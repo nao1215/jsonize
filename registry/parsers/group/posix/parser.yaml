@@ -13,7 +13,11 @@ detect:
   auto_detect: false
   signature:
     all:
-      - '\A[^:\n]+:[^:\n]*:\d+:'
+      # Exactly four colon separated fields, none of which holds a space.
+      # Without the field count /etc/passwd (seven fields) is read as a
+      # group whose member list is the rest of the line, and without the
+      # space rule any "Label: 12:34:56" line qualifies.
+      - '\A[^:\s]+:[^:\s]*:\d+:[^:\s]*$'
 input:
   ignore:
     - '^\s*#'
