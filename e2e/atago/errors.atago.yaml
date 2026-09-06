@@ -480,16 +480,16 @@ scenarios:
   - name: naming a parser does not get another command's output past its signature
     steps:
       - run:
-          command: jz --parser group
+          command: jz --parser etc --variant group
           stdin: "root:x:0:0:root:/root:/bin/bash\ndaemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\n"
       - assert:
           exit_code: 4
           stdout:
             empty: true
           stderr:
-            contains: no group variant matches this input
+            contains: "etc/group does not describe this input"
       - run:
-          command: jz --parser hosts
+          command: jz --parser etc --variant hosts
           stdin: "10:14  up 3 days, 22:45, 2 users, load averages: 1.0 1.1 1.2\n"
       - assert:
           exit_code: 4

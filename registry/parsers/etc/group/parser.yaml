@@ -1,8 +1,8 @@
 # /etc/group, four colon separated fields; the member list is an array
 # and is empty for a group nobody belongs to explicitly.
 format: 1
-command: group
-variant: posix
+command: etc
+variant: group
 description: /etc/group entries
 metadata:
   tags: [linux, darwin, user]

@@ -22,6 +22,7 @@ input.
 | `dpkg` | `list` |
 | `du` | `posix` |
 | `env` | `null-separated`, `posix` |
+| `etc` | `group`, `hosts`, `os-release`, `passwd` |
 | `ethtool` | `driver-info` |
 | `file` | `posix` |
 | `findmnt` | `linux` |
@@ -29,10 +30,8 @@ input.
 | `getconf` | `glibc` |
 | `git` | `branch-verbose`, `config-list`, `log-oneline`, `remote-verbose`, `stash-list`, `status-porcelain` |
 | `go` | `env` |
-| `group` | `posix` |
 | `host` | `bind` |
 | `hostnamectl` | `linux` |
-| `hosts` | `posix` |
 | `id` | `posix` |
 | `iostat` | `cpu`, `device`, `linux` |
 | `ip` | `brief-address`, `brief-link`, `neighbour`, `route` |
@@ -61,8 +60,6 @@ input.
 | `mpstat` | `linux` |
 | `nmcli` | `connection`, `device` |
 | `npm` | `ls`, `outdated` |
-| `os-release` | `linux` |
-| `passwd` | `posix` |
 | `pidstat` | `linux` |
 | `ping` | `linux` |
 | `pip` | `columns` |

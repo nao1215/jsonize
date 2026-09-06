@@ -15,13 +15,13 @@ scenarios:
       # group has four colon separated fields, passwd has seven. Read as a
       # group the shell would end up in the member list.
       - run:
-          command: jz --parser group --file passwd.txt
+          command: jz --parser etc --variant group --file passwd.txt
       - assert:
           exit_code: 4
           stdout:
             empty: true
           stderr:
-            contains: no group variant matches this input
+            contains: "etc/group does not describe this input"
       - run:
           command: jz --file passwd.txt
       - assert:
@@ -29,7 +29,7 @@ scenarios:
           stdout:
             empty: true
           stderr:
-            contains: it could be `passwd` output
+            contains: "it could be `etc` output"
 
   - name: the clock in BSD uptime output is not an IPv6 address
     steps:
@@ -38,13 +38,13 @@ scenarios:
           from: "${specdir}/testdata/decoys/uptime-bsd.txt"
       # "12:34  up 3 days" has the shape of an address followed by names.
       - run:
-          command: jz --parser hosts --file uptime-bsd.txt
+          command: jz --parser etc --variant hosts --file uptime-bsd.txt
       - assert:
           exit_code: 4
           stdout:
             empty: true
           stderr:
-            contains: no hosts variant matches this input
+            contains: "etc/hosts does not describe this input"
       - run:
           command: jz --file uptime-bsd.txt
       - assert:
@@ -70,16 +70,11 @@ scenarios:
             empty: true
           stderr:
             contains: no env variant matches this input
+      # PRETTY_NAME together with NAME and ID is this file and close to
+      # nothing else, so unlike the assignments env prints it is claimed
+      # on sight, and the quotes come off.
       - run:
           command: jz --file os-release.txt
-      - assert:
-          exit_code: 4
-          stdout:
-            empty: true
-          stderr:
-            contains: it could be `os-release` output
-      - run:
-          command: jz --parser os-release --file os-release.txt
       - assert:
           exit_code: 0
           stderr:

@@ -2,8 +2,8 @@
 # blank lines are dropped; a trailing comment on a line is kept out of
 # the host names.
 format: 1
-command: hosts
-variant: posix
+command: etc
+variant: hosts
 description: /etc/hosts entries
 metadata:
   tags: [linux, darwin, network]

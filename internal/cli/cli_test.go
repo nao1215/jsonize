@@ -346,16 +346,16 @@ func TestNamedParserStillChecksTheInput(t *testing.T) {
 			// parser reads four and used to accept it, silently folding
 			// the home directory and the shell into the member list.
 			name:   "group must not read a passwd file",
-			args:   []string{"--parser", "group"},
+			args:   []string{"--parser", "etc", "--variant", "group"},
 			input:  "root:x:0:0:root:/root:/bin/bash\ndaemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\n",
-			reject: "no group variant matches this input",
+			reject: "etc/group does not describe this input",
 		},
 		{
 			// A clock time is not an IPv6 address.
 			name:   "hosts must not read an uptime line",
-			args:   []string{"--parser", "hosts"},
+			args:   []string{"--parser", "etc", "--variant", "hosts"},
 			input:  "10:14  up 3 days, 22:45, 2 users, load averages: 1.0 1.1 1.2\n",
-			reject: "no hosts variant matches this input",
+			reject: "etc/hosts does not describe this input",
 		},
 		{
 			// blkid prints "path: TAG=..." which is the shape of file(1)

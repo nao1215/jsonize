@@ -3,8 +3,8 @@
 # os-release`; the shape alone is too close to a shell fragment for jz to
 # claim it.
 format: 1
-command: os-release
-variant: linux
+command: etc
+variant: os-release
 description: /etc/os-release distribution identification
 metadata:
   tags: [linux, system]
@@ -12,10 +12,15 @@ metadata:
   references:
     - https://www.freedesktop.org/software/systemd/man/os-release.html
 detect:
-  auto_detect: false
+  # Three keys the file is defined to carry, each on its own line. One of
+  # them alone is a shell assignment like any other, but PRETTY_NAME
+  # together with NAME and ID is this file and close to nothing else,
+  # which is enough to read /etc/os-release without being asked.
   signature:
     all:
-      - '^(?:NAME|ID|PRETTY_NAME)='
+      - '^PRETTY_NAME='
+      - '^NAME='
+      - '^ID='
 parse:
   type: kv
   separator: "="

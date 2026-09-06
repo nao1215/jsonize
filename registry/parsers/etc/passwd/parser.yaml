@@ -1,8 +1,8 @@
 # /etc/passwd, seven colon separated fields. The password field is the
 # placeholder the shadow file leaves behind, not a secret.
 format: 1
-command: passwd
-variant: posix
+command: etc
+variant: passwd
 description: /etc/passwd account entries
 metadata:
   tags: [linux, darwin, user]
