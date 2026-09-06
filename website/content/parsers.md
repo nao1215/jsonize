@@ -128,7 +128,15 @@ A rounded, human-readable number reaches JSON exactly as printed. The
 base behind a suffix is not in the output (`df -h` steps by 1024, `df -H`
 by 1000) and the value is rounded either way, so a byte count would be
 two guesses stacked. Ask the command for exact numbers when you need
-them: `df`, `free`, `ls -l`, `lsblk -b`.
+them: `df`, `free`, `lsblk -b`.
+
+Where the exact and the rounded form of a command are separate
+definitions, the exact one gives numbers: `df` does, `df -h` does not.
+That split needs the two forms to be told apart, and telling them apart
+means reading the values, which jz only sees for the first 200 lines. A
+listing has no length limit, so `ls -l` and `ls -lh` are one definition
+and its size is a string in both. The rule is the same one; what changes
+is whether jz can know which form it has.
 
 The same reasoning applies to `env`: a value containing a newline cannot
 be told from two variables in the line-based output, so `env -0 | jz`

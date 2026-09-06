@@ -88,6 +88,21 @@ way around the checks. The definition's signature still has to fit the
 text, and jz fails if it does not; there is no option that turns that
 off.
 
+A wrapper is the common case for naming one. `jz run` takes the parser
+from the name of the command it starts, so `sudo`, `env`, `nice`,
+`timeout`, `stdbuf` and `busybox` all put their own name there instead of
+the tool that produces the output. Name the parser and jz reads what the
+wrapper ran:
+
+```console
+$ jz run --parser df -- sudo df -h
+$ jz run --parser ps -- busybox ps
+```
+
+jz does not keep a list of which commands are wrappers. The list would
+never be complete, and a wrong entry would read some other command's
+output with the wrong definition.
+
 ## Where jz stops and the command begins
 
 Everything from the command name onwards belongs to the command, so its
