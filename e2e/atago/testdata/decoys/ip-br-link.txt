@@ -1,3 +1,3 @@
 lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP>
-eno1             UP             84:47:09:72:4a:d4 <BROADCAST,MULTICAST,UP,LOWER_UP>
-docker0          DOWN           fe:a5:0c:b2:8b:a5 <NO-CARRIER,BROADCAST,MULTICAST,UP>
+eno1             UP             52:54:00:10:00:01 <BROADCAST,MULTICAST,UP,LOWER_UP>
+docker0          DOWN           52:54:00:10:00:02 <NO-CARRIER,BROADCAST,MULTICAST,UP>
