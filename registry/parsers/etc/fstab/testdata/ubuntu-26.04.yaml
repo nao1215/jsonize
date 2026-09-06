@@ -1,0 +1,3 @@
+description: A workstation with a root file system named by path, an EFI partition, a swap file whose fields are separated by tabs, and a data disk named by UUID.
+source: /etc/fstab of an Ubuntu 26.04 installation; the UUIDs were replaced with UUIDs of the same shape and the user name in the mount point was replaced
+os: linux
