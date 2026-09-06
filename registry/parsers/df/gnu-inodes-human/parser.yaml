@@ -1,0 +1,33 @@
+# `df -ih`. The counts are rounded and carry a suffix whose base the
+# output does not record, so they stay exactly as printed.
+format: 1
+command: df
+variant: gnu-inodes-human
+description: df -ih on GNU coreutils, rounded inode counts
+metadata:
+  tags: [linux, filesystem]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html
+detect:
+  os: [linux]
+  args:
+    all: ["-i"]
+    any: ["-h", "--human-readable", "-H", "--si"]
+  signature:
+    all:
+      - '^Filesystem\s+Inodes\s+IUsed\s+IFree\s+IUse%\s+Mounted on\s*$'
+      # At least one count carries a suffix. Without one the output is
+      # indistinguishable from `df -i`, and reading it as exact numbers
+      # is then the right answer anyway.
+      - '^\S+[ \t]+[\d.]+[KMGTPE][ \t]'
+input:
+  ignore: ['^df: ']
+parse:
+  type: table
+  header:
+    columns: [filesystem, inodes, iused, ifree, iuse_percent, mounted_on]
+fields:
+  filesystem: {required: true}
+  iuse_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  mounted_on: {required: true}

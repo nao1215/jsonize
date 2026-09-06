@@ -1,0 +1,47 @@
+[
+  {
+    "filesystem": "tmpfs",
+    "type": "tmpfs",
+    "1k_blocks": 12882672,
+    "used": 5928,
+    "available": 12876744,
+    "use_percent": 1,
+    "mounted_on": "/run"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "type": "ext4",
+    "1k_blocks": 1920641288,
+    "used": 1673138544,
+    "available": 149865780,
+    "use_percent": 92,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "tmpfs",
+    "type": "tmpfs",
+    "1k_blocks": 32206676,
+    "used": 948084,
+    "available": 31258592,
+    "use_percent": 3,
+    "mounted_on": "/dev/shm"
+  },
+  {
+    "filesystem": "efivarfs",
+    "type": "efivarfs",
+    "1k_blocks": 128,
+    "used": 48,
+    "available": 76,
+    "use_percent": 39,
+    "mounted_on": "/sys/firmware/efi/efivars"
+  },
+  {
+    "filesystem": "none",
+    "type": "tmpfs",
+    "1k_blocks": 1024,
+    "used": 0,
+    "available": 1024,
+    "use_percent": 0,
+    "mounted_on": "/run/credentials/systemd-journald.service"
+  }
+]

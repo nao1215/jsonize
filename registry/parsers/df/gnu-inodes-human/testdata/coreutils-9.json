@@ -1,0 +1,34 @@
+[
+  {
+    "filesystem": "tmpfs",
+    "inodes": "800K",
+    "iused": "2.7K",
+    "ifree": "798K",
+    "iuse_percent": 1,
+    "mounted_on": "/run"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "inodes": "117M",
+    "iused": "7.1M",
+    "ifree": "110M",
+    "iuse_percent": 7,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "tmpfs",
+    "inodes": "7.7M",
+    "iused": "818",
+    "ifree": "7.7M",
+    "iuse_percent": 1,
+    "mounted_on": "/dev/shm"
+  },
+  {
+    "filesystem": "efivarfs",
+    "inodes": "0",
+    "iused": "0",
+    "ifree": "0",
+    "iuse_percent": null,
+    "mounted_on": "/sys/firmware/efi/efivars"
+  }
+]

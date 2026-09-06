@@ -1,0 +1,4 @@
+description: filesystems including one with no inodes, whose percentage prints as a dash
+source: captured on Ubuntu 26.04 (GNU coreutils 9.x) with LC_ALL=C; device name replaced
+os: linux
+args: [-i]

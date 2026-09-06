@@ -1,0 +1,38 @@
+# `df -i` reports inode counts instead of blocks. The counts are exact,
+# so they become numbers; a filesystem that has no inodes at all prints
+# "-" for the percentage.
+format: 1
+command: df
+variant: gnu-inodes
+description: df -i on GNU coreutils, exact inode counts
+metadata:
+  tags: [linux, filesystem]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html
+detect:
+  os: [linux]
+  args:
+    any: ["-i", "--inodes"]
+    none: ["-h", "--human-readable", "-H", "--si"]
+  signature:
+    all:
+      - '^Filesystem\s+Inodes\s+IUsed\s+IFree\s+IUse%\s+Mounted on\s*$'
+    none:
+      # The same header covers `df -ih`, whose counts carry a suffix and
+      # are rounded. Those are read by df/gnu-inodes-human and must not
+      # be converted to numbers here.
+      - '^\S+[ \t]+[\d.]+[KMGTPE][ \t]'
+input:
+  ignore: ['^df: ']
+parse:
+  type: table
+  header:
+    columns: [filesystem, inodes, iused, ifree, iuse_percent, mounted_on]
+fields:
+  filesystem: {required: true}
+  inodes: {type: int, required: true}
+  iused: {type: int, required: true}
+  ifree: {type: int, required: true}
+  iuse_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  mounted_on: {required: true}

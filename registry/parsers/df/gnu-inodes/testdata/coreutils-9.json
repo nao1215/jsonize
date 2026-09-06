@@ -1,0 +1,42 @@
+[
+  {
+    "filesystem": "tmpfs",
+    "inodes": 819200,
+    "iused": 2734,
+    "ifree": 816466,
+    "iuse_percent": 1,
+    "mounted_on": "/run"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "inodes": 122028032,
+    "iused": 7344317,
+    "ifree": 114683715,
+    "iuse_percent": 7,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "tmpfs",
+    "inodes": 8051669,
+    "iused": 818,
+    "ifree": 8050851,
+    "iuse_percent": 1,
+    "mounted_on": "/dev/shm"
+  },
+  {
+    "filesystem": "efivarfs",
+    "inodes": 0,
+    "iused": 0,
+    "ifree": 0,
+    "iuse_percent": null,
+    "mounted_on": "/sys/firmware/efi/efivars"
+  },
+  {
+    "filesystem": "none",
+    "inodes": 1024,
+    "iused": 1,
+    "ifree": 1023,
+    "iuse_percent": 1,
+    "mounted_on": "/run/credentials/systemd-journald.service"
+  }
+]

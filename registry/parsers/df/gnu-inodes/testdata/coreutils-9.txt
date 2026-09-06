@@ -1,0 +1,6 @@
+Filesystem        Inodes   IUsed     IFree IUse% Mounted on
+tmpfs             819200    2734    816466    1% /run
+/dev/nvme0n1p2 122028032 7344317 114683715    7% /
+tmpfs            8051669     818   8050851    1% /dev/shm
+efivarfs               0       0         0     - /sys/firmware/efi/efivars
+none                1024       1      1023    1% /run/credentials/systemd-journald.service

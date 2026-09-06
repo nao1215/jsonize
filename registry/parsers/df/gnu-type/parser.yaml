@@ -1,0 +1,33 @@
+# `df -T` inserts the filesystem type as a second column; the block
+# counts are the exact ones `df` prints without -h.
+format: 1
+command: df
+variant: gnu-type
+description: df -T on GNU coreutils, with the filesystem type column
+metadata:
+  tags: [linux, filesystem]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html
+detect:
+  os: [linux]
+  args:
+    any: ["-T", "--print-type"]
+    none: ["-h", "--human-readable", "-H", "--si", "-i", "--inodes"]
+  signature:
+    all:
+      - '^Filesystem\s+Type\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
+input:
+  ignore: ['^df: ']
+parse:
+  type: table
+  header:
+    columns: [filesystem, type, 1k_blocks, used, available, use_percent, mounted_on]
+fields:
+  filesystem: {required: true}
+  type: {required: true}
+  1k_blocks: {type: int, required: true}
+  used: {type: int, required: true}
+  available: {type: int, required: true}
+  use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  mounted_on: {required: true}
