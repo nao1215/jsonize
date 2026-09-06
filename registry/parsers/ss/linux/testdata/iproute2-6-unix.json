@@ -1,0 +1,72 @@
+[
+  {
+    "netid": "u_seq",
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "*",
+    "local_port": "114615138",
+    "peer_address": "*",
+    "peer_port": "114615139"
+  },
+  {
+    "netid": "u_str",
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "*",
+    "local_port": "114380591",
+    "peer_address": "*",
+    "peer_port": "114380592"
+  },
+  {
+    "netid": "u_str",
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "/run/user/1000/at-spi/bus_0",
+    "local_port": "106322086",
+    "peer_address": "*",
+    "peer_port": "106295281"
+  },
+  {
+    "netid": "u_str",
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "/run/systemd/journal/stdout",
+    "local_port": "46912016",
+    "peer_address": "*",
+    "peer_port": "46930082"
+  },
+  {
+    "netid": "u_str",
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "/run/containerd/s/d6b03a54cfcaf4c76114f7ab710d94a72b4957d69030b1c6d31217f4615b5538",
+    "local_port": "30041609",
+    "peer_address": "*",
+    "peer_port": "30021263"
+  },
+  {
+    "netid": "u_str",
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "*",
+    "local_port": "19525248",
+    "peer_address": "*",
+    "peer_port": "19525247"
+  },
+  {
+    "netid": "u_str",
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "*",
+    "local_port": "3072714",
+    "peer_address": "*",
+    "peer_port": "3057335"
+  }
+]

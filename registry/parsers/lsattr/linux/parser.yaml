@@ -14,11 +14,12 @@ detect:
   os: [linux]
   signature:
     all:
-      # Any word followed by an absolute path fits "word /path", so the
-      # first field is restricted to the attribute letters e2fsprogs
-      # prints, and it has to contain at least one unset slot: a real
-      # attribute string is mostly dashes.
-      - '\A[-aAcCdDeEFiIjmNPsStTuVx]{10,25} /'
+      # Any word followed by a path fits "word path", so the first field
+      # is restricted to the attribute letters e2fsprogs prints, and it
+      # has to contain at least one unset slot: a real attribute string
+      # is mostly dashes. The path itself is relative when lsattr is
+      # given no operand, so it cannot be required to start with a slash.
+      - '\A[-aAcCdDeEFiIjmNPsStTuVx]{10,25}[ \t]+\S'
       - '\A[aAcCdDeEFiIjmNPsStTuVx]*-'
 parse:
   type: regex

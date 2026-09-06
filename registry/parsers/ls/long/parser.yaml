@@ -26,7 +26,9 @@ metadata:
     - https://pubs.opengroup.org/onlinepubs/9699919799/utilities/ls.html
 detect:
   args:
-    any: ["-l", "-al", "-la", "-lA", "-Al", "-lh", "-alh", "-lah", "-lR", "-alR", "-lS", "-lt", "-ltr"]
+    # Bundled short flags are expanded before this is matched, so "-l"
+    # alone covers -al, -lh, -ltr and the rest of the combinations.
+    any: ["-l", "--format=long", "--format=verbose"]
   signature:
     all:
       - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+[\d.]+[KMGTPBi]*\s+\w{3}\s+\d{1,2}\s+'

@@ -12,8 +12,6 @@ metadata:
     - https://www.freedesktop.org/software/systemd/man/systemctl.html
 detect:
   os: [linux]
-  args:
-    any: ["list-units", "--type=service", "-t"]
   signature:
     all:
       - '\A\s*UNIT\s+LOAD\s+ACTIVE\s+SUB\s+DESCRIPTION\s*$'
@@ -23,7 +21,10 @@ input:
     - '^\s*$'
     - '^\d+ loaded units listed'
     - '^To show all installed unit files'
+    - '^Legend:'
     - '^LOAD\s+='
+    - '^\s+(?:LOAD|ACTIVE|SUB)\s+->'
+    - '^LOAD\s+->'
     - '^ACTIVE\s+='
     - '^SUB\s+='
 parse:

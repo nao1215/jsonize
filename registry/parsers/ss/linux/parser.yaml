@@ -19,9 +19,17 @@ detect:
 input:
   ignore:
     - '\ANetid\s+State'
+    - '^RTNETLINK answers:'
 parse:
   type: regex
-  pattern: '^(?P<netid>\S+)\s+(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+):(?P<local_port>[^\s:]+)\s+(?P<peer_address>\S+):(?P<peer_port>[^\s:]+)\s*(?P<process>\S.*)?$'
+  patterns:
+    # An internet socket: the address and the port share a column and are
+    # separated by the last colon.
+    - '^(?P<netid>\S+)\s+(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+):(?P<local_port>[^\s:]+)\s+(?P<peer_address>\S+):(?P<peer_port>[^\s:]+)\s*(?P<process>\S.*)?$'
+    # A unix socket: the same two columns hold a path (or "*") and the
+    # inode number, separated by whitespace instead of a colon. Plain
+    # `ss` with no filter lists these, so the table mixes both shapes.
+    - '^(?P<netid>\S+)\s+(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+)\s+(?P<local_port>\S+)\s+(?P<peer_address>\S+)\s+(?P<peer_port>\S+)\s*(?P<process>\S.*)?$'
 fields:
   netid: {required: true}
   state: {required: true}

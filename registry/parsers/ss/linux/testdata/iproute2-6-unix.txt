@@ -1,0 +1,8 @@
+Netid State Recv-Q Send-Q                                                                            Local Address:Port      Peer Address:Port     
+u_seq ESTAB 0      0                                                                                             * 114615138            * 114615139
+u_str ESTAB 0      0                                                                                             * 114380591            * 114380592
+u_str ESTAB 0      0                                                                   /run/user/1000/at-spi/bus_0 106322086            * 106295281
+u_str ESTAB 0      0                                                                   /run/systemd/journal/stdout 46912016             * 46930082 
+u_str ESTAB 0      0            /run/containerd/s/d6b03a54cfcaf4c76114f7ab710d94a72b4957d69030b1c6d31217f4615b5538 30041609             * 30021263 
+u_str ESTAB 0      0                                                                                             * 19525248             * 19525247 
+u_str ESTAB 0      0                                                                                             * 3072714              * 3057335  
