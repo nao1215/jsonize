@@ -107,16 +107,25 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 			}
 		}
 	}
-	got, err := engine.Parse(e.Def, c.Input, opts.Engine)
 	if c.Meta.ExpectError != "" {
+		// A definition refuses text either by not describing it or by
+		// failing to parse it, and both are things a case may want to
+		// pin. Naming the definition is what a caller does when they
+		// believe the text is theirs, so that is the path checked.
+		ctx := selector.Context{Parser: e.Def.Command, Variant: e.Def.Variant, OS: c.Meta.OS, Args: c.Meta.Args, Input: c.Input}
+		_, err := selector.Select(reg, ctx)
+		if err == nil {
+			_, err = engine.Parse(e.Def, c.Input, opts.Engine)
+		}
 		switch {
 		case err == nil:
-			res.Err = fmt.Errorf("expected an error containing %q but parsing succeeded", c.Meta.ExpectError)
+			res.Err = fmt.Errorf("expected an error containing %q but the input was read", c.Meta.ExpectError)
 		case !strings.Contains(err.Error(), c.Meta.ExpectError):
 			res.Err = fmt.Errorf("expected an error containing %q, got: %w", c.Meta.ExpectError, err)
 		}
 		return res
 	}
+	got, err := engine.Parse(e.Def, c.Input, opts.Engine)
 	if err != nil {
 		res.Err = err
 		return res

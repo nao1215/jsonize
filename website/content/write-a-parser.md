@@ -91,8 +91,12 @@ os: linux
 args: [-p, "1234"]
 ```
 
-To pin an error path, add a fixture with `expect_error: <substring>` and
-no `.json`.
+To pin text the definition must refuse, add a fixture with
+`expect_error: <substring>` and no `.json`. It covers both ways a
+definition refuses: the signature not describing the text, and the parse
+failing on it. The substring is matched against whichever message comes
+out, so `expect_error: 'does not describe this input'` pins a signature
+that keeps a neighbouring format away.
 
 ## 5. Generate the golden file and review it
 

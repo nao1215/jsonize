@@ -2,4 +2,4 @@ description: "`hostnamectl hostname` prints the name alone, with no label; it is
 source: captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C; host name replaced
 os: linux
 args: ["hostname"]
-expect_error: 'expected "key:value"'
+expect_error: 'does not describe this input'

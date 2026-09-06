@@ -48,7 +48,7 @@ func TestRun(t *testing.T) {
 		"kv/v/badjson": "expected JSON is invalid",
 		"kv/v/err":     "",
 		"kv/v/errmsg":  "expected an error containing",
-		"kv/v/errno":   "parsing succeeded",
+		"kv/v/errno":   "the input was read",
 		"kv/v/nogold":  "has no nogold.json",
 		"kv/v/nosel":   "automatic detection",
 		"kv/v/ok":      "",

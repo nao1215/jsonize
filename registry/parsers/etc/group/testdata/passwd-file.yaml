@@ -1,0 +1,4 @@
+description: /etc/passwd has seven fields where a group has four, and must be refused rather than read as a group whose member list swallowed the shell
+source: /etc/passwd from Ubuntu 26.04 with the user names replaced
+os: linux
+expect_error: 'does not describe this input'

@@ -2,4 +2,4 @@ description: "`localectl list-locales` prints bare locale names, not pairs; the 
 source: captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C
 os: linux
 args: ["list-locales"]
-expect_error: 'expected "key:value"'
+expect_error: 'does not describe this input'
