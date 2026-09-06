@@ -17,7 +17,7 @@
   },
   {
     "name": "CPU(s)",
-    "value": "32"
+    "value": 32
   },
   {
     "name": "On-line CPU(s) list",
@@ -41,15 +41,15 @@
   },
   {
     "name": "Thread(s) per core",
-    "value": "2"
+    "value": 2
   },
   {
     "name": "Core(s) per socket",
-    "value": "16"
+    "value": 16
   },
   {
     "name": "Socket(s)",
-    "value": "1"
+    "value": 1
   },
   {
     "name": "Stepping",
@@ -65,15 +65,15 @@
   },
   {
     "name": "CPU max MHz",
-    "value": "5187.5000"
+    "value": 5187.5
   },
   {
     "name": "CPU min MHz",
-    "value": "625.0000"
+    "value": 625
   },
   {
     "name": "BogoMIPS",
-    "value": "5999.85"
+    "value": 5999.85
   },
   {
     "name": "Flags",
@@ -101,7 +101,7 @@
   },
   {
     "name": "NUMA node(s)",
-    "value": "1"
+    "value": 1
   },
   {
     "name": "NUMA node0 CPU(s)",

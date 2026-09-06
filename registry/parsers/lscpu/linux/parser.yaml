@@ -29,3 +29,17 @@ parse:
   type: kv
   separator: ":"
   as: list
+# A kv definition looks its conversions up by the key the command
+# printed, so these are the labels lscpu writes, brackets and spaces and
+# all. Only the counts and the clock speeds are converted: the rest of
+# the labels hold text, and the set of labels that appears at all depends
+# on the machine.
+fields:
+  "CPU(s)": {type: int}
+  "Thread(s) per core": {type: int}
+  "Core(s) per socket": {type: int}
+  "Socket(s)": {type: int}
+  "NUMA node(s)": {type: int}
+  "CPU max MHz": {type: float}
+  "CPU min MHz": {type: float}
+  "BogoMIPS": {type: float}

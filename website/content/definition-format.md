@@ -186,6 +186,12 @@ parse:
   on_mismatch: error | skip
 ```
 
+A kv definition looks its `fields` entries up by the key the command
+printed, not by a name the definition chose, so those entries are written
+exactly as the key appears: `"CPU(s)"`, `"Thread(s) per core"`. Elsewhere
+a field name has to be an identifier, because elsewhere it is a name the
+definition picked.
+
 `list` yields `[{"name": ..., "value": ...}]`; `map` yields one object
 (later duplicates win). Keys and values are trimmed unless
 `trim: false`, which a format whose values are significant down to the

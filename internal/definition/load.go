@@ -196,7 +196,7 @@ func (d *Definition) Validate() error {
 	d.Input.ignore = compileList(v, "input.ignore", d.Input.Ignore, "")
 	validateSelect(v, "input.select", &d.Input.Select)
 	validateParse(v, "parse", &d.Parse, d.Fields, 0)
-	validateFields(v, "fields", d.Fields, 0)
+	validateFields(v, "fields", d.Fields, 0, d.Parse.Type == TypeKV)
 	if len(v.errs) == 0 {
 		return nil
 	}
@@ -454,11 +454,16 @@ func validateComposite(v *validator, path string, p *Parse) {
 		seen[part.Name] = true
 		validateSelect(v, pp+".select", &part.Select)
 		validateParse(v, pp+".parse", &part.Parse, part.Fields, 1)
-		validateFields(v, pp+".fields", part.Fields, 0)
+		validateFields(v, pp+".fields", part.Fields, 0, part.Parse.Type == TypeKV)
 	}
 }
 
-func validateFields(v *validator, path string, fields map[string]*Field, depth int) {
+// validateFields checks the entries of a fields map. rawKeys is set for a
+// kv parse, whose entries are looked up by the key the command printed
+// rather than by a name the definition chose: "CPU(s)" and "Thread(s) per
+// core" are what lscpu prints, and a definition that cannot name them
+// cannot convert their values.
+func validateFields(v *validator, path string, fields map[string]*Field, depth int, rawKeys bool) {
 	if depth > MaxNesting {
 		v.add(path, "fields nested deeper than %d levels", MaxNesting)
 		return
@@ -471,7 +476,10 @@ func validateFields(v *validator, path string, fields map[string]*Field, depth i
 	for _, name := range names {
 		f := fields[name]
 		fp := path + "." + name
-		if !fieldRe.MatchString(name) {
+		switch {
+		case rawKeys && (name == "" || strings.ContainsAny(name, "\n\r")):
+			v.add(fp, "invalid key %q", name)
+		case !rawKeys && !fieldRe.MatchString(name):
 			v.add(fp, "invalid field name %q", name)
 		}
 		if f == nil {
@@ -553,7 +561,9 @@ func validateObjectField(v *validator, path string, f *Field, depth int) {
 			}
 		}
 	}
-	validateFields(v, path+".fields", f.Fields, depth+1)
+	// A nested fields map is keyed by regex group names, which are
+	// identifiers by construction.
+	validateFields(v, path+".fields", f.Fields, depth+1, false)
 }
 
 // validateFieldKeys rejects keys that belong to a different field type.
