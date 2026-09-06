@@ -1,0 +1,4 @@
+description: "Limits lowered first, so that a resource which reads unlimited on this machine also appears as a number."
+source: captured on Ubuntu 26.04 with LC_ALL=C, sh -c 'ulimit -n 256; ulimit -s 4096; ulimit -a' where /bin/sh is dash 0.5.12
+os: linux
+args: ["-a"]

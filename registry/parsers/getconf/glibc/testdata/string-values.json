@@ -1,0 +1,38 @@
+[
+  {
+    "name": "POSIX_REC_MIN_XFER_SIZE",
+    "value": "4096"
+  },
+  {
+    "name": "POSIX_REC_XFER_ALIGN",
+    "value": "4096"
+  },
+  {
+    "name": "SYMLINK_MAX",
+    "value": null
+  },
+  {
+    "name": "GNU_LIBC_VERSION",
+    "value": "glibc 2.43"
+  },
+  {
+    "name": "GNU_LIBPTHREAD_VERSION",
+    "value": "NPTL 2.43"
+  },
+  {
+    "name": "POSIX2_SYMLINKS",
+    "value": "1"
+  },
+  {
+    "name": "LEVEL1_ICACHE_SIZE",
+    "value": "32768"
+  },
+  {
+    "name": "LEVEL1_ICACHE_ASSOC",
+    "value": null
+  },
+  {
+    "name": "LEVEL1_ICACHE_LINESIZE",
+    "value": "64"
+  }
+]

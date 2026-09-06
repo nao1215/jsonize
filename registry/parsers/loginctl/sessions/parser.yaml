@@ -1,0 +1,36 @@
+# The table `loginctl` prints without a subcommand, which is
+# `loginctl list-sessions`. The trailing "N sessions listed." line is a
+# legend, not a row, and is dropped.
+#
+# A session id is not a number: logind names greeter sessions c1, c2 and
+# so on, so it stays a string. "-" means the column does not apply to
+# this session and becomes null.
+format: 1
+command: loginctl
+variant: sessions
+description: loginctl list-sessions table
+metadata:
+  tags: [linux, systemd, session]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/loginctl.html
+detect:
+  os: [linux]
+  args:
+    none: ["list-users", "list-seats"]
+  signature:
+    all:
+      - '^SESSION[ \t]+UID[ \t]+USER[ \t]+SEAT[ \t]+LEADER[ \t]+CLASS[ \t]+TTY[ \t]+IDLE[ \t]+SINCE[ \t]*$'
+input:
+  ignore:
+    - '^[0-9]+ sessions listed\.$'
+parse:
+  type: table
+  split: whitespace
+fields:
+  uid: {type: int}
+  seat: {null_if: ["-"]}
+  leader: {type: int}
+  tty: {null_if: ["-"]}
+  idle: {type: bool}
+  since: {null_if: ["-"]}

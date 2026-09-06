@@ -1,0 +1,68 @@
+[
+  {
+    "session": "2",
+    "uid": 1000,
+    "user": "alice",
+    "seat": null,
+    "leader": 8541,
+    "class": "user",
+    "tty": null,
+    "idle": false,
+    "since": null
+  },
+  {
+    "session": "29",
+    "uid": 1000,
+    "user": "alice",
+    "seat": "seat0",
+    "leader": 5165,
+    "class": "user",
+    "tty": null,
+    "idle": false,
+    "since": null
+  },
+  {
+    "session": "3",
+    "uid": 1000,
+    "user": "alice",
+    "seat": null,
+    "leader": 8941,
+    "class": "manager",
+    "tty": null,
+    "idle": false,
+    "since": null
+  },
+  {
+    "session": "439",
+    "uid": 1000,
+    "user": "alice",
+    "seat": null,
+    "leader": 994792,
+    "class": "user",
+    "tty": null,
+    "idle": false,
+    "since": null
+  },
+  {
+    "session": "498",
+    "uid": 1000,
+    "user": "alice",
+    "seat": null,
+    "leader": 375895,
+    "class": "user",
+    "tty": null,
+    "idle": false,
+    "since": null
+  },
+  {
+    "session": "587",
+    "uid": 1000,
+    "user": "alice",
+    "seat": null,
+    "leader": 1892859,
+    "class": "user",
+    "tty": null,
+    "idle": false,
+    "since": null
+  }
+]

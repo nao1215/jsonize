@@ -1,0 +1,5 @@
+description: "`localectl list-locales` prints bare locale names, not pairs; the definition refuses it instead of inventing keys."
+source: captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C
+os: linux
+args: ["list-locales"]
+expect_error: 'expected "key:value"'

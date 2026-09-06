@@ -1,0 +1,58 @@
+[
+  {
+    "resource": "time",
+    "unit": "seconds",
+    "value": "unlimited"
+  },
+  {
+    "resource": "file",
+    "unit": "blocks",
+    "value": "unlimited"
+  },
+  {
+    "resource": "data",
+    "unit": "kbytes",
+    "value": "unlimited"
+  },
+  {
+    "resource": "stack",
+    "unit": "kbytes",
+    "value": "8192"
+  },
+  {
+    "resource": "coredump",
+    "unit": "blocks",
+    "value": "0"
+  },
+  {
+    "resource": "memory",
+    "unit": "kbytes",
+    "value": "unlimited"
+  },
+  {
+    "resource": "locked memory",
+    "unit": "kbytes",
+    "value": "8192"
+  },
+  {
+    "resource": "process",
+    "value": "251443"
+  },
+  {
+    "resource": "nofiles",
+    "value": "524288"
+  },
+  {
+    "resource": "vmemory",
+    "unit": "kbytes",
+    "value": "unlimited"
+  },
+  {
+    "resource": "locks",
+    "value": "unlimited"
+  },
+  {
+    "resource": "rtprio",
+    "value": "0"
+  }
+]

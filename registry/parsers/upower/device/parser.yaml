@@ -1,0 +1,37 @@
+# `upower -i` prints "label: value" pairs indented by two spaces, then
+# indents them by four under a heading naming the device type (battery,
+# line-power, unknown). The labels contain spaces and the set of them
+# depends on the device, so the pairs are a list of name/value objects
+# and the values stay strings, percent sign and all.
+#
+# What this definition loses: a line without a colon is dropped, so the
+# device type heading disappears and the pairs under it are flattened
+# into the same list. That also drops the rows of a "History (charge):"
+# block, which are three numbers and no colon.
+format: 1
+command: upower
+variant: device
+description: upower -i device information
+metadata:
+  tags: [linux, power, upower]
+  compatible: [UPower]
+  references:
+    - https://upower.freedesktop.org/docs/
+detect:
+  os: [linux]
+  args:
+    any: ["-i", "--show-info"]
+  signature:
+    all:
+      - '^[ \t]*power supply:[ \t]'
+      - '^[ \t]*has history:[ \t]'
+input:
+  ignore:
+    - '^[^:]*$'
+parse:
+  type: kv
+  separator: ":"
+  as: list
+  # icon-name is printed in single quotes; the quotes are upower's
+  # punctuation, not part of the name.
+  unquote: true

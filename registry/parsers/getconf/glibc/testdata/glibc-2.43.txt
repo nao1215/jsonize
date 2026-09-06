@@ -1,0 +1,13 @@
+LINK_MAX                            65000
+MAX_CANON                           255
+MAX_INPUT                           255
+NAME_MAX                            255
+PATH_MAX                            4096
+PIPE_BUF                            4096
+SOCK_MAXBUF                         
+_POSIX_ASYNC_IO                     
+_POSIX_CHOWN_RESTRICTED             1
+_POSIX_NO_TRUNC                     1
+_POSIX_PRIO_IO                      
+_POSIX_SYNC_IO                      
+_POSIX_VDISABLE                     0

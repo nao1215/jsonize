@@ -1,0 +1,5 @@
+description: "`locale -a` lists locale names, one per line and no values; the definition refuses it instead of reading names as keys."
+source: captured on Ubuntu 26.04 (glibc 2.43) with LC_ALL=C
+os: linux
+args: ["-a"]
+expect_error: 'expected "key=value"'

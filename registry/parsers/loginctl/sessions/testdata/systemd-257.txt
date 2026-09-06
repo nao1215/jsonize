@@ -1,0 +1,9 @@
+SESSION  UID USER  SEAT  LEADER  CLASS   TTY IDLE SINCE
+      2 1000 alice -     8541    user    -   no   -
+     29 1000 alice seat0 5165    user    -   no   -
+      3 1000 alice -     8941    manager -   no   -
+    439 1000 alice -     994792  user    -   no   -
+    498 1000 alice -     375895  user    -   no   -
+    587 1000 alice -     1892859 user    -   no   -
+
+6 sessions listed.

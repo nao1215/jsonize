@@ -1,0 +1,33 @@
+# `locale` prints one NAME=value line per category. A category whose
+# value the library derived from LANG or LC_ALL is printed in double
+# quotes; one the environment sets directly is not. The quotes are shell
+# syntax rather than content and are removed, the way /etc/os-release
+# removes them.
+#
+# The shape is `env`'s, so the three categories every implementation
+# prints have to be present before this definition claims the text; env
+# in turn refuses a value that opens with a quote.
+format: 1
+command: locale
+variant: posix
+description: locale category settings
+metadata:
+  tags: [linux, darwin, locale]
+  compatible: [glibc, macOS locale]
+  references:
+    - https://man7.org/linux/man-pages/man1/locale.1.html
+detect:
+  args:
+    # -a lists locale names and -m charmap names, one per line; -k prints
+    # the keywords of one category. None of those are this format.
+    none: ["-a", "-m", "-k"]
+  signature:
+    all:
+      - '^LANG='
+      - '^LC_CTYPE='
+      - '^LC_ALL='
+parse:
+  type: kv
+  separator: "="
+  as: map
+  unquote: true

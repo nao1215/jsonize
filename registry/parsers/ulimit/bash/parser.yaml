@@ -1,0 +1,34 @@
+# `ulimit -a` as bash prints it: the resource name, then the unit and
+# the option letter in parentheses, then the limit. Resources counted in
+# things rather than measured in units print the option letter alone, so
+# the unit is absent from those objects. The unit itself can be a phrase
+# ("512 bytes" for pipe size).
+#
+# A limit is either a number or the word unlimited, so the value stays
+# the string that was printed.
+format: 1
+command: ulimit
+variant: bash
+description: ulimit -a resource limits as bash prints them
+metadata:
+  tags: [linux, darwin, shell, limits]
+  compatible: [bash]
+  references:
+    - https://www.gnu.org/software/bash/manual/bash.html#index-ulimit
+detect:
+  args:
+    any: ["-a"]
+  signature:
+    all:
+      - '^core file size[ \t]+\(blocks, -c\)'
+      - '^open files[ \t]+\(-n\)'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<resource>.+?)[ \t]+\((?P<unit>[^,()]+), (?P<flag>-[A-Za-z])\)[ \t]+(?P<value>.+?)[ \t]*$'
+    - '^(?P<resource>.+?)[ \t]+\((?P<flag>-[A-Za-z])\)[ \t]+(?P<value>.+?)[ \t]*$'
+fields:
+  resource: {required: true}
+  unit: {when_missing: omit}
+  flag: {required: true}
+  value: {required: true}
