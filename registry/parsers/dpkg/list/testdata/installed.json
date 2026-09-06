@@ -1,0 +1,162 @@
+[
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "3cpio",
+    "version": "0.14.0-1ubuntu1",
+    "architecture": "amd64",
+    "description": "Manage initrd cpio archives"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "7zip",
+    "version": "26.00+dfsg-1",
+    "architecture": "amd64",
+    "description": "7-Zip file archiver with a high compression ratio"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "accountsservice",
+    "version": "23.13.9-8ubuntu5.2",
+    "architecture": "amd64",
+    "description": "query and manipulate user account information"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "acl",
+    "version": "2.3.2-2",
+    "architecture": "amd64",
+    "description": "access control list - utilities"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "adduser",
+    "version": "3.153ubuntu1",
+    "architecture": "all",
+    "description": "add and remove users and groups"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "adwaita-icon-theme",
+    "version": "50.0-1",
+    "architecture": "all",
+    "description": "default icon theme of GNOME"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "aha",
+    "version": "0.5.1-3build2",
+    "architecture": "amd64",
+    "description": "ANSI color to HTML converter"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "aisleriot",
+    "version": "1:3.22.35-5",
+    "architecture": "amd64",
+    "description": "GNOME solitaire card game collection"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "alsa-base",
+    "version": "1.0.25+dfsg-0ubuntu9",
+    "architecture": "all",
+    "description": "ALSA driver configuration files"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "alsa-topology-conf",
+    "version": "1.2.5.1-3build1",
+    "architecture": "all",
+    "description": "ALSA topology configuration files"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "alsa-ucm-conf",
+    "version": "1.2.15.3-1ubuntu1.5",
+    "architecture": "all",
+    "description": "ALSA Use Case Manager configuration files"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "alsa-utils",
+    "version": "1.2.15.2-1ubuntu1",
+    "architecture": "amd64",
+    "description": "Utilities for configuring and using ALSA"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "amd64-microcode",
+    "version": "3.20251202.1ubuntu2",
+    "architecture": "amd64",
+    "description": "Platform firmware and microcode for AMD CPUs and SoCs"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "amdgpu-core",
+    "version": "1:6.3.60300-2084815.24.04",
+    "architecture": "all",
+    "description": "Core meta package for unified amdgpu driver."
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "amdgpu-install",
+    "version": "6.3.60300-2084815.24.04",
+    "architecture": "all",
+    "description": "AMDGPU driver repository and installer"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "anacron",
+    "version": "2.3-45ubuntu1",
+    "architecture": "amd64",
+    "description": "cron-like program that doesn't go by time"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "apache2-bin",
+    "version": "2.4.66-2ubuntu2.4",
+    "architecture": "amd64",
+    "description": "Apache HTTP Server (modules and other binary files)"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "apparmor",
+    "version": "5.0.2-0ubuntu1~26.04.1",
+    "architecture": "amd64",
+    "description": "user-space parser utility for AppArmor"
+  },
+  {
+    "desired": "r",
+    "status": "c",
+    "name": "appmenu-gtk-module-common",
+    "version": "25.04-1build1",
+    "architecture": "all",
+    "description": "Common files for GtkMenuShell D-Bus exporter"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "apport",
+    "version": "2.34.1-0ubuntu0.1",
+    "architecture": "all",
+    "description": "automatically generate crash reports for debugging"
+  }
+]

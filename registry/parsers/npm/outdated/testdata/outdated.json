@@ -1,0 +1,18 @@
+[
+  {
+    "package": "chalk",
+    "current": "4.1.0",
+    "wanted": "4.1.0",
+    "latest": "6.0.0",
+    "location": "node_modules/chalk",
+    "depended_by": "npmproj"
+  },
+  {
+    "package": "semver",
+    "current": "7.5.0",
+    "wanted": "7.5.0",
+    "latest": "7.8.5",
+    "location": "node_modules/semver",
+    "depended_by": "npmproj"
+  }
+]

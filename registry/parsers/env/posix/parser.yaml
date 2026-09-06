@@ -21,6 +21,12 @@ detect:
     # weak a claim to convert without being asked.
     all:
       - '^[A-Za-z_][A-Za-z0-9_]*=[^\n]*\n[A-Za-z_][A-Za-z0-9_]*='
+    none:
+      # env prints values raw; it never adds quotes. A quoted value comes
+      # from a program that writes assignments for a shell to read, such
+      # as `go env`, where the quotes are syntax rather than content and
+      # would end up inside the value here.
+      - "^[A-Za-z_][A-Za-z0-9_]*='"
 parse:
   type: kv
   separator: "="

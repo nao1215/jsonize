@@ -1,0 +1,3 @@
+source: "`pip list` with pip 26.2.1 on CPython 3.12 (Ubuntu 26.04) with LC_ALL=C, in a virtual environment holding requests and rich"
+os: linux
+args: ["list"]

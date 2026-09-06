@@ -1,0 +1,4 @@
+description: One package, so both columns are as narrow as their titles.
+source: "`pip list` with pip 26.2.1 on CPython 3.12 (Ubuntu 26.04) with LC_ALL=C, in a virtual environment holding only pip"
+os: linux
+args: ["list"]

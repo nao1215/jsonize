@@ -1,0 +1,57 @@
+[
+  {
+    "name": "bash",
+    "suites": [
+      "resolute",
+      "now"
+    ],
+    "version": "5.3-2ubuntu1",
+    "architecture": "amd64",
+    "states": [
+      "installed",
+      "automatic"
+    ]
+  },
+  {
+    "name": "bash",
+    "suites": [
+      "resolute"
+    ],
+    "version": "5.3-2ubuntu1",
+    "architecture": "i386"
+  },
+  {
+    "name": "tcsh",
+    "suites": [
+      "resolute"
+    ],
+    "version": "6.24.13-2.1",
+    "architecture": "amd64"
+  },
+  {
+    "name": "vim-nox",
+    "suites": [
+      "resolute-updates",
+      "resolute-security"
+    ],
+    "version": "2:9.1.2141-1ubuntu4.8",
+    "architecture": "amd64"
+  },
+  {
+    "name": "vim-nox",
+    "suites": [
+      "resolute-updates",
+      "resolute-security"
+    ],
+    "version": "2:9.1.2141-1ubuntu4.8",
+    "architecture": "i386"
+  },
+  {
+    "name": "zsh",
+    "suites": [
+      "resolute"
+    ],
+    "version": "5.9-8ubuntu3",
+    "architecture": "amd64"
+  }
+]

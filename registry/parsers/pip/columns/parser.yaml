@@ -1,0 +1,32 @@
+# The default `pip list` layout: a two column table under a rule of
+# dashes. Other layouts (--format freeze, --outdated, --verbose) print
+# different titles and are excluded by the signature rather than guessed
+# at, so they end as "no parser" instead of a table read with the wrong
+# columns.
+format: 1
+command: pip
+variant: columns
+description: pip list installed package table
+metadata:
+  tags: [python, package]
+  compatible: [pip, uv]
+  references:
+    - https://pip.pypa.io/en/stable/cli/pip_list/
+detect:
+  args:
+    all: ["list"]
+  signature:
+    all:
+      - '\APackage[ \t]+Version[ \t]*$'
+      - '(?m)^-{2,}[ \t]+-{2,}[ \t]*$'
+input:
+  ignore:
+    - '^-{2,}[ \t]+-{2,}[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    columns: [package, version]
+fields:
+  package: {required: true}
+  version: {required: true}

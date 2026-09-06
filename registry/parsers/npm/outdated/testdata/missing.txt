@@ -1,0 +1,3 @@
+Package  Current  Wanted  Latest  Location            Depended by
+chalk      4.1.0   4.1.0   6.0.0  node_modules/chalk  broken-app
+semver   MISSING   7.8.5   7.8.5  -                   broken-app

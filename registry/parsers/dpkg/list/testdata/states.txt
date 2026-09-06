@@ -1,0 +1,9 @@
++-- Desired=Unknown/Install/Remove/Purge/Hold
+|+- Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-aWait/Trig-pend
+||+ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)
+||| Name                          Version        Architecture Description
++++-=============================-==============-============-=====================================================
+ii  bash                          5.3-2ubuntu1   amd64        GNU Bourne Again SHell
+ii  dpkg                          1.23.7ubuntu1  amd64        Debian package management system
+rc  grub-pc                       2.12-5ubuntu11 amd64        GRand Unified Bootloader, version 2 (PC/BIOS version)
+rc  linux-image-6.14.0-35-generic 6.14.0-35.35   amd64        Signed kernel image generic

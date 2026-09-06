@@ -1,0 +1,4 @@
+description: The same project as deps.txt, drawn with box drawing characters instead of ASCII because the locale is UTF-8.
+source: "`npm ls` with npm 10.9.4 (node 22.22.1) on Ubuntu 26.04 with LC_ALL=C.utf8"
+os: linux
+args: ["ls"]

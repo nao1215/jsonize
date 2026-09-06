@@ -1,0 +1,56 @@
+# `npm ls` prints the project on the first line and one line per direct
+# dependency, so the result is the project and its list rather than one
+# flat array. The tree glyphs are ASCII (+-- and `--) in the C locale and
+# box drawing characters in a UTF-8 one; both spellings are read.
+# A tree deeper than one level, which `npm ls --all` prints, uses
+# continuation prefixes this definition does not read: such input is
+# reported as an error rather than parsed into a shape that has lost the
+# nesting.
+format: 1
+command: npm
+variant: ls
+description: npm ls direct dependency tree
+metadata:
+  tags: [node, package, javascript]
+  compatible: [npm]
+  references:
+    - https://docs.npmjs.com/cli/commands/npm-ls
+detect:
+  args:
+    any: ["ls", "list", "la", "ll"]
+  signature:
+    all:
+      - '\A[^ \t]+@[^ \t]+[ \t]+\S'
+      - '(?m)^(?:\+--|`--|├──|└──)[ \t]'
+input:
+  # A project with no dependencies prints one placeholder row.
+  ignore:
+    - '^(?:\+--|`--|├──|└──)[ \t]+\(empty\)[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: project
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^(?P<name>@?[^@]+)@(?P<version>\S+)[ \t]+(?P<path>.+?)[ \t]*$'
+      fields:
+        name: {required: true}
+        version: {required: true}
+        path: {required: true}
+    - name: dependencies
+      select: {skip: 1}
+      parse:
+        type: regex
+        patterns:
+          # A dependency npm could not find has its requested range where
+          # an installed version would be.
+          - '^(?:\+--|`--|├──|└──)[ \t]+(?P<state>UNMET DEPENDENCY)[ \t]+(?P<name>@?[^@ \t]+)@(?P<version>\S+)[ \t]*$'
+          # Anything after the version (extraneous, deduped, invalid) is
+          # npm's note about the installed copy.
+          - '^(?:\+--|`--|├──|└──)[ \t]+(?P<name>@?[^@ \t]+)@(?P<version>\S+)(?:[ \t]+(?P<state>.+?))?[ \t]*$'
+      fields:
+        name: {required: true}
+        version: {required: true}
+        state: {when_missing: omit}

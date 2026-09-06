@@ -1,0 +1,4 @@
+description: Taken inside a module, so GOMOD is a path, and with GOFLAGS set to two words to cover a value containing spaces. The home directory was replaced with /home/user and the checkout with /home/user/src/jsonize.
+source: "`GOFLAGS='-mod=mod -count=1' go env` with go 1.26.4 on Ubuntu 26.04 with LC_ALL=C, inside a module"
+os: linux
+args: ["env"]

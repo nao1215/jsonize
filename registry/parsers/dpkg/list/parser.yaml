@@ -1,0 +1,37 @@
+# `dpkg -l` prints a five line legend, then rows whose first three
+# characters are the desired action, the current status and an error
+# flag. The three are reported separately because they are three
+# independent fields printed without a separator; the error flag is a
+# space when there is none, so it is omitted rather than reported as " ".
+format: 1
+command: dpkg
+variant: list
+description: dpkg -l installed package table
+metadata:
+  tags: [linux, package, debian]
+  compatible: [dpkg]
+  references:
+    - https://manpages.debian.org/dpkg-query.1
+detect:
+  os: [linux]
+  args:
+    any: ["-l", "--list"]
+  signature:
+    all:
+      - '\A\+-- Desired=Unknown/Install/Remove/Purge/Hold[ \t]*$'
+      - '(?m)^\+\+\+-='
+input:
+  # Everything above the +++-=== rule is the legend and the column titles.
+  select:
+    after: '^\+\+\+-='
+parse:
+  type: regex
+  pattern: '^(?P<desired>[a-zA-Z])(?P<status>[a-zA-Z])(?P<error>[a-zA-Z])?[ \t]+(?P<name>\S+)[ \t]+(?P<version>\S+)[ \t]+(?P<architecture>\S+)(?:[ \t]+(?P<description>.+?))?[ \t]*$'
+fields:
+  desired: {required: true}
+  status: {required: true}
+  error: {when_missing: omit}
+  name: {required: true}
+  version: {required: true}
+  architecture: {required: true}
+  description: {when_missing: omit}
