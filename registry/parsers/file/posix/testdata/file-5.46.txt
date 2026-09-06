@@ -1,0 +1,3 @@
+/etc/hosts: ASCII text
+/bin/ls:    symbolic link to ../lib/cargo/bin/coreutils/ls
+/tmp:       sticky, directory

@@ -1,0 +1,29 @@
+[
+  {
+    "username": "root",
+    "password": "x",
+    "uid": 0,
+    "gid": 0,
+    "gecos": "root",
+    "home": "/root",
+    "shell": "/bin/bash"
+  },
+  {
+    "username": "daemon",
+    "password": "x",
+    "uid": 1,
+    "gid": 1,
+    "gecos": "daemon",
+    "home": "/usr/sbin",
+    "shell": "/usr/sbin/nologin"
+  },
+  {
+    "username": "bin",
+    "password": "x",
+    "uid": 2,
+    "gid": 2,
+    "gecos": "bin",
+    "home": "/bin",
+    "shell": "/usr/sbin/nologin"
+  }
+]

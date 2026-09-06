@@ -293,8 +293,8 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 				v.add(path+".on_mismatch", "only valid for type regex or kv")
 			}
 		case "kv":
-			if p.Separator != "" || p.As != "" || p.KeyName != "" || p.ValueName != "" || p.Trim != nil {
-				v.add(path, "separator/as/key_name/value_name/trim are only valid for type kv")
+			if p.Separator != "" || p.As != "" || p.KeyName != "" || p.ValueName != "" || p.Trim != nil || p.Unquote {
+				v.add(path, "separator/as/key_name/value_name/trim/unquote are only valid for type kv")
 			}
 		case "composite":
 			if len(p.Parts) > 0 {

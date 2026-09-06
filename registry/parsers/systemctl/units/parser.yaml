@@ -1,0 +1,38 @@
+# `systemctl list-units` is an aligned table with a leading marker column
+# that is blank for a healthy unit and "*" (or another glyph) for one
+# that needs attention. The marker is reported rather than dropped.
+format: 1
+command: systemctl
+variant: units
+description: systemctl list-units table
+metadata:
+  tags: [linux, systemd, service]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemctl.html
+detect:
+  os: [linux]
+  args:
+    any: ["list-units", "--type=service", "-t"]
+  signature:
+    all:
+      - '\A\s*UNIT\s+LOAD\s+ACTIVE\s+SUB\s+DESCRIPTION\s*$'
+input:
+  ignore:
+    - '\A\s*UNIT\s+LOAD'
+    - '^\s*$'
+    - '^\d+ loaded units listed'
+    - '^To show all installed unit files'
+    - '^LOAD\s+='
+    - '^ACTIVE\s+='
+    - '^SUB\s+='
+parse:
+  type: regex
+  pattern: '^(?P<marker>\S)?\s+(?P<unit>\S+)\s+(?P<load>\S+)\s+(?P<active>\S+)\s+(?P<sub>\S+)\s+(?P<description>.+?)\s*$'
+fields:
+  marker: {when_missing: omit}
+  unit: {required: true}
+  load: {required: true}
+  active: {required: true}
+  sub: {required: true}
+  description: {required: true}

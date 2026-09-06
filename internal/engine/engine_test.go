@@ -850,3 +850,28 @@ fields:
 		t.Error(diff)
 	}
 }
+
+func TestParseKVUnquote(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: os-release\nvariant: linux\nparse: {type: kv, as: map, unquote: true}\n")
+	got, err := Parse(def, []byte(`NAME="Ubuntu"
+VERSION="26.04 LTS (Resolute Raccoon)"
+ID=ubuntu
+SINGLE='quoted'
+UNBALANCED="left
+EMPTY=""
+`), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `{"NAME":"Ubuntu","VERSION":"26.04 LTS (Resolute Raccoon)","ID":"ubuntu","SINGLE":"quoted","UNBALANCED":"\"left","EMPTY":""}`
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	// Without the option the quotes are content.
+	plain := load(t, "format: 1\ncommand: x\nvariant: v\nparse: {type: kv, as: map}\n")
+	got, err = Parse(plain, []byte("NAME=\"Ubuntu\"\n"), Options{})
+	if err != nil || mustJSON(t, got) != `{"NAME":"\"Ubuntu\""}` {
+		t.Errorf("without unquote: %v %v", mustJSON(t, got), err)
+	}
+}

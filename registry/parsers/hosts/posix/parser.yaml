@@ -1,0 +1,28 @@
+# /etc/hosts: an address and the names that resolve to it. Comments and
+# blank lines are dropped; a trailing comment on a line is kept out of
+# the host names.
+format: 1
+command: hosts
+variant: posix
+description: /etc/hosts entries
+metadata:
+  tags: [linux, darwin, network]
+  compatible: [POSIX hosts file]
+  references:
+    - https://man7.org/linux/man-pages/man5/hosts.5.html
+detect:
+  auto_detect: false
+  signature:
+    all:
+      # An IPv4 address or an IPv6 one, which has to contain a colon:
+      # bare hex digits would also describe a tab separated number.
+      - '^(?:\d+\.\d+\.\d+\.\d+|[0-9a-fA-F]*:[0-9a-fA-F:]*)\s+\S'
+input:
+  ignore:
+    - '^\s*#'
+parse:
+  type: regex
+  pattern: '^(?P<address>\S+)\s+(?P<names>[^#]+?)\s*(?:#.*)?$'
+fields:
+  address: {required: true}
+  names: {type: array, split_regex: '\s+'}

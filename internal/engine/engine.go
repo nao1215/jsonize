@@ -349,6 +349,20 @@ func (r *run) objectFromMatch(re *regexp.Regexp, text string, m []int, fields ma
 	return obj, nil
 }
 
+// unquote removes one matching pair of surrounding quotes, which is what
+// a shell-quoted file such as /etc/os-release writes around a value that
+// contains spaces.
+func unquote(s string) string {
+	if len(s) < 2 {
+		return s
+	}
+	q := s[0]
+	if (q == '"' || q == '\'') && s[len(s)-1] == q {
+		return s[1 : len(s)-1]
+	}
+	return s
+}
+
 // parseKV handles type: kv.
 func (r *run) parseKV(p *definition.Parse, fields map[string]*definition.Field, lines []line) (any, error) {
 	sep := p.Separator
@@ -389,6 +403,9 @@ func (r *run) parseKV(p *definition.Parse, fields map[string]*definition.Field, 
 		value := l.text[idx+len(sep):]
 		if trim {
 			value = strings.TrimSpace(value)
+		}
+		if p.Unquote {
+			value = unquote(value)
 		}
 		if asMap {
 			if err := r.setField(obj, key, value, fields[key], l.num); err != nil {

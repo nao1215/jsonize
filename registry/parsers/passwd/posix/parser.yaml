@@ -1,0 +1,32 @@
+# /etc/passwd, seven colon separated fields. The password field is the
+# placeholder the shadow file leaves behind, not a secret.
+format: 1
+command: passwd
+variant: posix
+description: /etc/passwd account entries
+metadata:
+  tags: [linux, darwin, user]
+  compatible: [shadow-utils]
+  references:
+    - https://man7.org/linux/man-pages/man5/passwd.5.html
+detect:
+  auto_detect: false
+  signature:
+    all:
+      - '\A[^:\n]+:[^:\n]*:\d+:\d+:[^:\n]*:[^:\n]*:'
+input:
+  ignore:
+    - '^\s*#'
+parse:
+  type: table
+  split: delimiter
+  delimiter: ":"
+  header:
+    none: true
+    columns: [username, password, uid, gid, gecos, home, shell]
+fields:
+  username: {required: true}
+  uid: {type: int, required: true}
+  gid: {type: int, required: true}
+  home: {required: true}
+  shell: {required: true}

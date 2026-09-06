@@ -1,0 +1,22 @@
+# "path: description". The path column is padded when several files are
+# named, so the colon is what separates them, not the spacing.
+format: 1
+command: file
+variant: posix
+description: file type descriptions
+metadata:
+  tags: [linux, darwin, filesystem]
+  compatible: [file(1)]
+  references:
+    - https://man7.org/linux/man-pages/man1/file.1.html
+detect:
+  auto_detect: false
+  signature:
+    all:
+      - '\A\S+:\s+\S'
+parse:
+  type: regex
+  pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'
+fields:
+  file: {required: true}
+  type: {required: true}

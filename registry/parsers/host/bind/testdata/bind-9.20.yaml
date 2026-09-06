@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (BIND host 9.20) with LC_ALL=C; host names replaced
+os: linux
+description: the HTTPS record line is not one of the sentences this definition reads, and is skipped

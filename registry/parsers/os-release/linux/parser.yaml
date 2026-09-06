@@ -1,0 +1,24 @@
+# /etc/os-release is NAME=value with quoted values. It is a file rather
+# than a command, so it is read as `cat /etc/os-release | jz --parser
+# os-release`; the shape alone is too close to a shell fragment for jz to
+# claim it.
+format: 1
+command: os-release
+variant: linux
+description: /etc/os-release distribution identification
+metadata:
+  tags: [linux, system]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/os-release.html
+detect:
+  auto_detect: false
+  signature:
+    all:
+      - '^(?:NAME|ID|PRETTY_NAME)='
+parse:
+  type: kv
+  separator: "="
+  as: map
+  # The quotes around a value with spaces are shell syntax, not content.
+  unquote: true

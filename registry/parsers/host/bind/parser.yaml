@@ -1,0 +1,33 @@
+# `host` prints one sentence per answer, and the sentence says which
+# record type it is. Each form is a pattern of its own so the address,
+# the mail exchanger and its priority land in named fields.
+format: 1
+command: host
+variant: bind
+description: host lookup answers
+metadata:
+  tags: [linux, darwin, network, dns]
+  compatible: [BIND host]
+  references:
+    - https://linux.die.net/man/1/host
+detect:
+  signature:
+    all:
+      - '^\S+ (?:has address|has IPv6 address|mail is handled by|is an alias for|domain name pointer|has HTTP service bindings) '
+parse:
+  type: regex
+  on_mismatch: skip
+  patterns:
+    - '^(?P<name>\S+) has address (?P<address>\S+)$'
+    - '^(?P<name>\S+) has IPv6 address (?P<ipv6_address>\S+)$'
+    - '^(?P<name>\S+) mail is handled by (?P<priority>\d+) (?P<exchanger>\S+)$'
+    - '^(?P<name>\S+) is an alias for (?P<alias_for>\S+)$'
+    - '^(?P<name>\S+) domain name pointer (?P<pointer>\S+)$'
+fields:
+  name: {required: true}
+  priority: {type: int, when_missing: omit}
+  address: {when_missing: omit}
+  ipv6_address: {when_missing: omit}
+  exchanger: {when_missing: omit}
+  alias_for: {when_missing: omit}
+  pointer: {when_missing: omit}

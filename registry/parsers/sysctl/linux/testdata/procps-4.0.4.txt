@@ -1,0 +1,4 @@
+abi.vsyscall32 = 1
+debug.exception-trace = 1
+debug.kprobes-optimization = 1
+dev.cdrom.autoclose = 1

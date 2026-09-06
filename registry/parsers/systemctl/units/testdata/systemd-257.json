@@ -1,0 +1,31 @@
+[
+  {
+    "unit": "accounts-daemon.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "running",
+    "description": "Accounts Service"
+  },
+  {
+    "unit": "alsa-restore.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "exited",
+    "description": "Save/Restore Sound Card State"
+  },
+  {
+    "unit": "apparmor.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "exited",
+    "description": "Load AppArmor profiles"
+  },
+  {
+    "marker": "*",
+    "unit": "apport-autoreport.service",
+    "load": "loaded",
+    "active": "failed",
+    "sub": "failed",
+    "description": "Process error reports when automatic reporting is enabled"
+  }
+]

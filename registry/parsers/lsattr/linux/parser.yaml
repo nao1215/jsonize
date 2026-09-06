@@ -1,0 +1,23 @@
+# The attribute string is fixed width, with a letter per attribute and a
+# dash where it is unset. The letters that are set are also listed, so a
+# consumer need not know the column order.
+format: 1
+command: lsattr
+variant: linux
+description: lsattr file attributes
+metadata:
+  tags: [linux, filesystem, e2fsprogs]
+  compatible: [e2fsprogs]
+  references:
+    - https://man7.org/linux/man-pages/man1/lsattr.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[-a-zA-Z]{10,25} /'
+parse:
+  type: regex
+  pattern: '^(?P<attributes>[-a-zA-Z]+)\s+(?P<file>.+)$'
+fields:
+  attributes: {required: true}
+  file: {required: true}

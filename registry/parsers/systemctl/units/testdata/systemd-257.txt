@@ -1,0 +1,5 @@
+  UNIT                                                                                      LOAD   ACTIVE SUB     DESCRIPTION
+  accounts-daemon.service                                                                   loaded active running Accounts Service
+  alsa-restore.service                                                                      loaded active exited  Save/Restore Sound Card State
+  apparmor.service                                                                          loaded active exited  Load AppArmor profiles
+* apport-autoreport.service                                                                 loaded failed failed  Process error reports when automatic reporting is enabled

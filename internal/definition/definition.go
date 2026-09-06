@@ -278,7 +278,11 @@ type Parse struct {
 	// Trim removes surrounding whitespace from both sides of the
 	// separator. It defaults to true; a format whose values are
 	// significant down to the space (env) sets it to false.
-	Trim      *bool  `yaml:"trim,omitempty"`
+	Trim *bool `yaml:"trim,omitempty"`
+	// Unquote removes one matching pair of surrounding quotes from the
+	// value, for the shell-quoted files (/etc/os-release) whose quotes
+	// are syntax rather than content.
+	Unquote   bool   `yaml:"unquote,omitempty"`
 	As        string `yaml:"as,omitempty"`
 	KeyName   string `yaml:"key_name,omitempty"`
 	ValueName string `yaml:"value_name,omitempty"`

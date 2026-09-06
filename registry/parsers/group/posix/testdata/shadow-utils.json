@@ -1,0 +1,20 @@
+[
+  {
+    "name": "root",
+    "password": "x",
+    "gid": 0,
+    "members": []
+  },
+  {
+    "name": "daemon",
+    "password": "x",
+    "gid": 1,
+    "members": []
+  },
+  {
+    "name": "bin",
+    "password": "x",
+    "gid": 2,
+    "members": []
+  }
+]

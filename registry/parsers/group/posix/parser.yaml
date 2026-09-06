@@ -1,0 +1,30 @@
+# /etc/group, four colon separated fields; the member list is an array
+# and is empty for a group nobody belongs to explicitly.
+format: 1
+command: group
+variant: posix
+description: /etc/group entries
+metadata:
+  tags: [linux, darwin, user]
+  compatible: [shadow-utils]
+  references:
+    - https://man7.org/linux/man-pages/man5/group.5.html
+detect:
+  auto_detect: false
+  signature:
+    all:
+      - '\A[^:\n]+:[^:\n]*:\d+:'
+input:
+  ignore:
+    - '^\s*#'
+parse:
+  type: table
+  split: delimiter
+  delimiter: ":"
+  header:
+    none: true
+    columns: [name, password, gid, members]
+fields:
+  name: {required: true}
+  gid: {type: int, required: true}
+  members: {type: array, split: ","}

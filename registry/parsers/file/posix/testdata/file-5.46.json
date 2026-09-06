@@ -1,0 +1,14 @@
+[
+  {
+    "file": "/etc/hosts",
+    "type": "ASCII text"
+  },
+  {
+    "file": "/bin/ls",
+    "type": "symbolic link to ../lib/cargo/bin/coreutils/ls"
+  },
+  {
+    "file": "/tmp",
+    "type": "sticky, directory"
+  }
+]

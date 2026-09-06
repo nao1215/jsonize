@@ -1,0 +1,14 @@
+[
+  {
+    "address": "127.0.0.1",
+    "names": [
+      "localhost"
+    ]
+  },
+  {
+    "address": "127.0.1.1",
+    "names": [
+      "host1"
+    ]
+  }
+]

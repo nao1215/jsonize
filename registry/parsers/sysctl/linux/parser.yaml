@@ -1,0 +1,24 @@
+# "key = value" pairs. Values keep their text: many are tab separated
+# lists (net.ipv4.tcp_rmem) or paths, and a number here is not more
+# useful than the string the kernel printed.
+format: 1
+command: sysctl
+variant: linux
+description: sysctl -a kernel parameters
+metadata:
+  tags: [linux, kernel, procps]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man8/sysctl.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-a", "--all", "-A"]
+  signature:
+    all:
+      - '\A[a-z][a-z0-9_.]*\.[a-z0-9_.]+ = '
+      - '^(?:kernel|net|vm|fs|dev|abi|debug)\.'
+parse:
+  type: kv
+  separator: " = "
+  as: list

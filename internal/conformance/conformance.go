@@ -90,7 +90,10 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 				res.Err = fmt.Errorf("selection with --parser %s: %w", e.Def.Command, err)
 				return res
 			}
-			if _, err := selector.Select(reg, selector.Context{Input: c.Input}); err == nil {
+			// Automatic detection may well land on another definition
+			// whose format this text also fits; what it must not do is
+			// choose this one.
+			if sel, err := selector.Select(reg, selector.Context{Input: c.Input}); err == nil && sel.Entry.Def.ID() == e.Def.ID() {
 				res.Err = fmt.Errorf("%s declares auto_detect: false but automatic detection still chose it", e.Def.ID())
 				return res
 			}
