@@ -1,0 +1,139 @@
+version: "1"
+
+suite:
+  name: jz - output of one command is not read by another parser
+
+# Every fixture here is real output that another definition used to claim.
+# Naming the parser does not get past the signature either: a signature is
+# a necessary condition, not a hint.
+scenarios:
+  - name: /etc/passwd is not read as /etc/group
+    steps:
+      - fixture:
+          file: passwd.txt
+          from: "${specdir}/testdata/decoys/passwd.txt"
+      # group has four colon separated fields, passwd has seven. Read as a
+      # group the shell would end up in the member list.
+      - run:
+          command: jz --parser group --file passwd.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: no group variant matches this input
+      - run:
+          command: jz --file passwd.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: it could be `passwd` output
+
+  - name: the clock in BSD uptime output is not an IPv6 address
+    steps:
+      - fixture:
+          file: uptime-bsd.txt
+          from: "${specdir}/testdata/decoys/uptime-bsd.txt"
+      # "12:34  up 3 days" has the shape of an address followed by names.
+      - run:
+          command: jz --parser hosts --file uptime-bsd.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: no hosts variant matches this input
+      - run:
+          command: jz --file uptime-bsd.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            empty: true
+          stdout:
+            json:
+              - {path: "$.time", equals: "12:34"}
+              - {path: "$.users", equals: 2}
+
+  - name: /etc/os-release is not read as environment variables
+    steps:
+      - fixture:
+          file: os-release.txt
+          from: "${specdir}/testdata/decoys/os-release.txt"
+      # Read as env the shell quotes stay inside the values.
+      - run:
+          command: jz --parser env --file os-release.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: no env variant matches this input
+      - run:
+          command: jz --file os-release.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: it could be `os-release` output
+      - run:
+          command: jz --parser os-release --file os-release.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            empty: true
+          stdout:
+            json:
+              - {path: "$.NAME", equals: Ubuntu}
+              - {path: "$.VERSION_ID", equals: "26.04"}
+
+  - name: blkid output is not read as file(1) descriptions
+    steps:
+      - fixture:
+          file: blkid.txt
+          from: "${specdir}/testdata/decoys/blkid.txt"
+      # Both are "NAME: rest of the line".
+      - run:
+          command: jz --parser file --file blkid.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: no file variant matches this input
+      - run:
+          command: jz --file blkid.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            empty: true
+          stdout:
+            json:
+              - {path: "$", length: 2}
+              - {path: "$[0].device", equals: /dev/nvme0n1p2}
+
+  - name: ip -brief link is not read as ip -brief address
+    steps:
+      - fixture:
+          file: ip-br-link.txt
+          from: "${specdir}/testdata/decoys/ip-br-link.txt"
+      # The first two columns are the same; the third is a MAC address,
+      # which would land in the address list.
+      - run:
+          command: jz --parser ip --variant brief-address --file ip-br-link.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: does not describe this input
+      - run:
+          command: jz --file ip-br-link.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: unable to identify the input format

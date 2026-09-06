@@ -1,0 +1,35 @@
+[
+  {
+    "address": "::1",
+    "names": [
+      "localhost",
+      "ip6-localhost",
+      "ip6-loopback"
+    ]
+  },
+  {
+    "address": "fe00::0",
+    "names": [
+      "ip6-localnet"
+    ]
+  },
+  {
+    "address": "ff02::1",
+    "names": [
+      "ip6-allnodes"
+    ]
+  },
+  {
+    "address": "ff02::2",
+    "names": [
+      "ip6-allrouters"
+    ]
+  },
+  {
+    "address": "2001:db8::10",
+    "names": [
+      "host1.example.com",
+      "host1"
+    ]
+  }
+]

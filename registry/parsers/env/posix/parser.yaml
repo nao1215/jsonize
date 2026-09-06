@@ -21,6 +21,12 @@ detect:
     # weak a claim to convert without being asked.
     all:
       - '^[A-Za-z_][A-Za-z0-9_]*=[^\n]*\n[A-Za-z_][A-Za-z0-9_]*='
+    none:
+      # /etc/os-release has the same NAME=value shape but its values are
+      # shell quoted and its keys are not environment variables. Read as
+      # env the quotes end up inside the value.
+      - '^[A-Za-z_][A-Za-z0-9_]*="'
+      - '^(?:PRETTY_NAME|VERSION_ID|VERSION_CODENAME|ID_LIKE|HOME_URL)='
 parse:
   type: kv
   separator: "="

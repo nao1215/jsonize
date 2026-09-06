@@ -16,6 +16,11 @@ detect:
   signature:
     all:
       - '\A\S+\s+(?:UP|DOWN|UNKNOWN|LOWERLAYERDOWN)\s'
+    none:
+      # `ip -brief link` shares the first two columns. Its third column is
+      # a MAC address followed by the interface flags in angle brackets,
+      # which read as addresses here.
+      - '^\S+\s+\S+\s+.*<[A-Z_,-]+>'
 parse:
   type: regex
   pattern: '^(?P<interface>\S+)\s+(?P<state>UP|DOWN|UNKNOWN|LOWERLAYERDOWN)\s*(?P<addresses>.*?)\s*$'
