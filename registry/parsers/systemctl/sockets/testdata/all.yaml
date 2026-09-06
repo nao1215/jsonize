@@ -1,0 +1,3 @@
+source: "systemctl list-sockets --all --no-pager on Ubuntu with systemd 259, LC_ALL=C; loaded but inactive sockets widen the unit column"
+os: linux
+args: ["list-sockets", "--all"]

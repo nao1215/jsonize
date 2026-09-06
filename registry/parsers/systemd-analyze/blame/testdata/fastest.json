@@ -1,0 +1,82 @@
+[
+  {
+    "time": "551us",
+    "unit": "systemd-ask-password.socket"
+  },
+  {
+    "time": "510us",
+    "unit": "systemd-factory-reset.socket"
+  },
+  {
+    "time": "435us",
+    "unit": "systemd-sysext.socket"
+  },
+  {
+    "time": "366us",
+    "unit": "systemd-creds.socket"
+  },
+  {
+    "time": "62us",
+    "unit": "systemd-journald-dev-log.socket"
+  },
+  {
+    "time": "53us",
+    "unit": "avahi-daemon.socket"
+  },
+  {
+    "time": "51us",
+    "unit": "uuidd.socket"
+  },
+  {
+    "time": "49us",
+    "unit": "cups.socket"
+  },
+  {
+    "time": "26us",
+    "unit": "systemd-journald.socket"
+  },
+  {
+    "time": "23us",
+    "unit": "syslog.socket"
+  },
+  {
+    "time": "20us",
+    "unit": "systemd-resolved-monitor.socket"
+  },
+  {
+    "time": "16us",
+    "unit": "systemd-rfkill.socket"
+  },
+  {
+    "time": "15us",
+    "unit": "systemd-hostnamed.socket"
+  },
+  {
+    "time": "14us",
+    "unit": "dbus.socket"
+  },
+  {
+    "time": "13us",
+    "unit": "systemd-oomd.socket"
+  },
+  {
+    "time": "11us",
+    "unit": "systemd-udevd-varlink.socket"
+  },
+  {
+    "time": "10us",
+    "unit": "systemd-logind-varlink.socket"
+  },
+  {
+    "time": "9us",
+    "unit": "systemd-udevd-kernel.socket"
+  },
+  {
+    "time": "7us",
+    "unit": "systemd-udevd-control.socket"
+  },
+  {
+    "time": "7us",
+    "unit": "systemd-resolved-varlink.socket"
+  }
+]

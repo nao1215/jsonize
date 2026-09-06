@@ -1,0 +1,31 @@
+# `systemctl show UNIT` prints one property per line as Key=value. The
+# keys are already identifiers and each appears once, so the result is
+# one object rather than a list of pairs.
+#
+# The shape is the same as an environment dump, which is why the
+# signature asks for the two properties every unit has: an Id that ends
+# in a unit suffix, and a Description. A .env file has neither.
+#
+# No value is converted. systemd spells durations in microseconds, "yes"
+# and "no" for booleans, "infinity" for no limit and "[not set]" for an
+# unset one, all in the same output, and picking a type per property
+# would mean naming every property systemd has.
+format: 1
+command: systemctl
+variant: show
+description: systemctl show properties of a unit
+metadata:
+  tags: [linux, systemd, service]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemctl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AId=[^\n]+\.(?:service|socket|target|device|mount|automount|swap|path|timer|slice|scope)$'
+      - '^Description='
+parse:
+  type: kv
+  separator: "="
+  as: map

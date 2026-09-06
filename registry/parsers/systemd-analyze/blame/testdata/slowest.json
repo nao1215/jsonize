@@ -1,0 +1,82 @@
+[
+  {
+    "time": "1w 6d 18h 15min 19.086s",
+    "unit": "snapd.service"
+  },
+  {
+    "time": "2min 44.575s",
+    "unit": "fstrim.service"
+  },
+  {
+    "time": "1min 1.969s",
+    "unit": "apt-daily-upgrade.service"
+  },
+  {
+    "time": "30.105s",
+    "unit": "apport-autoreport.service"
+  },
+  {
+    "time": "12.295s",
+    "unit": "apt-daily.service"
+  },
+  {
+    "time": "4.816s",
+    "unit": "NetworkManager-wait-online.service"
+  },
+  {
+    "time": "2.077s",
+    "unit": "dev-rfkill.device"
+  },
+  {
+    "time": "2.077s",
+    "unit": "sys-devices-virtual-misc-rfkill.device"
+  },
+  {
+    "time": "2.030s",
+    "unit": "dev-tpm0.device"
+  },
+  {
+    "time": "2.030s",
+    "unit": "sys-devices-LNXSYSTM:00-LNXSYBUS:00-MSFT0101:00-tpm-tpm0.device"
+  },
+  {
+    "time": "2.024s",
+    "unit": "sys-devices-platform-serial8250-serial8250:0-serial8250:0.3-tty-ttyS3.device"
+  },
+  {
+    "time": "2.024s",
+    "unit": "dev-ttyS3.device"
+  },
+  {
+    "time": "2.021s",
+    "unit": "sys-devices-platform-serial8250-serial8250:0-serial8250:0.2-tty-ttyS2.device"
+  },
+  {
+    "time": "2.021s",
+    "unit": "dev-ttyS2.device"
+  },
+  {
+    "time": "2.019s",
+    "unit": "dev-tpmrm0.device"
+  },
+  {
+    "time": "2.019s",
+    "unit": "sys-devices-LNXSYSTM:00-LNXSYBUS:00-MSFT0101:00-tpmrm-tpmrm0.device"
+  },
+  {
+    "time": "2.019s",
+    "unit": "dev-ttyprintk.device"
+  },
+  {
+    "time": "2.019s",
+    "unit": "sys-devices-virtual-tty-ttyprintk.device"
+  },
+  {
+    "time": "2.017s",
+    "unit": "dev-ttyS0.device"
+  },
+  {
+    "time": "2.017s",
+    "unit": "sys-devices-platform-serial8250-serial8250:0-serial8250:0.0-tty-ttyS0.device"
+  }
+]

@@ -1,0 +1,31 @@
+# `journalctl -o short-iso` prints the same entry as the default short
+# output with an ISO 8601 timestamp in place of the syslog date. The
+# offset is what separates the two: the default format has no zone, so
+# neither definition can read the other's output.
+#
+# Like the short variant, the shape belongs to any log that prints a
+# timestamp, a host and a tag, so the definition is never chosen
+# automatically.
+format: 1
+command: journalctl
+variant: short-iso
+description: journalctl short-iso output, one journal entry per line
+metadata:
+  tags: [linux, log, systemd]
+  compatible: [systemd]
+  references:
+    - https://man7.org/linux/man-pages/man1/journalctl.1.html
+detect:
+  os: [linux]
+  auto_detect: false
+  signature:
+    all:
+      - '^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2} \S+ [^\s\[:]+(?:\[[0-9]+\])?: '
+parse:
+  type: regex
+  pattern: '^(?P<timestamp>[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}[+-][0-9]{2}:[0-9]{2}) (?P<hostname>\S+) (?P<identifier>[^\s\[:]+)(?:\[(?P<pid>[0-9]+)\])?: ?(?P<message>.*)$'
+fields:
+  timestamp: {required: true}
+  hostname: {required: true}
+  identifier: {required: true}
+  pid: {type: int}

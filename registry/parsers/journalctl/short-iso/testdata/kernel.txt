@@ -1,0 +1,5 @@
+2026-09-07T03:35:06+09:00 host01 systemd-sysv-generator[924726]: Please update package to include a native systemd unit file.
+2026-09-07T03:35:06+09:00 host01 systemd-sysv-generator[924726]: ! This compatibility logic is deprecated, expect removal soon. !
+2026-09-07T03:45:35+09:00 host01 kernel: kauditd_printk_skb: 126 callbacks suppressed
+2026-09-07T03:45:35+09:00 host01 kernel: audit: type=1400 audit(1788720335.729:3527): apparmor="AUDIT" operation="userns_create" class="namespace" info="Userns create - transitioning profile" profile="unconfined" pid=937338 comm="unshare" requested="userns_create" target="unprivileged_userns" execpath="/usr/bin/unshare"
+2026-09-07T03:45:35+09:00 host01 kernel: audit: type=1400 audit(1788720335.729:3528): apparmor="DENIED" operation="capable" class="cap" profile="unprivileged_userns" pid=937338 comm="unshare" capability=25  capname="sys_time"

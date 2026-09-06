@@ -1,0 +1,23 @@
+# `timedatectl timesync-status` reports what systemd-timesyncd knows
+# about the server it follows. The labels are right-aligned and contain
+# spaces, so the pairs stay a list of name/value objects, and the values
+# keep the units and the parenthesised bounds systemd printed with them.
+format: 1
+command: timedatectl
+variant: timesync
+description: timedatectl timesync-status, the state of the time synchronisation
+metadata:
+  tags: [linux, systemd, time]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/timedatectl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^[ \t]*Poll interval: '
+      - '^[ \t]*Root distance: '
+parse:
+  type: kv
+  separator: ":"
+  as: list

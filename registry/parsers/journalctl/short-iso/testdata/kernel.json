@@ -1,0 +1,37 @@
+[
+  {
+    "timestamp": "2026-09-07T03:35:06+09:00",
+    "hostname": "host01",
+    "identifier": "systemd-sysv-generator",
+    "pid": 924726,
+    "message": "Please update package to include a native systemd unit file."
+  },
+  {
+    "timestamp": "2026-09-07T03:35:06+09:00",
+    "hostname": "host01",
+    "identifier": "systemd-sysv-generator",
+    "pid": 924726,
+    "message": "! This compatibility logic is deprecated, expect removal soon. !"
+  },
+  {
+    "timestamp": "2026-09-07T03:45:35+09:00",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "kauditd_printk_skb: 126 callbacks suppressed"
+  },
+  {
+    "timestamp": "2026-09-07T03:45:35+09:00",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "audit: type=1400 audit(1788720335.729:3527): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=937338 comm=\"unshare\" requested=\"userns_create\" target=\"unprivileged_userns\" execpath=\"/usr/bin/unshare\""
+  },
+  {
+    "timestamp": "2026-09-07T03:45:35+09:00",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "audit: type=1400 audit(1788720335.729:3528): apparmor=\"DENIED\" operation=\"capable\" class=\"cap\" profile=\"unprivileged_userns\" pid=937338 comm=\"unshare\" capability=25  capname=\"sys_time\""
+  }
+]

@@ -1,0 +1,147 @@
+[
+  {
+    "listen": "0.0.0.0:22",
+    "unit": "ssh.socket",
+    "activates": "ssh.service"
+  },
+  {
+    "listen": "[::]:22",
+    "unit": "ssh.socket",
+    "activates": "ssh.service"
+  },
+  {
+    "listen": "kobject-uevent 1",
+    "unit": "systemd-udevd-kernel.socket",
+    "activates": "systemd-udevd.service"
+  },
+  {
+    "listen": "/dev/rfkill",
+    "unit": "systemd-rfkill.socket",
+    "activates": "systemd-rfkill.service"
+  },
+  {
+    "listen": "/run/avahi-daemon/socket",
+    "unit": "avahi-daemon.socket",
+    "activates": "avahi-daemon.service"
+  },
+  {
+    "listen": "/run/cups/cups.sock",
+    "unit": "cups.socket",
+    "activates": "cups.service"
+  },
+  {
+    "listen": "/run/dbus/system_bus_socket",
+    "unit": "dbus.socket",
+    "activates": "dbus.service"
+  },
+  {
+    "listen": "/run/docker.sock",
+    "unit": "docker.socket",
+    "activates": "docker.service"
+  },
+  {
+    "listen": "/run/polkit/agent-helper.socket",
+    "unit": "polkit-agent-helper.socket",
+    "activates": null
+  },
+  {
+    "listen": "/run/snapd-snap.socket",
+    "unit": "snapd.socket",
+    "activates": "snapd.service"
+  },
+  {
+    "listen": "/run/snapd.socket",
+    "unit": "snapd.socket",
+    "activates": "snapd.service"
+  },
+  {
+    "listen": "/run/ssh-unix-local/socket",
+    "unit": "sshd-unix-local.socket",
+    "activates": null
+  },
+  {
+    "listen": "/run/systemd/io.systemd.AskPassword",
+    "unit": "systemd-ask-password.socket",
+    "activates": null
+  },
+  {
+    "listen": "/run/systemd/io.systemd.Credentials",
+    "unit": "systemd-creds.socket",
+    "activates": null
+  },
+  {
+    "listen": "/run/systemd/io.systemd.FactoryReset",
+    "unit": "systemd-factory-reset.socket",
+    "activates": null
+  },
+  {
+    "listen": "/run/systemd/io.systemd.Hostname",
+    "unit": "systemd-hostnamed.socket",
+    "activates": "systemd-hostnamed.service"
+  },
+  {
+    "listen": "/run/systemd/io.systemd.Login",
+    "unit": "systemd-logind-varlink.socket",
+    "activates": "systemd-logind.service"
+  },
+  {
+    "listen": "/run/systemd/io.systemd.MuteConsole",
+    "unit": "systemd-mute-console.socket",
+    "activates": null
+  },
+  {
+    "listen": "/run/systemd/io.systemd.sysext",
+    "unit": "systemd-sysext.socket",
+    "activates": null
+  },
+  {
+    "listen": "/run/systemd/journal/dev-log",
+    "unit": "systemd-journald-dev-log.socket",
+    "activates": "systemd-journald.service"
+  },
+  {
+    "listen": "/run/systemd/journal/socket",
+    "unit": "systemd-journald.socket",
+    "activates": "systemd-journald.service"
+  },
+  {
+    "listen": "/run/systemd/journal/stdout",
+    "unit": "systemd-journald.socket",
+    "activates": "systemd-journald.service"
+  },
+  {
+    "listen": "/run/systemd/journal/syslog",
+    "unit": "syslog.socket",
+    "activates": "rsyslog.service"
+  },
+  {
+    "listen": "/run/systemd/oom/io.systemd.ManagedOOM",
+    "unit": "systemd-oomd.socket",
+    "activates": "systemd-oomd.service"
+  },
+  {
+    "listen": "/run/systemd/resolve/io.systemd.Resolve",
+    "unit": "systemd-resolved-varlink.socket",
+    "activates": "systemd-resolved.service"
+  },
+  {
+    "listen": "/run/systemd/resolve/io.systemd.Resolve.Monitor",
+    "unit": "systemd-resolved-monitor.socket",
+    "activates": "systemd-resolved.service"
+  },
+  {
+    "listen": "/run/udev/control",
+    "unit": "systemd-udevd-control.socket",
+    "activates": "systemd-udevd.service"
+  },
+  {
+    "listen": "/run/udev/io.systemd.Udev",
+    "unit": "systemd-udevd-varlink.socket",
+    "activates": "systemd-udevd.service"
+  },
+  {
+    "listen": "/run/uuidd/request",
+    "unit": "uuidd.socket",
+    "activates": "uuidd.service"
+  }
+]

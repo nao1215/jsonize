@@ -1,0 +1,30 @@
+# `systemctl list-unit-files` prints three columns, and the first header
+# label is two words, so the names are given rather than derived. A
+# preset of "-" means the unit file has no preset rather than a preset
+# named "-", so it becomes null.
+format: 1
+command: systemctl
+variant: unit-files
+description: systemctl list-unit-files table
+metadata:
+  tags: [linux, systemd, service]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemctl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*UNIT FILE[ \t]+STATE[ \t]+PRESET[ \t]*$'
+input:
+  ignore:
+    - '^[0-9]+ unit files listed\.$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    columns: [unit_file, state, preset]
+fields:
+  unit_file: {required: true}
+  state: {required: true}
+  preset: {null_if: ["-"]}

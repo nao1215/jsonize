@@ -1,0 +1,45 @@
+LISTEN                                          UNIT                                 ACTIVATES
+0.0.0.0:22                                      ssh.socket                           ssh.service
+[::]:22                                         ssh.socket                           ssh.service
+audit 1                                         systemd-journald-audit.socket        systemd-journald.service
+kobject-uevent 1                                systemd-udevd-kernel.socket          systemd-udevd.service
+route 1361                                      systemd-networkd.socket              systemd-networkd.service
+/dev/rfkill                                     systemd-rfkill.socket                systemd-rfkill.service
+/run/apport.socket                              apport-forward.socket                -
+/run/avahi-daemon/socket                        avahi-daemon.socket                  avahi-daemon.service
+/run/cups/cups.sock                             cups.socket                          cups.service
+/run/dbus/system_bus_socket                     dbus.socket                          dbus.service
+/run/docker.sock                                docker.socket                        docker.service
+/run/polkit/agent-helper.socket                 polkit-agent-helper.socket           -
+/run/snapd-snap.socket                          snapd.socket                         snapd.service
+/run/snapd.socket                               snapd.socket                         snapd.service
+/run/ssh-unix-local/socket                      sshd-unix-local.socket               -
+/run/systemd/io.systemd.AskPassword             systemd-ask-password.socket          -
+/run/systemd/io.systemd.Credentials             systemd-creds.socket                 -
+/run/systemd/io.systemd.FactoryReset            systemd-factory-reset.socket         -
+/run/systemd/io.systemd.Hostname                systemd-hostnamed.socket             systemd-hostnamed.service
+/run/systemd/io.systemd.Login                   systemd-logind-varlink.socket        systemd-logind.service
+/run/systemd/io.systemd.MuteConsole             systemd-mute-console.socket          -
+/run/systemd/io.systemd.PCRExtend               systemd-pcrextend.socket             -
+/run/systemd/io.systemd.PCRLock                 systemd-pcrlock.socket               -
+/run/systemd/io.systemd.sysext                  systemd-sysext.socket                -
+/run/systemd/journal/dev-log                    systemd-journald-dev-log.socket      systemd-journald.service
+/run/systemd/journal/socket                     systemd-journald.socket              systemd-journald.service
+/run/systemd/journal/stdout                     systemd-journald.socket              systemd-journald.service
+/run/systemd/journal/syslog                     syslog.socket                        rsyslog.service
+/run/systemd/netif/io.systemd.Network           systemd-networkd-varlink.socket      systemd-networkd.service
+/run/systemd/oom/io.systemd.ManagedOOM          systemd-oomd.socket                  systemd-oomd.service
+/run/systemd/resolve/io.systemd.Resolve         systemd-resolved-varlink.socket      systemd-resolved.service
+/run/systemd/resolve/io.systemd.Resolve.Monitor systemd-resolved-monitor.socket      systemd-resolved.service
+/run/systemd/resolve.hook/io.systemd.Network    systemd-networkd-resolve-hook.socket systemd-networkd.service
+/run/udev/control                               systemd-udevd-control.socket         systemd-udevd.service
+/run/udev/io.systemd.Udev                       systemd-udevd-varlink.socket         systemd-udevd.service
+/run/uuidd/request                              uuidd.socket                         uuidd.service
+/var/lib/sss/pipes/autofs                       sssd-autofs.socket                   sssd-autofs.service
+/var/lib/sss/pipes/nss                          sssd-nss.socket                      sssd-nss.service
+/var/lib/sss/pipes/pac                          sssd-pac.socket                      sssd-pac.service
+/var/lib/sss/pipes/pam                          sssd-pam.socket                      sssd-pam.service
+/var/lib/sss/pipes/ssh                          sssd-ssh.socket                      sssd-ssh.service
+/var/lib/sss/pipes/sudo                         sssd-sudo.socket                     sssd-sudo.service
+
+42 sockets listed.

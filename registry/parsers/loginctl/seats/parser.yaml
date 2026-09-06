@@ -1,0 +1,29 @@
+# `loginctl list-seats` prints one column and a legend. The header is the
+# whole of the evidence the text carries, so it is anchored at the start
+# of the input, and the subcommand is required as well: a seat list and a
+# session list are both loginctl output and only the arguments tell them
+# apart before the header is read.
+format: 1
+command: loginctl
+variant: seats
+description: loginctl list-seats table
+metadata:
+  tags: [linux, systemd, session]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/loginctl.html
+detect:
+  os: [linux]
+  args:
+    any: ["list-seats"]
+  signature:
+    all:
+      - '\A[ \t]*SEAT[ \t]*$'
+input:
+  ignore:
+    - '^[0-9]+ seats listed\.$'
+parse:
+  type: table
+  split: whitespace
+fields:
+  seat: {required: true}

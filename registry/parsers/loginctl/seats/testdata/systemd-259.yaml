@@ -1,0 +1,3 @@
+source: "loginctl list-seats --no-pager on Ubuntu with systemd 259, LC_ALL=C; this host has the one seat logind creates for the local console, and attaching another needs root"
+os: linux
+args: ["list-seats"]

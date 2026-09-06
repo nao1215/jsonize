@@ -1,0 +1,3 @@
+source: "systemctl list-unit-files cron.service ssh.service ssh.socket sshd.service sshd@.service --no-pager on Ubuntu with systemd 259, LC_ALL=C; host name replaced"
+os: linux
+args: ["list-unit-files", "cron.service", "ssh.service", "ssh.socket", "sshd.service", "sshd@.service"]

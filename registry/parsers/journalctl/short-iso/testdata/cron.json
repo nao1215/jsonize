@@ -1,0 +1,72 @@
+[
+  {
+    "timestamp": "2026-09-07T01:17:01+09:00",
+    "hostname": "host01",
+    "identifier": "CRON",
+    "pid": 818556,
+    "message": "pam_unix(cron:session): session closed for user root"
+  },
+  {
+    "timestamp": "2026-09-07T02:17:01+09:00",
+    "hostname": "host01",
+    "identifier": "CRON",
+    "pid": 864585,
+    "message": "pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)"
+  },
+  {
+    "timestamp": "2026-09-07T02:17:01+09:00",
+    "hostname": "host01",
+    "identifier": "CRON",
+    "pid": 864587,
+    "message": "(root) CMD (cd / && run-parts --report /etc/cron.hourly)"
+  },
+  {
+    "timestamp": "2026-09-07T02:17:01+09:00",
+    "hostname": "host01",
+    "identifier": "CRON",
+    "pid": 864585,
+    "message": "pam_unix(cron:session): session closed for user root"
+  },
+  {
+    "timestamp": "2026-09-07T03:10:01+09:00",
+    "hostname": "host01",
+    "identifier": "CRON",
+    "pid": 904501,
+    "message": "pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)"
+  },
+  {
+    "timestamp": "2026-09-07T03:10:01+09:00",
+    "hostname": "host01",
+    "identifier": "CRON",
+    "pid": 904503,
+    "message": "(root) CMD (test -e /run/systemd/system || SERVICE_MODE=1 /sbin/e2scrub_all -A -r)"
+  },
+  {
+    "timestamp": "2026-09-07T03:10:01+09:00",
+    "hostname": "host01",
+    "identifier": "CRON",
+    "pid": 904501,
+    "message": "pam_unix(cron:session): session closed for user root"
+  },
+  {
+    "timestamp": "2026-09-07T03:17:01+09:00",
+    "hostname": "host01",
+    "identifier": "CRON",
+    "pid": 909613,
+    "message": "pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)"
+  },
+  {
+    "timestamp": "2026-09-07T03:17:01+09:00",
+    "hostname": "host01",
+    "identifier": "CRON",
+    "pid": 909615,
+    "message": "(root) CMD (cd / && run-parts --report /etc/cron.hourly)"
+  },
+  {
+    "timestamp": "2026-09-07T03:17:01+09:00",
+    "hostname": "host01",
+    "identifier": "CRON",
+    "pid": 909613,
+    "message": "pam_unix(cron:session): session closed for user root"
+  }
+]
