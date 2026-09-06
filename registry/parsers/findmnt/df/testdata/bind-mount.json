@@ -1,0 +1,11 @@
+[
+  {
+    "source": "tmpfs[/snapd/ns]",
+    "fstype": "tmpfs",
+    "size": null,
+    "used": null,
+    "available": null,
+    "use_percent": null,
+    "target": "/run/snapd/ns"
+  }
+]

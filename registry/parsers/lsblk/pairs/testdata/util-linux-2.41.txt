@@ -1,0 +1,6 @@
+NAME="loop0" MAJ:MIN="7:0" RM="0" SIZE="4K" RO="1" TYPE="loop" MOUNTPOINTS="/snap/bare/5"
+NAME="loop1" MAJ:MIN="7:1" RM="0" SIZE="100.5M" RO="1" TYPE="loop" MOUNTPOINTS="/snap/telegram-desktop/7119"
+NAME="loop2" MAJ:MIN="7:2" RM="0" SIZE="221.5M" RO="1" TYPE="loop" MOUNTPOINTS="/snap/thunderbird/1240"
+NAME="loop3" MAJ:MIN="7:3" RM="0" SIZE="63.8M" RO="1" TYPE="loop" MOUNTPOINTS="/snap/core20/2866"
+NAME="loop4" MAJ:MIN="7:4" RM="0" SIZE="63.8M" RO="1" TYPE="loop" MOUNTPOINTS="/snap/core20/2769"
+NAME="loop5" MAJ:MIN="7:5" RM="0" SIZE="55.5M" RO="1" TYPE="loop" MOUNTPOINTS="/snap/core18/2999"

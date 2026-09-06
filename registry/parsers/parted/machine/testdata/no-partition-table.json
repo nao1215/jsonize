@@ -1,0 +1,15 @@
+[
+  {
+    "disk": {
+      "device": "/tmp/jz-disks/empty.img",
+      "size": "67.1MB",
+      "transport": "file",
+      "logical_sector_size": 512,
+      "physical_sector_size": 512,
+      "partition_table": "unknown",
+      "model": null,
+      "flags": []
+    },
+    "partitions": []
+  }
+]

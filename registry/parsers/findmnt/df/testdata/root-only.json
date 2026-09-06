@@ -1,0 +1,11 @@
+[
+  {
+    "source": "/dev/nvme1n1p2",
+    "fstype": "ext4",
+    "size": "1.8T",
+    "used": "1.6T",
+    "available": "142.6G",
+    "use_percent": 87,
+    "target": "/"
+  }
+]

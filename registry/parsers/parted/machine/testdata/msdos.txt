@@ -1,0 +1,5 @@
+BYT;
+/tmp/jz-disks/dos.img:537MB:file:512:512:msdos::;
+1:1049kB:106MB:105MB:::boot;
+2:106MB:173MB:67.1MB:::swap;
+3:173MB:230MB:56.6MB:::lba;

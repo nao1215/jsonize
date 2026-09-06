@@ -1,0 +1,30 @@
+# `lsblk -t` reports the queue geometry of each device. Every column is an
+# exact number except SCHED, which names the I/O scheduler, and WSAME,
+# which lsblk rounds ("0B", "2G"), so those two stay text.
+format: 1
+command: lsblk
+variant: topology
+description: lsblk -t, per-device I/O topology
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsblk.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^NAME[ \t]+ALIGNMENT[ \t]+MIN-IO[ \t]+OPT-IO[ \t]+PHY-SEC[ \t]+LOG-SEC[ \t]+ROTA[ \t]+SCHED[ \t]+RQ-SIZE[ \t]+RA[ \t]+WSAME[ \t]*$'
+parse:
+  type: table
+  split: aligned
+fields:
+  name: {required: true}
+  alignment: {type: int, required: true}
+  min_io: {type: int, required: true}
+  opt_io: {type: int, required: true}
+  phy_sec: {type: int, required: true}
+  log_sec: {type: int, required: true}
+  rota: {type: bool, required: true}
+  rq_size: {type: int}
+  ra: {type: int}

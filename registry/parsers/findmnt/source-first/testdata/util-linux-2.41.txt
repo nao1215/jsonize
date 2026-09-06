@@ -1,0 +1,10 @@
+SOURCE                 TARGET                                                                                              FSTYPE          OPTIONS
+/dev/nvme1n1p2         /                                                                                                   ext4            rw,relatime
+tmpfs                  |-/run                                                                                              tmpfs           rw,nosuid,nodev,size=12882672k,nr_inodes=819200,mode=755,inode64
+none                   | |-/run/credentials/systemd-journald.service                                                       tmpfs           ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,inode64,noswap
+none                   | |-/run/credentials/systemd-resolved.service                                                       tmpfs           ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,inode64,noswap
+tmpfs[/snapd/ns]       | |-/run/snapd/ns                                                                                   tmpfs           rw,nosuid,nodev,size=12882672k,nr_inodes=819200,mode=755,inode64
+nsfs[mnt:[4026534672]] | | |-/run/snapd/ns/yq.mnt                                                                          nsfs            rw
+nsfs[mnt:[4026533362]] | | |-/run/snapd/ns/snapd-desktop-integration.mnt                                                   nsfs            rw
+nsfs[mnt:[4026533127]] | | |-/run/snapd/ns/telegram-desktop.mnt                                                            nsfs            rw
+nsfs[mnt:[4026533125]] | | `-/run/snapd/ns/firmware-updater.mnt                                                            nsfs            rw

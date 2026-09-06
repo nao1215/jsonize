@@ -1,0 +1,33 @@
+# `df -Th` combines the type column of -T with the rounded sizes of -h.
+# The header names all seven columns and no other df form prints it, so
+# the signature alone separates this from df/gnu-type and df/gnu-human.
+# The sizes are rounded and the output does not say in which base, so they
+# are reported exactly as printed; run `df -T` for exact 1K blocks.
+format: 1
+command: df
+variant: gnu-type-human
+description: df -Th on GNU coreutils, type column with rounded sizes
+metadata:
+  tags: [linux, filesystem, coreutils]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^Filesystem[ \t]+Type[ \t]+Size[ \t]+Used[ \t]+Avail[ \t]+Use%[ \t]+Mounted on[ \t]*$'
+input:
+  ignore: ['^df: ']
+parse:
+  type: table
+  header:
+    columns: [filesystem, type, size, used, available, use_percent, mounted_on]
+fields:
+  filesystem: {required: true}
+  type: {required: true}
+  size: {required: true}
+  used: {required: true}
+  available: {required: true}
+  use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  mounted_on: {required: true}

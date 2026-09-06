@@ -1,0 +1,2 @@
+SOURCE         FSTYPE  SIZE  USED  AVAIL USE% TARGET
+/dev/nvme1n1p2 ext4    1.8T  1.6T 142.6G  87% /

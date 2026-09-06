@@ -1,0 +1,5 @@
+NAME="nvme1n1" MAJ:MIN="259:0" RM="0" SIZE="1.8T" RO="0" TYPE="disk" MOUNTPOINTS=""
+NAME="nvme1n1p1" MAJ:MIN="259:1" RM="0" SIZE="1G" RO="0" TYPE="part" MOUNTPOINTS="/boot/efi"
+NAME="nvme1n1p2" MAJ:MIN="259:2" RM="0" SIZE="1.8T" RO="0" TYPE="part" MOUNTPOINTS="/"
+NAME="nvme0n1" MAJ:MIN="259:3" RM="0" SIZE="1.9T" RO="0" TYPE="disk" MOUNTPOINTS=""
+NAME="nvme0n1p1" MAJ:MIN="259:4" RM="0" SIZE="1.9T" RO="0" TYPE="part" MOUNTPOINTS="/media/usr/2nd"

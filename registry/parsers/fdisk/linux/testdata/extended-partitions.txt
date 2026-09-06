@@ -1,0 +1,12 @@
+Disk ext.img: 512 MiB, 536870912 bytes, 1048576 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x5e6f7081
+
+Device     Boot  Start     End Sectors  Size Id Type
+ext.img1   *      2048  104447  102400   50M 83 Linux
+ext.img2        104448 1048575  944128  461M  5 Extended
+ext.img5        106496  311295  204800  100M 83 Linux
+ext.img6        313344  518143  204800  100M 8e Linux LVM

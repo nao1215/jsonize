@@ -1,0 +1,6 @@
+NAME        ALIGNMENT MIN-IO OPT-IO PHY-SEC LOG-SEC ROTA SCHED RQ-SIZE  RA WSAME
+nvme1n1             0    512      0     512     512    0 none     1023 128    0B
+|-nvme1n1p1         0    512      0     512     512    0 none     1023 128    0B
+`-nvme1n1p2         0    512      0     512     512    0 none     1023 128    0B
+nvme0n1             0    512      0     512     512    0 none     1023 128    0B
+`-nvme0n1p1         0    512      0     512     512    0 none     1023 128    0B

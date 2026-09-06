@@ -1,0 +1,4 @@
+description: a DOS disk with an extended partition and two logical ones, so the partition numbers skip from 2 to 5
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C from a disk image built for this fixture with sfdisk; identifiers replaced
+os: linux
+args: [-l, ext.img]

@@ -1,0 +1,4 @@
+description: a bind mount, whose four space columns are blank because the space belongs to the filesystem it was bound from
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+os: linux
+args: [--df, /run/snapd/ns]

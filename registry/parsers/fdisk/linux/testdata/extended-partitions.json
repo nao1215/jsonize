@@ -1,0 +1,59 @@
+[
+  {
+    "disk": {
+      "device": "ext.img",
+      "size": "512 MiB",
+      "bytes": 536870912,
+      "sectors": 1048576
+    },
+    "properties": {
+      "Units": "sectors of 1 * 512 = 512 bytes",
+      "Sector size (logical/physical)": "512 bytes / 512 bytes",
+      "I/O size (minimum/optimal)": "512 bytes / 512 bytes",
+      "Disklabel type": "dos",
+      "Disk identifier": "0x5e6f7081"
+    },
+    "partitions": [
+      {
+        "device": "ext.img1",
+        "boot": "*",
+        "start": 2048,
+        "end": 104447,
+        "sectors": 102400,
+        "size": "50M",
+        "id": "83",
+        "type": "Linux"
+      },
+      {
+        "device": "ext.img2",
+        "boot": null,
+        "start": 104448,
+        "end": 1048575,
+        "sectors": 944128,
+        "size": "461M",
+        "id": "5",
+        "type": "Extended"
+      },
+      {
+        "device": "ext.img5",
+        "boot": null,
+        "start": 106496,
+        "end": 311295,
+        "sectors": 204800,
+        "size": "100M",
+        "id": "83",
+        "type": "Linux"
+      },
+      {
+        "device": "ext.img6",
+        "boot": null,
+        "start": 313344,
+        "end": 518143,
+        "sectors": 204800,
+        "size": "100M",
+        "id": "8e",
+        "type": "Linux LVM"
+      }
+    ]
+  }
+]

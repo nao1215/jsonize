@@ -1,0 +1,5 @@
+BYT;
+/tmp/jz-disks/gpt.img:2147MB:file:512:512:gpt::;
+1:1049kB:538MB:537MB::EFI System:boot, esp;
+2:538MB:1612MB:1074MB:::swap;
+3:1612MB:2144MB:533MB::root:;

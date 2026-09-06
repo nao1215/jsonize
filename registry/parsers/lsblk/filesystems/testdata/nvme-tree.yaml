@@ -1,0 +1,4 @@
+description: two disks and their partitions, so the tree drawing, an empty row and the UUID column are all covered
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; UUIDs replaced and the mount point renamed
+os: linux
+args: [-f, /dev/nvme1n1, /dev/nvme0n1]

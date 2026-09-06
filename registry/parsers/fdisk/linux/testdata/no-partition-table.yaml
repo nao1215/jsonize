@@ -1,0 +1,4 @@
+description: a disk with no partition table, which prints neither the label lines nor a table
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C from a disk image built for this fixture with sfdisk; identifiers replaced
+os: linux
+args: [-l, empty.img]

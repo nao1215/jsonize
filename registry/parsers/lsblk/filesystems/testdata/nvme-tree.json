@@ -1,0 +1,52 @@
+[
+  {
+    "name": "nvme1n1",
+    "fstype": null,
+    "fsver": null,
+    "label": null,
+    "uuid": null,
+    "fsavail": null,
+    "fsuse_percent": null,
+    "mountpoint": null
+  },
+  {
+    "name": "|-nvme1n1p1",
+    "fstype": "vfat",
+    "fsver": "FAT32",
+    "label": null,
+    "uuid": "1A2B-3C4D",
+    "fsavail": "1G",
+    "fsuse_percent": 1,
+    "mountpoint": "/boot/efi"
+  },
+  {
+    "name": "`-nvme1n1p2",
+    "fstype": "ext4",
+    "fsver": "1.0",
+    "label": null,
+    "uuid": "0e2f7d1c-4a3b-4f8e-9c5d-1a2b3c4d5e6f",
+    "fsavail": "142.6G",
+    "fsuse_percent": 87,
+    "mountpoint": "/"
+  },
+  {
+    "name": "nvme0n1",
+    "fstype": null,
+    "fsver": null,
+    "label": null,
+    "uuid": null,
+    "fsavail": null,
+    "fsuse_percent": null,
+    "mountpoint": null
+  },
+  {
+    "name": "`-nvme0n1p1",
+    "fstype": "ext4",
+    "fsver": "1.0",
+    "label": "2nd",
+    "uuid": "7b1c8d2e-5f4a-4b3c-8d9e-0f1a2b3c4d5e",
+    "fsavail": "799.4G",
+    "fsuse_percent": 52,
+    "mountpoint": "/media/usr/2nd"
+  }
+]

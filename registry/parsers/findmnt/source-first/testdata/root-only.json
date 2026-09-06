@@ -1,0 +1,12 @@
+[
+  {
+    "source": "/dev/nvme1n1p2",
+    "tree_prefix": null,
+    "target": "/",
+    "fstype": "ext4",
+    "options": [
+      "rw",
+      "relatime"
+    ]
+  }
+]

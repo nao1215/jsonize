@@ -1,0 +1,116 @@
+[
+  {
+    "source": "/dev/nvme1n1p2",
+    "tree_prefix": null,
+    "target": "/",
+    "fstype": "ext4",
+    "options": [
+      "rw",
+      "relatime"
+    ]
+  },
+  {
+    "source": "tmpfs",
+    "tree_prefix": "|-",
+    "target": "/run",
+    "fstype": "tmpfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "size=12882672k",
+      "nr_inodes=819200",
+      "mode=755",
+      "inode64"
+    ]
+  },
+  {
+    "source": "none",
+    "tree_prefix": "| |-",
+    "target": "/run/credentials/systemd-journald.service",
+    "fstype": "tmpfs",
+    "options": [
+      "ro",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime",
+      "nosymfollow",
+      "size=1024k",
+      "nr_inodes=1024",
+      "mode=700",
+      "inode64",
+      "noswap"
+    ]
+  },
+  {
+    "source": "none",
+    "tree_prefix": "| |-",
+    "target": "/run/credentials/systemd-resolved.service",
+    "fstype": "tmpfs",
+    "options": [
+      "ro",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime",
+      "nosymfollow",
+      "size=1024k",
+      "nr_inodes=1024",
+      "mode=700",
+      "inode64",
+      "noswap"
+    ]
+  },
+  {
+    "source": "tmpfs[/snapd/ns]",
+    "tree_prefix": "| |-",
+    "target": "/run/snapd/ns",
+    "fstype": "tmpfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "size=12882672k",
+      "nr_inodes=819200",
+      "mode=755",
+      "inode64"
+    ]
+  },
+  {
+    "source": "nsfs[mnt:[4026534672]]",
+    "tree_prefix": "| | |-",
+    "target": "/run/snapd/ns/yq.mnt",
+    "fstype": "nsfs",
+    "options": [
+      "rw"
+    ]
+  },
+  {
+    "source": "nsfs[mnt:[4026533362]]",
+    "tree_prefix": "| | |-",
+    "target": "/run/snapd/ns/snapd-desktop-integration.mnt",
+    "fstype": "nsfs",
+    "options": [
+      "rw"
+    ]
+  },
+  {
+    "source": "nsfs[mnt:[4026533127]]",
+    "tree_prefix": "| | |-",
+    "target": "/run/snapd/ns/telegram-desktop.mnt",
+    "fstype": "nsfs",
+    "options": [
+      "rw"
+    ]
+  },
+  {
+    "source": "nsfs[mnt:[4026533125]]",
+    "tree_prefix": "| | `-",
+    "target": "/run/snapd/ns/firmware-updater.mnt",
+    "fstype": "nsfs",
+    "options": [
+      "rw"
+    ]
+  }
+]

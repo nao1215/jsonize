@@ -1,0 +1,62 @@
+# `parted -m print` writes the colon-separated report parted documents for
+# programs: a BYT; line, one line describing the device, then one line per
+# partition. `parted -m -l` repeats that for every device, so the
+# definition describes one block and `records` applies it to each.
+#
+# The human report parted prints without -m is not read here. Its
+# partition table has a "File system" column between two other columns,
+# and an aligned table can only carry a multi-word name in its last
+# column, so the columns after it would be cut in the wrong places.
+format: 1
+command: parted
+variant: machine
+description: parted -m, device description and partition list
+metadata:
+  tags: [linux, block-device, partition]
+  compatible: [GNU parted]
+  references:
+    - https://www.gnu.org/software/parted/manual/parted.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ABYT;[ \t]*$'
+      - '^[^:\n]+:[^:\n]*:[^:\n]*:\d+:\d+:[^:\n]*:[^:\n]*:[^:\n]*;[ \t]*$'
+parse:
+  type: records
+  start: '^BYT;[ \t]*$'
+  parts:
+    - name: disk
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        # parted rounds every size it prints and does not say in which
+        # base, so sizes stay as printed; the two sector sizes are exact.
+        pattern: '\A(?P<device>[^:]*):(?P<size>[^:]*):(?P<transport>[^:]*):(?P<logical_sector_size>\d+):(?P<physical_sector_size>\d+):(?P<partition_table>[^:]*):(?P<model>[^:]*):(?P<flags>[^:]*);[ \t]*\z'
+      fields:
+        device: {required: true}
+        size: {required: true}
+        transport: {required: true}
+        logical_sector_size: {type: int, required: true}
+        physical_sector_size: {type: int, required: true}
+        # "unknown" when the disk carries no partition table parted can
+        # read, in which case there are no partition lines either.
+        partition_table: {required: true}
+        model: {null_if: [""]}
+        flags: {type: array, split: ","}
+    - name: partitions
+      select: {skip: 2}
+      parse:
+        type: regex
+        pattern: '^(?P<number>\d+):(?P<start>[^:]*):(?P<end>[^:]*):(?P<size>[^:]*):(?P<file_system>[^:]*):(?P<name>[^:]*):(?P<flags>[^:]*);[ \t]*$'
+      fields:
+        number: {type: int, required: true}
+        start: {required: true}
+        end: {required: true}
+        size: {required: true}
+        # A partition parted cannot identify prints an empty field, and a
+        # name only exists on a labelling scheme that has names.
+        file_system: {null_if: [""]}
+        name: {null_if: [""]}
+        flags: {type: array, split: ","}

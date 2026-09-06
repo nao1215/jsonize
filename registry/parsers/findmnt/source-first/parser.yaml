@@ -1,0 +1,32 @@
+# `findmnt -o SOURCE,TARGET,FSTYPE,OPTIONS` prints the same four columns
+# as the default output with SOURCE first. The tree is still drawn, now in
+# the middle column, so the drawing is kept out of the target the same way
+# findmnt/linux keeps it out of its own.
+format: 1
+command: findmnt
+variant: source-first
+description: findmnt -o SOURCE,TARGET,FSTYPE,OPTIONS
+metadata:
+  tags: [linux, filesystem, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/findmnt.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ASOURCE[ \t]+TARGET[ \t]+FSTYPE[ \t]+OPTIONS[ \t]*$'
+input:
+  ignore:
+    - '\ASOURCE[ \t]+TARGET'
+parse:
+  type: regex
+  pattern: '^(?P<source>\S+)[ \t]+(?P<tree_prefix>[|`\-\s]*)(?P<target>/\S*)[ \t]+(?P<fstype>\S+)[ \t]+(?P<options>\S+)[ \t]*$'
+fields:
+  source: {required: true}
+  target: {required: true}
+  fstype: {required: true}
+  options: {type: array, split: ","}
+  # The drawing that shows nesting is kept as printed, and is null for a
+  # mount at the top of the tree.
+  tree_prefix: {null_if: [""]}

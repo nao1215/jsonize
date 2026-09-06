@@ -4,7 +4,7 @@
     "tags": [
       {
         "name": "UUID",
-        "value": "ef904cb9-60d2-49ea-bbc7-04bf09fbddeb"
+        "value": "0e2f7d1c-4a3b-4f8e-9c5d-1a2b3c4d5e6f"
       },
       {
         "name": "BLOCK_SIZE",
@@ -16,7 +16,7 @@
       },
       {
         "name": "PARTUUID",
-        "value": "79ff25f1-bd44-470f-b931-095a523a2fa5"
+        "value": "3c9e5a1b-2d4f-4a6b-8c0d-1e2f3a4b5c6d"
       }
     ]
   },
@@ -25,7 +25,7 @@
     "tags": [
       {
         "name": "UUID",
-        "value": "A6CC-7E4E"
+        "value": "1A2B-3C4D"
       },
       {
         "name": "BLOCK_SIZE",
@@ -37,7 +37,7 @@
       },
       {
         "name": "PARTUUID",
-        "value": "add2dac8-71b2-4a59-95f9-b8a2279fe103"
+        "value": "5d8f2b3a-6c1e-4d7b-9a0f-2b3c4d5e6f70"
       }
     ]
   }

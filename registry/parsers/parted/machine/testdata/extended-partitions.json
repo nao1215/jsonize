@@ -1,0 +1,56 @@
+[
+  {
+    "disk": {
+      "device": "/tmp/jz-disks/ext.img",
+      "size": "537MB",
+      "transport": "file",
+      "logical_sector_size": 512,
+      "physical_sector_size": 512,
+      "partition_table": "msdos",
+      "model": null,
+      "flags": []
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "start": "1049kB",
+        "end": "53.5MB",
+        "size": "52.4MB",
+        "file_system": null,
+        "name": null,
+        "flags": [
+          "boot"
+        ]
+      },
+      {
+        "number": 2,
+        "start": "53.5MB",
+        "end": "537MB",
+        "size": "483MB",
+        "file_system": null,
+        "name": null,
+        "flags": []
+      },
+      {
+        "number": 5,
+        "start": "54.5MB",
+        "end": "159MB",
+        "size": "105MB",
+        "file_system": null,
+        "name": null,
+        "flags": []
+      },
+      {
+        "number": 6,
+        "start": "160MB",
+        "end": "265MB",
+        "size": "105MB",
+        "file_system": null,
+        "name": null,
+        "flags": [
+          "lvm"
+        ]
+      }
+    ]
+  }
+]

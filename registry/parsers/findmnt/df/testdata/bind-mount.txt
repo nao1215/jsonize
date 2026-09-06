@@ -1,0 +1,2 @@
+SOURCE           FSTYPE SIZE USED AVAIL USE% TARGET
+tmpfs[/snapd/ns] tmpfs                       /run/snapd/ns

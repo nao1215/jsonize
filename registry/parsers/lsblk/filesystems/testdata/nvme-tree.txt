@@ -1,0 +1,6 @@
+NAME        FSTYPE FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+nvme1n1                                                                            
+|-nvme1n1p1 vfat   FAT32       1A2B-3C4D                                 1G     1% /boot/efi
+`-nvme1n1p2 ext4   1.0         0e2f7d1c-4a3b-4f8e-9c5d-1a2b3c4d5e6f  142.6G    87% /
+nvme0n1                                                                            
+`-nvme0n1p1 ext4   1.0   2nd   7b1c8d2e-5f4a-4b3c-8d9e-0f1a2b3c4d5e  799.4G    52% /media/usr/2nd

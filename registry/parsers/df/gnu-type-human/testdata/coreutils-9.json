@@ -1,0 +1,101 @@
+[
+  {
+    "filesystem": "tmpfs",
+    "type": "tmpfs",
+    "size": "13G",
+    "used": "4.5M",
+    "available": "13G",
+    "use_percent": 1,
+    "mounted_on": "/run"
+  },
+  {
+    "filesystem": "/dev/nvme1n1p2",
+    "type": "ext4",
+    "size": "1.8T",
+    "used": "1.6T",
+    "available": "143G",
+    "use_percent": 92,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "tmpfs",
+    "type": "tmpfs",
+    "size": "31G",
+    "used": "916M",
+    "available": "30G",
+    "use_percent": 3,
+    "mounted_on": "/dev/shm"
+  },
+  {
+    "filesystem": "efivarfs",
+    "type": "efivarfs",
+    "size": "128K",
+    "used": "48K",
+    "available": "76K",
+    "use_percent": 39,
+    "mounted_on": "/sys/firmware/efi/efivars"
+  },
+  {
+    "filesystem": "none",
+    "type": "tmpfs",
+    "size": "1.0M",
+    "used": "0",
+    "available": "1.0M",
+    "use_percent": 0,
+    "mounted_on": "/run/credentials/systemd-journald.service"
+  },
+  {
+    "filesystem": "none",
+    "type": "tmpfs",
+    "size": "1.0M",
+    "used": "0",
+    "available": "1.0M",
+    "use_percent": 0,
+    "mounted_on": "/run/credentials/systemd-resolved.service"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p1",
+    "type": "ext4",
+    "size": "1.9T",
+    "used": "982G",
+    "available": "800G",
+    "use_percent": 56,
+    "mounted_on": "/media/usr/2nd"
+  },
+  {
+    "filesystem": "tmpfs",
+    "type": "tmpfs",
+    "size": "31G",
+    "used": "15G",
+    "available": "16G",
+    "use_percent": 48,
+    "mounted_on": "/tmp"
+  },
+  {
+    "filesystem": "/dev/nvme1n1p1",
+    "type": "vfat",
+    "size": "1.1G",
+    "used": "6.4M",
+    "available": "1.1G",
+    "use_percent": 1,
+    "mounted_on": "/boot/efi"
+  },
+  {
+    "filesystem": "none",
+    "type": "tmpfs",
+    "size": "1.0M",
+    "used": "0",
+    "available": "1.0M",
+    "use_percent": 0,
+    "mounted_on": "/run/credentials/getty@tty1.service"
+  },
+  {
+    "filesystem": "tmpfs",
+    "type": "tmpfs",
+    "size": "6.2G",
+    "used": "412K",
+    "available": "6.2G",
+    "use_percent": 1,
+    "mounted_on": "/run/user/1000"
+  }
+]

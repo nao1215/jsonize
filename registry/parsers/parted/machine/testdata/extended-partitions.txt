@@ -1,0 +1,6 @@
+BYT;
+/tmp/jz-disks/ext.img:537MB:file:512:512:msdos::;
+1:1049kB:53.5MB:52.4MB:::boot;
+2:53.5MB:537MB:483MB:::;
+5:54.5MB:159MB:105MB:::;
+6:160MB:265MB:105MB:::lvm;
