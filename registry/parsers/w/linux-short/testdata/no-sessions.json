@@ -1,0 +1,11 @@
+{
+  "uptime": {
+    "time": "03:50:25",
+    "uptime": "13 days, 18:30",
+    "users": 5,
+    "load_1m": 0.2,
+    "load_5m": 0.4,
+    "load_15m": 0.47
+  },
+  "users": []
+}

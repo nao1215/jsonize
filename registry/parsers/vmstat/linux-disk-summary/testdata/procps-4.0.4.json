@@ -1,0 +1,54 @@
+[
+  {
+    "value": 60,
+    "name": "disks"
+  },
+  {
+    "value": 3,
+    "name": "partitions"
+  },
+  {
+    "value": 25131051,
+    "name": "total reads"
+  },
+  {
+    "value": 5715716,
+    "name": "merged reads"
+  },
+  {
+    "value": 1294070876,
+    "name": "read sectors"
+  },
+  {
+    "value": 5697404,
+    "name": "milli reading"
+  },
+  {
+    "value": 40657844,
+    "name": "writes"
+  },
+  {
+    "value": 23785406,
+    "name": "merged writes"
+  },
+  {
+    "value": 4021214906,
+    "name": "written sectors"
+  },
+  {
+    "value": 577885699,
+    "name": "milli writing"
+  },
+  {
+    "value": 0,
+    "name": "inprogress IO"
+  },
+  {
+    "value": 15630,
+    "name": "milli spent IO"
+  },
+  {
+    "value": 592563,
+    "name": "milli weighted IO"
+  }
+]

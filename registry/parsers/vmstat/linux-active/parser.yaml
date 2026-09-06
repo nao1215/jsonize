@@ -1,9 +1,10 @@
-# vmstat prints a group header, a column header and then the samples.
-# The counters are exact numbers, so they are read as such.
+# `vmstat -a` replaces the buffer and cache columns with the active and
+# inactive memory ones. Everything else is the default report, so the two
+# definitions are told apart by those two column names.
 format: 1
 command: vmstat
-variant: linux
-description: vmstat memory, swap, io, system and cpu counters
+variant: linux-active
+description: vmstat -a, active and inactive memory instead of buffers and cache
 metadata:
   tags: [linux, memory, procps]
   compatible: [procps-ng]
@@ -14,27 +15,24 @@ detect:
   signature:
     all:
       - '\Aprocs[ \t]+-+memory-+'
-      # `vmstat -a` prints the same group header and the same first four
-      # columns, and only then diverges: it reports inactive and active
-      # memory where the default report has buffers and cache.
-      - '^[ \t]*r[ \t]+b[ \t]+swpd[ \t]+free[ \t]+buff[ \t]+cache[ \t]'
+      - '^[ \t]*r[ \t]+b[ \t]+swpd[ \t]+free[ \t]+inact[ \t]+active[ \t]'
 input:
   ignore:
-    - '\Aprocs\s+-'
-    - '^\s*r\s+b\s+swpd\s'
+    - '\Aprocs[ \t]+-'
+    - '^[ \t]*r[ \t]+b[ \t]+swpd[ \t]'
 parse:
   type: table
   header:
     none: true
-    columns: [r, b, swpd, free, buff, cache, si, so, bi, bo, in, cs, us, sy, id, wa, st, gu]
+    columns: [r, b, swpd, free, inact, active, si, so, bi, bo, in, cs, us, sy, id, wa, st, gu]
   min_fields: 17
 fields:
   r: {type: int, required: true}
   b: {type: int, required: true}
   swpd: {type: int, required: true}
   free: {type: int, required: true}
-  buff: {type: int, required: true}
-  cache: {type: int, required: true}
+  inact: {type: int, required: true}
+  active: {type: int, required: true}
   si: {type: int}
   so: {type: int}
   bi: {type: int}

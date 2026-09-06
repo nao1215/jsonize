@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C by asking for a user with no session, which leaves the header and no rows
+os: linux
+args: [-s, alice]

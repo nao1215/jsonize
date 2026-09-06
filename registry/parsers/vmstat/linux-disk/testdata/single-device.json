@@ -1,0 +1,15 @@
+[
+  {
+    "disk": "nvme1n1",
+    "reads_total": 24852703,
+    "reads_merged": 5696128,
+    "reads_sectors": 1276928982,
+    "reads_ms": 5551891,
+    "writes_total": 40648340,
+    "writes_merged": 23774716,
+    "writes_sectors": 4020996970,
+    "writes_ms": 577873795,
+    "io_current": 0,
+    "io_seconds": 14029
+  }
+]

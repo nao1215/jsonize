@@ -12,8 +12,15 @@ metadata:
 detect:
   auto_detect: false
   signature:
+    window: 200
     all:
       - '\A\s*\d+\t\S'
+    # A size with a suffix is `du -h`, whose numbers are rounded and whose
+    # variant is gnu-human. The first line of such a listing can still be
+    # a plain count (a size below one kibibyte prints as "0"), so the whole
+    # window is searched rather than the first line alone.
+    none:
+      - '^[\d.]+[KMGTPEZY]\t'
 parse:
   type: table
   split: delimiter

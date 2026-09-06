@@ -1,0 +1,51 @@
+[
+  {
+    "flags": "drwxr-xr-x",
+    "links": 2,
+    "size": "4096",
+    "date": "May 25 09:14",
+    "filename": "ImageMagick-7"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 5,
+    "size": "4096",
+    "date": "Feb 27  2026",
+    "filename": "ModemManager"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 8,
+    "size": "4096",
+    "date": "May 25 09:16",
+    "filename": "NetworkManager"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 2,
+    "size": "4096",
+    "date": "Jul 24 20:13",
+    "filename": "PackageKit"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 3,
+    "size": "4096",
+    "date": "May 25 09:15",
+    "filename": "UPower"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 12,
+    "size": "4096",
+    "date": "May 26 21:01",
+    "filename": "X11"
+  },
+  {
+    "flags": "-rw-r--r--",
+    "links": 1,
+    "size": "4027",
+    "date": "May 23  2025",
+    "filename": "adduser.conf"
+  }
+]

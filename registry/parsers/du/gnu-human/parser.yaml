@@ -1,0 +1,35 @@
+# `du -h` prints the same two columns as plain du with the size rounded
+# to a suffix. The rounding hides the exact figure and the base (1024, or
+# 1000 with --si) is not printed, so the size is kept as the string it was
+# printed as; run plain du for exact counts.
+#
+# A listing whose sizes are all below one kibibyte prints plain numbers
+# and is read by du/posix, which is right: those numbers are exact.
+format: 1
+command: du
+variant: gnu-human
+description: du -h output (tab separated rounded size and path)
+metadata:
+  tags: [linux, darwin, filesystem]
+  compatible: [GNU coreutils, BusyBox, macOS du]
+  references:
+    - https://man7.org/linux/man-pages/man1/du.1.html
+# A rounded size, a tab and a path is not evidence of du on its own, so
+# this definition is used only when the parser is named.
+detect:
+  auto_detect: false
+  signature:
+    window: 200
+    all:
+      - '\A\s*[\d.]+[KMGTPEZY]?\t\S'
+      - '^[\d.]+[KMGTPEZY]\t'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [size, name]
+fields:
+  size: {required: true}
+  name: {required: true}

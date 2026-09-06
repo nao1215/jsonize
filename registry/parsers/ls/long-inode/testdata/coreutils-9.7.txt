@@ -1,0 +1,8 @@
+total 1420
+80216698 drwxr-xr-x  2 root                 root                   4096 May 25 09:14 ImageMagick-7
+80216073 drwxr-xr-x  5 root                 root                   4096 Feb 27  2026 ModemManager
+80216074 drwxr-xr-x  8 root                 root                   4096 May 25 09:16 NetworkManager
+80216075 drwxr-xr-x  2 root                 root                   4096 Jul 24 20:13 PackageKit
+80216076 drwxr-xr-x  3 root                 root                   4096 May 25 09:15 UPower
+80216077 drwxr-xr-x 12 root                 root                   4096 May 26 21:01 X11
+80219511 -rw-r--r--  1 root                 root                   4027 May 23  2025 adduser.conf

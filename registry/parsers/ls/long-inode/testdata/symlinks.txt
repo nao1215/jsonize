@@ -1,0 +1,6 @@
+total 0
+142429905 drwxrwxr-x 2 alice alice 60 Sep  7 03:49 archive
+142429906 drwxrwxr-x 2 alice alice 40 Sep  7 03:49 empty
+142429946 lrwxrwxrwx 1 alice alice 10 Sep  7 03:49 hosts-link -> /etc/hosts
+142429907 drwxrwxr-x 2 alice alice 60 Sep  7 03:49 old
+142429916 drwxrwxr-x 2 alice alice 60 Sep  7 03:49 old drafts

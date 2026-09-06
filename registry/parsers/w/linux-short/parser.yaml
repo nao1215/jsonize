@@ -1,0 +1,47 @@
+# `w -s` prints the same uptime line as `w` and then a shorter table: the
+# login time and the two cpu totals are gone. The column header names the
+# remaining columns, and it is the header that tells the two formats
+# apart, so neither definition needs an argument filter.
+format: 1
+command: w
+variant: linux-short
+description: "w -s on Linux (procps): uptime summary plus logged-in users without login and cpu times"
+metadata:
+  tags: [linux, user, system]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/w.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^.*load average: '
+      - '^USER[ \t]+TTY[ \t]+FROM[ \t]+IDLE[ \t]+WHAT[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: uptime
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^\s*(?P<time>\d{1,2}:\d{2}(?::\d{2})?)\s+up\s+(?P<uptime>.+?),\s+(?P<users>\d+) users?,\s+load average: (?P<load_1m>[\d.]+), (?P<load_5m>[\d.]+), (?P<load_15m>[\d.]+)\s*$'
+      fields:
+        users: {type: int}
+        load_1m: {type: float}
+        load_5m: {type: float}
+        load_15m: {type: float}
+    - name: users
+      select: {skip: 1}
+      parse:
+        type: table
+        split: aligned
+      # A display manager session has no terminal, FROM is blank for a
+      # local login and a session that is not idle leaves IDLE blank, so
+      # those columns stay optional. A row without a user is a truncated
+      # listing.
+      fields:
+        user: {required: true}
+        from: {null_if: ["-"]}
+        idle: {null_if: ["-"]}
+        what: {null_if: ["-"]}

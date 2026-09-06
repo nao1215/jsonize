@@ -1,0 +1,20 @@
+[
+  {
+    "name": "/etc/hosts",
+    "size": 221,
+    "blocks": 8,
+    "raw_mode": "81a4",
+    "uid": 0,
+    "gid": 0,
+    "device": "10302",
+    "inode": 80216458,
+    "links": 1,
+    "device_major": "0",
+    "device_minor": "0",
+    "access_time": 1788692626,
+    "modify_time": 1762229047,
+    "change_time": 1762229047,
+    "birth_time": 1762229047,
+    "io_block": 4096
+  }
+]

@@ -1,0 +1,3 @@
+disk- ------------reads------------ ------------writes----------- -----IO------
+       total merged sectors      ms  total merged sectors      ms    cur    sec
+nvme1n1 24852703 5696128 1276928982 5551891 40648340 23774716 4020996970 577873795      0  14029

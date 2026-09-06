@@ -1,0 +1,126 @@
+[
+  {
+    "value": 62903,
+    "unit": "M",
+    "name": "total memory"
+  },
+  {
+    "value": 35824,
+    "unit": "M",
+    "name": "used memory"
+  },
+  {
+    "value": 23455,
+    "unit": "M",
+    "name": "active memory"
+  },
+  {
+    "value": 21970,
+    "unit": "M",
+    "name": "inactive memory"
+  },
+  {
+    "value": 10215,
+    "unit": "M",
+    "name": "free memory"
+  },
+  {
+    "value": 1819,
+    "unit": "M",
+    "name": "buffer memory"
+  },
+  {
+    "value": 34224,
+    "unit": "M",
+    "name": "swap cache"
+  },
+  {
+    "value": 8191,
+    "unit": "M",
+    "name": "total swap"
+  },
+  {
+    "value": 2083,
+    "unit": "M",
+    "name": "used swap"
+  },
+  {
+    "value": 6108,
+    "unit": "M",
+    "name": "free swap"
+  },
+  {
+    "value": 106156588,
+    "name": "non-nice user cpu ticks"
+  },
+  {
+    "value": 149559,
+    "name": "nice user cpu ticks"
+  },
+  {
+    "value": 19198510,
+    "name": "system cpu ticks"
+  },
+  {
+    "value": 3663439075,
+    "name": "idle cpu ticks"
+  },
+  {
+    "value": 1707896,
+    "name": "IO-wait cpu ticks"
+  },
+  {
+    "value": 0,
+    "name": "IRQ cpu ticks"
+  },
+  {
+    "value": 1489067,
+    "name": "softirq cpu ticks"
+  },
+  {
+    "value": 0,
+    "name": "stolen cpu ticks"
+  },
+  {
+    "value": 0,
+    "name": "non-nice guest cpu ticks"
+  },
+  {
+    "value": 0,
+    "name": "nice guest cpu ticks"
+  },
+  {
+    "value": 647898484,
+    "unit": "K",
+    "name": "paged in"
+  },
+  {
+    "value": 2010667909,
+    "unit": "K",
+    "name": "paged out"
+  },
+  {
+    "value": 1559071,
+    "name": "pages swapped in"
+  },
+  {
+    "value": 5200842,
+    "name": "pages swapped out"
+  },
+  {
+    "value": 20850700697,
+    "name": "interrupts"
+  },
+  {
+    "value": 33477661023,
+    "name": "CPU context switches"
+  },
+  {
+    "value": 1787530780,
+    "name": "boot time"
+  },
+  {
+    "value": 42844420,
+    "name": "forks"
+  }
+]

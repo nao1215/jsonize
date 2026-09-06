@@ -1,0 +1,38 @@
+[
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "size": "60",
+    "date": "Sep  7 03:49",
+    "filename": "archive"
+  },
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "size": "40",
+    "date": "Sep  7 03:49",
+    "filename": "empty"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "size": "10",
+    "date": "Sep  7 03:49",
+    "filename": "hosts-link",
+    "link_to": "/etc/hosts"
+  },
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "size": "60",
+    "date": "Sep  7 03:49",
+    "filename": "old"
+  },
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "size": "60",
+    "date": "Sep  7 03:49",
+    "filename": "old drafts"
+  }
+]

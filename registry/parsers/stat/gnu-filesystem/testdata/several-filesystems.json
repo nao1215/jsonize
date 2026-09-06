@@ -1,0 +1,71 @@
+[
+  {
+    "file": {
+      "name": "/dev/shm"
+    },
+    "filesystem": {
+      "id": "1e43194a1170b536",
+      "namelen": 255,
+      "type": "tmpfs"
+    },
+    "block_size": {
+      "block_size": 4096,
+      "fundamental_block_size": 4096
+    },
+    "blocks": {
+      "total": 8051669,
+      "free": 7820030,
+      "available": 7820030
+    },
+    "inodes": {
+      "total": 8051669,
+      "free": 8051041
+    }
+  },
+  {
+    "file": {
+      "name": "/proc"
+    },
+    "filesystem": {
+      "id": "1900000000",
+      "namelen": 255,
+      "type": "proc"
+    },
+    "block_size": {
+      "block_size": 4096,
+      "fundamental_block_size": 4096
+    },
+    "blocks": {
+      "total": 0,
+      "free": 0,
+      "available": 0
+    },
+    "inodes": {
+      "total": 0,
+      "free": 0
+    }
+  },
+  {
+    "file": {
+      "name": "/sys"
+    },
+    "filesystem": {
+      "id": "e1d2b23ca09fd7bf",
+      "namelen": 255,
+      "type": "sysfs"
+    },
+    "block_size": {
+      "block_size": 4096,
+      "fundamental_block_size": 4096
+    },
+    "blocks": {
+      "total": 0,
+      "free": 0,
+      "available": 0
+    },
+    "inodes": {
+      "total": 0,
+      "free": 0
+    }
+  }
+]

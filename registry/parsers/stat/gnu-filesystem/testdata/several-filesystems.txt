@@ -1,0 +1,15 @@
+  File: "/dev/shm"
+    ID: 1e43194a1170b536 Namelen: 255     Type: tmpfs
+Block size: 4096       Fundamental block size: 4096
+Blocks: Total: 8051669    Free: 7820030    Available: 7820030
+Inodes: Total: 8051669    Free: 8051041
+  File: "/proc"
+    ID: 1900000000 Namelen: 255     Type: proc
+Block size: 4096       Fundamental block size: 4096
+Blocks: Total: 0          Free: 0          Available: 0
+Inodes: Total: 0          Free: 0
+  File: "/sys"
+    ID: e1d2b23ca09fd7bf Namelen: 255     Type: sysfs
+Block size: 4096       Fundamental block size: 4096
+Blocks: Total: 0          Free: 0          Available: 0
+Inodes: Total: 0          Free: 0

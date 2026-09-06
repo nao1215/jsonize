@@ -1,0 +1,53 @@
+[
+  {
+    "inode": 142429905,
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "alice",
+    "group": "alice",
+    "size": "60",
+    "date": "Sep  7 03:49",
+    "filename": "archive"
+  },
+  {
+    "inode": 142429906,
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "alice",
+    "group": "alice",
+    "size": "40",
+    "date": "Sep  7 03:49",
+    "filename": "empty"
+  },
+  {
+    "inode": 142429946,
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "alice",
+    "group": "alice",
+    "size": "10",
+    "date": "Sep  7 03:49",
+    "filename": "hosts-link",
+    "link_to": "/etc/hosts"
+  },
+  {
+    "inode": 142429907,
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "alice",
+    "group": "alice",
+    "size": "60",
+    "date": "Sep  7 03:49",
+    "filename": "old"
+  },
+  {
+    "inode": 142429916,
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "alice",
+    "group": "alice",
+    "size": "60",
+    "date": "Sep  7 03:49",
+    "filename": "old drafts"
+  }
+]
