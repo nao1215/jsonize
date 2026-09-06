@@ -1,0 +1,29 @@
+# `lsb_release -a` prints "Field:<tab>value" for a fixed set of fields.
+# The keys are the field names in the form the rest of the registry uses,
+# rather than the labels with their spaces and capitals.
+format: 1
+command: lsb_release
+variant: linux
+description: lsb_release -a distribution description
+metadata:
+  tags: [linux, system]
+  compatible: [lsb-release]
+  references:
+    - https://manpages.debian.org/lsb-release
+detect:
+  os: [linux]
+  args:
+    any: ["-a", "--all"]
+  signature:
+    all:
+      - '^(?:Distributor ID|Description|Release|Codename):\t'
+parse:
+  type: regex
+  each: input
+  pattern: '(?s)(?:LSB Version:\t(?P<lsb_version>[^\n]*)\n)?Distributor ID:\t(?P<distributor_id>[^\n]*)\nDescription:\t(?P<description>[^\n]*)\nRelease:\t(?P<release>[^\n]*)\nCodename:\t(?P<codename>[^\n]*)'
+fields:
+  lsb_version: {when_missing: omit}
+  distributor_id: {required: true}
+  description: {required: true}
+  release: {required: true}
+  codename: {required: true}

@@ -1,0 +1,52 @@
+[
+  {
+    "destination": "default",
+    "via": "192.168.11.1",
+    "dev": "wlp195s0",
+    "attributes": [
+      "proto",
+      "dhcp",
+      "src",
+      "192.168.11.60",
+      "metric",
+      "600"
+    ]
+  },
+  {
+    "destination": "172.17.0.0/16",
+    "dev": "docker0",
+    "attributes": [
+      "proto",
+      "kernel",
+      "scope",
+      "link",
+      "src",
+      "172.17.0.1"
+    ]
+  },
+  {
+    "destination": "172.18.0.0/16",
+    "dev": "br-d647a5eb3b66",
+    "attributes": [
+      "proto",
+      "kernel",
+      "scope",
+      "link",
+      "src",
+      "172.18.0.1",
+      "linkdown"
+    ]
+  },
+  {
+    "destination": "172.19.0.0/16",
+    "dev": "br-088d49b64243",
+    "attributes": [
+      "proto",
+      "kernel",
+      "scope",
+      "link",
+      "src",
+      "172.19.0.1"
+    ]
+  }
+]

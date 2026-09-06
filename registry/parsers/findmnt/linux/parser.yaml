@@ -1,0 +1,31 @@
+# The default output draws the mount tree with box characters in TARGET.
+# The tree prefix is kept out of the target so the path is usable, and
+# the depth it encoded is reported as a number.
+format: 1
+command: findmnt
+variant: linux
+description: findmnt mount tree
+metadata:
+  tags: [linux, filesystem, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/findmnt.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ATARGET\s+SOURCE\s+FSTYPE\s+OPTIONS\s*$'
+input:
+  ignore:
+    - '\ATARGET\s+SOURCE'
+parse:
+  type: regex
+  pattern: '^(?P<tree_prefix>[|`\-\s]*)(?P<target>/\S*)\s+(?P<source>\S+)\s+(?P<fstype>\S+)\s+(?P<options>\S+)\s*$'
+fields:
+  target: {required: true}
+  source: {required: true}
+  fstype: {required: true}
+  options: {type: array, split: ","}
+  # The drawing that shows nesting is kept as printed, and is null for a
+  # mount at the top of the tree.
+  tree_prefix: {null_if: [""]}

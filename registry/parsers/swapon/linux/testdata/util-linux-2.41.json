@@ -1,0 +1,9 @@
+[
+  {
+    "name": "/swap.img",
+    "type": "file",
+    "size": "8G",
+    "used": "1.5G",
+    "priority": -1
+  }
+]

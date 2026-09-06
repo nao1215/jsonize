@@ -1,0 +1,30 @@
+[
+  {
+    "bus": 1,
+    "device": 1,
+    "vendor_id": "1d6b",
+    "product_id": "0002",
+    "description": "Linux Foundation 2.0 root hub"
+  },
+  {
+    "bus": 1,
+    "device": 3,
+    "vendor_id": "0d8c",
+    "product_id": "8100",
+    "description": "C-Media Electronics, Inc. USB PnP Sound Device"
+  },
+  {
+    "bus": 2,
+    "device": 1,
+    "vendor_id": "1d6b",
+    "product_id": "0003",
+    "description": "Linux Foundation 3.0 root hub"
+  },
+  {
+    "bus": 3,
+    "device": 1,
+    "vendor_id": "1d6b",
+    "product_id": "0002",
+    "description": "Linux Foundation 2.0 root hub"
+  }
+]

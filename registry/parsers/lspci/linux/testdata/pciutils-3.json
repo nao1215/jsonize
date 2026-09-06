@@ -1,0 +1,25 @@
+[
+  {
+    "slot": "00:00.0",
+    "class": "Host bridge",
+    "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Root Complex",
+    "revision": "02"
+  },
+  {
+    "slot": "00:00.2",
+    "class": "IOMMU",
+    "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo IOMMU",
+    "revision": "02"
+  },
+  {
+    "slot": "00:01.0",
+    "class": "Host bridge",
+    "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Dummy Host Bridge"
+  },
+  {
+    "slot": "00:01.1",
+    "class": "PCI bridge",
+    "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe USB4 Bridge",
+    "revision": "02"
+  }
+]

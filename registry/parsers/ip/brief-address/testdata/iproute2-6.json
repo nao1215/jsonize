@@ -1,0 +1,35 @@
+[
+  {
+    "interface": "lo",
+    "state": "UNKNOWN",
+    "addresses": [
+      "127.0.0.1/8",
+      "::1/128"
+    ]
+  },
+  {
+    "interface": "eno1",
+    "state": "UP",
+    "addresses": [
+      "192.168.10.2/24",
+      "fe80::7026:3233:34af:8194/64"
+    ]
+  },
+  {
+    "interface": "wlp195s0",
+    "state": "UP",
+    "addresses": [
+      "192.168.11.60/24",
+      "fe80::ce9b:8da0:8a12:d629/64"
+    ]
+  },
+  {
+    "interface": "br-088d49b64243",
+    "state": "UP",
+    "addresses": [
+      "172.19.0.1/16",
+      "fc00:f853:ccd:e793::1/64",
+      "fe80::dc60:daff:fe25:74a0/64"
+    ]
+  }
+]

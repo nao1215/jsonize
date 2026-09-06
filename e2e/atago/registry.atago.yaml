@@ -44,8 +44,8 @@ scenarios:
           exit_code: 0
           stdout:
             json:
-              - { path: "$[0].command", equals: df }
-              - { path: "$[0].variants", length: 5 }
+              - { path: "$[0].command", matches: "^[a-z]" }
+              - { path: "$[0].variants[0]", matches: "^[a-z]" }
       - run:
           command: jz list --json df
       - assert:

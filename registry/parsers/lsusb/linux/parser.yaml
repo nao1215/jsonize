@@ -1,0 +1,25 @@
+# "Bus 001 Device 003: ID vvvv:pppp description", where the description
+# is missing for some devices.
+format: 1
+command: lsusb
+variant: linux
+description: lsusb default listing
+metadata:
+  tags: [linux, hardware, usbutils]
+  compatible: [usbutils]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsusb.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ABus \d{3} Device \d{3}: ID [0-9a-f]{4}:[0-9a-f]{4}'
+parse:
+  type: regex
+  pattern: '^Bus (?P<bus>\d{3}) Device (?P<device>\d{3}): ID (?P<vendor_id>[0-9a-f]{4}):(?P<product_id>[0-9a-f]{4})\s*(?P<description>.*?)\s*$'
+fields:
+  bus: {type: int, required: true}
+  device: {type: int, required: true}
+  vendor_id: {required: true}
+  product_id: {required: true}
+  description: {null_if: [""]}

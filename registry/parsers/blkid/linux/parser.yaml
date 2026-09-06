@@ -1,0 +1,28 @@
+# One device per line, followed by NAME="value" pairs whose set differs
+# per filesystem. The tags are read as a nested object rather than as
+# fixed columns, so a device with extra tags loses nothing.
+format: 1
+command: blkid
+variant: linux
+description: blkid device and filesystem tags
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/blkid.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A/dev/\S+: [A-Z_]+="'
+parse:
+  type: regex
+  pattern: '^(?P<device>[^:]+): (?P<tags>.+)$'
+fields:
+  device: {required: true}
+  tags:
+    type: array
+    split_regex: '" '
+    items:
+      type: object
+      regex: '^(?P<name>[A-Z_]+)="?(?P<value>[^"]*)"?$'

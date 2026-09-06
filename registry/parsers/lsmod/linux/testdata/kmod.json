@@ -1,0 +1,33 @@
+[
+  {
+    "name": "cpuid",
+    "size": 12288,
+    "used_by_count": 0
+  },
+  {
+    "name": "tcp_diag",
+    "size": 20480,
+    "used_by_count": 0
+  },
+  {
+    "name": "inet_diag",
+    "size": 24576,
+    "used_by_count": 1,
+    "used_by": [
+      "tcp_diag"
+    ]
+  },
+  {
+    "name": "uas",
+    "size": 32768,
+    "used_by_count": 0
+  },
+  {
+    "name": "usb_storage",
+    "size": 86016,
+    "used_by_count": 1,
+    "used_by": [
+      "uas"
+    ]
+  }
+]

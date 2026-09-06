@@ -1,0 +1,29 @@
+# systemd prints aligned "Label: value" lines. The labels contain spaces,
+# so the keys are the labels with the spaces replaced, and the booleans
+# systemd spells yes/no become real booleans.
+format: 1
+command: timedatectl
+variant: linux
+description: timedatectl clock and time zone status
+metadata:
+  tags: [linux, systemd, time]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/timedatectl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^\s*Local time: '
+      - '^\s*Time zone: '
+parse:
+  type: regex
+  each: input
+  pattern: '(?s)\A\s*Local time: (?P<local_time>[^\n]+)\n\s*Universal time: (?P<universal_time>[^\n]+)\n(?:\s*RTC time: (?P<rtc_time>[^\n]+)\n)?\s*Time zone: (?P<time_zone>[^\n]+)\n\s*System clock synchronized: (?P<system_clock_synchronized>\S+)\n\s*NTP service: (?P<ntp_service>\S+)\n\s*RTC in local TZ: (?P<rtc_in_local_tz>\S+)'
+fields:
+  local_time: {required: true}
+  universal_time: {required: true}
+  rtc_time: {when_missing: omit}
+  time_zone: {required: true}
+  system_clock_synchronized: {type: bool}
+  rtc_in_local_tz: {type: bool}

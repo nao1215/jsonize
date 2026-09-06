@@ -1,0 +1,9 @@
+{
+  "local_time": "Sun 2026-09-06 16:03:31 JST",
+  "universal_time": "Sun 2026-09-06 07:03:31 UTC",
+  "rtc_time": "Sun 2026-09-06 07:03:32",
+  "time_zone": "Asia/Tokyo (JST, +0900)",
+  "system_clock_synchronized": true,
+  "ntp_service": "active",
+  "rtc_in_local_tz": false
+}

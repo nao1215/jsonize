@@ -1,0 +1,44 @@
+[
+  {
+    "device": "/dev/nvme1n1p2",
+    "tags": [
+      {
+        "name": "UUID",
+        "value": "ef904cb9-60d2-49ea-bbc7-04bf09fbddeb"
+      },
+      {
+        "name": "BLOCK_SIZE",
+        "value": "4096"
+      },
+      {
+        "name": "TYPE",
+        "value": "ext4"
+      },
+      {
+        "name": "PARTUUID",
+        "value": "79ff25f1-bd44-470f-b931-095a523a2fa5"
+      }
+    ]
+  },
+  {
+    "device": "/dev/nvme1n1p1",
+    "tags": [
+      {
+        "name": "UUID",
+        "value": "A6CC-7E4E"
+      },
+      {
+        "name": "BLOCK_SIZE",
+        "value": "512"
+      },
+      {
+        "name": "TYPE",
+        "value": "vfat"
+      },
+      {
+        "name": "PARTUUID",
+        "value": "add2dac8-71b2-4a59-95f9-b8a2279fe103"
+      }
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+# GNU stat prints a block of labelled lines. Times keep their printed
+# form, including the offset, because converting them would need a time
+# zone database and would lose the nanoseconds.
+format: 1
+command: stat
+variant: gnu
+description: GNU coreutils stat (default format)
+metadata:
+  tags: [linux, filesystem, coreutils]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/stat-invocation.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A\s*File: '
+      - '^\s*(?:Size|size): \d+'
+      - '^Access: \(\d+/'
+parse:
+  type: regex
+  each: input
+  pattern: '(?s)\A\s*File: (?P<file>[^\n]+)\n\s*[Ss]ize: (?P<size>\d+)\s+Blocks: (?P<blocks>\d+)\s+IO Block: (?P<io_block>\d+)\s+(?P<type>[^\n]+)\nDevice: (?P<device>\S+)\s+Inode: (?P<inode>\d+)\s+Links: (?P<links>\d+)\n(?:Device type: [^\n]+\n)?Access: \((?P<access_mode>\d+)/(?P<access_flags>\S+)\)\s+Uid: \(\s*(?P<uid>\d+)/\s*(?P<user>[^)]+?)\)\s+Gid: \(\s*(?P<gid>\d+)/\s*(?P<group>[^)]+?)\)\n(?:Context: [^\n]+\n)?Access: (?P<access_time>[^\n]+)\nModify: (?P<modify_time>[^\n]+)\nChange: (?P<change_time>[^\n]+)(?:\n\s*Birth: (?P<birth_time>[^\n]+))?'
+fields:
+  file: {required: true}
+  size: {type: int, required: true}
+  blocks: {type: int, required: true}
+  io_block: {type: int, required: true}
+  type: {required: true}
+  device: {required: true}
+  inode: {type: int, required: true}
+  links: {type: int, required: true}
+  access_mode: {required: true}
+  access_flags: {required: true}
+  uid: {type: int, required: true}
+  user: {required: true}
+  gid: {type: int, required: true}
+  group: {required: true}
+  access_time: {required: true}
+  modify_time: {required: true}
+  change_time: {required: true}
+  birth_time: {null_if: ["-"], when_missing: omit}

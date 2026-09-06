@@ -1,0 +1,46 @@
+# vmstat prints a group header, a column header and then the samples.
+# The counters are exact numbers, so they are read as such.
+format: 1
+command: vmstat
+variant: linux
+description: vmstat memory, swap, io, system and cpu counters
+metadata:
+  tags: [linux, memory, procps]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man8/vmstat.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\Aprocs\s+-+memory-+'
+      - '^\s*r\s+b\s+swpd\s+free\s'
+input:
+  ignore:
+    - '\Aprocs\s+-'
+    - '^\s*r\s+b\s+swpd\s'
+parse:
+  type: table
+  header:
+    none: true
+    columns: [r, b, swpd, free, buff, cache, si, so, bi, bo, in, cs, us, sy, id, wa, st, gu]
+  min_fields: 17
+fields:
+  r: {type: int, required: true}
+  b: {type: int, required: true}
+  swpd: {type: int, required: true}
+  free: {type: int, required: true}
+  buff: {type: int, required: true}
+  cache: {type: int, required: true}
+  si: {type: int}
+  so: {type: int}
+  bi: {type: int}
+  bo: {type: int}
+  in: {type: int}
+  cs: {type: int}
+  us: {type: int}
+  sy: {type: int}
+  id: {type: int}
+  wa: {type: int}
+  st: {type: int}
+  gu: {type: int, when_missing: omit}

@@ -1,0 +1,32 @@
+# `ip route` writes a destination followed by key/value words whose set
+# varies per route, so the words are read as an object and a flag that
+# stands alone (linkdown) is kept in its own list.
+format: 1
+command: ip
+variant: route
+description: ip route show
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ip-route.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["route", "r"]
+  signature:
+    all:
+      - '\A(?:default|\d+\.\d+\.\d+\.\d+/\d+|\S+/\d+) (?:via|dev|proto) '
+parse:
+  type: regex
+  patterns:
+    - '^(?P<destination>\S+) via (?P<via>\S+) dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
+    - '^(?P<destination>\S+) dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
+fields:
+  destination: {required: true}
+  dev: {required: true}
+  via: {when_missing: omit}
+  # The words after the device are pairs (proto dhcp, metric 600) mixed
+  # with lone flags (linkdown); they are kept in order rather than being
+  # forced into a shape the output does not always have.
+  attributes: {type: array, split_regex: '\s+'}

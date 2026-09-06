@@ -1,0 +1,30 @@
+# Loaded kernel modules. "Used by" is a count followed by an optional
+# comma separated list of the modules that use this one, which becomes an
+# array so the two parts are not run together in one string.
+format: 1
+command: lsmod
+variant: linux
+description: lsmod loaded kernel modules
+metadata:
+  tags: [linux, kernel]
+  compatible: [kmod]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsmod.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AModule\s+Size\s+Used by\s*$'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<name>\S+)\s+(?P<size>\d+)\s+(?P<used_by_count>\d+)\s+(?P<used_by>\S+)\s*$'
+    - '^(?P<name>\S+)\s+(?P<size>\d+)\s+(?P<used_by_count>\d+)\s*$'
+input:
+  ignore:
+    - '\AModule\s+Size'
+fields:
+  name: {required: true}
+  size: {type: int, required: true}
+  used_by_count: {type: int, required: true}
+  used_by: {type: array, split: ",", when_missing: omit}

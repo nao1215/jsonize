@@ -1,0 +1,30 @@
+# `swapon --show` prints a table; the sizes are rounded and their base is
+# not in the output, so they stay as printed. Use `swapon --show --bytes`
+# for exact numbers, which this definition also reads because the column
+# is a string either way.
+format: 1
+command: swapon
+variant: linux
+description: swapon --show table of swap areas
+metadata:
+  tags: [linux, memory, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/swapon.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["--show", "-s"]
+  signature:
+    all:
+      - '\ANAME\s+TYPE\s+SIZE\s+USED\s+PRIO\s*$'
+parse:
+  type: table
+  header:
+    columns: [name, type, size, used, priority]
+fields:
+  name: {required: true}
+  type: {required: true}
+  size: {required: true}
+  used: {required: true}
+  priority: {type: int, required: true}

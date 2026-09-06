@@ -448,8 +448,20 @@ func TestList(t *testing.T) {
 	}
 	var commands []map[string]any
 	h.json(&commands)
-	if len(commands) < 10 || commands[0]["command"] != "df" || len(commands[0]["variants"].([]any)) != 5 {
-		t.Errorf("list --json: %v", commands[0])
+	if len(commands) < 10 {
+		t.Errorf("list --json returned %d commands", len(commands))
+	}
+	found := false
+	for _, c := range commands {
+		if c["command"] == "df" {
+			found = true
+			if len(c["variants"].([]any)) != 5 {
+				t.Errorf("df variants = %v", c["variants"])
+			}
+		}
+	}
+	if !found {
+		t.Errorf("df is missing from the list: %v", commands)
 	}
 	if code := h.run("list", "--json", "df"); code != ExitOK {
 		t.Fatal(h.stderr.String())

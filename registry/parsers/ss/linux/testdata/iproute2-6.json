@@ -1,0 +1,52 @@
+[
+  {
+    "netid": "udp",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "0.0.0.0",
+    "local_port": "58635",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "netid": "udp",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "0.0.0.0",
+    "local_port": "27036",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "netid": "udp",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "0.0.0.0",
+    "local_port": "59986",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "netid": "udp",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.54",
+    "local_port": "53",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "netid": "udp",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.53%lo",
+    "local_port": "53",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  }
+]
