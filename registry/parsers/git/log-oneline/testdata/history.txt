@@ -1,0 +1,6 @@
+8d23922 Merge branch 'topic/rename-the-flag'
+a5928e1 refactor: rename the flag so that the intent of the option is obvious to a reader
+be679cb chore: add more files
+0c4fb20 docs: 日本語のはじめにを追加する
+28f06f9 docs: describe the guide
+25df583 feat: add the first version of the reader

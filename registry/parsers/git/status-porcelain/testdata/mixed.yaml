@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: a modification, a rename, two deletions, a staged change and an untracked file; the paths with a space and with Japanese characters are C-quoted by git
+os: linux
+args: ["status", "--porcelain"]

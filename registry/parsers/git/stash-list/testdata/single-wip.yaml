@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: one entry made on a commit with an empty message, so the line ends at the object name
+os: linux
+args: ["stash", "list"]

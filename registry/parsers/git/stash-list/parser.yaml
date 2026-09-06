@@ -1,0 +1,36 @@
+# One line per entry: the reflog name, then the branch the entry was made
+# on and a description. An entry stashed without a message is described as
+# "WIP on <branch>: <commit> <subject>", one stashed with -m as
+# "On <branch>: <message>", and the object name is split out of the first
+# form so that both end with a message field.
+#
+# A branch name cannot contain a colon, so the first ": " after the branch
+# ends it even when the message has colons of its own.
+format: 1
+command: git
+variant: stash-list
+description: git stash list
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-stash
+detect:
+  args:
+    any: ["stash"]
+  signature:
+    all:
+      - '(?m)^stash@\{\d+\}: '
+parse:
+  type: regex
+  patterns:
+    - '^stash@\{(?P<index>\d+)\}: WIP on (?P<branch>[^:\n]+): (?P<commit>[0-9a-f]{4,40}) (?P<message>.*)$'
+    # The same entry when the commit it was made on has an empty message:
+    # git drops the trailing space as well as the subject.
+    - '^stash@\{(?P<index>\d+)\}: WIP on (?P<branch>[^:\n]+): (?P<commit>[0-9a-f]{4,40})$'
+    - '^stash@\{(?P<index>\d+)\}: On (?P<branch>[^:\n]+): (?P<message>.*)$'
+    - '^stash@\{(?P<index>\d+)\}: (?P<message>.*)$'
+fields:
+  index: {type: int, required: true}
+  branch: {when_missing: omit}
+  commit: {when_missing: omit}

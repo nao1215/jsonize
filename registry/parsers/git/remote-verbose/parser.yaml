@@ -1,0 +1,28 @@
+# Two lines per remote, one for each direction: the name, a tab, the URL
+# and the direction in parentheses. A remote with a separate push URL has
+# two different URLs, which is why the direction is kept rather than the
+# pair being folded into one object per remote.
+format: 1
+command: git
+variant: remote-verbose
+description: git remote -v
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-remote
+detect:
+  args:
+    any: ["remote"]
+  signature:
+    all:
+      - '(?m)^[^\t\n]+\t[^\n]* \((?:fetch|push)\)$'
+parse:
+  type: regex
+  # The URL is read greedily so that the last " (fetch)" or " (push)" on
+  # the line is the one that ends it; a path may contain anything else.
+  pattern: '^(?P<name>[^\t\n]+)\t(?P<url>.*) \((?P<direction>fetch|push)\)$'
+fields:
+  name: {required: true}
+  url: {required: true}
+  direction: {required: true}

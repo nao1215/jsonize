@@ -1,0 +1,31 @@
+# `--oneline` is `--pretty=oneline --abbrev-commit`: an abbreviated object
+# name, one space and the subject. A commit with an empty message prints
+# the space and nothing after it, so the subject is an empty string there.
+#
+# `--graph` draws the history with |, / and \ in front of the commit, and
+# `--decorate` inserts "(HEAD -> main)" between the object name and the
+# subject; neither is this format and the signature refuses both.
+format: 1
+command: git
+variant: log-oneline
+description: git log --oneline
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-log#Documentation/git-log.txt---oneline
+detect:
+  args:
+    any: ["log"]
+  # A hexadecimal word and a line of text is the shape of far too many
+  # reports to claim on sight, so jz reads it only when the parser is
+  # named (`jz run git log --oneline`, `--parser git`).
+  auto_detect: false
+  signature:
+    all:
+      - '\A[0-9a-f]{7,40} '
+parse:
+  type: regex
+  pattern: '^(?P<commit>[0-9a-f]{4,40}) (?P<subject>.*)$'
+fields:
+  commit: {required: true}

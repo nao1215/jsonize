@@ -1,0 +1,6 @@
+local-mirror	/srv/mirrors/sample-project.git (fetch)
+local-mirror	/srv/mirrors/sample-project.git (push)
+origin	https://github.com/example/sample-project.git (fetch)
+origin	https://github.com/example/sample-project.git (push)
+upstream	git@github.com:example/upstream-project.git (fetch)
+upstream	no-push-allowed (push)

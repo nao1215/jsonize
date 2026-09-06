@@ -1,0 +1,77 @@
+[
+  {
+    "name": "core.repositoryformatversion",
+    "value": "0"
+  },
+  {
+    "name": "core.filemode",
+    "value": "true"
+  },
+  {
+    "name": "core.bare",
+    "value": "false"
+  },
+  {
+    "name": "core.logallrefupdates",
+    "value": "true"
+  },
+  {
+    "name": "user.name",
+    "value": "Ada Lovelace"
+  },
+  {
+    "name": "user.email",
+    "value": "ada@example.com"
+  },
+  {
+    "name": "commit.gpgsign",
+    "value": "false"
+  },
+  {
+    "name": "remote.origin.url",
+    "value": "https://github.com/example/sample-project.git"
+  },
+  {
+    "name": "remote.origin.fetch",
+    "value": "+refs/heads/*:refs/remotes/origin/*"
+  },
+  {
+    "name": "remote.upstream.url",
+    "value": "git@github.com:example/upstream-project.git"
+  },
+  {
+    "name": "remote.upstream.fetch",
+    "value": "+refs/heads/*:refs/remotes/upstream/*"
+  },
+  {
+    "name": "remote.upstream.pushurl",
+    "value": "no-push-allowed"
+  },
+  {
+    "name": "remote.local-mirror.url",
+    "value": "/srv/mirrors/sample-project.git"
+  },
+  {
+    "name": "remote.local-mirror.fetch",
+    "value": "+refs/heads/*:refs/remotes/local-mirror/*"
+  },
+  {
+    "name": "alias.lg",
+    "value": "log --oneline --graph --decorate"
+  },
+  {
+    "name": "review.strict"
+  },
+  {
+    "name": "branch.main.mergeoptions",
+    "value": "--no-ff"
+  },
+  {
+    "name": "branch.main.remote",
+    "value": "origin"
+  },
+  {
+    "name": "branch.main.merge",
+    "value": "refs/heads/main"
+  }
+]

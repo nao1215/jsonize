@@ -1,0 +1,32 @@
+[
+  {
+    "name": "local-mirror",
+    "url": "/srv/mirrors/sample-project.git",
+    "direction": "fetch"
+  },
+  {
+    "name": "local-mirror",
+    "url": "/srv/mirrors/sample-project.git",
+    "direction": "push"
+  },
+  {
+    "name": "origin",
+    "url": "https://github.com/example/sample-project.git",
+    "direction": "fetch"
+  },
+  {
+    "name": "origin",
+    "url": "https://github.com/example/sample-project.git",
+    "direction": "push"
+  },
+  {
+    "name": "upstream",
+    "url": "git@github.com:example/upstream-project.git",
+    "direction": "fetch"
+  },
+  {
+    "name": "upstream",
+    "url": "no-push-allowed",
+    "direction": "push"
+  }
+]

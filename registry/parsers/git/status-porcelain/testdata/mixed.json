@@ -1,0 +1,38 @@
+[
+  {
+    "index": null,
+    "worktree": "M",
+    "path": "README.md"
+  },
+  {
+    "index": "R",
+    "worktree": null,
+    "path": "docs/guide.md",
+    "renamed_to": "docs/guide-v2.md"
+  },
+  {
+    "index": null,
+    "worktree": "D",
+    "path": "\"docs/notes with spaces.md\""
+  },
+  {
+    "index": "D",
+    "worktree": null,
+    "path": "docs/old.md"
+  },
+  {
+    "index": null,
+    "worktree": "M",
+    "path": "\"docs/\\346\\227\\245\\346\\234\\254\\350\\252\\236/\\343\\201\\257\\343\\201\\230\\343\\202\\201\\343\\201\\253.md\""
+  },
+  {
+    "index": "M",
+    "worktree": null,
+    "path": "src/main.go"
+  },
+  {
+    "index": "?",
+    "worktree": "?",
+    "path": "TODO.md"
+  }
+]

@@ -1,0 +1,43 @@
+# The short format prints two status letters, a space and the path, and
+# for a rename or a copy the old path, " -> " and the new one. The letters
+# are read as two separate fields because they mean different things: the
+# first is the state of the index, the second the state of the work tree,
+# and a space in either column means "unchanged there", which becomes null.
+#
+# Paths keep the C quoting git applies to a name with a space or a byte
+# above 127 ("docs/\346\227\245..."); jz does not decode it. Run
+# `git -c core.quotePath=false status --porcelain` to get the raw name.
+#
+# This is porcelain v1 only. `--porcelain=v2` prints a different format
+# (header lines, a mode and two object names per entry) that this
+# definition rejects rather than misreads.
+format: 1
+command: git
+variant: status-porcelain
+description: git status --porcelain (short format, version 1)
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-status#_short_format
+detect:
+  args:
+    any: ["status"]
+  # Two status letters and a path describe a great many line-oriented
+  # reports, so the text is not evidence on its own: jz reads it when the
+  # parser is named (`jz run git status --porcelain`, `--parser git`).
+  auto_detect: false
+  signature:
+    all:
+      - '\A(?:\?\?|!!|[MTADRCU][ MTADRCU]|[ ][MTADRCU]) [^ \n]'
+parse:
+  type: regex
+  patterns:
+    # Only R and C in the index column make " -> " a path separator.
+    - '^(?P<index>[RC])(?P<worktree>.) (?P<path>.+?) -> (?P<renamed_to>.+)$'
+    - '^(?P<index>.)(?P<worktree>.) (?P<path>.+)$'
+fields:
+  index: {null_if: [""]}
+  worktree: {null_if: [""]}
+  path: {required: true}
+  renamed_to: {when_missing: omit}
