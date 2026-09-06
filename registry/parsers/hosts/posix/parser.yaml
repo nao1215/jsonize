@@ -20,6 +20,10 @@ detect:
       # "19:36:15     CPU  %usr" from mpstat(1) read as an address
       # followed by names.
       - '^(?:\d+\.\d+\.\d+\.\d+|[0-9a-fA-F]*::[0-9a-fA-F:]*|(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})(?:%\S+)?[ \t]+\S'
+    none:
+      # `ip neighbour` prints "ADDRESS dev INTERFACE lladdr ... STATE",
+      # which is an address followed by words as well.
+      - '^\S+[ \t]+dev[ \t]+\S+[ \t]+(?:lladdr|PERMANENT|NOARP|REACHABLE|STALE|DELAY|PROBE|INCOMPLETE|FAILED|NONE)(?:[ \t]|$)'
 input:
   ignore:
     - '^\s*#'

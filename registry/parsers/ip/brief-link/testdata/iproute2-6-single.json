@@ -1,0 +1,12 @@
+[
+  {
+    "interface": "lo",
+    "state": "UNKNOWN",
+    "lladdr": "00:00:00:00:00:00",
+    "flags": [
+      "LOOPBACK",
+      "UP",
+      "LOWER_UP"
+    ]
+  }
+]

@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (NetworkManager 1.54.3) with LC_ALL=C
+description: >-
+  The same table with one more field asked for with -f, which is what the
+  column names being read from the header is for. Profile names and UUIDs
+  were replaced, keeping the printed width.
+os: linux
+args: ["-f", "DEVICE,TYPE,STATE,CONNECTION,CON-UUID", "device", "status"]

@@ -1,0 +1,36 @@
+# `iw dev <interface> link` names the access point on the first line and
+# then prints one indented "key: value" per line. The keys are human
+# labels with spaces in them ("rx bitrate", "dtim period"), which a field
+# name cannot be, and most values carry a unit ("-56 dBm", "545765046
+# bytes (55137939 packets)"), so the values are kept as printed.
+format: 1
+command: iw
+variant: link
+description: iw dev link status
+metadata:
+  tags: [linux, network, wireless]
+  compatible: [iw]
+  references:
+    - https://man.archlinux.org/man/iw.8
+detect:
+  os: [linux]
+  args:
+    any: ["link"]
+  signature:
+    all:
+      - '\AConnected to \S+ \(on \S+\)[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: connection
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AConnected to (?P<bssid>\S+) \(on (?P<interface>\S+)\)'
+    - name: details
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: map

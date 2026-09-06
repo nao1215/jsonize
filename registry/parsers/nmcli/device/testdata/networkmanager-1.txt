@@ -1,0 +1,16 @@
+DEVICE            TYPE      STATE                   CONNECTION      
+wlp195s0          wifi      connected               wifi-lab-5g-001 
+eno1              ethernet  connected               Home network 1  
+br-088d49b64243   bridge    connected (externally)  br-088d49b64243 
+br-5b0a8cd9c3d6   bridge    connected (externally)  br-5b0a8cd9c3d6 
+docker0           bridge    connected (externally)  docker0         
+lo                loopback  connected (externally)  lo              
+br-d647a5eb3b66   bridge    connected (externally)  br-d647a5eb3b66 
+veth0c4293d       ethernet  connected (externally)  veth0c4293d     
+veth0d5de59       ethernet  connected (externally)  veth0d5de59     
+veth3083cdb       ethernet  connected (externally)  veth3083cdb     
+veth5d856b9       ethernet  connected (externally)  veth5d856b9     
+veth65bc625       ethernet  connected (externally)  veth65bc625     
+veth9363d1f       ethernet  connected (externally)  veth9363d1f     
+vethceffd70       ethernet  connected (externally)  vethceffd70     
+p2p-dev-wlp195s0  wifi-p2p  disconnected            --              

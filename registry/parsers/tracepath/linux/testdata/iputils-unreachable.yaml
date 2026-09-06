@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (iputils tracepath) with LC_ALL=C
+description: >-
+  An address on the local network with no host answering. The probe comes
+  back as !H from this machine and the Resume line has neither hops nor
+  back.
+os: linux
+args: ["-n", "-m", "3", "192.168.11.254"]

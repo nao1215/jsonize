@@ -1,0 +1,24 @@
+# A connection profile is named by the user and the name may contain
+# spaces, so the columns are cut at the header words. A profile that is
+# not attached to an interface prints "--" for the device.
+format: 1
+command: nmcli
+variant: connection
+description: nmcli connection show
+metadata:
+  tags: [linux, network, networkmanager]
+  compatible: [NetworkManager]
+  references:
+    - https://networkmanager.dev/docs/api/latest/nmcli.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ANAME[ \t]+UUID[ \t]+TYPE[ \t]+DEVICE'
+parse:
+  type: table
+  split: aligned
+fields:
+  name: {required: true}
+  uuid: {required: true}
+  device: {null_if: ["--"]}

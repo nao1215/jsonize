@@ -1,0 +1,53 @@
+[
+  {
+    "address": "fe80::bd37:c9e5:3542:d1f5",
+    "dev": "eno1",
+    "lladdr": "52:54:00:10:01:1e",
+    "state": "STALE"
+  },
+  {
+    "address": "fe80::ddbe:ecc4:6a05:7e20",
+    "dev": "wlp195s0",
+    "lladdr": "52:54:00:10:01:10",
+    "state": "STALE"
+  },
+  {
+    "address": "fe80::5054:ff:fe10:11b",
+    "dev": "eno1",
+    "lladdr": "52:54:00:10:01:1b",
+    "state": "STALE"
+  },
+  {
+    "address": "fe80::5054:ff:fe10:119",
+    "dev": "wlp195s0",
+    "lladdr": "52:54:00:10:01:19",
+    "flags": [
+      "router"
+    ],
+    "state": "STALE"
+  },
+  {
+    "address": "fe80::5054:ff:fe10:11c",
+    "dev": "wlp195s0",
+    "lladdr": "52:54:00:10:01:1c",
+    "state": "STALE"
+  },
+  {
+    "address": "fe80::207d:36fd:4852:a3ec",
+    "dev": "eno1",
+    "lladdr": "52:54:00:10:01:1f",
+    "state": "STALE"
+  },
+  {
+    "address": "fe80::5054:ff:fe10:116",
+    "dev": "wlp195s0",
+    "lladdr": "52:54:00:10:01:16",
+    "state": "STALE"
+  },
+  {
+    "address": "fe80::5054:ff:fe10:11d",
+    "dev": "wlp195s0",
+    "lladdr": "52:54:00:10:01:1d",
+    "state": "STALE"
+  }
+]

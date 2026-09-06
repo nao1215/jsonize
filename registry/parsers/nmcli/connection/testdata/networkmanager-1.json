@@ -1,0 +1,98 @@
+[
+  {
+    "name": "wifi-lab-5g-001",
+    "uuid": "00000000-0000-4000-8000-000000000001",
+    "type": "wifi",
+    "device": "wlp195s0"
+  },
+  {
+    "name": "Home network 1",
+    "uuid": "00000000-0000-4000-8000-000000000002",
+    "type": "ethernet",
+    "device": "eno1"
+  },
+  {
+    "name": "br-088d49b64243",
+    "uuid": "00000000-0000-4000-8000-000000000003",
+    "type": "bridge",
+    "device": "br-088d49b64243"
+  },
+  {
+    "name": "br-5b0a8cd9c3d6",
+    "uuid": "00000000-0000-4000-8000-000000000004",
+    "type": "bridge",
+    "device": "br-5b0a8cd9c3d6"
+  },
+  {
+    "name": "docker0",
+    "uuid": "00000000-0000-4000-8000-000000000005",
+    "type": "bridge",
+    "device": "docker0"
+  },
+  {
+    "name": "lo",
+    "uuid": "00000000-0000-4000-8000-000000000006",
+    "type": "loopback",
+    "device": "lo"
+  },
+  {
+    "name": "br-d647a5eb3b66",
+    "uuid": "00000000-0000-4000-8000-000000000007",
+    "type": "bridge",
+    "device": "br-d647a5eb3b66"
+  },
+  {
+    "name": "veth0c4293d",
+    "uuid": "00000000-0000-4000-8000-000000000008",
+    "type": "ethernet",
+    "device": "veth0c4293d"
+  },
+  {
+    "name": "veth0d5de59",
+    "uuid": "00000000-0000-4000-8000-000000000009",
+    "type": "ethernet",
+    "device": "veth0d5de59"
+  },
+  {
+    "name": "veth3083cdb",
+    "uuid": "00000000-0000-4000-8000-00000000000a",
+    "type": "ethernet",
+    "device": "veth3083cdb"
+  },
+  {
+    "name": "veth5d856b9",
+    "uuid": "00000000-0000-4000-8000-00000000000b",
+    "type": "ethernet",
+    "device": "veth5d856b9"
+  },
+  {
+    "name": "veth65bc625",
+    "uuid": "00000000-0000-4000-8000-00000000000c",
+    "type": "ethernet",
+    "device": "veth65bc625"
+  },
+  {
+    "name": "veth9363d1f",
+    "uuid": "00000000-0000-4000-8000-00000000000d",
+    "type": "ethernet",
+    "device": "veth9363d1f"
+  },
+  {
+    "name": "vethceffd70",
+    "uuid": "00000000-0000-4000-8000-00000000000e",
+    "type": "ethernet",
+    "device": "vethceffd70"
+  },
+  {
+    "name": "netplan-eno1",
+    "uuid": "00000000-0000-4000-8000-00000000000f",
+    "type": "ethernet",
+    "device": null
+  },
+  {
+    "name": "Home network 2",
+    "uuid": "00000000-0000-4000-8000-000000000010",
+    "type": "ethernet",
+    "device": null
+  }
+]

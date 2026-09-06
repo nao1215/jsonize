@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (iw 6.17) with LC_ALL=C
+description: >-
+  A station associated with an access point on 5 GHz. The BSSID was
+  replaced and the network name was replaced with one of the same length.
+os: linux
+args: ["dev", "wlp195s0", "link"]

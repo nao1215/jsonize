@@ -1,0 +1,155 @@
+[
+  {
+    "interface": "lo",
+    "state": "UNKNOWN",
+    "lladdr": "00:00:00:00:00:00",
+    "flags": [
+      "LOOPBACK",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "eno1",
+    "state": "UP",
+    "lladdr": "52:54:00:10:00:01",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "wlp195s0",
+    "state": "UP",
+    "lladdr": "52:54:00:10:00:02",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "br-088d49b64243",
+    "state": "UP",
+    "lladdr": "52:54:00:10:00:03",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "docker0",
+    "state": "UP",
+    "lladdr": "52:54:00:10:00:04",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "br-d647a5eb3b66",
+    "state": "DOWN",
+    "lladdr": "52:54:00:10:00:05",
+    "flags": [
+      "NO-CARRIER",
+      "BROADCAST",
+      "MULTICAST",
+      "UP"
+    ]
+  },
+  {
+    "interface": "veth0c4293d@if2",
+    "state": "UP",
+    "lladdr": "52:54:00:10:00:06",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "veth9363d1f@if2",
+    "state": "UP",
+    "lladdr": "52:54:00:10:00:07",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "veth5d856b9@if2",
+    "state": "UP",
+    "lladdr": "52:54:00:10:00:08",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "veth0d5de59@if2",
+    "state": "UP",
+    "lladdr": "52:54:00:10:00:09",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "veth3083cdb@if2",
+    "state": "UP",
+    "lladdr": "52:54:00:10:00:0a",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "vethceffd70@if2",
+    "state": "UP",
+    "lladdr": "52:54:00:10:00:0b",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "veth65bc625@if2",
+    "state": "UP",
+    "lladdr": "52:54:00:10:00:0c",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ]
+  },
+  {
+    "interface": "br-5b0a8cd9c3d6",
+    "state": "DOWN",
+    "lladdr": "52:54:00:10:00:0d",
+    "flags": [
+      "NO-CARRIER",
+      "BROADCAST",
+      "MULTICAST",
+      "UP"
+    ]
+  }
+]

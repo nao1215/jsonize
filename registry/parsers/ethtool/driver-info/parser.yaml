@@ -1,0 +1,33 @@
+# `ethtool -i` is the one ethtool form whose whole output is "key: value"
+# on a single line each. The five supports- keys are yes/no answers, so
+# they become booleans; a driver that cannot answer prints "N/A".
+format: 1
+command: ethtool
+variant: driver-info
+description: ethtool -i driver information
+metadata:
+  tags: [linux, network, ethtool]
+  compatible: [ethtool]
+  references:
+    - https://man7.org/linux/man-pages/man8/ethtool.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-i", "--driver"]
+  signature:
+    all:
+      - '\Adriver:[ \t]'
+      - '^supports-statistics:[ \t]'
+parse:
+  type: kv
+  separator: ":"
+  as: map
+fields:
+  driver: {required: true}
+  firmware-version: {null_if: ["N/A"]}
+  bus-info: {null_if: ["N/A"]}
+  supports-statistics: {type: bool}
+  supports-test: {type: bool}
+  supports-eeprom-access: {type: bool}
+  supports-register-dump: {type: bool}
+  supports-priv-flags: {type: bool}

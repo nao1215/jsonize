@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (NetworkManager 1.54.3) with LC_ALL=C
+description: >-
+  Every stored profile, including two that are not attached to a device
+  and print "--". The names and UUIDs were replaced, keeping the printed
+  width, and one name still contains a space.
+os: linux
+args: ["connection"]

@@ -1,0 +1,92 @@
+[
+  {
+    "device": "wlp195s0",
+    "type": "wifi",
+    "state": "connected",
+    "connection": "wifi-lab-5g-001"
+  },
+  {
+    "device": "eno1",
+    "type": "ethernet",
+    "state": "connected",
+    "connection": "Home network 1"
+  },
+  {
+    "device": "br-088d49b64243",
+    "type": "bridge",
+    "state": "connected (externally)",
+    "connection": "br-088d49b64243"
+  },
+  {
+    "device": "br-5b0a8cd9c3d6",
+    "type": "bridge",
+    "state": "connected (externally)",
+    "connection": "br-5b0a8cd9c3d6"
+  },
+  {
+    "device": "docker0",
+    "type": "bridge",
+    "state": "connected (externally)",
+    "connection": "docker0"
+  },
+  {
+    "device": "lo",
+    "type": "loopback",
+    "state": "connected (externally)",
+    "connection": "lo"
+  },
+  {
+    "device": "br-d647a5eb3b66",
+    "type": "bridge",
+    "state": "connected (externally)",
+    "connection": "br-d647a5eb3b66"
+  },
+  {
+    "device": "veth0c4293d",
+    "type": "ethernet",
+    "state": "connected (externally)",
+    "connection": "veth0c4293d"
+  },
+  {
+    "device": "veth0d5de59",
+    "type": "ethernet",
+    "state": "connected (externally)",
+    "connection": "veth0d5de59"
+  },
+  {
+    "device": "veth3083cdb",
+    "type": "ethernet",
+    "state": "connected (externally)",
+    "connection": "veth3083cdb"
+  },
+  {
+    "device": "veth5d856b9",
+    "type": "ethernet",
+    "state": "connected (externally)",
+    "connection": "veth5d856b9"
+  },
+  {
+    "device": "veth65bc625",
+    "type": "ethernet",
+    "state": "connected (externally)",
+    "connection": "veth65bc625"
+  },
+  {
+    "device": "veth9363d1f",
+    "type": "ethernet",
+    "state": "connected (externally)",
+    "connection": "veth9363d1f"
+  },
+  {
+    "device": "vethceffd70",
+    "type": "ethernet",
+    "state": "connected (externally)",
+    "connection": "vethceffd70"
+  },
+  {
+    "device": "p2p-dev-wlp195s0",
+    "type": "wifi-p2p",
+    "state": "disconnected",
+    "connection": null
+  }
+]

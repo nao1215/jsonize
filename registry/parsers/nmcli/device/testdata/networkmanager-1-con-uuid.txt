@@ -1,0 +1,16 @@
+DEVICE            TYPE      STATE                   CONNECTION       CON-UUID                             
+wlp195s0          wifi      connected               wifi-lab-5g-001  00000000-0000-4000-8000-000000000001 
+eno1              ethernet  connected               Home network 1   00000000-0000-4000-8000-000000000002 
+br-088d49b64243   bridge    connected (externally)  br-088d49b64243  00000000-0000-4000-8000-000000000003 
+br-5b0a8cd9c3d6   bridge    connected (externally)  br-5b0a8cd9c3d6  00000000-0000-4000-8000-000000000004 
+docker0           bridge    connected (externally)  docker0          00000000-0000-4000-8000-000000000005 
+lo                loopback  connected (externally)  lo               00000000-0000-4000-8000-000000000006 
+br-d647a5eb3b66   bridge    connected (externally)  br-d647a5eb3b66  00000000-0000-4000-8000-000000000007 
+veth0c4293d       ethernet  connected (externally)  veth0c4293d      00000000-0000-4000-8000-000000000008 
+veth0d5de59       ethernet  connected (externally)  veth0d5de59      00000000-0000-4000-8000-000000000009 
+veth3083cdb       ethernet  connected (externally)  veth3083cdb      00000000-0000-4000-8000-00000000000a 
+veth5d856b9       ethernet  connected (externally)  veth5d856b9      00000000-0000-4000-8000-00000000000b 
+veth65bc625       ethernet  connected (externally)  veth65bc625      00000000-0000-4000-8000-00000000000c 
+veth9363d1f       ethernet  connected (externally)  veth9363d1f      00000000-0000-4000-8000-00000000000d 
+vethceffd70       ethernet  connected (externally)  vethceffd70      00000000-0000-4000-8000-00000000000e 
+p2p-dev-wlp195s0  wifi-p2p  disconnected            --               --                                   

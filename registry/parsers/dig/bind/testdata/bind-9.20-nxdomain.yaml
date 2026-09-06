@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C
+description: >-
+  A name under the reserved .invalid domain, refused by the stub resolver.
+  There is no answer section, and an OPT pseudosection appears before the
+  question.
+os: linux
+args: ["nonexistent-host.invalid"]

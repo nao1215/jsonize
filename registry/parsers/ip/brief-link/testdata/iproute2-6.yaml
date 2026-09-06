@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C
+description: >-
+  Every interface of a workstation with bridges and veth pairs. The
+  hardware addresses were replaced with 52:54:00 addresses of the same
+  width; the loopback keeps the all-zero address the kernel prints.
+os: linux
+args: ["-br", "link"]

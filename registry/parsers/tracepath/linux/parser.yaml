@@ -1,0 +1,47 @@
+# tracepath prints one line per probe and a Resume line at the end. A
+# probe that only reports a path MTU is written with a "?" after the hop
+# number and has no round trip time, a probe that got no answer says "no
+# reply", and anything the hop added after the time (reached, asymm 2,
+# !H) is kept as a note. The Resume line is a summary of the run, not a
+# hop, so it is a part of its own.
+format: 1
+command: tracepath
+variant: linux
+description: tracepath path MTU discovery
+metadata:
+  tags: [linux, network, iputils]
+  compatible: [iputils]
+  references:
+    - https://man7.org/linux/man-pages/man8/tracepath.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*\d+\??:[ \t]'
+      - '^[ \t]*Resume:[ \t]+pmtu[ \t]+\d+'
+parse:
+  type: composite
+  parts:
+    - name: hops
+      select: {until: '^[ \t]*Resume:'}
+      parse:
+        type: regex
+        patterns:
+          - '^[ \t]*(?P<hop>\d+)\?:[ \t]+\[(?P<host>[^\]]*)\][ \t]+pmtu[ \t]+(?P<pmtu>\d+)[ \t]*$'
+          - '^[ \t]*(?P<hop>\d+):[ \t]+(?P<host>\S+)[ \t]+(?P<time_ms>[\d.]+)ms(?:[ \t]+(?P<note>\S.*?))?[ \t]*$'
+          - '^[ \t]*(?P<hop>\d+):[ \t]+(?P<note>no reply)[ \t]*$'
+      fields:
+        hop: {type: int, required: true}
+        host: {when_missing: omit}
+        pmtu: {type: int, when_missing: omit}
+        time_ms: {type: float, when_missing: omit}
+        note: {when_missing: omit}
+    - name: summary
+      parse:
+        type: regex
+        each: input
+        pattern: 'Resume:[ \t]+pmtu[ \t]+(?P<pmtu>\d+)(?:[ \t]+hops[ \t]+(?P<hops>\d+))?(?:[ \t]+back[ \t]+(?P<back>\d+))?'
+      fields:
+        pmtu: {type: int}
+        hops: {type: int, when_missing: omit}
+        back: {type: int, when_missing: omit}

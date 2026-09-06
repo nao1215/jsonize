@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (iputils tracepath) with LC_ALL=C
+description: The local gateway, one hop away, reached on the second probe.
+os: linux
+args: ["-n", "192.168.11.1"]

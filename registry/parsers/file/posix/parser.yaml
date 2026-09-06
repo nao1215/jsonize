@@ -41,6 +41,10 @@ detect:
       # labelled line, such as an archive listing announcing its archive,
       # has rows underneath that carry no colon followed by a space.
       - '^(?:[^:\n]|:[^ \t\n])*$'
+      # `ethtool -i` opens with "driver: <name>" and "version: <name>",
+      # which are properties of an interface rather than a path and the
+      # description of what is stored there.
+      - '\Adriver:[ \t]+\S+\nversion:[ \t]'
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'

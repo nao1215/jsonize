@@ -1,0 +1,8 @@
+fe80::bd37:c9e5:3542:d1f5 dev eno1 lladdr 52:54:00:10:01:1e STALE 
+fe80::ddbe:ecc4:6a05:7e20 dev wlp195s0 lladdr 52:54:00:10:01:10 STALE 
+fe80::5054:ff:fe10:11b dev eno1 lladdr 52:54:00:10:01:1b STALE 
+fe80::5054:ff:fe10:119 dev wlp195s0 lladdr 52:54:00:10:01:19 router STALE 
+fe80::5054:ff:fe10:11c dev wlp195s0 lladdr 52:54:00:10:01:1c STALE 
+fe80::207d:36fd:4852:a3ec dev eno1 lladdr 52:54:00:10:01:1f STALE 
+fe80::5054:ff:fe10:116 dev wlp195s0 lladdr 52:54:00:10:01:16 STALE 
+fe80::5054:ff:fe10:11d dev wlp195s0 lladdr 52:54:00:10:01:1d STALE 
