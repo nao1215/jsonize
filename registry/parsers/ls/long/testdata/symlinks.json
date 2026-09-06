@@ -1,0 +1,31 @@
+[
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": 7,
+    "date": "Apr 22  2024",
+    "filename": "bin",
+    "link_to": "usr/bin"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": 7,
+    "date": "Apr 22  2024",
+    "filename": "lib",
+    "link_to": "usr/lib"
+  },
+  {
+    "flags": "-rw-r--r--.",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": 42,
+    "date": "Jan  5 10:11",
+    "filename": "selinux-labelled file"
+  }
+]

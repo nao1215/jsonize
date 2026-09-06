@@ -1,0 +1,26 @@
+[
+  {
+    "lines": 1,
+    "words": 1,
+    "characters": 7,
+    "filename": "/etc/hostname"
+  },
+  {
+    "lines": 9,
+    "words": 25,
+    "characters": 221,
+    "filename": "/etc/hosts"
+  },
+  {
+    "lines": 54,
+    "words": 101,
+    "characters": 3154,
+    "filename": "/etc/passwd"
+  },
+  {
+    "lines": 64,
+    "words": 127,
+    "characters": 3382,
+    "filename": "total"
+  }
+]

@@ -1,0 +1,4 @@
+Filesystem                Size      Used Available Use% Mounted on
+tmpfs                    12.3G      5.8M     12.3G   0% /run
+/dev/nvme1n1p2            1.8T      1.6T    144.7G  92% /
+devtmpfs                 30.6G         0     30.6G   0% /dev

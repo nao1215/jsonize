@@ -1,0 +1,4 @@
+/dev/disk3s1s1 on / (apfs, sealed, local, read-only, journaled)
+devfs on /dev (devfs, local, nobrowse)
+/dev/disk3s6 on /System/Volumes/VM (apfs, local, noexec, journaled, noatime, nobrowse)
+map auto_home on /System/Volumes/Data/home (autofs, automounted, nobrowse)

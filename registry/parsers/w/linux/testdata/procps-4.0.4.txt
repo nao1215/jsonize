@@ -1,0 +1,3 @@
+ 13:50:00 up 13 days,  4:30,  5 users,  load average: 0.74, 0.79, 0.83
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU  WHAT
+alice               -                24Aug26         0.00s   ?    lightdm --session-child 13 20

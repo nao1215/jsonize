@@ -1,0 +1,123 @@
+version: "1"
+
+suite:
+  name: jz error contract
+
+# Diagnostics never go to stdout: a failing run leaves stdout empty so a
+# consumer piping into jq sees either JSON or nothing.
+scenarios:
+  - name: no arguments prints usage and exits 2
+    steps:
+      - run:
+          command: jz
+      - assert:
+          exit_code: 2
+          stdout:
+            empty: true
+          stderr:
+            contains: "Usage:"
+
+  - name: an unknown subcommand exits 2
+    steps:
+      - run:
+          command: jz frobnicate
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: unknown command "frobnicate"
+
+  - name: an unknown flag exits 2 and shows the subcommand usage
+    steps:
+      - run:
+          command: jz parse --bogus df
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "Usage: jz parse"
+
+  - name: an unknown command name exits 4 with a hint
+    steps:
+      - run:
+          command: jz parse dg
+          stdin: "x\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: no parser definition for command "dg" (did you mean df
+
+  - name: an unknown variant exits 4 and lists the available ones
+    steps:
+      - run:
+          command: jz parse --variant solaris df
+          stdin: "x\n"
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: "available: bsd, bsd-human, busybox-human, gnu, gnu-human"
+
+  - name: input that matches no variant exits 4 and explains every rejection
+    steps:
+      - run:
+          command: jz parse df
+          stdin: "this is not df output\n"
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: gnu-human
+            matches: "signature all\\[0\\] .* did not match"
+
+  - name: input that fails to parse exits 3 and names the line and field
+    steps:
+      - run:
+          command: jz parse --variant gnu df
+          stdin: "Filesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs  abc 0 0 0% /run\n"
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+          stderr:
+            contains: 'df/gnu: line 2: field "1k_blocks": cannot convert "abc" to int'
+
+  - name: a row with too few columns is rejected, not silently padded
+    steps:
+      - run:
+          command: jz parse --variant gnu df
+          stdin: "Filesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs 1 2\n"
+      - assert:
+          exit_code: 3
+          stderr:
+            contains: expected at least 6 fields but found 3
+
+  - name: oversized input is refused before parsing
+    steps:
+      - run:
+          command: jz parse --max-input 16 env
+          stdin: "A=1\nB=2\nC=3\nD=4\nE=5\n"
+      - assert:
+          exit_code: 3
+          stderr:
+            contains: input exceeds 16 bytes
+
+  - name: registry update refuses plain http sources
+    steps:
+      - run:
+          command: jz registry update --source http://example.invalid/registry.tar.gz
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: registry URL must use https
+
+  - name: registry update against an unreachable host fails with exit 5 and leaves nothing behind
+    steps:
+      - run:
+          command: jz registry update --source https://127.0.0.1:9/registry.tar.gz --dir "${workdir}/reg"
+      - assert:
+          exit_code: 5
+          stderr:
+            contains: registry update failed
+      - assert:
+          dir:
+            path: "${workdir}"
+            not_contains: [reg]

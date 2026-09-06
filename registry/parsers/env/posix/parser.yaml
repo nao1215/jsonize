@@ -1,0 +1,14 @@
+# One NAME=value per line. Values containing newlines cannot be
+# represented line by line; such input fails with a clear error rather
+# than producing a misleading result.
+format: 1
+command: env
+variant: posix
+description: env / printenv output as a list of name/value pairs
+metadata:
+  tags: [linux, darwin, environment]
+  compatible: [GNU coreutils, BusyBox, macOS env]
+parse:
+  type: kv
+  separator: "="
+  as: list

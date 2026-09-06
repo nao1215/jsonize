@@ -1,0 +1,5 @@
+total 0
+drwxr-xr-x   3 root  wheel    96 Jul 30  2024 Applications
+drwxr-xr-x  70 root  wheel  2240 Jul 30  2024 Library
+lrwxr-xr-x@  1 root  wheel    11 Jul 30  2024 etc -> private/etc
+-rw-r--r--+  1 alice staff  4242 Sep  1 10:20 notes.txt

@@ -1,0 +1,4 @@
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; user and host names replaced
+os: linux
+args: [-a]
+description: BusyBox omits processor and hardware platform

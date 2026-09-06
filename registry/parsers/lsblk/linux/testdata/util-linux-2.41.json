@@ -1,0 +1,83 @@
+[
+  {
+    "name": "loop0",
+    "maj_min": "7:0",
+    "rm": false,
+    "size": 4096,
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/bare/5"
+  },
+  {
+    "name": "loop1",
+    "maj_min": "7:1",
+    "rm": false,
+    "size": 105381888,
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/telegram-desktop/7119"
+  },
+  {
+    "name": "loop2",
+    "maj_min": "7:2",
+    "rm": false,
+    "size": 232259584,
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/thunderbird/1240"
+  },
+  {
+    "name": "loop3",
+    "maj_min": "7:3",
+    "rm": false,
+    "size": 66899149,
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core20/2866"
+  },
+  {
+    "name": "loop4",
+    "maj_min": "7:4",
+    "rm": false,
+    "size": 66899149,
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core20/2769"
+  },
+  {
+    "name": "loop5",
+    "maj_min": "7:5",
+    "rm": false,
+    "size": 58195968,
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core18/2999"
+  },
+  {
+    "name": "loop6",
+    "maj_min": "7:6",
+    "rm": false,
+    "size": 58195968,
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core18/2979"
+  },
+  {
+    "name": "loop7",
+    "maj_min": "7:7",
+    "rm": false,
+    "size": 77594624,
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core22/2437"
+  },
+  {
+    "name": "loop8",
+    "maj_min": "7:8",
+    "rm": false,
+    "size": 70044877,
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core24/1587"
+  }
+]

@@ -1,0 +1,3 @@
+description: a value that spans lines cannot be represented line by line; parsing must fail and name the line
+expect_error: 'line 3: expected "key=value"'
+source: hand-written edge case

@@ -1,0 +1,6 @@
+# jsonize official registry manifest.
+format: 1
+name: official
+version: 0.1.0
+description: Parser definitions maintained with jsonize.
+source: https://github.com/nao1215/jsonize

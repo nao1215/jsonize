@@ -1,0 +1,25 @@
+# lsblk leaves MOUNTPOINT blank for unmounted devices and draws a tree in
+# NAME, so cells are cut at header offsets.
+format: 1
+command: lsblk
+variant: linux
+description: lsblk default output (util-linux)
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsblk.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^NAME\s+MAJ:MIN\s+RM\s+SIZE\s+RO\s+TYPE\s+MOUNTPOINTS?\s*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    rename: {mountpoints: mountpoint}
+fields:
+  rm: {type: bool}
+  size: {type: size}
+  ro: {type: bool}

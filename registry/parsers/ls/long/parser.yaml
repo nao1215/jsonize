@@ -1,0 +1,27 @@
+# `ls -l` lines on GNU and BSD. The optional trailing "." / "+" / "@"
+# after the mode string is the ACL/xattr marker; symlink targets are
+# split into link_to.
+format: 1
+command: ls
+variant: long
+description: ls -l / ls -al long listing (byte sizes) on Linux and macOS
+metadata:
+  tags: [linux, darwin, filesystem]
+  compatible: [GNU coreutils, macOS ls, BusyBox]
+detect:
+  args:
+    any: ["-l", "-al", "-la", "-lA", "-Al", "-lh", "-alh", "-lah", "-lR", "-alR"]
+    none: ["-h", "--human-readable"]
+  signature:
+    all:
+      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+\d+\s+\w{3}\s+\d{1,2}\s+'
+input:
+  ignore:
+    - '^total \d'
+parse:
+  type: regex
+  pattern: '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+?)(?: -> (?P<link_to>.+))?$'
+fields:
+  links: {type: int}
+  size: {type: int}
+  link_to: {when_missing: omit}

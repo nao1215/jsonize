@@ -1,0 +1,41 @@
+# `w` is two reports in one: an uptime line followed by an aligned table
+# whose FROM column may be blank, which is why the table is split by
+# header alignment rather than whitespace.
+format: 1
+command: w
+variant: linux
+description: "w on Linux (procps): uptime summary plus logged-in users"
+metadata:
+  tags: [linux, user, system]
+  compatible: [procps-ng]
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^.*load average: '
+      - '^USER\s+TTY\s+(?:FROM\s+)?LOGIN@\s+IDLE\s+JCPU\s+PCPU\s+WHAT\s*$'
+parse:
+  type: composite
+  parts:
+    - name: uptime
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^\s*(?P<time>\d{1,2}:\d{2}(?::\d{2})?)\s+up\s+(?P<uptime>.+?),\s+(?P<users>\d+) users?,\s+load average: (?P<load_1m>[\d.]+), (?P<load_5m>[\d.]+), (?P<load_15m>[\d.]+)\s*$'
+      fields:
+        users: {type: int}
+        load_1m: {type: float}
+        load_5m: {type: float}
+        load_15m: {type: float}
+    - name: users
+      select: {skip: 1}
+      parse:
+        type: table
+        split: aligned
+        header:
+          rename: {login: login_at}
+      fields:
+        from: {null_if: ["-"]}
+        idle: {null_if: ["-"]}
+        what: {null_if: ["-"]}

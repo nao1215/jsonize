@@ -1,0 +1,27 @@
+# GNU coreutils df, default 1K-block output. BusyBox df prints the same
+# layout, so this definition covers both (see metadata.compatible).
+format: 1
+command: df
+variant: gnu
+description: df default output with 1K blocks (GNU coreutils, BusyBox)
+metadata:
+  tags: [linux, filesystem, coreutils]
+  compatible: [GNU coreutils, BusyBox]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html
+detect:
+  os: [linux]
+  args:
+    none: ["-h", "--human-readable", "-H", "--si", "-i", "--inodes", "-T", "--print-type"]
+  signature:
+    all:
+      - '^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
+parse:
+  type: table
+  header:
+    columns: [filesystem, 1k_blocks, used, available, use_percent, mounted_on]
+fields:
+  1k_blocks: {type: int}
+  used: {type: int}
+  available: {type: int}
+  use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}

@@ -1,0 +1,5 @@
+tmpfs on /run type tmpfs (rw,nosuid,nodev,size=12882672k,nr_inodes=819200,mode=755,inode64)
+/dev/nvme1n1p2 on / type ext4 (rw,relatime)
+devtmpfs on /dev type devtmpfs (rw,nosuid,size=32119780k,nr_inodes=8029945,mode=755,inode64)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev,inode64,usrquota)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=600,ptmxmode=000)

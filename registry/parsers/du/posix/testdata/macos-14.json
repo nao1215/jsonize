@@ -1,0 +1,10 @@
+[
+  {
+    "size": 8,
+    "name": "/usr/local/bin/tool"
+  },
+  {
+    "size": 16,
+    "name": "/usr/local/bin"
+  }
+]

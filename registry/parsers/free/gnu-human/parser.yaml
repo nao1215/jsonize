@@ -1,0 +1,28 @@
+format: 1
+command: free
+variant: gnu-human
+description: procps free -h (sizes normalised to bytes)
+metadata:
+  tags: [linux, memory, procps]
+  compatible: [procps-ng]
+detect:
+  os: [linux]
+  args:
+    any: ["-h", "--human"]
+  signature:
+    all:
+      - '^\s+total\s+used\s+free\s+shared\s+buff/cache\s+available\s*$'
+      - '^Mem:\s+[\d.]+[KMGTPB]i?\b'
+parse:
+  type: table
+  header:
+    leading_label: type
+  min_fields: 4
+fields:
+  type: {trim_suffix: ":"}
+  total: {type: size}
+  used: {type: size}
+  free: {type: size}
+  shared: {type: size}
+  buff_cache: {type: size}
+  available: {type: size}

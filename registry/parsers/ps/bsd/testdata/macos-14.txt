@@ -1,0 +1,4 @@
+USER               PID  %CPU %MEM      VSZ    RSS   TT  STAT STARTED      TIME COMMAND
+alice              612   0.0  0.1 410252144  12000 s000  Ss    9:03AM   0:00.09 -zsh
+root                 1   0.0  0.1 410214320  10240   ??  Ss    9:02AM   3:12.45 /sbin/launchd
+_windowserver      201   4.2  1.2 412600000 200000   ??  Ss    9:02AM  12:01.33 /System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer -daemon

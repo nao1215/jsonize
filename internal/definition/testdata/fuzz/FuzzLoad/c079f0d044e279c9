@@ -1,0 +1,2 @@
+go test fuzz v1
+[]byte("format: 1\ncommand: 0\nvariant: 0\nparse:\n  type: table\n  header:\n   columns: !0000000000000000000000000\n0000")

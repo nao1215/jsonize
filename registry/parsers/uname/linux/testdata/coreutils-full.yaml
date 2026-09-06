@@ -1,0 +1,4 @@
+description: GNU uname -a printing processor and hardware platform (the default on most distributions)
+source: transcribed from GNU coreutils uname -a output format
+os: linux
+args: [-a]

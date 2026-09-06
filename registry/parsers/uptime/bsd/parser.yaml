@@ -1,0 +1,21 @@
+format: 1
+command: uptime
+variant: bsd
+description: "uptime on macOS and BSD: space separated load averages"
+metadata:
+  tags: [darwin, bsd, system]
+  compatible: [macOS uptime, FreeBSD uptime]
+detect:
+  os: [darwin, freebsd, openbsd, netbsd]
+  signature:
+    all:
+      - 'load averages: '
+parse:
+  type: regex
+  each: input
+  pattern: '^\s*(?P<time>\d{1,2}:\d{2}(?::\d{2})?)\s+up\s+(?P<uptime>.+?),\s+(?P<users>\d+) users?,\s+load averages: (?P<load_1m>[\d.]+) (?P<load_5m>[\d.]+) (?P<load_15m>[\d.]+)\s*$'
+fields:
+  users: {type: int}
+  load_1m: {type: float}
+  load_5m: {type: float}
+  load_15m: {type: float}

@@ -1,0 +1,72 @@
+[
+  {
+    "uid": "root",
+    "pid": 1,
+    "ppid": 0,
+    "c": 0,
+    "stime": "Aug24",
+    "tty": null,
+    "time": "00:04:50",
+    "cmd": "/usr/lib/systemd/systemd --switched-root --system --deserialize=55 splash"
+  },
+  {
+    "uid": "root",
+    "pid": 2,
+    "ppid": 0,
+    "c": 0,
+    "stime": "Aug24",
+    "tty": null,
+    "time": "00:00:01",
+    "cmd": "[kthreadd]"
+  },
+  {
+    "uid": "root",
+    "pid": 3,
+    "ppid": 2,
+    "c": 0,
+    "stime": "Aug24",
+    "tty": null,
+    "time": "00:00:00",
+    "cmd": "[pool_workqueue_release]"
+  },
+  {
+    "uid": "root",
+    "pid": 4,
+    "ppid": 2,
+    "c": 0,
+    "stime": "Aug24",
+    "tty": null,
+    "time": "00:00:00",
+    "cmd": "[kworker/R-rcu_gp]"
+  },
+  {
+    "uid": "root",
+    "pid": 5,
+    "ppid": 2,
+    "c": 0,
+    "stime": "Aug24",
+    "tty": null,
+    "time": "00:00:00",
+    "cmd": "[kworker/R-sync_wq]"
+  },
+  {
+    "uid": "root",
+    "pid": 6,
+    "ppid": 2,
+    "c": 0,
+    "stime": "Aug24",
+    "tty": null,
+    "time": "00:00:00",
+    "cmd": "[kworker/R-kvfree_rcu_reclaim]"
+  },
+  {
+    "uid": "root",
+    "pid": 7,
+    "ppid": 2,
+    "c": 0,
+    "stime": "Aug24",
+    "tty": null,
+    "time": "00:00:00",
+    "cmd": "[kworker/R-slub_flushwq]"
+  }
+]

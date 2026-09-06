@@ -1,0 +1,26 @@
+# `ps -ef` prints the same eight columns on Linux (procps) and macOS.
+format: 1
+command: ps
+variant: unix
+description: ps -ef (UID PID PPID C STIME TTY TIME CMD) on Linux and macOS
+metadata:
+  tags: [linux, darwin, process]
+  compatible: [procps-ng, macOS ps]
+  references:
+    - https://man7.org/linux/man-pages/man1/ps.1.html
+detect:
+  os: [linux, darwin, freebsd]
+  args:
+    any: ["-ef", "-e", "-f", "-A"]
+  signature:
+    all:
+      - '^\s*UID\s+PID\s+PPID\s+C\s+STIME\s+TTY\s+TIME\s+CMD\s*$'
+parse:
+  type: table
+  header:
+    columns: [uid, pid, ppid, c, stime, tty, time, cmd]
+fields:
+  pid: {type: int}
+  ppid: {type: int}
+  c: {type: int}
+  tty: {null_if: ["?", "??"]}

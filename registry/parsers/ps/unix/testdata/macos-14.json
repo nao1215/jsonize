@@ -1,0 +1,42 @@
+[
+  {
+    "uid": "0",
+    "pid": 1,
+    "ppid": 0,
+    "c": 0,
+    "stime": "9:02AM",
+    "tty": null,
+    "time": "3:12.45",
+    "cmd": "/sbin/launchd"
+  },
+  {
+    "uid": "0",
+    "pid": 88,
+    "ppid": 1,
+    "c": 0,
+    "stime": "9:02AM",
+    "tty": null,
+    "time": "0:04.10",
+    "cmd": "/usr/sbin/syslogd"
+  },
+  {
+    "uid": "501",
+    "pid": 612,
+    "ppid": 611,
+    "c": 0,
+    "stime": "9:03AM",
+    "tty": "ttys000",
+    "time": "0:00.09",
+    "cmd": "-zsh"
+  },
+  {
+    "uid": "501",
+    "pid": 640,
+    "ppid": 612,
+    "c": 0,
+    "stime": "9:05AM",
+    "tty": "ttys000",
+    "time": "0:00.01",
+    "cmd": "ps -ef"
+  }
+]

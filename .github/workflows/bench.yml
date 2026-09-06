@@ -1,0 +1,21 @@
+name: Benchmark
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Benchmarks are informational: the job posts a benchstat comparison in
+# the log and never fails a PR on timing, because shared runners are noisy.
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - run: mkdir -p bench && go test -run '^$' -bench . -benchmem -count 3 ./internal/... | tee bench/new.txt
+      - run: go run golang.org/x/perf/cmd/benchstat@latest bench/baseline.txt bench/new.txt || true

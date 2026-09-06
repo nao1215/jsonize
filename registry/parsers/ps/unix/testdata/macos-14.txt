@@ -1,0 +1,5 @@
+  UID   PID  PPID   C STIME   TTY           TIME CMD
+    0     1     0   0  9:02AM ??         3:12.45 /sbin/launchd
+    0    88     1   0  9:02AM ??         0:04.10 /usr/sbin/syslogd
+  501   612   611   0  9:03AM ttys000    0:00.09 -zsh
+  501   640   612   0  9:05AM ttys000    0:00.01 ps -ef

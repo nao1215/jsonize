@@ -1,0 +1,27 @@
+# BusyBox df -h labels the fourth column "Available" where GNU prints
+# "Avail"; that single word is what tells the two apart.
+format: 1
+command: df
+variant: busybox-human
+description: BusyBox df -h (sizes normalised to bytes)
+metadata:
+  tags: [linux, busybox, filesystem]
+  compatible: [BusyBox]
+  references:
+    - https://busybox.net/downloads/BusyBox.html#df
+detect:
+  os: [linux]
+  args:
+    any: ["-h"]
+  signature:
+    all:
+      - '^Filesystem\s+Size\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
+parse:
+  type: table
+  header:
+    columns: [filesystem, size, used, available, use_percent, mounted_on]
+fields:
+  size: {type: size}
+  used: {type: size}
+  available: {type: size}
+  use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}

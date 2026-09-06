@@ -1,0 +1,58 @@
+[
+  {
+    "filesystem": "tmpfs",
+    "size": 13958643712,
+    "used": 6081741,
+    "available": 13958643712,
+    "use_percent": 1,
+    "mounted_on": "/run"
+  },
+  {
+    "filesystem": "/dev/nvme1n1p2",
+    "size": 1979120929997,
+    "used": 1759218604442,
+    "available": 155692564480,
+    "use_percent": 92,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "tmpfs",
+    "size": 33285996544,
+    "used": 1000341504,
+    "available": 32212254720,
+    "use_percent": 4,
+    "mounted_on": "/dev/shm"
+  },
+  {
+    "filesystem": "efivarfs",
+    "size": 131072,
+    "used": 49152,
+    "available": 77824,
+    "use_percent": 39,
+    "mounted_on": "/sys/firmware/efi/efivars"
+  },
+  {
+    "filesystem": "none",
+    "size": 1048576,
+    "used": 0,
+    "available": 1048576,
+    "use_percent": 0,
+    "mounted_on": "/run/credentials/systemd-journald.service"
+  },
+  {
+    "filesystem": "none",
+    "size": 1048576,
+    "used": 0,
+    "available": 1048576,
+    "use_percent": 0,
+    "mounted_on": "/run/credentials/systemd-resolved.service"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p1",
+    "size": 2089072092774,
+    "used": 1054414471168,
+    "available": 858993459200,
+    "use_percent": 56,
+    "mounted_on": "/media/alice/2nd"
+  }
+]

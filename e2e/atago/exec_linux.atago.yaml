@@ -1,0 +1,117 @@
+version: "1"
+
+suite:
+  name: real commands on Linux
+
+# Runs the host's own coreutils/procps binaries. CI runs this on
+# ubuntu-latest; the asserted structure is what differs between
+# implementations, never machine-specific values.
+scenarios:
+  - name: df, df -h and the variant they select
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --meta df
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.variant", equals: gnu }
+              - { path: "$.data[0].mounted_on", matches: "^/" }
+              - { path: "$.data[0].1k_blocks", gte: 0 }
+      - run:
+          command: jz run --meta df -h
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.variant", equals: gnu-human }
+              - { path: "$.data[0].size", gte: 0 }
+
+  - name: procps free, uptime and ps
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --meta free
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.variant", equals: gnu }
+              - { path: "$.data[0].type", equals: Mem }
+              - { path: "$.data[0].total", gt: 0 }
+      - run:
+          command: jz run --meta free -w
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.variant", equals: gnu-wide }
+              - { path: "$.data[0].buffers", gte: 0 }
+      - run:
+          command: jz run uptime
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.users", gte: 0 }
+              - { path: "$.load_1m", gte: 0 }
+      - run:
+          command: jz run --meta ps -ef
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.variant", equals: unix }
+              - { path: "$.data[0].pid", equals: 1 }
+      - run:
+          command: jz run --meta ps aux
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.variant", equals: bsd }
+              - { path: "$.data[0].pid", equals: 1 }
+
+  - name: uname, id, env, mount and du
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run uname -a
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.kernel_name", equals: Linux }
+              - { path: "$.operating_system", equals: GNU/Linux }
+      - run:
+          command: jz run id
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.uid.id", gte: 0 }
+              - { path: "$.groups[0].name", matches: ".+" }
+      - run:
+          command: jz run env
+          env:
+            JZ_E2E_MARKER: present
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '{"name":"JZ_E2E_MARKER","value":"present"}'
+      - run:
+          command: jz run mount
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].options[0]", matches: "^r[wo]$" }
+      - run:
+          command: jz run du -s .
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].name", equals: "." }
+              - { path: "$[0].size", gte: 0 }

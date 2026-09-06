@@ -1,0 +1,20 @@
+format: 1
+command: ps
+variant: busybox
+description: BusyBox ps default output (PID USER COMMAND)
+metadata:
+  tags: [linux, busybox, process]
+  compatible: [BusyBox]
+  references:
+    - https://busybox.net/downloads/BusyBox.html#ps
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^\s*PID\s+USER\s+COMMAND\s*$'
+parse:
+  type: table
+  header:
+    columns: [pid, user, command]
+fields:
+  pid: {type: int}

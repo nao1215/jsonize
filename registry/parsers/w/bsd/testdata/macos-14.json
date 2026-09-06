@@ -1,0 +1,28 @@
+{
+  "uptime": {
+    "time": "14:02",
+    "uptime": "3 days,  4:11",
+    "users": 2,
+    "load_1m": 1.52,
+    "load_5m": 1.68,
+    "load_15m": 1.71
+  },
+  "users": [
+    {
+      "user": "alice",
+      "tty": "console",
+      "from": null,
+      "login_at": "Mon09",
+      "idle": "3days",
+      "what": null
+    },
+    {
+      "user": "alice",
+      "tty": "s000",
+      "from": null,
+      "login_at": "14:01",
+      "idle": null,
+      "what": "w"
+    }
+  ]
+}

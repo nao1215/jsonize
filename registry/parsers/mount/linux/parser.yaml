@@ -1,0 +1,19 @@
+format: 1
+command: mount
+variant: linux
+description: "mount listing on Linux (util-linux and BusyBox): \"fs on dir type fstype (options)\""
+metadata:
+  tags: [linux, filesystem]
+  compatible: [util-linux, BusyBox]
+  references:
+    - https://man7.org/linux/man-pages/man8/mount.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^\S.* on .* type \S+ \('
+parse:
+  type: regex
+  pattern: '^(?P<filesystem>.+?) on (?P<mount_point>.+?) type (?P<type>\S+) \((?P<options>[^)]*)\)\s*$'
+fields:
+  options: {type: array, split: ","}

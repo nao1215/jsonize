@@ -1,0 +1,22 @@
+{
+  "uptime": {
+    "time": "13:50:00",
+    "uptime": "13 days,  4:30",
+    "users": 5,
+    "load_1m": 0.74,
+    "load_5m": 0.79,
+    "load_15m": 0.83
+  },
+  "users": [
+    {
+      "user": "alice",
+      "tty": null,
+      "from": null,
+      "login_at": "24Aug26",
+      "idle": null,
+      "jcpu": "0.00s",
+      "pcpu": "?",
+      "what": "lightdm --session-child 13 20"
+    }
+  ]
+}

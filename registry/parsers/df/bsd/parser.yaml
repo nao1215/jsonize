@@ -1,0 +1,32 @@
+# macOS df default output: 512-byte blocks plus inode columns.
+format: 1
+command: df
+variant: bsd
+description: BSD df default output on macOS (512-byte blocks and inode counts)
+metadata:
+  tags: [darwin, bsd, filesystem]
+  compatible: [macOS df]
+  references:
+    - https://www.unix.com/man-page/osx/1/df/
+detect:
+  os: [darwin]
+  args:
+    none: ["-h", "-H", "-g", "-k", "-m"]
+  signature:
+    all:
+      - '^Filesystem\s+512-blocks\s+Used\s+Available\s+Capacity\s+iused\s+ifree\s+%iused\s+Mounted on\s*$'
+# The filesystem column may contain spaces ("map auto_home"), so cells are
+# cut at header offsets instead of whitespace.
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [filesystem, 512_blocks, used, available, capacity_percent, iused, ifree, iused_percent, mounted_on]
+fields:
+  512_blocks: {type: int}
+  used: {type: int}
+  available: {type: int}
+  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  iused: {type: int}
+  ifree: {type: int}
+  iused_percent: {type: int, trim_suffix: "%", null_if: ["-"]}

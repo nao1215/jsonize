@@ -1,0 +1,24 @@
+{
+  "uid": {
+    "id": 1000,
+    "name": "alice"
+  },
+  "gid": {
+    "id": 1000,
+    "name": "alice"
+  },
+  "groups": [
+    {
+      "id": 4,
+      "name": "adm"
+    },
+    {
+      "id": 27,
+      "name": "sudo"
+    },
+    {
+      "id": 1000,
+      "name": "alice"
+    }
+  ]
+}

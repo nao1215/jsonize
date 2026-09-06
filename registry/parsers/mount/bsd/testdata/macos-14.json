@@ -1,0 +1,43 @@
+[
+  {
+    "filesystem": "/dev/disk3s1s1",
+    "mount_point": "/",
+    "type": "apfs",
+    "options": [
+      "sealed",
+      "local",
+      "read-only",
+      "journaled"
+    ]
+  },
+  {
+    "filesystem": "devfs",
+    "mount_point": "/dev",
+    "type": "devfs",
+    "options": [
+      "local",
+      "nobrowse"
+    ]
+  },
+  {
+    "filesystem": "/dev/disk3s6",
+    "mount_point": "/System/Volumes/VM",
+    "type": "apfs",
+    "options": [
+      "local",
+      "noexec",
+      "journaled",
+      "noatime",
+      "nobrowse"
+    ]
+  },
+  {
+    "filesystem": "map auto_home",
+    "mount_point": "/System/Volumes/Data/home",
+    "type": "autofs",
+    "options": [
+      "automounted",
+      "nobrowse"
+    ]
+  }
+]

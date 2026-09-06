@@ -1,0 +1,23 @@
+# GNU uname -a prints machine, processor and hardware platform; BusyBox
+# omits the last two, hence the optional group.
+format: 1
+command: uname
+variant: linux
+description: uname -a on Linux (GNU coreutils and BusyBox)
+metadata:
+  tags: [linux, system]
+  compatible: [GNU coreutils, BusyBox]
+detect:
+  os: [linux]
+  args:
+    any: ["-a", "--all"]
+  signature:
+    all:
+      - '^Linux '
+parse:
+  type: regex
+  each: input
+  pattern: '^(?P<kernel_name>Linux) (?P<node_name>\S+) (?P<kernel_release>\S+) (?P<kernel_version>#.+?) (?P<machine>[a-z0-9_]+)(?: (?P<processor>\S+) (?P<hardware_platform>\S+))? (?P<operating_system>\S+)\s*$'
+fields:
+  processor: {when_missing: omit}
+  hardware_platform: {when_missing: omit}

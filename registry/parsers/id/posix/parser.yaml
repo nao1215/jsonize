@@ -1,0 +1,40 @@
+format: 1
+command: id
+variant: posix
+description: id output with nested uid/gid/groups and optional SELinux context
+metadata:
+  tags: [linux, darwin, user]
+  compatible: [GNU coreutils, BusyBox, macOS id]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/id-invocation.html
+detect:
+  signature:
+    all:
+      - '^uid=\d+'
+parse:
+  type: regex
+  each: input
+  pattern: '^uid=(?P<uid>\S+) gid=(?P<gid>\S+)(?: groups=(?P<groups>\S+))?(?: context=(?P<context>\S+))?\s*$'
+fields:
+  uid:
+    type: object
+    regex: '^(?P<id>\d+)(?:\((?P<name>[^)]*)\))?$'
+    fields:
+      id: {type: int}
+  gid:
+    type: object
+    regex: '^(?P<id>\d+)(?:\((?P<name>[^)]*)\))?$'
+    fields:
+      id: {type: int}
+  groups:
+    type: array
+    split: ","
+    items:
+      type: object
+      regex: '^(?P<id>\d+)(?:\((?P<name>[^)]*)\))?$'
+      fields:
+        id: {type: int}
+  context:
+    type: object
+    when_missing: omit
+    regex: '^(?P<user>[^:]+):(?P<role>[^:]+):(?P<type>[^:]+):(?P<level>.+)$'

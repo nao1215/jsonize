@@ -1,0 +1,6 @@
+Filesystem     512-blocks      Used Available Capacity iused      ifree %iused  Mounted on
+/dev/disk3s1s1  965595304  19928936 574836504     4%  404813 2874182520    0%   /
+devfs                 402       402         0   100%     696          0  100%   /dev
+/dev/disk3s6    965595304   4194344 574836504     1%       2 2874182520    0%   /System/Volumes/VM
+/dev/disk3s2    965595304  12386448 574836504     3%    1210 2874182520    0%   /System/Volumes/Preboot
+map auto_home           0         0         0   100%       0          0  100%   /System/Volumes/Data/home

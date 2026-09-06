@@ -1,0 +1,166 @@
+# Design
+
+This document records the decisions behind jsonize, the alternatives that
+were considered and what the MVP deliberately leaves out.
+
+## Goals
+
+- Turn command output into JSON without writing Go per command.
+- Make the chosen parser and the reason for choosing it visible; never
+  produce plausible-looking JSON from the wrong parser.
+- Keep definitions safe to accept from third parties.
+- Behave identically in a terminal, a pipeline and CI.
+
+## Architecture
+
+```
+cmd/jz                    entry point: signals, exit code
+internal/cli              subcommands, flag parsing, registry layering, exit-code contract
+internal/runner           exec mode: child process, LC_ALL=C, stderr passthrough, output cap, signals
+internal/registry         load registry directories/FS, merge with precedence, testdata cases
+internal/definition       YAML schema, validation, regex compilation, format/version checks
+internal/selector         variant selection (os / args / signature → specificity → priority → error)
+internal/engine           parse algorithms (table, regex, kv, composite) and field conversion
+internal/convert          scalar conversions (int, float, bool, size with units)
+internal/jsonutil         insertion-ordered JSON object and encoder
+internal/conformance      golden runner shared by `go test` and `jz validate`
+internal/remote           HTTPS download, checksum, safe extraction, atomic install
+registry/                 the official definitions and fixtures (data) + a one-file embed
+e2e/atago                 end-to-end scenarios
+```
+
+Data flows in one direction: **capture → select → parse → encode**. The
+selector needs only the first lines of the text; the engine needs the
+compiled definition and the whole text; encoding never sees definitions.
+
+## Decisions and trade-offs
+
+### Definitions in YAML rather than Go plugins or a scripting language
+
+Per-command code is the obvious design and it is where most output
+converters end up: hundreds of hand-written parsers whose variant
+detection is ad-hoc string sniffing and whose schema lives in comments.
+jsonize instead fixes a small declarative language. The price is
+expressiveness: a format that needs stateful parsing (multi-line records
+with continuation rules, recursive sections) cannot be expressed today.
+The gain is that every definition is reviewable, testable by a fixture,
+and safe to load from a third party. YAML was chosen over JSON (no
+comments) and TOML (awkward nesting); `goccy/go-yaml` provides strict
+decoding and line numbers in errors.
+
+### Four parse types, not a general pipeline
+
+`table`, `regex`, `kv` and `composite` cover the shapes found in the
+initial commands. A composable step pipeline (split → map → filter …)
+was considered and rejected for the MVP: it is harder to validate, harder
+to explain, and every real example so far fits one of the four. The
+`input.select` block (after/until/skip/limit) plus `composite` gives
+section handling without a pipeline. Adding a fifth type later does not
+change the format version because unknown types are already an error.
+
+### Table splitting
+
+- `whitespace`: split on runs of whitespace with the last column
+  absorbing the remainder. Robust for `df`, `ps`, `free`.
+- `aligned`: cut cells at the rune offsets where header words start,
+  moving a boundary left when a right-aligned value is wider than its
+  header and keeping a token whole when it overflows to the right. Empty
+  cells become `null`. Needed for `lsblk`, `w`, macOS `df`.
+- `delimiter`: a literal separator (`du`'s tab).
+
+Explicit `header.columns` is preferred in the official registry because
+derived names depend on the exact header text; derivation exists for
+quick local definitions.
+
+### Variant = output format
+
+One definition per *format*, not per implementation. GNU and BusyBox `df`
+without options print the same table, so one definition covers both and
+lists them in `metadata.compatible`; `df -h` differs between them ("Avail"
+vs "Available") and gets two definitions. This keeps definitions
+honest: a definition claims exactly what its fixtures prove.
+
+### Selection never guesses
+
+Candidates are filtered by criteria that apply (a criterion whose input is
+unknown, such as arguments in pipe mode, neither helps nor hurts) and
+ranked by how many applied criteria they satisfied. A tie after
+`priority` is an error that names the candidates. The alternative,
+"first match wins", would silently depend on directory order.
+
+Fixtures double as selection tests: every `testdata/<case>.yaml` with
+`os`/`args` is pushed through the selector and must pick its own
+definition, so adding a variant whose signature overlaps an existing one
+fails `make test` immediately.
+
+### Exec mode forces `LC_ALL=C`
+
+Output formats are documented for the C locale; translated headers and
+localized numbers break parsers. jz sets `LC_ALL=C` and `LANG=C` (and
+drops `LANGUAGE`) unless `--keep-locale` is given. Pipe mode cannot
+control the producer, which is why signatures match structure rather than
+prose where possible.
+
+### Exit status of `jz run`
+
+A failing command's status is mirrored, and its output is still parsed
+when there is any (for example `df` exits 1 when a mount point is
+unreadable but prints the table). jz's own codes (2–5) are documented and
+distinct from 0/1 so scripts can tell them apart, but they can collide
+with a child's codes; the stderr line `jz: <cmd> exited with status N`
+disambiguates.
+
+### Registry layering and the code/data boundary
+
+`registry/` holds only YAML, fixtures and one `embed.go`. `internal/*`
+never imports it; only `cmd/jz` and the golden test do. Moving the
+registry to its own repository means changing one import and pointing
+`remote.DefaultURL` at the new release page.
+
+Layering (flags → env → user → cache → embedded) lets a user fix a parser
+locally today and ship it upstream tomorrow with no change in behaviour.
+
+### Update integrity
+
+HTTPS + SHA-256 + safe extraction + validation + atomic rename. Signing was
+left out of the MVP: a checksum served next to the archive already
+detects corruption, and a signature only adds value with an independent
+key-distribution channel, which is a release-process decision rather
+than code. The hook is `remote.Options.Validate`; a signature check slots
+in before it.
+
+### Format versioning
+
+`format: 1` is the schema major version. A different number is rejected
+with a message that says whether to upgrade jz or the definition.
+`min_jsonize` lets a definition require a newer jz for a feature added
+without a format bump. Development builds skip the check.
+
+### Dependencies
+
+- `github.com/goccy/go-yaml` — strict YAML decoding with positions.
+- `github.com/google/go-cmp` — structural diffs in golden failures.
+
+No CLI framework: seven subcommands with a handful of flags each are
+served by `flag` and a dispatch table, and the `run` subcommand needs
+"stop at the first non-flag" semantics that `flag` gives for free.
+
+## Deliberately out of scope for the MVP
+
+- Streaming parsers (line-at-a-time output for long-running commands).
+- Multi-line records and recursive sections (`ls -R`, `ip addr`).
+- Derived fields (computing `uptime_seconds` from `"13 days, 4:30"`).
+- File parsers (`/etc/passwd`, `/proc/*`) — the engine can do them, but
+  the `command` key and `jz run` are about commands.
+- Signature verification of registry archives (see above).
+- A JSON Schema for editor completion of `parser.yaml`; validation is
+  done in Go with path-qualified messages instead.
+
+## Where to cut next
+
+- `registry/` → separate repository; only `remote.DefaultURL` and the
+  `official` import change.
+- `internal/definition` + `internal/engine` + `internal/convert` form a
+  library with no CLI dependencies and could be exported as a package.
+- `internal/remote` is independent of jsonize and could verify signatures
+  or support multiple named sources without touching the CLI.

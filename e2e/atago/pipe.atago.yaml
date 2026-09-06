@@ -1,0 +1,184 @@
+version: "1"
+
+suite:
+  name: jz parse (pipe mode)
+
+# Pipe mode never executes anything, so these scenarios run identically on
+# Linux, macOS and Windows. Fixtures are copies of the registry testdata.
+scenarios:
+  - name: GNU df output becomes typed rows with the variant chosen from the header
+    steps:
+      - fixture:
+          file: df-gnu.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz parse --meta --os linux df
+          stdin: {file: df-gnu.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            empty: true
+          stdout:
+            json:
+              - { path: "$.command", equals: df }
+              - { path: "$.variant", equals: gnu }
+              - { path: "$.source", equals: embedded }
+              - { path: "$.data", length: 7 }
+              - { path: "$.data[0].filesystem", equals: tmpfs }
+              - { path: "$.data[0].1k_blocks", equals: 12882672 }
+              - { path: "$.data[0].use_percent", equals: 1 }
+              - { path: "$.data[0].mounted_on", equals: /run }
+
+  - name: macOS df output selects the bsd variant without any OS hint
+    steps:
+      - fixture:
+          file: df-bsd.txt
+          from: "${specdir}/testdata/df-bsd.txt"
+      - run:
+          command: jz parse --pretty df
+          stdin: {file: df-bsd.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "\"512_blocks\": 965595304"
+      - assert:
+          stdout:
+            json:
+              - { path: "$[4].filesystem", equals: "map auto_home" }
+              - { path: "$[4].mounted_on", equals: /System/Volumes/Data/home }
+              - { path: "$[0].iused_percent", equals: 0 }
+
+  - name: free -h sizes are normalised to bytes and Swap keeps null for absent columns
+    steps:
+      - fixture:
+          file: free-h.txt
+          from: "${specdir}/testdata/free-h.txt"
+      - run:
+          command: jz parse free
+          stdin: {file: free-h.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].type", equals: Mem }
+              - { path: "$[0].total", equals: 65498251264 }
+              - { path: "$[1].type", equals: Swap }
+              - { path: "$[1].shared", equals: null }
+
+  - name: a composite parser returns an object with one key per part
+    steps:
+      - fixture:
+          file: w-linux.txt
+          from: "${specdir}/testdata/w-linux.txt"
+      - run:
+          command: jz parse --os linux w
+          stdin: {file: w-linux.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.uptime.users", equals: 5 }
+              - { path: "$.uptime.load_1m", equals: 0.74 }
+              - { path: "$.users[0].user", equals: alice }
+              - { path: "$.users[0].tty", equals: null }
+              - { path: "$.users[0].what", equals: "lightdm --session-child 13 20" }
+
+  - name: nested objects and arrays from a single line
+    steps:
+      - fixture:
+          file: id-selinux.txt
+          from: "${specdir}/testdata/id-selinux.txt"
+      - run:
+          command: jz parse id
+          stdin: {file: id-selinux.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.uid.id", equals: 1000 }
+              - { path: "$.uid.name", equals: alice }
+              - { path: "$.groups", length: 2 }
+              - { path: "$.groups[1].name", equals: wheel }
+              - { path: "$.context.level", equals: "s0-s0:c0.c1023" }
+
+  - name: raw mode keeps every value as a string
+    steps:
+      - fixture:
+          file: df-gnu.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz parse --raw --os linux df
+          stdin: {file: df-gnu.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].1k_blocks", equals: "12882672" }
+              - { path: "$[0].use_percent", equals: "1%" }
+
+  - name: key=value input becomes a list of name/value objects
+    steps:
+      - run:
+          command: jz parse env
+          stdin: "HOME=/home/alice\nSHELL=/bin/sh\nEMPTY=\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 3 }
+              - { path: "$[0].name", equals: HOME }
+              - { path: "$[2].value", equals: "" }
+
+  - name: --file reads the captured output instead of stdin
+    steps:
+      - fixture:
+          file: df-gnu.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz parse --file df-gnu.txt df
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$", length: 7 }
+
+  - name: empty input to a table parser is an empty array, not an error
+    steps:
+      - run:
+          command: jz parse df
+          stdin: ""
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: no variant of "df" matches the input
+      - run:
+          command: jz parse --variant gnu df
+          stdin: ""
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+
+  - name: an explicit variant bypasses detection
+    steps:
+      - fixture:
+          file: df-gnu.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz parse --variant gnu --meta df
+          stdin: {file: df-gnu.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$.variant", equals: gnu }
+
+  - name: CRLF line endings and a UTF-8 BOM are tolerated
+    steps:
+      - run:
+          command: jz parse env
+          stdin: "﻿A=1\r\nB=2\r\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].value", equals: "1" }
+              - { path: "$[1].name", equals: B }

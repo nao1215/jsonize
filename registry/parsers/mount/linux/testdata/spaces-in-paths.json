@@ -1,0 +1,29 @@
+[
+  {
+    "filesystem": "//fileserver/Team Share",
+    "mount_point": "/mnt/team share",
+    "type": "cifs",
+    "options": [
+      "rw",
+      "relatime",
+      "vers=3.1.1",
+      "cache=strict",
+      "username=alice"
+    ]
+  },
+  {
+    "filesystem": "/dev/sr0",
+    "mount_point": "/media/alice/Ubuntu 24.04 LTS amd64",
+    "type": "iso9660",
+    "options": [
+      "ro",
+      "nosuid",
+      "nodev",
+      "relatime",
+      "nojoliet",
+      "check=s",
+      "map=n",
+      "blocksize=2048"
+    ]
+  }
+]

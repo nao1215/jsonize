@@ -1,0 +1,24 @@
+# The filename column is absent when wc reads standard input, so only
+# three fields are required.
+format: 1
+command: wc
+variant: posix
+description: wc output (lines, words, characters, optional filename)
+metadata:
+  tags: [linux, darwin, text]
+  compatible: [GNU coreutils, BusyBox, macOS wc]
+detect:
+  signature:
+    all:
+      - '^\s*\d+\s+\d+\s+\d+(?:\s+\S.*)?$'
+parse:
+  type: table
+  header:
+    none: true
+    columns: [lines, words, characters, filename]
+  min_fields: 3
+fields:
+  lines: {type: int}
+  words: {type: int}
+  characters: {type: int}
+  filename: {when_missing: omit}

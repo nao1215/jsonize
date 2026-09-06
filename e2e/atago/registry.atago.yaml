@@ -1,0 +1,253 @@
+version: "1"
+
+suite:
+  name: registries and definitions
+
+# Users extend jz with YAML only. These scenarios add a definition in the
+# scenario workdir, validate it, generate its golden file and use it, then
+# show that a user definition shadows the official one.
+scenarios:
+  - name: list and show describe the embedded registry
+    steps:
+      - run:
+          command: jz list
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "df       gnu"
+            matches: "ps +bsd +linux,darwin,freebsd +embedded"
+      - run:
+          command: jz list --json
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].command", equals: df }
+              - { path: "$[0].source", equals: embedded }
+      - run:
+          command: jz show --json df gnu
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].variant", equals: gnu }
+              - { path: "$[0].detect.os[0]", equals: linux }
+              - { path: "$[0].fields.1k_blocks", equals: int }
+      - run:
+          command: jz registry paths
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: embedded
+
+  - name: a new parser defined in YAML works without rebuilding jz
+    steps:
+      - fixture:
+          file: reg/registry.yaml
+          content: |
+            format: 1
+            name: local
+      - fixture:
+          file: reg/parsers/greet/default/parser.yaml
+          content: |
+            format: 1
+            command: greet
+            variant: default
+            description: greeting lines
+            parse:
+              type: regex
+              pattern: '^hello (?P<name>\S+) x(?P<times>\d+)$'
+            fields:
+              times: {type: int}
+      - fixture:
+          file: reg/parsers/greet/default/testdata/basic.txt
+          content: |
+            hello world x3
+            hello jz x1
+      # Validation fails until a golden file exists ...
+      - run:
+          command: jz validate reg
+      - assert:
+          exit_code: 5
+          stdout:
+            contains: has no basic.json
+      # ... --update writes it ...
+      - run:
+          command: jz validate --update reg
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: WROTE
+      - assert:
+          file:
+            path: reg/parsers/greet/default/testdata/basic.json
+            json:
+              - { path: "$[0].name", equals: world }
+              - { path: "$[1].times", equals: 1 }
+      # ... and then everything passes.
+      - run:
+          command: jz validate reg
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "ok   greet/default [basic]"
+      - run:
+          command: jz parse --registry reg greet
+          stdin: "hello atago x7\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].name", equals: atago }
+              - { path: "$[0].times", equals: 7 }
+
+  - name: a broken definition is reported with its path and YAML key
+    steps:
+      - fixture:
+          file: reg/parsers/bad/one/parser.yaml
+          content: |
+            format: 1
+            command: bad
+            variant: one
+            parse:
+              type: regex
+              pattern: '(unclosed'
+            fields:
+              nope: {type: date}
+      - run:
+          command: jz validate reg
+      - assert:
+          exit_code: 5
+          stdout:
+            contains: "parse.pattern: invalid regular expression"
+            matches: "fields.nope.type: unknown type \"date\""
+      # Other parsers keep working; the broken one is skipped with a warning.
+      - run:
+          command: jz list --registry reg
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "warning: skipping definition"
+
+  - name: a definition in the wrong directory is rejected
+    steps:
+      - fixture:
+          file: reg/parsers/df/gnu/parser.yaml
+          content: |
+            format: 1
+            command: df
+            variant: bsd
+            parse: {type: kv}
+      - run:
+          command: jz validate reg
+      - assert:
+          exit_code: 5
+          stdout:
+            contains: must live at parsers/df/bsd/parser.yaml
+
+  - name: a newer definition format is detected instead of misparsed
+    steps:
+      - fixture:
+          file: reg/parsers/x/y/parser.yaml
+          content: |
+            format: 2
+            command: x
+            variant: y
+            parse: {type: kv}
+      - run:
+          command: jz validate reg
+      - assert:
+          exit_code: 5
+          stdout:
+            contains: format 2 is not supported by this jsonize
+
+  - name: a user definition shadows the official one of the same name
+    # The user registry lives under os.UserConfigDir, which XDG_CONFIG_HOME
+    # controls on Linux; the same scenario runs on macOS through HOME below.
+    only: {os: linux}
+    env:
+      XDG_CONFIG_HOME: "${workdir}/xdg"
+    steps:
+      - fixture:
+          file: xdg/jsonize/registry/parsers/df/gnu/parser.yaml
+          content: |
+            format: 1
+            command: df
+            variant: gnu
+            description: user override keeping strings
+            detect: {signature: {all: ['^Filesystem']}}
+            parse:
+              type: table
+              header:
+                columns: [filesystem, blocks, used, available, use_percent, mounted_on]
+      - run:
+          command: jz show df gnu
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "source:      user"
+            matches: "shadows: +embedded"
+      - run:
+          command: jz parse --meta df
+          stdin: "Filesystem 1K-blocks Used Available Use% Mounted on\nfs 1 2 3 4% /\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.source", equals: user }
+              - { path: "$.data[0].blocks", equals: "1" }
+      - run:
+          command: jz parse --embedded-only --meta df
+          stdin: "Filesystem 1K-blocks Used Available Use% Mounted on\nfs 1 2 3 4% /\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.source", equals: embedded }
+              - { path: "$.data[0].1k_blocks", equals: 1 }
+
+  - name: a user definition shadows the official one on macOS
+    only: {os: darwin}
+    env:
+      HOME: "${workdir}/home"
+    steps:
+      - fixture:
+          file: "home/Library/Application Support/jsonize/registry/parsers/df/gnu/parser.yaml"
+          content: |
+            format: 1
+            command: df
+            variant: gnu
+            description: user override keeping strings
+            detect: {signature: {all: ['^Filesystem']}}
+            parse:
+              type: table
+              header:
+                columns: [filesystem, blocks, used, available, use_percent, mounted_on]
+      - run:
+          command: jz parse --meta df
+          stdin: "Filesystem 1K-blocks Used Available Use% Mounted on\nfs 1 2 3 4% /\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.source", equals: user }
+              - { path: "$.data[0].blocks", equals: "1" }
+
+  - name: JSONIZE_REGISTRY_PATH adds registries
+    steps:
+      - fixture:
+          file: extra/parsers/bye/default/parser.yaml
+          content: |
+            format: 1
+            command: bye
+            variant: default
+            parse: {type: kv}
+      - run:
+          command: jz parse bye
+          stdin: "a=b\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/extra"
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].value", equals: b }

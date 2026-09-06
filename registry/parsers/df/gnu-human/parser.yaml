@@ -1,0 +1,25 @@
+format: 1
+command: df
+variant: gnu-human
+description: GNU coreutils df -h (sizes normalised to bytes)
+metadata:
+  tags: [linux, filesystem, coreutils]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html
+detect:
+  os: [linux]
+  args:
+    any: ["-h", "--human-readable", "-H", "--si"]
+  signature:
+    all:
+      - '^Filesystem\s+Size\s+Used\s+Avail\s+Use%\s+Mounted on\s*$'
+parse:
+  type: table
+  header:
+    columns: [filesystem, size, used, available, use_percent, mounted_on]
+fields:
+  size: {type: size}
+  used: {type: size}
+  available: {type: size}
+  use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}

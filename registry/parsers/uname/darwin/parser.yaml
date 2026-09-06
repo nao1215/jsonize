@@ -1,0 +1,18 @@
+format: 1
+command: uname
+variant: darwin
+description: uname -a on macOS
+metadata:
+  tags: [darwin, system]
+  compatible: [macOS uname]
+detect:
+  os: [darwin]
+  args:
+    any: ["-a"]
+  signature:
+    all:
+      - '^Darwin '
+parse:
+  type: regex
+  each: input
+  pattern: '^(?P<kernel_name>Darwin) (?P<node_name>\S+) (?P<kernel_release>\S+) (?P<kernel_version>.+?) (?P<machine>\S+)\s*$'

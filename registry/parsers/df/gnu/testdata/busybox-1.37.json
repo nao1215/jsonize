@@ -1,0 +1,26 @@
+[
+  {
+    "filesystem": "tmpfs",
+    "1k_blocks": 12882672,
+    "used": 5928,
+    "available": 12876744,
+    "use_percent": 0,
+    "mounted_on": "/run"
+  },
+  {
+    "filesystem": "/dev/nvme1n1p2",
+    "1k_blocks": 1920641288,
+    "used": 1671319428,
+    "available": 151684896,
+    "use_percent": 92,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "devtmpfs",
+    "1k_blocks": 32119780,
+    "used": 0,
+    "available": 32119780,
+    "use_percent": 0,
+    "mounted_on": "/dev"
+  }
+]

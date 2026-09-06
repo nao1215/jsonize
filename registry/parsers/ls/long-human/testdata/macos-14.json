@@ -1,0 +1,29 @@
+[
+  {
+    "flags": "drwxr-xr-x",
+    "links": 3,
+    "owner": "root",
+    "group": "wheel",
+    "size": 96,
+    "date": "Jul 30  2024",
+    "filename": "Applications"
+  },
+  {
+    "flags": "-rw-r--r--",
+    "links": 1,
+    "owner": "alice",
+    "group": "staff",
+    "size": 4198,
+    "date": "Sep  1 10:20",
+    "filename": "notes.txt"
+  },
+  {
+    "flags": "-rw-r--r--",
+    "links": 1,
+    "owner": "alice",
+    "group": "staff",
+    "size": 2411725,
+    "date": "Sep  2 11:00",
+    "filename": "photo.jpg"
+  }
+]

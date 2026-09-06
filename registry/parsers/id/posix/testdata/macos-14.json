@@ -1,0 +1,40 @@
+{
+  "uid": {
+    "id": 501,
+    "name": "alice"
+  },
+  "gid": {
+    "id": 20,
+    "name": "staff"
+  },
+  "groups": [
+    {
+      "id": 20,
+      "name": "staff"
+    },
+    {
+      "id": 12,
+      "name": "everyone"
+    },
+    {
+      "id": 61,
+      "name": "localaccounts"
+    },
+    {
+      "id": 79,
+      "name": "_appserverusr"
+    },
+    {
+      "id": 80,
+      "name": "admin"
+    },
+    {
+      "id": 81,
+      "name": "_appserveradm"
+    },
+    {
+      "id": 98,
+      "name": "_lpadmin"
+    }
+  ]
+}

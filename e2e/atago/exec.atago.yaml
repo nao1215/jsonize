@@ -1,0 +1,165 @@
+version: "1"
+
+suite:
+  name: jz run (exec mode)
+
+# Exec-mode contracts that do not depend on which df/ps implementation the
+# host has: a shell script stands in for the target command. Windows has
+# no /bin/sh, so these scenarios are POSIX-only; pipe.atago.yaml covers the
+# parsing itself everywhere.
+scenarios:
+  - name: the command runs without a shell and its stdout becomes JSON
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            parse: {type: kv}
+            fields:
+              n: {type: int}
+      - run:
+          command: jz run --registry reg --meta -- sh -c 'echo n=42; echo lc=$LC_ALL'
+      - assert:
+          exit_code: 0
+          stderr:
+            empty: true
+          stdout:
+            json:
+              - { path: "$.command", equals: sh }
+              - { path: "$.exit_status", equals: 0 }
+              - { path: "$.argv[0]", equals: sh }
+              - { path: "$.argv[2]", equals: "echo n=42; echo lc=$LC_ALL" }
+              - { path: "$.data[0].value", equals: 42 }
+              - { path: "$.data[1].value", equals: C }
+
+  - name: stderr passes through untouched and never enters the JSON
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            parse: {type: kv}
+      - run:
+          command: jz run --registry reg -- sh -c 'echo a=b; echo warning >&2'
+      - assert:
+          exit_code: 0
+          stderr:
+            equals: warning
+          stdout:
+            json: { path: "$", length: 1 }
+
+  - name: a failing command keeps its exit status while its output is still parsed
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            parse: {type: kv}
+      - run:
+          command: jz run --registry reg -- sh -c 'echo a=b; exit 7'
+      - assert:
+          exit_code: 7
+          stderr:
+            contains: sh exited with status 7
+          stdout:
+            json: { path: "$[0].value", equals: b }
+      - run:
+          command: jz run --registry reg -- sh -c 'exit 9'
+      - assert:
+          exit_code: 9
+          stdout:
+            empty: true
+
+  - name: a command killed by a signal yields 128+signal
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            parse: {type: kv}
+      - run:
+          command: jz run --registry reg -- sh -c 'kill -TERM $$'
+      - assert:
+          exit_code: 143
+          stderr:
+            contains: terminated by SIGTERM
+
+  - name: --timeout terminates a hanging command
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            parse: {type: kv}
+      - run:
+          command: jz run --registry reg --timeout 300ms -- sh -c 'exec sleep 30'
+          timeout: 20s
+      - assert:
+          exit_code: 143
+          stderr:
+            contains: timeout of 300ms reached
+
+  - name: an unknown command is refused before anything is executed
+    skip: {os: windows}
+    steps:
+      - run:
+          command: jz run -- sh -c 'echo executed > marker'
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: no parser definition for command "sh"
+      - assert:
+          dir:
+            path: "${workdir}"
+            not_contains: [marker]
+
+  - name: arguments are passed verbatim, including ones that look like jz flags
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            parse: {type: kv}
+      - run:
+          command: jz run --registry reg sh -c 'echo args="$*"' sh --pretty --variant x
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].value", equals: "--pretty --variant x" }
+
+  - name: --keep-locale inherits the caller's locale
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            parse: {type: kv}
+      - run:
+          command: jz run --registry reg --keep-locale -- sh -c 'echo lc=${LC_ALL:-inherited}'
+          env:
+            LC_ALL: ""
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].value", equals: inherited }

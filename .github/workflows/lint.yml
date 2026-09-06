@@ -1,0 +1,31 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  golangci:
+    strategy:
+      matrix:
+        goos: [linux, darwin, windows]
+    runs-on: ubuntu-latest
+    env:
+      GOOS: ${{ matrix.goos }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.13.2
+      - name: gofmt
+        if: matrix.goos == 'linux'
+        run: test -z "$(gofmt -s -l $(git ls-files '*.go'))" || (gofmt -s -d $(git ls-files '*.go'); exit 1)
+      - name: go vet
+        run: go vet ./...

@@ -1,0 +1,20 @@
+format: 1
+command: du
+variant: posix
+description: du output (tab separated size and path) on Linux, macOS and BusyBox
+metadata:
+  tags: [linux, darwin, filesystem]
+  compatible: [GNU coreutils, BusyBox, macOS du]
+detect:
+  signature:
+    all:
+      - '^\d+\t'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [size, name]
+fields:
+  size: {type: int}

@@ -1,0 +1,10 @@
+[
+  {
+    "size": 24,
+    "name": "/etc/skel"
+  },
+  {
+    "size": 128,
+    "name": "/etc/default"
+  }
+]

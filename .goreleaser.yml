@@ -1,0 +1,77 @@
+version: 2
+
+project_name: jsonize
+
+before:
+  hooks:
+    - go mod tidy
+    - bash ./scripts/registry_archive.sh dist
+
+builds:
+  - id: jz
+    main: ./cmd/jz
+    binary: jz
+    env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+    ldflags:
+      - -s -w -X github.com/nao1215/jsonize/internal/buildinfo.Version={{ .Version }}
+
+archives:
+  - id: default
+    formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE
+      - README.md
+
+# The official registry is published beside the binaries so that
+# `jz registry update` can fetch it independently of a jz upgrade.
+release:
+  extra_files:
+    - glob: dist/jsonize-registry.tar.gz
+    - glob: dist/jsonize-registry.tar.gz.sha256
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+nfpms:
+  - id: packages
+    package_name: jsonize
+    vendor: Naohiro CHIKAMATSU
+    homepage: https://github.com/nao1215/jsonize
+    maintainer: Naohiro CHIKAMATSU <n.chika156@gmail.com>
+    description: Turn command output into JSON.
+    license: MIT
+    formats: [deb, rpm, apk]
+    bindir: /usr/bin
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\(.+\))??!?:.+$'
+      order: 0
+    - title: Bug fixes
+      regexp: '^.*?fix(\(.+\))??!?:.+$'
+      order: 1
+    - title: Parsers
+      regexp: '^.*?parser(\(.+\))??!?:.+$'
+      order: 2
+    - title: Others
+      order: 999
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"

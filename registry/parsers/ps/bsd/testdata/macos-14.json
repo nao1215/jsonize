@@ -1,0 +1,41 @@
+[
+  {
+    "user": "alice",
+    "pid": 612,
+    "cpu_percent": 0,
+    "mem_percent": 0.1,
+    "vsz": 410252144,
+    "rss": 12000,
+    "tty": "s000",
+    "stat": "Ss",
+    "start": "9:03AM",
+    "time": "0:00.09",
+    "command": "-zsh"
+  },
+  {
+    "user": "root",
+    "pid": 1,
+    "cpu_percent": 0,
+    "mem_percent": 0.1,
+    "vsz": 410214320,
+    "rss": 10240,
+    "tty": null,
+    "stat": "Ss",
+    "start": "9:02AM",
+    "time": "3:12.45",
+    "command": "/sbin/launchd"
+  },
+  {
+    "user": "_windowserver",
+    "pid": 201,
+    "cpu_percent": 4.2,
+    "mem_percent": 1.2,
+    "vsz": 412600000,
+    "rss": 200000,
+    "tty": null,
+    "stat": "Ss",
+    "start": "9:02AM",
+    "time": "12:01.33",
+    "command": "/System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer -daemon"
+  }
+]

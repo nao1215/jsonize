@@ -1,0 +1,32 @@
+name: Fuzz
+
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fuzz:
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - { pkg: ./internal/convert, name: FuzzSize }
+          - { pkg: ./internal/definition, name: FuzzLoad }
+          - { pkg: ./internal/engine, name: FuzzParse }
+          - { pkg: ./internal/selector, name: FuzzSelect }
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - run: go test -run '^$' -fuzz '^${{ matrix.target.name }}$' -fuzztime 5m ${{ matrix.target.pkg }}
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: fuzz-crashers-${{ matrix.target.name }}
+          path: "**/testdata/fuzz/**"

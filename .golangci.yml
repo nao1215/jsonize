@@ -1,0 +1,129 @@
+version: "2"
+
+run:
+  go: "1.26"
+  timeout: 5m
+
+linters:
+  default: none
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - contextcheck
+    - copyloopvar
+    - dupword
+    - durationcheck
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - exhaustive
+    - forbidigo
+    - gocheckcompilerdirectives
+    - gochecknoinits
+    - gocognit
+    - goconst
+    - gocritic
+    - gosec
+    - govet
+    - ineffassign
+    - misspell
+    - musttag
+    - nakedret
+    - nilerr
+    - nilnil
+    - noctx
+    - nolintlint
+    - perfsprint
+    - prealloc
+    - predeclared
+    - reassign
+    - revive
+    - staticcheck
+    - tagliatelle
+    - testifylint
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - usetesting
+    - wastedassign
+    - whitespace
+  settings:
+    errcheck:
+      check-type-assertions: true
+      exclude-functions:
+        - fmt.Fprint
+        - fmt.Fprintf
+        - fmt.Fprintln
+        - (*bytes.Buffer).Write
+        - (*bytes.Buffer).WriteByte
+        - (*bytes.Buffer).WriteString
+        - (*strings.Builder).WriteByte
+        - (*strings.Builder).WriteRune
+        - (*strings.Builder).WriteString
+        - (io.Closer).Close
+        - (*os.File).Close
+        - (*compress/gzip.Reader).Close
+        - os.Remove
+        - os.RemoveAll
+    forbidigo:
+      # stdout carries JSON; diagnostics must go through the injected
+      # writers so that they never mix with data.
+      forbid:
+        - pattern: ^fmt\.Print(ln|f)?$
+          msg: write to the injected stdout/stderr, never to os.Stdout directly
+        - pattern: ^os\.(Chdir|Setenv|Unsetenv)$
+          msg: process-global state makes tests order dependent
+      analyze-types: true
+    gocognit:
+      min-complexity: 35
+    goconst:
+      min-len: 3
+      min-occurrences: 4
+      ignore-string-values:
+        - "format: 1"
+    gocritic:
+      disabled-checks:
+        - ifElseChain
+    gosec:
+      excludes:
+        - G304 # file paths come from the user's own command line
+        - G204 # running the user's command is the purpose of jz run
+        - G301 # registry directories are user data; the umask applies
+        - G302 # extracted definition files are meant to be readable
+        - G306 # golden files are source files, 0644 is expected
+    revive:
+      rules:
+        - name: exported
+          arguments: [checkPrivateReceivers, disableStutteringCheck]
+    tagliatelle:
+      case:
+        rules:
+          yaml: snake
+          json: snake
+  exclusions:
+    rules:
+      - path: _test\.go
+        linters: [gosec, gocognit, goconst, forbidigo, errcheck, noctx, bodyclose]
+      - path: registry/embed.go
+        linters: [gochecknoglobals]
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    gofmt:
+      simplify: true
+    goimports:
+      local-prefixes:
+        - github.com/nao1215/jsonize
+
+issues:
+  max-same-issues: 0
+  max-issues-per-linter: 0

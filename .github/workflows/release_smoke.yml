@@ -1,0 +1,32 @@
+name: ReleaseSmoke
+
+on:
+  pull_request:
+    paths:
+      - ".goreleaser.yml"
+      - "scripts/registry_archive.sh"
+      - "cmd/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: "~> v2"
+          args: release --snapshot --clean --skip=publish
+      - name: smoke test the registry archive
+        run: |
+          ./dist/jz_linux_amd64_v1/jz version
+          cd dist && sha256sum -c jsonize-registry.tar.gz.sha256

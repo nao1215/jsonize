@@ -1,0 +1,4 @@
+description: symbolic links and a SELinux context marker after the mode string
+source: hand-written in GNU ls -l format
+os: linux
+args: [-l]

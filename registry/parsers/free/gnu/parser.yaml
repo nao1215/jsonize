@@ -1,0 +1,32 @@
+# procps-ng free default output (kibibytes). Values stay in KiB as
+# printed; use the gnu-human variant for byte normalisation of -h output.
+format: 1
+command: free
+variant: gnu
+description: procps free default output (values in KiB as printed)
+metadata:
+  tags: [linux, memory, procps]
+  compatible: [procps-ng, BusyBox]
+  references:
+    - https://man7.org/linux/man-pages/man1/free.1.html
+detect:
+  os: [linux]
+  args:
+    none: ["-h", "--human", "-w", "--wide"]
+  signature:
+    all:
+      - '^\s+total\s+used\s+free\s+shared\s+buff/cache\s+available\s*$'
+      - '^Mem:\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s*$'
+parse:
+  type: table
+  header:
+    leading_label: type
+  min_fields: 4
+fields:
+  type: {trim_suffix: ":"}
+  total: {type: int}
+  used: {type: int}
+  free: {type: int}
+  shared: {type: int}
+  buff_cache: {type: int}
+  available: {type: int}

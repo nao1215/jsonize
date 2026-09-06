@@ -1,0 +1,29 @@
+format: 1
+command: df
+variant: bsd-human
+description: BSD df -h output on macOS (sizes normalised to bytes)
+metadata:
+  tags: [darwin, bsd, filesystem]
+  compatible: [macOS df]
+detect:
+  os: [darwin]
+  args:
+    any: ["-h", "-H"]
+  signature:
+    all:
+      - '^Filesystem\s+Size\s+Used\s+Avail\s+Capacity\s+iused\s+ifree\s+%iused\s+Mounted on\s*$'
+# The filesystem column may contain spaces ("map auto_home"), so cells are
+# cut at header offsets instead of whitespace.
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [filesystem, size, used, available, capacity_percent, iused, ifree, iused_percent, mounted_on]
+fields:
+  size: {type: size}
+  used: {type: size}
+  available: {type: size}
+  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  iused: {type: int}
+  ifree: {type: int}
+  iused_percent: {type: int, trim_suffix: "%", null_if: ["-"]}

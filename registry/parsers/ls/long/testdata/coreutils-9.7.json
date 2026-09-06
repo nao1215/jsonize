@@ -1,0 +1,47 @@
+[
+  {
+    "flags": "drwxr-xr-x",
+    "links": 12,
+    "owner": "root",
+    "group": "root",
+    "size": 4096,
+    "date": "Apr 16  2025",
+    "filename": "."
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 20,
+    "owner": "root",
+    "group": "root",
+    "size": 4096,
+    "date": "Feb 27  2026",
+    "filename": ".."
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 2,
+    "owner": "root",
+    "group": "root",
+    "size": 114688,
+    "date": "Sep  6 13:08",
+    "filename": "bin"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 2,
+    "owner": "root",
+    "group": "root",
+    "size": 4096,
+    "date": "Jun 15 23:06",
+    "filename": "games"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 57,
+    "owner": "root",
+    "group": "root",
+    "size": 20480,
+    "date": "Jul 28 09:20",
+    "filename": "include"
+  }
+]

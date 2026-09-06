@@ -1,0 +1,39 @@
+[
+  {
+    "flags": "drwxr-xr-x",
+    "links": 3,
+    "owner": "root",
+    "group": "wheel",
+    "size": 96,
+    "date": "Jul 30  2024",
+    "filename": "Applications"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 70,
+    "owner": "root",
+    "group": "wheel",
+    "size": 2240,
+    "date": "Jul 30  2024",
+    "filename": "Library"
+  },
+  {
+    "flags": "lrwxr-xr-x@",
+    "links": 1,
+    "owner": "root",
+    "group": "wheel",
+    "size": 11,
+    "date": "Jul 30  2024",
+    "filename": "etc",
+    "link_to": "private/etc"
+  },
+  {
+    "flags": "-rw-r--r--+",
+    "links": 1,
+    "owner": "alice",
+    "group": "staff",
+    "size": 4242,
+    "date": "Sep  1 10:20",
+    "filename": "notes.txt"
+  }
+]

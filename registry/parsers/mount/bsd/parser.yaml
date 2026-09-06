@@ -1,0 +1,21 @@
+# macOS/BSD mount prints the filesystem type as the first entry of the
+# parenthesised list.
+format: 1
+command: mount
+variant: bsd
+description: "mount listing on macOS and BSD: \"fs on dir (type, options)\""
+metadata:
+  tags: [darwin, bsd, filesystem]
+  compatible: [macOS mount, FreeBSD mount]
+detect:
+  os: [darwin, freebsd, openbsd, netbsd]
+  signature:
+    all:
+      - '^\S.* on .* \([^)]*\)\s*$'
+    none:
+      - ' type \S+ \('
+parse:
+  type: regex
+  pattern: '^(?P<filesystem>.+?) on (?P<mount_point>.+?) \((?P<type>[^,)]+)(?:, (?P<options>[^)]*))?\)\s*$'
+fields:
+  options: {type: array, split: ", "}

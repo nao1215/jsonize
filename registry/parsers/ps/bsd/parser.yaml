@@ -1,0 +1,27 @@
+# `ps aux` on Linux (TTY, START) and macOS (TT, STARTED) share the same
+# eleven columns; the header wording is folded by the signature.
+format: 1
+command: ps
+variant: bsd
+description: ps aux (USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND) on Linux and macOS
+metadata:
+  tags: [linux, darwin, process]
+  compatible: [procps-ng, macOS ps]
+detect:
+  os: [linux, darwin, freebsd]
+  args:
+    any: ["aux", "axu", "-aux", "-axu"]
+  signature:
+    all:
+      - '^USER\s+PID\s+%CPU\s+%MEM\s+VSZ\s+RSS\s+TTY?\s+STAT\s+START(?:ED)?\s+TIME\s+COMMAND\s*$'
+parse:
+  type: table
+  header:
+    columns: [user, pid, cpu_percent, mem_percent, vsz, rss, tty, stat, start, time, command]
+fields:
+  pid: {type: int}
+  cpu_percent: {type: float}
+  mem_percent: {type: float}
+  vsz: {type: int}
+  rss: {type: int}
+  tty: {null_if: ["?", "??"]}

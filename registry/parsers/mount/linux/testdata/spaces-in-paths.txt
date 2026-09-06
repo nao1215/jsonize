@@ -1,0 +1,2 @@
+//fileserver/Team Share on /mnt/team share type cifs (rw,relatime,vers=3.1.1,cache=strict,username=alice)
+/dev/sr0 on /media/alice/Ubuntu 24.04 LTS amd64 type iso9660 (ro,nosuid,nodev,relatime,nojoliet,check=s,map=n,blocksize=2048)

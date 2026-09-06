@@ -1,0 +1,57 @@
+[
+  {
+    "filesystem": "/dev/disk3s1s1",
+    "512_blocks": 965595304,
+    "used": 19928936,
+    "available": 574836504,
+    "capacity_percent": 4,
+    "iused": 404813,
+    "ifree": 2874182520,
+    "iused_percent": 0,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "devfs",
+    "512_blocks": 402,
+    "used": 402,
+    "available": 0,
+    "capacity_percent": 100,
+    "iused": 696,
+    "ifree": 0,
+    "iused_percent": 100,
+    "mounted_on": "/dev"
+  },
+  {
+    "filesystem": "/dev/disk3s6",
+    "512_blocks": 965595304,
+    "used": 4194344,
+    "available": 574836504,
+    "capacity_percent": 1,
+    "iused": 2,
+    "ifree": 2874182520,
+    "iused_percent": 0,
+    "mounted_on": "/System/Volumes/VM"
+  },
+  {
+    "filesystem": "/dev/disk3s2",
+    "512_blocks": 965595304,
+    "used": 12386448,
+    "available": 574836504,
+    "capacity_percent": 3,
+    "iused": 1210,
+    "ifree": 2874182520,
+    "iused_percent": 0,
+    "mounted_on": "/System/Volumes/Preboot"
+  },
+  {
+    "filesystem": "map auto_home",
+    "512_blocks": 0,
+    "used": 0,
+    "available": 0,
+    "capacity_percent": 100,
+    "iused": 0,
+    "ifree": 0,
+    "iused_percent": 100,
+    "mounted_on": "/System/Volumes/Data/home"
+  }
+]

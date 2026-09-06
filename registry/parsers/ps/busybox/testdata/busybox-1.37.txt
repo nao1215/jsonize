@@ -1,0 +1,5 @@
+PID   USER     COMMAND
+    1 root     /usr/lib/systemd/systemd --switched-root --system --deserialize=55 splash
+    2 root     [kthreadd]
+    3 root     [pool_workqueue_]
+    4 root     [kworker/R-rcu_g]

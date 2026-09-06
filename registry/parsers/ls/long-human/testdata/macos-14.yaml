@@ -1,0 +1,3 @@
+source: transcribed in the format printed by macOS 14 (Sonoma); not machine-captured, so CI also runs the real command on a macOS runner (see e2e/atago/exec_darwin.atago.yaml)
+os: darwin
+args: [-lh]

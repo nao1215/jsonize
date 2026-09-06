@@ -1,0 +1,8 @@
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 Aug24 ?        00:04:50 /usr/lib/systemd/systemd --switched-root --system --deserialize=55 splash
+root           2       0  0 Aug24 ?        00:00:01 [kthreadd]
+root           3       2  0 Aug24 ?        00:00:00 [pool_workqueue_release]
+root           4       2  0 Aug24 ?        00:00:00 [kworker/R-rcu_gp]
+root           5       2  0 Aug24 ?        00:00:00 [kworker/R-sync_wq]
+root           6       2  0 Aug24 ?        00:00:00 [kworker/R-kvfree_rcu_reclaim]
+root           7       2  0 Aug24 ?        00:00:00 [kworker/R-slub_flushwq]

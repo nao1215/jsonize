@@ -1,0 +1,4 @@
+total 0
+lrwxrwxrwx 1 root root  7 Apr 22  2024 bin -> usr/bin
+lrwxrwxrwx 1 root root  7 Apr 22  2024 lib -> usr/lib
+-rw-r--r--. 1 root root 42 Jan  5 10:11 selinux-labelled file

@@ -1,0 +1,22 @@
+[
+  {
+    "pid": 1,
+    "user": "root",
+    "command": "/usr/lib/systemd/systemd --switched-root --system --deserialize=55 splash"
+  },
+  {
+    "pid": 2,
+    "user": "root",
+    "command": "[kthreadd]"
+  },
+  {
+    "pid": 3,
+    "user": "root",
+    "command": "[pool_workqueue_]"
+  },
+  {
+    "pid": 4,
+    "user": "root",
+    "command": "[kworker/R-rcu_g]"
+  }
+]

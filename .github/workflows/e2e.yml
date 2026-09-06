@@ -1,0 +1,38 @@
+name: E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 5 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  atago:
+    name: atago (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - uses: nao1215/setup-atago@v0.1.1
+        with:
+          version: v0.21.0
+      - name: run E2E (POSIX)
+        if: runner.os != 'Windows'
+        run: make e2e
+      - name: run E2E (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          go build -o dist/jz.exe ./cmd/jz
+          export PATH="$PWD/dist:$PATH"
+          atago run --ci --retry-failed 0 e2e/atago/pipe.atago.yaml e2e/atago/registry.atago.yaml e2e/atago/errors.atago.yaml

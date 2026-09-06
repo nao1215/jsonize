@@ -1,0 +1,29 @@
+format: 1
+command: free
+variant: gnu-wide
+description: procps free -w (buffers and cache in separate columns, KiB as printed)
+metadata:
+  tags: [linux, memory, procps]
+  compatible: [procps-ng]
+detect:
+  os: [linux]
+  args:
+    any: ["-w", "--wide"]
+    none: ["-h", "--human"]
+  signature:
+    all:
+      - '^\s+total\s+used\s+free\s+shared\s+buffers\s+cache\s+available\s*$'
+parse:
+  type: table
+  header:
+    leading_label: type
+  min_fields: 4
+fields:
+  type: {trim_suffix: ":"}
+  total: {type: int}
+  used: {type: int}
+  free: {type: int}
+  shared: {type: int}
+  buffers: {type: int}
+  cache: {type: int}
+  available: {type: int}

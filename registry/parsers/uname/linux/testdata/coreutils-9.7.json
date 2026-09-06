@@ -1,0 +1,8 @@
+{
+  "kernel_name": "Linux",
+  "node_name": "host1",
+  "kernel_release": "7.0.0-30-generic",
+  "kernel_version": "#30-Ubuntu SMP PREEMPT_DYNAMIC Fri Jul 31 18:22:54 UTC 2026",
+  "machine": "x86_64",
+  "operating_system": "GNU/Linux"
+}

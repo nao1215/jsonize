@@ -1,0 +1,30 @@
+# Coverage is measured on unit and golden tests (`make test`). The bar is
+# set where the parser engine, selector and conversion paths are fully
+# exercised; OS-specific process handling and the network update path
+# keep it below 100%.
+coverage:
+  paths:
+    - cover.out
+  acceptable: 85%
+  exclude:
+    - "cmd/jz/main.go"
+    - "registry/embed.go"
+codeToTestRatio:
+  code:
+    - "**/*.go"
+    - "!**/*_test.go"
+  test:
+    - "**/*_test.go"
+testExecutionTime:
+  if: true
+comment:
+  if: is_pull_request
+summary:
+  if: true
+report:
+  if: is_default_branch
+  datastores:
+    - artifact://${GITHUB_REPOSITORY}
+diff:
+  datastores:
+    - artifact://${GITHUB_REPOSITORY}

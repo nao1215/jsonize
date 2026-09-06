@@ -1,0 +1,7 @@
+{
+  "kernel_name": "Darwin",
+  "node_name": "host1.local",
+  "kernel_release": "23.6.0",
+  "kernel_version": "Darwin Kernel Version 23.6.0: Mon Jul 29 21:14:30 PDT 2024; root:xnu-10063.141.2~1/RELEASE_ARM64_T6000",
+  "machine": "arm64"
+}
