@@ -210,3 +210,33 @@ scenarios:
             empty: true
           stderr:
             contains: no lscpu variant matches this input
+
+  # A report whose blocks repeat: each interface carries its own counter
+  # tables, so the answer is one object per interface rather than a flat
+  # list of rows that no longer says which interface they belong to.
+  - name: ip -s link groups each interface with its own counters
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run ip -s link
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              # The loopback interface is index 1 on every Linux machine.
+              - { path: "$[0].interface.index", equals: 1 }
+              - { path: "$[0].interface.name", equals: lo }
+              - { path: "$[0].link.type", equals: loopback }
+              # The counters belong to that interface, not to the report.
+              - { path: "$[0].rx.bytes", gte: 0 }
+              - { path: "$[0].tx.packets", gte: 0 }
+              # An interface with no alternative names still has the key.
+              - { path: "$[0].altnames", length: 0 }
+      # Without -s the same command prints no counter tables, and this
+      # definition must not be stretched over that.
+      - run:
+          command: jz run ip link
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
