@@ -1,0 +1,14 @@
+[
+  {
+    "value": 60,
+    "name": "disks"
+  },
+  {
+    "value": 3,
+    "name": "partitions"
+  },
+  {
+    "value": 25131051,
+    "name": "total reads"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "type": "Mem",
+    "total": 65959276544,
+    "used": 38367502336,
+    "free": 10039779328,
+    "shared": 19391123456,
+    "buff_cache": 37685194752,
+    "available": 27591774208
+  },
+  {
+    "type": "Swap",
+    "total": 8589930496,
+    "used": 2184925184,
+    "free": 6405005312,
+    "shared": null,
+    "buff_cache": null,
+    "available": null
+  }
+]

@@ -1,0 +1,37 @@
+# `ls -lZ` adds the security context between the group and the size. On a
+# system without SELinux the context is a question mark, and on one with
+# it a colon-separated label. `ls -l --author` also inserts one column in
+# that position, so the signature asks for the shape of a context rather
+# than for any extra column: a user name is neither a question mark nor a
+# label with colons in it.
+#
+# The context is kept as printed rather than split, because "?" is not a
+# label and has no parts.
+format: 1
+command: ls
+variant: long-context
+description: ls -lZ long listing with the security context
+metadata:
+  tags: [linux, filesystem, selinux]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/ls-invocation.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+(?:\?|\S*:\S*:\S*)\s+[\d.]+[KMGTPBi]*\s+\w{3}\s+\d{1,2}\s+'
+input:
+  ignore:
+    - '^total\s'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<context>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<context>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+)$'
+fields:
+  links: {type: int, required: true}
+  context: {null_if: ["?"]}
+  size: {required: true}
+  filename: {required: true}
+  link_to: {when_missing: omit}

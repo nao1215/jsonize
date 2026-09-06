@@ -1,0 +1,41 @@
+# `vmstat -d` prints one row per block device under a two-line header,
+# and repeats that header every twenty rows. Reads and writes both end in
+# columns called total, merged, sectors and ms, so the header cannot name
+# the columns on its own and the names are given here with the side they
+# belong to.
+format: 1
+command: vmstat
+variant: linux-disk
+description: vmstat -d, per-device read and write counters
+metadata:
+  tags: [linux, disk, procps]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man8/vmstat.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\Adisk-[ \t]+-+reads-+'
+      - '^[ \t]+total merged sectors[ \t]+ms[ \t]+total merged sectors'
+input:
+  ignore:
+    - '^disk-[ \t]+-'
+    - '^[ \t]+total merged sectors[ \t]'
+parse:
+  type: table
+  header:
+    none: true
+    columns: [disk, reads_total, reads_merged, reads_sectors, reads_ms, writes_total, writes_merged, writes_sectors, writes_ms, io_current, io_seconds]
+fields:
+  disk: {required: true}
+  reads_total: {type: int, required: true}
+  reads_merged: {type: int}
+  reads_sectors: {type: int}
+  reads_ms: {type: int}
+  writes_total: {type: int}
+  writes_merged: {type: int}
+  writes_sectors: {type: int}
+  writes_ms: {type: int}
+  io_current: {type: int}
+  io_seconds: {type: int}

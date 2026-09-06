@@ -1,0 +1,31 @@
+# `vmstat -s` turns the report on its side: one counter per line, the
+# value first and the label after it. Memory counters carry the unit
+# letter that -S selected between the two, the rest do not, so the unit
+# is a field of its own and is absent where the command printed none.
+#
+# The labels are English sentences with spaces in them, which cannot be
+# field names, so the result is a list of counters rather than one object.
+format: 1
+command: vmstat
+variant: linux-stats
+description: vmstat -s, one counter per line
+metadata:
+  tags: [linux, memory, procps]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man8/vmstat.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^[ \t]*\d+[ \t]+(?:[KkMmGgb][ \t]+)?total memory[ \t]*$'
+      - '^[ \t]*\d+[ \t]+non-nice user cpu ticks[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    - '^\s*(?P<value>\d+)\s+(?P<unit>[KkMmGgb])\s+(?P<name>\S.*?)\s*$'
+    - '^\s*(?P<value>\d+)\s+(?P<name>\S.*?)\s*$'
+fields:
+  value: {type: int, required: true}
+  name: {required: true}
+  unit: {when_missing: omit}

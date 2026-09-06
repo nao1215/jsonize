@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C; the first eight lines of a listing of /etc, which holds both date forms
+os: linux
+args: [-li, /etc]

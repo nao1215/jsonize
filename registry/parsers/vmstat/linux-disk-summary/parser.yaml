@@ -1,0 +1,26 @@
+# `vmstat -D` sums what `vmstat -d` lists per device: a value first and
+# the label after it, with no unit column and no device names. The labels
+# have spaces in them, so the result is a list of counters rather than one
+# object, the same shape `vmstat -s` produces.
+format: 1
+command: vmstat
+variant: linux-disk-summary
+description: vmstat -D, disk activity totalled over all devices
+metadata:
+  tags: [linux, disk, procps]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man8/vmstat.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*\d+[ \t]+disks[ \t]*$'
+      - '^[ \t]*\d+[ \t]+partitions[ \t]*$'
+      - '^[ \t]*\d+[ \t]+total reads[ \t]*$'
+parse:
+  type: regex
+  pattern: '^\s*(?P<value>\d+)\s+(?P<name>\S.*?)\s*$'
+fields:
+  value: {type: int, required: true}
+  name: {required: true}

@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (BIND host 9.20) with LC_ALL=C from a public domain. Asking for one record type prints the same sentences, so a listing of only mail exchangers needs no variant of its own.
+os: linux
+args: [-t, MX, gmail.com]

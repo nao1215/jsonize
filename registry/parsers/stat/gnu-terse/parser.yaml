@@ -1,0 +1,44 @@
+# `stat -t` prints the same facts as the default block on one line per
+# operand, in a fixed order and with no labels. Three of the numbers are
+# hexadecimal (the raw mode, the device and the device type), the rest are
+# decimal, and the times are seconds since the epoch.
+#
+# A name followed by numbers is not evidence of stat on its own, so this
+# definition is used only when the parser is named.
+format: 1
+command: stat
+variant: gnu-terse
+description: GNU coreutils stat -t (one line per file, no labels)
+metadata:
+  tags: [linux, filesystem, coreutils]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/stat-invocation.html
+detect:
+  auto_detect: false
+  signature:
+    all:
+      - '\A\S.* \d+ \d+ [0-9a-f]+ \d+ \d+ [0-9a-f]+ \d+ \d+ [0-9a-f]+ [0-9a-f]+ \d+ \d+ \d+ \d+ \d+(?: \S+)?$'
+parse:
+  type: regex
+  # A file name may contain spaces and is not quoted, so the name is
+  # whatever precedes the sixteen fields that follow it.
+  pattern: '^(?P<name>.+?) (?P<size>\d+) (?P<blocks>\d+) (?P<raw_mode>[0-9a-f]+) (?P<uid>\d+) (?P<gid>\d+) (?P<device>[0-9a-f]+) (?P<inode>\d+) (?P<links>\d+) (?P<device_major>[0-9a-f]+) (?P<device_minor>[0-9a-f]+) (?P<access_time>\d+) (?P<modify_time>\d+) (?P<change_time>\d+) (?P<birth_time>\d+) (?P<io_block>\d+)(?: (?P<context>\S+))?\s*$'
+fields:
+  name: {required: true}
+  size: {type: int, required: true}
+  blocks: {type: int, required: true}
+  raw_mode: {required: true}
+  uid: {type: int, required: true}
+  gid: {type: int, required: true}
+  device: {required: true}
+  inode: {type: int, required: true}
+  links: {type: int, required: true}
+  device_major: {required: true}
+  device_minor: {required: true}
+  access_time: {type: int, required: true}
+  modify_time: {type: int, required: true}
+  change_time: {type: int, required: true}
+  birth_time: {type: int, required: true}
+  io_block: {type: int, required: true}
+  context: {when_missing: omit}

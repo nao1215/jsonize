@@ -1,0 +1,74 @@
+# `stat -f` reports the filesystem a name lives on, not the file, and
+# prints five lines per operand. The block repeats once per operand, so
+# the definition describes one block and `records` applies it to each.
+#
+# The lines group the numbers already (the two block sizes, the block
+# counts, the inode counts), and the parts keep that grouping rather than
+# flattening names such as Total and Free that appear on two lines with
+# different meanings.
+format: 1
+command: stat
+variant: gnu-filesystem
+description: GNU coreutils stat -f (filesystem information)
+metadata:
+  tags: [linux, filesystem, coreutils]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/stat-invocation.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*File: "'
+      - '^[ \t]*ID: \S+[ \t]+Namelen: \d+[ \t]+Type: \S'
+      - '^Blocks: Total: \d+'
+parse:
+  type: records
+  start: '^\s*File: "'
+  parts:
+    - name: file
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^\s*File: "(?P<name>.*)"\s*$'
+      fields:
+        name: {required: true}
+    - name: filesystem
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        # An unrecognised filesystem prints its magic number in brackets
+        # after the word UNKNOWN, so the type runs to the end of the line.
+        pattern: '^\s*ID: (?P<id>\S+)\s+Namelen: (?P<namelen>\d+)\s+Type: (?P<type>\S.*?)\s*$'
+      fields:
+        namelen: {type: int}
+    - name: block_size
+      select: {skip: 2, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^Block size: (?P<block_size>\d+)\s+Fundamental block size: (?P<fundamental_block_size>\d+)\s*$'
+      fields:
+        block_size: {type: int}
+        fundamental_block_size: {type: int}
+    - name: blocks
+      select: {skip: 3, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^Blocks: Total: (?P<total>\d+)\s+Free: (?P<free>\d+)\s+Available: (?P<available>\d+)\s*$'
+      fields:
+        total: {type: int}
+        free: {type: int}
+        available: {type: int}
+    - name: inodes
+      select: {skip: 4, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^Inodes: Total: (?P<total>\d+)\s+Free: (?P<free>\d+)\s*$'
+      fields:
+        total: {type: int}
+        free: {type: int}

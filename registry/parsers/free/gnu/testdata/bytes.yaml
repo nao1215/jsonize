@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C. `free -b` changes the unit of the counts, not the layout, so the numbers stay exact and the row for Mem fills the header width.
+os: linux
+args: [-b]

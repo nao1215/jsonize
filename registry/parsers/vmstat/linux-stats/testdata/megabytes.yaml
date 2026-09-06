@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C. `-S M` changes the unit letter of the memory counters and leaves the paging counters in K, which is why the unit is read per line.
+os: linux
+args: [-s, -S, M]

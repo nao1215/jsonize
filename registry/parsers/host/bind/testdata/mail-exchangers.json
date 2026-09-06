@@ -1,0 +1,27 @@
+[
+  {
+    "name": "gmail.com",
+    "priority": 10,
+    "exchanger": "alt1.gmail-smtp-in.l.google.com."
+  },
+  {
+    "name": "gmail.com",
+    "priority": 5,
+    "exchanger": "gmail-smtp-in.l.google.com."
+  },
+  {
+    "name": "gmail.com",
+    "priority": 30,
+    "exchanger": "alt3.gmail-smtp-in.l.google.com."
+  },
+  {
+    "name": "gmail.com",
+    "priority": 20,
+    "exchanger": "alt2.gmail-smtp-in.l.google.com."
+  },
+  {
+    "name": "gmail.com",
+    "priority": 40,
+    "exchanger": "alt4.gmail-smtp-in.l.google.com."
+  }
+]

@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C. A delay and a count add one row per sample under the same header.
+os: linux
+args: [-a, 1, 2]
