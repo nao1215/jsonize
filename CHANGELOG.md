@@ -20,9 +20,10 @@ project follows [Semantic Versioning](https://semver.org/).
   typed field conversion.
 - Layered registries: `JSONIZE_REGISTRY_PATH`, the user directory and the
   registry embedded in the binary. jz makes no network access.
-- Official definitions for 35 commands in 49 output formats, from `df`,
-  `free`, `ps` and `uptime` to `ip`, `ss`, `systemctl` and `lsusb`.
-  `jz list` prints the current set.
+- Official definitions for 74 commands in 109 output formats, covering
+  coreutils and procps, the util-linux listings, the systemd tools, the
+  network commands, sysstat, the archive and checksum tools, git, and the
+  package managers. `jz list` prints the current set.
 
 ### Fixed
 
@@ -33,6 +34,14 @@ project follows [Semantic Versioning](https://semver.org/).
   kept the shell quotes inside the values; `file` read `blkid` output and
   any `token:` line followed by a newline; `ip -brief address` read
   `ip -brief link` output, putting the MAC address in the address list.
+- Definitions that listed arguments their command does not need. `swapon`
+  and `systemctl` print with no arguments exactly what their definition
+  reads, and both turned that call away; the `ls` list enumerated flag
+  combinations that bundling already covers and left out the long
+  spellings. `lsattr` refused the relative path it prints when given no
+  operand, `ss` had no pattern for the unix sockets a bare call lists,
+  and `systemctl` on current systemd closes with a legend the ignore list
+  did not cover.
 
 ### Decisions worth knowing
 
