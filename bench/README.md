@@ -29,7 +29,7 @@ reproducible without external fixtures.
 | `DetectWithParser`, `DetectWithVariant` | `--parser` and `--variant`, which narrow the scan to one command or one definition |
 | `DetectNoMatch` | the worst case, where every candidate is evaluated and rejected |
 | `DetectLargeInput` | detection over a 1 MB input, to show the cost follows the signature window and not the input size |
-| `ParseTable*`, `ParseRegex*`, `ParseKV*` | the engine on small and large inputs, including raw mode |
+| `ParseTable*`, `ParseRegex*`, `ParseKV*` | the engine on small and large inputs |
 | `EncodeJSON*` | JSON generation (compact and pretty) |
 
 Detection is a two-stage design: cheap signature matching over the first

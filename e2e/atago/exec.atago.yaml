@@ -22,19 +22,18 @@ scenarios:
             fields:
               n: {type: int}
       - run:
-          command: jz run --registry reg --meta -- sh -c 'echo n=42; echo lc=$LC_ALL'
+          command: jz run -- sh -c 'echo n=42; echo lc=$LC_ALL'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 0
           stderr:
             empty: true
           stdout:
             json:
-              - { path: "$.parser", equals: sh }
-              - { path: "$.variant", equals: default }
-              - { path: "$.exit_status", equals: 0 }
-              - { path: "$.argv[0]", equals: sh }
-              - { path: "$.data[0].value", equals: 42 }
-              - { path: "$.data[1].value", equals: C }
+              - { path: "$[0].name", equals: n }
+              - { path: "$[0].value", equals: 42 }
+              - { path: "$[1].value", equals: C }
 
   - name: stderr passes through untouched and never enters the JSON
     skip: {os: windows}
@@ -48,7 +47,9 @@ scenarios:
             detect: {signature: {all: ['^[A-Za-z_][A-Za-z0-9_]*=']}}
             parse: {type: kv}
       - run:
-          command: jz run --registry reg -- sh -c 'echo a=b; echo warning >&2'
+          command: jz run -- sh -c 'echo a=b; echo warning >&2'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 0
           stderr:
@@ -68,7 +69,9 @@ scenarios:
             detect: {signature: {all: ['^[A-Za-z_][A-Za-z0-9_]*=']}}
             parse: {type: kv}
       - run:
-          command: jz run --registry reg -- sh -c 'echo a=b; exit 7'
+          command: jz run -- sh -c 'echo a=b; exit 7'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 7
           stderr:
@@ -76,7 +79,9 @@ scenarios:
           stdout:
             json: { path: "$[0].value", equals: b }
       - run:
-          command: jz run --registry reg -- sh -c 'exit 9'
+          command: jz run -- sh -c 'exit 9'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 9
           stdout:
@@ -94,7 +99,9 @@ scenarios:
             detect: {signature: {all: ['=']}}
             parse: {type: kv}
       - run:
-          command: jz run --registry reg -- sh -c 'kill -TERM $$'
+          command: jz run -- sh -c 'kill -TERM $$'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 143
           stderr:
@@ -112,7 +119,9 @@ scenarios:
             detect: {signature: {all: ['=']}}
             parse: {type: kv}
       - run:
-          command: jz run --registry reg --timeout 300ms -- sh -c 'exec sleep 30'
+          command: jz run --timeout 300ms -- sh -c 'exec sleep 30'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
           timeout: 20s
       - assert:
           exit_code: 143
@@ -131,33 +140,37 @@ scenarios:
             detect: {signature: {all: ['^[A-Za-z_][A-Za-z0-9_]*=']}}
             parse: {type: kv}
       - run:
-          command: jz run --registry reg -- sh -c 'echo unexpected output'
+          command: jz run -- sh -c 'echo unexpected output'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 4
           stdout:
             empty: true
           stderr:
             contains: no sh variant matches this input
-      # Knowing the command name is not a licence to ignore the signature,
-      # and neither is naming the variant; --force is the explicit escape.
+      # Knowing the command name is not a licence to ignore the
+      # signature, and neither is naming the variant.
       - run:
-          command: jz run --registry reg --variant default -- sh -c 'echo unexpected output'
+          command: jz run --parser sh --variant default -- sh -c 'echo unexpected output'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 4
           stderr:
             contains: does not describe this input
-      - run:
-          command: jz run --registry reg --variant default --force -- sh -c 'echo unexpected output'
+      # There is no way to make jz parse output its definition rejects.
       - assert:
-          exit_code: 3
-          stdout:
-            empty: true
+          stderr:
+            not_contains: "--force"
 
   - name: an unknown command is refused before anything is executed
     skip: {os: windows}
     steps:
       - run:
           command: jz run -- sh -c 'echo executed > marker'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 4
           stderr:
@@ -178,7 +191,9 @@ scenarios:
             variant: default
             parse: {type: kv}
       - run:
-          command: jz run --registry reg --variant nope -- sh -c 'echo executed > marker'
+          command: jz run --parser sh --variant nope -- sh -c 'echo executed > marker'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 4
           stderr:
@@ -201,7 +216,9 @@ scenarios:
             parse: {type: kv}
       # A flag before the command is jz's: the output is indented.
       - run:
-          command: jz run --registry reg --pretty sh -c 'echo "args=$*"' sh -h
+          command: jz run --pretty sh -c 'echo "args=$*"' sh -h
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 0
           stdout:
@@ -211,7 +228,9 @@ scenarios:
             json: { path: "$[0].value", equals: "-h" }
       # The same flag after the command belongs to the command.
       - run:
-          command: jz run --registry reg sh -c 'echo "args=$*"' sh --pretty --parser
+          command: jz run sh -c 'echo "args=$*"' sh --pretty --parser
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 0
           stdout:
@@ -221,14 +240,18 @@ scenarios:
             json: { path: "$[0].value", equals: "--pretty --parser" }
       # -- states the boundary explicitly.
       - run:
-          command: jz run --registry reg -- sh -c 'echo "args=$*"' sh --pretty --variant
+          command: jz run -- sh -c 'echo "args=$*"' sh --pretty --variant
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 0
           stdout:
             json: { path: "$[0].value", equals: "--pretty --variant" }
       # A -- after the command is the command's own argument.
       - run:
-          command: jz run --registry reg sh -c 'echo "args=$*"' sh -- --literal
+          command: jz run sh -c 'echo "args=$*"' sh -- --literal
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 0
           stdout:
@@ -246,8 +269,9 @@ scenarios:
             detect: {signature: {all: ['^[A-Za-z_][A-Za-z0-9_]*=']}}
             parse: {type: kv}
       - run:
-          command: jz run --registry reg --keep-locale -- sh -c 'echo lc=${LC_ALL:-inherited}'
+          command: jz run --keep-locale -- sh -c 'echo lc=${LC_ALL:-inherited}'
           env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
             LC_ALL: ""
       - assert:
           exit_code: 0
@@ -259,6 +283,8 @@ scenarios:
     steps:
       - run:
           command: jz run
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 2
           stdout:

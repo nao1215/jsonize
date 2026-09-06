@@ -61,10 +61,6 @@ func TestLoadMergesSourcesWithPrecedence(t *testing.T) {
 	if ents := reg.Entries(); len(ents) != 4 || ents[0].Def.ID() != "custom/default" {
 		t.Errorf("Entries = %v", ents)
 	}
-	ms := reg.Manifests()
-	if len(ms) != 2 || ms[0].Manifest.Name != "user" || ms[0].Count != 2 || ms[1].Count != 3 {
-		t.Errorf("Manifests = %+v", ms)
-	}
 	if len(reg.Problems) != 0 {
 		t.Errorf("Problems = %v", reg.Problems)
 	}
@@ -137,7 +133,7 @@ func TestLoadFatalErrors(t *testing.T) {
 		t.Errorf("format mismatch: %v", err)
 	}
 	reg, err := Load(Source{Name: "m", FS: fstest.MapFS{"registry.yaml": {Data: []byte("format: 1\nname: empty\n")}}})
-	if err != nil || reg.Len() != 0 || len(reg.Manifests()) != 1 {
+	if err != nil || reg.Len() != 0 {
 		t.Errorf("manifest only: %v %v", reg, err)
 	}
 }

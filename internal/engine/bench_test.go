@@ -78,44 +78,40 @@ fields:
   use_percent: {type: int, trim_suffix: "%"}
 `
 
-func benchParse(b *testing.B, def *definition.Definition, input []byte, opts Options) {
+func benchParse(b *testing.B, def *definition.Definition, input []byte) {
 	b.Helper()
 	b.SetBytes(int64(len(input)))
 	b.ReportAllocs()
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		if _, err := Parse(def, input, opts); err != nil {
+		if _, err := Parse(def, input, Options{}); err != nil {
 			b.Fatal(err)
 		}
 	}
 }
 
 func BenchmarkParseTableWhitespaceSmall(b *testing.B) {
-	benchParse(b, benchDef(b, dfDef), dfInputRows(10), Options{})
+	benchParse(b, benchDef(b, dfDef), dfInputRows(10))
 }
 
 func BenchmarkParseTableWhitespaceLarge(b *testing.B) {
-	benchParse(b, benchDef(b, dfDef), dfInputRows(100000), Options{})
+	benchParse(b, benchDef(b, dfDef), dfInputRows(100000))
 }
 
 func BenchmarkParseTableAlignedLarge(b *testing.B) {
-	benchParse(b, benchDef(b, alignedDef), dfInputRows(100000), Options{})
-}
-
-func BenchmarkParseTableRawLarge(b *testing.B) {
-	benchParse(b, benchDef(b, dfDef), dfInputRows(100000), Options{Raw: true})
+	benchParse(b, benchDef(b, alignedDef), dfInputRows(100000))
 }
 
 func BenchmarkParseRegexSmall(b *testing.B) {
-	benchParse(b, benchDef(b, mountDef), mountInputRows(10), Options{})
+	benchParse(b, benchDef(b, mountDef), mountInputRows(10))
 }
 
 func BenchmarkParseRegexLarge(b *testing.B) {
-	benchParse(b, benchDef(b, mountDef), mountInputRows(100000), Options{})
+	benchParse(b, benchDef(b, mountDef), mountInputRows(100000))
 }
 
 func BenchmarkParseKVLarge(b *testing.B) {
-	benchParse(b, benchDef(b, envDef), envInputRows(100000), Options{})
+	benchParse(b, benchDef(b, envDef), envInputRows(100000))
 }
 
 func BenchmarkEncodeJSONLarge(b *testing.B) {

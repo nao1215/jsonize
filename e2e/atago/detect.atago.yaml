@@ -13,22 +13,20 @@ scenarios:
           file: df-gnu.txt
           from: "${specdir}/testdata/df-gnu.txt"
       - run:
-          command: jz --meta
+          command: jz
           stdin: {file: df-gnu.txt}
       - assert:
           exit_code: 0
           stderr:
             empty: true
           stdout:
+            # The 1K-block keys are what say the gnu variant was chosen.
             json:
-              - { path: "$.parser", equals: df }
-              - { path: "$.variant", equals: gnu }
-              - { path: "$.source", equals: embedded }
-              - { path: "$.data", length: 7 }
-              - { path: "$.data[0].filesystem", equals: tmpfs }
-              - { path: "$.data[0].1k_blocks", equals: 12882672 }
-              - { path: "$.data[0].use_percent", equals: 1 }
-              - { path: "$.data[0].mounted_on", equals: /run }
+              - { path: "$", length: 7 }
+              - { path: "$[0].filesystem", equals: tmpfs }
+              - { path: "$[0].1k_blocks", equals: 12882672 }
+              - { path: "$[0].use_percent", equals: 1 }
+              - { path: "$[0].mounted_on", equals: /run }
 
   - name: a different variant of the same command is told apart by its header
     steps:
@@ -36,15 +34,15 @@ scenarios:
           file: df-bsd.txt
           from: "${specdir}/testdata/df-bsd.txt"
       - run:
-          command: jz --meta --pretty
+          command: jz --pretty
           stdin: {file: df-bsd.txt}
       - assert:
           exit_code: 0
           stdout:
+            # 512-byte blocks and the inode columns are the BSD variant.
             json:
-              - { path: "$.variant", equals: bsd }
-              - { path: "$.data[4].filesystem", equals: "map auto_home" }
-              - { path: "$.data[0].512_blocks", equals: 965595304 }
+              - { path: "$[4].filesystem", equals: "map auto_home" }
+              - { path: "$[0].512_blocks", equals: 965595304 }
 
   - name: a different command entirely is identified from the same stdin
     steps:
@@ -52,19 +50,18 @@ scenarios:
           file: free-h.txt
           from: "${specdir}/testdata/free-h.txt"
       - run:
-          command: jz --meta
+          command: jz
           stdin: {file: free-h.txt}
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.parser", equals: free }
-              - { path: "$.variant", equals: gnu-human }
+              - { path: "$[0].type", equals: Mem }
               # -h and -h --si differ only in the base of the suffixes and
               # the output does not say which was used, so the value is
               # reported as printed.
-              - { path: "$.data[0].total", equals: "61Gi" }
-              - { path: "$.data[1].shared", equals: null }
+              - { path: "$[0].total", equals: "61Gi" }
+              - { path: "$[1].type", equals: Swap }
 
   - name: a composite parser returns one key per part
     steps:
@@ -121,35 +118,18 @@ scenarios:
           stdout:
             json: { path: "$", length: 7 }
 
-  - name: raw mode keeps every value as a string
-    steps:
-      - fixture:
-          file: df-gnu.txt
-          from: "${specdir}/testdata/df-gnu.txt"
-      - run:
-          command: jz --raw
-          stdin: {file: df-gnu.txt}
-      - assert:
-          exit_code: 0
-          stdout:
-            json:
-              - { path: "$[0].1k_blocks", equals: "12882672" }
-              - { path: "$[0].use_percent", equals: "1%" }
-
   - name: naming the parser narrows detection to one command
     steps:
       - fixture:
           file: df-gnu.txt
           from: "${specdir}/testdata/df-gnu.txt"
       - run:
-          command: jz --parser df --meta
+          command: jz --parser df
           stdin: {file: df-gnu.txt}
       - assert:
           exit_code: 0
           stdout:
-            json:
-              - { path: "$.parser", equals: df }
-              - { path: "$.variant", equals: gnu }
+            json: { path: "$[0].1k_blocks", equals: 12882672 }
 
   - name: naming the variant pins the definition
     steps:
@@ -157,32 +137,12 @@ scenarios:
           file: df-gnu.txt
           from: "${specdir}/testdata/df-gnu.txt"
       - run:
-          command: jz --parser df --variant gnu --meta
+          command: jz --parser df --variant gnu
           stdin: {file: df-gnu.txt}
       - assert:
           exit_code: 0
           stdout:
-            json: { path: "$.variant", equals: gnu }
-
-  - name: an --os hint removes variants written for another system
-    steps:
-      - fixture:
-          file: df-gnu.txt
-          from: "${specdir}/testdata/df-gnu.txt"
-      - run:
-          command: jz --os linux
-          stdin: {file: df-gnu.txt}
-      - assert:
-          exit_code: 0
-          stdout:
-            json: { path: "$[0].mounted_on", equals: /run }
-      - run:
-          command: jz --os darwin
-          stdin: {file: df-gnu.txt}
-      - assert:
-          exit_code: 4
-          stdout:
-            empty: true
+            json: { path: "$[0].1k_blocks", equals: 12882672 }
 
   - name: CRLF line endings and a UTF-8 BOM do not hide the format
     steps:
@@ -259,15 +219,14 @@ scenarios:
   - name: one ls parser reads -l and -lh, whatever the sizes look like
     steps:
       - run:
-          command: jz --meta
+          command: jz
           stdin: "-rw-r--r-- 1 u g 3 Jan  5 10:11 small.txt\n"
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.parser", equals: ls }
-              - { path: "$.variant", equals: long }
-              - { path: "$.data[0].size", equals: "3" }
+              - { path: "$[0].filename", equals: small.txt }
+              - { path: "$[0].size", equals: "3" }
       - run:
           command: jz
           stdin: "-rw-r--r-- 1 u g 3 Jan  5 10:11 small.txt\n-rw-r--r-- 1 u g 2.9K Jan  5 10:12 big.bin\n"
@@ -293,12 +252,11 @@ scenarios:
           file: env0.bin
           base64: "QT1vbmUKc3RpbGwgQQBCPXR3bwA="
       - run:
-          command: jz --meta
+          command: jz
           stdin: {file: env0.bin}
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: null-separated }
-              - { path: "$.data[0].value", equals: "one\nstill A" }
-              - { path: "$.data", length: 2 }
+              - { path: "$[0].value", equals: "one\nstill A" }
+              - { path: "$", length: 2 }

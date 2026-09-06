@@ -6,67 +6,58 @@ import (
 	"os"
 
 	"github.com/nao1215/jsonize/internal/engine"
+	"github.com/nao1215/jsonize/internal/jsonutil"
 	"github.com/nao1215/jsonize/internal/selector"
 )
 
 //nolint:dupword // the usage block repeats "jz" on purpose
-const convertUsage = `Usage: COMMAND | jz [flags]
-       jz [flags] < FILE
-       jz [flags] --file FILE
+const convertUsage = `Usage: COMMAND | jz [options]
+       jz [options] < FILE
+       jz [options] --file FILE
 
-Reads output that some command produced earlier and converts it to JSON.
+Reads output that a command produced earlier and converts it to JSON.
 Nothing is executed. The parser is identified from the text itself: every
-parser signature in the registry is tested, and jz succeeds only when
-exactly one of them matches. Text that matches none, or more than one, is
-an error that names what to pass explicitly.
+parser signature is tested and jz succeeds only when exactly one matches.
+Text that matches none, or more than one, is an error naming what to pass.
 
   df -h | jz
-  jz < captured.txt
-  df -h | jz --parser df                    # only consider df's variants
+  jz --file captured.txt
+  df -h | jz --parser df
   df -h | jz --parser df --variant gnu-human
 
-Flags:
+Options:
 `
 
-// convertOptions are the flags specific to the conversion mode.
+// convertOptions are the options of the default mode.
 type convertOptions struct {
-	file     string
-	osHint   string
-	maxInput int64
+	file    string
+	output  outputOptions
+	selects selectOptions
 }
 
-// bindConvertFlags registers every flag of the default mode. It is shared
-// with the help output so the two can never drift apart.
-func bindConvertFlags(fs *flag.FlagSet, rf *registryFlags, of *outputFlags, sf *selectFlags, co *convertOptions) {
-	rf.bind(fs)
-	of.bind(fs)
-	sf.bind(fs, true)
-	fs.StringVar(&co.file, "file", "-", "read the output from `path` instead of stdin")
-	fs.StringVar(&co.osHint, "os", "", "operating `system` that produced the output (linux, darwin, ...)")
-	fs.Int64Var(&co.maxInput, "max-input", engine.DefaultMaxInputSize, "maximum input size in `bytes`")
+func (c *convertOptions) bind(o *optionSet) {
+	o.stringOpt(&c.file, "file", "f", "PATH", "-", "read input from PATH instead of stdin")
+	c.output.bind(o)
+	c.selects.bind(o)
+	o.helpDoc()
 }
 
 func (a *app) cmdConvert(args []string) int {
-	fs := newFlagSet("jz")
-	var (
-		rf registryFlags
-		of outputFlags
-		sf selectFlags
-		co convertOptions
-	)
-	bindConvertFlags(fs, &rf, &of, &sf, &co)
-	if code, done := a.parseFlags(fs, args, convertUsage); done {
+	o := newOptions("jz")
+	var co convertOptions
+	co.bind(o)
+	if code, done := a.parse(o, args, convertUsage); done {
 		return code
 	}
-	if fs.NArg() > 0 {
-		return a.unexpectedArgs(fs)
+	if o.fs.NArg() > 0 {
+		return a.unexpectedArgs(o.fs)
 	}
-	if sf.variant != "" && sf.parser == "" {
-		a.errorf("%v", &selector.VariantWithoutParserError{Variant: sf.variant})
+	if co.selects.variant != "" && co.selects.parser == "" {
+		a.errorf("%v", &selector.VariantWithoutParserError{Variant: co.selects.variant})
 		return ExitUsage
 	}
 
-	reg, code := a.loadRegistry(&rf)
+	reg, code := a.loadRegistry()
 	if code != 0 {
 		return code
 	}
@@ -80,30 +71,30 @@ func (a *app) cmdConvert(args []string) int {
 		defer f.Close()
 		r = f
 	}
-	data, err := io.ReadAll(io.LimitReader(r, co.maxInput+1))
+	// The size limit is not negotiable from the command line: it exists so
+	// that a runaway producer cannot make jz allocate without bound.
+	data, err := io.ReadAll(io.LimitReader(r, MaxInputSize+1))
 	if err != nil {
 		a.errorf("reading input: %v", err)
 		return ExitError
 	}
-	if int64(len(data)) > co.maxInput {
-		a.errorf("input exceeds %d bytes (raise --max-input if that is intended)", co.maxInput)
+	if int64(len(data)) > MaxInputSize {
+		a.errorf("input exceeds the %d byte limit", MaxInputSize)
 		return ExitParse
 	}
 	sel, err := selector.Select(reg, selector.Context{
-		Parser:  sf.parser,
-		Variant: sf.variant,
-		Force:   sf.force,
-		OS:      co.osHint,
+		Parser:  co.selects.parser,
+		Variant: co.selects.variant,
 		Input:   data,
 	})
 	if err != nil {
 		return a.exitFor(err)
 	}
-	out, err := engine.Parse(sel.Entry.Def, data, engine.Options{Raw: of.raw, MaxInputSize: co.maxInput})
+	out, err := engine.Parse(sel.Entry.Def, data, engine.Options{MaxInputSize: MaxInputSize})
 	if err != nil {
 		return a.exitFor(err)
 	}
-	if err := emit(a.env.Stdout, out, sel.Entry, &of, nil); err != nil {
+	if err := jsonutil.Encode(a.env.Stdout, out, co.output.pretty); err != nil {
 		a.errorf("writing output: %v", err)
 		return ExitError
 	}
@@ -117,7 +108,7 @@ func (a *app) unexpectedArgs(fs *flag.FlagSet) int {
 	if lookup(arg) == nil {
 		a.errorf("unknown command %q", arg)
 	} else {
-		a.errorf("%q must come before the conversion flags", arg)
+		a.errorf("%q must come before the options", arg)
 	}
 	a.usage(a.env.Stderr)
 	return ExitUsage

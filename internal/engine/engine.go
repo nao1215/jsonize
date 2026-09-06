@@ -11,7 +11,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io"
 	"regexp"
 	"strings"
 	"unicode/utf8"
@@ -28,9 +27,6 @@ const (
 
 // Options tunes a parse run.
 type Options struct {
-	// Raw disables field conversion: every value stays a string (or null for
-	// empty aligned cells). Useful to inspect what a definition extracts.
-	Raw bool
 	// MaxInputSize bounds the accepted input in bytes (0 = default).
 	MaxInputSize int64
 	// MaxLineLength bounds a single line in bytes (0 = default).
@@ -91,19 +87,6 @@ var ErrInputTooLarge = errors.New("input too large")
 
 // ErrLineTooLong is wrapped when a single line exceeds the limit.
 var ErrLineTooLong = errors.New("line too long")
-
-// ParseReader reads r up to the configured limit and parses it.
-func ParseReader(def *definition.Definition, r io.Reader, opts Options) (any, error) {
-	limit := opts.maxInput()
-	data, err := io.ReadAll(io.LimitReader(r, limit+1))
-	if err != nil {
-		return nil, &ParseError{Definition: def.ID(), Msg: "reading input", Cause: err}
-	}
-	if int64(len(data)) > limit {
-		return nil, &ParseError{Definition: def.ID(), Msg: fmt.Sprintf("input exceeds %d bytes", limit), Cause: ErrInputTooLarge}
-	}
-	return Parse(def, data, opts)
-}
 
 // Parse applies def to input. The result is either []any (one ordered
 // object per record) or *jsonutil.Object, depending on the parse type.

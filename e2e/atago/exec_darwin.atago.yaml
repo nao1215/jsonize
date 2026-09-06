@@ -10,59 +10,53 @@ scenarios:
     only: {os: darwin}
     steps:
       - run:
-          command: jz run --meta df
+          command: jz run df
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: bsd }
-              - { path: "$.data[0].mounted_on", equals: / }
-              - { path: "$.data[0].512_blocks", gt: 0 }
+              - { path: "$[0].mounted_on", equals: / }
+              - { path: "$[0].512_blocks", gt: 0 }
       - run:
-          command: jz run --meta df -h
+          command: jz run df -h
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: bsd-human }
-              - { path: "$.data[0].size", matches: "^[0-9.]+[KMGTP]i?$" }
+              - { path: "$[0].size", matches: "^[0-9.]+[KMGTP]i?$" }
 
   - name: uptime, ps, mount, uname, id, du and wc
     only: {os: darwin}
     steps:
       - run:
-          command: jz run --meta uptime
+          command: jz run uptime
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: bsd }
               - { path: "$.data.load_1m", gte: 0 }
       - run:
-          command: jz run --meta ps -ef
+          command: jz run ps -ef
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: unix }
-              - { path: "$.data[0].pid", equals: 1 }
+              - { path: "$[0].pid", equals: 1 }
       - run:
-          command: jz run --meta ps aux
+          command: jz run ps aux
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: bsd }
-              - { path: "$.data[0].command", matches: ".+" }
+              - { path: "$[0].command", matches: ".+" }
       - run:
-          command: jz run --meta mount
+          command: jz run mount
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: bsd }
-              - { path: "$.data[0].mount_point", equals: / }
-              - { path: "$.data[0].type", matches: "^[a-z]+$" }
+              - { path: "$[0].mount_point", equals: / }
+              - { path: "$[0].type", matches: "^[a-z]+$" }
       - run:
           command: jz run uname -a
       - assert:
@@ -101,14 +95,12 @@ scenarios:
     steps:
       - run:
           shell: true
-          command: LC_ALL=C df | jz --meta
+          command: LC_ALL=C df | jz
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.parser", equals: df }
-              - { path: "$.variant", equals: bsd }
-              - { path: "$.data[0].mounted_on", equals: / }
+              - { path: "$[0].mounted_on", equals: / }
       - run:
           shell: true
           command: LC_ALL=C uname -a | jz
@@ -118,10 +110,10 @@ scenarios:
             json: { path: "$.kernel_name", equals: Darwin }
       - run:
           shell: true
-          command: LC_ALL=C mount | jz --meta
+          command: LC_ALL=C mount | jz
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.parser", equals: mount }
-              - { path: "$.variant", equals: bsd }
+              - { path: "$[0].mount_point", equals: / }
+              - { path: "$[0].type", matches: "^[a-z]+$" }

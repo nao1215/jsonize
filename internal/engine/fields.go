@@ -32,7 +32,7 @@ func (r *run) convert(name string, raw any, f *definition.Field, ln int) (any, b
 		return nil, f != nil && f.WhenMissing == definition.MissingOmit, nil
 	}
 	s, _ := raw.(string)
-	if r.opts.Raw || f == nil {
+	if f == nil {
 		return s, false, nil
 	}
 	// Only an explicit trim_prefix/trim_suffix rewrites the text. A value

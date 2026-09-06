@@ -105,29 +105,6 @@ func TestEncodeNonFinite(t *testing.T) {
 	}
 }
 
-func TestToPlain(t *testing.T) {
-	t.Parallel()
-	o := NewObject()
-	o.Set("i", int64(1))
-	o.Set("n", 2)
-	o.Set("l", []any{NewObject()})
-	var nilObj *Object
-	o.Set("nil", nilObj)
-	p := ToPlain(o).(map[string]any)
-	if p["i"] != float64(1) || p["n"] != float64(2) {
-		t.Errorf("ToPlain ints = %v", p)
-	}
-	if _, ok := p["l"].([]any)[0].(map[string]any); !ok {
-		t.Errorf("nested object not converted: %T", p["l"].([]any)[0])
-	}
-	if p["nil"] != nil {
-		t.Errorf("nil object = %v", p["nil"])
-	}
-	if ToPlain("s") != "s" {
-		t.Error("string passthrough")
-	}
-}
-
 func TestMarshalJSONViaStdlib(t *testing.T) {
 	t.Parallel()
 	o := NewObject()

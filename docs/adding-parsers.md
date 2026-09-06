@@ -66,8 +66,11 @@ fields:
 ```
 
 Always add a `detect.signature`, even for a single variant: it is what
-lets `jz parse` reject unrelated text with a clear message instead of
-producing nonsense.
+lets jz reject unrelated text with a clear message instead of producing
+nonsense. If the shape is too generic to be evidence on its own (a number
+and a path, three numbers in a row), add `auto_detect: false` next to it:
+the definition is then used only when the parser is named, and its
+signature is still checked there.
 
 ## 4. Add fixtures
 
@@ -90,12 +93,14 @@ no `.json`.
 ## 5. Generate the golden file and review it
 
 ```console
-$ make golden-update
+$ make registry-update-golden
 $ git diff --stat registry/parsers/lsof
 $ cat registry/parsers/lsof/default/testdata/lsof-4.95.json
 ```
 
-Check types, `null`s and the last column. Then:
+Check types, `null`s and the last column. A rounded, human-readable
+number stays a string: the output does not record the base and the value
+is already rounded, so converting it would invent precision. Then:
 
 ```console
 $ make test
@@ -109,7 +114,7 @@ from the JSON.
 
 ```console
 $ go run ./cmd/jz run lsof -p $$
-$ lsof -p $$ | go run ./cmd/jz parse --pretty lsof
+$ lsof -p $$ | go run ./cmd/jz --pretty
 ```
 
 ## 7. Open the pull request
@@ -124,8 +129,8 @@ The same loop works with a personal registry and the released binary:
 ```console
 $ mkdir -p ~/.config/jsonize/registry/parsers/lsof/default/testdata
 $ $EDITOR ~/.config/jsonize/registry/parsers/lsof/default/parser.yaml
-$ jz validate --update ~/.config/jsonize/registry
-$ jz validate ~/.config/jsonize/registry
+$ make registry-update-golden DIR=~/.config/jsonize/registry
+$ make registry-test DIR=~/.config/jsonize/registry
 ```
 
 `jz list` shows the definition with source `user`, and it shadows an

@@ -121,26 +121,28 @@ scenarios:
             fields:
               times: {type: int}
       - run:
-          command: jz --registry reg --meta
+          command: jz
           stdin: "hello atago x7\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.parser", equals: greet }
-              - { path: "$.source", matches: "reg$" }
-              - { path: "$.data[0].name", equals: atago }
-              - { path: "$.data[0].times", equals: 7 }
-      # Subcommands come first; a flag before one is a usage error rather
-      # than being silently treated as piped input.
+              - { path: "$[0].name", equals: atago }
+              - { path: "$[0].times", equals: 7 }
+      # Subcommands come first; an option before one is a usage error
+      # rather than being silently treated as piped input.
       - run:
-          command: jz --registry reg list greet
+          command: jz --pretty list greet
       - assert:
           exit_code: 2
           stderr:
-            contains: "\"list\" must come before the conversion flags"
+            contains: "\"list\" must come before the options"
       - run:
-          command: jz list --registry reg greet
+          command: jz list greet
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 0
           stdout:
@@ -196,29 +198,30 @@ scenarios:
               header:
                 columns: [filesystem, blocks, used, available, use_percent, mounted_on]
       - run:
-          command: jz --meta
+          command: jz
           stdin: "Filesystem 1K-blocks Used Available Use% Mounted on\nfs 1 2 3 4% /\n"
       - assert:
           exit_code: 0
           stdout:
-            json:
-              - { path: "$.source", equals: user }
-              - { path: "$.data[0].blocks", equals: "1" }
+            # The user definition keeps every value a string, which is how
+            # the output shows that it shadowed the embedded one.
+            json: { path: "$[0].blocks", equals: "1" }
       - run:
           command: jz list df gnu
       - assert:
           exit_code: 0
           stdout:
             matches: "shadows: +the same definition in embedded"
+      # Without the user registry the embedded definition applies again.
       - run:
-          command: jz --embedded-only --meta
+          command: jz
           stdin: "Filesystem 1K-blocks Used Available Use% Mounted on\nfs 1 2 3 4% /\n"
+          env:
+            XDG_CONFIG_HOME: "${workdir}/empty-config"
       - assert:
           exit_code: 0
           stdout:
-            json:
-              - { path: "$.source", equals: embedded }
-              - { path: "$.data[0].1k_blocks", equals: 1 }
+            json: { path: "$[0].1k_blocks", equals: 1 }
 
   - name: a broken definition is skipped with a warning, not fatally
     steps:
@@ -242,8 +245,10 @@ scenarios:
               type: regex
               pattern: '^good (?P<v>\S+)$'
       - run:
-          command: jz --registry reg
+          command: jz
           stdin: "good news\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 0
           stdout:
@@ -271,8 +276,10 @@ scenarios:
             variant: y
             parse: {type: kv}
       - run:
-          command: jz --registry reg
+          command: jz
           stdin: "x\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           stderr:
             contains: must live at parsers/df/bsd/parser.yaml

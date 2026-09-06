@@ -1,6 +1,6 @@
 # Recorded 2026-09-06 with `go test -run ^$ -bench . -benchmem -count 3 ./internal/...`; see bench/README.md
 PASS
-ok  	github.com/nao1215/jsonize/internal/buildinfo	0.003s
+ok  	github.com/nao1215/jsonize/internal/buildinfo	0.002s
 PASS
 ok  	github.com/nao1215/jsonize/internal/cli	0.002s
 PASS
@@ -11,90 +11,87 @@ goos: linux
 goarch: amd64
 pkg: github.com/nao1215/jsonize/internal/definition
 cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
-BenchmarkLoadAndValidate-32    	   10164	    106152 ns/op	  126881 B/op	    2218 allocs/op
-BenchmarkLoadAndValidate-32    	   10000	    109594 ns/op	  126887 B/op	    2218 allocs/op
-BenchmarkLoadAndValidate-32    	   10000	    103947 ns/op	  126897 B/op	    2218 allocs/op
-BenchmarkValidateNested-32     	    9484	    116382 ns/op	  146866 B/op	    2417 allocs/op
-BenchmarkValidateNested-32     	   10000	    116886 ns/op	  146862 B/op	    2417 allocs/op
-BenchmarkValidateNested-32     	   10000	    116841 ns/op	  146877 B/op	    2417 allocs/op
+BenchmarkLoadAndValidate-32    	   10532	    104143 ns/op	  129370 B/op	    2234 allocs/op
+BenchmarkLoadAndValidate-32    	   10000	    108103 ns/op	  129357 B/op	    2234 allocs/op
+BenchmarkLoadAndValidate-32    	   10000	    105041 ns/op	  129375 B/op	    2234 allocs/op
+BenchmarkValidateNested-32     	   10000	    114111 ns/op	  149362 B/op	    2435 allocs/op
+BenchmarkValidateNested-32     	   10000	    116996 ns/op	  149374 B/op	    2435 allocs/op
+BenchmarkValidateNested-32     	   10000	    121954 ns/op	  149355 B/op	    2435 allocs/op
 PASS
-ok  	github.com/nao1215/jsonize/internal/definition	7.620s
+ok  	github.com/nao1215/jsonize/internal/definition	7.661s
 goos: linux
 goarch: amd64
 pkg: github.com/nao1215/jsonize/internal/engine
 cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
-BenchmarkParseTableWhitespaceSmall-32    	  143160	      8831 ns/op	  76.89 MB/s	   14928 B/op	     244 allocs/op
-BenchmarkParseTableWhitespaceSmall-32    	  133556	      9168 ns/op	  74.06 MB/s	   14928 B/op	     244 allocs/op
-BenchmarkParseTableWhitespaceSmall-32    	  148455	      9335 ns/op	  72.74 MB/s	   14928 B/op	     244 allocs/op
-BenchmarkParseTableWhitespaceLarge-32    	      10	 106032874 ns/op	  62.14 MB/s	148024484 B/op	 2200053 allocs/op
-BenchmarkParseTableWhitespaceLarge-32    	      12	 101677182 ns/op	  64.80 MB/s	148023894 B/op	 2200051 allocs/op
-BenchmarkParseTableWhitespaceLarge-32    	      10	 101973912 ns/op	  64.61 MB/s	148022843 B/op	 2200051 allocs/op
-BenchmarkParseTableAlignedLarge-32       	       9	 121973930 ns/op	  54.02 MB/s	167696776 B/op	 2700047 allocs/op
-BenchmarkParseTableAlignedLarge-32       	       9	 119795474 ns/op	  55.00 MB/s	167696808 B/op	 2700047 allocs/op
-BenchmarkParseTableAlignedLarge-32       	       9	 120516836 ns/op	  54.67 MB/s	167696805 B/op	 2700047 allocs/op
-BenchmarkParseTableRawLarge-32           	      13	  98339575 ns/op	  67.00 MB/s	152023344 B/op	 2300051 allocs/op
-BenchmarkParseTableRawLarge-32           	      12	  98425222 ns/op	  66.94 MB/s	152022633 B/op	 2300050 allocs/op
-BenchmarkParseTableRawLarge-32           	      13	  84156476 ns/op	  78.29 MB/s	152022942 B/op	 2300050 allocs/op
-BenchmarkParseRegexSmall-32              	   95287	     12901 ns/op	  63.56 MB/s	   11100 B/op	     189 allocs/op
-BenchmarkParseRegexSmall-32              	   94467	     12827 ns/op	  63.93 MB/s	   11098 B/op	     189 allocs/op
-BenchmarkParseRegexSmall-32              	   94928	     12784 ns/op	  64.14 MB/s	   11098 B/op	     189 allocs/op
-BenchmarkParseRegexLarge-32              	       8	 149188684 ns/op	  60.18 MB/s	114676716 B/op	 1800049 allocs/op
-BenchmarkParseRegexLarge-32              	       7	 153897291 ns/op	  58.34 MB/s	114688931 B/op	 1800050 allocs/op
-BenchmarkParseRegexLarge-32              	       7	 153841754 ns/op	  58.36 MB/s	114699626 B/op	 1800052 allocs/op
-BenchmarkParseKVLarge-32                 	      38	  26570647 ns/op	 164.76 MB/s	65776148 B/op	  800032 allocs/op
-BenchmarkParseKVLarge-32                 	      38	  31995015 ns/op	 136.83 MB/s	65776136 B/op	  800032 allocs/op
-BenchmarkParseKVLarge-32                 	      38	  31263969 ns/op	 140.03 MB/s	65776133 B/op	  800032 allocs/op
-BenchmarkEncodeJSONLarge-32              	      14	  75445950 ns/op	 179.84 MB/s	62336709 B/op	 1100031 allocs/op
-BenchmarkEncodeJSONLarge-32              	      16	  71951708 ns/op	 188.57 MB/s	62336298 B/op	 1100030 allocs/op
-BenchmarkEncodeJSONLarge-32              	      14	  72962085 ns/op	 185.96 MB/s	62336709 B/op	 1100031 allocs/op
-BenchmarkEncodeJSONPrettyLarge-32        	       9	 127386924 ns/op	93677291 B/op	 1100040 allocs/op
-BenchmarkEncodeJSONPrettyLarge-32        	       8	 125074621 ns/op	93679838 B/op	 1100045 allocs/op
-BenchmarkEncodeJSONPrettyLarge-32        	       8	 125960424 ns/op	93679602 B/op	 1100041 allocs/op
+BenchmarkParseTableWhitespaceSmall-32    	  138663	      8786 ns/op	  77.28 MB/s	   14928 B/op	     244 allocs/op
+BenchmarkParseTableWhitespaceSmall-32    	  146235	      8553 ns/op	  79.39 MB/s	   14928 B/op	     244 allocs/op
+BenchmarkParseTableWhitespaceSmall-32    	  143887	      8367 ns/op	  81.15 MB/s	   14928 B/op	     244 allocs/op
+BenchmarkParseTableWhitespaceLarge-32    	      12	 104121290 ns/op	  63.28 MB/s	148025284 B/op	 2200053 allocs/op
+BenchmarkParseTableWhitespaceLarge-32    	      10	 100995851 ns/op	  65.24 MB/s	148024335 B/op	 2200052 allocs/op
+BenchmarkParseTableWhitespaceLarge-32    	      12	  99214521 ns/op	  66.41 MB/s	148022685 B/op	 2200051 allocs/op
+BenchmarkParseTableAlignedLarge-32       	       9	 117209597 ns/op	  56.22 MB/s	167697366 B/op	 2700047 allocs/op
+BenchmarkParseTableAlignedLarge-32       	       9	 120065183 ns/op	  54.88 MB/s	167696787 B/op	 2700047 allocs/op
+BenchmarkParseTableAlignedLarge-32       	       9	 117351656 ns/op	  56.15 MB/s	167696775 B/op	 2700047 allocs/op
+BenchmarkParseRegexSmall-32              	   84036	     13395 ns/op	  61.22 MB/s	   11086 B/op	     189 allocs/op
+BenchmarkParseRegexSmall-32              	   90793	     12866 ns/op	  63.73 MB/s	   11098 B/op	     189 allocs/op
+BenchmarkParseRegexSmall-32              	   92917	     13182 ns/op	  62.21 MB/s	   11110 B/op	     189 allocs/op
+BenchmarkParseRegexLarge-32              	       7	 144185919 ns/op	  62.27 MB/s	114679014 B/op	 1800049 allocs/op
+BenchmarkParseRegexLarge-32              	       8	 147718194 ns/op	  60.78 MB/s	114717370 B/op	 1800054 allocs/op
+BenchmarkParseRegexLarge-32              	       7	 148385697 ns/op	  60.50 MB/s	114688931 B/op	 1800050 allocs/op
+BenchmarkParseKVLarge-32                 	      36	  29880363 ns/op	 146.51 MB/s	65776137 B/op	  800032 allocs/op
+BenchmarkParseKVLarge-32                 	      42	  28080952 ns/op	 155.90 MB/s	65776136 B/op	  800032 allocs/op
+BenchmarkParseKVLarge-32                 	      43	  24108597 ns/op	 181.59 MB/s	65776138 B/op	  800032 allocs/op
+BenchmarkEncodeJSONLarge-32              	      15	  67568864 ns/op	 200.80 MB/s	62336881 B/op	 1100031 allocs/op
+BenchmarkEncodeJSONLarge-32              	      15	  70672177 ns/op	 191.98 MB/s	62336877 B/op	 1100031 allocs/op
+BenchmarkEncodeJSONLarge-32              	      14	  73797684 ns/op	 183.85 MB/s	62336729 B/op	 1100031 allocs/op
+BenchmarkEncodeJSONPrettyLarge-32        	       9	 119119986 ns/op	93677729 B/op	 1100038 allocs/op
+BenchmarkEncodeJSONPrettyLarge-32        	       9	 120573523 ns/op	93677240 B/op	 1100039 allocs/op
+BenchmarkEncodeJSONPrettyLarge-32        	       9	 118246933 ns/op	93679494 B/op	 1100042 allocs/op
 PASS
-ok  	github.com/nao1215/jsonize/internal/engine	42.510s
+ok  	github.com/nao1215/jsonize/internal/engine	38.539s
 PASS
-ok  	github.com/nao1215/jsonize/internal/jsonutil	0.002s
+ok  	github.com/nao1215/jsonize/internal/jsonutil	0.003s
 goos: linux
 goarch: amd64
 pkg: github.com/nao1215/jsonize/internal/registry
 cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
-BenchmarkLoadRegistry/definitions=26-32         	     830	   1470691 ns/op	 1476410 B/op	   25941 allocs/op
-BenchmarkLoadRegistry/definitions=26-32         	     880	   1289298 ns/op	 1476006 B/op	   25940 allocs/op
-BenchmarkLoadRegistry/definitions=26-32         	     922	   1280650 ns/op	 1476004 B/op	   25940 allocs/op
-BenchmarkLoadRegistry/definitions=500-32        	      42	  30803358 ns/op	28384140 B/op	  495786 allocs/op
-BenchmarkLoadRegistry/definitions=500-32        	      38	  29221043 ns/op	28382258 B/op	  495788 allocs/op
-BenchmarkLoadRegistry/definitions=500-32        	      42	  33484071 ns/op	28386016 B/op	  495797 allocs/op
-BenchmarkLoadRegistry/definitions=1000-32       	      13	  85013167 ns/op	56693239 B/op	  991275 allocs/op
-BenchmarkLoadRegistry/definitions=1000-32       	      18	  87560530 ns/op	56698327 B/op	  991309 allocs/op
-BenchmarkLoadRegistry/definitions=1000-32       	      13	  80188055 ns/op	56692906 B/op	  991293 allocs/op
+BenchmarkLoadRegistry/definitions=26-32         	     800	   1317480 ns/op	 1536478 B/op	   26277 allocs/op
+BenchmarkLoadRegistry/definitions=26-32         	     926	   1348828 ns/op	 1536590 B/op	   26277 allocs/op
+BenchmarkLoadRegistry/definitions=26-32         	     892	   1335194 ns/op	 1536596 B/op	   26278 allocs/op
+BenchmarkLoadRegistry/definitions=500-32        	      39	  30615777 ns/op	29554138 B/op	  502305 allocs/op
+BenchmarkLoadRegistry/definitions=500-32        	      38	  29801635 ns/op	29555583 B/op	  502322 allocs/op
+BenchmarkLoadRegistry/definitions=500-32        	      39	  30509998 ns/op	29556738 B/op	  502321 allocs/op
+BenchmarkLoadRegistry/definitions=1000-32       	      18	  66722771 ns/op	59034083 B/op	 1004346 allocs/op
+BenchmarkLoadRegistry/definitions=1000-32       	      18	  67106557 ns/op	59037912 B/op	 1004362 allocs/op
+BenchmarkLoadRegistry/definitions=1000-32       	      16	  66255686 ns/op	59041912 B/op	 1004381 allocs/op
 PASS
-ok  	github.com/nao1215/jsonize/internal/registry	13.811s
+ok  	github.com/nao1215/jsonize/internal/registry	11.197s
 PASS
-ok  	github.com/nao1215/jsonize/internal/runner	0.002s
+ok  	github.com/nao1215/jsonize/internal/runner	0.003s
 goos: linux
 goarch: amd64
 pkg: github.com/nao1215/jsonize/internal/selector
 cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
-BenchmarkDetect/definitions=26-32         	   58495	     20398 ns/op	    6156 B/op	     115 allocs/op
-BenchmarkDetect/definitions=26-32         	   60382	     19626 ns/op	    6158 B/op	     115 allocs/op
-BenchmarkDetect/definitions=26-32         	   60342	     19588 ns/op	    6152 B/op	     115 allocs/op
-BenchmarkDetect/definitions=500-32        	    2420	    492655 ns/op	  118959 B/op	    2015 allocs/op
-BenchmarkDetect/definitions=500-32        	    2374	    499760 ns/op	  118845 B/op	    2015 allocs/op
-BenchmarkDetect/definitions=500-32        	    2348	    499674 ns/op	  118888 B/op	    2015 allocs/op
-BenchmarkDetect/definitions=1000-32       	    1185	   1011932 ns/op	  231087 B/op	    4016 allocs/op
-BenchmarkDetect/definitions=1000-32       	    1184	   1013977 ns/op	  230963 B/op	    4016 allocs/op
-BenchmarkDetect/definitions=1000-32       	    1165	   1020353 ns/op	  231300 B/op	    4017 allocs/op
-BenchmarkDetectWithParser-32              	  497935	      2463 ns/op	     833 B/op	      21 allocs/op
-BenchmarkDetectWithParser-32              	  508243	      2364 ns/op	     831 B/op	      21 allocs/op
-BenchmarkDetectWithParser-32              	  549392	      2281 ns/op	     833 B/op	      21 allocs/op
-BenchmarkDetectWithVariant-32             	 3809856	       328.7 ns/op	     187 B/op	       6 allocs/op
-BenchmarkDetectWithVariant-32             	 3336471	       370.5 ns/op	     188 B/op	       6 allocs/op
-BenchmarkDetectWithVariant-32             	 3546924	       347.1 ns/op	     188 B/op	       6 allocs/op
-BenchmarkDetectNoMatch-32                 	    1234	    927658 ns/op	  247242 B/op	    4018 allocs/op
-BenchmarkDetectNoMatch-32                 	    1281	    980024 ns/op	  247708 B/op	    4018 allocs/op
-BenchmarkDetectNoMatch-32                 	    1203	    975129 ns/op	  248176 B/op	    4018 allocs/op
-BenchmarkDetectLargeInput-32              	     438	   2718482 ns/op	 367.87 MB/s	  419561 B/op	    4220 allocs/op
-BenchmarkDetectLargeInput-32              	     445	   2690728 ns/op	 371.66 MB/s	  419836 B/op	    4220 allocs/op
-BenchmarkDetectLargeInput-32              	     445	   2785468 ns/op	 359.02 MB/s	  419859 B/op	    4220 allocs/op
+BenchmarkDetect/definitions=26-32         	   58567	     19873 ns/op	    6179 B/op	     116 allocs/op
+BenchmarkDetect/definitions=26-32         	   61848	     19284 ns/op	    6171 B/op	     116 allocs/op
+BenchmarkDetect/definitions=26-32         	   61999	     19531 ns/op	    6172 B/op	     116 allocs/op
+BenchmarkDetect/definitions=500-32        	    2542	    495347 ns/op	  118791 B/op	    2016 allocs/op
+BenchmarkDetect/definitions=500-32        	    2554	    484774 ns/op	  118761 B/op	    2016 allocs/op
+BenchmarkDetect/definitions=500-32        	    2502	    490091 ns/op	  118761 B/op	    2016 allocs/op
+BenchmarkDetect/definitions=1000-32       	    1111	   1046943 ns/op	  230678 B/op	    4017 allocs/op
+BenchmarkDetect/definitions=1000-32       	     960	   1054323 ns/op	  231142 B/op	    4017 allocs/op
+BenchmarkDetect/definitions=1000-32       	    1204	   1022754 ns/op	  231030 B/op	    4017 allocs/op
+BenchmarkDetectWithParser-32              	  426225	      2509 ns/op	     856 B/op	      22 allocs/op
+BenchmarkDetectWithParser-32              	  484833	      2382 ns/op	     857 B/op	      22 allocs/op
+BenchmarkDetectWithParser-32              	  494505	      2417 ns/op	     857 B/op	      22 allocs/op
+BenchmarkDetectWithVariant-32             	 3707773	       340.1 ns/op	     187 B/op	       6 allocs/op
+BenchmarkDetectWithVariant-32             	 3678580	       361.4 ns/op	     188 B/op	       6 allocs/op
+BenchmarkDetectWithVariant-32             	 3186190	       357.5 ns/op	     188 B/op	       6 allocs/op
+BenchmarkDetectNoMatch-32                 	    1216	    976572 ns/op	  247890 B/op	    4019 allocs/op
+BenchmarkDetectNoMatch-32                 	    1227	    997409 ns/op	  247708 B/op	    4019 allocs/op
+BenchmarkDetectNoMatch-32                 	    1166	    974814 ns/op	  247887 B/op	    4019 allocs/op
+BenchmarkDetectLargeInput-32              	     423	   2718087 ns/op	 367.92 MB/s	  419867 B/op	    4221 allocs/op
+BenchmarkDetectLargeInput-32              	     414	   2747394 ns/op	 364.00 MB/s	  419751 B/op	    4221 allocs/op
+BenchmarkDetectLargeInput-32              	     444	   2706460 ns/op	 369.50 MB/s	  419986 B/op	    4221 allocs/op
 PASS
-ok  	github.com/nao1215/jsonize/internal/selector	32.808s
+ok  	github.com/nao1215/jsonize/internal/selector	33.061s

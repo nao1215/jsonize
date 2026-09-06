@@ -207,31 +207,3 @@ func Marshal(v any) ([]byte, error) {
 	}
 	return buf.Bytes(), nil
 }
-
-// ToPlain converts ordered objects into map[string]any recursively so the
-// value can be compared with values produced by encoding/json.Unmarshal.
-func ToPlain(v any) any {
-	switch t := v.(type) {
-	case *Object:
-		if t == nil {
-			return nil
-		}
-		m := make(map[string]any, len(t.members))
-		for _, mem := range t.members {
-			m[mem.Key] = ToPlain(mem.Value)
-		}
-		return m
-	case []any:
-		out := make([]any, len(t))
-		for i, e := range t {
-			out[i] = ToPlain(e)
-		}
-		return out
-	case int64:
-		return float64(t)
-	case int:
-		return float64(t)
-	default:
-		return v
-	}
-}

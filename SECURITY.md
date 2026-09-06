@@ -8,30 +8,26 @@
   Regular expressions are compiled by Go's `regexp` (RE2) which guarantees
   linear-time matching; their length is capped. Nesting depth, column
   counts and part counts are bounded by the validator.
-- **Input is bounded.** `jz parse` refuses input above `--max-input`
-  (64 MiB by default) and lines above 1 MiB; `jz run` stops a command
-  whose stdout exceeds `--max-output`.
+- **Input is bounded.** jz refuses input above 64 MiB and lines above
+  1 MiB, in both modes. The limit is internal on purpose: it is a safety
+  property, not a preference to tune.
 - **`jz run` executes exactly the command you named.** No shell is
   involved, arguments are passed verbatim, and the command is looked up on
   `PATH` like any other program. jz will not execute a command it has no
   definition for.
-- **Registry updates are fetched over HTTPS only.** The archive must match
-  the SHA-256 published next to it, is extracted without honouring
-  absolute paths, `..`, symlinks, hard links or device nodes, is bounded
-  in file count and total size, must load cleanly, and is then installed
-  with an atomic rename. A failed update leaves the previous registry in
-  place. Plain `http://` is rejected unless `--allow-http` is given, which
-  exists for tests.
-- **Layered registries.** A definition in a user or `--registry` directory
-  shadows the official one of the same name. Only put directories you
-  control there; `jz list` shows where each definition came from.
+- **No network access.** jz never fetches anything: the official registry
+  is embedded in the binary and additional definitions come from local
+  directories only.
+- **Layered registries.** A definition in the user registry or in a
+  directory named by `JSONIZE_REGISTRY_PATH` shadows the official one of
+  the same name. Only point those at directories you control;
+  `jz list --sources` shows where definitions came from and
+  `jz list COMMAND VARIANT` shows which file a definition lives in.
+- **A named parser is still checked.** `--parser` and `--variant` narrow
+  the candidates; they do not disable the signature check, and there is
+  no option that does.
 
-What the checksum does *not* give you: authenticity independent of the
-download host. The checksum file lives beside the archive on the release
-page, so it detects corruption and truncation, not a compromised host.
-Release archives of the `jz` binary carry GitHub build provenance
-attestations; signing the registry archive with a key held outside the
-CI is planned but not part of the current release process.
+Release binaries carry GitHub build provenance attestations.
 
 ## Supported versions
 

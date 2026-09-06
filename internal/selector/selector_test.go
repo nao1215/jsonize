@@ -269,25 +269,29 @@ func TestSelectWithParserScope(t *testing.T) {
 	}
 }
 
-func TestExplicitVariantIsVerifiedUnlessForced(t *testing.T) {
+func TestExplicitVariantIsAlwaysVerified(t *testing.T) {
 	t.Parallel()
 	reg := testRegistry(t)
+	// Naming a variant is a claim about the text, not permission to
+	// ignore it: there is no way to parse with a definition whose
+	// signature says the input is something else.
 	_, err := Select(reg, Context{Parser: "df", Variant: "bsd", Input: []byte(gnuDF)})
 	var me *MismatchError
 	if !errors.As(err, &me) {
 		t.Fatalf("expected MismatchError, got %v", err)
 	}
-	if !strings.Contains(err.Error(), "df/bsd does not describe this input") || !strings.Contains(err.Error(), "--force") {
+	if !strings.Contains(err.Error(), "df/bsd does not describe this input") {
 		t.Errorf("message: %v", err)
-	}
-	res, err := Select(reg, Context{Parser: "df", Variant: "bsd", Force: true, Input: []byte(gnuDF)})
-	if err != nil || res.Entry.Def.ID() != "df/bsd" {
-		t.Errorf("--force: %v %v", res, err)
 	}
 	// A variant whose OS does not match is a mismatch too.
 	_, err = Select(reg, Context{Parser: "df", Variant: "bsd", OS: "linux", Input: []byte(bsdDF)})
 	if !errors.As(err, &me) || !strings.Contains(err.Error(), "written for darwin, not linux") {
 		t.Errorf("os mismatch: %v", err)
+	}
+	// The matching variant is accepted.
+	res, err := Select(reg, Context{Parser: "df", Variant: "gnu", Input: []byte(gnuDF)})
+	if err != nil || res.Entry.Def.ID() != "df/gnu" {
+		t.Errorf("matching variant: %v %v", res, err)
 	}
 }
 
@@ -415,7 +419,12 @@ func TestShadowingChangesTheCandidateSet(t *testing.T) {
 	if _, err := Select(reg, Context{Input: []byte(gnuDF)}); err == nil {
 		t.Error("the shadowing definition must decide")
 	}
-	res, err := Select(reg, Context{Parser: "df", Variant: "gnu", Force: true, Input: []byte(gnuDF)})
+	// The shadowing definition is the one a name resolves to, and it is
+	// checked like any other.
+	if _, err := Select(reg, Context{Parser: "df", Variant: "gnu", Input: []byte(gnuDF)}); err == nil {
+		t.Error("the shadowing definition decides, and it does not match")
+	}
+	res, err := Select(reg, Context{Parser: "df", Variant: "gnu", Input: []byte("NEVER MATCHES\n")})
 	if err != nil || res.Entry.Source != "user" {
 		t.Errorf("shadowed entry: %v %v", res, err)
 	}

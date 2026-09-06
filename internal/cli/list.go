@@ -20,44 +20,40 @@ const listUsage = `Usage: jz list [COMMAND [VARIANT]]
   jz list df gnu-human    everything about one definition
   jz list --sources       the registries in use, in precedence order
 
-Flags:
+Options:
 `
 
 func (a *app) cmdList(args []string) int {
-	fs := newFlagSet("list")
-	var (
-		rf      registryFlags
-		asJSON  bool
-		sources bool
-	)
-	rf.bind(fs)
-	fs.BoolVar(&asJSON, "json", false, "print machine-readable JSON instead of a table")
-	fs.BoolVar(&sources, "sources", false, "list the registries in precedence order")
-	if code, done := a.parseFlags(fs, args, listUsage); done {
+	o := newOptions("list")
+	var asJSON, sources bool
+	o.boolOpt(&asJSON, "json", "", "print machine-readable JSON instead of a table")
+	o.boolOpt(&sources, "sources", "", "list the registries in precedence order")
+	o.helpDoc()
+	if code, done := a.parse(o, args, listUsage); done {
 		return code
 	}
-	if fs.NArg() > 2 {
-		a.errorf("list: expected at most COMMAND and VARIANT, got %d arguments", fs.NArg())
+	if o.fs.NArg() > 2 {
+		a.errorf("list: expected at most COMMAND and VARIANT, got %d arguments", o.fs.NArg())
 		return ExitUsage
 	}
 	if sources {
-		if fs.NArg() > 0 {
+		if o.fs.NArg() > 0 {
 			a.errorf("list: --sources takes no arguments")
 			return ExitUsage
 		}
-		return a.listSources(&rf, asJSON)
+		return a.listSources(asJSON)
 	}
-	reg, code := a.loadRegistry(&rf)
+	reg, code := a.loadRegistry()
 	if code != 0 {
 		return code
 	}
-	switch fs.NArg() {
+	switch o.fs.NArg() {
 	case 0:
 		return a.listCommands(reg, asJSON)
 	case 1:
-		return a.listVariants(reg, fs.Arg(0), asJSON)
+		return a.listVariants(reg, o.fs.Arg(0), asJSON)
 	default:
-		return a.listDefinition(reg, fs.Arg(0), fs.Arg(1), asJSON)
+		return a.listDefinition(reg, o.fs.Arg(0), o.fs.Arg(1), asJSON)
 	}
 }
 
@@ -181,13 +177,13 @@ func printFields(w io.Writer, indent string, fields map[string]*definition.Field
 	}
 }
 
-func (a *app) listSources(rf *registryFlags, asJSON bool) int {
-	srcs, err := a.sources(rf)
+func (a *app) listSources(asJSON bool) int {
+	srcs, err := a.sources()
 	if err != nil {
 		a.errorf("%v", err)
 		return ExitRegistry
 	}
-	reg, code := a.loadRegistry(rf)
+	reg, code := a.loadRegistry()
 	if code != 0 {
 		return code
 	}
@@ -220,7 +216,7 @@ func (a *app) listSources(rf *registryFlags, asJSON bool) int {
 	if err := tw.Flush(); err != nil {
 		return finish(err, a)
 	}
-	fmt.Fprintf(a.env.Stdout, "\nThe first registry that defines a command/variant wins.\nAdd your own with --registry DIR or %s.\n", EnvRegistryPath)
+	fmt.Fprintf(a.env.Stdout, "\nThe first registry that defines a command/variant wins.\nAdd your own by pointing %s at a directory.\n", EnvRegistryPath)
 	return ExitOK
 }
 

@@ -75,8 +75,10 @@ scenarios:
             detect: {signature: {all: ['SHARED']}}
             parse: {type: kv}
       - run:
-          command: jz --registry reg
+          command: jz
           stdin: "SHARED=1\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 4
           stdout:
@@ -89,8 +91,10 @@ scenarios:
             contains: "--parser alpha"
       # Naming the parser resolves it.
       - run:
-          command: jz --registry reg --parser beta
+          command: jz --parser beta
           stdin: "SHARED=1\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 0
           stdout:
@@ -115,20 +119,24 @@ scenarios:
             detect: {signature: {all: ['SHARED']}}
             parse: {type: kv}
       - run:
-          command: jz --registry reg --parser twin
+          command: jz --parser twin
           stdin: "SHARED=1\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 4
           stderr:
             contains: input matches multiple twin variants
             matches: "--variant one"
       - run:
-          command: jz --registry reg --parser twin --variant two
+          command: jz --parser twin --variant two
           stdin: "SHARED=1\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
       - assert:
           exit_code: 0
 
-  - name: a variant that contradicts the input is refused until forced
+  - name: a variant that contradicts the input is refused, with no way around it
     steps:
       - fixture:
           file: df-gnu.txt
@@ -142,16 +150,12 @@ scenarios:
             empty: true
           stderr:
             contains: df/bsd does not describe this input
-            matches: "pass --force"
-      - run:
-          command: jz --parser df --variant bsd --force
-          stdin: {file: df-gnu.txt}
+      # Naming a variant is a claim about the text, not permission to
+      # ignore it; a definition that rejects output it should accept is a
+      # definition to fix.
       - assert:
-          exit_code: 3
-          stdout:
-            empty: true
           stderr:
-            contains: "df/bsd:"
+            not_contains: "--force"
 
   - name: a parse failure names the line and the field, and prints no JSON
     steps:
@@ -211,14 +215,17 @@ scenarios:
             contains: "--variant gnu needs --parser"
 
   - name: oversized input is refused before parsing
+    skip: {os: windows}
     steps:
       - run:
-          command: jz --max-input 16
-          stdin: "A=1\nB=2\nC=3\nD=4\nE=5\n"
+          shell: true
+          command: head -c 67108865 /dev/zero | tr "\\0" "x" | jz
       - assert:
           exit_code: 3
+          stdout:
+            empty: true
           stderr:
-            contains: input exceeds 16 bytes
+            contains: input exceeds the 67108864 byte limit
 
   - name: a format too generic to recognise is refused and names its parser
     steps:
@@ -299,13 +306,6 @@ scenarios:
           exit_code: 4
           stderr:
             contains: does not describe this input
-      # Only --force reaches the parser, which reports an empty table.
-      - run:
-          command: jz --file empty2.txt --parser df --variant gnu --force
-      - assert:
-          exit_code: 0
-          stdout:
-            equals: "[]"
 
   - name: an unknown subcommand or flag is a usage error
     steps:
@@ -330,6 +330,48 @@ scenarios:
           exit_code: 2
           stderr:
             contains: expected at most COMMAND and VARIANT
+
+  - name: the options removed before release are usage errors
+    steps:
+      - run:
+          command: jz --raw
+          stdin: "x=1\n"
+      - assert:
+          exit_code: 2
+          stdout:
+            empty: true
+          stderr:
+            contains: "not defined: -raw"
+      - run:
+          command: jz --meta
+          stdin: "x=1\n"
+      - assert:
+          exit_code: 2
+      - run:
+          command: jz --os linux
+          stdin: "x=1\n"
+      - assert:
+          exit_code: 2
+      - run:
+          command: jz --force
+          stdin: "x=1\n"
+      - assert:
+          exit_code: 2
+      - run:
+          command: jz --max-input 1
+          stdin: "x=1\n"
+      - assert:
+          exit_code: 2
+      - run:
+          command: jz --embedded-only
+          stdin: "x=1\n"
+      - assert:
+          exit_code: 2
+      - run:
+          command: jz --registry ./registry
+          stdin: "x=1\n"
+      - assert:
+          exit_code: 2
 
   - name: the subcommands removed before release are gone
     steps:

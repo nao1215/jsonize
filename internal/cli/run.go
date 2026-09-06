@@ -9,16 +9,17 @@ import (
 	"time"
 
 	"github.com/nao1215/jsonize/internal/engine"
+	"github.com/nao1215/jsonize/internal/jsonutil"
 	"github.com/nao1215/jsonize/internal/registry"
 	"github.com/nao1215/jsonize/internal/runner"
 	"github.com/nao1215/jsonize/internal/selector"
 )
 
-const runUsage = `Usage: jz run [flags] COMMAND [args...]
+const runUsage = `Usage: jz run [options] COMMAND [args...]
 
 Runs COMMAND with the given arguments (no shell involved), captures its
-standard output and converts it to JSON. Standard input is handed to the
-command and standard error is passed through. The command runs with
+stdout and converts that to JSON. Standard input is handed to the command
+and its stderr is passed through untouched. The command runs with
 LC_ALL=C so that its output is stable; use --keep-locale to inherit the
 current locale instead.
 
@@ -27,46 +28,46 @@ variants, but the output still has to match the variant's signature, so a
 command that prints something unexpected fails instead of being
 mis-parsed.
 
-Flags for jz come before COMMAND; everything from COMMAND onwards is
-passed to it untouched, so its own flags never reach jz:
+Options for jz come before COMMAND; everything from COMMAND onwards is
+passed to it untouched, so its own options never reach jz. A bare -- can
+state that boundary explicitly:
 
   jz run df -h
   jz run --pretty ps aux
-  jz run mytool --pretty          # --pretty goes to mytool
-  jz run -- mytool --pretty       # the same, stated explicitly
+  jz run mytool --pretty              # --pretty goes to mytool
+  jz run -- mytool --pretty           # the same, stated explicitly
+  jz run --parser dir -- cmd.exe /c dir   # a wrapper whose name is not the parser
 
 If the command exits non-zero, jz still parses whatever it printed,
 reports the status on stderr and exits with that same status. A command
 terminated by a signal yields 128+signal.
 
-Flags:
+Options:
 `
 
 func (a *app) cmdRun(args []string) int {
-	fs := newFlagSet("run")
+	o := newOptions("run")
 	var (
-		rf         registryFlags
-		of         outputFlags
-		sf         selectFlags
+		out        outputOptions
+		sel        selectOptions
 		envs       stringList
 		keepLocale bool
 		timeout    time.Duration
-		maxOutput  int64
 	)
-	rf.bind(fs)
-	of.bind(fs)
-	sf.bind(fs, false)
-	fs.Var(&envs, "env", "set `NAME=value` in the command's environment (repeatable)")
-	fs.BoolVar(&keepLocale, "keep-locale", false, "do not force LC_ALL=C for the command")
-	fs.DurationVar(&timeout, "timeout", 0, "kill the command after this `duration` (0 = no limit)")
-	fs.Int64Var(&maxOutput, "max-output", engine.DefaultMaxInputSize, "maximum stdout size in `bytes`")
-	if code, done := a.parseFlags(fs, args, runUsage); done {
+	out.bind(o)
+	sel.bind(o)
+	o.listOpt(&envs, "env", "NAME=VALUE", "set a variable in the command's environment (repeatable)")
+	o.boolOpt(&keepLocale, "keep-locale", "", "do not force LC_ALL=C for the command")
+	o.durationOpt(&timeout, "timeout", "DURATION", 0, "kill the command after this long (0 = no limit)")
+	o.helpDoc()
+	if code, done := a.parse(o, args, runUsage); done {
 		return code
 	}
-	rest := fs.Args()
+	rest := o.fs.Args()
 	if len(rest) == 0 {
 		a.errorf("run: no command given")
 		fmt.Fprint(a.env.Stderr, runUsage)
+		o.print(a.env.Stderr)
 		return ExitUsage
 	}
 	extraEnv, err := splitEnvFlag(envs)
@@ -74,10 +75,20 @@ func (a *app) cmdRun(args []string) int {
 		a.errorf("%v", err)
 		return ExitUsage
 	}
+	if sel.variant != "" && sel.parser == "" {
+		a.errorf("%v", &selector.VariantWithoutParserError{Variant: sel.variant})
+		return ExitUsage
+	}
 	name, cmdArgs := rest[0], rest[1:]
-	parser := parserKey(name)
+	// The command name is the parser unless the user says otherwise,
+	// which is what makes a wrapper (`jz run --parser dir -- cmd.exe /c
+	// dir`) readable.
+	parser := sel.parser
+	if parser == "" {
+		parser = parserKey(name)
+	}
 
-	reg, code := a.loadRegistry(&rf)
+	reg, code := a.loadRegistry()
 	if code != 0 {
 		return code
 	}
@@ -85,11 +96,11 @@ func (a *app) cmdRun(args []string) int {
 	if len(reg.Variants(parser)) == 0 {
 		return a.exitFor(&selector.UnknownParserError{Parser: parser, Known: reg.Commands()})
 	}
-	if sf.variant != "" {
-		if _, ok := reg.Lookup(parser, sf.variant); !ok {
+	if sel.variant != "" {
+		if _, ok := reg.Lookup(parser, sel.variant); !ok {
 			return a.exitFor(&selector.UnknownVariantError{
 				Parser:    parser,
-				Variant:   sf.variant,
+				Variant:   sel.variant,
 				Available: variantNames(reg.Variants(parser)),
 			})
 		}
@@ -109,7 +120,7 @@ func (a *app) cmdRun(args []string) int {
 		// command gets it: `printf ... | jz run wc` has to reach wc.
 		Stdin:      a.env.Stdin,
 		KeepLocale: keepLocale,
-		MaxOutput:  maxOutput,
+		MaxOutput:  MaxInputSize,
 	}, a.env.Stderr, a.env.Signals)
 	if err != nil {
 		a.errorf("%v", err)
@@ -131,10 +142,11 @@ func (a *app) cmdRun(args []string) int {
 		return res.ExitCode
 	}
 
-	sel, err := selector.Select(reg, selector.Context{
+	// jz ran the command, so it knows the arguments and the system it ran
+	// on; both narrow the variants before the output is checked.
+	chosen, err := selector.Select(reg, selector.Context{
 		Parser:  parser,
-		Variant: sf.variant,
-		Force:   sf.force,
+		Variant: sel.variant,
 		OS:      a.env.GOOS,
 		Args:    cmdArgs,
 		Input:   res.Stdout,
@@ -142,15 +154,11 @@ func (a *app) cmdRun(args []string) int {
 	if err != nil {
 		return a.failedRun(err, res.ExitCode)
 	}
-	data, err := engine.Parse(sel.Entry.Def, res.Stdout, engine.Options{Raw: of.raw, MaxInputSize: maxOutput})
+	data, err := engine.Parse(chosen.Entry.Def, res.Stdout, engine.Options{MaxInputSize: MaxInputSize})
 	if err != nil {
 		return a.failedRun(err, res.ExitCode)
 	}
-	extra := map[string]any{
-		"exit_status": int64(res.ExitCode),
-		"argv":        stringsToAny(append([]string{name}, cmdArgs...)),
-	}
-	if err := emit(a.env.Stdout, data, sel.Entry, &of, extra); err != nil {
+	if err := jsonutil.Encode(a.env.Stdout, data, out.pretty); err != nil {
 		a.errorf("writing output: %v", err)
 		return ExitError
 	}

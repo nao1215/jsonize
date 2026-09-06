@@ -74,18 +74,9 @@ type Entry struct {
 type Registry struct {
 	entries   map[string]*Entry // id -> entry
 	byCommand map[string][]*Entry
-	manifests []LoadedManifest
 	// Problems lists definitions that failed to load. The registry stays
 	// usable; callers decide whether problems are fatal.
 	Problems []error
-}
-
-// LoadedManifest pairs a manifest with its source.
-type LoadedManifest struct {
-	Source   string
-	Manifest Manifest
-	// Count is the number of definitions loaded from the source.
-	Count int
 }
 
 // LoadError is a problem with one definition file.
@@ -125,20 +116,21 @@ func (r *Registry) addSource(src Source) error {
 		}
 		return fmt.Errorf("registry %q: %w", src.Name, err)
 	}
-	lm := LoadedManifest{Source: src.Name}
+	// The manifest is read for its format version: a registry written for
+	// a newer jsonize must be refused rather than half understood.
+	var manifest Manifest
 	if data, err := fs.ReadFile(src.FS, ManifestFile); err == nil {
-		if err := definition.DecodeYAML(data, &lm.Manifest); err != nil {
+		if err := definition.DecodeYAML(data, &manifest); err != nil {
 			return &LoadError{Source: src.Name, Path: ManifestFile, Err: fmt.Errorf("invalid manifest: %w", err)}
 		}
-		if lm.Manifest.Format != definition.CurrentFormat {
-			return &LoadError{Source: src.Name, Path: ManifestFile, Err: &definition.FormatError{Source: ManifestFile, Got: lm.Manifest.Format}}
+		if manifest.Format != definition.CurrentFormat {
+			return &LoadError{Source: src.Name, Path: ManifestFile, Err: &definition.FormatError{Source: ManifestFile, Got: manifest.Format}}
 		}
 	} else if !errors.Is(err, fs.ErrNotExist) {
 		return &LoadError{Source: src.Name, Path: ManifestFile, Err: err}
 	}
 	if _, err := fs.Stat(src.FS, ParsersDir); err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
-			r.manifests = append(r.manifests, lm)
 			return nil
 		}
 		return &LoadError{Source: src.Name, Path: ParsersDir, Err: err}
@@ -170,13 +162,11 @@ func (r *Registry) addSource(src Source) error {
 		}
 		def.Origin = src.Name
 		r.add(&Entry{Def: def, Source: src.Name, Path: p})
-		lm.Count++
 		return nil
 	})
 	if err != nil {
 		return err
 	}
-	r.manifests = append(r.manifests, lm)
 	return nil
 }
 
@@ -229,11 +219,6 @@ func (r *Registry) Entries() []*Entry {
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].Def.ID() < out[j].Def.ID() })
 	return out
-}
-
-// Manifests returns the manifests of the loaded sources in precedence order.
-func (r *Registry) Manifests() []LoadedManifest {
-	return r.manifests
 }
 
 // Len returns the number of distinct definitions.

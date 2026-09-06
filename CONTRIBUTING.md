@@ -20,15 +20,22 @@ need no Go at all; the sections below cover both kinds.
 4. Generate the golden file and check it by eye:
 
    ```console
-   $ make golden-update
+   $ make registry-update-golden
    $ git diff registry/
    ```
 
 5. Run `make test`. The golden test proves that every fixture parses,
    selects its own variant unambiguously and matches its JSON.
 
-Definitions must contain a `detect.signature` whenever a command has more
-than one variant, so that piped input can be classified.
+Every definition needs a `detect.signature`: it is what lets jz accept the
+text as that format and reject anything else. When the shape is too
+generic to be evidence on its own (a number and a path, three numbers),
+add `detect.auto_detect: false` so the definition is only used when the
+user names the parser.
+
+Do not convert a rounded, human-readable number to bytes. The output does
+not record the base, and the value is rounded; keep it as printed and let
+the exact form of the command produce numbers.
 
 ## Contributing code
 
@@ -63,7 +70,6 @@ definition. Additive, optional keys keep the format number.
 ## Releasing
 
 Tag `vX.Y.Z` on `main`. GoReleaser builds the binaries for Linux, macOS
-and Windows, packages the registry as `jsonize-registry.tar.gz` with a
-`.sha256` file and publishes everything to the GitHub release; build
-provenance is attested. `jz registry update` picks the archive up from
-the "latest" release.
+and Windows and publishes them to the GitHub release with build
+provenance attested. The registry ships inside the binary, so a release
+is the unit that carries both the code and the definitions.

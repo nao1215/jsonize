@@ -46,9 +46,6 @@ type Context struct {
 	// Variant names one definition of Parser explicitly. It requires
 	// Parser to be set.
 	Variant string
-	// Force accepts an explicit Variant even when its signature
-	// contradicts the input.
-	Force bool
 	// OS is the operating system that produced the output, when known.
 	OS string
 	// Args are the arguments the command was run with. Nil means unknown,
@@ -118,8 +115,7 @@ type MismatchError struct {
 }
 
 func (e *MismatchError) Error() string {
-	return fmt.Sprintf("%s does not describe this input: %s\npass --force to parse with it anyway",
-		e.Entry.Def.ID(), e.Reason)
+	return fmt.Sprintf("%s does not describe this input: %s", e.Entry.Def.ID(), e.Reason)
 }
 
 // NoMatchError is returned when no definition survives.
@@ -227,10 +223,11 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		if !ok {
 			return nil, &UnknownVariantError{Parser: ctx.Parser, Variant: ctx.Variant, Available: variantNames(candidates)}
 		}
-		if !ctx.Force {
-			if reason, ok := check(e, &ctx, window); !ok {
-				return nil, &MismatchError{Entry: e, Reason: reason}
-			}
+		// A name is not evidence: a variant the user asked for still has
+		// to fit the text. If a definition rejects output it should
+		// accept, the definition is what needs fixing.
+		if reason, ok := check(e, &ctx, window); !ok {
+			return nil, &MismatchError{Entry: e, Reason: reason}
 		}
 		return &Result{Entry: e, Scanned: 1}, nil
 	}

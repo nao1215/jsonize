@@ -23,7 +23,7 @@ internal/selector         variant selection (os / args / signature → specifici
 internal/engine           parse algorithms (table, regex, kv, composite) and field conversion
 internal/convert          scalar conversions (int, float, bool, size with units)
 internal/jsonutil         insertion-ordered JSON object and encoder
-internal/conformance      golden runner shared by `go test` and `jz validate`
+internal/conformance      golden runner shared by `go test` and `make registry-test`
 internal/remote           HTTPS download, checksum, safe extraction, atomic install
 registry/                 the official definitions and fixtures (data) + a one-file embed
 e2e/atago                 end-to-end scenarios
@@ -34,6 +34,22 @@ selector needs only the first lines of the text; the engine needs the
 compiled definition and the whole text; encoding never sees definitions.
 
 ## Decisions and trade-offs
+
+### A small public surface
+
+The command line is three subcommands (`run`, `list`, `version`) and five
+options (`--file`, `--pretty`, `--parser`, `--variant`, `--help`). Every
+option that asked the user to make a decision jz should be making, or
+that changed the output contract, was removed before release:
+
+| Removed | Why |
+|---------|-----|
+| `--raw` | a second output shape for the same input; the typed one is the contract |
+| `--meta` | an envelope that changed the JSON schema depending on a flag |
+| `--os` | asking the user to declare the producing system instead of matching the text; jz knows the system when it runs the command itself |
+| `--force` | a way to parse with a definition whose signature says the text is something else, which is exactly the failure jz exists to prevent |
+| `--max-input` | a safety limit, not a preference: 64 MiB, internal |
+| `--embedded-only`, `--registry` | registry plumbing; `JSONIZE_REGISTRY_PATH` covers the real use and tests inject sources directly |
 
 ### Definitions in YAML rather than Go plugins or a scripting language
 
@@ -80,6 +96,27 @@ lists them in `metadata.compatible`; `df -h` differs between them ("Avail"
 vs "Available") and gets two definitions. This keeps definitions
 honest: a definition claims exactly what its fixtures prove.
 
+### Rounded numbers stay text
+
+`df -h` steps by 1024 and `df -H` by 1000; the output records neither,
+and both round. Deriving bytes from "1.1G" would invent both a base and a
+precision, so human-readable sizes are reported exactly as printed and
+the exact forms of the same commands (`df`, `free`, `ls -l`, `lsblk -b`)
+are what produce numbers. The same reasoning removed the `ls -l` /
+`ls -lh` split: which one produced a listing is not decidable from the
+text, and with the size kept as printed it does not need to be.
+
+### Some formats are only used when named
+
+A signature is a necessary condition, but a weak one can still be met by
+unrelated text: a number, a tab and a path is `du` output and
+`git diff --numstat` alike. Such a definition sets
+`detect.auto_detect: false`, which keeps it out of automatic detection
+while `--parser du` and `jz run du` still reach it, signature check
+included. The alternative, adding exclusion patterns for every other
+format that happens to look similar, is a list that can never be
+finished.
+
 ### Selection never guesses
 
 Candidates are filtered by criteria that apply (a criterion whose input is
@@ -120,14 +157,13 @@ registry to its own repository means changing one import and pointing
 Layering (flags → env → user → cache → embedded) lets a user fix a parser
 locally today and ship it upstream tomorrow with no change in behaviour.
 
-### Update integrity
+### No network, ever
 
-HTTPS + SHA-256 + safe extraction + validation + atomic rename. Signing was
-left out of the MVP: a checksum served next to the archive already
-detects corruption, and a signature only adds value with an independent
-key-distribution channel, which is a release-process decision rather
-than code. The hook is `remote.Options.Validate`; a signature check slots
-in before it.
+jz reads local directories and nothing else. A release carries both the
+code and the definitions, so a given input converts to the same JSON on a
+given machine whatever the network is doing. Updating the official
+registry means installing a new jz; adding your own means pointing
+`JSONIZE_REGISTRY_PATH` at a directory.
 
 ### Format versioning
 
@@ -152,15 +188,14 @@ served by `flag` and a dispatch table, and the `run` subcommand needs
 - Derived fields (computing `uptime_seconds` from `"13 days, 4:30"`).
 - File parsers (`/etc/passwd`, `/proc/*`) — the engine can do them, but
   the `command` key and `jz run` are about commands.
-- Signature verification of registry archives (see above).
+- Fetching or updating registries over the network.
 - A JSON Schema for editor completion of `parser.yaml`; validation is
   done in Go with path-qualified messages instead.
 
 ## Where to cut next
 
-- `registry/` → separate repository; only `remote.DefaultURL` and the
-  `official` import change.
+- `registry/` → separate repository; only the `official` import changes.
 - `internal/definition` + `internal/engine` + `internal/convert` form a
   library with no CLI dependencies and could be exported as a package.
-- `internal/remote` is independent of jsonize and could verify signatures
-  or support multiple named sources without touching the CLI.
+- `internal/selector` and `internal/engine` are independent of the CLI and
+  could be exercised by other front ends.

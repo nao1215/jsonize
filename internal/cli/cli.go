@@ -35,6 +35,12 @@ const (
 
 const flagHelp = "--help"
 
+// MaxInputSize bounds the text jz reads, from a pipe, a file or a
+// command's stdout. It is a safety limit rather than a preference, so it
+// is not a command line option: a runaway producer must not be able to
+// make jz allocate without bound.
+const MaxInputSize = 64 << 20
+
 // Env is the process environment the CLI runs in, injected for tests.
 type Env struct {
 	Stdin  io.Reader
@@ -71,8 +77,8 @@ type command struct {
 
 func commands() []command {
 	return []command{
-		{"run", "run a command and convert its output to JSON", (*app).cmdRun},
-		{"list", "list the supported parsers, or inspect one", (*app).cmdList},
+		{"run", "run a command and convert its stdout to JSON", (*app).cmdRun},
+		{"list", "list supported parsers, or inspect one", (*app).cmdList},
 		{"version", "print the version", (*app).cmdVersion},
 	}
 }
@@ -101,7 +107,6 @@ func Main(args []string, env Env) int {
 				}
 			}
 			a.usage(a.env.Stdout)
-			a.printConvertFlags(a.env.Stdout)
 			return ExitOK
 		case "-v", "--version":
 			return a.cmdVersion(nil)
@@ -114,7 +119,6 @@ func Main(args []string, env Env) int {
 		// Nothing to read and nothing asked for: help beats hanging on a
 		// terminal. Piped and redirected input never take this path.
 		a.usage(a.env.Stdout)
-		a.printConvertFlags(a.env.Stdout)
 		return ExitOK
 	}
 	return a.cmdConvert(args)
@@ -133,10 +137,10 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "jsonize - Turn command output into JSON.")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Usage:")
-	fmt.Fprintln(w, "  COMMAND | jz [flags]              convert piped output; the format is detected")
-	fmt.Fprintln(w, "  jz [flags] < FILE                 convert output captured earlier")
-	fmt.Fprintln(w, "  jz run [flags] COMMAND [args...]  run COMMAND and convert what it prints")
-	fmt.Fprintln(w, "  jz list [COMMAND [VARIANT]]       list the supported parsers, or inspect one")
+	fmt.Fprintln(w, "  COMMAND | jz [options]")
+	fmt.Fprintln(w, "  jz [options] < FILE")
+	fmt.Fprintln(w, "  jz run [options] COMMAND [args...]")
+	fmt.Fprintln(w, "  jz list [COMMAND [VARIANT]]")
 	fmt.Fprintln(w, "  jz version")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Commands:")
@@ -144,25 +148,26 @@ func (a *app) usage(w io.Writer) {
 		fmt.Fprintf(w, "  %-9s %s\n", c.name, c.summary)
 	}
 	fmt.Fprintln(w)
+	fmt.Fprintln(w, "Options:")
+	a.printOptions(w)
+	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Examples:")
 	fmt.Fprintln(w, "  df -h | jz")
 	fmt.Fprintln(w, "  jz run df -h")
-	fmt.Fprintln(w, "  df -h | jz --parser df --variant gnu-human   # when detection is not certain")
+	fmt.Fprintln(w, "  jz --file captured.txt")
+	fmt.Fprintln(w, "  df -h | jz --parser df")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Exit codes: 0 ok, 1 error, 2 usage, 3 parse failure, 4 unidentified or")
 	fmt.Fprintln(w, "ambiguous input, 5 registry problem; `jz run` mirrors the command's own status.")
-	fmt.Fprintln(w)
-	fmt.Fprintln(w, "Run `jz run --help` or `jz list --help` for a subcommand's own flags.")
 }
 
-// printConvertFlags lists the flags of the default (conversion) mode.
-func (a *app) printConvertFlags(w io.Writer) {
-	fmt.Fprintln(w)
-	fmt.Fprintln(w, "Conversion flags (COMMAND | jz):")
-	fs := newFlagSet("jz")
-	bindConvertFlags(fs, &registryFlags{}, &outputFlags{}, &selectFlags{}, &convertOptions{})
-	fs.SetOutput(w)
-	fs.PrintDefaults()
+// printOptions lists the options of the default (conversion) mode, which
+// are the ones the root help is about.
+func (a *app) printOptions(w io.Writer) {
+	o := newOptions("jz")
+	var co convertOptions
+	co.bind(o)
+	o.print(w)
 }
 
 // errorf prints a diagnostic to stderr. Multi-line messages keep the

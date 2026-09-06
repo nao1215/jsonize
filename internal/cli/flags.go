@@ -6,73 +6,130 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"time"
 )
 
-// registryFlags are shared by every mode that loads definitions.
-type registryFlags struct {
-	dirs         stringList
-	embeddedOnly bool
+// optionSet registers command line options and renders them. Both jobs go
+// through the same calls, so the help can never list an option that does
+// not exist or miss one that does, and a short and a long form appear as
+// the single option they are instead of as two entries.
+type optionSet struct {
+	fs   *flag.FlagSet
+	docs []optionDoc
 }
 
-func (f *registryFlags) bind(fs *flag.FlagSet) {
-	fs.Var(&f.dirs, "registry", "additional registry `dir` (repeatable; earlier wins)")
-	fs.BoolVar(&f.embeddedOnly, "embedded-only", false, "ignore the user registry and JSONIZE_REGISTRY_PATH")
+type optionDoc struct {
+	short string // without the dash, empty when there is none
+	long  string // without the dashes
+	arg   string // placeholder for the value, empty for a switch
+	help  string
 }
 
-// outputFlags control JSON emission.
-type outputFlags struct {
-	pretty bool
-	raw    bool
-	meta   bool
-}
-
-func (f *outputFlags) bind(fs *flag.FlagSet) {
-	fs.BoolVar(&f.pretty, "pretty", false, "indent the JSON output")
-	fs.BoolVar(&f.pretty, "p", false, "shorthand for --pretty")
-	fs.BoolVar(&f.raw, "raw", false, "skip type conversion; every value stays a string")
-	fs.BoolVar(&f.raw, "r", false, "shorthand for --raw")
-	fs.BoolVar(&f.meta, "meta", false, "wrap the result with parser, variant and source metadata")
-}
-
-// selectFlags narrow or pin the automatic detection.
-type selectFlags struct {
-	parser  string
-	variant string
-	force   bool
-}
-
-// bind registers the flags shared by both modes. withParser is false for
-// `jz run`, where the command name already names the parser.
-func (f *selectFlags) bind(fs *flag.FlagSet, withParser bool) {
-	if withParser {
-		fs.StringVar(&f.parser, "parser", "", "only consider this parser's variants (a command `name`)")
-	}
-	fs.StringVar(&f.variant, "variant", "", "use this `variant` of the parser")
-	fs.BoolVar(&f.force, "force", false, "parse with the named variant even if its signature does not match the input")
-}
-
-// newFlagSet builds a FlagSet whose usage text is printed by the caller.
-func newFlagSet(name string) *flag.FlagSet {
+func newOptions(name string) *optionSet {
 	fs := flag.NewFlagSet(name, flag.ContinueOnError)
 	fs.SetOutput(io.Discard)
-	return fs
+	return &optionSet{fs: fs}
 }
 
-// parseFlags parses args and prints usage on --help or error. The bool
+func (o *optionSet) doc(short, long, arg, help string) {
+	o.docs = append(o.docs, optionDoc{short: short, long: long, arg: arg, help: help})
+}
+
+// stringOpt registers a string option under its long name and, when given,
+// its short one.
+func (o *optionSet) stringOpt(p *string, long, short, arg, value, help string) {
+	o.fs.StringVar(p, long, value, help)
+	if short != "" {
+		o.fs.StringVar(p, short, value, help)
+	}
+	o.doc(short, long, arg, help)
+}
+
+func (o *optionSet) boolOpt(p *bool, long, short, help string) {
+	o.fs.BoolVar(p, long, false, help)
+	if short != "" {
+		o.fs.BoolVar(p, short, false, help)
+	}
+	o.doc(short, long, "", help)
+}
+
+func (o *optionSet) durationOpt(p *time.Duration, long, arg string, value time.Duration, help string) {
+	o.fs.DurationVar(p, long, value, help)
+	o.doc("", long, arg, help)
+}
+
+func (o *optionSet) listOpt(p *stringList, long, arg, help string) {
+	o.fs.Var(p, long, help)
+	o.doc("", long, arg, help)
+}
+
+// print writes the options as one aligned line each.
+func (o *optionSet) print(w io.Writer) {
+	if len(o.docs) == 0 {
+		return
+	}
+	names := make([]string, len(o.docs))
+	width := 0
+	for i, d := range o.docs {
+		var b strings.Builder
+		if d.short != "" {
+			fmt.Fprintf(&b, "-%s, ", d.short)
+		} else {
+			b.WriteString("    ")
+		}
+		fmt.Fprintf(&b, "--%s", d.long)
+		if d.arg != "" {
+			fmt.Fprintf(&b, " %s", d.arg)
+		}
+		names[i] = b.String()
+		if len(names[i]) > width {
+			width = len(names[i])
+		}
+	}
+	for i, d := range o.docs {
+		fmt.Fprintf(w, "  %-*s  %s\n", width, names[i], d.help)
+	}
+}
+
+// outputOptions control how the JSON is written.
+type outputOptions struct {
+	pretty bool
+}
+
+func (f *outputOptions) bind(o *optionSet) {
+	o.boolOpt(&f.pretty, "pretty", "p", "indent JSON output")
+}
+
+// selectOptions narrow or pin the automatic detection.
+type selectOptions struct {
+	parser  string
+	variant string
+}
+
+func (f *selectOptions) bind(o *optionSet) {
+	o.stringOpt(&f.parser, "parser", "", "NAME", "", "restrict detection to one parser")
+	o.stringOpt(&f.variant, "variant", "", "NAME", "", "use a variant of --parser")
+}
+
+// helpDoc is the line for -h/--help. The flag package answers those names
+// itself, so there is nothing to register.
+func (o *optionSet) helpDoc() {
+	o.doc("h", "help", "", "show help")
+}
+
+// parse reads args and prints usage on --help or on an error. The bool
 // result is true when the caller should return the given exit code.
-func (a *app) parseFlags(fs *flag.FlagSet, args []string, usage string) (int, bool) {
-	err := fs.Parse(args)
+func (a *app) parse(o *optionSet, args []string, usage string) (int, bool) {
+	err := o.fs.Parse(args)
 	if errors.Is(err, flag.ErrHelp) {
 		fmt.Fprint(a.env.Stdout, usage)
-		fs.SetOutput(a.env.Stdout)
-		fs.PrintDefaults()
+		o.print(a.env.Stdout)
 		return ExitOK, true
 	}
 	if err != nil {
 		a.errorf("%v", err)
 		fmt.Fprint(a.env.Stderr, usage)
-		fs.SetOutput(a.env.Stderr)
-		fs.PrintDefaults()
+		o.print(a.env.Stderr)
 		return ExitUsage, true
 	}
 	return 0, false

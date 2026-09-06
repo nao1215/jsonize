@@ -45,6 +45,7 @@ detect:
     none: []                     # none may match
     window: 20                   # lines examined (default 20, max 200)
   priority: 0
+  auto_detect: true              # false = only used when the parser is named
 ```
 
 - `os` is compared with the running OS in exec mode and with `--os` in
@@ -53,7 +54,13 @@ detect:
   `-hT` satisfies `any: ["-h"]`.
 - `signature` expressions are matched against the first `window` lines
   joined with newlines, in multi-line mode (`^`/`$` match line
-  boundaries).
+  boundaries). `\A` anchors at the start of the input.
+- `auto_detect: false` marks a format whose text is not evidence on its
+  own: three numbers in a row, or a number and a path, describe far too
+  many things. Such a definition is skipped by automatic detection and
+  used only when the parser is named (`--parser du`, or `jz run du`),
+  where its signature is still checked. Prefer it to a growing list of
+  `none` expressions excluding every other format that looks similar.
 
 Selection: a candidate whose applicable criterion fails is rejected; the
 remaining candidates are ranked by the number of satisfied criteria, then
@@ -76,8 +83,9 @@ command runs).
 
 ```yaml
 input:
-  ignore: ['^total \d']   # drop matching lines
-  skip_blank: true         # default true
+  record_separator: newline # or nul, for `env -0` style output
+  ignore: ['^total \d']    # drop matching lines
+  skip_blank: true          # default true
   select:                  # applied in this order
     after: '^BEGIN'        # drop up to and including the first match
     until: '^END'          # stop before the first match
@@ -85,9 +93,11 @@ input:
     limit: 50              # keep at most N lines
 ```
 
-Input is split on `\n`; a trailing `\r` is removed from every line and a
-UTF-8 BOM is dropped. Input must be valid UTF-8 and within the size
-limits.
+Input is split on the record separator, a newline by default; a trailing
+`\r` is then removed from every line and a UTF-8 BOM is dropped. With
+`record_separator: nul` the records are separated by NUL bytes instead,
+which is what makes a value containing a newline representable. Input
+must be valid UTF-8 and within the size limits.
 
 ## parse
 
@@ -135,6 +145,25 @@ parse:
   on_mismatch: error | skip # default error
 ```
 
+Several alternatives can be listed instead of one expression, and are
+tried in the order given; the first that matches decides how the line is
+read. This is how a definition treats structurally different lines
+differently without a single expression having to guess:
+
+```yaml
+parse:
+  type: regex
+  patterns:
+    # only a mode starting with "l" makes " -> " a link separator
+    - '^(?P<flags>l\S+)\s+(?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>\S+)\s+(?P<filename>.+)$'
+fields:
+  link_to: {when_missing: omit}
+```
+
+A group that only appears in some alternatives is simply absent from the
+objects the others produce.
+
 `each: line` yields an array with one object per line built from the
 named groups; `each: input` matches the whole (pre-processed) text once
 and yields a single object. Groups that did not participate are `null`
@@ -150,12 +179,15 @@ parse:
   as: list | map          # default list
   key_name: name          # list mode key names
   value_name: value
+  trim: true              # default true
   on_mismatch: error | skip
 ```
 
 `list` yields `[{"name": ..., "value": ...}]`; `map` yields one object
-(later duplicates win). Keys and values are trimmed. `fields` entries are
-looked up by key and applied to the value.
+(later duplicates win). Keys and values are trimmed unless
+`trim: false`, which a format whose values are significant down to the
+space (an environment variable) sets. `fields` entries are looked up by
+key and applied to the value.
 
 ### type: composite
 
@@ -202,7 +234,7 @@ fields:
 | Key | Applies to | Meaning |
 |-----|-----------|---------|
 | `type` | all | `string` (default), `int`, `float`, `bool`, `size`, `array`, `object` |
-| `trim_prefix`, `trim_suffix` | all | removed before conversion |
+| `trim_prefix`, `trim_suffix` | all | removed before conversion; without them a string value keeps its whitespace exactly as the parser produced it |
 | `null_if` | all | values (after trimming) that become `null` |
 | `required` | all | `null`/empty is an error |
 | `when_missing` | all | `null` (default) or `omit` the key when the value is missing |
@@ -213,9 +245,12 @@ fields:
 | `regex`, `fields` | object | named groups become keys; `fields` converts them |
 
 `size` accepts `1024`, `955M`, `3.7G`, `466Gi`, `1.2 MiB`, `0B` and
-returns bytes as an integer (rounded). Nesting is limited to 8 levels.
+returns bytes as an integer (rounded). Use it only where the base is
+certain and the value is not already rounded: a human-readable size
+printed by `df -h` or `ls -lh` is neither, and the official definitions
+keep such values as the strings they were printed as. Nesting is limited
+to 8 levels.
 
-With `--raw`, `fields` is ignored and every value is the trimmed string.
 
 ## Errors
 
@@ -241,7 +276,8 @@ mount/linux: line 7: line does not match pattern /^(?P<filesystem>.+?) on .../: 
 | regular expression | 2048 characters |
 | columns | 256 |
 | composite parts | 32 |
+| regex alternatives | 16 |
 | field nesting | 8 |
 | signature window | 200 lines |
-| input (parse) / stdout (run) | 64 MiB, `--max-input` / `--max-output` |
+| input, and a command's stdout | 64 MiB (internal) |
 | line | 1 MiB |

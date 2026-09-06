@@ -108,13 +108,6 @@ parse:
 	if err == nil || !strings.Contains(err.Error(), "expected at least 7 fields") {
 		t.Fatalf("expected field count error, got %v", err)
 	}
-	raw, err := Parse(def, []byte(input), Options{Raw: true})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !strings.Contains(mustJSON(t, raw), `"type":"Mem:","total":"3861332"`) {
-		t.Errorf("raw mode should keep strings: %s", mustJSON(t, raw))
-	}
 }
 
 func TestParseTableAligned(t *testing.T) {
@@ -601,23 +594,7 @@ func TestLimitsAndEncoding(t *testing.T) {
 	if err != nil || mustJSON(t, got) != `[{"a":"a"},{"a":"b"}]` {
 		t.Errorf("BOM/CRLF: %v %v", mustJSON(t, got), err)
 	}
-	got, err = ParseReader(def, strings.NewReader("x\n"), Options{})
-	if err != nil || mustJSON(t, got) != `[{"a":"x"}]` {
-		t.Errorf("ParseReader: %v %v", mustJSON(t, got), err)
-	}
-	_, err = ParseReader(def, strings.NewReader("toolong"), Options{MaxInputSize: 3})
-	if !errors.Is(err, ErrInputTooLarge) {
-		t.Errorf("ParseReader limit: %v", err)
-	}
-	_, err = ParseReader(def, errReader{}, Options{})
-	if err == nil || !strings.Contains(err.Error(), "reading input") {
-		t.Errorf("ParseReader read error: %v", err)
-	}
 }
-
-type errReader struct{}
-
-func (errReader) Read([]byte) (int, error) { return 0, errors.New("boom") }
 
 func TestParseErrorFormatting(t *testing.T) {
 	t.Parallel()

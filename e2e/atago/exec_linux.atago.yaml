@@ -11,44 +11,40 @@ scenarios:
     only: {os: linux}
     steps:
       - run:
-          command: jz run --meta df
+          command: jz run df
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: gnu }
-              - { path: "$.data[0].mounted_on", matches: "^/" }
-              - { path: "$.data[0].1k_blocks", gte: 0 }
+              - { path: "$[0].mounted_on", matches: "^/" }
+              - { path: "$[0].1k_blocks", gte: 0 }
       - run:
-          command: jz run --meta df -h
+          command: jz run df -h
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: gnu-human }
               # A rounded human-readable size stays as printed.
-              - { path: "$.data[0].size", matches: "^[0-9.]+[KMGTP]?$" }
+              - { path: "$[0].size", matches: "^[0-9.]+[KMGTP]?$" }
 
   - name: procps free, uptime and ps
     only: {os: linux}
     steps:
       - run:
-          command: jz run --meta free
+          command: jz run free
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: gnu }
-              - { path: "$.data[0].type", equals: Mem }
-              - { path: "$.data[0].total", gt: 0 }
+              - { path: "$[0].type", equals: Mem }
+              - { path: "$[0].total", gt: 0 }
       - run:
-          command: jz run --meta free -w
+          command: jz run free -w
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: gnu-wide }
-              - { path: "$.data[0].buffers", gte: 0 }
+              - { path: "$[0].buffers", gte: 0 }
       # wc is too generic for jz to claim on its own, so a run names it.
       - run:
           shell: true
@@ -69,21 +65,19 @@ scenarios:
               - { path: "$.users", gte: 0 }
               - { path: "$.load_1m", gte: 0 }
       - run:
-          command: jz run --meta ps -ef
+          command: jz run ps -ef
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: unix }
-              - { path: "$.data[0].pid", equals: 1 }
+              - { path: "$[0].pid", equals: 1 }
       - run:
-          command: jz run --meta ps aux
+          command: jz run ps aux
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.variant", equals: bsd }
-              - { path: "$.data[0].pid", equals: 1 }
+              - { path: "$[0].pid", equals: 1 }
 
   - name: uname, id, env, mount and du
     only: {os: linux}
@@ -133,14 +127,12 @@ scenarios:
     steps:
       - run:
           shell: true
-          command: LC_ALL=C df | jz --meta
+          command: LC_ALL=C df | jz
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.parser", equals: df }
-              - { path: "$.variant", equals: gnu }
-              - { path: "$.data[0].mounted_on", matches: "^/" }
+              - { path: "$[0].mounted_on", matches: "^/" }
       - run:
           shell: true
           command: LC_ALL=C uname -a | jz
@@ -157,10 +149,9 @@ scenarios:
             json: { path: "$.uid.id", gte: 0 }
       - run:
           shell: true
-          command: LC_ALL=C free | jz --meta
+          command: LC_ALL=C free | jz
       - assert:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.parser", equals: free }
-              - { path: "$.data[0].type", equals: Mem }
+              - { path: "$[0].type", equals: Mem }
