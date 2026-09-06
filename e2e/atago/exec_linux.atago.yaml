@@ -240,3 +240,20 @@ scenarios:
       - assert:
           exit_code: 4
           stdout: {empty: true}
+
+  # Several operands mean several records. A definition that read only the
+  # first block would drop the rest without saying so.
+  - name: stat -f reports every filesystem it was asked about
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run stat -f / /tmp
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].file.name", equals: "/" }
+              - { path: "$[1].file.name", equals: /tmp }
+              - { path: "$[0].blocks.total", gt: 0 }
