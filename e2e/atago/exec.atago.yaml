@@ -1,12 +1,12 @@
 version: "1"
 
 suite:
-  name: jz run (exec mode)
+  name: jz run - executing the command
 
-# Exec-mode contracts that do not depend on which df/ps implementation the
-# host has: a shell script stands in for the target command. Windows has
-# no /bin/sh, so these scenarios are POSIX-only; pipe.atago.yaml covers the
-# parsing itself everywhere.
+# Contracts that do not depend on which df/ps implementation the host
+# has: a shell script stands in for the target command. Windows has no
+# /bin/sh, so these are POSIX-only; detect.atago.yaml covers parsing
+# everywhere and exec_linux/exec_darwin run the real binaries.
 scenarios:
   - name: the command runs without a shell and its stdout becomes JSON
     skip: {os: windows}
@@ -17,6 +17,7 @@ scenarios:
             format: 1
             command: sh
             variant: default
+            detect: {signature: {all: ['^[A-Za-z_][A-Za-z0-9_]*=']}}
             parse: {type: kv}
             fields:
               n: {type: int}
@@ -28,10 +29,10 @@ scenarios:
             empty: true
           stdout:
             json:
-              - { path: "$.command", equals: sh }
+              - { path: "$.parser", equals: sh }
+              - { path: "$.variant", equals: default }
               - { path: "$.exit_status", equals: 0 }
               - { path: "$.argv[0]", equals: sh }
-              - { path: "$.argv[2]", equals: "echo n=42; echo lc=$LC_ALL" }
               - { path: "$.data[0].value", equals: 42 }
               - { path: "$.data[1].value", equals: C }
 
@@ -44,6 +45,7 @@ scenarios:
             format: 1
             command: sh
             variant: default
+            detect: {signature: {all: ['^[A-Za-z_][A-Za-z0-9_]*=']}}
             parse: {type: kv}
       - run:
           command: jz run --registry reg -- sh -c 'echo a=b; echo warning >&2'
@@ -54,7 +56,7 @@ scenarios:
           stdout:
             json: { path: "$", length: 1 }
 
-  - name: a failing command keeps its exit status while its output is still parsed
+  - name: a failing command keeps its status while its output is still parsed
     skip: {os: windows}
     steps:
       - fixture:
@@ -63,6 +65,7 @@ scenarios:
             format: 1
             command: sh
             variant: default
+            detect: {signature: {all: ['^[A-Za-z_][A-Za-z0-9_]*=']}}
             parse: {type: kv}
       - run:
           command: jz run --registry reg -- sh -c 'echo a=b; exit 7'
@@ -88,6 +91,7 @@ scenarios:
             format: 1
             command: sh
             variant: default
+            detect: {signature: {all: ['=']}}
             parse: {type: kv}
       - run:
           command: jz run --registry reg -- sh -c 'kill -TERM $$'
@@ -105,6 +109,7 @@ scenarios:
             format: 1
             command: sh
             variant: default
+            detect: {signature: {all: ['=']}}
             parse: {type: kv}
       - run:
           command: jz run --registry reg --timeout 300ms -- sh -c 'exec sleep 30'
@@ -114,6 +119,40 @@ scenarios:
           stderr:
             contains: timeout of 300ms reached
 
+  - name: output that does not match the signature fails instead of being mis-parsed
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            detect: {signature: {all: ['^[A-Za-z_][A-Za-z0-9_]*=']}}
+            parse: {type: kv}
+      - run:
+          command: jz run --registry reg -- sh -c 'echo unexpected output'
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: no sh variant matches this input
+      # Knowing the command name is not a licence to ignore the signature,
+      # and neither is naming the variant; --force is the explicit escape.
+      - run:
+          command: jz run --registry reg --variant default -- sh -c 'echo unexpected output'
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: does not describe this input
+      - run:
+          command: jz run --registry reg --variant default --force -- sh -c 'echo unexpected output'
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+
   - name: an unknown command is refused before anything is executed
     skip: {os: windows}
     steps:
@@ -122,13 +161,13 @@ scenarios:
       - assert:
           exit_code: 4
           stderr:
-            contains: no parser definition for command "sh"
+            contains: no parser for "sh"
       - assert:
           dir:
             path: "${workdir}"
             not_contains: [marker]
 
-  - name: arguments are passed verbatim, including ones that look like jz flags
+  - name: an unknown variant is refused before anything is executed
     skip: {os: windows}
     steps:
       - fixture:
@@ -139,11 +178,61 @@ scenarios:
             variant: default
             parse: {type: kv}
       - run:
-          command: jz run --registry reg sh -c 'echo args="$*"' sh --pretty --variant x
+          command: jz run --registry reg --variant nope -- sh -c 'echo executed > marker'
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: has no variant "nope"
+      - assert:
+          dir:
+            path: "${workdir}"
+            not_contains: [marker]
+
+  - name: jz flags stop at the command name
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            detect: {signature: {all: ['^args=']}}
+            parse: {type: kv}
+      # A flag before the command is jz's: the output is indented.
+      - run:
+          command: jz run --registry reg --pretty sh -c 'echo "args=$*"' sh -h
       - assert:
           exit_code: 0
           stdout:
-            json: { path: "$[0].value", equals: "--pretty --variant x" }
+            contains: "\n  {"
+      - assert:
+          stdout:
+            json: { path: "$[0].value", equals: "-h" }
+      # The same flag after the command belongs to the command.
+      - run:
+          command: jz run --registry reg sh -c 'echo "args=$*"' sh --pretty --parser
+      - assert:
+          exit_code: 0
+          stdout:
+            not_contains: "\n  {"
+      - assert:
+          stdout:
+            json: { path: "$[0].value", equals: "--pretty --parser" }
+      # -- states the boundary explicitly.
+      - run:
+          command: jz run --registry reg -- sh -c 'echo "args=$*"' sh --pretty --variant
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].value", equals: "--pretty --variant" }
+      # A -- after the command is the command's own argument.
+      - run:
+          command: jz run --registry reg sh -c 'echo "args=$*"' sh -- --literal
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].value", equals: "-- --literal" }
 
   - name: --keep-locale inherits the caller's locale
     skip: {os: windows}
@@ -154,6 +243,7 @@ scenarios:
             format: 1
             command: sh
             variant: default
+            detect: {signature: {all: ['^[A-Za-z_][A-Za-z0-9_]*=']}}
             parse: {type: kv}
       - run:
           command: jz run --registry reg --keep-locale -- sh -c 'echo lc=${LC_ALL:-inherited}'
@@ -163,3 +253,15 @@ scenarios:
           exit_code: 0
           stdout:
             json: { path: "$[0].value", equals: inherited }
+
+  - name: run with no command is a usage error
+    skip: {os: windows}
+    steps:
+      - run:
+          command: jz run
+      - assert:
+          exit_code: 2
+          stdout:
+            empty: true
+          stderr:
+            contains: no command given

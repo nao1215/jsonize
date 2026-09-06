@@ -25,155 +25,358 @@ func buildRegistry(t *testing.T, defs map[string]string) *registry.Registry {
 	return reg
 }
 
-func dfReg(t *testing.T) *registry.Registry {
+func def(command, variant, detect string) string {
+	return "format: 1\ncommand: " + command + "\nvariant: " + variant + "\n" + detect + "parse: {type: kv}\n"
+}
+
+// The fixture registry mixes variants of one command with definitions of
+// other commands, which is what makes cross-command detection testable.
+func testRegistry(t *testing.T) *registry.Registry {
 	t.Helper()
 	return buildRegistry(t, map[string]string{
-		"df/gnu":           "format: 1\ncommand: df\nvariant: gnu\ndetect:\n  os: [linux]\n  args: {none: ['-h']}\n  signature: {all: ['^Filesystem\\s+1K-blocks']}\nparse: {type: kv}\n",
-		"df/gnu-human":     "format: 1\ncommand: df\nvariant: gnu-human\ndetect:\n  os: [linux]\n  args: {any: ['-h', '--human-readable']}\n  signature: {all: ['^Filesystem\\s+Size\\s+Used\\s+Avail\\s']}\nparse: {type: kv}\n",
-		"df/bsd":           "format: 1\ncommand: df\nvariant: bsd\ndetect:\n  os: [darwin, freebsd]\n  signature: {all: ['^Filesystem\\s+512-blocks']}\nparse: {type: kv}\n",
-		"df/busybox-human": "format: 1\ncommand: df\nvariant: busybox-human\ndetect:\n  os: [linux]\n  args: {any: ['-h']}\n  signature: {all: ['^Filesystem\\s+Size\\s+Used\\s+Available\\s']}\nparse: {type: kv}\n",
+		"df/gnu":       def("df", "gnu", "detect:\n  os: [linux]\n  args: {none: ['-h']}\n  signature: {all: ['^Filesystem\\s+1K-blocks']}\n"),
+		"df/gnu-human": def("df", "gnu-human", "detect:\n  os: [linux]\n  args: {any: ['-h']}\n  signature: {all: ['^Filesystem\\s+Size\\s+Used\\s+Avail\\s']}\n"),
+		"df/bsd":       def("df", "bsd", "detect:\n  os: [darwin]\n  signature: {all: ['^Filesystem\\s+512-blocks']}\n"),
+		"mount/linux":  def("mount", "linux", "detect:\n  os: [linux]\n  signature: {all: [' on .* type \\S+ \\(']}\n"),
+		"env/posix":    def("env", "posix", ""),
 	})
 }
 
-func TestSelectBySignatureInPipeMode(t *testing.T) {
+const (
+	gnuDF   = "Filesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs              1000       0      1000   0% /run\n"
+	humanDF = "Filesystem      Size  Used Avail Use% Mounted on\ntmpfs           1.0G     0  1.0G   0% /run\n"
+	bsdDF   = "Filesystem   512-blocks  Used Available Capacity iused ifree %iused Mounted on\n/dev/disk1s1  100 10 90 10% 1 2 0% /\n"
+	mounted = "tmpfs on /run type tmpfs (rw,nosuid)\n"
+)
+
+func TestSelectAutomatic(t *testing.T) {
 	t.Parallel()
-	reg := dfReg(t)
+	reg := testRegistry(t)
 	tests := []struct {
 		name  string
 		input string
 		want  string
 	}{
-		{"gnu", "Filesystem     1K-blocks Used Available Use% Mounted on\n", "gnu"},
-		{"gnu -h", "Filesystem  Size  Used Avail Use% Mounted on\n", "gnu-human"},
-		{"bsd", "Filesystem  512-blocks Used Available Capacity iused ifree %iused Mounted on\n", "bsd"},
-		{"busybox -h", "Filesystem                Size      Used Available Use% Mounted on\n", "busybox-human"},
-		{"crlf+bom", "\xEF\xBB\xBFFilesystem     1K-blocks Used\r\n", "gnu"},
+		{"one variant of one command", gnuDF, "df/gnu"},
+		{"another variant of the same command", humanDF, "df/gnu-human"},
+		{"a variant of a different OS", bsdDF, "df/bsd"},
+		{"a different command entirely", mounted, "mount/linux"},
+		{"CRLF and a BOM do not hide the header", "\xEF\xBB\xBFFilesystem     1K-blocks Used\r\ntmpfs 1 2\r\n", "df/gnu"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			res, err := Select(reg, Context{Command: "df", Input: []byte(tt.input)})
+			res, err := Select(reg, Context{Input: []byte(tt.input)})
 			if err != nil {
-				t.Fatal(err)
+				t.Fatalf("Select: %v", err)
 			}
-			if res.Entry.Def.Variant != tt.want {
-				t.Errorf("selected %s, want %s", res.Entry.Def.Variant, tt.want)
+			if res.Entry.Def.ID() != tt.want {
+				t.Errorf("selected %s, want %s", res.Entry.Def.ID(), tt.want)
 			}
-			if len(res.Evaluations) != 4 {
-				t.Errorf("evaluations = %d", len(res.Evaluations))
+			if res.Scanned != 5 {
+				t.Errorf("Scanned = %d, want 5", res.Scanned)
 			}
 		})
 	}
 }
 
-func TestSelectRejections(t *testing.T) {
+func TestSelectNoMatch(t *testing.T) {
 	t.Parallel()
-	reg := dfReg(t)
-	// OS contradicts the signature: gnu needs linux.
-	_, err := Select(reg, Context{Command: "df", OS: "darwin", Input: []byte("Filesystem 1K-blocks Used\n")})
-	var nm *NoMatchError
-	if !errors.As(err, &nm) {
-		t.Fatalf("expected NoMatchError, got %v", err)
+	reg := testRegistry(t)
+	for _, input := range []string{"", "   \n\t\n", "this is not a filesystem table\n", "\xff\xfe\x00binary\n", "Filesystem\n"} {
+		_, err := Select(reg, Context{Input: []byte(input)})
+		var nm *NoMatchError
+		if !errors.As(err, &nm) {
+			t.Fatalf("input %q: expected NoMatchError, got %v", input, err)
+		}
+		msg := err.Error()
+		for _, want := range []string{"unable to identify the input format", "--parser", "jz list"} {
+			if !strings.Contains(msg, want) {
+				t.Errorf("input %q: message missing %q:\n%s", input, want, msg)
+			}
+		}
+		// The whole-registry message must stay short instead of dumping
+		// one rejection per definition.
+		if strings.Count(msg, "\n") > 6 {
+			t.Errorf("message too long:\n%s", msg)
+		}
+	}
+}
+
+func TestSelectAmbiguous(t *testing.T) {
+	t.Parallel()
+	// Two commands whose signatures both match the same text.
+	reg := buildRegistry(t, map[string]string{
+		"alpha/default": def("alpha", "default", "detect: {signature: {all: ['^HEADER']}}\n"),
+		"beta/default":  def("beta", "default", "detect: {signature: {all: ['HEADER']}}\n"),
+	})
+	_, err := Select(reg, Context{Input: []byte("HEADER x\n")})
+	var am *AmbiguousError
+	if !errors.As(err, &am) {
+		t.Fatalf("expected AmbiguousError, got %v", err)
 	}
 	msg := err.Error()
-	for _, want := range []string{"gnu: os darwin is not one of [linux]", "bsd: os darwin matched; signature all[0]", "--variant"} {
+	for _, want := range []string{"input matches multiple parsers", "alpha/default", "beta/default", "--parser alpha"} {
 		if !strings.Contains(msg, want) {
 			t.Errorf("message missing %q:\n%s", want, msg)
 		}
 	}
-	// exec mode: args exclude gnu when -h is given even if signature matched.
-	_, err = Select(reg, Context{Command: "df", OS: "linux", Args: []string{"-hT"}, Input: []byte("Filesystem 1K-blocks Used\n")})
-	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "argument -h excludes this variant") {
-		t.Errorf("args none: %v", err)
+	// Two variants of the same command: the message talks about variants.
+	reg = buildRegistry(t, map[string]string{
+		"df/a": def("df", "a", "detect: {signature: {all: ['^HEADER']}}\n"),
+		"df/b": def("df", "b", "detect: {signature: {all: ['HEADER']}}\n"),
+	})
+	_, err = Select(reg, Context{Input: []byte("HEADER x\n")})
+	if !errors.As(err, &am) || !strings.Contains(err.Error(), "multiple df variants") || !strings.Contains(err.Error(), "--variant a") {
+		t.Errorf("same-command ambiguity: %v", err)
 	}
-	// exec mode: gnu-human requires -h.
-	_, err = Select(reg, Context{Command: "df", OS: "linux", Args: []string{}, Input: []byte("Filesystem Size Used Avail Use% Mounted on\n")})
-	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "none of the arguments [-h, --human-readable] were given") {
-		t.Errorf("args any: %v", err)
+	// Naming the parser does not help when both variants match; naming
+	// the variant does.
+	if _, err := Select(reg, Context{Parser: "df", Input: []byte("HEADER x\n")}); !errors.As(err, &am) {
+		t.Errorf("--parser alone should stay ambiguous: %v", err)
 	}
-	// exec mode success with bundled flag.
-	res, err := Select(reg, Context{Command: "df", OS: "linux", Args: []string{"-hP"}, Input: []byte("Filesystem Size Used Avail Use% Mounted on\n")})
-	if err != nil || res.Entry.Def.Variant != "gnu-human" {
-		t.Errorf("bundled flag: %v %v", res, err)
-	}
-	// empty input: signatures fail.
-	if _, err := Select(reg, Context{Command: "df"}); !errors.As(err, &nm) {
-		t.Errorf("empty input: %v", err)
-	}
-}
-
-func TestSelectUnknownCommandAndVariant(t *testing.T) {
-	t.Parallel()
-	reg := dfReg(t)
-	_, err := Select(reg, Context{Command: "dg"})
-	var uc *UnknownCommandError
-	if !errors.As(err, &uc) || !strings.Contains(err.Error(), "did you mean df") {
-		t.Errorf("unknown command: %v", err)
-	}
-	_, err = Select(reg, Context{Command: "zzzzzz"})
-	if !errors.As(err, &uc) || strings.Contains(err.Error(), "did you mean") {
-		t.Errorf("no suggestion expected: %v", err)
-	}
-	_, err = Select(reg, Context{Command: "df", Variant: "solaris"})
-	var uv *UnknownVariantError
-	if !errors.As(err, &uv) || !strings.Contains(err.Error(), "available: bsd, busybox-human, gnu, gnu-human") {
-		t.Errorf("unknown variant: %v", err)
-	}
-	res, err := Select(reg, Context{Command: "df", Variant: "bsd"})
-	if err != nil || res.Entry.Def.Variant != "bsd" || res.Evaluations[0].Reasons[0] != "selected with --variant" {
+	res, err := Select(reg, Context{Parser: "df", Variant: "b", Input: []byte("HEADER x\n")})
+	if err != nil || res.Entry.Def.Variant != "b" {
 		t.Errorf("explicit variant: %v %v", res, err)
 	}
 }
 
-func TestSelectSpecificityPriorityAmbiguity(t *testing.T) {
+func TestPriorityBreaksTiesWithinOneCommandOnly(t *testing.T) {
 	t.Parallel()
-	reg := buildRegistry(t, map[string]string{
-		"x/catch-all": "format: 1\ncommand: x\nvariant: catch-all\nparse: {type: kv}\n",
-		"x/sig":       "format: 1\ncommand: x\nvariant: sig\ndetect: {signature: {any: ['^HEADER']}}\nparse: {type: kv}\n",
-		"x/sig-os":    "format: 1\ncommand: x\nvariant: sig-os\ndetect: {os: [linux], signature: {any: ['^HEADER']}}\nparse: {type: kv}\n",
+	same := buildRegistry(t, map[string]string{
+		"df/general":  def("df", "general", "detect: {signature: {all: ['HEADER']}}\n"),
+		"df/specific": def("df", "specific", "detect: {priority: 10, signature: {all: ['HEADER']}}\n"),
 	})
-	// Pipe mode, unknown OS: sig (1) beats catch-all (0); sig-os also 1 -> tie -> ambiguous.
-	_, err := Select(reg, Context{Command: "x", Input: []byte("HEADER\n")})
-	var amb *AmbiguousError
-	if !errors.As(err, &amb) || !strings.Contains(err.Error(), "variants sig, sig-os") {
-		t.Fatalf("expected ambiguity, got %v", err)
+	res, err := Select(same, Context{Input: []byte("HEADER\n")})
+	if err != nil || res.Entry.Def.Variant != "specific" {
+		t.Errorf("priority within a command: %v %v", res, err)
 	}
-	// With OS known, sig-os (2) wins.
-	res, err := Select(reg, Context{Command: "x", OS: "linux", Input: []byte("HEADER\n")})
-	if err != nil || res.Entry.Def.Variant != "sig-os" {
-		t.Errorf("os tie-break: %v %v", res, err)
-	}
-	// Non-matching input: only the catch-all survives.
-	res, err = Select(reg, Context{Command: "x", Input: []byte("other\n")})
-	if err != nil || res.Entry.Def.Variant != "catch-all" {
-		t.Errorf("catch-all: %v %v", res, err)
-	}
-	// Priority breaks a tie.
-	reg2 := buildRegistry(t, map[string]string{
-		"y/a": "format: 1\ncommand: y\nvariant: a\ndetect: {priority: 5, signature: {any: ['^H']}}\nparse: {type: kv}\n",
-		"y/b": "format: 1\ncommand: y\nvariant: b\ndetect: {signature: {any: ['^H']}}\nparse: {type: kv}\n",
+	// Equal priorities stay ambiguous.
+	equal := buildRegistry(t, map[string]string{
+		"df/a": def("df", "a", "detect: {priority: 5, signature: {all: ['HEADER']}}\n"),
+		"df/b": def("df", "b", "detect: {priority: 5, signature: {all: ['HEADER']}}\n"),
 	})
-	res, err = Select(reg2, Context{Command: "y", Input: []byte("H\n")})
-	if err != nil || res.Entry.Def.Variant != "a" {
-		t.Errorf("priority: %v %v", res, err)
+	if _, err := Select(equal, Context{Input: []byte("HEADER\n")}); err == nil {
+		t.Error("equal priorities must stay ambiguous")
+	}
+	// Priority never ranks different commands against each other.
+	cross := buildRegistry(t, map[string]string{
+		"alpha/x": def("alpha", "x", "detect: {priority: 10, signature: {all: ['HEADER']}}\n"),
+		"beta/y":  def("beta", "y", "detect: {signature: {all: ['HEADER']}}\n"),
+	})
+	var am *AmbiguousError
+	if _, err := Select(cross, Context{Input: []byte("HEADER\n")}); !errors.As(err, &am) {
+		t.Errorf("cross-command priority must not decide: %v", err)
 	}
 }
 
-func TestSignatureNoneAndAllArgs(t *testing.T) {
+func TestDefinitionWithoutSignature(t *testing.T) {
 	t.Parallel()
-	reg := buildRegistry(t, map[string]string{
-		"z/a": "format: 1\ncommand: z\nvariant: a\ndetect: {args: {all: ['-a', '-b']}, signature: {none: ['FORBIDDEN'], window: 2}}\nparse: {type: kv}\n",
+	reg := testRegistry(t)
+	// env/posix has no signature: it is invisible to automatic detection.
+	_, err := Select(reg, Context{Input: []byte("HOME=/root\nSHELL=/bin/sh\n")})
+	var nm *NoMatchError
+	if !errors.As(err, &nm) {
+		t.Fatalf("expected NoMatchError, got %v", err)
+	}
+	// Naming the parser makes it usable, and the rejection reason says so.
+	res, err := Select(reg, Context{Parser: "env", Input: []byte("HOME=/root\n")})
+	if err != nil || res.Entry.Def.ID() != "env/posix" {
+		t.Fatalf("--parser env: %v %v", res, err)
+	}
+	// Within a parser scope a signature-less variant is a candidate, so it
+	// becomes ambiguous as soon as a sibling also matches. That is why
+	// every variant of a multi-variant command should carry a signature.
+	reg2 := buildRegistry(t, map[string]string{
+		"env/posix": def("env", "posix", ""),
+		"env/other": def("env", "other", "detect: {signature: {all: ['^NOPE']}}\n"),
 	})
-	if _, err := Select(reg, Context{Command: "z", Args: []string{"-a"}, Input: []byte("ok\n")}); err == nil || !strings.Contains(err.Error(), "argument -b was not given") {
+	res, err = Select(reg2, Context{Parser: "env", Input: []byte("x\n")})
+	if err != nil || res.Entry.Def.Variant != "posix" {
+		t.Errorf("the only candidate wins: %v %v", res, err)
+	}
+	var am *AmbiguousError
+	if _, err := Select(reg2, Context{Parser: "env", Input: []byte("NOPE\n")}); !errors.As(err, &am) {
+		t.Errorf("a matching sibling makes it ambiguous: %v", err)
+	}
+	// Per-variant rejection reasons are listed when the scope is one parser.
+	reg3 := buildRegistry(t, map[string]string{
+		"env/one": def("env", "one", "detect: {signature: {all: ['^NOPE']}}\n"),
+		"env/two": def("env", "two", "detect: {signature: {all: ['^ALSO NOPE']}}\n"),
+	})
+	_, err = Select(reg3, Context{Parser: "env", Input: []byte("x\n")})
+	if err == nil || !strings.Contains(err.Error(), "signature all[0]") || !strings.Contains(err.Error(), "no env variant matches") {
+		t.Errorf("per-variant rejections: %v", err)
+	}
+}
+
+func TestSelectWithParserScope(t *testing.T) {
+	t.Parallel()
+	reg := testRegistry(t)
+	res, err := Select(reg, Context{Parser: "df", Input: []byte(gnuDF)})
+	if err != nil || res.Entry.Def.ID() != "df/gnu" || res.Scanned != 3 {
+		t.Errorf("scoped select: %v %v", res, err)
+	}
+	// A parser scope does not excuse a signature mismatch.
+	_, err = Select(reg, Context{Parser: "df", Input: []byte(mounted)})
+	var nm *NoMatchError
+	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "no df variant matches") {
+		t.Errorf("scoped mismatch: %v", err)
+	}
+	if !strings.Contains(err.Error(), "--parser df --variant") {
+		t.Errorf("scoped hint: %v", err)
+	}
+}
+
+func TestExplicitVariantIsVerifiedUnlessForced(t *testing.T) {
+	t.Parallel()
+	reg := testRegistry(t)
+	_, err := Select(reg, Context{Parser: "df", Variant: "bsd", Input: []byte(gnuDF)})
+	var me *MismatchError
+	if !errors.As(err, &me) {
+		t.Fatalf("expected MismatchError, got %v", err)
+	}
+	if !strings.Contains(err.Error(), "df/bsd does not describe this input") || !strings.Contains(err.Error(), "--force") {
+		t.Errorf("message: %v", err)
+	}
+	res, err := Select(reg, Context{Parser: "df", Variant: "bsd", Force: true, Input: []byte(gnuDF)})
+	if err != nil || res.Entry.Def.ID() != "df/bsd" {
+		t.Errorf("--force: %v %v", res, err)
+	}
+	// A variant whose OS does not match is a mismatch too.
+	_, err = Select(reg, Context{Parser: "df", Variant: "bsd", OS: "linux", Input: []byte(bsdDF)})
+	if !errors.As(err, &me) || !strings.Contains(err.Error(), "written for darwin, not linux") {
+		t.Errorf("os mismatch: %v", err)
+	}
+}
+
+func TestSelectErrorsForUnknownNames(t *testing.T) {
+	t.Parallel()
+	reg := testRegistry(t)
+	var up *UnknownParserError
+	_, err := Select(reg, Context{Parser: "dg", Input: []byte(gnuDF)})
+	if !errors.As(err, &up) || !strings.Contains(err.Error(), "did you mean df") {
+		t.Errorf("unknown parser: %v", err)
+	}
+	_, err = Select(reg, Context{Parser: "zzzzzz", Input: nil})
+	if !errors.As(err, &up) || strings.Contains(err.Error(), "did you mean") {
+		t.Errorf("no suggestion expected: %v", err)
+	}
+	var uv *UnknownVariantError
+	_, err = Select(reg, Context{Parser: "df", Variant: "solaris", Input: []byte(gnuDF)})
+	if !errors.As(err, &uv) || !strings.Contains(err.Error(), "available: bsd, gnu, gnu-human") {
+		t.Errorf("unknown variant: %v", err)
+	}
+	var vp *VariantWithoutParserError
+	_, err = Select(reg, Context{Variant: "gnu", Input: []byte(gnuDF)})
+	if !errors.As(err, &vp) || !strings.Contains(err.Error(), "needs --parser") {
+		t.Errorf("variant without parser: %v", err)
+	}
+}
+
+func TestOSAndArgsAreHardFilters(t *testing.T) {
+	t.Parallel()
+	reg := testRegistry(t)
+	// The OS hint removes a candidate that would otherwise match.
+	_, err := Select(reg, Context{OS: "darwin", Input: []byte(gnuDF)})
+	var nm *NoMatchError
+	if !errors.As(err, &nm) {
+		t.Errorf("os filter: %v", err)
+	}
+	res, err := Select(reg, Context{OS: "linux", Input: []byte(gnuDF)})
+	if err != nil || res.Entry.Def.ID() != "df/gnu" {
+		t.Errorf("matching os: %v %v", res, err)
+	}
+	// Arguments are known only when jz ran the command itself.
+	_, err = Select(reg, Context{Parser: "df", OS: "linux", Args: []string{"-hT"}, Input: []byte(gnuDF)})
+	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "excluded by the argument -h") {
+		t.Errorf("args none: %v", err)
+	}
+	res, err = Select(reg, Context{Parser: "df", OS: "linux", Args: []string{"-hP"}, Input: []byte(humanDF)})
+	if err != nil || res.Entry.Def.Variant != "gnu-human" {
+		t.Errorf("bundled flag: %v %v", res, err)
+	}
+	_, err = Select(reg, Context{Parser: "df", OS: "linux", Args: []string{}, Input: []byte(humanDF)})
+	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "needs one of the arguments [-h]") {
+		t.Errorf("args any: %v", err)
+	}
+	all := buildRegistry(t, map[string]string{
+		"z/a": def("z", "a", "detect: {args: {all: ['-a', '-b']}, signature: {all: ['ok']}}\n"),
+	})
+	_, err = Select(all, Context{Parser: "z", Args: []string{"-a"}, Input: []byte("ok\n")})
+	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "needs the argument -b") {
 		t.Errorf("args all: %v", err)
 	}
-	if _, err := Select(reg, Context{Command: "z", Args: []string{"-ab"}, Input: []byte("x\nFORBIDDEN\n")}); err == nil || !strings.Contains(err.Error(), "none[0]") {
-		t.Errorf("signature none: %v", err)
+}
+
+func TestSignatureAnyNoneAndWindow(t *testing.T) {
+	t.Parallel()
+	reg := buildRegistry(t, map[string]string{
+		"z/a": def("z", "a", "detect: {signature: {any: ['^A', '^B'], none: ['FORBIDDEN'], window: 2}}\n"),
+	})
+	if _, err := Select(reg, Context{Input: []byte("A\n")}); err != nil {
+		t.Errorf("any: %v", err)
 	}
-	// Window of 2 lines: FORBIDDEN on line 3 is not seen.
-	res, err := Select(reg, Context{Command: "z", Args: []string{"-ab"}, Input: []byte("x\ny\nFORBIDDEN\n")})
-	if err != nil || res.Entry.Def.Variant != "a" {
-		t.Errorf("window: %v %v", res, err)
+	if _, err := Select(reg, Context{Input: []byte("C\n")}); err == nil || !strings.Contains(err.Error(), "unable to identify") {
+		t.Errorf("any mismatch: %v", err)
+	}
+	if _, err := Select(reg, Context{Parser: "z", Input: []byte("C\n")}); err == nil || !strings.Contains(err.Error(), "no signature any[] expression matched") {
+		t.Errorf("any mismatch reason: %v", err)
+	}
+	if _, err := Select(reg, Context{Parser: "z", Input: []byte("A\nFORBIDDEN\n")}); err == nil || !strings.Contains(err.Error(), "none[0]") {
+		t.Errorf("none: %v", err)
+	}
+	// The window bounds how far a signature can look.
+	if _, err := Select(reg, Context{Input: []byte("A\nx\nFORBIDDEN\n")}); err != nil {
+		t.Errorf("window: %v", err)
+	}
+}
+
+func TestLeadingNoiseAndHeaderPosition(t *testing.T) {
+	t.Parallel()
+	reg := testRegistry(t)
+	// A warning line before the header does not hide it.
+	noisy := "df: /run/user/1000/gvfs: Permission denied\n" + gnuDF
+	res, err := Select(reg, Context{Input: []byte(noisy)})
+	if err != nil || res.Entry.Def.ID() != "df/gnu" {
+		t.Errorf("leading warning: %v %v", res, err)
+	}
+	// A header further down is still inside the default window.
+	buried := strings.Repeat("warning\n", 10) + gnuDF
+	if _, err := Select(reg, Context{Input: []byte(buried)}); err != nil {
+		t.Errorf("buried header: %v", err)
+	}
+	// Beyond the window it is not, and that is a refusal rather than a guess.
+	tooFar := strings.Repeat("warning\n", 60) + gnuDF
+	if _, err := Select(reg, Context{Input: []byte(tooFar)}); err == nil {
+		t.Error("a header beyond the window must not be found")
+	}
+	// Case matters: signatures are literal about the header text.
+	if _, err := Select(reg, Context{Input: []byte(strings.ToUpper(gnuDF))}); err == nil {
+		t.Error("upper-cased header must not match")
+	}
+}
+
+func TestShadowingChangesTheCandidateSet(t *testing.T) {
+	t.Parallel()
+	lower := fstest.MapFS{
+		"parsers/df/gnu/parser.yaml": &fstest.MapFile{Data: []byte(def("df", "gnu", "detect: {signature: {all: ['^Filesystem\\s+1K-blocks']}}\n"))},
+	}
+	upper := fstest.MapFS{
+		"parsers/df/gnu/parser.yaml": &fstest.MapFile{Data: []byte(def("df", "gnu", "detect: {signature: {all: ['^NEVER MATCHES']}}\n"))},
+	}
+	reg, err := registry.Load(registry.Source{Name: "user", FS: upper}, registry.Source{Name: "embedded", FS: lower})
+	if err != nil {
+		t.Fatal(err)
+	}
+	// The shadowing definition decides detection, so the input no longer
+	// matches even though the embedded one would have accepted it.
+	if _, err := Select(reg, Context{Input: []byte(gnuDF)}); err == nil {
+		t.Error("the shadowing definition must decide")
+	}
+	res, err := Select(reg, Context{Parser: "df", Variant: "gnu", Force: true, Input: []byte(gnuDF)})
+	if err != nil || res.Entry.Source != "user" {
+		t.Errorf("shadowed entry: %v %v", res, err)
 	}
 }
 

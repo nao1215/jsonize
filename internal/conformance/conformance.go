@@ -71,21 +71,23 @@ func Run(reg *registry.Registry, fsys fs.FS, sourceName string, opts Options) []
 
 func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Options) Result {
 	res := Result{Definition: e.Def.ID(), Case: c.Name, Path: path.Join(c.Dir, c.Name+".txt")}
-	// Selection: the fixture must pick its own definition when the
-	// metadata supplies the signals an exec-mode run would have.
+	// Selection is part of the contract, not just parsing: a fixture has
+	// to identify its own definition the way a user's input would.
 	if c.Meta.ExpectError == "" {
-		ctx := selector.Context{Command: e.Def.Command, OS: c.Meta.OS, Input: c.Input}
-		if c.Meta.Args != nil {
-			ctx.Args = c.Meta.Args
+		if c.Meta.AutoDetects() {
+			// What `COMMAND | jz` does: no parser, no OS, no arguments.
+			if err := selects(reg, e, selector.Context{Input: c.Input}); err != nil {
+				res.Err = fmt.Errorf("automatic detection: %w", err)
+				return res
+			}
 		}
-		sel, err := selector.Select(reg, ctx)
-		switch {
-		case err != nil:
-			res.Err = fmt.Errorf("variant selection: %w", err)
-			return res
-		case sel.Entry.Def.ID() != e.Def.ID():
-			res.Err = fmt.Errorf("variant selection picked %s instead of %s; tighten detect.signature", sel.Entry.Def.ID(), e.Def.ID())
-			return res
+		// What `jz run` does when the metadata records the arguments.
+		if c.Meta.OS != "" || c.Meta.Args != nil {
+			ctx := selector.Context{Parser: e.Def.Command, OS: c.Meta.OS, Args: c.Meta.Args, Input: c.Input}
+			if err := selects(reg, e, ctx); err != nil {
+				res.Err = fmt.Errorf("selection with parser %s: %w", e.Def.Command, err)
+				return res
+			}
 		}
 	}
 	got, err := engine.Parse(e.Def, c.Input, opts.Engine)
@@ -121,6 +123,18 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 		res.Err = fmt.Errorf("output differs from %s.json (-want +got):\n%s", c.Name, diff)
 	}
 	return res
+}
+
+// selects reports whether ctx picks exactly the expected definition.
+func selects(reg *registry.Registry, want *registry.Entry, ctx selector.Context) error {
+	sel, err := selector.Select(reg, ctx)
+	if err != nil {
+		return err
+	}
+	if sel.Entry.Def.ID() != want.Def.ID() {
+		return fmt.Errorf("picked %s instead of %s; tighten detect.signature", sel.Entry.Def.ID(), want.Def.ID())
+	}
+	return nil
 }
 
 // Diff compares two JSON documents structurally (key order is ignored so

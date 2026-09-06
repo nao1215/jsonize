@@ -8,8 +8,11 @@ metadata:
 detect:
   os: [darwin, freebsd, openbsd, netbsd]
   signature:
+    # `w` opens with the same summary line; the table header rejects it.
     all:
-      - 'load averages: '
+      - '^\s*\d{1,2}:\d{2}(?::\d{2})?\s+up\s+.*,\s+load averages: [\d.]+ [\d.]+ [\d.]+\s*$'
+    none:
+      - '^USER\s+TTY\s'
 parse:
   type: regex
   each: input

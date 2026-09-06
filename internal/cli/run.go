@@ -14,32 +14,47 @@ import (
 	"github.com/nao1215/jsonize/internal/selector"
 )
 
-const runUsage = `Usage: jz run [flags] <command> [args...]
+const runUsage = `Usage: jz run [flags] COMMAND [args...]
 
-Runs <command> with the given arguments (no shell involved), captures its
-standard output and converts it to JSON. Standard error is passed through.
-The command runs with LC_ALL=C so that its output is stable; use
+Runs COMMAND with the given arguments (no shell involved), captures its
+standard output and converts it to JSON. Standard error is passed
+through. The command runs with LC_ALL=C so that its output is stable; use
 --keep-locale to inherit the current locale instead.
 
-If the command exits with a non-zero status, jz still parses whatever it
-printed, reports the status on stderr and exits with that same status. A
-command terminated by a signal yields 128+signal.
+The command name selects the parser and its arguments narrow the
+variants, but the output still has to match the variant's signature, so a
+command that prints something unexpected fails instead of being
+mis-parsed.
+
+Flags for jz come before COMMAND; everything from COMMAND onwards is
+passed to it untouched, so its own flags never reach jz:
+
+  jz run df -h
+  jz run --pretty ps aux
+  jz run mytool --pretty          # --pretty goes to mytool
+  jz run -- mytool --pretty       # the same, stated explicitly
+
+If the command exits non-zero, jz still parses whatever it printed,
+reports the status on stderr and exits with that same status. A command
+terminated by a signal yields 128+signal.
 
 Flags:
 `
 
 func (a *app) cmdRun(args []string) int {
 	fs := newFlagSet("run")
-	var rf registryFlags
-	var of outputFlags
-	var sf selectFlags
-	var envs stringList
-	var keepLocale bool
-	var timeout time.Duration
-	var maxOutput int64
+	var (
+		rf         registryFlags
+		of         outputFlags
+		sf         selectFlags
+		envs       stringList
+		keepLocale bool
+		timeout    time.Duration
+		maxOutput  int64
+	)
 	rf.bind(fs)
 	of.bind(fs)
-	sf.bind(fs, a.env.GOOS)
+	sf.bind(fs, false)
 	fs.Var(&envs, "env", "set `NAME=value` in the command's environment (repeatable)")
 	fs.BoolVar(&keepLocale, "keep-locale", false, "do not force LC_ALL=C for the command")
 	fs.DurationVar(&timeout, "timeout", 0, "kill the command after this `duration` (0 = no limit)")
@@ -50,6 +65,7 @@ func (a *app) cmdRun(args []string) int {
 	rest := fs.Args()
 	if len(rest) == 0 {
 		a.errorf("run: no command given")
+		fmt.Fprint(a.env.Stderr, runUsage)
 		return ExitUsage
 	}
 	extraEnv, err := splitEnvFlag(envs)
@@ -58,21 +74,23 @@ func (a *app) cmdRun(args []string) int {
 		return ExitUsage
 	}
 	name, cmdArgs := rest[0], rest[1:]
-	key := commandKey(name)
+	parser := parserKey(name)
 
 	reg, code := a.loadRegistry(&rf)
 	if code != 0 {
 		return code
 	}
-	// Refuse to execute anything jz cannot parse, before touching the
-	// system.
-	if len(reg.Variants(key)) == 0 {
-		return a.exitFor(&selector.UnknownCommandError{Command: key, Known: reg.Commands()})
+	// Nothing is executed until jz knows it can parse the result.
+	if len(reg.Variants(parser)) == 0 {
+		return a.exitFor(&selector.UnknownParserError{Parser: parser, Known: reg.Commands()})
 	}
 	if sf.variant != "" {
-		if _, ok := reg.Lookup(key, sf.variant); !ok {
-			_, err := selector.Select(reg, selector.Context{Command: key, Variant: sf.variant})
-			return a.exitFor(err)
+		if _, ok := reg.Lookup(parser, sf.variant); !ok {
+			return a.exitFor(&selector.UnknownVariantError{
+				Parser:    parser,
+				Variant:   sf.variant,
+				Available: variantNames(reg.Variants(parser)),
+			})
 		}
 	}
 
@@ -82,29 +100,24 @@ func (a *app) cmdRun(args []string) int {
 		ctx, cancel = context.WithTimeout(ctx, timeout)
 		defer cancel()
 	}
-	// Definition exec.env applies only once the variant is known; since
-	// several variants may share a command, apply the union of their env
-	// when they agree and let --env override.
-	defEnv := mergedExecEnv(reg, key)
 	res, err := runner.Run(ctx, runner.Command{
 		Name:       name,
 		Args:       cmdArgs,
-		Env:        append(defEnv, extraEnv...),
+		Env:        append(mergedExecEnv(reg, parser), extraEnv...),
 		KeepLocale: keepLocale,
 		MaxOutput:  maxOutput,
-		Stdin:      nil,
 	}, a.env.Stderr, a.env.Signals)
 	if err != nil {
+		a.errorf("%v", err)
 		if errors.Is(err, runner.ErrOutputTooLarge) {
-			a.errorf("%v", err)
 			return ExitParse
 		}
-		a.errorf("%v", err)
 		return ExitError
 	}
-	if res.Signal != "" {
+	switch {
+	case res.Signal != "":
 		a.errorf("%s was terminated by %s", name, res.Signal)
-	} else if res.ExitCode != 0 {
+	case res.ExitCode != 0:
 		a.errorf("%s exited with status %d", name, res.ExitCode)
 	}
 	if ctx.Err() != nil && timeout > 0 {
@@ -114,21 +127,20 @@ func (a *app) cmdRun(args []string) int {
 		return res.ExitCode
 	}
 
-	sel, err := selector.Select(reg, selector.Context{Command: key, Variant: sf.variant, OS: sf.os, Args: cmdArgs, Input: res.Stdout})
+	sel, err := selector.Select(reg, selector.Context{
+		Parser:  parser,
+		Variant: sf.variant,
+		Force:   sf.force,
+		OS:      a.env.GOOS,
+		Args:    cmdArgs,
+		Input:   res.Stdout,
+	})
 	if err != nil {
-		code := a.exitFor(err)
-		if res.ExitCode != 0 {
-			return res.ExitCode
-		}
-		return code
+		return a.failedRun(err, res.ExitCode)
 	}
 	data, err := engine.Parse(sel.Entry.Def, res.Stdout, engine.Options{Raw: of.raw, MaxInputSize: maxOutput})
 	if err != nil {
-		code := a.exitFor(err)
-		if res.ExitCode != 0 {
-			return res.ExitCode
-		}
-		return code
+		return a.failedRun(err, res.ExitCode)
 	}
 	extra := map[string]any{
 		"exit_status": int64(res.ExitCode),
@@ -141,9 +153,19 @@ func (a *app) cmdRun(args []string) int {
 	return res.ExitCode
 }
 
-// commandKey maps an executable path to its registry key: the base name
+// failedRun reports a selection or parse failure. A command that already
+// failed keeps its own status, which is the more useful signal.
+func (a *app) failedRun(err error, childStatus int) int {
+	code := a.exitFor(err)
+	if childStatus != 0 {
+		return childStatus
+	}
+	return code
+}
+
+// parserKey maps an executable path to its registry key: the base name
 // without a Windows extension.
-func commandKey(name string) string {
+func parserKey(name string) string {
 	base := filepath.Base(name)
 	lower := strings.ToLower(base)
 	for _, ext := range []string{".exe", ".cmd", ".bat"} {
@@ -155,11 +177,12 @@ func commandKey(name string) string {
 }
 
 // mergedExecEnv collects exec.env entries of every variant of a command.
-// Conflicting values are dropped so that no variant is favoured.
-func mergedExecEnv(reg *registry.Registry, key string) []string {
+// Conflicting values are dropped so that no variant is favoured before
+// the command has even run.
+func mergedExecEnv(reg *registry.Registry, parser string) []string {
 	values := map[string]string{}
 	conflict := map[string]bool{}
-	for _, e := range reg.Variants(key) {
+	for _, e := range reg.Variants(parser) {
 		for k, v := range e.Def.Exec.Env {
 			if old, ok := values[k]; ok && old != v {
 				conflict[k] = true
@@ -170,16 +193,16 @@ func mergedExecEnv(reg *registry.Registry, key string) []string {
 	var out []string
 	for _, k := range sortedKeys(values) {
 		if !conflict[k] {
-			out = append(out, fmt.Sprintf("%s=%s", k, values[k]))
+			out = append(out, k+"="+values[k])
 		}
 	}
 	return out
 }
 
-func stringsToAny(list []string) []any {
-	out := make([]any, len(list))
-	for i, s := range list {
-		out[i] = s
+func variantNames(entries []*registry.Entry) []string {
+	out := make([]string, len(entries))
+	for i, e := range entries {
+		out[i] = e.Def.Variant
 	}
 	return out
 }

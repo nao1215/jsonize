@@ -13,8 +13,13 @@ detect:
     any: ["-l", "-al", "-la", "-lA", "-Al", "-lh", "-alh", "-lah", "-lR", "-alR"]
     none: ["-h", "--human-readable"]
   signature:
+    # A -lh listing whose sizes all happen to be plain byte counts is
+    # indistinguishable from -l, and parsing it here is still correct; a
+    # listing with one suffixed size is not this variant.
     all:
       - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+\d+\s+\w{3}\s+\d{1,2}\s+'
+    none:
+      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+[\d.]+[KMGTPB]\s+\w{3}\s+\d{1,2}\s+'
 input:
   ignore:
     - '^total \d'

@@ -13,7 +13,7 @@ func emit(w io.Writer, data any, e *registry.Entry, of *outputFlags, extra map[s
 		return jsonutil.Encode(w, data, of.pretty)
 	}
 	env := jsonutil.NewObject()
-	env.Set("command", e.Def.Command)
+	env.Set("parser", e.Def.Command)
 	env.Set("variant", e.Def.Variant)
 	env.Set("source", e.Source)
 	for _, k := range sortedKeys(extra) {

@@ -9,8 +9,13 @@ metadata:
   compatible: [GNU coreutils, BusyBox, macOS wc]
 detect:
   signature:
+    # wc prints no header, so the very first line is a count line (\A).
+    # The guard rejects tables that merely start with numbers, such as
+    # `ps -ef` on macOS, whose fourth column is numeric too.
     all:
-      - '^\s*\d+\s+\d+\s+\d+(?:\s+\S.*)?$'
+      - '\A\s*\d+\s+\d+\s+\d+(?:\s+\S.*)?$'
+    none:
+      - '^\s*\d+\s+\d+\s+\d+\s+\d+\s+\S'
 parse:
   type: table
   header:

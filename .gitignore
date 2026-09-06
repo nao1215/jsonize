@@ -14,5 +14,8 @@ cover.html
 *.swp
 .DS_Store
 
+# atago run state
+/.atago/
+
 # local scratch
 /doc/reference/

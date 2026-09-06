@@ -8,7 +8,7 @@ import (
 	"github.com/nao1215/jsonize/internal/registry"
 )
 
-const kvDef = "format: 1\ncommand: kv\nvariant: v\ndetect: {signature: {all: ['=']}}\nparse: {type: kv, as: map}\nfields: {n: {type: int}}\n"
+const kvDef = "format: 1\ncommand: kv\nvariant: v\ndetect: {signature: {all: ['^n=']}}\nparse: {type: kv, as: map}\nfields: {n: {type: int}}\n"
 
 func TestRun(t *testing.T) {
 	t.Parallel()
@@ -32,7 +32,7 @@ func TestRun(t *testing.T) {
 		"parsers/kv/v/testdata/pfail.txt":    {Data: []byte("n=oops\n")},
 		"parsers/kv/v/testdata/pfail.json":   {Data: []byte("{}")},
 		"parsers/empty/v/parser.yaml":        {Data: []byte("format: 1\ncommand: empty\nvariant: v\nparse: {type: kv}\n")},
-		"parsers/other/v/parser.yaml":        {Data: []byte("format: 1\ncommand: other\nvariant: v\ndetect: {os: [linux]}\nparse: {type: kv}\n")},
+		"parsers/other/v/parser.yaml":        {Data: []byte("format: 1\ncommand: other\nvariant: v\ndetect: {os: [linux], signature: {all: ['^a=']}}\nparse: {type: kv}\n")},
 		"parsers/other/v/testdata/a.txt":     {Data: []byte("a=b\n")},
 		"parsers/other/v/testdata/a.json":    {Data: []byte("[{\"name\":\"a\",\"value\":\"b\"}]")},
 		"parsers/other/v/testdata/a.yaml":    {Data: []byte("os: darwin\n")},
@@ -50,10 +50,10 @@ func TestRun(t *testing.T) {
 		"kv/v/errmsg":  "expected an error containing",
 		"kv/v/errno":   "parsing succeeded",
 		"kv/v/nogold":  "has no nogold.json",
-		"kv/v/nosel":   "variant selection",
+		"kv/v/nosel":   "automatic detection",
 		"kv/v/ok":      "",
 		"kv/v/pfail":   "cannot convert",
-		"other/v/a":    "variant selection",
+		"other/v/a":    "written for linux, not darwin",
 	}
 	if len(results) != len(want) {
 		t.Errorf("got %d results, want %d", len(results), len(want))

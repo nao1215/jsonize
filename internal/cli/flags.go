@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// registryFlags are shared by every subcommand that loads definitions.
+// registryFlags are shared by every mode that loads definitions.
 type registryFlags struct {
 	dirs         stringList
 	embeddedOnly bool
@@ -16,7 +16,7 @@ type registryFlags struct {
 
 func (f *registryFlags) bind(fs *flag.FlagSet) {
 	fs.Var(&f.dirs, "registry", "additional registry `dir` (repeatable; earlier wins)")
-	fs.BoolVar(&f.embeddedOnly, "embedded-only", false, "ignore user, cached and JSONIZE_REGISTRY_PATH registries")
+	fs.BoolVar(&f.embeddedOnly, "embedded-only", false, "ignore the user registry and JSONIZE_REGISTRY_PATH")
 }
 
 // outputFlags control JSON emission.
@@ -31,18 +31,24 @@ func (f *outputFlags) bind(fs *flag.FlagSet) {
 	fs.BoolVar(&f.pretty, "p", false, "shorthand for --pretty")
 	fs.BoolVar(&f.raw, "raw", false, "skip type conversion; every value stays a string")
 	fs.BoolVar(&f.raw, "r", false, "shorthand for --raw")
-	fs.BoolVar(&f.meta, "meta", false, "wrap the result with command, variant and source metadata")
+	fs.BoolVar(&f.meta, "meta", false, "wrap the result with parser, variant and source metadata")
 }
 
-// selectFlags choose a variant.
+// selectFlags narrow or pin the automatic detection.
 type selectFlags struct {
+	parser  string
 	variant string
-	os      string
+	force   bool
 }
 
-func (f *selectFlags) bind(fs *flag.FlagSet, defaultOS string) {
-	fs.StringVar(&f.variant, "variant", "", "use this variant instead of auto-detection")
-	fs.StringVar(&f.os, "os", defaultOS, "operating system that produced the output (linux, darwin, ...); empty = unknown")
+// bind registers the flags shared by both modes. withParser is false for
+// `jz run`, where the command name already names the parser.
+func (f *selectFlags) bind(fs *flag.FlagSet, withParser bool) {
+	if withParser {
+		fs.StringVar(&f.parser, "parser", "", "only consider this parser's variants (a command `name`)")
+	}
+	fs.StringVar(&f.variant, "variant", "", "use this `variant` of the parser")
+	fs.BoolVar(&f.force, "force", false, "parse with the named variant even if its signature does not match the input")
 }
 
 // newFlagSet builds a FlagSet whose usage text is printed by the caller.

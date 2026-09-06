@@ -17,15 +17,23 @@ jobs:
     env:
       GOOS: ${{ matrix.goos }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: stable
-      - uses: golangci/golangci-lint-action@v8
+          # Must match the go directive in go.mod: golangci-lint-action
+          # runs with GOTOOLCHAIN=local and cannot upgrade the toolchain.
+          go-version: "1.26"
+      - uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
           version: v2.13.2
       - name: gofmt
         if: matrix.goos == 'linux'
-        run: test -z "$(gofmt -s -l $(git ls-files '*.go'))" || (gofmt -s -d $(git ls-files '*.go'); exit 1)
+        run: |
+          unformatted=$(gofmt -s -l .)
+          if [ -n "$unformatted" ]; then
+            echo "$unformatted"
+            gofmt -s -d .
+            exit 1
+          fi
       - name: go vet
         run: go vet ./...

@@ -8,12 +8,10 @@ import (
 	"github.com/nao1215/jsonize/internal/registry"
 )
 
-// Source names used in diagnostics and `jz list`.
+// Source names used in diagnostics and `jz list --sources`.
 const (
 	SourceEmbedded = "embedded"
 	SourceUser     = "user"
-	SourceCache    = "official-cache"
-	SourceEnv      = "env"
 )
 
 // EnvRegistryPath lists extra registry directories, separated like PATH.
@@ -28,17 +26,9 @@ func (a *app) userRegistryDir() (string, error) {
 	return filepath.Join(dir, "jsonize", "registry"), nil
 }
 
-// cacheRegistryDir returns <cache>/jsonize/registry/official, where
-// `jz registry update` installs the downloaded official registry.
-func (a *app) cacheRegistryDir() (string, error) {
-	dir, err := a.env.UserCacheDir()
-	if err != nil {
-		return "", err
-	}
-	return filepath.Join(dir, "jsonize", "registry", "official"), nil
-}
-
-// sources resolves the registry layering in precedence order.
+// sources resolves the registry layering in precedence order. jz reads
+// only local directories: no network access happens at any point, so a
+// given input always converts to the same JSON on a given machine.
 func (a *app) sources(rf *registryFlags) ([]registry.Source, error) {
 	var out []registry.Source
 	for _, d := range rf.dirs {
@@ -66,9 +56,6 @@ func (a *app) sources(rf *registryFlags) ([]registry.Source, error) {
 		}
 		if dir, err := a.userRegistryDir(); err == nil {
 			out = append(out, registry.Source{Name: SourceUser, FS: os.DirFS(dir), Optional: true})
-		}
-		if dir, err := a.cacheRegistryDir(); err == nil {
-			out = append(out, registry.Source{Name: SourceCache, FS: os.DirFS(dir), Optional: true})
 		}
 	}
 	emb := a.env.Embedded

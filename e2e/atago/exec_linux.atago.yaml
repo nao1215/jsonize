@@ -115,3 +115,40 @@ scenarios:
             json:
               - { path: "$[0].name", equals: "." }
               - { path: "$[0].size", gte: 0 }
+
+  - name: piping a real command into jz identifies it without any hint
+    only: {os: linux}
+    steps:
+      - run:
+          shell: true
+          command: LC_ALL=C df | jz --meta
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.parser", equals: df }
+              - { path: "$.variant", equals: gnu }
+              - { path: "$.data[0].mounted_on", matches: "^/" }
+      - run:
+          shell: true
+          command: LC_ALL=C uname -a | jz
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$.kernel_name", equals: Linux }
+      - run:
+          shell: true
+          command: LC_ALL=C id | jz
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$.uid.id", gte: 0 }
+      - run:
+          shell: true
+          command: LC_ALL=C free | jz --meta
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.parser", equals: free }
+              - { path: "$.data[0].type", equals: Mem }

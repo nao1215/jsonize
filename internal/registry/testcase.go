@@ -35,6 +35,18 @@ type CaseMeta struct {
 	ExpectError string `yaml:"expect_error,omitempty"`
 	// Source records where the captured output came from.
 	Source string `yaml:"source,omitempty"`
+	// AutoDetect can be set to false for a fixture that cannot be
+	// identified from its text alone (a definition without a signature,
+	// or output that legitimately matches several parsers). Such a case
+	// is still parsed and compared; only the detection check is skipped,
+	// and the reason belongs in Description.
+	AutoDetect *bool `yaml:"auto_detect,omitempty"`
+}
+
+// AutoDetects reports whether the fixture must be identifiable without
+// any hint. It defaults to true.
+func (m CaseMeta) AutoDetects() bool {
+	return m.AutoDetect == nil || *m.AutoDetect
 }
 
 // Cases loads the golden cases of an entry. Expected is nil when no

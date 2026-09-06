@@ -23,8 +23,15 @@ reproducible without external fixtures.
 
 | Benchmark | Measures |
 |-----------|----------|
-| `LoadRegistry/definitions=N` | indexing a registry, paid on every jz start |
+| `LoadRegistry/definitions=N` | indexing a registry, paid on every jz start; N brackets the official registry (26) and one twenty times larger |
 | `LoadAndValidate`, `ValidateNested` | decoding and validating one definition |
-| `Select` | variant selection among 8 candidates |
+| `Detect/definitions=N` | `COMMAND \| jz`: every signature is evaluated because no parser was named |
+| `DetectWithParser`, `DetectWithVariant` | `--parser` and `--variant`, which narrow the scan to one command or one definition |
+| `DetectNoMatch` | the worst case, where every candidate is evaluated and rejected |
+| `DetectLargeInput` | detection over a 1 MB input, to show the cost follows the signature window and not the input size |
 | `ParseTable*`, `ParseRegex*`, `ParseKV*` | the engine on small and large inputs, including raw mode |
 | `EncodeJSON*` | JSON generation (compact and pretty) |
+
+Detection is a two-stage design: cheap signature matching over the first
+lines picks exactly one definition, and only that definition then parses
+the whole input. No definition is ever fully applied speculatively.

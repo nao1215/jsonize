@@ -1,12 +1,26 @@
-// Package selector chooses which variant of a command's parser definitions
-// applies to a given run.
+// Package selector decides which parser definition describes a piece of
+// captured output.
 //
-// Selection is deterministic and never guesses: every candidate is scored
-// by how many of its detect criteria (os, args, signature) were both
-// applicable and satisfied; a candidate whose applicable criterion fails is
-// rejected. The single most specific survivor wins; ties are broken by
-// detect.priority; a remaining tie is reported as ambiguous so the user can
-// pass --variant explicitly.
+// The rules are the same whether jz read the text from standard input or
+// produced it by running a command; only the amount of information
+// differs. Nothing is ever chosen by similarity or by "closest match":
+//
+//   - A definition's signature is a necessary condition. If the signature
+//     does not match the text, the definition is out, no matter what else
+//     is known about the input.
+//   - A definition without a signature cannot be identified from text
+//     alone, so it is only considered once the parser is known (jz run,
+//     or --parser).
+//   - The operating system and the command arguments are hard filters
+//     when they are known (jz run, or --os). They can only remove
+//     candidates, never promote one.
+//   - detect.priority breaks a tie between variants of the same command,
+//     which is a deliberate statement by the definition author. It never
+//     ranks definitions of different commands against each other.
+//
+// Exactly one survivor means success. Zero and more than one are both
+// errors that say what to pass explicitly, because emitting confident but
+// wrong JSON is the worst failure this tool can have.
 package selector
 
 import (
@@ -20,147 +34,266 @@ import (
 	"github.com/nao1215/jsonize/internal/registry"
 )
 
-// Context carries the signals available for selection.
+// Context carries everything known about the text to classify.
 type Context struct {
-	// Command is the command name (already resolved to a registry key).
-	Command string
-	// Variant, when set, bypasses detection.
+	// Parser restricts the candidates to one command's definitions. It is
+	// the command name in exec mode and the --parser value in pipe mode.
+	// Empty means "consider every parser in the registry".
+	Parser string
+	// Variant names one definition of Parser explicitly. It requires
+	// Parser to be set.
 	Variant string
-	// OS is the GOOS of the machine that produced the output. Empty means
-	// unknown (pipe mode without --os), in which case os criteria are
-	// neither satisfied nor violated.
+	// Force accepts an explicit Variant even when its signature
+	// contradicts the input.
+	Force bool
+	// OS is the operating system that produced the output, when known.
 	OS string
-	// Args are the command arguments (exec mode). Nil means unknown.
+	// Args are the arguments the command was run with. Nil means unknown,
+	// which is always the case for piped input.
 	Args []string
-	// Input is the captured output; only the signature window is examined.
+	// Input is the captured output. Only the leading lines are examined.
 	Input []byte
 }
 
-// Result describes the chosen definition and the runner-up evaluations.
+// Result is a successful selection.
 type Result struct {
-	Entry       *registry.Entry
-	Evaluations []Evaluation
-}
-
-// Evaluation records how one candidate fared.
-type Evaluation struct {
+	// Entry is the chosen definition.
 	Entry *registry.Entry
-	// Accepted is false when an applicable criterion failed.
-	Accepted bool
-	// Specificity counts satisfied criteria.
-	Specificity int
-	// Reasons explains rejections or which criteria matched.
-	Reasons []string
+	// Scanned is the number of definitions the signatures were evaluated
+	// against.
+	Scanned int
 }
 
-// UnknownCommandError is returned when no definition exists for a command.
-type UnknownCommandError struct {
-	Command string
-	Known   []string
+// Rejection records why one definition was not selected.
+type Rejection struct {
+	Entry  *registry.Entry
+	Reason string
 }
 
-func (e *UnknownCommandError) Error() string {
-	msg := fmt.Sprintf("no parser definition for command %q", e.Command)
-	if s := suggest(e.Command, e.Known); len(s) > 0 {
+// UnknownParserError is returned when --parser or a command name has no
+// definitions at all.
+type UnknownParserError struct {
+	Parser string
+	Known  []string
+}
+
+func (e *UnknownParserError) Error() string {
+	msg := fmt.Sprintf("no parser for %q", e.Parser)
+	if s := suggest(e.Parser, e.Known); len(s) > 0 {
 		msg += fmt.Sprintf(" (did you mean %s?)", strings.Join(s, ", "))
 	}
-	return msg + "; run `jz list` to see supported commands"
+	return msg + "\nrun `jz list` to see the supported parsers"
 }
 
-// UnknownVariantError is returned when --variant names a missing variant.
+// UnknownVariantError is returned when --variant names a variant the
+// parser does not have.
 type UnknownVariantError struct {
-	Command   string
+	Parser    string
 	Variant   string
 	Available []string
 }
 
 func (e *UnknownVariantError) Error() string {
-	return fmt.Sprintf("command %q has no variant %q (available: %s)", e.Command, e.Variant, strings.Join(e.Available, ", "))
+	return fmt.Sprintf("parser %q has no variant %q (available: %s)\nrun `jz list %s` to see them",
+		e.Parser, e.Variant, strings.Join(e.Available, ", "), e.Parser)
 }
 
-// NoMatchError is returned when every candidate was rejected.
+// VariantWithoutParserError is returned when --variant is given alone.
+type VariantWithoutParserError struct {
+	Variant string
+}
+
+func (e *VariantWithoutParserError) Error() string {
+	return fmt.Sprintf("--variant %s needs --parser: a variant name only identifies a definition together with its parser", e.Variant)
+}
+
+// MismatchError is returned when an explicitly chosen definition
+// contradicts the input.
+type MismatchError struct {
+	Entry  *registry.Entry
+	Reason string
+}
+
+func (e *MismatchError) Error() string {
+	return fmt.Sprintf("%s does not describe this input: %s\npass --force to parse with it anyway",
+		e.Entry.Def.ID(), e.Reason)
+}
+
+// NoMatchError is returned when no definition survives.
 type NoMatchError struct {
-	Command     string
-	Evaluations []Evaluation
+	// Parser is the scope that was searched; empty means the whole
+	// registry.
+	Parser string
+	// Rejections explain the candidates that were considered. It is only
+	// filled when the search was limited to one parser; scanning the whole
+	// registry would produce a wall of text.
+	Rejections []Rejection
+	// Scanned counts the definitions that were evaluated.
+	Scanned int
 }
 
 func (e *NoMatchError) Error() string {
 	var b strings.Builder
-	fmt.Fprintf(&b, "no variant of %q matches the input", e.Command)
-	for _, ev := range e.Evaluations {
-		fmt.Fprintf(&b, "\n  - %s: %s", ev.Entry.Def.Variant, strings.Join(ev.Reasons, "; "))
+	if e.Parser == "" {
+		b.WriteString("unable to identify the input format")
+		fmt.Fprintf(&b, "\nno signature of the %d known parsers matched this text", e.Scanned)
+		b.WriteString("\n\nName the parser explicitly:\n  COMMAND | jz --parser df\nRun `jz list` to see the supported parsers.")
+		return b.String()
 	}
-	b.WriteString("\nuse --variant to choose one explicitly")
+	fmt.Fprintf(&b, "no %s variant matches this input", e.Parser)
+	for _, r := range e.Rejections {
+		fmt.Fprintf(&b, "\n  %s: %s", r.Entry.Def.Variant, r.Reason)
+	}
+	fmt.Fprintf(&b, "\n\nName the variant explicitly:\n  COMMAND | jz --parser %s --variant %s", e.Parser, firstVariant(e.Rejections))
 	return b.String()
 }
 
-// AmbiguousError is returned when several candidates tie.
+func firstVariant(rs []Rejection) string {
+	if len(rs) == 0 {
+		return "VARIANT"
+	}
+	return rs[0].Entry.Def.Variant
+}
+
+// AmbiguousError is returned when several definitions match equally well.
 type AmbiguousError struct {
-	Command    string
-	Candidates []Evaluation
+	Candidates []*registry.Entry
 }
 
 func (e *AmbiguousError) Error() string {
-	names := make([]string, len(e.Candidates))
-	for i, c := range e.Candidates {
-		names[i] = c.Entry.Def.Variant
+	var b strings.Builder
+	sameCommand := true
+	for _, c := range e.Candidates {
+		if c.Def.Command != e.Candidates[0].Def.Command {
+			sameCommand = false
+			break
+		}
 	}
-	return fmt.Sprintf("ambiguous: variants %s of %q all match the input equally well; use --variant to choose one",
-		strings.Join(names, ", "), e.Command)
+	if sameCommand {
+		fmt.Fprintf(&b, "input matches multiple %s variants:", e.Candidates[0].Def.Command)
+	} else {
+		b.WriteString("input matches multiple parsers:")
+	}
+	for _, c := range e.Candidates {
+		fmt.Fprintf(&b, "\n  %s", c.Def.ID())
+	}
+	first := e.Candidates[0].Def
+	if sameCommand {
+		fmt.Fprintf(&b, "\n\nSpecify one explicitly:\n  COMMAND | jz --parser %s --variant %s", first.Command, first.Variant)
+	} else {
+		fmt.Fprintf(&b, "\n\nSpecify one explicitly:\n  COMMAND | jz --parser %s", first.Command)
+	}
+	return b.String()
 }
 
-// Select picks a definition for ctx from reg.
+// Select classifies ctx.Input.
 func Select(reg *registry.Registry, ctx Context) (*Result, error) {
-	candidates := reg.Variants(ctx.Command)
-	if len(candidates) == 0 {
-		return nil, &UnknownCommandError{Command: ctx.Command, Known: reg.Commands()}
+	if ctx.Variant != "" && ctx.Parser == "" {
+		return nil, &VariantWithoutParserError{Variant: ctx.Variant}
 	}
-	if ctx.Variant != "" {
-		e, ok := reg.Lookup(ctx.Command, ctx.Variant)
-		if !ok {
-			names := make([]string, len(candidates))
-			for i, c := range candidates {
-				names[i] = c.Def.Variant
-			}
-			return nil, &UnknownVariantError{Command: ctx.Command, Variant: ctx.Variant, Available: names}
+	// Scoping to one parser is the cheap path: only that command's
+	// variants are materialised, never the whole registry.
+	var candidates []*registry.Entry
+	if ctx.Parser != "" {
+		candidates = reg.Variants(ctx.Parser)
+		if len(candidates) == 0 {
+			return nil, &UnknownParserError{Parser: ctx.Parser, Known: reg.Commands()}
 		}
-		return &Result{Entry: e, Evaluations: []Evaluation{{Entry: e, Accepted: true, Reasons: []string{"selected with --variant"}}}}, nil
+	} else {
+		candidates = reg.Entries()
 	}
 	window := signatureWindow(ctx.Input)
-	evals := make([]Evaluation, 0, len(candidates))
-	for _, c := range candidates {
-		evals = append(evals, Evaluate(c, ctx, window))
+
+	if ctx.Variant != "" {
+		e, ok := reg.Lookup(ctx.Parser, ctx.Variant)
+		if !ok {
+			return nil, &UnknownVariantError{Parser: ctx.Parser, Variant: ctx.Variant, Available: variantNames(candidates)}
+		}
+		if !ctx.Force {
+			if reason, ok := check(e, &ctx, window); !ok {
+				return nil, &MismatchError{Entry: e, Reason: reason}
+			}
+		}
+		return &Result{Entry: e, Scanned: 1}, nil
 	}
-	var accepted []Evaluation
-	for _, ev := range evals {
-		if ev.Accepted {
-			accepted = append(accepted, ev)
+
+	var (
+		matched    []*registry.Entry
+		rejections []Rejection
+	)
+	for _, e := range candidates {
+		if reason, ok := check(e, &ctx, window); ok {
+			matched = append(matched, e)
+		} else {
+			rejections = append(rejections, Rejection{Entry: e, Reason: reason})
 		}
 	}
-	if len(accepted) == 0 {
-		return nil, &NoMatchError{Command: ctx.Command, Evaluations: evals}
-	}
-	sort.SliceStable(accepted, func(i, j int) bool {
-		if accepted[i].Specificity != accepted[j].Specificity {
-			return accepted[i].Specificity > accepted[j].Specificity
+	switch len(matched) {
+	case 1:
+		return &Result{Entry: matched[0], Scanned: len(candidates)}, nil
+	case 0:
+		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates)}
+		if ctx.Parser != "" {
+			err.Rejections = rejections
 		}
-		return accepted[i].Entry.Def.Detect.Priority > accepted[j].Entry.Def.Detect.Priority
-	})
-	best := accepted[0]
-	tied := []Evaluation{best}
-	for _, ev := range accepted[1:] {
-		if ev.Specificity == best.Specificity && ev.Entry.Def.Detect.Priority == best.Entry.Def.Detect.Priority {
-			tied = append(tied, ev)
-		}
+		return nil, err
 	}
-	if len(tied) > 1 {
-		return nil, &AmbiguousError{Command: ctx.Command, Candidates: tied}
+	if best, ok := breakTie(matched); ok {
+		return &Result{Entry: best, Scanned: len(candidates)}, nil
 	}
-	return &Result{Entry: best.Entry, Evaluations: evals}, nil
+	return nil, &AmbiguousError{Candidates: matched}
 }
 
-// signatureWindow returns the first MaxSignatureWindow lines of input as
-// separate strings so each definition can pick its own window size.
+// breakTie applies detect.priority. It only decides between variants of
+// the same command, where the author can meaningfully rank definitions
+// against each other, and only when one priority is strictly highest.
+func breakTie(matched []*registry.Entry) (*registry.Entry, bool) {
+	for _, e := range matched[1:] {
+		if e.Def.Command != matched[0].Def.Command {
+			return nil, false
+		}
+	}
+	best := matched[0]
+	tied := false
+	for _, e := range matched[1:] {
+		switch {
+		case e.Def.Detect.Priority > best.Def.Detect.Priority:
+			best, tied = e, false
+		case e.Def.Detect.Priority == best.Def.Detect.Priority:
+			tied = true
+		}
+	}
+	if tied {
+		return nil, false
+	}
+	return best, true
+}
+
+// check reports whether one definition can describe the input, and why
+// not when it cannot.
+func check(e *registry.Entry, ctx *Context, window []string) (string, bool) {
+	d := &e.Def.Detect
+	if d.Signature.IsZero() {
+		// Nothing in the text can confirm or deny this definition.
+		if ctx.Parser == "" {
+			return "no signature: it can only be selected with --parser " + e.Def.Command, false
+		}
+	} else if reason, ok := matchSignature(&d.Signature, window); !ok {
+		return reason, false
+	}
+	if ctx.OS != "" && len(d.OS) > 0 && !contains(d.OS, ctx.OS) {
+		return fmt.Sprintf("written for %s, not %s", strings.Join(d.OS, "/"), ctx.OS), false
+	}
+	if ctx.Args != nil && !d.Args.IsZero() {
+		if reason, ok := matchArgs(&d.Args, ctx.Args); !ok {
+			return reason, false
+		}
+	}
+	return "", true
+}
+
+// signatureWindow returns the leading lines of input, which is all a
+// signature may look at.
 func signatureWindow(input []byte) []string {
 	if len(input) == 0 {
 		return nil
@@ -180,82 +313,39 @@ func signatureWindow(input []byte) []string {
 	return lines
 }
 
-// Evaluate scores one candidate. window holds the leading input lines.
-func Evaluate(e *registry.Entry, ctx Context, window []string) Evaluation {
-	ev := Evaluation{Entry: e, Accepted: true}
-	d := &e.Def.Detect
-	if len(d.OS) > 0 {
-		switch {
-		case ctx.OS == "":
-			ev.Reasons = append(ev.Reasons, "os unknown (pass --os to use it)")
-		case contains(d.OS, ctx.OS):
-			ev.Specificity++
-			ev.Reasons = append(ev.Reasons, "os "+ctx.OS+" matched")
-		default:
-			ev.Accepted = false
-			ev.Reasons = append(ev.Reasons, fmt.Sprintf("os %s is not one of [%s]", ctx.OS, strings.Join(d.OS, ", ")))
-		}
+func matchSignature(s *definition.Signature, window []string) (string, bool) {
+	n := s.Window
+	if n == 0 {
+		n = definition.DefaultSignatureWindow
 	}
-	if !d.Args.IsZero() {
-		if ctx.Args == nil {
-			ev.Reasons = append(ev.Reasons, "arguments unknown in pipe mode")
-		} else if ok, why := matchArgs(&d.Args, ctx.Args); ok {
-			ev.Specificity++
-			ev.Reasons = append(ev.Reasons, "arguments matched")
-		} else {
-			ev.Accepted = false
-			ev.Reasons = append(ev.Reasons, why)
-		}
+	if n > len(window) {
+		n = len(window)
 	}
-	if !d.Signature.IsZero() {
-		n := d.Signature.Window
-		if n == 0 {
-			n = definition.DefaultSignatureWindow
-		}
-		if n > len(window) {
-			n = len(window)
-		}
-		text := strings.Join(window[:n], "\n")
-		ok, why := matchSignature(&d.Signature, text)
-		if ok {
-			ev.Specificity++
-			ev.Reasons = append(ev.Reasons, "signature matched")
-		} else {
-			ev.Accepted = false
-			ev.Reasons = append(ev.Reasons, why)
-		}
-	}
-	if len(ev.Reasons) == 0 {
-		ev.Reasons = append(ev.Reasons, "no detect criteria (catch-all)")
-	}
-	return ev
-}
-
-func matchSignature(s *definition.Signature, text string) (bool, string) {
+	text := strings.Join(window[:n], "\n")
 	all, anyOf, none := s.Compiled()
 	for i, re := range all {
 		if !re.MatchString(text) {
-			return false, fmt.Sprintf("signature all[%d] %s did not match", i, short(re))
+			return fmt.Sprintf("signature all[%d] %s did not match", i, short(re)), false
 		}
 	}
 	if len(anyOf) > 0 {
-		matched := false
+		hit := false
 		for _, re := range anyOf {
 			if re.MatchString(text) {
-				matched = true
+				hit = true
 				break
 			}
 		}
-		if !matched {
-			return false, "no signature any[] expression matched"
+		if !hit {
+			return "no signature any[] expression matched", false
 		}
 	}
 	for i, re := range none {
 		if re.MatchString(text) {
-			return false, fmt.Sprintf("signature none[%d] %s matched", i, short(re))
+			return fmt.Sprintf("signature none[%d] %s matched", i, short(re)), false
 		}
 	}
-	return true, ""
+	return "", true
 }
 
 func short(re *regexp.Regexp) string {
@@ -268,7 +358,7 @@ func short(re *regexp.Regexp) string {
 
 // matchArgs applies any/all/none. Bundled short flags such as -hT count
 // as containing -h and -T.
-func matchArgs(a *definition.ArgsMatch, args []string) (bool, string) {
+func matchArgs(a *definition.ArgsMatch, args []string) (string, bool) {
 	set := map[string]bool{}
 	for _, arg := range args {
 		set[arg] = true
@@ -287,20 +377,28 @@ func matchArgs(a *definition.ArgsMatch, args []string) (bool, string) {
 			}
 		}
 		if !hit {
-			return false, fmt.Sprintf("none of the arguments [%s] were given", strings.Join(a.Any, ", "))
+			return fmt.Sprintf("needs one of the arguments [%s]", strings.Join(a.Any, ", ")), false
 		}
 	}
 	for _, want := range a.All {
 		if !set[want] {
-			return false, fmt.Sprintf("argument %s was not given", want)
+			return "needs the argument " + want, false
 		}
 	}
 	for _, bad := range a.None {
 		if set[bad] {
-			return false, fmt.Sprintf("argument %s excludes this variant", bad)
+			return "excluded by the argument " + bad, false
 		}
 	}
-	return true, ""
+	return "", true
+}
+
+func variantNames(entries []*registry.Entry) []string {
+	out := make([]string, len(entries))
+	for i, e := range entries {
+		out[i] = e.Def.Variant
+	}
+	return out
 }
 
 func contains(list []string, s string) bool {
@@ -323,6 +421,7 @@ func suggest(s string, known []string) []string {
 			out = append(out, k)
 		}
 	}
+	sort.Strings(out)
 	if len(out) > 3 {
 		out = out[:3]
 	}

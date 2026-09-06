@@ -5,7 +5,6 @@ project_name: jsonize
 before:
   hooks:
     - go mod tidy
-    - bash ./scripts/registry_archive.sh dist
 
 builds:
   - id: jz
@@ -30,13 +29,9 @@ archives:
       - LICENSE
       - README.md
 
-# The official registry is published beside the binaries so that
-# `jz registry update` can fetch it independently of a jz upgrade.
-release:
-  extra_files:
-    - glob: dist/jsonize-registry.tar.gz
-    - glob: dist/jsonize-registry.tar.gz.sha256
-
+# The official registry ships inside the binary: a release is the unit
+# that carries both the code and the parser definitions, and jz never
+# fetches anything at runtime.
 checksum:
   name_template: checksums.txt
   algorithm: sha256

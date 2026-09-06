@@ -8,8 +8,13 @@ metadata:
 detect:
   os: [linux]
   signature:
+    # `w` prints this very line before its user table, so the signature
+    # anchors the whole line and rejects anything that continues into a
+    # table.
     all:
-      - 'load average: '
+      - '^\s*\d{1,2}:\d{2}(?::\d{2})?\s+up\s+.*,\s+load average: [\d.]+, [\d.]+, [\d.]+\s*$'
+    none:
+      - '^USER\s+TTY\s'
 parse:
   type: regex
   each: input

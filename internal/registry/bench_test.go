@@ -6,10 +6,11 @@ import (
 	"testing/fstest"
 )
 
-// BenchmarkLoadRegistry measures the cost of indexing a registry of the
-// given size, which is paid on every jz invocation.
+// BenchmarkLoadRegistry measures the cost of indexing a registry, which
+// every jz invocation pays before anything else. The sizes bracket the
+// official registry (26) and a registry an order of magnitude larger.
 func BenchmarkLoadRegistry(b *testing.B) {
-	for _, n := range []int{30, 300} {
+	for _, n := range []int{26, 500, 1000} {
 		fsys := fstest.MapFS{"registry.yaml": {Data: []byte("format: 1\nname: bench\n")}}
 		for i := 0; i < n; i++ {
 			cmd := fmt.Sprintf("cmd%d", i/3)

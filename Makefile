@@ -43,9 +43,14 @@ coverage: test ## Produce cover.html from the coverage profile
 	go tool cover -html=cover.out -o cover.html
 	go tool cover -func=cover.out | tail -1
 
-.PHONY: golden-update
-golden-update: ## Regenerate registry golden files, then review the diff
-	go test ./registry -update
+.PHONY: registry-test
+registry-test: ## Validate parser definitions and run their golden tests (DIR=path for a local registry)
+	go test ./registry $(if $(DIR),-registry-dir $(DIR),) -count=1
+
+.PHONY: registry-update-golden
+registry-update-golden: ## Rewrite the expected JSON of every fixture, then review `git diff`
+	go test ./registry -update $(if $(DIR),-registry-dir $(DIR),) -count=1
+	@echo "golden files rewritten; review them with: git diff"
 
 .PHONY: fuzz
 fuzz: ## Run every fuzz target briefly (FUZZTIME=10s)
@@ -65,10 +70,6 @@ bench-compare: ## Compare bench/new.txt against bench/baseline.txt with benchsta
 .PHONY: e2e
 e2e: build ## Run the atago end-to-end suite (requires atago on PATH)
 	bash ./scripts/run_e2e.sh
-
-.PHONY: registry-archive
-registry-archive: ## Package the official registry as dist/jsonize-registry.tar.gz with a SHA-256 file
-	bash ./scripts/registry_archive.sh dist
 
 .PHONY: check
 check: fmt vet lint test test-race ## Run everything CI runs locally except E2E

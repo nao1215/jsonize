@@ -1,77 +1,162 @@
 version: "1"
 
 suite:
-  name: jz error contract
+  name: jz - refusing to guess
 
-# Diagnostics never go to stdout: a failing run leaves stdout empty so a
-# consumer piping into jq sees either JSON or nothing.
+# Wrong JSON returned with a zero exit status would be the worst failure
+# this tool could have, so every uncertain case ends non-zero with an
+# empty stdout and an explanation on stderr.
 scenarios:
-  - name: no arguments prints usage and exits 2
+  - name: text that matches no parser is refused, not approximated
     steps:
       - run:
           command: jz
-      - assert:
-          exit_code: 2
-          stdout:
-            empty: true
-          stderr:
-            contains: "Usage:"
-
-  - name: an unknown subcommand exits 2
-    steps:
-      - run:
-          command: jz frobnicate
-      - assert:
-          exit_code: 2
-          stderr:
-            contains: unknown command "frobnicate"
-
-  - name: an unknown flag exits 2 and shows the subcommand usage
-    steps:
-      - run:
-          command: jz parse --bogus df
-      - assert:
-          exit_code: 2
-          stderr:
-            contains: "Usage: jz parse"
-
-  - name: an unknown command name exits 4 with a hint
-    steps:
-      - run:
-          command: jz parse dg
-          stdin: "x\n"
+          stdin: "this is not the output of any known command\n"
       - assert:
           exit_code: 4
           stdout:
             empty: true
           stderr:
-            contains: no parser definition for command "dg" (did you mean df
+            contains: unable to identify the input format
+            matches: "Name the parser explicitly"
 
-  - name: an unknown variant exits 4 and lists the available ones
+  - name: empty and blank input are refused the same way
     steps:
+      # An empty file rather than an empty inline string: the point is
+      # that jz reads zero bytes and refuses, whatever the shell does.
+      - fixture:
+          file: empty.txt
+          content: ""
       - run:
-          command: jz parse --variant solaris df
-          stdin: "x\n"
+          command: jz --file empty.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: unable to identify
+      - run:
+          command: jz
+          stdin: "   \n\t\n"
       - assert:
           exit_code: 4
           stderr:
-            contains: "available: bsd, bsd-human, busybox-human, gnu, gnu-human"
+            contains: unable to identify
 
-  - name: input that matches no variant exits 4 and explains every rejection
+  - name: input that is not valid UTF-8 is refused before parsing
     steps:
+      - fixture:
+          file: binary.bin
+          base64: "/////gABAgP//w=="
       - run:
-          command: jz parse df
-          stdin: "this is not df output\n"
+          command: jz
+          stdin: {file: binary.bin}
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+
+  - name: input matching several parsers names them instead of choosing
+    steps:
+      - fixture:
+          file: reg/parsers/alpha/default/parser.yaml
+          content: |
+            format: 1
+            command: alpha
+            variant: default
+            detect: {signature: {all: ['^SHARED']}}
+            parse: {type: kv}
+      - fixture:
+          file: reg/parsers/beta/default/parser.yaml
+          content: |
+            format: 1
+            command: beta
+            variant: default
+            detect: {signature: {all: ['SHARED']}}
+            parse: {type: kv}
+      - run:
+          command: jz --registry reg
+          stdin: "SHARED=1\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: input matches multiple parsers
+            matches: "alpha/default"
+      - assert:
+          stderr:
+            contains: "--parser alpha"
+      # Naming the parser resolves it.
+      - run:
+          command: jz --registry reg --parser beta
+          stdin: "SHARED=1\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].name", equals: SHARED }
+
+  - name: several variants of one command are reported as variants
+    steps:
+      - fixture:
+          file: reg/parsers/twin/one/parser.yaml
+          content: |
+            format: 1
+            command: twin
+            variant: one
+            detect: {signature: {all: ['^SHARED']}}
+            parse: {type: kv}
+      - fixture:
+          file: reg/parsers/twin/two/parser.yaml
+          content: |
+            format: 1
+            command: twin
+            variant: two
+            detect: {signature: {all: ['SHARED']}}
+            parse: {type: kv}
+      - run:
+          command: jz --registry reg --parser twin
+          stdin: "SHARED=1\n"
       - assert:
           exit_code: 4
           stderr:
-            contains: gnu-human
-            matches: "signature all\\[0\\] .* did not match"
+            contains: input matches multiple twin variants
+            matches: "--variant one"
+      - run:
+          command: jz --registry reg --parser twin --variant two
+          stdin: "SHARED=1\n"
+      - assert:
+          exit_code: 0
 
-  - name: input that fails to parse exits 3 and names the line and field
+  - name: a variant that contradicts the input is refused until forced
+    steps:
+      - fixture:
+          file: df-gnu.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz --parser df --variant bsd
+          stdin: {file: df-gnu.txt}
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: df/bsd does not describe this input
+            matches: "pass --force"
+      - run:
+          command: jz --parser df --variant bsd --force
+          stdin: {file: df-gnu.txt}
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+          stderr:
+            contains: "df/bsd:"
+
+  - name: a parse failure names the line and the field, and prints no JSON
     steps:
       - run:
-          command: jz parse --variant gnu df
+          command: jz
           stdin: "Filesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs  abc 0 0 0% /run\n"
       - assert:
           exit_code: 3
@@ -83,41 +168,102 @@ scenarios:
   - name: a row with too few columns is rejected, not silently padded
     steps:
       - run:
-          command: jz parse --variant gnu df
+          command: jz
           stdin: "Filesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs 1 2\n"
       - assert:
           exit_code: 3
           stderr:
             contains: expected at least 6 fields but found 3
 
+  - name: an unknown parser or variant name fails with what does exist
+    steps:
+      - run:
+          command: jz --parser nosuchtool
+          stdin: "x\n"
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: no parser for "nosuchtool"
+            matches: "jz list"
+      - run:
+          command: jz --parser dg
+          stdin: "x\n"
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: did you mean df
+      - run:
+          command: jz --parser df --variant solaris
+          stdin: "x\n"
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: "available: bsd, bsd-human, busybox-human, gnu, gnu-human"
+
+  - name: a variant without a parser is a usage error
+    steps:
+      - run:
+          command: jz --variant gnu
+          stdin: "x\n"
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "--variant gnu needs --parser"
+
   - name: oversized input is refused before parsing
     steps:
       - run:
-          command: jz parse --max-input 16 env
+          command: jz --max-input 16
           stdin: "A=1\nB=2\nC=3\nD=4\nE=5\n"
       - assert:
           exit_code: 3
           stderr:
             contains: input exceeds 16 bytes
 
-  - name: registry update refuses plain http sources
+  - name: an unknown subcommand or flag is a usage error
     steps:
       - run:
-          command: jz registry update --source http://example.invalid/registry.tar.gz
+          command: jz frobnicate
+      - assert:
+          exit_code: 2
+          stdout:
+            empty: true
+          stderr:
+            contains: unknown command "frobnicate"
+      - run:
+          command: jz --bogus
+          stdin: "x\n"
       - assert:
           exit_code: 2
           stderr:
-            contains: registry URL must use https
+            contains: "Usage: COMMAND | jz"
+      - run:
+          command: jz list df gnu extra
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: expected at most COMMAND and VARIANT
 
-  - name: registry update against an unreachable host fails with exit 5 and leaves nothing behind
+  - name: the subcommands removed before release are gone
     steps:
       - run:
-          command: jz registry update --source https://127.0.0.1:9/registry.tar.gz --dir "${workdir}/reg"
+          command: jz parse df
+          stdin: "x\n"
       - assert:
-          exit_code: 5
+          exit_code: 2
           stderr:
-            contains: registry update failed
+            contains: unknown command "parse"
+      - run:
+          command: jz show df
       - assert:
-          dir:
-            path: "${workdir}"
-            not_contains: [reg]
+          exit_code: 2
+      - run:
+          command: jz validate
+      - assert:
+          exit_code: 2
+      - run:
+          command: jz registry update
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: unknown command "registry"

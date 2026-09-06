@@ -95,3 +95,33 @@ scenarios:
               - { path: "$[0].lines", equals: 2 }
               - { path: "$[0].words", equals: 3 }
               - { path: "$[0].filename", equals: words.txt }
+
+  - name: piping a real command into jz identifies it without any hint
+    only: {os: darwin}
+    steps:
+      - run:
+          shell: true
+          command: LC_ALL=C df | jz --meta
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.parser", equals: df }
+              - { path: "$.variant", equals: bsd }
+              - { path: "$.data[0].mounted_on", equals: / }
+      - run:
+          shell: true
+          command: LC_ALL=C uname -a | jz
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$.kernel_name", equals: Darwin }
+      - run:
+          shell: true
+          command: LC_ALL=C mount | jz --meta
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.parser", equals: mount }
+              - { path: "$.variant", equals: bsd }

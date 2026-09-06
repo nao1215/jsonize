@@ -8,6 +8,13 @@ description: env / printenv output as a list of name/value pairs
 metadata:
   tags: [linux, darwin, environment]
   compatible: [GNU coreutils, BusyBox, macOS env]
+detect:
+  signature:
+    # Two consecutive NAME=value lines. One line alone is not enough:
+    # `id` also starts with "uid=...", and a single assignment is too
+    # weak a claim to convert without being asked.
+    all:
+      - '^[A-Za-z_][A-Za-z0-9_]*=[^\n]*\n[A-Za-z_][A-Za-z0-9_]*='
 parse:
   type: kv
   separator: "="

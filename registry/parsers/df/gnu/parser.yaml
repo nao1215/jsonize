@@ -16,6 +16,11 @@ detect:
   signature:
     all:
       - '^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
+# df writes "df: /path: Permission denied" for mount points it cannot
+# stat; those lines land in the output when stderr is merged into it.
+input:
+  ignore:
+    - '^df: '
 parse:
   type: table
   header:
