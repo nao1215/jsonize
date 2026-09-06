@@ -14,7 +14,12 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\A[-a-zA-Z]{10,25} /'
+      # Any word followed by an absolute path fits "word /path", so the
+      # first field is restricted to the attribute letters e2fsprogs
+      # prints, and it has to contain at least one unset slot: a real
+      # attribute string is mostly dashes.
+      - '\A[-aAcCdDeEFiIjmNPsStTuVx]{10,25} /'
+      - '\A[aAcCdDeEFiIjmNPsStTuVx]*-'
 parse:
   type: regex
   pattern: '^(?P<attributes>[-a-zA-Z]+)\s+(?P<file>.+)$'

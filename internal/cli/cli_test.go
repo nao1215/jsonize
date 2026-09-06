@@ -283,6 +283,105 @@ func TestAutoDetectFailures(t *testing.T) {
 	}
 }
 
+// TestForeignOutputIsNotClaimed pipes text that no parser in the registry
+// describes and requires jz to say so. Every input here was accepted by
+// some definition once: a signature loose enough to fit a build log, a
+// status table or a properties file turns "COMMAND | jz" into confident
+// nonsense, which is the one failure the tool exists to avoid.
+func TestForeignOutputIsNotClaimed(t *testing.T) {
+	h := newHarness(t)
+	cases := []struct {
+		name  string
+		input string
+	}{
+		// mount/bsd used to read "X on Y (Z)" as a mount table.
+		{"build log", "Building foo on linux (amd64)\nBuilding bar on darwin (arm64)\n"},
+		{"prose", "The meeting is on Tuesday (rescheduled)\nLunch is on Friday (maybe)\n"},
+		// uname matched any line starting with the kernel name, which is
+		// how /proc/version and a boot log begin too.
+		{"proc version", "Linux version 7.0.0-30-generic (buildd@lcy02) #30-Ubuntu SMP\n"},
+		{"kernel banner in a log", "boot log\nLinux mybox 6.8.0 #1 SMP x86_64 GNU/Linux\n"},
+		{"darwin kernel banner", "Darwin Kernel Version 23.5.0: Wed May  1 20:09:52 PDT 2024\n"},
+		// ip/brief-address used to read any "NAME UP ..." line.
+		{"service status table", "web01 UP 3 days\ndb01 DOWN 2 hours\n"},
+		{"link speed", "eth0 UP 1000Mb/s full\n"},
+		// lsattr used to read any word followed by an absolute path.
+		{"name and path columns", "librarypath /usr/lib\nincludepath /usr/include\n"},
+		// sysctl used to read any dotted key with spaces around "=".
+		{"properties file", "user.name = nao\nnet.core.x = 1\n"},
+		// host/bind skips lines it cannot parse, so one sentence buried in
+		// prose used to become the whole answer.
+		{"prose mentioning a lookup", "Notes from today.\nwww.example.com has address 93.184.216.34\nrandom trailing text\n"},
+	}
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
+			code := h.pipe(tt.input)
+			if code == ExitOK {
+				t.Fatalf("claimed foreign input and produced JSON: %s", h.stdout.String())
+			}
+			if code != ExitSelect {
+				t.Fatalf("code = %d (want %d, unidentified); stderr:\n%s", code, ExitSelect, h.stderr.String())
+			}
+			if h.stdout.Len() != 0 {
+				t.Errorf("stdout must stay empty: %q", h.stdout.String())
+			}
+		})
+	}
+}
+
+// TestNamedParserStillChecksTheInput covers the definitions jz will not
+// choose on its own because their shape is too plain. Naming one is a
+// claim about the input, not a way past the signature, so a parser that
+// is handed another command's output has to refuse it.
+func TestNamedParserStillChecksTheInput(t *testing.T) {
+	h := newHarness(t)
+	cases := []struct {
+		name   string
+		args   []string
+		input  string
+		reject string
+	}{
+		{
+			// /etc/passwd has seven colon separated fields; the group
+			// parser reads four and used to accept it, silently folding
+			// the home directory and the shell into the member list.
+			name:   "group must not read a passwd file",
+			args:   []string{"--parser", "group"},
+			input:  "root:x:0:0:root:/root:/bin/bash\ndaemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\n",
+			reject: "no group variant matches this input",
+		},
+		{
+			// A clock time is not an IPv6 address.
+			name:   "hosts must not read an uptime line",
+			args:   []string{"--parser", "hosts"},
+			input:  "10:14  up 3 days, 22:45, 2 users, load averages: 1.0 1.1 1.2\n",
+			reject: "no hosts variant matches this input",
+		},
+		{
+			// blkid prints "path: TAG=..." which is the shape of file(1)
+			// output but never a type description.
+			name:   "file must not read blkid output",
+			args:   []string{"--parser", "file"},
+			input:  "/dev/nvme0n1p1: UUID=\"1234-ABCD\" BLOCK_SIZE=\"512\" TYPE=\"vfat\"\n",
+			reject: "no file variant matches this input",
+		},
+	}
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
+			code := h.pipe(tt.input, tt.args...)
+			if code == ExitOK {
+				t.Fatalf("accepted foreign input and produced JSON: %s", h.stdout.String())
+			}
+			if h.stdout.Len() != 0 {
+				t.Errorf("stdout must stay empty: %q", h.stdout.String())
+			}
+			if !strings.Contains(h.stderr.String(), tt.reject) {
+				t.Errorf("stderr should name %s:\n%s", tt.reject, h.stderr.String())
+			}
+		})
+	}
+}
+
 func TestAmbiguousInput(t *testing.T) {
 	h := newHarness(t)
 	dir := filepath.Join(h.home, "extra")

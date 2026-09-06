@@ -16,8 +16,10 @@ detect:
     any: ["-a", "--all", "-A"]
   signature:
     all:
-      - '\A[a-z][a-z0-9_.]*\.[a-z0-9_.]+ = '
-      - '^(?:kernel|net|vm|fs|dev|abi|debug)\.'
+      # Any dotted key with spaces around "=" is also a properties file
+      # or a git config listing, so the first line has to start with one
+      # of the kernel's own top-level names, not merely contain one.
+      - '\A(?:kernel|net|vm|fs|dev|abi|debug|crypto|sunrpc)\.[a-z0-9_.]+ = '
 parse:
   type: kv
   separator: " = "

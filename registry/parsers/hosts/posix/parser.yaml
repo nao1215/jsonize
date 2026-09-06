@@ -14,9 +14,11 @@ detect:
   auto_detect: false
   signature:
     all:
-      # An IPv4 address or an IPv6 one, which has to contain a colon:
-      # bare hex digits would also describe a tab separated number.
-      - '^(?:\d+\.\d+\.\d+\.\d+|[0-9a-fA-F]*:[0-9a-fA-F:]*)\s+\S'
+      # An IPv4 address or an IPv6 one, which has to contain at least two
+      # colons: bare hex digits would also describe a tab separated
+      # number, and a single colon is a clock time, which is how `uptime`
+      # and `w` begin.
+      - '^(?:\d+\.\d+\.\d+\.\d+|[0-9a-fA-F]*:[0-9a-fA-F]*:[0-9a-fA-F:]*)\s+\S'
 input:
   ignore:
     - '^\s*#'

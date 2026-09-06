@@ -396,3 +396,94 @@ scenarios:
           exit_code: 2
           stderr:
             contains: unknown command "registry"
+
+  # The output of a command jz has no parser for must not be read as the
+  # output of one it does. Each input below was converted into confident
+  # JSON by some definition until its signature was tightened, so they
+  # stay here as the record of what "too generic" looked like.
+  - name: another command's output is not read as a mount table
+    steps:
+      - run:
+          command: jz
+          stdin: "Building foo on linux (amd64)\nBuilding bar on darwin (arm64)\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: unable to identify the input format
+
+  - name: a kernel banner quoted in a file is not read as uname
+    steps:
+      - run:
+          command: jz
+          stdin: "Linux version 7.0.0-30-generic (buildd@lcy02) #30-Ubuntu SMP\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+      - run:
+          command: jz
+          stdin: "Darwin Kernel Version 23.5.0: Wed May  1 20:09:52 PDT 2024\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+
+  - name: a service status table is not read as ip -brief address
+    steps:
+      - run:
+          command: jz
+          stdin: "web01 UP 3 days\ndb01 DOWN 2 hours\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+
+  - name: a properties file is not read as sysctl
+    steps:
+      - run:
+          command: jz
+          stdin: "user.name = nao\nnet.core.x = 1\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+
+  - name: prose containing one DNS answer is not read as host
+    steps:
+      # host skips lines it cannot parse, so a loose signature here would
+      # have turned a page of text into a single answer record.
+      - run:
+          command: jz
+          stdin: "Notes from today.\nwww.example.com has address 93.184.216.34\nrandom trailing text\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+
+  - name: naming a parser does not get another command's output past its signature
+    steps:
+      - run:
+          command: jz --parser group
+          stdin: "root:x:0:0:root:/root:/bin/bash\ndaemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: no group variant matches this input
+      - run:
+          command: jz --parser hosts
+          stdin: "10:14  up 3 days, 22:45, 2 users, load averages: 1.0 1.1 1.2\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+      - run:
+          command: jz --parser file
+          stdin: "/dev/nvme0n1p1: UUID=\"1234-ABCD\" TYPE=\"vfat\"\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
