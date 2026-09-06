@@ -23,7 +23,13 @@ scenarios:
           exit_code: 0
           stdout:
             json:
+              # -h rounds the capacity columns and leaves the inode
+              # counts alone, so the first stays as printed and the
+              # second is a number. This is the only place that pairing
+              # is checked against a real BSD df.
               - { path: "$[0].size", matches: "^[0-9.]+[KMGTP]i?$" }
+              - { path: "$[0].iused", gte: 0 }
+              - { path: "$[0].ifree", gte: 0 }
 
   - name: uptime, ps, mount, uname, id, du and wc
     only: {os: darwin}
