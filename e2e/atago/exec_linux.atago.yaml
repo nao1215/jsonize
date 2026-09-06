@@ -257,3 +257,34 @@ scenarios:
               - { path: "$[0].file.name", equals: "/" }
               - { path: "$[1].file.name", equals: /tmp }
               - { path: "$[0].blocks.total", gt: 0 }
+
+  # BusyBox and kmod print the same three columns under the same header;
+  # what separates them is that BusyBox continues the header with the
+  # taint state. Getting this wrong reads one implementation's output
+  # with the other's definition, which is the failure the whole registry
+  # is arranged to avoid.
+  - name: BusyBox lsmod and kmod lsmod land on their own definitions
+    only: {os: linux}
+    steps:
+      - run:
+          shell: true
+          command: LC_ALL=C busybox lsmod | jz --parser lsmod --variant busybox
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$[0].size", gt: 0 }
+      # Each refuses the other's output rather than reading it.
+      - run:
+          shell: true
+          command: LC_ALL=C busybox lsmod | jz --parser lsmod --variant linux
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          shell: true
+          command: LC_ALL=C lsmod | jz --parser lsmod --variant busybox
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
