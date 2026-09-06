@@ -1,0 +1,19 @@
+{
+  "file": "/etc/hosts",
+  "size": 221,
+  "blocks": 8,
+  "io_block": 4096,
+  "type": "regular file",
+  "device": "10302h/66306d",
+  "inode": 80216458,
+  "links": 1,
+  "access_mode": "0644",
+  "access_flags": "-rw-r--r--",
+  "uid": 0,
+  "user": "root",
+  "gid": 0,
+  "group": "root",
+  "access_time": "2026-09-05 20:03:43.721217857 +0900",
+  "modify_time": "2025-11-04 13:04:07.841815606 +0900",
+  "change_time": "2025-11-04 13:04:07.841815606 +0900"
+}

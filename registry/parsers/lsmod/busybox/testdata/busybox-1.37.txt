@@ -1,0 +1,6 @@
+Module                  Size  Used by    Not tainted
+cpuid                  12288  0 
+tcp_diag               20480  0 
+inet_diag              24576  4 mptcp_diag,raw_diag,udp_diag,tcp_diag
+uas                    32768  0 
+usb_storage            86016  1 uas

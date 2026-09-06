@@ -1,0 +1,5 @@
+Module                  Size  Used by    Not tainted
+mptcp_diag             16384  0 
+x_tables               65536 13 ipt_REJECT,xt_statistic,xt_mark,xt_nfacct,xt_comment,ip_tables,xt_nat,xt_tcpudp,xt_conntrack,xt_MASQUERADE,xt_set,xt_addrtype,nft_compat
+nf_tables             409600 2396 nft_queue,nft_ct,nft_chain_nat,nft_compat
+bluetooth            1134592 44 rfcomm,bnep,btusb,btmtk,btrtl,btbcm,btintel

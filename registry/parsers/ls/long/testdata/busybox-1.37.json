@@ -1,0 +1,222 @@
+[
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "7",
+    "date": "Apr  9  2025",
+    "filename": "bin",
+    "link_to": "usr/bin"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 4,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Sep  6 06:53",
+    "filename": "boot"
+  },
+  {
+    "flags": "dr-xr-xr-x",
+    "links": 2,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Apr 16  2025",
+    "filename": "cdrom"
+  },
+  {
+    "flags": "-rw-r-----",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "1240",
+    "date": "May 25 15:19",
+    "filename": "debug"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 21,
+    "owner": "root",
+    "group": "root",
+    "size": "6020",
+    "date": "Sep  2 18:34",
+    "filename": "dev"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 162,
+    "owner": "root",
+    "group": "root",
+    "size": "12288",
+    "date": "Sep  6 06:53",
+    "filename": "etc"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 4,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "May 10 20:37",
+    "filename": "home"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "7",
+    "date": "Apr  9  2025",
+    "filename": "lib",
+    "link_to": "usr/lib"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "9",
+    "date": "Apr  9  2025",
+    "filename": "lib64",
+    "link_to": "usr/lib64"
+  },
+  {
+    "flags": "drwx------",
+    "links": 2,
+    "owner": "root",
+    "group": "root",
+    "size": "16384",
+    "date": "Nov  4  2025",
+    "filename": "lost+found"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 4,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Nov  4  2025",
+    "filename": "media"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 3,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Nov  5  2025",
+    "filename": "mnt"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 10,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Feb 24  2026",
+    "filename": "opt"
+  },
+  {
+    "flags": "dr-xr-xr-x",
+    "links": 799,
+    "owner": "root",
+    "group": "root",
+    "size": "0",
+    "date": "Aug 24 09:19",
+    "filename": "proc"
+  },
+  {
+    "flags": "drwx------",
+    "links": 8,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Feb 27  2026",
+    "filename": "root"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 50,
+    "owner": "root",
+    "group": "root",
+    "size": "1360",
+    "date": "Sep  6 06:53",
+    "filename": "run"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "8",
+    "date": "Apr  9  2025",
+    "filename": "sbin",
+    "link_to": "usr/sbin"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 35,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "May 27 20:29",
+    "filename": "snap"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 2,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Apr 16  2025",
+    "filename": "srv"
+  },
+  {
+    "flags": "-rw-------",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "8589934592",
+    "date": "Nov  4  2025",
+    "filename": "swap.img"
+  },
+  {
+    "flags": "dr-xr-xr-x",
+    "links": 13,
+    "owner": "root",
+    "group": "root",
+    "size": "0",
+    "date": "Aug 25 08:46",
+    "filename": "sys"
+  },
+  {
+    "flags": "drwxrwxrwt",
+    "links": 37298,
+    "owner": "root",
+    "group": "root",
+    "size": "752720",
+    "date": "Sep  6 19:27",
+    "filename": "tmp"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 12,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Apr 16  2025",
+    "filename": "usr"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 14,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Nov  4  2025",
+    "filename": "var"
+  }
+]
