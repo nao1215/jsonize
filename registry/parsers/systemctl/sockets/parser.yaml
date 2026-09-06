@@ -1,0 +1,29 @@
+# `systemctl list-sockets` prints an address, the socket unit and the
+# unit it activates. An address can contain a space ("kobject-uevent 1"),
+# so the row is cut where the header words start rather than on runs of
+# whitespace. "-" in the last column means the socket activates nothing.
+format: 1
+command: systemctl
+variant: sockets
+description: systemctl list-sockets table
+metadata:
+  tags: [linux, systemd, socket]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemctl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*LISTEN[ \t]+UNIT[ \t]+ACTIVATES[ \t]*$'
+input:
+  ignore:
+    - '^[0-9]+ sockets listed\.$'
+    - '^Pass --all to see loaded but inactive sockets, too\.$'
+parse:
+  type: table
+  split: aligned
+fields:
+  listen: {required: true}
+  unit: {required: true}
+  activates: {null_if: ["-"]}

@@ -1,0 +1,8 @@
+UNIT FILE                         STATE   PRESET
+proc-sys-fs-binfmt_misc.automount static  -
+dev-hugepages.mount               static  -
+snap-core24-1643.mount            enabled enabled
+anacron.timer                     enabled enabled
+systemd-tmpfiles-clean.timer      static  -
+
+5 unit files listed.

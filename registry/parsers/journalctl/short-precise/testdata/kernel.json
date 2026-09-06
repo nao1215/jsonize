@@ -1,0 +1,44 @@
+[
+  {
+    "timestamp": "Sep 07 03:35:06.625959",
+    "hostname": "host01",
+    "identifier": "systemd-sysv-generator",
+    "pid": 924726,
+    "message": "SysV service '/etc/init.d/grub-common' lacks a native systemd unit file, automatically generating a unit file for compatibility."
+  },
+  {
+    "timestamp": "Sep 07 03:35:06.626042",
+    "hostname": "host01",
+    "identifier": "systemd-sysv-generator",
+    "pid": 924726,
+    "message": "Please update package to include a native systemd unit file."
+  },
+  {
+    "timestamp": "Sep 07 03:35:06.626054",
+    "hostname": "host01",
+    "identifier": "systemd-sysv-generator",
+    "pid": 924726,
+    "message": "! This compatibility logic is deprecated, expect removal soon. !"
+  },
+  {
+    "timestamp": "Sep 07 03:45:35.730964",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "kauditd_printk_skb: 126 callbacks suppressed"
+  },
+  {
+    "timestamp": "Sep 07 03:45:35.731098",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "audit: type=1400 audit(1788720335.729:3527): apparmor=\"AUDIT\" operation=\"userns_create\" class=\"namespace\" info=\"Userns create - transitioning profile\" profile=\"unconfined\" pid=937338 comm=\"unshare\" requested=\"userns_create\" target=\"unprivileged_userns\" execpath=\"/usr/bin/unshare\""
+  },
+  {
+    "timestamp": "Sep 07 03:45:35.731129",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "audit: type=1400 audit(1788720335.729:3528): apparmor=\"DENIED\" operation=\"capable\" class=\"cap\" profile=\"unprivileged_userns\" pid=937338 comm=\"unshare\" capability=25  capname=\"sys_time\""
+  }
+]

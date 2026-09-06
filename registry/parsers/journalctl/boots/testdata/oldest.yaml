@@ -1,0 +1,2 @@
+source: "the header and the first 12 rows of journalctl --list-boots --no-pager on Ubuntu with systemd 259, LC_ALL=C; boot ids replaced. The full listing has 85 rows"
+os: linux

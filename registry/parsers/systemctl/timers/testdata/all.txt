@@ -1,0 +1,23 @@
+NEXT                            LEFT LAST                                   PASSED UNIT                           ACTIVATES
+Mon 2026-09-07 03:43:31 JST 3min 21s Mon 2026-09-07 03:38:31 JST      1min 38s ago sddm-backgrounds-cache.timer   sddm-backgrounds-cache.service
+Mon 2026-09-07 03:50:00 JST     9min Mon 2026-09-07 03:40:05 JST            4s ago sysstat-collect.timer          sysstat-collect.service
+Mon 2026-09-07 04:32:51 JST    52min Mon 2026-09-07 03:34:58 JST          5min ago fwupd-refresh.timer            fwupd-refresh.service
+Mon 2026-09-07 05:06:48 JST 1h 26min Mon 2026-09-07 02:06:48 JST      1h 33min ago apport-autoreport.timer        apport-autoreport.service
+Mon 2026-09-07 06:51:59 JST 3h 11min Sun 2026-09-06 06:52:28 JST           20h ago apt-daily-upgrade.timer        apt-daily-upgrade.service
+Mon 2026-09-07 07:30:33 JST 3h 50min Sun 2026-09-06 23:31:38 JST       4h 8min ago anacron.timer                  anacron.service
+Mon 2026-09-07 09:25:39 JST 5h 45min Sun 2026-09-06 09:25:39 JST           18h ago update-notifier-download.timer update-notifier-download.service
+Mon 2026-09-07 09:35:28 JST 5h 55min Sun 2026-09-06 09:35:28 JST           18h ago systemd-tmpfiles-clean.timer   systemd-tmpfiles-clean.service
+Mon 2026-09-07 11:57:04 JST       8h Sun 2026-09-06 06:22:17 JST           21h ago man-db.timer                   man-db.service
+Mon 2026-09-07 12:13:11 JST       8h Mon 2026-09-07 03:19:47 JST         20min ago motd-news.timer                motd-news.service
+Mon 2026-09-07 16:17:41 JST      12h Mon 2026-09-07 01:18:16 JST      2h 21min ago apt-daily.timer                apt-daily.service
+Tue 2026-09-08 00:00:00 JST      20h Mon 2026-09-07 00:00:17 JST      3h 39min ago dpkg-db-backup.timer           dpkg-db-backup.service
+Tue 2026-09-08 00:00:00 JST      20h Mon 2026-09-07 00:00:17 JST      3h 39min ago sysstat-rotate.timer           sysstat-rotate.service
+Tue 2026-09-08 00:04:28 JST      20h Mon 2026-09-07 00:05:48 JST      3h 34min ago logrotate.timer                logrotate.service
+Tue 2026-09-08 00:07:00 JST      20h Mon 2026-09-07 00:07:17 JST      3h 32min ago sysstat-summary.timer          sysstat-summary.service
+Thu 2026-09-10 16:59:07 JST   3 days Sun 2026-08-30 15:15:05 JST 1 week 0 days ago update-notifier-motd.timer     update-notifier-motd.service
+Sun 2026-09-13 03:10:16 JST   5 days Sun 2026-09-06 03:10:34 JST           24h ago e2scrub_all.timer              e2scrub_all.service
+Mon 2026-09-14 01:23:55 JST   6 days Mon 2026-09-07 00:01:29 JST      3h 38min ago fstrim.timer                   fstrim.service
+-                                  - -                                           - snapd.snap-repair.timer        snapd.snap-repair.service
+-                                  - -                                           - ua-timer.timer                 ua-timer.service
+
+20 timers listed.

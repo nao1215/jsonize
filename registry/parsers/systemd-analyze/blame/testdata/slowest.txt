@@ -1,0 +1,20 @@
+1w 6d 18h 15min 19.086s snapd.service
+           2min 44.575s fstrim.service
+            1min 1.969s apt-daily-upgrade.service
+                30.105s apport-autoreport.service
+                12.295s apt-daily.service
+                 4.816s NetworkManager-wait-online.service
+                 2.077s dev-rfkill.device
+                 2.077s sys-devices-virtual-misc-rfkill.device
+                 2.030s dev-tpm0.device
+                 2.030s sys-devices-LNXSYSTM:00-LNXSYBUS:00-MSFT0101:00-tpm-tpm0.device
+                 2.024s sys-devices-platform-serial8250-serial8250:0-serial8250:0.3-tty-ttyS3.device
+                 2.024s dev-ttyS3.device
+                 2.021s sys-devices-platform-serial8250-serial8250:0-serial8250:0.2-tty-ttyS2.device
+                 2.021s dev-ttyS2.device
+                 2.019s dev-tpmrm0.device
+                 2.019s sys-devices-LNXSYSTM:00-LNXSYBUS:00-MSFT0101:00-tpmrm-tpmrm0.device
+                 2.019s dev-ttyprintk.device
+                 2.019s sys-devices-virtual-tty-ttyprintk.device
+                 2.017s dev-ttyS0.device
+                 2.017s sys-devices-platform-serial8250-serial8250:0-serial8250:0.0-tty-ttyS0.device

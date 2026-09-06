@@ -1,0 +1,2 @@
+source: "the last 20 lines of systemd-analyze blame --no-pager on Ubuntu with systemd 259, LC_ALL=C; the tail of the listing is where the durations fall to microseconds"
+os: linux

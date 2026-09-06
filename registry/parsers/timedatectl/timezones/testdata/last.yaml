@@ -1,0 +1,2 @@
+source: "the last 20 lines of timedatectl list-timezones --no-pager on Ubuntu with systemd 259, LC_ALL=C; the listing ends with UTC, the one name that has no region"
+os: linux

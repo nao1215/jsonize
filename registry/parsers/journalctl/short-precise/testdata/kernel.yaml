@@ -1,0 +1,3 @@
+source: "journalctl -k -n 6 -o short-precise --no-pager on Ubuntu with systemd 259, LC_ALL=C; host name replaced. The kernel entries carry no pid, so that field is null on three rows"
+os: linux
+args: ["-k", "-n", "6", "-o", "short-precise"]

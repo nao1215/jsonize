@@ -1,0 +1,27 @@
+[
+  {
+    "unit_file": "proc-sys-fs-binfmt_misc.automount",
+    "state": "static",
+    "preset": null
+  },
+  {
+    "unit_file": "dev-hugepages.mount",
+    "state": "static",
+    "preset": null
+  },
+  {
+    "unit_file": "snap-core24-1643.mount",
+    "state": "enabled",
+    "preset": "enabled"
+  },
+  {
+    "unit_file": "anacron.timer",
+    "state": "enabled",
+    "preset": "enabled"
+  },
+  {
+    "unit_file": "systemd-tmpfiles-clean.timer",
+    "state": "static",
+    "preset": null
+  }
+]

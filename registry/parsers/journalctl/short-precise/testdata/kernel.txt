@@ -1,0 +1,6 @@
+Sep 07 03:35:06.625959 host01 systemd-sysv-generator[924726]: SysV service '/etc/init.d/grub-common' lacks a native systemd unit file, automatically generating a unit file for compatibility.
+Sep 07 03:35:06.626042 host01 systemd-sysv-generator[924726]: Please update package to include a native systemd unit file.
+Sep 07 03:35:06.626054 host01 systemd-sysv-generator[924726]: ! This compatibility logic is deprecated, expect removal soon. !
+Sep 07 03:45:35.730964 host01 kernel: kauditd_printk_skb: 126 callbacks suppressed
+Sep 07 03:45:35.731098 host01 kernel: audit: type=1400 audit(1788720335.729:3527): apparmor="AUDIT" operation="userns_create" class="namespace" info="Userns create - transitioning profile" profile="unconfined" pid=937338 comm="unshare" requested="userns_create" target="unprivileged_userns" execpath="/usr/bin/unshare"
+Sep 07 03:45:35.731129 host01 kernel: audit: type=1400 audit(1788720335.729:3528): apparmor="DENIED" operation="capable" class="cap" profile="unprivileged_userns" pid=937338 comm="unshare" capability=25  capname="sys_time"

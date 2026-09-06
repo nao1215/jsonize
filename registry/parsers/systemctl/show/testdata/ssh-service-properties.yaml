@@ -1,0 +1,3 @@
+source: "systemctl show -p Id -p Description -p Documentation -p LoadState -p ActiveState -p SubState -p MainPID -p FragmentPath ssh.service --no-pager on Ubuntu with systemd 259, LC_ALL=C; a selected set of properties, printed in systemd's own order"
+os: linux
+args: ["show", "-p", "Id", "-p", "Description", "-p", "Documentation", "-p", "LoadState", "-p", "ActiveState", "-p", "SubState", "-p", "MainPID", "-p", "FragmentPath", "ssh.service"]

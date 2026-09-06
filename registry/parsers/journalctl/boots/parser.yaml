@@ -1,0 +1,30 @@
+# `journalctl --list-boots` prints one row per boot: an index counting
+# back from the current boot, the boot id, and the timestamps of the
+# first and last entry recorded for it. Two header labels are two words
+# each and the index is right-aligned, so the row is read by its shape
+# rather than cut on the header positions.
+format: 1
+command: journalctl
+variant: boots
+description: journalctl --list-boots table
+metadata:
+  tags: [linux, log, systemd]
+  compatible: [systemd]
+  references:
+    - https://man7.org/linux/man-pages/man1/journalctl.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*IDX[ \t]+BOOT ID[ \t]+FIRST ENTRY[ \t]+LAST ENTRY[ \t]*$'
+input:
+  ignore:
+    - '\A[ \t]*IDX[ \t]+BOOT ID'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<idx>-?[0-9]+) (?P<boot_id>[0-9a-f]{32}) (?P<first_entry>[A-Z][a-z]{2} [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} \S+) (?P<last_entry>[A-Z][a-z]{2} [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} \S+)[ \t]*$'
+fields:
+  idx: {type: int}
+  boot_id: {required: true}
+  first_entry: {required: true}
+  last_entry: {required: true}

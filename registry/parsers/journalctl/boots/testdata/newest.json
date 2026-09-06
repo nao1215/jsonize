@@ -1,0 +1,74 @@
+[
+  {
+    "idx": -11,
+    "boot_id": "0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c",
+    "first_entry": "Sun 2026-08-09 00:23:42 JST",
+    "last_entry": "Sun 2026-08-09 13:04:59 JST"
+  },
+  {
+    "idx": -10,
+    "boot_id": "0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d",
+    "first_entry": "Sun 2026-08-09 13:05:30 JST",
+    "last_entry": "Sun 2026-08-09 17:49:01 JST"
+  },
+  {
+    "idx": -9,
+    "boot_id": "0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e",
+    "first_entry": "Sun 2026-08-09 19:40:09 JST",
+    "last_entry": "Tue 2026-08-11 01:20:29 JST"
+  },
+  {
+    "idx": -8,
+    "boot_id": "0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f",
+    "first_entry": "Tue 2026-08-11 06:09:46 JST",
+    "last_entry": "Wed 2026-08-12 08:10:13 JST"
+  },
+  {
+    "idx": -7,
+    "boot_id": "10101010101010101010101010101010",
+    "first_entry": "Wed 2026-08-12 08:10:26 JST",
+    "last_entry": "Thu 2026-08-13 07:46:53 JST"
+  },
+  {
+    "idx": -6,
+    "boot_id": "11111111111111111111111111111111",
+    "first_entry": "Thu 2026-08-13 07:47:06 JST",
+    "last_entry": "Thu 2026-08-13 20:01:26 JST"
+  },
+  {
+    "idx": -5,
+    "boot_id": "12121212121212121212121212121212",
+    "first_entry": "Thu 2026-08-13 20:01:36 JST",
+    "last_entry": "Fri 2026-08-14 00:54:00 JST"
+  },
+  {
+    "idx": -4,
+    "boot_id": "13131313131313131313131313131313",
+    "first_entry": "Fri 2026-08-14 09:33:03 JST",
+    "last_entry": "Fri 2026-08-14 21:33:28 JST"
+  },
+  {
+    "idx": -3,
+    "boot_id": "14141414141414141414141414141414",
+    "first_entry": "Fri 2026-08-14 21:34:02 JST",
+    "last_entry": "Tue 2026-08-18 22:08:27 JST"
+  },
+  {
+    "idx": -2,
+    "boot_id": "15151515151515151515151515151515",
+    "first_entry": "Tue 2026-08-18 22:09:15 JST",
+    "last_entry": "Wed 2026-08-19 20:06:07 JST"
+  },
+  {
+    "idx": -1,
+    "boot_id": "16161616161616161616161616161616",
+    "first_entry": "Wed 2026-08-19 20:06:18 JST",
+    "last_entry": "Mon 2026-08-24 00:27:31 JST"
+  },
+  {
+    "idx": 0,
+    "boot_id": "17171717171717171717171717171717",
+    "first_entry": "Mon 2026-08-24 09:19:43 JST",
+    "last_entry": "Mon 2026-09-07 03:40:05 JST"
+  }
+]

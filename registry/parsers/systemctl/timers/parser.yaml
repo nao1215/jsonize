@@ -1,0 +1,37 @@
+# `systemctl list-timers` right-aligns LEFT and PASSED, so a wide value
+# reaches back into the column before it and the header positions cannot
+# be used to cut the row. The four leading columns are read by their
+# shape instead: a weekday plus a date, a time and a zone, or "-" for a
+# timer that has no next elapse. The two durations are rounded for a
+# reader ("3 days", "1 week 0 days ago") and stay strings. The date has
+# to be spelled out in the pattern: a looser "four fields" would let a
+# LEFT of "3min 21s" swallow the first field of LAST.
+format: 1
+command: systemctl
+variant: timers
+description: systemctl list-timers table
+metadata:
+  tags: [linux, systemd, timer]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemctl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*NEXT[ \t]+LEFT[ \t]+LAST[ \t]+PASSED[ \t]+UNIT[ \t]+ACTIVATES[ \t]*$'
+input:
+  ignore:
+    - '\A[ \t]*NEXT[ \t]+LEFT[ \t]+LAST'
+    - '^[0-9]+ timers listed\.$'
+    - '^Pass --all to see loaded but inactive timers, too\.$'
+parse:
+  type: regex
+  pattern: '^(?P<next>-|[A-Z][a-z]{2} [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} \S+)[ \t]+(?P<left>.+?)[ \t]+(?P<last>-|[A-Z][a-z]{2} [0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} \S+)[ \t]+(?P<passed>.+)[ \t]+(?P<unit>\S+)[ \t]+(?P<activates>\S+)[ \t]*$'
+fields:
+  next: {null_if: ["-"]}
+  left: {null_if: ["-"]}
+  last: {null_if: ["-"]}
+  passed: {null_if: ["-"]}
+  unit: {required: true}
+  activates: {required: true}

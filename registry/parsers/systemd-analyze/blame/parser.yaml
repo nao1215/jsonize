@@ -1,0 +1,28 @@
+# `systemd-analyze blame` lists the units that took the longest to
+# initialise, slowest first. The duration is right-aligned and systemd
+# writes it for a reader, splitting it into as many units as it needs
+# ("1w 6d 18h 15min 19.086s"), so it stays the string it was printed as
+# and the unit name is the last field on the line.
+format: 1
+command: systemd-analyze
+variant: blame
+description: systemd-analyze blame, unit initialisation times
+metadata:
+  tags: [linux, systemd, boot]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemd-analyze.html
+detect:
+  os: [linux]
+  args:
+    any: ["blame"]
+  signature:
+    all:
+      - '\A[ \t]*[0-9]'
+      - '^[ \t]*[0-9][^\n]*[ \t]\S+\.(?:service|socket|target|device|mount|automount|swap|path|timer|slice|scope)[ \t]*$'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<time>.+)[ \t]+(?P<unit>\S+)[ \t]*$'
+fields:
+  time: {required: true}
+  unit: {required: true}

@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Server",
+    "value": "185.125.190.57 (ntp.ubuntu.com)"
+  },
+  {
+    "name": "Poll interval",
+    "value": "34min 8s (min: 32s; max 34min 8s)"
+  },
+  {
+    "name": "Leap",
+    "value": "normal"
+  },
+  {
+    "name": "Version",
+    "value": "4"
+  },
+  {
+    "name": "Stratum",
+    "value": "2"
+  },
+  {
+    "name": "Reference",
+    "value": "1D586304"
+  },
+  {
+    "name": "Precision",
+    "value": "1us (-25)"
+  },
+  {
+    "name": "Root distance",
+    "value": "3.653ms (max: 5s)"
+  },
+  {
+    "name": "Offset",
+    "value": "+12.604ms"
+  },
+  {
+    "name": "Delay",
+    "value": "237.481ms"
+  },
+  {
+    "name": "Jitter",
+    "value": "48.459ms"
+  },
+  {
+    "name": "Packet count",
+    "value": "672"
+  },
+  {
+    "name": "Frequency",
+    "value": "-47.597ppm"
+  }
+]

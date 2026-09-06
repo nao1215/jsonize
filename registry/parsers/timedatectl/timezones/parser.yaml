@@ -1,0 +1,28 @@
+# `timedatectl list-timezones` prints one zone name per line. A column of
+# slash-separated words is also a file list, a package list and half the
+# output of find, so the text is not evidence on its own and the
+# definition is used only when the parser is named.
+format: 1
+command: timedatectl
+variant: timezones
+description: timedatectl list-timezones, one time zone name per line
+metadata:
+  tags: [linux, systemd, time]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/timedatectl.html
+detect:
+  os: [linux]
+  auto_detect: false
+  args:
+    any: ["list-timezones"]
+  signature:
+    # Two zone names in a row, from the very first line: the listing has
+    # no header and starts with a region.
+    all:
+      - '\A[A-Z][A-Za-z_-]*/[A-Za-z0-9_+/-]+\n[A-Z][A-Za-z_-]*/[A-Za-z0-9_+/-]+$'
+parse:
+  type: regex
+  pattern: '^(?P<timezone>[A-Za-z0-9_+/-]+)$'
+fields:
+  timezone: {required: true}

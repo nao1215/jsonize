@@ -1,0 +1,146 @@
+[
+  {
+    "next": "Mon 2026-09-07 03:40:00 JST",
+    "left": "3s",
+    "last": "Mon 2026-09-07 03:30:00 JST",
+    "passed": "9min ago",
+    "unit": "sysstat-collect.timer",
+    "activates": "sysstat-collect.service"
+  },
+  {
+    "next": "Mon 2026-09-07 03:43:31 JST",
+    "left": "3min 35s",
+    "last": "Mon 2026-09-07 03:38:31 JST",
+    "passed": "1min 24s ago",
+    "unit": "sddm-backgrounds-cache.timer",
+    "activates": "sddm-backgrounds-cache.service"
+  },
+  {
+    "next": "Mon 2026-09-07 04:32:51 JST",
+    "left": "52min",
+    "last": "Mon 2026-09-07 03:34:58 JST",
+    "passed": "4min 57s ago",
+    "unit": "fwupd-refresh.timer",
+    "activates": "fwupd-refresh.service"
+  },
+  {
+    "next": "Mon 2026-09-07 05:06:48 JST",
+    "left": "1h 26min",
+    "last": "Mon 2026-09-07 02:06:48 JST",
+    "passed": "1h 33min ago",
+    "unit": "apport-autoreport.timer",
+    "activates": "apport-autoreport.service"
+  },
+  {
+    "next": "Mon 2026-09-07 06:51:59 JST",
+    "left": "3h 12min",
+    "last": "Sun 2026-09-06 06:52:28 JST",
+    "passed": "20h ago",
+    "unit": "apt-daily-upgrade.timer",
+    "activates": "apt-daily-upgrade.service"
+  },
+  {
+    "next": "Mon 2026-09-07 07:30:33 JST",
+    "left": "3h 50min",
+    "last": "Sun 2026-09-06 23:31:38 JST",
+    "passed": "4h 8min ago",
+    "unit": "anacron.timer",
+    "activates": "anacron.service"
+  },
+  {
+    "next": "Mon 2026-09-07 09:25:39 JST",
+    "left": "5h 45min",
+    "last": "Sun 2026-09-06 09:25:39 JST",
+    "passed": "18h ago",
+    "unit": "update-notifier-download.timer",
+    "activates": "update-notifier-download.service"
+  },
+  {
+    "next": "Mon 2026-09-07 09:35:28 JST",
+    "left": "5h 55min",
+    "last": "Sun 2026-09-06 09:35:28 JST",
+    "passed": "18h ago",
+    "unit": "systemd-tmpfiles-clean.timer",
+    "activates": "systemd-tmpfiles-clean.service"
+  },
+  {
+    "next": "Mon 2026-09-07 11:57:04 JST",
+    "left": "8h",
+    "last": "Sun 2026-09-06 06:22:17 JST",
+    "passed": "21h ago",
+    "unit": "man-db.timer",
+    "activates": "man-db.service"
+  },
+  {
+    "next": "Mon 2026-09-07 12:13:11 JST",
+    "left": "8h",
+    "last": "Mon 2026-09-07 03:19:47 JST",
+    "passed": "20min ago",
+    "unit": "motd-news.timer",
+    "activates": "motd-news.service"
+  },
+  {
+    "next": "Mon 2026-09-07 16:17:41 JST",
+    "left": "12h",
+    "last": "Mon 2026-09-07 01:18:16 JST",
+    "passed": "2h 21min ago",
+    "unit": "apt-daily.timer",
+    "activates": "apt-daily.service"
+  },
+  {
+    "next": "Tue 2026-09-08 00:00:00 JST",
+    "left": "20h",
+    "last": "Mon 2026-09-07 00:00:17 JST",
+    "passed": "3h 39min ago",
+    "unit": "dpkg-db-backup.timer",
+    "activates": "dpkg-db-backup.service"
+  },
+  {
+    "next": "Tue 2026-09-08 00:00:00 JST",
+    "left": "20h",
+    "last": "Mon 2026-09-07 00:00:17 JST",
+    "passed": "3h 39min ago",
+    "unit": "sysstat-rotate.timer",
+    "activates": "sysstat-rotate.service"
+  },
+  {
+    "next": "Tue 2026-09-08 00:04:28 JST",
+    "left": "20h",
+    "last": "Mon 2026-09-07 00:05:48 JST",
+    "passed": "3h 34min ago",
+    "unit": "logrotate.timer",
+    "activates": "logrotate.service"
+  },
+  {
+    "next": "Tue 2026-09-08 00:07:00 JST",
+    "left": "20h",
+    "last": "Mon 2026-09-07 00:07:17 JST",
+    "passed": "3h 32min ago",
+    "unit": "sysstat-summary.timer",
+    "activates": "sysstat-summary.service"
+  },
+  {
+    "next": "Thu 2026-09-10 16:59:07 JST",
+    "left": "3 days",
+    "last": "Sun 2026-08-30 15:15:05 JST",
+    "passed": "1 week 0 days ago",
+    "unit": "update-notifier-motd.timer",
+    "activates": "update-notifier-motd.service"
+  },
+  {
+    "next": "Sun 2026-09-13 03:10:16 JST",
+    "left": "5 days",
+    "last": "Sun 2026-09-06 03:10:34 JST",
+    "passed": "24h ago",
+    "unit": "e2scrub_all.timer",
+    "activates": "e2scrub_all.service"
+  },
+  {
+    "next": "Mon 2026-09-14 01:23:55 JST",
+    "left": "6 days",
+    "last": "Mon 2026-09-07 00:01:29 JST",
+    "passed": "3h 38min ago",
+    "unit": "fstrim.timer",
+    "activates": "fstrim.service"
+  }
+]

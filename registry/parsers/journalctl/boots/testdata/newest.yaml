@@ -1,0 +1,3 @@
+source: "the header and the last 12 rows of journalctl --list-boots --no-pager on Ubuntu with systemd 259, LC_ALL=C; boot ids replaced. Those indexes are one and two digits, so they are padded and the current boot is 0"
+os: linux
+args: ["--list-boots"]

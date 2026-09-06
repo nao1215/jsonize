@@ -1,0 +1,62 @@
+[
+  {
+    "timezone": "Pacific/Midway"
+  },
+  {
+    "timezone": "Pacific/Nauru"
+  },
+  {
+    "timezone": "Pacific/Niue"
+  },
+  {
+    "timezone": "Pacific/Norfolk"
+  },
+  {
+    "timezone": "Pacific/Noumea"
+  },
+  {
+    "timezone": "Pacific/Pago_Pago"
+  },
+  {
+    "timezone": "Pacific/Palau"
+  },
+  {
+    "timezone": "Pacific/Pitcairn"
+  },
+  {
+    "timezone": "Pacific/Pohnpei"
+  },
+  {
+    "timezone": "Pacific/Port_Moresby"
+  },
+  {
+    "timezone": "Pacific/Rarotonga"
+  },
+  {
+    "timezone": "Pacific/Saipan"
+  },
+  {
+    "timezone": "Pacific/Samoa"
+  },
+  {
+    "timezone": "Pacific/Tahiti"
+  },
+  {
+    "timezone": "Pacific/Tarawa"
+  },
+  {
+    "timezone": "Pacific/Tongatapu"
+  },
+  {
+    "timezone": "Pacific/Wake"
+  },
+  {
+    "timezone": "Pacific/Wallis"
+  },
+  {
+    "timezone": "Pacific/Yap"
+  },
+  {
+    "timezone": "UTC"
+  }
+]

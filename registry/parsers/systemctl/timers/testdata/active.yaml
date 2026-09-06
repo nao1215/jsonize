@@ -1,0 +1,3 @@
+source: "systemctl list-timers --no-pager on Ubuntu with systemd 259, LC_ALL=C; host name replaced"
+os: linux
+args: ["list-timers"]
