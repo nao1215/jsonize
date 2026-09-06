@@ -1,0 +1,31 @@
+# `lspci -vmm` prints one "Key:\tvalue" line per attribute and separates
+# the devices with a blank line. Which keys a device has depends on the
+# device, so a record keeps them as a map under the names lspci uses.
+format: 1
+command: lspci
+variant: verbose-machine
+description: lspci -vmm one key per line, blocks separated by blank lines
+metadata:
+  tags: [linux, hardware, pciutils]
+  compatible: [pciutils]
+  references:
+    - https://man7.org/linux/man-pages/man8/lspci.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ASlot:\t[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]'
+      - '^Class:\t'
+      - '^Vendor:\t'
+parse:
+  type: records
+  start: '^Slot:\t'
+  parts:
+    - name: device
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      fields:
+        IOMMUGroup: {type: int}
+        NUMANode: {type: int}

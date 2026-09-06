@@ -1,0 +1,4 @@
+description: the same table with --raw, which keeps the headings but drops the padding
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C, rfkill --raw
+os: linux
+args: [--raw]

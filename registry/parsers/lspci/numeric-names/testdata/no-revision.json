@@ -1,0 +1,10 @@
+[
+  {
+    "slot": "00:01.0",
+    "class": "Host bridge",
+    "class_id": "0600",
+    "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Dummy Host Bridge",
+    "vendor_id": "1022",
+    "device_id": "1509"
+  }
+]

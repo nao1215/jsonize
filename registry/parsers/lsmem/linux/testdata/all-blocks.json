@@ -1,0 +1,242 @@
+{
+  "ranges": [
+    {
+      "range": "0x0000000000000000-0x000000007fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "0"
+    },
+    {
+      "range": "0x0000000100000000-0x000000017fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "2"
+    },
+    {
+      "range": "0x0000000180000000-0x00000001ffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "3"
+    },
+    {
+      "range": "0x0000000200000000-0x000000027fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "4"
+    },
+    {
+      "range": "0x0000000280000000-0x00000002ffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "5"
+    },
+    {
+      "range": "0x0000000300000000-0x000000037fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "6"
+    },
+    {
+      "range": "0x0000000380000000-0x00000003ffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "7"
+    },
+    {
+      "range": "0x0000000400000000-0x000000047fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "8"
+    },
+    {
+      "range": "0x0000000480000000-0x00000004ffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "9"
+    },
+    {
+      "range": "0x0000000500000000-0x000000057fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "10"
+    },
+    {
+      "range": "0x0000000580000000-0x00000005ffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "11"
+    },
+    {
+      "range": "0x0000000600000000-0x000000067fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "12"
+    },
+    {
+      "range": "0x0000000680000000-0x00000006ffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "13"
+    },
+    {
+      "range": "0x0000000700000000-0x000000077fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "14"
+    },
+    {
+      "range": "0x0000000780000000-0x00000007ffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "15"
+    },
+    {
+      "range": "0x0000000800000000-0x000000087fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "16"
+    },
+    {
+      "range": "0x0000000880000000-0x00000008ffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "17"
+    },
+    {
+      "range": "0x0000000900000000-0x000000097fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "18"
+    },
+    {
+      "range": "0x0000000980000000-0x00000009ffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "19"
+    },
+    {
+      "range": "0x0000000a00000000-0x0000000a7fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "20"
+    },
+    {
+      "range": "0x0000000a80000000-0x0000000affffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "21"
+    },
+    {
+      "range": "0x0000000b00000000-0x0000000b7fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "22"
+    },
+    {
+      "range": "0x0000000b80000000-0x0000000bffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "23"
+    },
+    {
+      "range": "0x0000000c00000000-0x0000000c7fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "24"
+    },
+    {
+      "range": "0x0000000c80000000-0x0000000cffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "25"
+    },
+    {
+      "range": "0x0000000d00000000-0x0000000d7fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "26"
+    },
+    {
+      "range": "0x0000000d80000000-0x0000000dffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "27"
+    },
+    {
+      "range": "0x0000000e00000000-0x0000000e7fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "28"
+    },
+    {
+      "range": "0x0000000e80000000-0x0000000effffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "29"
+    },
+    {
+      "range": "0x0000000f00000000-0x0000000f7fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "30"
+    },
+    {
+      "range": "0x0000000f80000000-0x0000000fffffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "31"
+    },
+    {
+      "range": "0x0000001000000000-0x000000107fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "32"
+    }
+  ],
+  "summary": [
+    {
+      "name": "Memory block size",
+      "value": "2G"
+    },
+    {
+      "name": "Total online memory",
+      "value": "64G"
+    },
+    {
+      "name": "Total offline memory",
+      "value": "0B"
+    }
+  ]
+}

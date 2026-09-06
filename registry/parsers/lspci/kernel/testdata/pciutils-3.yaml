@@ -1,0 +1,4 @@
+description: devices with and without a kernel driver, and one whose block is a single line
+source: captured on Ubuntu 26.04 (pciutils 3.14.0) with LC_ALL=C, lspci -k
+os: linux
+args: [-k]

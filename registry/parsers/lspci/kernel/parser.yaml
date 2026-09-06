@@ -1,0 +1,48 @@
+# `lspci -k` prints the default line for each device and then, indented
+# under it, the subsystem and the kernel driver and modules that claim
+# it. The blocks repeat, so the definition describes one of them and
+# `records` applies it to each. A device that no driver claims has no
+# indented lines at all, which leaves attributes empty.
+format: 1
+command: lspci
+variant: kernel
+description: lspci -k devices with the drivers that claim them
+metadata:
+  tags: [linux, hardware, kernel, pciutils]
+  compatible: [pciutils]
+  references:
+    - https://man7.org/linux/man-pages/man8/lspci.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [^:\[]+: '
+    any:
+      - '^\t(?:Subsystem|Kernel driver in use|Kernel modules|DeviceName): '
+    none:
+      # The lines -v adds. Their keys are not "key: value" pairs and this
+      # definition would stop at the first one.
+      - '^\t(?:Flags|Capabilities|Memory at|I/O ports|Expansion ROM|Control|Status):'
+parse:
+  type: records
+  start: '^[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] '
+  parts:
+    - name: device
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<slot>[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>[^:]+): (?P<device>.+?)(?: \(rev (?P<revision>[0-9a-f]+)\))?[ \t]*\z'
+      fields:
+        slot: {required: true}
+        class: {required: true}
+        device: {required: true}
+        revision: {when_missing: omit}
+    # The keys are printed as lspci writes them, spaces and all, because
+    # which of them appear depends on the device.
+    - name: attributes
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: map

@@ -1,0 +1,48 @@
+# lsmem prints the table of memory ranges and then three summary lines
+# under it. The SIZE, REMOVABLE and BLOCK cells are right-aligned under
+# headings wider than they are, so the columns cannot be cut at the
+# heading offsets; every cell is a single word, so they are split on
+# whitespace instead.
+format: 1
+command: lsmem
+variant: linux
+description: lsmem memory ranges and the summary under them
+metadata:
+  tags: [linux, memory, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lsmem.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ARANGE[ \t]+SIZE[ \t]+STATE[ \t]+REMOVABLE[ \t]+BLOCK[ \t]*$'
+      # The summary is not looked for: with -a there is one row per block
+      # and it can sit well past the signature window.
+      - '^0x[0-9a-f]+-0x[0-9a-f]+[ \t]'
+parse:
+  type: composite
+  parts:
+    - name: ranges
+      select: {until: '^Memory block size:'}
+      parse:
+        type: table
+      fields:
+        range: {required: true}
+        # SIZE is rounded ("62G") and the exact figure is the number of
+        # blocks times the block size, so the printed text is kept as it
+        # is.
+        size: {required: true}
+        state: {required: true}
+        removable: {type: bool, required: true}
+        # A single block prints its number, a run of them prints
+        # "first-last".
+        block: {required: true}
+    # The summary lines are the only ones with a label, so they are
+    # picked out by shape rather than by position; the table rows and the
+    # heading above them are skipped because neither is a labelled pair.
+    - name: summary
+      parse:
+        type: regex
+        on_mismatch: skip
+        pattern: '^(?P<name>[A-Za-z][^:]*):[ \t]+(?P<value>.+?)[ \t]*$'

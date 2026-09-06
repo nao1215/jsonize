@@ -1,0 +1,4 @@
+description: one device whose name contains brackets and which reports no revision
+source: captured on Ubuntu 26.04 (pciutils 3.14.0) with LC_ALL=C, lspci -nn -s 00:01.0
+os: linux
+args: [-nn, -s, "00:01.0"]

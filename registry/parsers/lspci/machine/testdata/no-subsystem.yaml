@@ -1,0 +1,4 @@
+description: one device with no revision and an empty subsystem pair
+source: captured on Ubuntu 26.04 (pciutils 3.14.0) with LC_ALL=C, lspci -mm -s 00:01.0
+os: linux
+args: [-mm, -s, "00:01.0"]

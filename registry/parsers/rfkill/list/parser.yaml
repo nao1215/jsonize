@@ -1,0 +1,45 @@
+# `rfkill list` prints one block per radio switch: the index, the device
+# and the kind of radio on the first line, and the two block states
+# indented under it. The blocks repeat, so the definition describes one
+# of them and `records` applies it to each.
+format: 1
+command: rfkill
+variant: list
+description: rfkill list blocks, one per radio switch
+metadata:
+  tags: [linux, wireless, bluetooth, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/rfkill.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[0-9]+: \S+: \S'
+      - '^[ \t]+Soft blocked: (?:yes|no)[ \t]*$'
+      - '^[ \t]+Hard blocked: (?:yes|no)[ \t]*$'
+parse:
+  type: records
+  start: '^[0-9]+: '
+  parts:
+    - name: device
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<id>[0-9]+): (?P<name>[^:]+): (?P<type>.+?)[ \t]*\z'
+      fields:
+        id: {type: int, required: true}
+        name: {required: true}
+        type: {required: true}
+    # Soft is the state a command can change, hard the state of a
+    # physical switch.
+    - name: blocked
+      select: {skip: 1, limit: 2}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[ \t]*Soft blocked: (?P<soft>yes|no)[ \t]*\n[ \t]*Hard blocked: (?P<hard>yes|no)[ \t]*\z'
+      fields:
+        soft: {type: bool, required: true}
+        hard: {type: bool, required: true}

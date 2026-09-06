@@ -1,0 +1,35 @@
+# `lspci -nn` prints both the name and the number for the class, the
+# vendor and the device, each number in square brackets after the name it
+# belongs to. Device names contain brackets of their own ("[AMD]"), so
+# the ids are found by their shape rather than by the first bracket.
+format: 1
+command: lspci
+variant: numeric-names
+description: lspci -nn names with their numeric identifiers
+metadata:
+  tags: [linux, hardware, pciutils]
+  compatible: [pciutils]
+  references:
+    - https://man7.org/linux/man-pages/man8/lspci.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [^:]+ \[[0-9a-f]{4}\]: '
+      - '\[[0-9a-f]{4}:[0-9a-f]{4}\]'
+    none:
+      # An indented line means -k or -v was asked for as well, and this
+      # definition would stop at the first one.
+      - '^\t\S'
+parse:
+  type: regex
+  pattern: '^(?P<slot>[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>.+?) \[(?P<class_id>[0-9a-f]{4})\]: (?P<device>.+?) \[(?P<vendor_id>[0-9a-f]{4}):(?P<device_id>[0-9a-f]{4})\](?: \(rev (?P<revision>[0-9a-f]+)\))?(?: \(prog-if (?P<prog_if>[0-9a-f]+)[^)]*\))?[ \t]*$'
+fields:
+  slot: {required: true}
+  class: {required: true}
+  class_id: {required: true}
+  device: {required: true}
+  vendor_id: {required: true}
+  device_id: {required: true}
+  revision: {when_missing: omit}
+  prog_if: {when_missing: omit}

@@ -1,0 +1,56 @@
+# `upower -d` prints one block per device, headed by its object path, and
+# then a "Daemon:" block for the daemon itself. The blocks repeat, so the
+# definition describes one of them and `records` applies it to each.
+#
+# The labels contain spaces and which of them appear depends on the
+# device, so the pairs are a list of name/value objects and the values
+# stay strings, percent sign and all.
+#
+# What this definition loses: a line without a colon is dropped, so the
+# device type heading (battery, line-power, unknown) disappears and the
+# pairs under it are flattened into the same list, and the rows of a
+# "History (charge):" block, which are three numbers and no colon, go
+# with it.
+format: 1
+command: upower
+variant: dump
+description: upower -d every device and the daemon
+metadata:
+  tags: [linux, power, upower]
+  compatible: [UPower]
+  references:
+    - https://upower.freedesktop.org/docs/
+detect:
+  os: [linux]
+  args:
+    any: ["-d", "--dump"]
+  signature:
+    all:
+      # A device path or, on a machine with no power devices at all, the
+      # daemon block on its own.
+      - '\A(?:Device:[ \t]+/org/freedesktop/UPower/devices/\S|Daemon:[ \t]*$)'
+input:
+  ignore:
+    - '^[^:]*$'
+parse:
+  type: records
+  start: '^(?:Device|Daemon):'
+  parts:
+    # The daemon block has no path, which leaves it null.
+    - name: device
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<kind>Device|Daemon):(?:[ \t]+(?P<path>\S+))?[ \t]*\z'
+      fields:
+        kind: {required: true}
+    - name: properties
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: list
+        # icon-name is printed in single quotes; the quotes are upower's
+        # punctuation, not part of the name.
+        unquote: true

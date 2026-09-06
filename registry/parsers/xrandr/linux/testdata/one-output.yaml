@@ -1,0 +1,3 @@
+description: one connected output driving an ultrawide monitor
+source: captured on Ubuntu 26.04 (xrandr 1.5.3, RandR 1.6) with LC_ALL=C
+os: linux

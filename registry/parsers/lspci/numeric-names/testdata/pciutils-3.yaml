@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (pciutils 3.14.0) with LC_ALL=C, lspci -nn
+os: linux
+args: [-nn]

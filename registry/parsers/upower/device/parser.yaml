@@ -25,6 +25,10 @@ detect:
     all:
       - '^[ \t]*power supply:[ \t]'
       - '^[ \t]*has history:[ \t]'
+    none:
+      # `upower -d` repeats these pairs under a "Device:" heading for
+      # every device it knows, which upower/dump reads as records.
+      - '\ADevice:[ \t]+/org/freedesktop/UPower/devices/'
 input:
   ignore:
     - '^[^:]*$'

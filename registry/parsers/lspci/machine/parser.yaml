@@ -1,0 +1,32 @@
+# `lspci -mm` quotes every name so that a name containing a space or a
+# colon can be told apart from the punctuation around it. The revision
+# and the programming interface are printed bare, as -rNN and -pNN, and
+# both are omitted when the device does not report them.
+format: 1
+command: lspci
+variant: machine
+description: lspci -mm quoted fields
+metadata:
+  tags: [linux, hardware, pciutils]
+  compatible: [pciutils]
+  references:
+    - https://man7.org/linux/man-pages/man8/lspci.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] "[^"]*" "'
+parse:
+  type: regex
+  pattern: '^(?P<slot>[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) "(?P<class>[^"]*)" "(?P<vendor>[^"]*)" "(?P<device>[^"]*)"(?: -r(?P<revision>[0-9a-f]+))?(?: -p(?P<prog_if>[0-9a-f]+))?(?: "(?P<subsystem_vendor>[^"]*)" "(?P<subsystem_device>[^"]*)")?[ \t]*$'
+fields:
+  slot: {required: true}
+  class: {required: true}
+  vendor: {required: true}
+  device: {required: true}
+  revision: {when_missing: omit}
+  prog_if: {when_missing: omit}
+  # A device that reports no subsystem prints a pair of empty strings
+  # rather than leaving the columns out.
+  subsystem_vendor: {null_if: [""]}
+  subsystem_device: {null_if: [""]}

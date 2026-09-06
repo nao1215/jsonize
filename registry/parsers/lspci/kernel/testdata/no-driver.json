@@ -1,0 +1,13 @@
+[
+  {
+    "device": {
+      "slot": "00:00.0",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Root Complex",
+      "revision": "02"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Root Complex"
+    }
+  }
+]

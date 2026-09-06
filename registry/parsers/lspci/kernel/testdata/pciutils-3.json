@@ -1,0 +1,483 @@
+[
+  {
+    "device": {
+      "slot": "00:00.0",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Root Complex",
+      "revision": "02"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Root Complex"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:00.2",
+      "class": "IOMMU",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo IOMMU",
+      "revision": "02"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo IOMMU"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:01.0",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Dummy Host Bridge"
+    },
+    "attributes": {}
+  },
+  {
+    "device": {
+      "slot": "00:01.1",
+      "class": "PCI bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe USB4 Bridge",
+      "revision": "02"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe USB4 Bridge",
+      "Kernel driver in use": "pcieport",
+      "Kernel modules": "shpchp"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:01.2",
+      "class": "PCI bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe USB4 Bridge",
+      "revision": "02"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe USB4 Bridge",
+      "Kernel driver in use": "pcieport",
+      "Kernel modules": "shpchp"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:02.0",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Dummy Host Bridge"
+    },
+    "attributes": {}
+  },
+  {
+    "device": {
+      "slot": "00:02.1",
+      "class": "PCI bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo GPP Bridge",
+      "revision": "02"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Device 1453",
+      "Kernel driver in use": "pcieport",
+      "Kernel modules": "shpchp"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:02.2",
+      "class": "PCI bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo GPP Bridge",
+      "revision": "02"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Device 1453",
+      "Kernel driver in use": "pcieport",
+      "Kernel modules": "shpchp"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:02.3",
+      "class": "PCI bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo GPP Bridge",
+      "revision": "02"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Device 1453",
+      "Kernel driver in use": "pcieport",
+      "Kernel modules": "shpchp"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:02.5",
+      "class": "PCI bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo GPP Bridge",
+      "revision": "02"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Device 1453",
+      "Kernel driver in use": "pcieport",
+      "Kernel modules": "shpchp"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:03.0",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Dummy Host Bridge"
+    },
+    "attributes": {}
+  },
+  {
+    "device": {
+      "slot": "00:03.1",
+      "class": "PCI bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo GPP Bridge"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Device 1453",
+      "Kernel driver in use": "pcieport",
+      "Kernel modules": "shpchp"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:08.0",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Dummy Host Bridge"
+    },
+    "attributes": {}
+  },
+  {
+    "device": {
+      "slot": "00:08.1",
+      "class": "PCI bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]",
+      "Kernel driver in use": "pcieport",
+      "Kernel modules": "shpchp"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:08.2",
+      "class": "PCI bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]",
+      "Kernel driver in use": "pcieport",
+      "Kernel modules": "shpchp"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:08.3",
+      "class": "PCI bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]",
+      "Kernel driver in use": "pcieport",
+      "Kernel modules": "shpchp"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:14.0",
+      "class": "SMBus",
+      "device": "Advanced Micro Devices, Inc. [AMD] FCH SMBus Controller",
+      "revision": "71"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] FCH SMBus Controller",
+      "Kernel driver in use": "piix4_smbus",
+      "Kernel modules": "i2c_piix4, sp5100_tco"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:14.3",
+      "class": "ISA bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] FCH LPC Bridge",
+      "revision": "51"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] FCH LPC Bridge"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:18.0",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 0"
+    },
+    "attributes": {}
+  },
+  {
+    "device": {
+      "slot": "00:18.1",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 1"
+    },
+    "attributes": {}
+  },
+  {
+    "device": {
+      "slot": "00:18.2",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 2"
+    },
+    "attributes": {}
+  },
+  {
+    "device": {
+      "slot": "00:18.3",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 3"
+    },
+    "attributes": {
+      "Kernel driver in use": "k10temp",
+      "Kernel modules": "k10temp"
+    }
+  },
+  {
+    "device": {
+      "slot": "00:18.4",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 4"
+    },
+    "attributes": {}
+  },
+  {
+    "device": {
+      "slot": "00:18.5",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 5"
+    },
+    "attributes": {}
+  },
+  {
+    "device": {
+      "slot": "00:18.6",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 6"
+    },
+    "attributes": {}
+  },
+  {
+    "device": {
+      "slot": "00:18.7",
+      "class": "Host bridge",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 7"
+    },
+    "attributes": {}
+  },
+  {
+    "device": {
+      "slot": "c1:00.0",
+      "class": "Ethernet controller",
+      "device": "Realtek Semiconductor Co., Ltd. RTL8125 2.5GbE Controller",
+      "revision": "05"
+    },
+    "attributes": {
+      "DeviceName": "OnBoard LAN",
+      "Subsystem": "Realtek Semiconductor Co., Ltd. RTL8125 2.5GbE Controller",
+      "Kernel driver in use": "r8169",
+      "Kernel modules": "r8169"
+    }
+  },
+  {
+    "device": {
+      "slot": "c2:00.0",
+      "class": "SD Host controller",
+      "device": "Genesys Logic, Inc GL9755 SD Host Controller",
+      "revision": "01"
+    },
+    "attributes": {
+      "Subsystem": "Genesys Logic, Inc GL9755 SD Host Controller",
+      "Kernel driver in use": "sdhci-pci",
+      "Kernel modules": "sdhci_pci"
+    }
+  },
+  {
+    "device": {
+      "slot": "c3:00.0",
+      "class": "Network controller",
+      "device": "MEDIATEK Corp. MT7925 (RZ717) Wi-Fi 7 160MHz"
+    },
+    "attributes": {
+      "Subsystem": "MEDIATEK Corp. MT7925 (RZ717) Wi-Fi 7 160MHz",
+      "Kernel driver in use": "mt7925e",
+      "Kernel modules": "mt7925e"
+    }
+  },
+  {
+    "device": {
+      "slot": "c4:00.0",
+      "class": "Non-Volatile memory controller",
+      "device": "Shenzhen Longsys Electronics Co., Ltd. Lexar NM790 / Patriot Viper VP4300 Lite NVMe SSD (DRAM-less)",
+      "revision": "01"
+    },
+    "attributes": {
+      "Subsystem": "Shenzhen Longsys Electronics Co., Ltd. Lexar NM790 / Patriot Viper VP4300 Lite NVMe SSD (DRAM-less)",
+      "Kernel driver in use": "nvme",
+      "Kernel modules": "nvme"
+    }
+  },
+  {
+    "device": {
+      "slot": "c5:00.0",
+      "class": "Non-Volatile memory controller",
+      "device": "KIOXIA Corporation Exceria Plus G4 NVMe SSD (DRAM-less)",
+      "revision": "01"
+    },
+    "attributes": {
+      "Subsystem": "KIOXIA Corporation Device 0181",
+      "Kernel driver in use": "nvme",
+      "Kernel modules": "nvme"
+    }
+  },
+  {
+    "device": {
+      "slot": "c6:00.0",
+      "class": "Display controller",
+      "device": "Advanced Micro Devices, Inc. [AMD/ATI] Strix Halo [Radeon Graphics / Radeon 8050S Graphics / Radeon 8060S Graphics]",
+      "revision": "c1"
+    },
+    "attributes": {
+      "Subsystem": "Device 2014:801d",
+      "Kernel driver in use": "amdgpu",
+      "Kernel modules": "amdgpu"
+    }
+  },
+  {
+    "device": {
+      "slot": "c6:00.1",
+      "class": "Audio device",
+      "device": "Advanced Micro Devices, Inc. [AMD/ATI] Radeon High Definition Audio Controller"
+    },
+    "attributes": {
+      "Subsystem": "Device 2014:801d",
+      "Kernel driver in use": "snd_hda_intel",
+      "Kernel modules": "snd_hda_intel"
+    }
+  },
+  {
+    "device": {
+      "slot": "c6:00.2",
+      "class": "Encryption controller",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Krackan/Strix Halo CCP/ASP"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix/Krackan/Strix Halo CCP/ASP",
+      "Kernel driver in use": "ccp",
+      "Kernel modules": "ccp"
+    }
+  },
+  {
+    "device": {
+      "slot": "c6:00.4",
+      "class": "USB controller",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Device 15b9",
+      "Kernel driver in use": "xhci_hcd",
+      "Kernel modules": "xhci_pci"
+    }
+  },
+  {
+    "device": {
+      "slot": "c6:00.6",
+      "class": "Audio device",
+      "device": "Advanced Micro Devices, Inc. [AMD] Ryzen HD Audio Controller"
+    },
+    "attributes": {
+      "DeviceName": "OnBoard Audio",
+      "Subsystem": "Device 2014:801d",
+      "Kernel driver in use": "snd_hda_intel",
+      "Kernel modules": "snd_hda_intel"
+    }
+  },
+  {
+    "device": {
+      "slot": "c7:00.0",
+      "class": "Non-Essential Instrumentation [1300]",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe Dummy Function"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe Dummy Function"
+    }
+  },
+  {
+    "device": {
+      "slot": "c7:00.1",
+      "class": "Signal processing controller",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix/Krackan/Strix Halo Neural Processing Unit",
+      "revision": "11"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix/Krackan/Strix Halo Neural Processing Unit",
+      "Kernel driver in use": "amdxdna",
+      "Kernel modules": "amdxdna"
+    }
+  },
+  {
+    "device": {
+      "slot": "c8:00.0",
+      "class": "USB controller",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Device 15b9",
+      "Kernel driver in use": "xhci_hcd",
+      "Kernel modules": "xhci_pci"
+    }
+  },
+  {
+    "device": {
+      "slot": "c8:00.3",
+      "class": "USB controller",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI",
+      "Kernel driver in use": "xhci_hcd",
+      "Kernel modules": "xhci_pci"
+    }
+  },
+  {
+    "device": {
+      "slot": "c8:00.4",
+      "class": "USB controller",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI",
+      "Kernel driver in use": "xhci_hcd",
+      "Kernel modules": "xhci_pci"
+    }
+  },
+  {
+    "device": {
+      "slot": "c8:00.5",
+      "class": "USB controller",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo USB4 Host Router"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix Halo USB4 Host Router",
+      "Kernel driver in use": "thunderbolt",
+      "Kernel modules": "thunderbolt"
+    }
+  },
+  {
+    "device": {
+      "slot": "c8:00.6",
+      "class": "USB controller",
+      "device": "Advanced Micro Devices, Inc. [AMD] Strix Halo USB4 Host Router"
+    },
+    "attributes": {
+      "Subsystem": "Advanced Micro Devices, Inc. [AMD] Strix Halo USB4 Host Router",
+      "Kernel driver in use": "thunderbolt",
+      "Kernel modules": "thunderbolt"
+    }
+  }
+]

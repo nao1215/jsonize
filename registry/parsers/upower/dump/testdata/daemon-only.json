@@ -1,0 +1,30 @@
+[
+  {
+    "device": {
+      "kind": "Daemon",
+      "path": null
+    },
+    "properties": [
+      {
+        "name": "daemon-version",
+        "value": "1.91.1"
+      },
+      {
+        "name": "on-battery",
+        "value": "no"
+      },
+      {
+        "name": "lid-is-closed",
+        "value": "no"
+      },
+      {
+        "name": "lid-is-present",
+        "value": "no"
+      },
+      {
+        "name": "critical-action",
+        "value": "PowerOff"
+      }
+    ]
+  }
+]

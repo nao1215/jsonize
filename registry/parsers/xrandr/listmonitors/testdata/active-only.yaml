@@ -1,0 +1,4 @@
+description: the same listing asked for with --listactivemonitors, the other spelling that produces this format
+source: captured on Ubuntu 26.04 (xrandr 1.5.3, RandR 1.6) with LC_ALL=C, xrandr --listactivemonitors
+os: linux
+args: [--listactivemonitors]

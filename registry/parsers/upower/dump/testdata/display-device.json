@@ -1,0 +1,66 @@
+[
+  {
+    "device": {
+      "kind": "Device",
+      "path": "/org/freedesktop/UPower/devices/DisplayDevice"
+    },
+    "properties": [
+      {
+        "name": "power supply",
+        "value": "no"
+      },
+      {
+        "name": "updated",
+        "value": "Mon Aug 24 10:10:46 2026 (1186239 seconds ago)"
+      },
+      {
+        "name": "has history",
+        "value": "no"
+      },
+      {
+        "name": "has statistics",
+        "value": "no"
+      },
+      {
+        "name": "warning-level",
+        "value": "none"
+      },
+      {
+        "name": "percentage",
+        "value": "0%"
+      },
+      {
+        "name": "icon-name",
+        "value": "battery-missing-symbolic"
+      }
+    ]
+  },
+  {
+    "device": {
+      "kind": "Daemon",
+      "path": null
+    },
+    "properties": [
+      {
+        "name": "daemon-version",
+        "value": "1.91.1"
+      },
+      {
+        "name": "on-battery",
+        "value": "no"
+      },
+      {
+        "name": "lid-is-closed",
+        "value": "no"
+      },
+      {
+        "name": "lid-is-present",
+        "value": "no"
+      },
+      {
+        "name": "critical-action",
+        "value": "PowerOff"
+      }
+    ]
+  }
+]

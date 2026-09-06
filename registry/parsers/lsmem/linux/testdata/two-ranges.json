@@ -1,0 +1,32 @@
+{
+  "ranges": [
+    {
+      "range": "0x0000000000000000-0x000000007fffffff",
+      "size": "2G",
+      "state": "online",
+      "removable": true,
+      "block": "0"
+    },
+    {
+      "range": "0x0000000100000000-0x000000107fffffff",
+      "size": "62G",
+      "state": "online",
+      "removable": true,
+      "block": "2-32"
+    }
+  ],
+  "summary": [
+    {
+      "name": "Memory block size",
+      "value": "2G"
+    },
+    {
+      "name": "Total online memory",
+      "value": "64G"
+    },
+    {
+      "name": "Total offline memory",
+      "value": "0B"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+description: devices with and without a subsystem, and one with no revision
+source: captured on Ubuntu 26.04 (pciutils 3.14.0) with LC_ALL=C, lspci -vmm
+os: linux
+args: [-vmm]

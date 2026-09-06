@@ -1,0 +1,4 @@
+description: the controller block on its own, which is what a controller that cannot advertise prints
+source: lines 1 to 34 of the bluetoothctl show output captured on Ubuntu 26.04 (BlueZ 5.85) with LC_ALL=C; controller address and name replaced
+os: linux
+args: [show]

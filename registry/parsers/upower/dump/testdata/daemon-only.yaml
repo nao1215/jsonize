@@ -1,0 +1,4 @@
+description: the daemon block on its own, which is what a machine with no power devices prints
+source: lines 12 to 17 of the upower -d output captured on Ubuntu 26.04 (UPower 1.91.1) with LC_ALL=C
+os: linux
+args: [-d]

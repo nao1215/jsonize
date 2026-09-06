@@ -1,0 +1,132 @@
+00:00.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Root Complex (rev 02)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Root Complex
+00:00.2 IOMMU: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo IOMMU (rev 02)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo IOMMU
+00:01.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Dummy Host Bridge
+00:01.1 PCI bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe USB4 Bridge (rev 02)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe USB4 Bridge
+	Kernel driver in use: pcieport
+	Kernel modules: shpchp
+00:01.2 PCI bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe USB4 Bridge (rev 02)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe USB4 Bridge
+	Kernel driver in use: pcieport
+	Kernel modules: shpchp
+00:02.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Dummy Host Bridge
+00:02.1 PCI bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo GPP Bridge (rev 02)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Device 1453
+	Kernel driver in use: pcieport
+	Kernel modules: shpchp
+00:02.2 PCI bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo GPP Bridge (rev 02)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Device 1453
+	Kernel driver in use: pcieport
+	Kernel modules: shpchp
+00:02.3 PCI bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo GPP Bridge (rev 02)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Device 1453
+	Kernel driver in use: pcieport
+	Kernel modules: shpchp
+00:02.5 PCI bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo GPP Bridge (rev 02)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Device 1453
+	Kernel driver in use: pcieport
+	Kernel modules: shpchp
+00:03.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Dummy Host Bridge
+00:03.1 PCI bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo GPP Bridge
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Device 1453
+	Kernel driver in use: pcieport
+	Kernel modules: shpchp
+00:08.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Dummy Host Bridge
+00:08.1 PCI bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]
+	Kernel driver in use: pcieport
+	Kernel modules: shpchp
+00:08.2 PCI bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]
+	Kernel driver in use: pcieport
+	Kernel modules: shpchp
+00:08.3 PCI bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Internal GPP Bridge to Bus [C:A]
+	Kernel driver in use: pcieport
+	Kernel modules: shpchp
+00:14.0 SMBus: Advanced Micro Devices, Inc. [AMD] FCH SMBus Controller (rev 71)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] FCH SMBus Controller
+	Kernel driver in use: piix4_smbus
+	Kernel modules: i2c_piix4, sp5100_tco
+00:14.3 ISA bridge: Advanced Micro Devices, Inc. [AMD] FCH LPC Bridge (rev 51)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] FCH LPC Bridge
+00:18.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 0
+00:18.1 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 1
+00:18.2 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 2
+00:18.3 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 3
+	Kernel driver in use: k10temp
+	Kernel modules: k10temp
+00:18.4 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 4
+00:18.5 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 5
+00:18.6 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 6
+00:18.7 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix Halo Data Fabric; Function 7
+c1:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8125 2.5GbE Controller (rev 05)
+	DeviceName: OnBoard LAN
+	Subsystem: Realtek Semiconductor Co., Ltd. RTL8125 2.5GbE Controller
+	Kernel driver in use: r8169
+	Kernel modules: r8169
+c2:00.0 SD Host controller: Genesys Logic, Inc GL9755 SD Host Controller (rev 01)
+	Subsystem: Genesys Logic, Inc GL9755 SD Host Controller
+	Kernel driver in use: sdhci-pci
+	Kernel modules: sdhci_pci
+c3:00.0 Network controller: MEDIATEK Corp. MT7925 (RZ717) Wi-Fi 7 160MHz
+	Subsystem: MEDIATEK Corp. MT7925 (RZ717) Wi-Fi 7 160MHz
+	Kernel driver in use: mt7925e
+	Kernel modules: mt7925e
+c4:00.0 Non-Volatile memory controller: Shenzhen Longsys Electronics Co., Ltd. Lexar NM790 / Patriot Viper VP4300 Lite NVMe SSD (DRAM-less) (rev 01)
+	Subsystem: Shenzhen Longsys Electronics Co., Ltd. Lexar NM790 / Patriot Viper VP4300 Lite NVMe SSD (DRAM-less)
+	Kernel driver in use: nvme
+	Kernel modules: nvme
+c5:00.0 Non-Volatile memory controller: KIOXIA Corporation Exceria Plus G4 NVMe SSD (DRAM-less) (rev 01)
+	Subsystem: KIOXIA Corporation Device 0181
+	Kernel driver in use: nvme
+	Kernel modules: nvme
+c6:00.0 Display controller: Advanced Micro Devices, Inc. [AMD/ATI] Strix Halo [Radeon Graphics / Radeon 8050S Graphics / Radeon 8060S Graphics] (rev c1)
+	Subsystem: Device 2014:801d
+	Kernel driver in use: amdgpu
+	Kernel modules: amdgpu
+c6:00.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI] Radeon High Definition Audio Controller
+	Subsystem: Device 2014:801d
+	Kernel driver in use: snd_hda_intel
+	Kernel modules: snd_hda_intel
+c6:00.2 Encryption controller: Advanced Micro Devices, Inc. [AMD] Strix/Krackan/Strix Halo CCP/ASP
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Krackan/Strix Halo CCP/ASP
+	Kernel driver in use: ccp
+	Kernel modules: ccp
+c6:00.4 USB controller: Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Device 15b9
+	Kernel driver in use: xhci_hcd
+	Kernel modules: xhci_pci
+c6:00.6 Audio device: Advanced Micro Devices, Inc. [AMD] Ryzen HD Audio Controller
+	DeviceName: OnBoard Audio
+	Subsystem: Device 2014:801d
+	Kernel driver in use: snd_hda_intel
+	Kernel modules: snd_hda_intel
+c7:00.0 Non-Essential Instrumentation [1300]: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe Dummy Function
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe Dummy Function
+c7:00.1 Signal processing controller: Advanced Micro Devices, Inc. [AMD] Strix/Krackan/Strix Halo Neural Processing Unit (rev 11)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Krackan/Strix Halo Neural Processing Unit
+	Kernel driver in use: amdxdna
+	Kernel modules: amdxdna
+c8:00.0 USB controller: Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Device 15b9
+	Kernel driver in use: xhci_hcd
+	Kernel modules: xhci_pci
+c8:00.3 USB controller: Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI
+	Kernel driver in use: xhci_hcd
+	Kernel modules: xhci_pci
+c8:00.4 USB controller: Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix Halo USB 3.1 xHCI
+	Kernel driver in use: xhci_hcd
+	Kernel modules: xhci_pci
+c8:00.5 USB controller: Advanced Micro Devices, Inc. [AMD] Strix Halo USB4 Host Router
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix Halo USB4 Host Router
+	Kernel driver in use: thunderbolt
+	Kernel modules: thunderbolt
+c8:00.6 USB controller: Advanced Micro Devices, Inc. [AMD] Strix Halo USB4 Host Router
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix Halo USB4 Host Router
+	Kernel driver in use: thunderbolt
+	Kernel modules: thunderbolt

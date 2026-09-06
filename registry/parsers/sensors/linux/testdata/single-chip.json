@@ -1,0 +1,49 @@
+[
+  {
+    "chip": {
+      "name": "amdgpu",
+      "bus": "pci",
+      "address": "c600",
+      "adapter": "PCI adapter"
+    },
+    "readings": [
+      {
+        "name": "vddgfx",
+        "value": 0,
+        "unit": "V",
+        "limits": null,
+        "alarm": false
+      },
+      {
+        "name": "vddnb",
+        "value": 0,
+        "unit": "V",
+        "limits": null,
+        "alarm": false
+      },
+      {
+        "name": "edge",
+        "value": 39,
+        "unit": "C",
+        "limits": null,
+        "alarm": false
+      },
+      {
+        "name": "PPT",
+        "value": 14.02,
+        "unit": "W",
+        "limits": [
+          "avg =  14.02 W"
+        ],
+        "alarm": false
+      },
+      {
+        "name": "sclk",
+        "value": 804,
+        "unit": "MHz",
+        "limits": null,
+        "alarm": false
+      }
+    ]
+  }
+]

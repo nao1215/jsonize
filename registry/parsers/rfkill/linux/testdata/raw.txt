@@ -1,0 +1,3 @@
+ID TYPE DEVICE SOFT HARD
+0 bluetooth hci0 unblocked unblocked
+1 wlan phy0 unblocked unblocked

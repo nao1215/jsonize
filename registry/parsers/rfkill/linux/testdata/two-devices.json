@@ -1,0 +1,16 @@
+[
+  {
+    "id": 0,
+    "type": "bluetooth",
+    "device": "hci0",
+    "soft": false,
+    "hard": false
+  },
+  {
+    "id": 1,
+    "type": "wlan",
+    "device": "phy0",
+    "soft": false,
+    "hard": false
+  }
+]
