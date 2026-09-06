@@ -1,0 +1,2 @@
+NAME       SIZELIMIT OFFSET AUTOCLEAR RO BACK-FILE                        DIO LOG-SEC
+/dev/loop0         0      0         1  1 /var/lib/snapd/snaps/bare_5.snap   0     512

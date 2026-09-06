@@ -1,0 +1,50 @@
+[
+  {
+    "user": "alice",
+    "line": "seat0",
+    "time": "Nov  4 13:17",
+    "comment": "login screen"
+  },
+  {
+    "user": "alice",
+    "line": "tty2",
+    "time": "Nov  4 13:17",
+    "comment": "tty2"
+  },
+  {
+    "user": "alice",
+    "line": "seat0",
+    "time": "Nov  4 13:30",
+    "comment": "login screen"
+  },
+  {
+    "user": "alice",
+    "line": ":0",
+    "time": "Nov  4 13:30",
+    "comment": ":0"
+  },
+  {
+    "user": "alice",
+    "line": "seat0",
+    "time": "Nov  4 20:19",
+    "comment": "login screen"
+  },
+  {
+    "user": "alice",
+    "line": ":0",
+    "time": "Nov  4 20:19",
+    "comment": ":0"
+  },
+  {
+    "user": "alice",
+    "line": "seat0",
+    "time": "Nov  4 20:24",
+    "comment": "login screen"
+  },
+  {
+    "user": "alice",
+    "line": ":0",
+    "time": "Nov  4 20:24",
+    "comment": ":0"
+  }
+]

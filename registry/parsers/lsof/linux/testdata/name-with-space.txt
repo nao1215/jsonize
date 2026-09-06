@@ -1,0 +1,2 @@
+COMMAND     PID USER  FD   TYPE DEVICE SIZE/OFF      NODE NAME
+bash    2251059 alice 9r   REG   0,50       11 142374569 spaced name.txt

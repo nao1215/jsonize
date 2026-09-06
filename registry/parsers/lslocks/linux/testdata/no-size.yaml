@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+description: two locks whose SIZE column is empty for every row, so the SIZE heading is wider than anything under it
+os: linux
+args: [-p, "9050"]

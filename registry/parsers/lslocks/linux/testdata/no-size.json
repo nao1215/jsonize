@@ -1,0 +1,24 @@
+[
+  {
+    "command": "pipewire",
+    "pid": 9050,
+    "type": "FLOCK",
+    "size": null,
+    "mode": "WRITE",
+    "m": false,
+    "start": 0,
+    "end": 0,
+    "path": "/run/user/1000/pipewire-0.lock"
+  },
+  {
+    "command": "pipewire",
+    "pid": 9050,
+    "type": "FLOCK",
+    "size": null,
+    "mode": "WRITE",
+    "m": false,
+    "start": 0,
+    "end": 0,
+    "path": "/run/user/1000/pipewire-0-manager.lock"
+  }
+]

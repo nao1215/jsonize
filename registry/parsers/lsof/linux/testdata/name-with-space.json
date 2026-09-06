@@ -1,0 +1,13 @@
+[
+  {
+    "command": "bash",
+    "pid": 2251059,
+    "user": "alice",
+    "fd": "9r",
+    "type": "REG",
+    "device": "0,50",
+    "size_off": "11",
+    "node": "142374569",
+    "name": "spaced name.txt"
+  }
+]

@@ -1,0 +1,34 @@
+# BACK-FILE is a path that may contain spaces and is empty for a loop
+# device with no backing file, so cells are cut at the header offsets
+# rather than on whitespace. `losetup -a` prints one line per device in a
+# different shape, and `losetup --raw` prints the same columns separated
+# by single spaces instead of padded; neither is accepted here.
+format: 1
+command: losetup
+variant: linux
+description: losetup --list table of loop devices
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/losetup.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^NAME[ \t]+SIZELIMIT[ \t]+OFFSET[ \t]+AUTOCLEAR[ \t]+RO[ \t]+BACK-FILE[ \t]+DIO[ \t]+LOG-SEC[ \t]*$'
+    none:
+      - '^NAME SIZELIMIT OFFSET AUTOCLEAR RO BACK-FILE DIO LOG-SEC$'
+parse:
+  type: table
+  split: aligned
+# SIZELIMIT, OFFSET and LOG-SEC are always printed in bytes, so they
+# convert to integers.
+fields:
+  name: {required: true}
+  sizelimit: {type: int}
+  offset: {type: int}
+  autoclear: {type: bool}
+  ro: {type: bool}
+  dio: {type: bool}
+  log_sec: {type: int}

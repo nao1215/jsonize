@@ -1,0 +1,8 @@
+COMMAND    PID  TYPE   SIZE MODE  M      START        END PATH
+codex   757882 FLOCK        WRITE 0          0          0 /home/alice/.codex/thread-writer-locks/0f6a1c34-8b21-4d7e-9c05-1a2b3c4d5e6f.lock
+codex   757882 POSIX    28K READ  0 1073741826 1073742335 /home/alice/.codex/queue_1.sqlite
+codex   757882 POSIX    32K READ  0        128        128 /home/alice/.codex/queue_1.sqlite-shm
+codex   757882 FLOCK        WRITE 0          0          0 /home/alice/.codex/thread-writer-locks/1b7c2d45-9c32-4e8f-8d16-2b3c4d5e6f70.lock
+codex   757882 FLOCK        WRITE 0          0          0 /home/alice/.codex/tmp/arg0/codex-arg0su18Y5/.lock
+codex   757882 POSIX 100.4M READ  0 1073741826 1073742335 /home/alice/.codex/logs_2.sqlite
+codex   757882 POSIX    32K READ  0        128        128 /home/alice/.codex/logs_2.sqlite-shm

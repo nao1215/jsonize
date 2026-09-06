@@ -1,0 +1,3 @@
+ UID USER  PROC PWD-LOCK PWD-DENY  LAST-LOGIN GECOS
+   0 root   493        0        0             root
+1000 alice  206                   Aug24/19:20 alice

@@ -1,0 +1,107 @@
+[
+  {
+    "resource": "MSGMNI",
+    "description": "Number of System V message queues",
+    "limit": "32000",
+    "used": 0,
+    "use_percent": 0
+  },
+  {
+    "resource": "MSGMAX",
+    "description": "Max size of System V message (bytes)",
+    "limit": "8192",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "MSGMNB",
+    "description": "Default max size of System V queue (bytes)",
+    "limit": "16384",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "MQUMNI",
+    "description": "Number of POSIX message queues",
+    "limit": "256",
+    "used": 0,
+    "use_percent": 0
+  },
+  {
+    "resource": "MQUMAX",
+    "description": "Max size of POSIX message (bytes)",
+    "limit": "8192",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "MQUMNB",
+    "description": "Number of messages in POSIX message queue",
+    "limit": "10",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "SHMMNI",
+    "description": "Shared memory segments",
+    "limit": "4096",
+    "used": 0,
+    "use_percent": 0
+  },
+  {
+    "resource": "SHMALL",
+    "description": "Shared memory pages",
+    "limit": "18446744073692774399",
+    "used": 0,
+    "use_percent": 0
+  },
+  {
+    "resource": "SHMMAX",
+    "description": "Max size of shared memory segment (bytes)",
+    "limit": "18446744073692774399",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "SHMMIN",
+    "description": "Min size of shared memory segment (bytes)",
+    "limit": "1",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "SEMMNI",
+    "description": "Number of semaphore identifiers",
+    "limit": "32000",
+    "used": 5,
+    "use_percent": 0.02
+  },
+  {
+    "resource": "SEMMNS",
+    "description": "Total number of semaphores",
+    "limit": "1024000000",
+    "used": 5,
+    "use_percent": 0
+  },
+  {
+    "resource": "SEMMSL",
+    "description": "Max semaphores per semaphore set.",
+    "limit": "32000",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "SEMOPM",
+    "description": "Max number of operations per semop(2)",
+    "limit": "500",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "SEMVMX",
+    "description": "Semaphore max value",
+    "limit": "32767",
+    "used": null,
+    "use_percent": null
+  }
+]

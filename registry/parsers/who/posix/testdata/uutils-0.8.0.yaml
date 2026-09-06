@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (uutils coreutils 0.8.0) with LC_ALL=C from the login records in /var/log/wtmp, the first 8 rows; the login name was replaced with alice
+description: rows with a terminal and a comment, including a comment that contains a space and one that is a display name
+os: linux
+args: [/var/log/wtmp]

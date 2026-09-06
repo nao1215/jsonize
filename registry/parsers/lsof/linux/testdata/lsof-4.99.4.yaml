@@ -1,0 +1,8 @@
+source: captured on Ubuntu 26.04 (lsof 4.99.4) with LC_ALL=C; the login name was replaced with alice and the USER column widened by one to match
+description: >
+  A directory, a regular file, a character device, three unix sockets and
+  an epoll descriptor: SIZE/OFF is an offset (0t0) for the sockets, DEVICE
+  is a kernel address wide enough to reach into the TYPE column, and NAME
+  holds a socket description with spaces.
+os: linux
+args: [-a, -p, "9050", -d, "cwd,rtd,txt,0,1,2,3,4,5"]

@@ -1,0 +1,13 @@
+NAME        SIZELIMIT OFFSET AUTOCLEAR RO BACK-FILE                                               DIO LOG-SEC
+/dev/loop1          0      0         1  1 /var/lib/snapd/snaps/telegram-desktop_7119.snap           0     512
+/dev/loop29         0      0         1  1 /var/lib/snapd/snaps/icon-theme-breeze_5.snap             0     512
+/dev/loop19         0      0         1  1 /var/lib/snapd/snaps/ghostty_718.snap                     0     512
+/dev/loop47         0      0         1  1 /var/lib/snapd/snaps/firefox_8803.snap                    0     512
+/dev/loop37         0      0         1  1 /var/lib/snapd/snaps/snap-store_1367.snap                 0     512
+/dev/loop27         0      0         1  1 /var/lib/snapd/snaps/gradia_8.snap                        0     512
+/dev/loop55         0      0         1  1 /var/lib/snapd/snaps/zoom-client_279.snap                 0     512
+/dev/loop17         0      0         1  1 /var/lib/snapd/snaps/firmware-updater_226.snap            0     512
+/dev/loop45         0      0         1  1 /var/lib/snapd/snaps/telegram-desktop_7113.snap           0     512
+/dev/loop8          0      0         1  1 /var/lib/snapd/snaps/core24_1587.snap                     0     512
+/dev/loop35         0      0         1  1 /var/lib/snapd/snaps/scc_18.snap                          0     512
+/dev/loop25         0      0         1  1 /var/lib/snapd/snaps/gnome-46-2404_164.snap               0     512

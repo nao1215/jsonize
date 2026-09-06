@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; the login name was replaced with alice and the USER column widened by one to match
+description: a listing of one row, where NPROCS and PID are narrower than in the full table
+os: linux
+args: [-t, time]

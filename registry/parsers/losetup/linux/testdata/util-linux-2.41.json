@@ -1,0 +1,122 @@
+[
+  {
+    "name": "/dev/loop1",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/telegram-desktop_7119.snap",
+    "dio": false,
+    "log_sec": 512
+  },
+  {
+    "name": "/dev/loop29",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/icon-theme-breeze_5.snap",
+    "dio": false,
+    "log_sec": 512
+  },
+  {
+    "name": "/dev/loop19",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/ghostty_718.snap",
+    "dio": false,
+    "log_sec": 512
+  },
+  {
+    "name": "/dev/loop47",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/firefox_8803.snap",
+    "dio": false,
+    "log_sec": 512
+  },
+  {
+    "name": "/dev/loop37",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/snap-store_1367.snap",
+    "dio": false,
+    "log_sec": 512
+  },
+  {
+    "name": "/dev/loop27",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/gradia_8.snap",
+    "dio": false,
+    "log_sec": 512
+  },
+  {
+    "name": "/dev/loop55",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/zoom-client_279.snap",
+    "dio": false,
+    "log_sec": 512
+  },
+  {
+    "name": "/dev/loop17",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/firmware-updater_226.snap",
+    "dio": false,
+    "log_sec": 512
+  },
+  {
+    "name": "/dev/loop45",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/telegram-desktop_7113.snap",
+    "dio": false,
+    "log_sec": 512
+  },
+  {
+    "name": "/dev/loop8",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/core24_1587.snap",
+    "dio": false,
+    "log_sec": 512
+  },
+  {
+    "name": "/dev/loop35",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/scc_18.snap",
+    "dio": false,
+    "log_sec": 512
+  },
+  {
+    "name": "/dev/loop25",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/gnome-46-2404_164.snap",
+    "dio": false,
+    "log_sec": 512
+  }
+]

@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (lsof 4.99.4) with LC_ALL=C on a file whose name contains a space; the login name was replaced with alice and the USER column widened by one to match
+description: one row, whose NAME contains a space, under a header whose columns are narrower than in the usual listing
+os: linux
+args: ["spaced name.txt"]

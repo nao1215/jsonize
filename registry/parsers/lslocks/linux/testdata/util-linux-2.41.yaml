@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; the home directory was rewritten to /home/alice and the two lock file UUIDs were replaced
+description: POSIX and FLOCK locks of one process, with rounded sizes (28K, 100.4M), an empty SIZE, and START and END values wide enough to fill their columns
+os: linux
+args: [-p, "757882"]

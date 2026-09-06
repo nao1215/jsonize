@@ -1,0 +1,10 @@
+COMMAND   PID USER   FD      TYPE             DEVICE SIZE/OFF      NODE NAME
+pipewire 9050 alice cwd       DIR              259,2     4096 100663298 /home/alice
+pipewire 9050 alice rtd       DIR              259,2     4096         2 /
+pipewire 9050 alice txt       REG              259,2    14800  28967045 /usr/bin/pipewire
+pipewire 9050 alice   0r      CHR                1,3      0t0         5 /dev/null
+pipewire 9050 alice   1u     unix 0x0000000000000000      0t0     66578 type=STREAM (CONNECTED)
+pipewire 9050 alice   2u     unix 0x0000000000000000      0t0     66578 type=STREAM (CONNECTED)
+pipewire 9050 alice   3u     unix 0x0000000000000000      0t0     56628 /run/user/1000/pipewire-0 type=STREAM (LISTEN)
+pipewire 9050 alice   4u     unix 0x0000000000000000      0t0     56629 /run/user/1000/pipewire-0-manager type=STREAM (LISTEN)
+pipewire 9050 alice   5u  a_inode               0,17        0        70 [eventpoll:3,4,6,7,8,11,17,19,20,22,24,25,26,27,29,30,31,41,49,50,54,57,64,65,66,67,68,72,77,79,85,86...]

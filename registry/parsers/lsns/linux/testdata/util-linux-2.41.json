@@ -1,0 +1,66 @@
+[
+  {
+    "ns": 4026531832,
+    "type": "mnt",
+    "nprocs": 167,
+    "pid": 9049,
+    "user": "alice",
+    "command": "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"
+  },
+  {
+    "ns": 4026531833,
+    "type": "net",
+    "nprocs": 156,
+    "pid": 9049,
+    "user": "alice",
+    "command": "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"
+  },
+  {
+    "ns": 4026531834,
+    "type": "time",
+    "nprocs": 198,
+    "pid": 9049,
+    "user": "alice",
+    "command": "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"
+  },
+  {
+    "ns": 4026531835,
+    "type": "cgroup",
+    "nprocs": 198,
+    "pid": 9049,
+    "user": "alice",
+    "command": "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"
+  },
+  {
+    "ns": 4026531836,
+    "type": "pid",
+    "nprocs": 168,
+    "pid": 9049,
+    "user": "alice",
+    "command": "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"
+  },
+  {
+    "ns": 4026531837,
+    "type": "user",
+    "nprocs": 148,
+    "pid": 9049,
+    "user": "alice",
+    "command": "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"
+  },
+  {
+    "ns": 4026531838,
+    "type": "uts",
+    "nprocs": 198,
+    "pid": 9049,
+    "user": "alice",
+    "command": "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"
+  },
+  {
+    "ns": 4026531839,
+    "type": "ipc",
+    "nprocs": 186,
+    "pid": 9049,
+    "user": "alice",
+    "command": "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"
+  }
+]

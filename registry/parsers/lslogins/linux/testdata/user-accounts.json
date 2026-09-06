@@ -1,0 +1,20 @@
+[
+  {
+    "uid": 0,
+    "user": "root",
+    "proc": 493,
+    "pwd_lock": false,
+    "pwd_deny": false,
+    "last_login": null,
+    "gecos": "root"
+  },
+  {
+    "uid": 1000,
+    "user": "alice",
+    "proc": 206,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": "Aug24/19:20",
+    "gecos": "alice"
+  }
+]

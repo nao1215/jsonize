@@ -1,0 +1,32 @@
+# lsof leaves SIZE/OFF blank for a file that has neither, and NAME is free
+# text that contains spaces (a socket prints "type=STREAM (CONNECTED)"
+# after its path), so cells are cut at the header offsets rather than on
+# whitespace.
+format: 1
+command: lsof
+variant: linux
+description: lsof default listing of open files
+metadata:
+  tags: [linux, process, file, network]
+  compatible: [lsof]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsof.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^COMMAND[ \t]+PID[ \t]+USER[ \t]+FD[ \t]+TYPE[ \t]+DEVICE[ \t]+SIZE/OFF[ \t]+NODE[ \t]+NAME[ \t]*$'
+parse:
+  type: table
+  split: aligned
+# SIZE/OFF holds either a size or a file offset written as 0t<n>, and is
+# blank for a file that has neither, so it stays a string. NODE is the
+# inode number for a file but the protocol name ("TCP") for a socket, and
+# DEVICE is a major,minor pair for a device but a kernel address for a
+# socket; both stay strings for the same reason.
+fields:
+  command: {required: true}
+  pid: {type: int, required: true}
+  user: {required: true}
+  fd: {required: true}
+  name: {required: true}

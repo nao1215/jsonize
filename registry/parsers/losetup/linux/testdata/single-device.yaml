@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+description: one row, where the BACK-FILE column is only as wide as the single path under it
+os: linux
+args: [-l, -j, /var/lib/snapd/snaps/bare_5.snap]
