@@ -1,0 +1,6 @@
+description: |
+  An archive holding one member, where the totals line reads "1 file"
+  rather than "N files".
+source: captured on Ubuntu 26.04 with BusyBox v1.37.0, LC_ALL=C busybox unzip -l
+os: linux
+args: [-l]

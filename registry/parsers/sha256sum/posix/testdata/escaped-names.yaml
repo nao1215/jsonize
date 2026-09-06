@@ -1,0 +1,7 @@
+description: |
+  One run in binary mode over a name with a space, a name with a
+  backslash and standard input. A backslash in a name is printed doubled
+  behind a leading backslash that marks the line as escaped.
+source: captured on Ubuntu 26.04 with uutils coreutils 0.8.0, LC_ALL=C sha256sum -b
+os: linux
+args: [-b]

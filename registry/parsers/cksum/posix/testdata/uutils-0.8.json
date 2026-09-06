@@ -1,0 +1,22 @@
+[
+  {
+    "checksum": 200774583,
+    "size": 14,
+    "file": "README.txt"
+  },
+  {
+    "checksum": 3753279992,
+    "size": 12,
+    "file": "data.csv"
+  },
+  {
+    "checksum": 4294967295,
+    "size": 0,
+    "file": "empty.bin"
+  },
+  {
+    "checksum": 654479688,
+    "size": 21,
+    "file": "docs/日本語.txt"
+  }
+]

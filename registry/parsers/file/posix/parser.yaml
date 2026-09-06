@@ -1,5 +1,11 @@
 # "path: description". The path column is padded when several files are
 # named, so the colon is what separates them, not the spacing.
+#
+# One line of that shape is far too little evidence on its own, so the
+# signature also asks that no line lacks the separator: file prints one
+# "path: description" line per file and nothing else, while a report that
+# only opens with a labelled line (an archive listing announcing its
+# archive) has rows underneath that carry no colon followed by a space.
 format: 1
 command: file
 variant: posix
@@ -27,6 +33,10 @@ detect:
       # the padding between the columns is what the description is cut
       # from.
       - '^[^:\n]* [^:\n]*:[ \t]'
+      # No line may lack the separator. A report that merely opens with a
+      # labelled line, such as an archive listing announcing its archive,
+      # has rows underneath that carry no colon followed by a space.
+      - '^(?:[^:\n]|:[^ \t\n])*$'
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'

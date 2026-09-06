@@ -1,0 +1,37 @@
+# `tar -tvf` prints a listing close to `ls -l`, with two differences that
+# matter here: the owner and the group are one owner/group cell, and the
+# timestamp is ISO (2026-01-15 09:30). GNU tar prints minutes only unless
+# --full-time is given; BusyBox tar prints seconds, which is what
+# separates this definition from tar/busybox.
+#
+# Two patterns rather than one: only a member whose mode starts with l is
+# a symbolic link, so " -> " is a target separator there and an ordinary
+# part of the name everywhere else. Joining name and link_to back with
+# " -> " reproduces the line.
+#
+# GNU tar escapes a name containing a backslash or a control character,
+# and under LC_ALL=C it also escapes non-ASCII bytes in octal, so a name
+# is reported exactly as tar printed it. The size of a device member is
+# printed as major,minor rather than a byte count and is not read here.
+format: 1
+command: tar
+variant: gnu
+description: GNU tar -tvf archive listing
+metadata:
+  tags: [linux, darwin, archive]
+  compatible: [GNU tar]
+  references:
+    - https://www.gnu.org/software/tar/manual/tar.html
+detect:
+  signature:
+    all:
+      - '^[-dlcbps][-rwxsStT]{9}[ \t]+[^ \t/]*/[^ \t]*[ \t]+\d+[ \t]+\d{4}-\d{2}-\d{2}[ \t]+\d{2}:\d{2}[ \t]'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<mode>l[-rwxsStT]{9})[ \t]+(?P<owner>[^ \t/]*)/(?P<group>[^ \t]*)[ \t]+(?P<size>\d+)[ \t]+(?P<date>\d{4}-\d{2}-\d{2})[ \t]+(?P<time>\d{2}:\d{2})[ \t]+(?P<name>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<mode>[-dlcbps][-rwxsStT]{9})[ \t]+(?P<owner>[^ \t/]*)/(?P<group>[^ \t]*)[ \t]+(?P<size>\d+)[ \t]+(?P<date>\d{4}-\d{2}-\d{2})[ \t]+(?P<time>\d{2}:\d{2})[ \t]+(?P<name>.+)$'
+fields:
+  size: {type: int, required: true}
+  name: {required: true}
+  link_to: {when_missing: omit}

@@ -1,0 +1,24 @@
+Archive:  sample.zip
+Zip file size: 2861 bytes, number of entries: 21
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/
+-rw-rw-r--  3.0 unx       15 t- stor 26-Jan-15 09:30 src/back\slash.txt
+-rw-rw-r--  3.0 unx       14 t- stor 26-Jan-15 09:30 src/link.txt
+-rw-rw-r--  3.0 unx        0 b- stor 26-Jan-15 09:30 src/empty.bin
+-rw-rw-r--  3.0 unx       15 t- stor 26-Jan-15 09:30 src/two words.txt
+-rw-rw-r--  3.0 unx       12 t- stor 26-Jan-15 09:30 src/data.csv
+-rw-rw-r--  3.0 unx       14 t- stor 26-Jan-15 09:30 src/README.txt
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/deep/
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/deep/very/
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/deep/very/long/
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/deep/very/long/nested/
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/deep/very/long/nested/directory/
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/deep/very/long/nested/directory/path/
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/deep/very/long/nested/directory/path/for/
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/deep/very/long/nested/directory/path/for/boundary/
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/deep/very/long/nested/directory/path/for/boundary/testing/
+-rw-rw-r--  3.0 unx        2 t- stor 26-Jan-15 09:30 src/deep/very/long/nested/directory/path/for/boundary/testing/leaf-file-with-a-rather-long-name.txt
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/docs/
+-rw-rw-r--  3.0 unx       21 t- stor 26-Jan-15 09:30 src/docs/日本語.txt
+drwxrwxr-x  3.0 unx        0 b- stor 26-Jan-15 09:30 src/docs/manual/
+-rw-rw-r--  3.0 unx       12 t- stor 26-Jan-15 09:30 src/docs/manual/chapter.txt
+21 files, 105 bytes uncompressed, 105 bytes compressed:  0.0%

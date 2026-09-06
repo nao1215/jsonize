@@ -1,0 +1,7 @@
+description: |
+  A name with a space, a name with a backslash which is printed doubled
+  behind a leading backslash, and standard input, which leaves the name
+  out altogether.
+source: captured on Ubuntu 26.04 with uutils coreutils 0.8.0, LC_ALL=C cksum
+os: linux
+args: []
