@@ -272,3 +272,56 @@ scenarios:
             json:
               - { path: "$[0].value", equals: "one\nstill A" }
               - { path: "$", length: 2 }
+
+  # Choosing keys is the one place a caller can ask for something the
+  # format does not have, so the refusal matters as much as the success.
+  - name: extract and exclude choose keys, and an unknown key is refused
+    steps:
+      - fixture:
+          file: df-gnu.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz --extract filesystem --extract mounted_on --file df-gnu.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$[0].filesystem", matches: "\\S" }
+              - { path: "$[0].mounted_on", matches: "^/" }
+      # The keys that were not asked for are absent, not null.
+      - run:
+          command: jz --extract filesystem --extract mounted_on --file df-gnu.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            not_contains: '"used"'
+      - run:
+          command: jz --exclude used --exclude available --file df-gnu.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            not_contains: '"available"'
+      - run:
+          command: jz --exclude used --exclude available --file df-gnu.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].1k_blocks", gte: 0 }
+      # A key the format does not produce is named back, with what it has.
+      - run:
+          command: jz --extract mountpoint --file df-gnu.txt
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: 'no key "mountpoint" in the output'
+      # Keeping and dropping at once states two answers for one key.
+      - run:
+          command: jz --extract filesystem --exclude used --file df-gnu.txt
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: cannot be used together

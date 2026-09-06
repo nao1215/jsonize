@@ -34,6 +34,8 @@ pipe there is no such answer at all: nothing identifies an empty input.
 ```text
   -f, --file PATH     read input from PATH instead of stdin
   -p, --pretty        indent JSON output
+      --extract KEY   keep only this key (repeatable)
+      --exclude KEY   drop this key (repeatable)
       --parser NAME   restrict detection to one parser
       --variant NAME  use a variant of --parser
   -h, --help          show help
@@ -42,6 +44,31 @@ pipe there is no such answer at all: nothing identifies an empty input.
 `jz run` adds `--env NAME=VALUE`, `--keep-locale` and `--timeout`, which
 control the command rather than the conversion. `jz list` adds `--json`
 and `--sources`.
+
+## Choosing the keys
+
+`--extract` keeps the keys it names and `--exclude` drops them. Both may
+be repeated, both apply to every object jz prints, and they cannot be
+combined: a key named on both sides would have two answers.
+
+```console
+$ df -h | jz --extract filesystem --extract mounted_on
+[{"filesystem":"/dev/nvme0n1p2","mounted_on":"/"}, ...]
+
+$ jz run --exclude 1k_blocks --exclude used df
+```
+
+A key that the format does not produce is an error naming the keys it
+does have, rather than an empty object or a silently ignored request:
+
+```console
+$ df | jz --extract mountpoint
+jz: no key "mountpoint" in the output
+the keys it has are "1k_blocks", "available", "filesystem", "mounted_on", "use_percent", "used"
+```
+
+The keys named are the ones at the top of each object. A value nested
+inside an object keeps whatever it holds.
 
 ## Naming a parser
 

@@ -93,11 +93,30 @@ func (o *optionSet) print(w io.Writer) {
 
 // outputOptions control how the JSON is written.
 type outputOptions struct {
-	pretty bool
+	pretty  bool
+	extract stringList
+	exclude stringList
 }
 
 func (f *outputOptions) bind(o *optionSet) {
 	o.boolOpt(&f.pretty, "pretty", "p", "indent JSON output")
+	o.listOpt(&f.extract, "extract", "KEY", "keep only this key (repeatable)")
+	o.listOpt(&f.exclude, "exclude", "KEY", "drop this key (repeatable)")
+}
+
+// filter returns the narrowing the caller asked for. Asking to keep some
+// keys and drop others at the same time states two different answers for
+// a key named in both, so the pair is refused rather than resolved by a
+// rule nobody would remember. With neither option the filter drops
+// nothing, which is the same as not having one.
+func (f *outputOptions) filter() (*keyFilter, error) {
+	switch {
+	case len(f.extract) > 0 && len(f.exclude) > 0:
+		return nil, errors.New("--extract and --exclude cannot be used together")
+	case len(f.extract) > 0:
+		return newKeyFilter(f.extract, true), nil
+	}
+	return newKeyFilter(f.exclude, false), nil
 }
 
 // selectOptions narrow or pin the automatic detection.

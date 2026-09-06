@@ -1006,6 +1006,68 @@ func TestRunWithNoOutputAnswersWithAnEmptyList(t *testing.T) {
 	}
 }
 
+func TestExtractAndExclude(t *testing.T) {
+	const input = "Filesystem     1K-blocks    Used Available Use% Mounted on\n" +
+		"tmpfs              12882    5928     12876   1% /run\n"
+
+	h := newHarness(t)
+	if code := h.pipe(input, "--extract", "filesystem", "--extract", "mounted_on"); code != ExitOK {
+		t.Fatalf("code=%d %s", code, h.stderr.String())
+	}
+	// The keys keep the order the definition gives them, not the order
+	// they were asked for.
+	if got := strings.TrimSpace(h.stdout.String()); got != `[{"filesystem":"tmpfs","mounted_on":"/run"}]` {
+		t.Errorf("extract = %s", got)
+	}
+
+	h = newHarness(t)
+	if code := h.pipe(input, "--exclude", "1k_blocks", "--exclude", "used",
+		"--exclude", "available", "--exclude", "use_percent"); code != ExitOK {
+		t.Fatalf("code=%d %s", code, h.stderr.String())
+	}
+	if got := strings.TrimSpace(h.stdout.String()); got != `[{"filesystem":"tmpfs","mounted_on":"/run"}]` {
+		t.Errorf("exclude = %s", got)
+	}
+
+	// A key the format does not produce is an error rather than an empty
+	// answer, and the message says what there was instead.
+	h = newHarness(t)
+	if code := h.pipe(input, "--extract", "nosuch"); code != ExitUsage {
+		t.Fatalf("unknown key should be a usage error, got %d", code)
+	}
+	if h.stdout.Len() != 0 {
+		t.Errorf("stdout must stay empty: %q", h.stdout.String())
+	}
+	for _, want := range []string{`no key "nosuch"`, `"filesystem"`} {
+		if !strings.Contains(h.stderr.String(), want) {
+			t.Errorf("stderr missing %q:\n%s", want, h.stderr.String())
+		}
+	}
+
+	// Naming a key on both sides states two answers for it.
+	h = newHarness(t)
+	if code := h.pipe(input, "--extract", "filesystem", "--exclude", "used"); code != ExitUsage {
+		t.Fatalf("the pair should be a usage error, got %d", code)
+	}
+	if !strings.Contains(h.stderr.String(), "cannot be used together") {
+		t.Error(h.stderr.String())
+	}
+}
+
+func TestExtractOnASingleObject(t *testing.T) {
+	h := newHarness(t)
+	const input = "uid=1000(alice) gid=1000(alice) groups=1000(alice)\n"
+	if code := h.pipe(input, "--exclude", "groups"); code != ExitOK {
+		t.Fatalf("code=%d %s", code, h.stderr.String())
+	}
+	// A result that is one object rather than a list narrows the same way.
+	if got := strings.TrimSpace(h.stdout.String()); strings.Contains(got, "groups") {
+		t.Errorf("groups should be gone: %s", got)
+	} else if !strings.Contains(got, `"uid"`) {
+		t.Errorf("uid should remain: %s", got)
+	}
+}
+
 func TestEnvValuesAreKeptVerbatim(t *testing.T) {
 	h := newHarness(t)
 	// NAME=value describes a .env file and a properties file as well, so

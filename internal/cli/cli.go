@@ -221,6 +221,23 @@ func (a *app) exitFor(err error) int {
 }
 
 // stringList is a repeatable flag.
+// narrow applies --extract or --exclude to a result. The options are
+// checked when they are parsed, so the only failure left here is a key
+// the format does not produce.
+func (a *app) narrow(v any, out *outputOptions) (any, int) {
+	f, err := out.filter()
+	if err != nil {
+		a.errorf("%v", err)
+		return nil, ExitUsage
+	}
+	narrowed, err := f.apply(v)
+	if err != nil {
+		a.errorf("%v", err)
+		return nil, ExitUsage
+	}
+	return narrowed, ExitOK
+}
+
 type stringList []string
 
 func (s *stringList) String() string { return strings.Join(*s, ",") }

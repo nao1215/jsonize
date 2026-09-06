@@ -20,6 +20,10 @@ project follows [Semantic Versioning](https://semver.org/).
   typed field conversion.
 - Layered registries: `JSONIZE_REGISTRY_PATH`, the user directory and the
   registry embedded in the binary. jz makes no network access.
+- `--extract KEY` and `--exclude KEY`, repeatable, which keep or drop the
+  named keys of every object jz prints. Naming a key the format does not
+  produce is an error listing the keys it has, and the two options cannot
+  be combined.
 - `parse: type: records` for a report whose blocks repeat: a line
   matching `start` opens a record and the `parts` are applied to each.
 - Official definitions for 80 commands in 156 output formats, covering

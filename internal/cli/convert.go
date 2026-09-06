@@ -56,6 +56,10 @@ func (a *app) cmdConvert(args []string) int {
 		a.errorf("%v", &selector.VariantWithoutParserError{Variant: co.selects.variant})
 		return ExitUsage
 	}
+	if _, err := co.output.filter(); err != nil {
+		a.errorf("%v", err)
+		return ExitUsage
+	}
 
 	reg, code := a.loadRegistry()
 	if code != 0 {
@@ -93,6 +97,9 @@ func (a *app) cmdConvert(args []string) int {
 	out, err := engine.Parse(sel.Entry.Def, data, engine.Options{MaxInputSize: MaxInputSize})
 	if err != nil {
 		return a.exitFor(err)
+	}
+	if out, code = a.narrow(out, &co.output); code != ExitOK {
+		return code
 	}
 	if err := jsonutil.Encode(a.env.Stdout, out, co.output.pretty); err != nil {
 		a.errorf("writing output: %v", err)

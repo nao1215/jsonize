@@ -53,9 +53,21 @@ Options:
 ```text
   -f, --file PATH     read input from PATH instead of stdin
   -p, --pretty        indent JSON output
+      --extract KEY   keep only this key (repeatable)
+      --exclude KEY   drop this key (repeatable)
       --parser NAME   restrict detection to one parser
       --variant NAME  use a variant of --parser
   -h, --help          show help
+```
+
+`--extract` and `--exclude` name keys of the objects jz prints, and
+either may be repeated. Naming a key the format does not produce is an
+error listing the keys it does have, because a document quietly missing
+what was asked for is the wrong answer this tool exists to avoid.
+
+```console
+$ df -h | jz --extract filesystem --extract mounted_on
+[{"filesystem":"/dev/nvme0n1p2","mounted_on":"/"}, ...]
 ```
 
 `jz run` hands the command your standard input, passes its standard error

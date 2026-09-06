@@ -165,6 +165,11 @@ func (a *app) cmdRun(args []string) int {
 	if err != nil {
 		return a.failedRun(err, res.ExitCode)
 	}
+	narrowed, code := a.narrow(data, &out)
+	if code != ExitOK {
+		return code
+	}
+	data = narrowed
 	if err := jsonutil.Encode(a.env.Stdout, data, out.pretty); err != nil {
 		a.errorf("writing output: %v", err)
 		return ExitError
