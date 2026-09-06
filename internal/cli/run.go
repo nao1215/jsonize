@@ -138,8 +138,15 @@ func (a *app) cmdRun(args []string) int {
 	if ctx.Err() != nil && timeout > 0 {
 		a.errorf("timeout of %s reached", timeout)
 	}
-	if len(strings.TrimSpace(string(res.Stdout))) == 0 && res.ExitCode != 0 {
-		return res.ExitCode
+	if len(strings.TrimSpace(string(res.Stdout))) == 0 {
+		if res.ExitCode != 0 {
+			return res.ExitCode
+		}
+		// The command succeeded and printed nothing, which is what a
+		// command that lists things does when there is nothing to list.
+		// Here, unlike on a pipe, jz knows which format was meant, so it
+		// can say the list is empty instead of that it could not tell.
+		return a.emptyResult(reg, parser, sel.variant, out)
 	}
 
 	// jz ran the command, so it knows the arguments and the system it ran
@@ -163,6 +170,37 @@ func (a *app) cmdRun(args []string) int {
 		return ExitError
 	}
 	return res.ExitCode
+}
+
+// emptyResult answers a command that succeeded without printing
+// anything. Every definition the parser could have chosen has to produce
+// an array, or the empty answer is not knowable: a format that yields one
+// object has no empty form.
+func (a *app) emptyResult(reg *registry.Registry, parser, variant string, out outputOptions) int {
+	var candidates []*registry.Entry
+	if variant != "" {
+		e, ok := reg.Lookup(parser, variant)
+		if !ok {
+			return ExitSelect
+		}
+		candidates = []*registry.Entry{e}
+	} else {
+		candidates = reg.Variants(parser)
+	}
+	if len(candidates) == 0 {
+		return ExitSelect
+	}
+	for _, e := range candidates {
+		if !e.Def.Parse.YieldsArray() {
+			a.errorf("%s printed nothing, and %s reads a format that has no empty form", parser, e.Def.ID())
+			return ExitSelect
+		}
+	}
+	if err := jsonutil.Encode(a.env.Stdout, []any{}, out.pretty); err != nil {
+		a.errorf("writing output: %v", err)
+		return ExitError
+	}
+	return ExitOK
 }
 
 // failedRun reports a selection or parse failure. A command that already

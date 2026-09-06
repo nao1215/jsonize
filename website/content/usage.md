@@ -23,6 +23,12 @@ path either way.
 through untouched, mirrors its exit status, and runs it with `LC_ALL=C`
 so the output is the one the parsers describe.
 
+A command that succeeds without printing anything is answered with `[]`,
+which is what a command that lists things prints when there is nothing to
+list. That answer needs a format that has an empty form, so a parser
+whose variants read a single object says it cannot tell instead. On a
+pipe there is no such answer at all: nothing identifies an empty input.
+
 ## Options
 
 ```text

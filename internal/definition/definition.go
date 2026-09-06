@@ -301,6 +301,22 @@ type Parse struct {
 	groups []string
 }
 
+// YieldsArray reports whether this parser produces a JSON array. It is
+// what lets a caller that knows the format but has no text to read say
+// the answer is an empty list rather than that it could not tell.
+func (p *Parse) YieldsArray() bool {
+	switch p.Type {
+	case TypeTable, TypeRecords:
+		return true
+	case TypeRegex:
+		return p.Each != EachInput
+	case TypeKV:
+		return p.As != AsMap
+	default:
+		return false
+	}
+}
+
 // CompiledStart returns the compiled expression that opens a record.
 func (p *Parse) CompiledStart() *regexp.Regexp { return p.start }
 

@@ -981,6 +981,31 @@ func TestGenericFormatsNeedAnExplicitParser(t *testing.T) {
 	}
 }
 
+func TestRunWithNoOutputAnswersWithAnEmptyList(t *testing.T) {
+	h := newHarness(t)
+	// A command that lists things prints nothing when there is nothing
+	// to list. jz started this command, so it knows which format was
+	// meant and can say the list is empty; on a pipe it could not.
+	if code := h.run("run", "--parser", "git", "--variant", "stash-list", "true"); code != ExitOK {
+		t.Fatalf("code=%d %s", code, h.stderr.String())
+	}
+	if got := strings.TrimSpace(h.stdout.String()); got != "[]" {
+		t.Errorf("stdout = %q", got)
+	}
+	// A format that yields one object has no empty form, so the answer
+	// is not knowable and jz says so rather than inventing one.
+	h2 := newHarness(t)
+	if code := h2.run("run", "--parser", "uptime", "--variant", "linux", "true"); code != ExitSelect {
+		t.Fatalf("code=%d %s", code, h2.stderr.String())
+	}
+	if h2.stdout.Len() != 0 {
+		t.Errorf("stdout must stay empty: %q", h2.stdout.String())
+	}
+	if !strings.Contains(h2.stderr.String(), "no empty form") {
+		t.Error(h2.stderr.String())
+	}
+}
+
 func TestEnvValuesAreKeptVerbatim(t *testing.T) {
 	h := newHarness(t)
 	// NAME=value describes a .env file and a properties file as well, so
