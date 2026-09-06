@@ -13,7 +13,10 @@ detect:
     any: ["-a", "--all"]
   signature:
     all:
-      - '^Linux '
+      # The kernel version field always starts with "#", which is what
+      # separates this from the other reports whose first word is Linux
+      # (the sysstat banner, for one).
+      - '\ALinux \S+ \S+ #'
 parse:
   type: regex
   each: input
