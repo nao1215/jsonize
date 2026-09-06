@@ -1,0 +1,3 @@
+description: the four default columns, one line per process
+source: captured on Ubuntu 26.04 (procps-ng) with LC_ALL=C, first six lines
+os: linux

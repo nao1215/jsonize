@@ -1,0 +1,29 @@
+# `ps` with no arguments: the four POSIX default columns. CMD is the
+# command name rather than the full line, and it is the last column, so
+# it keeps the spaces a name like "Socket Process" contains.
+format: 1
+command: ps
+variant: posix
+description: ps default columns (PID, TTY, TIME, CMD)
+metadata:
+  tags: [linux, darwin, process]
+  compatible: [procps-ng, BusyBox, macOS ps]
+  references:
+    - https://pubs.opengroup.org/onlinepubs/9699919799/utilities/ps.html
+detect:
+  signature:
+    all:
+      # The other two variants lead with UID or USER; this one starts at
+      # PID and stops after four columns.
+      - '\A\s*PID[ \t]+TTY[ \t]+TIME[ \t]+CMD\s*$'
+parse:
+  type: table
+  header:
+    columns: [pid, tty, time, command]
+  # Everything after the third column is the command name, spaces and all.
+  max_fields: 4
+fields:
+  pid: {type: int, required: true}
+  tty: {required: true}
+  time: {required: true}
+  command: {required: true}

@@ -1,0 +1,3 @@
+description: command names that contain a space, which the last column has to keep whole
+source: captured on Ubuntu 26.04 (procps-ng) with LC_ALL=C, rows selected from the same listing
+os: linux

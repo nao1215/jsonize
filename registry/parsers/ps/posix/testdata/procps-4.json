@@ -1,0 +1,32 @@
+[
+  {
+    "pid": 8941,
+    "tty": "?",
+    "time": "00:00:11",
+    "command": "systemd"
+  },
+  {
+    "pid": 8945,
+    "tty": "?",
+    "time": "00:00:00",
+    "command": "(sd-pam)"
+  },
+  {
+    "pid": 9049,
+    "tty": "?",
+    "time": "00:00:54",
+    "command": "dbus-daemon"
+  },
+  {
+    "pid": 9050,
+    "tty": "?",
+    "time": "00:04:14",
+    "command": "pipewire"
+  },
+  {
+    "pid": 9069,
+    "tty": "?",
+    "time": "00:00:03",
+    "command": "mpris-proxy"
+  }
+]
