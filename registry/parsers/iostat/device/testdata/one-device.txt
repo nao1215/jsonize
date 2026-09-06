@@ -1,0 +1,6 @@
+Linux 6.8.0-generic (host01) 	09/06/26 	_x86_64_	(32 CPU)
+
+Device             tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd
+nvme0n1           0.04         0.23         0.03       808.58     268329      40292  938311980
+
+

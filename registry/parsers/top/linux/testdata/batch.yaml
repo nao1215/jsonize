@@ -1,0 +1,3 @@
+source: "top -b -n1 on Ubuntu with procps-ng 4.0.4, LC_ALL=C; cut down to the first sixteen tasks plus four with a rounded VIRT/RES or a comma TIME+"
+os: linux
+args: ["-b", "-n1"]

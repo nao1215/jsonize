@@ -1,0 +1,2 @@
+source: "iostat on Ubuntu with sysstat 12.7.7, LC_ALL=C; the device block was cut down to five of the sixty-five devices"
+os: linux

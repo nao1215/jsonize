@@ -1,0 +1,60 @@
+# The default iostat report is three blocks: the sysstat banner, one
+# avg-cpu table and one device table. The banner names the host, so it is
+# read as its own object rather than dropped.
+format: 1
+command: iostat
+variant: linux
+description: iostat default report, CPU averages followed by per-device counters
+metadata:
+  tags: [linux, io, cpu, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/iostat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^avg-cpu:[ \t]+%user[ \t]+%nice'
+      - '^Device[ \t]+tps[ \t]'
+parse:
+  type: composite
+  parts:
+    - name: report
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ALinux[ \t]+(?P<kernel>\S+)[ \t]+\((?P<hostname>[^)]*)\)[ \t]+(?P<date>\S+)[ \t]+_(?P<architecture>.+?)_[ \t]+\((?P<cpu_count>[0-9]+)[ \t]+CPU\)[ \t]*\z'
+      fields:
+        cpu_count: {type: int}
+    # The avg-cpu header carries a leading "avg-cpu:" label that the rows do
+    # not repeat, so the column names are declared instead of derived.
+    - name: cpu
+      select: {skip: 1, limit: 2}
+      parse:
+        type: table
+        header:
+          columns: [user_percent, nice_percent, system_percent, iowait_percent, steal_percent, idle_percent]
+      fields:
+        user_percent: {type: float, required: true}
+        nice_percent: {type: float}
+        system_percent: {type: float}
+        iowait_percent: {type: float}
+        steal_percent: {type: float}
+        idle_percent: {type: float}
+    # The device columns differ between sysstat releases (kB_dscd was added
+    # for discards), so they are taken from the header line as printed.
+    - name: devices
+      select: {skip: 3}
+      parse:
+        type: table
+      fields:
+        device: {required: true}
+        tps: {type: float}
+        kb_read_s: {type: float}
+        kb_wrtn_s: {type: float}
+        kb_dscd_s: {type: float}
+        kb_read: {type: int}
+        kb_wrtn: {type: int}
+        kb_dscd: {type: int}

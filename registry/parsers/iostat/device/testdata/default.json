@@ -1,0 +1,51 @@
+{
+  "report": {
+    "kernel": "6.8.0-generic",
+    "hostname": "host01",
+    "date": "09/06/26",
+    "architecture": "x86_64",
+    "cpu_count": 32
+  },
+  "devices": [
+    {
+      "device": "loop0",
+      "tps": 0,
+      "kb_read_s": 0,
+      "kb_wrtn_s": 0,
+      "kb_dscd_s": 0,
+      "kb_read": 21,
+      "kb_wrtn": 0,
+      "kb_dscd": 0
+    },
+    {
+      "device": "loop1",
+      "tps": 0.01,
+      "kb_read_s": 0.65,
+      "kb_wrtn_s": 0,
+      "kb_dscd_s": 0,
+      "kb_read": 754231,
+      "kb_wrtn": 0,
+      "kb_dscd": 0
+    },
+    {
+      "device": "loop10",
+      "tps": 0.01,
+      "kb_read_s": 0.14,
+      "kb_wrtn_s": 0,
+      "kb_dscd_s": 0,
+      "kb_read": 161094,
+      "kb_wrtn": 0,
+      "kb_dscd": 0
+    },
+    {
+      "device": "loop11",
+      "tps": 0,
+      "kb_read_s": 0,
+      "kb_wrtn_s": 0,
+      "kb_dscd_s": 0,
+      "kb_read": 693,
+      "kb_wrtn": 0,
+      "kb_dscd": 0
+    }
+  ]
+}

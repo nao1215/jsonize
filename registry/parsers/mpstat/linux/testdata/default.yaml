@@ -1,0 +1,2 @@
+source: "mpstat on Ubuntu with sysstat 12.7.7, LC_ALL=C"
+os: linux

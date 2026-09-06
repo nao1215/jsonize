@@ -1,0 +1,71 @@
+{
+  "report": {
+    "kernel": "6.8.0-generic",
+    "hostname": "host01",
+    "date": "09/06/26",
+    "architecture": "x86_64",
+    "cpu_count": 32
+  },
+  "cpu": [
+    {
+      "user_percent": 2.81,
+      "nice_percent": 0,
+      "system_percent": 0.54,
+      "iowait_percent": 0.04,
+      "steal_percent": 0,
+      "idle_percent": 96.6
+    }
+  ],
+  "devices": [
+    {
+      "device": "loop0",
+      "tps": 0,
+      "kb_read_s": 0,
+      "kb_wrtn_s": 0,
+      "kb_dscd_s": 0,
+      "kb_read": 21,
+      "kb_wrtn": 0,
+      "kb_dscd": 0
+    },
+    {
+      "device": "loop1",
+      "tps": 0.01,
+      "kb_read_s": 0.65,
+      "kb_wrtn_s": 0,
+      "kb_dscd_s": 0,
+      "kb_read": 754231,
+      "kb_wrtn": 0,
+      "kb_dscd": 0
+    },
+    {
+      "device": "loop10",
+      "tps": 0.01,
+      "kb_read_s": 0.14,
+      "kb_wrtn_s": 0,
+      "kb_dscd_s": 0,
+      "kb_read": 161094,
+      "kb_wrtn": 0,
+      "kb_dscd": 0
+    },
+    {
+      "device": "nvme0n1",
+      "tps": 0.04,
+      "kb_read_s": 0.23,
+      "kb_wrtn_s": 0.03,
+      "kb_dscd_s": 808.78,
+      "kb_read": 268329,
+      "kb_wrtn": 40292,
+      "kb_dscd": 938311980
+    },
+    {
+      "device": "nvme1n1",
+      "tps": 56.23,
+      "kb_read_s": 547.81,
+      "kb_wrtn_s": 1722.19,
+      "kb_dscd_s": 583.85,
+      "kb_read": 635544894,
+      "kb_wrtn": 1998019981,
+      "kb_dscd": 677365528
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+source: "journalctl -n 20 --no-pager on Ubuntu with systemd 259, LC_ALL=C"
+os: linux
+args: ["-n", "20", "--no-pager"]

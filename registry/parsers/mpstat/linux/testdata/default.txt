@@ -1,0 +1,4 @@
+Linux 6.8.0-generic (host01) 	09/06/26 	_x86_64_	(32 CPU)
+
+19:36:10     CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+19:36:10     all    2.81    0.00    0.50    0.04    0.00    0.04    0.00    0.00    0.00   96.60

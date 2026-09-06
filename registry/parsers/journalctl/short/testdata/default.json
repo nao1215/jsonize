@@ -1,0 +1,142 @@
+[
+  {
+    "timestamp": "Sep 06 19:31:52",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "ptrace attach of \"/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only\"[9049] was attempted by \"lsns -J -t time\"[2473192]"
+  },
+  {
+    "timestamp": "Sep 06 19:31:52",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "ptrace attach of \"/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only\"[9049] was attempted by \"lsns -J -t time\"[2473192]"
+  },
+  {
+    "timestamp": "Sep 06 19:31:52",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "ptrace attach of \"/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only\"[9049] was attempted by \"lsns -J -t time\"[2473192]"
+  },
+  {
+    "timestamp": "Sep 06 19:31:52",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "ptrace attach of \"/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only\"[9049] was attempted by \"lsns -J -t time\"[2473192]"
+  },
+  {
+    "timestamp": "Sep 06 19:31:52",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "ptrace attach of \"/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only\"[9049] was attempted by \"lsns -J -t time\"[2473192]"
+  },
+  {
+    "timestamp": "Sep 06 19:31:52",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "ptrace attach of \"/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only\"[9049] was attempted by \"lsns -J -t time\"[2473192]"
+  },
+  {
+    "timestamp": "Sep 06 19:31:52",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "ptrace attach of \"/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only\"[9049] was attempted by \"lsns -J -t time\"[2473192]"
+  },
+  {
+    "timestamp": "Sep 06 19:31:52",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "ptrace attach of \"/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only\"[9049] was attempted by \"lsns -J -t time\"[2473192]"
+  },
+  {
+    "timestamp": "Sep 06 19:31:52",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "ptrace attach of \"/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only\"[9049] was attempted by \"lsns -J -t time\"[2473192]"
+  },
+  {
+    "timestamp": "Sep 06 19:31:52",
+    "hostname": "host01",
+    "identifier": "kernel",
+    "pid": null,
+    "message": "ptrace attach of \"/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only\"[9049] was attempted by \"lsns -J -t time\"[2473192]"
+  },
+  {
+    "timestamp": "Sep 06 19:32:17",
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "Started anacron.service - Run anacron jobs."
+  },
+  {
+    "timestamp": "Sep 06 19:32:17",
+    "hostname": "host01",
+    "identifier": "anacron",
+    "pid": 2484617,
+    "message": "Anacron 2.3 started on 2026-09-06"
+  },
+  {
+    "timestamp": "Sep 06 19:32:17",
+    "hostname": "host01",
+    "identifier": "anacron",
+    "pid": 2484617,
+    "message": "Normal exit (0 jobs run)"
+  },
+  {
+    "timestamp": "Sep 06 19:32:17",
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "anacron.service: Deactivated successfully."
+  },
+  {
+    "timestamp": "Sep 06 19:34:47",
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "Starting sddm-backgrounds-cache.service - Update SDDM user backgrounds cache from AccountsService..."
+  },
+  {
+    "timestamp": "Sep 06 19:34:47",
+    "hostname": "host01",
+    "identifier": "update-sddm-backgrounds-cache",
+    "pid": 2682521,
+    "message": "SDDM backgrounds cache updated successfully"
+  },
+  {
+    "timestamp": "Sep 06 19:34:47",
+    "hostname": "host01",
+    "identifier": "update-sddm-backgrounds-cache",
+    "pid": 2682521,
+    "message": "Cache file: /usr/share/sddm/themes/ubuntu-budgie-login/cache/user-backgrounds.json"
+  },
+  {
+    "timestamp": "Sep 06 19:34:47",
+    "hostname": "host01",
+    "identifier": "update-sddm-backgrounds-cache",
+    "pid": 2682521,
+    "message": "QML file: /usr/share/sddm/themes/ubuntu-budgie-login/components/AccountsService.qml"
+  },
+  {
+    "timestamp": "Sep 06 19:34:47",
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "sddm-backgrounds-cache.service: Deactivated successfully."
+  },
+  {
+    "timestamp": "Sep 06 19:34:47",
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "Finished sddm-backgrounds-cache.service - Update SDDM user backgrounds cache from AccountsService."
+  }
+]

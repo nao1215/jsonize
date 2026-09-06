@@ -1,0 +1,43 @@
+# iostat -d prints the banner and the device table only. The avg-cpu table
+# is excluded by the signature so that the default report cannot land here.
+format: 1
+command: iostat
+variant: device
+description: iostat -d, per-device counters without the CPU table
+metadata:
+  tags: [linux, io, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/iostat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^Device[ \t]+tps[ \t]'
+    none:
+      - '^avg-cpu:[ \t]+%user[ \t]+%nice'
+parse:
+  type: composite
+  parts:
+    - name: report
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ALinux[ \t]+(?P<kernel>\S+)[ \t]+\((?P<hostname>[^)]*)\)[ \t]+(?P<date>\S+)[ \t]+_(?P<architecture>.+?)_[ \t]+\((?P<cpu_count>[0-9]+)[ \t]+CPU\)[ \t]*\z'
+      fields:
+        cpu_count: {type: int}
+    - name: devices
+      select: {skip: 1}
+      parse:
+        type: table
+      fields:
+        device: {required: true}
+        tps: {type: float}
+        kb_read_s: {type: float}
+        kb_wrtn_s: {type: float}
+        kb_dscd_s: {type: float}
+        kb_read: {type: int}
+        kb_wrtn: {type: int}
+        kb_dscd: {type: int}

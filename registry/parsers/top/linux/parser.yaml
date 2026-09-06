@@ -1,0 +1,98 @@
+# top -b -n1 prints five summary lines and then the task table. Each
+# summary line has its own shape, so each is a part of its own.
+format: 1
+command: top
+variant: linux
+description: "top -b -n1 on Linux (procps): summary lines plus the task table"
+metadata:
+  tags: [linux, process, cpu, memory, procps]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/top.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\Atop - [0-9]'
+      - '^Tasks:[ \t]+[0-9]+ total,'
+      - '^[ \t]*PID[ \t]+USER[ \t]+PR[ \t]+NI[ \t]'
+parse:
+  type: composite
+  parts:
+    - name: uptime
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\Atop - (?P<time>[0-9:]+) up[ \t]+(?P<uptime>.+?),[ \t]+(?P<users>[0-9]+) users?,[ \t]+load average: (?P<load_1m>[0-9.]+), (?P<load_5m>[0-9.]+), (?P<load_15m>[0-9.]+)[ \t]*\z'
+      fields:
+        users: {type: int}
+        load_1m: {type: float}
+        load_5m: {type: float}
+        load_15m: {type: float}
+    - name: tasks
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ATasks:[ \t]+(?P<total>[0-9]+) total,[ \t]+(?P<running>[0-9]+) running,[ \t]+(?P<sleeping>[0-9]+) sleeping,[ \t]+(?P<stopped>[0-9]+) stopped,[ \t]+(?P<zombie>[0-9]+) zombie[ \t]*\z'
+      fields:
+        total: {type: int}
+        running: {type: int}
+        sleeping: {type: int}
+        stopped: {type: int}
+        zombie: {type: int}
+    - name: cpu
+      select: {skip: 2, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A%Cpu\(s\):[ \t]+(?P<user>[0-9.]+) us,[ \t]+(?P<system>[0-9.]+) sy,[ \t]+(?P<nice>[0-9.]+) ni,[ \t]+(?P<idle>[0-9.]+) id,[ \t]+(?P<iowait>[0-9.]+) wa,[ \t]+(?P<hardware_irq>[0-9.]+) hi,[ \t]+(?P<software_irq>[0-9.]+) si,[ \t]+(?P<steal>[0-9.]+) st[ \t]*\z'
+      fields:
+        user: {type: float}
+        system: {type: float}
+        nice: {type: float}
+        idle: {type: float}
+        iowait: {type: float}
+        hardware_irq: {type: float}
+        software_irq: {type: float}
+        steal: {type: float}
+    # The memory figures are printed in the unit named at the start of the
+    # line, which top picks from the amount installed, so the unit is kept
+    # beside the numbers instead of being folded into them.
+    - name: memory
+      select: {skip: 3, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<unit>\S+) Mem[ \t]*:[ \t]+(?P<total>[0-9.]+) total,[ \t]+(?P<free>[0-9.]+) free,[ \t]+(?P<used>[0-9.]+) used,[ \t]+(?P<buff_cache>[0-9.]+) buff/cache[ \t]*\z'
+      fields:
+        total: {type: float}
+        free: {type: float}
+        used: {type: float}
+        buff_cache: {type: float}
+    - name: swap
+      select: {skip: 4, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<unit>\S+) Swap:[ \t]+(?P<total>[0-9.]+) total,[ \t]+(?P<free>[0-9.]+) free,[ \t]+(?P<used>[0-9.]+) used\.[ \t]+(?P<available>[0-9.]+) avail Mem[ \t]*\z'
+      fields:
+        total: {type: float}
+        free: {type: float}
+        used: {type: float}
+        available: {type: float}
+    # VIRT, RES and SHR switch to a rounded human-readable form (11.2g)
+    # once they no longer fit the column, and TIME+ switches from m:ss.hh
+    # to a comma form for long-running tasks, so all four stay strings.
+    - name: processes
+      select: {skip: 5}
+      parse:
+        type: table
+      fields:
+        pid: {type: int, required: true}
+        user: {required: true}
+        ni: {type: int}
+        cpu_percent: {type: float}
+        mem_percent: {type: float}
+        command: {required: true}

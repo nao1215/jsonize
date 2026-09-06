@@ -1,0 +1,37 @@
+[
+  {
+    "timestamp": "Sep 06 05:06:07",
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "Failed to start apport-autoreport.service - Process error reports when automatic reporting is enabled."
+  },
+  {
+    "timestamp": "Sep 06 08:06:19",
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "Failed to start apport-autoreport.service - Process error reports when automatic reporting is enabled."
+  },
+  {
+    "timestamp": "Sep 06 11:06:47",
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "Failed to start apport-autoreport.service - Process error reports when automatic reporting is enabled."
+  },
+  {
+    "timestamp": "Sep 06 14:06:56",
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "Failed to start apport-autoreport.service - Process error reports when automatic reporting is enabled."
+  },
+  {
+    "timestamp": "Sep 06 17:06:59",
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "Failed to start apport-autoreport.service - Process error reports when automatic reporting is enabled."
+  }
+]

@@ -13,10 +13,11 @@ detect:
     any: ["-a", "--all"]
   signature:
     all:
-      # "Linux " on any of the first lines also describes /proc/version
-      # and any log that quotes it. uname -a is the kernel name, the node
-      # name, the release and then a version that starts with "#", from
-      # the first character of the output.
+      # "Linux " on any of the first lines also describes /proc/version,
+      # any log that quotes it, and the sysstat banner that iostat,
+      # mpstat and pidstat open with. uname -a is the kernel name, the
+      # node name, the release and then a version starting with "#",
+      # from the first character of the output.
       - '\ALinux \S+ \S+ #'
 parse:
   type: regex

@@ -1,0 +1,19 @@
+{
+  "report": {
+    "kernel": "6.8.0-generic",
+    "hostname": "host01",
+    "date": "09/06/26",
+    "architecture": "x86_64",
+    "cpu_count": 32
+  },
+  "cpu": [
+    {
+      "user_percent": 2.81,
+      "nice_percent": 0,
+      "system_percent": 0.54,
+      "iowait_percent": 0.04,
+      "steal_percent": 0,
+      "idle_percent": 96.6
+    }
+  ]
+}
