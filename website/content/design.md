@@ -1,4 +1,7 @@
-# Design
+---
+title: Design
+description: The decisions behind jsonize, the alternatives considered and what was left out.
+---
 
 This document records the decisions behind jsonize, the alternatives that
 were considered and what the MVP deliberately leaves out.

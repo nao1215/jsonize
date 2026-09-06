@@ -1,0 +1,69 @@
+# Documentation site for jsonize, published to GitHub Pages. The pages are
+# written here rather than in a docs/ directory so the repository keeps one
+# place for prose and the site is the thing people read.
+baseURL = "https://nao1215.github.io/jsonize/"
+locale = "en"
+title = "jsonize"
+disableKinds = ["taxonomy", "term", "rss"]
+enableRobotsTXT = true
+timeZone = "UTC"
+
+[params]
+tagline = "Turn command output into JSON"
+description = "jsonize (jz) reads the output of a command, works out which command produced it, and writes JSON. Parsers are YAML definitions, not code."
+
+[markup.highlight]
+noClasses = false
+style = "github"
+
+[markup.tableOfContents]
+startLevel = 2
+endLevel = 3
+
+[[menus.main]]
+name = "Install"
+pageRef = "/install"
+weight = 10
+
+[[menus.main]]
+name = "Usage"
+pageRef = "/usage"
+weight = 20
+
+[[menus.main]]
+name = "Parsers"
+pageRef = "/parsers"
+weight = 30
+
+[[menus.main]]
+name = "Write a parser"
+pageRef = "/write-a-parser"
+weight = 40
+
+[[menus.main]]
+name = "Definition format"
+pageRef = "/definition-format"
+weight = 50
+
+[[menus.main]]
+name = "Design"
+pageRef = "/design"
+weight = 60
+
+# The demo recording lives beside its vhs script at the repository root, and
+# is mounted here so the site and the README can share one file.
+[[module.mounts]]
+source = "assets"
+target = "assets"
+
+[[module.mounts]]
+source = "content"
+target = "content"
+
+[[module.mounts]]
+source = "layouts"
+target = "layouts"
+
+[[module.mounts]]
+source = "../demo"
+target = "static/demo"

@@ -1,10 +1,8 @@
 # jsonize
 
-**jsonize — Turn command output into JSON.**
-
-Pipe a command's output to `jz` and get JSON. jz works out which command
-produced the text and how to read it, so there is nothing to configure
-and nothing to name:
+jsonize turns command output into JSON. Pipe a command to `jz` and it
+works out which command produced the text and how to read it, so there is
+nothing to name and nothing to configure.
 
 ```console
 $ df -h | jz
@@ -12,31 +10,24 @@ $ df -h | jz
 
 $ ps aux | jz | jq '.[] | select(.cpu_percent > 10) | .command'
 "/usr/lib/firefox/firefox"
-
-$ jz run --pretty uptime
-{
-  "time": "13:57:18",
-  "uptime": "13 days,  4:37",
-  "users": 5,
-  "load_1m": 0.43,
-  "load_5m": 0.65,
-  "load_15m": 0.76
-}
 ```
 
-Parsers are YAML definitions in a registry, not Go code: supporting a new
-command, another system's variant of it, or a new option is a pull
-request containing only YAML and fixtures.
+![jz reading df, uptime and free, and refusing input it cannot identify](demo/jsonize.gif)
+
+Parsers are YAML definitions in a registry, not Go code, so another
+command or another system's variant of one is a file and a fixture rather
+than a release.
+
+Documentation: https://nao1215.github.io/jsonize/
 
 ## Install
 
 ```console
-# from source (Go 1.26 or later)
-go install github.com/nao1215/jsonize/cmd/jz@latest
-
-# from a release archive
-curl -sSfL https://github.com/nao1215/jsonize/releases/latest/download/jsonize_<version>_linux_amd64.tar.gz | tar xz
+$ go install github.com/nao1215/jsonize/cmd/jz@latest
 ```
+
+Release archives for Linux, macOS and Windows are attached to every
+release.
 
 ## Using it
 
@@ -45,23 +36,10 @@ COMMAND | jz                 # convert piped output
 jz < captured.txt            # or output captured earlier
 jz --file captured.txt
 jz run COMMAND [args...]     # let jz run the command and convert its stdout
+jz list                      # what jz can read
 ```
 
-`jz run` is the helper for the case where jz starts the command itself. It
-hands the command your standard input, passes its standard error through
-untouched, mirrors its exit status, and runs it with `LC_ALL=C` so the
-output is the one the parsers describe.
-
-Everything after the command name belongs to the command, including
-things that look like jz options. A bare `--` states that boundary:
-
-```console
-$ jz run ps aux
-$ jz run mytool --pretty            # --pretty goes to mytool
-$ jz run --pretty -- mytool --json  # --pretty is jz's, --json is mytool's
-```
-
-### Options
+Options:
 
 ```text
   -f, --file PATH     read input from PATH instead of stdin
@@ -71,93 +49,15 @@ $ jz run --pretty -- mytool --json  # --pretty is jz's, --json is mytool's
   -h, --help          show help
 ```
 
-`--parser` and `--variant` are for the cases detection cannot settle on
-its own: a format too generic to claim, a wrapper whose name is not the
-tool it runs, a variant you want pinned in CI. `--variant` needs
-`--parser`, because a variant name only identifies a definition together
-with its parser:
+`jz run` hands the command your standard input, passes its standard error
+through, mirrors its exit status and runs it with `LC_ALL=C`. Everything
+after the command name belongs to the command, and a bare `--` states
+that boundary explicitly.
 
-```console
-$ git diff --numstat | jz --parser du     # deliberately reading it as du
-$ df -h | jz --parser df --variant gnu-human
-$ jz run --parser dir -- cmd.exe /c dir
-```
+## What it will not do
 
-Naming a parser is a claim about the input, not a way around the checks:
-the definition's signature still has to fit the text, and jz fails if it
-does not.
-
-### Exit codes
-
-| Code | Meaning |
-|------|---------|
-| 0 | success |
-| 1 | unexpected failure (I/O, internal) |
-| 2 | usage error |
-| 3 | the input did not match the chosen definition |
-| 4 | the format could not be identified, several matched, or a named one did not fit |
-| 5 | a registry could not be loaded |
-| *n* | `jz run` mirrors the command's own non-zero status (128+signal when it was killed); its output is still parsed when there is any |
-
-Diagnostics always go to stderr with a `jz:` prefix. Stdout carries
-complete JSON or nothing at all: a failure never leaves a half-written
-document behind.
-
-## What jz can read
-
-`jz list` prints the current table, `jz list df` the variants of one
-command, and `jz list df gnu` everything about one definition.
-
-| Command | Variants |
-|---------|----------|
-| `df` | `gnu`, `gnu-human`, `bsd`, `bsd-human`, `busybox-human` |
-| `free` | `gnu`, `gnu-human`, `gnu-wide` |
-| `ps` | `unix` (`ps -ef`), `bsd` (`ps aux`), `busybox` |
-| `uptime` | `linux`, `bsd` |
-| `w` | `linux`, `bsd` |
-| `mount` | `linux`, `bsd` |
-| `uname` | `linux`, `darwin` |
-| `ls` | `long` (`ls -l` and `ls -lh`) |
-| `lsblk` | `linux` |
-| `env` | `posix`, `null-separated` (`env -0`) |
-| `id`, `du`, `wc` | `posix` |
-
-A *variant* is one output format of a command. GNU `df`, `df -h`, macOS
-`df` and BusyBox `df -h` are four formats, so they are four definitions.
-When one format is printed by several implementations, a single
-definition covers them all and says so in `metadata.compatible`.
-
-## How jz decides
-
-Every definition carries a signature: the shape its output must have.
-
-```yaml
-detect:
-  os: [linux]                       # the systems this format comes from
-  args: {any: ["-h"], none: ["-i"]} # only checked when jz ran the command
-  signature:
-    all: ['^Filesystem\s+Size\s+Used\s+Avail\s+Use%\s+Mounted on\s*$']
-```
-
-A signature is a necessary condition: if it does not match, the
-definition is out. The operating system and the arguments are known only
-when jz ran the command itself, and they can then remove candidates but
-never promote one. Exactly one survivor is a success. Zero and more than
-one are both errors that say what to pass:
-
-```console
-$ cat weird.txt | jz
-jz: unable to identify the input format
-no signature of the 26 known parsers matched this text
-
-Name the parser explicitly:
-  COMMAND | jz --parser df
-Run `jz list` to see the supported parsers.
-```
-
-Some formats are too unremarkable to claim. A number, a tab and a path is
-`du` output and `git diff --numstat` alike, so `du` is only used when you
-name it:
+Wrong JSON returned with a zero exit status is the failure that matters,
+so jz refuses rather than approximates:
 
 ```console
 $ git diff --numstat | jz
@@ -168,108 +68,59 @@ Confirm it:
   COMMAND | jz --parser du
 ```
 
-### What jz will not invent
+A rounded size stays the text that was printed. `df -h` counts 1024 per
+suffix step and `df -H` counts 1000, the output records neither, and both
+round, so a byte count would be two guesses stacked. Run `df`, `free`,
+`ls -l` or `lsblk -b` when you need numbers.
 
-`df -h` counts 1024 per suffix step and `df -H` counts 1000, the output
-says which nowhere, and both round. jz therefore reports a
-human-readable size exactly as it was printed (`"1.8T"`) instead of
-deriving a byte count it cannot actually know. Ask the command for exact
-numbers when you need them: `df` (1K blocks), `free` (kibibytes),
-`ls -l` (bytes), `lsblk -b` (bytes).
+Naming a parser is a claim about the input, not a way past the checks:
+the definition's signature still has to fit, and there is no option that
+turns that off.
 
-Similarly, `env` output cannot express a value containing a newline;
-`env -0 | jz` can, and jz has a parser for it.
+## Adding a parser
 
-## Registries
+A definition and a captured fixture, no Go:
 
-Definitions come from layered registries, and the first one that defines
-a `command/variant` wins, so a local definition can override an official
-one without editing it:
-
-1. directories in `$JSONIZE_REGISTRY_PATH` (separated like `PATH`)
-2. the user registry: `$XDG_CONFIG_HOME/jsonize/registry` on Linux,
-   `~/Library/Application Support/jsonize/registry` on macOS,
-   `%AppData%\jsonize\registry` on Windows
-3. the registry embedded in the `jz` binary
-
-`jz list --sources` prints this list with what exists on your machine and
-how many definitions came from each. jz never accesses the network: the
-same input converts to the same JSON on the same machine, always.
-
-A registry directory looks like this:
-
-```
-registry.yaml                                    # format: 1, name, version
-parsers/<command>/<variant>/parser.yaml          # the definition
-parsers/<command>/<variant>/testdata/<case>.txt  # captured output
-parsers/<command>/<variant>/testdata/<case>.json # expected JSON
-parsers/<command>/<variant>/testdata/<case>.yaml # optional: os, args, source
+```console
+$ mkdir -p ~/.config/jsonize/registry/parsers/greet/default/testdata
+$ $EDITOR ~/.config/jsonize/registry/parsers/greet/default/parser.yaml
+$ make registry-update-golden DIR=~/.config/jsonize/registry
+$ make registry-test DIR=~/.config/jsonize/registry
+$ greet | jz
 ```
 
-## Adding a parser (no Go required)
+Registries are layered: `JSONIZE_REGISTRY_PATH`, then the user registry
+under the config directory, then the one built into the binary. jz never
+accesses the network, so the same input converts to the same JSON on the
+same machine. The guide is at
+https://nao1215.github.io/jsonize/write-a-parser/ and the reference at
+https://nao1215.github.io/jsonize/definition-format/.
 
-1. Create the directory and the definition:
+## Exit codes
 
-   ```console
-   $ mkdir -p ~/.config/jsonize/registry/parsers/greet/default/testdata
-   $ cat > ~/.config/jsonize/registry/parsers/greet/default/parser.yaml <<'YAML'
-   format: 1
-   command: greet
-   variant: default
-   description: greeting lines
-   detect:
-     signature:
-       all: ['^hello \S+ x\d+$']
-   parse:
-     type: regex
-     pattern: '^hello (?P<name>\S+) x(?P<times>\d+)$'
-   fields:
-     times: {type: int}
-   YAML
-   ```
+| Code | Meaning |
+|------|---------|
+| 0 | success |
+| 1 | unexpected failure |
+| 2 | usage error |
+| 3 | the input did not match the chosen definition |
+| 4 | unidentified, ambiguous, or a named parser that did not fit |
+| 5 | a registry could not be loaded |
+| *n* | `jz run` mirrors the command's own status, or 128+signal |
 
-2. Save captured output as `testdata/basic.txt`.
-3. Generate the expected JSON, read it, then check it stays that way:
-
-   ```console
-   $ make registry-update-golden DIR=~/.config/jsonize/registry
-   $ make registry-test DIR=~/.config/jsonize/registry
-   ```
-
-4. Use it: `greet | jz`.
-
-The definition language is documented in
-[docs/definition-format.md](docs/definition-format.md), and
-[docs/adding-parsers.md](docs/adding-parsers.md) walks through
-contributing one to the official registry.
-
-## Security model in one paragraph
-
-A definition is data. It can select lines, split them and convert values;
-it cannot run programs, read files or make network requests. Regular
-expressions use Go's RE2 engine (linear time, no catastrophic
-backtracking) and are bounded in length. Input is bounded at 64 MiB and
-lines at 1 MiB. `jz run` executes exactly the command you named, with no
-shell involved, and only after jz knows a parser exists for it. See
-[SECURITY.md](SECURITY.md).
+Diagnostics go to standard error. Standard output carries a complete JSON
+document or nothing.
 
 ## Development
 
 ```console
 $ make help                    # every target
-$ make build                   # dist/jz
-$ make test                    # unit and golden tests with coverage
-$ make test-race
-$ make lint                    # golangci-lint for linux, darwin and windows
-$ make fuzz                    # every Fuzz target briefly (FUZZTIME=10s)
+$ make check                   # fmt, vet, lint, unit tests, race
 $ make e2e                     # atago end-to-end suite
-$ make bench                   # benchmarks; make bench-compare against the baseline
-$ make registry-test           # validate definitions and run their golden cases
-$ make registry-update-golden  # rewrite the expected JSON, then read the diff
+$ make registry-test           # validate definitions and their golden cases
+$ make website-serve           # the documentation site locally
+$ make demo                    # re-record demo/jsonize.gif with vhs
 ```
-
-The design and its trade-offs are written up in
-[docs/design.md](docs/design.md).
 
 ## License
 

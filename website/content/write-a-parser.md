@@ -1,4 +1,7 @@
-# Adding a parser to the official registry
+---
+title: Write a parser
+description: How to add a parser to jsonize with YAML and a fixture, and how to contribute it.
+---
 
 This is the walkthrough for a pull request that adds `lsof` support, but
 the same steps apply to any command. Nothing here requires Go.

@@ -71,6 +71,18 @@ bench-compare: ## Compare bench/new.txt against bench/baseline.txt with benchsta
 e2e: build ## Run the atago end-to-end suite (requires atago on PATH)
 	bash ./scripts/run_e2e.sh
 
+.PHONY: website
+website: ## Build the documentation site into website/public
+	cd website && hugo --minify
+
+.PHONY: website-serve
+website-serve: ## Serve the documentation site locally
+	cd website && hugo server --buildDrafts
+
+.PHONY: demo
+demo: build ## Re-record demo/jsonize.gif with vhs
+	vhs demo/jsonize.tape
+
 .PHONY: check
 check: fmt vet lint test test-race ## Run everything CI runs locally except E2E
 

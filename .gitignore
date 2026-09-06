@@ -17,5 +17,10 @@ cover.html
 # atago run state
 /.atago/
 
+# hugo build output
+/website/public/
+/website/resources/
+/website/.hugo_build.lock
+
 # local scratch
 /doc/reference/

@@ -1,4 +1,7 @@
-# Definition format (format 1)
+---
+title: Definition format
+description: "The YAML a parser definition is written in: detection, parsing and field conversion."
+---
 
 A parser definition is one YAML document, `parser.yaml`, stored at
 `parsers/<command>/<variant>/` inside a registry. The directory names

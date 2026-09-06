@@ -12,8 +12,8 @@ need no Go at all; the sections below cover both kinds.
 2. Create `registry/parsers/<command>/<variant>/parser.yaml`. Variant
    names describe the *format* (`gnu`, `gnu-human`, `bsd`, `busybox`),
    not the machine it came from. Read
-   [docs/definition-format.md](docs/definition-format.md) and
-   [docs/adding-parsers.md](docs/adding-parsers.md).
+   the [definition format](https://nao1215.github.io/jsonize/definition-format/)
+   and the [guide to writing one](https://nao1215.github.io/jsonize/write-a-parser/).
 3. Put the capture in `testdata/<case>.txt` and describe it in
    `testdata/<case>.yaml` (`source`, and `os`/`args` so the fixture is
    also used to test variant selection).
@@ -64,8 +64,8 @@ the exact form of the command produce numbers.
 
 Changing the meaning of an existing key or adding a required one is a
 breaking change to `format`. Bump `definition.CurrentFormat`, document
-the migration in `docs/definition-format.md`, and update every embedded
-definition. Additive, optional keys keep the format number.
+the migration in `website/content/definition-format.md`, and update every
+embedded definition. Additive, optional keys keep the format number.
 
 ## Releasing
 
