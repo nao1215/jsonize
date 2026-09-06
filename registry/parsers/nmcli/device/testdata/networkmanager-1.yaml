@@ -1,0 +1,8 @@
+source: captured on Ubuntu 26.04 (NetworkManager 1.54.3) with LC_ALL=C
+description: >-
+  Every device NetworkManager knows about. The wifi profile name and one
+  profile named in Japanese were replaced with names of the same printed
+  width so the columns still line up. The last device has no connection
+  and prints "--".
+os: linux
+args: ["device"]

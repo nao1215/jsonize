@@ -1,0 +1,26 @@
+# The device table has a state cell that contains spaces ("connected
+# (externally)") and a connection name that may contain them too, so the
+# columns are cut at the header words rather than at whitespace. The
+# columns are read from the header, which is what lets an extra field
+# asked for with -f appear as one more key.
+format: 1
+command: nmcli
+variant: device
+description: nmcli device status
+metadata:
+  tags: [linux, network, networkmanager]
+  compatible: [NetworkManager]
+  references:
+    - https://networkmanager.dev/docs/api/latest/nmcli.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ADEVICE[ \t]+TYPE[ \t]+STATE[ \t]+CONNECTION'
+parse:
+  type: table
+  split: aligned
+fields:
+  device: {required: true}
+  connection: {null_if: ["--"]}
+  con_uuid: {null_if: ["--"]}

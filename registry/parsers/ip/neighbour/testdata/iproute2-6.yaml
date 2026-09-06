@@ -1,0 +1,8 @@
+source: captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C
+description: >-
+  The first sixteen IPv4 entries of the neighbour table. They cover the
+  resolved states (STALE, REACHABLE) and an entry that was never resolved
+  and therefore has no link-layer address (FAILED). The link-layer
+  addresses were replaced.
+os: linux
+args: ["neighbour"]

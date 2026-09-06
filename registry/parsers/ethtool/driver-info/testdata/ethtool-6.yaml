@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (ethtool 6.19) with LC_ALL=C
+description: >-
+  A PCI ethernet card. The expansion ROM version is printed as an empty
+  value and the bus address contains the colon the key is split on.
+os: linux
+args: ["-i", "eno1"]

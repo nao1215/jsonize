@@ -1,0 +1,32 @@
+# `ip neighbour` prints one entry per line ending in the NUD state. An
+# entry that was never resolved has no link-layer address, and a neighbour
+# that routes or answers for others carries "router" or "proxy" before the
+# state, so the three shapes are three alternatives.
+format: 1
+command: ip
+variant: neighbour
+description: ip neighbour show
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ip-neighbour.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["neighbour", "neighbor", "neigh", "n"]
+  signature:
+    all:
+      - '\A\S+ dev \S+ (?:lladdr \S+ )?(?:(?:router|proxy) )*(?:PERMANENT|NOARP|REACHABLE|STALE|DELAY|PROBE|INCOMPLETE|FAILED|NONE)[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<address>\S+) dev (?P<dev>\S+) lladdr (?P<lladdr>\S+) (?P<flags>(?:router|proxy)(?: (?:router|proxy))*) (?P<state>[A-Z]+)[ \t]*$'
+    - '^(?P<address>\S+) dev (?P<dev>\S+) lladdr (?P<lladdr>\S+) (?P<state>[A-Z]+)[ \t]*$'
+    - '^(?P<address>\S+) dev (?P<dev>\S+) (?P<state>[A-Z]+)[ \t]*$'
+fields:
+  address: {required: true}
+  dev: {required: true}
+  lladdr: {when_missing: omit}
+  flags: {type: array, split: " ", when_missing: omit}
+  state: {required: true}

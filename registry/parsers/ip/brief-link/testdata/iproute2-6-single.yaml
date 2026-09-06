@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C
+description: One interface asked for by name, the shortest output this form has.
+os: linux
+args: ["-br", "link", "show", "lo"]

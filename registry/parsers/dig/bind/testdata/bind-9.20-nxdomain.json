@@ -1,0 +1,25 @@
+{
+  "header": {
+    "opcode": "QUERY",
+    "status": "NXDOMAIN",
+    "id": 49958,
+    "flags": [
+      "qr",
+      "aa",
+      "rd",
+      "ra",
+      "ad"
+    ],
+    "question_count": 1,
+    "answer_count": 0,
+    "authority_count": 0,
+    "additional_count": 1
+  },
+  "answers": [],
+  "statistics": {
+    "query_time_ms": 0,
+    "server": "127.0.0.53#53",
+    "when": "Sun Sep 06 19:47:02 JST 2026",
+    "message_size": 53
+  }
+}

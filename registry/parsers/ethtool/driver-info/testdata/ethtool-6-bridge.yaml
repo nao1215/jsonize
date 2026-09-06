@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (ethtool 6.19) with LC_ALL=C
+description: >-
+  A software bridge, which has no firmware and no bus address and prints
+  N/A for both.
+os: linux
+args: ["-i", "docker0"]

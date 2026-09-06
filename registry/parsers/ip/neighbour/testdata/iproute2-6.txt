@@ -1,0 +1,16 @@
+172.19.0.3 dev br-088d49b64243 lladdr 52:54:00:10:00:0e STALE 
+172.17.0.6 dev docker0 lladdr 52:54:00:10:00:0f STALE 
+192.168.11.8 dev wlp195s0 lladdr 52:54:00:10:01:10 STALE 
+192.168.11.14 dev wlp195s0 FAILED 
+172.17.0.8 dev docker0 lladdr 52:54:00:10:01:11 STALE 
+172.19.0.2 dev br-088d49b64243 lladdr 52:54:00:10:01:12 STALE 
+172.17.0.2 dev docker0 lladdr 52:54:00:10:01:13 STALE 
+172.19.0.4 dev br-088d49b64243 lladdr 52:54:00:10:01:14 STALE 
+172.17.0.4 dev docker0 lladdr 52:54:00:10:01:15 STALE 
+192.168.11.15 dev wlp195s0 lladdr 52:54:00:10:01:16 STALE 
+192.168.11.8 dev eno1 lladdr 52:54:00:10:01:10 STALE 
+192.168.11.15 dev eno1 lladdr 52:54:00:10:01:16 STALE 
+172.17.0.3 dev docker0 lladdr 52:54:00:10:01:17 STALE 
+172.17.0.5 dev docker0 lladdr 52:54:00:10:01:18 REACHABLE 
+192.168.11.1 dev wlp195s0 lladdr 52:54:00:10:01:19 REACHABLE 
+192.168.11.14 dev eno1 lladdr 52:54:00:10:01:1a STALE 

@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C
+description: >-
+  An A record answered by the local router. The name was replaced with one
+  of the same length so the tabs dig printed still line the columns up.
+os: linux
+args: ["@192.168.11.1", "gateway.local"]

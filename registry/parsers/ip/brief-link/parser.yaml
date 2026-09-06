@@ -1,0 +1,32 @@
+# `ip -brief link` prints the same first two columns as `ip -brief
+# address`, so the angle-bracket flag list at the end of every line is
+# what tells the two apart; `ip/brief-address` requires what follows the
+# state to be addresses in CIDR form, which excludes this one. An
+# interface without a hardware address prints no address at all, which is
+# why the address is a separate alternative rather than an optional group.
+format: 1
+command: ip
+variant: brief-link
+description: ip -brief link show
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ip-link.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-br", "-brief"]
+  signature:
+    all:
+      - '\A\S+[ \t]+(?:UP|DOWN|UNKNOWN|LOWERLAYERDOWN)[ \t]+.*<[A-Z0-9_,-]*>[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<interface>\S+)[ \t]+(?P<state>UP|DOWN|UNKNOWN|LOWERLAYERDOWN)[ \t]+(?P<lladdr>[0-9a-fA-F:.]+)[ \t]+<(?P<flags>[^>]*)>[ \t]*$'
+    - '^(?P<interface>\S+)[ \t]+(?P<state>UP|DOWN|UNKNOWN|LOWERLAYERDOWN)[ \t]+<(?P<flags>[^>]*)>[ \t]*$'
+fields:
+  interface: {required: true}
+  state: {required: true}
+  lladdr: {when_missing: omit}
+  flags: {type: array, split: ","}

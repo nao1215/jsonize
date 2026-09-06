@@ -1,0 +1,51 @@
+# dig prints the decoded header, the sections of the reply and how the
+# query went. The answer section is the only part that is a table, so the
+# header and the statistics are matched once each and the answer records
+# are read as rows; a reply with no answer section leaves that list empty
+# rather than failing.
+format: 1
+command: dig
+variant: bind
+description: dig reply in the default long form
+metadata:
+  tags: [linux, darwin, network, dns]
+  compatible: [BIND dig]
+  references:
+    - https://bind9.readthedocs.io/en/latest/manpages.html#dig-dns-lookup-utility
+detect:
+  signature:
+    all:
+      - '^; <<>> DiG '
+      - '^;; ->>HEADER<<- opcode: '
+parse:
+  type: composite
+  parts:
+    - name: header
+      parse:
+        type: regex
+        each: input
+        pattern: ';; ->>HEADER<<- opcode: (?P<opcode>\w+), status: (?P<status>\w+), id: (?P<id>\d+)\n;; flags: (?P<flags>[^;]*); QUERY: (?P<question_count>\d+), ANSWER: (?P<answer_count>\d+), AUTHORITY: (?P<authority_count>\d+), ADDITIONAL: (?P<additional_count>\d+)'
+      fields:
+        id: {type: int}
+        flags: {type: array, split: " ", null_if: [""]}
+        question_count: {type: int}
+        answer_count: {type: int}
+        authority_count: {type: int}
+        additional_count: {type: int}
+    - name: answers
+      select: {after: '^;; ANSWER SECTION:$', until: '^;; '}
+      parse:
+        type: table
+        header:
+          none: true
+          columns: [name, ttl, class, type, data]
+      fields:
+        ttl: {type: int}
+    - name: statistics
+      parse:
+        type: regex
+        each: input
+        pattern: ';; Query time: (?P<query_time_ms>\d+) msec\n;; SERVER: (?P<server>[^\s(]+)[^\n]*\n;; WHEN: (?P<when>[^\n]+)\n;; MSG SIZE  rcvd: (?P<message_size>\d+)'
+      fields:
+        query_time_ms: {type: int}
+        message_size: {type: int}

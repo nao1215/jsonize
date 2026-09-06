@@ -1,0 +1,18 @@
+{
+  "hops": [
+    {
+      "hop": 1,
+      "host": "LOCALHOST",
+      "pmtu": 1500
+    },
+    {
+      "hop": 1,
+      "host": "192.168.11.60",
+      "time_ms": 3055.719,
+      "note": "!H"
+    }
+  ],
+  "summary": {
+    "pmtu": 1500
+  }
+}

@@ -1,0 +1,15 @@
+NAME             UUID                                  TYPE      DEVICE          
+wifi-lab-5g-001  00000000-0000-4000-8000-000000000001  wifi      wlp195s0        
+Home network 1   00000000-0000-4000-8000-000000000002  ethernet  eno1            
+br-088d49b64243  00000000-0000-4000-8000-000000000003  bridge    br-088d49b64243 
+br-5b0a8cd9c3d6  00000000-0000-4000-8000-000000000004  bridge    br-5b0a8cd9c3d6 
+docker0          00000000-0000-4000-8000-000000000005  bridge    docker0         
+lo               00000000-0000-4000-8000-000000000006  loopback  lo              
+br-d647a5eb3b66  00000000-0000-4000-8000-000000000007  bridge    br-d647a5eb3b66 
+veth0c4293d      00000000-0000-4000-8000-000000000008  ethernet  veth0c4293d     
+veth0d5de59      00000000-0000-4000-8000-000000000009  ethernet  veth0d5de59     
+veth3083cdb      00000000-0000-4000-8000-00000000000a  ethernet  veth3083cdb     
+veth5d856b9      00000000-0000-4000-8000-00000000000b  ethernet  veth5d856b9     
+veth65bc625      00000000-0000-4000-8000-00000000000c  ethernet  veth65bc625     
+veth9363d1f      00000000-0000-4000-8000-00000000000d  ethernet  veth9363d1f     
+vethceffd70      00000000-0000-4000-8000-00000000000e  ethernet  vethceffd70     

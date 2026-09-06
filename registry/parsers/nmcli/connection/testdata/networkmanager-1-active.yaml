@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (NetworkManager 1.54.3) with LC_ALL=C
+description: >-
+  Only the active profiles. The last row is printed without the trailing
+  padding the other rows have.
+os: linux
+args: ["connection", "show", "--active"]

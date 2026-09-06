@@ -1,0 +1,10 @@
+driver: r8169
+version: 7.0.0-30-generic
+firmware-version: rtl8125b-2_0.0.2 07/13/20
+expansion-rom-version: 
+bus-info: 0000:c1:00.0
+supports-statistics: yes
+supports-test: no
+supports-eeprom-access: no
+supports-register-dump: yes
+supports-priv-flags: no

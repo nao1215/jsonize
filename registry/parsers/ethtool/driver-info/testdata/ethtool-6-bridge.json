@@ -1,0 +1,12 @@
+{
+  "driver": "bridge",
+  "version": "2.3",
+  "firmware-version": null,
+  "expansion-rom-version": "",
+  "bus-info": null,
+  "supports-statistics": false,
+  "supports-test": false,
+  "supports-eeprom-access": false,
+  "supports-register-dump": false,
+  "supports-priv-flags": false
+}

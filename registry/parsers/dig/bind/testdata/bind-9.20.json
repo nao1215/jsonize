@@ -1,0 +1,29 @@
+{
+  "header": {
+    "opcode": "QUERY",
+    "status": "NOERROR",
+    "id": 10870,
+    "flags": [
+      "qr"
+    ],
+    "question_count": 1,
+    "answer_count": 1,
+    "authority_count": 0,
+    "additional_count": 0
+  },
+  "answers": [
+    {
+      "name": "gateway.local.",
+      "ttl": 3600,
+      "class": "IN",
+      "type": "A",
+      "data": "192.168.11.1"
+    }
+  ],
+  "statistics": {
+    "query_time_ms": 2,
+    "server": "192.168.11.1#53",
+    "when": "Sun Sep 06 19:47:01 JST 2026",
+    "message_size": 47
+  }
+}
