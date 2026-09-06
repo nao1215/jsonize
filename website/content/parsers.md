@@ -29,6 +29,7 @@ input.
 | `lsattr` | `linux` |
 | `lsb_release` | `linux` |
 | `lsblk` | `linux` |
+| `lscpu` | `linux` |
 | `lsmod` | `linux` |
 | `lspci` | `linux` |
 | `lsusb` | `linux` |

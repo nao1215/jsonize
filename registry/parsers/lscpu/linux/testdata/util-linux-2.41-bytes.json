@@ -1,0 +1,186 @@
+[
+  {
+    "name": "Architecture",
+    "value": "x86_64"
+  },
+  {
+    "name": "CPU op-mode(s)",
+    "value": "32-bit, 64-bit"
+  },
+  {
+    "name": "Address sizes",
+    "value": "48 bits physical, 48 bits virtual"
+  },
+  {
+    "name": "Byte Order",
+    "value": "Little Endian"
+  },
+  {
+    "name": "CPU(s)",
+    "value": "32"
+  },
+  {
+    "name": "On-line CPU(s) list",
+    "value": "0-31"
+  },
+  {
+    "name": "Vendor ID",
+    "value": "AuthenticAMD"
+  },
+  {
+    "name": "Model name",
+    "value": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  },
+  {
+    "name": "CPU family",
+    "value": "26"
+  },
+  {
+    "name": "Model",
+    "value": "112"
+  },
+  {
+    "name": "Thread(s) per core",
+    "value": "2"
+  },
+  {
+    "name": "Core(s) per socket",
+    "value": "16"
+  },
+  {
+    "name": "Socket(s)",
+    "value": "1"
+  },
+  {
+    "name": "Stepping",
+    "value": "0"
+  },
+  {
+    "name": "Frequency boost",
+    "value": "enabled"
+  },
+  {
+    "name": "CPU(s) scaling MHz",
+    "value": "88%"
+  },
+  {
+    "name": "CPU max MHz",
+    "value": "5187.5000"
+  },
+  {
+    "name": "CPU min MHz",
+    "value": "625.0000"
+  },
+  {
+    "name": "BogoMIPS",
+    "value": "5999.85"
+  },
+  {
+    "name": "Flags",
+    "value": "fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good amd_lbr_v2 nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpuid_fault cpb cat_l3 cdp_l3 hw_pstate ssbd mba perfmon_v2 ibrs ibpb stibp ibrs_enhanced vmmcall fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk avx_vnni avx512_bf16 clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif x2avic v_spec_ctrl vnmi avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid bus_lock_detect movdiri movdir64b overflow_recov succor smca fsrm avx512_vp2intersect flush_l1d amd_lbr_pmc_freeze"
+  },
+  {
+    "name": "Virtualization",
+    "value": "AMD-V"
+  },
+  {
+    "name": "L1d cache",
+    "value": "786432 (16 instances)"
+  },
+  {
+    "name": "L1i cache",
+    "value": "524288 (16 instances)"
+  },
+  {
+    "name": "L2 cache",
+    "value": "16777216 (16 instances)"
+  },
+  {
+    "name": "L3 cache",
+    "value": "67108864 (2 instances)"
+  },
+  {
+    "name": "NUMA node(s)",
+    "value": "1"
+  },
+  {
+    "name": "NUMA node0 CPU(s)",
+    "value": "0-31"
+  },
+  {
+    "name": "Vulnerability Gather data sampling",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Ghostwrite",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Indirect target selection",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Itlb multihit",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability L1tf",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Mds",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Meltdown",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Mmio stale data",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Old microcode",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Reg file data sampling",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Retbleed",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Spec rstack overflow",
+    "value": "Mitigation; IBPB on VMEXIT only"
+  },
+  {
+    "name": "Vulnerability Spec store bypass",
+    "value": "Mitigation; Speculative Store Bypass disabled via prctl"
+  },
+  {
+    "name": "Vulnerability Spectre v1",
+    "value": "Mitigation; usercopy/swapgs barriers and __user pointer sanitization"
+  },
+  {
+    "name": "Vulnerability Spectre v2",
+    "value": "Mitigation; Enhanced / Automatic IBRS; IBPB conditional; STIBP always-on; PBRSB-eIBRS Not affected; BHI Not affected"
+  },
+  {
+    "name": "Vulnerability Srbds",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Tsa",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Tsx async abort",
+    "value": "Not affected"
+  },
+  {
+    "name": "Vulnerability Vmscape",
+    "value": "Mitigation; IBPB on VMEXIT"
+  }
+]

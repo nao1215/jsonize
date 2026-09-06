@@ -1,0 +1,31 @@
+# lscpu prints "Label:" padded to a column, then the value. Which labels
+# appear depends on the CPU and the kernel: this machine prints a
+# "Vulnerability <name>" line per mitigation and a "NUMA node<n> CPU(s)"
+# line per node, and a machine without them prints neither. There is no
+# fixed set of keys to build an object from, so the result is a list of
+# name/value pairs, the shape sysctl uses for the same reason.
+#
+# Values stay as printed, as they do for sysctl. A conversion cannot be
+# attached to them anyway: fields are looked up by key, and a key such as
+# "CPU(s)" or "Thread(s) per core" is not a legal field name.
+format: 1
+command: lscpu
+variant: linux
+description: lscpu CPU architecture information
+metadata:
+  tags: [linux, hardware, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lscpu.1.html
+detect:
+  os: [linux]
+  signature:
+    # The other output formats of the same command are a table (-e, -C)
+    # and comma separated records (-p); neither starts with a label.
+    all:
+      - '\AArchitecture:\s+\S'
+      - '^CPU\(s\):\s+\d'
+parse:
+  type: kv
+  separator: ":"
+  as: list
