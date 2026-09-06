@@ -93,7 +93,8 @@ type Definition struct {
 	// "embedded:..."). It is set by the loader, not by the YAML.
 	Source string `yaml:"-"`
 	// Origin names the registry the definition came from (e.g. "embedded",
-	// "user", a --registry directory). Set by the registry loader.
+	// "user", a JSONIZE_REGISTRY_PATH directory). Set by the registry
+	// loader.
 	Origin string `yaml:"-"`
 }
 
@@ -129,7 +130,7 @@ type Detect struct {
 	Args ArgsMatch `yaml:"args,omitempty"`
 	// Signature matches the captured output itself.
 	Signature Signature `yaml:"signature,omitempty"`
-	// Priority breaks ties between candidates of equal specificity.
+	// Priority breaks a tie between variants of the same command.
 	Priority int `yaml:"priority,omitempty"`
 }
 

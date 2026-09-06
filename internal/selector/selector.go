@@ -15,8 +15,8 @@
 //     still verified then, so naming the parser confirms the format
 //     instead of skipping the check.
 //   - The operating system and the command arguments are hard filters
-//     when they are known (jz run, or --os). They can only remove
-//     candidates, never promote one.
+//     when they are known, which is the case when jz ran the command
+//     itself. They can only remove candidates, never promote one.
 //   - detect.priority breaks a tie between variants of the same command,
 //     which is a deliberate statement by the definition author. It never
 //     ranks definitions of different commands against each other.

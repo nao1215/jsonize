@@ -20,8 +20,9 @@ project follows [Semantic Versioning](https://semver.org/).
   typed field conversion.
 - Layered registries: `JSONIZE_REGISTRY_PATH`, the user directory and the
   registry embedded in the binary. jz makes no network access.
-- Official definitions for `df`, `free`, `ps`, `uptime`, `w`, `mount`,
-  `uname`, `ls`, `lsblk`, `id`, `env`, `du` and `wc`.
+- Official definitions for 35 commands in 49 output formats, from `df`,
+  `free`, `ps` and `uptime` to `ip`, `ss`, `systemctl` and `lsusb`.
+  `jz list` prints the current set.
 
 ### Decisions worth knowing
 
