@@ -14,6 +14,11 @@ detect:
   signature:
     all:
       - '\A\S+:\s+\S'
+    none:
+      # blkid prints the same "path: rest" shape but the rest is a list of
+      # TAG="value" pairs, never a type description, so `jz --parser file`
+      # must not accept it as one.
+      - '\A/dev/\S+: [A-Z_]+="'
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'

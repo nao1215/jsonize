@@ -11,7 +11,11 @@ detect:
     any: ["-a"]
   signature:
     all:
-      - '^Darwin '
+      # The kernel name alone is not enough: a log line that quotes the
+      # kernel banner ("Darwin Kernel Version 23.5.0: ...") also starts
+      # with it. uname -a puts the node name and the release before that
+      # banner, so require the whole shape from the first character.
+      - '\ADarwin \S+ \S+ Darwin Kernel Version '
 parse:
   type: regex
   each: input

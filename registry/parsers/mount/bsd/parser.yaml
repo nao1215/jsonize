@@ -11,7 +11,10 @@ detect:
   os: [darwin, freebsd, openbsd, netbsd]
   signature:
     all:
-      - '^\S.* on .* \([^)]*\)\s*$'
+      # "X on Y (Z)" alone is an English sentence ("built foo on linux
+      # (amd64)"), so the mount point has to be an absolute path and the
+      # parenthesised list has to open with a filesystem type token.
+      - '\A\S.* on /\S* \([a-z0-9_]+[,)]'
     none:
       - ' type \S+ \('
 parse:

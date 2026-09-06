@@ -13,7 +13,12 @@ detect:
   auto_detect: false
   signature:
     all:
-      - '\A[^:\n]+:[^:\n]*:\d+:'
+      # A group entry has exactly four fields, so the member list has to
+      # end the line, and a group name carries no whitespace. Without
+      # both, /etc/passwd (seven fields) and any sentence with a clock
+      # time in it fit the same shape, and `jz --parser group` would
+      # convert them as if they were groups.
+      - '\A[^:\s]+:[^:\n]*:\d+:[^:\n]*$'
 input:
   ignore:
     - '^\s*#'

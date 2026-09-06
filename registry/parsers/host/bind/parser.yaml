@@ -13,7 +13,11 @@ metadata:
 detect:
   signature:
     all:
-      - '^\S+ (?:has address|has IPv6 address|mail is handled by|is an alias for|domain name pointer|has HTTP service bindings) '
+      # Anchored at the start of the output, not at the start of any
+      # line: this parser skips lines it cannot read, so a page of prose
+      # that happens to contain one answer sentence would otherwise be
+      # converted into that one sentence and nothing else.
+      - '\A\S+ (?:has address|has IPv6 address|mail is handled by|is an alias for|domain name pointer|has HTTP service bindings) '
 parse:
   type: regex
   on_mismatch: skip

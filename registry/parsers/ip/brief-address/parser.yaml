@@ -15,7 +15,11 @@ detect:
     any: ["-br", "-brief"]
   signature:
     all:
-      - '\A\S+\s+(?:UP|DOWN|UNKNOWN|LOWERLAYERDOWN)\s'
+      # A name and the word UP is also every service status table there
+      # is ("web01 UP 3 days"), so what follows the state has to be
+      # addresses in CIDR form, or nothing at all for an interface that
+      # has none.
+      - '\A\S+[ \t]+(?:UP|DOWN|UNKNOWN|LOWERLAYERDOWN)(?:[ \t]+[0-9a-fA-F:][0-9a-fA-F.:]*/\d+)*[ \t]*$'
 parse:
   type: regex
   pattern: '^(?P<interface>\S+)\s+(?P<state>UP|DOWN|UNKNOWN|LOWERLAYERDOWN)\s*(?P<addresses>.*?)\s*$'
