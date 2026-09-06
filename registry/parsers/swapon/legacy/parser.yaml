@@ -1,0 +1,30 @@
+# `swapon -s` prints the older report, the one /proc/swaps has always
+# had: tab-separated Filename/Type/Size/Used/Priority. It is a different
+# format from the `swapon --show` table that swapon/linux reads, and the
+# numbers here are exact counts of 1 KiB units rather than rounded sizes,
+# so they become integers.
+format: 1
+command: swapon
+variant: legacy
+description: swapon -s, the /proc/swaps report
+metadata:
+  tags: [linux, memory, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/swapon.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AFilename[ \t]+Type[ \t]+Size[ \t]+Used[ \t]+Priority[ \t]*$'
+parse:
+  type: table
+  header:
+    columns: [filename, type, size, used, priority]
+fields:
+  filename: {required: true}
+  type: {required: true}
+  # Counts of 1 KiB units, as /proc/swaps reports them.
+  size: {type: int, required: true}
+  used: {type: int, required: true}
+  priority: {type: int, required: true}

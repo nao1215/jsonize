@@ -1,0 +1,4 @@
+description: the same disk through parted, whose numbering skips from 2 to 5 and whose flag field is empty on most rows
+source: captured on Ubuntu 26.04 (GNU parted 3.6) with LC_ALL=C from a disk image built for this fixture with sfdisk
+os: linux
+args: [-s, -m, ext.img, print]

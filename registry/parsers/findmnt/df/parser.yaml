@@ -1,0 +1,31 @@
+# `findmnt --df` reports space per mount the way df does, but keeps
+# findmnt's own source and target columns and drops the tree drawing. The
+# sizes are rounded ("142.6G") and their base is not in the output, so
+# they stay as printed; only the use percentage becomes a number.
+format: 1
+command: findmnt
+variant: df
+description: findmnt --df, space used per mount point
+metadata:
+  tags: [linux, filesystem, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/findmnt.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ASOURCE[ \t]+FSTYPE[ \t]+SIZE[ \t]+USED[ \t]+AVAIL[ \t]+USE%[ \t]+TARGET[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [source, fstype, size, used, available, use_percent, target]
+# A bind mount is listed with its four space columns blank, because the
+# space belongs to the filesystem it was bound from, so only the source,
+# the type and the target are always there.
+fields:
+  source: {required: true}
+  fstype: {required: true}
+  use_percent: {type: int, trim_suffix: "%"}
+  target: {required: true}

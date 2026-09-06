@@ -1,0 +1,49 @@
+[
+  {
+    "disk": {
+      "device": "/tmp/jz-disks/dos.img",
+      "size": "537MB",
+      "transport": "file",
+      "logical_sector_size": 512,
+      "physical_sector_size": 512,
+      "partition_table": "msdos",
+      "model": null,
+      "flags": []
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "start": "1049kB",
+        "end": "106MB",
+        "size": "105MB",
+        "file_system": null,
+        "name": null,
+        "flags": [
+          "boot"
+        ]
+      },
+      {
+        "number": 2,
+        "start": "106MB",
+        "end": "173MB",
+        "size": "67.1MB",
+        "file_system": null,
+        "name": null,
+        "flags": [
+          "swap"
+        ]
+      },
+      {
+        "number": 3,
+        "start": "173MB",
+        "end": "230MB",
+        "size": "56.6MB",
+        "file_system": null,
+        "name": null,
+        "flags": [
+          "lba"
+        ]
+      }
+    ]
+  }
+]

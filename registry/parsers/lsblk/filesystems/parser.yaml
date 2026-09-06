@@ -1,0 +1,26 @@
+# `lsblk -f` swaps the size and topology columns for what filesystem the
+# device carries. A device that holds no filesystem prints everything but
+# NAME blank, and FSAVAIL is rounded ("142.6G"), so the use percentage is
+# the only column that becomes a number.
+format: 1
+command: lsblk
+variant: filesystems
+description: lsblk -f, filesystem type, label, UUID and free space
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsblk.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^NAME[ \t]+FSTYPE[ \t]+FSVER[ \t]+LABEL[ \t]+UUID[ \t]+FSAVAIL[ \t]+FSUSE%[ \t]+MOUNTPOINTS?[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    rename: {mountpoints: mountpoint}
+fields:
+  name: {required: true}
+  fsuse_percent: {type: int, trim_suffix: "%"}

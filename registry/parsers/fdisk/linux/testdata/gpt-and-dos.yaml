@@ -1,0 +1,4 @@
+description: two disks in one listing, one with a GPT table and one with a DOS table, so both partition row shapes are read together
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C from a disk image built for this fixture with sfdisk; identifiers replaced
+os: linux
+args: [-l, gpt.img, dos.img]

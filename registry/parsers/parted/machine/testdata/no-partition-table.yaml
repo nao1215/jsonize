@@ -1,0 +1,4 @@
+description: a disk with no readable label, which prints the device line and no partitions
+source: captured on Ubuntu 26.04 (GNU parted 3.6) with LC_ALL=C from a disk image built for this fixture with sfdisk
+os: linux
+args: [-s, -m, empty.img, print]

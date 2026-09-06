@@ -1,0 +1,4 @@
+description: a GPT table, whose entries carry a type GUID, a uuid and sometimes a name
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C from a disk image built for this fixture with sfdisk; identifiers replaced
+os: linux
+args: [-d, gpt.img]

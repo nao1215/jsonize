@@ -1,0 +1,59 @@
+# `sfdisk -d` writes the partition table in the form sfdisk itself reads
+# back: a header of "key: value" lines, then one line per partition. One
+# invocation dumps one disk, but the block repeats when several are
+# dumped, so `records` applies the description to each.
+#
+# `sfdisk -l` is not a separate definition: it prints the same report as
+# `fdisk -l`, which fdisk/linux already reads.
+format: 1
+command: sfdisk
+variant: dump
+description: sfdisk -d, partition table dump
+metadata:
+  tags: [linux, block-device, partition, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/sfdisk.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\Alabel: \S'
+      - '^sector-size: \d+'
+      - '^\S+[ \t]*: start=[ \t]*\d+, size=[ \t]*\d+, type='
+parse:
+  type: records
+  start: '^label: '
+  parts:
+    - name: header
+      select: {until: '^\S+[ \t]*: start='}
+      parse:
+        type: kv
+        separator: ": "
+        as: map
+      fields:
+        first-lba: {type: int}
+        last-lba: {type: int}
+        sector-size: {type: int}
+    # sfdisk writes sector-size last in the header, so everything after it
+    # is the table. A header line that appeared below it would be reported
+    # as a line that does not match a partition rather than dropped.
+    - name: partitions
+      select: {after: '^sector-size: '}
+      parse:
+        type: regex
+        # A GPT entry names its type by GUID and may carry a uuid and a
+        # name; a DOS entry names a one-byte type and may be marked
+        # bootable.
+        pattern: '^(?P<device>\S+)[ \t]*: start=[ \t]*(?P<start>\d+), size=[ \t]*(?P<size>\d+), type=(?P<type>[^,]+)(?:, uuid=(?P<uuid>[^,]+))?(?:, name="(?P<name>[^"]*)")?(?:, (?P<bootable>bootable))?[ \t]*$'
+      fields:
+        device: {required: true}
+        # Sector counts, exact as sfdisk writes them.
+        start: {type: int, required: true}
+        size: {type: int, required: true}
+        # A GUID on a GPT disk, a hexadecimal type byte on a DOS disk, so
+        # it stays text either way.
+        type: {required: true}
+        # The word is printed only for a partition that carries the flag,
+        # so the field is true or null, never false.
+        bootable: {type: bool, true_values: ["bootable"]}

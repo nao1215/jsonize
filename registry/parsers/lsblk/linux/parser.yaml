@@ -14,6 +14,12 @@ detect:
   signature:
     all:
       - '^NAME\s+MAJ:MIN\s+RM\s+SIZE\s+RO\s+TYPE\s+MOUNTPOINTS?\s*$'
+    none:
+      # `lsblk -b` prints the same header with SIZE as a bare byte count.
+      # Those numbers belong to lsblk/bytes, which reports them as
+      # integers; keeping them here would hand back a string that looks
+      # like a number.
+      - '^\S+[ \t]+\d+:\d+[ \t]+[01][ \t]+\d+[ \t]+[01][ \t]'
 parse:
   type: table
   split: aligned

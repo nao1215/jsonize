@@ -1,0 +1,67 @@
+[
+  {
+    "name": "nvme1n1",
+    "alignment": 0,
+    "min_io": 512,
+    "opt_io": 0,
+    "phy_sec": 512,
+    "log_sec": 512,
+    "rota": false,
+    "sched": "none",
+    "rq_size": 1023,
+    "ra": 128,
+    "wsame": "0B"
+  },
+  {
+    "name": "|-nvme1n1p1",
+    "alignment": 0,
+    "min_io": 512,
+    "opt_io": 0,
+    "phy_sec": 512,
+    "log_sec": 512,
+    "rota": false,
+    "sched": "none",
+    "rq_size": 1023,
+    "ra": 128,
+    "wsame": "0B"
+  },
+  {
+    "name": "`-nvme1n1p2",
+    "alignment": 0,
+    "min_io": 512,
+    "opt_io": 0,
+    "phy_sec": 512,
+    "log_sec": 512,
+    "rota": false,
+    "sched": "none",
+    "rq_size": 1023,
+    "ra": 128,
+    "wsame": "0B"
+  },
+  {
+    "name": "nvme0n1",
+    "alignment": 0,
+    "min_io": 512,
+    "opt_io": 0,
+    "phy_sec": 512,
+    "log_sec": 512,
+    "rota": false,
+    "sched": "none",
+    "rq_size": 1023,
+    "ra": 128,
+    "wsame": "0B"
+  },
+  {
+    "name": "`-nvme0n1p1",
+    "alignment": 0,
+    "min_io": 512,
+    "opt_io": 0,
+    "phy_sec": 512,
+    "log_sec": 512,
+    "rota": false,
+    "sched": "none",
+    "rq_size": 1023,
+    "ra": 128,
+    "wsame": "0B"
+  }
+]

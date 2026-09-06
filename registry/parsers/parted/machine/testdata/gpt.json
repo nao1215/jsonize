@@ -1,0 +1,48 @@
+[
+  {
+    "disk": {
+      "device": "/tmp/jz-disks/gpt.img",
+      "size": "2147MB",
+      "transport": "file",
+      "logical_sector_size": 512,
+      "physical_sector_size": 512,
+      "partition_table": "gpt",
+      "model": null,
+      "flags": []
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "start": "1049kB",
+        "end": "538MB",
+        "size": "537MB",
+        "file_system": null,
+        "name": "EFI System",
+        "flags": [
+          "boot",
+          "esp"
+        ]
+      },
+      {
+        "number": 2,
+        "start": "538MB",
+        "end": "1612MB",
+        "size": "1074MB",
+        "file_system": null,
+        "name": null,
+        "flags": [
+          "swap"
+        ]
+      },
+      {
+        "number": 3,
+        "start": "1612MB",
+        "end": "2144MB",
+        "size": "533MB",
+        "file_system": null,
+        "name": "root",
+        "flags": []
+      }
+    ]
+  }
+]

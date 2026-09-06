@@ -1,0 +1,4 @@
+description: the first rows of a full listing, where the tree drawing reaches three levels deep
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+os: linux
+args: [-o, 'SOURCE,TARGET,FSTYPE,OPTIONS']

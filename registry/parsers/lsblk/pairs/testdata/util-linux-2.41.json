@@ -1,0 +1,56 @@
+[
+  {
+    "name": "loop0",
+    "maj_min": "7:0",
+    "rm": false,
+    "size": "4K",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/bare/5"
+  },
+  {
+    "name": "loop1",
+    "maj_min": "7:1",
+    "rm": false,
+    "size": "100.5M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/telegram-desktop/7119"
+  },
+  {
+    "name": "loop2",
+    "maj_min": "7:2",
+    "rm": false,
+    "size": "221.5M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/thunderbird/1240"
+  },
+  {
+    "name": "loop3",
+    "maj_min": "7:3",
+    "rm": false,
+    "size": "63.8M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core20/2866"
+  },
+  {
+    "name": "loop4",
+    "maj_min": "7:4",
+    "rm": false,
+    "size": "63.8M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core20/2769"
+  },
+  {
+    "name": "loop5",
+    "maj_min": "7:5",
+    "rm": false,
+    "size": "55.5M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core18/2999"
+  }
+]

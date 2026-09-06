@@ -1,0 +1,96 @@
+[
+  {
+    "disk": {
+      "device": "gpt.img",
+      "size": "2 GiB",
+      "bytes": 2147483648,
+      "sectors": 4194304
+    },
+    "properties": {
+      "Units": "sectors of 1 * 512 = 512 bytes",
+      "Sector size (logical/physical)": "512 bytes / 512 bytes",
+      "I/O size (minimum/optimal)": "512 bytes / 512 bytes",
+      "Disklabel type": "gpt",
+      "Disk identifier": "4B1C2D3E-5F60-4718-92A3-B4C5D6E7F809"
+    },
+    "partitions": [
+      {
+        "device": "gpt.img1",
+        "boot": null,
+        "start": 2048,
+        "end": 1050623,
+        "sectors": 1048576,
+        "size": "512M",
+        "id": null,
+        "type": "EFI System"
+      },
+      {
+        "device": "gpt.img2",
+        "boot": null,
+        "start": 1050624,
+        "end": 3147775,
+        "sectors": 2097152,
+        "size": "1G",
+        "id": null,
+        "type": "Linux swap"
+      },
+      {
+        "device": "gpt.img3",
+        "boot": null,
+        "start": 3147776,
+        "end": 4188159,
+        "sectors": 1040384,
+        "size": "508M",
+        "id": null,
+        "type": "Linux filesystem"
+      }
+    ]
+  },
+  {
+    "disk": {
+      "device": "dos.img",
+      "size": "512 MiB",
+      "bytes": 536870912,
+      "sectors": 1048576
+    },
+    "properties": {
+      "Units": "sectors of 1 * 512 = 512 bytes",
+      "Sector size (logical/physical)": "512 bytes / 512 bytes",
+      "I/O size (minimum/optimal)": "512 bytes / 512 bytes",
+      "Disklabel type": "dos",
+      "Disk identifier": "0x1a2b3c4d"
+    },
+    "partitions": [
+      {
+        "device": "dos.img1",
+        "boot": "*",
+        "start": 2048,
+        "end": 206847,
+        "sectors": 204800,
+        "size": "100M",
+        "id": "83",
+        "type": "Linux"
+      },
+      {
+        "device": "dos.img2",
+        "boot": null,
+        "start": 206848,
+        "end": 337919,
+        "sectors": 131072,
+        "size": "64M",
+        "id": "82",
+        "type": "Linux swap / Solaris"
+      },
+      {
+        "device": "dos.img3",
+        "boot": null,
+        "start": 337920,
+        "end": 448511,
+        "sectors": 110592,
+        "size": "54M",
+        "id": "c",
+        "type": "W95 FAT32 (LBA)"
+      }
+    ]
+  }
+]

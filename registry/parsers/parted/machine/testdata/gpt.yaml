@@ -1,0 +1,4 @@
+description: a GPT disk whose partitions have names and flags
+source: captured on Ubuntu 26.04 (GNU parted 3.6) with LC_ALL=C from a disk image built for this fixture with sfdisk
+os: linux
+args: [-s, -m, gpt.img, print]

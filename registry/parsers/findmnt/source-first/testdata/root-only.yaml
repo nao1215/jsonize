@@ -1,0 +1,4 @@
+description: a single mount point, which is at the top of the tree and so has no drawing
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+os: linux
+args: [-o, 'SOURCE,TARGET,FSTYPE,OPTIONS', /]

@@ -1,0 +1,32 @@
+# `lsblk -P` prints one NAME="value" line per device with the same seven
+# default columns, quoted and in a fixed order, so each line is read by a
+# single pattern instead of by column offsets. There is no header and no
+# tree drawing: the parent device is named in the child's NAME.
+format: 1
+command: lsblk
+variant: pairs
+description: lsblk -P, one quoted key/value line per device
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsblk.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ANAME="[^"]*" MAJ:MIN="\d+:\d+" RM="[01]" SIZE="'
+parse:
+  type: regex
+  pattern: '^NAME="(?P<name>[^"]*)" MAJ:MIN="(?P<maj_min>[^"]*)" RM="(?P<rm>[^"]*)" SIZE="(?P<size>[^"]*)" RO="(?P<ro>[^"]*)" TYPE="(?P<type>[^"]*)" MOUNTPOINTS="(?P<mountpoint>[^"]*)"[ \t]*$'
+fields:
+  name: {required: true}
+  maj_min: {required: true}
+  rm: {type: bool, required: true}
+  # SIZE is rounded here as it is in the default output, so it is kept as
+  # printed.
+  size: {required: true}
+  ro: {type: bool, required: true}
+  type: {required: true}
+  # An unmounted device prints MOUNTPOINTS="".
+  mountpoint: {null_if: [""]}

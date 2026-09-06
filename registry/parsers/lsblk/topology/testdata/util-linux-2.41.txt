@@ -1,0 +1,10 @@
+NAME        ALIGNMENT MIN-IO OPT-IO PHY-SEC LOG-SEC ROTA SCHED RQ-SIZE  RA WSAME
+loop0               0    512      0     512     512    0 none      128 128    0B
+loop1               0    512      0     512     512    0 none      128 128    0B
+loop2               0    512      0     512     512    0 none      128 128    0B
+loop3               0    512      0     512     512    0 none      128 128    0B
+loop4               0    512      0     512     512    0 none      128 128    0B
+loop5               0    512      0     512     512    0 none      128 128    0B
+loop6               0    512      0     512     512    0 none      128 128    0B
+loop7               0    512      0     512     512    0 none      128 128    0B
+loop8               0    512      0     512     512    0 none      128 128    0B

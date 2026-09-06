@@ -1,0 +1,10 @@
+NAME        FSTYPE   FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+loop0       squashfs 4.0                                                    0   100% /snap/bare/5
+loop1       squashfs 4.0                                                    0   100% /snap/telegram-desktop/7119
+loop2       squashfs 4.0                                                    0   100% /snap/thunderbird/1240
+loop3       squashfs 4.0                                                    0   100% /snap/core20/2866
+loop4       squashfs 4.0                                                    0   100% /snap/core20/2769
+loop5       squashfs 4.0                                                    0   100% /snap/core18/2999
+loop6       squashfs 4.0                                                    0   100% /snap/core18/2979
+loop7       squashfs 4.0                                                    0   100% /snap/core22/2437
+loop8       squashfs 4.0                                                    0   100% /snap/core24/1587

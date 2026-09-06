@@ -1,0 +1,2 @@
+SOURCE         TARGET FSTYPE OPTIONS
+/dev/nvme1n1p2 /      ext4   rw,relatime

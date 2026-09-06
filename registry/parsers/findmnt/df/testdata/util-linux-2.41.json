@@ -1,0 +1,74 @@
+[
+  {
+    "source": "tmpfs",
+    "fstype": "tmpfs",
+    "size": "12.3G",
+    "used": "4.4M",
+    "available": "12.3G",
+    "use_percent": 0,
+    "target": "/run"
+  },
+  {
+    "source": "/dev/nvme1n1p2",
+    "fstype": "ext4",
+    "size": "1.8T",
+    "used": "1.6T",
+    "available": "142.6G",
+    "use_percent": 87,
+    "target": "/"
+  },
+  {
+    "source": "devtmpfs",
+    "fstype": "devtmpfs",
+    "size": "30.6G",
+    "used": "0",
+    "available": "30.6G",
+    "use_percent": 0,
+    "target": "/dev"
+  },
+  {
+    "source": "tmpfs",
+    "fstype": "tmpfs",
+    "size": "30.7G",
+    "used": "915.4M",
+    "available": "29.8G",
+    "use_percent": 3,
+    "target": "/dev/shm"
+  },
+  {
+    "source": "none",
+    "fstype": "tmpfs",
+    "size": "1M",
+    "used": "0",
+    "available": "1M",
+    "use_percent": 0,
+    "target": "/run/credentials/systemd-journald.service"
+  },
+  {
+    "source": "none",
+    "fstype": "tmpfs",
+    "size": "1M",
+    "used": "0",
+    "available": "1M",
+    "use_percent": 0,
+    "target": "/run/credentials/systemd-resolved.service"
+  },
+  {
+    "source": "/dev/loop0",
+    "fstype": "squashfs",
+    "size": "128K",
+    "used": "128K",
+    "available": "0",
+    "use_percent": 100,
+    "target": "/snap/bare/5"
+  },
+  {
+    "source": "/dev/nvme0n1p1",
+    "fstype": "ext4",
+    "size": "1.8T",
+    "used": "981.9G",
+    "available": "799.4G",
+    "use_percent": 52,
+    "target": "/media/usr/2nd"
+  }
+]

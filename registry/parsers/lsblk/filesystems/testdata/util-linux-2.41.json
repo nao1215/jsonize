@@ -1,0 +1,92 @@
+[
+  {
+    "name": "loop0",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/bare/5"
+  },
+  {
+    "name": "loop1",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/telegram-desktop/7119"
+  },
+  {
+    "name": "loop2",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/thunderbird/1240"
+  },
+  {
+    "name": "loop3",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/core20/2866"
+  },
+  {
+    "name": "loop4",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/core20/2769"
+  },
+  {
+    "name": "loop5",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/core18/2999"
+  },
+  {
+    "name": "loop6",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/core18/2979"
+  },
+  {
+    "name": "loop7",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/core22/2437"
+  },
+  {
+    "name": "loop8",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/core24/1587"
+  }
+]

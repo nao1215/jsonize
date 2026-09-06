@@ -1,0 +1,71 @@
+# `fdisk -l` prints one block per disk: a geometry line, a few "Label:
+# value" lines whose set depends on the device, and the partition table.
+# The blocks repeat, so the definition describes one of them and `records`
+# applies it to each.
+#
+# The label lines are read as key/value pairs under their printed labels
+# rather than as a fixed list, because the set changes with the device:
+# fdisk adds "Disk model" for a real drive and drops "Disklabel type" and
+# "Disk identifier" for a disk that carries no partition table. Keeping
+# them as pairs means a label this definition has not seen reaches JSON
+# instead of failing the parse.
+format: 1
+command: fdisk
+variant: linux
+description: fdisk -l, one record per disk with its partition table
+metadata:
+  tags: [linux, block-device, partition, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/fdisk.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ADisk \S[^\n]*: [^\n]*, \d+ bytes, \d+ sectors[ \t]*$'
+      - '^Units: sectors of '
+parse:
+  type: records
+  start: '^Disk \S[^\n]*: [^\n]*, \d+ bytes, \d+ sectors[ \t]*$'
+  parts:
+    - name: disk
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        # The printed size is rounded ("2 GiB"); the byte and sector
+        # counts on the same line are exact.
+        pattern: '^Disk (?P<device>.+): (?P<size>[^,]+), (?P<bytes>\d+) bytes, (?P<sectors>\d+) sectors[ \t]*$'
+      fields:
+        device: {required: true}
+        bytes: {type: int, required: true}
+        sectors: {type: int, required: true}
+    - name: properties
+      select: {skip: 1, until: '^Device[ \t]'}
+      parse:
+        type: kv
+        separator: ": "
+        as: map
+    # A disk with no partition table has no "Device" header and therefore
+    # no partitions.
+    - name: partitions
+      select: {after: '^Device[ \t]'}
+      parse:
+        type: regex
+        # A DOS table adds a Boot column and a one-byte type Id; a GPT
+        # table has neither and names the type in full. Both are read
+        # here, because one machine can hold both kinds of disk.
+        pattern: '^(?P<device>\S+)[ \t]+(?:(?P<boot>\*)[ \t]+)?(?P<start>\d+)[ \t]+(?P<end>\d+)[ \t]+(?P<sectors>\d+)[ \t]+(?P<size>\S+)[ \t]+(?:(?P<id>[0-9a-fA-F]{1,2})[ \t]+)?(?P<type>\S.*?)[ \t]*$'
+      fields:
+        device: {required: true}
+        # "*" on a bootable DOS partition, null everywhere else.
+        boot: {}
+        start: {type: int, required: true}
+        end: {type: int, required: true}
+        sectors: {type: int, required: true}
+        # Rounded by fdisk; the sector counts on the same row are exact.
+        size: {required: true}
+        # A hexadecimal partition type byte, so it stays text: "82" is not
+        # eighty-two.
+        id: {}
+        type: {required: true}

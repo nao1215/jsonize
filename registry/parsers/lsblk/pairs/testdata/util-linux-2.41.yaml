@@ -1,0 +1,4 @@
+description: the first rows of a full listing
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C, first 6 lines
+os: linux
+args: [-P]

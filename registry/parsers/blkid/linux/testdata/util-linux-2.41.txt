@@ -1,2 +1,2 @@
-/dev/nvme1n1p2: UUID="ef904cb9-60d2-49ea-bbc7-04bf09fbddeb" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="79ff25f1-bd44-470f-b931-095a523a2fa5"
-/dev/nvme1n1p1: UUID="A6CC-7E4E" BLOCK_SIZE="512" TYPE="vfat" PARTUUID="add2dac8-71b2-4a59-95f9-b8a2279fe103"
+/dev/nvme1n1p2: UUID="0e2f7d1c-4a3b-4f8e-9c5d-1a2b3c4d5e6f" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="3c9e5a1b-2d4f-4a6b-8c0d-1e2f3a4b5c6d"
+/dev/nvme1n1p1: UUID="1A2B-3C4D" BLOCK_SIZE="512" TYPE="vfat" PARTUUID="5d8f2b3a-6c1e-4d7b-9a0f-2b3c4d5e6f70"

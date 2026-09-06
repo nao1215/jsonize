@@ -1,0 +1,9 @@
+label: dos
+label-id: 0x1a2b3c4d
+device: dos.img
+unit: sectors
+sector-size: 512
+
+dos.img1 : start=        2048, size=      204800, type=83, bootable
+dos.img2 : start=      206848, size=      131072, type=82
+dos.img3 : start=      337920, size=      110592, type=c

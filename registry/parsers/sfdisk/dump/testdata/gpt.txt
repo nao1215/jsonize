@@ -1,0 +1,11 @@
+label: gpt
+label-id: 4B1C2D3E-5F60-4718-92A3-B4C5D6E7F809
+device: gpt.img
+unit: sectors
+first-lba: 2048
+last-lba: 4194270
+sector-size: 512
+
+gpt.img1 : start=        2048, size=     1048576, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B, uuid=A1B2C3D4-E5F6-4708-9A1B-2C3D4E5F6071, name="EFI System"
+gpt.img2 : start=     1050624, size=     2097152, type=0657FD6D-A4AB-43C4-84E5-0933C84B4F4F, uuid=B2C3D4E5-F607-4819-8B2C-3D4E5F607182
+gpt.img3 : start=     3147776, size=     1040384, type=0FC63DAF-8483-4772-8E79-3D69D8477DE4, uuid=C3D4E5F6-0718-492A-9C3D-4E5F60718293, name="root"

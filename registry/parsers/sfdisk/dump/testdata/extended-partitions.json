@@ -1,0 +1,49 @@
+[
+  {
+    "header": {
+      "label": "dos",
+      "label-id": "0x5e6f7081",
+      "device": "ext.img",
+      "unit": "sectors",
+      "sector-size": 512
+    },
+    "partitions": [
+      {
+        "device": "ext.img1",
+        "start": 2048,
+        "size": 102400,
+        "type": "83",
+        "uuid": null,
+        "name": null,
+        "bootable": true
+      },
+      {
+        "device": "ext.img2",
+        "start": 104448,
+        "size": 944128,
+        "type": "5",
+        "uuid": null,
+        "name": null,
+        "bootable": null
+      },
+      {
+        "device": "ext.img5",
+        "start": 106496,
+        "size": 204800,
+        "type": "83",
+        "uuid": null,
+        "name": null,
+        "bootable": null
+      },
+      {
+        "device": "ext.img6",
+        "start": 313344,
+        "size": 204800,
+        "type": "8e",
+        "uuid": null,
+        "name": null,
+        "bootable": null
+      }
+    ]
+  }
+]
