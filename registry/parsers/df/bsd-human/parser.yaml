@@ -1,6 +1,9 @@
 # macOS df -h prints binary suffixes (466Gi) and df -H decimal ones
 # (500G); both are rounded, so the sizes are reported as printed rather
 # than converted. Run plain `df` for exact 512-byte block counts.
+#
+# The inode counts are abbreviated here too ("459k"), which is why they
+# are strings in this variant and numbers in the plain one.
 format: 1
 command: df
 variant: bsd-human
@@ -8,6 +11,8 @@ description: BSD df -h / -H output on macOS (sizes kept as printed)
 metadata:
   tags: [darwin, bsd, filesystem]
   compatible: [macOS df]
+  references:
+    - https://ss64.com/mac/df.html
 detect:
   os: [darwin]
   args:
@@ -15,20 +20,21 @@ detect:
   signature:
     all:
       - '^Filesystem\s+Size\s+Used\s+Avail\s+Capacity\s+iused\s+ifree\s+%iused\s+Mounted on\s*$'
-# The filesystem column may contain spaces ("map auto_home"), so cells are
-# cut at header offsets instead of whitespace.
+input:
+  ignore:
+    - '^Filesystem\s+Size'
 parse:
-  type: table
-  split: aligned
-  header:
-    columns: [filesystem, size, used, available, capacity_percent, iused, ifree, iused_percent, mounted_on]
+  type: regex
+  patterns:
+    - '^(?P<filesystem>.+?)\s+(?P<size>[\d.]+[KMGTPBEi]*)\s+(?P<used>[\d.]+[KMGTPBEi]*)\s+(?P<available>[\d.]+[KMGTPBEi]*)\s+(?P<capacity_percent>\S+)\s+(?P<iused>\S+)\s+(?P<ifree>\S+)\s+(?P<iused_percent>\S+)\s+(?P<mounted_on>/.*?)\s*$'
+    - '^(?P<filesystem>.+?)\s+(?P<size>[\d.]+[KMGTPBEi]*)\s+(?P<used>[\d.]+[KMGTPBEi]*)\s+(?P<available>[\d.]+[KMGTPBEi]*)\s+(?P<capacity_percent>\S+)\s+(?P<mounted_on>/.*?)\s*$'
 fields:
   filesystem: {required: true}
   size: {required: true}
   used: {required: true}
   available: {required: true}
   capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
-  iused: {type: int, required: true}
-  ifree: {type: int, required: true}
-  iused_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  iused: {null_if: ["-"], when_missing: omit}
+  ifree: {null_if: ["-"], when_missing: omit}
+  iused_percent: {type: int, trim_suffix: "%", null_if: ["-"], when_missing: omit}
   mounted_on: {required: true}

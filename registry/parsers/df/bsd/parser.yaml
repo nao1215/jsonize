@@ -1,4 +1,9 @@
 # macOS df default output: 512-byte blocks plus inode columns.
+#
+# Read by pattern rather than by header alignment: a filesystem name may
+# contain spaces ("map auto_home") and may be far wider than its column,
+# and the inode columns are absent for some mounts. Anchoring the mount
+# point at "/" is what keeps the two apart.
 format: 1
 command: df
 variant: bsd
@@ -7,7 +12,7 @@ metadata:
   tags: [darwin, bsd, filesystem]
   compatible: [macOS df]
   references:
-    - https://www.unix.com/man-page/osx/1/df/
+    - https://ss64.com/mac/df.html
 detect:
   os: [darwin]
   args:
@@ -15,20 +20,21 @@ detect:
   signature:
     all:
       - '^Filesystem\s+512-blocks\s+Used\s+Available\s+Capacity\s+iused\s+ifree\s+%iused\s+Mounted on\s*$'
-# The filesystem column may contain spaces ("map auto_home"), so cells are
-# cut at header offsets instead of whitespace.
+input:
+  ignore:
+    - '^Filesystem\s+512-blocks'
 parse:
-  type: table
-  split: aligned
-  header:
-    columns: [filesystem, 512_blocks, used, available, capacity_percent, iused, ifree, iused_percent, mounted_on]
+  type: regex
+  patterns:
+    - '^(?P<filesystem>.+?)\s+(?P<512_blocks>\d+)\s+(?P<used>\d+)\s+(?P<available>\d+)\s+(?P<capacity_percent>\S+)\s+(?P<iused>\S+)\s+(?P<ifree>\S+)\s+(?P<iused_percent>\S+)\s+(?P<mounted_on>/.*?)\s*$'
+    - '^(?P<filesystem>.+?)\s+(?P<512_blocks>\d+)\s+(?P<used>\d+)\s+(?P<available>\d+)\s+(?P<capacity_percent>\S+)\s+(?P<mounted_on>/.*?)\s*$'
 fields:
   filesystem: {required: true}
   512_blocks: {type: int, required: true}
   used: {type: int, required: true}
   available: {type: int, required: true}
   capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
-  iused: {type: int, required: true}
-  ifree: {type: int, required: true}
-  iused_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  iused: {type: int, null_if: ["-"], when_missing: omit}
+  ifree: {type: int, null_if: ["-"], when_missing: omit}
+  iused_percent: {type: int, trim_suffix: "%", null_if: ["-"], when_missing: omit}
   mounted_on: {required: true}

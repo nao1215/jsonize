@@ -34,7 +34,7 @@ scenarios:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.data.load_1m", gte: 0 }
+              - { path: "$.load_1m", gte: 0 }
       - run:
           command: jz run ps -ef
       - assert:
