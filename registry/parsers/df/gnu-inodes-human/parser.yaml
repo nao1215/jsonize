@@ -15,6 +15,10 @@ detect:
     all: ["-i"]
     any: ["-h", "--human-readable", "-H", "--si"]
   signature:
+    # The rule below reads the shape of the values, so it has to see
+    # every row: a listing whose first rows are all small would
+    # otherwise be judged on those alone.
+    window: 200
     all:
       - '^Filesystem\s+Inodes\s+IUsed\s+IFree\s+IUse%\s+Mounted on\s*$'
       # At least one count carries a suffix. Without one the output is
