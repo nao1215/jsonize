@@ -26,7 +26,8 @@ scenarios:
           stdout:
             json:
               - { path: "$.variant", equals: gnu-human }
-              - { path: "$.data[0].size", gte: 0 }
+              # A rounded human-readable size stays as printed.
+              - { path: "$.data[0].size", matches: "^[0-9.]+[KMGTP]?$" }
 
   - name: procps free, uptime and ps
     only: {os: linux}
@@ -48,6 +49,17 @@ scenarios:
             json:
               - { path: "$.variant", equals: gnu-wide }
               - { path: "$.data[0].buffers", gte: 0 }
+      # wc is too generic for jz to claim on its own, so a run names it.
+      - run:
+          shell: true
+          command: printf 'hello world\n' | jz run wc
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].lines", equals: 1 }
+              - { path: "$[0].words", equals: 2 }
+              - { path: "$[0].bytes", equals: 12 }
       - run:
           command: jz run uptime
       - assert:

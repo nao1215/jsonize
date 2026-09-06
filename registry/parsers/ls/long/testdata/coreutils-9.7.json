@@ -4,7 +4,7 @@
     "links": 12,
     "owner": "root",
     "group": "root",
-    "size": 4096,
+    "size": "4096",
     "date": "Apr 16  2025",
     "filename": "."
   },
@@ -13,7 +13,7 @@
     "links": 20,
     "owner": "root",
     "group": "root",
-    "size": 4096,
+    "size": "4096",
     "date": "Feb 27  2026",
     "filename": ".."
   },
@@ -22,7 +22,7 @@
     "links": 2,
     "owner": "root",
     "group": "root",
-    "size": 114688,
+    "size": "114688",
     "date": "Sep  6 13:08",
     "filename": "bin"
   },
@@ -31,7 +31,7 @@
     "links": 2,
     "owner": "root",
     "group": "root",
-    "size": 4096,
+    "size": "4096",
     "date": "Jun 15 23:06",
     "filename": "games"
   },
@@ -40,7 +40,7 @@
     "links": 57,
     "owner": "root",
     "group": "root",
-    "size": 20480,
+    "size": "20480",
     "date": "Jul 28 09:20",
     "filename": "include"
   }

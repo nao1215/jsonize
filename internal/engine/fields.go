@@ -35,16 +35,23 @@ func (r *run) convert(name string, raw any, f *definition.Field, ln int) (any, b
 	if r.opts.Raw || f == nil {
 		return s, false, nil
 	}
-	s = convert.Strip(s, f.TrimPrefix, f.TrimSuffix)
+	// Only an explicit trim_prefix/trim_suffix rewrites the text. A value
+	// that a parser kept verbatim (a key/value line with trim: false)
+	// reaches JSON with its spacing intact; the numeric conversions trim
+	// on their own where whitespace is never meaningful.
+	if f.TrimPrefix != "" || f.TrimSuffix != "" {
+		s = convert.Strip(s, f.TrimPrefix, f.TrimSuffix)
+	}
+	trimmed := strings.TrimSpace(s)
 	for _, n := range f.NullIf {
-		if s == n {
+		if trimmed == n {
 			if f.Required {
 				return nil, false, r.errorf(ln, name, "required value is null")
 			}
 			return nil, f.WhenMissing == definition.MissingOmit, nil
 		}
 	}
-	if f.Required && s == "" {
+	if f.Required && trimmed == "" {
 		return nil, false, r.errorf(ln, name, "required value is empty")
 	}
 	v, err := r.convertScalar(name, s, f, ln)

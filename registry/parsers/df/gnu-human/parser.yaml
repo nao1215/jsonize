@@ -1,7 +1,13 @@
+# `df -h` and `df -H` print the same header and differ only in the base of
+# the suffixes: -h counts 1024 per step, -H (--si) counts 1000. The output
+# does not say which was used, and the numbers are rounded anyway, so the
+# sizes are reported exactly as printed instead of being turned into a
+# byte count jsonize cannot actually know. Run plain `df` for exact
+# 1K-block numbers.
 format: 1
 command: df
 variant: gnu-human
-description: GNU coreutils df -h (sizes normalised to bytes)
+description: GNU coreutils df -h / -H (sizes kept as printed)
 metadata:
   tags: [linux, filesystem, coreutils]
   compatible: [GNU coreutils]
@@ -24,7 +30,9 @@ parse:
   header:
     columns: [filesystem, size, used, available, use_percent, mounted_on]
 fields:
-  size: {type: size}
-  used: {type: size}
-  available: {type: size}
+  filesystem: {required: true}
+  size: {required: true}
+  used: {required: true}
+  available: {required: true}
   use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  mounted_on: {required: true}

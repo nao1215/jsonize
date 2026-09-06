@@ -1,0 +1,31 @@
+[
+  {
+    "flags": "-rw-r--r--",
+    "links": 1,
+    "owner": "alice",
+    "group": "staff",
+    "size": "42",
+    "date": "Jan  5 10:11",
+    "filename": "a -> b"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "alice",
+    "group": "staff",
+    "size": "7",
+    "date": "Jan  5 10:12",
+    "filename": "link",
+    "link_to": "target"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "alice",
+    "group": "staff",
+    "size": "9",
+    "date": "Jan  5 10:13",
+    "filename": "odd",
+    "link_to": "name -> target"
+  }
+]

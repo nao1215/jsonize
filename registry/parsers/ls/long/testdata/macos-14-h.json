@@ -4,7 +4,7 @@
     "links": 3,
     "owner": "root",
     "group": "wheel",
-    "size": 96,
+    "size": "96B",
     "date": "Jul 30  2024",
     "filename": "Applications"
   },
@@ -13,7 +13,7 @@
     "links": 1,
     "owner": "alice",
     "group": "staff",
-    "size": 4198,
+    "size": "4.1K",
     "date": "Sep  1 10:20",
     "filename": "notes.txt"
   },
@@ -22,7 +22,7 @@
     "links": 1,
     "owner": "alice",
     "group": "staff",
-    "size": 2411725,
+    "size": "2.3M",
     "date": "Sep  2 11:00",
     "filename": "photo.jpg"
   }

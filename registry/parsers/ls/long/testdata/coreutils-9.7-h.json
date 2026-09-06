@@ -4,7 +4,7 @@
     "links": 2,
     "owner": "root",
     "group": "root",
-    "size": 4096,
+    "size": "4.0K",
     "date": "May 25 09:14",
     "filename": "ImageMagick-7"
   },
@@ -13,7 +13,7 @@
     "links": 5,
     "owner": "root",
     "group": "root",
-    "size": 4096,
+    "size": "4.0K",
     "date": "Feb 27  2026",
     "filename": "ModemManager"
   },
@@ -22,7 +22,7 @@
     "links": 8,
     "owner": "root",
     "group": "root",
-    "size": 4096,
+    "size": "4.0K",
     "date": "May 25 09:16",
     "filename": "NetworkManager"
   },
@@ -31,7 +31,7 @@
     "links": 2,
     "owner": "root",
     "group": "root",
-    "size": 4096,
+    "size": "4.0K",
     "date": "Jul 24 20:13",
     "filename": "PackageKit"
   },
@@ -40,7 +40,7 @@
     "links": 3,
     "owner": "root",
     "group": "root",
-    "size": 4096,
+    "size": "4.0K",
     "date": "May 25 09:15",
     "filename": "UPower"
   },
@@ -49,7 +49,7 @@
     "links": 12,
     "owner": "root",
     "group": "root",
-    "size": 4096,
+    "size": "4.0K",
     "date": "May 26 21:01",
     "filename": "X11"
   },
@@ -58,7 +58,7 @@
     "links": 1,
     "owner": "root",
     "group": "root",
-    "size": 4096,
+    "size": "4.0K",
     "date": "May 23  2025",
     "filename": "adduser.conf"
   }

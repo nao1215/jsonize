@@ -5,10 +5,15 @@ description: du output (tab separated size and path) on Linux, macOS and BusyBox
 metadata:
   tags: [linux, darwin, filesystem]
   compatible: [GNU coreutils, BusyBox, macOS du]
+# A number, a tab and a path is also the shape of `git diff --numstat`
+# and of any other tab-separated report, so jz does not claim this format
+# on its own: `jz --parser du` or `jz run du` says it is du output, and
+# the signature then checks that the text really has that shape.
 detect:
+  auto_detect: false
   signature:
     all:
-      - '^\d+\t'
+      - '\A\s*\d+\t\S'
 parse:
   type: table
   split: delimiter
@@ -17,4 +22,5 @@ parse:
     none: true
     columns: [size, name]
 fields:
-  size: {type: int}
+  size: {type: int, required: true}
+  name: {required: true}

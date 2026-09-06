@@ -684,3 +684,230 @@ func TestMergedExecEnv(t *testing.T) {
 		t.Errorf("mergedExecEnv = %q", got)
 	}
 }
+
+// TestNoFabricatedUnits pins that a rounded, human-readable size reaches
+// JSON exactly as the command printed it. `df -h` counts 1024 per suffix
+// step and `df -H` counts 1000, the output does not say which, and both
+// are rounded, so any byte count jz produced would be invented.
+func TestNoFabricatedUnits(t *testing.T) {
+	h := newHarness(t)
+	si := "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       1.1G  100M  1.0G  10% /\n"
+	if code := h.pipe(si); code != ExitOK {
+		t.Fatalf("code=%d %s", code, h.stderr.String())
+	}
+	var rows []map[string]any
+	h.json(&rows)
+	if rows[0]["size"] != "1.1G" || rows[0]["used"] != "100M" {
+		t.Errorf("sizes must stay as printed: %v", rows[0])
+	}
+	if rows[0]["use_percent"] != float64(10) {
+		t.Errorf("a percentage is exact and stays typed: %v", rows[0])
+	}
+	// The exact form of the same command still yields integers.
+	if code := h.pipe(gnuDF); code != ExitOK {
+		t.Fatal(h.stderr.String())
+	}
+	h.json(&rows)
+	if rows[0]["1k_blocks"] != float64(1000000) {
+		t.Errorf("1K blocks are exact: %v", rows[0])
+	}
+	// free and lsblk follow the same rule.
+	if code := h.pipe("               total        used        free      shared  buff/cache   available\nMem:            61Gi        34Gi       8.3Gi        17Gi        36Gi        26Gi\n"); code != ExitOK {
+		t.Fatal(h.stderr.String())
+	}
+	h.json(&rows)
+	if rows[0]["total"] != "61Gi" {
+		t.Errorf("free -h: %v", rows[0])
+	}
+	if code := h.pipe("NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS\nsda           8:0    0    20G  0 disk \n"); code != ExitOK {
+		t.Fatal(h.stderr.String())
+	}
+	h.json(&rows)
+	if rows[0]["size"] != "20G" || rows[0]["mountpoint"] != nil {
+		t.Errorf("lsblk: %v", rows[0])
+	}
+}
+
+// TestGenericFormatsNeedAnExplicitParser pins that a format jz cannot
+// recognise on its own is refused, with a message naming the parser to
+// pass, instead of being claimed because it was the only candidate left.
+func TestGenericFormatsNeedAnExplicitParser(t *testing.T) {
+	h := newHarness(t)
+	numstat := "10\t2\tmain.go\n" // git diff --numstat, not du
+	code := h.pipe(numstat)
+	if code != ExitSelect {
+		t.Fatalf("code = %d, want %d (%s)", code, ExitSelect, h.stderr.String())
+	}
+	if h.stdout.Len() != 0 {
+		t.Errorf("stdout = %q", h.stdout.String())
+	}
+	for _, want := range []string{"could be `du` output", "too generic", "jz --parser du"} {
+		if !strings.Contains(h.stderr.String(), want) {
+			t.Errorf("stderr missing %q:\n%s", want, h.stderr.String())
+		}
+	}
+	// Naming the parser is an assertion about the input, and the
+	// signature still checks the shape.
+	if code := h.pipe("134164\t/usr/bin\n", "--parser", "du"); code != ExitOK {
+		t.Fatalf("--parser du: %d %s", code, h.stderr.String())
+	}
+	var rows []map[string]any
+	h.json(&rows)
+	if rows[0]["size"] != float64(134164) || rows[0]["name"] != "/usr/bin" {
+		t.Errorf("du rows = %v", rows)
+	}
+	if code := h.pipe("not du output at all\n", "--parser", "du"); code != ExitSelect {
+		t.Errorf("the signature still applies: %d %s", code, h.stderr.String())
+	}
+	// wc is generic in the same way; three numbers alone say nothing.
+	if code := h.pipe("      1       1       4\n"); code != ExitSelect ||
+		!strings.Contains(h.stderr.String(), "jz --parser wc") {
+		t.Errorf("wc without a parser: %d %s", code, h.stderr.String())
+	}
+	if code := h.pipe("      1       1       4\n", "--parser", "wc"); code != ExitOK {
+		t.Fatal(h.stderr.String())
+	}
+	h.json(&rows)
+	// The third column of the default output counts bytes, not characters.
+	if _, ok := rows[0]["characters"]; ok {
+		t.Errorf("wc must not report characters: %v", rows[0])
+	}
+	if rows[0]["bytes"] != float64(4) || rows[0]["lines"] != float64(1) {
+		t.Errorf("wc rows = %v", rows)
+	}
+}
+
+func TestEnvValuesAreKeptVerbatim(t *testing.T) {
+	h := newHarness(t)
+	if code := h.pipe("A=  padded  \nB=x\nC=\n"); code != ExitOK {
+		t.Fatalf("code=%d %s", code, h.stderr.String())
+	}
+	var rows []map[string]any
+	h.json(&rows)
+	if rows[0]["value"] != "  padded  " || rows[2]["value"] != "" {
+		t.Errorf("env values = %v", rows)
+	}
+	// The NUL form of the same command is the lossless one: a value may
+	// contain a newline, which the line form cannot express.
+	if code := h.pipe("A=one\nstill A\x00B=two\x00", "--meta"); code != ExitOK {
+		t.Fatalf("env -0: %d %s", code, h.stderr.String())
+	}
+	var env map[string]any
+	h.json(&env)
+	if env["variant"] != "null-separated" {
+		t.Errorf("variant = %v", env["variant"])
+	}
+	data := env["data"].([]any)
+	if data[0].(map[string]any)["value"] != "one\nstill A" || len(data) != 2 {
+		t.Errorf("NUL data = %v", data)
+	}
+}
+
+func TestLsListingsAreReadOnce(t *testing.T) {
+	h := newHarness(t)
+	// A regular file may be called "a -> b"; only a symbolic link has a
+	// target.
+	listing := "total 8\n" +
+		"-rw-r--r-- 1 alice staff   42 Jan  5 10:11 a -> b\n" +
+		"lrwxrwxrwx 1 alice staff    7 Jan  5 10:12 bin -> usr/bin\n"
+	if code := h.pipe(listing); code != ExitOK {
+		t.Fatalf("code=%d %s", code, h.stderr.String())
+	}
+	var rows []map[string]any
+	h.json(&rows)
+	if rows[0]["filename"] != "a -> b" {
+		t.Errorf("regular file: %v", rows[0])
+	}
+	if _, ok := rows[0]["link_to"]; ok {
+		t.Errorf("a regular file has no target: %v", rows[0])
+	}
+	if rows[1]["filename"] != "bin" || rows[1]["link_to"] != "usr/bin" {
+		t.Errorf("symlink: %v", rows[1])
+	}
+	// One parser reads both -l and -lh, so neither the sizes in the
+	// listing nor their order decide whether it can be read at all.
+	small := "-rw-r--r-- 1 u g 3 Jan  5 10:11 small.txt\n"
+	mixed := small + strings.Repeat(small, 24) + "-rw-r--r-- 1 u g 2.9K Jan  5 10:11 big.bin\n"
+	for name, in := range map[string]string{"small only": small, "suffix past the window": mixed} {
+		if code := h.pipe(in, "--meta"); code != ExitOK {
+			t.Fatalf("%s: %d %s", name, code, h.stderr.String())
+		}
+		var env map[string]any
+		h.json(&env)
+		if env["variant"] != "long" {
+			t.Errorf("%s: variant = %v", name, env["variant"])
+		}
+	}
+	h.json(&map[string]any{})
+	if code := h.pipe(mixed); code != ExitOK {
+		t.Fatal(h.stderr.String())
+	}
+	h.json(&rows)
+	if rows[0]["size"] != "3" || rows[len(rows)-1]["size"] != "2.9K" {
+		t.Errorf("sizes stay as printed: %v ... %v", rows[0], rows[len(rows)-1])
+	}
+}
+
+func TestTruncatedAlignedRowIsAnError(t *testing.T) {
+	h := newHarness(t)
+	code := h.pipe("NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS\nsda\n")
+	if code != ExitParse {
+		t.Fatalf("code = %d, want %d (%s)", code, ExitParse, h.stderr.String())
+	}
+	if h.stdout.Len() != 0 {
+		t.Errorf("stdout = %q", h.stdout.String())
+	}
+	if !strings.Contains(h.stderr.String(), `field "maj_min": required value is missing`) {
+		t.Errorf("stderr = %s", h.stderr.String())
+	}
+	// A column that is legitimately empty is still allowed.
+	if code := h.pipe("NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS\nsda           8:0    0    20G  0 disk \n"); code != ExitOK {
+		t.Fatalf("unmounted device: %d %s", code, h.stderr.String())
+	}
+	var rows []map[string]any
+	h.json(&rows)
+	if rows[0]["mountpoint"] != nil {
+		t.Errorf("mountpoint = %v", rows[0]["mountpoint"])
+	}
+}
+
+// TestEmptyInput pins the two ways an empty input can end: unidentifiable
+// when nothing was named, and a signature mismatch when a parser was.
+func TestEmptyInput(t *testing.T) {
+	h := newHarness(t)
+	if code := h.pipe(""); code != ExitSelect || !strings.Contains(h.stderr.String(), "unable to identify") {
+		t.Errorf("auto: %d %s", code, h.stderr.String())
+	}
+	if code := h.pipe("", "--parser", "df"); code != ExitSelect ||
+		!strings.Contains(h.stderr.String(), "no df variant matches this input") {
+		t.Errorf("--parser: %d %s", code, h.stderr.String())
+	}
+	if code := h.pipe("", "--parser", "df", "--variant", "gnu"); code != ExitSelect ||
+		!strings.Contains(h.stderr.String(), "does not describe this input") {
+		t.Errorf("--variant: %d %s", code, h.stderr.String())
+	}
+	// Only --force reaches the parser, which then reports an empty table.
+	if code := h.pipe("", "--parser", "df", "--variant", "gnu", "--force"); code != ExitOK ||
+		strings.TrimSpace(h.stdout.String()) != "[]" {
+		t.Errorf("--force: %d %q", code, h.stdout.String())
+	}
+}
+
+func TestRunPassesStdinToTheCommand(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("needs POSIX wc")
+	}
+	h := newHarness(t)
+	h.stdin.WriteString("hello world\n")
+	if code := h.run("run", "wc"); code != ExitOK {
+		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
+	}
+	var rows []map[string]any
+	h.json(&rows)
+	if len(rows) != 1 || rows[0]["lines"] != float64(1) || rows[0]["words"] != float64(2) || rows[0]["bytes"] != float64(12) {
+		t.Errorf("wc counted %v, want 1 line, 2 words, 12 bytes", rows)
+	}
+	if _, ok := rows[0]["filename"]; ok {
+		t.Errorf("wc reading stdin prints no filename: %v", rows[0])
+	}
+}

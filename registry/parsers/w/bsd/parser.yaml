@@ -32,7 +32,12 @@ parse:
         split: aligned
         header:
           rename: {login: login_at}
+      # A display manager session has no terminal, FROM is blank for a
+      # local login and WHAT can be "-", so those columns stay optional.
+      # A row without a user or a login time is a truncated listing.
       fields:
+        user: {required: true}
+        login_at: {required: true}
         from: {null_if: ["-"]}
         idle: {null_if: ["-"]}
         what: {null_if: ["-"]}

@@ -1,7 +1,10 @@
+# macOS df -h prints binary suffixes (466Gi) and df -H decimal ones
+# (500G); both are rounded, so the sizes are reported as printed rather
+# than converted. Run plain `df` for exact 512-byte block counts.
 format: 1
 command: df
 variant: bsd-human
-description: BSD df -h output on macOS (sizes normalised to bytes)
+description: BSD df -h / -H output on macOS (sizes kept as printed)
 metadata:
   tags: [darwin, bsd, filesystem]
   compatible: [macOS df]
@@ -20,10 +23,12 @@ parse:
   header:
     columns: [filesystem, size, used, available, capacity_percent, iused, ifree, iused_percent, mounted_on]
 fields:
-  size: {type: size}
-  used: {type: size}
-  available: {type: size}
-  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
-  iused: {type: int}
-  ifree: {type: int}
-  iused_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  filesystem: {required: true}
+  size: {required: true}
+  used: {required: true}
+  available: {required: true}
+  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  iused: {type: int, required: true}
+  ifree: {type: int, required: true}
+  iused_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  mounted_on: {required: true}

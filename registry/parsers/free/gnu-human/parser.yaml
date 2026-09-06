@@ -1,7 +1,11 @@
+# `free -h` counts 1024 per suffix step and `free -h --si` counts 1000,
+# and the output does not say which is in use. The values are rounded in
+# either case, so they are reported as printed; run plain `free` for exact
+# kibibyte numbers.
 format: 1
 command: free
 variant: gnu-human
-description: procps free -h (sizes normalised to bytes)
+description: procps free -h (sizes kept as printed)
 metadata:
   tags: [linux, memory, procps]
   compatible: [procps-ng]
@@ -19,10 +23,7 @@ parse:
     leading_label: type
   min_fields: 4
 fields:
-  type: {trim_suffix: ":"}
-  total: {type: size}
-  used: {type: size}
-  free: {type: size}
-  shared: {type: size}
-  buff_cache: {type: size}
-  available: {type: size}
+  type: {trim_suffix: ":", required: true}
+  total: {required: true}
+  used: {required: true}
+  free: {required: true}

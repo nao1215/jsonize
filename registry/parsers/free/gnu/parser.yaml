@@ -23,8 +23,8 @@ parse:
     leading_label: type
   min_fields: 4
 fields:
-  type: {trim_suffix: ":"}
-  total: {type: int}
+  type: {trim_suffix: ":", required: true}
+  total: {type: int, required: true}
   used: {type: int}
   free: {type: int}
   shared: {type: int}

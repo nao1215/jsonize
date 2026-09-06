@@ -1,0 +1,4 @@
+source: hand-written; a listing cut short mid-row, as a pipe closing early produces
+description: a row that stops after NAME is an error, not a device whose columns are all null
+os: linux
+expect_error: 'field "maj_min": required value is missing'

@@ -2,19 +2,19 @@
   {
     "lines": 1,
     "words": 1,
-    "characters": 7,
+    "bytes": 7,
     "filename": "/etc/hostname"
   },
   {
     "lines": 9,
     "words": 25,
-    "characters": 221,
+    "bytes": 221,
     "filename": "/etc/hosts"
   },
   {
     "lines": 10,
     "words": 26,
-    "characters": 228,
+    "bytes": 228,
     "filename": "total"
   }
 ]

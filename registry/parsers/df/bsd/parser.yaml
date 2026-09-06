@@ -23,10 +23,12 @@ parse:
   header:
     columns: [filesystem, 512_blocks, used, available, capacity_percent, iused, ifree, iused_percent, mounted_on]
 fields:
-  512_blocks: {type: int}
-  used: {type: int}
-  available: {type: int}
-  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
-  iused: {type: int}
-  ifree: {type: int}
-  iused_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  filesystem: {required: true}
+  512_blocks: {type: int, required: true}
+  used: {type: int, required: true}
+  available: {type: int, required: true}
+  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  iused: {type: int, required: true}
+  ifree: {type: int, required: true}
+  iused_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  mounted_on: {required: true}

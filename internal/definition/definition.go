@@ -115,6 +115,14 @@ type Metadata struct {
 
 // Detect holds the signals used to choose among variants of a command.
 type Detect struct {
+	// AutoDetect can be set to false for a format whose text is too
+	// unremarkable to recognise on its own (three numbers in a row, a
+	// number and a path). Such a definition is only used when the user
+	// names the parser, or when jz ran the command itself and therefore
+	// knows what produced the text. Its signature is still verified, so
+	// naming the parser confirms the format rather than bypassing the
+	// check.
+	AutoDetect *bool `yaml:"auto_detect,omitempty"`
 	// OS restricts the variant to these GOOS values. Empty means any.
 	OS []string `yaml:"os,omitempty"`
 	// Args matches the arguments the command was run with (exec mode only).
@@ -131,6 +139,12 @@ type ArgsMatch struct {
 	Any  []string `yaml:"any,omitempty"`
 	All  []string `yaml:"all,omitempty"`
 	None []string `yaml:"none,omitempty"`
+}
+
+// AutoDetectable reports whether the definition may be chosen without
+// the parser being named. It defaults to true.
+func (d *Detect) AutoDetectable() bool {
+	return d.AutoDetect == nil || *d.AutoDetect
 }
 
 // IsZero reports whether no argument criteria are set.
@@ -173,8 +187,18 @@ type Exec struct {
 	Env map[string]string `yaml:"env,omitempty"`
 }
 
+// Record separators.
+const (
+	RecordNewline = "newline"
+	RecordNUL     = "nul"
+)
+
 // Input controls pre-processing of the captured text before parsing.
 type Input struct {
+	// RecordSeparator splits the input into records: "newline" (the
+	// default) or "nul" for the NUL-separated output of tools such as
+	// `env -0`, where a value may itself contain newlines.
+	RecordSeparator string `yaml:"record_separator,omitempty"`
 	// Ignore lists regular expressions; matching lines are dropped.
 	Ignore []string `yaml:"ignore,omitempty"`
 	// SkipBlank drops blank lines. Defaults to true.
@@ -183,6 +207,14 @@ type Input struct {
 	Select Select `yaml:"select,omitempty"`
 
 	ignore []*regexp.Regexp
+}
+
+// Separator returns the effective record separator byte.
+func (in *Input) Separator() byte {
+	if in.RecordSeparator == RecordNUL {
+		return 0
+	}
+	return '\n'
 }
 
 // SkipBlankLines reports the effective skip_blank setting.
@@ -232,12 +264,21 @@ type Parse struct {
 	MinFields int    `yaml:"min_fields,omitempty"`
 
 	// regex
-	Pattern    string `yaml:"pattern,omitempty"`
-	Each       string `yaml:"each,omitempty"`
-	OnMismatch string `yaml:"on_mismatch,omitempty"`
+	Pattern string `yaml:"pattern,omitempty"`
+	// Patterns are alternatives tried in order; the first one that
+	// matches wins. They let a definition treat structurally different
+	// lines differently (an ls symlink line and an ordinary one) without
+	// a single expression having to guess.
+	Patterns   []string `yaml:"patterns,omitempty"`
+	Each       string   `yaml:"each,omitempty"`
+	OnMismatch string   `yaml:"on_mismatch,omitempty"`
 
 	// kv
 	Separator string `yaml:"separator,omitempty"`
+	// Trim removes surrounding whitespace from both sides of the
+	// separator. It defaults to true; a format whose values are
+	// significant down to the space (env) sets it to false.
+	Trim      *bool  `yaml:"trim,omitempty"`
 	As        string `yaml:"as,omitempty"`
 	KeyName   string `yaml:"key_name,omitempty"`
 	ValueName string `yaml:"value_name,omitempty"`
@@ -245,16 +286,31 @@ type Parse struct {
 	// composite
 	Parts []Part `yaml:"parts,omitempty"`
 
-	pattern *regexp.Regexp
-	// groups are the named capture groups of pattern in order.
+	compiled []*regexp.Regexp
+	// groups are the named capture groups of every pattern, in order and
+	// without duplicates.
 	groups []string
 }
 
-// CompiledPattern returns the compiled regular expression for regex parsers.
-func (p *Parse) CompiledPattern() *regexp.Regexp { return p.pattern }
+// CompiledPatterns returns the compiled expressions of a regex parser in
+// the order they are tried.
+func (p *Parse) CompiledPatterns() []*regexp.Regexp { return p.compiled }
 
-// Groups returns the named capture groups of the pattern in order.
+// Groups returns the named capture groups of every pattern.
 func (p *Parse) Groups() []string { return p.groups }
+
+// PatternSources returns the expressions as written, for diagnostics.
+func (p *Parse) PatternSources() []string {
+	if p.Pattern != "" {
+		return []string{p.Pattern}
+	}
+	return p.Patterns
+}
+
+// TrimCells reports the effective kv trim setting.
+func (p *Parse) TrimCells() bool {
+	return p.Trim == nil || *p.Trim
+}
 
 // Header describes the header line of a table.
 type Header struct {

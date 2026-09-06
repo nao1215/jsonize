@@ -1,6 +1,12 @@
-# One NAME=value per line. Values containing newlines cannot be
-# represented line by line; such input fails with a clear error rather
-# than producing a misleading result.
+# One NAME=value record per line, values kept exactly as printed
+# (trim: false), because a trailing or leading space in an environment
+# variable is part of its value.
+#
+# What this format cannot express: a value that itself contains a
+# newline. "A=one\nB=two" is one variable whose value is "one\nB=two" and
+# two variables A and B at the same time, and no amount of matching can
+# tell them apart. jz reads it as two variables. Use `env -0` (see the
+# nul variant) when values may contain newlines.
 format: 1
 command: env
 variant: posix
@@ -19,3 +25,4 @@ parse:
   type: kv
   separator: "="
   as: list
+  trim: false

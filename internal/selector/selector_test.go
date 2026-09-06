@@ -90,7 +90,7 @@ func TestSelectNoMatch(t *testing.T) {
 			t.Fatalf("input %q: expected NoMatchError, got %v", input, err)
 		}
 		msg := err.Error()
-		for _, want := range []string{"unable to identify the input format", "--parser", "jz list"} {
+		for _, want := range []string{"unable to identify the input format", "--parser"} {
 			if !strings.Contains(msg, want) {
 				t.Errorf("input %q: message missing %q:\n%s", input, want, msg)
 			}
@@ -167,6 +167,47 @@ func TestPriorityBreaksTiesWithinOneCommandOnly(t *testing.T) {
 	var am *AmbiguousError
 	if _, err := Select(cross, Context{Input: []byte("HEADER\n")}); !errors.As(err, &am) {
 		t.Errorf("cross-command priority must not decide: %v", err)
+	}
+}
+
+func TestExplicitOnlyDefinitions(t *testing.T) {
+	t.Parallel()
+	// A format too generic to claim: three numbers and a path also
+	// describe `git diff --numstat`, so du is only used when named.
+	reg := buildRegistry(t, map[string]string{
+		"du/posix": def("du", "posix", "detect:\n  auto_detect: false\n  signature: {all: ['\\A\\s*\\d+\\t']}\n"),
+		"df/gnu":   def("df", "gnu", "detect: {signature: {all: ['^Filesystem\\s+1K-blocks']}}\n"),
+	})
+	_, err := Select(reg, Context{Input: []byte("10\t2\tmain.go\n")})
+	var nm *NoMatchError
+	if !errors.As(err, &nm) {
+		t.Fatalf("expected NoMatchError, got %v", err)
+	}
+	if len(nm.Hints) != 1 || nm.Hints[0].Def.Command != "du" {
+		t.Errorf("hints = %v", nm.Hints)
+	}
+	msg := err.Error()
+	for _, want := range []string{"could be `du` output", "too generic", "jz --parser du"} {
+		if !strings.Contains(msg, want) {
+			t.Errorf("message missing %q:\n%s", want, msg)
+		}
+	}
+	// Naming the parser makes it usable, and the signature is still checked.
+	res, err := Select(reg, Context{Parser: "du", Input: []byte("10\tmain.go\n")})
+	if err != nil || res.Entry.Def.ID() != "du/posix" {
+		t.Fatalf("--parser du: %v %v", res, err)
+	}
+	if _, err := Select(reg, Context{Parser: "du", Input: []byte("not du output\n")}); err == nil ||
+		!strings.Contains(err.Error(), "signature all[0]") {
+		t.Errorf("signature is still verified: %v", err)
+	}
+	// jz run knows the command, which counts as naming the parser.
+	if _, err := Select(reg, Context{Parser: "du", Args: []string{"-s", "."}, Input: []byte("10\tmain.go\n")}); err != nil {
+		t.Errorf("run mode: %v", err)
+	}
+	// A definition that is auto-detectable is unaffected.
+	if _, err := Select(reg, Context{Input: []byte("Filesystem     1K-blocks Used\n")}); err != nil {
+		t.Errorf("auto-detectable definition: %v", err)
 	}
 }
 

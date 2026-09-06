@@ -1,29 +1,34 @@
-# The filename column is absent when wc reads standard input, so only
-# three fields are required.
+# Three numbers in a row describe far too many things (any numeric table,
+# a diff summary) for jz to claim them as wc output, so this parser is
+# only used when the parser is named or when jz ran wc itself. The
+# signature still checks the shape afterwards.
+#
+# The third column of the default output is a BYTE count. `wc -m` prints
+# characters instead in the same layout, so its output must not be read
+# with this definition; `wc -l`, `-w` and `-c` print a single column,
+# which this definition rejects rather than guessing which one it is.
 format: 1
 command: wc
 variant: posix
-description: wc output (lines, words, characters, optional filename)
+description: wc default output (lines, words, bytes, optional filename)
 metadata:
   tags: [linux, darwin, text]
   compatible: [GNU coreutils, BusyBox, macOS wc]
+  references:
+    - https://pubs.opengroup.org/onlinepubs/9699919799/utilities/wc.html
 detect:
+  auto_detect: false
   signature:
-    # wc prints no header, so the very first line is a count line (\A).
-    # The guard rejects tables that merely start with numbers, such as
-    # `ps -ef` on macOS, whose fourth column is numeric too.
     all:
       - '\A\s*\d+\s+\d+\s+\d+(?:\s+\S.*)?$'
-    none:
-      - '^\s*\d+\s+\d+\s+\d+\s+\d+\s+\S'
 parse:
   type: table
   header:
     none: true
-    columns: [lines, words, characters, filename]
+    columns: [lines, words, bytes, filename]
   min_fields: 3
 fields:
-  lines: {type: int}
-  words: {type: int}
-  characters: {type: int}
+  lines: {type: int, required: true}
+  words: {type: int, required: true}
+  bytes: {type: int, required: true}
   filename: {when_missing: omit}

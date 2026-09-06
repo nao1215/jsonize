@@ -26,7 +26,9 @@ parse:
   header:
     columns: [filesystem, 1k_blocks, used, available, use_percent, mounted_on]
 fields:
-  1k_blocks: {type: int}
-  used: {type: int}
-  available: {type: int}
+  filesystem: {required: true}
+  1k_blocks: {type: int, required: true}
+  used: {type: int, required: true}
+  available: {type: int, required: true}
   use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  mounted_on: {required: true}

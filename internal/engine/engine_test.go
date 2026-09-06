@@ -708,3 +708,168 @@ func FuzzParse(f *testing.F) {
 		}
 	})
 }
+
+func TestParseRegexSeveralPatterns(t *testing.T) {
+	t.Parallel()
+	// The shape of the line decides how it is read: only a mode string
+	// starting with "l" makes " -> " a link separator.
+	def := load(t, `
+format: 1
+command: ls
+variant: long
+parse:
+  type: regex
+  patterns:
+    - '^(?P<flags>l\S+)\s+(?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>\S+)\s+(?P<filename>.+)$'
+fields:
+  link_to: {when_missing: omit}
+`)
+	input := "lrwxrwxrwx bin -> usr/bin\n-rw-r--r-- a -> b\nlrwxrwxrwx a -> b -> c\n"
+	got, err := Parse(def, []byte(input), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `[{"flags":"lrwxrwxrwx","filename":"bin","link_to":"usr/bin"},` +
+		`{"flags":"-rw-r--r--","filename":"a -> b"},` +
+		`{"flags":"lrwxrwxrwx","filename":"a","link_to":"b -> c"}]`
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	// A line that fits none of the alternatives names them all.
+	_, err = Parse(def, []byte("\n x\n"), Options{})
+	if err == nil || !strings.Contains(err.Error(), "any of the 2 patterns") {
+		t.Errorf("mismatch message: %v", err)
+	}
+	// on_mismatch and each: input work the same way with several patterns.
+	skip := load(t, `
+format: 1
+command: x
+variant: v
+parse:
+  type: regex
+  patterns: ['^a(?P<a>\d+)$', '^b(?P<b>\d+)$']
+  on_mismatch: skip
+`)
+	got, err = Parse(skip, []byte("a1\nzzz\nb2\n"), Options{})
+	if err != nil || mustJSON(t, got) != `[{"a":"1"},{"b":"2"}]` {
+		t.Errorf("skip with patterns: %v %v", mustJSON(t, got), err)
+	}
+	whole := load(t, `
+format: 1
+command: x
+variant: v
+parse:
+  type: regex
+  each: input
+  patterns: ['^only-this (?P<a>\S+)$', '^(?P<b>.+)$']
+`)
+	got, err = Parse(whole, []byte("something else\n"), Options{})
+	if err != nil || mustJSON(t, got) != `{"b":"something else"}` {
+		t.Errorf("each input with patterns: %v %v", mustJSON(t, got), err)
+	}
+}
+
+func TestParseKVKeepsWhitespaceWhenAsked(t *testing.T) {
+	t.Parallel()
+	trimmed := load(t, "format: 1\ncommand: x\nvariant: v\nparse: {type: kv}\n")
+	verbatim := load(t, "format: 1\ncommand: env\nvariant: posix\nparse: {type: kv, trim: false}\n")
+	input := "A=  padded  \nB=x\nC=\n"
+	got, err := Parse(trimmed, []byte(input), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(mustJSON(t, got), `{"name":"A","value":"padded"}`) {
+		t.Errorf("trim default: %s", mustJSON(t, got))
+	}
+	got, err = Parse(verbatim, []byte(input), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `[{"name":"A","value":"  padded  "},{"name":"B","value":"x"},{"name":"C","value":""}]`
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	// A field rule must not quietly undo the preservation either.
+	typed := load(t, `
+format: 1
+command: env
+variant: posix
+parse: {type: kv, trim: false, as: map}
+fields:
+  PADDED: {}
+  NUM: {type: int}
+  DASH: {null_if: ["-"]}
+`)
+	got, err = Parse(typed, []byte("PADDED=  keep me  \nNUM=  42  \nDASH=  -  \n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want = `{"PADDED":"  keep me  ","NUM":42,"DASH":null}`
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	// Required still rejects a value that is only whitespace.
+	req := load(t, "format: 1\ncommand: env\nvariant: posix\nparse: {type: kv, trim: false, as: map}\nfields: {A: {required: true}}\n")
+	if _, err := Parse(req, []byte("A=   \n"), Options{}); err == nil ||
+		!strings.Contains(err.Error(), "required value is empty") {
+		t.Errorf("required with whitespace: %v", err)
+	}
+}
+
+func TestParseNULSeparatedRecords(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: env
+variant: null-separated
+input:
+  record_separator: nul
+parse: {type: kv, trim: false}
+`)
+	// The NUL form is the one that survives a value containing a newline.
+	input := "A=one\nstill A\x00B=two\x00PADDED=  x  \x00"
+	got, err := Parse(def, []byte(input), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `[{"name":"A","value":"one\nstill A"},{"name":"B","value":"two"},{"name":"PADDED","value":"  x  "}]`
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	// The same bytes read as lines cannot tell the two apart, which is
+	// why the NUL variant exists.
+	lines := load(t, "format: 1\ncommand: env\nvariant: posix\nparse: {type: kv, trim: false}\n")
+	got, err = Parse(lines, []byte("A=one\nB=two\n"), Options{})
+	if err != nil || mustJSON(t, got) != `[{"name":"A","value":"one"},{"name":"B","value":"two"}]` {
+		t.Errorf("newline form: %v %v", mustJSON(t, got), err)
+	}
+	// A record longer than the limit is reported as such.
+	if _, err := Parse(def, []byte("A=xxxxxxxxxx\x00"), Options{MaxLineLength: 4}); !errors.Is(err, ErrLineTooLong) {
+		t.Errorf("record limit: %v", err)
+	}
+}
+
+func TestStringFieldsKeepWhitespace(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: v
+parse:
+  type: regex
+  pattern: '^\[(?P<padded>.*)\]\[(?P<trimmed>.*)\]$'
+fields:
+  trimmed: {trim_suffix: "!"}
+`)
+	got, err := Parse(def, []byte("[  a  ][  b!  ]\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Without an explicit trim rule the captured text is untouched; with
+	// one, the surrounding space goes with it.
+	want := `[{"padded":"  a  ","trimmed":"b"}]`
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+}

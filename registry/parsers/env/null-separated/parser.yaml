@@ -1,0 +1,28 @@
+# The variant is named after the --null flag. It is spelled out because
+# a directory called "nul" cannot be embedded or checked out on Windows,
+# and a bare "null" is the null value in YAML.
+# `env -0` separates records with NUL, which no value can contain, so
+# this is the lossless form: a value may hold newlines and spaces and
+# still be read back exactly.
+format: 1
+command: env
+variant: null-separated
+description: env -0 / printenv -0 output (NUL separated, values kept verbatim)
+metadata:
+  tags: [linux, darwin, environment]
+  compatible: [GNU coreutils, macOS env]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/env-invocation.html
+detect:
+  args:
+    any: ["-0", "--null"]
+  signature:
+    all:
+      - '\A[A-Za-z_][A-Za-z0-9_]*=[^\x00]*\x00'
+input:
+  record_separator: nul
+parse:
+  type: kv
+  separator: "="
+  as: list
+  trim: false

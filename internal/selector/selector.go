@@ -8,9 +8,12 @@
 //   - A definition's signature is a necessary condition. If the signature
 //     does not match the text, the definition is out, no matter what else
 //     is known about the input.
-//   - A definition without a signature cannot be identified from text
-//     alone, so it is only considered once the parser is known (jz run,
-//     or --parser).
+//   - A definition without a signature, or one that declares
+//     detect.auto_detect: false because its format is too unremarkable to
+//     recognise (three numbers, a number and a path), is only considered
+//     once the parser is known (jz run, or --parser). Its signature is
+//     still verified then, so naming the parser confirms the format
+//     instead of skipping the check.
 //   - The operating system and the command arguments are hard filters
 //     when they are known (jz run, or --os). They can only remove
 //     candidates, never promote one.
@@ -130,12 +133,27 @@ type NoMatchError struct {
 	Rejections []Rejection
 	// Scanned counts the definitions that were evaluated.
 	Scanned int
+	// Hints are definitions whose signature does fit the text but which
+	// jz refuses to choose on its own because their format is too
+	// generic. Naming one of them is the way forward.
+	Hints []*registry.Entry
 }
 
 func (e *NoMatchError) Error() string {
 	var b strings.Builder
 	if e.Parser == "" {
 		b.WriteString("unable to identify the input format")
+		if len(e.Hints) > 0 {
+			names := make([]string, 0, len(e.Hints))
+			for _, h := range e.Hints {
+				names = append(names, h.Def.Command)
+			}
+			names = dedupe(names)
+			fmt.Fprintf(&b, "\nit could be %s output, but that format is too generic for jz to claim on its own",
+				strings.Join(quoteAll(names), " or "))
+			fmt.Fprintf(&b, "\n\nConfirm it:\n  COMMAND | jz --parser %s", names[0])
+			return b.String()
+		}
 		fmt.Fprintf(&b, "\nno signature of the %d known parsers matched this text", e.Scanned)
 		b.WriteString("\n\nName the parser explicitly:\n  COMMAND | jz --parser df\nRun `jz list` to see the supported parsers.")
 		return b.String()
@@ -219,9 +237,23 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 
 	var (
 		matched    []*registry.Entry
+		hints      []*registry.Entry
 		rejections []Rejection
 	)
 	for _, e := range candidates {
+		if ctx.Parser == "" && ExplicitOnly(e.Def) {
+			// The text cannot vouch for such a definition. A definition
+			// that does carry a signature can still say "this looks like
+			// me", which becomes a hint naming the parser to pass; one
+			// without a signature says nothing at all.
+			if !e.Def.Detect.Signature.IsZero() {
+				if _, ok := check(e, &ctx, window); ok {
+					hints = append(hints, e)
+				}
+			}
+			rejections = append(rejections, Rejection{Entry: e, Reason: "needs --parser " + e.Def.Command})
+			continue
+		}
 		if reason, ok := check(e, &ctx, window); ok {
 			matched = append(matched, e)
 		} else {
@@ -232,7 +264,7 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 	case 1:
 		return &Result{Entry: matched[0], Scanned: len(candidates)}, nil
 	case 0:
-		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates)}
+		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: hints}
 		if ctx.Parser != "" {
 			err.Rejections = rejections
 		}
@@ -273,13 +305,10 @@ func breakTie(matched []*registry.Entry) (*registry.Entry, bool) {
 // not when it cannot.
 func check(e *registry.Entry, ctx *Context, window []string) (string, bool) {
 	d := &e.Def.Detect
-	if d.Signature.IsZero() {
-		// Nothing in the text can confirm or deny this definition.
-		if ctx.Parser == "" {
-			return "no signature: it can only be selected with --parser " + e.Def.Command, false
+	if !d.Signature.IsZero() {
+		if reason, ok := matchSignature(&d.Signature, window); !ok {
+			return reason, false
 		}
-	} else if reason, ok := matchSignature(&d.Signature, window); !ok {
-		return reason, false
 	}
 	if ctx.OS != "" && len(d.OS) > 0 && !contains(d.OS, ctx.OS) {
 		return fmt.Sprintf("written for %s, not %s", strings.Join(d.OS, "/"), ctx.OS), false
@@ -391,6 +420,34 @@ func matchArgs(a *definition.ArgsMatch, args []string) (string, bool) {
 		}
 	}
 	return "", true
+}
+
+// ExplicitOnly reports whether a definition may only be used once the
+// user has named the parser (or jz ran the command itself), either
+// because it has no signature or because it declares its format too
+// generic to claim.
+func ExplicitOnly(d *definition.Definition) bool {
+	return !d.Detect.AutoDetectable() || d.Detect.Signature.IsZero()
+}
+
+func dedupe(list []string) []string {
+	seen := map[string]bool{}
+	out := list[:0:0]
+	for _, s := range list {
+		if !seen[s] {
+			seen[s] = true
+			out = append(out, s)
+		}
+	}
+	return out
+}
+
+func quoteAll(list []string) []string {
+	out := make([]string, len(list))
+	for i, s := range list {
+		out[i] = "`" + s + "`"
+	}
+	return out
 }
 
 func variantNames(entries []*registry.Entry) []string {

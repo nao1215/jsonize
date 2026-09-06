@@ -1,0 +1,4 @@
+PATH=/usr/bin:/bin
+PADDED=  spaced  
+EMPTY=
+EQUALS=a=b

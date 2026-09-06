@@ -23,6 +23,8 @@ const (
 	MaxColumns = 256
 	// MaxParts bounds composite parts.
 	MaxParts = 32
+	// MaxPatterns bounds the alternatives of a regex parser.
+	MaxPatterns = 16
 	// MaxNesting bounds field nesting depth (array of object of array...).
 	MaxNesting = 8
 )
@@ -206,6 +208,11 @@ func (d *Definition) Validate() error {
 			v.add("exec.env", "invalid variable name %q", k)
 		}
 	}
+	switch d.Input.RecordSeparator {
+	case "", RecordNewline, RecordNUL:
+	default:
+		v.add("input.record_separator", "must be newline or nul")
+	}
 	d.Input.ignore = compileList(v, "input.ignore", d.Input.Ignore, "")
 	validateSelect(v, "input.select", &d.Input.Select)
 	validateParse(v, "parse", &d.Parse, d.Fields, 0)
@@ -279,15 +286,15 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 				v.add(path, "split/delimiter/max_fields/min_fields are only valid for type table")
 			}
 		case "regex":
-			if p.Pattern != "" || p.Each != "" {
-				v.add(path, "pattern/each are only valid for type regex")
+			if p.Pattern != "" || len(p.Patterns) > 0 || p.Each != "" {
+				v.add(path, "pattern/patterns/each are only valid for type regex")
 			}
 			if p.OnMismatch != "" && p.Type != TypeKV {
 				v.add(path+".on_mismatch", "only valid for type regex or kv")
 			}
 		case "kv":
-			if p.Separator != "" || p.As != "" || p.KeyName != "" || p.ValueName != "" {
-				v.add(path, "separator/as/key_name/value_name are only valid for type kv")
+			if p.Separator != "" || p.As != "" || p.KeyName != "" || p.ValueName != "" || p.Trim != nil {
+				v.add(path, "separator/as/key_name/value_name/trim are only valid for type kv")
 			}
 		case "composite":
 			if len(p.Parts) > 0 {
@@ -373,27 +380,51 @@ func validateHeader(v *validator, path string, p *Parse, fields map[string]*Fiel
 }
 
 func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*Field) {
-	if p.Pattern == "" {
-		v.add(path+".pattern", "is required for type regex")
-	} else if re := v.regex(path+".pattern", p.Pattern); re != nil {
-		p.pattern = re
-		p.groups = namedGroups(re)
-		if len(p.groups) == 0 {
-			v.add(path+".pattern", "must contain at least one named group (?P<name>...)")
+	exprs := p.Patterns
+	key := path + ".patterns"
+	switch {
+	case p.Pattern != "" && len(p.Patterns) > 0:
+		v.add(path, "pattern and patterns are mutually exclusive")
+		return
+	case p.Pattern != "":
+		exprs = []string{p.Pattern}
+		key = path + ".pattern"
+	case len(p.Patterns) == 0:
+		v.add(path+".pattern", "is required for type regex (or patterns for several alternatives)")
+		return
+	}
+	if len(exprs) > MaxPatterns {
+		v.add(key, "more than %d alternatives", MaxPatterns)
+		return
+	}
+	groupSet := map[string]bool{}
+	for i, expr := range exprs {
+		ep := key
+		if len(exprs) > 1 {
+			ep = fmt.Sprintf("%s[%d]", key, i)
 		}
-		for _, g := range p.groups {
+		re := v.regex(ep, expr)
+		if re == nil {
+			continue
+		}
+		p.compiled = append(p.compiled, re)
+		groups := namedGroups(re)
+		if len(groups) == 0 {
+			v.add(ep, "must contain at least one named group (?P<name>...)")
+		}
+		for _, g := range groups {
 			if !fieldRe.MatchString(g) {
-				v.add(path+".pattern", "group name %q is not a valid field name", g)
+				v.add(ep, "group name %q is not a valid field name", g)
+			}
+			if !groupSet[g] {
+				groupSet[g] = true
+				p.groups = append(p.groups, g)
 			}
 		}
-		groupSet := map[string]bool{}
-		for _, g := range p.groups {
-			groupSet[g] = true
-		}
-		for name := range fields {
-			if !groupSet[name] {
-				v.add("fields."+name, "is not a named group of the pattern")
-			}
+	}
+	for name := range fields {
+		if !groupSet[name] {
+			v.add("fields."+name, "is not a named group of any pattern")
 		}
 	}
 	switch p.Each {

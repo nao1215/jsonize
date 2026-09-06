@@ -4,7 +4,7 @@
     "links": 1,
     "owner": "root",
     "group": "root",
-    "size": 7,
+    "size": "7",
     "date": "Apr 22  2024",
     "filename": "bin",
     "link_to": "usr/bin"
@@ -14,7 +14,7 @@
     "links": 1,
     "owner": "root",
     "group": "root",
-    "size": 7,
+    "size": "7",
     "date": "Apr 22  2024",
     "filename": "lib",
     "link_to": "usr/lib"
@@ -24,7 +24,7 @@
     "links": 1,
     "owner": "root",
     "group": "root",
-    "size": 42,
+    "size": "42",
     "date": "Jan  5 10:11",
     "filename": "selinux-labelled file"
   }

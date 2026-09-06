@@ -1,0 +1,20 @@
+[
+  {
+    "name": "sda",
+    "maj_min": "8:0",
+    "rm": false,
+    "size": "20G",
+    "ro": false,
+    "type": "disk",
+    "mountpoint": null
+  },
+  {
+    "name": "sda1",
+    "maj_min": "8:1",
+    "rm": false,
+    "size": "1G",
+    "ro": false,
+    "type": "part",
+    "mountpoint": "/boot"
+  }
+]

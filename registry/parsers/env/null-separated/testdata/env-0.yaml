@@ -1,0 +1,4 @@
+source: shaped like `env -0` output (GNU coreutils 9.7); written by hand so it contains the two values the newline form cannot represent
+description: a value with an embedded newline and one with significant padding survive the NUL form
+os: linux
+args: ["-0"]

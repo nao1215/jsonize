@@ -1,0 +1,3 @@
+source: hand-written in util-linux lsblk format
+description: MOUNTPOINTS is legitimately empty for a device that is not mounted, which stays null
+os: linux

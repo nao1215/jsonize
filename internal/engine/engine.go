@@ -111,7 +111,7 @@ func Parse(def *definition.Definition, input []byte, opts Options) (any, error) 
 	if int64(len(input)) > opts.maxInput() {
 		return nil, &ParseError{Definition: def.ID(), Msg: fmt.Sprintf("input exceeds %d bytes", opts.maxInput()), Cause: ErrInputTooLarge}
 	}
-	lines, err := splitLines(input, opts.maxLine())
+	lines, err := splitRecords(input, def.Input.Separator(), opts.maxLine())
 	if err != nil {
 		return nil, &ParseError{Definition: def.ID(), Line: err.line, Msg: err.msg, Cause: err.cause}
 	}
@@ -133,7 +133,10 @@ type splitError struct {
 	cause error
 }
 
-func splitLines(input []byte, maxLen int) ([]line, *splitError) {
+// splitRecords cuts the input into records on sep, which is a newline for
+// ordinary command output and NUL for the record-separated output of
+// tools such as `env -0`.
+func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
 	if len(input) == 0 {
 		return nil, nil
 	}
@@ -141,16 +144,18 @@ func splitLines(input []byte, maxLen int) ([]line, *splitError) {
 	if !utf8.Valid(input) {
 		return nil, &splitError{msg: "input is not valid UTF-8"}
 	}
-	parts := bytes.Split(input, []byte{'\n'})
+	parts := bytes.Split(input, []byte{sep})
 	if len(parts) > 0 && len(parts[len(parts)-1]) == 0 {
-		parts = parts[:len(parts)-1] // trailing newline
+		parts = parts[:len(parts)-1] // trailing separator
 	}
 	out := make([]line, 0, len(parts))
 	for i, p := range parts {
 		if len(p) > maxLen {
-			return nil, &splitError{line: i + 1, msg: fmt.Sprintf("line exceeds %d bytes", maxLen), cause: ErrLineTooLong}
+			return nil, &splitError{line: i + 1, msg: fmt.Sprintf("record exceeds %d bytes", maxLen), cause: ErrLineTooLong}
 		}
-		p = bytes.TrimSuffix(p, []byte{'\r'})
+		if sep == '\n' {
+			p = bytes.TrimSuffix(p, []byte{'\r'})
+		}
 		out = append(out, line{text: string(p), num: i + 1})
 	}
 	return out, nil
@@ -265,29 +270,31 @@ func (r *run) parseComposite(p *definition.Parse, lines []line) (any, error) {
 	return obj, nil
 }
 
-// parseRegex handles type: regex.
+// parseRegex handles type: regex. Several patterns are tried in the
+// order the definition lists them; the first one that matches decides how
+// the line is read.
 func (r *run) parseRegex(p *definition.Parse, fields map[string]*definition.Field, lines []line) (any, error) {
-	re := p.CompiledPattern()
+	patterns := p.CompiledPatterns()
 	if p.Each == definition.EachInput {
 		texts := make([]string, len(lines))
 		for i, l := range lines {
 			texts[i] = l.text
 		}
 		text := strings.Join(texts, "\n")
-		m := re.FindStringSubmatchIndex(text)
+		re, m := firstMatch(patterns, text)
 		if m == nil {
-			return nil, r.errorf(0, "", "input does not match pattern %s", shortPattern(p.Pattern))
+			return nil, r.errorf(0, "", "input does not match %s", describePatterns(p))
 		}
 		return r.objectFromMatch(re, text, m, fields, firstLine(lines))
 	}
 	out := make([]any, 0, len(lines))
 	for _, l := range lines {
-		m := re.FindStringSubmatchIndex(l.text)
+		re, m := firstMatch(patterns, l.text)
 		if m == nil {
 			if p.OnMismatch == definition.MismatchSkip {
 				continue
 			}
-			return nil, r.errorf(l.num, "", "line does not match pattern %s: %q", shortPattern(p.Pattern), truncate(l.text, 80))
+			return nil, r.errorf(l.num, "", "line does not match %s: %q", describePatterns(p), truncate(l.text, 80))
 		}
 		obj, err := r.objectFromMatch(re, l.text, m, fields, l.num)
 		if err != nil {
@@ -296,6 +303,30 @@ func (r *run) parseRegex(p *definition.Parse, fields map[string]*definition.Fiel
 		out = append(out, obj)
 	}
 	return out, nil
+}
+
+// firstMatch returns the first pattern that matches and its submatch
+// indices.
+func firstMatch(patterns []*regexp.Regexp, text string) (*regexp.Regexp, []int) {
+	for _, re := range patterns {
+		if m := re.FindStringSubmatchIndex(text); m != nil {
+			return re, m
+		}
+	}
+	return nil, nil
+}
+
+// describePatterns renders the alternatives for an error message.
+func describePatterns(p *definition.Parse) string {
+	sources := p.PatternSources()
+	if len(sources) == 1 {
+		return "pattern " + shortPattern(sources[0])
+	}
+	parts := make([]string, len(sources))
+	for i, s := range sources {
+		parts[i] = shortPattern(s)
+	}
+	return fmt.Sprintf("any of the %d patterns %s", len(sources), strings.Join(parts, ", "))
 }
 
 func firstLine(lines []line) int {
@@ -356,11 +387,15 @@ func (r *run) parseKV(p *definition.Parse, fields map[string]*definition.Field, 
 	} else {
 		list = make([]any, 0, len(lines))
 	}
+	trim := p.TrimCells()
 	for _, l := range lines {
 		idx := strings.Index(l.text, sep)
 		key := ""
 		if idx >= 0 {
-			key = strings.TrimSpace(l.text[:idx])
+			key = l.text[:idx]
+			if trim {
+				key = strings.TrimSpace(key)
+			}
 		}
 		if idx < 0 || key == "" {
 			if p.OnMismatch == definition.MismatchSkip {
@@ -368,7 +403,10 @@ func (r *run) parseKV(p *definition.Parse, fields map[string]*definition.Field, 
 			}
 			return nil, r.errorf(l.num, "", "expected \"key%svalue\": %q", sep, truncate(l.text, 80))
 		}
-		value := strings.TrimSpace(l.text[idx+len(sep):])
+		value := l.text[idx+len(sep):]
+		if trim {
+			value = strings.TrimSpace(value)
+		}
 		if asMap {
 			if err := r.setField(obj, key, value, fields[key], l.num); err != nil {
 				return nil, err

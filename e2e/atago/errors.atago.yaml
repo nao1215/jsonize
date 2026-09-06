@@ -220,6 +220,93 @@ scenarios:
           stderr:
             contains: input exceeds 16 bytes
 
+  - name: a format too generic to recognise is refused and names its parser
+    steps:
+      # `10\t2\tmain.go` is `git diff --numstat`, not du output; the
+      # shapes are indistinguishable, so jz refuses instead of picking du
+      # because it was the only candidate left.
+      - run:
+          command: jz
+          stdin: "10\t2\tmain.go\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: could be `du` output
+            matches: "jz --parser du"
+      # Naming the parser is the user asserting what the text is; the
+      # signature still checks that it has the right shape.
+      - run:
+          command: jz --parser du
+          stdin: "134164\t/usr/bin\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].size", equals: 134164 }
+              - { path: "$[0].name", equals: /usr/bin }
+      - run:
+          command: jz --parser du
+          stdin: "this is not du output\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+
+  - name: a row cut short is an error, not a device with null columns
+    steps:
+      - run:
+          command: jz
+          stdin: "NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS\nsda\n"
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+          stderr:
+            contains: 'field "maj_min": required value is missing'
+      # A column that is genuinely empty is still fine.
+      - run:
+          command: jz
+          stdin: "NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS\nsda           8:0    0    20G  0 disk \n"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].size", equals: "20G" }
+              - { path: "$[0].mountpoint", equals: null }
+
+  - name: an empty input ends differently depending on what was named
+    steps:
+      - fixture:
+          file: empty2.txt
+          content: ""
+      - run:
+          command: jz --file empty2.txt
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: unable to identify
+      - run:
+          command: jz --file empty2.txt --parser df
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: no df variant matches this input
+      - run:
+          command: jz --file empty2.txt --parser df --variant gnu
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: does not describe this input
+      # Only --force reaches the parser, which reports an empty table.
+      - run:
+          command: jz --file empty2.txt --parser df --variant gnu --force
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+
   - name: an unknown subcommand or flag is a usage error
     steps:
       - run:

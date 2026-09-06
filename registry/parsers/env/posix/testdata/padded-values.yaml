@@ -1,0 +1,3 @@
+source: hand-written; `env` prints the value after the first "=" verbatim, spaces included
+description: leading and trailing spaces are part of the value and are kept
+os: linux

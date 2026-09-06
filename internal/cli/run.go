@@ -17,9 +17,10 @@ import (
 const runUsage = `Usage: jz run [flags] COMMAND [args...]
 
 Runs COMMAND with the given arguments (no shell involved), captures its
-standard output and converts it to JSON. Standard error is passed
-through. The command runs with LC_ALL=C so that its output is stable; use
---keep-locale to inherit the current locale instead.
+standard output and converts it to JSON. Standard input is handed to the
+command and standard error is passed through. The command runs with
+LC_ALL=C so that its output is stable; use --keep-locale to inherit the
+current locale instead.
 
 The command name selects the parser and its arguments narrow the
 variants, but the output still has to match the variant's signature, so a
@@ -101,9 +102,12 @@ func (a *app) cmdRun(args []string) int {
 		defer cancel()
 	}
 	res, err := runner.Run(ctx, runner.Command{
-		Name:       name,
-		Args:       cmdArgs,
-		Env:        append(mergedExecEnv(reg, parser), extraEnv...),
+		Name: name,
+		Args: cmdArgs,
+		Env:  append(mergedExecEnv(reg, parser), extraEnv...),
+		// jz reads nothing from standard input in this mode, so the
+		// command gets it: `printf ... | jz run wc` has to reach wc.
+		Stdin:      a.env.Stdin,
 		KeepLocale: keepLocale,
 		MaxOutput:  maxOutput,
 	}, a.env.Stderr, a.env.Signals)

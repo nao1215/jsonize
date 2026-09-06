@@ -1,32 +1,45 @@
-# `ls -l` lines on GNU and BSD. The optional trailing "." / "+" / "@"
-# after the mode string is the ACL/xattr marker; symlink targets are
-# split into link_to.
+# One definition for `ls -l` and `ls -lh`: the columns and their meaning
+# are identical and only the size column is formatted differently, so a
+# single parser avoids having to guess which of the two produced a
+# listing. That guess is not decidable anyway: a -lh listing of small
+# files prints plain byte counts, and a suffixed size may appear on any
+# line, including well past the part of the output a signature may read.
+#
+# The size is therefore reported exactly as printed ("4096" or "4.0K").
+# A -lh size is rounded and its base (1024, or 1000 with --si) is not
+# visible in the output, so converting it would invent precision; run
+# `ls -l` for exact byte counts.
+#
+# Two patterns rather than one: only a line whose mode starts with "l" is
+# a symbolic link, so " -> " is a target separator there and an ordinary
+# part of the file name everywhere else. A name that contains " -> " is
+# split at its first occurrence; joining filename and link_to back with
+# " -> " reproduces what ls printed.
 format: 1
 command: ls
 variant: long
-description: ls -l / ls -al long listing (byte sizes) on Linux and macOS
+description: ls -l / ls -lh long listing on Linux, macOS and BusyBox
 metadata:
   tags: [linux, darwin, filesystem]
   compatible: [GNU coreutils, macOS ls, BusyBox]
+  references:
+    - https://pubs.opengroup.org/onlinepubs/9699919799/utilities/ls.html
 detect:
   args:
-    any: ["-l", "-al", "-la", "-lA", "-Al", "-lh", "-alh", "-lah", "-lR", "-alR"]
-    none: ["-h", "--human-readable"]
+    any: ["-l", "-al", "-la", "-lA", "-Al", "-lh", "-alh", "-lah", "-lR", "-alR", "-lS", "-lt", "-ltr"]
   signature:
-    # A -lh listing whose sizes all happen to be plain byte counts is
-    # indistinguishable from -l, and parsing it here is still correct; a
-    # listing with one suffixed size is not this variant.
     all:
-      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+\d+\s+\w{3}\s+\d{1,2}\s+'
-    none:
-      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+[\d.]+[KMGTPB]\s+\w{3}\s+\d{1,2}\s+'
+      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+[\d.]+[KMGTPBi]*\s+\w{3}\s+\d{1,2}\s+'
 input:
   ignore:
-    - '^total \d'
+    - '^total\s'
 parse:
   type: regex
-  pattern: '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+?)(?: -> (?P<link_to>.+))?$'
+  patterns:
+    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+)$'
 fields:
-  links: {type: int}
-  size: {type: int}
+  links: {type: int, required: true}
+  size: {required: true}
+  filename: {required: true}
   link_to: {when_missing: omit}

@@ -63,7 +63,7 @@ scenarios:
               - { path: "$.source", equals: embedded }
               - { path: "$.detect.auto_detectable", equals: true }
               - { path: "$.detect.os[0]", equals: linux }
-              - { path: "$.fields.1k_blocks", equals: int }
+              - { path: "$.fields.1k_blocks", equals: "int required" }
 
   - name: list --sources shows where definitions come from
     steps:

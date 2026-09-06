@@ -74,10 +74,24 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 	// Selection is part of the contract, not just parsing: a fixture has
 	// to identify its own definition the way a user's input would.
 	if c.Meta.ExpectError == "" {
-		if c.Meta.AutoDetects() {
+		explicit := selector.ExplicitOnly(e.Def)
+		if c.Meta.AutoDetects() && !explicit {
 			// What `COMMAND | jz` does: no parser, no OS, no arguments.
 			if err := selects(reg, e, selector.Context{Input: c.Input}); err != nil {
 				res.Err = fmt.Errorf("automatic detection: %w", err)
+				return res
+			}
+		}
+		if explicit {
+			// A definition that jz will not claim on its own must still be
+			// reachable by naming it, and its signature must accept the
+			// fixture rather than being skipped.
+			if err := selects(reg, e, selector.Context{Parser: e.Def.Command, Input: c.Input}); err != nil {
+				res.Err = fmt.Errorf("selection with --parser %s: %w", e.Def.Command, err)
+				return res
+			}
+			if _, err := selector.Select(reg, selector.Context{Input: c.Input}); err == nil {
+				res.Err = fmt.Errorf("%s declares auto_detect: false but automatic detection still chose it", e.Def.ID())
 				return res
 			}
 		}

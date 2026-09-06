@@ -107,12 +107,69 @@ parse:
 		t.Fatalf("Load: %v", err)
 	}
 	p := d.Parse.Parts[0].Parse
-	if p.CompiledPattern() == nil || strings.Join(p.Groups(), ",") != "time,uptime" {
+	if len(p.CompiledPatterns()) != 1 || strings.Join(p.Groups(), ",") != "time,uptime" {
 		t.Errorf("regex part not compiled: %v", p.Groups())
 	}
 	sel := d.Parse.Parts[1].Select
 	if sel.CompiledAfter() == nil || sel.CompiledUntil() == nil {
 		t.Error("select regexes not compiled")
+	}
+}
+
+func TestLoadPatternsAndOptions(t *testing.T) {
+	t.Parallel()
+	d, err := Load([]byte(`
+format: 1
+command: ls
+variant: long
+detect:
+  auto_detect: false
+input:
+  record_separator: nul
+parse:
+  type: regex
+  patterns:
+    - '^l(?P<flags>\S+) (?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>\S+) (?P<filename>.+)$'
+fields:
+  link_to: {when_missing: omit}
+`), "ls.yaml")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if len(d.Parse.CompiledPatterns()) != 2 {
+		t.Errorf("patterns = %d", len(d.Parse.CompiledPatterns()))
+	}
+	if got := strings.Join(d.Parse.Groups(), ","); got != "flags,filename,link_to" {
+		t.Errorf("groups = %s", got)
+	}
+	if len(d.Parse.PatternSources()) != 2 {
+		t.Errorf("sources = %v", d.Parse.PatternSources())
+	}
+	if d.Detect.AutoDetectable() {
+		t.Error("auto_detect: false was not read")
+	}
+	if d.Input.Separator() != 0 {
+		t.Errorf("separator = %q", d.Input.Separator())
+	}
+
+	// Defaults.
+	d, err = Load([]byte("format: 1\ncommand: c\nvariant: v\nparse: {type: kv}\n"), "d.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !d.Detect.AutoDetectable() || !d.Parse.TrimCells() || d.Input.Separator() != '\n' {
+		t.Error("defaults")
+	}
+	d, err = Load([]byte("format: 1\ncommand: c\nvariant: v\nparse: {type: kv, trim: false}\n"), "d.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if d.Parse.TrimCells() {
+		t.Error("trim: false was not read")
+	}
+	if got := d.Parse.PatternSources(); got != nil {
+		t.Errorf("kv has no patterns: %v", got)
 	}
 }
 
@@ -223,6 +280,14 @@ func TestLoadErrors(t *testing.T) {
 		{"table with parts", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, parts: [{name: a, parse: {type: kv}}]}\n", "only valid for type composite"},
 		{"table on_mismatch", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, on_mismatch: skip}\n", "on_mismatch"},
 		{"regex missing pattern", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex}\n", "pattern: is required"},
+		{"regex both pattern forms", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', patterns: ['(?P<b>.)']}\n", "mutually exclusive"},
+		{"regex too many patterns", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: [" + strings.Repeat("'(?P<a>.)',", MaxPatterns+1) + "]}\n", "more than 16 alternatives"},
+		{"regex patterns invalid", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: ['(?P<a>.)', '(']}\n", "patterns[1]"},
+		{"regex patterns no groups", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: ['abc']}\n", "at least one named group"},
+		{"field not in any pattern", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: ['(?P<a>.)', '(?P<b>.)']}\nfields: {c: {}}\n", "not a named group of any pattern"},
+		{"trim outside kv", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', trim: false}\n", "only valid for type kv"},
+		{"patterns outside regex", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, patterns: ['(?P<a>.)']}\n", "only valid for type regex"},
+		{"bad record separator", "format: 1\ncommand: c\nvariant: v\ninput: {record_separator: comma}\nparse: {type: kv}\n", "must be newline or nul"},
 		{"regex invalid", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '('}\n", "invalid regular expression"},
 		{"regex no groups", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: 'abc'}\n", "at least one named group"},
 		{"regex bad each", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', each: all}\n", "must be line or input"},

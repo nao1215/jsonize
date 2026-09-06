@@ -1,0 +1,8 @@
+source: hand-written in GNU ls -l format
+description: >
+  " -> " is only a link separator on a line whose mode says symbolic
+  link; a regular file may be called "a -> b". A link whose own name
+  contains " -> " is split at the first one, and joining filename and
+  link_to back with " -> " reproduces the line.
+os: linux
+args: ["-l"]

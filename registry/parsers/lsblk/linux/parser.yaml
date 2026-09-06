@@ -19,7 +19,15 @@ parse:
   split: aligned
   header:
     rename: {mountpoints: mountpoint}
+# MOUNTPOINT is empty for anything that is not mounted, so it is the one
+# optional column; a row that stops before RO is a truncated listing and
+# is reported as an error rather than filled with nulls.
 fields:
-  rm: {type: bool}
-  size: {type: size}
-  ro: {type: bool}
+  name: {required: true}
+  maj_min: {required: true}
+  rm: {type: bool, required: true}
+  # SIZE is rounded ("20G" for 20401094656 bytes) and lsblk offers -b for
+  # the exact byte count, so the printed text is kept as it is.
+  size: {required: true}
+  ro: {type: bool, required: true}
+  type: {required: true}
