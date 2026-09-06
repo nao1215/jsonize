@@ -1,0 +1,6 @@
+broken-app@2.0.0 /tmp/jz-fixtures/broken-app
++-- chalk@4.1.0
++-- left-pad@1.3.0 extraneous
++-- ms@2.1.3
+`-- UNMET DEPENDENCY semver@^7.6.0
+

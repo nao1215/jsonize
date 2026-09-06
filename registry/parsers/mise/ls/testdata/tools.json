@@ -1,0 +1,152 @@
+[
+  {
+    "tool": "argocd",
+    "version": "3.4.2",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "erlang",
+    "version": "28.4.1",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "erlang",
+    "version": "28.5",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "erlang",
+    "version": "29.0",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "gleam",
+    "version": "1.15.2",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "gleam",
+    "version": "1.16.0",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "go",
+    "version": "1.25.3",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "go",
+    "version": "1.26.3",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "go",
+    "version": "1.26.4",
+    "source": "~/.config/mise/config.toml",
+    "requested": "1.26.4"
+  },
+  {
+    "tool": "helm",
+    "version": "4.2.0",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "hugo",
+    "version": "0.162.1",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "java",
+    "version": "17.0.2",
+    "source": "~/.config/mise/config.toml",
+    "requested": "17"
+  },
+  {
+    "tool": "kind",
+    "version": "0.31.0",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "kubeconform",
+    "version": "0.7.0",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "kubectl",
+    "version": "1.35.0",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "node",
+    "version": "22.21.1",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "node",
+    "version": "22.22.1",
+    "source": "~/.config/mise/config.toml",
+    "requested": "22"
+  },
+  {
+    "tool": "node",
+    "version": "24.3.0",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "node",
+    "version": "26.1.0",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "rebar",
+    "version": "3.25.0",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "rebar",
+    "version": "3.27.0",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "shellcheck",
+    "version": "0.11.0",
+    "source": "~/.config/mise/config.toml",
+    "requested": "0.11.0"
+  },
+  {
+    "tool": "shfmt",
+    "version": "3.13.1",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "uv",
+    "version": "0.11.12",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "yarn",
+    "version": "1.22.22",
+    "source": null,
+    "requested": null
+  }
+]

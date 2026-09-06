@@ -1,0 +1,31 @@
+# `npm outdated` is a table whose last title is two words, so the column
+# names are declared rather than derived. A package that is declared but
+# not installed prints MISSING for its version and "-" for its location;
+# both are placeholders for a value that is not there.
+format: 1
+command: npm
+variant: outdated
+description: npm outdated version table
+metadata:
+  tags: [node, package, javascript]
+  compatible: [npm]
+  references:
+    - https://docs.npmjs.com/cli/commands/npm-outdated
+detect:
+  args:
+    any: ["outdated"]
+  signature:
+    all:
+      - '\APackage[ \t]+Current[ \t]+Wanted[ \t]+Latest[ \t]+Location[ \t]+Depended by[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    columns: [package, current, wanted, latest, location, depended_by]
+fields:
+  package: {required: true}
+  current: {null_if: ["MISSING"]}
+  wanted: {required: true}
+  latest: {required: true}
+  location: {null_if: ["-"]}
+  depended_by: {required: true}

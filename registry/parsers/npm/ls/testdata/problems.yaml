@@ -1,0 +1,4 @@
+description: One package installed without being declared (extraneous) and one declared without being installed (UNMET DEPENDENCY).
+source: "`npm ls` with npm 10.9.4 (node 22.22.1) on Ubuntu 26.04 with LC_ALL=C, in a project whose node_modules and package.json disagree"
+os: linux
+args: ["ls"]

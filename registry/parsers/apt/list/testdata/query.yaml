@@ -1,0 +1,4 @@
+description: Named packages, so most rows have no bracketed state and one package appears twice with two architectures.
+source: "`apt list bash zsh tcsh vim-nox` on Ubuntu 26.04 (apt 3.2) with LC_ALL=C"
+os: linux
+args: ["list", "bash", "zsh", "tcsh", "vim-nox"]

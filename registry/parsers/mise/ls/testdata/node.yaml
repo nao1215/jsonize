@@ -1,0 +1,4 @@
+description: One tool, where three rows carry only two columns and one carries all four.
+source: "`mise ls node` with mise 2026.2.21 on Ubuntu 26.04 with LC_ALL=C"
+os: linux
+args: ["ls", "node"]

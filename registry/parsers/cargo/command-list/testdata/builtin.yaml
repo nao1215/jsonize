@@ -1,0 +1,4 @@
+description: An empty CARGO_HOME and a PATH without extra subcommands, so only built-in commands and aliases are listed.
+source: "`CARGO_HOME=<empty dir> PATH=/usr/bin:/bin cargo --list` with cargo 1.98.0 on Ubuntu 26.04 with LC_ALL=C"
+os: linux
+args: ["--list"]

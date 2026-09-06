@@ -1,0 +1,26 @@
+[
+  {
+    "tool": "node",
+    "version": "22.21.1",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "node",
+    "version": "22.22.1",
+    "source": "~/.config/mise/config.toml",
+    "requested": "22"
+  },
+  {
+    "tool": "node",
+    "version": "24.3.0",
+    "source": null,
+    "requested": null
+  },
+  {
+    "tool": "node",
+    "version": "26.1.0",
+    "source": null,
+    "requested": null
+  }
+]

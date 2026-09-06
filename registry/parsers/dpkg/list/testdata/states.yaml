@@ -1,0 +1,4 @@
+description: Named packages, so the columns are narrower and two rows are in the rc state (removed, configuration files kept).
+source: "`dpkg -l bash grub-pc linux-image-6.14.0-35-generic dpkg` on Ubuntu 26.04 (dpkg 1.23.7) with LC_ALL=C"
+os: linux
+args: ["-l", "bash", "grub-pc", "linux-image-6.14.0-35-generic", "dpkg"]

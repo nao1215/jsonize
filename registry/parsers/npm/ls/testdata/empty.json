@@ -1,0 +1,8 @@
+{
+  "project": {
+    "name": "empty-app",
+    "version": "0.1.0",
+    "path": "/tmp/jz-fixtures/empty-app"
+  },
+  "dependencies": []
+}

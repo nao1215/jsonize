@@ -1,0 +1,29 @@
+# `go env` writes KEY='value' one per line on Unix, quoted the way a
+# shell would need it; the quotes are syntax, not content, so they are
+# removed. The values stay strings: GOFLAGS is a word list, GOGCCFLAGS
+# contains "=" of its own, and the set of keys changes with the Go
+# release, so typing individual keys would age badly.
+format: 1
+command: go
+variant: env
+description: go env environment as printed for a shell
+metadata:
+  tags: [go, toolchain]
+  compatible: [gc]
+  references:
+    - https://pkg.go.dev/cmd/go#hdr-Print_Go_environment_information
+detect:
+  args:
+    all: ["env"]
+    none: ["-json", "--json"]
+  signature:
+    window: 60
+    all:
+      - "\\A[A-Z][A-Z0-9_]*='"
+      - "(?m)^GOARCH='"
+      - "(?m)^GOROOT='"
+parse:
+  type: kv
+  separator: "="
+  as: map
+  unquote: true

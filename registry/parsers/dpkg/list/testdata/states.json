@@ -1,0 +1,34 @@
+[
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "bash",
+    "version": "5.3-2ubuntu1",
+    "architecture": "amd64",
+    "description": "GNU Bourne Again SHell"
+  },
+  {
+    "desired": "i",
+    "status": "i",
+    "name": "dpkg",
+    "version": "1.23.7ubuntu1",
+    "architecture": "amd64",
+    "description": "Debian package management system"
+  },
+  {
+    "desired": "r",
+    "status": "c",
+    "name": "grub-pc",
+    "version": "2.12-5ubuntu11",
+    "architecture": "amd64",
+    "description": "GRand Unified Bootloader, version 2 (PC/BIOS version)"
+  },
+  {
+    "desired": "r",
+    "status": "c",
+    "name": "linux-image-6.14.0-35-generic",
+    "version": "6.14.0-35.35",
+    "architecture": "amd64",
+    "description": "Signed kernel image generic"
+  }
+]

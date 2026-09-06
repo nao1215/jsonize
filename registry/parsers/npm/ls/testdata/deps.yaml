@@ -1,0 +1,3 @@
+source: "`npm ls` with npm 10.9.4 (node 22.22.1) on Ubuntu 26.04 with LC_ALL=C, in a project with three dependencies"
+os: linux
+args: ["ls"]

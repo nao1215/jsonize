@@ -1,0 +1,5 @@
+sample-app@1.0.0 /tmp/jz-fixtures/sample-app
++-- chalk@4.1.0
++-- left-pad@1.3.0
+`-- semver@7.5.0
+

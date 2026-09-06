@@ -1,0 +1,4 @@
+description: A project with no dependencies, where npm prints the (empty) placeholder row.
+source: "`npm ls` with npm 10.9.4 (node 22.22.1) on Ubuntu 26.04 with LC_ALL=C, in a project whose package.json has no dependencies"
+os: linux
+args: ["ls"]

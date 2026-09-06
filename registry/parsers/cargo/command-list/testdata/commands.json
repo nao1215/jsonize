@@ -1,0 +1,208 @@
+[
+  {
+    "command": "add",
+    "description": "Add dependencies to a Cargo.toml manifest file"
+  },
+  {
+    "command": "audit"
+  },
+  {
+    "command": "b",
+    "alias_for": "build"
+  },
+  {
+    "command": "bench",
+    "description": "Execute all benchmarks of a local package"
+  },
+  {
+    "command": "binstall"
+  },
+  {
+    "command": "build",
+    "description": "Compile a local package and all of its dependencies"
+  },
+  {
+    "command": "c",
+    "alias_for": "check"
+  },
+  {
+    "command": "check",
+    "description": "Check a local package and all of its dependencies for errors"
+  },
+  {
+    "command": "clean",
+    "description": "Remove artifacts that cargo has generated in the past"
+  },
+  {
+    "command": "clippy",
+    "description": "Checks a package to catch common mistakes and improve your Rust code."
+  },
+  {
+    "command": "config",
+    "description": "Inspect configuration values"
+  },
+  {
+    "command": "cyclonedx"
+  },
+  {
+    "command": "d",
+    "alias_for": "doc"
+  },
+  {
+    "command": "doc",
+    "description": "Build a package's documentation"
+  },
+  {
+    "command": "fetch",
+    "description": "Fetch dependencies of a package from the network"
+  },
+  {
+    "command": "fix",
+    "description": "Automatically fix lint warnings reported by rustc"
+  },
+  {
+    "command": "fmt",
+    "description": "Formats all bin and lib files of the current crate using rustfmt."
+  },
+  {
+    "command": "generate-lockfile",
+    "description": "Generate the lockfile for a package"
+  },
+  {
+    "command": "git-checkout",
+    "description": "REMOVED: This command has been removed"
+  },
+  {
+    "command": "help",
+    "description": "Displays help for a cargo command"
+  },
+  {
+    "command": "info",
+    "description": "Display information about a package"
+  },
+  {
+    "command": "init",
+    "description": "Create a new cargo package in an existing directory"
+  },
+  {
+    "command": "install",
+    "description": "Install a Rust binary"
+  },
+  {
+    "command": "llvm-cov"
+  },
+  {
+    "command": "locate-project",
+    "description": "Print a JSON representation of a Cargo.toml file's location"
+  },
+  {
+    "command": "login",
+    "description": "Log in to a registry."
+  },
+  {
+    "command": "logout",
+    "description": "Remove an API token from the registry locally"
+  },
+  {
+    "command": "metadata",
+    "description": "Output the resolved dependencies of a package, the concrete used versions including overrides, in machine-readable format"
+  },
+  {
+    "command": "miri"
+  },
+  {
+    "command": "new",
+    "description": "Create a new cargo package at <path>"
+  },
+  {
+    "command": "nextest"
+  },
+  {
+    "command": "owner",
+    "description": "Manage the owners of a crate on the registry"
+  },
+  {
+    "command": "package",
+    "description": "Assemble the local package into a distributable tarball"
+  },
+  {
+    "command": "pkgid",
+    "description": "Print a fully qualified package specification"
+  },
+  {
+    "command": "publish",
+    "description": "Upload a package to the registry"
+  },
+  {
+    "command": "r",
+    "alias_for": "run"
+  },
+  {
+    "command": "read-manifest",
+    "description": "DEPRECATED: Print a JSON representation of a Cargo.toml manifest."
+  },
+  {
+    "command": "remove",
+    "description": "Remove dependencies from a Cargo.toml manifest file"
+  },
+  {
+    "command": "report",
+    "description": "Generate and display various kinds of reports"
+  },
+  {
+    "command": "rm",
+    "alias_for": "remove"
+  },
+  {
+    "command": "run",
+    "description": "Run a binary or example of the local package"
+  },
+  {
+    "command": "rustc",
+    "description": "Compile a package, and pass extra options to the compiler"
+  },
+  {
+    "command": "rustdoc",
+    "description": "Build a package's documentation, using specified custom flags."
+  },
+  {
+    "command": "search",
+    "description": "Search packages in the registry. Default registry is crates.io"
+  },
+  {
+    "command": "t",
+    "alias_for": "test"
+  },
+  {
+    "command": "test",
+    "description": "Execute all unit and integration tests and build examples of a local package"
+  },
+  {
+    "command": "tree",
+    "description": "Display a tree visualization of a dependency graph"
+  },
+  {
+    "command": "uninstall",
+    "description": "Remove a Rust binary"
+  },
+  {
+    "command": "update",
+    "description": "Update dependencies as recorded in the local lock file"
+  },
+  {
+    "command": "vendor",
+    "description": "Vendor all dependencies for a project locally"
+  },
+  {
+    "command": "verify-project",
+    "description": "DEPRECATED: Check correctness of crate manifest."
+  },
+  {
+    "command": "version",
+    "description": "Show version information"
+  },
+  {
+    "command": "yank",
+    "description": "Remove a pushed crate from the index"
+  }
+]

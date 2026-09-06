@@ -1,0 +1,42 @@
+[
+  {
+    "package": "certifi",
+    "version": "2026.7.22"
+  },
+  {
+    "package": "charset-normalizer",
+    "version": "3.5.1"
+  },
+  {
+    "package": "idna",
+    "version": "3.19"
+  },
+  {
+    "package": "markdown-it-py",
+    "version": "4.2.0"
+  },
+  {
+    "package": "mdurl",
+    "version": "0.1.2"
+  },
+  {
+    "package": "pip",
+    "version": "26.2.1"
+  },
+  {
+    "package": "Pygments",
+    "version": "2.21.0"
+  },
+  {
+    "package": "requests",
+    "version": "2.34.2"
+  },
+  {
+    "package": "rich",
+    "version": "15.0.0"
+  },
+  {
+    "package": "urllib3",
+    "version": "2.7.0"
+  }
+]

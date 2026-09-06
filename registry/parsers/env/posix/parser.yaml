@@ -22,10 +22,15 @@ detect:
     all:
       - '^[A-Za-z_][A-Za-z0-9_]*=[^\n]*\n[A-Za-z_][A-Za-z0-9_]*='
     none:
-      # /etc/os-release has the same NAME=value shape but its values are
-      # shell quoted and its keys are not environment variables. Read as
-      # env the quotes end up inside the value.
+      # env prints values raw and never adds quotes. A quoted value comes
+      # from a program writing assignments for a shell to read: the
+      # quotes there are syntax, and reading the text as env output would
+      # leave them inside the value. /etc/os-release does this with
+      # double quotes, `go env` with single ones.
       - '^[A-Za-z_][A-Za-z0-9_]*="'
+      - "^[A-Za-z_][A-Za-z0-9_]*='"
+      # os-release keys are not environment variables even when its
+      # values happen to be unquoted.
       - '^(?:PRETTY_NAME|VERSION_ID|VERSION_CODENAME|ID_LIKE|HOME_URL)='
 parse:
   type: kv

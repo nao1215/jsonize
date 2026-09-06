@@ -1,0 +1,3 @@
+source: "`dpkg -l` on Ubuntu 26.04 (dpkg 1.23.7) with LC_ALL=C, cut to the first 25 lines with head"
+os: linux
+args: ["-l"]

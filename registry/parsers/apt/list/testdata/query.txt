@@ -1,0 +1,7 @@
+Listing...
+bash/resolute,now 5.3-2ubuntu1 amd64 [installed,automatic]
+bash/resolute 5.3-2ubuntu1 i386
+tcsh/resolute 6.24.13-2.1 amd64
+vim-nox/resolute-updates,resolute-security 2:9.1.2141-1ubuntu4.8 amd64
+vim-nox/resolute-updates,resolute-security 2:9.1.2141-1ubuntu4.8 i386
+zsh/resolute 5.9-8ubuntu3 amd64

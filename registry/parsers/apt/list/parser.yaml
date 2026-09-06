@@ -1,0 +1,34 @@
+# `apt list` writes "name/suites version architecture [states]". The
+# suites and the bracketed states are comma separated lists, so both
+# become arrays; a state can carry a colon ("upgradable to: 1.2") and is
+# kept as the text apt printed. The brackets are absent for a package
+# that is only available, which is why the group is optional.
+format: 1
+command: apt
+variant: list
+description: apt list package table
+metadata:
+  tags: [linux, package, debian]
+  compatible: [apt]
+  references:
+    - https://manpages.debian.org/apt.8
+detect:
+  os: [linux]
+  args:
+    all: ["list"]
+  signature:
+    all:
+      - '\AListing\.\.\.[ \t]*$'
+      - '(?m)^[^/ \t]+/\S+[ \t]+\S+[ \t]+\S+'
+input:
+  ignore:
+    - '^Listing\.\.\.[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<name>[^/ \t]+)/(?P<suites>\S+)[ \t]+(?P<version>\S+)[ \t]+(?P<architecture>\S+)(?:[ \t]+\[(?P<states>[^\]]*)\])?[ \t]*$'
+fields:
+  name: {required: true}
+  suites: {type: array, split: ","}
+  version: {required: true}
+  architecture: {required: true}
+  states: {type: array, split: ",", when_missing: omit}

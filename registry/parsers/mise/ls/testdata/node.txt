@@ -1,0 +1,4 @@
+node  22.21.1
+node  22.22.1  ~/.config/mise/config.toml  22
+node  24.3.0
+node  26.1.0

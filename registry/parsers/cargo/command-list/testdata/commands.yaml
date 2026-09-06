@@ -1,0 +1,4 @@
+description: Includes subcommands installed with cargo install, which print no description.
+source: "`cargo --list` with cargo 1.98.0 on Ubuntu 26.04 with LC_ALL=C"
+os: linux
+args: ["--list"]

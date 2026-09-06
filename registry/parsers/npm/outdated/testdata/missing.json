@@ -1,0 +1,18 @@
+[
+  {
+    "package": "chalk",
+    "current": "4.1.0",
+    "wanted": "4.1.0",
+    "latest": "6.0.0",
+    "location": "node_modules/chalk",
+    "depended_by": "broken-app"
+  },
+  {
+    "package": "semver",
+    "current": null,
+    "wanted": "7.8.5",
+    "latest": "7.8.5",
+    "location": null,
+    "depended_by": "broken-app"
+  }
+]

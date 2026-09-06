@@ -1,0 +1,33 @@
+# `cargo --list` names every subcommand cargo can run. A built-in has a
+# description, an alias has "alias: <target>" in its place, and a
+# subcommand found on PATH has neither, so the three shapes are three
+# alternatives rather than one expression guessing at the tail.
+format: 1
+command: cargo
+variant: command-list
+description: cargo --list available subcommands
+metadata:
+  tags: [rust, toolchain]
+  compatible: [cargo]
+  references:
+    - https://doc.rust-lang.org/cargo/commands/cargo.html
+detect:
+  args:
+    any: ["--list"]
+  signature:
+    all:
+      - '\AInstalled Commands:[ \t]*$'
+      - '(?m)^[ \t]+\S+'
+input:
+  ignore:
+    - '^Installed Commands:[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    - '^[ \t]+(?P<command>\S+)[ \t]+alias:[ \t]+(?P<alias_for>\S+)[ \t]*$'
+    - '^[ \t]+(?P<command>\S+)[ \t]+(?P<description>.+?)[ \t]*$'
+    - '^[ \t]+(?P<command>\S+)[ \t]*$'
+fields:
+  command: {required: true}
+  alias_for: {when_missing: omit}
+  description: {when_missing: omit}
