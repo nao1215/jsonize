@@ -202,6 +202,9 @@ func TestHelpListsEveryOptionOnce(t *testing.T) {
 		"-h, --help",
 		"run a command and convert its stdout to JSON",
 		"df -h | jz",
+		"Documentation:   https://nao1215.github.io/jsonize/",
+		"Report an issue: https://github.com/nao1215/jsonize/issues",
+		"GitHub Sponsors: https://github.com/sponsors/nao1215",
 	} {
 		if !strings.Contains(help, want) {
 			t.Errorf("help missing %q:\n%s", want, help)
@@ -400,6 +403,11 @@ func TestUsageAndVersion(t *testing.T) {
 	for _, sub := range []string{"run", "list"} {
 		if code := h.run(sub, "--help"); code != ExitOK || !strings.Contains(h.stdout.String(), "Usage: jz "+sub) {
 			t.Errorf("%s --help: %d %q", sub, code, h.stdout.String())
+		}
+		// Every help ends with where to read more and where to help out.
+		if !strings.Contains(h.stdout.String(), "GitHub Sponsors: https://github.com/sponsors/nao1215") ||
+			!strings.Contains(h.stdout.String(), "https://nao1215.github.io/jsonize/") {
+			t.Errorf("%s --help is missing the project links:\n%s", sub, h.stdout.String())
 		}
 		if code := h.run(sub, "--no-such-option"); code != ExitUsage {
 			t.Errorf("%s bad option: %d", sub, code)

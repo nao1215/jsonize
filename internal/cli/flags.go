@@ -124,6 +124,8 @@ func (a *app) parse(o *optionSet, args []string, usage string) (int, bool) {
 	if errors.Is(err, flag.ErrHelp) {
 		fmt.Fprint(a.env.Stdout, usage)
 		o.print(a.env.Stdout)
+		fmt.Fprintln(a.env.Stdout)
+		printLinks(a.env.Stdout)
 		return ExitOK, true
 	}
 	if err != nil {

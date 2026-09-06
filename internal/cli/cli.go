@@ -159,6 +159,18 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Exit codes: 0 ok, 1 error, 2 usage, 3 parse failure, 4 unidentified or")
 	fmt.Fprintln(w, "ambiguous input, 5 registry problem; `jz run` mirrors the command's own status.")
+	fmt.Fprintln(w)
+	fmt.Fprintln(w, "Run `jz run --help` or `jz list --help` for a subcommand's own options.")
+	fmt.Fprintln(w)
+	printLinks(w)
+}
+
+// printLinks closes the help with where to read more, where to report a
+// problem and where to support the work.
+func printLinks(w io.Writer) {
+	fmt.Fprintln(w, "Documentation:   https://nao1215.github.io/jsonize/")
+	fmt.Fprintln(w, "Report an issue: https://github.com/nao1215/jsonize/issues")
+	fmt.Fprintln(w, "GitHub Sponsors: https://github.com/sponsors/nao1215")
 }
 
 // printOptions lists the options of the default (conversion) mode, which

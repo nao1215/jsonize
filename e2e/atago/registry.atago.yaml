@@ -83,6 +83,24 @@ scenarios:
               - { path: "$[-1].name", equals: embedded }
               - { path: "$[-1].present", equals: true }
 
+  - name: help points at the documentation, the issue tracker and sponsors
+    steps:
+      - run:
+          command: jz --help
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "Documentation:   https://nao1215.github.io/jsonize/"
+      - assert:
+          stdout:
+            contains: "GitHub Sponsors: https://github.com/sponsors/nao1215"
+      - run:
+          command: jz run --help
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "Report an issue: https://github.com/nao1215/jsonize/issues"
+
   - name: version reports the binary and the definition format it reads
     steps:
       - run:
