@@ -1,6 +1,7 @@
 ---
 title: Parsers
 description: The commands jsonize reads today, and how it decides which definition applies.
+toc: true
 ---
 
 `jz list` prints the table below from the binary you have. `jz list df`

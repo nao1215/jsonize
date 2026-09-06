@@ -1,6 +1,7 @@
 ---
 title: Write a parser
 description: How to add a parser to jsonize with YAML and a fixture, and how to contribute it.
+toc: true
 ---
 
 This is the walkthrough for a pull request that adds `lsof` support, but

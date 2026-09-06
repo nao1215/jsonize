@@ -1,6 +1,7 @@
 ---
 title: Design
 description: The decisions behind jsonize, the alternatives considered and what was left out.
+toc: true
 ---
 
 This document records the decisions behind jsonize, the alternatives that

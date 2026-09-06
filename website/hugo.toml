@@ -1,6 +1,6 @@
-# Documentation site for jsonize, published to GitHub Pages. The pages are
-# written here rather than in a docs/ directory so the repository keeps one
-# place for prose and the site is the thing people read.
+# Configuration for the hosted documentation website (GitHub Pages).
+# Content lives here rather than in a docs/ directory, so the site is the
+# one place the prose is kept and the repository does not carry two.
 baseURL = "https://nao1215.github.io/jsonize/"
 locale = "en"
 title = "jsonize"
@@ -10,11 +10,10 @@ timeZone = "UTC"
 
 [params]
 tagline = "Turn command output into JSON"
-description = "jsonize (jz) reads the output of a command, works out which command produced it, and writes JSON. Parsers are YAML definitions, not code."
+description = "jsonize (jz) reads what a command printed, works out which command printed it, and writes JSON. Parsers are YAML definitions, not code."
 
 [markup.highlight]
 noClasses = false
-style = "github"
 
 [markup.tableOfContents]
 startLevel = 2
@@ -50,12 +49,7 @@ name = "Design"
 pageRef = "/design"
 weight = 60
 
-# The demo recording lives beside its vhs script at the repository root, and
-# is mounted here so the site and the README can share one file.
-[[module.mounts]]
-source = "assets"
-target = "assets"
-
+[module]
 [[module.mounts]]
 source = "content"
 target = "content"
@@ -64,6 +58,14 @@ target = "content"
 source = "layouts"
 target = "layouts"
 
+[[module.mounts]]
+source = "assets"
+target = "assets"
+
+# The demo recording lives beside the vhs script that produces it, so the
+# README and the site serve the same file and neither can go stale on its
+# own. Declaring any mount replaces Hugo's implicit static mount, which is
+# why this is named explicitly.
 [[module.mounts]]
 source = "../demo"
 target = "static/demo"

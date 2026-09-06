@@ -1,6 +1,7 @@
 ---
 title: Usage
 description: The two ways to give jz input, the options it takes, and what its exit codes mean.
+toc: true
 ---
 
 ## Two ways in

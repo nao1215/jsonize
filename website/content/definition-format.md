@@ -1,6 +1,7 @@
 ---
 title: Definition format
 description: "The YAML a parser definition is written in: detection, parsing and field conversion."
+toc: true
 ---
 
 A parser definition is one YAML document, `parser.yaml`, stored at
