@@ -1,5 +1,11 @@
 # "path: description". The path column is padded when several files are
 # named, so the colon is what separates them, not the spacing.
+#
+# One line of that shape is far too little evidence on its own, so the
+# signature also asks that no line lacks the separator: file prints one
+# "path: description" line per file and nothing else, while a report that
+# only opens with a labelled line (an archive listing announcing its
+# archive) has rows underneath that carry no colon followed by a space.
 format: 1
 command: file
 variant: posix
@@ -13,7 +19,28 @@ detect:
   auto_detect: false
   signature:
     all:
-      - '\A\S+:\s+\S'
+      # The description follows on the same line. \s would also match the
+      # newline, which let "root:x:0:" from /etc/group through.
+      - '\A\S+:[ \t]+\S'
+    none:
+      # blkid prints "DEVICE: KEY="value" KEY="value"", which is the same
+      # shape. A file(1) description never opens with an assignment.
+      - '\A\S+:\s+[A-Z_]+="'
+      # What stands left of the colon is a path. The label blocks that
+      # share this shape (lscpu, hostnamectl, upower) name a property
+      # instead, and a property name has spaces in it: "CPU op-mode(s)".
+      # A path with a space in it is not readable here either way, since
+      # the padding between the columns is what the description is cut
+      # from.
+      - '^[^:\n]* [^:\n]*:[ \t]'
+      # No line may lack the separator. A report that merely opens with a
+      # labelled line, such as an archive listing announcing its archive,
+      # has rows underneath that carry no colon followed by a space.
+      - '^(?:[^:\n]|:[^ \t\n])*$'
+      # `ethtool -i` opens with "driver: <name>" and "version: <name>",
+      # which are properties of an interface rather than a path and the
+      # description of what is stored there.
+      - '\Adriver:[ \t]+\S+\nversion:[ \t]'
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'

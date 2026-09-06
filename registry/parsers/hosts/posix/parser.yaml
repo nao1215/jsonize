@@ -14,9 +14,16 @@ detect:
   auto_detect: false
   signature:
     all:
-      # An IPv4 address or an IPv6 one, which has to contain a colon:
-      # bare hex digits would also describe a tab separated number.
-      - '^(?:\d+\.\d+\.\d+\.\d+|[0-9a-fA-F]*:[0-9a-fA-F:]*)\s+\S'
+      # An IPv4 address, or an IPv6 one written either with the "::" run
+      # of zeroes or in full. Colon separated hex digits alone describe a
+      # clock as well, which is how "12:34  up 3 days" from uptime(1) and
+      # "19:36:15     CPU  %usr" from mpstat(1) read as an address
+      # followed by names.
+      - '^(?:\d+\.\d+\.\d+\.\d+|[0-9a-fA-F]*::[0-9a-fA-F:]*|(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})(?:%\S+)?[ \t]+\S'
+    none:
+      # `ip neighbour` prints "ADDRESS dev INTERFACE lladdr ... STATE",
+      # which is an address followed by words as well.
+      - '^\S+[ \t]+dev[ \t]+\S+[ \t]+(?:lladdr|PERMANENT|NOARP|REACHABLE|STALE|DELAY|PROBE|INCOMPLETE|FAILED|NONE)(?:[ \t]|$)'
 input:
   ignore:
     - '^\s*#'
