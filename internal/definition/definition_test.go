@@ -225,8 +225,12 @@ fields:
 	}
 }
 
+// This test is deliberately not parallel, and neither are its subtests.
+// Decoding this many documents at once has crashed the YAML library on
+// Windows with Go 1.26 (a fault inside its decodeMap, which recover
+// cannot catch). jz reads a registry one definition at a time, so the
+// concurrency here bought nothing but a flaky build.
 func TestLoadErrors(t *testing.T) {
-	t.Parallel()
 	base := "format: 1\ncommand: c\nvariant: v\nparse: {type: kv}\n"
 	tests := []struct {
 		name string
@@ -323,7 +327,6 @@ func TestLoadErrors(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
 			_, err := Load([]byte(tt.src), tt.name+".yaml")
 			if err == nil {
 				t.Fatalf("expected error containing %q", tt.want)
