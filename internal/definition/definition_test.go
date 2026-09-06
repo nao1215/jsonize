@@ -4,7 +4,6 @@ import (
 	"errors"
 	"strings"
 	"testing"
-
 )
 
 const validTable = `

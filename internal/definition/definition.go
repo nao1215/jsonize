@@ -282,8 +282,8 @@ type Parse struct {
 	// Unquote removes one matching pair of surrounding quotes from the
 	// value, for the shell-quoted files (/etc/os-release) whose quotes
 	// are syntax rather than content.
-	Unquote   bool   `yaml:"unquote,omitempty"`
-	As        string `yaml:"as,omitempty"`
+	Unquote bool   `yaml:"unquote,omitempty"`
+	As      string `yaml:"as,omitempty"`
 
 	// composite, records
 	Parts []Part `yaml:"parts,omitempty"`
