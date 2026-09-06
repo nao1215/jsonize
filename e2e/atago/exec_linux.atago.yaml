@@ -155,3 +155,27 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].type", equals: Mem }
+
+  - name: lscpu lands on the label format, and its other output formats do not
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run lscpu
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              # Which labels lscpu prints depends on the CPU; the first
+              # one is the architecture everywhere.
+              - { path: "$[0].name", equals: Architecture }
+              - { path: "$[0].value", matches: "^\\S+$" }
+      # -p prints comma separated records. No definition reads that, and
+      # the label one must not be stretched over it.
+      - run:
+          command: jz run lscpu -p
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: no lscpu variant matches this input

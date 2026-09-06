@@ -1,0 +1,4 @@
+description: lscpu --bytes prints the cache sizes as plain byte counts; the rest of the format is unchanged, so it is the same variant.
+source: captured on Ubuntu with util-linux 2.41.3 (AMD x86_64) with LC_ALL=C
+os: linux
+args: ["--bytes"]

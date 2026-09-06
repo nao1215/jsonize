@@ -157,6 +157,21 @@ scenarios:
           stderr:
             not_contains: "--force"
 
+  - name: naming lscpu does not push its comma separated format through
+    steps:
+      - fixture:
+          file: lscpu-parsable.txt
+          from: "${specdir}/testdata/lscpu-parsable.txt"
+      - run:
+          command: jz --parser lscpu
+          stdin: {file: lscpu-parsable.txt}
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: no lscpu variant matches this input
+
   - name: a parse failure names the line and the field, and prints no JSON
     steps:
       - run:
