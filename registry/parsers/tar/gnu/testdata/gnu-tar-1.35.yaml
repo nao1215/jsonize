@@ -1,0 +1,9 @@
+description: |
+  A throwaway archive built for this fixture: directories, an empty
+  member, a symbolic link, a name with a space, a name with a backslash
+  that tar prints escaped, a Japanese name that tar prints as octal
+  escapes under LC_ALL=C, and a member nine directories deep with a long
+  leaf name. Owner and group were set to alice with --owner/--group.
+source: captured on Ubuntu 26.04 with GNU tar 1.35, LC_ALL=C tar -tvf
+os: linux
+args: [-tvf]

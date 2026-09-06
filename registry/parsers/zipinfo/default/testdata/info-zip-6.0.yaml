@@ -1,0 +1,7 @@
+description: |
+  The archive the unzip fixtures list, read by zipinfo: directories, an
+  empty member, a name with a space, a name with a backslash, a Japanese
+  name and a member nine directories deep with a long leaf name.
+source: captured on Ubuntu 26.04 with Info-ZIP ZipInfo 3.00, LC_ALL=C zipinfo
+os: linux
+args: []

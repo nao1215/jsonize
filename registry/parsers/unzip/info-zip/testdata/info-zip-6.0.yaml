@@ -1,0 +1,7 @@
+description: |
+  A throwaway archive built for this fixture: directories, an empty
+  member, a name with a space, a name with a backslash, a Japanese name
+  and a member nine directories deep with a long leaf name.
+source: captured on Ubuntu 26.04 with Info-ZIP UnZip 6.00, LC_ALL=C unzip -l
+os: linux
+args: [-l]

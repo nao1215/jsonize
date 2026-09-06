@@ -1,0 +1,17 @@
+[
+  {
+    "checksum": 1242720411,
+    "size": 15,
+    "file": "two words.txt"
+  },
+  {
+    "escaped": true,
+    "checksum": 1872435470,
+    "size": 15,
+    "file": "back\\\\slash.txt"
+  },
+  {
+    "checksum": 200774583,
+    "size": 14
+  }
+]

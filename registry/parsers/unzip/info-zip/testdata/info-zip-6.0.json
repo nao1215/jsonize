@@ -1,0 +1,128 @@
+[
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/"
+  },
+  {
+    "length": 15,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/back\\slash.txt"
+  },
+  {
+    "length": 14,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/link.txt"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/empty.bin"
+  },
+  {
+    "length": 15,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/two words.txt"
+  },
+  {
+    "length": 12,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/data.csv"
+  },
+  {
+    "length": 14,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/README.txt"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/path/"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/path/for/"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/path/for/boundary/"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/path/for/boundary/testing/"
+  },
+  {
+    "length": 2,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/path/for/boundary/testing/leaf-file-with-a-rather-long-name.txt"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/docs/"
+  },
+  {
+    "length": 21,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/docs/日本語.txt"
+  },
+  {
+    "length": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/docs/manual/"
+  },
+  {
+    "length": 12,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/docs/manual/chapter.txt"
+  }
+]

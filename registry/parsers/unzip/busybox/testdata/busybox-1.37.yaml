@@ -1,0 +1,7 @@
+description: |
+  The same archive the unzip/info-zip fixture lists, read by BusyBox: the
+  date is MM-DD-YYYY and the Japanese member name arrives as question
+  marks because the applet cannot represent it under LC_ALL=C.
+source: captured on Ubuntu 26.04 with BusyBox v1.37.0, LC_ALL=C busybox unzip -l
+os: linux
+args: [-l]

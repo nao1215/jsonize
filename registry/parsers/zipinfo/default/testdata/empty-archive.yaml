@@ -1,0 +1,8 @@
+description: |
+  An archive with every member deleted. zipinfo still prints its header
+  and then "Empty zipfile."; the member list is empty, so the result is
+  an empty array. zipinfo exits 1 on such an archive, which jz run
+  mirrors.
+source: captured on Ubuntu 26.04 with Info-ZIP ZipInfo 3.00, LC_ALL=C zipinfo
+os: linux
+args: []

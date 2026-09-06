@@ -1,0 +1,43 @@
+# cksum prints a CRC, the size in bytes and the file name. Three
+# whitespace separated cells, two of them numbers, is the shape of most
+# columnar reports, so jz does not claim this format on its own:
+# `jz --parser cksum` or `jz run cksum` says what produced it, and the
+# signature then checks that the text really has that shape.
+#
+# Reading standard input leaves out the name, so the second pattern
+# covers the two cell line and file is absent from the object it makes.
+# A name containing a backslash or a newline is printed escaped, with a
+# backslash in front of the CRC to mark it; escaped is true on such a
+# line and absent everywhere else.
+#
+# `cksum -a <algorithm>` prints a tagged line instead ("SHA256 (f) = ...")
+# and is not read here.
+#
+# The cells are separated by exactly one space, never a tab and never
+# padding, so the signature asks for single spaces. That is what keeps
+# this definition from claiming a tab separated report such as
+# `git diff --numstat`, which has the same three cell shape.
+format: 1
+command: cksum
+variant: posix
+description: cksum CRC, byte count and file name
+metadata:
+  tags: [linux, darwin, checksum]
+  compatible: [GNU coreutils, uutils coreutils]
+  references:
+    - https://man7.org/linux/man-pages/man1/cksum.1.html
+detect:
+  auto_detect: false
+  signature:
+    all:
+      - '\A\\?\d+ \d+(?: \S|$)'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<escaped>\\)?(?P<checksum>\d+)[ \t]+(?P<size>\d+)[ \t]+(?P<file>.+)$'
+    - '^(?P<escaped>\\)?(?P<checksum>\d+)[ \t]+(?P<size>\d+)[ \t]*$'
+fields:
+  escaped: {type: bool, true_values: ["\\"], when_missing: omit}
+  checksum: {type: int, required: true}
+  size: {type: int, required: true}
+  file: {when_missing: omit}

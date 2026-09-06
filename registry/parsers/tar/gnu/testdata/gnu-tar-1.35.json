@@ -1,0 +1,192 @@
+[
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 15,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/back\\\\slash.txt"
+  },
+  {
+    "mode": "lrwxrwxrwx",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/link.txt",
+    "link_to": "README.txt"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/empty.bin"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 15,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/two words.txt"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 12,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/data.csv"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 14,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/README.txt"
+  },
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/"
+  },
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/"
+  },
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/"
+  },
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/"
+  },
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/"
+  },
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/path/"
+  },
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/path/for/"
+  },
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/path/for/boundary/"
+  },
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/path/for/boundary/testing/"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 2,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/deep/very/long/nested/directory/path/for/boundary/testing/leaf-file-with-a-rather-long-name.txt"
+  },
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/docs/"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 21,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/docs/\\346\\227\\245\\346\\234\\254\\350\\252\\236.txt"
+  },
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/docs/manual/"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 12,
+    "date": "2026-01-15",
+    "time": "09:30",
+    "name": "src/docs/manual/chapter.txt"
+  }
+]

@@ -1,0 +1,6 @@
+description: |
+  An archive holding one member, where the totals line reads "1 file"
+  rather than "N files".
+source: captured on Ubuntu 26.04 with Info-ZIP UnZip 6.00, LC_ALL=C unzip -l
+os: linux
+args: [-l]

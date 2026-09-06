@@ -1,0 +1,7 @@
+description: |
+  The archive the tar/gnu fixture lists, read by BusyBox: the timestamp
+  carries seconds, and neither the backslash in a name nor the Japanese
+  name is escaped.
+source: captured on Ubuntu 26.04 with BusyBox v1.37.0, LC_ALL=C busybox tar -tvf
+os: linux
+args: [-tvf]

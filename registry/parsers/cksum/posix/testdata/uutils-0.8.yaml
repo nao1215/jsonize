@@ -1,0 +1,6 @@
+description: |
+  Four files in one run, including an empty one, whose CRC is the largest
+  value the format prints, and a Japanese file name.
+source: captured on Ubuntu 26.04 with uutils coreutils 0.8.0, LC_ALL=C cksum
+os: linux
+args: []

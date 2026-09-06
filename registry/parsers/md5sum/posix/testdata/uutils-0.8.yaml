@@ -1,0 +1,6 @@
+description: |
+  Four files hashed in one run, including an empty one and a Japanese
+  file name.
+source: captured on Ubuntu 26.04 with uutils coreutils 0.8.0, LC_ALL=C md5sum
+os: linux
+args: []

@@ -1,0 +1,38 @@
+# `unzip -l` prints one row per archive member: the uncompressed length,
+# the modification date and time, and the name. The banner, the rules and
+# the totals line carry nothing the rows do not, so they are dropped and
+# the result is the member list alone.
+#
+# Info-ZIP writes the date as YYYY-MM-DD. BusyBox unzip prints the same
+# header with MM-DD-YYYY, so the date shape is what separates this
+# definition from unzip/busybox; both signatures require a data row.
+#
+# The name runs to the end of the line, so a member whose name contains
+# spaces is kept whole. The length is the uncompressed size in bytes; the
+# compressed size is not in this format (`unzip -v` prints it).
+format: 1
+command: unzip
+variant: info-zip
+description: Info-ZIP unzip -l archive listing
+metadata:
+  tags: [linux, darwin, archive]
+  compatible: [Info-ZIP unzip]
+  references:
+    - https://manpages.debian.org/unstable/unzip/unzip.1.en.html
+detect:
+  signature:
+    all:
+      - '^[ \t]*Length[ \t]+Date[ \t]+Time[ \t]+Name[ \t]*$'
+      - '^[ \t]*\d+[ \t]+\d{4}-\d{2}-\d{2}[ \t]+\d{2}:\d{2}[ \t]'
+input:
+  ignore:
+    - '^Archive:[ \t]'
+    - '^[ \t]*Length[ \t]+Date[ \t]+Time[ \t]+Name[ \t]*$'
+    - '^[ \t]*-{3,}'
+    - '^[ \t]*\d+[ \t]+\d+ files?$'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<length>\d+)[ \t]+(?P<date>\d{4}-\d{2}-\d{2})[ \t]+(?P<time>\d{2}:\d{2})[ \t]+(?P<name>.+)$'
+fields:
+  length: {type: int, required: true}
+  name: {required: true}

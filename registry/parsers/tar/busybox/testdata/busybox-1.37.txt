@@ -1,0 +1,21 @@
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/
+-rw-rw-r-- alice/alice        15 2026-01-15 09:30:00 src/back\slash.txt
+lrwxrwxrwx alice/alice         0 2026-01-15 09:30:00 src/link.txt -> README.txt
+-rw-rw-r-- alice/alice         0 2026-01-15 09:30:00 src/empty.bin
+-rw-rw-r-- alice/alice        15 2026-01-15 09:30:00 src/two words.txt
+-rw-rw-r-- alice/alice        12 2026-01-15 09:30:00 src/data.csv
+-rw-rw-r-- alice/alice        14 2026-01-15 09:30:00 src/README.txt
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/deep/
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/deep/very/
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/deep/very/long/
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/deep/very/long/nested/
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/deep/very/long/nested/directory/
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/deep/very/long/nested/directory/path/
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/deep/very/long/nested/directory/path/for/
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/deep/very/long/nested/directory/path/for/boundary/
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/deep/very/long/nested/directory/path/for/boundary/testing/
+-rw-rw-r-- alice/alice         2 2026-01-15 09:30:00 src/deep/very/long/nested/directory/path/for/boundary/testing/leaf-file-with-a-rather-long-name.txt
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/docs/
+-rw-rw-r-- alice/alice        21 2026-01-15 09:30:00 src/docs/日本語.txt
+drwxrwxr-x alice/alice         0 2026-01-15 09:30:00 src/docs/manual/
+-rw-rw-r-- alice/alice        12 2026-01-15 09:30:00 src/docs/manual/chapter.txt

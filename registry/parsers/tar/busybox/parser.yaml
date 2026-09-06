@@ -1,0 +1,29 @@
+# BusyBox `tar -tvf` prints the same columns as GNU tar but includes
+# seconds in the timestamp (09:30:00 rather than 09:30). That is the only
+# difference visible in a listing, and it is what keeps the two
+# definitions exclusive.
+#
+# BusyBox does not escape a name containing a backslash or a non-ASCII
+# byte, so a name is the bytes tar read from the archive.
+format: 1
+command: tar
+variant: busybox
+description: BusyBox tar -tvf archive listing
+metadata:
+  tags: [linux, archive]
+  compatible: [BusyBox]
+  references:
+    - https://busybox.net/downloads/BusyBox.html
+detect:
+  signature:
+    all:
+      - '^[-dlcbps][-rwxsStT]{9}[ \t]+[^ \t/]*/[^ \t]*[ \t]+\d+[ \t]+\d{4}-\d{2}-\d{2}[ \t]+\d{2}:\d{2}:\d{2}[ \t]'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<mode>l[-rwxsStT]{9})[ \t]+(?P<owner>[^ \t/]*)/(?P<group>[^ \t]*)[ \t]+(?P<size>\d+)[ \t]+(?P<date>\d{4}-\d{2}-\d{2})[ \t]+(?P<time>\d{2}:\d{2}:\d{2})[ \t]+(?P<name>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<mode>[-dlcbps][-rwxsStT]{9})[ \t]+(?P<owner>[^ \t/]*)/(?P<group>[^ \t]*)[ \t]+(?P<size>\d+)[ \t]+(?P<date>\d{4}-\d{2}-\d{2})[ \t]+(?P<time>\d{2}:\d{2}:\d{2})[ \t]+(?P<name>.+)$'
+fields:
+  size: {type: int, required: true}
+  name: {required: true}
+  link_to: {when_missing: omit}

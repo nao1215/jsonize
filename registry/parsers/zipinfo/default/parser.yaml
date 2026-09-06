@@ -1,0 +1,39 @@
+# zipinfo with no format option prints its short listing: the unix
+# permissions the member was stored with, the zip version and host system
+# that wrote it, the uncompressed size, two attribute characters, the
+# compression method, the modification date and time, and the name.
+#
+# The two attribute characters are reported as one string because that is
+# how zipinfo documents them: the first is t or b for a text or binary
+# member, the second is x for an extra field, l for a comment, or - for
+# neither, and either may be upper case when the member has an extended
+# local header.
+#
+# The banner, the "Zip file size" line and the trailing totals carry
+# nothing the rows do not. "Empty zipfile." is dropped too, so an archive
+# with no members reads as an empty list rather than an error.
+format: 1
+command: zipinfo
+variant: default
+description: zipinfo short archive listing
+metadata:
+  tags: [linux, darwin, archive]
+  compatible: [Info-ZIP zipinfo]
+  references:
+    - https://manpages.debian.org/unstable/unzip/zipinfo.1.en.html
+detect:
+  signature:
+    all:
+      - '^Zip file size: \d+ bytes, number of entries: \d+$'
+input:
+  ignore:
+    - '^Archive:[ \t]'
+    - '^Zip file size: '
+    - '^\d+ files?, \d+ bytes uncompressed'
+    - '^Empty zipfile\.$'
+parse:
+  type: regex
+  pattern: '^(?P<mode>[-dlcbps][-rwxsStT]{9})[ \t]+(?P<version>\S+)[ \t]+(?P<os>\S+)[ \t]+(?P<size>\d+)[ \t]+(?P<attributes>\S\S)[ \t]+(?P<method>\S+)[ \t]+(?P<date>\d{2}-[A-Za-z]{3}-\d{2})[ \t]+(?P<time>\d{2}:\d{2})[ \t]+(?P<name>.+)$'
+fields:
+  size: {type: int, required: true}
+  name: {required: true}

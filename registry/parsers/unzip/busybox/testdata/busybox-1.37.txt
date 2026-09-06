@@ -1,0 +1,26 @@
+Archive:  sample.zip
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+        0  01-15-2026 09:30   src/
+       15  01-15-2026 09:30   src/back\slash.txt
+       14  01-15-2026 09:30   src/link.txt
+        0  01-15-2026 09:30   src/empty.bin
+       15  01-15-2026 09:30   src/two words.txt
+       12  01-15-2026 09:30   src/data.csv
+       14  01-15-2026 09:30   src/README.txt
+        0  01-15-2026 09:30   src/deep/
+        0  01-15-2026 09:30   src/deep/very/
+        0  01-15-2026 09:30   src/deep/very/long/
+        0  01-15-2026 09:30   src/deep/very/long/nested/
+        0  01-15-2026 09:30   src/deep/very/long/nested/directory/
+        0  01-15-2026 09:30   src/deep/very/long/nested/directory/path/
+        0  01-15-2026 09:30   src/deep/very/long/nested/directory/path/for/
+        0  01-15-2026 09:30   src/deep/very/long/nested/directory/path/for/boundary/
+        0  01-15-2026 09:30   src/deep/very/long/nested/directory/path/for/boundary/testing/
+        2  01-15-2026 09:30   src/deep/very/long/nested/directory/path/for/boundary/testing/leaf-file-with-a-rather-long-name.txt
+        0  01-15-2026 09:30   src/docs/
+       21  01-15-2026 09:30   src/docs/?????????.txt
+        0  01-15-2026 09:30   src/docs/manual/
+       12  01-15-2026 09:30   src/docs/manual/chapter.txt
+ --------                     -------
+      105                     21 files

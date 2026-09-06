@@ -1,0 +1,4 @@
+description: An archive holding one member, the shortest listing tar prints.
+source: captured on Ubuntu 26.04 with GNU tar 1.35, LC_ALL=C tar -tvf
+os: linux
+args: [-tvf]
