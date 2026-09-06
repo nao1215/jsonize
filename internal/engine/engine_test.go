@@ -427,6 +427,52 @@ fields:
 	}
 }
 
+func TestParseRecords(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: blocks
+parse:
+  type: records
+  start: '^\S'
+  parts:
+    - name: head
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^(?P<name>\S+)$'
+    - name: items
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^\s+(?P<item>\S+)$'
+`)
+	got, err := Parse(def, []byte("alpha\n  one\n  two\nbeta\n  three\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	const want = `[{"head":{"name":"alpha"},"items":[{"item":"one"},{"item":"two"}]},` +
+		`{"head":{"name":"beta"},"items":[{"item":"three"}]}]`
+	if mustJSON(t, got) != want {
+		t.Error(mustJSON(t, got))
+	}
+
+	// A record with no children still produces the record.
+	got, err = Parse(def, []byte("alpha\n"), Options{})
+	if err != nil || mustJSON(t, got) != `[{"head":{"name":"alpha"},"items":[]}]` {
+		t.Errorf("childless record: %v %v", mustJSON(t, got), err)
+	}
+
+	// Text before the first record is reported rather than dropped.
+	if _, err := Parse(def, []byte("  stray\nalpha\n"), Options{}); err == nil {
+		t.Error("a line before the first record should be an error")
+	} else if !strings.Contains(err.Error(), "precedes the first record") {
+		t.Error(err)
+	}
+}
+
 func TestParseComposite(t *testing.T) {
 	t.Parallel()
 	def := load(t, `

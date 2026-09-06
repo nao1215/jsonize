@@ -1,0 +1,88 @@
+[
+  {
+    "interface": {
+      "index": 1,
+      "name": "lo",
+      "flags": [
+        "LOOPBACK",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 65536,
+      "qdisc": "noqueue",
+      "state": "UNKNOWN",
+      "mode": "DEFAULT",
+      "group": "default",
+      "qlen": 1000
+    },
+    "link": {
+      "type": "loopback",
+      "address": "00:00:00:00:00:00",
+      "broadcast": "00:00:00:00:00:00"
+    },
+    "rx": {
+      "bytes": 7335910508,
+      "packets": 6701823,
+      "errors": 0,
+      "dropped": 0,
+      "missed": 0,
+      "mcast": 0
+    },
+    "tx": {
+      "bytes": 7335910508,
+      "packets": 6701823,
+      "errors": 0,
+      "dropped": 0,
+      "carrier": 0,
+      "collsns": 0
+    },
+    "altnames": []
+  },
+  {
+    "interface": {
+      "index": 2,
+      "name": "eno1",
+      "flags": [
+        "BROADCAST",
+        "MULTICAST",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 1500,
+      "qdisc": "fq_codel",
+      "state": "UP",
+      "mode": "DEFAULT",
+      "group": "default",
+      "qlen": 1000
+    },
+    "link": {
+      "type": "ether",
+      "address": "aa:bb:cc:dd:ee:ff",
+      "broadcast": "ff:ff:ff:ff:ff:ff"
+    },
+    "rx": {
+      "bytes": 1007250705,
+      "packets": 3265360,
+      "errors": 0,
+      "dropped": 414905,
+      "missed": 0,
+      "mcast": 734844
+    },
+    "tx": {
+      "bytes": 1439574440,
+      "packets": 2474810,
+      "errors": 0,
+      "dropped": 0,
+      "carrier": 0,
+      "collsns": 0
+    },
+    "altnames": [
+      {
+        "name": "enp193s0"
+      },
+      {
+        "name": "enxaabbccddeeff"
+      }
+    ]
+  }
+]

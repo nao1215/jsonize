@@ -1,0 +1,6 @@
+7: veth0c4293d@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-088d49b64243 state UP mode DEFAULT group default 
+    link/ether aa:bb:cc:dd:ee:01 brd aa:bb:cc:dd:ee:01 link-netnsid 0
+    RX:  bytes packets errors dropped  missed   mcast           
+     554209788 4672026      0       0       0       0 
+    TX:  bytes packets errors dropped carrier collsns           
+    2259125648 3852025      0       0       0       0 

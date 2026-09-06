@@ -230,6 +230,8 @@ func (r *run) parse(p *definition.Parse, fields map[string]*definition.Field, li
 		return r.parseKV(p, fields, lines)
 	case definition.TypeComposite:
 		return r.parseComposite(p, lines)
+	case definition.TypeRecords:
+		return r.parseRecords(p, lines)
 	default:
 		return nil, r.errorf(0, "", "unsupported parse type %q", p.Type)
 	}
@@ -251,6 +253,36 @@ func (r *run) parseComposite(p *definition.Parse, lines []line) (any, error) {
 		obj.Set(part.Name, v)
 	}
 	return obj, nil
+}
+
+// parseRecords handles type: records. A line matching start opens a
+// record and everything up to the next such line belongs to it, which is
+// what a report of repeating blocks looks like: an interface followed by
+// its counters, a crate followed by its binaries. Each record is then
+// read the way composite reads a whole input, so a definition that can
+// describe one block can describe a file full of them.
+func (r *run) parseRecords(p *definition.Parse, lines []line) (any, error) {
+	start := p.CompiledStart()
+	var groups [][]line
+	for _, ln := range lines {
+		if start.MatchString(ln.text) {
+			groups = append(groups, []line{ln})
+			continue
+		}
+		if len(groups) == 0 {
+			return nil, r.errorf(ln.num, "", "line precedes the first record: %q", ln.text)
+		}
+		groups[len(groups)-1] = append(groups[len(groups)-1], ln)
+	}
+	out := make([]any, 0, len(groups))
+	for _, g := range groups {
+		v, err := r.parseComposite(p, g)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, v)
+	}
+	return out, nil
 }
 
 // parseRegex handles type: regex. Several patterns are tried in the

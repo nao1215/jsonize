@@ -233,24 +233,39 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 	switch p.Type {
 	case TypeTable:
 		validateTable(v, path, p, fields)
-		rejectKeys(v, path, p, "regex", "kv", "composite")
+		rejectKeys(v, path, p, "regex", "kv", "parts")
 	case TypeRegex:
 		validateRegexParse(v, path, p, fields)
-		rejectKeys(v, path, p, "table", "kv", "composite")
+		rejectKeys(v, path, p, "table", "kv", "parts")
 	case TypeKV:
 		validateKV(v, path, p)
-		rejectKeys(v, path, p, "table", "regex", "composite")
+		rejectKeys(v, path, p, "table", "regex", "parts")
 	case TypeComposite:
 		if depth > 0 {
 			v.add(path+".type", "composite parts cannot be composite")
 			return
 		}
+		if p.Start != "" {
+			v.add(path+".start", "only valid for type records")
+		}
+		validateComposite(v, path, p)
+		rejectKeys(v, path, p, "table", "regex", "kv")
+	case TypeRecords:
+		if depth > 0 {
+			v.add(path+".type", "records parts cannot be records")
+			return
+		}
+		if p.Start == "" {
+			v.add(path+".start", "is required for type records")
+		} else {
+			p.start = v.regex(path+".start", p.Start)
+		}
 		validateComposite(v, path, p)
 		rejectKeys(v, path, p, "table", "regex", "kv")
 	case "":
-		v.add(path+".type", "is required (table, regex, kv or composite)")
+		v.add(path+".type", "is required (table, regex, kv, composite or records)")
 	default:
-		v.add(path+".type", "unknown parse type %q (expected table, regex, kv or composite)", p.Type)
+		v.add(path+".type", "unknown parse type %q (expected table, regex, kv, composite or records)", p.Type)
 	}
 }
 
@@ -276,9 +291,12 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 			if p.Separator != "" || p.As != "" || p.Trim != nil || p.Unquote {
 				v.add(path, "separator/as/trim/unquote are only valid for type kv")
 			}
-		case "composite":
+		case "parts":
 			if len(p.Parts) > 0 {
-				v.add(path+".parts", "only valid for type composite")
+				v.add(path+".parts", "only valid for type composite or records")
+			}
+			if p.Start != "" {
+				v.add(path+".start", "only valid for type records")
 			}
 		}
 	}

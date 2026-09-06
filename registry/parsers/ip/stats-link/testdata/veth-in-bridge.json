@@ -1,0 +1,44 @@
+[
+  {
+    "interface": {
+      "index": 7,
+      "name": "veth0c4293d",
+      "peer": "if2",
+      "flags": [
+        "BROADCAST",
+        "MULTICAST",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noqueue",
+      "master": "br-088d49b64243",
+      "state": "UP",
+      "mode": "DEFAULT",
+      "group": "default"
+    },
+    "link": {
+      "type": "ether",
+      "address": "aa:bb:cc:dd:ee:01",
+      "broadcast": "aa:bb:cc:dd:ee:01",
+      "netnsid": 0
+    },
+    "rx": {
+      "bytes": 554209788,
+      "packets": 4672026,
+      "errors": 0,
+      "dropped": 0,
+      "missed": 0,
+      "mcast": 0
+    },
+    "tx": {
+      "bytes": 2259125648,
+      "packets": 3852025,
+      "errors": 0,
+      "dropped": 0,
+      "carrier": 0,
+      "collsns": 0
+    },
+    "altnames": []
+  }
+]

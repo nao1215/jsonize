@@ -1,0 +1,4 @@
+description: one interface with no alternative names, so the last part reads nothing
+source: captured on Ubuntu 26.04 (iproute2 6.x) with LC_ALL=C
+os: linux
+args: [-s, link, show, lo]

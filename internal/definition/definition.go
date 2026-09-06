@@ -24,6 +24,7 @@ const (
 	TypeRegex     = "regex"
 	TypeKV        = "kv"
 	TypeComposite = "composite"
+	TypeRecords   = "records"
 )
 
 // Table split modes.
@@ -284,14 +285,24 @@ type Parse struct {
 	Unquote   bool   `yaml:"unquote,omitempty"`
 	As        string `yaml:"as,omitempty"`
 
-	// composite
+	// composite, records
 	Parts []Part `yaml:"parts,omitempty"`
 
+	// records: a line matching Start opens a record, and everything up
+	// to the next such line belongs to it. Each record is then read the
+	// way composite reads a whole input, so the parts vocabulary is the
+	// same one.
+	Start string `yaml:"start,omitempty"`
+
 	compiled []*regexp.Regexp
+	start    *regexp.Regexp
 	// groups are the named capture groups of every pattern, in order and
 	// without duplicates.
 	groups []string
 }
+
+// CompiledStart returns the compiled expression that opens a record.
+func (p *Parse) CompiledStart() *regexp.Regexp { return p.start }
 
 // CompiledPatterns returns the compiled expressions of a regex parser in
 // the order they are tried.

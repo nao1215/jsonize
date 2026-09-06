@@ -1,0 +1,4 @@
+description: two interfaces, the second carrying two alternative names
+source: captured on Ubuntu 26.04 (iproute2 6.x) with LC_ALL=C; MAC address replaced
+os: linux
+args: [-s, link]

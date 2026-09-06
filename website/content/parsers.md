@@ -34,7 +34,7 @@ input.
 | `hostnamectl` | `linux` |
 | `id` | `posix` |
 | `iostat` | `cpu`, `device`, `linux` |
-| `ip` | `brief-address`, `brief-link`, `neighbour`, `route` |
+| `ip` | `brief-address`, `brief-link`, `neighbour`, `route`, `stats-link` |
 | `iw` | `link` |
 | `journalctl` | `short` |
 | `locale` | `posix` |

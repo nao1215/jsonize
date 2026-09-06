@@ -1,0 +1,89 @@
+# `ip -s link` prints one block per interface: a header line, the link
+# layer address, an RX counter table, a TX counter table, and however
+# many alternative names the interface has. The blocks repeat, so the
+# definition describes one of them and `records` applies it to each.
+format: 1
+command: ip
+variant: stats-link
+description: ip -s link, per-interface counters
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ip-link.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-s", "-stats", "--stats"]
+    all: ["link"]
+  signature:
+    all:
+      # An index, a name, the flag list, and the counter tables that -s
+      # adds. Without the tables this is plain `ip link`.
+      - '\A\d+: \S+: <[A-Z0-9_,-]*>'
+      - '^[ \t]+RX:[ \t]+bytes[ \t]+packets[ \t]+errors'
+      - '^[ \t]+TX:[ \t]+bytes[ \t]+packets[ \t]+errors'
+parse:
+  type: records
+  start: '^\d+: '
+  parts:
+    - name: interface
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        # A bridged interface names its bridge between the queueing
+        # discipline and the state, and a veth end names its peer after
+        # an @. Both are absent on an ordinary interface.
+        pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>\S+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+) qdisc (?P<qdisc>\S+)(?: master (?P<master>\S+))? state (?P<state>\S+) mode (?P<mode>\S+) group (?P<group>\S+)(?: qlen (?P<qlen>\d+))?\s*$'
+      fields:
+        index: {type: int}
+        mtu: {type: int}
+        qlen: {type: int, when_missing: omit}
+        master: {when_missing: omit}
+        peer: {when_missing: omit}
+        flags: {type: array, split: ","}
+    - name: link
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        # A veth end inside a namespace also reports the namespace id.
+        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
+      fields:
+        netnsid: {type: int, when_missing: omit}
+    # The header line above each table names the same columns every time,
+    # so the counters are read from the value line alone.
+    - name: rx
+      select: {skip: 3, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^\s*(?P<bytes>\d+)\s+(?P<packets>\d+)\s+(?P<errors>\d+)\s+(?P<dropped>\d+)\s+(?P<missed>\d+)\s+(?P<mcast>\d+)\s*$'
+      fields:
+        bytes: {type: int}
+        packets: {type: int}
+        errors: {type: int}
+        dropped: {type: int}
+        missed: {type: int}
+        mcast: {type: int}
+    - name: tx
+      select: {skip: 5, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^\s*(?P<bytes>\d+)\s+(?P<packets>\d+)\s+(?P<errors>\d+)\s+(?P<dropped>\d+)\s+(?P<carrier>\d+)\s+(?P<collsns>\d+)\s*$'
+      fields:
+        bytes: {type: int}
+        packets: {type: int}
+        errors: {type: int}
+        dropped: {type: int}
+        carrier: {type: int}
+        collsns: {type: int}
+    # Whatever follows the two tables is the alternative names, of which
+    # an interface may have none.
+    - name: altnames
+      select: {skip: 6}
+      parse:
+        type: regex
+        pattern: '^\s*altname (?P<name>\S+)\s*$'

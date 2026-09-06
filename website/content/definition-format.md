@@ -202,6 +202,30 @@ than content. `fields` entries are looked up by key, before any
 conversion, so the key has to be a legal field name: a format whose
 labels contain spaces or brackets (`CPU(s)`) cannot convert its values.
 
+### type: records
+
+```yaml
+parse:
+  type: records
+  start: '^\d+: '        # a line matching this opens a record
+  parts: [...]           # the same parts as composite
+```
+
+A line matching `start` opens a record and everything up to the next such
+line belongs to it, which is the shape of a report of repeating blocks:
+an interface followed by its counters, a crate followed by its binaries.
+Each record is then read the way `composite` reads a whole input, so the
+`parts` are written once and applied to every block. The result is an
+array with one object per record.
+
+Text before the first record is an error naming the line, rather than
+something quietly dropped; a banner belongs in `input.select` instead.
+
+`records` is not recursive: a part cannot itself be `records` or
+`composite`. A tree of arbitrary depth (`npm ls --all`, `iw dev`) has no
+shape jz can promise in advance, and those commands print JSON of their
+own.
+
 ### type: composite
 
 ```yaml
