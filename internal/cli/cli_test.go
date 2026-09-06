@@ -983,7 +983,13 @@ func TestGenericFormatsNeedAnExplicitParser(t *testing.T) {
 
 func TestEnvValuesAreKeptVerbatim(t *testing.T) {
 	h := newHarness(t)
-	if code := h.pipe("A=  padded  \nB=x\nC=\n"); code != ExitOK {
+	// NAME=value describes a .env file and a properties file as well, so
+	// the line form is named rather than guessed; the NUL form below is
+	// distinctive enough to be claimed on sight.
+	if code := h.pipe("A=  padded  \nB=x\nC=\n"); code != ExitSelect {
+		t.Fatalf("plain env should not be claimed: code=%d %s", code, h.stderr.String())
+	}
+	if code := h.pipe("A=  padded  \nB=x\nC=\n", "--parser", "env"); code != ExitOK {
 		t.Fatalf("code=%d %s", code, h.stderr.String())
 	}
 	rows := h.rows()

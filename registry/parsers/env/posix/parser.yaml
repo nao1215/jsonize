@@ -15,23 +15,25 @@ metadata:
   tags: [linux, darwin, environment]
   compatible: [GNU coreutils, BusyBox, macOS env]
 detect:
+  # NAME=value is the shape of a .env file, a properties file, a shell
+  # fragment and the show subcommand of half the systemd tools, so the
+  # text is not evidence that env produced it. Every format that came
+  # along wanted another none expression here, which is a list of other
+  # people's formats growing inside this one; naming the parser is the
+  # answer the rest of the registry already uses for a generic shape.
+  auto_detect: false
   signature:
     # Two consecutive NAME=value lines. One line alone is not enough:
-    # `id` also starts with "uid=...", and a single assignment is too
-    # weak a claim to convert without being asked.
+    # `id` also starts with "uid=...".
     all:
       - '^[A-Za-z_][A-Za-z0-9_]*=[^\n]*\n[A-Za-z_][A-Za-z0-9_]*='
     none:
-      # env prints values raw and never adds quotes. A quoted value comes
-      # from a program writing assignments for a shell to read: the
-      # quotes there are syntax, and reading the text as env output would
-      # leave them inside the value. /etc/os-release does this with
-      # double quotes, `go env` with single ones.
+      # env prints values raw and never adds quotes, so a quoted value
+      # means some other program wrote the assignment for a shell to
+      # read. This one stays because it is a property of env itself, and
+      # it is what makes --parser env refuse the wrong text.
       - '^[A-Za-z_][A-Za-z0-9_]*="'
       - "^[A-Za-z_][A-Za-z0-9_]*='"
-      # os-release keys are not environment variables even when its
-      # values happen to be unquoted.
-      - '^(?:PRETTY_NAME|VERSION_ID|VERSION_CODENAME|ID_LIKE|HOME_URL)='
 parse:
   type: kv
   separator: "="

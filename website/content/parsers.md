@@ -127,3 +127,8 @@ them: `df`, `free`, `ls -l`, `lsblk -b`.
 The same reasoning applies to `env`: a value containing a newline cannot
 be told from two variables in the line-based output, so `env -0 | jz`
 exists for the cases where that matters.
+
+`NAME=value` is also what a `.env` file, a properties file and a shell
+fragment look like, so the line-based form is one of the definitions jz
+will not claim on sight. `env | jz --parser env` and `jz run env` read
+it; `env -0` is distinctive and needs no name.

@@ -239,8 +239,20 @@ scenarios:
 
   - name: environment values keep their spacing, and env -0 keeps newlines
     steps:
+      # NAME=value is the shape of a .env file, a properties file and a
+      # shell fragment too, so the plain form is named rather than
+      # guessed. The NUL-separated form below is distinctive and is not.
       - run:
           command: jz
+          stdin: "A=  padded  \nB=x\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: "too generic for jz to claim on its own"
+      - run:
+          command: jz --parser env
           stdin: "A=  padded  \nB=x\n"
       - assert:
           exit_code: 0
