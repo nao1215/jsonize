@@ -20,6 +20,13 @@ detect:
       # blkid prints "DEVICE: KEY="value" KEY="value"", which is the same
       # shape. A file(1) description never opens with an assignment.
       - '\A\S+:\s+[A-Z_]+="'
+      # What stands left of the colon is a path. The label blocks that
+      # share this shape (lscpu, hostnamectl, upower) name a property
+      # instead, and a property name has spaces in it: "CPU op-mode(s)".
+      # A path with a space in it is not readable here either way, since
+      # the padding between the columns is what the description is cut
+      # from.
+      - '^[^:\n]* [^:\n]*:[ \t]'
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'
