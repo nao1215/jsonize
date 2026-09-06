@@ -20,7 +20,9 @@ detect:
     any: ["ls", "list", "la", "ll"]
   signature:
     all:
-      - '\A[^ \t]+@[^ \t]+[ \t]+\S'
+      # The root line is "name@version /path". Outside a package npm
+      # still prints the line with the version left empty.
+      - '\A[^ \t]+@[^ \t]*[ \t]+\S'
       - '(?m)^(?:\+--|`--|├──|└──)[ \t]'
 input:
   # A project with no dependencies prints one placeholder row.
@@ -34,10 +36,12 @@ parse:
       parse:
         type: regex
         each: input
-        pattern: '^(?P<name>@?[^@]+)@(?P<version>\S+)[ \t]+(?P<path>.+?)[ \t]*$'
+        # Outside a package npm prints the root line with no version.
+        pattern: '^(?P<name>@?[^@]+)@(?P<version>\S*)[ \t]+(?P<path>.+?)[ \t]*$'
       fields:
         name: {required: true}
-        version: {required: true}
+        # Empty outside a package, where npm has no version to print.
+        version: {null_if: [""]}
         path: {required: true}
     - name: dependencies
       select: {skip: 1}
