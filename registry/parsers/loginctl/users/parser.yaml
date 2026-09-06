@@ -1,0 +1,28 @@
+# `loginctl list-users` prints a different table from the session list,
+# so it is a variant of its own rather than a shape the session columns
+# could absorb. The trailing "N users listed." line is a legend.
+format: 1
+command: loginctl
+variant: users
+description: loginctl list-users table
+metadata:
+  tags: [linux, systemd, session]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/loginctl.html
+detect:
+  os: [linux]
+  args:
+    any: ["list-users"]
+  signature:
+    all:
+      - '^[ \t]*UID[ \t]+USER[ \t]+LINGER[ \t]+STATE[ \t]*$'
+input:
+  ignore:
+    - '^[0-9]+ users listed\.$'
+parse:
+  type: table
+  split: whitespace
+fields:
+  uid: {type: int}
+  linger: {type: bool}

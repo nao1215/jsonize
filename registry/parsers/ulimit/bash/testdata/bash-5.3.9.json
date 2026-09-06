@@ -1,0 +1,98 @@
+[
+  {
+    "resource": "real-time non-blocking time",
+    "unit": "microseconds",
+    "flag": "-R",
+    "value": "unlimited"
+  },
+  {
+    "resource": "core file size",
+    "unit": "blocks",
+    "flag": "-c",
+    "value": "0"
+  },
+  {
+    "resource": "data seg size",
+    "unit": "kbytes",
+    "flag": "-d",
+    "value": "unlimited"
+  },
+  {
+    "resource": "scheduling priority",
+    "flag": "-e",
+    "value": "0"
+  },
+  {
+    "resource": "file size",
+    "unit": "blocks",
+    "flag": "-f",
+    "value": "unlimited"
+  },
+  {
+    "resource": "pending signals",
+    "flag": "-i",
+    "value": "251443"
+  },
+  {
+    "resource": "max locked memory",
+    "unit": "kbytes",
+    "flag": "-l",
+    "value": "8192"
+  },
+  {
+    "resource": "max memory size",
+    "unit": "kbytes",
+    "flag": "-m",
+    "value": "unlimited"
+  },
+  {
+    "resource": "open files",
+    "flag": "-n",
+    "value": "524288"
+  },
+  {
+    "resource": "pipe size",
+    "unit": "512 bytes",
+    "flag": "-p",
+    "value": "8"
+  },
+  {
+    "resource": "POSIX message queues",
+    "unit": "bytes",
+    "flag": "-q",
+    "value": "819200"
+  },
+  {
+    "resource": "real-time priority",
+    "flag": "-r",
+    "value": "0"
+  },
+  {
+    "resource": "stack size",
+    "unit": "kbytes",
+    "flag": "-s",
+    "value": "8192"
+  },
+  {
+    "resource": "cpu time",
+    "unit": "seconds",
+    "flag": "-t",
+    "value": "unlimited"
+  },
+  {
+    "resource": "max user processes",
+    "flag": "-u",
+    "value": "251443"
+  },
+  {
+    "resource": "virtual memory",
+    "unit": "kbytes",
+    "flag": "-v",
+    "value": "unlimited"
+  },
+  {
+    "resource": "file locks",
+    "flag": "-x",
+    "value": "unlimited"
+  }
+]

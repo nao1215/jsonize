@@ -1,0 +1,54 @@
+[
+  {
+    "name": "LINK_MAX",
+    "value": "65000"
+  },
+  {
+    "name": "MAX_CANON",
+    "value": "255"
+  },
+  {
+    "name": "MAX_INPUT",
+    "value": "255"
+  },
+  {
+    "name": "NAME_MAX",
+    "value": "255"
+  },
+  {
+    "name": "PATH_MAX",
+    "value": "4096"
+  },
+  {
+    "name": "PIPE_BUF",
+    "value": "4096"
+  },
+  {
+    "name": "SOCK_MAXBUF",
+    "value": null
+  },
+  {
+    "name": "_POSIX_ASYNC_IO",
+    "value": null
+  },
+  {
+    "name": "_POSIX_CHOWN_RESTRICTED",
+    "value": "1"
+  },
+  {
+    "name": "_POSIX_NO_TRUNC",
+    "value": "1"
+  },
+  {
+    "name": "_POSIX_PRIO_IO",
+    "value": null
+  },
+  {
+    "name": "_POSIX_SYNC_IO",
+    "value": null
+  },
+  {
+    "name": "_POSIX_VDISABLE",
+    "value": "0"
+  }
+]

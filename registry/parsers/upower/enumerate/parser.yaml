@@ -1,0 +1,23 @@
+# `upower -e` prints one D-Bus object path per line. The paths are the
+# argument `upower -i` takes, so they are worth a name of their own.
+format: 1
+command: upower
+variant: enumerate
+description: upower -e device object paths
+metadata:
+  tags: [linux, power, upower]
+  compatible: [UPower]
+  references:
+    - https://upower.freedesktop.org/docs/
+detect:
+  os: [linux]
+  args:
+    any: ["-e", "--enumerate"]
+  signature:
+    all:
+      - '\A/org/freedesktop/UPower/devices/\S'
+parse:
+  type: regex
+  pattern: '^(?P<device>/org/freedesktop/UPower/devices/\S+)$'
+fields:
+  device: {required: true}

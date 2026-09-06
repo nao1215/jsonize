@@ -1,0 +1,33 @@
+# `ulimit -a` as dash and the BusyBox shells print it: the resource name
+# with its unit in parentheses, then the limit. Four resources (process,
+# nofiles, locks, rtprio) are counts and carry no unit, so the unit is
+# absent from those objects rather than null.
+#
+# A limit is either a number or the word unlimited, so the value stays
+# the string that was printed instead of becoming a number that has to
+# encode "no limit" somehow.
+format: 1
+command: ulimit
+variant: dash
+description: ulimit -a resource limits as dash prints them
+metadata:
+  tags: [linux, shell, limits]
+  compatible: [dash, BusyBox ash]
+  references:
+    - https://manpages.debian.org/dash
+detect:
+  args:
+    any: ["-a"]
+  signature:
+    all:
+      - '^time\(seconds\)[ \t]'
+      - '^(?:nofiles|process)[ \t]'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<resource>[a-z][a-z ]*)\((?P<unit>[a-z]+)\)[ \t]+(?P<value>\S+)[ \t]*$'
+    - '^(?P<resource>[a-z][a-z ]*[a-z])[ \t]+(?P<value>\S+)[ \t]*$'
+fields:
+  resource: {required: true}
+  unit: {when_missing: omit}
+  value: {required: true}

@@ -1,0 +1,15 @@
+ Static hostname: host1
+       Icon name: computer-desktop
+         Chassis: desktop 🖥️
+      Machine ID: a1b2c3d4e5f60718293a4b5c6d7e8f90
+         Boot ID: 0f1e2d3c4b5a69788796a5b4c3d2e1f0
+Operating System: Ubuntu 26.04 LTS
+          Kernel: Linux 7.0.0-30-generic
+    Architecture: x86-64
+ Hardware Vendor: GMKtec
+  Hardware Model: NucBox_EVO-X2
+    Hardware SKU: EVO-X2-001
+Hardware Version: Version 1.0
+Firmware Version: EVO-X2 1.09
+   Firmware Date: Sat 2025-09-13
+    Firmware Age: 11month 3w 2d

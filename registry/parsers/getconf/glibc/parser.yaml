@@ -1,0 +1,35 @@
+# `getconf -a` prints a variable name padded to a column and then its
+# value. A variable that is not defined on this system has no value at
+# all, which becomes null rather than an empty string. Two of the values
+# (GNU_LIBC_VERSION, GNU_LIBPTHREAD_VERSION) contain a space, so the
+# value is the rest of the line rather than one word.
+#
+# The numbers stay strings: the same listing mixes limits, byte counts,
+# compiler flags and version strings, and a name such as ULONG_MAX
+# carries a value that does not fit a JSON number.
+format: 1
+command: getconf
+variant: glibc
+description: getconf -a system configuration variables
+metadata:
+  tags: [linux, system, libc]
+  compatible: [glibc]
+  references:
+    - https://man7.org/linux/man-pages/man1/getconf.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-a"]
+  signature:
+    all:
+      # Names glibc always prints, whichever part of the listing is seen.
+      - '^(?:LINK_MAX|NAME_MAX|PATH_MAX|SYMLINK_MAX|GNU_LIBC_VERSION|_POSIX_VDISABLE)[ \t]'
+      # Two adjacent lines of the same shape; one alone is any two-column
+      # text.
+      - '^[A-Z_][A-Z0-9_]*[ \t]+[^\n]*\n[A-Z_][A-Z0-9_]*[ \t]+'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+)[ \t]*(?P<value>.*?)[ \t]*$'
+fields:
+  name: {required: true}
+  value: {null_if: [""]}

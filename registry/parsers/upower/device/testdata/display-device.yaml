@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (UPower 1.90) with LC_ALL=C, upower -i /org/freedesktop/UPower/devices/DisplayDevice
+os: linux
+args: ["-i", "/org/freedesktop/UPower/devices/DisplayDevice"]

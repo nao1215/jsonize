@@ -1,0 +1,8 @@
+[
+  {
+    "uid": 1000,
+    "user": "alice",
+    "linger": false,
+    "state": "active"
+  }
+]

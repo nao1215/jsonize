@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (UPower 1.90) with LC_ALL=C; a desktop with no battery, so the composite display device is the only one
+os: linux
+args: ["-e"]

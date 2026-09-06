@@ -1,0 +1,24 @@
+# systemd right-aligns the labels of "Label: value" lines, so the colon
+# separates the two and the padding is not part of either. The labels
+# contain spaces and cannot be field names, and which of them appear
+# depends on what the firmware reports, so the pairs stay a list of
+# name/value objects and every value stays a string.
+format: 1
+command: hostnamectl
+variant: linux
+description: hostnamectl host, hardware and firmware identification
+metadata:
+  tags: [linux, systemd, system]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/hostnamectl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^[ \t]*Icon name: '
+      - '^[ \t]*Chassis: '
+parse:
+  type: kv
+  separator: ":"
+  as: list

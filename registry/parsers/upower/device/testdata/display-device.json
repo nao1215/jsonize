@@ -1,0 +1,30 @@
+[
+  {
+    "name": "power supply",
+    "value": "no"
+  },
+  {
+    "name": "updated",
+    "value": "Mon Aug 24 10:10:46 2026 (1156636 seconds ago)"
+  },
+  {
+    "name": "has history",
+    "value": "no"
+  },
+  {
+    "name": "has statistics",
+    "value": "no"
+  },
+  {
+    "name": "warning-level",
+    "value": "none"
+  },
+  {
+    "name": "percentage",
+    "value": "0%"
+  },
+  {
+    "name": "icon-name",
+    "value": "battery-missing-symbolic"
+  }
+]
