@@ -20,7 +20,9 @@ project follows [Semantic Versioning](https://semver.org/).
   typed field conversion.
 - Layered registries: `JSONIZE_REGISTRY_PATH`, the user directory and the
   registry embedded in the binary. jz makes no network access.
-- Official definitions for 74 commands in 109 output formats, covering
+- `parse: type: records` for a report whose blocks repeat: a line
+  matching `start` opens a record and the `parts` are applied to each.
+- Official definitions for 71 commands in 110 output formats, covering
   coreutils and procps, the util-linux listings, the systemd tools, the
   network commands, sysstat, the archive and checksum tools, git, and the
   package managers. `jz list` prints the current set.
@@ -42,6 +44,28 @@ project follows [Semantic Versioning](https://semver.org/).
   operand, `ss` had no pattern for the unix sockets a bare call lists,
   and `systemctl` on current systemd closes with a legend the ignore list
   did not cover.
+
+### Changed
+
+- `env` is read only when the parser is named. `NAME=value` is the shape
+  of a `.env` file, a properties file and a shell fragment too, and every
+  one of those that came along wanted another exclusion inside `env`.
+- `passwd`, `group`, `hosts` and `os-release` describe files rather than
+  commands and are now variants of `etc`. Only `passwd` also existed as a
+  binary, and `jz run passwd` used to start the interactive one.
+  `/etc/os-release` no longer needs a name: `PRETTY_NAME` together with
+  `NAME` and `ID` is that file and close to nothing else.
+- `jz run` answers a command that succeeded without printing anything
+  with `[]`, where the format it named has an empty form.
+- A kv definition can convert the values of labels that are not
+  identifiers (`CPU(s)`, `Thread(s) per core`).
+- `expect_error` in a fixture covers a definition refusing text at
+  detection, not only at parse time.
+
+### Removed
+
+- `min_jsonize`, `metadata.fixtures` and the kv `key_name`/`value_name`
+  pair. No definition used any of them.
 
 ### Decisions worth knowing
 
