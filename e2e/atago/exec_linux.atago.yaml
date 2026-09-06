@@ -79,6 +79,37 @@ scenarios:
             json:
               - { path: "$[0].pid", equals: 1 }
 
+  # One command, three output formats, and the arguments alone do not say
+  # which: the shape of the text has to decide. Each of these asserts a
+  # column that only its own variant produces.
+  - name: ps lands on a different variant for each of its three formats
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run ps
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              # posix: four columns, so no user and no parent pid
+              - { path: "$[0].command", matches: "\\S" }
+              - { path: "$[0].tty", matches: "\\S" }
+      - run:
+          command: jz run ps -ef
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].ppid", gte: 0 }
+      - run:
+          command: jz run ps aux
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].cpu_percent", gte: 0 }
+
   - name: uname, id, env, mount and du
     only: {os: linux}
     steps:
