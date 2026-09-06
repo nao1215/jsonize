@@ -1,0 +1,35 @@
+# The DESCRIPTION column is a sentence with spaces and LIMIT is wide
+# enough to run into it (SHMALL prints a 20 digit number under a column
+# whose header starts much further right), so cells are cut at the header
+# offsets, which moves a wide right-aligned number back to its own column.
+# `lsipc --raw` prints the same columns separated by single spaces with
+# the spaces inside DESCRIPTION escaped, which the signature rejects.
+format: 1
+command: lsipc
+variant: linux
+description: lsipc summary of System V and POSIX IPC limits
+metadata:
+  tags: [linux, ipc, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lsipc.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^RESOURCE[ \t]+DESCRIPTION[ \t]+LIMIT[ \t]+USED[ \t]+USE%[ \t]*$'
+    none:
+      - '^RESOURCE DESCRIPTION LIMIT USED USE%$'
+parse:
+  type: table
+  split: aligned
+# LIMIT is rounded and unit-suffixed by default ("8K", "16E") and exact
+# with --bytes, and the exact value exceeds what an integer holds, so it
+# stays as printed. USED and USE% are "-" for a limit that nothing can
+# consume.
+fields:
+  resource: {required: true}
+  description: {required: true}
+  limit: {required: true}
+  used: {type: int, null_if: ["-"]}
+  use_percent: {type: float, trim_suffix: "%", null_if: ["-"]}

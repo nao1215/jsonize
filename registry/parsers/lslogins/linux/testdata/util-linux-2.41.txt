@@ -1,0 +1,23 @@
+  UID USER                 PROC PWD-LOCK PWD-DENY  LAST-LOGIN GECOS
+    0 root                  490        0        0             root
+    1 daemon                  0                               daemon
+    2 bin                     0                               bin
+    3 sys                     0                               sys
+    4 sync                    0                               sync
+    5 games                   0                               games
+    6 man                     0                               man
+    7 lp                      0                               lp
+    8 mail                    0                               mail
+    9 news                    0                               news
+   10 uucp                    0                               uucp
+   13 proxy                   0                               proxy
+   33 www-data                0                               www-data
+   34 backup                  0                               backup
+   38 list                    0                               Mailing List Manager
+   39 irc                     0                               ircd
+   42 _apt                    0                               
+  100 dhcpcd                  0                               DHCP Client Daemon,,,
+  101 syslog                  1                               
+  102 tss                     0                               TPM software stack,,,
+ 1000 alice                 206                   Aug24/19:20 alice
+65534 nobody                  0        0        0             nobody

@@ -1,0 +1,79 @@
+[
+  {
+    "command": "codex",
+    "pid": 757882,
+    "type": "FLOCK",
+    "size": null,
+    "mode": "WRITE",
+    "m": false,
+    "start": 0,
+    "end": 0,
+    "path": "/home/alice/.codex/thread-writer-locks/0f6a1c34-8b21-4d7e-9c05-1a2b3c4d5e6f.lock"
+  },
+  {
+    "command": "codex",
+    "pid": 757882,
+    "type": "POSIX",
+    "size": "28K",
+    "mode": "READ",
+    "m": false,
+    "start": 1073741826,
+    "end": 1073742335,
+    "path": "/home/alice/.codex/queue_1.sqlite"
+  },
+  {
+    "command": "codex",
+    "pid": 757882,
+    "type": "POSIX",
+    "size": "32K",
+    "mode": "READ",
+    "m": false,
+    "start": 128,
+    "end": 128,
+    "path": "/home/alice/.codex/queue_1.sqlite-shm"
+  },
+  {
+    "command": "codex",
+    "pid": 757882,
+    "type": "FLOCK",
+    "size": null,
+    "mode": "WRITE",
+    "m": false,
+    "start": 0,
+    "end": 0,
+    "path": "/home/alice/.codex/thread-writer-locks/1b7c2d45-9c32-4e8f-8d16-2b3c4d5e6f70.lock"
+  },
+  {
+    "command": "codex",
+    "pid": 757882,
+    "type": "FLOCK",
+    "size": null,
+    "mode": "WRITE",
+    "m": false,
+    "start": 0,
+    "end": 0,
+    "path": "/home/alice/.codex/tmp/arg0/codex-arg0su18Y5/.lock"
+  },
+  {
+    "command": "codex",
+    "pid": 757882,
+    "type": "POSIX",
+    "size": "100.4M",
+    "mode": "READ",
+    "m": false,
+    "start": 1073741826,
+    "end": 1073742335,
+    "path": "/home/alice/.codex/logs_2.sqlite"
+  },
+  {
+    "command": "codex",
+    "pid": 757882,
+    "type": "POSIX",
+    "size": "32K",
+    "mode": "READ",
+    "m": false,
+    "start": 128,
+    "end": 128,
+    "path": "/home/alice/.codex/logs_2.sqlite-shm"
+  }
+]

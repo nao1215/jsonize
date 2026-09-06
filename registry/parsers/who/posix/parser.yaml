@@ -1,0 +1,26 @@
+# who prints no header, and a record written without a terminal leaves
+# the line column blank, so the shape of a row is written out from the
+# start: a name, an optional line, the login time and an optional comment
+# in parentheses. The line column is optional in the pattern rather than
+# in a second alternative so that every object has the same keys.
+format: 1
+command: who
+variant: posix
+description: who listing of logged-in users
+metadata:
+  tags: [linux, darwin, user, login]
+  compatible: [GNU coreutils, uutils coreutils, BusyBox]
+  references:
+    - https://pubs.opengroup.org/onlinepubs/9699919799/utilities/who.html
+detect:
+  signature:
+    all:
+      - '\A\S+(?:[ \t]+\S+)?[ \t]+[A-Z][a-z]{2}[ \t]+[ 0-9]?[0-9][ \t]+[0-9]{2}:[0-9]{2}(?:[ \t]|$)'
+parse:
+  type: regex
+  pattern: '^(?P<user>\S+)(?:[ \t]+(?P<line>\S+))??[ \t]+(?P<time>[A-Z][a-z]{2}[ \t]+[ 0-9]?[0-9][ \t]+[0-9]{2}:[0-9]{2})(?:[ \t]+\((?P<comment>.*)\))?[ \t]*$'
+# The time is kept as the string who printed because it carries no year
+# and its shape follows the locale; jz runs the command under LC_ALL=C.
+fields:
+  user: {required: true}
+  time: {required: true}

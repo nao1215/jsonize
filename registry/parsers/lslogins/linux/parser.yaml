@@ -1,0 +1,33 @@
+# PWD-LOCK, PWD-DENY, LAST-LOGIN and GECOS are all blank for an account
+# that has no password entry, has never logged in or carries no comment,
+# and GECOS itself contains spaces and commas, so cells are cut at the
+# header offsets rather than on whitespace. `lslogins --raw` prints the
+# same columns separated by single spaces instead of padded, which the
+# signature rejects.
+format: 1
+command: lslogins
+variant: linux
+description: lslogins default table of accounts
+metadata:
+  tags: [linux, user, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lslogins.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^[ \t]*UID[ \t]+USER[ \t]+PROC[ \t]+PWD-LOCK[ \t]+PWD-DENY[ \t]+LAST-LOGIN[ \t]+GECOS[ \t]*$'
+    none:
+      - '^UID USER PROC PWD-LOCK PWD-DENY LAST-LOGIN GECOS$'
+parse:
+  type: table
+  split: aligned
+# LAST-LOGIN is printed as "Aug24/19:20" by default and as a full date
+# with --time-format, so it stays the string it was printed as.
+fields:
+  uid: {type: int, required: true}
+  user: {required: true}
+  proc: {type: int}
+  pwd_lock: {type: bool}
+  pwd_deny: {type: bool}

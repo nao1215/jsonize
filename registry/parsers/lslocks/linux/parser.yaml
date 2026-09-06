@@ -1,0 +1,33 @@
+# SIZE is blank for a lock on a file whose size lslocks cannot read, and
+# PATH may contain spaces, so cells are cut at the header offsets rather
+# than on whitespace. `lslocks --raw` prints the same columns separated by
+# single spaces instead of padded, which the signature rejects.
+format: 1
+command: lslocks
+variant: linux
+description: lslocks table of local file locks
+metadata:
+  tags: [linux, file, process, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lslocks.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^COMMAND[ \t]+PID[ \t]+TYPE[ \t]+SIZE[ \t]+MODE[ \t]+M[ \t]+START[ \t]+END[ \t]+PATH[ \t]*$'
+    none:
+      - '^COMMAND PID TYPE SIZE MODE M START END PATH$'
+parse:
+  type: table
+  split: aligned
+# SIZE is rounded and unit-suffixed by default ("100.4M") and exact with
+# --bytes, so it stays as printed. PID is -1 and COMMAND is "(undefined)"
+# for an open file description lock, which belongs to no process.
+fields:
+  command: {required: true}
+  pid: {type: int, required: true}
+  type: {required: true}
+  m: {type: bool}
+  start: {type: int}
+  end: {type: int}

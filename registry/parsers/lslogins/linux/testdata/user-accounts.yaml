@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; the login name was replaced with alice and the USER column widened by one to match
+description: two rows under the narrowest header lslogins prints, where every column is as wide as its own heading
+os: linux
+args: [-u]

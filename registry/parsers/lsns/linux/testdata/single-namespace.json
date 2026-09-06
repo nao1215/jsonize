@@ -1,0 +1,10 @@
+[
+  {
+    "ns": 4026531834,
+    "type": "time",
+    "nprocs": 201,
+    "pid": 9049,
+    "user": "alice",
+    "command": "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"
+  }
+]

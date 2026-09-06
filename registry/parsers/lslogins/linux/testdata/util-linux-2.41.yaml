@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C, the first 20 rows plus the two last ones; the login name was replaced with alice
+description: >
+  System accounts with an empty PWD-LOCK, PWD-DENY and LAST-LOGIN, an
+  account whose GECOS is empty and one whose GECOS holds spaces and
+  commas, and a human account that has logged in.
+os: linux

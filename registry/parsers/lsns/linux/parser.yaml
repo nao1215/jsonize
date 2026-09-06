@@ -1,0 +1,31 @@
+# COMMAND is a whole command line with spaces, and a namespace that no
+# process holds any more prints an empty PID, USER and COMMAND, so cells
+# are cut at the header offsets rather than on whitespace. `lsns --raw`
+# prints the same columns separated by single spaces instead of padded,
+# which the signature rejects.
+format: 1
+command: lsns
+variant: linux
+description: lsns table of namespaces
+metadata:
+  tags: [linux, namespace, process, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsns.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^[ \t]*NS[ \t]+TYPE[ \t]+NPROCS[ \t]+PID[ \t]+USER[ \t]+COMMAND[ \t]*$'
+    none:
+      - '^NS TYPE NPROCS PID USER COMMAND$'
+parse:
+  type: table
+  split: aligned
+# PID, USER and COMMAND describe the lowest process in the namespace and
+# are all empty when NPROCS is 0, so only the namespace itself is required.
+fields:
+  ns: {type: int, required: true}
+  type: {required: true}
+  nprocs: {type: int}
+  pid: {type: int}

@@ -1,0 +1,200 @@
+[
+  {
+    "uid": 0,
+    "user": "root",
+    "proc": 490,
+    "pwd_lock": false,
+    "pwd_deny": false,
+    "last_login": null,
+    "gecos": "root"
+  },
+  {
+    "uid": 1,
+    "user": "daemon",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "daemon"
+  },
+  {
+    "uid": 2,
+    "user": "bin",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "bin"
+  },
+  {
+    "uid": 3,
+    "user": "sys",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "sys"
+  },
+  {
+    "uid": 4,
+    "user": "sync",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "sync"
+  },
+  {
+    "uid": 5,
+    "user": "games",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "games"
+  },
+  {
+    "uid": 6,
+    "user": "man",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "man"
+  },
+  {
+    "uid": 7,
+    "user": "lp",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "lp"
+  },
+  {
+    "uid": 8,
+    "user": "mail",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "mail"
+  },
+  {
+    "uid": 9,
+    "user": "news",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "news"
+  },
+  {
+    "uid": 10,
+    "user": "uucp",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "uucp"
+  },
+  {
+    "uid": 13,
+    "user": "proxy",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "proxy"
+  },
+  {
+    "uid": 33,
+    "user": "www-data",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "www-data"
+  },
+  {
+    "uid": 34,
+    "user": "backup",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "backup"
+  },
+  {
+    "uid": 38,
+    "user": "list",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "Mailing List Manager"
+  },
+  {
+    "uid": 39,
+    "user": "irc",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "ircd"
+  },
+  {
+    "uid": 42,
+    "user": "_apt",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": null
+  },
+  {
+    "uid": 100,
+    "user": "dhcpcd",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "DHCP Client Daemon,,,"
+  },
+  {
+    "uid": 101,
+    "user": "syslog",
+    "proc": 1,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": null
+  },
+  {
+    "uid": 102,
+    "user": "tss",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "TPM software stack,,,"
+  },
+  {
+    "uid": 1000,
+    "user": "alice",
+    "proc": 206,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": "Aug24/19:20",
+    "gecos": "alice"
+  },
+  {
+    "uid": 65534,
+    "user": "nobody",
+    "proc": 0,
+    "pwd_lock": false,
+    "pwd_deny": false,
+    "last_login": null,
+    "gecos": "nobody"
+  }
+]
