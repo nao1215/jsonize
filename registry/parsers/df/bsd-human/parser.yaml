@@ -34,7 +34,9 @@ fields:
   used: {required: true}
   available: {required: true}
   capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
-  iused: {null_if: ["-"], when_missing: omit}
-  ifree: {null_if: ["-"], when_missing: omit}
+  # -h rounds the size columns and leaves the inode counts alone, so
+  # these are exact and become numbers the way df/bsd reads them.
+  iused: {type: int, null_if: ["-"], when_missing: omit}
+  ifree: {type: int, null_if: ["-"], when_missing: omit}
   iused_percent: {type: int, trim_suffix: "%", null_if: ["-"], when_missing: omit}
   mounted_on: {required: true}

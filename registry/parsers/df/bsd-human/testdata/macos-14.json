@@ -5,8 +5,8 @@
     "used": "9.5Gi",
     "available": "274Gi",
     "capacity_percent": 4,
-    "iused": "404813",
-    "ifree": "2874182520",
+    "iused": 404813,
+    "ifree": 2874182520,
     "iused_percent": 0,
     "mounted_on": "/"
   },
@@ -16,8 +16,8 @@
     "used": "201Ki",
     "available": "0Bi",
     "capacity_percent": 100,
-    "iused": "696",
-    "ifree": "0",
+    "iused": 696,
+    "ifree": 0,
     "iused_percent": 100,
     "mounted_on": "/dev"
   },
@@ -27,8 +27,8 @@
     "used": "2.0Gi",
     "available": "274Gi",
     "capacity_percent": 1,
-    "iused": "2",
-    "ifree": "2874182520",
+    "iused": 2,
+    "ifree": 2874182520,
     "iused_percent": 0,
     "mounted_on": "/System/Volumes/VM"
   },
@@ -38,8 +38,8 @@
     "used": "0Bi",
     "available": "0Bi",
     "capacity_percent": 100,
-    "iused": "0",
-    "ifree": "0",
+    "iused": 0,
+    "ifree": 0,
     "iused_percent": 100,
     "mounted_on": "/System/Volumes/Data/home"
   }
