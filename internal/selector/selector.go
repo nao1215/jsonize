@@ -33,6 +33,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/nao1215/jsonize/internal/convert"
 	"github.com/nao1215/jsonize/internal/definition"
 	"github.com/nao1215/jsonize/internal/registry"
 )
@@ -325,6 +326,9 @@ func signatureWindow(input []byte) []string {
 		return nil
 	}
 	input = bytes.TrimPrefix(input, []byte{0xEF, 0xBB, 0xBF})
+	// A command that keeps colouring its output through a pipe would
+	// otherwise hide its own format behind the escapes.
+	input = convert.StripANSI(input)
 	var lines []string
 	for len(input) > 0 && len(lines) < definition.MaxSignatureWindow {
 		i := bytes.IndexByte(input, '\n')

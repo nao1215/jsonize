@@ -201,3 +201,31 @@ func FuzzSize(f *testing.F) {
 		_, _ = Bool(s, nil, nil)
 	})
 }
+
+func TestStripANSI(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name string
+		in   string
+		want string
+	}{
+		{"plain text is returned untouched", "Filesystem 1K-blocks\n", "Filesystem 1K-blocks\n"},
+		{"colour", "\x1b[32mgreen\x1b[0m", "green"},
+		{"bold and reset around a cell", "a \x1b[1;31mb\x1b[m c", "a b c"},
+		{"osc hyperlink terminated by BEL", "\x1b]8;;file:///x\x07name\x1b]8;;\x07", "name"},
+		{"osc hyperlink terminated by ESC backslash", "\x1b]8;;u\x1b\\name\x1b]8;;\x1b\\", "name"},
+		{"two character sequence", "\x1b(Btext", "text"},
+		// A lone escape at the end is data as far as jz can tell, so it
+		// is kept rather than swallowing what came before it.
+		{"unterminated CSI", "a\x1b[32", "a\x1b[32"},
+		{"trailing escape", "a\x1b", "a\x1b"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := string(StripANSI([]byte(tt.in))); got != tt.want {
+				t.Errorf("StripANSI(%q) = %q, want %q", tt.in, got, tt.want)
+			}
+		})
+	}
+}

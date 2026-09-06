@@ -4,6 +4,7 @@
 package convert
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"math"
@@ -190,4 +191,70 @@ func Strip(s, prefix, suffix string) string {
 		t = strings.TrimSuffix(t, suffix)
 	}
 	return strings.TrimSpace(t)
+}
+
+// StripANSI removes the escape sequences a command writes to colour its
+// output. Several modern tools (eza, procs, ls --color=always) keep
+// colouring even when their output is a pipe, and the escapes would
+// otherwise sit inside the values and hide the format from detection.
+//
+// The input is returned unchanged when it holds no escape, which is the
+// ordinary case, so nothing is copied for output that was never coloured.
+func StripANSI(b []byte) []byte {
+	if !bytes.ContainsRune(b, 0x1b) {
+		return b
+	}
+	out := make([]byte, 0, len(b))
+	for i := 0; i < len(b); {
+		if b[i] != 0x1b || i+1 >= len(b) {
+			out = append(out, b[i])
+			i++
+			continue
+		}
+		switch b[i+1] {
+		case '[':
+			// CSI: parameter and intermediate bytes, then a final byte
+			// in the range @ to ~. This is what colour uses.
+			j := i + 2
+			for j < len(b) && b[j] >= 0x20 && b[j] <= 0x3f {
+				j++
+			}
+			if j < len(b) && b[j] >= 0x40 && b[j] <= 0x7e {
+				i = j + 1
+				continue
+			}
+			// Unterminated: keep the bytes rather than eat the rest.
+			out = append(out, b[i])
+			i++
+		case ']':
+			// OSC, which ls and eza use for terminal hyperlinks. It runs
+			// to a BEL or to ESC \.
+			j := i + 2
+			for j < len(b) {
+				if b[j] == 0x07 {
+					j++
+					break
+				}
+				if b[j] == 0x1b && j+1 < len(b) && b[j+1] == '\\' {
+					j += 2
+					break
+				}
+				j++
+			}
+			i = j
+		default:
+			// Everything else: any intermediate bytes, then one final
+			// byte. ESC ( B, which selects a character set, is three
+			// bytes rather than two.
+			j := i + 1
+			for j < len(b) && b[j] >= 0x20 && b[j] <= 0x2f {
+				j++
+			}
+			if j < len(b) {
+				j++
+			}
+			i = j
+		}
+	}
+	return out
 }

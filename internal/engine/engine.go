@@ -15,6 +15,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/nao1215/jsonize/internal/convert"
 	"github.com/nao1215/jsonize/internal/definition"
 	"github.com/nao1215/jsonize/internal/jsonutil"
 )
@@ -124,6 +125,9 @@ func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
 		return nil, nil
 	}
 	input = bytes.TrimPrefix(input, []byte{0xEF, 0xBB, 0xBF}) // UTF-8 BOM
+	// Detection strips these too; doing it here as well keeps the
+	// escapes out of the values when a parser is named instead.
+	input = convert.StripANSI(input)
 	if !utf8.Valid(input) {
 		return nil, &splitError{msg: "input is not valid UTF-8"}
 	}
