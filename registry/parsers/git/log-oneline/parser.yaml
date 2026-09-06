@@ -29,6 +29,12 @@ detect:
       # name. Those tools separate the two with exactly two spaces, and
       # cksum puts a second number where a subject would start.
       - '\A[0-9a-f]{7,128}  '
+      # Binary mode writes one space and a "*" before the name, and an
+      # escaped name puts a backslash in front of the digest. A digest is
+      # a fixed length, so requiring 32 or more keeps a short commit hash
+      # followed by a "*" subject out of this.
+      - '\A[0-9a-f]{32,128} \*'
+      - '\A\\[0-9a-f]{32,128} '
       - '\A\d+ \d+ \S'
 parse:
   type: regex
