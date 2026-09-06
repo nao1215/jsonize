@@ -22,10 +22,11 @@ project follows [Semantic Versioning](https://semver.org/).
   registry embedded in the binary. jz makes no network access.
 - `parse: type: records` for a report whose blocks repeat: a line
   matching `start` opens a record and the `parts` are applied to each.
-- Official definitions for 71 commands in 110 output formats, covering
+- Official definitions for 80 commands in 156 output formats, covering
   coreutils and procps, the util-linux listings, the systemd tools, the
-  network commands, sysstat, the archive and checksum tools, git, and the
-  package managers. `jz list` prints the current set.
+  network commands, sysstat, the disk layout tools, the hardware and
+  display tools, the archive and checksum tools, git, and the package
+  managers. `jz list` prints the current set.
 
 ### Fixed
 

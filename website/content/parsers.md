@@ -15,17 +15,19 @@ input.
 |---------|----------|
 | `apt` | `list` |
 | `blkid` | `linux` |
+| `bluetoothctl` | `show` |
 | `cargo` | `command-list` |
 | `cksum` | `posix` |
-| `df` | `bsd`, `bsd-human`, `busybox-human`, `gnu`, `gnu-human`, `gnu-inodes`, `gnu-inodes-human`, `gnu-type` |
+| `df` | `bsd`, `bsd-human`, `busybox-human`, `gnu`, `gnu-human`, `gnu-inodes`, `gnu-inodes-human`, `gnu-type`, `gnu-type-human` |
 | `dig` | `bind` |
 | `dpkg` | `list` |
-| `du` | `posix` |
+| `du` | `gnu-human`, `posix` |
 | `env` | `null-separated`, `posix` |
 | `etc` | `group`, `hosts`, `os-release`, `passwd` |
 | `ethtool` | `driver-info` |
+| `fdisk` | `linux` |
 | `file` | `posix` |
-| `findmnt` | `linux` |
+| `findmnt` | `df`, `linux`, `source-first` |
 | `free` | `gnu`, `gnu-human`, `gnu-wide` |
 | `getconf` | `glibc` |
 | `git` | `branch-verbose`, `config-list`, `log-oneline`, `remote-verbose`, `stash-list`, `status-porcelain` |
@@ -36,23 +38,24 @@ input.
 | `iostat` | `cpu`, `device`, `linux` |
 | `ip` | `brief-address`, `brief-link`, `neighbour`, `route`, `stats-link` |
 | `iw` | `link` |
-| `journalctl` | `short` |
+| `journalctl` | `boots`, `short`, `short-iso`, `short-precise` |
 | `locale` | `posix` |
 | `localectl` | `linux` |
-| `loginctl` | `sessions`, `users` |
+| `loginctl` | `seats`, `sessions`, `users` |
 | `losetup` | `linux` |
-| `ls` | `long` |
+| `ls` | `long`, `long-context`, `long-inode`, `long-no-owner-group` |
 | `lsattr` | `linux` |
 | `lsb_release` | `linux` |
-| `lsblk` | `linux` |
+| `lsblk` | `bytes`, `filesystems`, `linux`, `pairs`, `topology` |
 | `lscpu` | `linux` |
 | `lsipc` | `linux` |
 | `lslocks` | `linux` |
 | `lslogins` | `linux` |
+| `lsmem` | `linux` |
 | `lsmod` | `busybox`, `linux` |
 | `lsns` | `linux` |
 | `lsof` | `linux` |
-| `lspci` | `linux` |
+| `lspci` | `kernel`, `linux`, `machine`, `numeric`, `numeric-names`, `verbose-machine` |
 | `lsusb` | `linux` |
 | `md5sum` | `posix` |
 | `mise` | `ls` |
@@ -60,29 +63,35 @@ input.
 | `mpstat` | `linux` |
 | `nmcli` | `connection`, `device` |
 | `npm` | `ls`, `outdated` |
+| `parted` | `machine` |
 | `pidstat` | `linux` |
 | `ping` | `linux` |
 | `pip` | `columns` |
 | `ps` | `bsd`, `busybox`, `posix`, `unix` |
+| `rfkill` | `linux`, `list` |
+| `sensors` | `linux` |
+| `sfdisk` | `dump` |
 | `sha256sum` | `posix` |
 | `ss` | `linux` |
-| `stat` | `gnu` |
-| `swapon` | `linux` |
+| `stat` | `gnu`, `gnu-filesystem`, `gnu-terse` |
+| `swapon` | `legacy`, `linux` |
 | `sysctl` | `linux` |
-| `systemctl` | `units` |
+| `systemctl` | `show`, `sockets`, `timers`, `unit-files`, `units` |
+| `systemd-analyze` | `blame` |
 | `tar` | `busybox`, `gnu` |
-| `timedatectl` | `linux` |
+| `timedatectl` | `linux`, `timesync`, `timezones` |
 | `top` | `linux` |
 | `tracepath` | `linux` |
 | `ulimit` | `bash`, `dash` |
 | `uname` | `darwin`, `linux` |
 | `unzip` | `busybox`, `info-zip` |
-| `upower` | `device`, `enumerate` |
+| `upower` | `device`, `dump`, `enumerate` |
 | `uptime` | `bsd`, `linux` |
-| `vmstat` | `linux` |
-| `w` | `bsd`, `linux` |
+| `vmstat` | `linux`, `linux-active`, `linux-disk`, `linux-disk-summary`, `linux-stats` |
+| `w` | `bsd`, `linux`, `linux-short` |
 | `wc` | `posix` |
 | `who` | `posix` |
+| `xrandr` | `linux`, `listmonitors` |
 | `zipinfo` | `default` |
 
 A variant is one output format of a command. GNU `df`, `df -h`, macOS
