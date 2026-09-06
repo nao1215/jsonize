@@ -129,11 +129,17 @@ scenarios:
             empty: true
           stderr:
             contains: does not describe this input
+      # Once ip/brief-link existed the text stopped being unidentifiable,
+      # so what this pins is the stronger property: automatic detection
+      # picks the definition that reads a MAC address and a flag list,
+      # neither of which the address variant produces.
       - run:
           command: jz --file ip-br-link.txt
       - assert:
-          exit_code: 4
-          stdout:
-            empty: true
+          exit_code: 0
           stderr:
-            contains: unable to identify the input format
+            empty: true
+          stdout:
+            json:
+              - { path: "$[0].lladdr", matches: "^[0-9a-f:]+$" }
+              - { path: "$[0].flags", length: 3 }

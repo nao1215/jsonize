@@ -13,42 +13,80 @@ input.
 
 | Command | Variants |
 |---------|----------|
+| `apt` | `list` |
 | `blkid` | `linux` |
-| `df` | `gnu`, `gnu-human`, `bsd`, `bsd-human`, `busybox-human` |
+| `cargo` | `command-list` |
+| `cksum` | `posix` |
+| `df` | `bsd`, `bsd-human`, `busybox-human`, `gnu`, `gnu-human`, `gnu-inodes`, `gnu-inodes-human`, `gnu-type` |
+| `dig` | `bind` |
+| `dpkg` | `list` |
 | `du` | `posix` |
-| `env` | `posix`, `null-separated` |
+| `env` | `null-separated`, `posix` |
+| `ethtool` | `driver-info` |
 | `file` | `posix` |
 | `findmnt` | `linux` |
 | `free` | `gnu`, `gnu-human`, `gnu-wide` |
+| `getconf` | `glibc` |
+| `git` | `branch-verbose`, `config-list`, `log-oneline`, `remote-verbose`, `stash-list`, `status-porcelain` |
+| `go` | `env` |
 | `group` | `posix` |
 | `host` | `bind` |
+| `hostnamectl` | `linux` |
 | `hosts` | `posix` |
 | `id` | `posix` |
-| `ip` | `route`, `brief-address` |
+| `iostat` | `cpu`, `device`, `linux` |
+| `ip` | `brief-address`, `brief-link`, `neighbour`, `route` |
+| `iw` | `link` |
+| `journalctl` | `short` |
+| `locale` | `posix` |
+| `localectl` | `linux` |
+| `loginctl` | `sessions`, `users` |
+| `losetup` | `linux` |
 | `ls` | `long` |
 | `lsattr` | `linux` |
 | `lsb_release` | `linux` |
 | `lsblk` | `linux` |
 | `lscpu` | `linux` |
-| `lsmod` | `linux` |
+| `lsipc` | `linux` |
+| `lslocks` | `linux` |
+| `lslogins` | `linux` |
+| `lsmod` | `busybox`, `linux` |
+| `lsns` | `linux` |
+| `lsof` | `linux` |
 | `lspci` | `linux` |
 | `lsusb` | `linux` |
-| `mount` | `linux`, `bsd` |
+| `md5sum` | `posix` |
+| `mise` | `ls` |
+| `mount` | `bsd`, `linux` |
+| `mpstat` | `linux` |
+| `nmcli` | `connection`, `device` |
+| `npm` | `ls`, `outdated` |
 | `os-release` | `linux` |
 | `passwd` | `posix` |
+| `pidstat` | `linux` |
 | `ping` | `linux` |
-| `ps` | `unix`, `bsd`, `busybox` |
+| `pip` | `columns` |
+| `ps` | `bsd`, `busybox`, `posix`, `unix` |
+| `sha256sum` | `posix` |
 | `ss` | `linux` |
 | `stat` | `gnu` |
 | `swapon` | `linux` |
 | `sysctl` | `linux` |
 | `systemctl` | `units` |
+| `tar` | `busybox`, `gnu` |
 | `timedatectl` | `linux` |
-| `uname` | `linux`, `darwin` |
-| `uptime` | `linux`, `bsd` |
+| `top` | `linux` |
+| `tracepath` | `linux` |
+| `ulimit` | `bash`, `dash` |
+| `uname` | `darwin`, `linux` |
+| `unzip` | `busybox`, `info-zip` |
+| `upower` | `device`, `enumerate` |
+| `uptime` | `bsd`, `linux` |
 | `vmstat` | `linux` |
-| `w` | `linux`, `bsd` |
+| `w` | `bsd`, `linux` |
 | `wc` | `posix` |
+| `who` | `posix` |
+| `zipinfo` | `default` |
 
 A variant is one output format of a command. GNU `df`, `df -h`, macOS
 `df` and BusyBox `df -h` are four formats, so they are four definitions.
