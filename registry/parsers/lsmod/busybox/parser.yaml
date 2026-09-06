@@ -1,0 +1,36 @@
+# BusyBox lsmod prints the kernel taint state after the "Used by" column
+# heading ("Not tainted", or the taint letters), so its header line
+# continues where the kmod header ends. That is what tells the two apart:
+# the linux variant anchors the end of the line after "Used by", this one
+# requires something more on it.
+#
+# The rows carry the same three columns as kmod, except that a module
+# nothing uses is followed by a trailing space instead of nothing, and a
+# wide size or reference count eats the padding between columns.
+format: 1
+command: lsmod
+variant: busybox
+description: BusyBox lsmod loaded kernel modules
+metadata:
+  tags: [linux, busybox, kernel]
+  compatible: [BusyBox]
+  references:
+    - https://busybox.net/downloads/BusyBox.html#lsmod
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AModule[ \t]+Size[ \t]+Used by[ \t]+\S'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<name>\S+)[ \t]+(?P<size>\d+)[ \t]+(?P<used_by_count>\d+)[ \t]+(?P<used_by>\S+)[ \t]*$'
+    - '^(?P<name>\S+)[ \t]+(?P<size>\d+)[ \t]+(?P<used_by_count>\d+)[ \t]*$'
+input:
+  ignore:
+    - '\AModule[ \t]+Size'
+fields:
+  name: {required: true}
+  size: {type: int, required: true}
+  used_by_count: {type: int, required: true}
+  used_by: {type: array, split: ",", when_missing: omit}

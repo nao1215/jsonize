@@ -1,0 +1,2 @@
+source: busybox 1.37.0 env applet on Ubuntu, LC_ALL=C, run with -i and a fixed set of variables so the capture carries no real environment
+os: linux

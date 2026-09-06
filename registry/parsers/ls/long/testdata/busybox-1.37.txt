@@ -1,0 +1,25 @@
+total 8388688
+lrwxrwxrwx    1 root     root             7 Apr  9  2025 bin -> usr/bin
+drwxr-xr-x    4 root     root          4096 Sep  6 06:53 boot
+dr-xr-xr-x    2 root     root          4096 Apr 16  2025 cdrom
+-rw-r-----    1 root     root          1240 May 25 15:19 debug
+drwxr-xr-x   21 root     root          6020 Sep  2 18:34 dev
+drwxr-xr-x  162 root     root         12288 Sep  6 06:53 etc
+drwxr-xr-x    4 root     root          4096 May 10 20:37 home
+lrwxrwxrwx    1 root     root             7 Apr  9  2025 lib -> usr/lib
+lrwxrwxrwx    1 root     root             9 Apr  9  2025 lib64 -> usr/lib64
+drwx------    2 root     root         16384 Nov  4  2025 lost+found
+drwxr-xr-x    4 root     root          4096 Nov  4  2025 media
+drwxr-xr-x    3 root     root          4096 Nov  5  2025 mnt
+drwxr-xr-x   10 root     root          4096 Feb 24  2026 opt
+dr-xr-xr-x  799 root     root             0 Aug 24 09:19 proc
+drwx------    8 root     root          4096 Feb 27  2026 root
+drwxr-xr-x   50 root     root          1360 Sep  6 06:53 run
+lrwxrwxrwx    1 root     root             8 Apr  9  2025 sbin -> usr/sbin
+drwxr-xr-x   35 root     root          4096 May 27 20:29 snap
+drwxr-xr-x    2 root     root          4096 Apr 16  2025 srv
+-rw-------    1 root     root     8589934592 Nov  4  2025 swap.img
+dr-xr-xr-x   13 root     root             0 Aug 25 08:46 sys
+drwxrwxrwt 37298 root     root        752720 Sep  6 19:27 tmp
+drwxr-xr-x   12 root     root          4096 Apr 16  2025 usr
+drwxr-xr-x   14 root     root          4096 Nov  4  2025 var

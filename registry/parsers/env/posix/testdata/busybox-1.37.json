@@ -1,0 +1,22 @@
+[
+  {
+    "name": "SHELL",
+    "value": "/bin/sh"
+  },
+  {
+    "name": "HOME",
+    "value": "/home/alice"
+  },
+  {
+    "name": "USER",
+    "value": "alice"
+  },
+  {
+    "name": "PATH",
+    "value": "/usr/local/bin:/usr/bin:/bin"
+  },
+  {
+    "name": "LANG",
+    "value": "C.UTF-8"
+  }
+]

@@ -1,0 +1,5 @@
+SHELL=/bin/sh
+HOME=/home/alice
+USER=alice
+PATH=/usr/local/bin:/usr/bin:/bin
+LANG=C.UTF-8
