@@ -33,6 +33,10 @@ detect:
       # the padding between the columns is what the description is cut
       # from.
       - '^[^:\n]* [^:\n]*:[ \t]'
+      # `git stash list` opens with a reflog selector ("stash@{0}: WIP on
+      # main: ..."), which has the same shape. "@{" cannot appear in a ref
+      # name, and a path named that way is not what file(1) prints.
+      - '\A\S*@\{\d+\}:[ \t]'
       # No line may lack the separator. A report that merely opens with a
       # labelled line, such as an archive listing announcing its archive,
       # has rows underneath that carry no colon followed by a space.

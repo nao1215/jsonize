@@ -24,6 +24,12 @@ detect:
   signature:
     all:
       - '\A[0-9a-f]{7,40} '
+    none:
+      # A checksum listing is the same shape: a hexadecimal word and a
+      # name. Those tools separate the two with exactly two spaces, and
+      # cksum puts a second number where a subject would start.
+      - '\A[0-9a-f]{7,128}  '
+      - '\A\d+ \d+ \S'
 parse:
   type: regex
   pattern: '^(?P<commit>[0-9a-f]{4,40}) (?P<subject>.*)$'
