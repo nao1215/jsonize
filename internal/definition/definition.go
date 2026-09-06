@@ -81,7 +81,6 @@ type Definition struct {
 	Command     string            `yaml:"command"`
 	Variant     string            `yaml:"variant"`
 	Description string            `yaml:"description,omitempty"`
-	MinJsonize  string            `yaml:"min_jsonize,omitempty"`
 	Metadata    Metadata          `yaml:"metadata,omitempty"`
 	Detect      Detect            `yaml:"detect,omitempty"`
 	Exec        Exec              `yaml:"exec,omitempty"`
@@ -107,7 +106,6 @@ func (d *Definition) ID() string {
 type Metadata struct {
 	Tags       []string `yaml:"tags,omitempty"`
 	References []string `yaml:"references,omitempty"`
-	Fixtures   string   `yaml:"fixtures,omitempty"`
 	Authors    []string `yaml:"authors,omitempty"`
 	// Compatible lists the implementations known to produce this format,
 	// e.g. ["GNU coreutils", "BusyBox"]. Informational only.
@@ -285,8 +283,6 @@ type Parse struct {
 	// are syntax rather than content.
 	Unquote   bool   `yaml:"unquote,omitempty"`
 	As        string `yaml:"as,omitempty"`
-	KeyName   string `yaml:"key_name,omitempty"`
-	ValueName string `yaml:"value_name,omitempty"`
 
 	// composite
 	Parts []Part `yaml:"parts,omitempty"`

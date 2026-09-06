@@ -10,7 +10,6 @@ import (
 
 	"github.com/goccy/go-yaml"
 
-	"github.com/nao1215/jsonize/internal/buildinfo"
 )
 
 // Limits guarding against hostile or accidental resource use.
@@ -75,17 +74,6 @@ type FormatError struct {
 func (e *FormatError) Error() string {
 	return fmt.Sprintf("%s: format %d is not supported by this jsonize (supports format %d); update jsonize or the definition",
 		e.Source, e.Got, CurrentFormat)
-}
-
-// VersionError reports a definition that requires a newer jsonize.
-type VersionError struct {
-	Source   string
-	Required string
-	Running  string
-}
-
-func (e *VersionError) Error() string {
-	return fmt.Sprintf("%s: requires jsonize >= %s but this is %s", e.Source, e.Required, e.Running)
 }
 
 // Load decodes, validates and compiles a definition. source is used in
@@ -175,14 +163,6 @@ func (d *Definition) Validate() error {
 		v.add("variant", "%q must match %s", d.Variant, variantRe)
 	case reservedNames[d.Variant]:
 		v.add("variant", "%q is a reserved file name on Windows and cannot be used", d.Variant)
-	}
-	if d.MinJsonize != "" {
-		req, err := buildinfo.ParseSemver(d.MinJsonize)
-		if err != nil {
-			v.add("min_jsonize", "%v", err)
-		} else if cur, ok := buildinfo.Current(); ok && cur.Less(req) {
-			v.errs = append(v.errs, &VersionError{Source: d.Source, Required: req.String(), Running: cur.String()})
-		}
 	}
 	for i, os := range d.Detect.OS {
 		if !knownOS[os] {
@@ -293,8 +273,8 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 				v.add(path+".on_mismatch", "only valid for type regex or kv")
 			}
 		case "kv":
-			if p.Separator != "" || p.As != "" || p.KeyName != "" || p.ValueName != "" || p.Trim != nil || p.Unquote {
-				v.add(path, "separator/as/key_name/value_name/trim/unquote are only valid for type kv")
+			if p.Separator != "" || p.As != "" || p.Trim != nil || p.Unquote {
+				v.add(path, "separator/as/trim/unquote are only valid for type kv")
 			}
 		case "composite":
 			if len(p.Parts) > 0 {
@@ -448,18 +428,6 @@ func validateKV(v *validator, path string, p *Parse) {
 	case "", AsList, AsMap:
 	default:
 		v.add(path+".as", "must be list or map")
-	}
-	if p.As == AsMap && (p.KeyName != "" || p.ValueName != "") {
-		v.add(path, "key_name/value_name do not apply to as: map")
-	}
-	if p.KeyName != "" && !fieldRe.MatchString(p.KeyName) {
-		v.add(path+".key_name", "invalid name %q", p.KeyName)
-	}
-	if p.ValueName != "" && !fieldRe.MatchString(p.ValueName) {
-		v.add(path+".value_name", "invalid name %q", p.ValueName)
-	}
-	if p.KeyName != "" && p.KeyName == p.ValueName {
-		v.add(path+".value_name", "must differ from key_name")
 	}
 	validateMismatch(v, path, p.OnMismatch)
 }

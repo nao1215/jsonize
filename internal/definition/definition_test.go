@@ -5,7 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nao1215/jsonize/internal/buildinfo"
 )
 
 const validTable = `
@@ -98,8 +97,6 @@ parse:
         type: kv
         separator: "="
         as: list
-        key_name: k
-        value_name: v
         on_mismatch: skip
 `
 	d, err := Load([]byte(src), "w.yaml")
@@ -296,10 +293,7 @@ func TestLoadErrors(t *testing.T) {
 		{"regex with table keys", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', header: {columns: [a]}}\n", "only valid for type table"},
 		{"regex with split", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', split: aligned}\n", "only valid for type table"},
 		{"kv bad as", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, as: tuple}\n", "must be list or map"},
-		{"kv map with names", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, as: map, key_name: k}\n", "do not apply to as: map"},
-		{"kv bad key name", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, key_name: 'a b'}\n", "key_name"},
 		{"kv bad value name", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, value_name: 'a b'}\n", "value_name"},
-		{"kv same names", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, key_name: a, value_name: a}\n", "must differ"},
 		{"kv with pattern", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, pattern: x}\n", "only valid for type regex"},
 		{"composite no parts", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite}\n", "parts: is required"},
 		{"composite nested", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: a, parse: {type: composite, parts: [{name: b, parse: {type: kv}}]}}]}\n", "cannot be composite"},
@@ -376,10 +370,6 @@ func TestErrorTypes(t *testing.T) {
 	if !strings.Contains(fe.Error(), "format 9") {
 		t.Error(fe.Error())
 	}
-	ve := &VersionError{Source: "s", Required: "2.0.0", Running: "1.0.0"}
-	if !strings.Contains(ve.Error(), ">= 2.0.0") {
-		t.Error(ve.Error())
-	}
 	e := &ValidationError{Msg: "m"}
 	if e.Error() != "definition: m" {
 		t.Error(e.Error())
@@ -388,22 +378,6 @@ func TestErrorTypes(t *testing.T) {
 	var got *FormatError
 	if !errors.As(err, &got) || got.Got != 3 {
 		t.Errorf("expected FormatError, got %v", err)
-	}
-}
-
-func TestMinJsonize(t *testing.T) {
-	old := buildinfo.Version
-	t.Cleanup(func() { buildinfo.Version = old })
-	buildinfo.Version = "v1.0.0"
-	src := "format: 1\ncommand: c\nvariant: v\nmin_jsonize: 2.0.0\nparse: {type: kv}\n"
-	_, err := Load([]byte(src), "x.yaml")
-	var ve *VersionError
-	if !errors.As(err, &ve) {
-		t.Fatalf("expected VersionError, got %v", err)
-	}
-	buildinfo.Version = "v2.1.0"
-	if _, err := Load([]byte(src), "x.yaml"); err != nil {
-		t.Errorf("newer jsonize should accept: %v", err)
 	}
 }
 

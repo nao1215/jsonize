@@ -139,9 +139,6 @@ func (a *app) listDefinition(reg *registry.Registry, command, variant string, as
 		fmt.Fprintf(w, "  shadows:      the same definition in %s\n", strings.Join(e.Shadowed, ", "))
 	}
 	fmt.Fprintf(w, "  format:       %d\n", d.Format)
-	if d.MinJsonize != "" {
-		fmt.Fprintf(w, "  min_jsonize:  %s\n", d.MinJsonize)
-	}
 	if len(d.Metadata.Compatible) > 0 {
 		fmt.Fprintf(w, "  compatible:   %s\n", strings.Join(d.Metadata.Compatible, ", "))
 	}
@@ -259,9 +256,6 @@ func describe(e *registry.Entry) *jsonutil.Object {
 	o.Set("variant", d.Variant)
 	o.Set("description", d.Description)
 	o.Set("format", int64(d.Format))
-	if d.MinJsonize != "" {
-		o.Set("min_jsonize", d.MinJsonize)
-	}
 	o.Set("source", e.Source)
 	o.Set("path", e.Path)
 	o.Set("shadowed", stringsToAny(e.Shadowed))

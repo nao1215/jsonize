@@ -425,19 +425,6 @@ fields:
 	if mustJSON(t, got) != `{"name":"last wins","count":3,"flag":true}` {
 		t.Error(mustJSON(t, got))
 	}
-	custom := load(t, `
-format: 1
-command: x
-variant: names
-parse:
-  type: kv
-  key_name: k
-  value_name: v
-`)
-	got, err = Parse(custom, []byte("a=1\n"), Options{})
-	if err != nil || mustJSON(t, got) != `[{"k":"a","v":"1"}]` {
-		t.Errorf("custom names: %v %v", mustJSON(t, got), err)
-	}
 }
 
 func TestParseComposite(t *testing.T) {

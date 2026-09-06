@@ -13,7 +13,6 @@ format: 1                       # required; the schema version
 command: df                     # required; [a-z0-9][a-z0-9._+-]*
 variant: gnu-human              # required; [a-z0-9][a-z0-9-]*
 description: GNU coreutils df -h
-min_jsonize: 0.2.0              # optional; oldest jz that understands this file
 metadata: {...}                 # optional, informational
 detect: {...}                   # optional; how to choose this variant
 exec: {...}                     # optional; environment for jz run
@@ -182,8 +181,6 @@ parse:
   type: kv
   separator: "="          # default "="
   as: list | map          # default list
-  key_name: name          # list mode key names
-  value_name: value
   trim: true              # default true
   unquote: false          # default false
   on_mismatch: error | skip

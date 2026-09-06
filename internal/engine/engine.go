@@ -369,13 +369,7 @@ func (r *run) parseKV(p *definition.Parse, fields map[string]*definition.Field, 
 	if sep == "" {
 		sep = "="
 	}
-	keyName, valueName := p.KeyName, p.ValueName
-	if keyName == "" {
-		keyName = "name"
-	}
-	if valueName == "" {
-		valueName = "value"
-	}
+	const keyName, valueName = "name", "value"
 	asMap := p.As == definition.AsMap
 	var list []any
 	var obj *jsonutil.Object
