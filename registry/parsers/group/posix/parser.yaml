@@ -13,12 +13,11 @@ detect:
   auto_detect: false
   signature:
     all:
-      # A group entry has exactly four fields, so the member list has to
-      # end the line, and a group name carries no whitespace. Without
-      # both, /etc/passwd (seven fields) and any sentence with a clock
-      # time in it fit the same shape, and `jz --parser group` would
-      # convert them as if they were groups.
-      - '\A[^:\s]+:[^:\n]*:\d+:[^:\n]*$'
+      # Exactly four colon separated fields, none of which holds a space.
+      # Without the field count /etc/passwd (seven fields) is read as a
+      # group whose member list is the rest of the line, and without the
+      # space rule any "Label: 12:34:56" line qualifies.
+      - '\A[^:\s]+:[^:\s]*:\d+:[^:\s]*$'
 input:
   ignore:
     - '^\s*#'

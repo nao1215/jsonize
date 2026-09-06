@@ -16,9 +16,9 @@ detect:
   signature:
     all:
       # A name and the word UP is also every service status table there
-      # is ("web01 UP 3 days"), so what follows the state has to be
-      # addresses in CIDR form, or nothing at all for an interface that
-      # has none.
+      # is ("web01 UP 3 days"), and `ip -brief link` shares the first two
+      # columns as well, so what follows the state has to be addresses in
+      # CIDR form, or nothing at all for an interface that has none.
       - '\A\S+[ \t]+(?:UP|DOWN|UNKNOWN|LOWERLAYERDOWN)(?:[ \t]+[0-9a-fA-F:][0-9a-fA-F.:]*/\d+)*[ \t]*$'
 parse:
   type: regex

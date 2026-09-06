@@ -1,0 +1,3 @@
+description: the IPv6 half of /etc/hosts, which the signature accepts only from two colons on
+source: the IPv6 block Debian and Ubuntu ship in /etc/hosts, with the documentation address 2001:db8::/32 added
+os: linux

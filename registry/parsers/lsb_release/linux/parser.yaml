@@ -16,7 +16,13 @@ detect:
     any: ["-a", "--all"]
   signature:
     all:
-      - '^(?:Distributor ID|Description|Release|Codename):\t'
+      # All four fields, because the parser needs all four. One of them on
+      # its own is `lsb_release -d` or `-r`, which this definition cannot
+      # read and used to fail at parse time instead of at detection.
+      - '^Distributor ID:\t'
+      - '^Description:\t'
+      - '^Release:\t'
+      - '^Codename:\t'
 parse:
   type: regex
   each: input

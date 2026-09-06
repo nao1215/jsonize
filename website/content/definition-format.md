@@ -185,14 +185,19 @@ parse:
   key_name: name          # list mode key names
   value_name: value
   trim: true              # default true
+  unquote: false          # default false
   on_mismatch: error | skip
 ```
 
 `list` yields `[{"name": ..., "value": ...}]`; `map` yields one object
 (later duplicates win). Keys and values are trimmed unless
 `trim: false`, which a format whose values are significant down to the
-space (an environment variable) sets. `fields` entries are looked up by
-key and applied to the value.
+space (an environment variable) sets. `unquote: true` removes one
+matching pair of surrounding `"` or `'` from the value, for the
+shell-quoted files (`/etc/os-release`) whose quotes are syntax rather
+than content. `fields` entries are looked up by key, before any
+conversion, so the key has to be a legal field name: a format whose
+labels contain spaces or brackets (`CPU(s)`) cannot convert its values.
 
 ### type: composite
 

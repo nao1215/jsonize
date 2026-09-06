@@ -13,12 +13,13 @@ detect:
   auto_detect: false
   signature:
     all:
-      - '\A\S+:\s+\S'
+      # The description follows on the same line. \s would also match the
+      # newline, which let "root:x:0:" from /etc/group through.
+      - '\A\S+:[ \t]+\S'
     none:
-      # blkid prints the same "path: rest" shape but the rest is a list of
-      # TAG="value" pairs, never a type description, so `jz --parser file`
-      # must not accept it as one.
-      - '\A/dev/\S+: [A-Z_]+="'
+      # blkid prints "DEVICE: KEY="value" KEY="value"", which is the same
+      # shape. A file(1) description never opens with an assignment.
+      - '\A\S+:\s+[A-Z_]+="'
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'

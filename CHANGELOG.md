@@ -24,6 +24,16 @@ project follows [Semantic Versioning](https://semver.org/).
   `free`, `ps` and `uptime` to `ip`, `ss`, `systemctl` and `lsusb`.
   `jz list` prints the current set.
 
+### Fixed
+
+- Signatures that accepted the output of a neighbouring command. `group`
+  read `/etc/passwd`, `uname -a` and `timedatectl` output; `hosts` read
+  the clock at the start of BSD `uptime` and `w` output as an IPv6
+  address; `env` claimed `/etc/os-release` under automatic detection and
+  kept the shell quotes inside the values; `file` read `blkid` output and
+  any `token:` line followed by a newline; `ip -brief address` read
+  `ip -brief link` output, putting the MAC address in the address list.
+
 ### Decisions worth knowing
 
 - A rounded, human-readable size (`df -h`, `free -h`, `ls -lh`, `lsblk`)
