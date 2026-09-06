@@ -1,0 +1,18 @@
+[
+  {
+    "index": 0,
+    "branch": "feature/read-the-japanese-guide",
+    "message": "日本語のメモを直す途中"
+  },
+  {
+    "index": 1,
+    "branch": "main",
+    "commit": "be679cb",
+    "message": "chore: add more files"
+  },
+  {
+    "index": 2,
+    "branch": "main",
+    "message": "work in progress on the reader"
+  }
+]

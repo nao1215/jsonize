@@ -1,0 +1,48 @@
+# One line per branch: a marker, the branch name padded into a column, the
+# abbreviated object name of its tip and the subject of that commit. The
+# marker is "*" for the branch HEAD points at, "+" for a branch checked out
+# in a linked worktree and a space for the rest, which becomes null.
+#
+# A detached HEAD has no branch name, so git writes a parenthesised phrase
+# ("(HEAD detached at 0c4fb20)", "(no branch, rebasing main)") in the name
+# column; that phrase contains spaces and is matched on its own.
+#
+# `-a` adds the remote-tracking branches, which have this same shape apart
+# from the symbolic ref line ("remotes/origin/HEAD -> origin/main"); that
+# line has no object name and is reported as a line that does not match.
+#
+# With an upstream, git puts its divergence in brackets before the subject
+# ([ahead 1], [ahead 1, behind 2], [gone]). Only those three words open a
+# tracking field, so a subject that itself starts with a bracket stays a
+# subject. `-vv` prints the upstream name in those brackets instead; that
+# is a different format and its brackets are left in the subject.
+format: 1
+command: git
+variant: branch-verbose
+description: git branch -v
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-branch
+detect:
+  args:
+    any: ["branch"]
+  # A marker, a word, a hexadecimal word and free text is a shape other
+  # reports share, so jz reads it only when the parser is named
+  # (`jz run git branch -v`, `--parser git`).
+  auto_detect: false
+  signature:
+    all:
+      - '(?m)^[*+] (?:\([^)\n]*\)|[^ \n]+)[ \t]+[0-9a-f]{7,40}(?:[ \t]|$)'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<marker>[*+ ]) (?P<name>\([^)\n]*\))[ \t]+(?P<commit>[0-9a-f]{4,40})[ \t]?(?P<subject>.*)$'
+    - '^(?P<marker>[*+ ]) (?P<name>[^ \t]+)[ \t]+(?P<commit>[0-9a-f]{4,40}) \[(?P<tracking>(?:ahead|behind|gone)[^\]\n]*)\] (?P<subject>.*)$'
+    - '^(?P<marker>[*+ ]) (?P<name>[^ \t]+)[ \t]+(?P<commit>[0-9a-f]{4,40})[ \t]?(?P<subject>.*)$'
+fields:
+  marker: {null_if: [""]}
+  name: {required: true}
+  commit: {required: true}
+  tracking: {when_missing: omit}

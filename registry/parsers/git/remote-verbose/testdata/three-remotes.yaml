@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: an https remote, an ssh remote whose push URL differs from its fetch URL, and a remote that is a local path
+os: linux
+args: ["remote", "-v"]

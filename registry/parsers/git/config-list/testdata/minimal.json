@@ -1,0 +1,42 @@
+[
+  {
+    "name": "core.repositoryformatversion",
+    "value": "0"
+  },
+  {
+    "name": "core.filemode",
+    "value": "true"
+  },
+  {
+    "name": "core.bare",
+    "value": "false"
+  },
+  {
+    "name": "core.logallrefupdates",
+    "value": "true"
+  },
+  {
+    "name": "core.excludesfile",
+    "value": ""
+  },
+  {
+    "name": "user.name",
+    "value": "Ada Lovelace"
+  },
+  {
+    "name": "user.email",
+    "value": "ada@example.com"
+  },
+  {
+    "name": "remote.origin.url",
+    "value": "/srv/git repos/tiny.git"
+  },
+  {
+    "name": "remote.origin.fetch",
+    "value": "+refs/heads/*:refs/remotes/origin/*"
+  },
+  {
+    "name": "alias.st",
+    "value": "status --porcelain=v1"
+  }
+]

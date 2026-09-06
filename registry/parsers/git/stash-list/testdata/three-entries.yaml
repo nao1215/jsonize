@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: three entries made on two branches, one of them with a Japanese message and one stashed without a message so that git wrote WIP and the commit it was made on
+os: linux
+args: ["stash", "list"]

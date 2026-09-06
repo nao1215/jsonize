@@ -1,0 +1,12 @@
+[
+  {
+    "name": "origin",
+    "url": "/srv/git repos/tiny.git",
+    "direction": "fetch"
+  },
+  {
+    "name": "origin",
+    "url": "/srv/git repos/tiny.git",
+    "direction": "push"
+  }
+]

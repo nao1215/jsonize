@@ -1,0 +1,38 @@
+# One line per setting, "section.key=value" with the section and the key
+# lower-cased by git. The same key may appear more than once (a remote has
+# several fetch refspecs), so the settings are a list rather than an
+# object: folding them into one would drop every repetition but the last.
+#
+# A key set with no value at all is printed without the "=" and then has
+# no value field, which is what tells it apart from a key set to the empty
+# string. A value keeps whatever git printed, including any "=" of its own.
+format: 1
+command: git
+variant: config-list
+description: git config --list
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-config#Documentation/git-config.txt---list
+detect:
+  args:
+    any: ["config"]
+  # "key=value" lines are the shape of an environment, an os-release file
+  # and much else, so jz reads them as git configuration only when the
+  # parser is named (`jz run git config --list`, `--parser git`).
+  auto_detect: false
+  signature:
+    all:
+      # A dotted lower-case key with no space before the "=" (which is
+      # what separates this from `sysctl -a`, whose keys are also dotted
+      # but which prints " = ").
+      - '\A[a-z][a-z0-9]*\.[^\n= ]+='
+      - '(?m)^(?:core|remote|branch|alias|init|credential|include|includeif|submodule|http|pack|rebase|receive|push|pull|fetch|commit|diff|merge|status|tag|gpg|color|log|user)\.[^\n= ]*='
+parse:
+  type: regex
+  patterns:
+    - '^(?P<name>[^=\n]+)=(?P<value>.*)$'
+    - '^(?P<name>[^=\n]+)$'
+fields:
+  name: {required: true}

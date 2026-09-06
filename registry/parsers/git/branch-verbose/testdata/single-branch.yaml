@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: one branch whose tip has an empty commit message, so the line ends after the separating space
+os: linux
+args: ["branch", "-v"]

@@ -1,0 +1,10 @@
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+core.excludesfile=
+user.name=Ada Lovelace
+user.email=ada@example.com
+remote.origin.url=/srv/git repos/tiny.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+alias.st=status --porcelain=v1

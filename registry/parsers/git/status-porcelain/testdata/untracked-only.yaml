@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: one untracked file and nothing else; the shortest output the format has, with a quoted path
+os: linux
+args: ["status", "--porcelain"]

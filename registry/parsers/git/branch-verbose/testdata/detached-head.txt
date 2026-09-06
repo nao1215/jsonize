@@ -1,0 +1,5 @@
+* (HEAD detached at 0c4fb20)                                   0c4fb20 docs: 日本語のはじめにを追加する
+  feature/read-the-japanese-guide                              be679cb chore: add more files
+  hotfix/very-long-branch-name-that-describes-the-whole-change 28f06f9 docs: describe the guide
++ main                                                         8d23922 [ahead 3] Merge branch 'topic/rename-the-flag'
+  topic/rename-the-flag                                        a5928e1 refactor: rename the flag so that the intent of the option is obvious to a reader

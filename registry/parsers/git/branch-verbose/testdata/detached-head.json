@@ -1,0 +1,33 @@
+[
+  {
+    "marker": "*",
+    "name": "(HEAD detached at 0c4fb20)",
+    "commit": "0c4fb20",
+    "subject": "docs: 日本語のはじめにを追加する"
+  },
+  {
+    "marker": null,
+    "name": "feature/read-the-japanese-guide",
+    "commit": "be679cb",
+    "subject": "chore: add more files"
+  },
+  {
+    "marker": null,
+    "name": "hotfix/very-long-branch-name-that-describes-the-whole-change",
+    "commit": "28f06f9",
+    "subject": "docs: describe the guide"
+  },
+  {
+    "marker": "+",
+    "name": "main",
+    "commit": "8d23922",
+    "tracking": "ahead 3",
+    "subject": "Merge branch 'topic/rename-the-flag'"
+  },
+  {
+    "marker": null,
+    "name": "topic/rename-the-flag",
+    "commit": "a5928e1",
+    "subject": "refactor: rename the flag so that the intent of the option is obvious to a reader"
+  }
+]

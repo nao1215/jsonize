@@ -1,0 +1,26 @@
+[
+  {
+    "commit": "8d23922",
+    "subject": "Merge branch 'topic/rename-the-flag'"
+  },
+  {
+    "commit": "a5928e1",
+    "subject": "refactor: rename the flag so that the intent of the option is obvious to a reader"
+  },
+  {
+    "commit": "be679cb",
+    "subject": "chore: add more files"
+  },
+  {
+    "commit": "0c4fb20",
+    "subject": "docs: 日本語のはじめにを追加する"
+  },
+  {
+    "commit": "28f06f9",
+    "subject": "docs: describe the guide"
+  },
+  {
+    "commit": "25df583",
+    "subject": "feat: add the first version of the reader"
+  }
+]

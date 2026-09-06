@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C; --local so that the personal configuration of the machine stays out of the fixture
+description: the configuration of a repository with three remotes, an alias whose value has spaces, and review.strict, a key set with no value at all
+os: linux
+args: ["config", "--list", "--local"]

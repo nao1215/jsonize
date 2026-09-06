@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C, run from a linked worktree with a detached HEAD
+description: a detached HEAD, a branch checked out in another worktree (+), a branch ahead of its upstream and a Japanese subject
+os: linux
+args: ["branch", "-v"]

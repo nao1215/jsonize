@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C; --local so that the personal configuration of the machine stays out of the fixture
+description: a freshly initialised repository, with core.excludesfile set to the empty string and an alias whose value contains an equals sign
+os: linux
+args: ["config", "--list", "--local"]

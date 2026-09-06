@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: one remote whose URL is a local path containing a space, which is what makes the tab and the trailing "(fetch)" the only reliable separators
+os: linux
+args: ["remote", "-v"]

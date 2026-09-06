@@ -1,0 +1,19 @@
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+user.name=Ada Lovelace
+user.email=ada@example.com
+commit.gpgsign=false
+remote.origin.url=https://github.com/example/sample-project.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+remote.upstream.url=git@github.com:example/upstream-project.git
+remote.upstream.fetch=+refs/heads/*:refs/remotes/upstream/*
+remote.upstream.pushurl=no-push-allowed
+remote.local-mirror.url=/srv/mirrors/sample-project.git
+remote.local-mirror.fetch=+refs/heads/*:refs/remotes/local-mirror/*
+alias.lg=log --oneline --graph --decorate
+review.strict
+branch.main.mergeoptions=--no-ff
+branch.main.remote=origin
+branch.main.merge=refs/heads/main

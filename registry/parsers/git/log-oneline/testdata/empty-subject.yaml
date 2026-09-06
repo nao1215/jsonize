@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: a repository with a single commit whose message is empty, so the line is an object name and the separating space
+os: linux
+args: ["log", "--oneline"]
