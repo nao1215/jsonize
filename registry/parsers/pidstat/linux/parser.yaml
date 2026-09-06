@@ -1,0 +1,47 @@
+# pidstat prints the sysstat banner and one table whose first column is the
+# sample time, unlabelled in the header, so the column names are declared.
+# Command is last and keeps the rest of the line, because a task name can
+# contain spaces ("Socket Process", "mt76-tx phy0").
+format: 1
+command: pidstat
+variant: linux
+description: pidstat per-task CPU utilisation
+metadata:
+  tags: [linux, cpu, process, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/pidstat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+UID[ \t]+PID[ \t]+%usr'
+parse:
+  type: composite
+  parts:
+    - name: report
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ALinux[ \t]+(?P<kernel>\S+)[ \t]+\((?P<hostname>[^)]*)\)[ \t]+(?P<date>\S+)[ \t]+_(?P<architecture>.+?)_[ \t]+\((?P<cpu_count>[0-9]+)[ \t]+CPU\)[ \t]*\z'
+      fields:
+        cpu_count: {type: int}
+    - name: tasks
+      select: {skip: 1}
+      parse:
+        type: table
+        header:
+          columns: [time, uid, pid, usr_percent, system_percent, guest_percent, wait_percent, cpu_percent, cpu, command]
+      fields:
+        time: {required: true}
+        uid: {type: int}
+        pid: {type: int, required: true}
+        usr_percent: {type: float}
+        system_percent: {type: float}
+        guest_percent: {type: float}
+        wait_percent: {type: float}
+        cpu_percent: {type: float}
+        cpu: {type: int}
+        command: {required: true}

@@ -1,0 +1,57 @@
+{
+  "uptime": {
+    "time": "19:39:57",
+    "uptime": "13 days, 10:20",
+    "users": 5,
+    "load_1m": 4.34,
+    "load_5m": 2.99,
+    "load_15m": 1.7
+  },
+  "tasks": {
+    "total": 1,
+    "running": 0,
+    "sleeping": 1,
+    "stopped": 0,
+    "zombie": 0
+  },
+  "cpu": {
+    "user": 4.4,
+    "system": 0.9,
+    "nice": 0,
+    "idle": 94.7,
+    "iowait": 0,
+    "hardware_irq": 0,
+    "software_irq": 0,
+    "steal": 0
+  },
+  "memory": {
+    "unit": "MiB",
+    "total": 62903.7,
+    "free": 1400,
+    "used": 39521,
+    "buff_cache": 40268.8
+  },
+  "swap": {
+    "unit": "MiB",
+    "total": 8192,
+    "free": 6619.8,
+    "used": 1572.2,
+    "available": 23382.7
+  },
+  "processes": [
+    {
+      "pid": 1,
+      "user": "root",
+      "pr": "20",
+      "ni": 0,
+      "virt": "28252",
+      "res": "13480",
+      "shr": "6320",
+      "s": "S",
+      "cpu_percent": 0,
+      "mem_percent": 0,
+      "time": "4:52.14",
+      "command": "systemd"
+    }
+  ]
+}

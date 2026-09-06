@@ -1,0 +1,20 @@
+Sep 06 19:31:52 host01 kernel: ptrace attach of "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"[9049] was attempted by "lsns -J -t time"[2473192]
+Sep 06 19:31:52 host01 kernel: ptrace attach of "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"[9049] was attempted by "lsns -J -t time"[2473192]
+Sep 06 19:31:52 host01 kernel: ptrace attach of "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"[9049] was attempted by "lsns -J -t time"[2473192]
+Sep 06 19:31:52 host01 kernel: ptrace attach of "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"[9049] was attempted by "lsns -J -t time"[2473192]
+Sep 06 19:31:52 host01 kernel: ptrace attach of "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"[9049] was attempted by "lsns -J -t time"[2473192]
+Sep 06 19:31:52 host01 kernel: ptrace attach of "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"[9049] was attempted by "lsns -J -t time"[2473192]
+Sep 06 19:31:52 host01 kernel: ptrace attach of "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"[9049] was attempted by "lsns -J -t time"[2473192]
+Sep 06 19:31:52 host01 kernel: ptrace attach of "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"[9049] was attempted by "lsns -J -t time"[2473192]
+Sep 06 19:31:52 host01 kernel: ptrace attach of "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"[9049] was attempted by "lsns -J -t time"[2473192]
+Sep 06 19:31:52 host01 kernel: ptrace attach of "/usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only"[9049] was attempted by "lsns -J -t time"[2473192]
+Sep 06 19:32:17 host01 systemd[1]: Started anacron.service - Run anacron jobs.
+Sep 06 19:32:17 host01 anacron[2484617]: Anacron 2.3 started on 2026-09-06
+Sep 06 19:32:17 host01 anacron[2484617]: Normal exit (0 jobs run)
+Sep 06 19:32:17 host01 systemd[1]: anacron.service: Deactivated successfully.
+Sep 06 19:34:47 host01 systemd[1]: Starting sddm-backgrounds-cache.service - Update SDDM user backgrounds cache from AccountsService...
+Sep 06 19:34:47 host01 update-sddm-backgrounds-cache[2682521]: SDDM backgrounds cache updated successfully
+Sep 06 19:34:47 host01 update-sddm-backgrounds-cache[2682521]: Cache file: /usr/share/sddm/themes/ubuntu-budgie-login/cache/user-backgrounds.json
+Sep 06 19:34:47 host01 update-sddm-backgrounds-cache[2682521]: QML file: /usr/share/sddm/themes/ubuntu-budgie-login/components/AccountsService.qml
+Sep 06 19:34:47 host01 systemd[1]: sddm-backgrounds-cache.service: Deactivated successfully.
+Sep 06 19:34:47 host01 systemd[1]: Finished sddm-backgrounds-cache.service - Update SDDM user backgrounds cache from AccountsService.

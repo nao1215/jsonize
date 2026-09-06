@@ -1,0 +1,8 @@
+top - 19:39:57 up 13 days, 10:20,  5 users,  load average: 4.34, 2.99, 1.70
+Tasks:   1 total,   0 running,   1 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  4.4 us,  0.9 sy,  0.0 ni, 94.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  62903.7 total,   1400.0 free,  39521.0 used,  40268.8 buff/cache     
+MiB Swap:   8192.0 total,   6619.8 free,   1572.2 used.  23382.7 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   28252  13480   6320 S   0.0   0.0   4:52.14 systemd

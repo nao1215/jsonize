@@ -1,0 +1,4 @@
+Linux 6.8.0-generic (host01) 	09/06/26 	_x86_64_	(32 CPU)
+
+19:39:55      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+19:39:55        0         1    0.01    0.01    0.00    0.00    0.03    22  systemd

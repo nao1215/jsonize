@@ -1,0 +1,49 @@
+# mpstat prints the sysstat banner and one table whose first column is the
+# sample time, unlabelled in the header, so the column names are declared.
+format: 1
+command: mpstat
+variant: linux
+description: mpstat per-processor CPU utilisation
+metadata:
+  tags: [linux, cpu, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/mpstat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+CPU[ \t]+%usr[ \t]+%nice'
+parse:
+  type: composite
+  parts:
+    - name: report
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ALinux[ \t]+(?P<kernel>\S+)[ \t]+\((?P<hostname>[^)]*)\)[ \t]+(?P<date>\S+)[ \t]+_(?P<architecture>.+?)_[ \t]+\((?P<cpu_count>[0-9]+)[ \t]+CPU\)[ \t]*\z'
+      fields:
+        cpu_count: {type: int}
+    # cpu is "all" for the summary row and a processor number otherwise, so
+    # it stays a string.
+    - name: cpu
+      select: {skip: 1}
+      parse:
+        type: table
+        header:
+          columns: [time, cpu, usr_percent, nice_percent, sys_percent, iowait_percent, irq_percent, soft_percent, steal_percent, guest_percent, gnice_percent, idle_percent]
+      fields:
+        time: {required: true}
+        cpu: {required: true}
+        usr_percent: {type: float}
+        nice_percent: {type: float}
+        sys_percent: {type: float}
+        iowait_percent: {type: float}
+        irq_percent: {type: float}
+        soft_percent: {type: float}
+        steal_percent: {type: float}
+        guest_percent: {type: float}
+        gnice_percent: {type: float}
+        idle_percent: {type: float}

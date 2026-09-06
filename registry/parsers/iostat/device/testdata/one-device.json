@@ -1,0 +1,21 @@
+{
+  "report": {
+    "kernel": "6.8.0-generic",
+    "hostname": "host01",
+    "date": "09/06/26",
+    "architecture": "x86_64",
+    "cpu_count": 32
+  },
+  "devices": [
+    {
+      "device": "nvme0n1",
+      "tps": 0.04,
+      "kb_read_s": 0.23,
+      "kb_wrtn_s": 0.03,
+      "kb_dscd_s": 808.58,
+      "kb_read": 268329,
+      "kb_wrtn": 40292,
+      "kb_dscd": 938311980
+    }
+  ]
+}

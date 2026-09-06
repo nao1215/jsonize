@@ -1,0 +1,2 @@
+source: "pidstat on Ubuntu with sysstat 12.7.7, LC_ALL=C; cut down to the first eighteen tasks plus five whose command name contains a space"
+os: linux

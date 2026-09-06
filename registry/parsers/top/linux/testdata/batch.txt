@@ -1,0 +1,24 @@
+top - 19:36:19 up 13 days, 10:16,  5 users,  load average: 0.96, 1.35, 0.95
+Tasks: 734 total,   1 running, 733 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  1.4 us,  0.3 sy,  0.0 ni, 98.3 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  62903.7 total,   2322.0 free,  38261.9 used,  40593.5 buff/cache     
+MiB Swap:   8192.0 total,   6629.4 free,   1562.6 used.  24641.8 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+ 529988 bob       20   0 5643036 777116 125480 S  27.3   1.2   9:23.82 claude
+1463121 root      20   0 1304508  74072  19560 S   9.1   0.1 281:15.66 kube-co+
+2727527 bob       20   0    8460   6048   3864 R   9.1   0.0   0:00.02 top
+      1 root      20   0   28252  13480   6320 S   0.0   0.0   4:52.12 systemd
+      2 root      20   0       0      0      0 S   0.0   0.0   0:01.10 kthreadd
+      3 root      20   0       0      0      0 S   0.0   0.0   0:00.00 pool_wo+
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker+
+      5 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker+
+      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker+
+      7 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker+
+      8 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker+
+     10 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker+
+     13 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker+
+   7018 root      20   0 4689520  72448  22520 S   0.0   0.1      6,31 kubelet
+   7925 root      20   0   11.2g  66488  15948 S   0.0   0.1      6,14 etcd
+ 175814 bob       20   0 1452.3g 469348 122404 S   0.0   0.7   3:31.92 code
+ 462023 bob       20   0   54.8g   1.1g 903804 S   0.0   1.8  35:49.65 chrome
