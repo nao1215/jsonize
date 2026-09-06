@@ -1,0 +1,3 @@
+description: seven chips, one of them reporting limits that spill onto a second line
+source: captured on Ubuntu 26.04 (lm-sensors 3.6.2) with LC_ALL=C
+os: linux

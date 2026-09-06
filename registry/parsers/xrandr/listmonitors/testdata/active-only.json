@@ -1,0 +1,22 @@
+{
+  "summary": {
+    "count": 1
+  },
+  "monitors": [
+    {
+      "index": 0,
+      "automatic": true,
+      "primary": true,
+      "name": "HDMI-A-1",
+      "width": 2560,
+      "width_mm": 673,
+      "height": 1080,
+      "height_mm": 284,
+      "x": 0,
+      "y": 0,
+      "outputs": [
+        "HDMI-A-1"
+      ]
+    }
+  ]
+}

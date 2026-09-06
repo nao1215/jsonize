@@ -1,0 +1,31 @@
+# `lspci -n` replaces every name with the number behind it: the class
+# code, then the vendor and device ids. Nothing else is printed, so the
+# output carries no words at all.
+format: 1
+command: lspci
+variant: numeric
+description: lspci -n numeric identifiers
+metadata:
+  tags: [linux, hardware, pciutils]
+  compatible: [pciutils]
+  references:
+    - https://man7.org/linux/man-pages/man8/lspci.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [0-9a-f]{4}: [0-9a-f]{4}:[0-9a-f]{4}'
+    none:
+      # An indented line means -k or -v was asked for as well, and this
+      # definition would stop at the first one.
+      - '^\t\S'
+parse:
+  type: regex
+  pattern: '^(?P<slot>[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class_id>[0-9a-f]{4}): (?P<vendor_id>[0-9a-f]{4}):(?P<device_id>[0-9a-f]{4})(?: \(rev (?P<revision>[0-9a-f]+)\))?(?: \(prog-if (?P<prog_if>[0-9a-f]+)\))?[ \t]*$'
+fields:
+  slot: {required: true}
+  class_id: {required: true}
+  vendor_id: {required: true}
+  device_id: {required: true}
+  revision: {when_missing: omit}
+  prog_if: {when_missing: omit}

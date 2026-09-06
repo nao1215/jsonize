@@ -1,0 +1,12 @@
+[
+  {
+    "device": {
+      "Slot": "00:01.0",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo Dummy Host Bridge",
+      "ProgIf": "00",
+      "IOMMUGroup": 1
+    }
+  }
+]

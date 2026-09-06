@@ -1,0 +1,48 @@
+# `bluetoothctl show` names the controller on its first line and then
+# indents its properties under it, followed by a second block for the
+# advertising features. UUID, Roles, SupportedIncludes and several other
+# keys are printed once per value, so both blocks are lists of name/value
+# objects rather than maps.
+format: 1
+command: bluetoothctl
+variant: show
+description: bluetoothctl show controller properties
+metadata:
+  tags: [linux, bluetooth, bluez]
+  compatible: [BlueZ]
+  references:
+    - https://manpages.debian.org/testing/bluez/bluetoothctl.1.en.html
+detect:
+  os: [linux]
+  args:
+    all: ["show"]
+  signature:
+    all:
+      - '\AController [0-9A-F]{2}(?::[0-9A-F]{2}){5} \([a-z]+\)[ \t]*$'
+      - '^[ \t]+Powered:[ \t]'
+parse:
+  type: composite
+  parts:
+    - name: controller
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AController (?P<address>[0-9A-F]{2}(?::[0-9A-F]{2}){5}) \((?P<address_type>[a-z]+)\)[ \t]*\z'
+      fields:
+        address: {required: true}
+        address_type: {required: true}
+    - name: properties
+      select: {skip: 1, until: '^Advertising Features:'}
+      parse:
+        type: kv
+        separator: ":"
+        as: list
+    # A controller that cannot advertise prints no such block, which
+    # leaves this list empty.
+    - name: advertising
+      select: {after: '^Advertising Features:'}
+      parse:
+        type: kv
+        separator: ":"
+        as: list

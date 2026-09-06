@@ -1,0 +1,4 @@
+description: a machine with no battery, so the only device is the composite display device
+source: captured on Ubuntu 26.04 (UPower 1.91.1) with LC_ALL=C, upower -d
+os: linux
+args: [-d]

@@ -1,0 +1,4 @@
+description: the same screen read with --current, which reports the configuration without probing the outputs
+source: captured on Ubuntu 26.04 (xrandr 1.5.3, RandR 1.6) with LC_ALL=C, xrandr --current
+os: linux
+args: [--current]

@@ -1,0 +1,24 @@
+[
+  {
+    "device": {
+      "id": 0,
+      "name": "hci0",
+      "type": "Bluetooth"
+    },
+    "blocked": {
+      "soft": false,
+      "hard": false
+    }
+  },
+  {
+    "device": {
+      "id": 1,
+      "name": "phy0",
+      "type": "Wireless LAN"
+    },
+    "blocked": {
+      "soft": false,
+      "hard": false
+    }
+  }
+]

@@ -1,0 +1,8 @@
+amdgpu-pci-c600
+Adapter: PCI adapter
+vddgfx:        0.00 V  
+vddnb:         0.00 V  
+edge:         +39.0 C  
+PPT:          14.02 W  (avg =  14.02 W)
+sclk:         804 MHz 
+

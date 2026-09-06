@@ -1,0 +1,63 @@
+# xrandr prints one block per output: the output line, and under it one
+# line per mode the output supports. The blocks repeat, so the definition
+# describes one of them and `records` applies it to each.
+#
+# What this definition loses: the "Screen 0: minimum ... maximum ..." line
+# above the first output, which states the bounds the X screen can be
+# resized within. It is dropped because a record cannot hold a shape of
+# its own, and what it says about the current size is repeated by the
+# geometry of the outputs.
+format: 1
+command: xrandr
+variant: linux
+description: xrandr outputs and the modes they support
+metadata:
+  tags: [linux, display, x11, randr]
+  compatible: [xrandr]
+  references:
+    - https://www.x.org/releases/current/doc/man/man1/xrandr.1.xhtml
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AScreen [0-9]+: minimum [0-9]+ x [0-9]+, current [0-9]+ x [0-9]+, maximum [0-9]+ x [0-9]+'
+      - '^\S+ (?:connected|disconnected)'
+input:
+  select:
+    after: '\AScreen [0-9]+:'
+parse:
+  type: records
+  start: '^\S+ (?:connected|disconnected)'
+  parts:
+    # A disconnected output has no geometry and no physical size, an
+    # output that is connected but not in use has no geometry either, and
+    # the rotation and reflection are printed only when they are not the
+    # default.
+    - name: output
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>\S+) (?P<status>connected|disconnected)(?P<primary>(?: primary)?)(?: (?P<geometry>[0-9]+x[0-9]+\+[0-9]+\+[0-9]+))?(?: (?P<rotation>normal|left|inverted|right))?(?: (?P<reflection>X axis|Y axis|X and Y axis))? \((?P<transforms>[^)]*)\)(?: (?P<width_mm>[0-9]+)mm x (?P<height_mm>[0-9]+)mm)?[ \t]*\z'
+      fields:
+        name: {required: true}
+        status: {required: true}
+        primary: {type: bool, true_values: ["primary"], false_values: [""]}
+        # The rotations and reflections the output supports, kept as
+        # printed: they are separated by spaces but two of them ("x axis",
+        # "y axis") contain one, so splitting on whitespace would cut them
+        # in half.
+        transforms: {required: true}
+        width_mm: {type: int}
+        height_mm: {type: int}
+    # A mode line names the mode and then every refresh rate it can be
+    # driven at, with * marking the one in use and + the one the monitor
+    # prefers. The markers stay attached to the rate they belong to.
+    - name: modes
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^[ \t]+(?P<mode>\S+)[ \t]+(?P<rates>\S.*?)[ \t]*$'
+      fields:
+        mode: {required: true}
+        rates: {type: array, split_regex: '[ \t]+'}

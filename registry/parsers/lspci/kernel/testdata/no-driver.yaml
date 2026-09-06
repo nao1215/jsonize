@@ -1,0 +1,4 @@
+description: one device that names a subsystem but no kernel driver
+source: captured on Ubuntu 26.04 (pciutils 3.14.0) with LC_ALL=C, lspci -k -s 00:00.0
+os: linux
+args: [-k, -s, "00:00.0"]

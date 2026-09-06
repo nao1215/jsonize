@@ -1,0 +1,28 @@
+# rfkill with no command prints a table of every radio switch. The SOFT
+# and HARD cells are right-aligned under their headings while DEVICE is
+# left-aligned under a wider one, so the columns cannot be cut at the
+# heading offsets; every cell is a single word, so they are split on
+# whitespace instead. That also reads --raw, which prints the same
+# headings with one space between the columns.
+format: 1
+command: rfkill
+variant: linux
+description: rfkill default table of radio switches
+metadata:
+  tags: [linux, wireless, bluetooth, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/rfkill.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AID[ \t]+TYPE[ \t]+DEVICE[ \t]+SOFT[ \t]+HARD[ \t]*$'
+parse:
+  type: table
+fields:
+  id: {type: int, required: true}
+  type: {required: true}
+  device: {required: true}
+  soft: {type: bool, true_values: ["blocked"], false_values: ["unblocked"], required: true}
+  hard: {type: bool, true_values: ["blocked"], false_values: ["unblocked"], required: true}

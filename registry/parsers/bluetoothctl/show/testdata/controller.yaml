@@ -1,0 +1,4 @@
+description: one controller with the advertising block under it, and repeated UUID and Roles keys
+source: captured on Ubuntu 26.04 (BlueZ 5.85) with LC_ALL=C, bluetoothctl show; controller address and name replaced
+os: linux
+args: [show]

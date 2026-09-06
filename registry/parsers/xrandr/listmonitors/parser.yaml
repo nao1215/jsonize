@@ -1,0 +1,50 @@
+# `xrandr --listmonitors` counts the monitors on its first line and then
+# prints one line each: the index, the flags, the name, the size in
+# pixels and millimetres, the position, and the outputs the monitor is
+# made of.
+format: 1
+command: xrandr
+variant: listmonitors
+description: xrandr --listmonitors monitor geometry
+metadata:
+  tags: [linux, display, x11, randr]
+  compatible: [xrandr]
+  references:
+    - https://www.x.org/releases/current/doc/man/man1/xrandr.1.xhtml
+detect:
+  os: [linux]
+  args:
+    any: ["--listmonitors", "--listactivemonitors"]
+  signature:
+    all:
+      - '\AMonitors: [0-9]+[ \t]*$'
+      - '^[ \t]*[0-9]+: [+*]*\S+ [0-9]+/[0-9]+x[0-9]+/[0-9]+\+[0-9]+\+[0-9]+'
+parse:
+  type: composite
+  parts:
+    - name: summary
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AMonitors: (?P<count>[0-9]+)[ \t]*\z'
+      fields:
+        count: {type: int, required: true}
+    # + marks a monitor xrandr set up automatically and * the primary one.
+    - name: monitors
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^[ \t]*(?P<index>[0-9]+): (?P<automatic>\+?)(?P<primary>\*?)(?P<name>\S+) (?P<width>[0-9]+)/(?P<width_mm>[0-9]+)x(?P<height>[0-9]+)/(?P<height_mm>[0-9]+)\+(?P<x>[0-9]+)\+(?P<y>[0-9]+)[ \t]+(?P<outputs>\S.*?)[ \t]*$'
+      fields:
+        index: {type: int, required: true}
+        automatic: {type: bool, true_values: ["+"], false_values: [""]}
+        primary: {type: bool, true_values: ["*"], false_values: [""]}
+        name: {required: true}
+        width: {type: int}
+        width_mm: {type: int}
+        height: {type: int}
+        height_mm: {type: int}
+        x: {type: int}
+        y: {type: int}
+        outputs: {type: array, split_regex: '[ \t]+'}

@@ -1,0 +1,508 @@
+[
+  {
+    "device": {
+      "Slot": "00:00.0",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo Root Complex",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix/Strix Halo Root Complex",
+      "Rev": "02",
+      "ProgIf": "00"
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:00.2",
+      "Class": "IOMMU",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo IOMMU",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix/Strix Halo IOMMU",
+      "Rev": "02",
+      "ProgIf": "00"
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:01.0",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo Dummy Host Bridge",
+      "ProgIf": "00",
+      "IOMMUGroup": 1
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:01.1",
+      "Class": "PCI bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo PCIe USB4 Bridge",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix/Strix Halo PCIe USB4 Bridge",
+      "Rev": "02",
+      "ProgIf": "00",
+      "IOMMUGroup": 2
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:01.2",
+      "Class": "PCI bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo PCIe USB4 Bridge",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix/Strix Halo PCIe USB4 Bridge",
+      "Rev": "02",
+      "ProgIf": "00",
+      "IOMMUGroup": 3
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:02.0",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo Dummy Host Bridge",
+      "ProgIf": "00",
+      "IOMMUGroup": 4
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:02.1",
+      "Class": "PCI bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo GPP Bridge",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Device 1453",
+      "Rev": "02",
+      "ProgIf": "00",
+      "IOMMUGroup": 5
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:02.2",
+      "Class": "PCI bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo GPP Bridge",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Device 1453",
+      "Rev": "02",
+      "ProgIf": "00",
+      "IOMMUGroup": 6
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:02.3",
+      "Class": "PCI bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo GPP Bridge",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Device 1453",
+      "Rev": "02",
+      "ProgIf": "00",
+      "IOMMUGroup": 7
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:02.5",
+      "Class": "PCI bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo GPP Bridge",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Device 1453",
+      "Rev": "02",
+      "ProgIf": "00",
+      "IOMMUGroup": 8
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:03.0",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo Dummy Host Bridge",
+      "ProgIf": "00",
+      "IOMMUGroup": 9
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:03.1",
+      "Class": "PCI bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo GPP Bridge",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Device 1453",
+      "ProgIf": "00",
+      "IOMMUGroup": 10
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:08.0",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo Dummy Host Bridge",
+      "ProgIf": "00",
+      "IOMMUGroup": 11
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:08.1",
+      "Class": "PCI bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo Internal GPP Bridge to Bus [C:A]",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix/Strix Halo Internal GPP Bridge to Bus [C:A]",
+      "ProgIf": "00",
+      "IOMMUGroup": 12
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:08.2",
+      "Class": "PCI bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo Internal GPP Bridge to Bus [C:A]",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix/Strix Halo Internal GPP Bridge to Bus [C:A]",
+      "ProgIf": "00",
+      "IOMMUGroup": 13
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:08.3",
+      "Class": "PCI bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo Internal GPP Bridge to Bus [C:A]",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix/Strix Halo Internal GPP Bridge to Bus [C:A]",
+      "ProgIf": "00",
+      "IOMMUGroup": 14
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:14.0",
+      "Class": "SMBus",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "FCH SMBus Controller",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "FCH SMBus Controller",
+      "Rev": "71",
+      "ProgIf": "00",
+      "IOMMUGroup": 15
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:14.3",
+      "Class": "ISA bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "FCH LPC Bridge",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "FCH LPC Bridge",
+      "Rev": "51",
+      "ProgIf": "00",
+      "IOMMUGroup": 15
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:18.0",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo Data Fabric; Function 0",
+      "ProgIf": "00",
+      "IOMMUGroup": 16
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:18.1",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo Data Fabric; Function 1",
+      "ProgIf": "00",
+      "IOMMUGroup": 16
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:18.2",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo Data Fabric; Function 2",
+      "ProgIf": "00",
+      "IOMMUGroup": 16
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:18.3",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo Data Fabric; Function 3",
+      "ProgIf": "00",
+      "IOMMUGroup": 16
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:18.4",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo Data Fabric; Function 4",
+      "ProgIf": "00",
+      "IOMMUGroup": 16
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:18.5",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo Data Fabric; Function 5",
+      "ProgIf": "00",
+      "IOMMUGroup": 16
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:18.6",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo Data Fabric; Function 6",
+      "ProgIf": "00",
+      "IOMMUGroup": 16
+    }
+  },
+  {
+    "device": {
+      "Slot": "00:18.7",
+      "Class": "Host bridge",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo Data Fabric; Function 7",
+      "ProgIf": "00",
+      "IOMMUGroup": 16
+    }
+  },
+  {
+    "device": {
+      "Slot": "c1:00.0",
+      "Class": "Ethernet controller",
+      "Vendor": "Realtek Semiconductor Co., Ltd.",
+      "Device": "RTL8125 2.5GbE Controller",
+      "SVendor": "Realtek Semiconductor Co., Ltd.",
+      "SDevice": "RTL8125 2.5GbE Controller",
+      "Rev": "05",
+      "ProgIf": "00",
+      "IOMMUGroup": 17
+    }
+  },
+  {
+    "device": {
+      "Slot": "c2:00.0",
+      "Class": "SD Host controller",
+      "Vendor": "Genesys Logic, Inc",
+      "Device": "GL9755 SD Host Controller",
+      "SVendor": "Genesys Logic, Inc",
+      "SDevice": "GL9755 SD Host Controller",
+      "Rev": "01",
+      "ProgIf": "01",
+      "IOMMUGroup": 18
+    }
+  },
+  {
+    "device": {
+      "Slot": "c3:00.0",
+      "Class": "Network controller",
+      "Vendor": "MEDIATEK Corp.",
+      "Device": "MT7925 (RZ717) Wi-Fi 7 160MHz",
+      "SVendor": "MEDIATEK Corp.",
+      "SDevice": "MT7925 (RZ717) Wi-Fi 7 160MHz",
+      "ProgIf": "00",
+      "IOMMUGroup": 19
+    }
+  },
+  {
+    "device": {
+      "Slot": "c4:00.0",
+      "Class": "Non-Volatile memory controller",
+      "Vendor": "Shenzhen Longsys Electronics Co., Ltd.",
+      "Device": "Lexar NM790 / Patriot Viper VP4300 Lite NVMe SSD (DRAM-less)",
+      "SVendor": "Shenzhen Longsys Electronics Co., Ltd.",
+      "SDevice": "Lexar NM790 / Patriot Viper VP4300 Lite NVMe SSD (DRAM-less)",
+      "Rev": "01",
+      "ProgIf": "02",
+      "IOMMUGroup": 20
+    }
+  },
+  {
+    "device": {
+      "Slot": "c5:00.0",
+      "Class": "Non-Volatile memory controller",
+      "Vendor": "KIOXIA Corporation",
+      "Device": "Exceria Plus G4 NVMe SSD (DRAM-less)",
+      "SVendor": "KIOXIA Corporation",
+      "SDevice": "Device 0181",
+      "Rev": "01",
+      "ProgIf": "02",
+      "IOMMUGroup": 21
+    }
+  },
+  {
+    "device": {
+      "Slot": "c6:00.0",
+      "Class": "Display controller",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD/ATI]",
+      "Device": "Strix Halo [Radeon Graphics / Radeon 8050S Graphics / Radeon 8060S Graphics]",
+      "SVendor": "Unknown vendor 2014",
+      "SDevice": "Device 801d",
+      "Rev": "c1",
+      "ProgIf": "00",
+      "IOMMUGroup": 22
+    }
+  },
+  {
+    "device": {
+      "Slot": "c6:00.1",
+      "Class": "Audio device",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD/ATI]",
+      "Device": "Radeon High Definition Audio Controller",
+      "SVendor": "Unknown vendor 2014",
+      "SDevice": "Device 801d",
+      "ProgIf": "00",
+      "IOMMUGroup": 23
+    }
+  },
+  {
+    "device": {
+      "Slot": "c6:00.2",
+      "Class": "Encryption controller",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Krackan/Strix Halo CCP/ASP",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix/Krackan/Strix Halo CCP/ASP",
+      "ProgIf": "00",
+      "IOMMUGroup": 24
+    }
+  },
+  {
+    "device": {
+      "Slot": "c6:00.4",
+      "Class": "USB controller",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo USB 3.1 xHCI",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Device 15b9",
+      "ProgIf": "30",
+      "IOMMUGroup": 25
+    }
+  },
+  {
+    "device": {
+      "Slot": "c6:00.6",
+      "Class": "Audio device",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Ryzen HD Audio Controller",
+      "SVendor": "Unknown vendor 2014",
+      "SDevice": "Device 801d",
+      "ProgIf": "00",
+      "IOMMUGroup": 26
+    }
+  },
+  {
+    "device": {
+      "Slot": "c7:00.0",
+      "Class": "Non-Essential Instrumentation [1300]",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Strix Halo PCIe Dummy Function",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix/Strix Halo PCIe Dummy Function",
+      "ProgIf": "00",
+      "IOMMUGroup": 27
+    }
+  },
+  {
+    "device": {
+      "Slot": "c7:00.1",
+      "Class": "Signal processing controller",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix/Krackan/Strix Halo Neural Processing Unit",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix/Krackan/Strix Halo Neural Processing Unit",
+      "Rev": "11",
+      "ProgIf": "00",
+      "IOMMUGroup": 28
+    }
+  },
+  {
+    "device": {
+      "Slot": "c8:00.0",
+      "Class": "USB controller",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo USB 3.1 xHCI",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Device 15b9",
+      "ProgIf": "30",
+      "IOMMUGroup": 29
+    }
+  },
+  {
+    "device": {
+      "Slot": "c8:00.3",
+      "Class": "USB controller",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo USB 3.1 xHCI",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix Halo USB 3.1 xHCI",
+      "ProgIf": "30",
+      "IOMMUGroup": 30
+    }
+  },
+  {
+    "device": {
+      "Slot": "c8:00.4",
+      "Class": "USB controller",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo USB 3.1 xHCI",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix Halo USB 3.1 xHCI",
+      "ProgIf": "30",
+      "IOMMUGroup": 31
+    }
+  },
+  {
+    "device": {
+      "Slot": "c8:00.5",
+      "Class": "USB controller",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo USB4 Host Router",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix Halo USB4 Host Router",
+      "ProgIf": "40",
+      "IOMMUGroup": 32
+    }
+  },
+  {
+    "device": {
+      "Slot": "c8:00.6",
+      "Class": "USB controller",
+      "Vendor": "Advanced Micro Devices, Inc. [AMD]",
+      "Device": "Strix Halo USB4 Host Router",
+      "SVendor": "Advanced Micro Devices, Inc. [AMD]",
+      "SDevice": "Strix Halo USB4 Host Router",
+      "ProgIf": "40",
+      "IOMMUGroup": 33
+    }
+  }
+]

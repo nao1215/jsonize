@@ -1,0 +1,141 @@
+{
+  "controller": {
+    "address": "00:1A:7D:DA:71:13",
+    "address_type": "public"
+  },
+  "properties": [
+    {
+      "name": "Manufacturer",
+      "value": "0x0046 (70)"
+    },
+    {
+      "name": "Version",
+      "value": "0x0d (13)"
+    },
+    {
+      "name": "Name",
+      "value": "example-host"
+    },
+    {
+      "name": "Alias",
+      "value": "example-host"
+    },
+    {
+      "name": "Class",
+      "value": "0x007c0104 (8126724)"
+    },
+    {
+      "name": "Powered",
+      "value": "yes"
+    },
+    {
+      "name": "PowerState",
+      "value": "on"
+    },
+    {
+      "name": "Discoverable",
+      "value": "no"
+    },
+    {
+      "name": "DiscoverableTimeout",
+      "value": "0x000000b4 (180)"
+    },
+    {
+      "name": "Pairable",
+      "value": "yes"
+    },
+    {
+      "name": "UUID",
+      "value": "Message Notification Se.. (00001133-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "A/V Remote Control        (0000110e-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Vendor specific           (03b80e5a-ede8-4b33-a751-6ce34ec4c700)"
+    },
+    {
+      "name": "UUID",
+      "value": "OBEX Object Push          (00001105-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Message Access Server     (00001132-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "PnP Information           (00001200-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "IrMC Sync                 (00001104-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Vendor specific           (00005005-0000-1000-8000-0002ee000001)"
+    },
+    {
+      "name": "UUID",
+      "value": "A/V Remote Control Target (0000110c-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Generic Attribute Profile (00001801-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Phonebook Access Server   (0000112f-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Audio Sink                (0000110b-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Device Information        (0000180a-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Generic Access Profile    (00001800-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Phonebook Access Client   (0000112e-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Handsfree Audio Gateway   (0000111f-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Audio Source              (0000110a-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "OBEX File Transfer        (00001106-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "UUID",
+      "value": "Handsfree                 (0000111e-0000-1000-8000-00805f9b34fb)"
+    },
+    {
+      "name": "Modalias",
+      "value": "usb:v1D6Bp0246d0555"
+    },
+    {
+      "name": "Discovering",
+      "value": "no"
+    },
+    {
+      "name": "Roles",
+      "value": "central"
+    },
+    {
+      "name": "Roles",
+      "value": "peripheral"
+    }
+  ],
+  "advertising": []
+}

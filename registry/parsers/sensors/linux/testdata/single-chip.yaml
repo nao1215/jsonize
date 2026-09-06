@@ -1,0 +1,4 @@
+description: one chip named on the command line, so the output is a single block
+source: captured on Ubuntu 26.04 (lm-sensors 3.6.2) with LC_ALL=C, sensors amdgpu-pci-c600
+os: linux
+args: [amdgpu-pci-c600]

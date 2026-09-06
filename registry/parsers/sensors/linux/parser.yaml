@@ -1,0 +1,61 @@
+# sensors prints one block per chip: the chip name, the adapter it hangs
+# off, and one reading per line. The blocks repeat, so the definition
+# describes one of them and `records` applies it to each.
+#
+# What this definition loses: when the limits of a reading do not fit on
+# one line sensors continues them on the next, indented and in
+# parentheses, and those continuation lines are dropped by input.ignore
+# because a record cannot attach a line to the reading above it.
+format: 1
+command: sensors
+variant: linux
+description: sensors readings grouped by chip
+metadata:
+  tags: [linux, hardware, temperature, lm-sensors]
+  compatible: [lm-sensors]
+  references:
+    - https://man7.org/linux/man-pages/man1/sensors.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # A chip name on its own line, the adapter under it, and at least
+      # one labelled reading.
+      - '\A\S+$'
+      - '^Adapter: \S'
+      - '^[^ \t:][^:]*:[ \t]+[-+]?[0-9]'
+input:
+  ignore:
+    - '^[ \t]+\('
+parse:
+  type: records
+  # A chip name is the only line with no whitespace in it: the adapter
+  # line and every reading line carry a label and a value.
+  start: '^\S+$'
+  parts:
+    # The chip name is "name-bus-address", but a chip that does not follow
+    # that shape still has to be read, so the split is optional and leaves
+    # bus and address null.
+    - name: chip
+      select: {limit: 2}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>\S+?)(?:-(?P<bus>[a-z0-9]+)-(?P<address>\S+))?\nAdapter: (?P<adapter>.+?)[ \t]*\z'
+      fields:
+        name: {required: true}
+        adapter: {required: true}
+    # A reading is "label: value unit" with the limits the chip reports in
+    # parentheses after it, and ALARM when the value is out of range. A
+    # sensor that cannot be read prints N/A, which leaves value and unit
+    # null.
+    - name: readings
+      select: {skip: 2}
+      parse:
+        type: regex
+        pattern: '^(?P<name>[^:]+):[ \t]+(?:(?P<value>[-+]?[0-9.]+)[ \t]+(?P<unit>\S+)|N/A)[ \t]*(?:\((?P<limits>[^)]*)\))?(?P<alarm>(?:[ \t]+ALARM)?)[ \t]*$'
+      fields:
+        name: {required: true}
+        value: {type: float}
+        limits: {type: array, split_regex: ',[ \t]*'}
+        alarm: {type: bool, true_values: ["ALARM"], false_values: [""]}
