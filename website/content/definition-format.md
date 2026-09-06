@@ -52,8 +52,8 @@ detect:
   auto_detect: true              # false = only used when the parser is named
 ```
 
-- `os` is compared with the running OS in exec mode and with `--os` in
-  pipe mode. When the OS is unknown the criterion is skipped.
+- `os` is compared with the running OS in exec mode. In pipe mode the
+  producing OS is unknown and the criterion is skipped.
 - `args` applies only in exec mode. Bundled short flags are expanded, so
   `-hT` satisfies `any: ["-h"]`.
 - `signature` expressions are matched against the first `window` lines
@@ -66,9 +66,10 @@ detect:
   where its signature is still checked. Prefer it to a growing list of
   `none` expressions excluding every other format that looks similar.
 
-Selection: a candidate whose applicable criterion fails is rejected; the
-remaining candidates are ranked by the number of satisfied criteria, then
-by `priority`; a tie is an error.
+Selection: a candidate whose applicable criterion fails is rejected. One
+remaining candidate is the answer. Several are settled by `priority` only
+when they are variants of the same command and one priority is strictly
+highest; otherwise the selection is an error naming them.
 
 ## exec
 

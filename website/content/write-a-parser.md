@@ -123,8 +123,8 @@ $ lsof -p $$ | go run ./cmd/jz --pretty
 
 ## 7. Open the pull request
 
-Include the definition, the fixtures, the golden JSON and one line in the
-README table. Use a `parser:` commit prefix.
+Include the definition, the fixtures, the golden JSON and one row in the
+table in `website/content/parsers.md`. Use a `parser:` commit prefix.
 
 ## Working outside the repository
 

@@ -2,28 +2,28 @@
 
 ## Trust model
 
-- **Parser definitions are data.** A definition can select lines, split
+- Parser definitions are data. A definition can select lines, split
   them, match regular expressions and convert values. It cannot run
   commands, read files, make network requests or evaluate expressions.
   Regular expressions are compiled by Go's `regexp` (RE2) which guarantees
   linear-time matching; their length is capped. Nesting depth, column
   counts and part counts are bounded by the validator.
-- **Input is bounded.** jz refuses input above 64 MiB and lines above
+- Input is bounded. jz refuses input above 64 MiB and lines above
   1 MiB, in both modes. The limit is internal on purpose: it is a safety
   property, not a preference to tune.
-- **`jz run` executes exactly the command you named.** No shell is
+- `jz run` executes exactly the command you named. No shell is
   involved, arguments are passed verbatim, and the command is looked up on
   `PATH` like any other program. jz will not execute a command it has no
   definition for.
-- **No network access.** jz never fetches anything: the official registry
+- No network access. jz never fetches anything: the official registry
   is embedded in the binary and additional definitions come from local
   directories only.
-- **Layered registries.** A definition in the user registry or in a
+- Layered registries. A definition in the user registry or in a
   directory named by `JSONIZE_REGISTRY_PATH` shadows the official one of
   the same name. Only point those at directories you control;
   `jz list --sources` shows where definitions came from and
   `jz list COMMAND VARIANT` shows which file a definition lives in.
-- **A named parser is still checked.** `--parser` and `--variant` narrow
+- A named parser is still checked. `--parser` and `--variant` narrow
   the candidates; they do not disable the signature check, and there is
   no option that does.
 

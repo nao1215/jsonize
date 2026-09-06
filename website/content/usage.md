@@ -13,10 +13,11 @@ jz --file captured.txt
 jz run COMMAND [args...]     # let jz run the command and convert its stdout
 ```
 
-The mode is always explicit. jz does not decide what to do by looking at
-whether standard input is a terminal, so a pipeline behaves the same in a
-shell and in CI. Running `jz` with no arguments in a terminal prints help
-rather than waiting for input that is not coming.
+The mode is always explicit, so a pipeline behaves the same in a shell
+and in CI. Whether standard input is a terminal is consulted for one
+thing only: `jz` with no arguments at all prints help instead of waiting
+for input that is not coming. Piped and redirected input take the same
+path either way.
 
 `jz run` hands the command your standard input, passes its standard error
 through untouched, mirrors its exit status, and runs it with `LC_ALL=C`
@@ -45,7 +46,7 @@ runs, or a variant you want pinned in CI.
 ```console
 $ git diff --numstat | jz --parser du
 $ df -h | jz --parser df --variant gnu-human
-$ jz run --parser dir -- cmd.exe /c dir
+$ jz run --parser df -- sudo df -h
 ```
 
 `--variant` needs `--parser`: a variant name only identifies a definition

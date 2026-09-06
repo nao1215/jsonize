@@ -23,17 +23,17 @@ internal/cli              subcommands, flag parsing, registry layering, exit-cod
 internal/runner           exec mode: child process, LC_ALL=C, stderr passthrough, output cap, signals
 internal/registry         load registry directories/FS, merge with precedence, testdata cases
 internal/definition       YAML schema, validation, regex compilation, format/version checks
-internal/selector         variant selection (os / args / signature → specificity → priority → error)
+internal/selector         variant selection (os / args / signature filter → priority → error)
 internal/engine           parse algorithms (table, regex, kv, composite) and field conversion
 internal/convert          scalar conversions (int, float, bool, size with units)
 internal/jsonutil         insertion-ordered JSON object and encoder
 internal/conformance      golden runner shared by `go test` and `make registry-test`
-internal/remote           HTTPS download, checksum, safe extraction, atomic install
+internal/buildinfo        the version string stamped at build time
 registry/                 the official definitions and fixtures (data) + a one-file embed
 e2e/atago                 end-to-end scenarios
 ```
 
-Data flows in one direction: **capture → select → parse → encode**. The
+Data flows in one direction: capture → select → parse → encode. The
 selector needs only the first lines of the text; the engine needs the
 compiled definition and the whole text; encoding never sees definitions.
 
@@ -81,11 +81,11 @@ change the format version because unknown types are already an error.
 ### Table splitting
 
 - `whitespace`: split on runs of whitespace with the last column
-  absorbing the remainder. Robust for `df`, `ps`, `free`.
+  absorbing the remainder. Used for `df`, `ps`, `free`.
 - `aligned`: cut cells at the rune offsets where header words start,
   moving a boundary left when a right-aligned value is wider than its
   header and keeping a token whole when it overflows to the right. Empty
-  cells become `null`. Needed for `lsblk`, `w`, macOS `df`.
+  cells become `null`. Needed for `lsblk` and `w`.
 - `delimiter`: a literal separator (`du`'s tab).
 
 Explicit `header.columns` is preferred in the official registry because
@@ -124,10 +124,13 @@ finished.
 ### Selection never guesses
 
 Candidates are filtered by criteria that apply (a criterion whose input is
-unknown, such as arguments in pipe mode, neither helps nor hurts) and
-ranked by how many applied criteria they satisfied. A tie after
-`priority` is an error that names the candidates. The alternative,
-"first match wins", would silently depend on directory order.
+unknown, such as arguments in pipe mode, neither helps nor hurts). One
+survivor is the answer; there is no ranking by how closely a definition
+fits. Several survivors are settled by `detect.priority` only when they
+are variants of the same command and one priority is strictly highest,
+which is a statement the definition author made deliberately; anything
+else is an error that names the candidates. The alternative, "first match
+wins", would silently depend on directory order.
 
 Fixtures double as selection tests: every `testdata/<case>.yaml` with
 `os`/`args` is pushed through the selector and must pick its own
@@ -155,11 +158,11 @@ disambiguates.
 
 `registry/` holds only YAML, fixtures and one `embed.go`. `internal/*`
 never imports it; only `cmd/jz` and the golden test do. Moving the
-registry to its own repository means changing one import and pointing
-`remote.DefaultURL` at the new release page.
+registry to its own repository means changing one import.
 
-Layering (flags → env → user → cache → embedded) lets a user fix a parser
-locally today and ship it upstream tomorrow with no change in behaviour.
+Layering (`JSONIZE_REGISTRY_PATH` → user registry → embedded) lets a user
+fix a parser locally today and ship it upstream tomorrow with no change
+in behaviour.
 
 ### No network, ever
 
@@ -181,7 +184,7 @@ without a format bump. Development builds skip the check.
 - `github.com/goccy/go-yaml` — strict YAML decoding with positions.
 - `github.com/google/go-cmp` — structural diffs in golden failures.
 
-No CLI framework: seven subcommands with a handful of flags each are
+No CLI framework: three subcommands with a handful of flags each are
 served by `flag` and a dispatch table, and the `run` subcommand needs
 "stop at the first non-flag" semantics that `flag` gives for free.
 

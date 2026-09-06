@@ -36,7 +36,7 @@ state that boundary explicitly:
   jz run --pretty ps aux
   jz run mytool --pretty              # --pretty goes to mytool
   jz run -- mytool --pretty           # the same, stated explicitly
-  jz run --parser dir -- cmd.exe /c dir   # a wrapper whose name is not the parser
+  jz run --parser df -- sudo df -h    # a wrapper whose name is not the parser
 
 If the command exits non-zero, jz still parses whatever it printed,
 reports the status on stderr and exits with that same status. A command
@@ -81,8 +81,8 @@ func (a *app) cmdRun(args []string) int {
 	}
 	name, cmdArgs := rest[0], rest[1:]
 	// The command name is the parser unless the user says otherwise,
-	// which is what makes a wrapper (`jz run --parser dir -- cmd.exe /c
-	// dir`) readable.
+	// which is what makes a wrapper (`jz run --parser df -- sudo df -h`)
+	// readable.
 	parser := sel.parser
 	if parser == "" {
 		parser = parserKey(name)

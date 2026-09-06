@@ -10,7 +10,7 @@ $ ps aux | jz | jq '.[] | select(.cpu_percent > 10) | .command'
 "/usr/lib/firefox/firefox"
 ```
 
-![jz converting df, ps and uptime output](demo/jsonize.gif)
+![jz reading df, uptime and free, and refusing input it cannot identify](demo/jsonize.gif)
 
 Parsers are YAML definitions in a registry rather than Go code, so
 supporting another command, another system's variant of it, or another
