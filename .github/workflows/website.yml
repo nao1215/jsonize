@@ -51,7 +51,9 @@ jobs:
           path: website/public
 
   deploy:
-    if: github.event_name == 'push'
+    # A pull request builds the site to prove it still builds, but only a
+    # push or a manual run publishes it.
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
