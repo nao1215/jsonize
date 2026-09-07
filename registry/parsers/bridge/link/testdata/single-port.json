@@ -1,0 +1,18 @@
+[
+  {
+    "index": 7,
+    "name": "veth0c4293d",
+    "peer": "eno1",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "master": "br-088d49b64243",
+    "state": "forwarding",
+    "priority": 32,
+    "cost": 2
+  }
+]

@@ -1,0 +1,10 @@
+52:54:00:1a:00:13 master br-088d49b64243 
+52:54:00:1a:00:14 vlan 1 master br-088d49b64243 permanent
+52:54:00:1a:00:14 master br-088d49b64243 permanent
+52:54:00:1a:00:02 self permanent
+52:54:00:1a:00:06 self permanent
+52:54:00:1a:00:01 self permanent
+52:54:00:1a:00:15 self permanent
+52:54:00:1a:00:07 self permanent
+52:54:00:1a:00:04 self permanent
+52:54:00:1a:00:09 self permanent

@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (iproute2 6.19) with LC_ALL=C; every
+  link-layer address replaced with a 52:54:00 one
+description: >-
+  Naming the device leaves the `dev` word out of every line, so the
+  address is followed directly by the attributes.
+os: linux
+args: ["fdb", "show", "dev", "veth0c4293d"]
