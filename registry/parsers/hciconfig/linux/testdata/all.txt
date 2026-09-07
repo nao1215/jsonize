@@ -1,0 +1,17 @@
+hci0:	Type: Primary  Bus: USB
+	BD Address: 52:54:00:12:34:56  ACL MTU: 1021:8  SCO MTU: 240:8
+	UP RUNNING 
+	RX bytes:13972 acl:0 sco:0 events:1908 errors:0
+	TX bytes:470739 acl:0 sco:0 commands:1908 errors:0
+	Features: 0xbf 0x3e 0x8d 0xfe 0xdb 0xff 0x7b 0x87
+	Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3 
+	Link policy: RSWITCH SNIFF 
+	Link mode: PERIPHERAL ACCEPT 
+	Name: 'bt-host'
+	Class: 0x7c0104
+	Service Classes: Rendering, Capturing, Object Transfer, Audio, Telephony
+	Device Class: Computer, Desktop workstation
+	HCI Version: 5.4 (0xd)  Revision: 0x518
+	LMP Version: 5.4 (0xd)  Subversion: 0x2606
+	Manufacturer: MediaTek, Inc. (70)
+
