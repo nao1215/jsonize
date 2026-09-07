@@ -1,12 +1,6 @@
 # /etc/fstab: one line per file system. The dump and pass numbers are
 # optional in the format, so a line may stop after the options, which is
 # why the three alternatives differ only in how far they read.
-#
-# /proc/mounts is written in the same six fields, and on a systemd
-# machine /etc/mtab is a symbolic link to it, so the two cannot be told
-# apart by what the fields are. They are told apart by who wrote them,
-# which is what the expression in `none` says: see proc/mounts, which
-# carries the same expression as its signature.
 format: 1
 command: etc
 variant: fstab
@@ -28,16 +22,6 @@ detect:
       # than any line is what keeps a mount table out: `findmnt` opens
       # with its column names, which name no device.
       - '\A(?:[ \t]*(?:#[^\n]*)?\n)*(?:/\S+|UUID=\S+|LABEL=\S+|PARTUUID=\S+|PARTLABEL=\S+|ID=\S+|none|tmpfs|proc|sysfs|devpts|debugfs|overlay|cgroup2?|\S+:/\S*)[ \t]+(?:/\S*|none|swap)[ \t]+[\w.+-]+[ \t]+[\w=,.:@/+-]+(?:[ \t]+\d+){0,2}[ \t]*$'
-    none:
-      # The mount table the kernel writes to /proc/mounts. Every line of
-      # it is an entry with all six fields, the option list opens with
-      # rw or ro because that is the first thing show_vfsmnt() prints,
-      # and the dump and pass numbers are always 0. An fstab holds
-      # comments, blank lines, options spelled defaults, and a pass
-      # number of 1 or 2 for the file systems fsck should check, so
-      # nothing that is written by hand looks like this all the way
-      # down.
-      - '\A(?:\S+ \S+ \S+ (?:rw|ro)(?:,\S+)? 0 0\n)*\S+ \S+ \S+ (?:rw|ro)(?:,\S+)? 0 0[ \t]*\z'
 input:
   ignore:
     - '^\s*#'
