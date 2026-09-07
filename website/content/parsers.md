@@ -15,13 +15,17 @@ input.
 |---------|----------|
 | `amixer` | `simple-controls` |
 | `apt` | `list`, `show` |
+| `apt-cache` | `stats` |
+| `ar` | `table-verbose` |
 | `arp` | `alternate` |
 | `blkid` | `linux` |
 | `bluetoothctl` | `show` |
 | `bridge` | `fdb`, `link` |
 | `busctl` | `list` |
+| `capsh` | `print` |
 | `cargo` | `command-list`, `install-list` |
 | `chage` | `linux` |
+| `chrt` | `policy` |
 | `cksum` | `posix` |
 | `date` | `posix`, `rfc-email` |
 | `debconf-show` | `linux` |
@@ -34,27 +38,33 @@ input.
 | `env` | `null-separated`, `posix` |
 | `etc` | `crontab`, `fstab`, `group`, `hosts`, `nsswitch`, `os-release`, `passwd`, `resolv-conf` |
 | `ethtool` | `driver-info`, `features`, `settings`, `statistics` |
+| `factor` | `default` |
 | `fc-list` | `posix` |
 | `fdisk` | `linux` |
 | `file` | `posix` |
 | `findmnt` | `df`, `linux`, `source-first` |
 | `free` | `gnu`, `gnu-human`, `gnu-wide` |
+| `getcap` | `paths` |
 | `getconf` | `glibc` |
 | `getfacl` | `posix` |
-| `git` | `branch-verbose`, `config-list`, `count-objects`, `diff-numstat`, `diff-stat`, `log`, `log-oneline`, `remote-verbose`, `shortlog-summary`, `stash-list`, `status-porcelain` |
+| `git` | `branch-verbose`, `config-list`, `count-objects`, `diff-numstat`, `diff-stat`, `for-each-ref`, `log`, `log-oneline`, `ls-files-stage`, `ls-tree`, `remote-verbose`, `shortlog-summary`, `show-ref`, `stash-list`, `status-porcelain` |
 | `go` | `env`, `list-modules`, `mod-graph`, `version-modules` |
 | `gpg` | `colons` |
 | `hciconfig` | `linux` |
+| `hexdump` | `canonical` |
 | `host` | `bind` |
 | `hostnamectl` | `linux` |
+| `iconv` | `list` |
 | `id` | `posix` |
 | `ifconfig` | `busybox` |
+| `ionice` | `class` |
 | `iostat` | `cpu`, `device`, `extended`, `linux` |
 | `ip` | `address`, `brief-address`, `brief-link`, `link`, `multicast-address`, `neighbour`, `route`, `rule`, `stats-link` |
 | `ipcs` | `linux`, `message-queues`, `semaphores`, `shared-memory` |
 | `iw` | `link` |
 | `journalctl` | `boots`, `short`, `short-iso`, `short-precise` |
 | `last` | `busybox` |
+| `ldconfig` | `cache` |
 | `ldd` | `posix` |
 | `locale` | `posix` |
 | `localectl` | `linux` |
@@ -83,18 +93,24 @@ input.
 | `mount` | `bsd`, `linux` |
 | `mpstat` | `linux` |
 | `mtr` | `report` |
+| `namei` | `long` |
 | `netstat` | `all-sockets`, `internet`, `routing`, `unix` |
 | `networkctl` | `list` |
+| `nm` | `dynamic` |
 | `nmcli` | `connection`, `device`, `device-show`, `wifi` |
 | `npm` | `ls`, `outdated` |
+| `nstat` | `counters` |
 | `numactl` | `hardware` |
+| `objdump` | `section-headers` |
+| `od` | `hex-bytes` |
+| `openssl` | `ciphers`, `version-all` |
 | `pactl` | `info`, `short-devices` |
 | `parted` | `machine` |
 | `pidstat` | `linux`, `memory` |
 | `ping` | `linux` |
 | `pip` | `columns` |
 | `pmap` | `linux` |
-| `proc` | `cpuinfo-x86`, `diskstats`, `loadavg`, `meminfo`, `uptime` |
+| `proc` | `buddyinfo`, `consoles`, `cpuinfo-x86`, `crypto`, `devices`, `diskstats`, `filesystems`, `interrupts`, `loadavg`, `meminfo`, `modules`, `mountinfo`, `net-arp`, `net-dev`, `net-route`, `net-unix`, `partitions`, `schedstat`, `self-limits`, `self-status`, `softirqs`, `stat`, `uptime`, `vmstat` |
 | `ps` | `bsd`, `busybox`, `posix`, `unix` |
 | `readelf` | `header` |
 | `resolvectl` | `status` |
@@ -105,14 +121,17 @@ input.
 | `sar` | `cpu`, `filesystem`, `io`, `memory`, `network-device`, `paging`, `queue`, `swap`, `task` |
 | `scc` | `default` |
 | `sensors` | `linux` |
+| `service` | `status-all` |
 | `sfdisk` | `dump` |
 | `sha1sum` | `posix` |
 | `sha224sum` | `posix` |
 | `sha256sum` | `posix` |
 | `sha384sum` | `posix` |
 | `sha512sum` | `posix` |
+| `size` | `gnu` |
 | `snap` | `list` |
 | `ss` | `linux`, `single-protocol`, `summary` |
+| `ssh-keygen` | `fingerprint` |
 | `stat` | `gnu`, `gnu-filesystem`, `gnu-terse` |
 | `swapon` | `legacy`, `linux` |
 | `sysctl` | `linux` |
@@ -120,7 +139,9 @@ input.
 | `systemd-analyze` | `blame`, `time` |
 | `systemd-cgtop` | `batch` |
 | `systemd-id128` | `show` |
+| `systemd-path` | `paths` |
 | `tar` | `busybox`, `gnu` |
+| `taskset` | `affinity-list` |
 | `tc` | `qdisc`, `qdisc-stats` |
 | `timedatectl` | `linux`, `timesync`, `timezones` |
 | `top` | `linux` |
@@ -139,6 +160,7 @@ input.
 | `wc` | `posix` |
 | `who` | `posix` |
 | `xrandr` | `linux`, `listmonitors` |
+| `xxd` | `default` |
 | `zipinfo` | `default` |
 
 A variant is one output format of a command. GNU `df`, `df -h`, macOS

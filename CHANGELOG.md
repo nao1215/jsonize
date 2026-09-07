@@ -84,16 +84,34 @@ project follows [Semantic Versioning](https://semver.org/).
   line it belongs to, for the reports that break a long value at the
   terminal width (`ethtool`) and for the control files whose values
   continue on an indented line (`dpkg -s`, `apt show`).
-- Official definitions for 126 commands in 263 output formats, covering
+- Official definitions for 149 commands in 314 output formats, covering
   coreutils and procps, the util-linux listings, the systemd tools, the
   classic network commands and the iproute2 ones, sysstat, the disk
   layout tools, the hardware and display tools, the archive and checksum
-  tools, the account and firmware listings, the sound and font
-  listings, git, docker, the package managers and the language
-  toolchains. `jz list` prints the current set.
+  tools, the account and firmware listings, the sound and font listings,
+  the binary inspection tools (`nm`, `objdump`, `size`, `ar`, and the
+  three hex dumps `xxd`, `hexdump -C` and `od`), the process attributes
+  (`taskset`, `chrt`, `ionice`, `capsh`, `getcap`, `namei`), git
+  including its plumbing, openssl, docker, the package managers, the
+  language toolchains, and two dozen files under `/proc` read the way the
+  `/etc` files are. `jz list` prints the current set.
 
 ### Fixed
 
+- `git/log-oneline` read a symbol table. `nm -D` prints a zero padded
+  sixty-four bit address, a one letter symbol type and a name, which is a
+  hexadecimal word followed by a line of text; the definition claimed
+  seven to twenty hexadecimal digits and so reported 0000000000000000 as
+  a commit hash. The bound is fifteen digits now, which is past what any
+  repository's abbreviation reaches and short of where an address column
+  starts.
+- `file/posix` read a dump of a file's bytes. An xxd line is a word, a
+  colon and a line of text, and any dump has some line whose printable
+  column spells one of the kinds file(1) names, so a hex dump was read as
+  a listing of sixteen byte long paths. Every description must name a
+  kind now, or be one of the two messages file(1) writes for a file it
+  could not identify; one line naming a kind is still required as well,
+  which is what keeps a listing of nothing but errors refused.
 - `etc/crontab` accepted a shell script that installs a cron entry. One
   entry is not evidence: a script that installs one carries one, and so
   does a document that quotes one. The signature now claims the whole
