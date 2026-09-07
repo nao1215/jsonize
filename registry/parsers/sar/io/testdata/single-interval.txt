@@ -1,0 +1,5 @@
+Linux 7.0.0-30-generic (workstation) 	09/07/26 	_x86_64_	(32 CPU)
+
+08:55:19          tps      rtps      wtps      dtps   bread/s   bwrtn/s   bdscd/s
+08:55:20        11.00      0.00     11.00      0.00      0.00     56.00      0.00
+Average:        11.00      0.00     11.00      0.00      0.00     56.00      0.00

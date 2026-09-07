@@ -1,0 +1,4 @@
+description: A single control asked for by name, the shortest output this form has.
+source: captured on Ubuntu 26.04 (alsa-utils 1.2.14) with LC_ALL=C from `amixer sget Master`
+os: linux
+args: ["sget", "Master"]

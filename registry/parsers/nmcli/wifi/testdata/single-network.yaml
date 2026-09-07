@@ -1,0 +1,3 @@
+description: The header and the joined network alone, which is the only row where IN-USE is not empty.
+source: the header line and the marked row of the same capture as scan-list
+os: linux

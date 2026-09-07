@@ -1,0 +1,46 @@
+# `sar -u` prints a banner naming the kernel, the host, the date and
+# the CPU count, then one row per sampling interval and a summary row
+# labelled Average:. The banner is dropped: it is one line about the run
+# rather than a row of the report, and a table cannot hold both.
+#
+# The column names sit on a line that opens with the time the report
+# started rather than with a name, so the names are written out here and
+# that line is ignored. `sar -n DEV` repeats the name line above the
+# summary block, which is why the ignore pattern accepts either label.
+#
+# The first cell is the time of the sample, except on a summary row where
+# it is the word Average. The trailing colon that only the summary rows
+# carry is removed so the cell holds one or the other and nothing else.
+format: 1
+command: sar
+variant: cpu
+description: sar -u CPU utilisation
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+CPU[ \t]+%user[ \t]+%nice[ \t]+%system[ \t]+%iowait[ \t]+%steal[ \t]+%idle[ \t]*$'
+input:
+  ignore:
+    - '\ALinux '
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+CPU[ \t]+%user'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, cpu, user_percent, nice_percent, system_percent, iowait_percent, steal_percent, idle_percent]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  cpu: {required: true}
+  user_percent: {type: float}
+  nice_percent: {type: float}
+  system_percent: {type: float}
+  iowait_percent: {type: float}
+  steal_percent: {type: float}
+  idle_percent: {type: float}
