@@ -1,0 +1,37 @@
+[
+  {
+    "seen": false,
+    "name": "glibc/kernel-not-supported",
+    "value": ""
+  },
+  {
+    "seen": false,
+    "name": "glibc/upgrade",
+    "value": "true"
+  },
+  {
+    "seen": false,
+    "name": "glibc/restart-failed",
+    "value": ""
+  },
+  {
+    "seen": false,
+    "name": "glibc/disable-screensaver",
+    "value": ""
+  },
+  {
+    "seen": false,
+    "name": "glibc/restart-services",
+    "value": ""
+  },
+  {
+    "seen": true,
+    "name": "libraries/restart-without-asking",
+    "value": "true"
+  },
+  {
+    "seen": false,
+    "name": "glibc/kernel-too-old",
+    "value": ""
+  }
+]
