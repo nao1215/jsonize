@@ -1,0 +1,10 @@
+Run the checks in this order.
+
+  ./configure --prefix=/usr/local
+  make -j8 -k
+  install -m 0755 -o root -g root build/mytool /usr/local/bin/mytool
+  setcap cap_net_raw+ep /usr/local/bin/mytool
+  mytool --check -v -p 8080
+
+The last line is the one that matters: it exits non-zero when the
+capability was not granted.
