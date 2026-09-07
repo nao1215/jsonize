@@ -64,7 +64,7 @@ func (a *app) listCommands(reg *registry.Registry, asJSON bool) int {
 		for _, c := range commands {
 			o := jsonutil.NewObject()
 			o.Set("command", c)
-			o.Set("variants", stringsToAny(variantNames(reg.Variants(c))))
+			o.Set("variants", stringsToAny(variantNames(ownVariants(reg, c))))
 			if names := reg.Aliases(c); len(names) > 0 {
 				o.Set("aliases", stringsToAny(names))
 			}
@@ -75,7 +75,7 @@ func (a *app) listCommands(reg *registry.Registry, asJSON bool) int {
 	tw := tabwriter.NewWriter(a.env.Stdout, 0, 4, 2, ' ', 0)
 	fmt.Fprintln(tw, "COMMAND\tVARIANTS")
 	for _, c := range commands {
-		fmt.Fprintf(tw, "%s\t%s\n", c, strings.Join(variantNames(reg.Variants(c)), ", "))
+		fmt.Fprintf(tw, "%s\t%s\n", c, strings.Join(variantNames(ownVariants(reg, c)), ", "))
 	}
 	if err := tw.Flush(); err != nil {
 		return finish(err, a)
@@ -94,6 +94,19 @@ func (a *app) listCommands(reg *registry.Registry, asJSON bool) int {
 	}
 	fmt.Fprintf(a.env.Stdout, "\n%d commands, %d definitions. `jz list COMMAND` shows the variants.\n", len(commands), reg.Len())
 	return ExitOK
+}
+
+// ownVariants returns the definitions a command carries itself, leaving
+// out the ones it only answers to as an alias of another command.
+func ownVariants(reg *registry.Registry, command string) []*registry.Entry {
+	all := reg.Variants(command)
+	out := make([]*registry.Entry, 0, len(all))
+	for _, e := range all {
+		if e.Def.Command == command {
+			out = append(out, e)
+		}
+	}
+	return out
 }
 
 func (a *app) listVariants(reg *registry.Registry, command string, asJSON bool) int {
@@ -125,13 +138,29 @@ func (a *app) listVariants(reg *registry.Registry, command string, asJSON bool) 
 		if goos == "" {
 			goos = "any"
 		}
-		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\n", e.Def.Variant, goos, e.Source, e.Def.Description)
+		// A definition reached under another name says whose it is, so
+		// that the variant name can be looked up where it lives.
+		name := e.Def.Variant
+		if key := parserKey(command); key != e.Def.Command {
+			name = e.Def.ID()
+		}
+		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\n", name, goos, e.Source, e.Def.Description)
 	}
 	if err := tw.Flush(); err != nil {
 		return finish(err, a)
 	}
-	if key := parserKey(command); key != entries[0].Def.Command {
-		fmt.Fprintf(a.env.Stdout, "\n%s prints what %s prints, and is read by its definitions.\n", key, entries[0].Def.Command)
+	// Definitions of another command appear here when that command prints
+	// what this one prints; say so rather than leave the identifier to be
+	// puzzled over.
+	var borrowed []string
+	for _, e := range entries {
+		if e.Def.Command != parserKey(command) {
+			borrowed = append(borrowed, e.Def.ID())
+		}
+	}
+	if len(borrowed) > 0 {
+		fmt.Fprintf(a.env.Stdout, "\n%s prints what another command prints, and %s reads it.\n",
+			parserKey(command), strings.Join(borrowed, ", "))
 	}
 	fmt.Fprintf(a.env.Stdout, "\n`jz list %s %s` shows how one definition detects and parses.\n", entries[0].Def.Command, entries[0].Def.Variant)
 	return ExitOK

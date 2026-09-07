@@ -143,6 +143,15 @@ A variant is one output format of a command. GNU `df`, `df -h`, macOS
 When several implementations print the same format, one definition covers
 them and says so in its metadata.
 
+Some commands print what another command prints. Nothing in the text says
+which of them wrote it, so they share a definition rather than having one
+each, and the command they are listed under is the one the definition is
+named for. These are read as well:
+
+`gcksum` (as `cksum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5sum`), `gsha1sum` (as `sha1sum`), `gsha256sum` (as `sha256sum`), `gsha512sum` (as `sha512sum`), `gstat` (as `stat`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `nerdctl` (as `docker`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `systemd-resolve` (as `resolvectl`), `uv` (as `pip`), `vdir` (as `ls`).
+
+`jz run`, `--parser` and `jz list` all take the other name.
+
 ## How a definition is chosen
 
 Every definition carries a signature: the shape its output has.
