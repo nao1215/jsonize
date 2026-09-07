@@ -1,0 +1,4 @@
+description: a module loaded from a file, carrying an empty depends value and the tab-indented continuation lines of a signature
+source: captured with LC_ALL=C from kmod 34 on Ubuntu as "modinfo cpuid"; the key fingerprint replaced and the signature replaced and shortened from 512 bytes to 68
+os: linux
+args: [cpuid]
