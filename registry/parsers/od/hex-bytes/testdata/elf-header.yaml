@@ -1,0 +1,6 @@
+description: |
+  The first 96 bytes of an executable: six full lines and the closing
+  offset line.
+source: captured on Ubuntu 26.04 with od (uutils coreutils) 0.8.0, LC_ALL=C od -A x -t x1z -N 96 /bin/ls
+os: linux
+args: [-A, x, -t, x1z, -N, "96", /bin/ls]

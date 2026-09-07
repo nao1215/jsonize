@@ -1,0 +1,5 @@
+description: |
+  One file, so the table is a header and a single row.
+source: captured on Ubuntu 26.04 with GNU size (GNU Binutils for Ubuntu) 2.46, LC_ALL=C size /usr/bin/gcc
+os: linux
+args: [/usr/bin/gcc]

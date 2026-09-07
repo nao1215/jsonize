@@ -1,0 +1,6 @@
+
+/bin/ls:
+                 w _ITM_deregisterTMCloneTable
+                 w _ITM_registerTMCloneTable
+                 U _Unwind_Backtrace@GCC_3.3
+                 U _Unwind_GetDataRelBase@GCC_3.0

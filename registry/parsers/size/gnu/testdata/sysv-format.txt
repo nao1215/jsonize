@@ -1,0 +1,8 @@
+/usr/bin/tar  :
+section                size     addr
+.note.gnu.build-id       36      848
+.interp                  28      884
+.gnu.hash               232      912
+.dynsym                5880     1144
+.dynstr                2670     7024
+.gnu.version            490     9694

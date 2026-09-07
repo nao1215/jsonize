@@ -1,0 +1,5 @@
+   text	   data	    bss	    dec	    hex	filename
+    550	      0	      0	    550	    226	check_fds.o (ex /usr/lib/x86_64-linux-gnu/libc.a)
+     32	      8	      0	     40	     28	dso_handle.o (ex /usr/lib/x86_64-linux-gnu/libc.a)
+    198	      0	     12	    210	     d2	init-first.o (ex /usr/lib/x86_64-linux-gnu/libc.a)
+  13196	     48	     40	  13284	   33e4	libc-start.o (ex /usr/lib/x86_64-linux-gnu/libc.a)

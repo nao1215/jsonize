@@ -1,0 +1,104 @@
+{
+  "file": {
+    "name": "/bin/cat",
+    "format": "elf64-x86-64"
+  },
+  "sections": [
+    {
+      "idx": 0,
+      "name": ".note.gnu.build-id",
+      "size": "00000024",
+      "vma": "0000000000000388",
+      "lma": "0000000000000388",
+      "file_off": "00000388",
+      "align": 2,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "READONLY",
+        "DATA"
+      ]
+    },
+    {
+      "idx": 1,
+      "name": ".interp",
+      "size": "0000001c",
+      "vma": "00000000000003ac",
+      "lma": "00000000000003ac",
+      "file_off": "000003ac",
+      "align": 0,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "READONLY",
+        "DATA"
+      ]
+    },
+    {
+      "idx": 2,
+      "name": ".gnu.hash",
+      "size": "00000048",
+      "vma": "00000000000003c8",
+      "lma": "00000000000003c8",
+      "file_off": "000003c8",
+      "align": 3,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "READONLY",
+        "DATA"
+      ]
+    },
+    {
+      "idx": 3,
+      "name": ".dynsym",
+      "size": "000019f8",
+      "vma": "0000000000000410",
+      "lma": "0000000000000410",
+      "file_off": "00000410",
+      "align": 3,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "READONLY",
+        "DATA"
+      ]
+    },
+    {
+      "idx": 4,
+      "name": ".dynstr",
+      "size": "00000d5f",
+      "vma": "0000000000001e08",
+      "lma": "0000000000001e08",
+      "file_off": "00001e08",
+      "align": 0,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "READONLY",
+        "DATA"
+      ]
+    },
+    {
+      "idx": 5,
+      "name": ".gnu.version",
+      "size": "0000022a",
+      "vma": "0000000000002b68",
+      "lma": "0000000000002b68",
+      "file_off": "00002b68",
+      "align": 1,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "READONLY",
+        "DATA"
+      ]
+    }
+  ]
+}

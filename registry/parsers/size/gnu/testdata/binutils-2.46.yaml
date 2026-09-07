@@ -1,0 +1,6 @@
+description: |
+  Two executables in one run, the ordinary case. The numbers are padded to
+  the header width but separated by tabs.
+source: captured on Ubuntu 26.04 with GNU size (GNU Binutils for Ubuntu) 2.46, LC_ALL=C size /usr/bin/gcc /usr/bin/tar
+os: linux
+args: [/usr/bin/gcc, /usr/bin/tar]

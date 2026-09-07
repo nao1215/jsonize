@@ -1,0 +1,6 @@
+description: |
+  The first 96 bytes of an executable: six full lines whose text column
+  is almost all dots.
+source: captured on Ubuntu 26.04 with xxd 2025-11-26, LC_ALL=C xxd -l 96 /bin/ls
+os: linux
+args: [-l, "96", /bin/ls]

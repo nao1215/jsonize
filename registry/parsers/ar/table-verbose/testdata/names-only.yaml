@@ -1,0 +1,6 @@
+description: |
+  `ar t` without v prints one member name per line and nothing else. It
+  is a list of names, not this table, and the definition refuses it.
+source: captured on Ubuntu 26.04 with GNU ar (GNU Binutils for Ubuntu) 2.46, LC_ALL=C ar t /usr/lib/x86_64-linux-gnu/libc.a | head -6
+os: linux
+expect_error: does not describe this input

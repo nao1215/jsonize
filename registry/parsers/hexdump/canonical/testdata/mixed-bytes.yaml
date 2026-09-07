@@ -1,0 +1,13 @@
+description: |
+  A 184-byte file written for this fixture, so the text column can be
+  checked against known bytes. Its first sixteen bytes are
+  ">|<demo>|<bits>|", so the text column holds bars of its own next to
+  the bars that fence it and the closing one is the last on the line, not
+  the first; then 48 zero bytes, three identical lines of which hexdump
+  prints one and abbreviates the rest to an asterisk; then the bytes 0x01
+  to 0x10; then six lines of plain text; then eight bytes, so the last
+  line is short. The closing line is the length, 0xb8.
+source: |
+  built and captured on Ubuntu 26.04 with util-linux 2.41.3 hexdump,
+  LC_ALL=C hexdump -C sample.bin
+os: linux

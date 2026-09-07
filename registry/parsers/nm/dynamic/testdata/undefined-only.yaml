@@ -1,0 +1,6 @@
+description: |
+  An executable, whose dynamic symbols are all imports: every line has a
+  blank value field. The first 24 lines of the output.
+source: captured on Ubuntu 26.04 with GNU nm (GNU Binutils for Ubuntu) 2.46, LC_ALL=C nm -D /bin/ls
+os: linux
+args: [-D, /bin/ls]

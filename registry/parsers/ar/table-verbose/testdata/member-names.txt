@@ -1,0 +1,4 @@
+rw-rw-r-- 1000/1000      1 Mar  5 07:09 2024 short.o
+rwxr-xr-x 1000/1000     11 Mar  5 07:09 2024 run.sh
+rw-rw-r-- 1000/1000     10 Mar  5 07:09 2024 two words.o
+rw-rw-r-- 1000/1000      1 Mar  5 07:09 2024 a-very-long-member-name-over-fifteen.o

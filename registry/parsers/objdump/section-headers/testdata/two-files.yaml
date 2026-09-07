@@ -1,0 +1,8 @@
+description: |
+  Two files in one run, so the banner appears again between the tables.
+  Only the first banner can be dropped, and the second one has nowhere to
+  go, so the definition refuses the text instead of attaching it to the
+  last section of the first file.
+source: captured on Ubuntu 26.04 with GNU objdump (GNU Binutils for Ubuntu) 2.46, LC_ALL=C objdump -h /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o
+os: linux
+expect_error: does not match

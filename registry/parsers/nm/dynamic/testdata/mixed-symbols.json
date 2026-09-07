@@ -1,0 +1,102 @@
+[
+  {
+    "address": null,
+    "type": "w",
+    "name": "_ITM_deregisterTMCloneTable"
+  },
+  {
+    "address": null,
+    "type": "w",
+    "name": "_ITM_registerTMCloneTable"
+  },
+  {
+    "address": null,
+    "type": "w",
+    "name": "__cxa_finalize@GLIBC_2.2.5"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__errno_location@GLIBC_2.2.5"
+  },
+  {
+    "address": null,
+    "type": "w",
+    "name": "__gmon_start__"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__snprintf_chk@GLIBC_2.3.4"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__stack_chk_fail@GLIBC_2.4"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__vsnprintf_chk@GLIBC_2.3.4"
+  },
+  {
+    "address": "00000000000089e0",
+    "type": "T",
+    "name": "adler32"
+  },
+  {
+    "address": "00000000000089f0",
+    "type": "T",
+    "name": "adler32_combine@@ZLIB_1.2.2"
+  },
+  {
+    "address": "0000000000008ae0",
+    "type": "T",
+    "name": "adler32_combine64@@ZLIB_1.2.3.3"
+  },
+  {
+    "address": "0000000000008340",
+    "type": "T",
+    "name": "adler32_z@@ZLIB_1.2.9"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "close@GLIBC_2.2.5"
+  },
+  {
+    "address": "0000000000013050",
+    "type": "T",
+    "name": "compress"
+  },
+  {
+    "address": "0000000000012ee0",
+    "type": "T",
+    "name": "compress2"
+  },
+  {
+    "address": "0000000000013060",
+    "type": "T",
+    "name": "compressBound@@ZLIB_1.2.0"
+  },
+  {
+    "address": "0000000000009720",
+    "type": "T",
+    "name": "crc32"
+  },
+  {
+    "address": "000000000000b220",
+    "type": "T",
+    "name": "crc32_combine@@ZLIB_1.2.2"
+  },
+  {
+    "address": "000000000000b120",
+    "type": "T",
+    "name": "crc32_combine64@@ZLIB_1.2.3.3"
+  },
+  {
+    "address": "000000000000b2f0",
+    "type": "T",
+    "name": "crc32_combine_gen@@ZLIB_1.2.12"
+  }
+]

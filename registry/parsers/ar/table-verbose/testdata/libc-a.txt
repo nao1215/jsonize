@@ -1,0 +1,6 @@
+rw-r--r-- 0/0   2312 Jan  1 00:00 1970 check_fds.o
+rw-r--r-- 0/0   1000 Jan  1 00:00 1970 dso_handle.o
+rw-r--r-- 0/0   1848 Jan  1 00:00 1970 init-first.o
+rw-r--r-- 0/0  30016 Jan  1 00:00 1970 libc-start.o
+rw-r--r-- 0/0   3384 Jan  1 00:00 1970 libc-tls.o
+rw-r--r-- 0/0    608 Jan  1 00:00 1970 sysdep.o

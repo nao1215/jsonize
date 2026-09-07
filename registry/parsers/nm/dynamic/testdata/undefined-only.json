@@ -1,0 +1,122 @@
+[
+  {
+    "address": null,
+    "type": "w",
+    "name": "_ITM_deregisterTMCloneTable"
+  },
+  {
+    "address": null,
+    "type": "w",
+    "name": "_ITM_registerTMCloneTable"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "_Unwind_Backtrace@GCC_3.3"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "_Unwind_GetDataRelBase@GCC_3.0"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "_Unwind_GetIP@GCC_3.0"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "_Unwind_GetIPInfo@GCC_4.2.0"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "_Unwind_GetLanguageSpecificData@GCC_3.0"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "_Unwind_GetRegionStart@GCC_3.0"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "_Unwind_GetTextRelBase@GCC_3.0"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "_Unwind_Resume@GCC_3.0"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "_Unwind_SetGR@GCC_3.0"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "_Unwind_SetIP@GCC_3.0"
+  },
+  {
+    "address": null,
+    "type": "w",
+    "name": "__cxa_finalize@GLIBC_2.2.5"
+  },
+  {
+    "address": null,
+    "type": "w",
+    "name": "__cxa_thread_atexit_impl@GLIBC_2.18"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__environ@GLIBC_2.2.5"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__errno_location@GLIBC_2.2.5"
+  },
+  {
+    "address": null,
+    "type": "w",
+    "name": "__gmon_start__"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__libc_current_sigrtmax@GLIBC_2.2.5"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__libc_current_sigrtmin@GLIBC_2.2.5"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__libc_start_main@GLIBC_2.34"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__memcpy_chk@GLIBC_2.3.4"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__register_atfork@GLIBC_2.3.2"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__res_init@GLIBC_2.2.5"
+  },
+  {
+    "address": null,
+    "type": "U",
+    "name": "__snprintf_chk@GLIBC_2.3.4"
+  }
+]
