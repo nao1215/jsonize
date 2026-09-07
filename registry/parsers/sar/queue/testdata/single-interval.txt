@@ -1,0 +1,5 @@
+Linux 7.0.0-30-generic (workstation) 	09/07/26 	_x86_64_	(32 CPU)
+
+11:53:42      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+11:53:43            2      3871      3.57      3.85      3.81         0
+Average:            2      3871      3.57      3.85      3.81         0
