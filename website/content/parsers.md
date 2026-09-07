@@ -20,7 +20,7 @@ input.
 | `bluetoothctl` | `show` |
 | `bridge` | `fdb`, `link` |
 | `busctl` | `list` |
-| `cargo` | `command-list` |
+| `cargo` | `command-list`, `install-list` |
 | `chage` | `linux` |
 | `cksum` | `posix` |
 | `date` | `posix`, `rfc-email` |
@@ -34,12 +34,14 @@ input.
 | `env` | `null-separated`, `posix` |
 | `etc` | `crontab`, `fstab`, `group`, `hosts`, `nsswitch`, `os-release`, `passwd`, `resolv-conf` |
 | `ethtool` | `driver-info`, `features`, `settings`, `statistics` |
+| `fc-list` | `posix` |
 | `fdisk` | `linux` |
 | `file` | `posix` |
 | `findmnt` | `df`, `linux`, `source-first` |
 | `free` | `gnu`, `gnu-human`, `gnu-wide` |
 | `getconf` | `glibc` |
-| `git` | `branch-verbose`, `config-list`, `diff-numstat`, `diff-stat`, `log`, `log-oneline`, `remote-verbose`, `shortlog-summary`, `stash-list`, `status-porcelain` |
+| `getfacl` | `posix` |
+| `git` | `branch-verbose`, `config-list`, `count-objects`, `diff-numstat`, `diff-stat`, `log`, `log-oneline`, `remote-verbose`, `shortlog-summary`, `stash-list`, `status-porcelain` |
 | `go` | `env`, `list-modules`, `mod-graph`, `version-modules` |
 | `gpg` | `colons` |
 | `hciconfig` | `linux` |
@@ -62,8 +64,11 @@ input.
 | `lsattr` | `linux` |
 | `lsb_release` | `linux` |
 | `lsblk` | `bytes`, `filesystems`, `linux`, `pairs`, `topology` |
+| `lsclocks` | `linux` |
 | `lscpu` | `caches`, `extended`, `linux` |
+| `lsfd` | `linux` |
 | `lsipc` | `linux` |
+| `lsirq` | `linux` |
 | `lslocks` | `linux` |
 | `lslogins` | `linux` |
 | `lsmem` | `linux` |
@@ -83,10 +88,12 @@ input.
 | `nmcli` | `connection`, `device`, `device-show`, `wifi` |
 | `npm` | `ls`, `outdated` |
 | `numactl` | `hardware` |
+| `pactl` | `info`, `short-devices` |
 | `parted` | `machine` |
 | `pidstat` | `linux`, `memory` |
 | `ping` | `linux` |
 | `pip` | `columns` |
+| `pmap` | `linux` |
 | `ps` | `bsd`, `busybox`, `posix`, `unix` |
 | `readelf` | `header` |
 | `resolvectl` | `status` |
@@ -108,6 +115,8 @@ input.
 | `sysctl` | `linux` |
 | `systemctl` | `show`, `sockets`, `status`, `timers`, `unit-files`, `units` |
 | `systemd-analyze` | `blame`, `time` |
+| `systemd-cgtop` | `batch` |
+| `systemd-id128` | `show` |
 | `tar` | `busybox`, `gnu` |
 | `tc` | `qdisc`, `qdisc-stats` |
 | `timedatectl` | `linux`, `timesync`, `timezones` |
@@ -120,6 +129,7 @@ input.
 | `update-alternatives` | `query`, `selections` |
 | `upower` | `device`, `dump`, `enumerate` |
 | `uptime` | `bsd`, `linux` |
+| `uuidparse` | `linux` |
 | `uv` | `pip-show`, `tool-list` |
 | `vmstat` | `linux`, `linux-active`, `linux-disk`, `linux-disk-summary`, `linux-stats` |
 | `w` | `bsd`, `linux`, `linux-short` |
