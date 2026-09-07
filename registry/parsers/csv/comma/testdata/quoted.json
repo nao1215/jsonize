@@ -1,0 +1,17 @@
+[
+  {
+    "name": "web",
+    "note": "a, b",
+    "count": "3"
+  },
+  {
+    "name": "db",
+    "note": "he said \"hi\"",
+    "count": "4"
+  },
+  {
+    "name": "log",
+    "note": "first\nsecond",
+    "count": "5"
+  }
+]

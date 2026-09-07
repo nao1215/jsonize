@@ -1,0 +1,12 @@
+[
+  {
+    "name": "web",
+    "size": "120",
+    "kind": "service"
+  },
+  {
+    "name": "db",
+    "size": "340",
+    "kind": "service"
+  }
+]

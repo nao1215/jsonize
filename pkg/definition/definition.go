@@ -29,6 +29,11 @@ const (
 	TypeKV        = "kv"
 	TypeComposite = "composite"
 	TypeRecords   = "records"
+	// TypeCSV is a delimiter-separated table with RFC 4180 quoting, where
+	// a value may contain the delimiter, a quote or a newline.
+	TypeCSV = "csv"
+	// TypeINI is a file of [section] headings and key = value lines.
+	TypeINI = "ini"
 )
 
 // Table split modes.
@@ -36,6 +41,9 @@ const (
 	SplitWhitespace = "whitespace"
 	SplitAligned    = "aligned"
 	SplitDelimiter  = "delimiter"
+	// SplitBox is a table drawn with rules, as MySQL and several
+	// container tools print one.
+	SplitBox = "box"
 )
 
 // Regex "each" modes.
@@ -321,9 +329,12 @@ func (s *Select) CompiledUntil() *regexp.Regexp { return s.until }
 type Parse struct {
 	Type string `yaml:"type"`
 
-	// table
-	Header    Header `yaml:"header,omitempty"`
-	Split     string `yaml:"split,omitempty"`
+	// table, csv
+	Header Header `yaml:"header,omitempty"`
+	Split  string `yaml:"split,omitempty"`
+	// Delimiter is the literal separator of a table with split:
+	// delimiter, and the one character a csv parser cuts on (default
+	// ",").
 	Delimiter string `yaml:"delimiter,omitempty"`
 	MaxFields int    `yaml:"max_fields,omitempty"`
 	MinFields int    `yaml:"min_fields,omitempty"`
@@ -370,7 +381,7 @@ type Parse struct {
 // the answer is an empty list rather than that it could not tell.
 func (p *Parse) YieldsArray() bool {
 	switch p.Type {
-	case TypeTable, TypeRecords:
+	case TypeTable, TypeRecords, TypeCSV:
 		return true
 	case TypeRegex:
 		return p.Each != EachInput

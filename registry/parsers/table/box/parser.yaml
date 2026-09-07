@@ -1,0 +1,15 @@
+# A table drawn with rules, as several database clients and container
+# tools print one. The rules say where the rows are and the bars say
+# where the cells are, so a value wider than its column cannot shift a
+# boundary and a value wrapped over two lines is one cell.
+format: 1
+command: table
+variant: box
+description: any table drawn with +-| or box-drawing rules
+metadata:
+  tags: [generic]
+detect:
+  auto_detect: false
+parse:
+  type: table
+  split: box

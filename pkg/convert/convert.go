@@ -332,52 +332,67 @@ func StripANSI(b []byte) []byte {
 			i++
 			continue
 		}
-		switch b[i+1] {
-		case '[':
-			// CSI: parameter and intermediate bytes, then a final byte
-			// in the range @ to ~. This is what colour uses.
-			j := i + 2
-			for j < len(b) && b[j] >= 0x20 && b[j] <= 0x3f {
-				j++
-			}
-			if j < len(b) && b[j] >= 0x40 && b[j] <= 0x7e {
-				i = j + 1
-				continue
-			}
-			// Unterminated: keep the bytes rather than eat the rest.
+		// No escape sequence runs past the end of a line. Neither a
+		// carriage return nor a newline is the final byte of any of them,
+		// and letting one be eaten would join two records into one; it
+		// also made the whole-document reader and the streaming one
+		// disagree, since the streaming one has already cut the line off.
+		limit := len(b)
+		if n := bytes.IndexAny(b[i+1:], "\r\n"); n >= 0 {
+			limit = i + 1 + n
+		}
+		end, ok := escapeEnd(b, i, limit)
+		if !ok {
+			// Unterminated: keep the byte rather than eat the rest.
 			out = append(out, b[i])
 			i++
-		case ']':
-			// OSC, which ls and eza use for terminal hyperlinks. It runs
-			// to a BEL or to ESC \.
-			j := i + 2
-			for j < len(b) {
-				if b[j] == 0x07 {
-					j++
-					break
-				}
-				if b[j] == 0x1b && j+1 < len(b) && b[j+1] == '\\' {
-					j += 2
-					break
-				}
-				j++
-			}
-			i = j
-		default:
-			// Everything else: any intermediate bytes, then one final
-			// byte. ESC ( B, which selects a character set, is three
-			// bytes rather than two.
-			j := i + 1
-			for j < len(b) && b[j] >= 0x20 && b[j] <= 0x2f {
-				j++
-			}
-			if j < len(b) {
-				j++
-			}
-			i = j
+			continue
 		}
+		i = end
 	}
 	return out
+}
+
+// escapeEnd returns the index just past the escape sequence starting at
+// i, and whether the sequence ends before limit.
+func escapeEnd(b []byte, i, limit int) (int, bool) {
+	switch b[i+1] {
+	case '[':
+		// CSI: parameter and intermediate bytes, then a final byte in the
+		// range @ to ~. This is what colour uses.
+		j := i + 2
+		for j < limit && b[j] >= 0x20 && b[j] <= 0x3f {
+			j++
+		}
+		if j < limit && b[j] >= 0x40 && b[j] <= 0x7e {
+			return j + 1, true
+		}
+		return 0, false
+	case ']':
+		// OSC, which ls and eza use for terminal hyperlinks. It runs to a
+		// BEL or to ESC \.
+		for j := i + 2; j < limit; j++ {
+			if b[j] == 0x07 {
+				return j + 1, true
+			}
+			if b[j] == 0x1b && j+1 < limit && b[j+1] == '\\' {
+				return j + 2, true
+			}
+		}
+		return 0, false
+	default:
+		// Everything else: any intermediate bytes, then one final byte.
+		// ESC ( B, which selects a character set, is three bytes rather
+		// than two.
+		j := i + 1
+		for j < limit && b[j] >= 0x20 && b[j] <= 0x2f {
+			j++
+		}
+		if j >= limit {
+			return 0, false
+		}
+		return j + 1, true
+	}
 }
 
 // Duration layouts. They say what the last part of a bare two-part

@@ -1,0 +1,136 @@
+version: "1"
+
+suite:
+  name: definitions given on the command line
+
+# jz reads output it has a definition for. --define is the answer for the
+# output it does not: the caller writes the definition instead of the
+# name of one, and nothing is selected, so nothing can be selected
+# wrongly. The registry also carries a handful of definitions that
+# describe a shape rather than a command, for the same job under a name.
+scenarios:
+  - name: --define reads with the definition it is given
+    steps:
+      - run:
+          command: "jz --define 'parse: {type: csv}'"
+          stdin: |
+            a,b
+            1,"x,y"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].b", equals: "x,y" }
+      # The definition it used is what --explain has to say.
+      - run:
+          command: "jz --explain --define 'parse: {type: csv}'"
+          stdin: |
+            a,b
+            1,2
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "inline/inline from --define"
+
+  - name: a table drawn with rules is read cell by cell
+    steps:
+      - fixture:
+          file: box.txt
+          from: "${specdir}/testdata/box-table.txt"
+      - run:
+          command: "jz --define 'parse: {type: table, split: box}' --file ${workdir}/box.txt"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].name", equals: web }
+              # A value wrapped over two lines is one cell.
+              - { path: "$[0].image", equals: "nginx:1.27\n(alpine)" }
+      # An empty cell is null rather than the empty string.
+      - run:
+          command: jz --parser table --variant box --file ${workdir}/box.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].ports", equals: null }
+
+  - name: an ini file is read as sections of keys
+    steps:
+      - fixture:
+          file: settings.ini
+          from: "${specdir}/testdata/sections.ini"
+      - run:
+          command: jz --parser ini --file ${workdir}/settings.ini
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.core.bare", equals: "false" }
+              - { path: "$.user.name", equals: Alice }
+      # Keys written before the first heading go under the empty name.
+      - assert:
+          stdout:
+            contains: '"":{"top":"1"}'
+      # An ini result is one object, so it has no streaming form.
+      - run:
+          command: jz --parser ini --stream --file ${workdir}/settings.ini
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "has no streaming form"
+
+  - name: --define states the whole definition, so nothing is left to choose
+    steps:
+      - run:
+          command: "jz --define 'parse: {type: csv}' --parser df"
+          stdin: "a,b\n"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "cannot be used together"
+      - run:
+          command: "jz --define 'parse: {type: nope}'"
+          stdin: "a,b\n"
+      - assert:
+          exit_code: 5
+          stdout: {empty: true}
+          stderr:
+            contains: "--define: parse.type:"
+      # The four keys that place a definition in a registry get an
+      # explanation rather than "unknown key".
+      - run:
+          command: "jz --define 'command: df'"
+          stdin: "a,b\n"
+      - assert:
+          exit_code: 5
+          stderr:
+            contains: "does not live in a registry"
+
+  # A definition that describes a shape reads anything of that shape,
+  # which is why it is never chosen on its own.
+  - name: a shape definition is never reached by automatic detection
+    steps:
+      - fixture:
+          file: df-gnu.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz --explain --file ${workdir}/df-gnu.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "df/gnu from embedded"
+          stdout:
+            json:
+              # Typed, which a shape could not have done: it says nothing
+              # about what its columns mean.
+              - { path: "$[1].use_percent", equals: 92 }
+      - run:
+          command: jz --parser table --variant whitespace --file ${workdir}/df-gnu.txt
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}

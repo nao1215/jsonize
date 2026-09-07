@@ -1,0 +1,14 @@
+# A table whose cells are cut at the rune offsets where the header words
+# start, so an empty cell stays empty instead of shifting the row. Use it
+# where a column may be blank; use table/whitespace where none is.
+format: 1
+command: table
+variant: aligned
+description: any column-aligned table, cells cut at the header offsets
+metadata:
+  tags: [generic]
+detect:
+  auto_detect: false
+parse:
+  type: table
+  split: aligned

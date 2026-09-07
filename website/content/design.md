@@ -112,6 +112,69 @@ are what produce numbers. The same reasoning removed the `ls -l` /
 `ls -lh` split: which one produced a listing is not decidable from the
 text, and with the size kept as printed it does not need to be.
 
+### A definition can be given instead of named
+
+jz reads output it has a definition for, and the honest answer for
+everything else was exit 4 and a suggestion to write one. That is right
+about what jz will not guess and wrong about what it will not do: the
+caller often knows the shape perfectly well and only wants this reading
+of it, once, without a registry.
+
+`--define` takes the definition itself. It is a `parser.yaml` without the
+four keys that place one in a registry, so what is left is `parse` and
+optionally `input` and `fields`. Nothing is detected, which is why it
+cannot be combined with `--parser`: both are answers to a question, and
+`--define` has already answered it.
+
+It adds no expressive power. The body goes through the same loader and
+the same validation as a file, so an inline definition can say nothing a
+file cannot, and a definition that turns out to be worth keeping is
+moved into a registry unchanged.
+
+Beside it the registry gained a few definitions that describe a shape
+rather than a command: `table/whitespace`, `table/aligned`, `table/box`,
+`csv/comma`, `csv/tab`, `kv/colon`, `kv/equals` and `ini/default`. They
+are `--define` under a name, for the readings common enough to be worth
+one.
+
+Those needed a rule the registry had not needed before. A definition with
+no signature and `auto_detect: false` makes no claim about the text at
+all, so the checks that ask whether a definition reads a neighbour's
+output cannot be applied to it: it reads everything of that shape, which
+is what it is for, and running the check would report every fixture in
+the registry against `table/whitespace`. `selector.ShapeOnly` names that
+class, and the conformance runner leaves those out of the cross product
+and requires the variant to be named rather than the parser alone, since
+`table/whitespace` and `table/aligned` read the same lines two ways and
+no text can separate them.
+
+### Three formats that are not line-oriented
+
+`csv`, `ini` and `table` with `split: box` were added because each one
+breaks the assumption the other parsers are built on, that one line is
+one record.
+
+A CSV value may contain the delimiter, a quote, or a line break, so the
+lines are joined back together and read with `encoding/csv`. A streamed
+CSV holds a line back while the quote count is odd, which is exactly when
+a value is still open. An ini file is sections of keys and so is one
+object with no streaming form at all. A drawn table has its rows marked
+by rules rather than by line breaks, so a value wrapped over three lines
+is one cell.
+
+Adding them cost no new key beyond `split: box`, and each brought its own
+fuzz coverage. That found a bug older than any of them: `StripANSI` would
+take a line break as the final byte of an escape sequence, joining two
+records into one, and it did so only in the whole-document reader —
+the streaming one had already cut the line off. The two readings
+disagreed on `"\x1b\n"`. No escape sequence ends with a line break, so
+none may eat one.
+
+XML, YAML, TOML, plist, x509 and JWT stay out. They are not what commands
+print, and each already has a tool whose whole job is that format: `yq`,
+`openssl x509 -text`, `plutil`. A converter for command output that also
+half-read six document formats would be worse at both.
+
 ### A repeating report is an array of samples
 
 `iostat 1 3` prints its column header once per sample. The second one

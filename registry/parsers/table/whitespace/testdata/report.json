@@ -1,0 +1,17 @@
+[
+  {
+    "region": "north",
+    "orders": "1204",
+    "revenue": "88210"
+  },
+  {
+    "region": "south",
+    "orders": "937",
+    "revenue": "71455"
+  },
+  {
+    "region": "east",
+    "orders": "1580",
+    "revenue": "120300"
+  }
+]

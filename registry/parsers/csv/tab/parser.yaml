@@ -1,0 +1,14 @@
+# Tab-separated values, read with the same quoting rules as the comma
+# form. A tab is what a value is least likely to contain, which is why so
+# many tools cut on one.
+format: 1
+command: csv
+variant: tab
+description: tab-separated values, first line as the header
+metadata:
+  tags: [generic]
+detect:
+  auto_detect: false
+parse:
+  type: csv
+  delimiter: "\t"

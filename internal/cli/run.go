@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	"github.com/nao1215/jsonize/internal/runner"
+	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/registry"
@@ -82,13 +84,18 @@ func (a *app) cmdRun(args []string) int {
 		a.errorf("%v", err)
 		return ExitUsage
 	}
-	if sel.variant != "" && sel.parser == "" {
-		a.errorf("%v", &selector.VariantWithoutParserError{Variant: sel.variant})
+	if err := sel.check(); err != nil {
+		a.errorf("%v", err)
 		return ExitUsage
 	}
 	if err := out.check(); err != nil {
 		a.errorf("%v", err)
 		return ExitUsage
+	}
+	inline, hasInline, err := sel.definition()
+	if err != nil {
+		a.errorf("%v", err)
+		return ExitRegistry
 	}
 	name, cmdArgs := rest[0], rest[1:]
 	// The command name is the parser unless the user says otherwise,
@@ -103,11 +110,12 @@ func (a *app) cmdRun(args []string) int {
 	if code != 0 {
 		return code
 	}
-	// Nothing is executed until jz knows it can parse the result.
-	if len(reg.Variants(parser)) == 0 {
+	// Nothing is executed until jz knows it can parse the result. A
+	// definition given on the command line is that knowledge already.
+	if !hasInline && len(reg.Variants(parser)) == 0 {
 		return a.exitFor(&selector.UnknownParserError{Parser: parser, Known: reg.Commands()})
 	}
-	if sel.variant != "" {
+	if sel.variant != "" && !hasInline {
 		if _, ok := reg.Lookup(parser, sel.variant); !ok {
 			return a.exitFor(&selector.UnknownVariantError{
 				Parser:    parser,
@@ -132,6 +140,9 @@ func (a *app) cmdRun(args []string) int {
 		Stdin:      a.env.Stdin,
 		KeepLocale: keepLocale,
 		MaxOutput:  MaxInputSize,
+	}
+	if hasInline {
+		return a.runWith(ctx, inline, command, &out, timeout, sel.explain)
 	}
 	if out.stream {
 		return a.runStream(ctx, reg, command, selector.Context{
@@ -330,4 +341,64 @@ func variantNames(entries []*registry.Entry) []string {
 		out[i] = e.Def.Variant
 	}
 	return out
+}
+
+// runWith runs the command and reads its output with a definition given
+// on the command line. It is the pipe case with jz starting the
+// producer, so the command's status is mirrored the way it always is.
+func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runner.Command, out *outputOptions, timeout time.Duration, explain bool) int {
+	if out.stream {
+		plain := a.env.Stderr
+		a.env.Stderr = &syncWriter{w: plain}
+		defer func() { a.env.Stderr = plain }()
+		code := ExitOK
+		res, err := runner.Stream(ctx, cmd, a.env.Stderr, a.env.Signals, func(r io.Reader) error {
+			if code = a.convertWith(def, r, out, explain); code != ExitOK {
+				return errStreamFailed
+			}
+			return nil
+		})
+		if err != nil && !errors.Is(err, errStreamFailed) {
+			a.errorf("%v", err)
+			return ExitError
+		}
+		a.reportChild(ctx, cmd.Name, res, timeout)
+		if explain {
+			a.explainCommand(cmd.Name, cmd.Args, res.ExitCode)
+		}
+		if code != ExitOK && res.ExitCode == 0 {
+			return code
+		}
+		return res.ExitCode
+	}
+	res, err := runner.Run(ctx, cmd, a.env.Stderr, a.env.Signals)
+	if err != nil {
+		a.errorf("%v", err)
+		if errors.Is(err, runner.ErrOutputTooLarge) {
+			return ExitParse
+		}
+		return ExitError
+	}
+	a.reportChild(ctx, cmd.Name, res, timeout)
+	if explain {
+		a.explainCommand(cmd.Name, cmd.Args, res.ExitCode)
+	}
+	code := a.convertWith(def, bytes.NewReader(res.Stdout), out, explain)
+	if res.ExitCode != 0 {
+		return res.ExitCode
+	}
+	return code
+}
+
+// reportChild writes what the command did with itself.
+func (a *app) reportChild(ctx context.Context, name string, res *runner.Result, timeout time.Duration) {
+	switch {
+	case res.Signal != "":
+		a.errorf("%s was terminated by %s", name, res.Signal)
+	case res.ExitCode != 0:
+		a.errorf("%s exited with status %d", name, res.ExitCode)
+	}
+	if ctx.Err() != nil && timeout > 0 {
+		a.errorf("timeout of %s reached", timeout)
+	}
 }

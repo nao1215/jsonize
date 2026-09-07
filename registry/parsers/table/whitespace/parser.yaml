@@ -1,0 +1,16 @@
+# A table split on runs of whitespace, with the first line as its header.
+# It is the shape most reports have, and that is exactly why nothing
+# claims it on sight: two words above two words is not evidence of
+# anything. Name it when you have output jz has no definition for and
+# want its columns as keys.
+format: 1
+command: table
+variant: whitespace
+description: any whitespace-separated table, first line as the header
+metadata:
+  tags: [generic]
+detect:
+  auto_detect: false
+parse:
+  type: table
+  split: whitespace

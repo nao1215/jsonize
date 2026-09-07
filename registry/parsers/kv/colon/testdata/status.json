@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Name",
+    "value": "sshd"
+  },
+  {
+    "name": "Loaded",
+    "value": "loaded"
+  },
+  {
+    "name": "Active",
+    "value": "active (running)"
+  }
+]

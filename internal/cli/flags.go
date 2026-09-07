@@ -10,7 +10,9 @@ import (
 	"time"
 
 	"github.com/nao1215/jsonize/pkg/convert"
+	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/selector"
 )
 
 // optionSet registers command line options and renders them. Both jobs go
@@ -198,13 +200,39 @@ func (f *outputOptions) filter() (*keyFilter, error) {
 type selectOptions struct {
 	parser  string
 	variant string
+	define  string
 	explain bool
 }
 
 func (f *selectOptions) bind(o *optionSet) {
 	o.stringOpt(&f.parser, "parser", "", "NAME", "", "restrict detection to one parser")
 	o.stringOpt(&f.variant, "variant", "", "NAME", "", "use a variant of --parser")
+	o.stringOpt(&f.define, "define", "", "YAML", "", "read with a definition given here instead of a registered one")
 	o.boolOpt(&f.explain, "explain", "", "report the chosen definition and why, on stderr")
+}
+
+// check reports the option pairs that state two answers at once.
+func (f *selectOptions) check() error {
+	if f.define != "" && (f.parser != "" || f.variant != "") {
+		return errors.New("--define and --parser/--variant cannot be used together: --define is the definition, so there is nothing left to choose")
+	}
+	if f.variant != "" && f.parser == "" {
+		return &selector.VariantWithoutParserError{Variant: f.variant}
+	}
+	return nil
+}
+
+// definition returns the inline definition. The bool result is false
+// when --define was not given, which is not a failure.
+func (f *selectOptions) definition() (*definition.Definition, bool, error) {
+	if f.define == "" {
+		return nil, false, nil
+	}
+	d, err := definition.LoadInline([]byte(f.define), "--define")
+	if err != nil {
+		return nil, false, err
+	}
+	return d, true, nil
 }
 
 // helpDoc is the line for -h/--help. The flag package answers those names

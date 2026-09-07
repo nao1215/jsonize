@@ -1,0 +1,13 @@
+# Lines of "key=value", which is what an environment listing and a shell
+# configuration both look like.
+format: 1
+command: kv
+variant: equals
+description: any "key=value" listing, as a list of name/value pairs
+metadata:
+  tags: [generic]
+detect:
+  auto_detect: false
+parse:
+  type: kv
+  separator: "="

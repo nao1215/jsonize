@@ -245,6 +245,14 @@ func TestStripANSI(t *testing.T) {
 		{"plain text is returned untouched", "Filesystem 1K-blocks\n", "Filesystem 1K-blocks\n"},
 		{"colour", "\x1b[32mgreen\x1b[0m", "green"},
 		{"bold and reset around a cell", "a \x1b[1;31mb\x1b[m c", "a b c"},
+		// No escape sequence has a line break as its final byte, and
+		// eating one would join two records into one. It also made the
+		// whole-document reader and the streaming one disagree, since the
+		// streaming one has already cut the line off.
+		{"a stray escape at the end of a line keeps the line break", "a\x1b\nb\n", "a\x1b\nb\n"},
+		{"a stray escape before a carriage return keeps it", "a\x1b\r\n", "a\x1b\r\n"},
+		{"an unterminated CSI at the end of a line keeps the line break", "a\x1b[1\nb\n", "a\x1b[1\nb\n"},
+		{"an unterminated hyperlink does not eat the rest of the output", "\x1b]8;;http\nplain\n", "\x1b]8;;http\nplain\n"},
 		{"osc hyperlink terminated by BEL", "\x1b]8;;file:///x\x07name\x1b]8;;\x07", "name"},
 		{"osc hyperlink terminated by ESC backslash", "\x1b]8;;u\x1b\\name\x1b]8;;\x1b\\", "name"},
 		{"two character sequence", "\x1b(Btext", "text"},
