@@ -494,11 +494,22 @@ and, before this, had to be named on the command line every time — for a
 file whose path already said what it was.
 
 It stays evidence and does not become an instruction. The definition it
-names still has to satisfy its signature, and when it does not the pair
-is dropped and the text is read on its own terms, so a path can only add
-an answer and never replace one. A base name containing a dot is treated
-as a file name rather than a variant name, which keeps a capture saved as
-`fstab.txt` out of it and stops the rule needing a list of extensions.
+names has to satisfy its signature and then read the text; failing either
+drops the pair and the text is read on its own terms, so a path can only
+add an answer and never replace one. A base name containing a dot is
+treated as a file name rather than a variant name, which keeps a capture
+saved as `fstab.txt` out of it and stops the rule needing a list of
+extensions.
+
+The definitions that describe a shape are excluded. They were not at
+first, and that was the one failure this tool exists to prevent: a
+shape carries no signature, so nothing about the text can rule it out,
+and `df` output in a file called `comma` inside a directory called `csv`
+was read as CSV and returned at exit 0. The rest of the rule survives
+because every other definition makes a claim the text can refuse; a shape
+makes none, so for those the directory name would have been the whole of
+the evidence. Naming one stays a claim the caller makes rather than one
+their directory layout makes for them.
 
 The alternative considered was reading the base name as the parser
 (`df.txt` → `df`). It was rejected because it guesses where this rule

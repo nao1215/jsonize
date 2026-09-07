@@ -71,6 +71,19 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A file's path could name a definition that describes a shape, and those
+  carry no signature, so nothing about the text could rule one out: `df`
+  output in a file called `comma` inside a directory called `csv` was
+  read as CSV and returned at exit 0, where the same bytes on standard
+  input were read as `df`. Wrong JSON at a successful exit is the one
+  failure this tool exists to prevent. A path now names only a definition
+  that makes a claim the text can refuse.
+- A path that named a definition whose signature accepted the text but
+  whose parse then failed gave exit 3, where the same bytes on standard
+  input were read correctly. The fallback ran only when the choice
+  failed, not when the reading did, so the guarantee that a path can only
+  add an answer was not kept. Both failures now drop the path.
+
 - Checking a registry took 25 seconds where it had taken one, as soon as
   a deeply nested fixture was added. go-cmp builds its report as it walks
   a value, and on a 22-level tree that runs for tens of seconds whether

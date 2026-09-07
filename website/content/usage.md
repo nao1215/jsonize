@@ -324,11 +324,17 @@ What this buys is the formats too unremarkable to claim on sight.
 command line every time.
 
 The path is evidence, not an instruction. The definition it names still
-has to fit the text, and when it does not the path is dropped and the
-text is read on its own terms — so a path can only add an answer, never
-replace one. A name with a dot in it is a file name rather than a variant
-name and is ignored, which is what keeps a capture saved as `fstab.txt`
-out of it.
+has to fit the text, and when it does not — because its signature rules
+the text out, or because it accepts the text and then cannot read it —
+the path is dropped and the text is read on its own terms. So a path can
+only add an answer, never replace one. A name with a dot in it is a file
+name rather than a variant name and is ignored, which is what keeps a
+capture saved as `fstab.txt` out of it.
+
+The definitions that describe a shape are never named this way. They
+carry no signature, so nothing about the text could rule one out and the
+directory name would be the whole of the evidence. Naming those stays
+something you do on the command line.
 
 ## Naming a parser
 
