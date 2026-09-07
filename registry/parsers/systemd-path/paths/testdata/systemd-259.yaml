@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C as
+  `systemd-path`, the whole output apart from line 4. That line is
+  "search-binaries" and holds this machine's PATH, naming every tool
+  installed for the user, so it was cut out rather than rewritten; the
+  remaining lines have the home directory replaced with /home/user.
+os: linux
+args: []

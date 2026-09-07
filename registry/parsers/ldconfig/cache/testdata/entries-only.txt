@@ -1,0 +1,7 @@
+	libzvbi.so.0 (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libzvbi.so.0
+	libzvbi.so.0 (libc6) => /usr/lib/i386-linux-gnu/libzvbi.so.0
+	libzvbi-chains.so.0 (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libzvbi-chains.so.0
+	libzvbi-chains.so.0 (libc6) => /usr/lib/i386-linux-gnu/libzvbi-chains.so.0
+	libzstd.so.1 (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libzstd.so.1
+	libzstd.so.1 (libc6) => /usr/lib/i386-linux-gnu/libzstd.so.1
+	libzopflipng.so.1 (libc6,x86-64) => /lib/libzopflipng.so.1

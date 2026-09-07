@@ -1,0 +1,7 @@
+source: >-
+  `ls -F /sys/class | head -8` on the same machine with LC_ALL=C: one
+  name per line, every one of them ending in a slash. It is the shape
+  the encoding list is closest to, and the definition is pinned to
+  refuse it because none of the lines carry the second slash.
+os: linux
+expect_error: "does not describe this input"

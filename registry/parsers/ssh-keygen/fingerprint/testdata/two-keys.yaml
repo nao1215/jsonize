@@ -1,0 +1,10 @@
+source: >-
+  captured on Ubuntu 26.04 (OpenSSH 10.2p1) with LC_ALL=C as
+  `ssh-keygen -l -f <file>` over a file holding two public keys, the way
+  a known_hosts or authorized_keys file is fingerprinted. The keys were
+  generated for the capture and deleted afterwards; the two digests were
+  replaced with made-up base64 strings of the same 43 characters, and
+  the user and host names in the first comment with "user@workstation".
+  The first key carries a comment containing spaces and the second was
+  generated without one, which is where "no comment" comes from.
+os: linux

@@ -1,0 +1,5 @@
+source: >-
+  line 2 of the same capture, one stopped service on its own: the
+  shortest report the command prints, and the one the signature has the
+  least to work with.
+os: linux

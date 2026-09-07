@@ -1,0 +1,34 @@
+# `service --status-all` runs "status" for every script in /etc/init.d
+# and prints one line per service:
+#
+#      [ + ]  cron
+#      [ - ]  anacron
+#
+# The mark is the whole of the report, so it becomes a bool: "+" for a
+# script that answered 0 with output, "-" for one that did not. There is
+# a third mark, "?", for a script whose status action only printed a
+# usage message; /usr/sbin/service writes those lines to stderr, so they
+# reach jz only when the caller merged the streams, and "unknown" is
+# null rather than false.
+format: 1
+command: service
+variant: status-all
+description: service --status-all init script states
+metadata:
+  tags: [linux, service, sysvinit]
+  compatible: [init-system-helpers]
+  references:
+    - https://manpages.debian.org/unstable/init-system-helpers/service.8.en.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # Every line is a bracketed mark and a name, with nothing before
+      # the first service and nothing summarising them at the end.
+      - '\A(?: \[ [-+?] \][ \t]+[^\n]+\n)* \[ [-+?] \][ \t]+[^\n]+\z'
+parse:
+  type: regex
+  pattern: '^[ \t]*\[[ \t]*(?P<running>[-+?])[ \t]*\][ \t]+(?P<name>.+?)[ \t]*$'
+fields:
+  running: {type: bool, true_values: ["+"], false_values: ["-"], null_if: ["?"]}
+  name: {required: true}

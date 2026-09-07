@@ -1,0 +1,31 @@
+Total package names: 177481 (5679 k)
+Total package structures: 169917 (7476 k)
+  Normal packages: 79960
+  Pure virtual packages: 2876
+  Single virtual packages: 70957
+  Mixed virtual packages: 4099
+  Missing: 12025
+Total distinct source versions: 89041 (2137 k)
+Total distinct versions: 89041 (8548 k)
+Total distinct descriptions: 156287 (3751 k)
+Total dependencies: 587777/164504 (14.4 M)
+Total ver/file relations: 136160 (2179 k)
+Total Desc/File relations: 175798 (2813 k)
+Total Provides mappings: 90630 (2175 k)
+Total globbed strings: 292635 (7358 k)
+Total slack space: 75.8 k
+Total space accounted for: 58.2 M
+Total buckets in PkgHashTable: 196613
+  Unused: 87098
+  Used: 109515
+  Utilization: 55.7008%
+  Average entries: 1.55154
+  Longest: 11
+  Shortest: 1
+Total buckets in GrpHashTable: 196613
+  Unused: 79571
+  Used: 117042
+  Utilization: 59.5291%
+  Average entries: 1.51639
+  Longest: 7
+  Shortest: 1

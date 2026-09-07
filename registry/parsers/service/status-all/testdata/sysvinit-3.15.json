@@ -1,0 +1,146 @@
+[
+  {
+    "running": true,
+    "name": "alsa-utils"
+  },
+  {
+    "running": false,
+    "name": "anacron"
+  },
+  {
+    "running": true,
+    "name": "apparmor"
+  },
+  {
+    "running": true,
+    "name": "apport"
+  },
+  {
+    "running": true,
+    "name": "bluetooth"
+  },
+  {
+    "running": false,
+    "name": "console-setup.sh"
+  },
+  {
+    "running": true,
+    "name": "cron"
+  },
+  {
+    "running": true,
+    "name": "cups"
+  },
+  {
+    "running": true,
+    "name": "dbus"
+  },
+  {
+    "running": true,
+    "name": "docker"
+  },
+  {
+    "running": false,
+    "name": "gdm3"
+  },
+  {
+    "running": true,
+    "name": "grub-common"
+  },
+  {
+    "running": true,
+    "name": "kdump-tools"
+  },
+  {
+    "running": false,
+    "name": "keyboard-setup.sh"
+  },
+  {
+    "running": true,
+    "name": "lightdm"
+  },
+  {
+    "running": true,
+    "name": "lm-sensors"
+  },
+  {
+    "running": true,
+    "name": "openvpn"
+  },
+  {
+    "running": false,
+    "name": "plymouth"
+  },
+  {
+    "running": true,
+    "name": "plymouth-log"
+  },
+  {
+    "running": true,
+    "name": "procps"
+  },
+  {
+    "running": false,
+    "name": "rsync"
+  },
+  {
+    "running": false,
+    "name": "saned"
+  },
+  {
+    "running": false,
+    "name": "screen-cleanup"
+  },
+  {
+    "running": false,
+    "name": "sddm"
+  },
+  {
+    "running": true,
+    "name": "seatd"
+  },
+  {
+    "running": true,
+    "name": "smartmontools"
+  },
+  {
+    "running": false,
+    "name": "speech-dispatcher"
+  },
+  {
+    "running": false,
+    "name": "spice-vdagent"
+  },
+  {
+    "running": true,
+    "name": "ssh"
+  },
+  {
+    "running": false,
+    "name": "sssd"
+  },
+  {
+    "running": false,
+    "name": "tor"
+  },
+  {
+    "running": true,
+    "name": "ufw"
+  },
+  {
+    "running": true,
+    "name": "unattended-upgrades"
+  },
+  {
+    "running": true,
+    "name": "uuidd"
+  },
+  {
+    "running": false,
+    "name": "whoopsie"
+  },
+  {
+    "running": false,
+    "name": "x11-common"
+  }
+]

@@ -1,0 +1,8 @@
+accel/
+ata_device/
+ata_link/
+ata_port/
+backlight/
+bdi/
+block/
+bluetooth/

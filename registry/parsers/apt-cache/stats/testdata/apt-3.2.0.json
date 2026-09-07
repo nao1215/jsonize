@@ -1,0 +1,137 @@
+[
+  {
+    "name": "Total package names",
+    "count": 177481,
+    "size": "5679 k"
+  },
+  {
+    "name": "Total package structures",
+    "count": 169917,
+    "size": "7476 k"
+  },
+  {
+    "name": "Normal packages",
+    "count": 79960
+  },
+  {
+    "name": "Pure virtual packages",
+    "count": 2876
+  },
+  {
+    "name": "Single virtual packages",
+    "count": 70957
+  },
+  {
+    "name": "Mixed virtual packages",
+    "count": 4099
+  },
+  {
+    "name": "Missing",
+    "count": 12025
+  },
+  {
+    "name": "Total distinct source versions",
+    "count": 89041,
+    "size": "2137 k"
+  },
+  {
+    "name": "Total distinct versions",
+    "count": 89041,
+    "size": "8548 k"
+  },
+  {
+    "name": "Total distinct descriptions",
+    "count": 156287,
+    "size": "3751 k"
+  },
+  {
+    "name": "Total dependencies",
+    "count": 587777,
+    "data_count": 164504,
+    "size": "14.4 M"
+  },
+  {
+    "name": "Total ver/file relations",
+    "count": 136160,
+    "size": "2179 k"
+  },
+  {
+    "name": "Total Desc/File relations",
+    "count": 175798,
+    "size": "2813 k"
+  },
+  {
+    "name": "Total Provides mappings",
+    "count": 90630,
+    "size": "2175 k"
+  },
+  {
+    "name": "Total globbed strings",
+    "count": 292635,
+    "size": "7358 k"
+  },
+  {
+    "name": "Total slack space",
+    "value": "75.8 k"
+  },
+  {
+    "name": "Total space accounted for",
+    "value": "58.2 M"
+  },
+  {
+    "name": "Total buckets in PkgHashTable",
+    "count": 196613
+  },
+  {
+    "name": "Unused",
+    "count": 87098
+  },
+  {
+    "name": "Used",
+    "count": 109515
+  },
+  {
+    "name": "Utilization",
+    "value": "55.7008%"
+  },
+  {
+    "name": "Average entries",
+    "value": "1.55154"
+  },
+  {
+    "name": "Longest",
+    "count": 11
+  },
+  {
+    "name": "Shortest",
+    "count": 1
+  },
+  {
+    "name": "Total buckets in GrpHashTable",
+    "count": 196613
+  },
+  {
+    "name": "Unused",
+    "count": 79571
+  },
+  {
+    "name": "Used",
+    "count": 117042
+  },
+  {
+    "name": "Utilization",
+    "value": "59.5291%"
+  },
+  {
+    "name": "Average entries",
+    "value": "1.51639"
+  },
+  {
+    "name": "Longest",
+    "count": 7
+  },
+  {
+    "name": "Shortest",
+    "count": 1
+  }
+]

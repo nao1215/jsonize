@@ -1,0 +1,8 @@
+source: >-
+  the first 6 lines of `apt-cache policy` on the same machine (Ubuntu
+  26.04, apt 3.2.0, LC_ALL=C). It is the neighbouring report of the same
+  command and it also opens with a label and a colon, so the definition
+  is pinned to refuse it rather than read its indented lines as counts.
+  Nothing was replaced; the repositories are public.
+os: linux
+expect_error: "does not describe this input"

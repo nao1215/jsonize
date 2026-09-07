@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (OpenSSH 10.2p1) with LC_ALL=C as
+  `ssh-keygen -l -f /etc/ssh/ssh_host_ed25519_key.pub`. The host name in
+  the comment was replaced with "workstation" and the digest with a
+  made-up base64 string of the same 43 characters, so the line no longer
+  identifies the machine.
+os: linux
+args: ["-l", "-f", "/etc/ssh/ssh_host_ed25519_key.pub"]

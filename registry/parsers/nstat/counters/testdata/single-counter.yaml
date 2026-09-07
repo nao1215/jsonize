@@ -1,0 +1,7 @@
+source: >-
+  captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C as
+  `nstat -asz TcpActiveOpens`, the whole output. A pattern argument
+  leaves the banner and one counter, which is the shortest report nstat
+  prints. Nothing was replaced.
+os: linux
+args: ["-asz", "TcpActiveOpens"]

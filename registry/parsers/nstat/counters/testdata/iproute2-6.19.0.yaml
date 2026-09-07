@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C as
+  `nstat -asz`; the output has 441 lines and this is line 1 with lines
+  85-95 and 300-308, chosen for the counters that are not zero and for
+  the 31 character name that leaves a single space before its value.
+  Nothing was replaced; the counters name no host.
+os: linux
+args: ["-asz"]

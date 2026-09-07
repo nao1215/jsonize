@@ -1,0 +1,39 @@
+# nstat prints "#kernel", then one counter per line in three columns:
+# the SNMP name, the counter and the rate per second.
+#
+#     TcpActiveOpens                  434867             0.0
+#
+# The name column is padded to 32 characters but a longer name is not
+# truncated, so "TcpExtTCPFastOpenListenOverflow 0" leaves one space
+# between the first two columns; the columns are read as whitespace
+# separated rather than at fixed offsets for that reason.
+format: 1
+command: nstat
+variant: counters
+description: nstat SNMP counter list
+metadata:
+  tags: [linux, network, iproute2, snmp]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/nstat.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # nstat names the snapshot it dumped on the first line, and every
+      # line under it is a name and two numbers. Three columns like that
+      # describe far too much on their own, which is why the banner is
+      # part of the claim rather than something skipped.
+      - '\A#kernel(?:\n\S+[ \t]+\d+[ \t]+-?\d+\.\d+)*\z'
+input:
+  ignore:
+    - '^#kernel$'
+parse:
+  type: regex
+  # The rate is printed with %6.1f, so it is a decimal number even when
+  # the interval makes it zero.
+  pattern: '^(?P<name>\S+)[ \t]+(?P<value>\d+)[ \t]+(?P<rate>-?\d+\.\d+)[ \t]*$'
+fields:
+  name: {required: true}
+  value: {type: int, required: true}
+  rate: {type: float, required: true}

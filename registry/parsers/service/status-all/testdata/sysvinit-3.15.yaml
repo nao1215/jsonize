@@ -1,0 +1,6 @@
+source: >-
+  captured on Ubuntu 26.04 (init-system-helpers 1.69, sysvinit-utils
+  3.15) with LC_ALL=C as `service --status-all`, the whole of stdout.
+  Nothing was replaced; the names come from installed packages.
+os: linux
+args: ["--status-all"]

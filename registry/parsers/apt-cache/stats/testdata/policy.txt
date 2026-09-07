@@ -1,0 +1,6 @@
+Package files:
+ 100 /var/lib/dpkg/status
+     release a=now
+ 500 https://packages.microsoft.com/repos/code stable/main amd64 Packages
+     release o=code stable,a=stable,n=stable,l=code stable,c=main,b=amd64
+     origin packages.microsoft.com

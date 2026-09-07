@@ -1,0 +1,7 @@
+source: >-
+  captured on Ubuntu 26.04 (GNU C Library 2.43) with LC_ALL=C as
+  `iconv -l`; the output has 1180 lines and this is lines 750-775, the
+  window that holds the four names containing a slash of their own
+  ("ISO-10646/UCS2/") next to the ordinary ones. Nothing was replaced.
+os: linux
+args: ["-l"]

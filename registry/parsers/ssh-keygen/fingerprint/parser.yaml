@@ -1,0 +1,40 @@
+# `ssh-keygen -l -f <file>` prints one line per public key in the file:
+#
+#     256 SHA256:kTt9...5rQ root@workstation (ED25519)
+#
+# A file holding one host key gives one line and a known_hosts file gives
+# hundreds, so the lines are read one at a time rather than as a single
+# object.
+#
+# The comment is whatever was stored in the key and it may contain
+# spaces, so it is bounded by the parenthesised key type at the end of
+# the line rather than by a field count; a key with no comment prints
+# the words "no comment" there, which stay as printed because that is
+# what ssh-keygen says and not a name jz can tell from a real one.
+format: 1
+command: ssh-keygen
+variant: fingerprint
+description: ssh-keygen -l public key fingerprints
+metadata:
+  tags: [linux, darwin, ssh, security]
+  compatible: [OpenSSH]
+  references:
+    - https://man.openbsd.org/ssh-keygen.1
+detect:
+  signature:
+    all:
+      # Every line: the length, the hash name in front of the digest, the
+      # comment, and the key type in parentheses closing the line. -E
+      # chooses the hash, so the three spellings OpenSSH accepts are all
+      # named here.
+      - '\A(?:\d+ (?:SHA256|SHA1|MD5):\S+ [^\n]* \([A-Z0-9-]+\)\n)*\d+ (?:SHA256|SHA1|MD5):\S+ [^\n]* \([A-Z0-9-]+\)\z'
+parse:
+  type: regex
+  pattern: '^(?P<bits>\d+) (?P<fingerprint>\S+) (?P<comment>.*) \((?P<type>[A-Z0-9-]+)\)$'
+fields:
+  bits: {type: int, required: true}
+  # Kept whole: the hash name is part of what a fingerprint is compared
+  # as, and `-E md5` prints "MD5:" and colon separated hex bytes here.
+  fingerprint: {required: true}
+  comment: {required: true}
+  type: {required: true}
