@@ -13,7 +13,11 @@ detect:
   auto_detect: false
   signature:
     all:
-      - '\A[^:\n]+:[^:\n]*:\d+:\d+:[^:\n]*:[^:\n]*:'
+      # Exactly seven colon separated fields, the way /etc/group counts
+      # its four. Without the count any colon separated record with two
+      # numbers in the third and fourth field qualifies, which is what
+      # the key listing of `gpg --with-colons` looks like.
+      - '\A[^:\n]+:[^:\n]*:\d+:\d+:[^:\n]*:[^:\n]*:[^:\n]*$'
 input:
   ignore:
     - '^\s*#'
