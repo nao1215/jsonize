@@ -1,7 +1,8 @@
 # `ip link` prints one block per interface: a header line, the link layer
-# address, and however many alternative names the interface has. It is
-# `ip -s link` without the counter tables and `ip address` without the
-# addresses, so the signature has to name both of those absences.
+# address, and then the interface's alias and alternative names, of which
+# it may have neither. It is `ip -s link` without the counter tables and
+# `ip address` without the addresses, so the signature has to name both
+# of those absences.
 format: 1
 command: ip
 variant: link
@@ -47,8 +48,20 @@ parse:
         pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
       fields:
         netnsid: {type: int, when_missing: omit}
+    # An interface may carry a free-text alias and any number of
+    # alternative names. Both sit under the link line, so each part names
+    # the other's lines as belonging to a sibling rather than taking a
+    # position: which of the two comes first is not something the format
+    # promises.
+    - name: alias
+      select: {skip: 2}
+      ignore: ['^\s*altname ']
+      parse:
+        type: regex
+        pattern: '^\s*alias (?P<name>.+?)\s*$'
     - name: altnames
       select: {skip: 2}
+      ignore: ['^\s*alias ']
       parse:
         type: regex
         pattern: '^\s*altname (?P<name>\S+)\s*$'

@@ -20,29 +20,13 @@
       "address": "00:00:00:00:00:00",
       "broadcast": "00:00:00:00:00:00"
     },
-    "rx": {
-      "bytes": 7335910508,
-      "packets": 6701823,
-      "errors": 0,
-      "dropped": 0,
-      "missed": 0,
-      "mcast": 0
-    },
-    "tx": {
-      "bytes": 7335910508,
-      "packets": 6701823,
-      "errors": 0,
-      "dropped": 0,
-      "carrier": 0,
-      "collsns": 0
-    },
     "alias": [],
     "altnames": []
   },
   {
     "interface": {
       "index": 2,
-      "name": "eno1",
+      "name": "eth0",
       "flags": [
         "BROADCAST",
         "MULTICAST",
@@ -50,7 +34,7 @@
         "LOWER_UP"
       ],
       "mtu": 1500,
-      "qdisc": "fq_codel",
+      "qdisc": "mq",
       "state": "UP",
       "mode": "DEFAULT",
       "group": "default",
@@ -61,29 +45,14 @@
       "address": "aa:bb:cc:dd:ee:ff",
       "broadcast": "ff:ff:ff:ff:ff:ff"
     },
-    "rx": {
-      "bytes": 1007250705,
-      "packets": 3265360,
-      "errors": 0,
-      "dropped": 414905,
-      "missed": 0,
-      "mcast": 734844
-    },
-    "tx": {
-      "bytes": 1439574440,
-      "packets": 2474810,
-      "errors": 0,
-      "dropped": 0,
-      "carrier": 0,
-      "collsns": 0
-    },
-    "alias": [],
+    "alias": [
+      {
+        "name": "Network Device"
+      }
+    ],
     "altnames": [
       {
-        "name": "enp193s0"
-      },
-      {
-        "name": "enxaabbccddeeff"
+        "name": "enP30832s1"
       }
     ]
   }

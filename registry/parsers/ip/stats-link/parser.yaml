@@ -53,9 +53,12 @@ parse:
       fields:
         netnsid: {type: int, when_missing: omit}
     # The header line above each table names the same columns every time,
-    # so the counters are read from the value line alone.
+    # so the counters are read from the value line alone. The tables are
+    # found by their header rather than by counting lines, because an
+    # interface with an alias or an alternative name has more lines above
+    # them than one without.
     - name: rx
-      select: {skip: 3, limit: 1}
+      select: {after: '^[ \t]*RX:[ \t]*bytes', limit: 1}
       parse:
         type: regex
         each: input
@@ -68,7 +71,7 @@ parse:
         missed: {type: int}
         mcast: {type: int}
     - name: tx
-      select: {skip: 5, limit: 1}
+      select: {after: '^[ \t]*TX:[ \t]*bytes', limit: 1}
       parse:
         type: regex
         each: input
@@ -80,10 +83,18 @@ parse:
         dropped: {type: int}
         carrier: {type: int}
         collsns: {type: int}
-    # Whatever follows the two tables is the alternative names, of which
-    # an interface may have none.
+    # The alias and the alternative names sit among the tables rather
+    # than at a fixed offset, so each part names the lines that belong to
+    # a sibling instead of taking a position.
+    - name: alias
+      select: {skip: 2}
+      ignore: ['^[ \t]*(?:RX|TX):', '^[ \t]*[0-9]', '^\s*altname ']
+      parse:
+        type: regex
+        pattern: '^\s*alias (?P<name>.+?)\s*$'
     - name: altnames
-      select: {skip: 6}
+      select: {skip: 2}
+      ignore: ['^[ \t]*(?:RX|TX):', '^[ \t]*[0-9]', '^\s*alias ']
       parse:
         type: regex
         pattern: '^\s*altname (?P<name>\S+)\s*$'

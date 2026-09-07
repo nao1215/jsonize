@@ -1,0 +1,2 @@
+source: "ip link on an Azure host, LC_ALL=C, as a GitHub Actions ubuntu-latest runner prints it (run 34155170184, 2026-09-07). The interface carries a free-text alias above its alternative name, which no fixture had, and reading it as one more altname was a parse failure. The MAC address is replaced."
+os: linux

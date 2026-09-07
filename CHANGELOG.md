@@ -52,6 +52,16 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `ip link`, `ip -s link` and `ip address` refused an interface that
+  carries a free-text alias, which is a line `ip` prints between the link
+  layer address and the alternative names. `ip link` read it as one more
+  alternative name and failed; `ip -s link` counted lines to find its
+  counter tables, and the extra line moved them. The tables are now found
+  by their header, the alias is a part of its own, and each of the two
+  parts under the link line names the other's lines as belonging to a
+  sibling rather than taking a position, since which of them comes first
+  is not something the format promises.
+
 - The streaming reader trimmed the carriage return of a CRLF line ending
   before stripping escape sequences, where the whole-document reader
   strips first. A record that ended with an escape sequence around the
