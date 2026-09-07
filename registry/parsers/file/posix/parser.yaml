@@ -49,6 +49,12 @@ detect:
       # value, and its property lines carry no assignment quoting to
       # catch. The device path on its first line is what names it.
       - '\AP: /devices/\S'
+      # modinfo pads its label to sixteen columns and writes the module's
+      # value after it, which is the same shape as an aligned listing of
+      # two files. Both labels have to be there: a single file named
+      # "filename" listed beside a longer one would pad the same way, but
+      # not beside one named "license" as well.
+      - '(?s)^filename:[ \t]{2,}\S.*^license:[ \t]{2,}\S'
       # `ethtool -i` opens with "driver: <name>" and "version: <name>",
       # which are properties of an interface rather than a path and the
       # description of what is stored there.

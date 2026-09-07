@@ -1,0 +1,4 @@
+description: a built-in module that repeats both the alias and the parm key, and whose parm values hold colons and parentheses of their own
+source: captured with LC_ALL=C from kmod 34 on Ubuntu as "modinfo loop"
+os: linux
+args: [loop]

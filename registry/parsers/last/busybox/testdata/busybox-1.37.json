@@ -1,0 +1,50 @@
+[
+  {
+    "user": "usr",
+    "tty": null,
+    "host": null,
+    "login_time": "Aug 24 19:20"
+  },
+  {
+    "user": "usr",
+    "tty": null,
+    "host": null,
+    "login_time": "Aug  9 19:40"
+  },
+  {
+    "user": "usr",
+    "tty": "pts/5",
+    "host": "fe80::5054:00ff:fe12:3456%eno1",
+    "login_time": "Jul  1 08:46"
+  },
+  {
+    "user": "usr",
+    "tty": "tty7",
+    "host": ":0",
+    "login_time": "May 25 22:05"
+  },
+  {
+    "user": "usr",
+    "tty": "tty2",
+    "host": "local",
+    "login_time": "May 25 21:55"
+  },
+  {
+    "user": "usr",
+    "tty": ":0",
+    "host": ":0",
+    "login_time": "Nov  4 20:24"
+  },
+  {
+    "user": "usr",
+    "tty": "seat0",
+    "host": "login screen",
+    "login_time": "Nov  4 20:24"
+  },
+  {
+    "user": "usr",
+    "tty": "tty2",
+    "host": "tty2",
+    "login_time": "Nov  4 13:17"
+  }
+]

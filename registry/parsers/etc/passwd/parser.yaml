@@ -13,7 +13,13 @@ detect:
   auto_detect: false
   signature:
     all:
-      - '\A[^:\n]+:[^:\n]*:\d+:\d+:[^:\n]*:[^:\n]*:'
+      # Seven fields ending the line, of which the sixth is the home
+      # directory and so an absolute path. Without those two conditions
+      # any line carrying six colons and two numbers between them passes:
+      # the first line of BusyBox ifconfig
+      # ("br-0 Link encap:Ethernet  HWaddr 52:54:00:25:74:A0") splits into
+      # exactly seven fields with 54 and 00 where the ids go.
+      - '\A[^:\n]+:[^:\n]*:\d+:\d+:[^:\n]*:/[^:\n]*:[^:\n]*$'
 input:
   ignore:
     - '^\s*#'
