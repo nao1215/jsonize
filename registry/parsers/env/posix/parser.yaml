@@ -14,6 +14,8 @@ description: env / printenv output as a list of name/value pairs
 metadata:
   tags: [linux, darwin, environment]
   compatible: [GNU coreutils, BusyBox, macOS env]
+  references:
+    - https://man7.org/linux/man-pages/man1/env.1.html
 detect:
   # NAME=value is the shape of a .env file, a properties file, a shell
   # fragment and the show subcommand of half the systemd tools, so the

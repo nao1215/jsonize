@@ -5,6 +5,8 @@ description: uname -a on macOS
 metadata:
   tags: [darwin, system]
   compatible: [macOS uname]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?uname(1)
 detect:
   os: [darwin]
   args:

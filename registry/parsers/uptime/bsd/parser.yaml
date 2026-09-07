@@ -5,6 +5,8 @@ description: "uptime on macOS and BSD: space separated load averages"
 metadata:
   tags: [darwin, bsd, system]
   compatible: [macOS uptime, FreeBSD uptime]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?uptime(1)
 detect:
   os: [darwin, freebsd, openbsd, netbsd]
   signature:
