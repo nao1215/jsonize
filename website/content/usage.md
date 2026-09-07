@@ -186,6 +186,22 @@ a command and variant wins:
 never accesses the network, so the same input converts to the same JSON
 on the same machine.
 
+A registry's `registry.yaml` can also switch definitions of the
+registries below it off:
+
+```yaml
+format: 1
+name: mine
+disable:
+  - file/posix   # one definition
+  - du           # every variant of a command
+```
+
+A disabled definition is not loaded at all, so `jz list`, `--parser` and
+automatic detection all stop seeing it. Shadowing replaces a definition
+and needs a whole one written under the same name; disabling takes one
+out. An entry that names nothing is a warning, not an error.
+
 The order settles more than definitions of the same name. When automatic
 detection is left with definitions of different commands that all fit the
 text, the one from the earlier registry is the answer, because that order

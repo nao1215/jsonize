@@ -21,7 +21,9 @@ import (
 	"fmt"
 	"io/fs"
 	"path"
+	"regexp"
 	"sort"
+	"strings"
 
 	"github.com/nao1215/jsonize/internal/definition"
 )
@@ -48,6 +50,31 @@ type Manifest struct {
 	Version     string `yaml:"version,omitempty"`
 	Description string `yaml:"description,omitempty"`
 	Source      string `yaml:"source,omitempty"`
+	// Disable names definitions of the less preferred registries below
+	// this one that must not be loaded at all: "command/variant" for one
+	// definition, "command" for every variant of it. It is how a user
+	// switches off a definition that misreads their output, where
+	// shadowing would mean rewriting the whole thing.
+	Disable []string `yaml:"disable,omitempty"`
+}
+
+// disableRe matches "command" and "command/variant", the two forms a
+// disable entry may take.
+var disableRe = regexp.MustCompile(`^[a-z0-9][a-z0-9._+-]*(/[a-z0-9][a-z0-9-]*)?$`)
+
+// disableRule is one parsed entry of a manifest's disable list.
+type disableRule struct {
+	// Source is the registry that declared the rule.
+	source  string
+	text    string
+	command string
+	// variant is empty when the rule covers every variant of the command.
+	variant string
+	matched bool
+}
+
+func (d disableRule) covers(def *definition.Definition) bool {
+	return d.command == def.Command && (d.variant == "" || d.variant == def.Variant)
 }
 
 // Source is one place definitions come from.
@@ -86,6 +113,16 @@ type Registry struct {
 	// Problems lists definitions that failed to load. The registry stays
 	// usable; callers decide whether problems are fatal.
 	Problems []error
+	// Warnings lists things that are worth saying but do not change what
+	// the registry holds, such as a disable entry that named nothing.
+	Warnings []error
+
+	// rules are the disable entries of the sources read so far. They only
+	// apply to the sources read after them.
+	rules []disableRule
+	// disabled counts, per source, the definitions a preferred registry
+	// switched off.
+	disabled map[string]int
 }
 
 // LoadError is a problem with one definition file.
@@ -103,10 +140,20 @@ func (e *LoadError) Unwrap() error { return e.Err }
 
 // Load reads every source in precedence order (first wins).
 func Load(sources ...Source) (*Registry, error) {
-	r := &Registry{entries: map[string]*Entry{}, byCommand: map[string][]*Entry{}, commands: map[string]bool{}}
+	r := &Registry{
+		entries:   map[string]*Entry{},
+		byCommand: map[string][]*Entry{},
+		commands:  map[string]bool{},
+		disabled:  map[string]int{},
+	}
 	for i, src := range sources {
 		if err := r.addSource(i, src); err != nil {
 			return nil, err
+		}
+	}
+	for _, rule := range r.rules {
+		if !rule.matched {
+			r.Warnings = append(r.Warnings, fmt.Errorf("%s: %s: disable %q matches no definition", rule.source, ManifestFile, rule.text))
 		}
 	}
 	for _, list := range r.byCommand {
@@ -138,6 +185,14 @@ func (r *Registry) addSource(precedence int, src Source) error {
 	} else if !errors.Is(err, fs.ErrNotExist) {
 		return &LoadError{Source: src.Name, Path: ManifestFile, Err: err}
 	}
+	// A registry's own definitions are never affected by its own disable
+	// list, so the rules it declares are collected after its files are
+	// read and apply to the registries below it.
+	rules, err := parseDisable(src.Name, manifest.Disable)
+	if err != nil {
+		return err
+	}
+	defer func() { r.rules = append(r.rules, rules...) }()
 	if _, err := fs.Stat(src.FS, ParsersDir); err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
 			return nil
@@ -145,7 +200,7 @@ func (r *Registry) addSource(precedence int, src Source) error {
 		return &LoadError{Source: src.Name, Path: ParsersDir, Err: err}
 	}
 	count := 0
-	err := fs.WalkDir(src.FS, ParsersDir, func(p string, d fs.DirEntry, err error) error {
+	err = fs.WalkDir(src.FS, ParsersDir, func(p string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return &LoadError{Source: src.Name, Path: p, Err: err}
 		}
@@ -169,6 +224,10 @@ func (r *Registry) addSource(precedence int, src Source) error {
 			r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: p, Err: err})
 			return nil //nolint:nilerr // recorded in Problems so other definitions still load
 		}
+		if r.disable(def) {
+			r.disabled[src.Name]++
+			return nil
+		}
 		def.Origin = src.Name
 		r.add(&Entry{Def: def, Source: src.Name, Path: p, Precedence: precedence})
 		return nil
@@ -177,6 +236,47 @@ func (r *Registry) addSource(precedence int, src Source) error {
 		return err
 	}
 	return nil
+}
+
+// parseDisable turns a manifest's disable list into rules, rejecting an
+// entry that is neither "command" nor "command/variant".
+func parseDisable(source string, entries []string) ([]disableRule, error) {
+	if len(entries) == 0 {
+		return nil, nil
+	}
+	rules := make([]disableRule, 0, len(entries))
+	for i, e := range entries {
+		if !disableRe.MatchString(e) {
+			return nil, &LoadError{
+				Source: source,
+				Path:   ManifestFile,
+				Err:    fmt.Errorf("disable[%d]: %q must be a command or a command/variant", i, e),
+			}
+		}
+		command, variant, _ := strings.Cut(e, "/")
+		rules = append(rules, disableRule{source: source, text: e, command: command, variant: variant})
+	}
+	return rules, nil
+}
+
+// disable reports whether a preferred registry switched this definition
+// off. A disabled definition is not loaded at all, so it is absent from
+// every lookup rather than being hidden from some of them.
+func (r *Registry) disable(def *definition.Definition) bool {
+	hit := false
+	for i := range r.rules {
+		if r.rules[i].covers(def) {
+			r.rules[i].matched = true
+			hit = true
+		}
+	}
+	return hit
+}
+
+// Disabled returns how many definitions of a source a preferred registry
+// switched off.
+func (r *Registry) Disabled(source string) int {
+	return r.disabled[source]
 }
 
 // checkLayout enforces parsers/<command>/<variant>/parser.yaml so that the

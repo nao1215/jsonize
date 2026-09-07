@@ -78,6 +78,12 @@ func (a *app) cmdTest(args []string) int {
 		}
 		opts.Decoys = list
 	}
+	for _, w := range reg.Warnings {
+		a.errorf("warning: %v", w)
+	}
+	for _, w := range reg.Warnings {
+		a.errorf("warning: %v", w)
+	}
 	underTest := map[string]bool{}
 	for _, t := range targets {
 		underTest[t] = true

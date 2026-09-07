@@ -6,7 +6,8 @@ toc: true
 
 A parser definition is one YAML document, `parser.yaml`, stored at
 `parsers/<command>/<variant>/` inside a registry. The directory names
-must match the `command` and `variant` keys.
+must match the `command` and `variant` keys. The registry itself is
+described by [its manifest](#the-registry-manifest).
 
 ```yaml
 format: 1                       # required; the schema version
@@ -353,6 +354,37 @@ printed by `df -h` or `ls -lh` is neither, and the official definitions
 keep such values as the strings they were printed as. Nesting is limited
 to 8 levels.
 
+
+## The registry manifest
+
+`registry.yaml` sits at the top of a registry directory and describes the
+registry rather than any one definition:
+
+```yaml
+format: 1                 # required; the same schema version definitions carry
+name: mine                # required; how the registry appears in diagnostics
+version: "2026.09"        # optional
+description: my parsers   # optional
+source: https://...       # optional; where the registry came from
+disable:                  # optional; definitions below this registry to switch off
+  - file/posix            # one definition
+  - du                    # every variant of a command
+```
+
+`disable` reaches downwards only: it applies to the registries below this
+one in the layering, never to this one and never to one above it. A
+disabled definition is not loaded at all, so it is absent from `jz list`,
+from `--parser` and from automatic detection alike. This is what to reach
+for when an official definition misreads your output: shadowing it means
+writing a whole definition under the same name, while disabling it takes
+it out and leaves the rest.
+
+An entry that names no definition is a warning on standard error, not an
+error, because a registry that disables a definition removed upstream
+should keep working. An entry that is neither `command` nor
+`command/variant` is a validation error and the registry does not load.
+`jz list --sources` counts, per registry, the definitions a registry
+above it switched off.
 
 ## Errors
 

@@ -491,3 +491,47 @@ scenarios:
           exit_code: 0
           stdout:
             json: { path: "$[0].mounted_on", equals: "/" }
+
+  # A registry's manifest can switch off definitions of the registries
+  # below it, which is what a user does with an official parser that
+  # misreads their output.
+  - name: a manifest disables a definition of a lower registry
+    steps:
+      - fixture:
+          file: off/registry.yaml
+          content: |
+            format: 1
+            name: local
+            disable:
+              - file/posix
+              - nothing-here
+      - fixture:
+          file: text.txt
+          content: |
+            /etc/hosts: ASCII text
+      - run:
+          command: jz --parser file --file ${workdir}/text.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].type", equals: "ASCII text" }
+      - run:
+          command: jz --parser file --file ${workdir}/text.txt
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/off"
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: no parser for "file"
+      - assert:
+          stderr:
+            contains: 'disable "nothing-here" matches no definition'
+      - run:
+          command: jz list --sources
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/off"
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: DISABLED
+            matches: "embedded +present +\\d+ +1"

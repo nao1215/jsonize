@@ -250,23 +250,24 @@ func (a *app) listSources(asJSON bool) int {
 			o.Set("location", a.sourceLocation(s))
 			o.Set("present", a.sourceExists(s))
 			o.Set("definitions", int64(counts[s.Name]))
+			o.Set("disabled", int64(reg.Disabled(s.Name)))
 			list = append(list, o)
 		}
 		return finish(jsonutil.Encode(a.env.Stdout, list, true), a)
 	}
 	tw := tabwriter.NewWriter(a.env.Stdout, 0, 4, 2, ' ', 0)
-	fmt.Fprintln(tw, "#\tREGISTRY\tSTATE\tDEFINITIONS\tLOCATION")
+	fmt.Fprintln(tw, "#\tREGISTRY\tSTATE\tDEFINITIONS\tDISABLED\tLOCATION")
 	for i, s := range srcs {
 		state := "absent"
 		if a.sourceExists(s) {
 			state = "present"
 		}
-		fmt.Fprintf(tw, "%d\t%s\t%s\t%d\t%s\n", i+1, s.Name, state, counts[s.Name], a.sourceLocation(s))
+		fmt.Fprintf(tw, "%d\t%s\t%s\t%d\t%d\t%s\n", i+1, s.Name, state, counts[s.Name], reg.Disabled(s.Name), a.sourceLocation(s))
 	}
 	if err := tw.Flush(); err != nil {
 		return finish(err, a)
 	}
-	fmt.Fprintf(a.env.Stdout, "\nThe first registry that defines a command/variant wins.\nAdd your own by pointing %s at a directory.\n", EnvRegistryPath)
+	fmt.Fprintf(a.env.Stdout, "\nThe first registry that defines a command/variant wins, and DISABLED counts\nthe definitions a registry above it switched off.\nAdd your own by pointing %s at a directory.\n", EnvRegistryPath)
 	return ExitOK
 }
 
