@@ -551,7 +551,43 @@ func TestLevenshtein(t *testing.T) {
 	if levenshtein("kitten", "sitting") != 3 || levenshtein("", "abc") != 3 || levenshtein("same", "same") != 0 {
 		t.Error("levenshtein")
 	}
-	if s := suggest("d", []string{"df", "du", "date", "dig", "zzz"}); len(s) != 3 {
+	// Four names are one edit away, and only three are offered.
+	if s := suggest("dx", []string{"da", "db", "dc", "dd", "zzz"}); len(s) != 3 {
 		t.Errorf("suggest cap: %v", s)
+	}
+}
+
+// TestSuggestOffersOnlyTheClosest pins that a wrong name is answered with
+// the commands nearest to it and no others. Every command within two
+// edits used to be offered, which in a registry of a few hundred means
+// the one the caller meant arrives in a crowd, and the alphabetical cap
+// of three could drop it entirely.
+func TestSuggestOffersOnlyTheClosest(t *testing.T) {
+	t.Parallel()
+	known := []string{"ar", "df", "dig", "du", "git", "ls", "lscpu", "nm"}
+	for _, tt := range []struct {
+		name string
+		want []string
+	}{
+		// ar is two edits away and df, dig and du are one, so ar is not
+		// offered even though it would fit under the old bound.
+		{"dg", []string{"df", "dig", "du"}},
+		// A name that extends a command counts as closer than any edit.
+		{"dff", []string{"df"}},
+		{"lscpuu", []string{"lscpu"}},
+		// Nothing near enough is no suggestion rather than a bad one.
+		{"kubectl", nil},
+	} {
+		got := suggest(tt.name, known)
+		if len(got) != len(tt.want) {
+			t.Errorf("suggest(%q) = %v, want %v", tt.name, got, tt.want)
+			continue
+		}
+		for i := range got {
+			if got[i] != tt.want[i] {
+				t.Errorf("suggest(%q) = %v, want %v", tt.name, got, tt.want)
+				break
+			}
+		}
 	}
 }

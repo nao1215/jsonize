@@ -534,13 +534,35 @@ func contains(list []string, s string) bool {
 }
 
 // suggest returns known names within a small edit distance of s.
+// suggest names the commands closest to one that does not exist. Only
+// the closest are offered: a registry of a few hundred commands has
+// several within two edits of any short name, and listing them beside
+// the one the caller meant is worse than listing nothing, because the
+// answer stops standing out. A name that extends or is extended by a
+// command counts as closer than any edit distance.
 func suggest(s string, known []string) []string {
-	var out []string
+	best := -1
+	score := map[string]int{}
 	for _, k := range known {
 		if k == s {
 			continue
 		}
-		if strings.HasPrefix(k, s) || strings.HasPrefix(s, k) || levenshtein(s, k) <= 2 {
+		// A name that extends or is extended by a command is a candidate
+		// however long the extension, but it is ranked by the same
+		// distance as everything else, so `lscpuu` offers lscpu rather
+		// than lscpu and ls together.
+		d := levenshtein(s, k)
+		if d > 2 && !strings.HasPrefix(k, s) && !strings.HasPrefix(s, k) {
+			continue
+		}
+		score[k] = d
+		if best < 0 || d < best {
+			best = d
+		}
+	}
+	var out []string
+	for k, d := range score {
+		if d == best {
 			out = append(out, k)
 		}
 	}

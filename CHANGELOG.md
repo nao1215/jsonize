@@ -98,6 +98,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- The suggestion for a parser name that does not exist offered every
+  command within two edits, alphabetically, capped at three. At a few
+  hundred commands that buries the one the caller meant and can drop it
+  entirely: `--parser dg` answered "did you mean ar, df, dig", where `ar`
+  is two edits away and the other two are one. Only the closest are
+  offered now, and a name that extends a command is ranked by the same
+  distance as everything else, so `--parser lscpuu` says lscpu rather
+  than lscpu and ls together.
 - `git/log-oneline` read a symbol table. `nm -D` prints a zero padded
   sixty-four bit address, a one letter symbol type and a name, which is a
   hexadecimal word followed by a line of text; the definition claimed
