@@ -1,0 +1,54 @@
+# `git log` prints one block per commit: the commit line, the header
+# lines, a blank line, and the message indented by four spaces.
+#
+# Blank lines are kept rather than dropped, because they are what
+# separates the headers from the message and the paragraphs of the
+# message from each other. The message is an array of its lines with the
+# indentation removed, so an empty string in it is a paragraph break.
+#
+# The headers are a map rather than named fields: which ones a commit
+# carries depends on the commit (a merge adds Merge:) and on the
+# formatting options, and a map keeps whatever was printed.
+format: 1
+command: git
+variant: log
+description: git log default format
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-log
+detect:
+  signature:
+    all:
+      - '\Acommit [0-9a-f]{7,40}\b'
+      - '^Author:[ \t]'
+input:
+  skip_blank: false
+parse:
+  type: records
+  start: '^commit [0-9a-f]{7,40}\b'
+  parts:
+    - name: commit
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\Acommit (?P<hash>[0-9a-f]{7,40})(?: \((?P<refs>[^)]*)\))?[ \t]*$'
+      fields:
+        hash: {required: true}
+        refs: {type: array, split: ",", when_missing: omit}
+    - name: headers
+      select: {skip: 1, until: '^[ \t]*$'}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+    - name: message
+      select: {after: '^[ \t]*$'}
+      parse:
+        type: regex
+        each: input
+        pattern: '(?s)\A(?P<lines>.*?)[ \t\r\n]*\z'
+      fields:
+        lines: {type: array, split: "\n"}

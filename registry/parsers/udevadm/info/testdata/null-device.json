@@ -1,0 +1,54 @@
+[
+  {
+    "tag": "P",
+    "value": "/devices/virtual/mem/null"
+  },
+  {
+    "tag": "M",
+    "value": "null"
+  },
+  {
+    "tag": "J",
+    "value": "c1:3"
+  },
+  {
+    "tag": "U",
+    "value": "mem"
+  },
+  {
+    "tag": "D",
+    "value": "c 1:3"
+  },
+  {
+    "tag": "N",
+    "value": "null"
+  },
+  {
+    "tag": "L",
+    "value": "0"
+  },
+  {
+    "tag": "E",
+    "value": "DEVPATH=/devices/virtual/mem/null"
+  },
+  {
+    "tag": "E",
+    "value": "DEVNAME=/dev/null"
+  },
+  {
+    "tag": "E",
+    "value": "DEVMODE=0666"
+  },
+  {
+    "tag": "E",
+    "value": "MAJOR=1"
+  },
+  {
+    "tag": "E",
+    "value": "MINOR=3"
+  },
+  {
+    "tag": "E",
+    "value": "SUBSYSTEM=mem"
+  }
+]

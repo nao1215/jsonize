@@ -1,0 +1,3 @@
+description: An NVMe disk, which has several symlink lines and a long list of properties.
+source: captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C from `udevadm info -q all -n /dev/nvme0n1`; the serial number, the EUI and the partition table UUID were replaced with values of the same width
+os: linux

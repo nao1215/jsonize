@@ -1,0 +1,64 @@
+[
+  {
+    "commit": {
+      "hash": "8315fbfb88d3080788679234e10f74139b621f5d"
+    },
+    "headers": {
+      "Merge": "1a34814 1e3fd55",
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Mon Sep 7 09:06:35 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "merge the topic branch"
+      ]
+    }
+  },
+  {
+    "commit": {
+      "hash": "1a348149ff7078757f307580d7846bb788b17484"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Mon Sep 7 09:06:35 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "add a second note",
+        "",
+        "The body explains why the note exists and wraps over",
+        "more than one line.",
+        "",
+        "It also has a second paragraph."
+      ]
+    }
+  },
+  {
+    "commit": {
+      "hash": "1e3fd5522c278259421ff443378c717e528db3c5"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Mon Sep 7 09:06:35 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "add a note on the topic branch"
+      ]
+    }
+  },
+  {
+    "commit": {
+      "hash": "3ba713485c808bba6dd5f5416640dd488df8db62"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Mon Sep 7 09:06:35 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "add the first note"
+      ]
+    }
+  }
+]

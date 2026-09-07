@@ -41,6 +41,10 @@ detect:
       # labelled line, such as an archive listing announcing its archive,
       # has rows underneath that carry no colon followed by a space.
       - '^(?:[^:\n]|:[^ \t\n])*$'
+      # `udevadm info -q all` prints a one letter tag, a colon and a
+      # value, and its property lines carry no assignment quoting to
+      # catch. The device path on its first line is what names it.
+      - '\AP: /devices/\S'
       # `ethtool -i` opens with "driver: <name>" and "version: <name>",
       # which are properties of an interface rather than a path and the
       # description of what is stored there.

@@ -1,0 +1,4 @@
+description: A single commit with a one line message, the shortest block this format has.
+source: captured with LC_ALL=C from the same repository as history
+os: linux
+args: ["log", "-1"]

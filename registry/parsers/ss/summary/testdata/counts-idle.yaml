@@ -1,0 +1,3 @@
+description: A second capture of the same report, taken when fewer sockets were open.
+source: captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C
+os: linux
