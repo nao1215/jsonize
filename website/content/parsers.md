@@ -94,7 +94,7 @@ input.
 | `route` | `linux` |
 | `rsync` | `itemize` |
 | `rustup` | `component-list`, `target-list`, `toolchains`, `toolchains-verbose` |
-| `sar` | `cpu`, `io`, `memory`, `network-device` |
+| `sar` | `cpu`, `filesystem`, `io`, `memory`, `network-device`, `paging`, `queue`, `swap`, `task` |
 | `scc` | `default` |
 | `sensors` | `linux` |
 | `sfdisk` | `dump` |
@@ -102,7 +102,7 @@ input.
 | `sha256sum` | `posix` |
 | `sha512sum` | `posix` |
 | `snap` | `list` |
-| `ss` | `linux`, `summary` |
+| `ss` | `linux`, `single-protocol`, `summary` |
 | `stat` | `gnu`, `gnu-filesystem`, `gnu-terse` |
 | `swapon` | `legacy`, `linux` |
 | `sysctl` | `linux` |
