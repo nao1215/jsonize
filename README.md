@@ -52,16 +52,18 @@ jz test [DIR...]             # check parser definitions of your own
 Options:
 
 ```text
-  -f, --file PATH     read input from PATH instead of stdin
-  -p, --pretty        indent JSON output
-      --stream        write one record per line as it is read
-      --raw           skip the field rules and report every value as text
-      --extract KEY   keep only this key (repeatable)
-      --exclude KEY   drop this key (repeatable)
-      --parser NAME   restrict detection to one parser
-      --variant NAME  use a variant of --parser
-      --explain       report the chosen definition and why, on stderr
-  -h, --help          show help
+  -f, --file PATH               read input from PATH instead of stdin
+  -p, --pretty                  indent JSON output
+      --stream                  write one record per line as it is read
+      --raw                     skip the field rules and report every value as text
+      --extract KEY             keep only this key (repeatable)
+      --exclude KEY             drop this key (repeatable)
+      --assume-year YEAR        date the timestamps a format prints without a year (or "now")
+      --assume-zone ABBR=+HHMM  give a zone abbreviation an offset (repeatable)
+      --parser NAME             restrict detection to one parser
+      --variant NAME            use a variant of --parser
+      --explain                 report the chosen definition and why, on stderr
+  -h, --help                    show help
 ```
 
 `--extract` and `--exclude` name keys of the objects jz prints, and

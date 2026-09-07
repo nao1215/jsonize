@@ -525,3 +525,121 @@ scenarios:
           exit_code: 2
           stderr:
             contains: "not defined"
+
+  # A printed length of time becomes seconds. What the text cannot settle
+  # is whether a bare "4:50" is minutes and seconds or hours and minutes,
+  # so the definition says which, and being wrong about it is a factor of
+  # sixty that nothing downstream would notice.
+  - name: a duration is reported in seconds
+    steps:
+      - fixture:
+          file: ps.txt
+          from: "${specdir}/testdata/ps-posix.txt"
+      - run:
+          command: jz --file ${workdir}/ps.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].time", equals: 254 }
+              - { path: "$[1].time", equals: 0 }
+      # --raw shows the text each value was made from.
+      - run:
+          command: jz --raw --file ${workdir}/ps.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].time", equals: "00:04:14" }
+      - fixture:
+          file: uptime.txt
+          content: |
+             13:42:13 up 13 days,  4:22,  0 users,  load average: 0.59, 0.70, 0.84
+      - run:
+          command: jz --file ${workdir}/uptime.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.uptime", equals: 1138920 }
+
+  # A format that prints no year cannot be dated without being told which
+  # year it meant, and one that names its zone by an abbreviation cannot
+  # be placed without being told what that abbreviation stands for.
+  # Either way the value stays the text it was printed as until the
+  # command line says what to assume.
+  - name: --assume-year and --assume-zone date what a format leaves out
+    steps:
+      - fixture:
+          file: who.txt
+          content: |
+            alice    seat0        Nov  4 13:17 (login screen)
+            alice    tty2         Nov  4 13:17 (tty2)
+      - run:
+          command: jz --parser who --file ${workdir}/who.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].time", equals: "Nov  4 13:17" }
+      - run:
+          command: jz --parser who --assume-year 2025 --file ${workdir}/who.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].time", equals: "2025-11-04T13:17:00Z" }
+      - fixture:
+          file: date.txt
+          content: |
+            Mon Sep  7 10:02:02 JST 2026
+      - run:
+          command: jz --parser date --file ${workdir}/date.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.timestamp", equals: "Mon Sep  7 10:02:02 JST 2026" }
+      - run:
+          command: jz --parser date --assume-zone JST=+0900 --file ${workdir}/date.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.timestamp", equals: "2026-09-07T10:02:02+09:00" }
+      # An abbreviation that says its own offset needs nothing.
+      - fixture:
+          file: date-utc.txt
+          content: |
+            Mon Sep  7 01:02:02 UTC 2026
+      - run:
+          command: jz --parser date --file ${workdir}/date-utc.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.timestamp", equals: "2026-09-07T01:02:02Z" }
+      # An assumption no field asks for makes no difference and is not an
+      # error; one that cannot be read is.
+      - fixture:
+          file: ps.txt
+          from: "${specdir}/testdata/ps-posix.txt"
+      - run:
+          command: jz --assume-year 2025 --assume-zone JST=+0900 --file ${workdir}/ps.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].time", equals: 254 }
+      - run:
+          command: jz --assume-year 20x5 --file ${workdir}/who.txt
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "four digit year"
+      - run:
+          command: jz --assume-zone JST=0900 --file ${workdir}/who.txt
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}

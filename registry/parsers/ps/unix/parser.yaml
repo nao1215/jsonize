@@ -24,3 +24,4 @@ fields:
   ppid: {type: int}
   c: {type: int}
   tty: {null_if: ["?", "??"]}
+  time: {type: duration, layout: mm:ss}

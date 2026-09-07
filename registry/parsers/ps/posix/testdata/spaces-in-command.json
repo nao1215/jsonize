@@ -2,25 +2,25 @@
   {
     "pid": 448591,
     "tty": "?",
-    "time": "00:00:00",
+    "time": 0,
     "command": "Socket Process"
   },
   {
     "pid": 448612,
     "tty": "?",
-    "time": "00:00:10",
+    "time": 10,
     "command": "Privileged Cont"
   },
   {
     "pid": 492080,
     "tty": "?",
-    "time": "00:00:44",
+    "time": 44,
     "command": "Isolated Web Co"
   },
   {
     "pid": 505704,
     "tty": "?",
-    "time": "00:02:54",
+    "time": 174,
     "command": "Isolated Web Co"
   }
 ]

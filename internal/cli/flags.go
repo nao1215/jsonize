@@ -5,9 +5,11 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"strconv"
 	"strings"
 	"time"
 
+	"github.com/nao1215/jsonize/pkg/convert"
 	"github.com/nao1215/jsonize/pkg/engine"
 )
 
@@ -100,6 +102,10 @@ type outputOptions struct {
 	raw     bool
 	extract stringList
 	exclude stringList
+	// year and zones are the assumptions the caller allows about a
+	// timestamp the format does not fully state.
+	year  string
+	zones stringList
 }
 
 func (f *outputOptions) bind(o *optionSet) {
@@ -108,12 +114,55 @@ func (f *outputOptions) bind(o *optionSet) {
 	o.boolOpt(&f.raw, "raw", "", "skip the field rules and report every value as text")
 	o.listOpt(&f.extract, "extract", "KEY", "keep only this key (repeatable)")
 	o.listOpt(&f.exclude, "exclude", "KEY", "drop this key (repeatable)")
+	o.stringOpt(&f.year, "assume-year", "", "YEAR", "", "date the timestamps a format prints without a year (or \"now\")")
+	o.listOpt(&f.zones, "assume-zone", "ABBR=+HHMM", "give a zone abbreviation an offset (repeatable)")
 }
 
 // engineOptions is what the output options say about reading, as opposed
-// to about writing.
+// to about writing. The assumptions are checked when the options are
+// parsed, so nothing here can fail.
 func (f *outputOptions) engineOptions() engine.Options {
-	return engine.Options{MaxInputSize: MaxInputSize, Raw: f.raw}
+	a, _ := f.assumptions()
+	return engine.Options{MaxInputSize: MaxInputSize, Raw: f.raw, Assume: a}
+}
+
+// assumptions reads --assume-year and --assume-zone. An assumption that
+// no field in the chosen format asks for is not an error: it makes no
+// difference to the output, and refusing it would mean a caller who
+// writes the same command line for several formats has to know which of
+// them prints a bare year. That is unlike a key named to --extract,
+// which changes the shape a consumer reads and so has to be right.
+func (f *outputOptions) assumptions() (convert.Assumptions, error) {
+	var a convert.Assumptions
+	switch f.year {
+	case "":
+	case "now":
+		a.Year = time.Now().Year()
+	default:
+		n, err := strconv.Atoi(f.year)
+		if err != nil || len(f.year) != 4 || n < 1000 {
+			return a, fmt.Errorf("--assume-year expects a four digit year or \"now\", got %q", f.year)
+		}
+		a.Year = n
+	}
+	for _, e := range f.zones {
+		name, off, ok := strings.Cut(e, "=")
+		if !ok || name == "" {
+			return a, fmt.Errorf("--assume-zone expects ABBR=+HHMM, got %q", e)
+		}
+		secs, err := convert.ParseZoneOffset(off)
+		if err != nil {
+			return a, fmt.Errorf("--assume-zone %s: %w", e, err)
+		}
+		if a.Zones == nil {
+			a.Zones = map[string]int{}
+		}
+		if old, dup := a.Zones[name]; dup && old != secs {
+			return a, fmt.Errorf("--assume-zone gives %s two offsets", name)
+		}
+		a.Zones[name] = secs
+	}
+	return a, nil
 }
 
 // check reports the option pairs that state two answers at once. It is
@@ -121,6 +170,9 @@ func (f *outputOptions) engineOptions() engine.Options {
 func (f *outputOptions) check() error {
 	if f.pretty && f.stream {
 		return errors.New("--pretty and --stream cannot be used together: a stream is one record per line, and indenting spreads a record over several")
+	}
+	if _, err := f.assumptions(); err != nil {
+		return err
 	}
 	_, err := f.filter()
 	return err

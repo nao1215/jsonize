@@ -576,12 +576,14 @@ func validateField(v *validator, path string, f *Field, depth int) {
 		}
 	case FieldTime:
 		validateTimeField(v, path, f)
+	case FieldDuration:
+		validateDurationField(v, path, f)
 	case FieldArray:
 		validateArrayField(v, path, f, depth)
 	case FieldObject:
 		validateObjectField(v, path, f, depth)
 	default:
-		v.add(path+".type", "unknown type %q (expected string, int, float, bool, size, time, array or object)", f.Type)
+		v.add(path+".type", "unknown type %q (expected string, int, float, bool, size, time, duration, array or object)", f.Type)
 	}
 	validateFieldKeys(v, path, f)
 }
@@ -596,19 +598,41 @@ func validateBoolField(v *validator, path string, f *Field) {
 	}
 }
 
-// validateTimeField checks a time field. The layout has to name a year,
-// because a format that prints none (an `ls -l` listing of a recent file,
-// a syslog line) can only be dated by guessing which year it meant, and
-// such a column stays the string it was printed as.
+// validateTimeField checks a time field. A layout that names no year is
+// only allowed alongside year: assumed, because a format that prints
+// none (an `ls -l` listing of a recent file, a syslog line) can only be
+// dated by being told which year it meant. Saying so is a statement
+// about the format; the value stays the string it was printed as until
+// the command line supplies the year.
 func validateTimeField(v *validator, path string, f *Field) {
 	switch {
 	case f.Layout == "":
 		v.add(path+".layout", "is required for type time (a Go reference layout, e.g. \"2006-01-02 15:04:05\")")
-	case !strings.Contains(f.Layout, "06"):
-		v.add(path+".layout", "%q states no year; a timestamp without one cannot be dated without inventing it, so keep the value as a string", f.Layout)
+	case !strings.Contains(f.Layout, "06") && f.Year != YearAssumed:
+		v.add(path+".layout", "%q states no year; write year: assumed beside it if the format prints none, and the value stays a string until --assume-year says which year to use", f.Layout)
+	case strings.Contains(f.Layout, "06") && f.Year == YearAssumed:
+		v.add(path+".year", "assumed contradicts a layout that already carries a year")
 	}
 	if _, ok := convert.Location(f.Location); !ok {
 		v.add(path+".location", "must be utc or local, not %q", f.Location)
+	}
+}
+
+// validateDurationField checks a duration field. The layout is one of two
+// words rather than a Go layout, and it is required: a bare two-part
+// reading is minutes and seconds in one format and hours and minutes in
+// another, nothing in the text says which, and being wrong about it is a
+// factor of sixty that nothing downstream would notice.
+func validateDurationField(v *validator, path string, f *Field) {
+	switch f.Layout {
+	case convert.LayoutHourMinute, convert.LayoutMinuteSecond:
+	case "":
+		v.add(path+".layout", "is required for type duration: %s or %s, saying what the last part of a bare \"4:50\" is", convert.LayoutHourMinute, convert.LayoutMinuteSecond)
+	default:
+		v.add(path+".layout", "must be %s or %s for type duration, not %q", convert.LayoutHourMinute, convert.LayoutMinuteSecond, f.Layout)
+	}
+	if f.Location != "" {
+		v.add(path+".location", "is only valid for type time")
 	}
 }
 
@@ -668,8 +692,22 @@ func validateFieldKeys(v *validator, path string, f *Field) {
 	if f.EffectiveType() != FieldSize && f.Unit != "" {
 		v.add(path+".unit", "only valid for type size")
 	}
-	if f.EffectiveType() != FieldTime && (f.Layout != "" || f.Location != "") {
-		v.add(path, "layout/location are only valid for type time")
+	switch f.EffectiveType() {
+	case FieldTime:
+	case FieldDuration:
+		if f.Year != "" {
+			v.add(path+".year", "is only valid for type time")
+		}
+	default:
+		if f.Layout != "" || f.Location != "" {
+			v.add(path, "layout/location are only valid for type time and type duration")
+		}
+		if f.Year != "" {
+			v.add(path+".year", "is only valid for type time")
+		}
+	}
+	if f.Year != "" && f.Year != YearAssumed {
+		v.add(path+".year", "must be %q, not %q", YearAssumed, f.Year)
 	}
 	switch f.WhenMissing {
 	case "", MissingNull, MissingOmit:

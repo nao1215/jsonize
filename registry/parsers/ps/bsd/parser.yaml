@@ -27,3 +27,6 @@ fields:
   vsz: {type: int}
   rss: {type: int}
   tty: {null_if: ["?", "??"]}
+  # Cumulative CPU time. procps prints "4:50" and macOS prints "0:00.09",
+  # both minutes and seconds, and both name one length exactly.
+  time: {type: duration, layout: mm:ss}

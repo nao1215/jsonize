@@ -32,16 +32,18 @@ pipe there is no such answer at all: nothing identifies an empty input.
 ## Options
 
 ```text
-  -f, --file PATH     read input from PATH instead of stdin
-  -p, --pretty        indent JSON output
-      --stream        write one record per line as it is read
-      --raw           skip the field rules and report every value as text
-      --extract KEY   keep only this key (repeatable)
-      --exclude KEY   drop this key (repeatable)
-      --parser NAME   restrict detection to one parser
-      --variant NAME  use a variant of --parser
-      --explain       report the chosen definition and why, on stderr
-  -h, --help          show help
+  -f, --file PATH               read input from PATH instead of stdin
+  -p, --pretty                  indent JSON output
+      --stream                  write one record per line as it is read
+      --raw                     skip the field rules and report every value as text
+      --extract KEY             keep only this key (repeatable)
+      --exclude KEY             drop this key (repeatable)
+      --assume-year YEAR        date the timestamps a format prints without a year (or "now")
+      --assume-zone ABBR=+HHMM  give a zone abbreviation an offset (repeatable)
+      --parser NAME             restrict detection to one parser
+      --variant NAME            use a variant of --parser
+      --explain                 report the chosen definition and why, on stderr
+  -h, --help                    show help
 ```
 
 `jz run` adds `--env NAME=VALUE`, `--keep-locale` and `--timeout`, which
@@ -144,6 +146,48 @@ the command's status wins: it is the more useful signal, because a
 command that failed explains both what it printed and what it did not.
 The skipped records are on standard error either way, so nothing is lost
 by the choice — only the number changes.
+
+## Timestamps a format does not fully state
+
+Two things a command prints cannot be read from the text alone.
+
+`who`, `last` and `journalctl -o short` print `Nov  4 13:17` with no
+year. `date`, `timedatectl` and `systemctl list-timers` name their zone
+by an abbreviation, and `JST` is +0900 only if you carry a table of
+abbreviations — the same three letters mean different offsets in
+different parts of the world. Left alone, both stay the text they were
+printed as:
+
+```console
+$ who | jz --extract time
+[{"time":"Nov  4 13:17"}]
+```
+
+Supplying the missing half converts them:
+
+```console
+$ who | jz --assume-year 2025 --extract time
+[{"time":"2025-11-04T13:17:00Z"}]
+
+$ jz run --assume-year now who
+$ jz run --assume-zone JST=+0900 --assume-zone CET=+0100 date
+```
+
+`--assume-year` takes a four-digit year or `now`, which is resolved once
+when the command line is read. `--assume-zone` takes `ABBR=+HHMM` and may
+be repeated.
+
+They are assumptions and jz reports them as such: nothing is dated unless
+you say so. Dating a bare `Nov  4` by this machine's clock, or reading
+`JST` against this machine's own zone, would make the same text convert
+differently on two machines, which is the opposite of what a converter is
+for.
+
+An assumption that no field in the chosen format asks for is not an
+error. It changes nothing about the output, and refusing it would mean a
+caller who writes one command line for several formats has to know which
+of them prints a bare year. That is unlike a key named to `--extract`,
+which changes the shape a consumer reads and so has to be right.
 
 ## Seeing what a definition extracted
 

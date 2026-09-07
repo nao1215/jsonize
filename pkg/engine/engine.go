@@ -37,6 +37,12 @@ type Options struct {
 	MaxInputSize int64
 	// MaxLineLength bounds a single line in bytes (0 = default).
 	MaxLineLength int
+	// Assume carries what the command line allowed jz to assume about a
+	// timestamp that does not say it itself: which year a format that
+	// prints none meant, and what offset a zone abbreviation stands for.
+	// Both are empty by default, and a value that needs one that was not
+	// given stays the string it was printed as.
+	Assume convert.Assumptions
 	// Raw skips the field rules. Every value is handed over as it was
 	// extracted: a string, or null for an empty aligned cell and a regex
 	// group that did not take part in the match. Nothing is converted,

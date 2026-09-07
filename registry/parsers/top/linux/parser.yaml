@@ -26,6 +26,7 @@ parse:
         each: input
         pattern: '\Atop - (?P<time>[0-9:]+) up[ \t]+(?P<uptime>.+?),[ \t]+(?P<users>[0-9]+) users?,[ \t]+load average: (?P<load_1m>[0-9.]+), (?P<load_5m>[0-9.]+), (?P<load_15m>[0-9.]+)[ \t]*\z'
       fields:
+        uptime: {type: duration, layout: h:mm}
         users: {type: int}
         load_1m: {type: float}
         load_5m: {type: float}

@@ -9,8 +9,10 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/nao1215/jsonize/pkg/registry"
 	official "github.com/nao1215/jsonize/registry"
@@ -1355,5 +1357,106 @@ func TestRawSkipsTheFieldRules(t *testing.T) {
 	// is the typed reading. Raw mode has nothing to say there.
 	if code := h.run("test", "--raw"); code != ExitUsage {
 		t.Errorf("jz test --raw: %d", code)
+	}
+}
+
+// A format that prints no year, or names its zone only by an
+// abbreviation, leaves the value as the text it was printed as. Dating
+// it by this machine's clock, or reading an abbreviation against this
+// machine's own zone, would make the same text convert differently on
+// two machines.
+func TestAssumptionsAboutTimestamps(t *testing.T) {
+	h := newHarness(t)
+	const who = "alice    seat0        Nov  4 13:17 (login screen)\n"
+	if code := h.pipe(who, "--parser", "who"); code != ExitOK {
+		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
+	}
+	if got := h.rows()[0]["time"]; got != "Nov  4 13:17" {
+		t.Errorf("without a year: %#v", got)
+	}
+	if code := h.pipe(who, "--parser", "who", "--assume-year", "2025"); code != ExitOK {
+		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
+	}
+	if got := h.rows()[0]["time"]; got != "2025-11-04T13:17:00Z" {
+		t.Errorf("with a year: %#v", got)
+	}
+	// "now" is resolved once, on the command line, so nothing further
+	// down reads a clock.
+	if code := h.pipe(who, "--parser", "who", "--assume-year", "now"); code != ExitOK {
+		t.Fatalf("now: %d %s", code, h.stderr.String())
+	}
+	if got, ok := h.rows()[0]["time"].(string); !ok || !strings.HasPrefix(got, strconv.Itoa(time.Now().Year())+"-") {
+		t.Errorf("now: %#v", h.rows()[0]["time"])
+	}
+
+	const date = "Mon Sep  7 10:02:02 JST 2026\n"
+	if code := h.pipe(date, "--parser", "date"); code != ExitOK {
+		t.Fatalf("date: %d %s", code, h.stderr.String())
+	}
+	var obj map[string]any
+	h.json(&obj)
+	if obj["timestamp"] != "Mon Sep  7 10:02:02 JST 2026" {
+		t.Errorf("without a zone: %#v", obj["timestamp"])
+	}
+	if code := h.pipe(date, "--parser", "date", "--assume-zone", "JST=+0900"); code != ExitOK {
+		t.Fatalf("date zone: %d %s", code, h.stderr.String())
+	}
+	h.json(&obj)
+	if obj["timestamp"] != "2026-09-07T10:02:02+09:00" {
+		t.Errorf("with a zone: %#v", obj["timestamp"])
+	}
+
+	// An assumption no field in the chosen format asks for makes no
+	// difference to the output and is not an error.
+	if code := h.pipe(gnuDF, "--assume-year", "2025", "--assume-zone", "JST=+0900"); code != ExitOK {
+		t.Errorf("unused assumptions: %d %s", code, h.stderr.String())
+	}
+	// One that cannot be read is.
+	for _, args := range [][]string{
+		{"--assume-year", "20x5"}, {"--assume-year", "25"}, {"--assume-year", "later"},
+		{"--assume-zone", "JST"}, {"--assume-zone", "JST=0900"}, {"--assume-zone", "=+0900"},
+	} {
+		if code := h.pipe(gnuDF, args...); code != ExitUsage {
+			t.Errorf("%v: code = %d", args, code)
+		}
+		if h.stdout.Len() != 0 {
+			t.Errorf("%v: stdout = %q", args, h.stdout.String())
+		}
+	}
+	// Two offsets for one abbreviation state two answers.
+	if code := h.pipe(gnuDF, "--assume-zone", "JST=+0900", "--assume-zone", "JST=+0100"); code != ExitUsage {
+		t.Errorf("conflicting zones: %d", code)
+	}
+}
+
+// A duration is reported in seconds, and the definition says what the
+// last part of a bare two-part reading is.
+func TestDurationFields(t *testing.T) {
+	h := newHarness(t)
+	const ps = "  PID TTY          TIME CMD\n 1234 pts/0    00:04:14 bash\n 5678 pts/0    00:00:00 ps\n"
+	if code := h.pipe(ps); code != ExitOK {
+		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
+	}
+	rows := h.rows()
+	if len(rows) != 2 || rows[0]["time"] != float64(254) || rows[1]["time"] != float64(0) {
+		t.Errorf("rows = %v", rows)
+	}
+	const uptime = " 13:42:13 up 13 days,  4:22,  0 users,  load average: 0.59, 0.70, 0.84\n"
+	if code := h.pipe(uptime); code != ExitOK {
+		t.Fatalf("uptime: %d %s", code, h.stderr.String())
+	}
+	var obj map[string]any
+	h.json(&obj)
+	if obj["uptime"] != float64(1138920) {
+		t.Errorf("uptime = %#v", obj["uptime"])
+	}
+	// --raw shows the text it was made from, which is the point of that
+	// option for a value the reader has to check.
+	if code := h.pipe(uptime, "--raw"); code != ExitOK {
+		t.Fatal(code)
+	}
+	h.json(&obj)
+	if obj["uptime"] != "13 days,  4:22" {
+		t.Errorf("raw uptime = %#v", obj["uptime"])
 	}
 }

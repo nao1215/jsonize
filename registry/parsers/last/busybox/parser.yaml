@@ -48,5 +48,5 @@ fields:
   tty: {null_if: [""]}
   host: {null_if: [""]}
   # The login time carries no year, so it stays the string it was printed
-  # as rather than becoming a timestamp that would have to guess one.
-  login_time: {required: true}
+  # as until --assume-year says which year to read it in.
+  login_time: {type: time, layout: "Jan _2 15:04", year: assumed, required: true}

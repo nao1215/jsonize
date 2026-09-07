@@ -110,7 +110,13 @@ func (r *run) convertScalar(name, s string, f *definition.Field, ln int) (any, e
 		return v, nil
 	case definition.FieldTime:
 		loc, _ := convert.Location(f.Location)
-		v, err := convert.Time(s, f.Layout, loc)
+		v, _, err := convert.TimeAssuming(s, f.Layout, loc, r.opts.Assume)
+		if err != nil {
+			return nil, wrap(err)
+		}
+		return v, nil
+	case definition.FieldDuration:
+		v, err := convert.Duration(s, f.Layout)
 		if err != nil {
 			return nil, wrap(err)
 		}

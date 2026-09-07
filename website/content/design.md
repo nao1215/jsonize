@@ -112,6 +112,71 @@ are what produce numbers. The same reasoning removed the `ls -l` /
 `ls -lh` split: which one produced a listing is not decidable from the
 text, and with the size kept as printed it does not need to be.
 
+### A duration is seconds, and the rounded rule is about naming
+
+`ps` prints `00:04:14`, `uptime` prints `13 days, 4:22` and `w` prints
+`13:42m`. Each of those is a length of time that a consumer has to
+subtract, compare or sum, and doing any of that on the string means
+reimplementing this reading in whatever asked. `type: duration` reads
+them and reports seconds.
+
+The one thing the text cannot settle is a bare two-part reading. `4:50`
+is four minutes fifty seconds out of `ps` and one line later `1:23` is an
+hour and twenty-three minutes out of `uptime`; nothing distinguishes
+them. So `layout` is required and says which — `h:mm` or `mm:ss` — and
+there is no default, because being wrong is a factor of sixty that
+nothing downstream would notice. A trailing unit letter settles it where
+the format prints one, which is how `w` separates `13:42m` from `13:42`.
+
+The rule that a rounded number stays text applies here too, and working
+out what it means sharpened the rule itself. It is about what the text
+*names*, not about how coarse the value is. `1.8T` names no particular
+number of bytes until a base and a precision are chosen for it, so
+converting invents both. `13 days, 4:22` names exactly 1138920 seconds;
+the machine has been up for some seconds more, but the text is not
+ambiguous about the length it states, it just states a coarser one.
+
+What that does rule out is a column whose shape changes with the value.
+`top`'s TIME+ prints `mmm:ss.hh` and falls back to `hhh,mm` for a
+long-running task, so one field would carry seconds for one row and
+minutes for another. It stays text, and the comma form is deliberately
+not a spelling `duration` reads: admitting a comma into the grammar would
+make every other value containing one ambiguous, to serve one column of
+one program.
+
+### Assumptions are stated on the command line, never inferred
+
+Two things a command prints cannot be read from the text alone. `who`
+prints `Nov  4 13:17` with no year, and `date` prints `JST`, which is
++0900 only if you carry a table of abbreviations — the same three letters
+name different offsets in different parts of the world.
+
+Until now both stayed text, and a layout without a year was a validation
+error so that nothing could be dated by accident. That was right about
+the danger and wrong about the conclusion: the caller often does know
+which year a log covers and what zone the machine was in, and jz had no
+way to be told.
+
+So the knowledge is asked for and never inferred. `--assume-year 2025`
+(or `now`) dates a field whose definition says `year: assumed`;
+`--assume-zone JST=+0900`, repeatable, gives an abbreviation an offset.
+Without them the value stays the string it was printed as, and
+`year: assumed` on its own converts nothing — it is a statement about the
+format, which is why it is in the definition, next to the claim that the
+layout is what it is.
+
+Nothing reads a clock or a zone database on the way past. `now` is
+resolved once when the command line is read, and whatever Go made of an
+abbreviation is discarded rather than trusted, because Go resolves one
+against the running machine's own zone and the same text would then
+convert differently on two machines.
+
+An assumption that no field in the chosen format asks for is not an
+error. It changes nothing about the output, and refusing it would mean a
+caller who writes one command line for several formats has to know which
+of them prints a bare year. That is unlike a key named to `--extract`,
+which changes the shape a consumer reads and so has to be right.
+
 ### Some formats are only used when named
 
 A signature is a necessary condition, but a weak one can still be met by
@@ -503,6 +568,28 @@ Two further things any answer has to handle:
   nothing else. Splitting the shapes into separate variants does not
   change that: automatic detection would have the same two candidates and
   the same absence of evidence.
+
+### A column that prints two layouts
+
+`ls -l` prints `Jan  5 10:11` for a file changed in the last six months
+and `Apr  9  2025` for an older one. One column, two layouts, and which
+one a row carries depends on the age of the file rather than on anything
+the definition knows.
+
+A field takes one layout, so the column stays text. `year: assumed`
+does not help: it says the format prints no year, and this one prints a
+year for some rows. Reading the value would mean either two more regex
+alternatives in a definition that already has two, splitting on a
+distinction nobody asked about, or a field that may state a list of
+layouts and tries them in order.
+
+The second is probably right and is not done, because a list of layouts
+would be the first place in the format where a field guesses, and the
+rule that keeps `--force` out of this tool is the same rule. The
+question is whether trying layouts in a stated order counts as guessing
+when the definition wrote the order down. `who`, `last` and
+`journalctl -o short` all print one layout, so nothing in the registry
+needs it today.
 
 ### Whether a definition should split a value it can
 
