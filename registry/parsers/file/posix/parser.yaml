@@ -70,6 +70,9 @@ detect:
       # both print for every package, and a file called that is not
       # something file(1) is asked about.
       - '^Required-by:'
+      # A Debian control record opens by naming its package, which
+      # reads as a file named Package and a description of one word.
+      - '\APackage: \S+[ \t]*$'
       # `ethtool -i` opens with "driver: <name>" and "version: <name>",
       # which are properties of an interface rather than a path and the
       # description of what is stored there.

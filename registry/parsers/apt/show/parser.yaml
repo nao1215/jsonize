@@ -1,0 +1,56 @@
+# `apt show` prints one control block per package, separated by a blank
+# line, the same shape `dpkg -s` prints for what is installed. A field
+# whose value runs long continues on lines that open with a space, which
+# input.fold joins back onto the field it belongs to.
+#
+# The two are told apart by the fields apt adds about where the package
+# comes from. dpkg reports a Status; apt reports its sources.
+#
+# Installed-Size and Download-Size are rounded for people to read
+# ("2068 kB"), so they stay strings. dpkg prints the same figure as a
+# plain count of kilobytes, which is why that definition types it.
+format: 1
+command: apt
+variant: show
+description: apt show package records
+metadata:
+  tags: [linux, packaging, debian]
+  compatible: [apt]
+  references:
+    - https://manpages.debian.org/unstable/apt/apt.8.en.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\APackage: \S'
+      - '^APT-(?:Sources|Manual-Installed): \S'
+input:
+  fold: '^[ ]'
+parse:
+  type: records
+  start: '^Package: '
+  parts:
+    - name: package
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^Package: (?P<name>\S+)[ \t]*$'
+      fields:
+        name: {required: true}
+    - name: fields
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      fields:
+        Depends: {type: array, split: ","}
+        Pre-Depends: {type: array, split: ","}
+        Recommends: {type: array, split: ","}
+        Suggests: {type: array, split: ","}
+        Breaks: {type: array, split: ","}
+        Conflicts: {type: array, split: ","}
+        Replaces: {type: array, split: ","}
+        Provides: {type: array, split: ","}
+        Enhances: {type: array, split: ","}
