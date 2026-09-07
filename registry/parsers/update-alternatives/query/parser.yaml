@@ -34,16 +34,19 @@ parse:
     # choice is automatic, and which candidate is in place.
     - name: link
       select: {until: '^Alternative:'}
+      # The slave links sit between Link: and Status:, so they cannot be
+      # cut away by a range; they are indented and nothing else in the
+      # block is.
+      ignore: ['^[ \t]']
       parse:
         type: kv
         separator: ":"
         as: map
-        on_mismatch: skip
     - name: slaves
       select: {until: '^Alternative:'}
+      ignore: ['^\S']
       parse:
         type: regex
-        on_mismatch: skip
         pattern: '^[ \t]+(?P<name>\S+)[ \t]+(?P<path>\S+)[ \t]*$'
     - name: alternatives
       select: {after: '^Value:'}

@@ -13,20 +13,23 @@ metadata:
 detect:
   signature:
     all:
-      # Anchored at the start of the output, not at the start of any
-      # line: this parser skips lines it cannot read, so a page of prose
-      # that happens to contain one answer sentence would otherwise be
-      # converted into that one sentence and nothing else.
+      # Anchored at the start of the output rather than at the start of
+      # any line, so that a page of prose containing one answer sentence
+      # is not read as a lookup.
       - '\A\S+ (?:has address|has IPv6 address|mail is handled by|is an alias for|domain name pointer|has HTTP service bindings) '
 parse:
   type: regex
-  on_mismatch: skip
   patterns:
     - '^(?P<name>\S+) has address (?P<address>\S+)$'
     - '^(?P<name>\S+) has IPv6 address (?P<ipv6_address>\S+)$'
     - '^(?P<name>\S+) mail is handled by (?P<priority>\d+) (?P<exchanger>\S+)$'
     - '^(?P<name>\S+) is an alias for (?P<alias_for>\S+)$'
     - '^(?P<name>\S+) domain name pointer (?P<pointer>\S+)$'
+    # An HTTPS or SVCB record. The parameters after the target are a
+    # space separated list of key=value pairs whose keys the record type
+    # is free to extend, so they are kept as the text that was printed
+    # rather than split into fields this definition would have to know.
+    - '^(?P<name>\S+) has HTTP service bindings (?P<priority>\d+) (?P<target>\S+)(?:[ \t]+(?P<parameters>.*?))?[ \t]*$'
 fields:
   name: {required: true}
   priority: {type: int, when_missing: omit}
@@ -35,3 +38,5 @@ fields:
   exchanger: {when_missing: omit}
   alias_for: {when_missing: omit}
   pointer: {when_missing: omit}
+  target: {when_missing: omit}
+  parameters: {when_missing: omit}

@@ -56,13 +56,14 @@ parse:
         as: map
       fields:
         BootOrder: {type: array, split: ","}
-    # The entry lines are picked out by shape rather than by position: a
-    # line that does not open with an entry number is a settings line the
-    # part above has already read.
+    # The entry lines are picked out by shape rather than by position:
+    # the settings above them are labelled pairs, which an entry line
+    # never is, so they are what this part drops.
     - name: entries
+      ignore:
+        - '^[A-Za-z][A-Za-z0-9]*: '
       parse:
         type: regex
-        on_mismatch: skip
         pattern: '^Boot(?P<boot_number>[0-9A-Fa-f]{4})(?P<active>\*?)[ ]+(?P<name>[^\t]*)(?:\t(?P<device_path>.*))?$'
       fields:
         boot_number: {required: true}

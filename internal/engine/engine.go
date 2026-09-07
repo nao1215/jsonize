@@ -195,6 +195,21 @@ func prepare(in *definition.Input, lines []line) []line {
 	return out
 }
 
+// dropIgnored removes the lines a part declared as belonging to a
+// sibling.
+func dropIgnored(ignore []*regexp.Regexp, lines []line) []line {
+	if len(ignore) == 0 {
+		return lines
+	}
+	out := lines[:0:0]
+	for _, l := range lines {
+		if !matchesAny(ignore, l.text) {
+			out = append(out, l)
+		}
+	}
+	return out
+}
+
 func matchesAny(res []*regexp.Regexp, s string) bool {
 	for _, re := range res {
 		if re.MatchString(s) {
@@ -272,7 +287,10 @@ func (r *run) parseComposite(p *definition.Parse, lines []line) (any, error) {
 	obj := jsonutil.NewObject()
 	for i := range p.Parts {
 		part := &p.Parts[i]
-		sub := applySelect(&part.Select, lines)
+		// The region comes first and the ignore list narrows it, so that
+		// select.skip and select.limit count the lines as they stand in
+		// the output rather than the ones left after dropping.
+		sub := dropIgnored(part.IgnorePatterns(), applySelect(&part.Select, lines))
 		v, err := r.parse(&part.Parse, part.Fields, sub)
 		if err != nil {
 			var pe *ParseError
@@ -337,9 +355,6 @@ func (r *run) parseRegex(p *definition.Parse, fields map[string]*definition.Fiel
 	for _, l := range lines {
 		re, m := firstMatch(patterns, l.text)
 		if m == nil {
-			if p.OnMismatch == definition.MismatchSkip {
-				continue
-			}
 			return nil, r.errorf(l.num, "", "line does not match %s: %q", describePatterns(p), truncate(l.text, 80))
 		}
 		obj, err := r.objectFromMatch(re, l.text, m, fields, l.num)
@@ -452,9 +467,6 @@ func (r *run) parseKV(p *definition.Parse, fields map[string]*definition.Field, 
 			}
 		}
 		if idx < 0 || key == "" {
-			if p.OnMismatch == definition.MismatchSkip {
-				continue
-			}
 			return nil, r.errorf(l.num, "", "expected \"key%svalue\": %q", sep, truncate(l.text, 80))
 		}
 		value := l.text[idx+len(sep):]

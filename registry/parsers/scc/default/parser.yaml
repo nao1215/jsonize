@@ -83,9 +83,9 @@ parse:
     # list.
     - name: processed
       select: {after: '^Total[ \t]'}
+      ignore: ['^Estimated ']
       parse:
         type: regex
-        on_mismatch: skip
         pattern: '^Processed (?P<bytes>\d+) bytes, (?P<megabytes>\S+) megabytes \((?P<unit>[^)]*)\)[ \t]*$'
       fields:
         # The size beside the byte count is written by more than one

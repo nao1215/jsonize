@@ -346,9 +346,6 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 			if p.Pattern != "" || len(p.Patterns) > 0 || p.Each != "" {
 				v.add(path, "pattern/patterns/each are only valid for type regex")
 			}
-			if p.OnMismatch != "" && p.Type != TypeKV {
-				v.add(path+".on_mismatch", "only valid for type regex or kv")
-			}
 		case "kv":
 			if p.Separator != "" || p.As != "" || p.Trim != nil || p.Unquote {
 				v.add(path, "separator/as/trim/unquote are only valid for type kv")
@@ -492,15 +489,6 @@ func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*
 	default:
 		v.add(path+".each", "must be line or input")
 	}
-	validateMismatch(v, path, p.OnMismatch)
-}
-
-func validateMismatch(v *validator, path, policy string) {
-	switch policy {
-	case "", MismatchError, MismatchSkip:
-	default:
-		v.add(path+".on_mismatch", "must be error or skip")
-	}
 }
 
 func validateKV(v *validator, path string, p *Parse) {
@@ -509,7 +497,6 @@ func validateKV(v *validator, path string, p *Parse) {
 	default:
 		v.add(path+".as", "must be list or map")
 	}
-	validateMismatch(v, path, p.OnMismatch)
 }
 
 func validateComposite(v *validator, path string, p *Parse, kind string) {
@@ -533,6 +520,7 @@ func validateComposite(v *validator, path string, p *Parse, kind string) {
 		}
 		seen[part.Name] = true
 		validateSelect(v, pp+".select", &part.Select)
+		part.ignore = compileList(v, pp+".ignore", part.Ignore, "")
 		validateParse(v, pp+".parse", &part.Parse, part.Fields, kind)
 		validateFields(v, pp+".fields", part.Fields, 0, part.Parse.Type == TypeKV)
 	}

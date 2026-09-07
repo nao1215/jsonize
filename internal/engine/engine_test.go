@@ -297,18 +297,33 @@ fields:
 	if !errors.As(err, &pe) || pe.Line != 1 || !strings.Contains(err.Error(), "does not match pattern") {
 		t.Errorf("mismatch error = %v", err)
 	}
-	skip := load(t, `
+	// A part says which lines of its region belong to a sibling, and only
+	// those are dropped: anything else still has to be read.
+	shared := load(t, `
 format: 1
 command: mount
-variant: skip
+variant: shared
 parse:
-  type: regex
-  pattern: '^(?P<a>\d+)$'
-  on_mismatch: skip
+  type: composite
+  parts:
+    - name: letters
+      ignore: ['^\d']
+      parse:
+        type: regex
+        pattern: '^(?P<a>[a-z])$'
+    - name: numbers
+      ignore: ['^[a-z]']
+      parse:
+        type: regex
+        pattern: '^(?P<n>\d+)$'
 `)
-	got, err = Parse(skip, []byte("x\n1\ny\n2\n"), Options{})
-	if err != nil || mustJSON(t, got) != `[{"a":"1"},{"a":"2"}]` {
-		t.Errorf("skip mode: %v %v", mustJSON(t, got), err)
+	got, err = Parse(shared, []byte("x\n1\ny\n2\n"), Options{})
+	if err != nil || mustJSON(t, got) != `{"letters":[{"a":"x"},{"a":"y"}],"numbers":[{"n":"1"},{"n":"2"}]}` {
+		t.Errorf("part ignore: %v %v", mustJSON(t, got), err)
+	}
+	_, err = Parse(shared, []byte("x\n1\n!\n"), Options{})
+	if err == nil || !strings.Contains(err.Error(), "does not match pattern") {
+		t.Errorf("a line no part claims must fail: %v", err)
 	}
 }
 
@@ -413,12 +428,11 @@ parse:
   type: kv
   separator: ":"
   as: map
-  on_mismatch: skip
 fields:
   count: {type: int}
   flag: {type: bool}
 `)
-	got, err = Parse(m, []byte("name : jsonize\ncount: 3\nflag: yes\njunk\nname: last wins\n"), Options{})
+	got, err = Parse(m, []byte("name : jsonize\ncount: 3\nflag: yes\nname: last wins\n"), Options{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -856,20 +870,6 @@ fields:
 	_, err = Parse(def, []byte("\n x\n"), Options{})
 	if err == nil || !strings.Contains(err.Error(), "any of the 2 patterns") {
 		t.Errorf("mismatch message: %v", err)
-	}
-	// on_mismatch and each: input work the same way with several patterns.
-	skip := load(t, `
-format: 1
-command: x
-variant: v
-parse:
-  type: regex
-  patterns: ['^a(?P<a>\d+)$', '^b(?P<b>\d+)$']
-  on_mismatch: skip
-`)
-	got, err = Parse(skip, []byte("a1\nzzz\nb2\n"), Options{})
-	if err != nil || mustJSON(t, got) != `[{"a":"1"},{"b":"2"}]` {
-		t.Errorf("skip with patterns: %v %v", mustJSON(t, got), err)
 	}
 	whole := load(t, `
 format: 1

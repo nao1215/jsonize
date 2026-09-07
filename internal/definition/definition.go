@@ -40,12 +40,6 @@ const (
 	EachInput = "input"
 )
 
-// Mismatch policies.
-const (
-	MismatchError = "error"
-	MismatchSkip  = "skip"
-)
-
 // Key/value output shapes.
 const (
 	AsList = "list"
@@ -327,9 +321,8 @@ type Parse struct {
 	// matches wins. They let a definition treat structurally different
 	// lines differently (an ls symlink line and an ordinary one) without
 	// a single expression having to guess.
-	Patterns   []string `yaml:"patterns,omitempty"`
-	Each       string   `yaml:"each,omitempty"`
-	OnMismatch string   `yaml:"on_mismatch,omitempty"`
+	Patterns []string `yaml:"patterns,omitempty"`
+	Each     string   `yaml:"each,omitempty"`
 
 	// kv
 	Separator string `yaml:"separator,omitempty"`
@@ -414,11 +407,23 @@ type Header struct {
 
 // Part is one component of a composite parser.
 type Part struct {
-	Name   string            `yaml:"name"`
-	Select Select            `yaml:"select,omitempty"`
+	Name   string `yaml:"name"`
+	Select Select `yaml:"select,omitempty"`
+	// Ignore lists regular expressions; a line of the part's region that
+	// matches one is dropped. It is what a part uses to say which lines
+	// of a shared region belong to a sibling: a settings line the part
+	// above already read, a slave link the part below reads. Naming them
+	// is the point, so that a line nobody reads is a mistake the parse
+	// reports rather than something quietly lost.
+	Ignore []string          `yaml:"ignore,omitempty"`
 	Parse  Parse             `yaml:"parse"`
 	Fields map[string]*Field `yaml:"fields,omitempty"`
+
+	ignore []*regexp.Regexp
 }
+
+// IgnorePatterns returns the compiled expressions of a part's ignore list.
+func (p *Part) IgnorePatterns() []*regexp.Regexp { return p.ignore }
 
 // Field describes how one extracted value is converted.
 type Field struct {

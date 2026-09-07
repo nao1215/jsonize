@@ -92,11 +92,11 @@ parse:
       fields:
         idle: {null_if: ["-"]}
     - name: env
+      ignore: ['^\\S']
       parse:
         type: kv
         separator: "="
         as: list
-        on_mismatch: skip
 `
 	d, err := Load([]byte(src), "w.yaml")
 	if err != nil {
@@ -279,7 +279,7 @@ func TestLoadErrors(t *testing.T) {
 		{"table with regex keys", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, pattern: x}\n", "only valid for type regex"},
 		{"table with kv keys", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, separator: x}\n", "only valid for type kv"},
 		{"table with parts", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, parts: [{name: a, parse: {type: kv}}]}\n", "only valid for type composite"},
-		{"table on_mismatch", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, on_mismatch: skip}\n", "on_mismatch"},
+		{"on_mismatch is gone", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', on_mismatch: skip}\n", `unknown key "on_mismatch"`},
 		{"regex missing pattern", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex}\n", "pattern: is required"},
 		{"regex both pattern forms", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', patterns: ['(?P<b>.)']}\n", "mutually exclusive"},
 		{"regex too many patterns", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: [" + strings.Repeat("'(?P<a>.)',", MaxPatterns+1) + "]}\n", "more than 16 alternatives"},
@@ -292,7 +292,7 @@ func TestLoadErrors(t *testing.T) {
 		{"regex invalid", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '('}\n", "invalid regular expression"},
 		{"regex no groups", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: 'abc'}\n", "at least one named group"},
 		{"regex bad each", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', each: all}\n", "must be line or input"},
-		{"regex bad mismatch", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', on_mismatch: ignore}\n", "must be error or skip"},
+		{"bad part ignore", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: p, ignore: ['('], parse: {type: kv}}]}\n", "parts[0].ignore[0]"},
 		{"regex field not group", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)'}\nfields: {b: {}}\n", "not a named group"},
 		{"regex with table keys", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', header: {columns: [a]}}\n", "only valid for type table"},
 		{"regex with split", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', split: aligned}\n", "only valid for type table"},

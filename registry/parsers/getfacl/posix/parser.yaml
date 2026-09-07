@@ -2,11 +2,11 @@
 # lines naming the file and its owner, then one access control entry per
 # line.
 #
-# Each part reads the whole block and skips what belongs to the other,
+# Each part reads the whole block and names what belongs to the other,
 # because the number of comment lines depends on the file: a directory
 # with sticky or setgid bits carries a flags line and an ordinary file
-# does not. A line matching neither shape is dropped rather than
-# reported, which is the price of that.
+# does not. The two shapes cover the block between them, so a line of
+# neither shape is an error.
 #
 # An entry that the mask narrows carries the permissions it actually has
 # in a trailing comment. Both are kept: what was granted and what is
@@ -32,16 +32,18 @@ parse:
   start: '^# file: '
   parts:
     - name: attributes
+      ignore:
+        - '^[^#]'
       parse:
         type: regex
-        on_mismatch: skip
         pattern: '^# (?P<name>[^:]+): (?P<value>.*?)[ \t]*$'
       fields:
         name: {required: true}
     - name: entries
+      ignore:
+        - '^#'
       parse:
         type: regex
-        on_mismatch: skip
         patterns:
           - '^(?P<default>default):(?P<type>[a-z]*):(?P<qualifier>[^:]*):(?P<permissions>[rwxX-]+)(?:[ \t]+#effective:(?P<effective>[rwx-]+))?[ \t]*$'
           - '^(?P<type>[a-z]+):(?P<qualifier>[^:]*):(?P<permissions>[rwxX-]+)(?:[ \t]+#effective:(?P<effective>[rwx-]+))?[ \t]*$'

@@ -63,9 +63,9 @@ parse:
     # above reads it.
     - name: inet6
       select: {skip: 1, until: '[ \t]MTU:'}
+      ignore: ['^[ \t]*inet addr:']
       parse:
         type: regex
-        on_mismatch: skip
         pattern: '\A[ \t]*inet6 addr:[ \t]*(?P<address>[^/ \t]+)/(?P<prefixlen>\d+)[ \t]+Scope:(?P<scope>\S+)[ \t]*\z'
       fields:
         prefixlen: {type: int}

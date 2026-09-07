@@ -191,7 +191,6 @@ parse:
   type: regex
   pattern: '^(?P<filesystem>.+?) on (?P<mount_point>.+?) type (?P<type>\S+)$'
   each: line | input        # default line
-  on_mismatch: error | skip # default error
 ```
 
 Several alternatives can be listed instead of one expression, and are
@@ -217,7 +216,10 @@ objects the others produce.
 named groups; `each: input` matches the whole (pre-processed) text once
 and yields a single object. Groups that did not participate are `null`
 (or omitted with `when_missing: omit`). A non-matching line is an error
-naming the line and pattern unless `on_mismatch: skip`.
+naming the line and the pattern. A line that belongs to another part of
+a composite is named in that part's [`ignore`](#type-composite); a line
+that belongs to nothing is a definition that does not describe its
+input.
 
 ### type: kv
 
@@ -228,7 +230,6 @@ parse:
   as: list | map          # default list
   trim: true              # default true
   unquote: false          # default false
-  on_mismatch: error | skip
 ```
 
 A kv definition looks its `fields` entries up by the key the command
@@ -289,6 +290,28 @@ parse:
 
 Each part re-selects from the pre-processed lines and runs its own
 parser; the result is an object keyed by part name.
+
+A part may also carry `ignore`, a list of expressions matching lines of
+its region that belong to a sibling part:
+
+```yaml
+parts:
+  - name: settings
+    select: {until: '^Boot[0-9A-Fa-f]{4}'}
+    parse: {type: kv, separator: ':', as: map}
+  - name: entries
+    ignore: ['^[A-Za-z][A-Za-z0-9]*: ']
+    parse: {type: regex, pattern: '^Boot(?P<boot_number>[0-9A-Fa-f]{4})...'}
+```
+
+`select` runs first and `ignore` narrows what it left, so `skip` and
+`limit` count the lines as they stand in the output. Use it where two
+parts share a region and neither can be cut out by a range: the settings
+above a list of boot entries, the slave links between two labelled
+blocks. What it is not for is silence. Every line of a part's region that
+`ignore` does not name has to be read, so a line the definition never
+anticipated is an error rather than a value quietly missing from the
+JSON.
 
 A part may be `records`, which is what a report that opens with a banner
 and then repeats a block needs: one part reads the banner, the next reads
