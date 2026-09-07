@@ -41,6 +41,10 @@ detect:
       # labelled line, such as an archive listing announcing its archive,
       # has rows underneath that carry no colon followed by a space.
       - '^(?:[^:\n]|:[^ \t\n])*$'
+      # `ip rule` prints a priority, a colon and the rule, which reads
+      # as a file named after a number and a description of what is in
+      # it. A rule always opens with its from selector.
+      - '\A\d+:[ \t]+(?:not[ \t]+)?from[ \t]+\S'
       # `udevadm info -q all` prints a one letter tag, a colon and a
       # value, and its property lines carry no assignment quoting to
       # catch. The device path on its first line is what names it.
