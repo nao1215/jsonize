@@ -1,0 +1,13 @@
+description: >-
+  A listing that opens with defined symbols, so every line carries an
+  address. That is a hexadecimal word followed by a line of text, which
+  is also the shape of `git log --oneline`, and git/log-oneline read this
+  file until its hash bound came down from twenty digits to fifteen. The
+  case is here so the two stay apart.
+source: >-
+  captured with LC_ALL=C from `nm -D /lib/x86_64-linux-gnu/libc.so.6`
+  (binutils 2.45, glibc 2.42) on Linux 7.0.0-30-generic; lines 1-6 and
+  140-146 of the output, chosen to hold both the absolute version symbols
+  and ordinary defined ones
+os: linux
+args: [-D, /lib/x86_64-linux-gnu/libc.so.6]

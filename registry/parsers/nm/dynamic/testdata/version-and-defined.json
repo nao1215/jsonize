@@ -1,0 +1,67 @@
+[
+  {
+    "address": "0000000000000000",
+    "type": "A",
+    "name": "GLIBC_2.10"
+  },
+  {
+    "address": "0000000000000000",
+    "type": "A",
+    "name": "GLIBC_2.11"
+  },
+  {
+    "address": "0000000000000000",
+    "type": "A",
+    "name": "GLIBC_2.12"
+  },
+  {
+    "address": "0000000000000000",
+    "type": "A",
+    "name": "GLIBC_2.13"
+  },
+  {
+    "address": "0000000000000000",
+    "type": "A",
+    "name": "GLIBC_2.14"
+  },
+  {
+    "address": "0000000000000000",
+    "type": "A",
+    "name": "GLIBC_2.15"
+  },
+  {
+    "address": "000000000006aa60",
+    "type": "T",
+    "name": "_IO_sprintf@@GLIBC_2.2.5"
+  },
+  {
+    "address": "000000000009dd30",
+    "type": "T",
+    "name": "_IO_sputbackc@@GLIBC_2.2.5"
+  },
+  {
+    "address": "0000000000092930",
+    "type": "T",
+    "name": "_IO_sputbackwc@@GLIBC_2.2.5"
+  },
+  {
+    "address": "000000000006ab20",
+    "type": "T",
+    "name": "_IO_sscanf@@GLIBC_2.2.5"
+  },
+  {
+    "address": "000000000009f2d0",
+    "type": "T",
+    "name": "_IO_str_init_readonly@@GLIBC_2.2.5"
+  },
+  {
+    "address": "000000000009f2b0",
+    "type": "T",
+    "name": "_IO_str_init_static@@GLIBC_2.2.5"
+  },
+  {
+    "address": "000000000009f300",
+    "type": "T",
+    "name": "_IO_str_overflow@@GLIBC_2.2.5"
+  }
+]

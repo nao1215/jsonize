@@ -24,20 +24,27 @@ detect:
   signature:
     all:
       # An abbreviated commit hash, one space, and the subject. The upper
-      # bound is what jz undertakes to read: `--oneline` abbreviates, and
-      # twenty digits is well past what any repository needs. A digest
-      # listing is the same shape but its hash is a fixed 32, 40 or 64
-      # digits, none of which leaves a space where this expression wants
-      # one, so md5sum, sha1sum and sha256sum are not this format rather
-      # than being excluded from it. `git log --no-abbrev --oneline`
-      # falls outside for the same reason, and says so by failing.
-      - '\A[0-9a-f]{7,20} '
+      # bound is what jz undertakes to read. git sizes the abbreviation
+      # to the number of objects in the repository, so it is seven digits
+      # for a young one and grows by a digit every sixteenfold; fifteen
+      # is past what any repository reaches. Sixteen is where a symbol
+      # table starts: `nm` prints a zero padded sixty-four bit address
+      # and then a one letter type, which is a hexadecimal word and a
+      # line of text like any other, and was read as a commit until this
+      # bound came down from twenty. A digest listing is the same shape
+      # again but its hash is a fixed 32, 40 or 64 digits, none of which
+      # leaves a space where this expression wants one, so md5sum,
+      # sha1sum and sha256sum are not this format rather than being
+      # excluded from it. `git log --no-abbrev --oneline` and
+      # `--abbrev=16` fall outside for the same reason, and say so by
+      # failing rather than by being read as something else.
+      - '\A[0-9a-f]{7,15} '
     any:
       # The subject, which a commit may leave empty. What it is never is
       # a bare number: that second column belongs to `cksum`, which
       # writes a checksum, a size and a name.
-      - '\A[0-9a-f]{7,20}[ \t]*$'
-      - '\A[0-9a-f]{7,20} \S*[^\s\d]'
+      - '\A[0-9a-f]{7,15}[ \t]*$'
+      - '\A[0-9a-f]{7,15} \S*[^\s\d]'
 parse:
   type: regex
   pattern: '^(?P<commit>[0-9a-f]{4,40}) (?P<subject>.*)$'
