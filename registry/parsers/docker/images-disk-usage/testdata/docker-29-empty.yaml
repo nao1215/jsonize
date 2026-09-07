@@ -1,0 +1,6 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  A reference filter that matches no image. The header is printed alone and
+  the result is an empty array.
+os: linux
+args: ["images", "--filter", "reference=zzzznomatch"]

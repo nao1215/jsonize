@@ -1,0 +1,50 @@
+# One sample of the resource counters, printed by `docker stats --no-stream`
+# (without it the command redraws the table forever and jz never sees the
+# end of the output).
+#
+# Every header cell but NAME and PIDS holds a space, so the row is read with
+# an expression rather than by cutting at the header words. Three of the
+# columns print two values around a slash, and each becomes two fields:
+# MEM USAGE / LIMIT is what the container uses and what it may use, NET I/O
+# is what it received and what it sent, BLOCK I/O is what it read from and
+# wrote to block devices.
+#
+# The sizes are rounded for reading ("342.7MiB", "61.43GiB", "686kB") and
+# stay the strings docker printed; only the two percentages and the process
+# count are numbers.
+#
+# When docker has no sample for a container it prints "--" in each of these
+# cells and "-- / --" in the paired ones, so every field admits "--" as a
+# null. That is the shape docker's stats formatter writes for a container it
+# could not read; it did not occur in the captured fixtures.
+format: 1
+command: docker
+variant: stats
+description: docker stats --no-stream
+metadata:
+  tags: [container, docker, resource]
+  compatible: [Docker CLI]
+  references:
+    - https://docs.docker.com/reference/cli/docker/container/stats/
+detect:
+  signature:
+    all:
+      - '\ACONTAINER ID[ \t]+NAME[ \t]+CPU %[ \t]+MEM USAGE / LIMIT[ \t]+MEM %[ \t]+NET I/O[ \t]+BLOCK I/O[ \t]+PIDS[ \t]*$'
+input:
+  ignore:
+    - '^CONTAINER ID[ \t]+NAME[ \t]+CPU %'
+parse:
+  type: regex
+  pattern: '^(?P<container_id>\S+) {2,}(?P<name>\S+) {2,}(?P<cpu_percent>\S+) {2,}(?P<mem_usage>\S+) / (?P<mem_limit>\S+) {2,}(?P<mem_percent>\S+) {2,}(?P<net_input>\S+) / (?P<net_output>\S+) {2,}(?P<block_input>\S+) / (?P<block_output>\S+) {2,}(?P<pids>\S+)$'
+fields:
+  container_id: {required: true}
+  name: {required: true}
+  cpu_percent: {type: float, trim_suffix: "%", null_if: ["--"]}
+  mem_usage: {null_if: ["--"]}
+  mem_limit: {null_if: ["--"]}
+  mem_percent: {type: float, trim_suffix: "%", null_if: ["--"]}
+  net_input: {null_if: ["--"]}
+  net_output: {null_if: ["--"]}
+  block_input: {null_if: ["--"]}
+  block_output: {null_if: ["--"]}
+  pids: {type: int, null_if: ["--"]}

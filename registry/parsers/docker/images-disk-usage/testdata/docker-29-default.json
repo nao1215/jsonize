@@ -1,0 +1,387 @@
+[
+  {
+    "image": "adobe/s3mock:4.11.0",
+    "id": "821a735833a1",
+    "disk_usage": "231MB",
+    "content_size": "100MB",
+    "extra": null
+  },
+  {
+    "image": "adobe/s3mock:latest",
+    "id": "821a735833a1",
+    "disk_usage": "231MB",
+    "content_size": "100MB",
+    "extra": null
+  },
+  {
+    "image": "alpine:latest",
+    "id": "b5d29f65d9c2",
+    "disk_usage": "13MB",
+    "content_size": "3.93MB",
+    "extra": null
+  },
+  {
+    "image": "api-myapp:latest",
+    "id": "59945ed077a7",
+    "disk_usage": "61.1MB",
+    "content_size": "16.1MB",
+    "extra": null
+  },
+  {
+    "image": "debian:stable-slim",
+    "id": "31ce1e774529",
+    "disk_usage": "119MB",
+    "content_size": "31.8MB",
+    "extra": null
+  },
+  {
+    "image": "fsouza/fake-gcs-server:1.54.0",
+    "id": "e0e32436e7f0",
+    "disk_usage": "82.3MB",
+    "content_size": "24.2MB",
+    "extra": null
+  },
+  {
+    "image": "fsouza/fake-gcs-server:latest",
+    "id": "e0e32436e7f0",
+    "disk_usage": "82.3MB",
+    "content_size": "24.2MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/foundry-rs/foundry:stable",
+    "id": "31e09bc9e29d",
+    "disk_usage": "622MB",
+    "content_size": "186MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/gleam-lang/gleam:v1.15.2-erlang-alpine",
+    "id": "48d220040815",
+    "disk_usage": "187MB",
+    "content_size": "66.8MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/goccy/bigquery-emulator:latest",
+    "id": "f161b52bc94a",
+    "disk_usage": "422MB",
+    "content_size": "92.8MB",
+    "extra": "U"
+  },
+  {
+    "image": "ghcr.io/k1low/runn:latest",
+    "id": "c938127af129",
+    "disk_usage": "1.94GB",
+    "content_size": "540MB",
+    "extra": "U"
+  },
+  {
+    "image": "ghcr.io/k1low/runn:v1.9.2",
+    "id": "c938127af129",
+    "disk_usage": "1.94GB",
+    "content_size": "540MB",
+    "extra": "U"
+  },
+  {
+    "image": "ghcr.io/mermaid-js/mermaid-cli/mermaid-cli:11.4.2",
+    "id": "aa8a5ede4d16",
+    "disk_usage": "1.92GB",
+    "content_size": "543MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:0.10.1-next-amd64",
+    "id": "38455450e8fa",
+    "disk_usage": "163MB",
+    "content_size": "41.8MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:0.10.1-next-arm64",
+    "id": "2f98ca9b160e",
+    "disk_usage": "40.7MB",
+    "content_size": "40.7MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:0.15.1-next-amd64",
+    "id": "68afec93d324",
+    "disk_usage": "163MB",
+    "content_size": "41.8MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:0.15.1-next-arm64",
+    "id": "7a1665910972",
+    "disk_usage": "40.7MB",
+    "content_size": "40.7MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:0.16.1-next-amd64",
+    "id": "d1abc0d27d43",
+    "disk_usage": "163MB",
+    "content_size": "41.8MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:0.16.1-next-arm64",
+    "id": "35a8c213171b",
+    "disk_usage": "40.7MB",
+    "content_size": "40.7MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:0.17.1-next-amd64",
+    "id": "c9942609b08e",
+    "disk_usage": "163MB",
+    "content_size": "41.8MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:0.17.1-next-arm64",
+    "id": "3c103d245a15",
+    "disk_usage": "40.7MB",
+    "content_size": "40.7MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:0.19.1-next-amd64",
+    "id": "40cff90ba89e",
+    "disk_usage": "164MB",
+    "content_size": "42.1MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:0.19.1-next-arm64",
+    "id": "4992e0235ef5",
+    "disk_usage": "41MB",
+    "content_size": "41MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:latest-amd64",
+    "id": "40cff90ba89e",
+    "disk_usage": "164MB",
+    "content_size": "42.1MB",
+    "extra": null
+  },
+  {
+    "image": "ghcr.io/example/demo1:latest-arm64",
+    "id": "4992e0235ef5",
+    "disk_usage": "41MB",
+    "content_size": "41MB",
+    "extra": null
+  },
+  {
+    "image": "kindest/node@sha256:19b2030215cbf9b9e3b101a92753b3963ba39c5e77c36bb5036e06efc8748e7f",
+    "id": "19b2030215cb",
+    "disk_usage": "1.35GB",
+    "content_size": "397MB",
+    "extra": "U"
+  },
+  {
+    "image": "koalaman/shellcheck:stable",
+    "id": "dd9ac4327cad",
+    "disk_usage": "20MB",
+    "content_size": "3.81MB",
+    "extra": null
+  },
+  {
+    "image": "mcr.microsoft.com/azure-storage/azurite:3.35.0",
+    "id": "c108ce4a773b",
+    "disk_usage": "429MB",
+    "content_size": "93.9MB",
+    "extra": null
+  },
+  {
+    "image": "mcr.microsoft.com/azure-storage/azurite:latest",
+    "id": "c108ce4a773b",
+    "disk_usage": "429MB",
+    "content_size": "93.9MB",
+    "extra": null
+  },
+  {
+    "image": "demos-album:latest",
+    "id": "606e7f4e59b3",
+    "disk_usage": "68.5MB",
+    "content_size": "22.6MB",
+    "extra": "U"
+  },
+  {
+    "image": "demos-eventstore:latest",
+    "id": "8a6297207fcc",
+    "disk_usage": "67.4MB",
+    "content_size": "22.2MB",
+    "extra": "U"
+  },
+  {
+    "image": "demos-frontend:latest",
+    "id": "76f0399b0178",
+    "disk_usage": "92.6MB",
+    "content_size": "26MB",
+    "extra": "U"
+  },
+  {
+    "image": "demos-gateway:latest",
+    "id": "09c9b0bad396",
+    "disk_usage": "55.9MB",
+    "content_size": "18.4MB",
+    "extra": "U"
+  },
+  {
+    "image": "demos-media-command:latest",
+    "id": "374cfe7b7bd6",
+    "disk_usage": "60MB",
+    "content_size": "19.4MB",
+    "extra": "U"
+  },
+  {
+    "image": "demos-media-query:latest",
+    "id": "36289468be54",
+    "disk_usage": "55.6MB",
+    "content_size": "18.3MB",
+    "extra": "U"
+  },
+  {
+    "image": "demos-notification:latest",
+    "id": "8dc27381660b",
+    "disk_usage": "68.5MB",
+    "content_size": "22.6MB",
+    "extra": "U"
+  },
+  {
+    "image": "demos-saga:latest",
+    "id": "4aa84fcab140",
+    "disk_usage": "68.4MB",
+    "content_size": "22.6MB",
+    "extra": "U"
+  },
+  {
+    "image": "minlag/mermaid-cli:latest",
+    "id": "622d99a46112",
+    "disk_usage": "3.21GB",
+    "content_size": "890MB",
+    "extra": null
+  },
+  {
+    "image": "moby/buildkit:buildx-stable-1",
+    "id": "37c5c3cd6be7",
+    "disk_usage": "355MB",
+    "content_size": "111MB",
+    "extra": "U"
+  },
+  {
+    "image": "mysql:8.4",
+    "id": "deda34fb4c99",
+    "disk_usage": "1.12GB",
+    "content_size": "255MB",
+    "extra": "U"
+  },
+  {
+    "image": "nginx:alpine",
+    "id": "727e03749faf",
+    "disk_usage": "93.4MB",
+    "content_size": "26.9MB",
+    "extra": null
+  },
+  {
+    "image": "node:22-alpine",
+    "id": "8c73f82fd729",
+    "disk_usage": "232MB",
+    "content_size": "58.1MB",
+    "extra": null
+  },
+  {
+    "image": "postgres:12-alpine",
+    "id": "085f150395e7",
+    "disk_usage": "382MB",
+    "content_size": "107MB",
+    "extra": null
+  },
+  {
+    "image": "postgres:13-alpine",
+    "id": "fda3c9dc6e6b",
+    "disk_usage": "384MB",
+    "content_size": "107MB",
+    "extra": null
+  },
+  {
+    "image": "postgres:16",
+    "id": "94c9eb1f6512",
+    "disk_usage": "641MB",
+    "content_size": "166MB",
+    "extra": null
+  },
+  {
+    "image": "postgres:16-alpine",
+    "id": "eb6dd0759d4f",
+    "disk_usage": "395MB",
+    "content_size": "111MB",
+    "extra": null
+  },
+  {
+    "image": "postgres:17-alpine",
+    "id": "01bf1364b3da",
+    "disk_usage": "424MB",
+    "content_size": "118MB",
+    "extra": "U"
+  },
+  {
+    "image": "applib:test",
+    "id": "0245d3047a98",
+    "disk_usage": "156MB",
+    "content_size": "58.3MB",
+    "extra": null
+  },
+  {
+    "image": "tonistiigi/binfmt:latest",
+    "id": "1334150ed5e5",
+    "disk_usage": "118MB",
+    "content_size": "32.7MB",
+    "extra": null
+  },
+  {
+    "image": "myapp-cli-test:latest",
+    "id": "2b1f1f6785e3",
+    "disk_usage": "166MB",
+    "content_size": "40.3MB",
+    "extra": null
+  },
+  {
+    "image": "myapp-test:latest",
+    "id": "4f7ce05569eb",
+    "disk_usage": "186MB",
+    "content_size": "47.4MB",
+    "extra": null
+  },
+  {
+    "image": "myapp:dev",
+    "id": "3acae599b4dd",
+    "disk_usage": "49MB",
+    "content_size": "12.6MB",
+    "extra": null
+  },
+  {
+    "image": "myapp:local",
+    "id": "94ff851bd582",
+    "disk_usage": "174MB",
+    "content_size": "45.5MB",
+    "extra": "U"
+  },
+  {
+    "image": "ubuntu:24.04",
+    "id": "9c7c756b879d",
+    "disk_usage": "119MB",
+    "content_size": "31.7MB",
+    "extra": null
+  },
+  {
+    "image": "valalang/lint:latest",
+    "id": "1b9bd3a120d7",
+    "disk_usage": "256MB",
+    "content_size": "57.9MB",
+    "extra": null
+  }
+]

@@ -1,0 +1,28 @@
+# Two columns: the volume driver and the volume name. A name is a single
+# word (docker rejects one with a space), so the row is cut on whitespace.
+# The names are declared here because the header's second cell is two words
+# ("VOLUME NAME") and deriving the names from the header would make it two
+# columns of its own.
+#
+# An anonymous volume is named by the 64-character identifier docker gave
+# it; a named one carries whatever name it was created with.
+format: 1
+command: docker
+variant: volume-ls
+description: docker volume ls
+metadata:
+  tags: [container, docker, volume]
+  compatible: [Docker CLI]
+  references:
+    - https://docs.docker.com/reference/cli/docker/volume/ls/
+detect:
+  signature:
+    all:
+      - '\ADRIVER[ \t]+VOLUME NAME[ \t]*$'
+parse:
+  type: table
+  header:
+    columns: [driver, volume_name]
+fields:
+  driver: {required: true}
+  volume_name: {required: true}

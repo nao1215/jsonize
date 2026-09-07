@@ -1,0 +1,50 @@
+# The container table, printed by `docker ps`, `docker ps -a` and their
+# `docker container ls` spellings, which all produce these seven columns.
+#
+# The row is read with an expression rather than by cutting at the header
+# words. `split: aligned` takes the column offsets from the words of the
+# header, and the very first cell here is two words ("CONTAINER ID"), which
+# puts a spurious boundary in front of every remaining column. Docker pads
+# the columns with three spaces and no cell holds two spaces in a row, so
+# two spaces are an unambiguous separator instead.
+#
+# Five of the seven cells can hold a space. COMMAND is the entrypoint as
+# docker printed it: quoted, and truncated to twenty characters with a
+# horizontal ellipsis, so it is a display string rather than the command
+# (`--no-trunc` prints it whole and is read by the same expression, and a
+# quote inside it does not end the cell because the closing quote is the
+# one followed by the column gap). CREATED and STATUS are English phrases
+# ("6 weeks ago", "Exited (137) 5 months ago") and stay strings.
+#
+# PORTS is empty for a container that publishes nothing and the row then
+# has one long run of spaces where the cell would be; the empty cell
+# becomes an empty array. NAMES is comma-joined for a container that
+# carries more than one name, so both are arrays.
+format: 1
+command: docker
+variant: ps
+description: docker ps and docker ps -a
+metadata:
+  tags: [container, docker, process]
+  compatible: [Docker CLI]
+  references:
+    - https://docs.docker.com/reference/cli/docker/container/ls/
+detect:
+  signature:
+    all:
+      - '\ACONTAINER ID[ \t]+IMAGE[ \t]+COMMAND[ \t]+CREATED[ \t]+STATUS[ \t]+PORTS[ \t]+NAMES[ \t]*$'
+input:
+  # A listing with no containers prints the header and nothing else, which
+  # is an empty array rather than no output at all.
+  ignore:
+    - '^CONTAINER ID[ \t]+IMAGE[ \t]'
+parse:
+  type: regex
+  pattern: '^(?P<container_id>\S+) {2,}(?P<image>\S+) {2,}"(?P<command>.*?)" {2,}(?P<created>\S.*?) {2,}(?P<status>\S.*?) {2,}(?P<ports>.*?) *(?P<names>\S+)$'
+fields:
+  container_id: {required: true}
+  image: {required: true}
+  created: {required: true}
+  status: {required: true}
+  ports: {type: array, split: ","}
+  names: {type: array, split: ","}

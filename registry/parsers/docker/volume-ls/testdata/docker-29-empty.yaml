@@ -1,0 +1,6 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  A name filter that matches no volume. The header is printed alone and the
+  result is an empty array.
+os: linux
+args: ["volume", "ls", "--filter", "name=zzzznomatch"]

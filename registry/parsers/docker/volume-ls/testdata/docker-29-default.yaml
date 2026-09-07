@@ -1,0 +1,9 @@
+source: >-
+  captured from Docker 29.2.1 on Linux with LC_ALL=C; the header line and
+  lines 74 to 88 of the listing
+description: >-
+  Anonymous volumes, named by the identifier docker gave them, followed by
+  the named ones. The names that came from private projects were replaced
+  and the identifiers rewritten, keeping their length.
+os: linux
+args: ["volume", "ls"]

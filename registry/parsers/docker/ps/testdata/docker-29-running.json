@@ -1,0 +1,91 @@
+[
+  {
+    "container_id": "accaee24e51d",
+    "image": "ghcr.io/goccy/bigquery-emulator:latest",
+    "command": "/bin/bigquery-emula…",
+    "created": "10 days ago",
+    "status": "Up 10 days",
+    "ports": [
+      "0.0.0.0:9050->9050/tcp",
+      "[::]:9050->9050/tcp"
+    ],
+    "names": [
+      "datalab-bq-probe"
+    ]
+  },
+  {
+    "container_id": "a2afeaf3fa18",
+    "image": "postgres:17-alpine",
+    "command": "docker-entrypoint.s…",
+    "created": "10 days ago",
+    "status": "Up 10 days",
+    "ports": [
+      "5432/tcp"
+    ],
+    "names": [
+      "datalab-pg-probe"
+    ]
+  },
+  {
+    "container_id": "c781233c8005",
+    "image": "mysql:8.4",
+    "command": "docker-entrypoint.s…",
+    "created": "10 days ago",
+    "status": "Up 10 days",
+    "ports": [
+      "3306/tcp",
+      "33060/tcp"
+    ],
+    "names": [
+      "datalab-mysql-probe"
+    ]
+  },
+  {
+    "container_id": "1e2516252d99",
+    "image": "kindest/node:v1.35.0",
+    "command": "/usr/local/bin/entr…",
+    "created": "6 weeks ago",
+    "status": "Up 13 days",
+    "ports": [],
+    "names": [
+      "demo-environment-local-worker2"
+    ]
+  },
+  {
+    "container_id": "3793087f6697",
+    "image": "kindest/node:v1.35.0",
+    "command": "/usr/local/bin/entr…",
+    "created": "6 weeks ago",
+    "status": "Up 13 days",
+    "ports": [],
+    "names": [
+      "demo-environment-local-worker"
+    ]
+  },
+  {
+    "container_id": "e2a31dabb7ac",
+    "image": "kindest/node:v1.35.0",
+    "command": "/usr/local/bin/entr…",
+    "created": "6 weeks ago",
+    "status": "Up 13 days",
+    "ports": [
+      "127.0.0.1:8080->80/tcp",
+      "127.0.0.1:8443->443/tcp",
+      "127.0.0.1:42765->6443/tcp"
+    ],
+    "names": [
+      "demo-environment-local-control-plane"
+    ]
+  },
+  {
+    "container_id": "bd85e74de011",
+    "image": "moby/buildkit:buildx-stable-1",
+    "command": "/usr/bin/buildkitd-…",
+    "created": "8 weeks ago",
+    "status": "Up 13 days",
+    "ports": [],
+    "names": [
+      "buildx_buildkit_demo-local-builder"
+    ]
+  }
+]

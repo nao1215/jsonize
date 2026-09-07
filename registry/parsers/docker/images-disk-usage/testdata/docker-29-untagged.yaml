@@ -1,0 +1,9 @@
+source: >-
+  captured from Docker 29.2.1 on Linux with LC_ALL=C; the header and the
+  first eight rows of the listing
+description: >-
+  Images with no reference of their own, which docker prints as
+  "<untagged>" in the IMAGE column. The IDs were replaced, keeping their
+  length.
+os: linux
+args: ["images", "--filter", "dangling=true"]
