@@ -1,0 +1,27 @@
+# `fc-list` prints one font file per line: the path, the families the
+# file provides, and the styles. Families and styles are comma separated
+# lists, and a file that provides one family still prints a list of one.
+#
+# The separator between the path and the rest is a colon and a space,
+# which is also what a file(1) listing uses; the style field is what
+# tells the two apart.
+format: 1
+command: fc-list
+variant: posix
+description: fc-list font files, families and styles
+metadata:
+  tags: [linux, darwin, font]
+  compatible: [fontconfig]
+  references:
+    - https://man.archlinux.org/man/fc-list.1
+detect:
+  signature:
+    all:
+      - '\A/\S+: [^:\n]+:style=\S'
+parse:
+  type: regex
+  pattern: '^(?P<file>[^:]+): (?P<families>[^:]*):style=(?P<styles>.*?)[ \t]*$'
+fields:
+  file: {required: true}
+  families: {type: array, split: ","}
+  styles: {type: array, split: ","}
