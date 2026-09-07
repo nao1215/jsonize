@@ -1,0 +1,4 @@
+description: routing table with addresses left unresolved
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; addresses and bridge names replaced
+os: linux
+args: ["-rn"]

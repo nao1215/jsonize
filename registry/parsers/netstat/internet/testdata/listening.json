@@ -1,0 +1,382 @@
+[
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "57343",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "18191",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "50717",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.54",
+    "local_port": "53",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "0.0.0.0",
+    "local_port": "9050",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "18790",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "58653",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "0.0.0.0",
+    "local_port": "22",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "27060",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "38689",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "38465",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "8080",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "39137",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "0.0.0.0",
+    "local_port": "27036",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "33573",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "631",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "13753",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.53",
+    "local_port": "53",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "42853",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "42765",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "41963",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "8899",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "41629",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "8443",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.1",
+    "local_port": "11434",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "::1",
+    "local_port": "631",
+    "foreign_address": "::",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "::",
+    "local_port": "9050",
+    "foreign_address": "::",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "::",
+    "local_port": "22",
+    "foreign_address": "::",
+    "foreign_port": "*",
+    "state": "LISTEN"
+  },
+  {
+    "proto": "udp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "0.0.0.0",
+    "local_port": "58635",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "udp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "0.0.0.0",
+    "local_port": "27036",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "udp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "0.0.0.0",
+    "local_port": "59986",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "udp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.54",
+    "local_port": "53",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "udp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "127.0.0.53",
+    "local_port": "53",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "udp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "172.20.0.1",
+    "local_port": "3702",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "udp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "239.255.255.250",
+    "local_port": "3702",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "udp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "172.18.0.1",
+    "local_port": "3702",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "udp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "239.255.255.250",
+    "local_port": "3702",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "udp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "172.17.0.1",
+    "local_port": "3702",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "*",
+    "state": null
+  }
+]

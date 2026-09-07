@@ -1,0 +1,72 @@
+[
+  {
+    "destination": "0.0.0.0",
+    "gateway": "192.168.11.7",
+    "genmask": "0.0.0.0",
+    "flags": "UG",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0,
+    "iface": "wlp195s0"
+  },
+  {
+    "destination": "172.17.0.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.0.0",
+    "flags": "U",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0,
+    "iface": "docker0"
+  },
+  {
+    "destination": "172.18.0.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.0.0",
+    "flags": "U",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0,
+    "iface": "br-2b3c4d5e6f70"
+  },
+  {
+    "destination": "172.19.0.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.0.0",
+    "flags": "U",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0,
+    "iface": "br-1a2b3c4d5e6f"
+  },
+  {
+    "destination": "172.20.0.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.0.0",
+    "flags": "U",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0,
+    "iface": "br-3c4d5e6f7081"
+  },
+  {
+    "destination": "192.168.10.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.255.0",
+    "flags": "U",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0,
+    "iface": "eno1"
+  },
+  {
+    "destination": "192.168.11.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.255.0",
+    "flags": "U",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0,
+    "iface": "wlp195s0"
+  }
+]

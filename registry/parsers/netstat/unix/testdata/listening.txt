@@ -1,0 +1,20 @@
+Active UNIX domain sockets (only servers)
+Proto RefCnt Flags       Type       State         I-Node Path
+unix  2      [ ACC ]     STREAM     LISTENING     19525291 /tmp/vscode-ah-1a2b3c4d5e6f/Ab1Cd2-Ef3Gh4Ij5Kl6MnO.sock
+unix  2      [ ACC ]     STREAM     LISTENING     127194628 /tmp/cc-daemon-1000/1a2b3c4d/control.sock
+unix  2      [ ACC ]     STREAM     LISTENING      54354 /var/run/docker/metrics.sock
+unix  2      [ ACC ]     STREAM     LISTENING     127203528 /tmp/cc-daemon-1000/1a2b3c4d/spare/5e6f7081.pty.sock
+unix  2      [ ACC ]     STREAM     LISTENING     127145977 /tmp/cc-daemon-1000/1a2b3c4d/pty/92a3b4c5.sock
+unix  2      [ ACC ]     STREAM     LISTENING     127196123 /tmp/cc-daemon-1000/1a2b3c4d/spare/5e6f7081.claim.sock
+unix  2      [ ACC ]     STREAM     LISTENING     127212790 /tmp/cc-daemon-1000/1a2b3c4d/rv/92a3b4c5.sock
+unix  2      [ ACC ]     STREAM     LISTENING       8183 /run/systemd/userdb/io.systemd.DynamicUser
+unix  2      [ ACC ]     STREAM     LISTENING      41526 /run/containerd/containerd.sock.ttrpc
+unix  2      [ ACC ]     STREAM     LISTENING       8184 /run/systemd/io.systemd.ManagedOOM
+unix  2      [ ACC ]     STREAM     LISTENING      41528 /run/containerd/containerd.sock
+unix  2      [ ACC ]     STREAM     LISTENING       8185 /run/systemd/io.systemd.Manager
+unix  2      [ ACC ]     STREAM     LISTENING     19552573 /run/user/1000/vscode-d6e7f809-1.13-main.sock
+unix  2      [ ACC ]     STREAM     LISTENING      12291 /run/systemd/journal/stdout
+unix  2      [ ACC ]     STREAM     LISTENING      54449 /var/run/docker/libnetwork/1a2b3c4d5e6f.sock
+unix  2      [ ACC ]     STREAM     LISTENING     97547001 /run/user/1000/vscode-git-1a2b3c4d5e.sock
+unix  2      [ ACC ]     STREAM     LISTENING     97557288 /run/user/1000/ssh-askpass-1a2b3c4d-5e6f-7081-92a3-b4c5d6e7f809.sock
+unix  2      [ ACC ]     STREAM     LISTENING     3849730 /run/user/1000/gcr/.ssh

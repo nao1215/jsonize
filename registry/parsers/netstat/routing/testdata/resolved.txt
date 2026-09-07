@@ -1,0 +1,9 @@
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+default         _gateway        0.0.0.0         UG        0 0          0 wlp195s0
+172.17.0.0      *               255.255.0.0     U         0 0          0 docker0
+172.18.0.0      *               255.255.0.0     U         0 0          0 br-2b3c4d5e6f70
+172.19.0.0      *               255.255.0.0     U         0 0          0 br-1a2b3c4d5e6f
+172.20.0.0      *               255.255.0.0     U         0 0          0 br-3c4d5e6f7081
+192.168.10.0    *               255.255.255.0   U         0 0          0 eno1
+192.168.11.0    *               255.255.255.0   U         0 0          0 wlp195s0

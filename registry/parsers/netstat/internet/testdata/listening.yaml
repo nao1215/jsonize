@@ -1,0 +1,4 @@
+description: listening TCP and UDP sockets, including IPv6 addresses and the blank state column of a datagram socket
+source: lines 1-40 of `busybox netstat -tuln` captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; addresses replaced
+os: linux
+args: ["-tuln"]

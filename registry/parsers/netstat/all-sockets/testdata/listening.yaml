@@ -1,0 +1,4 @@
+description: both tables in one output, the internet one holding raw sockets
+source: lines 1-14 of `busybox netstat -nwlx` captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; socket names replaced
+os: linux
+args: ["-nwlx"]

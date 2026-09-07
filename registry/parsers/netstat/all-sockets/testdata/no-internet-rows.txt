@@ -1,0 +1,12 @@
+Active Internet connections (w/o servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       
+Active UNIX domain sockets (w/o servers)
+Proto RefCnt Flags       Type       State         I-Node Path
+unix  3      [ ]         STREAM     CONNECTED     46912016 /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     30041609 /run/containerd/s/1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f809
+unix  3      [ ]         STREAM     CONNECTED     19525248 
+unix  3      [ ]         STREAM     CONNECTED     3072714 
+unix  3      [ ]         STREAM     CONNECTED     104873615 
+unix  3      [ ]         STREAM     CONNECTED     96251182 
+unix  3      [ ]         STREAM     CONNECTED     47369155 
+unix  3      [ ]         STREAM     CONNECTED     35762561 

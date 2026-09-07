@@ -1,0 +1,138 @@
+[
+  {
+    "name": "?",
+    "address": "172.19.0.3",
+    "hwaddress": "52:54:00:1a:2b:3c",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "br-1a2b3c4d5e6f"
+  },
+  {
+    "name": "?",
+    "address": "172.17.0.6",
+    "hwaddress": "52:54:00:2b:3c:4d",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "docker0"
+  },
+  {
+    "name": "?",
+    "address": "192.168.11.3",
+    "hwaddress": "52:54:00:3c:4d:5e",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "wlp195s0"
+  },
+  {
+    "name": "?",
+    "address": "192.168.11.31",
+    "hwaddress": null,
+    "hwtype": null,
+    "flags": [],
+    "device": "wlp195s0"
+  },
+  {
+    "name": "?",
+    "address": "172.17.0.8",
+    "hwaddress": "52:54:00:4d:5e:6f",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "docker0"
+  },
+  {
+    "name": "?",
+    "address": "172.19.0.2",
+    "hwaddress": "52:54:00:5e:6f:70",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "br-1a2b3c4d5e6f"
+  },
+  {
+    "name": "?",
+    "address": "172.17.0.2",
+    "hwaddress": "52:54:00:6f:70:81",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "docker0"
+  },
+  {
+    "name": "?",
+    "address": "172.19.0.4",
+    "hwaddress": "52:54:00:70:81:92",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "br-1a2b3c4d5e6f"
+  },
+  {
+    "name": "?",
+    "address": "172.17.0.4",
+    "hwaddress": "52:54:00:81:92:a3",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "docker0"
+  },
+  {
+    "name": "?",
+    "address": "192.168.11.32",
+    "hwaddress": "52:54:00:92:a3:b4",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "wlp195s0"
+  },
+  {
+    "name": "?",
+    "address": "192.168.11.3",
+    "hwaddress": "52:54:00:3c:4d:5e",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "eno1"
+  },
+  {
+    "name": "?",
+    "address": "192.168.11.32",
+    "hwaddress": "52:54:00:92:a3:b4",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "eno1"
+  },
+  {
+    "name": "?",
+    "address": "172.17.0.3",
+    "hwaddress": "52:54:00:a3:b4:c5",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "docker0"
+  },
+  {
+    "name": "?",
+    "address": "192.168.11.201",
+    "hwaddress": null,
+    "hwtype": null,
+    "flags": [],
+    "device": "wlp195s0"
+  },
+  {
+    "name": "?",
+    "address": "172.17.0.5",
+    "hwaddress": "52:54:00:b4:c5:d6",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "docker0"
+  },
+  {
+    "name": "_gateway",
+    "address": "192.168.11.7",
+    "hwaddress": "52:54:00:c5:d6:e7",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "wlp195s0"
+  },
+  {
+    "name": "?",
+    "address": "192.168.11.31",
+    "hwaddress": "52:54:00:d6:e7:f8",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "eno1"
+  }
+]

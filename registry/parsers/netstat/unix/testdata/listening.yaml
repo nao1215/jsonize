@@ -1,0 +1,4 @@
+description: listening UNIX sockets, every one with a path and the ACC flag
+source: lines 1-20 of `busybox netstat -xl` captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; socket names replaced
+os: linux
+args: ["-xl"]
