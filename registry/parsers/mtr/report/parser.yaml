@@ -19,6 +19,10 @@ detect:
   signature:
     all:
       - '^HOST:[ \t]+\S+[ \t]+Loss%[ \t]+Snt[ \t]+Last[ \t]+Avg[ \t]+Best[ \t]+Wrst[ \t]+StDev[ \t]*$'
+      # A hop, so that a document quoting the header line is not read as
+      # a report with no hops in it. The header alone says what the
+      # columns are called, not that anything was measured.
+      - '^[ \t]*\d+\.\|--[ \t]+\S'
 parse:
   type: composite
   parts:
