@@ -39,6 +39,7 @@ pipe there is no such answer at all: nothing identifies an empty input.
       --exclude KEY   drop this key (repeatable)
       --parser NAME   restrict detection to one parser
       --variant NAME  use a variant of --parser
+      --explain       report the chosen definition and why, on stderr
   -h, --help          show help
 ```
 
@@ -142,6 +143,84 @@ the command's status wins: it is the more useful signal, because a
 command that failed explains both what it printed and what it did not.
 The skipped records are on standard error either way, so nothing is lost
 by the choice — only the number changes.
+
+## Seeing which parser was chosen
+
+The choice is the one thing a converter has to get right, and a
+successful run says nothing about it: the JSON looks the same whichever
+definition produced it. `--explain` writes the answer on standard error.
+
+```console
+$ jz --explain --file df-gnu.txt
+jz: df/gnu from embedded
+jz: matched: signature.all[0] /^Filesystem\s+1K-blocks\s+Used\s+Available/
+```
+
+`jz run` adds the command it started and the status it gave:
+
+```console
+$ jz run --explain df -h
+jz: df/gnu-human from embedded
+jz: matched: signature.all[0] /^Filesystem\s+Size\s+Used\s+Avail/, detect.os linux, detect.args
+jz: command: df -h (exit 0)
+```
+
+Naming a parser adds the variants it left out and why, which is what
+makes a wrong variant traceable:
+
+```console
+$ jz --explain --parser df --file df-gnu.txt
+jz: df/gnu from embedded
+jz: matched: signature.all[0] /^Filesystem\s+1K-blocks\s+Used\s+Available/
+jz: rejected: df/bsd (signature.all[0] /^Filesystem\s+512-blocks/ did not match), ...
+```
+
+Without a parser the search covers the whole registry, which rejects
+almost all of it on the first expression of a signature. Saying so three
+hundred times explains nothing, so only the definitions that came close
+are listed: one that got past its first expression, and one whose
+signature does fit but which jz will not choose on its own. That is the
+same list `--explain` shows when nothing was identified at all:
+
+```console
+$ jz --explain --file passwd.txt
+jz: unable to identify the input format
+it could be `etc` output, but that format is too generic for jz to claim on its own
+...
+jz: rejected: etc/passwd (needs --parser etc), sensors/linux (signature.all[1] /^Adapter: / did not match)
+```
+
+`--explain` changes neither standard output nor the exit status, and it
+writes no clock reading, so two runs over the same input explain
+themselves identically.
+
+## What a file path says
+
+`jz run` knows the command it started and its arguments. A file has no
+argv, so its path is the only evidence besides the text: the directory
+the file sits in names the parser, the file itself names the variant, and
+the pair has to exist.
+
+```console
+$ jz --file /etc/fstab       # etc/fstab
+$ jz --file /proc/meminfo    # proc/meminfo
+```
+
+Nothing in jz knows about `/etc` or `/proc`. Those directories work
+because parsers named `etc` and `proc` exist, and a registry with a
+parser named after some other directory gets the same treatment.
+
+What this buys is the formats too unremarkable to claim on sight.
+`/etc/fstab` is six whitespace-separated fields, which is why it declares
+`auto_detect: false`; before the path was read it had to be named on the
+command line every time.
+
+The path is evidence, not an instruction. The definition it names still
+has to fit the text, and when it does not the path is dropped and the
+text is read on its own terms — so a path can only add an answer, never
+replace one. A name with a dot in it is a file name rather than a variant
+name and is ignored, which is what keeps a capture saved as `fstab.txt`
+out of it.
 
 ## Naming a parser
 

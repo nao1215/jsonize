@@ -331,3 +331,28 @@ scenarios:
               {"size":8,"name":"/b"}
           stderr:
             contains: "line 2"
+
+  # The rule holds no list of names: /proc is a parser because a parser
+  # named proc exists, the same way /etc is.
+  - name: the path of a real /proc file names its definition
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz --explain --file /proc/meminfo
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "proc/meminfo from embedded"
+          stdout:
+            json:
+              - { path: "$[0].name", equals: MemTotal }
+              - { path: "$[0].value", gt: 0 }
+      - run:
+          command: jz --explain --file /proc/uptime
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "proc/uptime from embedded"
+          stdout:
+            json:
+              - { path: "$.uptime_seconds", gt: 0 }

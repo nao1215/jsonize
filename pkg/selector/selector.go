@@ -67,12 +67,28 @@ type Result struct {
 	// Scanned is the number of definitions the signatures were evaluated
 	// against.
 	Scanned int
+	// Matched renders the conditions the chosen definition stated and the
+	// input met, as "signature.all[0] /^Filesystem/". It is what --explain
+	// shows, so that a choice can be checked rather than trusted.
+	Matched []string
+	// Rejections explain the definitions that were considered and left
+	// out. Scanning the whole registry rejects almost all of it on the
+	// first expression of a signature, which says nothing, so only the
+	// ones that came close are kept there; a search scoped to one parser
+	// keeps all of its variants.
+	Rejections []Rejection
 }
 
 // Rejection records why one definition was not selected.
 type Rejection struct {
 	Entry  *registry.Entry
 	Reason string
+	// Close marks a rejection worth reading: the definition satisfied
+	// part of what it asks for before it was ruled out. A definition that
+	// failed the very first expression of its signature is every
+	// unrelated parser in the registry, and listing those explains
+	// nothing.
+	Close bool
 }
 
 // UnknownParserError is returned when --parser or a command name has no
@@ -138,6 +154,10 @@ type NoMatchError struct {
 	// jz refuses to choose on its own because their format is too
 	// generic. Naming one of them is the way forward.
 	Hints []*registry.Entry
+	// Reported carries the rejections --explain shows. It is the whole
+	// list when one parser was searched and the near misses otherwise,
+	// which is the same choice a successful selection makes.
+	Reported []Rejection
 }
 
 func (e *NoMatchError) Error() string {
@@ -177,6 +197,8 @@ func firstVariant(rs []Rejection) string {
 // AmbiguousError is returned when several definitions match equally well.
 type AmbiguousError struct {
 	Candidates []*registry.Entry
+	// Reported carries the rejections --explain shows.
+	Reported []Rejection
 }
 
 func (e *AmbiguousError) Error() string {
@@ -231,14 +253,16 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		// A name is not evidence: a variant the user asked for still has
 		// to fit the text. If a definition rejects output it should
 		// accept, the definition is what needs fixing.
-		if reason, ok := check(e, &ctx, window); !ok {
-			return nil, &MismatchError{Entry: e, Reason: reason}
+		v := check(e, &ctx, window)
+		if !v.ok() {
+			return nil, &MismatchError{Entry: e, Reason: v.Reason}
 		}
-		return &Result{Entry: e, Scanned: 1}, nil
+		return &Result{Entry: e, Scanned: 1, Matched: v.Matched}, nil
 	}
 
 	var (
 		matched    []*registry.Entry
+		verdicts   = map[*registry.Entry]verdict{}
 		hints      []*registry.Entry
 		rejections []Rejection
 	)
@@ -248,25 +272,42 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 			// that does carry a signature can still say "this looks like
 			// me", which becomes a hint naming the parser to pass; one
 			// without a signature says nothing at all.
+			fits := false
 			if !e.Def.Detect.Signature.IsZero() {
-				if _, ok := check(e, &ctx, window); ok {
+				if check(e, &ctx, window).ok() {
 					hints = append(hints, e)
+					fits = true
 				}
 			}
-			rejections = append(rejections, Rejection{Entry: e, Reason: "needs --parser " + e.Def.Command})
+			// A definition whose signature does fit the text and is only
+			// held back by auto_detect is the near miss most worth
+			// naming, since naming its parser is the way forward.
+			rejections = append(rejections, Rejection{Entry: e, Reason: "needs --parser " + e.Def.Command, Close: fits})
 			continue
 		}
-		if reason, ok := check(e, &ctx, window); ok {
+		v := check(e, &ctx, window)
+		if v.ok() {
 			matched = append(matched, e)
+			verdicts[e] = v
 		} else {
-			rejections = append(rejections, Rejection{Entry: e, Reason: reason})
+			rejections = append(rejections, Rejection{Entry: e, Reason: v.Reason, Close: v.Close})
 		}
+	}
+	// A search of the whole registry rejects nearly all of it on the first
+	// expression of a signature, which explains nothing; a search scoped
+	// to one parser is short enough to report whole.
+	reported := rejections
+	if ctx.Parser == "" {
+		reported = closeOnly(rejections)
+	}
+	result := func(e *registry.Entry) *Result {
+		return &Result{Entry: e, Scanned: len(candidates), Matched: verdicts[e].Matched, Rejections: reported}
 	}
 	switch len(matched) {
 	case 1:
-		return &Result{Entry: matched[0], Scanned: len(candidates)}, nil
+		return result(matched[0]), nil
 	case 0:
-		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: hints}
+		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: hints, Reported: reported}
 		if ctx.Parser != "" {
 			err.Rejections = rejections
 		}
@@ -279,12 +320,12 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 	// two registries describe overlapping formats.
 	matched = mostPreferred(matched)
 	if len(matched) == 1 {
-		return &Result{Entry: matched[0], Scanned: len(candidates)}, nil
+		return result(matched[0]), nil
 	}
 	if best, ok := breakTie(matched); ok {
-		return &Result{Entry: best, Scanned: len(candidates)}, nil
+		return result(best), nil
 	}
-	return nil, &AmbiguousError{Candidates: matched}
+	return nil, &AmbiguousError{Candidates: matched, Reported: reported}
 }
 
 // mostPreferred keeps the entries that come from the earliest registry in
@@ -332,26 +373,62 @@ func breakTie(matched []*registry.Entry) (*registry.Entry, bool) {
 	return best, true
 }
 
-// check reports whether one definition can describe the input, and why
-// not when it cannot.
-func check(e *registry.Entry, ctx *Context, window []string) (string, bool) {
+// verdict is the outcome of testing one definition against the input.
+type verdict struct {
+	// Matched renders the conditions the definition stated and the input
+	// met, in the order they were tested.
+	Matched []string
+	// Reason says why the definition was ruled out; empty means it was
+	// not.
+	Reason string
+	// Close reports that the definition satisfied part of what it asks
+	// for before being ruled out, which is what separates a near miss
+	// from an unrelated parser.
+	Close bool
+}
+
+func (v verdict) ok() bool { return v.Reason == "" }
+
+// check reports whether one definition can describe the input, why not
+// when it cannot, and what it did meet either way.
+func check(e *registry.Entry, ctx *Context, window []string) verdict {
 	d := &e.Def.Detect
+	var v verdict
 	if !d.Signature.IsZero() {
-		if reason, ok := matchSignature(&d.Signature, window); !ok {
-			return reason, false
+		v = matchSignature(&d.Signature, window)
+		if !v.ok() {
+			return v
 		}
 	}
+	// Anything past the signature has already met it, so a rejection here
+	// is always worth reading.
 	if ctx.OS != "" && len(d.OS) > 0 && !contains(d.OS, ctx.OS) {
-		return fmt.Sprintf("written for %s, not %s", strings.Join(d.OS, "/"), ctx.OS), false
+		v.Reason = fmt.Sprintf("written for %s, not %s", strings.Join(d.OS, "/"), ctx.OS)
+		v.Close = true
+		return v
 	}
+	v.Matched = appendCriterion(v.Matched, ctx.OS != "" && len(d.OS) > 0, "detect.os", strings.Join(d.OS, "/"))
 	// An alias may need other arguments than the command does, so the
 	// filter comes from the name the definition was reached under.
 	if args := e.Def.ArgsFor(ctx.Parser); ctx.Args != nil && !args.IsZero() {
-		if reason, ok := matchArgs(args, ctx.Args); !ok {
-			return reason, false
+		reason, ok := matchArgs(args, ctx.Args)
+		if !ok {
+			v.Reason, v.Close = reason, true
+			return v
 		}
+		v.Matched = append(v.Matched, "detect.args")
 	}
-	return "", true
+	return v
+}
+
+func appendCriterion(list []string, when bool, key, detail string) []string {
+	if !when {
+		return list
+	}
+	if detail == "" {
+		return append(list, key)
+	}
+	return append(list, key+" "+detail)
 }
 
 // Window returns how many leading lines a caller has to hold before a
@@ -408,7 +485,7 @@ func signatureWindow(input []byte) []string {
 	return lines
 }
 
-func matchSignature(s *definition.Signature, window []string) (string, bool) {
+func matchSignature(s *definition.Signature, window []string) verdict {
 	n := s.Window
 	if n == 0 {
 		n = definition.DefaultSignatureWindow
@@ -418,29 +495,44 @@ func matchSignature(s *definition.Signature, window []string) (string, bool) {
 	}
 	text := strings.Join(window[:n], "\n")
 	all, anyOf, none := s.Compiled()
+	var v verdict
 	for i, re := range all {
 		if !re.MatchString(text) {
-			return fmt.Sprintf("signature all[%d] %s did not match", i, short(re)), false
+			v.Reason = fmt.Sprintf("signature.all[%d] %s did not match", i, short(re))
+			// Getting past an earlier expression is what makes this
+			// worth reading; failing the first one is what almost every
+			// definition in the registry does with almost every input.
+			v.Close = i > 0
+			return v
 		}
+		v.Matched = append(v.Matched, fmt.Sprintf("signature.all[%d] %s", i, short(re)))
 	}
 	if len(anyOf) > 0 {
-		hit := false
-		for _, re := range anyOf {
+		hit := -1
+		for i, re := range anyOf {
 			if re.MatchString(text) {
-				hit = true
+				hit = i
 				break
 			}
 		}
-		if !hit {
-			return "no signature any[] expression matched", false
+		if hit < 0 {
+			v.Reason = "no signature.any[] expression matched"
+			v.Close = len(all) > 0
+			return v
 		}
+		v.Matched = append(v.Matched, fmt.Sprintf("signature.any[%d] %s", hit, short(anyOf[hit])))
 	}
 	for i, re := range none {
 		if re.MatchString(text) {
-			return fmt.Sprintf("signature none[%d] %s matched", i, short(re)), false
+			v.Reason = fmt.Sprintf("signature.none[%d] %s matched", i, short(re))
+			v.Close = len(all) > 0 || len(anyOf) > 0
+			return v
 		}
 	}
-	return "", true
+	if len(none) > 0 {
+		v.Matched = append(v.Matched, fmt.Sprintf("signature.none[] (%d expressions, none matched)", len(none)))
+	}
+	return v
 }
 
 func short(re *regexp.Regexp) string {
@@ -592,4 +684,16 @@ func levenshtein(a, b string) int {
 		prev, cur = cur, prev
 	}
 	return prev[len(rb)]
+}
+
+// closeOnly keeps the rejections that explain something: a definition
+// that met part of what it asks for before being ruled out.
+func closeOnly(rs []Rejection) []Rejection {
+	out := rs[:0:0]
+	for _, r := range rs {
+		if r.Close {
+			out = append(out, r)
+		}
+	}
+	return out
 }

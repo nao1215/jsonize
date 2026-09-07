@@ -199,7 +199,7 @@ func TestExplicitOnlyDefinitions(t *testing.T) {
 		t.Fatalf("--parser du: %v %v", res, err)
 	}
 	if _, err := Select(reg, Context{Parser: "du", Input: []byte("not du output\n")}); err == nil ||
-		!strings.Contains(err.Error(), "signature all[0]") {
+		!strings.Contains(err.Error(), "signature.all[0]") {
 		t.Errorf("signature is still verified: %v", err)
 	}
 	// jz run knows the command, which counts as naming the parser.
@@ -247,7 +247,7 @@ func TestDefinitionWithoutSignature(t *testing.T) {
 		"env/two": def("env", "two", "detect: {signature: {all: ['^ALSO NOPE']}}\n"),
 	})
 	_, err = Select(reg3, Context{Parser: "env", Input: []byte("x\n")})
-	if err == nil || !strings.Contains(err.Error(), "signature all[0]") || !strings.Contains(err.Error(), "no env variant matches") {
+	if err == nil || !strings.Contains(err.Error(), "signature.all[0]") || !strings.Contains(err.Error(), "no env variant matches") {
 		t.Errorf("per-variant rejections: %v", err)
 	}
 }
@@ -366,7 +366,7 @@ func TestSignatureAnyNoneAndWindow(t *testing.T) {
 	if _, err := Select(reg, Context{Input: []byte("C\n")}); err == nil || !strings.Contains(err.Error(), "unable to identify") {
 		t.Errorf("any mismatch: %v", err)
 	}
-	if _, err := Select(reg, Context{Parser: "z", Input: []byte("C\n")}); err == nil || !strings.Contains(err.Error(), "no signature any[] expression matched") {
+	if _, err := Select(reg, Context{Parser: "z", Input: []byte("C\n")}); err == nil || !strings.Contains(err.Error(), "no signature.any[] expression matched") {
 		t.Errorf("any mismatch reason: %v", err)
 	}
 	if _, err := Select(reg, Context{Parser: "z", Input: []byte("A\nFORBIDDEN\n")}); err == nil || !strings.Contains(err.Error(), "none[0]") {

@@ -76,8 +76,16 @@ func (a *app) cmdConvert(args []string) int {
 		defer f.Close()
 		r = f
 	}
+	ctx := selector.Context{Parser: co.selects.parser, Variant: co.selects.variant}
+	if co.selects.parser == "" && co.file != "-" {
+		// A path is evidence about the text the same way argv is in exec
+		// mode, and it is the only evidence a file gives.
+		if p, v, ok := parserFromPath(reg, co.file); ok {
+			ctx.Parser, ctx.Variant = p, v
+		}
+	}
 	if co.output.stream {
-		return a.stream(reg, r, selector.Context{Parser: co.selects.parser, Variant: co.selects.variant}, &co.output, false)
+		return a.stream(reg, r, ctx, &co.output, false, co.selects.explain)
 	}
 	// The size limit is not negotiable from the command line: it exists so
 	// that a runaway producer cannot make jz allocate without bound.
@@ -90,13 +98,24 @@ func (a *app) cmdConvert(args []string) int {
 		a.errorf("input exceeds the %d byte limit", MaxInputSize)
 		return ExitParse
 	}
-	sel, err := selector.Select(reg, selector.Context{
-		Parser:  co.selects.parser,
-		Variant: co.selects.variant,
-		Input:   data,
-	})
+	ctx.Input = data
+	sel, err := selector.Select(reg, ctx)
+	if err != nil && ctx.Parser != co.selects.parser {
+		// The path was a guess, so it never makes the answer worse: a
+		// definition it named that the text does not fit is dropped and
+		// the ordinary reading of the text decides.
+		ctx.Parser, ctx.Variant = co.selects.parser, co.selects.variant
+		sel, err = selector.Select(reg, ctx)
+	}
 	if err != nil {
-		return a.exitFor(err)
+		code := a.exitFor(err)
+		if co.selects.explain {
+			a.explainFailure(err)
+		}
+		return code
+	}
+	if co.selects.explain {
+		a.explain(sel)
 	}
 	out, err := engine.Parse(sel.Entry.Def, data, engine.Options{MaxInputSize: MaxInputSize})
 	if err != nil {

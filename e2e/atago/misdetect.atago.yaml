@@ -30,6 +30,21 @@ scenarios:
             empty: true
           stderr:
             contains: "it could be `etc` output"
+      # --explain adds the definitions that came close underneath the
+      # message, and changes neither the status nor standard output. A
+      # search of the whole registry rejects nearly all of it on the
+      # first expression of a signature, so only near misses are listed.
+      - run:
+          command: jz --explain --file passwd.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: "rejected: "
+      - assert:
+          stderr:
+            contains: "etc/passwd (needs --parser etc)"
 
   - name: the clock in BSD uptime output is not an IPv6 address
     steps:

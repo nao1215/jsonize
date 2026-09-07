@@ -136,7 +136,7 @@ func (a *app) cmdRun(args []string) int {
 	if out.stream {
 		return a.runStream(ctx, reg, command, selector.Context{
 			Parser: parser, Variant: sel.variant, OS: a.env.GOOS, Args: cmdArgs,
-		}, &out, timeout)
+		}, &out, timeout, sel.explain)
 	}
 	res, err := runner.Run(ctx, command, a.env.Stderr, a.env.Signals)
 	if err != nil {
@@ -176,7 +176,16 @@ func (a *app) cmdRun(args []string) int {
 		Input:   res.Stdout,
 	})
 	if err != nil {
-		return a.failedRun(err, res.ExitCode)
+		code := a.failedRun(err, res.ExitCode)
+		if sel.explain {
+			a.explainFailure(err)
+			a.explainCommand(name, cmdArgs, res.ExitCode)
+		}
+		return code
+	}
+	if sel.explain {
+		a.explain(chosen)
+		a.explainCommand(name, cmdArgs, res.ExitCode)
 	}
 	data, err := engine.Parse(chosen.Entry.Def, res.Stdout, engine.Options{MaxInputSize: MaxInputSize})
 	if err != nil {
@@ -202,7 +211,7 @@ var errStreamFailed = errors.New("streaming failed")
 // runStream is `jz run --stream`: the command's output is read through a
 // pipe and converted as it arrives, instead of being collected first.
 // The child's status is mirrored the way it is without --stream.
-func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.Command, sctx selector.Context, out *outputOptions, timeout time.Duration) int {
+func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.Command, sctx selector.Context, out *outputOptions, timeout time.Duration, explain bool) int {
 	// The child's standard error is copied through while jz may be
 	// writing its own diagnostic, so the two go through one lock rather
 	// than interleaving mid-line.
@@ -211,7 +220,7 @@ func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.
 	defer func() { a.env.Stderr = plain }()
 	code := ExitOK
 	res, err := runner.Stream(ctx, cmd, a.env.Stderr, a.env.Signals, func(r io.Reader) error {
-		if code = a.stream(reg, r, sctx, out, true); code != ExitOK {
+		if code = a.stream(reg, r, sctx, out, true, explain); code != ExitOK {
 			return errStreamFailed
 		}
 		return nil
@@ -228,6 +237,9 @@ func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.
 	}
 	if ctx.Err() != nil && timeout > 0 {
 		a.errorf("timeout of %s reached", timeout)
+	}
+	if explain {
+		a.explainCommand(cmd.Name, cmd.Args, res.ExitCode)
 	}
 	if code != ExitOK && res.ExitCode == 0 {
 		return code
