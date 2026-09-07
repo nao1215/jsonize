@@ -32,13 +32,13 @@ project follows [Semantic Versioning](https://semver.org/).
   line it belongs to, for the reports that break a long value at the
   terminal width (`ethtool`) and for the control files whose values
   continue on an indented line (`dpkg -s`, `apt show`).
-- Official definitions for COMMANDS_COUNT commands in FORMATS_COUNT
-  output formats, covering coreutils and procps, the util-linux
-  listings, the systemd tools, the classic network commands and the
-  iproute2 ones, sysstat, the disk layout tools, the hardware and display
-  tools, the archive and checksum tools, the account and firmware
-  listings, git, docker, the package managers and the language
-  toolchains. `jz list` prints the current set.
+- Official definitions for 116 commands in 242 output formats, covering
+  coreutils and procps, the util-linux listings, the systemd tools, the
+  classic network commands and the iproute2 ones, sysstat, the disk
+  layout tools, the hardware and display tools, the archive and checksum
+  tools, the account and firmware listings, git, docker, the package
+  managers and the language toolchains. `jz list` prints the current
+  set.
 
 ### Fixed
 

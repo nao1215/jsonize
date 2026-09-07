@@ -13,32 +13,47 @@ input.
 
 | Command | Variants |
 |---------|----------|
-| `apt` | `list` |
+| `amixer` | `simple-controls` |
+| `apt` | `list`, `show` |
+| `arp` | `alternate` |
 | `blkid` | `linux` |
 | `bluetoothctl` | `show` |
+| `bridge` | `fdb`, `link` |
+| `busctl` | `list` |
 | `cargo` | `command-list` |
+| `chage` | `linux` |
 | `cksum` | `posix` |
+| `date` | `posix`, `rfc-email` |
+| `debconf-show` | `linux` |
 | `df` | `bsd`, `bsd-human`, `busybox-human`, `gnu`, `gnu-human`, `gnu-inodes`, `gnu-inodes-human`, `gnu-type`, `gnu-type-human` |
 | `dig` | `bind` |
-| `dpkg` | `list` |
+| `docker` | `images-disk-usage`, `images-repo-tag`, `network-ls`, `ps`, `stats`, `volume-ls` |
+| `dpkg` | `list`, `status` |
 | `du` | `gnu-human`, `posix` |
+| `efibootmgr` | `linux` |
 | `env` | `null-separated`, `posix` |
-| `etc` | `group`, `hosts`, `os-release`, `passwd` |
-| `ethtool` | `driver-info` |
+| `etc` | `crontab`, `fstab`, `group`, `hosts`, `nsswitch`, `os-release`, `passwd`, `resolv-conf` |
+| `ethtool` | `driver-info`, `features`, `settings`, `statistics` |
 | `fdisk` | `linux` |
 | `file` | `posix` |
 | `findmnt` | `df`, `linux`, `source-first` |
 | `free` | `gnu`, `gnu-human`, `gnu-wide` |
 | `getconf` | `glibc` |
-| `git` | `branch-verbose`, `config-list`, `log-oneline`, `remote-verbose`, `stash-list`, `status-porcelain` |
-| `go` | `env` |
+| `git` | `branch-verbose`, `config-list`, `diff-numstat`, `diff-stat`, `log`, `log-oneline`, `remote-verbose`, `shortlog-summary`, `stash-list`, `status-porcelain` |
+| `go` | `env`, `list-modules`, `mod-graph`, `version-modules` |
+| `gpg` | `colons` |
+| `hciconfig` | `linux` |
 | `host` | `bind` |
 | `hostnamectl` | `linux` |
 | `id` | `posix` |
-| `iostat` | `cpu`, `device`, `linux` |
-| `ip` | `brief-address`, `brief-link`, `neighbour`, `route`, `stats-link` |
+| `ifconfig` | `busybox` |
+| `iostat` | `cpu`, `device`, `extended`, `linux` |
+| `ip` | `address`, `brief-address`, `brief-link`, `link`, `multicast-address`, `neighbour`, `route`, `rule`, `stats-link` |
+| `ipcs` | `linux`, `message-queues`, `semaphores`, `shared-memory` |
 | `iw` | `link` |
 | `journalctl` | `boots`, `short`, `short-iso`, `short-precise` |
+| `last` | `busybox` |
+| `ldd` | `posix` |
 | `locale` | `posix` |
 | `localectl` | `linux` |
 | `loginctl` | `seats`, `sessions`, `users` |
@@ -47,46 +62,65 @@ input.
 | `lsattr` | `linux` |
 | `lsb_release` | `linux` |
 | `lsblk` | `bytes`, `filesystems`, `linux`, `pairs`, `topology` |
-| `lscpu` | `linux` |
+| `lscpu` | `caches`, `extended`, `linux` |
 | `lsipc` | `linux` |
 | `lslocks` | `linux` |
 | `lslogins` | `linux` |
 | `lsmem` | `linux` |
 | `lsmod` | `busybox`, `linux` |
 | `lsns` | `linux` |
-| `lsof` | `linux` |
+| `lsof` | `linux`, `tasks` |
 | `lspci` | `kernel`, `linux`, `machine`, `numeric`, `numeric-names`, `verbose-machine` |
 | `lsusb` | `linux` |
 | `md5sum` | `posix` |
 | `mise` | `ls` |
+| `modinfo` | `linux` |
 | `mount` | `bsd`, `linux` |
 | `mpstat` | `linux` |
-| `nmcli` | `connection`, `device` |
+| `mtr` | `report` |
+| `netstat` | `all-sockets`, `internet`, `routing`, `unix` |
+| `networkctl` | `list` |
+| `nmcli` | `connection`, `device`, `device-show`, `wifi` |
 | `npm` | `ls`, `outdated` |
+| `numactl` | `hardware` |
 | `parted` | `machine` |
-| `pidstat` | `linux` |
+| `pidstat` | `linux`, `memory` |
 | `ping` | `linux` |
 | `pip` | `columns` |
 | `ps` | `bsd`, `busybox`, `posix`, `unix` |
+| `readelf` | `header` |
+| `resolvectl` | `status` |
 | `rfkill` | `linux`, `list` |
+| `route` | `linux` |
+| `rsync` | `itemize` |
+| `rustup` | `component-list`, `target-list`, `toolchains`, `toolchains-verbose` |
+| `sar` | `cpu`, `io`, `memory`, `network-device` |
+| `scc` | `default` |
 | `sensors` | `linux` |
 | `sfdisk` | `dump` |
+| `sha1sum` | `posix` |
 | `sha256sum` | `posix` |
-| `ss` | `linux` |
+| `sha512sum` | `posix` |
+| `snap` | `list` |
+| `ss` | `linux`, `summary` |
 | `stat` | `gnu`, `gnu-filesystem`, `gnu-terse` |
 | `swapon` | `legacy`, `linux` |
 | `sysctl` | `linux` |
-| `systemctl` | `show`, `sockets`, `timers`, `unit-files`, `units` |
-| `systemd-analyze` | `blame` |
+| `systemctl` | `show`, `sockets`, `status`, `timers`, `unit-files`, `units` |
+| `systemd-analyze` | `blame`, `time` |
 | `tar` | `busybox`, `gnu` |
+| `tc` | `qdisc`, `qdisc-stats` |
 | `timedatectl` | `linux`, `timesync`, `timezones` |
 | `top` | `linux` |
 | `tracepath` | `linux` |
+| `udevadm` | `info` |
 | `ulimit` | `bash`, `dash` |
 | `uname` | `darwin`, `linux` |
 | `unzip` | `busybox`, `info-zip` |
+| `update-alternatives` | `query`, `selections` |
 | `upower` | `device`, `dump`, `enumerate` |
 | `uptime` | `bsd`, `linux` |
+| `uv` | `pip-show`, `tool-list` |
 | `vmstat` | `linux`, `linux-active`, `linux-disk`, `linux-disk-summary`, `linux-stats` |
 | `w` | `bsd`, `linux`, `linux-short` |
 | `wc` | `posix` |
