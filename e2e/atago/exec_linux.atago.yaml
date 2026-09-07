@@ -481,9 +481,12 @@ scenarios:
 
   # A sample of the definitions added for commands the registry had no
   # reading for. What is pinned is the shape of the answer, never a value
-  # of this machine's.
-  - name: the sysstat, systemd and ALSA listings land on their own definitions
+  # of this machine's. Each command is probed on its own: a cloud runner
+  # may not have it, and systemd-analyze refuses to answer at all until
+  # the boot has finished, which on a runner it may never do.
+  - name: systemd-analyze critical-chain is read as a tree of durations
     only: {os: linux}
+    skip: {command: "! systemd-analyze critical-chain > /dev/null 2>&1"}
     steps:
       - run:
           command: jz run --explain systemd-analyze critical-chain
@@ -493,9 +496,13 @@ scenarios:
             contains: "systemd-analyze/critical-chain from embedded"
           stdout:
             json:
-              # A tree whose times are read as durations.
               - { path: "$[0].activated", gt: 0 }
               - { path: "$[0].children[0].unit", matches: "\\." }
+
+  - name: systemd-analyze security scores each service
+    only: {os: linux}
+    skip: {command: "! systemd-analyze security --no-pager > /dev/null 2>&1"}
+    steps:
       - run:
           command: jz run --explain systemd-analyze security --no-pager
       - assert:
@@ -505,6 +512,11 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].exposure", gte: 0 }
+
+  - name: blkid -o export is one block of attributes per device
+    only: {os: linux}
+    skip: {command: "[ -z \"$(blkid -o export 2>/dev/null)\" ]"}
+    steps:
       - run:
           command: jz run --explain blkid -o export
       - assert:
