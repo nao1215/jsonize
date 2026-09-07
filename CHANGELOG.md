@@ -24,6 +24,15 @@ project follows [Semantic Versioning](https://semver.org/).
   named keys of every object jz prints. Naming a key the format does not
   produce is an error listing the keys it has, and the two options cannot
   be combined.
+- `--stream`, on the default mode and on `jz run`, for a command that
+  keeps printing: one JSON document per line, each written as soon as the
+  record behind it is complete. It applies to the formats that yield
+  records (`table`, `regex` per line, a kv list, `records`); a format read
+  into one object is refused, as is `--pretty`. This is the only option
+  that changes the output contract, from "standard output carries a
+  complete document or nothing" to "every line of standard output is a
+  complete document": a record that cannot be read still exits 3, but the
+  records already written stay written.
 - `parse: type: records` for a report whose blocks repeat: a line
   matching `start` opens a record and the `parts` are applied to each. A
   `composite` part may itself be `records`, which is what a report that
@@ -34,6 +43,17 @@ project follows [Semantic Versioning](https://semver.org/).
   and `nerdctl` what `docker` prints, and the g-prefixed coreutils macOS
   installs print what the coreutils commands print. `jz run`,
   `--parser` and `jz list` all take the other name.
+- `type: time` for a field, with `layout` (a Go reference layout,
+  required, and it has to state a year) and `location` (`utc` by default,
+  or `local`). The value is written as an RFC 3339 string and never as an
+  epoch number. It is applied where the text says what it means:
+  `journalctl -o short-iso`, `stat`, `mtr --report` and `date -R` all
+  print a numeric offset. A timestamp with no year (`who`, `last`,
+  `journalctl -o short`), one with only a zone abbreviation (`date`,
+  `systemctl list-timers`, `journalctl --list-boots`, `timedatectl`) and
+  one with no zone at all (`tar -tv`, `unzip -l`) stay the strings they
+  were printed as, because dating them means inventing what the output
+  does not say.
 - `input: fold:` joins a value that continues on the next line onto the
   line it belongs to, for the reports that break a long value at the
   terminal width (`ethtool`) and for the control files whose values
@@ -93,6 +113,12 @@ project follows [Semantic Versioning](https://semver.org/).
   identifiers (`CPU(s)`, `Thread(s) per core`).
 - `expect_error` in a fixture covers a definition refusing text at
   detection, not only at parse time.
+- `internal/registry`, `internal/definition`, `internal/selector`,
+  `internal/engine`, `internal/convert` and `internal/jsonutil` moved to
+  `pkg/`, so another program can load a registry, select a definition and
+  parse with it. `internal/cli`, `internal/runner`,
+  `internal/conformance` and `internal/buildinfo` stay internal: they are
+  decisions about a command line, not about reading text.
 
 ### Removed
 

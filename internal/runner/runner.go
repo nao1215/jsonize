@@ -124,6 +124,72 @@ func Run(ctx context.Context, cmd Command, stderr io.Writer, sigs <-chan os.Sign
 	return res, nil
 }
 
+// Stream runs cmd and hands its standard output to consume while the
+// command is still producing it. There is no total output limit here:
+// nothing is held, so nothing can grow without bound.
+//
+// consume is called once, on this goroutine, with a reader over the
+// child's stdout. Whatever it leaves unread is drained afterwards, so a
+// consumer that stops early (input.select.until) cannot leave the child
+// blocked on a full pipe.
+func Stream(ctx context.Context, cmd Command, stderr io.Writer, sigs <-chan os.Signal, consume func(io.Reader) error) (*Result, error) {
+	if strings.TrimSpace(cmd.Name) == "" {
+		return nil, errors.New("no command given")
+	}
+	path, err := exec.LookPath(cmd.Name)
+	if err != nil {
+		return nil, fmt.Errorf("cannot run %q: %w", cmd.Name, err)
+	}
+	c := exec.CommandContext(ctx, path, cmd.Args...)
+	c.Env = BuildEnv(os.Environ(), cmd.KeepLocale, cmd.Env)
+	c.Dir = cmd.Dir
+	c.Stdin = cmd.Stdin
+	c.Stderr = stderr
+	c.Cancel = func() error { return terminate(c.Process) }
+	c.WaitDelay = 3 * time.Second
+	pipe, err := c.StdoutPipe()
+	if err != nil {
+		return nil, fmt.Errorf("cannot read the output of %q: %w", cmd.Name, err)
+	}
+	start := time.Now()
+	if err := c.Start(); err != nil {
+		return nil, fmt.Errorf("cannot run %q: %w", cmd.Name, err)
+	}
+	done := make(chan struct{})
+	if sigs != nil {
+		go func() {
+			for {
+				select {
+				case s := <-sigs:
+					_ = forward(c.Process, s)
+				case <-done:
+					return
+				}
+			}
+		}()
+	}
+	consumeErr := consume(pipe)
+	_, _ = io.Copy(io.Discard, pipe)
+	waitErr := c.Wait()
+	close(done)
+	res := &Result{Duration: time.Since(start)}
+	if waitErr != nil {
+		var ee *exec.ExitError
+		if !errors.As(waitErr, &ee) {
+			if consumeErr != nil {
+				return res, consumeErr
+			}
+			return nil, fmt.Errorf("waiting for %q: %w", cmd.Name, waitErr)
+		}
+		res.ExitCode = ee.ExitCode()
+		if sig, ok := signalName(ee.ProcessState); ok {
+			res.Signal = sig.name
+			res.ExitCode = 128 + sig.number
+		}
+	}
+	return res, consumeErr
+}
+
 // limitedBuffer collects stdout and cancels the run once the limit is
 // exceeded.
 type limitedBuffer struct {

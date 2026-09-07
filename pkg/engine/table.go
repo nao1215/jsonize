@@ -4,8 +4,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/nao1215/jsonize/internal/definition"
-	"github.com/nao1215/jsonize/internal/jsonutil"
+	"github.com/nao1215/jsonize/pkg/definition"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
 // column is a resolved table column: its name and, for aligned tables, the

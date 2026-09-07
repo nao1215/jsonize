@@ -5,7 +5,7 @@ import (
 	"runtime"
 
 	"github.com/nao1215/jsonize/internal/buildinfo"
-	"github.com/nao1215/jsonize/internal/definition"
+	"github.com/nao1215/jsonize/pkg/definition"
 )
 
 func (a *app) cmdVersion(args []string) int {

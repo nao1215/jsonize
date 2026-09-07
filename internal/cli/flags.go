@@ -94,14 +94,26 @@ func (o *optionSet) print(w io.Writer) {
 // outputOptions control how the JSON is written.
 type outputOptions struct {
 	pretty  bool
+	stream  bool
 	extract stringList
 	exclude stringList
 }
 
 func (f *outputOptions) bind(o *optionSet) {
 	o.boolOpt(&f.pretty, "pretty", "p", "indent JSON output")
+	o.boolOpt(&f.stream, "stream", "", "write one record per line as it is read")
 	o.listOpt(&f.extract, "extract", "KEY", "keep only this key (repeatable)")
 	o.listOpt(&f.exclude, "exclude", "KEY", "drop this key (repeatable)")
+}
+
+// check reports the option pairs that state two answers at once. It is
+// called before anything is read or executed.
+func (f *outputOptions) check() error {
+	if f.pretty && f.stream {
+		return errors.New("--pretty and --stream cannot be used together: a stream is one record per line, and indenting spreads a record over several")
+	}
+	_, err := f.filter()
+	return err
 }
 
 // filter returns the narrowing the caller asked for. Asking to keep some

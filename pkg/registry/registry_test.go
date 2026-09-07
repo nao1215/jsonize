@@ -8,7 +8,7 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/nao1215/jsonize/internal/definition"
+	"github.com/nao1215/jsonize/pkg/definition"
 )
 
 func def(cmd, variant string) string {

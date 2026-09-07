@@ -21,14 +21,14 @@ were considered and what the MVP deliberately leaves out.
 cmd/jz                    entry point: signals, exit code
 internal/cli              subcommands, flag parsing, registry layering, exit-code contract
 internal/runner           exec mode: child process, LC_ALL=C, stderr passthrough, output cap, signals
-internal/registry         load registry directories/FS, merge with precedence, testdata cases
-internal/definition       YAML schema, validation, regex compilation, format/version checks
-internal/selector         variant selection (os / args / signature filter → priority → error)
-internal/engine           parse algorithms (table, regex, kv, composite) and field conversion
-internal/convert          scalar conversions (int, float, bool, size with units)
-internal/jsonutil         insertion-ordered JSON object and encoder
 internal/conformance      golden cases and the definition/fixture cross product, shared by `go test` and `jz test`
 internal/buildinfo        the version string stamped at build time
+pkg/registry              load registry directories/FS, merge with precedence, testdata cases
+pkg/definition            YAML schema, validation, regex compilation, format checks
+pkg/selector              variant selection (os / args / signature filter → precedence → priority)
+pkg/engine                parse algorithms (table, regex, kv, composite, records), streaming, field conversion
+pkg/convert               scalar conversions (int, float, bool, size with units, time)
+pkg/jsonutil              insertion-ordered JSON object and encoder
 registry/                 the official definitions and fixtures (data) + a one-file embed
 e2e/atago                 end-to-end scenarios
 ```
@@ -42,7 +42,8 @@ compiled definition and the whole text; encoding never sees definitions.
 ### A small public surface
 
 The command line is four subcommands (`run`, `list`, `test`, `version`)
-and five options (`--file`, `--pretty`, `--parser`, `--variant`, `--help`). Every
+and six options (`--file`, `--pretty`, `--stream`, `--parser`,
+`--variant`, `--help`). Every
 option that asked the user to make a decision jz should be making, or
 that changed the output contract, was removed before release:
 
@@ -170,6 +171,36 @@ distinct from 0/1 so scripts can tell them apart, but they can collide
 with a child's codes; the stderr line `jz: <cmd> exited with status N`
 disambiguates.
 
+### Streaming is an option, not the default
+
+A command that does not end (`ping`, `vmstat 1`) has no whole document to
+write, so `--stream` writes one JSON document per line as each record is
+read. It is the only option that changes the output contract: everywhere
+else standard output carries a complete document or nothing, and here
+every *line* is a complete document. A record that cannot be read still
+stops the conversion with exit status 3, but the records already written
+stay written, because they are finished documents that have already left.
+
+That is why it is an option. Making it the default would mean giving up
+the guarantee that a failure leaves nothing behind, for every user, to
+serve the commands that need it.
+
+Detection is unchanged and it is what the first record waits for. jz
+holds back until it has as many leading lines as the widest signature
+among the candidates looks at — twenty by default — because a definition
+can rule itself out with a line further down, and committing before that
+would be the guess the selector exists to avoid. Naming the parser, which
+`jz run` always does, narrows the candidates and usually the wait with
+them. The held lines are then read by the same code as the rest, so there
+is one reading, not two: `jz test` checks every fixture both ways and
+fails a definition whose two readings disagree.
+
+Only a format that yields records can be streamed. `composite`,
+`each: input` and a kv map build one object out of the whole text, and
+that object does not exist until the last line has arrived; asking for it
+one record at a time is a request jz cannot carry out, so it is a usage
+error rather than a silent fallback.
+
 ### Registry layering and the code/data boundary
 
 `registry/` holds only YAML, fixtures and one `embed.go`. `internal/*`
@@ -220,7 +251,6 @@ served by `flag` and a dispatch table, and the `run` subcommand needs
 
 ## Deliberately out of scope for the MVP
 
-- Streaming parsers (line-at-a-time output for long-running commands).
 - Recursive sections, where the depth comes from the input (`ls -R`,
   `npm ls --all`, `docker info`). A block that repeats at one level is
   `records`, and a value continued on the next line is `input.fold`; a
@@ -233,10 +263,29 @@ served by `flag` and a dispatch table, and the `run` subcommand needs
 - A JSON Schema for editor completion of `parser.yaml`; validation is
   done in Go with path-qualified messages instead.
 
+### The library under pkg/
+
+The six packages that read text are under `pkg/`, so another program can
+load a registry, select a definition and parse with it without going
+through the command line. `internal/` keeps what only the binary needs:
+the subcommands, the child process, the conformance runner and the
+version string.
+
+The split is where it is because the exit-code contract, the flag parsing
+and the process handling are decisions about a command line, not about
+reading text, and a library that carried them would be answering
+questions its caller has already answered. What crosses the line is the
+registry, the definition schema, the selector, the engine, the scalar
+conversions and the ordered object — everything between a piece of text
+and the JSON for it.
+
+The surface is kept small deliberately: what `cmd/jz` and the tests do
+not reach is unexported, and what stays is what a caller cannot avoid
+naming. The enum vocabularies of the definition schema
+(`RecordNUL`, `UnitBinary`, `MissingNull` and their siblings) are the
+exception: they name the values a caller reads out of a `Definition`, and
+exporting half a set would be worse than exporting all of it.
+
 ## Where to cut next
 
 - `registry/` → separate repository; only the `official` import changes.
-- `internal/definition` + `internal/engine` + `internal/convert` form a
-  library with no CLI dependencies and could be exported as a package.
-- `internal/selector` and `internal/engine` are independent of the CLI and
-  could be exercised by other front ends.

@@ -5,6 +5,11 @@
 // them into cells with one of three algorithms (table, regex, key/value),
 // optionally combines several such parts, and converts cells with the
 // field rules. Nothing in a definition can execute code.
+//
+// Parse reads a whole text and returns the value for it. Stream reads a
+// text that has not finished yet and hands over one record at a time,
+// which is the same reading arranged differently: the two agree record
+// for record, and the conformance runner checks that they do.
 package engine
 
 import (
@@ -15,9 +20,9 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/nao1215/jsonize/internal/convert"
-	"github.com/nao1215/jsonize/internal/definition"
-	"github.com/nao1215/jsonize/internal/jsonutil"
+	"github.com/nao1215/jsonize/pkg/convert"
+	"github.com/nao1215/jsonize/pkg/definition"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
 // Default resource limits.

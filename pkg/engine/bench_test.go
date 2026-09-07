@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/nao1215/jsonize/internal/definition"
-	"github.com/nao1215/jsonize/internal/jsonutil"
+	"github.com/nao1215/jsonize/pkg/definition"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
 // Benchmarks use synthetic but format-faithful df/mount/env inputs so that

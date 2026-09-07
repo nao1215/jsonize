@@ -22,10 +22,11 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"github.com/nao1215/jsonize/internal/engine"
-	"github.com/nao1215/jsonize/internal/jsonutil"
-	"github.com/nao1215/jsonize/internal/registry"
-	"github.com/nao1215/jsonize/internal/selector"
+	"github.com/nao1215/jsonize/pkg/definition"
+	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
+	"github.com/nao1215/jsonize/pkg/registry"
+	"github.com/nao1215/jsonize/pkg/selector"
 )
 
 // Result is the outcome of one case.
@@ -177,6 +178,10 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 		res.Err = err
 		return res
 	}
+	if err := streamMatches(e.Def, c.Input, got, opts); err != nil {
+		res.Err = err
+		return res
+	}
 	var buf bytes.Buffer
 	if err := jsonutil.Encode(&buf, got, true); err != nil {
 		res.Err = fmt.Errorf("encoding result: %w", err)
@@ -196,6 +201,34 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 		res.Err = fmt.Errorf("output differs from %s.json (-want +got):\n%s", c.Name, diff)
 	}
 	return res
+}
+
+// streamMatches checks that reading the fixture one record at a time
+// produces the same records as reading it whole. --stream changes when a
+// record is written, never what it says, so a definition whose two
+// readings disagree would answer differently depending on a flag.
+func streamMatches(def *definition.Definition, input []byte, batch any, opts Options) error {
+	list, ok := batch.([]any)
+	if !ok || !def.Parse.YieldsArray() {
+		return nil
+	}
+	var want bytes.Buffer
+	for _, v := range list {
+		if err := jsonutil.Encode(&want, v, false); err != nil {
+			return err
+		}
+	}
+	var got bytes.Buffer
+	err := engine.Stream(def, bytes.NewReader(input), opts.Engine, func(v any) error {
+		return jsonutil.Encode(&got, v, false)
+	})
+	if err != nil {
+		return fmt.Errorf("reading with --stream: %w", err)
+	}
+	if diff := cmp.Diff(want.String(), got.String()); diff != "" {
+		return fmt.Errorf("--stream reads this differently than the whole document (-whole +stream):\n%s", diff)
+	}
+	return nil
 }
 
 // selects reports whether ctx picks exactly the expected definition.

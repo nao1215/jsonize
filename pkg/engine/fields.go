@@ -3,9 +3,9 @@ package engine
 import (
 	"strings"
 
-	"github.com/nao1215/jsonize/internal/convert"
-	"github.com/nao1215/jsonize/internal/definition"
-	"github.com/nao1215/jsonize/internal/jsonutil"
+	"github.com/nao1215/jsonize/pkg/convert"
+	"github.com/nao1215/jsonize/pkg/definition"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
 // setField converts raw (a string or nil) with the field rules and stores
@@ -92,6 +92,13 @@ func (r *run) convertScalar(name, s string, f *definition.Field, ln int) (any, e
 			base = convert.Decimal
 		}
 		v, err := convert.Size(s, base)
+		if err != nil {
+			return nil, wrap(err)
+		}
+		return v, nil
+	case definition.FieldTime:
+		loc, _ := convert.Location(f.Location)
+		v, err := convert.Time(s, f.Layout, loc)
 		if err != nil {
 			return nil, wrap(err)
 		}

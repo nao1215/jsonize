@@ -5,7 +5,7 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/nao1215/jsonize/internal/registry"
+	"github.com/nao1215/jsonize/pkg/registry"
 )
 
 // loose reads anything that has a colon in it, which is also the shape of

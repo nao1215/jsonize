@@ -12,6 +12,7 @@ import (
 	"github.com/goccy/go-yaml"
 
 	"github.com/nao1215/jsonize/internal/buildinfo"
+	"github.com/nao1215/jsonize/pkg/convert"
 )
 
 // Limits guarding against hostile or accidental resource use.
@@ -121,7 +122,7 @@ func Load(data []byte, source string) (*Definition, error) {
 	if d.Format != CurrentFormat {
 		return nil, &FormatError{Source: source, Got: d.Format}
 	}
-	if err := d.Validate(); err != nil {
+	if err := d.validate(); err != nil {
 		return nil, err
 	}
 	return &d, nil
@@ -171,10 +172,11 @@ func (v *validator) regex(path, expr string) *regexp.Regexp {
 	return re
 }
 
-// Validate checks the definition and compiles its regular expressions. All
-// problems are reported together (errors.Join) so that authors can fix a
-// file in one pass.
-func (d *Definition) Validate() error {
+// validate checks the definition and compiles its regular expressions.
+// All problems are reported together (errors.Join) so that authors can
+// fix a file in one pass. Load is the only way in: a Definition that has
+// not been through it has no compiled expressions.
+func (d *Definition) validate() error {
 	v := &validator{source: d.Source}
 	if d.Format != CurrentFormat {
 		v.add("format", "must be %d", CurrentFormat)
@@ -572,12 +574,14 @@ func validateField(v *validator, path string, f *Field, depth int) {
 		default:
 			v.add(path+".unit", "must be binary or decimal")
 		}
+	case FieldTime:
+		validateTimeField(v, path, f)
 	case FieldArray:
 		validateArrayField(v, path, f, depth)
 	case FieldObject:
 		validateObjectField(v, path, f, depth)
 	default:
-		v.add(path+".type", "unknown type %q (expected string, int, float, bool, size, array or object)", f.Type)
+		v.add(path+".type", "unknown type %q (expected string, int, float, bool, size, time, array or object)", f.Type)
 	}
 	validateFieldKeys(v, path, f)
 }
@@ -589,6 +593,22 @@ func validateBoolField(v *validator, path string, f *Field) {
 				v.add(fmt.Sprintf("%s.true_values[%d]", path, i), "%q is also listed in false_values", t)
 			}
 		}
+	}
+}
+
+// validateTimeField checks a time field. The layout has to name a year,
+// because a format that prints none (an `ls -l` listing of a recent file,
+// a syslog line) can only be dated by guessing which year it meant, and
+// such a column stays the string it was printed as.
+func validateTimeField(v *validator, path string, f *Field) {
+	switch {
+	case f.Layout == "":
+		v.add(path+".layout", "is required for type time (a Go reference layout, e.g. \"2006-01-02 15:04:05\")")
+	case !strings.Contains(f.Layout, "06"):
+		v.add(path+".layout", "%q states no year; a timestamp without one cannot be dated without inventing it, so keep the value as a string", f.Layout)
+	}
+	if _, ok := convert.Location(f.Location); !ok {
+		v.add(path+".location", "must be utc or local, not %q", f.Location)
 	}
 }
 
@@ -647,6 +667,9 @@ func validateFieldKeys(v *validator, path string, f *Field) {
 	}
 	if f.EffectiveType() != FieldSize && f.Unit != "" {
 		v.add(path+".unit", "only valid for type size")
+	}
+	if f.EffectiveType() != FieldTime && (f.Layout != "" || f.Location != "") {
+		v.add(path, "layout/location are only valid for type time")
 	}
 	switch f.WhenMissing {
 	case "", MissingNull, MissingOmit:

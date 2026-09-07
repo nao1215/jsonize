@@ -17,10 +17,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/nao1215/jsonize/internal/definition"
-	"github.com/nao1215/jsonize/internal/engine"
-	"github.com/nao1215/jsonize/internal/registry"
-	"github.com/nao1215/jsonize/internal/selector"
+	"github.com/nao1215/jsonize/pkg/definition"
+	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/registry"
+	"github.com/nao1215/jsonize/pkg/selector"
 )
 
 // Exit codes. They are a stable contract documented in the README.
@@ -156,6 +156,7 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "Examples:")
 	fmt.Fprintln(w, "  df -h | jz")
 	fmt.Fprintln(w, "  jz run df -h")
+	fmt.Fprintln(w, "  vmstat 1 | jz --stream")
 	fmt.Fprintln(w, "  jz --file captured.txt")
 	fmt.Fprintln(w, "  df -h | jz --parser df")
 	fmt.Fprintln(w)

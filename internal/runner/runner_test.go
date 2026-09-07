@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"os/exec"
 	"runtime"
@@ -147,5 +148,65 @@ func TestSignalNameNil(t *testing.T) {
 	}
 	if err := forward(nil, os.Interrupt); err != nil {
 		t.Error(err)
+	}
+}
+
+func TestStreamHandsOutputOverAsItArrives(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	t.Parallel()
+	var stderr bytes.Buffer
+	var got []byte
+	res, err := Stream(context.Background(), Command{
+		Name: "sh",
+		Args: []string{"-c", "echo one; echo two; echo problem >&2; exit 4"},
+	}, &stderr, nil, func(r io.Reader) error {
+		var err error
+		got, err = io.ReadAll(r)
+		return err
+	})
+	if err != nil {
+		t.Fatalf("Stream: %v", err)
+	}
+	if string(got) != "one\ntwo\n" {
+		t.Errorf("stdout = %q", got)
+	}
+	if res.ExitCode != 4 || !strings.Contains(stderr.String(), "problem") {
+		t.Errorf("res = %+v stderr = %q", res, stderr.String())
+	}
+}
+
+// A consumer that stops early must not leave the child blocked on a full
+// pipe, so whatever it left is drained before the wait.
+func TestStreamDrainsWhatTheConsumerLeft(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	t.Parallel()
+	stop := errors.New("stop")
+	res, err := Stream(context.Background(), Command{
+		Name: "sh",
+		Args: []string{"-c", "i=0; while [ $i -lt 20000 ]; do echo line$i; i=$((i+1)); done"},
+	}, io.Discard, nil, func(r io.Reader) error {
+		buf := make([]byte, 8)
+		_, _ = r.Read(buf)
+		return stop
+	})
+	if !errors.Is(err, stop) {
+		t.Fatalf("err = %v", err)
+	}
+	if res == nil || res.ExitCode != 0 {
+		t.Errorf("res = %+v", res)
+	}
+}
+
+func TestStreamErrors(t *testing.T) {
+	t.Parallel()
+	if _, err := Stream(context.Background(), Command{Name: "  "}, io.Discard, nil, func(io.Reader) error { return nil }); err == nil {
+		t.Error("empty command should fail")
+	}
+	if _, err := Stream(context.Background(), Command{Name: "definitely-missing-binary"}, io.Discard, nil, func(io.Reader) error { return nil }); err == nil {
+		t.Error("missing binary should fail")
 	}
 }

@@ -54,14 +54,14 @@ registry-update-golden: ## Rewrite the expected JSON of every fixture, then revi
 
 .PHONY: fuzz
 fuzz: ## Run every fuzz target briefly (FUZZTIME=10s)
-	@for t in $$(grep -rhoE 'func (Fuzz[A-Za-z0-9_]+)' --include='*_test.go' . | awk '{print $$2}' | sort -u); do \
-		pkg=./$$(grep -rlE "func $$t\(" --include='*_test.go' . | head -1 | xargs dirname); \
+	@for t in $$(grep -rhoE 'func (Fuzz[A-Za-z0-9_]+)' --include='*_test.go' cmd internal pkg registry | awk '{print $$2}' | sort -u); do \
+		pkg=./$$(grep -rlE "func $$t\(" --include='*_test.go' cmd internal pkg registry | head -1 | xargs dirname); \
 		echo "== $$t ($$pkg)"; go test -run '^$$' -fuzz "^$$t$$" -fuzztime $${FUZZTIME:-10s} $$pkg || exit 1; \
 	done
 
 .PHONY: bench
 bench: ## Run benchmarks (COUNT=6) and store the result in bench/new.txt
-	go test -run '^$$' -bench . -benchmem -count $${COUNT:-6} ./internal/... | tee bench/new.txt
+	go test -run '^$$' -bench . -benchmem -count $${COUNT:-6} ./internal/... ./pkg/... | tee bench/new.txt
 
 .PHONY: bench-compare
 bench-compare: ## Compare bench/new.txt against bench/baseline.txt with benchstat
