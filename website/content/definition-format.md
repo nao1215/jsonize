@@ -23,8 +23,11 @@ parse: {...}                    # required; the algorithm
 fields: {...}                   # optional; conversions per field
 ```
 
-Unknown keys are errors. Names such as `aux`, `con` or `nul` are rejected
-because they cannot be directories on Windows.
+Unknown keys are errors naming the key and saying that a newer jz may
+read it: keys are added within format 1, so this is how a definition
+written for a later release reaches an older jz. Names such as `aux`,
+`con` or `nul` are rejected because they cannot be directories on
+Windows.
 
 ## aliases
 

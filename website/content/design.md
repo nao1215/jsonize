@@ -190,10 +190,24 @@ registry means installing a new jz; adding your own means pointing
 
 ### Format versioning
 
-`format: 1` is the schema major version. A different number is rejected
-with a message that says whether to upgrade jz or the definition.
-`min_jsonize` lets a definition require a newer jz for a feature added
-without a format bump. Development builds skip the check.
+`format: 1` is the schema major version, and a different number is
+rejected with a message that says whether to upgrade jz or the
+definition.
+
+Until the first tag, format 1 is not frozen: keys are added, renamed and
+removed while the shape settles. After the tag, adding a key is a minor
+release and the number stays 1. An older jz meeting a definition that
+uses the new key refuses that definition with an unknown-key error saying
+a newer jz may be needed, which is the whole compatibility story: a
+definition works with the build it was written for and every later one.
+Removing a key, or changing what one means, is `format: 2`, because
+neither can be told from a mistake by looking at the file.
+
+`min_jsonize` was the alternative, a version a definition could demand.
+It was removed: it asked every definition author to know which release
+introduced each key they used, and it said nothing at all when they got
+it wrong. The unknown-key error needs no such bookkeeping, and it names
+the key that is the problem.
 
 ### Dependencies
 

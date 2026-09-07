@@ -6,9 +6,12 @@ import (
 	"regexp"
 	"regexp/syntax"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/goccy/go-yaml"
+
+	"github.com/nao1215/jsonize/internal/buildinfo"
 )
 
 // Limits guarding against hostile or accidental resource use.
@@ -75,6 +78,31 @@ func (e *FormatError) Error() string {
 		e.Source, e.Got, CurrentFormat)
 }
 
+// UnknownKeyError reports a key this build does not know. It is told
+// apart from other schema problems because it is the one that a newer
+// jsonize may well understand: keys are added within format 1, so a
+// definition written for a later release reaches an older one this way
+// rather than as a format number it cannot read.
+type UnknownKeyError struct {
+	Source string
+	Key    string
+	// Line is where the key appears, 0 when the decoder did not say.
+	Line int
+}
+
+func (e *UnknownKeyError) Error() string {
+	where := ""
+	if e.Line > 0 {
+		where = fmt.Sprintf("line %d: ", e.Line)
+	}
+	return fmt.Sprintf("%s: %sunknown key %q; this definition may need a newer jz (this build reads definition format %d as of %s)",
+		e.Source, where, e.Key, CurrentFormat, buildinfo.Get())
+}
+
+// unknownFieldRe reads the key and its position out of the strict
+// decoder's message, which is the only place they are reported.
+var unknownFieldRe = regexp.MustCompile(`(?:\[(\d+):\d+\] )?unknown field "([^"]+)"`)
+
 // Load decodes, validates and compiles a definition. source is used in
 // error messages and stored in Definition.Source.
 func Load(data []byte, source string) (*Definition, error) {
@@ -83,6 +111,10 @@ func Load(data []byte, source string) (*Definition, error) {
 	}
 	var d Definition
 	if err := DecodeYAML(data, &d); err != nil {
+		if m := unknownFieldRe.FindStringSubmatch(err.Error()); m != nil {
+			line, _ := strconv.Atoi(m[1])
+			return nil, &UnknownKeyError{Source: source, Key: m[2], Line: line}
+		}
 		return nil, &ValidationError{Source: source, Msg: "invalid YAML: " + err.Error()}
 	}
 	d.Source = source

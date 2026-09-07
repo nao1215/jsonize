@@ -238,7 +238,7 @@ func TestLoadErrors(t *testing.T) {
 		want string // substring expected in the error
 	}{
 		{"not yaml", "format: [", "invalid YAML"},
-		{"unknown key", base + "bogus: 1\n", "invalid YAML"},
+		{"unknown key", base + "bogus: 1\n", `unknown key "bogus"; this definition may need a newer jz`},
 		{"format 2", "format: 2\ncommand: c\nvariant: v\nparse: {type: kv}\n", "format 2 is not supported"},
 		{"missing command", "format: 1\nvariant: v\nparse: {type: kv}\n", "command: is required"},
 		{"bad command", "format: 1\ncommand: 'A B'\nvariant: v\nparse: {type: kv}\n", "command"},
@@ -246,7 +246,8 @@ func TestLoadErrors(t *testing.T) {
 		{"bad variant", "format: 1\ncommand: c\nvariant: 'Bad_'\nparse: {type: kv}\n", "variant"},
 		{"reserved variant", "format: 1\ncommand: c\nvariant: aux\nparse: {type: kv}\n", "reserved file name"},
 		{"reserved command", "format: 1\ncommand: nul\nvariant: v\nparse: {type: kv}\n", "reserved file name"},
-		{"bad min_jsonize", base + "min_jsonize: abc\n", "min_jsonize"},
+		{"key removed from the format", base + "min_jsonize: abc\n", `unknown key "min_jsonize"`},
+		{"nested unknown key", base + "input: {fold: 'a', bogus: 'b'}\n", `unknown key "bogus"`},
 		{"bad os", base + "detect: {os: [plan9]}\n", "unknown operating system"},
 		{"empty arg", base + "detect: {args: {any: ['']}}\n", "empty argument"},
 		{"bad window", base + "detect: {signature: {window: 999}}\n", "window"},

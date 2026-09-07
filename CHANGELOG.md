@@ -115,6 +115,11 @@ project follows [Semantic Versioning](https://semver.org/).
   the answer would be a guess about the command rather than a reading of
   the text. The alias carries the arguments its name needs, which is how
   `getent passwd` and `getent group` reach different files.
+- Format 1 is not frozen until the first tag. After it, adding a key is a
+  minor release and the number stays 1; an older jz refuses a definition
+  that uses a new key with an unknown-key error saying a newer jz may be
+  needed. Removing a key or changing what one means is format 2, because
+  neither can be told from a mistake by looking at the file.
 - A tree of arbitrary depth has no shape jz can promise in advance and
   is left out: `npm ls --all`, `iw dev`, `lsusb -t`, `docker info`,
   `apt-cache policy`, `systemd-analyze critical-chain`. Most of those

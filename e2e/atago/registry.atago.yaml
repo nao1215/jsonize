@@ -535,3 +535,32 @@ scenarios:
           stdout:
             contains: DISABLED
             matches: "embedded +present +\\d+ +1"
+
+  # Keys are added within format 1, so a definition written for a later
+  # release reaches an older jz as an unknown key rather than as a format
+  # number it cannot read.
+  - name: an unknown key says a newer jz may be needed, and jz list counts the skips
+    steps:
+      - fixture:
+          file: newer/parsers/greet/x/parser.yaml
+          content: |
+            format: 1
+            command: greet
+            variant: x
+            detect: {signature: {all: ['^hello ']}}
+            input:
+              collate: yes
+            parse:
+              type: regex
+              pattern: '^hello (?P<name>\S+)$'
+      - run:
+          command: jz list
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/newer"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: 'unknown key "collate"; this definition may need a newer jz'
+      - assert:
+          stderr:
+            contains: "1 definition failed to load and is not listed"

@@ -47,6 +47,10 @@ func (a *app) cmdList(args []string) int {
 	if code != 0 {
 		return code
 	}
+	// A definition that did not load is missing from everything printed
+	// below, so the listing says how many rather than leaving the
+	// warnings above to be counted by hand.
+	defer a.reportSkipped(reg)
 	switch o.fs.NArg() {
 	case 0:
 		return a.listCommands(reg, asJSON)
@@ -54,6 +58,18 @@ func (a *app) cmdList(args []string) int {
 		return a.listVariants(reg, o.fs.Arg(0), asJSON)
 	default:
 		return a.listDefinition(reg, o.fs.Arg(0), o.fs.Arg(1), asJSON)
+	}
+}
+
+// reportSkipped closes a listing with how many definitions were left out
+// because they failed to load.
+func (a *app) reportSkipped(reg *registry.Registry) {
+	switch n := len(reg.Problems); {
+	case n == 0:
+	case n == 1:
+		a.errorf("1 definition failed to load and is not listed")
+	default:
+		a.errorf("%d definitions failed to load and are not listed", n)
 	}
 }
 

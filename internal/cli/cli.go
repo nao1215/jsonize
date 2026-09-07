@@ -215,8 +215,9 @@ func (a *app) exitFor(err error) int {
 		le *registry.LoadError
 		ve *definition.ValidationError
 		fe *definition.FormatError
+		ue *definition.UnknownKeyError
 	)
-	if errors.As(err, &le) || errors.As(err, &ve) || errors.As(err, &fe) {
+	if errors.As(err, &le) || errors.As(err, &ve) || errors.As(err, &fe) || errors.As(err, &ue) {
 		return ExitRegistry
 	}
 	return ExitError
