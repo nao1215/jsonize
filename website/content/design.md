@@ -21,14 +21,14 @@ were considered and what the MVP deliberately leaves out.
 cmd/jz                    entry point: signals, exit code
 internal/cli              subcommands, flag parsing, registry layering, exit-code contract
 internal/runner           exec mode: child process, LC_ALL=C, stderr passthrough, output cap, signals
-internal/registry         load registry directories/FS, merge with precedence, testdata cases
-internal/definition       YAML schema, validation, regex compilation, format/version checks
-internal/selector         variant selection (os / args / signature filter → priority → error)
-internal/engine           parse algorithms (table, regex, kv, composite) and field conversion
-internal/convert          scalar conversions (int, float, bool, size with units)
-internal/jsonutil         insertion-ordered JSON object and encoder
 internal/conformance      golden cases and the definition/fixture cross product, shared by `go test` and `jz test`
 internal/buildinfo        the version string stamped at build time
+pkg/registry              load registry directories/FS, merge with precedence, testdata cases
+pkg/definition            YAML schema, validation, regex compilation, format checks
+pkg/selector              variant selection (os / args / signature filter → precedence → priority)
+pkg/engine                parse algorithms (table, regex, kv, composite, records), streaming, field conversion
+pkg/convert               scalar conversions (int, float, bool, size with units, time)
+pkg/jsonutil              insertion-ordered JSON object and encoder
 registry/                 the official definitions and fixtures (data) + a one-file embed
 e2e/atago                 end-to-end scenarios
 ```
@@ -263,10 +263,29 @@ served by `flag` and a dispatch table, and the `run` subcommand needs
 - A JSON Schema for editor completion of `parser.yaml`; validation is
   done in Go with path-qualified messages instead.
 
+### The library under pkg/
+
+The six packages that read text are under `pkg/`, so another program can
+load a registry, select a definition and parse with it without going
+through the command line. `internal/` keeps what only the binary needs:
+the subcommands, the child process, the conformance runner and the
+version string.
+
+The split is where it is because the exit-code contract, the flag parsing
+and the process handling are decisions about a command line, not about
+reading text, and a library that carried them would be answering
+questions its caller has already answered. What crosses the line is the
+registry, the definition schema, the selector, the engine, the scalar
+conversions and the ordered object — everything between a piece of text
+and the JSON for it.
+
+The surface is kept small deliberately: what `cmd/jz` and the tests do
+not reach is unexported, and what stays is what a caller cannot avoid
+naming. The enum vocabularies of the definition schema
+(`RecordNUL`, `UnitBinary`, `MissingNull` and their siblings) are the
+exception: they name the values a caller reads out of a `Definition`, and
+exporting half a set would be worse than exporting all of it.
+
 ## Where to cut next
 
 - `registry/` → separate repository; only the `official` import changes.
-- `internal/definition` + `internal/engine` + `internal/convert` form a
-  library with no CLI dependencies and could be exported as a package.
-- `internal/selector` and `internal/engine` are independent of the CLI and
-  could be exercised by other front ends.

@@ -25,7 +25,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/nao1215/jsonize/internal/definition"
+	"github.com/nao1215/jsonize/pkg/definition"
 )
 
 // ManifestFile is the name of the registry manifest.
@@ -43,8 +43,8 @@ const TestdataDir = "testdata"
 // MaxDefinitions bounds how many definitions one source may contain.
 const MaxDefinitions = 10000
 
-// Manifest describes a registry.
-type Manifest struct {
+// manifest describes a registry.
+type manifest struct {
 	Format      int    `yaml:"format"`
 	Name        string `yaml:"name"`
 	Version     string `yaml:"version,omitempty"`
@@ -174,13 +174,13 @@ func (r *Registry) addSource(precedence int, src Source) error {
 	}
 	// The manifest is read for its format version: a registry written for
 	// a newer jsonize must be refused rather than half understood.
-	var manifest Manifest
+	var m manifest
 	if data, err := fs.ReadFile(src.FS, ManifestFile); err == nil {
-		if err := definition.DecodeYAML(data, &manifest); err != nil {
+		if err := definition.DecodeYAML(data, &m); err != nil {
 			return &LoadError{Source: src.Name, Path: ManifestFile, Err: fmt.Errorf("invalid manifest: %w", err)}
 		}
-		if manifest.Format != definition.CurrentFormat {
-			return &LoadError{Source: src.Name, Path: ManifestFile, Err: &definition.FormatError{Source: ManifestFile, Got: manifest.Format}}
+		if m.Format != definition.CurrentFormat {
+			return &LoadError{Source: src.Name, Path: ManifestFile, Err: &definition.FormatError{Source: ManifestFile, Got: m.Format}}
 		}
 	} else if !errors.Is(err, fs.ErrNotExist) {
 		return &LoadError{Source: src.Name, Path: ManifestFile, Err: err}
@@ -188,7 +188,7 @@ func (r *Registry) addSource(precedence int, src Source) error {
 	// A registry's own definitions are never affected by its own disable
 	// list, so the rules it declares are collected after its files are
 	// read and apply to the registries below it.
-	rules, err := parseDisable(src.Name, manifest.Disable)
+	rules, err := parseDisable(src.Name, m.Disable)
 	if err != nil {
 		return err
 	}

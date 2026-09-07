@@ -5,9 +5,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/nao1215/jsonize/internal/engine"
-	"github.com/nao1215/jsonize/internal/jsonutil"
-	"github.com/nao1215/jsonize/internal/selector"
+	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
+	"github.com/nao1215/jsonize/pkg/selector"
 )
 
 //nolint:dupword // the usage block repeats "jz" on purpose

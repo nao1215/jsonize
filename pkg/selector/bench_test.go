@@ -6,7 +6,7 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/nao1215/jsonize/internal/registry"
+	"github.com/nao1215/jsonize/pkg/registry"
 )
 
 // syntheticRegistry builds n definitions spread over n/4 commands, each

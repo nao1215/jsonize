@@ -8,9 +8,9 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/nao1215/jsonize/internal/definition"
-	"github.com/nao1215/jsonize/internal/jsonutil"
-	"github.com/nao1215/jsonize/internal/registry"
+	"github.com/nao1215/jsonize/pkg/definition"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
+	"github.com/nao1215/jsonize/pkg/registry"
 )
 
 const listUsage = `Usage: jz list [COMMAND [VARIANT]]

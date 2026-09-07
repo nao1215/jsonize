@@ -22,15 +22,13 @@ const (
 	typeTime  = "time"
 )
 
-// Location names the two time zones a definition may name. A zone
-// database is not consulted: jz reads text a command printed on this
-// machine, so the only two answers that are not guesses are the one the
-// text states and the one the machine is in.
+// The two time zones a definition may name. A zone database is not
+// consulted: jz reads text a command printed on this machine, so the only
+// two answers that are not guesses are the one the text states and the
+// one the machine is in.
 const (
-	// LocationUTC reads a timestamp that carries no zone as UTC.
-	LocationUTC = "utc"
-	// LocationLocal reads it in the running system's zone.
-	LocationLocal = "local"
+	locationUTC   = "utc"
+	locationLocal = "local"
 )
 
 // Error describes a failed conversion.
@@ -88,21 +86,21 @@ func Float(s string) (float64, error) {
 	return v, nil
 }
 
-// DefaultTrueValues and DefaultFalseValues are the case-insensitive spellings
+// defaultTrueValues and defaultFalseValues are the case-insensitive spellings
 // recognised by Bool when a definition does not list its own.
 var (
-	DefaultTrueValues  = []string{"true", "yes", "on", "1", "y"}
-	DefaultFalseValues = []string{"false", "no", "off", "0", "n"}
+	defaultTrueValues  = []string{"true", "yes", "on", "1", "y"}
+	defaultFalseValues = []string{"false", "no", "off", "0", "n"}
 )
 
 // Bool parses a boolean. trueValues and falseValues may be nil to use the
 // defaults. Matching is case-insensitive.
 func Bool(s string, trueValues, falseValues []string) (bool, error) {
 	if trueValues == nil {
-		trueValues = DefaultTrueValues
+		trueValues = defaultTrueValues
 	}
 	if falseValues == nil {
-		falseValues = DefaultFalseValues
+		falseValues = defaultFalseValues
 	}
 	t := strings.TrimSpace(s)
 	for _, v := range trueValues {
@@ -222,9 +220,9 @@ func Time(s, layout string, loc *time.Location) (string, error) {
 // Location resolves a definition's location name. An empty name is UTC.
 func Location(name string) (*time.Location, bool) {
 	switch strings.ToLower(strings.TrimSpace(name)) {
-	case "", LocationUTC:
+	case "", locationUTC:
 		return time.UTC, true
-	case LocationLocal:
+	case locationLocal:
 		return time.Local, true
 	default:
 		return nil, false

@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nao1215/jsonize/internal/engine"
-	"github.com/nao1215/jsonize/internal/jsonutil"
-	"github.com/nao1215/jsonize/internal/registry"
 	"github.com/nao1215/jsonize/internal/runner"
-	"github.com/nao1215/jsonize/internal/selector"
+	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
+	"github.com/nao1215/jsonize/pkg/registry"
+	"github.com/nao1215/jsonize/pkg/selector"
 )
 
 const runUsage = `Usage: jz run [options] COMMAND [args...]

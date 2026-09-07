@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nao1215/jsonize/internal/registry"
+	"github.com/nao1215/jsonize/pkg/registry"
 	official "github.com/nao1215/jsonize/registry"
 )
 

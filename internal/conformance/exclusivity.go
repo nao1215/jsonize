@@ -8,9 +8,9 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/nao1215/jsonize/internal/engine"
-	"github.com/nao1215/jsonize/internal/registry"
-	"github.com/nao1215/jsonize/internal/selector"
+	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/registry"
+	"github.com/nao1215/jsonize/pkg/selector"
 )
 
 // Fixture is one captured output together with the definition it belongs

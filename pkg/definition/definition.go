@@ -6,6 +6,10 @@
 // variant detection, but it cannot run commands or evaluate expressions.
 // Regular expressions use Go's RE2 engine, which guarantees linear-time
 // matching, so a hostile definition cannot cause catastrophic backtracking.
+//
+// Load is the way in. It decodes one YAML document, validates it and
+// compiles its expressions; a Definition that has not been through it
+// carries no compiled expressions and must not be handed to the engine.
 package definition
 
 import (

@@ -4,7 +4,7 @@
 code. It was recorded with:
 
 ```
-go test -run '^$' -bench . -benchmem -count 3 ./internal/...
+go test -run '^$' -bench . -benchmem -count 3 ./internal/... ./pkg/...
 ```
 
 on an AMD Ryzen AI Max+ 395 (32 threads), Linux, Go 1.26. Absolute numbers

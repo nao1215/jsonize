@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/nao1215/jsonize/internal/definition"
+	"github.com/nao1215/jsonize/pkg/definition"
 )
 
 // Case is one golden test case stored next to a definition: an input

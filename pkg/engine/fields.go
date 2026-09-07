@@ -3,9 +3,9 @@ package engine
 import (
 	"strings"
 
-	"github.com/nao1215/jsonize/internal/convert"
-	"github.com/nao1215/jsonize/internal/definition"
-	"github.com/nao1215/jsonize/internal/jsonutil"
+	"github.com/nao1215/jsonize/pkg/convert"
+	"github.com/nao1215/jsonize/pkg/definition"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
 // setField converts raw (a string or nil) with the field rules and stores

@@ -129,6 +129,19 @@ same machine. The guide is at
 https://nao1215.github.io/jsonize/write-a-parser/ and the reference at
 https://nao1215.github.io/jsonize/definition-format/.
 
+## From Go
+
+The registry, the selector and the engine are a library:
+
+```go
+reg, _ := registry.Load(registry.Source{Name: "embedded", FS: official.FS()})
+sel, err := selector.Select(reg, selector.Context{Input: text})  // err: unidentified or ambiguous
+out, err := engine.Parse(sel.Entry.Def, text, engine.Options{})  // out: ordered objects
+jsonutil.Encode(os.Stdout, out, true)
+```
+
+Reference: https://pkg.go.dev/github.com/nao1215/jsonize/pkg/selector
+
 ## Exit codes
 
 | Code | Meaning |

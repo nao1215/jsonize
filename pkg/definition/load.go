@@ -12,7 +12,7 @@ import (
 	"github.com/goccy/go-yaml"
 
 	"github.com/nao1215/jsonize/internal/buildinfo"
-	"github.com/nao1215/jsonize/internal/convert"
+	"github.com/nao1215/jsonize/pkg/convert"
 )
 
 // Limits guarding against hostile or accidental resource use.
@@ -122,7 +122,7 @@ func Load(data []byte, source string) (*Definition, error) {
 	if d.Format != CurrentFormat {
 		return nil, &FormatError{Source: source, Got: d.Format}
 	}
-	if err := d.Validate(); err != nil {
+	if err := d.validate(); err != nil {
 		return nil, err
 	}
 	return &d, nil
@@ -172,10 +172,11 @@ func (v *validator) regex(path, expr string) *regexp.Regexp {
 	return re
 }
 
-// Validate checks the definition and compiles its regular expressions. All
-// problems are reported together (errors.Join) so that authors can fix a
-// file in one pass.
-func (d *Definition) Validate() error {
+// validate checks the definition and compiles its regular expressions.
+// All problems are reported together (errors.Join) so that authors can
+// fix a file in one pass. Load is the only way in: a Definition that has
+// not been through it has no compiled expressions.
+func (d *Definition) validate() error {
 	v := &validator{source: d.Source}
 	if d.Format != CurrentFormat {
 		v.add("format", "must be %d", CurrentFormat)

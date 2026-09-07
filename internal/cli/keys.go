@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/nao1215/jsonize/internal/jsonutil"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
 // keyFilter narrows the objects of a result to the keys the caller named.

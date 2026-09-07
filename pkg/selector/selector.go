@@ -37,9 +37,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/nao1215/jsonize/internal/convert"
-	"github.com/nao1215/jsonize/internal/definition"
-	"github.com/nao1215/jsonize/internal/registry"
+	"github.com/nao1215/jsonize/pkg/convert"
+	"github.com/nao1215/jsonize/pkg/definition"
+	"github.com/nao1215/jsonize/pkg/registry"
 )
 
 // Context carries everything known about the text to classify.

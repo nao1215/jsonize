@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nao1215/jsonize/internal/jsonutil"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
 // streamAll collects the records Stream emits as one JSON document per

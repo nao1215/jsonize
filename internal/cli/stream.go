@@ -7,10 +7,10 @@ import (
 	"io"
 	"sync"
 
-	"github.com/nao1215/jsonize/internal/engine"
-	"github.com/nao1215/jsonize/internal/jsonutil"
-	"github.com/nao1215/jsonize/internal/registry"
-	"github.com/nao1215/jsonize/internal/selector"
+	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
+	"github.com/nao1215/jsonize/pkg/registry"
+	"github.com/nao1215/jsonize/pkg/selector"
 )
 
 // stream reads r and writes one JSON document per line as each record

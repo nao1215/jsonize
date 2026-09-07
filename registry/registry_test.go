@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/nao1215/jsonize/internal/conformance"
-	"github.com/nao1215/jsonize/internal/registry"
+	"github.com/nao1215/jsonize/pkg/registry"
 )
 
 // This test is a thin wrapper around the same check `jz test` runs, so

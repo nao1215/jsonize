@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	"github.com/nao1215/jsonize/internal/conformance"
-	"github.com/nao1215/jsonize/internal/engine"
-	"github.com/nao1215/jsonize/internal/registry"
+	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/registry"
 )
 
 const testUsage = `Usage: jz test [options] [DIR...]

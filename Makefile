@@ -61,7 +61,7 @@ fuzz: ## Run every fuzz target briefly (FUZZTIME=10s)
 
 .PHONY: bench
 bench: ## Run benchmarks (COUNT=6) and store the result in bench/new.txt
-	go test -run '^$$' -bench . -benchmem -count $${COUNT:-6} ./internal/... | tee bench/new.txt
+	go test -run '^$$' -bench . -benchmem -count $${COUNT:-6} ./internal/... ./pkg/... | tee bench/new.txt
 
 .PHONY: bench-compare
 bench-compare: ## Compare bench/new.txt against bench/baseline.txt with benchstat

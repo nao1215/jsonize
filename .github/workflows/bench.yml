@@ -17,5 +17,5 @@ jobs:
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: stable
-      - run: mkdir -p bench && go test -run '^$' -bench . -benchmem -count 3 ./internal/... | tee bench/new.txt
+      - run: mkdir -p bench && go test -run '^$' -bench . -benchmem -count 3 ./internal/... ./pkg/... | tee bench/new.txt
       - run: go run golang.org/x/perf/cmd/benchstat@latest bench/baseline.txt bench/new.txt || true

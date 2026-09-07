@@ -114,6 +114,15 @@ project follows [Semantic Versioning](https://semver.org/).
 - `expect_error` in a fixture covers a definition refusing text at
   detection, not only at parse time.
 
+### Changed
+
+- `internal/registry`, `internal/definition`, `internal/selector`,
+  `internal/engine`, `internal/convert` and `internal/jsonutil` moved to
+  `pkg/`, so another program can load a registry, select a definition and
+  parse with it. `internal/cli`, `internal/runner`,
+  `internal/conformance` and `internal/buildinfo` stay internal: they are
+  decisions about a command line, not about reading text.
+
 ### Removed
 
 - `min_jsonize`, `metadata.fixtures` and the kv `key_name`/`value_name`
