@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (uv 0.9.7) with LC_ALL=C against a tool environment holding moto; the home directory in Location was replaced with /home/alice
+description: >
+  Two packages named at once, separated by a line of three dashes that
+  the definition drops. The first has both a Requires and a Required-by
+  list, the second only Requires.
+os: linux

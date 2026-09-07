@@ -65,6 +65,11 @@ detect:
       # same opening but is already excluded by the rule above, since the
       # lines below it carry no separator at all.
       - '\A\d+: \S+: <[A-Z0-9_,-]*>'
+      # `pip show` and `uv pip show` print package metadata as
+      # "Key: value", which is the same shape. Required-by is a field
+      # both print for every package, and a file called that is not
+      # something file(1) is asked about.
+      - '^Required-by:'
       # `ethtool -i` opens with "driver: <name>" and "version: <name>",
       # which are properties of an interface rather than a path and the
       # description of what is stored there.

@@ -1,0 +1,122 @@
+[
+  {
+    "name": "aarch64-apple-darwin",
+    "installed": false
+  },
+  {
+    "name": "aarch64-apple-ios",
+    "installed": false
+  },
+  {
+    "name": "aarch64-apple-ios-macabi",
+    "installed": false
+  },
+  {
+    "name": "aarch64-apple-ios-sim",
+    "installed": false
+  },
+  {
+    "name": "aarch64-apple-tvos",
+    "installed": false
+  },
+  {
+    "name": "aarch64-apple-tvos-sim",
+    "installed": false
+  },
+  {
+    "name": "aarch64-apple-visionos",
+    "installed": false
+  },
+  {
+    "name": "aarch64-apple-visionos-sim",
+    "installed": false
+  },
+  {
+    "name": "aarch64-apple-watchos",
+    "installed": false
+  },
+  {
+    "name": "aarch64-apple-watchos-sim",
+    "installed": false
+  },
+  {
+    "name": "aarch64-linux-android",
+    "installed": true
+  },
+  {
+    "name": "aarch64-pc-windows-gnullvm",
+    "installed": false
+  },
+  {
+    "name": "aarch64-pc-windows-msvc",
+    "installed": false
+  },
+  {
+    "name": "aarch64-unknown-freebsd",
+    "installed": false
+  },
+  {
+    "name": "aarch64-unknown-fuchsia",
+    "installed": false
+  },
+  {
+    "name": "aarch64-unknown-linux-gnu",
+    "installed": false
+  },
+  {
+    "name": "aarch64-unknown-linux-musl",
+    "installed": false
+  },
+  {
+    "name": "aarch64-unknown-linux-ohos",
+    "installed": false
+  },
+  {
+    "name": "aarch64-unknown-none",
+    "installed": false
+  },
+  {
+    "name": "aarch64-unknown-none-softfloat",
+    "installed": false
+  },
+  {
+    "name": "aarch64-unknown-uefi",
+    "installed": false
+  },
+  {
+    "name": "arm-linux-androideabi",
+    "installed": false
+  },
+  {
+    "name": "arm-unknown-linux-gnueabi",
+    "installed": false
+  },
+  {
+    "name": "arm-unknown-linux-gnueabihf",
+    "installed": false
+  },
+  {
+    "name": "arm-unknown-linux-musleabi",
+    "installed": false
+  },
+  {
+    "name": "arm-unknown-linux-musleabihf",
+    "installed": false
+  },
+  {
+    "name": "arm64ec-pc-windows-msvc",
+    "installed": false
+  },
+  {
+    "name": "armv5te-unknown-linux-gnueabi",
+    "installed": false
+  },
+  {
+    "name": "armv5te-unknown-linux-musleabi",
+    "installed": false
+  },
+  {
+    "name": "armv7-linux-androideabi",
+    "installed": false
+  }
+]

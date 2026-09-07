@@ -1,0 +1,78 @@
+# `systemctl status UNIT` prints one block per unit named on the command
+# line: a header carrying the state marker, the unit id and its
+# description, then the properties systemd has for that unit, then the
+# last journal entries of the unit. The blocks repeat, so the definition
+# describes one of them and `records` applies it to each.
+#
+# The journal entries are dropped. They are log lines, not properties of
+# the unit, and their timestamped shape (`Sep 07 08:17:02 host1 cron[1]:`)
+# would otherwise be read as a label of nine characters followed by a
+# value. Only the default short format is recognised: with --output=cat
+# or another format the entries survive the ignore rule, and most of them
+# then fail to parse. Nothing in the text says which format was asked
+# for, so those calls are out of scope.
+#
+# Which properties a unit has depends on what kind of unit it is (Listen
+# and Accepted for a socket, Where and What for a mount, several Process
+# lines for a service that runs more than one command), so the properties
+# are a list of name/value pairs rather than an object: an object would
+# lose the repeated names.
+#
+# systemd right-aligns every label so that its colon sits at column 11
+# and indents a line that continues the previous property (a second Docs
+# URL, the processes under CGroup) to column 13. A continuation line is
+# therefore kept with a null name instead of being dropped. The tree
+# drawn under CGroup has no fixed depth, so only the text of each of its
+# lines survives, not its shape.
+#
+# `systemctl status` with no unit named prints something else entirely: a
+# summary of the manager followed by a control group tree of the whole
+# system. It has no Loaded line, so the signature refuses it.
+#
+# No value is converted. systemd writes durations for a reader
+# ("2 weeks 0 days ago"), sizes with a suffix ("2.5M"), and packs several
+# facts into one line ("active (running) since ..."), none of which has a
+# type this definition can promise.
+format: 1
+command: systemctl
+variant: status
+description: systemctl status of one or more units
+metadata:
+  tags: [linux, systemd, service]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemctl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # A header line: the state marker, the unit id, and the description
+      # systemd omits when it repeats the id.
+      - '^\S [^ ]+\.(?:service|socket|target|device|mount|automount|swap|path|timer|slice|scope)(?: - |$)'
+      - '^ {5}Loaded: \S'
+      - '^ {5}Active: \S'
+input:
+  ignore:
+    # The journal entries printed under each unit.
+    - '^[A-Z][a-z]{2} [ 0-9][0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} '
+parse:
+  type: records
+  start: '^\S [^ ]+\.(?:service|socket|target|device|mount|automount|swap|path|timer|slice|scope)(?: - |$)'
+  parts:
+    - name: unit
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        # systemd leaves the description off when it would only repeat
+        # the unit id, and it is then null. No unit on the machine this
+        # was written on does that, so the branch is untested against a
+        # real capture.
+        pattern: '^(?P<marker>\S) (?P<name>\S+)(?: - (?P<description>.*))?$'
+    - name: properties
+      select: {skip: 1}
+      parse:
+        type: regex
+        # Either a label whose colon sits at column 11, or a line that
+        # continues the property above it and has no label of its own.
+        pattern: '^(?: *(?P<name>[A-Za-z][A-Za-z0-9 ./-]*): | {12,})(?P<value>.*)$'

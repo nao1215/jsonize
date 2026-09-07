@@ -1,0 +1,22 @@
+* cron.service - Regular background program processing daemon
+     Loaded: loaded (/usr/lib/systemd/system/cron.service; enabled; preset: enabled)
+     Active: active (running) since Mon 2026-08-24 09:19:47 JST; 2 weeks 0 days ago
+ Invocation: 3f2a1c05e8b74d1e9a6c0f83b2d54e71
+       Docs: man:cron(8)
+   Main PID: 1971 (cron)
+      Tasks: 1 (limit: 75433)
+     Memory: 2.5M (peak: 5.6M, swap: 32K, swap peak: 32K)
+        CPU: 7.999s
+     CGroup: /system.slice/cron.service
+             `-1971 /usr/sbin/cron -f -P
+
+Sep 07 08:17:02 host1 CRON[1659141]: pam_unix(cron:session): session closed for user root
+Sep 07 08:30:01 host1 CRON[1789329]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+Sep 07 08:30:01 host1 CRON[1789331]: (root) CMD (if [ -x /etc/init.d/anacron ] && ! [ -d /run/systemd/system ]; then exec /usr/sbin/invoke-rc.d anacron start >/dev/null; fi)
+Sep 07 08:30:01 host1 CRON[1789329]: pam_unix(cron:session): session closed for user root
+Sep 07 09:17:01 host1 CRON[1229507]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+Sep 07 09:17:01 host1 CRON[1229511]: (root) CMD (cd / && run-parts --report /etc/cron.hourly)
+Sep 07 09:17:01 host1 CRON[1229507]: pam_unix(cron:session): session closed for user root
+Sep 07 09:30:01 host1 CRON[3486139]: pam_unix(cron:session): session opened for user root(uid=0) by root(uid=0)
+Sep 07 09:30:01 host1 CRON[3486150]: (root) CMD (if [ -x /etc/init.d/anacron ] && ! [ -d /run/systemd/system ]; then exec /usr/sbin/invoke-rc.d anacron start >/dev/null; fi)
+Sep 07 09:30:01 host1 CRON[3486139]: pam_unix(cron:session): session closed for user root

@@ -1,0 +1,4 @@
+source: the first 30 lines of `rustup component list` on Ubuntu 26.04 (rustup 1.29.1, stable toolchain) with LC_ALL=C; the full listing is 160 lines
+description: a listing of the active toolchain in which some components are installed and most are not
+os: linux
+args: [component, list]

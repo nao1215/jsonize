@@ -1,0 +1,40 @@
+# `uv tool list` prints one block per installed tool: the tool and its
+# version, then one line per executable the tool put on PATH. The blocks
+# repeat, so the definition describes one of them and `records` applies
+# it to each.
+#
+# `uv tool list --show-paths` puts the installation directory after the
+# version and the executable path after each name. The signature holds
+# the version line to the end of the line, so that listing is refused
+# rather than read with the paths folded into the version.
+format: 1
+command: uv
+variant: tool-list
+description: uv tool list, installed tools and their executables
+metadata:
+  tags: [python, package]
+  compatible: [uv]
+  references:
+    - https://docs.astral.sh/uv/reference/cli/#uv-tool-list
+detect:
+  signature:
+    all:
+      - '\A\S+ v[0-9]+(?:\.[0-9]+)+\S*$'
+      - '^- [A-Za-z0-9._-]+$'
+parse:
+  type: records
+  start: '^\S+ v[0-9]'
+  parts:
+    - name: tool
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^(?P<name>\S+) v(?P<version>\S+)$'
+    # A tool can put more than one executable on PATH, and their names
+    # need not contain the name of the tool.
+    - name: executables
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^- (?P<name>\S+)$'
