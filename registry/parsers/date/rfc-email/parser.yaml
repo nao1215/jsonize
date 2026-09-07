@@ -21,8 +21,12 @@ detect:
 parse:
   type: regex
   each: input
-  pattern: '\A(?P<weekday>\w{3}), (?P<day>\d\d) (?P<month>\w{3}) (?P<year>\d{4}) (?P<hour>\d\d):(?P<minute>\d\d):(?P<second>\d\d) (?P<offset>[+-]\d{4})[ \t]*$'
+  pattern: '\A(?P<timestamp>(?P<weekday>\w{3}), (?P<day>\d\d) (?P<month>\w{3}) (?P<year>\d{4}) (?P<hour>\d\d):(?P<minute>\d\d):(?P<second>\d\d) (?P<offset>[+-]\d{4}))[ \t]*$'
 fields:
+  # The line states a numeric offset, so the whole of it names one
+  # instant; the parts stay beside it because a caller asking for the
+  # weekday should not have to take the timestamp apart again.
+  timestamp: {type: time, layout: "Mon, 02 Jan 2006 15:04:05 -0700", required: true}
   day: {type: int}
   hour: {type: int}
   minute: {type: int}

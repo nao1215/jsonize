@@ -40,7 +40,10 @@ fields:
   user: {required: true}
   gid: {type: int, required: true}
   group: {required: true}
-  access_time: {required: true}
-  modify_time: {required: true}
-  change_time: {required: true}
-  birth_time: {null_if: ["-"], when_missing: omit}
+  # Every one of these carries the offset the file system recorded, so
+  # the instant is in the text and not in the machine reading it. A file
+  # system that keeps no birth time prints a dash.
+  access_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", required: true}
+  modify_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", required: true}
+  change_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", required: true}
+  birth_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", null_if: ["-"], when_missing: omit}

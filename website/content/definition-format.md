@@ -347,6 +347,7 @@ conversion:
 fields:
   use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
   size:        {type: size, unit: binary}
+  modified:    {type: time, layout: "2006-01-02 15:04:05 -0700"}
   ro:          {type: bool, true_values: [1, yes], false_values: [0, no]}
   options:     {type: array, split: ","}
   groups:
@@ -362,12 +363,14 @@ fields:
 
 | Key | Applies to | Meaning |
 |-----|-----------|---------|
-| `type` | all | `string` (default), `int`, `float`, `bool`, `size`, `array`, `object` |
+| `type` | all | `string` (default), `int`, `float`, `bool`, `size`, `time`, `array`, `object` |
 | `trim_prefix`, `trim_suffix` | all | removed before conversion; without them a string value keeps its whitespace exactly as the parser produced it |
 | `null_if` | all | values (after trimming) that become `null` |
 | `required` | all | `null`/empty is an error |
 | `when_missing` | all | `null` (default) or `omit` the key when the value is missing |
 | `unit` | size | `binary` (K=1024, default) or `decimal` (K=1000); `Ki`/`Mi` always mean 1024 |
+| `layout` | time | the [Go reference layout](https://pkg.go.dev/time#pkg-constants) the timestamp is written in; required, and it has to state a year |
+| `location` | time | how to read a timestamp that states no zone: `utc` (default) or `local`, the zone the running system is in |
 | `true_values`, `false_values` | bool | spellings (case-insensitive); defaults are true/yes/on/1/y and false/no/off/0/n |
 | `split`, `split_regex` | array | how to split; items are trimmed |
 | `items` | array | conversion applied to each element (arrays of arrays are not allowed) |
@@ -377,8 +380,32 @@ fields:
 returns bytes as an integer (rounded). Use it only where the base is
 certain and the value is not already rounded: a human-readable size
 printed by `df -h` or `ls -lh` is neither, and the official definitions
-keep such values as the strings they were printed as. Nesting is limited
-to 8 levels.
+keep such values as the strings they were printed as.
+
+`time` writes the value as an RFC 3339 string and never as an epoch
+number, so a timestamp has one shape in the output and a consumer never
+has to ask which of two a field carries. The same rule as for a rounded
+size applies to what it is used on: a timestamp is converted only where
+the text says what it means.
+
+- No year, no conversion. An `ls -l` listing of a recent file and a
+  syslog line print `Sep  7 14:20`, and dating that means picking a year
+  the output does not name. A layout without a year is a validation
+  error, and those columns stay the strings they were printed as
+  (`who`, `last`, `journalctl -o short`).
+- A zone abbreviation is not an offset. `JST` means +0900 only if you
+  carry a table of abbreviations, which jz does not, so `date`,
+  `systemctl list-timers`, `journalctl --list-boots` and `timedatectl`
+  keep their timestamps as text. A numeric offset in the text needs no
+  table, which is what `journalctl -o short-iso`, `stat`, `mtr` and
+  `date -R` print.
+- `location` is for a timestamp with no zone at all, and it is a
+  statement the definition makes rather than something jz works out. An
+  archive listing (`tar -tv`, `unzip -l`) prints the local time of the
+  machine that wrote the archive, which neither `utc` nor `local`
+  describes, so those stay text too.
+
+Nesting is limited to 8 levels.
 
 
 ## The registry manifest

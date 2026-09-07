@@ -96,6 +96,13 @@ func (r *run) convertScalar(name, s string, f *definition.Field, ln int) (any, e
 			return nil, wrap(err)
 		}
 		return v, nil
+	case definition.FieldTime:
+		loc, _ := convert.Location(f.Location)
+		v, err := convert.Time(s, f.Layout, loc)
+		if err != nil {
+			return nil, wrap(err)
+		}
+		return v, nil
 	case definition.FieldArray:
 		return r.convertArray(name, s, f, ln)
 	case definition.FieldObject:

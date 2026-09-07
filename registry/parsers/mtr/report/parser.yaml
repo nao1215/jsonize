@@ -29,7 +29,9 @@ parse:
         each: input
         pattern: '\AStart: (?P<started>\S+)[ \t]*$'
       fields:
-        started: {required: true}
+        # mtr writes the start time with its offset, so it names an
+        # instant on its own.
+        started: {type: time, layout: "2006-01-02T15:04:05-0700", required: true}
     - name: hops
       select: {skip: 2}
       parse:

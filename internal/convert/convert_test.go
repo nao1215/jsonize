@@ -4,6 +4,7 @@ import (
 	"errors"
 	"math"
 	"testing"
+	"time"
 )
 
 func TestInt(t *testing.T) {
@@ -227,5 +228,55 @@ func TestStripANSI(t *testing.T) {
 				t.Errorf("StripANSI(%q) = %q, want %q", tt.in, got, tt.want)
 			}
 		})
+	}
+}
+
+func TestTime(t *testing.T) {
+	t.Parallel()
+	utc, _ := Location("")
+	local, ok := Location("LOCAL")
+	if !ok {
+		t.Fatal("local is a location")
+	}
+	tests := []struct {
+		name   string
+		in     string
+		layout string
+		loc    *time.Location
+		want   string
+	}{
+		{"offset in the text", "2026-09-07T14:20:01+0900", "2006-01-02T15:04:05-0700", utc, "2026-09-07T14:20:01+09:00"},
+		{"colon in the offset", "2026-09-07T14:20:01+09:00", "2006-01-02T15:04:05-07:00", utc, "2026-09-07T14:20:01+09:00"},
+		{"fraction kept", "2026-09-07 14:20:01.5 +0900", "2006-01-02 15:04:05.999999999 -0700", utc, "2026-09-07T14:20:01.5+09:00"},
+		{"trailing zeros dropped", "2026-09-07 14:20:01.500 +0900", "2006-01-02 15:04:05.999999999 -0700", utc, "2026-09-07T14:20:01.5+09:00"},
+		{"no zone reads as UTC", "2026-09-07 14:20:01", "2006-01-02 15:04:05", utc, "2026-09-07T14:20:01Z"},
+		{"surrounding space", "  2026-09-07 14:20:01  ", "2006-01-02 15:04:05", nil, "2026-09-07T14:20:01Z"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			got, err := Time(tt.in, tt.layout, tt.loc)
+			if err != nil || got != tt.want {
+				t.Errorf("Time(%q) = %q, %v; want %q", tt.in, got, err, tt.want)
+			}
+		})
+	}
+	// The same text read in the running system's zone names the same
+	// wall clock with that zone's offset.
+	got, err := Time("2026-09-07 14:20:01", "2006-01-02 15:04:05", local)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := time.Date(2026, 9, 7, 14, 20, 1, 0, time.Local).Format(time.RFC3339Nano)
+	if got != want {
+		t.Errorf("local = %q, want %q", got, want)
+	}
+	for _, in := range []string{"", "  ", "not a time", "2026-13-45 99:99:99"} {
+		if _, err := Time(in, "2006-01-02 15:04:05", utc); err == nil {
+			t.Errorf("Time(%q) should fail", in)
+		}
+	}
+	if _, ok := Location("Asia/Tokyo"); ok {
+		t.Error("only utc and local are locations")
 	}
 }

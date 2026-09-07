@@ -10,6 +10,7 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Type names used in conversion errors.
@@ -18,6 +19,18 @@ const (
 	typeFloat = "float"
 	typeBool  = "bool"
 	typeSize  = "size"
+	typeTime  = "time"
+)
+
+// Location names the two time zones a definition may name. A zone
+// database is not consulted: jz reads text a command printed on this
+// machine, so the only two answers that are not guesses are the one the
+// text states and the one the machine is in.
+const (
+	// LocationUTC reads a timestamp that carries no zone as UTC.
+	LocationUTC = "utc"
+	// LocationLocal reads it in the running system's zone.
+	LocationLocal = "local"
 )
 
 // Error describes a failed conversion.
@@ -177,6 +190,45 @@ func Size(s string, base SizeBase) (int64, error) {
 		return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("value overflows int64")}
 	}
 	return int64(v), nil
+}
+
+// Time parses a timestamp with a Go reference layout and returns it as an
+// RFC 3339 string. A layout that states a zone offset uses the one in the
+// text; one that does not is read in loc, which is UTC unless the
+// definition said otherwise.
+//
+// The answer is a string and never an epoch number. A timestamp has one
+// shape in the output, so that a consumer does not have to ask which
+// field carries which of two.
+func Time(s, layout string, loc *time.Location) (string, error) {
+	t := strings.TrimSpace(s)
+	if t == "" {
+		return "", &Error{Type: typeTime, Input: s, Cause: errors.New("empty value")}
+	}
+	if loc == nil {
+		loc = time.UTC
+	}
+	parsed, err := time.ParseInLocation(layout, t, loc)
+	if err != nil {
+		var pe *time.ParseError
+		if errors.As(err, &pe) {
+			return "", &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("does not match the layout %q", layout)}
+		}
+		return "", &Error{Type: typeTime, Input: s, Cause: err}
+	}
+	return parsed.Format(time.RFC3339Nano), nil
+}
+
+// Location resolves a definition's location name. An empty name is UTC.
+func Location(name string) (*time.Location, bool) {
+	switch strings.ToLower(strings.TrimSpace(name)) {
+	case "", LocationUTC:
+		return time.UTC, true
+	case LocationLocal:
+		return time.Local, true
+	default:
+		return nil, false
+	}
 }
 
 // Strip removes a prefix and a suffix (each may be empty) and trims

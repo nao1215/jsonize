@@ -43,6 +43,17 @@ project follows [Semantic Versioning](https://semver.org/).
   and `nerdctl` what `docker` prints, and the g-prefixed coreutils macOS
   installs print what the coreutils commands print. `jz run`,
   `--parser` and `jz list` all take the other name.
+- `type: time` for a field, with `layout` (a Go reference layout,
+  required, and it has to state a year) and `location` (`utc` by default,
+  or `local`). The value is written as an RFC 3339 string and never as an
+  epoch number. It is applied where the text says what it means:
+  `journalctl -o short-iso`, `stat`, `mtr --report` and `date -R` all
+  print a numeric offset. A timestamp with no year (`who`, `last`,
+  `journalctl -o short`), one with only a zone abbreviation (`date`,
+  `systemctl list-timers`, `journalctl --list-boots`, `timedatectl`) and
+  one with no zone at all (`tar -tv`, `unzip -l`) stay the strings they
+  were printed as, because dating them means inventing what the output
+  does not say.
 - `input: fold:` joins a value that continues on the next line onto the
   line it belongs to, for the reports that break a long value at the
   terminal width (`ethtool`) and for the control files whose values

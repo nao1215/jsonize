@@ -460,6 +460,12 @@ func describeField(f *definition.Field) string {
 	if f.Unit != "" {
 		s += " unit=" + f.Unit
 	}
+	if f.Layout != "" {
+		s += fmt.Sprintf(" layout=%q", f.Layout)
+	}
+	if f.Location != "" {
+		s += " location=" + f.Location
+	}
 	if len(f.NullIf) > 0 {
 		s += fmt.Sprintf(" null_if=%q", f.NullIf)
 	}

@@ -53,6 +53,7 @@ const (
 	FieldFloat  = "float"
 	FieldBool   = "bool"
 	FieldSize   = "size"
+	FieldTime   = "time"
 	FieldArray  = "array"
 	FieldObject = "object"
 )
@@ -438,6 +439,14 @@ type Field struct {
 	False []string `yaml:"false_values,omitempty"`
 	// Unit selects binary (default) or decimal multipliers for size fields.
 	Unit string `yaml:"unit,omitempty"`
+	// Layout is the Go reference layout a time field is written in
+	// ("2006-01-02T15:04:05-0700"). It is required for a time field, and
+	// it has to carry a year: a timestamp printed without one cannot be
+	// turned into a date without inventing it.
+	Layout string `yaml:"layout,omitempty"`
+	// Location reads a timestamp that states no zone: "utc" (the default)
+	// or "local" for the zone the running system is in.
+	Location string `yaml:"location,omitempty"`
 	// Required rejects null or missing values.
 	Required bool `yaml:"required,omitempty"`
 	// WhenMissing controls what happens when a regex group did not
