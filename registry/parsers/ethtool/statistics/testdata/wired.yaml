@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (ethtool 6.19) with LC_ALL=C
+description: >-
+  A Realtek r8169 card, whose counter names are all plain identifiers and
+  whose values all fit an integer.
+os: linux
+args: ["-S", "eno1"]
