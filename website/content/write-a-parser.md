@@ -44,6 +44,8 @@ Start from the closest existing definition:
 | one object from the whole output | `registry/parsers/uptime/linux/parser.yaml` |
 | nested values | `registry/parsers/id/posix/parser.yaml` |
 | summary line + table | `registry/parsers/w/linux/parser.yaml` |
+| a block per subject, repeated | `registry/parsers/ip/stats-link/parser.yaml` |
+| a header block, then repeated blocks | `registry/parsers/update-alternatives/query/parser.yaml` |
 
 For `lsof`, the header is `COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME`
 and `NAME` may contain spaces, so a whitespace table with explicit columns
