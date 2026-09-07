@@ -1,0 +1,45 @@
+# /proc/consoles is one line per registered system console: the device,
+# what can be done with it, the flags it carries, and the device number.
+#
+# The three operations are a letter or a dash in a fixed position, so
+# each becomes a boolean of its own: R read, W write, U unblank.
+#
+# The flags are one letter per position as well, but the positions are
+# not a fixed set the way the operations are: the kernel fills a slot
+# per flag it knows about and leaves a space where the flag is not set,
+# and slots have been added over time. They are reported as the text
+# between the parentheses with the trailing padding removed, which keeps
+# every letter where the kernel put it. The documented letters are E
+# enabled, C preferred console, B primary boot console, p used for the
+# printk buffer, b a braille device rather than a TTY, and a safe to use
+# when the CPU is offline.
+format: 1
+command: proc
+variant: consoles
+description: /proc/consoles registered system consoles
+metadata:
+  tags: [linux, console, proc]
+  compatible: [Linux]
+  references:
+    - https://www.kernel.org/doc/Documentation/filesystems/proc.rst
+    - https://man7.org/linux/man-pages/man5/proc.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # Every line is a console: a device, the three operation letters,
+      # the flags in parentheses, and the major and minor number. The
+      # operations and the parenthesised flags together are what tell
+      # this from the other tables in /proc that name a device and a
+      # device number.
+      - '\A(?:\S+[ \t]+[R-][W-][U-] \([^)]*\)[ \t]+\d+:\d+[ \t]*\n)*\S+[ \t]+[R-][W-][U-] \([^)]*\)[ \t]+\d+:\d+[ \t]*\z'
+parse:
+  type: regex
+  pattern: '^(?P<device>\S+)[ \t]+(?P<read>[R-])(?P<write>[W-])(?P<unblank>[U-]) \((?P<flags>[^)]*?)[ \t]*\)[ \t]+(?P<major>\d+):(?P<minor>\d+)[ \t]*$'
+fields:
+  device: {required: true}
+  read: {type: bool, true_values: [R], false_values: ["-"]}
+  write: {type: bool, true_values: [W], false_values: ["-"]}
+  unblank: {type: bool, true_values: [U], false_values: ["-"]}
+  major: {type: int, required: true}
+  minor: {type: int, required: true}

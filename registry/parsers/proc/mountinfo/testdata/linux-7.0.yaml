@@ -1,0 +1,14 @@
+description: |
+  A window rather than the whole file: the machine has 107 mounts, and
+  the four rows taken from the end carry the shapes the head does not.
+  Line 26 of the fixture mounts a subdirectory (/snapd/ns) rather than
+  the root of its device, line 29 has a namespace root
+  (mnt:[4026533362]) that is not a path at all, and both of them carry
+  no optional field, so the "-" follows the mount options directly.
+source: |
+  /proc/self/mountinfo on Linux 7.0.0-30-generic (Ubuntu), read with
+  LC_ALL=C. Lines 1-25 and 70-73 of the file; the removable disk mounted
+  under /media named the user, and became /media/user/2nd, and the
+  docker overlay and netns mounts that fill lines 75-93 are outside the
+  window.
+os: linux

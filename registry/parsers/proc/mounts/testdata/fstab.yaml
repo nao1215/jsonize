@@ -1,0 +1,10 @@
+description: |
+  /etc/fstab is written in the same six fields, and that is why this
+  case is here. What separates them is how the file is written rather
+  than what the fields are: this one has comments, mounts a swap file
+  with a mount point of none, spells its options defaults and sw, and
+  gives the pass column a 1 and a 2. The kernel writes none of that, so
+  none of these lines is the row this definition claims.
+source: the etc/fstab definition's own fixture, registry/parsers/etc/fstab/testdata/ubuntu-26.04.txt
+expect_error: 'does not describe this input'
+os: linux

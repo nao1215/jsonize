@@ -1,0 +1,85 @@
+# /proc/<pid>/status is the human readable form of a process entry: a
+# label, a colon, a tab and a value. It is read as a map of whatever
+# labels the file holds, the way proc/cpuinfo is, because the set of
+# them is not fixed. It follows the kernel version, the architecture and
+# what the process is: a kernel thread has no address space and writes
+# none of the Vm and Rss lines, x86 adds x86_Thread_features, and a
+# process inside a namespace writes a value per namespace level on the
+# NStgid group.
+#
+# A value that ends in a unit is kept as the text the kernel wrote.
+# "16248 kB" is a number and a unit in one field, and separating them
+# here would mean a conversion per label: the labels that carry a unit
+# would be taken apart and the rest handed back whole, and a kernel that
+# added another counter would land in the second group. proc/meminfo can
+# separate them because every line there has the same shape and the
+# shape is what it reads; here the shape is a map. This is the same
+# decision proc/cpuinfo makes for "cache size", and the open question it
+# records in design.md covers both.
+#
+# The fields below convert only what is a number, a set of numbers or a
+# flag on every kernel. Umask stays text because it is octal and reading
+# it as decimal would change what it says. The signal and capability
+# masks are hexadecimal for the same reason, and Cpus_allowed_list is a
+# range rather than a count.
+#
+# Uid, Gid and the NS group hold several numbers in one field. Uid and
+# Gid are the real, effective, saved set and filesystem ids in that
+# order; the NS group is one id per namespace level, outermost first, so
+# it holds one number outside a container and more inside one. Groups is
+# a set. All of them become arrays of numbers, which is reading the line
+# rather than adding to it.
+format: 1
+command: proc
+variant: self-status
+description: /proc/<pid>/status process status labels
+metadata:
+  tags: [linux, process, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_pid_status.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The file opens with the command name, and the four lines below
+      # are written for every process on every kernel that has this
+      # file. State is the distinctive one: a letter and the word it
+      # stands for in parentheses.
+      - '\AName:[ \t]+\S'
+      - '^State:[ \t]+[A-Z] \([a-z ]+\)[ \t]*$'
+      - '^Pid:[ \t]+\d+[ \t]*$'
+      - '^PPid:[ \t]+\d+[ \t]*$'
+      # The four ids the kernel keeps for a process, which is what tells
+      # this from any other list of labelled values.
+      - '^Uid:[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]*$'
+parse:
+  type: kv
+  separator: ":"
+  as: map
+# The keys are the labels the kernel writes.
+fields:
+  Tgid: {type: int}
+  Ngid: {type: int}
+  Pid: {type: int}
+  PPid: {type: int}
+  TracerPid: {type: int}
+  FDSize: {type: int}
+  Threads: {type: int}
+  # The seccomp mode is 0, 1 or 2, not a flag.
+  Seccomp: {type: int}
+  Seccomp_filters: {type: int}
+  voluntary_ctxt_switches: {type: int}
+  nonvoluntary_ctxt_switches: {type: int}
+  Kthread: {type: bool}
+  CoreDumping: {type: bool}
+  THP_enabled: {type: bool}
+  NoNewPrivs: {type: bool}
+  # Empty on a kernel thread, which is an empty list rather than null.
+  Groups: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  Uid: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  Gid: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  NStgid: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  NSpid: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  NSpgid: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  NSsid: {type: array, split_regex: '[ \t]+', items: {type: int}}

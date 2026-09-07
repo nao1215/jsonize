@@ -1,0 +1,8 @@
+description: |
+  /proc/stat also opens a line with cpu and a processor number followed
+  by counters, and is the file this one is most easily read as. It has
+  no version line, no timestamp and no domain rows, and its counters are
+  jiffies spent in each state rather than scheduler statistics.
+source: /proc/stat on Linux 7.0.0-30-generic (Ubuntu), lines 1-8, read with LC_ALL=C
+expect_error: 'does not describe this input'
+os: linux

@@ -1,0 +1,6 @@
+description: |
+  The last two rows carry no unit: a nice value and a realtime priority
+  are plain numbers, and the kernel leaves the Units column empty for
+  them.
+source: /proc/self/limits of a `cat` process on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C
+os: linux

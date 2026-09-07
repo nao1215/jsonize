@@ -1,0 +1,10 @@
+description: |
+  The first fifteen lines of /proc/meminfo. It is labelled with a colon
+  the same way and several of its labels end in a number and kB, but it
+  holds none of the lines this format is recognised by: no Name, no
+  State and no Pid. proc/meminfo reads it; this definition refuses it,
+  which is the other direction of the pair that proc/meminfo's
+  process-status case pins.
+source: /proc/meminfo on Linux 7.0.0-30-generic (Ubuntu), lines 1-15, read with LC_ALL=C
+expect_error: 'does not describe this input'
+os: linux

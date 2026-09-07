@@ -1,0 +1,39 @@
+# /proc/buddyinfo is one line per memory zone: the NUMA node it belongs
+# to, the name of the zone, and how many free blocks the buddy allocator
+# holds of each size.
+#
+# The counts are an array rather than a column per size. Their number is
+# the kernel's MAX_PAGE_ORDER plus one, which is a build-time constant
+# (eleven entries here, ten on a kernel built with the older default),
+# so a definition that named a column per order would refuse the file on
+# a kernel configured differently. The index into the array is the
+# order: entry n counts blocks of 2^n pages, so on a machine with 4 KiB
+# pages entry 0 is a single page and entry 10 is 4 MiB.
+format: 1
+command: proc
+variant: buddyinfo
+description: /proc/buddyinfo free blocks per zone and allocation order
+metadata:
+  tags: [linux, memory, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_buddyinfo.5.html
+detect:
+  os: [linux]
+  signature:
+    # A machine with many NUMA nodes writes a line per node and zone,
+    # which passes the default window.
+    window: 200
+    all:
+      # Every line names a node and a zone and then counts free blocks.
+      # Requiring the counts on the same line is what tells this from
+      # /proc/zoneinfo, which opens each zone with the same words and
+      # writes its numbers on indented lines below.
+      - '\A(?:Node \d+, zone[ \t]+\S+(?:[ \t]+\d+)+[ \t]*\n)*Node \d+, zone[ \t]+\S+(?:[ \t]+\d+)+[ \t]*\z'
+parse:
+  type: regex
+  pattern: '^Node (?P<node>\d+), zone[ \t]+(?P<zone>\S+)[ \t]+(?P<free_blocks>\d+(?:[ \t]+\d+)*)[ \t]*$'
+fields:
+  node: {type: int, required: true}
+  zone: {required: true}
+  free_blocks: {type: array, split_regex: '[ \t]+', items: {type: int}}

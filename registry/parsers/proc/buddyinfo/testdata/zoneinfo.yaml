@@ -1,0 +1,7 @@
+description: |
+  /proc/zoneinfo opens each zone with the same "Node 0, zone      DMA"
+  line, and is the nearest thing in /proc to this file. The line carries
+  no counts there; the numbers follow on indented lines of their own.
+source: /proc/zoneinfo on Linux 7.0.0-30-generic (Ubuntu), lines 1-12, read with LC_ALL=C
+expect_error: 'does not describe this input'
+os: linux
