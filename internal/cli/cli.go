@@ -38,8 +38,9 @@ const flagHelp = "--help"
 // MaxInputSize bounds the text jz reads, from a pipe, a file or a
 // command's stdout. It is a safety limit rather than a preference, so it
 // is not a command line option: a runaway producer must not be able to
-// make jz allocate without bound.
-const MaxInputSize = 64 << 20
+// make jz allocate without bound. It is the engine's own default rather
+// than a second number that happens to agree with it.
+const MaxInputSize = engine.DefaultMaxInputSize
 
 // Env is the process environment the CLI runs in, injected for tests.
 type Env struct {
