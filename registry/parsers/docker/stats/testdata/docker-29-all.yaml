@@ -1,0 +1,7 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  One sample for every container, so the stopped ones report zero: "0B / 0B"
+  in the paired columns and 0 processes. Names and IDs were replaced,
+  keeping the printed width.
+os: linux
+args: ["stats", "--no-stream", "-a"]

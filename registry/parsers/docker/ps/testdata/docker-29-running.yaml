@@ -1,0 +1,8 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  The running containers. One row publishes two ports, one publishes three,
+  and three publish none, which is the empty PORTS cell. Container names,
+  image tags built locally and the container IDs were replaced, keeping the
+  printed width and the length of the hexadecimal IDs.
+os: linux
+args: ["ps"]

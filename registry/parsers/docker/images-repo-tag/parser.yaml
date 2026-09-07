@@ -1,0 +1,41 @@
+# The image table whose columns are REPOSITORY, TAG, IMAGE ID, CREATED and
+# SIZE. Docker prints it for `docker images --format 'table {{.Repository}}
+# \t{{.Tag}}\t{{.ID}}\t{{.CreatedSince}}\t{{.Size}}'`, and it is also what
+# older docker builds print for a bare `docker images`. The variant is named
+# after its columns rather than after a docker version, because a definition
+# cannot check which build produced the text.
+#
+# CREATED is an English phrase ("2 weeks ago", "8 months ago") and holds
+# spaces, and "IMAGE ID" is a two-word header cell in the middle of the
+# table, so the row is read with an expression: cutting on whitespace would
+# break the phrase and cutting at the header words would shift every column
+# after IMAGE ID.
+#
+# SIZE is rounded for reading ("41MB", "1.35GB") and stays the string docker
+# printed. An image with no reference has "<none>" in both REPOSITORY and
+# TAG, which becomes null.
+format: 1
+command: docker
+variant: images-repo-tag
+description: docker images with the REPOSITORY/TAG/IMAGE ID/CREATED/SIZE columns
+metadata:
+  tags: [container, docker, image]
+  compatible: [Docker CLI]
+  references:
+    - https://docs.docker.com/reference/cli/docker/image/ls/
+detect:
+  signature:
+    all:
+      - '\AREPOSITORY[ \t]+TAG[ \t]+IMAGE ID[ \t]+CREATED[ \t]+SIZE[ \t]*$'
+input:
+  ignore:
+    - '^REPOSITORY[ \t]+TAG[ \t]+IMAGE ID[ \t]'
+parse:
+  type: regex
+  pattern: '^(?P<repository>\S+) {2,}(?P<tag>\S+) {2,}(?P<image_id>\S+) {2,}(?P<created>\S.*?) {2,}(?P<size>\S+)$'
+fields:
+  repository: {null_if: ["<none>"]}
+  tag: {null_if: ["<none>"]}
+  image_id: {required: true}
+  created: {required: true}
+  size: {required: true}

@@ -1,0 +1,38 @@
+[
+  {
+    "network_id": "9d34582a8e2c",
+    "name": "api_default",
+    "driver": "bridge",
+    "scope": "local"
+  },
+  {
+    "network_id": "4e99b1f53ebc",
+    "name": "bridge",
+    "driver": "bridge",
+    "scope": "local"
+  },
+  {
+    "network_id": "377bf3d7e28a",
+    "name": "host",
+    "driver": "host",
+    "scope": "local"
+  },
+  {
+    "network_id": "35521adc1b1e",
+    "name": "kind",
+    "driver": "bridge",
+    "scope": "local"
+  },
+  {
+    "network_id": "2c10496dedcc",
+    "name": "demos_services",
+    "driver": "bridge",
+    "scope": "local"
+  },
+  {
+    "network_id": "758f21e616c1",
+    "name": "none",
+    "driver": "null",
+    "scope": "local"
+  }
+]

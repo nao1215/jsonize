@@ -1,0 +1,8 @@
+CONTAINER ID   NAME                                   CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O         PIDS
+accaee24e51d   datalab-bq-probe                       0.00%     342.7MiB / 61.43GiB   0.54%     37.3MB / 29.2MB   878MB / 464MB     38
+a2afeaf3fa18   datalab-pg-probe                       0.37%     27.31MiB / 61.43GiB   0.04%     9.12MB / 686kB    1.22GB / 56.7MB   6
+c781233c8005   datalab-mysql-probe                    0.48%     412.7MiB / 61.43GiB   0.66%     9.85MB / 1.93MB   2.3GB / 323MB     51
+1e2516252d99   demo-environment-local-worker2         1.69%     1.292GiB / 61.43GiB   2.10%     648MB / 286MB     4.5GB / 832MB     298
+3793087f6697   demo-environment-local-worker          1.79%     1.194GiB / 61.43GiB   1.94%     2.32GB / 569MB    5.3GB / 437MB     303
+e2a31dabb7ac   demo-environment-local-control-plane   9.67%     2.344GiB / 61.43GiB   3.82%     602MB / 2.67GB    11.5GB / 38.5GB   477
+bd85e74de011   buildx_buildkit_demo-local-builder     0.01%     78.03MiB / 61.43GiB   0.12%     803MB / 11.5MB    18.1GB / 14GB     39

@@ -1,0 +1,8 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  Every tagged image. Sixteen rows carry "U" in EXTRA and the rest leave it
+  empty, one image is named by digest instead of by tag, and two tags share
+  one image ID. Image names built locally, one registry account name and the
+  hexadecimal IDs were replaced, keeping the printed width.
+os: linux
+args: ["images"]
