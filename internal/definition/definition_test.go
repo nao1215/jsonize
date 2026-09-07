@@ -301,6 +301,7 @@ func TestLoadErrors(t *testing.T) {
 		{"bad fold", "format: 1\ncommand: c\nvariant: v\ninput: {fold: '('}\nparse: {type: kv}\n", "invalid regular expression"},
 		{"composite no parts", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite}\n", "parts: is required"},
 		{"composite nested", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: a, parse: {type: composite, parts: [{name: b, parse: {type: kv}}]}}]}\n", "cannot be composite"},
+		{"records with no parts", "format: 1\ncommand: c\nvariant: v\nparse: {type: records, start: x}\n", "is required for type records"},
 		{"records nested in records", "format: 1\ncommand: c\nvariant: v\nparse: {type: records, start: x, parts: [{name: a, parse: {type: records, start: y, parts: [{name: b, parse: {type: kv}}]}}]}\n", "cannot be records"},
 		{"records part cannot be composite", "format: 1\ncommand: c\nvariant: v\nparse: {type: records, start: x, parts: [{name: a, parse: {type: composite, parts: [{name: b, parse: {type: kv}}]}}]}\n", "cannot be composite"},
 		{"composite no name", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{parse: {type: kv}}]}\n", "name: is required"},

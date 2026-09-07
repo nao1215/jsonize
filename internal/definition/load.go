@@ -459,7 +459,7 @@ func validateKV(v *validator, path string, p *Parse) {
 
 func validateComposite(v *validator, path string, p *Parse, kind string) {
 	if len(p.Parts) == 0 {
-		v.add(path+".parts", "is required for type composite")
+		v.add(path+".parts", "is required for type %s", kind)
 	}
 	if len(p.Parts) > MaxParts {
 		v.add(path+".parts", "more than %d parts", MaxParts)
