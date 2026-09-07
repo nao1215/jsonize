@@ -1,0 +1,34 @@
+# `apt-cache depends PKG` prints the package and, indented under it, each
+# relationship it has; a virtual package's providers are indented one
+# level further. The depth is a property of the dependency graph, so it
+# is read as a tree.
+format: 1
+command: apt-cache
+variant: depends
+description: apt-cache depends, what a package depends on
+metadata:
+  tags: [linux, debian, package]
+  compatible: [APT]
+  references:
+    - https://manpages.debian.org/apt-cache
+detect:
+  args:
+    any: ["depends", "rdepends"]
+  signature:
+    all:
+      - '\A\S+[ \t]*$'
+      - '^  (?:Pre)?Depends: \S+[ \t]*$'
+parse:
+  type: tree
+  indent: "  "
+  node:
+    parse:
+      type: regex
+      patterns:
+        # A relationship names its kind; a provider under one is a bare
+        # package name, and so is the package the report is about.
+        - '^(?P<relation>\S+): (?P<package>.+?)[ \t]*$'
+        - '^(?P<package>.+?)[ \t]*$'
+    fields:
+      package: {required: true}
+      relation: {when_missing: omit}

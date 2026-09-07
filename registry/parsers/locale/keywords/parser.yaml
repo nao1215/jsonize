@@ -1,0 +1,31 @@
+# `locale -k CATEGORY` prints the keywords of one locale category and
+# their values, quoted when the value is a list or holds a space. The
+# quotes are syntax rather than content, so they come off; the
+# semicolons inside a list are left alone, because which keywords hold a
+# list is a property of the category rather than of the format.
+format: 1
+command: locale
+variant: keywords
+description: locale -k CATEGORY, the keywords of one locale category
+metadata:
+  tags: [linux, darwin, locale]
+  compatible: [glibc]
+  references:
+    - https://man7.org/linux/man-pages/man1/locale.1.html
+detect:
+  args:
+    any: ["-k", "--keyword-name"]
+  signature:
+    all:
+      # A keyword name is lower case with underscores, and the first
+      # line of every category jz has seen states one.
+      - '\A[a-z][a-z0-9_]*=(?:"[^"]*"|[^"\n]*)$'
+      # At least one value is a quoted list, which is what separates this
+      # from a shell-quoted settings file such as /etc/os-release, whose
+      # names are upper case.
+      - '^[a-z][a-z0-9_]*="[^"]*"$'
+parse:
+  type: kv
+  separator: "="
+  unquote: true
+  as: map

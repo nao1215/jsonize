@@ -1,0 +1,3 @@
+source: "ip route show table all on Ubuntu with iproute2 6.14, LC_ALL=C, trimmed to six routes; the local table's routes open with their type, which the main table never prints. The addresses and the interface name are replaced."
+os: linux
+args: ["route", "show", "table", "all"]

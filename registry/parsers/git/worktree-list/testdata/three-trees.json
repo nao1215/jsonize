@@ -1,0 +1,21 @@
+[
+  {
+    "path": "/srv/repo",
+    "commit": "a799d62",
+    "branch": "main"
+  },
+  {
+    "path": "/srv/repo/wt/feature",
+    "commit": "79e6e38",
+    "branch": "feature",
+    "state": "locked"
+  },
+  {
+    "path": "/srv/repo/wt/detached",
+    "commit": "63831b4",
+    "state": "detached HEAD"
+  },
+  {
+    "path": "/srv/repo/wt/bare"
+  }
+]

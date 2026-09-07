@@ -1,0 +1,3 @@
+source: "mokutil --list-sbat on Ubuntu with mokutil 0.7.2, LC_ALL=C"
+os: linux
+args: ["--list-sbat"]

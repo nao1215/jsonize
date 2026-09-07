@@ -1,0 +1,7 @@
+bash:
+  Installed: 5.3-2ubuntu1
+  Candidate: 5.3-2ubuntu1
+  Version table:
+ *** 5.3-2ubuntu1 500
+        500 http://jp.archive.ubuntu.com/ubuntu resolute/main amd64 Packages
+        100 /var/lib/dpkg/status

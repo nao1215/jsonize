@@ -1,0 +1,2 @@
+source: "go tool dist list with Go 1.26, LC_ALL=C, trimmed to twelve platforms"
+args: ["tool", "dist", "list"]

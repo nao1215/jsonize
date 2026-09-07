@@ -1,0 +1,68 @@
+# `apt-cache policy PKG` prints, for each package named, which version is
+# installed, which one would be installed, and then the version table:
+# every version APT knows and the sources that offer it, with the source
+# priorities indented under each version. The star marks the installed
+# one.
+format: 1
+command: apt-cache
+variant: policy
+description: apt-cache policy PKG, the versions of a package and where they come from
+metadata:
+  tags: [linux, debian, package]
+  compatible: [APT]
+  references:
+    - https://manpages.debian.org/apt-cache
+detect:
+  args:
+    any: ["policy"]
+  signature:
+    all:
+      - '\A\S+:[ \t]*$'
+      - '^  Installed: \S'
+      - '^  Candidate: \S'
+      - '^  Version table:[ \t]*$'
+parse:
+  type: records
+  start: '^\S+:[ \t]*$'
+  parts:
+    - name: package
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>\S+):[ \t]*\z'
+    - name: state
+      select: {skip: 1, limit: 2}
+      parse:
+        type: kv
+        separator: ": "
+        as: map
+      fields:
+        Installed: {null_if: ["(none)"]}
+        Candidate: {null_if: ["(none)"]}
+    # The version table is two kinds of line: a version with the
+    # priority APT gives it, and under each one the sources that offer
+    # it. They are read as two lists rather than as a tree, because the
+    # marker column that says which version is installed sits where the
+    # indentation would be, so the depth of a line and the width of its
+    # prefix are not the same thing here.
+    - name: versions
+      select: {after: '^  Version table:'}
+      ignore: ['^ {8}']
+      parse:
+        type: regex
+        pattern: '^ (?P<marker>\*\*\*|   ) (?P<version>\S+) (?P<priority>[0-9]+)[ \t]*$'
+      fields:
+        version: {required: true}
+        priority: {type: int, required: true}
+        # The three stars mark the version that is installed.
+        marker: {type: bool, true_values: ["***"], false_values: ["   ", ""]}
+    - name: sources
+      select: {after: '^  Version table:'}
+      ignore: ['^ (?:\*\*\*|   ) \S+ [0-9]+[ \t]*$']
+      parse:
+        type: regex
+        pattern: '^ {8}(?P<priority>[0-9]+) (?P<source>.+?)[ \t]*$'
+      fields:
+        priority: {type: int, required: true}
+        source: {required: true}

@@ -1,0 +1,30 @@
+# `systemd-analyze security` scores each service on how much of the
+# system it can reach. The last column is an emoticon, which is the same
+# fact as the predicate beside it drawn for a terminal; it is kept as
+# printed rather than dropped, because dropping a column is a claim about
+# what a reader wants.
+format: 1
+command: systemd-analyze
+variant: security
+description: systemd-analyze security, the exposure score of each service
+metadata:
+  tags: [linux, systemd, security]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemd-analyze.html
+detect:
+  os: [linux]
+  args:
+    any: ["security"]
+  signature:
+    all:
+      - '\A[ \t]*UNIT[ \t]+EXPOSURE[ \t]+PREDICATE[ \t]+HAPPY[ \t]*$'
+parse:
+  type: table
+  header:
+    columns: [unit, exposure, predicate, happy]
+fields:
+  unit: {required: true}
+  exposure: {type: float, required: true}
+  predicate: {required: true}
+  happy: {required: true}

@@ -1,0 +1,31 @@
+# `git worktree list` prints the path of each working tree, the commit it
+# has checked out and the branch that commit is on, with the state after
+# it when there is one. A bare tree prints "(bare)" where the commit and
+# branch would be.
+format: 1
+command: git
+variant: worktree-list
+description: git worktree list, the working trees of a repository
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-worktree
+detect:
+  args:
+    all: ["worktree", "list"]
+  signature:
+    all:
+      - '\A/\S+[ \t]+(?:\(bare\)|[0-9a-f]{7,40}[ \t]+\[[^]]+\])'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<path>\S+)[ \t]+\(bare\)[ \t]*$'
+    - '^(?P<path>\S+)[ \t]+(?P<commit>[0-9a-f]{7,40})[ \t]+\[(?P<branch>[^]]*)\](?:[ \t]+(?P<state>\S+))?[ \t]*$'
+    # A tree whose HEAD is detached names no branch.
+    - '^(?P<path>\S+)[ \t]+(?P<commit>[0-9a-f]{7,40})[ \t]+\((?P<state>detached HEAD)\)[ \t]*$'
+fields:
+  path: {required: true}
+  commit: {when_missing: omit}
+  branch: {when_missing: omit}
+  state: {when_missing: omit}

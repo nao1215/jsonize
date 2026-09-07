@@ -28,13 +28,13 @@ the same reading with settings of your own.
 
 | Command | Variants |
 |---------|----------|
-| `amixer` | `simple-controls` |
+| `amixer` | `contents`, `simple-controls` |
 | `aplay` | `devices` |
 | `apt` | `list`, `show` |
-| `apt-cache` | `stats` |
+| `apt-cache` | `depends`, `policy`, `stats` |
 | `ar` | `table-verbose` |
 | `arp` | `alternate` |
-| `blkid` | `linux` |
+| `blkid` | `export`, `linux` |
 | `bluetoothctl` | `show` |
 | `bridge` | `fdb`, `link` |
 | `busctl` | `list` |
@@ -44,12 +44,13 @@ the same reading with settings of your own.
 | `chrt` | `policy` |
 | `cksum` | `posix` |
 | `csv` | `comma`, `tab` |
+| `curl` | `version` |
 | `date` | `posix`, `rfc-email` |
 | `debconf-show` | `linux` |
 | `df` | `bsd`, `bsd-human`, `busybox-human`, `gnu`, `gnu-human`, `gnu-inodes`, `gnu-inodes-human`, `gnu-type`, `gnu-type-human` |
 | `dig` | `bind` |
 | `docker` | `images-disk-usage`, `images-repo-tag`, `network-ls`, `ps`, `stats`, `volume-ls` |
-| `dpkg` | `list`, `status` |
+| `dpkg` | `list`, `selections`, `status` |
 | `du` | `gnu-human`, `posix` |
 | `efibootmgr` | `linux` |
 | `env` | `null-separated`, `posix` |
@@ -64,9 +65,10 @@ the same reading with settings of your own.
 | `getcap` | `paths` |
 | `getconf` | `glibc` |
 | `getfacl` | `posix` |
-| `git` | `branch-verbose`, `config-list`, `count-objects`, `diff-numstat`, `diff-stat`, `for-each-ref`, `log`, `log-oneline`, `ls-files-stage`, `ls-tree`, `remote-verbose`, `shortlog-summary`, `show-ref`, `stash-list`, `status-porcelain` |
-| `go` | `env`, `list-modules`, `mod-graph`, `version-modules` |
-| `gpg` | `colons` |
+| `gh` | `auth-status` |
+| `git` | `branch-verbose`, `config-list`, `count-objects`, `diff-numstat`, `diff-stat`, `for-each-ref`, `log`, `log-oneline`, `ls-files-stage`, `ls-tree`, `remote-verbose`, `shortlog-summary`, `show-ref`, `stash-list`, `status-porcelain`, `worktree-list` |
+| `go` | `dist-list`, `env`, `list-modules`, `mod-graph`, `version-modules` |
+| `gpg` | `colons`, `version` |
 | `hciconfig` | `linux` |
 | `hexdump` | `canonical` |
 | `host` | `bind` |
@@ -77,15 +79,15 @@ the same reading with settings of your own.
 | `ini` | `default` |
 | `ionice` | `class` |
 | `iostat` | `cpu`, `device`, `extended`, `linux` |
-| `ip` | `address`, `brief-address`, `brief-link`, `link`, `multicast-address`, `neighbour`, `route`, `rule`, `stats-link` |
+| `ip` | `address`, `brief-address`, `brief-link`, `link`, `multicast-address`, `neighbour`, `route`, `rule`, `stats-link`, `stats-link-detail` |
 | `ipcs` | `linux`, `message-queues`, `semaphores`, `shared-memory` |
 | `iw` | `dev`, `link` |
-| `journalctl` | `boots`, `short`, `short-iso`, `short-precise` |
+| `journalctl` | `boots`, `short`, `short-iso`, `short-monotonic`, `short-precise` |
 | `kv` | `colon`, `equals` |
 | `last` | `busybox` |
 | `ldconfig` | `cache` |
 | `ldd` | `posix` |
-| `locale` | `posix` |
+| `locale` | `keywords`, `posix` |
 | `localectl` | `linux` |
 | `loginctl` | `seats`, `sessions`, `users` |
 | `losetup` | `linux` |
@@ -105,26 +107,27 @@ the same reading with settings of your own.
 | `lsns` | `linux` |
 | `lsof` | `linux`, `tasks` |
 | `lspci` | `kernel`, `linux`, `machine`, `numeric`, `numeric-names`, `verbose`, `verbose-machine` |
-| `lsusb` | `linux`, `verbose` |
+| `lsusb` | `linux`, `tree`, `verbose` |
 | `md5sum` | `posix` |
 | `mise` | `ls` |
 | `modinfo` | `linux` |
+| `mokutil` | `sbat` |
 | `mount` | `bsd`, `linux` |
-| `mpstat` | `linux` |
+| `mpstat` | `interrupts`, `linux` |
 | `mtr` | `report` |
 | `namei` | `long` |
 | `netstat` | `all-sockets`, `internet`, `routing`, `unix` |
 | `networkctl` | `list` |
 | `nm` | `dynamic` |
-| `nmcli` | `connection`, `device`, `device-show`, `wifi` |
+| `nmcli` | `connection`, `device`, `device-show`, `general`, `wifi` |
 | `npm` | `ls`, `outdated` |
 | `nslookup` | `query` |
 | `nstat` | `counters` |
 | `numactl` | `hardware` |
 | `objdump` | `section-headers` |
 | `od` | `hex-bytes` |
-| `openssl` | `ciphers`, `version-all` |
-| `pactl` | `info`, `short-devices` |
+| `openssl` | `ciphers`, `ciphers-codes`, `version-all` |
+| `pactl` | `info`, `short-devices`, `sinks` |
 | `parted` | `machine` |
 | `pidstat` | `linux`, `memory` |
 | `ping` | `linux` |
@@ -140,7 +143,7 @@ the same reading with settings of your own.
 | `rustup` | `component-list`, `target-list`, `toolchains`, `toolchains-verbose` |
 | `sar` | `cpu`, `filesystem`, `io`, `memory`, `network-device`, `paging`, `queue`, `swap`, `task` |
 | `scc` | `default` |
-| `sensors` | `linux` |
+| `sensors` | `linux`, `raw` |
 | `service` | `status-all` |
 | `sfdisk` | `dump` |
 | `sha1sum` | `posix` |
@@ -156,8 +159,8 @@ the same reading with settings of your own.
 | `stat` | `gnu`, `gnu-filesystem`, `gnu-terse` |
 | `swapon` | `legacy`, `linux` |
 | `sysctl` | `linux` |
-| `systemctl` | `show`, `sockets`, `status`, `timers`, `unit-files`, `units` |
-| `systemd-analyze` | `blame`, `critical-chain`, `time` |
+| `systemctl` | `dependencies`, `jobs`, `show`, `sockets`, `status`, `timers`, `unit-files`, `units` |
+| `systemd-analyze` | `blame`, `critical-chain`, `security`, `time` |
 | `systemd-cgtop` | `batch` |
 | `systemd-id128` | `show` |
 | `systemd-path` | `paths` |
@@ -168,6 +171,7 @@ the same reading with settings of your own.
 | `timedatectl` | `linux`, `timesync`, `timezones` |
 | `top` | `linux` |
 | `tracepath` | `linux` |
+| `tree` | `listing` |
 | `udevadm` | `info` |
 | `ulimit` | `bash`, `dash` |
 | `uname` | `darwin`, `linux` |

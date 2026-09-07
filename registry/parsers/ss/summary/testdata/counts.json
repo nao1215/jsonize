@@ -4,7 +4,7 @@
   },
   "tcp": {
     "total": 444,
-    "established": 144,
+    "estab": 144,
     "closed": 264,
     "orphaned": 0,
     "timewait": 4

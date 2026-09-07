@@ -1,0 +1,2 @@
+source: "gh auth status with GitHub CLI 2.87.3, LC_ALL=C; the account name and the home directory are replaced, and the token was already masked by gh"
+args: ["auth", "status"]

@@ -1,3 +1,0 @@
-source: "ss -s on Ubuntu with iproute2 6.14, LC_ALL=C"
-os: linux
-args: ["-s"]

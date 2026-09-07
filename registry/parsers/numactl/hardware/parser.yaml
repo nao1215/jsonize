@@ -1,12 +1,18 @@
-# `numactl --hardware` prints how many NUMA nodes the machine has, a
-# block of facts per node, and a distance matrix. The per-node lines all
-# start with "node N", so they are read as one list rather than as a
-# block per node: which of them a kernel prints varies, and a list of
-# what was printed says that without claiming a shape.
+# `numactl --hardware` prints a count of the memory nodes, then three
+# lines about each node, then a distance matrix.
+#
+# The three lines per node repeat, so they are a records part inside the
+# composite. The matrix header names the columns with node numbers rather
+# than with column names, so it is dropped and each row keeps its
+# distances as a list in column order.
+#
+# The sizes are printed in whole megabytes and are exact, so they are
+# numbers; the unit is on the line rather than in the value, and is left
+# out of the JSON the way every other exact number in the registry is.
 format: 1
 command: numactl
 variant: hardware
-description: numactl --hardware, NUMA nodes and the distances between them
+description: numactl --hardware memory nodes and distances
 metadata:
   tags: [linux, memory, numa]
   compatible: [numactl]
@@ -14,12 +20,15 @@ metadata:
     - https://man7.org/linux/man-pages/man8/numactl.8.html
 detect:
   os: [linux]
-  args:
-    any: ["--hardware", "-H"]
   signature:
     all:
-      - '\Aavailable: [0-9]+ nodes '
-      - '^node [0-9]+ cpus:'
+      - '\Aavailable: \d+ nodes? \('
+      - '^node distances:[ \t]*$'
+input:
+  ignore:
+    # The header of the distance matrix, which is the word node followed
+    # by the node numbers. A per-node line has a word after the number.
+    - '^node(?:[ \t]+\d+)+[ \t]*$'
 parse:
   type: composite
   parts:
@@ -28,27 +37,37 @@ parse:
       parse:
         type: regex
         each: input
-        pattern: '\Aavailable: (?P<nodes>[0-9]+) nodes \((?P<node_ids>[^)]*)\)[ \t]*\z'
+        pattern: '\Aavailable: (?P<count>\d+) nodes? \((?P<nodes>[^)]*)\)'
       fields:
-        nodes: {type: int}
-    # The value is left as printed: a cpu list is a list of numbers, a
-    # size is a number and its unit, and one key cannot be both.
-    - name: node
-      select: {after: '^available:'}
-      ignore: ['^node distances:', '^node[ \t]+[0-9 \t]*$', '^[ \t]*[0-9]+:']
+        count: {type: int, required: true}
+        nodes: {type: array, split_regex: '[ \t,]+', items: {type: int}}
+    - name: nodes
+      select: {after: '\Aavailable:', until: '^node distances:'}
       parse:
-        type: regex
-        pattern: '^node (?P<node>[0-9]+) (?P<key>\S+):[ \t]*(?P<value>.*?)[ \t]*$'
-      fields:
-        node: {type: int, required: true}
-    # The matrix is one row per node, and the row is the distance to each
-    # node in the order the header names them.
+        type: records
+        start: '^node \d+ cpus:'
+        parts:
+          - name: cpus
+            select: {limit: 1}
+            parse:
+              type: regex
+              each: input
+              pattern: '^node (?P<node>\d+) cpus:[ \t]*(?P<cpus>.*?)[ \t]*$'
+            fields:
+              node: {type: int, required: true}
+              cpus: {type: array, split_regex: '[ \t]+', items: {type: int}}
+          - name: memory
+            select: {skip: 1}
+            parse:
+              type: regex
+              pattern: '^node \d+ (?P<name>size|free): (?P<megabytes>\d+) MB[ \t]*$'
+            fields:
+              megabytes: {type: int}
     - name: distances
       select: {after: '^node distances:'}
-      ignore: ['^node[ \t]+[0-9 \t]*$']
       parse:
         type: regex
-        pattern: '^[ \t]*(?P<node>[0-9]+):[ \t]+(?P<to>[0-9 \t]+?)[ \t]*$'
+        pattern: '^[ \t]*(?P<node>\d+):[ \t]*(?P<distances>.*?)[ \t]*$'
       fields:
-        node: {type: int}
-        to: {type: array, split_regex: '[ \t]+', items: {type: int}}
+        node: {type: int, required: true}
+        distances: {type: array, split_regex: '[ \t]+', items: {type: int}}

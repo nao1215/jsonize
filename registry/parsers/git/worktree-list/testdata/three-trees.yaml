@@ -1,0 +1,2 @@
+source: "git worktree list with git 2.51, LC_ALL=C; the paths and branch names are replaced, and a detached tree and a bare one are included because those two lines have shapes of their own"
+args: ["worktree", "list"]

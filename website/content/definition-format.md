@@ -332,9 +332,10 @@ Three things the input may not decide:
 - Depth stops at 32.
 
 A tree may be a `composite` part, which is what a report with a banner
-above the tree needs. It may not be a `records` part: a record is a block
-that repeats at one level and a tree is what the input decides the depth
-of.
+above the tree needs, and a `records` part, which is what a report of
+repeating blocks with a tree inside each needs (`sensors -u`). The two
+decide different things and do not conflict: `start` says where a record
+begins and `indent` says how deep a line inside one is.
 
 With `--stream`, one top-level node is written per line, once nothing
 deeper follows it.
@@ -423,12 +424,11 @@ Text before the first record is an error naming the line, rather than
 something quietly dropped. A banner belongs in `input.select`, or in a
 `composite` part of its own with the blocks in a second part.
 
-`records` is not recursive: a part of it cannot be `records`,
-`composite` or `tree`. A record is a block that repeats at one level, so
-its depth is stated by the definition and there is nothing for the input
-to say about it. Where the depth is the input's to decide — `lspci -vv`,
-`lsusb -v`, `iw dev` — `type: tree` is the reading, and one definition
-cannot be both: they answer "where does this line belong" differently.
+`records` is not recursive: a part of it cannot be `records` or
+`composite`. A record is a block that repeats at one level, so its own
+depth is stated by the definition and there is nothing for the input to
+say about it. A part may be a `tree`, which decides a different thing —
+how deep a line inside one block is — and `sensors -u` needs both.
 
 ### type: composite
 

@@ -380,14 +380,6 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 		validateINI(v, path, p)
 		rejectKeys(v, path, p, "table", "regex", "parts")
 	case TypeTree:
-		if parent == TypeRecords {
-			// A record is a block that repeats at one level; a tree is
-			// what the input decides the depth of. Nesting one in the
-			// other would put two answers to "where does this node
-			// belong" in one definition.
-			v.add(path+".type", "a records part cannot be a tree")
-			return
-		}
 		validateTree(v, path, p)
 		rejectKeys(v, path, p, "table", "regex", "kv", "parts")
 	case "":

@@ -1,0 +1,10 @@
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/1p, 480M
+    |__ Port 001: Dev 003, If 0, Class=Audio, Driver=snd-usb-audio, 12M
+    |__ Port 001: Dev 003, If 1, Class=Audio, Driver=snd-usb-audio, 12M
+    |__ Port 001: Dev 003, If 2, Class=Audio, Driver=snd-usb-audio, 12M
+    |__ Port 001: Dev 003, If 3, Class=Human Interface Device, Driver=usbhid, 12M
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/1p, 10000M
+/:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/5p, 480M
+    |__ Port 001: Dev 013, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 002: Dev 016, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 002: Dev 016, If 1, Class=Human Interface Device, Driver=usbhid, 12M

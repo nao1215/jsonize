@@ -1,0 +1,16 @@
+/etc/apt
+|-- apt.conf.d
+|   |-- 01-vendor-ubuntu
+|   |-- 01autoremove
+|   |-- 10periodic
+|   |-- 15update-stamp
+|   |-- 20apt-esm-hook.conf
+|   |-- 20archive
+|   |-- 20auto-upgrades
+|   |-- 20dbus
+|   |-- 20packagekit
+|   |-- 20snapd.conf
+|   |-- 50appstream
+|   |-- 50command-not-found
+
+8 directories, 40 files

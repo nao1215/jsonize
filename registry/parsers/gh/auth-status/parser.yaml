@@ -1,0 +1,48 @@
+# `gh auth status` prints one block per host: the host name, then a line
+# saying which account is logged in, then the details of that login
+# indented under it. The tick before the login line is drawn for a
+# terminal and says the same thing the block does, so it is not read as
+# part of the account name.
+format: 1
+command: gh
+variant: auth-status
+description: gh auth status, the accounts logged in to each host
+metadata:
+  tags: [git, github]
+  compatible: [GitHub CLI]
+  references:
+    - https://cli.github.com/manual/gh_auth_status
+detect:
+  args:
+    all: ["auth", "status"]
+  signature:
+    all:
+      - '\A\S+\.\S+[ \t]*$'
+      - '^  . Logged in to \S+ account \S+ \('
+      - '^  - Token: '
+parse:
+  type: records
+  start: '^\S'
+  parts:
+    - name: host
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>\S+)[ \t]*\z'
+    - name: login
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[ \t]*\S+ Logged in to (?P<host>\S+) account (?P<account>\S+) \((?P<source>[^)]*)\)[ \t]*\z'
+    # Which details gh prints depends on how the login was made, so they
+    # are read as the pairs that were printed. The dash in front of each
+    # is a bullet drawn for a terminal and is not part of the key.
+    - name: details
+      select: {skip: 2}
+      parse:
+        type: regex
+        pattern: '^[ \t]*- (?P<key>[^:]+): ?(?P<value>.*?)[ \t]*$'
+      fields:
+        key: {required: true}

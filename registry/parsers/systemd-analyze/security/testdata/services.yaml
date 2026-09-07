@@ -1,0 +1,3 @@
+source: "systemd-analyze security --no-pager on Ubuntu with systemd 258, LC_ALL=C, trimmed to seven services"
+os: linux
+args: ["security", "--no-pager"]

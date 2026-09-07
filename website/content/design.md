@@ -174,9 +174,12 @@ answers — how much of what it captured is one level — so it adds a key
 without removing a question.
 
 `tree` may be a `composite` part, which is what a report with a banner
-above the tree needs. It may not be a `records` part: a record is a block
-that repeats at one level and a tree is what the input decides the depth
-of, and one definition cannot answer "where does this line belong" twice.
+above the tree needs, and a `records` part, which `sensors -u` needs: it
+prints a block per chip and a two-level tree of features inside each. It
+was forbidden there at first on the grounds that a record and a tree both
+say where a line belongs; they do not say it about the same thing.
+`start` decides where a block begins and `indent` decides how deep a line
+inside one is, and neither can answer the other's question.
 
 ### A definition can be given instead of named
 

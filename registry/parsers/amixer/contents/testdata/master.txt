@@ -1,0 +1,12 @@
+numid=4,iface=MIXER,name='Master Playback Switch'
+  ; type=BOOLEAN,access=rw------,values=1
+  : values=on
+numid=3,iface=MIXER,name='Master Playback Volume'
+  ; type=INTEGER,access=rw------,values=2,min=0,max=65536,step=1
+  : values=9830,9830
+numid=2,iface=MIXER,name='Capture Switch'
+  ; type=BOOLEAN,access=rw------,values=1
+  : values=on
+numid=1,iface=MIXER,name='Capture Volume'
+  ; type=INTEGER,access=rw------,values=2,min=0,max=65536,step=1
+  : values=36751,36751

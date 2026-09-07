@@ -1,0 +1,2 @@
+source: "locale -k LC_TIME under LC_ALL=C with glibc 2.42, trimmed to ten keywords"
+args: ["-k", "LC_TIME"]

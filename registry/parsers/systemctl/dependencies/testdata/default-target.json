@@ -1,0 +1,123 @@
+[
+  {
+    "unit": "default.target",
+    "children": [
+      {
+        "unit": "accounts-daemon.service",
+        "children": []
+      },
+      {
+        "unit": "gnome-remote-desktop-configuration.service",
+        "children": []
+      },
+      {
+        "unit": "grub-common.service",
+        "children": []
+      },
+      {
+        "unit": "lightdm.service",
+        "children": []
+      },
+      {
+        "unit": "ollama.service",
+        "children": []
+      },
+      {
+        "unit": "power-profiles-daemon.service",
+        "children": []
+      },
+      {
+        "unit": "switcheroo-control.service",
+        "children": []
+      },
+      {
+        "unit": "udisks2.service",
+        "children": []
+      },
+      {
+        "unit": "multi-user.target",
+        "children": []
+      },
+      {
+        "unit": "anacron.service",
+        "children": []
+      },
+      {
+        "unit": "apport.service",
+        "children": []
+      },
+      {
+        "unit": "avahi-daemon.service",
+        "children": []
+      },
+      {
+        "unit": "blueman-mechanism.service",
+        "children": []
+      },
+      {
+        "unit": "console-setup.service",
+        "children": []
+      },
+      {
+        "unit": "containerd.service",
+        "children": []
+      },
+      {
+        "unit": "cron.service",
+        "children": []
+      },
+      {
+        "unit": "cups-browsed.service",
+        "children": []
+      },
+      {
+        "unit": "cups.path",
+        "children": []
+      },
+      {
+        "unit": "cups.service",
+        "children": []
+      },
+      {
+        "unit": "dbus.service",
+        "children": []
+      },
+      {
+        "unit": "dmesg.service",
+        "children": []
+      },
+      {
+        "unit": "docker.service",
+        "children": []
+      },
+      {
+        "unit": "e2scrub_reap.service",
+        "children": []
+      },
+      {
+        "unit": "grub-common.service",
+        "children": []
+      },
+      {
+        "unit": "grub-initrd-fallback.service",
+        "children": []
+      },
+      {
+        "unit": "grub2-common.service",
+        "children": []
+      },
+      {
+        "unit": "lm-sensors.service",
+        "children": []
+      },
+      {
+        "unit": "ModemManager.service",
+        "children": []
+      },
+      {
+        "unit": "NetworkManager.service",
+        "children": []
+      }
+    ]
+  }
+]

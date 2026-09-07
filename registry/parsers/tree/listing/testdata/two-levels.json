@@ -1,0 +1,60 @@
+[
+  {
+    "name": "/etc/apt",
+    "children": [
+      {
+        "name": "apt.conf.d",
+        "children": [
+          {
+            "name": "01-vendor-ubuntu",
+            "children": []
+          },
+          {
+            "name": "01autoremove",
+            "children": []
+          },
+          {
+            "name": "10periodic",
+            "children": []
+          },
+          {
+            "name": "15update-stamp",
+            "children": []
+          },
+          {
+            "name": "20apt-esm-hook.conf",
+            "children": []
+          },
+          {
+            "name": "20archive",
+            "children": []
+          },
+          {
+            "name": "20auto-upgrades",
+            "children": []
+          },
+          {
+            "name": "20dbus",
+            "children": []
+          },
+          {
+            "name": "20packagekit",
+            "children": []
+          },
+          {
+            "name": "20snapd.conf",
+            "children": []
+          },
+          {
+            "name": "50appstream",
+            "children": []
+          },
+          {
+            "name": "50command-not-found",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]

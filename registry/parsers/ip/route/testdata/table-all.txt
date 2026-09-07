@@ -1,0 +1,6 @@
+default via 192.0.2.1 dev wlan0 proto dhcp src 192.0.2.60 metric 600 
+172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1 
+local 127.0.0.0/8 dev lo table local proto kernel scope host src 127.0.0.1 
+local 127.0.0.1 dev lo table local proto kernel scope host src 127.0.0.1 
+broadcast 127.255.255.255 dev lo table local proto kernel scope link src 127.0.0.1 
+local 172.17.0.1 dev docker0 table local proto kernel scope host src 172.17.0.1 

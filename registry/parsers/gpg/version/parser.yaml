@@ -1,0 +1,70 @@
+# `gpg --version` prints the version, the licence, where the home
+# directory is, and the algorithms this build supports. The licence
+# paragraph is dropped: it is the same four sentences for every build.
+#
+# An algorithm list that does not fit the terminal is continued on the
+# next line, indented, which is what input.fold joins back.
+format: 1
+command: gpg
+variant: version
+aliases:
+  - name: gpg2
+description: gpg --version, the build and the algorithms it supports
+metadata:
+  tags: [crypto, gnupg]
+  compatible: [GnuPG]
+  references:
+    - https://www.gnupg.org/documentation/manuals/gnupg/
+detect:
+  args:
+    any: ["--version"]
+  signature:
+    all:
+      - '\Agpg \(GnuPG(?:[^)]*)\) [0-9]'
+      - '^Home: '
+      - '^Supported algorithms:[ \t]*$'
+input:
+  fold: '^[ \t]+\S'
+  ignore:
+    - '^Copyright \(C\)'
+    - '^License '
+    - '^This is free software'
+    - '^There is NO WARRANTY'
+    - '^Supported algorithms:[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: version
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\Agpg \((?P<implementation>[^)]*)\) (?P<version>\S+)[ \t]*\z'
+    # A library line is a name and a version with no colon in it, which
+    # is what separates it from the "key: value" lines below.
+    - name: libraries
+      select: {skip: 1}
+      ignore: ['^[^:]*:']
+      parse:
+        type: regex
+        pattern: '^(?P<name>\S+) (?P<version>\S+)[ \t]*$'
+    - name: home
+      select: {skip: 1}
+      ignore: ['^[^:]*$', '^(?:Pubkey|Cipher|Hash|Compression|AEAD):']
+      parse:
+        type: regex
+        each: input
+        pattern: '\AHome: (?P<path>.+?)[ \t]*\z'
+    - name: algorithms
+      select: {skip: 1}
+      ignore: ['^[^:]*$', '^Home:']
+      parse:
+        type: kv
+        separator: ": "
+        as: map
+      fields:
+        Pubkey: {type: array, split: ", "}
+        Cipher: {type: array, split: ", "}
+        Hash: {type: array, split: ", "}
+        Compression: {type: array, split: ", "}
+        AEAD: {type: array, split: ", "}

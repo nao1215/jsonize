@@ -1,0 +1,24 @@
+# `nmcli general status` prints one row under seven headings. The row is
+# the state of NetworkManager as a whole rather than of any device.
+format: 1
+command: nmcli
+variant: general
+description: nmcli general status, the state of NetworkManager
+metadata:
+  tags: [linux, network, networkmanager]
+  compatible: [NetworkManager]
+  references:
+    - https://networkmanager.dev/docs/api/latest/nmcli.html
+detect:
+  os: [linux]
+  args:
+    all: ["general"]
+  signature:
+    all:
+      - '\ASTATE[ \t]+CONNECTIVITY[ \t]+WIFI-HW[ \t]+WIFI[ \t]+WWAN-HW[ \t]+WWAN'
+parse:
+  type: table
+  split: aligned
+fields:
+  state: {required: true}
+  connectivity: {required: true}

@@ -1,0 +1,3 @@
+source: "systemctl list-jobs --no-pager on Ubuntu with systemd 258, LC_ALL=C; the unit's instance name is replaced"
+os: linux
+args: ["list-jobs", "--no-pager"]

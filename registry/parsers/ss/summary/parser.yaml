@@ -1,10 +1,10 @@
-# `ss -s` prints two summary lines and then a table of socket counts by
-# transport. The first two lines are counts of their own rather than
-# rows of that table, so each is read on its own terms.
+# `ss -s` prints three things that are not rows of one table: a total, a
+# line of TCP states, and a table of counts per transport. Each is read
+# on its own and the result is an object of the three.
 format: 1
 command: ss
 variant: summary
-description: ss -s, socket counts by transport
+description: ss -s socket counts
 metadata:
   tags: [linux, network, iproute2]
   compatible: [iproute2]
@@ -12,13 +12,10 @@ metadata:
     - https://man7.org/linux/man-pages/man8/ss.8.html
 detect:
   os: [linux]
-  args:
-    any: ["-s", "--summary"]
   signature:
     all:
-      - '\ATotal: [0-9]+'
-      - '^TCP:[ \t]+[0-9]+ \(estab [0-9]+,'
-      - '^Transport[ \t]+Total[ \t]+IP[ \t]+IPv6'
+      - '\ATotal:[ \t]+\d+[ \t]*$'
+      - '^Transport[ \t]+Total[ \t]+IP[ \t]+IPv6[ \t]*$'
 parse:
   type: composite
   parts:
@@ -27,18 +24,18 @@ parse:
       parse:
         type: regex
         each: input
-        pattern: '\ATotal: (?P<sockets>[0-9]+)[ \t]*\z'
+        pattern: '\ATotal:[ \t]+(?P<sockets>\d+)[ \t]*$'
       fields:
-        sockets: {type: int}
+        sockets: {type: int, required: true}
     - name: tcp
       select: {skip: 1, limit: 1}
       parse:
         type: regex
         each: input
-        pattern: '\ATCP:[ \t]+(?P<total>[0-9]+) \(estab (?P<established>[0-9]+), closed (?P<closed>[0-9]+), orphaned (?P<orphaned>[0-9]+), timewait (?P<timewait>[0-9]+)\)[ \t]*\z'
+        pattern: '\ATCP:[ \t]+(?P<total>\d+) \(estab (?P<estab>\d+), closed (?P<closed>\d+), orphaned (?P<orphaned>\d+), timewait (?P<timewait>\d+)\)'
       fields:
-        total: {type: int}
-        established: {type: int}
+        total: {type: int, required: true}
+        estab: {type: int}
         closed: {type: int}
         orphaned: {type: int}
         timewait: {type: int}
@@ -46,6 +43,7 @@ parse:
       select: {after: '^Transport[ \t]+Total'}
       parse:
         type: table
+        split: whitespace
         header:
           none: true
           columns: [transport, total, ip, ipv6]

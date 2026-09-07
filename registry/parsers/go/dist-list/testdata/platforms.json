@@ -1,0 +1,50 @@
+[
+  {
+    "os": "aix",
+    "arch": "ppc64"
+  },
+  {
+    "os": "android",
+    "arch": "386"
+  },
+  {
+    "os": "android",
+    "arch": "amd64"
+  },
+  {
+    "os": "android",
+    "arch": "arm"
+  },
+  {
+    "os": "android",
+    "arch": "arm64"
+  },
+  {
+    "os": "darwin",
+    "arch": "amd64"
+  },
+  {
+    "os": "darwin",
+    "arch": "arm64"
+  },
+  {
+    "os": "dragonfly",
+    "arch": "amd64"
+  },
+  {
+    "os": "freebsd",
+    "arch": "386"
+  },
+  {
+    "os": "freebsd",
+    "arch": "amd64"
+  },
+  {
+    "os": "freebsd",
+    "arch": "arm"
+  },
+  {
+    "os": "freebsd",
+    "arch": "arm64"
+  }
+]

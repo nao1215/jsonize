@@ -1,0 +1,47 @@
+[
+  {
+    "package": "bash",
+    "children": [
+      {
+        "relation": "PreDepends",
+        "package": "libc6",
+        "children": []
+      },
+      {
+        "relation": "PreDepends",
+        "package": "libtinfo6",
+        "children": []
+      },
+      {
+        "relation": "Depends",
+        "package": "base-files",
+        "children": [
+          {
+            "package": "base-files:i386",
+            "children": []
+          }
+        ]
+      },
+      {
+        "relation": "Depends",
+        "package": "debianutils",
+        "children": [
+          {
+            "package": "debianutils:i386",
+            "children": []
+          }
+        ]
+      },
+      {
+        "relation": "Recommends",
+        "package": "bash-completion",
+        "children": []
+      },
+      {
+        "relation": "Suggests",
+        "package": "bash-doc",
+        "children": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,127 @@
+[
+  {
+    "chip": {
+      "name": "amdgpu-pci-c600"
+    },
+    "adapter": {
+      "name": "PCI adapter"
+    },
+    "features": [
+      {
+        "name": "vddgfx",
+        "children": [
+          {
+            "name": "in0_input",
+            "value": 0,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "vddnb",
+        "children": [
+          {
+            "name": "in1_input",
+            "value": 0,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "edge",
+        "children": [
+          {
+            "name": "temp1_input",
+            "value": 35,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "PPT",
+        "children": [
+          {
+            "name": "power1_average",
+            "value": 11.003,
+            "children": []
+          },
+          {
+            "name": "power1_input",
+            "value": 11.003,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "sclk",
+        "children": [
+          {
+            "name": "freq1_input",
+            "value": 600000000,
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "chip": {
+      "name": "nvme-pci-c500"
+    },
+    "adapter": {
+      "name": "PCI adapter"
+    },
+    "features": [
+      {
+        "name": "Composite",
+        "children": [
+          {
+            "name": "temp1_input",
+            "value": 30.85,
+            "children": []
+          },
+          {
+            "name": "temp1_max",
+            "value": 82.85,
+            "children": []
+          },
+          {
+            "name": "temp1_min",
+            "value": -0.15,
+            "children": []
+          },
+          {
+            "name": "temp1_crit",
+            "value": 84.85,
+            "children": []
+          },
+          {
+            "name": "temp1_alarm",
+            "value": 0,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "Sensor 1",
+        "children": [
+          {
+            "name": "temp2_input",
+            "value": 30.85,
+            "children": []
+          },
+          {
+            "name": "temp2_max",
+            "value": 65261.85,
+            "children": []
+          },
+          {
+            "name": "temp2_min",
+            "value": -273.15,
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+# `systemctl list-jobs` prints the jobs the manager is running now, and
+# closes with a count that repeats the number of rows. The count is
+# dropped: it says nothing the array does not.
+format: 1
+command: systemctl
+variant: jobs
+description: systemctl list-jobs, the jobs the manager is running
+metadata:
+  tags: [linux, systemd]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemctl.html
+detect:
+  os: [linux]
+  args:
+    any: ["list-jobs"]
+  signature:
+    all:
+      - '\A[ \t]*JOB[ \t]+UNIT[ \t]+TYPE[ \t]+STATE[ \t]*$'
+input:
+  ignore:
+    - '^[0-9]+ jobs listed\.'
+    - '^No jobs running\.'
+parse:
+  type: table
+  header:
+    columns: [job, unit, type, state]
+fields:
+  job: {type: int, required: true}
+  unit: {required: true}
+  type: {required: true}
+  state: {required: true}
