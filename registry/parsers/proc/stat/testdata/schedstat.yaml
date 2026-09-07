@@ -1,0 +1,11 @@
+description: |
+  /proc/schedstat also writes one cpuN line per processor, and its
+  counters are decimal numbers separated by single spaces. It is refused
+  because it has no summary cpu line and its cpu0 line carries nine
+  counters rather than ten, which is what the signature asks for.
+expect_error: 'does not describe this input'
+os: linux
+source: |
+  the first eight lines of /proc/schedstat on Linux 7.0.0-30-generic
+  (Ubuntu), read with LC_ALL=C. The file continues with the same lines
+  for each of the other 31 processors.

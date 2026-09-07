@@ -1,0 +1,782 @@
+[
+  {
+    "name": "nr_free_pages",
+    "value": 2472598
+  },
+  {
+    "name": "nr_free_pages_blocks",
+    "value": 247296
+  },
+  {
+    "name": "nr_zone_inactive_anon",
+    "value": 2333521
+  },
+  {
+    "name": "nr_zone_active_anon",
+    "value": 4914469
+  },
+  {
+    "name": "nr_zone_inactive_file",
+    "value": 3292958
+  },
+  {
+    "name": "nr_zone_active_file",
+    "value": 1213695
+  },
+  {
+    "name": "nr_zone_unevictable",
+    "value": 206
+  },
+  {
+    "name": "nr_zone_write_pending",
+    "value": 7216
+  },
+  {
+    "name": "nr_mlock",
+    "value": 161
+  },
+  {
+    "name": "nr_zspages",
+    "value": 0
+  },
+  {
+    "name": "nr_free_cma",
+    "value": 0
+  },
+  {
+    "name": "nr_unaccepted",
+    "value": 0
+  },
+  {
+    "name": "numa_hit",
+    "value": 26453704124
+  },
+  {
+    "name": "numa_miss",
+    "value": 0
+  },
+  {
+    "name": "numa_foreign",
+    "value": 0
+  },
+  {
+    "name": "numa_interleave",
+    "value": 621
+  },
+  {
+    "name": "numa_local",
+    "value": 26453291525
+  },
+  {
+    "name": "numa_other",
+    "value": 0
+  },
+  {
+    "name": "nr_inactive_anon",
+    "value": 2333521
+  },
+  {
+    "name": "nr_active_anon",
+    "value": 4914469
+  },
+  {
+    "name": "nr_inactive_file",
+    "value": 3292958
+  },
+  {
+    "name": "nr_active_file",
+    "value": 1213695
+  },
+  {
+    "name": "nr_unevictable",
+    "value": 206
+  },
+  {
+    "name": "nr_slab_reclaimable",
+    "value": 928534
+  },
+  {
+    "name": "nr_slab_unreclaimable",
+    "value": 390839
+  },
+  {
+    "name": "nr_isolated_anon",
+    "value": 0
+  },
+  {
+    "name": "nr_isolated_file",
+    "value": 0
+  },
+  {
+    "name": "workingset_nodes",
+    "value": 570169
+  },
+  {
+    "name": "workingset_refault_anon",
+    "value": 2515310
+  },
+  {
+    "name": "workingset_refault_file",
+    "value": 111159262
+  },
+  {
+    "name": "workingset_activate_anon",
+    "value": 456554
+  },
+  {
+    "name": "workingset_activate_file",
+    "value": 15764444
+  },
+  {
+    "name": "workingset_restore_anon",
+    "value": 14778
+  },
+  {
+    "name": "workingset_restore_file",
+    "value": 3900215
+  },
+  {
+    "name": "workingset_nodereclaim",
+    "value": 2900290
+  },
+  {
+    "name": "nr_anon_pages",
+    "value": 2582061
+  },
+  {
+    "name": "nr_mapped",
+    "value": 681022
+  },
+  {
+    "name": "nr_file_pages",
+    "value": 9175571
+  },
+  {
+    "name": "nr_dirty",
+    "value": 7216
+  },
+  {
+    "name": "nr_writeback",
+    "value": 0
+  },
+  {
+    "name": "nr_shmem",
+    "value": 4653675
+  },
+  {
+    "name": "nr_shmem_hugepages",
+    "value": 0
+  },
+  {
+    "name": "nr_shmem_pmdmapped",
+    "value": 0
+  },
+  {
+    "name": "nr_file_hugepages",
+    "value": 191
+  },
+  {
+    "name": "nr_file_pmdmapped",
+    "value": 0
+  },
+  {
+    "name": "nr_anon_transparent_hugepages",
+    "value": 0
+  },
+  {
+    "name": "nr_vmscan_write",
+    "value": 9038219
+  },
+  {
+    "name": "nr_vmscan_immediate_reclaim",
+    "value": 1907
+  },
+  {
+    "name": "nr_dirtied",
+    "value": 527871673
+  },
+  {
+    "name": "nr_written",
+    "value": 493367866
+  },
+  {
+    "name": "nr_throttled_written",
+    "value": 0
+  },
+  {
+    "name": "nr_kernel_misc_reclaimable",
+    "value": 0
+  },
+  {
+    "name": "nr_foll_pin_acquired",
+    "value": 932140
+  },
+  {
+    "name": "nr_foll_pin_released",
+    "value": 932139
+  },
+  {
+    "name": "nr_kernel_stack",
+    "value": 68304
+  },
+  {
+    "name": "nr_page_table_pages",
+    "value": 34620
+  },
+  {
+    "name": "nr_sec_page_table_pages",
+    "value": 1726
+  },
+  {
+    "name": "nr_iommu_pages",
+    "value": 1726
+  },
+  {
+    "name": "nr_swapcached",
+    "value": 15280
+  },
+  {
+    "name": "pgpromote_success",
+    "value": 0
+  },
+  {
+    "name": "pgpromote_candidate",
+    "value": 0
+  },
+  {
+    "name": "pgpromote_candidate_nrl",
+    "value": 0
+  },
+  {
+    "name": "pgdemote_kswapd",
+    "value": 0
+  },
+  {
+    "name": "pgdemote_direct",
+    "value": 0
+  },
+  {
+    "name": "pgdemote_khugepaged",
+    "value": 0
+  },
+  {
+    "name": "pgdemote_proactive",
+    "value": 0
+  },
+  {
+    "name": "nr_hugetlb",
+    "value": 0
+  },
+  {
+    "name": "nr_balloon_pages",
+    "value": 0
+  },
+  {
+    "name": "nr_kernel_file_pages",
+    "value": 0
+  },
+  {
+    "name": "nr_dirty_threshold",
+    "value": 1372479
+  },
+  {
+    "name": "nr_dirty_background_threshold",
+    "value": 685401
+  },
+  {
+    "name": "nr_memmap_pages",
+    "value": 262144
+  },
+  {
+    "name": "nr_memmap_boot_pages",
+    "value": 261632
+  },
+  {
+    "name": "pgpgin",
+    "value": 651540160
+  },
+  {
+    "name": "pgpgout",
+    "value": 2032880309
+  },
+  {
+    "name": "pswpin",
+    "value": 1565075
+  },
+  {
+    "name": "pswpout",
+    "value": 5216130
+  },
+  {
+    "name": "pgalloc_dma",
+    "value": 1024
+  },
+  {
+    "name": "pgalloc_dma32",
+    "value": 889929102
+  },
+  {
+    "name": "pgalloc_normal",
+    "value": 26240443224
+  },
+  {
+    "name": "pgalloc_movable",
+    "value": 0
+  },
+  {
+    "name": "pgalloc_device",
+    "value": 0
+  },
+  {
+    "name": "allocstall_dma",
+    "value": 0
+  },
+  {
+    "name": "allocstall_dma32",
+    "value": 0
+  },
+  {
+    "name": "allocstall_normal",
+    "value": 39482
+  },
+  {
+    "name": "allocstall_movable",
+    "value": 2061751
+  },
+  {
+    "name": "allocstall_device",
+    "value": 0
+  },
+  {
+    "name": "pgskip_dma",
+    "value": 0
+  },
+  {
+    "name": "pgskip_dma32",
+    "value": 460
+  },
+  {
+    "name": "pgskip_normal",
+    "value": 80127
+  },
+  {
+    "name": "pgskip_movable",
+    "value": 0
+  },
+  {
+    "name": "pgskip_device",
+    "value": 0
+  },
+  {
+    "name": "pgfree",
+    "value": 27354971976
+  },
+  {
+    "name": "pgactivate",
+    "value": 98363664
+  },
+  {
+    "name": "pgdeactivate",
+    "value": 37972
+  },
+  {
+    "name": "pglazyfree",
+    "value": 8732034
+  },
+  {
+    "name": "pgfault",
+    "value": 28575668302
+  },
+  {
+    "name": "pgmajfault",
+    "value": 13181611
+  },
+  {
+    "name": "pglazyfreed",
+    "value": 1208239
+  },
+  {
+    "name": "pgrefill",
+    "value": 265150938
+  },
+  {
+    "name": "pgreuse",
+    "value": 2244922904
+  },
+  {
+    "name": "pgsteal_kswapd",
+    "value": 306762328
+  },
+  {
+    "name": "pgsteal_direct",
+    "value": 125119633
+  },
+  {
+    "name": "pgsteal_khugepaged",
+    "value": 18101
+  },
+  {
+    "name": "pgsteal_proactive",
+    "value": 0
+  },
+  {
+    "name": "pgscan_kswapd",
+    "value": 333495034
+  },
+  {
+    "name": "pgscan_direct",
+    "value": 228366437
+  },
+  {
+    "name": "pgscan_khugepaged",
+    "value": 21940
+  },
+  {
+    "name": "pgscan_proactive",
+    "value": 0
+  },
+  {
+    "name": "pgscan_direct_throttle",
+    "value": 0
+  },
+  {
+    "name": "pgscan_anon",
+    "value": 29174625
+  },
+  {
+    "name": "pgscan_file",
+    "value": 532732357
+  },
+  {
+    "name": "pgsteal_anon",
+    "value": 9094761
+  },
+  {
+    "name": "pgsteal_file",
+    "value": 422825937
+  },
+  {
+    "name": "zone_reclaim_success",
+    "value": 0
+  },
+  {
+    "name": "zone_reclaim_failed",
+    "value": 0
+  },
+  {
+    "name": "pginodesteal",
+    "value": 151796
+  },
+  {
+    "name": "slabs_scanned",
+    "value": 123393085
+  },
+  {
+    "name": "kswapd_inodesteal",
+    "value": 2544788
+  },
+  {
+    "name": "kswapd_low_wmark_hit_quickly",
+    "value": 191625
+  },
+  {
+    "name": "kswapd_high_wmark_hit_quickly",
+    "value": 15122
+  },
+  {
+    "name": "pageoutrun",
+    "value": 212216
+  },
+  {
+    "name": "pgrotated",
+    "value": 9660733
+  },
+  {
+    "name": "drop_pagecache",
+    "value": 0
+  },
+  {
+    "name": "drop_slab",
+    "value": 0
+  },
+  {
+    "name": "oom_kill",
+    "value": 56
+  },
+  {
+    "name": "numa_pte_updates",
+    "value": 0
+  },
+  {
+    "name": "numa_huge_pte_updates",
+    "value": 0
+  },
+  {
+    "name": "numa_hint_faults",
+    "value": 0
+  },
+  {
+    "name": "numa_hint_faults_local",
+    "value": 0
+  },
+  {
+    "name": "numa_pages_migrated",
+    "value": 0
+  },
+  {
+    "name": "pgmigrate_success",
+    "value": 216899459
+  },
+  {
+    "name": "pgmigrate_fail",
+    "value": 9871007
+  },
+  {
+    "name": "thp_migration_success",
+    "value": 0
+  },
+  {
+    "name": "thp_migration_fail",
+    "value": 0
+  },
+  {
+    "name": "thp_migration_split",
+    "value": 0
+  },
+  {
+    "name": "compact_migrate_scanned",
+    "value": 8080508286
+  },
+  {
+    "name": "compact_free_scanned",
+    "value": 9129162783
+  },
+  {
+    "name": "compact_isolated",
+    "value": 446431977
+  },
+  {
+    "name": "compact_stall",
+    "value": 718605
+  },
+  {
+    "name": "compact_fail",
+    "value": 503495
+  },
+  {
+    "name": "compact_success",
+    "value": 215110
+  },
+  {
+    "name": "compact_daemon_wake",
+    "value": 144895
+  },
+  {
+    "name": "compact_daemon_migrate_scanned",
+    "value": 8007180744
+  },
+  {
+    "name": "compact_daemon_free_scanned",
+    "value": 8750108811
+  },
+  {
+    "name": "htlb_buddy_alloc_success",
+    "value": 0
+  },
+  {
+    "name": "htlb_buddy_alloc_fail",
+    "value": 0
+  },
+  {
+    "name": "cma_alloc_success",
+    "value": 0
+  },
+  {
+    "name": "cma_alloc_fail",
+    "value": 0
+  },
+  {
+    "name": "unevictable_pgs_culled",
+    "value": 493218
+  },
+  {
+    "name": "unevictable_pgs_scanned",
+    "value": 33237
+  },
+  {
+    "name": "unevictable_pgs_rescued",
+    "value": 451706
+  },
+  {
+    "name": "unevictable_pgs_mlocked",
+    "value": 418657
+  },
+  {
+    "name": "unevictable_pgs_munlocked",
+    "value": 417656
+  },
+  {
+    "name": "unevictable_pgs_cleared",
+    "value": 0
+  },
+  {
+    "name": "unevictable_pgs_stranded",
+    "value": 840
+  },
+  {
+    "name": "thp_fault_alloc",
+    "value": 185
+  },
+  {
+    "name": "thp_fault_fallback",
+    "value": 5
+  },
+  {
+    "name": "thp_fault_fallback_charge",
+    "value": 0
+  },
+  {
+    "name": "thp_collapse_alloc",
+    "value": 222
+  },
+  {
+    "name": "thp_collapse_alloc_failed",
+    "value": 5
+  },
+  {
+    "name": "thp_file_alloc",
+    "value": 0
+  },
+  {
+    "name": "thp_file_fallback",
+    "value": 0
+  },
+  {
+    "name": "thp_file_fallback_charge",
+    "value": 0
+  },
+  {
+    "name": "thp_file_mapped",
+    "value": 487819
+  },
+  {
+    "name": "thp_split_page",
+    "value": 2
+  },
+  {
+    "name": "thp_split_page_failed",
+    "value": 0
+  },
+  {
+    "name": "thp_deferred_split_page",
+    "value": 9
+  },
+  {
+    "name": "thp_underused_split_page",
+    "value": 0
+  },
+  {
+    "name": "thp_split_pmd",
+    "value": 825
+  },
+  {
+    "name": "thp_scan_exceed_none_pte",
+    "value": 26862
+  },
+  {
+    "name": "thp_scan_exceed_swap_pte",
+    "value": 0
+  },
+  {
+    "name": "thp_scan_exceed_share_pte",
+    "value": 0
+  },
+  {
+    "name": "thp_split_pud",
+    "value": 0
+  },
+  {
+    "name": "thp_zero_page_alloc",
+    "value": 41
+  },
+  {
+    "name": "thp_zero_page_alloc_failed",
+    "value": 5
+  },
+  {
+    "name": "thp_swpout",
+    "value": 0
+  },
+  {
+    "name": "thp_swpout_fallback",
+    "value": 2
+  },
+  {
+    "name": "balloon_inflate",
+    "value": 0
+  },
+  {
+    "name": "balloon_deflate",
+    "value": 0
+  },
+  {
+    "name": "balloon_migrate",
+    "value": 0
+  },
+  {
+    "name": "swap_ra",
+    "value": 1650099
+  },
+  {
+    "name": "swap_ra_hit",
+    "value": 1549966
+  },
+  {
+    "name": "swpin_zero",
+    "value": 950842
+  },
+  {
+    "name": "swpout_zero",
+    "value": 3820930
+  },
+  {
+    "name": "ksm_swpin_copy",
+    "value": 4
+  },
+  {
+    "name": "cow_ksm",
+    "value": 0
+  },
+  {
+    "name": "zswpin",
+    "value": 0
+  },
+  {
+    "name": "zswpout",
+    "value": 0
+  },
+  {
+    "name": "zswpwb",
+    "value": 0
+  },
+  {
+    "name": "direct_map_level2_splits",
+    "value": 2830
+  },
+  {
+    "name": "direct_map_level3_splits",
+    "value": 37
+  },
+  {
+    "name": "direct_map_level2_collapses",
+    "value": 0
+  },
+  {
+    "name": "direct_map_level3_collapses",
+    "value": 0
+  },
+  {
+    "name": "nr_unstable",
+    "value": 0
+  }
+]

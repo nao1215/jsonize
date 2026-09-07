@@ -1,0 +1,11 @@
+description: |
+  Fourteen interfaces: loopback, a wired and a wireless one, three bridges,
+  seven veth ends and a docker bridge. One bridge has never received or
+  sent a byte and has dropped every frame handed to it, so the row is
+  zeros apart from transmit_drop, and the names are long enough that the
+  colon is pushed out of the field the kernel aligns it in.
+source: |
+  /proc/net/dev on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C.
+  The hexadecimal ids in the bridge and veth interface names were replaced
+  with made-up ones of the same length; the column layout is unchanged.
+os: linux

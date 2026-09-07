@@ -1,0 +1,9 @@
+description: |
+  A cgroup v2 memory.stat file is written the same way, a name and a
+  decimal number per line, and several of its counters carry the names
+  /proc/vmstat uses. It is refused because it does not open with
+  nr_free_pages, which is the only thing that tells one list of counters
+  from the other.
+expect_error: 'does not describe this input'
+os: linux
+source: /sys/fs/cgroup/memory.stat on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C. Nothing replaced; the file names no host, user or address.

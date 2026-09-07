@@ -1,0 +1,73 @@
+# /proc/stat is three kinds of line under one label each: the per-CPU
+# time counters, two vectors of counters (intr and softirq), and five
+# single numbers. They are read as one object per line, named by the
+# label the kernel wrote, which is why the objects do not all carry the
+# same keys.
+#
+# The alternative would be a composite with a part per kind. It cannot be
+# written: the parts of a composite select lines by position, and the
+# number of cpu lines is the number of processors, so there is no way to
+# say "the lines after the last cpu line". A regex with alternatives is
+# what the format offers for lines that are structurally different, and
+# every line is still read: one the patterns do not cover is an error
+# naming it rather than something quietly dropped.
+#
+# The cpu line is read as ten counters. That is what a kernel since
+# 2.6.33 writes; guest_nice was the last one added. An older kernel
+# writing eight or nine of them does not match, and the file is refused
+# rather than read with the columns shifted. No such kernel was available
+# to capture from, which is the same reason proc/diskstats claims one row
+# shape.
+#
+# The counters are the jiffies the kernel counts in, and they are
+# reported as the integers they are. Turning them into seconds needs
+# USER_HZ, which this file does not state.
+#
+# intr and softirq each write a total and then one counter per source.
+# The per-source counters become an array so that the reader can index
+# them the way the kernel does, rather than splitting one long string.
+format: 1
+command: proc
+variant: stat
+description: /proc/stat kernel and per-CPU activity counters
+metadata:
+  tags: [linux, cpu, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_stat.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The summary line and the first processor, each with exactly ten
+      # counters. Nothing else in /proc opens this way.
+      #
+      # The lines further down are not part of the signature on purpose:
+      # btime and softirq sit below one line per processor, and a machine
+      # with more than about two hundred of them would push them past the
+      # largest window a signature may look at.
+      - '\Acpu[ \t]+(?:\d+[ \t]+){9}\d+[ \t]*$'
+      - '^cpu0[ \t]+(?:\d+[ \t]+){9}\d+[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    # The summary line is named cpu and each processor cpuN.
+    - '^(?P<name>cpu[0-9]*)[ \t]+(?P<user>\d+)[ \t]+(?P<nice>\d+)[ \t]+(?P<system>\d+)[ \t]+(?P<idle>\d+)[ \t]+(?P<iowait>\d+)[ \t]+(?P<irq>\d+)[ \t]+(?P<softirq>\d+)[ \t]+(?P<steal>\d+)[ \t]+(?P<guest>\d+)[ \t]+(?P<guest_nice>\d+)[ \t]*$'
+    # A total followed by one counter per interrupt or per softirq.
+    - '^(?P<name>intr|softirq)[ \t]+(?P<total>\d+)[ \t]+(?P<counters>\d+(?:[ \t]+\d+)*)[ \t]*$'
+    - '^(?P<name>ctxt|btime|processes|procs_running|procs_blocked)[ \t]+(?P<value>\d+)[ \t]*$'
+fields:
+  name: {required: true}
+  user: {type: int, required: true}
+  nice: {type: int, required: true}
+  system: {type: int, required: true}
+  idle: {type: int, required: true}
+  iowait: {type: int, required: true}
+  irq: {type: int, required: true}
+  softirq: {type: int, required: true}
+  steal: {type: int, required: true}
+  guest: {type: int, required: true}
+  guest_nice: {type: int, required: true}
+  total: {type: int, required: true}
+  counters: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  value: {type: int, required: true}

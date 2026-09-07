@@ -1,0 +1,58 @@
+# /proc/net/dev is one row per network interface with eight receive and
+# eight transmit counters. Its two header lines describe the two halves
+# rather than the columns, so the column names below are the words of the
+# second header line, prefixed with the half they belong to.
+#
+# The names are the file's own: errs, drop and colls are not spelled out,
+# because the kernel does not spell them out either and `ip -s link`,
+# which reports the same counters under different names, is where a
+# reader who wants errors and dropped goes.
+#
+# The interface name is followed by a colon and then the first counter,
+# right aligned in a field the kernel sizes for it. A name long enough to
+# overflow that field pushes the colon along with it and the counter
+# still follows one space later, so the name is read as everything up to
+# the colon rather than by position.
+format: 1
+command: proc
+variant: net-dev
+description: /proc/net/dev per-interface receive and transmit counters
+metadata:
+  tags: [linux, network, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_net.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # Both header lines. /proc/net/wireless opens with the same
+      # "Inter-|" banner and its second line is a different set of
+      # columns, which is what the second expression tells apart.
+      - '\AInter-\|[ \t]+Receive[ \t]+\|[ \t]+Transmit[ \t]*$'
+      - '^[ \t]*face[ \t]*\|bytes[ \t]+packets[ \t]+errs[ \t]+drop[ \t]+fifo[ \t]+frame[ \t]+compressed[ \t]+multicast\|bytes[ \t]+packets[ \t]+errs[ \t]+drop[ \t]+fifo[ \t]+colls[ \t]+carrier[ \t]+compressed[ \t]*$'
+input:
+  ignore:
+    - '\AInter-\|'
+    - '^[ \t]*face[ \t]*\|'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<interface>[^:[:space:]]+):[ \t]+(?P<receive_bytes>\d+)[ \t]+(?P<receive_packets>\d+)[ \t]+(?P<receive_errs>\d+)[ \t]+(?P<receive_drop>\d+)[ \t]+(?P<receive_fifo>\d+)[ \t]+(?P<receive_frame>\d+)[ \t]+(?P<receive_compressed>\d+)[ \t]+(?P<receive_multicast>\d+)[ \t]+(?P<transmit_bytes>\d+)[ \t]+(?P<transmit_packets>\d+)[ \t]+(?P<transmit_errs>\d+)[ \t]+(?P<transmit_drop>\d+)[ \t]+(?P<transmit_fifo>\d+)[ \t]+(?P<transmit_colls>\d+)[ \t]+(?P<transmit_carrier>\d+)[ \t]+(?P<transmit_compressed>\d+)[ \t]*$'
+fields:
+  interface: {required: true}
+  receive_bytes: {type: int, required: true}
+  receive_packets: {type: int, required: true}
+  receive_errs: {type: int, required: true}
+  receive_drop: {type: int, required: true}
+  receive_fifo: {type: int, required: true}
+  receive_frame: {type: int, required: true}
+  receive_compressed: {type: int, required: true}
+  receive_multicast: {type: int, required: true}
+  transmit_bytes: {type: int, required: true}
+  transmit_packets: {type: int, required: true}
+  transmit_errs: {type: int, required: true}
+  transmit_drop: {type: int, required: true}
+  transmit_fifo: {type: int, required: true}
+  transmit_colls: {type: int, required: true}
+  transmit_carrier: {type: int, required: true}
+  transmit_compressed: {type: int, required: true}

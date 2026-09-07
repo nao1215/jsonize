@@ -1,0 +1,7 @@
+description: |
+  /proc/net/wireless opens with the same "Inter-|" banner and is laid out
+  the same way, in halves separated by pipes. Its second header line names
+  a different set of columns, and that is what refuses it.
+expect_error: 'does not describe this input'
+os: linux
+source: /proc/net/wireless on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C. The file has no interface rows on this machine.

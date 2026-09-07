@@ -1,0 +1,50 @@
+# /proc/modules is what lsmod reads, and this definition is for the file
+# rather than for lsmod's rendering of it. The two are told apart by the
+# text: lsmod prints a "Module Size Used by" header and drops the load
+# state, the address and the taint flags, so lsmod/linux asks for that
+# header and this definition asks for the three columns lsmod does not
+# print. Neither reads the other's output.
+#
+# used_by is the list the kernel writes with a trailing comma, or a
+# single dash when nothing uses the module. The dash becomes null, which
+# is the same value an unloaded dependency list would have; an empty list
+# would claim the kernel wrote an empty list, and it wrote a dash.
+#
+# The address is the text the kernel wrote. It is hexadecimal, and it is
+# zero here for every module because the file hides pointers from a
+# reader who is not root.
+#
+# The taint flags in brackets after the address are absent from every row
+# of the capture beside this file, because nothing on that machine
+# loaded a module that taints the kernel. They are read as a string of
+# the letters module_flags writes, and the field is null on the rows that
+# have none.
+format: 1
+command: proc
+variant: modules
+description: /proc/modules loaded kernel modules with their state and address
+metadata:
+  tags: [linux, kernel, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_modules.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The first row, with the three columns lsmod does not print: the
+      # load state, the address and the optional taint flags.
+      - '\A\S+[ \t]+\d+[ \t]+\d+[ \t]+\S+[ \t]+(?:Live|Loading|Unloading)[ \t]+0x[0-9a-f]+(?:[ \t]+\([A-Z]+\))?[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+)[ \t]+(?P<size>\d+)[ \t]+(?P<used_by_count>\d+)[ \t]+(?P<used_by>\S+)[ \t]+(?P<state>Live|Loading|Unloading)[ \t]+(?P<address>0x[0-9a-f]+)(?:[ \t]+\((?P<taints>[A-Z]+)\))?[ \t]*$'
+fields:
+  name: {required: true}
+  size: {type: int, required: true}
+  used_by_count: {type: int, required: true}
+  # The trailing comma goes before the split, or the last element would
+  # be an empty string.
+  used_by: {type: array, split: ",", trim_suffix: ",", null_if: ["-"]}
+  state: {required: true}
+  address: {required: true}
+  taints: {}

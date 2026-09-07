@@ -1,0 +1,41 @@
+# /proc/vmstat is one counter per line: a name and a decimal number,
+# separated by a single space.
+#
+# The result is a list of {name, value} rather than one object keyed by
+# name, for the reason proc/meminfo gives: the set of counters follows
+# the kernel configuration and version. Roughly two hundred of them are
+# printed here, a kernel built without transparent huge pages or without
+# NUMA prints fewer, and every release adds some. There is nothing to
+# convert per name either, since every value is a count.
+#
+# The name and the number are all this file is, and a list of names and
+# numbers describes far too many things to be evidence of itself. What
+# makes it recognisable is that the kernel writes its zone statistics
+# first and nr_free_pages is the first of those, in every kernel that has
+# had this file. The signature asks for that line at the start of the
+# input and for every line in the window to be a name and a number, which
+# is what keeps the definition from claiming any other list of counters.
+format: 1
+command: proc
+variant: vmstat
+description: /proc/vmstat virtual memory counters
+metadata:
+  tags: [linux, memory, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_vmstat.5.html
+detect:
+  os: [linux]
+  signature:
+    # The file is far longer than the default window, and the shape below
+    # is about all of it.
+    window: 200
+    all:
+      - '\A(?:[a-z][a-z0-9_]*[ \t]+\d+[ \t]*\n)*[a-z][a-z0-9_]*[ \t]+\d+[ \t]*\z'
+      - '\Anr_free_pages[ \t]+\d+[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<name>[a-z][a-z0-9_]*)[ \t]+(?P<value>\d+)[ \t]*$'
+fields:
+  name: {required: true}
+  value: {type: int, required: true}

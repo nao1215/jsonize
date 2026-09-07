@@ -1,0 +1,8 @@
+description: |
+  /proc/devices is the other short list of names the kernel registers,
+  and a reader may well point jz at either. Its lines are a number and a
+  name separated by spaces rather than a tab separated pair, so the shape
+  refuses it.
+expect_error: 'does not describe this input'
+os: linux
+source: /proc/devices on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C. Nothing replaced; the file names no host, user or address.

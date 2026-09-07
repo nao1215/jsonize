@@ -1,0 +1,6 @@
+description: |
+  A full /proc/stat from a 32-processor machine: the summary line, one
+  line per processor, the intr vector with its 1224 per-interrupt
+  counters, the five single counters and the softirq vector.
+source: /proc/stat on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C. Nothing replaced; the file names no host, user or address.
+os: linux

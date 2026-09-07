@@ -1,0 +1,10 @@
+description: |
+  The character half alone, which is what a truncated read of the file
+  looks like. It is refused rather than read as a file whose block list
+  happens to be empty: without the second heading the block part of the
+  composite selects nothing and there is no way to tell the two apart.
+expect_error: 'does not describe this input'
+os: linux
+source: |
+  synthetic; /proc/devices from Linux 7.0.0-30-generic (Ubuntu) with the
+  Block devices heading and everything after it removed.

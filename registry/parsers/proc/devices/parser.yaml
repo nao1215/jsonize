@@ -1,0 +1,49 @@
+# /proc/devices is two lists under a heading each: the character device
+# drivers registered with the kernel, then the block ones. The same major
+# number means different drivers in the two lists, which is why the
+# result keeps them apart rather than flattening them into one array with
+# a type column.
+#
+# A composite part selects the lines between the two headings, so both
+# headings have to be there. A file with only the character heading would
+# leave the block part selecting nothing and reporting an empty list,
+# which would be indistinguishable from a kernel with no block driver at
+# all. The signature asks for both headings, so such a file is refused
+# instead. That is what the window is raised for: the block heading sits
+# below one line per character driver, fifty-five lines down on this
+# machine.
+format: 1
+command: proc
+variant: devices
+description: /proc/devices character and block device drivers
+metadata:
+  tags: [linux, kernel, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_devices.5.html
+detect:
+  os: [linux]
+  signature:
+    window: 200
+    all:
+      - '\ACharacter devices:[ \t]*$'
+      - '^Block devices:[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: character_devices
+      select: {after: '^Character devices:[ \t]*$', until: '^Block devices:[ \t]*$'}
+      parse:
+        type: table
+        header: {none: true, columns: [major, name]}
+      fields:
+        major: {type: int, required: true}
+        name: {required: true}
+    - name: block_devices
+      select: {after: '^Block devices:[ \t]*$'}
+      parse:
+        type: table
+        header: {none: true, columns: [major, name]}
+      fields:
+        major: {type: int, required: true}
+        name: {required: true}

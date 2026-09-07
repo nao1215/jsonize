@@ -1,0 +1,134 @@
+[
+  {
+    "nodev": true,
+    "name": "sysfs"
+  },
+  {
+    "nodev": true,
+    "name": "tmpfs"
+  },
+  {
+    "nodev": true,
+    "name": "bdev"
+  },
+  {
+    "nodev": true,
+    "name": "proc"
+  },
+  {
+    "nodev": true,
+    "name": "cgroup"
+  },
+  {
+    "nodev": true,
+    "name": "cgroup2"
+  },
+  {
+    "nodev": true,
+    "name": "devtmpfs"
+  },
+  {
+    "nodev": true,
+    "name": "configfs"
+  },
+  {
+    "nodev": true,
+    "name": "debugfs"
+  },
+  {
+    "nodev": true,
+    "name": "tracefs"
+  },
+  {
+    "nodev": true,
+    "name": "securityfs"
+  },
+  {
+    "nodev": true,
+    "name": "sockfs"
+  },
+  {
+    "nodev": true,
+    "name": "bpf"
+  },
+  {
+    "nodev": true,
+    "name": "pipefs"
+  },
+  {
+    "nodev": true,
+    "name": "ramfs"
+  },
+  {
+    "nodev": true,
+    "name": "hugetlbfs"
+  },
+  {
+    "nodev": true,
+    "name": "devpts"
+  },
+  {
+    "nodev": false,
+    "name": "ext3"
+  },
+  {
+    "nodev": false,
+    "name": "ext2"
+  },
+  {
+    "nodev": false,
+    "name": "ext4"
+  },
+  {
+    "nodev": false,
+    "name": "squashfs"
+  },
+  {
+    "nodev": false,
+    "name": "vfat"
+  },
+  {
+    "nodev": true,
+    "name": "ecryptfs"
+  },
+  {
+    "nodev": false,
+    "name": "fuseblk"
+  },
+  {
+    "nodev": true,
+    "name": "fuse"
+  },
+  {
+    "nodev": true,
+    "name": "fusectl"
+  },
+  {
+    "nodev": true,
+    "name": "efivarfs"
+  },
+  {
+    "nodev": true,
+    "name": "mqueue"
+  },
+  {
+    "nodev": true,
+    "name": "resctrl"
+  },
+  {
+    "nodev": true,
+    "name": "pstore"
+  },
+  {
+    "nodev": true,
+    "name": "autofs"
+  },
+  {
+    "nodev": true,
+    "name": "binfmt_misc"
+  },
+  {
+    "nodev": true,
+    "name": "overlay"
+  }
+]
