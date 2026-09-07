@@ -6,7 +6,7 @@
     "c": 0,
     "stime": "Aug24",
     "tty": null,
-    "time": "00:04:50",
+    "time": 290,
     "cmd": "/usr/lib/systemd/systemd --switched-root --system --deserialize=55 splash"
   },
   {
@@ -16,7 +16,7 @@
     "c": 0,
     "stime": "Aug24",
     "tty": null,
-    "time": "00:00:01",
+    "time": 1,
     "cmd": "[kthreadd]"
   },
   {
@@ -26,7 +26,7 @@
     "c": 0,
     "stime": "Aug24",
     "tty": null,
-    "time": "00:00:00",
+    "time": 0,
     "cmd": "[pool_workqueue_release]"
   },
   {
@@ -36,7 +36,7 @@
     "c": 0,
     "stime": "Aug24",
     "tty": null,
-    "time": "00:00:00",
+    "time": 0,
     "cmd": "[kworker/R-rcu_gp]"
   },
   {
@@ -46,7 +46,7 @@
     "c": 0,
     "stime": "Aug24",
     "tty": null,
-    "time": "00:00:00",
+    "time": 0,
     "cmd": "[kworker/R-sync_wq]"
   },
   {
@@ -56,7 +56,7 @@
     "c": 0,
     "stime": "Aug24",
     "tty": null,
-    "time": "00:00:00",
+    "time": 0,
     "cmd": "[kworker/R-kvfree_rcu_reclaim]"
   },
   {
@@ -66,7 +66,7 @@
     "c": 0,
     "stime": "Aug24",
     "tty": null,
-    "time": "00:00:00",
+    "time": 0,
     "cmd": "[kworker/R-slub_flushwq]"
   }
 ]

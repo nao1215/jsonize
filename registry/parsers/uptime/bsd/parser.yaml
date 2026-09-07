@@ -19,6 +19,11 @@ parse:
   each: input
   pattern: '^\s*(?P<time>\d{1,2}:\d{2}(?::\d{2})?)\s+up\s+(?P<uptime>.+?),\s+(?P<users>\d+) users?,\s+load averages: (?P<load_1m>[\d.]+) (?P<load_5m>[\d.]+) (?P<load_15m>[\d.]+)\s*$'
 fields:
+  # "13 days, 4:22", "45 min" or a bare "4:22" once the machine has been
+  # up less than a day. The reading is hours and minutes, which is what
+  # layout says; nothing in the text distinguishes it from minutes and
+  # seconds.
+  uptime: {type: duration, layout: h:mm}
   users: {type: int}
   load_1m: {type: float}
   load_5m: {type: float}

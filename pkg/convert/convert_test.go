@@ -203,6 +203,38 @@ func FuzzSize(f *testing.F) {
 	})
 }
 
+// A duration is never negative and never NaN, whatever the text was: a
+// value JSON cannot carry, or one that ran backwards, would be worse
+// than refusing the input.
+func FuzzDuration(f *testing.F) {
+	for _, s := range []string{
+		"3-04:05:06", "04:05", "13 days, 4:30", "45 min", "1h2m3s", "13:42m",
+		"", ":", "-", "1e400s", "99999999999999999999d", "0.00s", "1-2-3:4",
+	} {
+		f.Add(s)
+	}
+	f.Fuzz(func(t *testing.T, s string) {
+		for _, layout := range []string{LayoutHourMinute, LayoutMinuteSecond} {
+			v, err := Duration(s, layout)
+			if err != nil {
+				continue
+			}
+			switch n := v.(type) {
+			case int64:
+				if n < 0 {
+					t.Fatalf("negative duration %d from %q", n, s)
+				}
+			case float64:
+				if n < 0 || math.IsNaN(n) || math.IsInf(n, 0) {
+					t.Fatalf("duration %v from %q is not a JSON number", n, s)
+				}
+			default:
+				t.Fatalf("duration of %q is a %T", s, v)
+			}
+		}
+	})
+}
+
 func TestStripANSI(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
@@ -255,7 +287,7 @@ func TestTime(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			got, err := Time(tt.in, tt.layout, tt.loc)
+			got, _, err := TimeAssuming(tt.in, tt.layout, tt.loc, Assumptions{})
 			if err != nil || got != tt.want {
 				t.Errorf("Time(%q) = %q, %v; want %q", tt.in, got, err, tt.want)
 			}
@@ -263,7 +295,7 @@ func TestTime(t *testing.T) {
 	}
 	// The same text read in the running system's zone names the same
 	// wall clock with that zone's offset.
-	got, err := Time("2026-09-07 14:20:01", "2006-01-02 15:04:05", local)
+	got, _, err := TimeAssuming("2026-09-07 14:20:01", "2006-01-02 15:04:05", local, Assumptions{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -272,11 +304,139 @@ func TestTime(t *testing.T) {
 		t.Errorf("local = %q, want %q", got, want)
 	}
 	for _, in := range []string{"", "  ", "not a time", "2026-13-45 99:99:99"} {
-		if _, err := Time(in, "2006-01-02 15:04:05", utc); err == nil {
+		if _, _, err := TimeAssuming(in, "2006-01-02 15:04:05", utc, Assumptions{}); err == nil {
 			t.Errorf("Time(%q) should fail", in)
 		}
 	}
 	if _, ok := Location("Asia/Tokyo"); ok {
 		t.Error("only utc and local are locations")
+	}
+}
+
+func TestDuration(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		in     string
+		layout string
+		want   any
+	}{
+		// A reading with three or more parts settles itself.
+		{"3-04:05:06", LayoutMinuteSecond, int64(273906)},
+		{"04:05:06", LayoutMinuteSecond, int64(14706)},
+		{"0-00:00:01", LayoutHourMinute, int64(1)},
+		// Two parts are what the layout is for.
+		{"4:50", LayoutMinuteSecond, int64(290)},
+		{"1:23", LayoutHourMinute, int64(4980)},
+		// A fraction on the last part survives as one.
+		{"01:23.45", LayoutMinuteSecond, 83.45},
+		{"0:00.09", LayoutMinuteSecond, 0.09},
+		{"00:00:01.5", LayoutMinuteSecond, 1.5},
+		// A trailing unit names the unit of the last part, which is how w
+		// separates thirteen hours from thirteen minutes.
+		{"13:42m", LayoutMinuteSecond, int64(49320)},
+		{"13:42", LayoutMinuteSecond, int64(822)},
+		{"5.00s", LayoutMinuteSecond, int64(5)},
+		// Days in front of a clock reading, which is uptime.
+		{"13 days, 4:22", LayoutMinuteSecond, int64(1138920)},
+		{"1 day, 0:01", LayoutMinuteSecond, int64(86460)},
+		{"3 days,  4:11", LayoutMinuteSecond, int64(274260)},
+		// A number and its unit, run together or spelled out.
+		{"45 min", LayoutMinuteSecond, int64(2700)},
+		{"12 sec", LayoutMinuteSecond, int64(12)},
+		{"3days", LayoutMinuteSecond, int64(259200)},
+		{"1h2m3s", LayoutMinuteSecond, int64(3723)},
+		{"3d4h", LayoutMinuteSecond, int64(273600)},
+		{"1.5h", LayoutMinuteSecond, int64(5400)},
+		{"250ms", LayoutMinuteSecond, 0.25},
+		{"2 hours", LayoutMinuteSecond, int64(7200)},
+	}
+	for _, tt := range tests {
+		got, err := Duration(tt.in, tt.layout)
+		if err != nil {
+			t.Errorf("Duration(%q, %q): %v", tt.in, tt.layout, err)
+			continue
+		}
+		if got != tt.want {
+			t.Errorf("Duration(%q, %q) = %#v, want %#v", tt.in, tt.layout, got, tt.want)
+		}
+	}
+}
+
+func TestDurationRefuses(t *testing.T) {
+	t.Parallel()
+	for _, in := range []string{
+		"", "   ",
+		"2 users",      // a number and a word that is not a unit
+		"1.8T",         // a rounded size
+		"1m2h",         // units out of order, which would otherwise add up
+		"12:34:56:78",  // more parts than a clock reading has
+		"-1:00",        // no negative durations
+		"1:2x",         // a trailing letter that names no unit
+		"::",           // empty parts
+		"4:",           // an empty last part
+		"Jan  5 10:11", // a date
+		"3 days 4:11",  // the comma is what says the days ended
+	} {
+		if v, err := Duration(in, LayoutMinuteSecond); err == nil {
+			t.Errorf("Duration(%q) = %v, want an error", in, v)
+		}
+	}
+}
+
+// A timestamp whose format states no year, or states a zone only by its
+// abbreviation, is left as the text it was printed as until the command
+// line says what to assume. Dating it by this machine's clock, or
+// reading an abbreviation against this machine's own zone, would make
+// the same text convert differently on two machines.
+func TestTimeAssuming(t *testing.T) {
+	t.Parallel()
+	const noYear = "Jan _2 15:04"
+	if got, ok, err := TimeAssuming("Nov  4 13:17", noYear, nil, Assumptions{}); err != nil || ok || got != "Nov  4 13:17" {
+		t.Errorf("no year given: %q %v %v", got, ok, err)
+	}
+	if got, ok, err := TimeAssuming("Nov  4 13:17", noYear, nil, Assumptions{Year: 2025}); err != nil || !ok || got != "2025-11-04T13:17:00Z" {
+		t.Errorf("year assumed: %q %v %v", got, ok, err)
+	}
+
+	const zoned = "Mon Jan _2 15:04:05 MST 2006"
+	if got, ok, err := TimeAssuming("Mon Sep  7 10:02:02 JST 2026", zoned, nil, Assumptions{}); err != nil || ok || got != "Mon Sep  7 10:02:02 JST 2026" {
+		t.Errorf("no zone given: %q %v %v", got, ok, err)
+	}
+	a := Assumptions{Zones: map[string]int{"JST": 9 * 3600}}
+	if got, ok, err := TimeAssuming("Mon Sep  7 10:02:02 JST 2026", zoned, nil, a); err != nil || !ok || got != "2026-09-07T10:02:02+09:00" {
+		t.Errorf("zone assumed: %q %v %v", got, ok, err)
+	}
+	// UTC and GMT state their own offset, so they need no assumption.
+	if got, _, err := TimeAssuming("Mon Sep  7 01:02:02 UTC 2026", zoned, nil, Assumptions{}); err != nil || got != "2026-09-07T01:02:02Z" {
+		t.Errorf("utc: %q %v", got, err)
+	}
+	// An abbreviation with no offset given is left alone even when this
+	// machine happens to be in a zone of that name.
+	local, _ := Location("local")
+	name, _ := time.Now().In(local).Zone()
+	if name != "UTC" && name != "" {
+		in := "Mon Sep  7 10:02:02 " + name + " 2026"
+		if got, ok, _ := TimeAssuming(in, zoned, local, Assumptions{}); ok || got != in {
+			t.Errorf("local abbreviation %q was resolved: %q", name, got)
+		}
+	}
+	// A layout that does carry a year ignores the assumption.
+	if got, _, err := TimeAssuming("2024-05-06 07:08:09", "2006-01-02 15:04:05", nil, Assumptions{Year: 1999}); err != nil || got != "2024-05-06T07:08:09Z" {
+		t.Errorf("year in the layout: %q %v", got, err)
+	}
+}
+
+func TestParseZoneOffset(t *testing.T) {
+	t.Parallel()
+	for in, want := range map[string]int{"+0900": 9 * 3600, "-0500": -5 * 3600, "+0000": 0, "+0530": 5*3600 + 1800} {
+		got, err := ParseZoneOffset(in)
+		if err != nil || got != want {
+			t.Errorf("ParseZoneOffset(%q) = %d, %v; want %d", in, got, err, want)
+		}
+	}
+	for _, in := range []string{"", "0900", "+900", "+09:00", "JST", "+2400", "+0060", "++900"} {
+		if _, err := ParseZoneOffset(in); err == nil {
+			t.Errorf("ParseZoneOffset(%q) accepted", in)
+		}
 	}
 }

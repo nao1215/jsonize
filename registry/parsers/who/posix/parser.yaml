@@ -27,4 +27,7 @@ parse:
 # and its shape follows the locale; jz runs the command under LC_ALL=C.
 fields:
   user: {required: true}
-  time: {required: true}
+  # who prints a month, a day and a clock reading and no year at all.
+  # The value stays the string it was printed as until --assume-year
+  # says which year to read it in.
+  time: {type: time, layout: "Jan _2 15:04", year: assumed, required: true}

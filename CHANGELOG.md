@@ -8,6 +8,33 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `fields.<name>.type: duration`, which turns a printed length of time
+  into seconds: `3-04:05:06`, `04:05:06`, `04:05`, `01:23.45`, `13:42m`,
+  `13 days, 4:30`, `45 min`, `3days`, `1h2m3s`, `3d4h`. The result is an
+  integer when the length is a whole number of seconds. `layout` is
+  required and is `h:mm` or `mm:ss`, saying what the last part of a bare
+  two-part reading is, since `ps` prints four minutes fifty seconds as
+  `4:50` and `uptime` prints an hour and twenty-three minutes as `1:23`.
+  Applied to the TIME column of every `ps` variant and to the uptime of
+  `uptime`, `w` and `top`, whose expected JSON changed from a string to a
+  number. `top`'s TIME+ stays text: it falls back from `mmm:ss.hh` to
+  `hhh,mm` for a long-running task, so the column would carry two
+  different precisions.
+- `--assume-year YEAR` (or `now`) and `--assume-zone ABBR=+HHMM`
+  (repeatable), which supply what a format leaves out. A time field whose
+  layout carries no year now writes `year: assumed` beside it, which says
+  the format prints none; the value stays the string it was printed as
+  until `--assume-year` says which year to read it in. A layout naming
+  its zone with `MST` converts when the abbreviation states its own
+  offset (`UTC`, `GMT`) and otherwise waits for `--assume-zone`. Applied
+  to `who`, `last`, `journalctl -o short`, `date` and `timedatectl`.
+  Nothing reads a clock or a zone database on the way past: `now` is
+  resolved once when the command line is read, and whatever Go made of an
+  abbreviation is discarded, since Go resolves one against the running
+  machine and the same text would convert differently on two machines.
+- `date` reports the whole reading as `timestamp` beside the parts it is
+  made of.
+
 - `--raw`, which skips the field rules so that every value is the text it
   was extracted from. A value that comes out wrong was either cut from
   the wrong place or converted wrongly, and once it is typed the two look

@@ -26,7 +26,9 @@ parse:
   type: regex
   pattern: '^(?P<timestamp>[A-Z][a-z]{2} [ 0-9][0-9] [0-9]{2}:[0-9]{2}:[0-9]{2}) (?P<hostname>\S+) (?P<identifier>[^\s\[:]+)(?:\[(?P<pid>[0-9]+)\])?: ?(?P<message>.*)$'
 fields:
-  timestamp: {required: true}
+  # The short format prints no year. The value stays the string it was
+  # printed as until --assume-year says which year to read it in.
+  timestamp: {type: time, layout: "Jan _2 15:04:05", year: assumed, required: true}
   hostname: {required: true}
   identifier: {required: true}
   pid: {type: int}

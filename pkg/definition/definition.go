@@ -58,14 +58,23 @@ const (
 	FieldBool   = "bool"
 	FieldSize   = "size"
 	FieldTime   = "time"
-	FieldArray  = "array"
-	FieldObject = "object"
+	// FieldDuration is a printed length of time, reported in seconds.
+	FieldDuration = "duration"
+	FieldArray    = "array"
+	FieldObject   = "object"
 )
 
 // Size unit bases.
 const (
 	UnitBinary  = "binary"
 	UnitDecimal = "decimal"
+)
+
+// Year policies for a time field whose layout carries no year.
+const (
+	// YearAssumed says the format prints no year and that the value is
+	// to be dated only when the command line says which year to assume.
+	YearAssumed = "assumed"
 )
 
 // Missing-value policies for object sub-fields.
@@ -444,9 +453,19 @@ type Field struct {
 	Unit string `yaml:"unit,omitempty"`
 	// Layout is the Go reference layout a time field is written in
 	// ("2006-01-02T15:04:05-0700"). It is required for a time field, and
-	// it has to carry a year: a timestamp printed without one cannot be
-	// turned into a date without inventing it.
+	// it has to carry a year unless Year says the format prints none.
+	//
+	// For a duration field it is one of two words rather than a layout,
+	// h:mm or mm:ss, and it says what the last part of a bare two-part
+	// reading is. That is the one thing the text cannot settle on its
+	// own: ps prints four minutes fifty seconds as "4:50" and uptime
+	// prints an hour and twenty-three minutes as "1:23".
 	Layout string `yaml:"layout,omitempty"`
+	// Year is "assumed" for a time field whose layout carries no year.
+	// Such a value stays the string it was printed as unless the command
+	// line says which year to assume, so writing it is a statement about
+	// the format rather than a way to have a date invented.
+	Year string `yaml:"year,omitempty"`
 	// Location reads a timestamp that states no zone: "utc" (the default)
 	// or "local" for the zone the running system is in.
 	Location string `yaml:"location,omitempty"`

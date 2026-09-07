@@ -21,9 +21,15 @@ parse:
   each: input
   pattern: '(?s)\A\s*Local time: (?P<local_time>[^\n]+)\n\s*Universal time: (?P<universal_time>[^\n]+)\n(?:\s*RTC time: (?P<rtc_time>[^\n]+)\n)?\s*Time zone: (?P<time_zone>[^\n]+)\n\s*System clock synchronized: (?P<system_clock_synchronized>\S+)\n\s*NTP service: (?P<ntp_service>\S+)\n\s*RTC in local TZ: (?P<rtc_in_local_tz>\S+)'
 fields:
-  local_time: {required: true}
-  universal_time: {required: true}
-  rtc_time: {when_missing: omit}
+  # The local clock is stated in a zone abbreviation, which names a
+  # different offset in different parts of the world. It stays the string
+  # it was printed as until --assume-zone gives that abbreviation an
+  # offset; the universal clock says UTC and needs nothing.
+  local_time: {type: time, layout: "Mon 2006-01-02 15:04:05 MST", required: true}
+  universal_time: {type: time, layout: "Mon 2006-01-02 15:04:05 MST", required: true}
+  # The hardware clock is printed with no zone at all, and timedatectl
+  # reports it in UTC.
+  rtc_time: {type: time, layout: "Mon 2006-01-02 15:04:05", when_missing: omit}
   time_zone: {required: true}
   system_clock_synchronized: {type: bool}
   rtc_in_local_tz: {type: bool}

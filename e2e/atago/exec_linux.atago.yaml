@@ -356,3 +356,39 @@ scenarios:
           stdout:
             json:
               - { path: "$.uptime_seconds", gt: 0 }
+
+  # The host's own procps, so what is pinned is the shape of the answer
+  # rather than any particular machine's numbers.
+  - name: real uptime and ps report their durations in seconds
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run uptime
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.uptime", gt: 0 }
+      - run:
+          command: jz run ps
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].time", gte: 0 }
+
+  - name: real who leaves its timestamps alone until a year is assumed
+    only: {os: linux}
+    steps:
+      # who prints nothing at all on a machine with no logins, and an
+      # empty listing is [] rather than a row to look at, so the shape is
+      # asserted through a fixture and only the exit status through the
+      # real command.
+      - run:
+          command: jz run who
+      - assert:
+          exit_code: 0
+      - run:
+          command: jz run --assume-year now who
+      - assert:
+          exit_code: 0

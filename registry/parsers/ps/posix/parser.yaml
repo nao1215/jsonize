@@ -25,5 +25,5 @@ parse:
 fields:
   pid: {type: int, required: true}
   tty: {required: true}
-  time: {required: true}
+  time: {type: duration, layout: mm:ss, required: true}
   command: {required: true}

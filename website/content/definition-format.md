@@ -378,6 +378,8 @@ fields:
   use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
   size:        {type: size, unit: binary}
   modified:    {type: time, layout: "2006-01-02 15:04:05 -0700"}
+  login_at:    {type: time, layout: "Jan _2 15:04", year: assumed}
+  elapsed:     {type: duration, layout: mm:ss}
   ro:          {type: bool, true_values: [1, yes], false_values: [0, no]}
   options:     {type: array, split: ","}
   groups:
@@ -393,14 +395,16 @@ fields:
 
 | Key | Applies to | Meaning |
 |-----|-----------|---------|
-| `type` | all | `string` (default), `int`, `float`, `bool`, `size`, `time`, `array`, `object` |
+| `type` | all | `string` (default), `int`, `float`, `bool`, `size`, `time`, `duration`, `array`, `object` |
 | `trim_prefix`, `trim_suffix` | all | removed before conversion; without them a string value keeps its whitespace exactly as the parser produced it |
 | `null_if` | all | values (after trimming) that become `null` |
 | `required` | all | `null`/empty is an error |
 | `when_missing` | all | `null` (default) or `omit` the key when the value is missing |
 | `unit` | size | `binary` (K=1024, default) or `decimal` (K=1000); `Ki`/`Mi` always mean 1024 |
-| `layout` | time | the [Go reference layout](https://pkg.go.dev/time#pkg-constants) the timestamp is written in; required, and it has to state a year |
+| `layout` | time | the [Go reference layout](https://pkg.go.dev/time#pkg-constants) the timestamp is written in; required, and it has to state a year unless `year: assumed` says the format prints none |
+| `year` | time | `assumed` for a format that prints no year; the value stays a string until `--assume-year` says which year to read it in |
 | `location` | time | how to read a timestamp that states no zone: `utc` (default) or `local`, the zone the running system is in |
+| `layout` | duration | `h:mm` or `mm:ss`, saying what the last part of a bare `4:50` is; required |
 | `true_values`, `false_values` | bool | spellings (case-insensitive); defaults are true/yes/on/1/y and false/no/off/0/n |
 | `split`, `split_regex` | array | how to split; items are trimmed |
 | `items` | array | conversion applied to each element (arrays of arrays are not allowed) |
@@ -418,22 +422,62 @@ has to ask which of two a field carries. The same rule as for a rounded
 size applies to what it is used on: a timestamp is converted only where
 the text says what it means.
 
-- No year, no conversion. An `ls -l` listing of a recent file and a
-  syslog line print `Sep  7 14:20`, and dating that means picking a year
-  the output does not name. A layout without a year is a validation
-  error, and those columns stay the strings they were printed as
-  (`who`, `last`, `journalctl -o short`).
-- A zone abbreviation is not an offset. `JST` means +0900 only if you
-  carry a table of abbreviations, which jz does not, so `date`,
-  `systemctl list-timers`, `journalctl --list-boots` and `timedatectl`
-  keep their timestamps as text. A numeric offset in the text needs no
-  table, which is what `journalctl -o short-iso`, `stat`, `mtr` and
-  `date -R` print.
+- No year, no conversion, unless the caller supplies one. `who`, `last`
+  and `journalctl -o short` print `Sep  7 14:20`, and dating that means
+  picking a year the output does not name. Such a field writes
+  `year: assumed` beside a layout with no year, which says the format
+  prints none; the value then stays the string it was printed as until
+  `--assume-year 2025` or `--assume-year now` says which year to read it
+  in. A layout without a year and without `year: assumed` is a
+  validation error, so nothing is dated by accident.
+- A zone abbreviation is not an offset, unless the caller supplies one.
+  `JST` means +0900 only if you carry a table of abbreviations, which jz
+  does not: the same three letters name different offsets in different
+  parts of the world. A layout with `MST` in it converts when the
+  abbreviation says its own offset (`UTC`, `GMT`) and otherwise waits for
+  `--assume-zone JST=+0900`, which may be repeated. Until then `date`,
+  `timedatectl` and `systemctl list-timers` keep those timestamps as
+  text. A numeric offset in the text needs no table, which is what
+  `journalctl -o short-iso`, `stat`, `mtr` and `date -R` print.
 - `location` is for a timestamp with no zone at all, and it is a
   statement the definition makes rather than something jz works out. An
   archive listing (`tar -tv`, `unzip -l`) prints the local time of the
   machine that wrote the archive, which neither `utc` nor `local`
   describes, so those stay text too.
+
+`duration` turns a printed length of time into seconds, as an integer
+when the length is a whole number of them and a decimal when it is not.
+It reads the spellings commands print:
+
+```text
+3-04:05:06     days-hours:minutes:seconds (ps -o etime)
+04:05:06       hours:minutes:seconds
+04:05          settled by layout: h:mm or mm:ss
+01:23.45       the same with a fraction on the last part
+13:42m         a trailing unit names the unit of the last part
+13 days, 4:30  days and a clock reading (uptime)
+45 min         a number and the unit it is in
+3days
+1h2m3s         units run together, largest first
+3d4h
+```
+
+`layout` is required and is one of two words rather than a Go layout. It
+says what the last part of a bare two-part reading is: `ps` prints four
+minutes fifty seconds as `4:50` and `uptime` prints an hour and
+twenty-three minutes as `1:23`, and nothing in the text separates them.
+Being wrong about it is a factor of sixty that nothing downstream would
+notice, so there is no default.
+
+The rule about rounded values applies here as it does to `size`, and it
+is about what the text names rather than how coarse it is.
+`13 days, 4:30` names exactly 1139400 seconds, so it converts, even
+though the machine has been up for some seconds more. `1.8T` names no
+particular number of bytes until a base and a precision are chosen for
+it, so it does not. What that rules out is a column that prints two
+shapes of different precision: `top`'s TIME+ falls back from
+`mmm:ss.hh` to `hhh,mm` for a long-running task, so the same field would
+carry seconds for one row and minutes for another, and it stays text.
 
 Nesting is limited to 8 levels.
 

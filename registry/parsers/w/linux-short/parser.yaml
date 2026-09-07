@@ -27,6 +27,7 @@ parse:
         each: input
         pattern: '^\s*(?P<time>\d{1,2}:\d{2}(?::\d{2})?)\s+up\s+(?P<uptime>.+?),\s+(?P<users>\d+) users?,\s+load average: (?P<load_1m>[\d.]+), (?P<load_5m>[\d.]+), (?P<load_15m>[\d.]+)\s*$'
       fields:
+        uptime: {type: duration, layout: h:mm}
         users: {type: int}
         load_1m: {type: float}
         load_5m: {type: float}

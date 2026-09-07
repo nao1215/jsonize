@@ -24,8 +24,14 @@ detect:
 parse:
   type: regex
   each: input
-  pattern: '\A(?P<weekday>\w{3}) (?P<month>\w{3}) (?P<day>[ \d]\d) (?P<hour>\d\d):(?P<minute>\d\d):(?P<second>\d\d) (?P<timezone>\S+) (?P<year>\d{4})[ \t]*$'
+  pattern: '\A(?P<timestamp>(?P<weekday>\w{3}) (?P<month>\w{3}) (?P<day>[ \d]\d) (?P<hour>\d\d):(?P<minute>\d\d):(?P<second>\d\d) (?P<timezone>\S+) (?P<year>\d{4}))[ \t]*$'
 fields:
+  # The whole reading as one value, beside the parts it is made of. The
+  # zone is an abbreviation, which names a different offset in different
+  # parts of the world, so the timestamp stays the string it was printed
+  # as until --assume-zone gives that abbreviation an offset. UTC and GMT
+  # need nothing.
+  timestamp: {type: time, layout: "Mon Jan _2 15:04:05 MST 2006", required: true}
   day: {type: int}
   hour: {type: int}
   minute: {type: int}

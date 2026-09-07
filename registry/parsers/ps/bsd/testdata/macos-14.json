@@ -9,7 +9,7 @@
     "tty": "s000",
     "stat": "Ss",
     "start": "9:03AM",
-    "time": "0:00.09",
+    "time": 0.09,
     "command": "-zsh"
   },
   {
@@ -22,7 +22,7 @@
     "tty": null,
     "stat": "Ss",
     "start": "9:02AM",
-    "time": "3:12.45",
+    "time": 192.45,
     "command": "/sbin/launchd"
   },
   {
@@ -35,7 +35,7 @@
     "tty": null,
     "stat": "Ss",
     "start": "9:02AM",
-    "time": "12:01.33",
+    "time": 721.33,
     "command": "/System/Library/PrivateFrameworks/SkyLight.framework/Resources/WindowServer -daemon"
   }
 ]
