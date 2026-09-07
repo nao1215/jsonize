@@ -1,0 +1,30 @@
+cargo-x86_64-unknown-linux-gnu (installed)
+clippy-x86_64-unknown-linux-gnu (installed)
+llvm-bitcode-linker-x86_64-unknown-linux-gnu
+llvm-tools-x86_64-unknown-linux-gnu (installed)
+rust-analysis-x86_64-unknown-linux-gnu
+rust-analyzer-x86_64-unknown-linux-gnu
+rust-docs-x86_64-unknown-linux-gnu
+rust-src (installed)
+rust-std-aarch64-apple-darwin
+rust-std-aarch64-apple-ios
+rust-std-aarch64-apple-ios-macabi
+rust-std-aarch64-apple-ios-sim
+rust-std-aarch64-apple-tvos
+rust-std-aarch64-apple-tvos-sim
+rust-std-aarch64-apple-visionos
+rust-std-aarch64-apple-visionos-sim
+rust-std-aarch64-apple-watchos
+rust-std-aarch64-apple-watchos-sim
+rust-std-aarch64-linux-android (installed)
+rust-std-aarch64-pc-windows-gnullvm
+rust-std-aarch64-pc-windows-msvc
+rust-std-aarch64-unknown-freebsd
+rust-std-aarch64-unknown-fuchsia
+rust-std-aarch64-unknown-linux-gnu
+rust-std-aarch64-unknown-linux-musl
+rust-std-aarch64-unknown-linux-ohos
+rust-std-aarch64-unknown-none
+rust-std-aarch64-unknown-none-softfloat
+rust-std-aarch64-unknown-uefi
+rust-std-arm-linux-androideabi

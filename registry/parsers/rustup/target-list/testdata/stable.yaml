@@ -1,0 +1,4 @@
+source: the first 30 lines of `rustup target list` on Ubuntu 26.04 (rustup 1.29.1, stable toolchain) with LC_ALL=C; the full listing is 116 lines
+description: a listing of the active toolchain, in which one target inside the window is installed
+os: linux
+args: [target, list]
