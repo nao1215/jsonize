@@ -1,0 +1,8 @@
+     IRQ      TOTAL NAME
+ TASKLET 3851159688 normal priority tasklet softirq
+   SCHED 1900399358 schedule softirq
+     RCU 1811037716 RCU softirq
+   TIMER  425284888 timer softirq
+  NET_RX  245991043 network receive softirq
+      HI   31318511 high priority tasklet softirq
+   BLOCK     267878 block device softirq

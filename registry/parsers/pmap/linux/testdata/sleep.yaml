@@ -1,0 +1,3 @@
+description: A short-lived process with a handful of mappings, the smallest map this form prints for a process the caller can read.
+source: captured on Ubuntu 26.04 (procps-ng 4.0) with LC_ALL=C from `pmap` of a sleep started for this fixture
+os: linux

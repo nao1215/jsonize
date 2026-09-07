@@ -1,0 +1,302 @@
+{
+  "process": {
+    "pid": 3092129,
+    "command": "sleep 20"
+  },
+  "mappings": [
+    {
+      "address": "000058bc6bc4b000",
+      "kilobytes": 968,
+      "permissions": "r----",
+      "mapping": "sleep"
+    },
+    {
+      "address": "000058bc6bd3d000",
+      "kilobytes": 4832,
+      "permissions": "r-x--",
+      "mapping": "sleep"
+    },
+    {
+      "address": "000058bc6c1f5000",
+      "kilobytes": 3836,
+      "permissions": "r----",
+      "mapping": "sleep"
+    },
+    {
+      "address": "000058bc6c5b4000",
+      "kilobytes": 1428,
+      "permissions": "r----",
+      "mapping": "sleep"
+    },
+    {
+      "address": "000058bc6c719000",
+      "kilobytes": 24,
+      "permissions": "rw---",
+      "mapping": "sleep"
+    },
+    {
+      "address": "000058bc6c71f000",
+      "kilobytes": 4,
+      "permissions": "rw---",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "000058bc7c828000",
+      "kilobytes": 132,
+      "permissions": "rw---",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "00007443e1754000",
+      "kilobytes": 12,
+      "permissions": "r----",
+      "mapping": "libpcre2-8.so.0.14.0"
+    },
+    {
+      "address": "00007443e1757000",
+      "kilobytes": 496,
+      "permissions": "r-x--",
+      "mapping": "libpcre2-8.so.0.14.0"
+    },
+    {
+      "address": "00007443e17d3000",
+      "kilobytes": 172,
+      "permissions": "r----",
+      "mapping": "libpcre2-8.so.0.14.0"
+    },
+    {
+      "address": "00007443e17fe000",
+      "kilobytes": 4,
+      "permissions": "r----",
+      "mapping": "libpcre2-8.so.0.14.0"
+    },
+    {
+      "address": "00007443e17ff000",
+      "kilobytes": 4,
+      "permissions": "rw---",
+      "mapping": "libpcre2-8.so.0.14.0"
+    },
+    {
+      "address": "00007443e1800000",
+      "kilobytes": 160,
+      "permissions": "r----",
+      "mapping": "libc.so.6"
+    },
+    {
+      "address": "00007443e1828000",
+      "kilobytes": 1632,
+      "permissions": "r-x--",
+      "mapping": "libc.so.6"
+    },
+    {
+      "address": "00007443e19c0000",
+      "kilobytes": 312,
+      "permissions": "r----",
+      "mapping": "libc.so.6"
+    },
+    {
+      "address": "00007443e1a0e000",
+      "kilobytes": 16,
+      "permissions": "r----",
+      "mapping": "libc.so.6"
+    },
+    {
+      "address": "00007443e1a12000",
+      "kilobytes": 8,
+      "permissions": "rw---",
+      "mapping": "libc.so.6"
+    },
+    {
+      "address": "00007443e1a14000",
+      "kilobytes": 52,
+      "permissions": "rw---",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "00007443e1a8c000",
+      "kilobytes": 20,
+      "permissions": "rw---",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "00007443e1a91000",
+      "kilobytes": 72,
+      "permissions": "r----",
+      "mapping": "libm.so.6"
+    },
+    {
+      "address": "00007443e1aa3000",
+      "kilobytes": 640,
+      "permissions": "r-x--",
+      "mapping": "libm.so.6"
+    },
+    {
+      "address": "00007443e1b43000",
+      "kilobytes": 456,
+      "permissions": "r----",
+      "mapping": "libm.so.6"
+    },
+    {
+      "address": "00007443e1bb5000",
+      "kilobytes": 4,
+      "permissions": "r----",
+      "mapping": "libm.so.6"
+    },
+    {
+      "address": "00007443e1bb6000",
+      "kilobytes": 4,
+      "permissions": "rw---",
+      "mapping": "libm.so.6"
+    },
+    {
+      "address": "00007443e1bb7000",
+      "kilobytes": 16,
+      "permissions": "r----",
+      "mapping": "libgcc_s.so.1"
+    },
+    {
+      "address": "00007443e1bbb000",
+      "kilobytes": 144,
+      "permissions": "r-x--",
+      "mapping": "libgcc_s.so.1"
+    },
+    {
+      "address": "00007443e1bdf000",
+      "kilobytes": 16,
+      "permissions": "r----",
+      "mapping": "libgcc_s.so.1"
+    },
+    {
+      "address": "00007443e1be3000",
+      "kilobytes": 4,
+      "permissions": "r----",
+      "mapping": "libgcc_s.so.1"
+    },
+    {
+      "address": "00007443e1be4000",
+      "kilobytes": 4,
+      "permissions": "rw---",
+      "mapping": "libgcc_s.so.1"
+    },
+    {
+      "address": "00007443e1be5000",
+      "kilobytes": 28,
+      "permissions": "r----",
+      "mapping": "libselinux.so.1"
+    },
+    {
+      "address": "00007443e1bec000",
+      "kilobytes": 132,
+      "permissions": "r-x--",
+      "mapping": "libselinux.so.1"
+    },
+    {
+      "address": "00007443e1c0d000",
+      "kilobytes": 28,
+      "permissions": "r----",
+      "mapping": "libselinux.so.1"
+    },
+    {
+      "address": "00007443e1c14000",
+      "kilobytes": 4,
+      "permissions": "r----",
+      "mapping": "libselinux.so.1"
+    },
+    {
+      "address": "00007443e1c15000",
+      "kilobytes": 4,
+      "permissions": "rw---",
+      "mapping": "libselinux.so.1"
+    },
+    {
+      "address": "00007443e1c16000",
+      "kilobytes": 8,
+      "permissions": "rw---",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "00007443e1c36000",
+      "kilobytes": 4,
+      "permissions": "-----",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "00007443e1c37000",
+      "kilobytes": 8,
+      "permissions": "rw---",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "00007443e1c39000",
+      "kilobytes": 8,
+      "permissions": "rw---",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "00007443e1c3b000",
+      "kilobytes": 16,
+      "permissions": "r----",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "00007443e1c3f000",
+      "kilobytes": 8,
+      "permissions": "r----",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "00007443e1c41000",
+      "kilobytes": 8,
+      "permissions": "r-x--",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "00007443e1c43000",
+      "kilobytes": 4,
+      "permissions": "r----",
+      "mapping": "ld-linux-x86-64.so.2"
+    },
+    {
+      "address": "00007443e1c44000",
+      "kilobytes": 188,
+      "permissions": "r-x--",
+      "mapping": "ld-linux-x86-64.so.2"
+    },
+    {
+      "address": "00007443e1c73000",
+      "kilobytes": 44,
+      "permissions": "r----",
+      "mapping": "ld-linux-x86-64.so.2"
+    },
+    {
+      "address": "00007443e1c7e000",
+      "kilobytes": 8,
+      "permissions": "r----",
+      "mapping": "ld-linux-x86-64.so.2"
+    },
+    {
+      "address": "00007443e1c80000",
+      "kilobytes": 4,
+      "permissions": "rw---",
+      "mapping": "ld-linux-x86-64.so.2"
+    },
+    {
+      "address": "00007443e1c81000",
+      "kilobytes": 4,
+      "permissions": "rw---",
+      "mapping": "[ anon ]"
+    },
+    {
+      "address": "00007fff4298a000",
+      "kilobytes": 136,
+      "permissions": "rw---",
+      "mapping": "[ stack ]"
+    },
+    {
+      "address": "ffffffffff600000",
+      "kilobytes": 4,
+      "permissions": "--x--",
+      "mapping": "[ anon ]"
+    }
+  ]
+}

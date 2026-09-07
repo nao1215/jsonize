@@ -1,0 +1,12 @@
+ IRQ       TOTAL NAME
+ LOC 12402867953 Local timer interrupts
+ CAL 10248846721 Function call interrupts
+ TLB  5281495625 TLB shootdowns
+ RES   978622362 Rescheduling interrupts
+ 178    73245130 IR-PCI-MSIX-0000:c6:00.0 0-edge amdgpu
+ 176    57418687 IR-PCI-MSI-0000:c3:00.0 0-edge mt7925e
+  44    31327007 IR-PCI-MSIX-0000:c8:00.0 0-edge xhci_hcd
+ 139     5491890 IR-PCI-MSIX-0000:c1:00.0 0-edge eno1
+ 137     5113947 IR-PCI-MSIX-0000:c5:00.0 31-edge nvme1q31
+ 113     5102377 IR-PCI-MSIX-0000:c5:00.0 7-edge nvme1q7
+ 138     3297076 IR-PCI-MSIX-0000:c5:00.0 32-edge nvme1q32

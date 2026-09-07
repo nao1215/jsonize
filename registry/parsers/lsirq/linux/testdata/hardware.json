@@ -1,0 +1,57 @@
+[
+  {
+    "irq": "LOC",
+    "total": 12402867953,
+    "name": "Local timer interrupts"
+  },
+  {
+    "irq": "CAL",
+    "total": 10248846721,
+    "name": "Function call interrupts"
+  },
+  {
+    "irq": "TLB",
+    "total": 5281495625,
+    "name": "TLB shootdowns"
+  },
+  {
+    "irq": "RES",
+    "total": 978622362,
+    "name": "Rescheduling interrupts"
+  },
+  {
+    "irq": "178",
+    "total": 73245130,
+    "name": "IR-PCI-MSIX-0000:c6:00.0 0-edge amdgpu"
+  },
+  {
+    "irq": "176",
+    "total": 57418687,
+    "name": "IR-PCI-MSI-0000:c3:00.0 0-edge mt7925e"
+  },
+  {
+    "irq": "44",
+    "total": 31327007,
+    "name": "IR-PCI-MSIX-0000:c8:00.0 0-edge xhci_hcd"
+  },
+  {
+    "irq": "139",
+    "total": 5491890,
+    "name": "IR-PCI-MSIX-0000:c1:00.0 0-edge eno1"
+  },
+  {
+    "irq": "137",
+    "total": 5113947,
+    "name": "IR-PCI-MSIX-0000:c5:00.0 31-edge nvme1q31"
+  },
+  {
+    "irq": "113",
+    "total": 5102377,
+    "name": "IR-PCI-MSIX-0000:c5:00.0 7-edge nvme1q7"
+  },
+  {
+    "irq": "138",
+    "total": 3297076,
+    "name": "IR-PCI-MSIX-0000:c5:00.0 32-edge nvme1q32"
+  }
+]

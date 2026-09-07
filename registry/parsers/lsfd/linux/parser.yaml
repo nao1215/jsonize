@@ -1,0 +1,31 @@
+# `lsfd` lists open files the way lsof does, with columns of its own. The
+# rows are cut at whitespace rather than at the header words: PID and
+# INODE are right-aligned and wider than their names, which is what
+# `split: aligned` cannot read.
+#
+# NAME is last and keeps the rest of the line, because it holds a path
+# and, for a socket, a description with spaces in it. A file the caller
+# may not read has no name at all, so a row can stop one cell short.
+format: 1
+command: lsfd
+variant: linux
+description: lsfd open file listing
+metadata:
+  tags: [linux, process, file, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lsfd.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ACOMMAND[ \t]+PID[ \t]+USER[ \t]+ASSOC[ \t]+XMODE[ \t]+TYPE[ \t]+SOURCE[ \t]+MNTID[ \t]+INODE[ \t]+NAME[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  min_fields: 7
+fields:
+  command: {required: true}
+  pid: {type: int, required: true}
+  mntid: {type: int}
+  inode: {type: int}

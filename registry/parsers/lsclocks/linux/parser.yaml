@@ -1,0 +1,27 @@
+# `lsclocks` lists the clocks the kernel offers. The ID column is
+# right-aligned and narrower than its name, which is what `split:
+# aligned` cannot read, so the cells are cut at whitespace.
+#
+# TIME is seconds with nanosecond precision, more digits than a float
+# keeps, so it stays a string. RESOL carries its unit ("1ns") and stays
+# one too.
+format: 1
+command: lsclocks
+variant: linux
+description: lsclocks kernel clock listing
+metadata:
+  tags: [linux, time, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lsclocks.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*ID[ \t]+NAME[ \t]+TYPE[ \t]+(?:TIME[ \t]+)?RESOL'
+parse:
+  type: table
+  split: whitespace
+fields:
+  id: {type: int, required: true}
+  name: {required: true}
