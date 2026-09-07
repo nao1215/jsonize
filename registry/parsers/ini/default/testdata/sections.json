@@ -1,0 +1,13 @@
+{
+  "": {
+    "top": "1"
+  },
+  "core": {
+    "repositoryformatversion": "0",
+    "bare": "false"
+  },
+  "user": {
+    "name": "Alice",
+    "email": "alice@example.com"
+  }
+}

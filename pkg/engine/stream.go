@@ -61,6 +61,9 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 	if def.Parse.Type == definition.TypeTable && def.Parse.Header.None {
 		s.columns()
 	}
+	if def.Parse.Type == definition.TypeCSV && def.Parse.Header.None {
+		s.csvCols = def.Parse.Header.Columns
+	}
 	br := bufio.NewReaderSize(r, 64*1024)
 	sep := def.Input.Separator()
 	num := 0
@@ -76,7 +79,12 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 			return err
 		}
 		num++
-		if !utf8.Valid(raw) {
+		// The escapes come off before the check, which is the order the
+		// whole-document reader uses. Doing it the other way round
+		// refused a record whose only invalid bytes were inside an
+		// escape sequence that was about to be removed.
+		stripped := convert.StripANSI(raw)
+		if !utf8.Valid(stripped) {
 			if rerr := s.report(&ParseError{Definition: def.ID(), Line: num, Msg: "input is not valid UTF-8"}); rerr != nil {
 				return rerr
 			}
@@ -85,7 +93,7 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 			}
 			continue
 		}
-		text := string(convert.StripANSI(raw))
+		text := string(stripped)
 		if num == 1 {
 			text = trimBOM(text)
 		}
@@ -161,6 +169,13 @@ type streamer struct {
 	cols   []column
 	header bool
 	block  []line
+
+	// csvPending holds the lines of a record a quoted value has not
+	// finished yet; csvCols is the header once it has been read.
+	csvPending []line
+	csvCols    []string
+	// boxRow holds the lines between two rules of a drawn table.
+	boxRow []line
 }
 
 // report hands a failed record to onError. It returns nil when the read
@@ -239,7 +254,12 @@ func (s *streamer) feedSelected(l line) error {
 func (s *streamer) feedRecord(l line) error {
 	switch s.p.Type {
 	case definition.TypeTable:
+		if s.split() == definition.SplitBox {
+			return s.feedBox(l)
+		}
 		return s.feedTable(l)
+	case definition.TypeCSV:
+		return s.feedCSV(l)
 	case definition.TypeRegex:
 		obj, err := s.regexObject(l)
 		if err != nil {
@@ -379,5 +399,98 @@ func (s *streamer) finish() error {
 			return err
 		}
 	}
+	if err := s.flushBox(); err != nil {
+		return err
+	}
+	if len(s.csvPending) > 0 {
+		// A quoted value that never closes is a record the input did not
+		// finish, and reporting it is better than dropping it.
+		pending := s.csvPending
+		s.csvPending = nil
+		return s.emitCSV(pending)
+	}
 	return s.flushBlock()
+}
+
+// feedCSV holds a line back while a quoted value is still open. A record
+// is finished when the text so far carries an even number of quotes:
+// every quoted value opens and closes with one, and a quote inside one is
+// written twice.
+func (s *streamer) feedCSV(l line) error {
+	s.csvPending = append(s.csvPending, l)
+	quotes := 0
+	for _, p := range s.csvPending {
+		quotes += strings.Count(p.text, `"`)
+	}
+	if quotes%2 != 0 {
+		return nil
+	}
+	pending := s.csvPending
+	s.csvPending = nil
+	return s.emitCSV(pending)
+}
+
+// emitCSV reads one finished record, taking the first one as the header
+// unless the definition named the columns.
+func (s *streamer) emitCSV(pending []line) error {
+	texts := make([]string, len(pending))
+	for i, p := range pending {
+		texts[i] = p.text
+	}
+	rows, err := readCSV(strings.Join(texts, "\n"), s.p)
+	if err != nil {
+		return s.errorf(pending[0].num, "", "%s", err.Error())
+	}
+	for _, row := range rows {
+		if s.csvCols == nil {
+			s.csvCols = csvColumns(s.p, row)
+			continue
+		}
+		obj, err := s.csvRow(s.fields, s.csvCols, row, pending[0].num)
+		if err != nil {
+			return err
+		}
+		if err := s.emit(obj); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// feedBox accumulates the lines of a drawn row and releases it at the
+// rule that closes it. The first row is the header.
+func (s *streamer) feedBox(l line) error {
+	if isBoxRule(l.text) {
+		return s.flushBox()
+	}
+	s.boxRow = append(s.boxRow, l)
+	return nil
+}
+
+func (s *streamer) flushBox() error {
+	if len(s.boxRow) == 0 {
+		return nil
+	}
+	group := s.boxRow
+	s.boxRow = nil
+	if !s.header {
+		cols, err := s.boxColumns(s.p, group)
+		if err != nil {
+			return err
+		}
+		s.cols, s.header = cols, true
+		return nil
+	}
+	obj := jsonutil.NewObject()
+	cells := boxJoin(group, "\n")
+	for i, c := range s.cols {
+		var raw any
+		if i < len(cells) {
+			raw = cells[i]
+		}
+		if err := s.setField(obj, c.name, raw, s.fields[c.name], group[0].num); err != nil {
+			return err
+		}
+	}
+	return s.emit(obj)
 }

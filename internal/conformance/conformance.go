@@ -131,18 +131,8 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 			}
 		}
 		if explicit {
-			// A definition that jz will not claim on its own must still be
-			// reachable by naming it, and its signature must accept the
-			// fixture rather than being skipped.
-			if err := selects(reg, e, selector.Context{Parser: e.Def.Command, Input: c.Input}); err != nil {
-				res.Err = fmt.Errorf("selection with --parser %s: %w", e.Def.Command, err)
-				return res
-			}
-			// Automatic detection may well land on another definition
-			// whose format this text also fits; what it must not do is
-			// choose this one.
-			if sel, err := selector.Select(reg, selector.Context{Input: c.Input}); err == nil && sel.Entry.Def.ID() == e.Def.ID() {
-				res.Err = fmt.Errorf("%s declares auto_detect: false but automatic detection still chose it", e.Def.ID())
+			if err := namedSelects(reg, e, c); err != nil {
+				res.Err = err
 				return res
 			}
 		}
@@ -201,6 +191,33 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 		res.Err = fmt.Errorf("output differs from %s.json (-want +got):\n%s", c.Name, diff)
 	}
 	return res
+}
+
+// namedSelects checks the paths a definition jz will not claim on its
+// own is reached by. Naming it must work, and its signature must accept
+// the fixture rather than being skipped; automatic detection must not
+// choose it.
+//
+// A shape has no signature and so cannot be told from its siblings by
+// text: table/whitespace and table/aligned read the same lines two ways.
+// Naming the variant is what picks one, and that is what is required of
+// those.
+func namedSelects(reg *registry.Registry, e *registry.Entry, c registry.Case) error {
+	ctx := selector.Context{Parser: e.Def.Command, Input: c.Input}
+	named := "--parser " + e.Def.Command
+	if selector.ShapeOnly(e.Def) {
+		ctx.Variant = e.Def.Variant
+		named += " --variant " + e.Def.Variant
+	}
+	if err := selects(reg, e, ctx); err != nil {
+		return fmt.Errorf("selection with %s: %w", named, err)
+	}
+	// Automatic detection may well land on another definition whose
+	// format this text also fits; what it must not do is choose this one.
+	if sel, err := selector.Select(reg, selector.Context{Input: c.Input}); err == nil && sel.Entry.Def.ID() == e.Def.ID() {
+		return fmt.Errorf("%s declares auto_detect: false but automatic detection still chose it", e.Def.ID())
+	}
+	return nil
 }
 
 // streamMatches checks that reading the fixture one record at a time

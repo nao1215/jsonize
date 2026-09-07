@@ -1,0 +1,13 @@
+# Lines of "key: value". It is the shape of a dozen status reports and
+# of nothing in particular, so it is only used when named.
+format: 1
+command: kv
+variant: colon
+description: 'any "key: value" listing, as a list of name/value pairs'
+metadata:
+  tags: [generic]
+detect:
+  auto_detect: false
+parse:
+  type: kv
+  separator: ": "

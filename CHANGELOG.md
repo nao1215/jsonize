@@ -24,6 +24,50 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `--define YAML`, which takes the definition itself instead of the name
+  of one: a `parser.yaml` without `format`, `command`, `variant` or
+  `detect`, so what is left is `parse` and optionally `input` and
+  `fields`. Nothing is detected, so it cannot be combined with `--parser`
+  or `--variant`. It adds no expressive power — the body goes through the
+  same loader and validation as a file — so a definition worth keeping
+  moves into a registry unchanged.
+- Definitions that describe a shape rather than a command:
+  `table/whitespace`, `table/aligned`, `table/box`, `csv/comma`,
+  `csv/tab`, `kv/colon`, `kv/equals` and `ini/default`. They are
+  `--define` under a name and are never reached by automatic detection.
+  Such a definition makes no claim about the text, so the conformance
+  runner leaves it out of the check that asks whether a definition reads
+  a neighbour's output, and requires the variant to be named rather than
+  the parser alone.
+- `parse.type: csv`, with RFC 4180 quoting and a `delimiter` (default
+  `,`), so a value may contain the delimiter, a quote written twice or a
+  line break. A short row leaves the remaining keys null and a long one
+  is an error; a header naming a column twice numbers the repeats.
+- `parse.type: ini`, reading `[section]` headings and `key = value`
+  lines into an object of objects. Keys before the first heading go under
+  the empty name, `#` and `;` start a comment only at the start of a
+  line, a repeated section continues the first and a repeated key takes
+  the last value.
+- `table.split: box`, for a table drawn with `+-|` or Unicode
+  box-drawing rules. The rules mark the rows and the bars mark the cells,
+  a value wrapped over several lines is one cell joined with a newline, a
+  header written over two lines is one name joined with `_`, and an empty
+  cell is null.
+
+### Fixed
+
+- `StripANSI` would take a line break as the final byte of an escape
+  sequence and eat it, joining two records into one. It did so only when
+  the whole document was read, since the streaming reader has already cut
+  the line off, so the two readings disagreed on text as small as
+  `"\x1b\n"`. No escape sequence ends with a line break or a carriage
+  return, so none may consume one. Found by the fuzz target added for the
+  new parse types.
+- The streaming reader checked that a record was valid UTF-8 before
+  stripping its escape sequences, where the whole-document reader strips
+  first. A record whose only invalid bytes were inside an escape about to
+  be removed was refused by one reading and accepted by the other.
+
 - `fields.<name>.type: duration`, which turns a printed length of time
   into seconds: `3-04:05:06`, `04:05:06`, `04:05`, `01:23.45`, `13:42m`,
   `13 days, 4:30`, `45 min`, `3days`, `1h2m3s`, `3d4h`. The result is an

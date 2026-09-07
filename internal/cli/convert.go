@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/selector"
@@ -53,13 +54,18 @@ func (a *app) cmdConvert(args []string) int {
 	if o.fs.NArg() > 0 {
 		return a.unexpectedArgs(o.fs)
 	}
-	if co.selects.variant != "" && co.selects.parser == "" {
-		a.errorf("%v", &selector.VariantWithoutParserError{Variant: co.selects.variant})
+	if err := co.selects.check(); err != nil {
+		a.errorf("%v", err)
 		return ExitUsage
 	}
 	if err := co.output.check(); err != nil {
 		a.errorf("%v", err)
 		return ExitUsage
+	}
+	inline, hasInline, err := co.selects.definition()
+	if err != nil {
+		a.errorf("%v", err)
+		return ExitRegistry
 	}
 
 	reg, code := a.loadRegistry()
@@ -76,6 +82,9 @@ func (a *app) cmdConvert(args []string) int {
 		defer f.Close()
 		r = f
 	}
+	if hasInline {
+		return a.convertWith(inline, r, &co.output, co.selects.explain)
+	}
 	ctx := selector.Context{Parser: co.selects.parser, Variant: co.selects.variant}
 	if co.selects.parser == "" && co.file != "-" {
 		// A path is evidence about the text the same way argv is in exec
@@ -89,14 +98,9 @@ func (a *app) cmdConvert(args []string) int {
 	}
 	// The size limit is not negotiable from the command line: it exists so
 	// that a runaway producer cannot make jz allocate without bound.
-	data, err := io.ReadAll(io.LimitReader(r, MaxInputSize+1))
-	if err != nil {
-		a.errorf("reading input: %v", err)
-		return ExitError
-	}
-	if int64(len(data)) > MaxInputSize {
-		a.errorf("input exceeds the %d byte limit", MaxInputSize)
-		return ExitParse
+	data, code := a.readAll(r)
+	if code != ExitOK {
+		return code
 	}
 	ctx.Input = data
 	sel, err := selector.Select(reg, ctx)
@@ -142,4 +146,49 @@ func (a *app) unexpectedArgs(fs *flag.FlagSet) int {
 	}
 	a.usage(a.env.Stderr)
 	return ExitUsage
+}
+
+// readAll reads the whole input. The size limit is not negotiable from
+// the command line: it exists so that a runaway producer cannot make jz
+// allocate without bound.
+func (a *app) readAll(r io.Reader) ([]byte, int) {
+	data, err := io.ReadAll(io.LimitReader(r, MaxInputSize+1))
+	if err != nil {
+		a.errorf("reading input: %v", err)
+		return nil, ExitError
+	}
+	if int64(len(data)) > MaxInputSize {
+		a.errorf("input exceeds the %d byte limit", MaxInputSize)
+		return nil, ExitParse
+	}
+	return data, ExitOK
+}
+
+// convertWith reads the input with a definition given on the command
+// line. Nothing is selected, so nothing can be selected wrongly: the
+// caller stated the format and gets either the reading of it or the
+// reason it does not fit.
+func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOptions, explain bool) int {
+	if explain {
+		a.errorf("%s from --define", def.ID())
+	}
+	if out.stream {
+		return a.streamWith(def, r, out)
+	}
+	data, code := a.readAll(r)
+	if code != ExitOK {
+		return code
+	}
+	v, err := engine.Parse(def, data, out.engineOptions())
+	if err != nil {
+		return a.exitFor(err)
+	}
+	if v, code = a.narrow(v, out); code != ExitOK {
+		return code
+	}
+	if err := jsonutil.Encode(a.env.Stdout, v, out.pretty); err != nil {
+		a.errorf("writing output: %v", err)
+		return ExitError
+	}
+	return ExitOK
 }

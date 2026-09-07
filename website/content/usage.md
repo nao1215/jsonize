@@ -42,6 +42,7 @@ pipe there is no such answer at all: nothing identifies an empty input.
       --assume-zone ABBR=+HHMM  give a zone abbreviation an offset (repeatable)
       --parser NAME             restrict detection to one parser
       --variant NAME            use a variant of --parser
+      --define YAML             read with a definition given here instead of a registered one
       --explain                 report the chosen definition and why, on stderr
   -h, --help                    show help
 ```
@@ -146,6 +147,43 @@ the command's status wins: it is the more useful signal, because a
 command that failed explains both what it printed and what it did not.
 The skipped records are on standard error either way, so nothing is lost
 by the choice — only the number changes.
+
+## Output jz has no definition for
+
+`--define` takes the definition itself instead of the name of one. It is
+a `parser.yaml` without the four keys that place a definition in a
+registry — no `format`, `command`, `variant` or `detect` — so what is
+left is `parse` and, if you want them, `input` and `fields`:
+
+```console
+$ docker ps | jz --define 'parse: {type: table, split: box}'
+$ jz --define 'parse: {type: csv, delimiter: "|"}' --file export.txt
+$ mytool --list | jz --define '
+    input: {select: {after: "^---"}}
+    parse: {type: kv, separator: ": "}'
+```
+
+Nothing is detected: you stated the format, so nothing can be chosen
+wrongly. It cannot be combined with `--parser` or `--variant`, which
+would be a second answer to a question already settled. A body that
+cannot be read is exit 5 and the message names the key
+(`--define: parse.type: unknown parse type "tabel"`).
+
+The registry also carries a few definitions that describe a shape rather
+than a command, for the same job under a name:
+
+```console
+$ docker ps | jz --parser table --variant box
+$ jz --parser ini --file ~/.gitconfig
+$ jz --parser csv --variant tab --file export.tsv
+$ ss -tunlp | jz --parser table --variant whitespace
+```
+
+They are `table` (`whitespace`, `aligned`, `box`), `csv` (`comma`,
+`tab`), `kv` (`colon`, `equals`) and `ini` (`default`). Automatic
+detection never reaches them — two words above two words says nothing
+about what produced them — and every value comes out as text, because a
+shape says nothing about what its columns mean.
 
 ## Timestamps a format does not fully state
 

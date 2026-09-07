@@ -588,6 +588,20 @@ func ExplicitOnly(d *definition.Definition) bool {
 	return !d.Detect.AutoDetectable() || d.Detect.Signature.IsZero()
 }
 
+// ShapeOnly reports a definition that describes a shape rather than a
+// command: it declines automatic detection and carries no signature, so
+// it says nothing at all about the text and makes no claim to check.
+// `table/whitespace` and `csv/comma` are those; naming one is the caller
+// saying what the text is, which is the same thing --define does with
+// the definition written out.
+//
+// Such a definition is left out of the checks that ask whether a
+// definition reads a neighbour's output, because it reads everything by
+// design and would report every fixture in the registry.
+func ShapeOnly(d *definition.Definition) bool {
+	return !d.Detect.AutoDetectable() && d.Detect.Signature.IsZero()
+}
+
 func dedupe(list []string) []string {
 	seen := map[string]bool{}
 	out := list[:0:0]

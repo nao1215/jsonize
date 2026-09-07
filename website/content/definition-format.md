@@ -185,7 +185,7 @@ must be valid UTF-8 and within the size limits.
 ```yaml
 parse:
   type: table
-  split: whitespace | aligned | delimiter   # default whitespace
+  split: whitespace | aligned | delimiter | box   # default whitespace
   delimiter: "\t"                            # with split: delimiter
   header:
     columns: [filesystem, size, used]        # explicit names
@@ -211,8 +211,66 @@ non-alphanumerics become `_`, a leading or trailing `%` becomes
   kept whole. Empty cells are `null`. With explicit `columns`, extra
   trailing header words ("Mounted on") belong to the last column.
 - `delimiter`: `strings.SplitN` on the literal, cells trimmed.
+- `box`: a table drawn with rules, as MySQL and several container tools
+  print one. The rules say where the rows are and the vertical bars say
+  where the cells are, so nothing is counted or aligned and a value wider
+  than its column cannot shift a boundary. A rule is a line with nothing
+  on it but `+-=|`, the Unicode box-drawing characters and whitespace;
+  the frame around the table and the rule under the header are both
+  recognised without the definition describing either. A value wrapped
+  over several lines is one cell, joined with a newline; a header written
+  over two lines is one name, joined with `_`. An empty cell is `null`.
+  `max_fields`, `min_fields` and `header.none` do not apply.
 
 Missing trailing cells (at least `min_fields` present) are `null`.
+
+### type: csv
+
+```yaml
+parse:
+  type: csv
+  delimiter: ","                             # default ","; "\t" for TSV
+  header:
+    columns: [name, size]                    # explicit names
+    none: true                               # no header line (columns required)
+    rename: {qty: quantity}
+```
+
+Result: an array of objects, one per row. It is a table whose cells are
+cut by a delimiter that a value may itself contain, which is what
+separates it from `split: delimiter`: a value wrapped in `"` may hold the
+delimiter, a line break, or a quote written twice (RFC 4180). The first
+row names the columns unless the definition does, and the names are
+normalised the way a table header is.
+
+A row shorter than the header leaves the remaining keys `null`, so every
+object of a document carries the same keys. A row longer than the header
+is an error: a value with no column to go under has nowhere to be
+reported. A header naming one column twice numbers the repeats
+(`a`, `a_2`), because refusing a file a spreadsheet exported would be
+the wrong answer and hiding one of the values would be worse.
+
+### type: ini
+
+```yaml
+parse:
+  type: ini
+  separator: "="                             # default "="
+  trim: true                                 # default true
+  unquote: false                             # drop one surrounding pair of quotes
+```
+
+Result: an object of objects. A `[section]` heading opens an outer key
+and every `key = value` line under it becomes an inner one, which is what
+systemd units, git configuration and desktop entries are written in.
+Keys written before the first heading go under the empty name, and there
+is no such key when the file has no preamble. Lines starting with `#` or
+`;` are comments; either character inside a value is part of the value,
+since a password or a path may contain one. A section written twice
+continues the first, and a key written twice takes the last value — an
+array would mean a key's type depended on how many times it appeared.
+
+Because the result is one object, an ini parser has no streaming form.
 
 ### type: regex
 

@@ -1,0 +1,11 @@
+top = 1
+
+; a comment
+[core]
+repositoryformatversion = 0
+bare = false
+
+# another
+[user]
+name = Alice
+email = alice@example.com

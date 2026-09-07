@@ -21,6 +21,11 @@ func (r *run) parseTable(p *definition.Parse, fields map[string]*definition.Fiel
 	if split == "" {
 		split = definition.SplitWhitespace
 	}
+	if split == definition.SplitBox {
+		// A drawn table has its own idea of where a row ends, so it does
+		// not go through the line-per-row loop below.
+		return r.parseBox(p, fields, lines)
+	}
 	var (
 		cols   []column
 		header line

@@ -128,6 +128,50 @@ func Load(data []byte, source string) (*Definition, error) {
 	return &d, nil
 }
 
+// InlineCommand and InlineVariant name a definition given on the command
+// line rather than loaded from a registry. It is not written to disk and
+// is not detected, so the name says where it came from.
+const (
+	InlineCommand = "inline"
+	InlineVariant = "inline"
+)
+
+// LoadInline reads a definition body given on the command line. It is a
+// parser.yaml without the four keys that place a definition in a
+// registry: format is this build's, command and variant are the inline
+// pair, and detect is meaningless for a definition nothing chooses.
+// Everything else — input, parse, fields — is the same schema and goes
+// through the same validation, so an inline definition cannot express
+// anything a file cannot.
+func LoadInline(body []byte, source string) (*Definition, error) {
+	var probe struct {
+		Format  int    `yaml:"format"`
+		Command string `yaml:"command"`
+		Variant string `yaml:"variant"`
+		Detect  any    `yaml:"detect"`
+	}
+	// A body is decoded loosely once to name the keys that place a
+	// definition, so that writing one gets an explanation rather than
+	// "unknown key" from the strict pass below.
+	if err := yaml.Unmarshal(body, &probe); err == nil {
+		for _, k := range []struct {
+			name string
+			set  bool
+		}{
+			{"format", probe.Format != 0},
+			{"command", probe.Command != ""},
+			{"variant", probe.Variant != ""},
+			{"detect", probe.Detect != nil},
+		} {
+			if k.set {
+				return nil, &ValidationError{Source: source, Msg: k.name + ": a definition given here is not chosen and does not live in a registry, so it states no " + k.name}
+			}
+		}
+	}
+	full := fmt.Sprintf("format: %d\ncommand: %s\nvariant: %s\n", CurrentFormat, InlineCommand, InlineVariant)
+	return Load(append([]byte(full), body...), source)
+}
+
 // DecodeYAML decodes strictly and turns a decoder panic into an error. A
 // definition may come from an untrusted registry, and the YAML library
 // has been observed to panic on some malformed tagged scalars; a broken
@@ -255,7 +299,7 @@ func (d *Definition) validate() error {
 	}
 	validateSelect(v, "input.select", &d.Input.Select)
 	validateParse(v, "parse", &d.Parse, d.Fields, "")
-	validateFields(v, "fields", d.Fields, 0, d.Parse.Type == TypeKV)
+	validateFields(v, "fields", d.Fields, 0, d.Parse.Type == TypeKV || d.Parse.Type == TypeINI)
 	if len(v.errs) == 0 {
 		return nil
 	}
@@ -326,10 +370,49 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 		}
 		validateComposite(v, path, p, TypeRecords)
 		rejectKeys(v, path, p, "table", "regex", "kv")
+	case TypeCSV:
+		validateCSV(v, path, p, fields)
+		rejectKeys(v, path, p, "regex", "kv", "parts")
+	case TypeINI:
+		validateINI(v, path, p)
+		rejectKeys(v, path, p, "table", "regex", "parts")
 	case "":
-		v.add(path+".type", "is required (table, regex, kv, composite or records)")
+		v.add(path+".type", "is required (%s)", parseTypeList)
 	default:
-		v.add(path+".type", "unknown parse type %q (expected table, regex, kv, composite or records)", p.Type)
+		v.add(path+".type", "unknown parse type %q (expected %s)", p.Type, parseTypeList)
+	}
+}
+
+// parseTypeList names the parse types in error messages.
+const parseTypeList = "table, csv, ini, regex, kv, composite or records"
+
+// validateCSV checks a csv parser. It is a table whose cells are cut by a
+// delimiter that a value may itself contain, so it shares the header
+// vocabulary and takes none of the whitespace-table settings.
+func validateCSV(v *validator, path string, p *Parse, fields map[string]*Field) {
+	if p.Split != "" {
+		v.add(path+".split", "only valid for type table; a csv parser always cuts on its delimiter")
+	}
+	if d := []rune(p.Delimiter); len(d) > 1 {
+		v.add(path+".delimiter", "must be a single character, not %q", p.Delimiter)
+	} else if len(d) == 1 && (d[0] == '"' || d[0] == '\r' || d[0] == '\n') {
+		v.add(path+".delimiter", "cannot be %q: a quote and a line break are what the quoting rules are about", p.Delimiter)
+	}
+	if p.MaxFields != 0 || p.MinFields != 0 {
+		v.add(path, "max_fields/min_fields are only valid for type table; a csv row states its own width")
+	}
+	if p.Header.LeadingLabel != "" {
+		v.add(path+".header.leading_label", "only valid for type table")
+	}
+	validateHeader(v, path, p, fields)
+}
+
+// validateINI checks an ini parser. The sections make it an object of
+// objects, so nothing about tables applies; what it shares with kv is how
+// one line is cut.
+func validateINI(v *validator, path string, p *Parse) {
+	if p.As != "" {
+		v.add(path+".as", "only valid for type kv; ini is always a map of sections")
 	}
 }
 
@@ -339,7 +422,7 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 		switch f {
 		case "table":
 			if len(p.Header.Columns) > 0 || p.Header.None || p.Header.LeadingLabel != "" || len(p.Header.Rename) > 0 {
-				v.add(path+".header", "only valid for type table")
+				v.add(path+".header", "only valid for type table and type csv")
 			}
 			if p.Split != "" || p.Delimiter != "" || p.MaxFields != 0 || p.MinFields != 0 {
 				v.add(path, "split/delimiter/max_fields/min_fields are only valid for type table")
@@ -350,7 +433,7 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 			}
 		case "kv":
 			if p.Separator != "" || p.As != "" || p.Trim != nil || p.Unquote {
-				v.add(path, "separator/as/trim/unquote are only valid for type kv")
+				v.add(path, "separator/as/trim/unquote are only valid for type kv and type ini")
 			}
 		case "parts":
 			if len(p.Parts) > 0 {
@@ -365,7 +448,7 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 
 func validateTable(v *validator, path string, p *Parse, fields map[string]*Field) {
 	switch p.Split {
-	case "", SplitWhitespace, SplitAligned:
+	case "", SplitWhitespace, SplitAligned, SplitBox:
 		if p.Delimiter != "" {
 			v.add(path+".delimiter", "only valid with split: delimiter")
 		}
@@ -374,7 +457,7 @@ func validateTable(v *validator, path string, p *Parse, fields map[string]*Field
 			v.add(path+".delimiter", "is required with split: delimiter")
 		}
 	default:
-		v.add(path+".split", "unknown split mode %q (expected whitespace, aligned or delimiter)", p.Split)
+		v.add(path+".split", "unknown split mode %q (expected whitespace, aligned, delimiter or box)", p.Split)
 	}
 	if p.MaxFields < 0 || p.MinFields < 0 {
 		v.add(path, "max_fields/min_fields must not be negative")
@@ -384,6 +467,14 @@ func validateTable(v *validator, path string, p *Parse, fields map[string]*Field
 	}
 	if p.Split == SplitAligned && (p.MaxFields != 0 || p.MinFields != 0) {
 		v.add(path, "max_fields/min_fields do not apply to split: aligned")
+	}
+	if p.Split == SplitBox {
+		if p.MaxFields != 0 || p.MinFields != 0 {
+			v.add(path, "max_fields/min_fields do not apply to split: box; the rules say where the cells are")
+		}
+		if p.Header.None {
+			v.add(path+".header.none", "cannot be combined with split: box; a box table draws its header row")
+		}
 	}
 	validateHeader(v, path, p, fields)
 }
@@ -524,7 +615,7 @@ func validateComposite(v *validator, path string, p *Parse, kind string) {
 		validateSelect(v, pp+".select", &part.Select)
 		part.ignore = compileList(v, pp+".ignore", part.Ignore, "")
 		validateParse(v, pp+".parse", &part.Parse, part.Fields, kind)
-		validateFields(v, pp+".fields", part.Fields, 0, part.Parse.Type == TypeKV)
+		validateFields(v, pp+".fields", part.Fields, 0, part.Parse.Type == TypeKV || part.Parse.Type == TypeINI)
 	}
 }
 

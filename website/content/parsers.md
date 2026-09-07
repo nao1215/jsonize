@@ -9,6 +9,21 @@ shows the variants of one command and `jz list df gnu` everything about
 one definition, including where it came from and how it detects its
 input.
 
+A handful of entries describe a shape rather than a command: `table`
+(`whitespace`, `aligned`, `box`), `csv` (`comma`, `tab`), `kv` (`colon`,
+`equals`) and `ini` (`default`). They are never chosen on their own —
+two words above two words says nothing about what produced them — and
+are reached by naming both halves:
+
+```console
+$ docker ps | jz --parser table --variant box
+$ jz --parser ini --file ~/.gitconfig
+```
+
+They convert nothing: a shape says nothing about what its columns mean,
+so every value is the text it was cut from. Use `--define` where you want
+the same reading with settings of your own.
+
 ## Supported commands
 
 | Command | Variants |
@@ -27,6 +42,7 @@ input.
 | `chage` | `linux` |
 | `chrt` | `policy` |
 | `cksum` | `posix` |
+| `csv` | `comma`, `tab` |
 | `date` | `posix`, `rfc-email` |
 | `debconf-show` | `linux` |
 | `df` | `bsd`, `bsd-human`, `busybox-human`, `gnu`, `gnu-human`, `gnu-inodes`, `gnu-inodes-human`, `gnu-type`, `gnu-type-human` |
@@ -57,12 +73,14 @@ input.
 | `iconv` | `list` |
 | `id` | `posix` |
 | `ifconfig` | `busybox` |
+| `ini` | `default` |
 | `ionice` | `class` |
 | `iostat` | `cpu`, `device`, `extended`, `linux` |
 | `ip` | `address`, `brief-address`, `brief-link`, `link`, `multicast-address`, `neighbour`, `route`, `rule`, `stats-link` |
 | `ipcs` | `linux`, `message-queues`, `semaphores`, `shared-memory` |
 | `iw` | `link` |
 | `journalctl` | `boots`, `short`, `short-iso`, `short-precise` |
+| `kv` | `colon`, `equals` |
 | `last` | `busybox` |
 | `ldconfig` | `cache` |
 | `ldd` | `posix` |
@@ -140,6 +158,7 @@ input.
 | `systemd-cgtop` | `batch` |
 | `systemd-id128` | `show` |
 | `systemd-path` | `paths` |
+| `table` | `aligned`, `box`, `whitespace` |
 | `tar` | `busybox`, `gnu` |
 | `taskset` | `affinity-list` |
 | `tc` | `qdisc`, `qdisc-stats` |

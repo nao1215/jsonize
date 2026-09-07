@@ -1,0 +1,13 @@
+# A file of [section] headings and key = value lines, which is what
+# systemd units, git configuration and desktop entries are written in.
+# Keys before the first heading go under the empty name.
+format: 1
+command: ini
+variant: default
+description: any [section] and key = value file
+metadata:
+  tags: [generic]
+detect:
+  auto_detect: false
+parse:
+  type: ini

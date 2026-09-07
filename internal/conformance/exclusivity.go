@@ -122,6 +122,13 @@ type reader struct {
 func readersOf(reg *registry.Registry) []reader {
 	var out []reader
 	for _, e := range reg.Entries() {
+		if selector.ShapeOnly(e.Def) {
+			// A definition that describes a shape reads anything of that
+			// shape, which is what it is for. There is no claim here to
+			// check, and checking it would report every fixture in the
+			// registry against `table/whitespace`.
+			continue
+		}
 		out = append(out, reader{entry: e, name: e.Def.Command})
 		for _, alias := range e.Def.AliasNames() {
 			out = append(out, reader{entry: e, name: alias})

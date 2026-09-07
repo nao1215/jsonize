@@ -1,0 +1,14 @@
+[
+  {
+    "name": "retry-limit",
+    "value": "3"
+  },
+  {
+    "name": "cache-size",
+    "value": "256"
+  },
+  {
+    "name": "bind-address",
+    "value": "0.0.0.0"
+  }
+]

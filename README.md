@@ -62,6 +62,7 @@ Options:
       --assume-zone ABBR=+HHMM  give a zone abbreviation an offset (repeatable)
       --parser NAME             restrict detection to one parser
       --variant NAME            use a variant of --parser
+      --define YAML             read with a definition given here instead of a registered one
       --explain                 report the chosen definition and why, on stderr
   -h, --help                    show help
 ```

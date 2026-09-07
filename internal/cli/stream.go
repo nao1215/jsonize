@@ -7,6 +7,7 @@ import (
 	"io"
 	"sync"
 
+	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/registry"
@@ -80,6 +81,44 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
 	err = engine.Stream(chosen.Entry.Def, io.MultiReader(bytes.NewReader(head), br), eopts, emit, onError)
+	switch {
+	case narrowErr != nil:
+		a.errorf("%v", narrowErr)
+		return ExitUsage
+	case err != nil:
+		return a.exitForStream(err)
+	case skipped > 0:
+		return ExitParse
+	}
+	return ExitOK
+}
+
+// streamWith streams the input with a definition given on the command
+// line. Detection is what the leading lines are held back for, and there
+// is none here, so the first record is written as soon as it is read.
+func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOptions) int {
+	filter, err := out.filter()
+	if err != nil {
+		a.errorf("%v", err)
+		return ExitUsage
+	}
+	var narrowErr error
+	emit := func(v any) error {
+		narrowed, err := filter.apply(v)
+		if err != nil {
+			narrowErr = err
+			return err
+		}
+		return jsonutil.Encode(a.env.Stdout, narrowed, false)
+	}
+	skipped := 0
+	eopts := out.engineOptions()
+	eopts.MaxInputSize = 0
+	err = engine.Stream(def, r, eopts, emit, func(pe *engine.ParseError) error {
+		skipped++
+		a.errorf("%v", pe)
+		return nil
+	})
 	switch {
 	case narrowErr != nil:
 		a.errorf("%v", narrowErr)

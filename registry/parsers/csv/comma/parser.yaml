@@ -1,0 +1,15 @@
+# Comma-separated values with RFC 4180 quoting: a value may contain the
+# comma, a quote written twice, or a line break, as long as it is quoted.
+# The first line names the columns.
+format: 1
+command: csv
+variant: comma
+description: comma-separated values, first line as the header
+metadata:
+  tags: [generic]
+  references:
+    - https://www.rfc-editor.org/rfc/rfc4180
+detect:
+  auto_detect: false
+parse:
+  type: csv

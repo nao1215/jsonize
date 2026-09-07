@@ -1,0 +1,12 @@
+[
+  {
+    "name": "sda",
+    "size": "20G",
+    "type": "disk"
+  },
+  {
+    "name": "sda1",
+    "size": null,
+    "type": "part"
+  }
+]
