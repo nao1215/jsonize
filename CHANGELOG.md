@@ -8,6 +8,19 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `--stream` reports a record it cannot read and carries on with the next
+  one, instead of ending there. The line is named on standard error as
+  `jz: <definition>: line N: <reason>`, the records after it are still
+  written, and the status is 3 at the end if anything was skipped. This is
+  what the commands `--stream` exists for actually print: `ping` puts a
+  request timeout among its replies and `rsync` puts progress among its
+  file names, and ending at the first of those threw away everything still
+  to come. Reading a whole document is unchanged — one record that does
+  not fit still means the text is not the format it claimed to be, so
+  nothing is written. `engine.Stream` takes an
+  `onError func(*ParseError) error` beside `emit` so a library caller
+  chooses between the two.
+
 - A decoy corpus under `registry/testdata/decoys/`, checked by
   `make registry-test`. It holds text that belongs to no format jz reads
   and every definition is applied to every file of it. The machinery
@@ -39,8 +52,7 @@ project follows [Semantic Versioning](https://semver.org/).
   into one object is refused, as is `--pretty`. This is the only option
   that changes the output contract, from "standard output carries a
   complete document or nothing" to "every line of standard output is a
-  complete document": a record that cannot be read still exits 3, but the
-  records already written stay written.
+  complete document".
 - `/proc/meminfo`, `/proc/loadavg`, `/proc/uptime`, `/proc/cpuinfo` and
   `/proc/diskstats`, as variants of a parser named `proc`, read from a
   pipe or a redirect the way the `/etc` files are. All but one say enough

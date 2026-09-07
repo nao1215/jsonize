@@ -219,9 +219,12 @@ func streamMatches(def *definition.Definition, input []byte, batch any, opts Opt
 		}
 	}
 	var got bytes.Buffer
+	// nil onError: a fixture that reads whole has to read the same way
+	// as a stream, so a record the stream skips is a difference to
+	// report rather than one to absorb.
 	err := engine.Stream(def, bytes.NewReader(input), opts.Engine, func(v any) error {
 		return jsonutil.Encode(&got, v, false)
-	})
+	}, nil)
 	if err != nil {
 		return fmt.Errorf("reading with --stream: %w", err)
 	}

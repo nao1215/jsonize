@@ -132,6 +132,34 @@ scenarios:
           stdout:
             equals: ""
 
+  - name: a record in the middle that cannot be read is skipped, not fatal
+    steps:
+      - fixture:
+          file: gap.txt
+          content: |
+            Filesystem     1K-blocks    Used Available Use% Mounted on
+            tmpfs            1000000    5000    995000   1% /run
+            garbage
+            /dev/sda1       20000000 5000000  15000000  25% /
+      - run:
+          command: jz --stream --file ${workdir}/gap.txt
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"filesystem":"tmpfs","1k_blocks":1000000,"used":5000,"available":995000,"use_percent":1,"mounted_on":"/run"}
+              {"filesystem":"/dev/sda1","1k_blocks":20000000,"used":5000000,"available":15000000,"use_percent":25,"mounted_on":"/"}
+          stderr:
+            contains: "line 3"
+      # Read whole, the same text is not the format it claimed to be, so
+      # nothing is written and the status is the same 3.
+      - run:
+          command: jz --file ${workdir}/gap.txt
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: ""
+
   - name: --extract applies to every record of a stream
     steps:
       - fixture:

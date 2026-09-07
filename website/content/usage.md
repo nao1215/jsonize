@@ -107,12 +107,41 @@ is what bounds a producer that never prints a separator.
 
 Everywhere else, standard output carries a complete JSON document or
 nothing at all. With `--stream` that reads: every line of standard output
-is a complete JSON document. A record that cannot be read still stops the
-conversion with a message on standard error and exit status 3, but the
-records already written stay written — they are finished documents, and
-jz cannot take them back once they have left. That is the whole of the
-difference, and it is the reason `--stream` is an option rather than the
-default.
+is a complete JSON document.
+
+The second difference follows from the first. Reading a whole document,
+one record that does not fit means the text is not the format it claimed
+to be, so nothing is written and the status is 3. In a stream the records
+already written have left, so jz cannot take that view: a record it
+cannot read is reported on standard error as
+
+```text
+jz: ping/linux: line 42: line does not match /^\d+ bytes from/
+```
+
+and the records after it are still written. The status is 3 at the end if
+anything was skipped. This is what a command that does not finish needs.
+`ping` prints a request timeout among its replies and `rsync` prints
+progress among its file names; ending the stream at the first of those
+would throw away everything still to come.
+
+Both readings say the same thing with exit status 3: something in the
+input could not be read. What differs is how much of the rest survives,
+and that is the whole of the difference.
+
+Two failures are not records to skip and still end a stream at once. Text
+whose format cannot be identified is exit 4 and is settled on the leading
+lines, before a single record is written. A format that reads its whole
+output into one object has no streaming form at all, which is exit 2.
+
+### jz run --stream and the command's own status
+
+`jz run` mirrors the status of the command it started, and it has one
+number to return. When the command fails and a record was also skipped,
+the command's status wins: it is the more useful signal, because a
+command that failed explains both what it printed and what it did not.
+The skipped records are on standard error either way, so nothing is lost
+by the choice — only the number changes.
 
 ## Naming a parser
 

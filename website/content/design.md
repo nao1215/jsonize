@@ -243,13 +243,46 @@ A command that does not end (`ping`, `vmstat 1`) has no whole document to
 write, so `--stream` writes one JSON document per line as each record is
 read. It is the only option that changes the output contract: everywhere
 else standard output carries a complete document or nothing, and here
-every *line* is a complete document. A record that cannot be read still
-stops the conversion with exit status 3, but the records already written
-stay written, because they are finished documents that have already left.
+every *line* is a complete document.
 
 That is why it is an option. Making it the default would mean giving up
 the guarantee that a failure leaves nothing behind, for every user, to
 serve the commands that need it.
+
+### A stream refuses records, not the stream
+
+Reading a whole document, one record that does not fit means the text is
+not the format it claimed to be: nothing is written and the status is 3.
+A stream cannot take that view, because the records already written have
+left. So it takes the other one: a record jz cannot read is named on
+standard error with its line number, the records after it are still
+written, and the status is 3 at the end if anything was skipped.
+
+This is what the commands `--stream` exists for actually print. `ping`
+puts a request timeout among its replies, `rsync` puts progress among its
+file names, and a monitoring loop runs for hours. Ending at the first
+line with no reading for it would throw away everything still to come,
+which is a worse answer than a partial one for exactly the inputs the
+option is about. Batch mode is unchanged, so the guarantee is still there
+for everyone not asking for a stream.
+
+Two failures are not records and still end a stream at once. Text whose
+format cannot be identified is settled on the leading lines before
+anything is written (exit 4), and a format that reads its whole output
+into one object has no streaming form at all (exit 2). Neither is a
+record to leave out.
+
+`engine.Stream` takes an `onError func(*ParseError) error` beside `emit`,
+so a library caller chooses: returning nil carries on and leaves the
+record out, returning an error ends the read there. A nil `onError` is
+the second, which is what the conformance runner passes — a fixture read
+whole and read as a stream have to agree record for record, and a stream
+that quietly skipped one would hide the disagreement.
+
+When `jz run --stream` skips a record and the command also fails, the
+command's status wins. jz has one number to return and mirrors the
+command's, which is the more useful of the two; the skipped records are
+on standard error either way, so only the number is given up.
 
 Detection is unchanged and it is what the first record waits for. jz
 holds back until it has as many leading lines as the widest signature
