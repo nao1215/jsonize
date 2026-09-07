@@ -1,0 +1,87 @@
+[
+  {
+    "destination": "default",
+    "via": "192.0.2.1",
+    "dev": "wlan0",
+    "attributes": [
+      "proto",
+      "dhcp",
+      "src",
+      "192.0.2.60",
+      "metric",
+      "600"
+    ]
+  },
+  {
+    "destination": "172.17.0.0/16",
+    "dev": "docker0",
+    "attributes": [
+      "proto",
+      "kernel",
+      "scope",
+      "link",
+      "src",
+      "172.17.0.1"
+    ]
+  },
+  {
+    "type": "local",
+    "destination": "127.0.0.0/8",
+    "dev": "lo",
+    "attributes": [
+      "table",
+      "local",
+      "proto",
+      "kernel",
+      "scope",
+      "host",
+      "src",
+      "127.0.0.1"
+    ]
+  },
+  {
+    "type": "local",
+    "destination": "127.0.0.1",
+    "dev": "lo",
+    "attributes": [
+      "table",
+      "local",
+      "proto",
+      "kernel",
+      "scope",
+      "host",
+      "src",
+      "127.0.0.1"
+    ]
+  },
+  {
+    "type": "broadcast",
+    "destination": "127.255.255.255",
+    "dev": "lo",
+    "attributes": [
+      "table",
+      "local",
+      "proto",
+      "kernel",
+      "scope",
+      "link",
+      "src",
+      "127.0.0.1"
+    ]
+  },
+  {
+    "type": "local",
+    "destination": "172.17.0.1",
+    "dev": "docker0",
+    "attributes": [
+      "table",
+      "local",
+      "proto",
+      "kernel",
+      "scope",
+      "host",
+      "src",
+      "172.17.0.1"
+    ]
+  }
+]

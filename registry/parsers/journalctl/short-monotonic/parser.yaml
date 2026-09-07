@@ -1,0 +1,29 @@
+# `journalctl -o short-monotonic` prints the seconds since boot in
+# brackets instead of a date. It is already a number of seconds, so it
+# needs no conversion; there is no year to assume and no zone to resolve
+# either, which is what makes this format easier to read than the
+# default one.
+format: 1
+command: journalctl
+variant: short-monotonic
+description: journalctl -o short-monotonic, entries timed from the boot
+metadata:
+  tags: [linux, systemd, log]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/journalctl.html
+detect:
+  os: [linux]
+  args:
+    all: ["short-monotonic"]
+  signature:
+    all:
+      - '\A\[[ \t]*[0-9]+\.[0-9]{6}\] \S+ \S'
+parse:
+  type: regex
+  pattern: '^\[[ \t]*(?P<monotonic>[0-9]+\.[0-9]{6})\] (?P<hostname>\S+) (?P<identifier>[^\s\[:]+)(?:\[(?P<pid>[0-9]+)\])?: ?(?P<message>.*)$'
+fields:
+  monotonic: {type: float, required: true}
+  hostname: {required: true}
+  identifier: {required: true}
+  pid: {type: int, when_missing: omit}

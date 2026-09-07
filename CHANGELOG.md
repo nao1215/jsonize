@@ -32,6 +32,25 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Thirty definitions for formats that had none: `/etc/services` and
+  `/etc/protocols` (also read through `getent`), `nslookup HOST`,
+  `aplay -l` (and `arecord -l`), `smartctl --scan`, `systemctl
+  list-dependencies --plain`, `systemctl list-jobs`, `blkid -o export`,
+  `git worktree list`, `lsusb -t`, `nmcli general status`, `mpstat -I`,
+  `gpg --version`, `apt-cache depends`, `apt-cache policy`, `sensors -u`,
+  `dpkg --get-selections`, `ip -s -s link`, `systemd-analyze
+  critical-chain`, `systemd-analyze security`, `go tool dist list`,
+  `journalctl -o short-monotonic`, `curl --version`, `amixer contents`,
+  `openssl ciphers -V`, `locale -k`, `tree`, `gh auth status`,
+  `mokutil --list-sbat` and `pactl list sinks`. Six of them are trees
+  and one is a CSV, which is what the new parse types were for.
+- `indent` accepts a list of the forms one level of a tree may take, for
+  a report that marks a level with a branch character: `tree(1)` writes a
+  level as one of "|   ", "    ", "|-- " and "`-- ", and
+  `systemd-analyze critical-chain` as two spaces or a backtick and a
+  dash. Each is a fixed width whose characters depend on whether anything
+  follows, so a single string cannot count them.
+- The duration units gain the week, which systemd prints.
 - `parse.type: tree`, for a report whose depth comes from the input:
   `lspci -vv` prints a device, its capabilities under it and a
   capability's flags under those, and how far that goes is a property of
@@ -52,6 +71,20 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Checking a registry took 25 seconds where it had taken one, as soon as
+  a deeply nested fixture was added. go-cmp builds its report as it walks
+  a value, and on a 22-level tree that runs for tens of seconds whether
+  the values agree or not. The comparison is now made first and described
+  only when it fails, and the description is by line rather than by
+  structure: a golden mismatch is two pretty-printed documents, and where
+  they part company is what a reader wants.
+- `ip route` read the type a route may open with as the destination.
+  The main table prints none, because every route in it is unicast;
+  `ip route show table all` prints the local table too, whose routes are
+  local, broadcast and multicast, and every one of them failed.
+- `ip -s -s link` was claimed by the definition for one `-s` and then
+  failed on the error tables the second one adds. The two are now
+  separate definitions, and each refuses the other's output.
 - `ip link`, `ip -s link` and `ip address` refused an interface that
   carries a free-text alias, which is a line `ip` prints between the link
   layer address and the alternative names. `ip link` read it as one more
@@ -91,11 +124,14 @@ project follows [Semantic Versioning](https://semver.org/).
   the empty name, `#` and `;` start a comment only at the start of a
   line, a repeated section continues the first and a repeated key takes
   the last value.
-- `table.split: box`, for a table drawn with `+-|` or Unicode
-  box-drawing rules. The rules mark the rows and the bars mark the cells,
-  a value wrapped over several lines is one cell joined with a newline, a
-  header written over two lines is one name joined with `_`, and an empty
-  cell is null.
+- `table.split: box`, for a table drawn with `+-=~` or any character of
+  the Unicode Box Drawing block. The bars mark the cells, and the rules
+  separate the header from the body: inside the body a line is a row of
+  its own, which is what MySQL, psql, `sqlite3` in box mode and `duf`
+  print, and a line whose first cell is empty continues the row above it,
+  which is how a table that wraps a long value writes the rest. A header
+  written over two lines is one name joined with `_`, and an empty cell
+  is null.
 
 ### Fixed
 
@@ -256,7 +292,7 @@ project follows [Semantic Versioning](https://semver.org/).
   line it belongs to, for the reports that break a long value at the
   terminal width (`ethtool`) and for the control files whose values
   continue on an indented line (`dpkg -s`, `apt show`).
-- Official definitions for 149 commands in 314 output formats, covering
+- Official definitions for 160 commands in 355 output formats, covering
   coreutils and procps, the util-linux listings, the systemd tools, the
   classic network commands and the iproute2 ones, sysstat, the disk
   layout tools, the hardware and display tools, the archive and checksum
@@ -266,7 +302,8 @@ project follows [Semantic Versioning](https://semver.org/).
   (`taskset`, `chrt`, `ionice`, `capsh`, `getcap`, `namei`), git
   including its plumbing, openssl, docker, the package managers, the
   language toolchains, and two dozen files under `/proc` read the way the
-  `/etc` files are. `jz list` prints the current set.
+  `/etc` files are, plus a handful that describe a shape rather than a
+  command (`table`, `csv`, `kv`, `ini`). `jz list` prints the current set.
 
 ### Fixed
 

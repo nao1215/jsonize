@@ -1,0 +1,94 @@
+[
+  {
+    "bus": 1,
+    "port": 1,
+    "device": 1,
+    "class": "root_hub",
+    "driver": "xhci_hcd/1p",
+    "speed": "480M",
+    "children": [
+      {
+        "port": 1,
+        "device": 3,
+        "interface": 0,
+        "class": "Audio",
+        "driver": "snd-usb-audio",
+        "speed": "12M",
+        "children": []
+      },
+      {
+        "port": 1,
+        "device": 3,
+        "interface": 1,
+        "class": "Audio",
+        "driver": "snd-usb-audio",
+        "speed": "12M",
+        "children": []
+      },
+      {
+        "port": 1,
+        "device": 3,
+        "interface": 2,
+        "class": "Audio",
+        "driver": "snd-usb-audio",
+        "speed": "12M",
+        "children": []
+      },
+      {
+        "port": 1,
+        "device": 3,
+        "interface": 3,
+        "class": "Human Interface Device",
+        "driver": "usbhid",
+        "speed": "12M",
+        "children": []
+      }
+    ]
+  },
+  {
+    "bus": 2,
+    "port": 1,
+    "device": 1,
+    "class": "root_hub",
+    "driver": "xhci_hcd/1p",
+    "speed": "10000M",
+    "children": []
+  },
+  {
+    "bus": 3,
+    "port": 1,
+    "device": 1,
+    "class": "root_hub",
+    "driver": "xhci_hcd/5p",
+    "speed": "480M",
+    "children": [
+      {
+        "port": 1,
+        "device": 13,
+        "interface": 0,
+        "class": "Human Interface Device",
+        "driver": "usbhid",
+        "speed": "12M",
+        "children": []
+      },
+      {
+        "port": 2,
+        "device": 16,
+        "interface": 0,
+        "class": "Human Interface Device",
+        "driver": "usbhid",
+        "speed": "12M",
+        "children": []
+      },
+      {
+        "port": 2,
+        "device": 16,
+        "interface": 1,
+        "class": "Human Interface Device",
+        "driver": "usbhid",
+        "speed": "12M",
+        "children": []
+      }
+    ]
+  }
+]

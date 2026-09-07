@@ -1,0 +1,82 @@
+[
+  {
+    "code_high": "13",
+    "code_low": "02",
+    "name": "TLS_AES_256_GCM_SHA384",
+    "protocol": "TLSv1.3",
+    "kx": "any",
+    "au": "any",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "code_high": "13",
+    "code_low": "03",
+    "name": "TLS_CHACHA20_POLY1305_SHA256",
+    "protocol": "TLSv1.3",
+    "kx": "any",
+    "au": "any",
+    "enc": "CHACHA20/POLY1305(256)",
+    "mac": "AEAD"
+  },
+  {
+    "code_high": "13",
+    "code_low": "01",
+    "name": "TLS_AES_128_GCM_SHA256",
+    "protocol": "TLSv1.3",
+    "kx": "any",
+    "au": "any",
+    "enc": "AESGCM(128)",
+    "mac": "AEAD"
+  },
+  {
+    "code_high": "C0",
+    "code_low": "2C",
+    "name": "ECDHE-ECDSA-AES256-GCM-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "ECDSA",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "code_high": "C0",
+    "code_low": "30",
+    "name": "ECDHE-RSA-AES256-GCM-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "RSA",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "code_high": "00",
+    "code_low": "9F",
+    "name": "DHE-RSA-AES256-GCM-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "DH",
+    "au": "RSA",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "code_high": "CC",
+    "code_low": "A9",
+    "name": "ECDHE-ECDSA-CHACHA20-POLY1305",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "ECDSA",
+    "enc": "CHACHA20/POLY1305(256)",
+    "mac": "AEAD"
+  },
+  {
+    "code_high": "CC",
+    "code_low": "A8",
+    "name": "ECDHE-RSA-CHACHA20-POLY1305",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "RSA",
+    "enc": "CHACHA20/POLY1305(256)",
+    "mac": "AEAD"
+  }
+]

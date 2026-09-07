@@ -1,0 +1,2 @@
+source: "tree -L 2 /etc/apt on Ubuntu with tree 2.2.1, LC_ALL=C, trimmed to the first fourteen lines and the closing count"
+args: ["-L", "2", "/etc/apt"]

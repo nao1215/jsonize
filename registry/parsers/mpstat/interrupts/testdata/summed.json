@@ -1,0 +1,21 @@
+[
+  {
+    "cpu": [
+      {
+        "time": "05:05:05",
+        "cpu": "all",
+        "interrupts_per_second": 6429
+      },
+      {
+        "time": "05:05:06",
+        "cpu": "all",
+        "interrupts_per_second": 9206
+      },
+      {
+        "time": "Average",
+        "cpu": "all",
+        "interrupts_per_second": 7817.5
+      }
+    ]
+  }
+]

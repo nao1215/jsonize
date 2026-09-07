@@ -1,0 +1,3 @@
+source: "aplay -l on Ubuntu with alsa-utils 1.2.14, LC_ALL=C"
+os: linux
+args: ["-l"]

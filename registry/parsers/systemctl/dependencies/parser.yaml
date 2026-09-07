@@ -1,0 +1,35 @@
+# `systemctl list-dependencies --plain` prints a unit and, indented under
+# it, the units it wants. The depth is a property of the unit graph
+# rather than of the format, so it is read as a tree.
+#
+# Without --plain systemd draws the branches with box characters and
+# marks each unit with a status dot, which the signature refuses: a dot
+# is a colour code away from a unit name and reading one as the other
+# would put the status in the name.
+format: 1
+command: systemctl
+variant: dependencies
+description: systemctl list-dependencies --plain, the units a unit pulls in
+metadata:
+  tags: [linux, systemd]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemctl.html
+detect:
+  os: [linux]
+  args:
+    any: ["list-dependencies"]
+    all: ["--plain"]
+  signature:
+    all:
+      - '\A\S+\.(?:target|service|socket|mount|timer|path|slice|device|swap|scope)[ \t]*$'
+      - '^  \S+\.(?:target|service|socket|mount|timer|path|slice|device|swap|scope)[ \t]*$'
+parse:
+  type: tree
+  indent: "  "
+  node:
+    parse:
+      type: regex
+      pattern: '^(?P<unit>\S+)[ \t]*$'
+    fields:
+      unit: {required: true}

@@ -1,0 +1,3 @@
+source: "amixer contents on Ubuntu with alsa-utils 1.2.14, LC_ALL=C, trimmed to four controls"
+os: linux
+args: ["contents"]

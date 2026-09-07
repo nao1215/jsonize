@@ -211,16 +211,25 @@ non-alphanumerics become `_`, a leading or trailing `%` becomes
   kept whole. Empty cells are `null`. With explicit `columns`, extra
   trailing header words ("Mounted on") belong to the last column.
 - `delimiter`: `strings.SplitN` on the literal, cells trimmed.
-- `box`: a table drawn with rules, as MySQL and several container tools
-  print one. The rules say where the rows are and the vertical bars say
-  where the cells are, so nothing is counted or aligned and a value wider
-  than its column cannot shift a boundary. A rule is a line with nothing
-  on it but `+-=|`, the Unicode box-drawing characters and whitespace;
-  the frame around the table and the rule under the header are both
-  recognised without the definition describing either. A value wrapped
-  over several lines is one cell, joined with a newline; a header written
-  over two lines is one name, joined with `_`. An empty cell is `null`.
+- `box`: a table drawn with rules, as MySQL, psql and `sqlite3` in box
+  mode print one. The vertical bars say where the cells are, so nothing
+  is counted or aligned and a value wider than its column cannot shift a
+  boundary. A rule is a line with nothing on it but `+-=~`, a character
+  from the Unicode Box Drawing block, and whitespace; the frame around
+  the table and the rule under the header are both recognised without the
+  definition describing either.
+
+  The rules separate the header from the body. Inside the body a line is
+  a row of its own, which is what those tools print, and a line whose
+  first cell is empty continues the row above it, which is how a table
+  that wraps a long value writes the rest of it. A header written over
+  two lines is one name, joined with `_`; a value continued on the next
+  line is one cell, joined with a newline. An empty cell is `null`.
   `max_fields`, `min_fields` and `header.none` do not apply.
+
+  A row whose first column is genuinely blank cannot be told from a
+  continuation, because in this format they are the same line. A table
+  with such a column is one to read some other way.
 
 Missing trailing cells (at least `min_fields` present) are `null`.
 
@@ -278,6 +287,8 @@ Because the result is one object, an ini parser has no streaming form.
 parse:
   type: tree
   indent: "\t"                  # one level of indentation, as it is written
+  # or the forms one level may take, tried in the order written:
+  # indent: ["  ", "`-"]
   node:
     parse:
       type: regex               # or kv; a node is one line
@@ -290,7 +301,14 @@ parse:
 ```
 
 Result: an array of nodes. Every line is a node; its depth is how many
-times `indent` opens the line, and its children are the lines under it.
+levels of indentation open it, and its children are the lines under it.
+
+`indent` is one level as it is written — `"\t"`, `"  "` — or a list of
+the forms one level may take, for a report that marks a level with a
+branch character. `systemd-analyze critical-chain` indents by two
+characters that are either two spaces or a backtick and a dash, so it
+writes `["  ", "`-"]`; the first form that fits at each step is the one
+taken, so the order is the order they are tried in.
 A node is the fields `node` reads from its line plus a `children` array,
 which is `[]` when nothing follows it — so a consumer walks every node
 the same way.
@@ -314,9 +332,10 @@ Three things the input may not decide:
 - Depth stops at 32.
 
 A tree may be a `composite` part, which is what a report with a banner
-above the tree needs. It may not be a `records` part: a record is a block
-that repeats at one level and a tree is what the input decides the depth
-of.
+above the tree needs, and a `records` part, which is what a report of
+repeating blocks with a tree inside each needs (`sensors -u`). The two
+decide different things and do not conflict: `start` says where a record
+begins and `indent` says how deep a line inside one is.
 
 With `--stream`, one top-level node is written per line, once nothing
 deeper follows it.
@@ -405,12 +424,11 @@ Text before the first record is an error naming the line, rather than
 something quietly dropped. A banner belongs in `input.select`, or in a
 `composite` part of its own with the blocks in a second part.
 
-`records` is not recursive: a part of it cannot be `records`,
-`composite` or `tree`. A record is a block that repeats at one level, so
-its depth is stated by the definition and there is nothing for the input
-to say about it. Where the depth is the input's to decide — `lspci -vv`,
-`lsusb -v`, `iw dev` — `type: tree` is the reading, and one definition
-cannot be both: they answer "where does this line belong" differently.
+`records` is not recursive: a part of it cannot be `records` or
+`composite`. A record is a block that repeats at one level, so its own
+depth is stated by the definition and there is nothing for the input to
+say about it. A part may be a `tree`, which decides a different thing —
+how deep a line inside one block is — and `sensors -u` needs both.
 
 ### type: composite
 

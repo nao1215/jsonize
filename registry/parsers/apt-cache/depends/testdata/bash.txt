@@ -1,0 +1,9 @@
+bash
+  PreDepends: libc6
+  PreDepends: libtinfo6
+  Depends: base-files
+    base-files:i386
+  Depends: debianutils
+    debianutils:i386
+  Recommends: bash-completion
+  Suggests: bash-doc

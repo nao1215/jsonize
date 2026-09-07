@@ -1,0 +1,56 @@
+# `pactl list sinks` prints a block per sink: a heading with its index,
+# then indented "Key: Value" lines, with the properties and formats
+# indented one level further under headings of their own. Which keys a
+# sink has depends on the driver, so the block is read as a map rather
+# than as named columns, and the nested lists are left as the lines they
+# were printed on.
+format: 1
+command: pactl
+variant: sinks
+description: pactl list sinks or sources, one block per device
+metadata:
+  tags: [linux, audio, pulseaudio, pipewire]
+  compatible: [PulseAudio, PipeWire]
+  references:
+    - https://man.archlinux.org/man/pactl.1
+detect:
+  os: [linux]
+  args:
+    all: ["list"]
+    none: ["short"]
+  signature:
+    all:
+      - '\A(?:Sink|Source) #[0-9]+[ \t]*$'
+      - '^\tState: \S'
+      - '^\tName: \S'
+input:
+  # The volume list is too wide for a terminal and pactl breaks it, so
+  # the rest of it is joined back onto the line it belongs to. The break
+  # is at a space run rather than at a key, which is what separates a
+  # continuation from the deeper lines under Properties.
+  fold: '^\t[ ]{4,}\S'
+parse:
+  type: records
+  start: '^(?:Sink|Source) #[0-9]+[ \t]*$'
+  parts:
+    - name: index
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<kind>Sink|Source) #(?P<index>[0-9]+)[ \t]*\z'
+      fields:
+        index: {type: int}
+    # One level of "Key: Value" lines. A property list is its own report
+    # and reading it as a sibling of State would flatten two things into
+    # one, so it is left out.
+    - name: attributes
+      select: {skip: 1}
+      # The deeper lines under Properties and Formats are left out, and
+      # so are the headings above them: a heading is a key with no value,
+      # and its value is the lines this part does not read.
+      ignore: ['^\t\t', '^\t[^:]+:[ \t]*$']
+      parse:
+        type: kv
+        separator: ": "
+        as: map

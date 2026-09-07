@@ -1,0 +1,11 @@
+[
+  {
+    "state": "connected",
+    "connectivity": "full",
+    "wifi_hw": "enabled",
+    "wifi": "enabled",
+    "wwan_hw": "missing",
+    "wwan": "enabled",
+    "metered": "no (guessed)"
+  }
+]

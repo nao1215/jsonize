@@ -1,0 +1,56 @@
+[
+  {
+    "interface": {
+      "index": 1,
+      "name": "lo",
+      "flags": [
+        "LOOPBACK",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 65536,
+      "qdisc": "noqueue",
+      "state": "UNKNOWN",
+      "mode": "DEFAULT",
+      "group": "default",
+      "qlen": 1000
+    },
+    "link": {
+      "type": "loopback",
+      "address": "00:00:00:00:00:00",
+      "broadcast": "00:00:00:00:00:00"
+    },
+    "rx": {
+      "bytes": 7353597585,
+      "packets": 6828593,
+      "errors": 0,
+      "dropped": 0,
+      "missed": 0,
+      "mcast": 0
+    },
+    "tx": {
+      "bytes": 7353597585,
+      "packets": 6828593,
+      "errors": 0,
+      "dropped": 0,
+      "carrier": 0,
+      "collsns": 0
+    },
+    "rx_errors": {
+      "length": 0,
+      "crc": 0,
+      "frame": 0,
+      "fifo": 0,
+      "overrun": 0
+    },
+    "tx_errors": {
+      "aborted": 0,
+      "fifo": 0,
+      "window": 0,
+      "heartbeat": 0,
+      "transns": 0
+    },
+    "alias": [],
+    "altnames": []
+  }
+]

@@ -1,0 +1,60 @@
+# `sensors -u` prints one block per chip: the chip name, the adapter it
+# is behind, and then a feature and the readings under it. The features a
+# chip has depend on the chip, so they are read as a tree rather than as
+# named keys.
+format: 1
+command: sensors
+variant: raw
+description: sensors -u, the readings of each chip without units
+metadata:
+  tags: [linux, hardware, sensors]
+  compatible: [lm-sensors]
+  references:
+    - https://man7.org/linux/man-pages/man1/sensors.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-u"]
+  signature:
+    all:
+      - '\A\S*[^\s:][ \t]*$'
+      - '^Adapter: \S'
+      - '^  \S+_input: -?[0-9.]+[ \t]*$'
+parse:
+  type: records
+  # A chip line is one word that does not end in a colon: a feature
+  # line ends in one and the adapter line has a space in it. A chip name
+  # may itself contain a colon (r8169_0_c100:00-mdio-0), so the colon
+  # cannot simply be excluded.
+  start: '^\S*[^\s:]$'
+  parts:
+    - name: chip
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>\S+)[ \t]*\z'
+    - name: adapter
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AAdapter: (?P<name>.+?)[ \t]*\z'
+    # A feature and its readings, the readings indented under it. The
+    # depth is two and fixed, but which features a chip has is not.
+    - name: features
+      select: {skip: 2}
+      parse:
+        type: tree
+        indent: "  "
+        node:
+          parse:
+            type: regex
+            patterns:
+              # A feature name may hold a space ("Sensor 1"), so the
+              # colon is what ends it rather than the first space.
+              - '^(?P<name>[^:]+):[ \t]*(?P<value>-?[0-9.]+)[ \t]*$'
+              - '^(?P<name>[^:]+):[ \t]*$'
+          fields:
+            name: {required: true}
+            value: {type: float, when_missing: omit}

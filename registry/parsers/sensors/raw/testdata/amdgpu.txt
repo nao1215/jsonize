@@ -1,0 +1,26 @@
+amdgpu-pci-c600
+Adapter: PCI adapter
+vddgfx:
+  in0_input: 0.000
+vddnb:
+  in1_input: 0.000
+edge:
+  temp1_input: 35.000
+PPT:
+  power1_average: 11.003
+  power1_input: 11.003
+sclk:
+  freq1_input: 600000000.000
+
+nvme-pci-c500
+Adapter: PCI adapter
+Composite:
+  temp1_input: 30.850
+  temp1_max: 82.850
+  temp1_min: -0.150
+  temp1_crit: 84.850
+  temp1_alarm: 0.000
+Sensor 1:
+  temp2_input: 30.850
+  temp2_max: 65261.850
+  temp2_min: -273.150

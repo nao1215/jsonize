@@ -23,6 +23,11 @@ detect:
       - '\A\d+: \S+: <[A-Z0-9_,-]*>'
       - '^[ \t]+RX:[ \t]+bytes[ \t]+packets[ \t]+errors'
       - '^[ \t]+TX:[ \t]+bytes[ \t]+packets[ \t]+errors'
+    none:
+      # `ip -s -s link` adds a table of error counters under each of the
+      # two, which this definition has no place for. It is a statement
+      # about what one -s prints, not a list of neighbours to avoid.
+      - '^[ \t]+RX errors:[ \t]+length'
 parse:
   type: records
   start: '^\d+: '

@@ -1,0 +1,2086 @@
+[
+  {
+    "name": "tcpmux",
+    "port": 1,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "echo",
+    "port": 7,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "echo",
+    "port": 7,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "discard",
+    "port": 9,
+    "protocol": "tcp",
+    "aliases": [
+      "sink",
+      "null"
+    ]
+  },
+  {
+    "name": "discard",
+    "port": 9,
+    "protocol": "udp",
+    "aliases": [
+      "sink",
+      "null"
+    ]
+  },
+  {
+    "name": "systat",
+    "port": 11,
+    "protocol": "tcp",
+    "aliases": [
+      "users"
+    ]
+  },
+  {
+    "name": "daytime",
+    "port": 13,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "daytime",
+    "port": 13,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "netstat",
+    "port": 15,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "qotd",
+    "port": 17,
+    "protocol": "tcp",
+    "aliases": [
+      "quote"
+    ]
+  },
+  {
+    "name": "chargen",
+    "port": 19,
+    "protocol": "tcp",
+    "aliases": [
+      "ttytst",
+      "source"
+    ]
+  },
+  {
+    "name": "chargen",
+    "port": 19,
+    "protocol": "udp",
+    "aliases": [
+      "ttytst",
+      "source"
+    ]
+  },
+  {
+    "name": "ftp-data",
+    "port": 20,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ftp",
+    "port": 21,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "fsp",
+    "port": 21,
+    "protocol": "udp",
+    "aliases": [
+      "fspd"
+    ]
+  },
+  {
+    "name": "ssh",
+    "port": 22,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "telnet",
+    "port": 23,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "smtp",
+    "port": 25,
+    "protocol": "tcp",
+    "aliases": [
+      "mail"
+    ]
+  },
+  {
+    "name": "time",
+    "port": 37,
+    "protocol": "tcp",
+    "aliases": [
+      "timserver"
+    ]
+  },
+  {
+    "name": "time",
+    "port": 37,
+    "protocol": "udp",
+    "aliases": [
+      "timserver"
+    ]
+  },
+  {
+    "name": "whois",
+    "port": 43,
+    "protocol": "tcp",
+    "aliases": [
+      "nicname"
+    ]
+  },
+  {
+    "name": "tacacs",
+    "port": 49,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "tacacs",
+    "port": 49,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "domain",
+    "port": 53,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "domain",
+    "port": 53,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "bootps",
+    "port": 67,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "bootpc",
+    "port": 68,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "tftp",
+    "port": 69,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "gopher",
+    "port": 70,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "finger",
+    "port": 79,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "http",
+    "port": 80,
+    "protocol": "tcp",
+    "aliases": [
+      "www"
+    ]
+  },
+  {
+    "name": "kerberos",
+    "port": 88,
+    "protocol": "tcp",
+    "aliases": [
+      "kerberos5",
+      "krb5",
+      "kerberos-sec"
+    ]
+  },
+  {
+    "name": "kerberos",
+    "port": 88,
+    "protocol": "udp",
+    "aliases": [
+      "kerberos5",
+      "krb5",
+      "kerberos-sec"
+    ]
+  },
+  {
+    "name": "iso-tsap",
+    "port": 102,
+    "protocol": "tcp",
+    "aliases": [
+      "tsap"
+    ]
+  },
+  {
+    "name": "acr-nema",
+    "port": 104,
+    "protocol": "tcp",
+    "aliases": [
+      "dicom"
+    ]
+  },
+  {
+    "name": "pop3",
+    "port": 110,
+    "protocol": "tcp",
+    "aliases": [
+      "pop-3"
+    ]
+  },
+  {
+    "name": "sunrpc",
+    "port": 111,
+    "protocol": "tcp",
+    "aliases": [
+      "portmapper"
+    ]
+  },
+  {
+    "name": "sunrpc",
+    "port": 111,
+    "protocol": "udp",
+    "aliases": [
+      "portmapper"
+    ]
+  },
+  {
+    "name": "auth",
+    "port": 113,
+    "protocol": "tcp",
+    "aliases": [
+      "authentication",
+      "tap",
+      "ident"
+    ]
+  },
+  {
+    "name": "nntp",
+    "port": 119,
+    "protocol": "tcp",
+    "aliases": [
+      "readnews",
+      "untp"
+    ]
+  },
+  {
+    "name": "ntp",
+    "port": 123,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "epmap",
+    "port": 135,
+    "protocol": "tcp",
+    "aliases": [
+      "loc-srv"
+    ]
+  },
+  {
+    "name": "netbios-ns",
+    "port": 137,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "netbios-dgm",
+    "port": 138,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "netbios-ssn",
+    "port": 139,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "imap2",
+    "port": 143,
+    "protocol": "tcp",
+    "aliases": [
+      "imap"
+    ]
+  },
+  {
+    "name": "snmp",
+    "port": 161,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "snmp",
+    "port": 161,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "snmp-trap",
+    "port": 162,
+    "protocol": "tcp",
+    "aliases": [
+      "snmptrap"
+    ]
+  },
+  {
+    "name": "snmp-trap",
+    "port": 162,
+    "protocol": "udp",
+    "aliases": [
+      "snmptrap"
+    ]
+  },
+  {
+    "name": "cmip-man",
+    "port": 163,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "cmip-man",
+    "port": 163,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "cmip-agent",
+    "port": 164,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "cmip-agent",
+    "port": 164,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "mailq",
+    "port": 174,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "xdmcp",
+    "port": 177,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "bgp",
+    "port": 179,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "smux",
+    "port": 199,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "qmtp",
+    "port": 209,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "z3950",
+    "port": 210,
+    "protocol": "tcp",
+    "aliases": [
+      "wais"
+    ]
+  },
+  {
+    "name": "ipx",
+    "port": 213,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "ptp-event",
+    "port": 319,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "ptp-general",
+    "port": 320,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "pawserv",
+    "port": 345,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "zserv",
+    "port": 346,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "rpc2portmap",
+    "port": 369,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "rpc2portmap",
+    "port": 369,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "codaauth2",
+    "port": 370,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "codaauth2",
+    "port": 370,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "clearcase",
+    "port": 371,
+    "protocol": "udp",
+    "aliases": [
+      "Clearcase"
+    ]
+  },
+  {
+    "name": "ldap",
+    "port": 389,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ldap",
+    "port": 389,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "svrloc",
+    "port": 427,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "svrloc",
+    "port": 427,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "https",
+    "port": 443,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "https",
+    "port": 443,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "snpp",
+    "port": 444,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "microsoft-ds",
+    "port": 445,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "kpasswd",
+    "port": 464,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "kpasswd",
+    "port": 464,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "submissions",
+    "port": 465,
+    "protocol": "tcp",
+    "aliases": [
+      "ssmtp",
+      "smtps",
+      "urd"
+    ]
+  },
+  {
+    "name": "saft",
+    "port": 487,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "isakmp",
+    "port": 500,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "rtsp",
+    "port": 554,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "rtsp",
+    "port": 554,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "nqs",
+    "port": 607,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "asf-rmcp",
+    "port": 623,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "qmqp",
+    "port": 628,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ipp",
+    "port": 631,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ldp",
+    "port": 646,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ldp",
+    "port": 646,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "exec",
+    "port": 512,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "biff",
+    "port": 512,
+    "protocol": "udp",
+    "aliases": [
+      "comsat"
+    ]
+  },
+  {
+    "name": "login",
+    "port": 513,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "who",
+    "port": 513,
+    "protocol": "udp",
+    "aliases": [
+      "whod"
+    ]
+  },
+  {
+    "name": "shell",
+    "port": 514,
+    "protocol": "tcp",
+    "aliases": [
+      "cmd",
+      "syslog"
+    ]
+  },
+  {
+    "name": "syslog",
+    "port": 514,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "printer",
+    "port": 515,
+    "protocol": "tcp",
+    "aliases": [
+      "spooler"
+    ]
+  },
+  {
+    "name": "talk",
+    "port": 517,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "ntalk",
+    "port": 518,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "route",
+    "port": 520,
+    "protocol": "udp",
+    "aliases": [
+      "router",
+      "routed"
+    ]
+  },
+  {
+    "name": "gdomap",
+    "port": 538,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "gdomap",
+    "port": 538,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "uucp",
+    "port": 540,
+    "protocol": "tcp",
+    "aliases": [
+      "uucpd"
+    ]
+  },
+  {
+    "name": "klogin",
+    "port": 543,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "kshell",
+    "port": 544,
+    "protocol": "tcp",
+    "aliases": [
+      "krcmd"
+    ]
+  },
+  {
+    "name": "dhcpv6-client",
+    "port": 546,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "dhcpv6-server",
+    "port": 547,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "afpovertcp",
+    "port": 548,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "nntps",
+    "port": 563,
+    "protocol": "tcp",
+    "aliases": [
+      "snntp"
+    ]
+  },
+  {
+    "name": "submission",
+    "port": 587,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ldaps",
+    "port": 636,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ldaps",
+    "port": 636,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "tinc",
+    "port": 655,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "tinc",
+    "port": 655,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "silc",
+    "port": 706,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "kerberos-adm",
+    "port": 749,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "domain-s",
+    "port": 853,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "domain-s",
+    "port": 853,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "rsync",
+    "port": 873,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ftps-data",
+    "port": 989,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ftps",
+    "port": 990,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "telnets",
+    "port": 992,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "imaps",
+    "port": 993,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "pop3s",
+    "port": 995,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "socks",
+    "port": 1080,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "proofd",
+    "port": 1093,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "rootd",
+    "port": 1094,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "openvpn",
+    "port": 1194,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "openvpn",
+    "port": 1194,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "rmiregistry",
+    "port": 1099,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "lotusnote",
+    "port": 1352,
+    "protocol": "tcp",
+    "aliases": [
+      "lotusnotes"
+    ]
+  },
+  {
+    "name": "ms-sql-s",
+    "port": 1433,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ms-sql-m",
+    "port": 1434,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "ingreslock",
+    "port": 1524,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "datametrics",
+    "port": 1645,
+    "protocol": "tcp",
+    "aliases": [
+      "old-radius"
+    ]
+  },
+  {
+    "name": "datametrics",
+    "port": 1645,
+    "protocol": "udp",
+    "aliases": [
+      "old-radius"
+    ]
+  },
+  {
+    "name": "sa-msg-port",
+    "port": 1646,
+    "protocol": "tcp",
+    "aliases": [
+      "old-radacct"
+    ]
+  },
+  {
+    "name": "sa-msg-port",
+    "port": 1646,
+    "protocol": "udp",
+    "aliases": [
+      "old-radacct"
+    ]
+  },
+  {
+    "name": "kermit",
+    "port": 1649,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "groupwise",
+    "port": 1677,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "l2f",
+    "port": 1701,
+    "protocol": "udp",
+    "aliases": [
+      "l2tp"
+    ]
+  },
+  {
+    "name": "radius",
+    "port": 1812,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "radius",
+    "port": 1812,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "radius-acct",
+    "port": 1813,
+    "protocol": "tcp",
+    "aliases": [
+      "radacct"
+    ]
+  },
+  {
+    "name": "radius-acct",
+    "port": 1813,
+    "protocol": "udp",
+    "aliases": [
+      "radacct"
+    ]
+  },
+  {
+    "name": "cisco-sccp",
+    "port": 2000,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "nfs",
+    "port": 2049,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "nfs",
+    "port": 2049,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "gnunet",
+    "port": 2086,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "gnunet",
+    "port": 2086,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "rtcm-sc104",
+    "port": 2101,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "rtcm-sc104",
+    "port": 2101,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "gsigatekeeper",
+    "port": 2119,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "gris",
+    "port": 2135,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "cvspserver",
+    "port": 2401,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "venus",
+    "port": 2430,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "venus",
+    "port": 2430,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "venus-se",
+    "port": 2431,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "venus-se",
+    "port": 2431,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "codasrv",
+    "port": 2432,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "codasrv",
+    "port": 2432,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "codasrv-se",
+    "port": 2433,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "codasrv-se",
+    "port": 2433,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "mon",
+    "port": 2583,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "mon",
+    "port": 2583,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "dict",
+    "port": 2628,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "f5-globalsite",
+    "port": 2792,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "gsiftp",
+    "port": 2811,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "gpsd",
+    "port": 2947,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "gds-db",
+    "port": 3050,
+    "protocol": "tcp",
+    "aliases": [
+      "gds_db"
+    ]
+  },
+  {
+    "name": "icpv2",
+    "port": 3130,
+    "protocol": "udp",
+    "aliases": [
+      "icp"
+    ]
+  },
+  {
+    "name": "isns",
+    "port": 3205,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "isns",
+    "port": 3205,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "iscsi-target",
+    "port": 3260,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "mysql",
+    "port": 3306,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ms-wbt-server",
+    "port": 3389,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "nut",
+    "port": 3493,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "nut",
+    "port": 3493,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "distcc",
+    "port": 3632,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "daap",
+    "port": 3689,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "svn",
+    "port": 3690,
+    "protocol": "tcp",
+    "aliases": [
+      "subversion"
+    ]
+  },
+  {
+    "name": "suucp",
+    "port": 4031,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "sysrqd",
+    "port": 4094,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "sieve",
+    "port": 4190,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "epmd",
+    "port": 4369,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "remctl",
+    "port": 4373,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "f5-iquery",
+    "port": 4353,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ntske",
+    "port": 4460,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ipsec-nat-t",
+    "port": 4500,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "iax",
+    "port": 4569,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "mtn",
+    "port": 4691,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "radmin-port",
+    "port": 4899,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "sip",
+    "port": 5060,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "sip",
+    "port": 5060,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "sip-tls",
+    "port": 5061,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "sip-tls",
+    "port": 5061,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "xmpp-client",
+    "port": 5222,
+    "protocol": "tcp",
+    "aliases": [
+      "jabber-client"
+    ]
+  },
+  {
+    "name": "xmpp-server",
+    "port": 5269,
+    "protocol": "tcp",
+    "aliases": [
+      "jabber-server"
+    ]
+  },
+  {
+    "name": "cfengine",
+    "port": 5308,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "mdns",
+    "port": 5353,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "postgresql",
+    "port": 5432,
+    "protocol": "tcp",
+    "aliases": [
+      "postgres"
+    ]
+  },
+  {
+    "name": "freeciv",
+    "port": 5556,
+    "protocol": "tcp",
+    "aliases": [
+      "rptp"
+    ]
+  },
+  {
+    "name": "amqps",
+    "port": 5671,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "amqp",
+    "port": 5672,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "amqp",
+    "port": 5672,
+    "protocol": "sctp",
+    "aliases": []
+  },
+  {
+    "name": "coap",
+    "port": 5683,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "coap",
+    "port": 5683,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "coaps",
+    "port": 5684,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "coaps",
+    "port": 5684,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "x11",
+    "port": 6000,
+    "protocol": "tcp",
+    "aliases": [
+      "x11-0"
+    ]
+  },
+  {
+    "name": "x11-1",
+    "port": 6001,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "x11-2",
+    "port": 6002,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "x11-3",
+    "port": 6003,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "x11-4",
+    "port": 6004,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "x11-5",
+    "port": 6005,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "x11-6",
+    "port": 6006,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "x11-7",
+    "port": 6007,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "gnutella-svc",
+    "port": 6346,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "gnutella-svc",
+    "port": 6346,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "gnutella-rtr",
+    "port": 6347,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "gnutella-rtr",
+    "port": 6347,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "redis",
+    "port": 6379,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "sge-qmaster",
+    "port": 6444,
+    "protocol": "tcp",
+    "aliases": [
+      "sge_qmaster"
+    ]
+  },
+  {
+    "name": "sge-execd",
+    "port": 6445,
+    "protocol": "tcp",
+    "aliases": [
+      "sge_execd"
+    ]
+  },
+  {
+    "name": "mysql-proxy",
+    "port": 6446,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "babel",
+    "port": 6696,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "ircs-u",
+    "port": 6697,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "bbs",
+    "port": 7000,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "afs3-fileserver",
+    "port": 7000,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "afs3-callback",
+    "port": 7001,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "afs3-prserver",
+    "port": 7002,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "afs3-vlserver",
+    "port": 7003,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "afs3-kaserver",
+    "port": 7004,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "afs3-volser",
+    "port": 7005,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "afs3-bos",
+    "port": 7007,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "afs3-update",
+    "port": 7008,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "afs3-rmtsys",
+    "port": 7009,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "font-service",
+    "port": 7100,
+    "protocol": "tcp",
+    "aliases": [
+      "xfs"
+    ]
+  },
+  {
+    "name": "http-alt",
+    "port": 8080,
+    "protocol": "tcp",
+    "aliases": [
+      "webcache"
+    ]
+  },
+  {
+    "name": "puppet",
+    "port": 8140,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "bacula-dir",
+    "port": 9101,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "bacula-fd",
+    "port": 9102,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "bacula-sd",
+    "port": 9103,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "xmms2",
+    "port": 9667,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "nbd",
+    "port": 10809,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "zabbix-agent",
+    "port": 10050,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "zabbix-trapper",
+    "port": 10051,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "amanda",
+    "port": 10080,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "dicom",
+    "port": 11112,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "hkp",
+    "port": 11371,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "db-lsp",
+    "port": 17500,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "dcap",
+    "port": 22125,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "gsidcap",
+    "port": 22128,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "wnn6",
+    "port": 22273,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "rtmp",
+    "port": 1,
+    "protocol": "ddp",
+    "aliases": []
+  },
+  {
+    "name": "nbp",
+    "port": 2,
+    "protocol": "ddp",
+    "aliases": []
+  },
+  {
+    "name": "echo",
+    "port": 4,
+    "protocol": "ddp",
+    "aliases": []
+  },
+  {
+    "name": "zip",
+    "port": 6,
+    "protocol": "ddp",
+    "aliases": []
+  },
+  {
+    "name": "kerberos4",
+    "port": 750,
+    "protocol": "udp",
+    "aliases": [
+      "kerberos-iv",
+      "kdc"
+    ]
+  },
+  {
+    "name": "kerberos4",
+    "port": 750,
+    "protocol": "tcp",
+    "aliases": [
+      "kerberos-iv",
+      "kdc"
+    ]
+  },
+  {
+    "name": "kerberos-master",
+    "port": 751,
+    "protocol": "udp",
+    "aliases": [
+      "kerberos_master"
+    ]
+  },
+  {
+    "name": "kerberos-master",
+    "port": 751,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "passwd-server",
+    "port": 752,
+    "protocol": "udp",
+    "aliases": [
+      "passwd_server"
+    ]
+  },
+  {
+    "name": "krb-prop",
+    "port": 754,
+    "protocol": "tcp",
+    "aliases": [
+      "krb_prop",
+      "krb5_prop",
+      "hprop"
+    ]
+  },
+  {
+    "name": "zephyr-srv",
+    "port": 2102,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "zephyr-clt",
+    "port": 2103,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "zephyr-hm",
+    "port": 2104,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "iprop",
+    "port": 2121,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "supfilesrv",
+    "port": 871,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "supfiledbg",
+    "port": 1127,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "poppassd",
+    "port": 106,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "moira-db",
+    "port": 775,
+    "protocol": "tcp",
+    "aliases": [
+      "moira_db"
+    ]
+  },
+  {
+    "name": "moira-update",
+    "port": 777,
+    "protocol": "tcp",
+    "aliases": [
+      "moira_update"
+    ]
+  },
+  {
+    "name": "moira-ureg",
+    "port": 779,
+    "protocol": "udp",
+    "aliases": [
+      "moira_ureg"
+    ]
+  },
+  {
+    "name": "spamd",
+    "port": 783,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "skkserv",
+    "port": 1178,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "predict",
+    "port": 1210,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "rmtcfg",
+    "port": 1236,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "xtel",
+    "port": 1313,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "xtelw",
+    "port": 1314,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "zebrasrv",
+    "port": 2600,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "zebra",
+    "port": 2601,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ripd",
+    "port": 2602,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ripngd",
+    "port": 2603,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ospfd",
+    "port": 2604,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "bgpd",
+    "port": 2605,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ospf6d",
+    "port": 2606,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "ospfapi",
+    "port": 2607,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "isisd",
+    "port": 2608,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "fax",
+    "port": 4557,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "hylafax",
+    "port": 4559,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "munin",
+    "port": 4949,
+    "protocol": "tcp",
+    "aliases": [
+      "lrrd"
+    ]
+  },
+  {
+    "name": "rplay",
+    "port": 5555,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "nrpe",
+    "port": 5666,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "nsca",
+    "port": 5667,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "canna",
+    "port": 5680,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "syslog-tls",
+    "port": 6514,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "sane-port",
+    "port": 6566,
+    "protocol": "tcp",
+    "aliases": [
+      "sane",
+      "saned"
+    ]
+  },
+  {
+    "name": "ircd",
+    "port": 6667,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "zope-ftp",
+    "port": 8021,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "tproxy",
+    "port": 8081,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "omniorb",
+    "port": 8088,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "clc-build-daemon",
+    "port": 8990,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "xinetd",
+    "port": 9098,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "git",
+    "port": 9418,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "zope",
+    "port": 9673,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "webmin",
+    "port": 10000,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "kamanda",
+    "port": 10081,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "amandaidx",
+    "port": 10082,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "amidxtape",
+    "port": 10083,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "sgi-cmsd",
+    "port": 17001,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "sgi-crsd",
+    "port": 17002,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "sgi-gcd",
+    "port": 17003,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "sgi-cad",
+    "port": 17004,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "binkp",
+    "port": 24554,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "asp",
+    "port": 27374,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "asp",
+    "port": 27374,
+    "protocol": "udp",
+    "aliases": []
+  },
+  {
+    "name": "csync2",
+    "port": 30865,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "dircproxy",
+    "port": 57000,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "tfido",
+    "port": 60177,
+    "protocol": "tcp",
+    "aliases": []
+  },
+  {
+    "name": "fido",
+    "port": 60179,
+    "protocol": "tcp",
+    "aliases": []
+  }
+]

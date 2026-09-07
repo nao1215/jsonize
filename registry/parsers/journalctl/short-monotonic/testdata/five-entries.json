@@ -1,0 +1,37 @@
+[
+  {
+    "monotonic": 1280933.091483,
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "sddm-backgrounds-cache.service: Deactivated successfully."
+  },
+  {
+    "monotonic": 1280933.091735,
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "Finished sddm-backgrounds-cache.service - Update SDDM user backgrounds cache from AccountsService."
+  },
+  {
+    "monotonic": 1281020.041907,
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "Starting sysstat-collect.service - system activity accounting tool..."
+  },
+  {
+    "monotonic": 1281020.081513,
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "sysstat-collect.service: Deactivated successfully."
+  },
+  {
+    "monotonic": 1281020.081743,
+    "hostname": "host01",
+    "identifier": "systemd",
+    "pid": 1,
+    "message": "Finished sysstat-collect.service - system activity accounting tool."
+  }
+]

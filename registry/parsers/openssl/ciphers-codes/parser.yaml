@@ -1,0 +1,25 @@
+# `openssl ciphers -V` prints what -v prints with the two-byte wire code
+# of each suite in front of it. The code is what a packet capture shows,
+# which is the reason to ask for this form rather than the other.
+format: 1
+command: openssl
+variant: ciphers-codes
+description: openssl ciphers -V, each suite with its wire code
+metadata:
+  tags: [crypto, tls]
+  compatible: [OpenSSL]
+  references:
+    - https://docs.openssl.org/master/man1/openssl-ciphers/
+detect:
+  args:
+    all: ["ciphers"]
+    any: ["-V"]
+  signature:
+    all:
+      - '\A[ \t]*0x[0-9A-F]{2},0x[0-9A-F]{2} - \S+[ \t]+\S+[ \t]+Kx=\S+[ \t]+Au=\S+[ \t]+Enc=\S+[ \t]+Mac=\S+'
+parse:
+  type: regex
+  pattern: '^[ \t]*0x(?P<code_high>[0-9A-F]{2}),0x(?P<code_low>[0-9A-F]{2}) - (?P<name>\S+)[ \t]+(?P<protocol>\S+)[ \t]+Kx=(?P<kx>\S+)[ \t]+Au=(?P<au>\S+)[ \t]+Enc=(?P<enc>\S+)[ \t]+Mac=(?P<mac>\S+)[ \t]*$'
+fields:
+  name: {required: true}
+  protocol: {required: true}

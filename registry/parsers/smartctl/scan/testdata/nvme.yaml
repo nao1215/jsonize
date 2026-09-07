@@ -1,0 +1,2 @@
+source: "smartctl --scan on Ubuntu with smartmontools 7.5, LC_ALL=C"
+args: ["--scan"]

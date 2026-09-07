@@ -1,0 +1,36 @@
+# `amixer contents` prints three lines per control: the identifier, then
+# the type and access marked with ";", then the values marked with ":".
+# The two marked lines belong to the identifier above them, so they are
+# folded onto it and the whole control is read as one line.
+format: 1
+command: amixer
+variant: contents
+description: amixer contents, every mixer control with its type and values
+metadata:
+  tags: [linux, audio, alsa]
+  compatible: [alsa-utils]
+  references:
+    - https://man7.org/linux/man-pages/man1/amixer.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["contents"]
+  signature:
+    all:
+      - "\\Anumid=[0-9]+,iface=\\S+,name='[^']*'"
+      - '^[ \t]*; type=\S+,access='
+input:
+  fold: '^[ \t]*[;:] '
+parse:
+  type: regex
+  # The properties after the type differ by control (an integer control
+  # states its range, a boolean states nothing), so they are kept as the
+  # list that was printed rather than forced into named keys.
+  pattern: "^numid=(?P<numid>[0-9]+),iface=(?P<interface>[^,]*),name='(?P<name>[^']*)'(?:,index=(?P<index>[0-9]+))? ; (?P<properties>[^ ]+) : values=(?P<values>.*?)[ \t]*$"
+fields:
+  numid: {type: int, required: true}
+  interface: {required: true}
+  name: {required: true}
+  index: {type: int, when_missing: omit}
+  properties: {type: array, split: ","}
+  values: {type: array, split: ","}

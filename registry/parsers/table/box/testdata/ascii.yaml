@@ -1,1 +1,1 @@
-source: "a hand-written example of the shape this definition describes; it names no command, because it describes a shape rather than a command"
+source: "a hand-written example of the shape this definition describes: a rule around the table and under the header and nowhere else, which is what MySQL, psql and sqlite3 in box mode print"

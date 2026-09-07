@@ -1,0 +1,48 @@
+# A sysstat report is a run of samples: the banner names the machine
+# once, and everything after it repeats once per interval, column header
+# and all. Reading it as an array of samples is what lets an interval run
+# be read at all (the second header used to reach the table as a row) and
+# what lets --stream hand over a sample as soon as it is complete. The
+# closing summary block is a sample of its own, whose rows are labelled
+# Average instead of with a time.
+#
+# The banner is dropped with it. It carries the kernel, the host and the
+# CPU count, which `uname -a` and `nproc` also print and jz also reads;
+# what it does not carry is a sample, and a shape that had one object for
+# it and an array for the rest could not be streamed.
+format: 1
+command: mpstat
+variant: interrupts
+description: mpstat -I per-processor interrupt rates
+metadata:
+  tags: [linux, cpu, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/mpstat.1.html
+detect:
+  os: [linux]
+  args:
+    all: ["-I"]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+CPU[ \t]+intr/s[ \t]*$'
+input:
+  select:
+    after: '\ALinux[ \t]'
+parse:
+  type: records
+  # A sample opens with the column header and runs to the next one.
+  start: '^(?:[0-9]{2}:[0-9]{2}:[0-9]{2}|Average:)[ \t]+CPU[ \t]+intr/s[ \t]*$'
+  parts:
+    # cpu is "all" for the summary row and a processor number otherwise, so
+    # it stays a string.
+    - name: cpu
+      parse:
+        type: table
+        header:
+          columns: [time, cpu, interrupts_per_second]
+      fields:
+        time: {required: true, trim_suffix: ":"}
+        cpu: {required: true}
+        interrupts_per_second: {type: float}

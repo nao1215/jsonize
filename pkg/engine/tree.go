@@ -69,24 +69,39 @@ func (r *run) treeNodes(p *definition.Parse, lines []line, i, depth int) ([]any,
 	return out, i, nil
 }
 
-// treeDepth counts how many times the indentation unit opens the line,
-// and returns the rest of it.
+// treeDepth counts how many levels of indentation open the line and
+// returns the rest of it. Where a definition states several forms one
+// level may take, the first that fits at each step is the one taken.
 func (r *run) treeDepth(p *definition.Parse, l line) (int, string, error) {
 	text, depth := l.text, 0
-	for strings.HasPrefix(text, p.Indent) {
-		text = text[len(p.Indent):]
+	for {
+		unit, ok := openingUnit(p.Indent, text)
+		if !ok {
+			break
+		}
+		text = text[len(unit):]
 		depth++
 		if depth > definition.MaxTreeDepth {
 			return 0, "", r.errorf(l.num, "", "nested deeper than %d levels", definition.MaxTreeDepth)
 		}
 	}
 	// Leading whitespace that is not a whole number of levels means the
-	// unit the definition states is not the one the text uses, and
+	// indentation the definition states is not the one the text uses, and
 	// rounding it down would put a node under the wrong parent.
 	if rest := strings.TrimLeft(text, " \t"); len(rest) != len(text) {
-		return 0, "", r.errorf(l.num, "", "indented by something other than a whole number of %q", p.Indent)
+		return 0, "", r.errorf(l.num, "", "indented by something other than a whole number of %v", []string(p.Indent))
 	}
 	return depth, text, nil
+}
+
+// openingUnit returns the first stated form of one level that opens text.
+func openingUnit(indent definition.Indent, text string) (string, bool) {
+	for _, unit := range indent {
+		if unit != "" && strings.HasPrefix(text, unit) {
+			return unit, true
+		}
+	}
+	return "", false
 }
 
 // treeNode reads one line into the object for it.

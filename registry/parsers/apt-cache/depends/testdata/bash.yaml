@@ -1,0 +1,2 @@
+source: "apt-cache depends bash on Ubuntu with APT 3.1, LC_ALL=C"
+args: ["depends", "bash"]

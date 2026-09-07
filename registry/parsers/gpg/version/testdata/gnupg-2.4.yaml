@@ -1,0 +1,2 @@
+source: "gpg --version on Ubuntu with GnuPG 2.4.8, LC_ALL=C; the home directory is replaced"
+args: ["--version"]

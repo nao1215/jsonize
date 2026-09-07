@@ -1,0 +1,3 @@
+source: "lsusb -t on Ubuntu with usbutils 018, LC_ALL=C, trimmed to the first ten lines"
+os: linux
+args: ["-t"]

@@ -159,16 +159,27 @@ not a whole number of the stated unit is an error rather than being
 rounded down. Depth stops at 32, which no report comes near, so a
 producer cannot make jz build an unbounded stack of objects.
 
-A `level` expression that captured the leading whitespace was considered
-in place of stating the unit. It was dropped because it still leaves the
-question the unit answers — how much whitespace is one level — so it adds
-a key without removing a question. A format whose indentation is not a
-fixed unit is not one `tree` reads.
+`indent` states one level as it is written, and it accepts a list of the
+forms one level may take. That second half was not in the first version
+and three reports asked for it: tree(1) writes a level as one of
+`"|   "`, `"    "`, `"|-- "` and ``"`-- "``, `systemd-analyze
+critical-chain` as two spaces or a backtick and a dash, and `wpctl` as
+four spaces or a branch character. Each is a fixed width whose characters
+depend on whether anything follows, so a single string cannot count them
+and a list of alternatives can.
+
+A `level` expression that captured the leading whitespace was the other
+candidate. It was dropped because it still leaves the question the width
+answers — how much of what it captured is one level — so it adds a key
+without removing a question.
 
 `tree` may be a `composite` part, which is what a report with a banner
-above the tree needs. It may not be a `records` part: a record is a block
-that repeats at one level and a tree is what the input decides the depth
-of, and one definition cannot answer "where does this line belong" twice.
+above the tree needs, and a `records` part, which `sensors -u` needs: it
+prints a block per chip and a two-level tree of features inside each. It
+was forbidden there at first on the grounds that a record and a tree both
+say where a line belongs; they do not say it about the same thing.
+`start` decides where a block begins and `indent` decides how deep a line
+inside one is, and neither can answer the other's question.
 
 ### A definition can be given instead of named
 
@@ -216,9 +227,18 @@ A CSV value may contain the delimiter, a quote, or a line break, so the
 lines are joined back together and read with `encoding/csv`. A streamed
 CSV holds a line back while the quote count is odd, which is exactly when
 a value is still open. An ini file is sections of keys and so is one
-object with no streaming form at all. A drawn table has its rows marked
-by rules rather than by line breaks, so a value wrapped over three lines
-is one cell.
+object with no streaming form at all. A drawn table takes its cells from
+the bars rather than from whitespace, and a value the table wrapped over
+three lines is one cell.
+
+What a drawn table does not do is mark every row with a rule. It was
+written that way first, and `duf` said otherwise: MySQL, psql, `sqlite3`
+in box mode and `duf` all draw a rule around the table and under the
+header and nowhere else, so every line of the body is a row. A wrapped
+value writes its continuation with the first cell left empty, and that is
+what separates the two. It also means a row whose first column is
+genuinely blank cannot be told from a continuation — in this format they
+are the same line.
 
 Adding them cost no new key beyond `split: box`, and each brought its own
 fuzz coverage. That found a bug older than any of them: `StripANSI` would

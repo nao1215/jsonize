@@ -1,0 +1,38 @@
+# `lsusb -t` draws the bus as a tree: a root hub, the ports on it, and
+# the ports of any hub plugged into those. The depth is a property of
+# what is plugged in, so it is read as a tree.
+#
+# A level is four spaces, and the deepest one of a line carries "|__ "
+# instead of the fourth space. That marker is left to the node
+# expression rather than counted as indentation, which is what keeps the
+# count of levels the same as the count of hubs.
+format: 1
+command: lsusb
+variant: tree
+description: lsusb -t, the USB buses and what is plugged into them
+metadata:
+  tags: [linux, hardware, usb, usbutils]
+  compatible: [usbutils]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsusb.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-t", "--tree"]
+  signature:
+    all:
+      - '\A/:  Bus [0-9]+\.Port [0-9]+: Dev [0-9]+, Class=root_hub,'
+parse:
+  type: tree
+  indent: "    "
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^/:  Bus (?P<bus>[0-9]+)\.Port (?P<port>[0-9]+): Dev (?P<device>[0-9]+), Class=(?P<class>[^,]*), Driver=(?P<driver>[^,]*), (?P<speed>\S+)[ \t]*$'
+        - '^\|__ Port (?P<port>[0-9]+): Dev (?P<device>[0-9]+), If (?P<interface>[0-9]+), Class=(?P<class>[^,]*), Driver=(?P<driver>[^,]*), (?P<speed>\S+)[ \t]*$'
+    fields:
+      bus: {type: int, when_missing: omit}
+      port: {type: int, required: true}
+      device: {type: int, required: true}
+      interface: {type: int, when_missing: omit}

@@ -1,0 +1,41 @@
+# `curl --version` prints the build on the first line, then the release
+# date and the protocols and features it was built with, each as a
+# labelled list.
+format: 1
+command: curl
+variant: version
+description: curl --version, the build and what it supports
+metadata:
+  tags: [network, http]
+  compatible: [curl]
+  references:
+    - https://curl.se/docs/manpage.html
+detect:
+  args:
+    any: ["--version", "-V"]
+  signature:
+    all:
+      - '\Acurl [0-9]+\.[0-9]+\.[0-9]+ \([^)]*\) '
+      - '^Protocols: '
+parse:
+  type: composite
+  parts:
+    - name: build
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        # The libraries after the host triple are name/version pairs
+        # joined by a slash, and which of them a build has varies.
+        pattern: '\Acurl (?P<version>\S+) \((?P<host>[^)]*)\)(?: (?P<libraries>.*?))?[ \t]*\z'
+      fields:
+        libraries: {type: array, split_regex: '[ \t]+'}
+    - name: details
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ": "
+        as: map
+      fields:
+        Protocols: {type: array, split: " "}
+        Features: {type: array, split: " "}

@@ -478,3 +478,79 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].phy", gte: 0 }
+
+  # A sample of the definitions added for commands the registry had no
+  # reading for. What is pinned is the shape of the answer, never a value
+  # of this machine's.
+  - name: the sysstat, systemd and ALSA listings land on their own definitions
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain systemd-analyze critical-chain
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemd-analyze/critical-chain from embedded"
+          stdout:
+            json:
+              # A tree whose times are read as durations.
+              - { path: "$[0].activated", gt: 0 }
+              - { path: "$[0].children[0].unit", matches: "\\." }
+      - run:
+          command: jz run --explain systemd-analyze security --no-pager
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemd-analyze/security from embedded"
+          stdout:
+            json:
+              - { path: "$[0].exposure", gte: 0 }
+      - run:
+          command: jz run --explain aplay -l
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "aplay/devices from embedded"
+      - run:
+          command: jz run --explain blkid -o export
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "blkid/export from embedded"
+
+  - name: the network and package listings land on their own definitions
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain ip -s -s link
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ip/stats-link-detail from embedded"
+          stdout:
+            json:
+              - { path: "$[0].rx_errors.crc", gte: 0 }
+      # The definition for one -s refuses the doubled report, which is
+      # the pair being exclusive rather than one of them being chosen.
+      - run:
+          shell: true
+          command: LC_ALL=C ip -s -s link | jz --parser ip --variant stats-link
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          command: jz run --explain dpkg --get-selections
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "dpkg/selections from embedded"
+      - run:
+          command: jz run --explain apt-cache depends bash
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "apt-cache/depends from embedded"
+          stdout:
+            json:
+              - { path: "$[0].package", equals: bash }
+              - { path: "$[0].children[0].relation", matches: "Depends" }

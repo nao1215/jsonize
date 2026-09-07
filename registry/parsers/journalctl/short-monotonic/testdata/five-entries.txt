@@ -1,0 +1,5 @@
+[1280933.091483] host01 systemd[1]: sddm-backgrounds-cache.service: Deactivated successfully.
+[1280933.091735] host01 systemd[1]: Finished sddm-backgrounds-cache.service - Update SDDM user backgrounds cache from AccountsService.
+[1281020.041907] host01 systemd[1]: Starting sysstat-collect.service - system activity accounting tool...
+[1281020.081513] host01 systemd[1]: sysstat-collect.service: Deactivated successfully.
+[1281020.081743] host01 systemd[1]: Finished sysstat-collect.service - system activity accounting tool.

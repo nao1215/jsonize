@@ -704,3 +704,41 @@ scenarios:
       - assert:
           stderr:
             contains: "no parent"
+
+  # A definition given for a file rather than a command is reached by its
+  # path the same way /etc/fstab is.
+  - name: /etc/services and /etc/protocols are read from their paths
+    steps:
+      - fixture:
+          file: etc/services
+          content: |
+            tcpmux                1/tcp
+            discard               9/tcp sink null
+            ssh                  22/tcp
+      - run:
+          command: jz --explain --file ${workdir}/etc/services
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "etc/services from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 3 }
+              - { path: "$[1].port", equals: 9 }
+              - { path: "$[1].aliases", length: 2 }
+              - { path: "$[2].aliases", length: 0 }
+      - fixture:
+          file: etc/protocols
+          content: |
+            ip     0  IP
+            icmp   1  ICMP
+            manet  138
+      - run:
+          command: jz --file ${workdir}/etc/protocols
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[2].name", equals: manet }
+              - { path: "$[2].number", equals: 138 }
+              - { path: "$[2].aliases", length: 0 }

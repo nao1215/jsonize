@@ -1,0 +1,25 @@
+# `dpkg --get-selections` prints a package and what is to be done with
+# it, one per line. The five words on the right are the whole vocabulary
+# dpkg has for that, which is what makes this listing recognisable.
+format: 1
+command: dpkg
+variant: selections
+description: dpkg --get-selections, each package and its selection state
+metadata:
+  tags: [linux, debian, package]
+  compatible: [dpkg]
+  references:
+    - https://manpages.debian.org/dpkg
+detect:
+  args:
+    any: ["--get-selections"]
+  signature:
+    all:
+      - '\A\S+[ \t]+(?:install|hold|deinstall|purge|unknown)[ \t]*$'
+      - '^\S+[ \t]+(?:install|hold|deinstall|purge|unknown)[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<package>\S+)[ \t]+(?P<selection>install|hold|deinstall|purge|unknown)[ \t]*$'
+fields:
+  package: {required: true}
+  selection: {required: true}

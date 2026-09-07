@@ -13,6 +13,8 @@
 package definition
 
 import (
+	"errors"
+	"fmt"
 	"regexp"
 	"strings"
 )
@@ -374,8 +376,8 @@ type Parse struct {
 	//
 	// Indent is one level of indentation as it is written: "\t" for a
 	// report indented with tabs, "  " for one indented with two spaces.
-	// A line's depth is how many times it repeats at the start.
-	Indent string `yaml:"indent,omitempty"`
+	// A line's depth is how many times it opens the line.
+	Indent Indent `yaml:"indent,omitempty"`
 	// Node says how one line of the tree is read. Every line is a node,
 	// so this applies at every depth.
 	Node *Node `yaml:"node,omitempty"`
@@ -444,6 +446,40 @@ type Header struct {
 	LeadingLabel string `yaml:"leading_label,omitempty"`
 	// Rename maps normalised header names to field names.
 	Rename map[string]string `yaml:"rename,omitempty"`
+}
+
+// Indent is one level of a tree's indentation, or the forms one level
+// may take. A report that marks a level with a branch character rather
+// than with spaces writes several: `systemd-analyze critical-chain`
+// indents by two characters that are either two spaces or a backtick and
+// a dash, and tree(1) by four that are one of "|   ", "    ", "|-- " and
+// "`-- ". A line's depth is how many of them open it, and the first that
+// fits at each step is the one taken, so a definition that writes
+// several states the order they are tried in.
+//
+// One level written as a plain string is the same as a list of one.
+type Indent []string
+
+// UnmarshalYAML accepts either a string or a list of them.
+func (i *Indent) UnmarshalYAML(b []byte) error {
+	// A number would decode as the digits of itself, which is a level of
+	// indentation nothing prints. Saying so beats accepting "2" as two
+	// characters that happen to be a two.
+	var n int
+	if err := DecodeYAML(b, &n); err == nil {
+		return fmt.Errorf("indent is the indentation as it is written, not how many characters it is: %q for a tab, %q for two spaces", "\\t", "  ")
+	}
+	var one string
+	if err := DecodeYAML(b, &one); err == nil {
+		*i = Indent{one}
+		return nil
+	}
+	var many []string
+	if err := DecodeYAML(b, &many); err != nil {
+		return errors.New("indent must be a string or a list of strings")
+	}
+	*i = many
+	return nil
 }
 
 // Node describes how one line of a tree is read. It is a part without a

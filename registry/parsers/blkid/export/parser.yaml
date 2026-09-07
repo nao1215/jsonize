@@ -1,0 +1,29 @@
+# `blkid -o export` prints one block of key=value lines per device,
+# separated by blank lines. Which keys a device has depends on what is on
+# it, so the block is read as a map rather than as named columns.
+format: 1
+command: blkid
+variant: export
+description: blkid -o export, one block of attributes per device
+metadata:
+  tags: [linux, disk, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/blkid.8.html
+detect:
+  os: [linux]
+  args:
+    all: ["export"]
+  signature:
+    all:
+      - '\ADEVNAME=/dev/\S+[ \t]*$'
+      - '^TYPE=\S+[ \t]*$'
+parse:
+  type: records
+  start: '^DEVNAME='
+  parts:
+    - name: attributes
+      parse:
+        type: kv
+        separator: "="
+        as: map

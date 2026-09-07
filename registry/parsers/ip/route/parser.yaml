@@ -20,11 +20,21 @@ detect:
 parse:
   type: regex
   patterns:
+    # A route may open with its type. The main table prints none, because
+    # every route in it is unicast; `ip route show table all` prints the
+    # local table too, whose routes are local, broadcast and multicast,
+    # and a type read as a destination would put "local" where a prefix
+    # belongs.
+    - '^(?P<type>unicast|local|broadcast|multicast|throw|unreachable|prohibit|blackhole|nat) (?P<destination>\S+) via (?P<via>\S+) dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
+    - '^(?P<type>unicast|local|broadcast|multicast|throw|unreachable|prohibit|blackhole|nat) (?P<destination>\S+) dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
+    # A route with no device at all, which is what a rejecting type has.
+    - '^(?P<type>throw|unreachable|prohibit|blackhole) (?P<destination>\S+)\s*(?P<attributes>.*?)\s*$'
     - '^(?P<destination>\S+) via (?P<via>\S+) dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
     - '^(?P<destination>\S+) dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
 fields:
   destination: {required: true}
-  dev: {required: true}
+  dev: {when_missing: omit}
+  type: {when_missing: omit}
   via: {when_missing: omit}
   # The words after the device are pairs (proto dhcp, metric 600) mixed
   # with lone flags (linkdown); they are kept in order rather than being

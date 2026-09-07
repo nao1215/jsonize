@@ -1,0 +1,3 @@
+source: "mpstat -I SUM 1 2 on Ubuntu with sysstat 12.7.7, LC_ALL=C; two samples and the closing summary"
+os: linux
+args: ["-I", "SUM", "1", "2"]

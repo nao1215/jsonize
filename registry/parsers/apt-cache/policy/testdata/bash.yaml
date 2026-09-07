@@ -1,0 +1,2 @@
+source: "apt-cache policy bash on Ubuntu with APT 3.1, LC_ALL=C"
+args: ["policy", "bash"]

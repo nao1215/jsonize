@@ -1,0 +1,3 @@
+source: "nmcli general status on Ubuntu with NetworkManager 1.56, LC_ALL=C"
+os: linux
+args: ["general", "status"]

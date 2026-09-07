@@ -1,0 +1,16 @@
+Sink #65
+	State: SUSPENDED
+	Name: alsa_output.pci-0000_c6_00.6.analog-stereo
+	Description: Ryzen HD Audio Controller Analog Stereo
+	Driver: PipeWire
+	Sample Specification: s32le 2ch 48000Hz
+	Channel Map: front-left,front-right
+	Owner Module: 4294967295
+	Mute: no
+	Volume: front-left: 18989 /  29% / -32.28 dB,   front-right: 18989 /  29% / -32.28 dB
+	        balance 0.00
+	Base Volume: 65536 / 100% / 0.00 dB
+	Monitor Source: alsa_output.pci-0000_c6_00.6.analog-stereo.monitor
+	Latency: 0 usec, configured 0 usec
+	Flags: HARDWARE HW_MUTE_CTRL HW_VOLUME_CTRL DECIBEL_VOLUME LATENCY 
+	Properties:

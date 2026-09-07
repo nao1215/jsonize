@@ -1,0 +1,27 @@
+# `go tool dist list` prints every operating system and architecture the
+# toolchain can build for, one pair per line. Two words joined by a slash
+# is the shape of a path as well, so this one is only used when it is
+# named or when jz ran the command itself.
+format: 1
+command: go
+variant: dist-list
+description: go tool dist list, the platforms the toolchain can build for
+metadata:
+  tags: [go, toolchain]
+  compatible: [Go]
+  references:
+    - https://pkg.go.dev/cmd/dist
+detect:
+  auto_detect: false
+  args:
+    all: ["dist", "list"]
+  signature:
+    all:
+      # Every line is a GOOS and a GOARCH, both lower-case words.
+      - '\A(?:[a-z0-9]+/[a-z0-9]+[ \t]*\n)*[a-z0-9]+/[a-z0-9]+[ \t]*\z'
+parse:
+  type: regex
+  pattern: '^(?P<os>[a-z0-9]+)/(?P<arch>[a-z0-9]+)[ \t]*$'
+fields:
+  os: {required: true}
+  arch: {required: true}

@@ -1,0 +1,44 @@
+[
+  {
+    "unit": "ModemManager.service",
+    "exposure": 6.3,
+    "predicate": "MEDIUM",
+    "happy": ":-|"
+  },
+  {
+    "unit": "NetworkManager.service",
+    "exposure": 7.8,
+    "predicate": "EXPOSED",
+    "happy": ":-("
+  },
+  {
+    "unit": "accounts-daemon.service",
+    "exposure": 5.5,
+    "predicate": "MEDIUM",
+    "happy": ":-|"
+  },
+  {
+    "unit": "alsa-state.service",
+    "exposure": 9.6,
+    "predicate": "UNSAFE",
+    "happy": ":-{"
+  },
+  {
+    "unit": "anacron.service",
+    "exposure": 9.6,
+    "predicate": "UNSAFE",
+    "happy": ":-{"
+  },
+  {
+    "unit": "avahi-daemon.service",
+    "exposure": 9.6,
+    "predicate": "UNSAFE",
+    "happy": ":-{"
+  },
+  {
+    "unit": "blueman-mechanism.service",
+    "exposure": 9.6,
+    "predicate": "UNSAFE",
+    "happy": ":-{"
+  }
+]

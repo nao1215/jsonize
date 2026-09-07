@@ -1,0 +1,2 @@
+source: "openssl ciphers -V on Ubuntu with OpenSSL 3.5.5, LC_ALL=C, trimmed to eight suites"
+args: ["ciphers", "-V"]

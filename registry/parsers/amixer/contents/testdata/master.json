@@ -1,0 +1,62 @@
+[
+  {
+    "numid": 4,
+    "interface": "MIXER",
+    "name": "Master Playback Switch",
+    "properties": [
+      "type=BOOLEAN",
+      "access=rw------",
+      "values=1"
+    ],
+    "values": [
+      "on"
+    ]
+  },
+  {
+    "numid": 3,
+    "interface": "MIXER",
+    "name": "Master Playback Volume",
+    "properties": [
+      "type=INTEGER",
+      "access=rw------",
+      "values=2",
+      "min=0",
+      "max=65536",
+      "step=1"
+    ],
+    "values": [
+      "9830",
+      "9830"
+    ]
+  },
+  {
+    "numid": 2,
+    "interface": "MIXER",
+    "name": "Capture Switch",
+    "properties": [
+      "type=BOOLEAN",
+      "access=rw------",
+      "values=1"
+    ],
+    "values": [
+      "on"
+    ]
+  },
+  {
+    "numid": 1,
+    "interface": "MIXER",
+    "name": "Capture Volume",
+    "properties": [
+      "type=INTEGER",
+      "access=rw------",
+      "values=2",
+      "min=0",
+      "max=65536",
+      "step=1"
+    ],
+    "values": [
+      "36751",
+      "36751"
+    ]
+  }
+]

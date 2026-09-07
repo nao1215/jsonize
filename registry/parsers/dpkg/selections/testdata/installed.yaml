@@ -1,0 +1,2 @@
+source: "dpkg --get-selections on Ubuntu with dpkg 1.22, LC_ALL=C, trimmed to eight packages"
+args: ["--get-selections"]

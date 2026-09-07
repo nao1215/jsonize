@@ -1,0 +1,1 @@
+source: "nslookup example.com on Ubuntu with bind9-dnsutils 9.20, LC_ALL=C, answered by the local systemd-resolved stub"

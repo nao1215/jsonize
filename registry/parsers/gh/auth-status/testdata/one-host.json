@@ -1,0 +1,30 @@
+[
+  {
+    "host": {
+      "name": "github.com"
+    },
+    "login": {
+      "host": "github.com",
+      "account": "alice",
+      "source": "/home/alice/.config/gh/hosts.yml"
+    },
+    "details": [
+      {
+        "key": "Active account",
+        "value": "true"
+      },
+      {
+        "key": "Git operations protocol",
+        "value": "ssh"
+      },
+      {
+        "key": "Token",
+        "value": "gho_************************************"
+      },
+      {
+        "key": "Token scopes",
+        "value": "'admin:public_key', 'gist', 'read:org', 'repo'"
+      }
+    ]
+  }
+]

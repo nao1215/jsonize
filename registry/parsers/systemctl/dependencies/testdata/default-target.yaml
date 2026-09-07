@@ -1,0 +1,3 @@
+source: "systemctl list-dependencies --no-pager --plain on Ubuntu with systemd 258, LC_ALL=C, trimmed to the first thirty lines"
+os: linux
+args: ["list-dependencies", "--no-pager", "--plain"]

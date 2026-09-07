@@ -1,0 +1,42 @@
+# `tree` draws a directory and what is under it, and closes with a count
+# of what it found. The depth is a property of the directory, so it is
+# read as a tree.
+#
+# A level is four characters, and which four depends on whether anything
+# follows: a branch is "|-- " and the last one "`-- ", while a level that
+# only passes through is "|   " or four spaces. Naming all four is what
+# lets the depth be counted.
+format: 1
+command: tree
+variant: listing
+description: tree, a directory and what is under it
+metadata:
+  tags: [filesystem]
+  compatible: [tree]
+  references:
+    - https://linux.die.net/man/1/tree
+detect:
+  args:
+    none: ["-J", "--json", "-X", "-H"]
+  signature:
+    all:
+      - '\A\S'
+      - '^(?:\|-- |`-- )\S'
+      - '^[0-9]+ director(?:y|ies)(?:, [0-9]+ files?)?[ \t]*$'
+input:
+  select:
+    # The count at the end is the same facts the tree already carries.
+    until: '^[0-9]+ director(?:y|ies)'
+parse:
+  type: tree
+  indent: ["|   ", "    ", "|-- ", "`-- "]
+  node:
+    parse:
+      type: regex
+      # tree prints a symbolic link as "name -> target".
+      patterns:
+        - '^(?P<name>.+?) -> (?P<link_to>.+?)[ \t]*$'
+        - '^(?P<name>.+?)[ \t]*$'
+    fields:
+      name: {required: true}
+      link_to: {when_missing: omit}

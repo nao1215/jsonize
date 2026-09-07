@@ -1,0 +1,30 @@
+# `mokutil --list-sbat` prints the SBAT revocation entries the firmware
+# holds, one comma-separated record per line: a component name, its
+# generation, and for a vendor entry the rest of the SBAT fields. It is
+# comma-separated values without a header, which is what the columns say.
+format: 1
+command: mokutil
+variant: sbat
+description: mokutil --list-sbat, the SBAT revocations the firmware holds
+metadata:
+  tags: [linux, firmware, secureboot]
+  compatible: [mokutil]
+  references:
+    - https://github.com/lcp/mokutil
+detect:
+  os: [linux]
+  args:
+    any: ["--list-sbat", "-x"]
+  signature:
+    all:
+      # The first record is always the SBAT format's own version.
+      - '\Asbat,[0-9]+(?:,[0-9]+)?[ \t]*$'
+parse:
+  type: csv
+  header:
+    none: true
+    columns: [component, generation, date]
+fields:
+  component: {required: true}
+  generation: {type: int, required: true}
+  date: {when_missing: omit}

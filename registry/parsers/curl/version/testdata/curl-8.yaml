@@ -1,0 +1,2 @@
+source: "curl --version on Ubuntu with curl 8.18.0, LC_ALL=C"
+args: ["--version"]

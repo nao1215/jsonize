@@ -1,0 +1,38 @@
+# /etc/services: a service name, the port and protocol it runs on, and
+# any other names for the same service. Comments and blank lines are
+# dropped, and a trailing comment is kept out of the alias list.
+format: 1
+command: etc
+variant: services
+aliases:
+  # `getent services` prints this file, plus whatever the other name
+  # services answer with.
+  - name: getent
+    args:
+      all: ["services"]
+description: /etc/services entries
+metadata:
+  tags: [linux, darwin, network]
+  compatible: [POSIX services file]
+  references:
+    - https://man7.org/linux/man-pages/man5/services.5.html
+detect:
+  signature:
+    all:
+      # The first entry after any comments: a name, then a port and a
+      # protocol joined by a slash, which is what makes this file
+      # unmistakable. Nothing else in the registry writes a bare
+      # "number/word" in its second column.
+      - '\A(?:[ \t]*(?:#[^\n]*)?\n)*[A-Za-z0-9][A-Za-z0-9._+-]*[ \t]+[0-9]{1,5}/[a-z]{2,5}(?:[ \t]|$)'
+input:
+  ignore:
+    - '^[ \t]*#'
+parse:
+  type: regex
+  # A trailing comment is dropped rather than read as one more alias.
+  pattern: '^(?P<name>\S+)[ \t]+(?P<port>[0-9]+)/(?P<protocol>\S+)[ \t]*(?P<aliases>[^#]*?)[ \t]*(?:#.*)?$'
+fields:
+  port: {type: int, required: true}
+  name: {required: true}
+  protocol: {required: true}
+  aliases: {type: array, split_regex: '[ \t]+'}

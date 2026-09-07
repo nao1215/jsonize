@@ -1,0 +1,26 @@
+The time when unit became active or started is printed after the "@" character.
+The time the unit took to start is printed after the "+" character.
+
+graphical.target @8.581s
+`-power-profiles-daemon.service @8.546s +34ms
+  `-multi-user.target @8.544s
+    `-docker.service @7.580s +963ms
+      `-network-online.target @7.578s
+        `-NetworkManager-wait-online.service @2.761s +4.816s
+          `-NetworkManager.service @2.379s +379ms
+            `-dbus.service @2.285s +87ms
+              `-basic.target @2.282s
+                `-sockets.target @2.282s
+                  `-snapd.socket @2.268s +14ms
+                    `-sysinit.target @2.264s
+                      `-snapd.apparmor.service @2.119s +145ms
+                        `-apparmor.service @2.041s +76ms
+                          `-local-fs.target @2.040s
+                            `-run-docker-netns-730b00ef8599.mount @8.313s
+                              `-local-fs-pre.target @622ms
+                                `-systemd-tmpfiles-setup-dev.service @616ms +5ms
+                                  `-systemd-tmpfiles-setup-dev-early.service @591ms +10ms
+                                    `-kmod-static-nodes.service @584ms +6ms
+                                      `-systemd-journald.socket
+                                        `-system.slice
+                                          `--.slice
