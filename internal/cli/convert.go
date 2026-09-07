@@ -24,6 +24,7 @@ Text that matches none, or more than one, is an error naming what to pass.
   jz --file captured.txt
   df -h | jz --parser df
   df -h | jz --parser df --variant gnu-human
+  vmstat 1 | jz --stream               # one JSON document per line
 
 Options:
 `
@@ -56,7 +57,7 @@ func (a *app) cmdConvert(args []string) int {
 		a.errorf("%v", &selector.VariantWithoutParserError{Variant: co.selects.variant})
 		return ExitUsage
 	}
-	if _, err := co.output.filter(); err != nil {
+	if err := co.output.check(); err != nil {
 		a.errorf("%v", err)
 		return ExitUsage
 	}
@@ -74,6 +75,9 @@ func (a *app) cmdConvert(args []string) int {
 		}
 		defer f.Close()
 		r = f
+	}
+	if co.output.stream {
+		return a.stream(reg, r, selector.Context{Parser: co.selects.parser, Variant: co.selects.variant}, &co.output, false)
 	}
 	// The size limit is not negotiable from the command line: it exists so
 	// that a runaway producer cannot make jz allocate without bound.

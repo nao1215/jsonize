@@ -354,6 +354,36 @@ func check(e *registry.Entry, ctx *Context, window []string) (string, bool) {
 	return "", true
 }
 
+// Window returns how many leading lines a caller has to hold before a
+// selection can be trusted: the largest window any candidate signature
+// looks at. Reading fewer would let a definition through whose none[]
+// expression sits further down, which is a false accept rather than a
+// slower answer.
+//
+// parser scopes the candidates the way Select does, so naming a command
+// (which `jz run` always does) usually brings this down to the default
+// twenty lines.
+func Window(reg *registry.Registry, parser string) int {
+	candidates := reg.Entries()
+	if parser != "" {
+		candidates = reg.Variants(parser)
+	}
+	n := 1
+	for _, e := range candidates {
+		w := e.Def.Detect.Signature.Window
+		if w == 0 {
+			w = definition.DefaultSignatureWindow
+		}
+		if w > n {
+			n = w
+		}
+	}
+	if n > definition.MaxSignatureWindow {
+		n = definition.MaxSignatureWindow
+	}
+	return n
+}
+
 // signatureWindow returns the leading lines of input, which is all a
 // signature may look at.
 func signatureWindow(input []byte) []string {

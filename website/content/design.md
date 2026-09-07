@@ -42,7 +42,8 @@ compiled definition and the whole text; encoding never sees definitions.
 ### A small public surface
 
 The command line is four subcommands (`run`, `list`, `test`, `version`)
-and five options (`--file`, `--pretty`, `--parser`, `--variant`, `--help`). Every
+and six options (`--file`, `--pretty`, `--stream`, `--parser`,
+`--variant`, `--help`). Every
 option that asked the user to make a decision jz should be making, or
 that changed the output contract, was removed before release:
 
@@ -170,6 +171,36 @@ distinct from 0/1 so scripts can tell them apart, but they can collide
 with a child's codes; the stderr line `jz: <cmd> exited with status N`
 disambiguates.
 
+### Streaming is an option, not the default
+
+A command that does not end (`ping`, `vmstat 1`) has no whole document to
+write, so `--stream` writes one JSON document per line as each record is
+read. It is the only option that changes the output contract: everywhere
+else standard output carries a complete document or nothing, and here
+every *line* is a complete document. A record that cannot be read still
+stops the conversion with exit status 3, but the records already written
+stay written, because they are finished documents that have already left.
+
+That is why it is an option. Making it the default would mean giving up
+the guarantee that a failure leaves nothing behind, for every user, to
+serve the commands that need it.
+
+Detection is unchanged and it is what the first record waits for. jz
+holds back until it has as many leading lines as the widest signature
+among the candidates looks at — twenty by default — because a definition
+can rule itself out with a line further down, and committing before that
+would be the guess the selector exists to avoid. Naming the parser, which
+`jz run` always does, narrows the candidates and usually the wait with
+them. The held lines are then read by the same code as the rest, so there
+is one reading, not two: `jz test` checks every fixture both ways and
+fails a definition whose two readings disagree.
+
+Only a format that yields records can be streamed. `composite`,
+`each: input` and a kv map build one object out of the whole text, and
+that object does not exist until the last line has arrived; asking for it
+one record at a time is a request jz cannot carry out, so it is a usage
+error rather than a silent fallback.
+
 ### Registry layering and the code/data boundary
 
 `registry/` holds only YAML, fixtures and one `embed.go`. `internal/*`
@@ -220,7 +251,6 @@ served by `flag` and a dispatch table, and the `run` subcommand needs
 
 ## Deliberately out of scope for the MVP
 
-- Streaming parsers (line-at-a-time output for long-running commands).
 - Recursive sections, where the depth comes from the input (`ls -R`,
   `npm ls --all`, `docker info`). A block that repeats at one level is
   `records`, and a value continued on the next line is `input.fold`; a

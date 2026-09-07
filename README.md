@@ -54,6 +54,7 @@ Options:
 ```text
   -f, --file PATH     read input from PATH instead of stdin
   -p, --pretty        indent JSON output
+      --stream        write one record per line as it is read
       --extract KEY   keep only this key (repeatable)
       --exclude KEY   drop this key (repeatable)
       --parser NAME   restrict detection to one parser
@@ -75,6 +76,13 @@ $ df -h | jz --extract filesystem --extract mounted_on
 through, mirrors its exit status and runs it with `LC_ALL=C`. Everything
 after the command name belongs to the command, and a bare `--` states
 that boundary explicitly.
+
+`--stream` answers a command that keeps printing, one JSON document per
+line as each record is read:
+
+```console
+$ jz run --stream ping -c 100 1.1.1.1 | jq -c 'select(.time_ms > 20)'
+```
 
 ## What it will not do
 

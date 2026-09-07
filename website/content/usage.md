@@ -34,6 +34,7 @@ pipe there is no such answer at all: nothing identifies an empty input.
 ```text
   -f, --file PATH     read input from PATH instead of stdin
   -p, --pretty        indent JSON output
+      --stream        write one record per line as it is read
       --extract KEY   keep only this key (repeatable)
       --exclude KEY   drop this key (repeatable)
       --parser NAME   restrict detection to one parser
@@ -69,6 +70,49 @@ the keys it has are "1k_blocks", "available", "filesystem", "mounted_on", "use_p
 
 The keys named are the ones at the top of each object. A value nested
 inside an object keeps whatever it holds.
+
+## Reading a command that keeps printing
+
+`ping`, `vmstat 1` and `tail -f` do not end, so there is no whole
+document to write. `--stream` writes one JSON document per line, each one
+as soon as the record behind it is complete:
+
+```console
+$ jz run --stream ping -c 100 1.1.1.1 | jq -c 'select(.time_ms > 20)'
+$ vmstat 1 | jz --stream
+```
+
+Only a format that yields records can be streamed: a table, a regex
+matched per line, a key/value list, and `records`. A format read into one
+object (`composite`, `each: input`, a kv map) is refused with
+`format <id> has no streaming form` and exit status 2, because there is
+nothing to hand over until the last line has arrived. `--pretty` is
+refused with it for the same reason: a stream is one record per line, and
+indenting spreads a record over several.
+
+Detection is unchanged, and it is what the first records wait for. jz
+holds back until it has as many leading lines as the widest signature
+among the parsers in scope looks at — twenty by default — because a
+definition can rule itself out with a line further down, and choosing
+before that would be guessing. Naming the parser narrows the scope, so
+`jz run ping` and `COMMAND | jz --stream --parser mount` usually wait for
+twenty lines and no more. The lines held back are then read by the same
+code as everything after them.
+
+`--extract` and `--exclude` apply to each record. The 64 MiB input limit
+does not apply, since nothing is held; the 1 MiB limit on a single line
+is what bounds a producer that never prints a separator.
+
+### What --stream changes about the output
+
+Everywhere else, standard output carries a complete JSON document or
+nothing at all. With `--stream` that reads: every line of standard output
+is a complete JSON document. A record that cannot be read still stops the
+conversion with a message on standard error and exit status 3, but the
+records already written stay written — they are finished documents, and
+jz cannot take them back once they have left. That is the whole of the
+difference, and it is the reason `--stream` is an option rather than the
+default.
 
 ## Naming a parser
 

@@ -24,6 +24,15 @@ project follows [Semantic Versioning](https://semver.org/).
   named keys of every object jz prints. Naming a key the format does not
   produce is an error listing the keys it has, and the two options cannot
   be combined.
+- `--stream`, on the default mode and on `jz run`, for a command that
+  keeps printing: one JSON document per line, each written as soon as the
+  record behind it is complete. It applies to the formats that yield
+  records (`table`, `regex` per line, a kv list, `records`); a format read
+  into one object is refused, as is `--pretty`. This is the only option
+  that changes the output contract, from "standard output carries a
+  complete document or nothing" to "every line of standard output is a
+  complete document": a record that cannot be read still exits 3, but the
+  records already written stay written.
 - `parse: type: records` for a report whose blocks repeat: a line
   matching `start` opens a record and the `parts` are applied to each. A
   `composite` part may itself be `records`, which is what a report that

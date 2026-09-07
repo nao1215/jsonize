@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"path/filepath"
 	"strings"
 	"time"
@@ -37,6 +38,12 @@ state that boundary explicitly:
   jz run mytool --pretty              # --pretty goes to mytool
   jz run -- mytool --pretty           # the same, stated explicitly
   jz run --parser df -- sudo df -h    # a wrapper whose name is not the parser
+  jz run --stream ping -c 100 host    # one JSON document per line
+
+--stream answers a command that does not end: each record is written as
+soon as it can be read, instead of one array once the command has
+finished. It applies to the formats that yield records; a format read
+into one object is a usage error.
 
 If the command exits non-zero, jz still parses whatever it printed,
 reports the status on stderr and exits with that same status. A command
@@ -79,6 +86,10 @@ func (a *app) cmdRun(args []string) int {
 		a.errorf("%v", &selector.VariantWithoutParserError{Variant: sel.variant})
 		return ExitUsage
 	}
+	if err := out.check(); err != nil {
+		a.errorf("%v", err)
+		return ExitUsage
+	}
 	name, cmdArgs := rest[0], rest[1:]
 	// The command name is the parser unless the user says otherwise,
 	// which is what makes a wrapper (`jz run --parser df -- sudo df -h`)
@@ -112,7 +123,7 @@ func (a *app) cmdRun(args []string) int {
 		ctx, cancel = context.WithTimeout(ctx, timeout)
 		defer cancel()
 	}
-	res, err := runner.Run(ctx, runner.Command{
+	command := runner.Command{
 		Name: name,
 		Args: cmdArgs,
 		Env:  append(mergedExecEnv(reg, parser), extraEnv...),
@@ -121,7 +132,13 @@ func (a *app) cmdRun(args []string) int {
 		Stdin:      a.env.Stdin,
 		KeepLocale: keepLocale,
 		MaxOutput:  MaxInputSize,
-	}, a.env.Stderr, a.env.Signals)
+	}
+	if out.stream {
+		return a.runStream(ctx, reg, command, selector.Context{
+			Parser: parser, Variant: sel.variant, OS: a.env.GOOS, Args: cmdArgs,
+		}, &out, timeout)
+	}
+	res, err := runner.Run(ctx, command, a.env.Stderr, a.env.Signals)
 	if err != nil {
 		a.errorf("%v", err)
 		if errors.Is(err, runner.ErrOutputTooLarge) {
@@ -173,6 +190,47 @@ func (a *app) cmdRun(args []string) int {
 	if err := jsonutil.Encode(a.env.Stdout, data, out.pretty); err != nil {
 		a.errorf("writing output: %v", err)
 		return ExitError
+	}
+	return res.ExitCode
+}
+
+// errStreamFailed marks a streaming failure that has already been
+// reported, so that the child still gets waited for and its own status
+// still wins.
+var errStreamFailed = errors.New("streaming failed")
+
+// runStream is `jz run --stream`: the command's output is read through a
+// pipe and converted as it arrives, instead of being collected first.
+// The child's status is mirrored the way it is without --stream.
+func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.Command, sctx selector.Context, out *outputOptions, timeout time.Duration) int {
+	// The child's standard error is copied through while jz may be
+	// writing its own diagnostic, so the two go through one lock rather
+	// than interleaving mid-line.
+	plain := a.env.Stderr
+	a.env.Stderr = &syncWriter{w: plain}
+	defer func() { a.env.Stderr = plain }()
+	code := ExitOK
+	res, err := runner.Stream(ctx, cmd, a.env.Stderr, a.env.Signals, func(r io.Reader) error {
+		if code = a.stream(reg, r, sctx, out, true); code != ExitOK {
+			return errStreamFailed
+		}
+		return nil
+	})
+	if err != nil && !errors.Is(err, errStreamFailed) {
+		a.errorf("%v", err)
+		return ExitError
+	}
+	switch {
+	case res.Signal != "":
+		a.errorf("%s was terminated by %s", cmd.Name, res.Signal)
+	case res.ExitCode != 0:
+		a.errorf("%s exited with status %d", cmd.Name, res.ExitCode)
+	}
+	if ctx.Err() != nil && timeout > 0 {
+		a.errorf("timeout of %s reached", timeout)
+	}
+	if code != ExitOK && res.ExitCode == 0 {
+		return code
 	}
 	return res.ExitCode
 }
