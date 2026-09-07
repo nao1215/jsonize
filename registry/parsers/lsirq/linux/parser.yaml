@@ -4,7 +4,8 @@
 #
 # The IRQ column holds a number for a hardware line and a word for the
 # ones the kernel counts separately (LOC, CAL, TLB), so it stays a
-# string.
+# string. Some of those have no name at all, which is why a row may stop
+# after the count.
 format: 1
 command: lsirq
 variant: linux
@@ -22,7 +23,8 @@ detect:
 parse:
   type: table
   split: whitespace
+  min_fields: 2
 fields:
   irq: {required: true}
   total: {type: int, required: true}
-  name: {required: true}
+  name: {}

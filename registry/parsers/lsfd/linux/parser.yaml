@@ -1,11 +1,11 @@
 # `lsfd` lists open files the way lsof does, with columns of its own. The
-# rows are cut at whitespace rather than at the header words: PID and
-# INODE are right-aligned and wider than their names, which is what
-# `split: aligned` cannot read.
+# cells are cut at the header words, because a row can leave a cell in
+# the middle empty: a mapping the caller may not stat reports an error
+# where the type belongs and nothing where the mount and inode do, and
+# whitespace splitting would then read its name as the mount id.
 #
-# NAME is last and keeps the rest of the line, because it holds a path
-# and, for a socket, a description with spaces in it. A file the caller
-# may not read has no name at all, so a row can stop one cell short.
+# lsfd pads each header to the width of its column, which is what makes
+# cutting at the header words work for its right-aligned numbers.
 format: 1
 command: lsfd
 variant: linux
@@ -22,8 +22,7 @@ detect:
       - '\ACOMMAND[ \t]+PID[ \t]+USER[ \t]+ASSOC[ \t]+XMODE[ \t]+TYPE[ \t]+SOURCE[ \t]+MNTID[ \t]+INODE[ \t]+NAME[ \t]*$'
 parse:
   type: table
-  split: whitespace
-  min_fields: 7
+  split: aligned
 fields:
   command: {required: true}
   pid: {type: int, required: true}
