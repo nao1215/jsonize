@@ -216,9 +216,18 @@ A CSV value may contain the delimiter, a quote, or a line break, so the
 lines are joined back together and read with `encoding/csv`. A streamed
 CSV holds a line back while the quote count is odd, which is exactly when
 a value is still open. An ini file is sections of keys and so is one
-object with no streaming form at all. A drawn table has its rows marked
-by rules rather than by line breaks, so a value wrapped over three lines
-is one cell.
+object with no streaming form at all. A drawn table takes its cells from
+the bars rather than from whitespace, and a value the table wrapped over
+three lines is one cell.
+
+What a drawn table does not do is mark every row with a rule. It was
+written that way first, and `duf` said otherwise: MySQL, psql, `sqlite3`
+in box mode and `duf` all draw a rule around the table and under the
+header and nowhere else, so every line of the body is a row. A wrapped
+value writes its continuation with the first cell left empty, and that is
+what separates the two. It also means a row whose first column is
+genuinely blank cannot be told from a continuation — in this format they
+are the same line.
 
 Adding them cost no new key beyond `split: box`, and each brought its own
 fuzz coverage. That found a bug older than any of them: `StripANSI` would

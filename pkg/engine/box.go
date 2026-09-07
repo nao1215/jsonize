@@ -7,26 +7,31 @@ import (
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
-// boxVerticals are the characters that separate two cells of a drawn
-// table: the ASCII bar and the light, heavy and double box-drawing ones.
-const boxVerticals = "|│┃║"
+// The characters a drawn table is made of. Unicode gives them a block of
+// their own (Box Drawing, U+2500 to U+257F), so the whole block counts
+// rather than a list of the ones seen so far: duf draws its frame with
+// arc corners, MySQL with ASCII, and the next tool will pick something
+// else again.
+const (
+	boxDrawingFirst = 0x2500
+	boxDrawingLast  = 0x257F
+)
 
-// boxRuleRunes are what a rule between rows is drawn from, on top of the
-// verticals above: the ASCII dash, plus and equals sign, and the
-// box-drawing horizontals and junctions.
-const boxRuleRunes = "-+=" +
-	"─━┄┅┈┉═" + // horizontals
-	"┌┍┎┏┐┑┒┓" + // upper corners
-	"└┕┖┗┘┙┚┛" + // lower corners
-	"├┝┞┟┠┡┢┣" + // left tees
-	"┤┥┦┧┨┩┪┫" + // right tees
-	"┬┭┮┯┰┱┲┳" + // top tees
-	"┴┵┶┷┸┹┺┻" + // bottom tees
-	"┼┽┾┿╀╁╂╃" + // crosses
-	"╄╅╆╇╈╉╊╋" +
-	"╔╗╚╝╠╣╦╩╬" + // double
-	"╒╓╕╖╘╙╛╜" +
-	"╞╟╡╢╤╥╧╨╪╫"
+// boxVerticals are the characters that separate two cells: the ASCII bar
+// and the box-drawing ones that stand upright.
+const boxVerticals = "|│┃║╎╏╽╿"
+
+// boxRuleASCII are the characters a rule is drawn from outside the
+// Unicode block.
+const boxRuleASCII = "-+=~"
+
+// isBoxVertical reports a character that separates two cells.
+func isBoxVertical(r rune) bool { return strings.ContainsRune(boxVerticals, r) }
+
+// isBoxDrawing reports a character a rule may be drawn from.
+func isBoxDrawing(r rune) bool {
+	return (r >= boxDrawingFirst && r <= boxDrawingLast) || strings.ContainsRune(boxRuleASCII, r)
+}
 
 // isBoxRule reports a line that draws a rule rather than carrying
 // values. Whitespace is ignored, and a line with nothing else on it is
@@ -37,7 +42,7 @@ func isBoxRule(text string) bool {
 	for _, r := range text {
 		switch {
 		case r == ' ' || r == '\t':
-		case strings.ContainsRune(boxRuleRunes, r), strings.ContainsRune(boxVerticals, r):
+		case isBoxDrawing(r), isBoxVertical(r):
 			found = true
 		default:
 			return false
@@ -58,7 +63,7 @@ func boxCells(text string) []string {
 	var cells []string
 	var cur strings.Builder
 	for _, r := range text {
-		if strings.ContainsRune(boxVerticals, r) {
+		if isBoxVertical(r) {
 			cells = append(cells, strings.TrimSpace(cur.String()))
 			cur.Reset()
 			continue
@@ -75,16 +80,16 @@ func boxCells(text string) []string {
 	return cells
 }
 
-// boxRows groups the lines of a drawn table into rows. A rule closes the
-// row above it, so a value wrapped over several lines is one row and its
-// pieces are joined with a newline.
-func boxRows(lines []line) [][]line {
-	var rows [][]line
+// boxBlocks cuts the lines of a drawn table at its rules. The rules are
+// what separates the header from the body; inside a block it is the
+// lines themselves that separate the rows.
+func boxBlocks(lines []line) [][]line {
+	var blocks [][]line
 	var cur []line
 	for _, l := range lines {
 		if isBoxRule(l.text) {
 			if len(cur) > 0 {
-				rows = append(rows, cur)
+				blocks = append(blocks, cur)
 				cur = nil
 			}
 			continue
@@ -92,7 +97,29 @@ func boxRows(lines []line) [][]line {
 		cur = append(cur, l)
 	}
 	if len(cur) > 0 {
-		rows = append(rows, cur)
+		blocks = append(blocks, cur)
+	}
+	return blocks
+}
+
+// boxBodyRows cuts one block of the body into rows. A line is a row of
+// its own, which is what MySQL, psql and duf print: they draw a rule
+// around the table and under the header and nowhere else. A line whose
+// first cell is empty continues the row above it, which is how a table
+// that wraps a long value writes the rest of it.
+//
+// A row whose first column is genuinely blank cannot be told from a
+// continuation, because in this format they are the same line. A table
+// with such a column is one to read some other way.
+func boxBodyRows(block []line) [][]line {
+	var rows [][]line
+	for _, l := range block {
+		cells := boxCells(l.text)
+		if len(rows) > 0 && (len(cells) == 0 || cells[0] == "") {
+			rows[len(rows)-1] = append(rows[len(rows)-1], l)
+			continue
+		}
+		rows = append(rows, []line{l})
 	}
 	return rows
 }
@@ -132,28 +159,30 @@ func boxJoin(group []line, join string) []any {
 // counted or aligned: unlike split: aligned, a value wider than its
 // column cannot shift a boundary.
 func (r *run) parseBox(p *definition.Parse, fields map[string]*definition.Field, lines []line) (any, error) {
-	rows := boxRows(lines)
-	if len(rows) == 0 {
+	blocks := boxBlocks(lines)
+	if len(blocks) == 0 {
 		return []any{}, nil
 	}
-	cols, err := r.boxColumns(p, rows[0])
+	cols, err := r.boxColumns(p, blocks[0])
 	if err != nil {
 		return nil, err
 	}
-	out := make([]any, 0, len(rows)-1)
-	for _, group := range rows[1:] {
-		obj := jsonutil.NewObject()
-		cells := boxJoin(group, "\n")
-		for i, c := range cols {
-			var raw any
-			if i < len(cells) {
-				raw = cells[i]
+	out := []any{}
+	for _, block := range blocks[1:] {
+		for _, row := range boxBodyRows(block) {
+			obj := jsonutil.NewObject()
+			cells := boxJoin(row, "\n")
+			for i, c := range cols {
+				var raw any
+				if i < len(cells) {
+					raw = cells[i]
+				}
+				if err := r.setField(obj, c.name, raw, fields[c.name], row[0].num); err != nil {
+					return nil, err
+				}
 			}
-			if err := r.setField(obj, c.name, raw, fields[c.name], group[0].num); err != nil {
-				return nil, err
-			}
+			out = append(out, obj)
 		}
-		out = append(out, obj)
 	}
 	return out, nil
 }

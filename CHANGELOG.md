@@ -91,11 +91,14 @@ project follows [Semantic Versioning](https://semver.org/).
   the empty name, `#` and `;` start a comment only at the start of a
   line, a repeated section continues the first and a repeated key takes
   the last value.
-- `table.split: box`, for a table drawn with `+-|` or Unicode
-  box-drawing rules. The rules mark the rows and the bars mark the cells,
-  a value wrapped over several lines is one cell joined with a newline, a
-  header written over two lines is one name joined with `_`, and an empty
-  cell is null.
+- `table.split: box`, for a table drawn with `+-=~` or any character of
+  the Unicode Box Drawing block. The bars mark the cells, and the rules
+  separate the header from the body: inside the body a line is a row of
+  its own, which is what MySQL, psql, `sqlite3` in box mode and `duf`
+  print, and a line whose first cell is empty continues the row above it,
+  which is how a table that wraps a long value writes the rest. A header
+  written over two lines is one name joined with `_`, and an empty cell
+  is null.
 
 ### Fixed
 

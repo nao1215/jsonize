@@ -56,6 +56,26 @@ scenarios:
           stdout:
             json:
               - { path: "$[1].ports", equals: null }
+      # A rule separates the header from the body and nothing else in the
+      # common case, so every line of the body is a row.
+      - fixture:
+          file: rows.txt
+          content: |
+            +----+-------+
+            | id | name  |
+            +----+-------+
+            |  1 | alpha |
+            |  2 | beta  |
+            |  3 | gamma |
+            +----+-------+
+      - run:
+          command: jz --parser table --variant box --file ${workdir}/rows.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 3 }
+              - { path: "$[1].name", equals: beta }
 
   - name: an ini file is read as sections of keys
     steps:

@@ -211,16 +211,25 @@ non-alphanumerics become `_`, a leading or trailing `%` becomes
   kept whole. Empty cells are `null`. With explicit `columns`, extra
   trailing header words ("Mounted on") belong to the last column.
 - `delimiter`: `strings.SplitN` on the literal, cells trimmed.
-- `box`: a table drawn with rules, as MySQL and several container tools
-  print one. The rules say where the rows are and the vertical bars say
-  where the cells are, so nothing is counted or aligned and a value wider
-  than its column cannot shift a boundary. A rule is a line with nothing
-  on it but `+-=|`, the Unicode box-drawing characters and whitespace;
-  the frame around the table and the rule under the header are both
-  recognised without the definition describing either. A value wrapped
-  over several lines is one cell, joined with a newline; a header written
-  over two lines is one name, joined with `_`. An empty cell is `null`.
+- `box`: a table drawn with rules, as MySQL, psql and `sqlite3` in box
+  mode print one. The vertical bars say where the cells are, so nothing
+  is counted or aligned and a value wider than its column cannot shift a
+  boundary. A rule is a line with nothing on it but `+-=~`, a character
+  from the Unicode Box Drawing block, and whitespace; the frame around
+  the table and the rule under the header are both recognised without the
+  definition describing either.
+
+  The rules separate the header from the body. Inside the body a line is
+  a row of its own, which is what those tools print, and a line whose
+  first cell is empty continues the row above it, which is how a table
+  that wraps a long value writes the rest of it. A header written over
+  two lines is one name, joined with `_`; a value continued on the next
+  line is one cell, joined with a newline. An empty cell is `null`.
   `max_fields`, `min_fields` and `header.none` do not apply.
+
+  A row whose first column is genuinely blank cannot be told from a
+  continuation, because in this format they are the same line. A table
+  with such a column is one to read some other way.
 
 Missing trailing cells (at least `min_fields` present) are `null`.
 

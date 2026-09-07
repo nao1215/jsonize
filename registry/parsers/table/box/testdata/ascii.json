@@ -1,12 +1,17 @@
 [
   {
-    "name": "web",
-    "image": "nginx:1.27\n(alpine)",
-    "ports": "80"
+    "id": "1",
+    "name": "alpha",
+    "created": "2026-01-02 03:04:05"
   },
   {
-    "name": "db",
-    "image": "postgres:16",
-    "ports": null
+    "id": "2",
+    "name": "beta",
+    "created": "2026-01-03 06:07:08"
+  },
+  {
+    "id": "3",
+    "name": "gamma",
+    "created": "2026-01-04 09:10:11"
   }
 ]

@@ -193,6 +193,34 @@ func TestParseBoxUnicodeAndWrappedHeader(t *testing.T) {
 	}
 }
 
+// A rule separates the header from the body and nothing else in the
+// common case: MySQL, psql and sqlite3 in box mode draw one around the
+// table and one under the header. Every line of the body is a row.
+func TestParseBoxOneRowPerLine(t *testing.T) {
+	t.Parallel()
+	input := strings.Join([]string{
+		"+----+-------+",
+		"| id | name  |",
+		"+----+-------+",
+		"|  1 | alpha |",
+		"|  2 | beta  |",
+		"|  3 | gamma |",
+		"+----+-------+",
+		"",
+	}, "\n")
+	v, err := Parse(load(t, boxDef), []byte(input), Options{})
+	if err != nil {
+		t.Fatalf("Parse: %v", err)
+	}
+	want := `[{"id":"1","name":"alpha"},{"id":"2","name":"beta"},{"id":"3","name":"gamma"}]`
+	if got := mustJSON(t, v); got != want {
+		t.Errorf("got  %s\nwant %s", got, want)
+	}
+	if got, err := streamAll(t, boxDef, input); err != nil || strings.Count(got, "\n") != 3 {
+		t.Errorf("streamed %q, %v", got, err)
+	}
+}
+
 func TestParseBoxRefuses(t *testing.T) {
 	t.Parallel()
 	// A header with an unnamed column has nowhere to put its values.

@@ -507,14 +507,40 @@ func (s *streamer) emitCSV(pending []line) error {
 	return nil
 }
 
-// feedBox accumulates the lines of a drawn row and releases it at the
-// rule that closes it. The first row is the header.
+// feedBox accumulates the lines of a drawn table. The rules close the
+// header, and after it a line is a row of its own unless its first cell
+// is empty, in which case it continues the row above — the same reading
+// the whole-document parser does, arranged one line at a time.
 func (s *streamer) feedBox(l line) error {
 	if isBoxRule(l.text) {
+		if !s.header {
+			return s.closeBoxHeader()
+		}
 		return s.flushBox()
 	}
-	s.boxRow = append(s.boxRow, l)
+	if !s.header {
+		s.boxRow = append(s.boxRow, l)
+		return nil
+	}
+	if cells := boxCells(l.text); len(s.boxRow) > 0 && (len(cells) == 0 || cells[0] == "") {
+		s.boxRow = append(s.boxRow, l)
+		return nil
+	}
+	if err := s.flushBox(); err != nil {
+		return err
+	}
+	s.boxRow = []line{l}
 	return nil
+}
+
+// closeBoxHeader names the columns from the lines above the first rule.
+func (s *streamer) closeBoxHeader() error {
+	if len(s.boxRow) == 0 {
+		return nil
+	}
+	group := s.boxRow
+	s.boxRow = nil
+	return s.closeBoxHeaderFrom(group)
 }
 
 func (s *streamer) flushBox() error {
@@ -524,12 +550,7 @@ func (s *streamer) flushBox() error {
 	group := s.boxRow
 	s.boxRow = nil
 	if !s.header {
-		cols, err := s.boxColumns(s.p, group)
-		if err != nil {
-			return err
-		}
-		s.cols, s.header = cols, true
-		return nil
+		return s.closeBoxHeaderFrom(group)
 	}
 	obj := jsonutil.NewObject()
 	cells := boxJoin(group, "\n")
@@ -543,4 +564,13 @@ func (s *streamer) flushBox() error {
 		}
 	}
 	return s.emit(obj)
+}
+
+func (s *streamer) closeBoxHeaderFrom(group []line) error {
+	cols, err := s.boxColumns(s.p, group)
+	if err != nil {
+		return err
+	}
+	s.cols, s.header = cols, true
+	return nil
 }
