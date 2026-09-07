@@ -1,7 +1,10 @@
-# pidstat prints the sysstat banner and one table whose first column is the
-# sample time, unlabelled in the header, so the column names are declared.
-# Command is last and keeps the rest of the line, because a task name can
-# contain spaces ("Socket Process", "mt76-tx phy0").
+# `pidstat -r` prints the same banner and shape as the default report
+# with memory columns instead of CPU ones. The two are told apart by the
+# fourth column name, %usr in one and minflt/s in the other.
+#
+# The fault counts are rates and are floats; the sizes are exact
+# kilobytes and are integers. Command is last and keeps the rest of the
+# line, because a task name can contain spaces ("Socket Process").
 #
 # Asked for an interval, pidstat closes with a summary block and prints
 # the column names again above it. That repeat is dropped; the rows under
@@ -9,10 +12,10 @@
 # that only those rows carry is trimmed.
 format: 1
 command: pidstat
-variant: linux
-description: pidstat per-task CPU utilisation
+variant: memory
+description: pidstat -r per-task memory use
 metadata:
-  tags: [linux, cpu, process, sysstat]
+  tags: [linux, memory, process, sysstat]
   compatible: [sysstat]
   references:
     - https://man7.org/linux/man-pages/man1/pidstat.1.html
@@ -21,10 +24,10 @@ detect:
   signature:
     all:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
-      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+UID[ \t]+PID[ \t]+%usr'
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+UID[ \t]+PID[ \t]+minflt/s'
 input:
   ignore:
-    - '^Average:[ \t]+UID[ \t]+PID[ \t]+%usr'
+    - '^Average:[ \t]+UID[ \t]+PID[ \t]+minflt/s'
 parse:
   type: composite
   parts:
@@ -41,17 +44,14 @@ parse:
       parse:
         type: table
         header:
-          columns: [time, uid, pid, usr_percent, system_percent, guest_percent, wait_percent, cpu_percent, cpu, command]
+          columns: [time, uid, pid, minflt_s, majflt_s, vsz, rss, mem_percent, command]
       fields:
         time: {required: true, trim_suffix: ":"}
         uid: {type: int}
         pid: {type: int, required: true}
-        usr_percent: {type: float}
-        system_percent: {type: float}
-        guest_percent: {type: float}
-        wait_percent: {type: float}
-        cpu_percent: {type: float}
-        # A summary row is not about one processor and prints a dash
-        # where the number goes.
-        cpu: {type: int, null_if: ["-"]}
+        minflt_s: {type: float}
+        majflt_s: {type: float}
+        vsz: {type: int}
+        rss: {type: int}
+        mem_percent: {type: float}
         command: {required: true}
