@@ -1,0 +1,40 @@
+# `--numstat` prints one tab separated line per changed path: lines
+# added, lines deleted and the path. A file git treats as binary has no
+# line counts and prints "-" in both columns, which becomes null.
+#
+# The path cell is not always a path. Rename and copy detection writes
+# the pair in one cell, either as "old => new" or, when the two share a
+# prefix and a suffix, with the differing middle in braces
+# ("{docs => website/content}/design.md"). A name with a space or a byte
+# above 127 keeps the C quoting git applies to it; jz does not decode
+# that. `-z` writes the paths on lines of their own instead and this
+# definition does not read it.
+#
+# Two numbers and a path is a shape far too many reports share, so jz
+# reads it only when the parser is named (`jz run git diff --numstat`,
+# `--parser git`). The signature anchors the first line, which keeps out
+# `git log --numstat` and `git show --numstat`: those open with a commit
+# header and are a different format, not this one with a preamble.
+format: 1
+command: git
+variant: diff-numstat
+description: git diff --numstat added and deleted line counts per path
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---numstat
+detect:
+  args:
+    any: ["diff"]
+  auto_detect: false
+  signature:
+    all:
+      - '\A(?:\d+|-)\t(?:\d+|-)\t\S'
+parse:
+  type: regex
+  pattern: '^(?P<added>\d+|-)\t(?P<deleted>\d+|-)\t(?P<path>.+)$'
+fields:
+  added: {type: int, null_if: ["-"]}
+  deleted: {type: int, null_if: ["-"]}
+  path: {required: true}

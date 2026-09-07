@@ -14,13 +14,20 @@ detect:
   signature:
     window: 200
     all:
-      - '\A\s*\d+\t\S'
+      # No du pads the count, so a report that right-aligns its first
+      # cell into a column is something else: `git shortlog -s` writes
+      # the commit count that way.
+      - '\A\d+\t\S'
     # A size with a suffix is `du -h`, whose numbers are rounded and whose
     # variant is gnu-human. The first line of such a listing can still be
     # a plain count (a size below one kibibyte prints as "0"), so the whole
     # window is searched rather than the first line alone.
     none:
       - '^[\d.]+[KMGTPEZY]\t'
+      # `git diff --numstat` writes two counts before the path, so a
+      # first line whose second cell is a number too (or the dash a
+      # binary file gets) is that format and not a du listing.
+      - '\A(?:\d+|-)\t(?:\d+|-)\t'
 parse:
   type: table
   split: delimiter

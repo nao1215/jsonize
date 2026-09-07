@@ -1,0 +1,45 @@
+# `git shortlog -s` replaces the grouped commit subjects of a plain
+# shortlog with one line per author: the number of commits in a six
+# column field, a tab, and the author name. `-e` appends the address in
+# angle brackets, which is read into a field of its own; a name that
+# itself ends in angle brackets is indistinguishable from that and is
+# read the same way.
+#
+# A number and a name is the shape of every counted report on a machine,
+# so the text is not evidence on its own: jz reads it only when the
+# parser is named (`jz run git shortlog -sn`, `--parser git`). Even
+# named, the signature has to earn it. It asks for a line of exactly two
+# tab separated cells, which rejects the three cell output of
+# `git diff --numstat`, and for the count to sit in the six column field
+# git formats it with, which rejects a report that merely happens to
+# separate a number from a word with a tab.
+format: 1
+command: git
+variant: shortlog-summary
+description: git shortlog -s commit counts per author
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-shortlog
+detect:
+  args:
+    any: ["shortlog"]
+  auto_detect: false
+  signature:
+    all:
+      - '\A[ ]*\d+\t[^\t\n]+$'
+    any:
+      # the field git formats the count into, and the wider field a count
+      # of a million commits or more would need
+      - '(?m)^[ 0-9]{6}\t[^\t\n]+$'
+      - '(?m)^\d{7,}\t[^\t\n]+$'
+    none:
+      # a third tab separated cell is another format, `--numstat` above all
+      - '(?m)^[ ]*\S+\t[^\t\n]*\t'
+parse:
+  type: regex
+  pattern: '^[ ]*(?P<count>\d+)\t(?P<author>.+?)(?: <(?P<email>[^<>\n]+)>)?$'
+fields:
+  count: {type: int, required: true}
+  author: {required: true}

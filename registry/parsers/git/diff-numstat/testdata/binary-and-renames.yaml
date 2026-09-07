@@ -1,0 +1,3 @@
+description: A commit that adds a binary file, whose counts are both dashes, and that renames three files, two of them printed in the brace form and one as a plain pair.
+source: "`git diff --numstat` between two commits of this repository with git 2.53.0 on Ubuntu 26.04 with LC_ALL=C"
+os: linux
