@@ -139,19 +139,35 @@ func TestFilePathNamesTheDefinition(t *testing.T) {
 // worse would not be worth having.
 func TestFilePathNeverMakesTheAnswerWorse(t *testing.T) {
 	h := newHarness(t)
-	dir := filepath.Join(t.TempDir(), "etc")
-	if err := os.MkdirAll(dir, 0o755); err != nil {
-		t.Fatal(err)
-	}
-	path := filepath.Join(dir, "fstab")
-	if err := os.WriteFile(path, []byte(gnuDF), 0o600); err != nil {
-		t.Fatal(err)
-	}
-	if code := h.run("--file", path); code != ExitOK {
-		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
-	}
-	if rows := h.rows(); len(rows) != 2 || rows[0]["filesystem"] != "tmpfs" {
-		t.Errorf("rows = %v", rows)
+	// Each of these is a real (parser, variant) pair, so the path names
+	// something; none of them describes df output. The last four are the
+	// dangerous kind: a definition that describes a shape has no
+	// signature, so nothing about the text can rule it out and the
+	// directory name would be the only evidence there was.
+	for _, pair := range [][2]string{
+		{"etc", "fstab"},
+		{"proc", "meminfo"},
+		{"csv", "comma"},
+		{"table", "whitespace"},
+		{"kv", "colon"},
+		{"ini", "default"},
+	} {
+		dir := filepath.Join(t.TempDir(), pair[0])
+		if err := os.MkdirAll(dir, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		path := filepath.Join(dir, pair[1])
+		if err := os.WriteFile(path, []byte(gnuDF), 0o600); err != nil {
+			t.Fatal(err)
+		}
+		if code := h.run("--file", path); code != ExitOK {
+			t.Errorf("%s/%s: code=%d stderr=%s", pair[0], pair[1], code, h.stderr.String())
+			continue
+		}
+		rows := h.rows()
+		if len(rows) != 2 || rows[0]["filesystem"] != "tmpfs" || rows[0]["1k_blocks"] != float64(1000000) {
+			t.Errorf("%s/%s read df output as something else: %v", pair[0], pair[1], rows)
+		}
 	}
 }
 
@@ -178,6 +194,13 @@ func TestParserFromPath(t *testing.T) {
 		{path: "/fstab"},
 		// The parser exists, the variant does not.
 		{path: "/etc/not-a-variant"},
+		// A definition that describes a shape rather than a command has
+		// no signature, so naming one from a path would put the whole
+		// weight of the answer on a directory name.
+		{path: "/csv/comma"},
+		{path: "/table/whitespace"},
+		{path: "/kv/colon"},
+		{path: "/ini/default"},
 	}
 	for _, tt := range tests {
 		p, v, ok := parserFromPath(reg, tt.path)
