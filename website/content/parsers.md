@@ -106,7 +106,9 @@ input.
 | `sensors` | `linux` |
 | `sfdisk` | `dump` |
 | `sha1sum` | `posix` |
+| `sha224sum` | `posix` |
 | `sha256sum` | `posix` |
+| `sha384sum` | `posix` |
 | `sha512sum` | `posix` |
 | `snap` | `list` |
 | `ss` | `linux`, `single-protocol`, `summary` |
@@ -148,7 +150,7 @@ which of them wrote it, so they share a definition rather than having one
 each, and the command they are listed under is the one the definition is
 named for. These are read as well:
 
-`gcksum` (as `cksum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5sum`), `gsha1sum` (as `sha1sum`), `gsha256sum` (as `sha256sum`), `gsha512sum` (as `sha512sum`), `gstat` (as `stat`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `nerdctl` (as `docker`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `python` (as `pip`), `python3` (as `pip`), `systemd-resolve` (as `resolvectl`), `uv` (as `pip`), `vdir` (as `ls`).
+`b2sum` (as `sha512sum`), `gb2sum` (as `sha512sum`), `gcksum` (as `cksum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5sum`), `gsha1sum` (as `sha1sum`), `gsha224sum` (as `sha224sum`), `gsha256sum` (as `sha256sum`), `gsha384sum` (as `sha384sum`), `gsha512sum` (as `sha512sum`), `gstat` (as `stat`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `nerdctl` (as `docker`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `python` (as `pip`), `python3` (as `pip`), `systemd-resolve` (as `resolvectl`), `uv` (as `pip`), `vdir` (as `ls`).
 
 `jz run`, `--parser` and `jz list` all take the other name.
 

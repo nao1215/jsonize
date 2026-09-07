@@ -38,7 +38,7 @@ project follows [Semantic Versioning](https://semver.org/).
   line it belongs to, for the reports that break a long value at the
   terminal width (`ethtool`) and for the control files whose values
   continue on an indented line (`dpkg -s`, `apt show`).
-- Official definitions for 126 commands in 261 output formats, covering
+- Official definitions for 126 commands in 263 output formats, covering
   coreutils and procps, the util-linux listings, the systemd tools, the
   classic network commands and the iproute2 ones, sysstat, the disk
   layout tools, the hardware and display tools, the archive and checksum
