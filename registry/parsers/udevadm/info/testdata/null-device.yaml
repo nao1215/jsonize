@@ -1,0 +1,4 @@
+description: A virtual device with no symlinks and a handful of properties, the shortest record this form prints.
+source: captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C from `udevadm info -q all -n /dev/null`
+os: linux
+args: ["info", "-q", "all", "-n", "/dev/null"]

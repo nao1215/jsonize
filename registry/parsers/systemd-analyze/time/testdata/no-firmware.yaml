@@ -1,0 +1,5 @@
+source: transcribed from the machine example under "systemd-analyze time" in the systemd-analyze(1) manual, https://www.freedesktop.org/software/systemd/man/systemd-analyze.html; not captured on a real system
+description: >
+  A boot with no firmware or loader timing, whose total is written in two
+  units (1min 9.608s) and whose reached target line has no full stop.
+os: linux

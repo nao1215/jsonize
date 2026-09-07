@@ -1,0 +1,56 @@
+[
+  {
+    "id": 0,
+    "name": "realtime",
+    "type": "sys",
+    "resol": "1ns"
+  },
+  {
+    "id": 1,
+    "name": "monotonic",
+    "type": "sys",
+    "resol": "1ns"
+  },
+  {
+    "id": 4,
+    "name": "monotonic-raw",
+    "type": "sys",
+    "resol": "1ns"
+  },
+  {
+    "id": 5,
+    "name": "realtime-coarse",
+    "type": "sys",
+    "resol": "1ms"
+  },
+  {
+    "id": 6,
+    "name": "monotonic-coarse",
+    "type": "sys",
+    "resol": "1ms"
+  },
+  {
+    "id": 7,
+    "name": "boottime",
+    "type": "sys",
+    "resol": "1ns"
+  },
+  {
+    "id": 8,
+    "name": "realtime-alarm",
+    "type": "sys",
+    "resol": "1ns"
+  },
+  {
+    "id": 9,
+    "name": "boottime-alarm",
+    "type": "sys",
+    "resol": "1ns"
+  },
+  {
+    "id": 11,
+    "name": "tai",
+    "type": "sys",
+    "resol": "1ns"
+  }
+]

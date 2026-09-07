@@ -1,0 +1,66 @@
+# `netstat` with no family flag prints the internet connection table and
+# the UNIX domain socket table one after the other, so the output is an
+# object with one array per table rather than a single array. Each table
+# is read exactly as netstat/internet and netstat/unix read it on their
+# own; the definition format has no way to share those expressions, so
+# they are repeated here.
+#
+# Either table can be empty, which is what an internet table filtered to
+# raw sockets usually looks like.
+#
+# Both banners have to be inside the signature window for this definition
+# to be recognised. The window is at its maximum, so an output with more
+# than 200 internet rows falls to netstat/internet, which then fails on
+# the UNIX banner instead of quietly dropping the second table.
+format: 1
+command: netstat
+variant: all-sockets
+description: netstat with no family flag, internet and UNIX tables together
+metadata:
+  tags: [linux, network, net-tools]
+  # Only BusyBox was available to capture from; net-tools prints the same
+  # columns but was not verified here.
+  compatible: [BusyBox]
+  references:
+    - https://man7.org/linux/man-pages/man8/netstat.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AActive Internet connections \('
+      - '^Proto[ \t]+Recv-Q[ \t]+Send-Q[ \t]+Local Address[ \t]+Foreign Address[ \t]+State[ \t]*$'
+      - '^Active UNIX domain sockets \('
+      - '^Proto[ \t]+RefCnt[ \t]+Flags[ \t]+Type[ \t]+State[ \t]+I-Node[ \t]+Path[ \t]*$'
+    window: 200
+parse:
+  type: composite
+  parts:
+    - name: internet
+      # Everything before the second banner, less this table's own banner
+      # and header.
+      select: {until: '^Active UNIX domain sockets', skip: 2}
+      parse:
+        type: regex
+        pattern: '^(?P<proto>\S+)[ \t]+(?P<recv_q>\d+)[ \t]+(?P<send_q>\d+)[ \t]+(?P<local_address>\S+):(?P<local_port>[^\s:]+)[ \t]+(?P<foreign_address>\S+):(?P<foreign_port>[^\s:]+)[ \t]*(?P<state>\S*)[ \t]*$'
+      fields:
+        proto: {required: true}
+        recv_q: {type: int, required: true}
+        send_q: {type: int, required: true}
+        local_address: {required: true}
+        local_port: {required: true}
+        foreign_address: {required: true}
+        foreign_port: {required: true}
+        state: {null_if: [""]}
+    - name: unix
+      select: {after: '^Active UNIX domain sockets', skip: 1}
+      parse:
+        type: regex
+        pattern: '^(?P<proto>\S+)[ \t]+(?P<refcnt>\d+)[ \t]+\[[ \t]*(?P<flags>[^\]]*?)[ \t]*\][ \t]+(?P<type>\S+)[ \t]+(?P<state>[A-Z]*)[ \t]+(?P<inode>\d+)[ \t]*(?P<path>.*?)[ \t]*$'
+      fields:
+        proto: {required: true}
+        refcnt: {type: int, required: true}
+        flags: {type: array, split_regex: '[ \t]+'}
+        type: {required: true}
+        state: {null_if: [""]}
+        inode: {type: int, required: true}
+        path: {null_if: [""]}

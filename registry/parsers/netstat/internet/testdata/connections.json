@@ -1,0 +1,102 @@
+[
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "192.168.11.20",
+    "local_port": "53743",
+    "foreign_address": "198.51.100.201",
+    "foreign_port": "27018",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "192.168.11.20",
+    "local_port": "45082",
+    "foreign_address": "203.0.113.47",
+    "foreign_port": "443",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "192.168.11.20",
+    "local_port": "36974",
+    "foreign_address": "203.0.113.110",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "192.168.11.20",
+    "local_port": "49670",
+    "foreign_address": "198.51.100.103",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "192.168.11.20",
+    "local_port": "41764",
+    "foreign_address": "203.0.113.110",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "192.168.11.20",
+    "local_port": "41766",
+    "foreign_address": "203.0.113.110",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "192.168.11.20",
+    "local_port": "41780",
+    "foreign_address": "203.0.113.110",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "192.168.11.20",
+    "local_port": "41792",
+    "foreign_address": "203.0.113.110",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "192.168.11.20",
+    "local_port": "41800",
+    "foreign_address": "203.0.113.110",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "tcp",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "192.168.11.20",
+    "local_port": "41802",
+    "foreign_address": "203.0.113.110",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  }
+]

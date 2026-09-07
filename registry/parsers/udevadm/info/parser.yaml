@@ -1,0 +1,29 @@
+# `udevadm info -q all` prints one letter, a colon and a value per line.
+# The letter says what the line is: P a device path, N a node name, S a
+# symlink under /dev, E a property, and so on. Lines repeat, so the
+# result keeps them in the order printed rather than folding them into
+# an object where a second S would replace the first.
+#
+# A property line carries a further KEY=value inside its value. It is
+# left whole: splitting it would give the E lines a shape the other
+# letters do not have.
+format: 1
+command: udevadm
+variant: info
+description: udevadm info -q all device records
+metadata:
+  tags: [linux, device, systemd]
+  compatible: [systemd]
+  references:
+    - https://man7.org/linux/man-pages/man8/udevadm.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AP: /devices/\S'
+      - '^E: DEVPATH='
+parse:
+  type: regex
+  pattern: '^(?P<tag>[A-Z]): (?P<value>.*)$'
+fields:
+  tag: {required: true}

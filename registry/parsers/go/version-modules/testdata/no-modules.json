@@ -1,0 +1,44 @@
+[
+  {
+    "binary": {
+      "file": "/proc/self/exe",
+      "go_version": "go1.26.4",
+      "main_package": "cmd/go"
+    },
+    "modules": [],
+    "build": [
+      {
+        "key": "-buildmode",
+        "value": "exe"
+      },
+      {
+        "key": "-compiler",
+        "value": "gc"
+      },
+      {
+        "key": "-gcflags",
+        "value": "cmd/...=-dwarf=false"
+      },
+      {
+        "key": "-trimpath",
+        "value": "true"
+      },
+      {
+        "key": "CGO_ENABLED",
+        "value": "0"
+      },
+      {
+        "key": "GOARCH",
+        "value": "amd64"
+      },
+      {
+        "key": "GOOS",
+        "value": "linux"
+      },
+      {
+        "key": "GOAMD64",
+        "value": "v1"
+      }
+    ]
+  }
+]

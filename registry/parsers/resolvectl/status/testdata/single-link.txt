@@ -1,0 +1,7 @@
+Link 3 (wlp195s0)
+    Current Scopes: DNS
+         Protocols: +DefaultRoute -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+Current DNS Server: 192.0.2.1
+       DNS Servers: 192.0.2.1
+        DNS Domain: example.com
+     Default Route: yes

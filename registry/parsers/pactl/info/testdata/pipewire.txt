@@ -1,0 +1,15 @@
+Server String: /run/user/1000/pulse/native
+Library Protocol Version: 35
+Server Protocol Version: 35
+Is Local: yes
+Client Index: 23633
+Tile Size: 65472
+User Name: user
+Host Name: workstation
+Server Name: PulseAudio (on PipeWire 1.6.2)
+Server Version: 15.0.0
+Default Sample Specification: float32le 2ch 48000Hz
+Default Channel Map: front-left,front-right
+Default Sink: alsa_output.usb-C-Media_INC._USB_Sound_Device-00.analog-stereo
+Default Source: alsa_input.usb-046d_HD_Pro_Webcam_C920_00000000-02.analog-stereo
+Cookie: 0000:0000

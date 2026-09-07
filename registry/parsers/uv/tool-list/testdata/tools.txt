@@ -1,0 +1,6 @@
+analytics-mcp v0.7.0
+- analytics-mcp
+- google-analytics-mcp
+moto v5.2.2
+- moto_proxy
+- moto_server

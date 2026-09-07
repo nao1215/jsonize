@@ -1,0 +1,4 @@
+description: the Global block followed by three links, one of which has a DNS server and a search domain
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, lines 1-22 of a 71 line output whose remaining links are more bridge and veth blocks; DNS server address and DNS domain replaced
+os: linux
+args: [status]

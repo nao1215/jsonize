@@ -1,0 +1,18 @@
+[
+  {
+    "cpu": 0,
+    "online": true
+  },
+  {
+    "cpu": 1,
+    "online": true
+  },
+  {
+    "cpu": 2,
+    "online": true
+  },
+  {
+    "cpu": 3,
+    "online": true
+  }
+]

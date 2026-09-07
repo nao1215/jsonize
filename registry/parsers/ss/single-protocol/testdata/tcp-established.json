@@ -1,0 +1,56 @@
+[
+  {
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "53743",
+    "peer_address": "203.0.113.75",
+    "peer_port": "27018"
+  },
+  {
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "33490",
+    "peer_address": "203.0.113.10",
+    "peer_port": "443"
+  },
+  {
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "33802",
+    "peer_address": "203.0.113.10",
+    "peer_port": "443"
+  },
+  {
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "39512",
+    "peer_address": "203.0.113.10",
+    "peer_port": "443"
+  },
+  {
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "41826",
+    "peer_address": "203.0.113.10",
+    "peer_port": "443"
+  },
+  {
+    "state": "ESTAB",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "48274",
+    "peer_address": "203.0.113.10",
+    "peer_port": "443"
+  }
+]

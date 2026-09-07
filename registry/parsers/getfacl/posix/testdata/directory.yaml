@@ -1,0 +1,4 @@
+description: A directory whose sticky bit adds a flags line that a file does not have.
+source: captured on Ubuntu 26.04 (acl 2.3) with LC_ALL=C from `getfacl -p /tmp`
+os: linux
+args: ["-p", "/tmp"]

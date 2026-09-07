@@ -1,0 +1,74 @@
+# A block of settings lines followed by one line per boot entry, so the
+# result has a part for each: the settings as a map, the entries as a
+# list.
+#
+# The settings keys are the labels efibootmgr printed (BootCurrent,
+# BootOrder, Timeout and whatever else the firmware reports), because a
+# kv part keys on the raw label. Only BootOrder is converted, into the
+# list of entry numbers it is. BootCurrent and the entry numbers are
+# four-digit hex names, not counts, and stay text; Timeout keeps its unit
+# word rather than being cut down to a number, since the definition
+# cannot promise the word is always the plural.
+#
+# The active marker is an asterisk on an entry the firmware will try and
+# a space on one it will not, so it is read as a group that always takes
+# part and may match nothing, which makes `active` a bool on every entry
+# instead of null on the inactive ones.
+#
+# -v adds an indented "dp:" and "data:" hex dump under each entry. Those
+# lines are dropped: dp is the binary form of the device path already in
+# device_path, data is the byte string already printed at the end of it,
+# and attaching them to the entry above would need a records parse inside
+# this composite, which the format does not allow. Both invocations
+# therefore produce the same result and there is one variant.
+format: 1
+command: efibootmgr
+variant: linux
+description: efibootmgr boot settings and boot entries
+metadata:
+  tags: [linux, boot, efi, firmware]
+  compatible: [efibootmgr]
+  references:
+    - https://man7.org/linux/man-pages/man8/efibootmgr.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # "Boot" followed by exactly four hex digits and the marker column.
+      # BootCurrent, BootOrder and BootNext do not match it: none of them
+      # has four hex digits after "Boot".
+      - '^Boot[0-9A-Fa-f]{4}[* ] \S'
+    any:
+      - '^BootCurrent: [0-9A-Fa-f]{4}[ \t]*$'
+      - '^BootOrder: [0-9A-Fa-f]{4}(?:,[0-9A-Fa-f]{4})*[ \t]*$'
+      - '^Timeout: \d+ '
+input:
+  ignore:
+    - '^[ ]+(?:dp|data): '
+parse:
+  type: composite
+  parts:
+    - name: settings
+      select: {until: '^Boot[0-9A-Fa-f]{4}[* ]'}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      fields:
+        BootOrder: {type: array, split: ","}
+    # The entry lines are picked out by shape rather than by position:
+    # the settings above them are labelled pairs, which an entry line
+    # never is, so they are what this part drops.
+    - name: entries
+      ignore:
+        - '^[A-Za-z][A-Za-z0-9]*: '
+      parse:
+        type: regex
+        pattern: '^Boot(?P<boot_number>[0-9A-Fa-f]{4})(?P<active>\*?)[ ]+(?P<name>[^\t]*)(?:\t(?P<device_path>.*))?$'
+      fields:
+        boot_number: {required: true}
+        active: {type: bool, true_values: ["*"], false_values: [""]}
+        # efibootmgr before version 17 prints the device path only with
+        # -v, and the key is then null rather than an empty string: the
+        # line does not carry the field at all.
+        device_path: {}

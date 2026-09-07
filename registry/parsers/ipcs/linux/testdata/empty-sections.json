@@ -1,0 +1,41 @@
+{
+  "message_queues": [],
+  "shared_memory_segments": [],
+  "semaphore_arrays": [
+    {
+      "key": "0xe93c17d9",
+      "semid": 6,
+      "owner": "ada",
+      "perms": "666",
+      "nsems": 1
+    },
+    {
+      "key": "0xe41d64f4",
+      "semid": 7,
+      "owner": "ada",
+      "perms": "600",
+      "nsems": 1
+    },
+    {
+      "key": "0x1f4f6d73",
+      "semid": 8,
+      "owner": "ada",
+      "perms": "600",
+      "nsems": 1
+    },
+    {
+      "key": "0xe3749ff1",
+      "semid": 9,
+      "owner": "ada",
+      "perms": "600",
+      "nsems": 1
+    },
+    {
+      "key": "0xa6c03dab",
+      "semid": 10,
+      "owner": "ada",
+      "perms": "600",
+      "nsems": 1
+    }
+  ]
+}

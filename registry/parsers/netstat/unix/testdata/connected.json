@@ -1,0 +1,128 @@
+[
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "STREAM",
+    "state": "CONNECTED",
+    "inode": 3063641,
+    "path": "/run/dbus/system_bus_socket"
+  },
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "STREAM",
+    "state": "CONNECTED",
+    "inode": 121918634,
+    "path": "/run/systemd/journal/stdout"
+  },
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "SEQPACKET",
+    "state": "CONNECTED",
+    "inode": 96254005,
+    "path": null
+  },
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "STREAM",
+    "state": "CONNECTED",
+    "inode": 47381381,
+    "path": null
+  },
+  {
+    "proto": "unix",
+    "refcnt": 2,
+    "flags": [],
+    "type": "DGRAM",
+    "state": null,
+    "inode": 5108564,
+    "path": null
+  },
+  {
+    "proto": "unix",
+    "refcnt": 2,
+    "flags": [],
+    "type": "STREAM",
+    "state": "CONNECTED",
+    "inode": 3004282,
+    "path": null
+  },
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "STREAM",
+    "state": "CONNECTED",
+    "inode": 113742526,
+    "path": null
+  },
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "STREAM",
+    "state": "CONNECTED",
+    "inode": 97576782,
+    "path": null
+  },
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "STREAM",
+    "state": "CONNECTED",
+    "inode": 35727320,
+    "path": "/run/user/1000/wayland-0"
+  },
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "STREAM",
+    "state": "CONNECTED",
+    "inode": 3063733,
+    "path": null
+  },
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "STREAM",
+    "state": "CONNECTED",
+    "inode": 3055167,
+    "path": null
+  },
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "STREAM",
+    "state": "CONNECTED",
+    "inode": 3052258,
+    "path": "/run/user/1000/wayland-0"
+  },
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "STREAM",
+    "state": "CONNECTED",
+    "inode": 3082251,
+    "path": "/run/systemd/journal/stdout"
+  },
+  {
+    "proto": "unix",
+    "refcnt": 3,
+    "flags": [],
+    "type": "DGRAM",
+    "state": "CONNECTED",
+    "inode": 17296,
+    "path": null
+  }
+]

@@ -1,0 +1,4 @@
+description: One changed file, the shortest output there is.
+source: "`git diff --numstat` between two commits of this repository with git 2.53.0 on Ubuntu 26.04 with LC_ALL=C"
+os: linux
+args: ["diff", "--numstat"]

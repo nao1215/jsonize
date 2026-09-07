@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (iproute2 6.19) with LC_ALL=C
+description: >-
+  Every interface on the machine. Thirteen carry noqueue with no
+  parameters at all; the wired card carries fq_codel, whose parameters
+  mix pairs with the lone word ecn.
+os: linux
+args: ["qdisc", "show"]

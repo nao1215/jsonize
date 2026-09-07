@@ -1,0 +1,4 @@
+description: BusyBox prints the same table as procps under -h, rounded to one decimal and a single letter, so this definition reads it unchanged.
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C
+os: linux
+args: [-h]

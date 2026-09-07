@@ -1,0 +1,63 @@
+# `resolvectl status` prints one block per scope: a `Global` line, then a
+# `Link N (name)` line for every interface, each followed by indented
+# `Label: value` rows. The blocks repeat, so the definition describes one
+# of them and `records` applies it to each. `start` matches the Global
+# line as well as the Link lines, which keeps the global resolver
+# settings as the first record instead of dropping them with
+# `input.select.after`.
+#
+# resolved renders the rows through the systemd table formatter, which
+# wraps a value wider than $COLUMNS onto unlabelled continuation lines.
+# `exec.env` raises COLUMNS so `jz run` never sees one; a status piped in
+# from elsewhere was rendered at 80 columns, where a long DNS server list
+# does wrap. Such a line matches no pattern and is reported as
+# a parse error rather than read as a label of its own, because the
+# definition format has no way to join a continuation onto the value
+# above it.
+format: 1
+command: resolvectl
+variant: status
+aliases:
+  - name: systemd-resolve
+description: resolvectl status, per-scope resolver settings
+metadata:
+  tags: [linux, network, dns, systemd]
+  compatible: [systemd-resolved]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/resolvectl.html
+detect:
+  os: [linux]
+  # `resolvectl` with no verb prints the same status, so there is no
+  # argument every invocation of this format carries.
+  signature:
+    all:
+      - '\A(?:Global|Link \d+ \([^)]*\))$'
+      - '^[ \t]*Protocols:[ \t]+[-+]'
+exec:
+  env:
+    COLUMNS: "1000"
+parse:
+  type: records
+  start: '^(?:Global|Link \d+ \([^)]*\))$'
+  parts:
+    - name: scope
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        # The Global line carries no index or name, and a Link line is
+        # not global. The empty alternative in the first group keeps it
+        # participating on a Link line, so every record has the key.
+        pattern: '^(?P<global>Global|)(?:Link (?P<index>\d+) \((?P<name>[^)]*)\))?$'
+      fields:
+        global: {type: bool, true_values: ["Global"], false_values: [""]}
+        index: {type: int}
+    - name: settings
+      select: {skip: 1}
+      parse:
+        type: regex
+        # A label is a word starting with a letter, followed by a colon
+        # and then a space or the end of the line. A wrapped value never
+        # looks like that: an address, a domain list or a protocol flag
+        # fails the pattern instead of being taken for a label.
+        pattern: '^[ \t]*(?P<name>[A-Za-z][A-Za-z0-9 ._-]*):(?:[ \t]+(?P<value>.*?))?[ \t]*$'

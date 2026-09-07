@@ -34,6 +34,7 @@ pipe there is no such answer at all: nothing identifies an empty input.
 ```text
   -f, --file PATH     read input from PATH instead of stdin
   -p, --pretty        indent JSON output
+      --stream        write one record per line as it is read
       --extract KEY   keep only this key (repeatable)
       --exclude KEY   drop this key (repeatable)
       --parser NAME   restrict detection to one parser
@@ -43,7 +44,7 @@ pipe there is no such answer at all: nothing identifies an empty input.
 
 `jz run` adds `--env NAME=VALUE`, `--keep-locale` and `--timeout`, which
 control the command rather than the conversion. `jz list` adds `--json`
-and `--sources`.
+and `--sources`, and `jz test` adds `--update` and `--decoys`.
 
 ## Choosing the keys
 
@@ -70,6 +71,49 @@ the keys it has are "1k_blocks", "available", "filesystem", "mounted_on", "use_p
 The keys named are the ones at the top of each object. A value nested
 inside an object keeps whatever it holds.
 
+## Reading a command that keeps printing
+
+`ping`, `vmstat 1` and `tail -f` do not end, so there is no whole
+document to write. `--stream` writes one JSON document per line, each one
+as soon as the record behind it is complete:
+
+```console
+$ jz run --stream ping -c 100 1.1.1.1 | jq -c 'select(.time_ms > 20)'
+$ vmstat 1 | jz --stream
+```
+
+Only a format that yields records can be streamed: a table, a regex
+matched per line, a key/value list, and `records`. A format read into one
+object (`composite`, `each: input`, a kv map) is refused with
+`format <id> has no streaming form` and exit status 2, because there is
+nothing to hand over until the last line has arrived. `--pretty` is
+refused with it for the same reason: a stream is one record per line, and
+indenting spreads a record over several.
+
+Detection is unchanged, and it is what the first records wait for. jz
+holds back until it has as many leading lines as the widest signature
+among the parsers in scope looks at — twenty by default — because a
+definition can rule itself out with a line further down, and choosing
+before that would be guessing. Naming the parser narrows the scope, so
+`jz run ping` and `COMMAND | jz --stream --parser mount` usually wait for
+twenty lines and no more. The lines held back are then read by the same
+code as everything after them.
+
+`--extract` and `--exclude` apply to each record. The 64 MiB input limit
+does not apply, since nothing is held; the 1 MiB limit on a single line
+is what bounds a producer that never prints a separator.
+
+### What --stream changes about the output
+
+Everywhere else, standard output carries a complete JSON document or
+nothing at all. With `--stream` that reads: every line of standard output
+is a complete JSON document. A record that cannot be read still stops the
+conversion with a message on standard error and exit status 3, but the
+records already written stay written — they are finished documents, and
+jz cannot take them back once they have left. That is the whole of the
+difference, and it is the reason `--stream` is an option rather than the
+default.
+
 ## Naming a parser
 
 Detection settles most input on its own. Name a parser when it cannot:
@@ -77,7 +121,7 @@ a format too generic to claim, a wrapper whose name is not the tool it
 runs, or a variant you want pinned in CI.
 
 ```console
-$ git diff --numstat | jz --parser du
+$ du -a /etc/cron.d | jz --parser du
 $ df -h | jz --parser df --variant gnu-human
 $ jz run --parser df -- sudo df -h
 ```
@@ -103,6 +147,70 @@ jz does not keep a list of which commands are wrappers. The list would
 never be complete, and a wrong entry would read some other command's
 output with the wrong definition.
 
+A file is the other case. `/etc/fstab`, `/etc/passwd` and their
+neighbours have no argv to detect them from, so they are variants of a
+parser named `etc` and are always named:
+
+```console
+$ jz --parser etc --variant fstab --file /etc/fstab
+$ cat /etc/nsswitch.conf | jz --parser etc
+```
+
+Naming `etc` without a variant is enough where the file recognises
+itself; `jz list etc` prints the ones that exist.
+
+The kernel's own files are read the same way, under a parser named
+`proc`. Some of them say enough about themselves to be identified from
+their text alone:
+
+```console
+$ cat /proc/meminfo | jz
+[{"name":"MemTotal","value":64413356,"unit":"kB"}, ...,
+ {"name":"HugePages_Total","value":0,"unit":null}, ...]
+
+$ jz < /proc/loadavg
+{"load_1m":0.8,"load_5m":0.56,"load_15m":0.42,"runnable":2,"total":4686,"last_pid":3717503}
+
+$ jz --parser proc --variant uptime < /proc/uptime
+{"uptime_seconds":1242659.1,"idle_seconds":38176926.97}
+```
+
+```console
+$ cat /proc/cpuinfo | jz
+[{"cpu":{"processor":0,"vendor_id":"AuthenticAMD","cpu family":26, ...,
+         "flags":["fpu","vme","de", ...],"bugs":["spectre_v1", ...]}}, ...]
+
+$ jz < /proc/diskstats
+[{"major":7,"minor":0,"device":"loop0","reads_completed":16, ...,"flush_ms":0}, ...]
+```
+
+`/proc/meminfo` is a list of counters rather than one object keyed by
+label, because which labels the kernel prints depends on how it was
+built. The unit is a field of its own and is `null` on the four
+`HugePages_` counters, which the kernel prints without one; the number
+is left in the unit the file states rather than multiplied out.
+
+`/proc/cpuinfo` is read under the variant `cpuinfo-x86`, because the
+file has no shape common to the architectures: an arm64 machine writes
+`Features` and `CPU implementer` where x86 writes `flags` and
+`vendor_id`, and gets exit 4 here until somebody captures that form and
+writes its variant. Within x86 the labels still vary by vendor, so a
+block is read as whatever labels it holds, with a conversion for the
+ones whose type is known and the kernel's own text for the rest.
+
+`/proc/diskstats` is read for the twenty-field row Linux 5.5 and later
+write. A fourteen- or eighteen-field row from an older kernel is refused
+as a row with too few fields: nothing shifts and no counter is filled in.
+Those shapes are not covered because there was no machine running such a
+kernel to capture from.
+
+`/proc/uptime` is the third case rather than the first two, and it is
+worth saying why. It holds two decimal numbers and nothing else, which
+is the shape of any pair of measurements, so jz will not claim it on
+sight; naming the parser is what says which file this is. The signature
+is still checked when you do, so naming it is not a way past the
+checks.
+
 ## Where jz stops and the command begins
 
 Everything from the command name onwards belongs to the command, so its
@@ -113,6 +221,34 @@ $ jz run ps aux
 $ jz run mytool --pretty            # --pretty goes to mytool
 $ jz run --pretty -- mytool --json  # --pretty is jz's, --json is mytool's
 ```
+
+## Checking definitions of your own
+
+`jz test` holds a registry to the contract the official one is held to.
+
+```console
+jz test                      # the registries jz would use, except the built-in one
+jz test ./registry           # a directory, layered above the built-in registry
+jz test --update ./registry  # write testdata/<case>.json from the current output
+jz test --decoys ./decoys .  # also require every file under ./decoys to be refused
+```
+
+Two things are checked. Every `testdata/<case>.txt` is parsed with its own
+definition and compared with the `.json` beside it, and every definition
+is then named explicitly on every other definition's fixtures and must
+refuse them. The official fixtures travel inside the binary, so the
+second check covers your definitions against every format jz already
+reads without a copy of the repository: a signature wide enough to read
+`df` output fails here rather than in someone's pipeline.
+
+`--update` writes only to the registries under test; the built-in one
+cannot be written to, so `jz test --update` with no directory writes to
+the user registry and says on standard error where it wrote.
+
+Failures go to standard error, one per line, followed by
+`N passed, M failed`. Standard output stays empty. The exit status is 0
+when everything passed, 1 when something failed, 2 for a usage error and
+5 when a registry could not be read.
 
 ## Exit codes
 
@@ -145,3 +281,27 @@ a command and variant wins:
 `jz list --sources` prints them with what exists on your machine. jz
 never accesses the network, so the same input converts to the same JSON
 on the same machine.
+
+A registry's `registry.yaml` can also switch definitions of the
+registries below it off:
+
+```yaml
+format: 1
+name: mine
+disable:
+  - file/posix   # one definition
+  - du           # every variant of a command
+```
+
+A disabled definition is not loaded at all, so `jz list`, `--parser` and
+automatic detection all stop seeing it. Shadowing replaces a definition
+and needs a whole one written under the same name; disabling takes one
+out. An entry that names nothing is a warning, not an error.
+
+The order settles more than definitions of the same name. When automatic
+detection is left with definitions of different commands that all fit the
+text, the one from the earlier registry is the answer, because that order
+is what you declared. A definition of your own can therefore take over a
+format jz already reads, and it cannot make jz stop reading one. Two
+definitions of the *same* registry that both fit stay an error naming
+them; `jz test` reports those before they reach a pipeline.

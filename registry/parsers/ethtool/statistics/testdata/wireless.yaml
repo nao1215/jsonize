@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 (ethtool 6.19) with LC_ALL=C, lines 1 to 32 of
+  108
+description: >-
+  A mac80211 driver. Two things the wired card does not show: a counter
+  name that contains a colon (tx_ampdu_len:0-1), and a value larger than
+  a signed 64-bit integer (noise).
+os: linux
+args: ["-S", "wlp195s0"]

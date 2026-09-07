@@ -1,0 +1,5 @@
+go build -o dist/jz ./cmd/jz
+go test ./... -count=1
+ok  	example.com/pkg/one	0.312s
+ok  	example.com/pkg/two	1.204s
+PASS

@@ -1,0 +1,5 @@
+NAME ONE-SIZE TYPE
+L1d       48K Data
+L1i       32K Instruction
+L2         1M Unified
+L3        32M Unified

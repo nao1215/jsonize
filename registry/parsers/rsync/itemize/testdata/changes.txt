@@ -1,0 +1,7 @@
+*deleting   staledir/
+*deleting   removed.txt
+>f.s....... a.txt
+>f+++++++++ b.txt
+cL+++++++++ link -> a.txt
+cd+++++++++ sub/
+>f+++++++++ sub/c.txt

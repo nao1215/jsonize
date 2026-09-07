@@ -1,0 +1,14 @@
+NAME                                                PID PROCESS         USER             CONNECTION    UNIT                          SESSION DESCRIPTION
+:1.0                                                697 systemd-timesyn systemd-timesync :1.0          systemd-timesyncd.service     -       -
+:1.1                                                703 systemd-oomd    systemd-oom      :1.1          systemd-oomd.service          -       -
+:1.10                                              1968 accounts-daemon root             :1.10         accounts-daemon.service       -       -
+:1.1064                                         3419410 telegram-deskto ada              :1.1064       user@1000.service             -       -
+:1.1090                                         3605196 steam           ada              :1.1090       user@1000.service             -       -
+:1.1091                                         3605196 steam           ada              :1.1091       user@1000.service             -       -
+:1.1094                                         3605534 steamwebhelper  ada              :1.1094       user@1000.service             -       -
+:1.1095                                         3605534 steamwebhelper  ada              :1.1095       user@1000.service             -       -
+:1.1096                                         3605534 steamwebhelper  ada              :1.1096       user@1000.service             -       -
+:1.1097                                         3605534 steamwebhelper  ada              :1.1097       user@1000.service             -       -
+:1.12                                              2133 wpa_supplicant  root             :1.12         wpa_supplicant.service        -       -
+:1.127                                             5165 lightdm         root             :1.127        session-29.scope              29      -
+:1.128                                           330744 startplasma-way ada              :1.128        session-29.scope              29      -

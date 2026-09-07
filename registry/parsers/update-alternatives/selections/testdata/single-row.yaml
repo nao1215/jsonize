@@ -1,0 +1,8 @@
+source: |
+  captured on Ubuntu 26.04 (dpkg 1.23.7) with LC_ALL=C; line 4 of the same
+  output
+description: |
+  One row on its own, which is what the command prints on a machine with a
+  single alternative registered.
+os: linux
+args: [--get-selections]

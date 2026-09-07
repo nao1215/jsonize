@@ -7,6 +7,8 @@ description: ps aux (USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND) on 
 metadata:
   tags: [linux, darwin, process]
   compatible: [procps-ng, macOS ps]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?ps(1)
 detect:
   os: [linux, darwin, freebsd]
   args:

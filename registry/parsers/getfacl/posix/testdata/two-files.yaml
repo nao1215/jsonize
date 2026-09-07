@@ -1,0 +1,4 @@
+description: Two files with no named entries, which is the shortest block this form prints.
+source: captured on Ubuntu 26.04 (acl 2.3) with LC_ALL=C from `getfacl -p /etc/hosts /etc/fstab`
+os: linux
+args: ["-p", "/etc/hosts", "/etc/fstab"]

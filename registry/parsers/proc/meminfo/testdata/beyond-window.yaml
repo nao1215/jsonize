@@ -1,0 +1,11 @@
+description: |
+  A synthetic file longer than the 200-line signature window, with a line
+  that is not a counter past the end of it. The window bounds detection
+  only: the signature sees the first 200 lines and accepts, and the
+  parser then reads every line and fails on the one that is not a
+  counter. What this pins is that the lines past the window are read
+  rather than assumed, so a file cannot be half converted and returned
+  as a success.
+expect_error: 'line 202: line does not match'
+os: linux
+source: synthetic; MemTotal from the capture beside it, the rest padding

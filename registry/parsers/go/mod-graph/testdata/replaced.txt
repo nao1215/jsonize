@@ -1,0 +1,4 @@
+example.com/probe example.com/lib@v1.0.0
+example.com/probe go@1.26
+example.com/lib@v1.0.0 go@1.26
+go@1.26 toolchain@go1.26

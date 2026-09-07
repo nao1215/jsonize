@@ -1,0 +1,132 @@
+[
+  {
+    "name": "com.canonical.UbuntuAdvantage",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "com.hp.hplip",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "com.ubuntu.LanguageSelector",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "com.ubuntu.SoftwareProperties",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "com.ubuntu.WhoopsiePreferences",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "fi.w1.wpa_supplicant1",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "io.netplan.Netplan",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "net.hadess.PowerProfiles",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "net.reactivated.Fprint",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "org.blueman.Mechanism",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "org.bluez",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "org.cinnamon.SettingsDaemon.DateTimeMechanism",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  },
+  {
+    "name": "org.debian.apt",
+    "pid": null,
+    "process": null,
+    "user": null,
+    "connection": "(activatable)",
+    "unit": null,
+    "session": null,
+    "description": null
+  }
+]

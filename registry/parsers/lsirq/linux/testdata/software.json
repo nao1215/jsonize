@@ -1,0 +1,37 @@
+[
+  {
+    "irq": "TASKLET",
+    "total": 3851159688,
+    "name": "normal priority tasklet softirq"
+  },
+  {
+    "irq": "SCHED",
+    "total": 1900399358,
+    "name": "schedule softirq"
+  },
+  {
+    "irq": "RCU",
+    "total": 1811037716,
+    "name": "RCU softirq"
+  },
+  {
+    "irq": "TIMER",
+    "total": 425284888,
+    "name": "timer softirq"
+  },
+  {
+    "irq": "NET_RX",
+    "total": 245991043,
+    "name": "network receive softirq"
+  },
+  {
+    "irq": "HI",
+    "total": 31318511,
+    "name": "high priority tasklet softirq"
+  },
+  {
+    "irq": "BLOCK",
+    "total": 267878,
+    "name": "block device softirq"
+  }
+]

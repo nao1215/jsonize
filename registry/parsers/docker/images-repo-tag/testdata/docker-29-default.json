@@ -1,0 +1,387 @@
+[
+  {
+    "repository": "myapp",
+    "tag": "local",
+    "image_id": "94ff851bd582",
+    "created": "3 days ago",
+    "size": "174MB"
+  },
+  {
+    "repository": "debian",
+    "tag": "stable-slim",
+    "image_id": "31ce1e774529",
+    "created": "2 weeks ago",
+    "size": "119MB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "0.19.1-next-arm64",
+    "image_id": "4992e0235ef5",
+    "created": "3 weeks ago",
+    "size": "41MB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "latest-arm64",
+    "image_id": "4992e0235ef5",
+    "created": "3 weeks ago",
+    "size": "41MB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "0.19.1-next-amd64",
+    "image_id": "40cff90ba89e",
+    "created": "3 weeks ago",
+    "size": "164MB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "latest-amd64",
+    "image_id": "40cff90ba89e",
+    "created": "3 weeks ago",
+    "size": "164MB"
+  },
+  {
+    "repository": "minlag/mermaid-cli",
+    "tag": "latest",
+    "image_id": "622d99a46112",
+    "created": "4 weeks ago",
+    "size": "3.21GB"
+  },
+  {
+    "repository": "ubuntu",
+    "tag": "24.04",
+    "image_id": "9c7c756b879d",
+    "created": "5 weeks ago",
+    "size": "119MB"
+  },
+  {
+    "repository": "node",
+    "tag": "22-alpine",
+    "image_id": "8c73f82fd729",
+    "created": "5 weeks ago",
+    "size": "232MB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "0.17.1-next-arm64",
+    "image_id": "3c103d245a15",
+    "created": "5 weeks ago",
+    "size": "40.7MB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "0.17.1-next-amd64",
+    "image_id": "c9942609b08e",
+    "created": "5 weeks ago",
+    "size": "163MB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "0.16.1-next-amd64",
+    "image_id": "d1abc0d27d43",
+    "created": "5 weeks ago",
+    "size": "163MB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "0.16.1-next-arm64",
+    "image_id": "35a8c213171b",
+    "created": "5 weeks ago",
+    "size": "40.7MB"
+  },
+  {
+    "repository": "mysql",
+    "tag": "8.4",
+    "image_id": "deda34fb4c99",
+    "created": "5 weeks ago",
+    "size": "1.12GB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "0.15.1-next-arm64",
+    "image_id": "7a1665910972",
+    "created": "5 weeks ago",
+    "size": "40.7MB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "0.15.1-next-amd64",
+    "image_id": "68afec93d324",
+    "created": "5 weeks ago",
+    "size": "163MB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "0.10.1-next-arm64",
+    "image_id": "2f98ca9b160e",
+    "created": "8 weeks ago",
+    "size": "40.7MB"
+  },
+  {
+    "repository": "ghcr.io/example/demo1",
+    "tag": "0.10.1-next-amd64",
+    "image_id": "38455450e8fa",
+    "created": "8 weeks ago",
+    "size": "163MB"
+  },
+  {
+    "repository": "postgres",
+    "tag": "17-alpine",
+    "image_id": "01bf1364b3da",
+    "created": "2 months ago",
+    "size": "424MB"
+  },
+  {
+    "repository": "alpine",
+    "tag": "latest",
+    "image_id": "b5d29f65d9c2",
+    "created": "2 months ago",
+    "size": "13MB"
+  },
+  {
+    "repository": "ghcr.io/goccy/bigquery-emulator",
+    "tag": "latest",
+    "image_id": "f161b52bc94a",
+    "created": "2 months ago",
+    "size": "422MB"
+  },
+  {
+    "repository": "tonistiigi/binfmt",
+    "tag": "latest",
+    "image_id": "1334150ed5e5",
+    "created": "3 months ago",
+    "size": "118MB"
+  },
+  {
+    "repository": "moby/buildkit",
+    "tag": "buildx-stable-1",
+    "image_id": "37c5c3cd6be7",
+    "created": "3 months ago",
+    "size": "355MB"
+  },
+  {
+    "repository": "ghcr.io/k1low/runn",
+    "tag": "latest",
+    "image_id": "c938127af129",
+    "created": "4 months ago",
+    "size": "1.94GB"
+  },
+  {
+    "repository": "ghcr.io/k1low/runn",
+    "tag": "v1.9.2",
+    "image_id": "c938127af129",
+    "created": "4 months ago",
+    "size": "1.94GB"
+  },
+  {
+    "repository": "applib",
+    "tag": "test",
+    "image_id": "0245d3047a98",
+    "created": "4 months ago",
+    "size": "156MB"
+  },
+  {
+    "repository": "postgres",
+    "tag": "16-alpine",
+    "image_id": "eb6dd0759d4f",
+    "created": "4 months ago",
+    "size": "395MB"
+  },
+  {
+    "repository": "postgres",
+    "tag": "16",
+    "image_id": "94c9eb1f6512",
+    "created": "5 months ago",
+    "size": "641MB"
+  },
+  {
+    "repository": "ghcr.io/gleam-lang/gleam",
+    "tag": "v1.15.2-erlang-alpine",
+    "image_id": "48d220040815",
+    "created": "5 months ago",
+    "size": "187MB"
+  },
+  {
+    "repository": "myapp-cli-test",
+    "tag": "latest",
+    "image_id": "2b1f1f6785e3",
+    "created": "6 months ago",
+    "size": "166MB"
+  },
+  {
+    "repository": "myapp-test",
+    "tag": "latest",
+    "image_id": "4f7ce05569eb",
+    "created": "6 months ago",
+    "size": "186MB"
+  },
+  {
+    "repository": "api-myapp",
+    "tag": "latest",
+    "image_id": "59945ed077a7",
+    "created": "6 months ago",
+    "size": "61.1MB"
+  },
+  {
+    "repository": "myapp",
+    "tag": "dev",
+    "image_id": "3acae599b4dd",
+    "created": "6 months ago",
+    "size": "49MB"
+  },
+  {
+    "repository": "demos-eventstore",
+    "tag": "latest",
+    "image_id": "8a6297207fcc",
+    "created": "6 months ago",
+    "size": "67.4MB"
+  },
+  {
+    "repository": "demos-notification",
+    "tag": "latest",
+    "image_id": "8dc27381660b",
+    "created": "6 months ago",
+    "size": "68.5MB"
+  },
+  {
+    "repository": "demos-album",
+    "tag": "latest",
+    "image_id": "606e7f4e59b3",
+    "created": "6 months ago",
+    "size": "68.5MB"
+  },
+  {
+    "repository": "demos-saga",
+    "tag": "latest",
+    "image_id": "4aa84fcab140",
+    "created": "6 months ago",
+    "size": "68.4MB"
+  },
+  {
+    "repository": "demos-media-command",
+    "tag": "latest",
+    "image_id": "374cfe7b7bd6",
+    "created": "6 months ago",
+    "size": "60MB"
+  },
+  {
+    "repository": "demos-media-query",
+    "tag": "latest",
+    "image_id": "36289468be54",
+    "created": "6 months ago",
+    "size": "55.6MB"
+  },
+  {
+    "repository": "demos-gateway",
+    "tag": "latest",
+    "image_id": "09c9b0bad396",
+    "created": "6 months ago",
+    "size": "55.9MB"
+  },
+  {
+    "repository": "demos-frontend",
+    "tag": "latest",
+    "image_id": "76f0399b0178",
+    "created": "6 months ago",
+    "size": "92.6MB"
+  },
+  {
+    "repository": "valalang/lint",
+    "tag": "latest",
+    "image_id": "1b9bd3a120d7",
+    "created": "6 months ago",
+    "size": "256MB"
+  },
+  {
+    "repository": "fsouza/fake-gcs-server",
+    "tag": "1.54.0",
+    "image_id": "e0e32436e7f0",
+    "created": "6 months ago",
+    "size": "82.3MB"
+  },
+  {
+    "repository": "fsouza/fake-gcs-server",
+    "tag": "latest",
+    "image_id": "e0e32436e7f0",
+    "created": "6 months ago",
+    "size": "82.3MB"
+  },
+  {
+    "repository": "nginx",
+    "tag": "alpine",
+    "image_id": "727e03749faf",
+    "created": "7 months ago",
+    "size": "93.4MB"
+  },
+  {
+    "repository": "ghcr.io/foundry-rs/foundry",
+    "tag": "stable",
+    "image_id": "31e09bc9e29d",
+    "created": "8 months ago",
+    "size": "622MB"
+  },
+  {
+    "repository": "kindest/node",
+    "tag": null,
+    "image_id": "19b2030215cb",
+    "created": "8 months ago",
+    "size": "1.35GB"
+  },
+  {
+    "repository": "adobe/s3mock",
+    "tag": "4.11.0",
+    "image_id": "821a735833a1",
+    "created": "9 months ago",
+    "size": "231MB"
+  },
+  {
+    "repository": "adobe/s3mock",
+    "tag": "latest",
+    "image_id": "821a735833a1",
+    "created": "9 months ago",
+    "size": "231MB"
+  },
+  {
+    "repository": "postgres",
+    "tag": "13-alpine",
+    "image_id": "fda3c9dc6e6b",
+    "created": "9 months ago",
+    "size": "384MB"
+  },
+  {
+    "repository": "koalaman/shellcheck",
+    "tag": "stable",
+    "image_id": "dd9ac4327cad",
+    "created": "13 months ago",
+    "size": "20MB"
+  },
+  {
+    "repository": "mcr.microsoft.com/azure-storage/azurite",
+    "tag": "3.35.0",
+    "image_id": "c108ce4a773b",
+    "created": "13 months ago",
+    "size": "429MB"
+  },
+  {
+    "repository": "mcr.microsoft.com/azure-storage/azurite",
+    "tag": "latest",
+    "image_id": "c108ce4a773b",
+    "created": "13 months ago",
+    "size": "429MB"
+  },
+  {
+    "repository": "postgres",
+    "tag": "12-alpine",
+    "image_id": "085f150395e7",
+    "created": "21 months ago",
+    "size": "382MB"
+  },
+  {
+    "repository": "ghcr.io/mermaid-js/mermaid-cli/mermaid-cli",
+    "tag": "11.4.2",
+    "image_id": "aa8a5ede4d16",
+    "created": "21 months ago",
+    "size": "1.92GB"
+  }
+]

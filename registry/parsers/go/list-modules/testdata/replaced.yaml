@@ -1,0 +1,3 @@
+description: A module whose only dependency is replaced by a directory, so the line ends with the replacement path and no replacement version.
+source: "`go list -m all` with go 1.26.4 on Ubuntu 26.04 with LC_ALL=C, inside a throwaway module written for this fixture"
+os: linux

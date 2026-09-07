@@ -1,0 +1,17 @@
+? (172.19.0.3) at 52:54:00:1a:2b:3c [ether]  on br-1a2b3c4d5e6f
+? (172.17.0.6) at 52:54:00:2b:3c:4d [ether]  on docker0
+? (192.168.11.3) at 52:54:00:3c:4d:5e [ether]  on wlp195s0
+? (192.168.11.31) at <incomplete>  on wlp195s0
+? (172.17.0.8) at 52:54:00:4d:5e:6f [ether]  on docker0
+? (172.19.0.2) at 52:54:00:5e:6f:70 [ether]  on br-1a2b3c4d5e6f
+? (172.17.0.2) at 52:54:00:6f:70:81 [ether]  on docker0
+? (172.19.0.4) at 52:54:00:70:81:92 [ether]  on br-1a2b3c4d5e6f
+? (172.17.0.4) at 52:54:00:81:92:a3 [ether]  on docker0
+? (192.168.11.32) at 52:54:00:92:a3:b4 [ether]  on wlp195s0
+? (192.168.11.3) at 52:54:00:3c:4d:5e [ether]  on eno1
+? (192.168.11.32) at 52:54:00:92:a3:b4 [ether]  on eno1
+? (172.17.0.3) at 52:54:00:a3:b4:c5 [ether]  on docker0
+? (192.168.11.201) at <incomplete>  on wlp195s0
+? (172.17.0.5) at 52:54:00:b4:c5:d6 [ether]  on docker0
+_gateway (192.168.11.7) at 52:54:00:c5:d6:e7 [ether]  on wlp195s0
+? (192.168.11.31) at 52:54:00:d6:e7:f8 [ether]  on eno1

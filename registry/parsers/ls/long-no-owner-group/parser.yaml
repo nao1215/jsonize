@@ -9,6 +9,10 @@
 format: 1
 command: ls
 variant: long-no-owner-group
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gls
 description: ls -og long listing without the owner and group columns
 metadata:
   tags: [linux, darwin, filesystem]

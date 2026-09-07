@@ -1,0 +1,8 @@
+CONTAINER ID   IMAGE                                    COMMAND                  CREATED       STATUS       PORTS                                                                        NAMES
+accaee24e51d   ghcr.io/goccy/bigquery-emulator:latest   "/bin/bigquery-emula…"   10 days ago   Up 10 days   0.0.0.0:9050->9050/tcp, [::]:9050->9050/tcp                                  datalab-bq-probe
+a2afeaf3fa18   postgres:17-alpine                       "docker-entrypoint.s…"   10 days ago   Up 10 days   5432/tcp                                                                     datalab-pg-probe
+c781233c8005   mysql:8.4                                "docker-entrypoint.s…"   10 days ago   Up 10 days   3306/tcp, 33060/tcp                                                          datalab-mysql-probe
+1e2516252d99   kindest/node:v1.35.0                     "/usr/local/bin/entr…"   6 weeks ago   Up 13 days                                                                                demo-environment-local-worker2
+3793087f6697   kindest/node:v1.35.0                     "/usr/local/bin/entr…"   6 weeks ago   Up 13 days                                                                                demo-environment-local-worker
+e2a31dabb7ac   kindest/node:v1.35.0                     "/usr/local/bin/entr…"   6 weeks ago   Up 13 days   127.0.0.1:8080->80/tcp, 127.0.0.1:8443->443/tcp, 127.0.0.1:42765->6443/tcp   demo-environment-local-control-plane
+bd85e74de011   moby/buildkit:buildx-stable-1            "/usr/bin/buildkitd-…"   8 weeks ago   Up 13 days                                                                                buildx_buildkit_demo-local-builder

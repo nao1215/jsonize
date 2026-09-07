@@ -1,0 +1,9 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  Every container, so the stopped ones print "Exited (0) 3 days ago" and
+  "Exited (137) 5 months ago" in STATUS and leave PORTS empty. One container
+  was started from an image that carries no tag, so its IMAGE cell is a bare
+  image ID. Names, locally built image names and IDs were replaced, keeping
+  the printed width.
+os: linux
+args: ["ps", "-a"]

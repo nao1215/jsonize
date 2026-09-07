@@ -1,0 +1,212 @@
+[
+  {
+    "container_id": "d52ac7356a34",
+    "image": "ghcr.io/k1low/runn:v1.9.2",
+    "command": "/bin/bash /wait-for…",
+    "created": "3 days ago",
+    "status": "Exited (0) 3 days ago",
+    "ports": [],
+    "names": [
+      "api-runn-1"
+    ]
+  },
+  {
+    "container_id": "68423ffc022c",
+    "image": "myapp:local",
+    "command": "/myapp serve",
+    "created": "3 days ago",
+    "status": "Exited (0) 3 days ago",
+    "ports": [],
+    "names": [
+      "api-myapp-1"
+    ]
+  },
+  {
+    "container_id": "accaee24e51d",
+    "image": "ghcr.io/goccy/bigquery-emulator:latest",
+    "command": "/bin/bigquery-emula…",
+    "created": "10 days ago",
+    "status": "Up 10 days",
+    "ports": [
+      "0.0.0.0:9050->9050/tcp",
+      "[::]:9050->9050/tcp"
+    ],
+    "names": [
+      "datalab-bq-probe"
+    ]
+  },
+  {
+    "container_id": "a2afeaf3fa18",
+    "image": "postgres:17-alpine",
+    "command": "docker-entrypoint.s…",
+    "created": "10 days ago",
+    "status": "Up 10 days",
+    "ports": [
+      "5432/tcp"
+    ],
+    "names": [
+      "datalab-pg-probe"
+    ]
+  },
+  {
+    "container_id": "c781233c8005",
+    "image": "mysql:8.4",
+    "command": "docker-entrypoint.s…",
+    "created": "10 days ago",
+    "status": "Up 10 days",
+    "ports": [
+      "3306/tcp",
+      "33060/tcp"
+    ],
+    "names": [
+      "datalab-mysql-probe"
+    ]
+  },
+  {
+    "container_id": "1e2516252d99",
+    "image": "kindest/node:v1.35.0",
+    "command": "/usr/local/bin/entr…",
+    "created": "6 weeks ago",
+    "status": "Up 13 days",
+    "ports": [],
+    "names": [
+      "demo-environment-local-worker2"
+    ]
+  },
+  {
+    "container_id": "3793087f6697",
+    "image": "kindest/node:v1.35.0",
+    "command": "/usr/local/bin/entr…",
+    "created": "6 weeks ago",
+    "status": "Up 13 days",
+    "ports": [],
+    "names": [
+      "demo-environment-local-worker"
+    ]
+  },
+  {
+    "container_id": "e2a31dabb7ac",
+    "image": "kindest/node:v1.35.0",
+    "command": "/usr/local/bin/entr…",
+    "created": "6 weeks ago",
+    "status": "Up 13 days",
+    "ports": [
+      "127.0.0.1:8080->80/tcp",
+      "127.0.0.1:8443->443/tcp",
+      "127.0.0.1:42765->6443/tcp"
+    ],
+    "names": [
+      "demo-environment-local-control-plane"
+    ]
+  },
+  {
+    "container_id": "bd85e74de011",
+    "image": "moby/buildkit:buildx-stable-1",
+    "command": "/usr/bin/buildkitd-…",
+    "created": "8 weeks ago",
+    "status": "Up 13 days",
+    "ports": [],
+    "names": [
+      "buildx_buildkit_demo-local-builder"
+    ]
+  },
+  {
+    "container_id": "ea59eb69a4b7",
+    "image": "455409e55f42",
+    "command": "/myapp serve",
+    "created": "6 months ago",
+    "status": "Exited (137) 5 months ago",
+    "ports": [],
+    "names": [
+      "myapp-test"
+    ]
+  },
+  {
+    "container_id": "614ed82aaa63",
+    "image": "demos-saga",
+    "command": "./saga",
+    "created": "6 months ago",
+    "status": "Exited (2) 6 months ago",
+    "ports": [],
+    "names": [
+      "demos-saga-1"
+    ]
+  },
+  {
+    "container_id": "2c9d58155886",
+    "image": "demos-frontend",
+    "command": "/docker-entrypoint.…",
+    "created": "6 months ago",
+    "status": "Exited (0) 6 months ago",
+    "ports": [],
+    "names": [
+      "demos-frontend-1"
+    ]
+  },
+  {
+    "container_id": "4a8652aeaad3",
+    "image": "demos-media-query",
+    "command": "./media-query",
+    "created": "6 months ago",
+    "status": "Exited (2) 6 months ago",
+    "ports": [],
+    "names": [
+      "demos-media-query-1"
+    ]
+  },
+  {
+    "container_id": "02bcc9549dcf",
+    "image": "demos-notification",
+    "command": "./notification",
+    "created": "6 months ago",
+    "status": "Exited (2) 6 months ago",
+    "ports": [],
+    "names": [
+      "demos-notification-1"
+    ]
+  },
+  {
+    "container_id": "e0de304e55ec",
+    "image": "demos-media-command",
+    "command": "./media-command",
+    "created": "6 months ago",
+    "status": "Exited (2) 6 months ago",
+    "ports": [],
+    "names": [
+      "demos-media-command-1"
+    ]
+  },
+  {
+    "container_id": "de9be0a8cebb",
+    "image": "demos-gateway",
+    "command": "./gateway",
+    "created": "6 months ago",
+    "status": "Exited (2) 6 months ago",
+    "ports": [],
+    "names": [
+      "demos-gateway-1"
+    ]
+  },
+  {
+    "container_id": "9a220acc2610",
+    "image": "demos-album",
+    "command": "./album",
+    "created": "6 months ago",
+    "status": "Exited (2) 6 months ago",
+    "ports": [],
+    "names": [
+      "demos-album-1"
+    ]
+  },
+  {
+    "container_id": "720555905153",
+    "image": "demos-eventstore",
+    "command": "./eventstore",
+    "created": "6 months ago",
+    "status": "Exited (2) 6 months ago",
+    "ports": [],
+    "names": [
+      "demos-eventstore-1"
+    ]
+  }
+]

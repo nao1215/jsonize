@@ -1,0 +1,4 @@
+description: the whole ARP cache, including two entries the kernel has not resolved and one host whose name is known
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; addresses, hardware addresses and bridge names replaced
+os: linux
+args: ["-a"]

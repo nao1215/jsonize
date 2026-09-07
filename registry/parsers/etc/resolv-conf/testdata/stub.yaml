@@ -1,0 +1,3 @@
+description: The stub resolver file, which adds an options line whose value is a list of two words.
+source: /run/systemd/resolve/stub-resolv.conf on Ubuntu 26.04 (systemd 257); the search domain was replaced
+os: linux

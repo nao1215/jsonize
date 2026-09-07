@@ -5,6 +5,8 @@ description: procps free -w (buffers and cache in separate columns, KiB as print
 metadata:
   tags: [linux, memory, procps]
   compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/free.1.html
 detect:
   os: [linux]
   args:

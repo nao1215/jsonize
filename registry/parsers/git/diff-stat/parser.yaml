@@ -1,0 +1,60 @@
+# `--stat` is the human-readable summary: one line per path with the
+# number of changed lines and a bar, then a closing line counting the
+# files, the insertions and the deletions. The two shapes are read as two
+# parts, so the closing line does not become a row with empty columns in
+# the middle of the file list.
+#
+# What the file lines carry is what git printed, which is less than the
+# truth in two places. The bar is scaled to the width of the terminal
+# (80 columns when the output is a pipe), so its plus and minus signs are
+# a picture rather than a count of insertions and deletions, and it stays
+# the string it was drawn as. A path too long for the column is printed
+# elided from the left ("..." and the tail), and a rename is elided the
+# same way. `git diff --numstat` prints both exactly, and this definition
+# is for the report a person was meant to read.
+#
+# A file git treats as binary has no line count and prints the two sizes
+# instead, or the word "Bin" alone when neither side has a size.
+format: 1
+command: git
+variant: diff-stat
+description: git diff --stat summary of changed files
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---stat
+detect:
+  args:
+    any: ["diff"]
+  signature:
+    all:
+      # The first line has to be a file line, which keeps out
+      # `git log --stat` and `git show --stat`: they print the same
+      # summary under a commit header and are a different format. The
+      # closing line is no use as evidence, because a diff of more than
+      # twenty files pushes it past the end of the window.
+      - '\A .+ \|[ ]+(?:\d+|Bin)'
+      - '(?m)^ .+ \|[ ]+(?:\d+(?: [+-]+)?|Bin(?: \d+ -> \d+ bytes)?)$'
+parse:
+  type: composite
+  parts:
+    - name: files
+      select: {until: '^[ ]+\d+ files? changed(?:,|$)'}
+      parse:
+        type: regex
+        pattern: '^ (?P<path>.*?)[ ]+\|[ ]+(?:(?P<changes>\d+)(?: (?P<graph>[+-]+))?|Bin(?: (?P<old_bytes>\d+) -> (?P<new_bytes>\d+) bytes)?)$'
+      fields:
+        path: {required: true}
+        changes: {type: int}
+        old_bytes: {type: int}
+        new_bytes: {type: int}
+    - name: summary
+      parse:
+        type: regex
+        each: input
+        pattern: '(?m)^[ ]+(?P<files_changed>\d+) files? changed(?:, (?P<insertions>\d+) insertions?\(\+\))?(?:, (?P<deletions>\d+) deletions?\(-\))?$'
+      fields:
+        files_changed: {type: int, required: true}
+        insertions: {type: int}
+        deletions: {type: int}

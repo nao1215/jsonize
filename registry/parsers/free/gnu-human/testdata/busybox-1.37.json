@@ -1,0 +1,20 @@
+[
+  {
+    "type": "Mem",
+    "total": "61.4G",
+    "used": "14.4G",
+    "free": "11.8G",
+    "shared": "17.2G",
+    "buff_cache": "35.2G",
+    "available": "29.2G"
+  },
+  {
+    "type": "Swap",
+    "total": "8.0G",
+    "used": "2.0G",
+    "free": "6.0G",
+    "shared": null,
+    "buff_cache": null,
+    "available": null
+  }
+]

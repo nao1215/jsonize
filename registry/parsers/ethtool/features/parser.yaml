@@ -1,0 +1,47 @@
+# `ethtool -k` prints one offload feature per line as `name: on|off`,
+# with a bracketed suffix carrying a second fact about the feature: the
+# driver cannot change it ([fixed]), or a change is pending ([requested
+# on] / [requested off]). Both suffixes are read as their own fields
+# rather than being left in the value.
+#
+# `fixed` is a group that always takes part and may be empty, so every
+# entry carries the same boolean instead of a null on the lines without
+# the suffix. `requested` is written from the ethtool implementation and
+# does not appear in either fixture: no feature on this machine had a
+# change pending. The lines are flattened; ethtool indents the
+# sub-features of a feature under it, and the names are unique either
+# way.
+format: 1
+command: ethtool
+variant: features
+description: ethtool -k offload feature states
+metadata:
+  tags: [linux, network, ethtool]
+  compatible: [ethtool]
+  references:
+    - https://man7.org/linux/man-pages/man8/ethtool.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-k", "--show-features", "--show-offload"]
+  signature:
+    all:
+      - '\AFeatures for \S+:[ \t]*$'
+      - '^[ \t]*\S+:[ \t]+(?:on|off)\b'
+input:
+  select:
+    after: '^Features for '
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<name>[^:]+):[ \t]+(?P<value>on|off)[ \t]*(?P<fixed>(?:\[fixed\])?)[ \t]*(?P<requested>(?:\[requested (?:on|off)\])?)[ \t]*$'
+fields:
+  name: {required: true}
+  value: {type: bool}
+  fixed: {type: bool, true_values: ["[fixed]"], false_values: [""]}
+  # A feature with no change pending has no key at all, so the value
+  # reads on or off wherever it appears.
+  requested:
+    trim_prefix: "[requested "
+    trim_suffix: "]"
+    null_if: [""]
+    when_missing: omit

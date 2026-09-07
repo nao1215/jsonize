@@ -1,0 +1,4 @@
+description: The three rules the kernel installs for IPv4 on a machine with no policy routing of its own.
+source: captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C
+os: linux
+args: ["rule"]

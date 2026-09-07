@@ -1,0 +1,4 @@
+description: A positive offset from UTC.
+source: captured on Ubuntu 26.04 (GNU coreutils 9.8) with LC_ALL=C
+os: linux
+args: ["-R"]

@@ -1,0 +1,22 @@
+[
+  {
+    "proto": "raw",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "::%6252879",
+    "local_port": "58",
+    "foreign_address": "::",
+    "foreign_port": "*",
+    "state": "58"
+  },
+  {
+    "proto": "raw",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "::%6252879",
+    "local_port": "58",
+    "foreign_address": "::",
+    "foreign_port": "*",
+    "state": "58"
+  }
+]

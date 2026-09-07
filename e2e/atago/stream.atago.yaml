@@ -1,0 +1,223 @@
+version: "1"
+
+suite:
+  name: streaming
+
+# --stream writes one JSON document per line as each record becomes
+# readable, instead of one array once the input has ended. It is the only
+# option that changes the output contract, so what it changes is pinned
+# here: every line is a complete document, and the lines already written
+# stay written when a later one cannot be read.
+scenarios:
+  - name: every parse type that yields records streams the same records it prints whole
+    steps:
+      - fixture:
+          file: df.txt
+          content: |
+            Filesystem     1K-blocks    Used Available Use% Mounted on
+            tmpfs            1000000    5000    995000   1% /run
+            /dev/sda1       20000000 5000000  15000000  25% /
+      - run:
+          command: jz --stream --file ${workdir}/df.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"filesystem":"tmpfs","1k_blocks":1000000,"used":5000,"available":995000,"use_percent":1,"mounted_on":"/run"}
+              {"filesystem":"/dev/sda1","1k_blocks":20000000,"used":5000000,"available":15000000,"use_percent":25,"mounted_on":"/"}
+
+      # regex, one object per line.
+      - fixture:
+          file: mount.txt
+          content: |
+            proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+            sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+      - run:
+          command: jz --stream --file ${workdir}/mount.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"filesystem":"proc","mount_point":"/proc","type":"proc","options":["rw","nosuid","nodev","noexec","relatime"]}
+              {"filesystem":"sysfs","mount_point":"/sys","type":"sysfs","options":["rw","nosuid","nodev","noexec","relatime"]}
+
+      # kv, one object per key.
+      - fixture:
+          file: passwd.txt
+          content: |
+            root:x:0:0:root:/root:/bin/bash
+            daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+      - run:
+          command: jz --stream --parser etc --variant passwd --file ${workdir}/passwd.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"username":"root","password":"x","uid":0,"gid":0,"gecos":"root","home":"/root","shell":"/bin/bash"}
+              {"username":"daemon","password":"x","uid":1,"gid":1,"gecos":"daemon","home":"/usr/sbin","shell":"/usr/sbin/nologin"}
+
+      # records, one object per block; a block closes at the next start
+      # line and the last one at the end of the input.
+      - fixture:
+          file: hosts.txt
+          content: |
+            127.0.0.1	localhost
+            192.168.10.2	host1 host1.example.com
+      - run:
+          command: jz --stream --parser etc --variant hosts --file ${workdir}/hosts.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"address":"127.0.0.1","names":["localhost"]}
+              {"address":"192.168.10.2","names":["host1","host1.example.com"]}
+
+  - name: a format read as one object has no streaming form
+    steps:
+      - fixture:
+          file: uptime.txt
+          content: |
+             14:20:01 up 13 days,  4:30,  2 users,  load average: 0.52, 0.58, 0.59
+      - run:
+          command: jz --stream --file ${workdir}/uptime.txt
+      - assert:
+          exit_code: 2
+          stdout:
+            equals: ""
+          stderr:
+            contains: "has no streaming form"
+      - assert:
+          stderr:
+            contains: "Drop --stream"
+      # Without --stream the same input converts.
+      - run:
+          command: jz --file ${workdir}/uptime.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$.users", equals: 2 }
+
+  - name: --pretty and --stream state two different shapes
+    steps:
+      - run:
+          command: jz --stream --pretty
+          stdin: "x\n"
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "--pretty and --stream cannot be used together"
+
+  - name: a record that cannot be read leaves the ones before it written
+    steps:
+      - fixture:
+          file: broken.txt
+          content: |
+            Filesystem     1K-blocks    Used Available Use% Mounted on
+            tmpfs            1000000    5000    995000   1% /run
+            /dev/sda1       not-a-number 5000000  15000000  25% /
+      - run:
+          command: jz --stream --file ${workdir}/broken.txt
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"filesystem":"tmpfs","1k_blocks":1000000,"used":5000,"available":995000,"use_percent":1,"mounted_on":"/run"}
+          stderr:
+            contains: "cannot convert"
+      # Read whole, the same input leaves standard output empty.
+      - run:
+          command: jz --file ${workdir}/broken.txt
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: ""
+
+  - name: --extract applies to every record of a stream
+    steps:
+      - fixture:
+          file: df2.txt
+          content: |
+            Filesystem     1K-blocks    Used Available Use% Mounted on
+            tmpfs            1000000    5000    995000   1% /run
+            /dev/sda1       20000000 5000000  15000000  25% /
+      - run:
+          command: jz --stream --extract mounted_on --file ${workdir}/df2.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"mounted_on":"/run"}
+              {"mounted_on":"/"}
+      - run:
+          command: jz --stream --extract mountpoint --file ${workdir}/df2.txt
+      - assert:
+          exit_code: 2
+          stdout:
+            equals: ""
+          stderr:
+            contains: 'no key "mountpoint" in the output'
+
+  # The point of the option: a command that keeps printing is answered
+  # while it is still printing. The producer writes a window of lines,
+  # waits, then writes one more, so a copy of the output taken during the
+  # wait already carries records.
+  - name: jz run --stream writes records before the command has finished
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: slow-mount
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            # Detection reads the leading lines before it commits, so the
+            # producer prints more than a signature window of them before
+            # it pauses.
+            i=1
+            while [ $i -le 25 ]; do
+              printf '/dev/sd%s on /mnt/%s type ext4 (rw,relatime)\n' "$i" "$i"
+              i=$((i + 1))
+            done
+            sleep 3
+            printf 'tmpfs on /tmp type tmpfs (rw,nosuid,nodev)\n'
+      - run:
+          shell: true
+          command: jz run --stream --parser mount ${workdir}/slow-mount > ${workdir}/out.ndjson & sleep 1; cp ${workdir}/out.ndjson ${workdir}/early.ndjson; wait
+      - assert:
+          exit_code: 0
+      - assert:
+          file:
+            path: "${workdir}/early.ndjson"
+            contains: '"mount_point":"/mnt/1"'
+      - assert:
+          file:
+            path: "${workdir}/early.ndjson"
+            not_contains: '"mount_point":"/tmp"'
+      - assert:
+          file:
+            path: "${workdir}/out.ndjson"
+            contains: '"mount_point":"/tmp"'
+
+  - name: jz run --stream mirrors the command's own status
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: failing-df
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            printf 'Filesystem     1K-blocks    Used Available Use%% Mounted on\n'
+            printf 'tmpfs            1000000    5000    995000   1%% /run\n'
+            echo 'df: /mnt: Permission denied' >&2
+            exit 1
+      - run:
+          command: jz run --stream --parser df ${workdir}/failing-df
+      - assert:
+          exit_code: 1
+          stdout:
+            equals: |
+              {"filesystem":"tmpfs","1k_blocks":1000000,"used":5000,"available":995000,"use_percent":1,"mounted_on":"/run"}
+          stderr:
+            contains: "Permission denied"
+      - assert:
+          stderr:
+            contains: "exited with status 1"

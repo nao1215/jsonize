@@ -1,0 +1,18 @@
+/home/user/go/bin/jz: go1.26.4
+	path	github.com/nao1215/jsonize/cmd/jz
+	mod	github.com/nao1215/jsonize	v0.0.0-20260907005921-27ca675b8fa2+dirty	
+	dep	github.com/goccy/go-yaml	v1.19.2	h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM=
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	CGO_ENABLED=1
+	build	CGO_CFLAGS=
+	build	CGO_CPPFLAGS=
+	build	CGO_CXXFLAGS=
+	build	CGO_LDFLAGS=
+	build	GOARCH=amd64
+	build	GOOS=linux
+	build	GOAMD64=v1
+	build	vcs=git
+	build	vcs.revision=27ca675b8fa2a3969af6f58781ef750762780583
+	build	vcs.time=2026-09-07T00:59:21Z
+	build	vcs.modified=true

@@ -1,0 +1,12 @@
+  tzdata/Zones/Pacific:
+  tzdata/Zones/Arctic:
+* tzdata/Zones/Asia: Tokyo
+  tzdata/Zones/Australia:
+* tzdata/Areas: Asia
+  tzdata/Zones/America:
+* tzdata/Zones/Etc: UTC
+  tzdata/Zones/Antarctica:
+  tzdata/Zones/Indian:
+  tzdata/Zones/Atlantic:
+  tzdata/Zones/Africa:
+  tzdata/Zones/Europe:

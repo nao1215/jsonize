@@ -3,6 +3,12 @@
 format: 1
 command: etc
 variant: passwd
+aliases:
+  # `getent passwd` prints this file, adding whatever the other name
+  # services answer with.
+  - name: getent
+    args:
+      all: ["passwd"]
 description: /etc/passwd account entries
 metadata:
   tags: [linux, darwin, user]
@@ -13,7 +19,15 @@ detect:
   auto_detect: false
   signature:
     all:
-      - '\A[^:\n]+:[^:\n]*:\d+:\d+:[^:\n]*:[^:\n]*:'
+      # Exactly seven fields ending the line, of which the sixth is the
+      # home directory and so an absolute path. Without both conditions
+      # any colon separated record with two numbers in the third and
+      # fourth field qualifies: the first line of BusyBox ifconfig
+      # ("br-0 Link encap:Ethernet  HWaddr 52:54:00:25:74:A0") splits into
+      # exactly seven fields with 54 and 00 where the ids go, and the key
+      # listing of `gpg --with-colons` has the numbers in the right place
+      # and many more fields after them.
+      - '\A[^:\n]+:[^:\n]*:\d+:\d+:[^:\n]*:/[^:\n]*:[^:\n]*$'
 input:
   ignore:
     - '^\s*#'

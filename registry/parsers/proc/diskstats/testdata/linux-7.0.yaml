@@ -1,0 +1,6 @@
+description: |
+  Every row on this machine has twenty fields. It carries loop devices,
+  an NVMe disk and its partitions, and a device-mapper node, so the rows
+  cover the shapes the file holds.
+source: /proc/diskstats on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C
+os: linux

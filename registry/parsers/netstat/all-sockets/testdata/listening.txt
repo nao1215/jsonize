@@ -1,0 +1,14 @@
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       
+raw        0      0 ::%6252879:58           :::*                    58          
+raw        0      0 ::%6252879:58           :::*                    58          
+Active UNIX domain sockets (only servers)
+Proto RefCnt Flags       Type       State         I-Node Path
+unix  2      [ ACC ]     STREAM     LISTENING     19525291 /tmp/vscode-ah-1a2b3c4d5e6f/Ab1Cd2-Ef3Gh4Ij5Kl6MnO.sock
+unix  2      [ ACC ]     STREAM     LISTENING     127194628 /tmp/cc-daemon-1000/1a2b3c4d/control.sock
+unix  2      [ ACC ]     STREAM     LISTENING      54354 /var/run/docker/metrics.sock
+unix  2      [ ACC ]     STREAM     LISTENING     127203528 /tmp/cc-daemon-1000/1a2b3c4d/spare/5e6f7081.pty.sock
+unix  2      [ ACC ]     STREAM     LISTENING     127145977 /tmp/cc-daemon-1000/1a2b3c4d/pty/92a3b4c5.sock
+unix  2      [ ACC ]     STREAM     LISTENING     127196123 /tmp/cc-daemon-1000/1a2b3c4d/spare/5e6f7081.claim.sock
+unix  2      [ ACC ]     STREAM     LISTENING     127212790 /tmp/cc-daemon-1000/1a2b3c4d/rv/92a3b4c5.sock
+unix  2      [ ACC ]     STREAM     LISTENING       8183 /run/systemd/userdb/io.systemd.DynamicUser

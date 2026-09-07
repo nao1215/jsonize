@@ -1,0 +1,10 @@
+source: >-
+  captured with LC_ALL=C gpg --list-sigs --with-colons on Ubuntu with
+  GnuPG 2.4.8, lines 44 to 56 of a 304 line listing; user ids, key ids,
+  fingerprints and the revocation comment were replaced the same way as
+  in keys.txt
+description: >-
+  one key block from a signature listing, which adds sig and rev records
+  carrying 17 and 22 fields where a pub record carries 21
+os: linux
+args: ["--list-sigs", "--with-colons"]

@@ -1,0 +1,34 @@
+# `systemd-analyze time` reports how long each stage of the boot took,
+# and `systemd-analyze` with no verb prints the same two lines, so this
+# definition names no arguments and is told apart from
+# systemd-analyze/blame by its signature alone.
+#
+# Only the stages that ran are printed: a container has no firmware,
+# loader or kernel stage, a machine without an initramfs has no initrd
+# stage, and the "= total" is added only when there was a kernel stage.
+# A stage that was not printed is null rather than zero, because zero
+# would claim it took no time. The second line is absent until the
+# default target has been reached.
+#
+# Every duration stays the string it was printed as. systemd writes them
+# for a reader and uses as many units as it needs, so a single value can
+# be "296ms", "5.386s" or "1min 9.608s".
+format: 1
+command: systemd-analyze
+variant: time
+description: systemd-analyze time, the duration of each boot stage
+metadata:
+  tags: [linux, systemd, boot]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemd-analyze.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AStartup finished in [0-9]'
+      - '^[^\n]* \(userspace\)[ \t]*(?:=|$)'
+parse:
+  type: regex
+  each: input
+  pattern: '\AStartup finished in (?:(?P<firmware>[^()]+?) \(firmware\) \+ )?(?:(?P<loader>[^()]+?) \(loader\) \+ )?(?:(?P<kernel>[^()]+?) \(kernel\) \+ )?(?:(?P<initrd>[^()]+?) \(initrd\) \+ )?(?P<userspace>[^()]+?) \(userspace\)(?: = (?P<total>[^\n]+?))?[ \t]*(?:\n(?P<target>\S+) reached after (?P<target_time>[^\n]+?) in userspace\.?[ \t]*)?\z'

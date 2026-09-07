@@ -1,0 +1,54 @@
+[
+  {
+    "name": "tx_packets",
+    "value": "3143865"
+  },
+  {
+    "name": "rx_packets",
+    "value": "3304481"
+  },
+  {
+    "name": "tx_errors",
+    "value": "0"
+  },
+  {
+    "name": "rx_errors",
+    "value": "0"
+  },
+  {
+    "name": "rx_missed",
+    "value": "0"
+  },
+  {
+    "name": "align_errors",
+    "value": "0"
+  },
+  {
+    "name": "tx_single_collisions",
+    "value": "0"
+  },
+  {
+    "name": "tx_multi_collisions",
+    "value": "0"
+  },
+  {
+    "name": "unicast",
+    "value": "2092397"
+  },
+  {
+    "name": "broadcast",
+    "value": "454342"
+  },
+  {
+    "name": "multicast",
+    "value": "757742"
+  },
+  {
+    "name": "tx_aborted",
+    "value": "0"
+  },
+  {
+    "name": "tx_underrun",
+    "value": "0"
+  }
+]

@@ -1,0 +1,65 @@
+# `ip address` prints one block per interface: a header line and then a
+# run of lines whose kind and count depend on the interface. A block has
+# a link layer line, any number of alternative names, and an address
+# followed by its lifetimes, repeated once per address.
+#
+# Those lines are read as a list where every entry names its kind, since
+# a fixed set of parts cannot describe a run whose length and order come
+# from the interface. A valid_lft entry belongs to the address entry
+# above it.
+format: 1
+command: ip
+variant: address
+description: ip address, one block per interface
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ip-address.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # `ip link` adds the mode here and prints no address lines.
+      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+'
+      - '^[ \t]+inet6?[ \t]+\S+'
+parse:
+  type: records
+  start: '^\d+: '
+  parts:
+    - name: interface
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>\S+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+) qdisc (?P<qdisc>\S+)(?: master (?P<master>\S+))? state (?P<state>\S+) group (?P<group>\S+)(?: qlen (?P<qlen>\d+))?\s*$'
+      fields:
+        index: {type: int}
+        mtu: {type: int}
+        qlen: {type: int, when_missing: omit}
+        master: {when_missing: omit}
+        peer: {when_missing: omit}
+        flags: {type: array, split: ","}
+    - name: details
+      select: {skip: 1}
+      parse:
+        type: regex
+        patterns:
+          - '^\s*(?P<kind>link)/(?P<link_type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
+          - '^\s*(?P<kind>altname) (?P<name>\S+)\s*$'
+          - '^\s*(?P<kind>inet6?) (?P<address>\S+)(?: brd (?P<broadcast>\S+))? scope (?P<scope>\S+)(?:[ \t]+(?P<attributes>.*?))?[ \t]*$'
+          - '^\s*(?P<kind>valid_lft) (?P<valid_lft>\S+) preferred_lft (?P<preferred_lft>\S+)\s*$'
+      fields:
+        kind: {required: true}
+        link_type: {when_missing: omit}
+        name: {when_missing: omit}
+        address: {when_missing: omit}
+        broadcast: {when_missing: omit}
+        scope: {when_missing: omit}
+        netnsid: {type: int, when_missing: omit}
+        valid_lft: {when_missing: omit}
+        preferred_lft: {when_missing: omit}
+        # What follows the scope is a set of words: how the address was
+        # configured, which protocol added it, and on an IPv4 address the
+        # interface it belongs to.
+        attributes: {type: array, split_regex: '[ \t]+', when_missing: omit}

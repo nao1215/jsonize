@@ -1,0 +1,32 @@
+[
+  {
+    "time": "08:55:18",
+    "tps": 10,
+    "rtps": 0,
+    "wtps": 10,
+    "dtps": 0,
+    "bread_per_s": 0,
+    "bwrtn_per_s": 56,
+    "bdscd_per_s": 0
+  },
+  {
+    "time": "08:55:19",
+    "tps": 6,
+    "rtps": 0,
+    "wtps": 6,
+    "dtps": 0,
+    "bread_per_s": 0,
+    "bwrtn_per_s": 24,
+    "bdscd_per_s": 0
+  },
+  {
+    "time": "Average",
+    "tps": 8,
+    "rtps": 0,
+    "wtps": 8,
+    "dtps": 0,
+    "bread_per_s": 0,
+    "bwrtn_per_s": 40,
+    "bdscd_per_s": 0
+  }
+]

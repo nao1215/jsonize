@@ -1,0 +1,4 @@
+description: The first eight rows of a 32 CPU machine, with the topology, the online flag and the three frequencies.
+source: the header and rows 1 to 8 of `lscpu -e` captured on Ubuntu 26.04 (util-linux 2.41) with LC_ALL=C
+os: linux
+args: ["-e"]

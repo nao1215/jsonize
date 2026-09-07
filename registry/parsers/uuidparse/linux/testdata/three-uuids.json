@@ -1,0 +1,20 @@
+[
+  {
+    "uuid": "9166b62d-4d08-4891-a1dd-95d54407ad4c",
+    "variant": "DCE",
+    "type": "random",
+    "time": null
+  },
+  {
+    "uuid": "a74e155e-aa58-11f1-8000-525400112233",
+    "variant": "DCE",
+    "type": "time-based",
+    "time": "2026-09-07 10:08:36,595235+09:00"
+  },
+  {
+    "uuid": "00000000-0000-0000-0000-000000000000",
+    "variant": "NCS",
+    "type": null,
+    "time": null
+  }
+]

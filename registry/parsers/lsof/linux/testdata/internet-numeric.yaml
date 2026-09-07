@@ -1,0 +1,9 @@
+source: captured on Ubuntu 26.04 (lsof 4.99.4) with LC_ALL=C, nine rows selected from a 98 row listing; the login name was replaced with alice and the USER column widened by one to match, the host address with 192.168.0.60 and the peer address with 203.0.113.116
+description: >
+  lsof -i -n -P prints the same nine column header as the default listing,
+  so the numeric addresses of an internet listing are read by this
+  definition too. A UDP row has no state in parentheses and ends in a
+  trailing space, an IPv6 address keeps its brackets, and a wildcard
+  address is a bare asterisk.
+os: linux
+args: [-i, -n, -P]

@@ -1,0 +1,14 @@
+[
+  {
+    "user": "usr",
+    "tty": "pts/5",
+    "host": "fe80::5054:00ff:fe12:3456%eno1",
+    "login_time": "Jul  1 08:46"
+  },
+  {
+    "user": "usr",
+    "tty": "pts/5",
+    "host": "fe80::5054:00ff:fe12:3456%eno1",
+    "login_time": "Jul  1 08:44"
+  }
+]

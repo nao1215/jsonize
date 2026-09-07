@@ -1,0 +1,29 @@
+# /etc/nsswitch.conf: a database name, then the sources glibc consults
+# for it. An action written in brackets ([SUCCESS=merge]) belongs to the
+# source before it; it is kept as its own element rather than attached,
+# because attaching it would need a shape the sources list does not have.
+format: 1
+command: etc
+variant: nsswitch
+description: /etc/nsswitch.conf name service databases
+metadata:
+  tags: [linux, user, network]
+  compatible: [glibc]
+  references:
+    - https://man7.org/linux/man-pages/man5/nsswitch.conf.5.html
+detect:
+  auto_detect: false
+  signature:
+    all:
+      # A bare "label: words" line is the shape of half the reports on a
+      # system, so the label has to be one of the databases glibc reads.
+      - '^(?:passwd|group|shadow|gshadow|hosts|networks|protocols|services|ethers|rpc|netgroup|automount|aliases|publickey|initgroups):[ \t]+\S'
+input:
+  ignore:
+    - '^\s*#'
+parse:
+  type: regex
+  pattern: '^(?P<database>[a-z_]+):[ \t]*(?P<sources>.*?)[ \t]*$'
+fields:
+  database: {required: true}
+  sources: {type: array, split_regex: '[ \t]+'}

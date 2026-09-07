@@ -1,0 +1,5 @@
+description: |
+  The idle figure is larger than the uptime because it is summed over
+  every processor on the machine.
+source: /proc/uptime on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C
+os: linux

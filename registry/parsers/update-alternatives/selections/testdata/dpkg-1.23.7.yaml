@@ -1,0 +1,8 @@
+source: |
+  captured on Ubuntu 26.04 (dpkg 1.23.7) with LC_ALL=C; the machine lists
+  105 alternatives and this is lines 1-30 of that output
+description: |
+  The ordinary shape: a name padded to thirty columns, the selection mode
+  and the path currently linked.
+os: linux
+args: [--get-selections]

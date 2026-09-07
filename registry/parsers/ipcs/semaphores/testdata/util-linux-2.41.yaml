@@ -1,0 +1,6 @@
+source: |
+  captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; the owner
+  name was replaced with one of the same width
+description: Five arrays, with two different permission masks among them.
+os: linux
+args: [-s]

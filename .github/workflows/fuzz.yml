@@ -14,11 +14,10 @@ jobs:
       fail-fast: false
       matrix:
         target:
-          - { pkg: ./internal/convert, name: FuzzSize }
-          - { pkg: ./internal/definition, name: FuzzLoad }
-          - { pkg: ./internal/engine, name: FuzzParse }
-          - { pkg: ./internal/selector, name: FuzzSelect }
-          - { pkg: ./internal/selector, name: FuzzSelectAll }
+          - { pkg: ./pkg/convert, name: FuzzSize }
+          - { pkg: ./pkg/definition, name: FuzzLoad }
+          - { pkg: ./pkg/engine, name: FuzzParse }
+          - { pkg: ./pkg/selector, name: FuzzSelect }
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

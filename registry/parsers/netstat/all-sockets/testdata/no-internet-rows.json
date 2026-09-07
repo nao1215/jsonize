@@ -1,0 +1,77 @@
+{
+  "internet": [],
+  "unix": [
+    {
+      "proto": "unix",
+      "refcnt": 3,
+      "flags": [],
+      "type": "STREAM",
+      "state": "CONNECTED",
+      "inode": 46912016,
+      "path": "/run/systemd/journal/stdout"
+    },
+    {
+      "proto": "unix",
+      "refcnt": 3,
+      "flags": [],
+      "type": "STREAM",
+      "state": "CONNECTED",
+      "inode": 30041609,
+      "path": "/run/containerd/s/1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f809"
+    },
+    {
+      "proto": "unix",
+      "refcnt": 3,
+      "flags": [],
+      "type": "STREAM",
+      "state": "CONNECTED",
+      "inode": 19525248,
+      "path": null
+    },
+    {
+      "proto": "unix",
+      "refcnt": 3,
+      "flags": [],
+      "type": "STREAM",
+      "state": "CONNECTED",
+      "inode": 3072714,
+      "path": null
+    },
+    {
+      "proto": "unix",
+      "refcnt": 3,
+      "flags": [],
+      "type": "STREAM",
+      "state": "CONNECTED",
+      "inode": 104873615,
+      "path": null
+    },
+    {
+      "proto": "unix",
+      "refcnt": 3,
+      "flags": [],
+      "type": "STREAM",
+      "state": "CONNECTED",
+      "inode": 96251182,
+      "path": null
+    },
+    {
+      "proto": "unix",
+      "refcnt": 3,
+      "flags": [],
+      "type": "STREAM",
+      "state": "CONNECTED",
+      "inode": 47369155,
+      "path": null
+    },
+    {
+      "proto": "unix",
+      "refcnt": 3,
+      "flags": [],
+      "type": "STREAM",
+      "state": "CONNECTED",
+      "inode": 35762561,
+      "path": null
+    }
+  ]
+}

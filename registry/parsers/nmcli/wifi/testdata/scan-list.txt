@@ -1,0 +1,20 @@
+IN-USE  BSSID              SSID                  MODE   CHAN  RATE         SIGNAL  BARS  SECURITY  
+        52:54:00:00:00:00  wifi-ap-01-abcdefghi  Infra  1     1170 Mbit/s  74      ***   WPA3      
+        52:54:00:00:01:07  --                    Infra  1     1170 Mbit/s  74      ***   WPA2 WPA3 
+        52:54:00:00:02:0E  wifi-ap-02-abcd       Infra  1     1170 Mbit/s  74      ***   WPA2      
+        52:54:00:00:03:15  wifi-ap-03-abcdefghi  Infra  36    1170 Mbit/s  62      ***   WPA3      
+        52:54:00:00:04:1C  --                    Infra  36    1170 Mbit/s  60      ***   WPA2 WPA3 
+*       52:54:00:00:05:23  wifi-ap-04-abcd       Infra  36    1170 Mbit/s  59      ***   WPA2      
+        52:54:00:00:06:2A  wifi-ap-05-abcd       Infra  8     270 Mbit/s   42      **    WPA2      
+        52:54:00:00:07:31  wifi-ap-06-abc        Infra  8     270 Mbit/s   42      **    WPA2      
+        52:54:00:00:08:38  wifi-ap-07-abcdefghi  Infra  2     1170 Mbit/s  40      **    WPA3      
+        52:54:00:00:09:3F  wifi-ap-08-abcd       Infra  2     1170 Mbit/s  40      **    WPA2      
+        52:54:00:00:0A:46  wifi-ap-09-abcd       Infra  2     130 Mbit/s   40      **    WPA2      
+        52:54:00:00:0B:4D  wifi-ap-10-abcde      Infra  2     130 Mbit/s   40      **    WPA2      
+        52:54:00:00:0C:54  wifi-ap-06-abc        Infra  8     1170 Mbit/s  34      **    WPA2      
+        52:54:00:00:0D:5B  wifi-ap-11            Infra  11    270 Mbit/s   30      *     WPA2      
+        52:54:00:00:0E:62  wifi-ap-12-abcde      Infra  36    1170 Mbit/s  27      *     WPA2      
+        52:54:00:00:0F:69  wifi-ap-09-abcd       Infra  36    1170 Mbit/s  27      *     WPA2      
+        52:54:00:00:10:70  wifi-ap-13-a          Infra  5     1170 Mbit/s  24      *     WPA2 WPA3 
+        52:54:00:00:11:77  wifi-ap-14-abcdefghi  Infra  6     130 Mbit/s   24      *     WPA3      
+        52:54:00:00:12:7E  wifi-ap-15-a          Infra  64    540 Mbit/s   22      *     WPA2 WPA3 

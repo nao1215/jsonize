@@ -1,0 +1,3 @@
+description: The smallest graph a module with one dependency prints. The dependency is replaced by a directory, which the graph still names by its original path and version.
+source: "`go mod graph` with go 1.26.4 on Ubuntu 26.04 with LC_ALL=C, inside a throwaway module written for this fixture"
+os: linux

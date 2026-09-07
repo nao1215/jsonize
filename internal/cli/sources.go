@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/nao1215/jsonize/internal/registry"
+	"github.com/nao1215/jsonize/pkg/registry"
 )
 
 // Source names used in diagnostics and `jz list --sources`.
@@ -73,6 +73,9 @@ func (a *app) loadRegistry() (*registry.Registry, int) {
 	}
 	for _, p := range reg.Problems {
 		a.errorf("warning: skipping definition: %v", p)
+	}
+	for _, w := range reg.Warnings {
+		a.errorf("warning: %v", w)
 	}
 	return reg, 0
 }

@@ -1,0 +1,21 @@
+x apport-autoreport.service - Process error reports when automatic reporting is enabled
+     Loaded: loaded (/usr/lib/systemd/system/apport-autoreport.service; static)
+     Active: failed (Result: exit-code) since Mon 2026-09-07 08:42:57 JST; 1h 19min ago
+ Invocation: 9d6c2b81f45a4e03b92c7f18d0a35e6c
+TriggeredBy: * apport-autoreport.path
+             * apport-autoreport.timer
+    Process: 1801931 ExecStart=/usr/share/apport/whoopsie-upload-all --timeout 20 (code=exited, status=2)
+   Main PID: 1801931 (code=exited, status=2)
+   Mem peak: 18.8M
+        CPU: 88ms
+
+Sep 07 08:42:27 host1 whoopsie-upload-all[1801931]: INFO:root:/var/crash/_usr_lib_cargo_bin_coreutils_sha256sum.1000.crash already marked for upload, skipping
+Sep 07 08:42:27 host1 whoopsie-upload-all[1801931]: INFO:root:/var/crash/_usr_lib_cargo_bin_coreutils_timeout.1000.crash already marked for upload, skipping
+Sep 07 08:42:27 host1 whoopsie-upload-all[1801931]: INFO:root:/var/crash/_usr_bin_plasmashell.1000.crash already marked for upload, skipping
+Sep 07 08:42:27 host1 whoopsie-upload-all[1801931]: INFO:root:Waiting for whoopsie to upload reports (timeout: 20 s)
+Sep 07 08:42:27 host1 whoopsie-upload-all[1801931]: INFO:root:  missing (remaining: 20 s): /var/crash/_usr_lib_cargo_bin_coreutils_sha256sum.1000.uploaded
+Sep 07 08:42:37 host1 whoopsie-upload-all[1801931]: INFO:root:  missing (remaining: 10 s): /var/crash/_usr_lib_cargo_bin_coreutils_sha256sum.1000.uploaded
+Sep 07 08:42:47 host1 whoopsie-upload-all[1801931]: INFO:root:  missing (remaining: 0 s): /var/crash/_usr_lib_cargo_bin_coreutils_sha256sum.1000.uploaded
+Sep 07 08:42:57 host1 systemd[1]: apport-autoreport.service: Main process exited, code=exited, status=2/INVALIDARGUMENT
+Sep 07 08:42:57 host1 systemd[1]: apport-autoreport.service: Failed with result 'exit-code'.
+Sep 07 08:42:57 host1 systemd[1]: Failed to start apport-autoreport.service - Process error reports when automatic reporting is enabled.

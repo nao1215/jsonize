@@ -1,0 +1,50 @@
+# `snap list` prints six columns whose cells never contain a space, and
+# the row is read with one expression because the publisher cell holds
+# two values rather than one. A long channel name is elided with a U+2026
+# in the Tracking cell, which is kept as printed.
+#
+# snapd marks the publisher with a badge it appends to the name: two
+# asterisks for a verified account and one for a starred account. The
+# badge is a property of the account rather than part of its name, so it
+# is split off into two flags and the name is left clean. Both groups
+# always take part in the match, with the empty alternative, so every row
+# carries both keys.
+format: 1
+command: snap
+variant: list
+description: snap list installed snaps
+metadata:
+  tags: [linux, package, snap]
+  compatible: [snapd]
+  references:
+    - https://snapcraft.io/docs/snap-command-reference
+detect:
+  os: [linux]
+  # `snap` with no verb prints usage, so this table only ever follows the
+  # list verb. --all adds the disabled revisions of a snap as extra rows
+  # under the same header.
+  args:
+    all: ["list"]
+  signature:
+    all:
+      - '\AName[ \t]+Version[ \t]+Rev[ \t]+Tracking[ \t]+Publisher[ \t]+Notes[ \t]*$'
+input:
+  ignore:
+    - '^Name[ \t]+Version[ \t]+Rev[ \t]+Tracking[ \t]+Publisher[ \t]+Notes[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+)[ \t]+(?P<version>\S+)[ \t]+(?P<rev>\S+)[ \t]+(?P<tracking>\S+)[ \t]+(?P<publisher>[^\s*]+)(?P<verified>\*\*|)(?P<starred>\*|)[ \t]+(?P<notes>\S+)[ \t]*$'
+fields:
+  name: {required: true}
+  # A revision is not always a number: a snap installed from a file gets
+  # x1, x2 and so on.
+  rev: {required: true}
+  # A snap installed from a file follows no channel and has no publisher,
+  # both of which print as a dash.
+  tracking: {null_if: ["-"]}
+  publisher: {null_if: ["-"]}
+  verified: {type: bool, true_values: ["**"], false_values: [""]}
+  starred: {type: bool, true_values: ["*"], false_values: [""]}
+  # A row with nothing to say prints a dash where the comma separated
+  # notes would be.
+  notes: {type: array, split: ",", null_if: ["-"]}

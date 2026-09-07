@@ -44,24 +44,24 @@ coverage: test ## Produce cover.html from the coverage profile
 	go tool cover -func=cover.out | tail -1
 
 .PHONY: registry-test
-registry-test: ## Validate parser definitions and run their golden tests (DIR=path for a local registry)
-	go test ./registry $(if $(DIR),-registry-dir $(DIR),) -count=1
+registry-test: ## Validate the official definitions, run their golden cases and check they read nothing else
+	go test ./registry -count=1
 
 .PHONY: registry-update-golden
 registry-update-golden: ## Rewrite the expected JSON of every fixture, then review `git diff`
-	go test ./registry -update $(if $(DIR),-registry-dir $(DIR),) -count=1
+	go test ./registry -update -count=1
 	@echo "golden files rewritten; review them with: git diff"
 
 .PHONY: fuzz
 fuzz: ## Run every fuzz target briefly (FUZZTIME=10s)
-	@for t in $$(grep -rhoE 'func (Fuzz[A-Za-z0-9_]+)' --include='*_test.go' . | awk '{print $$2}' | sort -u); do \
-		pkg=./$$(grep -rlE "func $$t\(" --include='*_test.go' . | head -1 | xargs dirname); \
+	@for t in $$(grep -rhoE 'func (Fuzz[A-Za-z0-9_]+)' --include='*_test.go' cmd internal pkg registry | awk '{print $$2}' | sort -u); do \
+		pkg=./$$(grep -rlE "func $$t\(" --include='*_test.go' cmd internal pkg registry | head -1 | xargs dirname); \
 		echo "== $$t ($$pkg)"; go test -run '^$$' -fuzz "^$$t$$" -fuzztime $${FUZZTIME:-10s} $$pkg || exit 1; \
 	done
 
 .PHONY: bench
 bench: ## Run benchmarks (COUNT=6) and store the result in bench/new.txt
-	go test -run '^$$' -bench . -benchmem -count $${COUNT:-6} ./internal/... | tee bench/new.txt
+	go test -run '^$$' -bench . -benchmem -count $${COUNT:-6} ./internal/... ./pkg/... | tee bench/new.txt
 
 .PHONY: bench-compare
 bench-compare: ## Compare bench/new.txt against bench/baseline.txt with benchstat

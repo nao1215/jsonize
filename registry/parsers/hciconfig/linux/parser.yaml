@@ -1,0 +1,103 @@
+# hciconfig prints one block per Bluetooth adapter: the device name with
+# its type and bus, the address and the two MTUs, the state words, an RX
+# counter line and a TX counter line. With -a the same block is followed
+# by further lines, however many the adapter can answer for: a down
+# adapter cannot report its name, class or firmware versions and those
+# lines are simply absent.
+#
+# That tail is the only difference between the two forms, and it is the
+# shape `records` already handles as a trailing part whose length is
+# whatever is left (the alternative names in `ip -s link` are written the
+# same way). So one definition reads both: plain hciconfig gives an empty
+# `attributes`, hciconfig -a fills it. Splitting them into two variants
+# would buy nothing and would leave a down adapter under -a, whose output
+# is byte for byte the plain form, matching both.
+#
+# The tail is a list of {name, value} rather than named keys: which lines
+# appear depends on what the adapter answered, so the set of labels is
+# not fixed. Values stay strings; `HCI Version: 5.4 (0xd)  Revision:
+# 0x518` puts two labels on one line and only the first colon separates a
+# key from a value.
+format: 1
+command: hciconfig
+variant: linux
+description: hciconfig Bluetooth adapter listing
+metadata:
+  tags: [linux, bluetooth, bluez]
+  compatible: [BlueZ]
+  references:
+    - https://manpages.ubuntu.com/manpages/noble/en/man8/hciconfig.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[^\s:]+:[ \t]+Type: .* Bus: \S+[ \t]*$'
+      - '^[ \t]+BD Address: [0-9A-Fa-f:]+[ \t]+ACL MTU: \d+:\d+[ \t]+SCO MTU: \d+:\d+[ \t]*$'
+      - '^[ \t]+RX bytes:\d+ acl:\d+ sco:\d+ events:\d+ errors:\d+[ \t]*$'
+      - '^[ \t]+TX bytes:\d+ acl:\d+ sco:\d+ commands:\d+ errors:\d+[ \t]*$'
+parse:
+  type: records
+  start: '^[^\s:]+:[ \t]+Type: '
+  parts:
+    - name: device
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^(?P<name>[^\s:]+):[ \t]+Type: (?P<type>.+?)[ \t]+Bus: (?P<bus>\S+)[ \t]*$'
+    - name: address
+      select: {skip: 1, limit: 1}
+      # Each MTU is printed as size:count, the payload size and how many
+      # packets the controller will buffer.
+      parse:
+        type: regex
+        each: input
+        pattern: '^[ \t]*BD Address: (?P<bd_address>\S+)[ \t]+ACL MTU: (?P<acl_mtu>\d+):(?P<acl_packets>\d+)[ \t]+SCO MTU: (?P<sco_mtu>\d+):(?P<sco_packets>\d+)[ \t]*$'
+      fields:
+        acl_mtu: {type: int}
+        acl_packets: {type: int}
+        sco_mtu: {type: int}
+        sco_packets: {type: int}
+    # The state is a bare list of words (UP, RUNNING, PSCAN, ISCAN,
+    # DOWN, RAW) with a trailing space, not a labelled field.
+    - name: state
+      select: {skip: 2, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^[ \t]*(?P<flags>.*?)[ \t]*$'
+      fields:
+        flags: {type: array, split_regex: '[ \t]+'}
+    - name: rx
+      select: {skip: 3, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^[ \t]*RX bytes:(?P<bytes>\d+) acl:(?P<acl>\d+) sco:(?P<sco>\d+) events:(?P<events>\d+) errors:(?P<errors>\d+)[ \t]*$'
+      fields:
+        bytes: {type: int}
+        acl: {type: int}
+        sco: {type: int}
+        events: {type: int}
+        errors: {type: int}
+    - name: tx
+      select: {skip: 4, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^[ \t]*TX bytes:(?P<bytes>\d+) acl:(?P<acl>\d+) sco:(?P<sco>\d+) commands:(?P<commands>\d+) errors:(?P<errors>\d+)[ \t]*$'
+      fields:
+        bytes: {type: int}
+        acl: {type: int}
+        sco: {type: int}
+        commands: {type: int}
+        errors: {type: int}
+    # Whatever -a added. hciconfig quotes the adapter name because it may
+    # contain spaces, so the quotes are its syntax and are removed.
+    - name: attributes
+      select: {skip: 5}
+      parse:
+        type: kv
+        separator: ":"
+        as: list
+        unquote: true

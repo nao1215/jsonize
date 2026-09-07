@@ -1,0 +1,37 @@
+[
+  {
+    "device": {
+      "name": "hci0",
+      "type": "Primary",
+      "bus": "USB"
+    },
+    "address": {
+      "bd_address": "52:54:00:12:34:56",
+      "acl_mtu": 1021,
+      "acl_packets": 8,
+      "sco_mtu": 240,
+      "sco_packets": 8
+    },
+    "state": {
+      "flags": [
+        "UP",
+        "RUNNING"
+      ]
+    },
+    "rx": {
+      "bytes": 13972,
+      "acl": 0,
+      "sco": 0,
+      "events": 1908,
+      "errors": 0
+    },
+    "tx": {
+      "bytes": 470739,
+      "acl": 0,
+      "sco": 0,
+      "commands": 1908,
+      "errors": 0
+    },
+    "attributes": []
+  }
+]

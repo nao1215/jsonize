@@ -1,0 +1,49 @@
+[
+  {
+    "device": {
+      "name": "lo"
+    },
+    "properties": [
+      {
+        "name": "GENERAL.TYPE",
+        "value": "loopback"
+      },
+      {
+        "name": "GENERAL.HWADDR",
+        "value": "00:00:00:00:00:00"
+      },
+      {
+        "name": "GENERAL.MTU",
+        "value": "65536"
+      },
+      {
+        "name": "GENERAL.STATE",
+        "value": "100 (connected (externally))"
+      },
+      {
+        "name": "GENERAL.CONNECTION",
+        "value": "lo"
+      },
+      {
+        "name": "GENERAL.CON-PATH",
+        "value": "/org/freedesktop/NetworkManager/ActiveConnection/1"
+      },
+      {
+        "name": "IP4.ADDRESS[1]",
+        "value": "127.0.0.1/8"
+      },
+      {
+        "name": "IP4.GATEWAY",
+        "value": "--"
+      },
+      {
+        "name": "IP6.ADDRESS[1]",
+        "value": "::1/128"
+      },
+      {
+        "name": "IP6.GATEWAY",
+        "value": "--"
+      }
+    ]
+  }
+]

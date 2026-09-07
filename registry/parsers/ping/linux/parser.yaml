@@ -4,6 +4,8 @@
 format: 1
 command: ping
 variant: linux
+aliases:
+  - name: ping6
 description: ping replies and summary (iputils)
 metadata:
   tags: [linux, network]
@@ -32,7 +34,6 @@ parse:
       select: {after: 'bytes of data\.', until: '^--- '}
       parse:
         type: regex
-        on_mismatch: skip
         pattern: '^(?P<bytes>\d+) bytes from (?P<responder>[^:]+): icmp_seq=(?P<icmp_seq>\d+) ttl=(?P<ttl>\d+) time=(?P<time_ms>[\d.]+) ms$'
       fields:
         bytes: {type: int}

@@ -1,0 +1,81 @@
+[
+  {
+    "qdisc": {
+      "kind": "noqueue",
+      "handle": "0:",
+      "dev": "lo",
+      "parent": "root",
+      "refcnt": 2,
+      "options": []
+    },
+    "sent": {
+      "bytes": 0,
+      "packets": 0,
+      "dropped": 0,
+      "overlimits": 0,
+      "requeues": 0
+    },
+    "backlog": {
+      "bytes": "0b",
+      "packets": "0p",
+      "requeues": 0
+    },
+    "kind_stats": {
+      "words": []
+    }
+  },
+  {
+    "qdisc": {
+      "kind": "fq_codel",
+      "handle": "0:",
+      "dev": "eno1",
+      "parent": "root",
+      "refcnt": 2,
+      "options": [
+        "limit",
+        "10240p",
+        "flows",
+        "1024",
+        "quantum",
+        "1514",
+        "target",
+        "5ms",
+        "interval",
+        "100ms",
+        "memory_limit",
+        "32Mb",
+        "ecn",
+        "drop_batch",
+        "64"
+      ]
+    },
+    "sent": {
+      "bytes": 1489762848,
+      "packets": 3144004,
+      "dropped": 0,
+      "overlimits": 0,
+      "requeues": 267
+    },
+    "backlog": {
+      "bytes": "0b",
+      "packets": "0p",
+      "requeues": 267
+    },
+    "kind_stats": {
+      "words": [
+        "maxpacket",
+        "66616",
+        "drop_overlimit",
+        "0",
+        "new_flow_count",
+        "25666",
+        "ecn_mark",
+        "0",
+        "new_flows_len",
+        "0",
+        "old_flows_len",
+        "0"
+      ]
+    }
+  }
+]

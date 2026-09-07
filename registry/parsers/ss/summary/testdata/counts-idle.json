@@ -1,0 +1,44 @@
+{
+  "total": {
+    "sockets": 2369
+  },
+  "tcp": {
+    "total": 343,
+    "estab": 43,
+    "closed": 264,
+    "orphaned": 0,
+    "timewait": 4
+  },
+  "transports": [
+    {
+      "transport": "RAW",
+      "total": 2,
+      "ip": 0,
+      "ipv6": 2
+    },
+    {
+      "transport": "UDP",
+      "total": 89,
+      "ip": 50,
+      "ipv6": 39
+    },
+    {
+      "transport": "TCP",
+      "total": 79,
+      "ip": 76,
+      "ipv6": 3
+    },
+    {
+      "transport": "INET",
+      "total": 170,
+      "ip": 126,
+      "ipv6": 44
+    },
+    {
+      "transport": "FRAG",
+      "total": 0,
+      "ip": 0,
+      "ipv6": 0
+    }
+  ]
+}

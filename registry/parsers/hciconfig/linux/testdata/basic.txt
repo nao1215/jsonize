@@ -1,0 +1,6 @@
+hci0:	Type: Primary  Bus: USB
+	BD Address: 52:54:00:12:34:56  ACL MTU: 1021:8  SCO MTU: 240:8
+	UP RUNNING 
+	RX bytes:13972 acl:0 sco:0 events:1908 errors:0
+	TX bytes:470739 acl:0 sco:0 commands:1908 errors:0
+

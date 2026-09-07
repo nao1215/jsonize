@@ -1,0 +1,34 @@
+# `rustup target list` prints one target triple per line and marks the
+# ones that are present with "(installed)".
+#
+# One name per line is not evidence of anything on its own, so the
+# signature does not describe the shape of a line: it names three targets
+# that rustup lists on every host, which sort to the top of the list. A
+# list of words that happens to look similar does not carry all three.
+#
+# `rustup target list --installed` prints only the installed targets,
+# without the marker, and is refused rather than read as a full listing:
+# the three targets the signature names need not be among them, and its
+# text carries nothing else to tell it from a list of words.
+format: 1
+command: rustup
+variant: target-list
+description: rustup target list, targets and whether they are installed
+metadata:
+  tags: [rust, toolchain, package]
+  compatible: [rustup]
+  references:
+    - https://rust-lang.github.io/rustup/cross-compilation.html
+detect:
+  signature:
+    all:
+      - '^aarch64-apple-darwin(?: \(installed\))?$'
+      - '^aarch64-apple-ios(?: \(installed\))?$'
+      - '^aarch64-apple-ios-sim(?: \(installed\))?$'
+parse:
+  type: regex
+  # The marker is a group that always takes part and may be empty, so
+  # that every line reports installed rather than only the marked ones.
+  pattern: '^(?P<name>\S+)(?P<installed>(?: \(installed\))?)$'
+fields:
+  installed: {type: bool, true_values: ["(installed)"], false_values: [""]}

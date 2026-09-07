@@ -1,0 +1,46 @@
+[
+  {
+    "name": "name",
+    "value": "loop"
+  },
+  {
+    "name": "filename",
+    "value": "(builtin)"
+  },
+  {
+    "name": "alias",
+    "value": "devname:loop-control"
+  },
+  {
+    "name": "alias",
+    "value": "char-major-10-237"
+  },
+  {
+    "name": "alias",
+    "value": "block-major-7-*"
+  },
+  {
+    "name": "license",
+    "value": "GPL"
+  },
+  {
+    "name": "file",
+    "value": "drivers/block/loop"
+  },
+  {
+    "name": "description",
+    "value": "Loopback device support"
+  },
+  {
+    "name": "parm",
+    "value": "max_loop:Maximum number of loop devices"
+  },
+  {
+    "name": "parm",
+    "value": "max_part:Maximum number of partitions per loop device (int)"
+  },
+  {
+    "name": "parm",
+    "value": "hw_queue_depth:Queue depth for each hardware queue. Default: 128"
+  }
+]

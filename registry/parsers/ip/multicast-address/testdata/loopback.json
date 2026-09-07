@@ -1,0 +1,35 @@
+[
+  {
+    "interface": {
+      "index": 1,
+      "name": "lo"
+    },
+    "addresses": [
+      {
+        "family": "inet",
+        "address": "224.0.0.251",
+        "users": null
+      },
+      {
+        "family": "inet",
+        "address": "224.0.0.1",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff02::fb",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff02::1",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff01::1",
+        "users": null
+      }
+    ]
+  }
+]

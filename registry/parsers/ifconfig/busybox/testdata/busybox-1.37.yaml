@@ -1,0 +1,3 @@
+description: five of the fourteen interfaces the machine reported, chosen to cover a bridge with a global and a link-local address, an interface with no IPv6 address and a loopback with no hardware address
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; hardware addresses and the link-local addresses derived from them replaced
+os: linux

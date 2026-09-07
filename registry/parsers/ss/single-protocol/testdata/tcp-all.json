@@ -1,0 +1,101 @@
+[
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 128,
+    "local_address": "127.0.0.1",
+    "local_port": "57343",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 64,
+    "local_address": "127.0.0.1",
+    "local_port": "18191",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 511,
+    "local_address": "127.0.0.1",
+    "local_port": "50717",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.54",
+    "local_port": "53",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "0.0.0.0",
+    "local_port": "9050",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 5,
+    "local_address": "127.0.0.1",
+    "local_port": "18790",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 511,
+    "local_address": "127.0.0.1",
+    "local_port": "58653",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "0.0.0.0",
+    "local_port": "22",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 128,
+    "local_address": "127.0.0.1",
+    "local_port": "27060",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 128,
+    "local_address": "127.0.0.1",
+    "local_port": "38465",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.1",
+    "local_port": "8080",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  }
+]

@@ -19,10 +19,6 @@ detect:
       - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [^:\[]+: '
     any:
       - '^\t(?:Subsystem|Kernel driver in use|Kernel modules|DeviceName): '
-    none:
-      # The lines -v adds. Their keys are not "key: value" pairs and this
-      # definition would stop at the first one.
-      - '^\t(?:Flags|Capabilities|Memory at|I/O ports|Expansion ROM|Control|Status):'
 parse:
   type: records
   start: '^[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] '

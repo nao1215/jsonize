@@ -1,0 +1,4 @@
+description: A position independent executable.
+source: captured on Ubuntu 26.04 (GNU binutils 2.46) with LC_ALL=C
+os: linux
+args: ["-h", "/bin/ls"]

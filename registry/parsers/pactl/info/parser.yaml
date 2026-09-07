@@ -1,0 +1,22 @@
+# `pactl info` prints one label and one value per line about the sound
+# server. The labels carry spaces, so their values cannot be typed; every
+# one of them is a name, a version or a device string anyway.
+format: 1
+command: pactl
+variant: info
+description: pactl info sound server properties
+metadata:
+  tags: [linux, audio, pulseaudio, pipewire]
+  compatible: [PulseAudio, PipeWire]
+  references:
+    - https://man.archlinux.org/man/pactl.1
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AServer String: \S'
+      - '^Default Sample Specification: \S'
+parse:
+  type: kv
+  separator: ":"
+  as: map

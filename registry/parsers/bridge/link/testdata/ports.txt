@@ -1,0 +1,7 @@
+7: veth0c4293d@eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master br-088d49b64243 state forwarding priority 32 cost 2 
+8: veth9363d1f@eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master docker0 state forwarding priority 32 cost 2 
+9: veth5d856b9@eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master br-088d49b64243 state forwarding priority 32 cost 2 
+10: veth0d5de59@eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master br-088d49b64243 state forwarding priority 32 cost 2 
+71: veth3083cdb@eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master docker0 state forwarding priority 32 cost 2 
+72: vethceffd70@eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master docker0 state forwarding priority 32 cost 2 
+73: veth65bc625@eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 master docker0 state forwarding priority 32 cost 2 

@@ -1,0 +1,40 @@
+# One toolchain per line, followed by the markers rustup appends when the
+# toolchain is the one in use or the one chosen by default: "(active)",
+# "(default)" or "(active, default)", in that order and never any other.
+#
+# A line with no markers is read by the second expression, whose empty
+# groups keep both keys present, rather than by making the parenthesis
+# optional in the first: an optional group that does not take part yields
+# null, and a toolchain that is simply not the default is false, not
+# unknown.
+format: 1
+command: rustup
+variant: toolchains
+description: rustup toolchain list, installed Rust toolchains
+metadata:
+  tags: [rust, toolchain, package]
+  compatible: [rustup]
+  references:
+    - https://rust-lang.github.io/rustup/concepts/toolchains.html
+detect:
+  args:
+    all: ["toolchain", "list"]
+  signature:
+    all:
+      # A bare toolchain name, optionally marked. `rustup toolchain list
+      # -v` puts the install path after the markers and fails this.
+      - '\A[^\s(]+(?: \((?:active|default|active, default)\))?$'
+    any:
+      # rustup keeps a default toolchain, so at least one line is marked.
+      # `rustup target list` and `rustup component list` print the same
+      # bare names but mark them "(installed)".
+      - '^[^\s(]+ \((?:active|default|active, default)\)$'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<name>[^\s(]+) \((?P<active>active|)(?:, )?(?P<default>default|)\)$'
+    - '^(?P<name>[^\s(]+)(?P<active>)(?P<default>)$'
+fields:
+  name: {required: true}
+  active: {type: bool, true_values: ["active"], false_values: [""]}
+  default: {type: bool, true_values: ["default"], false_values: [""]}

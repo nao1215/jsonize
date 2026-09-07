@@ -1,0 +1,4 @@
+description: One interface asked for by name, with one address of each family.
+source: captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C
+os: linux
+args: ["address", "show", "lo"]

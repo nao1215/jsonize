@@ -1,0 +1,45 @@
+# `amixer` prints one block per simple mixer control: a line naming the
+# control and its index, then indented lines of a label and a value.
+#
+# Which labels a block carries depends on what the control can do, so the
+# lines after the first are read as labels and values in the order they
+# were printed rather than as a fixed set of keys. That keeps a control
+# with a Mono line and one without in the same shape.
+#
+# The values are left as printed. "Playback 9830 [15%] [on]" is a raw
+# level, the same level as a percentage, and a switch state on one line,
+# and pulling those apart would need a shape that only the channel lines
+# have.
+format: 1
+command: amixer
+variant: simple-controls
+description: amixer simple mixer control settings
+metadata:
+  tags: [linux, audio, alsa]
+  compatible: [alsa-utils]
+  references:
+    - https://man7.org/linux/man-pages/man1/amixer.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - "\\ASimple mixer control '[^']*',\\d+[ \t]*$"
+parse:
+  type: records
+  start: "^Simple mixer control '"
+  parts:
+    - name: control
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: "^Simple mixer control '(?P<name>[^']*)',(?P<index>\\d+)[ \t]*$"
+      fields:
+        name: {required: true}
+        index: {type: int, required: true}
+    - name: settings
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: list

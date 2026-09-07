@@ -1,0 +1,43 @@
+# Asked for one protocol (`ss -t`, `ss -u`, `ss -w`, `ss -x`), ss leaves
+# out the Netid column, since every row would carry the same value. The
+# rest of the table is the one ss/linux reads, and the two are told apart
+# by whether the header opens with Netid or with State.
+#
+# The address and the port are separated by the last colon, which is what
+# makes an IPv6 address ("[::]:22") and a scoped one ("127.0.0.53%lo:53")
+# readable; both parts are reported separately as well as together.
+format: 1
+command: ss
+variant: single-protocol
+description: ss socket table for one protocol, without the Netid column
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ss.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AState\s+Recv-Q\s+Send-Q\s+Local Address:Port\s+Peer Address:Port'
+input:
+  ignore:
+    - '\AState\s+Recv-Q'
+    - '^RTNETLINK answers:'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+):(?P<local_port>[^\s:]+)\s+(?P<peer_address>\S+):(?P<peer_port>[^\s:]+)\s*(?P<process>\S.*)?$'
+    # A unix socket table asked for with -x has the same header and holds
+    # a path and an inode where the internet table holds an address and a
+    # port, separated by whitespace rather than by a colon.
+    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+)\s+(?P<local_port>\S+)\s+(?P<peer_address>\S+)\s+(?P<peer_port>\S+)\s*(?P<process>\S.*)?$'
+fields:
+  state: {required: true}
+  recv_q: {type: int, required: true}
+  send_q: {type: int, required: true}
+  local_address: {required: true}
+  local_port: {required: true}
+  peer_address: {required: true}
+  peer_port: {required: true}
+  process: {when_missing: omit}

@@ -1,0 +1,55 @@
+# rsync --itemize-changes (-i) prints `%i %n%L`: an eleven character
+# change string, a space, the path, and for a link the target after
+# " -> " or " => ".
+#
+# The eleven characters stay one string. They are not eleven booleans:
+# each position takes five values (a dot for unchanged, the letter for
+# changed, "+" for newly created, a space when every attribute is
+# unchanged, "?" when the far side is too old to say), and position five
+# is "t" or "T" and position nine is "u", "n" or "b" depending on which
+# of --times, --atimes and --crtimes is in effect. Naming the positions
+# would have to collapse those states into one, and the option that
+# decides what position nine means is not in the text. The man page
+# spells the string out; the definition hands it over as printed,
+# trailing spaces and all, because a space there means something a dot
+# does not.
+#
+# A deleted item puts a message in the same field instead ("*deleting"),
+# which the leading "*" already marks, so it needs no separate key.
+#
+# Only a symlink carries " -> " as a separator and only a hard link
+# carries " => ", so the file type in the second position decides
+# whether to split; a file named "arrow -> not a link.txt" keeps its
+# name. A hard link that is not being created prints no target at all.
+#
+# This reads the stream -i produces on its own. With -v or --stats
+# rsync wraps it in a banner and a report that are not itemize lines,
+# and those are refused rather than dropped: the banner by the signature,
+# and a report that starts past the signature window by the line it puts
+# in front of the parser.
+format: 1
+command: rsync
+variant: itemize
+description: rsync --itemize-changes output
+metadata:
+  tags: [files, transfer, sync]
+  compatible: [rsync]
+  references:
+    - https://download.samba.org/pub/rsync/rsync.1
+detect:
+  signature:
+    all:
+      # An eleven character change string followed by a space and a
+      # path. Every position is drawn from its own small alphabet.
+      - '^[<>ch.][fdLDS][c.+ ?][s.+ ?][tT.+ ?][p.+ ?][o.+ ?][g.+ ?][unb.+ ?][a.+ ?][x.+ ?] \S'
+parse:
+  type: regex
+  patterns:
+    # A message fills the itemize area instead of the flags.
+    - '^(?P<change>\*[^ \t]+)[ \t]+(?P<path>.+)$'
+    - '^(?P<change>[<>ch.]L.{9}) (?P<path>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<change>h[fdLDS].{9}) (?P<path>.+?) => (?P<link_to>.+)$'
+    - '^(?P<change>[<>ch.][fdLDS].{9}) (?P<path>.+)$'
+fields:
+  path: {required: true}
+  link_to: {when_missing: omit}

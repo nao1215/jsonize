@@ -1,0 +1,4 @@
+description: Four files hashed in one run, including an empty one and a Japanese file name.
+source: captured on Ubuntu 26.04 (GNU coreutils 9.8) with LC_ALL=C over files made for this fixture
+os: linux
+args: []

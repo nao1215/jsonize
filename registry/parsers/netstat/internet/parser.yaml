@@ -1,0 +1,53 @@
+# The internet connection table `netstat` prints when a family is
+# selected (-t, -u, -w). The address and the port share one column and
+# are separated by the last colon, which is what keeps an IPv6 address
+# ("::1:631") and a scoped one ("::%6252879:58") readable.
+#
+# Without a family flag netstat prints this table and the UNIX socket
+# table one after the other; that shape is netstat/all-sockets, and the
+# UNIX banner in signature.none is what keeps this definition off it.
+# The banner can only be seen inside the signature window, so an output
+# with more than 200 internet rows before it is read as this format and
+# fails on the UNIX banner rather than being silently truncated.
+format: 1
+command: netstat
+variant: internet
+description: netstat internet connection table (-t, -u, -w)
+metadata:
+  tags: [linux, network, net-tools]
+  # Only BusyBox was available to capture from; net-tools prints the same
+  # columns but was not verified here.
+  compatible: [BusyBox]
+  references:
+    - https://man7.org/linux/man-pages/man8/netstat.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AActive Internet connections \('
+      - '^Proto[ \t]+Recv-Q[ \t]+Send-Q[ \t]+Local Address[ \t]+Foreign Address[ \t]+State[ \t]*$'
+    none:
+      - '^Active UNIX domain sockets \('
+    window: 200
+input:
+  ignore:
+    - '^Active Internet connections'
+    - '^Proto[ \t]+Recv-Q'
+parse:
+  type: regex
+  # The state column is empty for a datagram socket, so it is a group
+  # that always participates and may be empty rather than an optional
+  # one, which keeps every row carrying the same keys.
+  pattern: '^(?P<proto>\S+)[ \t]+(?P<recv_q>\d+)[ \t]+(?P<send_q>\d+)[ \t]+(?P<local_address>\S+):(?P<local_port>[^\s:]+)[ \t]+(?P<foreign_address>\S+):(?P<foreign_port>[^\s:]+)[ \t]*(?P<state>\S*)[ \t]*$'
+fields:
+  proto: {required: true}
+  recv_q: {type: int, required: true}
+  send_q: {type: int, required: true}
+  local_address: {required: true}
+  # A port is a number, a service name (when -n is omitted) or "*", and a
+  # raw socket puts its protocol number in the state column, so neither
+  # is converted.
+  local_port: {required: true}
+  foreign_address: {required: true}
+  foreign_port: {required: true}
+  state: {null_if: [""]}

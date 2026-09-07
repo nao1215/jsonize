@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (lsof 4.99.4) with LC_ALL=C, nine rows selected from a 98 row listing; the login name was replaced with alice and the USER column widened by one to match, the host name with host1 and the peer addresses with 203.0.113.116, 203.0.113.34.example.net and 203-0-113-75.example.net
+description: >
+  lsof -i without -n -P resolves addresses and ports, so NAME holds host
+  names and service names (https, mdns) instead of numbers. The header and
+  every other column are the same as in the numeric listing.
+os: linux
+args: [-i]

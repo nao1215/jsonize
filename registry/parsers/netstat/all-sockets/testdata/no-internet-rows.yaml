@@ -1,0 +1,4 @@
+description: both tables in one output, the internet one empty because no raw socket is connected
+source: lines 1-12 of `busybox netstat -nwx` captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; socket names replaced
+os: linux
+args: ["-nwx"]

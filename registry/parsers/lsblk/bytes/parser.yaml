@@ -18,8 +18,6 @@ detect:
     all:
       - '^NAME[ \t]+MAJ:MIN[ \t]+RM[ \t]+SIZE[ \t]+RO[ \t]+TYPE[ \t]+MOUNTPOINTS?[ \t]*$'
       - '^\S+[ \t]+\d+:\d+[ \t]+[01][ \t]+\d+[ \t]+[01][ \t]'
-    none:
-      - '^\S+[ \t]+\d+:\d+[ \t]+[01][ \t]+[\d.]+[BKMGTPE][ \t]+[01][ \t]'
 parse:
   type: table
   split: aligned

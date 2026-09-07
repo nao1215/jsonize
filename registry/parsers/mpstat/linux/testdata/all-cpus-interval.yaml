@@ -1,0 +1,4 @@
+description: Every processor over one sampling interval, which adds a summary block whose rows are labelled Average and whose column names are printed again above them.
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C from `mpstat -P ALL 1 1`; the host name in the banner was replaced
+os: linux
+args: ["-P", "ALL", "1", "1"]

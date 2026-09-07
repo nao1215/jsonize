@@ -1,0 +1,36 @@
+# Three columns and no heading line. The name is padded to thirty
+# columns and the mode to eight, but a name wider than its column pushes
+# the rest of the row to the right, so the cells are cut on whitespace
+# rather than at the offsets the padding suggests.
+#
+# The mode is "auto" or "manual" and the path is the target the link
+# currently points at; both are kept as text. A path is the last cell, so
+# a link target containing a space stays whole.
+format: 1
+command: update-alternatives
+variant: selections
+description: update-alternatives --get-selections links, modes and targets
+metadata:
+  tags: [linux, debian, package, dpkg]
+  compatible: [dpkg]
+  references:
+    - https://manpages.debian.org/unstable/dpkg/update-alternatives.1.en.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # Three columns are not evidence on their own; the second cell
+      # holding one of the two mode words and the third being absolute
+      # is what names this format.
+      - '\A[^ \t]+[ \t]+(?:auto|manual)[ \t]+/[^ \t]'
+      - '^[^ \t]+[ \t]+(?:auto|manual)[ \t]+/[^ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [name, status, path]
+fields:
+  name: {required: true}
+  status: {required: true}
+  path: {required: true}

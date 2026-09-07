@@ -1,0 +1,58 @@
+[
+  {
+    "file": "/tmp/sample/dir",
+    "type": "directory"
+  },
+  {
+    "file": "/tmp/sample/slink",
+    "type": "symbolic link to /etc/hosts"
+  },
+  {
+    "file": "/tmp/sample/a.txt",
+    "type": "ASCII text"
+  },
+  {
+    "file": "/tmp/sample/empty.bin",
+    "type": "empty"
+  },
+  {
+    "file": "/tmp/sample/s.sh",
+    "type": "POSIX shell script, ASCII text executable"
+  },
+  {
+    "file": "/tmp/sample/pipe",
+    "type": "fifo (named pipe)"
+  },
+  {
+    "file": "/tmp/sample/sock",
+    "type": "socket"
+  },
+  {
+    "file": "/tmp/sample/ar.tar",
+    "type": "POSIX tar archive (GNU)"
+  },
+  {
+    "file": "/tmp/sample/a.gz",
+    "type": "gzip compressed data, was \"a.txt\", from Unix, original size modulo 2^32 6"
+  },
+  {
+    "file": "/dev/null",
+    "type": "character special (1/3)"
+  },
+  {
+    "file": "/tmp/sample/a.png",
+    "type": "PNG image data, 16 x 16, 8-bit/color RGBA, non-interlaced"
+  },
+  {
+    "file": "/tmp/sample/db.sqlite",
+    "type": "SQLite 3.x database, last written using SQLite version 3050001"
+  },
+  {
+    "file": "/tmp/sample/doc.pdf",
+    "type": "PDF document, version 1.7"
+  },
+  {
+    "file": "/tmp/sample/f.ttf",
+    "type": "TrueType Font data, 15 tables, 1st \"GDEF\""
+  }
+]

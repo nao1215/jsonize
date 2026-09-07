@@ -1,0 +1,30 @@
+[
+  {
+    "index": 65,
+    "name": "alsa_output.pci-0000_c6_00.6.analog-stereo",
+    "driver": "PipeWire",
+    "sample_specification": "s32le 2ch 48000Hz",
+    "state": "SUSPENDED"
+  },
+  {
+    "index": 70,
+    "name": "alsa_output.usb-C-Media_INC._USB_Sound_Device-00.analog-stereo",
+    "driver": "PipeWire",
+    "sample_specification": "s16le 2ch 48000Hz",
+    "state": "RUNNING"
+  },
+  {
+    "index": 2033,
+    "name": "alsa_output.usb-Fonglun_USB_PnP_Sound_Device_201801-00.analog-stereo",
+    "driver": "PipeWire",
+    "sample_specification": "s16le 2ch 48000Hz",
+    "state": "SUSPENDED"
+  },
+  {
+    "index": 23592,
+    "name": "alsa_output.pci-0000_c6_00.1.hdmi-stereo",
+    "driver": "PipeWire",
+    "sample_specification": "s32le 2ch 48000Hz",
+    "state": "SUSPENDED"
+  }
+]

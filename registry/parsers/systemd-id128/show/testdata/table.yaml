@@ -1,0 +1,4 @@
+description: The first rows of the full listing.
+source: the header and rows 1 to 11 of `systemd-id128 show` captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C
+os: linux
+args: ["show"]

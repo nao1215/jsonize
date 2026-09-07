@@ -1,0 +1,35 @@
+# Four columns: the network's short identifier, its name, the driver behind
+# it and the scope it lives in. None of the cells holds a space, so the row
+# is cut on whitespace; the names are declared here because the header's
+# first cell is two words ("NETWORK ID") and deriving them from the header
+# would make it two columns.
+#
+# `--no-trunc` prints the full 64-character identifier in the same columns
+# and is read the same way.
+format: 1
+command: docker
+variant: network-ls
+aliases:
+  # podman and nerdctl print the same tables under the same
+  # subcommands.
+  - name: podman
+  - name: nerdctl
+description: docker network ls
+metadata:
+  tags: [container, docker, network]
+  compatible: [Docker CLI]
+  references:
+    - https://docs.docker.com/reference/cli/docker/network/ls/
+detect:
+  signature:
+    all:
+      - '\ANETWORK ID[ \t]+NAME[ \t]+DRIVER[ \t]+SCOPE[ \t]*$'
+parse:
+  type: table
+  header:
+    columns: [network_id, name, driver, scope]
+fields:
+  network_id: {required: true}
+  name: {required: true}
+  driver: {required: true}
+  scope: {required: true}

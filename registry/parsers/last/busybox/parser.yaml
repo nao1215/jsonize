@@ -1,0 +1,52 @@
+# BusyBox last prints four fields of fixed width -- user, terminal, host
+# and the login time -- and the heading over the fourth reads "LOGIN
+# TIME", which is why nothing is ever printed under the word TIME.
+#
+# The columns are not read by their heading positions. A host wider than
+# its eighteen columns is not truncated: it pushes the login time to the
+# right, and cutting the row at the heading offsets then puts the time in
+# the wrong column. So each row is matched from its ends instead, with the
+# login time as the anchor, and the three alternatives below say which of
+# the middle fields the row filled in.
+#
+# What that gives up: a row with an empty terminal and a host would read
+# the host as the terminal. BusyBox fills in the terminal for every record
+# it prints, so that combination does not occur; the pair is empty
+# together, which the third alternative covers.
+format: 1
+command: last
+variant: busybox
+description: BusyBox last login records
+metadata:
+  tags: [linux, busybox, login]
+  compatible: [BusyBox]
+  references:
+    - https://busybox.net/downloads/BusyBox.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # util-linux last prints no heading at all, so the heading alone
+      # identifies this format.
+      - '\AUSER[ \t]+TTY[ \t]+HOST[ \t]+LOGIN[ \t]+TIME[ \t]*$'
+input:
+  ignore:
+    - '\AUSER[ \t]+TTY[ \t]+HOST[ \t]+LOGIN[ \t]+TIME[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    # The host may hold a space ("login screen"), so it is taken lazily up
+    # to the login time rather than as one word.
+    - '^(?P<user>\S+)[ \t]+(?P<tty>\S+)[ \t]+(?P<host>\S.*?)[ \t]+(?P<login_time>[A-Z][a-z]{2}[ \t]+\d{1,2}[ \t]+\d{2}:\d{2})[ \t]*$'
+    - '^(?P<user>\S+)[ \t]+(?P<tty>\S+)[ \t]+(?P<host>)(?P<login_time>[A-Z][a-z]{2}[ \t]+\d{1,2}[ \t]+\d{2}:\d{2})[ \t]*$'
+    - '^(?P<user>\S+)[ \t]+(?P<tty>)(?P<host>)(?P<login_time>[A-Z][a-z]{2}[ \t]+\d{1,2}[ \t]+\d{2}:\d{2})[ \t]*$'
+fields:
+  user: {required: true}
+  # The empty groups in the second and third alternative keep every row
+  # carrying the same keys; an unfilled field reads as null rather than
+  # as an empty string.
+  tty: {null_if: [""]}
+  host: {null_if: [""]}
+  # The login time carries no year, so it stays the string it was printed
+  # as rather than becoming a timestamp that would have to guess one.
+  login_time: {required: true}

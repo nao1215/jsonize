@@ -1,0 +1,4 @@
+description: status asked for one interface, which prints no Global block, so the first record is a Link block
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, resolvectl status wlp195s0; DNS server address and DNS domain replaced
+os: linux
+args: [status, wlp195s0]

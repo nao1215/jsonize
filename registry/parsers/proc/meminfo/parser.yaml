@@ -1,0 +1,51 @@
+# /proc/meminfo is one counter per line: a label, a colon, a decimal
+# number and, for most of them, the unit the kernel reports it in.
+#
+# The result is a list of {name, value, unit} rather than one object
+# keyed by label, because the set of labels is not fixed. It follows the
+# kernel configuration: Zswap, Unaccepted, Balloon and the huge page
+# counters appear or not depending on what is built in, and a new
+# release adds more. An object with a field rule per label would convert
+# the labels this machine happens to have and quietly hand back the rest
+# as strings, so the shape says what every line is instead.
+#
+# The unit is kept rather than folded into the number. Every counter the
+# kernel reports in kilobytes says so, and the four HugePages_ counters
+# are plain counts with no unit at all; dropping the word would leave the
+# two indistinguishable. The value is not converted to bytes either.
+# Doing so would be a legitimate conversion rather than a guess, since
+# the file names its unit and that unit is defined, but the rule this
+# registry follows is to report the number and the unit as the source
+# wrote them and leave the arithmetic to the reader, which is the same
+# rule that keeps `df -h` sizes as text.
+format: 1
+command: proc
+variant: meminfo
+description: /proc/meminfo memory counters
+metadata:
+  tags: [linux, memory, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_meminfo.5.html
+detect:
+  os: [linux]
+  signature:
+    # The file is longer than the default window and the shape below is
+    # about all of it.
+    window: 200
+    all:
+      # Every line is a labelled counter: a label, a colon, a decimal
+      # number, and at most one word of unit.
+      - '\A(?:[A-Za-z][A-Za-z0-9_()]*:[ \t]+\d+(?:[ \t]+[A-Za-z]+)?[ \t]*\n)*[A-Za-z][A-Za-z0-9_()]*:[ \t]+\d+(?:[ \t]+[A-Za-z]+)?[ \t]*\z'
+      # The kernel writes the total first, and has since the file
+      # existed. Requiring it is what tells this file from any other
+      # list of labelled counters.
+      - '\AMemTotal:[ \t]+\d+[ \t]+kB[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<name>[A-Za-z][A-Za-z0-9_()]*):[ \t]+(?P<value>\d+)(?:[ \t]+(?P<unit>[A-Za-z]+))?[ \t]*$'
+fields:
+  name: {required: true}
+  value: {type: int, required: true}
+  # Null on the counters the kernel reports without one.
+  unit: {}

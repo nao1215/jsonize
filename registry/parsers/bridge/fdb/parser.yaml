@@ -1,0 +1,45 @@
+# `bridge fdb` writes a link-layer address, the device it was seen on,
+# and then whichever attributes the entry carries: `self` or `master
+# <bridge>`, a VLAN id, a destination for a tunnel port, and a state word
+# that a freshly learned entry does not have at all.
+#
+# Only the device is named, because it is the one attribute the command
+# always prints immediately after the address. The rest are kept as the
+# words they were printed as, the way `ip route` keeps its per-route
+# words: their set and their order belong to the entry, and picking them
+# apart by name would report a null for an attribute that is present but
+# in a place this definition did not expect. `bridge fdb show dev <dev>`
+# leaves the device out, so it is optional.
+format: 1
+command: bridge
+variant: fdb
+description: bridge fdb, the forwarding database
+metadata:
+  tags: [linux, network, iproute2, bridge]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/bridge.8.html
+detect:
+  os: [linux]
+  args:
+    all: ["fdb"]
+  signature:
+    all:
+      # A bare ethernet address at the start of the first line, and one of
+      # the words a forwarding database entry carries somewhere on it.
+      # The words are not pinned to a position because the attributes
+      # before them differ per entry: a tunnel port prints a destination
+      # where a bridge port prints its VLAN. `ip neighbour` lines open
+      # with an IP address instead, and the tools that do print a
+      # link-layer address label it (lladdr, link/ether).
+      - '\A[0-9a-f]{2}(?::[0-9a-f]{2}){5} [^\n]*\b(?:self|master|permanent|static|dynamic|extern_learn)\b'
+parse:
+  type: regex
+  # The address is not pinned to the ethernet shape here: a port on a
+  # non-ethernet link prints a longer one, and the signature has already
+  # decided the text is a forwarding database.
+  pattern: '^(?P<address>\S+)(?: dev (?P<dev>\S+))?[ \t]*(?P<attributes>.*?)[ \t]*$'
+fields:
+  address: {required: true}
+  dev: {when_missing: omit}
+  attributes: {type: array, split_regex: '\s+'}

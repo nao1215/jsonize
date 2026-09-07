@@ -1,0 +1,3 @@
+description: one bridge with no IPv6 address and no traffic, so the byte counts are zero and print a rounded form of "0.0 B"
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C as "busybox ifconfig br-d647a5eb3b66"; the hardware address replaced
+os: linux

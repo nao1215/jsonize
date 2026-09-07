@@ -1,0 +1,172 @@
+[
+  {
+    "binary": {
+      "file": "/home/user/go/bin/fzf",
+      "go_version": "go1.26.4",
+      "main_package": "github.com/junegunn/fzf"
+    },
+    "modules": [
+      {
+        "kind": "mod",
+        "path": "github.com/junegunn/fzf",
+        "version": "v0.74.3",
+        "sum": "h1:ruZVbGC4jMzdYAy9EdC6irM9YU8aRNTByL6b5K4/Tpk="
+      },
+      {
+        "kind": "dep",
+        "path": "github.com/charlievieth/fastwalk",
+        "version": "v1.0.14",
+        "sum": "h1:3Eh5uaFGwHZd8EGwTjJnSpBkfwfsak9h6ICgnWlhAyg="
+      },
+      {
+        "kind": "dep",
+        "path": "github.com/junegunn/go-shellwords",
+        "version": "v0.0.0-20250127100254-2aa3b3277741",
+        "sum": "h1:7dYDtfMDfKzjT+DVfIS4iqknSEKtZpEcXtu6vuaasHs="
+      },
+      {
+        "kind": "dep",
+        "path": "github.com/mattn/go-isatty",
+        "version": "v0.0.24",
+        "sum": "h1:tGZZoVgT/KiqK1c8ocVLeDS8BSWMRd47J3Lbz7vsReI="
+      },
+      {
+        "kind": "dep",
+        "path": "github.com/rivo/uniseg",
+        "version": "v0.4.7",
+        "sum": "h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ="
+      },
+      {
+        "kind": "dep",
+        "path": "golang.org/x/sys",
+        "version": "v0.35.0",
+        "sum": "h1:vz1N37gP5bs89s7He8XuIYXpyY0+QlsKmzipCbUtyxI="
+      },
+      {
+        "kind": "dep",
+        "path": "golang.org/x/term",
+        "version": "v0.34.0",
+        "sum": "h1:O/2T7POpk0ZZ7MAzMeWFSg6S5IpWd/RXDlM9hgM3DR4="
+      }
+    ],
+    "build": [
+      {
+        "key": "-buildmode",
+        "value": "exe"
+      },
+      {
+        "key": "-compiler",
+        "value": "gc"
+      },
+      {
+        "key": "DefaultGODEBUG",
+        "value": "containermaxprocs=0,cryptocustomrand=1,decoratemappings=0,gotestjsonbuildtext=1,httpcookiemaxnum=0,multipathtcp=0,randseednop=0,rsa1024min=0,tlsmlkem=0,tlssecpmlkem=0,tlssha1=1,updatemaxprocs=0,urlmaxqueryparams=0,urlstrictcolons=0,x509rsacrt=0,x509sha256skid=0,x509usepolicies=0"
+      },
+      {
+        "key": "CGO_ENABLED",
+        "value": "1"
+      },
+      {
+        "key": "CGO_CFLAGS",
+        "value": ""
+      },
+      {
+        "key": "CGO_CPPFLAGS",
+        "value": ""
+      },
+      {
+        "key": "CGO_CXXFLAGS",
+        "value": ""
+      },
+      {
+        "key": "CGO_LDFLAGS",
+        "value": ""
+      },
+      {
+        "key": "GOARCH",
+        "value": "amd64"
+      },
+      {
+        "key": "GOOS",
+        "value": "linux"
+      },
+      {
+        "key": "GOAMD64",
+        "value": "v1"
+      }
+    ]
+  },
+  {
+    "binary": {
+      "file": "/home/user/src/probe/probe",
+      "go_version": "go1.26.4",
+      "main_package": "example.com/probe"
+    },
+    "modules": [
+      {
+        "kind": "mod",
+        "path": "example.com/probe",
+        "version": "(devel)",
+        "sum": null
+      },
+      {
+        "kind": "dep",
+        "path": "example.com/lib",
+        "version": "v1.0.0",
+        "sum": null
+      },
+      {
+        "kind": "=>",
+        "path": "./lib",
+        "version": "(devel)",
+        "sum": null
+      }
+    ],
+    "build": [
+      {
+        "key": "-buildmode",
+        "value": "exe"
+      },
+      {
+        "key": "-compiler",
+        "value": "gc"
+      },
+      {
+        "key": "-ldflags",
+        "value": "\"-X 'main.version=1.2.3 beta'\""
+      },
+      {
+        "key": "CGO_ENABLED",
+        "value": "1"
+      },
+      {
+        "key": "CGO_CFLAGS",
+        "value": ""
+      },
+      {
+        "key": "CGO_CPPFLAGS",
+        "value": ""
+      },
+      {
+        "key": "CGO_CXXFLAGS",
+        "value": ""
+      },
+      {
+        "key": "CGO_LDFLAGS",
+        "value": ""
+      },
+      {
+        "key": "GOARCH",
+        "value": "amd64"
+      },
+      {
+        "key": "GOOS",
+        "value": "linux"
+      },
+      {
+        "key": "GOAMD64",
+        "value": "v1"
+      }
+    ]
+  }
+]

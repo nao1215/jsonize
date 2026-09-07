@@ -1,0 +1,32 @@
+# `ip rule` prints one routing policy rule per line: a priority, the
+# selectors that decide whether the rule applies, and what to do when it
+# does. Most rules end in a table to look up; the rest name an action
+# (unreachable, prohibit, blackhole), which is why the second alternative
+# reads the rest of the line whole rather than insisting on a table.
+#
+# The selectors are kept as printed. They are a set of words whose names
+# and count come from what the rule was created with, and naming them
+# here would be a list that the next kernel version outgrows.
+format: 1
+command: ip
+variant: rule
+description: ip rule, routing policy rules
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ip-rule.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A\d+:[ \t]+(?:not[ \t]+)?from[ \t]+\S'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<priority>\d+):[ \t]+(?P<selectors>.*?)[ \t]+lookup[ \t]+(?P<table>\S+)[ \t]*$'
+    - '^(?P<priority>\d+):[ \t]+(?P<selectors>.*?)[ \t]*$'
+fields:
+  priority: {type: int, required: true}
+  selectors: {required: true}
+  table: {when_missing: omit}

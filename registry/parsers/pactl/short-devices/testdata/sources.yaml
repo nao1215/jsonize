@@ -1,0 +1,4 @@
+description: The input devices, which include the monitor sources of every output. The webcam serial in one name was replaced.
+source: captured on Ubuntu 26.04 (PipeWire 1.6.2) with LC_ALL=C
+os: linux
+args: ["list", "short", "sources"]

@@ -44,6 +44,8 @@ Start from the closest existing definition:
 | one object from the whole output | `registry/parsers/uptime/linux/parser.yaml` |
 | nested values | `registry/parsers/id/posix/parser.yaml` |
 | summary line + table | `registry/parsers/w/linux/parser.yaml` |
+| a block per subject, repeated | `registry/parsers/ip/stats-link/parser.yaml` |
+| a header block, then repeated blocks | `registry/parsers/update-alternatives/query/parser.yaml` |
 
 For `lsof`, the header is `COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME`
 and `NAME` may contain spaces, so a whitespace table with explicit columns
@@ -76,12 +78,32 @@ and a path, three numbers in a row), add `auto_detect: false` next to it:
 the definition is then used only when the parser is named, and its
 signature is still checked there.
 
+Write the signature as what must be true of the output, and decide it
+before you look at whether the fixtures pass. Anchor the whole text with
+`\A` and `\z` where the format is short enough to say so, and where it
+is not, say what every line of it looks like. A signature is also where
+you state what this definition does not undertake to read; that is a
+scope you choose, and the comment beside the expression is where you
+say it.
+
+What not to reach for is `none`. If a neighbouring format matches your
+signature, the signature is not yet saying what your format is, and
+excluding the neighbour couples your definition to theirs: they change
+it, your definition breaks, and the list never stops growing.
+[The reference](/jsonize/definition-format/#writing-a-signature) has the
+detail.
+
 ## 4. Add fixtures
 
 ```
 registry/parsers/lsof/default/testdata/lsof-4.95.txt
 registry/parsers/lsof/default/testdata/lsof-4.95.yaml
 ```
+
+Fixtures verify the signature you decided on; they do not decide it.
+Capture one per thing the definition claims, including the shapes it
+claims to refuse, so that the file beside the definition says what the
+definition means rather than what happened to pass.
 
 The `.yaml` file documents the capture and feeds the selection test:
 
@@ -101,7 +123,7 @@ that keeps a neighbouring format away.
 ## 5. Generate the golden file and review it
 
 ```console
-$ make registry-update-golden
+$ jz test --update ./registry
 $ git diff --stat registry/parsers/lsof
 $ cat registry/parsers/lsof/default/testdata/lsof-4.95.json
 ```
@@ -111,24 +133,47 @@ number stays a string: the output does not record the base and the value
 is already rounded, so converting it would invent precision. Then:
 
 ```console
-$ make test
+$ jz test ./registry
 ```
 
-The golden test fails if the fixture does not select its own variant
-(signature overlap with another variant), does not parse, or differs
-from the JSON.
+The check fails if the fixture does not select its own variant, does not
+parse, differs from the JSON, or if any definition reads a fixture that
+belongs to another one. That last check is the one that catches a
+signature written wide enough to swallow a neighbouring format.
 
-## 6. Try it for real
+## 6. Check it against the decoys
+
+`registry/testdata/decoys/` holds text that belongs to no format jz
+reads: prose, a build log, a CHANGELOG, an INI file, a shell script, a
+document that quotes a report's header line. Every definition is applied
+to every one of them, and reading one is a failure.
+
+Every file in there was read by some definition once. A signature that
+looks for a single recognisable line will find it in a document that
+merely quotes that line, and a parser that takes any word where the
+format has a vocabulary will turn a sentence into a record. The corpus is
+how those two mistakes stay fixed.
+
+If your format resembles something ordinary, add a file. There is nothing
+to register: the check reads the directory.
+
+```console
+$ cat > registry/testdata/decoys/my-lookalike.txt
+$ jz test ./registry
+```
+
+## 7. Try it for real
 
 ```console
 $ go run ./cmd/jz run lsof -p $$
 $ lsof -p $$ | go run ./cmd/jz --pretty
 ```
 
-## 7. Open the pull request
+## 8. Open the pull request
 
-Include the definition, the fixtures, the golden JSON and one row in the
-table in `website/content/parsers.md`. Use a `parser:` commit prefix.
+Include the definition, the fixtures, the golden JSON, any decoy you
+added and one row in the table in `website/content/parsers.md`. Use a
+`parser:` commit prefix.
 
 ## Working outside the repository
 
@@ -137,9 +182,14 @@ The same loop works with a personal registry and the released binary:
 ```console
 $ mkdir -p ~/.config/jsonize/registry/parsers/lsof/default/testdata
 $ $EDITOR ~/.config/jsonize/registry/parsers/lsof/default/parser.yaml
-$ make registry-update-golden DIR=~/.config/jsonize/registry
-$ make registry-test DIR=~/.config/jsonize/registry
+$ jz test --update
+$ jz test
 ```
+
+With no directory, `jz test` checks the registries jz would use and
+leaves the built-in one alone. The official fixtures are inside the
+binary either way, so your definition is held to the same exclusivity
+check as an official one without a copy of the repository.
 
 `jz list` shows the definition with source `user`, and it shadows an
 official definition of the same command and variant.

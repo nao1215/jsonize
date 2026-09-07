@@ -1,0 +1,7 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  A filter that matches no container. Docker prints the header alone and the
+  columns shrink to their minimum width; the result is an empty array, not
+  no output.
+os: linux
+args: ["ps", "--filter", "name=zzzznomatch"]

@@ -1,0 +1,2 @@
+source: /proc/loadavg on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C
+os: linux

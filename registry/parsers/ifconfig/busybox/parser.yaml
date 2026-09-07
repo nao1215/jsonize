@@ -1,0 +1,129 @@
+# BusyBox ifconfig prints one indented block per interface: a header line
+# naming the interface and its link layer, an optional IPv4 line, however
+# many IPv6 lines the interface has, the flags with the MTU, two counter
+# lines, the queue line and the byte totals. The blocks repeat, so the
+# definition describes one of them and `records` applies it to each.
+#
+# The blocks vary in which of the middle lines are present, so nothing is
+# selected by counting from the top: every part after the address lines
+# anchors on the line above it instead.
+#
+# Two things this definition does not carry. An interface whose kernel
+# knows its IRQ or memory window prints a further line after the byte
+# totals ("Interrupt:16 Memory:f7c00000-f7c20000"); no interface on the
+# machine this was captured from printed one, so no part reads it and it
+# is dropped. An interface with no flags at all prints the literal
+# "[NO FLAGS]" where the flag names go, which `flags` then splits into
+# two words.
+format: 1
+command: ifconfig
+variant: busybox
+description: BusyBox ifconfig per-interface block
+metadata:
+  tags: [linux, busybox, network]
+  compatible: [BusyBox]
+  references:
+    - https://busybox.net/downloads/BusyBox.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The header line, and the two counter lines that only this layout
+      # prints. The modern net-tools layout writes "flags=4163<UP,...>"
+      # and "RX packets 104225  bytes 16850143", so neither matches.
+      - '\A\S+[ \t]+Link encap:'
+      - '^[ \t]+RX packets:\d+ errors:\d+ dropped:\d+ overruns:\d+ frame:\d+[ \t]*$'
+      - '^[ \t]+collisions:\d+[ \t]+txqueuelen:\d+[ \t]*$'
+    # A block is nine lines at most on the machine this came from, but an
+    # interface with many addresses pushes the counter lines down.
+    window: 40
+parse:
+  type: records
+  start: '^\S+[ \t]+Link encap:'
+  parts:
+    - name: interface
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        # A loopback names its encapsulation in two words and has no
+        # hardware address.
+        pattern: '\A(?P<name>\S+)[ \t]+Link encap:(?P<encap>.+?)(?:[ \t]+HWaddr[ \t]+(?P<hwaddr>\S+))?[ \t]*\z'
+    # The IPv4 line, if the interface has one. The whole line is one
+    # optional group, so an interface without an address still carries the
+    # same keys, all null. P-t-P replaces Bcast on a point-to-point link.
+    - name: inet
+      select: {skip: 1, until: 'inet6 addr:|[ \t]MTU:'}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?:[ \t]*inet addr:(?P<address>\S+)(?:[ \t]+P-t-P:(?P<peer>\S+))?(?:[ \t]+Bcast:(?P<broadcast>\S+))?[ \t]+Mask:(?P<mask>\S+)[ \t]*)?\z'
+    # An interface has any number of IPv6 addresses, including none. The
+    # IPv4 line sits in the same region and is skipped here; the part
+    # above reads it.
+    - name: inet6
+      select: {skip: 1, until: '[ \t]MTU:'}
+      ignore: ['^[ \t]*inet addr:']
+      parse:
+        type: regex
+        pattern: '\A[ \t]*inet6 addr:[ \t]*(?P<address>[^/ \t]+)/(?P<prefixlen>\d+)[ \t]+Scope:(?P<scope>\S+)[ \t]*\z'
+      fields:
+        prefixlen: {type: int}
+    # The flags line is the last line before the counters, and the address
+    # lines above it are of no fixed number, so it is reached from the end
+    # of the region rather than by counting from the start.
+    - name: status
+      select: {skip: 1, until: '^[ \t]*RX packets:'}
+      parse:
+        type: regex
+        each: input
+        pattern: '(?s)\A(?:.*\n)?[ \t]*(?P<flags>[A-Z0-9 \[\]-]+?)[ \t]+MTU:(?P<mtu>\d+)[ \t]+Metric:(?P<metric>\d+)[ \t]*\z'
+      fields:
+        flags: {type: array, split_regex: '[ \t]+'}
+        mtu: {type: int}
+        metric: {type: int}
+    - name: rx
+      select: {after: '[ \t]MTU:', limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[ \t]*RX packets:(?P<packets>\d+)[ \t]+errors:(?P<errors>\d+)[ \t]+dropped:(?P<dropped>\d+)[ \t]+overruns:(?P<overruns>\d+)[ \t]+frame:(?P<frame>\d+)[ \t]*\z'
+      fields:
+        packets: {type: int}
+        errors: {type: int}
+        dropped: {type: int}
+        overruns: {type: int}
+        frame: {type: int}
+    - name: tx
+      select: {after: '^[ \t]*RX packets:', limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[ \t]*TX packets:(?P<packets>\d+)[ \t]+errors:(?P<errors>\d+)[ \t]+dropped:(?P<dropped>\d+)[ \t]+overruns:(?P<overruns>\d+)[ \t]+carrier:(?P<carrier>\d+)[ \t]*\z'
+      fields:
+        packets: {type: int}
+        errors: {type: int}
+        dropped: {type: int}
+        overruns: {type: int}
+        carrier: {type: int}
+    - name: queue
+      select: {after: '^[ \t]*TX packets:', limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[ \t]*collisions:(?P<collisions>\d+)[ \t]+txqueuelen:(?P<txqueuelen>\d+)[ \t]*\z'
+      fields:
+        collisions: {type: int}
+        txqueuelen: {type: int}
+    # The byte totals are printed twice on this line: once exactly and
+    # once rounded to one decimal. The exact count is a number; the
+    # rounded form stays the string it was printed as.
+    - name: bytes
+      select: {after: '^[ \t]*collisions:', limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[ \t]*RX bytes:(?P<rx>\d+)[ \t]+\((?P<rx_human>[^)]*)\)[ \t]+TX bytes:(?P<tx>\d+)[ \t]+\((?P<tx_human>[^)]*)\)[ \t]*\z'
+      fields:
+        rx: {type: int}
+        tx: {type: int}

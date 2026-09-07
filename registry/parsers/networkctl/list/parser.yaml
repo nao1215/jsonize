@@ -1,0 +1,38 @@
+# `networkctl` with no verb prints the same table as `networkctl list`,
+# so the format carries no argument of its own and `detect.args` would
+# only reject the default invocation.
+#
+# IDX is right-aligned and the widest value can be narrower than the
+# header, which is the case `split: aligned` cannot cut, so the row is
+# read by whitespace. Every cell after it is a single word: an interface
+# name, a link type, an operational state and a setup state all come from
+# fixed vocabularies without spaces.
+format: 1
+command: networkctl
+variant: list
+description: networkctl list, one row per network interface
+metadata:
+  tags: [linux, network, systemd]
+  compatible: [systemd-networkd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/networkctl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AIDX[ \t]+LINK[ \t]+TYPE[ \t]+OPERATIONAL[ \t]+SETUP[ \t]*$'
+input:
+  # The table ends with a count of the rows above it.
+  ignore:
+    - '^\d+ links listed\.$'
+parse:
+  type: table
+  split: whitespace
+fields:
+  idx: {type: int, required: true}
+  link: {required: true}
+  # networkd prints a dash for a state it does not know, which is what an
+  # interface it does not manage reports.
+  type: {null_if: ["-"]}
+  operational: {null_if: ["-"]}
+  setup: {null_if: ["-"]}

@@ -1,0 +1,45 @@
+# `sar -q` prints a banner naming the kernel, the host, the date and
+# the CPU count, then one row per sampling interval and a summary row
+# labelled Average:. The banner is dropped: it is one line about the run
+# rather than a row of the report, and a table cannot hold both.
+#
+# The column names sit on a line that opens with the time the report
+# started rather than with a name, so the names are written out here and
+# that line is ignored. `sar -n DEV` repeats the name line above the
+# summary block, which is why the ignore pattern accepts either label.
+#
+# The first cell is the time of the sample, except on a summary row where
+# it is the word Average. The trailing colon that only the summary rows
+# carry is removed so the cell holds one or the other and nothing else.
+format: 1
+command: sar
+variant: queue
+description: sar -q run queue and load averages
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+runq-sz[ \t]+plist-sz[ \t]+ldavg-1[ \t]+ldavg-5[ \t]+ldavg-15[ \t]+blocked[ \t]*$'
+input:
+  ignore:
+    - '\ALinux '
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+runq-sz[ \t]+plist-sz'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, runq_sz, plist_sz, ldavg_1, ldavg_5, ldavg_15, blocked]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  runq_sz: {type: int}
+  plist_sz: {type: int}
+  ldavg_1: {type: float}
+  ldavg_5: {type: float}
+  ldavg_15: {type: float}
+  blocked: {type: int}

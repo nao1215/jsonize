@@ -1,0 +1,17 @@
+[
+  {
+    "priority": 0,
+    "selectors": "from all",
+    "table": "local"
+  },
+  {
+    "priority": 32766,
+    "selectors": "from all",
+    "table": "main"
+  },
+  {
+    "priority": 32767,
+    "selectors": "from all",
+    "table": "default"
+  }
+]
