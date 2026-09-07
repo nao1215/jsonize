@@ -73,6 +73,10 @@ detect:
       # A Debian control record opens by naming its package, which
       # reads as a file named Package and a description of one word.
       - '\APackage: \S+[ \t]*$'
+      # `fc-list` prints a path, then the families a font file provides
+      # and its styles, which is a path, a colon and a description too.
+      # The style field is what only that listing has.
+      - '^[^:\n]+: [^:\n]*:style='
       # `ethtool -i` opens with "driver: <name>" and "version: <name>",
       # which are properties of an interface rather than a path and the
       # description of what is stored there.
