@@ -1,0 +1,53 @@
+# /proc/<pid>/limits is a four column table of the resource limits the
+# process runs under: the name of the limit, its soft and hard value,
+# and the unit they are counted in.
+#
+# It is read with a regular expression rather than as an aligned table
+# because two of its header cells hold two words. Column starts are
+# taken from where the header words begin, so "Soft Limit" and "Hard
+# Limit" would each start a column of their own and every column after
+# the first would be cut in the wrong place. Only a trailing header cell
+# can hold a space, which is why `df` can read "Mounted on" and this
+# cannot read "Soft Limit".
+#
+# The columns are fixed widths ("%-25s %-20s %-20s %-10s"), so the
+# expression reads the name as letters and spaces and the two values as
+# a decimal or the word unlimited. A limit is one or the other, so both
+# stay the text that was printed rather than becoming a number that has
+# to encode "no limit" somehow, which is the same choice the ulimit
+# definitions make.
+#
+# The unit is null on the rows that have none: a nice value and a
+# realtime priority are plain numbers and the kernel leaves the column
+# empty for them.
+format: 1
+command: proc
+variant: self-limits
+description: /proc/<pid>/limits soft and hard resource limits
+metadata:
+  tags: [linux, process, limits, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_pid_limits.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The header, which is the whole of the first line and names the
+      # four columns.
+      - '\ALimit[ \t]+Soft Limit[ \t]+Hard Limit[ \t]+Units[ \t]*$'
+      # RLIMIT_CPU is first in the kernel's table, so this row follows
+      # the header on every process.
+      - '^Max cpu time[ \t]+(?:unlimited|\d+)[ \t]'
+input:
+  select:
+    # The header, which the signature has already read.
+    skip: 1
+parse:
+  type: regex
+  pattern: '^(?P<limit>[A-Za-z][A-Za-z ]*[A-Za-z])[ \t]+(?P<soft_limit>unlimited|\d+)[ \t]+(?P<hard_limit>unlimited|\d+)(?:[ \t]+(?P<units>[A-Za-z]+))?[ \t]*$'
+fields:
+  limit: {required: true}
+  soft_limit: {required: true}
+  hard_limit: {required: true}
+  units: {}

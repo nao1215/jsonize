@@ -1,0 +1,200 @@
+# /proc/schedstat opens with the version of the format and the jiffies
+# timestamp it was read at, and then writes a block per processor: a cpu
+# line of nine counters, followed by a line per scheduling domain that
+# processor belongs to.
+#
+# The version line is what this definition claims. The columns of the
+# domain lines are defined by it and have changed: version 15 and 16
+# write the cpumask straight after the domain number, version 17 writes
+# the name of the domain first, and 17 also splits the load imbalance
+# counter into four (load, utilisation, tasks, misfit), which is what
+# makes a domain line 45 counters rather than 36. Requiring "version 17"
+# is therefore not a way of recognising the file but a statement of
+# which format is read; an older kernel gets exit 4, which is the right
+# answer until somebody captures one and writes a variant for it.
+#
+# The nine counters of a cpu line have been the same since version 15.
+# The second is a leftover from the O(1) scheduler and is always zero;
+# it is reported rather than dropped, because dropping a field would
+# renumber the rest against the documentation.
+#
+# The domain counters are read as a table of named columns. The three
+# groups of eleven are the same counters recorded in the three states
+# the processor can balance in, in the order the documentation numbers
+# them: busy, idle, and newly idle. The six sbe and sbf counters are
+# named for the fields they are and are always zero; the kernel has not
+# updated them since exec and fork balancing were removed.
+#
+# A domain line with a different number of counters is refused rather
+# than read: a row with fewer fields than there are columns is an error,
+# and an extra field would land in the last column, where it fails to
+# convert to an integer.
+format: 1
+command: proc
+variant: schedstat
+description: /proc/schedstat version 17 scheduler statistics per processor and domain
+metadata:
+  tags: [linux, scheduler, proc]
+  compatible: [Linux]
+  references:
+    - https://www.kernel.org/doc/Documentation/scheduler/sched-stats.rst
+    - https://man7.org/linux/man-pages/man5/proc.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The two lines the file opens with, and one of each kind of row.
+      # The version is the format, not a detail: see the note above.
+      - '\Aversion 17[ \t]*$'
+      - '^timestamp \d+[ \t]*$'
+      # Nine counters after the processor number. /proc/stat also opens
+      # a line with cpu and a number, and writes ten.
+      - '^cpu\d+(?: \d+){9}[ \t]*$'
+      # A domain: its name, the cpumask of the processors in it (comma
+      # separated in groups of 32 bits on a large machine), and the 45
+      # counters version 17 keeps.
+      - '^domain\d+ \S+ [0-9a-f,]+(?: \d+){45}[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: header
+      select: {limit: 2}
+      parse:
+        type: kv
+        separator: " "
+        as: map
+      fields:
+        version: {type: int}
+        # Jiffies since boot, as the kernel counts them.
+        timestamp: {type: int}
+    - name: cpus
+      # The records start at the first cpu line; the two lines above are
+      # read by the part before this one.
+      select: {after: '^timestamp '}
+      parse:
+        type: records
+        start: '^cpu\d+ '
+        parts:
+          - name: cpu
+            select: {limit: 1}
+            parse:
+              type: regex
+              each: input
+              pattern: '\A(?P<cpu>cpu\d+) (?P<yield_count>\d+) (?P<legacy>\d+) (?P<schedule_count>\d+) (?P<schedule_idle_count>\d+) (?P<wakeup_count>\d+) (?P<wakeup_local_count>\d+) (?P<run_time_ns>\d+) (?P<wait_time_ns>\d+) (?P<timeslice_count>\d+)[ \t]*\z'
+            fields:
+              cpu: {required: true}
+              yield_count: {type: int, required: true}
+              # Always zero: the O(1) scheduler kept a count here.
+              legacy: {type: int, required: true}
+              schedule_count: {type: int, required: true}
+              schedule_idle_count: {type: int, required: true}
+              wakeup_count: {type: int, required: true}
+              wakeup_local_count: {type: int, required: true}
+              run_time_ns: {type: int, required: true}
+              wait_time_ns: {type: int, required: true}
+              timeslice_count: {type: int, required: true}
+          - name: domains
+            select: {skip: 1}
+            parse:
+              type: table
+              header:
+                none: true
+                columns:
+                  - domain
+                  - name
+                  - cpumask
+                  - busy_lb_count
+                  - busy_lb_balanced
+                  - busy_lb_failed
+                  - busy_lb_imbalance_load
+                  - busy_lb_imbalance_util
+                  - busy_lb_imbalance_task
+                  - busy_lb_imbalance_misfit
+                  - busy_lb_gained
+                  - busy_lb_hot_gained
+                  - busy_lb_nobusyq
+                  - busy_lb_nobusyg
+                  - idle_lb_count
+                  - idle_lb_balanced
+                  - idle_lb_failed
+                  - idle_lb_imbalance_load
+                  - idle_lb_imbalance_util
+                  - idle_lb_imbalance_task
+                  - idle_lb_imbalance_misfit
+                  - idle_lb_gained
+                  - idle_lb_hot_gained
+                  - idle_lb_nobusyq
+                  - idle_lb_nobusyg
+                  - newly_idle_lb_count
+                  - newly_idle_lb_balanced
+                  - newly_idle_lb_failed
+                  - newly_idle_lb_imbalance_load
+                  - newly_idle_lb_imbalance_util
+                  - newly_idle_lb_imbalance_task
+                  - newly_idle_lb_imbalance_misfit
+                  - newly_idle_lb_gained
+                  - newly_idle_lb_hot_gained
+                  - newly_idle_lb_nobusyq
+                  - newly_idle_lb_nobusyg
+                  - alb_count
+                  - alb_failed
+                  - alb_pushed
+                  - sbe_count
+                  - sbe_balanced
+                  - sbe_pushed
+                  - sbf_count
+                  - sbf_balanced
+                  - sbf_pushed
+                  - ttwu_wake_remote
+                  - ttwu_move_affine
+                  - ttwu_move_balance
+            fields:
+              domain: {required: true}
+              name: {required: true}
+              # Hexadecimal, in groups of 32 bits separated by commas.
+              cpumask: {required: true}
+              busy_lb_count: {type: int, required: true}
+              busy_lb_balanced: {type: int, required: true}
+              busy_lb_failed: {type: int, required: true}
+              busy_lb_imbalance_load: {type: int, required: true}
+              busy_lb_imbalance_util: {type: int, required: true}
+              busy_lb_imbalance_task: {type: int, required: true}
+              busy_lb_imbalance_misfit: {type: int, required: true}
+              busy_lb_gained: {type: int, required: true}
+              busy_lb_hot_gained: {type: int, required: true}
+              busy_lb_nobusyq: {type: int, required: true}
+              busy_lb_nobusyg: {type: int, required: true}
+              idle_lb_count: {type: int, required: true}
+              idle_lb_balanced: {type: int, required: true}
+              idle_lb_failed: {type: int, required: true}
+              idle_lb_imbalance_load: {type: int, required: true}
+              idle_lb_imbalance_util: {type: int, required: true}
+              idle_lb_imbalance_task: {type: int, required: true}
+              idle_lb_imbalance_misfit: {type: int, required: true}
+              idle_lb_gained: {type: int, required: true}
+              idle_lb_hot_gained: {type: int, required: true}
+              idle_lb_nobusyq: {type: int, required: true}
+              idle_lb_nobusyg: {type: int, required: true}
+              newly_idle_lb_count: {type: int, required: true}
+              newly_idle_lb_balanced: {type: int, required: true}
+              newly_idle_lb_failed: {type: int, required: true}
+              newly_idle_lb_imbalance_load: {type: int, required: true}
+              newly_idle_lb_imbalance_util: {type: int, required: true}
+              newly_idle_lb_imbalance_task: {type: int, required: true}
+              newly_idle_lb_imbalance_misfit: {type: int, required: true}
+              newly_idle_lb_gained: {type: int, required: true}
+              newly_idle_lb_hot_gained: {type: int, required: true}
+              newly_idle_lb_nobusyq: {type: int, required: true}
+              newly_idle_lb_nobusyg: {type: int, required: true}
+              alb_count: {type: int, required: true}
+              alb_failed: {type: int, required: true}
+              alb_pushed: {type: int, required: true}
+              sbe_count: {type: int, required: true}
+              sbe_balanced: {type: int, required: true}
+              sbe_pushed: {type: int, required: true}
+              sbf_count: {type: int, required: true}
+              sbf_balanced: {type: int, required: true}
+              sbf_pushed: {type: int, required: true}
+              ttwu_wake_remote: {type: int, required: true}
+              ttwu_move_affine: {type: int, required: true}
+              ttwu_move_balance: {type: int, required: true}

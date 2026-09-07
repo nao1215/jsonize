@@ -1,0 +1,428 @@
+[
+  {
+    "device": "tmpfs",
+    "mount_point": "/run",
+    "fs_type": "tmpfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "size=12882672k",
+      "nr_inodes=819200",
+      "mode=755",
+      "inode64"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "/dev/nvme1n1p2",
+    "mount_point": "/",
+    "fs_type": "ext4",
+    "options": [
+      "rw",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "devtmpfs",
+    "mount_point": "/dev",
+    "fs_type": "devtmpfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "size=32119780k",
+      "nr_inodes=8029945",
+      "mode=755",
+      "inode64"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "tmpfs",
+    "mount_point": "/dev/shm",
+    "fs_type": "tmpfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "inode64",
+      "usrquota"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "devpts",
+    "mount_point": "/dev/pts",
+    "fs_type": "devpts",
+    "options": [
+      "rw",
+      "nosuid",
+      "noexec",
+      "relatime",
+      "gid=5",
+      "mode=600",
+      "ptmxmode=000"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "sysfs",
+    "mount_point": "/sys",
+    "fs_type": "sysfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "securityfs",
+    "mount_point": "/sys/kernel/security",
+    "fs_type": "securityfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "cgroup2",
+    "mount_point": "/sys/fs/cgroup",
+    "fs_type": "cgroup2",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime",
+      "nsdelegate",
+      "memory_recursiveprot",
+      "memory_hugetlb_accounting"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "none",
+    "mount_point": "/sys/fs/pstore",
+    "fs_type": "pstore",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "efivarfs",
+    "mount_point": "/sys/firmware/efi/efivars",
+    "fs_type": "efivarfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "bpf",
+    "mount_point": "/sys/fs/bpf",
+    "fs_type": "bpf",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime",
+      "mode=700"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "configfs",
+    "mount_point": "/sys/kernel/config",
+    "fs_type": "configfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "proc",
+    "mount_point": "/proc",
+    "fs_type": "proc",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "systemd-1",
+    "mount_point": "/proc/sys/fs/binfmt_misc",
+    "fs_type": "autofs",
+    "options": [
+      "rw",
+      "relatime",
+      "fd=37",
+      "pgrp=1",
+      "timeout=0",
+      "minproto=5",
+      "maxproto=5",
+      "direct",
+      "pipe_ino=12540"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "none",
+    "mount_point": "/run/credentials/systemd-journald.service",
+    "fs_type": "tmpfs",
+    "options": [
+      "ro",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime",
+      "nosymfollow",
+      "size=1024k",
+      "nr_inodes=1024",
+      "mode=700",
+      "inode64",
+      "noswap"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "mqueue",
+    "mount_point": "/dev/mqueue",
+    "fs_type": "mqueue",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "hugetlbfs",
+    "mount_point": "/dev/hugepages",
+    "fs_type": "hugetlbfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "relatime",
+      "pagesize=2M"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "debugfs",
+    "mount_point": "/sys/kernel/debug",
+    "fs_type": "debugfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "tracefs",
+    "mount_point": "/sys/kernel/tracing",
+    "fs_type": "tracefs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "fusectl",
+    "mount_point": "/sys/fs/fuse/connections",
+    "fs_type": "fusectl",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "none",
+    "mount_point": "/run/credentials/systemd-resolved.service",
+    "fs_type": "tmpfs",
+    "options": [
+      "ro",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime",
+      "nosymfollow",
+      "size=1024k",
+      "nr_inodes=1024",
+      "mode=700",
+      "inode64",
+      "noswap"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "/dev/loop0",
+    "mount_point": "/snap/bare/5",
+    "fs_type": "squashfs",
+    "options": [
+      "ro",
+      "nodev",
+      "relatime",
+      "errors=continue",
+      "threads=single"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "/dev/nvme0n1p1",
+    "mount_point": "/media/user/2nd",
+    "fs_type": "ext4",
+    "options": [
+      "rw",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "/dev/loop3",
+    "mount_point": "/snap/core20/2866",
+    "fs_type": "squashfs",
+    "options": [
+      "ro",
+      "nodev",
+      "relatime",
+      "errors=continue",
+      "threads=single"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "/dev/loop5",
+    "mount_point": "/snap/core18/2999",
+    "fs_type": "squashfs",
+    "options": [
+      "ro",
+      "nodev",
+      "relatime",
+      "errors=continue",
+      "threads=single"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "/dev/nvme1n1p1",
+    "mount_point": "/boot/efi",
+    "fs_type": "vfat",
+    "options": [
+      "rw",
+      "relatime",
+      "fmask=0022",
+      "dmask=0022",
+      "codepage=437",
+      "iocharset=iso8859-1",
+      "shortname=mixed",
+      "errors=remount-ro"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "binfmt_misc",
+    "mount_point": "/proc/sys/fs/binfmt_misc",
+    "fs_type": "binfmt_misc",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "tmpfs",
+    "mount_point": "/run/snapd/ns",
+    "fs_type": "tmpfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "size=12882672k",
+      "nr_inodes=819200",
+      "mode=755",
+      "inode64"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "nsfs",
+    "mount_point": "/run/snapd/ns/snapd-desktop-integration.mnt",
+    "fs_type": "nsfs",
+    "options": [
+      "rw"
+    ],
+    "dump": 0,
+    "pass": 0
+  }
+]

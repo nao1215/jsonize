@@ -1,0 +1,6 @@
+description: |
+  The whole file: three zones of one NUMA node. The DMA zone has no free
+  block below order eight, so its first eight counts are zero, which is
+  the row that shows the counts are per order rather than a total.
+source: /proc/buddyinfo on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C
+os: linux

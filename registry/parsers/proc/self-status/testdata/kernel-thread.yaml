@@ -1,0 +1,9 @@
+description: |
+  /proc/2/status, the kthreadd kernel thread. A kernel thread has no
+  address space, so the whole Vm and Rss group is absent, and so are
+  CoreDumping, THP_enabled and untag_mask. Groups holds a single space,
+  which reads as an empty list rather than a missing key. The case pins
+  that the definition reports the labels the file holds instead of a
+  fixed set.
+source: /proc/2/status on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C
+os: linux

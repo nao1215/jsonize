@@ -1,0 +1,12 @@
+Node 0, zone      DMA
+  per-node stats
+      nr_inactive_anon 2333507
+      nr_active_anon 4972505
+      nr_inactive_file 3332629
+      nr_active_file 1249280
+      nr_unevictable 206
+      nr_slab_reclaimable 932991
+      nr_slab_unreclaimable 390246
+      nr_isolated_anon 0
+      nr_isolated_file 0
+      workingset_nodes 568821

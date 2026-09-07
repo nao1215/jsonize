@@ -1,0 +1,5 @@
+description: |
+  The whole file on a machine with one console. tty0 is not read from,
+  so its operations column opens with a dash rather than an R.
+source: /proc/consoles on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C
+os: linux

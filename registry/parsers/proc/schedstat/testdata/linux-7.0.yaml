@@ -1,0 +1,8 @@
+description: |
+  The first two processors of a 32-processor machine, each with the
+  three sched domains the topology gives it (SMT, MC, PKG). The counters
+  the kernel keeps only while schedstats are enabled are zero here,
+  because kernel.sched_schedstats was off; the run time, wait time and
+  timeslice counts on the cpu lines are kept regardless and are not.
+source: /proc/schedstat on Linux 7.0.0-30-generic (Ubuntu), lines 1-10 of 130, read with LC_ALL=C
+os: linux

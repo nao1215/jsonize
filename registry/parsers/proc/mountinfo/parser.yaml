@@ -1,0 +1,64 @@
+# /proc/<pid>/mountinfo is one line per mount in the process's mount
+# namespace: the mount and its parent, the device it lives on, which
+# part of that device is mounted and where, the options the mount was
+# made with, then a "-", and after it the three things that belong to
+# the filesystem rather than to the mount.
+#
+# The "-" is there because the number of fields before it is not fixed.
+# Between the mount options and the separator the kernel writes zero or
+# more optional fields, one per propagation property the mount has:
+# shared:N, master:N, propagate_from:N, unbindable. A mount that has
+# none writes nothing there, so the separator follows the mount options
+# directly. That is why the fields after it are read by looking for the
+# "-" rather than by counting, and why a mount with no propagation
+# reports an empty list rather than null.
+#
+# The optional fields stay strings. Three of the four are a tag and a
+# number, but unbindable is a tag alone, so splitting them on the colon
+# would work for some and not for others.
+#
+# Paths keep the escapes the kernel wrote. A space in a mount point is
+# written \040, and a tab, a newline and a backslash are escaped the
+# same way; undoing them here would produce a path that no longer
+# matches the file. The root field is not always a path at all: a
+# namespace mount writes mnt:[4026533362] there.
+format: 1
+command: proc
+variant: mountinfo
+description: /proc/<pid>/mountinfo mount table with mount ids and propagation
+metadata:
+  tags: [linux, filesystem, mount, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_pid_mountinfo.5.html
+detect:
+  os: [linux]
+  signature:
+    # A machine with snap and container mounts runs well past the
+    # default window, and the shape below is about every line.
+    window: 200
+    all:
+      # Every line is a mount: two ids, a device number, a root, a mount
+      # point, the mount options, any optional fields, the "-", and the
+      # filesystem type, source and options. The two ids and the
+      # major:minor pair opening the line are what tell this from the
+      # six field table /proc/mounts writes.
+      - '\A(?:\d+ \d+ \d+:\d+ \S+ \S+ \S+(?: [^ ]+)*? - \S+ \S+ \S+[ \t]*\n)*\d+ \d+ \d+:\d+ \S+ \S+ \S+(?: [^ ]+)*? - \S+ \S+ \S+[ \t]*\z'
+parse:
+  type: regex
+  pattern: '^(?P<mount_id>\d+) (?P<parent_id>\d+) (?P<major>\d+):(?P<minor>\d+) (?P<root>\S+) (?P<mount_point>\S+) (?P<mount_options>\S+)(?P<optional_fields>(?: [^ ]+)*?) - (?P<fs_type>\S+) (?P<mount_source>\S+) (?P<super_options>\S+)[ \t]*$'
+fields:
+  mount_id: {type: int, required: true}
+  parent_id: {type: int, required: true}
+  major: {type: int, required: true}
+  minor: {type: int, required: true}
+  root: {required: true}
+  mount_point: {required: true}
+  mount_options: {type: array, split: ","}
+  # The group keeps the space that separates it from the mount options,
+  # so that a mount with no optional field has an empty value rather
+  # than a missing one; the prefix is dropped before the split.
+  optional_fields: {type: array, trim_prefix: " ", split_regex: '[ \t]+'}
+  fs_type: {required: true}
+  mount_source: {required: true}
+  super_options: {type: array, split: ","}

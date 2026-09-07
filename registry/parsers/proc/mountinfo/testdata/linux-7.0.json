@@ -1,0 +1,685 @@
+[
+  {
+    "mount_id": 34,
+    "parent_id": 44,
+    "major": 0,
+    "minor": 29,
+    "root": "/",
+    "mount_point": "/run",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev"
+    ],
+    "optional_fields": [
+      "shared:13"
+    ],
+    "fs_type": "tmpfs",
+    "mount_source": "tmpfs",
+    "super_options": [
+      "rw",
+      "size=12882672k",
+      "nr_inodes=819200",
+      "mode=755",
+      "inode64"
+    ]
+  },
+  {
+    "mount_id": 44,
+    "parent_id": 1,
+    "major": 259,
+    "minor": 2,
+    "root": "/",
+    "mount_point": "/",
+    "mount_options": [
+      "rw",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:1"
+    ],
+    "fs_type": "ext4",
+    "mount_source": "/dev/nvme1n1p2",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 41,
+    "parent_id": 44,
+    "major": 0,
+    "minor": 7,
+    "root": "/",
+    "mount_point": "/dev",
+    "mount_options": [
+      "rw",
+      "nosuid"
+    ],
+    "optional_fields": [
+      "shared:2"
+    ],
+    "fs_type": "devtmpfs",
+    "mount_source": "devtmpfs",
+    "super_options": [
+      "rw",
+      "size=32119780k",
+      "nr_inodes=8029945",
+      "mode=755",
+      "inode64"
+    ]
+  },
+  {
+    "mount_id": 43,
+    "parent_id": 41,
+    "major": 0,
+    "minor": 27,
+    "root": "/",
+    "mount_point": "/dev/shm",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev"
+    ],
+    "optional_fields": [
+      "shared:3"
+    ],
+    "fs_type": "tmpfs",
+    "mount_source": "tmpfs",
+    "super_options": [
+      "rw",
+      "inode64",
+      "usrquota"
+    ]
+  },
+  {
+    "mount_id": 45,
+    "parent_id": 41,
+    "major": 0,
+    "minor": 28,
+    "root": "/",
+    "mount_point": "/dev/pts",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:4"
+    ],
+    "fs_type": "devpts",
+    "mount_source": "devpts",
+    "super_options": [
+      "rw",
+      "gid=5",
+      "mode=600",
+      "ptmxmode=000"
+    ]
+  },
+  {
+    "mount_id": 46,
+    "parent_id": 44,
+    "major": 0,
+    "minor": 26,
+    "root": "/",
+    "mount_point": "/sys",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:5"
+    ],
+    "fs_type": "sysfs",
+    "mount_source": "sysfs",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 47,
+    "parent_id": 46,
+    "major": 0,
+    "minor": 8,
+    "root": "/",
+    "mount_point": "/sys/kernel/security",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:6"
+    ],
+    "fs_type": "securityfs",
+    "mount_source": "securityfs",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 48,
+    "parent_id": 46,
+    "major": 0,
+    "minor": 30,
+    "root": "/",
+    "mount_point": "/sys/fs/cgroup",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:7"
+    ],
+    "fs_type": "cgroup2",
+    "mount_source": "cgroup2",
+    "super_options": [
+      "rw",
+      "nsdelegate",
+      "memory_recursiveprot",
+      "memory_hugetlb_accounting"
+    ]
+  },
+  {
+    "mount_id": 49,
+    "parent_id": 46,
+    "major": 0,
+    "minor": 31,
+    "root": "/",
+    "mount_point": "/sys/fs/pstore",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:8"
+    ],
+    "fs_type": "pstore",
+    "mount_source": "none",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 50,
+    "parent_id": 46,
+    "major": 0,
+    "minor": 32,
+    "root": "/",
+    "mount_point": "/sys/firmware/efi/efivars",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:9"
+    ],
+    "fs_type": "efivarfs",
+    "mount_source": "efivarfs",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 51,
+    "parent_id": 46,
+    "major": 0,
+    "minor": 33,
+    "root": "/",
+    "mount_point": "/sys/fs/bpf",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:10"
+    ],
+    "fs_type": "bpf",
+    "mount_source": "bpf",
+    "super_options": [
+      "rw",
+      "mode=700"
+    ]
+  },
+  {
+    "mount_id": 52,
+    "parent_id": 46,
+    "major": 0,
+    "minor": 21,
+    "root": "/",
+    "mount_point": "/sys/kernel/config",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:11"
+    ],
+    "fs_type": "configfs",
+    "mount_source": "configfs",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 53,
+    "parent_id": 44,
+    "major": 0,
+    "minor": 25,
+    "root": "/",
+    "mount_point": "/proc",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:12"
+    ],
+    "fs_type": "proc",
+    "mount_source": "proc",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 28,
+    "parent_id": 53,
+    "major": 0,
+    "minor": 34,
+    "root": "/",
+    "mount_point": "/proc/sys/fs/binfmt_misc",
+    "mount_options": [
+      "rw",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:14"
+    ],
+    "fs_type": "autofs",
+    "mount_source": "systemd-1",
+    "super_options": [
+      "rw",
+      "fd=37",
+      "pgrp=1",
+      "timeout=0",
+      "minproto=5",
+      "maxproto=5",
+      "direct",
+      "pipe_ino=12540"
+    ]
+  },
+  {
+    "mount_id": 29,
+    "parent_id": 34,
+    "major": 0,
+    "minor": 35,
+    "root": "/",
+    "mount_point": "/run/credentials/systemd-journald.service",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime",
+      "nosymfollow"
+    ],
+    "optional_fields": [
+      "shared:19"
+    ],
+    "fs_type": "tmpfs",
+    "mount_source": "none",
+    "super_options": [
+      "ro",
+      "size=1024k",
+      "nr_inodes=1024",
+      "mode=700",
+      "inode64",
+      "noswap"
+    ]
+  },
+  {
+    "mount_id": 31,
+    "parent_id": 41,
+    "major": 0,
+    "minor": 23,
+    "root": "/",
+    "mount_point": "/dev/mqueue",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:15"
+    ],
+    "fs_type": "mqueue",
+    "mount_source": "mqueue",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 32,
+    "parent_id": 41,
+    "major": 0,
+    "minor": 36,
+    "root": "/",
+    "mount_point": "/dev/hugepages",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:16"
+    ],
+    "fs_type": "hugetlbfs",
+    "mount_source": "hugetlbfs",
+    "super_options": [
+      "rw",
+      "pagesize=2M"
+    ]
+  },
+  {
+    "mount_id": 35,
+    "parent_id": 46,
+    "major": 0,
+    "minor": 9,
+    "root": "/",
+    "mount_point": "/sys/kernel/debug",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:17"
+    ],
+    "fs_type": "debugfs",
+    "mount_source": "debugfs",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 36,
+    "parent_id": 46,
+    "major": 0,
+    "minor": 14,
+    "root": "/",
+    "mount_point": "/sys/kernel/tracing",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:18"
+    ],
+    "fs_type": "tracefs",
+    "mount_source": "tracefs",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 37,
+    "parent_id": 46,
+    "major": 0,
+    "minor": 37,
+    "root": "/",
+    "mount_point": "/sys/fs/fuse/connections",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:20"
+    ],
+    "fs_type": "fusectl",
+    "mount_source": "fusectl",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 40,
+    "parent_id": 34,
+    "major": 0,
+    "minor": 39,
+    "root": "/",
+    "mount_point": "/run/credentials/systemd-resolved.service",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime",
+      "nosymfollow"
+    ],
+    "optional_fields": [
+      "shared:22"
+    ],
+    "fs_type": "tmpfs",
+    "mount_source": "none",
+    "super_options": [
+      "ro",
+      "size=1024k",
+      "nr_inodes=1024",
+      "mode=700",
+      "inode64",
+      "noswap"
+    ]
+  },
+  {
+    "mount_id": 54,
+    "parent_id": 44,
+    "major": 7,
+    "minor": 0,
+    "root": "/",
+    "mount_point": "/snap/bare/5",
+    "mount_options": [
+      "ro",
+      "nodev",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:164"
+    ],
+    "fs_type": "squashfs",
+    "mount_source": "/dev/loop0",
+    "super_options": [
+      "ro",
+      "errors=continue",
+      "threads=single"
+    ]
+  },
+  {
+    "mount_id": 64,
+    "parent_id": 44,
+    "major": 259,
+    "minor": 4,
+    "root": "/",
+    "mount_point": "/media/user/2nd",
+    "mount_options": [
+      "rw",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:174"
+    ],
+    "fs_type": "ext4",
+    "mount_source": "/dev/nvme0n1p1",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 94,
+    "parent_id": 44,
+    "major": 7,
+    "minor": 3,
+    "root": "/",
+    "mount_point": "/snap/core20/2866",
+    "mount_options": [
+      "ro",
+      "nodev",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:184"
+    ],
+    "fs_type": "squashfs",
+    "mount_source": "/dev/loop3",
+    "super_options": [
+      "ro",
+      "errors=continue",
+      "threads=single"
+    ]
+  },
+  {
+    "mount_id": 100,
+    "parent_id": 44,
+    "major": 7,
+    "minor": 5,
+    "root": "/",
+    "mount_point": "/snap/core18/2999",
+    "mount_options": [
+      "ro",
+      "nodev",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:189"
+    ],
+    "fs_type": "squashfs",
+    "mount_source": "/dev/loop5",
+    "super_options": [
+      "ro",
+      "errors=continue",
+      "threads=single"
+    ]
+  },
+  {
+    "mount_id": 489,
+    "parent_id": 44,
+    "major": 259,
+    "minor": 1,
+    "root": "/",
+    "mount_point": "/boot/efi",
+    "mount_options": [
+      "rw",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:454"
+    ],
+    "fs_type": "vfat",
+    "mount_source": "/dev/nvme1n1p1",
+    "super_options": [
+      "rw",
+      "fmask=0022",
+      "dmask=0022",
+      "codepage=437",
+      "iocharset=iso8859-1",
+      "shortname=mixed",
+      "errors=remount-ro"
+    ]
+  },
+  {
+    "mount_id": 494,
+    "parent_id": 28,
+    "major": 0,
+    "minor": 51,
+    "root": "/",
+    "mount_point": "/proc/sys/fs/binfmt_misc",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime"
+    ],
+    "optional_fields": [
+      "shared:459"
+    ],
+    "fs_type": "binfmt_misc",
+    "mount_source": "binfmt_misc",
+    "super_options": [
+      "rw"
+    ]
+  },
+  {
+    "mount_id": 709,
+    "parent_id": 34,
+    "major": 0,
+    "minor": 29,
+    "root": "/snapd/ns",
+    "mount_point": "/run/snapd/ns",
+    "mount_options": [
+      "rw",
+      "nosuid",
+      "nodev"
+    ],
+    "optional_fields": [],
+    "fs_type": "tmpfs",
+    "mount_source": "tmpfs",
+    "super_options": [
+      "rw",
+      "size=12882672k",
+      "nr_inodes=819200",
+      "mode=755",
+      "inode64"
+    ]
+  },
+  {
+    "mount_id": 4493,
+    "parent_id": 709,
+    "major": 0,
+    "minor": 5,
+    "root": "mnt:[4026533362]",
+    "mount_point": "/run/snapd/ns/snapd-desktop-integration.mnt",
+    "mount_options": [
+      "rw"
+    ],
+    "optional_fields": [],
+    "fs_type": "nsfs",
+    "mount_source": "nsfs",
+    "super_options": [
+      "rw"
+    ]
+  }
+]

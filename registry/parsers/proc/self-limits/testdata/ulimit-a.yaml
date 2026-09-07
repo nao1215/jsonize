@@ -1,0 +1,8 @@
+description: |
+  `ulimit -a` as bash prints it. It reports the same limits one per
+  line, but names them in lower case, puts the unit and the option
+  letter in parentheses and prints one value where this file prints a
+  soft and a hard one. The header row this format opens with is absent.
+source: bash `ulimit -a` on Ubuntu with LC_ALL=C
+expect_error: 'does not describe this input'
+os: linux

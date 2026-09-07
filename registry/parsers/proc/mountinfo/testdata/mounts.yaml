@@ -1,0 +1,12 @@
+description: |
+  /proc/mounts lists the same mounts in the older six-field form: no
+  mount and parent id, no device number, no root, and no "-" separating
+  the independent fields from the per-filesystem ones. It is the
+  neighbour this file is most easily confused with, and proc/mounts is
+  what reads it.
+source: |
+  /proc/mounts on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C,
+  lines 1-25 and 70-73; the removable disk mounted under /media named
+  the user, and became /media/user/2nd.
+expect_error: 'does not describe this input'
+os: linux

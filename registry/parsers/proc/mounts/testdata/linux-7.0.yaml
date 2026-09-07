@@ -1,0 +1,10 @@
+description: |
+  A window rather than the whole file: the machine has 107 mounts. The
+  four rows taken from the end include a mount whose option list is the
+  single word rw, which is the shortest a row gets.
+source: |
+  /proc/mounts on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C.
+  Lines 1-25 and 70-73 of the file; the removable disk mounted under
+  /media named the user, and became /media/user/2nd, and the docker
+  overlay and netns mounts that fill lines 75-93 are outside the window.
+os: linux

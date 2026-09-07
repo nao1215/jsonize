@@ -1,0 +1,8 @@
+description: |
+  /proc/tty/drivers names devices and their major and minor numbers as
+  well, and its rows are padded into columns the same way. It carries no
+  operations column and no flags in parentheses, which is what this
+  definition recognises a console by.
+source: /proc/tty/drivers on Linux 7.0.0-30-generic (Ubuntu), lines 1-8, read with LC_ALL=C
+expect_error: 'does not describe this input'
+os: linux

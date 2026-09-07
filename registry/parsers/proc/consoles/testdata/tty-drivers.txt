@@ -1,0 +1,8 @@
+/dev/tty             /dev/tty        5       0 system:/dev/tty
+/dev/console         /dev/console    5       1 system:console
+/dev/ptmx            /dev/ptmx       5       2 system
+/dev/vc/0            /dev/vc/0       4       0 system:vtmaster
+rfcomm               /dev/rfcomm   216 0-255 serial
+dbc_serial           /dev/ttyDBC   241 0-63 serial
+ttyprintk            /dev/ttyprintk   5       3 console
+max310x              /dev/ttyMAX   204 209-224 serial

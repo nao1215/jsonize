@@ -1,0 +1,11 @@
+[
+  {
+    "device": "tty0",
+    "read": false,
+    "write": true,
+    "unblank": true,
+    "flags": "EC  p",
+    "major": 4,
+    "minor": 8
+  }
+]
