@@ -1,27 +1,26 @@
-# /proc/stat is three kinds of line under one label each: the per-CPU
-# time counters, two vectors of counters (intr and softirq), and five
-# single numbers. They are read as one object per line, named by the
-# label the kernel wrote, which is why the objects do not all carry the
-# same keys.
+# /proc/stat is three kinds of line: a table of times per processor, two
+# vectors of counters, and five single numbers. They are three parts, and
+# each part names the lines of the other two in its ignore list, so every
+# line of the file is read by exactly one of them and a line the kernel
+# starts writing that none of them describes is an error rather than a
+# value missing from the output.
 #
-# The alternative would be a composite with a part per kind. It cannot be
-# written: the parts of a composite select lines by position, and the
-# number of cpu lines is the number of processors, so there is no way to
-# say "the lines after the last cpu line". A regex with alternatives is
-# what the format offers for lines that are structurally different, and
-# every line is still read: one the patterns do not cover is an error
-# naming it rather than something quietly dropped.
+# The parts cannot be cut out by a range instead. A part selects lines by
+# position, the number of cpu lines is the number of processors, and
+# there is no way to say "the lines after the last cpu line".
 #
-# The cpu line is read as ten counters. That is what a kernel since
-# 2.6.33 writes; guest_nice was the last one added. An older kernel
-# writing eight or nine of them does not match, and the file is refused
-# rather than read with the columns shifted. No such kernel was available
-# to capture from, which is the same reason proc/diskstats claims one row
-# shape.
+# The cpu rows carry ten counters. That is what a kernel since 2.6.33
+# writes, guest_nice having been the last one added. An older kernel
+# writing eight or nine of them does not match the signature, and the
+# file is refused rather than read with the columns shifted; no machine
+# running such a kernel was available to capture from, which is the same
+# reason proc/diskstats claims one row shape.
 #
 # The counters are the jiffies the kernel counts in, and they are
 # reported as the integers they are. Turning them into seconds needs
-# USER_HZ, which this file does not state.
+# USER_HZ, which this file does not state. btime is a Unix timestamp and
+# is left an integer for the same reason: the file states no format, and
+# type: time is for text that says what it means.
 #
 # intr and softirq each write a total and then one counter per source.
 # The per-source counters become an array so that the reader can index
@@ -49,25 +48,57 @@ detect:
       - '\Acpu[ \t]+(?:\d+[ \t]+){9}\d+[ \t]*$'
       - '^cpu0[ \t]+(?:\d+[ \t]+){9}\d+[ \t]*$'
 parse:
-  type: regex
-  patterns:
+  type: composite
+  parts:
     # The summary line is named cpu and each processor cpuN.
-    - '^(?P<name>cpu[0-9]*)[ \t]+(?P<user>\d+)[ \t]+(?P<nice>\d+)[ \t]+(?P<system>\d+)[ \t]+(?P<idle>\d+)[ \t]+(?P<iowait>\d+)[ \t]+(?P<irq>\d+)[ \t]+(?P<softirq>\d+)[ \t]+(?P<steal>\d+)[ \t]+(?P<guest>\d+)[ \t]+(?P<guest_nice>\d+)[ \t]*$'
-    # A total followed by one counter per interrupt or per softirq.
-    - '^(?P<name>intr|softirq)[ \t]+(?P<total>\d+)[ \t]+(?P<counters>\d+(?:[ \t]+\d+)*)[ \t]*$'
-    - '^(?P<name>ctxt|btime|processes|procs_running|procs_blocked)[ \t]+(?P<value>\d+)[ \t]*$'
-fields:
-  name: {required: true}
-  user: {type: int, required: true}
-  nice: {type: int, required: true}
-  system: {type: int, required: true}
-  idle: {type: int, required: true}
-  iowait: {type: int, required: true}
-  irq: {type: int, required: true}
-  softirq: {type: int, required: true}
-  steal: {type: int, required: true}
-  guest: {type: int, required: true}
-  guest_nice: {type: int, required: true}
-  total: {type: int, required: true}
-  counters: {type: array, split_regex: '[ \t]+', items: {type: int}}
-  value: {type: int, required: true}
+    - name: cpu
+      ignore:
+        - '^(?:intr|softirq)[ \t]'
+        - '^(?:ctxt|btime|processes|procs_running|procs_blocked)[ \t]'
+      parse:
+        type: table
+        header:
+          none: true
+          columns: [name, user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice]
+      fields:
+        name: {required: true}
+        user: {type: int, required: true}
+        nice: {type: int, required: true}
+        system: {type: int, required: true}
+        idle: {type: int, required: true}
+        iowait: {type: int, required: true}
+        irq: {type: int, required: true}
+        softirq: {type: int, required: true}
+        steal: {type: int, required: true}
+        guest: {type: int, required: true}
+        guest_nice: {type: int, required: true}
+    # A total followed by one counter per interrupt line, and the same
+    # for the software interrupts.
+    - name: interrupts
+      ignore:
+        - '^cpu[0-9]*[ \t]'
+        - '^(?:ctxt|btime|processes|procs_running|procs_blocked)[ \t]'
+      parse:
+        type: regex
+        pattern: '^(?P<name>intr|softirq)[ \t]+(?P<total>\d+)[ \t]+(?P<counters>\d+(?:[ \t]+\d+)*)[ \t]*$'
+      fields:
+        name: {required: true}
+        total: {type: int, required: true}
+        counters: {type: array, split_regex: '[ \t]+', items: {type: int}}
+    # The five counters the kernel writes once each. Their names are
+    # fixed, so this part is a map with a conversion per name rather than
+    # a list of name and value.
+    - name: counters
+      ignore:
+        - '^cpu[0-9]*[ \t]'
+        - '^(?:intr|softirq)[ \t]'
+      parse:
+        type: kv
+        separator: " "
+        as: map
+      fields:
+        ctxt: {type: int}
+        btime: {type: int}
+        processes: {type: int}
+        procs_running: {type: int}
+        procs_blocked: {type: int}

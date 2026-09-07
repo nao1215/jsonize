@@ -24,16 +24,22 @@ detect:
     # machine has thirty-three.
     window: 200
     all:
-      # Every line is a tab separated pair whose first cell is either
-      # empty or the word nodev. Nothing but this file is laid out that
-      # way, and no line of it is anything else.
-      - '\A(?:(?:nodev)?\t[^\t\n]+\n)*(?:nodev)?\t[^\t\n]+\z'
+      # Every line is a tab separated pair: an empty cell or the word
+      # nodev, and then a filesystem type name, which is a lower case
+      # word. The name has to be spelled out rather than left as "the
+      # rest of the line": ldd indents each library it lists with a tab
+      # too, and a pair of a tab and anything is a description that fits
+      # its output as well as this file's.
+      - '\A(?:(?:nodev)?\t[a-z0-9][a-z0-9_-]*\n)*(?:nodev)?\t[a-z0-9][a-z0-9_-]*\z'
+      # procfs is registered on any kernel able to print this file, and
+      # it needs no device, so this line is in every copy of it.
+      - '^nodev\tproc$'
 parse:
   type: regex
   # An alternation with an empty branch, rather than an optional group,
   # so that the group takes part in every match and the value is the
   # empty string rather than null when the word is absent.
-  pattern: '^(?P<nodev>nodev|)\t(?P<name>[^\t]+)$'
+  pattern: '^(?P<nodev>nodev|)\t(?P<name>[a-z0-9][a-z0-9_-]*)$'
 fields:
   nodev: {type: bool, true_values: ["nodev"], false_values: [""]}
   name: {required: true}

@@ -31,10 +31,15 @@ metadata:
 detect:
   os: [linux]
   signature:
+    # A machine loading more than twenty modules is ordinary; this one
+    # loads 170.
+    window: 200
     all:
-      # The first row, with the three columns lsmod does not print: the
-      # load state, the address and the optional taint flags.
-      - '\A\S+[ \t]+\d+[ \t]+\d+[ \t]+\S+[ \t]+(?:Live|Loading|Unloading)[ \t]+0x[0-9a-f]+(?:[ \t]+\([A-Z]+\))?[ \t]*$'
+      # Every row, with the three columns lsmod does not print: the load
+      # state, the address and the optional taint flags. There is no
+      # header and no other line, so the rows are the whole of what this
+      # file is.
+      - '\A(?:\S+[ \t]+\d+[ \t]+\d+[ \t]+\S+[ \t]+(?:Live|Loading|Unloading)[ \t]+0x[0-9a-f]+(?:[ \t]+\([A-Z]+\))?[ \t]*\n)*\S+[ \t]+\d+[ \t]+\d+[ \t]+\S+[ \t]+(?:Live|Loading|Unloading)[ \t]+0x[0-9a-f]+(?:[ \t]+\([A-Z]+\))?[ \t]*\z'
 parse:
   type: regex
   pattern: '^(?P<name>\S+)[ \t]+(?P<size>\d+)[ \t]+(?P<used_by_count>\d+)[ \t]+(?P<used_by>\S+)[ \t]+(?P<state>Live|Loading|Unloading)[ \t]+(?P<address>0x[0-9a-f]+)(?:[ \t]+\((?P<taints>[A-Z]+)\))?[ \t]*$'
