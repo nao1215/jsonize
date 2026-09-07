@@ -1,4 +1,7 @@
-# Recorded 2026-09-06 with `go test -run ^$ -bench . -benchmem -count 3 ./internal/...`; see bench/README.md
+# Recorded 2026-09-06 with `go test -run ^$ -bench . -benchmem -count 3`; see
+# bench/README.md. The pkg: lines were rewritten when definition, engine,
+# selector and registry moved from internal/ to pkg/; the measurements are
+# the ones that were recorded.
 PASS
 ok  	github.com/nao1215/jsonize/internal/buildinfo	0.002s
 PASS
@@ -6,10 +9,10 @@ ok  	github.com/nao1215/jsonize/internal/cli	0.002s
 PASS
 ok  	github.com/nao1215/jsonize/internal/conformance	0.002s
 PASS
-ok  	github.com/nao1215/jsonize/internal/convert	0.002s
+ok  	github.com/nao1215/jsonize/pkg/convert	0.002s
 goos: linux
 goarch: amd64
-pkg: github.com/nao1215/jsonize/internal/definition
+pkg: github.com/nao1215/jsonize/pkg/definition
 cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
 BenchmarkLoadAndValidate-32    	   10532	    104143 ns/op	  129370 B/op	    2234 allocs/op
 BenchmarkLoadAndValidate-32    	   10000	    108103 ns/op	  129357 B/op	    2234 allocs/op
@@ -18,10 +21,10 @@ BenchmarkValidateNested-32     	   10000	    114111 ns/op	  149362 B/op	    2435
 BenchmarkValidateNested-32     	   10000	    116996 ns/op	  149374 B/op	    2435 allocs/op
 BenchmarkValidateNested-32     	   10000	    121954 ns/op	  149355 B/op	    2435 allocs/op
 PASS
-ok  	github.com/nao1215/jsonize/internal/definition	7.661s
+ok  	github.com/nao1215/jsonize/pkg/definition	7.661s
 goos: linux
 goarch: amd64
-pkg: github.com/nao1215/jsonize/internal/engine
+pkg: github.com/nao1215/jsonize/pkg/engine
 cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
 BenchmarkParseTableWhitespaceSmall-32    	  138663	      8786 ns/op	  77.28 MB/s	   14928 B/op	     244 allocs/op
 BenchmarkParseTableWhitespaceSmall-32    	  146235	      8553 ns/op	  79.39 MB/s	   14928 B/op	     244 allocs/op
@@ -48,12 +51,12 @@ BenchmarkEncodeJSONPrettyLarge-32        	       9	 119119986 ns/op	93677729 B/o
 BenchmarkEncodeJSONPrettyLarge-32        	       9	 120573523 ns/op	93677240 B/op	 1100039 allocs/op
 BenchmarkEncodeJSONPrettyLarge-32        	       9	 118246933 ns/op	93679494 B/op	 1100042 allocs/op
 PASS
-ok  	github.com/nao1215/jsonize/internal/engine	38.539s
+ok  	github.com/nao1215/jsonize/pkg/engine	38.539s
 PASS
-ok  	github.com/nao1215/jsonize/internal/jsonutil	0.003s
+ok  	github.com/nao1215/jsonize/pkg/jsonutil	0.003s
 goos: linux
 goarch: amd64
-pkg: github.com/nao1215/jsonize/internal/registry
+pkg: github.com/nao1215/jsonize/pkg/registry
 cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
 BenchmarkLoadRegistry/definitions=26-32         	     800	   1317480 ns/op	 1536478 B/op	   26277 allocs/op
 BenchmarkLoadRegistry/definitions=26-32         	     926	   1348828 ns/op	 1536590 B/op	   26277 allocs/op
@@ -65,12 +68,12 @@ BenchmarkLoadRegistry/definitions=1000-32       	      18	  66722771 ns/op	59034
 BenchmarkLoadRegistry/definitions=1000-32       	      18	  67106557 ns/op	59037912 B/op	 1004362 allocs/op
 BenchmarkLoadRegistry/definitions=1000-32       	      16	  66255686 ns/op	59041912 B/op	 1004381 allocs/op
 PASS
-ok  	github.com/nao1215/jsonize/internal/registry	11.197s
+ok  	github.com/nao1215/jsonize/pkg/registry	11.197s
 PASS
 ok  	github.com/nao1215/jsonize/internal/runner	0.003s
 goos: linux
 goarch: amd64
-pkg: github.com/nao1215/jsonize/internal/selector
+pkg: github.com/nao1215/jsonize/pkg/selector
 cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
 BenchmarkDetect/definitions=26-32         	   58567	     19873 ns/op	    6179 B/op	     116 allocs/op
 BenchmarkDetect/definitions=26-32         	   61848	     19284 ns/op	    6171 B/op	     116 allocs/op
@@ -94,4 +97,4 @@ BenchmarkDetectLargeInput-32              	     423	   2718087 ns/op	 367.92 MB/
 BenchmarkDetectLargeInput-32              	     414	   2747394 ns/op	 364.00 MB/s	  419751 B/op	    4221 allocs/op
 BenchmarkDetectLargeInput-32              	     444	   2706460 ns/op	 369.50 MB/s	  419986 B/op	    4221 allocs/op
 PASS
-ok  	github.com/nao1215/jsonize/internal/selector	33.061s
+ok  	github.com/nao1215/jsonize/pkg/selector	33.061s
