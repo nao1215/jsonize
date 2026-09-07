@@ -1,0 +1,102 @@
+[
+  {
+    "name": "IcmpMsgOutType3",
+    "value": 11072,
+    "rate": 0
+  },
+  {
+    "name": "IcmpMsgOutType8",
+    "value": 116,
+    "rate": 0
+  },
+  {
+    "name": "TcpActiveOpens",
+    "value": 434867,
+    "rate": 0
+  },
+  {
+    "name": "TcpPassiveOpens",
+    "value": 77007,
+    "rate": 0
+  },
+  {
+    "name": "TcpAttemptFails",
+    "value": 4271,
+    "rate": 0
+  },
+  {
+    "name": "TcpEstabResets",
+    "value": 39717,
+    "rate": 0
+  },
+  {
+    "name": "TcpInSegs",
+    "value": 38420226,
+    "rate": 0
+  },
+  {
+    "name": "TcpOutSegs",
+    "value": 45813581,
+    "rate": 0
+  },
+  {
+    "name": "TcpRetransSegs",
+    "value": 761755,
+    "rate": 0
+  },
+  {
+    "name": "TcpInErrs",
+    "value": 174,
+    "rate": 0
+  },
+  {
+    "name": "TcpOutRsts",
+    "value": 117318,
+    "rate": 0
+  },
+  {
+    "name": "TcpExtTCPFastOpenActive",
+    "value": 0,
+    "rate": 0
+  },
+  {
+    "name": "TcpExtTCPFastOpenActiveFail",
+    "value": 0,
+    "rate": 0
+  },
+  {
+    "name": "TcpExtTCPFastOpenPassive",
+    "value": 0,
+    "rate": 0
+  },
+  {
+    "name": "TcpExtTCPFastOpenPassiveFail",
+    "value": 0,
+    "rate": 0
+  },
+  {
+    "name": "TcpExtTCPFastOpenListenOverflow",
+    "value": 0,
+    "rate": 0
+  },
+  {
+    "name": "TcpExtTCPFastOpenCookieReqd",
+    "value": 0,
+    "rate": 0
+  },
+  {
+    "name": "TcpExtTCPFastOpenBlackhole",
+    "value": 0,
+    "rate": 0
+  },
+  {
+    "name": "TcpExtTCPSpuriousRtxHostQueues",
+    "value": 979,
+    "rate": 0
+  },
+  {
+    "name": "TcpExtBusyPollRxPackets",
+    "value": 0,
+    "rate": 0
+  }
+]

@@ -1,0 +1,21 @@
+#kernel
+IcmpMsgOutType3                 11072              0.0
+IcmpMsgOutType8                 116                0.0
+TcpActiveOpens                  434867             0.0
+TcpPassiveOpens                 77007              0.0
+TcpAttemptFails                 4271               0.0
+TcpEstabResets                  39717              0.0
+TcpInSegs                       38420226           0.0
+TcpOutSegs                      45813581           0.0
+TcpRetransSegs                  761755             0.0
+TcpInErrs                       174                0.0
+TcpOutRsts                      117318             0.0
+TcpExtTCPFastOpenActive         0                  0.0
+TcpExtTCPFastOpenActiveFail     0                  0.0
+TcpExtTCPFastOpenPassive        0                  0.0
+TcpExtTCPFastOpenPassiveFail    0                  0.0
+TcpExtTCPFastOpenListenOverflow 0                  0.0
+TcpExtTCPFastOpenCookieReqd     0                  0.0
+TcpExtTCPFastOpenBlackhole      0                  0.0
+TcpExtTCPSpuriousRtxHostQueues  979                0.0
+TcpExtBusyPollRxPackets         0                  0.0

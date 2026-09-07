@@ -1,0 +1,7 @@
+source: >-
+  `systemd-path temporary system-binaries` on the same machine with
+  LC_ALL=C. Naming paths prints their values and nothing else, which is
+  a list of bare paths rather than this format, so the definition is
+  pinned to refuse it.
+os: linux
+expect_error: "does not describe this input"

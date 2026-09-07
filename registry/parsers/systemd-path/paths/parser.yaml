@@ -1,0 +1,37 @@
+# systemd-path prints one "name: value" line per path systemd knows,
+# sorted by name. A value is either one absolute path or a colon
+# separated search list, which is why it stays the string it was printed
+# as: splitting it would need to know which of the two the name means,
+# and the text does not say.
+#
+# "name: value" is the plainest shape there is, so the signature is not
+# only that: it is that every line has it, that the name is a lowercase
+# identifier and the value an absolute path, and that two of the names
+# systemd has always defined are among them.
+format: 1
+command: systemd-path
+variant: paths
+description: systemd-path system and user path list
+metadata:
+  tags: [linux, systemd, filesystem]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemd-path.html
+detect:
+  os: [linux]
+  signature:
+    # The list is around eighty lines and the two names below sit in the
+    # middle of it, so the whole report has to be in the window.
+    window: 200
+    all:
+      - '\A(?:[a-z0-9-]+: /[^\n]*\n)*[a-z0-9-]+: /[^\n]*\z'
+      # Defined since systemd 215 and resolvable without a session, so
+      # they are printed wherever the command runs at all.
+      - '^system-binaries: /'
+      - '^temporary: /'
+parse:
+  type: regex
+  pattern: '^(?P<name>[a-z0-9-]+): (?P<path>/.*?)[ \t]*$'
+fields:
+  name: {required: true}
+  path: {required: true}

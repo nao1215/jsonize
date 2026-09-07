@@ -1,0 +1,14 @@
+[
+  {
+    "bits": 3072,
+    "fingerprint": "SHA256:Zq4Hx8LmC1vTdY6RsNbEw0PkAj7UgFoi2XeQ9nMr3St",
+    "comment": "user@workstation spare laptop key",
+    "type": "RSA"
+  },
+  {
+    "bits": 256,
+    "fingerprint": "SHA256:7pWnKd3ZsQvAx0LbEy8RtCfHm1UjGo5NiXe4YqB2rTk",
+    "comment": "no comment",
+    "type": "ED25519"
+  }
+]

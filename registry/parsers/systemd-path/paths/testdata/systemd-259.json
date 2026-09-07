@@ -1,0 +1,306 @@
+[
+  {
+    "name": "binfmt",
+    "path": "/usr/lib/binfmt.d"
+  },
+  {
+    "name": "catalog",
+    "path": "/usr/lib/systemd/catalog"
+  },
+  {
+    "name": "modules-load",
+    "path": "/usr/lib/modules-load.d"
+  },
+  {
+    "name": "search-binaries-default",
+    "path": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+  },
+  {
+    "name": "search-configuration",
+    "path": "/home/user/.config:/home/user/.config/kdedefaults:/etc/xdg/xdg-plasma:/etc/xdg"
+  },
+  {
+    "name": "search-configuration-factory",
+    "path": "/usr/local/share/factory/etc:/usr/share/factory/etc"
+  },
+  {
+    "name": "search-library-arch",
+    "path": "/home/user/.local/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu"
+  },
+  {
+    "name": "search-library-private",
+    "path": "/home/user/.local/lib:/usr/local/lib:/usr/lib"
+  },
+  {
+    "name": "search-shared",
+    "path": "/home/user/.local/share:/usr/share/plasma:/usr/local/share:/usr/share:/var/lib/snapd/desktop"
+  },
+  {
+    "name": "search-state-factory",
+    "path": "/usr/local/share/factory/var:/usr/share/factory/var"
+  },
+  {
+    "name": "sysctl",
+    "path": "/usr/lib/sysctl.d"
+  },
+  {
+    "name": "system-binaries",
+    "path": "/usr/bin"
+  },
+  {
+    "name": "system-configuration",
+    "path": "/etc"
+  },
+  {
+    "name": "system-configuration-factory",
+    "path": "/usr/share/factory/etc"
+  },
+  {
+    "name": "system-credential-store",
+    "path": "/etc/credstore"
+  },
+  {
+    "name": "system-credential-store-encrypted",
+    "path": "/etc/credstore.encrypted"
+  },
+  {
+    "name": "system-include",
+    "path": "/usr/include"
+  },
+  {
+    "name": "system-library-arch",
+    "path": "/usr/lib/x86_64-linux-gnu"
+  },
+  {
+    "name": "system-library-private",
+    "path": "/usr/lib"
+  },
+  {
+    "name": "system-runtime",
+    "path": "/run"
+  },
+  {
+    "name": "system-runtime-logs",
+    "path": "/run/log"
+  },
+  {
+    "name": "system-search-configuration",
+    "path": "/etc/:/run/:/usr/local/lib/:/usr/lib/"
+  },
+  {
+    "name": "system-search-credential-store",
+    "path": "/etc/credstore:/run/credstore:/usr/local/lib/credstore:/usr/lib/credstore"
+  },
+  {
+    "name": "system-search-credential-store-encrypted",
+    "path": "/etc/credstore.encrypted:/run/credstore.encrypted:/usr/local/lib/credstore.encrypted:/usr/lib/credstore.encrypted"
+  },
+  {
+    "name": "system-shared",
+    "path": "/usr/share"
+  },
+  {
+    "name": "system-state-cache",
+    "path": "/var/cache"
+  },
+  {
+    "name": "system-state-factory",
+    "path": "/usr/share/factory/var"
+  },
+  {
+    "name": "system-state-logs",
+    "path": "/var/log"
+  },
+  {
+    "name": "system-state-private",
+    "path": "/var/lib"
+  },
+  {
+    "name": "system-state-spool",
+    "path": "/var/spool"
+  },
+  {
+    "name": "systemd-initrd-preset",
+    "path": "/usr/lib/systemd/initrd-preset"
+  },
+  {
+    "name": "systemd-search-network",
+    "path": "/etc/systemd/network:/run/systemd/network:/usr/local/lib/systemd/network:/usr/lib/systemd/network"
+  },
+  {
+    "name": "systemd-search-system-environment-generator",
+    "path": "/run/systemd/system-environment-generators:/etc/systemd/system-environment-generators:/usr/local/lib/systemd/system-environment-generators:/usr/lib/systemd/system-environment-generators"
+  },
+  {
+    "name": "systemd-search-system-generator",
+    "path": "/run/systemd/system-generators:/etc/systemd/system-generators:/usr/local/lib/systemd/system-generators:/usr/lib/systemd/system-generators"
+  },
+  {
+    "name": "systemd-search-system-unit",
+    "path": "/etc/systemd/system.control:/run/systemd/system.control:/run/systemd/transient:/run/systemd/generator.early:/etc/systemd/system:/etc/systemd/system.attached:/run/systemd/system:/run/systemd/system.attached:/run/systemd/generator:/usr/local/lib/systemd/system:/usr/lib/systemd/system:/run/systemd/generator.late"
+  },
+  {
+    "name": "systemd-search-user-environment-generator",
+    "path": "/run/systemd/user-environment-generators:/etc/systemd/user-environment-generators:/usr/local/lib/systemd/user-environment-generators:/usr/lib/systemd/user-environment-generators"
+  },
+  {
+    "name": "systemd-search-user-generator",
+    "path": "/run/systemd/user-generators:/etc/systemd/user-generators:/usr/local/lib/systemd/user-generators:/usr/lib/systemd/user-generators"
+  },
+  {
+    "name": "systemd-search-user-unit",
+    "path": "/home/user/.config/systemd/user.control:/run/user/1000/systemd/user.control:/run/user/1000/systemd/transient:/run/user/1000/systemd/generator.early:/home/user/.config/systemd/user:/home/user/.config/kdedefaults/systemd/user:/etc/xdg/xdg-plasma/systemd/user:/etc/xdg/systemd/user:/etc/systemd/user:/run/user/1000/systemd/user:/run/systemd/user:/run/user/1000/systemd/generator:/home/user/.local/share/systemd/user:/usr/share/plasma/systemd/user:/usr/local/share/systemd/user:/usr/share/systemd/user:/var/lib/snapd/desktop/systemd/user:/usr/local/lib/systemd/user:/usr/lib/systemd/user:/run/user/1000/systemd/generator.late"
+  },
+  {
+    "name": "systemd-shutdown",
+    "path": "/usr/lib/systemd/system-shutdown"
+  },
+  {
+    "name": "systemd-sleep",
+    "path": "/usr/lib/systemd/system-sleep"
+  },
+  {
+    "name": "systemd-system-conf",
+    "path": "/etc/systemd/system"
+  },
+  {
+    "name": "systemd-system-environment-generator",
+    "path": "/usr/lib/systemd/system-environment-generators"
+  },
+  {
+    "name": "systemd-system-generator",
+    "path": "/usr/lib/systemd/system-generators"
+  },
+  {
+    "name": "systemd-system-preset",
+    "path": "/usr/lib/systemd/system-preset"
+  },
+  {
+    "name": "systemd-system-unit",
+    "path": "/usr/lib/systemd/system"
+  },
+  {
+    "name": "systemd-user-conf",
+    "path": "/etc/systemd/user"
+  },
+  {
+    "name": "systemd-user-environment-generator",
+    "path": "/usr/lib/systemd/user-environment-generators"
+  },
+  {
+    "name": "systemd-user-generator",
+    "path": "/usr/lib/systemd/user-generators"
+  },
+  {
+    "name": "systemd-user-preset",
+    "path": "/usr/lib/systemd/user-preset"
+  },
+  {
+    "name": "systemd-user-unit",
+    "path": "/usr/lib/systemd/user"
+  },
+  {
+    "name": "systemd-util",
+    "path": "/usr/lib/systemd"
+  },
+  {
+    "name": "sysusers",
+    "path": "/usr/lib/sysusers.d"
+  },
+  {
+    "name": "temporary",
+    "path": "/tmp"
+  },
+  {
+    "name": "temporary-large",
+    "path": "/var/tmp"
+  },
+  {
+    "name": "tmpfiles",
+    "path": "/usr/lib/tmpfiles.d"
+  },
+  {
+    "name": "user",
+    "path": "/home/user"
+  },
+  {
+    "name": "user-binaries",
+    "path": "/home/user/.local/bin"
+  },
+  {
+    "name": "user-configuration",
+    "path": "/home/user/.config"
+  },
+  {
+    "name": "user-credential-store",
+    "path": "/home/user/.config/credstore"
+  },
+  {
+    "name": "user-credential-store-encrypted",
+    "path": "/home/user/.config/credstore.encrypted"
+  },
+  {
+    "name": "user-desktop",
+    "path": "/home/user/Desktop"
+  },
+  {
+    "name": "user-documents",
+    "path": "/home/user/Documents"
+  },
+  {
+    "name": "user-download",
+    "path": "/home/user/Downloads"
+  },
+  {
+    "name": "user-library-arch",
+    "path": "/home/user/.local/lib/x86_64-linux-gnu"
+  },
+  {
+    "name": "user-library-private",
+    "path": "/home/user/.local/lib"
+  },
+  {
+    "name": "user-music",
+    "path": "/home/user/Music"
+  },
+  {
+    "name": "user-pictures",
+    "path": "/home/user/Pictures"
+  },
+  {
+    "name": "user-public",
+    "path": "/home/user/Public"
+  },
+  {
+    "name": "user-runtime",
+    "path": "/run/user/1000"
+  },
+  {
+    "name": "user-search-credential-store",
+    "path": "/home/user/.config/credstore:/run/user/1000/credstore:/home/user/.local/lib/credstore"
+  },
+  {
+    "name": "user-search-credential-store-encrypted",
+    "path": "/home/user/.config/credstore.encrypted:/run/user/1000/credstore.encrypted:/home/user/.local/lib/credstore.encrypted"
+  },
+  {
+    "name": "user-shared",
+    "path": "/home/user/.local/share"
+  },
+  {
+    "name": "user-state-cache",
+    "path": "/home/user/.cache"
+  },
+  {
+    "name": "user-state-private",
+    "path": "/home/user/.local/state"
+  },
+  {
+    "name": "user-templates",
+    "path": "/home/user/Templates"
+  },
+  {
+    "name": "user-videos",
+    "path": "/home/user/Videos"
+  }
+]

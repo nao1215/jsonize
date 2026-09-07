@@ -1,0 +1,6 @@
+source: >-
+  lines 2-8 of the same capture, that is `ldconfig -p` with the count
+  line cut off, as a pipeline through grep would deliver it. The entries
+  alone are not evidence of the format, so the definition refuses them.
+os: linux
+expect_error: "does not describe this input"

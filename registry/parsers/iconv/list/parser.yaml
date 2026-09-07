@@ -1,0 +1,33 @@
+# `iconv -l` prints one encoding per line. glibc stores a canonical name
+# with a two character suffix for the transliteration mode, and appends
+# slashes until the name holds exactly two of them, so a plain name comes
+# out as "ISO-8859-1//" and a name that already contains a slash as
+# "ISO-10646/UCS2/". Stripping the trailing slashes gives back the name
+# to pass to -f or -t in either case.
+#
+# Because the suffix fills the name up to two slashes, every line holds
+# exactly two of them and the last character is one, and that is what the
+# signature says. A listing of directory names carries one trailing slash
+# per line and no second one.
+format: 1
+command: iconv
+variant: list
+description: iconv -l known character encodings
+metadata:
+  tags: [linux, darwin, encoding, glibc]
+  compatible: [GNU C Library]
+  references:
+    - https://man7.org/linux/man-pages/man1/iconv.1.html
+detect:
+  signature:
+    all:
+      # Every line: any name, two slashes, the second one closing it.
+      # glibc before 2.16 printed a paragraph of prose and then the names
+      # separated by commas, which is a different format and is refused
+      # here rather than misread.
+      - '\A(?:[^/\n]*/[^/\n]*/\n)*[^/\n]*/[^/\n]*/\z'
+parse:
+  type: regex
+  pattern: '^(?P<encoding>.+?)/{1,2}$'
+fields:
+  encoding: {required: true}

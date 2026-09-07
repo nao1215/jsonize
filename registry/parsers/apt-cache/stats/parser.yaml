@@ -1,0 +1,52 @@
+# `apt-cache stats` reports the size of the package cache. Four kinds of
+# line appear, and the indentation groups the last three under the total
+# above them:
+#
+#     Total package names: 177481 (5679 k)
+#       Normal packages: 79960
+#     Total dependencies: 587777/164504 (14.4 M)
+#     Total slack space: 75.8 k
+#     Utilization: 55.7008%
+#
+# so the count, the pair and the memory the structures occupy are read
+# into their own fields and everything else is kept as printed. The
+# memory figures are rounded by apt for a reader (SizeToStr), which is
+# why they stay strings: "5679 k" does not say which multiple of a
+# thousand it was rounded from.
+#
+# The result is an array rather than an object because the labels are not
+# unique: apt prints the same "Unused", "Used", "Utilization", "Average
+# entries", "Longest" and "Shortest" under both PkgHashTable and
+# GrpHashTable, and an object would keep only the second set.
+format: 1
+command: apt-cache
+variant: stats
+description: apt-cache stats package cache statistics
+metadata:
+  tags: [linux, debian, package]
+  compatible: [APT]
+  references:
+    - https://manpages.debian.org/unstable/apt/apt-cache.8.en.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The first two lines apt prints, and the only labels that carry
+      # both a count and a size. A label with a count under it is not
+      # evidence on its own, so both lines have to be there.
+      - '\ATotal package names:[ \t]+\d+ \('
+      - '^Total package structures:[ \t]+\d+ \('
+parse:
+  type: regex
+  patterns:
+    # "Total dependencies" prints DependsCount/DependsDataCount: how many
+    # dependencies there are, and how many distinct ones they resolve to.
+    - '^[ \t]*(?P<name>[^:]+):[ \t]+(?P<count>\d+)/(?P<data_count>\d+) \((?P<size>[^)]*)\)[ \t]*$'
+    - '^[ \t]*(?P<name>[^:]+):[ \t]+(?P<count>\d+) \((?P<size>[^)]*)\)[ \t]*$'
+    - '^[ \t]*(?P<name>[^:]+):[ \t]+(?P<count>\d+)[ \t]*$'
+    # A rounded size, a percentage or an average: whatever apt printed.
+    - '^[ \t]*(?P<name>[^:]+):[ \t]+(?P<value>.*\S)[ \t]*$'
+fields:
+  name: {required: true}
+  count: {type: int}
+  data_count: {type: int}

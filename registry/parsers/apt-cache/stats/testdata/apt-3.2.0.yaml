@@ -1,0 +1,6 @@
+source: >-
+  captured on Ubuntu 26.04 (apt 3.2.0) with LC_ALL=C as `apt-cache
+  stats`, the whole output. Nothing was replaced; the figures describe
+  the package cache and name no host or user.
+os: linux
+args: ["stats"]
