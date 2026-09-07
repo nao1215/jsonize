@@ -23,6 +23,11 @@
 format: 1
 command: docker
 variant: ps
+aliases:
+  # podman and nerdctl print the same tables under the same
+  # subcommands.
+  - name: podman
+  - name: nerdctl
 description: docker ps and docker ps -a
 metadata:
   tags: [container, docker, process]

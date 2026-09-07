@@ -6,6 +6,11 @@
 format: 1
 command: pip
 variant: columns
+aliases:
+  - name: uv
+    args:
+      all: ["pip", "list"]
+  - name: pip3
 description: pip list installed package table
 metadata:
   tags: [python, package]

@@ -12,6 +12,7 @@ must match the `command` and `variant` keys.
 format: 1                       # required; the schema version
 command: df                     # required; [a-z0-9][a-z0-9._+-]*
 variant: gnu-human              # required; [a-z0-9][a-z0-9-]*
+aliases: [...]                  # optional; other commands printing this
 description: GNU coreutils df -h
 metadata: {...}                 # optional, informational
 detect: {...}                   # optional; how to choose this variant
@@ -23,6 +24,32 @@ fields: {...}                   # optional; conversions per field
 
 Unknown keys are errors. Names such as `aux`, `con` or `nul` are rejected
 because they cannot be directories on Windows.
+
+## aliases
+
+More than one command can print the same format, and nothing in the text
+says which of them wrote it. One definition answers for all of them:
+
+```yaml
+aliases:
+  - name: vdir                  # required; the other command's name
+    args: {}                    # optional; replaces detect.args here
+  - name: getent
+    args: {all: [passwd]}
+  - name: podman                # inherits detect.args
+```
+
+`jz run vdir`, `jz --parser vdir` and `jz list vdir` all reach the
+definition; `jz list` reports the aliases under the command they belong
+to rather than as commands of their own, because they add no format.
+
+`args` is what makes an alias more than a second name. An alias that says
+nothing there is filtered the way the command is, which is what `gdf`
+wants: it is GNU `df` under the name macOS installs it as, and `gdf -h`
+should reach the same variant `df -h` does. An alias that needs other
+arguments states them, which is what `getent passwd` wants. An alias that
+states an empty filter accepts any arguments, which is what `vdir` wants:
+it prints the long listing that `ls` prints only with `-l`.
 
 ## metadata
 

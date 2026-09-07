@@ -3,6 +3,10 @@
 format: 1
 command: uname
 variant: linux
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: guname
 description: uname -a on Linux (GNU coreutils and BusyBox)
 metadata:
   tags: [linux, system]

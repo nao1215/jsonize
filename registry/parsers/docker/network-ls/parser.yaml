@@ -9,6 +9,11 @@
 format: 1
 command: docker
 variant: network-ls
+aliases:
+  # podman and nerdctl print the same tables under the same
+  # subcommands.
+  - name: podman
+  - name: nerdctl
 description: docker network ls
 metadata:
   tags: [container, docker, network]

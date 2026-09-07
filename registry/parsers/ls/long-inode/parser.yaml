@@ -17,6 +17,10 @@
 format: 1
 command: ls
 variant: long-inode
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gls
 description: ls -li long listing with the inode number
 metadata:
   tags: [linux, darwin, filesystem]

@@ -20,6 +20,11 @@
 format: 1
 command: docker
 variant: stats
+aliases:
+  # podman and nerdctl print the same tables under the same
+  # subcommands.
+  - name: podman
+  - name: nerdctl
 description: docker stats --no-stream
 metadata:
   tags: [container, docker, resource]

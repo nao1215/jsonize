@@ -889,6 +889,32 @@ func TestRunRealCommands(t *testing.T) {
 	}
 }
 
+// A command that prints what another one prints is read by the same
+// definition, under its own name and with the arguments that name needs.
+func TestRunUsesAliases(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("no POSIX commands")
+	}
+	h := newHarness(t)
+	for _, args := range [][]string{{"printenv"}, {"getent", "passwd"}, {"getent", "group"}} {
+		if code := h.run(append([]string{"run"}, args...)...); code != ExitOK {
+			t.Errorf("run %v: %d %s", args, code, h.stderr.String())
+		}
+	}
+	// The arguments an alias states replace the ones the command needs:
+	// getent takes the database name where etc takes nothing.
+	if code := h.run("run", "getent", "services"); code == ExitOK {
+		t.Errorf("getent services has no definition and must not be read: %s", h.stdout.String())
+	}
+	// Naming the parser by an alias reaches the same definitions.
+	if code := h.pipe("root:x:0:\n", "--parser", "getent", "--variant", "group"); code != ExitOK {
+		t.Errorf("--parser getent --variant group: %d %s", code, h.stderr.String())
+	}
+	if h.rows()[0]["name"] != "root" {
+		t.Errorf("rows = %v", h.rows())
+	}
+}
+
 func TestMergedExecEnv(t *testing.T) {
 	t.Parallel()
 	dir := t.TempDir()

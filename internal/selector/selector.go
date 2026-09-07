@@ -311,8 +311,10 @@ func check(e *registry.Entry, ctx *Context, window []string) (string, bool) {
 	if ctx.OS != "" && len(d.OS) > 0 && !contains(d.OS, ctx.OS) {
 		return fmt.Sprintf("written for %s, not %s", strings.Join(d.OS, "/"), ctx.OS), false
 	}
-	if ctx.Args != nil && !d.Args.IsZero() {
-		if reason, ok := matchArgs(&d.Args, ctx.Args); !ok {
+	// An alias may need other arguments than the command does, so the
+	// filter comes from the name the definition was reached under.
+	if args := e.Def.ArgsFor(ctx.Parser); ctx.Args != nil && !args.IsZero() {
+		if reason, ok := matchArgs(args, ctx.Args); !ok {
 			return reason, false
 		}
 	}

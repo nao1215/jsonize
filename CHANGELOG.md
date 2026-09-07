@@ -28,6 +28,12 @@ project follows [Semantic Versioning](https://semver.org/).
   matching `start` opens a record and the `parts` are applied to each. A
   `composite` part may itself be `records`, which is what a report that
   opens with a header block and then repeats a block needs.
+- `aliases:` on a definition, for the commands that print a format
+  another command prints: `vdir` prints what `ls -l` prints, `printenv`
+  what `env` prints, `getent passwd` what `/etc/passwd` holds, `podman`
+  and `nerdctl` what `docker` prints, and the g-prefixed coreutils macOS
+  installs print what the coreutils commands print. `jz run`,
+  `--parser` and `jz list` all take the other name.
 - `input: fold:` joins a value that continues on the next line onto the
   line it belongs to, for the reports that break a long value at the
   terminal width (`ethtool`) and for the control files whose values
@@ -103,13 +109,12 @@ project follows [Semantic Versioning](https://semver.org/).
 - Naming a parser or variant never disables the signature check.
 - The public options are `--file`, `--pretty`, `--parser`, `--variant`
   and `--help`. The input limit is 64 MiB and is not configurable.
-- Two commands that print the same format cannot both be registered.
-  Nothing in the text says which of them wrote it, so one definition
-  would read the other's output and the answer would be a guess about
-  the command rather than a reading of the text. `vdir` (`ls -l`),
-  `getent passwd` (`/etc/passwd`), `uv pip list` (`pip list`) and
-  `printenv` (`env`) are the ones this rule leaves out, and `jz run`
-  does not land for them.
+- Two commands that print the same format are one definition with an
+  alias, not two definitions. Nothing in the text says which of them
+  wrote it, so a second definition would read the first one's output and
+  the answer would be a guess about the command rather than a reading of
+  the text. The alias carries the arguments its name needs, which is how
+  `getent passwd` and `getent group` reach different files.
 - A tree of arbitrary depth has no shape jz can promise in advance and
   is left out: `npm ls --all`, `iw dev`, `lsusb -t`, `docker info`,
   `apt-cache policy`, `systemd-analyze critical-chain`. Most of those

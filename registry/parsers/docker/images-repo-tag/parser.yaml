@@ -17,6 +17,11 @@
 format: 1
 command: docker
 variant: images-repo-tag
+aliases:
+  # podman and nerdctl print the same tables under the same
+  # subcommands.
+  - name: podman
+  - name: nerdctl
 description: docker images with the REPOSITORY/TAG/IMAGE ID/CREATED/SIZE columns
 metadata:
   tags: [container, docker, image]

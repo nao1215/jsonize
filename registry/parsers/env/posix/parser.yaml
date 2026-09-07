@@ -10,6 +10,11 @@
 format: 1
 command: env
 variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: genv
+  - name: printenv
 description: env / printenv output as a list of name/value pairs
 metadata:
   tags: [linux, darwin, environment]

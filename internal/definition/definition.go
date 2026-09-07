@@ -81,6 +81,7 @@ type Definition struct {
 	Format      int               `yaml:"format"`
 	Command     string            `yaml:"command"`
 	Variant     string            `yaml:"variant"`
+	Aliases     []Alias           `yaml:"aliases,omitempty"`
 	Description string            `yaml:"description,omitempty"`
 	Metadata    Metadata          `yaml:"metadata,omitempty"`
 	Detect      Detect            `yaml:"detect,omitempty"`
@@ -101,6 +102,53 @@ type Definition struct {
 // ID returns "command/variant".
 func (d *Definition) ID() string {
 	return d.Command + "/" + d.Variant
+}
+
+// Alias is another command that prints this same format: vdir prints
+// what ls -l prints, printenv what env prints, podman what docker
+// prints. One definition answers for all of them, because nothing in the
+// text says which of the commands wrote it.
+type Alias struct {
+	// Name is the other command's name, matched against argv[0] the way
+	// Command is.
+	Name string `yaml:"name"`
+	// Args replaces detect.args while the definition is reached under
+	// this name, for an alias that needs other arguments than the command
+	// does: getent prints the passwd file only when asked for passwd,
+	// while vdir needs no argument where ls needs -l. An alias that says
+	// nothing here is filtered the way the command is, and one that says
+	// an empty filter accepts any arguments.
+	Args *ArgsMatch `yaml:"args,omitempty"`
+}
+
+// ArgsFor returns the argument filter that applies when the definition
+// was reached under name.
+func (d *Definition) ArgsFor(name string) *ArgsMatch {
+	if name != "" && name != d.Command {
+		for i := range d.Aliases {
+			if d.Aliases[i].Name != name {
+				continue
+			}
+			if d.Aliases[i].Args != nil {
+				return d.Aliases[i].Args
+			}
+			break
+		}
+	}
+	return &d.Detect.Args
+}
+
+// AliasNames returns the alias names in the order the definition lists
+// them.
+func (d *Definition) AliasNames() []string {
+	if len(d.Aliases) == 0 {
+		return nil
+	}
+	out := make([]string, 0, len(d.Aliases))
+	for i := range d.Aliases {
+		out = append(out, d.Aliases[i].Name)
+	}
+	return out
 }
 
 // Metadata is descriptive information that does not affect parsing.

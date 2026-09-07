@@ -1,6 +1,10 @@
 format: 1
 command: du
 variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gdu
 description: du output (tab separated size and path) on Linux, macOS and BusyBox
 metadata:
   tags: [linux, darwin, filesystem]

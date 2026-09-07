@@ -16,6 +16,9 @@
 format: 1
 command: tar
 variant: gnu
+aliases:
+  # GNU tar is installed as gtar where the system tar is the BSD one.
+  - name: gtar
 description: GNU tar -tvf archive listing
 metadata:
   tags: [linux, darwin, archive]

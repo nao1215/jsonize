@@ -17,6 +17,8 @@
 format: 1
 command: resolvectl
 variant: status
+aliases:
+  - name: systemd-resolve
 description: resolvectl status, per-scope resolver settings
 metadata:
   tags: [linux, network, dns, systemd]

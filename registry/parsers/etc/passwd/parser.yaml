@@ -3,6 +3,12 @@
 format: 1
 command: etc
 variant: passwd
+aliases:
+  # `getent passwd` prints this file, adding whatever the other name
+  # services answer with.
+  - name: getent
+    args:
+      all: ["passwd"]
 description: /etc/passwd account entries
 metadata:
   tags: [linux, darwin, user]

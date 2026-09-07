@@ -74,6 +74,9 @@ type Entry struct {
 type Registry struct {
 	entries   map[string]*Entry // id -> entry
 	byCommand map[string][]*Entry
+	// commands holds the names a definition calls its own, which is what
+	// Commands reports; byCommand also answers to the aliases.
+	commands map[string]bool
 	// Problems lists definitions that failed to load. The registry stays
 	// usable; callers decide whether problems are fatal.
 	Problems []error
@@ -94,7 +97,7 @@ func (e *LoadError) Unwrap() error { return e.Err }
 
 // Load reads every source in precedence order (first wins).
 func Load(sources ...Source) (*Registry, error) {
-	r := &Registry{entries: map[string]*Entry{}, byCommand: map[string][]*Entry{}}
+	r := &Registry{entries: map[string]*Entry{}, byCommand: map[string][]*Entry{}, commands: map[string]bool{}}
 	for _, src := range sources {
 		if err := r.addSource(src); err != nil {
 			return nil, err
@@ -188,12 +191,27 @@ func (r *Registry) add(e *Entry) {
 	}
 	r.entries[id] = e
 	r.byCommand[e.Def.Command] = append(r.byCommand[e.Def.Command], e)
+	r.commands[e.Def.Command] = true
+	for _, name := range e.Def.AliasNames() {
+		if name == e.Def.Command {
+			continue
+		}
+		r.byCommand[name] = append(r.byCommand[name], e)
+	}
 }
 
-// Lookup returns the definition for command/variant.
+// Lookup returns the definition for command/variant. The command may be
+// an alias, in which case the definition it names answers.
 func (r *Registry) Lookup(command, variant string) (*Entry, bool) {
-	e, ok := r.entries[command+"/"+variant]
-	return e, ok
+	if e, ok := r.entries[command+"/"+variant]; ok {
+		return e, true
+	}
+	for _, e := range r.byCommand[command] {
+		if e.Def.Variant == variant {
+			return e, true
+		}
+	}
+	return nil, false
 }
 
 // Variants returns the entries for a command sorted by variant name.
@@ -201,11 +219,33 @@ func (r *Registry) Variants(command string) []*Entry {
 	return r.byCommand[command]
 }
 
-// Commands returns the known command names sorted.
+// Commands returns the known command names sorted. An alias is not one:
+// it answers to Variants and Lookup, and the command it belongs to
+// reports it.
 func (r *Registry) Commands() []string {
-	out := make([]string, 0, len(r.byCommand))
-	for c := range r.byCommand {
+	out := make([]string, 0, len(r.commands))
+	for c := range r.commands {
 		out = append(out, c)
+	}
+	sort.Strings(out)
+	return out
+}
+
+// Aliases returns the other names the definitions of a command answer
+// to, sorted and without duplicates.
+func (r *Registry) Aliases(command string) []string {
+	seen := map[string]bool{}
+	var out []string
+	for _, e := range r.byCommand[command] {
+		if e.Def.Command != command {
+			continue
+		}
+		for _, name := range e.Def.AliasNames() {
+			if !seen[name] {
+				seen[name] = true
+				out = append(out, name)
+			}
+		}
 	}
 	sort.Strings(out)
 	return out

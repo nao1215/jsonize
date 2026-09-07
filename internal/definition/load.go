@@ -163,6 +163,29 @@ func (d *Definition) Validate() error {
 	case reservedNames[d.Variant]:
 		v.add("variant", "%q is a reserved file name on Windows and cannot be used", d.Variant)
 	}
+	seenAlias := map[string]bool{}
+	for i := range d.Aliases {
+		ap := fmt.Sprintf("aliases[%d]", i)
+		name := d.Aliases[i].Name
+		switch {
+		case name == "":
+			v.add(ap+".name", "is required")
+		case !nameRe.MatchString(name):
+			v.add(ap+".name", "%q must match %s", name, nameRe)
+		case name == d.Command:
+			v.add(ap+".name", "%q is the command itself", name)
+		case seenAlias[name]:
+			v.add(ap+".name", "duplicate alias %q", name)
+		}
+		seenAlias[name] = true
+		if am := d.Aliases[i].Args; am != nil {
+			for j, a := range append(append(append([]string{}, am.Any...), am.All...), am.None...) {
+				if strings.TrimSpace(a) == "" {
+					v.add(fmt.Sprintf("%s.args[%d]", ap, j), "empty argument")
+				}
+			}
+		}
+	}
 	for i, os := range d.Detect.OS {
 		if !knownOS[os] {
 			v.add(fmt.Sprintf("detect.os[%d]", i), "unknown operating system %q", os)

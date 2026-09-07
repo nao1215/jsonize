@@ -3,6 +3,10 @@
 format: 1
 command: df
 variant: gnu
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gdf
 description: df default output with 1K blocks (GNU coreutils, BusyBox)
 metadata:
   tags: [linux, filesystem, coreutils]

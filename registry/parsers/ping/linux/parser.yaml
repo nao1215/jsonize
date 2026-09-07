@@ -4,6 +4,8 @@
 format: 1
 command: ping
 variant: linux
+aliases:
+  - name: ping6
 description: ping replies and summary (iputils)
 metadata:
   tags: [linux, network]

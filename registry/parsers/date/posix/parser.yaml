@@ -7,6 +7,10 @@
 format: 1
 command: date
 variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gdate
 description: date default output
 metadata:
   tags: [linux, darwin, time]

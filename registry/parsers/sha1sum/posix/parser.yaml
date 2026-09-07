@@ -17,6 +17,10 @@
 format: 1
 command: sha1sum
 variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gsha1sum
 description: sha1sum checksum lines
 metadata:
   tags: [linux, darwin, checksum]
