@@ -125,6 +125,72 @@ included. The alternative, adding exclusion patterns for every other
 format that happens to look similar, is a list that can never be
 finished.
 
+### Signatures say what a format is
+
+A signature is a claim about the text: this is the output of this
+command. It is written as what must be true, and `none` is not how a
+definition earns its answer.
+
+The alternative was tried and it does not scale. `file/posix` reads
+"path: description", which is the shape of a dozen other reports, so it
+collected an exclusion for each one it met: `blkid`, `lscpu`,
+`git stash list`, `udevadm`, `modinfo`, `nmcli`, `pip show`, a Debian
+control record, `fc-list`, `ethtool -i`. Fourteen of them, and the
+fifteenth was going to arrive with the next definition somebody added.
+A list of everything a format is not cannot be finished, and each entry
+made `file/posix` a definition other people had to edit before their own
+would pass.
+
+What replaced it says two things about file(1) output itself. Every line
+is "path: description", which is where `apt show`, `dpkg -s`, `zipinfo`
+and `lscpu` stop resembling it; and some description names a kind of
+file, from a list this definition owns. Fourteen exclusions became zero,
+and nothing about the neighbours is mentioned at all.
+
+Four rules follow from that, and they are what a signature is reviewed
+against:
+
+- Write the shape, and write the whole of it. Anchoring both ends is
+  what separates `uptime` from `w`, which opens with the same line, and
+  `ipcs -q` from `ipcs`, which opens with the same section. `\A` and
+  `\z` do most of the work that a `none` used to.
+- A signature may narrow what the definition undertakes to read.
+  `git log --oneline` is read for an abbreviated hash of seven to twenty
+  digits, which leaves no room for a 32, 40 or 64 digit digest; the
+  price is `--no-abbrev`, and the definition says so. This is a decision
+  about scope, not a description of md5sum.
+- Unknown is an answer. A format jz cannot claim exits 4, and that is
+  the tool working. The failure to design against is the other one: a
+  text read confidently with the wrong definition and returned with
+  status 0.
+- `none` is a safety valve for the case where there is no positive form
+  to write, and the reason belongs beside it. One is left in the
+  registry, in `etc/hosts`: `ip neighbour` prints an address, "dev", an
+  interface and a state, and every word of that is a legal host name, so
+  nothing in the text tells the two apart.
+
+Definitions have to be independent for the registry to grow. Adding one
+should need nothing but its own signature and its own fixtures; needing
+to edit a definition somebody else wrote means the two were coupled
+through an exclusion. Measuring that is one command: take a `none` out
+and run `jz test`. Of the 68 the registry had, 31 excluded nothing at
+all, 13 named another command, and 11 remain, every one of them telling
+variants of a single command apart.
+
+### Fixtures verify a signature, they do not decide it
+
+The order is: decide what the format is, write the signature, then
+capture fixtures that show it. The other order looks the same from the
+outside and is not: "no fixture misdetected, so the signature is fine"
+holds only until somebody adds a fixture, and it leaves the definition
+saying whatever happened to work rather than what was meant.
+
+`file/posix` carries the difference. Its fixtures are one line per kind
+the signature names, a listing that mixes a kind with lines file(1)
+could not read, and a listing that names no kind at all and is refused.
+Each of the three exists because the signature says something, not the
+other way round.
+
 ### Selection never guesses
 
 Candidates are filtered by criteria that apply (a criterion whose input is

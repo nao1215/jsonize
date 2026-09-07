@@ -23,9 +23,6 @@ detect:
       # `ip link` adds the mode here and prints no address lines.
       - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+'
       - '^[ \t]+inet6?[ \t]+\S+'
-    none:
-      - '^[ \t]+RX:[ \t]+bytes[ \t]+packets[ \t]+errors'
-      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+.* mode \S+'
 parse:
   type: records
   start: '^\d+: '

@@ -34,9 +34,6 @@ detect:
       # of a million commits or more would need
       - '(?m)^[ 0-9]{6}\t[^\t\n]+$'
       - '(?m)^\d{7,}\t[^\t\n]+$'
-    none:
-      # a third tab separated cell is another format, `--numstat` above all
-      - '(?m)^[ ]*\S+\t[^\t\n]*\t'
 parse:
   type: regex
   pattern: '^[ ]*(?P<count>\d+)\t(?P<author>.+?)(?: <(?P<email>[^<>\n]+)>)?$'

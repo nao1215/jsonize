@@ -1,0 +1,14 @@
+[
+  {
+    "file": "/tmp/sample/dir",
+    "type": "directory"
+  },
+  {
+    "file": "nonexistent",
+    "type": "cannot open `nonexistent' (No such file or directory)"
+  },
+  {
+    "file": "/etc/shadow",
+    "type": "regular file, no read permission"
+  }
+]

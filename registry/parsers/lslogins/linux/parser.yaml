@@ -18,8 +18,6 @@ detect:
   signature:
     all:
       - '^[ \t]*UID[ \t]+USER[ \t]+PROC[ \t]+PWD-LOCK[ \t]+PWD-DENY[ \t]+LAST-LOGIN[ \t]+GECOS[ \t]*$'
-    none:
-      - '^UID USER PROC PWD-LOCK PWD-DENY LAST-LOGIN GECOS$'
 parse:
   type: table
   split: aligned

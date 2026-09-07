@@ -17,12 +17,14 @@ metadata:
 detect:
   os: [linux]
   signature:
+    # The whole of the output is this one section: the banner, its
+    # heading, and rows of that shape to the end. `ipcs` with no option
+    # prints three sections, and its second banner is where this
+    # expression stops short of the end rather than something the
+    # definition has to name and exclude.
+    window: 200
     all:
-      - '^-+ Semaphore Arrays -+$'
-      - '^key[ \t]+semid[ \t]+owner[ \t]+perms[ \t]+nsems[ \t]*$'
-    none:
-      - '^-+ Message Queues -+$'
-      - '^-+ Shared Memory Segments -+$'
+      - '\A(?:[ \t]*\n)*-+ Semaphore Arrays -+[ \t]*\nkey[ \t]+semid[ \t]+owner[ \t]+perms[ \t]+nsems[ \t]*(?:\n(?:0x[0-9a-fA-F]+[ \t]+\d+(?:[ \t]+\S+)*[ \t]*|[ \t]*))*\z'
 input:
   select:
     after: '^-+ Semaphore Arrays -+$'

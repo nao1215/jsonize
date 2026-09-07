@@ -14,17 +14,14 @@ detect:
   auto_detect: false
   signature:
     all:
-      # A device specification, then a mount point, then a file system
-      # type and a comma separated option list. Anchoring the device to
-      # the spellings fstab allows is what keeps a line of any other
-      # whitespace separated table from reading as an entry.
-      - '^(?:/\S+|UUID=\S+|LABEL=\S+|PARTUUID=\S+|PARTLABEL=\S+|ID=\S+|none|tmpfs|proc|sysfs|devpts|debugfs|overlay|cgroup2?|\S+:/\S*)[ \t]+(?:/\S*|none|swap)[ \t]+[\w.+-]+[ \t]+[\w=,.:@/+-]+(?:[ \t]+\d+){0,2}[ \t]*$'
-    none:
-      # A mount table prints its column names in capitals above rows that
-      # have the same four cells an entry has (findmnt -o SOURCE,TARGET,
-      # FSTYPE,OPTIONS is the closest). An entry names a device and a
-      # path, so a line of bare capitals is never one.
-      - '^[A-Z][A-Z0-9_%-]*(?:[ \t]+[A-Z][A-Z0-9_%-]*)+[ \t]*$'
+      # The file opens with an entry, after any comments: a device
+      # specification, a mount point, a file system type and a comma
+      # separated option list. Anchoring the device to the spellings
+      # fstab allows is what keeps another whitespace separated table
+      # from reading as an entry, and requiring the first entry rather
+      # than any line is what keeps a mount table out: `findmnt` opens
+      # with its column names, which name no device.
+      - '\A(?:[ \t]*(?:#[^\n]*)?\n)*(?:/\S+|UUID=\S+|LABEL=\S+|PARTUUID=\S+|PARTLABEL=\S+|ID=\S+|none|tmpfs|proc|sysfs|devpts|debugfs|overlay|cgroup2?|\S+:/\S*)[ \t]+(?:/\S*|none|swap)[ \t]+[\w.+-]+[ \t]+[\w=,.:@/+-]+(?:[ \t]+\d+){0,2}[ \t]*$'
 input:
   ignore:
     - '^\s*#'

@@ -30,17 +30,14 @@ detect:
   # answer the rest of the registry already uses for a generic shape.
   auto_detect: false
   signature:
-    # Two consecutive NAME=value lines. One line alone is not enough:
-    # `id` also starts with "uid=...".
     all:
-      - '^[A-Za-z_][A-Za-z0-9_]*=[^\n]*\n[A-Za-z_][A-Za-z0-9_]*='
-    none:
-      # env prints values raw and never adds quotes, so a quoted value
-      # means some other program wrote the assignment for a shell to
-      # read. This one stays because it is a property of env itself, and
-      # it is what makes --parser env refuse the wrong text.
-      - '^[A-Za-z_][A-Za-z0-9_]*="'
-      - "^[A-Za-z_][A-Za-z0-9_]*='"
+      # Every line is NAME=value with the value written raw, and there
+      # are at least two of them. env never quotes a value, so a file
+      # written for a shell to read (/etc/os-release, `go env`, `locale`)
+      # has a quoted line somewhere in it and is not this format, rather
+      # than being a format this one has to know about and exclude. Two
+      # lines because `id` opens with "uid=..." on a line of its own.
+      - '\A(?:[A-Za-z_][A-Za-z0-9_]*=(?:[^"''\n][^\n]*)?\n)+[A-Za-z_][A-Za-z0-9_]*=(?:[^"''\n][^\n]*)?\z'
 parse:
   type: kv
   separator: "="

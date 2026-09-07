@@ -25,9 +25,6 @@ detect:
       # `ip link` puts `qdisc` where this puts `master`, and nothing else
       # prints a spanning tree priority and cost after a flag list.
       - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ master \S+ state \S+ priority \d+ cost \d+[ \t]*$'
-    none:
-      # The detail form of the same command.
-      - '^[ \t]+hairpin (?:on|off) guard '
 parse:
   type: regex
   # A veth end names its peer after an @, as it does in `ip link`.

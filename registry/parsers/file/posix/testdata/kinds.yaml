@@ -1,0 +1,8 @@
+description: |
+  One line per kind of file the definition undertakes to read, so that the
+  list in the signature is checked rather than asserted. The first ten
+  lines were captured; the last four are transcribed from file(1) output
+  for a PNG, a SQLite database, a PDF and a TrueType font, whose magic
+  this machine did not have.
+source: captured on Ubuntu 26.04 (file 5.46) with LC_ALL=C, paths rewritten
+os: linux

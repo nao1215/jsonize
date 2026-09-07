@@ -17,8 +17,6 @@ detect:
       # (amd64)"), so the mount point has to be an absolute path and the
       # parenthesised list has to open with a filesystem type token.
       - '\A\S.* on /\S* \([a-z0-9_]+[,)]'
-    none:
-      - ' type \S+ \('
 parse:
   type: regex
   pattern: '^(?P<filesystem>.+?) on (?P<mount_point>.+?) \((?P<type>[^,)]+)(?:, (?P<options>[^)]*))?\)\s*$'

@@ -25,12 +25,6 @@ detect:
       - '^aarch64-apple-darwin(?: \(installed\))?$'
       - '^aarch64-apple-ios(?: \(installed\))?$'
       - '^aarch64-apple-ios-sim(?: \(installed\))?$'
-    # Every component of `rustup component list` carries a component
-    # name before the triple, so that listing has none of the three
-    # lines above; this keeps the two apart from the other direction as
-    # well.
-    none:
-      - '^rust-std-'
 parse:
   type: regex
   # The marker is a group that always takes part and may be empty, so
