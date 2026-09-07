@@ -1,0 +1,4 @@
+description: A single cycle to the loopback address, asked for without name resolution.
+source: captured on Ubuntu 26.04 (mtr 0.95) with LC_ALL=C; the host name in the header was replaced
+os: linux
+args: ["--report", "--report-cycles", "1", "-n", "127.0.0.1"]

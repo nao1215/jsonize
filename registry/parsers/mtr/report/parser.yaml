@@ -1,0 +1,49 @@
+# `mtr --report` prints when the run started, a header naming the host it
+# ran from, and one row per hop. The header's first column is the word
+# HOST followed by that host name, which is two words where the columns
+# are cut, so the rows are read by expression rather than by column.
+#
+# A hop that answered nothing prints ??? where the address goes and no
+# figures at all, which is the second alternative; its keys are absent
+# rather than null, since the hop reported nothing to be null about.
+format: 1
+command: mtr
+variant: report
+description: mtr --report per-hop statistics
+metadata:
+  tags: [linux, darwin, network]
+  compatible: [mtr]
+  references:
+    - https://man7.org/linux/man-pages/man8/mtr.8.html
+detect:
+  signature:
+    all:
+      - '^HOST:[ \t]+\S+[ \t]+Loss%[ \t]+Snt[ \t]+Last[ \t]+Avg[ \t]+Best[ \t]+Wrst[ \t]+StDev[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: report
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AStart: (?P<started>\S+)[ \t]*$'
+      fields:
+        started: {required: true}
+    - name: hops
+      select: {skip: 2}
+      parse:
+        type: regex
+        patterns:
+          - '^[ \t]*(?P<hop>\d+)\.\|--[ \t]+(?P<host>\S+)[ \t]+(?P<loss_percent>[\d.]+)%[ \t]+(?P<sent>\d+)[ \t]+(?P<last>[\d.]+)[ \t]+(?P<average>[\d.]+)[ \t]+(?P<best>[\d.]+)[ \t]+(?P<worst>[\d.]+)[ \t]+(?P<stdev>[\d.]+)[ \t]*$'
+          - '^[ \t]*(?P<hop>\d+)\.\|--[ \t]+(?P<host>\?\?\?)[ \t]*$'
+      fields:
+        hop: {type: int, required: true}
+        host: {required: true}
+        loss_percent: {type: float, when_missing: omit}
+        sent: {type: int, when_missing: omit}
+        last: {type: float, when_missing: omit}
+        average: {type: float, when_missing: omit}
+        best: {type: float, when_missing: omit}
+        worst: {type: float, when_missing: omit}
+        stdev: {type: float, when_missing: omit}

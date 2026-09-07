@@ -1,0 +1,18 @@
+{
+  "report": {
+    "started": "2026-09-07T11:24:56+0900"
+  },
+  "hops": [
+    {
+      "hop": 1,
+      "host": "127.0.0.1",
+      "loss_percent": 0,
+      "sent": 1,
+      "last": 0.1,
+      "average": 0.1,
+      "best": 0.1,
+      "worst": 0.1,
+      "stdev": 0
+    }
+  ]
+}
