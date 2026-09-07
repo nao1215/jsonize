@@ -1,46 +1,41 @@
-{
-  "report": {
-    "kernel": "7.0.0-30-generic",
-    "hostname": "workstation",
-    "date": "09/07/26",
-    "architecture": "x86_64",
-    "cpu_count": 32
-  },
-  "cpu": [
-    {
-      "user_percent": 2.9,
-      "nice_percent": 0,
-      "system_percent": 0.58,
-      "iowait_percent": 0.04,
-      "steal_percent": 0,
-      "idle_percent": 96.47
-    }
-  ],
-  "devices": [
-    {
-      "device": "nvme0n1",
-      "r_s": 0.03,
-      "rkb_s": 0.25,
-      "rrqm_s": 0.02,
-      "rrqm_percent": 36.14,
-      "r_await": 1.26,
-      "rareq_sz": 8.84,
-      "w_s": 0,
-      "wkb_s": 0.03,
-      "wrqm_s": 0.01,
-      "wrqm_percent": 74,
-      "w_await": 2.34,
-      "wareq_sz": 15.21,
-      "d_s": 0.02,
-      "dkb_s": 772.11,
-      "drqm_s": 0,
-      "drqm_percent": 0,
-      "d_await": 0.38,
-      "dareq_sz": 45746.77,
-      "f_s": 0,
-      "f_await": 15.34,
-      "aqu_sz": 0,
-      "util_percent": 0
-    }
-  ]
-}
+[
+  {
+    "cpu": [
+      {
+        "user_percent": 2.9,
+        "nice_percent": 0,
+        "system_percent": 0.58,
+        "iowait_percent": 0.04,
+        "steal_percent": 0,
+        "idle_percent": 96.47
+      }
+    ],
+    "devices": [
+      {
+        "device": "nvme0n1",
+        "r_s": 0.03,
+        "rkb_s": 0.25,
+        "rrqm_s": 0.02,
+        "rrqm_percent": 36.14,
+        "r_await": 1.26,
+        "rareq_sz": 8.84,
+        "w_s": 0,
+        "wkb_s": 0.03,
+        "wrqm_s": 0.01,
+        "wrqm_percent": 74,
+        "w_await": 2.34,
+        "wareq_sz": 15.21,
+        "d_s": 0.02,
+        "dkb_s": 772.11,
+        "drqm_s": 0,
+        "drqm_percent": 0,
+        "d_await": 0.38,
+        "dareq_sz": 45746.77,
+        "f_s": 0,
+        "f_await": 15.34,
+        "aqu_sz": 0,
+        "util_percent": 0
+      }
+    ]
+  }
+]

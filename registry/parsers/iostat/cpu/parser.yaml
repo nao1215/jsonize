@@ -1,9 +1,17 @@
-# iostat -c prints the banner and the avg-cpu table only. The device table
-# is excluded by the signature so that the default report cannot land here.
+# A sysstat report is a run of samples: the banner names the machine
+# once, and everything after it repeats once per interval. Reading it as
+# an array of samples is what lets `iostat 1 3` be read at all (the
+# second header used to reach a table as a row) and what lets --stream
+# hand over a sample as soon as it is complete.
+#
+# The banner is dropped with it. It carries the kernel, the host and the
+# CPU count, which `uname -a` and `nproc` also print and jz also reads;
+# what it does not carry is a sample, and a shape that had one object for
+# it and an array for the rest could not be streamed.
 format: 1
 command: iostat
 variant: cpu
-description: iostat -c, CPU averages without the device table
+description: iostat -c, one sample of CPU averages without the device table
 metadata:
   tags: [linux, cpu, sysstat]
   compatible: [sysstat]
@@ -20,22 +28,14 @@ detect:
       # the extended one that opens with r/s, means this is a fuller
       # report and not the CPU one.
       - '^Device[ \t]+\S'
+input:
+  select:
+    after: '\ALinux[ \t]'
 parse:
-  type: composite
+  type: records
+  start: '^avg-cpu:[ \t]'
   parts:
-    - name: report
-      select: {limit: 1}
-      parse:
-        type: regex
-        each: input
-        pattern: '\ALinux[ \t]+(?P<kernel>\S+)[ \t]+\((?P<hostname>[^)]*)\)[ \t]+(?P<date>\S+)[ \t]+_(?P<architecture>.+?)_[ \t]+\((?P<cpu_count>[0-9]+)[ \t]+CPU\)[ \t]*\z'
-      fields:
-        cpu_count: {type: int}
-    # A repeated run (iostat -c 1 2) prints the header again between the
-    # samples; that second header reaches this table as a row and is
-    # reported as a conversion error rather than being dropped.
     - name: cpu
-      select: {skip: 1}
       parse:
         type: table
         header:

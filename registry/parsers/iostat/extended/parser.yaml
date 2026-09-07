@@ -1,15 +1,17 @@
-# `iostat -x` prints the same three blocks as the default report with a
-# wider device table: reads, writes, discards and flushes each get their
-# own rate, queue and wait columns. The two forms are told apart by the
-# first device column, tps in one and r/s in the other.
+# A sysstat report is a run of samples: the banner names the machine
+# once, and everything after it repeats once per interval. Reading it as
+# an array of samples is what lets `iostat 1 3` be read at all (the
+# second header used to reach a table as a row) and what lets --stream
+# hand over a sample as soon as it is complete.
 #
-# Every extended column is a rate or an average, so all of them are
-# floats. The device names still come from the header, because which
-# columns a sysstat release prints has changed before.
+# The banner is dropped with it. It carries the kernel, the host and the
+# CPU count, which `uname -a` and `nproc` also print and jz also reads;
+# what it does not carry is a sample, and a shape that had one object for
+# it and an array for the rest could not be streamed.
 format: 1
 command: iostat
 variant: extended
-description: iostat -x report, CPU averages followed by extended per-device counters
+description: iostat -x, one sample of extended per-device statistics
 metadata:
   tags: [linux, io, cpu, sysstat]
   compatible: [sysstat]
@@ -22,21 +24,17 @@ detect:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
       - '^avg-cpu:[ \t]+%user[ \t]+%nice'
       - '^Device[ \t]+r/s[ \t]'
+input:
+  select:
+    after: '\ALinux[ \t]'
 parse:
-  type: composite
+  type: records
+  start: '^avg-cpu:[ \t]'
   parts:
-    - name: report
-      select: {limit: 1}
-      parse:
-        type: regex
-        each: input
-        pattern: '\ALinux[ \t]+(?P<kernel>\S+)[ \t]+\((?P<hostname>[^)]*)\)[ \t]+(?P<date>\S+)[ \t]+_(?P<architecture>.+?)_[ \t]+\((?P<cpu_count>[0-9]+)[ \t]+CPU\)[ \t]*\z'
-      fields:
-        cpu_count: {type: int}
     # The avg-cpu header carries a leading "avg-cpu:" label that the rows do
     # not repeat, so the column names are declared instead of derived.
     - name: cpu
-      select: {skip: 1, limit: 2}
+      select: {limit: 2}
       parse:
         type: table
         header:
@@ -51,7 +49,7 @@ parse:
     # The device columns differ between sysstat releases (kB_dscd was added
     # for discards), so they are taken from the header line as printed.
     - name: devices
-      select: {skip: 3}
+      select: {skip: 2}
       parse:
         type: table
       fields:

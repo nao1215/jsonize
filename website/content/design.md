@@ -112,6 +112,42 @@ are what produce numbers. The same reasoning removed the `ls -l` /
 `ls -lh` split: which one produced a listing is not decidable from the
 text, and with the size kept as printed it does not need to be.
 
+### A repeating report is an array of samples
+
+`iostat 1 3` prints its column header once per sample. The second one
+reached the device table as a row and failed to convert, so the whole
+report was exit 3 — the one input `iostat` is most often asked for could
+not be read at all. `mpstat` and `pidstat` had the same fault.
+
+Those reports are now read as an array of samples: `type: records` with
+the sample's own header line as `start`, and the tables inside a sample
+as its parts. A single-shot run is the same shape with one sample in it.
+That is a breaking change to what those definitions return, and it is
+the shape that makes `--stream` mean something here: one sample per line,
+written as soon as it is complete, which is what a command run for
+minutes is run for.
+
+No new key was needed. The suspicion was that a table inside a repeating
+block could not take its header from the block, which would have wanted
+something like `header.from_block: true`. It can: a part's table already
+derives its header from the first line of the part's region, and inside
+`records` that region is the block. The vocabulary that was already there
+(`records`, `composite` parts, `input.select.after`) said the whole
+thing.
+
+Two things were given up. The sysstat banner is dropped: it names the
+kernel, the host and the CPU count, which `uname -a` and `nproc` also
+print and jz also reads, and what it does not carry is a sample. Keeping
+it would mean one object for the banner and an array for the rest, which
+has no streaming form at all, so the trade is the banner against the
+option this whole change exists for.
+
+The other is that `vmstat` and `sar` were left alone. They print their
+column header once and every sample under it, so an interval run was
+already one table with one row per sample and nothing was broken. Making
+them look like the others would have been a change for symmetry, and the
+difference is in what the commands print rather than in what jz prefers.
+
 ### A duration is seconds, and the rounded rule is about naming
 
 `ps` prints `00:04:14`, `uptime` prints `13 days, 4:22` and `w` prints

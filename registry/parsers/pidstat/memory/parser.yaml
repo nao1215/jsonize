@@ -1,15 +1,15 @@
-# `pidstat -r` prints the same banner and shape as the default report
-# with memory columns instead of CPU ones. The two are told apart by the
-# fourth column name, %usr in one and minflt/s in the other.
+# A sysstat report is a run of samples: the banner names the machine
+# once, and everything after it repeats once per interval, column header
+# and all. Reading it as an array of samples is what lets an interval run
+# be read at all (the second header used to reach the table as a row) and
+# what lets --stream hand over a sample as soon as it is complete. The
+# closing summary block is a sample of its own, whose rows are labelled
+# Average instead of with a time.
 #
-# The fault counts are rates and are floats; the sizes are exact
-# kilobytes and are integers. Command is last and keeps the rest of the
-# line, because a task name can contain spaces ("Socket Process").
-#
-# Asked for an interval, pidstat closes with a summary block and prints
-# the column names again above it. That repeat is dropped; the rows under
-# it are labelled Average instead of with a time, and the trailing colon
-# that only those rows carry is trimmed.
+# The banner is dropped with it. It carries the kernel, the host and the
+# CPU count, which `uname -a` and `nproc` also print and jz also reads;
+# what it does not carry is a sample, and a shape that had one object for
+# it and an array for the rest could not be streamed.
 format: 1
 command: pidstat
 variant: memory
@@ -26,21 +26,14 @@ detect:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
       - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+UID[ \t]+PID[ \t]+minflt/s'
 input:
-  ignore:
-    - '^Average:[ \t]+UID[ \t]+PID[ \t]+minflt/s'
+  select:
+    after: '\ALinux[ \t]'
 parse:
-  type: composite
+  type: records
+  # A sample opens with the column header and runs to the next one.
+  start: '^(?:[0-9]{2}:[0-9]{2}:[0-9]{2}|Average:)[ \t]+UID[ \t]+PID[ \t]+minflt/s'
   parts:
-    - name: report
-      select: {limit: 1}
-      parse:
-        type: regex
-        each: input
-        pattern: '\ALinux[ \t]+(?P<kernel>\S+)[ \t]+\((?P<hostname>[^)]*)\)[ \t]+(?P<date>\S+)[ \t]+_(?P<architecture>.+?)_[ \t]+\((?P<cpu_count>[0-9]+)[ \t]+CPU\)[ \t]*\z'
-      fields:
-        cpu_count: {type: int}
     - name: tasks
-      select: {skip: 1}
       parse:
         type: table
         header:
