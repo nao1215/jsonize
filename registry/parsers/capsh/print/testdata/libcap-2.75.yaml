@@ -1,0 +1,3 @@
+source: "captured on Ubuntu 26.04 (libcap2-bin 1:2.75) with LC_ALL=C: capsh --print; the user name was replaced with user"
+os: linux
+args: [--print]

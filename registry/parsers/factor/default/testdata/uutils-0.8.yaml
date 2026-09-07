@@ -1,0 +1,3 @@
+source: "captured on Ubuntu 26.04 (uutils coreutils 0.8.0) with LC_ALL=C: factor 12 97 360 1"
+os: linux
+args: ["12", "97", "360", "1"]

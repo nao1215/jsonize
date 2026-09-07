@@ -1,0 +1,56 @@
+# `namei -l` prints one block per path it was given: the path itself on
+# an "f:" line, then one row per component, mode first. Following a
+# symlink appends the components of its target to the same block. The
+# blocks repeat, so the definition describes one and `records` applies it
+# to each.
+#
+# The rows are indented by two spaces per symlink followed, which is what
+# shows a component belongs to a link target rather than to the path that
+# was asked about. That indentation is not extracted: namei also pads the
+# owner and group columns to the widest name in the whole report, with
+# the same character, so within one row the padding and the indentation
+# cannot be told apart.
+format: 1
+command: namei
+variant: long
+description: namei -l path components with mode, owner and group
+metadata:
+  tags: [linux, filesystem, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/namei.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The banner names the path that was resolved. Without -l the rows
+      # are a type letter and a name, with no mode, owner or group.
+      - '\Af: \S'
+      - '^[bcdlps?-][rwxsStT-]{9}[ \t]+\S+[ \t]+\S+[ \t]+\S'
+parse:
+  type: records
+  start: '^f: '
+  parts:
+    - name: file
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\Af: (?P<path>.+?)[ \t]*\z'
+      fields:
+        path: {required: true}
+    - name: components
+      select: {skip: 1}
+      parse:
+        type: regex
+        patterns:
+          # Only a mode starting with "l" makes " -> " a link separator.
+          - '^(?P<mode>l[rwxsStT-]{9})[ \t]+(?P<owner>\S+)[ \t]+(?P<group>\S+)[ \t]+(?P<name>.+?) -> (?P<link_to>.+?)[ \t]*$'
+          - '^(?P<mode>[bcdlps?-][rwxsStT-]{9})[ \t]+(?P<owner>\S+)[ \t]+(?P<group>\S+)[ \t]+(?P<name>.+?)[ \t]*$'
+          # A component that could not be resolved has no mode, owner or
+          # group: the columns are blank and the reason follows the name.
+          - '^[ \t]+(?P<name>\S+) - (?P<error>.+?)[ \t]*$'
+      fields:
+        name: {required: true}
+        link_to: {when_missing: omit}
+        error: {when_missing: omit}

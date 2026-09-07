@@ -1,0 +1,4 @@
+source: "captured on Ubuntu 26.04 (libcap2-bin 1:2.75) with LC_ALL=C: capsh --inh= --print; the user name was replaced with user"
+os: linux
+args: [--inh=, --print]
+description: "An empty set prints nothing after the separator, and the IAB line keeps the space it pads with, so the value is empty on both spellings."

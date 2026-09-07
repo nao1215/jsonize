@@ -1,0 +1,33 @@
+# "path capabilities", where the capabilities are what cap_to_text
+# writes: a comma separated list of names, then the flags they are set
+# in ("cap_net_raw=ep"), and possibly several such clauses separated by
+# spaces. A file with no capabilities is not printed at all.
+#
+# A word and a path is the shape that made lsattr claim unrelated text
+# once, and this is the same shape read the other way round, so the
+# signature does not settle for one line of it: every line of the report
+# has to be a path followed by a capability clause, and a clause has to
+# be spelled the way libcap spells one. That also keeps `getcap -n` out,
+# which appends the root id to the line.
+format: 1
+command: getcap
+variant: paths
+description: getcap file capabilities per path
+metadata:
+  tags: [linux, security, capabilities, libcap]
+  compatible: [libcap]
+  references:
+    - https://man7.org/linux/man-pages/man8/getcap.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A\S+(?:[ \t]+(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*)?[-+=][eip]*)+(?:\n\S+(?:[ \t]+(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*)?[-+=][eip]*)+)*\z'
+parse:
+  type: regex
+  # The path is taken up to the capability clause rather than up to the
+  # first space, so a file name with a space in it survives.
+  pattern: '^(?P<file>.+?)[ \t]+(?P<capabilities>(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*)?[-+=][eip]*(?:[ \t]+(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*)?[-+=][eip]*)*)[ \t]*$'
+fields:
+  file: {required: true}
+  capabilities: {required: true}

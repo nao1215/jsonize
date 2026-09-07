@@ -1,0 +1,4 @@
+source: "captured on Ubuntu 26.04 (uutils coreutils 0.8.0) with LC_ALL=C: factor 0 2 18446744073709551615"
+os: linux
+args: ["0", "2", "18446744073709551615"]
+description: "0 prints no factors at all, and the last number is larger than a signed 64-bit integer, which is why the numbers stay strings."

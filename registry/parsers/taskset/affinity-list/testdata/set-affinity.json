@@ -1,0 +1,5 @@
+{
+  "pid": 3496393,
+  "affinity_list": "0-3",
+  "new_affinity_list": "0,2"
+}

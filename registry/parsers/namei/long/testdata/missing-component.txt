@@ -1,0 +1,14 @@
+f: /usr/bin/ls
+drwxr-xr-x root root /
+drwxr-xr-x root root usr
+drwxr-xr-x root root bin
+lrwxrwxrwx root root ls -> ../lib/cargo/bin/coreutils/ls
+drwxr-xr-x root root   ..
+drwxr-xr-x root root   lib
+drwxr-xr-x root root   cargo
+drwxr-xr-x root root   bin
+drwxr-xr-x root root   coreutils
+-rwxr-xr-x root root   ls
+f: /nope/x
+drwxr-xr-x root root /
+                      nope - No such file or directory
