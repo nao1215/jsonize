@@ -1,0 +1,89 @@
+# /proc/diskstats is one row per block device and partition: a major and
+# a minor number, the device name, and the counters the kernel keeps for
+# it.
+#
+# How many counters there are depends on the kernel. It was eleven from
+# 2.6, fifteen from 4.18 when the discard counters arrived, and
+# seventeen from 5.5 when the flush ones did, for a row of fourteen,
+# eighteen and twenty fields. This definition reads the twenty-field row
+# and nothing else: the signature counts the fields, so an older kernel
+# is refused rather than read with its columns shifted or padded out with
+# zeroes it never wrote. The other two shapes need their own variants,
+# and a machine running one of those kernels to capture them from.
+#
+# Sector counts are left as sectors. The kernel writes them in 512-byte
+# units regardless of what the hardware uses, so a byte figure would be
+# arithmetic the file did not ask for; the names say sectors so that the
+# reader can do it knowing that.
+#
+# The millisecond fields are what the kernel calls them. weighted_io_ms
+# is not a duration but a running total of in-flight time multiplied by
+# queue depth, so it is named for the field rather than presented as a
+# time.
+format: 1
+command: proc
+variant: diskstats
+description: /proc/diskstats per-device I/O counters (20-field rows, Linux 5.5 and later)
+metadata:
+  tags: [linux, disk, proc]
+  compatible: [Linux]
+  references:
+    - https://www.kernel.org/doc/Documentation/admin-guide/iostats.rst
+    - https://man7.org/linux/man-pages/man5/proc_diskstats.5.html
+detect:
+  os: [linux]
+  signature:
+    # A machine with many partitions and loop devices runs past the
+    # default window, and the shape below is about every row.
+    window: 200
+    all:
+      # Every row is a major, a minor, a device name and seventeen more
+      # counters. Counting them is what tells this from the fourteen and
+      # eighteen field rows older kernels write.
+      - '\A(?:[ \t]*\d+[ \t]+\d+[ \t]+\S+(?:[ \t]+\d+){17}[ \t]*\n)*[ \t]*\d+[ \t]+\d+[ \t]+\S+(?:[ \t]+\d+){17}[ \t]*\z'
+parse:
+  type: table
+  header:
+    none: true
+    columns:
+      - major
+      - minor
+      - device
+      - reads_completed
+      - reads_merged
+      - sectors_read
+      - read_ms
+      - writes_completed
+      - writes_merged
+      - sectors_written
+      - write_ms
+      - io_in_progress
+      - io_ms
+      - weighted_io_ms
+      - discards_completed
+      - discards_merged
+      - sectors_discarded
+      - discard_ms
+      - flush_completed
+      - flush_ms
+fields:
+  major: {type: int, required: true}
+  minor: {type: int, required: true}
+  device: {required: true}
+  reads_completed: {type: int, required: true}
+  reads_merged: {type: int, required: true}
+  sectors_read: {type: int, required: true}
+  read_ms: {type: int, required: true}
+  writes_completed: {type: int, required: true}
+  writes_merged: {type: int, required: true}
+  sectors_written: {type: int, required: true}
+  write_ms: {type: int, required: true}
+  io_in_progress: {type: int, required: true}
+  io_ms: {type: int, required: true}
+  weighted_io_ms: {type: int, required: true}
+  discards_completed: {type: int, required: true}
+  discards_merged: {type: int, required: true}
+  sectors_discarded: {type: int, required: true}
+  discard_ms: {type: int, required: true}
+  flush_completed: {type: int, required: true}
+  flush_ms: {type: int, required: true}

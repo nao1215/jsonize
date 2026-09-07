@@ -1,0 +1,91 @@
+# /proc/cpuinfo is one block per logical processor, separated by a blank
+# line. Each block is "label : value" lines, and a block opens with
+# "processor".
+#
+# The variant is named for the architecture because the file has no
+# common shape across them. On x86 a block names vendor_id, cpu family,
+# model and flags; on arm64 the same file names BogoMIPS, Features, CPU
+# implementer and CPU architecture, and none of the x86 labels appear at
+# all. Those are different formats that happen to share a path, so this
+# definition claims the x86 one and says so in its name. An arm64 or
+# riscv machine gets exit 4 here, which is the correct answer until
+# somebody captures those and writes their own variant.
+#
+# Which labels appear varies within x86 as well: TLB size and power
+# management come from AMD, and a virtual machine may drop several
+# others. The block is therefore read as a map of whatever labels are
+# present, with a conversion for the ones whose type is known. A label
+# this definition does not list still appears, with the text the kernel
+# wrote for it.
+#
+# Four values stay text on purpose. microcode is hexadecimal, which is
+# how the kernel identifies a revision rather than a quantity to compare.
+# cache size ("1024 KB"), TLB size ("192 4K pages") and address sizes
+# ("48 bits physical, 48 bits virtual") each pack more than one fact into
+# a phrase, and taking them apart would be inventing a structure the file
+# does not have.
+format: 1
+command: proc
+variant: cpuinfo-x86
+description: /proc/cpuinfo processor blocks on x86
+metadata:
+  tags: [linux, cpu, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_cpuinfo.5.html
+detect:
+  os: [linux]
+  signature:
+    # One block is under thirty lines on the machines this was written
+    # against, and the labels below all sit in the first one, so the
+    # window covers a block rather than the whole file.
+    window: 40
+    all:
+      # A block opens the file, and it opens with the processor number.
+      #
+      # There is no rule here that every line be a label and a value, the
+      # way there is in proc/meminfo. The four expressions below already
+      # identify the file, and a /proc/cpuinfo with one unreadable line
+      # in it is a cpuinfo that cannot be parsed rather than something
+      # else: exit 3 naming the line is the better answer there than
+      # exit 4 saying jz cannot tell what the file is.
+      - '\Aprocessor\s*:\s*\d+\s*$'
+      # The labels that make this the x86 form of the file. arm64 writes
+      # none of them.
+      - '^vendor_id\s*:\s*\S'
+      - '^cpu family\s*:\s*\d+\s*$'
+      - '^flags\s*:\s*\S'
+parse:
+  type: records
+  start: '^processor\s*:'
+  parts:
+    - name: cpu
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      # The keys are the labels the kernel writes, spaces and all.
+      fields:
+        processor: {type: int}
+        cpu family: {type: int}
+        model: {type: int}
+        stepping: {type: int}
+        physical id: {type: int}
+        siblings: {type: int}
+        core id: {type: int}
+        cpu cores: {type: int}
+        apicid: {type: int}
+        initial apicid: {type: int}
+        cpuid level: {type: int}
+        clflush size: {type: int}
+        cache_alignment: {type: int}
+        cpu MHz: {type: float}
+        bogomips: {type: float}
+        fpu: {type: bool}
+        fpu_exception: {type: bool}
+        wp: {type: bool}
+        # Space separated sets. An empty one is an empty list, which is
+        # what a kernel with no power management to report writes.
+        flags: {type: array, split_regex: '[ \t]+'}
+        bugs: {type: array, split_regex: '[ \t]+'}
+        power management: {type: array, split_regex: '[ \t]+'}

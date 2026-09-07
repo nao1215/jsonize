@@ -165,9 +165,44 @@ their text alone:
 
 ```console
 $ cat /proc/meminfo | jz
+[{"name":"MemTotal","value":64413356,"unit":"kB"}, ...,
+ {"name":"HugePages_Total","value":0,"unit":null}, ...]
+
 $ jz < /proc/loadavg
+{"load_1m":0.8,"load_5m":0.56,"load_15m":0.42,"runnable":2,"total":4686,"last_pid":3717503}
+
 $ jz --parser proc --variant uptime < /proc/uptime
+{"uptime_seconds":1242659.1,"idle_seconds":38176926.97}
 ```
+
+```console
+$ cat /proc/cpuinfo | jz
+[{"cpu":{"processor":0,"vendor_id":"AuthenticAMD","cpu family":26, ...,
+         "flags":["fpu","vme","de", ...],"bugs":["spectre_v1", ...]}}, ...]
+
+$ jz < /proc/diskstats
+[{"major":7,"minor":0,"device":"loop0","reads_completed":16, ...,"flush_ms":0}, ...]
+```
+
+`/proc/meminfo` is a list of counters rather than one object keyed by
+label, because which labels the kernel prints depends on how it was
+built. The unit is a field of its own and is `null` on the four
+`HugePages_` counters, which the kernel prints without one; the number
+is left in the unit the file states rather than multiplied out.
+
+`/proc/cpuinfo` is read under the variant `cpuinfo-x86`, because the
+file has no shape common to the architectures: an arm64 machine writes
+`Features` and `CPU implementer` where x86 writes `flags` and
+`vendor_id`, and gets exit 4 here until somebody captures that form and
+writes its variant. Within x86 the labels still vary by vendor, so a
+block is read as whatever labels it holds, with a conversion for the
+ones whose type is known and the kernel's own text for the rest.
+
+`/proc/diskstats` is read for the twenty-field row Linux 5.5 and later
+write. The signature counts the fields, so the fourteen- and
+eighteen-field rows older kernels write are refused rather than read
+with their columns shifted or padded with zeroes the kernel never
+wrote.
 
 `/proc/uptime` is the third case rather than the first two, and it is
 worth saying why. It holds two decimal numbers and nothing else, which

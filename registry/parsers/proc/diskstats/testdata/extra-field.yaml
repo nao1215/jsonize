@@ -1,0 +1,7 @@
+description: |
+  A row with one field more than this definition names. A future kernel
+  adding a counter would look like this, and it is refused rather than
+  read with the new counter folded into the last column.
+expect_error: 'does not describe this input'
+os: linux
+source: synthetic; the capture beside it with a field appended to each row.

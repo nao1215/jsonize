@@ -1,0 +1,12 @@
+description: |
+  The eighteen-field row a kernel between 4.18 and 5.4 writes: everything
+  up to the discard counters, and no flush ones. Reading it with this
+  definition would either shift every column or invent two counters the
+  kernel never wrote, so the field count in the signature refuses it. A
+  kernel of that vintage needs its own variant, captured from a machine
+  running one.
+expect_error: 'does not describe this input'
+os: linux
+source: |
+  synthetic; the capture beside it with the last two fields of each row
+  removed. Not output from a 4.18-5.4 kernel.

@@ -33,11 +33,22 @@ project follows [Semantic Versioning](https://semver.org/).
   complete document or nothing" to "every line of standard output is a
   complete document": a record that cannot be read still exits 3, but the
   records already written stay written.
-- `/proc/meminfo`, `/proc/loadavg` and `/proc/uptime`, as variants of a
-  parser named `proc`, read from a pipe or a redirect the way the `/etc`
-  files are. meminfo and loadavg say enough about themselves to be
-  identified from their text; `/proc/uptime` is two decimal numbers and
-  nothing else, so it is named rather than claimed on sight.
+- `/proc/meminfo`, `/proc/loadavg`, `/proc/uptime`, `/proc/cpuinfo` and
+  `/proc/diskstats`, as variants of a parser named `proc`, read from a
+  pipe or a redirect the way the `/etc` files are. All but one say enough
+  about themselves to be identified from their text; `/proc/uptime` is
+  two decimal numbers and nothing else, so it is named rather than
+  claimed on sight.
+- `/proc/cpuinfo` is `cpuinfo-x86`, because the file has no shape common
+  to the architectures: arm64 writes `Features` and `CPU implementer`
+  where x86 writes `flags` and `vendor_id`. The variant name is what
+  says which one jz reads, and an arm64 machine gets exit 4 rather than
+  a block with most of its fields missing.
+- `/proc/diskstats` is read for the twenty-field row Linux 5.5 and later
+  write. The field count is part of the signature, so the fourteen- and
+  eighteen-field rows older kernels write are refused rather than read
+  with their columns shifted or padded with zeroes the kernel never
+  wrote.
 - `parse: type: records` for a report whose blocks repeat: a line
   matching `start` opens a record and the `parts` are applied to each. A
   `composite` part may itself be `records`, which is what a report that

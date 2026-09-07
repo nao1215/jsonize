@@ -22,9 +22,12 @@ detect:
   os: [linux]
   signature:
     all:
-      # The whole file is this one line. Three decimals, a runnable count
-      # over a total, and a PID; the slash between two of the numbers is
-      # what no other line of five numbers has.
+      # The whole file is this one line: three decimals, a runnable count
+      # over a total, and a PID. A slash in the middle of a row of
+      # numbers is a distinctive enough shape to identify on, and no
+      # definition or fixture in the registry collides with it today.
+      # That is a statement about this registry, checked by `jz test`,
+      # not a claim that nothing else could ever print such a line.
       - '\A\d+\.\d\d [\d.]+ [\d.]+ \d+/\d+ \d+\s*\z'
 parse:
   type: regex

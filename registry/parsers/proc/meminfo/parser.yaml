@@ -12,9 +12,12 @@
 # The unit is kept rather than folded into the number. Every counter the
 # kernel reports in kilobytes says so, and the four HugePages_ counters
 # are plain counts with no unit at all; dropping the word would leave the
-# two indistinguishable. It is not converted to bytes either: the file
-# says kB and means 1024 bytes, but multiplying it here would state a
-# figure the file does not.
+# two indistinguishable. The value is not converted to bytes either.
+# Doing so would be a legitimate conversion rather than a guess, since
+# the file names its unit and that unit is defined, but the rule this
+# registry follows is to report the number and the unit as the source
+# wrote them and leave the arithmetic to the reader, which is the same
+# rule that keeps `df -h` sizes as text.
 format: 1
 command: proc
 variant: meminfo

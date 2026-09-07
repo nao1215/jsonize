@@ -1,0 +1,12 @@
+description: |
+  A processor block with none of the labels this definition identifies
+  on. arm64 writes its cpuinfo in this shape, naming Features and CPU
+  implementer where x86 names flags and vendor_id, so an arm64 machine
+  gets exit 4 here rather than a block with most of its fields missing.
+expect_error: 'does not describe this input'
+os: linux
+source: |
+  synthetic, written from the arm64 field names in proc_cpuinfo(5). Not a
+  capture from an arm64 machine, and not a fixture for an arm64 variant:
+  it exists only to show that this definition refuses what it does not
+  claim.
