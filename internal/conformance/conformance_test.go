@@ -1,9 +1,11 @@
 package conformance
 
 import (
+	"bytes"
 	"strings"
 	"testing"
 	"testing/fstest"
+	"time"
 
 	"github.com/nao1215/jsonize/pkg/registry"
 )
@@ -105,5 +107,38 @@ func TestDiff(t *testing.T) {
 	}
 	if _, err := Diff([]byte(`{}`), []byte(`{`)); err == nil {
 		t.Error("invalid produced")
+	}
+}
+
+// Diff describes a difference and says nothing when there is none. The
+// second half is what has to be cheap: go-cmp builds its report as it
+// walks, and on a deeply nested value that costs seconds, while almost
+// every case in a registry passes.
+func TestDiffIsCheapWhenTheValuesAgree(t *testing.T) {
+	t.Parallel()
+	deep := []byte(`{"a":1}`)
+	for range 30 {
+		deep = append(append([]byte(`{"children":[`), deep...), []byte(`]}`)...)
+	}
+	done := make(chan string, 1)
+	go func() {
+		d, err := Diff(deep, deep)
+		if err != nil {
+			t.Error(err)
+		}
+		done <- d
+	}()
+	select {
+	case d := <-done:
+		if d != "" {
+			t.Errorf("equal values differ: %s", d)
+		}
+	case <-time.After(5 * time.Second):
+		t.Fatal("comparing two equal deeply nested values took more than 5 seconds")
+	}
+	// A difference is still described.
+	other := bytes.Replace(deep, []byte(`{"a":1}`), []byte(`{"a":2}`), 1)
+	if d, err := Diff(deep, other); err != nil || d == "" {
+		t.Errorf("difference = %q, %v", d, err)
 	}
 }

@@ -159,11 +159,19 @@ not a whole number of the stated unit is an error rather than being
 rounded down. Depth stops at 32, which no report comes near, so a
 producer cannot make jz build an unbounded stack of objects.
 
-A `level` expression that captured the leading whitespace was considered
-in place of stating the unit. It was dropped because it still leaves the
-question the unit answers — how much whitespace is one level — so it adds
-a key without removing a question. A format whose indentation is not a
-fixed unit is not one `tree` reads.
+`indent` states one level as it is written, and it accepts a list of the
+forms one level may take. That second half was not in the first version
+and three reports asked for it: tree(1) writes a level as one of
+`"|   "`, `"    "`, `"|-- "` and ``"`-- "``, `systemd-analyze
+critical-chain` as two spaces or a backtick and a dash, and `wpctl` as
+four spaces or a branch character. Each is a fixed width whose characters
+depend on whether anything follows, so a single string cannot count them
+and a list of alternatives can.
+
+A `level` expression that captured the leading whitespace was the other
+candidate. It was dropped because it still leaves the question the width
+answers — how much of what it captured is one level — so it adds a key
+without removing a question.
 
 `tree` may be a `composite` part, which is what a report with a banner
 above the tree needs. It may not be a `records` part: a record is a block

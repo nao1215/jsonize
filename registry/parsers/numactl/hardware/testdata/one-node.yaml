@@ -1,4 +1,3 @@
-description: A machine with one memory node, whose distance matrix is a single row.
-source: captured on Ubuntu 26.04 (numactl 2.0.19) with LC_ALL=C
+source: "numactl --hardware on Ubuntu with numactl 2.0.19, LC_ALL=C; a single-node machine, so the distance matrix has one row"
 os: linux
 args: ["--hardware"]

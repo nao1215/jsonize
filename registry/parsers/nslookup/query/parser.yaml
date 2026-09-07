@@ -1,0 +1,42 @@
+# `nslookup HOST` prints the resolver it asked and then the answers. Each
+# answer is two lines, a name and the address it resolved to, and
+# nslookup repeats the name for every address a host has. Joining the
+# address onto the name it belongs to is what input.fold is for, and it
+# joins the resolver's two lines the same way.
+format: 1
+command: nslookup
+variant: query
+description: nslookup HOST, the resolver used and the addresses it answered with
+metadata:
+  tags: [linux, darwin, network, dns]
+  compatible: [bind9 nslookup]
+  references:
+    - https://man7.org/linux/man-pages/man1/nslookup.1.html
+detect:
+  signature:
+    all:
+      - '\AServer:[ \t]+\S+'
+      - '^Address:[ \t]*\S+#[0-9]+'
+input:
+  fold: '^Address(?:es)?:[ \t]'
+  ignore:
+    - '^Non-authoritative answer:[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: server
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AServer:[ \t]+(?P<name>\S+) Address:[ \t]*(?P<address>\S+)#(?P<port>[0-9]+)[ \t]*\z'
+      fields:
+        port: {type: int}
+    - name: answers
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^Name:[ \t]+(?P<name>\S+) Address(?:es)?:[ \t]*(?P<address>\S+)[ \t]*$'
+      fields:
+        name: {required: true}
+        address: {required: true}

@@ -18,9 +18,8 @@ import (
 	"fmt"
 	"io/fs"
 	"path"
+	"reflect"
 	"strings"
-
-	"github.com/google/go-cmp/cmp"
 
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
@@ -245,8 +244,9 @@ func streamMatches(def *definition.Definition, input []byte, batch any, opts Opt
 	if err != nil {
 		return fmt.Errorf("reading with --stream: %w", err)
 	}
-	if diff := cmp.Diff(want.String(), got.String()); diff != "" {
-		return fmt.Errorf("--stream reads this differently than the whole document (-whole +stream):\n%s", diff)
+	if want.String() != got.String() {
+		return fmt.Errorf("--stream reads this differently than the whole document (-whole +stream):\n%s",
+			lineDiff(want.Bytes(), got.Bytes()))
 	}
 	return nil
 }
@@ -274,7 +274,48 @@ func Diff(want, got []byte) (string, error) {
 	if err := json.Unmarshal(got, &g); err != nil {
 		return "", fmt.Errorf("produced JSON is invalid: %w", err)
 	}
-	return cmp.Diff(w, g), nil
+	if reflect.DeepEqual(w, g) {
+		return "", nil
+	}
+	return lineDiff(want, got), nil
+}
+
+// lineDiff reports where two pretty-printed JSON documents part company:
+// the first line that differs, with a little of what came before it, and
+// how many lines each has.
+//
+// A structural comparison would say more, and go-cmp was what said it
+// until a tree fixture made the cost visible: it builds its report as it
+// walks, and on a deeply nested value that runs for minutes, which is
+// worse than a short answer for a check meant to run on every save. The
+// decision above is still structural; only the description is by line.
+func lineDiff(want, got []byte) string {
+	w := strings.Split(strings.TrimRight(string(want), "\n"), "\n")
+	g := strings.Split(strings.TrimRight(string(got), "\n"), "\n")
+	at := len(w)
+	for i := range min(len(w), len(g)) {
+		if w[i] != g[i] {
+			at = i
+			break
+		}
+	}
+	var b strings.Builder
+	fmt.Fprintf(&b, "first difference at line %d (want %d lines, got %d)\n", at+1, len(w), len(g))
+	const context = 3
+	for i := max(0, at-context); i < at; i++ {
+		fmt.Fprintf(&b, "  %s\n", w[i])
+	}
+	fmt.Fprintf(&b, "- %s\n", nth(w, at))
+	fmt.Fprintf(&b, "+ %s\n", nth(g, at))
+	return b.String()
+}
+
+// nth returns one line, or a note that the document ended before it.
+func nth(lines []string, i int) string {
+	if i >= len(lines) {
+		return "(end of document)"
+	}
+	return lines[i]
 }
 
 // Summary counts passed and failed results.

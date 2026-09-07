@@ -1,0 +1,42 @@
+# `systemd-analyze critical-chain` prints the chain of units that decided
+# when the boot finished, each indented under the one it waited for. The
+# depth is a property of the machine's unit graph rather than of the
+# format, so it is read as a tree.
+#
+# A level is two characters, and the last level of a line is written with
+# a backtick and a dash where the ones above it are spaces. Naming both
+# forms is what lets the depth be counted.
+format: 1
+command: systemd-analyze
+variant: critical-chain
+description: systemd-analyze critical-chain, the units the boot waited on
+metadata:
+  tags: [linux, systemd, boot]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemd-analyze.html
+detect:
+  os: [linux]
+  args:
+    any: ["critical-chain"]
+  signature:
+    all:
+      - '\AThe time when unit became active or started is printed after the "@" character\.'
+      - '^`-\S+ @'
+input:
+  select:
+    after: '^The time the unit took to start is printed after'
+parse:
+  type: tree
+  indent: ["  ", "`-"]
+  node:
+    parse:
+      type: regex
+      patterns:
+        # A unit that was already active has no times of its own.
+        - '^(?P<unit>\S+) @(?P<activated>[^ ]+)(?: \+(?P<startup>[^ ]+))?[ \t]*$'
+        - '^(?P<unit>\S+)[ \t]*$'
+    fields:
+      unit: {required: true}
+      activated: {type: duration, layout: mm:ss}
+      startup: {type: duration, layout: mm:ss}

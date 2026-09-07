@@ -357,6 +357,9 @@ func TestDuration(t *testing.T) {
 		{"1.5h", LayoutMinuteSecond, int64(5400)},
 		{"250ms", LayoutMinuteSecond, 0.25},
 		{"2 hours", LayoutMinuteSecond, int64(7200)},
+		// systemd writes a long startup this way.
+		{"1w 6d 18h 15min 19.086s", LayoutMinuteSecond, 1188919.086},
+		{"2min 44.575s", LayoutMinuteSecond, 164.575},
 	}
 	for _, tt := range tests {
 		got, err := Duration(tt.in, tt.layout)

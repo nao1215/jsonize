@@ -1,13 +1,13 @@
 {
   "total": {
-    "sockets": 2546
+    "sockets": 2265
   },
   "tcp": {
-    "total": 444,
-    "established": 144,
+    "total": 329,
+    "established": 31,
     "closed": 264,
-    "orphaned": 0,
-    "timewait": 4
+    "orphaned": 1,
+    "timewait": 7
   },
   "transports": [
     {
@@ -18,21 +18,21 @@
     },
     {
       "transport": "UDP",
-      "total": 109,
-      "ip": 70,
+      "total": 74,
+      "ip": 35,
       "ipv6": 39
     },
     {
       "transport": "TCP",
-      "total": 180,
-      "ip": 176,
-      "ipv6": 4
+      "total": 65,
+      "ip": 62,
+      "ipv6": 3
     },
     {
       "transport": "INET",
-      "total": 291,
-      "ip": 246,
-      "ipv6": 45
+      "total": 141,
+      "ip": 97,
+      "ipv6": 44
     },
     {
       "transport": "FRAG",

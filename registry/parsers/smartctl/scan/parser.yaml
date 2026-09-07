@@ -1,0 +1,26 @@
+# `smartctl --scan` names each device it found and the device type to
+# pass for it, with the same two facts repeated as a comment. The comment
+# is where the human-readable description is, so it is read rather than
+# dropped.
+format: 1
+command: smartctl
+variant: scan
+description: smartctl --scan, the devices smartmontools found
+metadata:
+  tags: [linux, darwin, disk, smart]
+  compatible: [smartmontools]
+  references:
+    - https://www.smartmontools.org/browser/trunk/smartmontools/smartctl.8.in
+detect:
+  args:
+    any: ["--scan", "--scan-open"]
+  signature:
+    all:
+      - '\A/dev/\S+ -d \S+ # /dev/\S+, '
+parse:
+  type: regex
+  pattern: '^(?P<device>/dev/\S+) -d (?P<type>\S+) # \S+, (?P<description>.+?)[ \t]*$'
+fields:
+  device: {required: true}
+  type: {required: true}
+  description: {required: true}

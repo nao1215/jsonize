@@ -576,6 +576,7 @@ var durationUnits = map[string]float64{
 	"m": 60, "min": 60, "mins": 60, "minute": 60, "minutes": 60,
 	"h": 3600, "hr": 3600, "hrs": 3600, "hour": 3600, "hours": 3600,
 	"d": 86400, "day": 86400, "days": 86400,
+	"w": 604800, "wk": 604800, "week": 604800, "weeks": 604800,
 }
 
 // parseUnits reads a number followed by its unit, repeated: "45 min",

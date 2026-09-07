@@ -1,0 +1,400 @@
+[
+  {
+    "name": "ip",
+    "number": 0,
+    "aliases": [
+      "IP"
+    ]
+  },
+  {
+    "name": "hopopt",
+    "number": 0,
+    "aliases": [
+      "HOPOPT"
+    ]
+  },
+  {
+    "name": "icmp",
+    "number": 1,
+    "aliases": [
+      "ICMP"
+    ]
+  },
+  {
+    "name": "igmp",
+    "number": 2,
+    "aliases": [
+      "IGMP"
+    ]
+  },
+  {
+    "name": "ggp",
+    "number": 3,
+    "aliases": [
+      "GGP"
+    ]
+  },
+  {
+    "name": "ipencap",
+    "number": 4,
+    "aliases": [
+      "IP-ENCAP"
+    ]
+  },
+  {
+    "name": "st",
+    "number": 5,
+    "aliases": [
+      "ST"
+    ]
+  },
+  {
+    "name": "tcp",
+    "number": 6,
+    "aliases": [
+      "TCP"
+    ]
+  },
+  {
+    "name": "egp",
+    "number": 8,
+    "aliases": [
+      "EGP"
+    ]
+  },
+  {
+    "name": "igp",
+    "number": 9,
+    "aliases": [
+      "IGP"
+    ]
+  },
+  {
+    "name": "pup",
+    "number": 12,
+    "aliases": [
+      "PUP"
+    ]
+  },
+  {
+    "name": "udp",
+    "number": 17,
+    "aliases": [
+      "UDP"
+    ]
+  },
+  {
+    "name": "hmp",
+    "number": 20,
+    "aliases": [
+      "HMP"
+    ]
+  },
+  {
+    "name": "xns-idp",
+    "number": 22,
+    "aliases": [
+      "XNS-IDP"
+    ]
+  },
+  {
+    "name": "rdp",
+    "number": 27,
+    "aliases": [
+      "RDP"
+    ]
+  },
+  {
+    "name": "iso-tp4",
+    "number": 29,
+    "aliases": [
+      "ISO-TP4"
+    ]
+  },
+  {
+    "name": "dccp",
+    "number": 33,
+    "aliases": [
+      "DCCP"
+    ]
+  },
+  {
+    "name": "xtp",
+    "number": 36,
+    "aliases": [
+      "XTP"
+    ]
+  },
+  {
+    "name": "ddp",
+    "number": 37,
+    "aliases": [
+      "DDP"
+    ]
+  },
+  {
+    "name": "idpr-cmtp",
+    "number": 38,
+    "aliases": [
+      "IDPR-CMTP"
+    ]
+  },
+  {
+    "name": "ipv6",
+    "number": 41,
+    "aliases": [
+      "IPv6"
+    ]
+  },
+  {
+    "name": "ipv6-route",
+    "number": 43,
+    "aliases": [
+      "IPv6-Route"
+    ]
+  },
+  {
+    "name": "ipv6-frag",
+    "number": 44,
+    "aliases": [
+      "IPv6-Frag"
+    ]
+  },
+  {
+    "name": "idrp",
+    "number": 45,
+    "aliases": [
+      "IDRP"
+    ]
+  },
+  {
+    "name": "rsvp",
+    "number": 46,
+    "aliases": [
+      "RSVP"
+    ]
+  },
+  {
+    "name": "gre",
+    "number": 47,
+    "aliases": [
+      "GRE"
+    ]
+  },
+  {
+    "name": "esp",
+    "number": 50,
+    "aliases": [
+      "IPSEC-ESP"
+    ]
+  },
+  {
+    "name": "ah",
+    "number": 51,
+    "aliases": [
+      "IPSEC-AH"
+    ]
+  },
+  {
+    "name": "skip",
+    "number": 57,
+    "aliases": [
+      "SKIP"
+    ]
+  },
+  {
+    "name": "ipv6-icmp",
+    "number": 58,
+    "aliases": [
+      "IPv6-ICMP"
+    ]
+  },
+  {
+    "name": "ipv6-nonxt",
+    "number": 59,
+    "aliases": [
+      "IPv6-NoNxt"
+    ]
+  },
+  {
+    "name": "ipv6-opts",
+    "number": 60,
+    "aliases": [
+      "IPv6-Opts"
+    ]
+  },
+  {
+    "name": "rspf",
+    "number": 73,
+    "aliases": [
+      "RSPF",
+      "CPHB"
+    ]
+  },
+  {
+    "name": "vmtp",
+    "number": 81,
+    "aliases": [
+      "VMTP"
+    ]
+  },
+  {
+    "name": "eigrp",
+    "number": 88,
+    "aliases": [
+      "EIGRP"
+    ]
+  },
+  {
+    "name": "ospf",
+    "number": 89,
+    "aliases": [
+      "OSPFIGP"
+    ]
+  },
+  {
+    "name": "ax.25",
+    "number": 93,
+    "aliases": [
+      "AX.25"
+    ]
+  },
+  {
+    "name": "ipip",
+    "number": 94,
+    "aliases": [
+      "IPIP"
+    ]
+  },
+  {
+    "name": "etherip",
+    "number": 97,
+    "aliases": [
+      "ETHERIP"
+    ]
+  },
+  {
+    "name": "encap",
+    "number": 98,
+    "aliases": [
+      "ENCAP"
+    ]
+  },
+  {
+    "name": "pim",
+    "number": 103,
+    "aliases": [
+      "PIM"
+    ]
+  },
+  {
+    "name": "ipcomp",
+    "number": 108,
+    "aliases": [
+      "IPCOMP"
+    ]
+  },
+  {
+    "name": "vrrp",
+    "number": 112,
+    "aliases": [
+      "VRRP"
+    ]
+  },
+  {
+    "name": "l2tp",
+    "number": 115,
+    "aliases": [
+      "L2TP"
+    ]
+  },
+  {
+    "name": "isis",
+    "number": 124,
+    "aliases": [
+      "ISIS"
+    ]
+  },
+  {
+    "name": "sctp",
+    "number": 132,
+    "aliases": [
+      "SCTP"
+    ]
+  },
+  {
+    "name": "fc",
+    "number": 133,
+    "aliases": [
+      "FC"
+    ]
+  },
+  {
+    "name": "mobility-header",
+    "number": 135,
+    "aliases": [
+      "Mobility-Header"
+    ]
+  },
+  {
+    "name": "udplite",
+    "number": 136,
+    "aliases": [
+      "UDPLite"
+    ]
+  },
+  {
+    "name": "mpls-in-ip",
+    "number": 137,
+    "aliases": [
+      "MPLS-in-IP"
+    ]
+  },
+  {
+    "name": "manet",
+    "number": 138,
+    "aliases": []
+  },
+  {
+    "name": "hip",
+    "number": 139,
+    "aliases": [
+      "HIP"
+    ]
+  },
+  {
+    "name": "shim6",
+    "number": 140,
+    "aliases": [
+      "Shim6"
+    ]
+  },
+  {
+    "name": "wesp",
+    "number": 141,
+    "aliases": [
+      "WESP"
+    ]
+  },
+  {
+    "name": "rohc",
+    "number": 142,
+    "aliases": [
+      "ROHC"
+    ]
+  },
+  {
+    "name": "ethernet",
+    "number": 143,
+    "aliases": [
+      "Ethernet"
+    ]
+  },
+  {
+    "name": "mptcp",
+    "number": 262,
+    "aliases": [
+      "MPTCP"
+    ]
+  }
+]

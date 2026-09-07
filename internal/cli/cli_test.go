@@ -1014,10 +1014,12 @@ func TestRunUsesAliases(t *testing.T) {
 		}
 	}
 	// The arguments an alias states replace the ones the command needs:
-	// getent takes the database name where etc takes nothing.
+	// getent takes the database name where etc takes nothing, and a
+	// database no definition claims is refused rather than read with
+	// whichever of them happens to fit.
 	if _, err := exec.LookPath("getent"); err == nil {
-		if code := h.run("run", "getent", "services"); code == ExitOK {
-			t.Errorf("getent services has no definition and must not be read: %s", h.stdout.String())
+		if code := h.run("run", "getent", "ahosts"); code == ExitOK {
+			t.Errorf("getent ahosts has no definition and must not be read: %s", h.stdout.String())
 		}
 	}
 	// Naming the parser by an alias reaches the same definitions.

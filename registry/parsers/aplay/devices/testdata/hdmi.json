@@ -1,0 +1,142 @@
+[
+  {
+    "device": {
+      "card": 0,
+      "card_id": "Generic",
+      "card_name": "HD-Audio Generic",
+      "device": 3,
+      "device_id": "HDMI 0",
+      "device_name": "HDMI 0"
+    },
+    "subdevice_count": {
+      "available": 1,
+      "total": 1
+    },
+    "subdevices": [
+      {
+        "index": 0,
+        "name": "subdevice #0"
+      }
+    ]
+  },
+  {
+    "device": {
+      "card": 0,
+      "card_id": "Generic",
+      "card_name": "HD-Audio Generic",
+      "device": 7,
+      "device_id": "HDMI 1",
+      "device_name": "HDMI 1"
+    },
+    "subdevice_count": {
+      "available": 1,
+      "total": 1
+    },
+    "subdevices": [
+      {
+        "index": 0,
+        "name": "subdevice #0"
+      }
+    ]
+  },
+  {
+    "device": {
+      "card": 0,
+      "card_id": "Generic",
+      "card_name": "HD-Audio Generic",
+      "device": 8,
+      "device_id": "HDMI 2",
+      "device_name": "HDMI 2"
+    },
+    "subdevice_count": {
+      "available": 1,
+      "total": 1
+    },
+    "subdevices": [
+      {
+        "index": 0,
+        "name": "subdevice #0"
+      }
+    ]
+  },
+  {
+    "device": {
+      "card": 0,
+      "card_id": "Generic",
+      "card_name": "HD-Audio Generic",
+      "device": 9,
+      "device_id": "HDMI 3",
+      "device_name": "HDMI 3"
+    },
+    "subdevice_count": {
+      "available": 1,
+      "total": 1
+    },
+    "subdevices": [
+      {
+        "index": 0,
+        "name": "subdevice #0"
+      }
+    ]
+  },
+  {
+    "device": {
+      "card": 1,
+      "card_id": "Device",
+      "card_name": "USB PnP Sound Device",
+      "device": 0,
+      "device_id": "USB Audio",
+      "device_name": "USB Audio"
+    },
+    "subdevice_count": {
+      "available": 1,
+      "total": 1
+    },
+    "subdevices": [
+      {
+        "index": 0,
+        "name": "subdevice #0"
+      }
+    ]
+  },
+  {
+    "device": {
+      "card": 2,
+      "card_id": "Generic_1",
+      "card_name": "HD-Audio Generic",
+      "device": 0,
+      "device_id": "SN6186 Analog",
+      "device_name": "SN6186 Analog"
+    },
+    "subdevice_count": {
+      "available": 1,
+      "total": 1
+    },
+    "subdevices": [
+      {
+        "index": 0,
+        "name": "subdevice #0"
+      }
+    ]
+  },
+  {
+    "device": {
+      "card": 4,
+      "card_id": "MicroII",
+      "card_name": "Audio Advantage MicroII",
+      "device": 0,
+      "device_id": "USB Audio",
+      "device_name": "USB Audio"
+    },
+    "subdevice_count": {
+      "available": 1,
+      "total": 1
+    },
+    "subdevices": [
+      {
+        "index": 0,
+        "name": "subdevice #0"
+      }
+    ]
+  }
+]

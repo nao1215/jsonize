@@ -338,7 +338,7 @@ func validateSelect(v *validator, path string, s *Select) {
 // other nesting is allowed, because anything deeper describes a tree
 // whose shape comes from the input rather than from the definition.
 func validateParse(v *validator, path string, p *Parse, fields map[string]*Field, parent string) {
-	if p.Type != TypeTree && (p.Indent != "" || p.Node != nil) {
+	if p.Type != TypeTree && (len(p.Indent) > 0 || p.Node != nil) {
 		v.add(path, "indent/node are only valid for type tree")
 	}
 	switch p.Type {
@@ -426,11 +426,13 @@ func validateCSV(v *validator, path string, p *Parse, fields map[string]*Field) 
 // indented with two spaces are both stated the same way and neither is
 // guessed.
 func validateTree(v *validator, path string, p *Parse) {
-	switch {
-	case p.Indent == "":
-		v.add(path+".indent", `is required for type tree: one level of indentation as it is written, "\t" or "  "`)
-	case strings.Trim(p.Indent, " \t") != "":
-		v.add(path+".indent", "must be spaces or tabs, not %q", p.Indent)
+	if len(p.Indent) == 0 {
+		v.add(path+".indent", `is required for type tree: one level of indentation as it is written, "\t" or "  ", or the forms one level may take`)
+	}
+	for i, unit := range p.Indent {
+		if unit == "" {
+			v.add(fmt.Sprintf("%s.indent[%d]", path, i), "is empty, so it opens every line and no line ever ends")
+		}
 	}
 	if p.Node == nil {
 		v.add(path+".node", "is required for type tree: how one line of the tree is read")

@@ -1,0 +1,2 @@
+source: "getent services on Ubuntu with glibc 2.42, LC_ALL=C"
+args: ["services"]

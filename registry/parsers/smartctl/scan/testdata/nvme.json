@@ -1,0 +1,12 @@
+[
+  {
+    "device": "/dev/nvme0",
+    "type": "nvme",
+    "description": "NVMe device"
+  },
+  {
+    "device": "/dev/nvme1",
+    "type": "nvme",
+    "description": "NVMe device"
+  }
+]

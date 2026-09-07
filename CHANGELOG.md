@@ -32,6 +32,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Definitions for eight formats that had none: `/etc/services` and
+  `/etc/protocols` (also read through `getent`), `nslookup HOST`,
+  `numactl --hardware`, `ss -s`, `aplay -l` (and `arecord -l`),
+  `smartctl --scan` and `systemd-analyze critical-chain`, the last of
+  which is a tree whose times are read as durations.
 - `parse.type: tree`, for a report whose depth comes from the input:
   `lspci -vv` prints a device, its capabilities under it and a
   capability's flags under those, and how far that goes is a property of
@@ -52,6 +57,13 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Checking a registry took 25 seconds where it had taken one, as soon as
+  a deeply nested fixture was added. go-cmp builds its report as it walks
+  a value, and on a 22-level tree that runs for tens of seconds whether
+  the values agree or not. The comparison is now made first and described
+  only when it fails, and the description is by line rather than by
+  structure: a golden mismatch is two pretty-printed documents, and where
+  they part company is what a reader wants.
 - `ip link`, `ip -s link` and `ip address` refused an interface that
   carries a free-text alias, which is a line `ip` prints between the link
   layer address and the alternative names. `ip link` read it as one more
@@ -259,7 +271,7 @@ project follows [Semantic Versioning](https://semver.org/).
   line it belongs to, for the reports that break a long value at the
   terminal width (`ethtool`) and for the control files whose values
   continue on an indented line (`dpkg -s`, `apt show`).
-- Official definitions for 149 commands in 314 output formats, covering
+- Official definitions for 156 commands in 330 output formats, covering
   coreutils and procps, the util-linux listings, the systemd tools, the
   classic network commands and the iproute2 ones, sysstat, the disk
   layout tools, the hardware and display tools, the archive and checksum
@@ -269,7 +281,8 @@ project follows [Semantic Versioning](https://semver.org/).
   (`taskset`, `chrt`, `ionice`, `capsh`, `getcap`, `namei`), git
   including its plumbing, openssl, docker, the package managers, the
   language toolchains, and two dozen files under `/proc` read the way the
-  `/etc` files are. `jz list` prints the current set.
+  `/etc` files are, plus a handful that describe a shape rather than a
+  command (`table`, `csv`, `kv`, `ini`). `jz list` prints the current set.
 
 ### Fixed
 

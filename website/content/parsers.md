@@ -29,6 +29,7 @@ the same reading with settings of your own.
 | Command | Variants |
 |---------|----------|
 | `amixer` | `simple-controls` |
+| `aplay` | `devices` |
 | `apt` | `list`, `show` |
 | `apt-cache` | `stats` |
 | `ar` | `table-verbose` |
@@ -52,7 +53,7 @@ the same reading with settings of your own.
 | `du` | `gnu-human`, `posix` |
 | `efibootmgr` | `linux` |
 | `env` | `null-separated`, `posix` |
-| `etc` | `crontab`, `fstab`, `group`, `hosts`, `nsswitch`, `os-release`, `passwd`, `resolv-conf` |
+| `etc` | `crontab`, `fstab`, `group`, `hosts`, `nsswitch`, `os-release`, `passwd`, `protocols`, `resolv-conf`, `services` |
 | `ethtool` | `driver-info`, `features`, `settings`, `statistics` |
 | `factor` | `default` |
 | `fc-list` | `posix` |
@@ -117,6 +118,7 @@ the same reading with settings of your own.
 | `nm` | `dynamic` |
 | `nmcli` | `connection`, `device`, `device-show`, `wifi` |
 | `npm` | `ls`, `outdated` |
+| `nslookup` | `query` |
 | `nstat` | `counters` |
 | `numactl` | `hardware` |
 | `objdump` | `section-headers` |
@@ -147,6 +149,7 @@ the same reading with settings of your own.
 | `sha384sum` | `posix` |
 | `sha512sum` | `posix` |
 | `size` | `gnu` |
+| `smartctl` | `scan` |
 | `snap` | `list` |
 | `ss` | `linux`, `single-protocol`, `summary` |
 | `ssh-keygen` | `fingerprint` |
@@ -154,7 +157,7 @@ the same reading with settings of your own.
 | `swapon` | `legacy`, `linux` |
 | `sysctl` | `linux` |
 | `systemctl` | `show`, `sockets`, `status`, `timers`, `unit-files`, `units` |
-| `systemd-analyze` | `blame`, `time` |
+| `systemd-analyze` | `blame`, `critical-chain`, `time` |
 | `systemd-cgtop` | `batch` |
 | `systemd-id128` | `show` |
 | `systemd-path` | `paths` |

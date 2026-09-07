@@ -1,0 +1,56 @@
+# `aplay -l` lists the playback devices ALSA knows, one block per device:
+# a card line naming the card and the device on it, then the subdevices
+# under it. The heading above the list is dropped.
+format: 1
+command: aplay
+variant: devices
+aliases:
+  # `arecord -l` prints the same blocks for capture devices, under a
+  # heading of its own.
+  - name: arecord
+description: aplay -l playback devices, or arecord -l capture devices
+metadata:
+  tags: [linux, audio, alsa]
+  compatible: [alsa-utils]
+  references:
+    - https://man7.org/linux/man-pages/man1/aplay.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-l", "--list-devices", "-L", "--list-pcms"]
+  signature:
+    all:
+      - '\A\*\*\*\* List of (?:PLAYBACK|CAPTURE) Hardware Devices \*\*\*\*'
+      - '^card [0-9]+: \S+ \[[^]]*\], device [0-9]+:'
+input:
+  select:
+    after: '^\*\*\*\* List of '
+parse:
+  type: records
+  start: '^card [0-9]+:'
+  parts:
+    - name: device
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\Acard (?P<card>[0-9]+): (?P<card_id>\S+) \[(?P<card_name>[^]]*)\], device (?P<device>[0-9]+): (?P<device_id>.+?) \[(?P<device_name>[^]]*)\][ \t]*\z'
+      fields:
+        card: {type: int}
+        device: {type: int}
+    - name: subdevice_count
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[ \t]*Subdevices: (?P<available>[0-9]+)/(?P<total>[0-9]+)[ \t]*\z'
+      fields:
+        available: {type: int}
+        total: {type: int}
+    - name: subdevices
+      select: {skip: 2}
+      parse:
+        type: regex
+        pattern: '^[ \t]*Subdevice #(?P<index>[0-9]+): (?P<name>.+?)[ \t]*$'
+      fields:
+        index: {type: int}
