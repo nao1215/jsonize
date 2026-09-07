@@ -40,10 +40,21 @@ detect:
     all:
       # Every line is a path, a colon and a description.
       - '\A(?:\S+:[ \t]+\S[^\n]*\n)*\S+:[ \t]+\S[^\n]*\z'
-      # The kinds of file jz undertakes to read. Case is ignored because
-      # file(1) capitalises a description that opens with a proper noun
-      # ("Composite Document File V2 Document").
+      # Some description names a kind of file jz undertakes to read. Case
+      # is ignored because file(1) capitalises a description that opens
+      # with a proper noun ("Composite Document File V2 Document"). A
+      # listing that names no kind at all is refused: "could not read it"
+      # is a sentence other tools write too.
       - '(?i)^\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed)\b'
+      # And every description does, or is one of the two file(1) writes
+      # for a file it was given but could not identify. One line naming a
+      # kind is not evidence on its own: any dump of a file's bytes has
+      # some line whose printable column happens to spell one of these
+      # words, and `xxd` output was read as a listing of sixteen byte
+      # long paths until this expression covered the whole text. An error
+      # message rarer than these two is refused, which is the same answer
+      # this definition gives for a kind it does not name.
+      - '(?i)\A(?:\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)\b[^\n]*\n)*\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)\b[^\n]*\z'
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'

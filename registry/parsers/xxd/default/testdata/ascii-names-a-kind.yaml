@@ -1,0 +1,11 @@
+description: >-
+  A dump whose printable column spells "data" and "text". Those are two of
+  the words file/posix looks for, and an xxd line is a word, a colon and a
+  line of text, so file read this shape as a listing of sixteen byte long
+  paths until its claim covered every line rather than one of them. The
+  case is here so the two stay apart.
+source: >-
+  captured with LC_ALL=C from `xxd` over a two line text file written for
+  this case (xxd 2025-04-04 by Juergen Weigert et al.) on Linux
+  7.0.0-30-generic
+os: linux
