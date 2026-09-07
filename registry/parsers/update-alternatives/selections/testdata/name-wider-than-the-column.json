@@ -1,0 +1,32 @@
+[
+  {
+    "name": "js",
+    "status": "auto",
+    "path": "/usr/bin/nodejs"
+  },
+  {
+    "name": "jsondiff",
+    "status": "auto",
+    "path": "/usr/bin/json-patch-jsondiff"
+  },
+  {
+    "name": "libblas.so.3-x86_64-linux-gnu",
+    "status": "auto",
+    "path": "/usr/lib/x86_64-linux-gnu/blas/libblas.so.3"
+  },
+  {
+    "name": "liblapack.so.3-x86_64-linux-gnu",
+    "status": "auto",
+    "path": "/usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3"
+  },
+  {
+    "name": "lightdm-greeter",
+    "status": "auto",
+    "path": "/usr/share/xgreeters/lightdm-gtk-greeter.desktop"
+  },
+  {
+    "name": "lzip",
+    "status": "auto",
+    "path": "/usr/bin/lzip.lzip"
+  }
+]
