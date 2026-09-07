@@ -325,3 +325,46 @@ scenarios:
           stdout: {empty: true}
           stderr:
             contains: cannot be used together
+
+  # A report that opens with a header block and then repeats a block is
+  # one object with a list inside it, not a list of blocks. What the
+  # header block carries is the answer to which candidate is in place.
+  - name: a header block and repeated blocks are read as one object
+    steps:
+      - fixture:
+          file: ua-query.txt
+          from: "${specdir}/testdata/update-alternatives-query.txt"
+      - run:
+          command: jz --parser update-alternatives --file ua-query.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            empty: true
+          stdout:
+            json:
+              - { path: "$.link.Name", equals: pager }
+              - { path: "$.link.Value", equals: /usr/bin/less }
+              - { path: "$.slaves[0].name", equals: pager.1.gz }
+              - { path: "$.alternatives[0].candidate.Priority", equals: 50 }
+
+  # A value that continues on an indented line belongs to the field above
+  # it. Reading the continuation as a field of its own would invent keys,
+  # and dropping it would truncate the value without saying so.
+  - name: a value continued on the next line is joined to it
+    steps:
+      - fixture:
+          file: dpkg-status.txt
+          from: "${specdir}/testdata/dpkg-status.txt"
+      - run:
+          command: jz --parser dpkg --file dpkg-status.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            empty: true
+          stdout:
+            json:
+              - { path: "$[0].package.name", equals: dpkg }
+              # The second line of the description is in the same value
+              # as the first.
+              - { path: "$[0].fields.Description", matches: 'infrastructure for handling the installation' }
+
