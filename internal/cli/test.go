@@ -242,7 +242,7 @@ func readDecoys(dir string) ([]conformance.Decoy, error) {
 		if len(out) >= MaxDecoyFiles {
 			return fmt.Errorf("more than %d files under %s", MaxDecoyFiles, dir)
 		}
-		data, err := os.ReadFile(p)
+		data, err := os.ReadFile(p) //nolint:gosec // a decoy directory is named by the user running jz
 		if err != nil {
 			return err
 		}

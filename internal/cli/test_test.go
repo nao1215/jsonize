@@ -77,7 +77,7 @@ func TestTestUpdateWritesGolden(t *testing.T) {
 		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
 	}
 	golden := filepath.Join(dir, "parsers", "greet", "x", "testdata", "a.json")
-	data, err := os.ReadFile(golden) //nolint:gosec // the path is built by the test
+	data, err := os.ReadFile(golden)
 	if err != nil {
 		t.Fatal(err)
 	}

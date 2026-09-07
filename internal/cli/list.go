@@ -64,9 +64,9 @@ func (a *app) cmdList(args []string) int {
 // reportSkipped closes a listing with how many definitions were left out
 // because they failed to load.
 func (a *app) reportSkipped(reg *registry.Registry) {
-	switch n := len(reg.Problems); {
-	case n == 0:
-	case n == 1:
+	switch n := len(reg.Problems); n {
+	case 0:
+	case 1:
 		a.errorf("1 definition failed to load and is not listed")
 	default:
 		a.errorf("%d definitions failed to load and are not listed", n)

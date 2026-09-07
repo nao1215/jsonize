@@ -73,6 +73,18 @@ type reader struct {
 	name  string
 }
 
+// readersOf lists every way a definition can be named.
+func readersOf(reg *registry.Registry) []reader {
+	var out []reader
+	for _, e := range reg.Entries() {
+		out = append(out, reader{entry: e, name: e.Def.Command})
+		for _, alias := range e.Def.AliasNames() {
+			out = append(out, reader{entry: e, name: alias})
+		}
+	}
+	return out
+}
+
 // Exclusivity checks the whole registry against itself: every definition
 // is named explicitly on every fixture of every other definition, and
 // must refuse it. Naming a definition is a claim about the text, not a
@@ -90,13 +102,7 @@ type reader struct {
 // own definition refuses, and is usually another definition's valid
 // output, so another definition reading it is right.
 func Exclusivity(reg *registry.Registry, fixtures []Fixture, target func(source string) bool, opts Options) []Result {
-	var readers []reader
-	for _, e := range reg.Entries() {
-		readers = append(readers, reader{entry: e, name: e.Def.Command})
-		for _, alias := range e.Def.AliasNames() {
-			readers = append(readers, reader{entry: e, name: alias})
-		}
-	}
+	readers := readersOf(reg)
 	work := make([]Fixture, 0, len(fixtures))
 	for _, f := range fixtures {
 		if f.Case.Meta.ExpectError == "" {
@@ -117,13 +123,7 @@ func Exclusivity(reg *registry.Registry, fixtures []Fixture, target func(source 
 // Decoys checks that text belonging to no registered format is refused
 // both by automatic detection and by every definition named explicitly.
 func Decoys(reg *registry.Registry, decoys []Decoy, opts Options) []Result {
-	var readers []reader
-	for _, e := range reg.Entries() {
-		readers = append(readers, reader{entry: e, name: e.Def.Command})
-		for _, alias := range e.Def.AliasNames() {
-			readers = append(readers, reader{entry: e, name: alias})
-		}
-	}
+	readers := readersOf(reg)
 	per := make([][]Result, len(decoys))
 	each(len(decoys), opts.Parallel, func(i int) {
 		d := decoys[i]

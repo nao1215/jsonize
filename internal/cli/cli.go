@@ -162,7 +162,8 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "Exit codes: 0 ok, 1 error, 2 usage, 3 parse failure, 4 unidentified or")
 	fmt.Fprintln(w, "ambiguous input, 5 registry problem; `jz run` mirrors the command's own status.")
 	fmt.Fprintln(w)
-	fmt.Fprintln(w, "Run `jz run --help` or `jz list --help` for a subcommand's own options.")
+	fmt.Fprintln(w, "Run `jz run --help`, `jz list --help` or `jz test --help` for a subcommand's")
+	fmt.Fprintln(w, "own options.")
 	fmt.Fprintln(w)
 	printLinks(w)
 }
