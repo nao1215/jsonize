@@ -93,8 +93,39 @@ detect:
   own: three numbers in a row, or a number and a path, describe far too
   many things. Such a definition is skipped by automatic detection and
   used only when the parser is named (`--parser du`, or `jz run du`),
-  where its signature is still checked. Prefer it to a growing list of
-  `none` expressions excluding every other format that looks similar.
+  where its signature is still checked.
+
+### Writing a signature
+
+A signature is a claim that the text is this command's output, so write
+what must be true of it and let `none` alone.
+
+Write the shape and write the whole of it. `\A` and `\z` anchor the
+text rather than a line, and that is what separates a format from one
+that opens the same way: `uptime` is one line and nothing after it,
+where `w` continues into a table; `ipcs -q` is one section and its rows
+to the end, where `ipcs` has two more. Inside the text, `^` and `$` are
+line anchors, so a rule about every line is written as the whole text
+made of those lines.
+
+A signature may also narrow what the definition undertakes to read, and
+that is a decision worth writing down rather than a shortcoming.
+`git log --oneline` is read for an abbreviated hash of seven to twenty
+digits, which leaves no room for a 32, 40 or 64 digit checksum listing;
+the price is `git log --no-abbrev`, and the comment beside the
+expression says so.
+
+`none` is for the case where there is no positive form to write, and the
+reason belongs beside it. It is not the way to keep a neighbouring
+format out: a list of what a format is not cannot be finished, it grows
+by one every time somebody adds a definition, and it couples your
+definition to theirs. If you find yourself adding a `none` that names
+another command, the signature above it is not yet saying what the
+format is.
+
+A format jz cannot claim is refused with exit 4, which is an answer.
+The one to design against is the other: text read confidently with the
+wrong definition and returned with status 0.
 
 Selection: a candidate whose applicable criterion fails is rejected. One
 remaining candidate is the answer. Several from different registries are

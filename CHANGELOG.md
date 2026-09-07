@@ -133,6 +133,28 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Decisions worth knowing
 
+- A signature says what a format is, not what it is not. `none` is a
+  safety valve for the case where there is no positive form to write,
+  with the reason beside it, rather than the way a definition keeps its
+  neighbours out. A list of what a format is not cannot be finished, it
+  grows by one with every definition somebody adds, and it couples the
+  two together: `file/posix` had collected fourteen such expressions and
+  now has none. Of the 68 the registry carried, 31 excluded nothing at
+  all, 13 named another command, and 11 remain, every one telling
+  variants of a single command apart.
+- Adding a definition needs nothing but its own signature and its own
+  fixtures. Needing to edit somebody else's definition means the two
+  were coupled through an exclusion, and `jz test` is what shows it.
+- A signature may narrow what a definition undertakes to read, and that
+  is a decision to write down. `git log --oneline` is read for an
+  abbreviated hash of seven to twenty digits, `cksum` for a checksum
+  written in full, and `file` for the kinds of file named in its
+  signature. What falls outside is refused with exit 4, which is an
+  answer; the failure to design against is text read confidently with
+  the wrong definition and returned with status 0.
+- Fixtures verify a signature; they do not decide it. The order is
+  decide the format, write the signature, capture fixtures that show it.
+
 - A rounded, human-readable size (`df -h`, `free -h`, `ls -lh`, `lsblk`)
   is reported exactly as printed. The base is not recoverable from the
   output and the value is rounded, so a byte count would be invented.

@@ -78,12 +78,32 @@ and a path, three numbers in a row), add `auto_detect: false` next to it:
 the definition is then used only when the parser is named, and its
 signature is still checked there.
 
+Write the signature as what must be true of the output, and decide it
+before you look at whether the fixtures pass. Anchor the whole text with
+`\A` and `\z` where the format is short enough to say so, and where it
+is not, say what every line of it looks like. A signature is also where
+you state what this definition does not undertake to read; that is a
+scope you choose, and the comment beside the expression is where you
+say it.
+
+What not to reach for is `none`. If a neighbouring format matches your
+signature, the signature is not yet saying what your format is, and
+excluding the neighbour couples your definition to theirs: they change
+it, your definition breaks, and the list never stops growing.
+[The reference](/jsonize/definition-format/#writing-a-signature) has the
+detail.
+
 ## 4. Add fixtures
 
 ```
 registry/parsers/lsof/default/testdata/lsof-4.95.txt
 registry/parsers/lsof/default/testdata/lsof-4.95.yaml
 ```
+
+Fixtures verify the signature you decided on; they do not decide it.
+Capture one per thing the definition claims, including the shapes it
+claims to refuse, so that the file beside the definition says what the
+definition means rather than what happened to pass.
 
 The `.yaml` file documents the capture and feeds the selection test:
 
