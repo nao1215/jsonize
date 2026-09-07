@@ -27,7 +27,7 @@ internal/selector         variant selection (os / args / signature filter → pr
 internal/engine           parse algorithms (table, regex, kv, composite) and field conversion
 internal/convert          scalar conversions (int, float, bool, size with units)
 internal/jsonutil         insertion-ordered JSON object and encoder
-internal/conformance      golden runner shared by `go test` and `make registry-test`
+internal/conformance      golden cases and the definition/fixture cross product, shared by `go test` and `jz test`
 internal/buildinfo        the version string stamped at build time
 registry/                 the official definitions and fixtures (data) + a one-file embed
 e2e/atago                 end-to-end scenarios
@@ -41,8 +41,8 @@ compiled definition and the whole text; encoding never sees definitions.
 
 ### A small public surface
 
-The command line is three subcommands (`run`, `list`, `version`) and five
-options (`--file`, `--pretty`, `--parser`, `--variant`, `--help`). Every
+The command line is four subcommands (`run`, `list`, `test`, `version`)
+and five options (`--file`, `--pretty`, `--parser`, `--variant`, `--help`). Every
 option that asked the user to make a decision jz should be making, or
 that changed the output contract, was removed before release:
 
@@ -187,7 +187,7 @@ without a format bump. Development builds skip the check.
 - `github.com/goccy/go-yaml` — strict YAML decoding with positions.
 - `github.com/google/go-cmp` — structural diffs in golden failures.
 
-No CLI framework: three subcommands with a handful of flags each are
+No CLI framework: four subcommands with a handful of flags each are
 served by `flag` and a dispatch table, and the `run` subcommand needs
 "stop at the first non-flag" semantics that `flag` gives for free.
 

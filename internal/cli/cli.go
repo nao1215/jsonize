@@ -2,8 +2,8 @@
 //
 // The default behaviour, with no subcommand, is to read text from
 // standard input, identify which command produced it and write JSON.
-// Everything else (running the command for you, listing parsers, the
-// version) is a subcommand. Data goes to stdout and only ever as JSON;
+// Everything else (running the command for you, listing parsers,
+// checking a registry of definitions, the version) is a subcommand. Data goes to stdout and only ever as JSON;
 // diagnostics go to stderr with a "jz:" prefix, so a consumer reading
 // stdout sees valid JSON or nothing at all.
 package cli
@@ -79,6 +79,7 @@ func commands() []command {
 	return []command{
 		{"run", "run a command and convert its stdout to JSON", (*app).cmdRun},
 		{"list", "list supported parsers, or inspect one", (*app).cmdList},
+		{"test", "check parser definitions and their fixtures", (*app).cmdTest},
 		{"version", "print the version", (*app).cmdVersion},
 	}
 }
@@ -141,6 +142,7 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "  jz [options] < FILE")
 	fmt.Fprintln(w, "  jz run [options] COMMAND [args...]")
 	fmt.Fprintln(w, "  jz list [COMMAND [VARIANT]]")
+	fmt.Fprintln(w, "  jz test [DIR...]")
 	fmt.Fprintln(w, "  jz version")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Commands:")

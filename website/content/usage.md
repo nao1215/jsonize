@@ -43,7 +43,7 @@ pipe there is no such answer at all: nothing identifies an empty input.
 
 `jz run` adds `--env NAME=VALUE`, `--keep-locale` and `--timeout`, which
 control the command rather than the conversion. `jz list` adds `--json`
-and `--sources`.
+and `--sources`, and `jz test` adds `--update` and `--decoys`.
 
 ## Choosing the keys
 
@@ -125,6 +125,34 @@ $ jz run ps aux
 $ jz run mytool --pretty            # --pretty goes to mytool
 $ jz run --pretty -- mytool --json  # --pretty is jz's, --json is mytool's
 ```
+
+## Checking definitions of your own
+
+`jz test` holds a registry to the contract the official one is held to.
+
+```console
+jz test                      # the registries jz would use, except the built-in one
+jz test ./registry           # a directory, layered above the built-in registry
+jz test --update ./registry  # write testdata/<case>.json from the current output
+jz test --decoys ./decoys .  # also require every file under ./decoys to be refused
+```
+
+Two things are checked. Every `testdata/<case>.txt` is parsed with its own
+definition and compared with the `.json` beside it, and every definition
+is then named explicitly on every other definition's fixtures and must
+refuse them. The official fixtures travel inside the binary, so the
+second check covers your definitions against every format jz already
+reads without a copy of the repository: a signature wide enough to read
+`df` output fails here rather than in someone's pipeline.
+
+`--update` writes only to the registries under test; the built-in one
+cannot be written to, so `jz test --update` with no directory writes to
+the user registry and says on standard error where it wrote.
+
+Failures go to standard error, one per line, followed by
+`N passed, M failed`. Standard output stays empty. The exit status is 0
+when everything passed, 1 when something failed, 2 for a usage error and
+5 when a registry could not be read.
 
 ## Exit codes
 
