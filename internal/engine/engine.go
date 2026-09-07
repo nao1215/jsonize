@@ -99,6 +99,10 @@ func Parse(def *definition.Definition, input []byte, opts Options) (any, error) 
 	if err != nil {
 		return nil, &ParseError{Definition: def.ID(), Line: err.line, Msg: err.msg, Cause: err.cause}
 	}
+	lines, ferr := foldLines(&def.Input, lines)
+	if ferr != nil {
+		return nil, &ParseError{Definition: def.ID(), Line: ferr.line, Msg: ferr.msg, Cause: ferr.cause}
+	}
 	lines = prepare(&def.Input, lines)
 	lines = applySelect(&def.Input.Select, lines)
 	r := &run{def: def, opts: opts}
@@ -144,6 +148,29 @@ func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
 			p = bytes.TrimSuffix(p, []byte{'\r'})
 		}
 		out = append(out, line{text: string(p), num: i + 1})
+	}
+	return out, nil
+}
+
+// foldLines joins a wrapped continuation onto the line above it. It runs
+// before prepare, so a continuation is joined even when the line it
+// belongs to would otherwise be dropped, and the joined line keeps the
+// number of the line it started on.
+func foldLines(in *definition.Input, lines []line) ([]line, *splitError) {
+	fold := in.FoldPattern()
+	if fold == nil {
+		return lines, nil
+	}
+	out := lines[:0:0]
+	for _, l := range lines {
+		if !fold.MatchString(l.text) {
+			out = append(out, l)
+			continue
+		}
+		if len(out) == 0 {
+			return nil, &splitError{line: l.num, msg: fmt.Sprintf("continuation line with nothing to join it to: %q", l.text)}
+		}
+		out[len(out)-1].text += " " + strings.TrimSpace(l.text)
 	}
 	return out, nil
 }

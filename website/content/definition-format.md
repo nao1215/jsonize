@@ -88,6 +88,7 @@ command runs).
 ```yaml
 input:
   record_separator: newline # or nul, for `env -0` style output
+  fold: '^[ \t]+\S'         # join a wrapped line onto the one above it
   ignore: ['^total \d']    # drop matching lines
   skip_blank: true          # default true
   select:                  # applied in this order
@@ -98,8 +99,19 @@ input:
 ```
 
 Input is split on the record separator, a newline by default; a trailing
-`\r` is then removed from every line and a UTF-8 BOM is dropped. With
-`record_separator: nul` the records are separated by NUL bytes instead,
+`\r` is then removed from every line and a UTF-8 BOM is dropped.
+
+`fold` names the continuation of the line above it. A matching line is
+joined onto the previous one with a single space and its own leading and
+trailing whitespace removed, and the joined line keeps the number of the
+line it started on. It runs before `ignore` and `skip_blank`, so a
+continuation is joined even where the line it belongs to would be
+dropped. A continuation with nothing above it is an error naming the
+line, rather than something quietly dropped. This is for a report that
+breaks a long value at the terminal width (`ethtool` listing link modes)
+and for the control files whose values continue on an indented line.
+
+With `record_separator: nul` the records are separated by NUL bytes instead,
 which is what makes a value containing a newline representable. Input
 must be valid UTF-8 and within the size limits.
 

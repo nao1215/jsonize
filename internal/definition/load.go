@@ -193,6 +193,9 @@ func (d *Definition) Validate() error {
 		v.add("input.record_separator", "must be newline or nul")
 	}
 	d.Input.ignore = compileList(v, "input.ignore", d.Input.Ignore, "")
+	if d.Input.Fold != "" {
+		d.Input.fold = v.regex("input.fold", d.Input.Fold)
+	}
 	validateSelect(v, "input.select", &d.Input.Select)
 	validateParse(v, "parse", &d.Parse, d.Fields, "")
 	validateFields(v, "fields", d.Fields, 0, d.Parse.Type == TypeKV)

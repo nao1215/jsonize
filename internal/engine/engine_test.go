@@ -427,6 +427,38 @@ fields:
 	}
 }
 
+// input.fold joins a wrapped continuation onto the line above it, which
+// is how a report that breaks a long value at the terminal width is read
+// as one value rather than as a label of its own.
+func TestInputFold(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: wrapped
+input:
+  fold: '^[ \t]+\S'
+parse:
+  type: kv
+  separator: ":"
+  as: map
+`)
+	got, err := Parse(def, []byte("modes:  10baseT/Half\n        100baseT/Full\nduplex: Full\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if mustJSON(t, got) != `{"modes":"10baseT/Half 100baseT/Full","duplex":"Full"}` {
+		t.Error(mustJSON(t, got))
+	}
+
+	// A continuation with nothing above it is reported, not dropped.
+	if _, err := Parse(def, []byte("   orphan\nmodes: x\n"), Options{}); err == nil {
+		t.Error("a continuation on the first line should be an error")
+	} else if !strings.Contains(err.Error(), "nothing to join") {
+		t.Error(err)
+	}
+}
+
 func TestParseRecords(t *testing.T) {
 	t.Parallel()
 	def := load(t, `

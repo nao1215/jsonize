@@ -201,12 +201,18 @@ type Input struct {
 	RecordSeparator string `yaml:"record_separator,omitempty"`
 	// Ignore lists regular expressions; matching lines are dropped.
 	Ignore []string `yaml:"ignore,omitempty"`
+	// Fold names the continuation of the line above it: a matching line
+	// is joined onto the previous one with a single space, which is how a
+	// report that breaks a long value at the terminal width is read as
+	// one value. It is applied before Ignore and SkipBlank.
+	Fold string `yaml:"fold,omitempty"`
 	// SkipBlank drops blank lines. Defaults to true.
 	SkipBlank *bool `yaml:"skip_blank,omitempty"`
 	// Select narrows the lines handed to the parser.
 	Select Select `yaml:"select,omitempty"`
 
 	ignore []*regexp.Regexp
+	fold   *regexp.Regexp
 }
 
 // Separator returns the effective record separator byte.
@@ -224,6 +230,10 @@ func (in *Input) SkipBlankLines() bool {
 
 // IgnorePatterns returns the compiled ignore expressions.
 func (in *Input) IgnorePatterns() []*regexp.Regexp { return in.ignore }
+
+// FoldPattern reports the continuation expression, nil when the format
+// has no wrapped lines.
+func (in *Input) FoldPattern() *regexp.Regexp { return in.fold }
 
 // Select picks a contiguous range of lines. The steps are applied in the
 // order after, until, skip, limit.

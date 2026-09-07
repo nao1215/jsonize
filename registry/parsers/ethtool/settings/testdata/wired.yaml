@@ -1,0 +1,4 @@
+description: A wired interface whose three lists of link modes are each broken over four lines, and which opens with the warning an unprivileged caller gets.
+source: captured on Ubuntu 26.04 (ethtool 6.11) with LC_ALL=C
+os: linux
+args: ["eno1"]
