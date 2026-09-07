@@ -1,0 +1,36 @@
+# `nm -D` lists the dynamic symbol table in nm's default (BSD) layout:
+# the value right-aligned in a field two characters wide per pointer
+# byte, the one-letter symbol type, and the name.
+#
+# A symbol the object only refers to has no value, so the first field is
+# blank — sixteen spaces on a 64-bit target — and address is null there.
+# The value is left as the hexadecimal string nm printed: it is an
+# address, not a quantity, and the width says how wide the target's
+# pointers are.
+#
+# `nm` without -D prints the same three fields for the ordinary symbol
+# table, so this definition reads that too; the variant is named after
+# the table this fixture came from, not after a difference in the text.
+# A run naming several files interleaves a blank line and a "file:"
+# header, which this definition refuses: the format starts at a symbol.
+format: 1
+command: nm
+variant: dynamic
+description: nm dynamic symbol table
+metadata:
+  tags: [linux, binary, binutils]
+  compatible: [GNU binutils]
+  references:
+    - https://man7.org/linux/man-pages/man1/nm.1.html
+detect:
+  signature:
+    all:
+      # Value, type letter, name. The value field is as wide as two
+      # characters per pointer byte and is blank when there is no value.
+      - '\A(?:[0-9a-fA-F]{16}|[0-9a-fA-F]{8}|[ ]{16}|[ ]{8}) [A-Za-z?-] \S+$'
+parse:
+  type: regex
+  pattern: '^(?P<address>[0-9a-fA-F]*)[ ]+(?P<type>[A-Za-z?-]) (?P<name>.+)$'
+fields:
+  address: {null_if: [""]}
+  name: {required: true}

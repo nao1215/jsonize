@@ -1,0 +1,50 @@
+[
+  {
+    "mode": "rw-r--r--",
+    "uid": 0,
+    "gid": 0,
+    "size": 2312,
+    "date": "Jan  1 00:00 1970",
+    "name": "check_fds.o"
+  },
+  {
+    "mode": "rw-r--r--",
+    "uid": 0,
+    "gid": 0,
+    "size": 1000,
+    "date": "Jan  1 00:00 1970",
+    "name": "dso_handle.o"
+  },
+  {
+    "mode": "rw-r--r--",
+    "uid": 0,
+    "gid": 0,
+    "size": 1848,
+    "date": "Jan  1 00:00 1970",
+    "name": "init-first.o"
+  },
+  {
+    "mode": "rw-r--r--",
+    "uid": 0,
+    "gid": 0,
+    "size": 30016,
+    "date": "Jan  1 00:00 1970",
+    "name": "libc-start.o"
+  },
+  {
+    "mode": "rw-r--r--",
+    "uid": 0,
+    "gid": 0,
+    "size": 3384,
+    "date": "Jan  1 00:00 1970",
+    "name": "libc-tls.o"
+  },
+  {
+    "mode": "rw-r--r--",
+    "uid": 0,
+    "gid": 0,
+    "size": 608,
+    "date": "Jan  1 00:00 1970",
+    "name": "sysdep.o"
+  }
+]

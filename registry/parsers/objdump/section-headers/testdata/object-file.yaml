@@ -1,0 +1,7 @@
+description: |
+  A relocatable object, whose whole output fits. .bss carries the one
+  flag ALLOC, which is the shortest flags line the format prints, and
+  every section is at address zero.
+source: captured on Ubuntu 26.04 with GNU objdump (GNU Binutils for Ubuntu) 2.46, LC_ALL=C objdump -h /usr/lib/x86_64-linux-gnu/crt1.o
+os: linux
+args: [-h, /usr/lib/x86_64-linux-gnu/crt1.o]

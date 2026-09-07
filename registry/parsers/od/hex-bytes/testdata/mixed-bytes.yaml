@@ -1,0 +1,15 @@
+description: |
+  A 184-byte file written for this fixture, so the text column can be
+  checked against known bytes. Its first sixteen bytes are
+  ">|<demo>|<bits>|", so the text column holds angle brackets of its own
+  next to the brackets that fence it and the closing one is the last on
+  the line, not the first; then 48 zero bytes, three identical lines of
+  which od prints one and abbreviates the rest to an asterisk; then the
+  bytes 0x01 to 0x10; then six lines of plain text, which take the offset
+  past 0x9f and show that uutils writes its letters in upper case while
+  the bytes stay lower case; then eight bytes, so the last line is short.
+  The closing line is the length, 0xb8.
+source: |
+  built and captured on Ubuntu 26.04 with od (uutils coreutils) 0.8.0,
+  LC_ALL=C od -A x -t x1z sample.bin
+os: linux

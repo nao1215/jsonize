@@ -1,0 +1,51 @@
+# `objdump -h` names the file and its target, then prints each section on
+# two lines: the numbered row of sizes and offsets, and the flags
+# indented under it. The flags line is a continuation of the row above
+# it, so `fold` joins the two and each section becomes one line and one
+# object. The expression that recognises a continuation asks for a letter
+# after the indent, which is what keeps it from swallowing the numbered
+# rows, indented too but by a digit.
+#
+# The banner is the file, not a section, so it is a part of its own and
+# the sections are a second part beginning after the column header.
+# Naming several files repeats the banner between the tables, and the
+# second one falls inside the sections part, where a line that is not a
+# section is an error.
+#
+# Size, VMA, LMA and File off are hexadecimal and stay strings: they are
+# addresses and file positions written in the target's own width. Algn is
+# printed as 2**n and n is what the field keeps.
+format: 1
+command: objdump
+variant: section-headers
+description: objdump -h section headers of one file
+metadata:
+  tags: [linux, binary, binutils]
+  compatible: [GNU binutils]
+  references:
+    - https://man7.org/linux/man-pages/man1/objdump.1.html
+detect:
+  signature:
+    all:
+      - '^Sections:[ \t]*$'
+      - '^Idx Name[ \t]+Size[ \t]+VMA[ \t]+LMA[ \t]+File off[ \t]+Algn[ \t]*$'
+input:
+  fold: '^[ \t]+[A-Z]'
+parse:
+  type: composite
+  parts:
+    - name: file
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^(?P<name>.+):[ \t]+file format (?P<format>\S+)$'
+    - name: sections
+      select: {after: '^Idx Name[ \t]+Size'}
+      parse:
+        type: regex
+        pattern: '^[ \t]*(?P<idx>\d+) (?P<name>\S+)[ \t]+(?P<size>[0-9a-f]+)[ \t]+(?P<vma>[0-9a-f]+)[ \t]+(?P<lma>[0-9a-f]+)[ \t]+(?P<file_off>[0-9a-f]+)[ \t]+2\*\*(?P<align>\d+) (?P<flags>[A-Za-z_0-9]+(?:, [A-Za-z_0-9]+)*)$'
+      fields:
+        idx: {type: int}
+        align: {type: int}
+        flags: {type: array, split: ","}

@@ -1,0 +1,7 @@
+description: |
+  Naming more than one file makes nm print a blank line and a "file:"
+  header before each table, so the text no longer begins with a symbol.
+  That is a different format and this definition refuses it.
+source: captured on Ubuntu 26.04 with GNU nm (GNU Binutils for Ubuntu) 2.46, LC_ALL=C nm -D /bin/ls /bin/cat | head -6
+os: linux
+expect_error: does not describe this input

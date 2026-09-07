@@ -1,0 +1,45 @@
+# xxd's default dump: the offset and a colon, sixteen bytes as eight
+# two-byte groups, then the same sixteen bytes as text. Three commands
+# render the same bytes this way and they are told apart by what stands
+# around the text column: xxd puts nothing around it, `hexdump -C` puts
+# it between vertical bars and `od -t x1z` between angle brackets. The
+# signature therefore describes the colon after the offset and the fixed
+# width of the hexadecimal field, which is padded out even on a short
+# last line.
+#
+# The text column is whatever bytes the file held, printed as characters
+# or as dots. It can spell anything, including the punctuation the other
+# two dumps use as delimiters, so nothing may be read out of it: it is
+# taken by position, from the two spaces that follow the padded
+# hexadecimal field to the end of the line, and kept as a string. Its
+# trailing spaces are bytes 0x20 and stay.
+#
+# Each group holds two bytes because that is xxd's default grouping, so
+# the elements are groups as printed, not bytes. The offset stays the
+# hexadecimal string xxd wrote. `-c`, `-g` and `-u` change the widths and
+# the case, which are other renderings and not this one.
+format: 1
+command: xxd
+variant: default
+description: xxd default hexadecimal dump
+metadata:
+  tags: [linux, darwin, binary, hexdump]
+  compatible: [xxd]
+  references:
+    - https://man7.org/linux/man-pages/man1/xxd.1.html
+detect:
+  signature:
+    all:
+      # Offset, colon, the 39-character hexadecimal field, two spaces and
+      # at least one character of text.
+      - '\A[0-9a-f]+: [0-9a-f ]{39}  .'
+parse:
+  type: regex
+  pattern: '^(?P<offset>[0-9a-f]+): (?P<groups>[0-9a-f ]{39})  (?P<ascii>.*)$'
+fields:
+  groups:
+    type: array
+    split_regex: '[ \t]+'
+    # The field is padded with spaces to a fixed width, so a short last
+    # line ends in an empty piece that is not a group.
+    items: {null_if: [""], when_missing: omit}

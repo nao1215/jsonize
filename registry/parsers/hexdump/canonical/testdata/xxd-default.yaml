@@ -1,0 +1,7 @@
+description: |
+  The same bytes rendered by xxd: a colon after the offset, two-byte
+  groups and no fence around the text column. This definition must not
+  read it.
+source: captured on Ubuntu 26.04 with xxd 2025-11-26, LC_ALL=C xxd sample.bin
+os: linux
+expect_error: does not describe this input

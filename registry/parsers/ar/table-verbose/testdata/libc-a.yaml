@@ -1,0 +1,6 @@
+description: |
+  The first six members of the C library archive. It was built the
+  default deterministic way, so the owner, the group and the time are all
+  zero.
+source: captured on Ubuntu 26.04 with GNU ar (GNU Binutils for Ubuntu) 2.46, LC_ALL=C TZ=UTC ar tv /usr/lib/x86_64-linux-gnu/libc.a | head -6
+os: linux

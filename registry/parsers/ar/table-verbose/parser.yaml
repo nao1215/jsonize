@@ -1,0 +1,37 @@
+# `ar tv` lists the members of an archive: the permission bits, the owner
+# and group as uid/gid, the size in bytes, the modification time and the
+# member name. `ar t` prints the names alone, which is a different format
+# and refused here.
+#
+# The name is last and a member may be called anything the file it came
+# from was called, spaces included, so the expression takes the rest of
+# the line.
+#
+# ar writes the time with strftime "%b %e %H:%M %Y" in the local zone and
+# with no zone in it, so the field keeps the text as printed rather than
+# claiming an instant. An archive built the default deterministic way
+# reports zero for the owner, the group and the time.
+format: 1
+command: ar
+variant: table-verbose
+description: ar tv archive member listing
+metadata:
+  tags: [linux, binary, binutils, archive]
+  compatible: [GNU binutils]
+  references:
+    - https://man7.org/linux/man-pages/man1/ar.1.html
+detect:
+  signature:
+    all:
+      # Nine permission characters, uid/gid, a size, a strftime date and
+      # a name. `ls -l` puts a file type character in front of the same
+      # nine, so the anchor keeps the two apart.
+      - '\A[-rwxsStT]{9} \d+/\d+[ \t]+\d+ [A-Z][a-z]{2} [ \d]\d [ \d]\d:\d{2} \d{4} \S'
+parse:
+  type: regex
+  pattern: '^(?P<mode>[-rwxsStT]{9}) (?P<uid>\d+)/(?P<gid>\d+)[ \t]+(?P<size>\d+) (?P<date>[A-Z][a-z]{2} [ \d]\d [ \d]\d:\d{2} \d{4}) (?P<name>.+)$'
+fields:
+  uid: {type: int}
+  gid: {type: int}
+  size: {type: int}
+  name: {required: true}

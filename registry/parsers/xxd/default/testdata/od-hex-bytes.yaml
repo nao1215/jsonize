@@ -1,0 +1,6 @@
+description: |
+  The same bytes rendered by `od -A x -t x1z`: a six-digit offset with no
+  colon and the text between angle brackets. xxd must not read it.
+source: captured on Ubuntu 26.04 with od (uutils coreutils) 0.8.0, LC_ALL=C od -A x -t x1z sample.bin
+os: linux
+expect_error: does not describe this input

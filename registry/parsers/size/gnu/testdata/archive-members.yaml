@@ -1,0 +1,6 @@
+description: |
+  Measuring a static library names every member, and the name carries the
+  archive it came from behind a space: the last cell contains spaces,
+  parentheses and a path. The first five lines of the output are kept.
+source: captured on Ubuntu 26.04 with GNU size (GNU Binutils for Ubuntu) 2.46, LC_ALL=C size /usr/lib/x86_64-linux-gnu/libc.a | head -5
+os: linux

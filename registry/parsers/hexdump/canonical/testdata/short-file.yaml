@@ -1,0 +1,11 @@
+description: |
+  A 12-byte file written for this fixture, so the whole dump is one short
+  line: every byte slot after the twelfth is blank and the opening bar
+  stays in the column it has on a full line. The bytes are
+  ">short|dump<", which puts all three of the fences the hexadecimal
+  dumps use inside the text column of a dump that has only one line to be
+  recognised by.
+source: |
+  built and captured on Ubuntu 26.04 with util-linux 2.41.3 hexdump,
+  LC_ALL=C hexdump -C short.bin
+os: linux

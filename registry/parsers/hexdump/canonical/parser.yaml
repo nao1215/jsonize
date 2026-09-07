@@ -1,0 +1,56 @@
+# `hexdump -C`, the canonical dump: the offset padded to eight digits,
+# sixteen bytes in two groups of eight, then the same bytes as text
+# between vertical bars. Three commands render the same bytes this way
+# and the fence around the text column is what separates them:
+# `hexdump -C` uses bars, `od -t x1z` uses angle brackets and xxd uses
+# nothing but does write a colon after the offset. The signature
+# describes the two spaces after the offset, the two groups of eight
+# bytes and the opening bar.
+#
+# The text column is bytes, not syntax: it can contain bars of its own,
+# which is why the expression takes everything up to the last bar on the
+# line and keeps it as a string.
+#
+# Two more kinds of line exist. A run of identical lines is printed once
+# and then abbreviated to a single asterisk, which becomes an object with
+# repeat true; how many lines it stands for is only recoverable from the
+# next offset. The dump ends with the offset one past the last byte and
+# nothing else, which is the file's length, and becomes an object with
+# end_offset alone. Offsets stay strings: they are hexadecimal positions
+# and that is how they were printed.
+format: 1
+command: hexdump
+variant: canonical
+aliases:
+  # hd is this dump under a name of its own: it needs no option to print
+  # what `hexdump -C` prints.
+  - name: hd
+description: hexdump -C canonical hexadecimal and ASCII dump
+metadata:
+  tags: [linux, darwin, binary, hexdump]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/hexdump.1.html
+detect:
+  signature:
+    all:
+      # Eight digits of offset or more (hexdump pads to eight and widens
+      # past that for a file over 4 GiB), then sixteen byte slots in two
+      # groups of eight, then the opening bar. A slot the file ran out of
+      # is blank rather than absent, which is what lets a dump shorter
+      # than sixteen bytes have the same shape as any other.
+      - '\A[0-9a-f]{8,}  (?:[0-9a-f]{2} |   ){8} (?:[0-9a-f]{2} |   ){7}(?:[0-9a-f]{2}|  )  \|'
+parse:
+  type: regex
+  patterns:
+    # The bars sit where the sixteenth slot ends, so the text column is
+    # taken by position and the bytes are counted rather than measured.
+    - '^(?P<offset>[0-9a-f]+)  (?P<bytes>(?:[0-9a-f]{2} |   ){8} (?:[0-9a-f]{2} |   ){7}(?:[0-9a-f]{2}|  ))  \|(?P<ascii>.*)\|$'
+    - '^(?P<repeat>\*)$'
+    - '^(?P<end_offset>[0-9a-f]+)$'
+fields:
+  bytes:
+    type: array
+    split_regex: '[ \t]+'
+    items: {null_if: [""], when_missing: omit}
+  repeat: {type: bool, true_values: ["*"]}

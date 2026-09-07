@@ -1,0 +1,7 @@
+description: |
+  The same bytes rendered by `hexdump -C`: two spaces after the offset,
+  the sixteen bytes broken into two groups of eight, and the text between
+  vertical bars. This definition must not read it.
+source: captured on Ubuntu 26.04 with util-linux 2.41.3 hexdump, LC_ALL=C hexdump -C sample.bin
+os: linux
+expect_error: does not describe this input

@@ -1,0 +1,6 @@
+description: |
+  The first 96 bytes of an executable: six full lines and the closing
+  offset line.
+source: captured on Ubuntu 26.04 with util-linux 2.41.3 hexdump, LC_ALL=C hexdump -C -n 96 /bin/ls
+os: linux
+args: [-C, -n, "96", /bin/ls]

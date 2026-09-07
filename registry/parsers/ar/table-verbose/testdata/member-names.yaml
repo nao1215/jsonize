@@ -1,0 +1,8 @@
+description: |
+  An archive built with -U, which keeps the real modes, owner and times:
+  an executable member, a name containing a space, and a name longer than
+  the fifteen characters the plain archive header holds.
+source: |
+  built on Ubuntu 26.04 with GNU ar (GNU Binutils for Ubuntu) 2.46 from
+  four files owned by uid 1000, then LC_ALL=C TZ=UTC ar tv member-names.a
+os: linux

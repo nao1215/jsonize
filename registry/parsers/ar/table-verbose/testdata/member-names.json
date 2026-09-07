@@ -1,0 +1,34 @@
+[
+  {
+    "mode": "rw-rw-r--",
+    "uid": 1000,
+    "gid": 1000,
+    "size": 1,
+    "date": "Mar  5 07:09 2024",
+    "name": "short.o"
+  },
+  {
+    "mode": "rwxr-xr-x",
+    "uid": 1000,
+    "gid": 1000,
+    "size": 11,
+    "date": "Mar  5 07:09 2024",
+    "name": "run.sh"
+  },
+  {
+    "mode": "rw-rw-r--",
+    "uid": 1000,
+    "gid": 1000,
+    "size": 10,
+    "date": "Mar  5 07:09 2024",
+    "name": "two words.o"
+  },
+  {
+    "mode": "rw-rw-r--",
+    "uid": 1000,
+    "gid": 1000,
+    "size": 1,
+    "date": "Mar  5 07:09 2024",
+    "name": "a-very-long-member-name-over-fifteen.o"
+  }
+]

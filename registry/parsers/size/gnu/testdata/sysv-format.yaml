@@ -1,0 +1,7 @@
+description: |
+  `size -A` prints the System V format: a file name, then one row per
+  section under "section size addr". It is a different table and this
+  definition must not read it.
+source: captured on Ubuntu 26.04 with GNU size (GNU Binutils for Ubuntu) 2.46, LC_ALL=C size -A /usr/bin/tar | head -8
+os: linux
+expect_error: does not describe this input

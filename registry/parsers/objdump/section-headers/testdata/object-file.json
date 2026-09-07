@@ -1,0 +1,130 @@
+{
+  "file": {
+    "name": "/usr/lib/x86_64-linux-gnu/crt1.o",
+    "format": "elf64-x86-64"
+  },
+  "sections": [
+    {
+      "idx": 0,
+      "name": ".text",
+      "size": "00000035",
+      "vma": "0000000000000000",
+      "lma": "0000000000000000",
+      "file_off": "00000040",
+      "align": 4,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "RELOC",
+        "READONLY",
+        "CODE"
+      ]
+    },
+    {
+      "idx": 1,
+      "name": ".eh_frame",
+      "size": "0000005c",
+      "vma": "0000000000000000",
+      "lma": "0000000000000000",
+      "file_off": "00000078",
+      "align": 3,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "RELOC",
+        "READONLY",
+        "DATA"
+      ]
+    },
+    {
+      "idx": 2,
+      "name": ".data",
+      "size": "00000004",
+      "vma": "0000000000000000",
+      "lma": "0000000000000000",
+      "file_off": "000000d4",
+      "align": 0,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "DATA"
+      ]
+    },
+    {
+      "idx": 3,
+      "name": ".bss",
+      "size": "00000000",
+      "vma": "0000000000000000",
+      "lma": "0000000000000000",
+      "file_off": "000000d8",
+      "align": 0,
+      "flags": [
+        "ALLOC"
+      ]
+    },
+    {
+      "idx": 4,
+      "name": ".note.gnu.property",
+      "size": "00000030",
+      "vma": "0000000000000000",
+      "lma": "0000000000000000",
+      "file_off": "000000d8",
+      "align": 3,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "READONLY",
+        "DATA"
+      ]
+    },
+    {
+      "idx": 5,
+      "name": ".note.GNU-stack",
+      "size": "00000000",
+      "vma": "0000000000000000",
+      "lma": "0000000000000000",
+      "file_off": "00000108",
+      "align": 0,
+      "flags": [
+        "CONTENTS",
+        "READONLY"
+      ]
+    },
+    {
+      "idx": 6,
+      "name": ".note.ABI-tag",
+      "size": "00000020",
+      "vma": "0000000000000000",
+      "lma": "0000000000000000",
+      "file_off": "00000108",
+      "align": 2,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "READONLY",
+        "DATA"
+      ]
+    },
+    {
+      "idx": 7,
+      "name": ".rodata.cst4",
+      "size": "00000004",
+      "vma": "0000000000000000",
+      "lma": "0000000000000000",
+      "file_off": "00000128",
+      "align": 2,
+      "flags": [
+        "CONTENTS",
+        "ALLOC",
+        "LOAD",
+        "READONLY",
+        "DATA"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "text": 1285951,
+    "data": 9848,
+    "bss": 16248,
+    "dec": 1312047,
+    "hex": "14052f",
+    "filename": "/usr/bin/gcc"
+  },
+  {
+    "text": 419020,
+    "data": 19968,
+    "bss": 4416,
+    "dec": 443404,
+    "hex": "6c40c",
+    "filename": "/usr/bin/tar"
+  }
+]

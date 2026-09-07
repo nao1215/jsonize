@@ -1,0 +1,7 @@
+description: |
+  The same bytes rendered by `hexdump -C`: no colon after the offset, one
+  byte per group, and the text between vertical bars. xxd must not read
+  it, even though the text column of the first line contains bars.
+source: captured on Ubuntu 26.04 with util-linux 2.41.3 hexdump, LC_ALL=C hexdump -C sample.bin
+os: linux
+expect_error: does not describe this input

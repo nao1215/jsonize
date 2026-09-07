@@ -1,0 +1,6 @@
+check_fds.o
+dso_handle.o
+init-first.o
+libc-start.o
+libc-tls.o
+sysdep.o

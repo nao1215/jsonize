@@ -1,0 +1,12 @@
+description: |
+  A 184-byte file written for this fixture, so the text column can be
+  checked against known bytes. Its first sixteen bytes are
+  ">|<demo>|<bits>|", which fills the text column with the very
+  characters `hexdump -C` and `od -t x1z` use to fence theirs; then 48
+  zero bytes, which xxd prints line by line rather than collapsing; then
+  the bytes 0x01 to 0x10; then six lines of plain text; then eight bytes,
+  so the last line is short and its hexadecimal field is padded.
+source: |
+  built and captured on Ubuntu 26.04 with xxd 2025-11-26,
+  LC_ALL=C xxd sample.bin
+os: linux

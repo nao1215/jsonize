@@ -1,0 +1,6 @@
+description: |
+  An executable, the ordinary case. The first six sections are kept, one
+  of which has a name wider than the Name column so its size is pushed to
+  the right.
+source: captured on Ubuntu 26.04 with GNU objdump (GNU Binutils for Ubuntu) 2.46, LC_ALL=C objdump -h /bin/cat | head -17
+os: linux

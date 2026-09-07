@@ -1,0 +1,56 @@
+# `od -t x1z`: an offset, sixteen bytes one at a time, then the same
+# bytes as text between angle brackets. Three commands render the same
+# bytes this way and the fence around the text column is what separates
+# them: `od -t x1z` uses angle brackets, `hexdump -C` uses vertical bars
+# and xxd uses nothing but writes a colon after the offset. The signature
+# describes the single space after the offset, the run of sixteen
+# one-byte groups and the opening bracket.
+#
+# The text column is bytes, not syntax: it can contain brackets of its
+# own, which is why the expression takes everything up to the last
+# bracket on the line and keeps it as a string.
+#
+# Two more kinds of line exist. A run of identical lines is printed once
+# and then abbreviated to a single asterisk, which becomes an object with
+# repeat true; how many lines it stands for is only recoverable from the
+# next offset. The dump ends with the offset one past the last byte and
+# nothing else, which is the file's length, and becomes an object with
+# end_offset alone.
+#
+# The offset stays a string. -A chooses the base it is written in and
+# nothing in the line says which was chosen, so reading it as a number
+# would be guessing; -t x1z is what this definition describes, whichever
+# base -A picked. `-A n` leaves the offset out and is not this format.
+format: 1
+command: od
+variant: hex-bytes
+description: od -t x1z hexadecimal bytes with ASCII
+metadata:
+  tags: [linux, binary, hexdump]
+  compatible: [GNU coreutils, uutils coreutils]
+  references:
+    - https://man7.org/linux/man-pages/man1/od.1.html
+detect:
+  signature:
+    all:
+      # An offset, sixteen byte slots and the opening bracket. A slot the
+      # file ran out of is blank rather than absent, which is what lets a
+      # dump shorter than sixteen bytes have the same shape as any other.
+      # uutils coreutils writes the offset's letters in upper case and
+      # the bytes in lower case; either case is read in the offset, so an
+      # implementation that writes it in lower case is read as well.
+      - '\A[0-9a-fA-F]+ (?:[0-9a-f]{2} |   ){15}(?:[0-9a-f]{2}|  )  >'
+parse:
+  type: regex
+  patterns:
+    # The brackets sit where the sixteenth slot ends, so the text column
+    # is taken by position and the bytes are counted rather than measured.
+    - '^(?P<offset>[0-9a-fA-F]+) (?P<bytes>(?:[0-9a-f]{2} |   ){15}(?:[0-9a-f]{2}|  ))  >(?P<ascii>.*)<$'
+    - '^(?P<repeat>\*)$'
+    - '^(?P<end_offset>[0-9a-fA-F]+)$'
+fields:
+  bytes:
+    type: array
+    split_regex: '[ \t]+'
+    items: {null_if: [""], when_missing: omit}
+  repeat: {type: bool, true_values: ["*"]}
