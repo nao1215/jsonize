@@ -26,10 +26,15 @@ detect:
     any: ["show-ref"]
   signature:
     all:
-      # A full object name, one space and a ref path, with nothing else
-      # on the line. `--head` puts a line for HEAD first, so the ref line
-      # this anchors on is not required to be the first one.
-      - '(?m)^[0-9a-f]{40,64} refs/[^\t\n]*$'
+      # Every line, from the first to the last: a full object name, one
+      # space and a name with no space and no tab in it, which is what a
+      # ref name may be. Saying it of the whole text is what separates
+      # this from `git for-each-ref`, whose lines open the same way and
+      # then put the object type and a tab.
+      - '\A(?:[0-9a-f]{40,64} [^ \t\n]+\n)*[0-9a-f]{40,64} [^ \t\n]+\z'
+      # And at least one of those names is a full ref path. `--head` puts
+      # a line for HEAD first, so this one is not anchored at \A.
+      - '(?m)^[0-9a-f]{40,64} refs/'
 parse:
   type: regex
   # A tab in the ref name makes the line something else (for-each-ref

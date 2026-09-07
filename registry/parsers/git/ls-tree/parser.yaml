@@ -33,11 +33,12 @@ detect:
     any: ["ls-tree"]
   signature:
     all:
-      # A six-digit octal mode, the object type and a full object name
-      # ended by the tab. `git ls-files -s` has the same leading mode but
-      # a hexadecimal object name where this has a type word, and a stage
-      # digit where this has the object name.
-      - '\A[0-7]{6} (?:blob|tree|commit) [0-9a-f]{40,64}\t'
+      # Every line, from the first to the last: a six-digit octal mode,
+      # the object type, a full object name and the tab before the path.
+      # `git ls-files -s` opens with the same mode but puts the object
+      # name where this puts the type, so the claim is made of the whole
+      # text rather than of the first line.
+      - '\A(?:[0-7]{6} (?:blob|tree|commit) [0-9a-f]{40,64}\t[^\n]+\n)*[0-7]{6} (?:blob|tree|commit) [0-9a-f]{40,64}\t[^\n]+\z'
 parse:
   type: regex
   pattern: '^(?P<mode>[0-7]{6}) (?P<type>[a-z]+) (?P<object>[0-9a-f]{40,64})\t(?P<path>.*)$'

@@ -32,10 +32,13 @@ detect:
     any: ["ls-files"]
   signature:
     all:
-      # A six-digit octal mode, a full object name, a single stage digit
-      # and a tab. The object name is 40 hexadecimal characters in a
-      # SHA-1 repository and 64 in a SHA-256 one.
-      - '\A[0-7]{6} [0-9a-f]{40,64} [0-3]\t'
+      # Every line, from the first to the last: a six-digit octal mode, a
+      # full object name, a single stage digit and the tab before the
+      # path. The object name is 40 hexadecimal characters in a SHA-1
+      # repository and 64 in a SHA-256 one. Saying it of the whole text
+      # rather than of the first line is what separates this from
+      # `git ls-tree`, whose lines open with the same mode.
+      - '\A(?:[0-7]{6} [0-9a-f]{40,64} [0-3]\t[^\n]+\n)*[0-7]{6} [0-9a-f]{40,64} [0-3]\t[^\n]+\z'
 parse:
   type: regex
   pattern: '^(?P<mode>[0-7]{6}) (?P<object>[0-9a-f]{40,64}) (?P<stage>[0-3])\t(?P<path>.*)$'

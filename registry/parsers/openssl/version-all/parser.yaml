@@ -33,6 +33,12 @@ detect:
       # own name and a different set of labels, so the product name is
       # part of the evidence.
       - '\AOpenSSL [0-9]'
+      # The banner and then nothing but labelled lines, which is what
+      # separates the report from a document quoting one line of it. The
+      # labels openssl prints are letters and spaces; a build that adds
+      # one spelled otherwise falls outside this and says so by failing,
+      # rather than being read as something else.
+      - '\A[^\n]*\n(?:[A-Za-z][A-Za-z ]*:[^\n]*(?:\n|\z))+\z'
       - '(?m)^built on: '
       - '(?m)^OPENSSLDIR: '
 parse:
@@ -44,9 +50,11 @@ parse:
         type: regex
         each: input
         patterns:
-          # OpenSSL 3 repeats itself as "(Library: OpenSSL 3.5.5 ...)"
-          # when the library the tool is linked against differs from the
-          # one it was built against.
+          # OpenSSL 3 names the library it is linked against in
+          # parentheses ("(Library: OpenSSL 3.5.5 27 Jan 2026)"), which
+          # need not be the version the tool was built against. OpenSSL 1
+          # ends the banner at the date, so the second alternative reads
+          # that and leaves the key out.
           - '^(?P<product>\S+) (?P<version>\S+)\s+(?P<released>[^()\n]*?) \(Library: (?P<library>[^)\n]*)\)$'
           - '^(?P<product>\S+) (?P<version>\S+)\s+(?P<released>.*?)\s*$'
       fields:
