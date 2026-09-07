@@ -1,0 +1,9 @@
+source: |
+  captured on Ubuntu 26.04 (efibootmgr version 18) with LC_ALL=C from
+  efibootmgr -v, anonymised the same way as efibootmgr-18
+description: |
+  With -v the same entries are followed by an indented hex dump of the
+  device path, and of the option data where an entry has any. The dump is
+  dropped, so this parses to the same result as the plain form.
+os: linux
+args: [-v]

@@ -1,0 +1,10 @@
+source: |
+  captured on Ubuntu 26.04 (efibootmgr version 18) with LC_ALL=C; the GPT
+  partition UUID, the vendor GUID of the Windows entry and the BCD object
+  GUID inside its option data were replaced with different hex of the same
+  width, in every place each of them appears
+description: |
+  The ordinary shape: three settings lines and five active entries, each
+  with a device path after a tab.
+os: linux
+args: []
