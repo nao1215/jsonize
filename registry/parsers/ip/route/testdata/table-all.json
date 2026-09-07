@@ -13,35 +13,8 @@
     ]
   },
   {
-    "destination": "172.17.0.0/16",
-    "dev": "docker0",
-    "attributes": [
-      "proto",
-      "kernel",
-      "scope",
-      "link",
-      "src",
-      "172.17.0.1"
-    ]
-  },
-  {
     "type": "local",
     "destination": "127.0.0.0/8",
-    "dev": "lo",
-    "attributes": [
-      "table",
-      "local",
-      "proto",
-      "kernel",
-      "scope",
-      "host",
-      "src",
-      "127.0.0.1"
-    ]
-  },
-  {
-    "type": "local",
-    "destination": "127.0.0.1",
     "dev": "lo",
     "attributes": [
       "table",
@@ -70,18 +43,33 @@
     ]
   },
   {
-    "type": "local",
-    "destination": "172.17.0.1",
-    "dev": "docker0",
+    "type": "anycast",
+    "destination": "fc00:2001:db8::",
+    "dev": "br-example",
     "attributes": [
       "table",
       "local",
       "proto",
       "kernel",
-      "scope",
-      "host",
-      "src",
-      "172.17.0.1"
+      "metric",
+      "0",
+      "pref",
+      "medium"
+    ]
+  },
+  {
+    "type": "multicast",
+    "destination": "ff00::/8",
+    "dev": "eno1",
+    "attributes": [
+      "table",
+      "local",
+      "proto",
+      "kernel",
+      "metric",
+      "256",
+      "pref",
+      "medium"
     ]
   }
 ]

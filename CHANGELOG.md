@@ -81,7 +81,10 @@ project follows [Semantic Versioning](https://semver.org/).
 - `ip route` read the type a route may open with as the destination.
   The main table prints none, because every route in it is unicast;
   `ip route show table all` prints the local table too, whose routes are
-  local, broadcast and multicast, and every one of them failed.
+  local, broadcast, anycast and multicast, and every one of them failed.
+  The list of types is the one the kernel has rather than the ones seen
+  so far: the first pass took it from one machine's IPv4 table and missed
+  anycast, which is printed only for IPv6.
 - `ip -s -s link` was claimed by the definition for one `-s` and then
   failed on the error tables the second one adds. The two are now
   separate definitions, and each refuses the other's output.

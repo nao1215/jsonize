@@ -22,11 +22,13 @@ parse:
   patterns:
     # A route may open with its type. The main table prints none, because
     # every route in it is unicast; `ip route show table all` prints the
-    # local table too, whose routes are local, broadcast and multicast,
-    # and a type read as a destination would put "local" where a prefix
-    # belongs.
-    - '^(?P<type>unicast|local|broadcast|multicast|throw|unreachable|prohibit|blackhole|nat) (?P<destination>\S+) via (?P<via>\S+) dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
-    - '^(?P<type>unicast|local|broadcast|multicast|throw|unreachable|prohibit|blackhole|nat) (?P<destination>\S+) dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
+    # local table too, whose routes are local, broadcast, anycast and
+    # multicast, and a type read as a destination would put "local" where
+    # a prefix belongs. The list is the one the kernel has, not the ones
+    # seen so far: anycast is only printed for IPv6, which is why the
+    # first pass missed it.
+    - '^(?P<type>unicast|local|broadcast|anycast|multicast|throw|unreachable|prohibit|blackhole|nat) (?P<destination>\S+) via (?P<via>\S+) dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
+    - '^(?P<type>unicast|local|broadcast|anycast|multicast|throw|unreachable|prohibit|blackhole|nat) (?P<destination>\S+) dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
     # A route with no device at all, which is what a rejecting type has.
     - '^(?P<type>throw|unreachable|prohibit|blackhole) (?P<destination>\S+)\s*(?P<attributes>.*?)\s*$'
     - '^(?P<destination>\S+) via (?P<via>\S+) dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
