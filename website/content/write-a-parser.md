@@ -141,17 +141,39 @@ parse, differs from the JSON, or if any definition reads a fixture that
 belongs to another one. That last check is the one that catches a
 signature written wide enough to swallow a neighbouring format.
 
-## 6. Try it for real
+## 6. Check it against the decoys
+
+`registry/testdata/decoys/` holds text that belongs to no format jz
+reads: prose, a build log, a CHANGELOG, an INI file, a shell script, a
+document that quotes a report's header line. Every definition is applied
+to every one of them, and reading one is a failure.
+
+Every file in there was read by some definition once. A signature that
+looks for a single recognisable line will find it in a document that
+merely quotes that line, and a parser that takes any word where the
+format has a vocabulary will turn a sentence into a record. The corpus is
+how those two mistakes stay fixed.
+
+If your format resembles something ordinary, add a file. There is nothing
+to register: the check reads the directory.
+
+```console
+$ cat > registry/testdata/decoys/my-lookalike.txt
+$ jz test ./registry
+```
+
+## 7. Try it for real
 
 ```console
 $ go run ./cmd/jz run lsof -p $$
 $ lsof -p $$ | go run ./cmd/jz --pretty
 ```
 
-## 7. Open the pull request
+## 8. Open the pull request
 
-Include the definition, the fixtures, the golden JSON and one row in the
-table in `website/content/parsers.md`. Use a `parser:` commit prefix.
+Include the definition, the fixtures, the golden JSON, any decoy you
+added and one row in the table in `website/content/parsers.md`. Use a
+`parser:` commit prefix.
 
 ## Working outside the repository
 

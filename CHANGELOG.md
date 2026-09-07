@@ -8,6 +8,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- A decoy corpus under `registry/testdata/decoys/`, checked by
+  `make registry-test`. It holds text that belongs to no format jz reads
+  and every definition is applied to every file of it. The machinery
+  already existed for third parties as `jz test --decoys DIR`; what was
+  missing was a corpus of its own for the official registry, so the texts
+  that had defeated a signature once lived in a scratch directory and
+  were checked by hand. The first thing it caught on being wired in was
+  `etc/crontab` reading a shell script.
 - Automatic detection as the default behaviour: `COMMAND | jz` and
   `jz < FILE` identify the format from the text and convert it.
 - `jz run COMMAND` for the case where jz starts the command itself,
@@ -86,6 +94,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `etc/crontab` accepted a shell script that installs a cron entry. One
+  entry is not evidence: a script that installs one carries one, and so
+  does a document that quotes one. The signature now claims the whole
+  text, which is entries, variable assignments, comments and blank lines
+  and nothing else, so the refusal happens before parsing rather than on
+  the first line that is not an entry.
 - `git log --stat`, `--numstat`, `--shortstat`, `--name-only`,
   `--name-status` and `-p` were read as `git/log` and their file lists,
   diffstats and diffs were reported as lines of the commit message. The

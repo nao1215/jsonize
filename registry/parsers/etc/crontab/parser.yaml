@@ -28,6 +28,11 @@ detect:
       # than repeated with a count so that the day and month names cron
       # accepts stay inside the fields that accept them.
       - '^(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+\S'
+      # And nothing else in the file. One entry is not evidence: a script
+      # that installs a cron entry carries one, and so does a document
+      # that quotes one. A crontab is entries, variable assignments,
+      # comments and blank lines, all the way down.
+      - '\A(?:(?:[ \t]*#[^\n]*|[ \t]*[A-Za-z_][A-Za-z0-9_]*=[^\n]*|[ \t]*|(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*|@(?:reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*)\n)*(?:[ \t]*#[^\n]*|[ \t]*[A-Za-z_][A-Za-z0-9_]*=[^\n]*|[ \t]*|(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*|@(?:reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*)\z'
 input:
   ignore:
     - '^\s*#'

@@ -3,7 +3,6 @@ package cli
 import (
 	"errors"
 	"fmt"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
@@ -41,10 +40,6 @@ registry could not be read.
 Options:
 `
 
-// MaxDecoyFiles bounds a decoy directory so that pointing --decoys at a
-// large tree cannot make jz read it all.
-const MaxDecoyFiles = 1000
-
 func (a *app) cmdTest(args []string) int {
 	o := newOptions("test")
 	var (
@@ -71,7 +66,7 @@ func (a *app) cmdTest(args []string) int {
 		Engine: engine.Options{MaxInputSize: MaxInputSize},
 	}
 	if decoys != "" {
-		list, err := readDecoys(decoys)
+		list, err := conformance.ReadDecoys(decoys)
 		if err != nil {
 			a.errorf("%v", err)
 			return ExitUsage
@@ -225,42 +220,4 @@ func (a *app) sourceDir(name string) (string, bool) {
 // the failure it belongs to.
 func indentAfterFirst(s string) string {
 	return strings.ReplaceAll(strings.TrimRight(s, "\n"), "\n", "\n    ")
-}
-
-// readDecoys reads every regular file under dir. A decoy is text that
-// belongs to no registered format, and the check is that nothing reads
-// it.
-func readDecoys(dir string) ([]conformance.Decoy, error) {
-	var out []conformance.Decoy
-	err := filepath.WalkDir(dir, func(p string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if d.IsDir() || !d.Type().IsRegular() {
-			return nil
-		}
-		if len(out) >= MaxDecoyFiles {
-			return fmt.Errorf("more than %d files under %s", MaxDecoyFiles, dir)
-		}
-		data, err := os.ReadFile(p) //nolint:gosec // a decoy directory is named by the user running jz
-		if err != nil {
-			return err
-		}
-		if int64(len(data)) > MaxInputSize {
-			return fmt.Errorf("%s exceeds the %d byte limit", p, MaxInputSize)
-		}
-		rel, err := filepath.Rel(dir, p)
-		if err != nil {
-			rel = p
-		}
-		out = append(out, conformance.Decoy{Name: filepath.ToSlash(rel), Input: data})
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	if len(out) == 0 {
-		return nil, fmt.Errorf("no files under %s", dir)
-	}
-	return out, nil
 }

@@ -2,3 +2,4 @@
 # Rotate the logs every Monday at half past four.
 30 4 * * 1 root /usr/local/bin/rotate-logs --keep 30
 echo "installed the entry above into /etc/cron.d/rotate"
+Package: this line is prose, not a control record
