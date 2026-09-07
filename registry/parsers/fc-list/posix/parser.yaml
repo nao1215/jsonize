@@ -2,6 +2,11 @@
 # file provides, and the styles. Families and styles are comma separated
 # lists, and a file that provides one family still prints a list of one.
 #
+# A variable font carries its weights and widths in axes rather than in
+# named styles and prints no style field at all, which is the second
+# alternative; styles is absent there rather than an empty list, because
+# the file names none.
+#
 # The separator between the path and the rest is a colon and a space,
 # which is also what a file(1) listing uses; the style field is what
 # tells the two apart.
@@ -17,11 +22,15 @@ metadata:
 detect:
   signature:
     all:
-      - '\A/\S+: [^:\n]+:style=\S'
+      # Any line with a style, not the first: a variable font names no
+      # style, and a listing may open with one.
+      - '^/\S+: [^:\n]+:style=\S'
 parse:
   type: regex
-  pattern: '^(?P<file>[^:]+): (?P<families>[^:]*):style=(?P<styles>.*?)[ \t]*$'
+  patterns:
+    - '^(?P<file>[^:]+): (?P<families>[^:]*):style=(?P<styles>.*?)[ \t]*$'
+    - '^(?P<file>[^:]+): (?P<families>[^:]*?)[ \t]*$'
 fields:
   file: {required: true}
   families: {type: array, split: ","}
-  styles: {type: array, split: ","}
+  styles: {type: array, split: ",", when_missing: omit}
