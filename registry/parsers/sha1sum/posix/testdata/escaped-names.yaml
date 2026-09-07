@@ -1,0 +1,4 @@
+description: One run in binary mode over a name with a space and a name with a backslash, which is printed doubled behind a leading backslash that marks the line as escaped.
+source: captured on Ubuntu 26.04 (GNU coreutils 9.8) with LC_ALL=C over files made for this fixture
+os: linux
+args: [-b]
