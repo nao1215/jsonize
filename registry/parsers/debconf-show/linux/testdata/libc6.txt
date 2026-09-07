@@ -1,0 +1,7 @@
+  glibc/kernel-not-supported:
+  glibc/upgrade: true
+  glibc/restart-failed:
+  glibc/disable-screensaver:
+  glibc/restart-services:
+* libraries/restart-without-asking: true
+  glibc/kernel-too-old:

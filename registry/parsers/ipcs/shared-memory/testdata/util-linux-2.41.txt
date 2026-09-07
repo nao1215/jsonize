@@ -1,0 +1,5 @@
+
+------ Shared Memory Segments --------
+key        shmid      owner      perms      bytes      nattch     status      
+0xa6381549 131080     ada        640        4096       0                       
+

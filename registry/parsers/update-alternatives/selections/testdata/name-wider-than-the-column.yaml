@@ -1,0 +1,9 @@
+source: |
+  captured on Ubuntu 26.04 (dpkg 1.23.7) with LC_ALL=C; lines 52-57 of the
+  same output
+description: |
+  liblapack.so.3-x86_64-linux-gnu is one character wider than the name
+  column, so its row is not aligned with the rows around it. The cells are
+  cut on whitespace for that reason, not at fixed offsets.
+os: linux
+args: [--get-selections]

@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (debconf 1.5.x) with LC_ALL=C
+description: |
+  One package answering questions from two template namespaces (glibc and
+  libraries), with five empty values among seven lines.
+os: linux
+args: [libc6]

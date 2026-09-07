@@ -1,0 +1,45 @@
+# ipcs -q: the message queue section on its own, so the result is the
+# list of queues rather than an object with one populated part. The
+# banners of the other two sections are excluded, which is what separates
+# this from the default listing that prints all three; no detect.args is
+# needed for that, and writing one would only reject an invocation that
+# reaches the same format by another spelling.
+#
+# The cells are cut on whitespace rather than at the heading offsets: the
+# owner is printed in a ten-column field and a longer login name pushes
+# the rest of the row to the right.
+format: 1
+command: ipcs
+variant: message-queues
+description: ipcs -q message queues
+metadata:
+  tags: [linux, ipc, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/ipcs.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^-+ Message Queues -+$'
+      - '^key[ \t]+msqid[ \t]+owner[ \t]+perms[ \t]+used-bytes[ \t]+messages[ \t]*$'
+    none:
+      - '^-+ Shared Memory Segments -+$'
+      - '^-+ Semaphore Arrays -+$'
+input:
+  select:
+    after: '^-+ Message Queues -+$'
+parse:
+  type: table
+fields:
+  # The key is printed as 0x%08x and names the queue; it is an identifier
+  # rather than a count.
+  key: {required: true}
+  msqid: {type: int, required: true}
+  owner: {required: true}
+  # An octal mode printed without a leading zero. Read as a number it
+  # would be decimal 660 rather than rw-rw----, so the digits stay as
+  # they were printed.
+  perms: {required: true}
+  used_bytes: {type: int}
+  messages: {type: int}

@@ -1,0 +1,45 @@
+{
+  "settings": {
+    "BootCurrent": "0000",
+    "Timeout": "2 seconds",
+    "BootOrder": [
+      "0000",
+      "0002",
+      "0003",
+      "0004",
+      "0005"
+    ]
+  },
+  "entries": [
+    {
+      "boot_number": "0000",
+      "active": true,
+      "name": "Ubuntu",
+      "device_path": "HD(1,GPT,3f81b6e2-04c7-4d13-8ba0-6e19c5720d48,0x800,0x219800)/\\EFI\\ubuntu\\shimx64.efi"
+    },
+    {
+      "boot_number": "0002",
+      "active": true,
+      "name": "Windows Boot Manager",
+      "device_path": "VenHw(5c40a1d8-2b6e-49f0-9a37-11d4e8072b6a)57494e444f5753000100000088000000780000004200430044004f0042004a004500430054003d007b00370062003400310063003000350065002d0033006100390032002d0034006600310038002d0062003600640030002d003200380065003700630031003900610035006600330034007d00000039000100000010000000040000007fff0400"
+    },
+    {
+      "boot_number": "0003",
+      "active": false,
+      "name": "UEFI:CD/DVD Drive",
+      "device_path": "BBS(129,,0x0)"
+    },
+    {
+      "boot_number": "0004",
+      "active": true,
+      "name": "UEFI:Removable Device",
+      "device_path": "BBS(130,,0x0)"
+    },
+    {
+      "boot_number": "0005",
+      "active": true,
+      "name": "UEFI:Network Device",
+      "device_path": "BBS(131,,0x0)"
+    }
+  ]
+}

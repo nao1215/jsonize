@@ -1,0 +1,32 @@
+# chage -l prints seven labels padded with tabs and separated from the
+# value by a colon. The label set is fixed: chage writes all seven on
+# every run, in this order, so the result is a map whose keys are
+# known in advance rather than a {name, value} list, which would only add
+# a level of indirection to a fixed record.
+#
+# The labels contain spaces, so they cannot be written as `fields` names
+# and no value can be converted. That loses nothing here: one label holds
+# a date ("Nov 03, 2025", or "2025-11-03" with -i), the word "never" or
+# the sentence "password must be changed", and the three counted labels
+# hold a number whose meaning depends on the same three spellings. Every
+# value reaches JSON as the string chage printed, and the keys are the
+# labels as printed.
+format: 1
+command: chage
+variant: linux
+description: chage -l password ageing information for one account
+metadata:
+  tags: [linux, account, shadow]
+  compatible: [shadow-utils]
+  references:
+    - https://man7.org/linux/man-pages/man1/chage.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALast password change[ \t]+: '
+      - '^Number of days of warning before password expires[ \t]+: '
+parse:
+  type: kv
+  separator: ":"
+  as: map
