@@ -45,10 +45,12 @@ project follows [Semantic Versioning](https://semver.org/).
   says which one jz reads, and an arm64 machine gets exit 4 rather than
   a block with most of its fields missing.
 - `/proc/diskstats` is read for the twenty-field row Linux 5.5 and later
-  write. The field count is part of the signature, so the fourteen- and
-  eighteen-field rows older kernels write are refused rather than read
-  with their columns shifted or padded with zeroes the kernel never
-  wrote.
+  write. The fourteen- and eighteen-field rows older kernels write are
+  refused as rows with too few fields, so nothing shifts and no counter
+  is filled in. Those shapes are not covered because no machine running
+  such a kernel was available to capture from; the format could describe
+  them, and whether to do that with one definition or a variant per shape
+  is an open question in design.md.
 - `parse: type: records` for a report whose blocks repeat: a line
   matching `start` opens a record and the `parts` are applied to each. A
   `composite` part may itself be `records`, which is what a report that

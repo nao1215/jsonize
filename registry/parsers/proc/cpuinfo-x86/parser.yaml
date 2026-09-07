@@ -18,12 +18,21 @@
 # this definition does not list still appears, with the text the kernel
 # wrote for it.
 #
-# Four values stay text on purpose. microcode is hexadecimal, which is
-# how the kernel identifies a revision rather than a quantity to compare.
+# Four values are kept as the text the kernel wrote. microcode is
+# hexadecimal, which is how a revision is identified rather than a
+# quantity to compare, and convert.Int reads base ten.
+#
 # cache size ("1024 KB"), TLB size ("192 4K pages") and address sizes
-# ("48 bits physical, 48 bits virtual") each pack more than one fact into
-# a phrase, and taking them apart would be inventing a structure the file
-# does not have.
+# ("48 bits physical, 48 bits virtual") each hold more than one fact,
+# and the format can take them apart: a field of type object splits a
+# value on a regular expression, which is how the runnable count and the
+# total are read out of proc/loadavg. Doing so would be reading what the
+# file states, not guessing at it. This definition does not, and that is
+# a decision about its output rather than a limit of the engine: the
+# values are reported as written and the reader splits them if they need
+# to. Whether that is the right call, given that proc/meminfo does
+# separate a counter from its unit, is an open question and is recorded
+# in design.md.
 format: 1
 command: proc
 variant: cpuinfo-x86

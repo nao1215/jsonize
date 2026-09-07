@@ -199,10 +199,10 @@ block is read as whatever labels it holds, with a conversion for the
 ones whose type is known and the kernel's own text for the rest.
 
 `/proc/diskstats` is read for the twenty-field row Linux 5.5 and later
-write. The signature counts the fields, so the fourteen- and
-eighteen-field rows older kernels write are refused rather than read
-with their columns shifted or padded with zeroes the kernel never
-wrote.
+write. A fourteen- or eighteen-field row from an older kernel is refused
+as a row with too few fields: nothing shifts and no counter is filled in.
+Those shapes are not covered because there was no machine running such a
+kernel to capture from.
 
 `/proc/uptime` is the third case rather than the first two, and it is
 worth saying why. It holds two decimal numbers and nothing else, which

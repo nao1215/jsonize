@@ -352,6 +352,63 @@ naming. The enum vocabularies of the definition schema
 exception: they name the values a caller reads out of a `Definition`, and
 exporting half a set would be worse than exporting all of it.
 
+## Open questions
+
+Decisions that have not been made. Nothing here is implemented, and each
+is recorded because a definition in the registry works around it today.
+
+### Exact field counts in a table
+
+A `table` with `split: whitespace` gives its last column whatever is left
+on the line. That is what `ps aux` needs, where the command and its
+arguments are one cell with spaces in it, and it is the default because
+`max_fields` is unset. It means a table cannot say "this row has exactly
+N fields": a row with N+1 of them produces N cells with two values in the
+last one, and `max_fields: N+1` is refused by validation because it
+exceeds the number of columns.
+
+`proc/diskstats` needs the exact count and gets it from two places that
+were never designed to work together. Inside the signature window the
+expression counts the fields. Past the window nothing counts them, and
+what refuses a twenty-first field is that it lands in `flush_ms` and
+fails to convert to an integer. A table whose last column were text
+would take the extra field without a word.
+
+Two uses are being served by one setting, and they want opposite things:
+a last column that absorbs the rest of the line, and a row whose width is
+checked. Relaxing the `max_fields` validation, or adding a key that
+states the width, would separate them. Neither is decided, and adding a
+definition key is not something to do for one definition.
+
+Two further things any answer has to handle:
+
+- The widths a format allows are not always a range. `/proc/diskstats`
+  has fourteen, eighteen and twenty fields across kernel versions, and a
+  row of fifteen, sixteen, seventeen or nineteen is not any of them. A
+  count written as a range would accept rows no kernel ever wrote.
+- Field counts cannot resolve every ambiguity. A twenty-field row
+  truncated to eighteen is indistinguishable from a row an older kernel
+  wrote, because the columns are backward compatible and the text carries
+  nothing else. Splitting the shapes into separate variants does not
+  change that: automatic detection would have the same two candidates and
+  the same absence of evidence.
+
+### Whether a definition should split a value it can
+
+A field of type `object` splits a value on a regular expression, so a
+definition can turn `1024 KB` into a number and a unit, or
+`48 bits physical, 48 bits virtual` into two numbers. That is reading
+what the text states rather than guessing at it, which is why
+`proc/loadavg` splits `4/4688` into a runnable count and a total.
+
+The registry is not consistent about when to do it. `proc/meminfo`
+separates every counter from its unit; `proc/cpuinfo-x86` reports
+`cache size`, `TLB size` and `address sizes` as the text the kernel
+wrote. Both are defensible on their own and the pair is not. What is
+missing is a rule for which values a definition takes apart and which it
+hands over whole, and until there is one, changing either would be
+trading one inconsistency for another.
+
 ## Where to cut next
 
 - `registry/` → separate repository; only the `official` import changes.
