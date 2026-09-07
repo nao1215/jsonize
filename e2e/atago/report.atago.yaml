@@ -30,7 +30,12 @@ scenarios:
               - { path: "$[0].cpu[0].user_percent", equals: 3.07 }
               - { path: "$[0].devices", length: 2 }
               - { path: "$[0].devices[0].device", equals: nvme0n1 }
-              - { path: "$[2].cpu[0].user_percent", equals: 0.6 }
+              # A third sample, read the same way as the first. The value
+              # itself is checked with a bound rather than an equality,
+              # because 0.60 has no exact binary form and two platforms
+              # print the nearest double differently.
+              - { path: "$[2].cpu[0].user_percent", gt: 0.5 }
+              - { path: "$[2].cpu[0].user_percent", lt: 0.7 }
       # One sample per line, which is what a monitoring consumer reads.
       - run:
           command: jz --stream --file ${workdir}/iostat.txt

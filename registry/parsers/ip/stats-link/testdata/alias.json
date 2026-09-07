@@ -1,0 +1,51 @@
+[
+  {
+    "interface": {
+      "index": 2,
+      "name": "eth0",
+      "flags": [
+        "BROADCAST",
+        "MULTICAST",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 1500,
+      "qdisc": "mq",
+      "state": "UP",
+      "mode": "DEFAULT",
+      "group": "default",
+      "qlen": 1000
+    },
+    "link": {
+      "type": "ether",
+      "address": "aa:bb:cc:dd:ee:ff",
+      "broadcast": "ff:ff:ff:ff:ff:ff"
+    },
+    "rx": {
+      "bytes": 1007250705,
+      "packets": 3265360,
+      "errors": 0,
+      "dropped": 414905,
+      "missed": 0,
+      "mcast": 734844
+    },
+    "tx": {
+      "bytes": 260139377,
+      "packets": 1832318,
+      "errors": 0,
+      "dropped": 0,
+      "carrier": 0,
+      "collsns": 0
+    },
+    "alias": [
+      {
+        "name": "Network Device"
+      }
+    ],
+    "altnames": [
+      {
+        "name": "enP30832s1"
+      }
+    ]
+  }
+]

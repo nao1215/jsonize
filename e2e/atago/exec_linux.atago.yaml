@@ -444,7 +444,9 @@ scenarios:
   # never a slot number or a device name.
   - name: jz run lspci -vv lands on the tree definition
     only: {os: linux}
-    skip: {command: "! command -v lspci > /dev/null"}
+    # A cloud runner has lspci but no PCI bus to list, so the probe is
+    # the output rather than the binary.
+    skip: {command: "! LC_ALL=C lspci -vv 2>/dev/null | grep -q '^[0-9a-f][0-9a-f]:'"}
     steps:
       - run:
           command: jz run --explain lspci -vv

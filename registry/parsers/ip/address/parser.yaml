@@ -47,6 +47,7 @@ parse:
         patterns:
           - '^\s*(?P<kind>link)/(?P<link_type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
           - '^\s*(?P<kind>altname) (?P<name>\S+)\s*$'
+          - '^\s*(?P<kind>alias) (?P<name>.+?)\s*$'
           - '^\s*(?P<kind>inet6?) (?P<address>\S+)(?: brd (?P<broadcast>\S+))? scope (?P<scope>\S+)(?:[ \t]+(?P<attributes>.*?))?[ \t]*$'
           - '^\s*(?P<kind>valid_lft) (?P<valid_lft>\S+) preferred_lft (?P<preferred_lft>\S+)\s*$'
       fields:
