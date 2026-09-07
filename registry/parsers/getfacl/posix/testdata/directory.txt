@@ -1,0 +1,8 @@
+# file: /tmp
+# owner: root
+# group: root
+# flags: --t
+user::rwx
+group::rwx
+other::rwx
+

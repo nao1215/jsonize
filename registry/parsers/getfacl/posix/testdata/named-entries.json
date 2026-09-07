@@ -1,0 +1,125 @@
+[
+  {
+    "attributes": [
+      {
+        "name": "file",
+        "value": "/srv/share/file.txt"
+      },
+      {
+        "name": "owner",
+        "value": "user"
+      },
+      {
+        "name": "group",
+        "value": "user"
+      }
+    ],
+    "entries": [
+      {
+        "type": "user",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "user",
+        "qualifier": "nobody",
+        "permissions": "rw-",
+        "effective": "r--"
+      },
+      {
+        "type": "group",
+        "qualifier": null,
+        "permissions": "rw-",
+        "effective": "r--"
+      },
+      {
+        "type": "mask",
+        "qualifier": null,
+        "permissions": "r--"
+      },
+      {
+        "type": "other",
+        "qualifier": null,
+        "permissions": "r--"
+      }
+    ]
+  },
+  {
+    "attributes": [
+      {
+        "name": "file",
+        "value": "/srv/share"
+      },
+      {
+        "name": "owner",
+        "value": "user"
+      },
+      {
+        "name": "group",
+        "value": "user"
+      }
+    ],
+    "entries": [
+      {
+        "type": "user",
+        "qualifier": null,
+        "permissions": "rwx"
+      },
+      {
+        "type": "user",
+        "qualifier": "nobody",
+        "permissions": "rwx"
+      },
+      {
+        "type": "group",
+        "qualifier": null,
+        "permissions": "rwx"
+      },
+      {
+        "type": "group",
+        "qualifier": "audio",
+        "permissions": "r--"
+      },
+      {
+        "type": "mask",
+        "qualifier": null,
+        "permissions": "rwx"
+      },
+      {
+        "type": "other",
+        "qualifier": null,
+        "permissions": "r-x"
+      },
+      {
+        "default": true,
+        "type": "user",
+        "qualifier": null,
+        "permissions": "rwx"
+      },
+      {
+        "default": true,
+        "type": "user",
+        "qualifier": "nobody",
+        "permissions": "rwx"
+      },
+      {
+        "default": true,
+        "type": "group",
+        "qualifier": null,
+        "permissions": "rwx"
+      },
+      {
+        "default": true,
+        "type": "mask",
+        "qualifier": null,
+        "permissions": "rwx"
+      },
+      {
+        "default": true,
+        "type": "other",
+        "qualifier": null,
+        "permissions": "r-x"
+      }
+    ]
+  }
+]

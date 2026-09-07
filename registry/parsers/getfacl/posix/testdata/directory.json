@@ -1,0 +1,39 @@
+[
+  {
+    "attributes": [
+      {
+        "name": "file",
+        "value": "/tmp"
+      },
+      {
+        "name": "owner",
+        "value": "root"
+      },
+      {
+        "name": "group",
+        "value": "root"
+      },
+      {
+        "name": "flags",
+        "value": "--t"
+      }
+    ],
+    "entries": [
+      {
+        "type": "user",
+        "qualifier": null,
+        "permissions": "rwx"
+      },
+      {
+        "type": "group",
+        "qualifier": null,
+        "permissions": "rwx"
+      },
+      {
+        "type": "other",
+        "qualifier": null,
+        "permissions": "rwx"
+      }
+    ]
+  }
+]
