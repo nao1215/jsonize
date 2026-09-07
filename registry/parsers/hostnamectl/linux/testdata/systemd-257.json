@@ -33,15 +33,15 @@
   },
   {
     "name": "Hardware Vendor",
-    "value": "GMKtec"
+    "value": "ExampleCo"
   },
   {
     "name": "Hardware Model",
-    "value": "NucBox_EVO-X2"
+    "value": "NucBox_Model-1"
   },
   {
     "name": "Hardware SKU",
-    "value": "EVO-X2-001"
+    "value": "Model-1-001"
   },
   {
     "name": "Hardware Version",
@@ -49,7 +49,7 @@
   },
   {
     "name": "Firmware Version",
-    "value": "EVO-X2 1.09"
+    "value": "Model-1 1.09"
   },
   {
     "name": "Firmware Date",
