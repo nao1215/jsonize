@@ -1,0 +1,45 @@
+# `uv pip show PACKAGE` prints the metadata of an installed package as
+# one "Key: value" line per field, and separates the packages with a line
+# of three dashes when more than one is named. The blocks repeat, so the
+# definition describes one of them and `records` applies it to each.
+#
+# The command is uv because that is the name `jz run uv pip show` gives
+# jz, but `pip show` prints the same block and is read by this definition
+# as well. Which fields appear depends on which of the two printed them:
+# uv prints five, pip prints ten. They are kept as a map under the names
+# the tool used rather than as a fixed set this definition would have to
+# keep in step with.
+#
+# Requires and Required-by are comma separated lists that are empty when
+# the package has no dependencies or no dependants, so an empty one is
+# null rather than a list holding one empty name.
+format: 1
+command: uv
+variant: pip-show
+description: uv pip show package metadata
+metadata:
+  tags: [python, package]
+  compatible: [uv, pip]
+  references:
+    - https://docs.astral.sh/uv/reference/cli/#uv-pip-show
+detect:
+  signature:
+    all:
+      - '\AName:[ \t]\S'
+      - '^Version:[ \t]\S'
+      - '^Required-by:'
+input:
+  ignore:
+    - '^-{3}$'
+parse:
+  type: records
+  start: '^Name:[ \t]'
+  parts:
+    - name: package
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      fields:
+        Requires: {type: array, split: ",", null_if: [""]}
+        Required-by: {type: array, split: ",", null_if: [""]}

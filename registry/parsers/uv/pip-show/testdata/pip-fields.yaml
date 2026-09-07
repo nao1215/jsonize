@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 from `python3 -m pip show pip` (pip 25.3) with LC_ALL=C; the home directory in Location was replaced with /home/alice
+description: >
+  The same block printed by pip itself, which has ten fields where uv has
+  five. Author is empty and Requires and Required-by end in a space,
+  which the key/value parser trims away.
+os: linux
