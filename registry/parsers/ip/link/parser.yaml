@@ -1,0 +1,55 @@
+# `ip link` prints one block per interface: a header line, the link layer
+# address, and however many alternative names the interface has. It is
+# `ip -s link` without the counter tables and `ip address` without the
+# addresses, so the signature has to name both of those absences.
+format: 1
+command: ip
+variant: link
+description: ip link, one block per interface
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ip-link.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The mode the header carries is what `ip address` leaves out.
+      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+.* mode \S+'
+    none:
+      - '^[ \t]+RX:[ \t]+bytes[ \t]+packets[ \t]+errors'
+      - '^[ \t]+inet6?[ \t]'
+parse:
+  type: records
+  start: '^\d+: '
+  parts:
+    - name: interface
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        # A bridged interface names its bridge between the queueing
+        # discipline and the state, and a veth end names its peer after
+        # an @. Both are absent on an ordinary interface.
+        pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>\S+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+) qdisc (?P<qdisc>\S+)(?: master (?P<master>\S+))? state (?P<state>\S+) mode (?P<mode>\S+) group (?P<group>\S+)(?: qlen (?P<qlen>\d+))?\s*$'
+      fields:
+        index: {type: int}
+        mtu: {type: int}
+        qlen: {type: int, when_missing: omit}
+        master: {when_missing: omit}
+        peer: {when_missing: omit}
+        flags: {type: array, split: ","}
+    - name: link
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
+      fields:
+        netnsid: {type: int, when_missing: omit}
+    - name: altnames
+      select: {skip: 2}
+      parse:
+        type: regex
+        pattern: '^\s*altname (?P<name>\S+)\s*$'
