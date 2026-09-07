@@ -459,6 +459,32 @@ parse:
 	}
 }
 
+// Folding runs before ignoring, so a continuation reaches the line it
+// belongs to even where that line is dropped, and a continuation of a
+// dropped line goes with it.
+func TestInputFoldRunsBeforeIgnore(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: wrapped
+input:
+  fold: '^[ \t]+\S'
+  ignore: ['^note:']
+parse:
+  type: kv
+  separator: ":"
+  as: map
+`)
+	got, err := Parse(def, []byte("note:  dropped\n       with its continuation\nkept:  value\n       and its own\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if mustJSON(t, got) != `{"kept":"value and its own"}` {
+		t.Error(mustJSON(t, got))
+	}
+}
+
 func TestParseRecords(t *testing.T) {
 	t.Parallel()
 	def := load(t, `
