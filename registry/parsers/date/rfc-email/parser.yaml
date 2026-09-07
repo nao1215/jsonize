@@ -1,0 +1,26 @@
+# `date -R` prints the format RFC 5322 gives an email date: the same
+# fields as the default output with a numeric offset instead of a zone
+# abbreviation, and the day before the month.
+format: 1
+command: date
+variant: rfc-email
+description: date -R, RFC 5322 date
+metadata:
+  tags: [linux, darwin, time]
+  compatible: [GNU coreutils]
+  references:
+    - https://man7.org/linux/man-pages/man1/date.1.html
+detect:
+  signature:
+    all:
+      - '\A(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d\d (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d\d:\d\d:\d\d [+-]\d{4}[ \t]*$'
+parse:
+  type: regex
+  each: input
+  pattern: '\A(?P<weekday>\w{3}), (?P<day>\d\d) (?P<month>\w{3}) (?P<year>\d{4}) (?P<hour>\d\d):(?P<minute>\d\d):(?P<second>\d\d) (?P<offset>[+-]\d{4})[ \t]*$'
+fields:
+  day: {type: int}
+  hour: {type: int}
+  minute: {type: int}
+  second: {type: int}
+  year: {type: int}

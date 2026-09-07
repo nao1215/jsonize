@@ -1,0 +1,4 @@
+description: The machine's own time zone, whose day of month is padded with a space.
+source: captured on Ubuntu 26.04 (GNU coreutils 9.8) with LC_ALL=C
+os: linux
+args: []

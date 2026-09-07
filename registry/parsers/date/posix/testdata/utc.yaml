@@ -1,0 +1,4 @@
+description: The same moment in UTC, which is where the zone abbreviation differs.
+source: captured on Ubuntu 26.04 (GNU coreutils 9.8) with LC_ALL=C
+os: linux
+args: ["-u"]
