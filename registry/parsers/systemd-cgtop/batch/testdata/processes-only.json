@@ -1,0 +1,66 @@
+[
+  {
+    "control_group": "/",
+    "tasks": 71,
+    "cpu_percent": null,
+    "memory": "31.2G",
+    "input_per_s": null,
+    "output_per_s": null
+  },
+  {
+    "control_group": "dev-hugepages.mount",
+    "tasks": null,
+    "cpu_percent": null,
+    "memory": "4K",
+    "input_per_s": null,
+    "output_per_s": null
+  },
+  {
+    "control_group": "dev-mqueue.mount",
+    "tasks": null,
+    "cpu_percent": null,
+    "memory": "4K",
+    "input_per_s": null,
+    "output_per_s": null
+  },
+  {
+    "control_group": "init.scope",
+    "tasks": 1,
+    "cpu_percent": null,
+    "memory": "25M",
+    "input_per_s": null,
+    "output_per_s": null
+  },
+  {
+    "control_group": "proc-sys-fs-binfmt_misc.mount",
+    "tasks": null,
+    "cpu_percent": null,
+    "memory": "8K",
+    "input_per_s": null,
+    "output_per_s": null
+  },
+  {
+    "control_group": "sys-fs-fuse-connections.mount",
+    "tasks": null,
+    "cpu_percent": null,
+    "memory": "4K",
+    "input_per_s": null,
+    "output_per_s": null
+  },
+  {
+    "control_group": "sys-kernel-config.mount",
+    "tasks": null,
+    "cpu_percent": null,
+    "memory": "4K",
+    "input_per_s": null,
+    "output_per_s": null
+  },
+  {
+    "control_group": "sys-kernel-debug.mount",
+    "tasks": null,
+    "cpu_percent": null,
+    "memory": "4K",
+    "input_per_s": null,
+    "output_per_s": null
+  }
+]

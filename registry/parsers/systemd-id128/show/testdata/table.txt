@@ -1,0 +1,12 @@
+NAME                        ID
+root-alpha                  6523f8ae3eb14e2aa05a18b695ae656f
+root-alpha-verity           fc56d9e9e6e54c06be32e74407ce09a5
+root-alpha-verity-sig       d46495b7a053414f80f7700c99921ef8
+usr-alpha                   e18cf08c33ec4c0d8246c6c6fb3da024
+usr-alpha-verity            8cce0d25c0d04a44bd8746331bf1df67
+usr-alpha-verity-sig        5c6e1c76076a457aa0fef3b4cd21ce6e
+root-arc                    d27f46ed29194cb8bd259531f3c16534
+root-arc-verity             24b2d9750f974521afa1cd531e421b8d
+root-arc-verity-sig         143a70bacbd34f06919f6c05683a78bc
+usr-arc                     7978a68363164922bbee38bff5a2fecc
+usr-arc-verity              fca0598cd88045918c164eda05c7347c

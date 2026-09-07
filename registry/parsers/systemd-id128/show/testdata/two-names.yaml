@@ -1,0 +1,4 @@
+description: Two identifiers asked for by name, which is the shortest listing this form prints.
+source: captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C
+os: linux
+args: ["show", "root-alpha", "usr-x86-64"]
