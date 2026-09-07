@@ -947,8 +947,17 @@ func TestNoFabricatedUnits(t *testing.T) {
 // pass, instead of being claimed because it was the only candidate left.
 func TestGenericFormatsNeedAnExplicitParser(t *testing.T) {
 	h := newHarness(t)
-	numstat := "10\t2\tmain.go\n" // git diff --numstat, not du
-	if code := h.pipe(numstat); code != ExitSelect || h.stdout.Len() != 0 {
+	// Three tab separated cells, two of them counts, is what
+	// `git diff --numstat` prints and not what du prints.
+	if code := h.pipe("10\t2\tmain.go\n"); code != ExitSelect || h.stdout.Len() != 0 {
+		t.Fatalf("code=%d stdout=%q stderr=%s", code, h.stdout.String(), h.stderr.String())
+	}
+	if got := h.stderr.String(); !strings.Contains(got, "could be `git` output") {
+		t.Errorf("numstat should be named as git:\n%s", got)
+	}
+	// A count and a path is du, and nothing about the text says so, so
+	// the parser has to be named.
+	if code := h.pipe("12\t/usr/bin\n"); code != ExitSelect || h.stdout.Len() != 0 {
 		t.Fatalf("code=%d stdout=%q stderr=%s", code, h.stdout.String(), h.stderr.String())
 	}
 	for _, want := range []string{"could be `du` output", "too generic", "jz --parser du"} {
