@@ -10,6 +10,14 @@ aliases:
   - name: uv
     args:
       all: ["pip", "list"]
+  # The interpreter runs pip as a module, which is how a system without a
+  # pip on PATH installs and lists packages.
+  - name: python3
+    args:
+      all: ["-m", "pip", "list"]
+  - name: python
+    args:
+      all: ["-m", "pip", "list"]
   - name: pip3
 description: pip list installed package table
 metadata:
