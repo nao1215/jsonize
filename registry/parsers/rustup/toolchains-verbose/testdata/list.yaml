@@ -1,0 +1,4 @@
+description: two toolchains with their install directories, one of them both active and default
+source: captured on Ubuntu 26.04 (rustup 1.29.1) with LC_ALL=C, rustup toolchain list -v; the user name in the paths was replaced
+os: linux
+args: [toolchain, list, -v]
