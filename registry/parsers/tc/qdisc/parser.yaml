@@ -1,0 +1,43 @@
+# `tc qdisc show` prints one line per queueing discipline: its kind, its
+# handle, the device, where it sits in the hierarchy, and then the
+# parameters of that kind. The parameters differ per kind and mix pairs
+# (`limit 10240p`) with lone words (`ecn`), so they are kept as the words
+# they were printed as, the way `ip route` keeps its per-route words.
+#
+# `tc -s qdisc show` adds counter lines below each of these, which is a
+# different shape and a different definition (tc/qdisc-stats).
+format: 1
+command: tc
+variant: qdisc
+description: tc qdisc show, one line per queueing discipline
+metadata:
+  tags: [linux, network, iproute2, traffic-control]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/tc.8.html
+detect:
+  os: [linux]
+  args:
+    all: ["qdisc"]
+    none: ["-s", "-stats", "-statistics", "--statistics"]
+  signature:
+    all:
+      # Naming a device leaves the `dev` word out, so it is optional
+      # here too.
+      - '\Aqdisc \S+ [0-9a-f]+: (?:dev \S+ )?(?:root|parent [0-9a-f:]+)\b'
+    none:
+      # The counter lines of `tc -s qdisc show`.
+      - '^ Sent \d+ bytes \d+ pkt \('
+parse:
+  type: regex
+  # refcnt is printed only when the discipline is referenced more than
+  # once, and a child discipline reports a parent handle where a root one
+  # reports the word root.
+  pattern: '^qdisc (?P<kind>\S+) (?P<handle>\S+)(?: dev (?P<dev>\S+))?[ \t]+(?P<parent>root|parent [0-9a-f:]+)(?: refcnt (?P<refcnt>\d+))?[ \t]*(?P<options>.*?)[ \t]*$'
+fields:
+  kind: {required: true}
+  handle: {required: true}
+  dev: {when_missing: omit}
+  parent: {trim_prefix: "parent "}
+  refcnt: {type: int, when_missing: omit}
+  options: {type: array, split_regex: '\s+'}
