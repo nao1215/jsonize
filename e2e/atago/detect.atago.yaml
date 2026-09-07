@@ -368,3 +368,40 @@ scenarios:
               # as the first.
               - { path: "$[0].fields.Description", matches: 'infrastructure for handling the installation' }
 
+  # A command that prints what another command prints is read by the same
+  # definition, under either name. Nothing in the text says which of them
+  # wrote it, which is why there is one definition and not two.
+  - name: a parser can be named by the other name of its format
+    steps:
+      - fixture:
+          file: df-gnu.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz --parser gdf --file df-gnu.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            empty: true
+          stdout:
+            json:
+              - { path: "$[0].filesystem", equals: tmpfs }
+              - { path: "$[0].1k_blocks", equals: 12882672 }
+      # The definition is still the one it always was, and naming it that
+      # way says so.
+      - run:
+          command: jz --parser gdf --variant gnu --file df-gnu.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].mounted_on", equals: /run }
+      # A name no definition answers to is refused, the same as any other
+      # unknown parser.
+      - run:
+          command: jz --parser gnodf --file df-gnu.txt
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: 'no parser for "gnodf"'
+
