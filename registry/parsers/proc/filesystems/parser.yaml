@@ -1,0 +1,45 @@
+# /proc/filesystems is the list of filesystem types the kernel can mount.
+# Each line is a tab, then the name; a type that does not need a block
+# device has the word nodev in front of the tab, and one that does has
+# nothing there at all.
+#
+# The flag is reported under the name the kernel writes for it rather
+# than inverted into requires_device, and it is a boolean because the
+# column is one of two things: the word or an empty cell. The empty cell
+# is spelled out in false_values so that every row carries the same key
+# with a boolean in it, instead of half of them carrying null.
+format: 1
+command: proc
+variant: filesystems
+description: /proc/filesystems filesystem types the kernel supports
+metadata:
+  tags: [linux, filesystem, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_filesystems.5.html
+detect:
+  os: [linux]
+  signature:
+    # A kernel with more than the default twenty types is ordinary; this
+    # machine has thirty-three.
+    window: 200
+    all:
+      # Every line is a tab separated pair: an empty cell or the word
+      # nodev, and then a filesystem type name, which is a lower case
+      # word. The name has to be spelled out rather than left as "the
+      # rest of the line": ldd indents each library it lists with a tab
+      # too, and a pair of a tab and anything is a description that fits
+      # its output as well as this file's.
+      - '\A(?:(?:nodev)?\t[a-z0-9][a-z0-9_-]*\n)*(?:nodev)?\t[a-z0-9][a-z0-9_-]*\z'
+      # procfs is registered on any kernel able to print this file, and
+      # it needs no device, so this line is in every copy of it.
+      - '^nodev\tproc$'
+parse:
+  type: regex
+  # An alternation with an empty branch, rather than an optional group,
+  # so that the group takes part in every match and the value is the
+  # empty string rather than null when the word is absent.
+  pattern: '^(?P<nodev>nodev|)\t(?P<name>[a-z0-9][a-z0-9_-]*)$'
+fields:
+  nodev: {type: bool, true_values: ["nodev"], false_values: [""]}
+  name: {required: true}

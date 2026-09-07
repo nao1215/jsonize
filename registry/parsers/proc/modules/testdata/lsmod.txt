@@ -1,0 +1,8 @@
+Module                  Size  Used by
+sctp_diag              16384  0
+sctp                  516096  61 sctp_diag
+ip6_udp_tunnel         16384  1 sctp
+udp_tunnel             36864  1 sctp
+mptcp_diag             16384  0
+raw_diag               12288  0
+unix_diag              12288  0

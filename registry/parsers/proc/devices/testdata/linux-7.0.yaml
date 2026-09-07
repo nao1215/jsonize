@@ -1,0 +1,6 @@
+description: |
+  Fifty-two character drivers and twenty-two block ones. Several majors
+  are registered twice under the same name (4 for tty and ttyS, 65 to 135
+  for sd), and some driver names hold a path (/dev/tty, cpu/msr).
+source: /proc/devices on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C. Nothing replaced; the file names no host, user or address.
+os: linux

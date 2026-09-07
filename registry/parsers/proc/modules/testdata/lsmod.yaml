@@ -1,0 +1,9 @@
+description: |
+  lsmod reads this very file and prints it under a "Module Size Used by"
+  header, without the load state, the address and the taint flags. It is
+  refused here, and lsmod/linux is the definition that reads it.
+expect_error: 'does not describe this input'
+os: linux
+source: |
+  the first eight lines of `lsmod` (kmod 34) on Linux 7.0.0-30-generic
+  (Ubuntu), read with LC_ALL=C.

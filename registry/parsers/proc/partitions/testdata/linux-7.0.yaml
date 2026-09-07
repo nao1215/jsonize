@@ -1,0 +1,5 @@
+description: |
+  Two NVMe disks with their partitions and 57 loop devices, one of them
+  four blocks long. The rows are not sorted by major and minor.
+source: /proc/partitions on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C. Nothing replaced; the file names no host, user or address.
+os: linux

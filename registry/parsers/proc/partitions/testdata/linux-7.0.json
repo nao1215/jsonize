@@ -1,0 +1,368 @@
+[
+  {
+    "major": 7,
+    "minor": 0,
+    "blocks": 4,
+    "name": "loop0"
+  },
+  {
+    "major": 7,
+    "minor": 1,
+    "blocks": 102868,
+    "name": "loop1"
+  },
+  {
+    "major": 7,
+    "minor": 2,
+    "blocks": 226796,
+    "name": "loop2"
+  },
+  {
+    "major": 7,
+    "minor": 3,
+    "blocks": 65312,
+    "name": "loop3"
+  },
+  {
+    "major": 7,
+    "minor": 4,
+    "blocks": 65308,
+    "name": "loop4"
+  },
+  {
+    "major": 7,
+    "minor": 5,
+    "blocks": 56820,
+    "name": "loop5"
+  },
+  {
+    "major": 7,
+    "minor": 6,
+    "blocks": 56824,
+    "name": "loop6"
+  },
+  {
+    "major": 7,
+    "minor": 7,
+    "blocks": 75768,
+    "name": "loop7"
+  },
+  {
+    "major": 259,
+    "minor": 0,
+    "blocks": 1953514584,
+    "name": "nvme1n1"
+  },
+  {
+    "major": 259,
+    "minor": 1,
+    "blocks": 1100800,
+    "name": "nvme1n1p1"
+  },
+  {
+    "major": 259,
+    "minor": 2,
+    "blocks": 1952411648,
+    "name": "nvme1n1p2"
+  },
+  {
+    "major": 259,
+    "minor": 3,
+    "blocks": 2000398680,
+    "name": "nvme0n1"
+  },
+  {
+    "major": 259,
+    "minor": 4,
+    "blocks": 2000397312,
+    "name": "nvme0n1p1"
+  },
+  {
+    "major": 7,
+    "minor": 10,
+    "blocks": 68408,
+    "name": "loop10"
+  },
+  {
+    "major": 7,
+    "minor": 9,
+    "blocks": 75756,
+    "name": "loop9"
+  },
+  {
+    "major": 7,
+    "minor": 11,
+    "blocks": 20120,
+    "name": "loop11"
+  },
+  {
+    "major": 7,
+    "minor": 8,
+    "blocks": 68452,
+    "name": "loop8"
+  },
+  {
+    "major": 7,
+    "minor": 14,
+    "blocks": 142216,
+    "name": "loop14"
+  },
+  {
+    "major": 7,
+    "minor": 12,
+    "blocks": 20440,
+    "name": "loop12"
+  },
+  {
+    "major": 7,
+    "minor": 13,
+    "blocks": 141856,
+    "name": "loop13"
+  },
+  {
+    "major": 7,
+    "minor": 15,
+    "blocks": 219588,
+    "name": "loop15"
+  },
+  {
+    "major": 7,
+    "minor": 18,
+    "blocks": 16844,
+    "name": "loop18"
+  },
+  {
+    "major": 7,
+    "minor": 17,
+    "blocks": 16896,
+    "name": "loop17"
+  },
+  {
+    "major": 7,
+    "minor": 19,
+    "blocks": 139100,
+    "name": "loop19"
+  },
+  {
+    "major": 7,
+    "minor": 20,
+    "blocks": 139104,
+    "name": "loop20"
+  },
+  {
+    "major": 7,
+    "minor": 23,
+    "blocks": 544128,
+    "name": "loop23"
+  },
+  {
+    "major": 7,
+    "minor": 22,
+    "blocks": 358088,
+    "name": "loop22"
+  },
+  {
+    "major": 7,
+    "minor": 21,
+    "blocks": 168780,
+    "name": "loop21"
+  },
+  {
+    "major": 7,
+    "minor": 24,
+    "blocks": 544248,
+    "name": "loop24"
+  },
+  {
+    "major": 7,
+    "minor": 25,
+    "blocks": 629280,
+    "name": "loop25"
+  },
+  {
+    "major": 7,
+    "minor": 26,
+    "blocks": 620624,
+    "name": "loop26"
+  },
+  {
+    "major": 7,
+    "minor": 28,
+    "blocks": 93888,
+    "name": "loop28"
+  },
+  {
+    "major": 7,
+    "minor": 27,
+    "blocks": 12960,
+    "name": "loop27"
+  },
+  {
+    "major": 7,
+    "minor": 29,
+    "blocks": 13484,
+    "name": "loop29"
+  },
+  {
+    "major": 7,
+    "minor": 30,
+    "blocks": 43984,
+    "name": "loop30"
+  },
+  {
+    "major": 7,
+    "minor": 31,
+    "blocks": 411628,
+    "name": "loop31"
+  },
+  {
+    "major": 7,
+    "minor": 32,
+    "blocks": 404460,
+    "name": "loop32"
+  },
+  {
+    "major": 7,
+    "minor": 33,
+    "blocks": 19276,
+    "name": "loop33"
+  },
+  {
+    "major": 7,
+    "minor": 34,
+    "blocks": 19284,
+    "name": "loop34"
+  },
+  {
+    "major": 7,
+    "minor": 35,
+    "blocks": 14544,
+    "name": "loop35"
+  },
+  {
+    "major": 7,
+    "minor": 36,
+    "blocks": 11884,
+    "name": "loop36"
+  },
+  {
+    "major": 7,
+    "minor": 37,
+    "blocks": 16064,
+    "name": "loop37"
+  },
+  {
+    "major": 7,
+    "minor": 39,
+    "blocks": 267096,
+    "name": "loop39"
+  },
+  {
+    "major": 7,
+    "minor": 38,
+    "blocks": 12092,
+    "name": "loop38"
+  },
+  {
+    "major": 7,
+    "minor": 40,
+    "blocks": 51304,
+    "name": "loop40"
+  },
+  {
+    "major": 7,
+    "minor": 41,
+    "blocks": 828,
+    "name": "loop41"
+  },
+  {
+    "major": 7,
+    "minor": 42,
+    "blocks": 828,
+    "name": "loop42"
+  },
+  {
+    "major": 7,
+    "minor": 43,
+    "blocks": 179696,
+    "name": "loop43"
+  },
+  {
+    "major": 7,
+    "minor": 44,
+    "blocks": 147288,
+    "name": "loop44"
+  },
+  {
+    "major": 7,
+    "minor": 45,
+    "blocks": 102824,
+    "name": "loop45"
+  },
+  {
+    "major": 7,
+    "minor": 47,
+    "blocks": 267356,
+    "name": "loop47"
+  },
+  {
+    "major": 7,
+    "minor": 46,
+    "blocks": 51476,
+    "name": "loop46"
+  },
+  {
+    "major": 7,
+    "minor": 48,
+    "blocks": 219644,
+    "name": "loop48"
+  },
+  {
+    "major": 7,
+    "minor": 50,
+    "blocks": 38456,
+    "name": "loop50"
+  },
+  {
+    "major": 7,
+    "minor": 49,
+    "blocks": 226444,
+    "name": "loop49"
+  },
+  {
+    "major": 7,
+    "minor": 54,
+    "blocks": 495748,
+    "name": "loop54"
+  },
+  {
+    "major": 7,
+    "minor": 53,
+    "blocks": 7756,
+    "name": "loop53"
+  },
+  {
+    "major": 7,
+    "minor": 51,
+    "blocks": 7756,
+    "name": "loop51"
+  },
+  {
+    "major": 7,
+    "minor": 52,
+    "blocks": 351528,
+    "name": "loop52"
+  },
+  {
+    "major": 7,
+    "minor": 55,
+    "blocks": 432940,
+    "name": "loop55"
+  },
+  {
+    "major": 7,
+    "minor": 56,
+    "blocks": 38472,
+    "name": "loop56"
+  }
+]

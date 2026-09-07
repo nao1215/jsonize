@@ -1,0 +1,306 @@
+{
+  "character_devices": [
+    {
+      "major": 1,
+      "name": "mem"
+    },
+    {
+      "major": 4,
+      "name": "/dev/vc/0"
+    },
+    {
+      "major": 4,
+      "name": "tty"
+    },
+    {
+      "major": 4,
+      "name": "ttyS"
+    },
+    {
+      "major": 5,
+      "name": "/dev/tty"
+    },
+    {
+      "major": 5,
+      "name": "/dev/console"
+    },
+    {
+      "major": 5,
+      "name": "/dev/ptmx"
+    },
+    {
+      "major": 5,
+      "name": "ttyprintk"
+    },
+    {
+      "major": 6,
+      "name": "lp"
+    },
+    {
+      "major": 7,
+      "name": "vcs"
+    },
+    {
+      "major": 10,
+      "name": "misc"
+    },
+    {
+      "major": 13,
+      "name": "input"
+    },
+    {
+      "major": 21,
+      "name": "sg"
+    },
+    {
+      "major": 29,
+      "name": "fb"
+    },
+    {
+      "major": 81,
+      "name": "video4linux"
+    },
+    {
+      "major": 89,
+      "name": "i2c"
+    },
+    {
+      "major": 99,
+      "name": "ppdev"
+    },
+    {
+      "major": 108,
+      "name": "ppp"
+    },
+    {
+      "major": 116,
+      "name": "alsa"
+    },
+    {
+      "major": 128,
+      "name": "ptm"
+    },
+    {
+      "major": 136,
+      "name": "pts"
+    },
+    {
+      "major": 180,
+      "name": "usb"
+    },
+    {
+      "major": 189,
+      "name": "usb_device"
+    },
+    {
+      "major": 202,
+      "name": "cpu/msr"
+    },
+    {
+      "major": 203,
+      "name": "cpu/cpuid"
+    },
+    {
+      "major": 204,
+      "name": "ttyMAX"
+    },
+    {
+      "major": 216,
+      "name": "rfcomm"
+    },
+    {
+      "major": 226,
+      "name": "drm"
+    },
+    {
+      "major": 234,
+      "name": "aux"
+    },
+    {
+      "major": 235,
+      "name": "cec"
+    },
+    {
+      "major": 236,
+      "name": "lirc"
+    },
+    {
+      "major": 237,
+      "name": "media"
+    },
+    {
+      "major": 238,
+      "name": "hidraw"
+    },
+    {
+      "major": 239,
+      "name": "nvme-generic"
+    },
+    {
+      "major": 240,
+      "name": "nvme"
+    },
+    {
+      "major": 241,
+      "name": "ttyDBC"
+    },
+    {
+      "major": 242,
+      "name": "bsg"
+    },
+    {
+      "major": 243,
+      "name": "watchdog"
+    },
+    {
+      "major": 244,
+      "name": "remoteproc"
+    },
+    {
+      "major": 245,
+      "name": "ptp"
+    },
+    {
+      "major": 246,
+      "name": "pps"
+    },
+    {
+      "major": 247,
+      "name": "rtc"
+    },
+    {
+      "major": 248,
+      "name": "dma_heap"
+    },
+    {
+      "major": 249,
+      "name": "dax"
+    },
+    {
+      "major": 250,
+      "name": "dimmctl"
+    },
+    {
+      "major": 251,
+      "name": "ndctl"
+    },
+    {
+      "major": 252,
+      "name": "tpm"
+    },
+    {
+      "major": 253,
+      "name": "pwm"
+    },
+    {
+      "major": 254,
+      "name": "gpiochip"
+    },
+    {
+      "major": 261,
+      "name": "accel"
+    },
+    {
+      "major": 510,
+      "name": "kfd"
+    },
+    {
+      "major": 511,
+      "name": "tee"
+    }
+  ],
+  "block_devices": [
+    {
+      "major": 7,
+      "name": "loop"
+    },
+    {
+      "major": 8,
+      "name": "sd"
+    },
+    {
+      "major": 9,
+      "name": "md"
+    },
+    {
+      "major": 11,
+      "name": "sr"
+    },
+    {
+      "major": 65,
+      "name": "sd"
+    },
+    {
+      "major": 66,
+      "name": "sd"
+    },
+    {
+      "major": 67,
+      "name": "sd"
+    },
+    {
+      "major": 68,
+      "name": "sd"
+    },
+    {
+      "major": 69,
+      "name": "sd"
+    },
+    {
+      "major": 70,
+      "name": "sd"
+    },
+    {
+      "major": 71,
+      "name": "sd"
+    },
+    {
+      "major": 128,
+      "name": "sd"
+    },
+    {
+      "major": 129,
+      "name": "sd"
+    },
+    {
+      "major": 130,
+      "name": "sd"
+    },
+    {
+      "major": 131,
+      "name": "sd"
+    },
+    {
+      "major": 132,
+      "name": "sd"
+    },
+    {
+      "major": 133,
+      "name": "sd"
+    },
+    {
+      "major": 134,
+      "name": "sd"
+    },
+    {
+      "major": 135,
+      "name": "sd"
+    },
+    {
+      "major": 252,
+      "name": "device-mapper"
+    },
+    {
+      "major": 253,
+      "name": "virtblk"
+    },
+    {
+      "major": 254,
+      "name": "mdp"
+    },
+    {
+      "major": 259,
+      "name": "blkext"
+    }
+  ]
+}

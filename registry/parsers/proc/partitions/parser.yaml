@@ -1,0 +1,34 @@
+# /proc/partitions is the list of block devices and partitions the kernel
+# knows the size of: a major and a minor number, a size and a name.
+#
+# The size is named blocks because the header names it #blocks and the
+# kernel counts it in 1024-byte blocks whatever the device's own sector
+# size is. It is reported as that count rather than as bytes: the file
+# does not state the unit, and the arithmetic belongs to the reader, the
+# way it does for the sectors in proc/diskstats.
+#
+# The columns are named here rather than derived from the header, because
+# #blocks would become _blocks.
+format: 1
+command: proc
+variant: partitions
+description: /proc/partitions block devices and their sizes in 1K blocks
+metadata:
+  tags: [linux, disk, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_partitions.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\Amajor[ \t]+minor[ \t]+#blocks[ \t]+name[ \t]*$'
+parse:
+  type: table
+  header:
+    columns: [major, minor, blocks, name]
+fields:
+  major: {type: int, required: true}
+  minor: {type: int, required: true}
+  blocks: {type: int, required: true}
+  name: {required: true}

@@ -1,0 +1,6 @@
+description: |
+  Thirty-three types, both kinds of line: the ones needing a block device
+  (ext4, squashfs, vfat, fuseblk) write an empty first cell, the rest
+  write nodev.
+source: /proc/filesystems on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C. Nothing replaced; the file names no host, user or address.
+os: linux

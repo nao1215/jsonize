@@ -1,0 +1,1817 @@
+[
+  {
+    "name": "sctp_diag",
+    "size": 16384,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "sctp",
+    "size": 516096,
+    "used_by_count": 61,
+    "used_by": [
+      "sctp_diag"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "ip6_udp_tunnel",
+    "size": 16384,
+    "used_by_count": 1,
+    "used_by": [
+      "sctp"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "udp_tunnel",
+    "size": 36864,
+    "used_by_count": 1,
+    "used_by": [
+      "sctp"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "mptcp_diag",
+    "size": 16384,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "raw_diag",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "unix_diag",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "udp_diag",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "cpuid",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "tcp_diag",
+    "size": 20480,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "inet_diag",
+    "size": 24576,
+    "used_by_count": 5,
+    "used_by": [
+      "sctp_diag",
+      "mptcp_diag",
+      "raw_diag",
+      "udp_diag",
+      "tcp_diag"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "uas",
+    "size": 32768,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "usb_storage",
+    "size": 86016,
+    "used_by_count": 1,
+    "used_by": [
+      "uas"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "ipt_REJECT",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nf_reject_ipv4",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": [
+      "ipt_REJECT"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nfnetlink_queue",
+    "size": 32768,
+    "used_by_count": 3,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nft_queue",
+    "size": 12288,
+    "used_by_count": 24,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nft_ct",
+    "size": 28672,
+    "used_by_count": 3,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xt_statistic",
+    "size": 12288,
+    "used_by_count": 9,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xt_mark",
+    "size": 12288,
+    "used_by_count": 12,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xt_nfacct",
+    "size": 12288,
+    "used_by_count": 6,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nfnetlink_acct",
+    "size": 16384,
+    "used_by_count": 7,
+    "used_by": [
+      "xt_nfacct"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xt_comment",
+    "size": 12288,
+    "used_by_count": 390,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "ip_tables",
+    "size": 32768,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nf_conntrack_netlink",
+    "size": 61440,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xt_nat",
+    "size": 12288,
+    "used_by_count": 76,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xt_tcpudp",
+    "size": 16384,
+    "used_by_count": 60,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "veth",
+    "size": 45056,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xt_conntrack",
+    "size": 12288,
+    "used_by_count": 62,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xt_MASQUERADE",
+    "size": 16384,
+    "used_by_count": 14,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "bridge",
+    "size": 425984,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "stp",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": [
+      "bridge"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "llc",
+    "size": 16384,
+    "used_by_count": 2,
+    "used_by": [
+      "bridge",
+      "stp"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xfrm_user",
+    "size": 69632,
+    "used_by_count": 1,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xfrm_algo",
+    "size": 16384,
+    "used_by_count": 1,
+    "used_by": [
+      "xfrm_user"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xt_set",
+    "size": 20480,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "ip_set",
+    "size": 61440,
+    "used_by_count": 1,
+    "used_by": [
+      "xt_set"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nft_chain_nat",
+    "size": 12288,
+    "used_by_count": 27,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nf_nat",
+    "size": 65536,
+    "used_by_count": 3,
+    "used_by": [
+      "xt_nat",
+      "xt_MASQUERADE",
+      "nft_chain_nat"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nf_conntrack",
+    "size": 196608,
+    "used_by_count": 6,
+    "used_by": [
+      "nft_ct",
+      "nf_conntrack_netlink",
+      "xt_nat",
+      "xt_conntrack",
+      "xt_MASQUERADE",
+      "nf_nat"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nf_defrag_ipv6",
+    "size": 24576,
+    "used_by_count": 1,
+    "used_by": [
+      "nf_conntrack"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nf_defrag_ipv4",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": [
+      "nf_conntrack"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "xt_addrtype",
+    "size": 12288,
+    "used_by_count": 13,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nft_compat",
+    "size": 20480,
+    "used_by_count": 642,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "x_tables",
+    "size": 65536,
+    "used_by_count": 13,
+    "used_by": [
+      "ipt_REJECT",
+      "xt_statistic",
+      "xt_mark",
+      "xt_nfacct",
+      "xt_comment",
+      "ip_tables",
+      "xt_nat",
+      "xt_tcpudp",
+      "xt_conntrack",
+      "xt_MASQUERADE",
+      "xt_set",
+      "xt_addrtype",
+      "nft_compat"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nf_tables",
+    "size": 409600,
+    "used_by_count": 2396,
+    "used_by": [
+      "nft_queue",
+      "nft_ct",
+      "nft_chain_nat",
+      "nft_compat"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nfnetlink",
+    "size": 20480,
+    "used_by_count": 22,
+    "used_by": [
+      "nfnetlink_queue",
+      "nfnetlink_acct",
+      "nf_conntrack_netlink",
+      "ip_set",
+      "nft_compat",
+      "nf_tables"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "ccm",
+    "size": 20480,
+    "used_by_count": 6,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "rfcomm",
+    "size": 110592,
+    "used_by_count": 16,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_seq_dummy",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_hrtimer",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "overlay",
+    "size": 233472,
+    "used_by_count": 47,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "cmac",
+    "size": 12288,
+    "used_by_count": 4,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "algif_hash",
+    "size": 20480,
+    "used_by_count": 1,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "algif_skcipher",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "af_alg",
+    "size": 32768,
+    "used_by_count": 6,
+    "used_by": [
+      "algif_hash",
+      "algif_skcipher"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "qrtr",
+    "size": 53248,
+    "used_by_count": 2,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "bnep",
+    "size": 32768,
+    "used_by_count": 2,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "binfmt_misc",
+    "size": 24576,
+    "used_by_count": 1,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nls_iso8859_1",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "amdgpu",
+    "size": 21569536,
+    "used_by_count": 127,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "amd_atl",
+    "size": 77824,
+    "used_by_count": 1,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "intel_rapl_msr",
+    "size": 20480,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "intel_rapl_common",
+    "size": 57344,
+    "used_by_count": 1,
+    "used_by": [
+      "intel_rapl_msr"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "mt7925e",
+    "size": 24576,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "mt7925_common",
+    "size": 163840,
+    "used_by_count": 1,
+    "used_by": [
+      "mt7925e"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "mt792x_lib",
+    "size": 73728,
+    "used_by_count": 2,
+    "used_by": [
+      "mt7925e",
+      "mt7925_common"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "mt76_connac_lib",
+    "size": 110592,
+    "used_by_count": 3,
+    "used_by": [
+      "mt7925e",
+      "mt7925_common",
+      "mt792x_lib"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "amdxcp",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": [
+      "amdgpu"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "edac_mce_amd",
+    "size": 28672,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "drm_panel_backlight_quirks",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": [
+      "amdgpu"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "mt76",
+    "size": 167936,
+    "used_by_count": 4,
+    "used_by": [
+      "mt7925e",
+      "mt7925_common",
+      "mt792x_lib",
+      "mt76_connac_lib"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_hda_codec_atihdmi",
+    "size": 24576,
+    "used_by_count": 1,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_hda_codec_senarytech",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "drm_buddy",
+    "size": 28672,
+    "used_by_count": 1,
+    "used_by": [
+      "amdgpu"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "amdxdna",
+    "size": 172032,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "kvm_amd",
+    "size": 262144,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_hda_codec_generic",
+    "size": 126976,
+    "used_by_count": 1,
+    "used_by": [
+      "snd_hda_codec_senarytech"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "drm_ttm_helper",
+    "size": 20480,
+    "used_by_count": 2,
+    "used_by": [
+      "amdgpu"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_hda_codec_hdmi",
+    "size": 65536,
+    "used_by_count": 1,
+    "used_by": [
+      "snd_hda_codec_atihdmi"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_hda_intel",
+    "size": 65536,
+    "used_by_count": 2,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "amd_pmf",
+    "size": 131072,
+    "used_by_count": 1,
+    "used_by": [
+      "amdxdna"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "btusb",
+    "size": 81920,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_usb_audio",
+    "size": 622592,
+    "used_by_count": 3,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "mac80211",
+    "size": 1933312,
+    "used_by_count": 4,
+    "used_by": [
+      "mt7925_common",
+      "mt792x_lib",
+      "mt76_connac_lib",
+      "mt76"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "ttm",
+    "size": 135168,
+    "used_by_count": 2,
+    "used_by": [
+      "amdgpu",
+      "drm_ttm_helper"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "amdtee",
+    "size": 32768,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "kvm",
+    "size": 1527808,
+    "used_by_count": 1,
+    "used_by": [
+      "kvm_amd"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_hda_codec",
+    "size": 212992,
+    "used_by_count": 5,
+    "used_by": [
+      "snd_hda_codec_atihdmi",
+      "snd_hda_codec_senarytech",
+      "snd_hda_codec_generic",
+      "snd_hda_codec_hdmi",
+      "snd_hda_intel"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "btmtk",
+    "size": 36864,
+    "used_by_count": 1,
+    "used_by": [
+      "btusb"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "drm_exec",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": [
+      "amdgpu"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "amd_sfh",
+    "size": 73728,
+    "used_by_count": 1,
+    "used_by": [
+      "amd_pmf"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "btrtl",
+    "size": 36864,
+    "used_by_count": 1,
+    "used_by": [
+      "btusb"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "drm_suballoc_helper",
+    "size": 24576,
+    "used_by_count": 1,
+    "used_by": [
+      "amdgpu"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_hda_core",
+    "size": 151552,
+    "used_by_count": 6,
+    "used_by": [
+      "snd_hda_codec_atihdmi",
+      "snd_hda_codec_senarytech",
+      "snd_hda_codec_generic",
+      "snd_hda_codec_hdmi",
+      "snd_hda_intel",
+      "snd_hda_codec"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "btbcm",
+    "size": 24576,
+    "used_by_count": 1,
+    "used_by": [
+      "btusb"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "tee",
+    "size": 61440,
+    "used_by_count": 2,
+    "used_by": [
+      "amd_pmf",
+      "amdtee"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_seq_midi",
+    "size": 24576,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_usbmidi_lib",
+    "size": 57344,
+    "used_by_count": 1,
+    "used_by": [
+      "snd_usb_audio"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "uvcvideo",
+    "size": 147456,
+    "used_by_count": 1,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "drm_display_helper",
+    "size": 303104,
+    "used_by_count": 1,
+    "used_by": [
+      "amdgpu"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "btintel",
+    "size": 69632,
+    "used_by_count": 1,
+    "used_by": [
+      "btusb"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_intel_dspcfg",
+    "size": 45056,
+    "used_by_count": 1,
+    "used_by": [
+      "snd_hda_intel"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_seq_midi_event",
+    "size": 16384,
+    "used_by_count": 1,
+    "used_by": [
+      "snd_seq_midi"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "irqbypass",
+    "size": 16384,
+    "used_by_count": 1,
+    "used_by": [
+      "kvm"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_ump",
+    "size": 49152,
+    "used_by_count": 1,
+    "used_by": [
+      "snd_usb_audio"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "gpu_sched",
+    "size": 69632,
+    "used_by_count": 2,
+    "used_by": [
+      "amdgpu",
+      "amdxdna"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_intel_sdw_acpi",
+    "size": 16384,
+    "used_by_count": 1,
+    "used_by": [
+      "snd_intel_dspcfg"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "uvc",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": [
+      "uvcvideo"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "rapl",
+    "size": 20480,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_rawmidi",
+    "size": 57344,
+    "used_by_count": 3,
+    "used_by": [
+      "snd_seq_midi",
+      "snd_usbmidi_lib",
+      "snd_ump"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "bluetooth",
+    "size": 1134592,
+    "used_by_count": 44,
+    "used_by": [
+      "rfcomm",
+      "bnep",
+      "btusb",
+      "btmtk",
+      "btrtl",
+      "btbcm",
+      "btintel"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_hwdep",
+    "size": 24576,
+    "used_by_count": 2,
+    "used_by": [
+      "snd_usb_audio",
+      "snd_hda_codec"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "gspca_vc032x",
+    "size": 45056,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "cec",
+    "size": 106496,
+    "used_by_count": 2,
+    "used_by": [
+      "amdgpu",
+      "drm_display_helper"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "wmi_bmof",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "r8169",
+    "size": 151552,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "platform_profile",
+    "size": 20480,
+    "used_by_count": 1,
+    "used_by": [
+      "amd_pmf"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_seq",
+    "size": 126976,
+    "used_by_count": 9,
+    "used_by": [
+      "snd_seq_dummy",
+      "snd_seq_midi",
+      "snd_seq_midi_event"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "i2c_piix4",
+    "size": 36864,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_pcm",
+    "size": 208896,
+    "used_by_count": 5,
+    "used_by": [
+      "snd_hda_codec_hdmi",
+      "snd_hda_intel",
+      "snd_usb_audio",
+      "snd_hda_codec",
+      "snd_hda_core"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "gspca_main",
+    "size": 36864,
+    "used_by_count": 1,
+    "used_by": [
+      "gspca_vc032x"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "rc_core",
+    "size": 81920,
+    "used_by_count": 1,
+    "used_by": [
+      "cec"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "cfg80211",
+    "size": 1536000,
+    "used_by_count": 4,
+    "used_by": [
+      "mt7925_common",
+      "mt76_connac_lib",
+      "mt76",
+      "mac80211"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "k10temp",
+    "size": 16384,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "i2c_smbus",
+    "size": 20480,
+    "used_by_count": 1,
+    "used_by": [
+      "i2c_piix4"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "videobuf2_vmalloc",
+    "size": 20480,
+    "used_by_count": 2,
+    "used_by": [
+      "uvcvideo",
+      "gspca_main"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_seq_device",
+    "size": 16384,
+    "used_by_count": 4,
+    "used_by": [
+      "snd_seq_midi",
+      "snd_ump",
+      "snd_rawmidi",
+      "snd_seq"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "i2c_algo_bit",
+    "size": 16384,
+    "used_by_count": 1,
+    "used_by": [
+      "amdgpu"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "videobuf2_memops",
+    "size": 16384,
+    "used_by_count": 1,
+    "used_by": [
+      "videobuf2_vmalloc"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd_timer",
+    "size": 53248,
+    "used_by_count": 3,
+    "used_by": [
+      "snd_hrtimer",
+      "snd_seq",
+      "snd_pcm"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "libarc4",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": [
+      "mac80211"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "videobuf2_v4l2",
+    "size": 36864,
+    "used_by_count": 2,
+    "used_by": [
+      "uvcvideo",
+      "gspca_main"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "realtek",
+    "size": 57344,
+    "used_by_count": 1,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "videobuf2_common",
+    "size": 90112,
+    "used_by_count": 5,
+    "used_by": [
+      "uvcvideo",
+      "gspca_main",
+      "videobuf2_vmalloc",
+      "videobuf2_memops",
+      "videobuf2_v4l2"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "snd",
+    "size": 147456,
+    "used_by_count": 25,
+    "used_by": [
+      "snd_hda_codec_generic",
+      "snd_hda_codec_hdmi",
+      "snd_hda_intel",
+      "snd_usb_audio",
+      "snd_hda_codec",
+      "snd_usbmidi_lib",
+      "snd_ump",
+      "snd_rawmidi",
+      "snd_hwdep",
+      "snd_seq",
+      "snd_pcm",
+      "snd_seq_device",
+      "snd_timer"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "videodev",
+    "size": 376832,
+    "used_by_count": 4,
+    "used_by": [
+      "uvcvideo",
+      "gspca_vc032x",
+      "gspca_main",
+      "videobuf2_v4l2"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "amd_pmc",
+    "size": 53248,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "soundcore",
+    "size": 16384,
+    "used_by_count": 1,
+    "used_by": [
+      "snd"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "input_leds",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "mc",
+    "size": 90112,
+    "used_by_count": 6,
+    "used_by": [
+      "snd_usb_audio",
+      "uvcvideo",
+      "videobuf2_v4l2",
+      "videobuf2_common",
+      "videodev"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "mac_hid",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "sch_fq_codel",
+    "size": 28672,
+    "used_by_count": 2,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "efi_pstore",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "hid_generic",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nvme",
+    "size": 69632,
+    "used_by_count": 3,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "usbhid",
+    "size": 86016,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "hid",
+    "size": 282624,
+    "used_by_count": 3,
+    "used_by": [
+      "amd_sfh",
+      "hid_generic",
+      "usbhid"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "sdhci_pci",
+    "size": 106496,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nvme_core",
+    "size": 241664,
+    "used_by_count": 4,
+    "used_by": [
+      "nvme"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "ghash_clmulni_intel",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "thunderbolt",
+    "size": 569344,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "sdhci_uhs2",
+    "size": 40960,
+    "used_by_count": 1,
+    "used_by": [
+      "sdhci_pci"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "ccp",
+    "size": 192512,
+    "used_by_count": 2,
+    "used_by": [
+      "kvm_amd",
+      "amdtee"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "video",
+    "size": 77824,
+    "used_by_count": 1,
+    "used_by": [
+      "amdgpu"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nvme_keyring",
+    "size": 20480,
+    "used_by_count": 1,
+    "used_by": [
+      "nvme_core"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "sdhci",
+    "size": 106496,
+    "used_by_count": 2,
+    "used_by": [
+      "sdhci_pci",
+      "sdhci_uhs2"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "nvme_auth",
+    "size": 28672,
+    "used_by_count": 1,
+    "used_by": [
+      "nvme_core"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "hkdf",
+    "size": 12288,
+    "used_by_count": 1,
+    "used_by": [
+      "nvme_auth"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "cqhci",
+    "size": 40960,
+    "used_by_count": 1,
+    "used_by": [
+      "sdhci_pci"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "wmi",
+    "size": 36864,
+    "used_by_count": 2,
+    "used_by": [
+      "wmi_bmof",
+      "video"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "psmouse",
+    "size": 225280,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "serio_raw",
+    "size": 20480,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "lp",
+    "size": 32768,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "ppdev",
+    "size": 24576,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "parport",
+    "size": 81920,
+    "used_by_count": 2,
+    "used_by": [
+      "lp",
+      "ppdev"
+    ],
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "msr",
+    "size": 12288,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "dmi_sysfs",
+    "size": 28672,
+    "used_by_count": 0,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "autofs4",
+    "size": 61440,
+    "used_by_count": 8,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  },
+  {
+    "name": "aesni_intel",
+    "size": 98304,
+    "used_by_count": 3,
+    "used_by": null,
+    "state": "Live",
+    "address": "0x0000000000000000",
+    "taints": null
+  }
+]

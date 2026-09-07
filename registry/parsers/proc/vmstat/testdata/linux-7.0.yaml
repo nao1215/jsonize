@@ -1,0 +1,5 @@
+description: |
+  A full /proc/vmstat: 195 counters, from the zone statistics the kernel
+  writes first to the direct map and unstable counters it writes last.
+source: /proc/vmstat on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C. Nothing replaced; the file names no host, user or address.
+os: linux

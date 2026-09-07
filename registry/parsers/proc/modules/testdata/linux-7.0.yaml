@@ -1,0 +1,7 @@
+description: |
+  170 modules, in the order the kernel lists them: the ones nothing uses
+  write a dash in the dependency column, the rest write a comma
+  terminated list of up to five names. No module here taints the kernel,
+  so no row carries the bracketed flags.
+source: /proc/modules on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C. Nothing replaced; the file names no host, user or address.
+os: linux

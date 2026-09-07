@@ -1,0 +1,11 @@
+description: |
+  /proc/diskstats names the same devices with the same major and minor
+  numbers and its rows begin the same way. It has no header line, and the
+  header is what this definition asks for, so it is refused rather than
+  read with the counters landing in the size column.
+expect_error: 'does not describe this input'
+os: linux
+source: |
+  the first six lines of /proc/diskstats on Linux 7.0.0-30-generic
+  (Ubuntu), read with LC_ALL=C. The file continues with one such row per
+  block device and partition.
