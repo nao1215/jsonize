@@ -86,6 +86,24 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `git log --stat`, `--numstat`, `--shortstat`, `--name-only`,
+  `--name-status` and `-p` were read as `git/log` and their file lists,
+  diffstats and diffs were reported as lines of the commit message. The
+  message part took whatever followed the blank line; it now requires
+  what git actually prints, which is a message indented by four spaces.
+  None of those six formats is read: a diffstat elides its paths and pads
+  its columns, so there is nothing to recover the file names from. This
+  is not something a signature could have settled, because the leading
+  lines of such a listing are an ordinary commit block.
+- `etc/crontab` read the other lines of a shell script that installs a
+  cron entry. A signature only has to find one entry to vouch for a file,
+  and the five time fields of the parse pattern took any word, so
+  `echo "installed ..."` became an entry with `echo` as its minute. The
+  time fields now repeat the vocabulary the signature checked for.
+- `ethtool` and `mtr` signatures that looked for their opening line
+  alone, which prose explaining the format carries as a quotation. Each
+  now also requires the thing the report is made of: an indented property
+  under `Settings for eth0:`, and a hop line under the `HOST:` header.
 - Signatures that accepted the output of a neighbouring command. `group`
   read `/etc/passwd`, `uname -a` and `timedatectl` output; `hosts` read
   the clock at the start of BSD `uptime` and `w` output as an IPv6
@@ -140,8 +158,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Removed
 
-- `min_jsonize`, `metadata.fixtures` and the kv `key_name`/`value_name`
-  pair. No definition used any of them.
+- `min_jsonize`, `metadata.fixtures`, `metadata.authors` and the kv
+  `key_name`/`value_name` pair. No definition used any of them, and
+  nothing read them back: `authors` was documented in the definition
+  format and reported by neither `jz list` nor `jz list --json`.
 - `parse.on_mismatch`. `skip` dropped every line a pattern did not fit
   without saying which, which is the failure jz exists to prevent one
   line at a time: `host` was silently discarding the HTTPS record in its

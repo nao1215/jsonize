@@ -35,7 +35,13 @@ input:
 parse:
   type: regex
   patterns:
-    - '^(?P<minute>\S+)[ \t]+(?P<hour>\S+)[ \t]+(?P<day_of_month>\S+)[ \t]+(?P<month>\S+)[ \t]+(?P<day_of_week>\S+)[ \t]+(?P<user>[A-Za-z_][A-Za-z0-9_.-]*)[ \t]+(?P<command>.+?)[ \t]*$'
+    # The five time fields repeat the vocabulary the signature checked
+    # for, rather than taking any non-blank word. A signature only has to
+    # find one entry to vouch for the file, so a script that carries a
+    # single cron line used to have its other lines read as entries too,
+    # with `echo` as the minute and the rest of the sentence spread over
+    # the remaining columns.
+    - '^(?P<minute>[-0-9*,/]+)[ \t]+(?P<hour>[-0-9*,/]+)[ \t]+(?P<day_of_month>[-0-9*,/]+)[ \t]+(?P<month>[-0-9*,/a-zA-Z]+)[ \t]+(?P<day_of_week>[-0-9*,/a-zA-Z]+)[ \t]+(?P<user>[A-Za-z_][A-Za-z0-9_.-]*)[ \t]+(?P<command>.+?)[ \t]*$'
     - '^@(?P<special>reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+(?P<user>[A-Za-z_][A-Za-z0-9_.-]*)[ \t]+(?P<command>.+?)[ \t]*$'
 fields:
   user: {required: true}

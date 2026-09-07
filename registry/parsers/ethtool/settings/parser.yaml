@@ -26,6 +26,10 @@ detect:
   signature:
     all:
       - '^Settings for [^:\n]+:[ \t]*$'
+      # An indented property under it. ethtool indents every one, so a
+      # document that quotes the opening line and then describes it in
+      # prose does not look like a settings report.
+      - '^[ \t]+\S[^:\n]*:'
 input:
   fold: '^\t[ ]+\S'
   ignore:
