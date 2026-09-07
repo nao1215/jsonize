@@ -36,6 +36,12 @@ detect:
       - '\A[0-9a-f]{32,128} \*'
       - '\A\\[0-9a-f]{32,128} '
       - '\A\d+ \d+ \S'
+      # `git show-ref` and `git for-each-ref` also open with an object
+      # name and a space. Both print the full object name where --oneline
+      # abbreviates, and what follows is a ref path or the object type
+      # and a tab, never a subject.
+      - '\A[0-9a-f]{40,64} refs/'
+      - '\A[0-9a-f]{40,64} (?:commit|tag|tree|blob)\t'
 parse:
   type: regex
   pattern: '^(?P<commit>[0-9a-f]{4,40}) (?P<subject>.*)$'

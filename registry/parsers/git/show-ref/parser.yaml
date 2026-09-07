@@ -1,0 +1,41 @@
+# One line per ref: the object name, a single space and the full ref
+# name. A ref name may not contain a space or a tab, so the first space
+# ends the object name and the rest of the line is the name.
+#
+# The object name is the one the ref points at directly, which for an
+# annotated tag is the tag object rather than the commit it wraps.
+# `--dereference` adds a second line for such a tag whose name ends in
+# "^{}" and whose object name is the commit; that line has this same
+# shape.
+#
+# `git for-each-ref` prints the same object name and ref name with the
+# object type between them and a tab before the name, which is what the
+# signature uses to keep the two apart: a show-ref line has no tab at
+# all.
+format: 1
+command: git
+variant: show-ref
+description: git show-ref
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-show-ref
+detect:
+  args:
+    any: ["show-ref"]
+  signature:
+    all:
+      # A full object name, one space and a ref path, with nothing else
+      # on the line. `--head` puts a line for HEAD first, so the ref line
+      # this anchors on is not required to be the first one.
+      - '(?m)^[0-9a-f]{40,64} refs/[^\t\n]*$'
+parse:
+  type: regex
+  # A tab in the ref name makes the line something else (for-each-ref
+  # output) rather than a ref whose name happens to contain one, so it is
+  # reported instead of read.
+  pattern: '^(?P<object>[0-9a-f]{40,64}) (?P<refname>[^\t\n]+)$'
+fields:
+  object: {required: true}
+  refname: {required: true}

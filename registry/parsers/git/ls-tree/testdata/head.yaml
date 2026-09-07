@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: the entries of the top-level tree, where a subdirectory appears once as a tree and a symbolic link keeps mode 120000
+os: linux
+args: ["ls-tree", "HEAD"]

@@ -1,0 +1,46 @@
+{
+  "banner": {
+    "product": "OpenSSL",
+    "version": "3.5.5",
+    "released": "27 Jan 2026",
+    "library": "OpenSSL 3.5.5 27 Jan 2026"
+  },
+  "settings": [
+    {
+      "name": "built on",
+      "value": "Wed Aug 26 11:58:23 2026 UTC"
+    },
+    {
+      "name": "platform",
+      "value": "debian-amd64"
+    },
+    {
+      "name": "options",
+      "value": "bn(64,64)"
+    },
+    {
+      "name": "compiler",
+      "value": "gcc -fPIC -pthread -m64 -Wa,--noexecstack -Wall -fzero-call-used-regs=used-gpr -Wa,--noexecstack -g -O2 -Werror=implicit-function-declaration -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -ffile-prefix-map=/build/openssl-YuD4uC/openssl-3.5.5=. -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -fdebug-prefix-map=/build/openssl-YuD4uC/openssl-3.5.5=/usr/src/openssl-3.5.5-1ubuntu3.5 -DOPENSSL_USE_NODELETE -DL_ENDIAN -DOPENSSL_PIC -DOPENSSL_BUILDING_OPENSSL -DZLIB -DZSTD -DNDEBUG -Wdate-time -D_FORTIFY_SOURCE=3"
+    },
+    {
+      "name": "OPENSSLDIR",
+      "value": "/usr/lib/ssl"
+    },
+    {
+      "name": "ENGINESDIR",
+      "value": "/usr/lib/x86_64-linux-gnu/engines-3"
+    },
+    {
+      "name": "MODULESDIR",
+      "value": "/usr/lib/x86_64-linux-gnu/ossl-modules"
+    },
+    {
+      "name": "Seeding source",
+      "value": "os-specific JITTER (3060300)"
+    },
+    {
+      "name": "CPUINFO",
+      "value": "OPENSSL_ia32cap=0x7ed8320b078bffff:0x19405fdef1bf97ab:0x0000003010000110:0x0000000000000000:0x0000000000000000"
+    }
+  ]
+}

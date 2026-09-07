@@ -1,0 +1,62 @@
+# A banner line followed by "label: value" lines. The banner carries a
+# colon of its own inside "(Library: ...)", so it is read on its own
+# rather than as a pair; everything after it is split at the first colon
+# and the rest of the line is the value. That matters for two labels:
+# compiler is a whole command line and CPUINFO is a run of
+# colon-separated register values.
+#
+# Which labels appear depends on the build and the version. MODULESDIR,
+# CPUINFO and "Seeding source" are OpenSSL 3, ENGINESDIR is absent from a
+# build without engines, and a label may hold a space ("built on",
+# "Seeding source"), which is not a legal field name. The pairs therefore
+# stay a list of name/value objects and every value stays the string
+# openssl printed.
+#
+# openssl prints the directory values in double quotes; the quotes are
+# its presentation and not part of the path, so one surrounding pair is
+# removed.
+format: 1
+command: openssl
+variant: version-all
+description: openssl version -a
+metadata:
+  tags: [tls, crypto, version]
+  compatible: [OpenSSL]
+  references:
+    - https://docs.openssl.org/master/man1/openssl-version/
+detect:
+  args:
+    any: ["version"]
+  signature:
+    all:
+      # LibreSSL and BoringSSL answer `version -a` with a banner of their
+      # own name and a different set of labels, so the product name is
+      # part of the evidence.
+      - '\AOpenSSL [0-9]'
+      - '(?m)^built on: '
+      - '(?m)^OPENSSLDIR: '
+parse:
+  type: composite
+  parts:
+    - name: banner
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        patterns:
+          # OpenSSL 3 repeats itself as "(Library: OpenSSL 3.5.5 ...)"
+          # when the library the tool is linked against differs from the
+          # one it was built against.
+          - '^(?P<product>\S+) (?P<version>\S+)\s+(?P<released>[^()\n]*?) \(Library: (?P<library>[^)\n]*)\)$'
+          - '^(?P<product>\S+) (?P<version>\S+)\s+(?P<released>.*?)\s*$'
+      fields:
+        product: {required: true}
+        version: {required: true}
+        library: {when_missing: omit}
+    - name: settings
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: list
+        unquote: true

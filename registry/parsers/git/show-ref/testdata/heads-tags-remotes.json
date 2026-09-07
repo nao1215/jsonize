@@ -1,0 +1,30 @@
+[
+  {
+    "object": "33aaa0dff67392278f9e7d4c947586b9cec15a6a",
+    "refname": "refs/heads/main"
+  },
+  {
+    "object": "28ec6990dd1aae76940bb3501ee2915c43fe86f8",
+    "refname": "refs/heads/topic/rename-the-flag"
+  },
+  {
+    "object": "33aaa0dff67392278f9e7d4c947586b9cec15a6a",
+    "refname": "refs/remotes/origin/HEAD"
+  },
+  {
+    "object": "33aaa0dff67392278f9e7d4c947586b9cec15a6a",
+    "refname": "refs/remotes/origin/main"
+  },
+  {
+    "object": "28ec6990dd1aae76940bb3501ee2915c43fe86f8",
+    "refname": "refs/remotes/origin/topic/rename-the-flag"
+  },
+  {
+    "object": "28ec6990dd1aae76940bb3501ee2915c43fe86f8",
+    "refname": "refs/tags/lightweight-tag"
+  },
+  {
+    "object": "aeebecfe6b18d9f65dd528ed076e9ebef8f4986e",
+    "refname": "refs/tags/v0.1.0"
+  }
+]

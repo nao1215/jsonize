@@ -1,0 +1,4 @@
+source: OpenSSL 3.5.5 on Ubuntu, LC_ALL=C
+description: the default suite list, whose Enc values include CHACHA20/POLY1305(256) with a slash and parentheses
+os: linux
+args: ["ciphers", "-v"]

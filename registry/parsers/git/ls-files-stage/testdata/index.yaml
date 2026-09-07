@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: a merged index holding a path with a space, a path quoted because of its non-ASCII bytes, a symbolic link, an executable and a gitlink
+os: linux
+args: ["ls-files", "-s"]

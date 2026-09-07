@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: the same tree walked with -r, so a gitlink appears as a commit entry and the paths include one with a space and one quoted for its non-ASCII bytes
+os: linux
+args: ["ls-tree", "-r", "HEAD"]

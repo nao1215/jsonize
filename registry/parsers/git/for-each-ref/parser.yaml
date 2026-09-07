@@ -1,0 +1,40 @@
+# The default format is "%(objectname) %(objecttype)\t%(refname)": the
+# object name, a space, the type of that object, a tab and the full ref
+# name. A ref name may not contain a tab, so the tab ends the type and
+# the rest of the line is the name.
+#
+# The type is what tells an annotated tag from a lightweight one: a
+# lightweight tag names the commit itself ("commit"), an annotated tag
+# names the tag object that wraps it ("tag"). The type is captured as
+# written rather than as a fixed set, so a ref pointing at a tree or a
+# blob still reads.
+#
+# `git show-ref` prints the same object name and ref name without the
+# type and without the tab, which is what the signature uses to keep the
+# two apart. A `--format` of the caller's own is a different format and
+# is refused rather than guessed at.
+format: 1
+command: git
+variant: for-each-ref
+description: git for-each-ref default format
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-for-each-ref
+detect:
+  args:
+    any: ["for-each-ref"]
+  signature:
+    all:
+      # A full object name, the object type and the tab before the ref
+      # path. The object name is 40 hexadecimal characters in a SHA-1
+      # repository and 64 in a SHA-256 one.
+      - '(?m)^[0-9a-f]{40,64} (?:commit|tag|tree|blob)\trefs/'
+parse:
+  type: regex
+  pattern: '^(?P<object>[0-9a-f]{40,64}) (?P<type>[a-z]+)\t(?P<refname>.+)$'
+fields:
+  object: {required: true}
+  type: {required: true}
+  refname: {required: true}

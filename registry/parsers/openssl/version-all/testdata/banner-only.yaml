@@ -1,0 +1,5 @@
+source: OpenSSL 3.5.5 on Ubuntu, LC_ALL=C
+description: what plain `openssl version` prints, which is the banner alone; without the labelled lines it is not this format and the signature says so
+os: linux
+args: ["version"]
+expect_error: does not describe this input

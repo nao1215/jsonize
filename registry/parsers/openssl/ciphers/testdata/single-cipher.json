@@ -1,0 +1,10 @@
+[
+  {
+    "name": "AES128-SHA",
+    "protocol": "SSLv3",
+    "kx": "RSA",
+    "au": "RSA",
+    "enc": "AES(128)",
+    "mac": "SHA1"
+  }
+]
