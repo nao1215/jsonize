@@ -78,7 +78,7 @@ the same reading with settings of your own.
 | `iostat` | `cpu`, `device`, `extended`, `linux` |
 | `ip` | `address`, `brief-address`, `brief-link`, `link`, `multicast-address`, `neighbour`, `route`, `rule`, `stats-link` |
 | `ipcs` | `linux`, `message-queues`, `semaphores`, `shared-memory` |
-| `iw` | `link` |
+| `iw` | `dev`, `link` |
 | `journalctl` | `boots`, `short`, `short-iso`, `short-precise` |
 | `kv` | `colon`, `equals` |
 | `last` | `busybox` |
@@ -103,8 +103,8 @@ the same reading with settings of your own.
 | `lsmod` | `busybox`, `linux` |
 | `lsns` | `linux` |
 | `lsof` | `linux`, `tasks` |
-| `lspci` | `kernel`, `linux`, `machine`, `numeric`, `numeric-names`, `verbose-machine` |
-| `lsusb` | `linux` |
+| `lspci` | `kernel`, `linux`, `machine`, `numeric`, `numeric-names`, `verbose`, `verbose-machine` |
+| `lsusb` | `linux`, `verbose` |
 | `md5sum` | `posix` |
 | `mise` | `ls` |
 | `modinfo` | `linux` |

@@ -34,7 +34,14 @@ const (
 	TypeCSV = "csv"
 	// TypeINI is a file of [section] headings and key = value lines.
 	TypeINI = "ini"
+	// TypeTree is a report whose depth comes from the indentation of the
+	// input: lspci -vv, lsusb -v, iw dev.
+	TypeTree = "tree"
 )
+
+// MaxTreeDepth bounds how deep a tree may go, so that a producer cannot
+// make jz build an unbounded stack of objects. No report comes close.
+const MaxTreeDepth = 32
 
 // Table split modes.
 const (
@@ -363,6 +370,16 @@ type Parse struct {
 	// composite, records
 	Parts []Part `yaml:"parts,omitempty"`
 
+	// tree
+	//
+	// Indent is one level of indentation as it is written: "\t" for a
+	// report indented with tabs, "  " for one indented with two spaces.
+	// A line's depth is how many times it repeats at the start.
+	Indent string `yaml:"indent,omitempty"`
+	// Node says how one line of the tree is read. Every line is a node,
+	// so this applies at every depth.
+	Node *Node `yaml:"node,omitempty"`
+
 	// records: a line matching Start opens a record, and everything up
 	// to the next such line belongs to it. Each record is then read the
 	// way composite reads a whole input, so the parts vocabulary is the
@@ -381,7 +398,7 @@ type Parse struct {
 // the answer is an empty list rather than that it could not tell.
 func (p *Parse) YieldsArray() bool {
 	switch p.Type {
-	case TypeTable, TypeRecords, TypeCSV:
+	case TypeTable, TypeRecords, TypeCSV, TypeTree:
 		return true
 	case TypeRegex:
 		return p.Each != EachInput
@@ -427,6 +444,14 @@ type Header struct {
 	LeadingLabel string `yaml:"leading_label,omitempty"`
 	// Rename maps normalised header names to field names.
 	Rename map[string]string `yaml:"rename,omitempty"`
+}
+
+// Node describes how one line of a tree is read. It is a part without a
+// name or a region: a tree has one description for every node, and what
+// differs between them is only how deep they are.
+type Node struct {
+	Parse  Parse             `yaml:"parse"`
+	Fields map[string]*Field `yaml:"fields,omitempty"`
 }
 
 // Part is one component of a composite parser.

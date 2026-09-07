@@ -299,6 +299,8 @@ func (r *run) parse(p *definition.Parse, fields map[string]*definition.Field, li
 		return r.parseCSV(p, fields, lines)
 	case definition.TypeINI:
 		return r.parseINI(p, fields, lines)
+	case definition.TypeTree:
+		return r.parseTree(p, lines)
 	default:
 		return nil, r.errorf(0, "", "unsupported parse type %q", p.Type)
 	}

@@ -24,6 +24,31 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `parse.type: tree`, for a report whose depth comes from the input:
+  `lspci -vv` prints a device, its capabilities under it and a
+  capability's flags under those, and how far that goes is a property of
+  the machine rather than of the format. The definition states what a
+  node is — the fields read from its line, plus a `children` array — and
+  the input states nothing but how deep the nodes go. Every line is a
+  node, read by `node.parse` (an ordered list of regular expressions, or
+  a key/value split), and `indent` states one level of indentation as it
+  is written. A line that skips a level, indentation that is not a whole
+  number of the unit, and depth beyond 32 are all errors. A tree may be a
+  `composite` part and may not be a `records` part. `--stream` writes one
+  top-level node per line.
+- `lspci/verbose`, `lsusb/verbose` and `iw/dev`, the first definitions to
+  use it. `lspci/kernel` and `lsusb/linux` gained one exclusion each,
+  because the output they read is a subset of the verbose output and only
+  the register dumps and descriptor blocks say which of the two a text
+  is.
+
+### Fixed
+
+- The streaming reader trimmed the carriage return of a CRLF line ending
+  before stripping escape sequences, where the whole-document reader
+  strips first. A record that ended with an escape sequence around the
+  carriage return was read differently by the two.
+
 - `--define YAML`, which takes the definition itself instead of the name
   of one: a `parser.yaml` without `format`, `command`, `variant` or
   `detect`, so what is left is `parse` and optionally `input` and

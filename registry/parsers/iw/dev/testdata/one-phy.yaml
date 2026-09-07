@@ -1,0 +1,3 @@
+source: "iw dev on Ubuntu with iw 6.9, LC_ALL=C; one phy with a P2P device and a connected interface. The MAC addresses and the network name are replaced."
+os: linux
+args: ["dev"]

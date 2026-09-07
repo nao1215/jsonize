@@ -1,0 +1,41 @@
+# `iw dev` is a tree: a wireless phy has interfaces and an interface has
+# attributes, and one of those attributes is itself a small table. The
+# depth is a property of the radio rather than of the format, so every
+# line is a node and its depth is how many tabs open it.
+#
+# Six shapes appear, so the node is read by six expressions in order: the
+# phy line, a named interface, the unnamed one a P2P device gets, a
+# heading, a name and a value, and anything else, which is a row of the
+# queue table.
+format: 1
+command: iw
+variant: dev
+description: iw dev wireless interfaces as a tree under their phy
+metadata:
+  tags: [linux, network, wireless]
+  compatible: [iw]
+  references:
+    - https://man7.org/linux/man-pages/man8/iw.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["dev"]
+  signature:
+    all:
+      - '\Aphy#[0-9]+[ \t]*$'
+      - '^\t(?:Interface \S+|Unnamed/non-netdev interface)[ \t]*$'
+parse:
+  type: tree
+  indent: "\t"
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^phy#(?P<phy>[0-9]+)[ \t]*$'
+        - '^Interface (?P<interface>\S+)[ \t]*$'
+        - '^(?P<interface>Unnamed/non-netdev interface)[ \t]*$'
+        - '^(?P<name>\S.*?):[ \t]*$'
+        - '^(?P<name>\S+)[ \t]+(?P<value>.+?)[ \t]*$'
+        - '^(?P<text>.+?)[ \t]*$'
+    fields:
+      phy: {type: int}

@@ -112,6 +112,49 @@ are what produce numbers. The same reasoning removed the `ls -l` /
 `ls -lh` split: which one produced a listing is not decidable from the
 text, and with the size kept as printed it does not need to be.
 
+### The depth is input-derived, the shape is not
+
+`lspci -vv` prints a device, its capabilities under it and a capability's
+flags under those. `lsusb -v` prints a device, a configuration, an
+interface, an endpoint and an endpoint's attributes. How far that goes is
+a property of the machine being described, so no definition can state it,
+and this was out of scope for exactly that reason: a definition says what
+the output looks like, and here it cannot say all of it.
+
+What it can say is what a node is. `type: tree` splits the two: the
+definition states the fields read from a node's line and that its
+children go in a `children` array, and the input states nothing but how
+deep the nodes go. The result has the shape the definition described,
+repeated as many times as the text nests. That is a narrower thing than
+"recursion in the format" and it is the part the earlier answer threw out
+with the rest.
+
+Every line is a node. Grouping runs of lines at one depth into a single
+node was the alternative, and it makes a node's identity depend on its
+siblings, which is a rule that cannot be stated in one sentence. With one
+line per node, a node's line is read by `node.parse` — an ordered list of
+regular expressions, or a key/value split — and the same description
+applies at every depth, since the shapes that appear at each are what the
+alternatives are for.
+
+Three limits keep the input from deciding more than the depth. A line
+indented two levels below the one above it has no parent and is an error
+rather than being attached to the nearest ancestor. Indentation that is
+not a whole number of the stated unit is an error rather than being
+rounded down. Depth stops at 32, which no report comes near, so a
+producer cannot make jz build an unbounded stack of objects.
+
+A `level` expression that captured the leading whitespace was considered
+in place of stating the unit. It was dropped because it still leaves the
+question the unit answers — how much whitespace is one level — so it adds
+a key without removing a question. A format whose indentation is not a
+fixed unit is not one `tree` reads.
+
+`tree` may be a `composite` part, which is what a report with a banner
+above the tree needs. It may not be a `records` part: a record is a block
+that repeats at one level and a tree is what the input decides the depth
+of, and one definition cannot answer "where does this line belong" twice.
+
 ### A definition can be given instead of named
 
 jz reads output it has a definition for, and the honest answer for
@@ -592,10 +635,6 @@ served by `flag` and a dispatch table, and the `run` subcommand needs
 
 ## Deliberately out of scope for the MVP
 
-- Recursive sections, where the depth comes from the input (`ls -R`,
-  `npm ls --all`, `docker info`). A block that repeats at one level is
-  `records`, and a value continued on the next line is `input.fold`; a
-  tree is neither.
 - Derived fields (computing `uptime_seconds` from `"13 days, 4:30"`).
 - Two commands that print the same format under both their names.
   Nothing in the text says which of them wrote it, so `vdir`, `getent`

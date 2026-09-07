@@ -218,6 +218,8 @@ func FuzzFormats(f *testing.F) {
 		"format: 1\ncommand: t\nvariant: d\nparse: {type: csv, delimiter: \"\\t\"}\n",
 		"format: 1\ncommand: t\nvariant: i\nparse: {type: ini}\n",
 		"format: 1\ncommand: t\nvariant: b\nparse: {type: table, split: box}\n",
+		"format: 1\ncommand: t\nvariant: t\nparse: {type: tree, indent: \"  \", node: {parse: {type: regex, patterns: ['^(?P<k>\\S+): (?P<v>.*)$', '^(?P<x>.+)$']}}}\n",
+		"format: 1\ncommand: t\nvariant: w\nparse: {type: tree, indent: \"\\t\", node: {parse: {type: kv, separator: \": \"}}}\n",
 	}
 	for _, seed := range []string{
 		"a,b\n1,2\n",
@@ -228,6 +230,10 @@ func FuzzFormats(f *testing.F) {
 		"# c\n; c\n[a]\n[a]\nk=1\nk=2\n",
 		"+--+--+\n| a | b |\n+--+--+\n| 1 | 2 |\n+--+--+\n",
 		"┌─┬─┐\n│a│b│\n╞═╪═╡\n│1│2│\n└─┴─┘\n",
+		"a: 1\n  b: 2\n    c: 3\nd: 4\n",
+		"a: 1\n    b: 2\n",
+		"   a\n",
+		"\ta: 1\n",
 		"|", "+", "\"", "\n\n\n", "",
 	} {
 		for i := range defs {

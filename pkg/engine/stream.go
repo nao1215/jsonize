@@ -79,28 +79,8 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 			return err
 		}
 		num++
-		// The escapes come off before the check, which is the order the
-		// whole-document reader uses. Doing it the other way round
-		// refused a record whose only invalid bytes were inside an
-		// escape sequence that was about to be removed.
-		stripped := convert.StripANSI(raw)
-		if !utf8.Valid(stripped) {
-			if rerr := s.report(&ParseError{Definition: def.ID(), Line: num, Msg: "input is not valid UTF-8"}); rerr != nil {
-				return rerr
-			}
-			if errors.Is(err, io.EOF) {
-				break
-			}
-			continue
-		}
-		text := string(stripped)
-		if num == 1 {
-			text = trimBOM(text)
-		}
-		if perr := s.feedRaw(line{text: text, num: num}); perr != nil {
-			if rerr := s.report(perr); rerr != nil {
-				return rerr
-			}
+		if rerr := s.feedRecordText(def, prepareRecord(raw, sep, num), num); rerr != nil {
+			return rerr
 		}
 		if errors.Is(err, io.EOF) {
 			break
@@ -111,6 +91,35 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 	}
 	if err := s.finish(); err != nil {
 		return s.report(err)
+	}
+	return nil
+}
+
+// prepareRecord brings one record to the form the whole-document reader
+// produces: the escape sequences come off first, then the carriage
+// return of a CRLF ending, then the byte order mark of the first record.
+// The order is the whole point — doing any of it the other way round
+// made the two readings disagree on text neither of them should have
+// treated specially.
+func prepareRecord(raw []byte, sep byte, num int) []byte {
+	out := convert.StripANSI(raw)
+	if sep == '\n' {
+		out = bytes.TrimSuffix(out, []byte{'\r'})
+	}
+	if num == 1 {
+		out = bytes.TrimPrefix(out, []byte{0xEF, 0xBB, 0xBF})
+	}
+	return out
+}
+
+// feedRecordText hands one prepared record to the parser, reporting a
+// record that is not valid UTF-8 the same way as one that does not fit.
+func (s *streamer) feedRecordText(def *definition.Definition, text []byte, num int) error {
+	if !utf8.Valid(text) {
+		return s.report(&ParseError{Definition: def.ID(), Line: num, Msg: "input is not valid UTF-8"})
+	}
+	if perr := s.feedRaw(line{text: string(text), num: num}); perr != nil {
+		return s.report(perr)
 	}
 	return nil
 }
@@ -133,15 +142,11 @@ func readRecord(br *bufio.Reader, sep byte, maxLen int) ([]byte, error) {
 		if len(out) > 0 && out[len(out)-1] == sep {
 			out = out[:len(out)-1]
 		}
-		if sep == '\n' {
-			out = bytes.TrimSuffix(out, []byte{'\r'})
-		}
+		// The carriage return of a CRLF line ending is trimmed by the
+		// caller rather than here, because the whole-document reader
+		// removes the escape sequences first and the two have to agree.
 		return out, err
 	}
-}
-
-func trimBOM(s string) string {
-	return string(bytes.TrimPrefix([]byte(s), []byte{0xEF, 0xBB, 0xBF}))
 }
 
 // streamer holds the state the batch reader keeps in slices: the line a
@@ -176,6 +181,8 @@ type streamer struct {
 	csvCols    []string
 	// boxRow holds the lines between two rules of a drawn table.
 	boxRow []line
+	// tree holds the lines of the top-level node that is still open.
+	tree []line
 }
 
 // report hands a failed record to onError. It returns nil when the read
@@ -274,6 +281,8 @@ func (s *streamer) feedRecord(l line) error {
 		return s.emit(obj)
 	case definition.TypeRecords:
 		return s.feedBlock(l)
+	case definition.TypeTree:
+		return s.feedTree(l)
 	default:
 		return &NoStreamError{Definition: s.def.ID()}
 	}
@@ -402,6 +411,9 @@ func (s *streamer) finish() error {
 	if err := s.flushBox(); err != nil {
 		return err
 	}
+	if err := s.flushTree(); err != nil {
+		return err
+	}
 	if len(s.csvPending) > 0 {
 		// A quoted value that never closes is a record the input did not
 		// finish, and reporting it is better than dropping it.
@@ -410,6 +422,44 @@ func (s *streamer) finish() error {
 		return s.emitCSV(pending)
 	}
 	return s.flushBlock()
+}
+
+// feedTree accumulates a top-level node and its descendants, and
+// releases it when the next line at depth zero proves it is finished. A
+// node is complete only once nothing deeper follows it, so a stream of a
+// tree is a stream of whole top-level nodes.
+func (s *streamer) feedTree(l line) error {
+	depth, _, err := s.treeDepth(s.p, l)
+	if err != nil {
+		return err
+	}
+	if depth == 0 {
+		if err := s.flushTree(); err != nil {
+			return err
+		}
+	} else if len(s.tree) == 0 {
+		return s.errorf(l.num, "", "indented %d levels below a line at level 0, so it has no parent", depth)
+	}
+	s.tree = append(s.tree, l)
+	return nil
+}
+
+func (s *streamer) flushTree() error {
+	if len(s.tree) == 0 {
+		return nil
+	}
+	group := s.tree
+	s.tree = nil
+	nodes, _, err := s.treeNodes(s.p, group, 0, 0)
+	if err != nil {
+		return err
+	}
+	for _, n := range nodes {
+		if err := s.emit(n); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // feedCSV holds a line back while a quoted value is still open. A record
