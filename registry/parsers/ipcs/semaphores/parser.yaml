@@ -1,0 +1,41 @@
+# ipcs -s: the semaphore section on its own. The banners of the other two
+# sections are excluded, which is what separates this from the default
+# listing that prints all three.
+#
+# The cells are cut on whitespace rather than at the heading offsets: the
+# owner is printed in a ten-column field and a longer login name pushes
+# the rest of the row to the right.
+format: 1
+command: ipcs
+variant: semaphores
+description: ipcs -s semaphore arrays
+metadata:
+  tags: [linux, ipc, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/ipcs.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^-+ Semaphore Arrays -+$'
+      - '^key[ \t]+semid[ \t]+owner[ \t]+perms[ \t]+nsems[ \t]*$'
+    none:
+      - '^-+ Message Queues -+$'
+      - '^-+ Shared Memory Segments -+$'
+input:
+  select:
+    after: '^-+ Semaphore Arrays -+$'
+parse:
+  type: table
+fields:
+  # The key is printed as 0x%08x and names the array; it is an identifier
+  # rather than a count.
+  key: {required: true}
+  semid: {type: int, required: true}
+  owner: {required: true}
+  # An octal mode printed without a leading zero. Read as a number it
+  # would be decimal 666 rather than rw-rw-rw-, so the digits stay as
+  # they were printed.
+  perms: {required: true}
+  nsems: {type: int}

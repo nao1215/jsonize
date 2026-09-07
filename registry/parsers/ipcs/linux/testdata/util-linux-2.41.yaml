@@ -1,0 +1,10 @@
+source: |
+  captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; the owner
+  name was replaced with one of the same width so the columns still line
+  up. The queue and the segment were created with ipcmk for the capture
+  and removed again afterwards.
+description: |
+  All three sections with rows in each, and a shared memory segment whose
+  status flags are blank.
+os: linux
+args: []
