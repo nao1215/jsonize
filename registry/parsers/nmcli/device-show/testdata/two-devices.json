@@ -1,0 +1,136 @@
+[
+  {
+    "device": {
+      "name": "wlp195s0"
+    },
+    "properties": [
+      {
+        "name": "GENERAL.TYPE",
+        "value": "wifi"
+      },
+      {
+        "name": "GENERAL.HWADDR",
+        "value": "52:54:00:44:55:66"
+      },
+      {
+        "name": "GENERAL.MTU",
+        "value": "1500"
+      },
+      {
+        "name": "GENERAL.STATE",
+        "value": "100 (connected)"
+      },
+      {
+        "name": "GENERAL.CONNECTION",
+        "value": "wifi-ap-04-abcd"
+      },
+      {
+        "name": "GENERAL.CON-PATH",
+        "value": "/org/freedesktop/NetworkManager/ActiveConnection/3"
+      },
+      {
+        "name": "IP4.ADDRESS[1]",
+        "value": "198.51.100.60/24"
+      },
+      {
+        "name": "IP4.GATEWAY",
+        "value": "198.51.100.1"
+      },
+      {
+        "name": "IP4.ROUTE[1]",
+        "value": "dst = 198.51.100.0/24, nh = 0.0.0.0, mt = 600"
+      },
+      {
+        "name": "IP4.ROUTE[2]",
+        "value": "dst = 0.0.0.0/0, nh = 198.51.100.1, mt = 600"
+      },
+      {
+        "name": "IP4.DNS[1]",
+        "value": "198.51.100.1"
+      },
+      {
+        "name": "IP4.DOMAIN[1]",
+        "value": "example.net"
+      },
+      {
+        "name": "IP6.ADDRESS[1]",
+        "value": "fe80::5054:ff:fe44:5566/64"
+      },
+      {
+        "name": "IP6.GATEWAY",
+        "value": "fe80::5054:ff:feaa:bbcc"
+      },
+      {
+        "name": "IP6.ROUTE[1]",
+        "value": "dst = fe80::/64, nh = ::, mt = 1024"
+      },
+      {
+        "name": "IP6.ROUTE[2]",
+        "value": "dst = ::/0, nh = fe80::5054:ff:feaa:bbcc, mt = 20600"
+      }
+    ]
+  },
+  {
+    "device": {
+      "name": "eno1"
+    },
+    "properties": [
+      {
+        "name": "GENERAL.TYPE",
+        "value": "ethernet"
+      },
+      {
+        "name": "GENERAL.HWADDR",
+        "value": "52:54:00:11:22:33"
+      },
+      {
+        "name": "GENERAL.MTU",
+        "value": "1500"
+      },
+      {
+        "name": "GENERAL.STATE",
+        "value": "100 (connected)"
+      },
+      {
+        "name": "GENERAL.CONNECTION",
+        "value": "プロファイル 1"
+      },
+      {
+        "name": "GENERAL.CON-PATH",
+        "value": "/org/freedesktop/NetworkManager/ActiveConnection/2"
+      },
+      {
+        "name": "WIRED-PROPERTIES.CARRIER",
+        "value": "on"
+      },
+      {
+        "name": "IP4.ADDRESS[1]",
+        "value": "192.0.2.2/24"
+      },
+      {
+        "name": "IP4.GATEWAY",
+        "value": "--"
+      },
+      {
+        "name": "IP4.ROUTE[1]",
+        "value": "dst = 192.0.2.0/24, nh = 0.0.0.0, mt = 100"
+      },
+      {
+        "name": "IP6.ADDRESS[1]",
+        "value": "fe80::5054:ff:fe11:2233/64"
+      },
+      {
+        "name": "IP6.GATEWAY",
+        "value": "fe80::5054:ff:feaa:bbcc"
+      },
+      {
+        "name": "IP6.ROUTE[1]",
+        "value": "dst = fe80::/64, nh = ::, mt = 1024"
+      },
+      {
+        "name": "IP6.ROUTE[2]",
+        "value": "dst = ::/0, nh = fe80::5054:ff:feaa:bbcc, mt = 20100"
+      }
+    ]
+  }
+]

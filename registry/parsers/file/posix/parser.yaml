@@ -55,6 +55,10 @@ detect:
       # "filename" listed beside a longer one would pad the same way, but
       # not beside one named "license" as well.
       - '(?s)^filename:[ \t]{2,}\S.*^license:[ \t]{2,}\S'
+      # nmcli labels a property with a section, a dot and a name, all
+      # in capitals (GENERAL.DEVICE, IP4.ADDRESS[1]). A file named that
+      # way is not what file(1) is asked about.
+      - '^[A-Z][A-Z0-9-]*\.[A-Z][A-Z0-9._-]*(?:\[\d+\])?:[ \t]'
       # `ethtool -i` opens with "driver: <name>" and "version: <name>",
       # which are properties of an interface rather than a path and the
       # description of what is stored there.

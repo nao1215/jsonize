@@ -1,0 +1,33 @@
+GENERAL.DEVICE:                         wlp195s0
+GENERAL.TYPE:                           wifi
+GENERAL.HWADDR:                         52:54:00:44:55:66
+GENERAL.MTU:                            1500
+GENERAL.STATE:                          100 (connected)
+GENERAL.CONNECTION:                     wifi-ap-04-abcd
+GENERAL.CON-PATH:                       /org/freedesktop/NetworkManager/ActiveConnection/3
+IP4.ADDRESS[1]:                         198.51.100.60/24
+IP4.GATEWAY:                            198.51.100.1
+IP4.ROUTE[1]:                           dst = 198.51.100.0/24, nh = 0.0.0.0, mt = 600
+IP4.ROUTE[2]:                           dst = 0.0.0.0/0, nh = 198.51.100.1, mt = 600
+IP4.DNS[1]:                             198.51.100.1
+IP4.DOMAIN[1]:                          example.net
+IP6.ADDRESS[1]:                         fe80::5054:ff:fe44:5566/64
+IP6.GATEWAY:                            fe80::5054:ff:feaa:bbcc
+IP6.ROUTE[1]:                           dst = fe80::/64, nh = ::, mt = 1024
+IP6.ROUTE[2]:                           dst = ::/0, nh = fe80::5054:ff:feaa:bbcc, mt = 20600
+
+GENERAL.DEVICE:                         eno1
+GENERAL.TYPE:                           ethernet
+GENERAL.HWADDR:                         52:54:00:11:22:33
+GENERAL.MTU:                            1500
+GENERAL.STATE:                          100 (connected)
+GENERAL.CONNECTION:                     プロファイル 1
+GENERAL.CON-PATH:                       /org/freedesktop/NetworkManager/ActiveConnection/2
+WIRED-PROPERTIES.CARRIER:               on
+IP4.ADDRESS[1]:                         192.0.2.2/24
+IP4.GATEWAY:                            --
+IP4.ROUTE[1]:                           dst = 192.0.2.0/24, nh = 0.0.0.0, mt = 100
+IP6.ADDRESS[1]:                         fe80::5054:ff:fe11:2233/64
+IP6.GATEWAY:                            fe80::5054:ff:feaa:bbcc
+IP6.ROUTE[1]:                           dst = fe80::/64, nh = ::, mt = 1024
+IP6.ROUTE[2]:                           dst = ::/0, nh = fe80::5054:ff:feaa:bbcc, mt = 20100
