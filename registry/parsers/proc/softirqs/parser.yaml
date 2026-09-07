@@ -1,0 +1,64 @@
+# /proc/softirqs is a header naming the CPUs and then one line per kind
+# of software interrupt, with how many times it has been raised on each
+# of those CPUs.
+#
+# The number of columns is the number of CPUs, so it is a property of the
+# machine rather than of the format, and the counts are one array per
+# line with the header reported beside them: counts[i] belongs to
+# cpus.present[i]. The header is named "present" because this file walks
+# the possible CPUs where /proc/interrupts walks the online ones, so a
+# CPU that is offline still has a column here, holding the counts it
+# gathered before it went down.
+#
+# The kinds are a fixed list in the kernel and each is one line: HI,
+# TIMER, NET_TX, NET_RX, BLOCK, IRQ_POLL, TASKLET, SCHED, HRTIMER, RCU.
+# A release that adds one adds a line, which needs nothing here, so the
+# lines are read as they come rather than named.
+#
+# What separates this from /proc/interrupts is that every line here is a
+# name and its counts and nothing else: no chip, no hardware number, no
+# driver, and no summary line with a different number of counts.
+format: 1
+command: proc
+variant: softirqs
+description: /proc/softirqs per-CPU software interrupt counters
+metadata:
+  tags: [linux, cpu, interrupt, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The header: leading space for the label column, then one CPU per
+      # processor.
+      - '\A[ \t]+CPU0(?:[ \t]+CPU\d+)*[ \t]*$'
+      # Every line under it is a name and its counts, and nothing follows
+      # the last count. The file is a dozen lines, so the whole of it is
+      # inside the window and can be claimed.
+      - '\A[ \t]+CPU0(?:[ \t]+CPU\d+)*[ \t]*(?:\n[ \t]*[A-Z][A-Z0-9_]*:(?:[ \t]+\d+)+[ \t]*)+\z'
+      # The two oldest kinds, which every kernel that has this file
+      # writes. Requiring them is what tells this from another report of
+      # labelled counts under a CPU header.
+      - '^[ \t]*HI:(?:[ \t]+\d+)+[ \t]*$'
+      - '^[ \t]*TIMER:(?:[ \t]+\d+)+[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: cpus
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^[ \t]*(?P<present>CPU\d+(?:[ \t]+CPU\d+)*)[ \t]*$'
+      fields:
+        present: {type: array, split_regex: '[ \t]+'}
+    - name: softirqs
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^[ \t]*(?P<name>[A-Z][A-Z0-9_]*):[ \t]+(?P<counts>\d+(?:[ \t]+\d+)*)[ \t]*$'
+      fields:
+        name: {required: true}
+        counts: {type: array, split_regex: '[ \t]+', items: {type: int}}

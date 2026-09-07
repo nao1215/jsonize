@@ -1,0 +1,15 @@
+description: |
+  The cache of a machine on a wireless LAN with two container bridges.
+  It carries an unresolved entry, whose hardware address the kernel
+  writes as all zeroes with the complete bit clear in the flags, and one
+  neighbour reached through two devices, which is two entries for one
+  address.
+source: |
+  /proc/net/arp on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C.
+  The hardware addresses were replaced with the 00:00:5e:00:53:xx
+  documentation range, one for one so that the two entries for the same
+  neighbour still agree; the addresses of the LAN became 192.0.2.x and
+  those of the container networks 198.51.100.x and 203.0.113.x; the
+  bridge was renamed. Nine further entries were dropped. The column
+  positions are the kernel's own, recomputed for the replaced values.
+os: linux

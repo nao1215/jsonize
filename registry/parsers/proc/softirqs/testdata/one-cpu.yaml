@@ -1,0 +1,9 @@
+description: |
+  The same file as a machine with one CPU writes it. The column count
+  follows the machine, so this is the boundary of that: one count per
+  line.
+source: |
+  synthetic; the capture beside it with all but the first of the 32 count
+  columns removed, keeping the widths the kernel writes ("CPU%-8d" in the
+  header, " %10u" per count).
+os: linux

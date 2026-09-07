@@ -1,0 +1,19 @@
+[
+  {
+    "algorithm": {
+      "name": "ccm(aes)",
+      "driver": "ccm_base(ctr-aes-vaes-avx512,cbcmac(aes-lib))",
+      "module": "ccm",
+      "priority": 450,
+      "refcnt": 3,
+      "selftest": "passed",
+      "internal": false,
+      "type": "aead",
+      "async": false,
+      "blocksize": 1,
+      "ivsize": 16,
+      "maxauthsize": 16,
+      "geniv": "<none>"
+    }
+  }
+]

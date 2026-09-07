@@ -1,0 +1,70 @@
+# /proc/net/route is the kernel's own IPv4 routing table: a header line
+# and one line per route, the fields separated by tabs and the whole line
+# padded with spaces to 127 columns.
+#
+# It is not what the `route` command prints, even though the two describe
+# the same table. route resolves the addresses, spells the flag bits as
+# letters and names the default route "default"; the file writes
+# addresses as eight hexadecimal digits and the flags as four, and
+# route/linux reads that other format.
+#
+# Destination, Gateway and Mask are kept as the text the kernel wrote.
+# They are little endian: 010200C0 is 192.0.2.1 read byte by byte from
+# the right, because the kernel writes the address in host byte order on
+# a little endian machine. Converting them would mean the definition
+# deciding both the byte order and the notation, and the value is not a
+# quantity anyway. Flags is a bit set in hexadecimal (0001 up, 0002
+# gateway) and is kept for the same reason. None of the four is an
+# integer field: reading 0003 base ten gives three, a number this file
+# never states. The six counters beside them are written base ten and
+# are integers.
+#
+# The trailing padding is not part of any value. A whitespace table
+# trims the line before splitting it, so the last column holds the
+# counter alone and not the run of spaces after it.
+format: 1
+command: proc
+variant: net-route
+description: /proc/net/route kernel IPv4 routing table
+metadata:
+  tags: [linux, network, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_net.5.html
+detect:
+  os: [linux]
+  signature:
+    # A machine with a route per container network runs past the default
+    # window, and the shape below is about every line of it.
+    window: 200
+    all:
+      # The header the kernel writes, verbatim apart from the runs of
+      # whitespace: "Gateway " carries a trailing space and "Mask" is
+      # followed by two tabs, which is the padding the columns were
+      # aligned with when a terminal read this file.
+      - '\AIface[ \t]+Destination[ \t]+Gateway[ \t]+Flags[ \t]+RefCnt[ \t]+Use[ \t]+Metric[ \t]+Mask[ \t]+MTU[ \t]+Window[ \t]+IRTT[ \t]*$'
+      # Every line after it is a route: a device, three addresses of
+      # eight hexadecimal digits with the flag word between the first
+      # two, and six decimal counters. Zero of them is a real shape, a
+      # namespace with no route in it, so the repetition may be empty.
+      - '\AIface(?:[ \t]+\w+)+[ \t]*(?:\n\S+\t[0-9A-Fa-f]{8}\t[0-9A-Fa-f]{8}\t[0-9A-Fa-f]{4}\t\d+\t\d+\t-?\d+\t[0-9A-Fa-f]{8}\t\d+\t\d+\t\d+[ \t]*)*\z'
+parse:
+  type: table
+  split: whitespace
+  # The header words are single words, but the kernel's own spelling
+  # (RefCnt, IRTT) is not what deriving names from it would give, and
+  # naming the columns here also fixes their number.
+  header:
+    columns: [iface, destination, gateway, flags, refcnt, use, metric, mask, mtu, window, irtt]
+fields:
+  iface: {required: true}
+  destination: {required: true}
+  gateway: {required: true}
+  flags: {required: true}
+  refcnt: {type: int, required: true}
+  use: {type: int, required: true}
+  metric: {type: int, required: true}
+  mask: {required: true}
+  mtu: {type: int, required: true}
+  window: {type: int, required: true}
+  irtt: {type: int, required: true}

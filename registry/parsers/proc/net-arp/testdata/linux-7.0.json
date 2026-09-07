@@ -1,0 +1,66 @@
+[
+  {
+    "ip_address": "203.0.113.3",
+    "hw_type": "0x1",
+    "flags": "0x2",
+    "hw_address": "00:00:5e:00:53:01",
+    "mask": "*",
+    "device": "br-1a2b3c4d5e6f"
+  },
+  {
+    "ip_address": "198.51.100.6",
+    "hw_type": "0x1",
+    "flags": "0x2",
+    "hw_address": "00:00:5e:00:53:02",
+    "mask": "*",
+    "device": "docker0"
+  },
+  {
+    "ip_address": "192.0.2.8",
+    "hw_type": "0x1",
+    "flags": "0x2",
+    "hw_address": "00:00:5e:00:53:03",
+    "mask": "*",
+    "device": "wlp195s0"
+  },
+  {
+    "ip_address": "192.0.2.14",
+    "hw_type": "0x1",
+    "flags": "0x0",
+    "hw_address": "00:00:5e:00:53:04",
+    "mask": "*",
+    "device": "wlp195s0"
+  },
+  {
+    "ip_address": "203.0.113.2",
+    "hw_type": "0x1",
+    "flags": "0x2",
+    "hw_address": "00:00:5e:00:53:05",
+    "mask": "*",
+    "device": "br-1a2b3c4d5e6f"
+  },
+  {
+    "ip_address": "192.0.2.254",
+    "hw_type": "0x1",
+    "flags": "0x0",
+    "hw_address": "00:00:00:00:00:00",
+    "mask": "*",
+    "device": "wlp195s0"
+  },
+  {
+    "ip_address": "192.0.2.1",
+    "hw_type": "0x1",
+    "flags": "0x2",
+    "hw_address": "00:00:5e:00:53:06",
+    "mask": "*",
+    "device": "wlp195s0"
+  },
+  {
+    "ip_address": "192.0.2.8",
+    "hw_type": "0x1",
+    "flags": "0x2",
+    "hw_address": "00:00:5e:00:53:03",
+    "mask": "*",
+    "device": "eno1"
+  }
+]

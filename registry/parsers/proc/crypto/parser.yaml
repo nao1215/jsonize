@@ -1,0 +1,69 @@
+# /proc/crypto is one block per registered algorithm, separated by a
+# blank line: "label : value" lines, the block opening with the name.
+#
+# The kernel writes the same seven labels for every algorithm (name,
+# driver, module, priority, refcnt, selftest, internal) and then whatever
+# the algorithm's own type reports: an aead adds ivsize, maxauthsize and
+# geniv, a skcipher adds the key sizes and the walk sizes, a hash adds
+# digestsize, a rng adds seedsize. Which labels a block carries is
+# therefore decided by its type rather than by the kernel version alone,
+# so each block is read as a map of the labels it has, with a conversion
+# for the ones whose type is known. A label this definition does not list
+# still appears, with the text the kernel wrote for it.
+#
+# The label is the key, spaces and all: "min keysize" and "max keysize"
+# reach the JSON as the kernel spells them, because a kv map reports the
+# key it read rather than a name this definition invented.
+#
+# selftest is not a boolean. The kernel writes "passed" or "unknown", and
+# "unknown" is an algorithm that was not tested rather than one that
+# failed, which a true/false pair cannot say. internal and async are
+# written as yes and no and are booleans.
+#
+# Two values are kept as text. geniv is "<none>" on every block that has
+# it, a word rather than a missing value, and the numeric labels this
+# definition converts are counts of bytes; nothing here is a size with a
+# unit to fold in.
+format: 1
+command: proc
+variant: crypto
+description: /proc/crypto registered kernel crypto algorithms
+metadata:
+  tags: [linux, crypto, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_crypto.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The seven labels every block opens with, in the order the kernel
+      # writes them. One block is enough evidence and the first one
+      # starts at the first line, so the window need not be widened: a
+      # file whose first block is this shape is this file.
+      - '\Aname[ \t]+:[ \t]*\S.*\ndriver[ \t]+:[ \t]*\S.*\nmodule[ \t]+:[ \t]*\S.*\npriority[ \t]+:[ \t]*-?\d+[ \t]*\nrefcnt[ \t]+:[ \t]*\d+[ \t]*\nselftest[ \t]+:[ \t]*\S+[ \t]*\ninternal[ \t]+:[ \t]*(?:yes|no)[ \t]*$'
+parse:
+  type: records
+  start: '^name[ \t]+:'
+  parts:
+    - name: algorithm
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      # The keys are the labels the kernel writes, spaces and all.
+      fields:
+        priority: {type: int}
+        refcnt: {type: int}
+        blocksize: {type: int}
+        digestsize: {type: int}
+        ivsize: {type: int}
+        maxauthsize: {type: int}
+        seedsize: {type: int}
+        statesize: {type: int}
+        chunksize: {type: int}
+        walksize: {type: int}
+        min keysize: {type: int}
+        max keysize: {type: int}
+        internal: {type: bool}
+        async: {type: bool}

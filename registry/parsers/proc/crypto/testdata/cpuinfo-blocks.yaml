@@ -1,0 +1,9 @@
+description: |
+  /proc/cpuinfo, which is also blocks of "label : value" separated by
+  blank lines. What tells the two apart is which labels open a block,
+  so this definition refuses it rather than reading a processor as an
+  algorithm.
+expect_error: 'does not describe this input'
+source: |
+  the first block of registry/parsers/proc/cpuinfo-x86/testdata/amd-ryzen-ai-max.txt.
+os: linux

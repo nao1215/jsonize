@@ -1,0 +1,10 @@
+description: |
+  What `arp -a` prints for the same cache. It is a different format,
+  read by arp/alternate, and this definition refuses it rather than
+  treating the two as one thing because they describe the same table.
+expect_error: 'does not describe this input'
+source: |
+  `busybox arp -a` on Linux 7.0.0-30-generic (Ubuntu) with LC_ALL=C,
+  first three lines; the addresses replaced the same way as in the
+  capture beside it.
+os: linux

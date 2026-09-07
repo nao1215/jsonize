@@ -1,0 +1,14 @@
+description: |
+  The routing table of a machine with a wireless and a wired interface
+  and two container bridges: a default route through the gateway, and a
+  network route per interface. The rows are padded to 127 columns, which
+  is what the kernel writes rather than anything the capture added.
+source: |
+  /proc/net/route on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C.
+  The addresses were replaced with documentation ranges and the hexadecimal
+  recomputed for each one, so the little endian encoding still holds:
+  192.168.11.0/24 became 192.0.2.0/24, 192.168.10.0/24 became
+  198.51.100.0/24, and the container networks 172.17.0.0/16 and
+  172.18.0.0/16 became 198.18.0.0/16 and 198.19.0.0/16. Two further
+  container bridge rows were dropped and the remaining bridge was renamed.
+os: linux

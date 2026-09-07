@@ -1,0 +1,172 @@
+{
+  "cpus": {
+    "online": [
+      "CPU0"
+    ]
+  },
+  "interrupts": [
+    {
+      "irq": "0",
+      "counts": [
+        132
+      ],
+      "chip": "IR-IO-APIC",
+      "hwirq": 2,
+      "handler": "edge",
+      "drivers": [
+        "timer"
+      ]
+    },
+    {
+      "irq": "1",
+      "counts": [
+        0
+      ],
+      "chip": "IR-IO-APIC",
+      "hwirq": 1,
+      "handler": "edge",
+      "drivers": [
+        "i8042"
+      ]
+    },
+    {
+      "irq": "3",
+      "counts": [
+        0
+      ],
+      "chip": "IR-IO-APIC",
+      "hwirq": 3,
+      "handler": "edge",
+      "drivers": [
+        "AMDI0010:00"
+      ]
+    },
+    {
+      "irq": "7",
+      "counts": [
+        0
+      ],
+      "chip": "IR-IO-APIC",
+      "hwirq": 7,
+      "handler": "fasteoi",
+      "drivers": [
+        "pinctrl_amd"
+      ]
+    },
+    {
+      "irq": "8",
+      "counts": [
+        0
+      ],
+      "chip": "IR-IO-APIC",
+      "hwirq": 8,
+      "handler": "edge",
+      "drivers": [
+        "rtc0"
+      ]
+    },
+    {
+      "irq": "9",
+      "counts": [
+        0
+      ],
+      "chip": "IR-IO-APIC",
+      "hwirq": 9,
+      "handler": "fasteoi",
+      "drivers": [
+        "acpi"
+      ]
+    },
+    {
+      "irq": "26",
+      "counts": [
+        0
+      ],
+      "chip": "PCI-MSI-0000:00:00.2",
+      "hwirq": 0,
+      "handler": "edge",
+      "drivers": [
+        "AMD-Vi"
+      ]
+    },
+    {
+      "irq": "27",
+      "counts": [
+        0
+      ],
+      "chip": "amd_gpio",
+      "hwirq": 61,
+      "handler": null,
+      "drivers": [
+        "ACPI:Event"
+      ]
+    },
+    {
+      "irq": "32",
+      "counts": [
+        0
+      ],
+      "chip": "IR-PCI-MSI-0000:00:01.1",
+      "hwirq": 0,
+      "handler": "edge",
+      "drivers": [
+        "PCIe PME",
+        "pciehp"
+      ]
+    },
+    {
+      "irq": "33",
+      "counts": [
+        0
+      ],
+      "chip": "IR-PCI-MSI-0000:00:01.2",
+      "hwirq": 0,
+      "handler": "edge",
+      "drivers": [
+        "PCIe PME",
+        "pciehp"
+      ]
+    },
+    {
+      "irq": "34",
+      "counts": [
+        0
+      ],
+      "chip": "IR-PCI-MSI-0000:00:02.1",
+      "hwirq": 0,
+      "handler": "edge",
+      "drivers": [
+        "PCIe PME",
+        "PCIe bwctrl"
+      ]
+    },
+    {
+      "irq": "NMI",
+      "counts": [
+        14794
+      ],
+      "description": "Non-maskable interrupts"
+    },
+    {
+      "irq": "ERR",
+      "counts": [
+        0
+      ],
+      "description": null
+    },
+    {
+      "irq": "MIS",
+      "counts": [
+        0
+      ],
+      "description": null
+    },
+    {
+      "irq": "VPMI",
+      "counts": [
+        0
+      ],
+      "description": "Perf Guest Mediated PMI"
+    }
+  ]
+}

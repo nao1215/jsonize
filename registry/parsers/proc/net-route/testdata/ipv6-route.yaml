@@ -1,0 +1,12 @@
+description: |
+  /proc/net/ipv6_route, the file next to this one. It carries no header
+  and its fields are 32 hexadecimal digits rather than eight, so it is
+  not this format and is refused rather than read as a routing table
+  with the columns shifted.
+expect_error: 'does not describe this input'
+source: |
+  the first three lines of /proc/net/ipv6_route on Linux 7.0.0-30-generic
+  (Ubuntu), read with LC_ALL=C; the unique local prefix was replaced with
+  the 2001:db8:: documentation prefix and the veth and bridge names with
+  fixed ones.
+os: linux
