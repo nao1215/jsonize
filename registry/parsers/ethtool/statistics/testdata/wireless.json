@@ -1,0 +1,126 @@
+[
+  {
+    "name": "rx_packets",
+    "value": "58278710"
+  },
+  {
+    "name": "rx_bytes",
+    "value": "59602958345"
+  },
+  {
+    "name": "rx_duplicates",
+    "value": "0"
+  },
+  {
+    "name": "rx_fragments",
+    "value": "57842580"
+  },
+  {
+    "name": "rx_dropped",
+    "value": "24448"
+  },
+  {
+    "name": "tx_packets",
+    "value": "39313423"
+  },
+  {
+    "name": "tx_bytes",
+    "value": "31326030255"
+  },
+  {
+    "name": "tx_filtered",
+    "value": "0"
+  },
+  {
+    "name": "tx_retry_failed",
+    "value": "0"
+  },
+  {
+    "name": "tx_retries",
+    "value": "7009169"
+  },
+  {
+    "name": "tx_handlers_drop",
+    "value": "0"
+  },
+  {
+    "name": "sta_state",
+    "value": "4"
+  },
+  {
+    "name": "txrate",
+    "value": "720600000"
+  },
+  {
+    "name": "rxrate",
+    "value": "864800000"
+  },
+  {
+    "name": "signal",
+    "value": "194"
+  },
+  {
+    "name": "channel",
+    "value": "5180"
+  },
+  {
+    "name": "noise",
+    "value": "18446744073709551615"
+  },
+  {
+    "name": "ch_time",
+    "value": "0"
+  },
+  {
+    "name": "ch_time_busy",
+    "value": "0"
+  },
+  {
+    "name": "ch_time_ext_busy",
+    "value": "18446744073709551615"
+  },
+  {
+    "name": "ch_time_rx",
+    "value": "0"
+  },
+  {
+    "name": "ch_time_tx",
+    "value": "0"
+  },
+  {
+    "name": "tx_ampdu_cnt",
+    "value": "0"
+  },
+  {
+    "name": "tx_mpdu_attempts",
+    "value": "0"
+  },
+  {
+    "name": "tx_mpdu_success",
+    "value": "0"
+  },
+  {
+    "name": "tx_pkt_ebf_cnt",
+    "value": "0"
+  },
+  {
+    "name": "tx_pkt_ibf_cnt",
+    "value": "0"
+  },
+  {
+    "name": "tx_ampdu_len:0-1",
+    "value": "0"
+  },
+  {
+    "name": "tx_ampdu_len:2-10",
+    "value": "0"
+  },
+  {
+    "name": "tx_ampdu_len:11-19",
+    "value": "0"
+  },
+  {
+    "name": "tx_ampdu_len:20-28",
+    "value": "0"
+  }
+]

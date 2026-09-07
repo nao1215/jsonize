@@ -1,0 +1,40 @@
+# `ethtool -S` prints whatever counters the driver registered, so the set
+# of names is a property of the driver rather than of the format; the
+# entries are a list of name/value pairs instead of an object, the way
+# lscpu's per-CPU labels are.
+#
+# The values stay strings for two reasons found in the fixtures. A name
+# may itself contain a colon (mt7921's `tx_ampdu_len:0-1`), so the pair
+# cannot be split on the first colon the way `ethtool -i` is, and the
+# counters are unsigned 64-bit: the wireless fixture reports
+# `noise: 18446744073709551615`, which does not fit the signed integer
+# JSON numbers jz produces.
+format: 1
+command: ethtool
+variant: statistics
+description: ethtool -S per-driver interface counters
+metadata:
+  tags: [linux, network, ethtool]
+  compatible: [ethtool]
+  references:
+    - https://man7.org/linux/man-pages/man8/ethtool.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-S", "--statistics"]
+  signature:
+    all:
+      # The banner is the whole evidence: it names no interface, so the
+      # only other thing this could be is a report that opens with the
+      # same words.
+      - '\ANIC statistics:[ \t]*$'
+      - '^[ \t]+\S+:[ \t]+\S'
+input:
+  select:
+    after: '^NIC statistics:'
+parse:
+  type: regex
+  # Greedy up to the last colon, because the name may contain one.
+  pattern: '^[ \t]+(?P<name>.+):[ \t]*(?P<value>.*?)[ \t]*$'
+fields:
+  name: {required: true}

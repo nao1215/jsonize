@@ -1,0 +1,12 @@
+52:54:00:1a:00:02 dev br-d647a5eb3b66 self permanent
+52:54:00:1a:00:06 dev br-d647a5eb3b66 self permanent
+52:54:00:1a:00:0c dev br-d647a5eb3b66 self permanent
+52:54:00:1a:00:0d dev br-d647a5eb3b66 self permanent
+52:54:00:1a:00:01 dev br-d647a5eb3b66 self permanent
+52:54:00:1a:00:05 dev br-d647a5eb3b66 self permanent
+52:54:00:1a:00:08 dev br-d647a5eb3b66 self permanent
+52:54:00:1a:00:12 dev br-d647a5eb3b66 vlan 1 master br-d647a5eb3b66 permanent
+52:54:00:1a:00:12 dev br-d647a5eb3b66 master br-d647a5eb3b66 permanent
+52:54:00:1a:00:13 dev veth0c4293d master br-088d49b64243 
+52:54:00:1a:00:14 dev veth0c4293d vlan 1 master br-088d49b64243 permanent
+52:54:00:1a:00:14 dev veth0c4293d master br-088d49b64243 permanent

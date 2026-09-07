@@ -59,6 +59,12 @@ detect:
       # in capitals (GENERAL.DEVICE, IP4.ADDRESS[1]). A file named that
       # way is not what file(1) is asked about.
       - '^[A-Z][A-Z0-9-]*\.[A-Z][A-Z0-9._-]*(?:\[\d+\])?:[ \t]'
+      # `bridge link` opens with an interface index, a name and a flag
+      # list ("7: veth0@eno1: <BROADCAST,MULTICAST,UP>"). The number left
+      # of the first colon is an index, not a path. `ip link` has the
+      # same opening but is already excluded by the rule above, since the
+      # lines below it carry no separator at all.
+      - '\A\d+: \S+: <[A-Z0-9_,-]*>'
       # `ethtool -i` opens with "driver: <name>" and "version: <name>",
       # which are properties of an interface rather than a path and the
       # description of what is stored there.

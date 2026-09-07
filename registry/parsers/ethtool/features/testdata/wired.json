@@ -1,0 +1,317 @@
+[
+  {
+    "name": "rx-checksumming",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-checksumming",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-checksum-ipv4",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-checksum-ip-generic",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-checksum-ipv6",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-checksum-fcoe-crc",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-checksum-sctp",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "scatter-gather",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-scatter-gather",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-scatter-gather-fraglist",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tcp-segmentation-offload",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-tcp-segmentation",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-tcp-ecn-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-tcp-mangleid-segmentation",
+    "value": false,
+    "fixed": false
+  },
+  {
+    "name": "tx-tcp6-segmentation",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-tcp-accecn-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "generic-segmentation-offload",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "generic-receive-offload",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "large-receive-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "rx-vlan-offload",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-vlan-offload",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "ntuple-filters",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "receive-hashing",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "highdma",
+    "value": true,
+    "fixed": true
+  },
+  {
+    "name": "rx-vlan-filter",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "vlan-challenged",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-gso-robust",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-fcoe-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-gre-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-gre-csum-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-ipxip4-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-ipxip6-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-udp_tnl-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-udp_tnl-csum-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-gso-partial",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-tunnel-remcsum-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-sctp-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-esp-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-udp-segmentation",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-gso-list",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-nocache-copy",
+    "value": false,
+    "fixed": false
+  },
+  {
+    "name": "loopback",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "rx-fcs",
+    "value": false,
+    "fixed": false
+  },
+  {
+    "name": "rx-all",
+    "value": false,
+    "fixed": false
+  },
+  {
+    "name": "tx-vlan-stag-hw-insert",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "rx-vlan-stag-hw-parse",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "rx-vlan-stag-filter",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "l2-fwd-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "hw-tc-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "esp-hw-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "esp-tx-csum-hw-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "rx-udp_tunnel-port-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tls-hw-tx-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tls-hw-rx-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "rx-gro-hw",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tls-hw-record",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "rx-gro-list",
+    "value": false,
+    "fixed": false
+  },
+  {
+    "name": "macsec-hw-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "rx-udp-gro-forwarding",
+    "value": false,
+    "fixed": false
+  },
+  {
+    "name": "hsr-tag-ins-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "hsr-tag-rm-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "hsr-fwd-offload",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "hsr-dup-offload",
+    "value": false,
+    "fixed": true
+  }
+]

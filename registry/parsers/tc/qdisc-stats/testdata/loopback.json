@@ -1,0 +1,26 @@
+[
+  {
+    "qdisc": {
+      "kind": "noqueue",
+      "handle": "0:",
+      "parent": "root",
+      "refcnt": 2,
+      "options": []
+    },
+    "sent": {
+      "bytes": 0,
+      "packets": 0,
+      "dropped": 0,
+      "overlimits": 0,
+      "requeues": 0
+    },
+    "backlog": {
+      "bytes": "0b",
+      "packets": "0p",
+      "requeues": 0
+    },
+    "kind_stats": {
+      "words": []
+    }
+  }
+]
