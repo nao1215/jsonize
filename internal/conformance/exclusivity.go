@@ -3,7 +3,9 @@ package conformance
 import (
 	"fmt"
 	"io/fs"
+	"os"
 	"path"
+	"path/filepath"
 	"runtime"
 	"sync"
 	"sync/atomic"
@@ -32,6 +34,49 @@ type Decoy struct {
 	Name string
 	// Input is the text itself.
 	Input []byte
+}
+
+// MaxDecoyFiles bounds a decoy directory so that naming a large tree
+// cannot make the caller read all of it.
+const MaxDecoyFiles = 1000
+
+// ReadDecoys reads every regular file under dir, recursively, and names
+// each one by its path relative to dir.
+func ReadDecoys(dir string) ([]Decoy, error) {
+	var out []Decoy
+	err := filepath.WalkDir(dir, func(p string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() || !d.Type().IsRegular() {
+			return nil
+		}
+		if len(out) >= MaxDecoyFiles {
+			return fmt.Errorf("more than %d files under %s", MaxDecoyFiles, dir)
+		}
+		data, err := os.ReadFile(p) //nolint:gosec // a decoy directory is named by the caller
+		if err != nil {
+			return err
+		}
+		if int64(len(data)) > engine.DefaultMaxInputSize {
+			return fmt.Errorf("%s exceeds the %d byte limit", p, engine.DefaultMaxInputSize)
+		}
+		rel, err := filepath.Rel(dir, p)
+		if err != nil {
+			rel = p
+		}
+		out = append(out, Decoy{Name: filepath.ToSlash(rel), Input: data})
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	// An empty directory would otherwise report a clean run for a check
+	// that examined nothing.
+	if len(out) == 0 {
+		return nil, fmt.Errorf("no files under %s", dir)
+	}
+	return out, nil
 }
 
 // Fixtures loads the fixtures of every entry whose source is among the
@@ -140,7 +185,14 @@ func Decoys(reg *registry.Registry, decoys []Decoy, opts Options) []Result {
 		for _, r := range readers {
 			if res, ok := reads(reg, r, d.Input, opts); ok {
 				res.Case, res.Path = d.Name, d.Name
-				res.Err = fmt.Errorf("%s read the decoy %s", namedAs(r), d.Name)
+				// Which half let it through decides what to sharpen: a
+				// signature that says too little, or a parser that takes
+				// any word where the format has a vocabulary.
+				if res.parsed {
+					res.Err = fmt.Errorf("%s read the decoy %s", namedAs(r), d.Name)
+				} else {
+					res.Err = fmt.Errorf("%s accepted the decoy %s and then failed to parse it", namedAs(r), d.Name)
+				}
 				out = append(out, res)
 			}
 		}

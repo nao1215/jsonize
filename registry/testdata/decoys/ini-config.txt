@@ -1,0 +1,7 @@
+[server]
+listen = 0.0.0.0:8080
+timeout = 30
+
+[logging]
+level = info
+path = /var/log/app.log

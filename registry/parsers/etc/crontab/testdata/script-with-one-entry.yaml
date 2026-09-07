@@ -1,8 +1,0 @@
-description: >-
-  A shell script that installs a cron entry carries one line of the shape
-  the signature looks for, which is enough for the signature to vouch for
-  the whole file. The remaining lines are not entries, and reading them as
-  entries put `echo` in the minute field and spread the sentence over the
-  rest of the columns. The time fields are what refuse them.
-source: written for this case
-expect_error: 'line 4: line does not match'

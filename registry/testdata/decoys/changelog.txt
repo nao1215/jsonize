@@ -1,0 +1,40 @@
+# Changelog
+
+All notable changes to this project are documented here. The format is
+based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
+project follows [Semantic Versioning](https://semver.org/).
+
+## [Unreleased]
+
+### Added
+
+- Automatic detection as the default behaviour: `COMMAND | jz` and
+  `jz < FILE` identify the format from the text and convert it.
+- `jz run COMMAND` for the case where jz starts the command itself,
+  passing standard input through, forwarding standard error and mirroring
+  the exit status.
+- `jz list`, `jz list COMMAND` and `jz list COMMAND VARIANT`, with
+  `--json` and `--sources`.
+- YAML parser definitions (format 1) with table, regex, key/value and
+  composite parsers, ordered regex alternatives, NUL-separated records and
+  typed field conversion.
+- Layered registries: `JSONIZE_REGISTRY_PATH`, the user directory and the
+  registry embedded in the binary. jz makes no network access.
+- `--extract KEY` and `--exclude KEY`, repeatable, which keep or drop the
+  named keys of every object jz prints. Naming a key the format does not
+  produce is an error listing the keys it has, and the two options cannot
+  be combined.
+- `parse: type: records` for a report whose blocks repeat: a line
+  matching `start` opens a record and the `parts` are applied to each. A
+  `composite` part may itself be `records`, which is what a report that
+  opens with a header block and then repeats a block needs.
+- `input: fold:` joins a value that continues on the next line onto the
+  line it belongs to, for the reports that break a long value at the
+  terminal width (`ethtool`) and for the control files whose values
+  continue on an indented line (`dpkg -s`, `apt show`).
+- Official definitions for COMMANDS_COUNT commands in FORMATS_COUNT
+  output formats, covering coreutils and procps, the util-linux
+  listings, the systemd tools, the classic network commands and the
+  iproute2 ones, sysstat, the disk layout tools, the hardware and display
+  tools, the archive and checksum tools, the account and firmware
+  listings, git, docker, the package managers and the language

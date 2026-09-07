@@ -112,7 +112,9 @@ func TestDecoys(t *testing.T) {
 		"automatic detection read the decoy colon.txt as tight/v",
 		"loose/v read the decoy colon.txt",
 		"loose/v (named esool) read the decoy colon.txt",
-		"crash/v read the decoy colon.txt",
+		// crash/v gets past its own signature and then fails to parse,
+		// which is a different repair from reading the text outright.
+		"crash/v accepted the decoy colon.txt and then failed to parse it",
 	} {
 		if !contains(got, w) {
 			t.Errorf("missing %q in %v", w, got)
