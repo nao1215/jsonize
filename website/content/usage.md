@@ -77,7 +77,7 @@ a format too generic to claim, a wrapper whose name is not the tool it
 runs, or a variant you want pinned in CI.
 
 ```console
-$ git diff --numstat | jz --parser du
+$ du -a /etc/cron.d | jz --parser du
 $ df -h | jz --parser df --variant gnu-human
 $ jz run --parser df -- sudo df -h
 ```
@@ -102,6 +102,18 @@ $ jz run --parser ps -- busybox ps
 jz does not keep a list of which commands are wrappers. The list would
 never be complete, and a wrong entry would read some other command's
 output with the wrong definition.
+
+A file is the other case. `/etc/fstab`, `/etc/passwd` and their
+neighbours have no argv to detect them from, so they are variants of a
+parser named `etc` and are always named:
+
+```console
+$ jz --parser etc --variant fstab --file /etc/fstab
+$ cat /etc/nsswitch.conf | jz --parser etc
+```
+
+Naming `etc` without a variant is enough where the file recognises
+itself; `jz list etc` prints the ones that exist.
 
 ## Where jz stops and the command begins
 
