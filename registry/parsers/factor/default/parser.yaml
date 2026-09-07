@@ -5,11 +5,18 @@
 #
 # A number, a colon and numbers describes far too much on one line, so
 # the signature describes the whole text instead: every line must have
-# that shape and nothing else on it. That also keeps `factor -h` out,
-# which writes the same factors as "2^2 3".
+# that shape and nothing else on it. That keeps prose and `factor -h`
+# out, the latter writing the same factors as "2^2 3". What it cannot
+# keep out is another listing of numbers under numbers, since only
+# multiplying them says which is which, and that is why the definition
+# is used only when it is named.
 format: 1
 command: factor
 variant: default
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gfactor
 description: factor prime factors of each number
 metadata:
   tags: [math]

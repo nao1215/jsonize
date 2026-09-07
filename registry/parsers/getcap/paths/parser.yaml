@@ -22,12 +22,15 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\A\S+(?:[ \t]+(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*)?[-+=][eip]*)+(?:\n\S+(?:[ \t]+(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*)?[-+=][eip]*)+)*\z'
+      # The first clause of a set names capabilities or is the whole set
+      # written as "=ep". Allowing it to be a bare flag group would have
+      # made a list of shell commands with an -e or -i option fit.
+      - '\A\S+(?:[ \t]+(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*[-+=][eip]*|=[eip]*)(?:[ \t]+(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*)?[-+=][eip]*)*)(?:\n\S+(?:[ \t]+(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*[-+=][eip]*|=[eip]*)(?:[ \t]+(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*)?[-+=][eip]*)*))*\z'
 parse:
   type: regex
   # The path is taken up to the capability clause rather than up to the
   # first space, so a file name with a space in it survives.
-  pattern: '^(?P<file>.+?)[ \t]+(?P<capabilities>(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*)?[-+=][eip]*(?:[ \t]+(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*)?[-+=][eip]*)*)[ \t]*$'
+  pattern: '^(?P<file>.+?)[ \t]+(?P<capabilities>(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*[-+=][eip]*|=[eip]*)(?:[ \t]+(?:cap_[a-z0-9_]+(?:,cap_[a-z0-9_]+)*)?[-+=][eip]*)*)[ \t]*$'
 fields:
   file: {required: true}
   capabilities: {required: true}
