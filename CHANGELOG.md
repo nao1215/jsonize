@@ -158,8 +158,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Removed
 
-- `min_jsonize`, `metadata.fixtures` and the kv `key_name`/`value_name`
-  pair. No definition used any of them.
+- `min_jsonize`, `metadata.fixtures`, `metadata.authors` and the kv
+  `key_name`/`value_name` pair. No definition used any of them, and
+  nothing read them back: `authors` was documented in the definition
+  format and reported by neither `jz list` nor `jz list --json`.
 - `parse.on_mismatch`. `skip` dropped every line a pattern did not fit
   without saying which, which is the failure jz exists to prevent one
   line at a time: `host` was silently discarding the HTTPS record in its

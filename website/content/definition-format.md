@@ -61,7 +61,6 @@ it prints the long listing that `ls` prints only with `-l`.
 |-----|---------|
 | `tags` | free-form strings shown by `jz list --json` |
 | `references` | URLs (manuals, source) |
-| `authors` | who maintains the definition |
 | `compatible` | implementations known to print this format, e.g. `[GNU coreutils, BusyBox]` |
 
 ## detect

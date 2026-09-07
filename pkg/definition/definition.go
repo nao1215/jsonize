@@ -154,7 +154,6 @@ func (d *Definition) AliasNames() []string {
 type Metadata struct {
 	Tags       []string `yaml:"tags,omitempty"`
 	References []string `yaml:"references,omitempty"`
-	Authors    []string `yaml:"authors,omitempty"`
 	// Compatible lists the implementations known to produce this format,
 	// e.g. ["GNU coreutils", "BusyBox"]. Informational only.
 	Compatible []string `yaml:"compatible,omitempty"`
