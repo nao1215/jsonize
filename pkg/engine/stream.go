@@ -34,19 +34,29 @@ func (e *NoStreamError) Error() string {
 //
 // Only a definition whose Parse.YieldsArray reports true has records to
 // hand over one at a time; anything else is a NoStreamError.
-func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any) error) error {
+//
+// onError decides what a record jz could not read means. Returning nil
+// keeps the stream going and the record is left out; returning an error
+// ends the read with it, which is what a caller wants when a partial
+// answer is worse than none. A nil onError is the second of those: the
+// first failure ends the read. Only a record's own content reaches
+// onError. A format with no streaming form, an emit that fails and a
+// record over the length limit are not records to skip, so they end the
+// read whatever onError says.
+func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any) error, onError func(*ParseError) error) error {
 	if !def.Parse.YieldsArray() {
 		return &NoStreamError{Definition: def.ID()}
 	}
 	s := &streamer{
-		run:    run{def: def, opts: opts},
-		p:      &def.Parse,
-		fields: def.Fields,
-		emit:   emit,
-		fold:   def.Input.FoldPattern(),
-		ignore: def.Input.IgnorePatterns(),
-		blank:  def.Input.SkipBlankLines(),
-		sel:    &def.Input.Select,
+		run:     run{def: def, opts: opts},
+		p:       &def.Parse,
+		fields:  def.Fields,
+		emit:    emit,
+		onError: onError,
+		fold:    def.Input.FoldPattern(),
+		ignore:  def.Input.IgnorePatterns(),
+		blank:   def.Input.SkipBlankLines(),
+		sel:     &def.Input.Select,
 	}
 	if def.Parse.Type == definition.TypeTable && def.Parse.Header.None {
 		s.columns()
@@ -67,14 +77,22 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 		}
 		num++
 		if !utf8.Valid(raw) {
-			return &ParseError{Definition: def.ID(), Line: num, Msg: "input is not valid UTF-8"}
+			if rerr := s.report(&ParseError{Definition: def.ID(), Line: num, Msg: "input is not valid UTF-8"}); rerr != nil {
+				return rerr
+			}
+			if errors.Is(err, io.EOF) {
+				break
+			}
+			continue
 		}
 		text := string(convert.StripANSI(raw))
 		if num == 1 {
 			text = trimBOM(text)
 		}
 		if perr := s.feedRaw(line{text: text, num: num}); perr != nil {
-			return perr
+			if rerr := s.report(perr); rerr != nil {
+				return rerr
+			}
 		}
 		if errors.Is(err, io.EOF) {
 			break
@@ -83,7 +101,10 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 			return err
 		}
 	}
-	return s.finish()
+	if err := s.finish(); err != nil {
+		return s.report(err)
+	}
+	return nil
 }
 
 // readRecord reads one record up to sep, refusing one longer than maxLen
@@ -120,9 +141,10 @@ func trimBOM(s string) string {
 // table header, and the record block that is still open.
 type streamer struct {
 	run
-	p      *definition.Parse
-	fields map[string]*definition.Field
-	emit   func(any) error
+	p       *definition.Parse
+	fields  map[string]*definition.Field
+	emit    func(any) error
+	onError func(*ParseError) error
 
 	fold   *regexp.Regexp
 	ignore []*regexp.Regexp
@@ -139,6 +161,20 @@ type streamer struct {
 	cols   []column
 	header bool
 	block  []line
+}
+
+// report hands a failed record to onError. It returns nil when the read
+// should carry on, and the error that must end it otherwise. Anything
+// that is not a record jz failed to read passes straight through.
+func (s *streamer) report(err error) error {
+	if err == nil || s.onError == nil {
+		return err
+	}
+	var pe *ParseError
+	if !errors.As(err, &pe) || errors.Is(err, ErrLineTooLong) {
+		return err
+	}
+	return s.onError(pe)
 }
 
 // feedRaw applies input.fold, which is the one stage that needs to see

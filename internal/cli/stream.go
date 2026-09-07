@@ -55,15 +55,30 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		}
 		return jsonutil.Encode(a.env.Stdout, narrowed, false)
 	}
+	// A record jz cannot read is reported and left out, and the ones
+	// after it are still written. A command that keeps printing (ping,
+	// rsync) puts a line jz has no reading for among thousands it has,
+	// and ending the stream there would throw away everything still to
+	// come. Reading a whole document is the other answer and keeps it:
+	// there, one unreadable line means the document is not the format it
+	// claimed to be, so nothing is written at all.
+	skipped := 0
+	onError := func(pe *engine.ParseError) error {
+		skipped++
+		a.errorf("%v", pe)
+		return nil
+	}
 	// A stream has no total size to bound; a record that never ends is
 	// what the line limit is there for.
-	err = engine.Stream(chosen.Entry.Def, io.MultiReader(bytes.NewReader(head), br), engine.Options{}, emit)
+	err = engine.Stream(chosen.Entry.Def, io.MultiReader(bytes.NewReader(head), br), engine.Options{}, emit, onError)
 	switch {
 	case narrowErr != nil:
 		a.errorf("%v", narrowErr)
 		return ExitUsage
 	case err != nil:
 		return a.exitForStream(err)
+	case skipped > 0:
+		return ExitParse
 	}
 	return ExitOK
 }

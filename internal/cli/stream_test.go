@@ -92,6 +92,31 @@ func TestStreamRefusesWhatItCannotStream(t *testing.T) {
 	}
 }
 
+// A record jz cannot read is left out and the ones after it are still
+// written, which is what a command that keeps printing needs: one line
+// with no reading for it must not end the stream.
+func TestStreamSkipsTheRecordsItCannotRead(t *testing.T) {
+	h := newHarness(t)
+	lines := strings.SplitAfter(gnuDF, "\n")
+	broken := lines[0] + "garbage\n" + strings.Join(lines[1:], "")
+	if code := h.pipe(broken, "--stream"); code != ExitParse {
+		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
+	}
+	recs := h.records()
+	if len(recs) != 2 || recs[0]["filesystem"] != "tmpfs" || recs[1]["filesystem"] != "/dev/sda1" {
+		t.Errorf("records = %v", recs)
+	}
+	if !strings.Contains(h.stderr.String(), "line 2") {
+		t.Errorf("stderr does not name the line: %s", h.stderr.String())
+	}
+	// Reading the same text as one document keeps the other answer: a
+	// line that does not fit means the document is not this format, so
+	// nothing is written.
+	if code := h.pipe(broken); code != ExitParse || h.stdout.Len() != 0 {
+		t.Errorf("whole document: %d stdout=%q", code, h.stdout.String())
+	}
+}
+
 // The one place the output contract differs: a failure part way through
 // leaves the records that were already written where they are.
 func TestStreamKeepsTheRecordsAlreadyWritten(t *testing.T) {

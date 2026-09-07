@@ -17,7 +17,7 @@ func streamAll(t *testing.T, src, input string) (string, error) {
 	var out bytes.Buffer
 	err := Stream(load(t, src), strings.NewReader(input), Options{}, func(v any) error {
 		return jsonutil.Encode(&out, v, false)
-	})
+	}, nil)
 	return out.String(), err
 }
 
@@ -204,7 +204,7 @@ func TestStreamBoundsOneRecord(t *testing.T) {
 	var out bytes.Buffer
 	err := Stream(load(t, streamTable), strings.NewReader("1\n"+long+"\n"), Options{MaxLineLength: 100}, func(v any) error {
 		return jsonutil.Encode(&out, v, false)
-	})
+	}, nil)
 	if !errors.Is(err, ErrLineTooLong) {
 		t.Errorf("err = %v", err)
 	}
@@ -222,7 +222,7 @@ func TestStreamStopsWhenEmitFails(t *testing.T) {
 	err := Stream(load(t, streamTable), strings.NewReader("1\n2\n3\n"), Options{}, func(any) error {
 		seen++
 		return boom
-	})
+	}, nil)
 	if !errors.Is(err, boom) || seen != 1 {
 		t.Errorf("err=%v seen=%d", err, seen)
 	}
@@ -236,7 +236,7 @@ func TestStreamEmptyInput(t *testing.T) {
 	}
 	// A reader that fails part way through is reported, not silently
 	// treated as the end of the input.
-	err = Stream(load(t, streamTable), io.MultiReader(strings.NewReader("1\n"), errReader{}), Options{}, func(any) error { return nil })
+	err = Stream(load(t, streamTable), io.MultiReader(strings.NewReader("1\n"), errReader{}), Options{}, func(any) error { return nil }, nil)
 	if err == nil || !strings.Contains(err.Error(), "broken") {
 		t.Errorf("err = %v", err)
 	}
@@ -245,3 +245,86 @@ func TestStreamEmptyInput(t *testing.T) {
 type errReader struct{}
 
 func (errReader) Read([]byte) (int, error) { return 0, errors.New("broken pipe") }
+
+// With an onError that returns nil, a record jz cannot read is reported
+// and the ones after it are still read. It is what --stream needs from a
+// command that keeps printing: one unreadable line must not end the
+// stream.
+func TestStreamContinuesPastAnUnreadableRecord(t *testing.T) {
+	t.Parallel()
+	var out bytes.Buffer
+	var reported []*ParseError
+	err := Stream(load(t, streamTable), strings.NewReader("1\nnot-a-number\n3\n"), Options{}, func(v any) error {
+		return jsonutil.Encode(&out, v, false)
+	}, func(pe *ParseError) error {
+		reported = append(reported, pe)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("err = %v", err)
+	}
+	if out.String() != "{\"n\":1}\n{\"n\":3}\n" {
+		t.Errorf("records = %q", out.String())
+	}
+	if len(reported) != 1 || reported[0].Line != 2 {
+		t.Fatalf("reported = %v", reported)
+	}
+}
+
+// An onError that returns an error stops the read there, which is how a
+// caller asks for the batch behaviour while still seeing the record that
+// failed.
+func TestStreamStopsWhenOnErrorRefuses(t *testing.T) {
+	t.Parallel()
+	var out bytes.Buffer
+	stop := errors.New("stop")
+	calls := 0
+	err := Stream(load(t, streamTable), strings.NewReader("1\nx\ny\n3\n"), Options{}, func(v any) error {
+		return jsonutil.Encode(&out, v, false)
+	}, func(*ParseError) error {
+		calls++
+		return stop
+	})
+	if !errors.Is(err, stop) || calls != 1 {
+		t.Errorf("err=%v calls=%d", err, calls)
+	}
+	if out.String() != "{\"n\":1}\n" {
+		t.Errorf("records = %q", out.String())
+	}
+}
+
+// onError sees only records jz could not read. A format with no
+// streaming form, an emit that fails and a record over the length limit
+// are not records to skip, so they end the stream whatever onError says.
+func TestStreamOnErrorDoesNotSwallowTheOtherFailures(t *testing.T) {
+	t.Parallel()
+	keepGoing := func(*ParseError) error { return nil }
+
+	_, err := StreamCollect(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: kv, as: map}\n", "a=1\n", keepGoing)
+	var ns *NoStreamError
+	if !errors.As(err, &ns) {
+		t.Errorf("no streaming form: got %v", err)
+	}
+
+	boom := errors.New("boom")
+	err = Stream(load(t, streamTable), strings.NewReader("1\n2\n"), Options{}, func(any) error { return boom }, keepGoing)
+	if !errors.Is(err, boom) {
+		t.Errorf("emit failure: got %v", err)
+	}
+
+	long := strings.Repeat("x", 300)
+	err = Stream(load(t, streamTable), strings.NewReader("1\n"+long+"\n"), Options{MaxLineLength: 100}, func(any) error { return nil }, keepGoing)
+	if !errors.Is(err, ErrLineTooLong) {
+		t.Errorf("record over the limit: got %v", err)
+	}
+}
+
+// StreamCollect runs Stream with an onError of the caller's choosing.
+func StreamCollect(t *testing.T, src, input string, onError func(*ParseError) error) (string, error) {
+	t.Helper()
+	var out bytes.Buffer
+	err := Stream(load(t, src), strings.NewReader(input), Options{}, func(v any) error {
+		return jsonutil.Encode(&out, v, false)
+	}, onError)
+	return out.String(), err
+}

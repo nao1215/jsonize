@@ -300,3 +300,34 @@ scenarios:
       - assert:
           exit_code: 4
           stdout: {empty: true}
+
+  # A command jz started can print a line jz has no reading for. In a
+  # stream that line is reported and left out; everything else the
+  # command printed still reaches standard output, and the status says
+  # something was skipped.
+  - name: jz run --stream skips a line the command printed that it cannot read
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --stream --parser du -- sh -c 'printf "4\t/a\ngarbage\n8\t/b\n"'
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"size":4,"name":"/a"}
+              {"size":8,"name":"/b"}
+          stderr:
+            contains: "line 2"
+      # The command's own status wins over the skipped record: jz mirrors
+      # what the command said about itself, and it can only return one
+      # number. The skipped records are on standard error either way.
+      - run:
+          command: jz run --stream --parser du -- sh -c 'printf "4\t/a\ngarbage\n8\t/b\n"; exit 7'
+      - assert:
+          exit_code: 7
+          stdout:
+            equals: |
+              {"size":4,"name":"/a"}
+              {"size":8,"name":"/b"}
+          stderr:
+            contains: "line 2"
