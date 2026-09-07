@@ -1,0 +1,22 @@
+[
+  {
+    "time": "08:55:20",
+    "tps": 11,
+    "rtps": 0,
+    "wtps": 11,
+    "dtps": 0,
+    "bread_per_s": 0,
+    "bwrtn_per_s": 56,
+    "bdscd_per_s": 0
+  },
+  {
+    "time": "Average",
+    "tps": 11,
+    "rtps": 0,
+    "wtps": 11,
+    "dtps": 0,
+    "bread_per_s": 0,
+    "bwrtn_per_s": 56,
+    "bdscd_per_s": 0
+  }
+]

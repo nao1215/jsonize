@@ -1,0 +1,10 @@
+/proc/self/exe: go1.26.4
+	path	cmd/go
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	-gcflags=cmd/...=-dwarf=false
+	build	-trimpath=true
+	build	CGO_ENABLED=0
+	build	GOARCH=amd64
+	build	GOOS=linux
+	build	GOAMD64=v1

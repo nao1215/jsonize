@@ -1,0 +1,3 @@
+description: A workstation configuration, including the hosts line whose sources carry a bracketed action.
+source: /etc/nsswitch.conf on Ubuntu 26.04 (glibc 2.43)
+os: linux

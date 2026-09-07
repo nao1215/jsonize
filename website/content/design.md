@@ -27,7 +27,7 @@ internal/selector         variant selection (os / args / signature filter → pr
 internal/engine           parse algorithms (table, regex, kv, composite) and field conversion
 internal/convert          scalar conversions (int, float, bool, size with units)
 internal/jsonutil         insertion-ordered JSON object and encoder
-internal/conformance      golden runner shared by `go test` and `make registry-test`
+internal/conformance      golden cases and the definition/fixture cross product, shared by `go test` and `jz test`
 internal/buildinfo        the version string stamped at build time
 registry/                 the official definitions and fixtures (data) + a one-file embed
 e2e/atago                 end-to-end scenarios
@@ -41,8 +41,8 @@ compiled definition and the whole text; encoding never sees definitions.
 
 ### A small public surface
 
-The command line is three subcommands (`run`, `list`, `version`) and five
-options (`--file`, `--pretty`, `--parser`, `--variant`, `--help`). Every
+The command line is four subcommands (`run`, `list`, `test`, `version`)
+and five options (`--file`, `--pretty`, `--parser`, `--variant`, `--help`). Every
 option that asked the user to make a decision jz should be making, or
 that changed the output contract, was removed before release:
 
@@ -61,22 +61,25 @@ Per-command code is the obvious design and it is where most output
 converters end up: hundreds of hand-written parsers whose variant
 detection is ad-hoc string sniffing and whose schema lives in comments.
 jsonize instead fixes a small declarative language. The price is
-expressiveness: a format that needs stateful parsing (multi-line records
-with continuation rules, recursive sections) cannot be expressed today.
-The gain is that every definition is reviewable, testable by a fixture,
-and safe to load from a third party. YAML was chosen over JSON (no
+expressiveness: a format whose shape comes from the input rather than
+from the definition, such as a tree of arbitrary depth, cannot be
+expressed. The gain is that every definition is reviewable, testable by
+a fixture, and safe to load from a third party. YAML was chosen over JSON (no
 comments) and TOML (awkward nesting); `goccy/go-yaml` provides strict
 decoding and line numbers in errors.
 
-### Four parse types, not a general pipeline
+### A handful of parse types, not a general pipeline
 
-`table`, `regex`, `kv` and `composite` cover the shapes found in the
-initial commands. A composable step pipeline (split → map → filter …)
-was considered and rejected for the MVP: it is harder to validate, harder
-to explain, and every real example so far fits one of the four. The
+`table`, `regex`, `kv`, `composite` and `records` cover the shapes the
+registered commands print. A composable step pipeline (split → map →
+filter …) was considered and rejected: it is harder to validate, harder
+to explain, and every real example so far fits one of the five. The
 `input.select` block (after/until/skip/limit) plus `composite` gives
-section handling without a pipeline. Adding a fifth type later does not
-change the format version because unknown types are already an error.
+section handling without a pipeline, `records` applies one description
+to a block that repeats, and a `composite` part may be `records` so that
+a report with a header block above the repeats has a shape too. Adding a
+type does not change the format version, because an unknown type is
+already an error.
 
 ### Table splitting
 
@@ -132,10 +135,23 @@ which is a statement the definition author made deliberately; anything
 else is an error that names the candidates. The alternative, "first match
 wins", would silently depend on directory order.
 
-Fixtures double as selection tests: every `testdata/<case>.yaml` with
-`os`/`args` is pushed through the selector and must pick its own
-definition, so adding a variant whose signature overlaps an existing one
-fails `make test` immediately.
+Survivors from different registries are settled before that, by the
+layering: the definition from the earlier registry wins. This is a
+declaration rather than a guess, and it is the same declaration that
+already decides which definition of one command and variant applies. The
+alternative was to keep it an error, which meant that one definition
+someone added locally could take an official parser away from them: with
+a `^Filesystem` signature in a user registry, `df -h | jz` reported that
+the input matched several parsers and exited 4. Definitions inside one
+registry are still never ranked against each other, so a collision the
+registry owns stays an error they have to resolve. `jz test` is where
+they see it.
+
+Fixtures double as selection tests: every fixture is pushed through the
+selector and must pick its own definition, and every definition is named
+explicitly on every other definition's fixtures and must refuse them, so
+adding a variant whose signature overlaps an existing one fails
+`jz test` immediately.
 
 ### Exec mode forces `LC_ALL=C`
 
@@ -174,27 +190,45 @@ registry means installing a new jz; adding your own means pointing
 
 ### Format versioning
 
-`format: 1` is the schema major version. A different number is rejected
-with a message that says whether to upgrade jz or the definition.
-`min_jsonize` lets a definition require a newer jz for a feature added
-without a format bump. Development builds skip the check.
+`format: 1` is the schema major version, and a different number is
+rejected with a message that says whether to upgrade jz or the
+definition.
+
+Until the first tag, format 1 is not frozen: keys are added, renamed and
+removed while the shape settles. After the tag, adding a key is a minor
+release and the number stays 1. An older jz meeting a definition that
+uses the new key refuses that definition with an unknown-key error saying
+a newer jz may be needed, which is the whole compatibility story: a
+definition works with the build it was written for and every later one.
+Removing a key, or changing what one means, is `format: 2`, because
+neither can be told from a mistake by looking at the file.
+
+`min_jsonize` was the alternative, a version a definition could demand.
+It was removed: it asked every definition author to know which release
+introduced each key they used, and it said nothing at all when they got
+it wrong. The unknown-key error needs no such bookkeeping, and it names
+the key that is the problem.
 
 ### Dependencies
 
 - `github.com/goccy/go-yaml` — strict YAML decoding with positions.
 - `github.com/google/go-cmp` — structural diffs in golden failures.
 
-No CLI framework: three subcommands with a handful of flags each are
+No CLI framework: four subcommands with a handful of flags each are
 served by `flag` and a dispatch table, and the `run` subcommand needs
 "stop at the first non-flag" semantics that `flag` gives for free.
 
 ## Deliberately out of scope for the MVP
 
 - Streaming parsers (line-at-a-time output for long-running commands).
-- Multi-line records and recursive sections (`ls -R`, `ip addr`).
+- Recursive sections, where the depth comes from the input (`ls -R`,
+  `npm ls --all`, `docker info`). A block that repeats at one level is
+  `records`, and a value continued on the next line is `input.fold`; a
+  tree is neither.
 - Derived fields (computing `uptime_seconds` from `"13 days, 4:30"`).
-- File parsers (`/etc/passwd`, `/proc/*`) — the engine can do them, but
-  the `command` key and `jz run` are about commands.
+- Two commands that print the same format under both their names.
+  Nothing in the text says which of them wrote it, so `vdir`, `getent`
+  and `printenv` are left to `ls`, `etc` and `env`.
 - Fetching or updating registries over the network.
 - A JSON Schema for editor completion of `parser.yaml`; validation is
   done in Go with path-qualified messages instead.

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "?",
+    "address": "192.168.11.3",
+    "hwaddress": "52:54:00:3c:4d:5e",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "eno1"
+  },
+  {
+    "name": "?",
+    "address": "192.168.11.32",
+    "hwaddress": "52:54:00:92:a3:b4",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "eno1"
+  },
+  {
+    "name": "?",
+    "address": "192.168.11.31",
+    "hwaddress": "52:54:00:d6:e7:f8",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "eno1"
+  }
+]

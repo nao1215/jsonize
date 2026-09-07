@@ -1,0 +1,22 @@
+Name: pager
+Link: /usr/bin/pager
+Slaves:
+ pager.1.gz /usr/share/man/man1/pager.1.gz
+Status: auto
+Best: /usr/bin/less
+Value: /usr/bin/less
+
+Alternative: /bin/more
+Priority: 50
+Slaves:
+ pager.1.gz /usr/share/man/man1/more.1.gz
+
+Alternative: /usr/bin/less
+Priority: 77
+Slaves:
+ pager.1.gz /usr/share/man/man1/less.1.gz
+
+Alternative: /usr/bin/w3m
+Priority: 25
+Slaves:
+ pager.1.gz /usr/share/man/man1/w3m.1.gz

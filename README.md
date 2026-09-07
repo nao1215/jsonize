@@ -46,6 +46,7 @@ jz < captured.txt            # or output captured earlier
 jz --file captured.txt
 jz run COMMAND [args...]     # let jz run the command and convert its stdout
 jz list                      # what jz can read
+jz test [DIR...]             # check parser definitions of your own
 ```
 
 Options:
@@ -105,10 +106,13 @@ A definition and a captured fixture, no Go:
 ```console
 $ mkdir -p ~/.config/jsonize/registry/parsers/greet/default/testdata
 $ $EDITOR ~/.config/jsonize/registry/parsers/greet/default/parser.yaml
-$ make registry-update-golden DIR=~/.config/jsonize/registry
-$ make registry-test DIR=~/.config/jsonize/registry
+$ jz test --update            # write testdata/<case>.json from the output
+$ jz test                     # check it, and check it reads nothing else
 $ greet | jz
 ```
+
+The official fixtures are built into the binary, so `jz test` also proves
+your definition refuses every format jz already reads.
 
 Registries are layered: `JSONIZE_REGISTRY_PATH`, then the user registry
 under the config directory, then the one built into the binary. jz never
@@ -138,7 +142,7 @@ document or nothing.
 $ make help                    # every target
 $ make check                   # fmt, vet, lint, unit tests, race
 $ make e2e                     # atago end-to-end suite
-$ make registry-test           # validate definitions and their golden cases
+$ make registry-test           # the same checks `jz test` runs, on the official registry
 $ make website-serve           # the documentation site locally
 $ make demo                    # re-record demo/jsonize.gif with vhs
 ```

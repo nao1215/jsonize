@@ -8,6 +8,8 @@ description: "w on Linux (procps): uptime summary plus logged-in users"
 metadata:
   tags: [linux, user, system]
   compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/w.1.html
 detect:
   os: [linux]
   signature:

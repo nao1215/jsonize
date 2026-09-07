@@ -1,0 +1,86 @@
+# The default listing: three banners, each followed by a heading row and
+# the rows of that facility. A section with nothing in it prints its
+# banner and heading and no rows, so each part can be an empty list while
+# the other two are not.
+#
+# The cells are cut on whitespace rather than at the heading offsets. The
+# owner is printed in a ten-column field and a longer login name pushes
+# the rest of the row to the right, which fixed offsets would then cut in
+# the middle of a value. The trailing status column of a shared memory
+# segment is two six-column flags printed side by side, so it is left as
+# the last cell and keeps whatever text follows: nothing, "dest",
+# "locked", or both.
+#
+# `ipcs -m -q` and the other partial combinations print two banners and
+# are claimed by no definition here, which is a refusal rather than a
+# wrong reading: this one needs all three banners and each single-section
+# definition rejects the other two.
+format: 1
+command: ipcs
+variant: linux
+description: ipcs message queues, shared memory segments and semaphore arrays
+metadata:
+  tags: [linux, ipc, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/ipcs.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^-+ Message Queues -+$'
+      - '^-+ Shared Memory Segments -+$'
+      - '^-+ Semaphore Arrays -+$'
+    # A machine with a few hundred message queues pushes the third banner
+    # past the window, and nothing then claims the output. That is the
+    # right failure: no other definition can read it either.
+    window: 200
+parse:
+  type: composite
+  parts:
+    - name: message_queues
+      select:
+        after: '^-+ Message Queues -+$'
+        until: '^-+ Shared Memory Segments -+$'
+      parse:
+        type: table
+      fields:
+        # The key is printed as 0x%08x and names the queue; it is an
+        # identifier rather than a count.
+        key: {required: true}
+        msqid: {type: int, required: true}
+        owner: {required: true}
+        # An octal mode printed without a leading zero. Read as a number
+        # it would be decimal 660 rather than rw-rw----, so the digits
+        # stay as they were printed.
+        perms: {required: true}
+        used_bytes: {type: int}
+        messages: {type: int}
+    - name: shared_memory_segments
+      select:
+        after: '^-+ Shared Memory Segments -+$'
+        until: '^-+ Semaphore Arrays -+$'
+      parse:
+        type: table
+        # The status flags are blank on an ordinary segment, so the row
+        # ends after nattch.
+        min_fields: 6
+      fields:
+        key: {required: true}
+        shmid: {type: int, required: true}
+        owner: {required: true}
+        perms: {required: true}
+        bytes: {type: int}
+        nattch: {type: int}
+        status: {}
+    - name: semaphore_arrays
+      select:
+        after: '^-+ Semaphore Arrays -+$'
+      parse:
+        type: table
+      fields:
+        key: {required: true}
+        semid: {type: int, required: true}
+        owner: {required: true}
+        perms: {required: true}
+        nsems: {type: int}

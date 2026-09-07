@@ -1,0 +1,132 @@
+[
+  {
+    "name": ":1.0",
+    "pid": 697,
+    "process": "systemd-timesyn",
+    "user": "systemd-timesync",
+    "connection": ":1.0",
+    "unit": "systemd-timesyncd.service",
+    "session": null,
+    "description": null
+  },
+  {
+    "name": ":1.1",
+    "pid": 703,
+    "process": "systemd-oomd",
+    "user": "systemd-oom",
+    "connection": ":1.1",
+    "unit": "systemd-oomd.service",
+    "session": null,
+    "description": null
+  },
+  {
+    "name": ":1.10",
+    "pid": 1968,
+    "process": "accounts-daemon",
+    "user": "root",
+    "connection": ":1.10",
+    "unit": "accounts-daemon.service",
+    "session": null,
+    "description": null
+  },
+  {
+    "name": ":1.1064",
+    "pid": 3419410,
+    "process": "telegram-deskto",
+    "user": "ada",
+    "connection": ":1.1064",
+    "unit": "user@1000.service",
+    "session": null,
+    "description": null
+  },
+  {
+    "name": ":1.1090",
+    "pid": 3605196,
+    "process": "steam",
+    "user": "ada",
+    "connection": ":1.1090",
+    "unit": "user@1000.service",
+    "session": null,
+    "description": null
+  },
+  {
+    "name": ":1.1091",
+    "pid": 3605196,
+    "process": "steam",
+    "user": "ada",
+    "connection": ":1.1091",
+    "unit": "user@1000.service",
+    "session": null,
+    "description": null
+  },
+  {
+    "name": ":1.1094",
+    "pid": 3605534,
+    "process": "steamwebhelper",
+    "user": "ada",
+    "connection": ":1.1094",
+    "unit": "user@1000.service",
+    "session": null,
+    "description": null
+  },
+  {
+    "name": ":1.1095",
+    "pid": 3605534,
+    "process": "steamwebhelper",
+    "user": "ada",
+    "connection": ":1.1095",
+    "unit": "user@1000.service",
+    "session": null,
+    "description": null
+  },
+  {
+    "name": ":1.1096",
+    "pid": 3605534,
+    "process": "steamwebhelper",
+    "user": "ada",
+    "connection": ":1.1096",
+    "unit": "user@1000.service",
+    "session": null,
+    "description": null
+  },
+  {
+    "name": ":1.1097",
+    "pid": 3605534,
+    "process": "steamwebhelper",
+    "user": "ada",
+    "connection": ":1.1097",
+    "unit": "user@1000.service",
+    "session": null,
+    "description": null
+  },
+  {
+    "name": ":1.12",
+    "pid": 2133,
+    "process": "wpa_supplicant",
+    "user": "root",
+    "connection": ":1.12",
+    "unit": "wpa_supplicant.service",
+    "session": null,
+    "description": null
+  },
+  {
+    "name": ":1.127",
+    "pid": 5165,
+    "process": "lightdm",
+    "user": "root",
+    "connection": ":1.127",
+    "unit": "session-29.scope",
+    "session": "29",
+    "description": null
+  },
+  {
+    "name": ":1.128",
+    "pid": 330744,
+    "process": "startplasma-way",
+    "user": "ada",
+    "connection": ":1.128",
+    "unit": "session-29.scope",
+    "session": "29",
+    "description": null
+  }
+]

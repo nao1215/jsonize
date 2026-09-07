@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (systemd 259.5) with LC_ALL=C; the host name was replaced with host1 and the invocation id with another 32 hex digits
+description: >
+  A failed unit, whose marker is x rather than the asterisk of a healthy
+  one, with a Process line and a TriggeredBy list whose second entry is a
+  continuation line. No args are recorded because systemctl exits 3 for a
+  unit that is not running.
+os: linux

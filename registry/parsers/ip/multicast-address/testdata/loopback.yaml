@@ -1,0 +1,4 @@
+description: The loopback, which has joined a handful of addresses and no link layer groups.
+source: captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C
+os: linux
+args: ["maddr", "show", "lo"]

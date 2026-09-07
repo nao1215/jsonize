@@ -1,0 +1,4 @@
+description: Three cycles with names resolved, which is what puts a name rather than an address in the hop column.
+source: captured on Ubuntu 26.04 (mtr 0.95) with LC_ALL=C; the host name in the header was replaced
+os: linux
+args: ["--report", "--report-cycles", "3", "127.0.0.1"]

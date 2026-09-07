@@ -1,0 +1,100 @@
+[
+  {
+    "idx": 1,
+    "link": "lo",
+    "type": "loopback",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 2,
+    "link": "eno1",
+    "type": "ether",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 3,
+    "link": "wlp195s0",
+    "type": "wlan",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 4,
+    "link": "br-088d49b64243",
+    "type": "bridge",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 5,
+    "link": "docker0",
+    "type": "bridge",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 6,
+    "link": "br-d647a5eb3b66",
+    "type": "bridge",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 7,
+    "link": "veth0c4293d",
+    "type": "ether",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 8,
+    "link": "veth9363d1f",
+    "type": "ether",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 9,
+    "link": "veth5d856b9",
+    "type": "ether",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 10,
+    "link": "veth0d5de59",
+    "type": "ether",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 71,
+    "link": "veth3083cdb",
+    "type": "ether",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 72,
+    "link": "vethceffd70",
+    "type": "ether",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 73,
+    "link": "veth65bc625",
+    "type": "ether",
+    "operational": null,
+    "setup": "unmanaged"
+  },
+  {
+    "idx": 193,
+    "link": "br-5b0a8cd9c3d6",
+    "type": "bridge",
+    "operational": null,
+    "setup": "unmanaged"
+  }
+]

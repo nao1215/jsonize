@@ -1,0 +1,10 @@
+COMMAND       PID USER   FD   TYPE    DEVICE SIZE/OFF NODE NAME
+code-110a    9585 alice  11u  IPv4     63593      0t0  TCP localhost:38465 (LISTEN)
+lazygit     43288 alice   7u  IPv4 132279166      0t0  TCP host1:42428->203.0.113.116:https (ESTABLISHED)
+claude    1795298 alice  19u  IPv4 131719248      0t0  TCP host1:55800->203.0.113.34.example.net:https (ESTABLISHED)
+steam     3605196 alice 107u  IPv4  47384006      0t0  TCP localhost:57343->localhost:48548 (ESTABLISHED)
+steam     3605196 alice 123u  IPv4  47398224      0t0  UDP *:27036 
+steam     3605196 alice 134u  IPv4 108630039      0t0  TCP host1:53743->203-0-113-75.example.net:27018 (ESTABLISHED)
+steamwebh 3605534 alice 182u  IPv4 100964684      0t0  UDP mdns.mcast.net:mdns 
+python3   3910695 alice  10u  IPv4  20207918      0t0  UDP host1:3702 
+python3   3910695 alice  23u  IPv6  20204668      0t0  UDP [ff02::c]:3702 

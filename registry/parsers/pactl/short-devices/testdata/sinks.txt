@@ -1,0 +1,4 @@
+65	alsa_output.pci-0000_c6_00.6.analog-stereo	PipeWire	s32le 2ch 48000Hz	SUSPENDED
+70	alsa_output.usb-C-Media_INC._USB_Sound_Device-00.analog-stereo	PipeWire	s16le 2ch 48000Hz	RUNNING
+2033	alsa_output.usb-Fonglun_USB_PnP_Sound_Device_201801-00.analog-stereo	PipeWire	s16le 2ch 48000Hz	SUSPENDED
+23592	alsa_output.pci-0000_c6_00.1.hdmi-stereo	PipeWire	s32le 2ch 48000Hz	SUSPENDED

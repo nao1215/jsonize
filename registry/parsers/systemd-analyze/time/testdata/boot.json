@@ -1,0 +1,10 @@
+{
+  "firmware": "5.386s",
+  "loader": "1.295s",
+  "kernel": "2.108s",
+  "initrd": "1.561s",
+  "userspace": "8.586s",
+  "total": "18.938s",
+  "target": "graphical.target",
+  "target_time": "8.581s"
+}

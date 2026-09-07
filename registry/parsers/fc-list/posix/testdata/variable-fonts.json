@@ -1,0 +1,71 @@
+[
+  {
+    "file": "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf",
+    "families": [
+      "Ubuntu"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf",
+    "families": [
+      "Ubuntu"
+    ],
+    "styles": [
+      "Bold Italic"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf",
+    "families": [
+      "Ubuntu"
+    ],
+    "styles": [
+      "Condensed Bold Italic"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf",
+    "families": [
+      "Ubuntu"
+    ],
+    "styles": [
+      "Condensed Extra Bold Italic"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf",
+    "families": [
+      "Ubuntu"
+    ],
+    "styles": [
+      "Condensed Italic"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf",
+    "families": [
+      "Ubuntu"
+    ],
+    "styles": [
+      "Condensed Light Italic"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf",
+    "families": [
+      "Ubuntu"
+    ],
+    "styles": [
+      "Condensed Medium Italic"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/truetype/ubuntu/Ubuntu-Italic[wdth,wght].ttf",
+    "families": [
+      "Ubuntu"
+    ],
+    "styles": [
+      "Condensed Thin Italic"
+    ]
+  }
+]

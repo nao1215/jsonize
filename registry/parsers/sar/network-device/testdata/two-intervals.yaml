@@ -1,0 +1,4 @@
+description: Two samples, where the summary block repeats the column name line above its rows.
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C; the host name in the banner and the bridge and veth interface names were replaced with names of the same width
+os: linux
+args: ["-n", "DEV", "1", "2"]

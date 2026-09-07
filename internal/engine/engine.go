@@ -99,6 +99,10 @@ func Parse(def *definition.Definition, input []byte, opts Options) (any, error) 
 	if err != nil {
 		return nil, &ParseError{Definition: def.ID(), Line: err.line, Msg: err.msg, Cause: err.cause}
 	}
+	lines, ferr := foldLines(&def.Input, lines)
+	if ferr != nil {
+		return nil, &ParseError{Definition: def.ID(), Line: ferr.line, Msg: ferr.msg, Cause: ferr.cause}
+	}
 	lines = prepare(&def.Input, lines)
 	lines = applySelect(&def.Input.Select, lines)
 	r := &run{def: def, opts: opts}
@@ -148,6 +152,29 @@ func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
 	return out, nil
 }
 
+// foldLines joins a wrapped continuation onto the line above it. It runs
+// before prepare, so a continuation is joined even when the line it
+// belongs to would otherwise be dropped, and the joined line keeps the
+// number of the line it started on.
+func foldLines(in *definition.Input, lines []line) ([]line, *splitError) {
+	fold := in.FoldPattern()
+	if fold == nil {
+		return lines, nil
+	}
+	out := lines[:0:0]
+	for _, l := range lines {
+		if !fold.MatchString(l.text) {
+			out = append(out, l)
+			continue
+		}
+		if len(out) == 0 {
+			return nil, &splitError{line: l.num, msg: fmt.Sprintf("continuation line with nothing to join it to: %q", l.text)}
+		}
+		out[len(out)-1].text += " " + strings.TrimSpace(l.text)
+	}
+	return out, nil
+}
+
 // prepare drops ignored and blank lines.
 func prepare(in *definition.Input, lines []line) []line {
 	ignore := in.IgnorePatterns()
@@ -164,6 +191,21 @@ func prepare(in *definition.Input, lines []line) []line {
 			continue
 		}
 		out = append(out, l)
+	}
+	return out
+}
+
+// dropIgnored removes the lines a part declared as belonging to a
+// sibling.
+func dropIgnored(ignore []*regexp.Regexp, lines []line) []line {
+	if len(ignore) == 0 {
+		return lines
+	}
+	out := lines[:0:0]
+	for _, l := range lines {
+		if !matchesAny(ignore, l.text) {
+			out = append(out, l)
+		}
 	}
 	return out
 }
@@ -245,7 +287,10 @@ func (r *run) parseComposite(p *definition.Parse, lines []line) (any, error) {
 	obj := jsonutil.NewObject()
 	for i := range p.Parts {
 		part := &p.Parts[i]
-		sub := applySelect(&part.Select, lines)
+		// The region comes first and the ignore list narrows it, so that
+		// select.skip and select.limit count the lines as they stand in
+		// the output rather than the ones left after dropping.
+		sub := dropIgnored(part.IgnorePatterns(), applySelect(&part.Select, lines))
 		v, err := r.parse(&part.Parse, part.Fields, sub)
 		if err != nil {
 			var pe *ParseError
@@ -310,9 +355,6 @@ func (r *run) parseRegex(p *definition.Parse, fields map[string]*definition.Fiel
 	for _, l := range lines {
 		re, m := firstMatch(patterns, l.text)
 		if m == nil {
-			if p.OnMismatch == definition.MismatchSkip {
-				continue
-			}
 			return nil, r.errorf(l.num, "", "line does not match %s: %q", describePatterns(p), truncate(l.text, 80))
 		}
 		obj, err := r.objectFromMatch(re, l.text, m, fields, l.num)
@@ -425,9 +467,6 @@ func (r *run) parseKV(p *definition.Parse, fields map[string]*definition.Field, 
 			}
 		}
 		if idx < 0 || key == "" {
-			if p.OnMismatch == definition.MismatchSkip {
-				continue
-			}
 			return nil, r.errorf(l.num, "", "expected \"key%svalue\": %q", sep, truncate(l.text, 80))
 		}
 		value := l.text[idx+len(sep):]

@@ -1,0 +1,3 @@
+description: Two binaries named on one command line. The second was built from a module that replaces a dependency with a directory, which prints a dep line without a checksum, a => line for the replacement, a blank continuation line, and an -ldflags setting whose value holds spaces and both kinds of quote.
+source: "`go version -m` on two binaries with go 1.26.4 on Ubuntu 26.04 with LC_ALL=C; the binary paths were replaced with /home/user/go/bin/fzf and /home/user/src/probe/probe"
+os: linux

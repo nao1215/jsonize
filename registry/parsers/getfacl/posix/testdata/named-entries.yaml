@@ -1,0 +1,3 @@
+description: A file whose mask narrows two entries, and a directory carrying named entries and the default entries it hands to what is created inside it.
+source: captured on Ubuntu 26.04 (acl 2.3) with LC_ALL=C over files created for this fixture; the paths and the owner were replaced
+os: linux

@@ -1,0 +1,4 @@
+description: The IPv6 table, which has no default rule and so is one rule shorter.
+source: captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C
+os: linux
+args: ["-6", "rule"]

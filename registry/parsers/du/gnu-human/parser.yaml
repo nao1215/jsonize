@@ -8,6 +8,10 @@
 format: 1
 command: du
 variant: gnu-human
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gdu
 description: du -h output (tab separated rounded size and path)
 metadata:
   tags: [linux, darwin, filesystem]

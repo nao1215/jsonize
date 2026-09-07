@@ -138,3 +138,21 @@ scenarios:
             json:
               - { path: "$[0].lladdr", matches: "^[0-9a-f:]+$" }
               - { path: "$[0].flags", length: 3 }
+
+  # A user crontab has no user field, so its command lands where the user
+  # name belongs. Reading the first word of the command as the user would
+  # be a wrong answer at exit 0, which is the one failure that matters.
+  - name: a user crontab is not read as a system one
+    steps:
+      - fixture:
+          file: user-crontab.txt
+          from: "${specdir}/testdata/decoys/user-crontab.txt"
+      - run:
+          command: jz --parser etc --variant crontab --file user-crontab.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: does not describe this input
+

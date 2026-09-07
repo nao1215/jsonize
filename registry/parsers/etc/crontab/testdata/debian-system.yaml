@@ -1,0 +1,3 @@
+description: The system crontab a Debian derivative ships, whose time fields are separated by a mix of spaces and tabs and whose commands contain shell operators.
+source: /etc/crontab on Ubuntu 26.04 (cron 3.0pl1)
+os: linux

@@ -11,7 +11,9 @@
 //
 // Sources are layered: a definition with the same command/variant in a
 // higher-precedence source shadows the lower one, so users can override an
-// official definition without editing it.
+// official definition without editing it. Each entry also carries the
+// position of its source in that layering, which is what the selector
+// uses to settle a collision between definitions of different commands.
 package registry
 
 import (
@@ -19,7 +21,9 @@ import (
 	"fmt"
 	"io/fs"
 	"path"
+	"regexp"
 	"sort"
+	"strings"
 
 	"github.com/nao1215/jsonize/internal/definition"
 )
@@ -46,6 +50,31 @@ type Manifest struct {
 	Version     string `yaml:"version,omitempty"`
 	Description string `yaml:"description,omitempty"`
 	Source      string `yaml:"source,omitempty"`
+	// Disable names definitions of the less preferred registries below
+	// this one that must not be loaded at all: "command/variant" for one
+	// definition, "command" for every variant of it. It is how a user
+	// switches off a definition that misreads their output, where
+	// shadowing would mean rewriting the whole thing.
+	Disable []string `yaml:"disable,omitempty"`
+}
+
+// disableRe matches "command" and "command/variant", the two forms a
+// disable entry may take.
+var disableRe = regexp.MustCompile(`^[a-z0-9][a-z0-9._+-]*(/[a-z0-9][a-z0-9-]*)?$`)
+
+// disableRule is one parsed entry of a manifest's disable list.
+type disableRule struct {
+	// Source is the registry that declared the rule.
+	source  string
+	text    string
+	command string
+	// variant is empty when the rule covers every variant of the command.
+	variant string
+	matched bool
+}
+
+func (d disableRule) covers(def *definition.Definition) bool {
+	return d.command == def.Command && (d.variant == "" || d.variant == def.Variant)
 }
 
 // Source is one place definitions come from.
@@ -65,6 +94,10 @@ type Entry struct {
 	Source string
 	// Path is the definition path inside its source FS.
 	Path string
+	// Precedence is the position of Source in the layering Load was given,
+	// 0 being the most preferred. Two entries share it exactly when they
+	// come from the same registry.
+	Precedence int
 	// Shadowed lists sources whose definition for the same id was hidden by
 	// this one.
 	Shadowed []string
@@ -74,9 +107,22 @@ type Entry struct {
 type Registry struct {
 	entries   map[string]*Entry // id -> entry
 	byCommand map[string][]*Entry
+	// commands holds the names a definition calls its own, which is what
+	// Commands reports; byCommand also answers to the aliases.
+	commands map[string]bool
 	// Problems lists definitions that failed to load. The registry stays
 	// usable; callers decide whether problems are fatal.
 	Problems []error
+	// Warnings lists things that are worth saying but do not change what
+	// the registry holds, such as a disable entry that named nothing.
+	Warnings []error
+
+	// rules are the disable entries of the sources read so far. They only
+	// apply to the sources read after them.
+	rules []disableRule
+	// disabled counts, per source, the definitions a preferred registry
+	// switched off.
+	disabled map[string]int
 }
 
 // LoadError is a problem with one definition file.
@@ -94,10 +140,20 @@ func (e *LoadError) Unwrap() error { return e.Err }
 
 // Load reads every source in precedence order (first wins).
 func Load(sources ...Source) (*Registry, error) {
-	r := &Registry{entries: map[string]*Entry{}, byCommand: map[string][]*Entry{}}
-	for _, src := range sources {
-		if err := r.addSource(src); err != nil {
+	r := &Registry{
+		entries:   map[string]*Entry{},
+		byCommand: map[string][]*Entry{},
+		commands:  map[string]bool{},
+		disabled:  map[string]int{},
+	}
+	for i, src := range sources {
+		if err := r.addSource(i, src); err != nil {
 			return nil, err
+		}
+	}
+	for _, rule := range r.rules {
+		if !rule.matched {
+			r.Warnings = append(r.Warnings, fmt.Errorf("%s: %s: disable %q matches no definition", rule.source, ManifestFile, rule.text))
 		}
 	}
 	for _, list := range r.byCommand {
@@ -106,7 +162,7 @@ func Load(sources ...Source) (*Registry, error) {
 	return r, nil
 }
 
-func (r *Registry) addSource(src Source) error {
+func (r *Registry) addSource(precedence int, src Source) error {
 	if src.FS == nil {
 		return fmt.Errorf("source %q has no filesystem", src.Name)
 	}
@@ -129,6 +185,14 @@ func (r *Registry) addSource(src Source) error {
 	} else if !errors.Is(err, fs.ErrNotExist) {
 		return &LoadError{Source: src.Name, Path: ManifestFile, Err: err}
 	}
+	// A registry's own definitions are never affected by its own disable
+	// list, so the rules it declares are collected after its files are
+	// read and apply to the registries below it.
+	rules, err := parseDisable(src.Name, manifest.Disable)
+	if err != nil {
+		return err
+	}
+	defer func() { r.rules = append(r.rules, rules...) }()
 	if _, err := fs.Stat(src.FS, ParsersDir); err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
 			return nil
@@ -136,7 +200,7 @@ func (r *Registry) addSource(src Source) error {
 		return &LoadError{Source: src.Name, Path: ParsersDir, Err: err}
 	}
 	count := 0
-	err := fs.WalkDir(src.FS, ParsersDir, func(p string, d fs.DirEntry, err error) error {
+	err = fs.WalkDir(src.FS, ParsersDir, func(p string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return &LoadError{Source: src.Name, Path: p, Err: err}
 		}
@@ -160,14 +224,59 @@ func (r *Registry) addSource(src Source) error {
 			r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: p, Err: err})
 			return nil //nolint:nilerr // recorded in Problems so other definitions still load
 		}
+		if r.disable(def) {
+			r.disabled[src.Name]++
+			return nil
+		}
 		def.Origin = src.Name
-		r.add(&Entry{Def: def, Source: src.Name, Path: p})
+		r.add(&Entry{Def: def, Source: src.Name, Path: p, Precedence: precedence})
 		return nil
 	})
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+// parseDisable turns a manifest's disable list into rules, rejecting an
+// entry that is neither "command" nor "command/variant".
+func parseDisable(source string, entries []string) ([]disableRule, error) {
+	if len(entries) == 0 {
+		return nil, nil
+	}
+	rules := make([]disableRule, 0, len(entries))
+	for i, e := range entries {
+		if !disableRe.MatchString(e) {
+			return nil, &LoadError{
+				Source: source,
+				Path:   ManifestFile,
+				Err:    fmt.Errorf("disable[%d]: %q must be a command or a command/variant", i, e),
+			}
+		}
+		command, variant, _ := strings.Cut(e, "/")
+		rules = append(rules, disableRule{source: source, text: e, command: command, variant: variant})
+	}
+	return rules, nil
+}
+
+// disable reports whether a preferred registry switched this definition
+// off. A disabled definition is not loaded at all, so it is absent from
+// every lookup rather than being hidden from some of them.
+func (r *Registry) disable(def *definition.Definition) bool {
+	hit := false
+	for i := range r.rules {
+		if r.rules[i].covers(def) {
+			r.rules[i].matched = true
+			hit = true
+		}
+	}
+	return hit
+}
+
+// Disabled returns how many definitions of a source a preferred registry
+// switched off.
+func (r *Registry) Disabled(source string) int {
+	return r.disabled[source]
 }
 
 // checkLayout enforces parsers/<command>/<variant>/parser.yaml so that the
@@ -188,12 +297,27 @@ func (r *Registry) add(e *Entry) {
 	}
 	r.entries[id] = e
 	r.byCommand[e.Def.Command] = append(r.byCommand[e.Def.Command], e)
+	r.commands[e.Def.Command] = true
+	for _, name := range e.Def.AliasNames() {
+		if name == e.Def.Command {
+			continue
+		}
+		r.byCommand[name] = append(r.byCommand[name], e)
+	}
 }
 
-// Lookup returns the definition for command/variant.
+// Lookup returns the definition for command/variant. The command may be
+// an alias, in which case the definition it names answers.
 func (r *Registry) Lookup(command, variant string) (*Entry, bool) {
-	e, ok := r.entries[command+"/"+variant]
-	return e, ok
+	if e, ok := r.entries[command+"/"+variant]; ok {
+		return e, true
+	}
+	for _, e := range r.byCommand[command] {
+		if e.Def.Variant == variant {
+			return e, true
+		}
+	}
+	return nil, false
 }
 
 // Variants returns the entries for a command sorted by variant name.
@@ -201,11 +325,33 @@ func (r *Registry) Variants(command string) []*Entry {
 	return r.byCommand[command]
 }
 
-// Commands returns the known command names sorted.
+// Commands returns the known command names sorted. An alias is not one:
+// it answers to Variants and Lookup, and the command it belongs to
+// reports it.
 func (r *Registry) Commands() []string {
-	out := make([]string, 0, len(r.byCommand))
-	for c := range r.byCommand {
+	out := make([]string, 0, len(r.commands))
+	for c := range r.commands {
 		out = append(out, c)
+	}
+	sort.Strings(out)
+	return out
+}
+
+// Aliases returns the other names the definitions of a command answer
+// to, sorted and without duplicates.
+func (r *Registry) Aliases(command string) []string {
+	seen := map[string]bool{}
+	var out []string
+	for _, e := range r.byCommand[command] {
+		if e.Def.Command != command {
+			continue
+		}
+		for _, name := range e.Def.AliasNames() {
+			if !seen[name] {
+				seen[name] = true
+				out = append(out, name)
+			}
+		}
 	}
 	sort.Strings(out)
 	return out

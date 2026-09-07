@@ -1,0 +1,77 @@
+[
+  {
+    "destination": "default",
+    "via": "192.168.11.1",
+    "dev": "wlp195s0",
+    "attributes": [
+      "src",
+      "192.168.11.60",
+      "metric",
+      "600"
+    ]
+  },
+  {
+    "destination": "172.17.0.0/16",
+    "dev": "docker0",
+    "attributes": [
+      "scope",
+      "link",
+      "src",
+      "172.17.0.1"
+    ]
+  },
+  {
+    "destination": "172.18.0.0/16",
+    "dev": "br-d647a5eb3b66",
+    "attributes": [
+      "scope",
+      "link",
+      "src",
+      "172.18.0.1"
+    ]
+  },
+  {
+    "destination": "172.19.0.0/16",
+    "dev": "br-088d49b64243",
+    "attributes": [
+      "scope",
+      "link",
+      "src",
+      "172.19.0.1"
+    ]
+  },
+  {
+    "destination": "172.20.0.0/16",
+    "dev": "br-5b0a8cd9c3d6",
+    "attributes": [
+      "scope",
+      "link",
+      "src",
+      "172.20.0.1"
+    ]
+  },
+  {
+    "destination": "192.168.10.0/24",
+    "dev": "eno1",
+    "attributes": [
+      "scope",
+      "link",
+      "src",
+      "192.168.10.2",
+      "metric",
+      "100"
+    ]
+  },
+  {
+    "destination": "192.168.11.0/24",
+    "dev": "wlp195s0",
+    "attributes": [
+      "scope",
+      "link",
+      "src",
+      "192.168.11.60",
+      "metric",
+      "600"
+    ]
+  }
+]

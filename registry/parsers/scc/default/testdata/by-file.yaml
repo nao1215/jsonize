@@ -1,0 +1,10 @@
+source: >-
+  captured with LC_ALL=C scc --by-file internal/cli in the jsonize
+  checkout with scc 3.7.0 from the snap package
+description: >-
+  --by-file lists every file between the languages and the total, under
+  the same header but with no file count; the rows are refused rather
+  than reported as languages
+os: linux
+args: ["--by-file", "internal/cli"]
+expect_error: 'field "files": required value is missing'

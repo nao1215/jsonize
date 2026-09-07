@@ -1,0 +1,42 @@
+[
+  {
+    "device": "/dev/disk/by-uuid/1c4bd1a0-7f3e-4a58-9c11-0d2f6b8ae413",
+    "mount_point": "/",
+    "fs_type": "ext4",
+    "options": [
+      "defaults"
+    ],
+    "dump": 0,
+    "pass": 1
+  },
+  {
+    "device": "/dev/disk/by-uuid/B71D-9F02",
+    "mount_point": "/boot/efi",
+    "fs_type": "vfat",
+    "options": [
+      "defaults"
+    ],
+    "dump": 0,
+    "pass": 1
+  },
+  {
+    "device": "/swap.img",
+    "mount_point": "none",
+    "fs_type": "swap",
+    "options": [
+      "sw"
+    ],
+    "dump": 0,
+    "pass": 0
+  },
+  {
+    "device": "UUID=7d05e2c8-4a19-4f7b-bd63-5e1c0a934f27",
+    "mount_point": "/media/user/2nd",
+    "fs_type": "ext4",
+    "options": [
+      "defaults"
+    ],
+    "dump": 0,
+    "pass": 2
+  }
+]

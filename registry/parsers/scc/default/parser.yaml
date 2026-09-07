@@ -1,0 +1,93 @@
+# scc prints a table of languages drawn with horizontal rules, then a
+# total row, then three cost estimates and a byte count. The estimates
+# are not rows of the table, so the whole is a composite: the rules are
+# dropped, the language rows read as a table, and the total, the
+# estimates and the byte count are matched where they stand.
+#
+# Every count keeps its thousands separators and stays a string. "9,435"
+# is not an integer to this format and a comma is not a digit; converting
+# would mean deciding that the separator is always a comma, which is a
+# property of the locale scc was built for and not of the text. The cost
+# carries a currency symbol for the same reason. The byte count is the
+# one number printed with a plain %d, and it converts.
+#
+# The total is matched by name rather than by position because the number
+# of language rows above it is not known in advance. The estimates and
+# the byte count are lists because --no-cocomo and --no-size each remove
+# a section, leaving nothing for their part to read.
+#
+# The rules are dropped in both spellings: --ci draws them with hyphens
+# instead of U+2500, and --no-hborder leaves them out, which is why the
+# header row rather than a rule is what identifies the format.
+format: 1
+command: scc
+variant: default
+description: scc source line count table
+metadata:
+  tags: [code, metrics]
+  compatible: [scc]
+  references:
+    - https://github.com/boyter/scc
+detect:
+  signature:
+    all:
+      - '^Language[ \t]+Files[ \t]+Lines[ \t]+Blanks[ \t]+Comments[ \t]+Code[ \t]+Complexity[ \t]*$'
+      - '^Total[ \t]+[\d,]+[ \t]'
+    none:
+      # --percent puts a percentage row after every language row, in the
+      # same columns and with a label in the Language column. Reading
+      # those as languages would say something the table does not.
+      - '^Percentage[ \t]+[\d.]+%'
+    # One line per language stands between the header and the total, and
+    # a repository can hold a lot of languages.
+    window: 200
+input:
+  ignore:
+    # The rules separate the sections and carry nothing.
+    - '^\x{2500}+[ \t]*$'
+    - '^-{10,}[ \t]*$'
+parse:
+  type: composite
+  parts:
+    # The header line and the language rows, stopping before the total.
+    # Split on the header word positions: a language name may hold a
+    # space ("Plain Text") so the cells cannot be counted from the left.
+    - name: languages
+      select: {until: '^Total[ \t]'}
+      parse:
+        type: table
+        split: aligned
+      fields:
+        # --by-file adds a second block of rows between the languages
+        # and the total, one per file, and the only thing separating the
+        # two blocks is a rule this definition has already dropped. A
+        # file row leaves the Files column empty, which is what makes it
+        # an error here rather than a path reported as a language.
+        files: {required: true}
+    - name: total
+      select: {until: '^Estimated '}
+      parse:
+        type: regex
+        each: input
+        pattern: '(?m)^Total[ \t]+(?P<files>\S+)[ \t]+(?P<lines>\S+)[ \t]+(?P<blanks>\S+)[ \t]+(?P<comments>\S+)[ \t]+(?P<code>\S+)[ \t]+(?P<complexity>\S+)[ \t]*$'
+    # The COCOMO estimates. --no-cocomo drops all three and leaves an
+    # empty list; --cocomo-project-type changes the model in brackets.
+    - name: estimates
+      select: {after: '^Total[ \t]', until: '^Processed '}
+      parse:
+        type: regex
+        pattern: '^Estimated (?P<name>[^(]+?) \((?P<model>[^)]*)\) (?P<value>.+)$'
+    # The byte count stands in the same region as the estimates, which
+    # the part above already reads, so this one takes the line it knows
+    # and passes over theirs. --no-size removes it and leaves an empty
+    # list.
+    - name: processed
+      select: {after: '^Total[ \t]'}
+      ignore: ['^Estimated ']
+      parse:
+        type: regex
+        pattern: '^Processed (?P<bytes>\d+) bytes, (?P<megabytes>\S+) megabytes \((?P<unit>[^)]*)\)[ \t]*$'
+      fields:
+        # The size beside the byte count is written by more than one
+        # formatter depending on --size-unit and stays as printed.
+        bytes: {type: int}

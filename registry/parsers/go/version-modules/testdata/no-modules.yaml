@@ -1,0 +1,4 @@
+description: The go command itself, which records a main package but no module or dependency lines at all, so the module list is empty.
+source: "`go version -m /proc/self/exe` with go 1.26.4 on Ubuntu 26.04 with LC_ALL=C"
+os: linux
+args: ["version", "-m", "/proc/self/exe"]

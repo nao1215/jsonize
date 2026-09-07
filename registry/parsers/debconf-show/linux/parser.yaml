@@ -1,0 +1,36 @@
+# One line per question: a marker column, the template name, a colon and
+# the value. The marker is an asterisk when debconf has the question's
+# "seen" flag set (the user was shown it) and a space otherwise, so it is
+# written as a group that always takes part and may match nothing, which
+# keeps `seen` a bool on every line instead of null on the unmarked ones.
+#
+# A question with no answer prints nothing after the colon, and the value
+# is then the empty string rather than null: what the line reports is an
+# answer that is empty, not a field the format left out.
+#
+# Values are left as text. They come from templates of every type, so
+# "true" here is the answer to a boolean question in one line and part of
+# a free-text answer in the next.
+format: 1
+command: debconf-show
+variant: linux
+description: debconf-show questions and answers for one package
+metadata:
+  tags: [linux, debian, debconf, package]
+  compatible: [debconf]
+  references:
+    - https://manpages.debian.org/unstable/debconf-utils/debconf-show.1.en.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The marker column is exactly one character wide and the template
+      # name always carries a slash, which is what separates this from a
+      # plain indented "key: value" listing.
+      - '\A[* ] [A-Za-z0-9][^ :]*/[^ :]*:(?: |$)'
+parse:
+  type: regex
+  pattern: '^(?P<seen>\*?)[ ]+(?P<name>\S+): ?(?P<value>.*)$'
+fields:
+  seen: {type: bool, true_values: ["*"], false_values: [""]}
+  name: {required: true}

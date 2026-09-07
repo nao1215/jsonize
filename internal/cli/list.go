@@ -47,6 +47,10 @@ func (a *app) cmdList(args []string) int {
 	if code != 0 {
 		return code
 	}
+	// A definition that did not load is missing from everything printed
+	// below, so the listing says how many rather than leaving the
+	// warnings above to be counted by hand.
+	defer a.reportSkipped(reg)
 	switch o.fs.NArg() {
 	case 0:
 		return a.listCommands(reg, asJSON)
@@ -57,6 +61,18 @@ func (a *app) cmdList(args []string) int {
 	}
 }
 
+// reportSkipped closes a listing with how many definitions were left out
+// because they failed to load.
+func (a *app) reportSkipped(reg *registry.Registry) {
+	switch n := len(reg.Problems); n {
+	case 0:
+	case 1:
+		a.errorf("1 definition failed to load and is not listed")
+	default:
+		a.errorf("%d definitions failed to load and are not listed", n)
+	}
+}
+
 func (a *app) listCommands(reg *registry.Registry, asJSON bool) int {
 	commands := reg.Commands()
 	if asJSON {
@@ -64,7 +80,10 @@ func (a *app) listCommands(reg *registry.Registry, asJSON bool) int {
 		for _, c := range commands {
 			o := jsonutil.NewObject()
 			o.Set("command", c)
-			o.Set("variants", stringsToAny(variantNames(reg.Variants(c))))
+			o.Set("variants", stringsToAny(variantNames(ownVariants(reg, c))))
+			if names := reg.Aliases(c); len(names) > 0 {
+				o.Set("aliases", stringsToAny(names))
+			}
 			list = append(list, o)
 		}
 		return finish(jsonutil.Encode(a.env.Stdout, list, true), a)
@@ -72,13 +91,38 @@ func (a *app) listCommands(reg *registry.Registry, asJSON bool) int {
 	tw := tabwriter.NewWriter(a.env.Stdout, 0, 4, 2, ' ', 0)
 	fmt.Fprintln(tw, "COMMAND\tVARIANTS")
 	for _, c := range commands {
-		fmt.Fprintf(tw, "%s\t%s\n", c, strings.Join(variantNames(reg.Variants(c)), ", "))
+		fmt.Fprintf(tw, "%s\t%s\n", c, strings.Join(variantNames(ownVariants(reg, c)), ", "))
 	}
 	if err := tw.Flush(); err != nil {
 		return finish(err, a)
 	}
+	// A command that prints what another one prints is read by the same
+	// definitions, and is listed here rather than as a command of its
+	// own, because it adds no format.
+	var also []string
+	for _, c := range commands {
+		for _, name := range reg.Aliases(c) {
+			also = append(also, fmt.Sprintf("%s (as %s)", name, c))
+		}
+	}
+	if len(also) > 0 {
+		fmt.Fprintf(a.env.Stdout, "\nAlso read: %s.\n", strings.Join(also, ", "))
+	}
 	fmt.Fprintf(a.env.Stdout, "\n%d commands, %d definitions. `jz list COMMAND` shows the variants.\n", len(commands), reg.Len())
 	return ExitOK
+}
+
+// ownVariants returns the definitions a command carries itself, leaving
+// out the ones it only answers to as an alias of another command.
+func ownVariants(reg *registry.Registry, command string) []*registry.Entry {
+	all := reg.Variants(command)
+	out := make([]*registry.Entry, 0, len(all))
+	for _, e := range all {
+		if e.Def.Command == command {
+			out = append(out, e)
+		}
+	}
+	return out
 }
 
 func (a *app) listVariants(reg *registry.Registry, command string, asJSON bool) int {
@@ -93,6 +137,9 @@ func (a *app) listVariants(reg *registry.Registry, command string, asJSON bool) 
 			o := jsonutil.NewObject()
 			o.Set("command", e.Def.Command)
 			o.Set("variant", e.Def.Variant)
+			if names := e.Def.AliasNames(); len(names) > 0 {
+				o.Set("aliases", stringsToAny(names))
+			}
 			o.Set("description", e.Def.Description)
 			o.Set("os", stringsToAny(e.Def.Detect.OS))
 			o.Set("source", e.Source)
@@ -107,10 +154,29 @@ func (a *app) listVariants(reg *registry.Registry, command string, asJSON bool) 
 		if goos == "" {
 			goos = "any"
 		}
-		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\n", e.Def.Variant, goos, e.Source, e.Def.Description)
+		// A definition reached under another name says whose it is, so
+		// that the variant name can be looked up where it lives.
+		name := e.Def.Variant
+		if key := parserKey(command); key != e.Def.Command {
+			name = e.Def.ID()
+		}
+		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\n", name, goos, e.Source, e.Def.Description)
 	}
 	if err := tw.Flush(); err != nil {
 		return finish(err, a)
+	}
+	// Definitions of another command appear here when that command prints
+	// what this one prints; say so rather than leave the identifier to be
+	// puzzled over.
+	var borrowed []string
+	for _, e := range entries {
+		if e.Def.Command != parserKey(command) {
+			borrowed = append(borrowed, e.Def.ID())
+		}
+	}
+	if len(borrowed) > 0 {
+		fmt.Fprintf(a.env.Stdout, "\n%s prints what another command prints, and %s reads it.\n",
+			parserKey(command), strings.Join(borrowed, ", "))
 	}
 	fmt.Fprintf(a.env.Stdout, "\n`jz list %s %s` shows how one definition detects and parses.\n", entries[0].Def.Command, entries[0].Def.Variant)
 	return ExitOK
@@ -139,6 +205,9 @@ func (a *app) listDefinition(reg *registry.Registry, command, variant string, as
 		fmt.Fprintf(w, "  shadows:      the same definition in %s\n", strings.Join(e.Shadowed, ", "))
 	}
 	fmt.Fprintf(w, "  format:       %d\n", d.Format)
+	if names := d.AliasNames(); len(names) > 0 {
+		fmt.Fprintf(w, "  also reads:   %s\n", strings.Join(names, ", "))
+	}
 	if len(d.Metadata.Compatible) > 0 {
 		fmt.Fprintf(w, "  compatible:   %s\n", strings.Join(d.Metadata.Compatible, ", "))
 	}
@@ -197,23 +266,24 @@ func (a *app) listSources(asJSON bool) int {
 			o.Set("location", a.sourceLocation(s))
 			o.Set("present", a.sourceExists(s))
 			o.Set("definitions", int64(counts[s.Name]))
+			o.Set("disabled", int64(reg.Disabled(s.Name)))
 			list = append(list, o)
 		}
 		return finish(jsonutil.Encode(a.env.Stdout, list, true), a)
 	}
 	tw := tabwriter.NewWriter(a.env.Stdout, 0, 4, 2, ' ', 0)
-	fmt.Fprintln(tw, "#\tREGISTRY\tSTATE\tDEFINITIONS\tLOCATION")
+	fmt.Fprintln(tw, "#\tREGISTRY\tSTATE\tDEFINITIONS\tDISABLED\tLOCATION")
 	for i, s := range srcs {
 		state := "absent"
 		if a.sourceExists(s) {
 			state = "present"
 		}
-		fmt.Fprintf(tw, "%d\t%s\t%s\t%d\t%s\n", i+1, s.Name, state, counts[s.Name], a.sourceLocation(s))
+		fmt.Fprintf(tw, "%d\t%s\t%s\t%d\t%d\t%s\n", i+1, s.Name, state, counts[s.Name], reg.Disabled(s.Name), a.sourceLocation(s))
 	}
 	if err := tw.Flush(); err != nil {
 		return finish(err, a)
 	}
-	fmt.Fprintf(a.env.Stdout, "\nThe first registry that defines a command/variant wins.\nAdd your own by pointing %s at a directory.\n", EnvRegistryPath)
+	fmt.Fprintf(a.env.Stdout, "\nThe first registry that defines a command/variant wins, and DISABLED counts\nthe definitions a registry above it switched off.\nAdd your own by pointing %s at a directory.\n", EnvRegistryPath)
 	return ExitOK
 }
 
@@ -254,6 +324,7 @@ func describe(e *registry.Entry) *jsonutil.Object {
 	o := jsonutil.NewObject()
 	o.Set("command", d.Command)
 	o.Set("variant", d.Variant)
+	o.Set("aliases", stringsToAny(d.AliasNames()))
 	o.Set("description", d.Description)
 	o.Set("format", int64(d.Format))
 	o.Set("source", e.Source)

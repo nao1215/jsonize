@@ -1,0 +1,3 @@
+description: One device asked for by name, which is the shortest device table this report has.
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C from `iostat -x nvme0n1`; the host name in the banner was replaced
+os: linux

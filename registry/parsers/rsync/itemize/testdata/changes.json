@@ -1,0 +1,31 @@
+[
+  {
+    "change": "*deleting",
+    "path": "staledir/"
+  },
+  {
+    "change": "*deleting",
+    "path": "removed.txt"
+  },
+  {
+    "change": ">f.s.......",
+    "path": "a.txt"
+  },
+  {
+    "change": ">f+++++++++",
+    "path": "b.txt"
+  },
+  {
+    "change": "cL+++++++++",
+    "path": "link",
+    "link_to": "a.txt"
+  },
+  {
+    "change": "cd+++++++++",
+    "path": "sub/"
+  },
+  {
+    "change": ">f+++++++++",
+    "path": "sub/c.txt"
+  }
+]

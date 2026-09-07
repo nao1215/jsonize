@@ -1,0 +1,32 @@
+# `git count-objects -v` prints one label and one count per line. Every
+# value is an exact number: the sizes are in kilobytes, which the labels
+# say and the values do not carry.
+format: 1
+command: git
+variant: count-objects
+description: git count-objects -v repository object counts
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-count-objects
+detect:
+  args:
+    all: ["count-objects"]
+  signature:
+    all:
+      - '\Acount: \d+[ \t]*$'
+      - '^in-pack: \d+[ \t]*$'
+parse:
+  type: kv
+  separator: ":"
+  as: map
+fields:
+  count: {type: int}
+  size: {type: int}
+  in-pack: {type: int}
+  packs: {type: int}
+  size-pack: {type: int}
+  prune-packable: {type: int}
+  garbage: {type: int}
+  size-garbage: {type: int}

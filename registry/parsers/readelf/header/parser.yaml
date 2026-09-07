@@ -1,0 +1,33 @@
+# `readelf -h` prints the ELF header as a label and a value per line
+# under a banner. The labels carry spaces and slashes, so the values
+# cannot be typed and the keys are reported as printed.
+#
+# The values are not one kind of thing: a class is a word, an entry point
+# is hexadecimal, a count is a decimal number and several carry their
+# unit in brackets ("64 (bytes)"). Reading them as strings is what keeps
+# the definition from claiming a meaning the line does not carry.
+#
+# The labels are a list rather than an object because Version appears
+# twice, once for the file version and once for the ELF version. An
+# object would keep the second and drop the first without saying so.
+format: 1
+command: readelf
+variant: header
+description: readelf -h ELF header fields
+metadata:
+  tags: [linux, binary, elf]
+  compatible: [GNU binutils]
+  references:
+    - https://sourceware.org/binutils/docs/binutils/readelf.html
+detect:
+  signature:
+    all:
+      - '\AELF Header:[ \t]*$'
+      - '^[ \t]+Magic:[ \t]+[0-9a-f ]+$'
+input:
+  select:
+    after: '\AELF Header:'
+parse:
+  type: kv
+  separator: ":"
+  as: list

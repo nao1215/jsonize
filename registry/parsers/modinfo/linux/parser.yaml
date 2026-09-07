@@ -1,0 +1,50 @@
+# modinfo prints one field per line, the label padded to sixteen columns.
+# Several labels repeat: a module names as many aliases and as many
+# parameters as it has, and the order they come in is the order the module
+# declared them.
+#
+# So the fields are a list of name and value pairs, not one object. An
+# object would have to answer what a repeated label means, and both
+# answers are wrong: keeping the last alias throws the others away, and
+# collecting every label into an array would give "license" a
+# one-element array as well. A list keeps the repeats and the order, and
+# it also survives the fact that which labels appear at all depends on
+# the module -- a built-in module prints "file", one loaded from disk
+# prints "vermagic" and the four sig_ fields instead.
+#
+# The signature is not carried. modinfo wraps its hex bytes over as many
+# tab-indented continuation lines as it needs, and a continuation line is
+# not a field; keeping only the first line of it would report a signature
+# that is not the module's. Both the label and its continuation lines are
+# dropped here rather than reported wrongly.
+format: 1
+command: modinfo
+variant: linux
+description: modinfo module fields
+metadata:
+  tags: [linux, kernel, kmod]
+  compatible: [kmod]
+  references:
+    - https://man7.org/linux/man-pages/man8/modinfo.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # Every module prints a filename, padded to the sixteen-column
+      # label field: "(builtin)" for a built-in module, a path for one
+      # loaded from disk.
+      - '^filename:[ \t]{2,}\S'
+    any:
+      # Which of the rest a module carries is up to the module.
+      - '^license:[ \t]{2,}\S'
+      - '^description:[ \t]{2,}\S'
+      - '^vermagic:[ \t]{2,}\S'
+      - '^alias:[ \t]{2,}\S'
+input:
+  ignore:
+    - '\Asignature:'
+    - '\A\t'
+parse:
+  type: kv
+  separator: ":"
+  as: list

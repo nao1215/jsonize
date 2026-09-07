@@ -1,0 +1,93 @@
+[
+  {
+    "container_id": "accaee24e51d",
+    "name": "datalab-bq-probe",
+    "cpu_percent": 0,
+    "mem_usage": "342.7MiB",
+    "mem_limit": "61.43GiB",
+    "mem_percent": 0.54,
+    "net_input": "37.3MB",
+    "net_output": "29.2MB",
+    "block_input": "878MB",
+    "block_output": "464MB",
+    "pids": 38
+  },
+  {
+    "container_id": "a2afeaf3fa18",
+    "name": "datalab-pg-probe",
+    "cpu_percent": 0.37,
+    "mem_usage": "27.31MiB",
+    "mem_limit": "61.43GiB",
+    "mem_percent": 0.04,
+    "net_input": "9.12MB",
+    "net_output": "686kB",
+    "block_input": "1.22GB",
+    "block_output": "56.7MB",
+    "pids": 6
+  },
+  {
+    "container_id": "c781233c8005",
+    "name": "datalab-mysql-probe",
+    "cpu_percent": 0.48,
+    "mem_usage": "412.7MiB",
+    "mem_limit": "61.43GiB",
+    "mem_percent": 0.66,
+    "net_input": "9.85MB",
+    "net_output": "1.93MB",
+    "block_input": "2.3GB",
+    "block_output": "323MB",
+    "pids": 51
+  },
+  {
+    "container_id": "1e2516252d99",
+    "name": "demo-environment-local-worker2",
+    "cpu_percent": 1.69,
+    "mem_usage": "1.292GiB",
+    "mem_limit": "61.43GiB",
+    "mem_percent": 2.1,
+    "net_input": "648MB",
+    "net_output": "286MB",
+    "block_input": "4.5GB",
+    "block_output": "832MB",
+    "pids": 298
+  },
+  {
+    "container_id": "3793087f6697",
+    "name": "demo-environment-local-worker",
+    "cpu_percent": 1.79,
+    "mem_usage": "1.194GiB",
+    "mem_limit": "61.43GiB",
+    "mem_percent": 1.94,
+    "net_input": "2.32GB",
+    "net_output": "569MB",
+    "block_input": "5.3GB",
+    "block_output": "437MB",
+    "pids": 303
+  },
+  {
+    "container_id": "e2a31dabb7ac",
+    "name": "demo-environment-local-control-plane",
+    "cpu_percent": 9.67,
+    "mem_usage": "2.344GiB",
+    "mem_limit": "61.43GiB",
+    "mem_percent": 3.82,
+    "net_input": "602MB",
+    "net_output": "2.67GB",
+    "block_input": "11.5GB",
+    "block_output": "38.5GB",
+    "pids": 477
+  },
+  {
+    "container_id": "bd85e74de011",
+    "name": "buildx_buildkit_demo-local-builder",
+    "cpu_percent": 0.01,
+    "mem_usage": "78.03MiB",
+    "mem_limit": "61.43GiB",
+    "mem_percent": 0.12,
+    "net_input": "803MB",
+    "net_output": "11.5MB",
+    "block_input": "18.1GB",
+    "block_output": "14GB",
+    "pids": 39
+  }
+]

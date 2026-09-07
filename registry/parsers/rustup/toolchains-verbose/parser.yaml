@@ -1,0 +1,33 @@
+# The same listing as `rustup toolchain list`, with the directory the
+# toolchain is installed in after the markers. The path is what keeps the
+# two apart: the plain listing ends at the markers, this one never does.
+format: 1
+command: rustup
+variant: toolchains-verbose
+description: rustup toolchain list -v, installed Rust toolchains with their paths
+metadata:
+  tags: [rust, toolchain, package]
+  compatible: [rustup]
+  references:
+    - https://rust-lang.github.io/rustup/concepts/toolchains.html
+detect:
+  args:
+    all: ["toolchain", "list"]
+  signature:
+    all:
+      # An absolute path follows the name. Windows prints a drive letter
+      # here instead, which no fixture covers, so that spelling is left
+      # unread rather than guessed at.
+      - '\A[^\s(]+(?: \((?:active|default|active, default)\))? /\S+$'
+    any:
+      - '^[^\s(]+ \((?:active|default|active, default)\) /\S+$'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<name>[^\s(]+) \((?P<active>active|)(?:, )?(?P<default>default|)\) (?P<path>/\S+)$'
+    - '^(?P<name>[^\s(]+)(?P<active>)(?P<default>) (?P<path>/\S+)$'
+fields:
+  name: {required: true}
+  active: {type: bool, true_values: ["active"], false_values: [""]}
+  default: {type: bool, true_values: ["default"], false_values: [""]}
+  path: {required: true}

@@ -25,12 +25,26 @@ project follows [Semantic Versioning](https://semver.org/).
   produce is an error listing the keys it has, and the two options cannot
   be combined.
 - `parse: type: records` for a report whose blocks repeat: a line
-  matching `start` opens a record and the `parts` are applied to each.
-- Official definitions for 80 commands in 156 output formats, covering
+  matching `start` opens a record and the `parts` are applied to each. A
+  `composite` part may itself be `records`, which is what a report that
+  opens with a header block and then repeats a block needs.
+- `aliases:` on a definition, for the commands that print a format
+  another command prints: `vdir` prints what `ls -l` prints, `printenv`
+  what `env` prints, `getent passwd` what `/etc/passwd` holds, `podman`
+  and `nerdctl` what `docker` prints, and the g-prefixed coreutils macOS
+  installs print what the coreutils commands print. `jz run`,
+  `--parser` and `jz list` all take the other name.
+- `input: fold:` joins a value that continues on the next line onto the
+  line it belongs to, for the reports that break a long value at the
+  terminal width (`ethtool`) and for the control files whose values
+  continue on an indented line (`dpkg -s`, `apt show`).
+- Official definitions for 126 commands in 263 output formats, covering
   coreutils and procps, the util-linux listings, the systemd tools, the
-  network commands, sysstat, the disk layout tools, the hardware and
-  display tools, the archive and checksum tools, git, and the package
-  managers. `jz list` prints the current set.
+  classic network commands and the iproute2 ones, sysstat, the disk
+  layout tools, the hardware and display tools, the archive and checksum
+  tools, the account and firmware listings, the sound and font
+  listings, git, docker, the package managers and the language
+  toolchains. `jz list` prints the current set.
 
 ### Fixed
 
@@ -41,6 +55,19 @@ project follows [Semantic Versioning](https://semver.org/).
   kept the shell quotes inside the values; `file` read `blkid` output and
   any `token:` line followed by a newline; `ip -brief address` read
   `ip -brief link` output, putting the MAC address in the address list.
+- The same failure in the definitions added later, each found by
+  applying every definition to every other definition's fixtures.
+  `cksum` read a crontab entry as a checksum and a size; `etc/passwd`
+  read the first line of BusyBox `ifconfig` and a `gpg --with-colons`
+  key; `etc/fstab` read a mount table header as an entry; `file` read
+  `udevadm`, `ip rule`, `bridge link`, `nmcli` and Debian control
+  records; `iostat` read the extended device table with the definition
+  for the CPU one; `etc/crontab` read a user crontab, whose command
+  lands where the user name belongs.
+- The sysstat reports asked for with an interval. `mpstat`, `pidstat`
+  and `iostat` had only ever been captured without one, so none of them
+  had seen the summary block an interval adds, which prints the column
+  names again and labels its rows Average.
 - Definitions that listed arguments their command does not need. `swapon`
   and `systemctl` print with no arguments exactly what their definition
   reads, and both turned that call away; the `ls` list enumerated flag
@@ -71,6 +98,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - `min_jsonize`, `metadata.fixtures` and the kv `key_name`/`value_name`
   pair. No definition used any of them.
+- `parse.on_mismatch`. `skip` dropped every line a pattern did not fit
+  without saying which, which is the failure jz exists to prevent one
+  line at a time: `host` was silently discarding the HTTPS record in its
+  own fixture. A composite part now names the lines of its region that
+  belong to a sibling with `ignore`, and a line nothing claims is an
+  error.
 
 ### Decisions worth knowing
 
@@ -82,3 +115,18 @@ project follows [Semantic Versioning](https://semver.org/).
 - Naming a parser or variant never disables the signature check.
 - The public options are `--file`, `--pretty`, `--parser`, `--variant`
   and `--help`. The input limit is 64 MiB and is not configurable.
+- Two commands that print the same format are one definition with an
+  alias, not two definitions. Nothing in the text says which of them
+  wrote it, so a second definition would read the first one's output and
+  the answer would be a guess about the command rather than a reading of
+  the text. The alias carries the arguments its name needs, which is how
+  `getent passwd` and `getent group` reach different files.
+- Format 1 is not frozen until the first tag. After it, adding a key is a
+  minor release and the number stays 1; an older jz refuses a definition
+  that uses a new key with an unknown-key error saying a newer jz may be
+  needed. Removing a key or changing what one means is format 2, because
+  neither can be told from a mistake by looking at the file.
+- A tree of arbitrary depth has no shape jz can promise in advance and
+  is left out: `npm ls --all`, `iw dev`, `lsusb -t`, `docker info`,
+  `apt-cache policy`, `systemd-analyze critical-chain`. Most of those
+  commands print JSON of their own.

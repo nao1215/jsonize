@@ -43,7 +43,7 @@ pipe there is no such answer at all: nothing identifies an empty input.
 
 `jz run` adds `--env NAME=VALUE`, `--keep-locale` and `--timeout`, which
 control the command rather than the conversion. `jz list` adds `--json`
-and `--sources`.
+and `--sources`, and `jz test` adds `--update` and `--decoys`.
 
 ## Choosing the keys
 
@@ -77,7 +77,7 @@ a format too generic to claim, a wrapper whose name is not the tool it
 runs, or a variant you want pinned in CI.
 
 ```console
-$ git diff --numstat | jz --parser du
+$ du -a /etc/cron.d | jz --parser du
 $ df -h | jz --parser df --variant gnu-human
 $ jz run --parser df -- sudo df -h
 ```
@@ -103,6 +103,18 @@ jz does not keep a list of which commands are wrappers. The list would
 never be complete, and a wrong entry would read some other command's
 output with the wrong definition.
 
+A file is the other case. `/etc/fstab`, `/etc/passwd` and their
+neighbours have no argv to detect them from, so they are variants of a
+parser named `etc` and are always named:
+
+```console
+$ jz --parser etc --variant fstab --file /etc/fstab
+$ cat /etc/nsswitch.conf | jz --parser etc
+```
+
+Naming `etc` without a variant is enough where the file recognises
+itself; `jz list etc` prints the ones that exist.
+
 ## Where jz stops and the command begins
 
 Everything from the command name onwards belongs to the command, so its
@@ -113,6 +125,34 @@ $ jz run ps aux
 $ jz run mytool --pretty            # --pretty goes to mytool
 $ jz run --pretty -- mytool --json  # --pretty is jz's, --json is mytool's
 ```
+
+## Checking definitions of your own
+
+`jz test` holds a registry to the contract the official one is held to.
+
+```console
+jz test                      # the registries jz would use, except the built-in one
+jz test ./registry           # a directory, layered above the built-in registry
+jz test --update ./registry  # write testdata/<case>.json from the current output
+jz test --decoys ./decoys .  # also require every file under ./decoys to be refused
+```
+
+Two things are checked. Every `testdata/<case>.txt` is parsed with its own
+definition and compared with the `.json` beside it, and every definition
+is then named explicitly on every other definition's fixtures and must
+refuse them. The official fixtures travel inside the binary, so the
+second check covers your definitions against every format jz already
+reads without a copy of the repository: a signature wide enough to read
+`df` output fails here rather than in someone's pipeline.
+
+`--update` writes only to the registries under test; the built-in one
+cannot be written to, so `jz test --update` with no directory writes to
+the user registry and says on standard error where it wrote.
+
+Failures go to standard error, one per line, followed by
+`N passed, M failed`. Standard output stays empty. The exit status is 0
+when everything passed, 1 when something failed, 2 for a usage error and
+5 when a registry could not be read.
 
 ## Exit codes
 
@@ -145,3 +185,27 @@ a command and variant wins:
 `jz list --sources` prints them with what exists on your machine. jz
 never accesses the network, so the same input converts to the same JSON
 on the same machine.
+
+A registry's `registry.yaml` can also switch definitions of the
+registries below it off:
+
+```yaml
+format: 1
+name: mine
+disable:
+  - file/posix   # one definition
+  - du           # every variant of a command
+```
+
+A disabled definition is not loaded at all, so `jz list`, `--parser` and
+automatic detection all stop seeing it. Shadowing replaces a definition
+and needs a whole one written under the same name; disabling takes one
+out. An entry that names nothing is a warning, not an error.
+
+The order settles more than definitions of the same name. When automatic
+detection is left with definitions of different commands that all fit the
+text, the one from the earlier registry is the answer, because that order
+is what you declared. A definition of your own can therefore take over a
+format jz already reads, and it cannot make jz stop reading one. Two
+definitions of the *same* registry that both fit stay an error naming
+them; `jz test` reports those before they reach a pipeline.

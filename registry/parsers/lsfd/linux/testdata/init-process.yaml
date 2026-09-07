@@ -1,0 +1,4 @@
+description: A process this user may not read into, where the type is ERROR and the name is missing, so the row stops one cell short.
+source: captured on Ubuntu 26.04 (util-linux 2.41) with LC_ALL=C from `lsfd -p 1`
+os: linux
+args: ["-p", "1"]

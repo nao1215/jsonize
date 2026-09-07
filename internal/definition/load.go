@@ -6,9 +6,12 @@ import (
 	"regexp"
 	"regexp/syntax"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/goccy/go-yaml"
+
+	"github.com/nao1215/jsonize/internal/buildinfo"
 )
 
 // Limits guarding against hostile or accidental resource use.
@@ -75,6 +78,31 @@ func (e *FormatError) Error() string {
 		e.Source, e.Got, CurrentFormat)
 }
 
+// UnknownKeyError reports a key this build does not know. It is told
+// apart from other schema problems because it is the one that a newer
+// jsonize may well understand: keys are added within format 1, so a
+// definition written for a later release reaches an older one this way
+// rather than as a format number it cannot read.
+type UnknownKeyError struct {
+	Source string
+	Key    string
+	// Line is where the key appears, 0 when the decoder did not say.
+	Line int
+}
+
+func (e *UnknownKeyError) Error() string {
+	where := ""
+	if e.Line > 0 {
+		where = fmt.Sprintf("line %d: ", e.Line)
+	}
+	return fmt.Sprintf("%s: %sunknown key %q; this definition may need a newer jz (this build reads definition format %d as of %s)",
+		e.Source, where, e.Key, CurrentFormat, buildinfo.Get())
+}
+
+// unknownFieldRe reads the key and its position out of the strict
+// decoder's message, which is the only place they are reported.
+var unknownFieldRe = regexp.MustCompile(`(?:\[(\d+):\d+\] )?unknown field "([^"]+)"`)
+
 // Load decodes, validates and compiles a definition. source is used in
 // error messages and stored in Definition.Source.
 func Load(data []byte, source string) (*Definition, error) {
@@ -83,6 +111,10 @@ func Load(data []byte, source string) (*Definition, error) {
 	}
 	var d Definition
 	if err := DecodeYAML(data, &d); err != nil {
+		if m := unknownFieldRe.FindStringSubmatch(err.Error()); m != nil {
+			line, _ := strconv.Atoi(m[1])
+			return nil, &UnknownKeyError{Source: source, Key: m[2], Line: line}
+		}
 		return nil, &ValidationError{Source: source, Msg: "invalid YAML: " + err.Error()}
 	}
 	d.Source = source
@@ -163,6 +195,29 @@ func (d *Definition) Validate() error {
 	case reservedNames[d.Variant]:
 		v.add("variant", "%q is a reserved file name on Windows and cannot be used", d.Variant)
 	}
+	seenAlias := map[string]bool{}
+	for i := range d.Aliases {
+		ap := fmt.Sprintf("aliases[%d]", i)
+		name := d.Aliases[i].Name
+		switch {
+		case name == "":
+			v.add(ap+".name", "is required")
+		case !nameRe.MatchString(name):
+			v.add(ap+".name", "%q must match %s", name, nameRe)
+		case name == d.Command:
+			v.add(ap+".name", "%q is the command itself", name)
+		case seenAlias[name]:
+			v.add(ap+".name", "duplicate alias %q", name)
+		}
+		seenAlias[name] = true
+		if am := d.Aliases[i].Args; am != nil {
+			for j, a := range append(append(append([]string{}, am.Any...), am.All...), am.None...) {
+				if strings.TrimSpace(a) == "" {
+					v.add(fmt.Sprintf("%s.args[%d]", ap, j), "empty argument")
+				}
+			}
+		}
+	}
 	for i, os := range d.Detect.OS {
 		if !knownOS[os] {
 			v.add(fmt.Sprintf("detect.os[%d]", i), "unknown operating system %q", os)
@@ -193,8 +248,11 @@ func (d *Definition) Validate() error {
 		v.add("input.record_separator", "must be newline or nul")
 	}
 	d.Input.ignore = compileList(v, "input.ignore", d.Input.Ignore, "")
+	if d.Input.Fold != "" {
+		d.Input.fold = v.regex("input.fold", d.Input.Fold)
+	}
 	validateSelect(v, "input.select", &d.Input.Select)
-	validateParse(v, "parse", &d.Parse, d.Fields, 0)
+	validateParse(v, "parse", &d.Parse, d.Fields, "")
 	validateFields(v, "fields", d.Fields, 0, d.Parse.Type == TypeKV)
 	if len(v.errs) == 0 {
 		return nil
@@ -228,7 +286,12 @@ func validateSelect(v *validator, path string, s *Select) {
 	}
 }
 
-func validateParse(v *validator, path string, p *Parse, fields map[string]*Field, depth int) {
+// validateParse checks one parser. parent is the type of the parser this
+// one is a part of, empty at the top level. A composite part may be
+// records, which is what a banner followed by repeating blocks needs; no
+// other nesting is allowed, because anything deeper describes a tree
+// whose shape comes from the input rather than from the definition.
+func validateParse(v *validator, path string, p *Parse, fields map[string]*Field, parent string) {
 	switch p.Type {
 	case TypeTable:
 		validateTable(v, path, p, fields)
@@ -240,17 +303,17 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 		validateKV(v, path, p)
 		rejectKeys(v, path, p, "table", "regex", "parts")
 	case TypeComposite:
-		if depth > 0 {
-			v.add(path+".type", "composite parts cannot be composite")
+		if parent != "" {
+			v.add(path+".type", "a part cannot be composite")
 			return
 		}
 		if p.Start != "" {
 			v.add(path+".start", "only valid for type records")
 		}
-		validateComposite(v, path, p)
+		validateComposite(v, path, p, TypeComposite)
 		rejectKeys(v, path, p, "table", "regex", "kv")
 	case TypeRecords:
-		if depth > 0 {
+		if parent == TypeRecords {
 			v.add(path+".type", "records parts cannot be records")
 			return
 		}
@@ -259,7 +322,7 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 		} else {
 			p.start = v.regex(path+".start", p.Start)
 		}
-		validateComposite(v, path, p)
+		validateComposite(v, path, p, TypeRecords)
 		rejectKeys(v, path, p, "table", "regex", "kv")
 	case "":
 		v.add(path+".type", "is required (table, regex, kv, composite or records)")
@@ -282,9 +345,6 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 		case "regex":
 			if p.Pattern != "" || len(p.Patterns) > 0 || p.Each != "" {
 				v.add(path, "pattern/patterns/each are only valid for type regex")
-			}
-			if p.OnMismatch != "" && p.Type != TypeKV {
-				v.add(path+".on_mismatch", "only valid for type regex or kv")
 			}
 		case "kv":
 			if p.Separator != "" || p.As != "" || p.Trim != nil || p.Unquote {
@@ -429,15 +489,6 @@ func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*
 	default:
 		v.add(path+".each", "must be line or input")
 	}
-	validateMismatch(v, path, p.OnMismatch)
-}
-
-func validateMismatch(v *validator, path, policy string) {
-	switch policy {
-	case "", MismatchError, MismatchSkip:
-	default:
-		v.add(path+".on_mismatch", "must be error or skip")
-	}
 }
 
 func validateKV(v *validator, path string, p *Parse) {
@@ -446,12 +497,11 @@ func validateKV(v *validator, path string, p *Parse) {
 	default:
 		v.add(path+".as", "must be list or map")
 	}
-	validateMismatch(v, path, p.OnMismatch)
 }
 
-func validateComposite(v *validator, path string, p *Parse) {
+func validateComposite(v *validator, path string, p *Parse, kind string) {
 	if len(p.Parts) == 0 {
-		v.add(path+".parts", "is required for type composite")
+		v.add(path+".parts", "is required for type %s", kind)
 	}
 	if len(p.Parts) > MaxParts {
 		v.add(path+".parts", "more than %d parts", MaxParts)
@@ -470,7 +520,8 @@ func validateComposite(v *validator, path string, p *Parse) {
 		}
 		seen[part.Name] = true
 		validateSelect(v, pp+".select", &part.Select)
-		validateParse(v, pp+".parse", &part.Parse, part.Fields, 1)
+		part.ignore = compileList(v, pp+".ignore", part.Ignore, "")
+		validateParse(v, pp+".parse", &part.Parse, part.Fields, kind)
 		validateFields(v, pp+".fields", part.Fields, 0, part.Parse.Type == TypeKV)
 	}
 }

@@ -1,0 +1,49 @@
+# `sar -B` prints a banner naming the kernel, the host, the date and
+# the CPU count, then one row per sampling interval and a summary row
+# labelled Average:. The banner is dropped: it is one line about the run
+# rather than a row of the report, and a table cannot hold both.
+#
+# The column names sit on a line that opens with the time the report
+# started rather than with a name, so the names are written out here and
+# that line is ignored. `sar -n DEV` repeats the name line above the
+# summary block, which is why the ignore pattern accepts either label.
+#
+# The first cell is the time of the sample, except on a summary row where
+# it is the word Average. The trailing colon that only the summary rows
+# carry is removed so the cell holds one or the other and nothing else.
+format: 1
+command: sar
+variant: paging
+description: sar -B paging statistics
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+pgpgin/s[ \t]+pgpgout/s[ \t]+fault/s[ \t]+majflt/s[ \t]+pgfree/s'
+input:
+  ignore:
+    - '\ALinux '
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+pgpgin/s[ \t]+pgpgout/s'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, pgpgin_per_s, pgpgout_per_s, fault_per_s, majflt_per_s, pgfree_per_s, pgscank_per_s, pgscand_per_s, pgsteal_per_s, pgprom_per_s, pgdem_per_s]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  pgpgin_per_s: {type: float}
+  pgpgout_per_s: {type: float}
+  fault_per_s: {type: float}
+  majflt_per_s: {type: float}
+  pgfree_per_s: {type: float}
+  pgscank_per_s: {type: float}
+  pgscand_per_s: {type: float}
+  pgsteal_per_s: {type: float}
+  pgprom_per_s: {type: float}
+  pgdem_per_s: {type: float}

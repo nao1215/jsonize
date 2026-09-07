@@ -1,0 +1,18 @@
+[
+  {
+    "time": "11:55:10",
+    "kbswpfree": 6317536,
+    "kbswpused": 2071068,
+    "swpused_percent": 24.69,
+    "kbswpcad": 103308,
+    "swpcad_percent": 4.99
+  },
+  {
+    "time": "Average",
+    "kbswpfree": 6317536,
+    "kbswpused": 2071068,
+    "swpused_percent": 24.69,
+    "kbswpcad": 103308,
+    "swpcad_percent": 4.99
+  }
+]

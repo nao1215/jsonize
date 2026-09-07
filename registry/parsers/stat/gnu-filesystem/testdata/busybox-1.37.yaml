@@ -1,0 +1,4 @@
+description: BusyBox prints the same five lines as coreutils except that the block size line stops after the block size, so the fundamental block size is null here.
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C
+os: linux
+args: [-f, /etc/hosts]

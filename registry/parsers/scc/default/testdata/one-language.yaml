@@ -1,0 +1,8 @@
+source: >-
+  captured with LC_ALL=C scc internal on the jsonize checkout with scc
+  3.7.0 from the snap package
+description: >-
+  a single language row, where the total repeats it, and one count small
+  enough to print without a separator
+os: linux
+args: ["internal"]

@@ -1,0 +1,42 @@
+[
+  {
+    "from": {
+      "path": "example.com/probe",
+      "version": null
+    },
+    "to": {
+      "path": "example.com/lib",
+      "version": "v1.0.0"
+    }
+  },
+  {
+    "from": {
+      "path": "example.com/probe",
+      "version": null
+    },
+    "to": {
+      "path": "go",
+      "version": "1.26"
+    }
+  },
+  {
+    "from": {
+      "path": "example.com/lib",
+      "version": "v1.0.0"
+    },
+    "to": {
+      "path": "go",
+      "version": "1.26"
+    }
+  },
+  {
+    "from": {
+      "path": "go",
+      "version": "1.26"
+    },
+    "to": {
+      "path": "toolchain",
+      "version": "go1.26"
+    }
+  }
+]

@@ -17,6 +17,9 @@ cover.html
 # atago run state
 /.atago/
 
+# scratch worktrees an assistant session cuts inside the repository
+/.claude/worktrees/
+
 # hugo build output
 /website/public/
 /website/resources/

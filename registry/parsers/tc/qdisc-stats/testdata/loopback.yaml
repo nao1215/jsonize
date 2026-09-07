@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (iproute2 6.19) with LC_ALL=C
+description: >-
+  One block, without the `dev` word that naming a device drops, and with
+  no kind-specific statistics after the two counter lines.
+os: linux
+args: ["-s", "qdisc", "show", "dev", "lo"]

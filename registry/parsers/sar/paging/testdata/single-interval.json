@@ -1,0 +1,28 @@
+[
+  {
+    "time": "11:55:07",
+    "pgpgin_per_s": 0,
+    "pgpgout_per_s": 28,
+    "fault_per_s": 160914,
+    "majflt_per_s": 0,
+    "pgfree_per_s": 140802,
+    "pgscank_per_s": 0,
+    "pgscand_per_s": 0,
+    "pgsteal_per_s": 0,
+    "pgprom_per_s": 0,
+    "pgdem_per_s": 0
+  },
+  {
+    "time": "Average",
+    "pgpgin_per_s": 0,
+    "pgpgout_per_s": 28,
+    "fault_per_s": 160914,
+    "majflt_per_s": 0,
+    "pgfree_per_s": 140802,
+    "pgscank_per_s": 0,
+    "pgscand_per_s": 0,
+    "pgsteal_per_s": 0,
+    "pgprom_per_s": 0,
+    "pgdem_per_s": 0
+  }
+]

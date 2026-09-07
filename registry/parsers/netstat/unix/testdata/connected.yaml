@@ -1,0 +1,4 @@
+description: connected UNIX sockets, including unnamed ones with a blank path and a datagram socket with a blank state
+source: lines 1-2 and 85-98 of `busybox netstat -x` captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; socket names replaced
+os: linux
+args: ["-x"]

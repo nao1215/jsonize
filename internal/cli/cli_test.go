@@ -889,6 +889,32 @@ func TestRunRealCommands(t *testing.T) {
 	}
 }
 
+// A command that prints what another one prints is read by the same
+// definition, under its own name and with the arguments that name needs.
+func TestRunUsesAliases(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("no POSIX commands")
+	}
+	h := newHarness(t)
+	for _, args := range [][]string{{"printenv"}, {"getent", "passwd"}, {"getent", "group"}} {
+		if code := h.run(append([]string{"run"}, args...)...); code != ExitOK {
+			t.Errorf("run %v: %d %s", args, code, h.stderr.String())
+		}
+	}
+	// The arguments an alias states replace the ones the command needs:
+	// getent takes the database name where etc takes nothing.
+	if code := h.run("run", "getent", "services"); code == ExitOK {
+		t.Errorf("getent services has no definition and must not be read: %s", h.stdout.String())
+	}
+	// Naming the parser by an alias reaches the same definitions.
+	if code := h.pipe("root:x:0:\n", "--parser", "getent", "--variant", "group"); code != ExitOK {
+		t.Errorf("--parser getent --variant group: %d %s", code, h.stderr.String())
+	}
+	if h.rows()[0]["name"] != "root" {
+		t.Errorf("rows = %v", h.rows())
+	}
+}
+
 func TestMergedExecEnv(t *testing.T) {
 	t.Parallel()
 	dir := t.TempDir()
@@ -947,8 +973,17 @@ func TestNoFabricatedUnits(t *testing.T) {
 // pass, instead of being claimed because it was the only candidate left.
 func TestGenericFormatsNeedAnExplicitParser(t *testing.T) {
 	h := newHarness(t)
-	numstat := "10\t2\tmain.go\n" // git diff --numstat, not du
-	if code := h.pipe(numstat); code != ExitSelect || h.stdout.Len() != 0 {
+	// Three tab separated cells, two of them counts, is what
+	// `git diff --numstat` prints and not what du prints.
+	if code := h.pipe("10\t2\tmain.go\n"); code != ExitSelect || h.stdout.Len() != 0 {
+		t.Fatalf("code=%d stdout=%q stderr=%s", code, h.stdout.String(), h.stderr.String())
+	}
+	if got := h.stderr.String(); !strings.Contains(got, "could be `git` output") {
+		t.Errorf("numstat should be named as git:\n%s", got)
+	}
+	// A count and a path is du, and nothing about the text says so, so
+	// the parser has to be named.
+	if code := h.pipe("12\t/usr/bin\n"); code != ExitSelect || h.stdout.Len() != 0 {
 		t.Fatalf("code=%d stdout=%q stderr=%s", code, h.stdout.String(), h.stderr.String())
 	}
 	for _, want := range []string{"could be `du` output", "too generic", "jz --parser du"} {

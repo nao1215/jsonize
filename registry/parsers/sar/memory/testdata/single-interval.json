@@ -1,0 +1,30 @@
+[
+  {
+    "time": "08:55:17",
+    "kbmemfree": 11357788,
+    "kbavail": 28846284,
+    "kbmemused": 14224404,
+    "memused_percent": 22.08,
+    "kbbuffers": 2020416,
+    "kbcached": 31420056,
+    "kbcommit": 79088984,
+    "commit_percent": 108.64,
+    "kbactive": 23912224,
+    "kbinact": 21502884,
+    "kbdirty": 20756
+  },
+  {
+    "time": "Average",
+    "kbmemfree": 11357788,
+    "kbavail": 28846284,
+    "kbmemused": 14224404,
+    "memused_percent": 22.08,
+    "kbbuffers": 2020416,
+    "kbcached": 31420056,
+    "kbcommit": 79088984,
+    "commit_percent": 108.64,
+    "kbactive": 23912224,
+    "kbinact": 21502884,
+    "kbdirty": 20756
+  }
+]

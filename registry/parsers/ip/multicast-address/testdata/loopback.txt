@@ -1,0 +1,6 @@
+1:	lo
+	inet  224.0.0.251
+	inet  224.0.0.1
+	inet6 ff02::fb
+	inet6 ff02::1
+	inet6 ff01::1

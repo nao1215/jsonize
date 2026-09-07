@@ -1,0 +1,4 @@
+description: A wired interface with all three families and two addresses that more than one socket has joined. The link layer groups derived from the hardware address were rewritten along with it.
+source: captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C; the bytes of the hardware address were replaced in the multicast groups derived from it
+os: linux
+args: ["maddr", "show", "eno1"]

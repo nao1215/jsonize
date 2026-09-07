@@ -1,0 +1,3 @@
+description: The files of one family, each providing a single family name and one style.
+source: captured on Ubuntu 26.04 (fontconfig 2.15) with LC_ALL=C from `fc-list :family=DejaVu Serif | sort`
+os: linux

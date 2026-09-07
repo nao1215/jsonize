@@ -1,0 +1,80 @@
+# `tc -s qdisc show` prints the line that `tc qdisc show` prints and then
+# the counters below it: what the discipline sent, what is still queued,
+# and however many lines of statistics the kind itself defines. That is a
+# block per discipline, so the definition describes one block and
+# `records` applies it to each.
+#
+# The kind-specific tail is a different set of words for every kind:
+# fq_codel reports its largest packet and its flow counts, and another
+# kind reports whatever it counts instead. The tail is kept as the words
+# it was printed as rather than given a shape only fq_codel fits.
+#
+# A discipline with a rate estimator attached prints one more line,
+# between the two counter lines, which this definition does not
+# describe: no discipline on the machine the fixtures came from had one.
+format: 1
+command: tc
+variant: qdisc-stats
+description: tc -s qdisc show, queueing disciplines with their counters
+metadata:
+  tags: [linux, network, iproute2, traffic-control]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/tc.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-s", "-stats", "-statistics", "--statistics"]
+    all: ["qdisc"]
+  signature:
+    all:
+      - '\Aqdisc \S+ [0-9a-f]+: (?:dev \S+ )?(?:root|parent [0-9a-f:]+)\b'
+      # What -s adds; without it this is tc/qdisc.
+      - '^ Sent \d+ bytes \d+ pkt \(dropped \d+,'
+parse:
+  type: records
+  start: '^qdisc '
+  parts:
+    - name: qdisc
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^qdisc (?P<kind>\S+) (?P<handle>\S+)(?: dev (?P<dev>\S+))?[ \t]+(?P<parent>root|parent [0-9a-f:]+)(?: refcnt (?P<refcnt>\d+))?[ \t]*(?P<options>.*?)[ \t]*$'
+      fields:
+        kind: {required: true}
+        handle: {required: true}
+        dev: {when_missing: omit}
+        parent: {trim_prefix: "parent "}
+        refcnt: {type: int, when_missing: omit}
+        options: {type: array, split_regex: '\s+'}
+    - name: sent
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^[ \t]*Sent (?P<bytes>\d+) bytes (?P<packets>\d+) pkt \(dropped (?P<dropped>\d+), overlimits (?P<overlimits>\d+) requeues (?P<requeues>\d+)\)[ \t]*$'
+      fields:
+        bytes: {type: int}
+        packets: {type: int}
+        dropped: {type: int}
+        overlimits: {type: int}
+        requeues: {type: int}
+    - name: backlog
+      select: {skip: 2, limit: 1}
+      parse:
+        type: regex
+        each: input
+        # tc rounds the queued amount (0b, 15Kb), so the two counts keep
+        # the suffixed spellings they were printed with.
+        pattern: '^[ \t]*backlog (?P<bytes>\S+) (?P<packets>\S+) requeues (?P<requeues>\d+)[ \t]*$'
+      fields:
+        requeues: {type: int}
+    - name: kind_stats
+      select: {skip: 3}
+      parse:
+        type: regex
+        each: input
+        pattern: '(?s)\A[ \t]*(?P<words>.*?)[ \t]*\z'
+      fields:
+        words: {type: array, split_regex: '\s+'}

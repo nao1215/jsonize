@@ -1,0 +1,4 @@
+description: One package whose Conffiles list and Description body both continue over several lines.
+source: captured on Ubuntu 26.04 (dpkg 1.23.7) with LC_ALL=C from `dpkg -s bash`
+os: linux
+args: ["-s", "bash"]

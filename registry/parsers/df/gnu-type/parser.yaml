@@ -3,6 +3,10 @@
 format: 1
 command: df
 variant: gnu-type
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gdf
 description: df -T on GNU coreutils, with the filesystem type column
 metadata:
   tags: [linux, filesystem]

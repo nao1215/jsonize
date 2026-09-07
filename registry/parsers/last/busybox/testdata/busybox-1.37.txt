@@ -1,0 +1,9 @@
+USER       TTY            HOST               LOGIN        TIME
+usr                                          Aug 24 19:20
+usr                                          Aug  9 19:40
+usr        pts/5          fe80::5054:00ff:fe12:3456%eno1 Jul  1 08:46
+usr        tty7           :0                 May 25 22:05
+usr        tty2           local              May 25 21:55
+usr        :0             :0                 Nov  4 20:24
+usr        seat0          login screen       Nov  4 20:24
+usr        tty2           tty2               Nov  4 13:17

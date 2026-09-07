@@ -1,0 +1,3 @@
+description: The header and six established sockets, which is where a peer address is something other than the wildcard.
+source: the header and the established rows of `ss -tan` captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C; the local and peer addresses were replaced with documentation addresses
+os: linux

@@ -1,0 +1,42 @@
+# `busctl` with no verb prints the same table as `busctl list`, and the
+# subset selectors (--acquired, --activatable, --unique) narrow the rows
+# without changing the columns, so the format carries no argument of its
+# own.
+#
+# Every cell but the last is a single word: a bus name, a truncated
+# comm, a user name, a connection id, a unit name and a session id all
+# print without spaces, and DESCRIPTION is last and keeps the rest of the
+# line. Splitting on whitespace therefore reads the row without depending
+# on the header offsets, which a seven digit pid crosses because PID is
+# right-aligned under a three letter header.
+format: 1
+command: busctl
+variant: list
+description: busctl list, peers on the bus and the names they own
+metadata:
+  tags: [linux, dbus, systemd]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/busctl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ANAME[ \t]+PID[ \t]+PROCESS[ \t]+USER[ \t]+CONNECTION[ \t]+UNIT[ \t]+SESSION[ \t]+DESCRIPTION[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+fields:
+  name: {required: true}
+  # A dash stands for a value the bus does not have, which is every
+  # column but the name for a service that is activatable and not yet
+  # started.
+  pid: {type: int, null_if: ["-"]}
+  process: {null_if: ["-"]}
+  user: {null_if: ["-"]}
+  connection: {null_if: ["-"]}
+  unit: {null_if: ["-"]}
+  # A logind session id is not always a number: a greeter session is
+  # named c1, c2 and so on.
+  session: {null_if: ["-"]}
+  description: {null_if: ["-"]}

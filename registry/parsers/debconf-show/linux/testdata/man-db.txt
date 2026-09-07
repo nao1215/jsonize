@@ -1,0 +1,2 @@
+  man-db/install-setuid: false
+  man-db/auto-update: true

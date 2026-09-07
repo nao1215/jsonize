@@ -1,0 +1,25 @@
+[
+  {
+    "file": {
+      "name": "/etc/hosts"
+    },
+    "filesystem": {
+      "id": "648575401942969",
+      "namelen": 255,
+      "type": "ext2/ext3"
+    },
+    "block_size": {
+      "block_size": 4096,
+      "fundamental_block_size": null
+    },
+    "blocks": {
+      "total": 480160322,
+      "free": 61792084,
+      "available": 37382843
+    },
+    "inodes": {
+      "total": 122028032,
+      "free": 114673299
+    }
+  }
+]

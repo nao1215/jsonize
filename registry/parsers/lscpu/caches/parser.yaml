@@ -1,0 +1,30 @@
+# `lscpu -C` prints one row per cache. The two size columns are rounded
+# for people to read (48K, 1M), so they stay strings; the counts beside
+# them are exact and are numbers.
+format: 1
+command: lscpu
+variant: caches
+description: lscpu -C, one row per cache
+metadata:
+  tags: [linux, cpu, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lscpu.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # NAME followed by TYPE is also the header of a connection list and
+      # of a swap table, so one of the column names only this listing
+      # prints has to be there as well.
+      - '\ANAME(?:[ \t]+\S+)*[ \t]+(?:ONE-SIZE|ALL-SIZE|COHERENCY-SIZE|PHY-LINE)(?:[ \t]|$)'
+parse:
+  type: table
+  split: whitespace
+fields:
+  name: {required: true}
+  ways: {type: int}
+  level: {type: int}
+  sets: {type: int}
+  phy_line: {type: int}
+  coherency_size: {type: int}

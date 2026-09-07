@@ -1,0 +1,4 @@
+description: One package, whose description body continues over several lines.
+source: captured on Ubuntu 26.04 (apt 3.1) with LC_ALL=C from `apt show bash`; the warning apt writes about its command line interface goes to standard error and is not part of this
+os: linux
+args: ["show", "bash"]

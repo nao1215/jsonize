@@ -1,0 +1,15 @@
+[
+  {
+    "in_use": true,
+    "bssid": "52:54:00:00:05:23",
+    "ssid": "wifi-ap-04-abcd",
+    "mode": "Infra",
+    "chan": 36,
+    "rate": "1170 Mbit/s",
+    "signal": 59,
+    "bars": "***",
+    "security": [
+      "WPA2"
+    ]
+  }
+]

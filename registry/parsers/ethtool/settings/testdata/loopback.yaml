@@ -1,0 +1,4 @@
+description: The loopback, which answers with one line and no continuations.
+source: captured on Ubuntu 26.04 (ethtool 6.11) with LC_ALL=C
+os: linux
+args: ["lo"]

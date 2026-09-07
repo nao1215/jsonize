@@ -1,0 +1,16 @@
+Active UNIX domain sockets (w/o servers)
+Proto RefCnt Flags       Type       State         I-Node Path
+unix  3      [ ]         STREAM     CONNECTED     3063641 /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     121918634 /run/systemd/journal/stdout
+unix  3      [ ]         SEQPACKET  CONNECTED     96254005 
+unix  3      [ ]         STREAM     CONNECTED     47381381 
+unix  2      [ ]         DGRAM                    5108564 
+unix  2      [ ]         STREAM     CONNECTED     3004282 
+unix  3      [ ]         STREAM     CONNECTED     113742526 
+unix  3      [ ]         STREAM     CONNECTED     97576782 
+unix  3      [ ]         STREAM     CONNECTED     35727320 /run/user/1000/wayland-0
+unix  3      [ ]         STREAM     CONNECTED     3063733 
+unix  3      [ ]         STREAM     CONNECTED     3055167 
+unix  3      [ ]         STREAM     CONNECTED     3052258 /run/user/1000/wayland-0
+unix  3      [ ]         STREAM     CONNECTED     3082251 /run/systemd/journal/stdout
+unix  3      [ ]         DGRAM      CONNECTED      17296 

@@ -1,0 +1,33 @@
+# The default output of date(1) under LC_ALL=C: a weekday, a month, a day
+# padded with a space, a time, a time zone abbreviation and a year.
+#
+# The zone is kept as printed. It is an abbreviation whose meaning
+# depends on where the machine is, and turning it into an offset would
+# require a table jz does not carry.
+format: 1
+command: date
+variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gdate
+description: date default output
+metadata:
+  tags: [linux, darwin, time]
+  compatible: [GNU coreutils, BSD]
+  references:
+    - https://man7.org/linux/man-pages/man1/date.1.html
+detect:
+  signature:
+    all:
+      - '\A(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) [ \d]\d \d\d:\d\d:\d\d \S+ \d{4}[ \t]*$'
+parse:
+  type: regex
+  each: input
+  pattern: '\A(?P<weekday>\w{3}) (?P<month>\w{3}) (?P<day>[ \d]\d) (?P<hour>\d\d):(?P<minute>\d\d):(?P<second>\d\d) (?P<timezone>\S+) (?P<year>\d{4})[ \t]*$'
+fields:
+  day: {type: int}
+  hour: {type: int}
+  minute: {type: int}
+  second: {type: int}
+  year: {type: int}

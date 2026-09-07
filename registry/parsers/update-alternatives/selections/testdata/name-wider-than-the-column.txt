@@ -1,0 +1,6 @@
+js                             auto     /usr/bin/nodejs
+jsondiff                       auto     /usr/bin/json-patch-jsondiff
+libblas.so.3-x86_64-linux-gnu  auto     /usr/lib/x86_64-linux-gnu/blas/libblas.so.3
+liblapack.so.3-x86_64-linux-gnu auto     /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3
+lightdm-greeter                auto     /usr/share/xgreeters/lightdm-gtk-greeter.desktop
+lzip                           auto     /usr/bin/lzip.lzip

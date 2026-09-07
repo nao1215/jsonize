@@ -44,6 +44,8 @@ Start from the closest existing definition:
 | one object from the whole output | `registry/parsers/uptime/linux/parser.yaml` |
 | nested values | `registry/parsers/id/posix/parser.yaml` |
 | summary line + table | `registry/parsers/w/linux/parser.yaml` |
+| a block per subject, repeated | `registry/parsers/ip/stats-link/parser.yaml` |
+| a header block, then repeated blocks | `registry/parsers/update-alternatives/query/parser.yaml` |
 
 For `lsof`, the header is `COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME`
 and `NAME` may contain spaces, so a whitespace table with explicit columns
@@ -101,7 +103,7 @@ that keeps a neighbouring format away.
 ## 5. Generate the golden file and review it
 
 ```console
-$ make registry-update-golden
+$ jz test --update ./registry
 $ git diff --stat registry/parsers/lsof
 $ cat registry/parsers/lsof/default/testdata/lsof-4.95.json
 ```
@@ -111,12 +113,13 @@ number stays a string: the output does not record the base and the value
 is already rounded, so converting it would invent precision. Then:
 
 ```console
-$ make test
+$ jz test ./registry
 ```
 
-The golden test fails if the fixture does not select its own variant
-(signature overlap with another variant), does not parse, or differs
-from the JSON.
+The check fails if the fixture does not select its own variant, does not
+parse, differs from the JSON, or if any definition reads a fixture that
+belongs to another one. That last check is the one that catches a
+signature written wide enough to swallow a neighbouring format.
 
 ## 6. Try it for real
 
@@ -137,9 +140,14 @@ The same loop works with a personal registry and the released binary:
 ```console
 $ mkdir -p ~/.config/jsonize/registry/parsers/lsof/default/testdata
 $ $EDITOR ~/.config/jsonize/registry/parsers/lsof/default/parser.yaml
-$ make registry-update-golden DIR=~/.config/jsonize/registry
-$ make registry-test DIR=~/.config/jsonize/registry
+$ jz test --update
+$ jz test
 ```
+
+With no directory, `jz test` checks the registries jz would use and
+leaves the built-in one alone. The official fixtures are inside the
+binary either way, so your definition is held to the same exclusivity
+check as an official one without a copy of the repository.
 
 `jz list` shows the definition with source `user`, and it shadows an
 official definition of the same command and variant.

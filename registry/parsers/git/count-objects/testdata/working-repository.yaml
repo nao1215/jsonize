@@ -1,0 +1,4 @@
+description: A repository with loose objects and one pack.
+source: captured in this repository on Ubuntu 26.04 (git 2.53) with LC_ALL=C
+os: linux
+args: ["count-objects", "-v"]

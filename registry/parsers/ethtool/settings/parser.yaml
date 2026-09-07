@@ -1,0 +1,53 @@
+# `ethtool <interface>` prints a line naming the interface and then a
+# labelled value per line. A long value is broken at the terminal width
+# and continued on an indented line, which is what input.fold joins back
+# together; without it the continuation would read as a label of its own
+# or, worse, be dropped and the value silently truncated.
+#
+# Asked by a user who cannot open a netlink socket, ethtool says so on
+# standard output and falls back to the older interface, which answers
+# with the same report. That line is dropped.
+#
+# The three lists of link modes are arrays: they are a set of modes
+# separated by spaces, which is what the continuation lines were
+# carrying. Every other value is left as printed, since a speed, a port
+# list in brackets and a yes are not one kind of thing.
+format: 1
+command: ethtool
+variant: settings
+description: ethtool interface settings
+metadata:
+  tags: [linux, network, ethtool]
+  compatible: [ethtool]
+  references:
+    - https://man7.org/linux/man-pages/man8/ethtool.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^Settings for [^:\n]+:[ \t]*$'
+input:
+  fold: '^\t[ ]+\S'
+  ignore:
+    - '^netlink error:'
+parse:
+  type: composite
+  parts:
+    - name: interface
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^Settings for (?P<name>[^:\n]+):[ \t]*$'
+      fields:
+        name: {required: true}
+    - name: settings
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      fields:
+        Supported link modes: {type: array, split_regex: '[ \t]+'}
+        Advertised link modes: {type: array, split_regex: '[ \t]+'}
+        Link partner advertised link modes: {type: array, split_regex: '[ \t]+'}

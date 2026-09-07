@@ -1,0 +1,4 @@
+description: names that can be started on demand, where every column but the name and the connection is a dash
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, lines 1-14 of busctl list --activatable
+os: linux
+args: [list, --activatable]

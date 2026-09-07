@@ -1,0 +1,3 @@
+description: The file systemd-resolved writes with the upstream server it learned, one nameserver and one search domain.
+source: /run/systemd/resolve/resolv.conf on Ubuntu 26.04 (systemd 257); the server address and the search domain were replaced
+os: linux

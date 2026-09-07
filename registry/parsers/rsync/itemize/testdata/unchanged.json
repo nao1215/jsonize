@@ -1,0 +1,30 @@
+[
+  {
+    "change": ".d         ",
+    "path": "./"
+  },
+  {
+    "change": ".f         ",
+    "path": "arrow -> not a link.txt"
+  },
+  {
+    "change": ".S         ",
+    "path": "fifo"
+  },
+  {
+    "change": ".f         ",
+    "path": "hard-a"
+  },
+  {
+    "change": "hf         ",
+    "path": "hard-b"
+  },
+  {
+    "change": ".f         ",
+    "path": "keep.txt"
+  },
+  {
+    "change": ".f         ",
+    "path": "name with spaces.txt"
+  }
+]

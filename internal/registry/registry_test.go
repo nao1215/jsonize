@@ -163,3 +163,92 @@ func TestCasesErrors(t *testing.T) {
 		t.Error(e.TestdataPath())
 	}
 }
+
+// A manifest's disable list switches off definitions of the registries
+// below it. A user who hits a misdetecting official definition can take
+// it out instead of rewriting it.
+func TestDisableRemovesDefinitionsOfLowerSources(t *testing.T) {
+	t.Parallel()
+	high := fstest.MapFS{
+		"registry.yaml":                    {Data: []byte("format: 1\nname: user\ndisable:\n  - file/posix\n  - du\n  - nothing-here\n")},
+		"parsers/mine/default/parser.yaml": {Data: []byte(def("mine", "default"))},
+	}
+	low := fstest.MapFS{
+		"parsers/file/posix/parser.yaml":   {Data: []byte(def("file", "posix"))},
+		"parsers/file/bsd/parser.yaml":     {Data: []byte(def("file", "bsd"))},
+		"parsers/du/posix/parser.yaml":     {Data: []byte(def("du", "posix"))},
+		"parsers/du/gnu-human/parser.yaml": {Data: []byte(def("du", "gnu-human"))},
+		"parsers/uptime/linux/parser.yaml": {Data: []byte(def("uptime", "linux"))},
+	}
+	reg, err := Load(Source{Name: "user", FS: high}, Source{Name: "embedded", FS: low})
+	if err != nil {
+		t.Fatal(err)
+	}
+	// A disabled definition is gone from every way of reaching it, not
+	// hidden from some of them.
+	for _, id := range []string{"file/posix", "du/posix", "du/gnu-human"} {
+		command, variant, _ := strings.Cut(id, "/")
+		if _, ok := reg.Lookup(command, variant); ok {
+			t.Errorf("%s is still reachable by Lookup", id)
+		}
+	}
+	if got := len(reg.Variants("du")); got != 0 {
+		t.Errorf("du still has %d variants", got)
+	}
+	for _, c := range reg.Commands() {
+		if c == "du" {
+			t.Error("du is still a command")
+		}
+	}
+	if _, ok := reg.Lookup("file", "bsd"); !ok {
+		t.Error("file/bsd was disabled although only file/posix was named")
+	}
+	if got := reg.Disabled("embedded"); got != 3 {
+		t.Errorf("Disabled(embedded) = %d, want 3", got)
+	}
+	// An entry that named nothing is worth saying, not worth failing on.
+	if len(reg.Warnings) != 1 || !strings.Contains(reg.Warnings[0].Error(), `disable "nothing-here"`) {
+		t.Errorf("warnings = %v", reg.Warnings)
+	}
+}
+
+// A registry never disables itself, and a registry below cannot disable
+// one above it.
+func TestDisableOnlyReachesDownwards(t *testing.T) {
+	t.Parallel()
+	high := fstest.MapFS{
+		"parsers/df/gnu/parser.yaml": {Data: []byte(def("df", "gnu"))},
+	}
+	low := fstest.MapFS{
+		"registry.yaml":                   {Data: []byte("format: 1\nname: low\ndisable: [df, own]\n")},
+		"parsers/own/default/parser.yaml": {Data: []byte(def("own", "default"))},
+	}
+	reg, err := Load(Source{Name: "user", FS: high}, Source{Name: "embedded", FS: low})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := reg.Lookup("df", "gnu"); !ok {
+		t.Error("a lower registry disabled a definition above it")
+	}
+	if _, ok := reg.Lookup("own", "default"); !ok {
+		t.Error("a registry disabled its own definition")
+	}
+}
+
+func TestDisableSyntaxIsChecked(t *testing.T) {
+	t.Parallel()
+	for _, entry := range []string{"Bad", "a/b/c", "", "df/", "df gnu"} {
+		fsys := fstest.MapFS{
+			"registry.yaml":              {Data: []byte("format: 1\nname: x\ndisable: [\"" + entry + "\"]\n")},
+			"parsers/df/gnu/parser.yaml": {Data: []byte(def("df", "gnu"))},
+		}
+		_, err := Load(Source{Name: "s", FS: fsys})
+		if err == nil {
+			t.Errorf("disable %q was accepted", entry)
+			continue
+		}
+		if !strings.Contains(err.Error(), "must be a command or a command/variant") {
+			t.Errorf("disable %q: %v", entry, err)
+		}
+	}
+}

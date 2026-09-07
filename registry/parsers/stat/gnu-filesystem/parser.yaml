@@ -9,10 +9,14 @@
 format: 1
 command: stat
 variant: gnu-filesystem
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gstat
 description: GNU coreutils stat -f (filesystem information)
 metadata:
   tags: [linux, filesystem, coreutils]
-  compatible: [GNU coreutils]
+  compatible: [GNU coreutils, BusyBox]
   references:
     - https://www.gnu.org/software/coreutils/manual/html_node/stat-invocation.html
 detect:
@@ -49,7 +53,10 @@ parse:
       parse:
         type: regex
         each: input
-        pattern: '^Block size: (?P<block_size>\d+)\s+Fundamental block size: (?P<fundamental_block_size>\d+)\s*$'
+        # BusyBox prints this block line for line the way coreutils does
+        # but reports no fundamental block size, so that half of the line
+        # is optional and the field is null when it is absent.
+        pattern: '^Block size: (?P<block_size>\d+)(?:\s+Fundamental block size: (?P<fundamental_block_size>\d+))?\s*$'
       fields:
         block_size: {type: int}
         fundamental_block_size: {type: int}

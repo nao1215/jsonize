@@ -10,10 +10,17 @@
 format: 1
 command: env
 variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: genv
+  - name: printenv
 description: env / printenv output as a list of name/value pairs
 metadata:
   tags: [linux, darwin, environment]
   compatible: [GNU coreutils, BusyBox, macOS env]
+  references:
+    - https://man7.org/linux/man-pages/man1/env.1.html
 detect:
   # NAME=value is the shape of a .env file, a properties file, a shell
   # fragment and the show subcommand of half the systemd tools, so the

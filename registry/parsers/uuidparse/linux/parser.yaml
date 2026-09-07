@@ -1,0 +1,24 @@
+# `uuidparse` says what each UUID it is given encodes. The cells are cut
+# at the header words, because the time column holds a timestamp with a
+# space in it and the two columns before it are empty for a UUID that
+# encodes neither a type nor a time.
+format: 1
+command: uuidparse
+variant: linux
+description: uuidparse UUID variant, type and time
+metadata:
+  tags: [linux, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/uuidparse.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AUUID[ \t]+VARIANT[ \t]+TYPE[ \t]+TIME[ \t]*$'
+parse:
+  type: table
+  split: aligned
+fields:
+  uuid: {required: true}
+  variant: {required: true}

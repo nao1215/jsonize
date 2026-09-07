@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (iproute2 6.19) with LC_ALL=C
+description: >-
+  Naming a device drops the `dev` word from the line, leaving a single
+  discipline with no parameters.
+os: linux
+args: ["qdisc", "show", "dev", "lo"]

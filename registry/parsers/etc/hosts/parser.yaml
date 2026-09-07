@@ -4,6 +4,12 @@
 format: 1
 command: etc
 variant: hosts
+aliases:
+  # `getent hosts` prints this file, adding whatever the other name
+  # services answer with.
+  - name: getent
+    args:
+      all: ["hosts"]
 description: /etc/hosts entries
 metadata:
   tags: [linux, darwin, network]
@@ -24,6 +30,9 @@ detect:
       # `ip neighbour` prints "ADDRESS dev INTERFACE lladdr ... STATE",
       # which is an address followed by words as well.
       - '^\S+[ \t]+dev[ \t]+\S+[ \t]+(?:lladdr|PERMANENT|NOARP|REACHABLE|STALE|DELAY|PROBE|INCOMPLETE|FAILED|NONE)(?:[ \t]|$)'
+      # `netstat -r` and `route` print a routing table whose destination
+      # and gateway columns are two addresses followed by more columns.
+      - '^Destination[ \t]+Gateway[ \t]+Genmask[ \t]+Flags[ \t]'
 input:
   ignore:
     - '^\s*#'

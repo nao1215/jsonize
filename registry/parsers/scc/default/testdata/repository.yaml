@@ -1,0 +1,8 @@
+source: >-
+  captured with LC_ALL=C scc on the jsonize checkout with scc 3.7.0 from
+  the snap package
+description: >-
+  twelve languages, including one whose name holds a space, and counts
+  wide enough to carry thousands separators
+os: linux
+args: ["."]

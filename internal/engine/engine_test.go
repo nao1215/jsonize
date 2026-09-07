@@ -297,18 +297,33 @@ fields:
 	if !errors.As(err, &pe) || pe.Line != 1 || !strings.Contains(err.Error(), "does not match pattern") {
 		t.Errorf("mismatch error = %v", err)
 	}
-	skip := load(t, `
+	// A part says which lines of its region belong to a sibling, and only
+	// those are dropped: anything else still has to be read.
+	shared := load(t, `
 format: 1
 command: mount
-variant: skip
+variant: shared
 parse:
-  type: regex
-  pattern: '^(?P<a>\d+)$'
-  on_mismatch: skip
+  type: composite
+  parts:
+    - name: letters
+      ignore: ['^\d']
+      parse:
+        type: regex
+        pattern: '^(?P<a>[a-z])$'
+    - name: numbers
+      ignore: ['^[a-z]']
+      parse:
+        type: regex
+        pattern: '^(?P<n>\d+)$'
 `)
-	got, err = Parse(skip, []byte("x\n1\ny\n2\n"), Options{})
-	if err != nil || mustJSON(t, got) != `[{"a":"1"},{"a":"2"}]` {
-		t.Errorf("skip mode: %v %v", mustJSON(t, got), err)
+	got, err = Parse(shared, []byte("x\n1\ny\n2\n"), Options{})
+	if err != nil || mustJSON(t, got) != `{"letters":[{"a":"x"},{"a":"y"}],"numbers":[{"n":"1"},{"n":"2"}]}` {
+		t.Errorf("part ignore: %v %v", mustJSON(t, got), err)
+	}
+	_, err = Parse(shared, []byte("x\n1\n!\n"), Options{})
+	if err == nil || !strings.Contains(err.Error(), "does not match pattern") {
+		t.Errorf("a line no part claims must fail: %v", err)
 	}
 }
 
@@ -413,16 +428,73 @@ parse:
   type: kv
   separator: ":"
   as: map
-  on_mismatch: skip
 fields:
   count: {type: int}
   flag: {type: bool}
 `)
-	got, err = Parse(m, []byte("name : jsonize\ncount: 3\nflag: yes\njunk\nname: last wins\n"), Options{})
+	got, err = Parse(m, []byte("name : jsonize\ncount: 3\nflag: yes\nname: last wins\n"), Options{})
 	if err != nil {
 		t.Fatal(err)
 	}
 	if mustJSON(t, got) != `{"name":"last wins","count":3,"flag":true}` {
+		t.Error(mustJSON(t, got))
+	}
+}
+
+// input.fold joins a wrapped continuation onto the line above it, which
+// is how a report that breaks a long value at the terminal width is read
+// as one value rather than as a label of its own.
+func TestInputFold(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: wrapped
+input:
+  fold: '^[ \t]+\S'
+parse:
+  type: kv
+  separator: ":"
+  as: map
+`)
+	got, err := Parse(def, []byte("modes:  10baseT/Half\n        100baseT/Full\nduplex: Full\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if mustJSON(t, got) != `{"modes":"10baseT/Half 100baseT/Full","duplex":"Full"}` {
+		t.Error(mustJSON(t, got))
+	}
+
+	// A continuation with nothing above it is reported, not dropped.
+	if _, err := Parse(def, []byte("   orphan\nmodes: x\n"), Options{}); err == nil {
+		t.Error("a continuation on the first line should be an error")
+	} else if !strings.Contains(err.Error(), "nothing to join") {
+		t.Error(err)
+	}
+}
+
+// Folding runs before ignoring, so a continuation reaches the line it
+// belongs to even where that line is dropped, and a continuation of a
+// dropped line goes with it.
+func TestInputFoldRunsBeforeIgnore(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: wrapped
+input:
+  fold: '^[ \t]+\S'
+  ignore: ['^note:']
+parse:
+  type: kv
+  separator: ":"
+  as: map
+`)
+	got, err := Parse(def, []byte("note:  dropped\n       with its continuation\nkept:  value\n       and its own\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if mustJSON(t, got) != `{"kept":"value and its own"}` {
 		t.Error(mustJSON(t, got))
 	}
 }
@@ -470,6 +542,54 @@ parse:
 		t.Error("a line before the first record should be an error")
 	} else if !strings.Contains(err.Error(), "precedes the first record") {
 		t.Error(err)
+	}
+}
+
+// A composite part may be records: a report that opens with a banner and
+// then repeats a block needs one part for the banner and one for the
+// blocks.
+func TestParseCompositeWithRecordsPart(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: banner-and-blocks
+parse:
+  type: composite
+  parts:
+    - name: header
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^report for (?P<host>\S+)$'
+    - name: entries
+      select: {skip: 1}
+      parse:
+        type: records
+        start: '^\S'
+        parts:
+          - name: head
+            select: {limit: 1}
+            parse:
+              type: regex
+              each: input
+              pattern: '^(?P<name>\S+)$'
+          - name: items
+            select: {skip: 1}
+            parse:
+              type: regex
+              pattern: '^\s+(?P<item>\S+)$'
+`)
+	got, err := Parse(def, []byte("report for alpha\nfirst\n  one\n  two\nsecond\n  three\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	const want = `{"header":{"host":"alpha"},"entries":[` +
+		`{"head":{"name":"first"},"items":[{"item":"one"},{"item":"two"}]},` +
+		`{"head":{"name":"second"},"items":[{"item":"three"}]}]}`
+	if mustJSON(t, got) != want {
+		t.Error(mustJSON(t, got))
 	}
 }
 
@@ -750,20 +870,6 @@ fields:
 	_, err = Parse(def, []byte("\n x\n"), Options{})
 	if err == nil || !strings.Contains(err.Error(), "any of the 2 patterns") {
 		t.Errorf("mismatch message: %v", err)
-	}
-	// on_mismatch and each: input work the same way with several patterns.
-	skip := load(t, `
-format: 1
-command: x
-variant: v
-parse:
-  type: regex
-  patterns: ['^a(?P<a>\d+)$', '^b(?P<b>\d+)$']
-  on_mismatch: skip
-`)
-	got, err = Parse(skip, []byte("a1\nzzz\nb2\n"), Options{})
-	if err != nil || mustJSON(t, got) != `[{"a":"1"},{"b":"2"}]` {
-		t.Errorf("skip with patterns: %v %v", mustJSON(t, got), err)
 	}
 	whole := load(t, `
 format: 1

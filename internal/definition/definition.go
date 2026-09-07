@@ -40,12 +40,6 @@ const (
 	EachInput = "input"
 )
 
-// Mismatch policies.
-const (
-	MismatchError = "error"
-	MismatchSkip  = "skip"
-)
-
 // Key/value output shapes.
 const (
 	AsList = "list"
@@ -81,6 +75,7 @@ type Definition struct {
 	Format      int               `yaml:"format"`
 	Command     string            `yaml:"command"`
 	Variant     string            `yaml:"variant"`
+	Aliases     []Alias           `yaml:"aliases,omitempty"`
 	Description string            `yaml:"description,omitempty"`
 	Metadata    Metadata          `yaml:"metadata,omitempty"`
 	Detect      Detect            `yaml:"detect,omitempty"`
@@ -101,6 +96,53 @@ type Definition struct {
 // ID returns "command/variant".
 func (d *Definition) ID() string {
 	return d.Command + "/" + d.Variant
+}
+
+// Alias is another command that prints this same format: vdir prints
+// what ls -l prints, printenv what env prints, podman what docker
+// prints. One definition answers for all of them, because nothing in the
+// text says which of the commands wrote it.
+type Alias struct {
+	// Name is the other command's name, matched against argv[0] the way
+	// Command is.
+	Name string `yaml:"name"`
+	// Args replaces detect.args while the definition is reached under
+	// this name, for an alias that needs other arguments than the command
+	// does: getent prints the passwd file only when asked for passwd,
+	// while vdir needs no argument where ls needs -l. An alias that says
+	// nothing here is filtered the way the command is, and one that says
+	// an empty filter accepts any arguments.
+	Args *ArgsMatch `yaml:"args,omitempty"`
+}
+
+// ArgsFor returns the argument filter that applies when the definition
+// was reached under name.
+func (d *Definition) ArgsFor(name string) *ArgsMatch {
+	if name != "" && name != d.Command {
+		for i := range d.Aliases {
+			if d.Aliases[i].Name != name {
+				continue
+			}
+			if d.Aliases[i].Args != nil {
+				return d.Aliases[i].Args
+			}
+			break
+		}
+	}
+	return &d.Detect.Args
+}
+
+// AliasNames returns the alias names in the order the definition lists
+// them.
+func (d *Definition) AliasNames() []string {
+	if len(d.Aliases) == 0 {
+		return nil
+	}
+	out := make([]string, 0, len(d.Aliases))
+	for i := range d.Aliases {
+		out = append(out, d.Aliases[i].Name)
+	}
+	return out
 }
 
 // Metadata is descriptive information that does not affect parsing.
@@ -201,12 +243,18 @@ type Input struct {
 	RecordSeparator string `yaml:"record_separator,omitempty"`
 	// Ignore lists regular expressions; matching lines are dropped.
 	Ignore []string `yaml:"ignore,omitempty"`
+	// Fold names the continuation of the line above it: a matching line
+	// is joined onto the previous one with a single space, which is how a
+	// report that breaks a long value at the terminal width is read as
+	// one value. It is applied before Ignore and SkipBlank.
+	Fold string `yaml:"fold,omitempty"`
 	// SkipBlank drops blank lines. Defaults to true.
 	SkipBlank *bool `yaml:"skip_blank,omitempty"`
 	// Select narrows the lines handed to the parser.
 	Select Select `yaml:"select,omitempty"`
 
 	ignore []*regexp.Regexp
+	fold   *regexp.Regexp
 }
 
 // Separator returns the effective record separator byte.
@@ -224,6 +272,10 @@ func (in *Input) SkipBlankLines() bool {
 
 // IgnorePatterns returns the compiled ignore expressions.
 func (in *Input) IgnorePatterns() []*regexp.Regexp { return in.ignore }
+
+// FoldPattern reports the continuation expression, nil when the format
+// has no wrapped lines.
+func (in *Input) FoldPattern() *regexp.Regexp { return in.fold }
 
 // Select picks a contiguous range of lines. The steps are applied in the
 // order after, until, skip, limit.
@@ -269,9 +321,8 @@ type Parse struct {
 	// matches wins. They let a definition treat structurally different
 	// lines differently (an ls symlink line and an ordinary one) without
 	// a single expression having to guess.
-	Patterns   []string `yaml:"patterns,omitempty"`
-	Each       string   `yaml:"each,omitempty"`
-	OnMismatch string   `yaml:"on_mismatch,omitempty"`
+	Patterns []string `yaml:"patterns,omitempty"`
+	Each     string   `yaml:"each,omitempty"`
 
 	// kv
 	Separator string `yaml:"separator,omitempty"`
@@ -356,11 +407,23 @@ type Header struct {
 
 // Part is one component of a composite parser.
 type Part struct {
-	Name   string            `yaml:"name"`
-	Select Select            `yaml:"select,omitempty"`
+	Name   string `yaml:"name"`
+	Select Select `yaml:"select,omitempty"`
+	// Ignore lists regular expressions; a line of the part's region that
+	// matches one is dropped. It is what a part uses to say which lines
+	// of a shared region belong to a sibling: a settings line the part
+	// above already read, a slave link the part below reads. Naming them
+	// is the point, so that a line nobody reads is a mistake the parse
+	// reports rather than something quietly lost.
+	Ignore []string          `yaml:"ignore,omitempty"`
 	Parse  Parse             `yaml:"parse"`
 	Fields map[string]*Field `yaml:"fields,omitempty"`
+
+	ignore []*regexp.Regexp
 }
+
+// IgnorePatterns returns the compiled expressions of a part's ignore list.
+func (p *Part) IgnorePatterns() []*regexp.Regexp { return p.ignore }
 
 // Field describes how one extracted value is converted.
 type Field struct {

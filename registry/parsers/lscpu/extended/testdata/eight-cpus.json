@@ -1,0 +1,90 @@
+[
+  {
+    "cpu": 0,
+    "node": 0,
+    "socket": 0,
+    "core": 0,
+    "caches": "0:0:0:0",
+    "online": true,
+    "maxmhz": 5187.5,
+    "minmhz": 625,
+    "mhz": 5019.4282
+  },
+  {
+    "cpu": 1,
+    "node": 0,
+    "socket": 0,
+    "core": 1,
+    "caches": "1:1:1:0",
+    "online": true,
+    "maxmhz": 5187.5,
+    "minmhz": 625,
+    "mhz": 5014.1602
+  },
+  {
+    "cpu": 2,
+    "node": 0,
+    "socket": 0,
+    "core": 2,
+    "caches": "2:2:2:0",
+    "online": true,
+    "maxmhz": 5187.5,
+    "minmhz": 625,
+    "mhz": 5005.3599
+  },
+  {
+    "cpu": 3,
+    "node": 0,
+    "socket": 0,
+    "core": 3,
+    "caches": "3:3:3:0",
+    "online": true,
+    "maxmhz": 5187.5,
+    "minmhz": 625,
+    "mhz": 5015.0879
+  },
+  {
+    "cpu": 4,
+    "node": 0,
+    "socket": 0,
+    "core": 4,
+    "caches": "4:4:4:0",
+    "online": true,
+    "maxmhz": 5187.5,
+    "minmhz": 625,
+    "mhz": 5015.813
+  },
+  {
+    "cpu": 5,
+    "node": 0,
+    "socket": 0,
+    "core": 5,
+    "caches": "5:5:5:0",
+    "online": true,
+    "maxmhz": 5187.5,
+    "minmhz": 625,
+    "mhz": 5019.6431
+  },
+  {
+    "cpu": 6,
+    "node": 0,
+    "socket": 0,
+    "core": 6,
+    "caches": "6:6:6:0",
+    "online": true,
+    "maxmhz": 5187.5,
+    "minmhz": 625,
+    "mhz": 5023.002
+  },
+  {
+    "cpu": 7,
+    "node": 0,
+    "socket": 0,
+    "core": 7,
+    "caches": "7:7:7:0",
+    "online": true,
+    "maxmhz": 5187.5,
+    "minmhz": 625,
+    "mhz": 5059.8862
+  }
+]

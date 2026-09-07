@@ -1,0 +1,4 @@
+description: Eight crates, one of which installed three binaries.
+source: captured on Ubuntu 26.04 (cargo 1.92) with LC_ALL=C
+os: linux
+args: ["install", "--list"]

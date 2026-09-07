@@ -1,0 +1,21 @@
+66	0	.github/workflows/website.yml
+5	0	.gitignore
+4	4	CONTRIBUTING.md
+12	0	Makefile
+60	209	README.md
+-	-	demo/jsonize.gif
+32	0	demo/jsonize.tape
+125	0	website/assets/css/site.css
+46	0	website/content/_index.md
+4	1	{docs => website/content}/definition-format.md
+4	1	{docs => website/content}/design.md
+32	0	website/content/install.md
+89	0	website/content/parsers.md
+97	0	website/content/usage.md
+4	1	docs/adding-parsers.md => website/content/write-a-parser.md
+69	0	website/hugo.toml
+6	0	website/layouts/404.html
+36	0	website/layouts/_default/baseof.html
+9	0	website/layouts/_default/home.html
+11	0	website/layouts/_default/list.html
+11	0	website/layouts/_default/single.html

@@ -7,6 +7,8 @@ description: "mount listing on macOS and BSD: \"fs on dir (type, options)\""
 metadata:
   tags: [darwin, bsd, filesystem]
   compatible: [macOS mount, FreeBSD mount]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?mount(8)
 detect:
   os: [darwin, freebsd, openbsd, netbsd]
   signature:

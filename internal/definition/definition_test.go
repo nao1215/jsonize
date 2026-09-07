@@ -92,11 +92,11 @@ parse:
       fields:
         idle: {null_if: ["-"]}
     - name: env
+      ignore: ['^\\S']
       parse:
         type: kv
         separator: "="
         as: list
-        on_mismatch: skip
 `
 	d, err := Load([]byte(src), "w.yaml")
 	if err != nil {
@@ -238,7 +238,7 @@ func TestLoadErrors(t *testing.T) {
 		want string // substring expected in the error
 	}{
 		{"not yaml", "format: [", "invalid YAML"},
-		{"unknown key", base + "bogus: 1\n", "invalid YAML"},
+		{"unknown key", base + "bogus: 1\n", `unknown key "bogus"; this definition may need a newer jz`},
 		{"format 2", "format: 2\ncommand: c\nvariant: v\nparse: {type: kv}\n", "format 2 is not supported"},
 		{"missing command", "format: 1\nvariant: v\nparse: {type: kv}\n", "command: is required"},
 		{"bad command", "format: 1\ncommand: 'A B'\nvariant: v\nparse: {type: kv}\n", "command"},
@@ -246,7 +246,8 @@ func TestLoadErrors(t *testing.T) {
 		{"bad variant", "format: 1\ncommand: c\nvariant: 'Bad_'\nparse: {type: kv}\n", "variant"},
 		{"reserved variant", "format: 1\ncommand: c\nvariant: aux\nparse: {type: kv}\n", "reserved file name"},
 		{"reserved command", "format: 1\ncommand: nul\nvariant: v\nparse: {type: kv}\n", "reserved file name"},
-		{"bad min_jsonize", base + "min_jsonize: abc\n", "min_jsonize"},
+		{"key removed from the format", base + "min_jsonize: abc\n", `unknown key "min_jsonize"`},
+		{"nested unknown key", base + "input: {fold: 'a', bogus: 'b'}\n", `unknown key "bogus"`},
 		{"bad os", base + "detect: {os: [plan9]}\n", "unknown operating system"},
 		{"empty arg", base + "detect: {args: {any: ['']}}\n", "empty argument"},
 		{"bad window", base + "detect: {signature: {window: 999}}\n", "window"},
@@ -278,7 +279,7 @@ func TestLoadErrors(t *testing.T) {
 		{"table with regex keys", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, pattern: x}\n", "only valid for type regex"},
 		{"table with kv keys", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, separator: x}\n", "only valid for type kv"},
 		{"table with parts", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, parts: [{name: a, parse: {type: kv}}]}\n", "only valid for type composite"},
-		{"table on_mismatch", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, on_mismatch: skip}\n", "on_mismatch"},
+		{"on_mismatch is gone", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', on_mismatch: skip}\n", `unknown key "on_mismatch"`},
 		{"regex missing pattern", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex}\n", "pattern: is required"},
 		{"regex both pattern forms", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', patterns: ['(?P<b>.)']}\n", "mutually exclusive"},
 		{"regex too many patterns", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: [" + strings.Repeat("'(?P<a>.)',", MaxPatterns+1) + "]}\n", "more than 16 alternatives"},
@@ -291,15 +292,23 @@ func TestLoadErrors(t *testing.T) {
 		{"regex invalid", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '('}\n", "invalid regular expression"},
 		{"regex no groups", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: 'abc'}\n", "at least one named group"},
 		{"regex bad each", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', each: all}\n", "must be line or input"},
-		{"regex bad mismatch", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', on_mismatch: ignore}\n", "must be error or skip"},
+		{"bad part ignore", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: p, ignore: ['('], parse: {type: kv}}]}\n", "parts[0].ignore[0]"},
 		{"regex field not group", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)'}\nfields: {b: {}}\n", "not a named group"},
 		{"regex with table keys", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', header: {columns: [a]}}\n", "only valid for type table"},
 		{"regex with split", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', split: aligned}\n", "only valid for type table"},
 		{"kv bad as", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, as: tuple}\n", "must be list or map"},
 		{"kv bad value name", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, value_name: 'a b'}\n", "value_name"},
 		{"kv with pattern", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, pattern: x}\n", "only valid for type regex"},
+		{"alias without a name", "format: 1\ncommand: c\nvariant: v\naliases: [{args: {all: [x]}}]\nparse: {type: kv}\n", "aliases[0].name: is required"},
+		{"alias is the command", "format: 1\ncommand: c\nvariant: v\naliases: [{name: c}]\nparse: {type: kv}\n", "is the command itself"},
+		{"duplicate alias", "format: 1\ncommand: c\nvariant: v\naliases: [{name: d}, {name: d}]\nparse: {type: kv}\n", "duplicate alias"},
+		{"alias bad name", "format: 1\ncommand: c\nvariant: v\naliases: [{name: 'A B'}]\nparse: {type: kv}\n", "must match"},
+		{"bad fold", "format: 1\ncommand: c\nvariant: v\ninput: {fold: '('}\nparse: {type: kv}\n", "invalid regular expression"},
 		{"composite no parts", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite}\n", "parts: is required"},
 		{"composite nested", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: a, parse: {type: composite, parts: [{name: b, parse: {type: kv}}]}}]}\n", "cannot be composite"},
+		{"records with no parts", "format: 1\ncommand: c\nvariant: v\nparse: {type: records, start: x}\n", "is required for type records"},
+		{"records nested in records", "format: 1\ncommand: c\nvariant: v\nparse: {type: records, start: x, parts: [{name: a, parse: {type: records, start: y, parts: [{name: b, parse: {type: kv}}]}}]}\n", "cannot be records"},
+		{"records part cannot be composite", "format: 1\ncommand: c\nvariant: v\nparse: {type: records, start: x, parts: [{name: a, parse: {type: composite, parts: [{name: b, parse: {type: kv}}]}}]}\n", "cannot be composite"},
 		{"composite no name", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{parse: {type: kv}}]}\n", "name: is required"},
 		{"composite bad name", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: 'a b', parse: {type: kv}}]}\n", "invalid name"},
 		{"composite dup name", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: a, parse: {type: kv}}, {name: a, parse: {type: kv}}]}\n", "duplicate part name"},

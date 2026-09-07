@@ -1,0 +1,3 @@
+description: Rows about single threads, where both thread columns are filled and the path names the task directory.
+source: the header and lines 13 to 30 of the same capture as process-rows
+os: linux

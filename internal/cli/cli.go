@@ -2,8 +2,8 @@
 //
 // The default behaviour, with no subcommand, is to read text from
 // standard input, identify which command produced it and write JSON.
-// Everything else (running the command for you, listing parsers, the
-// version) is a subcommand. Data goes to stdout and only ever as JSON;
+// Everything else (running the command for you, listing parsers,
+// checking a registry of definitions, the version) is a subcommand. Data goes to stdout and only ever as JSON;
 // diagnostics go to stderr with a "jz:" prefix, so a consumer reading
 // stdout sees valid JSON or nothing at all.
 package cli
@@ -79,6 +79,7 @@ func commands() []command {
 	return []command{
 		{"run", "run a command and convert its stdout to JSON", (*app).cmdRun},
 		{"list", "list supported parsers, or inspect one", (*app).cmdList},
+		{"test", "check parser definitions and their fixtures", (*app).cmdTest},
 		{"version", "print the version", (*app).cmdVersion},
 	}
 }
@@ -141,6 +142,7 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "  jz [options] < FILE")
 	fmt.Fprintln(w, "  jz run [options] COMMAND [args...]")
 	fmt.Fprintln(w, "  jz list [COMMAND [VARIANT]]")
+	fmt.Fprintln(w, "  jz test [DIR...]")
 	fmt.Fprintln(w, "  jz version")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Commands:")
@@ -160,7 +162,8 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "Exit codes: 0 ok, 1 error, 2 usage, 3 parse failure, 4 unidentified or")
 	fmt.Fprintln(w, "ambiguous input, 5 registry problem; `jz run` mirrors the command's own status.")
 	fmt.Fprintln(w)
-	fmt.Fprintln(w, "Run `jz run --help` or `jz list --help` for a subcommand's own options.")
+	fmt.Fprintln(w, "Run `jz run --help`, `jz list --help` or `jz test --help` for a subcommand's")
+	fmt.Fprintln(w, "own options.")
 	fmt.Fprintln(w)
 	printLinks(w)
 }
@@ -213,8 +216,9 @@ func (a *app) exitFor(err error) int {
 		le *registry.LoadError
 		ve *definition.ValidationError
 		fe *definition.FormatError
+		ue *definition.UnknownKeyError
 	)
-	if errors.As(err, &le) || errors.As(err, &ve) || errors.As(err, &fe) {
+	if errors.As(err, &le) || errors.As(err, &ve) || errors.As(err, &fe) || errors.As(err, &ue) {
 		return ExitRegistry
 	}
 	return ExitError

@@ -1,0 +1,4 @@
+description: two toolchains, one of them both active and default and the other unmarked
+source: captured on Ubuntu 26.04 (rustup 1.29.1) with LC_ALL=C
+os: linux
+args: [toolchain, list]

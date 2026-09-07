@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (shadow 1:4.17.4-2ubuntu3) with LC_ALL=C, chage -l -i
+description: |
+  The same account with -i, which prints dates as YYYY-MM-DD. The labels
+  do not change, so one definition reads both spellings and the value
+  stays the string chage printed.
+os: linux

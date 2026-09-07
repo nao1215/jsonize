@@ -20,6 +20,10 @@
 format: 1
 command: cksum
 variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gcksum
 description: cksum CRC, byte count and file name
 metadata:
   tags: [linux, darwin, checksum]
@@ -31,6 +35,11 @@ detect:
   signature:
     all:
       - '\A\\?\d+ \d+(?: \S|$)'
+    none:
+      # A crontab entry opens with two numbers and then its remaining
+      # time fields, so it reads as a CRC, a size and a file name unless
+      # it is named here.
+      - '^(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+\S+[ \t]+\S'
 parse:
   type: regex
   patterns:

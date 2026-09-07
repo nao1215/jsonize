@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (ethtool 6.19) with LC_ALL=C, lines 1 to 14 of
+  64
+description: >-
+  The loopback device, where the first feature is fixed on and a
+  sub-feature is fixed off under a parent that is not.
+os: linux
+args: ["-k", "lo"]

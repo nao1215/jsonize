@@ -6,12 +6,14 @@ toc: true
 
 A parser definition is one YAML document, `parser.yaml`, stored at
 `parsers/<command>/<variant>/` inside a registry. The directory names
-must match the `command` and `variant` keys.
+must match the `command` and `variant` keys. The registry itself is
+described by [its manifest](#the-registry-manifest).
 
 ```yaml
 format: 1                       # required; the schema version
 command: df                     # required; [a-z0-9][a-z0-9._+-]*
 variant: gnu-human              # required; [a-z0-9][a-z0-9-]*
+aliases: [...]                  # optional; other commands printing this
 description: GNU coreutils df -h
 metadata: {...}                 # optional, informational
 detect: {...}                   # optional; how to choose this variant
@@ -21,8 +23,37 @@ parse: {...}                    # required; the algorithm
 fields: {...}                   # optional; conversions per field
 ```
 
-Unknown keys are errors. Names such as `aux`, `con` or `nul` are rejected
-because they cannot be directories on Windows.
+Unknown keys are errors naming the key and saying that a newer jz may
+read it: keys are added within format 1, so this is how a definition
+written for a later release reaches an older jz. Names such as `aux`,
+`con` or `nul` are rejected because they cannot be directories on
+Windows.
+
+## aliases
+
+More than one command can print the same format, and nothing in the text
+says which of them wrote it. One definition answers for all of them:
+
+```yaml
+aliases:
+  - name: vdir                  # required; the other command's name
+    args: {}                    # optional; replaces detect.args here
+  - name: getent
+    args: {all: [passwd]}
+  - name: podman                # inherits detect.args
+```
+
+`jz run vdir`, `jz --parser vdir` and `jz list vdir` all reach the
+definition; `jz list` reports the aliases under the command they belong
+to rather than as commands of their own, because they add no format.
+
+`args` is what makes an alias more than a second name. An alias that says
+nothing there is filtered the way the command is, which is what `gdf`
+wants: it is GNU `df` under the name macOS installs it as, and `gdf -h`
+should reach the same variant `df -h` does. An alias that needs other
+arguments states them, which is what `getent passwd` wants. An alias that
+states an empty filter accepts any arguments, which is what `vdir` wants:
+it prints the long listing that `ls` prints only with `-l`.
 
 ## metadata
 
@@ -66,9 +97,11 @@ detect:
   `none` expressions excluding every other format that looks similar.
 
 Selection: a candidate whose applicable criterion fails is rejected. One
-remaining candidate is the answer. Several are settled by `priority` only
-when they are variants of the same command and one priority is strictly
-highest; otherwise the selection is an error naming them.
+remaining candidate is the answer. Several from different registries are
+settled by the registry layering, the earlier one winning. Several from
+one registry are settled by `priority` only when they are variants of the
+same command and one priority is strictly highest; otherwise the
+selection is an error naming them.
 
 ## exec
 
@@ -88,6 +121,7 @@ command runs).
 ```yaml
 input:
   record_separator: newline # or nul, for `env -0` style output
+  fold: '^[ \t]+\S'         # join a wrapped line onto the one above it
   ignore: ['^total \d']    # drop matching lines
   skip_blank: true          # default true
   select:                  # applied in this order
@@ -98,8 +132,19 @@ input:
 ```
 
 Input is split on the record separator, a newline by default; a trailing
-`\r` is then removed from every line and a UTF-8 BOM is dropped. With
-`record_separator: nul` the records are separated by NUL bytes instead,
+`\r` is then removed from every line and a UTF-8 BOM is dropped.
+
+`fold` names the continuation of the line above it. A matching line is
+joined onto the previous one with a single space and its own leading and
+trailing whitespace removed, and the joined line keeps the number of the
+line it started on. It runs before `ignore` and `skip_blank`, so a
+continuation is joined even where the line it belongs to would be
+dropped. A continuation with nothing above it is an error naming the
+line, rather than something quietly dropped. This is for a report that
+breaks a long value at the terminal width (`ethtool` listing link modes)
+and for the control files whose values continue on an indented line.
+
+With `record_separator: nul` the records are separated by NUL bytes instead,
 which is what makes a value containing a newline representable. Input
 must be valid UTF-8 and within the size limits.
 
@@ -146,7 +191,6 @@ parse:
   type: regex
   pattern: '^(?P<filesystem>.+?) on (?P<mount_point>.+?) type (?P<type>\S+)$'
   each: line | input        # default line
-  on_mismatch: error | skip # default error
 ```
 
 Several alternatives can be listed instead of one expression, and are
@@ -172,7 +216,10 @@ objects the others produce.
 named groups; `each: input` matches the whole (pre-processed) text once
 and yields a single object. Groups that did not participate are `null`
 (or omitted with `when_missing: omit`). A non-matching line is an error
-naming the line and pattern unless `on_mismatch: skip`.
+naming the line and the pattern. A line that belongs to another part of
+a composite is named in that part's [`ignore`](#type-composite); a line
+that belongs to nothing is a definition that does not describe its
+input.
 
 ### type: kv
 
@@ -183,7 +230,6 @@ parse:
   as: list | map          # default list
   trim: true              # default true
   unquote: false          # default false
-  on_mismatch: error | skip
 ```
 
 A kv definition looks its `fields` entries up by the key the command
@@ -219,9 +265,10 @@ Each record is then read the way `composite` reads a whole input, so the
 array with one object per record.
 
 Text before the first record is an error naming the line, rather than
-something quietly dropped; a banner belongs in `input.select` instead.
+something quietly dropped. A banner belongs in `input.select`, or in a
+`composite` part of its own with the blocks in a second part.
 
-`records` is not recursive: a part cannot itself be `records` or
+`records` is not recursive: a part of it cannot be `records` or
 `composite`. A tree of arbitrary depth (`npm ls --all`, `iw dev`) has no
 shape jz can promise in advance, and those commands print JSON of their
 own.
@@ -242,8 +289,53 @@ parse:
 ```
 
 Each part re-selects from the pre-processed lines and runs its own
-parser; the result is an object keyed by part name. Parts cannot be
-composite themselves.
+parser; the result is an object keyed by part name.
+
+A part may also carry `ignore`, a list of expressions matching lines of
+its region that belong to a sibling part:
+
+```yaml
+parts:
+  - name: settings
+    select: {until: '^Boot[0-9A-Fa-f]{4}'}
+    parse: {type: kv, separator: ':', as: map}
+  - name: entries
+    ignore: ['^[A-Za-z][A-Za-z0-9]*: ']
+    parse: {type: regex, pattern: '^Boot(?P<boot_number>[0-9A-Fa-f]{4})...'}
+```
+
+`select` runs first and `ignore` narrows what it left, so `skip` and
+`limit` count the lines as they stand in the output. Use it where two
+parts share a region and neither can be cut out by a range: the settings
+above a list of boot entries, the slave links between two labelled
+blocks. What it is not for is silence. Every line of a part's region that
+`ignore` does not name has to be read, so a line the definition never
+anticipated is an error rather than a value quietly missing from the
+JSON.
+
+A part may be `records`, which is what a report that opens with a banner
+and then repeats a block needs: one part reads the banner, the next reads
+the blocks.
+
+```yaml
+parse:
+  type: composite
+  parts:
+    - name: alternative
+      select: {limit: 4}
+      parse: {type: kv, separator: ':', as: map}
+    - name: candidates
+      select: {after: '^Alternative:'}
+      parse:
+        type: records
+        start: '^Alternative:'
+        parts: [...]
+```
+
+No other nesting is allowed. A part cannot be `composite`, and a part of
+`records` cannot be `records`: both describe a depth that comes from the
+input rather than from the definition, which is the shape jz does not
+promise.
 
 ## fields
 
@@ -288,6 +380,37 @@ printed by `df -h` or `ls -lh` is neither, and the official definitions
 keep such values as the strings they were printed as. Nesting is limited
 to 8 levels.
 
+
+## The registry manifest
+
+`registry.yaml` sits at the top of a registry directory and describes the
+registry rather than any one definition:
+
+```yaml
+format: 1                 # required; the same schema version definitions carry
+name: mine                # required; how the registry appears in diagnostics
+version: "2026.09"        # optional
+description: my parsers   # optional
+source: https://...       # optional; where the registry came from
+disable:                  # optional; definitions below this registry to switch off
+  - file/posix            # one definition
+  - du                    # every variant of a command
+```
+
+`disable` reaches downwards only: it applies to the registries below this
+one in the layering, never to this one and never to one above it. A
+disabled definition is not loaded at all, so it is absent from `jz list`,
+from `--parser` and from automatic detection alike. This is what to reach
+for when an official definition misreads your output: shadowing it means
+writing a whole definition under the same name, while disabling it takes
+it out and leaves the rest.
+
+An entry that names no definition is a warning on standard error, not an
+error, because a registry that disables a definition removed upstream
+should keep working. An entry that is neither `command` nor
+`command/variant` is a validation error and the registry does not load.
+`jz list --sources` counts, per registry, the definitions a registry
+above it switched off.
 
 ## Errors
 

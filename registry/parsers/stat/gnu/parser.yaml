@@ -4,6 +4,10 @@
 format: 1
 command: stat
 variant: gnu
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gstat
 description: GNU coreutils stat (default format)
 metadata:
   tags: [linux, filesystem, coreutils]

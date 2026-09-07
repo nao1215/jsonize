@@ -1,0 +1,41 @@
+# `netstat -r` and `route` both print a "Kernel IP routing table" banner,
+# and the two tables are told apart by the header row alone: netstat
+# reports MSS, Window and irtt where route reports Metric, Ref and Use.
+# Both signatures pin their own header row whole, so neither can be
+# reached by the other's output.
+format: 1
+command: netstat
+variant: routing
+description: netstat -r kernel IP routing table
+metadata:
+  tags: [linux, network, net-tools]
+  # Only BusyBox was available to capture from; net-tools prints the same
+  # columns but was not verified here.
+  compatible: [BusyBox]
+  references:
+    - https://man7.org/linux/man-pages/man8/netstat.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AKernel IP routing table[ \t]*$'
+      - '^Destination[ \t]+Gateway[ \t]+Genmask[ \t]+Flags[ \t]+MSS[ \t]+Window[ \t]+irtt[ \t]+Iface[ \t]*$'
+input:
+  ignore:
+    - '^Kernel IP routing table[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+fields:
+  # Destination and gateway are addresses with -n and names without it,
+  # where an absent gateway prints "*" and the default route prints
+  # "default"; the flag cell is a set of letters (U, G, H) that is one
+  # word, not a number.
+  destination: {required: true}
+  gateway: {required: true}
+  genmask: {required: true}
+  flags: {required: true}
+  mss: {type: int}
+  window: {type: int}
+  irtt: {type: int}
+  iface: {required: true}

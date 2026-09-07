@@ -1,0 +1,14 @@
+COMMAND PID USER  ASSOC  XMODE  TYPE          SOURCE MNTID INODE NAME
+systemd   1 root    exe ????-- ERROR readlink:EACCES             
+systemd   1 root    cwd ????-- ERROR readlink:EACCES             
+systemd   1 root    rtd ????-- ERROR readlink:EACCES             
+systemd   1 root cgroup ????-- ERROR readlink:EACCES             
+systemd   1 root    ipc ????-- ERROR readlink:EACCES             
+systemd   1 root    mnt ????-- ERROR readlink:EACCES             
+systemd   1 root    net ????-- ERROR readlink:EACCES             
+systemd   1 root    pid ????-- ERROR readlink:EACCES             
+systemd   1 root  pid4c ????-- ERROR readlink:EACCES             
+systemd   1 root   time ????-- ERROR readlink:EACCES             
+systemd   1 root time4c ????-- ERROR readlink:EACCES             
+systemd   1 root   user ????-- ERROR readlink:EACCES             
+systemd   1 root    uts ????-- ERROR readlink:EACCES             

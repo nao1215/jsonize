@@ -1,0 +1,4 @@
+description: The placeholder fstab a base image ships, holding a comment and nothing else. There is no entry to recognise, so the file is refused rather than read as an empty table.
+source: /etc/fstab of the core18 snap base image
+os: linux
+expect_error: 'does not describe this input'
