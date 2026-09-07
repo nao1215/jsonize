@@ -42,10 +42,9 @@ compiled definition and the whole text; encoding never sees definitions.
 ### A small public surface
 
 The command line is four subcommands (`run`, `list`, `test`, `version`)
-and six options (`--file`, `--pretty`, `--stream`, `--parser`,
-`--variant`, `--help`). Every
-option that asked the user to make a decision jz should be making, or
-that changed the output contract, was removed before release:
+and the options listed in the usage page. Every option that asked the
+user to make a decision jz should be making, or that changed the output
+contract, was removed before release:
 
 | Removed | Why |
 |---------|-----|
@@ -190,6 +189,64 @@ the signature names, a listing that mixes a kind with lines file(1)
 could not read, and a listing that names no kind at all and is refused.
 Each of the three exists because the signature says something, not the
 other way round.
+
+### The choice is visible
+
+Making the chosen parser and the reason for it visible is one of the
+goals, and until `--explain` a successful run met none of it: the JSON
+looked the same whichever definition produced it, and the only way to
+find out was to read the registry. The selector already carried the
+answer — it counts what it scanned and records why each candidate was
+left out, because the failure messages are built from it — so what was
+missing was a way to ask on the way past.
+
+Everything it writes goes to standard error and nothing about the answer
+changes, which is what lets it be added to a working pipeline. It writes
+no clock reading either: an explanation is for comparing between runs and
+pasting into a report, and a timestamp would make two identical answers
+differ.
+
+The rejections need a rule. A search of the whole registry rejects three
+hundred definitions on the first expression of a signature, and printing
+that is not an explanation. A search scoped to one parser has a handful
+of variants and all of them are worth reading. So the line is drawn at
+whether the definition met part of what it asks for: past its first
+signature expression, or a signature that fits and an `auto_detect: false`
+holding it back. Those are the near misses, and a scoped search reports
+every variant because in that scope they all are.
+
+### A file path is evidence
+
+`jz run` narrows the variants with the command name and its arguments,
+and a pipe has nothing but the text. A file sits between the two: it has
+no argv, but it has a path, and the path says something the text does
+not.
+
+The rule is one sentence and holds no list of names. The directory the
+file sits in names the parser, the file names the variant, and the pair
+has to exist in the registry. `/etc/fstab` and `/proc/meminfo` work
+because parsers named `etc` and `proc` exist, which they do because those
+formats were named after the directory they live in; a registry that
+names a parser after some other directory gets the same treatment, and
+nothing in Go knows about either path.
+
+What it buys is exactly the formats a signature cannot claim. `/etc/fstab`
+is six whitespace-separated fields, so it declares `auto_detect: false`
+and, before this, had to be named on the command line every time — for a
+file whose path already said what it was.
+
+It stays evidence and does not become an instruction. The definition it
+names still has to satisfy its signature, and when it does not the pair
+is dropped and the text is read on its own terms, so a path can only add
+an answer and never replace one. A base name containing a dot is treated
+as a file name rather than a variant name, which keeps a capture saved as
+`fstab.txt` out of it and stops the rule needing a list of extensions.
+
+The alternative considered was reading the base name as the parser
+(`df.txt` → `df`). It was rejected because it guesses where this rule
+looks up: a file called `ls` in a directory called `bin` would name a
+parser that exists, with no variant to confirm it against, and the whole
+point of the pair is that both halves have to be right.
 
 ### Selection never guesses
 

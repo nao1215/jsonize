@@ -8,6 +8,25 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `--explain`, on every mode, which writes the chosen definition and what
+  it was chosen on to standard error: the definition and the registry it
+  came from, the conditions the input met, and the definitions that were
+  left out with the reason for each. Standard output and the exit status
+  are untouched, and no clock reading is written, so two runs over the
+  same input explain themselves identically. A search of the whole
+  registry lists only the definitions that came close, since rejecting
+  three hundred others on the first expression of a signature explains
+  nothing; a search scoped to one parser lists every variant.
+- A file path is read as evidence about the text in it: the directory
+  names the parser and the file names the variant, and the pair has to
+  exist in the registry. `jz --file /etc/fstab` and
+  `jz --file /proc/meminfo` now convert without the parser being named,
+  which is what the formats too unremarkable to claim on sight needed.
+  Nothing in the code knows about `/etc` or `/proc`; those work because
+  parsers of those names exist. The path stays evidence: a definition it
+  names that the text does not fit is dropped and the text is read on its
+  own terms, so a path can only add an answer.
+
 - `--stream` reports a record it cannot read and carries on with the next
   one, instead of ending there. The line is named on standard error as
   `jz: <definition>: line N: <reason>`, the records after it are still

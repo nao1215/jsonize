@@ -405,3 +405,79 @@ scenarios:
           stderr:
             contains: 'no parser for "gnodf"'
 
+  # The choice is the one thing a converter has to get right, and until
+  # --explain a successful run said nothing about it. Everything it adds
+  # is on standard error, so what a consumer reads is untouched.
+  - name: --explain reports the definition and leaves the answer alone
+    steps:
+      - fixture:
+          file: df-gnu.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz --file ${workdir}/df-gnu.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+      - run:
+          command: jz --explain --file ${workdir}/df-gnu.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "jz: df/gnu from embedded"
+      - assert:
+          stderr:
+            contains: "jz: matched: signature.all[0] /"
+      # Naming the parser reports the variants that were left out, which
+      # is what makes a wrong variant traceable.
+      - run:
+          command: jz --explain --parser df --file ${workdir}/df-gnu.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "rejected: "
+      - assert:
+          stderr:
+            contains: "df/gnu-human (signature.all[0]"
+
+  # A file has no argv, so its path is the only evidence besides the text
+  # itself. The directory names the parser and the file names the
+  # variant, which is what the formats too unremarkable to claim on sight
+  # need: six whitespace-separated fields is not a signature.
+  - name: the path of a file names the definition to read it with
+    steps:
+      - fixture:
+          file: etc/fstab
+          content: |
+            /dev/sda1  /      ext4  defaults          0 1
+            UUID=abcd  /boot  vfat  umask=0077        0 2
+      - run:
+          command: jz --explain --file ${workdir}/etc/fstab
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "etc/fstab from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].mount_point", equals: "/" }
+      # The same text with no such path says it cannot tell, which is
+      # what the path added.
+      - run:
+          shell: true
+          command: cat ${workdir}/etc/fstab | jz
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      # A path naming a definition the text does not fit is dropped and
+      # the text decides on its own terms, so the path can only ever add
+      # an answer.
+      - fixture:
+          file: etc/passwd
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz --file ${workdir}/etc/passwd
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].filesystem", matches: "." }

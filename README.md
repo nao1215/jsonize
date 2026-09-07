@@ -59,6 +59,7 @@ Options:
       --exclude KEY   drop this key (repeatable)
       --parser NAME   restrict detection to one parser
       --variant NAME  use a variant of --parser
+      --explain       report the chosen definition and why, on stderr
   -h, --help          show help
 ```
 

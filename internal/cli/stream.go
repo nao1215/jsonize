@@ -21,7 +21,7 @@ import (
 // signature in scope looks at, or until the input ends, and only then
 // commits to a definition. The lines it held take the same path as the
 // ones that follow, so nothing is read twice or read differently.
-func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, out *outputOptions, knownProducer bool) int {
+func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, out *outputOptions, knownProducer, explain bool) int {
 	filter, err := out.filter()
 	if err != nil {
 		a.errorf("%v", err)
@@ -42,7 +42,14 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	ctx.Input = head
 	chosen, err := selector.Select(reg, ctx)
 	if err != nil {
-		return a.exitFor(err)
+		code := a.exitFor(err)
+		if explain {
+			a.explainFailure(err)
+		}
+		return code
+	}
+	if explain {
+		a.explain(chosen)
 	}
 	// A key the format does not produce is a usage error, the same as it
 	// is for a whole document, so it is kept apart from a parse failure.

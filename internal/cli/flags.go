@@ -131,15 +131,18 @@ func (f *outputOptions) filter() (*keyFilter, error) {
 	return newKeyFilter(f.exclude, false), nil
 }
 
-// selectOptions narrow or pin the automatic detection.
+// selectOptions narrow or pin the automatic detection, and ask for the
+// choice to be shown.
 type selectOptions struct {
 	parser  string
 	variant string
+	explain bool
 }
 
 func (f *selectOptions) bind(o *optionSet) {
 	o.stringOpt(&f.parser, "parser", "", "NAME", "", "restrict detection to one parser")
 	o.stringOpt(&f.variant, "variant", "", "NAME", "", "use a variant of --parser")
+	o.boolOpt(&f.explain, "explain", "", "report the chosen definition and why, on stderr")
 }
 
 // helpDoc is the line for -h/--help. The flag package answers those names
