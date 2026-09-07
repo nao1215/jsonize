@@ -1,0 +1,45 @@
+{
+  "link": {
+    "Name": "awk",
+    "Link": "/usr/bin/awk",
+    "Status": "auto",
+    "Best": "/usr/bin/mawk",
+    "Value": "/usr/bin/mawk"
+  },
+  "slaves": [
+    {
+      "name": "awk.1.gz",
+      "path": "/usr/share/man/man1/awk.1.gz"
+    },
+    {
+      "name": "nawk",
+      "path": "/usr/bin/nawk"
+    },
+    {
+      "name": "nawk.1.gz",
+      "path": "/usr/share/man/man1/nawk.1.gz"
+    }
+  ],
+  "alternatives": [
+    {
+      "candidate": {
+        "Alternative": "/usr/bin/mawk",
+        "Priority": 5
+      },
+      "slaves": [
+        {
+          "name": "awk.1.gz",
+          "path": "/usr/share/man/man1/mawk.1.gz"
+        },
+        {
+          "name": "nawk",
+          "path": "/usr/bin/mawk"
+        },
+        {
+          "name": "nawk.1.gz",
+          "path": "/usr/share/man/man1/mawk.1.gz"
+        }
+      ]
+    }
+  ]
+}

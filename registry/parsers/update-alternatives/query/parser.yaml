@@ -1,0 +1,66 @@
+# `update-alternatives --query` prints a block about the link group and
+# then one block per candidate. The link block ends at Value:, which
+# appears once, and is what the candidate blocks are selected after.
+#
+# Both kinds of block announce their slave links with a bare "Slaves:"
+# line and then list them indented. That line carries nothing but the
+# announcement, so it is dropped and the indented lines are read as a
+# list of their own; without dropping it the link block would gain a key
+# whose value is always empty.
+format: 1
+command: update-alternatives
+variant: query
+description: update-alternatives --query link group and candidates
+metadata:
+  tags: [linux, packaging, debian]
+  compatible: [dpkg]
+  references:
+    - https://manpages.debian.org/unstable/dpkg/update-alternatives.1.en.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AName: \S'
+      - '^Link: /\S'
+      - '^Status: \S'
+      - '^Value: \S'
+input:
+  ignore:
+    - '^Slaves:[ \t]*$'
+parse:
+  type: composite
+  parts:
+    # The link block names the group, where the link lives, whether the
+    # choice is automatic, and which candidate is in place.
+    - name: link
+      select: {until: '^Alternative:'}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+        on_mismatch: skip
+    - name: slaves
+      select: {until: '^Alternative:'}
+      parse:
+        type: regex
+        on_mismatch: skip
+        pattern: '^[ \t]+(?P<name>\S+)[ \t]+(?P<path>\S+)[ \t]*$'
+    - name: alternatives
+      select: {after: '^Value:'}
+      parse:
+        type: records
+        start: '^Alternative:'
+        parts:
+          - name: candidate
+            select: {limit: 2}
+            parse:
+              type: kv
+              separator: ":"
+              as: map
+            fields:
+              Priority: {type: int}
+          - name: slaves
+            select: {skip: 2}
+            parse:
+              type: regex
+              pattern: '^[ \t]+(?P<name>\S+)[ \t]+(?P<path>\S+)[ \t]*$'

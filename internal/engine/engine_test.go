@@ -473,6 +473,54 @@ parse:
 	}
 }
 
+// A composite part may be records: a report that opens with a banner and
+// then repeats a block needs one part for the banner and one for the
+// blocks.
+func TestParseCompositeWithRecordsPart(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: banner-and-blocks
+parse:
+  type: composite
+  parts:
+    - name: header
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^report for (?P<host>\S+)$'
+    - name: entries
+      select: {skip: 1}
+      parse:
+        type: records
+        start: '^\S'
+        parts:
+          - name: head
+            select: {limit: 1}
+            parse:
+              type: regex
+              each: input
+              pattern: '^(?P<name>\S+)$'
+          - name: items
+            select: {skip: 1}
+            parse:
+              type: regex
+              pattern: '^\s+(?P<item>\S+)$'
+`)
+	got, err := Parse(def, []byte("report for alpha\nfirst\n  one\n  two\nsecond\n  three\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	const want = `{"header":{"host":"alpha"},"entries":[` +
+		`{"head":{"name":"first"},"items":[{"item":"one"},{"item":"two"}]},` +
+		`{"head":{"name":"second"},"items":[{"item":"three"}]}]}`
+	if mustJSON(t, got) != want {
+		t.Error(mustJSON(t, got))
+	}
+}
+
 func TestParseComposite(t *testing.T) {
 	t.Parallel()
 	def := load(t, `

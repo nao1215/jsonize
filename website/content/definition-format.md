@@ -219,9 +219,10 @@ Each record is then read the way `composite` reads a whole input, so the
 array with one object per record.
 
 Text before the first record is an error naming the line, rather than
-something quietly dropped; a banner belongs in `input.select` instead.
+something quietly dropped. A banner belongs in `input.select`, or in a
+`composite` part of its own with the blocks in a second part.
 
-`records` is not recursive: a part cannot itself be `records` or
+`records` is not recursive: a part of it cannot be `records` or
 `composite`. A tree of arbitrary depth (`npm ls --all`, `iw dev`) has no
 shape jz can promise in advance, and those commands print JSON of their
 own.
@@ -242,8 +243,31 @@ parse:
 ```
 
 Each part re-selects from the pre-processed lines and runs its own
-parser; the result is an object keyed by part name. Parts cannot be
-composite themselves.
+parser; the result is an object keyed by part name.
+
+A part may be `records`, which is what a report that opens with a banner
+and then repeats a block needs: one part reads the banner, the next reads
+the blocks.
+
+```yaml
+parse:
+  type: composite
+  parts:
+    - name: alternative
+      select: {limit: 4}
+      parse: {type: kv, separator: ':', as: map}
+    - name: candidates
+      select: {after: '^Alternative:'}
+      parse:
+        type: records
+        start: '^Alternative:'
+        parts: [...]
+```
+
+No other nesting is allowed. A part cannot be `composite`, and a part of
+`records` cannot be `records`: both describe a depth that comes from the
+input rather than from the definition, which is the shape jz does not
+promise.
 
 ## fields
 

@@ -194,7 +194,7 @@ func (d *Definition) Validate() error {
 	}
 	d.Input.ignore = compileList(v, "input.ignore", d.Input.Ignore, "")
 	validateSelect(v, "input.select", &d.Input.Select)
-	validateParse(v, "parse", &d.Parse, d.Fields, 0)
+	validateParse(v, "parse", &d.Parse, d.Fields, "")
 	validateFields(v, "fields", d.Fields, 0, d.Parse.Type == TypeKV)
 	if len(v.errs) == 0 {
 		return nil
@@ -228,7 +228,12 @@ func validateSelect(v *validator, path string, s *Select) {
 	}
 }
 
-func validateParse(v *validator, path string, p *Parse, fields map[string]*Field, depth int) {
+// validateParse checks one parser. parent is the type of the parser this
+// one is a part of, empty at the top level. A composite part may be
+// records, which is what a banner followed by repeating blocks needs; no
+// other nesting is allowed, because anything deeper describes a tree
+// whose shape comes from the input rather than from the definition.
+func validateParse(v *validator, path string, p *Parse, fields map[string]*Field, parent string) {
 	switch p.Type {
 	case TypeTable:
 		validateTable(v, path, p, fields)
@@ -240,17 +245,17 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 		validateKV(v, path, p)
 		rejectKeys(v, path, p, "table", "regex", "parts")
 	case TypeComposite:
-		if depth > 0 {
-			v.add(path+".type", "composite parts cannot be composite")
+		if parent != "" {
+			v.add(path+".type", "a part cannot be composite")
 			return
 		}
 		if p.Start != "" {
 			v.add(path+".start", "only valid for type records")
 		}
-		validateComposite(v, path, p)
+		validateComposite(v, path, p, TypeComposite)
 		rejectKeys(v, path, p, "table", "regex", "kv")
 	case TypeRecords:
-		if depth > 0 {
+		if parent == TypeRecords {
 			v.add(path+".type", "records parts cannot be records")
 			return
 		}
@@ -259,7 +264,7 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 		} else {
 			p.start = v.regex(path+".start", p.Start)
 		}
-		validateComposite(v, path, p)
+		validateComposite(v, path, p, TypeRecords)
 		rejectKeys(v, path, p, "table", "regex", "kv")
 	case "":
 		v.add(path+".type", "is required (table, regex, kv, composite or records)")
@@ -449,7 +454,7 @@ func validateKV(v *validator, path string, p *Parse) {
 	validateMismatch(v, path, p.OnMismatch)
 }
 
-func validateComposite(v *validator, path string, p *Parse) {
+func validateComposite(v *validator, path string, p *Parse, kind string) {
 	if len(p.Parts) == 0 {
 		v.add(path+".parts", "is required for type composite")
 	}
@@ -470,7 +475,7 @@ func validateComposite(v *validator, path string, p *Parse) {
 		}
 		seen[part.Name] = true
 		validateSelect(v, pp+".select", &part.Select)
-		validateParse(v, pp+".parse", &part.Parse, part.Fields, 1)
+		validateParse(v, pp+".parse", &part.Parse, part.Fields, kind)
 		validateFields(v, pp+".fields", part.Fields, 0, part.Parse.Type == TypeKV)
 	}
 }

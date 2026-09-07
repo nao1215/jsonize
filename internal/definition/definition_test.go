@@ -300,6 +300,8 @@ func TestLoadErrors(t *testing.T) {
 		{"kv with pattern", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, pattern: x}\n", "only valid for type regex"},
 		{"composite no parts", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite}\n", "parts: is required"},
 		{"composite nested", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: a, parse: {type: composite, parts: [{name: b, parse: {type: kv}}]}}]}\n", "cannot be composite"},
+		{"records nested in records", "format: 1\ncommand: c\nvariant: v\nparse: {type: records, start: x, parts: [{name: a, parse: {type: records, start: y, parts: [{name: b, parse: {type: kv}}]}}]}\n", "cannot be records"},
+		{"records part cannot be composite", "format: 1\ncommand: c\nvariant: v\nparse: {type: records, start: x, parts: [{name: a, parse: {type: composite, parts: [{name: b, parse: {type: kv}}]}}]}\n", "cannot be composite"},
 		{"composite no name", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{parse: {type: kv}}]}\n", "name: is required"},
 		{"composite bad name", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: 'a b', parse: {type: kv}}]}\n", "invalid name"},
 		{"composite dup name", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: a, parse: {type: kv}}, {name: a, parse: {type: kv}}]}\n", "duplicate part name"},

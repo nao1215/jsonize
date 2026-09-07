@@ -1,0 +1,4 @@
+description: A group with several candidates, one of them at a negative priority and one with no slave links at all.
+source: captured on Ubuntu 26.04 (dpkg 1.23.7) with LC_ALL=C
+os: linux
+args: ["--query", "editor"]
