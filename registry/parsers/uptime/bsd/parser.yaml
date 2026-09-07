@@ -10,11 +10,10 @@ metadata:
 detect:
   os: [darwin, freebsd, openbsd, netbsd]
   signature:
-    # `w` opens with the same summary line; the table header rejects it.
+    # The whole output is this one line; `w` opens with the same summary
+    # and then continues into a table of users.
     all:
-      - '^\s*\d{1,2}:\d{2}(?::\d{2})?\s+up\s+.*,\s+load averages: [\d.]+ [\d.]+ [\d.]+\s*$'
-    none:
-      - '^USER\s+TTY\s'
+      - '\A\s*\d{1,2}:\d{2}(?::\d{2})?\s+up\s+.*,\s+load averages: [\d.]+ [\d.]+ [\d.]+\s*\z'
 parse:
   type: regex
   each: input

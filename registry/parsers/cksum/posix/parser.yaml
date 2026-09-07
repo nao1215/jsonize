@@ -34,12 +34,13 @@ detect:
   auto_detect: false
   signature:
     all:
-      - '\A\\?\d+ \d+(?: \S|$)'
-    none:
-      # A crontab entry opens with two numbers and then its remaining
-      # time fields, so it reads as a CRC, a size and a file name unless
-      # it is named here.
-      - '^(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+\S+[ \t]+\S'
+      # A CRC, a byte count and a name. The CRC is a 32-bit checksum
+      # written in full, so it has three digits or more except for the
+      # one value in forty million that does not; a crontab entry opens
+      # with a minute and an hour, which never do. Writing the width is
+      # what tells the two apart, rather than a description of what a
+      # crontab line looks like.
+      - '\A\\?\d{3,10} \d+(?: \S|$)'
 parse:
   type: regex
   patterns:

@@ -20,19 +20,24 @@ detect:
   auto_detect: false
   signature:
     all:
-      # An IPv4 address, or an IPv6 one written either with the "::" run
-      # of zeroes or in full. Colon separated hex digits alone describe a
-      # clock as well, which is how "12:34  up 3 days" from uptime(1) and
-      # "19:36:15     CPU  %usr" from mpstat(1) read as an address
-      # followed by names.
-      - '^(?:\d+\.\d+\.\d+\.\d+|[0-9a-fA-F]*::[0-9a-fA-F:]*|(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})(?:%\S+)?[ \t]+\S'
+      # The file opens with an entry, after any comments: an address and
+      # the names it maps to, running to the end of the line. Writing the
+      # whole first entry rather than any line that resembles one settles
+      # two neighbours without naming them. A routing table opens with
+      # its own title and column names, so `netstat -r` and `route` are
+      # not this format; and a host name never holds a colon, so the
+      # hardware address in a neighbour table ends the line early. Colon
+      # separated hex digits alone describe a clock too, which is how
+      # "12:34  up 3 days" from uptime(1) reads as an address followed by
+      # names.
+      - '\A(?:[ \t]*(?:#[^\n]*)?\n)*(?:\d+\.\d+\.\d+\.\d+|[0-9a-fA-F]*::[0-9a-fA-F:]*|(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})(?:%\S+)?(?:[ \t]+[A-Za-z0-9][A-Za-z0-9._-]*)+[ \t]*$'
     none:
-      # `ip neighbour` prints "ADDRESS dev INTERFACE lladdr ... STATE",
-      # which is an address followed by words as well.
+      # The one exclusion this definition keeps, and the reason it is an
+      # exclusion: `ip neighbour` prints "ADDRESS dev INTERFACE STATE"
+      # for a neighbour whose hardware address it does not have, and
+      # every word of that is a legal host name. Nothing in the text
+      # tells the two apart, so there is no positive form to write.
       - '^\S+[ \t]+dev[ \t]+\S+[ \t]+(?:lladdr|PERMANENT|NOARP|REACHABLE|STALE|DELAY|PROBE|INCOMPLETE|FAILED|NONE)(?:[ \t]|$)'
-      # `netstat -r` and `route` print a routing table whose destination
-      # and gateway columns are two addresses followed by more columns.
-      - '^Destination[ \t]+Gateway[ \t]+Genmask[ \t]+Flags[ \t]'
 input:
   ignore:
     - '^\s*#'

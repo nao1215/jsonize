@@ -1,3 +1,8 @@
-description: a value that spans lines cannot be represented line by line; parsing must fail and name the line
-expect_error: 'line 3: expected "key=value"'
+description: |
+  A value that spans lines cannot be represented line by line. The
+  signature asks that every line be an assignment, so the continuation
+  line means this is not the format, and jz says so before it starts
+  reading rather than after three lines of it. `env -0` is what prints
+  such a value unambiguously, and env/null-separated reads that.
+expect_error: 'does not describe this input'
 source: hand-written edge case
