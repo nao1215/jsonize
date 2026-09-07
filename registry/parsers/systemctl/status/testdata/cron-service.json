@@ -1,0 +1,51 @@
+[
+  {
+    "unit": {
+      "marker": "*",
+      "name": "cron.service",
+      "description": "Regular background program processing daemon"
+    },
+    "properties": [
+      {
+        "name": "Loaded",
+        "value": "loaded (/usr/lib/systemd/system/cron.service; enabled; preset: enabled)"
+      },
+      {
+        "name": "Active",
+        "value": "active (running) since Mon 2026-08-24 09:19:47 JST; 2 weeks 0 days ago"
+      },
+      {
+        "name": "Invocation",
+        "value": "3f2a1c05e8b74d1e9a6c0f83b2d54e71"
+      },
+      {
+        "name": "Docs",
+        "value": "man:cron(8)"
+      },
+      {
+        "name": "Main PID",
+        "value": "1971 (cron)"
+      },
+      {
+        "name": "Tasks",
+        "value": "1 (limit: 75433)"
+      },
+      {
+        "name": "Memory",
+        "value": "2.5M (peak: 5.6M, swap: 32K, swap peak: 32K)"
+      },
+      {
+        "name": "CPU",
+        "value": "7.999s"
+      },
+      {
+        "name": "CGroup",
+        "value": "/system.slice/cron.service"
+      },
+      {
+        "name": null,
+        "value": "`-1971 /usr/sbin/cron -f -P"
+      }
+    ]
+  }
+]

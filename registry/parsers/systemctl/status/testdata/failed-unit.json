@@ -1,0 +1,47 @@
+[
+  {
+    "unit": {
+      "marker": "x",
+      "name": "apport-autoreport.service",
+      "description": "Process error reports when automatic reporting is enabled"
+    },
+    "properties": [
+      {
+        "name": "Loaded",
+        "value": "loaded (/usr/lib/systemd/system/apport-autoreport.service; static)"
+      },
+      {
+        "name": "Active",
+        "value": "failed (Result: exit-code) since Mon 2026-09-07 08:42:57 JST; 1h 19min ago"
+      },
+      {
+        "name": "Invocation",
+        "value": "9d6c2b81f45a4e03b92c7f18d0a35e6c"
+      },
+      {
+        "name": "TriggeredBy",
+        "value": "* apport-autoreport.path"
+      },
+      {
+        "name": null,
+        "value": "* apport-autoreport.timer"
+      },
+      {
+        "name": "Process",
+        "value": "1801931 ExecStart=/usr/share/apport/whoopsie-upload-all --timeout 20 (code=exited, status=2)"
+      },
+      {
+        "name": "Main PID",
+        "value": "1801931 (code=exited, status=2)"
+      },
+      {
+        "name": "Mem peak",
+        "value": "18.8M"
+      },
+      {
+        "name": "CPU",
+        "value": "88ms"
+      }
+    ]
+  }
+]
