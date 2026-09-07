@@ -1,0 +1,66 @@
+# The colon listing gpg prints with --with-colons is a record format:
+# the first field names the record type and the meaning of every later
+# field depends on that type. Field 10 is the user id on a `uid` record,
+# the fingerprint on an `fpr` record and the issuer name in gpgsm; a
+# `tru` record shares no field with any of them. A definition cannot
+# carry a different column set per record type, so naming the fields
+# would mean either picking one type's names and printing them over the
+# others, or inventing a schema this format cannot express.
+#
+# The definition therefore keeps the record type and the fields the line
+# actually carries, positionally: `fields[n]` is field n+2 of doc/DETAILS
+# (`fields[0]` is field 2, the validity of a key record). doc/DETAILS
+# asks for exactly this: "Parsers should not assume a limit on the number
+# of fields per line" and "parsers should ignore any record whose type
+# they do not recognize", which a fixed set of named columns cannot do.
+# The lines in one listing carry 8, 11, 17, 19, 21 and 22 fields.
+#
+# Values stay strings. A key length and a timestamp are integers on some
+# records and empty or a word on others (field 6 is migrating to an ISO
+# 8601 form, field 20 is a number optionally followed by a URL), and the
+# position alone does not say which.
+#
+# One loss: the array conversion trims each element, so a user id
+# printed with a leading or trailing space keeps neither. gpg quotes
+# control characters and the colon itself in field 10 (`\x3a`) but not
+# spaces.
+#
+# The signature is anchored on a key listing, which is what --list-keys,
+# --list-secret-keys and --list-sigs print. `gpg --list-config
+# --with-colons` writes the same kind of record but only cfg lines, and
+# is turned away rather than claimed on the strength of the colons
+# alone.
+format: 1
+command: gpg
+variant: colons
+description: gpg --with-colons key listing
+metadata:
+  tags: [openpgp, keys, gnupg]
+  compatible: [GnuPG]
+  references:
+    # The field list, per record type, shipped with gnupg as doc/DETAILS
+    # (/usr/share/doc/gnupg/DETAILS.gz on Debian and Ubuntu).
+    - https://github.com/gpg/gnupg/blob/master/doc/DETAILS
+    - https://man7.org/linux/man-pages/man1/gpg.1.html
+detect:
+  signature:
+    all:
+      # An fpr record is eight empty fields followed by the fingerprint.
+      # No other listing in the registry has that shape.
+      - '^fpr:{9}[0-9A-F]{16,64}:'
+    any:
+      # A primary key record: validity, key length, algorithm number,
+      # the 16 hex digit key id and the creation time. The sec form is
+      # what --list-secret-keys prints; the keyring this was written
+      # against holds no secret key, so only the pub form has a fixture.
+      - '^pub:[^:\n]*:\d+:\d+:[0-9A-F]{16}:\d+:'
+      - '^sec:[^:\n]*:\d+:\d+:[0-9A-F]{16}:\d+:'
+parse:
+  type: regex
+  # Every record type is three lower-case alphanumerics (pub, sub, uid,
+  # fpr, fp2, tru, sig, rev, rvs, rvk, pkd, grp, tfs, spk, cfg, uat,
+  # sec, ssb, crt, crs). An unknown one still reads, which is what
+  # doc/DETAILS asks a parser to do.
+  pattern: '^(?P<type>[a-z0-9]{3}):(?P<fields>.*)$'
+fields:
+  fields: {type: array, split: ":"}
