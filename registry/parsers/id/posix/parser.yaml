@@ -14,7 +14,11 @@ metadata:
 detect:
   signature:
     all:
-      - '^uid=\d+'
+      # id prints one line and nothing else, so the line is the start of
+      # the text. Anchored at a line instead, this claimed every report
+      # that mentions a uid somewhere further down: `capsh --print` ends
+      # with the process identity in exactly this shape.
+      - '\Auid=\d+'
 parse:
   type: regex
   each: input

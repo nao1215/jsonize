@@ -1,0 +1,71 @@
+# `capsh --print` is three reports in one file. The capability state is
+# written as labelled lines, but with two spellings of the separator: a
+# colon for a value that describes the process ("Current: cap_x=i") and
+# " =" for a set that is simply listed ("Bounding set =cap_chown,..."),
+# with the secure bits indented underneath their own line. All of those
+# are one label and one value, so they are read as a list of pairs and
+# the value keeps the text libcap printed; a set and a securebits word
+# have nothing in common to convert them to.
+#
+# The last four lines are not capability state: they are the process
+# identity in the shape id(1) prints it, and the mode libcap guesses from
+# it. Those do not fit the same pair, so they get parts of their own
+# rather than an ignore list, and they are located by their own shape:
+# how many "secure-" lines come before them depends on what the kernel
+# supports.
+format: 1
+command: capsh
+variant: print
+description: capsh --print capability sets, secure bits and process identity
+metadata:
+  tags: [linux, security, capabilities, libcap]
+  compatible: [libcap]
+  references:
+    - https://man7.org/linux/man-pages/man1/capsh.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ACurrent: '
+      - '^Bounding set ='
+      - '^Securebits: [0-9a-f]+/'
+parse:
+  type: composite
+  parts:
+    - name: state
+      select: {until: '^uid='}
+      parse:
+        type: regex
+        patterns:
+          - '^[ \t]*(?P<name>[^:\n]+?):[ \t]*(?P<value>.*?)[ \t]*$'
+          - '^(?P<name>[^=\n]+?)[ \t]=(?P<value>.*?)[ \t]*$'
+      fields:
+        name: {required: true}
+    - name: identity
+      parse:
+        type: regex
+        each: input
+        # Not anchored: the block sits at the end, after however many
+        # secure bits this kernel reports. A libcap older than 2.30 does
+        # not print the effective uid, so that pair is optional.
+        pattern: '\nuid=(?P<uid>\d+)\((?P<user>[^)]*)\)(?:[ \t]+euid=(?P<euid>\d+)\((?P<euser>[^)]*)\))?\ngid=(?P<gid>\d+)\((?P<group>[^)]*)\)\ngroups=(?P<groups>[^\n]*)'
+      fields:
+        uid: {type: int}
+        euid: {type: int}
+        gid: {type: int}
+        groups:
+          type: array
+          split: ","
+          items:
+            type: object
+            regex: '^(?P<id>\d+)(?:\((?P<name>[^)]*)\))?$'
+            fields:
+              id: {type: int}
+    - name: guessed_mode
+      select: {after: '^groups='}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AGuessed mode: (?P<name>[^(\n]+?) \((?P<code>\d+)\)[ \t]*\z'
+      fields:
+        code: {type: int}

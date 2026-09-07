@@ -1,0 +1,4 @@
+source: "captured on Ubuntu 26.04 (libcap2-bin 1:2.75) with LC_ALL=C: getcap /usr/bin/ping /usr/bin/mtr-packet /usr/bin/mtr"
+os: linux
+args: [/usr/bin/ping, /usr/bin/mtr-packet, /usr/bin/mtr]
+description: "Three files, two lines: a file that carries no capabilities is not mentioned at all, which is also why a report about such files alone is empty."

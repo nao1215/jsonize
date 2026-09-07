@@ -1,0 +1,10 @@
+[
+  {
+    "file": "/usr/bin/ping",
+    "capabilities": "cap_net_raw=ep"
+  },
+  {
+    "file": "/usr/bin/mtr-packet",
+    "capabilities": "cap_net_raw=ep"
+  }
+]

@@ -1,0 +1,41 @@
+# `chrt -p` reports one process in two or three sentences, each naming
+# the pid again. Whether the third sentence appears depends on the
+# process: a task the kernel gives a time slice reports a runtime
+# parameter, a real-time task does not.
+#
+# A SCHED_DEADLINE task reports the three parameters on one line instead
+# ("runtime/deadline/period parameters: a/b/c"); that spelling comes from
+# the message strings of util-linux 2.41 and is not in a fixture, because
+# creating a deadline task needs privileges this capture did not have.
+#
+# Only the reporting form is read. Changing a policy prints the new
+# values as well, and that needs privileges too.
+format: 1
+command: chrt
+variant: policy
+description: chrt -p scheduling policy and priority of a process
+metadata:
+  tags: [linux, process, scheduling, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/chrt.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # `taskset -pc` opens with the same "pid N's current " words, so
+      # both lines of the pair are required: taskset prints neither.
+      - '\Apid \d+''s current scheduling policy: \S'
+      - '^pid \d+''s current scheduling priority: -?\d+$'
+parse:
+  type: regex
+  each: input
+  patterns:
+    - '\Apid (?P<pid>\d+)''s current scheduling policy: (?P<policy>[^\n]+)\npid \d+''s current scheduling priority: (?P<priority>-?\d+)\npid \d+''s current runtime/deadline/period parameters: (?P<runtime>\d+)/(?P<deadline>\d+)/(?P<period>\d+)[ \t]*\z'
+    - '\Apid (?P<pid>\d+)''s current scheduling policy: (?P<policy>[^\n]+)\npid \d+''s current scheduling priority: (?P<priority>-?\d+)(?:\npid \d+''s current runtime parameter: (?P<runtime>\d+))?[ \t]*\z'
+fields:
+  pid: {type: int}
+  priority: {type: int}
+  runtime: {type: int}
+  deadline: {type: int}
+  period: {type: int}

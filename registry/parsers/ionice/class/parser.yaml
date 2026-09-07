@@ -1,0 +1,33 @@
+# `ionice -p` prints one line per pid: the scheduling class, and the
+# priority within it unless the class is idle, which has none. The pid is
+# not printed, so a report about several pids can only be read back in
+# the order they were named on the command line.
+#
+# Two words and a small number are not evidence of anything on their own,
+# and the idle case is a single word, so the definition is used only when
+# it is named. The signature still has to refuse other formats, and it
+# does that by describing the whole text rather than one line: every line
+# must be one of the four classes, spelled as util-linux spells them.
+format: 1
+command: ionice
+variant: class
+description: ionice -p I/O scheduling class of a process
+metadata:
+  tags: [linux, process, scheduling, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/ionice.1.html
+detect:
+  os: [linux]
+  auto_detect: false
+  signature:
+    all:
+      - '\A(?:(?:none|realtime|best-effort): prio [0-7]|idle)(?:\n(?:(?:none|realtime|best-effort): prio [0-7]|idle))*\z'
+parse:
+  type: regex
+  # The priority is one optional group rather than a second pattern, so
+  # that an idle line still carries the key with a null in it.
+  pattern: '^(?P<class>none|realtime|best-effort|idle)(?:: prio (?P<priority>[0-7]))?[ \t]*$'
+fields:
+  class: {required: true}
+  priority: {type: int}

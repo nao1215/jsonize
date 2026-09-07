@@ -1,0 +1,3 @@
+pid 1's current scheduling policy: SCHED_OTHER
+pid 1's current scheduling priority: 0
+pid 1's current runtime parameter: 2800000

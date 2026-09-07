@@ -1,0 +1,87 @@
+[
+  {
+    "file": {
+      "path": "/usr/bin/ls"
+    },
+    "components": [
+      {
+        "mode": "drwxr-xr-x",
+        "owner": "root",
+        "group": "root",
+        "name": "/"
+      },
+      {
+        "mode": "drwxr-xr-x",
+        "owner": "root",
+        "group": "root",
+        "name": "usr"
+      },
+      {
+        "mode": "drwxr-xr-x",
+        "owner": "root",
+        "group": "root",
+        "name": "bin"
+      },
+      {
+        "mode": "lrwxrwxrwx",
+        "owner": "root",
+        "group": "root",
+        "name": "ls",
+        "link_to": "../lib/cargo/bin/coreutils/ls"
+      },
+      {
+        "mode": "drwxr-xr-x",
+        "owner": "root",
+        "group": "root",
+        "name": ".."
+      },
+      {
+        "mode": "drwxr-xr-x",
+        "owner": "root",
+        "group": "root",
+        "name": "lib"
+      },
+      {
+        "mode": "drwxr-xr-x",
+        "owner": "root",
+        "group": "root",
+        "name": "cargo"
+      },
+      {
+        "mode": "drwxr-xr-x",
+        "owner": "root",
+        "group": "root",
+        "name": "bin"
+      },
+      {
+        "mode": "drwxr-xr-x",
+        "owner": "root",
+        "group": "root",
+        "name": "coreutils"
+      },
+      {
+        "mode": "-rwxr-xr-x",
+        "owner": "root",
+        "group": "root",
+        "name": "ls"
+      }
+    ]
+  },
+  {
+    "file": {
+      "path": "/nope/x"
+    },
+    "components": [
+      {
+        "mode": "drwxr-xr-x",
+        "owner": "root",
+        "group": "root",
+        "name": "/"
+      },
+      {
+        "name": "nope",
+        "error": "No such file or directory"
+      }
+    ]
+  }
+]

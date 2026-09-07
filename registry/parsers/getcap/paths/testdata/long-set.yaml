@@ -1,0 +1,4 @@
+source: "captured on Ubuntu 26.04 (libcap2-bin 1:2.75) with LC_ALL=C: getcap /usr/lib/snapd/snap-confine"
+os: linux
+args: [/usr/lib/snapd/snap-confine]
+description: "Ten capability names on one line, permitted only, which is the longest set on this machine."
