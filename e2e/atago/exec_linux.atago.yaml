@@ -506,12 +506,6 @@ scenarios:
             json:
               - { path: "$[0].exposure", gte: 0 }
       - run:
-          command: jz run --explain aplay -l
-      - assert:
-          exit_code: 0
-          stderr:
-            contains: "aplay/devices from embedded"
-      - run:
           command: jz run --explain blkid -o export
       - assert:
           exit_code: 0
@@ -554,3 +548,16 @@ scenarios:
             json:
               - { path: "$[0].package", equals: bash }
               - { path: "$[0].children[0].relation", matches: "Depends" }
+
+  # A cloud runner has no sound card and no alsa-utils, so the command
+  # itself is the probe.
+  - name: jz run aplay -l lands on the ALSA device listing
+    only: {os: linux}
+    skip: {command: "! command -v aplay > /dev/null"}
+    steps:
+      - run:
+          command: jz run --explain aplay -l
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "aplay/devices from embedded"
