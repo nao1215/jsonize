@@ -37,6 +37,12 @@ type Options struct {
 	MaxInputSize int64
 	// MaxLineLength bounds a single line in bytes (0 = default).
 	MaxLineLength int
+	// Raw skips the field rules. Every value is handed over as it was
+	// extracted: a string, or null for an empty aligned cell and a regex
+	// group that did not take part in the match. Nothing is converted,
+	// nothing is trimmed and null_if is not applied, so the output shows
+	// what the definition read rather than what it made of it.
+	Raw bool
 }
 
 func (o Options) maxInput() int64 {

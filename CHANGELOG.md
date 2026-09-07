@@ -8,6 +8,17 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `--raw`, which skips the field rules so that every value is the text it
+  was extracted from. A value that comes out wrong was either cut from
+  the wrong place or converted wrongly, and once it is typed the two look
+  alike; this separates them. Nothing is converted, `trim_prefix` and
+  `null_if` are not applied, and `required` and `when_missing` are left
+  out with them, so the shape does not change with the values in it. It
+  is not offered on `jz test`, which compares a fixture against the typed
+  JSON beside it. The option existed before release and was removed as a
+  second output shape for a consumer to choose between; it is back for the
+  other reader, the one writing the definition.
+
 - `--explain`, on every mode, which writes the chosen definition and what
   it was chosen on to standard error: the definition and the registry it
   came from, the conditions the input met, and the definitions that were

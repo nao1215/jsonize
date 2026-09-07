@@ -77,7 +77,9 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	}
 	// A stream has no total size to bound; a record that never ends is
 	// what the line limit is there for.
-	err = engine.Stream(chosen.Entry.Def, io.MultiReader(bytes.NewReader(head), br), engine.Options{}, emit, onError)
+	eopts := out.engineOptions()
+	eopts.MaxInputSize = 0
+	err = engine.Stream(chosen.Entry.Def, io.MultiReader(bytes.NewReader(head), br), eopts, emit, onError)
 	switch {
 	case narrowErr != nil:
 		a.errorf("%v", narrowErr)

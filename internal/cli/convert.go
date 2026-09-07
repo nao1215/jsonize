@@ -117,7 +117,7 @@ func (a *app) cmdConvert(args []string) int {
 	if co.selects.explain {
 		a.explain(sel)
 	}
-	out, err := engine.Parse(sel.Entry.Def, data, engine.Options{MaxInputSize: MaxInputSize})
+	out, err := engine.Parse(sel.Entry.Def, data, co.output.engineOptions())
 	if err != nil {
 		return a.exitFor(err)
 	}

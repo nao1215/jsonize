@@ -481,3 +481,47 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].filesystem", matches: "." }
+
+  # --raw reports what the definition extracted rather than what it made
+  # of it. It is the way to see whether a value converted wrongly or was
+  # cut from the wrong place, which look alike once they are typed.
+  - name: --raw reports every value as the text it was extracted from
+    steps:
+      - fixture:
+          file: df-gnu.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz --file ${workdir}/df-gnu.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].use_percent", equals: 92 }
+      - run:
+          command: jz --raw --file ${workdir}/df-gnu.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].use_percent", equals: "92%" }
+              - { path: "$[1].1k_blocks", equals: "1920641288" }
+      - run:
+          command: jz --raw --pretty --file ${workdir}/df-gnu.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"use_percent": "92%"'
+      - run:
+          command: jz --raw --stream --file ${workdir}/df-gnu.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"use_percent":"92%"'
+      # jz test compares a fixture with the typed JSON beside it, so raw
+      # mode has nothing to say there and is not offered.
+      - run:
+          command: jz test --raw
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "not defined"

@@ -55,6 +55,7 @@ Options:
   -f, --file PATH     read input from PATH instead of stdin
   -p, --pretty        indent JSON output
       --stream        write one record per line as it is read
+      --raw           skip the field rules and report every value as text
       --extract KEY   keep only this key (repeatable)
       --exclude KEY   drop this key (repeatable)
       --parser NAME   restrict detection to one parser
