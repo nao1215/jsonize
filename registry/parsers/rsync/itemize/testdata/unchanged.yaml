@@ -1,0 +1,9 @@
+source: >-
+  captured with LC_ALL=C rsync -aiinH src/ dst/ on Ubuntu with rsync
+  3.4.1, against scratch directories already in sync
+description: >-
+  the repeated -i that also reports unchanged items, where every
+  attribute position is a space rather than a dot, and a hard link that
+  prints no target because it is not being created
+os: linux
+args: ["-aiinH", "src/", "dst/"]

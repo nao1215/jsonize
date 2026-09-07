@@ -1,0 +1,12 @@
+source: >-
+  captured with LC_ALL=C gpg --list-keys --with-colons on Ubuntu with
+  GnuPG 2.4.8, first 40 lines of a 176 line listing; every user id was
+  replaced with a made-up name at example.com and every fingerprint,
+  key id and user id hash was rewritten to different hex of the same
+  length, keeping each key id equal to the last 16 digits of its
+  fingerprint
+description: >-
+  public keyring listing with expired keys, a revoked user id and a key
+  carrying three user ids
+os: linux
+args: ["--list-keys", "--with-colons"]

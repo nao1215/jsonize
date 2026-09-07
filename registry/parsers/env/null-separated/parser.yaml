@@ -7,6 +7,11 @@
 format: 1
 command: env
 variant: null-separated
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: genv
+  - name: printenv
 description: env -0 / printenv -0 output (NUL separated, values kept verbatim)
 metadata:
   tags: [linux, darwin, environment]

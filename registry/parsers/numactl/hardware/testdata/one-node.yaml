@@ -1,0 +1,4 @@
+description: A machine with one memory node, whose distance matrix is a single row.
+source: captured on Ubuntu 26.04 (numactl 2.0.19) with LC_ALL=C
+os: linux
+args: ["--hardware"]

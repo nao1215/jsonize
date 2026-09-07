@@ -1,0 +1,4 @@
+description: the same table with names resolved, where the default route prints "default" and an absent gateway prints "*"
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; addresses and bridge names replaced
+os: linux
+args: []

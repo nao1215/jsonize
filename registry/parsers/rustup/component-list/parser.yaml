@@ -1,0 +1,41 @@
+# `rustup component list` prints one component per line and marks the
+# ones that are present with "(installed)".
+#
+# One name per line is not evidence of anything on its own, so the
+# signature does not describe the shape of a line: it names three
+# components that rustup lists for every toolchain on every host
+# (rust-src, and the standard library of two Apple targets). A list of
+# words that happens to look similar does not carry all three, and the
+# component list of a different toolchain still does. The names of the
+# host components carry the host triple and are no use here.
+#
+# `rustup component list --installed` prints only the installed
+# components, without the marker, so it is missing the two rust-std
+# entries unless those targets happen to be installed and is refused
+# rather than read as a full listing.
+format: 1
+command: rustup
+variant: component-list
+description: rustup component list, components and whether they are installed
+metadata:
+  tags: [rust, toolchain, package]
+  compatible: [rustup]
+  references:
+    - https://rust-lang.github.io/rustup/concepts/components.html
+detect:
+  signature:
+    # rustup sorts the list, so these three sit close together near the
+    # top whatever the host is; the window allows for the host
+    # components that precede them.
+    window: 40
+    all:
+      - '^rust-src(?: \(installed\))?$'
+      - '^rust-std-aarch64-apple-darwin(?: \(installed\))?$'
+      - '^rust-std-aarch64-apple-ios(?: \(installed\))?$'
+parse:
+  type: regex
+  # The marker is a group that always takes part and may be empty, so
+  # that every line reports installed rather than only the marked ones.
+  pattern: '^(?P<name>\S+)(?P<installed>(?: \(installed\))?)$'
+fields:
+  installed: {type: bool, true_values: ["(installed)"], false_values: [""]}

@@ -17,8 +17,6 @@ detect:
   signature:
     all:
       - '^[ \t]*NS[ \t]+TYPE[ \t]+NPROCS[ \t]+PID[ \t]+USER[ \t]+COMMAND[ \t]*$'
-    none:
-      - '^NS TYPE NPROCS PID USER COMMAND$'
 parse:
   type: table
   split: aligned

@@ -1,0 +1,156 @@
+{
+  "files": [
+    {
+      "path": ".github/workflows/website.yml",
+      "changes": 66,
+      "graph": "+++++",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": ".gitignore",
+      "changes": 5,
+      "graph": "+",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "changes": 8,
+      "graph": "+-",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "Makefile",
+      "changes": 12,
+      "graph": "+",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "README.md",
+      "changes": 269,
+      "graph": "+++++----------------",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "demo/jsonize.gif",
+      "changes": null,
+      "graph": null,
+      "old_bytes": 0,
+      "new_bytes": 217022
+    },
+    {
+      "path": "demo/jsonize.tape",
+      "changes": 32,
+      "graph": "+++",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "website/assets/css/site.css",
+      "changes": 125,
+      "graph": "++++++++++",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "website/content/_index.md",
+      "changes": 46,
+      "graph": "++++",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "{docs => website/content}/definition-format.md",
+      "changes": 5,
+      "graph": "+-",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "{docs => website/content}/design.md",
+      "changes": 5,
+      "graph": "+-",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "website/content/install.md",
+      "changes": 32,
+      "graph": "+++",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "website/content/parsers.md",
+      "changes": 89,
+      "graph": "+++++++",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "website/content/usage.md",
+      "changes": 97,
+      "graph": "++++++++",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": ".../content/write-a-parser.md",
+      "changes": 5,
+      "graph": "+-",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "website/hugo.toml",
+      "changes": 69,
+      "graph": "++++++",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "website/layouts/404.html",
+      "changes": 6,
+      "graph": "+",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "website/layouts/_default/baseof.html",
+      "changes": 36,
+      "graph": "+++",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "website/layouts/_default/home.html",
+      "changes": 9,
+      "graph": "+",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "website/layouts/_default/list.html",
+      "changes": 11,
+      "graph": "+",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "website/layouts/_default/single.html",
+      "changes": 11,
+      "graph": "+",
+      "old_bytes": null,
+      "new_bytes": null
+    }
+  ],
+  "summary": {
+    "files_changed": 21,
+    "insertions": 722,
+    "deletions": 216
+  }
+}

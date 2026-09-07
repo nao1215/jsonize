@@ -1,0 +1,4 @@
+description: A crontab belonging to one account, written for this fixture. It has no user field, so the command lands where the user name belongs; the definition refuses it rather than reading the first word of the command as a user.
+source: written for this fixture in the format crontab(5) gives a user crontab
+os: linux
+expect_error: 'does not describe this input'

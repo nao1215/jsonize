@@ -313,3 +313,254 @@ scenarios:
           exit_code: 0
           stdout:
             not_contains: "http"
+
+  # `jz test` is what a third party runs on a registry of their own. The
+  # official fixtures travel inside the binary, so a definition is checked
+  # against them without a copy of this repository.
+  - name: jz test passes a correct definition
+    steps:
+      - fixture:
+          file: ok/registry.yaml
+          content: |
+            format: 1
+            name: local
+      - fixture:
+          file: ok/parsers/greet/default/parser.yaml
+          content: |
+            format: 1
+            command: greet
+            variant: default
+            description: greeting lines
+            detect:
+              signature:
+                all: ['^hello \S+ x\d+$']
+            parse:
+              type: regex
+              pattern: '^hello (?P<name>\S+) x(?P<times>\d+)$'
+            fields:
+              times: {type: int}
+      - fixture:
+          file: ok/parsers/greet/default/testdata/basic.txt
+          content: |
+            hello atago x7
+      - fixture:
+          file: ok/parsers/greet/default/testdata/basic.json
+          content: |
+            [{"name": "atago", "times": 7}]
+      - run:
+          command: jz test ${workdir}/ok
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: ""
+          stderr:
+            contains: "1 passed, 0 failed"
+
+  - name: jz test --update writes the golden file the fixture had none of
+    steps:
+      - fixture:
+          file: new/parsers/greet/default/parser.yaml
+          content: |
+            format: 1
+            command: greet
+            variant: default
+            detect: {signature: {all: ['^hello \S+ x\d+$']}}
+            parse:
+              type: regex
+              pattern: '^hello (?P<name>\S+) x(?P<times>\d+)$'
+            fields:
+              times: {type: int}
+      - fixture:
+          file: new/parsers/greet/default/testdata/basic.txt
+          content: |
+            hello atago x7
+      - run:
+          command: jz test --update ${workdir}/new
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "golden files written under"
+      - assert:
+          file:
+            path: "${workdir}/new/parsers/greet/default/testdata/basic.json"
+            contains: '"times": 7'
+      - run:
+          command: jz test ${workdir}/new
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "1 passed, 0 failed"
+
+  - name: jz test fails when the golden file disagrees with the output
+    steps:
+      - fixture:
+          file: stale/parsers/greet/default/parser.yaml
+          content: |
+            format: 1
+            command: greet
+            variant: default
+            detect: {signature: {all: ['^hello \S+$']}}
+            parse:
+              type: regex
+              pattern: '^hello (?P<name>\S+)$'
+      - fixture:
+          file: stale/parsers/greet/default/testdata/basic.txt
+          content: |
+            hello atago
+      - fixture:
+          file: stale/parsers/greet/default/testdata/basic.json
+          content: |
+            [{"name": "somebody else"}]
+      - run:
+          command: jz test ${workdir}/stale
+      - assert:
+          exit_code: 1
+          stdout:
+            equals: ""
+          stderr:
+            contains: "output differs from basic.json"
+      - assert:
+          stderr:
+            contains: "0 passed, 1 failed"
+
+  - name: jz test fails a definition that reads an official fixture
+    steps:
+      - fixture:
+          file: wide/parsers/greet/default/parser.yaml
+          content: |
+            format: 1
+            command: greet
+            variant: default
+            detect: {signature: {all: ['^Filesystem']}}
+            parse:
+              type: regex
+              pattern: '^(?P<line>.+)$'
+      - fixture:
+          file: wide/parsers/greet/default/testdata/basic.txt
+          content: |
+            Filesystem here
+      - run:
+          command: jz test ${workdir}/wide
+      - assert:
+          exit_code: 1
+          stderr:
+            contains: "a fixture of df/gnu"
+
+  # A definition added locally cannot turn an official parser into an
+  # ambiguity: the layering already says whose definitions apply.
+  - name: a definition in a preferred registry wins over the built-in one
+    steps:
+      - fixture:
+          file: wins/parsers/greet/x/parser.yaml
+          content: |
+            format: 1
+            command: greet
+            variant: x
+            description: anything opening with Filesystem
+            detect:
+              signature:
+                all: ['^Filesystem']
+            parse:
+              type: regex
+              pattern: '^(?P<line>.+)$'
+      - run:
+          command: jz --parser greet --variant x
+          stdin: "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1  1.8T  1.6T  145G  92% /\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/wins"
+      - assert:
+          exit_code: 0
+      # Automatic detection lands on the local definition rather than
+      # reporting that df and greet both match.
+      - run:
+          command: jz
+          stdin: "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1  1.8T  1.6T  145G  92% /\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/wins"
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].line", matches: "^Filesystem" }
+      # The built-in definition is still there under its own name.
+      - run:
+          command: jz --parser df
+          stdin: "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1  1.8T  1.6T  145G  92% /\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/wins"
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].mounted_on", equals: "/" }
+
+  # A registry's manifest can switch off definitions of the registries
+  # below it, which is what a user does with an official parser that
+  # misreads their output.
+  - name: a manifest disables a definition of a lower registry
+    steps:
+      - fixture:
+          file: off/registry.yaml
+          content: |
+            format: 1
+            name: local
+            disable:
+              - file/posix
+              - nothing-here
+      - fixture:
+          file: text.txt
+          content: |
+            /etc/hosts: ASCII text
+      - run:
+          command: jz --parser file --file ${workdir}/text.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].type", equals: "ASCII text" }
+      - run:
+          command: jz --parser file --file ${workdir}/text.txt
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/off"
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: no parser for "file"
+      - assert:
+          stderr:
+            contains: 'disable "nothing-here" matches no definition'
+      - run:
+          command: jz list --sources
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/off"
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: DISABLED
+            matches: "embedded +present +\\d+ +1"
+
+  # Keys are added within format 1, so a definition written for a later
+  # release reaches an older jz as an unknown key rather than as a format
+  # number it cannot read.
+  - name: an unknown key says a newer jz may be needed, and jz list counts the skips
+    steps:
+      - fixture:
+          file: newer/parsers/greet/x/parser.yaml
+          content: |
+            format: 1
+            command: greet
+            variant: x
+            detect: {signature: {all: ['^hello ']}}
+            input:
+              collate: yes
+            parse:
+              type: regex
+              pattern: '^hello (?P<name>\S+)$'
+      - run:
+          command: jz list
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/newer"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: 'unknown key "collate"; this definition may need a newer jz'
+      - assert:
+          stderr:
+            contains: "1 definition failed to load and is not listed"

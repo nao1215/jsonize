@@ -1,0 +1,67 @@
+[
+  {
+    "name": "rx-checksumming",
+    "value": true,
+    "fixed": true
+  },
+  {
+    "name": "tx-checksumming",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-checksum-ipv4",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-checksum-ip-generic",
+    "value": true,
+    "fixed": true
+  },
+  {
+    "name": "tx-checksum-ipv6",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-checksum-fcoe-crc",
+    "value": false,
+    "fixed": true
+  },
+  {
+    "name": "tx-checksum-sctp",
+    "value": true,
+    "fixed": true
+  },
+  {
+    "name": "scatter-gather",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-scatter-gather",
+    "value": true,
+    "fixed": true
+  },
+  {
+    "name": "tx-scatter-gather-fraglist",
+    "value": true,
+    "fixed": true
+  },
+  {
+    "name": "tcp-segmentation-offload",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-tcp-segmentation",
+    "value": true,
+    "fixed": false
+  },
+  {
+    "name": "tx-tcp-ecn-segmentation",
+    "value": true,
+    "fixed": false
+  }
+]

@@ -1,0 +1,152 @@
+[
+  {
+    "name": "animate",
+    "status": "auto",
+    "path": "/usr/bin/animate-im7.q16"
+  },
+  {
+    "name": "animate-im7",
+    "status": "auto",
+    "path": "/usr/bin/animate-im7.q16"
+  },
+  {
+    "name": "arptables",
+    "status": "auto",
+    "path": "/usr/sbin/arptables-nft"
+  },
+  {
+    "name": "awk",
+    "status": "auto",
+    "path": "/usr/bin/mawk"
+  },
+  {
+    "name": "babeljs",
+    "status": "auto",
+    "path": "/usr/bin/babeljs-7"
+  },
+  {
+    "name": "babeljs-external-helpers",
+    "status": "auto",
+    "path": "/usr/bin/babeljs-7-external-helpers"
+  },
+  {
+    "name": "babeljs-node",
+    "status": "auto",
+    "path": "/usr/bin/babeljs-7-node"
+  },
+  {
+    "name": "babeljs-parser",
+    "status": "auto",
+    "path": "/usr/bin/babeljs-7-parser"
+  },
+  {
+    "name": "builtins.7.gz",
+    "status": "auto",
+    "path": "/usr/share/man/man7/bash-builtins.7.gz"
+  },
+  {
+    "name": "c++",
+    "status": "auto",
+    "path": "/usr/bin/g++"
+  },
+  {
+    "name": "c89",
+    "status": "auto",
+    "path": "/usr/bin/c89-gcc"
+  },
+  {
+    "name": "c99",
+    "status": "auto",
+    "path": "/usr/bin/c99-gcc"
+  },
+  {
+    "name": "cc",
+    "status": "auto",
+    "path": "/usr/bin/gcc"
+  },
+  {
+    "name": "compare",
+    "status": "auto",
+    "path": "/usr/bin/compare-im7.q16"
+  },
+  {
+    "name": "compare-im7",
+    "status": "auto",
+    "path": "/usr/bin/compare-im7.q16"
+  },
+  {
+    "name": "composite",
+    "status": "auto",
+    "path": "/usr/bin/composite-im7.q16"
+  },
+  {
+    "name": "composite-im7",
+    "status": "auto",
+    "path": "/usr/bin/composite-im7.q16"
+  },
+  {
+    "name": "conjure",
+    "status": "auto",
+    "path": "/usr/bin/conjure-im7.q16"
+  },
+  {
+    "name": "conjure-im7",
+    "status": "auto",
+    "path": "/usr/bin/conjure-im7.q16"
+  },
+  {
+    "name": "convert",
+    "status": "auto",
+    "path": "/usr/bin/convert-im7.q16"
+  },
+  {
+    "name": "convert-im7",
+    "status": "auto",
+    "path": "/usr/bin/convert-im7.q16"
+  },
+  {
+    "name": "cpp",
+    "status": "auto",
+    "path": "/usr/bin/cpp"
+  },
+  {
+    "name": "default-GM.sf2",
+    "status": "auto",
+    "path": "/usr/share/sounds/sf2/TimGM6mb.sf2"
+  },
+  {
+    "name": "default-GM.sf3",
+    "status": "auto",
+    "path": "/usr/share/sounds/sf2/TimGM6mb.sf2"
+  },
+  {
+    "name": "default.plymouth",
+    "status": "auto",
+    "path": "/usr/share/plymouth/themes/ubuntu-budgie-logo/ubuntu-budgie-logo.plymouth"
+  },
+  {
+    "name": "desktop-background",
+    "status": "auto",
+    "path": "/usr/share/desktop-base/active-theme/wallpaper/contents/images/1920x1080.svg"
+  },
+  {
+    "name": "desktop-background.xml",
+    "status": "auto",
+    "path": "/usr/share/desktop-base/active-theme/wallpaper/gnome-background.xml"
+  },
+  {
+    "name": "desktop-lockscreen.xml",
+    "status": "auto",
+    "path": "/usr/share/desktop-base/active-theme/lockscreen/gnome-background.xml"
+  },
+  {
+    "name": "desktop-login-background",
+    "status": "auto",
+    "path": "/usr/share/desktop-base/active-theme/login/background.svg"
+  },
+  {
+    "name": "desktop-plasma5-wallpaper",
+    "status": "auto",
+    "path": "/usr/share/desktop-base/active-theme/wallpaper"
+  }
+]

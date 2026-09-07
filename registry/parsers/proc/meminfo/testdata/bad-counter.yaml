@@ -1,0 +1,7 @@
+description: |
+  A synthetic file whose third line is labelled but holds a word instead
+  of a number. It is inside the signature window, so the shape rule
+  refuses the file before any of it is read.
+expect_error: 'does not describe this input'
+os: linux
+source: synthetic; derived from the capture beside it

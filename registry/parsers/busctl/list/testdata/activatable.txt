@@ -1,0 +1,14 @@
+NAME                                            PID PROCESS USER CONNECTION    UNIT SESSION DESCRIPTION
+com.canonical.UbuntuAdvantage                     - -       -    (activatable) -    -       -
+com.hp.hplip                                      - -       -    (activatable) -    -       -
+com.ubuntu.LanguageSelector                       - -       -    (activatable) -    -       -
+com.ubuntu.SoftwareProperties                     - -       -    (activatable) -    -       -
+com.ubuntu.WhoopsiePreferences                    - -       -    (activatable) -    -       -
+fi.w1.wpa_supplicant1                             - -       -    (activatable) -    -       -
+io.netplan.Netplan                                - -       -    (activatable) -    -       -
+net.hadess.PowerProfiles                          - -       -    (activatable) -    -       -
+net.reactivated.Fprint                            - -       -    (activatable) -    -       -
+org.blueman.Mechanism                             - -       -    (activatable) -    -       -
+org.bluez                                         - -       -    (activatable) -    -       -
+org.cinnamon.SettingsDaemon.DateTimeMechanism     - -       -    (activatable) -    -       -
+org.debian.apt                                    - -       -    (activatable) -    -       -

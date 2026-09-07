@@ -1,0 +1,246 @@
+[
+  {
+    "inode": 13,
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "7",
+    "date": "Apr  9  2025",
+    "filename": "bin",
+    "link_to": "usr/bin"
+  },
+  {
+    "inode": 30277633,
+    "flags": "drwxr-xr-x",
+    "links": 4,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Sep  6 06:53",
+    "filename": "boot"
+  },
+  {
+    "inode": 67895297,
+    "flags": "dr-xr-xr-x",
+    "links": 2,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Apr 16  2025",
+    "filename": "cdrom"
+  },
+  {
+    "inode": 18,
+    "flags": "-rw-r-----",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "1240",
+    "date": "May 25 15:19",
+    "filename": "debug"
+  },
+  {
+    "inode": 1,
+    "flags": "drwxr-xr-x",
+    "links": 21,
+    "owner": "root",
+    "group": "root",
+    "size": "6040",
+    "date": "Sep  7 03:35",
+    "filename": "dev"
+  },
+  {
+    "inode": 80216065,
+    "flags": "drwxr-xr-x",
+    "links": 162,
+    "owner": "root",
+    "group": "root",
+    "size": "12288",
+    "date": "Sep  6 06:53",
+    "filename": "etc"
+  },
+  {
+    "inode": 100663297,
+    "flags": "drwxr-xr-x",
+    "links": 4,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "May 10 20:37",
+    "filename": "home"
+  },
+  {
+    "inode": 14,
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "7",
+    "date": "Apr  9  2025",
+    "filename": "lib",
+    "link_to": "usr/lib"
+  },
+  {
+    "inode": 15,
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "9",
+    "date": "Apr  9  2025",
+    "filename": "lib64",
+    "link_to": "usr/lib64"
+  },
+  {
+    "inode": 11,
+    "flags": "drwx------",
+    "links": 2,
+    "owner": "root",
+    "group": "root",
+    "size": "16384",
+    "date": "Nov  4  2025",
+    "filename": "lost+found"
+  },
+  {
+    "inode": 104988673,
+    "flags": "drwxr-xr-x",
+    "links": 4,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Nov  4  2025",
+    "filename": "media"
+  },
+  {
+    "inode": 21102593,
+    "flags": "drwxr-xr-x",
+    "links": 3,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Nov  5  2025",
+    "filename": "mnt"
+  },
+  {
+    "inode": 78249985,
+    "flags": "drwxr-xr-x",
+    "links": 10,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Feb 24  2026",
+    "filename": "opt"
+  },
+  {
+    "inode": 1,
+    "flags": "dr-xr-xr-x",
+    "links": 804,
+    "owner": "root",
+    "group": "root",
+    "size": "0",
+    "date": "Aug 24 09:19",
+    "filename": "proc"
+  },
+  {
+    "inode": 61079553,
+    "flags": "drwx------",
+    "links": 8,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Feb 27  2026",
+    "filename": "root"
+  },
+  {
+    "inode": 1,
+    "flags": "drwxr-xr-x",
+    "links": 50,
+    "owner": "root",
+    "group": "root",
+    "size": "1360",
+    "date": "Sep  7 06:52",
+    "filename": "run"
+  },
+  {
+    "inode": 16,
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "8",
+    "date": "Apr  9  2025",
+    "filename": "sbin",
+    "link_to": "usr/sbin"
+  },
+  {
+    "inode": 20709377,
+    "flags": "drwxr-xr-x",
+    "links": 35,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "May 27 20:29",
+    "filename": "snap"
+  },
+  {
+    "inode": 58458113,
+    "flags": "drwxr-xr-x",
+    "links": 2,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Apr 16  2025",
+    "filename": "srv"
+  },
+  {
+    "inode": 17,
+    "flags": "-rw-------",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "8589934592",
+    "date": "Nov  4  2025",
+    "filename": "swap.img"
+  },
+  {
+    "inode": 1,
+    "flags": "dr-xr-xr-x",
+    "links": 13,
+    "owner": "root",
+    "group": "root",
+    "size": "0",
+    "date": "Aug 25 08:46",
+    "filename": "sys"
+  },
+  {
+    "inode": 1,
+    "flags": "drwxrwxrwt",
+    "links": 37336,
+    "owner": "root",
+    "group": "root",
+    "size": "752140",
+    "date": "Sep  7 10:37",
+    "filename": "tmp"
+  },
+  {
+    "inode": 28966913,
+    "flags": "drwxr-xr-x",
+    "links": 12,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Apr 16  2025",
+    "filename": "usr"
+  },
+  {
+    "inode": 90439681,
+    "flags": "drwxr-xr-x",
+    "links": 14,
+    "owner": "root",
+    "group": "root",
+    "size": "4096",
+    "date": "Nov  4  2025",
+    "filename": "var"
+  }
+]

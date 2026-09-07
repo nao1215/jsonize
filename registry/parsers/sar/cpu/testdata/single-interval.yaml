@@ -1,0 +1,4 @@
+description: One sample, where the summary row repeats the only measurement.
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C; the host name in the banner and the bridge and veth interface names were replaced with names of the same width
+os: linux
+args: ["-u", "1", "1"]

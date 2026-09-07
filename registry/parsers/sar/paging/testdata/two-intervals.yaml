@@ -1,0 +1,4 @@
+description: Two samples of the paging counters and the summary row.
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C; the host name in the banner was replaced
+os: linux
+args: ["-B", "1", "2"]

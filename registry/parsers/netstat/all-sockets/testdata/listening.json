@@ -1,0 +1,114 @@
+{
+  "internet": [
+    {
+      "proto": "raw",
+      "recv_q": 0,
+      "send_q": 0,
+      "local_address": "::%6252879",
+      "local_port": "58",
+      "foreign_address": "::",
+      "foreign_port": "*",
+      "state": "58"
+    },
+    {
+      "proto": "raw",
+      "recv_q": 0,
+      "send_q": 0,
+      "local_address": "::%6252879",
+      "local_port": "58",
+      "foreign_address": "::",
+      "foreign_port": "*",
+      "state": "58"
+    }
+  ],
+  "unix": [
+    {
+      "proto": "unix",
+      "refcnt": 2,
+      "flags": [
+        "ACC"
+      ],
+      "type": "STREAM",
+      "state": "LISTENING",
+      "inode": 19525291,
+      "path": "/tmp/vscode-ah-1a2b3c4d5e6f/Ab1Cd2-Ef3Gh4Ij5Kl6MnO.sock"
+    },
+    {
+      "proto": "unix",
+      "refcnt": 2,
+      "flags": [
+        "ACC"
+      ],
+      "type": "STREAM",
+      "state": "LISTENING",
+      "inode": 127194628,
+      "path": "/tmp/cc-daemon-1000/1a2b3c4d/control.sock"
+    },
+    {
+      "proto": "unix",
+      "refcnt": 2,
+      "flags": [
+        "ACC"
+      ],
+      "type": "STREAM",
+      "state": "LISTENING",
+      "inode": 54354,
+      "path": "/var/run/docker/metrics.sock"
+    },
+    {
+      "proto": "unix",
+      "refcnt": 2,
+      "flags": [
+        "ACC"
+      ],
+      "type": "STREAM",
+      "state": "LISTENING",
+      "inode": 127203528,
+      "path": "/tmp/cc-daemon-1000/1a2b3c4d/spare/5e6f7081.pty.sock"
+    },
+    {
+      "proto": "unix",
+      "refcnt": 2,
+      "flags": [
+        "ACC"
+      ],
+      "type": "STREAM",
+      "state": "LISTENING",
+      "inode": 127145977,
+      "path": "/tmp/cc-daemon-1000/1a2b3c4d/pty/92a3b4c5.sock"
+    },
+    {
+      "proto": "unix",
+      "refcnt": 2,
+      "flags": [
+        "ACC"
+      ],
+      "type": "STREAM",
+      "state": "LISTENING",
+      "inode": 127196123,
+      "path": "/tmp/cc-daemon-1000/1a2b3c4d/spare/5e6f7081.claim.sock"
+    },
+    {
+      "proto": "unix",
+      "refcnt": 2,
+      "flags": [
+        "ACC"
+      ],
+      "type": "STREAM",
+      "state": "LISTENING",
+      "inode": 127212790,
+      "path": "/tmp/cc-daemon-1000/1a2b3c4d/rv/92a3b4c5.sock"
+    },
+    {
+      "proto": "unix",
+      "refcnt": 2,
+      "flags": [
+        "ACC"
+      ],
+      "type": "STREAM",
+      "state": "LISTENING",
+      "inode": 8183,
+      "path": "/run/systemd/userdb/io.systemd.DynamicUser"
+    }
+  ]
+}

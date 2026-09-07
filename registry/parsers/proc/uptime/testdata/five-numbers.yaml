@@ -1,0 +1,7 @@
+description: |
+  /proc/loadavg is the neighbouring one-line file. Naming this parser
+  does not make it read that one: the signature is checked when the
+  parser is named, which is what keeps auto_detect: false from being a
+  way past it.
+expect_error: 'does not describe this input'
+os: linux

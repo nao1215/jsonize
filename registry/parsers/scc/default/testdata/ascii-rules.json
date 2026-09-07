@@ -1,0 +1,84 @@
+{
+  "languages": [
+    {
+      "language": "HTML",
+      "files": "9",
+      "lines": "232",
+      "blanks": "0",
+      "comments": "0",
+      "code": "232",
+      "complexity": "0"
+    },
+    {
+      "language": "Markdown",
+      "files": "7",
+      "lines": "1,046",
+      "blanks": "194",
+      "comments": "0",
+      "code": "852",
+      "complexity": "0"
+    },
+    {
+      "language": "CSS",
+      "files": "2",
+      "lines": "669",
+      "blanks": "84",
+      "comments": "36",
+      "code": "549",
+      "complexity": "0"
+    },
+    {
+      "language": "Plain Text",
+      "files": "1",
+      "lines": "3",
+      "blanks": "0",
+      "comments": "0",
+      "code": "3",
+      "complexity": "0"
+    },
+    {
+      "language": "TOML",
+      "files": "1",
+      "lines": "71",
+      "blanks": "13",
+      "comments": "7",
+      "code": "51",
+      "complexity": "0"
+    },
+    {
+      "language": "XML",
+      "files": "1",
+      "lines": "15",
+      "blanks": "0",
+      "comments": "0",
+      "code": "15",
+      "complexity": "0"
+    }
+  ],
+  "total": {
+    "files": "21",
+    "lines": "2,036",
+    "blanks": "291",
+    "comments": "43",
+    "code": "1,702",
+    "complexity": "0"
+  },
+  "estimates": [
+    {
+      "name": "Cost to Develop",
+      "model": "organic",
+      "value": "$47,217"
+    },
+    {
+      "name": "Schedule Effort",
+      "model": "organic",
+      "value": "4.31 months"
+    },
+    {
+      "name": "People Required",
+      "model": "organic",
+      "value": "0.97"
+    }
+  ],
+  "processed": []
+}

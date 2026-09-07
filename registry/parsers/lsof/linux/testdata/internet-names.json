@@ -1,0 +1,101 @@
+[
+  {
+    "command": "code-110a",
+    "pid": 9585,
+    "user": "alice",
+    "fd": "11u",
+    "type": "IPv4",
+    "device": "63593",
+    "size_off": "0t0",
+    "node": "TCP",
+    "name": "localhost:38465 (LISTEN)"
+  },
+  {
+    "command": "lazygit",
+    "pid": 43288,
+    "user": "alice",
+    "fd": "7u",
+    "type": "IPv4",
+    "device": "132279166",
+    "size_off": "0t0",
+    "node": "TCP",
+    "name": "host1:42428->203.0.113.116:https (ESTABLISHED)"
+  },
+  {
+    "command": "claude",
+    "pid": 1795298,
+    "user": "alice",
+    "fd": "19u",
+    "type": "IPv4",
+    "device": "131719248",
+    "size_off": "0t0",
+    "node": "TCP",
+    "name": "host1:55800->203.0.113.34.example.net:https (ESTABLISHED)"
+  },
+  {
+    "command": "steam",
+    "pid": 3605196,
+    "user": "alice",
+    "fd": "107u",
+    "type": "IPv4",
+    "device": "47384006",
+    "size_off": "0t0",
+    "node": "TCP",
+    "name": "localhost:57343->localhost:48548 (ESTABLISHED)"
+  },
+  {
+    "command": "steam",
+    "pid": 3605196,
+    "user": "alice",
+    "fd": "123u",
+    "type": "IPv4",
+    "device": "47398224",
+    "size_off": "0t0",
+    "node": "UDP",
+    "name": "*:27036"
+  },
+  {
+    "command": "steam",
+    "pid": 3605196,
+    "user": "alice",
+    "fd": "134u",
+    "type": "IPv4",
+    "device": "108630039",
+    "size_off": "0t0",
+    "node": "TCP",
+    "name": "host1:53743->203-0-113-75.example.net:27018 (ESTABLISHED)"
+  },
+  {
+    "command": "steamwebh",
+    "pid": 3605534,
+    "user": "alice",
+    "fd": "182u",
+    "type": "IPv4",
+    "device": "100964684",
+    "size_off": "0t0",
+    "node": "UDP",
+    "name": "mdns.mcast.net:mdns"
+  },
+  {
+    "command": "python3",
+    "pid": 3910695,
+    "user": "alice",
+    "fd": "10u",
+    "type": "IPv4",
+    "device": "20207918",
+    "size_off": "0t0",
+    "node": "UDP",
+    "name": "host1:3702"
+  },
+  {
+    "command": "python3",
+    "pid": 3910695,
+    "user": "alice",
+    "fd": "23u",
+    "type": "IPv6",
+    "device": "20204668",
+    "size_off": "0t0",
+    "node": "UDP",
+    "name": "[ff02::c]:3702"
+  }
+]

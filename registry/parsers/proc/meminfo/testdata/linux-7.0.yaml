@@ -1,0 +1,6 @@
+description: |
+  A full /proc/meminfo, including the four HugePages_ counters the kernel
+  prints without a unit and the Zswap, Unaccepted and Balloon lines a
+  build without those features would not have.
+source: /proc/meminfo on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C
+os: linux

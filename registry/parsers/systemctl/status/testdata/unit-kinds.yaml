@@ -1,0 +1,9 @@
+source: captured on Ubuntu 26.04 (systemd 259.5) with LC_ALL=C; the host name was replaced with host1 and the invocation ids with other 32 hex digits
+description: >
+  Three kinds of unit in one output. The mount has Where and What and a
+  second Docs line, which is kept with a null name because it continues
+  the property above it. The socket has Triggers and Listen and no CGroup
+  at all. The slice has an Act. Units label, whose name contains a full
+  stop, and a control group tree two levels deep.
+os: linux
+args: [status, boot-efi.mount, cups.socket, system-cups.slice]

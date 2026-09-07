@@ -1,0 +1,4 @@
+description: One task asked for by process id, which is the shortest table this report has.
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C from `pidstat -r -p 1`; the host name in the banner was replaced
+os: linux
+args: ["-r", "-p", "1"]

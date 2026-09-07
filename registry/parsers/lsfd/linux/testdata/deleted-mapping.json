@@ -1,0 +1,86 @@
+[
+  {
+    "command": "dbus-daemon",
+    "pid": 9049,
+    "user": "user",
+    "assoc": "mem",
+    "xmode": "r-----",
+    "type": "REG",
+    "source": "nvme1n1p2",
+    "mntid": 0,
+    "inode": 28970240,
+    "name": "/usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3"
+  },
+  {
+    "command": "dbus-daemon",
+    "pid": 9049,
+    "user": "user",
+    "assoc": "mem",
+    "xmode": "rw----",
+    "type": "REG",
+    "source": "nvme1n1p2",
+    "mntid": 0,
+    "inode": 28970240,
+    "name": "/usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3"
+  },
+  {
+    "command": "dbus-daemon",
+    "pid": 9049,
+    "user": "user",
+    "assoc": "mem",
+    "xmode": "????--",
+    "type": "ERROR",
+    "source": "stat:EPERM",
+    "mntid": null,
+    "inode": null,
+    "name": "/usr/lib/x86_64-linux-gnu/libnss_sss.so.2 (deleted)"
+  },
+  {
+    "command": "dbus-daemon",
+    "pid": 9049,
+    "user": "user",
+    "assoc": "mem",
+    "xmode": "????--",
+    "type": "ERROR",
+    "source": "stat:EPERM",
+    "mntid": null,
+    "inode": null,
+    "name": "/usr/lib/x86_64-linux-gnu/libnss_sss.so.2 (deleted)"
+  },
+  {
+    "command": "dbus-daemon",
+    "pid": 9049,
+    "user": "user",
+    "assoc": "mem",
+    "xmode": "????--",
+    "type": "ERROR",
+    "source": "stat:EPERM",
+    "mntid": null,
+    "inode": null,
+    "name": "/usr/lib/x86_64-linux-gnu/libnss_sss.so.2 (deleted)"
+  },
+  {
+    "command": "dbus-daemon",
+    "pid": 9049,
+    "user": "user",
+    "assoc": "mem",
+    "xmode": "????--",
+    "type": "ERROR",
+    "source": "stat:EPERM",
+    "mntid": null,
+    "inode": null,
+    "name": "/usr/lib/x86_64-linux-gnu/libnss_sss.so.2 (deleted)"
+  },
+  {
+    "command": "dbus-daemon",
+    "pid": 9049,
+    "user": "user",
+    "assoc": "mem",
+    "xmode": "????--",
+    "type": "ERROR",
+    "source": "stat:EPERM",
+    "mntid": null,
+    "inode": null,
+    "name": "/usr/lib/x86_64-linux-gnu/libnss_sss.so.2 (deleted)"
+  }
+]

@@ -1,0 +1,4 @@
+description: fourteen interfaces none of which networkd manages, so every operational state is a dash
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, networkctl with no arguments, which prints the same table as networkctl list
+os: linux
+args: []

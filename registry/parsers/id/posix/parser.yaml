@@ -1,6 +1,10 @@
 format: 1
 command: id
 variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gid
 description: id output with nested uid/gid/groups and optional SELinux context
 metadata:
   tags: [linux, darwin, user]

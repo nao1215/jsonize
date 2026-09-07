@@ -1,11 +1,29 @@
-# "path: description". The path column is padded when several files are
-# named, so the colon is what separates them, not the spacing.
+# file(1) prints one "path: description" line per file and nothing else.
+# The path column is padded when several files are named, so the colon is
+# what separates the two, not the spacing.
 #
-# One line of that shape is far too little evidence on its own, so the
-# signature also asks that no line lacks the separator: file prints one
-# "path: description" line per file and nothing else, while a report that
-# only opens with a labelled line (an archive listing announcing its
-# archive) has rows underneath that carry no colon followed by a space.
+# The signature says what this format is, not what it is not. Two things
+# have to hold, and together they are the claim:
+#
+#   1. Every line is "path: description". Not the first line, every one.
+#      A report that merely opens with a labelled line has rows
+#      underneath that break it: `apt show` and `dpkg -s` continue a
+#      Description onto indented lines, `zipinfo` closes with a sentence,
+#      `lscpu` names properties whose labels hold a space.
+#   2. Some description names a kind of file, from the list below.
+#
+# That list is the point of this definition, and it is a decision rather
+# than a survey: it is what jz undertakes to read as file(1) output. It
+# is not an attempt to enumerate what file(1) can print, which depends on
+# a magic database that differs between machines and grows with every
+# release. A kind that is absent here is one jz says it cannot identify,
+# which is an answer; adding one widens what this definition covers, and
+# the fixture beside it is what says so.
+#
+# The window covers a whole plausible listing rather than the leading
+# twenty lines, because rule 1 is about all of the output. `apt show`
+# keeps its first twenty lines labelled and only continues one after
+# that, so a short window would have let it through.
 format: 1
 command: file
 variant: posix
@@ -18,33 +36,14 @@ metadata:
 detect:
   auto_detect: false
   signature:
+    window: 200
     all:
-      # The description follows on the same line. \s would also match the
-      # newline, which let "root:x:0:" from /etc/group through.
-      - '\A\S+:[ \t]+\S'
-    none:
-      # blkid prints "DEVICE: KEY="value" KEY="value"", which is the same
-      # shape. A file(1) description never opens with an assignment.
-      - '\A\S+:\s+[A-Z_]+="'
-      # What stands left of the colon is a path. The label blocks that
-      # share this shape (lscpu, hostnamectl, upower) name a property
-      # instead, and a property name has spaces in it: "CPU op-mode(s)".
-      # A path with a space in it is not readable here either way, since
-      # the padding between the columns is what the description is cut
-      # from.
-      - '^[^:\n]* [^:\n]*:[ \t]'
-      # `git stash list` opens with a reflog selector ("stash@{0}: WIP on
-      # main: ..."), which has the same shape. "@{" cannot appear in a ref
-      # name, and a path named that way is not what file(1) prints.
-      - '\A\S*@\{\d+\}:[ \t]'
-      # No line may lack the separator. A report that merely opens with a
-      # labelled line, such as an archive listing announcing its archive,
-      # has rows underneath that carry no colon followed by a space.
-      - '^(?:[^:\n]|:[^ \t\n])*$'
-      # `ethtool -i` opens with "driver: <name>" and "version: <name>",
-      # which are properties of an interface rather than a path and the
-      # description of what is stored there.
-      - '\Adriver:[ \t]+\S+\nversion:[ \t]'
+      # Every line is a path, a colon and a description.
+      - '\A(?:\S+:[ \t]+\S[^\n]*\n)*\S+:[ \t]+\S[^\n]*\z'
+      # The kinds of file jz undertakes to read. Case is ignored because
+      # file(1) capitalises a description that opens with a proper noun
+      # ("Composite Document File V2 Document").
+      - '(?i)^\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed)\b'
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'

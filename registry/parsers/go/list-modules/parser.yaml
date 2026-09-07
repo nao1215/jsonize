@@ -1,0 +1,34 @@
+# `go list -m all` prints the module path of the main module on its own,
+# then one line per module in the build list: a path and a version. A
+# module the main module replaces prints the replacement after " => ",
+# either as a directory (one word) or as a module and a version.
+#
+# A path and a version separated by a space is the shape of a great many
+# listings, so the text is not evidence on its own and jz reads it only
+# when the parser is named (`jz run go list -m all`, `--parser go`). The
+# signature still has work to do there: the first line has to be a single
+# word, which keeps `go mod graph` out, and some line has to carry a
+# version in the "v1.2.3" form the module system requires, which keeps
+# out listings whose second column is a plain number or a word.
+format: 1
+command: go
+variant: list-modules
+description: go list -m all build list of modules
+metadata:
+  tags: [go, toolchain, modules]
+  compatible: [gc]
+  references:
+    - https://pkg.go.dev/cmd/go#hdr-List_packages_or_modules
+detect:
+  args:
+    all: ["list"]
+  auto_detect: false
+  signature:
+    all:
+      - '\A\S+$'
+      - '(?m)^\S+ v[0-9]+\.[0-9]+\.[0-9]+'
+parse:
+  type: regex
+  pattern: '^(?P<path>\S+)(?: (?P<version>\S+))?(?: => (?P<replacement>\S+)(?: (?P<replacement_version>\S+))?)?$'
+fields:
+  path: {required: true}

@@ -18,6 +18,16 @@
 format: 1
 command: ls
 variant: long
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gls
+  # vdir is ls -l under another name, so it needs no flag where ls does.
+  # The uutils build of vdir prints no date at the time of writing, which
+  # this definition refuses rather than reads; the GNU one prints what ls
+  # -l prints.
+  - name: vdir
+    args: {}
 description: ls -l / ls -lh long listing on Linux, macOS and BusyBox
 metadata:
   tags: [linux, darwin, filesystem]

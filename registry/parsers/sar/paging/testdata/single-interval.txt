@@ -1,0 +1,5 @@
+Linux 7.0.0-30-generic (workstation) 	09/07/26 	_x86_64_	(32 CPU)
+
+11:55:06     pgpgin/s pgpgout/s   fault/s  majflt/s  pgfree/s pgscank/s pgscand/s pgsteal/s  pgprom/s   pgdem/s
+11:55:07         0.00     28.00 160914.00      0.00 140802.00      0.00      0.00      0.00      0.00      0.00
+Average:         0.00     28.00 160914.00      0.00 140802.00      0.00      0.00      0.00      0.00      0.00

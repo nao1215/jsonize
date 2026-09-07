@@ -1,0 +1,41 @@
+# A checksum, two characters and a file name is the shape of every
+# hashing tool's output and of plenty of other reports, so jz does not
+# claim this format on its own: `jz --parser sha384sum` or
+# `jz run sha384sum` says what produced it, and the signature then checks
+# that the text really has that shape. The digest length is what tells
+# one hashing tool's output from another's.
+#
+# The second character says how the file was read: two spaces for text
+# mode, a space and an asterisk for binary mode. It is not reported
+# because it describes the run, not the file.
+#
+# A name containing a backslash or a newline is printed escaped, with a
+# backslash in front of the digest to mark it. escaped is true on such a
+# line and absent everywhere else, so a name that has to be unescaped can
+# be told from one that is literal. `sha384sum -c` prints a different
+# format and is not read here.
+format: 1
+command: sha384sum
+variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gsha384sum
+description: sha384sum checksum lines
+metadata:
+  tags: [linux, darwin, checksum]
+  compatible: [GNU coreutils, uutils coreutils, BusyBox]
+  references:
+    - https://man7.org/linux/man-pages/man1/sha384sum.1.html
+detect:
+  auto_detect: false
+  signature:
+    all:
+      - '\A\\?[0-9a-fA-F]{96}[ \t][ *]\S'
+parse:
+  type: regex
+  pattern: '^(?P<escaped>\\)?(?P<checksum>[0-9a-fA-F]{96})[ \t][ *](?P<file>.+)$'
+fields:
+  escaped: {type: bool, true_values: ["\\"], when_missing: omit}
+  checksum: {required: true}
+  file: {required: true}

@@ -1,0 +1,292 @@
+[
+  {
+    "name": "MemTotal",
+    "value": 64413356,
+    "unit": "kB"
+  },
+  {
+    "name": "MemFree",
+    "value": 9089636,
+    "unit": "kB"
+  },
+  {
+    "name": "MemAvailable",
+    "value": 29807332,
+    "unit": "kB"
+  },
+  {
+    "name": "Buffers",
+    "value": 2590884,
+    "unit": "kB"
+  },
+  {
+    "name": "Cached",
+    "value": 33412112,
+    "unit": "kB"
+  },
+  {
+    "name": "SwapCached",
+    "value": 61004,
+    "unit": "kB"
+  },
+  {
+    "name": "Active",
+    "value": 25542964,
+    "unit": "kB"
+  },
+  {
+    "name": "Inactive",
+    "value": 22255176,
+    "unit": "kB"
+  },
+  {
+    "name": "Active(anon)",
+    "value": 20724904,
+    "unit": "kB"
+  },
+  {
+    "name": "Inactive(anon)",
+    "value": 9335228,
+    "unit": "kB"
+  },
+  {
+    "name": "Active(file)",
+    "value": 4818060,
+    "unit": "kB"
+  },
+  {
+    "name": "Inactive(file)",
+    "value": 12919948,
+    "unit": "kB"
+  },
+  {
+    "name": "Unevictable",
+    "value": 824,
+    "unit": "kB"
+  },
+  {
+    "name": "Mlocked",
+    "value": 644,
+    "unit": "kB"
+  },
+  {
+    "name": "SwapTotal",
+    "value": 8388604,
+    "unit": "kB"
+  },
+  {
+    "name": "SwapFree",
+    "value": 6441724,
+    "unit": "kB"
+  },
+  {
+    "name": "Zswap",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "Zswapped",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "Dirty",
+    "value": 2100,
+    "unit": "kB"
+  },
+  {
+    "name": "Writeback",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "AnonPages",
+    "value": 11745200,
+    "unit": "kB"
+  },
+  {
+    "name": "Mapped",
+    "value": 2902788,
+    "unit": "kB"
+  },
+  {
+    "name": "Shmem",
+    "value": 18526256,
+    "unit": "kB"
+  },
+  {
+    "name": "KReclaimable",
+    "value": 3704540,
+    "unit": "kB"
+  },
+  {
+    "name": "Slab",
+    "value": 5266924,
+    "unit": "kB"
+  },
+  {
+    "name": "SReclaimable",
+    "value": 3704540,
+    "unit": "kB"
+  },
+  {
+    "name": "SUnreclaim",
+    "value": 1562384,
+    "unit": "kB"
+  },
+  {
+    "name": "KernelStack",
+    "value": 75744,
+    "unit": "kB"
+  },
+  {
+    "name": "PageTables",
+    "value": 155176,
+    "unit": "kB"
+  },
+  {
+    "name": "SecPageTables",
+    "value": 6904,
+    "unit": "kB"
+  },
+  {
+    "name": "NFS_Unstable",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "Bounce",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "WritebackTmp",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "CommitLimit",
+    "value": 40595280,
+    "unit": "kB"
+  },
+  {
+    "name": "Committed_AS",
+    "value": 73406692,
+    "unit": "kB"
+  },
+  {
+    "name": "VmallocTotal",
+    "value": 34359738367,
+    "unit": "kB"
+  },
+  {
+    "name": "VmallocUsed",
+    "value": 163868,
+    "unit": "kB"
+  },
+  {
+    "name": "VmallocChunk",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "Percpu",
+    "value": 93184,
+    "unit": "kB"
+  },
+  {
+    "name": "HardwareCorrupted",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "AnonHugePages",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "ShmemHugePages",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "ShmemPmdMapped",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "FileHugePages",
+    "value": 389120,
+    "unit": "kB"
+  },
+  {
+    "name": "FilePmdMapped",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "CmaTotal",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "CmaFree",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "Unaccepted",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "Balloon",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "HugePages_Total",
+    "value": 0,
+    "unit": null
+  },
+  {
+    "name": "HugePages_Free",
+    "value": 0,
+    "unit": null
+  },
+  {
+    "name": "HugePages_Rsvd",
+    "value": 0,
+    "unit": null
+  },
+  {
+    "name": "HugePages_Surp",
+    "value": 0,
+    "unit": null
+  },
+  {
+    "name": "Hugepagesize",
+    "value": 2048,
+    "unit": "kB"
+  },
+  {
+    "name": "Hugetlb",
+    "value": 0,
+    "unit": "kB"
+  },
+  {
+    "name": "DirectMap4k",
+    "value": 5829832,
+    "unit": "kB"
+  },
+  {
+    "name": "DirectMap2M",
+    "value": 37840896,
+    "unit": "kB"
+  },
+  {
+    "name": "DirectMap1G",
+    "value": 23068672,
+    "unit": "kB"
+  }
+]

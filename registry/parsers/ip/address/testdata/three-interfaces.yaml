@@ -1,0 +1,4 @@
+description: A loopback, a wired interface with two alternative names, and a wireless one whose address is leased and therefore has a lifetime in seconds rather than forever.
+source: the first three blocks of `ip address` captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C; the hardware addresses, the names derived from them, and the IPv4 and link-local IPv6 addresses were replaced
+os: linux
+args: ["address"]

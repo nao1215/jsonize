@@ -1,0 +1,7 @@
+ IRQ       TOTAL NAME
+  41           1 IR-PCI-MSI-0000:00:08.3 0-edge PCIe PME, PCIe bwctrl
+  31           1 amd_gpio 0 ACPI:Event
+ ERR           0 
+ MIS           0 
+ RTR           0 APIC ICR read retries
+ DFR           0 Deferred Error APIC interrupts

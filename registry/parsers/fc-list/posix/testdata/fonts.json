@@ -1,0 +1,92 @@
+[
+  {
+    "file": "/usr/share/fonts/opentype/font-awesome/FontAwesome.otf",
+    "families": [
+      "FontAwesome"
+    ],
+    "styles": [
+      "Regular"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/opentype/mathjax/MathJax_AMS-Regular.otf",
+    "families": [
+      "MathJax_AMS"
+    ],
+    "styles": [
+      "Regular"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/opentype/mathjax/MathJax_Caligraphic-Bold.otf",
+    "families": [
+      "MathJax_Caligraphic"
+    ],
+    "styles": [
+      "Bold"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/opentype/mathjax/MathJax_Caligraphic-Regular.otf",
+    "families": [
+      "MathJax_Caligraphic"
+    ],
+    "styles": [
+      "Regular"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/opentype/mathjax/MathJax_Fraktur-Bold.otf",
+    "families": [
+      "MathJax_Fraktur"
+    ],
+    "styles": [
+      "Bold"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/opentype/mathjax/MathJax_Fraktur-Regular.otf",
+    "families": [
+      "MathJax_Fraktur"
+    ],
+    "styles": [
+      "Regular"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/opentype/mathjax/MathJax_Main-Bold.otf",
+    "families": [
+      "MathJax_Main"
+    ],
+    "styles": [
+      "Bold"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/opentype/mathjax/MathJax_Main-Italic.otf",
+    "families": [
+      "MathJax_Main"
+    ],
+    "styles": [
+      "Italic"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/opentype/mathjax/MathJax_Main-Regular.otf",
+    "families": [
+      "MathJax_Main"
+    ],
+    "styles": [
+      "Regular"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/opentype/mathjax/MathJax_Math-BoldItalic.otf",
+    "families": [
+      "MathJax_Math"
+    ],
+    "styles": [
+      "BoldItalic"
+    ]
+  }
+]

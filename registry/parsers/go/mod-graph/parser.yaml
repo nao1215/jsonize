@@ -1,0 +1,40 @@
+# `go mod graph` prints the module requirement graph as one edge per
+# line: the module that requires something, a space, and the module it
+# requires. Every node but the main module is written path@version, and
+# the toolchain itself appears as the nodes go@1.26 and toolchain@go1.26.
+#
+# Two words a line is far too common a shape to claim on sight, so jz
+# reads this only when the parser is named (`jz run go mod graph`,
+# `--parser go`). The signature asks for the two things that are true of
+# an edge list and of little else: the first line is a bare word followed
+# by a word carrying an "@", and some later line carries an "@" in both
+# columns. A module whose go directive predates 1.21 and which requires
+# only modules with no requirements of their own prints a single edge and
+# is refused rather than guessed at.
+format: 1
+command: go
+variant: mod-graph
+description: go mod graph module requirement edges
+metadata:
+  tags: [go, toolchain, modules]
+  compatible: [gc]
+  references:
+    - https://pkg.go.dev/cmd/go#hdr-Print_module_requirement_graph
+detect:
+  args:
+    all: ["mod", "graph"]
+  auto_detect: false
+  signature:
+    all:
+      - '\A[^\s@]+ [^\s@]+@[^\s@]+$'
+      - '(?m)^[^\s@]+@[^\s@]+ [^\s@]+@[^\s@]+$'
+parse:
+  type: regex
+  pattern: '^(?P<from>\S+) (?P<to>\S+)$'
+fields:
+  from:
+    type: object
+    regex: '^(?P<path>[^@]+)(?:@(?P<version>.*))?$'
+  to:
+    type: object
+    regex: '^(?P<path>[^@]+)(?:@(?P<version>.*))?$'

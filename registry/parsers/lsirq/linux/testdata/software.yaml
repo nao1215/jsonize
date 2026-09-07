@@ -1,0 +1,4 @@
+description: The software interrupt counts, where every name is a word followed by the word softirq.
+source: the header and rows 1 to 7 of `lsirq --softirq` captured on Ubuntu 26.04 (util-linux 2.41) with LC_ALL=C
+os: linux
+args: ["--softirq"]

@@ -1,2 +1,2 @@
-source: captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C; host name, machine ID and boot ID replaced
+source: captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C; the host name, the machine and boot IDs, and the vendor and model strings were replaced
 os: linux

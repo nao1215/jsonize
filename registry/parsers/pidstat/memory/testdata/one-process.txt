@@ -1,0 +1,4 @@
+Linux 7.0.0-30-generic (workstation) 	09/07/26 	_x86_64_	(32 CPU)
+
+10:55:22      UID       PID  minflt/s  majflt/s     VSZ     RSS   %MEM  Command
+10:55:22        0         1      5.00      0.01   28252   12780   0.02  systemd

@@ -1,0 +1,4 @@
+description: A PipeWire server answering the PulseAudio protocol, which is what the version line says.
+source: captured on Ubuntu 26.04 (PipeWire 1.6.2) with LC_ALL=C; the user name, the host name, the webcam serial and the cookie were replaced
+os: linux
+args: ["info"]

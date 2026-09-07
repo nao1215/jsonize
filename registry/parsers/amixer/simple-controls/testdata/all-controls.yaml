@@ -1,0 +1,4 @@
+description: Both controls of a laptop sound card. The playback control carries a Mono line with an empty value and the capture control does not, which is what the label and value list absorbs.
+source: captured on Ubuntu 26.04 (alsa-utils 1.2.14) with LC_ALL=C
+os: linux
+args: []

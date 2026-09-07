@@ -6,10 +6,10 @@
 Operating System: Ubuntu 26.04 LTS
           Kernel: Linux 7.0.0-30-generic
     Architecture: x86-64
- Hardware Vendor: GMKtec
-  Hardware Model: NucBox_EVO-X2
-    Hardware SKU: EVO-X2-001
+ Hardware Vendor: ExampleCo
+  Hardware Model: NucBox_Model-1
+    Hardware SKU: Model-1-001
 Hardware Version: Version 1.0
-Firmware Version: EVO-X2 1.09
+Firmware Version: Model-1 1.09
    Firmware Date: Sat 2025-09-13
     Firmware Age: 11month 3w 2d

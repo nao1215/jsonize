@@ -1,0 +1,146 @@
+[
+  {
+    "path": "github.com/nao1215/atago",
+    "version": null,
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go",
+    "version": "v1.36.11-20260709200747-435963d16310.1",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "cel.dev/expr",
+    "version": "v0.25.2",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "cloud.google.com/go/auth",
+    "version": "v0.18.2",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "cloud.google.com/go/compute/metadata",
+    "version": "v0.9.0",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "connectrpc.com/connect",
+    "version": "v1.20.0",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "filippo.io/edwards25519",
+    "version": "v1.2.0",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp",
+    "version": "v1.33.0",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/IGLOU-EU/go-wildcard/v2",
+    "version": "v2.1.1",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/anmitsu/go-shlex",
+    "version": "v0.0.0-20200514113438-38f4b401e2be",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/bits-and-blooms/bitset",
+    "version": "v1.24.6",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/bmatcuk/doublestar/v4",
+    "version": "v4.10.0",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/bufbuild/protocompile",
+    "version": "v0.14.1",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/cespare/xxhash/v2",
+    "version": "v2.3.0",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/charmbracelet/colorprofile",
+    "version": "v0.4.3",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/charmbracelet/ultraviolet",
+    "version": "v0.0.0-20260812204455-68fa937c71be",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/charmbracelet/x/ansi",
+    "version": "v0.11.8",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/charmbracelet/x/exp/ordered",
+    "version": "v0.1.0",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/charmbracelet/x/term",
+    "version": "v0.2.2",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/charmbracelet/x/termios",
+    "version": "v0.1.1",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/charmbracelet/x/vt",
+    "version": "v0.0.0-20260828171018-3c30eef5e73e",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/charmbracelet/x/windows",
+    "version": "v0.2.2",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/chromedp/cdproto",
+    "version": "v0.0.0-20260804232424-e85f50dbfd32",
+    "replacement": null,
+    "replacement_version": null
+  },
+  {
+    "path": "github.com/chromedp/chromedp",
+    "version": "v0.16.0",
+    "replacement": null,
+    "replacement_version": null
+  }
+]

@@ -1,0 +1,4 @@
+description: A program with six libraries, the virtual DSO that names only itself and the dynamic loader.
+source: captured on Ubuntu 26.04 (glibc 2.43) with LC_ALL=C
+os: linux
+args: ["/bin/ls"]

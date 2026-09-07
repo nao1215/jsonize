@@ -1,0 +1,9 @@
+source: >-
+  captured with LC_ALL=C rsync -ain --delete src/ dst/ on Ubuntu with
+  rsync 3.4.1, against two scratch directories holding only files made
+  for this fixture
+description: >-
+  a dry run that deletes two entries, creates a directory, a symlink and
+  two files, and updates the size and time of one file
+os: linux
+args: ["-ain", "--delete", "src/", "dst/"]

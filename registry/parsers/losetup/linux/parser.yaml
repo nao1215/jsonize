@@ -17,8 +17,6 @@ detect:
   signature:
     all:
       - '^NAME[ \t]+SIZELIMIT[ \t]+OFFSET[ \t]+AUTOCLEAR[ \t]+RO[ \t]+BACK-FILE[ \t]+DIO[ \t]+LOG-SEC[ \t]*$'
-    none:
-      - '^NAME SIZELIMIT OFFSET AUTOCLEAR RO BACK-FILE DIO LOG-SEC$'
 parse:
   type: table
   split: aligned

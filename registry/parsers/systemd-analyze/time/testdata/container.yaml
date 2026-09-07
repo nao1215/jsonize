@@ -1,0 +1,6 @@
+source: transcribed from the container example under "systemd-analyze time" in the systemd-analyze(1) manual, https://www.freedesktop.org/software/systemd/man/systemd-analyze.html; not captured on a real system
+description: >
+  A container, which has no firmware, loader, kernel or initrd stage.
+  systemd prints the total only when there was a kernel stage, so the
+  line ends at the userspace stage and total is null.
+os: linux

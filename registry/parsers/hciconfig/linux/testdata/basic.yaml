@@ -1,0 +1,6 @@
+source: >-
+  captured with LC_ALL=C hciconfig on Ubuntu with BlueZ 5.85; the
+  Bluetooth address was replaced with 52:54:00:12:34:56
+description: one USB adapter, the five line block hciconfig prints without -a
+os: linux
+args: []

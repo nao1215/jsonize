@@ -22,7 +22,6 @@ detect:
       # device. All four would be read wrongly or stop at the first line
       # this definition cannot parse.
       - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [0-9a-f]{4}: [0-9a-f]{4}:[0-9a-f]{4}'
-      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] "'
       - '^\t\S'
 parse:
   type: regex

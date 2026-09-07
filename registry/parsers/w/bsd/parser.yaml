@@ -5,6 +5,8 @@ description: "w on macOS and BSD: uptime summary plus logged-in users"
 metadata:
   tags: [darwin, bsd, user, system]
   compatible: [macOS w]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?w(1)
 detect:
   os: [darwin, freebsd, openbsd, netbsd]
   signature:

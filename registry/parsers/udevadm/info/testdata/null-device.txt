@@ -1,0 +1,14 @@
+P: /devices/virtual/mem/null
+M: null
+J: c1:3
+U: mem
+D: c 1:3
+N: null
+L: 0
+E: DEVPATH=/devices/virtual/mem/null
+E: DEVNAME=/dev/null
+E: DEVMODE=0666
+E: MAJOR=1
+E: MINOR=3
+E: SUBSYSTEM=mem
+

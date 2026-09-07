@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (uv 0.9.7) with LC_ALL=C
+description: >
+  Two tools, each with two executables. The first tool puts an executable
+  on PATH whose name is not the name of the tool.
+os: linux
+args: [tool, list]

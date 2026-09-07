@@ -1,0 +1,4 @@
+description: raw sockets, whose local address carries an IPv6 scope and whose state column holds a protocol number
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C
+os: linux
+args: ["-nwl"]

@@ -1,0 +1,24 @@
+# `systemd-id128 show` lists the well-known 128-bit identifiers systemd
+# carries, a name and its identifier per row. The identifier is thirty
+# two hexadecimal digits written without separators and stays a string.
+format: 1
+command: systemd-id128
+variant: show
+description: systemd-id128 show, the well-known identifiers
+metadata:
+  tags: [linux, systemd]
+  compatible: [systemd]
+  references:
+    - https://man7.org/linux/man-pages/man1/systemd-id128.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ANAME[ \t]+ID[ \t]*$'
+      - '(?m)^\S+[ \t]+[0-9a-f]{32}[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+fields:
+  name: {required: true}
+  id: {required: true}

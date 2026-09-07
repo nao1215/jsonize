@@ -1,0 +1,56 @@
+IMAGE                                                                                  ID             DISK USAGE   CONTENT SIZE   EXTRA
+adobe/s3mock:4.11.0                                                                    821a735833a1        231MB          100MB        
+adobe/s3mock:latest                                                                    821a735833a1        231MB          100MB        
+alpine:latest                                                                          b5d29f65d9c2         13MB         3.93MB        
+api-myapp:latest                                                                       59945ed077a7       61.1MB         16.1MB        
+debian:stable-slim                                                                     31ce1e774529        119MB         31.8MB        
+fsouza/fake-gcs-server:1.54.0                                                          e0e32436e7f0       82.3MB         24.2MB        
+fsouza/fake-gcs-server:latest                                                          e0e32436e7f0       82.3MB         24.2MB        
+ghcr.io/foundry-rs/foundry:stable                                                      31e09bc9e29d        622MB          186MB        
+ghcr.io/gleam-lang/gleam:v1.15.2-erlang-alpine                                         48d220040815        187MB         66.8MB        
+ghcr.io/goccy/bigquery-emulator:latest                                                 f161b52bc94a        422MB         92.8MB   U    
+ghcr.io/k1low/runn:latest                                                              c938127af129       1.94GB          540MB   U    
+ghcr.io/k1low/runn:v1.9.2                                                              c938127af129       1.94GB          540MB   U    
+ghcr.io/mermaid-js/mermaid-cli/mermaid-cli:11.4.2                                      aa8a5ede4d16       1.92GB          543MB        
+ghcr.io/example/demo1:0.10.1-next-amd64                                                38455450e8fa        163MB         41.8MB        
+ghcr.io/example/demo1:0.10.1-next-arm64                                                2f98ca9b160e       40.7MB         40.7MB        
+ghcr.io/example/demo1:0.15.1-next-amd64                                                68afec93d324        163MB         41.8MB        
+ghcr.io/example/demo1:0.15.1-next-arm64                                                7a1665910972       40.7MB         40.7MB        
+ghcr.io/example/demo1:0.16.1-next-amd64                                                d1abc0d27d43        163MB         41.8MB        
+ghcr.io/example/demo1:0.16.1-next-arm64                                                35a8c213171b       40.7MB         40.7MB        
+ghcr.io/example/demo1:0.17.1-next-amd64                                                c9942609b08e        163MB         41.8MB        
+ghcr.io/example/demo1:0.17.1-next-arm64                                                3c103d245a15       40.7MB         40.7MB        
+ghcr.io/example/demo1:0.19.1-next-amd64                                                40cff90ba89e        164MB         42.1MB        
+ghcr.io/example/demo1:0.19.1-next-arm64                                                4992e0235ef5         41MB           41MB        
+ghcr.io/example/demo1:latest-amd64                                                     40cff90ba89e        164MB         42.1MB        
+ghcr.io/example/demo1:latest-arm64                                                     4992e0235ef5         41MB           41MB        
+kindest/node@sha256:19b2030215cbf9b9e3b101a92753b3963ba39c5e77c36bb5036e06efc8748e7f   19b2030215cb       1.35GB          397MB   U    
+koalaman/shellcheck:stable                                                             dd9ac4327cad         20MB         3.81MB        
+mcr.microsoft.com/azure-storage/azurite:3.35.0                                         c108ce4a773b        429MB         93.9MB        
+mcr.microsoft.com/azure-storage/azurite:latest                                         c108ce4a773b        429MB         93.9MB        
+demos-album:latest                                                                     606e7f4e59b3       68.5MB         22.6MB   U    
+demos-eventstore:latest                                                                8a6297207fcc       67.4MB         22.2MB   U    
+demos-frontend:latest                                                                  76f0399b0178       92.6MB           26MB   U    
+demos-gateway:latest                                                                   09c9b0bad396       55.9MB         18.4MB   U    
+demos-media-command:latest                                                             374cfe7b7bd6         60MB         19.4MB   U    
+demos-media-query:latest                                                               36289468be54       55.6MB         18.3MB   U    
+demos-notification:latest                                                              8dc27381660b       68.5MB         22.6MB   U    
+demos-saga:latest                                                                      4aa84fcab140       68.4MB         22.6MB   U    
+minlag/mermaid-cli:latest                                                              622d99a46112       3.21GB          890MB        
+moby/buildkit:buildx-stable-1                                                          37c5c3cd6be7        355MB          111MB   U    
+mysql:8.4                                                                              deda34fb4c99       1.12GB          255MB   U    
+nginx:alpine                                                                           727e03749faf       93.4MB         26.9MB        
+node:22-alpine                                                                         8c73f82fd729        232MB         58.1MB        
+postgres:12-alpine                                                                     085f150395e7        382MB          107MB        
+postgres:13-alpine                                                                     fda3c9dc6e6b        384MB          107MB        
+postgres:16                                                                            94c9eb1f6512        641MB          166MB        
+postgres:16-alpine                                                                     eb6dd0759d4f        395MB          111MB        
+postgres:17-alpine                                                                     01bf1364b3da        424MB          118MB   U    
+applib:test                                                                            0245d3047a98        156MB         58.3MB        
+tonistiigi/binfmt:latest                                                               1334150ed5e5        118MB         32.7MB        
+myapp-cli-test:latest                                                                  2b1f1f6785e3        166MB         40.3MB        
+myapp-test:latest                                                                      4f7ce05569eb        186MB         47.4MB        
+myapp:dev                                                                              3acae599b4dd         49MB         12.6MB        
+myapp:local                                                                            94ff851bd582        174MB         45.5MB   U    
+ubuntu:24.04                                                                           9c7c756b879d        119MB         31.7MB        
+valalang/lint:latest                                                                   1b9bd3a120d7        256MB         57.9MB        

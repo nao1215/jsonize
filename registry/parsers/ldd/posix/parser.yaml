@@ -1,0 +1,33 @@
+# ldd prints one line per object the program needs. A shared library
+# names what was asked for and what it resolved to; the dynamic loader
+# and the virtual DSO name only themselves, since nothing looked them up
+# by name.
+#
+# The load address is where the object landed in this run, so it changes
+# from run to run. It is reported as printed rather than as a number: it
+# is written in hexadecimal with leading zeroes that carry a width.
+format: 1
+command: ldd
+variant: posix
+description: ldd shared object dependencies
+metadata:
+  tags: [linux, binary]
+  compatible: [glibc]
+  references:
+    - https://man7.org/linux/man-pages/man1/ldd.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^[ \t]+\S+ => \S+ \(0x[0-9a-f]+\)[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    - '^[ \t]+(?P<name>\S+) => (?P<path>\S+) \((?P<address>0x[0-9a-f]+)\)[ \t]*$'
+    - '^[ \t]+(?P<name>\S+) => (?P<status>not found)[ \t]*$'
+    - '^[ \t]+(?P<name>\S+) \((?P<address>0x[0-9a-f]+)\)[ \t]*$'
+fields:
+  name: {required: true}
+  path: {when_missing: omit}
+  status: {when_missing: omit}
+  address: {when_missing: omit}

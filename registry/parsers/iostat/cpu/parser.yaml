@@ -16,7 +16,10 @@ detect:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
       - '^avg-cpu:[ \t]+%user[ \t]+%nice'
     none:
-      - '^Device[ \t]+tps[ \t]'
+      # Any device table, whether the default one that opens with tps or
+      # the extended one that opens with r/s, means this is a fuller
+      # report and not the CPU one.
+      - '^Device[ \t]+\S'
 parse:
   type: composite
   parts:

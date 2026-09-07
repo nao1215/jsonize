@@ -1,0 +1,16 @@
+{
+  "files": [
+    {
+      "path": "internal/definition/definition_test.go",
+      "changes": 7,
+      "graph": "+++++--",
+      "old_bytes": null,
+      "new_bytes": null
+    }
+  ],
+  "summary": {
+    "files_changed": 1,
+    "insertions": 5,
+    "deletions": 2
+  }
+}

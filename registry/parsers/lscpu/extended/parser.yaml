@@ -1,0 +1,35 @@
+# `lscpu -e` prints one row per logical CPU. Which columns appear depends
+# on the machine and on what was asked for, so the names come from the
+# header rather than from a list written here; only the cache column is
+# renamed, since its header names the levels rather than the column.
+#
+# The frequencies are exact numbers. A machine that does not report one
+# prints a dash, which becomes null.
+format: 1
+command: lscpu
+variant: extended
+description: lscpu -e, one row per logical CPU
+metadata:
+  tags: [linux, cpu, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lscpu.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ACPU(?:[ \t]+\S+)*[ \t]+ONLINE(?:[ \t]|$)'
+parse:
+  type: table
+  split: whitespace
+  header:
+    rename: {l1d_l1i_l2_l3: caches}
+fields:
+  cpu: {type: int, required: true}
+  node: {type: int, null_if: ["-"]}
+  socket: {type: int, null_if: ["-"]}
+  core: {type: int, null_if: ["-"]}
+  online: {type: bool, true_values: ["yes"], false_values: ["no"]}
+  maxmhz: {type: float, null_if: ["-"]}
+  minmhz: {type: float, null_if: ["-"]}
+  mhz: {type: float, null_if: ["-"]}

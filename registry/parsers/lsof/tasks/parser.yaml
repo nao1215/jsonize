@@ -1,0 +1,32 @@
+# Asked for task level reporting, lsof adds two columns between the
+# process id and the user: the thread id and the thread name. Both are
+# empty on a row that is about the process rather than one of its
+# threads, which is what the empty cells of an aligned table become.
+#
+# The columns after them are the ones lsof/linux reads, and the reasons
+# they stay strings are the same: SIZE/OFF holds either a size or an
+# offset and can be blank, NODE is an inode for a file and a protocol
+# name for a socket, and DEVICE is a major,minor pair for a device and a
+# kernel address for a socket.
+format: 1
+command: lsof
+variant: tasks
+description: lsof task-level listing, with thread columns
+metadata:
+  tags: [linux, process, file]
+  compatible: [lsof]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsof.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^COMMAND[ \t]+PID[ \t]+TID[ \t]+TASKCMD[ \t]+USER[ \t]+FD[ \t]+TYPE[ \t]+DEVICE[ \t]+SIZE/OFF[ \t]+NODE[ \t]+NAME[ \t]*$'
+parse:
+  type: table
+  split: aligned
+fields:
+  command: {required: true}
+  pid: {type: int, required: true}
+  tid: {type: int}
+  name: {required: true}

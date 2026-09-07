@@ -1,0 +1,4 @@
+description: an overridden toolchain, which separates the two markers so one line reads "(default)" and the other "(active)"
+source: captured on Ubuntu 26.04 (rustup 1.29.1) with LC_ALL=C and RUSTUP_TOOLCHAIN set to the second toolchain
+os: linux
+args: [toolchain, list]

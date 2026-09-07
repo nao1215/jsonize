@@ -5,7 +5,7 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/nao1215/jsonize/internal/registry"
+	"github.com/nao1215/jsonize/pkg/registry"
 )
 
 const kvDef = "format: 1\ncommand: kv\nvariant: v\ndetect: {signature: {all: ['^n=']}}\nparse: {type: kv, as: map}\nfields: {n: {type: int}}\n"

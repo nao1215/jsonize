@@ -1,0 +1,45 @@
+{
+  "languages": [
+    {
+      "language": "Go",
+      "files": "37",
+      "lines": "9,435",
+      "blanks": "559",
+      "comments": "864",
+      "code": "8,012",
+      "complexity": "2,502"
+    }
+  ],
+  "total": {
+    "files": "37",
+    "lines": "9,435",
+    "blanks": "559",
+    "comments": "864",
+    "code": "8,012",
+    "complexity": "2,502"
+  },
+  "estimates": [
+    {
+      "name": "Cost to Develop",
+      "model": "organic",
+      "value": "$240,172"
+    },
+    {
+      "name": "Schedule Effort",
+      "model": "organic",
+      "value": "8.00 months"
+    },
+    {
+      "name": "People Required",
+      "model": "organic",
+      "value": "2.67"
+    }
+  ],
+  "processed": [
+    {
+      "bytes": 297575,
+      "megabytes": "0.298",
+      "unit": "SI"
+    }
+  ]
+}

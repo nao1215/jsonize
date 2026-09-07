@@ -1,0 +1,4 @@
+description: one interface, where the LINK column is narrower than in the full listing and the summary still says "1 links listed."
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, networkctl list lo
+os: linux
+args: [list, lo]

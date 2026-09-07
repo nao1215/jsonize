@@ -6,6 +6,10 @@
 format: 1
 command: who
 variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gwho
 description: who listing of logged-in users
 metadata:
   tags: [linux, darwin, user, login]

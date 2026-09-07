@@ -1,0 +1,80 @@
+# `iostat -x` prints the same three blocks as the default report with a
+# wider device table: reads, writes, discards and flushes each get their
+# own rate, queue and wait columns. The two forms are told apart by the
+# first device column, tps in one and r/s in the other.
+#
+# Every extended column is a rate or an average, so all of them are
+# floats. The device names still come from the header, because which
+# columns a sysstat release prints has changed before.
+format: 1
+command: iostat
+variant: extended
+description: iostat -x report, CPU averages followed by extended per-device counters
+metadata:
+  tags: [linux, io, cpu, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/iostat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^avg-cpu:[ \t]+%user[ \t]+%nice'
+      - '^Device[ \t]+r/s[ \t]'
+parse:
+  type: composite
+  parts:
+    - name: report
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ALinux[ \t]+(?P<kernel>\S+)[ \t]+\((?P<hostname>[^)]*)\)[ \t]+(?P<date>\S+)[ \t]+_(?P<architecture>.+?)_[ \t]+\((?P<cpu_count>[0-9]+)[ \t]+CPU\)[ \t]*\z'
+      fields:
+        cpu_count: {type: int}
+    # The avg-cpu header carries a leading "avg-cpu:" label that the rows do
+    # not repeat, so the column names are declared instead of derived.
+    - name: cpu
+      select: {skip: 1, limit: 2}
+      parse:
+        type: table
+        header:
+          columns: [user_percent, nice_percent, system_percent, iowait_percent, steal_percent, idle_percent]
+      fields:
+        user_percent: {type: float, required: true}
+        nice_percent: {type: float}
+        system_percent: {type: float}
+        iowait_percent: {type: float}
+        steal_percent: {type: float}
+        idle_percent: {type: float}
+    # The device columns differ between sysstat releases (kB_dscd was added
+    # for discards), so they are taken from the header line as printed.
+    - name: devices
+      select: {skip: 3}
+      parse:
+        type: table
+      fields:
+        device: {required: true}
+        r_s: {type: float}
+        rkb_s: {type: float}
+        rrqm_s: {type: float}
+        rrqm_percent: {type: float}
+        r_await: {type: float}
+        rareq_sz: {type: float}
+        w_s: {type: float}
+        wkb_s: {type: float}
+        wrqm_s: {type: float}
+        wrqm_percent: {type: float}
+        w_await: {type: float}
+        wareq_sz: {type: float}
+        d_s: {type: float}
+        dkb_s: {type: float}
+        drqm_s: {type: float}
+        drqm_percent: {type: float}
+        d_await: {type: float}
+        dareq_sz: {type: float}
+        f_s: {type: float}
+        f_await: {type: float}
+        aqu_sz: {type: float}
+        util_percent: {type: float}

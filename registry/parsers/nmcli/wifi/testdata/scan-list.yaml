@@ -1,0 +1,3 @@
+description: A scan of a residential band, including hidden networks whose SSID prints as two dashes and the one network this machine is joined to.
+source: captured on Ubuntu 26.04 (NetworkManager 1.56) with LC_ALL=C from `nmcli device wifi list --rescan no`; every BSSID was replaced with a 52:54:00 address and every SSID with a name of the same width
+os: linux

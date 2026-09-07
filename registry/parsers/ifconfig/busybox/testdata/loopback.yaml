@@ -1,0 +1,3 @@
+description: one loopback interface, which prints no hardware address and no broadcast address
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C as "busybox ifconfig lo"
+os: linux

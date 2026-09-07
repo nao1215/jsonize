@@ -1,0 +1,9 @@
+source: |
+  captured on Ubuntu 26.04 (shadow 1:4.17.4-2ubuntu3) with LC_ALL=C from
+  chage -l -P <dir> testuser, reading a synthetic passwd/shadow pair under
+  a prefix directory.
+description: |
+  Every one of the four date labels carries a date, which no account on
+  this machine prints; the three numeric labels are small numbers rather
+  than the 99999 that means "never".
+os: linux

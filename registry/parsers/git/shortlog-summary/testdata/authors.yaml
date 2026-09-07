@@ -1,0 +1,4 @@
+description: Two authors, one with a three digit count and one with a single digit, so both paddings of the count field appear. The author names were replaced.
+source: "`git shortlog -sn HEAD` with git 2.51.0 on Ubuntu 26.04 with LC_ALL=C, inside this repository"
+os: linux
+args: ["shortlog", "-sn", "HEAD"]

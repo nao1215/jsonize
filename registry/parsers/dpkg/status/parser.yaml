@@ -1,0 +1,60 @@
+# `dpkg -s` prints one control block per package, separated by a blank
+# line. A field whose value runs long continues on lines that open with a
+# space, which input.fold joins back onto the field they belong to. The
+# Description body and the Conffiles list are the two that always do.
+#
+# Folding a body onto its field loses where the line breaks were. That is
+# a smaller loss than the alternatives: a continuation read as a field of
+# its own would invent keys, and one dropped would truncate the value
+# without saying so.
+#
+# The relationship fields are comma separated lists and are read as
+# arrays; a version constraint stays inside its element, in brackets, as
+# printed.
+format: 1
+command: dpkg
+variant: status
+description: dpkg -s package status blocks
+metadata:
+  tags: [linux, packaging, debian]
+  compatible: [dpkg]
+  references:
+    - https://manpages.debian.org/unstable/dpkg/dpkg.1.en.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\APackage: \S'
+      # `apt show` prints the same control format without this line.
+      - '^Status: \S+ \S+ \S+[ \t]*$'
+input:
+  fold: '^[ ]'
+parse:
+  type: records
+  start: '^Package: '
+  parts:
+    - name: package
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^Package: (?P<name>\S+)[ \t]*$'
+      fields:
+        name: {required: true}
+    - name: fields
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      fields:
+        Installed-Size: {type: int}
+        Depends: {type: array, split: ","}
+        Pre-Depends: {type: array, split: ","}
+        Recommends: {type: array, split: ","}
+        Suggests: {type: array, split: ","}
+        Breaks: {type: array, split: ","}
+        Conflicts: {type: array, split: ","}
+        Replaces: {type: array, split: ","}
+        Provides: {type: array, split: ","}
+        Enhances: {type: array, split: ","}

@@ -1,0 +1,122 @@
+[
+  {
+    "name": "cargo-x86_64-unknown-linux-gnu",
+    "installed": true
+  },
+  {
+    "name": "clippy-x86_64-unknown-linux-gnu",
+    "installed": true
+  },
+  {
+    "name": "llvm-bitcode-linker-x86_64-unknown-linux-gnu",
+    "installed": false
+  },
+  {
+    "name": "llvm-tools-x86_64-unknown-linux-gnu",
+    "installed": true
+  },
+  {
+    "name": "rust-analysis-x86_64-unknown-linux-gnu",
+    "installed": false
+  },
+  {
+    "name": "rust-analyzer-x86_64-unknown-linux-gnu",
+    "installed": false
+  },
+  {
+    "name": "rust-docs-x86_64-unknown-linux-gnu",
+    "installed": false
+  },
+  {
+    "name": "rust-src",
+    "installed": true
+  },
+  {
+    "name": "rust-std-aarch64-apple-darwin",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-apple-ios",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-apple-ios-macabi",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-apple-ios-sim",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-apple-tvos",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-apple-tvos-sim",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-apple-visionos",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-apple-visionos-sim",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-apple-watchos",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-apple-watchos-sim",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-linux-android",
+    "installed": true
+  },
+  {
+    "name": "rust-std-aarch64-pc-windows-gnullvm",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-pc-windows-msvc",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-unknown-freebsd",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-unknown-fuchsia",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-unknown-linux-gnu",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-unknown-linux-musl",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-unknown-linux-ohos",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-unknown-none",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-unknown-none-softfloat",
+    "installed": false
+  },
+  {
+    "name": "rust-std-aarch64-unknown-uefi",
+    "installed": false
+  },
+  {
+    "name": "rust-std-arm-linux-androideabi",
+    "installed": false
+  }
+]

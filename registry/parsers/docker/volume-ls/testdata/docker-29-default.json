@@ -1,0 +1,62 @@
+[
+  {
+    "driver": "local",
+    "volume_name": "fa960da6e26e9cac4b0f42903a9a20890c90c7a2e66da7cab3ab071c9b3e7cf1"
+  },
+  {
+    "driver": "local",
+    "volume_name": "f90e8aaa13caa140b97dc491e93d37e2a27d28349e3c68b35760a1ff5a7b47b0"
+  },
+  {
+    "driver": "local",
+    "volume_name": "f35badc316006fae3476a0b9c10baaf46d7c487d112b07ef91d84b15ed658632"
+  },
+  {
+    "driver": "local",
+    "volume_name": "f498ec8ba37aa6117535a6639abe08fb199864a9f77de9f6e0986f7c045f2a4c"
+  },
+  {
+    "driver": "local",
+    "volume_name": "fd72490479962fef2d8c0f3cefae33aa2ad9b29b12d5835fede62c77e986048b"
+  },
+  {
+    "driver": "local",
+    "volume_name": "fdc308ac72616db1d7c517d796901268d204871e8abd642942049e38ec4d3a59"
+  },
+  {
+    "driver": "local",
+    "volume_name": "f837ad89a10e99fb0d5a17dcca03243cee1c3b4dcf94767bce58025309eb6ff0"
+  },
+  {
+    "driver": "local",
+    "volume_name": "f6fb70a50c23fa31f94c954ac98abc8583f44823e10b3d44ba6fe7bace0660d1"
+  },
+  {
+    "driver": "local",
+    "volume_name": "demos_album-data"
+  },
+  {
+    "driver": "local",
+    "volume_name": "demos_eventstore-data"
+  },
+  {
+    "driver": "local",
+    "volume_name": "demos_gateway-data"
+  },
+  {
+    "driver": "local",
+    "volume_name": "demos_media-files"
+  },
+  {
+    "driver": "local",
+    "volume_name": "demos_media-query-data"
+  },
+  {
+    "driver": "local",
+    "volume_name": "demos_notification-data"
+  },
+  {
+    "driver": "local",
+    "volume_name": "demos_saga-data"
+  }
+]

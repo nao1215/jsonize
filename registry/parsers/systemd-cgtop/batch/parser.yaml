@@ -1,0 +1,39 @@
+# `systemd-cgtop -b` prints one row per control group and, through a
+# pipe, no header at all: the column names are only drawn on a terminal.
+# The names are therefore written out here, and the format is named
+# rather than detected, since a path followed by numbers is a shape many
+# reports have.
+#
+# A figure the kernel does not account for is a dash, which becomes null.
+# The memory column is rounded for people to read ("31.1G") and stays a
+# string; the task count is exact and is a number.
+format: 1
+command: systemd-cgtop
+variant: batch
+description: systemd-cgtop -b resource use per control group
+metadata:
+  tags: [linux, systemd, process, memory]
+  compatible: [systemd]
+  references:
+    - https://man7.org/linux/man-pages/man1/systemd-cgtop.1.html
+detect:
+  os: [linux]
+  auto_detect: false
+  signature:
+    all:
+      # The root group is always the first row, and every row after it
+      # names a control group rather than a path on disk.
+      - '\A/[ \t]+(?:\d+|-)[ \t]+(?:[0-9.]+|-)[ \t]+(?:[0-9.]+[KMGT]?|-)[ \t]+(?:[0-9.]+[KMGT]?|-)[ \t]+(?:[0-9.]+[KMGT]?|-)[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [control_group, tasks, cpu_percent, memory, input_per_s, output_per_s]
+fields:
+  control_group: {required: true}
+  tasks: {type: int, null_if: ["-"]}
+  cpu_percent: {type: float, null_if: ["-"]}
+  memory: {null_if: ["-"]}
+  input_per_s: {null_if: ["-"]}
+  output_per_s: {null_if: ["-"]}

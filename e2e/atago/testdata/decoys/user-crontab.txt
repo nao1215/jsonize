@@ -1,0 +1,5 @@
+# A crontab belonging to one account.
+MAILTO=""
+
+30 4 * * 1 /usr/local/bin/rotate-logs --keep 30
+0 */4 * * * /usr/local/bin/check-mirrors

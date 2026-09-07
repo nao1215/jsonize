@@ -1,0 +1,13 @@
+description: |
+  The eighteen-field row a kernel between 4.18 and 5.4 writes: everything
+  up to the discard counters, and no flush ones. This definition names
+  twenty columns and min_fields defaults to that, so the row is refused
+  as having too few fields. Nothing shifts and nothing is filled in.
+
+  The shape is not covered because no machine running such a kernel was
+  available to capture from, not because the format cannot describe it.
+expect_error: 'does not describe this input'
+os: linux
+source: |
+  synthetic; the capture beside it with the last two fields of each row
+  removed. Not output from a 4.18-5.4 kernel.

@@ -1,0 +1,28 @@
+3046863:   sh -c LC_ALL=C pmap $$
+00005a33e1508000     16K r---- dash
+00005a33e150c000     84K r-x-- dash
+00005a33e1521000     20K r---- dash
+00005a33e1526000      8K r---- dash
+00005a33e1528000      4K rw--- dash
+00005a33e1529000      8K rw---   [ anon ]
+00005a341f4bd000    132K rw---   [ anon ]
+000073d5b6e00000    160K r---- libc.so.6
+000073d5b6e28000   1632K r-x-- libc.so.6
+000073d5b6fc0000    312K r---- libc.so.6
+000073d5b700e000     16K r---- libc.so.6
+000073d5b7012000      8K rw--- libc.so.6
+000073d5b7014000     52K rw---   [ anon ]
+000073d5b7108000     12K rw---   [ anon ]
+000073d5b712c000      8K rw---   [ anon ]
+000073d5b712e000     16K r----   [ anon ]
+000073d5b7132000      8K r----   [ anon ]
+000073d5b7134000      8K r-x--   [ anon ]
+000073d5b7136000      4K r---- ld-linux-x86-64.so.2
+000073d5b7137000    188K r-x-- ld-linux-x86-64.so.2
+000073d5b7166000     44K r---- ld-linux-x86-64.so.2
+000073d5b7171000      8K r---- ld-linux-x86-64.so.2
+000073d5b7173000      4K rw--- ld-linux-x86-64.so.2
+000073d5b7174000      4K rw---   [ anon ]
+00007ffc1f91b000    136K rw---   [ stack ]
+ffffffffff600000      4K --x--   [ anon ]
+ total             2896K

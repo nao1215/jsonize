@@ -1,0 +1,9 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  Every tagged image in the older column layout, asked for by name because
+  this docker build no longer prints it by default. One image is referred to
+  by digest and has "<none>" in TAG. Locally built image names, one registry
+  account name and the hexadecimal IDs were replaced, keeping the printed
+  width.
+os: linux
+args: ["images", "--format", 'table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedSince}}\t{{.Size}}']

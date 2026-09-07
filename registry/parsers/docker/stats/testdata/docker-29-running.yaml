@@ -1,0 +1,6 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  One sample for the running containers. Container names and IDs were
+  replaced, keeping the printed width and the length of the IDs.
+os: linux
+args: ["stats", "--no-stream"]

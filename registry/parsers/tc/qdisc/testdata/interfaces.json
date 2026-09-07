@@ -1,0 +1,130 @@
+[
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "lo",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "fq_codel",
+    "handle": "0:",
+    "dev": "eno1",
+    "parent": "root",
+    "refcnt": 2,
+    "options": [
+      "limit",
+      "10240p",
+      "flows",
+      "1024",
+      "quantum",
+      "1514",
+      "target",
+      "5ms",
+      "interval",
+      "100ms",
+      "memory_limit",
+      "32Mb",
+      "ecn",
+      "drop_batch",
+      "64"
+    ]
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "wlp195s0",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "br-088d49b64243",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "docker0",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "br-d647a5eb3b66",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "veth0c4293d",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "veth9363d1f",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "veth5d856b9",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "veth0d5de59",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "veth3083cdb",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "vethceffd70",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "veth65bc625",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  },
+  {
+    "kind": "noqueue",
+    "handle": "0:",
+    "dev": "br-5b0a8cd9c3d6",
+    "parent": "root",
+    "refcnt": 2,
+    "options": []
+  }
+]

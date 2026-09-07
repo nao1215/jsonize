@@ -1,0 +1,4 @@
+description: One changed file, so the count column is one character wide and the closing line is singular.
+source: "`git diff --stat` between two commits of this repository with git 2.53.0 on Ubuntu 26.04 with LC_ALL=C"
+os: linux
+args: ["diff", "--stat"]

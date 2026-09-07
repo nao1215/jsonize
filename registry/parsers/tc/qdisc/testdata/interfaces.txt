@@ -1,0 +1,14 @@
+qdisc noqueue 0: dev lo root refcnt 2 
+qdisc fq_codel 0: dev eno1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64 
+qdisc noqueue 0: dev wlp195s0 root refcnt 2 
+qdisc noqueue 0: dev br-088d49b64243 root refcnt 2 
+qdisc noqueue 0: dev docker0 root refcnt 2 
+qdisc noqueue 0: dev br-d647a5eb3b66 root refcnt 2 
+qdisc noqueue 0: dev veth0c4293d root refcnt 2 
+qdisc noqueue 0: dev veth9363d1f root refcnt 2 
+qdisc noqueue 0: dev veth5d856b9 root refcnt 2 
+qdisc noqueue 0: dev veth0d5de59 root refcnt 2 
+qdisc noqueue 0: dev veth3083cdb root refcnt 2 
+qdisc noqueue 0: dev vethceffd70 root refcnt 2 
+qdisc noqueue 0: dev veth65bc625 root refcnt 2 
+qdisc noqueue 0: dev br-5b0a8cd9c3d6 root refcnt 2 

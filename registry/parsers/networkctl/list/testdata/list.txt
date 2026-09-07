@@ -1,0 +1,17 @@
+IDX LINK            TYPE     OPERATIONAL SETUP
+  1 lo              loopback -           unmanaged
+  2 eno1            ether    -           unmanaged
+  3 wlp195s0        wlan     -           unmanaged
+  4 br-088d49b64243 bridge   -           unmanaged
+  5 docker0         bridge   -           unmanaged
+  6 br-d647a5eb3b66 bridge   -           unmanaged
+  7 veth0c4293d     ether    -           unmanaged
+  8 veth9363d1f     ether    -           unmanaged
+  9 veth5d856b9     ether    -           unmanaged
+ 10 veth0d5de59     ether    -           unmanaged
+ 71 veth3083cdb     ether    -           unmanaged
+ 72 vethceffd70     ether    -           unmanaged
+ 73 veth65bc625     ether    -           unmanaged
+193 br-5b0a8cd9c3d6 bridge   -           unmanaged
+
+14 links listed.

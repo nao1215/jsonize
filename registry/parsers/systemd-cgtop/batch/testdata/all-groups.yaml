@@ -1,0 +1,4 @@
+description: The first rows of one batch sample, where most groups account for memory and nothing else.
+source: rows 1 to 12 of `systemd-cgtop -b -n 1` captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C
+os: linux
+args: ["-b", "-n", "1"]

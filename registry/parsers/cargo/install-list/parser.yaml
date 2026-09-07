@@ -1,0 +1,43 @@
+# `cargo install --list` prints one block per installed crate: a line
+# naming the crate and its version, then the binaries it installed,
+# indented. The blocks repeat, so the definition describes one and
+# records applies it to each.
+#
+# A crate installed from somewhere other than the registry names that
+# source in brackets after the version; a crate from the registry names
+# nothing, and the key is absent there rather than null.
+format: 1
+command: cargo
+variant: install-list
+description: cargo install --list, installed crates and their binaries
+metadata:
+  tags: [rust, toolchain, package]
+  compatible: [cargo]
+  references:
+    - https://doc.rust-lang.org/cargo/commands/cargo-install.html
+detect:
+  args:
+    all: ["install"]
+  signature:
+    all:
+      - '\A\S+ v\d[^\s:]*(?: \([^)]*\))?:[ \t]*$'
+      - '(?m)^[ \t]+\S+[ \t]*$'
+parse:
+  type: records
+  start: '^\S+ v\d[^\s:]*(?: \([^)]*\))?:[ \t]*$'
+  parts:
+    - name: crate
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>\S+) v(?P<version>[^\s:]+)(?: \((?P<source>[^)]*)\))?:[ \t]*$'
+      fields:
+        name: {required: true}
+        version: {required: true}
+        source: {when_missing: omit}
+    - name: binaries
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^[ \t]+(?P<name>\S+)[ \t]*$'

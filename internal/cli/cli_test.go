@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nao1215/jsonize/internal/registry"
+	"github.com/nao1215/jsonize/pkg/registry"
 	official "github.com/nao1215/jsonize/registry"
 )
 
@@ -329,6 +329,93 @@ func TestForeignOutputIsNotClaimed(t *testing.T) {
 	}
 }
 
+// TestOtherInvocationsOfAKnownCommand pipes what a registered command
+// prints under options jz has no definition for. The command is known, so
+// a signature written for its default format can still fit the leading
+// lines; what must not happen is JSON that files the extra output under a
+// field of the format jz did recognise. Whether the input is turned away
+// by the signature or by the parser is not the point here: nothing may
+// reach standard output either way.
+func TestOtherInvocationsOfAKnownCommand(t *testing.T) {
+	h := newHarness(t)
+	cases := []struct {
+		name  string
+		args  []string
+		input string
+	}{
+		{
+			// A script that installs a cron entry carries one line of the
+			// shape a crontab has, which is all the signature looks for.
+			// The other lines used to be read as entries too, with `echo`
+			// as the minute.
+			name: "a script that installs a cron entry",
+			args: []string{"--parser", "etc", "--variant", "crontab"},
+			input: "#!/bin/sh\n" +
+				"30 4 * * 1 root /usr/local/bin/rotate-logs --keep 30\n" +
+				"echo \"installed the entry above into /etc/cron.d/rotate\"\n",
+		},
+		{
+			// `git log --stat` puts the diffstat inside the commit block,
+			// where the message would be. It used to be read as git/log
+			// with the file list reported as lines of the commit message.
+			name: "git log --stat",
+			input: "commit 1a348149ff7078757f307580d7846bb788b17484\n" +
+				"Author: Ada Lovelace <ada@example.com>\n" +
+				"Date:   Mon Sep 7 09:06:35 2026 +0900\n" +
+				"\n" +
+				"    add a second note\n" +
+				"\n" +
+				" notes/second.txt | 3 +++\n" +
+				" 1 file changed, 3 insertions(+)\n",
+		},
+		{
+			name: "git log --numstat",
+			input: "commit 1a348149ff7078757f307580d7846bb788b17484\n" +
+				"Author: Ada Lovelace <ada@example.com>\n" +
+				"Date:   Mon Sep 7 09:06:35 2026 +0900\n" +
+				"\n" +
+				"    add a second note\n" +
+				"\n" +
+				"3\t0\tnotes/second.txt\n",
+		},
+		{
+			name: "git log --name-only",
+			input: "commit 1a348149ff7078757f307580d7846bb788b17484\n" +
+				"Author: Ada Lovelace <ada@example.com>\n" +
+				"Date:   Mon Sep 7 09:06:35 2026 +0900\n" +
+				"\n" +
+				"    add a second note\n" +
+				"\n" +
+				"notes/second.txt\n",
+		},
+		{
+			name: "git log -p",
+			input: "commit 1a348149ff7078757f307580d7846bb788b17484\n" +
+				"Author: Ada Lovelace <ada@example.com>\n" +
+				"Date:   Mon Sep 7 09:06:35 2026 +0900\n" +
+				"\n" +
+				"    add a second note\n" +
+				"\n" +
+				"diff --git a/notes/second.txt b/notes/second.txt\n" +
+				"index e69de29..3b18e51 100644\n" +
+				"--- a/notes/second.txt\n" +
+				"+++ b/notes/second.txt\n" +
+				"@@ -0,0 +1 @@\n" +
+				"+hello\n",
+		},
+	}
+	for _, tt := range cases {
+		t.Run(tt.name, func(t *testing.T) {
+			if code := h.pipe(tt.input, tt.args...); code == ExitOK {
+				t.Fatalf("read another invocation and produced JSON: %s", h.stdout.String())
+			}
+			if h.stdout.Len() != 0 {
+				t.Errorf("stdout must stay empty: %q", h.stdout.String())
+			}
+		})
+	}
+}
+
 // TestNamedParserStillChecksTheInput covers the definitions jz will not
 // choose on its own because their shape is too plain. Naming one is a
 // claim about the input, not a way past the signature, so a parser that
@@ -356,6 +443,21 @@ func TestNamedParserStillChecksTheInput(t *testing.T) {
 			args:   []string{"--parser", "etc", "--variant", "hosts"},
 			input:  "10:14  up 3 days, 22:45, 2 users, load averages: 1.0 1.1 1.2\n",
 			reject: "etc/hosts does not describe this input",
+		},
+		{
+			// Prose that quotes the opening line of a report is not the
+			// report. Both signatures used to look for their header line
+			// alone, which a document explaining the format carries too.
+			name:   "ethtool must not read a document quoting its header",
+			args:   []string{"--parser", "ethtool", "--variant", "settings"},
+			input:  "The settings report opens with\n\nSettings for eno1:\n\nand then lists a label and a value per line.\n",
+			reject: "ethtool/settings does not describe this input",
+		},
+		{
+			name:   "mtr must not read a document quoting its header",
+			args:   []string{"--parser", "mtr", "--variant", "report"},
+			input:  "The report opens with\n\nHOST: workstation                      Loss%   Snt   Last   Avg  Best  Wrst StDev\n\nand the rows that follow are indented by two spaces.\n",
+			reject: "mtr/report does not describe this input",
 		},
 		{
 			// blkid prints "path: TAG=..." which is the shape of file(1)
@@ -889,6 +991,32 @@ func TestRunRealCommands(t *testing.T) {
 	}
 }
 
+// A command that prints what another one prints is read by the same
+// definition, under its own name and with the arguments that name needs.
+func TestRunUsesAliases(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("no POSIX commands")
+	}
+	h := newHarness(t)
+	for _, args := range [][]string{{"printenv"}, {"getent", "passwd"}, {"getent", "group"}} {
+		if code := h.run(append([]string{"run"}, args...)...); code != ExitOK {
+			t.Errorf("run %v: %d %s", args, code, h.stderr.String())
+		}
+	}
+	// The arguments an alias states replace the ones the command needs:
+	// getent takes the database name where etc takes nothing.
+	if code := h.run("run", "getent", "services"); code == ExitOK {
+		t.Errorf("getent services has no definition and must not be read: %s", h.stdout.String())
+	}
+	// Naming the parser by an alias reaches the same definitions.
+	if code := h.pipe("root:x:0:\n", "--parser", "getent", "--variant", "group"); code != ExitOK {
+		t.Errorf("--parser getent --variant group: %d %s", code, h.stderr.String())
+	}
+	if h.rows()[0]["name"] != "root" {
+		t.Errorf("rows = %v", h.rows())
+	}
+}
+
 func TestMergedExecEnv(t *testing.T) {
 	t.Parallel()
 	dir := t.TempDir()
@@ -947,8 +1075,17 @@ func TestNoFabricatedUnits(t *testing.T) {
 // pass, instead of being claimed because it was the only candidate left.
 func TestGenericFormatsNeedAnExplicitParser(t *testing.T) {
 	h := newHarness(t)
-	numstat := "10\t2\tmain.go\n" // git diff --numstat, not du
-	if code := h.pipe(numstat); code != ExitSelect || h.stdout.Len() != 0 {
+	// Three tab separated cells, two of them counts, is what
+	// `git diff --numstat` prints and not what du prints.
+	if code := h.pipe("10\t2\tmain.go\n"); code != ExitSelect || h.stdout.Len() != 0 {
+		t.Fatalf("code=%d stdout=%q stderr=%s", code, h.stdout.String(), h.stderr.String())
+	}
+	if got := h.stderr.String(); !strings.Contains(got, "could be `git` output") {
+		t.Errorf("numstat should be named as git:\n%s", got)
+	}
+	// A count and a path is du, and nothing about the text says so, so
+	// the parser has to be named.
+	if code := h.pipe("12\t/usr/bin\n"); code != ExitSelect || h.stdout.Len() != 0 {
 		t.Fatalf("code=%d stdout=%q stderr=%s", code, h.stdout.String(), h.stderr.String())
 	}
 	for _, want := range []string{"could be `du` output", "too generic", "jz --parser du"} {

@@ -1,0 +1,22 @@
+[
+  {
+    "time": "08:55:14",
+    "cpu": "all",
+    "user_percent": 0.69,
+    "nice_percent": 0.22,
+    "system_percent": 0.22,
+    "iowait_percent": 0.06,
+    "steal_percent": 0,
+    "idle_percent": 98.81
+  },
+  {
+    "time": "Average",
+    "cpu": "all",
+    "user_percent": 0.69,
+    "nice_percent": 0.22,
+    "system_percent": 0.22,
+    "iowait_percent": 0.06,
+    "steal_percent": 0,
+    "idle_percent": 98.81
+  }
+]

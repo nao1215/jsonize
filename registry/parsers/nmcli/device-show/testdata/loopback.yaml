@@ -1,0 +1,4 @@
+description: One device asked for by name, the shortest block this form has.
+source: captured on Ubuntu 26.04 (NetworkManager 1.56) with LC_ALL=C
+os: linux
+args: ["device", "show", "lo"]

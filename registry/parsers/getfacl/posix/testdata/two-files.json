@@ -1,0 +1,68 @@
+[
+  {
+    "attributes": [
+      {
+        "name": "file",
+        "value": "/etc/hosts"
+      },
+      {
+        "name": "owner",
+        "value": "root"
+      },
+      {
+        "name": "group",
+        "value": "root"
+      }
+    ],
+    "entries": [
+      {
+        "type": "user",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "group",
+        "qualifier": null,
+        "permissions": "r--"
+      },
+      {
+        "type": "other",
+        "qualifier": null,
+        "permissions": "r--"
+      }
+    ]
+  },
+  {
+    "attributes": [
+      {
+        "name": "file",
+        "value": "/etc/fstab"
+      },
+      {
+        "name": "owner",
+        "value": "root"
+      },
+      {
+        "name": "group",
+        "value": "root"
+      }
+    ],
+    "entries": [
+      {
+        "type": "user",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "group",
+        "qualifier": null,
+        "permissions": "r--"
+      },
+      {
+        "type": "other",
+        "qualifier": null,
+        "permissions": "r--"
+      }
+    ]
+  }
+]

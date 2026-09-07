@@ -1,0 +1,4 @@
+description: Four rows of a listing asked for with two columns, which is what shows that the column set is read from the header.
+source: the header and rows 1 to 4 of `lscpu -e=CPU,ONLINE` captured on Ubuntu 26.04 (util-linux 2.41) with LC_ALL=C
+os: linux
+args: ["-e=CPU,ONLINE"]

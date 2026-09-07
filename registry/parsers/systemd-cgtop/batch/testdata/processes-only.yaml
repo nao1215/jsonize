@@ -1,0 +1,4 @@
+description: The same sample counting processes rather than tasks, which is what -P changes in the second column.
+source: rows 1 to 8 of `systemd-cgtop -b -n 1 -P` captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C
+os: linux
+args: ["-b", "-n", "1", "-P"]

@@ -1,0 +1,56 @@
+# The image table whose columns are IMAGE, ID, DISK USAGE, CONTENT SIZE and
+# EXTRA. It is what `docker images` printed on the machine this was captured
+# on; the older layout with REPOSITORY, TAG, IMAGE ID, CREATED and SIZE is a
+# different format and has its own definition (variant images-repo-tag).
+# The variant is named after the columns rather than after a docker version
+# because the version that prints which layout is not something a definition
+# can check.
+#
+# Docker writes a line reminding the reader that the table is meant for
+# humans before the header, but on standard error, so it is not part of the
+# input jz reads and the definition does not mention it.
+#
+# The header has two two-word cells ("DISK USAGE", "CONTENT SIZE") and the
+# sizes are right-aligned under them, so the columns are cut on whitespace
+# with the names declared here: cutting at the header words would put a
+# boundary inside both of those cells. No cell in this table holds a space.
+#
+# EXTRA is the trailing flags cell, empty for most rows and "U" for an image
+# some container refers to. A row without it has four cells rather than an
+# empty fifth one, so min_fields is 4 and the missing cell becomes null.
+#
+# DISK USAGE and CONTENT SIZE are rounded for reading ("13MB", "3.93MB",
+# "1.94GB") and stay the strings docker printed. IMAGE is "<untagged>" for
+# an image with no reference of its own.
+#
+# `docker image ls --tree` prints this same header and then indents each
+# platform of a multi-platform image under it with a box-drawing marker.
+# Those rows are a different shape, so the tree output is refused rather
+# than half read.
+format: 1
+command: docker
+variant: images-disk-usage
+aliases:
+  # podman and nerdctl print the same tables under the same
+  # subcommands.
+  - name: podman
+  - name: nerdctl
+description: docker images with the IMAGE/ID/DISK USAGE/CONTENT SIZE columns
+metadata:
+  tags: [container, docker, image]
+  compatible: [Docker CLI]
+  references:
+    - https://docs.docker.com/reference/cli/docker/image/ls/
+detect:
+  signature:
+    all:
+      - '\AIMAGE[ \t]+ID[ \t]+DISK USAGE[ \t]+CONTENT SIZE[ \t]+EXTRA[ \t]*$'
+parse:
+  type: table
+  header:
+    columns: [image, id, disk_usage, content_size, extra]
+  min_fields: 4
+fields:
+  image: {null_if: ["<untagged>"]}
+  id: {required: true}
+  extra: {null_if: [""]}

@@ -1,0 +1,4 @@
+description: The first rows of every TCP socket, all of them listening, with the loopback addresses the machine binds.
+source: the header and rows 1 to 11 of `ss -tan` captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C
+os: linux
+args: ["-tan"]

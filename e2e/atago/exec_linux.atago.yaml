@@ -233,13 +233,25 @@ scenarios:
               - { path: "$[0].tx.packets", gte: 0 }
               # An interface with no alternative names still has the key.
               - { path: "$[0].altnames", length: 0 }
-      # Without -s the same command prints no counter tables, and this
-      # definition must not be stretched over that.
+      # Without -s the same command prints no counter tables. It has a
+      # definition of its own, and what this pins is that the two are not
+      # confused: the plain form carries no counters at all.
       - run:
           command: jz run ip link
       - assert:
-          exit_code: 4
-          stdout: {empty: true}
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$[0].interface.name", equals: lo }
+              - { path: "$[0].link.type", equals: loopback }
+              - { path: "$[0].altnames", length: 0 }
+      - run:
+          command: jz run ip link
+      - assert:
+          exit_code: 0
+          stdout:
+            not_contains: '"rx"'
 
   # Several operands mean several records. A definition that read only the
   # first block would drop the rest without saying so.

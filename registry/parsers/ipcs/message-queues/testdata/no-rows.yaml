@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+description: |
+  The heading and nothing under it, which is what this machine prints
+  when no message queue exists. The result is an empty list.
+os: linux
+args: [-q]

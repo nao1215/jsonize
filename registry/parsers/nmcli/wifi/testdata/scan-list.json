@@ -1,0 +1,253 @@
+[
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:00:00",
+    "ssid": "wifi-ap-01-abcdefghi",
+    "mode": "Infra",
+    "chan": 1,
+    "rate": "1170 Mbit/s",
+    "signal": 74,
+    "bars": "***",
+    "security": [
+      "WPA3"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:01:07",
+    "ssid": null,
+    "mode": "Infra",
+    "chan": 1,
+    "rate": "1170 Mbit/s",
+    "signal": 74,
+    "bars": "***",
+    "security": [
+      "WPA2",
+      "WPA3"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:02:0E",
+    "ssid": "wifi-ap-02-abcd",
+    "mode": "Infra",
+    "chan": 1,
+    "rate": "1170 Mbit/s",
+    "signal": 74,
+    "bars": "***",
+    "security": [
+      "WPA2"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:03:15",
+    "ssid": "wifi-ap-03-abcdefghi",
+    "mode": "Infra",
+    "chan": 36,
+    "rate": "1170 Mbit/s",
+    "signal": 62,
+    "bars": "***",
+    "security": [
+      "WPA3"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:04:1C",
+    "ssid": null,
+    "mode": "Infra",
+    "chan": 36,
+    "rate": "1170 Mbit/s",
+    "signal": 60,
+    "bars": "***",
+    "security": [
+      "WPA2",
+      "WPA3"
+    ]
+  },
+  {
+    "in_use": true,
+    "bssid": "52:54:00:00:05:23",
+    "ssid": "wifi-ap-04-abcd",
+    "mode": "Infra",
+    "chan": 36,
+    "rate": "1170 Mbit/s",
+    "signal": 59,
+    "bars": "***",
+    "security": [
+      "WPA2"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:06:2A",
+    "ssid": "wifi-ap-05-abcd",
+    "mode": "Infra",
+    "chan": 8,
+    "rate": "270 Mbit/s",
+    "signal": 42,
+    "bars": "**",
+    "security": [
+      "WPA2"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:07:31",
+    "ssid": "wifi-ap-06-abc",
+    "mode": "Infra",
+    "chan": 8,
+    "rate": "270 Mbit/s",
+    "signal": 42,
+    "bars": "**",
+    "security": [
+      "WPA2"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:08:38",
+    "ssid": "wifi-ap-07-abcdefghi",
+    "mode": "Infra",
+    "chan": 2,
+    "rate": "1170 Mbit/s",
+    "signal": 40,
+    "bars": "**",
+    "security": [
+      "WPA3"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:09:3F",
+    "ssid": "wifi-ap-08-abcd",
+    "mode": "Infra",
+    "chan": 2,
+    "rate": "1170 Mbit/s",
+    "signal": 40,
+    "bars": "**",
+    "security": [
+      "WPA2"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:0A:46",
+    "ssid": "wifi-ap-09-abcd",
+    "mode": "Infra",
+    "chan": 2,
+    "rate": "130 Mbit/s",
+    "signal": 40,
+    "bars": "**",
+    "security": [
+      "WPA2"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:0B:4D",
+    "ssid": "wifi-ap-10-abcde",
+    "mode": "Infra",
+    "chan": 2,
+    "rate": "130 Mbit/s",
+    "signal": 40,
+    "bars": "**",
+    "security": [
+      "WPA2"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:0C:54",
+    "ssid": "wifi-ap-06-abc",
+    "mode": "Infra",
+    "chan": 8,
+    "rate": "1170 Mbit/s",
+    "signal": 34,
+    "bars": "**",
+    "security": [
+      "WPA2"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:0D:5B",
+    "ssid": "wifi-ap-11",
+    "mode": "Infra",
+    "chan": 11,
+    "rate": "270 Mbit/s",
+    "signal": 30,
+    "bars": "*",
+    "security": [
+      "WPA2"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:0E:62",
+    "ssid": "wifi-ap-12-abcde",
+    "mode": "Infra",
+    "chan": 36,
+    "rate": "1170 Mbit/s",
+    "signal": 27,
+    "bars": "*",
+    "security": [
+      "WPA2"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:0F:69",
+    "ssid": "wifi-ap-09-abcd",
+    "mode": "Infra",
+    "chan": 36,
+    "rate": "1170 Mbit/s",
+    "signal": 27,
+    "bars": "*",
+    "security": [
+      "WPA2"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:10:70",
+    "ssid": "wifi-ap-13-a",
+    "mode": "Infra",
+    "chan": 5,
+    "rate": "1170 Mbit/s",
+    "signal": 24,
+    "bars": "*",
+    "security": [
+      "WPA2",
+      "WPA3"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:11:77",
+    "ssid": "wifi-ap-14-abcdefghi",
+    "mode": "Infra",
+    "chan": 6,
+    "rate": "130 Mbit/s",
+    "signal": 24,
+    "bars": "*",
+    "security": [
+      "WPA3"
+    ]
+  },
+  {
+    "in_use": null,
+    "bssid": "52:54:00:00:12:7E",
+    "ssid": "wifi-ap-15-a",
+    "mode": "Infra",
+    "chan": 64,
+    "rate": "540 Mbit/s",
+    "signal": 22,
+    "bars": "*",
+    "security": [
+      "WPA2",
+      "WPA3"
+    ]
+  }
+]

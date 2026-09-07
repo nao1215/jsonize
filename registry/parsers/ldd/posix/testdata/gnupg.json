@@ -1,0 +1,65 @@
+[
+  {
+    "name": "linux-vdso.so.1",
+    "address": "0x00007779d47e1000"
+  },
+  {
+    "name": "libz.so.1",
+    "path": "/usr/lib/x86_64-linux-gnu/libz.so.1",
+    "address": "0x00007779d4676000"
+  },
+  {
+    "name": "libbz2.so.1.0",
+    "path": "/usr/lib/x86_64-linux-gnu/libbz2.so.1.0",
+    "address": "0x00007779d4661000"
+  },
+  {
+    "name": "libsqlite3.so.0",
+    "path": "/usr/lib/x86_64-linux-gnu/libsqlite3.so.0",
+    "address": "0x00007779d44ed000"
+  },
+  {
+    "name": "libgcrypt.so.20",
+    "path": "/usr/lib/x86_64-linux-gnu/libgcrypt.so.20",
+    "address": "0x00007779d4336000"
+  },
+  {
+    "name": "libreadline.so.8",
+    "path": "/usr/lib/x86_64-linux-gnu/libreadline.so.8",
+    "address": "0x00007779d42dc000"
+  },
+  {
+    "name": "libassuan.so.9",
+    "path": "/usr/lib/x86_64-linux-gnu/libassuan.so.9",
+    "address": "0x00007779d42c4000"
+  },
+  {
+    "name": "libnpth.so.0",
+    "path": "/usr/lib/x86_64-linux-gnu/libnpth.so.0",
+    "address": "0x00007779d42bd000"
+  },
+  {
+    "name": "libgpg-error.so.0",
+    "path": "/usr/lib/x86_64-linux-gnu/libgpg-error.so.0",
+    "address": "0x00007779d4291000"
+  },
+  {
+    "name": "libc.so.6",
+    "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+    "address": "0x00007779d4000000"
+  },
+  {
+    "name": "libm.so.6",
+    "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+    "address": "0x00007779d3eda000"
+  },
+  {
+    "name": "/lib64/ld-linux-x86-64.so.2",
+    "address": "0x00007779d47e3000"
+  },
+  {
+    "name": "libtinfo.so.6",
+    "path": "/usr/lib/x86_64-linux-gnu/libtinfo.so.6",
+    "address": "0x00007779d425a000"
+  }
+]

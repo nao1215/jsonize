@@ -1,0 +1,35 @@
+[
+  {
+    "scope": {
+      "global": false,
+      "index": 3,
+      "name": "wlp195s0"
+    },
+    "settings": [
+      {
+        "name": "Current Scopes",
+        "value": "DNS"
+      },
+      {
+        "name": "Protocols",
+        "value": "+DefaultRoute -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported"
+      },
+      {
+        "name": "Current DNS Server",
+        "value": "192.0.2.1"
+      },
+      {
+        "name": "DNS Servers",
+        "value": "192.0.2.1"
+      },
+      {
+        "name": "DNS Domain",
+        "value": "example.com"
+      },
+      {
+        "name": "Default Route",
+        "value": "yes"
+      }
+    ]
+  }
+]

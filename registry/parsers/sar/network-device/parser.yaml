@@ -1,0 +1,48 @@
+# `sar -n DEV` prints a banner naming the kernel, the host, the date and
+# the CPU count, then one row per sampling interval and a summary row
+# labelled Average:. The banner is dropped: it is one line about the run
+# rather than a row of the report, and a table cannot hold both.
+#
+# The column names sit on a line that opens with the time the report
+# started rather than with a name, so the names are written out here and
+# that line is ignored. `sar -n DEV` repeats the name line above the
+# summary block, which is why the ignore pattern accepts either label.
+#
+# The first cell is the time of the sample, except on a summary row where
+# it is the word Average. The trailing colon that only the summary rows
+# carry is removed so the cell holds one or the other and nothing else.
+format: 1
+command: sar
+variant: network-device
+description: sar -n DEV network device activity
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+IFACE[ \t]+rxpck/s[ \t]+txpck/s[ \t]+rxkB/s[ \t]+txkB/s[ \t]+rxcmp/s[ \t]+txcmp/s[ \t]+rxmcst/s[ \t]+%ifutil[ \t]*$'
+input:
+  ignore:
+    - '\ALinux '
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+IFACE[ \t]+rxpck/s'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, iface, rxpck_per_s, txpck_per_s, rxkb_per_s, txkb_per_s, rxcmp_per_s, txcmp_per_s, rxmcst_per_s, ifutil_percent]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  iface: {required: true}
+  rxpck_per_s: {type: float}
+  txpck_per_s: {type: float}
+  rxkb_per_s: {type: float}
+  txkb_per_s: {type: float}
+  rxcmp_per_s: {type: float}
+  txcmp_per_s: {type: float}
+  rxmcst_per_s: {type: float}
+  ifutil_percent: {type: float}

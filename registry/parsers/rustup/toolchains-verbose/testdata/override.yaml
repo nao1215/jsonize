@@ -1,0 +1,4 @@
+description: an overridden toolchain, where the markers split across the two lines and the path still follows them
+source: captured on Ubuntu 26.04 (rustup 1.29.1) with LC_ALL=C and RUSTUP_TOOLCHAIN set to the second toolchain; the user name in the paths was replaced
+os: linux
+args: [toolchain, list, -v]

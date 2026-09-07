@@ -1,0 +1,62 @@
+[
+  {
+    "from": {
+      "path": "github.com/nao1215/jsonize",
+      "version": null
+    },
+    "to": {
+      "path": "github.com/goccy/go-yaml",
+      "version": "v1.19.2"
+    }
+  },
+  {
+    "from": {
+      "path": "github.com/nao1215/jsonize",
+      "version": null
+    },
+    "to": {
+      "path": "github.com/google/go-cmp",
+      "version": "v0.7.0"
+    }
+  },
+  {
+    "from": {
+      "path": "github.com/nao1215/jsonize",
+      "version": null
+    },
+    "to": {
+      "path": "go",
+      "version": "1.26"
+    }
+  },
+  {
+    "from": {
+      "path": "github.com/goccy/go-yaml",
+      "version": "v1.19.2"
+    },
+    "to": {
+      "path": "go",
+      "version": "1.21.0"
+    }
+  },
+  {
+    "from": {
+      "path": "github.com/google/go-cmp",
+      "version": "v0.7.0"
+    },
+    "to": {
+      "path": "go",
+      "version": "1.21"
+    }
+  },
+  {
+    "from": {
+      "path": "go",
+      "version": "1.26"
+    },
+    "to": {
+      "path": "toolchain",
+      "version": "go1.26"
+    }
+  }
+]

@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (systemd 259.5) with LC_ALL=C
+description: >
+  A machine that boots through firmware, boot loader, kernel and initrd,
+  so every stage is present and the line ends in the total. The reached
+  target line ends in a full stop, which older versions of systemd omit.
+os: linux
+args: [time]

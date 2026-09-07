@@ -1,0 +1,8 @@
+COMMAND             PID             USER  ASSOC  XMODE         TYPE          SOURCE MNTID      INODE NAME
+dbus-daemon        9049              user    mem r-----          REG       nvme1n1p2     0   28970240 /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3
+dbus-daemon        9049              user    mem rw----          REG       nvme1n1p2     0   28970240 /usr/lib/x86_64-linux-gnu/libdbus-1.so.3.38.3
+dbus-daemon        9049              user    mem ????--        ERROR      stat:EPERM                  /usr/lib/x86_64-linux-gnu/libnss_sss.so.2 (deleted)
+dbus-daemon        9049              user    mem ????--        ERROR      stat:EPERM                  /usr/lib/x86_64-linux-gnu/libnss_sss.so.2 (deleted)
+dbus-daemon        9049              user    mem ????--        ERROR      stat:EPERM                  /usr/lib/x86_64-linux-gnu/libnss_sss.so.2 (deleted)
+dbus-daemon        9049              user    mem ????--        ERROR      stat:EPERM                  /usr/lib/x86_64-linux-gnu/libnss_sss.so.2 (deleted)
+dbus-daemon        9049              user    mem ????--        ERROR      stat:EPERM                  /usr/lib/x86_64-linux-gnu/libnss_sss.so.2 (deleted)

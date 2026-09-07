@@ -1,0 +1,9 @@
+[
+  {
+    "idx": 1,
+    "link": "lo",
+    "type": "loopback",
+    "operational": null,
+    "setup": "unmanaged"
+  }
+]

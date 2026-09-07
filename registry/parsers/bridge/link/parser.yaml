@@ -1,0 +1,41 @@
+# `bridge link` and `bridge link show` print the same bytes: one line per
+# bridge port, an index and name like `ip link` but with the spanning
+# tree state, priority and path cost instead of the queueing discipline.
+# `bridge -d link` follows each of those lines with an indented line of
+# per-port settings, which this definition refuses rather than reads.
+#
+# Everything after the MTU is optional because a line is assembled from
+# the attributes the kernel returned: a device that is not a port of a
+# bridge has no master and no spanning tree state.
+format: 1
+command: bridge
+variant: link
+description: bridge link, one line per bridge port
+metadata:
+  tags: [linux, network, iproute2, bridge]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/bridge.8.html
+detect:
+  os: [linux]
+  args:
+    all: ["link"]
+  signature:
+    all:
+      # `ip link` puts `qdisc` where this puts `master`, and nothing else
+      # prints a spanning tree priority and cost after a flag list.
+      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ master \S+ state \S+ priority \d+ cost \d+[ \t]*$'
+parse:
+  type: regex
+  # A veth end names its peer after an @, as it does in `ip link`.
+  pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>[^:]+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+)(?: master (?P<master>\S+))?(?: state (?P<state>\S+))?(?: priority (?P<priority>\d+))?(?: cost (?P<cost>\d+))?[ \t]*$'
+fields:
+  index: {type: int}
+  name: {required: true}
+  peer: {when_missing: omit}
+  flags: {type: array, split: ","}
+  mtu: {type: int}
+  master: {when_missing: omit}
+  state: {when_missing: omit}
+  priority: {type: int, when_missing: omit}
+  cost: {type: int, when_missing: omit}

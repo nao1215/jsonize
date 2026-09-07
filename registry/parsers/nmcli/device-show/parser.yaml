@@ -1,0 +1,43 @@
+# `nmcli device show` prints one block per device, separated by a blank
+# line. Every line is a dotted label and a value; a label that can occur
+# more than once carries an index in brackets (IP4.ADDRESS[1]).
+#
+# The properties are a list rather than an object: the labels are not a
+# fixed set, they gain a section prefix per device kind
+# (WIRED-PROPERTIES, WIFI-PROPERTIES), and the indexed ones would need
+# the brackets to mean something the format does not promise. The value
+# of a route is itself a comma separated list of assignments and is kept
+# as printed for the same reason.
+format: 1
+command: nmcli
+variant: device-show
+description: nmcli device show, properties per device
+metadata:
+  tags: [linux, network, networkmanager]
+  compatible: [NetworkManager]
+  references:
+    - https://networkmanager.dev/docs/api/latest/nmcli.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AGENERAL\.DEVICE:[ \t]+\S'
+      - '^GENERAL\.TYPE:[ \t]+\S'
+parse:
+  type: records
+  start: '^GENERAL\.DEVICE:'
+  parts:
+    - name: device
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AGENERAL\.DEVICE:[ \t]+(?P<name>.+?)[ \t]*$'
+      fields:
+        name: {required: true}
+    - name: properties
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: list

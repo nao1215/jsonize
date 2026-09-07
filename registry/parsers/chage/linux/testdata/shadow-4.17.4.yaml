@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (shadow 1:4.17.4-2ubuntu3) with LC_ALL=C
+description: |
+  An account with no expiry set: three labels read "never" and the change
+  date is a month/day/year string. args is not recorded because chage
+  needs a login name and the only one this machine can read is the
+  caller's own, which would put a real user name in the registry.
+os: linux

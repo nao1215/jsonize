@@ -1,0 +1,32 @@
+[
+  {
+    "irq": "41",
+    "total": 1,
+    "name": "IR-PCI-MSI-0000:00:08.3 0-edge PCIe PME, PCIe bwctrl"
+  },
+  {
+    "irq": "31",
+    "total": 1,
+    "name": "amd_gpio 0 ACPI:Event"
+  },
+  {
+    "irq": "ERR",
+    "total": 0,
+    "name": null
+  },
+  {
+    "irq": "MIS",
+    "total": 0,
+    "name": null
+  },
+  {
+    "irq": "RTR",
+    "total": 0,
+    "name": "APIC ICR read retries"
+  },
+  {
+    "irq": "DFR",
+    "total": 0,
+    "name": "Deferred Error APIC interrupts"
+  }
+]

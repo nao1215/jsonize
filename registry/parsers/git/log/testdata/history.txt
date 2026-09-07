@@ -1,0 +1,29 @@
+commit 8315fbfb88d3080788679234e10f74139b621f5d
+Merge: 1a34814 1e3fd55
+Author: Ada Lovelace <ada@example.com>
+Date:   Mon Sep 7 09:06:35 2026 +0900
+
+    merge the topic branch
+
+commit 1a348149ff7078757f307580d7846bb788b17484
+Author: Ada Lovelace <ada@example.com>
+Date:   Mon Sep 7 09:06:35 2026 +0900
+
+    add a second note
+    
+    The body explains why the note exists and wraps over
+    more than one line.
+    
+    It also has a second paragraph.
+
+commit 1e3fd5522c278259421ff443378c717e528db3c5
+Author: Ada Lovelace <ada@example.com>
+Date:   Mon Sep 7 09:06:35 2026 +0900
+
+    add a note on the topic branch
+
+commit 3ba713485c808bba6dd5f5416640dd488df8db62
+Author: Ada Lovelace <ada@example.com>
+Date:   Mon Sep 7 09:06:35 2026 +0900
+
+    add the first note

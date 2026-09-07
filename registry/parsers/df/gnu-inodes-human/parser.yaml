@@ -3,6 +3,10 @@
 format: 1
 command: df
 variant: gnu-inodes-human
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gdf
 description: df -ih on GNU coreutils, rounded inode counts
 metadata:
   tags: [linux, filesystem]

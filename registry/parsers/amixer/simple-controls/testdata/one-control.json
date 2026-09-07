@@ -1,0 +1,34 @@
+[
+  {
+    "control": {
+      "name": "Master",
+      "index": 0
+    },
+    "settings": [
+      {
+        "name": "Capabilities",
+        "value": "pvolume pswitch pswitch-joined"
+      },
+      {
+        "name": "Playback channels",
+        "value": "Front Left - Front Right"
+      },
+      {
+        "name": "Limits",
+        "value": "Playback 0 - 65536"
+      },
+      {
+        "name": "Mono",
+        "value": ""
+      },
+      {
+        "name": "Front Left",
+        "value": "Playback 9830 [15%] [on]"
+      },
+      {
+        "name": "Front Right",
+        "value": "Playback 9830 [15%] [on]"
+      }
+    ]
+  }
+]

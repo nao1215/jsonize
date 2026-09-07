@@ -1,0 +1,31 @@
+# /etc/resolv.conf: one directive per line, the directive name followed
+# by its arguments. A directive can appear more than once, so the result
+# keeps the file order instead of folding the lines into one object.
+format: 1
+command: etc
+variant: resolv-conf
+description: /etc/resolv.conf resolver directives
+metadata:
+  tags: [linux, darwin, network, dns]
+  compatible: [glibc, systemd-resolved]
+  references:
+    - https://man7.org/linux/man-pages/man5/resolv.conf.5.html
+detect:
+  auto_detect: false
+  signature:
+    # The comment header systemd-resolved writes is longer than the
+    # default window, so the first directive is well down the file.
+    window: 200
+    all:
+      # A resolver file without a nameserver has nothing that tells it
+      # apart from any other list of words.
+      - '^nameserver[ \t]+\S+[ \t]*$'
+input:
+  ignore:
+    - '^\s*[#;]'
+parse:
+  type: regex
+  pattern: '^(?P<directive>nameserver|domain|search|sortlist|options)[ \t]+(?P<values>.+?)[ \t]*$'
+fields:
+  directive: {required: true}
+  values: {type: array, split_regex: '[ \t]+'}

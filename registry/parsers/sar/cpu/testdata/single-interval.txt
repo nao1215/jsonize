@@ -1,0 +1,5 @@
+Linux 7.0.0-30-generic (workstation) 	09/07/26 	_x86_64_	(32 CPU)
+
+08:55:13        CPU     %user     %nice   %system   %iowait    %steal     %idle
+08:55:14        all      0.69      0.22      0.22      0.06      0.00     98.81
+Average:        all      0.69      0.22      0.22      0.06      0.00     98.81
