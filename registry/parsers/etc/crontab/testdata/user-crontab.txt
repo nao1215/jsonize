@@ -1,0 +1,6 @@
+# A crontab installed for one account, which has no user field.
+SHELL=/bin/bash
+
+15 2 * * * /usr/local/bin/backup --full /srv
+0 */6 * * * /usr/local/bin/sync-photos
+@reboot /usr/local/bin/warm-cache
