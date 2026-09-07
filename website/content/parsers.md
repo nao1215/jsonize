@@ -94,6 +94,7 @@ input.
 | `ping` | `linux` |
 | `pip` | `columns` |
 | `pmap` | `linux` |
+| `proc` | `loadavg`, `meminfo`, `uptime` |
 | `ps` | `bsd`, `busybox`, `posix`, `unix` |
 | `readelf` | `header` |
 | `resolvectl` | `status` |

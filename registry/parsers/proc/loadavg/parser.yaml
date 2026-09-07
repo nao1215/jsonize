@@ -1,0 +1,39 @@
+# /proc/loadavg is one line of five fields: the load averages over one,
+# five and fifteen minutes, the number of runnable scheduling entities
+# over the total number of them, and the last PID the kernel allocated.
+#
+# The runnable and total counts are printed as one field separated by a
+# slash. They are two numbers, so they become two fields; that is
+# reading the line, not adding to it.
+#
+# The load averages are what the kernel prints. They are an exponentially
+# damped average of the run queue, not a percentage and not a count of
+# anything, so they stay the numbers they are.
+format: 1
+command: proc
+variant: loadavg
+description: /proc/loadavg load averages and scheduling counts
+metadata:
+  tags: [linux, proc, load]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_loadavg.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The whole file is this one line. Three decimals, a runnable count
+      # over a total, and a PID; the slash between two of the numbers is
+      # what no other line of five numbers has.
+      - '\A\d+\.\d\d [\d.]+ [\d.]+ \d+/\d+ \d+\s*\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\A(?P<load_1m>\d+\.\d+)[ \t]+(?P<load_5m>\d+\.\d+)[ \t]+(?P<load_15m>\d+\.\d+)[ \t]+(?P<runnable>\d+)/(?P<total>\d+)[ \t]+(?P<last_pid>\d+)\s*\z'
+fields:
+  load_1m: {type: float, required: true}
+  load_5m: {type: float, required: true}
+  load_15m: {type: float, required: true}
+  runnable: {type: int, required: true}
+  total: {type: int, required: true}
+  last_pid: {type: int, required: true}

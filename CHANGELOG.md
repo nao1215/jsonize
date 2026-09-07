@@ -33,6 +33,11 @@ project follows [Semantic Versioning](https://semver.org/).
   complete document or nothing" to "every line of standard output is a
   complete document": a record that cannot be read still exits 3, but the
   records already written stay written.
+- `/proc/meminfo`, `/proc/loadavg` and `/proc/uptime`, as variants of a
+  parser named `proc`, read from a pipe or a redirect the way the `/etc`
+  files are. meminfo and loadavg say enough about themselves to be
+  identified from their text; `/proc/uptime` is two decimal numbers and
+  nothing else, so it is named rather than claimed on sight.
 - `parse: type: records` for a report whose blocks repeat: a line
   matching `start` opens a record and the `parts` are applied to each. A
   `composite` part may itself be `records`, which is what a report that

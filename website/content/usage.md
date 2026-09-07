@@ -159,6 +159,23 @@ $ cat /etc/nsswitch.conf | jz --parser etc
 Naming `etc` without a variant is enough where the file recognises
 itself; `jz list etc` prints the ones that exist.
 
+The kernel's own files are read the same way, under a parser named
+`proc`. Some of them say enough about themselves to be identified from
+their text alone:
+
+```console
+$ cat /proc/meminfo | jz
+$ jz < /proc/loadavg
+$ jz --parser proc --variant uptime < /proc/uptime
+```
+
+`/proc/uptime` is the third case rather than the first two, and it is
+worth saying why. It holds two decimal numbers and nothing else, which
+is the shape of any pair of measurements, so jz will not claim it on
+sight; naming the parser is what says which file this is. The signature
+is still checked when you do, so naming it is not a way past the
+checks.
+
 ## Where jz stops and the command begins
 
 Everything from the command name onwards belongs to the command, so its
