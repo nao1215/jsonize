@@ -1,0 +1,13 @@
+kernel.perf_event_mlock_kb = 516
+kernel.perf_event_paranoid = 4
+kernel.pid_max = 4194304
+kernel.poweroff_cmd = /sbin/poweroff
+kernel.print-fatal-signals = 0
+kernel.printk = 4	4	1	7
+kernel.printk_delay = 0
+kernel.printk_devkmsg = on
+kernel.printk_ratelimit = 5
+kernel.printk_ratelimit_burst = 10
+kernel.pty.max = 4096
+kernel.pty.nr = 15
+kernel.pty.reserve = 1024

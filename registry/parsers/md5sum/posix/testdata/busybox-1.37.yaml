@@ -1,0 +1,4 @@
+description: BusyBox prints the digest and the name separated by two spaces, the same as coreutils.
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C
+os: linux
+args: [/etc/hosts, /etc/passwd]

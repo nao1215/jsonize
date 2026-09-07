@@ -1,0 +1,54 @@
+[
+  {
+    "name": "kernel.perf_event_mlock_kb",
+    "value": "516"
+  },
+  {
+    "name": "kernel.perf_event_paranoid",
+    "value": "4"
+  },
+  {
+    "name": "kernel.pid_max",
+    "value": "4194304"
+  },
+  {
+    "name": "kernel.poweroff_cmd",
+    "value": "/sbin/poweroff"
+  },
+  {
+    "name": "kernel.print-fatal-signals",
+    "value": "0"
+  },
+  {
+    "name": "kernel.printk",
+    "value": "4\t4\t1\t7"
+  },
+  {
+    "name": "kernel.printk_delay",
+    "value": "0"
+  },
+  {
+    "name": "kernel.printk_devkmsg",
+    "value": "on"
+  },
+  {
+    "name": "kernel.printk_ratelimit",
+    "value": "5"
+  },
+  {
+    "name": "kernel.printk_ratelimit_burst",
+    "value": "10"
+  },
+  {
+    "name": "kernel.pty.max",
+    "value": "4096"
+  },
+  {
+    "name": "kernel.pty.nr",
+    "value": "15"
+  },
+  {
+    "name": "kernel.pty.reserve",
+    "value": "1024"
+  }
+]

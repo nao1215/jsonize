@@ -1,0 +1,4 @@
+description: A window of the BusyBox output, taken so that it holds a tab separated list, a path and a word, which are the value shapes that could have told the two implementations apart. They do not.
+source: lines 183 to 195 of `sysctl -a` captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C
+os: linux
+args: ["-a"]

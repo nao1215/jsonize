@@ -1,0 +1,10 @@
+[
+  {
+    "checksum": "931755401e179b8c1767212cf065184a",
+    "file": "/etc/hosts"
+  },
+  {
+    "checksum": "8100d566d02f36d606690214155c15a3",
+    "file": "/etc/passwd"
+  }
+]

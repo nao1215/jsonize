@@ -8,7 +8,7 @@ variant: gnu-human
 description: procps free -h (sizes kept as printed)
 metadata:
   tags: [linux, memory, procps]
-  compatible: [procps-ng]
+  compatible: [procps-ng, BusyBox]
 detect:
   os: [linux]
   args:
