@@ -34,7 +34,7 @@ func TestRunCapturesStdoutAndStderr(t *testing.T) {
 		t.Skip("go not on PATH")
 	}
 	var stderr bytes.Buffer
-	res, err := Run(context.Background(), Command{Name: "go", Args: []string{"env", "GOOS"}}, &stderr, nil)
+	res, err := Run(context.Background(), Command{Name: "go", Args: []string{"env", "GOOS"}}, &stderr)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,10 +48,10 @@ func TestRunCapturesStdoutAndStderr(t *testing.T) {
 
 func TestRunErrors(t *testing.T) {
 	t.Parallel()
-	if _, err := Run(context.Background(), Command{Name: "  "}, os.Stderr, nil); err == nil {
+	if _, err := Run(context.Background(), Command{Name: "  "}, os.Stderr); err == nil {
 		t.Error("empty name should fail")
 	}
-	if _, err := Run(context.Background(), Command{Name: "jsonize-definitely-missing-binary"}, os.Stderr, nil); err == nil || !strings.Contains(err.Error(), "cannot run") {
+	if _, err := Run(context.Background(), Command{Name: "jsonize-definitely-missing-binary"}, os.Stderr); err == nil || !strings.Contains(err.Error(), "cannot run") {
 		t.Errorf("missing binary: %v", err)
 	}
 }
@@ -67,7 +67,7 @@ func TestRunPosix(t *testing.T) {
 	t.Run("exit code passthrough with stderr", func(t *testing.T) {
 		t.Parallel()
 		var stderr bytes.Buffer
-		res, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", "echo out; echo err >&2; exit 3"}}, &stderr, nil)
+		res, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", "echo out; echo err >&2; exit 3"}}, &stderr)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -77,7 +77,7 @@ func TestRunPosix(t *testing.T) {
 	})
 	t.Run("locale is forced and env applied", func(t *testing.T) {
 		t.Parallel()
-		res, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", "echo $LC_ALL $JZ_TEST"}, Env: []string{"JZ_TEST=yes"}}, os.Stderr, nil)
+		res, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", "echo $LC_ALL $JZ_TEST"}, Env: []string{"JZ_TEST=yes"}}, os.Stderr)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -87,21 +87,21 @@ func TestRunPosix(t *testing.T) {
 	})
 	t.Run("stdin is passed", func(t *testing.T) {
 		t.Parallel()
-		res, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", "cat"}, Stdin: strings.NewReader("ping")}, os.Stderr, nil)
+		res, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", "cat"}, Stdin: strings.NewReader("ping")}, os.Stderr)
 		if err != nil || string(res.Stdout) != "ping" {
 			t.Errorf("stdin: %q %v", res.Stdout, err)
 		}
 	})
 	t.Run("output limit kills the child", func(t *testing.T) {
 		t.Parallel()
-		_, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", "yes | head -c 100000"}, MaxOutput: 1000}, os.Stderr, nil)
+		_, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", "yes | head -c 100000"}, MaxOutput: 1000}, os.Stderr)
 		if !errors.Is(err, ErrOutputTooLarge) {
 			t.Errorf("expected ErrOutputTooLarge, got %v", err)
 		}
 	})
 	t.Run("child killed by signal reports 128+n", func(t *testing.T) {
 		t.Parallel()
-		res, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", "kill -TERM $$"}}, os.Stderr, nil)
+		res, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", "kill -TERM $$"}}, os.Stderr)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -111,12 +111,12 @@ func TestRunPosix(t *testing.T) {
 	})
 	t.Run("forwarded signal reaches the child", func(t *testing.T) {
 		t.Parallel()
-		sigs := make(chan os.Signal, 1)
+		sigs := testRelay()
 		go func() {
 			time.Sleep(200 * time.Millisecond)
-			sigs <- syscall.SIGTERM
+			sigs.ch <- syscall.SIGTERM
 		}()
-		res, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", "exec sleep 10"}}, os.Stderr, sigs)
+		res, err := run(context.Background(), Command{Name: "sh", Args: []string{"-c", "exec sleep 10"}}, os.Stderr, sigs)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -128,7 +128,7 @@ func TestRunPosix(t *testing.T) {
 		t.Parallel()
 		ctx, cancel := context.WithTimeout(context.Background(), 200*time.Millisecond)
 		defer cancel()
-		res, err := Run(ctx, Command{Name: "sh", Args: []string{"-c", "exec sleep 10"}}, os.Stderr, nil)
+		res, err := Run(ctx, Command{Name: "sh", Args: []string{"-c", "exec sleep 10"}}, os.Stderr)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -161,7 +161,7 @@ func TestStreamHandsOutputOverAsItArrives(t *testing.T) {
 	res, err := Stream(context.Background(), Command{
 		Name: "sh",
 		Args: []string{"-c", "echo one; echo two; echo problem >&2; exit 4"},
-	}, &stderr, nil, func(r io.Reader) error {
+	}, &stderr, func(r io.Reader) error {
 		var err error
 		got, err = io.ReadAll(r)
 		return err
@@ -177,9 +177,62 @@ func TestStreamHandsOutputOverAsItArrives(t *testing.T) {
 	}
 }
 
-// A consumer that stops early must not leave the child blocked on a full
-// pipe, so whatever it left is drained before the wait.
+// A consumer that has seen enough and returns nil must not leave the
+// child blocked on a full pipe: whatever it left is drained before the
+// wait, and the child's own status is what comes back.
 func TestStreamDrainsWhatTheConsumerLeft(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	t.Parallel()
+	res, err := Stream(context.Background(), Command{
+		Name: "sh",
+		Args: []string{"-c", "i=0; while [ $i -lt 20000 ]; do echo line$i; i=$((i+1)); done; exit 3"},
+	}, io.Discard, func(r io.Reader) error {
+		buf := make([]byte, 8)
+		_, _ = r.Read(buf)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("err = %v", err)
+	}
+	if res == nil || res.ExitCode != 3 || res.Stopped {
+		t.Errorf("res = %+v", res)
+	}
+}
+
+// A consumer that fails will write nothing more, so the child is stopped
+// instead of being left to run for nobody: a command that never ends
+// would otherwise keep jz waiting forever.
+func TestStreamStopsTheChildWhenTheConsumerFails(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	t.Parallel()
+	stop := errors.New("stop")
+	start := time.Now()
+	res, err := Stream(context.Background(), Command{
+		Name: "sh",
+		Args: []string{"-c", "echo first; exec sleep 30"},
+	}, io.Discard, func(r io.Reader) error {
+		buf := make([]byte, 6)
+		_, _ = io.ReadFull(r, buf)
+		return stop
+	})
+	if !errors.Is(err, stop) {
+		t.Fatalf("err = %v", err)
+	}
+	if res == nil || !res.Stopped || res.Signal != "SIGTERM" || res.ExitCode != 143 {
+		t.Errorf("res = %+v", res)
+	}
+	if time.Since(start) > 10*time.Second {
+		t.Errorf("waited %s for a child that should have been stopped", time.Since(start))
+	}
+}
+
+// A child that had already ended when the consumer failed keeps its own
+// status: the failure did not stop it.
+func TestStreamKeepsTheStatusOfAChildThatEndedByItself(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("uses POSIX sh")
 	}
@@ -187,26 +240,31 @@ func TestStreamDrainsWhatTheConsumerLeft(t *testing.T) {
 	stop := errors.New("stop")
 	res, err := Stream(context.Background(), Command{
 		Name: "sh",
-		Args: []string{"-c", "i=0; while [ $i -lt 20000 ]; do echo line$i; i=$((i+1)); done"},
-	}, io.Discard, nil, func(r io.Reader) error {
-		buf := make([]byte, 8)
-		_, _ = r.Read(buf)
+		Args: []string{"-c", "echo only; exit 7"},
+	}, io.Discard, func(r io.Reader) error {
+		_, _ = io.ReadAll(r)
 		return stop
 	})
 	if !errors.Is(err, stop) {
 		t.Fatalf("err = %v", err)
 	}
-	if res == nil || res.ExitCode != 0 {
+	if res == nil || res.Stopped || res.ExitCode != 7 {
 		t.Errorf("res = %+v", res)
 	}
 }
 
+// testRelay is a signal source a test feeds by hand; nothing is
+// subscribed, so stop has nothing to undo.
+func testRelay() *relay {
+	return &relay{ch: make(chan os.Signal, 1), done: make(chan struct{})}
+}
+
 func TestStreamErrors(t *testing.T) {
 	t.Parallel()
-	if _, err := Stream(context.Background(), Command{Name: "  "}, io.Discard, nil, func(io.Reader) error { return nil }); err == nil {
+	if _, err := Stream(context.Background(), Command{Name: "  "}, io.Discard, func(io.Reader) error { return nil }); err == nil {
 		t.Error("empty command should fail")
 	}
-	if _, err := Stream(context.Background(), Command{Name: "definitely-missing-binary"}, io.Discard, nil, func(io.Reader) error { return nil }); err == nil {
+	if _, err := Stream(context.Background(), Command{Name: "definitely-missing-binary"}, io.Discard, func(io.Reader) error { return nil }); err == nil {
 		t.Error("missing binary should fail")
 	}
 }

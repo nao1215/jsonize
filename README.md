@@ -80,7 +80,9 @@ $ df -h | jz --extract filesystem --extract mounted_on
 `jz run` hands the command your standard input, passes its standard error
 through, mirrors its exit status and runs it with `LC_ALL=C`. Everything
 after the command name belongs to the command, and a bare `--` states
-that boundary explicitly.
+that boundary explicitly. An interrupt reaches the command, and a
+command that keeps printing after its reader has gone, or past
+`--timeout`, is stopped rather than left running.
 
 `--stream` answers a command that keeps printing, one JSON document per
 line as each record is read:
@@ -157,6 +159,7 @@ Reference: https://pkg.go.dev/github.com/nao1215/jsonize/pkg/selector
 | 3 | the input did not match the chosen definition |
 | 4 | unidentified, ambiguous, or a named parser that did not fit |
 | 5 | a registry could not be loaded |
+| 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |
 | *n* | `jz run` mirrors the command's own status, or 128+signal |
 
 Diagnostics go to standard error. Standard output carries a complete JSON
@@ -167,7 +170,7 @@ document or nothing.
 ```console
 $ make help                    # every target
 $ make check                   # fmt, vet, lint, unit tests, race
-$ make e2e                     # atago end-to-end suite
+$ make e2e                     # atago end-to-end suite (see e2e/README.md)
 $ make registry-test           # the same checks `jz test` runs, on the official registry
 $ make website-serve           # the documentation site locally
 $ make demo                    # re-record demo/jsonize.gif with vhs

@@ -482,6 +482,7 @@ when everything passed, 1 when something failed, 2 for a usage error and
 | 3 | the input did not match the chosen definition |
 | 4 | the format could not be identified, several matched, or a named one did not fit |
 | 5 | a registry could not be loaded |
+| 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |
 | *n* | `jz run` mirrors the command's own non-zero status, or 128+signal when it was killed |
 
 Diagnostics go to standard error with a `jz:` prefix. Standard output

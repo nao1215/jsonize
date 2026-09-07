@@ -31,6 +31,11 @@ const (
 	ExitParse    = 3 // the input did not match the chosen definition
 	ExitSelect   = 4 // the format could not be identified, or was ambiguous
 	ExitRegistry = 5 // a registry could not be loaded
+	// ExitOutputClosed is 128+SIGPIPE: standard output was closed before
+	// the document was complete, as it is when the reader is `head` and
+	// has seen enough. There is nobody left to tell, so jz says nothing,
+	// stops the command it started and ends the way any filter does.
+	ExitOutputClosed = 141
 )
 
 const flagHelp = "--help"
@@ -58,8 +63,6 @@ type Env struct {
 	StdinIsTerminal func() bool
 	// GOOS is the running operating system.
 	GOOS string
-	// Signals receives interrupts to forward to child processes (may be nil).
-	Signals <-chan os.Signal
 	// Context bounds long operations.
 	Context context.Context
 	// Embedded is the built-in registry.
@@ -193,8 +196,22 @@ func (a *app) errorf(format string, args ...any) {
 	fmt.Fprintf(a.env.Stderr, "jz: "+format+"\n", args...)
 }
 
+// writeFailed answers a failure to write standard output. A reader that
+// has gone away is not an error to report: the message would go nowhere
+// useful, and the shell already knows. Anything else is unexpected.
+func (a *app) writeFailed(err error) int {
+	if outputClosed(err) {
+		return ExitOutputClosed
+	}
+	a.errorf("writing output: %v", err)
+	return ExitError
+}
+
 // exitFor maps an error to an exit code and prints it.
 func (a *app) exitFor(err error) int {
+	if outputClosed(err) {
+		return ExitOutputClosed
+	}
 	a.errorf("%v", err)
 	var pe *engine.ParseError
 	if errors.As(err, &pe) {

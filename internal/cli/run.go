@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -149,7 +150,7 @@ func (a *app) cmdRun(args []string) int {
 			Parser: parser, Variant: sel.variant, OS: a.env.GOOS, Args: cmdArgs,
 		}, &out, timeout, sel.explain)
 	}
-	res, err := runner.Run(ctx, command, a.env.Stderr, a.env.Signals)
+	res, err := runner.Run(ctx, command, a.env.Stderr)
 	if err != nil {
 		a.errorf("%v", err)
 		if errors.Is(err, runner.ErrOutputTooLarge) {
@@ -208,8 +209,7 @@ func (a *app) cmdRun(args []string) int {
 	}
 	data = narrowed
 	if err := jsonutil.Encode(a.env.Stdout, data, out.pretty); err != nil {
-		a.errorf("writing output: %v", err)
-		return ExitError
+		return a.writeFailed(err)
 	}
 	return res.ExitCode
 }
@@ -223,14 +223,10 @@ var errStreamFailed = errors.New("streaming failed")
 // pipe and converted as it arrives, instead of being collected first.
 // The child's status is mirrored the way it is without --stream.
 func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.Command, sctx selector.Context, out *outputOptions, timeout time.Duration, explain bool) int {
-	// The child's standard error is copied through while jz may be
-	// writing its own diagnostic, so the two go through one lock rather
-	// than interleaving mid-line.
-	plain := a.env.Stderr
-	a.env.Stderr = &syncWriter{w: plain}
-	defer func() { a.env.Stderr = plain }()
+	childStderr := a.shareStderr()
+	defer a.restoreStderr(childStderr)
 	code := ExitOK
-	res, err := runner.Stream(ctx, cmd, a.env.Stderr, a.env.Signals, func(r io.Reader) error {
+	res, err := runner.Stream(ctx, cmd, childStderr, func(r io.Reader) error {
 		if code = a.stream(reg, r, sctx, out, true, explain); code != ExitOK {
 			return errStreamFailed
 		}
@@ -240,15 +236,23 @@ func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.
 		a.errorf("%v", err)
 		return ExitError
 	}
-	switch {
-	case res.Signal != "":
-		a.errorf("%s was terminated by %s", cmd.Name, res.Signal)
-	case res.ExitCode != 0:
-		a.errorf("%s exited with status %d", cmd.Name, res.ExitCode)
+	return a.streamStatus(ctx, cmd, res, code, timeout, explain)
+}
+
+// streamStatus settles what jz run --stream returns once the command has
+// ended. The command's own status wins over a failure in the stream,
+// which is still on standard error; a command jz had to stop because
+// the stream had failed has no status of its own to mirror, so the
+// failure is what is returned and the stop is not reported as the
+// command's doing.
+func (a *app) streamStatus(ctx context.Context, cmd runner.Command, res *runner.Result, code int, timeout time.Duration, explain bool) int {
+	if res.Stopped {
+		if explain {
+			a.explainCommand(cmd.Name, cmd.Args, res.ExitCode)
+		}
+		return code
 	}
-	if ctx.Err() != nil && timeout > 0 {
-		a.errorf("timeout of %s reached", timeout)
-	}
+	a.reportChild(ctx, cmd.Name, res, timeout)
 	if explain {
 		a.explainCommand(cmd.Name, cmd.Args, res.ExitCode)
 	}
@@ -256,6 +260,29 @@ func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.
 		return code
 	}
 	return res.ExitCode
+}
+
+// shareStderr prepares standard error for a command whose output jz
+// reads while it runs: the command's own stderr is copied through while
+// jz may be writing a diagnostic, so the two go through one lock rather
+// than interleaving mid-line. When standard error is a file, the command
+// writes to it directly instead, which is what lets the command's end be
+// waited for without also waiting for whatever it left holding the
+// stream. The writer to give the command is returned.
+func (a *app) shareStderr() io.Writer {
+	plain := a.env.Stderr
+	a.env.Stderr = &syncWriter{w: plain}
+	if f, ok := plain.(*os.File); ok {
+		return f
+	}
+	return a.env.Stderr
+}
+
+// restoreStderr undoes shareStderr.
+func (a *app) restoreStderr(io.Writer) {
+	if sw, ok := a.env.Stderr.(*syncWriter); ok {
+		a.env.Stderr = sw.w
+	}
 }
 
 // emptyResult answers a command that succeeded without printing
@@ -283,8 +310,7 @@ func (a *app) emptyResult(reg *registry.Registry, parser, variant string, out ou
 		}
 	}
 	if err := jsonutil.Encode(a.env.Stdout, []any{}, out.pretty); err != nil {
-		a.errorf("writing output: %v", err)
-		return ExitError
+		return a.writeFailed(err)
 	}
 	return ExitOK
 }
@@ -348,11 +374,10 @@ func variantNames(entries []*registry.Entry) []string {
 // producer, so the command's status is mirrored the way it always is.
 func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runner.Command, out *outputOptions, timeout time.Duration, explain bool) int {
 	if out.stream {
-		plain := a.env.Stderr
-		a.env.Stderr = &syncWriter{w: plain}
-		defer func() { a.env.Stderr = plain }()
+		childStderr := a.shareStderr()
+		defer a.restoreStderr(childStderr)
 		code := ExitOK
-		res, err := runner.Stream(ctx, cmd, a.env.Stderr, a.env.Signals, func(r io.Reader) error {
+		res, err := runner.Stream(ctx, cmd, childStderr, func(r io.Reader) error {
 			if code = a.convertWith(def, r, out, explain); code != ExitOK {
 				return errStreamFailed
 			}
@@ -362,16 +387,9 @@ func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runne
 			a.errorf("%v", err)
 			return ExitError
 		}
-		a.reportChild(ctx, cmd.Name, res, timeout)
-		if explain {
-			a.explainCommand(cmd.Name, cmd.Args, res.ExitCode)
-		}
-		if code != ExitOK && res.ExitCode == 0 {
-			return code
-		}
-		return res.ExitCode
+		return a.streamStatus(ctx, cmd, res, code, timeout, explain)
 	}
-	res, err := runner.Run(ctx, cmd, a.env.Stderr, a.env.Signals)
+	res, err := runner.Run(ctx, cmd, a.env.Stderr)
 	if err != nil {
 		a.errorf("%v", err)
 		if errors.Is(err, runner.ErrOutputTooLarge) {

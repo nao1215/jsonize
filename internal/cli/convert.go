@@ -128,8 +128,7 @@ func (a *app) cmdConvert(args []string) int {
 		return code
 	}
 	if err := jsonutil.Encode(a.env.Stdout, out, co.output.pretty); err != nil {
-		a.errorf("writing output: %v", err)
-		return ExitError
+		return a.writeFailed(err)
 	}
 	return ExitOK
 }
@@ -186,8 +185,7 @@ func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOp
 		return code
 	}
 	if err := jsonutil.Encode(a.env.Stdout, v, out.pretty); err != nil {
-		a.errorf("writing output: %v", err)
-		return ExitError
+		return a.writeFailed(err)
 	}
 	return ExitOK
 }

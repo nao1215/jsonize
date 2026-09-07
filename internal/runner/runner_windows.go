@@ -4,6 +4,9 @@ package runner
 
 import "os"
 
+// hasSignals is false: a killed child reports a plain exit status.
+const hasSignals = false
+
 // terminate kills the child; Windows has no graceful signal equivalent.
 func terminate(p *os.Process) error {
 	if p == nil {
