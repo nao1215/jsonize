@@ -442,14 +442,41 @@ func describeParse(p *definition.Parse) string {
 			as = definition.AsList
 		}
 		return fmt.Sprintf("kv separator=%q as=%s", sep, as)
-	case definition.TypeComposite:
+	case definition.TypeComposite, definition.TypeRecords:
 		names := make([]string, len(p.Parts))
 		for i, part := range p.Parts {
 			names[i] = part.Name + ":" + part.Parse.Type
 		}
-		return "composite parts=" + strings.Join(names, ",")
+		return p.Type + " parts=" + strings.Join(names, ",")
+	case definition.TypeCSV:
+		s := fmt.Sprintf("csv delimiter=%q", csvDelimiterOf(p))
+		switch {
+		case len(p.Header.Columns) > 0:
+			s += " columns=" + strings.Join(p.Header.Columns, ",")
+		case p.Header.None:
+			s += " (no header)"
+		default:
+			s += " columns=from header"
+		}
+		return s
+	case definition.TypeINI:
+		sep := p.Separator
+		if sep == "" {
+			sep = "="
+		}
+		return fmt.Sprintf("ini separator=%q", sep)
+	case definition.TypeTree:
+		return fmt.Sprintf("tree indent=%q node=%s", p.Indent, describeParse(&p.Node.Parse))
 	}
 	return p.Type
+}
+
+// csvDelimiterOf reports the delimiter a csv parser cuts on, defaulted.
+func csvDelimiterOf(p *definition.Parse) string {
+	if p.Delimiter != "" {
+		return p.Delimiter
+	}
+	return ","
 }
 
 func describeField(f *definition.Field) string {

@@ -26,8 +26,8 @@ internal/buildinfo        the version string stamped at build time
 pkg/registry              load registry directories/FS, merge with precedence, testdata cases
 pkg/definition            YAML schema, validation, regex compilation, format checks
 pkg/selector              variant selection (os / args / signature filter → precedence → priority)
-pkg/engine                parse algorithms (table, regex, kv, composite, records), streaming, field conversion
-pkg/convert               scalar conversions (int, float, bool, size with units, time)
+pkg/engine                parse algorithms (table, csv, ini, tree, regex, kv, composite, records), streaming, field conversion
+pkg/convert               scalar conversions (int, float, bool, size with units, time, duration)
 pkg/jsonutil              insertion-ordered JSON object and encoder
 registry/                 the official definitions and fixtures (data) + a one-file embed
 e2e/atago                 end-to-end scenarios
@@ -69,16 +69,31 @@ decoding and line numbers in errors.
 
 ### A handful of parse types, not a general pipeline
 
-`table`, `regex`, `kv`, `composite` and `records` cover the shapes the
-registered commands print. A composable step pipeline (split → map →
-filter …) was considered and rejected: it is harder to validate, harder
-to explain, and every real example so far fits one of the five. The
-`input.select` block (after/until/skip/limit) plus `composite` gives
-section handling without a pipeline, `records` applies one description
-to a block that repeats, and a `composite` part may be `records` so that
-a report with a header block above the repeats has a shape too. Adding a
-type does not change the format version, because an unknown type is
-already an error.
+`table`, `csv`, `ini`, `tree`, `regex`, `kv`, `composite` and `records`
+cover the shapes the registered commands print. A composable step
+pipeline (split → map → filter …) was considered and rejected: it is
+harder to validate, harder to explain, and every real example so far fits
+one of the eight. The `input.select` block (after/until/skip/limit) plus
+`composite` gives section handling without a pipeline, `records` applies
+one description to a block that repeats, and a `composite` part may be
+`records` or `tree` so that a report with a header block above the
+repeats has a shape too. Adding a type does not change the format
+version, because an unknown type is already an error.
+
+The list grew from five to eight, and each of the three broke the
+assumption the first five share, that one line is one record: a CSV value
+may contain a line break, an ini file is sections rather than lines, and
+a drawn table marks its rows with rules. That is the test a ninth would
+have to pass.
+
+### The document formats stay out
+
+XML, YAML, TOML, plist, x509 and JWT are not what commands print, and
+each already has a tool whose whole job is that format: `yq`,
+`openssl x509 -text`, `plutil`. A converter for command output that also
+half-read six document formats would be worse at both jobs, and the
+half-reading is what it would be: those formats have specifications, and
+matching one is a project rather than a parse type.
 
 ### Table splitting
 
@@ -212,11 +227,6 @@ records into one, and it did so only in the whole-document reader —
 the streaming one had already cut the line off. The two readings
 disagreed on `"\x1b\n"`. No escape sequence ends with a line break, so
 none may eat one.
-
-XML, YAML, TOML, plist, x509 and JWT stay out. They are not what commands
-print, and each already has a tool whose whole job is that format: `yq`,
-`openssl x509 -text`, `plutil`. A converter for command output that also
-half-read six document formats would be worse at both.
 
 ### A repeating report is an array of samples
 
@@ -670,6 +680,33 @@ exporting half a set would be worse than exporting all of it.
 
 Decisions that have not been made. Nothing here is implemented, and each
 is recorded because a definition in the registry works around it today.
+
+### What a shape definition does about types
+
+`table/whitespace` and its siblings convert nothing: every value comes
+out as the text it was cut from, because a shape says nothing about what
+its columns mean. That is right, and it leaves a gap. Someone naming one
+of them usually does know what the columns mean, and has no way to say
+so short of `--define` with the whole definition written out.
+
+A `--field name=int` option would close it and is not obviously worth an
+option: the same thing is one line of `jq`, and an option that converts
+values is a second place where types are decided, next to the definitions
+where they belong.
+
+### Where the sysstat banner went
+
+Reading `iostat` as an array of samples dropped the banner, which named
+the kernel, the host, the architecture and the CPU count. The reason is
+sound — a shape with one object for the banner and an array for the rest
+has no streaming form, and the option is the point of the change — but
+the information is gone rather than moved. `uname -a` and `nproc` print
+the same facts and jz reads both, which is an answer for a script and not
+for someone reading one command's output.
+
+What would close it is a way for a definition to say that some fields
+belong to every record of a stream. Nothing in the format says that
+today, and inventing it for one report would be the wrong order.
 
 ### Exact field counts in a table
 

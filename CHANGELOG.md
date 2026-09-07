@@ -8,6 +8,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Loading and validating a registry is measurably slower in the
+  benchmarks (13 to 32 percent on `LoadRegistry`, 7 to 12 percent on
+  definition validation), which is the definition struct having grown and
+  the validator having more branches to walk. Parsing is unchanged.
+  End to end the cost is 1.4 percent: converting `df` output through the
+  built-in registry went from 78.3 ms to 79.4 ms, and ten of the
+  definitions in that registry are new.
+
 - `iostat`, `mpstat` and `pidstat` are read as an array of samples, one
   object per interval, instead of one object for the whole report. Asked
   for an interval those commands print their column header once per
