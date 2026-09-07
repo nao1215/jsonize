@@ -25,6 +25,18 @@ func (r *run) setField(obj *jsonutil.Object, name string, raw any, f *definition
 // convert applies a field rule. The bool result is true when the value
 // should be omitted from its parent object.
 func (r *run) convert(name string, raw any, f *definition.Field, ln int) (any, bool, error) {
+	if r.opts.Raw {
+		// The field rules are the whole of what raw mode leaves out, and
+		// they are all applied from here, so this is the one place that
+		// has to know about it. when_missing and required are field rules
+		// too: a shape that changed with the values in it would defeat
+		// the point of looking at what was extracted.
+		if raw == nil {
+			return nil, false, nil
+		}
+		s, _ := raw.(string)
+		return s, false, nil
+	}
 	if raw == nil {
 		if f != nil && f.Required {
 			return nil, false, r.errorf(ln, name, "required value is missing")

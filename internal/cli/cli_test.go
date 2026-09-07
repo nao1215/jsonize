@@ -155,7 +155,7 @@ func TestConversionOptions(t *testing.T) {
 func TestRemovedOptionsAreGone(t *testing.T) {
 	h := newHarness(t)
 	removed := [][]string{
-		{"--raw"}, {"-r"}, {"--meta"}, {"--os", "linux"}, {"--force"},
+		{"-r"}, {"--meta"}, {"--os", "linux"}, {"--force"},
 		{"--max-input", "1"}, {"--embedded-only"}, {"--registry", "./registry"},
 	}
 	for _, args := range removed {
@@ -171,7 +171,7 @@ func TestRemovedOptionsAreGone(t *testing.T) {
 		}
 	}
 	// The same for jz run, whose options are also a closed set.
-	for _, args := range [][]string{{"--raw"}, {"--meta"}, {"--force"}, {"--registry", "x"}, {"--max-output", "1"}} {
+	for _, args := range [][]string{{"--meta"}, {"--force"}, {"--registry", "x"}, {"--max-output", "1"}} {
 		if code := h.run(append([]string{"run"}, append(args, "df")...)...); code != ExitUsage {
 			t.Errorf("run %v: code = %d", args, code)
 		}
@@ -180,7 +180,7 @@ func TestRemovedOptionsAreGone(t *testing.T) {
 		t.Fatal(h.stderr.String())
 	}
 	help := h.stdout.String()
-	for _, gone := range []string{"--raw", "--meta", "--os", "--force", "--max-input", "--embedded-only", "--registry"} {
+	for _, gone := range []string{"--meta", "--os", "--force", "--max-input", "--embedded-only", "--registry"} {
 		if strings.Contains(help, gone) {
 			t.Errorf("help still mentions %s:\n%s", gone, help)
 		}
@@ -1316,5 +1316,44 @@ func TestEmptyInput(t *testing.T) {
 	}
 	if h.stdout.Len() != 0 {
 		t.Errorf("stdout = %q", h.stdout.String())
+	}
+}
+
+// --raw reports what the definition extracted rather than what it made of
+// it, which is what makes a definition debuggable: a value converted
+// wrongly and a value cut from the wrong place look alike once typed.
+func TestRawSkipsTheFieldRules(t *testing.T) {
+	h := newHarness(t)
+	if code := h.pipe(gnuDF, "--raw"); code != ExitOK {
+		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
+	}
+	rows := h.rows()
+	if len(rows) != 2 || rows[0]["use_percent"] != "1%" || rows[0]["1k_blocks"] != "1000000" {
+		t.Fatalf("rows = %v", rows)
+	}
+	// Without it the same input is typed, which is the contract raw mode
+	// steps out of.
+	if code := h.pipe(gnuDF); code != ExitOK {
+		t.Fatal(code)
+	}
+	if got := h.rows()[0]["use_percent"]; got != float64(1) {
+		t.Errorf("typed use_percent = %#v", got)
+	}
+	// It composes with the options that decide how the JSON is written.
+	if code := h.pipe(gnuDF, "--raw", "--pretty"); code != ExitOK || !strings.Contains(h.stdout.String(), "\"1%\"") {
+		t.Errorf("pretty: %d %s", code, h.stdout.String())
+	}
+	if code := h.pipe(gnuDF, "--raw", "--stream"); code != ExitOK {
+		t.Fatalf("stream: %d %s", code, h.stderr.String())
+	}
+	for _, rec := range h.records() {
+		if _, ok := rec["1k_blocks"].(string); !ok {
+			t.Errorf("streamed record is typed: %v", rec)
+		}
+	}
+	// jz test compares a fixture with the JSON beside it, and that JSON
+	// is the typed reading. Raw mode has nothing to say there.
+	if code := h.run("test", "--raw"); code != ExitUsage {
+		t.Errorf("jz test --raw: %d", code)
 	}
 }

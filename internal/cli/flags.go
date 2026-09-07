@@ -7,6 +7,8 @@ import (
 	"io"
 	"strings"
 	"time"
+
+	"github.com/nao1215/jsonize/pkg/engine"
 )
 
 // optionSet registers command line options and renders them. Both jobs go
@@ -95,6 +97,7 @@ func (o *optionSet) print(w io.Writer) {
 type outputOptions struct {
 	pretty  bool
 	stream  bool
+	raw     bool
 	extract stringList
 	exclude stringList
 }
@@ -102,8 +105,15 @@ type outputOptions struct {
 func (f *outputOptions) bind(o *optionSet) {
 	o.boolOpt(&f.pretty, "pretty", "p", "indent JSON output")
 	o.boolOpt(&f.stream, "stream", "", "write one record per line as it is read")
+	o.boolOpt(&f.raw, "raw", "", "skip the field rules and report every value as text")
 	o.listOpt(&f.extract, "extract", "KEY", "keep only this key (repeatable)")
 	o.listOpt(&f.exclude, "exclude", "KEY", "drop this key (repeatable)")
+}
+
+// engineOptions is what the output options say about reading, as opposed
+// to about writing.
+func (f *outputOptions) engineOptions() engine.Options {
+	return engine.Options{MaxInputSize: MaxInputSize, Raw: f.raw}
 }
 
 // check reports the option pairs that state two answers at once. It is

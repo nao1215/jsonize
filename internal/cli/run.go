@@ -187,7 +187,7 @@ func (a *app) cmdRun(args []string) int {
 		a.explain(chosen)
 		a.explainCommand(name, cmdArgs, res.ExitCode)
 	}
-	data, err := engine.Parse(chosen.Entry.Def, res.Stdout, engine.Options{MaxInputSize: MaxInputSize})
+	data, err := engine.Parse(chosen.Entry.Def, res.Stdout, out.engineOptions())
 	if err != nil {
 		return a.failedRun(err, res.ExitCode)
 	}

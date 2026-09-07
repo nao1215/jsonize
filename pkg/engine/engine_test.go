@@ -1014,3 +1014,69 @@ EMPTY=""
 		t.Errorf("without unquote: %v %v", mustJSON(t, got), err)
 	}
 }
+
+// Raw skips the field rules. What comes out is what the definition
+// extracted, which is what makes a definition debuggable: a value that
+// converts wrongly and a value that was cut from the wrong place look the
+// same once they are typed.
+func TestParseRawSkipsTheFieldRules(t *testing.T) {
+	t.Parallel()
+	const src = `format: 1
+command: t
+variant: v
+parse: {type: table, header: {none: true, columns: [n, pct, flag, when]}}
+fields:
+  n: {type: int}
+  pct: {trim_suffix: "%", type: int}
+  flag: {type: bool, null_if: ["-"]}
+  when: {type: time, layout: "2006-01-02"}
+`
+	def := load(t, src)
+	input := "12 92% - 2024-05-06\n"
+
+	typed, err := Parse(def, []byte(input), Options{})
+	if err != nil {
+		t.Fatalf("typed: %v", err)
+	}
+	if got := mustJSON(t, typed); got != `[{"n":12,"pct":92,"flag":null,"when":"2024-05-06T00:00:00Z"}]` {
+		t.Errorf("typed = %s", got)
+	}
+
+	raw, err := Parse(def, []byte(input), Options{Raw: true})
+	if err != nil {
+		t.Fatalf("raw: %v", err)
+	}
+	// Every value is the text that was extracted: no conversion, no
+	// trim_suffix, no null_if.
+	if got := mustJSON(t, raw); got != `[{"n":"12","pct":"92%","flag":"-","when":"2024-05-06"}]` {
+		t.Errorf("raw = %s", got)
+	}
+}
+
+// A shape that changed with the values in it would defeat the point, so
+// required and when_missing are left out with the rest of the field
+// rules and a group that did not take part is null.
+func TestParseRawKeepsTheShape(t *testing.T) {
+	t.Parallel()
+	const src = `format: 1
+command: t
+variant: v
+parse: {type: regex, pattern: '^(?P<a>\w+)(?: (?P<b>\w+))?$'}
+fields:
+  a: {required: true, type: int}
+  b: {when_missing: omit}
+`
+	def := load(t, src)
+	raw, err := Parse(def, []byte("xyz\n"), Options{Raw: true})
+	if err != nil {
+		t.Fatalf("raw: %v", err)
+	}
+	if got := mustJSON(t, raw); got != `[{"a":"xyz","b":null}]` {
+		t.Errorf("raw = %s", got)
+	}
+	// The same input typed is a failure, which is the difference raw mode
+	// exists to show.
+	if _, err := Parse(def, []byte("xyz\n"), Options{}); err == nil {
+		t.Error("typed accepted a value it cannot convert")
+	}
+}

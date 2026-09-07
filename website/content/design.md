@@ -48,7 +48,6 @@ contract, was removed before release:
 
 | Removed | Why |
 |---------|-----|
-| `--raw` | a second output shape for the same input; the typed one is the contract |
 | `--meta` | an envelope that changed the JSON schema depending on a flag |
 | `--os` | asking the user to declare the producing system instead of matching the text; jz knows the system when it runs the command itself |
 | `--force` | a way to parse with a definition whose signature says the text is something else, which is exactly the failure jz exists to prevent |
@@ -189,6 +188,28 @@ the signature names, a listing that mixes a kind with lines file(1)
 could not read, and a listing that names no kind at all and is refused.
 Each of the three exists because the signature says something, not the
 other way round.
+
+### --raw came back, for a different reason
+
+`--raw` was removed before release as a second output shape for the same
+input: two answers to the same question, and the typed one is the
+contract. That reasoning was about a consumer choosing a shape, and it
+still holds for one.
+
+What it missed is the other reader. When a value comes out wrong there
+are two possible causes — the definition cut it from the wrong place, or
+it converted it wrongly — and once the value is typed they look alike. A
+`use_percent` of 92 is right; `"92%"` cut down to 92 and the string `92`
+somewhere else cut down to 92 are the same 92. `--raw` shows the text
+each value was made from, so the two separate.
+
+So it is back with a narrower job. It skips the field rules and nothing
+else: no conversion, no `trim_prefix`, no `null_if`, and no `required` or
+`when_missing` either, since a shape that changed with the values in it
+would defeat the point. Every value is a string, or null for an empty
+aligned cell and a regex group that did not take part. It is not offered
+on `jz test`, which compares a fixture against the typed JSON beside it
+and has nothing to say about the untyped reading.
 
 ### The choice is visible
 

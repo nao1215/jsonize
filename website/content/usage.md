@@ -35,6 +35,7 @@ pipe there is no such answer at all: nothing identifies an empty input.
   -f, --file PATH     read input from PATH instead of stdin
   -p, --pretty        indent JSON output
       --stream        write one record per line as it is read
+      --raw           skip the field rules and report every value as text
       --extract KEY   keep only this key (repeatable)
       --exclude KEY   drop this key (repeatable)
       --parser NAME   restrict detection to one parser
@@ -143,6 +144,31 @@ the command's status wins: it is the more useful signal, because a
 command that failed explains both what it printed and what it did not.
 The skipped records are on standard error either way, so nothing is lost
 by the choice — only the number changes.
+
+## Seeing what a definition extracted
+
+A value that comes out wrong has two possible causes: the definition cut
+it from the wrong place, or it converted it wrongly. Once the value is
+typed the two look alike. `--raw` skips the field rules so that each
+value is the text it was made from:
+
+```console
+$ df -h | jz --extract use_percent
+[{"use_percent":92}]
+
+$ df -h | jz --raw --extract use_percent
+[{"use_percent":"92%"}]
+```
+
+Nothing is converted, `trim_prefix` and `null_if` are not applied, and
+`required` and `when_missing` are left out with them — a shape that
+changed with the values in it would defeat the point. Every value is a
+string, except an empty aligned cell and a regex group that did not take
+part in the match, which stay null.
+
+It works with `--pretty`, `--stream`, `--extract` and `--exclude`. It is
+not offered on `jz test`, which compares a fixture against the typed JSON
+beside it.
 
 ## Seeing which parser was chosen
 
