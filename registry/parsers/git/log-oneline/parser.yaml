@@ -34,7 +34,6 @@ detect:
       # a fixed length, so requiring 32 or more keeps a short commit hash
       # followed by a "*" subject out of this.
       - '\A[0-9a-f]{32,128} \*'
-      - '\A\\[0-9a-f]{32,128} '
       - '\A\d+ \d+ \S'
 parse:
   type: regex

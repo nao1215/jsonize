@@ -1,0 +1,7 @@
+description: |
+  Nothing here names a kind of file, and "could not read it" is a
+  sentence other tools write too, so jz says it cannot identify the text
+  rather than reading it as a file(1) listing. Widening the definition to
+  cover this means adding the kind to the signature on purpose.
+expect_error: does not describe this input
+os: linux

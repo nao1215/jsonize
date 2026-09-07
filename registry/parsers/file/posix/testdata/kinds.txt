@@ -1,0 +1,14 @@
+/tmp/sample/dir:        directory
+/tmp/sample/slink:      symbolic link to /etc/hosts
+/tmp/sample/a.txt:      ASCII text
+/tmp/sample/empty.bin:  empty
+/tmp/sample/s.sh:       POSIX shell script, ASCII text executable
+/tmp/sample/pipe:       fifo (named pipe)
+/tmp/sample/sock:       socket
+/tmp/sample/ar.tar:     POSIX tar archive (GNU)
+/tmp/sample/a.gz:       gzip compressed data, was "a.txt", from Unix, original size modulo 2^32 6
+/dev/null:              character special (1/3)
+/tmp/sample/a.png:      PNG image data, 16 x 16, 8-bit/color RGBA, non-interlaced
+/tmp/sample/db.sqlite:  SQLite 3.x database, last written using SQLite version 3050001
+/tmp/sample/doc.pdf:    PDF document, version 1.7
+/tmp/sample/f.ttf:      TrueType Font data, 15 tables, 1st "GDEF"

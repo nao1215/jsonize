@@ -1,0 +1,6 @@
+description: |
+  file(1) reports what it could not open on the same "path: description"
+  line as everything else, so a listing that names one kind of file is
+  read whole rather than refused over the lines beside it.
+source: captured on Ubuntu 26.04 (file 5.46) with LC_ALL=C
+os: linux

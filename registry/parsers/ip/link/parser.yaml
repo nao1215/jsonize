@@ -19,7 +19,6 @@ detect:
       - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+.* mode \S+'
     none:
       - '^[ \t]+RX:[ \t]+bytes[ \t]+packets[ \t]+errors'
-      - '^[ \t]+inet6?[ \t]'
 parse:
   type: records
   start: '^\d+: '

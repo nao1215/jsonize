@@ -18,8 +18,6 @@ detect:
   signature:
     all:
       - '^RESOURCE[ \t]+DESCRIPTION[ \t]+LIMIT[ \t]+USED[ \t]+USE%[ \t]*$'
-    none:
-      - '^RESOURCE DESCRIPTION LIMIT USED USE%$'
 parse:
   type: table
   split: aligned

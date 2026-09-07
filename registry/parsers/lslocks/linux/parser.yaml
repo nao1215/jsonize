@@ -16,8 +16,6 @@ detect:
   signature:
     all:
       - '^COMMAND[ \t]+PID[ \t]+TYPE[ \t]+SIZE[ \t]+MODE[ \t]+M[ \t]+START[ \t]+END[ \t]+PATH[ \t]*$'
-    none:
-      - '^COMMAND PID TYPE SIZE MODE M START END PATH$'
 parse:
   type: table
   split: aligned

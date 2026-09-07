@@ -29,7 +29,6 @@ detect:
     # a plain count (a size below one kibibyte prints as "0"), so the whole
     # window is searched rather than the first line alone.
     none:
-      - '^[\d.]+[KMGTPEZY]\t'
       # du prints two cells and never a third, so a line with a second
       # tab in it belongs to some other tab separated report:
       # `git diff --numstat` writes two counts before the path, and

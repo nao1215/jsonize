@@ -24,10 +24,6 @@ detect:
       # is what names this format.
       - '\A[^ \t]+[ \t]+(?:auto|manual)[ \t]+/[^ \t]'
       - '^[^ \t]+[ \t]+(?:auto|manual)[ \t]+/[^ \t]*$'
-    none:
-      # --query prints "Name:" and "Link:" pairs, and --list prints one
-      # bare path per line; neither reaches this definition.
-      - '^(?:Name|Link|Status|Best|Value|Alternative|Priority|Slaves):'
 parse:
   type: table
   split: whitespace

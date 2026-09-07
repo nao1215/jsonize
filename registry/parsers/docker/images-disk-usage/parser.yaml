@@ -45,8 +45,6 @@ detect:
   signature:
     all:
       - '\AIMAGE[ \t]+ID[ \t]+DISK USAGE[ \t]+CONTENT SIZE[ \t]+EXTRA[ \t]*$'
-    none:
-      - '^[├└]─ '
 parse:
   type: table
   header:

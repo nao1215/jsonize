@@ -42,11 +42,6 @@ detect:
       # An eleven character change string followed by a space and a
       # path. Every position is drawn from its own small alphabet.
       - '^[<>ch.][fdLDS][c.+ ?][s.+ ?][tT.+ ?][p.+ ?][o.+ ?][g.+ ?][unb.+ ?][a.+ ?][x.+ ?] \S'
-    none:
-      # -v adds lines that are not itemize lines.
-      - '^sending incremental file list$'
-      - '^receiving incremental file list$'
-      - '^sent [\d,]+ bytes  received [\d,]+ bytes'
 parse:
   type: regex
   patterns:

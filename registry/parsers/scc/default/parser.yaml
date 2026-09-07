@@ -33,13 +33,6 @@ detect:
     all:
       - '^Language[ \t]+Files[ \t]+Lines[ \t]+Blanks[ \t]+Comments[ \t]+Code[ \t]+Complexity[ \t]*$'
       - '^Total[ \t]+[\d,]+[ \t]'
-    none:
-      # --percent puts a percentage row after every language row, in the
-      # same columns and with a label in the Language column. Reading
-      # those as languages would say something the table does not.
-      - '^Percentage[ \t]+[\d.]+%'
-    # One line per language stands between the header and the total, and
-    # a repository can hold a lot of languages.
     window: 200
 input:
   ignore:
