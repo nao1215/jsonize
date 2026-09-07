@@ -244,9 +244,21 @@ scenarios:
 
   - name: a format too generic to recognise is refused and names its parser
     steps:
-      # `10\t2\tmain.go` is `git diff --numstat`, not du output; the
-      # shapes are indistinguishable, so jz refuses instead of picking du
-      # because it was the only candidate left.
+      # A count and a path is du output, and nothing in the text says so,
+      # which is why jz refuses rather than picking du because it was the
+      # only candidate left. The message names it and how to confirm it.
+      - run:
+          command: jz
+          stdin: "12\t/usr/bin\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: could be `du` output
+            matches: "jz --parser du"
+      # Three cells, two of them counts, is `git diff --numstat` and not
+      # du, and the message names the one it could be.
       - run:
           command: jz
           stdin: "10\t2\tmain.go\n"
@@ -255,8 +267,7 @@ scenarios:
           stdout:
             empty: true
           stderr:
-            contains: could be `du` output
-            matches: "jz --parser du"
+            contains: could be `git` output
       # Naming the parser is the user asserting what the text is; the
       # signature still checks that it has the right shape.
       - run:
