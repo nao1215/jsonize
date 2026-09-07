@@ -1,0 +1,87 @@
+[
+  {
+    "phy": 0,
+    "children": [
+      {
+        "interface": "Unnamed/non-netdev interface",
+        "children": [
+          {
+            "name": "wdev",
+            "value": "0x2",
+            "children": []
+          },
+          {
+            "name": "addr",
+            "value": "02:00:00:00:00:01",
+            "children": []
+          },
+          {
+            "name": "type",
+            "value": "P2P-device",
+            "children": []
+          },
+          {
+            "name": "txpower",
+            "value": "3.00 dBm",
+            "children": []
+          }
+        ]
+      },
+      {
+        "interface": "wlan0",
+        "children": [
+          {
+            "name": "ifindex",
+            "value": "3",
+            "children": []
+          },
+          {
+            "name": "wdev",
+            "value": "0x1",
+            "children": []
+          },
+          {
+            "name": "addr",
+            "value": "02:00:00:00:00:02",
+            "children": []
+          },
+          {
+            "name": "ssid",
+            "value": "example-net",
+            "children": []
+          },
+          {
+            "name": "type",
+            "value": "managed",
+            "children": []
+          },
+          {
+            "name": "channel",
+            "value": "36 (5180 MHz), width: 80 MHz, center1: 5210 MHz",
+            "children": []
+          },
+          {
+            "name": "txpower",
+            "value": "3.00 dBm",
+            "children": []
+          },
+          {
+            "name": "multicast TXQ",
+            "children": [
+              {
+                "name": "qsz-byt",
+                "value": "qsz-pkt\tflows\tdrops\tmarks\toverlmt\thashcol\ttx-bytes\ttx-packets",
+                "children": []
+              },
+              {
+                "name": "0",
+                "value": "0\t0\t0\t0\t0\t0\t0\t\t0",
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

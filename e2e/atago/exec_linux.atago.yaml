@@ -439,3 +439,40 @@ scenarios:
               # Two samples and the closing summary.
               - { path: "$", length: 3 }
               - { path: "$[2].cpu[0].time", equals: Average }
+
+  # The host's own pciutils. What is pinned is the shape of the answer,
+  # never a slot number or a device name.
+  - name: jz run lspci -vv lands on the tree definition
+    only: {os: linux}
+    skip: {command: "! command -v lspci > /dev/null"}
+    steps:
+      - run:
+          command: jz run --explain lspci -vv
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lspci/verbose from embedded"
+          stdout:
+            json:
+              - { path: "$[0].slot", matches: "^[0-9a-f]{2}:[0-9a-f]{2}\\.[0-9a-f]$" }
+              - { path: "$[0].children[0].children", length: 0 }
+      # One device per line, each a complete document.
+      - run:
+          command: jz run --stream lspci -vv
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"children":'
+            min_count: 2
+
+  - name: jz run iw dev lands on the tree definition
+    only: {os: linux}
+    skip: {command: "! iw dev > /dev/null 2>&1 || [ -z \"$(iw dev)\" ]"}
+    steps:
+      - run:
+          command: jz run iw dev
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].phy", gte: 0 }

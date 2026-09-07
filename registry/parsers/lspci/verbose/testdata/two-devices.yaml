@@ -1,0 +1,3 @@
+source: "lspci -vv on Ubuntu with pciutils 3.13.0, LC_ALL=C, trimmed to two devices; the second is a bridge, whose BridgeCtl flags wrap onto a line of their own and are the second level"
+os: linux
+args: ["-vv"]

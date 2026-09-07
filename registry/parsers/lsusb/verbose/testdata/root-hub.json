@@ -1,0 +1,245 @@
+[
+  {
+    "bus": "001",
+    "device": "001",
+    "vendor_id": "1d6b",
+    "product_id": "0002",
+    "description": "Linux Foundation 2.0 root hub",
+    "children": []
+  },
+  {
+    "name": "Negotiated speed",
+    "value": "High Speed (480Mbps)",
+    "children": []
+  },
+  {
+    "name": "Device Descriptor",
+    "children": [
+      {
+        "name": "bLength",
+        "value": "18",
+        "children": []
+      },
+      {
+        "name": "bDescriptorType",
+        "value": "1",
+        "children": []
+      },
+      {
+        "name": "bcdUSB",
+        "value": "2.00",
+        "children": []
+      },
+      {
+        "name": "bDeviceClass",
+        "value": "9 Hub",
+        "children": []
+      },
+      {
+        "name": "bDeviceSubClass",
+        "value": "0 [unknown]",
+        "children": []
+      },
+      {
+        "name": "bDeviceProtocol",
+        "value": "1 Single TT",
+        "children": []
+      },
+      {
+        "name": "bMaxPacketSize0",
+        "value": "64",
+        "children": []
+      },
+      {
+        "name": "idVendor",
+        "value": "0x1d6b Linux Foundation",
+        "children": []
+      },
+      {
+        "name": "idProduct",
+        "value": "0x0002 2.0 root hub",
+        "children": []
+      },
+      {
+        "name": "bcdDevice",
+        "value": "7.00",
+        "children": []
+      },
+      {
+        "name": "iManufacturer",
+        "value": "3 Linux 6.8.0-generic xhci-hcd",
+        "children": []
+      },
+      {
+        "name": "iProduct",
+        "value": "2 xHCI Host Controller",
+        "children": []
+      },
+      {
+        "name": "iSerial",
+        "value": "1 0000:c6:00.4",
+        "children": []
+      },
+      {
+        "name": "bNumConfigurations",
+        "value": "1",
+        "children": []
+      },
+      {
+        "name": "Configuration Descriptor",
+        "children": [
+          {
+            "name": "bLength",
+            "value": "9",
+            "children": []
+          },
+          {
+            "name": "bDescriptorType",
+            "value": "2",
+            "children": []
+          },
+          {
+            "name": "wTotalLength",
+            "value": "0x0019",
+            "children": []
+          },
+          {
+            "name": "bNumInterfaces",
+            "value": "1",
+            "children": []
+          },
+          {
+            "name": "bConfigurationValue",
+            "value": "1",
+            "children": []
+          },
+          {
+            "name": "iConfiguration",
+            "value": "0",
+            "children": []
+          },
+          {
+            "name": "bmAttributes",
+            "value": "0xe0",
+            "children": [
+              {
+                "text": "Self Powered",
+                "children": []
+              },
+              {
+                "text": "Remote Wakeup",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "MaxPower",
+            "value": "0mA",
+            "children": []
+          },
+          {
+            "name": "Interface Descriptor",
+            "children": [
+              {
+                "name": "bLength",
+                "value": "9",
+                "children": []
+              },
+              {
+                "name": "bDescriptorType",
+                "value": "4",
+                "children": []
+              },
+              {
+                "name": "bInterfaceNumber",
+                "value": "0",
+                "children": []
+              },
+              {
+                "name": "bAlternateSetting",
+                "value": "0",
+                "children": []
+              },
+              {
+                "name": "bNumEndpoints",
+                "value": "1",
+                "children": []
+              },
+              {
+                "name": "bInterfaceClass",
+                "value": "9 Hub",
+                "children": []
+              },
+              {
+                "name": "bInterfaceSubClass",
+                "value": "0 [unknown]",
+                "children": []
+              },
+              {
+                "name": "bInterfaceProtocol",
+                "value": "0 Full speed (or root) hub",
+                "children": []
+              },
+              {
+                "name": "iInterface",
+                "value": "0",
+                "children": []
+              },
+              {
+                "name": "Endpoint Descriptor",
+                "children": [
+                  {
+                    "name": "bLength",
+                    "value": "7",
+                    "children": []
+                  },
+                  {
+                    "name": "bDescriptorType",
+                    "value": "5",
+                    "children": []
+                  },
+                  {
+                    "name": "bEndpointAddress",
+                    "value": "0x81  EP 1 IN",
+                    "children": []
+                  },
+                  {
+                    "name": "bmAttributes",
+                    "value": "3",
+                    "children": [
+                      {
+                        "name": "Transfer Type",
+                        "value": "Interrupt",
+                        "children": []
+                      },
+                      {
+                        "name": "Synch Type",
+                        "value": "None",
+                        "children": []
+                      },
+                      {
+                        "name": "Usage Type",
+                        "value": "Data",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "name": "wMaxPacketSize",
+                    "value": "0x0004  1x 4 bytes",
+                    "children": []
+                  },
+                  {
+                    "name": "bInterval",
+                    "value": "12",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

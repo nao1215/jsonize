@@ -272,6 +272,55 @@ array would mean a key's type depended on how many times it appeared.
 
 Because the result is one object, an ini parser has no streaming form.
 
+### type: tree
+
+```yaml
+parse:
+  type: tree
+  indent: "\t"                  # one level of indentation, as it is written
+  node:
+    parse:
+      type: regex               # or kv; a node is one line
+      patterns:
+        - '^(?P<slot>\S+) (?P<class>[^:]+): (?P<device>.+)$'
+        - '^(?P<key>[^:]+): (?P<value>.*)$'
+        - '^(?P<text>.+)$'
+    fields:
+      revision: {when_missing: omit}
+```
+
+Result: an array of nodes. Every line is a node; its depth is how many
+times `indent` opens the line, and its children are the lines under it.
+A node is the fields `node` reads from its line plus a `children` array,
+which is `[]` when nothing follows it — so a consumer walks every node
+the same way.
+
+This is the one parser whose result has a depth the definition does not
+state. `lspci -vv` prints a device, its capabilities under it and a
+capability's flags under those, and how far that goes is a property of
+the machine rather than of the format. What the definition states is what
+a node is; what the input states is nothing but how deep the nodes go.
+
+`node.parse` is `regex` (with `pattern` or an ordered `patterns` list) or
+`kv`, and the same description applies at every depth: the shapes that
+appear at different depths are what the alternatives are for.
+
+Three things the input may not decide:
+
+- A line indented two levels below the one above it has no parent and is
+  an error, rather than being attached to the nearest ancestor.
+- Indentation that is not a whole number of `indent` is an error, rather
+  than being rounded down and put under the wrong parent.
+- Depth stops at 32.
+
+A tree may be a `composite` part, which is what a report with a banner
+above the tree needs. It may not be a `records` part: a record is a block
+that repeats at one level and a tree is what the input decides the depth
+of.
+
+With `--stream`, one top-level node is written per line, once nothing
+deeper follows it.
+
 ### type: regex
 
 ```yaml
@@ -356,10 +405,12 @@ Text before the first record is an error naming the line, rather than
 something quietly dropped. A banner belongs in `input.select`, or in a
 `composite` part of its own with the blocks in a second part.
 
-`records` is not recursive: a part of it cannot be `records` or
-`composite`. A tree of arbitrary depth (`npm ls --all`, `iw dev`) has no
-shape jz can promise in advance, and those commands print JSON of their
-own.
+`records` is not recursive: a part of it cannot be `records`,
+`composite` or `tree`. A record is a block that repeats at one level, so
+its depth is stated by the definition and there is nothing for the input
+to say about it. Where the depth is the input's to decide — `lspci -vv`,
+`lsusb -v`, `iw dev` — `type: tree` is the reading, and one definition
+cannot be both: they answer "where does this line belong" differently.
 
 ### type: composite
 

@@ -1,0 +1,46 @@
+# `lspci -vv` is a tree, and the depth is a property of the machine
+# rather than of the format: a device has capabilities, a capability has
+# flags, and how far that goes depends on what is plugged in. Every line
+# is a node, its depth is how many tabs open it, and its children are the
+# lines under it.
+#
+# The device line and the lines under it have different shapes, so the
+# node is read by three expressions in order: the device line, a
+# "Key: value" line, and anything else, which is the continuation of a
+# flag list that lspci wraps onto its own line.
+format: 1
+command: lspci
+variant: verbose
+description: lspci -vv devices as a tree of their attributes
+metadata:
+  tags: [linux, hardware, pci, pciutils]
+  compatible: [pciutils]
+  references:
+    - https://man7.org/linux/man-pages/man8/lspci.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-v", "-vv", "-vvv"]
+  signature:
+    all:
+      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [^:\[]+: '
+      # The register dumps are what -vv prints and -k does not.
+      - '^\tControl: I/O'
+      - '^\tStatus: Cap'
+  # `lspci -k` prints a subset of these lines, so its signature is met by
+  # this output too. The register dumps say which of the two this is, and
+  # priority is where a definition author states that.
+  priority: 10
+parse:
+  type: tree
+  indent: "\t"
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^(?P<slot>[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>[^:]+): (?P<device>.+?)(?: \(rev (?P<revision>[0-9a-f]+)\))?(?: \(prog-if (?P<prog_if>[0-9a-f]+)[^)]*\))?[ \t]*$'
+        - '^(?P<key>[^:]+): ?(?P<value>.*)$'
+        - '^(?P<text>.+)$'
+    fields:
+      revision: {when_missing: omit}
+      prog_if: {when_missing: omit}

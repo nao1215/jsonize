@@ -1,0 +1,3 @@
+source: "lsusb -v on Ubuntu with usbutils 018, LC_ALL=C, trimmed to the first device; run without root, so the descriptors are the ones an unprivileged process is shown"
+os: linux
+args: ["-v"]

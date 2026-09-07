@@ -643,3 +643,64 @@ scenarios:
       - assert:
           exit_code: 2
           stdout: {empty: true}
+
+  # A tree is the one shape whose depth the input decides. What the
+  # definition says is what a node is: the fields read from its line plus
+  # a children array; how deep the nodes go is a property of the machine
+  # being described.
+  - name: lspci -vv is read as a tree of devices and their attributes
+    steps:
+      - fixture:
+          file: lspci.txt
+          from: "${specdir}/testdata/lspci-verbose.txt"
+      - run:
+          command: jz --file ${workdir}/lspci.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].slot", equals: "00:00.0" }
+              - { path: "$[0].class", equals: "Host bridge" }
+              - { path: "$[0].children[0].key", equals: Subsystem }
+              # A flag list that lspci wraps onto its own line is a child
+              # of the line it belongs to, two levels down.
+              - { path: "$[1].children[11].key", equals: BridgeCtl }
+              - { path: "$[1].children[11].children[0].text", matches: "^PriDiscTmr" }
+              # A node with nothing under it still carries the key.
+              - { path: "$[0].children[0].children", length: 0 }
+      # One top-level node per line: a node is complete when nothing
+      # deeper follows it.
+      - run:
+          command: jz --stream --file ${workdir}/lspci.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"children":'
+            min_count: 2
+      - run:
+          command: jz --explain --file ${workdir}/lspci.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lspci/verbose from embedded"
+
+  - name: a line that skips a level has no parent
+    steps:
+      - fixture:
+          file: gap.txt
+          content: |
+            a: 1
+                b: 2
+            c: 3
+      - run:
+          command: "jz --define 'parse: {type: tree, indent: \"  \", node: {parse: {type: kv, separator: \": \"}}}' --file ${workdir}/gap.txt"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "line 2"
+      - assert:
+          stderr:
+            contains: "no parent"

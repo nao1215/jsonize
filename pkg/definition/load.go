@@ -338,6 +338,9 @@ func validateSelect(v *validator, path string, s *Select) {
 // other nesting is allowed, because anything deeper describes a tree
 // whose shape comes from the input rather than from the definition.
 func validateParse(v *validator, path string, p *Parse, fields map[string]*Field, parent string) {
+	if p.Type != TypeTree && (p.Indent != "" || p.Node != nil) {
+		v.add(path, "indent/node are only valid for type tree")
+	}
 	switch p.Type {
 	case TypeTable:
 		validateTable(v, path, p, fields)
@@ -376,6 +379,17 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 	case TypeINI:
 		validateINI(v, path, p)
 		rejectKeys(v, path, p, "table", "regex", "parts")
+	case TypeTree:
+		if parent == TypeRecords {
+			// A record is a block that repeats at one level; a tree is
+			// what the input decides the depth of. Nesting one in the
+			// other would put two answers to "where does this node
+			// belong" in one definition.
+			v.add(path+".type", "a records part cannot be a tree")
+			return
+		}
+		validateTree(v, path, p)
+		rejectKeys(v, path, p, "table", "regex", "kv", "parts")
 	case "":
 		v.add(path+".type", "is required (%s)", parseTypeList)
 	default:
@@ -384,7 +398,7 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 }
 
 // parseTypeList names the parse types in error messages.
-const parseTypeList = "table, csv, ini, regex, kv, composite or records"
+const parseTypeList = "table, csv, ini, tree, regex, kv, composite or records"
 
 // validateCSV checks a csv parser. It is a table whose cells are cut by a
 // delimiter that a value may itself contain, so it shares the header
@@ -405,6 +419,41 @@ func validateCSV(v *validator, path string, p *Parse, fields map[string]*Field) 
 		v.add(path+".header.leading_label", "only valid for type table")
 	}
 	validateHeader(v, path, p, fields)
+}
+
+// validateTree checks a tree parser. The indentation unit is written out
+// rather than counted, so that a report indented with tabs and one
+// indented with two spaces are both stated the same way and neither is
+// guessed.
+func validateTree(v *validator, path string, p *Parse) {
+	switch {
+	case p.Indent == "":
+		v.add(path+".indent", `is required for type tree: one level of indentation as it is written, "\t" or "  "`)
+	case strings.Trim(p.Indent, " \t") != "":
+		v.add(path+".indent", "must be spaces or tabs, not %q", p.Indent)
+	}
+	if p.Node == nil {
+		v.add(path+".node", "is required for type tree: how one line of the tree is read")
+		return
+	}
+	switch p.Node.Parse.Type {
+	case TypeRegex:
+		if p.Node.Parse.Each == EachInput {
+			v.add(path+".node.parse.each", "a tree node is one line, so each: input has nothing to match against")
+		}
+	case TypeKV:
+		if p.Node.Parse.As == AsMap {
+			v.add(path+".node.parse.as", "a tree node is one line, so a map of it would have one key")
+		}
+	case "":
+		v.add(path+".node.parse.type", "is required (regex or kv)")
+		return
+	default:
+		v.add(path+".node.parse.type", "a tree node is read with regex or kv, not %q", p.Node.Parse.Type)
+		return
+	}
+	validateParse(v, path+".node.parse", &p.Node.Parse, p.Node.Fields, TypeTree)
+	validateFields(v, path+".node.fields", p.Node.Fields, 0, p.Node.Parse.Type == TypeKV)
 }
 
 // validateINI checks an ini parser. The sections make it an object of

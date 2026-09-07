@@ -14,6 +14,12 @@ detect:
   signature:
     all:
       - '\ABus \d{3} Device \d{3}: ID [0-9a-f]{4}:[0-9a-f]{4}'
+    none:
+      # The plain listing is bus lines and nothing else. A descriptor
+      # heading means the output is -v, whose indented lines this
+      # definition would have to read as bus lines and then fail on. It
+      # is a statement about what lsusb prints without -v.
+      - '^Device Descriptor:$'
 parse:
   type: regex
   pattern: '^Bus (?P<bus>\d{3}) Device (?P<device>\d{3}): ID (?P<vendor_id>[0-9a-f]{4}):(?P<product_id>[0-9a-f]{4})\s*(?P<description>.*?)\s*$'
