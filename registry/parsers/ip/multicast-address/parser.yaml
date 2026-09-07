@@ -1,0 +1,45 @@
+# `ip maddress` prints one block per interface: the index and the name,
+# then one line per multicast address the interface has joined. A link
+# layer address, an IPv4 address and an IPv6 address are all printed the
+# same way, with the family in the first column.
+#
+# An address joined by more than one socket carries a count; an address
+# joined once prints none, so users is null there rather than one. What
+# the kernel prints is what is reported.
+format: 1
+command: ip
+variant: multicast-address
+description: ip maddress, multicast addresses per interface
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ip-maddress.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A\d+:[ \t]+\S+[ \t]*$'
+      - '^[ \t]+(?:link|inet|inet6)[ \t]+\S'
+parse:
+  type: records
+  start: '^\d+:[ \t]'
+  parts:
+    - name: interface
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^(?P<index>\d+):[ \t]+(?P<name>\S+)[ \t]*$'
+      fields:
+        index: {type: int, required: true}
+        name: {required: true}
+    - name: addresses
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^[ \t]+(?P<family>link|inet6|inet)[ \t]+(?P<address>\S+)(?:[ \t]+users[ \t]+(?P<users>\d+))?[ \t]*$'
+      fields:
+        family: {required: true}
+        address: {required: true}
+        users: {type: int}

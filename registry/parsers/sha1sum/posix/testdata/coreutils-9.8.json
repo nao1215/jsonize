@@ -1,0 +1,18 @@
+[
+  {
+    "checksum": "a5675307b61ec2517330622a6e649b4ca1ee5612",
+    "file": "README.txt"
+  },
+  {
+    "checksum": "28b540996a9eb31600b0e3e8fe4c09a0b3bcb66c",
+    "file": "data.csv"
+  },
+  {
+    "checksum": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "file": "empty.bin"
+  },
+  {
+    "checksum": "5f34ec0bfeac225b1c854340257a65b106f70ea6",
+    "file": "docs/日本語.txt"
+  }
+]

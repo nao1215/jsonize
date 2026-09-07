@@ -1,0 +1,115 @@
+[
+  {
+    "interface": {
+      "index": 2,
+      "name": "eno1"
+    },
+    "addresses": [
+      {
+        "family": "link",
+        "address": "01:00:5e:00:00:01",
+        "users": null
+      },
+      {
+        "family": "link",
+        "address": "33:33:00:00:00:01",
+        "users": null
+      },
+      {
+        "family": "link",
+        "address": "33:33:ff:11:22:33",
+        "users": null
+      },
+      {
+        "family": "link",
+        "address": "33:33:00:00:00:fb",
+        "users": null
+      },
+      {
+        "family": "link",
+        "address": "01:00:5e:00:00:fb",
+        "users": null
+      },
+      {
+        "family": "link",
+        "address": "33:33:00:00:00:02",
+        "users": 2
+      },
+      {
+        "family": "link",
+        "address": "33:33:ff:00:00:00",
+        "users": null
+      },
+      {
+        "family": "link",
+        "address": "01:00:5e:7f:ff:fa",
+        "users": null
+      },
+      {
+        "family": "link",
+        "address": "33:33:00:00:00:0c",
+        "users": null
+      },
+      {
+        "family": "inet",
+        "address": "239.255.255.250",
+        "users": null
+      },
+      {
+        "family": "inet",
+        "address": "224.0.0.251",
+        "users": 2
+      },
+      {
+        "family": "inet",
+        "address": "224.0.0.1",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff02::c",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff02::1:ff00:0",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff05::2",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff01::2",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff02::2",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff02::fb",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff02::1:ff11:2233",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff02::1",
+        "users": null
+      },
+      {
+        "family": "inet6",
+        "address": "ff01::1",
+        "users": null
+      }
+    ]
+  }
+]

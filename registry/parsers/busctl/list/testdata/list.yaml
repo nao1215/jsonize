@@ -1,0 +1,4 @@
+description: unique connection names, where the pid column is wide enough that a seven digit pid starts left of the PID header
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, lines 1-14 of a 142 line output; the user name was replaced
+os: linux
+args: [list]

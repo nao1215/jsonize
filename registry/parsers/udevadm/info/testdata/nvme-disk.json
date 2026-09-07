@@ -1,0 +1,146 @@
+[
+  {
+    "tag": "P",
+    "value": "/devices/pci0000:00/0000:00:02.5/0000:c4:00.0/nvme/nvme0/nvme0n1"
+  },
+  {
+    "tag": "M",
+    "value": "nvme0n1"
+  },
+  {
+    "tag": "R",
+    "value": "1"
+  },
+  {
+    "tag": "J",
+    "value": "b259:3"
+  },
+  {
+    "tag": "U",
+    "value": "block"
+  },
+  {
+    "tag": "T",
+    "value": "disk"
+  },
+  {
+    "tag": "D",
+    "value": "b 259:3"
+  },
+  {
+    "tag": "N",
+    "value": "nvme0n1"
+  },
+  {
+    "tag": "L",
+    "value": "0"
+  },
+  {
+    "tag": "S",
+    "value": "disk/by-path/pci-0000:c4:00.0-nvme-1"
+  },
+  {
+    "tag": "S",
+    "value": "disk/by-id/nvme-eui.000000000000000000000000000000ff"
+  },
+  {
+    "tag": "S",
+    "value": "disk/by-id/nvme-Lexar_SSD_ARES_2TB_SERIAL000000000000_1"
+  },
+  {
+    "tag": "S",
+    "value": "disk/by-id/nvme-Lexar_SSD_ARES_2TB_SERIAL000000000000"
+  },
+  {
+    "tag": "S",
+    "value": "disk/by-diskseq/10"
+  },
+  {
+    "tag": "Q",
+    "value": "10"
+  },
+  {
+    "tag": "E",
+    "value": "DEVPATH=/devices/pci0000:00/0000:00:02.5/0000:c4:00.0/nvme/nvme0/nvme0n1"
+  },
+  {
+    "tag": "E",
+    "value": "DEVNAME=/dev/nvme0n1"
+  },
+  {
+    "tag": "E",
+    "value": "DEVTYPE=disk"
+  },
+  {
+    "tag": "E",
+    "value": "DISKSEQ=10"
+  },
+  {
+    "tag": "E",
+    "value": "MAJOR=259"
+  },
+  {
+    "tag": "E",
+    "value": "MINOR=3"
+  },
+  {
+    "tag": "E",
+    "value": "SUBSYSTEM=block"
+  },
+  {
+    "tag": "E",
+    "value": "USEC_INITIALIZED=4352973"
+  },
+  {
+    "tag": "E",
+    "value": "ID_SERIAL_SHORT=SERIAL000000000000"
+  },
+  {
+    "tag": "E",
+    "value": "ID_WWN=eui.000000000000000000000000000000ff"
+  },
+  {
+    "tag": "E",
+    "value": "ID_MODEL=Lexar SSD ARES 2TB"
+  },
+  {
+    "tag": "E",
+    "value": "ID_REVISION=fecc6d"
+  },
+  {
+    "tag": "E",
+    "value": "ID_NSID=1"
+  },
+  {
+    "tag": "E",
+    "value": "ID_SERIAL=Lexar_SSD_ARES_2TB_SERIAL000000000000_1"
+  },
+  {
+    "tag": "E",
+    "value": "ID_PATH=pci-0000:c4:00.0-nvme-1"
+  },
+  {
+    "tag": "E",
+    "value": "ID_PATH_TAG=pci-0000_c4_00_0-nvme-1"
+  },
+  {
+    "tag": "E",
+    "value": "ID_PART_TABLE_UUID=0f1e2d3c-4b5a-6978-8796-a5b4c3d2e1f0"
+  },
+  {
+    "tag": "E",
+    "value": "ID_PART_TABLE_TYPE=gpt"
+  },
+  {
+    "tag": "E",
+    "value": "DEVLINKS=/dev/disk/by-path/pci-0000:c4:00.0-nvme-1 /dev/disk/by-id/nvme-eui.000000000000000000000000000000ff /dev/disk/by-id/nvme-Lexar_SSD_ARES_2TB_SERIAL000000000000_1 /dev/disk/by-id/nvme-Lexar_SSD_ARES_2TB_SERIAL000000000000 /dev/disk/by-diskseq/10"
+  },
+  {
+    "tag": "E",
+    "value": "TAGS=:systemd:"
+  },
+  {
+    "tag": "E",
+    "value": "CURRENT_TAGS=:systemd:"
+  }
+]

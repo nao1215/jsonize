@@ -1,0 +1,4 @@
+description: Two devices, one wireless and one wired, the wired one carrying a section of properties the wireless one does not have.
+source: the first two blocks of `nmcli device show` captured on Ubuntu 26.04 (NetworkManager 1.56) with LC_ALL=C; the hardware addresses, the addresses, the network name and the search domain were replaced
+os: linux
+args: ["device", "show"]

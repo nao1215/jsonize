@@ -1,0 +1,12 @@
+[
+  {
+    "seen": false,
+    "name": "man-db/install-setuid",
+    "value": "false"
+  },
+  {
+    "seen": false,
+    "name": "man-db/auto-update",
+    "value": "true"
+  }
+]

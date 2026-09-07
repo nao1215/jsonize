@@ -1,0 +1,10 @@
+{
+  "firmware": null,
+  "loader": null,
+  "kernel": null,
+  "initrd": null,
+  "userspace": "296ms",
+  "total": null,
+  "target": "multi-user.target",
+  "target_time": "275ms"
+}

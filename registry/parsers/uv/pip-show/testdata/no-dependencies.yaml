@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (uv 0.9.7) with LC_ALL=C; the home directory in Location was replaced with /home/alice
+description: >
+  One package with neither dependencies nor dependants, so both list
+  fields are empty and become null. uv prints five fields where pip
+  prints ten.
+os: linux
+args: [pip, show, pip]

@@ -1,0 +1,34 @@
+# `pactl list short sinks` and `... sources` print one device per line,
+# five tab separated cells: an index, a name, the driver, the sample
+# specification and the state.
+#
+# The other short listings have other columns (a module carries its
+# argument, a client carries its binary), so the state word at the end is
+# what says this is a sink or a source table. The sample specification
+# holds three values in one cell and is left as printed.
+format: 1
+command: pactl
+variant: short-devices
+description: pactl list short sinks and sources
+metadata:
+  tags: [linux, audio, pulseaudio, pipewire]
+  compatible: [PulseAudio, PipeWire]
+  references:
+    - https://man.archlinux.org/man/pactl.1
+detect:
+  os: [linux]
+  auto_detect: false
+  signature:
+    all:
+      - '\A\d+\t\S+\t\S+\t[^\t]+\t(?:RUNNING|IDLE|SUSPENDED|INVALID)[ \t]*$'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [index, name, driver, sample_specification, state]
+fields:
+  index: {type: int, required: true}
+  name: {required: true}
+  state: {required: true}

@@ -1,0 +1,10 @@
+description: |
+  Two processor blocks, which is enough to show that a block ends where
+  the next one begins. The AMD labels TLB size and power management are
+  here; an Intel machine writes neither and reads the same way.
+source: |
+  /proc/cpuinfo on Linux 7.0.0-30-generic (Ubuntu), AMD Ryzen AI Max+ 395,
+  read with LC_ALL=C. The machine reports 32 logical processors; the first
+  two blocks are kept verbatim and the remaining 30 removed, because the
+  whole file is 61 KB and every block after the first repeats its shape.
+os: linux

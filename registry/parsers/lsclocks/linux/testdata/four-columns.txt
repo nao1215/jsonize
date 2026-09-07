@@ -1,0 +1,10 @@
+ID NAME             TYPE RESOL
+ 0 realtime         sys    1ns
+ 1 monotonic        sys    1ns
+ 4 monotonic-raw    sys    1ns
+ 5 realtime-coarse  sys    1ms
+ 6 monotonic-coarse sys    1ms
+ 7 boottime         sys    1ns
+ 8 realtime-alarm   sys    1ns
+ 9 boottime-alarm   sys    1ns
+11 tai              sys    1ns

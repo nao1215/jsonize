@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (systemd 259.5) with LC_ALL=C; the host name was replaced with host1 and the invocation id with another 32 hex digits
+description: >
+  One service: the properties a running service has, a CGroup line with
+  one process under it, and ten journal entries that the definition drops.
+os: linux
+args: [status, cron.service]

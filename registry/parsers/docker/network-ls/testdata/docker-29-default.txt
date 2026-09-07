@@ -1,0 +1,7 @@
+NETWORK ID     NAME             DRIVER    SCOPE
+9d34582a8e2c   api_default      bridge    local
+4e99b1f53ebc   bridge           bridge    local
+377bf3d7e28a   host             host      local
+35521adc1b1e   kind             bridge    local
+2c10496dedcc   demos_services   bridge    local
+758f21e616c1   none             null      local

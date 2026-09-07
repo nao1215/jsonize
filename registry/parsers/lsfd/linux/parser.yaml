@@ -1,0 +1,30 @@
+# `lsfd` lists open files the way lsof does, with columns of its own. The
+# cells are cut at the header words, because a row can leave a cell in
+# the middle empty: a mapping the caller may not stat reports an error
+# where the type belongs and nothing where the mount and inode do, and
+# whitespace splitting would then read its name as the mount id.
+#
+# lsfd pads each header to the width of its column, which is what makes
+# cutting at the header words work for its right-aligned numbers.
+format: 1
+command: lsfd
+variant: linux
+description: lsfd open file listing
+metadata:
+  tags: [linux, process, file, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lsfd.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ACOMMAND[ \t]+PID[ \t]+USER[ \t]+ASSOC[ \t]+XMODE[ \t]+TYPE[ \t]+SOURCE[ \t]+MNTID[ \t]+INODE[ \t]+NAME[ \t]*$'
+parse:
+  type: table
+  split: aligned
+fields:
+  command: {required: true}
+  pid: {type: int, required: true}
+  mntid: {type: int}
+  inode: {type: int}

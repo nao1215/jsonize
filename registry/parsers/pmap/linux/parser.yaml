@@ -1,0 +1,51 @@
+# `pmap` names the process on its first line and then lists one mapping
+# per line. The mapping column is last and keeps the rest of the line: it
+# holds a file name, or a bracketed word for memory that has no file
+# ("[ anon ]", "[ stack ]").
+#
+# The closing total line is dropped. It is the sum of the sizes above it
+# and carries nothing the rows do not, and a table cannot hold a row that
+# is about the other rows.
+#
+# A process this user may not read into prints its name and nothing else,
+# which is why the mapping list can be empty.
+format: 1
+command: pmap
+variant: linux
+description: pmap process memory map
+metadata:
+  tags: [linux, process, memory, procps]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/pmap.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A\d+:[ \t]+\S'
+    any:
+      - '(?m)^[0-9a-f]{6,16}[ \t]+\d+K[ \t]+[-rwxs]{5}'
+      - '(?m)^[ \t]*total[ \t]+\d+K[ \t]*$'
+input:
+  ignore:
+    - '^[ \t]*total[ \t]+\d+K[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: process
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<pid>\d+):[ \t]+(?P<command>.+?)[ \t]*$'
+      fields:
+        pid: {type: int, required: true}
+        command: {required: true}
+    - name: mappings
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^(?P<address>[0-9a-f]+)[ \t]+(?P<kilobytes>\d+)K[ \t]+(?P<permissions>\S+)[ \t]+(?P<mapping>.+?)[ \t]*$'
+      fields:
+        kilobytes: {type: int}
+        mapping: {required: true}

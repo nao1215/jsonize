@@ -1,0 +1,3 @@
+description: Ten font files in path order, including files that provide two family names.
+source: the first ten lines of `fc-list | sort` captured on Ubuntu 26.04 (fontconfig 2.15) with LC_ALL=C
+os: linux

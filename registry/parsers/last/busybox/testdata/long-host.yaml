@@ -1,0 +1,3 @@
+description: two rows whose host is wider than the HOST column, so the login time no longer starts under the LOGIN heading
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; the user name replaced with one of the same width and the link-local host address replaced
+os: linux

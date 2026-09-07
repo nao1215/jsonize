@@ -1,0 +1,4 @@
+description: BusyBox prints no proto attribute and separates the attributes with two spaces instead of one, which this definition absorbs.
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C
+os: linux
+args: ["route"]

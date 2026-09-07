@@ -1,0 +1,40 @@
+# /etc/fstab: one line per file system. The dump and pass numbers are
+# optional in the format, so a line may stop after the options, which is
+# why the three alternatives differ only in how far they read.
+format: 1
+command: etc
+variant: fstab
+description: /etc/fstab file system table
+metadata:
+  tags: [linux, filesystem]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/fstab.5.html
+detect:
+  auto_detect: false
+  signature:
+    all:
+      # The file opens with an entry, after any comments: a device
+      # specification, a mount point, a file system type and a comma
+      # separated option list. Anchoring the device to the spellings
+      # fstab allows is what keeps another whitespace separated table
+      # from reading as an entry, and requiring the first entry rather
+      # than any line is what keeps a mount table out: `findmnt` opens
+      # with its column names, which name no device.
+      - '\A(?:[ \t]*(?:#[^\n]*)?\n)*(?:/\S+|UUID=\S+|LABEL=\S+|PARTUUID=\S+|PARTLABEL=\S+|ID=\S+|none|tmpfs|proc|sysfs|devpts|debugfs|overlay|cgroup2?|\S+:/\S*)[ \t]+(?:/\S*|none|swap)[ \t]+[\w.+-]+[ \t]+[\w=,.:@/+-]+(?:[ \t]+\d+){0,2}[ \t]*$'
+input:
+  ignore:
+    - '^\s*#'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<device>\S+)[ \t]+(?P<mount_point>\S+)[ \t]+(?P<fs_type>\S+)[ \t]+(?P<options>\S+)[ \t]+(?P<dump>\d+)[ \t]+(?P<pass>\d+)[ \t]*$'
+    - '^(?P<device>\S+)[ \t]+(?P<mount_point>\S+)[ \t]+(?P<fs_type>\S+)[ \t]+(?P<options>\S+)[ \t]+(?P<dump>\d+)[ \t]*$'
+    - '^(?P<device>\S+)[ \t]+(?P<mount_point>\S+)[ \t]+(?P<fs_type>\S+)[ \t]+(?P<options>\S+)[ \t]*$'
+fields:
+  device: {required: true}
+  mount_point: {required: true}
+  fs_type: {required: true}
+  options: {type: array, split: ","}
+  dump: {type: int, when_missing: omit}
+  pass: {type: int, when_missing: omit}

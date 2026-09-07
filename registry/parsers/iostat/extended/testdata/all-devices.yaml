@@ -1,0 +1,4 @@
+description: Every block device, including the loop devices a snap installation leaves behind, all of them idle.
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C from `iostat -x`; the host name in the banner was replaced
+os: linux
+args: ["-x"]

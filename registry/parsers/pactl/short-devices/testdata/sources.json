@@ -1,0 +1,51 @@
+[
+  {
+    "index": 65,
+    "name": "alsa_output.pci-0000_c6_00.6.analog-stereo.monitor",
+    "driver": "PipeWire",
+    "sample_specification": "s32le 2ch 48000Hz",
+    "state": "SUSPENDED"
+  },
+  {
+    "index": 66,
+    "name": "alsa_input.pci-0000_c6_00.6.analog-stereo",
+    "driver": "PipeWire",
+    "sample_specification": "s32le 2ch 48000Hz",
+    "state": "SUSPENDED"
+  },
+  {
+    "index": 69,
+    "name": "alsa_input.usb-046d_HD_Pro_Webcam_C920_00000000-02.analog-stereo",
+    "driver": "PipeWire",
+    "sample_specification": "s16le 2ch 32000Hz",
+    "state": "SUSPENDED"
+  },
+  {
+    "index": 70,
+    "name": "alsa_output.usb-C-Media_INC._USB_Sound_Device-00.analog-stereo.monitor",
+    "driver": "PipeWire",
+    "sample_specification": "s16le 2ch 48000Hz",
+    "state": "RUNNING"
+  },
+  {
+    "index": 2033,
+    "name": "alsa_output.usb-Fonglun_USB_PnP_Sound_Device_201801-00.analog-stereo.monitor",
+    "driver": "PipeWire",
+    "sample_specification": "s16le 2ch 48000Hz",
+    "state": "SUSPENDED"
+  },
+  {
+    "index": 2034,
+    "name": "alsa_input.usb-Fonglun_USB_PnP_Sound_Device_201801-00.mono-fallback",
+    "driver": "PipeWire",
+    "sample_specification": "s16le 1ch 48000Hz",
+    "state": "SUSPENDED"
+  },
+  {
+    "index": 23592,
+    "name": "alsa_output.pci-0000_c6_00.1.hdmi-stereo.monitor",
+    "driver": "PipeWire",
+    "sample_specification": "s32le 2ch 48000Hz",
+    "state": "SUSPENDED"
+  }
+]

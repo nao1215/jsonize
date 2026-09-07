@@ -5,16 +5,16 @@ description: "uptime on Linux (procps and BusyBox): comma separated load average
 metadata:
   tags: [linux, system]
   compatible: [procps-ng, BusyBox]
+  references:
+    - https://man7.org/linux/man-pages/man1/uptime.1.html
 detect:
   os: [linux]
   signature:
-    # `w` prints this very line before its user table, so the signature
-    # anchors the whole line and rejects anything that continues into a
-    # table.
+    # The whole output is this one line. `w` opens with the same summary
+    # and then prints a table of users, which is where it stops being
+    # this format; anchoring at both ends says so without naming w.
     all:
-      - '^\s*\d{1,2}:\d{2}(?::\d{2})?\s+up\s+.*,\s+load average: [\d.]+, [\d.]+, [\d.]+\s*$'
-    none:
-      - '^USER\s+TTY\s'
+      - '\A\s*\d{1,2}:\d{2}(?::\d{2})?\s+up\s+.*,\s+load average: [\d.]+, [\d.]+, [\d.]+\s*\z'
 parse:
   type: regex
   each: input

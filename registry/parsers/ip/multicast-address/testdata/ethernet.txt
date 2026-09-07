@@ -1,0 +1,22 @@
+2:	eno1
+	link  01:00:5e:00:00:01
+	link  33:33:00:00:00:01
+	link  33:33:ff:11:22:33
+	link  33:33:00:00:00:fb
+	link  01:00:5e:00:00:fb
+	link  33:33:00:00:00:02 users 2
+	link  33:33:ff:00:00:00
+	link  01:00:5e:7f:ff:fa
+	link  33:33:00:00:00:0c
+	inet  239.255.255.250
+	inet  224.0.0.251 users 2
+	inet  224.0.0.1
+	inet6 ff02::c
+	inet6 ff02::1:ff00:0
+	inet6 ff05::2
+	inet6 ff01::2
+	inet6 ff02::2
+	inet6 ff02::fb
+	inet6 ff02::1:ff11:2233
+	inet6 ff02::1
+	inet6 ff01::1

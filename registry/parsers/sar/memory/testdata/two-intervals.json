@@ -1,0 +1,44 @@
+[
+  {
+    "time": "08:55:15",
+    "kbmemfree": 11339176,
+    "kbavail": 28827644,
+    "kbmemused": 14243060,
+    "memused_percent": 22.11,
+    "kbbuffers": 2020404,
+    "kbcached": 31420024,
+    "kbcommit": 79088964,
+    "commit_percent": 108.64,
+    "kbactive": 23922764,
+    "kbinact": 21502856,
+    "kbdirty": 20700
+  },
+  {
+    "time": "08:55:16",
+    "kbmemfree": 11359572,
+    "kbavail": 28848040,
+    "kbmemused": 14222652,
+    "memused_percent": 22.08,
+    "kbbuffers": 2020416,
+    "kbcached": 31420024,
+    "kbcommit": 79088964,
+    "commit_percent": 108.64,
+    "kbactive": 23909824,
+    "kbinact": 21502856,
+    "kbdirty": 20732
+  },
+  {
+    "time": "Average",
+    "kbmemfree": 11349374,
+    "kbavail": 28837842,
+    "kbmemused": 14232856,
+    "memused_percent": 22.1,
+    "kbbuffers": 2020410,
+    "kbcached": 31420024,
+    "kbcommit": 79088964,
+    "commit_percent": 108.64,
+    "kbactive": 23916294,
+    "kbinact": 21502856,
+    "kbdirty": 20716
+  }
+]

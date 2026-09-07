@@ -1,0 +1,5 @@
+Version: 2.4.0
+Date: Mon Sep  7 08:38:15 JST 2026
+Author: the release team
+Changes: the loader now reports ELF Header: for a file it cannot map,
+and the rule list prints 0: from all lookup local when no policy is set.

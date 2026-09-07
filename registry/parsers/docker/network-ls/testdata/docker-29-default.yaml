@@ -1,0 +1,8 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  The three networks every daemon creates (bridge, host, none) and three
+  created by compose and by a cluster tool. One network name was replaced,
+  keeping its width, and the identifiers were rewritten, keeping their
+  length.
+os: linux
+args: ["network", "ls"]

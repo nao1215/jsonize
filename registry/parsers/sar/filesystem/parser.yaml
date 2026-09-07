@@ -1,0 +1,48 @@
+# `sar -F` prints a banner naming the kernel, the host, the date and
+# the CPU count, then one row per sampling interval and a summary row
+# labelled Average:. The banner is dropped: it is one line about the run
+# rather than a row of the report, and a table cannot hold both.
+#
+# The column names sit on a line that opens with the time the report
+# started rather than with a name, so the names are written out here and
+# that line is ignored. `sar -n DEV` repeats the name line above the
+# summary block, which is why the ignore pattern accepts either label.
+#
+# The first cell is the time of the sample, except on a summary row,
+# which this report labels Summary rather than Average. The trailing
+# colon that only those rows carry is removed so the cell holds a time or
+# the word and nothing else.
+format: 1
+command: sar
+variant: filesystem
+description: sar -F file system utilisation
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '^(?:\d\d:\d\d:\d\d|Average:|Summary:)[ \t]+MBfsfree[ \t]+MBfsused[ \t]+%fsused[ \t]+%ufsused[ \t]+Ifree[ \t]+Iused[ \t]+%Iused[ \t]+FILESYSTEM[ \t]*$'
+input:
+  ignore:
+    - '\ALinux '
+    - '^(?:\d\d:\d\d:\d\d|Average:|Summary:)[ \t]+MBfsfree[ \t]+MBfsused'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, mbfsfree, mbfsused, fsused_percent, ufsused_percent, ifree, iused, iused_percent, filesystem]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  mbfsfree: {type: int}
+  mbfsused: {type: int}
+  fsused_percent: {type: float}
+  ufsused_percent: {type: float}
+  ifree: {type: int}
+  iused: {type: int}
+  iused_percent: {type: float}
+  filesystem: {required: true}

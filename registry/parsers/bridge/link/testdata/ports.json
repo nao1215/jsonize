@@ -1,0 +1,114 @@
+[
+  {
+    "index": 7,
+    "name": "veth0c4293d",
+    "peer": "eno1",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "master": "br-088d49b64243",
+    "state": "forwarding",
+    "priority": 32,
+    "cost": 2
+  },
+  {
+    "index": 8,
+    "name": "veth9363d1f",
+    "peer": "eno1",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "master": "docker0",
+    "state": "forwarding",
+    "priority": 32,
+    "cost": 2
+  },
+  {
+    "index": 9,
+    "name": "veth5d856b9",
+    "peer": "eno1",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "master": "br-088d49b64243",
+    "state": "forwarding",
+    "priority": 32,
+    "cost": 2
+  },
+  {
+    "index": 10,
+    "name": "veth0d5de59",
+    "peer": "eno1",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "master": "br-088d49b64243",
+    "state": "forwarding",
+    "priority": 32,
+    "cost": 2
+  },
+  {
+    "index": 71,
+    "name": "veth3083cdb",
+    "peer": "eno1",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "master": "docker0",
+    "state": "forwarding",
+    "priority": 32,
+    "cost": 2
+  },
+  {
+    "index": 72,
+    "name": "vethceffd70",
+    "peer": "eno1",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "master": "docker0",
+    "state": "forwarding",
+    "priority": 32,
+    "cost": 2
+  },
+  {
+    "index": 73,
+    "name": "veth65bc625",
+    "peer": "eno1",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "master": "docker0",
+    "state": "forwarding",
+    "priority": 32,
+    "cost": 2
+  }
+]

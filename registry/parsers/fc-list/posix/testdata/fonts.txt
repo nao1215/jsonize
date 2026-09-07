@@ -1,0 +1,10 @@
+/usr/share/fonts/opentype/font-awesome/FontAwesome.otf: FontAwesome:style=Regular
+/usr/share/fonts/opentype/mathjax/MathJax_AMS-Regular.otf: MathJax_AMS:style=Regular
+/usr/share/fonts/opentype/mathjax/MathJax_Caligraphic-Bold.otf: MathJax_Caligraphic:style=Bold
+/usr/share/fonts/opentype/mathjax/MathJax_Caligraphic-Regular.otf: MathJax_Caligraphic:style=Regular
+/usr/share/fonts/opentype/mathjax/MathJax_Fraktur-Bold.otf: MathJax_Fraktur:style=Bold
+/usr/share/fonts/opentype/mathjax/MathJax_Fraktur-Regular.otf: MathJax_Fraktur:style=Regular
+/usr/share/fonts/opentype/mathjax/MathJax_Main-Bold.otf: MathJax_Main:style=Bold
+/usr/share/fonts/opentype/mathjax/MathJax_Main-Italic.otf: MathJax_Main:style=Italic
+/usr/share/fonts/opentype/mathjax/MathJax_Main-Regular.otf: MathJax_Main:style=Regular
+/usr/share/fonts/opentype/mathjax/MathJax_Math-BoldItalic.otf: MathJax_Math:style=BoldItalic

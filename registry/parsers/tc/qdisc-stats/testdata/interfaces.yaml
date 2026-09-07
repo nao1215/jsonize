@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 (iproute2 6.19) with LC_ALL=C, lines 1 to 8 of
+  44
+description: >-
+  Two blocks: a noqueue discipline whose block is the three lines every
+  discipline prints, and an fq_codel one that adds two lines of its own
+  statistics below them.
+os: linux
+args: ["-s", "qdisc", "show"]

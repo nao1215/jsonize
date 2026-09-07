@@ -1,0 +1,8 @@
+description: |
+  /proc/<pid>/status is labelled the same way and reports several of its
+  counters in kilobytes, but its lines are not all labelled counters:
+  Name holds a word, State holds a word and a parenthesis, Uid holds four
+  numbers. The shape is what refuses it, and MemTotal is not there
+  either.
+expect_error: 'does not describe this input'
+os: linux

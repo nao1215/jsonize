@@ -1,0 +1,20 @@
+ebcc355d5e2f77b80d7e9c8baa4b8449465ed33a Ada Lovelace chore: ignore the scratch worktrees cut inside the repository
+85babb740a33abe3f6b3c2561d0e27f67982744d Ada Lovelace parser: read the mtr report
+6ef043cc3b83996fa1e66321347b95c498969a9e Ada Lovelace parser: read the task-level listing of lsof
+e7858b2e5a556c9fb21514c32f566870729c3bd6 Ada Lovelace parser: read apt show records
+c83edaf5c27bc7fbeaf8f794ba11723aa3df186e Ada Lovelace test: pin the two shapes the definition format gained
+cbbf36c26bc812efb35a903d10ead8fce3681a79 Ada Lovelace feat: join a wrapped line onto the one above it
+2226ea94fd42153031a3db2ad1952d72a0db2d33 Ada Lovelace merge the service and toolchain batch: systemctl status, systemd-analyze time, uv and rustup
+80e15cff8ebbfef1ef14050ab7f197323063fcad Ada Lovelace merge the network tooling batch: ethtool, bridge and tc
+ee0d736066c014b1cd8a0d68bc8f9f27e979920b Ada Lovelace merge the record format batch: gpg, hciconfig, rsync and scc
+21bbb983de1f547a4fb499508940f06a01a18ce2 Ada Lovelace parser: read the sysstat reports asked for with an interval
+d41ef9fcd7446973abfd7b7afe97ac6aa12ae5a8 Ada Lovelace parser: read the table scc prints
+b54741f84264a1bebc891d244d9bd39f7ca9fa72 Ada Lovelace parser: read the change strings of rsync --itemize-changes
+ecc324dd38d72d5440a86c3447688aca8abb8110 Ada Lovelace parser: read the adapter blocks of hciconfig
+53823ce7bbd8263cf62e28fccb27967565caa1f2 Ada Lovelace parser: read the colon listing of gpg
+06679eb78f5c6aa93f880585caedd72619c1caa4 Ada Lovelace parser: count the fields of an /etc/passwd line
+b29c03d49301fb1d08628f14c8a568d663b5dc51 Ada Lovelace parser: stop file from reading a bridge port list
+8f3ff5b475b6965f749b7fe38a8f12a8adc78942 Ada Lovelace parser: read tc qdisc show with and without its counters
+16f316cbd098df17077a818bcae7b4caa690ae27 Ada Lovelace parser: read the bridge port list and the forwarding database
+2d0867058eaf42e8e20fb9266d4fe87d56a82268 Ada Lovelace parser: read the counters and the offload features ethtool prints
+654381a89ad35ebfb5bfda2c4715b2a3d1f82f16 Ada Lovelace docs: name the two block shapes in the parser guide

@@ -1,0 +1,4 @@
+description: A process this user may not read into prints its name and no mappings. Nothing in that one line says pmap wrote it, so it is refused rather than read as a file name and a description.
+source: captured on Ubuntu 26.04 (procps-ng 4.0) with LC_ALL=C from `pmap 1`
+os: linux
+expect_error: 'does not describe this input'

@@ -1,0 +1,11 @@
+name:           loop
+filename:       (builtin)
+alias:          devname:loop-control
+alias:          char-major-10-237
+alias:          block-major-7-*
+license:        GPL
+file:           drivers/block/loop
+description:    Loopback device support
+parm:           max_loop:Maximum number of loop devices
+parm:           max_part:Maximum number of partitions per loop device (int)
+parm:           hw_queue_depth:Queue depth for each hardware queue. Default: 128

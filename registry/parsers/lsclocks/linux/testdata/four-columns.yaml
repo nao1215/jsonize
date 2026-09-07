@@ -1,0 +1,4 @@
+description: The same clocks asked for with four columns, which shows that the column set is read from the header.
+source: captured on Ubuntu 26.04 (util-linux 2.41) with LC_ALL=C from `lsclocks -o ID,NAME,TYPE,RESOL`
+os: linux
+args: ["-o", "ID,NAME,TYPE,RESOL"]

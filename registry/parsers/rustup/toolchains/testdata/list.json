@@ -1,0 +1,12 @@
+[
+  {
+    "name": "stable-x86_64-unknown-linux-gnu",
+    "active": true,
+    "default": true
+  },
+  {
+    "name": "1.92-x86_64-unknown-linux-gnu",
+    "active": false,
+    "default": false
+  }
+]

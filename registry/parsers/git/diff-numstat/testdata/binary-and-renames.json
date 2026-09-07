@@ -1,0 +1,107 @@
+[
+  {
+    "added": 66,
+    "deleted": 0,
+    "path": ".github/workflows/website.yml"
+  },
+  {
+    "added": 5,
+    "deleted": 0,
+    "path": ".gitignore"
+  },
+  {
+    "added": 4,
+    "deleted": 4,
+    "path": "CONTRIBUTING.md"
+  },
+  {
+    "added": 12,
+    "deleted": 0,
+    "path": "Makefile"
+  },
+  {
+    "added": 60,
+    "deleted": 209,
+    "path": "README.md"
+  },
+  {
+    "added": null,
+    "deleted": null,
+    "path": "demo/jsonize.gif"
+  },
+  {
+    "added": 32,
+    "deleted": 0,
+    "path": "demo/jsonize.tape"
+  },
+  {
+    "added": 125,
+    "deleted": 0,
+    "path": "website/assets/css/site.css"
+  },
+  {
+    "added": 46,
+    "deleted": 0,
+    "path": "website/content/_index.md"
+  },
+  {
+    "added": 4,
+    "deleted": 1,
+    "path": "{docs => website/content}/definition-format.md"
+  },
+  {
+    "added": 4,
+    "deleted": 1,
+    "path": "{docs => website/content}/design.md"
+  },
+  {
+    "added": 32,
+    "deleted": 0,
+    "path": "website/content/install.md"
+  },
+  {
+    "added": 89,
+    "deleted": 0,
+    "path": "website/content/parsers.md"
+  },
+  {
+    "added": 97,
+    "deleted": 0,
+    "path": "website/content/usage.md"
+  },
+  {
+    "added": 4,
+    "deleted": 1,
+    "path": "docs/adding-parsers.md => website/content/write-a-parser.md"
+  },
+  {
+    "added": 69,
+    "deleted": 0,
+    "path": "website/hugo.toml"
+  },
+  {
+    "added": 6,
+    "deleted": 0,
+    "path": "website/layouts/404.html"
+  },
+  {
+    "added": 36,
+    "deleted": 0,
+    "path": "website/layouts/_default/baseof.html"
+  },
+  {
+    "added": 9,
+    "deleted": 0,
+    "path": "website/layouts/_default/home.html"
+  },
+  {
+    "added": 11,
+    "deleted": 0,
+    "path": "website/layouts/_default/list.html"
+  },
+  {
+    "added": 11,
+    "deleted": 0,
+    "path": "website/layouts/_default/single.html"
+  }
+]

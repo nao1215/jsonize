@@ -1,0 +1,8 @@
+source: |
+  derived from the capture above by removing the rows; the semaphores on
+  this machine belong to running programs and cannot be cleared, so the
+  empty section was taken from the shape ipcs -q and ipcs -m print here
+  when their facility is unused
+description: The heading and nothing under it, which parses to an empty list.
+os: linux
+args: [-s]

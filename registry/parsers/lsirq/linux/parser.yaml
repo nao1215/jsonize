@@ -1,0 +1,30 @@
+# `lsirq` counts the interrupts the kernel has taken. The name is last
+# and keeps the rest of the line, because it is a sentence rather than a
+# word ("Function call interrupts").
+#
+# The IRQ column holds a number for a hardware line and a word for the
+# ones the kernel counts separately (LOC, CAL, TLB), so it stays a
+# string. Some of those have no name at all, which is why a row may stop
+# after the count.
+format: 1
+command: lsirq
+variant: linux
+description: lsirq interrupt counts
+metadata:
+  tags: [linux, hardware, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lsirq.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*IRQ[ \t]+TOTAL[ \t]+NAME[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  min_fields: 2
+fields:
+  irq: {required: true}
+  total: {type: int, required: true}
+  name: {}

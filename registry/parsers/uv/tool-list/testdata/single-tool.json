@@ -1,0 +1,16 @@
+[
+  {
+    "tool": {
+      "name": "moto",
+      "version": "5.2.2"
+    },
+    "executables": [
+      {
+        "name": "moto_proxy"
+      },
+      {
+        "name": "moto_server"
+      }
+    ]
+  }
+]

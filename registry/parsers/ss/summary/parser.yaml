@@ -1,0 +1,54 @@
+# `ss -s` prints three things that are not rows of one table: a total, a
+# line of TCP states, and a table of counts per transport. Each is read
+# on its own and the result is an object of the three.
+format: 1
+command: ss
+variant: summary
+description: ss -s socket counts
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ss.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ATotal:[ \t]+\d+[ \t]*$'
+      - '^Transport[ \t]+Total[ \t]+IP[ \t]+IPv6[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: total
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ATotal:[ \t]+(?P<sockets>\d+)[ \t]*$'
+      fields:
+        sockets: {type: int, required: true}
+    - name: tcp
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ATCP:[ \t]+(?P<total>\d+) \(estab (?P<estab>\d+), closed (?P<closed>\d+), orphaned (?P<orphaned>\d+), timewait (?P<timewait>\d+)\)'
+      fields:
+        total: {type: int, required: true}
+        estab: {type: int}
+        closed: {type: int}
+        orphaned: {type: int}
+        timewait: {type: int}
+    - name: transports
+      select: {after: '^Transport[ \t]+Total'}
+      parse:
+        type: table
+        split: whitespace
+        header:
+          none: true
+          columns: [transport, total, ip, ipv6]
+      fields:
+        transport: {required: true}
+        total: {type: int}
+        ip: {type: int}
+        ipv6: {type: int}

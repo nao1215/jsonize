@@ -1,0 +1,3 @@
+description: A repository that has never been packed, where every pack count is zero.
+source: captured with LC_ALL=C from a repository created for this fixture
+os: linux

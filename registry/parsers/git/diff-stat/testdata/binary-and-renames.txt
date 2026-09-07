@@ -1,0 +1,22 @@
+ .github/workflows/website.yml                      |  66 +++++
+ .gitignore                                         |   5 +
+ CONTRIBUTING.md                                    |   8 +-
+ Makefile                                           |  12 +
+ README.md                                          | 269 +++++----------------
+ demo/jsonize.gif                                   | Bin 0 -> 217022 bytes
+ demo/jsonize.tape                                  |  32 +++
+ website/assets/css/site.css                        | 125 ++++++++++
+ website/content/_index.md                          |  46 ++++
+ {docs => website/content}/definition-format.md     |   5 +-
+ {docs => website/content}/design.md                |   5 +-
+ website/content/install.md                         |  32 +++
+ website/content/parsers.md                         |  89 +++++++
+ website/content/usage.md                           |  97 ++++++++
+ .../content/write-a-parser.md                      |   5 +-
+ website/hugo.toml                                  |  69 ++++++
+ website/layouts/404.html                           |   6 +
+ website/layouts/_default/baseof.html               |  36 +++
+ website/layouts/_default/home.html                 |   9 +
+ website/layouts/_default/list.html                 |  11 +
+ website/layouts/_default/single.html               |  11 +
+ 21 files changed, 722 insertions(+), 216 deletions(-)

@@ -1,0 +1,3 @@
+description: A shell, whose mappings include the files it loaded and the anonymous and stack regions that have no file.
+source: captured on Ubuntu 26.04 (procps-ng 4.0) with LC_ALL=C from `pmap` of the capturing shell
+os: linux

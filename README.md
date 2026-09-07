@@ -46,6 +46,7 @@ jz < captured.txt            # or output captured earlier
 jz --file captured.txt
 jz run COMMAND [args...]     # let jz run the command and convert its stdout
 jz list                      # what jz can read
+jz test [DIR...]             # check parser definitions of your own
 ```
 
 Options:
@@ -53,6 +54,7 @@ Options:
 ```text
   -f, --file PATH     read input from PATH instead of stdin
   -p, --pretty        indent JSON output
+      --stream        write one record per line as it is read
       --extract KEY   keep only this key (repeatable)
       --exclude KEY   drop this key (repeatable)
       --parser NAME   restrict detection to one parser
@@ -74,6 +76,13 @@ $ df -h | jz --extract filesystem --extract mounted_on
 through, mirrors its exit status and runs it with `LC_ALL=C`. Everything
 after the command name belongs to the command, and a bare `--` states
 that boundary explicitly.
+
+`--stream` answers a command that keeps printing, one JSON document per
+line as each record is read:
+
+```console
+$ jz run --stream ping -c 100 1.1.1.1 | jq -c 'select(.time_ms > 20)'
+```
 
 ## What it will not do
 
@@ -105,10 +114,13 @@ A definition and a captured fixture, no Go:
 ```console
 $ mkdir -p ~/.config/jsonize/registry/parsers/greet/default/testdata
 $ $EDITOR ~/.config/jsonize/registry/parsers/greet/default/parser.yaml
-$ make registry-update-golden DIR=~/.config/jsonize/registry
-$ make registry-test DIR=~/.config/jsonize/registry
+$ jz test --update            # write testdata/<case>.json from the output
+$ jz test                     # check it, and check it reads nothing else
 $ greet | jz
 ```
+
+The official fixtures are built into the binary, so `jz test` also proves
+your definition refuses every format jz already reads.
 
 Registries are layered: `JSONIZE_REGISTRY_PATH`, then the user registry
 under the config directory, then the one built into the binary. jz never
@@ -116,6 +128,19 @@ accesses the network, so the same input converts to the same JSON on the
 same machine. The guide is at
 https://nao1215.github.io/jsonize/write-a-parser/ and the reference at
 https://nao1215.github.io/jsonize/definition-format/.
+
+## From Go
+
+The registry, the selector and the engine are a library:
+
+```go
+reg, _ := registry.Load(registry.Source{Name: "embedded", FS: official.FS()})
+sel, err := selector.Select(reg, selector.Context{Input: text})  // err: unidentified or ambiguous
+out, err := engine.Parse(sel.Entry.Def, text, engine.Options{})  // out: ordered objects
+jsonutil.Encode(os.Stdout, out, true)
+```
+
+Reference: https://pkg.go.dev/github.com/nao1215/jsonize/pkg/selector
 
 ## Exit codes
 
@@ -138,7 +163,7 @@ document or nothing.
 $ make help                    # every target
 $ make check                   # fmt, vet, lint, unit tests, race
 $ make e2e                     # atago end-to-end suite
-$ make registry-test           # validate definitions and their golden cases
+$ make registry-test           # the same checks `jz test` runs, on the official registry
 $ make website-serve           # the documentation site locally
 $ make demo                    # re-record demo/jsonize.gif with vhs
 ```

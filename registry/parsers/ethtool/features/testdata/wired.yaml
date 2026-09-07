@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (ethtool 6.19) with LC_ALL=C
+description: >-
+  A Realtek r8169 card. Most features are fixed, a few are switchable,
+  and the checksum and segmentation groups carry indented sub-features.
+os: linux
+args: ["-k", "eno1"]

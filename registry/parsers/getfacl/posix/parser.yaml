@@ -1,0 +1,55 @@
+# `getfacl` prints one block per file, separated by a blank line: comment
+# lines naming the file and its owner, then one access control entry per
+# line.
+#
+# Each part reads the whole block and names what belongs to the other,
+# because the number of comment lines depends on the file: a directory
+# with sticky or setgid bits carries a flags line and an ordinary file
+# does not. The two shapes cover the block between them, so a line of
+# neither shape is an error.
+#
+# An entry that the mask narrows carries the permissions it actually has
+# in a trailing comment. Both are kept: what was granted and what is
+# effective are two facts, and the second is absent where the mask
+# changes nothing. A default entry, which a directory hands to what is
+# created inside it, opens with the word default and is marked as such.
+format: 1
+command: getfacl
+variant: posix
+description: getfacl access control lists
+metadata:
+  tags: [linux, filesystem, permissions]
+  compatible: [acl]
+  references:
+    - https://man7.org/linux/man-pages/man1/getfacl.1.html
+detect:
+  signature:
+    all:
+      - '\A# file: \S'
+      - '(?m)^user::[rwx-]{3}'
+parse:
+  type: records
+  start: '^# file: '
+  parts:
+    - name: attributes
+      ignore:
+        - '^[^#]'
+      parse:
+        type: regex
+        pattern: '^# (?P<name>[^:]+): (?P<value>.*?)[ \t]*$'
+      fields:
+        name: {required: true}
+    - name: entries
+      ignore:
+        - '^#'
+      parse:
+        type: regex
+        patterns:
+          - '^(?P<default>default):(?P<type>[a-z]*):(?P<qualifier>[^:]*):(?P<permissions>[rwxX-]+)(?:[ \t]+#effective:(?P<effective>[rwx-]+))?[ \t]*$'
+          - '^(?P<type>[a-z]+):(?P<qualifier>[^:]*):(?P<permissions>[rwxX-]+)(?:[ \t]+#effective:(?P<effective>[rwx-]+))?[ \t]*$'
+      fields:
+        type: {required: true}
+        permissions: {required: true}
+        qualifier: {null_if: [""]}
+        effective: {when_missing: omit}
+        default: {type: bool, true_values: ["default"], when_missing: omit}

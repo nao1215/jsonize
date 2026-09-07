@@ -1,0 +1,9 @@
+source: >-
+  captured with LC_ALL=C rsync -ainH src/ dst/ on Ubuntu with rsync
+  3.4.1, against scratch directories holding only files made for this
+  fixture
+description: >-
+  a hard link with its " => " target, a fifo, a file whose own name
+  contains " -> ", names with spaces and a permission-only change
+os: linux
+args: ["-ainH", "src/", "dst/"]

@@ -1,0 +1,4 @@
+description: Four commits, one of them a merge with an extra header, and one whose message has a body of two paragraphs.
+source: captured with LC_ALL=C from a repository created for this fixture with git 2.53; the author is not a real person
+os: linux
+args: ["log"]

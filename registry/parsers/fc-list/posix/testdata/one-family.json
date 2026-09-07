@@ -1,0 +1,20 @@
+[
+  {
+    "file": "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf",
+    "families": [
+      "DejaVu Serif"
+    ],
+    "styles": [
+      "Bold"
+    ]
+  },
+  {
+    "file": "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf",
+    "families": [
+      "DejaVu Serif"
+    ],
+    "styles": [
+      "Book"
+    ]
+  }
+]

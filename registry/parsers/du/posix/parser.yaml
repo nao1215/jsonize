@@ -1,10 +1,16 @@
 format: 1
 command: du
 variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gdu
 description: du output (tab separated size and path) on Linux, macOS and BusyBox
 metadata:
   tags: [linux, darwin, filesystem]
   compatible: [GNU coreutils, BusyBox, macOS du]
+  references:
+    - https://man7.org/linux/man-pages/man1/du.1.html
 # A number, a tab and a path is also the shape of `git diff --numstat`
 # and of any other tab-separated report, so jz does not claim this format
 # on its own: `jz --parser du` or `jz run du` says it is du output, and
@@ -14,13 +20,14 @@ detect:
   signature:
     window: 200
     all:
-      - '\A\s*\d+\t\S'
-    # A size with a suffix is `du -h`, whose numbers are rounded and whose
-    # variant is gnu-human. The first line of such a listing can still be
-    # a plain count (a size below one kibibyte prints as "0"), so the whole
-    # window is searched rather than the first line alone.
-    none:
-      - '^[\d.]+[KMGTPEZY]\t'
+      # A count, one tab, and a path that runs to the end of the line.
+      # Two things follow from writing the whole line rather than its
+      # opening. No du pads the count, so a report that right-aligns its
+      # first cell into a column is something else (`git shortlog -s`);
+      # and du prints two cells and never a third, so a tab separated
+      # report with more of them is not this one (`git diff --numstat`,
+      # `pactl list short sinks`).
+      - '\A\d+\t[^\t\n]*$'
 parse:
   type: table
   split: delimiter

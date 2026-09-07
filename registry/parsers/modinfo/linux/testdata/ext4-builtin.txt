@@ -1,0 +1,11 @@
+name:           ext4
+filename:       (builtin)
+license:        GPL
+file:           fs/ext4/ext4
+description:    Fourth Extended Filesystem
+author:         Remy Card, Stephen Tweedie, Andrew Morton, Andreas Dilger, Theodore Ts'o and others
+alias:          fs-ext4
+alias:          ext3
+alias:          fs-ext3
+alias:          ext2
+alias:          fs-ext2

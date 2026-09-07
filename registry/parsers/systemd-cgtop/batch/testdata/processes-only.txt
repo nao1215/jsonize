@@ -1,0 +1,8 @@
+/                                                                                                                             71      -    31.2G        -        -
+dev-hugepages.mount                                                                                                            -      -       4K        -        -
+dev-mqueue.mount                                                                                                               -      -       4K        -        -
+init.scope                                                                                                                     1      -      25M        -        -
+proc-sys-fs-binfmt_misc.mount                                                                                                  -      -       8K        -        -
+sys-fs-fuse-connections.mount                                                                                                  -      -       4K        -        -
+sys-kernel-config.mount                                                                                                        -      -       4K        -        -
+sys-kernel-debug.mount                                                                                                         -      -       4K        -        -

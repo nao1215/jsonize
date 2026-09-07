@@ -1,0 +1,4 @@
+description: A listing whose inode numbers differ in width, so ls right-aligns the column and most lines start with spaces. The definition read only listings whose inodes happened to be the same width until this case was added.
+source: "`ls -li /` captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C"
+os: linux
+args: [-li, /]

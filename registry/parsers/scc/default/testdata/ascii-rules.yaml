@@ -1,0 +1,8 @@
+source: >-
+  captured with LC_ALL=C scc --ci --no-size website in the jsonize
+  checkout with scc 3.7.0 from the snap package
+description: >-
+  --ci draws the rules with hyphens instead of U+2500 and --no-size
+  removes the byte count, leaving that list empty
+os: linux
+args: ["--ci", "--no-size", "website"]

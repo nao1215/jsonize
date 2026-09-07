@@ -1,0 +1,16 @@
+description: |
+  A twenty-first field on a row past the signature window, which the
+  signature never sees. The parser reads it, and a table's last column
+  takes whatever is left on the line, so the extra field lands in
+  flush_ms and fails to convert to an integer.
+
+  What this pins is that the row is refused rather than read with the
+  extra field folded into the last counter. It also pins where the
+  refusal comes from: the type of the last column, not a field count.
+  The table parser makes no promise about the number of fields past the
+  window, which is recorded as an open question in design.md.
+expect_error: 'field "flush_ms": cannot convert "0 99" to int'
+os: linux
+source: |
+  synthetic; 204 rows of padding to run past the 200-line window, then
+  one row of twenty-one fields.

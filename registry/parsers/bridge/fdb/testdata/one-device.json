@@ -1,0 +1,76 @@
+[
+  {
+    "address": "52:54:00:1a:00:13",
+    "attributes": [
+      "master",
+      "br-088d49b64243"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:14",
+    "attributes": [
+      "vlan",
+      "1",
+      "master",
+      "br-088d49b64243",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:14",
+    "attributes": [
+      "master",
+      "br-088d49b64243",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:02",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:06",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:01",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:15",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:07",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:04",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:09",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  }
+]

@@ -1,0 +1,21 @@
+[
+  {
+    "directive": "nameserver",
+    "values": [
+      "127.0.0.53"
+    ]
+  },
+  {
+    "directive": "options",
+    "values": [
+      "edns0",
+      "trust-ad"
+    ]
+  },
+  {
+    "directive": "search",
+    "values": [
+      "example.net"
+    ]
+  }
+]

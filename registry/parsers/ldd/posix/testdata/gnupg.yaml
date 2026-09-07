@@ -1,0 +1,4 @@
+description: A program with a longer list, where every entry but two resolves to a path.
+source: captured on Ubuntu 26.04 (glibc 2.43) with LC_ALL=C
+os: linux
+args: ["/usr/bin/gpg"]

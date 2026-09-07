@@ -1,0 +1,30 @@
+[
+  {
+    "tool": {
+      "name": "analytics-mcp",
+      "version": "0.7.0"
+    },
+    "executables": [
+      {
+        "name": "analytics-mcp"
+      },
+      {
+        "name": "google-analytics-mcp"
+      }
+    ]
+  },
+  {
+    "tool": {
+      "name": "moto",
+      "version": "5.2.2"
+    },
+    "executables": [
+      {
+        "name": "moto_proxy"
+      },
+      {
+        "name": "moto_server"
+      }
+    ]
+  }
+]

@@ -1,0 +1,144 @@
+{
+  "languages": [
+    {
+      "language": "YAML",
+      "files": "4,074",
+      "lines": "79,877",
+      "blanks": "1,072",
+      "comments": "11,627",
+      "code": "67,178",
+      "complexity": "0"
+    },
+    {
+      "language": "Plain Text",
+      "files": "2,681",
+      "lines": "30,270",
+      "blanks": "1,025",
+      "comments": "0",
+      "code": "29,245",
+      "complexity": "0"
+    },
+    {
+      "language": "JSON",
+      "files": "2,528",
+      "lines": "156,052",
+      "blanks": "0",
+      "comments": "0",
+      "code": "156,052",
+      "complexity": "0"
+    },
+    {
+      "language": "Go",
+      "files": "320",
+      "lines": "76,583",
+      "blanks": "4,561",
+      "comments": "7,064",
+      "code": "64,958",
+      "complexity": "20,230"
+    },
+    {
+      "language": "Markdown",
+      "files": "96",
+      "lines": "11,488",
+      "blanks": "2,155",
+      "comments": "0",
+      "code": "9,333",
+      "complexity": "0"
+    },
+    {
+      "language": "HTML",
+      "files": "72",
+      "lines": "1,856",
+      "blanks": "0",
+      "comments": "0",
+      "code": "1,856",
+      "complexity": "0"
+    },
+    {
+      "language": "CSS",
+      "files": "16",
+      "lines": "5,352",
+      "blanks": "672",
+      "comments": "288",
+      "code": "4,392",
+      "complexity": "0"
+    },
+    {
+      "language": "Shell",
+      "files": "16",
+      "lines": "400",
+      "blanks": "48",
+      "comments": "72",
+      "code": "280",
+      "complexity": "32"
+    },
+    {
+      "language": "License",
+      "files": "8",
+      "lines": "168",
+      "blanks": "32",
+      "comments": "0",
+      "code": "136",
+      "complexity": "0"
+    },
+    {
+      "language": "Makefile",
+      "files": "8",
+      "lines": "776",
+      "blanks": "176",
+      "comments": "0",
+      "code": "600",
+      "complexity": "40"
+    },
+    {
+      "language": "TOML",
+      "files": "8",
+      "lines": "568",
+      "blanks": "104",
+      "comments": "56",
+      "code": "408",
+      "complexity": "0"
+    },
+    {
+      "language": "XML",
+      "files": "8",
+      "lines": "120",
+      "blanks": "0",
+      "comments": "0",
+      "code": "120",
+      "complexity": "0"
+    }
+  ],
+  "total": {
+    "files": "9,835",
+    "lines": "363,510",
+    "blanks": "9,845",
+    "comments": "19,107",
+    "code": "334,558",
+    "complexity": "20,302"
+  },
+  "estimates": [
+    {
+      "name": "Cost to Develop",
+      "model": "organic",
+      "value": "$12,086,215"
+    },
+    {
+      "name": "Schedule Effort",
+      "model": "organic",
+      "value": "35.46 months"
+    },
+    {
+      "name": "People Required",
+      "model": "organic",
+      "value": "30.28"
+    }
+  ],
+  "processed": [
+    {
+      "bytes": 11027216,
+      "megabytes": "11.027",
+      "unit": "SI"
+    }
+  ]
+}

@@ -10,9 +10,17 @@
 #
 # The size is reported exactly as printed ("4096" or "4.0K") for the same
 # reason as in ls/long: a -h size is rounded and its base is not visible.
+#
+# The inode column is right-aligned to the widest number in the listing,
+# so most lines begin with spaces. Only a directory whose inodes are all
+# the same width starts every line at the first column.
 format: 1
 command: ls
 variant: long-inode
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gls
 description: ls -li long listing with the inode number
 metadata:
   tags: [linux, darwin, filesystem]
@@ -26,15 +34,15 @@ detect:
     none: ["-s", "--size"]
   signature:
     all:
-      - '^\d+\s+[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+[\d.]+[KMGTPBi]*\s+\w{3}\s+\d{1,2}\s+'
+      - '(?m)^[ \t]*\d+\s+[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+[\d.]+[KMGTPBi]*\s+\w{3}\s+\d{1,2}\s+'
 input:
   ignore:
     - '^total\s'
 parse:
   type: regex
   patterns:
-    - '^(?P<inode>\d+)\s+(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+?) -> (?P<link_to>.+)$'
-    - '^(?P<inode>\d+)\s+(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+)$'
+    - '^[ \t]*(?P<inode>\d+)\s+(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^[ \t]*(?P<inode>\d+)\s+(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+)$'
 fields:
   inode: {type: int, required: true}
   links: {type: int, required: true}

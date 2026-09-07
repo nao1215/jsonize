@@ -1,0 +1,78 @@
+[
+  {
+    "name": "Magic",
+    "value": "7f 45 4c 46 02 01 01 03 00 00 00 00 00 00 00 00"
+  },
+  {
+    "name": "Class",
+    "value": "ELF64"
+  },
+  {
+    "name": "Data",
+    "value": "2's complement, little endian"
+  },
+  {
+    "name": "Version",
+    "value": "1 (current)"
+  },
+  {
+    "name": "OS/ABI",
+    "value": "UNIX - GNU"
+  },
+  {
+    "name": "ABI Version",
+    "value": "0"
+  },
+  {
+    "name": "Type",
+    "value": "DYN (Shared object file)"
+  },
+  {
+    "name": "Machine",
+    "value": "Advanced Micro Devices X86-64"
+  },
+  {
+    "name": "Version",
+    "value": "0x1"
+  },
+  {
+    "name": "Entry point address",
+    "value": "0x2a820"
+  },
+  {
+    "name": "Start of program headers",
+    "value": "64 (bytes into file)"
+  },
+  {
+    "name": "Start of section headers",
+    "value": "2182416 (bytes into file)"
+  },
+  {
+    "name": "Flags",
+    "value": "0x0"
+  },
+  {
+    "name": "Size of this header",
+    "value": "64 (bytes)"
+  },
+  {
+    "name": "Size of program headers",
+    "value": "56 (bytes)"
+  },
+  {
+    "name": "Number of program headers",
+    "value": "15"
+  },
+  {
+    "name": "Size of section headers",
+    "value": "64 (bytes)"
+  },
+  {
+    "name": "Number of section headers",
+    "value": "64"
+  },
+  {
+    "name": "Section header string table index",
+    "value": "63"
+  }
+]

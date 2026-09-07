@@ -1,0 +1,59 @@
+# /etc/crontab and the files in /etc/cron.d: five time fields, the user
+# the job runs as, and the command. The variable assignments these files
+# may carry (SHELL, PATH, MAILTO) are dropped: they are not jobs, and a
+# table cannot hold two kinds of row without one of them being a
+# different object shape than the other.
+#
+# A user crontab has no user field and is otherwise the same text, so a
+# user crontab whose command is a bare word would read as a system entry
+# whose user is that word. What can be told apart is a command written as
+# a path or an option, which is not a user name, and the sixth field is
+# required to have the shape of one so that those are refused rather than
+# read wrongly. Only the system form is read here, and it is named rather
+# than detected.
+format: 1
+command: etc
+variant: crontab
+description: /etc/crontab and /etc/cron.d job entries
+metadata:
+  tags: [linux, scheduling]
+  compatible: [cron, vixie-cron]
+  references:
+    - https://man7.org/linux/man-pages/man5/crontab.5.html
+detect:
+  auto_detect: false
+  signature:
+    all:
+      # Five time fields, a user name, and a command. Written out rather
+      # than repeated with a count so that the day and month names cron
+      # accepts stay inside the fields that accept them.
+      - '^(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+\S'
+      # And nothing else in the file. One entry is not evidence: a script
+      # that installs a cron entry carries one, and so does a document
+      # that quotes one. A crontab is entries, variable assignments,
+      # comments and blank lines, all the way down.
+      - '\A(?:(?:[ \t]*#[^\n]*|[ \t]*[A-Za-z_][A-Za-z0-9_]*=[^\n]*|[ \t]*|(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*|@(?:reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*)\n)*(?:[ \t]*#[^\n]*|[ \t]*[A-Za-z_][A-Za-z0-9_]*=[^\n]*|[ \t]*|(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*|@(?:reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*)\z'
+input:
+  ignore:
+    - '^\s*#'
+    - '^\s*[A-Za-z_][A-Za-z0-9_]*='
+parse:
+  type: regex
+  patterns:
+    # The five time fields repeat the vocabulary the signature checked
+    # for, rather than taking any non-blank word. A signature only has to
+    # find one entry to vouch for the file, so a script that carries a
+    # single cron line used to have its other lines read as entries too,
+    # with `echo` as the minute and the rest of the sentence spread over
+    # the remaining columns.
+    - '^(?P<minute>[-0-9*,/]+)[ \t]+(?P<hour>[-0-9*,/]+)[ \t]+(?P<day_of_month>[-0-9*,/]+)[ \t]+(?P<month>[-0-9*,/a-zA-Z]+)[ \t]+(?P<day_of_week>[-0-9*,/a-zA-Z]+)[ \t]+(?P<user>[A-Za-z_][A-Za-z0-9_.-]*)[ \t]+(?P<command>.+?)[ \t]*$'
+    - '^@(?P<special>reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+(?P<user>[A-Za-z_][A-Za-z0-9_.-]*)[ \t]+(?P<command>.+?)[ \t]*$'
+fields:
+  user: {required: true}
+  command: {required: true}
+  minute: {when_missing: omit}
+  hour: {when_missing: omit}
+  day_of_month: {when_missing: omit}
+  month: {when_missing: omit}
+  day_of_week: {when_missing: omit}
+  special: {when_missing: omit}

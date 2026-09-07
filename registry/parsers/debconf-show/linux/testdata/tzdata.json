@@ -1,0 +1,62 @@
+[
+  {
+    "seen": false,
+    "name": "tzdata/Zones/Pacific",
+    "value": ""
+  },
+  {
+    "seen": false,
+    "name": "tzdata/Zones/Arctic",
+    "value": ""
+  },
+  {
+    "seen": true,
+    "name": "tzdata/Zones/Asia",
+    "value": "Tokyo"
+  },
+  {
+    "seen": false,
+    "name": "tzdata/Zones/Australia",
+    "value": ""
+  },
+  {
+    "seen": true,
+    "name": "tzdata/Areas",
+    "value": "Asia"
+  },
+  {
+    "seen": false,
+    "name": "tzdata/Zones/America",
+    "value": ""
+  },
+  {
+    "seen": true,
+    "name": "tzdata/Zones/Etc",
+    "value": "UTC"
+  },
+  {
+    "seen": false,
+    "name": "tzdata/Zones/Antarctica",
+    "value": ""
+  },
+  {
+    "seen": false,
+    "name": "tzdata/Zones/Indian",
+    "value": ""
+  },
+  {
+    "seen": false,
+    "name": "tzdata/Zones/Atlantic",
+    "value": ""
+  },
+  {
+    "seen": false,
+    "name": "tzdata/Zones/Africa",
+    "value": ""
+  },
+  {
+    "seen": false,
+    "name": "tzdata/Zones/Europe",
+    "value": ""
+  }
+]

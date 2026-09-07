@@ -1,0 +1,9 @@
+
+------ Semaphore Arrays --------
+key        semid      owner      perms      nsems     
+0xe93c17d9 6          ada        666        1         
+0xe41d64f4 7          ada        600        1         
+0x1f4f6d73 8          ada        600        1         
+0xe3749ff1 9          ada        600        1         
+0xa6c03dab 10         ada        600        1         
+

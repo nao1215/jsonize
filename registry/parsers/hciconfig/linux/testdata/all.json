@@ -1,0 +1,82 @@
+[
+  {
+    "device": {
+      "name": "hci0",
+      "type": "Primary",
+      "bus": "USB"
+    },
+    "address": {
+      "bd_address": "52:54:00:12:34:56",
+      "acl_mtu": 1021,
+      "acl_packets": 8,
+      "sco_mtu": 240,
+      "sco_packets": 8
+    },
+    "state": {
+      "flags": [
+        "UP",
+        "RUNNING"
+      ]
+    },
+    "rx": {
+      "bytes": 13972,
+      "acl": 0,
+      "sco": 0,
+      "events": 1908,
+      "errors": 0
+    },
+    "tx": {
+      "bytes": 470739,
+      "acl": 0,
+      "sco": 0,
+      "commands": 1908,
+      "errors": 0
+    },
+    "attributes": [
+      {
+        "name": "Features",
+        "value": "0xbf 0x3e 0x8d 0xfe 0xdb 0xff 0x7b 0x87"
+      },
+      {
+        "name": "Packet type",
+        "value": "DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3"
+      },
+      {
+        "name": "Link policy",
+        "value": "RSWITCH SNIFF"
+      },
+      {
+        "name": "Link mode",
+        "value": "PERIPHERAL ACCEPT"
+      },
+      {
+        "name": "Name",
+        "value": "bt-host"
+      },
+      {
+        "name": "Class",
+        "value": "0x7c0104"
+      },
+      {
+        "name": "Service Classes",
+        "value": "Rendering, Capturing, Object Transfer, Audio, Telephony"
+      },
+      {
+        "name": "Device Class",
+        "value": "Computer, Desktop workstation"
+      },
+      {
+        "name": "HCI Version",
+        "value": "5.4 (0xd)  Revision: 0x518"
+      },
+      {
+        "name": "LMP Version",
+        "value": "5.4 (0xd)  Subversion: 0x2606"
+      },
+      {
+        "name": "Manufacturer",
+        "value": "MediaTek, Inc. (70)"
+      }
+    ]
+  }
+]

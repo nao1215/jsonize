@@ -1,0 +1,202 @@
+[
+  {
+    "name": "bare",
+    "version": "1.0",
+    "rev": "5",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "brave",
+    "version": "1.94.119",
+    "rev": "676",
+    "tracking": "latest/stable",
+    "publisher": "brave",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "disabled"
+    ]
+  },
+  {
+    "name": "brave",
+    "version": "1.94.121",
+    "rev": "678",
+    "tracking": "latest/stable",
+    "publisher": "brave",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "core18",
+    "version": "20260204",
+    "rev": "2999",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "core18",
+    "version": "20260105",
+    "rev": "2979",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base",
+      "disabled"
+    ]
+  },
+  {
+    "name": "core20",
+    "version": "20260410",
+    "rev": "2866",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "core20",
+    "version": "20260211",
+    "rev": "2769",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base",
+      "disabled"
+    ]
+  },
+  {
+    "name": "core22",
+    "version": "20260225",
+    "rev": "2411",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base",
+      "disabled"
+    ]
+  },
+  {
+    "name": "core22",
+    "version": "20260410",
+    "rev": "2437",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "core24",
+    "version": "20260317",
+    "rev": "1587",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base",
+      "disabled"
+    ]
+  },
+  {
+    "name": "core24",
+    "version": "20260410",
+    "rev": "1643",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "desktop-security-center",
+    "version": "0+git.80cd2b4",
+    "rev": "150",
+    "tracking": "1/stable/…",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "disabled"
+    ]
+  },
+  {
+    "name": "desktop-security-center",
+    "version": "0+git.25daa58",
+    "rev": "151",
+    "tracking": "1/stable/…",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "drawio",
+    "version": "31.3.2",
+    "rev": "298",
+    "tracking": "latest/stable",
+    "publisher": "jgraph",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "drawio",
+    "version": "30.4.1",
+    "rev": "292",
+    "tracking": "latest/stable",
+    "publisher": "jgraph",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "disabled"
+    ]
+  },
+  {
+    "name": "firefox",
+    "version": "154.0.1-1",
+    "rev": "8803",
+    "tracking": "latest/stable/…",
+    "publisher": "mozilla",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "firefox",
+    "version": "153.0.4-1",
+    "rev": "8754",
+    "tracking": "latest/stable/…",
+    "publisher": "mozilla",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "disabled"
+    ]
+  }
+]

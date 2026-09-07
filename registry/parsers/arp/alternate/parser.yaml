@@ -1,0 +1,41 @@
+# The alternate (BSD) style listing `arp -a` prints, which is also what
+# BusyBox prints with no option at all: one line per cache entry, with no
+# header and no fixed columns. An entry the kernel has not resolved yet
+# prints "<incomplete>" where the hardware address and its type go, and
+# leaves both keys null.
+#
+# The tabular listing net-tools prints without -a is a different format
+# and is not covered here; it was not available to capture. Whatever
+# words a build prints between the hardware address and " on " (PERM,
+# PUB) are kept in order as flags.
+format: 1
+command: arp
+variant: alternate
+description: arp -a, the alternate BSD style ARP cache listing
+metadata:
+  tags: [linux, network, net-tools]
+  # Only BusyBox was available to capture from; net-tools prints the same
+  # line shape but was not verified here.
+  compatible: [BusyBox]
+  references:
+    - https://man7.org/linux/man-pages/man8/arp.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A\S+ \([0-9a-fA-F.:%]+\) at '
+      # At least one whole entry, which is what separates this from any
+      # other "name (something) at something" prose.
+      - '^\S+ \([0-9a-fA-F.:%]+\) at (?:[0-9a-fA-F]{2}(?::[0-9a-fA-F]{2})+ \[[a-z]+\]|<incomplete>)[ \t]+(?:[A-Z]+ )*on \S+[ \t]*$'
+parse:
+  type: regex
+  # An unresolved entry prints "<incomplete>" where the hardware address
+  # and its type go, so those two groups sit in an alternation and are
+  # null on such a row.
+  pattern: '^(?P<name>\S+) \((?P<address>[^)]+)\) at (?:(?P<hwaddress>[0-9a-fA-F:]+) \[(?P<hwtype>[^\]]*)\]|<incomplete>)[ \t]*(?P<flags>.*?)[ \t]*on[ \t]+(?P<device>\S+)[ \t]*$'
+fields:
+  # The name is "?" when the address does not resolve or -n was given.
+  name: {required: true}
+  address: {required: true}
+  flags: {type: array, split_regex: '[ \t]+'}
+  device: {required: true}

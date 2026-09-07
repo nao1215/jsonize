@@ -1,0 +1,4 @@
+description: A loopback with no alternative names and two interfaces that have them, one of them dormant.
+source: the first three blocks of `ip link` captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C; the hardware addresses and the names derived from them were replaced
+os: linux
+args: ["link"]

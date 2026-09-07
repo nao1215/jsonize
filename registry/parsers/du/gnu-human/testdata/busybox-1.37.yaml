@@ -1,0 +1,4 @@
+description: BusyBox rounds to one decimal where coreutils drops it (108.0K against 108K), which is why the size stays the string it was printed as.
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C
+os: linux
+args: [-h, /usr/share/doc/bash]

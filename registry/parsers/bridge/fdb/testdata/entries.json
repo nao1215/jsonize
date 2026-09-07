@@ -1,0 +1,106 @@
+[
+  {
+    "address": "52:54:00:1a:00:02",
+    "dev": "br-d647a5eb3b66",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:06",
+    "dev": "br-d647a5eb3b66",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:0c",
+    "dev": "br-d647a5eb3b66",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:0d",
+    "dev": "br-d647a5eb3b66",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:01",
+    "dev": "br-d647a5eb3b66",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:05",
+    "dev": "br-d647a5eb3b66",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:08",
+    "dev": "br-d647a5eb3b66",
+    "attributes": [
+      "self",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:12",
+    "dev": "br-d647a5eb3b66",
+    "attributes": [
+      "vlan",
+      "1",
+      "master",
+      "br-d647a5eb3b66",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:12",
+    "dev": "br-d647a5eb3b66",
+    "attributes": [
+      "master",
+      "br-d647a5eb3b66",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:13",
+    "dev": "veth0c4293d",
+    "attributes": [
+      "master",
+      "br-088d49b64243"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:14",
+    "dev": "veth0c4293d",
+    "attributes": [
+      "vlan",
+      "1",
+      "master",
+      "br-088d49b64243",
+      "permanent"
+    ]
+  },
+  {
+    "address": "52:54:00:1a:00:14",
+    "dev": "veth0c4293d",
+    "attributes": [
+      "master",
+      "br-088d49b64243",
+      "permanent"
+    ]
+  }
+]

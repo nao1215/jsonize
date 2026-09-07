@@ -1,0 +1,8 @@
+source: >-
+  captured with LC_ALL=C hciconfig -a on Ubuntu with BlueZ 5.85; the
+  Bluetooth address was replaced with 52:54:00:12:34:56 and the adapter
+  name, which is the host name, with bt-host
+description: >-
+  the same adapter with the eleven further lines -a adds when it is up
+os: linux
+args: ["-a"]

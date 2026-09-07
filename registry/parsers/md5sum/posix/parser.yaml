@@ -12,6 +12,10 @@
 format: 1
 command: md5sum
 variant: posix
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gmd5sum
 description: md5sum checksum lines
 metadata:
   tags: [linux, darwin, checksum]

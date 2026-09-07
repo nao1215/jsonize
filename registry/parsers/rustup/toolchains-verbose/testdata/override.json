@@ -1,0 +1,14 @@
+[
+  {
+    "name": "stable-x86_64-unknown-linux-gnu",
+    "active": false,
+    "default": true,
+    "path": "/home/ada/.rustup/toolchains/stable-x86_64-unknown-linux-gnu"
+  },
+  {
+    "name": "1.92-x86_64-unknown-linux-gnu",
+    "active": true,
+    "default": false,
+    "path": "/home/ada/.rustup/toolchains/1.92-x86_64-unknown-linux-gnu"
+  }
+]

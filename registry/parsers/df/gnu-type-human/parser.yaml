@@ -6,6 +6,10 @@
 format: 1
 command: df
 variant: gnu-type-human
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gdf
 description: df -Th on GNU coreutils, type column with rounded sizes
 metadata:
   tags: [linux, filesystem, coreutils]

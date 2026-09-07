@@ -1,0 +1,3 @@
+description: A file from /etc/cron.d holding two jobs and no comments or assignments.
+source: /etc/cron.d/e2scrub_all on Ubuntu 26.04 (e2fsprogs 1.47)
+os: linux

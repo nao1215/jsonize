@@ -1,0 +1,4 @@
+description: a module built into the kernel, which has no file on disk and repeats the alias key five times
+source: captured with LC_ALL=C from kmod 34 on Ubuntu as "modinfo ext4"
+os: linux
+args: [ext4]

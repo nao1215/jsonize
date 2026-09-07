@@ -13,32 +13,49 @@ input.
 
 | Command | Variants |
 |---------|----------|
-| `apt` | `list` |
+| `amixer` | `simple-controls` |
+| `apt` | `list`, `show` |
+| `arp` | `alternate` |
 | `blkid` | `linux` |
 | `bluetoothctl` | `show` |
-| `cargo` | `command-list` |
+| `bridge` | `fdb`, `link` |
+| `busctl` | `list` |
+| `cargo` | `command-list`, `install-list` |
+| `chage` | `linux` |
 | `cksum` | `posix` |
+| `date` | `posix`, `rfc-email` |
+| `debconf-show` | `linux` |
 | `df` | `bsd`, `bsd-human`, `busybox-human`, `gnu`, `gnu-human`, `gnu-inodes`, `gnu-inodes-human`, `gnu-type`, `gnu-type-human` |
 | `dig` | `bind` |
-| `dpkg` | `list` |
+| `docker` | `images-disk-usage`, `images-repo-tag`, `network-ls`, `ps`, `stats`, `volume-ls` |
+| `dpkg` | `list`, `status` |
 | `du` | `gnu-human`, `posix` |
+| `efibootmgr` | `linux` |
 | `env` | `null-separated`, `posix` |
-| `etc` | `group`, `hosts`, `os-release`, `passwd` |
-| `ethtool` | `driver-info` |
+| `etc` | `crontab`, `fstab`, `group`, `hosts`, `nsswitch`, `os-release`, `passwd`, `resolv-conf` |
+| `ethtool` | `driver-info`, `features`, `settings`, `statistics` |
+| `fc-list` | `posix` |
 | `fdisk` | `linux` |
 | `file` | `posix` |
 | `findmnt` | `df`, `linux`, `source-first` |
 | `free` | `gnu`, `gnu-human`, `gnu-wide` |
 | `getconf` | `glibc` |
-| `git` | `branch-verbose`, `config-list`, `log-oneline`, `remote-verbose`, `stash-list`, `status-porcelain` |
-| `go` | `env` |
+| `getfacl` | `posix` |
+| `git` | `branch-verbose`, `config-list`, `count-objects`, `diff-numstat`, `diff-stat`, `log`, `log-oneline`, `remote-verbose`, `shortlog-summary`, `stash-list`, `status-porcelain` |
+| `go` | `env`, `list-modules`, `mod-graph`, `version-modules` |
+| `gpg` | `colons` |
+| `hciconfig` | `linux` |
 | `host` | `bind` |
 | `hostnamectl` | `linux` |
 | `id` | `posix` |
-| `iostat` | `cpu`, `device`, `linux` |
-| `ip` | `brief-address`, `brief-link`, `neighbour`, `route`, `stats-link` |
+| `ifconfig` | `busybox` |
+| `iostat` | `cpu`, `device`, `extended`, `linux` |
+| `ip` | `address`, `brief-address`, `brief-link`, `link`, `multicast-address`, `neighbour`, `route`, `rule`, `stats-link` |
+| `ipcs` | `linux`, `message-queues`, `semaphores`, `shared-memory` |
 | `iw` | `link` |
 | `journalctl` | `boots`, `short`, `short-iso`, `short-precise` |
+| `last` | `busybox` |
+| `ldd` | `posix` |
 | `locale` | `posix` |
 | `localectl` | `linux` |
 | `loginctl` | `seats`, `sessions`, `users` |
@@ -47,46 +64,76 @@ input.
 | `lsattr` | `linux` |
 | `lsb_release` | `linux` |
 | `lsblk` | `bytes`, `filesystems`, `linux`, `pairs`, `topology` |
-| `lscpu` | `linux` |
+| `lsclocks` | `linux` |
+| `lscpu` | `caches`, `extended`, `linux` |
+| `lsfd` | `linux` |
 | `lsipc` | `linux` |
+| `lsirq` | `linux` |
 | `lslocks` | `linux` |
 | `lslogins` | `linux` |
 | `lsmem` | `linux` |
 | `lsmod` | `busybox`, `linux` |
 | `lsns` | `linux` |
-| `lsof` | `linux` |
+| `lsof` | `linux`, `tasks` |
 | `lspci` | `kernel`, `linux`, `machine`, `numeric`, `numeric-names`, `verbose-machine` |
 | `lsusb` | `linux` |
 | `md5sum` | `posix` |
 | `mise` | `ls` |
+| `modinfo` | `linux` |
 | `mount` | `bsd`, `linux` |
 | `mpstat` | `linux` |
-| `nmcli` | `connection`, `device` |
+| `mtr` | `report` |
+| `netstat` | `all-sockets`, `internet`, `routing`, `unix` |
+| `networkctl` | `list` |
+| `nmcli` | `connection`, `device`, `device-show`, `wifi` |
 | `npm` | `ls`, `outdated` |
+| `numactl` | `hardware` |
+| `pactl` | `info`, `short-devices` |
 | `parted` | `machine` |
-| `pidstat` | `linux` |
+| `pidstat` | `linux`, `memory` |
 | `ping` | `linux` |
 | `pip` | `columns` |
+| `pmap` | `linux` |
+| `proc` | `cpuinfo-x86`, `diskstats`, `loadavg`, `meminfo`, `uptime` |
 | `ps` | `bsd`, `busybox`, `posix`, `unix` |
+| `readelf` | `header` |
+| `resolvectl` | `status` |
 | `rfkill` | `linux`, `list` |
+| `route` | `linux` |
+| `rsync` | `itemize` |
+| `rustup` | `component-list`, `target-list`, `toolchains`, `toolchains-verbose` |
+| `sar` | `cpu`, `filesystem`, `io`, `memory`, `network-device`, `paging`, `queue`, `swap`, `task` |
+| `scc` | `default` |
 | `sensors` | `linux` |
 | `sfdisk` | `dump` |
+| `sha1sum` | `posix` |
+| `sha224sum` | `posix` |
 | `sha256sum` | `posix` |
-| `ss` | `linux` |
+| `sha384sum` | `posix` |
+| `sha512sum` | `posix` |
+| `snap` | `list` |
+| `ss` | `linux`, `single-protocol`, `summary` |
 | `stat` | `gnu`, `gnu-filesystem`, `gnu-terse` |
 | `swapon` | `legacy`, `linux` |
 | `sysctl` | `linux` |
-| `systemctl` | `show`, `sockets`, `timers`, `unit-files`, `units` |
-| `systemd-analyze` | `blame` |
+| `systemctl` | `show`, `sockets`, `status`, `timers`, `unit-files`, `units` |
+| `systemd-analyze` | `blame`, `time` |
+| `systemd-cgtop` | `batch` |
+| `systemd-id128` | `show` |
 | `tar` | `busybox`, `gnu` |
+| `tc` | `qdisc`, `qdisc-stats` |
 | `timedatectl` | `linux`, `timesync`, `timezones` |
 | `top` | `linux` |
 | `tracepath` | `linux` |
+| `udevadm` | `info` |
 | `ulimit` | `bash`, `dash` |
 | `uname` | `darwin`, `linux` |
 | `unzip` | `busybox`, `info-zip` |
+| `update-alternatives` | `query`, `selections` |
 | `upower` | `device`, `dump`, `enumerate` |
 | `uptime` | `bsd`, `linux` |
+| `uuidparse` | `linux` |
+| `uv` | `pip-show`, `tool-list` |
 | `vmstat` | `linux`, `linux-active`, `linux-disk`, `linux-disk-summary`, `linux-stats` |
 | `w` | `bsd`, `linux`, `linux-short` |
 | `wc` | `posix` |
@@ -98,6 +145,15 @@ A variant is one output format of a command. GNU `df`, `df -h`, macOS
 `df` and BusyBox `df -h` are four formats, so they are four definitions.
 When several implementations print the same format, one definition covers
 them and says so in its metadata.
+
+Some commands print what another command prints. Nothing in the text says
+which of them wrote it, so they share a definition rather than having one
+each, and the command they are listed under is the one the definition is
+named for. These are read as well:
+
+`b2sum` (as `sha512sum`), `gb2sum` (as `sha512sum`), `gcksum` (as `cksum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5sum`), `gsha1sum` (as `sha1sum`), `gsha224sum` (as `sha224sum`), `gsha256sum` (as `sha256sum`), `gsha384sum` (as `sha384sum`), `gsha512sum` (as `sha512sum`), `gstat` (as `stat`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `nerdctl` (as `docker`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `python` (as `pip`), `python3` (as `pip`), `systemd-resolve` (as `resolvectl`), `uv` (as `pip`), `vdir` (as `ls`).
+
+`jz run`, `--parser` and `jz list` all take the other name.
 
 ## How a definition is chosen
 

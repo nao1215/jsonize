@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (iproute2 6.19) with LC_ALL=C; `bridge link`
+  and `bridge link show` printed identical bytes
+description: >-
+  Seven veth ends, each a port of one of the container bridges. Every
+  line ends in a trailing space.
+os: linux
+args: ["link"]

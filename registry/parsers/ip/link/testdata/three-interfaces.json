@@ -1,0 +1,84 @@
+[
+  {
+    "interface": {
+      "index": 1,
+      "name": "lo",
+      "flags": [
+        "LOOPBACK",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 65536,
+      "qdisc": "noqueue",
+      "state": "UNKNOWN",
+      "mode": "DEFAULT",
+      "group": "default",
+      "qlen": 1000
+    },
+    "link": {
+      "type": "loopback",
+      "address": "00:00:00:00:00:00",
+      "broadcast": "00:00:00:00:00:00"
+    },
+    "altnames": []
+  },
+  {
+    "interface": {
+      "index": 2,
+      "name": "eno1",
+      "flags": [
+        "BROADCAST",
+        "MULTICAST",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 1500,
+      "qdisc": "fq_codel",
+      "state": "UP",
+      "mode": "DEFAULT",
+      "group": "default",
+      "qlen": 1000
+    },
+    "link": {
+      "type": "ether",
+      "address": "52:54:00:11:22:33",
+      "broadcast": "ff:ff:ff:ff:ff:ff"
+    },
+    "altnames": [
+      {
+        "name": "enp193s0"
+      },
+      {
+        "name": "enx525400112233"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 3,
+      "name": "wlp195s0",
+      "flags": [
+        "BROADCAST",
+        "MULTICAST",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noqueue",
+      "state": "UP",
+      "mode": "DORMANT",
+      "group": "default",
+      "qlen": 1000
+    },
+    "link": {
+      "type": "ether",
+      "address": "52:54:00:44:55:66",
+      "broadcast": "ff:ff:ff:ff:ff:ff"
+    },
+    "altnames": [
+      {
+        "name": "wlx525400445566"
+      }
+    ]
+  }
+]

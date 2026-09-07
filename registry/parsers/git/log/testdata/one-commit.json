@@ -1,0 +1,17 @@
+[
+  {
+    "commit": {
+      "hash": "8315fbfb88d3080788679234e10f74139b621f5d"
+    },
+    "headers": {
+      "Merge": "1a34814 1e3fd55",
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Mon Sep 7 09:06:35 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "merge the topic branch"
+      ]
+    }
+  }
+]

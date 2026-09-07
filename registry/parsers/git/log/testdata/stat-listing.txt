@@ -1,0 +1,17 @@
+commit 1a348149ff7078757f307580d7846bb788b17484
+Author: Ada Lovelace <ada@example.com>
+Date:   Mon Sep 7 09:06:35 2026 +0900
+
+    add a second note
+
+ notes/second.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+commit 1e3fd5522c278259421ff443378c717e528db3c5
+Author: Ada Lovelace <ada@example.com>
+Date:   Mon Sep 7 09:06:35 2026 +0900
+
+    add a note on the topic branch
+
+ notes/topic.txt | 1 +
+ 1 file changed, 1 insertion(+)

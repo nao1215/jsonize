@@ -1,0 +1,6 @@
+description: |
+  /proc/uptime is a line of numbers too, and it is the neighbour this
+  file is most easily confused with. It has two of them and no slash, so
+  it is not this format.
+expect_error: 'does not describe this input'
+os: linux

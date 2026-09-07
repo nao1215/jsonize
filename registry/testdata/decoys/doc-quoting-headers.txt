@@ -1,0 +1,11 @@
+The report opens with a line naming the machine it ran from:
+
+HOST: workstation                      Loss%   Snt   Last   Avg  Best  Wrst StDev
+
+and the rows that follow are indented by two spaces. The same document
+describes the settings report, which opens with
+
+Settings for eno1:
+
+and then lists a label and a value per line. Neither line is output on
+its own; both are quoted here so a reader can recognise them.

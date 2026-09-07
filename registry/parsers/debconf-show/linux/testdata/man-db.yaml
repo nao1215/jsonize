@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (debconf 1.5.x) with LC_ALL=C
+description: |
+  The smallest shape: two lines, no asterisk anywhere, so every question
+  is reported unseen and no value is empty.
+os: linux
+args: [man-db]

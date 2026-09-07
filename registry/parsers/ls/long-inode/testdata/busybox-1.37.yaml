@@ -1,0 +1,4 @@
+description: BusyBox right-aligns the inode number in a column of its own and pads the rest more widely than coreutils, and prints symbolic links with the same arrow, so this definition reads it unchanged.
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C
+os: linux
+args: [-li, /]

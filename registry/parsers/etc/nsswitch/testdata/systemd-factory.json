@@ -1,0 +1,82 @@
+[
+  {
+    "database": "passwd",
+    "sources": [
+      "files",
+      "systemd"
+    ]
+  },
+  {
+    "database": "group",
+    "sources": [
+      "files",
+      "[SUCCESS=merge]",
+      "systemd"
+    ]
+  },
+  {
+    "database": "shadow",
+    "sources": [
+      "files",
+      "systemd"
+    ]
+  },
+  {
+    "database": "gshadow",
+    "sources": [
+      "files",
+      "systemd"
+    ]
+  },
+  {
+    "database": "hosts",
+    "sources": [
+      "mymachines",
+      "resolve",
+      "[!UNAVAIL=return]",
+      "files",
+      "myhostname",
+      "dns"
+    ]
+  },
+  {
+    "database": "networks",
+    "sources": [
+      "files"
+    ]
+  },
+  {
+    "database": "protocols",
+    "sources": [
+      "db",
+      "files"
+    ]
+  },
+  {
+    "database": "services",
+    "sources": [
+      "db",
+      "files"
+    ]
+  },
+  {
+    "database": "ethers",
+    "sources": [
+      "db",
+      "files"
+    ]
+  },
+  {
+    "database": "rpc",
+    "sources": [
+      "db",
+      "files"
+    ]
+  },
+  {
+    "database": "netgroup",
+    "sources": [
+      "nis"
+    ]
+  }
+]

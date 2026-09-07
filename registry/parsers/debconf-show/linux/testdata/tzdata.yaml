@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (debconf 1.5.x) with LC_ALL=C
+description: |
+  Mixed markers: the two questions the installer asked carry an asterisk,
+  the unasked zone questions carry a space and print nothing after the
+  colon.
+os: linux
+args: [tzdata]

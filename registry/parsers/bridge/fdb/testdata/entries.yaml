@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 (iproute2 6.19) with LC_ALL=C, lines 46 to 57
+  of 134; every link-layer address replaced with a 52:54:00 one
+description: >-
+  The four shapes the command prints: a device entry with `self`, an
+  entry with a VLAN id and a master, the same entry without the VLAN id,
+  and a learned entry that has no state word and ends in a space.
+os: linux
+args: ["fdb"]

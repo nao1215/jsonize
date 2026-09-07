@@ -1,0 +1,4 @@
+description: Two packages in one call, which is what the blank line between blocks separates.
+source: captured on Ubuntu 26.04 (apt 3.1) with LC_ALL=C from `apt show tzdata coreutils`
+os: linux
+args: ["show", "tzdata", "coreutils"]

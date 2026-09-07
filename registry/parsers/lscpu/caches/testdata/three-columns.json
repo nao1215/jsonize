@@ -1,0 +1,22 @@
+[
+  {
+    "name": "L1d",
+    "one_size": "48K",
+    "type": "Data"
+  },
+  {
+    "name": "L1i",
+    "one_size": "32K",
+    "type": "Instruction"
+  },
+  {
+    "name": "L2",
+    "one_size": "1M",
+    "type": "Unified"
+  },
+  {
+    "name": "L3",
+    "one_size": "32M",
+    "type": "Unified"
+  }
+]

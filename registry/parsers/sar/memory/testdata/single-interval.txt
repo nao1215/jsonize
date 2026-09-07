@@ -1,0 +1,5 @@
+Linux 7.0.0-30-generic (workstation) 	09/07/26 	_x86_64_	(32 CPU)
+
+08:55:16    kbmemfree   kbavail kbmemused  %memused kbbuffers  kbcached  kbcommit   %commit  kbactive   kbinact   kbdirty
+08:55:17     11357788  28846284  14224404     22.08   2020416  31420056  79088984    108.64  23912224  21502884     20756
+Average:     11357788  28846284  14224404     22.08   2020416  31420056  79088984    108.64  23912224  21502884     20756

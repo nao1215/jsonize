@@ -1,0 +1,338 @@
+[
+  {
+    "name": "bare",
+    "version": "1.0",
+    "rev": "5",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "brave",
+    "version": "1.94.121",
+    "rev": "678",
+    "tracking": "latest/stable",
+    "publisher": "brave",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "core18",
+    "version": "20260204",
+    "rev": "2999",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "core20",
+    "version": "20260410",
+    "rev": "2866",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "core22",
+    "version": "20260410",
+    "rev": "2437",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "core24",
+    "version": "20260410",
+    "rev": "1643",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "desktop-security-center",
+    "version": "0+git.25daa58",
+    "rev": "151",
+    "tracking": "1/stable/…",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "drawio",
+    "version": "31.3.2",
+    "rev": "298",
+    "tracking": "latest/stable",
+    "publisher": "jgraph",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "firefox",
+    "version": "154.0.1-1",
+    "rev": "8803",
+    "tracking": "latest/stable/…",
+    "publisher": "mozilla",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "firmware-updater",
+    "version": "0+git.5645b80",
+    "rev": "226",
+    "tracking": "1/stable/…",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "ghostty",
+    "version": "v1.3.1",
+    "rev": "820",
+    "tracking": "latest/stable",
+    "publisher": "ken-vandine",
+    "verified": false,
+    "starred": true,
+    "notes": [
+      "classic"
+    ]
+  },
+  {
+    "name": "gnome-3-28-1804",
+    "version": "3.28.0-19-g98f9e67.98f9e67",
+    "rev": "198",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "gnome-3-38-2004",
+    "version": "0+git.efb213a",
+    "rev": "143",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "gnome-42-2204",
+    "version": "0+git.4982e7b-sdk0+git.69b626a",
+    "rev": "263",
+    "tracking": "latest/stable/…",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "gnome-46-2404",
+    "version": "0+git.b31ceab-sdk0+git.f0723a0",
+    "rev": "164",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "gradia",
+    "version": "1.12.0",
+    "rev": "8",
+    "tracking": "latest/stable",
+    "publisher": "alexandervanhee",
+    "verified": false,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "gtk-common-themes",
+    "version": "0.1-81-g442e511",
+    "rev": "1535",
+    "tracking": "latest/stable/…",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "icon-theme-breeze",
+    "version": "1.3",
+    "rev": "5",
+    "tracking": "latest/stable",
+    "publisher": "kde",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "kooha",
+    "version": "2.3.0",
+    "rev": "9",
+    "tracking": "latest/stable",
+    "publisher": "seadve",
+    "verified": false,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "mesa-2404",
+    "version": "25.2.8-snap288",
+    "rev": "1839",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "prompting-client",
+    "version": "0+git.33cd821",
+    "rev": "222",
+    "tracking": "1/stable/…",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "scc",
+    "version": "v3.7.0",
+    "rev": "21",
+    "tracking": "latest/stable",
+    "publisher": "felicianotech",
+    "verified": false,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "snap-store",
+    "version": "0+git.8334e2e4",
+    "rev": "1390",
+    "tracking": "2/stable/…",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "snapd",
+    "version": "2.76.3",
+    "rev": "27738",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "snapd"
+    ]
+  },
+  {
+    "name": "snapd-desktop-integration",
+    "version": "0.9",
+    "rev": "391",
+    "tracking": "latest/stable/…",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "spotify",
+    "version": "1.2.95.453.g0eeebbed",
+    "rev": "99",
+    "tracking": "latest/stable",
+    "publisher": "spotify",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "telegram-desktop",
+    "version": "7.1.3",
+    "rev": "7119",
+    "tracking": "latest/stable",
+    "publisher": "telegram-desktop",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "terraform",
+    "version": "1.16.1",
+    "rev": "928",
+    "tracking": "latest/stable",
+    "publisher": "snapcrafters",
+    "verified": false,
+    "starred": true,
+    "notes": [
+      "classic"
+    ]
+  },
+  {
+    "name": "thunderbird",
+    "version": "155.0-1",
+    "rev": "1240",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "upscayl",
+    "version": "2.15.0",
+    "rev": "39",
+    "tracking": "latest/stable",
+    "publisher": "nayamamarshe",
+    "verified": false,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "yq",
+    "version": "v4.49.2",
+    "rev": "2759",
+    "tracking": "latest/stable",
+    "publisher": "mikefarah",
+    "verified": false,
+    "starred": false,
+    "notes": null
+  },
+  {
+    "name": "zoom-client",
+    "version": "7.1.5.4332",
+    "rev": "279",
+    "tracking": "latest/stable",
+    "publisher": "ogra",
+    "verified": false,
+    "starred": false,
+    "notes": null
+  }
+]

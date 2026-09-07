@@ -1,0 +1,3 @@
+description: A second capture of the same machine, taken when less memory was free.
+source: captured on Ubuntu 26.04 (numactl 2.0.19) with LC_ALL=C
+os: linux

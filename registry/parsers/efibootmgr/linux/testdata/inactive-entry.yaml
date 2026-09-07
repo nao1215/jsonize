@@ -1,0 +1,9 @@
+source: |
+  derived from efibootmgr-18 by clearing the active marker of Boot0003;
+  efibootmgr prints a space where the asterisk is when an entry does not
+  have LOAD_OPTION_ACTIVE set, and changing that on this machine needs
+  root
+description: |
+  The marker column with both spellings in one output, which is what makes
+  `active` false on one entry and true on the rest.
+os: linux

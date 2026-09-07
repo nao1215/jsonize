@@ -1,0 +1,11 @@
+[
+  {
+    "checksum": "3fd80b01b3a64198aabe5adb78dbe84e884f93ace67a83d902aa981e",
+    "file": "two words.txt"
+  },
+  {
+    "escaped": true,
+    "checksum": "6fc30f87ae1b9ea442b3bef2c5e68ae655a01f2e8eb7b30a9a9e9e5d",
+    "file": "back\\\\slash.txt"
+  }
+]

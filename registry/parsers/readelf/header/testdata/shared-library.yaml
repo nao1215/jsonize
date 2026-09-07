@@ -1,0 +1,4 @@
+description: A shared library, whose type and entry point differ from an executable's.
+source: captured on Ubuntu 26.04 (GNU binutils 2.46) with LC_ALL=C
+os: linux
+args: ["-h", "/usr/lib/x86_64-linux-gnu/libc.so.6"]

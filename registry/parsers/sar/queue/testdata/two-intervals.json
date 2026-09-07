@@ -1,0 +1,29 @@
+[
+  {
+    "time": "11:53:44",
+    "runq_sz": 2,
+    "plist_sz": 3874,
+    "ldavg_1": 4.41,
+    "ldavg_5": 4.02,
+    "ldavg_15": 3.87,
+    "blocked": 0
+  },
+  {
+    "time": "11:53:45",
+    "runq_sz": 3,
+    "plist_sz": 3880,
+    "ldavg_1": 4.41,
+    "ldavg_5": 4.02,
+    "ldavg_15": 3.87,
+    "blocked": 0
+  },
+  {
+    "time": "Average",
+    "runq_sz": 2,
+    "plist_sz": 3877,
+    "ldavg_1": 4.41,
+    "ldavg_5": 4.02,
+    "ldavg_15": 3.87,
+    "blocked": 0
+  }
+]

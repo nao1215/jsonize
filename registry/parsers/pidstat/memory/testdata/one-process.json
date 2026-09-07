@@ -1,0 +1,22 @@
+{
+  "report": {
+    "kernel": "7.0.0-30-generic",
+    "hostname": "workstation",
+    "date": "09/07/26",
+    "architecture": "x86_64",
+    "cpu_count": 32
+  },
+  "tasks": [
+    {
+      "time": "10:55:22",
+      "uid": 0,
+      "pid": 1,
+      "minflt_s": 5,
+      "majflt_s": 0.01,
+      "vsz": 28252,
+      "rss": 12780,
+      "mem_percent": 0.02,
+      "command": "systemd"
+    }
+  ]
+}

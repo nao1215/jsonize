@@ -1,0 +1,6 @@
+source: >-
+  captured on Ubuntu 26.04 (iproute2 6.19) with LC_ALL=C, the first of
+  seven lines of `bridge link`
+description: A single port, which is what `bridge link show dev <port>` prints.
+os: linux
+args: ["link", "show"]

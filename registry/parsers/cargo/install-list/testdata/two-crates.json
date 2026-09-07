@@ -1,0 +1,24 @@
+[
+  {
+    "crate": {
+      "name": "cargo-audit",
+      "version": "0.22.1"
+    },
+    "binaries": [
+      {
+        "name": "cargo-audit"
+      }
+    ]
+  },
+  {
+    "crate": {
+      "name": "cargo-binstall",
+      "version": "1.17.7"
+    },
+    "binaries": [
+      {
+        "name": "cargo-binstall"
+      }
+    ]
+  }
+]

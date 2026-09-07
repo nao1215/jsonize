@@ -1,0 +1,41 @@
+* boot-efi.mount - /boot/efi
+     Loaded: loaded (/etc/fstab; generated)
+     Active: active (mounted) since Mon 2026-08-24 09:19:47 JST; 2 weeks 0 days ago
+ Invocation: 7c9e40b21d8f4a6b83e5c1a09f27d6b4
+      Where: /boot/efi
+       What: /dev/nvme1n1p1
+       Docs: man:fstab(5)
+             man:systemd-fstab-generator(8)
+      Tasks: 0 (limit: 75433)
+     Memory: 8K (peak: 1.7M)
+        CPU: 4ms
+     CGroup: /system.slice/boot-efi.mount
+
+Aug 24 09:19:46 host1 systemd[1]: Mounting boot-efi.mount - /boot/efi...
+Aug 24 09:19:47 host1 systemd[1]: Mounted boot-efi.mount - /boot/efi.
+* cups.socket - CUPS Scheduler
+     Loaded: loaded (/usr/lib/systemd/system/cups.socket; enabled; preset: enabled)
+     Active: active (running) since Mon 2026-09-07 00:05:48 JST; 9h ago
+ Invocation: 0b5d83f6c2a14e79b18f3d0c65a92e47
+   Triggers: * cups.service
+     Listen: /run/cups/cups.sock (Stream)
+
+Sep 07 00:05:48 host1 systemd[1]: Listening on cups.socket - CUPS Scheduler.
+* system-cups.slice - CUPS Slice
+     Loaded: loaded (/usr/lib/systemd/system/system-cups.slice; static)
+     Active: active since Mon 2026-08-24 09:19:45 JST; 2 weeks 0 days ago
+ Invocation: e41a7d92b0c34f58a7d61e9c308b5f26
+       Docs: man:cups(1)
+ Act. Units: 2
+      Tasks: 5
+     Memory: 10.3M (peak: 19.3M, swap: 4K, swap peak: 2.1M)
+        CPU: 1.681s
+     CGroup: /system.slice/system-cups.slice
+             |-cups-browsed.service
+             | `-3216324 /usr/sbin/cups-browsed
+             `-cups.service
+               `-3216300 /usr/sbin/cupsd -l
+
+Sep 01 06:52:56 host1 cups-browsed[165681]: WARNING: Unhandled message: interface=org.freedesktop.DBus, path=/org/freedesktop/DBus, member=ActivatableServicesChanged
+Sep 01 06:52:56 host1 cups-browsed[165681]: WARNING: Unhandled message: interface=org.freedesktop.DBus, path=/org/freedesktop/DBus, member=ActivatableServicesChanged
+Sep 01 06:52:58 host1 cups-browsed[165681]: WARNING: Unhandled message: interface=org.freedesktop.DBus, path=/org/freedesktop/DBus, member=ActivatableServicesChanged

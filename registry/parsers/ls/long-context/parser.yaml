@@ -10,6 +10,10 @@
 format: 1
 command: ls
 variant: long-context
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gls
 description: ls -lZ long listing with the security context
 metadata:
   tags: [linux, filesystem, selinux]

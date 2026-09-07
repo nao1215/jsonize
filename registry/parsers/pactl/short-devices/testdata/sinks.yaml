@@ -1,0 +1,4 @@
+description: The output devices of a machine with an onboard card, two USB cards and an HDMI output.
+source: captured on Ubuntu 26.04 (PipeWire 1.6.2) with LC_ALL=C
+os: linux
+args: ["list", "short", "sinks"]

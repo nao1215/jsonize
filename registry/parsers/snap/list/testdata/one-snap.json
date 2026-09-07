@@ -1,0 +1,14 @@
+[
+  {
+    "name": "snapd",
+    "version": "2.76.3",
+    "rev": "27738",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "snapd"
+    ]
+  }
+]

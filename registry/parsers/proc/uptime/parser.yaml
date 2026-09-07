@@ -1,0 +1,37 @@
+# /proc/uptime is one line of two numbers: how long the system has been
+# up, and how long its processors have spent idle, both in seconds with
+# two decimals.
+#
+# Two decimal numbers on a line is the shape of far too many things to
+# claim on sight, so jz reads this only when the parser is named
+# (`jz --parser proc --variant uptime < /proc/uptime`). The signature is
+# still checked there.
+#
+# The idle figure is summed over every processor, so on a machine with
+# sixteen of them it runs about sixteen times faster than the uptime.
+# Dividing it by the processor count would give the wall clock time the
+# machine was idle, and that count is not in this file, so the number is
+# reported as the file states it.
+format: 1
+command: proc
+variant: uptime
+description: /proc/uptime system and idle seconds
+metadata:
+  tags: [linux, proc, time]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_uptime.5.html
+detect:
+  os: [linux]
+  auto_detect: false
+  signature:
+    all:
+      # The whole file is two decimal numbers and nothing else.
+      - '\A\d+\.\d\d[ \t]+\d+\.\d\d\s*\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\A(?P<uptime_seconds>\d+\.\d+)[ \t]+(?P<idle_seconds>\d+\.\d+)\s*\z'
+fields:
+  uptime_seconds: {type: float, required: true}
+  idle_seconds: {type: float, required: true}
