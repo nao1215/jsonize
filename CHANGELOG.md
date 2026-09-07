@@ -113,9 +113,6 @@ project follows [Semantic Versioning](https://semver.org/).
   identifiers (`CPU(s)`, `Thread(s) per core`).
 - `expect_error` in a fixture covers a definition refusing text at
   detection, not only at parse time.
-
-### Changed
-
 - `internal/registry`, `internal/definition`, `internal/selector`,
   `internal/engine`, `internal/convert` and `internal/jsonutil` moved to
   `pkg/`, so another program can load a registry, select a definition and
