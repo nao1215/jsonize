@@ -77,6 +77,11 @@ detect:
       # and its styles, which is a path, a colon and a description too.
       # The style field is what only that listing has.
       - '^[^:\n]+: [^:\n]*:style='
+      # A description is prose: file(1) says what is in the file, never
+      # only how much of it there is. A line whose whole right hand side
+      # is a number is therefore a counter rather than a description,
+      # which is what `git count-objects -v` prints for every line.
+      - '^[^:\n]+:[ \t]+\d+[ \t]*$'
       # `ethtool -i` opens with "driver: <name>" and "version: <name>",
       # which are properties of an interface rather than a path and the
       # description of what is stored there.

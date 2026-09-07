@@ -44,12 +44,12 @@ coverage: test ## Produce cover.html from the coverage profile
 	go tool cover -func=cover.out | tail -1
 
 .PHONY: registry-test
-registry-test: ## Validate parser definitions and run their golden tests (DIR=path for a local registry)
-	go test ./registry $(if $(DIR),-registry-dir $(DIR),) -count=1
+registry-test: ## Validate the official definitions, run their golden cases and check they read nothing else
+	go test ./registry -count=1
 
 .PHONY: registry-update-golden
 registry-update-golden: ## Rewrite the expected JSON of every fixture, then review `git diff`
-	go test ./registry -update $(if $(DIR),-registry-dir $(DIR),) -count=1
+	go test ./registry -update -count=1
 	@echo "golden files rewritten; review them with: git diff"
 
 .PHONY: fuzz

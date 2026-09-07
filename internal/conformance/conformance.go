@@ -1,11 +1,15 @@
-// Package conformance runs the golden cases stored next to parser
-// definitions: every <case>.txt fixture is parsed with its definition and
-// compared with <case>.json. When the case metadata carries os/args, the
-// fixture is also fed through variant selection to prove that it picks its
-// own definition unambiguously.
+// Package conformance checks a registry against itself.
 //
-// The same checks back `go test` for the embedded registry and `jz
-// validate` for user registries, so parser authors need no Go toolchain.
+// Two things are checked. Every <case>.txt fixture stored next to a
+// definition is parsed with that definition and compared with
+// <case>.json, and is fed through selection to prove that it picks its
+// own definition unambiguously. Then every definition is named
+// explicitly on every other definition's fixtures and must refuse them,
+// which is what keeps a signature from quietly widening until it reads a
+// neighbouring format.
+//
+// The same checks back `go test ./registry` for the embedded registry and
+// `jz test` for any other one, so parser authors need no Go toolchain.
 package conformance
 
 import (
@@ -30,10 +34,16 @@ type Result struct {
 	Case       string
 	// Path is the fixture path inside the source FS.
 	Path string
+	// Source names the registry the checked definition came from.
+	Source string
 	// Actual is the JSON produced (pretty printed) when parsing succeeded.
 	Actual []byte
 	// Err is nil when the case passed.
 	Err error
+
+	// parsed records, for an exclusivity failure, whether the definition
+	// went on to produce JSON or only got past the signature.
+	parsed bool
 }
 
 // Options configures a run.
@@ -43,6 +53,14 @@ type Options struct {
 	Update bool
 	// Engine options for parsing.
 	Engine engine.Options
+	// Parallel bounds the goroutines the exclusivity check uses
+	// (0 = one per CPU).
+	Parallel int
+	// SkipExclusivity leaves out the definition/fixture cross product,
+	// which is the expensive half of a run.
+	SkipExclusivity bool
+	// Decoys are texts no definition may read.
+	Decoys []Decoy
 }
 
 // Run checks every case of every entry that belongs to the given source
@@ -55,11 +73,11 @@ func Run(reg *registry.Registry, fsys fs.FS, sourceName string, opts Options) []
 		}
 		cases, err := registry.Cases(fsys, e)
 		if err != nil {
-			results = append(results, Result{Definition: e.Def.ID(), Err: err})
+			results = append(results, Result{Definition: e.Def.ID(), Source: e.Source, Err: err})
 			continue
 		}
 		if len(cases) == 0 {
-			results = append(results, Result{Definition: e.Def.ID(), Err: fmt.Errorf("no testdata cases; add at least one <case>.txt and <case>.json under %s", e.TestdataPath())})
+			results = append(results, Result{Definition: e.Def.ID(), Source: e.Source, Err: fmt.Errorf("no testdata cases; add at least one <case>.txt and <case>.json under %s", e.TestdataPath())})
 			continue
 		}
 		for _, c := range cases {
@@ -69,8 +87,37 @@ func Run(reg *registry.Registry, fsys fs.FS, sourceName string, opts Options) []
 	return results
 }
 
+// Check is the whole contract of a registry in one call: the definitions
+// of the target sources are validated by running their golden cases, and
+// the cross product of definitions and fixtures proves that a definition
+// reads its own format and nothing else.
+//
+// sources must list every registry that was loaded, because a third
+// party's definition has to be checked against the official fixtures as
+// well as its own. targets names the sources under test; a pair whose
+// definition and fixture both come from elsewhere is skipped.
+func Check(reg *registry.Registry, sources []registry.Source, targets []string, opts Options) []Result {
+	underTest := map[string]bool{}
+	for _, t := range targets {
+		underTest[t] = true
+	}
+	var results []Result
+	for _, s := range sources {
+		if underTest[s.Name] && s.FS != nil {
+			results = append(results, Run(reg, s.FS, s.Name, opts)...)
+		}
+	}
+	if opts.SkipExclusivity {
+		return results
+	}
+	fixtures, problems := Fixtures(reg, sources)
+	results = append(results, problems...)
+	results = append(results, Exclusivity(reg, fixtures, func(src string) bool { return underTest[src] }, opts)...)
+	return append(results, Decoys(reg, opts.Decoys, opts)...)
+}
+
 func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Options) Result {
-	res := Result{Definition: e.Def.ID(), Case: c.Name, Path: path.Join(c.Dir, c.Name+".txt")}
+	res := Result{Definition: e.Def.ID(), Case: c.Name, Path: path.Join(c.Dir, c.Name+".txt"), Source: e.Source}
 	// Selection is part of the contract, not just parsing: a fixture has
 	// to identify its own definition the way a user's input would.
 	if c.Meta.ExpectError == "" {
