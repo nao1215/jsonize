@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"flag"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -999,14 +1000,23 @@ func TestRunUsesAliases(t *testing.T) {
 	}
 	h := newHarness(t)
 	for _, args := range [][]string{{"printenv"}, {"getent", "passwd"}, {"getent", "group"}} {
+		// getent is glibc's, so it is absent on macOS and on a musl
+		// system. What the alias does is the same wherever the command
+		// exists; where it does not there is nothing to run.
+		if _, err := exec.LookPath(args[0]); err != nil {
+			t.Logf("%s is not installed here", args[0])
+			continue
+		}
 		if code := h.run(append([]string{"run"}, args...)...); code != ExitOK {
 			t.Errorf("run %v: %d %s", args, code, h.stderr.String())
 		}
 	}
 	// The arguments an alias states replace the ones the command needs:
 	// getent takes the database name where etc takes nothing.
-	if code := h.run("run", "getent", "services"); code == ExitOK {
-		t.Errorf("getent services has no definition and must not be read: %s", h.stdout.String())
+	if _, err := exec.LookPath("getent"); err == nil {
+		if code := h.run("run", "getent", "services"); code == ExitOK {
+			t.Errorf("getent services has no definition and must not be read: %s", h.stdout.String())
+		}
 	}
 	// Naming the parser by an alias reaches the same definitions.
 	if code := h.pipe("root:x:0:\n", "--parser", "getent", "--variant", "group"); code != ExitOK {
