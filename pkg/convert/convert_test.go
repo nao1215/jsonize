@@ -419,10 +419,12 @@ func TestTimeAssuming(t *testing.T) {
 		t.Errorf("utc: %q %v", got, err)
 	}
 	// An abbreviation with no offset given is left alone even when this
-	// machine happens to be in a zone of that name.
+	// machine happens to be in a zone of that name. Only a machine whose
+	// zone has an abbreviation can be asked: Windows names its zones in
+	// words ("Coordinated Universal Time"), and a layout looking for MST
+	// has nothing to say about those.
 	local, _ := Location("local")
-	name, _ := time.Now().In(local).Zone()
-	if name != "UTC" && name != "" {
+	if name, _ := time.Now().In(local).Zone(); isZoneAbbreviation(name) && name != "UTC" && name != "GMT" {
 		in := "Mon Sep  7 10:02:02 " + name + " 2026"
 		if got, ok, _ := TimeAssuming(in, zoned, local, Assumptions{}); ok || got != in {
 			t.Errorf("local abbreviation %q was resolved: %q", name, got)
@@ -432,6 +434,20 @@ func TestTimeAssuming(t *testing.T) {
 	if got, _, err := TimeAssuming("2024-05-06 07:08:09", "2006-01-02 15:04:05", nil, Assumptions{Year: 1999}); err != nil || got != "2024-05-06T07:08:09Z" {
 		t.Errorf("year in the layout: %q %v", got, err)
 	}
+}
+
+// isZoneAbbreviation reports the short all-letters form a layout with MST
+// in it can read, as opposed to a zone named in words or as an offset.
+func isZoneAbbreviation(name string) bool {
+	if len(name) < 2 || len(name) > 5 {
+		return false
+	}
+	for _, r := range name {
+		if r < 'A' || r > 'Z' {
+			return false
+		}
+	}
+	return true
 }
 
 func TestParseZoneOffset(t *testing.T) {

@@ -3,6 +3,7 @@ package cli
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -78,19 +79,25 @@ func TestExplainOnUnidentifiedInput(t *testing.T) {
 	}
 }
 
-// jz run knows what it started, so it says so as well.
+// jz run knows what it started, so it says so as well. The definition is
+// one of the test registry's, which claims no operating system: jz run
+// filters on the system it is running on, so a Linux-only definition
+// would make this a test of that filter.
 func TestExplainOnRun(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
 	h := newHarness(t)
 	shellRegistry(t, h)
-	code := h.run("run", "--explain", "--parser", "df", "--", "sh", "-c", `printf '%s' "$0"`, gnuDF)
+	code := h.run("run", "--explain", "--", "sh", "-c", "echo n=1")
 	if code != ExitOK {
 		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
 	}
 	got := h.stderr.String()
-	if !strings.Contains(got, "jz: df/gnu from embedded") {
+	if !strings.Contains(got, "jz: sh/default from ") {
 		t.Errorf("no definition line:\n%s", got)
 	}
-	if !strings.Contains(got, "jz: command: sh -c ") || !strings.Contains(got, "(exit 0)") {
+	if !strings.Contains(got, "jz: command: sh -c echo n=1 (exit 0)") {
 		t.Errorf("no command line:\n%s", got)
 	}
 }
