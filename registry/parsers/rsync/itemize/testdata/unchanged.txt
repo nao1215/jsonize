@@ -1,0 +1,7 @@
+.d          ./
+.f          arrow -> not a link.txt
+.S          fifo
+.f          hard-a
+hf          hard-b
+.f          keep.txt
+.f          name with spaces.txt

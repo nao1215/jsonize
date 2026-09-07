@@ -1,0 +1,27 @@
+[
+  {
+    "change": ">f+++++++++",
+    "path": "arrow -> not a link.txt"
+  },
+  {
+    "change": "cS+++++++++",
+    "path": "fifo"
+  },
+  {
+    "change": ">f+++++++++",
+    "path": "hard-b"
+  },
+  {
+    "change": "hf+++++++++",
+    "path": "hard-a",
+    "link_to": "hard-b"
+  },
+  {
+    "change": ".f...p.....",
+    "path": "keep.txt"
+  },
+  {
+    "change": ">f+++++++++",
+    "path": "name with spaces.txt"
+  }
+]
