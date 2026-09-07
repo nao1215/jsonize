@@ -25,12 +25,20 @@ project follows [Semantic Versioning](https://semver.org/).
   produce is an error listing the keys it has, and the two options cannot
   be combined.
 - `parse: type: records` for a report whose blocks repeat: a line
-  matching `start` opens a record and the `parts` are applied to each.
-- Official definitions for 80 commands in 156 output formats, covering
-  coreutils and procps, the util-linux listings, the systemd tools, the
-  network commands, sysstat, the disk layout tools, the hardware and
-  display tools, the archive and checksum tools, git, and the package
-  managers. `jz list` prints the current set.
+  matching `start` opens a record and the `parts` are applied to each. A
+  `composite` part may itself be `records`, which is what a report that
+  opens with a header block and then repeats a block needs.
+- `input: fold:` joins a value that continues on the next line onto the
+  line it belongs to, for the reports that break a long value at the
+  terminal width (`ethtool`) and for the control files whose values
+  continue on an indented line (`dpkg -s`, `apt show`).
+- Official definitions for COMMANDS_COUNT commands in FORMATS_COUNT
+  output formats, covering coreutils and procps, the util-linux
+  listings, the systemd tools, the classic network commands and the
+  iproute2 ones, sysstat, the disk layout tools, the hardware and display
+  tools, the archive and checksum tools, the account and firmware
+  listings, git, docker, the package managers and the language
+  toolchains. `jz list` prints the current set.
 
 ### Fixed
 
@@ -41,6 +49,19 @@ project follows [Semantic Versioning](https://semver.org/).
   kept the shell quotes inside the values; `file` read `blkid` output and
   any `token:` line followed by a newline; `ip -brief address` read
   `ip -brief link` output, putting the MAC address in the address list.
+- The same failure in the definitions added later, each found by
+  applying every definition to every other definition's fixtures.
+  `cksum` read a crontab entry as a checksum and a size; `etc/passwd`
+  read the first line of BusyBox `ifconfig` and a `gpg --with-colons`
+  key; `etc/fstab` read a mount table header as an entry; `file` read
+  `udevadm`, `ip rule`, `bridge link`, `nmcli` and Debian control
+  records; `iostat` read the extended device table with the definition
+  for the CPU one; `etc/crontab` read a user crontab, whose command
+  lands where the user name belongs.
+- The sysstat reports asked for with an interval. `mpstat`, `pidstat`
+  and `iostat` had only ever been captured without one, so none of them
+  had seen the summary block an interval adds, which prints the column
+  names again and labels its rows Average.
 - Definitions that listed arguments their command does not need. `swapon`
   and `systemctl` print with no arguments exactly what their definition
   reads, and both turned that call away; the `ls` list enumerated flag
@@ -82,3 +103,14 @@ project follows [Semantic Versioning](https://semver.org/).
 - Naming a parser or variant never disables the signature check.
 - The public options are `--file`, `--pretty`, `--parser`, `--variant`
   and `--help`. The input limit is 64 MiB and is not configurable.
+- Two commands that print the same format cannot both be registered.
+  Nothing in the text says which of them wrote it, so one definition
+  would read the other's output and the answer would be a guess about
+  the command rather than a reading of the text. `vdir` (`ls -l`),
+  `getent passwd` (`/etc/passwd`), `uv pip list` (`pip list`) and
+  `printenv` (`env`) are the ones this rule leaves out, and `jz run`
+  does not land for them.
+- A tree of arbitrary depth has no shape jz can promise in advance and
+  is left out: `npm ls --all`, `iw dev`, `lsusb -t`, `docker info`,
+  `apt-cache policy`, `systemd-analyze critical-chain`. Most of those
+  commands print JSON of their own.

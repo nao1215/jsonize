@@ -1,0 +1,3 @@
+description: The first 24 lines of the build list of a project with many dependencies, which covers a release version, a pseudo-version and a version carrying a build-metadata suffix. No args are recorded because a landing check would run the command with an empty module cache, and resolving the build list would then reach the network.
+source: "the first 24 lines of `go list -m all` with go 1.26.4 on Ubuntu 26.04 with LC_ALL=C, inside the github.com/nao1215/atago module"
+os: linux

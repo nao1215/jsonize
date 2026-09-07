@@ -1,0 +1,64 @@
+# `go version -m` prints one block per binary: a header line naming the
+# file and the toolchain that built it, then tab-indented lines. Several
+# binaries can be named on one command line, so the blocks repeat and the
+# result is an array with one object per binary.
+#
+# Three kinds of indented line appear, and they are read into two lists
+# rather than one or three. `mod`, `dep` and `=>` carry the same three
+# cells (a module path, a version and a checksum) and a `=>` line is only
+# meaningful next to the `dep` it replaces, so splitting them apart would
+# lose that pairing; they stay in one list with the keyword in `kind`.
+# A `build` line carries something else entirely, a setting name and its
+# value, and putting it in the same list would leave every module entry
+# with an empty key column and every setting with three. `path` names the
+# main package and occurs once, so it belongs with the header.
+#
+# Lines of an unknown keyword are skipped rather than reported, because
+# each part reads the whole block and has to ignore the lines that belong
+# to the other part.
+#
+# A binary can lack `mod` and `dep` altogether (the go command itself is
+# built that way), and a replaced dependency prints no checksum and is
+# followed by a blank line, which the blank-line skip removes.
+format: 1
+command: go
+variant: version-modules
+description: go version -m module and build information embedded in a binary
+metadata:
+  tags: [go, toolchain, build]
+  compatible: [gc]
+  references:
+    - https://pkg.go.dev/cmd/go#hdr-Print_Go_version
+    - https://pkg.go.dev/runtime/debug#BuildInfo
+detect:
+  args:
+    all: ["version"]
+  signature:
+    all:
+      - '\A[^\t\n]+: go[0-9]'
+      - '(?m)^\t(?:path|mod|dep|build)\t'
+parse:
+  type: records
+  start: '^[^\t].*: go[0-9]'
+  parts:
+    - name: binary
+      select: {limit: 2}
+      parse:
+        type: regex
+        each: input
+        pattern: '(?m)\A(?P<file>.+): (?P<go_version>go\S+)(?:\n\tpath\t(?P<main_package>.*))?$'
+      fields:
+        file: {required: true}
+        go_version: {required: true}
+    - name: modules
+      parse:
+        type: regex
+        on_mismatch: skip
+        pattern: '^\t(?P<kind>mod|dep|=>)\t(?P<path>[^\t]*)\t(?P<version>[^\t]*)(?:\t(?P<sum>[^\t]*))?$'
+      fields:
+        sum: {null_if: [""]}
+    - name: build
+      parse:
+        type: regex
+        on_mismatch: skip
+        pattern: '^\tbuild\t(?P<key>[^=\t]*)(?:=(?P<value>.*))?$'

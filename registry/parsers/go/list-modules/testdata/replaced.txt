@@ -1,0 +1,2 @@
+example.com/probe
+example.com/lib v1.0.0 => ./lib

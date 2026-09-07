@@ -1,0 +1,81 @@
+[
+  {
+    "binary": {
+      "file": "/home/user/go/bin/jz",
+      "go_version": "go1.26.4",
+      "main_package": "github.com/nao1215/jsonize/cmd/jz"
+    },
+    "modules": [
+      {
+        "kind": "mod",
+        "path": "github.com/nao1215/jsonize",
+        "version": "v0.0.0-20260907005921-27ca675b8fa2+dirty",
+        "sum": null
+      },
+      {
+        "kind": "dep",
+        "path": "github.com/goccy/go-yaml",
+        "version": "v1.19.2",
+        "sum": "h1:PmFC1S6h8ljIz6gMRBopkjP1TVT7xuwrButHID66PoM="
+      }
+    ],
+    "build": [
+      {
+        "key": "-buildmode",
+        "value": "exe"
+      },
+      {
+        "key": "-compiler",
+        "value": "gc"
+      },
+      {
+        "key": "CGO_ENABLED",
+        "value": "1"
+      },
+      {
+        "key": "CGO_CFLAGS",
+        "value": ""
+      },
+      {
+        "key": "CGO_CPPFLAGS",
+        "value": ""
+      },
+      {
+        "key": "CGO_CXXFLAGS",
+        "value": ""
+      },
+      {
+        "key": "CGO_LDFLAGS",
+        "value": ""
+      },
+      {
+        "key": "GOARCH",
+        "value": "amd64"
+      },
+      {
+        "key": "GOOS",
+        "value": "linux"
+      },
+      {
+        "key": "GOAMD64",
+        "value": "v1"
+      },
+      {
+        "key": "vcs",
+        "value": "git"
+      },
+      {
+        "key": "vcs.revision",
+        "value": "27ca675b8fa2a3969af6f58781ef750762780583"
+      },
+      {
+        "key": "vcs.time",
+        "value": "2026-09-07T00:59:21Z"
+      },
+      {
+        "key": "vcs.modified",
+        "value": "true"
+      }
+    ]
+  }
+]
