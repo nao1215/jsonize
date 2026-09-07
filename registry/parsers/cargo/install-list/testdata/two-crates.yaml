@@ -1,0 +1,3 @@
+description: The first two blocks of the same capture, each with one binary.
+source: rows 1 to 4 of `cargo install --list` captured on Ubuntu 26.04 (cargo 1.92) with LC_ALL=C
+os: linux
