@@ -32,6 +32,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- The end-to-end suite runs every spec on Windows, verifies the sysstat
+  and BusyBox commands on Linux as required rather than when present,
+  lists every skipped scenario with its reason and fails on a skip that
+  is not the operating system's, verifies the listings that need a
+  device on captured output through `jz run`, and pins what `jz run`
+  does when its reader leaves, when it is interrupted and when
+  `--timeout` passes. `e2e/README.md` says what is guaranteed where.
+
 - Thirty definitions for formats that had none: `/etc/services` and
   `/etc/protocols` (also read through `getent`), `nslookup HOST`,
   `aplay -l` (and `arecord -l`), `smartctl --scan`, `systemctl
@@ -70,6 +78,28 @@ project follows [Semantic Versioning](https://semver.org/).
   is.
 
 ### Fixed
+
+- `jz run --stream` waited for the command to end after the stream had
+  failed for a reason of its own, such as `--extract` naming a key the
+  format does not produce, and a command that never ends made that
+  forever. The command is stopped instead, the failure is what jz
+  returns, and the stop is not reported as the command's own status.
+
+- A reader that had gone, as `head` does once it has seen enough, ended
+  jz by SIGPIPE before it could stop the command it had started, so
+  `jz run --stream ping host | head -3` left `ping` running until its
+  next write failed. jz now keeps going long enough to stop the command
+  and ends with the same 141.
+
+- Ending the command jz started waited for whatever that command had
+  left behind holding its standard output: `jz run --stream sh -c
+  'ping host'` interrupted did not return until `ping` did. Waiting for
+  the command is now waiting for the command alone.
+
+- jz reading a pipe ignored an interrupt until its input ended: the
+  subscription that forwards signals to a command was made at start-up
+  whether or not there was a command. It is made only while one runs,
+  so `producer | jz` told to stop stops.
 
 - A file's path could name a definition that describes a shape, and those
   carry no signature, so nothing about the text could rule one out: `df`

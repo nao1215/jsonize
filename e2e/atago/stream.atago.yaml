@@ -185,53 +185,9 @@ scenarios:
           stderr:
             contains: 'no key "mountpoint" in the output'
 
-  # The point of the option: a command that keeps printing is answered
-  # while it is still printing. The producer writes a window of lines,
-  # waits, then writes one more, so a copy of the output taken during the
-  # wait already carries records.
-  # du is the producer here because its definition names no operating
-  # system. A format restricted to one, such as the mount table or the
-  # GNU df report, cannot be selected on the others: the OS is a hard
-  # filter when jz ran the command itself, so on macOS such a scenario
-  # tests nothing but the filter.
-  - name: jz run --stream writes records before the command has finished
-    skip: {os: windows}
-    steps:
-      - fixture:
-          file: slow-du
-          mode: "0755"
-          content: |
-            #!/bin/sh
-            # Detection reads the leading lines before it commits, so the
-            # producer prints more than a signature window of them before
-            # it pauses. du declares a window of two hundred lines, which
-            # is the widest a definition may ask for, so the count here is
-            # what the option has to hold back at worst.
-            i=1
-            while [ $i -le 205 ]; do
-              printf '%s\t/mnt/%s\n' "$((i * 4))" "$i"
-              i=$((i + 1))
-            done
-            sleep 3
-            printf '128\t/tmp\n'
-      - run:
-          shell: true
-          command: jz run --stream --parser du ${workdir}/slow-du > ${workdir}/out.ndjson & sleep 1; cp ${workdir}/out.ndjson ${workdir}/early.ndjson; wait
-      - assert:
-          exit_code: 0
-      - assert:
-          file:
-            path: "${workdir}/early.ndjson"
-            contains: '"name":"/mnt/1"'
-      - assert:
-          file:
-            path: "${workdir}/early.ndjson"
-            not_contains: '"name":"/tmp"'
-      - assert:
-          file:
-            path: "${workdir}/out.ndjson"
-            contains: '"name":"/tmp"'
-
+  # A command that keeps printing is answered while it is still printing,
+  # and what happens when the reader or the command stops first is
+  # pinned in process.atago.yaml.
   - name: jz run --stream mirrors the command's own status
     skip: {os: windows}
     steps:
@@ -244,7 +200,7 @@ scenarios:
             echo 'du: /mnt: Permission denied' >&2
             exit 1
       - run:
-          command: jz run --stream --parser du ${workdir}/failing-du
+          command: jz run --stream --parser du -- sh ${workdir}/failing-du
       - assert:
           exit_code: 1
           stdout:

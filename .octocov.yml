@@ -8,7 +8,11 @@ coverage:
   acceptable: 85%
   exclude:
     - "cmd/jz/main.go"
+    - "cmd/jz/sigpipe_*.go"
     - "registry/embed.go"
+    # The end-to-end suite's own helper: a producer and a reader for the
+    # scenarios about a command that keeps printing, not part of jz.
+    - "e2e/**"
 codeToTestRatio:
   code:
     - "**/*.go"

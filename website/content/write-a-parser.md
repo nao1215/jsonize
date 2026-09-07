@@ -18,7 +18,9 @@ it was (`lsof 4.95 on Ubuntu 24.04`). If the command prints
 machine-specific values (host names, users), replace them consistently;
 do not change the layout. Formats you cannot run yourself (another OS)
 need a fixture whose origin you can state; CI additionally runs the real
-command on Linux and macOS runners (`e2e/atago/exec_*.atago.yaml`).
+command on Linux and macOS runners (`e2e/atago/exec_*.atago.yaml`), and
+a command that needs a device the runner lacks is run there on its
+captured output through the same path.
 
 ## 2. Decide the variant
 

@@ -1,0 +1,320 @@
+version: "1"
+
+suite:
+  name: jz run - the process it started and the reader it writes to
+  # e2ehelper is the producer and the reader in the scenarios that run
+  # everywhere: it prints du-shaped lines at a pace, and reports what
+  # became of the process on the other end. It is built once here from
+  # the Go source next to this file, which is the one build tool every
+  # machine running this suite has.
+  setup:
+    - fixture:
+        file: bin/.keep
+        content: ""
+    - run:
+        command: go build -C ${specdir}/e2ehelper -o ${suitedir}/bin/ .
+
+# What jz does about the process it started when the run does not end
+# the way both sides expected: the reader leaves, jz is told to stop, the
+# command is told to stop, or nobody is told anything and the deadline
+# passes. The contract is that jz does not hang, does not leave the
+# command running for nobody, and ends with a status that says what
+# happened.
+#
+# Every wait here is bounded: a step waits for a file to appear or a
+# process to end, up to a deadline, and never for a fixed time the
+# machine may or may not need. A script written as a fixture is run
+# through sh rather than executed: scenarios run in parallel, and a
+# file one of them has just written can still be held open by another's
+# fork for a moment, which an exec refuses with "text file busy".
+scenarios:
+  # The reader takes two records and leaves, the way `head -n 2` does.
+  # Two things are pinned at once: the records reached the reader while
+  # the command was still running (it had hundreds of lines left to
+  # print when they arrived), and once the reader had gone jz stopped the
+  # command instead of letting it print for nobody, then ended with
+  # 128+SIGPIPE like any filter whose reader has gone. jz learns that the
+  # reader has gone from a write that fails, so the producer keeps
+  # printing a line at a time after its first burst.
+  - name: jz run --stream hands over records while the command runs, and stops it when the reader leaves
+    steps:
+      - run:
+          command: ${suitedir}/bin/e2ehelper pipe -take 2 -pid ${workdir}/producer.pid -- jz run --stream --parser du -- ${suitedir}/bin/e2ehelper emit -lines 1000 -burst 250 -interval 100ms -pid ${workdir}/producer.pid
+          timeout: 30s
+      - assert:
+          duration:
+            lt: 6s
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "lines=2"
+      - assert:
+          stdout:
+            contains: "producer_alive_at_take=true"
+      - assert:
+          stdout:
+            contains: "status=141"
+      - assert:
+          stdout:
+            contains: "producer=gone"
+
+  # A stream that fails for a reason of its own will write nothing more,
+  # so the command is stopped: with a command that keeps printing, jz
+  # used to wait for it to end, which it never did. The failure is what
+  # jz returns; the stop is its own doing and is not reported as the
+  # command's status.
+  - name: a stream that cannot go on stops the command instead of waiting for it
+    steps:
+      - run:
+          command: jz run --stream --extract nope --parser du -- ${suitedir}/bin/e2ehelper emit -lines 1000 -burst 250 -interval 100ms -pid ${workdir}/producer.pid
+          timeout: 30s
+      - assert:
+          duration:
+            lt: 6s
+      - assert:
+          exit_code: 2
+          stdout:
+            empty: true
+      - assert:
+          stderr:
+            contains: 'no key "nope" in the output'
+      - assert:
+          stderr:
+            not_contains: "terminated"
+      - run:
+          command: ${suitedir}/bin/e2ehelper gone -pid ${workdir}/producer.pid
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "producer=gone"
+
+  # The same through a real shell pipeline: the reader is head, the pipe
+  # is the shell's, and what the shell sees of jz is what a script
+  # would. The producer records its process id so the script can wait,
+  # up to a deadline, for it to be gone.
+  - name: jz run --stream | head ends jz with 141 and leaves no producer behind
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: slow-du
+          mode: "0755"
+          from: "${specdir}/testdata/slow-du.sh"
+      - fixture:
+          file: pipeline.sh
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            # A fifo stands in for the shell's own pipe so that jz can be
+            # waited for by pid, which `a | b` does not allow in POSIX sh.
+            mkfifo pipe
+            jz run --stream --parser du -- sh ./slow-du > pipe 2> err.txt & jz=$!
+            head -n 2 < pipe > early.ndjson
+            wait $jz
+            echo "jz=$?"
+            i=0
+            while kill -0 "$(cat producer.pid)" 2>/dev/null && [ $i -lt 100 ]; do sleep 0.1; i=$((i + 1)); done
+            if kill -0 "$(cat producer.pid)" 2>/dev/null; then echo producer=alive; else echo producer=gone; fi
+      - run:
+          command: sh ./pipeline.sh
+          timeout: 30s
+      - assert:
+          duration:
+            lt: 6s
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              jz=141
+              producer=gone
+      - assert:
+          file:
+            path: early.ndjson
+            equals: |
+              {"size":4,"name":"/mnt/1"}
+              {"size":8,"name":"/mnt/2"}
+      # Nothing is said about a reader that has gone: the shell knows.
+      - assert:
+          file:
+            path: err.txt
+            equals: ""
+
+  # jz itself is told to stop while the command is still printing. The
+  # signal is passed on to the command, the records already read stay
+  # written, and jz reports the command's end the way it always does.
+  - name: a signal sent to jz alone reaches the command it started
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: slow-du
+          mode: "0755"
+          from: "${specdir}/testdata/slow-du.sh"
+      - fixture:
+          file: interrupt.sh
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            jz run --stream --parser du -- sh ./slow-du > out.ndjson 2> err.txt & jz=$!
+            # Wait for the first record, not for a length of time.
+            i=0
+            while [ ! -s out.ndjson ] && [ $i -lt 100 ]; do sleep 0.1; i=$((i + 1)); done
+            kill -TERM $jz
+            wait $jz
+            echo "jz=$?"
+            i=0
+            while kill -0 "$(cat producer.pid)" 2>/dev/null && [ $i -lt 100 ]; do sleep 0.1; i=$((i + 1)); done
+            if kill -0 "$(cat producer.pid)" 2>/dev/null; then echo producer=alive; else echo producer=gone; fi
+      - run:
+          command: sh ./interrupt.sh
+          timeout: 30s
+      - assert:
+          duration:
+            lt: 6s
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              jz=143
+              producer=gone
+      - assert:
+          file:
+            path: out.ndjson
+            contains: '"name":"/mnt/1"'
+      - assert:
+          file:
+            path: err.txt
+            contains: "terminated by SIGTERM"
+
+  # Ctrl-C in a terminal reaches every process in the foreground group,
+  # jz and its command alike. atago's signal step does the same to the
+  # group of a service. The shell around jz keeps a handler so that it
+  # survives to record what jz returned.
+  - name: an interrupt to the whole group ends jz with 130 and keeps what was written
+    skip: {os: windows}
+    services:
+      - name: pipeline
+        shell: true
+        command: 'trap : INT; jz run --stream --parser du -- sh ./slow-du > out.ndjson 2> err.txt; echo $? > status.txt'
+        ready:
+          file: out.ndjson
+          timeout: 10s
+    steps:
+      - fixture:
+          file: slow-du
+          mode: "0755"
+          from: "${specdir}/testdata/slow-du.sh"
+      - signal:
+          service: pipeline
+          signal: INT
+          wait:
+            timeout: 10s
+      - run:
+          command: cat status.txt
+          retry:
+            times: 50
+            interval: 100ms
+            until:
+              stdout:
+                contains: "130"
+      - assert:
+          file:
+            path: out.ndjson
+            contains: '"name":"/mnt/1"'
+      - assert:
+          file:
+            path: err.txt
+            contains: "terminated by SIGINT"
+
+  # --timeout on a stream: the records read before the deadline stay
+  # written, the command is stopped, and both facts are reported.
+  - name: --timeout on a stream keeps the records written and stops the command
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: slow-du
+          mode: "0755"
+          from: "${specdir}/testdata/slow-du.sh"
+      - run:
+          command: jz run --stream --timeout 500ms --parser du -- sh ./slow-du
+          timeout: 30s
+      - assert:
+          exit_code: 143
+          stdout:
+            contains: '"name":"/mnt/1"'
+      - assert:
+          stderr:
+            contains: "terminated by SIGTERM"
+      - assert:
+          stderr:
+            contains: "timeout of 500ms reached"
+      - run:
+          command: ${suitedir}/bin/e2ehelper gone -pid ${workdir}/producer.pid
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "producer=gone"
+
+  # A command that ignores the request to stop is killed after a grace
+  # period, so a --timeout is a deadline and not a suggestion.
+  - name: a command that ignores SIGTERM is killed after the grace period
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            detect: {signature: {all: ['=']}}
+            parse: {type: kv}
+      - run:
+          command: jz run --timeout 300ms -- sh -c 'trap "" TERM; exec sleep 30'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+          timeout: 30s
+      - assert:
+          duration:
+            lt: 10s
+      - assert:
+          exit_code: 137
+          stderr:
+            contains: "terminated by SIGKILL"
+      - assert:
+          stderr:
+            contains: "timeout of 300ms reached"
+
+  # With no command of its own to forward to, jz is a filter, and a
+  # filter told to stop stops: it used to hold the signal until its
+  # input ended, which for a producer that never ends was never.
+  - name: a signal to jz reading a pipe ends it at once
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: filter.sh
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            # A fifo rather than a pipeline: waiting for one process of a
+            # background pipeline waits for the whole of it in some shells.
+            mkfifo input
+            sleep 30 > input & producer=$!
+            jz < input > out.json 2> err.txt & jz=$!
+            sleep 0.2
+            kill -TERM $jz
+            wait $jz
+            echo "jz=$?"
+            kill $producer
+      - run:
+          command: sh ./filter.sh
+          timeout: 30s
+      - assert:
+          duration:
+            lt: 6s
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              jz=143
+      - assert:
+          file:
+            path: out.json
+            equals: ""

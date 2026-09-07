@@ -30,7 +30,7 @@ pkg/engine                parse algorithms (table, csv, ini, tree, regex, kv, co
 pkg/convert               scalar conversions (int, float, bool, size with units, time, duration)
 pkg/jsonutil              insertion-ordered JSON object and encoder
 registry/                 the official definitions and fixtures (data) + a one-file embed
-e2e/atago                 end-to-end scenarios
+e2e/atago                 end-to-end scenarios (e2e/README.md says what they guarantee where)
 ```
 
 Data flows in one direction: capture → select → parse → encode. The
