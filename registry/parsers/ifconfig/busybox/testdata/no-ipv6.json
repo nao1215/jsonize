@@ -1,0 +1,49 @@
+[
+  {
+    "interface": {
+      "name": "br-d647a5eb3b66",
+      "encap": "Ethernet",
+      "hwaddr": "52:54:00:D9:D0:F8"
+    },
+    "inet": {
+      "address": "172.18.0.1",
+      "peer": null,
+      "broadcast": "172.18.255.255",
+      "mask": "255.255.0.0"
+    },
+    "inet6": [],
+    "status": {
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "MULTICAST"
+      ],
+      "mtu": 1500,
+      "metric": 1
+    },
+    "rx": {
+      "packets": 0,
+      "errors": 0,
+      "dropped": 0,
+      "overruns": 0,
+      "frame": 0
+    },
+    "tx": {
+      "packets": 0,
+      "errors": 0,
+      "dropped": 9391,
+      "overruns": 0,
+      "carrier": 0
+    },
+    "queue": {
+      "collisions": 0,
+      "txqueuelen": 0
+    },
+    "bytes": {
+      "rx": 0,
+      "rx_human": "0.0 B",
+      "tx": 0,
+      "tx_human": "0.0 B"
+    }
+  }
+]
