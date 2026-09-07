@@ -1,0 +1,4 @@
+description: The same caches asked for with three columns, which shows that the column set is read from the header.
+source: captured on Ubuntu 26.04 (util-linux 2.41) with LC_ALL=C
+os: linux
+args: ["-C=NAME,ONE-SIZE,TYPE"]

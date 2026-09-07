@@ -1,0 +1,4 @@
+description: The four caches of a desktop CPU, with the rounded sizes and the exact counts side by side.
+source: captured on Ubuntu 26.04 (util-linux 2.41) with LC_ALL=C
+os: linux
+args: ["-C"]

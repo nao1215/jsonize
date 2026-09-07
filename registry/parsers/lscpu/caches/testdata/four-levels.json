@@ -1,0 +1,46 @@
+[
+  {
+    "name": "L1d",
+    "one_size": "48K",
+    "all_size": "768K",
+    "ways": 12,
+    "type": "Data",
+    "level": 1,
+    "sets": 64,
+    "phy_line": 1,
+    "coherency_size": 64
+  },
+  {
+    "name": "L1i",
+    "one_size": "32K",
+    "all_size": "512K",
+    "ways": 8,
+    "type": "Instruction",
+    "level": 1,
+    "sets": 64,
+    "phy_line": 1,
+    "coherency_size": 64
+  },
+  {
+    "name": "L2",
+    "one_size": "1M",
+    "all_size": "16M",
+    "ways": 16,
+    "type": "Unified",
+    "level": 2,
+    "sets": 1024,
+    "phy_line": 1,
+    "coherency_size": 64
+  },
+  {
+    "name": "L3",
+    "one_size": "32M",
+    "all_size": "64M",
+    "ways": 16,
+    "type": "Unified",
+    "level": 3,
+    "sets": 32768,
+    "phy_line": 1,
+    "coherency_size": 64
+  }
+]
