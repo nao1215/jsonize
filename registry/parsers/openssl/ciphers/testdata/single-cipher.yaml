@@ -1,0 +1,4 @@
+source: OpenSSL 3.5.5 on Ubuntu, LC_ALL=C, with the TLS 1.3 suites emptied so that one line is left
+description: a single cipher, the shortest output this format has
+os: linux
+args: ["ciphers", "-v", "-ciphersuites", "", "AES128-SHA"]

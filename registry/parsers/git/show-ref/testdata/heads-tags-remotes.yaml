@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: branches, remote-tracking refs and both tag kinds, where the annotated tag names its tag object rather than the commit
+os: linux
+args: ["show-ref"]

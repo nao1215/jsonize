@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: branches, remote-tracking refs and both tag kinds, where the lightweight tag has type commit and the annotated one type tag
+os: linux
+args: ["for-each-ref"]

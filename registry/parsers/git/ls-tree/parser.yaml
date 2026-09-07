@@ -1,0 +1,49 @@
+# One line per tree entry: the file mode, the object type, the object
+# name, a tab and the path. The mode is octal and its leading digits
+# carry the meaning (040000 a subtree, 100644 a file, 100755 an
+# executable, 120000 a symbolic link, 160000 a gitlink), so it stays the
+# string git printed; read as a number it would lose its leading zero and
+# its base.
+#
+# Without -r only the entries of the named tree are listed and a
+# subdirectory appears once as a "tree"; with -r the subtrees are walked
+# and only blobs and gitlinks remain. Both are this format.
+#
+# The separator before the path is a tab, which is what lets a path
+# contain spaces. A path holding a byte above 127 or a control character
+# is C-quoted and wrapped in double quotes
+# ("docs/\346\227\245\346\234\254..."); jz keeps it exactly as printed.
+#
+# `git ls-tree -l` puts the blob size between the object name and the
+# tab, and `--name-only` prints paths alone; neither is this format and
+# the signature refuses both. The type is captured as written rather than
+# as a fixed set, so a tree entry naming an object type this definition
+# was not written against still reads.
+format: 1
+command: git
+variant: ls-tree
+description: git ls-tree
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-ls-tree
+detect:
+  args:
+    any: ["ls-tree"]
+  signature:
+    all:
+      # Every line, from the first to the last: a six-digit octal mode,
+      # the object type, a full object name and the tab before the path.
+      # `git ls-files -s` opens with the same mode but puts the object
+      # name where this puts the type, so the claim is made of the whole
+      # text rather than of the first line.
+      - '\A(?:[0-7]{6} (?:blob|tree|commit) [0-9a-f]{40,64}\t[^\n]+\n)*[0-7]{6} (?:blob|tree|commit) [0-9a-f]{40,64}\t[^\n]+\z'
+parse:
+  type: regex
+  pattern: '^(?P<mode>[0-7]{6}) (?P<type>[a-z]+) (?P<object>[0-9a-f]{40,64})\t(?P<path>.*)$'
+fields:
+  mode: {required: true}
+  type: {required: true}
+  object: {required: true}
+  path: {required: true}

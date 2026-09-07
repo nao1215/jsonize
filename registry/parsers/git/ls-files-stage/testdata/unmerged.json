@@ -1,0 +1,26 @@
+[
+  {
+    "mode": "100644",
+    "object": "5626abf0f72e58d7a153368ba57db4c673c0e171",
+    "stage": 0,
+    "path": "README.md"
+  },
+  {
+    "mode": "100644",
+    "object": "8a205e8dc3e7c7914d69c3e900f2e944d77bb100",
+    "stage": 1,
+    "path": "release notes.md"
+  },
+  {
+    "mode": "100644",
+    "object": "26f343c083952217e74b016dda8c88e11cf5b394",
+    "stage": 2,
+    "path": "release notes.md"
+  },
+  {
+    "mode": "100644",
+    "object": "ba7a8edefdcea6e115e1e6a5425cafca803fecd9",
+    "stage": 3,
+    "path": "release notes.md"
+  }
+]

@@ -1,0 +1,4 @@
+source: git 2.53 in a repository with a single commit and no tags built for this fixture on Ubuntu, LC_ALL=C
+description: one branch and nothing else, the shortest output this format has
+os: linux
+args: ["show-ref"]

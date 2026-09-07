@@ -1,0 +1,49 @@
+# One line per index entry: the file mode, the object name, the stage
+# number, a tab and the path. The mode is octal and its leading digits
+# carry the meaning (100644 a file, 100755 an executable, 120000 a
+# symbolic link, 160000 a gitlink to another repository), so it stays the
+# string git printed; read as a number it would lose its leading zero and
+# its base.
+#
+# Stage 0 means the entry is merged. A conflicted path is listed three
+# times instead, as stages 1, 2 and 3 (common ancestor, ours, theirs), so
+# the path is not a key and the entries stay a list.
+#
+# The separator before the path is a tab, which is what lets a path
+# contain spaces. A path holding a byte above 127 or a control character
+# is C-quoted and wrapped in double quotes
+# ("docs/\346\227\245\346\234\254..."); jz keeps it exactly as printed.
+# `git -c core.quotePath=false ls-files -s` prints the raw name instead.
+#
+# Plain `git ls-files` prints paths alone and `git ls-files -s -z`
+# separates entries with NUL; neither is this format and the signature
+# refuses both.
+format: 1
+command: git
+variant: ls-files-stage
+description: git ls-files -s
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-ls-files
+detect:
+  args:
+    any: ["ls-files"]
+  signature:
+    all:
+      # Every line, from the first to the last: a six-digit octal mode, a
+      # full object name, a single stage digit and the tab before the
+      # path. The object name is 40 hexadecimal characters in a SHA-1
+      # repository and 64 in a SHA-256 one. Saying it of the whole text
+      # rather than of the first line is what separates this from
+      # `git ls-tree`, whose lines open with the same mode.
+      - '\A(?:[0-7]{6} [0-9a-f]{40,64} [0-3]\t[^\n]+\n)*[0-7]{6} [0-9a-f]{40,64} [0-3]\t[^\n]+\z'
+parse:
+  type: regex
+  pattern: '^(?P<mode>[0-7]{6}) (?P<object>[0-9a-f]{40,64}) (?P<stage>[0-3])\t(?P<path>.*)$'
+fields:
+  mode: {required: true}
+  object: {required: true}
+  stage: {type: int, required: true}
+  path: {required: true}

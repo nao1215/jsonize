@@ -1,0 +1,4 @@
+source: git 2.53 in a repository with a single commit built for this fixture on Ubuntu, LC_ALL=C
+description: a tree of one blob, the shortest output this format has
+os: linux
+args: ["ls-tree", "HEAD"]

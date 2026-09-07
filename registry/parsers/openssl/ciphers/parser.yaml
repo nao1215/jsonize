@@ -1,0 +1,45 @@
+# One line per cipher suite: the OpenSSL name, the protocol version the
+# suite was introduced with, and four columns labelled Kx, Au, Enc and
+# Mac. The labels are matched literally and only their values captured,
+# because the values are not words: Enc holds a slash and parentheses
+# (CHACHA20/POLY1305(256), AES(128)) and Kx may hold a key size (DH(512)),
+# so splitting the line on whitespace would depend on how openssl padded
+# the columns.
+#
+# `openssl ciphers` without -v prints the whole list as one
+# colon-separated line, and -V prefixes every line with the two-byte
+# suite code and a dash; neither is this format.
+#
+# OpenSSL 1.0.2 appended the word "export" to an export-grade suite.
+# Those suites were removed in 1.1.0 and no such line could be captured
+# here, so the definition does not claim to read one: it reports the line
+# instead of guessing at a column it has never seen.
+format: 1
+command: openssl
+variant: ciphers
+description: openssl ciphers -v
+metadata:
+  tags: [tls, crypto, security]
+  compatible: [OpenSSL]
+  references:
+    - https://docs.openssl.org/master/man1/openssl-ciphers/
+detect:
+  args:
+    any: ["ciphers"]
+  signature:
+    all:
+      # Every line, from the first to the last: a name, a protocol and
+      # the four labels in order. -V prefixes each line with the suite
+      # code and a dash and so is not this, and neither is a document
+      # that quotes one cipher line among prose.
+      - '\A(?:\S+[ \t]+\S+[ \t]+Kx=\S+[ \t]+Au=\S+[ \t]+Enc=\S+[ \t]+Mac=\S+[ \t]*\n)*\S+[ \t]+\S+[ \t]+Kx=\S+[ \t]+Au=\S+[ \t]+Enc=\S+[ \t]+Mac=\S+[ \t]*\z'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+)[ \t]+(?P<protocol>\S+)[ \t]+Kx=(?P<kx>\S+)[ \t]+Au=(?P<au>\S+)[ \t]+Enc=(?P<enc>\S+)[ \t]+Mac=(?P<mac>\S+)[ \t]*$'
+fields:
+  name: {required: true}
+  protocol: {required: true}
+  kx: {required: true}
+  au: {required: true}
+  enc: {required: true}
+  mac: {required: true}

@@ -1,0 +1,482 @@
+[
+  {
+    "name": "TLS_AES_256_GCM_SHA384",
+    "protocol": "TLSv1.3",
+    "kx": "any",
+    "au": "any",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "TLS_CHACHA20_POLY1305_SHA256",
+    "protocol": "TLSv1.3",
+    "kx": "any",
+    "au": "any",
+    "enc": "CHACHA20/POLY1305(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "TLS_AES_128_GCM_SHA256",
+    "protocol": "TLSv1.3",
+    "kx": "any",
+    "au": "any",
+    "enc": "AESGCM(128)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "ECDHE-ECDSA-AES256-GCM-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "ECDSA",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "ECDHE-RSA-AES256-GCM-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "RSA",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "DHE-RSA-AES256-GCM-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "DH",
+    "au": "RSA",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "ECDHE-ECDSA-CHACHA20-POLY1305",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "ECDSA",
+    "enc": "CHACHA20/POLY1305(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "ECDHE-RSA-CHACHA20-POLY1305",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "RSA",
+    "enc": "CHACHA20/POLY1305(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "DHE-RSA-CHACHA20-POLY1305",
+    "protocol": "TLSv1.2",
+    "kx": "DH",
+    "au": "RSA",
+    "enc": "CHACHA20/POLY1305(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "ECDHE-ECDSA-AES128-GCM-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "ECDSA",
+    "enc": "AESGCM(128)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "ECDHE-RSA-AES128-GCM-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "RSA",
+    "enc": "AESGCM(128)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "DHE-RSA-AES128-GCM-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "DH",
+    "au": "RSA",
+    "enc": "AESGCM(128)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "ECDHE-ECDSA-AES256-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "ECDSA",
+    "enc": "AES(256)",
+    "mac": "SHA384"
+  },
+  {
+    "name": "ECDHE-RSA-AES256-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "RSA",
+    "enc": "AES(256)",
+    "mac": "SHA384"
+  },
+  {
+    "name": "DHE-RSA-AES256-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "DH",
+    "au": "RSA",
+    "enc": "AES(256)",
+    "mac": "SHA256"
+  },
+  {
+    "name": "ECDHE-ECDSA-AES128-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "ECDSA",
+    "enc": "AES(128)",
+    "mac": "SHA256"
+  },
+  {
+    "name": "ECDHE-RSA-AES128-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "ECDH",
+    "au": "RSA",
+    "enc": "AES(128)",
+    "mac": "SHA256"
+  },
+  {
+    "name": "DHE-RSA-AES128-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "DH",
+    "au": "RSA",
+    "enc": "AES(128)",
+    "mac": "SHA256"
+  },
+  {
+    "name": "ECDHE-ECDSA-AES256-SHA",
+    "protocol": "TLSv1",
+    "kx": "ECDH",
+    "au": "ECDSA",
+    "enc": "AES(256)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "ECDHE-RSA-AES256-SHA",
+    "protocol": "TLSv1",
+    "kx": "ECDH",
+    "au": "RSA",
+    "enc": "AES(256)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "DHE-RSA-AES256-SHA",
+    "protocol": "SSLv3",
+    "kx": "DH",
+    "au": "RSA",
+    "enc": "AES(256)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "ECDHE-ECDSA-AES128-SHA",
+    "protocol": "TLSv1",
+    "kx": "ECDH",
+    "au": "ECDSA",
+    "enc": "AES(128)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "ECDHE-RSA-AES128-SHA",
+    "protocol": "TLSv1",
+    "kx": "ECDH",
+    "au": "RSA",
+    "enc": "AES(128)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "DHE-RSA-AES128-SHA",
+    "protocol": "SSLv3",
+    "kx": "DH",
+    "au": "RSA",
+    "enc": "AES(128)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "RSA-PSK-AES256-GCM-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "RSAPSK",
+    "au": "RSA",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "DHE-PSK-AES256-GCM-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "DHEPSK",
+    "au": "PSK",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "RSA-PSK-CHACHA20-POLY1305",
+    "protocol": "TLSv1.2",
+    "kx": "RSAPSK",
+    "au": "RSA",
+    "enc": "CHACHA20/POLY1305(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "DHE-PSK-CHACHA20-POLY1305",
+    "protocol": "TLSv1.2",
+    "kx": "DHEPSK",
+    "au": "PSK",
+    "enc": "CHACHA20/POLY1305(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "ECDHE-PSK-CHACHA20-POLY1305",
+    "protocol": "TLSv1.2",
+    "kx": "ECDHEPSK",
+    "au": "PSK",
+    "enc": "CHACHA20/POLY1305(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "AES256-GCM-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "RSA",
+    "au": "RSA",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "PSK-AES256-GCM-SHA384",
+    "protocol": "TLSv1.2",
+    "kx": "PSK",
+    "au": "PSK",
+    "enc": "AESGCM(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "PSK-CHACHA20-POLY1305",
+    "protocol": "TLSv1.2",
+    "kx": "PSK",
+    "au": "PSK",
+    "enc": "CHACHA20/POLY1305(256)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "RSA-PSK-AES128-GCM-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "RSAPSK",
+    "au": "RSA",
+    "enc": "AESGCM(128)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "DHE-PSK-AES128-GCM-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "DHEPSK",
+    "au": "PSK",
+    "enc": "AESGCM(128)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "AES128-GCM-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "RSA",
+    "au": "RSA",
+    "enc": "AESGCM(128)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "PSK-AES128-GCM-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "PSK",
+    "au": "PSK",
+    "enc": "AESGCM(128)",
+    "mac": "AEAD"
+  },
+  {
+    "name": "AES256-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "RSA",
+    "au": "RSA",
+    "enc": "AES(256)",
+    "mac": "SHA256"
+  },
+  {
+    "name": "AES128-SHA256",
+    "protocol": "TLSv1.2",
+    "kx": "RSA",
+    "au": "RSA",
+    "enc": "AES(128)",
+    "mac": "SHA256"
+  },
+  {
+    "name": "ECDHE-PSK-AES256-CBC-SHA384",
+    "protocol": "TLSv1",
+    "kx": "ECDHEPSK",
+    "au": "PSK",
+    "enc": "AES(256)",
+    "mac": "SHA384"
+  },
+  {
+    "name": "ECDHE-PSK-AES256-CBC-SHA",
+    "protocol": "TLSv1",
+    "kx": "ECDHEPSK",
+    "au": "PSK",
+    "enc": "AES(256)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "SRP-RSA-AES-256-CBC-SHA",
+    "protocol": "SSLv3",
+    "kx": "SRP",
+    "au": "RSA",
+    "enc": "AES(256)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "SRP-AES-256-CBC-SHA",
+    "protocol": "SSLv3",
+    "kx": "SRP",
+    "au": "SRP",
+    "enc": "AES(256)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "RSA-PSK-AES256-CBC-SHA384",
+    "protocol": "TLSv1",
+    "kx": "RSAPSK",
+    "au": "RSA",
+    "enc": "AES(256)",
+    "mac": "SHA384"
+  },
+  {
+    "name": "DHE-PSK-AES256-CBC-SHA384",
+    "protocol": "TLSv1",
+    "kx": "DHEPSK",
+    "au": "PSK",
+    "enc": "AES(256)",
+    "mac": "SHA384"
+  },
+  {
+    "name": "RSA-PSK-AES256-CBC-SHA",
+    "protocol": "SSLv3",
+    "kx": "RSAPSK",
+    "au": "RSA",
+    "enc": "AES(256)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "DHE-PSK-AES256-CBC-SHA",
+    "protocol": "SSLv3",
+    "kx": "DHEPSK",
+    "au": "PSK",
+    "enc": "AES(256)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "AES256-SHA",
+    "protocol": "SSLv3",
+    "kx": "RSA",
+    "au": "RSA",
+    "enc": "AES(256)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "PSK-AES256-CBC-SHA384",
+    "protocol": "TLSv1",
+    "kx": "PSK",
+    "au": "PSK",
+    "enc": "AES(256)",
+    "mac": "SHA384"
+  },
+  {
+    "name": "PSK-AES256-CBC-SHA",
+    "protocol": "SSLv3",
+    "kx": "PSK",
+    "au": "PSK",
+    "enc": "AES(256)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "ECDHE-PSK-AES128-CBC-SHA256",
+    "protocol": "TLSv1",
+    "kx": "ECDHEPSK",
+    "au": "PSK",
+    "enc": "AES(128)",
+    "mac": "SHA256"
+  },
+  {
+    "name": "ECDHE-PSK-AES128-CBC-SHA",
+    "protocol": "TLSv1",
+    "kx": "ECDHEPSK",
+    "au": "PSK",
+    "enc": "AES(128)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "SRP-RSA-AES-128-CBC-SHA",
+    "protocol": "SSLv3",
+    "kx": "SRP",
+    "au": "RSA",
+    "enc": "AES(128)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "SRP-AES-128-CBC-SHA",
+    "protocol": "SSLv3",
+    "kx": "SRP",
+    "au": "SRP",
+    "enc": "AES(128)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "RSA-PSK-AES128-CBC-SHA256",
+    "protocol": "TLSv1",
+    "kx": "RSAPSK",
+    "au": "RSA",
+    "enc": "AES(128)",
+    "mac": "SHA256"
+  },
+  {
+    "name": "DHE-PSK-AES128-CBC-SHA256",
+    "protocol": "TLSv1",
+    "kx": "DHEPSK",
+    "au": "PSK",
+    "enc": "AES(128)",
+    "mac": "SHA256"
+  },
+  {
+    "name": "RSA-PSK-AES128-CBC-SHA",
+    "protocol": "SSLv3",
+    "kx": "RSAPSK",
+    "au": "RSA",
+    "enc": "AES(128)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "DHE-PSK-AES128-CBC-SHA",
+    "protocol": "SSLv3",
+    "kx": "DHEPSK",
+    "au": "PSK",
+    "enc": "AES(128)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "AES128-SHA",
+    "protocol": "SSLv3",
+    "kx": "RSA",
+    "au": "RSA",
+    "enc": "AES(128)",
+    "mac": "SHA1"
+  },
+  {
+    "name": "PSK-AES128-CBC-SHA256",
+    "protocol": "TLSv1",
+    "kx": "PSK",
+    "au": "PSK",
+    "enc": "AES(128)",
+    "mac": "SHA256"
+  },
+  {
+    "name": "PSK-AES128-CBC-SHA",
+    "protocol": "SSLv3",
+    "kx": "PSK",
+    "au": "PSK",
+    "enc": "AES(128)",
+    "mac": "SHA1"
+  }
+]

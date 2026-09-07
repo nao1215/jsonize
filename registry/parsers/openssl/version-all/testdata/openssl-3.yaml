@@ -1,0 +1,4 @@
+source: OpenSSL 3.5.5 on Ubuntu, LC_ALL=C
+description: the full report, including the compiler line whose single value holds colons of its own and the CPUINFO line whose value is a run of colon-separated register values
+os: linux
+args: ["version", "-a"]

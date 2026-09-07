@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C, captured during a conflicted merge
+description: a conflicted path listed three times as stages 1, 2 and 3, which is what stops the path being a key
+os: linux
+args: ["ls-files", "-s"]

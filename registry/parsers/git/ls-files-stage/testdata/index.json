@@ -1,0 +1,44 @@
+[
+  {
+    "mode": "100644",
+    "object": "51c58a0ee0d53a01e061d94002e84926562b9c07",
+    "stage": 0,
+    "path": "README.md"
+  },
+  {
+    "mode": "100644",
+    "object": "aa9e8d56aa20ac40cdad158fdf6d4347c544b16a",
+    "stage": 0,
+    "path": "docs/guide.md"
+  },
+  {
+    "mode": "100644",
+    "object": "a941c2e33656b2444712059e9c8c4dbbf3acd958",
+    "stage": 0,
+    "path": "docs/release notes.md"
+  },
+  {
+    "mode": "100644",
+    "object": "3d52800f709f6011d0932d8aafd69c7f07bc0948",
+    "stage": 0,
+    "path": "\"docs/\\346\\227\\245\\346\\234\\254\\350\\252\\236\\343\\201\\256\\346\\211\\213\\345\\274\\225\\343\\201\\215.md\""
+  },
+  {
+    "mode": "120000",
+    "object": "eafc2aac7162cad4e1f335fab78ae18b297e49cc",
+    "stage": 0,
+    "path": "latest-guide.md"
+  },
+  {
+    "mode": "100755",
+    "object": "4163036efa65bd4a469e752267498f01ea36a55c",
+    "stage": 0,
+    "path": "run.sh"
+  },
+  {
+    "mode": "160000",
+    "object": "2e13c06f0fee9ff6b8bd4b0e8bd6dbbcd15dcb44",
+    "stage": 0,
+    "path": "vendor/tiny"
+  }
+]
