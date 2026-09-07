@@ -1,23 +1,18 @@
-{
-  "report": {
-    "kernel": "6.8.0-generic",
-    "hostname": "host01",
-    "date": "09/06/26",
-    "architecture": "x86_64",
-    "cpu_count": 32
-  },
-  "tasks": [
-    {
-      "time": "19:39:55",
-      "uid": 0,
-      "pid": 1,
-      "usr_percent": 0.01,
-      "system_percent": 0.01,
-      "guest_percent": 0,
-      "wait_percent": 0,
-      "cpu_percent": 0.03,
-      "cpu": 22,
-      "command": "systemd"
-    }
-  ]
-}
+[
+  {
+    "tasks": [
+      {
+        "time": "19:39:55",
+        "uid": 0,
+        "pid": 1,
+        "usr_percent": 0.01,
+        "system_percent": 0.01,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0.03,
+        "cpu": 22,
+        "command": "systemd"
+      }
+    ]
+  }
+]

@@ -1,25 +1,20 @@
-{
-  "report": {
-    "kernel": "6.8.0-generic",
-    "hostname": "host01",
-    "date": "09/06/26",
-    "architecture": "x86_64",
-    "cpu_count": 32
-  },
-  "cpu": [
-    {
-      "time": "19:36:10",
-      "cpu": "all",
-      "usr_percent": 2.81,
-      "nice_percent": 0,
-      "sys_percent": 0.5,
-      "iowait_percent": 0.04,
-      "irq_percent": 0,
-      "soft_percent": 0.04,
-      "steal_percent": 0,
-      "guest_percent": 0,
-      "gnice_percent": 0,
-      "idle_percent": 96.6
-    }
-  ]
-}
+[
+  {
+    "cpu": [
+      {
+        "time": "19:36:10",
+        "cpu": "all",
+        "usr_percent": 2.81,
+        "nice_percent": 0,
+        "sys_percent": 0.5,
+        "iowait_percent": 0.04,
+        "irq_percent": 0,
+        "soft_percent": 0.04,
+        "steal_percent": 0,
+        "guest_percent": 0,
+        "gnice_percent": 0,
+        "idle_percent": 96.6
+      }
+    ]
+  }
+]

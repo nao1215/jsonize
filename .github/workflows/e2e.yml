@@ -35,4 +35,4 @@ jobs:
         run: |
           go build -o dist/jz.exe ./cmd/jz
           export PATH="$PWD/dist:$PATH"
-          atago run --ci --retry-failed 0 e2e/atago/detect.atago.yaml e2e/atago/registry.atago.yaml e2e/atago/errors.atago.yaml
+          atago run --ci --retry-failed 0 e2e/atago/detect.atago.yaml e2e/atago/registry.atago.yaml e2e/atago/errors.atago.yaml e2e/atago/report.atago.yaml

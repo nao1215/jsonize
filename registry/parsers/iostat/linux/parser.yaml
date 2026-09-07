@@ -1,10 +1,17 @@
-# The default iostat report is three blocks: the sysstat banner, one
-# avg-cpu table and one device table. The banner names the host, so it is
-# read as its own object rather than dropped.
+# A sysstat report is a run of samples: the banner names the machine
+# once, and everything after it repeats once per interval. Reading it as
+# an array of samples is what lets `iostat 1 3` be read at all (the
+# second header used to reach a table as a row) and what lets --stream
+# hand over a sample as soon as it is complete.
+#
+# The banner is dropped with it. It carries the kernel, the host and the
+# CPU count, which `uname -a` and `nproc` also print and jz also reads;
+# what it does not carry is a sample, and a shape that had one object for
+# it and an array for the rest could not be streamed.
 format: 1
 command: iostat
 variant: linux
-description: iostat default report, CPU averages followed by per-device counters
+description: iostat default report, one sample of CPU averages and per-device counters
 metadata:
   tags: [linux, io, cpu, sysstat]
   compatible: [sysstat]
@@ -17,21 +24,18 @@ detect:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
       - '^avg-cpu:[ \t]+%user[ \t]+%nice'
       - '^Device[ \t]+tps[ \t]'
+input:
+  select:
+    after: '\ALinux[ \t]'
 parse:
-  type: composite
+  type: records
+  # A sample opens with the avg-cpu header and runs to the next one.
+  start: '^avg-cpu:[ \t]'
   parts:
-    - name: report
-      select: {limit: 1}
-      parse:
-        type: regex
-        each: input
-        pattern: '\ALinux[ \t]+(?P<kernel>\S+)[ \t]+\((?P<hostname>[^)]*)\)[ \t]+(?P<date>\S+)[ \t]+_(?P<architecture>.+?)_[ \t]+\((?P<cpu_count>[0-9]+)[ \t]+CPU\)[ \t]*\z'
-      fields:
-        cpu_count: {type: int}
     # The avg-cpu header carries a leading "avg-cpu:" label that the rows do
     # not repeat, so the column names are declared instead of derived.
     - name: cpu
-      select: {skip: 1, limit: 2}
+      select: {limit: 2}
       parse:
         type: table
         header:
@@ -46,7 +50,7 @@ parse:
     # The device columns differ between sysstat releases (kB_dscd was added
     # for discards), so they are taken from the header line as printed.
     - name: devices
-      select: {skip: 3}
+      select: {skip: 2}
       parse:
         type: table
       fields:

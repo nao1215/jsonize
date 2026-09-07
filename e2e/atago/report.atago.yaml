@@ -1,0 +1,124 @@
+version: "1"
+
+suite:
+  name: repeating reports
+
+# A sysstat command asked for an interval prints its column header once
+# per sample, and the second one used to reach the table as a row and
+# fail to convert. These reports are read as an array of samples, so an
+# interval run is readable and --stream can hand over a sample as soon as
+# it is complete. A single-shot run is the same shape with one sample in
+# it.
+#
+# Every fixture here is real output captured with LC_ALL=C, trimmed to a
+# few devices or processors so the expected values fit on a page.
+scenarios:
+  - name: iostat with an interval is an array of samples
+    steps:
+      - fixture:
+          file: iostat.txt
+          from: "${specdir}/testdata/iostat-repeated.txt"
+      - run:
+          command: jz --file ${workdir}/iostat.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 3 }
+              - { path: "$[0].cpu", length: 1 }
+              - { path: "$[0].cpu[0].user_percent", equals: 3.07 }
+              - { path: "$[0].devices", length: 2 }
+              - { path: "$[0].devices[0].device", equals: nvme0n1 }
+              - { path: "$[2].cpu[0].user_percent", equals: 0.6 }
+      # One sample per line, which is what a monitoring consumer reads.
+      - run:
+          command: jz --stream --file ${workdir}/iostat.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '{"cpu":['
+            count: 3
+      - run:
+          command: jz --explain --file ${workdir}/iostat.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "iostat/linux from embedded"
+
+  - name: a single-shot iostat report is one sample
+    steps:
+      - fixture:
+          file: iostat1.txt
+          from: "${specdir}/testdata/iostat-single.txt"
+      - run:
+          command: jz --file ${workdir}/iostat1.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].cpu[0].idle_percent", gt: 0 }
+              - { path: "$[0].devices[0].device", equals: nvme0n1 }
+      - run:
+          command: jz --stream --file ${workdir}/iostat1.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '{"cpu":['
+            count: 1
+
+  - name: mpstat with an interval closes with the summary as its own sample
+    steps:
+      - fixture:
+          file: mpstat.txt
+          from: "${specdir}/testdata/mpstat-repeated.txt"
+      - run:
+          command: jz --file ${workdir}/mpstat.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              # Three samples and the closing summary.
+              - { path: "$", length: 4 }
+              - { path: "$[0].cpu", length: 3 }
+              - { path: "$[0].cpu[0].cpu", equals: all }
+              - { path: "$[0].cpu[0].usr_percent", equals: 0.53 }
+              - { path: "$[0].cpu[0].time", equals: "03:24:13" }
+              - { path: "$[3].cpu[0].time", equals: Average }
+      - run:
+          command: jz --stream --file ${workdir}/mpstat.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '{"cpu":['
+            count: 4
+
+  # vmstat and sar print their column header once and every sample under
+  # it, so an interval run was already one table and is left as one. The
+  # difference is in what the commands print, not in what jz prefers.
+  - name: vmstat and sar keep the one table they print
+    steps:
+      - fixture:
+          file: vmstat.txt
+          from: "${specdir}/testdata/vmstat-repeated.txt"
+      - run:
+          command: jz --file ${workdir}/vmstat.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 3 }
+              - { path: "$[0].r", gte: 0 }
+      - fixture:
+          file: sar.txt
+          from: "${specdir}/testdata/sar-cpu-repeated.txt"
+      - run:
+          command: jz --file ${workdir}/sar.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 4 }
+              - { path: "$[3].time", equals: Average }

@@ -6,6 +6,22 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- `iostat`, `mpstat` and `pidstat` are read as an array of samples, one
+  object per interval, instead of one object for the whole report. Asked
+  for an interval those commands print their column header once per
+  sample, and the second one reached the table as a row and failed to
+  convert, so `iostat 1 3` was exit 3 — the input `iostat` is most often
+  asked for could not be read at all. A single-shot run is the same shape
+  with one sample in it, which is a breaking change to what those
+  definitions return. `--stream` now writes one sample per line.
+  The sysstat banner is dropped with it: it names the kernel, the host
+  and the CPU count, which `uname -a` and `nproc` also print, and a shape
+  with one object for the banner and an array for the rest has no
+  streaming form. `vmstat` and `sar` print their header once and every
+  sample under it, so they were already one table and are left alone.
+
 ### Added
 
 - `fields.<name>.type: duration`, which turns a printed length of time

@@ -1,0 +1,24 @@
+Linux 6.8.0-generic (host01) 	09/08/26 	_x86_64_	(32 CPU)
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.07    0.01    0.60    0.04    0.00   96.28
+
+Device             tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd
+nvme0n1           0.05         0.24         0.03       736.12     305013      40452  938311980
+nvme1n1          53.77       504.26      1601.21       658.67  642757567 2041013181  839591404
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           0.69    0.06    0.22    0.06    0.00   98.96
+
+Device             tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd
+nvme0n1           0.00         0.00         0.00         0.00          0          0          0
+nvme1n1          30.00         0.00       288.00         0.00          0        288          0
+
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           0.60    0.03    0.35    0.03    0.00   99.00
+
+Device             tps    kB_read/s    kB_wrtn/s    kB_dscd/s    kB_read    kB_wrtn    kB_dscd
+nvme0n1           0.00         0.00         0.00         0.00          0          0          0
+nvme1n1           9.00         0.00       132.00         0.00          0        132          0

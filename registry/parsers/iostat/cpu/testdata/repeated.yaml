@@ -1,4 +1,3 @@
 source: "iostat -c 1 2 on Ubuntu with sysstat 12.7.7, LC_ALL=C; two samples, so the column header is printed twice"
 os: linux
 args: ["-c", "1", "2"]
-expect_error: "cannot convert"

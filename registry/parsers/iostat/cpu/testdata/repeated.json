@@ -10,5 +10,17 @@
         "idle_percent": 96.6
       }
     ]
+  },
+  {
+    "cpu": [
+      {
+        "user_percent": 4.57,
+        "nice_percent": 0,
+        "system_percent": 1.67,
+        "iowait_percent": 0.03,
+        "steal_percent": 0,
+        "idle_percent": 93.73
+      }
+    ]
   }
 ]

@@ -392,3 +392,50 @@ scenarios:
           command: jz run --assume-year now who
       - assert:
           exit_code: 0
+
+  # procps is on every ubuntu runner; sysstat may not be, so iostat and
+  # mpstat are asked for only when they are there.
+  - name: jz run --stream vmstat writes the samples of an interval run
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --stream vmstat 1 3
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"swpd":'
+            count: 3
+
+  - name: jz run --stream iostat writes one sample per interval
+    only: {os: linux}
+    skip: {command: "! command -v iostat > /dev/null"}
+    steps:
+      - run:
+          command: jz run --stream iostat 1 3
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '{"cpu":['
+            count: 3
+      - run:
+          command: jz run iostat 1 3
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 3 }
+              - { path: "$[0].cpu[0].user_percent", gte: 0 }
+
+  - name: jz run mpstat with an interval closes with its summary sample
+    only: {os: linux}
+    skip: {command: "! command -v mpstat > /dev/null"}
+    steps:
+      - run:
+          command: jz run mpstat -P ALL 1 2
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              # Two samples and the closing summary.
+              - { path: "$", length: 3 }
+              - { path: "$[2].cpu[0].time", equals: Average }
