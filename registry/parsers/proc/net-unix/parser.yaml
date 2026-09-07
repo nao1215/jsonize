@@ -1,0 +1,73 @@
+# /proc/net/unix is one line per unix domain socket: a header, then the
+# kernel's address for the socket, its reference count, protocol, flags,
+# type and state in hexadecimal, the inode, and the path it was bound to.
+#
+# A socket that was never bound has no path at all, which is most of the
+# file: the line ends after the inode and path is null. A path is the
+# rest of the line and is not split further, because sun_path holds
+# arbitrary bytes and a socket bound to a name with a space in it is a
+# socket, not a malformed line. The one thing that cannot survive the
+# round trip is a name whose own first character is a space: the kernel
+# separates the inode from the path with one space and a whitespace
+# table cannot tell that space from the next.
+#
+# An abstract socket has no file behind it and its name is written with
+# a leading "@", which the kernel puts there in place of the leading NUL
+# byte. Any other NUL inside the name is written as "@" as well, so an
+# abstract name is reported as the file spells it rather than as the
+# bytes it holds.
+#
+# Six of the eight columns are hexadecimal and stay strings. flags is a
+# bit set whose one defined bit is 00010000, a listening socket; type is
+# 0001 stream, 0002 datagram, 0005 seqpacket; st is 01 unconnected, 02
+# connecting, 03 connected. Reading those base ten would turn 0010 into
+# ten, a number the file does not state. num is the kernel address of
+# the socket, written as zeroes unless the reader may see kernel
+# pointers, and the colon the kernel writes after it is a separator
+# rather than part of the value.
+#
+# inode is decimal, and it is the number to join this file to the
+# socket an "lsof" or "ss" line names.
+format: 1
+command: proc
+variant: net-unix
+description: /proc/net/unix open unix domain sockets
+metadata:
+  tags: [linux, network, socket, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_net.5.html
+    - https://man7.org/linux/man-pages/man7/unix.7.html
+detect:
+  os: [linux]
+  signature:
+    # A desktop holds well over a thousand of these, so the window sees
+    # a prefix of the file rather than all of it. The shape below is
+    # about every line it reaches.
+    window: 200
+    all:
+      # The header, which the kernel writes as one string.
+      - '\ANum[ \t]+RefCount[ \t]+Protocol[ \t]+Flags[ \t]+Type[ \t]+St[ \t]+Inode[ \t]+Path[ \t]*$'
+      # Every line after it: the address and its colon, four hexadecimal
+      # words of eight, four and two digits, the inode, and the rest of
+      # the line for the path. The inode is right-aligned in five
+      # columns, so a small one carries leading spaces.
+      - '\ANum(?:[ \t]+\w+)+[ \t]*(?:\n[0-9a-fA-F]+:[ \t]+[0-9a-fA-F]{8}[ \t]+[0-9a-fA-F]{8}[ \t]+[0-9a-fA-F]{8}[ \t]+[0-9a-fA-F]{4}[ \t]+[0-9a-fA-F]{2}[ \t]+\d+(?:[ \t].*)?)*\z'
+parse:
+  type: table
+  split: whitespace
+  # Naming the columns fixes their number, which is what lets the path
+  # keep the rest of the line: the eighth cell is the last one.
+  header:
+    columns: [num, refcount, protocol, flags, type, st, inode, path]
+  # A socket with no path is seven cells, and the eighth is then null.
+  min_fields: 7
+fields:
+  num: {trim_suffix: ":", required: true}
+  refcount: {required: true}
+  protocol: {required: true}
+  flags: {required: true}
+  type: {required: true}
+  st: {required: true}
+  inode: {type: int, required: true}
+  path: {}

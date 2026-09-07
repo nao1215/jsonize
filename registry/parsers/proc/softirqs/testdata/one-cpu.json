@@ -1,0 +1,69 @@
+{
+  "cpus": {
+    "present": [
+      "CPU0"
+    ]
+  },
+  "softirqs": [
+    {
+      "name": "HI",
+      "counts": [
+        1
+      ]
+    },
+    {
+      "name": "TIMER",
+      "counts": [
+        38803884
+      ]
+    },
+    {
+      "name": "NET_TX",
+      "counts": [
+        309
+      ]
+    },
+    {
+      "name": "NET_RX",
+      "counts": [
+        31087755
+      ]
+    },
+    {
+      "name": "BLOCK",
+      "counts": [
+        16586
+      ]
+    },
+    {
+      "name": "IRQ_POLL",
+      "counts": [
+        0
+      ]
+    },
+    {
+      "name": "TASKLET",
+      "counts": [
+        735442927
+      ]
+    },
+    {
+      "name": "SCHED",
+      "counts": [
+        335837442
+      ]
+    },
+    {
+      "name": "HRTIMER",
+      "counts": [
+        11136
+      ]
+    },
+    {
+      "name": "RCU",
+      "counts": [
+        104131159
+      ]
+    }
+  ]
+}

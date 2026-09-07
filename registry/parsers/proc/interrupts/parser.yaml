@@ -1,0 +1,94 @@
+# /proc/interrupts is a header naming the online CPUs and then one line
+# per interrupt source: how many times it has fired on each of those
+# CPUs, and what it belongs to.
+#
+# The number of columns is the number of CPUs, so it is a property of the
+# machine and not of the format. A definition that named thirty-two
+# columns would read this machine and no other. What the format promises
+# is that a line carries one count per CPU named in the header, in that
+# order, so the counts are one array per line and the header is reported
+# beside them: counts[i] belongs to cpus.online[i]. The kernel walks the
+# online CPUs to write both, so a CPU that is offline appears in neither.
+#
+# The promise holds for every line the kernel writes per interrupt, and
+# not for the summary lines underneath. ERR and MIS carry a single count
+# that is not per CPU at all, which is why a table of fixed columns
+# cannot read this file even on one machine: an array of one is the
+# honest result there.
+#
+# A numbered line names the chip that delivers the interrupt, the
+# hardware number it has on that chip, the flow handler the kernel gave
+# it ("edge", "fasteoi"), and the drivers that asked for it. The handler
+# is absent on a chip whose interrupts have no such name, and the drivers
+# are absent on an interrupt nothing has claimed. A summary line carries
+# a sentence instead, so it is read by a second pattern and the objects
+# it produces have a description where the others have a chip: a group
+# that does not take part in the alternative that matched is not a key.
+#
+# What this reads is the layout the generic code writes. An architecture
+# built with CONFIG_GENERIC_IRQ_SHOW_LEVEL adds a Level or Edge word
+# between the hardware number and the handler, which none of x86, where
+# this was captured, does. Such a line is refused with the line quoted
+# rather than read with the words shifted along, and adding it here would
+# mean writing a shape against output nobody has seen.
+#
+# irq is text on every line. The same key holds "0" and "NMI", and a
+# number on half the lines and a word on the other half is worse to read
+# than a string throughout.
+#
+# Two things stay text. A driver name can hold a space ("PCIe PME"), so
+# the drivers are split on the comma and space the kernel joins them
+# with rather than on whitespace. The chip name holds the PCI address of
+# the device it belongs to ("IR-PCI-MSIX-0000:c4:00.0"), which is a name
+# rather than a pair of fields.
+format: 1
+command: proc
+variant: interrupts
+description: /proc/interrupts per-CPU interrupt counters
+metadata:
+  tags: [linux, cpu, interrupt, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_interrupts.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The header, which is the only line with no label: leading space
+      # for the label column, then one CPU per online processor.
+      - '\A[ \t]+CPU0(?:[ \t]+CPU\d+)*[ \t]*$'
+      # At least one numbered interrupt with a chip behind it, which is
+      # what separates this from /proc/softirqs, whose lines are all
+      # named and end at their last count. The first line under the
+      # header is such a line on every machine the kernel boots, so the
+      # default window reaches it.
+      - '^[ \t]*\d+:(?:[ \t]+\d+)+[ \t]+\S'
+parse:
+  type: composite
+  parts:
+    - name: cpus
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^[ \t]*(?P<online>CPU\d+(?:[ \t]+CPU\d+)*)[ \t]*$'
+      fields:
+        online: {type: array, split_regex: '[ \t]+'}
+    - name: interrupts
+      select: {skip: 1}
+      parse:
+        type: regex
+        patterns:
+          # A numbered interrupt. The counts are greedy and stop at the
+          # chip name, which is never a number.
+          - '^[ \t]*(?P<irq>\d+):[ \t]+(?P<counts>\d+(?:[ \t]+\d+)*)[ \t]+(?P<chip>\S+)(?:[ \t]+(?P<hwirq>\d+))?(?:-(?P<handler>\S+))?(?:[ \t]{2,}(?P<drivers>\S.*?))?[ \t]*$'
+          # A summary line: a name the kernel writes rather than a
+          # number, its counts, and a sentence describing it. The
+          # sentence follows two spaces, which is what separates it from
+          # the counts.
+          - '^[ \t]*(?P<irq>[A-Za-z][A-Za-z0-9_-]*):[ \t]+(?P<counts>\d+(?:[ \t]+\d+)*)(?:[ \t]{2,}(?P<description>\S.*?))?[ \t]*$'
+      fields:
+        irq: {required: true}
+        counts: {type: array, split_regex: '[ \t]+', items: {type: int}}
+        hwirq: {type: int}
+        drivers: {type: array, split: ", "}

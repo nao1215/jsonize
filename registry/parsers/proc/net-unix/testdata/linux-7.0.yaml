@@ -1,0 +1,12 @@
+description: |
+  A window of the sockets a desktop session holds. It carries a socket
+  with no path, which is most of the file, a listening socket with the
+  00010000 flag and state 01, an abstract socket written with a leading
+  "@", a datagram socket, and an inode small enough that the kernel pads
+  it on the left.
+source: |
+  /proc/net/unix on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C:
+  line 1, the header, and lines 28 to 46 of the same capture. The home
+  directory became /home/user and the identifier in an editor's socket
+  name was replaced.
+os: linux

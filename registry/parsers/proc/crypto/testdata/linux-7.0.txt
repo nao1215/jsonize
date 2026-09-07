@@ -1,0 +1,83 @@
+name         : ccm(aes)
+driver       : ccm_base(ctr-aes-vaes-avx512,cbcmac(aes-lib))
+module       : ccm
+priority     : 450
+refcnt       : 3
+selftest     : passed
+internal     : no
+type         : aead
+async        : no
+blocksize    : 1
+ivsize       : 16
+maxauthsize  : 16
+geniv        : <none>
+
+name         : cbcmac(aes)
+driver       : cbcmac(aes-lib)
+module       : ccm
+priority     : 100
+refcnt       : 5
+selftest     : passed
+internal     : no
+type         : shash
+blocksize    : 16
+digestsize   : 16
+
+name         : cmac(aes)
+driver       : cmac(aes-lib)
+module       : cmac
+priority     : 100
+refcnt       : 5
+selftest     : passed
+internal     : no
+type         : shash
+blocksize    : 16
+digestsize   : 16
+
+name         : ghash
+driver       : ghash-pclmulqdqni
+module       : ghash_clmulni_intel
+priority     : 400
+refcnt       : 1
+selftest     : passed
+internal     : no
+type         : shash
+blocksize    : 16
+digestsize   : 16
+
+name         : pkcs1(rsa,sha256)
+driver       : pkcs1(rsa-generic,sha256)
+module       : kernel
+priority     : 100
+refcnt       : 1
+selftest     : passed
+internal     : no
+type         : sig
+
+name         : xctr(aes)
+driver       : xctr-aes-vaes-avx512
+module       : aesni_intel
+priority     : 800
+refcnt       : 1
+selftest     : passed
+internal     : no
+type         : skcipher
+async        : no
+blocksize    : 1
+min keysize  : 16
+max keysize  : 32
+ivsize       : 16
+chunksize    : 16
+walksize     : 16
+statesize    : 0
+
+name         : jitterentropy_rng
+driver       : jitterentropy_rng
+module       : kernel
+priority     : 100
+refcnt       : 1
+selftest     : passed
+internal     : no
+type         : rng
+seedsize     : 0
+

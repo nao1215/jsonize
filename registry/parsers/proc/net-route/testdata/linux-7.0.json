@@ -1,0 +1,67 @@
+[
+  {
+    "iface": "wlp195s0",
+    "destination": "00000000",
+    "gateway": "010200C0",
+    "flags": "0003",
+    "refcnt": 0,
+    "use": 0,
+    "metric": 600,
+    "mask": "00000000",
+    "mtu": 0,
+    "window": 0,
+    "irtt": 0
+  },
+  {
+    "iface": "docker0",
+    "destination": "000012C6",
+    "gateway": "00000000",
+    "flags": "0001",
+    "refcnt": 0,
+    "use": 0,
+    "metric": 0,
+    "mask": "0000FFFF",
+    "mtu": 0,
+    "window": 0,
+    "irtt": 0
+  },
+  {
+    "iface": "br-1a2b3c4d5e6f",
+    "destination": "000013C6",
+    "gateway": "00000000",
+    "flags": "0001",
+    "refcnt": 0,
+    "use": 0,
+    "metric": 0,
+    "mask": "0000FFFF",
+    "mtu": 0,
+    "window": 0,
+    "irtt": 0
+  },
+  {
+    "iface": "eno1",
+    "destination": "006433C6",
+    "gateway": "00000000",
+    "flags": "0001",
+    "refcnt": 0,
+    "use": 0,
+    "metric": 100,
+    "mask": "00FFFFFF",
+    "mtu": 0,
+    "window": 0,
+    "irtt": 0
+  },
+  {
+    "iface": "wlp195s0",
+    "destination": "000200C0",
+    "gateway": "00000000",
+    "flags": "0001",
+    "refcnt": 0,
+    "use": 0,
+    "metric": 600,
+    "mask": "00FFFFFF",
+    "mtu": 0,
+    "window": 0,
+    "irtt": 0
+  }
+]

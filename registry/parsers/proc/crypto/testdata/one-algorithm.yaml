@@ -1,0 +1,7 @@
+description: |
+  A single block, which is the least this file can hold and still be
+  itself. The result is an array of one.
+source: |
+  the first thirteen lines of the capture beside it, without the blank
+  line that follows them.
+os: linux

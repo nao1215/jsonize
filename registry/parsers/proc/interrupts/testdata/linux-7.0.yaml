@@ -1,0 +1,14 @@
+description: |
+  Lines from a 32 CPU x86-64 machine, chosen for the shapes the trailing
+  part of a line takes: a chip with a flow handler and one driver, a chip
+  whose interrupts have no handler name (amd_gpio), a chip named after
+  the PCI address behind it, two drivers on one interrupt where one of
+  the names holds a space ("PCIe PME, PCIe bwctrl"), summary lines with
+  a sentence, and ERR and MIS, which carry one count rather than one per
+  CPU.
+source: |
+  /proc/interrupts on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C.
+  The file holds 108 lines, so five ranges were taken whole: lines 1 to 9,
+  14 to 16, 89, 103 to 104 and 108. Nothing in it names the machine or
+  its user, so nothing was replaced.
+os: linux

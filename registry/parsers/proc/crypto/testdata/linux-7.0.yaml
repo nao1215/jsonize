@@ -1,0 +1,12 @@
+description: |
+  Blocks for seven algorithms, chosen to cover the labels the types
+  differ in: an aead with its ivsize, maxauthsize and geniv, three
+  hashes with a digestsize, a signature algorithm whose block stops
+  after the seven common labels, a skcipher with the key and walk
+  sizes, and a random number generator with a seedsize.
+source: |
+  /proc/crypto on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C.
+  The file holds 79 blocks in 957 lines, so three ranges of it were
+  taken whole: lines 1 to 55, 114 to 130 and 483 to 493. Nothing in the
+  file names the machine or its user, so nothing was replaced.
+os: linux

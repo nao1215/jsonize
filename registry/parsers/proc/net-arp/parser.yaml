@@ -1,0 +1,80 @@
+# /proc/net/arp is the kernel's ARP cache: a header line and one line per
+# entry, with the address, the hardware type and flags in hexadecimal,
+# the hardware address, a mask column and the device.
+#
+# It is not what `arp -a` prints. That command writes one sentence per
+# entry ("? (192.0.2.8) at ... [ether] on wlp195s0") and arp/alternate
+# reads it. This file is a table, and the two have no line in common.
+#
+# The cells are split on whitespace rather than at the header words,
+# because the columns do not stay where the header puts them. The kernel
+# writes the hardware address with one byte per two digits and no padding
+# ("%s     *        %s"), so the Mask and Device columns sit further
+# right for a device whose address is longer than six bytes: IP over
+# InfiniBand has twenty. Only the address column is a fixed width.
+#
+# What that costs is a device with no hardware address at all, where the
+# kernel writes nothing between the flags and the mask. Such a line has
+# five cells rather than six and is refused, rather than read with the
+# device in the mask column. It was not available to capture, and a
+# regular expression that made the address optional would have to be
+# written against a shape nobody here has seen.
+#
+# The hardware address is claimed as hexadecimal bytes, which is what
+# the kernel writes for every device type but one: on an AX.25 or NET/ROM
+# link it writes a callsign there instead. Such a cache is refused, and
+# saying so is the scope this definition takes rather than a shape it
+# guesses at.
+#
+# The mask column is "*" on every entry. The kernel has written the
+# character rather than a netmask since the ATF_NETMASK flag was
+# removed, and it is reported as the text it is rather than dropped,
+# because the column is what the file holds.
+#
+# hw_type and flags are kept as the "0x1" and "0x2" the kernel wrote.
+# They are a device type and a bit set (0x2 complete, 0x4 permanent,
+# 0x8 published), not quantities, and an int field would read them base
+# ten and refuse the "0x" anyway.
+format: 1
+command: proc
+variant: net-arp
+description: /proc/net/arp kernel ARP cache
+metadata:
+  tags: [linux, network, proc]
+  compatible: [Linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_net.5.html
+    - https://man7.org/linux/man-pages/man7/arp.7.html
+detect:
+  os: [linux]
+  signature:
+    # One entry per neighbour on the LAN and per container: past twenty
+    # lines on any machine that runs containers, and the shape below is
+    # about every line.
+    window: 200
+    all:
+      # The header, which the kernel writes as one string and which no
+      # other table opens with.
+      - '\AIP address[ \t]+HW type[ \t]+Flags[ \t]+HW address[ \t]+Mask[ \t]+Device[ \t]*$'
+      # Every line after it is an entry: an address, two hexadecimal
+      # words, the hardware address, the mask column and the device. A
+      # cache with nothing in it is the header alone, so the repetition
+      # may be empty.
+      - '\AIP address[ \t]+HW type[ \t]+Flags[ \t]+HW address[ \t]+Mask[ \t]+Device[ \t]*(?:\n\S+[ \t]+0x[0-9a-fA-F]+[ \t]+0x[0-9a-fA-F]+[ \t]+[0-9a-fA-F:]+[ \t]+\*[ \t]+\S+[ \t]*)*\z'
+parse:
+  type: table
+  split: whitespace
+  # Three of the header labels are two words each ("IP address",
+  # "HW type", "HW address"), which names derived from the header would
+  # split, so the columns are named here.
+  header:
+    columns: [ip_address, hw_type, flags, hw_address, mask, device]
+fields:
+  ip_address: {required: true}
+  hw_type: {required: true}
+  flags: {required: true}
+  # All zeroes on an entry the kernel has not resolved yet, which is a
+  # value the file states rather than a missing one.
+  hw_address: {required: true}
+  mask: {required: true}
+  device: {required: true}

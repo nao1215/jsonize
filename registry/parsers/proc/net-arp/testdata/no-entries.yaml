@@ -1,0 +1,7 @@
+description: |
+  The header and nothing else, which is what the file holds before any
+  neighbour has been resolved. The signature allows a cache with no
+  entry in it, and the result is an empty array.
+source: |
+  synthetic; the header line of the capture beside it.
+os: linux

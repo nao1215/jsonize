@@ -1,0 +1,9 @@
+description: |
+  The header and nothing else, which is what a network namespace with no
+  route in it holds. The rows are what the file is for, but a file
+  without one is still this file, so the signature allows none and the
+  result is an empty array.
+source: |
+  synthetic; the header line of the capture beside it, padded to 127
+  columns the way the kernel writes it.
+os: linux

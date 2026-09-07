@@ -1,0 +1,6 @@
+description: |
+  The whole file from a 32 CPU x86-64 machine: ten kinds of software
+  interrupt, each with one count per CPU. Nothing in it names the
+  machine or its user.
+source: /proc/softirqs on Linux 7.0.0-30-generic (Ubuntu), read with LC_ALL=C
+os: linux

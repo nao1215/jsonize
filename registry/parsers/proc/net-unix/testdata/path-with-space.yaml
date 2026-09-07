@@ -1,0 +1,10 @@
+description: |
+  A socket bound to a name with a space in it. The path is the rest of
+  the line, so the name arrives whole rather than cut at the space or
+  refused as a ninth field.
+source: |
+  /proc/net/unix on Linux 7.0.0-30-generic (Ubuntu) with LC_ALL=C, while
+  a python process held a listening socket bound to a name containing a
+  space; the header and that one line. The directory the socket was
+  created in was shortened to /tmp.
+os: linux
