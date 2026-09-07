@@ -1,0 +1,4 @@
+description: three entries of one interface, with names left unresolved
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C; addresses and hardware addresses replaced
+os: linux
+args: ["-n", "-i", "eno1"]

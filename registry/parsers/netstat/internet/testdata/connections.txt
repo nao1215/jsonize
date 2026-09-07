@@ -1,0 +1,12 @@
+Active Internet connections (w/o servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       
+tcp        0      0 192.168.11.20:53743     198.51.100.201:27018    ESTABLISHED 
+tcp        0      0 192.168.11.20:45082     203.0.113.47:443        TIME_WAIT   
+tcp        0      0 192.168.11.20:36974     203.0.113.110:443       ESTABLISHED 
+tcp        0      0 192.168.11.20:49670     198.51.100.103:443      ESTABLISHED 
+tcp        0      0 192.168.11.20:41764     203.0.113.110:443       ESTABLISHED 
+tcp        0      0 192.168.11.20:41766     203.0.113.110:443       ESTABLISHED 
+tcp        0      0 192.168.11.20:41780     203.0.113.110:443       ESTABLISHED 
+tcp        0      0 192.168.11.20:41792     203.0.113.110:443       ESTABLISHED 
+tcp        0      0 192.168.11.20:41800     203.0.113.110:443       ESTABLISHED 
+tcp        0      0 192.168.11.20:41802     203.0.113.110:443       ESTABLISHED 

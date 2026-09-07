@@ -1,0 +1,43 @@
+# The UNIX domain socket table `netstat -x` prints. The I-Node column is
+# right-aligned in a field narrower than the values it holds, so the
+# columns are read with an expression rather than by header offset.
+#
+# The banner is anchored with \A so that the combined output of a netstat
+# with no family flag, which starts with the internet table, is left to
+# netstat/all-sockets.
+format: 1
+command: netstat
+variant: unix
+description: netstat UNIX domain socket table (-x)
+metadata:
+  tags: [linux, network, net-tools]
+  # Only BusyBox was available to capture from; net-tools prints the same
+  # columns but was not verified here.
+  compatible: [BusyBox]
+  references:
+    - https://man7.org/linux/man-pages/man8/netstat.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AActive UNIX domain sockets \('
+      - '^Proto[ \t]+RefCnt[ \t]+Flags[ \t]+Type[ \t]+State[ \t]+I-Node[ \t]+Path[ \t]*$'
+input:
+  ignore:
+    - '^Active UNIX domain sockets'
+    - '^Proto[ \t]+RefCnt'
+parse:
+  type: regex
+  # Two cells are routinely blank: a datagram socket has no state, and a
+  # socket that was never bound has no path. Both are groups that always
+  # participate and may be empty, so every row carries the same keys.
+  pattern: '^(?P<proto>\S+)[ \t]+(?P<refcnt>\d+)[ \t]+\[[ \t]*(?P<flags>[^\]]*?)[ \t]*\][ \t]+(?P<type>\S+)[ \t]+(?P<state>[A-Z]*)[ \t]+(?P<inode>\d+)[ \t]*(?P<path>.*?)[ \t]*$'
+fields:
+  proto: {required: true}
+  refcnt: {type: int, required: true}
+  # The bracketed cell holds zero or more flag words (ACC, W, N).
+  flags: {type: array, split_regex: '[ \t]+'}
+  type: {required: true}
+  state: {null_if: [""]}
+  inode: {type: int, required: true}
+  path: {null_if: [""]}
