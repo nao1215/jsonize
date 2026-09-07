@@ -135,10 +135,23 @@ which is a statement the definition author made deliberately; anything
 else is an error that names the candidates. The alternative, "first match
 wins", would silently depend on directory order.
 
-Fixtures double as selection tests: every `testdata/<case>.yaml` with
-`os`/`args` is pushed through the selector and must pick its own
-definition, so adding a variant whose signature overlaps an existing one
-fails `make test` immediately.
+Survivors from different registries are settled before that, by the
+layering: the definition from the earlier registry wins. This is a
+declaration rather than a guess, and it is the same declaration that
+already decides which definition of one command and variant applies. The
+alternative was to keep it an error, which meant that one definition
+someone added locally could take an official parser away from them: with
+a `^Filesystem` signature in a user registry, `df -h | jz` reported that
+the input matched several parsers and exited 4. Definitions inside one
+registry are still never ranked against each other, so a collision the
+registry owns stays an error they have to resolve. `jz test` is where
+they see it.
+
+Fixtures double as selection tests: every fixture is pushed through the
+selector and must pick its own definition, and every definition is named
+explicitly on every other definition's fixtures and must refuse them, so
+adding a variant whose signature overlaps an existing one fails
+`jz test` immediately.
 
 ### Exec mode forces `LC_ALL=C`
 

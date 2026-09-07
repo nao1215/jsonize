@@ -445,3 +445,49 @@ scenarios:
           exit_code: 1
           stderr:
             contains: "a fixture of df/gnu"
+
+  # A definition added locally cannot turn an official parser into an
+  # ambiguity: the layering already says whose definitions apply.
+  - name: a definition in a preferred registry wins over the built-in one
+    steps:
+      - fixture:
+          file: wins/parsers/greet/x/parser.yaml
+          content: |
+            format: 1
+            command: greet
+            variant: x
+            description: anything opening with Filesystem
+            detect:
+              signature:
+                all: ['^Filesystem']
+            parse:
+              type: regex
+              pattern: '^(?P<line>.+)$'
+      - run:
+          command: jz --parser greet --variant x
+          stdin: "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1  1.8T  1.6T  145G  92% /\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/wins"
+      - assert:
+          exit_code: 0
+      # Automatic detection lands on the local definition rather than
+      # reporting that df and greet both match.
+      - run:
+          command: jz
+          stdin: "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1  1.8T  1.6T  145G  92% /\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/wins"
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].line", matches: "^Filesystem" }
+      # The built-in definition is still there under its own name.
+      - run:
+          command: jz --parser df
+          stdin: "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1  1.8T  1.6T  145G  92% /\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/wins"
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].mounted_on", equals: "/" }

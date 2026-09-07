@@ -93,9 +93,11 @@ detect:
   `none` expressions excluding every other format that looks similar.
 
 Selection: a candidate whose applicable criterion fails is rejected. One
-remaining candidate is the answer. Several are settled by `priority` only
-when they are variants of the same command and one priority is strictly
-highest; otherwise the selection is an error naming them.
+remaining candidate is the answer. Several from different registries are
+settled by the registry layering, the earlier one winning. Several from
+one registry are settled by `priority` only when they are variants of the
+same command and one priority is strictly highest; otherwise the
+selection is an error naming them.
 
 ## exec
 

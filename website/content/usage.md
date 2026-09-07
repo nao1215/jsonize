@@ -185,3 +185,11 @@ a command and variant wins:
 `jz list --sources` prints them with what exists on your machine. jz
 never accesses the network, so the same input converts to the same JSON
 on the same machine.
+
+The order settles more than definitions of the same name. When automatic
+detection is left with definitions of different commands that all fit the
+text, the one from the earlier registry is the answer, because that order
+is what you declared. A definition of your own can therefore take over a
+format jz already reads, and it cannot make jz stop reading one. Two
+definitions of the *same* registry that both fit stay an error naming
+them; `jz test` reports those before they reach a pipeline.

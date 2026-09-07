@@ -2,6 +2,7 @@ package selector
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -399,6 +400,121 @@ func TestLeadingNoiseAndHeaderPosition(t *testing.T) {
 	// Case matters: signatures are literal about the header text.
 	if _, err := Select(reg, Context{Input: []byte(strings.ToUpper(gnuDF))}); err == nil {
 		t.Error("upper-cased header must not match")
+	}
+}
+
+// layered builds a registry from several sources, most preferred first.
+// Each map is one registry: id -> definition body.
+func layered(t *testing.T, sources ...map[string]string) *registry.Registry {
+	t.Helper()
+	srcs := make([]registry.Source, 0, len(sources))
+	for i, defs := range sources {
+		fsys := fstest.MapFS{}
+		for id, body := range defs {
+			fsys["parsers/"+id+"/parser.yaml"] = &fstest.MapFile{Data: []byte(body)}
+		}
+		srcs = append(srcs, registry.Source{Name: fmt.Sprintf("source%d", i), FS: fsys})
+	}
+	reg, err := registry.Load(srcs...)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(reg.Problems) > 0 {
+		t.Fatal(reg.Problems)
+	}
+	return reg
+}
+
+// A definition someone adds locally must not be able to turn an official
+// parser into an ambiguity. The layering already says whose definitions
+// apply, so it decides here too.
+func TestSourcePrecedenceSettlesCollisions(t *testing.T) {
+	t.Parallel()
+	const (
+		wide     = "detect: {signature: {all: ['^Filesystem']}}\n"
+		narrow   = "detect: {signature: {all: ['^Filesystem\\s+1K-blocks']}}\n"
+		ranked   = "detect: {priority: 5, signature: {all: ['^Filesystem']}}\n"
+		unranked = "detect: {signature: {all: ['^Filesystem']}}\n"
+	)
+	tests := []struct {
+		name    string
+		sources []map[string]string
+		want    string // selected id, empty when the selection must fail
+	}{
+		{
+			name: "a user definition wins over an embedded one",
+			sources: []map[string]string{
+				{"greet/x": def("greet", "x", wide)},
+				{"df/gnu": def("df", "gnu", narrow)},
+			},
+			want: "greet/x",
+		},
+		{
+			name: "the embedded definition applies when nothing shadows it",
+			sources: []map[string]string{
+				{"greet/x": def("greet", "x", "detect: {signature: {all: ['^NEVER']}}\n")},
+				{"df/gnu": def("df", "gnu", narrow)},
+			},
+			want: "df/gnu",
+		},
+		{
+			name: "two definitions of one registry stay ambiguous",
+			sources: []map[string]string{
+				{"greet/x": def("greet", "x", wide), "hail/y": def("hail", "y", wide)},
+				{"df/gnu": def("df", "gnu", narrow)},
+			},
+		},
+		{
+			name: "two embedded definitions stay ambiguous",
+			sources: []map[string]string{
+				{"df/gnu": def("df", "gnu", narrow), "df/other": def("df", "other", wide)},
+			},
+		},
+		{
+			name: "priority still decides inside the preferred registry",
+			sources: []map[string]string{
+				{"df/general": def("df", "general", unranked), "df/specific": def("df", "specific", ranked)},
+				{"df/gnu": def("df", "gnu", narrow)},
+			},
+			want: "df/specific",
+		},
+		{
+			name: "priority does not reach across registries",
+			sources: []map[string]string{
+				{"greet/x": def("greet", "x", unranked)},
+				{"df/gnu": def("df", "gnu", ranked)},
+			},
+			want: "greet/x",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			reg := layered(t, tt.sources...)
+			res, err := Select(reg, Context{Input: []byte(gnuDF)})
+			if tt.want == "" {
+				var am *AmbiguousError
+				if !errors.As(err, &am) {
+					t.Fatalf("expected AmbiguousError, got %v (%v)", err, res)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if got := res.Entry.Def.ID(); got != tt.want {
+				t.Errorf("selected %s, want %s", got, tt.want)
+			}
+		})
+	}
+	// Naming the parser still reaches the definition the layering hid.
+	reg := layered(t,
+		map[string]string{"greet/x": def("greet", "x", wide)},
+		map[string]string{"df/gnu": def("df", "gnu", narrow)},
+	)
+	res, err := Select(reg, Context{Parser: "df", Input: []byte(gnuDF)})
+	if err != nil || res.Entry.Def.ID() != "df/gnu" {
+		t.Errorf("--parser df: %v %v", res, err)
 	}
 }
 

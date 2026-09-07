@@ -17,6 +17,10 @@
 //   - The operating system and the command arguments are hard filters
 //     when they are known, which is the case when jz ran the command
 //     itself. They can only remove candidates, never promote one.
+//   - When definitions from different registries survive together, the
+//     one from the more preferred registry wins. That is not a guess
+//     either: the layering is the order the user asked for, and it
+//     already decides which definition of the same name applies.
 //   - detect.priority breaks a tie between variants of the same command,
 //     which is a deliberate statement by the definition author. It never
 //     ranks definitions of different commands against each other.
@@ -268,10 +272,39 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		}
 		return nil, err
 	}
+	// The layering is a statement the user made: a registry earlier in it
+	// is the one whose definitions apply. Applying that here as well means
+	// a definition someone adds locally cannot turn an official parser
+	// into an ambiguity, which is what would otherwise happen the moment
+	// two registries describe overlapping formats.
+	matched = mostPreferred(matched)
+	if len(matched) == 1 {
+		return &Result{Entry: matched[0], Scanned: len(candidates)}, nil
+	}
 	if best, ok := breakTie(matched); ok {
 		return &Result{Entry: best, Scanned: len(candidates)}, nil
 	}
 	return nil, &AmbiguousError{Candidates: matched}
+}
+
+// mostPreferred keeps the entries that come from the earliest registry in
+// the layering. Entries of one registry are never ranked against each
+// other, so a collision inside a registry stays an error its owner has to
+// resolve.
+func mostPreferred(matched []*registry.Entry) []*registry.Entry {
+	best := matched[0].Precedence
+	for _, e := range matched[1:] {
+		if e.Precedence < best {
+			best = e.Precedence
+		}
+	}
+	out := matched[:0:0]
+	for _, e := range matched {
+		if e.Precedence == best {
+			out = append(out, e)
+		}
+	}
+	return out
 }
 
 // breakTie applies detect.priority. It only decides between variants of

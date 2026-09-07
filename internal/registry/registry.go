@@ -11,7 +11,9 @@
 //
 // Sources are layered: a definition with the same command/variant in a
 // higher-precedence source shadows the lower one, so users can override an
-// official definition without editing it.
+// official definition without editing it. Each entry also carries the
+// position of its source in that layering, which is what the selector
+// uses to settle a collision between definitions of different commands.
 package registry
 
 import (
@@ -65,6 +67,10 @@ type Entry struct {
 	Source string
 	// Path is the definition path inside its source FS.
 	Path string
+	// Precedence is the position of Source in the layering Load was given,
+	// 0 being the most preferred. Two entries share it exactly when they
+	// come from the same registry.
+	Precedence int
 	// Shadowed lists sources whose definition for the same id was hidden by
 	// this one.
 	Shadowed []string
@@ -98,8 +104,8 @@ func (e *LoadError) Unwrap() error { return e.Err }
 // Load reads every source in precedence order (first wins).
 func Load(sources ...Source) (*Registry, error) {
 	r := &Registry{entries: map[string]*Entry{}, byCommand: map[string][]*Entry{}, commands: map[string]bool{}}
-	for _, src := range sources {
-		if err := r.addSource(src); err != nil {
+	for i, src := range sources {
+		if err := r.addSource(i, src); err != nil {
 			return nil, err
 		}
 	}
@@ -109,7 +115,7 @@ func Load(sources ...Source) (*Registry, error) {
 	return r, nil
 }
 
-func (r *Registry) addSource(src Source) error {
+func (r *Registry) addSource(precedence int, src Source) error {
 	if src.FS == nil {
 		return fmt.Errorf("source %q has no filesystem", src.Name)
 	}
@@ -164,7 +170,7 @@ func (r *Registry) addSource(src Source) error {
 			return nil //nolint:nilerr // recorded in Problems so other definitions still load
 		}
 		def.Origin = src.Name
-		r.add(&Entry{Def: def, Source: src.Name, Path: p})
+		r.add(&Entry{Def: def, Source: src.Name, Path: p, Precedence: precedence})
 		return nil
 	})
 	if err != nil {
