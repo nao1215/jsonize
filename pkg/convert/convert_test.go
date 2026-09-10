@@ -314,6 +314,9 @@ func TestDuration(t *testing.T) {
 		{"1.5h", LayoutMinuteSecond, int64(5400)},
 		{"250ms", LayoutMinuteSecond, 0.25},
 		{"2 hours", LayoutMinuteSecond, int64(7200)},
+		// A unit spelled as a word is read whatever its case.
+		{"2 Hours", LayoutMinuteSecond, int64(7200)},
+		{"5 MIN", LayoutMinuteSecond, int64(300)},
 		// systemd writes a long startup this way.
 		{"1w 6d 18h 15min 19.086s", LayoutMinuteSecond, 1188919.086},
 		{"2min 44.575s", LayoutMinuteSecond, 164.575},
@@ -352,6 +355,9 @@ func TestDurationRefuses(t *testing.T) {
 		"1.5-01:02:03",
 		"+2-01:00:00",
 		"inf-01:00:00",
+		// A one-letter unit is its case: systemd writes a month as "M"
+		// where "m" is a minute, and a size writes a megabyte that way.
+		"1M", "2H", "3D", "4MS",
 	} {
 		if v, err := Duration(in, LayoutMinuteSecond); err == nil {
 			t.Errorf("Duration(%q) = %v, want an error", in, v)

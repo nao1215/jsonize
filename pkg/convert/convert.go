@@ -526,6 +526,21 @@ var durationUnits = map[string]float64{
 	"w": 604800, "wk": 604800, "week": 604800, "weeks": 604800,
 }
 
+// durationUnit looks a unit up. An abbreviation of one or two letters is
+// matched as written, because its case is part of it: systemd writes a
+// month as "M" where "m" is a minute, and "M" after a number is as often
+// a megabyte. A unit spelled as a word is matched whatever its case.
+func durationUnit(u string) (float64, bool) {
+	if mult, ok := durationUnits[u]; ok {
+		return mult, true
+	}
+	if len(u) <= 2 {
+		return 0, false
+	}
+	mult, ok := durationUnits[strings.ToLower(u)]
+	return mult, ok
+}
+
 // parseUnits reads a number followed by its unit, repeated: "45 min",
 // "1h2m3s", "3days". A space between the number and the unit is
 // optional, and the parts must run from the largest unit to the
@@ -555,7 +570,7 @@ func parseUnits(t string) (float64, error) {
 		if k == 0 {
 			return 0, errDurationShape
 		}
-		mult, ok := durationUnits[strings.ToLower(t[:k])]
+		mult, ok := durationUnit(t[:k])
 		if !ok || mult >= prev {
 			return 0, errDurationShape
 		}

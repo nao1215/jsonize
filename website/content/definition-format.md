@@ -670,6 +670,11 @@ It reads the spellings commands print:
 3d4h
 ```
 
+A unit spelled as a word (`min`, `Hours`) is read whatever its case. A
+unit of one or two letters is read as written: `m` is a minute, and `M`,
+which systemd writes for a month and a size writes for a megabyte, is
+no unit a duration reads.
+
 `layout` is required and is one of two words rather than a Go layout. It
 says what the last part of a bare two-part reading is: `ps` prints four
 minutes fifty seconds as `4:50` and `uptime` prints an hour and
