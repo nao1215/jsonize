@@ -1,0 +1,35 @@
+
+; <<>> DiG 9.20.24-1ubuntu0.3-Ubuntu <<>> +norec example.com NS @a.gtld-servers.net
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 43457
+;; flags: qr; QUERY: 1, ANSWER: 0, AUTHORITY: 2, ADDITIONAL: 13
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;example.com.			IN	NS
+
+;; AUTHORITY SECTION:
+example.com.		172800	IN	NS	hera.ns.cloudflare.com.
+example.com.		172800	IN	NS	elliott.ns.cloudflare.com.
+
+;; ADDITIONAL SECTION:
+hera.ns.cloudflare.com.	172800	IN	A	108.162.192.162
+hera.ns.cloudflare.com.	172800	IN	A	172.64.32.162
+hera.ns.cloudflare.com.	172800	IN	A	173.245.58.162
+hera.ns.cloudflare.com.	172800	IN	AAAA	2606:4700:50::adf5:3aa2
+hera.ns.cloudflare.com.	172800	IN	AAAA	2803:f800:50::6ca2:c0a2
+hera.ns.cloudflare.com.	172800	IN	AAAA	2a06:98c1:50::ac40:20a2
+elliott.ns.cloudflare.com. 172800 IN	A	108.162.195.228
+elliott.ns.cloudflare.com. 172800 IN	A	162.159.44.228
+elliott.ns.cloudflare.com. 172800 IN	A	172.64.35.228
+elliott.ns.cloudflare.com. 172800 IN	AAAA	2606:4700:58::a29f:2ce4
+elliott.ns.cloudflare.com. 172800 IN	AAAA	2803:f800:50::6ca2:c3e4
+elliott.ns.cloudflare.com. 172800 IN	AAAA	2a06:98c1:50::ac40:23e4
+
+;; Query time: 338 msec
+;; SERVER: 192.5.6.30#53(a.gtld-servers.net) (UDP)
+;; WHEN: Thu Sep 10 21:23:08 JST 2026
+;; MSG SIZE  rcvd: 359
+

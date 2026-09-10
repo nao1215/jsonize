@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/uuidparse/linux.json",
+  "title": "uuidparse/linux",
+  "description": "uuidparse UUID variant, type and time",
+  "x-jsonize": {
+    "definition": "uuidparse/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "uuid": {
+        "type": "string"
+      },
+      "variant": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

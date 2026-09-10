@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/gnu-type.json",
+  "title": "df/gnu-type",
+  "description": "df -T on GNU coreutils, with the filesystem type column",
+  "x-jsonize": {
+    "definition": "df/gnu-type",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "1k_blocks": {
+        "type": "integer"
+      },
+      "used": {
+        "type": "integer"
+      },
+      "available": {
+        "type": "integer"
+      },
+      "use_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "type",
+      "1k_blocks",
+      "used",
+      "available",
+      "use_percent",
+      "mounted_on"
+    ]
+  }
+}

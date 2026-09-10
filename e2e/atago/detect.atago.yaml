@@ -423,10 +423,13 @@ scenarios:
       - assert:
           exit_code: 0
           stderr:
-            contains: "jz: df/gnu from embedded"
+            contains: "jz: explain: chose df/gnu from embedded"
       - assert:
           stderr:
-            contains: "jz: matched: signature.all[0] /"
+            contains: "jz: explain: matched: signature.all[0] /"
+      - assert:
+          stderr:
+            contains: "jz: explain: read: 8 lines: 8 read"
       # Naming the parser reports the variants that were left out, which
       # is what makes a wrong variant traceable.
       - run:
@@ -434,10 +437,40 @@ scenarios:
       - assert:
           exit_code: 0
           stderr:
-            contains: "rejected: "
+            contains: "jz: explain: scope: the variants of df, named by --parser"
       - assert:
           stderr:
-            contains: "df/gnu-human (signature.all[0]"
+            contains: "jz: explain: rejected: df/gnu-human: signature.all[0]"
+      # The same facts as one JSON document, on the one line that opens
+      # with "jz: explain: ", for a script to read.
+      - run:
+          command: >-
+            sh -c 'jz --explain=json --file "$1" 2>&1 >/dev/null | sed -n "s/^jz: explain: //p"' sh ${workdir}/df-gnu.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.outcome", equals: chosen }
+              - { path: "$.chosen.definition", equals: df/gnu }
+              - { path: "$.chosen.registry", equals: embedded }
+              - { path: "$.read.lines", equals: 8 }
+              - { path: "$.read.read", equals: 8 }
+              - { path: "$.error", equals: null }
+
+  # Detection that cannot decide says which kind of undecided it is:
+  # nothing fits, or several do.
+  - name: --explain=json tells no match from an ambiguous one
+    steps:
+      - run:
+          command: >-
+            sh -c 'printf "this is not the output of any known command\n" | jz --explain=json 2>&1 >/dev/null | sed -n "s/^jz: explain: //p"'
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.outcome", equals: unidentified }
+              - { path: "$.chosen", equals: null }
+              - { path: "$.error.exit", equals: 4 }
 
   # A file has no argv, so its path is the only evidence besides the text
   # itself. The directory names the parser and the file names the

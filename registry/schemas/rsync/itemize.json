@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/rsync/itemize.json",
+  "title": "rsync/itemize",
+  "description": "rsync --itemize-changes output",
+  "x-jsonize": {
+    "definition": "rsync/itemize",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "change": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      },
+      "link_to": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "change",
+      "path"
+    ]
+  }
+}

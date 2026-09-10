@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/bridge/fdb.json",
+  "title": "bridge/fdb",
+  "description": "bridge fdb, the forwarding database",
+  "x-jsonize": {
+    "definition": "bridge/fdb",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "address": {
+        "type": "string"
+      },
+      "dev": {
+        "type": "string"
+      },
+      "attributes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "address",
+      "attributes"
+    ]
+  }
+}

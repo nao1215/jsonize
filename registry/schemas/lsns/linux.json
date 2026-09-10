@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsns/linux.json",
+  "title": "lsns/linux",
+  "description": "lsns table of namespaces",
+  "x-jsonize": {
+    "definition": "lsns/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "nprocs": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "ns": {
+        "type": "integer"
+      },
+      "pid": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "type": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

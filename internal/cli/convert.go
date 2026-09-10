@@ -83,19 +83,27 @@ func (a *app) cmdConvert(args []string) int {
 		defer f.Close()
 		r = f
 	}
+	exp := newExplanation(co.selects.explain)
 	if hasInline {
-		return a.convertWith(inline, r, &co.output, co.selects.explain)
+		return a.convertWith(inline, r, &co.output, exp)
 	}
 	ctx := selector.Context{Parser: co.selects.parser, Variant: co.selects.variant}
+	from := fromRegistry
+	if co.selects.parser != "" {
+		from = fromFlag
+	}
 	if co.selects.parser == "" && co.file != "-" {
 		// A path is evidence about the text the same way argv is in exec
 		// mode, and it is the only evidence a file gives.
 		if p, v, ok := parserFromPath(reg, co.file); ok {
 			ctx.Parser, ctx.Variant = p, v
+			from = fromPath
+			exp.path = co.file
 		}
 	}
+	exp.scope(ctx, from)
 	if co.output.stream {
-		return a.stream(reg, r, ctx, &co.output, false, co.selects.explain)
+		return a.stream(reg, r, ctx, &co.output, false, exp)
 	}
 	// The size limit is not negotiable from the command line: it exists so
 	// that a runaway producer cannot make jz allocate without bound.
@@ -104,26 +112,27 @@ func (a *app) cmdConvert(args []string) int {
 		return code
 	}
 	ctx.Input = data
-	sel, out, err := readWith(reg, ctx, data, co.output.engineOptions())
+	sel, out, acct, err := readWith(reg, ctx, data, co.output.engineOptions())
 	if err != nil && ctx.Parser != co.selects.parser {
 		// The path was a guess, so it never makes the answer worse. It
 		// is dropped when the definition it named does not describe the
 		// text and equally when it describes it but cannot read it:
 		// either way the guess was wrong, and the text is then read on
 		// its own terms.
+		exp.dropPath(err)
 		ctx.Parser, ctx.Variant = co.selects.parser, co.selects.variant
-		sel, out, err = readWith(reg, ctx, data, co.output.engineOptions())
+		exp.scope(ctx, fromRegistry)
+		sel, out, acct, err = readWith(reg, ctx, data, co.output.engineOptions())
 	}
+	exp.chose(sel)
 	if err != nil {
 		code := a.exitFor(err)
-		if co.selects.explain {
-			a.explainFailure(err)
-		}
+		exp.fail(err, code)
+		a.explainWrite(exp)
 		return code
 	}
-	if co.selects.explain {
-		a.explain(sel)
-	}
+	exp.read(acct)
+	a.explainWrite(exp)
 	if out, code = a.narrow(out, &co.output); code != ExitOK {
 		return code
 	}
@@ -166,21 +175,28 @@ func (a *app) readAll(r io.Reader) ([]byte, int) {
 // line. Nothing is selected, so nothing can be selected wrongly: the
 // caller stated the format and gets either the reading of it or the
 // reason it does not fit.
-func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOptions, explain bool) int {
-	if explain {
-		a.errorf("%s from --define", def.ID())
+func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOptions, exp *explanation) int {
+	if exp != nil {
+		exp.defined = def.ID()
+		exp.scope(selector.Context{}, fromDefine)
 	}
 	if out.stream {
+		a.explainWrite(exp)
 		return a.streamWith(def, r, out)
 	}
 	data, code := a.readAll(r)
 	if code != ExitOK {
 		return code
 	}
-	v, err := engine.Parse(def, data, out.engineOptions())
+	v, acct, err := engine.ParseAccounted(def, data, out.engineOptions())
 	if err != nil {
-		return a.exitFor(err)
+		code := a.exitFor(err)
+		exp.fail(err, code)
+		a.explainWrite(exp)
+		return code
 	}
+	exp.read(acct)
+	a.explainWrite(exp)
 	if v, code = a.narrow(v, out); code != ExitOK {
 		return code
 	}
@@ -193,15 +209,17 @@ func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOp
 // readWith chooses a definition for the text and reads it with that one.
 // The two steps are taken together because a caller that may retry has
 // to treat them the same way: a definition that does not describe the
-// text and one that cannot read it are both the wrong definition.
-func readWith(reg *registry.Registry, ctx selector.Context, data []byte, opts engine.Options) (*selector.Result, any, error) {
+// text and one that cannot read it are both the wrong definition. The
+// selection comes back even when the reading fails, since which
+// definition failed is part of explaining the failure.
+func readWith(reg *registry.Registry, ctx selector.Context, data []byte, opts engine.Options) (*selector.Result, any, engine.Account, error) {
 	sel, err := selector.Select(reg, ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, engine.Account{}, err
 	}
-	out, err := engine.Parse(sel.Entry.Def, data, opts)
+	out, acct, err := engine.ParseAccounted(sel.Entry.Def, data, opts)
 	if err != nil {
-		return nil, nil, err
+		return sel, nil, acct, err
 	}
-	return sel, out, nil
+	return sel, out, acct, nil
 }

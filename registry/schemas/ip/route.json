@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ip/route.json",
+  "title": "ip/route",
+  "description": "ip route show",
+  "x-jsonize": {
+    "definition": "ip/route",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string",
+        "enum": [
+          "anycast",
+          "blackhole",
+          "broadcast",
+          "local",
+          "multicast",
+          "nat",
+          "prohibit",
+          "throw",
+          "unicast",
+          "unreachable"
+        ]
+      },
+      "destination": {
+        "type": "string"
+      },
+      "via": {
+        "type": "string"
+      },
+      "dev": {
+        "type": "string"
+      },
+      "attributes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "destination",
+      "attributes"
+    ]
+  }
+}

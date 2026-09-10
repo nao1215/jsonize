@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ip/brief-address.json",
+  "title": "ip/brief-address",
+  "description": "ip -brief address show",
+  "x-jsonize": {
+    "definition": "ip/brief-address",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "interface": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "DOWN",
+          "LOWERLAYERDOWN",
+          "UNKNOWN",
+          "UP"
+        ]
+      },
+      "addresses": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "interface",
+      "state",
+      "addresses"
+    ]
+  }
+}

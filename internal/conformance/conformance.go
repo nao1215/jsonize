@@ -1,12 +1,13 @@
 // Package conformance checks a registry against itself.
 //
-// Two things are checked. Every <case>.txt fixture stored next to a
+// Three things are checked. Every <case>.txt fixture stored next to a
 // definition is parsed with that definition and compared with
 // <case>.json, and is fed through selection to prove that it picks its
-// own definition unambiguously. Then every definition is named
-// explicitly on every other definition's fixtures and must refuse them,
-// which is what keeps a signature from quietly widening until it reads a
-// neighbouring format.
+// own definition unambiguously. Every fixture is then tampered with (see
+// Tampering) to prove the definition reads all of what it is given.
+// Last, every definition is named explicitly on every other definition's
+// fixtures and must refuse them, which is what keeps a signature from
+// quietly widening until it reads a neighbouring format.
 //
 // The same checks back `go test ./registry` for the embedded registry and
 // `jz test` for any other one, so parser authors need no Go toolchain.
@@ -15,12 +16,14 @@ package conformance
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/fs"
 	"path"
 	"reflect"
 	"strings"
 
+	"github.com/nao1215/jsonize/internal/schema"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
@@ -88,9 +91,10 @@ func Run(reg *registry.Registry, fsys fs.FS, sourceName string, opts Options) []
 }
 
 // Check is the whole contract of a registry in one call: the definitions
-// of the target sources are validated by running their golden cases, and
-// the cross product of definitions and fixtures proves that a definition
-// reads its own format and nothing else.
+// of the target sources are validated by running their golden cases,
+// every fixture is tampered with to prove the definition reads all of its
+// input, and the cross product of definitions and fixtures proves that a
+// definition reads its own format and nothing else.
 //
 // sources must list every registry that was loaded, because a third
 // party's definition has to be checked against the official fixtures as
@@ -107,12 +111,14 @@ func Check(reg *registry.Registry, sources []registry.Source, targets []string, 
 			results = append(results, Run(reg, s.FS, s.Name, opts)...)
 		}
 	}
+	fixtures, problems := Fixtures(reg, sources)
+	results = append(results, problems...)
+	target := func(src string) bool { return underTest[src] }
+	results = append(results, Tampering(reg, fixtures, target, opts)...)
 	if opts.SkipExclusivity {
 		return results
 	}
-	fixtures, problems := Fixtures(reg, sources)
-	results = append(results, problems...)
-	results = append(results, Exclusivity(reg, fixtures, func(src string) bool { return underTest[src] }, opts)...)
+	results = append(results, Exclusivity(reg, fixtures, target, opts)...)
 	return append(results, Decoys(reg, opts.Decoys, opts)...)
 }
 
@@ -177,6 +183,15 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 		return res
 	}
 	res.Actual = buf.Bytes()
+	// The output contract is derived from the definition, and every
+	// fixture is a document the definition produced, so each has to fit
+	// the schema: a key it does not name, a null where it promises a
+	// value, an integer where it says string. A mismatch is the generator
+	// and the engine disagreeing about what the definition produces.
+	if errs := schema.Validate(schema.Generate(e.Def, 1), res.Actual); len(errs) > 0 {
+		res.Err = fmt.Errorf("the output does not fit the schema derived from the definition: %w", errors.Join(errs...))
+		return res
+	}
 	if opts.Update {
 		return res
 	}

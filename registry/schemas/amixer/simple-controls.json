@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/amixer/simple-controls.json",
+  "title": "amixer/simple-controls",
+  "description": "amixer simple mixer control settings",
+  "x-jsonize": {
+    "definition": "amixer/simple-controls",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "control": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "index"
+        ]
+      },
+      "settings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        }
+      }
+    },
+    "required": [
+      "control",
+      "settings"
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/loginctl/sessions.json",
+  "title": "loginctl/sessions",
+  "description": "loginctl list-sessions table",
+  "x-jsonize": {
+    "definition": "loginctl/sessions",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "idle": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "leader": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "seat": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "since": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "uid": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

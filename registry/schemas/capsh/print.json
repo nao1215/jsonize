@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/capsh/print.json",
+  "title": "capsh/print",
+  "description": "capsh --print capability sets, secure bits and process identity",
+  "x-jsonize": {
+    "definition": "capsh/print",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "state": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      }
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "integer"
+        },
+        "user": {
+          "type": "string"
+        },
+        "euid": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "euser": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "gid": {
+          "type": "integer"
+        },
+        "group": {
+          "type": "string"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ]
+          }
+        }
+      },
+      "required": [
+        "uid",
+        "user",
+        "euid",
+        "euser",
+        "gid",
+        "group",
+        "groups"
+      ]
+    },
+    "guessed_mode": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "code"
+      ]
+    }
+  },
+  "required": [
+    "state",
+    "identity",
+    "guessed_mode"
+  ]
+}

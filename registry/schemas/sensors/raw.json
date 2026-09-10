@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sensors/raw.json",
+  "title": "sensors/raw",
+  "description": "sensors -u, the readings of each chip without units",
+  "x-jsonize": {
+    "definition": "sensors/raw",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "chip": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "adapter": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "features": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/node_features"
+        }
+      }
+    },
+    "required": [
+      "chip",
+      "adapter",
+      "features"
+    ]
+  },
+  "$defs": {
+    "node_features": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node_features"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "children"
+      ]
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/self-status.json",
+  "title": "proc/self-status",
+  "description": "/proc/\u003cpid\u003e/status process status labels",
+  "x-jsonize": {
+    "definition": "proc/self-status",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "CoreDumping": {
+      "type": "boolean"
+    },
+    "FDSize": {
+      "type": "integer"
+    },
+    "Gid": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "Groups": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "Kthread": {
+      "type": "boolean"
+    },
+    "NSpgid": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "NSpid": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "NSsid": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "NStgid": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "Ngid": {
+      "type": "integer"
+    },
+    "NoNewPrivs": {
+      "type": "boolean"
+    },
+    "PPid": {
+      "type": "integer"
+    },
+    "Pid": {
+      "type": "integer"
+    },
+    "Seccomp": {
+      "type": "integer"
+    },
+    "Seccomp_filters": {
+      "type": "integer"
+    },
+    "THP_enabled": {
+      "type": "boolean"
+    },
+    "Tgid": {
+      "type": "integer"
+    },
+    "Threads": {
+      "type": "integer"
+    },
+    "TracerPid": {
+      "type": "integer"
+    },
+    "Uid": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "nonvoluntary_ctxt_switches": {
+      "type": "integer"
+    },
+    "voluntary_ctxt_switches": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": {
+    "type": "string"
+  }
+}

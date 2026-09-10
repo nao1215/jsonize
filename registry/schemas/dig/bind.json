@@ -1,0 +1,271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/dig/bind.json",
+  "title": "dig/bind",
+  "description": "dig reply in the default long form",
+  "x-jsonize": {
+    "definition": "dig/bind",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "arguments": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "servers_found": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "global_options": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "arguments",
+        "servers_found",
+        "global_options"
+      ]
+    },
+    "header": {
+      "type": "object",
+      "properties": {
+        "opcode": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "flags": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "question_count": {
+          "type": "integer"
+        },
+        "answer_count": {
+          "type": "integer"
+        },
+        "authority_count": {
+          "type": "integer"
+        },
+        "additional_count": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "opcode",
+        "status",
+        "id",
+        "flags",
+        "question_count",
+        "answer_count",
+        "authority_count",
+        "additional_count"
+      ]
+    },
+    "messages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      }
+    },
+    "edns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      }
+    },
+    "question": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "class",
+          "type"
+        ]
+      }
+    },
+    "answers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "ttl": {
+            "type": "integer"
+          },
+          "class": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "ttl",
+          "class",
+          "type",
+          "data"
+        ]
+      }
+    },
+    "authority": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "ttl": {
+            "type": "integer"
+          },
+          "class": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "ttl",
+          "class",
+          "type",
+          "data"
+        ]
+      }
+    },
+    "additional": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "ttl": {
+            "type": "integer"
+          },
+          "class": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "ttl",
+          "class",
+          "type",
+          "data"
+        ]
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "properties": {
+        "query_time_ms": {
+          "type": "integer"
+        },
+        "server": {
+          "type": "string"
+        },
+        "when": {
+          "type": "string"
+        },
+        "message_size": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "query_time_ms",
+        "server",
+        "when",
+        "message_size"
+      ]
+    }
+  },
+  "required": [
+    "query",
+    "header",
+    "messages",
+    "edns",
+    "question",
+    "answers",
+    "authority",
+    "additional",
+    "statistics"
+  ]
+}

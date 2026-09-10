@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/gnu-inodes.json",
+  "title": "df/gnu-inodes",
+  "description": "df -i on GNU coreutils, exact inode counts",
+  "x-jsonize": {
+    "definition": "df/gnu-inodes",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "inodes": {
+        "type": "integer"
+      },
+      "iused": {
+        "type": "integer"
+      },
+      "ifree": {
+        "type": "integer"
+      },
+      "iuse_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "inodes",
+      "iused",
+      "ifree",
+      "iuse_percent",
+      "mounted_on"
+    ]
+  }
+}

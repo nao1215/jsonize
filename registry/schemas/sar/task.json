@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/task.json",
+  "title": "sar/task",
+  "description": "sar -w task creation and context switching",
+  "x-jsonize": {
+    "definition": "sar/task",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "proc_per_s": {
+        "type": "number"
+      },
+      "cswch_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "proc_per_s",
+      "cswch_per_s"
+    ]
+  }
+}

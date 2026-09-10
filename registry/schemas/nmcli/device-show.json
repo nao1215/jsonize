@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/nmcli/device-show.json",
+  "title": "nmcli/device-show",
+  "description": "nmcli device show, properties per device",
+  "x-jsonize": {
+    "definition": "nmcli/device-show",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "properties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        }
+      }
+    },
+    "required": [
+      "device",
+      "properties"
+    ]
+  }
+}

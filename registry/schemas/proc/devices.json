@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/devices.json",
+  "title": "proc/devices",
+  "description": "/proc/devices character and block device drivers",
+  "x-jsonize": {
+    "definition": "proc/devices",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "character_devices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "major": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "major",
+          "name"
+        ]
+      }
+    },
+    "block_devices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "major": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "major",
+          "name"
+        ]
+      }
+    }
+  },
+  "required": [
+    "character_devices",
+    "block_devices"
+  ]
+}

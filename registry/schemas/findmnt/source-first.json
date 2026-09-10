@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/findmnt/source-first.json",
+  "title": "findmnt/source-first",
+  "description": "findmnt -o SOURCE,TARGET,FSTYPE,OPTIONS",
+  "x-jsonize": {
+    "definition": "findmnt/source-first",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "source": {
+        "type": "string"
+      },
+      "tree_prefix": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "target": {
+        "type": "string"
+      },
+      "fstype": {
+        "type": "string"
+      },
+      "options": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "source",
+      "tree_prefix",
+      "target",
+      "fstype",
+      "options"
+    ]
+  }
+}

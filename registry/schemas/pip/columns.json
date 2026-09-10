@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pip/columns.json",
+  "title": "pip/columns",
+  "description": "pip list installed package table",
+  "x-jsonize": {
+    "definition": "pip/columns",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "package": {
+        "type": "string"
+      },
+      "version": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "package",
+      "version"
+    ]
+  }
+}

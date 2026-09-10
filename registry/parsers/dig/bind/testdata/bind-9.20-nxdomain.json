@@ -1,4 +1,12 @@
 {
+  "query": {
+    "version": "9.20.24-1ubuntu0.3-Ubuntu",
+    "arguments": "nonexistent-host.invalid",
+    "servers_found": null,
+    "global_options": [
+      "+cmd"
+    ]
+  },
   "header": {
     "opcode": "QUERY",
     "status": "NXDOMAIN",
@@ -15,7 +23,23 @@
     "authority_count": 0,
     "additional_count": 1
   },
+  "messages": [],
+  "edns": [
+    {
+      "name": "EDNS",
+      "value": "version: 0, flags:; udp: 65494"
+    }
+  ],
+  "question": [
+    {
+      "name": "nonexistent-host.invalid.",
+      "class": "IN",
+      "type": "A"
+    }
+  ],
   "answers": [],
+  "authority": [],
+  "additional": [],
   "statistics": {
     "query_time_ms": 0,
     "server": "127.0.0.53#53",

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ionice/class.json",
+  "title": "ionice/class",
+  "description": "ionice -p I/O scheduling class of a process",
+  "x-jsonize": {
+    "definition": "ionice/class",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "class": {
+        "type": "string",
+        "enum": [
+          "best-effort",
+          "idle",
+          "none",
+          "realtime"
+        ]
+      },
+      "priority": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "class",
+      "priority"
+    ]
+  }
+}

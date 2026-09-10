@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/vmstat/linux-stats.json",
+  "title": "vmstat/linux-stats",
+  "description": "vmstat -s, one counter per line",
+  "x-jsonize": {
+    "definition": "vmstat/linux-stats",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "type": "integer"
+      },
+      "unit": {
+        "type": "string",
+        "enum": [
+          "G",
+          "K",
+          "M",
+          "b",
+          "g",
+          "k",
+          "m"
+        ]
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "value",
+      "name"
+    ]
+  }
+}

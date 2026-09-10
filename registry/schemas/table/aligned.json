@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/table/aligned.json",
+  "title": "table/aligned",
+  "description": "any column-aligned table, cells cut at the header offsets",
+  "x-jsonize": {
+    "definition": "table/aligned",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

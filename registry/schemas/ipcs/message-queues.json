@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ipcs/message-queues.json",
+  "title": "ipcs/message-queues",
+  "description": "ipcs -q message queues",
+  "x-jsonize": {
+    "definition": "ipcs/message-queues",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "key": {
+        "type": "string"
+      },
+      "messages": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "msqid": {
+        "type": "integer"
+      },
+      "owner": {
+        "type": "string"
+      },
+      "perms": {
+        "type": "string"
+      },
+      "used_bytes": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

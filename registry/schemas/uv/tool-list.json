@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/uv/tool-list.json",
+  "title": "uv/tool-list",
+  "description": "uv tool list, installed tools and their executables",
+  "x-jsonize": {
+    "definition": "uv/tool-list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tool": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "version"
+        ]
+      },
+      "executables": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      }
+    },
+    "required": [
+      "tool",
+      "executables"
+    ]
+  }
+}

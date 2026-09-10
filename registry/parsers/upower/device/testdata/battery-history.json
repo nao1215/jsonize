@@ -1,0 +1,122 @@
+[
+  {
+    "name": "native-path",
+    "value": "BAT0"
+  },
+  {
+    "name": "vendor",
+    "value": "ACME"
+  },
+  {
+    "name": "model",
+    "value": "5B10W13930"
+  },
+  {
+    "name": "serial",
+    "value": "1234"
+  },
+  {
+    "name": "power supply",
+    "value": "yes"
+  },
+  {
+    "name": "updated",
+    "value": "Thu Sep 10 21:50:12 2026 (21 seconds ago)"
+  },
+  {
+    "name": "has history",
+    "value": "yes"
+  },
+  {
+    "name": "has statistics",
+    "value": "yes"
+  },
+  {
+    "name": "battery",
+    "value": ""
+  },
+  {
+    "name": "present",
+    "value": "yes"
+  },
+  {
+    "name": "rechargeable",
+    "value": "yes"
+  },
+  {
+    "name": "state",
+    "value": "discharging"
+  },
+  {
+    "name": "warning-level",
+    "value": "none"
+  },
+  {
+    "name": "energy",
+    "value": "41.92 Wh"
+  },
+  {
+    "name": "energy-empty",
+    "value": "0 Wh"
+  },
+  {
+    "name": "energy-full",
+    "value": "50.05 Wh"
+  },
+  {
+    "name": "energy-full-design",
+    "value": "57 Wh"
+  },
+  {
+    "name": "energy-rate",
+    "value": "8.271 W"
+  },
+  {
+    "name": "voltage",
+    "value": "12.121 V"
+  },
+  {
+    "name": "charge-cycles",
+    "value": "214"
+  },
+  {
+    "name": "time to empty",
+    "value": "5.1 hours"
+  },
+  {
+    "name": "percentage",
+    "value": "83%"
+  },
+  {
+    "name": "capacity",
+    "value": "87.807%"
+  },
+  {
+    "name": "technology",
+    "value": "lithium-polymer"
+  },
+  {
+    "name": "icon-name",
+    "value": "battery-full-symbolic"
+  },
+  {
+    "name": "History (charge)",
+    "value": ""
+  },
+  {
+    "name": "1788958212",
+    "value": "83.000\tdischarging"
+  },
+  {
+    "name": "1788958092",
+    "value": "84.000\tdischarging"
+  },
+  {
+    "name": "History (rate)",
+    "value": ""
+  },
+  {
+    "name": "1788958212",
+    "value": "8.271\tdischarging"
+  }
+]

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lslocks/linux.json",
+  "title": "lslocks/linux",
+  "description": "lslocks table of local file locks",
+  "x-jsonize": {
+    "definition": "lslocks/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string"
+      },
+      "end": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "m": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "start": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "type": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/aplay/devices.json",
+  "title": "aplay/devices",
+  "description": "aplay -l playback devices, or arecord -l capture devices",
+  "x-jsonize": {
+    "definition": "aplay/devices",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "object",
+        "properties": {
+          "card": {
+            "type": "integer"
+          },
+          "card_id": {
+            "type": "string"
+          },
+          "card_name": {
+            "type": "string"
+          },
+          "device": {
+            "type": "integer"
+          },
+          "device_id": {
+            "type": "string"
+          },
+          "device_name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "card",
+          "card_id",
+          "card_name",
+          "device",
+          "device_id",
+          "device_name"
+        ]
+      },
+      "subdevice_count": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "available",
+          "total"
+        ]
+      },
+      "subdevices": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "index": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "index",
+            "name"
+          ]
+        }
+      }
+    },
+    "required": [
+      "device",
+      "subdevice_count",
+      "subdevices"
+    ]
+  }
+}

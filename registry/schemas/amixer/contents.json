@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/amixer/contents.json",
+  "title": "amixer/contents",
+  "description": "amixer contents, every mixer control with its type and values",
+  "x-jsonize": {
+    "definition": "amixer/contents",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "numid": {
+        "type": "integer"
+      },
+      "interface": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "index": {
+        "type": "integer"
+      },
+      "properties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "values": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "numid",
+      "interface",
+      "name",
+      "properties",
+      "values"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+  native-path:          BAT0
+  vendor:               ACME
+  model:                5B10W13930
+  serial:               1234
+  power supply:         yes
+  updated:              Thu Sep 10 21:50:12 2026 (21 seconds ago)
+  has history:          yes
+  has statistics:       yes
+  battery
+    present:             yes
+    rechargeable:        yes
+    state:               discharging
+    warning-level:       none
+    energy:              41.92 Wh
+    energy-empty:        0 Wh
+    energy-full:         50.05 Wh
+    energy-full-design:  57 Wh
+    energy-rate:         8.271 W
+    voltage:             12.121 V
+    charge-cycles:       214
+    time to empty:       5.1 hours
+    percentage:          83%
+    capacity:            87.807%
+    technology:          lithium-polymer
+    icon-name:          'battery-full-symbolic'
+  History (charge):
+    1788958212	83.000	discharging
+    1788958092	84.000	discharging
+  History (rate):
+    1788958212	8.271	discharging

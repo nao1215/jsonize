@@ -43,13 +43,35 @@ pipe there is no such answer at all: nothing identifies an empty input.
       --parser NAME             restrict detection to one parser
       --variant NAME            use a variant of --parser
       --define YAML             read with a definition given here instead of a registered one
-      --explain                 report the chosen definition and why, on stderr
+      --explain[=json]          report the chosen definition and why, on stderr
   -h, --help                    show help
 ```
 
 `jz run` adds `--env NAME=VALUE`, `--keep-locale` and `--timeout`, which
-control the command rather than the conversion. `jz list` adds `--json`
-and `--sources`, and `jz test` adds `--update` and `--decoys`.
+control the command rather than the conversion. `jz list` adds `--json`,
+`--schema` and `--sources`, and `jz test` adds `--update` and `--decoys`.
+
+## The shape of the output
+
+What a definition produces is a contract, and `jz list --schema` prints
+it as a JSON Schema: the keys, their types, which are always there, which
+may be null, and the values a key can take when the definition names
+them.
+
+```console
+$ jz list --schema df gnu | jq -c '.items.properties.use_percent'
+{"type":["integer","null"]}
+```
+
+The schema is derived from the definition, so it cannot drift from what
+jz prints; every fixture in the registry is checked against its own. The
+official ones are also published at
+`https://nao1215.github.io/jsonize/schemas/COMMAND/VARIANT.json`, and
+each carries the version of its contract in `x-jsonize.version`. The
+version goes up whenever a change could break a program reading the
+output, and nothing else moves it; the JSON jz prints stays as it is,
+with no version inside it. [Parsers](../parsers/#what-each-definition-produces)
+lists what counts as breaking.
 
 ## Choosing the keys
 
@@ -256,47 +278,94 @@ beside it.
 
 The choice is the one thing a converter has to get right, and a
 successful run says nothing about it: the JSON looks the same whichever
-definition produced it. `--explain` writes the answer on standard error.
+definition produced it. `--explain` writes the answer on standard error,
+one fact per line, each line opening with `jz: explain: `.
 
 ```console
 $ jz --explain --file df-gnu.txt
-jz: df/gnu from embedded
-jz: matched: signature.all[0] /^Filesystem\s+1K-blocks\s+Used\s+Available/
+jz: explain: chose df/gnu from embedded
+jz: explain: scope: every definition in the registry, by its signature alone
+jz: explain: matched: signature.all[0] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\.../
+jz: explain: rejected: tree/listing: signature.all[1] /^(?:\|-- |`-- )\S/ did not match
+jz: explain: not considered: 48 definitions only used when named
+jz: explain: read: 8 lines: 8 read
 ```
 
-`jz run` adds the command it started and the status it gave:
+The first line is the outcome: `chose`, `unidentified` when no definition
+fits, `ambiguous` when several do and nothing settles it, `mismatch` when
+a named variant does not fit, or `defined` for `--define`. Then:
+
+| Line | What it says |
+|------|--------------|
+| `scope` | which definitions were candidates, and what named them: nothing (the whole registry), `--parser`, the name of the command `jz run` started, or the path of `--file` |
+| `matched` | each condition the chosen definition states and the input met |
+| `settled by` / `outranked` | when several definitions fit, the rule that chose one (the registry layering, or `detect.priority` between variants of one command) and each one it chose over |
+| `rejected` | a definition that came close and why it was ruled out |
+| `held back` | a definition whose signature fits but which is only used when named |
+| `not considered` | how many definitions are only used when named, and so took no part |
+| `read` | where the lines of the input went: read, joined by `fold`, blank, or left out by each `input.ignore` expression |
+| `command` | for `jz run`, the command and the status it gave |
+
+`jz run` says the parser came from the command it started, and what the
+system and the arguments narrowed:
 
 ```console
 $ jz run --explain df -h
-jz: df/gnu-human from embedded
-jz: matched: signature.all[0] /^Filesystem\s+Size\s+Used\s+Avail/, detect.os linux, detect.args
-jz: command: df -h (exit 0)
-```
-
-Naming a parser adds the variants it left out and why, which is what
-makes a wrong variant traceable:
-
-```console
-$ jz --explain --parser df --file df-gnu.txt
-jz: df/gnu from embedded
-jz: matched: signature.all[0] /^Filesystem\s+1K-blocks\s+Used\s+Available/
-jz: rejected: df/bsd (signature.all[0] /^Filesystem\s+512-blocks/ did not match), ...
+jz: explain: chose df/gnu-human from embedded
+jz: explain: scope: the variants of df, from the name of the command jz ran
+jz: explain: scope: narrowed by the system it ran on (linux) and its arguments (-h)
+jz: explain: matched: signature.all[0] /^Filesystem\s+Size\s+Used\s+Avail\s+Use%\s+Mounted.../
+jz: explain: matched: detect.os linux
+jz: explain: matched: detect.args any [-h --human-readable]
+jz: explain: rejected: df/bsd: signature.all[0] /^Filesystem\s+512-blocks\s+Used\s+Available\s+Capa.../ did not match
+...
+jz: explain: read: 12 lines: 12 read
+jz: explain: command: df -h (exit 0)
 ```
 
 Without a parser the search covers the whole registry, which rejects
 almost all of it on the first expression of a signature. Saying so three
 hundred times explains nothing, so only the definitions that came close
 are listed: one that got past its first expression, and one whose
-signature does fit but which jz will not choose on its own. That is the
-same list `--explain` shows when nothing was identified at all:
+signature does fit but which jz will not choose on its own. A search
+scoped to one parser lists every variant it left out. When nothing is
+identified the ordinary message comes first and the explanation under it:
 
 ```console
 $ jz --explain --file passwd.txt
 jz: unable to identify the input format
 it could be `etc` output, but that format is too generic for jz to claim on its own
 ...
-jz: rejected: etc/passwd (needs --parser etc), sensors/linux (signature.all[1] /^Adapter: / did not match)
+jz: explain: unidentified: no definition fits the text
+jz: explain: scope: every definition in the registry, by its signature alone
+jz: explain: rejected: sensors/linux: signature.all[1] /^Adapter: \S/ did not match
+jz: explain: held back: etc/passwd: its signature fits, but it is only used when named (--parser etc)
+jz: explain: not considered: 47 definitions only used when named
 ```
+
+`--explain=json` writes the same facts as one JSON document, on a single
+line that opens the same way, so a script can take it apart from the rest
+of standard error:
+
+```console
+$ jz --explain=json --file df-gnu.txt 2>&1 >/dev/null | sed -n 's/^jz: explain: //p' | jq -c '{outcome, chosen: .chosen.definition, read: .read.read}'
+{"outcome":"chosen","chosen":"df/gnu","read":8}
+```
+
+Every key is there whatever the outcome, `null` or empty where it does
+not apply: `outcome`, `scope` (`from`, `parser`, `variant`, `os`, `args`,
+`path`, `path_dropped`), `chosen` (`definition`, `registry`, `matched`,
+`settled_by`, `outranked`), `candidates` (the definitions an ambiguous
+input fits), `rejected`, `held_back`, `not_considered`, `read` (`lines`,
+`read`, `folded`, `blank`, `ignored`), `command` and `error` (`message`,
+`exit`). The failure is still reported the ordinary way as well. In
+`jz run` the command's own standard error shares the stream, which is
+why the line opens with `jz: explain: ` rather than relying on being the
+only thing there.
+
+With `--stream` the explanation is written when the choice is made,
+before the first record, so it has no `read` counts; a stream may never
+end.
 
 `--explain` changes neither standard output nor the exit status, and it
 writes no clock reading, so two runs over the same input explain
@@ -455,10 +524,12 @@ jz test --update ./registry  # write testdata/<case>.json from the current outpu
 jz test --decoys ./decoys .  # also require every file under ./decoys to be refused
 ```
 
-Two things are checked. Every `testdata/<case>.txt` is parsed with its own
-definition and compared with the `.json` beside it, and every definition
-is then named explicitly on every other definition's fixtures and must
-refuse them. The official fixtures travel inside the binary, so the
+Three things are checked. Every `testdata/<case>.txt` is parsed with its
+own definition and compared with the `.json` beside it; every fixture is
+changed (a foreign line added, the whole text doubled) and must be refused
+or show the change in its result, which is what proves the definition
+reads all of its input; and every definition is then named explicitly on
+every other definition's fixtures and must refuse them. The official fixtures travel inside the binary, so the
 second check covers your definitions against every format jz already
 reads without a copy of the repository: a signature wide enough to read
 `df` output fails here rather than in someone's pipeline.
@@ -479,7 +550,7 @@ when everything passed, 1 when something failed, 2 for a usage error and
 | 0 | success |
 | 1 | unexpected failure (I/O, internal) |
 | 2 | usage error |
-| 3 | the input did not match the chosen definition |
+| 3 | the input did not match the chosen definition, or held text the definition did not read |
 | 4 | the format could not be identified, several matched, or a named one did not fit |
 | 5 | a registry could not be loaded |
 | 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |

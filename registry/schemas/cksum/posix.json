@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/cksum/posix.json",
+  "title": "cksum/posix",
+  "description": "cksum CRC, byte count and file name",
+  "x-jsonize": {
+    "definition": "cksum/posix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "escaped": {
+        "type": "boolean"
+      },
+      "checksum": {
+        "type": "integer"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "file": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "checksum",
+      "size"
+    ]
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/go/version-modules.json",
+  "title": "go/version-modules",
+  "description": "go version -m module and build information embedded in a binary",
+  "x-jsonize": {
+    "definition": "go/version-modules",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "binary": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "go_version": {
+            "type": "string"
+          },
+          "main_package": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "file",
+          "go_version",
+          "main_package"
+        ]
+      },
+      "modules": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "=\u003e",
+                "dep",
+                "mod"
+              ]
+            },
+            "path": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            },
+            "sum": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "path",
+            "version",
+            "sum"
+          ]
+        }
+      },
+      "build": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "key",
+            "value"
+          ]
+        }
+      }
+    },
+    "required": [
+      "binary",
+      "modules",
+      "build"
+    ]
+  }
+}

@@ -77,6 +77,17 @@ type Result struct {
 	// ones that came close are kept there; a search scoped to one parser
 	// keeps all of its variants.
 	Rejections []Rejection
+	// Settled names the rule that chose Entry over other definitions that
+	// fit the text as well: "registry" for the layering, "priority" for
+	// detect.priority. It is empty when Entry was the only one that fit.
+	Settled string
+	// Outranked are the definitions that fit the text and lost to Entry
+	// by the Settled rule, each with the reason in its own terms.
+	Outranked []Rejection
+	// ExplicitOnly counts the definitions left out because they are only
+	// used when named: no signature, or detect.auto_detect: false. It is
+	// zero for a search scoped to one parser, where they take part.
+	ExplicitOnly int
 }
 
 // Rejection records why one definition was not selected.
@@ -89,6 +100,10 @@ type Rejection struct {
 	// unrelated parser in the registry, and listing those explains
 	// nothing.
 	Close bool
+	// ExplicitOnly marks a definition that was not considered because it
+	// is only used when named. Close is then true when its signature does
+	// fit the text, which makes naming its parser the way forward.
+	ExplicitOnly bool
 }
 
 // UnknownParserError is returned when --parser or a command name has no
@@ -158,6 +173,9 @@ type NoMatchError struct {
 	// list when one parser was searched and the near misses otherwise,
 	// which is the same choice a successful selection makes.
 	Reported []Rejection
+	// ExplicitOnly counts the definitions left out because they are only
+	// used when named.
+	ExplicitOnly int
 }
 
 func (e *NoMatchError) Error() string {
@@ -199,6 +217,13 @@ type AmbiguousError struct {
 	Candidates []*registry.Entry
 	// Reported carries the rejections --explain shows.
 	Reported []Rejection
+	// Scanned counts the definitions that were evaluated.
+	Scanned int
+	// ExplicitOnly counts the definitions left out because they are only
+	// used when named.
+	ExplicitOnly int
+	// Unsettled says why no rule chose between the candidates.
+	Unsettled string
 }
 
 func (e *AmbiguousError) Error() string {
@@ -261,13 +286,15 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 	}
 
 	var (
-		matched    []*registry.Entry
-		verdicts   = map[*registry.Entry]verdict{}
-		hints      []*registry.Entry
-		rejections []Rejection
+		matched      []*registry.Entry
+		verdicts     = map[*registry.Entry]verdict{}
+		hints        []*registry.Entry
+		rejections   []Rejection
+		explicitOnly int
 	)
 	for _, e := range candidates {
 		if ctx.Parser == "" && ExplicitOnly(e.Def) {
+			explicitOnly++
 			// The text cannot vouch for such a definition. A definition
 			// that does carry a signature can still say "this looks like
 			// me", which becomes a hint naming the parser to pass; one
@@ -282,7 +309,7 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 			// A definition whose signature does fit the text and is only
 			// held back by auto_detect is the near miss most worth
 			// naming, since naming its parser is the way forward.
-			rejections = append(rejections, Rejection{Entry: e, Reason: "needs --parser " + e.Def.Command, Close: fits})
+			rejections = append(rejections, Rejection{Entry: e, Reason: "needs --parser " + e.Def.Command, Close: fits, ExplicitOnly: true})
 			continue
 		}
 		v := check(e, &ctx, window)
@@ -300,32 +327,79 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 	if ctx.Parser == "" {
 		reported = closeOnly(rejections)
 	}
-	result := func(e *registry.Entry) *Result {
-		return &Result{Entry: e, Scanned: len(candidates), Matched: verdicts[e].Matched, Rejections: reported}
+	result := func(e *registry.Entry, settled string, outranked []Rejection) *Result {
+		return &Result{
+			Entry: e, Scanned: len(candidates), Matched: verdicts[e].Matched, Rejections: reported,
+			Settled: settled, Outranked: outranked, ExplicitOnly: explicitOnly,
+		}
 	}
 	switch len(matched) {
 	case 1:
-		return result(matched[0]), nil
+		return result(matched[0], "", nil), nil
 	case 0:
-		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: hints, Reported: reported}
+		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: hints, Reported: reported, ExplicitOnly: explicitOnly}
 		if ctx.Parser != "" {
 			err.Rejections = rejections
 		}
 		return nil, err
 	}
-	// The layering is a statement the user made: a registry earlier in it
-	// is the one whose definitions apply. Applying that here as well means
-	// a definition someone adds locally cannot turn an official parser
-	// into an ambiguity, which is what would otherwise happen the moment
-	// two registries describe overlapping formats.
-	matched = mostPreferred(matched)
-	if len(matched) == 1 {
-		return result(matched[0]), nil
+	best, rule, outranked, preferred := settle(matched)
+	if best == nil {
+		return nil, &AmbiguousError{Candidates: preferred, Reported: reported, Scanned: len(candidates), ExplicitOnly: explicitOnly, Unsettled: unsettled(preferred)}
 	}
-	if best, ok := breakTie(matched); ok {
-		return result(best), nil
+	return result(best, rule, outranked), nil
+}
+
+// settle chooses among several definitions that all fit the text, and
+// says by which rule and over which others. It returns a nil entry, and
+// the definitions still standing, when no rule decides.
+//
+// The layering comes first. It is a statement the user made: a registry
+// earlier in it is the one whose definitions apply. Applying that here as
+// well means a definition someone adds locally cannot turn an official
+// parser into an ambiguity, which is what would otherwise happen the
+// moment two registries describe overlapping formats.
+func settle(matched []*registry.Entry) (*registry.Entry, string, []Rejection, []*registry.Entry) {
+	preferred := mostPreferred(matched)
+	var outranked []Rejection
+	for _, e := range matched {
+		if e.Precedence != preferred[0].Precedence {
+			outranked = append(outranked, Rejection{Entry: e, Reason: fmt.Sprintf("fits as well, from %s, which comes after %s in the layering", e.Source, preferred[0].Source), Close: true})
+		}
 	}
-	return nil, &AmbiguousError{Candidates: matched, Reported: reported}
+	if len(preferred) == 1 {
+		return preferred[0], SettledByRegistry, outranked, preferred
+	}
+	best, ok := breakTie(preferred)
+	if !ok {
+		return nil, "", nil, preferred
+	}
+	for _, e := range preferred {
+		if e != best {
+			outranked = append(outranked, Rejection{Entry: e, Reason: fmt.Sprintf("fits as well, with detect.priority %d against %d", e.Def.Detect.Priority, best.Def.Detect.Priority), Close: true})
+		}
+	}
+	return best, SettledByPriority, outranked, preferred
+}
+
+// The rules that choose between definitions that all fit the text.
+const (
+	// SettledByRegistry is the layering: the earlier registry wins.
+	SettledByRegistry = "registry"
+	// SettledByPriority is detect.priority, between variants of one
+	// command, when one is strictly highest.
+	SettledByPriority = "priority"
+)
+
+// unsettled says why breakTie could not choose among entries of one
+// registry.
+func unsettled(entries []*registry.Entry) string {
+	for _, e := range entries[1:] {
+		if e.Def.Command != entries[0].Def.Command {
+			return "they are different commands, and detect.priority only ranks variants of one"
+		}
+	}
+	return "no detect.priority among them is strictly highest"
 }
 
 // mostPreferred keeps the entries that come from the earliest registry in
@@ -416,9 +490,23 @@ func check(e *registry.Entry, ctx *Context, window []string) verdict {
 			v.Reason, v.Close = reason, true
 			return v
 		}
-		v.Matched = append(v.Matched, "detect.args")
+		v.Matched = append(v.Matched, "detect.args "+describeArgs(args))
 	}
 	return v
+}
+
+// describeArgs renders an argument filter as the definition states it.
+func describeArgs(a *definition.ArgsMatch) string {
+	var parts []string
+	for _, f := range []struct {
+		key  string
+		list []string
+	}{{"any", a.Any}, {"all", a.All}, {"none", a.None}} {
+		if len(f.list) > 0 {
+			parts = append(parts, f.key+" ["+strings.Join(f.list, " ")+"]")
+		}
+	}
+	return strings.Join(parts, ", ")
 }
 
 func appendCriterion(list []string, when bool, key, detail string) []string {

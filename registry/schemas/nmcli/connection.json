@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/nmcli/connection.json",
+  "title": "nmcli/connection",
+  "description": "nmcli connection show",
+  "x-jsonize": {
+    "definition": "nmcli/connection",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "name": {
+        "type": "string"
+      },
+      "uuid": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

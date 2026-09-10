@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/wc/posix.json",
+  "title": "wc/posix",
+  "description": "wc default output (lines, words, bytes, optional filename)",
+  "x-jsonize": {
+    "definition": "wc/posix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "lines": {
+        "type": "integer"
+      },
+      "words": {
+        "type": "integer"
+      },
+      "bytes": {
+        "type": "integer"
+      },
+      "filename": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "lines",
+      "words",
+      "bytes"
+    ]
+  }
+}

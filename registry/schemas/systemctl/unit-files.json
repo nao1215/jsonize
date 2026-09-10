@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemctl/unit-files.json",
+  "title": "systemctl/unit-files",
+  "description": "systemctl list-unit-files table",
+  "x-jsonize": {
+    "definition": "systemctl/unit-files",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "unit_file": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      },
+      "preset": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "unit_file",
+      "state",
+      "preset"
+    ]
+  }
+}

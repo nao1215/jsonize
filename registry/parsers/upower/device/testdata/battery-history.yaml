@@ -1,0 +1,7 @@
+source: transcribed from up_device_to_text and up_device_to_text_history in libupower-glib/up-device.c (UPower 1.91)
+description: >-
+  A laptop battery with history, written from the format strings upower
+  prints it with; no battery was available to capture from. The device
+  type heading and the history rows are the lines without a colon.
+os: linux
+args: ["-i", "/org/freedesktop/UPower/devices/battery_BAT0"]

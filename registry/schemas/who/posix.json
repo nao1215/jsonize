@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/who/posix.json",
+  "title": "who/posix",
+  "description": "who listing of logged-in users",
+  "x-jsonize": {
+    "definition": "who/posix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "user": {
+        "type": "string"
+      },
+      "line": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "time": {
+        "type": "string"
+      },
+      "comment": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "user",
+      "line",
+      "time",
+      "comment"
+    ]
+  }
+}

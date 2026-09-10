@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemctl/show.json",
+  "title": "systemctl/show",
+  "description": "systemctl show properties of a unit",
+  "x-jsonize": {
+    "definition": "systemctl/show",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {},
+  "additionalProperties": {
+    "type": "string"
+  }
+}

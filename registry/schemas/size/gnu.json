@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/size/gnu.json",
+  "title": "size/gnu",
+  "description": "GNU size Berkeley format section sizes",
+  "x-jsonize": {
+    "definition": "size/gnu",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "bss": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "data": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "dec": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "filename": {
+        "type": "string"
+      },
+      "text": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

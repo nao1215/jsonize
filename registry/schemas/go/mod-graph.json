@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/go/mod-graph.json",
+  "title": "go/mod-graph",
+  "description": "go mod graph module requirement edges",
+  "x-jsonize": {
+    "definition": "go/mod-graph",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "from": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "path",
+          "version"
+        ]
+      },
+      "to": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "path",
+          "version"
+        ]
+      }
+    },
+    "required": [
+      "from",
+      "to"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/locale/posix.json",
+  "title": "locale/posix",
+  "description": "locale category settings",
+  "x-jsonize": {
+    "definition": "locale/posix",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {},
+  "additionalProperties": {
+    "type": "string"
+  }
+}

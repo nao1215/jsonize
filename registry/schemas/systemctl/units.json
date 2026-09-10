@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemctl/units.json",
+  "title": "systemctl/units",
+  "description": "systemctl list-units table",
+  "x-jsonize": {
+    "definition": "systemctl/units",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "marker": {
+        "type": "string"
+      },
+      "unit": {
+        "type": "string"
+      },
+      "load": {
+        "type": "string"
+      },
+      "active": {
+        "type": "string"
+      },
+      "sub": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "unit",
+      "load",
+      "active",
+      "sub",
+      "description"
+    ]
+  }
+}

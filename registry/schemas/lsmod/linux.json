@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsmod/linux.json",
+  "title": "lsmod/linux",
+  "description": "lsmod loaded kernel modules",
+  "x-jsonize": {
+    "definition": "lsmod/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "used_by_count": {
+        "type": "integer"
+      },
+      "used_by": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "name",
+      "size",
+      "used_by_count"
+    ]
+  }
+}

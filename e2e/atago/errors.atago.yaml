@@ -56,6 +56,42 @@ scenarios:
           stdout:
             empty: true
 
+  # A reading that succeeds has read all of its input. Two dig replies
+  # in one capture used to come back as the first reply at exit 0; the
+  # second one is now named where it starts, and nothing is written.
+  - name: text the definition does not read is refused, not dropped
+    steps:
+      - fixture:
+          file: dig-reply.txt
+          from: "${specdir}/testdata/dig-reply.txt"
+      - fixture:
+          file: dig-nxdomain.txt
+          from: "${specdir}/testdata/dig-nxdomain.txt"
+      - run:
+          command: jz --file dig-reply.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.header.status", equals: NOERROR }
+      - run:
+          command: sh -c 'cat dig-reply.txt dig-nxdomain.txt | jz'
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+          stderr:
+            contains: "dig/bind: line 21: 11 lines no part of the definition read: line 21"
+      # A line nothing prints, added at the end, is the same failure.
+      - run:
+          command: sh -c '{ cat dig-reply.txt; echo "unexpected trailer"; } | jz'
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+          stderr:
+            contains: "unexpected trailer"
+
   - name: input matching several parsers names them instead of choosing
     steps:
       - fixture:

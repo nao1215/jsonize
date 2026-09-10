@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lspci/machine.json",
+  "title": "lspci/machine",
+  "description": "lspci -mm quoted fields",
+  "x-jsonize": {
+    "definition": "lspci/machine",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "slot": {
+        "type": "string"
+      },
+      "class": {
+        "type": "string"
+      },
+      "vendor": {
+        "type": "string"
+      },
+      "device": {
+        "type": "string"
+      },
+      "revision": {
+        "type": "string"
+      },
+      "prog_if": {
+        "type": "string"
+      },
+      "subsystem_vendor": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "subsystem_device": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "slot",
+      "class",
+      "vendor",
+      "device",
+      "subsystem_vendor",
+      "subsystem_device"
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/log.json",
+  "title": "git/log",
+  "description": "git log default format",
+  "x-jsonize": {
+    "definition": "git/log",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "commit": {
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "string"
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "hash"
+        ]
+      },
+      "headers": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "message": {
+        "type": "object",
+        "properties": {
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "lines"
+        ]
+      }
+    },
+    "required": [
+      "commit",
+      "headers",
+      "message"
+    ]
+  }
+}

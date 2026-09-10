@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/net-route.json",
+  "title": "proc/net-route",
+  "description": "/proc/net/route kernel IPv4 routing table",
+  "x-jsonize": {
+    "definition": "proc/net-route",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "iface": {
+        "type": "string"
+      },
+      "destination": {
+        "type": "string"
+      },
+      "gateway": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "string"
+      },
+      "refcnt": {
+        "type": "integer"
+      },
+      "use": {
+        "type": "integer"
+      },
+      "metric": {
+        "type": "integer"
+      },
+      "mask": {
+        "type": "string"
+      },
+      "mtu": {
+        "type": "integer"
+      },
+      "window": {
+        "type": "integer"
+      },
+      "irtt": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "iface",
+      "destination",
+      "gateway",
+      "flags",
+      "refcnt",
+      "use",
+      "metric",
+      "mask",
+      "mtu",
+      "window",
+      "irtt"
+    ]
+  }
+}

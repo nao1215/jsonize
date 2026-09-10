@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/timedatectl/linux.json",
+  "title": "timedatectl/linux",
+  "description": "timedatectl clock and time zone status",
+  "x-jsonize": {
+    "definition": "timedatectl/linux",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "local_time": {
+      "type": "string"
+    },
+    "universal_time": {
+      "type": "string"
+    },
+    "rtc_time": {
+      "type": "string"
+    },
+    "time_zone": {
+      "type": "string"
+    },
+    "system_clock_synchronized": {
+      "type": "boolean"
+    },
+    "ntp_service": {
+      "type": "string"
+    },
+    "rtc_in_local_tz": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "local_time",
+    "universal_time",
+    "time_zone",
+    "system_clock_synchronized",
+    "ntp_service",
+    "rtc_in_local_tz"
+  ]
+}

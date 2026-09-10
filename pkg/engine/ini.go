@@ -15,9 +15,10 @@ import (
 // like and what the systemd and git configurations do not have. The
 // result is an object of objects, so it has no streaming form.
 //
-// A repeated key takes the last value. The alternative, an array, would
-// mean a key's type depended on how many times it appeared, and a
-// consumer would have to handle both for every key.
+// A key written twice under one section is an error: an object keeps one
+// value per key, so the other would be missing from the result, and an
+// array instead would mean a key's type depended on how many times it
+// appeared.
 func (r *run) parseINI(p *definition.Parse, fields map[string]*definition.Field, lines []line) (any, error) {
 	sep := p.Separator
 	if sep == "" {
@@ -28,6 +29,9 @@ func (r *run) parseINI(p *definition.Parse, fields map[string]*definition.Field,
 	section := jsonutil.NewObject()
 	name := ""
 	root.Set(name, section)
+	// A section written twice continues the first, so a key is repeated
+	// when it appears twice under one name, wherever the two are.
+	keys := map[string]*keyLines{name: {}}
 	for _, l := range lines {
 		text := strings.TrimSpace(l.text)
 		if text == "" || isINIComment(text) {
@@ -45,6 +49,7 @@ func (r *run) parseINI(p *definition.Parse, fields map[string]*definition.Field,
 			}
 			section = jsonutil.NewObject()
 			root.Set(name, section)
+			keys[name] = &keyLines{}
 			continue
 		}
 		idx := strings.Index(text, sep)
@@ -64,6 +69,9 @@ func (r *run) parseINI(p *definition.Parse, fields map[string]*definition.Field,
 		}
 		if p.Unquote {
 			value = unquote(value)
+		}
+		if err := keys[name].add(r, key, l.num); err != nil {
+			return nil, err
 		}
 		if err := r.setField(section, key, value, fields[key], l.num); err != nil {
 			return nil, err

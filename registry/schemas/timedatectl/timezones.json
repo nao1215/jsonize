@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/timedatectl/timezones.json",
+  "title": "timedatectl/timezones",
+  "description": "timedatectl list-timezones, one time zone name per line",
+  "x-jsonize": {
+    "definition": "timedatectl/timezones",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "timezone": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "timezone"
+    ]
+  }
+}

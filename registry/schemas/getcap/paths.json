@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/getcap/paths.json",
+  "title": "getcap/paths",
+  "description": "getcap file capabilities per path",
+  "x-jsonize": {
+    "definition": "getcap/paths",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "string"
+      },
+      "capabilities": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "file",
+      "capabilities"
+    ]
+  }
+}

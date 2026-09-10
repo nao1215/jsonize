@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/tar/gnu.json",
+  "title": "tar/gnu",
+  "description": "GNU tar -tvf archive listing",
+  "x-jsonize": {
+    "definition": "tar/gnu",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "mode": {
+        "type": "string"
+      },
+      "owner": {
+        "type": "string"
+      },
+      "group": {
+        "type": "string"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "date": {
+        "type": "string"
+      },
+      "time": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "link_to": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "mode",
+      "owner",
+      "group",
+      "size",
+      "date",
+      "time",
+      "name"
+    ]
+  }
+}

@@ -154,12 +154,16 @@ input:
   fold: '^[ \t]+\S'         # join a wrapped line onto the one above it
   ignore: ['^total \d']    # drop matching lines
   skip_blank: true          # default true
-  select:                  # applied in this order
-    after: '^BEGIN'        # drop up to and including the first match
-    until: '^END'          # stop before the first match
-    skip: 1                # drop N leading lines
-    limit: 50              # keep at most N lines
+  select:                  # applied in this order; see below for what
+    after: '^BEGIN$'       #   start after the first match, the heading
+    until: '^END'          #   stop before the first match
+    skip: 1                #   pass over N leading lines
+    limit: 50              #   keep at most N lines
 ```
+
+The same four `select` keys narrow a `composite` part's region, which is
+where `until`, `skip` and `limit` earn their keep: what they leave out of
+one part is what its siblings read.
 
 Input is split on the record separator, a newline by default; a trailing
 `\r` is then removed from every line and a UTF-8 BOM is dropped.
@@ -177,6 +181,33 @@ and for the control files whose values continue on an indented line.
 With `record_separator: nul` the records are separated by NUL bytes instead,
 which is what makes a value containing a newline representable. Input
 must be valid UTF-8 and within the size limits.
+
+### Every line is read or left out by a rule
+
+A conversion that succeeds has read all of its input. Every line ends up
+in one of these places, and a line in none of them is an error naming it
+(exit 3), not a shorter result:
+
+- read by a parser: a table row or header, a line a pattern matched, a
+  key/value line, a tree node;
+- joined onto the line above by `fold`;
+- left out because it is blank, or because an `ignore` expression names
+  it;
+- the heading of a region: the line `select.after` matched, when the
+  expression describes the whole of it.
+
+`ignore` is the one way to leave text out on purpose, so what it names is
+what the definition declares worthless: a legend, a column header the
+parts do not need, a count that restates the rows. `jz --explain` reports
+how many lines each expression took.
+
+`select` narrows the lines a parser is given. At the top level nothing
+else is given the rest, so every line it leaves out has to be blank or
+ignored; in a `composite` part, what one part's region leaves out is read
+by its siblings or is unread. The heading `after` matches counts as read
+only when the expression states the line from end to end (surrounding
+whitespace aside): `after: '^Features for \S+:$'` does, `after: '^Features
+for '` leaves the rest of the line, and with it the interface name, unread.
 
 ## parse
 
@@ -231,6 +262,10 @@ non-alphanumerics become `_`, a leading or trailing `%` becomes
   continuation, because in this format they are the same line. A table
   with such a column is one to read some other way.
 
+  A line with neither a bar nor a rule on it has no cells, and a cell
+  past the last column the header names has no name to go under; both
+  are errors rather than text missing from the rows.
+
 Missing trailing cells (at least `min_fields` present) are `null`.
 
 ### type: csv
@@ -276,7 +311,8 @@ Keys written before the first heading go under the empty name, and there
 is no such key when the file has no preamble. Lines starting with `#` or
 `;` are comments; either character inside a value is part of the value,
 since a password or a path may contain one. A section written twice
-continues the first, and a key written twice takes the last value — an
+continues the first, and a key written twice in one section is an error
+naming both lines: keeping the last value would lose the other, and an
 array would mean a key's type depended on how many times it appeared.
 
 Because the result is one object, an ini parser has no streaming form.
@@ -311,7 +347,7 @@ writes `["  ", "`-"]`; the first form that fits at each step is the one
 taken, so the order is the order they are tried in.
 A node is the fields `node` reads from its line plus a `children` array,
 which is `[]` when nothing follows it — so a consumer walks every node
-the same way.
+the same way. A `node` pattern cannot name a group `children`.
 
 This is the one parser whose result has a depth the definition does not
 state. `lspci -vv` prints a device, its capabilities under it and a
@@ -372,7 +408,14 @@ objects the others produce.
 named groups; `each: input` matches the whole (pre-processed) text once
 and yields a single object. Groups that did not participate are `null`
 (or omitted with `when_missing: omit`). A non-matching line is an error
-naming the line and the pattern. A line that belongs to another part of
+naming the line and the pattern.
+
+A match has to reach both ends of the line it reads; surrounding
+whitespace aside, text before or after it is an error naming the line and
+the column, since it is a value the definition never looked at. With
+`each: input` the lines the match covers are the ones read: a line it
+does not reach is unread, and so is the part of a line it starts or ends
+inside. A line that belongs to another part of
 a composite is named in that part's [`ignore`](#type-composite); a line
 that belongs to nothing is a definition that does not describe its
 input.
@@ -394,8 +437,10 @@ exactly as the key appears: `"CPU(s)"`, `"Thread(s) per core"`. Elsewhere
 a field name has to be an identifier, because elsewhere it is a name the
 definition picked.
 
-`list` yields `[{"name": ..., "value": ...}]`; `map` yields one object
-(later duplicates win). Keys and values are trimmed unless
+`list` yields `[{"name": ..., "value": ...}]`; `map` yields one object,
+and a key printed twice is an error naming both lines: an object holds one
+value per key, so one of the two would be missing, and the same value
+twice usually means two documents read as one. Keys and values are trimmed unless
 `trim: false`, which a format whose values are significant down to the
 space (an environment variable) sets. `unquote: true` removes one
 matching pair of surrounding `"` or `'` from the value, for the
@@ -466,7 +511,8 @@ parts:
 parts share a region and neither can be cut out by a range: the settings
 above a list of boot entries, the slave links between two labelled
 blocks. What it is not for is silence. Every line of a part's region that
-`ignore` does not name has to be read, so a line the definition never
+`ignore` does not name has to be read, and a line it does name has to be
+read by the sibling it is handed to, so a line the definition never
 anticipated is an error rather than a value quietly missing from the
 JSON.
 
@@ -535,7 +581,7 @@ fields:
 | `true_values`, `false_values` | bool | spellings (case-insensitive); defaults are true/yes/on/1/y and false/no/off/0/n |
 | `split`, `split_regex` | array | how to split; items are trimmed |
 | `items` | array | conversion applied to each element (arrays of arrays are not allowed) |
-| `regex`, `fields` | object | named groups become keys; `fields` converts them |
+| `regex`, `fields` | object | named groups become keys; `fields` converts them; the match has to cover the whole value |
 
 `size` accepts `1024`, `955M`, `3.7G`, `466Gi`, `1.2 MiB`, `0B` and
 returns bytes as an integer (rounded). Use it only where the base is
@@ -654,6 +700,15 @@ Parse errors carry the definition, line number and field:
 ```
 df/gnu: line 3: field "used": cannot convert "abc" to int: invalid syntax
 mount/linux: line 7: line does not match pattern /^(?P<filesystem>.+?) on .../: "garbage"
+```
+
+Text the definition did not read is named where it is, the first few
+lines of it quoted and the rest counted; text a pattern stopped short of
+on a line it read is named with its column. This is two `dig` replies in
+one capture, of which the definition reads one:
+
+```
+dig/bind: line 21: 11 lines no part of the definition read: line 21 "; <<>> DiG 9.20.24-1ubuntu0.3-Ubuntu <<>> nonexistent-host.invalid", line 22 ";; global options: +cmd", line 23 ";; Got answer:" and 8 more
 ```
 
 ## Limits

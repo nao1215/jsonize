@@ -1,0 +1,67 @@
+{
+  "query": {
+    "version": "9.20.24-1ubuntu0.3-Ubuntu",
+    "arguments": "@192.168.11.1 gateway.local",
+    "servers_found": 1,
+    "global_options": [
+      "+cmd"
+    ]
+  },
+  "header": {
+    "opcode": "QUERY",
+    "status": "NXDOMAIN",
+    "id": 40862,
+    "flags": [
+      "qr",
+      "rd",
+      "ra",
+      "ad"
+    ],
+    "question_count": 1,
+    "answer_count": 0,
+    "authority_count": 1,
+    "additional_count": 1
+  },
+  "messages": [
+    {
+      "text": "WARNING: .local is reserved for Multicast DNS"
+    },
+    {
+      "text": "You are currently testing what happens when an mDNS query is leaked to DNS"
+    }
+  ],
+  "edns": [
+    {
+      "name": "EDNS",
+      "value": "version: 0, flags:; udp: 1232"
+    },
+    {
+      "name": "COOKIE",
+      "value": "cf8507018ae788e4010000006aa2a53880d2bfd13e771b09 (good)"
+    }
+  ],
+  "question": [
+    {
+      "name": "gateway.local.",
+      "class": "IN",
+      "type": "A"
+    }
+  ],
+  "answers": [],
+  "authority": [
+    {
+      "name": ".",
+      "ttl": 26052,
+      "class": "IN",
+      "type": "SOA",
+      "data": "a.root-servers.net. nstld.verisign-grs.com. 2026091000 1800 900 604800 86400"
+    }
+  ],
+  "additional": [],
+  "statistics": {
+    "query_time_ms": 4,
+    "server": "192.168.11.1#53",
+    "when": "Thu Sep 10 21:40:24 JST 2026",
+    "message_size": 145
+  }
+}

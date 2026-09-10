@@ -28,7 +28,10 @@ type optionDoc struct {
 	short string // without the dash, empty when there is none
 	long  string // without the dashes
 	arg   string // placeholder for the value, empty for a switch
-	help  string
+	// optional is the value a switch may be given with "=", shown as
+	// --long[=optional]; empty when it takes none.
+	optional string
+	help     string
 }
 
 func newOptions(name string) *optionSet {
@@ -59,6 +62,13 @@ func (o *optionSet) boolOpt(p *bool, long, short, help string) {
 	o.doc(short, long, "", help)
 }
 
+// switchOpt registers a switch that may also be given one value with
+// "=", such as --explain and --explain=json.
+func (o *optionSet) switchOpt(p flag.Value, long, optional, help string) {
+	o.fs.Var(p, long, help)
+	o.docs = append(o.docs, optionDoc{long: long, optional: optional, help: help})
+}
+
 func (o *optionSet) durationOpt(p *time.Duration, long, arg string, value time.Duration, help string) {
 	o.fs.DurationVar(p, long, value, help)
 	o.doc("", long, arg, help)
@@ -84,6 +94,9 @@ func (o *optionSet) print(w io.Writer) {
 			b.WriteString("    ")
 		}
 		fmt.Fprintf(&b, "--%s", d.long)
+		if d.optional != "" {
+			fmt.Fprintf(&b, "[=%s]", d.optional)
+		}
 		if d.arg != "" {
 			fmt.Fprintf(&b, " %s", d.arg)
 		}
@@ -201,14 +214,14 @@ type selectOptions struct {
 	parser  string
 	variant string
 	define  string
-	explain bool
+	explain explainMode
 }
 
 func (f *selectOptions) bind(o *optionSet) {
 	o.stringOpt(&f.parser, "parser", "", "NAME", "", "restrict detection to one parser")
 	o.stringOpt(&f.variant, "variant", "", "NAME", "", "use a variant of --parser")
 	o.stringOpt(&f.define, "define", "", "YAML", "", "read with a definition given here instead of a registered one")
-	o.boolOpt(&f.explain, "explain", "", "report the chosen definition and why, on stderr")
+	o.switchOpt(&f.explain, "explain", "json", "report the chosen definition and why, on stderr")
 }
 
 // check reports the option pairs that state two answers at once.

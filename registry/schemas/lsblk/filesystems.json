@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsblk/filesystems.json",
+  "title": "lsblk/filesystems",
+  "description": "lsblk -f, filesystem type, label, UUID and free space",
+  "x-jsonize": {
+    "definition": "lsblk/filesystems",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "fsuse_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

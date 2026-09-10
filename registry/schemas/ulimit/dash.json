@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ulimit/dash.json",
+  "title": "ulimit/dash",
+  "description": "ulimit -a resource limits as dash prints them",
+  "x-jsonize": {
+    "definition": "ulimit/dash",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "resource": {
+        "type": "string"
+      },
+      "unit": {
+        "type": "string"
+      },
+      "value": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "resource",
+      "value"
+    ]
+  }
+}

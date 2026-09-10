@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/upower/dump.json",
+  "title": "upower/dump",
+  "description": "upower -d every device and the daemon",
+  "x-jsonize": {
+    "definition": "upower/dump",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "Daemon",
+              "Device"
+            ]
+          },
+          "path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "kind",
+          "path"
+        ]
+      },
+      "properties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        }
+      }
+    },
+    "required": [
+      "device",
+      "properties"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/etc/nsswitch.json",
+  "title": "etc/nsswitch",
+  "description": "/etc/nsswitch.conf name service databases",
+  "x-jsonize": {
+    "definition": "etc/nsswitch",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "database": {
+        "type": "string"
+      },
+      "sources": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "database",
+      "sources"
+    ]
+  }
+}

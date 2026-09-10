@@ -21,7 +21,8 @@ were considered and what the MVP deliberately leaves out.
 cmd/jz                    entry point: signals, exit code
 internal/cli              subcommands, flag parsing, registry layering, exit-code contract
 internal/runner           exec mode: child process, LC_ALL=C, stderr passthrough, output cap, signals
-internal/conformance      golden cases and the definition/fixture cross product, shared by `go test` and `jz test`
+internal/conformance      golden cases, tampered fixtures and the definition/fixture cross product, shared by `go test` and `jz test`
+internal/schema           the JSON Schema of a definition's output, its validation and the compatibility rules
 internal/buildinfo        the version string stamped at build time
 pkg/registry              load registry directories/FS, merge with precedence, testdata cases
 pkg/definition            YAML schema, validation, regex compilation, format checks
@@ -473,6 +474,35 @@ signature expression, or a signature that fits and an `auto_detect: false`
 holding it back. Those are the near misses, and a scoped search reports
 every variant because in that scope they all are.
 
+What the first version left out was everything between "which one" and
+"why that one". It said which definition was chosen and what it matched,
+and it did not say what the candidates had been (the whole registry, a
+parser named on the command line, the command `jz run` started, a file's
+path), whether several definitions had fit and which rule had settled
+it, how many definitions had taken no part because they are only used
+when named, or where the input's lines had gone. Each of those is a
+question someone debugging a wrong answer has to ask, and each answer was
+already in hand: the selector records the rule that settled a tie as it
+applies it, and the engine's ledger counts what `ignore` left out. So
+the explanation now has a line for each, and the first line says which of
+the outcomes it was: `chose`, `unidentified`, `ambiguous`, `mismatch`,
+or `defined`. No and several are different failures with different
+remedies — write or name a definition, or settle two that overlap — and
+the exit status (4 for both) does not tell them apart.
+
+There is no score. A confidence number would be one more thing to trust
+without being able to check; every line here names a rule a definition
+states or a rule of the selector, and can be checked against `jz list`.
+
+`--explain=json` is the same facts for a script, one document on one line
+that opens `jz: explain: ` like the text lines do. It goes to standard
+error, not standard output, because standard output carries the
+conversion and nothing else. The prefix is kept because `jz run` passes
+the command's own standard error through on the same stream, and a line
+a script can pick out is worth more than a stream it has to trust to be
+clean. Every key is present whatever the outcome, so a consumer reads
+every explanation the same way.
+
 ### A file path is evidence
 
 `jz run` narrows the variants with the command name and its arguments,
@@ -626,6 +656,79 @@ that object does not exist until the last line has arrived; asking for it
 one record at a time is a request jz cannot carry out, so it is a usage
 error rather than a silent fallback.
 
+### Every line is accounted for
+
+"Never produce plausible-looking JSON from the wrong parser" was only half
+of the goal it came from. The other half is JSON from the right parser
+that is missing something, and until this was built nothing stood in its
+way. Two `dig` replies in one capture read as the first reply at exit 0:
+the header part matched the first header, the answers stopped at the
+first section break, and the second reply fell between the parts. `pactl
+list sinks` lost every property, port and format of every sink the same
+way, because the part that read the attributes named those lines as
+belonging to a sibling that did not exist. Golden files could not show
+either: they hold what a definition read, and a line it skipped leaves no
+trace in them.
+
+So the engine keeps a ledger. A line is read when a parser turned it into
+part of the result, left out when a rule the definition states says so
+(`ignore`, a blank line, a `fold` continuation), or it is unread, and
+unread text is exit 3 with the line quoted rather than a smaller answer.
+The rule lives in the engine and not in the definitions, so a definition
+gets it without asking and cannot opt out. None of the 355 definitions
+had to be edited to acquire it; 37 of them then failed on their own
+fixtures, most for a heading they had never stated in full, and the
+checks below found two more that only real output exposed.
+
+The finer rules are the ones the first measurement asked for:
+
+- A pattern has to reach both ends of the line it reads. The alternative,
+  counting a line read when a pattern matched part of it, would pass
+  exactly the case the ledger is for: a trailing field nobody asked
+  about. Checking every fixture found two lines in the whole registry
+  that fell foul of it, so it costs nothing to hold.
+- The heading `select.after` matches counts as read only when the
+  expression states the whole line. `after` is written to find a
+  position, and `'^Features for '` was never a statement that the
+  interface name after it is worthless. Stating the line is.
+- A part's `ignore` hands a line to a sibling; it does not drop it. The
+  documentation already said that was its purpose and nothing enforced
+  it, which is how `pactl` lost its properties.
+- A key printed twice into an object is an error, whatever the two
+  values. An object keeps one of them, and two copies of the same value
+  are what two documents read as one look like.
+- `ignore` is the one way to leave text out on purpose, and it is
+  trusted: what it names is what the definition declares worthless. That
+  trust is checked from outside. `jz test` adds a foreign line to every
+  fixture, at the end and in the middle, and reads every fixture twice
+  over; a definition that succeeds must carry the line in its result or
+  return more than one copy. That found `upower`'s catch-all
+  `ignore: ['^[^:]*$']`, which had been dropping the device type and the
+  history rows of a battery.
+
+Blank lines are never unread. They carry no value that could be missing,
+and a definition that keeps them for a parser that wants them
+(`skip_blank: false`) should not have to name the ones it does not.
+
+What this does not guarantee is a right reading. A table with explicit
+`header.columns` takes its first line as the header without checking its
+words; the signature is what checks them, and only inside its window. A
+pattern that spans lines with `[^\n]*` or `(?s).*` reads what it spans
+without reporting it; that is written into the definition, where a
+reviewer can see it, and the tampering check catches one that swallows a
+second copy of its input. The guarantee is narrower and exact: a
+successful conversion did not skip any of its input without saying so.
+
+Some text is left out on purpose, and saying so is now required rather
+than implicit. The sysstat banner, `xrandr`'s Screen line and the count
+under `tree` were dropped before and still are, for the reasons given
+where each is decided; what changed is that each is stated in full, so
+what is dropped is that line and not whatever happens to open like it.
+Where the text carried something the result did not — the `dig`
+question, EDNS options and warnings, `mtr`'s host, `pactl`'s properties,
+ports and formats, `upower`'s device type and history — the definition
+now reads it.
+
 ### Registry layering and the code/data boundary
 
 `registry/` holds only YAML, fixtures and one `embed.go`. `internal/*`
@@ -644,11 +747,63 @@ given machine whatever the network is doing. Updating the official
 registry means installing a new jz; adding your own means pointing
 `JSONIZE_REGISTRY_PATH` at a directory.
 
+### The output has a contract, and it is derived
+
+A consumer of `jz` output needs to know what it will get: which keys,
+of which types, which are always there. The definitions already say it —
+a column is a key, a named group is a key, a `type: int` field is an
+integer, `when_missing: omit` is a key that may be absent — so the schema
+is read off the definition rather than written beside it. A hand-written
+schema would be a second statement of the same facts, and the first time
+the two disagreed nobody would know which was right.
+
+What the generator derives is what the engine guarantees and nothing
+more. A key is required when every object of its kind carries it; a value
+is nullable where the engine can leave it empty; a group that can only
+match a few literals becomes an `enum`; a table that takes its column
+names from its header says so with `additionalProperties` instead of
+naming keys it cannot know. Every fixture in the registry is validated
+against its schema, by jz's own validator and by an independent one in
+CI; a disagreement is the generator and the engine disagreeing about a
+definition, and it fails the build.
+
+The schemas are published, in `registry/schemas` and on the site at the
+`$id` each states, and each carries a contract version in
+`x-jsonize.version`. That version is not `format`. `format` versions the
+language a definition is written in; the contract versions what one
+definition's output looks like. They change for unrelated reasons — the
+`iostat` rewrite changed an output from an object to an array without
+touching the language — and reusing one for the other would make both
+mean nothing.
+
+A change is breaking when a program reading the output, or a document
+kept from before and validated against the new schema, can be broken by
+it: a key removed, a type changed (made nullable included, and an object
+become an array), a key that is no longer always there, a key that now
+always is, an `enum` value added or taken away, an element type changed.
+Each direction has a reader it breaks, so both are counted. The one change
+that breaks neither is a key that may now appear and never has to.
+
+A breaking change is refused unless it is meant. `make
+registry-update-schema` rewrites the files and stops at a break;
+`BREAKING=command/variant` publishes it under the next version. CI then
+compares the schemas against the branch being merged into, so a schema
+edited by hand to match a break, with the version left alone, is caught
+there. Removing a definition ends its contract, which is said by listing
+it in `registry/schemas/retired`.
+
+The version is not written into the JSON jz prints. Every output would
+grow a key its consumers did not ask for, and the ones that compare
+documents would see every run differ from the last release's for no
+reason in the data. The definition that read the text identifies the
+contract, and `--explain` names it.
+
 ### Format versioning
 
-`format: 1` is the schema major version, and a different number is
-rejected with a message that says whether to upgrade jz or the
-definition.
+`format: 1` is the major version of the definition language, and a
+different number is rejected with a message that says whether to upgrade
+jz or the definition. It says nothing about what a definition produces;
+that is the output contract's version, above.
 
 Until the first tag, format 1 is not frozen: keys are added, renamed and
 removed while the shape settles. After the tag, adding a key is a minor
@@ -669,6 +824,12 @@ the key that is the problem.
 
 - `github.com/goccy/go-yaml` — strict YAML decoding with positions.
 - `github.com/google/go-cmp` — structural diffs in golden failures.
+
+No JSON Schema library: the generator emits a small subset of draft
+2020-12, and a validator for exactly that subset is shorter than the
+dependency. CI checks the same fixtures with the Python `jsonschema`
+package, so the two agreeing is evidence rather than one piece of code
+agreeing with itself.
 
 No CLI framework: four subcommands with a handful of flags each are
 served by `flag` and a dispatch table, and the `run` subcommand needs

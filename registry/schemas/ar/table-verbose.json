@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ar/table-verbose.json",
+  "title": "ar/table-verbose",
+  "description": "ar tv archive member listing",
+  "x-jsonize": {
+    "definition": "ar/table-verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "mode": {
+        "type": "string"
+      },
+      "uid": {
+        "type": "integer"
+      },
+      "gid": {
+        "type": "integer"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "date": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "mode",
+      "uid",
+      "gid",
+      "size",
+      "date",
+      "name"
+    ]
+  }
+}

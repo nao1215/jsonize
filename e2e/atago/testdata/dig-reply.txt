@@ -1,0 +1,19 @@
+
+; <<>> DiG 9.20.24-1ubuntu0.3-Ubuntu <<>> @192.168.11.1 gateway.local
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 10870
+;; flags: qr; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;gateway.local.			IN	A
+
+;; ANSWER SECTION:
+gateway.local.		3600	IN	A	192.168.11.1
+
+;; Query time: 2 msec
+;; SERVER: 192.168.11.1#53(192.168.11.1) (UDP)
+;; WHEN: Sun Sep 06 19:47:01 JST 2026
+;; MSG SIZE  rcvd: 47
+

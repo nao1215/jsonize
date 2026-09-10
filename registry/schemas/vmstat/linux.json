@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/vmstat/linux.json",
+  "title": "vmstat/linux",
+  "description": "vmstat memory, swap, io, system and cpu counters",
+  "x-jsonize": {
+    "definition": "vmstat/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "r": {
+        "type": "integer"
+      },
+      "b": {
+        "type": "integer"
+      },
+      "swpd": {
+        "type": "integer"
+      },
+      "free": {
+        "type": "integer"
+      },
+      "buff": {
+        "type": "integer"
+      },
+      "cache": {
+        "type": "integer"
+      },
+      "si": {
+        "type": "integer"
+      },
+      "so": {
+        "type": "integer"
+      },
+      "bi": {
+        "type": "integer"
+      },
+      "bo": {
+        "type": "integer"
+      },
+      "in": {
+        "type": "integer"
+      },
+      "cs": {
+        "type": "integer"
+      },
+      "us": {
+        "type": "integer"
+      },
+      "sy": {
+        "type": "integer"
+      },
+      "id": {
+        "type": "integer"
+      },
+      "wa": {
+        "type": "integer"
+      },
+      "st": {
+        "type": "integer"
+      },
+      "gu": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "r",
+      "b",
+      "swpd",
+      "free",
+      "buff",
+      "cache",
+      "si",
+      "so",
+      "bi",
+      "bo",
+      "in",
+      "cs",
+      "us",
+      "sy",
+      "id",
+      "wa",
+      "st"
+    ]
+  }
+}

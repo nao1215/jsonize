@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/iostat/extended.json",
+  "title": "iostat/extended",
+  "description": "iostat -x, one sample of extended per-device statistics",
+  "x-jsonize": {
+    "definition": "iostat/extended",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "cpu": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "user_percent": {
+              "type": "number"
+            },
+            "nice_percent": {
+              "type": "number"
+            },
+            "system_percent": {
+              "type": "number"
+            },
+            "iowait_percent": {
+              "type": "number"
+            },
+            "steal_percent": {
+              "type": "number"
+            },
+            "idle_percent": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "user_percent",
+            "nice_percent",
+            "system_percent",
+            "iowait_percent",
+            "steal_percent",
+            "idle_percent"
+          ]
+        }
+      },
+      "devices": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "aqu_sz": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "d_await": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "d_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "dareq_sz": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "device": {
+              "type": "string"
+            },
+            "dkb_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "drqm_percent": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "drqm_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "f_await": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "f_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "r_await": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "r_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "rareq_sz": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "rkb_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "rrqm_percent": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "rrqm_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "util_percent": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "w_await": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "w_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "wareq_sz": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "wkb_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "wrqm_percent": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "wrqm_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "required": [
+      "cpu",
+      "devices"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/update-alternatives/selections.json",
+  "title": "update-alternatives/selections",
+  "description": "update-alternatives --get-selections links, modes and targets",
+  "x-jsonize": {
+    "definition": "update-alternatives/selections",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "status",
+      "path"
+    ]
+  }
+}

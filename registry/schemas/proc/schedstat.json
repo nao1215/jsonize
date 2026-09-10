@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/schedstat.json",
+  "title": "proc/schedstat",
+  "description": "/proc/schedstat version 17 scheduler statistics per processor and domain",
+  "x-jsonize": {
+    "definition": "proc/schedstat",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "header": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "type": "integer"
+        },
+        "version": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "cpus": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "cpu": {
+            "type": "object",
+            "properties": {
+              "cpu": {
+                "type": "string"
+              },
+              "yield_count": {
+                "type": "integer"
+              },
+              "legacy": {
+                "type": "integer"
+              },
+              "schedule_count": {
+                "type": "integer"
+              },
+              "schedule_idle_count": {
+                "type": "integer"
+              },
+              "wakeup_count": {
+                "type": "integer"
+              },
+              "wakeup_local_count": {
+                "type": "integer"
+              },
+              "run_time_ns": {
+                "type": "integer"
+              },
+              "wait_time_ns": {
+                "type": "integer"
+              },
+              "timeslice_count": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "cpu",
+              "yield_count",
+              "legacy",
+              "schedule_count",
+              "schedule_idle_count",
+              "wakeup_count",
+              "wakeup_local_count",
+              "run_time_ns",
+              "wait_time_ns",
+              "timeslice_count"
+            ]
+          },
+          "domains": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "domain": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cpumask": {
+                  "type": "string"
+                },
+                "busy_lb_count": {
+                  "type": "integer"
+                },
+                "busy_lb_balanced": {
+                  "type": "integer"
+                },
+                "busy_lb_failed": {
+                  "type": "integer"
+                },
+                "busy_lb_imbalance_load": {
+                  "type": "integer"
+                },
+                "busy_lb_imbalance_util": {
+                  "type": "integer"
+                },
+                "busy_lb_imbalance_task": {
+                  "type": "integer"
+                },
+                "busy_lb_imbalance_misfit": {
+                  "type": "integer"
+                },
+                "busy_lb_gained": {
+                  "type": "integer"
+                },
+                "busy_lb_hot_gained": {
+                  "type": "integer"
+                },
+                "busy_lb_nobusyq": {
+                  "type": "integer"
+                },
+                "busy_lb_nobusyg": {
+                  "type": "integer"
+                },
+                "idle_lb_count": {
+                  "type": "integer"
+                },
+                "idle_lb_balanced": {
+                  "type": "integer"
+                },
+                "idle_lb_failed": {
+                  "type": "integer"
+                },
+                "idle_lb_imbalance_load": {
+                  "type": "integer"
+                },
+                "idle_lb_imbalance_util": {
+                  "type": "integer"
+                },
+                "idle_lb_imbalance_task": {
+                  "type": "integer"
+                },
+                "idle_lb_imbalance_misfit": {
+                  "type": "integer"
+                },
+                "idle_lb_gained": {
+                  "type": "integer"
+                },
+                "idle_lb_hot_gained": {
+                  "type": "integer"
+                },
+                "idle_lb_nobusyq": {
+                  "type": "integer"
+                },
+                "idle_lb_nobusyg": {
+                  "type": "integer"
+                },
+                "newly_idle_lb_count": {
+                  "type": "integer"
+                },
+                "newly_idle_lb_balanced": {
+                  "type": "integer"
+                },
+                "newly_idle_lb_failed": {
+                  "type": "integer"
+                },
+                "newly_idle_lb_imbalance_load": {
+                  "type": "integer"
+                },
+                "newly_idle_lb_imbalance_util": {
+                  "type": "integer"
+                },
+                "newly_idle_lb_imbalance_task": {
+                  "type": "integer"
+                },
+                "newly_idle_lb_imbalance_misfit": {
+                  "type": "integer"
+                },
+                "newly_idle_lb_gained": {
+                  "type": "integer"
+                },
+                "newly_idle_lb_hot_gained": {
+                  "type": "integer"
+                },
+                "newly_idle_lb_nobusyq": {
+                  "type": "integer"
+                },
+                "newly_idle_lb_nobusyg": {
+                  "type": "integer"
+                },
+                "alb_count": {
+                  "type": "integer"
+                },
+                "alb_failed": {
+                  "type": "integer"
+                },
+                "alb_pushed": {
+                  "type": "integer"
+                },
+                "sbe_count": {
+                  "type": "integer"
+                },
+                "sbe_balanced": {
+                  "type": "integer"
+                },
+                "sbe_pushed": {
+                  "type": "integer"
+                },
+                "sbf_count": {
+                  "type": "integer"
+                },
+                "sbf_balanced": {
+                  "type": "integer"
+                },
+                "sbf_pushed": {
+                  "type": "integer"
+                },
+                "ttwu_wake_remote": {
+                  "type": "integer"
+                },
+                "ttwu_move_affine": {
+                  "type": "integer"
+                },
+                "ttwu_move_balance": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "domain",
+                "name",
+                "cpumask",
+                "busy_lb_count",
+                "busy_lb_balanced",
+                "busy_lb_failed",
+                "busy_lb_imbalance_load",
+                "busy_lb_imbalance_util",
+                "busy_lb_imbalance_task",
+                "busy_lb_imbalance_misfit",
+                "busy_lb_gained",
+                "busy_lb_hot_gained",
+                "busy_lb_nobusyq",
+                "busy_lb_nobusyg",
+                "idle_lb_count",
+                "idle_lb_balanced",
+                "idle_lb_failed",
+                "idle_lb_imbalance_load",
+                "idle_lb_imbalance_util",
+                "idle_lb_imbalance_task",
+                "idle_lb_imbalance_misfit",
+                "idle_lb_gained",
+                "idle_lb_hot_gained",
+                "idle_lb_nobusyq",
+                "idle_lb_nobusyg",
+                "newly_idle_lb_count",
+                "newly_idle_lb_balanced",
+                "newly_idle_lb_failed",
+                "newly_idle_lb_imbalance_load",
+                "newly_idle_lb_imbalance_util",
+                "newly_idle_lb_imbalance_task",
+                "newly_idle_lb_imbalance_misfit",
+                "newly_idle_lb_gained",
+                "newly_idle_lb_hot_gained",
+                "newly_idle_lb_nobusyq",
+                "newly_idle_lb_nobusyg",
+                "alb_count",
+                "alb_failed",
+                "alb_pushed",
+                "sbe_count",
+                "sbe_balanced",
+                "sbe_pushed",
+                "sbf_count",
+                "sbf_balanced",
+                "sbf_pushed",
+                "ttwu_wake_remote",
+                "ttwu_move_affine",
+                "ttwu_move_balance"
+              ]
+            }
+          }
+        },
+        "required": [
+          "cpu",
+          "domains"
+        ]
+      }
+    }
+  },
+  "required": [
+    "header",
+    "cpus"
+  ]
+}

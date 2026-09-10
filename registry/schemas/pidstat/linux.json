@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pidstat/linux.json",
+  "title": "pidstat/linux",
+  "description": "pidstat per-task CPU utilisation",
+  "x-jsonize": {
+    "definition": "pidstat/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "string"
+            },
+            "uid": {
+              "type": "integer"
+            },
+            "pid": {
+              "type": "integer"
+            },
+            "usr_percent": {
+              "type": "number"
+            },
+            "system_percent": {
+              "type": "number"
+            },
+            "guest_percent": {
+              "type": "number"
+            },
+            "wait_percent": {
+              "type": "number"
+            },
+            "cpu_percent": {
+              "type": "number"
+            },
+            "cpu": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "time",
+            "uid",
+            "pid",
+            "usr_percent",
+            "system_percent",
+            "guest_percent",
+            "wait_percent",
+            "cpu_percent",
+            "cpu",
+            "command"
+          ]
+        }
+      }
+    },
+    "required": [
+      "tasks"
+    ]
+  }
+}

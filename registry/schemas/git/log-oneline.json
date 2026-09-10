@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/log-oneline.json",
+  "title": "git/log-oneline",
+  "description": "git log --oneline",
+  "x-jsonize": {
+    "definition": "git/log-oneline",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "commit": {
+        "type": "string"
+      },
+      "subject": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "commit",
+      "subject"
+    ]
+  }
+}

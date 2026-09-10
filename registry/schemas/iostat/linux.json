@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/iostat/linux.json",
+  "title": "iostat/linux",
+  "description": "iostat default report, one sample of CPU averages and per-device counters",
+  "x-jsonize": {
+    "definition": "iostat/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "cpu": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "user_percent": {
+              "type": "number"
+            },
+            "nice_percent": {
+              "type": "number"
+            },
+            "system_percent": {
+              "type": "number"
+            },
+            "iowait_percent": {
+              "type": "number"
+            },
+            "steal_percent": {
+              "type": "number"
+            },
+            "idle_percent": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "user_percent",
+            "nice_percent",
+            "system_percent",
+            "iowait_percent",
+            "steal_percent",
+            "idle_percent"
+          ]
+        }
+      },
+      "devices": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "device": {
+              "type": "string"
+            },
+            "kb_dscd": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "kb_dscd_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "kb_read": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "kb_read_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "kb_wrtn": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "kb_wrtn_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "tps": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "required": [
+      "cpu",
+      "devices"
+    ]
+  }
+}

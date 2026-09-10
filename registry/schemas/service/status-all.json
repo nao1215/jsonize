@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/service/status-all.json",
+  "title": "service/status-all",
+  "description": "service --status-all init script states",
+  "x-jsonize": {
+    "definition": "service/status-all",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "running": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "running",
+      "name"
+    ]
+  }
+}

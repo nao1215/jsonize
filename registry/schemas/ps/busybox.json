@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ps/busybox.json",
+  "title": "ps/busybox",
+  "description": "BusyBox ps default output (PID USER COMMAND)",
+  "x-jsonize": {
+    "definition": "ps/busybox",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "pid": {
+        "type": "integer"
+      },
+      "user": {
+        "type": "string"
+      },
+      "command": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "pid",
+      "user",
+      "command"
+    ]
+  }
+}

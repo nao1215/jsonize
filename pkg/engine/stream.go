@@ -67,7 +67,10 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 	br := bufio.NewReaderSize(r, 64*1024)
 	sep := def.Input.Separator()
 	num := 0
-	for !s.done {
+	// The whole input is read even once input.select has closed its
+	// range: what follows the range still has to be accounted for, and a
+	// line nobody reads there is as much a failure as one inside it.
+	for {
 		raw, err := readRecord(br, sep, opts.maxLine())
 		if errors.Is(err, ErrLineTooLong) {
 			return &ParseError{Definition: def.ID(), Line: num + 1, Msg: fmt.Sprintf("record exceeds %d bytes", opts.maxLine()), Cause: ErrLineTooLong}
@@ -233,28 +236,45 @@ func (s *streamer) feedFolded(l line) error {
 }
 
 // feedSelected applies input.select in the order after, until, skip,
-// limit, which is the order applySelect walks a slice in.
+// limit, which is the order applySelect walks a slice in. A line the
+// selection leaves out is unread, the way it is in a whole document,
+// except for the heading select.after states in full.
 func (s *streamer) feedSelected(l line) error {
+	if s.done {
+		return s.leftOut(l)
+	}
 	if s.sel.CompiledAfter() != nil && !s.started {
 		if s.sel.CompiledAfter().MatchString(l.text) {
 			s.started = true
+			if s.sel.Heading(l.text) {
+				return nil
+			}
 		}
-		return nil
+		return s.leftOut(l)
 	}
 	if re := s.sel.CompiledUntil(); re != nil && re.MatchString(l.text) {
 		s.done = true
-		return nil
+		return s.leftOut(l)
 	}
 	if s.skipped < s.sel.Skip {
 		s.skipped++
-		return nil
+		return s.leftOut(l)
 	}
 	if s.sel.Limit > 0 && s.taken >= s.sel.Limit {
 		s.done = true
-		return nil
+		return s.leftOut(l)
 	}
 	s.taken++
 	return s.feedRecord(l)
+}
+
+// leftOut reports a line the selection did not hand to the parser. Only
+// a line with nothing on it can be left out without a word.
+func (s *streamer) leftOut(l line) error {
+	if blank(l.text) {
+		return nil
+	}
+	return s.unreadError([]UnreadSpan{{Line: l.num, Text: truncate(l.text, 80)}})
 }
 
 // feedRecord hands one line to the parser for its type.
@@ -355,6 +375,9 @@ func (s *streamer) regexObject(l line) (any, error) {
 	if m == nil {
 		return nil, s.errorf(l.num, "", "line does not match %s: %q", describePatterns(s.p), truncate(l.text, 80))
 	}
+	if err := s.checkWhole(l, m[0], m[1]); err != nil {
+		return nil, err
+	}
 	return s.objectFromMatch(re, l.text, m, s.fields, l.num)
 }
 
@@ -374,11 +397,12 @@ func (s *streamer) kvEntry(l line) (any, error) {
 // the next start line proves it is finished.
 func (s *streamer) feedBlock(l line) error {
 	if s.p.CompiledStart().MatchString(l.text) {
-		if err := s.flushBlock(); err != nil {
-			return err
-		}
+		// The line opens the next record whether or not the one before it
+		// could be read: a caller that skips a bad record still gets the
+		// ones after it.
+		err := s.flushBlock()
 		s.block = []line{l}
-		return nil
+		return err
 	}
 	if len(s.block) == 0 {
 		return s.errorf(l.num, "", "line precedes the first record: %q", l.text)
@@ -391,17 +415,25 @@ func (s *streamer) flushBlock() error {
 	if len(s.block) == 0 {
 		return nil
 	}
-	v, err := s.parseComposite(s.p, s.block)
+	block := s.block
 	s.block = nil
+	// A record is read the way a whole composite is, so its lines are
+	// accounted for the same way, one record at a time.
+	s.ledger = newLedger(block)
+	defer func() { s.ledger = nil }()
+	v, err := s.parseComposite(s.p, block)
 	if err != nil {
 		return err
+	}
+	if spans := s.ledger.unread(block); len(spans) > 0 {
+		return s.unreadError(spans)
 	}
 	return s.emit(v)
 }
 
 // finish releases what the lookahead and the open record were holding.
 func (s *streamer) finish() error {
-	if s.held != nil && !s.done {
+	if s.held != nil {
 		held := *s.held
 		s.held = nil
 		if err := s.feedFolded(held); err != nil {
@@ -512,6 +544,9 @@ func (s *streamer) emitCSV(pending []line) error {
 // is empty, in which case it continues the row above — the same reading
 // the whole-document parser does, arranged one line at a time.
 func (s *streamer) feedBox(l line) error {
+	if err := s.boxLine(l); err != nil {
+		return err
+	}
 	if isBoxRule(l.text) {
 		if !s.header {
 			return s.closeBoxHeader()
@@ -552,16 +587,9 @@ func (s *streamer) flushBox() error {
 	if !s.header {
 		return s.closeBoxHeaderFrom(group)
 	}
-	obj := jsonutil.NewObject()
-	cells := boxJoin(group, "\n")
-	for i, c := range s.cols {
-		var raw any
-		if i < len(cells) {
-			raw = cells[i]
-		}
-		if err := s.setField(obj, c.name, raw, s.fields[c.name], group[0].num); err != nil {
-			return err
-		}
+	obj, err := s.boxObject(s.cols, boxJoin(group, "\n"), s.fields, group[0].num)
+	if err != nil {
+		return err
 	}
 	return s.emit(obj)
 }

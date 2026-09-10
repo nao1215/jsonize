@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/udevadm/info.json",
+  "title": "udevadm/info",
+  "description": "udevadm info -q all device records",
+  "x-jsonize": {
+    "definition": "udevadm/info",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tag": {
+        "type": "string",
+        "enum": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "J",
+          "K",
+          "L",
+          "M",
+          "N",
+          "O",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "U",
+          "V",
+          "W",
+          "X",
+          "Y",
+          "Z"
+        ]
+      },
+      "value": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "tag",
+      "value"
+    ]
+  }
+}

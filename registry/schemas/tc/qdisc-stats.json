@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/tc/qdisc-stats.json",
+  "title": "tc/qdisc-stats",
+  "description": "tc -s qdisc show, queueing disciplines with their counters",
+  "x-jsonize": {
+    "definition": "tc/qdisc-stats",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "qdisc": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "handle": {
+            "type": "string"
+          },
+          "dev": {
+            "type": "string"
+          },
+          "parent": {
+            "type": "string"
+          },
+          "refcnt": {
+            "type": "integer"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "kind",
+          "handle",
+          "parent",
+          "options"
+        ]
+      },
+      "sent": {
+        "type": "object",
+        "properties": {
+          "bytes": {
+            "type": "integer"
+          },
+          "packets": {
+            "type": "integer"
+          },
+          "dropped": {
+            "type": "integer"
+          },
+          "overlimits": {
+            "type": "integer"
+          },
+          "requeues": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "bytes",
+          "packets",
+          "dropped",
+          "overlimits",
+          "requeues"
+        ]
+      },
+      "backlog": {
+        "type": "object",
+        "properties": {
+          "bytes": {
+            "type": "string"
+          },
+          "packets": {
+            "type": "string"
+          },
+          "requeues": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "bytes",
+          "packets",
+          "requeues"
+        ]
+      },
+      "kind_stats": {
+        "type": "object",
+        "properties": {
+          "words": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "words"
+        ]
+      }
+    },
+    "required": [
+      "qdisc",
+      "sent",
+      "backlog",
+      "kind_stats"
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+name: Schema
+
+# The output contracts in registry/schemas are derived from the
+# definitions. The unit tests already hold them to the definitions on
+# every OS; this workflow adds the two checks that need more than the
+# tree in front of it: an independent validator reading every fixture
+# against its schema, and a comparison with what the branch being merged
+# into published, which is where a breaking change edited in by hand
+# without a new contract version is caught.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  independent:
+    name: fixtures against an independent validator
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install jsonschema
+        run: |
+          python3 -m venv "${RUNNER_TEMP}/venv"
+          "${RUNNER_TEMP}/venv/bin/pip" install --quiet jsonschema==4.23.0
+      - name: Validate every fixture against its published schema
+        run: '"${RUNNER_TEMP}/venv/bin/python" scripts/check_schemas.py'
+
+  against-base:
+    name: compatible with the base branch
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+      - name: Extract the schemas the base branch published
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          base="${RUNNER_TEMP}/base"
+          mkdir -p "${base}/registry"
+          if git cat-file -e "origin/${BASE_REF}:registry/schemas"; then
+            git archive "origin/${BASE_REF}" registry/schemas | tar -x -C "${base}"
+          else
+            echo "::notice::origin/${BASE_REF} publishes no schemas yet, so there is nothing to be compatible with"
+          fi
+      - name: Refuse a breaking change published without a new contract version
+        run: go test ./registry -run '^TestSchemasAgainstBase$' -count=1 -v -args -schema-base "${RUNNER_TEMP}/base/registry"

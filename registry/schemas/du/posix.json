@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/du/posix.json",
+  "title": "du/posix",
+  "description": "du output (tab separated size and path) on Linux, macOS and BusyBox",
+  "x-jsonize": {
+    "definition": "du/posix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "size": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "size",
+      "name"
+    ]
+  }
+}

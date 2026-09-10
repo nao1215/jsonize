@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/uname/darwin.json",
+  "title": "uname/darwin",
+  "description": "uname -a on macOS",
+  "x-jsonize": {
+    "definition": "uname/darwin",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "kernel_name": {
+      "type": "string",
+      "enum": [
+        "Darwin"
+      ]
+    },
+    "node_name": {
+      "type": "string"
+    },
+    "kernel_release": {
+      "type": "string"
+    },
+    "kernel_version": {
+      "type": "string"
+    },
+    "machine": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "kernel_name",
+    "node_name",
+    "kernel_release",
+    "kernel_version",
+    "machine"
+  ]
+}

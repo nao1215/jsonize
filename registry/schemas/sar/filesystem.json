@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/filesystem.json",
+  "title": "sar/filesystem",
+  "description": "sar -F file system utilisation",
+  "x-jsonize": {
+    "definition": "sar/filesystem",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "mbfsfree": {
+        "type": "integer"
+      },
+      "mbfsused": {
+        "type": "integer"
+      },
+      "fsused_percent": {
+        "type": "number"
+      },
+      "ufsused_percent": {
+        "type": "number"
+      },
+      "ifree": {
+        "type": "integer"
+      },
+      "iused": {
+        "type": "integer"
+      },
+      "iused_percent": {
+        "type": "number"
+      },
+      "filesystem": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "time",
+      "mbfsfree",
+      "mbfsused",
+      "fsused_percent",
+      "ufsused_percent",
+      "ifree",
+      "iused",
+      "iused_percent",
+      "filesystem"
+    ]
+  }
+}

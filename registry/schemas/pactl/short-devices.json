@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pactl/short-devices.json",
+  "title": "pactl/short-devices",
+  "description": "pactl list short sinks and sources",
+  "x-jsonize": {
+    "definition": "pactl/short-devices",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "index": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "driver": {
+        "type": "string"
+      },
+      "sample_specification": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "index",
+      "name",
+      "driver",
+      "sample_specification",
+      "state"
+    ]
+  }
+}

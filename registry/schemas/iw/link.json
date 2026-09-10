@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/iw/link.json",
+  "title": "iw/link",
+  "description": "iw dev link status",
+  "x-jsonize": {
+    "definition": "iw/link",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "connection": {
+      "type": "object",
+      "properties": {
+        "bssid": {
+          "type": "string"
+        },
+        "interface": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "bssid",
+        "interface"
+      ]
+    },
+    "details": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "connection",
+    "details"
+  ]
+}

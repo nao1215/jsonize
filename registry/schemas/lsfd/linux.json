@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsfd/linux.json",
+  "title": "lsfd/linux",
+  "description": "lsfd open file listing",
+  "x-jsonize": {
+    "definition": "lsfd/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string"
+      },
+      "inode": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mntid": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "pid": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

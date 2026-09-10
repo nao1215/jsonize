@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/npm/outdated.json",
+  "title": "npm/outdated",
+  "description": "npm outdated version table",
+  "x-jsonize": {
+    "definition": "npm/outdated",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "package": {
+        "type": "string"
+      },
+      "current": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "wanted": {
+        "type": "string"
+      },
+      "latest": {
+        "type": "string"
+      },
+      "location": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "depended_by": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "package",
+      "current",
+      "wanted",
+      "latest",
+      "location",
+      "depended_by"
+    ]
+  }
+}

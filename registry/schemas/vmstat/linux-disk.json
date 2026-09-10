@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/vmstat/linux-disk.json",
+  "title": "vmstat/linux-disk",
+  "description": "vmstat -d, per-device read and write counters",
+  "x-jsonize": {
+    "definition": "vmstat/linux-disk",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "disk": {
+        "type": "string"
+      },
+      "reads_total": {
+        "type": "integer"
+      },
+      "reads_merged": {
+        "type": "integer"
+      },
+      "reads_sectors": {
+        "type": "integer"
+      },
+      "reads_ms": {
+        "type": "integer"
+      },
+      "writes_total": {
+        "type": "integer"
+      },
+      "writes_merged": {
+        "type": "integer"
+      },
+      "writes_sectors": {
+        "type": "integer"
+      },
+      "writes_ms": {
+        "type": "integer"
+      },
+      "io_current": {
+        "type": "integer"
+      },
+      "io_seconds": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "disk",
+      "reads_total",
+      "reads_merged",
+      "reads_sectors",
+      "reads_ms",
+      "writes_total",
+      "writes_merged",
+      "writes_sectors",
+      "writes_ms",
+      "io_current",
+      "io_seconds"
+    ]
+  }
+}

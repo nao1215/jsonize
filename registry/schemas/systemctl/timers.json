@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemctl/timers.json",
+  "title": "systemctl/timers",
+  "description": "systemctl list-timers table",
+  "x-jsonize": {
+    "definition": "systemctl/timers",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "next": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "left": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "last": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "passed": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "unit": {
+        "type": "string"
+      },
+      "activates": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "next",
+      "left",
+      "last",
+      "passed",
+      "unit",
+      "activates"
+    ]
+  }
+}

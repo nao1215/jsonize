@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemd-analyze/blame.json",
+  "title": "systemd-analyze/blame",
+  "description": "systemd-analyze blame, unit initialisation times",
+  "x-jsonize": {
+    "definition": "systemd-analyze/blame",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "time",
+      "unit"
+    ]
+  }
+}

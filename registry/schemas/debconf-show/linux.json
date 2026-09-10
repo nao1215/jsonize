@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/debconf-show/linux.json",
+  "title": "debconf-show/linux",
+  "description": "debconf-show questions and answers for one package",
+  "x-jsonize": {
+    "definition": "debconf-show/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "seen": {
+        "type": "boolean"
+      },
+      "name": {
+        "type": "string"
+      },
+      "value": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "seen",
+      "name",
+      "value"
+    ]
+  }
+}

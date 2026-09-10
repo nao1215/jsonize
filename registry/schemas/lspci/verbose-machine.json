@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lspci/verbose-machine.json",
+  "title": "lspci/verbose-machine",
+  "description": "lspci -vmm one key per line, blocks separated by blank lines",
+  "x-jsonize": {
+    "definition": "lspci/verbose-machine",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "object",
+        "properties": {
+          "IOMMUGroup": {
+            "type": "integer"
+          },
+          "NUMANode": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "device"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/arp/alternate.json",
+  "title": "arp/alternate",
+  "description": "arp -a, the alternate BSD style ARP cache listing",
+  "x-jsonize": {
+    "definition": "arp/alternate",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "hwaddress": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "hwtype": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "flags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "device": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "address",
+      "hwaddress",
+      "hwtype",
+      "flags",
+      "device"
+    ]
+  }
+}

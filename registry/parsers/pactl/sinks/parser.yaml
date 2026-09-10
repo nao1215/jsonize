@@ -2,8 +2,8 @@
 # then indented "Key: Value" lines, with the properties and formats
 # indented one level further under headings of their own. Which keys a
 # sink has depends on the driver, so the block is read as a map rather
-# than as named columns, and the nested lists are left as the lines they
-# were printed on.
+# than as named columns, and so is the property list; the ports and the
+# formats are lists of their own.
 format: 1
 command: pactl
 variant: sinks
@@ -41,16 +41,33 @@ parse:
         pattern: '\A(?P<kind>Sink|Source) #(?P<index>[0-9]+)[ \t]*\z'
       fields:
         index: {type: int}
-    # One level of "Key: Value" lines. A property list is its own report
-    # and reading it as a sibling of State would flatten two things into
-    # one, so it is left out.
+    # One level of "Key: Value" lines. The three headings that open a
+    # nested list, and the lines under them, belong to the parts below.
     - name: attributes
       select: {skip: 1}
-      # The deeper lines under Properties and Formats are left out, and
-      # so are the headings above them: a heading is a key with no value,
-      # and its value is the lines this part does not read.
-      ignore: ['^\t\t', '^\t[^:]+:[ \t]*$']
+      ignore: ['^\t\t', '^\t(?:Properties|Ports|Formats):[ \t]*$']
       parse:
         type: kv
         separator: ": "
         as: map
+    # `key = "value"` lines, one per property the server reports. Which
+    # keys there are depends on the driver, so they are read as a map.
+    - name: properties
+      select: {after: '^\tProperties:$', until: '^\t\S'}
+      parse:
+        type: kv
+        separator: " = "
+        as: map
+        unquote: true
+    # One line per port: its name, then a description with the type,
+    # priority and availability in brackets, kept as printed.
+    - name: ports
+      select: {after: '^\tPorts:$', until: '^\t\S'}
+      parse:
+        type: regex
+        pattern: '^\t\t(?P<name>[^:]+): (?P<description>.+?)[ \t]*$'
+    - name: formats
+      select: {after: '^\tFormats:$', until: '^\t\S'}
+      parse:
+        type: regex
+        pattern: '^\t\t(?P<format>.+?)[ \t]*$'

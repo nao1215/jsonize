@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsb_release/linux.json",
+  "title": "lsb_release/linux",
+  "description": "lsb_release -a distribution description",
+  "x-jsonize": {
+    "definition": "lsb_release/linux",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "lsb_version": {
+      "type": "string"
+    },
+    "distributor_id": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "release": {
+      "type": "string"
+    },
+    "codename": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "distributor_id",
+    "description",
+    "release",
+    "codename"
+  ]
+}

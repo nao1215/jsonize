@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sensors/linux.json",
+  "title": "sensors/linux",
+  "description": "sensors readings grouped by chip",
+  "x-jsonize": {
+    "definition": "sensors/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "chip": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "bus": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "address": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "adapter": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "bus",
+          "address",
+          "adapter"
+        ]
+      },
+      "readings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "limits": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "alarm": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "name",
+            "value",
+            "unit",
+            "limits",
+            "alarm"
+          ]
+        }
+      }
+    },
+    "required": [
+      "chip",
+      "readings"
+    ]
+  }
+}

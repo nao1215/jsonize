@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/bsd-human.json",
+  "title": "df/bsd-human",
+  "description": "BSD df -h / -H output on macOS (sizes kept as printed)",
+  "x-jsonize": {
+    "definition": "df/bsd-human",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "used": {
+        "type": "string"
+      },
+      "available": {
+        "type": "string"
+      },
+      "capacity_percent": {
+        "type": "integer"
+      },
+      "iused": {
+        "type": "string"
+      },
+      "ifree": {
+        "type": "string"
+      },
+      "iused_percent": {
+        "type": "integer"
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "size",
+      "used",
+      "available",
+      "capacity_percent",
+      "mounted_on"
+    ]
+  }
+}

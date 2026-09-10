@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/mise/ls.json",
+  "title": "mise/ls",
+  "description": "mise ls installed tool versions",
+  "x-jsonize": {
+    "definition": "mise/ls",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tool": {
+        "type": "string"
+      },
+      "version": {
+        "type": "string"
+      },
+      "source": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "requested": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "tool",
+      "version",
+      "source",
+      "requested"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/uv/pip-show.json",
+  "title": "uv/pip-show",
+  "description": "uv pip show package metadata",
+  "x-jsonize": {
+    "definition": "uv/pip-show",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "package": {
+        "type": "object",
+        "properties": {
+          "Required-by": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "Requires": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "package"
+    ]
+  }
+}

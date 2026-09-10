@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lslogins/linux.json",
+  "title": "lslogins/linux",
+  "description": "lslogins default table of accounts",
+  "x-jsonize": {
+    "definition": "lslogins/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "proc": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "pwd_deny": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "pwd_lock": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "uid": {
+        "type": "integer"
+      },
+      "user": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

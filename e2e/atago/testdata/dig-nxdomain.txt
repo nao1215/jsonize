@@ -1,0 +1,17 @@
+
+; <<>> DiG 9.20.24-1ubuntu0.3-Ubuntu <<>> nonexistent-host.invalid
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 49958
+;; flags: qr aa rd ra ad; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;nonexistent-host.invalid.	IN	A
+
+;; Query time: 0 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53) (UDP)
+;; WHEN: Sun Sep 06 19:47:02 JST 2026
+;; MSG SIZE  rcvd: 53
+

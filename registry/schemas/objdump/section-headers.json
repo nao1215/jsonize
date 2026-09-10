@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/objdump/section-headers.json",
+  "title": "objdump/section-headers",
+  "description": "objdump -h section headers of one file",
+  "x-jsonize": {
+    "definition": "objdump/section-headers",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "file": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "format"
+      ]
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "idx": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "vma": {
+            "type": "string"
+          },
+          "lma": {
+            "type": "string"
+          },
+          "file_off": {
+            "type": "string"
+          },
+          "align": {
+            "type": "integer"
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "idx",
+          "name",
+          "size",
+          "vma",
+          "lma",
+          "file_off",
+          "align",
+          "flags"
+        ]
+      }
+    }
+  },
+  "required": [
+    "file",
+    "sections"
+  ]
+}

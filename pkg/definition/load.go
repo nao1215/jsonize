@@ -320,6 +320,11 @@ func compileList(v *validator, path string, exprs []string, flags string) []*reg
 func validateSelect(v *validator, path string, s *Select) {
 	if s.After != "" {
 		s.after = v.regex(path+".after", s.After)
+		if s.after != nil {
+			// The expression compiled on its own, so it compiles inside a
+			// group too; the flags it may open with stay scoped to it.
+			s.heading = regexp.MustCompile(`\A[ \t]*(?:` + s.After + `)[ \t]*\z`)
+		}
 	}
 	if s.Until != "" {
 		s.until = v.regex(path+".until", s.Until)
@@ -448,6 +453,14 @@ func validateTree(v *validator, path string, p *Parse) {
 	}
 	validateParse(v, path+".node.parse", &p.Node.Parse, p.Node.Fields, TypeTree)
 	validateFields(v, path+".node.fields", p.Node.Fields, 0, p.Node.Parse.Type == TypeKV)
+	// Every node carries its children under "children", so a group of
+	// that name would be read and then written over.
+	for _, g := range p.Node.Parse.Groups() {
+		if g == "children" {
+			v.add(path+".node.parse", `names a group "children", which is where a node's children go; name it something else`)
+			break
+		}
+	}
 }
 
 // validateINI checks an ini parser. The sections make it an object of

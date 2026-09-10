@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/etc/fstab.json",
+  "title": "etc/fstab",
+  "description": "/etc/fstab file system table",
+  "x-jsonize": {
+    "definition": "etc/fstab",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "string"
+      },
+      "mount_point": {
+        "type": "string"
+      },
+      "fs_type": {
+        "type": "string"
+      },
+      "options": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "dump": {
+        "type": "integer"
+      },
+      "pass": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "device",
+      "mount_point",
+      "fs_type",
+      "options"
+    ]
+  }
+}

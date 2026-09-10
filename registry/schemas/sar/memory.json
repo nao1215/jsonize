@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/memory.json",
+  "title": "sar/memory",
+  "description": "sar -r memory utilisation",
+  "x-jsonize": {
+    "definition": "sar/memory",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "kbmemfree": {
+        "type": "integer"
+      },
+      "kbavail": {
+        "type": "integer"
+      },
+      "kbmemused": {
+        "type": "integer"
+      },
+      "memused_percent": {
+        "type": "number"
+      },
+      "kbbuffers": {
+        "type": "integer"
+      },
+      "kbcached": {
+        "type": "integer"
+      },
+      "kbcommit": {
+        "type": "integer"
+      },
+      "commit_percent": {
+        "type": "number"
+      },
+      "kbactive": {
+        "type": "integer"
+      },
+      "kbinact": {
+        "type": "integer"
+      },
+      "kbdirty": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "time",
+      "kbmemfree",
+      "kbavail",
+      "kbmemused",
+      "memused_percent",
+      "kbbuffers",
+      "kbcached",
+      "kbcommit",
+      "commit_percent",
+      "kbactive",
+      "kbinact",
+      "kbdirty"
+    ]
+  }
+}

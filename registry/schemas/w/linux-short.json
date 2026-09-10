@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/w/linux-short.json",
+  "title": "w/linux-short",
+  "description": "w -s on Linux (procps): uptime summary plus logged-in users without login and cpu times",
+  "x-jsonize": {
+    "definition": "w/linux-short",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "uptime": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string"
+        },
+        "uptime": {
+          "type": "number"
+        },
+        "users": {
+          "type": "integer"
+        },
+        "load_1m": {
+          "type": "number"
+        },
+        "load_5m": {
+          "type": "number"
+        },
+        "load_15m": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "time",
+        "uptime",
+        "users",
+        "load_1m",
+        "load_5m",
+        "load_15m"
+      ]
+    },
+    "users": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "idle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "user": {
+            "type": "string"
+          },
+          "what": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  },
+  "required": [
+    "uptime",
+    "users"
+  ]
+}

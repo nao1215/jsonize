@@ -591,3 +591,75 @@ func TestSuggestOffersOnlyTheClosest(t *testing.T) {
 		}
 	}
 }
+
+// A selection that settles between several definitions says which rule
+// did it and what each loser fit with, which is what --explain reports;
+// one that cannot settle says why not.
+func TestSelectionRecordsHowItWasSettled(t *testing.T) {
+	t.Parallel()
+	reg := buildRegistry(t, map[string]string{
+		"df/general":  def("df", "general", "detect: {signature: {all: ['HEADER']}}\n"),
+		"df/specific": def("df", "specific", "detect: {priority: 10, signature: {all: ['HEADER']}}\n"),
+		"du/posix":    def("du", "posix", "detect: {auto_detect: false, signature: {all: ['HEADER']}}\n"),
+		"env/posix":   def("env", "posix", ""),
+	})
+	res, err := Select(reg, Context{Input: []byte("HEADER\n")})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.Settled != SettledByPriority || len(res.Outranked) != 1 || res.Outranked[0].Entry.Def.ID() != "df/general" ||
+		res.Outranked[0].Reason != "fits as well, with detect.priority 0 against 10" {
+		t.Errorf("settled %q, outranked %+v", res.Settled, res.Outranked)
+	}
+	// du fits and is held back; env has no signature and says nothing.
+	if res.ExplicitOnly != 2 {
+		t.Errorf("explicit only = %d", res.ExplicitOnly)
+	}
+	held := 0
+	for _, r := range res.Rejections {
+		if r.ExplicitOnly {
+			held++
+			if r.Entry.Def.ID() != "du/posix" || !r.Close {
+				t.Errorf("held back: %+v", r)
+			}
+		}
+	}
+	if held != 1 {
+		t.Errorf("reported %d held back, want the one whose signature fits", held)
+	}
+	// Only one fit: nothing was settled.
+	res, err = Select(reg, Context{Parser: "df", Variant: "general", Input: []byte("HEADER\n")})
+	if err != nil || res.Settled != "" || res.Outranked != nil {
+		t.Errorf("named: %+v %v", res, err)
+	}
+
+	cross := buildRegistry(t, map[string]string{
+		"alpha/x": def("alpha", "x", "detect: {signature: {all: ['HEADER']}}\n"),
+		"beta/y":  def("beta", "y", "detect: {signature: {all: ['HEADER']}}\n"),
+	})
+	_, err = Select(cross, Context{Input: []byte("HEADER\n")})
+	var am *AmbiguousError
+	if !errors.As(err, &am) || am.Scanned != 2 || am.Unsettled != "they are different commands, and detect.priority only ranks variants of one" {
+		t.Errorf("ambiguous: %+v", am)
+	}
+	same := buildRegistry(t, map[string]string{
+		"df/a": def("df", "a", "detect: {signature: {all: ['HEADER']}}\n"),
+		"df/b": def("df", "b", "detect: {signature: {all: ['HEADER']}}\n"),
+	})
+	if _, err := Select(same, Context{Input: []byte("HEADER\n")}); !errors.As(err, &am) || am.Unsettled != "no detect.priority among them is strictly highest" {
+		t.Errorf("same command: %v", err)
+	}
+}
+
+// The argument filter a definition met is named, so an explanation says
+// which of its arguments decided.
+func TestMatchedNamesTheArgumentFilter(t *testing.T) {
+	t.Parallel()
+	res, err := Select(testRegistry(t), Context{Parser: "df", OS: "linux", Args: []string{"-hT"}, Input: []byte(humanDF)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := strings.Join(res.Matched, "; "); !strings.HasSuffix(got, "detect.os linux; detect.args any [-h]") {
+		t.Errorf("matched = %s", got)
+	}
+}

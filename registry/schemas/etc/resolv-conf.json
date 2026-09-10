@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/etc/resolv-conf.json",
+  "title": "etc/resolv-conf",
+  "description": "/etc/resolv.conf resolver directives",
+  "x-jsonize": {
+    "definition": "etc/resolv-conf",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "directive": {
+        "type": "string",
+        "enum": [
+          "domain",
+          "nameserver",
+          "options",
+          "search",
+          "sortlist"
+        ]
+      },
+      "values": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "directive",
+      "values"
+    ]
+  }
+}

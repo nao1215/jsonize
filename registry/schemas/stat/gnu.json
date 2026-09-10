@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/stat/gnu.json",
+  "title": "stat/gnu",
+  "description": "GNU coreutils stat (default format)",
+  "x-jsonize": {
+    "definition": "stat/gnu",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "file": {
+      "type": "string"
+    },
+    "size": {
+      "type": "integer"
+    },
+    "blocks": {
+      "type": "integer"
+    },
+    "io_block": {
+      "type": "integer"
+    },
+    "type": {
+      "type": "string"
+    },
+    "device": {
+      "type": "string"
+    },
+    "inode": {
+      "type": "integer"
+    },
+    "links": {
+      "type": "integer"
+    },
+    "access_mode": {
+      "type": "string"
+    },
+    "access_flags": {
+      "type": "string"
+    },
+    "uid": {
+      "type": "integer"
+    },
+    "user": {
+      "type": "string"
+    },
+    "gid": {
+      "type": "integer"
+    },
+    "group": {
+      "type": "string"
+    },
+    "access_time": {
+      "type": "string"
+    },
+    "modify_time": {
+      "type": "string"
+    },
+    "change_time": {
+      "type": "string"
+    },
+    "birth_time": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "file",
+    "size",
+    "blocks",
+    "io_block",
+    "type",
+    "device",
+    "inode",
+    "links",
+    "access_mode",
+    "access_flags",
+    "uid",
+    "user",
+    "gid",
+    "group",
+    "access_time",
+    "modify_time",
+    "change_time"
+  ]
+}

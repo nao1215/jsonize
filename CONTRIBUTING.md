@@ -24,8 +24,23 @@ need no Go at all; the sections below cover both kinds.
    $ git diff registry/
    ```
 
-5. Run `make test`. The golden test proves that every fixture parses,
-   selects its own variant unambiguously and matches its JSON.
+5. Publish the schema of what the definition produces, and check it by
+   eye:
+
+   ```console
+   $ make registry-update-schema
+   $ git diff registry/schemas
+   ```
+
+   A change to an existing definition that could break a program reading
+   its output (a key removed or retyped, a key no longer always there) is
+   refused until it is meant: `make registry-update-schema
+   BREAKING=command/variant` publishes it under the next contract version.
+   Say why in `CHANGELOG.md`.
+
+6. Run `make test`. The golden test proves that every fixture parses,
+   selects its own variant unambiguously, reads all of its input, fits its
+   schema and matches its JSON.
 
 Every definition needs a `detect.signature`: it is what lets jz accept the
 text as that format and reject anything else. When the shape is too
@@ -65,6 +80,8 @@ the exact form of the command produce numbers.
 
 ## Definition format changes
 
+`format` versions how a definition is written, not what it produces; the
+output contract has a version of its own in `registry/schemas`.
 Changing the meaning of an existing key or adding a required one is a
 breaking change to `format`. Bump `definition.CurrentFormat`, document
 the migration in `website/content/definition-format.md`, and update every

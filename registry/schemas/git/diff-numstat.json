@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/diff-numstat.json",
+  "title": "git/diff-numstat",
+  "description": "git diff --numstat added and deleted line counts per path",
+  "x-jsonize": {
+    "definition": "git/diff-numstat",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "added": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "deleted": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "added",
+      "deleted",
+      "path"
+    ]
+  }
+}

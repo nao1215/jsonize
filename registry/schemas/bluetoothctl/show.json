@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/bluetoothctl/show.json",
+  "title": "bluetoothctl/show",
+  "description": "bluetoothctl show controller properties",
+  "x-jsonize": {
+    "definition": "bluetoothctl/show",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "controller": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "address_type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "address",
+        "address_type"
+      ]
+    },
+    "properties": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      }
+    },
+    "advertising": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      }
+    }
+  },
+  "required": [
+    "controller",
+    "properties",
+    "advertising"
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ss/summary.json",
+  "title": "ss/summary",
+  "description": "ss -s socket counts",
+  "x-jsonize": {
+    "definition": "ss/summary",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "total": {
+      "type": "object",
+      "properties": {
+        "sockets": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sockets"
+      ]
+    },
+    "tcp": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer"
+        },
+        "estab": {
+          "type": "integer"
+        },
+        "closed": {
+          "type": "integer"
+        },
+        "orphaned": {
+          "type": "integer"
+        },
+        "timewait": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "total",
+        "estab",
+        "closed",
+        "orphaned",
+        "timewait"
+      ]
+    },
+    "transports": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "transport": {
+            "type": "string"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "ip": {
+            "type": "integer"
+          },
+          "ipv6": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "transport",
+          "total",
+          "ip",
+          "ipv6"
+        ]
+      }
+    }
+  },
+  "required": [
+    "total",
+    "tcp",
+    "transports"
+  ]
+}

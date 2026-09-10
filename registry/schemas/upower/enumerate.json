@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/upower/enumerate.json",
+  "title": "upower/enumerate",
+  "description": "upower -e device object paths",
+  "x-jsonize": {
+    "definition": "upower/enumerate",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "device"
+    ]
+  }
+}

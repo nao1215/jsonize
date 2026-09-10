@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/count-objects.json",
+  "title": "git/count-objects",
+  "description": "git count-objects -v repository object counts",
+  "x-jsonize": {
+    "definition": "git/count-objects",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "integer"
+    },
+    "garbage": {
+      "type": "integer"
+    },
+    "in-pack": {
+      "type": "integer"
+    },
+    "packs": {
+      "type": "integer"
+    },
+    "prune-packable": {
+      "type": "integer"
+    },
+    "size": {
+      "type": "integer"
+    },
+    "size-garbage": {
+      "type": "integer"
+    },
+    "size-pack": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": {
+    "type": "string"
+  }
+}

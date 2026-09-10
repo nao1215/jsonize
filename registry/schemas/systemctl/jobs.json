@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemctl/jobs.json",
+  "title": "systemctl/jobs",
+  "description": "systemctl list-jobs, the jobs the manager is running",
+  "x-jsonize": {
+    "definition": "systemctl/jobs",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "job": {
+        "type": "integer"
+      },
+      "unit": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "job",
+      "unit",
+      "type",
+      "state"
+    ]
+  }
+}

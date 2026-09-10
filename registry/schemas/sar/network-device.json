@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/network-device.json",
+  "title": "sar/network-device",
+  "description": "sar -n DEV network device activity",
+  "x-jsonize": {
+    "definition": "sar/network-device",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "iface": {
+        "type": "string"
+      },
+      "rxpck_per_s": {
+        "type": "number"
+      },
+      "txpck_per_s": {
+        "type": "number"
+      },
+      "rxkb_per_s": {
+        "type": "number"
+      },
+      "txkb_per_s": {
+        "type": "number"
+      },
+      "rxcmp_per_s": {
+        "type": "number"
+      },
+      "txcmp_per_s": {
+        "type": "number"
+      },
+      "rxmcst_per_s": {
+        "type": "number"
+      },
+      "ifutil_percent": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "iface",
+      "rxpck_per_s",
+      "txpck_per_s",
+      "rxkb_per_s",
+      "txkb_per_s",
+      "rxcmp_per_s",
+      "txcmp_per_s",
+      "rxmcst_per_s",
+      "ifutil_percent"
+    ]
+  }
+}

@@ -26,16 +26,19 @@ detect:
 parse:
   type: composite
   parts:
+    # The start time, then the column header, which opens with the name
+    # of the host mtr ran on.
     - name: report
-      select: {limit: 1}
+      select: {limit: 2}
       parse:
         type: regex
         each: input
-        pattern: '\AStart: (?P<started>\S+)[ \t]*$'
+        pattern: '\AStart: (?P<started>\S+)[ \t]*\nHOST:[ \t]+(?P<host>\S+)[ \t]+Loss%[ \t]+Snt[ \t]+Last[ \t]+Avg[ \t]+Best[ \t]+Wrst[ \t]+StDev[ \t]*\z'
       fields:
         # mtr writes the start time with its offset, so it names an
         # instant on its own.
         started: {type: time, layout: "2006-01-02T15:04:05-0700", required: true}
+        host: {required: true}
     - name: hops
       select: {skip: 2}
       parse:

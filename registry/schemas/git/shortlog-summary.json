@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/shortlog-summary.json",
+  "title": "git/shortlog-summary",
+  "description": "git shortlog -s commit counts per author",
+  "x-jsonize": {
+    "definition": "git/shortlog-summary",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "count": {
+        "type": "integer"
+      },
+      "author": {
+        "type": "string"
+      },
+      "email": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "count",
+      "author",
+      "email"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/etc/os-release.json",
+  "title": "etc/os-release",
+  "description": "/etc/os-release distribution identification",
+  "x-jsonize": {
+    "definition": "etc/os-release",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {},
+  "additionalProperties": {
+    "type": "string"
+  }
+}

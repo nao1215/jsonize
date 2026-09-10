@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/uptime.json",
+  "title": "proc/uptime",
+  "description": "/proc/uptime system and idle seconds",
+  "x-jsonize": {
+    "definition": "proc/uptime",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "uptime_seconds": {
+      "type": "number"
+    },
+    "idle_seconds": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "uptime_seconds",
+    "idle_seconds"
+  ]
+}

@@ -22,6 +22,10 @@
         "value": "no"
       },
       {
+        "name": "unknown",
+        "value": ""
+      },
+      {
         "name": "warning-level",
         "value": "none"
       },

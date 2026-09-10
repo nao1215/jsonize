@@ -1,0 +1,24 @@
+
+; <<>> DiG 9.20.24-1ubuntu0.3-Ubuntu <<>> @192.168.11.1 gateway.local
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; WARNING: .local is reserved for Multicast DNS
+;; You are currently testing what happens when an mDNS query is leaked to DNS
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 40862
+;; flags: qr rd ra ad; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: cf8507018ae788e4010000006aa2a53880d2bfd13e771b09 (good)
+;; QUESTION SECTION:
+;gateway.local.			IN	A
+
+;; AUTHORITY SECTION:
+.			26052	IN	SOA	a.root-servers.net. nstld.verisign-grs.com. 2026091000 1800 900 604800 86400
+
+;; Query time: 4 msec
+;; SERVER: 192.168.11.1#53(192.168.11.1) (UDP)
+;; WHEN: Thu Sep 10 21:40:24 JST 2026
+;; MSG SIZE  rcvd: 145
+

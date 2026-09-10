@@ -24,7 +24,7 @@ detect:
       - '^card [0-9]+: \S+ \[[^]]*\], device [0-9]+:'
 input:
   select:
-    after: '^\*\*\*\* List of '
+    after: '^\*\*\*\* List of (?:PLAYBACK|CAPTURE) Hardware Devices \*\*\*\*$'
 parse:
   type: records
   start: '^card [0-9]+:'

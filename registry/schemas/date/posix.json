@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/date/posix.json",
+  "title": "date/posix",
+  "description": "date default output",
+  "x-jsonize": {
+    "definition": "date/posix",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "type": "string"
+    },
+    "weekday": {
+      "type": "string"
+    },
+    "month": {
+      "type": "string"
+    },
+    "day": {
+      "type": "integer"
+    },
+    "hour": {
+      "type": "integer"
+    },
+    "minute": {
+      "type": "integer"
+    },
+    "second": {
+      "type": "integer"
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "year": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "timestamp",
+    "weekday",
+    "month",
+    "day",
+    "hour",
+    "minute",
+    "second",
+    "timezone",
+    "year"
+  ]
+}

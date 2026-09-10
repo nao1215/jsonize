@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/update-alternatives/query.json",
+  "title": "update-alternatives/query",
+  "description": "update-alternatives --query link group and candidates",
+  "x-jsonize": {
+    "definition": "update-alternatives/query",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "link": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "slaves": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "path"
+        ]
+      }
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "candidate": {
+            "type": "object",
+            "properties": {
+              "Priority": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "slaves": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "path"
+              ]
+            }
+          }
+        },
+        "required": [
+          "candidate",
+          "slaves"
+        ]
+      }
+    }
+  },
+  "required": [
+    "link",
+    "slaves",
+    "alternatives"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/rfkill/list.json",
+  "title": "rfkill/list",
+  "description": "rfkill list blocks, one per radio switch",
+  "x-jsonize": {
+    "definition": "rfkill/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type"
+        ]
+      },
+      "blocked": {
+        "type": "object",
+        "properties": {
+          "soft": {
+            "type": "boolean"
+          },
+          "hard": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "soft",
+          "hard"
+        ]
+      }
+    },
+    "required": [
+      "device",
+      "blocked"
+    ]
+  }
+}

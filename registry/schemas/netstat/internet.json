@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/netstat/internet.json",
+  "title": "netstat/internet",
+  "description": "netstat internet connection table (-t, -u, -w)",
+  "x-jsonize": {
+    "definition": "netstat/internet",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "proto": {
+        "type": "string"
+      },
+      "recv_q": {
+        "type": "integer"
+      },
+      "send_q": {
+        "type": "integer"
+      },
+      "local_address": {
+        "type": "string"
+      },
+      "local_port": {
+        "type": "string"
+      },
+      "foreign_address": {
+        "type": "string"
+      },
+      "foreign_port": {
+        "type": "string"
+      },
+      "state": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "proto",
+      "recv_q",
+      "send_q",
+      "local_address",
+      "local_port",
+      "foreign_address",
+      "foreign_port",
+      "state"
+    ]
+  }
+}

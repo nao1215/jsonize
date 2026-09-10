@@ -21,14 +21,20 @@ func TestExplainReportsTheChoice(t *testing.T) {
 	}
 	plain := h.stdout.String()
 	lines := strings.Split(strings.TrimSpace(h.stderr.String()), "\n")
-	if len(lines) < 2 {
+	if len(lines) < 3 {
 		t.Fatalf("stderr = %q", h.stderr.String())
 	}
-	if lines[0] != "jz: df/gnu from embedded" {
+	if lines[0] != "jz: explain: chose df/gnu from embedded" {
 		t.Errorf("first line = %q", lines[0])
 	}
-	if !strings.HasPrefix(lines[1], "jz: matched: signature.all[0] /") {
+	if lines[1] != "jz: explain: scope: every definition in the registry, by its signature alone" {
 		t.Errorf("second line = %q", lines[1])
+	}
+	if !strings.HasPrefix(lines[2], "jz: explain: matched: signature.all[0] /") {
+		t.Errorf("third line = %q", lines[2])
+	}
+	if last := lines[len(lines)-1]; last != "jz: explain: read: 3 lines: 3 read" {
+		t.Errorf("last line = %q", last)
 	}
 	// No clock reading: two runs of the same input explain themselves
 	// identically, so an explanation can be compared and pasted.
@@ -49,7 +55,11 @@ func TestExplainListsTheVariantsItLeftOut(t *testing.T) {
 		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
 	}
 	got := h.stderr.String()
-	for _, want := range []string{"rejected: ", "df/gnu-human (signature.all[0]", "did not match"} {
+	for _, want := range []string{
+		"jz: explain: scope: the variants of df, named by --parser\n",
+		"jz: explain: rejected: df/gnu-human: signature.all[0]",
+		"did not match",
+	} {
 		if !strings.Contains(got, want) {
 			t.Errorf("stderr has no %q:\n%s", want, got)
 		}
@@ -71,18 +81,25 @@ func TestExplainOnUnidentifiedInput(t *testing.T) {
 	if !strings.Contains(got, "unable to identify the input format") {
 		t.Errorf("the ordinary message is gone:\n%s", got)
 	}
-	if !strings.Contains(got, "rejected: ") || !strings.Contains(got, "etc/passwd (needs --parser etc)") {
-		t.Errorf("no near miss listed:\n%s", got)
+	for _, want := range []string{
+		"jz: explain: unidentified: no definition fits the text\n",
+		"jz: explain: held back: etc/passwd: its signature fits, but it is only used when named (--parser etc)\n",
+		"jz: explain: not considered: ",
+	} {
+		if !strings.Contains(got, want) {
+			t.Errorf("no %q:\n%s", want, got)
+		}
 	}
 	if h.stdout.Len() != 0 {
 		t.Errorf("stdout = %q", h.stdout.String())
 	}
 }
 
-// jz run knows what it started, so it says so as well. The definition is
-// one of the test registry's, which claims no operating system: jz run
-// filters on the system it is running on, so a Linux-only definition
-// would make this a test of that filter.
+// jz run knows what it started, so it says so as well, and says that the
+// parser came from the command's name. The definition is one of the test
+// registry's, which claims no operating system: jz run filters on the
+// system it is running on, so a Linux-only definition would make this a
+// test of that filter.
 func TestExplainOnRun(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("uses POSIX sh")
@@ -94,11 +111,22 @@ func TestExplainOnRun(t *testing.T) {
 		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
 	}
 	got := h.stderr.String()
-	if !strings.Contains(got, "jz: sh/default from ") {
-		t.Errorf("no definition line:\n%s", got)
+	for _, want := range []string{
+		"jz: explain: chose sh/default from ",
+		"jz: explain: scope: the variants of sh, from the name of the command jz ran\n",
+		"jz: explain: scope: narrowed by the system it ran on (" + runtime.GOOS + ") and its arguments (-c echo n=1)\n",
+		"jz: explain: rejected: sh/alt: signature.all[0] /^ALT/ did not match\n",
+		"jz: explain: command: sh -c echo n=1 (exit 0)\n",
+	} {
+		if !strings.Contains(got, want) {
+			t.Errorf("no %q:\n%s", want, got)
+		}
 	}
-	if !strings.Contains(got, "jz: command: sh -c echo n=1 (exit 0)") {
-		t.Errorf("no command line:\n%s", got)
+	// A wrapper names the parser itself, and the explanation says the
+	// name did not come from the command.
+	code = h.run("run", "--explain", "--parser", "wrapper", "--", "sh", "-c", "echo wrapped=1")
+	if code != ExitOK || !strings.Contains(h.stderr.String(), "jz: explain: scope: the variants of wrapper, named by --parser\n") {
+		t.Errorf("code=%d stderr=%s", code, h.stderr.String())
 	}
 }
 
@@ -120,7 +148,8 @@ func TestFilePathNamesTheDefinition(t *testing.T) {
 	if code := h.run("--explain", "--file", path); code != ExitOK {
 		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
 	}
-	if !strings.Contains(h.stderr.String(), "etc/fstab from embedded") {
+	if !strings.Contains(h.stderr.String(), "jz: explain: chose etc/fstab from embedded\n") ||
+		!strings.Contains(h.stderr.String(), "jz: explain: scope: etc/fstab, from the file path "+path+"\n") {
 		t.Errorf("stderr = %s", h.stderr.String())
 	}
 	rows := h.rows()

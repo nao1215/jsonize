@@ -8,6 +8,48 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- A conversion that succeeds has read all of its input. Every line is
+  read by a parser, joined by `fold`, blank, named by `ignore`, or the
+  heading `select.after` states in full; anything else is exit 3 naming
+  the lines, instead of JSON that is missing them. Two `dig` replies in
+  one capture used to come back as the first one at exit 0. A pattern has
+  to reach both ends of the line it reads, a field of type object has to
+  cover its whole value, a part's `ignore` hands a line to a sibling
+  rather than dropping it, and `--stream` reads past the end of
+  `input.select` to report what it left out.
+- `--explain` says more and says it one fact per line, each opening with
+  `jz: explain: `: the outcome (`chose`, `unidentified`, `ambiguous`,
+  `mismatch`, `defined`), the scope the candidates came from (the whole
+  registry, `--parser`, the name of the command `jz run` started, the
+  path of `--file`, and a path that was dropped), what the chosen
+  definition matched, the rule that settled several that fit and each one
+  it outranked, the near misses, the definitions held back because they
+  are only used when named and how many took no part, and where the lines
+  of the input went. `--explain=json` writes the same facts as one JSON
+  document on one such line. The text of `--explain` changed with it:
+  `jz: df/gnu from embedded` is now `jz: explain: chose df/gnu from
+  embedded`, and the rejections are one per line.
+- A key printed twice into a kv map or an ini section is exit 3 naming
+  both lines. It used to keep the last value and drop the other.
+- A drawn table (`split: box`) refuses a line with no bar and no rule on
+  it, and a cell past the header's last column; both used to vanish.
+- A tree whose `node` pattern names a group `children` is refused when
+  the definition is loaded. The node's children were written over the
+  value the group read.
+- `jz test` changes every fixture — a foreign line at the end and in the
+  middle, the whole text twice — and fails a definition that still
+  succeeds without the change showing in its result.
+- Definitions that dropped text they did not state now read it or state
+  it: `dig` reads the command banner, warnings, the EDNS options and the
+  question, authority and additional sections; `mtr --report` the host;
+  `pactl list` the properties, ports and formats; `upower -i` and
+  `upower -d` the device type and the history rows. The headings that
+  others start after (`fdisk`, `ip -s link`, `ethtool -k`, `ss -s`,
+  `objdump -h`, `netstat`, the sysstat banner, `xrandr`'s Screen line)
+  are stated in full, and the legends and summary lines that are left out
+  (`dpkg -l`, `systemd-analyze critical-chain`, `tree`) are named by
+  `ignore`.
+
 - Loading and validating a registry is measurably slower in the
   benchmarks (13 to 32 percent on `LoadRegistry`, 7 to 12 percent on
   definition validation), which is the definition struct having grown and
@@ -31,6 +73,19 @@ project follows [Semantic Versioning](https://semver.org/).
   sample under it, so they were already one table and are left alone.
 
 ### Added
+
+- Every definition has a JSON Schema of its output, derived from the
+  definition: keys, types, which keys are always there, which values may
+  be null, the values a key can take when the definition names them.
+  `jz list --schema COMMAND VARIANT` prints it; the official ones are in
+  `registry/schemas`, linked from the parsers page and published at
+  `https://nao1215.github.io/jsonize/schemas/COMMAND/VARIANT.json`, each
+  with an output contract version (`x-jsonize.version`) that is separate
+  from `format`. Every fixture is validated against its schema, and a
+  change that could break a program reading the output is refused unless
+  it comes with a new contract version: `make registry-update-schema
+  BREAKING=command/variant`. CI checks the fixtures with an independent
+  validator and compares the schemas with the base branch's.
 
 - The end-to-end suite runs every spec on Windows, verifies the sysstat
   and BusyBox commands on Linux as required rather than when present,
@@ -79,6 +134,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `--stream` on a `records` format with a record that could not be read
+  lost the start of the next record as well, and reported the rest of it
+  as text before the first record.
 - `jz run --stream` waited for the command to end after the stream had
   failed for a reason of its own, such as `--extract` naming a key the
   format does not produce, and a command that never ends made that

@@ -46,6 +46,7 @@ jz < captured.txt            # or output captured earlier
 jz --file captured.txt
 jz run COMMAND [args...]     # let jz run the command and convert its stdout
 jz list                      # what jz can read
+jz list --schema df gnu      # the JSON Schema of what one definition produces
 jz test [DIR...]             # check parser definitions of your own
 ```
 
@@ -63,7 +64,7 @@ Options:
       --parser NAME             restrict detection to one parser
       --variant NAME            use a variant of --parser
       --define YAML             read with a definition given here instead of a registered one
-      --explain                 report the chosen definition and why, on stderr
+      --explain[=json]          report the chosen definition and why, on stderr
   -h, --help                    show help
 ```
 
@@ -156,7 +157,7 @@ Reference: https://pkg.go.dev/github.com/nao1215/jsonize/pkg/selector
 | 0 | success |
 | 1 | unexpected failure |
 | 2 | usage error |
-| 3 | the input did not match the chosen definition |
+| 3 | the input did not match the chosen definition, or held text the definition did not read |
 | 4 | unidentified, ambiguous, or a named parser that did not fit |
 | 5 | a registry could not be loaded |
 | 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |

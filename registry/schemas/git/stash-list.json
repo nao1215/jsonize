@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/stash-list.json",
+  "title": "git/stash-list",
+  "description": "git stash list",
+  "x-jsonize": {
+    "definition": "git/stash-list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "index": {
+        "type": "integer"
+      },
+      "branch": {
+        "type": "string"
+      },
+      "commit": {
+        "type": "string"
+      },
+      "message": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "index"
+    ]
+  }
+}

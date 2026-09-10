@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/openssl/version-all.json",
+  "title": "openssl/version-all",
+  "description": "openssl version -a",
+  "x-jsonize": {
+    "definition": "openssl/version-all",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "banner": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "released": {
+          "type": "string"
+        },
+        "library": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "product",
+        "version",
+        "released"
+      ]
+    },
+    "settings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      }
+    }
+  },
+  "required": [
+    "banner",
+    "settings"
+  ]
+}

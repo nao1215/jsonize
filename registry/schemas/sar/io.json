@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/io.json",
+  "title": "sar/io",
+  "description": "sar -b block device activity",
+  "x-jsonize": {
+    "definition": "sar/io",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "tps": {
+        "type": "number"
+      },
+      "rtps": {
+        "type": "number"
+      },
+      "wtps": {
+        "type": "number"
+      },
+      "dtps": {
+        "type": "number"
+      },
+      "bread_per_s": {
+        "type": "number"
+      },
+      "bwrtn_per_s": {
+        "type": "number"
+      },
+      "bdscd_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "tps",
+      "rtps",
+      "wtps",
+      "dtps",
+      "bread_per_s",
+      "bwrtn_per_s",
+      "bdscd_per_s"
+    ]
+  }
+}

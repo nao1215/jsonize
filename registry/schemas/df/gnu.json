@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/gnu.json",
+  "title": "df/gnu",
+  "description": "df default output with 1K blocks (GNU coreutils, BusyBox)",
+  "x-jsonize": {
+    "definition": "df/gnu",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "1k_blocks": {
+        "type": "integer"
+      },
+      "used": {
+        "type": "integer"
+      },
+      "available": {
+        "type": "integer"
+      },
+      "use_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "1k_blocks",
+      "used",
+      "available",
+      "use_percent",
+      "mounted_on"
+    ]
+  }
+}

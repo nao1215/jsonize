@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/netstat/routing.json",
+  "title": "netstat/routing",
+  "description": "netstat -r kernel IP routing table",
+  "x-jsonize": {
+    "definition": "netstat/routing",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "destination": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "string"
+      },
+      "gateway": {
+        "type": "string"
+      },
+      "genmask": {
+        "type": "string"
+      },
+      "iface": {
+        "type": "string"
+      },
+      "irtt": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mss": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "window": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsusb/verbose.json",
+  "title": "lsusb/verbose",
+  "description": "lsusb -v devices as a tree of their descriptors",
+  "x-jsonize": {
+    "definition": "lsusb/verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/node"
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "properties": {
+        "bus": {
+          "type": "string"
+        },
+        "device": {
+          "type": "string"
+        },
+        "vendor_id": {
+          "type": "string"
+        },
+        "product_id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "required": [
+        "children"
+      ]
+    }
+  }
+}

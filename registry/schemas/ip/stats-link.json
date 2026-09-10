@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ip/stats-link.json",
+  "title": "ip/stats-link",
+  "description": "ip -s link, per-interface counters",
+  "x-jsonize": {
+    "definition": "ip/stats-link",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "interface": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "peer": {
+            "type": "string"
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mtu": {
+            "type": "integer"
+          },
+          "qdisc": {
+            "type": "string"
+          },
+          "master": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "qlen": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "index",
+          "name",
+          "flags",
+          "mtu",
+          "qdisc",
+          "state",
+          "mode",
+          "group"
+        ]
+      },
+      "link": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "address": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "broadcast": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "netnsid": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "type",
+          "address",
+          "broadcast"
+        ]
+      },
+      "rx": {
+        "type": "object",
+        "properties": {
+          "bytes": {
+            "type": "integer"
+          },
+          "packets": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "integer"
+          },
+          "dropped": {
+            "type": "integer"
+          },
+          "missed": {
+            "type": "integer"
+          },
+          "mcast": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "bytes",
+          "packets",
+          "errors",
+          "dropped",
+          "missed",
+          "mcast"
+        ]
+      },
+      "tx": {
+        "type": "object",
+        "properties": {
+          "bytes": {
+            "type": "integer"
+          },
+          "packets": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "integer"
+          },
+          "dropped": {
+            "type": "integer"
+          },
+          "carrier": {
+            "type": "integer"
+          },
+          "collsns": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "bytes",
+          "packets",
+          "errors",
+          "dropped",
+          "carrier",
+          "collsns"
+        ]
+      },
+      "alias": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      },
+      "altnames": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      }
+    },
+    "required": [
+      "interface",
+      "link",
+      "rx",
+      "tx",
+      "alias",
+      "altnames"
+    ]
+  }
+}

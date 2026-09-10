@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/cpuinfo-x86.json",
+  "title": "proc/cpuinfo-x86",
+  "description": "/proc/cpuinfo processor blocks on x86",
+  "x-jsonize": {
+    "definition": "proc/cpuinfo-x86",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "cpu": {
+        "type": "object",
+        "properties": {
+          "apicid": {
+            "type": "integer"
+          },
+          "bogomips": {
+            "type": "number"
+          },
+          "bugs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cache_alignment": {
+            "type": "integer"
+          },
+          "clflush size": {
+            "type": "integer"
+          },
+          "core id": {
+            "type": "integer"
+          },
+          "cpu MHz": {
+            "type": "number"
+          },
+          "cpu cores": {
+            "type": "integer"
+          },
+          "cpu family": {
+            "type": "integer"
+          },
+          "cpuid level": {
+            "type": "integer"
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fpu": {
+            "type": "boolean"
+          },
+          "fpu_exception": {
+            "type": "boolean"
+          },
+          "initial apicid": {
+            "type": "integer"
+          },
+          "model": {
+            "type": "integer"
+          },
+          "physical id": {
+            "type": "integer"
+          },
+          "power management": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "processor": {
+            "type": "integer"
+          },
+          "siblings": {
+            "type": "integer"
+          },
+          "stepping": {
+            "type": "integer"
+          },
+          "wp": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "cpu"
+    ]
+  }
+}

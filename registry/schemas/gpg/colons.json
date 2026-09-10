@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gpg/colons.json",
+  "title": "gpg/colons",
+  "description": "gpg --with-colons key listing",
+  "x-jsonize": {
+    "definition": "gpg/colons",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string"
+      },
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "type",
+      "fields"
+    ]
+  }
+}

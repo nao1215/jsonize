@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lspci/kernel.json",
+  "title": "lspci/kernel",
+  "description": "lspci -k devices with the drivers that claim them",
+  "x-jsonize": {
+    "definition": "lspci/kernel",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "object",
+        "properties": {
+          "slot": {
+            "type": "string"
+          },
+          "class": {
+            "type": "string"
+          },
+          "device": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slot",
+          "class",
+          "device"
+        ]
+      },
+      "attributes": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "device",
+      "attributes"
+    ]
+  }
+}

@@ -30,7 +30,9 @@ detect:
       - '^[ \t]*\S+:[ \t]+(?:on|off)\b'
 input:
   select:
-    after: '^Features for '
+    # The heading names the interface, which is the argument ethtool was
+    # run with.
+    after: '^Features for \S+:$'
 parse:
   type: regex
   pattern: '^[ \t]*(?P<name>[^:]+):[ \t]+(?P<value>on|off)[ \t]*(?P<fixed>(?:\[fixed\])?)[ \t]*(?P<requested>(?:\[requested (?:on|off)\])?)[ \t]*$'

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/stat/gnu-filesystem.json",
+  "title": "stat/gnu-filesystem",
+  "description": "GNU coreutils stat -f (filesystem information)",
+  "x-jsonize": {
+    "definition": "stat/gnu-filesystem",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "filesystem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "namelen": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "namelen",
+          "type"
+        ]
+      },
+      "block_size": {
+        "type": "object",
+        "properties": {
+          "block_size": {
+            "type": "integer"
+          },
+          "fundamental_block_size": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "block_size",
+          "fundamental_block_size"
+        ]
+      },
+      "blocks": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer"
+          },
+          "free": {
+            "type": "integer"
+          },
+          "available": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "free",
+          "available"
+        ]
+      },
+      "inodes": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer"
+          },
+          "free": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "free"
+        ]
+      }
+    },
+    "required": [
+      "file",
+      "filesystem",
+      "block_size",
+      "blocks",
+      "inodes"
+    ]
+  }
+}

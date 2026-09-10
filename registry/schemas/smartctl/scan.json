@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/smartctl/scan.json",
+  "title": "smartctl/scan",
+  "description": "smartctl --scan, the devices smartmontools found",
+  "x-jsonize": {
+    "definition": "smartctl/scan",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "device",
+      "type",
+      "description"
+    ]
+  }
+}

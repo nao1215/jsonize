@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ethtool/features.json",
+  "title": "ethtool/features",
+  "description": "ethtool -k offload feature states",
+  "x-jsonize": {
+    "definition": "ethtool/features",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "value": {
+        "type": "boolean"
+      },
+      "fixed": {
+        "type": "boolean"
+      },
+      "requested": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "value",
+      "fixed"
+    ]
+  }
+}

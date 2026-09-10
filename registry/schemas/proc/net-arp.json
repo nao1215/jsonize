@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/net-arp.json",
+  "title": "proc/net-arp",
+  "description": "/proc/net/arp kernel ARP cache",
+  "x-jsonize": {
+    "definition": "proc/net-arp",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "ip_address": {
+        "type": "string"
+      },
+      "hw_type": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "string"
+      },
+      "hw_address": {
+        "type": "string"
+      },
+      "mask": {
+        "type": "string"
+      },
+      "device": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "ip_address",
+      "hw_type",
+      "flags",
+      "hw_address",
+      "mask",
+      "device"
+    ]
+  }
+}

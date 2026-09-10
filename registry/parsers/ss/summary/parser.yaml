@@ -40,7 +40,7 @@ parse:
         orphaned: {type: int}
         timewait: {type: int}
     - name: transports
-      select: {after: '^Transport[ \t]+Total'}
+      select: {after: '^Transport[ \t]+Total[ \t]+IP[ \t]+IPv6[ \t]*$'}
       parse:
         type: table
         split: whitespace

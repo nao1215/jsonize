@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsusb/linux.json",
+  "title": "lsusb/linux",
+  "description": "lsusb default listing",
+  "x-jsonize": {
+    "definition": "lsusb/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "bus": {
+        "type": "integer"
+      },
+      "device": {
+        "type": "integer"
+      },
+      "vendor_id": {
+        "type": "string"
+      },
+      "product_id": {
+        "type": "string"
+      },
+      "description": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "bus",
+      "device",
+      "vendor_id",
+      "product_id",
+      "description"
+    ]
+  }
+}
