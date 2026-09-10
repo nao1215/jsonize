@@ -148,6 +148,12 @@ project follows [Semantic Versioning](https://semver.org/).
   signature of `lspci/kernel`, which then failed on the lines `-k` does
   not print. It now lands on `lspci/verbose`, which reads `-v` and `-vv`
   alike.
+- The message for text jz could not identify told the reader to name a
+  parser (`--parser df`, or the first variant of the command), and a named
+  parser is held to its signature, so following it was refused the same
+  way. It now names the variant the system or the arguments ruled out
+  when there is one, and otherwise the shapes read by name (`csv`, `ini`,
+  `kv`, `table`) and `--define`.
 - `sar` on a day the machine rebooted was exit 3, in every report. The
   daily file then holds a LINUX RESTART line and a second run with its
   own column names and Average rows; the line is now left out like the

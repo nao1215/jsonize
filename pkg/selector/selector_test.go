@@ -101,6 +101,12 @@ func TestSelectNoMatch(t *testing.T) {
 		if strings.Count(msg, "\n") > 6 {
 			t.Errorf("message too long:\n%s", msg)
 		}
+		// Naming a parser that has a signature would be refused the same
+		// way, so the way forward it offers is a definition that describes
+		// a shape (env here, the one without a signature) or --define.
+		if strings.Contains(msg, "--parser df") || !strings.Contains(msg, "--parser env") || !strings.Contains(msg, "--define") {
+			t.Errorf("input %q: the message offers a way forward that does not lead anywhere:\n%s", input, msg)
+		}
 	}
 }
 
@@ -259,14 +265,22 @@ func TestSelectWithParserScope(t *testing.T) {
 	if err != nil || res.Entry.Def.ID() != "df/gnu" || res.Scanned != 3 {
 		t.Errorf("scoped select: %v %v", res, err)
 	}
-	// A parser scope does not excuse a signature mismatch.
+	// A parser scope does not excuse a signature mismatch, and naming a
+	// variant would not either: a named variant is checked the same way,
+	// so the message must not send the reader there.
 	_, err = Select(reg, Context{Parser: "df", Input: []byte(mounted)})
 	var nm *NoMatchError
 	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "no df variant matches") {
 		t.Errorf("scoped mismatch: %v", err)
 	}
-	if !strings.Contains(err.Error(), "--parser df --variant") {
-		t.Errorf("scoped hint: %v", err)
+	if strings.Contains(err.Error(), "--variant") || !strings.Contains(err.Error(), "jz list df") {
+		t.Errorf("scoped hint for text no variant fits: %v", err)
+	}
+	// A variant whose signature fits and that only the arguments ruled out
+	// is the one to name: a pipe carries no arguments.
+	_, err = Select(reg, Context{Parser: "df", OS: "linux", Args: []string{"-hT"}, Input: []byte(gnuDF)})
+	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "--variant gnu") || strings.Contains(err.Error(), "--variant bsd") {
+		t.Errorf("scoped hint for a variant the arguments ruled out: %v", err)
 	}
 }
 
