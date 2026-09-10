@@ -960,6 +960,69 @@ func TestAlignedCells(t *testing.T) {
 	}
 }
 
+// Two outputs of one command in a row are two tables, the second opening
+// with the same header. That line is a header, not a row: reading it as
+// one wrote {"image":"IMAGE","id":"ID"} at exit 0. It is read as the
+// header again, so an aligned table cut to other widths the second time
+// is cut where its own header says.
+func TestARepeatedHeaderStartsAnotherTable(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		name, def, in, want string
+	}{
+		{"whitespace", "parse: {type: table}\n",
+			"A B\n1 2\nA B\n3 4\n",
+			`[{"a":"1","b":"2"},{"a":"3","b":"4"}]`},
+		{"aligned, other widths", "parse: {type: table, split: aligned}\n",
+			"NAME  SIZE\nsda   20G\nNAME        SIZE\nnvme0n1     1T\n",
+			`[{"name":"sda","size":"20G"},{"name":"nvme0n1","size":"1T"}]`},
+		{"delimiter", "parse: {type: table, split: delimiter, delimiter: ':'}\n",
+			"a:b\n1:2\na:b\n3:4\n",
+			`[{"a":"1","b":"2"},{"a":"3","b":"4"}]`},
+		{"csv", "parse: {type: csv}\n",
+			"name,count\nx,1\nname,count\ny,2\n",
+			`[{"name":"x","count":"1"},{"name":"y","count":"2"}]`},
+		{"box", "parse: {type: table, split: box}\n",
+			"+----+\n| id |\n+----+\n| 1  |\n+----+\n+----+\n| id |\n+----+\n| 2  |\n+----+\n",
+			`[{"id":"1"},{"id":"2"}]`},
+		// With no header line there is nothing to repeat, and a row that
+		// happens to read like the column names is a row.
+		{"no header", "parse: {type: table, header: {none: true, columns: [a, b]}}\n",
+			"a b\n1 2\n",
+			`[{"a":"a","b":"b"},{"a":"1","b":"2"}]`},
+	}
+	for _, tc := range cases {
+		def := load(t, "format: 1\ncommand: t\nvariant: v\n"+tc.def)
+		got, err := Parse(def, []byte(tc.in), Options{})
+		if err != nil {
+			t.Errorf("%s: %v", tc.name, err)
+			continue
+		}
+		var buf bytes.Buffer
+		if err := jsonutil.Encode(&buf, got, false); err != nil {
+			t.Fatal(err)
+		}
+		if strings.TrimSpace(buf.String()) != tc.want {
+			t.Errorf("%s: got %s, want %s", tc.name, buf.String(), tc.want)
+		}
+		var streamed []any
+		if err := Stream(def, strings.NewReader(tc.in), Options{}, func(v any) error {
+			streamed = append(streamed, v)
+			return nil
+		}, func(pe *ParseError) error { return pe }); err != nil {
+			t.Errorf("%s: stream: %v", tc.name, err)
+			continue
+		}
+		buf.Reset()
+		if err := jsonutil.Encode(&buf, streamed, false); err != nil {
+			t.Fatal(err)
+		}
+		if strings.TrimSpace(buf.String()) != tc.want {
+			t.Errorf("%s: stream got %s, want %s", tc.name, buf.String(), tc.want)
+		}
+	}
+}
+
 // systemctl list-timers printed through the shape definition: LEFT is
 // right-aligned and "4min 27s" starts before its header, at a space, so
 // the cut left "... JST  4min" under NEXT at exit 0.

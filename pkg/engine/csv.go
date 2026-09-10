@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"errors"
 	"io"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -30,18 +31,24 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 	if err != nil {
 		return nil, r.errorf(lines[0].num+csvLine(err)-1, "", "%s", err.Error())
 	}
-	var cols []string
+	var (
+		cols   []string
+		header []string
+	)
 	if p.Header.None {
 		cols = p.Header.Columns
 	} else {
 		if len(rows) == 0 {
 			return []any{}, nil
 		}
-		cols = csvColumns(p, rows[0])
+		cols, header = csvColumns(p, rows[0]), rows[0]
 		rows = rows[1:]
 	}
 	out := make([]any, 0, len(rows))
 	for i, row := range rows {
+		if header != nil && slices.Equal(row, header) {
+			continue // the header of a second file joined to the first
+		}
 		obj, err := r.csvRow(fields, cols, row, lines[0].num+i)
 		if err != nil {
 			return nil, err

@@ -190,6 +190,16 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Two outputs of one command in a row were read with the second one's
+  header as a row: `docker network ls` twice gave
+  `{"network_id":"NETWORK","name":"ID",...}` at exit 0, and so did 20
+  definitions with a header line, `csv` and `table/box` among them. A
+  line that repeats the header starts a second table and is read as its
+  header, so an aligned table cut to other widths the second time is
+  cut where its own header says. `readelf -h` read its heading a second
+  time as a key; it is left out wherever it stands. `jz test` now checks
+  that a list read from the fixture twice is the records of one copy
+  twice, which is what finds this.
 - A file name that begins with a space lost it at exit 0: `ls -l`,
   `tar -tv`, `unzip -l`, `zipinfo` and `lsattr` took the space for more
   of the gap before the name, and `du` and `wc` trimmed it off both

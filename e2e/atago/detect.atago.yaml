@@ -63,6 +63,32 @@ scenarios:
               - { path: "$[0].total", equals: "61Gi" }
               - { path: "$[1].type", equals: Swap }
 
+  # Two listings in a row, as a loop over two hosts prints them, each
+  # lined up to its own widths. The second header opens a second table;
+  # it used to be read as a network named "ID" with the id "NETWORK".
+  - name: a command run twice is read as two tables, not a row of column names
+    steps:
+      - fixture:
+          file: networks.txt
+          content: |
+            NETWORK ID     NAME             DRIVER    SCOPE
+            9d34582a8e2c   api_default      bridge    local
+            4e99b1f53ebc   bridge           bridge    local
+            NETWORK ID     NAME      DRIVER    SCOPE
+            377bf3d7e28a   host      host      local
+            758f21e616c1   none      null      local
+      - run:
+          command: jz --parser docker --file networks.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 4 }
+              - { path: "$[2].name", equals: host }
+      - assert:
+          stdout:
+            not_contains: '"NETWORK"'
+
   - name: a composite parser returns one key per part
     steps:
       - fixture:

@@ -239,6 +239,14 @@ non-alphanumerics become `_`, a leading or trailing `%` becomes
 `_percent` (`%CPU` → `cpu_percent`, `Use%` → `use_percent`,
 `1K-blocks` → `1k_blocks`, `Mounted on` → `mounted_on`).
 
+A line of the body that repeats the header, word for word (cell for
+cell with `split: delimiter`), starts a second table: the output of the
+command run twice, or two files joined. It is read as the header again,
+which with `split: aligned` says where the second table's columns are,
+and never as a row of column names. `csv` and `box` do the same with a
+row equal to the header row. A table with `header.none` has no header to
+repeat.
+
 - `whitespace`: cells are runs of non-space characters; at most
   `max_fields` (default: number of columns) cells are produced and the
   last one keeps the rest of the line verbatim.

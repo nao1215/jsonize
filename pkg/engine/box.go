@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/nao1215/jsonize/pkg/definition"
@@ -172,10 +173,15 @@ func (r *run) parseBox(p *definition.Parse, fields map[string]*definition.Field,
 	if err != nil {
 		return nil, err
 	}
+	header := boxJoin(blocks[0], "\n")
 	out := []any{}
 	for _, block := range blocks[1:] {
 		for _, row := range boxBodyRows(block) {
-			obj, err := r.boxObject(cols, boxJoin(row, "\n"), fields, row[0].num)
+			cells := boxJoin(row, "\n")
+			if slices.Equal(cells, header) {
+				continue // the header of a second table drawn after the first
+			}
+			obj, err := r.boxObject(cols, cells, fields, row[0].num)
 			if err != nil {
 				return nil, err
 			}
