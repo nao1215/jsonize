@@ -1,5 +1,8 @@
-# procps-ng free default output (kibibytes). Values stay in KiB as
-# printed; use the gnu-human variant for byte normalisation of -h output.
+# procps-ng free, exact figures. They are in the unit free was asked for:
+# KiB by default, and -b, -k, -m, -g and their long forms change it
+# without changing the header, so the output does not say which and
+# neither does this. Rounded -h output is free/gnu-human's, and stays
+# the strings printed.
 format: 1
 command: free
 variant: gnu

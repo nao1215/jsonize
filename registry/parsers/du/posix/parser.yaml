@@ -36,5 +36,9 @@ parse:
     none: true
     columns: [size, name]
 fields:
+  # size is in the unit du counted in, which the output does not show:
+  # 1024-byte blocks by default for GNU and BusyBox, 512-byte blocks for
+  # the BSD and macOS du, bytes with -b, and whatever -k, -m or
+  # --block-size asked for.
   size: {type: int, required: true}
   name: {required: true}

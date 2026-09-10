@@ -1,5 +1,8 @@
 # vmstat prints a group header, a column header and then the samples.
-# The counters are exact numbers, so they are read as such.
+# The counters are exact numbers, so they are read as such. The memory
+# figures are in the unit vmstat was asked for: KiB by default, and -S
+# changes it without changing the header, so the output does not say
+# which and neither does this.
 format: 1
 command: vmstat
 variant: linux
