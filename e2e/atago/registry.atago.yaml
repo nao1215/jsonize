@@ -544,10 +544,15 @@ scenarios:
           command: jz --parser file --file ${workdir}/text.txt
           env:
             JSONIZE_REGISTRY_PATH: "${workdir}/off"
+      # Only the one definition is gone: file's other variants are still
+      # candidates, and posix is not among them.
       - assert:
           exit_code: 4
           stderr:
-            contains: no parser for "file"
+            contains: no file variant matches this input
+      - assert:
+          stderr:
+            not_contains: "posix:"
       - assert:
           stderr:
             contains: 'disable "nothing-here" matches no definition'
