@@ -1,0 +1,5 @@
+source: git 2.53 in the jsonize repository, `git branch -vv` with LC_ALL=C
+description: a second -v puts the upstream branch and how far ahead or behind it is in brackets before the subject, which cannot be told from a subject that opens with a bracket
+os: linux
+args: ["branch", "-vv"]
+expect_error: excluded by the argument -vv

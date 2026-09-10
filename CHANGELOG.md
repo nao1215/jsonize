@@ -168,6 +168,15 @@ project follows [Semantic Versioning](https://semver.org/).
   0 as one record whose last field held every other record. A format
   read line by line now refuses text holding a NUL byte, detected or
   named, and the message says what the text most likely is.
+- Options that add to the end of a line came back at exit 0 inside the
+  last field. `ar tvO` and `nm -l` are read now (`offset`, `location`),
+  as is what `ip -d rule` prints after the table (`attributes`; a rule
+  with neither a table nor an action is refused rather than read whole
+  into `selectors`). `git ls-files -s --eol` and `fc-list` with element
+  names are refused by the text. `tree -F` and the tree options that put
+  metadata before a name, `git log --oneline --decorate`, `--parents`
+  and `--children`, `git branch -vv` and `cksum -a sysv` are refused
+  under `jz run`.
 - `jz run wc -lwcL` came back at exit 0 with the fourth count at the
   start of `filename` ("6 /etc/hostname"). `-L` and `-m` are now
   excluded; the comment already said `-m` output must not be read.

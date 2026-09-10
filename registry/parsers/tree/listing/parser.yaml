@@ -17,7 +17,10 @@ metadata:
     - https://linux.die.net/man/1/tree
 detect:
   args:
-    none: ["-J", "--json", "-X", "-H"]
+    # -F marks each name with its kind, and -p -s -h -u -g -D --inodes
+    # --device and --du put the metadata in brackets before it; neither is
+    # part of the name. -f prints the whole path where the name goes.
+    none: ["-J", "--json", "-X", "-H", "-F", "--classify", "-p", "-s", "-h", "--si", "-u", "-g", "-D", "--inodes", "--device", "--du", "-f"]
   signature:
     all:
       - '\A\S'

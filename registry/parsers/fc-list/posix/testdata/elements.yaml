@@ -1,0 +1,8 @@
+description: |
+  Naming the elements to print after the pattern changes what follows the
+  families: here the index comes after the style, joined by a colon. A
+  style name cannot hold a colon (fontconfig writes it as "\:"), so the
+  definition refuses the line rather than read ":index=0" into the style.
+source: the first three lines of `LC_ALL=C fc-list :style=Bold family style file index` on Ubuntu 26.04 (fontconfig 2.17)
+os: linux
+expect_error: does not match

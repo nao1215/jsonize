@@ -28,7 +28,9 @@ detect:
 parse:
   type: regex
   patterns:
-    - '^(?P<file>[^:]+): (?P<families>[^:]*):style=(?P<styles>.*?)[ \t]*$'
+    # A style name cannot hold a colon (fontconfig writes it as "\:"), so
+    # a colon after the styles is another element someone asked for.
+    - '^(?P<file>[^:]+): (?P<families>[^:]*):style=(?P<styles>[^:]*?)[ \t]*$'
     - '^(?P<file>[^:]+): (?P<families>[^:]*?)[ \t]*$'
 fields:
   file: {required: true}

@@ -1,0 +1,5 @@
+description: -a sysv prints the System V checksum and the size in 512-byte blocks, in the same three cells, so the second is not a byte count. It is refused by the argument, since the text alone cannot say which it is.
+source: "cksum -a sysv LICENSE go.mod in the jsonize repository on Ubuntu 26.04 (uutils coreutils 0.8.0) with LC_ALL=C"
+os: linux
+args: ["-a", "sysv", "LICENSE", "go.mod"]
+expect_error: excluded by the argument sysv

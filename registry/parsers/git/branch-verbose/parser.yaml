@@ -28,6 +28,9 @@ metadata:
 detect:
   args:
     any: ["branch"]
+    # A second -v puts the upstream in brackets before the subject, which
+    # cannot be told from a subject that opens with a bracket.
+    none: ["-vv"]
   # A marker, a word, a hexadecimal word and free text is a shape other
   # reports share, so jz reads it only when the parser is named
   # (`jz run git branch -v`, `--parser git`).
