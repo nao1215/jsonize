@@ -8,6 +8,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `systemctl/show` is a list of names and values in the order printed
+  instead of one object (contract version 2). A unit with two
+  ExecReload= lines, which sshd's has, prints the property twice, and
+  the object could hold one of them: `jz run systemctl show ssh` was
+  exit 3.
 - `jz captured.txt` names a file where a subcommand goes. The refusal
   now says how to read it, with the options it was given:
   `jz --file captured.txt`.
