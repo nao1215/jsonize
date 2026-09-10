@@ -1,0 +1,114 @@
+[
+  {
+    "filesystem": "tmpfs",
+    "1k_blocks": 12882672,
+    "used": 4724,
+    "available": 12877948,
+    "use_percent": 1,
+    "mounted_on": "/run"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "1k_blocks": 1920641288,
+    "used": 1643625792,
+    "available": 179378532,
+    "use_percent": 91,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "devtmpfs",
+    "1k_blocks": 32095472,
+    "used": 0,
+    "available": 32095472,
+    "use_percent": 0,
+    "mounted_on": "/dev"
+  },
+  {
+    "filesystem": "tmpfs",
+    "1k_blocks": 32206676,
+    "used": 75712,
+    "available": 32130964,
+    "use_percent": 1,
+    "mounted_on": "/dev/shm"
+  },
+  {
+    "filesystem": "devpts",
+    "1k_blocks": 0,
+    "used": 0,
+    "available": 0,
+    "use_percent": null,
+    "mounted_on": "/dev/pts"
+  },
+  {
+    "filesystem": "sysfs",
+    "1k_blocks": 0,
+    "used": 0,
+    "available": 0,
+    "use_percent": null,
+    "mounted_on": "/sys"
+  },
+  {
+    "filesystem": "securityfs",
+    "1k_blocks": 0,
+    "used": 0,
+    "available": 0,
+    "use_percent": null,
+    "mounted_on": "/sys/kernel/security"
+  },
+  {
+    "filesystem": "cgroup2",
+    "1k_blocks": 0,
+    "used": 0,
+    "available": 0,
+    "use_percent": null,
+    "mounted_on": "/sys/fs/cgroup"
+  },
+  {
+    "filesystem": "none",
+    "1k_blocks": 0,
+    "used": 0,
+    "available": 0,
+    "use_percent": null,
+    "mounted_on": "/sys/fs/pstore"
+  },
+  {
+    "filesystem": "efivarfs",
+    "1k_blocks": 128,
+    "used": 48,
+    "available": 76,
+    "use_percent": 39,
+    "mounted_on": "/sys/firmware/efi/efivars"
+  },
+  {
+    "filesystem": "bpf",
+    "1k_blocks": 0,
+    "used": 0,
+    "available": 0,
+    "use_percent": null,
+    "mounted_on": "/sys/fs/bpf"
+  },
+  {
+    "filesystem": "configfs",
+    "1k_blocks": 0,
+    "used": 0,
+    "available": 0,
+    "use_percent": null,
+    "mounted_on": "/sys/kernel/config"
+  },
+  {
+    "filesystem": "proc",
+    "1k_blocks": 0,
+    "used": 0,
+    "available": 0,
+    "use_percent": null,
+    "mounted_on": "/proc"
+  },
+  {
+    "filesystem": "systemd-1",
+    "1k_blocks": null,
+    "used": null,
+    "available": null,
+    "use_percent": null,
+    "mounted_on": "/proc/sys/fs/binfmt_misc"
+  }
+]

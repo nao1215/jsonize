@@ -1,0 +1,4 @@
+description: -a lists the file systems df leaves out by default. An automount point nothing has mounted yet has no figures, and df prints a dash in each column.
+source: "the header and the first 14 rows of `df -a` on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C"
+os: linux
+args: ["-a"]
