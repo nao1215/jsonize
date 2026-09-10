@@ -111,6 +111,39 @@ parse:
 	}
 }
 
+// A table lines its columns up in the columns of a terminal, where a
+// kana or a CJK character takes two and a combining accent none. Counting
+// characters instead put the rest of such a row into the first cell.
+func TestParseTableAlignedByDisplayWidth(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned}\n")
+	input := "WHO                  UID  USER\n" +
+		"ModemManager         0    root\n" +
+		"スクリーンロッカー   1000 user01\n" +
+		"é́́́́                    1000 user01\n" +
+		"ｆｕｌｌ             7    x\n"
+	got, err := Parse(def, []byte(input), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `[{"who":"ModemManager","uid":"0","user":"root"},` +
+		`{"who":"スクリーンロッカー","uid":"1000","user":"user01"},` +
+		`{"who":"e` + strings.Repeat("́", 5) + `","uid":"1000","user":"user01"},` +
+		`{"who":"ｆｕｌｌ","uid":"7","user":"x"}]`
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	// A header in a wide script is measured the same way.
+	named := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned, header: {columns: [name, value, x]}}\n")
+	got, err = Parse(named, []byte("名前名前名前 値 X\na            1  z\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if mustJSON(t, got) != `[{"name":"a","value":"1","x":"z"}]` {
+		t.Error(mustJSON(t, got))
+	}
+}
+
 func TestParseTableAligned(t *testing.T) {
 	t.Parallel()
 	def := load(t, `

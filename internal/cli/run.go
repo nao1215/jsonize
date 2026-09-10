@@ -183,7 +183,7 @@ func (a *app) cmdRun(args []string) int {
 		// command that lists things does when there is nothing to list.
 		// Here, unlike on a pipe, jz knows which format was meant, so it
 		// can say the list is empty instead of that it could not tell.
-		return a.emptyResult(reg, parser, sel.variant, out)
+		return a.emptyResult(reg, sctx, out)
 	}
 
 	// jz ran the command, so it knows the arguments and the system it ran
@@ -286,28 +286,10 @@ func (a *app) restoreStderr(io.Writer) {
 }
 
 // emptyResult answers a command that succeeded without printing
-// anything. Every definition the parser could have chosen has to produce
-// an array, or the empty answer is not knowable: a format that yields one
-// object has no empty form.
-func (a *app) emptyResult(reg *registry.Registry, parser, variant string, out outputOptions) int {
-	var candidates []*registry.Entry
-	if variant != "" {
-		e, ok := reg.Lookup(parser, variant)
-		if !ok {
-			return ExitSelect
-		}
-		candidates = []*registry.Entry{e}
-	} else {
-		candidates = reg.Variants(parser)
-	}
-	if len(candidates) == 0 {
-		return ExitSelect
-	}
-	for _, e := range candidates {
-		if !e.Def.Parse.YieldsArray() {
-			a.errorf("%s printed nothing, and %s reads a format that has no empty form", parser, e.Def.ID())
-			return ExitSelect
-		}
+// anything with the empty list, when that is what it means.
+func (a *app) emptyResult(reg *registry.Registry, sctx selector.Context, out outputOptions) int {
+	if code := a.emptyFormats(reg, sctx, false); code != ExitOK {
+		return code
 	}
 	if err := jsonutil.Encode(a.env.Stdout, []any{}, out.pretty); err != nil {
 		return a.writeFailed(err)

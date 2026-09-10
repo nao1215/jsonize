@@ -9,7 +9,7 @@ import (
 )
 
 // column is a resolved table column: its name and, for aligned tables, the
-// rune offset where its header starts.
+// display column where its header starts.
 type column struct {
 	name  string
 	start int
@@ -137,13 +137,15 @@ func (r *run) resolveHeader(p *definition.Parse, header line, split string) ([]c
 	return cols, nil
 }
 
-// token is a whitespace-delimited word with its rune offset.
+// token is a whitespace-delimited word with the display column it starts
+// at.
 type token struct {
 	text  string
 	start int
 }
 
-// tokenize splits s on runs of whitespace, recording rune offsets.
+// tokenize splits s on runs of whitespace, recording where each word
+// starts in the columns of a terminal (see cellWidth).
 func tokenize(s string) []token {
 	var toks []token
 	start := -1
@@ -162,7 +164,7 @@ func tokenize(s string) []token {
 			}
 			b.WriteRune(r)
 		}
-		pos++
+		pos += cellWidth(r)
 	}
 	if start >= 0 {
 		toks = append(toks, token{text: b.String(), start: start})
@@ -242,40 +244,26 @@ func splitFieldsN(s string, n int) []string {
 // crosses the nominal boundary between two columns (a right-aligned number
 // that is wider than its header) is assigned to the column on its right,
 // mirroring how humans read such tables. Empty cells become nil.
+//
+// The offsets are display columns, the way the table was lined up, so a
+// row holding wide characters is cut where the header says rather than a
+// character later for every one of them.
 func alignedCells(text string, cols []column) []any {
 	runes := []rune(text)
 	n := len(runes)
 	cells := make([]any, len(cols))
+	narrow := allNarrow(text, runes)
 	prevEnd := 0
 	for i := range cols {
 		start := prevEnd
 		end := n
 		if i+1 < len(cols) {
 			end = cols[i+1].start
-			if end > n {
-				end = n
+			// Where every character takes one column, a column is an index.
+			if !narrow {
+				end = runeAt(runes, end)
 			}
-			if end < start {
-				end = start
-			}
-			// The next column's value may start before its header does
-			// (right-aligned numbers). Walk left from the boundary to the
-			// previous whitespace.
-			if end > start && end < n && !unicode.IsSpace(runes[end]) && !unicode.IsSpace(runes[end-1]) {
-				j := end
-				for j > start && !unicode.IsSpace(runes[j-1]) {
-					j--
-				}
-				if j > start {
-					end = j
-				} else {
-					// No whitespace on the left: the token began in this
-					// column and overflows to the right. Keep it whole.
-					for end < n && !unicode.IsSpace(runes[end]) {
-						end++
-					}
-				}
-			}
+			end = cellEnd(runes, start, min(max(end, start), n))
 		}
 		cell := strings.TrimSpace(string(runes[start:end]))
 		if cell == "" {
@@ -286,4 +274,57 @@ func alignedCells(text string, cols []column) []any {
 		prevEnd = end
 	}
 	return cells
+}
+
+// cellEnd moves the boundary of a cell that starts at start and would end
+// at end off a value that crosses it. The next column's value may start
+// before its header does (a right-aligned number), so the cut walks left
+// to the previous whitespace; with none there, the value began in this
+// column and overflows to the right, and it is kept whole.
+func cellEnd(runes []rune, start, end int) int {
+	n := len(runes)
+	if end <= start || end >= n || unicode.IsSpace(runes[end]) || unicode.IsSpace(runes[end-1]) {
+		return end
+	}
+	j := end
+	for j > start && !unicode.IsSpace(runes[j-1]) {
+		j--
+	}
+	if j > start {
+		return j
+	}
+	for end < n && !unicode.IsSpace(runes[end]) {
+		end++
+	}
+	return end
+}
+
+// allNarrow reports whether every rune of text takes exactly one column.
+func allNarrow(text string, runes []rune) bool {
+	if len(runes) == len(text) {
+		// ASCII, one byte a rune; only its control characters are not
+		// narrow by cellWidth, and it counts them as one column too.
+		return true
+	}
+	for _, r := range runes {
+		if cellWidth(r) != 1 {
+			return false
+		}
+	}
+	return true
+}
+
+// runeAt returns the index of the first rune of runes that starts at
+// display column col or after it, and len(runes) when none does. A wide
+// character that starts before col and covers it stays on the left, and
+// a combining mark stays with the character it modifies.
+func runeAt(runes []rune, col int) int {
+	pos := 0
+	for i, r := range runes {
+		if pos >= col && cellWidth(r) > 0 {
+			return i
+		}
+		pos += cellWidth(r)
+	}
+	return len(runes)
 }

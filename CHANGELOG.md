@@ -101,6 +101,8 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `systemd-inhibit/list` reads `systemd-inhibit --list`, one record per
+  inhibitor lock, with the operations the lock covers as an array.
 - `file/mime` reads `file -i` and `file --mime-type`: the MIME type and,
   when printed, the character set of each file.
 - `ip/oneline-link` reads `ip -o link`, one record per interface. It
@@ -158,6 +160,18 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- An aligned table cut a row holding CJK characters or kana one
+  character late for each of them, and wrote the result at exit 0:
+  `systemd-inhibit --list` gave an inhibitor named `スクリーンロッカー`
+  the user id and user name too, and moved every value after it one key
+  to the right. Positions are now counted in terminal columns, the way
+  the table was lined up.
+- `jz run` answered a command that printed nothing with `[]` whatever
+  its arguments were, including arguments under which no definition
+  reads its output: `jz run systemd-inhibit --what=sleep true` ran a
+  wrapper, and the empty list claimed there were no locks. The
+  arguments now choose among the definitions the same way they would
+  with output, and with none left the answer is exit 4.
 - A `float` field read Go's own number syntax, so `1_000.5` became
   1000.5 and `0x1p3` became 8; `int` already refused both. The days of a
   `duration` took any number too, `1_0-01:02:03` as ten days and

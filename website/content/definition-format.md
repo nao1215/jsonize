@@ -247,6 +247,11 @@ non-alphanumerics become `_`, a leading or trailing `%` becomes
   the cut to the previous space; a value that overflows to the right is
   kept whole. Empty cells are `null`. With explicit `columns`, extra
   trailing header words ("Mounted on") belong to the last column.
+  Positions are counted in the columns of a terminal, the way C tools
+  and systemd line a table up: a CJK character or a kana takes two, a
+  combining accent none. A tool that pads by counting characters instead
+  (Go's `text/tabwriter`) lines up a row holding such characters
+  differently, and that row is cut in the wrong place.
 - `delimiter`: `strings.SplitN` on the literal, cells trimmed.
 - `box`: a table drawn with rules, as MySQL, psql and `sqlite3` in box
   mode print one. The vertical bars say where the cells are, so nothing

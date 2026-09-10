@@ -165,6 +165,7 @@ the same reading with settings of your own.
 | `systemd-analyze` | [`blame`](../schemas/systemd-analyze/blame.json), [`critical-chain`](../schemas/systemd-analyze/critical-chain.json), [`security`](../schemas/systemd-analyze/security.json), [`time`](../schemas/systemd-analyze/time.json) |
 | `systemd-cgtop` | [`batch`](../schemas/systemd-cgtop/batch.json) |
 | `systemd-id128` | [`show`](../schemas/systemd-id128/show.json) |
+| `systemd-inhibit` | [`list`](../schemas/systemd-inhibit/list.json) |
 | `systemd-path` | [`paths`](../schemas/systemd-path/paths.json) |
 | `table` | [`aligned`](../schemas/table/aligned.json), [`box`](../schemas/table/box.json), [`whitespace`](../schemas/table/whitespace.json) |
 | `tar` | [`busybox`](../schemas/tar/busybox.json), [`gnu`](../schemas/tar/gnu.json) |

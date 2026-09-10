@@ -126,3 +126,19 @@ scenarios:
             json:
               - { path: "$[0].device.card", gte: 0 }
               - { path: "$[0].subdevice_count.total", gte: 1 }
+
+  # An application registers the name and reason of its lock, in any
+  # script, and systemd lines the table up by display width.
+  - name: jz run systemd-inhibit --list lands on the table of locks
+    only: {os: linux, command: "LC_ALL=C systemd-inhibit --list | grep -q '^WHO '"}
+    steps:
+      - run:
+          command: jz run --explain systemd-inhibit --list
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemd-inhibit/list from embedded"
+          stdout:
+            json:
+              - { path: "$[0].uid", gte: 0 }
+              - { path: "$[0].pid", gte: 1 }

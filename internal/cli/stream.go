@@ -43,7 +43,7 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		// jz started the command, so it knows what the format was meant
 		// to be. A list with nothing in it is no lines at all here, the
 		// same answer `[]` gives when the whole document is written.
-		return a.emptyStream(reg, ctx.Parser, ctx.Variant)
+		return a.emptyFormats(reg, ctx, true)
 	}
 	ctx.Input = head
 	chosen, err := selector.Select(reg, ctx)
@@ -137,25 +137,31 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 	return ExitOK
 }
 
-// emptyStream answers a command that succeeded without printing
-// anything. Every definition it could have chosen has to have a
-// streaming form, or writing nothing would be claiming an empty list for
-// a format that has none.
-func (a *app) emptyStream(reg *registry.Registry, parser, variant string) int {
-	candidates := reg.Variants(parser)
-	if variant != "" {
-		e, ok := reg.Lookup(parser, variant)
-		if !ok {
-			return ExitSelect
-		}
-		candidates = []*registry.Entry{e}
-	}
+// emptyFormats settles what a command that succeeded without printing
+// anything is an answer to. The formats its name and its arguments admit
+// have to be lists, or the empty answer is not knowable: a format that
+// yields one object has no empty form, and with --stream it has no
+// streaming form either, which is the error reported then. Arguments
+// that no definition reads the output of are no request for a list at
+// all, the same as they would be with output.
+func (a *app) emptyFormats(reg *registry.Registry, ctx selector.Context, stream bool) int {
+	candidates := selector.Candidates(reg, ctx)
 	if len(candidates) == 0 {
+		if ctx.Variant != "" {
+			a.errorf("%s printed nothing, and %s/%s does not read what it prints with these arguments", ctx.Parser, ctx.Parser, ctx.Variant)
+		} else {
+			a.errorf("%s printed nothing, and no %s variant reads what it prints with these arguments", ctx.Parser, ctx.Parser)
+		}
 		return ExitSelect
 	}
 	for _, e := range candidates {
-		if !e.Def.Parse.YieldsArray() {
+		switch {
+		case e.Def.Parse.YieldsArray():
+		case stream:
 			return a.exitForStream(&engine.NoStreamError{Definition: e.Def.ID()})
+		default:
+			a.errorf("%s printed nothing, and %s reads a format that has no empty form", ctx.Parser, e.Def.ID())
+			return ExitSelect
 		}
 	}
 	return ExitOK

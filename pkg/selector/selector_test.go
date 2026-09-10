@@ -281,6 +281,37 @@ func TestDefinitionWithoutSignature(t *testing.T) {
 	}
 }
 
+// The candidates for a command that printed nothing are the ones its
+// system and arguments admit, with no text to look at.
+func TestCandidates(t *testing.T) {
+	t.Parallel()
+	reg := testRegistry(t)
+	ids := func(ctx Context) string {
+		entries := Candidates(reg, ctx)
+		out := make([]string, 0, len(entries))
+		for _, e := range entries {
+			out = append(out, e.Def.ID())
+		}
+		return strings.Join(out, " ")
+	}
+	for _, tt := range []struct {
+		ctx  Context
+		want string
+	}{
+		{Context{Parser: "df"}, "df/bsd df/gnu df/gnu-human"},
+		{Context{Parser: "df", OS: "linux", Args: []string{}}, "df/gnu"},
+		{Context{Parser: "df", OS: "linux", Args: []string{"-h"}}, "df/gnu-human"},
+		{Context{Parser: "df", OS: "darwin", Args: []string{"-h"}}, "df/bsd"},
+		{Context{Parser: "df", Variant: "gnu-human", OS: "linux", Args: []string{}}, ""},
+		{Context{Parser: "df", Variant: "nope"}, ""},
+		{Context{Parser: "nope"}, ""},
+	} {
+		if got := ids(tt.ctx); got != tt.want {
+			t.Errorf("Candidates(%+v) = %q, want %q", tt.ctx, got, tt.want)
+		}
+	}
+}
+
 func TestSelectWithParserScope(t *testing.T) {
 	t.Parallel()
 	reg := testRegistry(t)

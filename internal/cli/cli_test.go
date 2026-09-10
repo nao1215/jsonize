@@ -1241,12 +1241,27 @@ func TestRunWithNoOutputAnswersWithAnEmptyList(t *testing.T) {
 	h := newHarness(t)
 	// A command that lists things prints nothing when there is nothing
 	// to list. jz started this command, so it knows which format was
-	// meant and can say the list is empty; on a pipe it could not.
-	if code := h.run("run", "--parser", "git", "--variant", "stash-list", "true"); code != ExitOK {
+	// meant and can say the list is empty; on a pipe it could not. true
+	// ignores its arguments, so it stands in for `git stash list`.
+	if code := h.run("run", "--parser", "git", "--variant", "stash-list", "true", "stash", "list"); code != ExitOK {
 		t.Fatalf("code=%d %s", code, h.stderr.String())
 	}
 	if got := strings.TrimSpace(h.stdout.String()); got != "[]" {
 		t.Errorf("stdout = %q", got)
+	}
+	// The arguments still choose the variant. Without them the command
+	// was not asked for the list, and nothing printed is no answer: the
+	// same arguments with output would have been refused too.
+	for _, args := range [][]string{
+		{"run", "--parser", "git", "--variant", "stash-list", "true"},
+		{"run", "--parser", "git", "--variant", "stash-list", "--stream", "true"},
+		// systemd-inhibit without --list is a wrapper around another
+		// command, and what that one printed is no list of locks.
+		{"run", "--parser", "systemd-inhibit", "true", "--what=sleep", "true"},
+	} {
+		if code := h.run(args...); code != ExitSelect || h.stdout.Len() != 0 {
+			t.Errorf("%v: code=%d stdout=%q %s", args, code, h.stdout.String(), h.stderr.String())
+		}
 	}
 	// A format that yields one object has no empty form, so the answer
 	// is not knowable and jz says so rather than inventing one.
