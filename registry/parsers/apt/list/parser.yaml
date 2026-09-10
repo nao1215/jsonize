@@ -19,7 +19,10 @@ detect:
   signature:
     all:
       - '\AListing\.\.\.[ \t]*$'
+    any:
       - '(?m)^[^/ \t]+/\S+[ \t]+\S+[ \t]+\S+'
+      # A pattern no package matches leaves the opening line alone.
+      - '\AListing\.\.\.[ \t]*\z'
 input:
   ignore:
     - '^Listing\.\.\.[ \t]*$'

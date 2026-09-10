@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (systemd 259) as journalctl -n 0 with LC_ALL=C
+description: a journal query that matched nothing prints this one line, which is the empty list
+os: linux
+args: [-n, "0"]

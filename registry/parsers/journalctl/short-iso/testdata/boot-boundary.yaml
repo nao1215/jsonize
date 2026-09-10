@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (systemd 259) as journalctl -o short-iso with LC_ALL=C, four lines of a longer output; the host name replaced
+description: >-
+  Entries of two boots: journalctl puts a line naming the next boot
+  between them.
+os: linux
+args: [-o, short-iso]

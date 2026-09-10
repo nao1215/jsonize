@@ -19,6 +19,11 @@ detect:
   signature:
     all:
       - '\A\[[ \t]*[0-9]+\.[0-9]{6}\] \S+ \S'
+input:
+  # A message of several lines and the line between two boots, which
+  # journalctl/short explains.
+  fold: '^[ \t]+\S'
+  ignore: ['^-- Boot [0-9a-f]{32} --$']
 parse:
   type: regex
   pattern: '^\[[ \t]*(?P<monotonic>[0-9]+\.[0-9]{6})\] (?P<hostname>\S+) (?P<identifier>[^\s\[:]+)(?:\[(?P<pid>[0-9]+)\])?: ?(?P<message>.*)$'
