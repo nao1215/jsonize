@@ -5,11 +5,22 @@
   "description": "systemctl show properties of a unit",
   "x-jsonize": {
     "definition": "systemctl/show",
-    "version": 1
+    "version": 2
   },
-  "type": "object",
-  "properties": {},
-  "additionalProperties": {
-    "type": "string"
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "value": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "value"
+    ]
   }
 }
