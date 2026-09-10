@@ -668,6 +668,16 @@ func TestUsageAndVersion(t *testing.T) {
 	if code := h.run("frobnicate"); code != ExitUsage || !strings.Contains(h.stderr.String(), `unknown command "frobnicate"`) {
 		t.Errorf("unknown command: %d %s", code, h.stderr.String())
 	}
+	// A file where a subcommand goes is a file meant to be read, and the
+	// refusal says how, keeping the options it was given.
+	captured := filepath.Join(t.TempDir(), "df output.txt")
+	if err := os.WriteFile(captured, []byte(gnuDF), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if code := h.run("--pretty", captured); code != ExitUsage || h.stdout.Len() != 0 ||
+		!strings.Contains(h.stderr.String(), "jz --pretty --file '"+captured+"'") {
+		t.Errorf("file as a command: %d %s", code, h.stderr.String())
+	}
 	if code := h.pipe(gnuDF, "--pretty", "run"); code != ExitUsage || !strings.Contains(h.stderr.String(), "must come before") {
 		t.Errorf("subcommand after options: %d %s", code, h.stderr.String())
 	}

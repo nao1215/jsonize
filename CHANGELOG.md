@@ -8,6 +8,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `jz captured.txt` names a file where a subcommand goes. The refusal
+  now says how to read it, with the options it was given:
+  `jz --file captured.txt`.
 - Input with no text in it, empty or blank lines only, is refused by
   saying so (`unable to identify the input format: it holds no text`)
   instead of that no signature matched it, and a search of one parser

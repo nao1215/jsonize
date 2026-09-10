@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"flag"
 	"io"
 	"os"
 
@@ -53,7 +52,7 @@ func (a *app) cmdConvert(args []string) int {
 		return code
 	}
 	if o.fs.NArg() > 0 {
-		return a.unexpectedArgs(o.fs)
+		return a.unexpectedArgs(o, args)
 	}
 	if err := co.selects.check(); err != nil {
 		a.errorf("%v", err)
@@ -143,10 +142,18 @@ func (a *app) cmdConvert(args []string) int {
 }
 
 // unexpectedArgs reports a positional argument in the default mode, where
-// a mistyped subcommand is the most likely cause.
-func (a *app) unexpectedArgs(fs *flag.FlagSet) int {
-	arg := fs.Arg(0)
+// a mistyped subcommand is the most likely cause. A file there is a file
+// meant to be read, and the refusal says how, with the options it came
+// with.
+func (a *app) unexpectedArgs(o *optionSet, args []string) int {
+	arg := o.fs.Arg(0)
 	if lookup(arg) == nil {
+		if fi, err := os.Stat(arg); err == nil && fi.Mode().IsRegular() && *o.given["file"] == 0 {
+			opts := args[:len(args)-o.fs.NArg()]
+			line := append(append([]string{"jz"}, opts...), "--file", arg)
+			a.errorf("unknown command %q; a file is read with --file:\n  %s", arg, shellLine(line))
+			return ExitUsage
+		}
 		a.errorf("unknown command %q", arg)
 	} else {
 		a.errorf("%q must come before the options", arg)
