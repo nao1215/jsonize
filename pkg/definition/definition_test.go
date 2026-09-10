@@ -343,6 +343,9 @@ func TestLoadErrors(t *testing.T) {
 		{"array no split", base + "fields: {a: {type: array}}\n", "need split"},
 		{"array both split", base + "fields: {a: {type: array, split: ',', split_regex: ','}}\n", "mutually exclusive"},
 		{"array bad regex", base + "fields: {a: {type: array, split_regex: '('}}\n", "split_regex"},
+		// A separator that can be nothing splits "abc def" into single
+		// characters, which reads as a list of the value's letters.
+		{"array regex matches nothing", base + "fields: {a: {type: array, split_regex: '[ \\t]*'}}\n", "split_regex: matches the empty string"},
 		{"array of array", base + "fields: {a: {type: array, split: ',', items: {type: array, split: ';'}}}\n", "nested arrays"},
 		{"object no regex", base + "fields: {a: {type: object}}\n", "regex: is required"},
 		{"object bad regex", base + "fields: {a: {type: object, regex: '('}}\n", "invalid regular expression"},
