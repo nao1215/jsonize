@@ -1,0 +1,11 @@
+Linux 7.0.0-31-generic (host01) 	09/10/26 	_x86_64_	(32 CPU)
+
+22:40:02          tps      rtps      wtps      dtps   bread/s   bwrtn/s   bdscd/s
+22:50:15        57.46      3.33     54.13      0.00    174.62   2874.02      0.00
+Average:        57.46      3.33     54.13      0.00    174.62   2874.02      0.00
+
+22:57:47     LINUX RESTART	(32 CPU)
+
+23:00:02          tps      rtps      wtps      dtps   bread/s   bwrtn/s   bdscd/s
+23:10:06       716.96    669.83     47.13      0.00  16104.26   2930.41      0.00
+Average:       716.96    669.83     47.13      0.00  16104.26   2930.41      0.00

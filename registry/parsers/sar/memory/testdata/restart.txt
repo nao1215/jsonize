@@ -1,0 +1,11 @@
+Linux 7.0.0-31-generic (host01) 	09/10/26 	_x86_64_	(32 CPU)
+
+22:40:02    kbmemfree   kbavail kbmemused  %memused kbbuffers  kbcached  kbcommit   %commit  kbactive   kbinact   kbdirty
+22:50:15     27961120  47805304  14131108     21.94   2749556  17230788  59795940     82.14  18606388  12827012     65904
+Average:     27961120  47805304  14131108     21.94   2749556  17230788  59795940     82.14  18606388  12827012     65904
+
+22:57:47     LINUX RESTART	(32 CPU)
+
+23:00:02    kbmemfree   kbavail kbmemused  %memused kbbuffers  kbcached  kbcommit   %commit  kbactive   kbinact   kbdirty
+23:10:06     48548424  54086984   8651416     13.43   1613924   4459488  52012244     71.44   8225688   4135088     52936
+Average:     48548424  54086984   8651416     13.43   1613924   4459488  52012244     71.44   8225688   4135088     52936

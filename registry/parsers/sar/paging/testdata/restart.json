@@ -1,0 +1,54 @@
+[
+  {
+    "time": "22:50:15",
+    "pgpgin_per_s": 87.31,
+    "pgpgout_per_s": 1437.01,
+    "fault_per_s": 60022.19,
+    "majflt_per_s": 0.59,
+    "pgfree_per_s": 64130.47,
+    "pgscank_per_s": 0,
+    "pgscand_per_s": 0,
+    "pgsteal_per_s": 0.05,
+    "pgprom_per_s": 0,
+    "pgdem_per_s": 0
+  },
+  {
+    "time": "Average",
+    "pgpgin_per_s": 87.31,
+    "pgpgout_per_s": 1437.01,
+    "fault_per_s": 60022.19,
+    "majflt_per_s": 0.59,
+    "pgfree_per_s": 64130.47,
+    "pgscank_per_s": 0,
+    "pgscand_per_s": 0,
+    "pgsteal_per_s": 0.05,
+    "pgprom_per_s": 0,
+    "pgdem_per_s": 0
+  },
+  {
+    "time": "23:10:06",
+    "pgpgin_per_s": 8075.98,
+    "pgpgout_per_s": 1465.2,
+    "fault_per_s": 58672.93,
+    "majflt_per_s": 162.38,
+    "pgfree_per_s": 56232.66,
+    "pgscank_per_s": 0,
+    "pgscand_per_s": 0,
+    "pgsteal_per_s": 0,
+    "pgprom_per_s": 0,
+    "pgdem_per_s": 0
+  },
+  {
+    "time": "Average",
+    "pgpgin_per_s": 8075.98,
+    "pgpgout_per_s": 1465.2,
+    "fault_per_s": 58672.93,
+    "majflt_per_s": 162.38,
+    "pgfree_per_s": 56232.66,
+    "pgscank_per_s": 0,
+    "pgscand_per_s": 0,
+    "pgsteal_per_s": 0,
+    "pgprom_per_s": 0,
+    "pgdem_per_s": 0
+  }
+]

@@ -1,0 +1,4 @@
+description: A report read from a daily file that spans a reboot. sar prints a LINUX RESTART line and starts the table again, with an Average row for each run.
+source: "sar -n DEV -f /var/log/sysstat/sa10 -s 22:40:00 -e 23:20:00 on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C; the machine rebooted at 22:57:47, so the day's file holds two runs. The host name in the banner and the bridge and veth interface names was replaced with a name of the same width"
+os: linux
+args: ["-n", "DEV", "-f", "/var/log/sysstat/sa10", "-s", "22:40:00", "-e", "23:20:00"]

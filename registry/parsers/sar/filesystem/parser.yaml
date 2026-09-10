@@ -12,6 +12,12 @@
 # which this report labels Summary rather than Average. The trailing
 # colon that only those rows carry is removed so the cell holds a time or
 # the word and nothing else.
+#
+# A daily file that spans a reboot has a LINUX RESTART line where the
+# machine came back up, and the report starts again after it with its
+# own column names and its own Average rows. The line is dropped like
+# the banner: it marks a moment rather than a sample, and the rows on
+# either side of it keep their times.
 format: 1
 command: sar
 variant: filesystem
@@ -28,7 +34,10 @@ detect:
       - '^(?:\d\d:\d\d:\d\d|Average:|Summary:)[ \t]+MBfsfree[ \t]+MBfsused[ \t]+%fsused[ \t]+%ufsused[ \t]+Ifree[ \t]+Iused[ \t]+%Iused[ \t]+FILESYSTEM[ \t]*$'
 input:
   ignore:
-    - '\ALinux '
+    # The banner, and the line sar prints where the day's file records a
+    # reboot. Both are stated whole, so no other line is left out with them.
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
     - '^(?:\d\d:\d\d:\d\d|Average:|Summary:)[ \t]+MBfsfree[ \t]+MBfsused'
 parse:
   type: table

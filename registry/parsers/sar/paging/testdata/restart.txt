@@ -1,0 +1,11 @@
+Linux 7.0.0-31-generic (host01) 	09/10/26 	_x86_64_	(32 CPU)
+
+22:40:02     pgpgin/s pgpgout/s   fault/s  majflt/s  pgfree/s pgscank/s pgscand/s pgsteal/s  pgprom/s   pgdem/s
+22:50:15        87.31   1437.01  60022.19      0.59  64130.47      0.00      0.00      0.05      0.00      0.00
+Average:        87.31   1437.01  60022.19      0.59  64130.47      0.00      0.00      0.05      0.00      0.00
+
+22:57:47     LINUX RESTART	(32 CPU)
+
+23:00:02     pgpgin/s pgpgout/s   fault/s  majflt/s  pgfree/s pgscank/s pgscand/s pgsteal/s  pgprom/s   pgdem/s
+23:10:06      8075.98   1465.20  58672.93    162.38  56232.66      0.00      0.00      0.00      0.00      0.00
+Average:      8075.98   1465.20  58672.93    162.38  56232.66      0.00      0.00      0.00      0.00      0.00

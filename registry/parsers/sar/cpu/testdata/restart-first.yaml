@@ -1,0 +1,4 @@
+description: A daily file that begins with the boot. The LINUX RESTART line comes straight after the banner.
+source: "sar -u -f /var/log/sysstat/sa10 -e 20:10:00 on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C. The host name in the banner was replaced with a name of the same width"
+os: linux
+args: ["-u", "-f", "/var/log/sysstat/sa10", "-e", "20:10:00"]
