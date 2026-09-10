@@ -1,0 +1,3 @@
+source: "lspci -vv on a GitHub Actions ubuntu-latest runner (Azure VM) with pciutils 3.10.0, LC_ALL=C, trimmed to two devices; every slot there carries a non-zero PCI domain, which lspci prints as a fourth hexadecimal field in front of the bus"
+os: linux
+args: ["-vv"]

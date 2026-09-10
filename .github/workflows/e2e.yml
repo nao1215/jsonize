@@ -39,9 +39,6 @@ jobs:
       # HOME, runs every spec under e2e/atago and fails on a skip that
       # is not the operating system's or an optional suite's. Windows
       # runs it under the bash that ships with Git.
-      - name: capture lspci -vv (temporary)
-        if: runner.os == 'Linux'
-        run: LC_ALL=C lspci -vv; echo "---"; LC_ALL=C lspci -vv | od -c | head -20
       - name: run E2E
         shell: bash
         run: bash ./scripts/run_e2e.sh

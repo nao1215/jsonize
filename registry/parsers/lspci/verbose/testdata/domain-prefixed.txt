@@ -1,0 +1,23 @@
+757d:00:00.0 Non-Volatile memory controller: Microsoft Corporation Device 00a9 (prog-if 02 [NVM Express])
+	Subsystem: Microsoft Corporation Device 0000
+	Physical Slot: 1307906816
+	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+	Latency: 0
+	NUMA node: 0
+	Region 0: Memory at fc0080000 (64-bit, non-prefetchable) [size=512K]
+	Capabilities: <access denied>
+	Kernel driver in use: nvme
+
+7870:00:00.0 Ethernet controller: Microsoft Corporation Device 00ba
+	Subsystem: Microsoft Corporation Device 0003
+	Physical Slot: 1
+	Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+	Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+	Latency: 0
+	NUMA node: 0
+	Region 0: Memory at fc4000000 (64-bit, prefetchable) [size=64M]
+	Region 4: Memory at fc8000000 (64-bit, prefetchable) [size=64K]
+	Capabilities: <access denied>
+	Kernel driver in use: mana
+

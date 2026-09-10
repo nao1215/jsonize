@@ -1,0 +1,17 @@
+[
+  {
+    "slot": "757d:00:00.0",
+    "class": "Non-Volatile memory controller",
+    "device": "Microsoft Corporation Device 00a9"
+  },
+  {
+    "slot": "7870:00:00.0",
+    "class": "Ethernet controller",
+    "device": "Microsoft Corporation Device 00ba"
+  },
+  {
+    "slot": "c05b:00:00.0",
+    "class": "Non-Volatile memory controller",
+    "device": "Microsoft Corporation Device 00a9"
+  }
+]
