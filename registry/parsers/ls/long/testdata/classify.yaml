@@ -1,0 +1,4 @@
+description: -F appends a mark to each name that says what kind of file it is, "/" for a directory. The mark is not part of the name, and a name cannot end with "/", so the line is refused rather than read with the mark in filename.
+source: "GNU coreutils 9.7 (gnuls) on Ubuntu 26.04, LC_ALL=C, ls -lF in a directory made for the fixture. The owner was replaced with a name of the same width"
+os: linux
+expect_error: 'does not match'

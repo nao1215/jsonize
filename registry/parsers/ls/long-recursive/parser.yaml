@@ -23,7 +23,7 @@ aliases:
   # vdir is ls -l under another name, so it needs no flag.
   - name: gls
   - name: vdir
-    args: {}
+    args: {none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]}
 description: ls -lR, or ls -l given several directories, as one record per directory
 metadata:
   tags: [linux, filesystem]
@@ -33,6 +33,8 @@ metadata:
 detect:
   args:
     any: ["-l", "--format=long", "--format=verbose"]
+    # A mark after each name (-F, -p) is not part of the name; see ls/long.
+    none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
   signature:
     all:
       # The output opens with a heading and the total under it.
@@ -58,7 +60,7 @@ parse:
         type: regex
         patterns:
           - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+?) -> (?P<link_to>.+)$'
-          - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+)$'
+          - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.*[^/])$'
       fields:
         links: {type: int, required: true}
         size: {required: true}
