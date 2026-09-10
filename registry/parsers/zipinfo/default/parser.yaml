@@ -33,7 +33,7 @@ input:
     - '^Empty zipfile\.$'
 parse:
   type: regex
-  pattern: '^(?P<mode>[-dlcbps][-rwxsStT]{9})[ \t]+(?P<version>\S+)[ \t]+(?P<os>\S+)[ \t]+(?P<size>\d+)[ \t]+(?P<attributes>\S\S)[ \t]+(?P<method>\S+)[ \t]+(?P<date>\d{2}-[A-Za-z]{3}-\d{2})[ \t]+(?P<time>\d{2}:\d{2})[ \t]+(?P<name>.+)$'
+  pattern: '^(?P<mode>[-dlcbps][-rwxsStT]{9})[ \t]+(?P<version>\S+)[ \t]+(?P<os>\S+)[ \t]+(?P<size>\d+)[ \t]+(?P<attributes>\S\S)[ \t]+(?P<method>\S+)[ \t]+(?P<date>\d{2}-[A-Za-z]{3}-\d{2})[ \t]+(?P<time>\d{2}:\d{2}) (?P<name>.+)$'
 fields:
   size: {type: int, required: true}
   name: {required: true}

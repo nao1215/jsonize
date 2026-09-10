@@ -23,7 +23,9 @@ detect:
       - '\A[aAcCdDeEFiIjmNPsStTuVx]*-'
 parse:
   type: regex
-  pattern: '^(?P<attributes>[-a-zA-Z]+)\s+(?P<file>.+)$'
+  # One space separates the attributes from the name, so a space after it
+  # is the first character of the name.
+  pattern: '^(?P<attributes>[-a-zA-Z]+) (?P<file>.+)$'
 fields:
   attributes: {required: true}
   file: {required: true}

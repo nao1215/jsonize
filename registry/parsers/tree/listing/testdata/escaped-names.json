@@ -1,0 +1,23 @@
+[
+  {
+    "name": "edge",
+    "children": [
+      {
+        "name": "\\ lead",
+        "children": []
+      },
+      {
+        "name": "trail\\ ",
+        "children": []
+      },
+      {
+        "name": "two\\ \\ spaces",
+        "children": []
+      },
+      {
+        "name": "x\\ ->\\ y",
+        "children": []
+      }
+    ]
+  }
+]

@@ -881,6 +881,42 @@ scenarios:
               - { path: "$[0].inet.address", equals: 127.0.0.1 }
               - { path: "$[0].inet.mask", equals: 255.0.0.0 }
 
+  # A name may begin or end with a space. The listings put a fixed
+  # separator in front of the name, and what follows it is the name: a
+  # leading space used to be taken for more of the separator and dropped.
+  - name: a name that begins or ends with a space keeps it
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: "sp/ lead"
+          content: "x\n"
+      - fixture:
+          file: "sp/trail "
+          content: "y\n"
+      - run:
+          command: jz run ls -l sp
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].filename", equals: " lead" }
+              - { path: "$[1].filename", equals: "trail " }
+      - run:
+          command: jz run du -a sp
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"name":"sp/trail "'
+      - run:
+          shell: true
+          command: cd sp && jz run wc ' lead' 'trail '
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].filename", equals: " lead" }
+              - { path: "$[1].filename", equals: "trail " }
+
   # A listing of several directories opens each with its path and a
   # colon. A file whose name ends with a colon prints a line that ends the
   # same way, and it has to stay an entry of the directory it is in.

@@ -29,12 +29,10 @@ detect:
       # `pactl list short sinks`).
       - '\A\d+\t[^\t\n]*$'
 parse:
-  type: table
-  split: delimiter
-  delimiter: "\t"
-  header:
-    none: true
-    columns: [size, name]
+  # Matched rather than split on the tab: a split trims its cells, and a
+  # name that begins or ends with a space would lose it.
+  type: regex
+  pattern: '^(?P<size>\d+)\t(?P<name>[^\t]+)$'
 fields:
   # size is in the unit du counted in, which the output does not show:
   # 1024-byte blocks by default for GNU and BusyBox, 512-byte blocks for

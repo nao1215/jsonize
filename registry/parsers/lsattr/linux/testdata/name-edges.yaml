@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (e2fsprogs 1.47) with LC_ALL=C over files made for the fixture
+description: one space separates the attributes from the name, so a space after it is the first character of the name
+os: linux
+args: [" lead", "trail "]

@@ -29,7 +29,7 @@ input:
     - '^[ \t]*\d+[ \t]+\d+ files?$'
 parse:
   type: regex
-  pattern: '^[ \t]*(?P<length>\d+)[ \t]+(?P<date>\d{2}-\d{2}-\d{4})[ \t]+(?P<time>\d{2}:\d{2})[ \t]+(?P<name>.+)$'
+  pattern: '^[ \t]*(?P<length>\d+)[ \t]+(?P<date>\d{2}-\d{2}-\d{4})[ \t]+(?P<time>\d{2}:\d{2})   (?P<name>.+)$'
 fields:
   length: {type: int, required: true}
   name: {required: true}

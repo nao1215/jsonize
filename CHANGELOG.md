@@ -190,6 +190,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A file name that begins with a space lost it at exit 0: `ls -l`,
+  `tar -tv`, `unzip -l`, `zipinfo` and `lsattr` took the space for more
+  of the gap before the name, and `du` and `wc` trimmed it off both
+  ends (`trail ` read as `trail`). One space, or three for `unzip -l`,
+  separates the name from what comes before it, and what follows is the
+  name. `tree` kept its escaped form but dropped the space of a trailing
+  `\ `. The checksum listings refused a name that begins with a space;
+  they read it.
 - `vmstat -w` was exit 4: the wide form draws each group name with
   dashes on both sides (`--procs--`), which the signature did not allow.
   The columns are the same, and `vmstat/linux` and `vmstat/linux-active`
