@@ -424,6 +424,44 @@ scenarios:
               - { path: "$[0].hard", matches: "^(unlimited|[0-9]+)$" }
               - { path: "$[0].units", equals: files }
 
+  # util-linux -r prints the columns lsblk -f lines up, one space apart
+  # and not lined up. Cut where the header words start, it put the
+  # version under FSTYPE's neighbour and the use percentage under UUID.
+  # Captured output, since a runner may have no block devices to list.
+  - name: the unaligned -r form of a util-linux table is refused, not cut by the header
+    only: {os: linux}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
+    steps:
+      - fixture:
+          file: bin/lsblk
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            case " $* " in
+            *" -r "*) cat "$(dirname "$0")/../captured/lsblk-f-r.txt" ;;
+            *) cat "$(dirname "$0")/../captured/lsblk-f.txt" ;;
+            esac
+      - fixture:
+          file: captured/lsblk-f-r.txt
+          from: "${specdir}/../../registry/parsers/lsblk/filesystems/testdata/raw.txt"
+      - fixture:
+          file: captured/lsblk-f.txt
+          from: "${specdir}/../../registry/parsers/lsblk/filesystems/testdata/util-linux-2.41.txt"
+      - run:
+          command: jz run lsblk -f -r
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: "No variant's signature fits this text"
+      - run:
+          command: jz run --explain lsblk -f
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lsblk/filesystems from embedded"
+
   # The host's own procps, so what is pinned is the shape of the answer
   # rather than any particular machine's numbers.
   - name: real uptime and ps report their durations in seconds

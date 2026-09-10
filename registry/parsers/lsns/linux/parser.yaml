@@ -17,6 +17,10 @@ detect:
   signature:
     all:
       - '^[ \t]*NS[ \t]+TYPE[ \t]+NPROCS[ \t]+PID[ \t]+USER[ \t]+COMMAND[ \t]*$'
+      # The header is lined up with the columns: NS sits over right-aligned
+      # inode numbers. -r prints the same words one space apart and the
+      # rows unaligned, which this cannot cut.
+      - '^(?:[ \t]+NS[ \t]|NS(?:[ \t][^\n]*\S)?[ \t]{2,}\S)'
 parse:
   type: table
   split: aligned

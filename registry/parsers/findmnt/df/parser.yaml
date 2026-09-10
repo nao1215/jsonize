@@ -16,6 +16,9 @@ detect:
   signature:
     all:
       - '\ASOURCE[ \t]+FSTYPE[ \t]+SIZE[ \t]+USED[ \t]+AVAIL[ \t]+USE%[ \t]+TARGET[ \t]*$'
+      # The header is lined up with the columns. -r prints the same words
+      # one space apart and the rows unaligned, which this cannot cut.
+      - '\ASOURCE(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
 parse:
   type: table
   split: aligned
