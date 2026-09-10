@@ -53,7 +53,8 @@ project follows [Semantic Versioning](https://semver.org/).
   `input.select` to report what it left out.
 - `--explain` says more and says it one fact per line, each opening with
   `jz: explain: `: the outcome (`chose`, `unidentified`, `ambiguous`,
-  `mismatch`, `defined`), the scope the candidates came from (the whole
+  `mismatch`, `defined`, and `empty` for a command that printed
+  nothing), the scope the candidates came from (the whole
   registry, `--parser`, the name of the command `jz run` started, the
   path of `--file`, and a path that was dropped), what the chosen
   definition matched, the rule that settled several that fit and each one
@@ -72,7 +73,8 @@ project follows [Semantic Versioning](https://semver.org/).
   value the group read.
 - `jz test` changes every fixture — a foreign line at the end and in the
   middle, the whole text twice — and fails a definition that still
-  succeeds without the change showing in its result.
+  succeeds without the change showing in its result. A list read from
+  the text twice has to be the records of one copy twice.
 - Definitions that dropped text they did not state now read it or state
   it: `dig` reads the command banner, warnings, the EDNS options and the
   question, authority and additional sections; `mtr --report` the host;
