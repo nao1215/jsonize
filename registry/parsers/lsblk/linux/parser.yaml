@@ -14,6 +14,9 @@ detect:
   signature:
     all:
       - '^NAME\s+MAJ:MIN\s+RM\s+SIZE\s+RO\s+TYPE\s+MOUNTPOINTS?\s*$'
+      # The header is lined up with the columns. -r prints the same words
+      # one space apart and the rows unaligned, which this cannot cut.
+      - '^NAME(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
     none:
       # `lsblk -b` prints the same header with SIZE as a bare byte count.
       # Those numbers belong to lsblk/bytes, which reports them as

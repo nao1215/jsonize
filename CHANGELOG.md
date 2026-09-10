@@ -162,6 +162,15 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `lsblk -f -r` came back at exit 0 with its values under the wrong keys:
+  `-r` prints the header of the aligned table one space apart and the
+  rows unaligned, and cutting the rows where those header words start
+  put the filesystem version under `fsver` together with the type, the
+  use percentage under `uuid` and the mount point under `fsavail`. The
+  util-linux table definitions (lsblk, findmnt --df, losetup, lsfd,
+  lsipc, lslocks, lslogins, lsns, uuidparse) now ask for a header that
+  is lined up, and refuse the raw form; the others used to fail on it by
+  chance, at exit 3.
 - An aligned table cut a row holding CJK characters or kana one
   character late for each of them, and wrote the result at exit 0:
   `systemd-inhibit --list` gave an inhibitor named `スクリーンロッカー`
