@@ -1,0 +1,52 @@
+# `ip -o link` prints one line per interface: the lines of the `ip link`
+# block joined by a backslash where the block form breaks the line. The
+# header, the link layer line and then the alias and the alternative
+# names, of which an interface may have neither. The words are the ones
+# ip/link reads, under the same names, with the link layer type as
+# link_type since the line is one object here rather than two.
+#
+# iproute2 prints the alias before the alternative names, and one line
+# leaves no room for reading them in either order the way ip/link does,
+# so the pattern takes them in the order the command prints them.
+format: 1
+command: ip
+variant: oneline-link
+description: ip -o link, one line per interface
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ip-link.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # Every line is an interface header followed on the same line by
+      # its link layer after a backslash, which is what the block form of
+      # `ip link` and `ip address` never print.
+      - '\A(?:\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+ [^\n]*\bmode \S+ group \S+[^\n\\]*\\[ \t]+link/[^\n]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  # A bridged interface names its bridge between the queueing discipline
+  # and the state, and a veth end names its peer after an @. Both are
+  # absent on an ordinary interface, and so is the queue length on a
+  # virtual one, which leaves a space before the backslash.
+  pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>\S+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+) qdisc (?P<qdisc>\S+)(?: master (?P<master>\S+))? state (?P<state>\S+) mode (?P<mode>\S+) group (?P<group>\S+)(?: qlen (?P<qlen>\d+))?[ \t]*\\[ \t]+link/(?P<link_type>\S+)(?: (?P<address>[0-9a-fA-F:.]+))?(?: brd (?P<broadcast>[0-9a-fA-F:.]+))?(?: link-netnsid (?P<netnsid>\d+))?(?:[ \t]*\\[ \t]+alias (?P<alias>.+?))?(?:[ \t]*\\[ \t]+altname (?P<altnames>\S+(?:[ \t]*\\[ \t]+altname \S+)*))?[ \t]*$'
+fields:
+  index: {type: int, required: true}
+  name: {required: true}
+  peer: {when_missing: omit}
+  flags: {type: array, split: ","}
+  mtu: {type: int, required: true}
+  qdisc: {required: true}
+  master: {when_missing: omit}
+  state: {required: true}
+  mode: {required: true}
+  group: {required: true}
+  qlen: {type: int, when_missing: omit}
+  link_type: {required: true}
+  address: {when_missing: omit}
+  broadcast: {when_missing: omit}
+  netnsid: {type: int, when_missing: omit}
+  alias: {when_missing: omit}
+  altnames: {type: array, split_regex: '[ \t]*\\[ \t]+altname[ \t]+', when_missing: omit}
