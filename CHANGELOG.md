@@ -161,6 +161,9 @@ project follows [Semantic Versioning](https://semver.org/).
   read the dash as null, which their schemas now allow (version 2).
 - `mount -l` was exit 3 on a file system with a label. The label is
   read as `label`.
+- `jz run wc -lwcL` came back at exit 0 with the fourth count at the
+  start of `filename` ("6 /etc/hostname"). `-L` and `-m` are now
+  excluded; the comment already said `-m` output must not be read.
 - `ls -lF` and `ls -lp` came back at exit 0 with the mark `-F` adds in
   `filename` ("docs/", "link@"). The long listings now exclude those
   arguments under `jz run`, and refuse a name that ends with "/", which

@@ -22,6 +22,12 @@ metadata:
     - https://pubs.opengroup.org/onlinepubs/9699919799/utilities/wc.html
 detect:
   auto_detect: false
+  args:
+    # -m puts characters where the bytes go, and -L adds the longest
+    # line's length as a fourth count, which the last column would take as
+    # the start of the file name. Piped in, neither can be told from a name
+    # with a space in it, so this is the only place they are refused.
+    none: ["-m", "--chars", "-L", "--max-line-length"]
   signature:
     all:
       - '\A\s*\d+\s+\d+\s+\d+(?:\s+\S.*)?$'
