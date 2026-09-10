@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (power-profiles-daemon 0.30) with LC_ALL=C
+description: >-
+  Three profiles with balanced in use. The performance profile reports
+  whether it is degraded and the others the platform driver, so the
+  attributes differ from one profile to the next.
+os: linux
+args: ["list"]

@@ -105,6 +105,8 @@ project follows [Semantic Versioning](https://semver.org/).
   inhibitor lock, with the operations the lock covers as an array.
 - `prlimit/linux` reads the resource limits `prlimit` prints, aligned or
   with `--raw`.
+- `powerprofilesctl/list` reads the power profiles, which one is in use,
+  and each one's attributes.
 - `file/mime` reads `file -i` and `file --mime-type`: the MIME type and,
   when printed, the character set of each file.
 - `ip/oneline-link` reads `ip -o link`, one record per interface. It
