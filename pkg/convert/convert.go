@@ -158,6 +158,7 @@ func TimeAssuming(s, layout string, loc *time.Location, a Assumptions) (string, 
 	if t == "" {
 		return "", false, &Error{Type: typeTime, Input: s, Cause: errors.New("empty value")}
 	}
+	written, assumed := layout, false
 	if !strings.Contains(layout, "06") {
 		if a.Year == 0 {
 			return s, false, nil
@@ -167,13 +168,23 @@ func TimeAssuming(s, layout string, loc *time.Location, a Assumptions) (string, 
 		// the rest of the layout.
 		layout = "2006 " + layout
 		t = strconv.Itoa(a.Year) + " " + t
+		assumed = true
 	}
 	if loc == nil {
 		loc = time.UTC
 	}
 	parsed, err := time.ParseInLocation(layout, t, loc)
 	if err != nil {
-		return "", false, &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("does not match the layout %q", layout)}
+		// A value that fits the layout can still name a day its year does
+		// not have (February 29), which is a different thing to say.
+		var pe *time.ParseError
+		if errors.As(err, &pe) && strings.Contains(pe.Message, "out of range") {
+			if assumed {
+				return "", false, &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("is not a date in %d, the year it was assumed to be in", a.Year)}
+			}
+			return "", false, &Error{Type: typeTime, Input: s, Cause: errors.New("is not a date: " + strings.TrimPrefix(pe.Message, ": "))}
+		}
+		return "", false, &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("does not match the layout %q", written)}
 	}
 	if strings.Contains(layout, "MST") {
 		resolved, ok := resolveZone(parsed, a.Zones)
