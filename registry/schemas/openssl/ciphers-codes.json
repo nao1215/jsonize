@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/openssl/ciphers-codes.json",
+  "title": "openssl/ciphers-codes",
+  "description": "openssl ciphers -V, each suite with its wire code",
+  "x-jsonize": {
+    "definition": "openssl/ciphers-codes",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "code_high": {
+        "type": "string"
+      },
+      "code_low": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "protocol": {
+        "type": "string"
+      },
+      "kx": {
+        "type": "string"
+      },
+      "au": {
+        "type": "string"
+      },
+      "enc": {
+        "type": "string"
+      },
+      "mac": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "code_high",
+      "code_low",
+      "name",
+      "protocol",
+      "kx",
+      "au",
+      "enc",
+      "mac"
+    ]
+  }
+}

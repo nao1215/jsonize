@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/locale/keywords.json",
+  "title": "locale/keywords",
+  "description": "locale -k CATEGORY, the keywords of one locale category",
+  "x-jsonize": {
+    "definition": "locale/keywords",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {},
+  "additionalProperties": {
+    "type": "string"
+  }
+}

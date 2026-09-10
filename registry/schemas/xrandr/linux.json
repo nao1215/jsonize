@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/xrandr/linux.json",
+  "title": "xrandr/linux",
+  "description": "xrandr outputs and the modes they support",
+  "x-jsonize": {
+    "definition": "xrandr/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "output": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "connected",
+              "disconnected"
+            ]
+          },
+          "primary": {
+            "type": "boolean"
+          },
+          "geometry": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rotation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reflection": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "transforms": {
+            "type": "string"
+          },
+          "width_mm": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "height_mm": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "status",
+          "primary",
+          "geometry",
+          "rotation",
+          "reflection",
+          "transforms",
+          "width_mm",
+          "height_mm"
+        ]
+      },
+      "modes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string"
+            },
+            "rates": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "mode",
+            "rates"
+          ]
+        }
+      }
+    },
+    "required": [
+      "output",
+      "modes"
+    ]
+  }
+}

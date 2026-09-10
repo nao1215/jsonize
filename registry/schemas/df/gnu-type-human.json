@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/gnu-type-human.json",
+  "title": "df/gnu-type-human",
+  "description": "df -Th on GNU coreutils, type column with rounded sizes",
+  "x-jsonize": {
+    "definition": "df/gnu-type-human",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "used": {
+        "type": "string"
+      },
+      "available": {
+        "type": "string"
+      },
+      "use_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "type",
+      "size",
+      "used",
+      "available",
+      "use_percent",
+      "mounted_on"
+    ]
+  }
+}

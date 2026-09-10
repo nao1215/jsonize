@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lscpu/linux.json",
+  "title": "lscpu/linux",
+  "description": "lscpu CPU architecture information",
+  "x-jsonize": {
+    "definition": "lscpu/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "value": {
+        "type": [
+          "string",
+          "integer",
+          "number"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "value"
+    ]
+  }
+}

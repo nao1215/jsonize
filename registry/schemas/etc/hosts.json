@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/etc/hosts.json",
+  "title": "etc/hosts",
+  "description": "/etc/hosts entries",
+  "x-jsonize": {
+    "definition": "etc/hosts",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "address": {
+        "type": "string"
+      },
+      "names": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "address",
+      "names"
+    ]
+  }
+}

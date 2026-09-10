@@ -52,6 +52,15 @@ registry-update-golden: ## Rewrite the expected JSON of every fixture, then revi
 	go test ./registry -update -count=1
 	@echo "golden files rewritten; review them with: git diff"
 
+.PHONY: registry-update-schema
+registry-update-schema: ## Rewrite registry/schemas from the definitions (BREAKING=cmd/variant,... to publish a breaking change)
+	go test ./registry -run '^TestSchemas$$' -count=1 -update-schema -break '$(BREAKING)'
+	@echo "schemas rewritten; review them with: git diff registry/schemas"
+
+.PHONY: schema-check
+schema-check: ## Validate every fixture against its published schema with an independent validator (needs python3 -m pip install jsonschema)
+	python3 scripts/check_schemas.py
+
 .PHONY: fuzz
 fuzz: ## Run every fuzz target briefly (FUZZTIME=10s)
 	@for t in $$(grep -rhoE 'func (Fuzz[A-Za-z0-9_]+)' --include='*_test.go' cmd internal pkg registry | awk '{print $$2}' | sort -u); do \

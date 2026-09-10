@@ -71,6 +71,19 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Every definition has a JSON Schema of its output, derived from the
+  definition: keys, types, which keys are always there, which values may
+  be null, the values a key can take when the definition names them.
+  `jz list --schema COMMAND VARIANT` prints it; the official ones are in
+  `registry/schemas`, linked from the parsers page and published at
+  `https://nao1215.github.io/jsonize/schemas/COMMAND/VARIANT.json`, each
+  with an output contract version (`x-jsonize.version`) that is separate
+  from `format`. Every fixture is validated against its schema, and a
+  change that could break a program reading the output is refused unless
+  it comes with a new contract version: `make registry-update-schema
+  BREAKING=command/variant`. CI checks the fixtures with an independent
+  validator and compares the schemas with the base branch's.
+
 - The end-to-end suite runs every spec on Windows, verifies the sysstat
   and BusyBox commands on Linux as required rather than when present,
   lists every skipped scenario with its reason and fails on a skip that

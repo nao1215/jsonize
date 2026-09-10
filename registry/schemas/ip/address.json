@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ip/address.json",
+  "title": "ip/address",
+  "description": "ip address, one block per interface",
+  "x-jsonize": {
+    "definition": "ip/address",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "interface": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "peer": {
+            "type": "string"
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mtu": {
+            "type": "integer"
+          },
+          "qdisc": {
+            "type": "string"
+          },
+          "master": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "qlen": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "index",
+          "name",
+          "flags",
+          "mtu",
+          "qdisc",
+          "state",
+          "group"
+        ]
+      },
+      "details": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "alias",
+                "altname",
+                "inet",
+                "inet6",
+                "link",
+                "valid_lft"
+              ]
+            },
+            "link_type": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "broadcast": {
+              "type": "string"
+            },
+            "netnsid": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "scope": {
+              "type": "string"
+            },
+            "attributes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "valid_lft": {
+              "type": "string"
+            },
+            "preferred_lft": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        }
+      }
+    },
+    "required": [
+      "interface",
+      "details"
+    ]
+  }
+}

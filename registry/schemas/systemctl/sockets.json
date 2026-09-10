@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemctl/sockets.json",
+  "title": "systemctl/sockets",
+  "description": "systemctl list-sockets table",
+  "x-jsonize": {
+    "definition": "systemctl/sockets",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "activates": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "listen": {
+        "type": "string"
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sfdisk/dump.json",
+  "title": "sfdisk/dump",
+  "description": "sfdisk -d, partition table dump",
+  "x-jsonize": {
+    "definition": "sfdisk/dump",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "header": {
+        "type": "object",
+        "properties": {
+          "first-lba": {
+            "type": "integer"
+          },
+          "last-lba": {
+            "type": "integer"
+          },
+          "sector-size": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "partitions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "device": {
+              "type": "string"
+            },
+            "start": {
+              "type": "integer"
+            },
+            "size": {
+              "type": "integer"
+            },
+            "type": {
+              "type": "string"
+            },
+            "uuid": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "bootable": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "device",
+            "start",
+            "size",
+            "type",
+            "uuid",
+            "name",
+            "bootable"
+          ]
+        }
+      }
+    },
+    "required": [
+      "header",
+      "partitions"
+    ]
+  }
+}

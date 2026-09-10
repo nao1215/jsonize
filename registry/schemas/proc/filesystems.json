@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/filesystems.json",
+  "title": "proc/filesystems",
+  "description": "/proc/filesystems filesystem types the kernel supports",
+  "x-jsonize": {
+    "definition": "proc/filesystems",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "nodev": {
+        "type": "boolean"
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "nodev",
+      "name"
+    ]
+  }
+}

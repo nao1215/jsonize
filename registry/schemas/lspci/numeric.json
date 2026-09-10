@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lspci/numeric.json",
+  "title": "lspci/numeric",
+  "description": "lspci -n numeric identifiers",
+  "x-jsonize": {
+    "definition": "lspci/numeric",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "slot": {
+        "type": "string"
+      },
+      "class_id": {
+        "type": "string"
+      },
+      "vendor_id": {
+        "type": "string"
+      },
+      "device_id": {
+        "type": "string"
+      },
+      "revision": {
+        "type": "string"
+      },
+      "prog_if": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "slot",
+      "class_id",
+      "vendor_id",
+      "device_id"
+    ]
+  }
+}

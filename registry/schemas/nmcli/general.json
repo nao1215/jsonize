@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/nmcli/general.json",
+  "title": "nmcli/general",
+  "description": "nmcli general status, the state of NetworkManager",
+  "x-jsonize": {
+    "definition": "nmcli/general",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "connectivity": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

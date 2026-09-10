@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/cargo/command-list.json",
+  "title": "cargo/command-list",
+  "description": "cargo --list available subcommands",
+  "x-jsonize": {
+    "definition": "cargo/command-list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string"
+      },
+      "alias_for": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "command"
+    ]
+  }
+}

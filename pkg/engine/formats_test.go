@@ -287,12 +287,20 @@ func FuzzFormats(f *testing.F) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		v, err := Parse(d, input, Options{MaxInputSize: 1 << 20})
+		v, acct, err := ParseAccounted(d, input, Options{MaxInputSize: 1 << 20})
 		if err != nil {
 			return
 		}
 		if _, err := jsonutil.Marshal(v); err != nil {
 			t.Fatalf("result not encodable: %v", err)
+		}
+		// A reading that succeeded has put every line somewhere.
+		accounted := acct.Read + acct.Folded + acct.Blank
+		for _, ig := range acct.Ignored {
+			accounted += ig.Lines
+		}
+		if accounted != acct.Lines {
+			t.Fatalf("the account covers %d of %d lines: %+v", accounted, acct.Lines, acct)
 		}
 		if !d.Parse.YieldsArray() {
 			return

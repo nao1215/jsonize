@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/apt-cache/policy.json",
+  "title": "apt-cache/policy",
+  "description": "apt-cache policy PKG, the versions of a package and where they come from",
+  "x-jsonize": {
+    "definition": "apt-cache/policy",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "package": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "state": {
+        "type": "object",
+        "properties": {
+          "Candidate": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Installed": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "versions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "marker": {
+              "type": "boolean"
+            },
+            "version": {
+              "type": "string"
+            },
+            "priority": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "marker",
+            "version",
+            "priority"
+          ]
+        }
+      },
+      "sources": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "source": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "priority",
+            "source"
+          ]
+        }
+      }
+    },
+    "required": [
+      "package",
+      "state",
+      "versions",
+      "sources"
+    ]
+  }
+}

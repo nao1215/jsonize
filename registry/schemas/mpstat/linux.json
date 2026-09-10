@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/mpstat/linux.json",
+  "title": "mpstat/linux",
+  "description": "mpstat per-processor CPU utilisation",
+  "x-jsonize": {
+    "definition": "mpstat/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "cpu": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "string"
+            },
+            "cpu": {
+              "type": "string"
+            },
+            "usr_percent": {
+              "type": "number"
+            },
+            "nice_percent": {
+              "type": "number"
+            },
+            "sys_percent": {
+              "type": "number"
+            },
+            "iowait_percent": {
+              "type": "number"
+            },
+            "irq_percent": {
+              "type": "number"
+            },
+            "soft_percent": {
+              "type": "number"
+            },
+            "steal_percent": {
+              "type": "number"
+            },
+            "guest_percent": {
+              "type": "number"
+            },
+            "gnice_percent": {
+              "type": "number"
+            },
+            "idle_percent": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "time",
+            "cpu",
+            "usr_percent",
+            "nice_percent",
+            "sys_percent",
+            "iowait_percent",
+            "irq_percent",
+            "soft_percent",
+            "steal_percent",
+            "guest_percent",
+            "gnice_percent",
+            "idle_percent"
+          ]
+        }
+      }
+    },
+    "required": [
+      "cpu"
+    ]
+  }
+}

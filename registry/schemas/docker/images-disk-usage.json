@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/docker/images-disk-usage.json",
+  "title": "docker/images-disk-usage",
+  "description": "docker images with the IMAGE/ID/DISK USAGE/CONTENT SIZE columns",
+  "x-jsonize": {
+    "definition": "docker/images-disk-usage",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "image": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "id": {
+        "type": "string"
+      },
+      "disk_usage": {
+        "type": "string"
+      },
+      "content_size": {
+        "type": "string"
+      },
+      "extra": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "image",
+      "id",
+      "disk_usage",
+      "content_size",
+      "extra"
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/softirqs.json",
+  "title": "proc/softirqs",
+  "description": "/proc/softirqs per-CPU software interrupt counters",
+  "x-jsonize": {
+    "definition": "proc/softirqs",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "cpus": {
+      "type": "object",
+      "properties": {
+        "present": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "present"
+      ]
+    },
+    "softirqs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "counts": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "counts"
+        ]
+      }
+    }
+  },
+  "required": [
+    "cpus",
+    "softirqs"
+  ]
+}

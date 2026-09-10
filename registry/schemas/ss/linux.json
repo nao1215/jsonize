@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ss/linux.json",
+  "title": "ss/linux",
+  "description": "ss socket table (-t/-u/-l/-n and combinations)",
+  "x-jsonize": {
+    "definition": "ss/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "netid": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      },
+      "recv_q": {
+        "type": "integer"
+      },
+      "send_q": {
+        "type": "integer"
+      },
+      "local_address": {
+        "type": "string"
+      },
+      "local_port": {
+        "type": "string"
+      },
+      "peer_address": {
+        "type": "string"
+      },
+      "peer_port": {
+        "type": "string"
+      },
+      "process": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "netid",
+      "state",
+      "recv_q",
+      "send_q",
+      "local_address",
+      "local_port",
+      "peer_address",
+      "peer_port"
+    ]
+  }
+}

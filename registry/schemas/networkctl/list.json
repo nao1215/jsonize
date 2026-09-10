@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/networkctl/list.json",
+  "title": "networkctl/list",
+  "description": "networkctl list, one row per network interface",
+  "x-jsonize": {
+    "definition": "networkctl/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "idx": {
+        "type": "integer"
+      },
+      "link": {
+        "type": "string"
+      },
+      "operational": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "setup": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "type": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

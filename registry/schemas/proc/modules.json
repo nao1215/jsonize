@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/modules.json",
+  "title": "proc/modules",
+  "description": "/proc/modules loaded kernel modules with their state and address",
+  "x-jsonize": {
+    "definition": "proc/modules",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "used_by_count": {
+        "type": "integer"
+      },
+      "used_by": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "Live",
+          "Loading",
+          "Unloading"
+        ]
+      },
+      "address": {
+        "type": "string"
+      },
+      "taints": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "size",
+      "used_by_count",
+      "used_by",
+      "state",
+      "address",
+      "taints"
+    ]
+  }
+}

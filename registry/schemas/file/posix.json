@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/file/posix.json",
+  "title": "file/posix",
+  "description": "file type descriptions",
+  "x-jsonize": {
+    "definition": "file/posix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "file",
+      "type"
+    ]
+  }
+}

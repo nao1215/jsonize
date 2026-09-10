@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/etc/crontab.json",
+  "title": "etc/crontab",
+  "description": "/etc/crontab and /etc/cron.d job entries",
+  "x-jsonize": {
+    "definition": "etc/crontab",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "minute": {
+        "type": "string"
+      },
+      "hour": {
+        "type": "string"
+      },
+      "day_of_month": {
+        "type": "string"
+      },
+      "month": {
+        "type": "string"
+      },
+      "day_of_week": {
+        "type": "string"
+      },
+      "user": {
+        "type": "string"
+      },
+      "command": {
+        "type": "string"
+      },
+      "special": {
+        "type": "string",
+        "enum": [
+          "annually",
+          "daily",
+          "hourly",
+          "midnight",
+          "monthly",
+          "reboot",
+          "weekly",
+          "yearly"
+        ]
+      }
+    },
+    "required": [
+      "user",
+      "command"
+    ]
+  }
+}

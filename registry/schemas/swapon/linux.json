@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/swapon/linux.json",
+  "title": "swapon/linux",
+  "description": "swapon --show table of swap areas",
+  "x-jsonize": {
+    "definition": "swapon/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "used": {
+        "type": "string"
+      },
+      "priority": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "name",
+      "type",
+      "size",
+      "used",
+      "priority"
+    ]
+  }
+}

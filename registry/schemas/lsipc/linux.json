@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsipc/linux.json",
+  "title": "lsipc/linux",
+  "description": "lsipc summary of System V and POSIX IPC limits",
+  "x-jsonize": {
+    "definition": "lsipc/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "description": {
+        "type": "string"
+      },
+      "limit": {
+        "type": "string"
+      },
+      "resource": {
+        "type": "string"
+      },
+      "use_percent": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "used": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

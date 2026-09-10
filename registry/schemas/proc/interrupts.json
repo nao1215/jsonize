@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/interrupts.json",
+  "title": "proc/interrupts",
+  "description": "/proc/interrupts per-CPU interrupt counters",
+  "x-jsonize": {
+    "definition": "proc/interrupts",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "cpus": {
+      "type": "object",
+      "properties": {
+        "online": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "online"
+      ]
+    },
+    "interrupts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "irq": {
+            "type": "string"
+          },
+          "counts": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "chip": {
+            "type": "string"
+          },
+          "hwirq": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "handler": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "drivers": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "irq",
+          "counts"
+        ]
+      }
+    }
+  },
+  "required": [
+    "cpus",
+    "interrupts"
+  ]
+}

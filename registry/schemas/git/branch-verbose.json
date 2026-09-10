@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/branch-verbose.json",
+  "title": "git/branch-verbose",
+  "description": "git branch -v",
+  "x-jsonize": {
+    "definition": "git/branch-verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "marker": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "name": {
+        "type": "string"
+      },
+      "commit": {
+        "type": "string"
+      },
+      "subject": {
+        "type": "string"
+      },
+      "tracking": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "marker",
+      "name",
+      "commit",
+      "subject"
+    ]
+  }
+}

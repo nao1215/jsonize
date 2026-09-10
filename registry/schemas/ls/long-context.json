@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ls/long-context.json",
+  "title": "ls/long-context",
+  "description": "ls -lZ long listing with the security context",
+  "x-jsonize": {
+    "definition": "ls/long-context",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "flags": {
+        "type": "string"
+      },
+      "links": {
+        "type": "integer"
+      },
+      "owner": {
+        "type": "string"
+      },
+      "group": {
+        "type": "string"
+      },
+      "context": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "size": {
+        "type": "string"
+      },
+      "date": {
+        "type": "string"
+      },
+      "filename": {
+        "type": "string"
+      },
+      "link_to": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "flags",
+      "links",
+      "owner",
+      "group",
+      "context",
+      "size",
+      "date",
+      "filename"
+    ]
+  }
+}

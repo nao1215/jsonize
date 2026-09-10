@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/netstat/unix.json",
+  "title": "netstat/unix",
+  "description": "netstat UNIX domain socket table (-x)",
+  "x-jsonize": {
+    "definition": "netstat/unix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "proto": {
+        "type": "string"
+      },
+      "refcnt": {
+        "type": "integer"
+      },
+      "flags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "type": {
+        "type": "string"
+      },
+      "state": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "inode": {
+        "type": "integer"
+      },
+      "path": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "proto",
+      "refcnt",
+      "flags",
+      "type",
+      "state",
+      "inode",
+      "path"
+    ]
+  }
+}

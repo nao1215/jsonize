@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lspci/verbose.json",
+  "title": "lspci/verbose",
+  "description": "lspci -vv devices as a tree of their attributes",
+  "x-jsonize": {
+    "definition": "lspci/verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/node"
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "properties": {
+        "slot": {
+          "type": "string"
+        },
+        "class": {
+          "type": "string"
+        },
+        "device": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "prog_if": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "required": [
+        "children"
+      ]
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ps/unix.json",
+  "title": "ps/unix",
+  "description": "ps -ef (UID PID PPID C STIME TTY TIME CMD) on Linux and macOS",
+  "x-jsonize": {
+    "definition": "ps/unix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "uid": {
+        "type": "string"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "ppid": {
+        "type": "integer"
+      },
+      "c": {
+        "type": "integer"
+      },
+      "stime": {
+        "type": "string"
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "time": {
+        "type": "number"
+      },
+      "cmd": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "uid",
+      "pid",
+      "ppid",
+      "c",
+      "stime",
+      "tty",
+      "time",
+      "cmd"
+    ]
+  }
+}

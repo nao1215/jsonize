@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ldconfig/cache.json",
+  "title": "ldconfig/cache",
+  "description": "ldconfig -p shared library cache listing",
+  "x-jsonize": {
+    "definition": "ldconfig/cache",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "library": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "library",
+      "flags",
+      "path"
+    ]
+  }
+}

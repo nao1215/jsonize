@@ -2,6 +2,7 @@ package cli
 
 import (
 	"encoding/json"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -355,5 +356,54 @@ func TestExplainStream(t *testing.T) {
 	}
 	if n := strings.Count(h.stderr.String(), "jz: explain: {"); n != 1 || !strings.Contains(h.stderr.String(), `"read":null`) {
 		t.Errorf("stderr = %s", h.stderr.String())
+	}
+}
+
+// jz list --schema prints the contract of one definition's output: the
+// published schema for a definition that has one, derived on the spot
+// for one that does not, with the version its registry published.
+func TestListSchema(t *testing.T) {
+	h := newHarness(t)
+	if code := h.run("list", "--schema", "df", "gnu"); code != ExitOK {
+		t.Fatalf("code=%d %s", code, h.stderr.String())
+	}
+	var s struct {
+		ID      string `json:"$id"`
+		Title   string `json:"title"`
+		Jsonize struct {
+			Definition string `json:"definition"`
+			Version    int    `json:"version"`
+		} `json:"x-jsonize"` //nolint:tagliatelle // the annotation's name in the schema
+		Type  string `json:"type"`
+		Items struct {
+			Required []string `json:"required"`
+		} `json:"items"`
+	}
+	h.json(&s)
+	if s.ID != "https://nao1215.github.io/jsonize/schemas/df/gnu.json" || s.Title != "df/gnu" || s.Jsonize.Version != 1 ||
+		s.Type != "array" || len(s.Items.Required) == 0 || s.Items.Required[0] != "filesystem" {
+		t.Errorf("schema = %+v", s)
+	}
+	// What is printed is what is published.
+	published, err := os.ReadFile(filepath.Join("..", "..", "registry", "schemas", "df", "gnu.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.ReplaceAll(string(published), "\r\n", "\n") != h.stdout.String() {
+		t.Errorf("jz list --schema differs from registry/schemas/df/gnu.json")
+	}
+	// A definition of the user's own has no published schema and gets
+	// the first version of the one derived from it.
+	explainRegistry(t, h)
+	if code := h.run("list", "--schema", "greet", "hello"); code != ExitOK || !strings.Contains(h.stdout.String(), `"version": 1`) {
+		t.Errorf("code=%d %s", code, h.stdout.String())
+	}
+	for _, args := range [][]string{{"list", "--schema"}, {"list", "--schema", "df"}, {"list", "--schema", "--json", "df", "gnu"}} {
+		if code := h.run(args...); code != ExitUsage {
+			t.Errorf("%v: code=%d", args, code)
+		}
+	}
+	if code := h.run("list", "--schema", "greet", "nope"); code != ExitSelect {
+		t.Errorf("unknown variant: code=%d", code)
 	}
 }

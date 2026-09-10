@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/bsd.json",
+  "title": "df/bsd",
+  "description": "BSD df default output on macOS (512-byte blocks and inode counts)",
+  "x-jsonize": {
+    "definition": "df/bsd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "512_blocks": {
+        "type": "integer"
+      },
+      "used": {
+        "type": "integer"
+      },
+      "available": {
+        "type": "integer"
+      },
+      "capacity_percent": {
+        "type": "integer"
+      },
+      "iused": {
+        "type": "integer"
+      },
+      "ifree": {
+        "type": "integer"
+      },
+      "iused_percent": {
+        "type": "integer"
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "512_blocks",
+      "used",
+      "available",
+      "capacity_percent",
+      "mounted_on"
+    ]
+  }
+}

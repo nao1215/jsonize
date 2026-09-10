@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsattr/linux.json",
+  "title": "lsattr/linux",
+  "description": "lsattr file attributes",
+  "x-jsonize": {
+    "definition": "lsattr/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "attributes": {
+        "type": "string"
+      },
+      "file": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "attributes",
+      "file"
+    ]
+  }
+}

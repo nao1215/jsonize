@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ip/brief-link.json",
+  "title": "ip/brief-link",
+  "description": "ip -brief link show",
+  "x-jsonize": {
+    "definition": "ip/brief-link",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "interface": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "DOWN",
+          "LOWERLAYERDOWN",
+          "UNKNOWN",
+          "UP"
+        ]
+      },
+      "lladdr": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "interface",
+      "state",
+      "flags"
+    ]
+  }
+}

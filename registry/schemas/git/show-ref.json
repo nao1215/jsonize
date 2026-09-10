@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/show-ref.json",
+  "title": "git/show-ref",
+  "description": "git show-ref",
+  "x-jsonize": {
+    "definition": "git/show-ref",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "object": {
+        "type": "string"
+      },
+      "refname": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "object",
+      "refname"
+    ]
+  }
+}

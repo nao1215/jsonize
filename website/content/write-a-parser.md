@@ -152,7 +152,21 @@ and a definition that still succeeds has to carry the foreign line in
 its result, or return more than one copy. An `ignore` that names more
 than the definition means to drop is what this catches.
 
-## 6. Check it against the decoys
+## 6. Look at the schema of what it produces
+
+```console
+$ jz list --schema lsof default
+```
+
+The schema is derived from the definition: its keys, the types the
+fields convert to, which keys every object carries and which values can
+be null. Read it the way a consumer would. A key you meant to be always
+there that shows as optional, or a number that shows as a string, is the
+definition saying something other than what you meant. In the official
+registry `make registry-update-schema` writes it to
+`registry/schemas/lsof/default.json`, where it is published.
+
+## 7. Check it against the decoys
 
 `registry/testdata/decoys/` holds text that belongs to no format jz
 reads: prose, a build log, a CHANGELOG, an INI file, a shell script, a
@@ -173,17 +187,18 @@ $ cat > registry/testdata/decoys/my-lookalike.txt
 $ jz test ./registry
 ```
 
-## 7. Try it for real
+## 8. Try it for real
 
 ```console
 $ go run ./cmd/jz run lsof -p $$
 $ lsof -p $$ | go run ./cmd/jz --pretty
 ```
 
-## 8. Open the pull request
+## 9. Open the pull request
 
-Include the definition, the fixtures, the golden JSON, any decoy you
-added and one row in the table in `website/content/parsers.md`. Use a
+Include the definition, the fixtures, the golden JSON, the schema, any
+decoy you added and the variant in the table in
+`website/content/parsers.md`, linked to its schema. Use a
 `parser:` commit prefix.
 
 ## Working outside the repository

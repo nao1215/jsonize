@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/go/dist-list.json",
+  "title": "go/dist-list",
+  "description": "go tool dist list, the platforms the toolchain can build for",
+  "x-jsonize": {
+    "definition": "go/dist-list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "os": {
+        "type": "string"
+      },
+      "arch": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "os",
+      "arch"
+    ]
+  }
+}

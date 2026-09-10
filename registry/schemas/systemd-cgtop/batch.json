@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemd-cgtop/batch.json",
+  "title": "systemd-cgtop/batch",
+  "description": "systemd-cgtop -b resource use per control group",
+  "x-jsonize": {
+    "definition": "systemd-cgtop/batch",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "control_group": {
+        "type": "string"
+      },
+      "tasks": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "cpu_percent": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "memory": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "input_per_s": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "output_per_s": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "control_group",
+      "tasks",
+      "cpu_percent",
+      "memory",
+      "input_per_s",
+      "output_per_s"
+    ]
+  }
+}

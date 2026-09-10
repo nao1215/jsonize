@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/od/hex-bytes.json",
+  "title": "od/hex-bytes",
+  "description": "od -t x1z hexadecimal bytes with ASCII",
+  "x-jsonize": {
+    "definition": "od/hex-bytes",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "offset": {
+        "type": "string"
+      },
+      "bytes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "ascii": {
+        "type": "string"
+      },
+      "repeat": {
+        "type": "boolean"
+      },
+      "end_offset": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/date/rfc-email.json",
+  "title": "date/rfc-email",
+  "description": "date -R, RFC 5322 date",
+  "x-jsonize": {
+    "definition": "date/rfc-email",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "type": "string"
+    },
+    "weekday": {
+      "type": "string"
+    },
+    "day": {
+      "type": "integer"
+    },
+    "month": {
+      "type": "string"
+    },
+    "year": {
+      "type": "integer"
+    },
+    "hour": {
+      "type": "integer"
+    },
+    "minute": {
+      "type": "integer"
+    },
+    "second": {
+      "type": "integer"
+    },
+    "offset": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "timestamp",
+    "weekday",
+    "day",
+    "month",
+    "year",
+    "hour",
+    "minute",
+    "second",
+    "offset"
+  ]
+}

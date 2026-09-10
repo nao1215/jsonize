@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemd-analyze/time.json",
+  "title": "systemd-analyze/time",
+  "description": "systemd-analyze time, the duration of each boot stage",
+  "x-jsonize": {
+    "definition": "systemd-analyze/time",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "firmware": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "loader": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "kernel": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "initrd": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "userspace": {
+      "type": "string"
+    },
+    "total": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target_time": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "firmware",
+    "loader",
+    "kernel",
+    "initrd",
+    "userspace",
+    "total",
+    "target",
+    "target_time"
+  ]
+}

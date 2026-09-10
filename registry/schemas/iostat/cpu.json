@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/iostat/cpu.json",
+  "title": "iostat/cpu",
+  "description": "iostat -c, one sample of CPU averages without the device table",
+  "x-jsonize": {
+    "definition": "iostat/cpu",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "cpu": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "user_percent": {
+              "type": "number"
+            },
+            "nice_percent": {
+              "type": "number"
+            },
+            "system_percent": {
+              "type": "number"
+            },
+            "iowait_percent": {
+              "type": "number"
+            },
+            "steal_percent": {
+              "type": "number"
+            },
+            "idle_percent": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "user_percent",
+            "nice_percent",
+            "system_percent",
+            "iowait_percent",
+            "steal_percent",
+            "idle_percent"
+          ]
+        }
+      }
+    },
+    "required": [
+      "cpu"
+    ]
+  }
+}

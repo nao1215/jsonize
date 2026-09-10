@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ldd/posix.json",
+  "title": "ldd/posix",
+  "description": "ldd shared object dependencies",
+  "x-jsonize": {
+    "definition": "ldd/posix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "not found"
+        ]
+      }
+    },
+    "required": [
+      "name"
+    ]
+  }
+}

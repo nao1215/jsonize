@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lscpu/extended.json",
+  "title": "lscpu/extended",
+  "description": "lscpu -e, one row per logical CPU",
+  "x-jsonize": {
+    "definition": "lscpu/extended",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "core": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "cpu": {
+        "type": "integer"
+      },
+      "maxmhz": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "mhz": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "minmhz": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "node": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "online": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "socket": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

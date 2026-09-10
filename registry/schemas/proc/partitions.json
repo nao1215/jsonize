@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/partitions.json",
+  "title": "proc/partitions",
+  "description": "/proc/partitions block devices and their sizes in 1K blocks",
+  "x-jsonize": {
+    "definition": "proc/partitions",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "major": {
+        "type": "integer"
+      },
+      "minor": {
+        "type": "integer"
+      },
+      "blocks": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "major",
+      "minor",
+      "blocks",
+      "name"
+    ]
+  }
+}

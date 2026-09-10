@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ipcs/linux.json",
+  "title": "ipcs/linux",
+  "description": "ipcs message queues, shared memory segments and semaphore arrays",
+  "x-jsonize": {
+    "definition": "ipcs/linux",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "message_queues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "messages": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "msqid": {
+            "type": "integer"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "perms": {
+            "type": "string"
+          },
+          "used_bytes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "shared_memory_segments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "bytes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "key": {
+            "type": "string"
+          },
+          "nattch": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "owner": {
+            "type": "string"
+          },
+          "perms": {
+            "type": "string"
+          },
+          "shmid": {
+            "type": "integer"
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "semaphore_arrays": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "nsems": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "owner": {
+            "type": "string"
+          },
+          "perms": {
+            "type": "string"
+          },
+          "semid": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  },
+  "required": [
+    "message_queues",
+    "shared_memory_segments",
+    "semaphore_arrays"
+  ]
+}

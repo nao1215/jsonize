@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/journalctl/short.json",
+  "title": "journalctl/short",
+  "description": "journalctl short output, one journal entry per line",
+  "x-jsonize": {
+    "definition": "journalctl/short",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "timestamp": {
+        "type": "string"
+      },
+      "hostname": {
+        "type": "string"
+      },
+      "identifier": {
+        "type": "string"
+      },
+      "pid": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "message": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "timestamp",
+      "hostname",
+      "identifier",
+      "pid",
+      "message"
+    ]
+  }
+}

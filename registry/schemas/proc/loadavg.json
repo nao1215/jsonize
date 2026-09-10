@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/loadavg.json",
+  "title": "proc/loadavg",
+  "description": "/proc/loadavg load averages and scheduling counts",
+  "x-jsonize": {
+    "definition": "proc/loadavg",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "load_1m": {
+      "type": "number"
+    },
+    "load_5m": {
+      "type": "number"
+    },
+    "load_15m": {
+      "type": "number"
+    },
+    "runnable": {
+      "type": "integer"
+    },
+    "total": {
+      "type": "integer"
+    },
+    "last_pid": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "load_1m",
+    "load_5m",
+    "load_15m",
+    "runnable",
+    "total",
+    "last_pid"
+  ]
+}

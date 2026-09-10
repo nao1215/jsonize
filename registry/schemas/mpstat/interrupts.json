@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/mpstat/interrupts.json",
+  "title": "mpstat/interrupts",
+  "description": "mpstat -I per-processor interrupt rates",
+  "x-jsonize": {
+    "definition": "mpstat/interrupts",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "cpu": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "string"
+            },
+            "cpu": {
+              "type": "string"
+            },
+            "interrupts_per_second": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "time",
+            "cpu",
+            "interrupts_per_second"
+          ]
+        }
+      }
+    },
+    "required": [
+      "cpu"
+    ]
+  }
+}

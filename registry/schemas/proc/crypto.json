@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/crypto.json",
+  "title": "proc/crypto",
+  "description": "/proc/crypto registered kernel crypto algorithms",
+  "x-jsonize": {
+    "definition": "proc/crypto",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "algorithm": {
+        "type": "object",
+        "properties": {
+          "async": {
+            "type": "boolean"
+          },
+          "blocksize": {
+            "type": "integer"
+          },
+          "chunksize": {
+            "type": "integer"
+          },
+          "digestsize": {
+            "type": "integer"
+          },
+          "internal": {
+            "type": "boolean"
+          },
+          "ivsize": {
+            "type": "integer"
+          },
+          "max keysize": {
+            "type": "integer"
+          },
+          "maxauthsize": {
+            "type": "integer"
+          },
+          "min keysize": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "integer"
+          },
+          "refcnt": {
+            "type": "integer"
+          },
+          "seedsize": {
+            "type": "integer"
+          },
+          "statesize": {
+            "type": "integer"
+          },
+          "walksize": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "algorithm"
+    ]
+  }
+}

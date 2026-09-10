@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/etc/passwd.json",
+  "title": "etc/passwd",
+  "description": "/etc/passwd account entries",
+  "x-jsonize": {
+    "definition": "etc/passwd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "username": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string"
+      },
+      "uid": {
+        "type": "integer"
+      },
+      "gid": {
+        "type": "integer"
+      },
+      "gecos": {
+        "type": "string"
+      },
+      "home": {
+        "type": "string"
+      },
+      "shell": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "username",
+      "password",
+      "uid",
+      "gid",
+      "gecos",
+      "home",
+      "shell"
+    ]
+  }
+}

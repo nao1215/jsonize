@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/nm/dynamic.json",
+  "title": "nm/dynamic",
+  "description": "nm dynamic symbol table",
+  "x-jsonize": {
+    "definition": "nm/dynamic",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "address": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "type": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "address",
+      "type",
+      "name"
+    ]
+  }
+}

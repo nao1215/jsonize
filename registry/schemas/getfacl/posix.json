@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/getfacl/posix.json",
+  "title": "getfacl/posix",
+  "description": "getfacl access control lists",
+  "x-jsonize": {
+    "definition": "getfacl/posix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "attributes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        }
+      },
+      "entries": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "default": {
+              "type": "boolean"
+            },
+            "type": {
+              "type": "string"
+            },
+            "qualifier": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "permissions": {
+              "type": "string"
+            },
+            "effective": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "qualifier",
+            "permissions"
+          ]
+        }
+      }
+    },
+    "required": [
+      "attributes",
+      "entries"
+    ]
+  }
+}

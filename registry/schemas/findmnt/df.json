@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/findmnt/df.json",
+  "title": "findmnt/df",
+  "description": "findmnt --df, space used per mount point",
+  "x-jsonize": {
+    "definition": "findmnt/df",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "source": {
+        "type": "string"
+      },
+      "fstype": {
+        "type": "string"
+      },
+      "size": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "used": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "available": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "use_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "target": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "source",
+      "fstype",
+      "size",
+      "used",
+      "available",
+      "use_percent",
+      "target"
+    ]
+  }
+}

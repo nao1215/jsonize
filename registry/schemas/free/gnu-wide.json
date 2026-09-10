@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/free/gnu-wide.json",
+  "title": "free/gnu-wide",
+  "description": "procps free -w (buffers and cache in separate columns, KiB as printed)",
+  "x-jsonize": {
+    "definition": "free/gnu-wide",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "available": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "buffers": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "cache": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "free": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "shared": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "total": {
+        "type": "integer"
+      },
+      "type": {
+        "type": "string"
+      },
+      "used": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

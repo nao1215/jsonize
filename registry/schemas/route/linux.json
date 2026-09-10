@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/route/linux.json",
+  "title": "route/linux",
+  "description": "route kernel IP routing table",
+  "x-jsonize": {
+    "definition": "route/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "destination": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "string"
+      },
+      "gateway": {
+        "type": "string"
+      },
+      "genmask": {
+        "type": "string"
+      },
+      "iface": {
+        "type": "string"
+      },
+      "metric": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "ref": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "use": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/netstat/all-sockets.json",
+  "title": "netstat/all-sockets",
+  "description": "netstat with no family flag, internet and UNIX tables together",
+  "x-jsonize": {
+    "definition": "netstat/all-sockets",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "internet": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "proto": {
+            "type": "string"
+          },
+          "recv_q": {
+            "type": "integer"
+          },
+          "send_q": {
+            "type": "integer"
+          },
+          "local_address": {
+            "type": "string"
+          },
+          "local_port": {
+            "type": "string"
+          },
+          "foreign_address": {
+            "type": "string"
+          },
+          "foreign_port": {
+            "type": "string"
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "proto",
+          "recv_q",
+          "send_q",
+          "local_address",
+          "local_port",
+          "foreign_address",
+          "foreign_port",
+          "state"
+        ]
+      }
+    },
+    "unix": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "proto": {
+            "type": "string"
+          },
+          "refcnt": {
+            "type": "integer"
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "type": {
+            "type": "string"
+          },
+          "state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "inode": {
+            "type": "integer"
+          },
+          "path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "proto",
+          "refcnt",
+          "flags",
+          "type",
+          "state",
+          "inode",
+          "path"
+        ]
+      }
+    }
+  },
+  "required": [
+    "internet",
+    "unix"
+  ]
+}

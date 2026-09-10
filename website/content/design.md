@@ -22,6 +22,7 @@ cmd/jz                    entry point: signals, exit code
 internal/cli              subcommands, flag parsing, registry layering, exit-code contract
 internal/runner           exec mode: child process, LC_ALL=C, stderr passthrough, output cap, signals
 internal/conformance      golden cases, tampered fixtures and the definition/fixture cross product, shared by `go test` and `jz test`
+internal/schema           the JSON Schema of a definition's output, its validation and the compatibility rules
 internal/buildinfo        the version string stamped at build time
 pkg/registry              load registry directories/FS, merge with precedence, testdata cases
 pkg/definition            YAML schema, validation, regex compilation, format checks
@@ -746,11 +747,63 @@ given machine whatever the network is doing. Updating the official
 registry means installing a new jz; adding your own means pointing
 `JSONIZE_REGISTRY_PATH` at a directory.
 
+### The output has a contract, and it is derived
+
+A consumer of `jz` output needs to know what it will get: which keys,
+of which types, which are always there. The definitions already say it —
+a column is a key, a named group is a key, a `type: int` field is an
+integer, `when_missing: omit` is a key that may be absent — so the schema
+is read off the definition rather than written beside it. A hand-written
+schema would be a second statement of the same facts, and the first time
+the two disagreed nobody would know which was right.
+
+What the generator derives is what the engine guarantees and nothing
+more. A key is required when every object of its kind carries it; a value
+is nullable where the engine can leave it empty; a group that can only
+match a few literals becomes an `enum`; a table that takes its column
+names from its header says so with `additionalProperties` instead of
+naming keys it cannot know. Every fixture in the registry is validated
+against its schema, by jz's own validator and by an independent one in
+CI; a disagreement is the generator and the engine disagreeing about a
+definition, and it fails the build.
+
+The schemas are published, in `registry/schemas` and on the site at the
+`$id` each states, and each carries a contract version in
+`x-jsonize.version`. That version is not `format`. `format` versions the
+language a definition is written in; the contract versions what one
+definition's output looks like. They change for unrelated reasons — the
+`iostat` rewrite changed an output from an object to an array without
+touching the language — and reusing one for the other would make both
+mean nothing.
+
+A change is breaking when a program reading the output, or a document
+kept from before and validated against the new schema, can be broken by
+it: a key removed, a type changed (made nullable included, and an object
+become an array), a key that is no longer always there, a key that now
+always is, an `enum` value added or taken away, an element type changed.
+Each direction has a reader it breaks, so both are counted. The one change
+that breaks neither is a key that may now appear and never has to.
+
+A breaking change is refused unless it is meant. `make
+registry-update-schema` rewrites the files and stops at a break;
+`BREAKING=command/variant` publishes it under the next version. CI then
+compares the schemas against the branch being merged into, so a schema
+edited by hand to match a break, with the version left alone, is caught
+there. Removing a definition ends its contract, which is said by listing
+it in `registry/schemas/retired`.
+
+The version is not written into the JSON jz prints. Every output would
+grow a key its consumers did not ask for, and the ones that compare
+documents would see every run differ from the last release's for no
+reason in the data. The definition that read the text identifies the
+contract, and `--explain` names it.
+
 ### Format versioning
 
-`format: 1` is the schema major version, and a different number is
-rejected with a message that says whether to upgrade jz or the
-definition.
+`format: 1` is the major version of the definition language, and a
+different number is rejected with a message that says whether to upgrade
+jz or the definition. It says nothing about what a definition produces;
+that is the output contract's version, above.
 
 Until the first tag, format 1 is not frozen: keys are added, renamed and
 removed while the shape settles. After the tag, adding a key is a minor
@@ -771,6 +824,12 @@ the key that is the problem.
 
 - `github.com/goccy/go-yaml` — strict YAML decoding with positions.
 - `github.com/google/go-cmp` — structural diffs in golden failures.
+
+No JSON Schema library: the generator emits a small subset of draft
+2020-12, and a validator for exactly that subset is shorter than the
+dependency. CI checks the same fixtures with the Python `jsonschema`
+package, so the two agreeing is evidence rather than one piece of code
+agreeing with itself.
 
 No CLI framework: four subcommands with a handful of flags each are
 served by `flag` and a dispatch table, and the `run` subcommand needs

@@ -65,6 +65,29 @@ scenarios:
               - { path: "$.detect.os[0]", equals: linux }
               - { path: "$.fields.1k_blocks", equals: "int required" }
 
+  # The output contract of one definition, derived from it and published
+  # with a version of its own, apart from the definition format.
+  - name: list --schema prints the JSON Schema of a definition's output
+    steps:
+      - run:
+          command: jz list --schema df gnu
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.title", equals: df/gnu }
+              - { path: "$.type", equals: array }
+              - { path: "$.items.required[0]", equals: filesystem }
+              - { path: "$.items.properties.1k_blocks.type", equals: integer }
+      - run:
+          command: jz list --schema df
+      - assert:
+          exit_code: 2
+          stdout:
+            empty: true
+          stderr:
+            contains: "--schema takes COMMAND VARIANT"
+
   - name: list --sources shows where definitions come from
     steps:
       - run:

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/rustup/toolchains.json",
+  "title": "rustup/toolchains",
+  "description": "rustup toolchain list, installed Rust toolchains",
+  "x-jsonize": {
+    "definition": "rustup/toolchains",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "active": {
+        "type": "boolean"
+      },
+      "default": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "name",
+      "active",
+      "default"
+    ]
+  }
+}

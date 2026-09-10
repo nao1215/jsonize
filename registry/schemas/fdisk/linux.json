@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/fdisk/linux.json",
+  "title": "fdisk/linux",
+  "description": "fdisk -l, one record per disk with its partition table",
+  "x-jsonize": {
+    "definition": "fdisk/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "disk": {
+        "type": "object",
+        "properties": {
+          "device": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "bytes": {
+            "type": "integer"
+          },
+          "sectors": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "device",
+          "size",
+          "bytes",
+          "sectors"
+        ]
+      },
+      "properties": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "partitions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "device": {
+              "type": "string"
+            },
+            "boot": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "start": {
+              "type": "integer"
+            },
+            "end": {
+              "type": "integer"
+            },
+            "sectors": {
+              "type": "integer"
+            },
+            "size": {
+              "type": "string"
+            },
+            "id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "type": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "device",
+            "boot",
+            "start",
+            "end",
+            "sectors",
+            "size",
+            "id",
+            "type"
+          ]
+        }
+      }
+    },
+    "required": [
+      "disk",
+      "properties",
+      "partitions"
+    ]
+  }
+}

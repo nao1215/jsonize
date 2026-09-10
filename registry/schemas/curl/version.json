@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/curl/version.json",
+  "title": "curl/version",
+  "description": "curl --version, the build and what it supports",
+  "x-jsonize": {
+    "definition": "curl/version",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "build": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "libraries": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "host",
+        "libraries"
+      ]
+    },
+    "details": {
+      "type": "object",
+      "properties": {
+        "Features": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "Protocols": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "build",
+    "details"
+  ]
+}

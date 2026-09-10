@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/fc-list/posix.json",
+  "title": "fc-list/posix",
+  "description": "fc-list font files, families and styles",
+  "x-jsonize": {
+    "definition": "fc-list/posix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "string"
+      },
+      "families": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "styles": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "file",
+      "families"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/rustup/toolchains-verbose.json",
+  "title": "rustup/toolchains-verbose",
+  "description": "rustup toolchain list -v, installed Rust toolchains with their paths",
+  "x-jsonize": {
+    "definition": "rustup/toolchains-verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "active": {
+        "type": "boolean"
+      },
+      "default": {
+        "type": "boolean"
+      },
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "active",
+      "default",
+      "path"
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/queue.json",
+  "title": "sar/queue",
+  "description": "sar -q run queue and load averages",
+  "x-jsonize": {
+    "definition": "sar/queue",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "runq_sz": {
+        "type": "integer"
+      },
+      "plist_sz": {
+        "type": "integer"
+      },
+      "ldavg_1": {
+        "type": "number"
+      },
+      "ldavg_5": {
+        "type": "number"
+      },
+      "ldavg_15": {
+        "type": "number"
+      },
+      "blocked": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "time",
+      "runq_sz",
+      "plist_sz",
+      "ldavg_1",
+      "ldavg_5",
+      "ldavg_15",
+      "blocked"
+    ]
+  }
+}

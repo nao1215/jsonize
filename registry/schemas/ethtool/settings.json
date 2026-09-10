@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ethtool/settings.json",
+  "title": "ethtool/settings",
+  "description": "ethtool interface settings",
+  "x-jsonize": {
+    "definition": "ethtool/settings",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "interface": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "Advertised link modes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "Link partner advertised link modes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "Supported link modes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "interface",
+    "settings"
+  ]
+}

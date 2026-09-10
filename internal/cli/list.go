@@ -8,6 +8,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
+	"github.com/nao1215/jsonize/internal/schema"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/registry"
@@ -15,18 +16,20 @@ import (
 
 const listUsage = `Usage: jz list [COMMAND [VARIANT]]
 
-  jz list                 the commands jz can convert
-  jz list df              the variants of one command
-  jz list df gnu-human    everything about one definition
-  jz list --sources       the registries in use, in precedence order
+  jz list                        the commands jz can convert
+  jz list df                     the variants of one command
+  jz list df gnu-human           everything about one definition
+  jz list --schema df gnu-human  the JSON Schema of what it produces
+  jz list --sources              the registries in use, in precedence order
 
 Options:
 `
 
 func (a *app) cmdList(args []string) int {
 	o := newOptions("list")
-	var asJSON, sources bool
+	var asJSON, sources, asSchema bool
 	o.boolOpt(&asJSON, "json", "", "print machine-readable JSON instead of a table")
+	o.boolOpt(&asSchema, "schema", "", "print the JSON Schema of one definition's output")
 	o.boolOpt(&sources, "sources", "", "list the registries in precedence order")
 	o.helpDoc()
 	if code, done := a.parse(o, args, listUsage); done {
@@ -34,6 +37,10 @@ func (a *app) cmdList(args []string) int {
 	}
 	if o.fs.NArg() > 2 {
 		a.errorf("list: expected at most COMMAND and VARIANT, got %d arguments", o.fs.NArg())
+		return ExitUsage
+	}
+	if asSchema && (o.fs.NArg() != 2 || sources || asJSON) {
+		a.errorf("list: --schema takes COMMAND VARIANT and nothing else: a schema describes one definition's output")
 		return ExitUsage
 	}
 	if sources {
@@ -57,8 +64,46 @@ func (a *app) cmdList(args []string) int {
 	case 1:
 		return a.listVariants(reg, o.fs.Arg(0), asJSON)
 	default:
+		if asSchema {
+			return a.listSchema(reg, o.fs.Arg(0), o.fs.Arg(1))
+		}
 		return a.listDefinition(reg, o.fs.Arg(0), o.fs.Arg(1), asJSON)
 	}
+}
+
+// listSchema prints the JSON Schema of what one definition produces. It is
+// derived from the definition, so it is the contract of the definition jz
+// would use, whichever registry that comes from; the contract version is
+// the one that registry published, and 1 for a registry that publishes
+// none.
+func (a *app) listSchema(reg *registry.Registry, command, variant string) int {
+	e, ok := reg.Lookup(parserKey(command), variant)
+	if !ok {
+		return a.listDefinition(reg, command, variant, false)
+	}
+	srcs, err := a.sources()
+	if err != nil {
+		a.errorf("%v", err)
+		return ExitRegistry
+	}
+	var published *schema.Schema
+	for _, s := range srcs {
+		if s.Name == e.Source && s.FS != nil {
+			if published, _, err = schema.Published(s.FS, e.Def); err != nil {
+				a.errorf("%v", err)
+				return ExitRegistry
+			}
+		}
+	}
+	out, err := schema.Encode(schema.Generate(e.Def, schema.Version(published)))
+	if err != nil {
+		a.errorf("%v", err)
+		return ExitError
+	}
+	if _, err := a.env.Stdout.Write(out); err != nil {
+		return a.writeFailed(err)
+	}
+	return ExitOK
 }
 
 // reportSkipped closes a listing with how many definitions were left out

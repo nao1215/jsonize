@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/docker/volume-ls.json",
+  "title": "docker/volume-ls",
+  "description": "docker volume ls",
+  "x-jsonize": {
+    "definition": "docker/volume-ls",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "driver": {
+        "type": "string"
+      },
+      "volume_name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "driver",
+      "volume_name"
+    ]
+  }
+}

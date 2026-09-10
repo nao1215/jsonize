@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/mountinfo.json",
+  "title": "proc/mountinfo",
+  "description": "/proc/\u003cpid\u003e/mountinfo mount table with mount ids and propagation",
+  "x-jsonize": {
+    "definition": "proc/mountinfo",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "mount_id": {
+        "type": "integer"
+      },
+      "parent_id": {
+        "type": "integer"
+      },
+      "major": {
+        "type": "integer"
+      },
+      "minor": {
+        "type": "integer"
+      },
+      "root": {
+        "type": "string"
+      },
+      "mount_point": {
+        "type": "string"
+      },
+      "mount_options": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "optional_fields": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "fs_type": {
+        "type": "string"
+      },
+      "mount_source": {
+        "type": "string"
+      },
+      "super_options": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "mount_id",
+      "parent_id",
+      "major",
+      "minor",
+      "root",
+      "mount_point",
+      "mount_options",
+      "optional_fields",
+      "fs_type",
+      "mount_source",
+      "super_options"
+    ]
+  }
+}

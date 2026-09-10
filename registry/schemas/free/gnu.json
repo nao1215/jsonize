@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/free/gnu.json",
+  "title": "free/gnu",
+  "description": "procps free default output (values in KiB as printed)",
+  "x-jsonize": {
+    "definition": "free/gnu",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "available": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "buff_cache": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "free": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "shared": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "total": {
+        "type": "integer"
+      },
+      "type": {
+        "type": "string"
+      },
+      "used": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

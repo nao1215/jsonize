@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/chrt/policy.json",
+  "title": "chrt/policy",
+  "description": "chrt -p scheduling policy and priority of a process",
+  "x-jsonize": {
+    "definition": "chrt/policy",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "pid": {
+      "type": "integer"
+    },
+    "policy": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "integer"
+    },
+    "runtime": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "deadline": {
+      "type": "integer"
+    },
+    "period": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "pid",
+    "policy",
+    "priority",
+    "runtime"
+  ]
+}

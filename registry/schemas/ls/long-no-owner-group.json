@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ls/long-no-owner-group.json",
+  "title": "ls/long-no-owner-group",
+  "description": "ls -og long listing without the owner and group columns",
+  "x-jsonize": {
+    "definition": "ls/long-no-owner-group",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "flags": {
+        "type": "string"
+      },
+      "links": {
+        "type": "integer"
+      },
+      "size": {
+        "type": "string"
+      },
+      "date": {
+        "type": "string"
+      },
+      "filename": {
+        "type": "string"
+      },
+      "link_to": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "flags",
+      "links",
+      "size",
+      "date",
+      "filename"
+    ]
+  }
+}

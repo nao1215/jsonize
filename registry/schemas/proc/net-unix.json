@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/net-unix.json",
+  "title": "proc/net-unix",
+  "description": "/proc/net/unix open unix domain sockets",
+  "x-jsonize": {
+    "definition": "proc/net-unix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "num": {
+        "type": "string"
+      },
+      "refcount": {
+        "type": "string"
+      },
+      "protocol": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "st": {
+        "type": "string"
+      },
+      "inode": {
+        "type": "integer"
+      },
+      "path": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "num",
+      "refcount",
+      "protocol",
+      "flags",
+      "type",
+      "st",
+      "inode",
+      "path"
+    ]
+  }
+}

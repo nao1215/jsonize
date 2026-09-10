@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/net-dev.json",
+  "title": "proc/net-dev",
+  "description": "/proc/net/dev per-interface receive and transmit counters",
+  "x-jsonize": {
+    "definition": "proc/net-dev",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "interface": {
+        "type": "string"
+      },
+      "receive_bytes": {
+        "type": "integer"
+      },
+      "receive_packets": {
+        "type": "integer"
+      },
+      "receive_errs": {
+        "type": "integer"
+      },
+      "receive_drop": {
+        "type": "integer"
+      },
+      "receive_fifo": {
+        "type": "integer"
+      },
+      "receive_frame": {
+        "type": "integer"
+      },
+      "receive_compressed": {
+        "type": "integer"
+      },
+      "receive_multicast": {
+        "type": "integer"
+      },
+      "transmit_bytes": {
+        "type": "integer"
+      },
+      "transmit_packets": {
+        "type": "integer"
+      },
+      "transmit_errs": {
+        "type": "integer"
+      },
+      "transmit_drop": {
+        "type": "integer"
+      },
+      "transmit_fifo": {
+        "type": "integer"
+      },
+      "transmit_colls": {
+        "type": "integer"
+      },
+      "transmit_carrier": {
+        "type": "integer"
+      },
+      "transmit_compressed": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "interface",
+      "receive_bytes",
+      "receive_packets",
+      "receive_errs",
+      "receive_drop",
+      "receive_fifo",
+      "receive_frame",
+      "receive_compressed",
+      "receive_multicast",
+      "transmit_bytes",
+      "transmit_packets",
+      "transmit_errs",
+      "transmit_drop",
+      "transmit_fifo",
+      "transmit_colls",
+      "transmit_carrier",
+      "transmit_compressed"
+    ]
+  }
+}

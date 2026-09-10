@@ -6,11 +6,13 @@ on:
     paths:
       - "website/**"
       - "demo/**"
+      - "registry/schemas/**"
       - ".github/workflows/website.yml"
   pull_request:
     paths:
       - "website/**"
       - "demo/**"
+      - "registry/schemas/**"
       - ".github/workflows/website.yml"
   workflow_dispatch:
 

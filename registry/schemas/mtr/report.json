@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/mtr/report.json",
+  "title": "mtr/report",
+  "description": "mtr --report per-hop statistics",
+  "x-jsonize": {
+    "definition": "mtr/report",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "report": {
+      "type": "object",
+      "properties": {
+        "started": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "started",
+        "host"
+      ]
+    },
+    "hops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "hop": {
+            "type": "integer"
+          },
+          "host": {
+            "type": "string"
+          },
+          "loss_percent": {
+            "type": "number"
+          },
+          "sent": {
+            "type": "integer"
+          },
+          "last": {
+            "type": "number"
+          },
+          "average": {
+            "type": "number"
+          },
+          "best": {
+            "type": "number"
+          },
+          "worst": {
+            "type": "number"
+          },
+          "stdev": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "hop",
+          "host"
+        ]
+      }
+    }
+  },
+  "required": [
+    "report",
+    "hops"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/xrandr/listmonitors.json",
+  "title": "xrandr/listmonitors",
+  "description": "xrandr --listmonitors monitor geometry",
+  "x-jsonize": {
+    "definition": "xrandr/listmonitors",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "count"
+      ]
+    },
+    "monitors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer"
+          },
+          "automatic": {
+            "type": "boolean"
+          },
+          "primary": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "width": {
+            "type": "integer"
+          },
+          "width_mm": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          },
+          "height_mm": {
+            "type": "integer"
+          },
+          "x": {
+            "type": "integer"
+          },
+          "y": {
+            "type": "integer"
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "index",
+          "automatic",
+          "primary",
+          "name",
+          "width",
+          "width_mm",
+          "height",
+          "height_mm",
+          "x",
+          "y",
+          "outputs"
+        ]
+      }
+    }
+  },
+  "required": [
+    "summary",
+    "monitors"
+  ]
+}

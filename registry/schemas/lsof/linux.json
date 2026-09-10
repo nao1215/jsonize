@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsof/linux.json",
+  "title": "lsof/linux",
+  "description": "lsof default listing of open files",
+  "x-jsonize": {
+    "definition": "lsof/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string"
+      },
+      "fd": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "user": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

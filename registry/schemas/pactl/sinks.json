@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pactl/sinks.json",
+  "title": "pactl/sinks",
+  "description": "pactl list sinks or sources, one block per device",
+  "x-jsonize": {
+    "definition": "pactl/sinks",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "index": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "Sink",
+              "Source"
+            ]
+          },
+          "index": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "kind",
+          "index"
+        ]
+      },
+      "attributes": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "properties": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "ports": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "description"
+          ]
+        }
+      },
+      "formats": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "format"
+          ]
+        }
+      }
+    },
+    "required": [
+      "index",
+      "attributes",
+      "properties",
+      "ports",
+      "formats"
+    ]
+  }
+}

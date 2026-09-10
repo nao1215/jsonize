@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ipcs/semaphores.json",
+  "title": "ipcs/semaphores",
+  "description": "ipcs -s semaphore arrays",
+  "x-jsonize": {
+    "definition": "ipcs/semaphores",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "key": {
+        "type": "string"
+      },
+      "nsems": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "owner": {
+        "type": "string"
+      },
+      "perms": {
+        "type": "string"
+      },
+      "semid": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

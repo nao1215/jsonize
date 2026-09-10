@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/last/busybox.json",
+  "title": "last/busybox",
+  "description": "BusyBox last login records",
+  "x-jsonize": {
+    "definition": "last/busybox",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "user": {
+        "type": "string"
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "host": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "login_time": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "user",
+      "tty",
+      "host",
+      "login_time"
+    ]
+  }
+}

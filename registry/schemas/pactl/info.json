@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pactl/info.json",
+  "title": "pactl/info",
+  "description": "pactl info sound server properties",
+  "x-jsonize": {
+    "definition": "pactl/info",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {},
+  "additionalProperties": {
+    "type": "string"
+  }
+}

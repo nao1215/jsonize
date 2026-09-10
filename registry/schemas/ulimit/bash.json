@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ulimit/bash.json",
+  "title": "ulimit/bash",
+  "description": "ulimit -a resource limits as bash prints them",
+  "x-jsonize": {
+    "definition": "ulimit/bash",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "resource": {
+        "type": "string"
+      },
+      "unit": {
+        "type": "string"
+      },
+      "flag": {
+        "type": "string"
+      },
+      "value": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "resource",
+      "flag",
+      "value"
+    ]
+  }
+}

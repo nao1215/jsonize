@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/cpu.json",
+  "title": "sar/cpu",
+  "description": "sar -u CPU utilisation",
+  "x-jsonize": {
+    "definition": "sar/cpu",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "cpu": {
+        "type": "string"
+      },
+      "user_percent": {
+        "type": "number"
+      },
+      "nice_percent": {
+        "type": "number"
+      },
+      "system_percent": {
+        "type": "number"
+      },
+      "iowait_percent": {
+        "type": "number"
+      },
+      "steal_percent": {
+        "type": "number"
+      },
+      "idle_percent": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "cpu",
+      "user_percent",
+      "nice_percent",
+      "system_percent",
+      "iowait_percent",
+      "steal_percent",
+      "idle_percent"
+    ]
+  }
+}

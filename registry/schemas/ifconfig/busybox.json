@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ifconfig/busybox.json",
+  "title": "ifconfig/busybox",
+  "description": "BusyBox ifconfig per-interface block",
+  "x-jsonize": {
+    "definition": "ifconfig/busybox",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "interface": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "encap": {
+            "type": "string"
+          },
+          "hwaddr": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "encap",
+          "hwaddr"
+        ]
+      },
+      "inet": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "peer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "broadcast": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "mask": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "address",
+          "peer",
+          "broadcast",
+          "mask"
+        ]
+      },
+      "inet6": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "prefixlen": {
+              "type": "integer"
+            },
+            "scope": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "address",
+            "prefixlen",
+            "scope"
+          ]
+        }
+      },
+      "status": {
+        "type": "object",
+        "properties": {
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mtu": {
+            "type": "integer"
+          },
+          "metric": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "flags",
+          "mtu",
+          "metric"
+        ]
+      },
+      "rx": {
+        "type": "object",
+        "properties": {
+          "packets": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "integer"
+          },
+          "dropped": {
+            "type": "integer"
+          },
+          "overruns": {
+            "type": "integer"
+          },
+          "frame": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "packets",
+          "errors",
+          "dropped",
+          "overruns",
+          "frame"
+        ]
+      },
+      "tx": {
+        "type": "object",
+        "properties": {
+          "packets": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "integer"
+          },
+          "dropped": {
+            "type": "integer"
+          },
+          "overruns": {
+            "type": "integer"
+          },
+          "carrier": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "packets",
+          "errors",
+          "dropped",
+          "overruns",
+          "carrier"
+        ]
+      },
+      "queue": {
+        "type": "object",
+        "properties": {
+          "collisions": {
+            "type": "integer"
+          },
+          "txqueuelen": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "collisions",
+          "txqueuelen"
+        ]
+      },
+      "bytes": {
+        "type": "object",
+        "properties": {
+          "rx": {
+            "type": "integer"
+          },
+          "rx_human": {
+            "type": "string"
+          },
+          "tx": {
+            "type": "integer"
+          },
+          "tx_human": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "rx",
+          "rx_human",
+          "tx",
+          "tx_human"
+        ]
+      }
+    },
+    "required": [
+      "interface",
+      "inet",
+      "inet6",
+      "status",
+      "rx",
+      "tx",
+      "queue",
+      "bytes"
+    ]
+  }
+}

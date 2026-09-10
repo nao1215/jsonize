@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/losetup/linux.json",
+  "title": "losetup/linux",
+  "description": "losetup --list table of loop devices",
+  "x-jsonize": {
+    "definition": "losetup/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "autoclear": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "dio": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "log_sec": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "name": {
+        "type": "string"
+      },
+      "offset": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "ro": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "sizelimit": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsblk/topology.json",
+  "title": "lsblk/topology",
+  "description": "lsblk -t, per-device I/O topology",
+  "x-jsonize": {
+    "definition": "lsblk/topology",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "alignment": {
+        "type": "integer"
+      },
+      "log_sec": {
+        "type": "integer"
+      },
+      "min_io": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "opt_io": {
+        "type": "integer"
+      },
+      "phy_sec": {
+        "type": "integer"
+      },
+      "ra": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "rota": {
+        "type": "boolean"
+      },
+      "rq_size": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

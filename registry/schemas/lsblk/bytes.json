@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsblk/bytes.json",
+  "title": "lsblk/bytes",
+  "description": "lsblk -b, sizes as exact byte counts",
+  "x-jsonize": {
+    "definition": "lsblk/bytes",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "maj_min": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "rm": {
+        "type": "boolean"
+      },
+      "ro": {
+        "type": "boolean"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "type": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

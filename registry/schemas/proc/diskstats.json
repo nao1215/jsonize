@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/diskstats.json",
+  "title": "proc/diskstats",
+  "description": "/proc/diskstats per-device I/O counters (20-field rows, Linux 5.5 and later)",
+  "x-jsonize": {
+    "definition": "proc/diskstats",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "major": {
+        "type": "integer"
+      },
+      "minor": {
+        "type": "integer"
+      },
+      "device": {
+        "type": "string"
+      },
+      "reads_completed": {
+        "type": "integer"
+      },
+      "reads_merged": {
+        "type": "integer"
+      },
+      "sectors_read": {
+        "type": "integer"
+      },
+      "read_ms": {
+        "type": "integer"
+      },
+      "writes_completed": {
+        "type": "integer"
+      },
+      "writes_merged": {
+        "type": "integer"
+      },
+      "sectors_written": {
+        "type": "integer"
+      },
+      "write_ms": {
+        "type": "integer"
+      },
+      "io_in_progress": {
+        "type": "integer"
+      },
+      "io_ms": {
+        "type": "integer"
+      },
+      "weighted_io_ms": {
+        "type": "integer"
+      },
+      "discards_completed": {
+        "type": "integer"
+      },
+      "discards_merged": {
+        "type": "integer"
+      },
+      "sectors_discarded": {
+        "type": "integer"
+      },
+      "discard_ms": {
+        "type": "integer"
+      },
+      "flush_completed": {
+        "type": "integer"
+      },
+      "flush_ms": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "major",
+      "minor",
+      "device",
+      "reads_completed",
+      "reads_merged",
+      "sectors_read",
+      "read_ms",
+      "writes_completed",
+      "writes_merged",
+      "sectors_written",
+      "write_ms",
+      "io_in_progress",
+      "io_ms",
+      "weighted_io_ms",
+      "discards_completed",
+      "discards_merged",
+      "sectors_discarded",
+      "discard_ms",
+      "flush_completed",
+      "flush_ms"
+    ]
+  }
+}

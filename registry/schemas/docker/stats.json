@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/docker/stats.json",
+  "title": "docker/stats",
+  "description": "docker stats --no-stream",
+  "x-jsonize": {
+    "definition": "docker/stats",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "container_id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "cpu_percent": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "mem_usage": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "mem_limit": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "mem_percent": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "net_input": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "net_output": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "block_input": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "block_output": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "pids": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "container_id",
+      "name",
+      "cpu_percent",
+      "mem_usage",
+      "mem_limit",
+      "mem_percent",
+      "net_input",
+      "net_output",
+      "block_input",
+      "block_output",
+      "pids"
+    ]
+  }
+}

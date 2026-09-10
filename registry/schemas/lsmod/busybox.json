@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsmod/busybox.json",
+  "title": "lsmod/busybox",
+  "description": "BusyBox lsmod loaded kernel modules",
+  "x-jsonize": {
+    "definition": "lsmod/busybox",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "used_by_count": {
+        "type": "integer"
+      },
+      "used_by": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "name",
+      "size",
+      "used_by_count"
+    ]
+  }
+}

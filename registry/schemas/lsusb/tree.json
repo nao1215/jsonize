@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsusb/tree.json",
+  "title": "lsusb/tree",
+  "description": "lsusb -t, the USB buses and what is plugged into them",
+  "x-jsonize": {
+    "definition": "lsusb/tree",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/node"
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "properties": {
+        "bus": {
+          "type": "integer"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "device": {
+          "type": "integer"
+        },
+        "class": {
+          "type": "string"
+        },
+        "driver": {
+          "type": "string"
+        },
+        "speed": {
+          "type": "string"
+        },
+        "interface": {
+          "type": "integer"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "required": [
+        "port",
+        "device",
+        "class",
+        "driver",
+        "speed",
+        "children"
+      ]
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/bridge/link.json",
+  "title": "bridge/link",
+  "description": "bridge link, one line per bridge port",
+  "x-jsonize": {
+    "definition": "bridge/link",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "index": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "peer": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "mtu": {
+        "type": "integer"
+      },
+      "master": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      },
+      "priority": {
+        "type": "integer"
+      },
+      "cost": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "index",
+      "name",
+      "flags",
+      "mtu"
+    ]
+  }
+}

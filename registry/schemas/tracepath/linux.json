@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/tracepath/linux.json",
+  "title": "tracepath/linux",
+  "description": "tracepath path MTU discovery",
+  "x-jsonize": {
+    "definition": "tracepath/linux",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "hops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "hop": {
+            "type": "integer"
+          },
+          "host": {
+            "type": "string"
+          },
+          "pmtu": {
+            "type": "integer"
+          },
+          "time_ms": {
+            "type": "number"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "hop"
+        ]
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "pmtu": {
+          "type": "integer"
+        },
+        "hops": {
+          "type": "integer"
+        },
+        "back": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "pmtu"
+      ]
+    }
+  },
+  "required": [
+    "hops",
+    "summary"
+  ]
+}

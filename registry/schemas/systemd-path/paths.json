@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemd-path/paths.json",
+  "title": "systemd-path/paths",
+  "description": "systemd-path system and user path list",
+  "x-jsonize": {
+    "definition": "systemd-path/paths",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "path"
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/stat/gnu-terse.json",
+  "title": "stat/gnu-terse",
+  "description": "GNU coreutils stat -t (one line per file, no labels)",
+  "x-jsonize": {
+    "definition": "stat/gnu-terse",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "blocks": {
+        "type": "integer"
+      },
+      "raw_mode": {
+        "type": "string"
+      },
+      "uid": {
+        "type": "integer"
+      },
+      "gid": {
+        "type": "integer"
+      },
+      "device": {
+        "type": "string"
+      },
+      "inode": {
+        "type": "integer"
+      },
+      "links": {
+        "type": "integer"
+      },
+      "device_major": {
+        "type": "string"
+      },
+      "device_minor": {
+        "type": "string"
+      },
+      "access_time": {
+        "type": "integer"
+      },
+      "modify_time": {
+        "type": "integer"
+      },
+      "change_time": {
+        "type": "integer"
+      },
+      "birth_time": {
+        "type": "integer"
+      },
+      "io_block": {
+        "type": "integer"
+      },
+      "context": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "size",
+      "blocks",
+      "raw_mode",
+      "uid",
+      "gid",
+      "device",
+      "inode",
+      "links",
+      "device_major",
+      "device_minor",
+      "access_time",
+      "modify_time",
+      "change_time",
+      "birth_time",
+      "io_block"
+    ]
+  }
+}

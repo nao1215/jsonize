@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/etc/protocols.json",
+  "title": "etc/protocols",
+  "description": "/etc/protocols entries",
+  "x-jsonize": {
+    "definition": "etc/protocols",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "number": {
+        "type": "integer"
+      },
+      "aliases": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "name",
+      "number",
+      "aliases"
+    ]
+  }
+}

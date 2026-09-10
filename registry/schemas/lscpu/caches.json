@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lscpu/caches.json",
+  "title": "lscpu/caches",
+  "description": "lscpu -C, one row per cache",
+  "x-jsonize": {
+    "definition": "lscpu/caches",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "coherency_size": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "level": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "name": {
+        "type": "string"
+      },
+      "phy_line": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "sets": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "ways": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

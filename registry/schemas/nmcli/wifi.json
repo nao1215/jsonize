@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/nmcli/wifi.json",
+  "title": "nmcli/wifi",
+  "description": "nmcli device wifi list",
+  "x-jsonize": {
+    "definition": "nmcli/wifi",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "bssid": {
+        "type": "string"
+      },
+      "chan": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "in_use": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "security": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      },
+      "signal": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "ssid": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

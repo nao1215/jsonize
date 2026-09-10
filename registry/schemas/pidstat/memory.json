@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pidstat/memory.json",
+  "title": "pidstat/memory",
+  "description": "pidstat -r per-task memory use",
+  "x-jsonize": {
+    "definition": "pidstat/memory",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "string"
+            },
+            "uid": {
+              "type": "integer"
+            },
+            "pid": {
+              "type": "integer"
+            },
+            "minflt_s": {
+              "type": "number"
+            },
+            "majflt_s": {
+              "type": "number"
+            },
+            "vsz": {
+              "type": "integer"
+            },
+            "rss": {
+              "type": "integer"
+            },
+            "mem_percent": {
+              "type": "number"
+            },
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "time",
+            "uid",
+            "pid",
+            "minflt_s",
+            "majflt_s",
+            "vsz",
+            "rss",
+            "mem_percent",
+            "command"
+          ]
+        }
+      }
+    },
+    "required": [
+      "tasks"
+    ]
+  }
+}

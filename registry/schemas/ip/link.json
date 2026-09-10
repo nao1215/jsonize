@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ip/link.json",
+  "title": "ip/link",
+  "description": "ip link, one block per interface",
+  "x-jsonize": {
+    "definition": "ip/link",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "interface": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "peer": {
+            "type": "string"
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mtu": {
+            "type": "integer"
+          },
+          "qdisc": {
+            "type": "string"
+          },
+          "master": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "qlen": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "index",
+          "name",
+          "flags",
+          "mtu",
+          "qdisc",
+          "state",
+          "mode",
+          "group"
+        ]
+      },
+      "link": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "address": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "broadcast": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "netnsid": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "type",
+          "address",
+          "broadcast"
+        ]
+      },
+      "alias": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      },
+      "altnames": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      }
+    },
+    "required": [
+      "interface",
+      "link",
+      "alias",
+      "altnames"
+    ]
+  }
+}

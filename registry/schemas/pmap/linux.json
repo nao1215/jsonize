@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pmap/linux.json",
+  "title": "pmap/linux",
+  "description": "pmap process memory map",
+  "x-jsonize": {
+    "definition": "pmap/linux",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "process": {
+      "type": "object",
+      "properties": {
+        "pid": {
+          "type": "integer"
+        },
+        "command": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "pid",
+        "command"
+      ]
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "kilobytes": {
+            "type": "integer"
+          },
+          "permissions": {
+            "type": "string"
+          },
+          "mapping": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "address",
+          "kilobytes",
+          "permissions",
+          "mapping"
+        ]
+      }
+    }
+  },
+  "required": [
+    "process",
+    "mappings"
+  ]
+}

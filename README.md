@@ -46,6 +46,7 @@ jz < captured.txt            # or output captured earlier
 jz --file captured.txt
 jz run COMMAND [args...]     # let jz run the command and convert its stdout
 jz list                      # what jz can read
+jz list --schema df gnu      # the JSON Schema of what one definition produces
 jz test [DIR...]             # check parser definitions of your own
 ```
 

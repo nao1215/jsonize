@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ipcs/shared-memory.json",
+  "title": "ipcs/shared-memory",
+  "description": "ipcs -m shared memory segments",
+  "x-jsonize": {
+    "definition": "ipcs/shared-memory",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "bytes": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "key": {
+        "type": "string"
+      },
+      "nattch": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "owner": {
+        "type": "string"
+      },
+      "perms": {
+        "type": "string"
+      },
+      "shmid": {
+        "type": "integer"
+      },
+      "status": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

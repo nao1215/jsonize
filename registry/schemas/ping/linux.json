@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ping/linux.json",
+  "title": "ping/linux",
+  "description": "ping replies and summary (iputils)",
+  "x-jsonize": {
+    "definition": "ping/linux",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "destination": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "data_bytes": {
+          "type": "integer"
+        },
+        "packet_bytes": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "address",
+        "data_bytes",
+        "packet_bytes"
+      ]
+    },
+    "replies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "bytes": {
+            "type": "integer"
+          },
+          "responder": {
+            "type": "string"
+          },
+          "icmp_seq": {
+            "type": "integer"
+          },
+          "ttl": {
+            "type": "integer"
+          },
+          "time_ms": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "bytes",
+          "responder",
+          "icmp_seq",
+          "ttl",
+          "time_ms"
+        ]
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "properties": {
+        "packets_transmitted": {
+          "type": "integer"
+        },
+        "packets_received": {
+          "type": "integer"
+        },
+        "packet_loss_percent": {
+          "type": "number"
+        },
+        "time_ms": {
+          "type": "integer"
+        },
+        "round_trip_min_ms": {
+          "type": "number"
+        },
+        "round_trip_avg_ms": {
+          "type": "number"
+        },
+        "round_trip_max_ms": {
+          "type": "number"
+        },
+        "round_trip_mdev_ms": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "packets_transmitted",
+        "packets_received",
+        "packet_loss_percent",
+        "time_ms",
+        "round_trip_min_ms",
+        "round_trip_avg_ms",
+        "round_trip_max_ms",
+        "round_trip_mdev_ms"
+      ]
+    }
+  },
+  "required": [
+    "destination",
+    "replies",
+    "statistics"
+  ]
+}

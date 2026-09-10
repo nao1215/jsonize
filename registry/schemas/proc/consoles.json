@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/consoles.json",
+  "title": "proc/consoles",
+  "description": "/proc/consoles registered system consoles",
+  "x-jsonize": {
+    "definition": "proc/consoles",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "string"
+      },
+      "read": {
+        "type": "boolean"
+      },
+      "write": {
+        "type": "boolean"
+      },
+      "unblank": {
+        "type": "boolean"
+      },
+      "flags": {
+        "type": "string"
+      },
+      "major": {
+        "type": "integer"
+      },
+      "minor": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "device",
+      "read",
+      "write",
+      "unblank",
+      "flags",
+      "major",
+      "minor"
+    ]
+  }
+}

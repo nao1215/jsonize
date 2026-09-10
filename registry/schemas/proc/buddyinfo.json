@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/buddyinfo.json",
+  "title": "proc/buddyinfo",
+  "description": "/proc/buddyinfo free blocks per zone and allocation order",
+  "x-jsonize": {
+    "definition": "proc/buddyinfo",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "node": {
+        "type": "integer"
+      },
+      "zone": {
+        "type": "string"
+      },
+      "free_blocks": {
+        "type": "array",
+        "items": {
+          "type": "integer"
+        }
+      }
+    },
+    "required": [
+      "node",
+      "zone",
+      "free_blocks"
+    ]
+  }
+}

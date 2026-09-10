@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/gnu-inodes-human.json",
+  "title": "df/gnu-inodes-human",
+  "description": "df -ih on GNU coreutils, rounded inode counts",
+  "x-jsonize": {
+    "definition": "df/gnu-inodes-human",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "inodes": {
+        "type": "string"
+      },
+      "iused": {
+        "type": "string"
+      },
+      "ifree": {
+        "type": "string"
+      },
+      "iuse_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "inodes",
+      "iused",
+      "ifree",
+      "iuse_percent",
+      "mounted_on"
+    ]
+  }
+}

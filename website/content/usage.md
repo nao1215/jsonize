@@ -48,8 +48,30 @@ pipe there is no such answer at all: nothing identifies an empty input.
 ```
 
 `jz run` adds `--env NAME=VALUE`, `--keep-locale` and `--timeout`, which
-control the command rather than the conversion. `jz list` adds `--json`
-and `--sources`, and `jz test` adds `--update` and `--decoys`.
+control the command rather than the conversion. `jz list` adds `--json`,
+`--schema` and `--sources`, and `jz test` adds `--update` and `--decoys`.
+
+## The shape of the output
+
+What a definition produces is a contract, and `jz list --schema` prints
+it as a JSON Schema: the keys, their types, which are always there, which
+may be null, and the values a key can take when the definition names
+them.
+
+```console
+$ jz list --schema df gnu | jq -c '.items.properties.use_percent'
+{"type":["integer","null"]}
+```
+
+The schema is derived from the definition, so it cannot drift from what
+jz prints; every fixture in the registry is checked against its own. The
+official ones are also published at
+`https://nao1215.github.io/jsonize/schemas/COMMAND/VARIANT.json`, and
+each carries the version of its contract in `x-jsonize.version`. The
+version goes up whenever a change could break a program reading the
+output, and nothing else moves it; the JSON jz prints stays as it is,
+with no version inside it. [Parsers](../parsers/#what-each-definition-produces)
+lists what counts as breaking.
 
 ## Choosing the keys
 

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/swap.json",
+  "title": "sar/swap",
+  "description": "sar -S swap space utilisation",
+  "x-jsonize": {
+    "definition": "sar/swap",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "kbswpfree": {
+        "type": "integer"
+      },
+      "kbswpused": {
+        "type": "integer"
+      },
+      "swpused_percent": {
+        "type": "number"
+      },
+      "kbswpcad": {
+        "type": "integer"
+      },
+      "swpcad_percent": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "kbswpfree",
+      "kbswpused",
+      "swpused_percent",
+      "kbswpcad",
+      "swpcad_percent"
+    ]
+  }
+}

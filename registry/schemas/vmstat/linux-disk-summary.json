@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/vmstat/linux-disk-summary.json",
+  "title": "vmstat/linux-disk-summary",
+  "description": "vmstat -D, disk activity totalled over all devices",
+  "x-jsonize": {
+    "definition": "vmstat/linux-disk-summary",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "value",
+      "name"
+    ]
+  }
+}

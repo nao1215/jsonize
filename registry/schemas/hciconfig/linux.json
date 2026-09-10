@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/hciconfig/linux.json",
+  "title": "hciconfig/linux",
+  "description": "hciconfig Bluetooth adapter listing",
+  "x-jsonize": {
+    "definition": "hciconfig/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "bus": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "type",
+          "bus"
+        ]
+      },
+      "address": {
+        "type": "object",
+        "properties": {
+          "bd_address": {
+            "type": "string"
+          },
+          "acl_mtu": {
+            "type": "integer"
+          },
+          "acl_packets": {
+            "type": "integer"
+          },
+          "sco_mtu": {
+            "type": "integer"
+          },
+          "sco_packets": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "bd_address",
+          "acl_mtu",
+          "acl_packets",
+          "sco_mtu",
+          "sco_packets"
+        ]
+      },
+      "state": {
+        "type": "object",
+        "properties": {
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "flags"
+        ]
+      },
+      "rx": {
+        "type": "object",
+        "properties": {
+          "bytes": {
+            "type": "integer"
+          },
+          "acl": {
+            "type": "integer"
+          },
+          "sco": {
+            "type": "integer"
+          },
+          "events": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "bytes",
+          "acl",
+          "sco",
+          "events",
+          "errors"
+        ]
+      },
+      "tx": {
+        "type": "object",
+        "properties": {
+          "bytes": {
+            "type": "integer"
+          },
+          "acl": {
+            "type": "integer"
+          },
+          "sco": {
+            "type": "integer"
+          },
+          "commands": {
+            "type": "integer"
+          },
+          "errors": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "bytes",
+          "acl",
+          "sco",
+          "commands",
+          "errors"
+        ]
+      },
+      "attributes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        }
+      }
+    },
+    "required": [
+      "device",
+      "address",
+      "state",
+      "rx",
+      "tx",
+      "attributes"
+    ]
+  }
+}

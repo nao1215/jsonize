@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/factor/default.json",
+  "title": "factor/default",
+  "description": "factor prime factors of each number",
+  "x-jsonize": {
+    "definition": "factor/default",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "number": {
+        "type": "string"
+      },
+      "factors": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "number",
+      "factors"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/paging.json",
+  "title": "sar/paging",
+  "description": "sar -B paging statistics",
+  "x-jsonize": {
+    "definition": "sar/paging",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "pgpgin_per_s": {
+        "type": "number"
+      },
+      "pgpgout_per_s": {
+        "type": "number"
+      },
+      "fault_per_s": {
+        "type": "number"
+      },
+      "majflt_per_s": {
+        "type": "number"
+      },
+      "pgfree_per_s": {
+        "type": "number"
+      },
+      "pgscank_per_s": {
+        "type": "number"
+      },
+      "pgscand_per_s": {
+        "type": "number"
+      },
+      "pgsteal_per_s": {
+        "type": "number"
+      },
+      "pgprom_per_s": {
+        "type": "number"
+      },
+      "pgdem_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "pgpgin_per_s",
+      "pgpgout_per_s",
+      "fault_per_s",
+      "majflt_per_s",
+      "pgfree_per_s",
+      "pgscank_per_s",
+      "pgscand_per_s",
+      "pgsteal_per_s",
+      "pgprom_per_s",
+      "pgdem_per_s"
+    ]
+  }
+}

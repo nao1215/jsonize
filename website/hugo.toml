@@ -69,3 +69,10 @@ target = "assets"
 [[module.mounts]]
 source = "../demo"
 target = "static/demo"
+
+# The output schemas are generated into the registry beside the
+# definitions they describe, and checked there; the site serves the same
+# files at the $id each of them states.
+[[module.mounts]]
+source = "../registry/schemas"
+target = "static/schemas"

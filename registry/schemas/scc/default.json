@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/scc/default.json",
+  "title": "scc/default",
+  "description": "scc source line count table",
+  "x-jsonize": {
+    "definition": "scc/default",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "total": {
+      "type": "object",
+      "properties": {
+        "files": {
+          "type": "string"
+        },
+        "lines": {
+          "type": "string"
+        },
+        "blanks": {
+          "type": "string"
+        },
+        "comments": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "complexity": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "files",
+        "lines",
+        "blanks",
+        "comments",
+        "code",
+        "complexity"
+      ]
+    },
+    "estimates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "model",
+          "value"
+        ]
+      }
+    },
+    "processed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "bytes": {
+            "type": "integer"
+          },
+          "megabytes": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "bytes",
+          "megabytes",
+          "unit"
+        ]
+      }
+    }
+  },
+  "required": [
+    "languages",
+    "total",
+    "estimates",
+    "processed"
+  ]
+}

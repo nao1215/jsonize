@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ps/posix.json",
+  "title": "ps/posix",
+  "description": "ps default columns (PID, TTY, TIME, CMD)",
+  "x-jsonize": {
+    "definition": "ps/posix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "pid": {
+        "type": "integer"
+      },
+      "tty": {
+        "type": "string"
+      },
+      "time": {
+        "type": "number"
+      },
+      "command": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "pid",
+      "tty",
+      "time",
+      "command"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/findmnt/linux.json",
+  "title": "findmnt/linux",
+  "description": "findmnt mount tree",
+  "x-jsonize": {
+    "definition": "findmnt/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tree_prefix": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "target": {
+        "type": "string"
+      },
+      "source": {
+        "type": "string"
+      },
+      "fstype": {
+        "type": "string"
+      },
+      "options": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "tree_prefix",
+      "target",
+      "source",
+      "fstype",
+      "options"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sha384sum/posix.json",
+  "title": "sha384sum/posix",
+  "description": "sha384sum checksum lines",
+  "x-jsonize": {
+    "definition": "sha384sum/posix",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "escaped": {
+        "type": "boolean"
+      },
+      "checksum": {
+        "type": "string"
+      },
+      "file": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "checksum",
+      "file"
+    ]
+  }
+}

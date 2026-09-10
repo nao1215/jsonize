@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/for-each-ref.json",
+  "title": "git/for-each-ref",
+  "description": "git for-each-ref default format",
+  "x-jsonize": {
+    "definition": "git/for-each-ref",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "object": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "refname": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "object",
+      "type",
+      "refname"
+    ]
+  }
+}

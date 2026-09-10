@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemd-analyze/critical-chain.json",
+  "title": "systemd-analyze/critical-chain",
+  "description": "systemd-analyze critical-chain, the units the boot waited on",
+  "x-jsonize": {
+    "definition": "systemd-analyze/critical-chain",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/node"
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "string"
+        },
+        "activated": {
+          "type": "number"
+        },
+        "startup": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "required": [
+        "unit",
+        "children"
+      ]
+    }
+  }
+}

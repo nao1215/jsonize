@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/parted/machine.json",
+  "title": "parted/machine",
+  "description": "parted -m, device description and partition list",
+  "x-jsonize": {
+    "definition": "parted/machine",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "disk": {
+        "type": "object",
+        "properties": {
+          "device": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "transport": {
+            "type": "string"
+          },
+          "logical_sector_size": {
+            "type": "integer"
+          },
+          "physical_sector_size": {
+            "type": "integer"
+          },
+          "partition_table": {
+            "type": "string"
+          },
+          "model": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "device",
+          "size",
+          "transport",
+          "logical_sector_size",
+          "physical_sector_size",
+          "partition_table",
+          "model",
+          "flags"
+        ]
+      },
+      "partitions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "number": {
+              "type": "integer"
+            },
+            "start": {
+              "type": "string"
+            },
+            "end": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "file_system": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "flags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "number",
+            "start",
+            "end",
+            "size",
+            "file_system",
+            "name",
+            "flags"
+          ]
+        }
+      }
+    },
+    "required": [
+      "disk",
+      "partitions"
+    ]
+  }
+}

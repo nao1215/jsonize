@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/stat.json",
+  "title": "proc/stat",
+  "description": "/proc/stat kernel and per-CPU activity counters",
+  "x-jsonize": {
+    "definition": "proc/stat",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "cpu": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "user": {
+            "type": "integer"
+          },
+          "nice": {
+            "type": "integer"
+          },
+          "system": {
+            "type": "integer"
+          },
+          "idle": {
+            "type": "integer"
+          },
+          "iowait": {
+            "type": "integer"
+          },
+          "irq": {
+            "type": "integer"
+          },
+          "softirq": {
+            "type": "integer"
+          },
+          "steal": {
+            "type": "integer"
+          },
+          "guest": {
+            "type": "integer"
+          },
+          "guest_nice": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "user",
+          "nice",
+          "system",
+          "idle",
+          "iowait",
+          "irq",
+          "softirq",
+          "steal",
+          "guest",
+          "guest_nice"
+        ]
+      }
+    },
+    "interrupts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "intr",
+              "softirq"
+            ]
+          },
+          "total": {
+            "type": "integer"
+          },
+          "counters": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "total",
+          "counters"
+        ]
+      }
+    },
+    "counters": {
+      "type": "object",
+      "properties": {
+        "btime": {
+          "type": "integer"
+        },
+        "ctxt": {
+          "type": "integer"
+        },
+        "processes": {
+          "type": "integer"
+        },
+        "procs_blocked": {
+          "type": "integer"
+        },
+        "procs_running": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "cpu",
+    "interrupts",
+    "counters"
+  ]
+}

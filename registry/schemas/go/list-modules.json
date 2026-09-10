@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/go/list-modules.json",
+  "title": "go/list-modules",
+  "description": "go list -m all build list of modules",
+  "x-jsonize": {
+    "definition": "go/list-modules",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string"
+      },
+      "version": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "replacement": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "replacement_version": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "path",
+      "version",
+      "replacement",
+      "replacement_version"
+    ]
+  }
+}

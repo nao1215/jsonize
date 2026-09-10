@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsblk/linux.json",
+  "title": "lsblk/linux",
+  "description": "lsblk default output (util-linux)",
+  "x-jsonize": {
+    "definition": "lsblk/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "maj_min": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "rm": {
+        "type": "boolean"
+      },
+      "ro": {
+        "type": "boolean"
+      },
+      "size": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

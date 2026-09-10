@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ls/long-inode.json",
+  "title": "ls/long-inode",
+  "description": "ls -li long listing with the inode number",
+  "x-jsonize": {
+    "definition": "ls/long-inode",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "inode": {
+        "type": "integer"
+      },
+      "flags": {
+        "type": "string"
+      },
+      "links": {
+        "type": "integer"
+      },
+      "owner": {
+        "type": "string"
+      },
+      "group": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "date": {
+        "type": "string"
+      },
+      "filename": {
+        "type": "string"
+      },
+      "link_to": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "inode",
+      "flags",
+      "links",
+      "owner",
+      "group",
+      "size",
+      "date",
+      "filename"
+    ]
+  }
+}

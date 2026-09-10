@@ -16,12 +16,14 @@ package conformance
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/fs"
 	"path"
 	"reflect"
 	"strings"
 
+	"github.com/nao1215/jsonize/internal/schema"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
@@ -181,6 +183,15 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 		return res
 	}
 	res.Actual = buf.Bytes()
+	// The output contract is derived from the definition, and every
+	// fixture is a document the definition produced, so each has to fit
+	// the schema: a key it does not name, a null where it promises a
+	// value, an integer where it says string. A mismatch is the generator
+	// and the engine disagreeing about what the definition produces.
+	if errs := schema.Validate(schema.Generate(e.Def, 1), res.Actual); len(errs) > 0 {
+		res.Err = fmt.Errorf("the output does not fit the schema derived from the definition: %w", errors.Join(errs...))
+		return res
+	}
 	if opts.Update {
 		return res
 	}

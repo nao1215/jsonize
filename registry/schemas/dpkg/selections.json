@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/dpkg/selections.json",
+  "title": "dpkg/selections",
+  "description": "dpkg --get-selections, each package and its selection state",
+  "x-jsonize": {
+    "definition": "dpkg/selections",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "package": {
+        "type": "string"
+      },
+      "selection": {
+        "type": "string",
+        "enum": [
+          "deinstall",
+          "hold",
+          "install",
+          "purge",
+          "unknown"
+        ]
+      }
+    },
+    "required": [
+      "package",
+      "selection"
+    ]
+  }
+}

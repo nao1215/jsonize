@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gpg/version.json",
+  "title": "gpg/version",
+  "description": "gpg --version, the build and the algorithms it supports",
+  "x-jsonize": {
+    "definition": "gpg/version",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "object",
+      "properties": {
+        "implementation": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "implementation",
+        "version"
+      ]
+    },
+    "libraries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "version"
+        ]
+      }
+    },
+    "home": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ]
+    },
+    "algorithms": {
+      "type": "object",
+      "properties": {
+        "AEAD": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "Cipher": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "Compression": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "Hash": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "Pubkey": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "version",
+    "libraries",
+    "home",
+    "algorithms"
+  ]
+}

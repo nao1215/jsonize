@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/efibootmgr/linux.json",
+  "title": "efibootmgr/linux",
+  "description": "efibootmgr boot settings and boot entries",
+  "x-jsonize": {
+    "definition": "efibootmgr/linux",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "settings": {
+      "type": "object",
+      "properties": {
+        "BootOrder": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "boot_number": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          },
+          "device_path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "boot_number",
+          "active",
+          "name",
+          "device_path"
+        ]
+      }
+    }
+  },
+  "required": [
+    "settings",
+    "entries"
+  ]
+}

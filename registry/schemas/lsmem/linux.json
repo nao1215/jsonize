@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsmem/linux.json",
+  "title": "lsmem/linux",
+  "description": "lsmem memory ranges and the summary under them",
+  "x-jsonize": {
+    "definition": "lsmem/linux",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "ranges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "block": {
+            "type": "string"
+          },
+          "range": {
+            "type": "string"
+          },
+          "removable": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "summary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      }
+    }
+  },
+  "required": [
+    "ranges",
+    "summary"
+  ]
+}

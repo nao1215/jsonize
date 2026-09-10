@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/docker/ps.json",
+  "title": "docker/ps",
+  "description": "docker ps and docker ps -a",
+  "x-jsonize": {
+    "definition": "docker/ps",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "container_id": {
+        "type": "string"
+      },
+      "image": {
+        "type": "string"
+      },
+      "command": {
+        "type": "string"
+      },
+      "created": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      },
+      "ports": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "names": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "container_id",
+      "image",
+      "command",
+      "created",
+      "status",
+      "ports",
+      "names"
+    ]
+  }
+}

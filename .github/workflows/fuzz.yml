@@ -23,6 +23,7 @@ jobs:
           - { pkg: ./pkg/definition, name: FuzzLoad }
           - { pkg: ./pkg/engine, name: FuzzFormats }
           - { pkg: ./pkg/engine, name: FuzzParse }
+          - { pkg: ./internal/schema, name: FuzzOutputFitsSchema }
           - { pkg: ./pkg/selector, name: FuzzSelect }
     runs-on: ubuntu-latest
     steps:

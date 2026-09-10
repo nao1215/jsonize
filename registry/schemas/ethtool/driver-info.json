@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ethtool/driver-info.json",
+  "title": "ethtool/driver-info",
+  "description": "ethtool -i driver information",
+  "x-jsonize": {
+    "definition": "ethtool/driver-info",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "bus-info": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "driver": {
+      "type": "string"
+    },
+    "firmware-version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "supports-eeprom-access": {
+      "type": "boolean"
+    },
+    "supports-priv-flags": {
+      "type": "boolean"
+    },
+    "supports-register-dump": {
+      "type": "boolean"
+    },
+    "supports-statistics": {
+      "type": "boolean"
+    },
+    "supports-test": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": {
+    "type": "string"
+  }
+}

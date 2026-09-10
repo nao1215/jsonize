@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/tc/qdisc.json",
+  "title": "tc/qdisc",
+  "description": "tc qdisc show, one line per queueing discipline",
+  "x-jsonize": {
+    "definition": "tc/qdisc",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "kind": {
+        "type": "string"
+      },
+      "handle": {
+        "type": "string"
+      },
+      "dev": {
+        "type": "string"
+      },
+      "parent": {
+        "type": "string"
+      },
+      "refcnt": {
+        "type": "integer"
+      },
+      "options": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "kind",
+      "handle",
+      "parent",
+      "options"
+    ]
+  }
+}

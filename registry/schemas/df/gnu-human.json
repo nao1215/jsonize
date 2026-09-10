@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/gnu-human.json",
+  "title": "df/gnu-human",
+  "description": "GNU coreutils df -h / -H (sizes kept as printed)",
+  "x-jsonize": {
+    "definition": "df/gnu-human",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "used": {
+        "type": "string"
+      },
+      "available": {
+        "type": "string"
+      },
+      "use_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "size",
+      "used",
+      "available",
+      "use_percent",
+      "mounted_on"
+    ]
+  }
+}

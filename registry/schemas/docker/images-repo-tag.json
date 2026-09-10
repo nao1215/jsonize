@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/docker/images-repo-tag.json",
+  "title": "docker/images-repo-tag",
+  "description": "docker images with the REPOSITORY/TAG/IMAGE ID/CREATED/SIZE columns",
+  "x-jsonize": {
+    "definition": "docker/images-repo-tag",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "repository": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "tag": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "image_id": {
+        "type": "string"
+      },
+      "created": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "repository",
+      "tag",
+      "image_id",
+      "created",
+      "size"
+    ]
+  }
+}

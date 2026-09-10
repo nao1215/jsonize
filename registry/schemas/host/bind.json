@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/host/bind.json",
+  "title": "host/bind",
+  "description": "host lookup answers",
+  "x-jsonize": {
+    "definition": "host/bind",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "ipv6_address": {
+        "type": "string"
+      },
+      "priority": {
+        "type": "integer"
+      },
+      "exchanger": {
+        "type": "string"
+      },
+      "alias_for": {
+        "type": "string"
+      },
+      "pointer": {
+        "type": "string"
+      },
+      "target": {
+        "type": "string"
+      },
+      "parameters": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name"
+    ]
+  }
+}

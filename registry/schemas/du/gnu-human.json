@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/du/gnu-human.json",
+  "title": "du/gnu-human",
+  "description": "du -h output (tab separated rounded size and path)",
+  "x-jsonize": {
+    "definition": "du/gnu-human",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "size": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "size",
+      "name"
+    ]
+  }
+}
