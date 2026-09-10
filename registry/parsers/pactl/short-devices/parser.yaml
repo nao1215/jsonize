@@ -17,6 +17,8 @@ metadata:
     - https://man.archlinux.org/man/pactl.1
 detect:
   os: [linux]
+  args:
+    all: ["list", "short"]
   auto_detect: false
   signature:
     all:

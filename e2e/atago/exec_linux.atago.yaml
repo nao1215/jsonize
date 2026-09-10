@@ -881,6 +881,33 @@ scenarios:
               - { path: "$[0].inet.address", equals: 127.0.0.1 }
               - { path: "$[0].inet.mask", equals: 255.0.0.0 }
 
+  # A machine with no sound card has no sinks, and pactl lists them by
+  # printing nothing. That is the empty list; pactl/info, one object, used
+  # to be judged with the listings and turned the answer into exit 4.
+  - name: pactl list of no sinks is the empty list
+    only: {os: linux}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
+    steps:
+      - fixture:
+          file: bin/pactl
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            exit 0
+      - run:
+          command: jz run pactl list short sinks
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+      - run:
+          command: jz run pactl list sinks
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+
   # A diff with nothing in it prints nothing. --numstat is a list, so that
   # is the empty list; git/diff-stat, an object, used to be judged with it
   # and turned the answer into exit 4.
