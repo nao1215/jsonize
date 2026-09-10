@@ -164,6 +164,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz < /dev/null` printed the help on standard output with status 0.
+  /dev/null is a character device, as a terminal is, and jz took any
+  character device for the terminal it prints its help to. It now asks
+  whether standard input is a terminal, so cron, a CI step or `ssh -n`,
+  which leave /dev/null there, get the refusal of empty input (exit 4).
 - A blank line after the last line of the input made 44 definitions
   unidentified: `cat /proc/meminfo; echo` was exit 4. A signature that
   says every line has one shape ends at `\z`, the end of the lines it
