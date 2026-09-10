@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"regexp"
+	"slices"
 	"strings"
 	"unicode/utf8"
 
@@ -186,13 +187,19 @@ type streamer struct {
 	cols   []column
 	header bool
 	block  []line
+	// headerText is the table's header line, which a second table repeats.
+	headerText string
 
 	// csvPending holds the lines of a record a quoted value has not
-	// finished yet; csvCols is the header once it has been read.
+	// finished yet; csvCols is the header once it has been read, and
+	// csvHeader the record it was read from.
 	csvPending []line
 	csvCols    []string
-	// boxRow holds the lines between two rules of a drawn table.
-	boxRow []line
+	csvHeader  []string
+	// boxRow holds the lines between two rules of a drawn table, and
+	// boxHeader the cells of the header row.
+	boxRow    []line
+	boxHeader []any
 	// tree holds the lines of the top-level node that is still open.
 	tree []line
 }
@@ -335,7 +342,16 @@ func (s *streamer) feedTable(l line) error {
 		if err != nil {
 			return err
 		}
-		s.cols, s.header = cols, true
+		s.cols, s.header, s.headerText = cols, true, l.text
+		return nil
+	}
+	if !s.p.Header.None && sameHeader(s.p, s.split(), l.text, s.headerText) {
+		// A second table, whose header says where its own columns are.
+		cols, err := s.resolveHeader(s.p, l, s.split())
+		if err != nil {
+			return err
+		}
+		s.cols = cols
 		return nil
 	}
 	obj, err := s.row(l)
@@ -536,8 +552,11 @@ func (s *streamer) emitCSV(pending []line) error {
 	}
 	for _, row := range rows {
 		if s.csvCols == nil {
-			s.csvCols = csvColumns(s.p, row)
+			s.csvCols, s.csvHeader = csvColumns(s.p, row), row
 			continue
+		}
+		if !s.p.Header.None && slices.Equal(row, s.csvHeader) {
+			continue // the header of a second file joined to the first
 		}
 		obj, err := s.csvRow(s.fields, s.csvCols, row, pending[0].num)
 		if err != nil {
@@ -598,7 +617,11 @@ func (s *streamer) flushBox() error {
 	if !s.header {
 		return s.closeBoxHeaderFrom(group)
 	}
-	obj, err := s.boxObject(s.cols, boxJoin(group, "\n"), s.fields, group[0].num)
+	cells := boxJoin(group, "\n")
+	if slices.Equal(cells, s.boxHeader) {
+		return nil // the header of a second table drawn after the first
+	}
+	obj, err := s.boxObject(s.cols, cells, s.fields, group[0].num)
 	if err != nil {
 		return err
 	}
@@ -610,6 +633,6 @@ func (s *streamer) closeBoxHeaderFrom(group []line) error {
 	if err != nil {
 		return err
 	}
-	s.cols, s.header = cols, true
+	s.cols, s.header, s.boxHeader = cols, true, boxJoin(group, "\n")
 	return nil
 }

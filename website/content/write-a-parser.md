@@ -156,8 +156,11 @@ expression, and a pattern has to reach both ends of the line it reads.
 Then the fixture is changed the ways real input goes wrong — a foreign
 line at the end, the same line in the middle, the whole fixture twice —
 and a definition that still succeeds has to carry the foreign line in
-its result, or return more than one copy. An `ignore` that names more
-than the definition means to drop is what this catches.
+its result. A list read from the fixture twice has to be the records of
+one copy twice, no fewer and nothing in between: a heading matched only
+at the start (`\A` in `select.after`) lets the second copy's heading in
+as a record. An `ignore` that names more than the definition means to
+drop is what this catches.
 
 The opposite changes have to change nothing. The fixture with CRLF line
 endings, with a byte order mark, without its last line break, and with a

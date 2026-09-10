@@ -700,10 +700,11 @@ The finer rules are the ones the first measurement asked for:
   trusted: what it names is what the definition declares worthless. That
   trust is checked from outside. `jz test` adds a foreign line to every
   fixture, at the end and in the middle, and reads every fixture twice
-  over; a definition that succeeds must carry the line in its result or
-  return more than one copy. That found `upower`'s catch-all
-  `ignore: ['^[^:]*$']`, which had been dropping the device type and the
-  history rows of a battery.
+  over; a definition that succeeds must carry the line in its result,
+  and a list read twice must be the records of one copy twice. That
+  found `upower`'s catch-all `ignore: ['^[^:]*$']`, which had been
+  dropping the device type and the history rows of a battery, and a
+  table's second header read as a row of column names.
 
 Blank lines are never unread. They carry no value that could be missing,
 and a definition that keeps them for a parser that wants them

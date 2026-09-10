@@ -117,10 +117,22 @@ func tamperFixture(reg *registry.Registry, f Fixture, opts Options) []Result {
 		// second copy of it has nothing in it to lose.
 		return out
 	}
+	list, isList := single.([]any)
+	if isList && len(list) == 0 {
+		// Two outputs with nothing in them have nothing in them either.
+		return out
+	}
 	twice := withSep(string(f.Case.Input)) + string(f.Case.Input)
 	if v, err := readNamed(reg, f, []byte(twice), opts); err == nil {
 		a, errA := encode(single)
 		b, errB := encode(v)
+		// The records of one output, twice: anything else read a line of
+		// one copy as something it is not, such as the second copy's
+		// header as a row of the first.
+		var want string
+		if isList && errA == nil {
+			want, errA = encode(append(append([]any{}, list...), list...))
+		}
 		switch {
 		case errA != nil:
 			fail("the fixture twice", errA)
@@ -128,9 +140,30 @@ func tamperFixture(reg *registry.Registry, f Fixture, opts Options) []Result {
 			fail("the fixture twice", errB)
 		case a == b:
 			fail("the fixture twice", errors.New("the definition read two copies and returned what it returns for one"))
+		case isList && b != want:
+			fail("the fixture twice", fmt.Errorf("the definition read two copies and returned something other than the records of one twice: %s", firstDifference(want, b)))
 		}
 	}
 	return out
+}
+
+// firstDifference quotes two encodings from a little before where they
+// part.
+func firstDifference(want, got string) string {
+	want, got = strings.TrimSpace(want), strings.TrimSpace(got)
+	i := 0
+	for i < len(want) && i < len(got) && want[i] == got[i] {
+		i++
+	}
+	from := max(0, i-40)
+	clip := func(s string) string {
+		s = s[min(from, len(s)):]
+		if len(s) > 120 {
+			s = s[:120]
+		}
+		return s
+	}
+	return fmt.Sprintf("expected …%s…, got …%s…", clip(want), clip(got))
 }
 
 // readNamed reads input with the fixture's definition named explicitly.

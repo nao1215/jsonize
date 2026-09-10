@@ -51,6 +51,14 @@ func (r *run) parseTable(p *definition.Parse, fields map[string]*definition.Fiel
 	for _, l := range lines {
 		var cells []any
 		var err error
+		if !p.Header.None && sameHeader(p, split, l.text, header.text) {
+			// The output of the command run twice: the second table's
+			// header, which says where its own columns are.
+			if cols, err = r.resolveHeader(p, l, split); err != nil {
+				return nil, err
+			}
+			continue
+		}
 		switch split {
 		case definition.SplitAligned:
 			cells, err = r.alignedRow(l, cols)
@@ -75,6 +83,51 @@ func (r *run) parseTable(p *definition.Parse, fields map[string]*definition.Fiel
 		out = append(out, obj)
 	}
 	return out, nil
+}
+
+// sameHeader reports whether a line of the body repeats the header: the
+// same words, or for a delimited table the same cells, in the same order.
+// That is where a second table starts, the output of the command run
+// twice or of two files joined, and reading it as a row would make a
+// record of the column names.
+//
+// It runs on every row, so it walks both texts without splitting them.
+func sameHeader(p *definition.Parse, split, text, header string) bool {
+	if split == definition.SplitDelimiter {
+		for {
+			a, restA, moreA := strings.Cut(text, p.Delimiter)
+			b, restB, moreB := strings.Cut(header, p.Delimiter)
+			if moreA != moreB || strings.TrimSpace(a) != strings.TrimSpace(b) {
+				return false
+			}
+			if !moreA {
+				return true
+			}
+			text, header = restA, restB
+		}
+	}
+	for {
+		a, restA := nextWord(text)
+		b, restB := nextWord(header)
+		if a != b {
+			return false
+		}
+		if a == "" {
+			return true
+		}
+		text, header = restA, restB
+	}
+}
+
+// nextWord returns the first run of non-space characters of s and what
+// follows it, or "" when s holds none.
+func nextWord(s string) (word, rest string) {
+	s = strings.TrimLeftFunc(s, unicode.IsSpace)
+	end := strings.IndexFunc(s, unicode.IsSpace)
+	if end < 0 {
+		return s, ""
+	}
+	return s[:end], s[end:]
 }
 
 // resolveHeader derives the column list from the header line and the

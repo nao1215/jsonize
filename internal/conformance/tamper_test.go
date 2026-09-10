@@ -36,6 +36,16 @@ func TestTampering(t *testing.T) {
 		"parsers/header/v/parser.yaml":     {Data: []byte("format: 1\ncommand: header\nvariant: v\ndetect: {signature: {all: ['^NAME +SIZE$']}}\ninput: {ignore: ['^NAME +SIZE$']}\nparse: {type: table, header: {none: true, columns: [name, size]}}\n")},
 		"parsers/header/v/testdata/a.txt":  {Data: []byte("NAME SIZE\n")},
 		"parsers/header/v/testdata/a.json": {Data: []byte(`[]`)},
+		// A table header over no rows is read, and two of them are still
+		// no rows.
+		"parsers/emptytable/v/parser.yaml":     {Data: []byte("format: 1\ncommand: emptytable\nvariant: v\ndetect: {signature: {all: ['^ID +NAME$']}}\nparse: {type: table}\n")},
+		"parsers/emptytable/v/testdata/a.txt":  {Data: []byte("ID NAME\n")},
+		"parsers/emptytable/v/testdata/a.json": {Data: []byte(`[]`)},
+		// Only the first heading is the heading, so the second copy's
+		// becomes an item: two copies are not the items of one twice.
+		"parsers/heading/v/parser.yaml":     {Data: []byte("format: 1\ncommand: heading\nvariant: v\ndetect: {signature: {all: ['\\A== list ==$']}}\ninput: {select: {after: '\\A== list ==$'}}\nparse: {type: regex, pattern: '^(?P<item>.+)$'}\n")},
+		"parsers/heading/v/testdata/a.txt":  {Data: []byte("== list ==\napple\npear\n")},
+		"parsers/heading/v/testdata/a.json": {Data: []byte(`[{"item":"apple"},{"item":"pear"}]`)},
 	}
 	src := registry.Source{Name: "s", FS: fsys}
 	reg, err := registry.Load(src)
@@ -59,6 +69,9 @@ func TestTampering(t *testing.T) {
 			"a foreign line at the end: the definition read the text and the line is nowhere in the result",
 			"a foreign line after record 1 of 2: the definition read the text and the line is nowhere in the result",
 			"the fixture twice: the definition read two copies and returned what it returns for one",
+		},
+		"heading/v": {
+			`the fixture twice: the definition read two copies and returned something other than the records of one twice: expected …item":"apple"},{"item":"pear"},{"item":"apple"},{"item":"pear"}]…, got …item":"apple"},{"item":"pear"},{"item":"== list =="},{"item":"apple"},{"item":"pear"}]…`,
 		},
 	}
 	if len(got) != len(want) {
