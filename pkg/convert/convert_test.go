@@ -373,6 +373,17 @@ func TestTimeAssuming(t *testing.T) {
 	if got, ok, err := TimeAssuming("Nov  4 13:17", noYear, nil, Assumptions{Year: 2025}); err != nil || !ok || got != "2025-11-04T13:17:00Z" {
 		t.Errorf("year assumed: %q %v %v", got, ok, err)
 	}
+	// February 29 fits the layout and is not a day of 2025. The message
+	// says that, and names the layout the definition wrote rather than
+	// the one with the assumed year put in front of it.
+	if _, _, err := TimeAssuming("Feb 29 10:00", noYear, nil, Assumptions{Year: 2025}); err == nil ||
+		!strings.Contains(err.Error(), "is not a date in 2025, the year it was assumed to be in") {
+		t.Errorf("a day the assumed year does not have: %v", err)
+	}
+	if _, _, err := TimeAssuming("29 Feb 10:00", noYear, nil, Assumptions{Year: 2025}); err == nil ||
+		!strings.Contains(err.Error(), `does not match the layout "Jan _2 15:04"`) {
+		t.Errorf("text the layout does not describe: %v", err)
+	}
 
 	const zoned = "Mon Jan _2 15:04:05 MST 2006"
 	if got, ok, err := TimeAssuming("Mon Sep  7 10:02:02 JST 2026", zoned, nil, Assumptions{}); err != nil || ok || got != "Mon Sep  7 10:02:02 JST 2026" {

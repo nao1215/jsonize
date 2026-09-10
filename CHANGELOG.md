@@ -190,6 +190,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `--assume-year 2025` over `Feb 29 10:00` said the value did not match
+  the layout, and quoted a layout the definition never wrote (`2006 Jan
+  _2 15:04`, with the year jz put in front). It now says the value is
+  not a date in 2025, and a value that does not fit names the layout as
+  written.
 - A table drawn with a frame and no rule under its header (a headless
   listing, as `psql` prints with a border and no headings) was read as
   a header over several lines, and the answer was `[]` at exit 0. It is
