@@ -99,6 +99,20 @@ scenarios:
             json:
               - { path: "$[0].exposure", gte: 0 }
 
+  # losetup -a prints nothing on a machine without loop devices.
+  - name: losetup -a is one record per loop device
+    only: {os: linux, command: "[ -n \"$(losetup -a)\" ]"}
+    steps:
+      - run:
+          command: jz run --explain losetup -a
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "losetup/associations from embedded"
+          stdout:
+            json:
+              - { path: "$[0].device", matches: "^/dev/loop" }
+
   # blkid prints nothing at all without the right to read the devices.
   - name: blkid -o export is one block of attributes per device
     only: {os: linux, command: "[ -n \"$(blkid -o export)\" ]"}

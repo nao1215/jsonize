@@ -92,7 +92,7 @@ the same reading with settings of your own.
 | `locale` | [`keywords`](../schemas/locale/keywords.json), [`posix`](../schemas/locale/posix.json) |
 | `localectl` | [`linux`](../schemas/localectl/linux.json) |
 | `loginctl` | [`seats`](../schemas/loginctl/seats.json), [`sessions`](../schemas/loginctl/sessions.json), [`users`](../schemas/loginctl/users.json) |
-| `losetup` | [`linux`](../schemas/losetup/linux.json) |
+| `losetup` | [`associations`](../schemas/losetup/associations.json), [`linux`](../schemas/losetup/linux.json) |
 | `ls` | [`long`](../schemas/ls/long.json), [`long-context`](../schemas/ls/long-context.json), [`long-inode`](../schemas/ls/long-inode.json), [`long-no-owner-group`](../schemas/ls/long-no-owner-group.json), [`long-recursive`](../schemas/ls/long-recursive.json) |
 | `lsattr` | [`linux`](../schemas/lsattr/linux.json) |
 | `lsb_release` | [`linux`](../schemas/lsb_release/linux.json) |

@@ -1,0 +1,42 @@
+# `losetup -a`, and `losetup DEVICE`, print one line per loop device in
+# the older association format (util-linux, sys-utils/losetup.c,
+# printf_loopdev): the device, the device number and inode of the
+# backing file in brackets, the file in parentheses, and the offset, the
+# size limit and the encryption when they are set.
+#
+#   /dev/loop0: [2049]:1234 (/var/lib/images/a.img), offset 1048576
+#
+# A user without the right to ask the kernel for them gets empty
+# brackets and no inode ("/dev/loop1: []: (...)"); those are null. A
+# device whose file is gone says " (lost)" after its name.
+format: 1
+command: losetup
+variant: associations
+description: losetup -a, each loop device and the file behind it
+metadata:
+  tags: [linux, storage, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/losetup.8.html
+    - https://github.com/util-linux/util-linux/blob/master/sys-utils/losetup.c
+detect:
+  os: [linux]
+  signature:
+    all:
+      # Every line is one device.
+      - '\A(?:/\S+(?: \(lost\))?: \[[0-9]*\]:[0-9]* \([^\n]*\)[^\n]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<device>/\S+?)(?: (?P<lost>\(lost\)))?: \[(?P<backing_device>[0-9]*)\]:(?P<inode>[0-9]*) \((?P<file>.*?)\)(?:, offset (?P<offset>[0-9]+))?(?:, sizelimit (?P<sizelimit>[0-9]+))?(?:, encryption (?P<encryption>.+) \(type (?P<encryption_type>[0-9]+)\))?$'
+fields:
+  device: {required: true}
+  lost: {type: bool, true_values: ["(lost)"], when_missing: omit}
+  # the device number of the file system the backing file is on, printed
+  # in decimal
+  backing_device: {type: int, null_if: [""]}
+  inode: {type: int, null_if: [""]}
+  file: {required: true}
+  offset: {type: int, when_missing: omit}
+  sizelimit: {type: int, when_missing: omit}
+  encryption: {when_missing: omit}
+  encryption_type: {type: int, when_missing: omit}
