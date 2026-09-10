@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) as vmstat -a -t 1 2 with LC_ALL=C
+description: >-
+  -t adds a timestamp group: the date and time of each sample, in the
+  zone whose abbreviation stands at the head of the column. The value
+  stays as printed.
+os: linux
+args: [-a, -t, 1, 2]
