@@ -1,0 +1,22 @@
+total 0
+drwxr-xr-x 2 root root     260 Sep 10 22:57 by-id
+drwxr-xr-x 2 root root     540 Sep 10 22:57 by-path
+crw-rw---- 1 root input 13, 64 Sep 10 22:57 event0
+crw-rw---- 1 root input 13, 65 Sep 10 22:57 event1
+crw-rw---- 1 root input 13, 74 Sep 10 22:57 event10
+crw-rw---- 1 root input 13, 75 Sep 10 22:57 event11
+crw-rw---- 1 root input 13, 76 Sep 10 22:57 event12
+crw-rw---- 1 root input 13, 77 Sep 10 22:57 event13
+crw-rw---- 1 root input 13, 78 Sep 10 22:57 event14
+crw-rw---- 1 root input 13, 79 Sep 10 22:57 event15
+crw-rw---- 1 root input 13, 80 Sep 10 22:57 event16
+crw-rw---- 1 root input 13, 66 Sep 10 22:57 event2
+crw-rw---- 1 root input 13, 67 Sep 10 22:57 event3
+crw-rw---- 1 root input 13, 68 Sep 10 22:57 event4
+crw-rw---- 1 root input 13, 69 Sep 10 22:57 event5
+crw-rw---- 1 root input 13, 70 Sep 10 22:57 event6
+crw-rw---- 1 root input 13, 71 Sep 10 22:57 event7
+crw-rw---- 1 root input 13, 72 Sep 10 22:57 event8
+crw-rw---- 1 root input 13, 73 Sep 10 22:57 event9
+crw-rw---- 1 root input 13, 63 Sep 10 22:57 mice
+crw-rw---- 1 root input 13, 32 Sep 10 22:57 mouse0

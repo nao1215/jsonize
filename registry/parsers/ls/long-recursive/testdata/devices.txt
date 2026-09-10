@@ -1,0 +1,12 @@
+/dev/input:
+total 0
+drwxr-xr-x 2 root root     540 Sep 10 22:57 by-path
+crw-rw---- 1 root input 13, 64 Sep 10 22:57 event0
+crw-rw---- 1 root input 13, 65 Sep 10 22:57 event1
+crw-rw---- 1 root input 13, 63 Sep 10 22:57 mice
+
+/dev/input/by-path:
+total 0
+lrwxrwxrwx 1 root root  9 Sep 10 22:57 platform-PNP0C0C:00-event -> ../event0
+lrwxrwxrwx 1 root root  9 Sep 10 22:57 platform-PNP0C0E:00-event -> ../event1
+lrwxrwxrwx 1 root root  9 Sep 10 22:57 platform-i8042-serio-0-event-kbd -> ../event2

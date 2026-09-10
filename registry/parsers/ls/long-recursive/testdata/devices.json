@@ -1,0 +1,85 @@
+[
+  {
+    "directory": {
+      "path": "/dev/input"
+    },
+    "entries": [
+      {
+        "flags": "drwxr-xr-x",
+        "links": 2,
+        "owner": "root",
+        "group": "root",
+        "size": "540",
+        "date": "Sep 10 22:57",
+        "filename": "by-path"
+      },
+      {
+        "flags": "crw-rw----",
+        "links": 1,
+        "owner": "root",
+        "group": "input",
+        "major": 13,
+        "minor": 64,
+        "date": "Sep 10 22:57",
+        "filename": "event0"
+      },
+      {
+        "flags": "crw-rw----",
+        "links": 1,
+        "owner": "root",
+        "group": "input",
+        "major": 13,
+        "minor": 65,
+        "date": "Sep 10 22:57",
+        "filename": "event1"
+      },
+      {
+        "flags": "crw-rw----",
+        "links": 1,
+        "owner": "root",
+        "group": "input",
+        "major": 13,
+        "minor": 63,
+        "date": "Sep 10 22:57",
+        "filename": "mice"
+      }
+    ]
+  },
+  {
+    "directory": {
+      "path": "/dev/input/by-path"
+    },
+    "entries": [
+      {
+        "flags": "lrwxrwxrwx",
+        "links": 1,
+        "owner": "root",
+        "group": "root",
+        "size": "9",
+        "date": "Sep 10 22:57",
+        "filename": "platform-PNP0C0C:00-event",
+        "link_to": "../event0"
+      },
+      {
+        "flags": "lrwxrwxrwx",
+        "links": 1,
+        "owner": "root",
+        "group": "root",
+        "size": "9",
+        "date": "Sep 10 22:57",
+        "filename": "platform-PNP0C0E:00-event",
+        "link_to": "../event1"
+      },
+      {
+        "flags": "lrwxrwxrwx",
+        "links": 1,
+        "owner": "root",
+        "group": "root",
+        "size": "9",
+        "date": "Sep 10 22:57",
+        "filename": "platform-i8042-serio-0-event-kbd",
+        "link_to": "../event2"
+      }
+    ]
+  }
+]

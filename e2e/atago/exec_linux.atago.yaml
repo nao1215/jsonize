@@ -881,6 +881,25 @@ scenarios:
               - { path: "$[0].inet.address", equals: 127.0.0.1 }
               - { path: "$[0].inet.mask", equals: 255.0.0.0 }
 
+  # A device file has no size; ls prints its major and minor numbers in
+  # that column. /dev/null is 1, 3 on every Linux system, and a listing of
+  # /dev used to be exit 4 for the first device in it.
+  - name: ls -l reads the device numbers of a device file
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run ls -l /dev/null
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].major", equals: 1 }
+              - { path: "$[0].minor", equals: 3 }
+      - run:
+          command: jz run ls -l /dev
+      - assert:
+          exit_code: 0
+
   # A name may begin or end with a space. The listings put a fixed
   # separator in front of the name, and what follows it is the name: a
   # leading space used to be taken for more of the separator and dropped.

@@ -1,0 +1,3 @@
+128 brw-rw---- 1 root disk 7, 0 Sep 10 22:57 /dev/loop0
+  5 crw-rw-rw- 1 root root 1, 3 Sep 10 22:57 /dev/null
+182 lrwxrwxrwx 1 root root   15 Sep 10 22:57 /dev/stdin -> /proc/self/fd/0

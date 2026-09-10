@@ -1,0 +1,6 @@
+crw-rw-rw- 1 root root  10, 229 Sep 10 22:57 /dev/fuse
+brw-rw---- 1 root disk   7,   0 Sep 10 22:57 /dev/loop0
+crw-rw-rw- 1 root root   1,   3 Sep 10 22:57 /dev/null
+brw-rw---- 1 root disk 259,   0 Sep 10 22:57 /dev/nvme0n1
+lrwxrwxrwx 1 root root      15 Sep 10 22:57 /dev/stdin -> /proc/self/fd/0
+crw-rw-rw- 1 root root   1,   5 Sep 10 22:57 /dev/zero

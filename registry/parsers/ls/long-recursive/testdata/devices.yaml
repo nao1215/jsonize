@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) as ls -lR /dev/input with LC_ALL=C, trimmed to four entries of the directory and three of by-path; the entries that name this machine's keyboard and mouse were left out
+description: character devices beside a directory, and links under it; a device has its major and minor numbers where the size goes
+os: linux
+args: ["-lR", "/dev/input"]
