@@ -576,7 +576,7 @@ a command and variant wins:
 never accesses the network, so the same input converts to the same JSON
 on the same machine.
 
-A registry's `registry.yaml` can also switch definitions of the
+A registry's optional `registry.yaml` can also switch definitions of the
 registries below it off:
 
 ```yaml

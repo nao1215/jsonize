@@ -658,7 +658,8 @@ Nesting is limited to 8 levels.
 ## The registry manifest
 
 `registry.yaml` sits at the top of a registry directory and describes the
-registry rather than any one definition:
+registry rather than any one definition. It is optional: a directory
+holding only `parsers/` is a registry that disables nothing.
 
 ```yaml
 format: 1                 # required; the same schema version definitions carry
