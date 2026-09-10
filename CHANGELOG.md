@@ -131,6 +131,10 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `ps/threads` reads `ps -eLf`, a line per thread with its LWP and the
+  thread count of its process, and `ps/jobs` reads the BSD job format of
+  `ps axj` and `ps axjf`, keeping the tree `f` draws into the command.
+  Both were exit 4.
 - `apt-cache/madison` reads `apt-cache madison`, one record per version
   and the index offering it. It was written from the documentation
   alone, as a check of what a first-time contributor has to go on, and

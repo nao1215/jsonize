@@ -107,7 +107,7 @@ scenarios:
   # One command, three output formats, and the arguments alone do not say
   # which: the shape of the text has to decide. Each of these asserts a
   # column that only its own variant produces.
-  - name: ps lands on a different variant for each of its three formats
+  - name: ps lands on a different variant for each of its formats
     only: {os: linux}
     steps:
       - run:
@@ -134,6 +134,26 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].cpu_percent", gte: 0 }
+      # -L prints a line per thread, and j the job format; with f the tree
+      # is drawn into the command, which keeps it.
+      - run:
+          command: jz run --explain ps -eLf
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ps/threads from embedded"
+          stdout:
+            json:
+              - { path: "$[0].nlwp", gte: 1 }
+      - run:
+          command: jz run --explain ps axjf
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ps/jobs from embedded"
+          stdout:
+            json:
+              - { path: "$[0].tpgid", gte: -1 }
 
   - name: uname, id, env, mount and du
     only: {os: linux}

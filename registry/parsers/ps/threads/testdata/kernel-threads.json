@@ -1,0 +1,38 @@
+[
+  {
+    "uid": "root",
+    "pid": 1,
+    "ppid": 0,
+    "lwp": 1,
+    "c": 0,
+    "nlwp": 1,
+    "stime": "Sep10",
+    "tty": null,
+    "time": 96,
+    "cmd": "/usr/lib/systemd/systemd --system --deserialize=124 splash"
+  },
+  {
+    "uid": "root",
+    "pid": 2,
+    "ppid": 0,
+    "lwp": 2,
+    "c": 0,
+    "nlwp": 1,
+    "stime": "Sep10",
+    "tty": null,
+    "time": 0,
+    "cmd": "[kthreadd]"
+  },
+  {
+    "uid": "root",
+    "pid": 3,
+    "ppid": 2,
+    "lwp": 3,
+    "c": 0,
+    "nlwp": 1,
+    "stime": "Sep10",
+    "tty": null,
+    "time": 0,
+    "cmd": "[pool_workqueue_release]"
+  }
+]

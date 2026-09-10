@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) as ps -eLf with LC_ALL=C, the first four lines
+description: the bundled spelling, and kernel threads, whose command is a name in brackets
+os: linux
+args: [-eLf]

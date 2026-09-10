@@ -1,0 +1,40 @@
+# The BSD job format, `ps j` (as in `ps axj` and `ps axjf`): the process
+# and its parent, the process group and session, the terminal and its
+# foreground group, the state, the user id, the CPU time and the command.
+#
+# With f, ps draws the process tree into the command ("  \_ [kworker]"),
+# and how far in it starts is the depth. The command is therefore
+# matched rather than split: one space after the time, and everything
+# after it as printed, the drawing included.
+format: 1
+command: ps
+variant: jobs
+description: ps axj and ps axjf, the BSD job format (PPID PID PGID SID TTY TPGID STAT UID TIME COMMAND)
+metadata:
+  tags: [linux, process]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/ps.1.html
+detect:
+  os: [linux]
+  # BSD options run together in any order (axjf, ajx, jf), so the
+  # arguments are not a list to match; the header is what says it.
+  signature:
+    all:
+      - '\A\s*PPID\s+PID\s+PGID\s+SID\s+TTY\s+TPGID\s+STAT\s+UID\s+TIME\s+COMMAND\s*$'
+input:
+  ignore:
+    - '\A\s*PPID\s+PID\s+PGID\s'
+parse:
+  type: regex
+  pattern: '^\s*(?P<ppid>\d+)\s+(?P<pid>\d+)\s+(?P<pgid>\d+)\s+(?P<sid>\d+)\s+(?P<tty>\S+)\s+(?P<tpgid>-?\d+)\s+(?P<stat>\S+)\s+(?P<uid>\d+)\s+(?P<time>\d+:\d{2}) (?P<command>.+)$'
+fields:
+  ppid: {type: int}
+  pid: {type: int}
+  pgid: {type: int}
+  sid: {type: int}
+  tty: {null_if: ["?"]}
+  # -1 when the process has no controlling terminal
+  tpgid: {type: int}
+  uid: {type: int}
+  time: {type: duration, layout: mm:ss}
