@@ -99,16 +99,6 @@ func (r *run) convertScalar(name, s string, f *definition.Field, ln int) (any, e
 			return nil, wrap(err)
 		}
 		return v, nil
-	case definition.FieldSize:
-		base := convert.Binary
-		if f.Unit == definition.UnitDecimal {
-			base = convert.Decimal
-		}
-		v, err := convert.Size(s, base)
-		if err != nil {
-			return nil, wrap(err)
-		}
-		return v, nil
 	case definition.FieldTime:
 		loc, _ := convert.Location(f.Location)
 		v, _, err := convert.TimeAssuming(s, f.Layout, loc, r.opts.Assume)

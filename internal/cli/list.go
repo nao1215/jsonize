@@ -528,9 +528,6 @@ func describeField(f *definition.Field) string {
 		return definition.FieldString
 	}
 	s := f.EffectiveType()
-	if f.Unit != "" {
-		s += " unit=" + f.Unit
-	}
 	if f.Layout != "" {
 		s += fmt.Sprintf(" layout=%q", f.Layout)
 	}

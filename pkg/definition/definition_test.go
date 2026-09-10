@@ -337,7 +337,9 @@ func TestLoadErrors(t *testing.T) {
 		{"kv field empty key", base + "fields: {'': {}}\n", "invalid key"},
 		{"field unknown type", base + "fields: {a: {type: date}}\n", "unknown type"},
 		{"bool overlap", base + "fields: {a: {type: bool, true_values: [x], false_values: [X]}}\n", "also listed in false_values"},
-		{"size bad unit", base + "fields: {a: {type: size, unit: hex}}\n", "must be binary or decimal"},
+		// A size with a unit is printed rounded, so there is no type that
+		// turns it into bytes.
+		{"size is not a type", base + "fields: {a: {type: size}}\n", `unknown type "size"`},
 		{"array no split", base + "fields: {a: {type: array}}\n", "need split"},
 		{"array both split", base + "fields: {a: {type: array, split: ',', split_regex: ','}}\n", "mutually exclusive"},
 		{"array bad regex", base + "fields: {a: {type: array, split_regex: '('}}\n", "split_regex"},
@@ -349,7 +351,6 @@ func TestLoadErrors(t *testing.T) {
 		{"string with split", base + "fields: {a: {split: ','}}\n", "only valid for type array"},
 		{"string with regex", base + "fields: {a: {regex: 'x'}}\n", "only valid for type object"},
 		{"string with true", base + "fields: {a: {true_values: [x]}}\n", "only valid for type bool"},
-		{"string with unit", base + "fields: {a: {unit: binary}}\n", "only valid for type size"},
 		{"bad when_missing", base + "fields: {a: {when_missing: skip}}\n", "must be null or omit"},
 		{"required omit", base + "fields: {a: {required: true, when_missing: omit}}\n", "contradictory"},
 		{"too large", "format: 1\n# " + strings.Repeat("x", MaxDefinitionSize) + "\n", "exceeds"},

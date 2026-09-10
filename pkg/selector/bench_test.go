@@ -20,7 +20,7 @@ func syntheticRegistry(tb testing.TB, n int) (*registry.Registry, []byte) {
 		variant := fmt.Sprintf("v%d", i%4)
 		body := fmt.Sprintf("format: 1\ncommand: %s\nvariant: %s\n"+
 			"detect:\n  os: [linux]\n  args: {none: ['-x%d']}\n  signature: {all: ['^HEADER-%d\\s+COLUMN\\s+COLUMN$']}\n"+
-			"parse:\n  type: table\n  header: {columns: [a, b, c]}\nfields: {b: {type: int}, c: {type: size}}\n", cmd, variant, i, i)
+			"parse:\n  type: table\n  header: {columns: [a, b, c]}\nfields: {b: {type: int}, c: {type: int}}\n", cmd, variant, i, i)
 		fsys[fmt.Sprintf("parsers/%s/%s/parser.yaml", cmd, variant)] = &fstest.MapFile{Data: []byte(body)}
 	}
 	reg, err := registry.Load(registry.Source{Name: "bench", FS: fsys})

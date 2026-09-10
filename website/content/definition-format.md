@@ -555,7 +555,6 @@ conversion:
 ```yaml
 fields:
   use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
-  size:        {type: size, unit: binary}
   modified:    {type: time, layout: "2006-01-02 15:04:05 -0700"}
   login_at:    {type: time, layout: "Jan _2 15:04", year: assumed}
   elapsed:     {type: duration, layout: mm:ss}
@@ -574,12 +573,11 @@ fields:
 
 | Key | Applies to | Meaning |
 |-----|-----------|---------|
-| `type` | all | `string` (default), `int`, `float`, `bool`, `size`, `time`, `duration`, `array`, `object` |
+| `type` | all | `string` (default), `int`, `float`, `bool`, `time`, `duration`, `array`, `object` |
 | `trim_prefix`, `trim_suffix` | all | removed before conversion; without them a string value keeps its whitespace exactly as the parser produced it |
 | `null_if` | all | values (after trimming) that become `null` |
 | `required` | all | `null`/empty is an error |
 | `when_missing` | all | `null` (default) or `omit` the key when the value is missing |
-| `unit` | size | `binary` (K=1024, default) or `decimal` (K=1000); `Ki`/`Mi` always mean 1024 |
 | `layout` | time | the [Go reference layout](https://pkg.go.dev/time#pkg-constants) the timestamp is written in; required, and it has to state a year unless `year: assumed` says the format prints none |
 | `year` | time | `assumed` for a format that prints no year; the value stays a string until `--assume-year` says which year to read it in |
 | `location` | time | how to read a timestamp that states no zone: `utc` (default) or `local`, the zone the running system is in |
@@ -589,11 +587,14 @@ fields:
 | `items` | array | conversion applied to each element (arrays of arrays are not allowed) |
 | `regex`, `fields` | object | named groups become keys; `fields` converts them; the match has to cover the whole value |
 
-`size` accepts `1024`, `955M`, `3.7G`, `466Gi`, `1.2 MiB`, `0B` and
-returns bytes as an integer (rounded). Use it only where the base is
-certain and the value is not already rounded: a human-readable size
-printed by `df -h` or `ls -lh` is neither, and the official definitions
-keep such values as the strings they were printed as.
+There is no type that turns `955M` or `1.8T` into bytes. A size printed
+with a unit is rounded to fit the column (`df -h`, `ls -lh`, `free -h`),
+so the number of bytes it stands for depends on a base and a precision
+the text does not state, and any integer jz wrote for it would be one
+the command never printed. Such a value stays the string it was printed
+as; a size printed as a plain count is an `int`. A value and its unit
+printed as an exact pair (`MemTotal: 32790384 kB`) can be read into an
+`object` with the two as separate keys.
 
 `time` writes the value as an RFC 3339 string and never as an epoch
 number, so a timestamp has one shape in the output and a consumer never
@@ -648,7 +649,7 @@ twenty-three minutes as `1:23`, and nothing in the text separates them.
 Being wrong about it is a factor of sixty that nothing downstream would
 notice, so there is no default.
 
-The rule about rounded values applies here as it does to `size`, and it
+The rule about rounded values applies here as it does to sizes, and it
 is about what the text names rather than how coarse it is.
 `13 days, 4:30` names exactly 1139400 seconds, so it converts, even
 though the machine has been up for some seconds more. `1.8T` names no
@@ -699,7 +700,7 @@ Validation errors carry the source and a dotted path:
 
 ```
 user:parsers/x/y/parser.yaml: parse.pattern: invalid regular expression: missing closing )
-user:parsers/x/y/parser.yaml: fields.size.unit: must be binary or decimal
+user:parsers/x/y/parser.yaml: fields.elapsed.layout: must be h:mm or mm:ss for type duration, not "hh:mm"
 ```
 
 Parse errors carry the definition, line number and field:

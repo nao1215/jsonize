@@ -152,6 +152,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A `float` field read Go's own number syntax, so `1_000.5` became
+  1000.5 and `0x1p3` became 8; `int` already refused both. The days of a
+  `duration` took any number too, `1_0-01:02:03` as ten days and
+  `1e3-00:00:00` as a thousand. Both now take digits only.
 - A command `jz run` stopped at `--timeout`, or one ended by a signal,
   had the line it was writing when it stopped read as a whole record:
   `du` cut off in the middle of a path gave that path shortened. With
@@ -615,6 +619,11 @@ project follows [Semantic Versioning](https://semver.org/).
   own fixture. A composite part now names the lines of its region that
   belong to a sibling with `ignore`, and a line nothing claims is an
   error.
+- The `size` field type, its `unit` key and `convert.Size`. No
+  definition used it: a size printed with a unit is rounded, and turning
+  `1.8T` into bytes writes a number the command never printed. It also
+  lost precision on a plain count above 2^53, turning
+  `9007199254740993` into `9007199254740992`. A plain count is an `int`.
 
 ### Decisions worth knowing
 
