@@ -95,6 +95,8 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `file/mime` reads `file -i` and `file --mime-type`: the MIME type and,
+  when printed, the character set of each file.
 - `ip/oneline-link` reads `ip -o link`, one record per interface. It
   was added from the documentation alone, as a test of whether that is
   enough; `ip/link` now states that its header line ends with the group

@@ -1,0 +1,4 @@
+description: A text file, a compressed one, an executable, a directory, a device and a symbolic link, each with its MIME type and character set.
+source: "`file -i` on Ubuntu 26.04 (file-5.46) with LC_ALL=C"
+os: linux
+args: ["-i", "/usr/share/doc/bash/copyright", "/usr/share/doc/bash/NEWS.gz", "/usr/bin/gnustat", "/usr/share/doc", "/dev/null", "/usr/bin/stat"]

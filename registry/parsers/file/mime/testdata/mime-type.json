@@ -1,0 +1,14 @@
+[
+  {
+    "file": "/usr/share/doc/bash/copyright",
+    "mime_type": "text/plain"
+  },
+  {
+    "file": "/usr/share/doc/bash/NEWS.gz",
+    "mime_type": "application/gzip"
+  },
+  {
+    "file": "/usr/bin/gnustat",
+    "mime_type": "application/x-pie-executable"
+  }
+]
