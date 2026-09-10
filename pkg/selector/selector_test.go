@@ -110,6 +110,29 @@ func TestSelectNoMatch(t *testing.T) {
 	}
 }
 
+// A command run with -z or --zero ends its records with NUL. Read line by
+// line that is one line holding every record, which a signature matching
+// the first one would let through; a format read line by line is out.
+func TestTextWithNULIsNotReadLineByLine(t *testing.T) {
+	t.Parallel()
+	reg := buildRegistry(t, map[string]string{
+		"sum/lines": def("sum", "lines", "detect: {signature: {all: ['^[0-9a-f]{4}  \\S']}}\n"),
+	})
+	in := []byte("abcd  a.txt\x00abcd  b.txt\x00")
+	for name, ctx := range map[string]Context{
+		"automatic": {Input: in},
+		"scoped":    {Parser: "sum", Input: in},
+		"named":     {Parser: "sum", Variant: "lines", Input: in},
+	} {
+		if _, err := Select(reg, ctx); err == nil || !strings.Contains(err.Error(), "NUL") {
+			t.Errorf("%s: %v", name, err)
+		}
+	}
+	if _, err := Select(reg, Context{Input: []byte("abcd  a.txt\nabcd  b.txt\n")}); err != nil {
+		t.Errorf("the same records on lines: %v", err)
+	}
+}
+
 func TestSelectAmbiguous(t *testing.T) {
 	t.Parallel()
 	// Two commands whose signatures both match the same text.

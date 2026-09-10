@@ -163,6 +163,11 @@ project follows [Semantic Versioning](https://semver.org/).
   read the dash as null, which their schemas now allow (version 2).
 - `mount -l` was exit 3 on a file system with a label. The label is
   read as `label`.
+- Output written with `-z` or `--zero` (`git ls-files -s -z`,
+  `git log --oneline -z`, `sha256sum -z`, `ls --zero`) came back at exit
+  0 as one record whose last field held every other record. A format
+  read line by line now refuses text holding a NUL byte, detected or
+  named, and the message says what the text most likely is.
 - `jz run wc -lwcL` came back at exit 0 with the fourth count at the
   start of `filename` ("6 /etc/hostname"). `-L` and `-m` are now
   excluded; the comment already said `-m` output must not be read.

@@ -121,6 +121,9 @@ func (s *streamer) feedRecordText(def *definition.Definition, text []byte, num i
 	if !utf8.Valid(text) {
 		return s.report(&ParseError{Definition: def.ID(), Line: num, Msg: "input is not valid UTF-8"})
 	}
+	if def.Input.Separator() == '\n' && bytes.IndexByte(text, 0) >= 0 {
+		return s.report(&ParseError{Definition: def.ID(), Line: num, Msg: nulInLine})
+	}
 	if perr := s.feedRaw(line{text: string(text), num: num}); perr != nil {
 		return s.report(perr)
 	}
