@@ -395,6 +395,35 @@ scenarios:
             json:
               - { path: "$.uptime_seconds", gt: 0 }
 
+  # util-linux prlimit, aligned and --raw. The raw form writes the spaces
+  # inside a description as \x20 and lines nothing up, and both are read
+  # the same way.
+  - name: prlimit lands on its definition, aligned or raw
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain prlimit --nofile --nice
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "prlimit/linux from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].resource", equals: NOFILE }
+              - { path: "$[0].description", equals: max number of open files }
+              - { path: "$[0].soft", matches: "^(unlimited|[0-9]+)$" }
+              - { path: "$[1].units", equals: null }
+      - run:
+          command: jz run prlimit --raw --nofile
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].resource", equals: NOFILE }
+              - { path: "$[0].hard", matches: "^(unlimited|[0-9]+)$" }
+              - { path: "$[0].units", equals: files }
+
   # The host's own procps, so what is pinned is the shape of the answer
   # rather than any particular machine's numbers.
   - name: real uptime and ps report their durations in seconds

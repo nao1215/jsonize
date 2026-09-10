@@ -1,0 +1,3 @@
+RESOURCE DESCRIPTION SOFT HARD UNITS
+NOFILE max\x20number\x20of\x20open\x20files 524288 524288 files
+NICE max\x20nice\x20prio\x20allowed\x20to\x20raise 0 0 

@@ -1,0 +1,16 @@
+[
+  {
+    "resource": "NOFILE",
+    "description": "max\\x20number\\x20of\\x20open\\x20files",
+    "soft": "524288",
+    "hard": "524288",
+    "units": "files"
+  },
+  {
+    "resource": "NICE",
+    "description": "max\\x20nice\\x20prio\\x20allowed\\x20to\\x20raise",
+    "soft": "0",
+    "hard": "0",
+    "units": null
+  }
+]

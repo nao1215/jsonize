@@ -1,0 +1,5 @@
+RESOURCE DESCRIPTION                      SOFT      HARD UNITS
+NOFILE   max number of open files       524288    524288 files
+NPROC    max number of processes        251443    251443 processes
+CORE     max core file size                  0 unlimited bytes
+NICE     max nice prio allowed to raise      0         0 

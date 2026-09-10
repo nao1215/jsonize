@@ -1,0 +1,44 @@
+# The table `prlimit` prints of the resource limits of a process: the
+# name of the resource, what it limits, the soft and hard value and the
+# unit they are counted in.
+#
+# It is read with a regular expression rather than as an aligned table.
+# The description is several words, and --raw prints the same columns
+# unaligned, one space apart, with the spaces inside a value written as
+# \x20; cutting that by where the header words start moved both limits
+# into the unit. The expression reads the description as whatever lies
+# between the name and the two limits, which holds for both, and a raw
+# description stays the text it was printed as.
+#
+# A limit is a decimal or the word unlimited, so both stay the text that
+# was printed, the same choice the ulimit and /proc/<pid>/limits
+# definitions make. The unit is null on the rows that have none: a nice
+# value and a realtime priority are plain numbers.
+format: 1
+command: prlimit
+variant: linux
+description: prlimit table of soft and hard resource limits
+metadata:
+  tags: [linux, process, limits]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/prlimit.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The header of the default columns, which is the first line.
+      - '\ARESOURCE[ \t]+DESCRIPTION[ \t]+SOFT[ \t]+HARD[ \t]+UNITS[ \t]*$'
+input:
+  select:
+    # The header, which the signature has already read.
+    after: '\ARESOURCE[ \t]+DESCRIPTION[ \t]+SOFT[ \t]+HARD[ \t]+UNITS[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<resource>[A-Z]+)[ \t]+(?P<description>\S.*?)[ \t]+(?P<soft>unlimited|\d+)[ \t]+(?P<hard>unlimited|\d+)(?:[ \t]+(?P<units>[a-z]+))?[ \t]*$'
+fields:
+  resource: {required: true}
+  description: {required: true}
+  soft: {required: true}
+  hard: {required: true}
+  units: {}

@@ -103,6 +103,8 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - `systemd-inhibit/list` reads `systemd-inhibit --list`, one record per
   inhibitor lock, with the operations the lock covers as an array.
+- `prlimit/linux` reads the resource limits `prlimit` prints, aligned or
+  with `--raw`.
 - `file/mime` reads `file -i` and `file --mime-type`: the MIME type and,
   when printed, the character set of each file.
 - `ip/oneline-link` reads `ip -o link`, one record per interface. It
