@@ -173,6 +173,43 @@ func TestEmptyOptionValueIsAUsageError(t *testing.T) {
 	}
 }
 
+// An option that takes one value, given two, states two answers. The
+// last one used to win without a word, so `jz -f a -f b` converted b and
+// said nothing about a. An option that may be repeated, and a switch,
+// are not affected.
+func TestRepeatedOptionIsAUsageError(t *testing.T) {
+	h := newHarness(t)
+	dir := t.TempDir()
+	file := filepath.Join(dir, "df.txt")
+	if err := os.WriteFile(file, []byte(gnuDF), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	for _, args := range [][]string{
+		{"-f", file, "-f", file},
+		{"-f", file, "--file", file},
+		{"--parser", "df", "--parser", "ls"},
+		{"--parser", "df", "--variant", "gnu", "--variant", "gnu-human"},
+		{"--assume-year", "2024", "--assume-year", "2025"},
+		{"run", "--timeout", "1h", "--timeout", "1s", "df"},
+		{"list", "--json", "--json"},
+	} {
+		code := h.pipe(gnuDF, args...)
+		if args[0] == "list" {
+			// --json is a switch: saying it twice says one thing.
+			if code != ExitOK {
+				t.Errorf("%q: code = %d, stderr = %s", args, code, h.stderr.String())
+			}
+			continue
+		}
+		if code != ExitUsage || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), "was given twice") {
+			t.Errorf("%q: code = %d, stdout = %q, stderr = %s", args, code, h.stdout.String(), h.stderr.String())
+		}
+	}
+	if code := h.pipe(gnuDF, "--extract", "filesystem", "--extract", "used", "-p", "-p"); code != ExitOK {
+		t.Errorf("repeatable options: %d %s", code, h.stderr.String())
+	}
+}
+
 // TestRemovedOptionsAreGone pins that the options cut before release are
 // usage errors rather than silently accepted or ignored.
 func TestRemovedOptionsAreGone(t *testing.T) {
