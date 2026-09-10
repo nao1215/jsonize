@@ -1,0 +1,7 @@
+State  Recv-Q Send-Q Local Address:Port  Peer Address:Port                                                                                                                    
+LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*    ino:4088 sk:400b cgroup:/system.slice/ssh.socket <->                                                               
+LISTEN 0      4096       127.0.0.1:631        0.0.0.0:*    ino:908506 sk:6054 cgroup:/system.slice/system-cups.slice/cups.service <->                                         
+LISTEN 0      4096      127.0.0.54:53         0.0.0.0:*    uid:990 ino:20721 sk:400d cgroup:/system.slice/systemd-resolved.service <->                                        
+LISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*    uid:990 ino:20719 sk:400e cgroup:/system.slice/systemd-resolved.service <->                                        
+LISTEN 0      511        127.0.0.1:36367      0.0.0.0:*    uid:1000 ino:70607 sk:400f cgroup:/user.slice/user-1000.slice/user@1000.service/app.slice/app-code-20653.scope <-> 
+LISTEN 0      4096       127.0.0.1:8080       0.0.0.0:*    ino:49408 sk:4011 cgroup:/system.slice/docker.service <->                                                          

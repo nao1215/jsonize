@@ -1,0 +1,132 @@
+[
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "0.0.0.0",
+    "local_port": "22",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.1",
+    "local_port": "631",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.54",
+    "local_port": "53",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.53%lo",
+    "local_port": "53",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 511,
+    "local_address": "127.0.0.1",
+    "local_port": "36367",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*",
+    "process": "users:((\"code\",pid=21170,fd=46))"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.1",
+    "local_port": "8080",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.1",
+    "local_port": "8443",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.1",
+    "local_port": "42765",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.1",
+    "local_port": "11434",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 511,
+    "local_address": "127.0.0.1",
+    "local_port": "44899",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*",
+    "process": "users:((\"code\",pid=21118,fd=47))"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 511,
+    "local_address": "127.0.0.1",
+    "local_port": "45679",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*",
+    "process": "users:((\"code\",pid=21170,fd=51))"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 511,
+    "local_address": "127.0.0.1",
+    "local_port": "47639",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*",
+    "process": "users:((\"code\",pid=24195,fd=36))"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "[::]",
+    "local_port": "22",
+    "peer_address": "[::]",
+    "peer_port": "*"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "[::1]",
+    "local_port": "631",
+    "peer_address": "[::]",
+    "peer_port": "*"
+  }
+]

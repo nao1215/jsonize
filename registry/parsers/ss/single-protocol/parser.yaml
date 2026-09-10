@@ -6,6 +6,9 @@
 # The address and the port are separated by the last colon, which is what
 # makes an IPv6 address ("[::]:22") and a scoped one ("127.0.0.53%lo:53")
 # readable; both parts are reported separately as well as together.
+#
+# The last column is the process list -p prints, users:((...)), and
+# nothing else, for the reason ss/linux gives.
 format: 1
 command: ss
 variant: single-protocol
@@ -27,11 +30,11 @@ input:
 parse:
   type: regex
   patterns:
-    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+):(?P<local_port>[^\s:]+)\s+(?P<peer_address>\S+):(?P<peer_port>[^\s:]+)\s*(?P<process>\S.*)?$'
+    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+):(?P<local_port>[^\s:]+)\s+(?P<peer_address>\S+):(?P<peer_port>[^\s:]+)(?:\s+(?P<process>users:\(\(.*\)\)))?\s*$'
     # A unix socket table asked for with -x has the same header and holds
     # a path and an inode where the internet table holds an address and a
     # port, separated by whitespace rather than by a colon.
-    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+)\s+(?P<local_port>\S+)\s+(?P<peer_address>\S+)\s+(?P<peer_port>\S+)\s*(?P<process>\S.*)?$'
+    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+)\s+(?P<local_port>\S+)\s+(?P<peer_address>\S+)\s+(?P<peer_port>\S+)(?:\s+(?P<process>users:\(\(.*\)\)))?\s*$'
 fields:
   state: {required: true}
   recv_q: {type: int, required: true}
