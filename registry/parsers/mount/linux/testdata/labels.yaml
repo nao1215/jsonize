@@ -1,0 +1,4 @@
+description: -l adds the label of a file system that has one, in brackets after the options.
+source: "`mount -l -t ext4,vfat` on Ubuntu 26.04 (util-linux 2.41) with LC_ALL=C; the user name in the mount point was replaced"
+os: linux
+args: ["-l", "-t", "ext4,vfat"]

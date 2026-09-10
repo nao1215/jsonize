@@ -14,6 +14,9 @@ detect:
       - '^\S.* on .* type \S+ \('
 parse:
   type: regex
-  pattern: '^(?P<filesystem>.+?) on (?P<mount_point>.+?) type (?P<type>\S+) \((?P<options>[^)]*)\)\s*$'
+  # -l adds a file system's label in brackets after the options, and only
+  # when it has one.
+  pattern: '^(?P<filesystem>.+?) on (?P<mount_point>.+?) type (?P<type>\S+) \((?P<options>[^)]*)\)(?: \[(?P<label>[^]]*)\])?\s*$'
 fields:
   options: {type: array, split: ","}
+  label: {when_missing: omit}
