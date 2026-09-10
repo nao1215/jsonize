@@ -1,0 +1,3 @@
+source: "tree over a directory made for the fixture, on Ubuntu 26.04 with tree 2.3.1, LC_ALL=C, untrimmed"
+description: twenty-seven lines, so the closing count is past the lines detection looks at
+args: ["project"]

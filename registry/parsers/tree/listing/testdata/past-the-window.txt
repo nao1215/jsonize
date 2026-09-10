@@ -1,0 +1,28 @@
+project
+|-- Makefile
+|-- README.md
+|-- cmd
+|   `-- jz
+|       |-- main.go
+|       `-- main_test.go
+|-- docs
+|   |-- design.md
+|   |-- format.md
+|   |-- index.md -> README.md
+|   `-- usage.md
+|-- go.mod
+|-- go.sum
+|-- internal
+|   `-- cli
+|       |-- cli.go
+|       |-- run.go
+|       `-- stream.go
+`-- testdata
+    |-- a.txt
+    |-- b.txt
+    |-- c.txt
+    |-- d.txt
+    |-- e.txt
+    `-- f.txt
+
+7 directories, 19 files
