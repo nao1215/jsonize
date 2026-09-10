@@ -199,6 +199,13 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- The journal in its short formats was exit 3 as soon as a message ran
+  over several lines or the output crossed a boot: `jz run journalctl
+  -n 40000` stopped at a Qt warning continued on indented lines. The
+  continuation is joined onto its entry, the line naming the next boot
+  is left out, and `-- No entries --` is the empty list.
+- `jz run apt list --installed PATTERN` matching nothing printed the
+  opening line alone and was exit 4; it is the empty list.
 - `jz run git diff --numstat` of no change was exit 4: `git/diff-stat`,
   which reads one object and so has no empty form, was among the
   variants the empty output was judged against. It is ruled out by
