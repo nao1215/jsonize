@@ -1,0 +1,34 @@
+# `ip -o address` prints one line per address instead of one block per
+# interface: the index and the name of the interface, then the address
+# line and its lifetimes, joined by a backslash where the block form
+# breaks the line. The words are the ones ip/address reads, under the
+# same names: the address keeps its prefix length, and what follows the
+# scope (how the address was configured, the protocol that added it, and
+# on an IPv4 address its label) is a list of words.
+format: 1
+command: ip
+variant: oneline-address
+description: ip -o address, one line per address
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ip-address.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A\d+: \S+[ \t]+inet6? \S+ .*\\[ \t]+valid_lft \S+ preferred_lft \S+[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<index>\d+): (?P<interface>\S+)[ \t]+(?P<family>inet6?) (?P<address>\S+)(?: brd (?P<broadcast>\S+))? scope (?P<scope>\S+)(?:[ \t]+(?P<attributes>[^\\]*?))?[ \t]*\\[ \t]+valid_lft (?P<valid_lft>\S+) preferred_lft (?P<preferred_lft>\S+)[ \t]*$'
+fields:
+  index: {type: int, required: true}
+  interface: {required: true}
+  family: {required: true}
+  address: {required: true}
+  broadcast: {when_missing: omit}
+  scope: {required: true}
+  attributes: {type: array, split_regex: '[ \t]+', when_missing: omit}
+  valid_lft: {required: true}
+  preferred_lft: {required: true}

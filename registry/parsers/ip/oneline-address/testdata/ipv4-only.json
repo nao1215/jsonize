@@ -1,0 +1,95 @@
+[
+  {
+    "index": 1,
+    "interface": "lo",
+    "family": "inet",
+    "address": "127.0.0.1/8",
+    "scope": "host",
+    "attributes": [
+      "lo"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 2,
+    "interface": "eno1",
+    "family": "inet",
+    "address": "192.0.2.2/24",
+    "broadcast": "192.0.2.255",
+    "scope": "global",
+    "attributes": [
+      "noprefixroute",
+      "eno1"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 3,
+    "interface": "wlp195s0",
+    "family": "inet",
+    "address": "198.51.100.60/24",
+    "broadcast": "198.51.100.255",
+    "scope": "global",
+    "attributes": [
+      "dynamic",
+      "noprefixroute",
+      "wlp195s0"
+    ],
+    "valid_lft": "160749sec",
+    "preferred_lft": "160749sec"
+  },
+  {
+    "index": 4,
+    "interface": "br-000000000001",
+    "family": "inet",
+    "address": "172.18.0.1/16",
+    "broadcast": "172.18.255.255",
+    "scope": "global",
+    "attributes": [
+      "br-000000000001"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 5,
+    "interface": "br-000000000002",
+    "family": "inet",
+    "address": "172.19.0.1/16",
+    "broadcast": "172.19.255.255",
+    "scope": "global",
+    "attributes": [
+      "br-000000000002"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 6,
+    "interface": "br-000000000003",
+    "family": "inet",
+    "address": "172.20.0.1/16",
+    "broadcast": "172.20.255.255",
+    "scope": "global",
+    "attributes": [
+      "br-000000000003"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 7,
+    "interface": "docker0",
+    "family": "inet",
+    "address": "172.17.0.1/16",
+    "broadcast": "172.17.255.255",
+    "scope": "global",
+    "attributes": [
+      "docker0"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  }
+]

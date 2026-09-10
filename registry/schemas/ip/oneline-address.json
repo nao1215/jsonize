@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ip/oneline-address.json",
+  "title": "ip/oneline-address",
+  "description": "ip -o address, one line per address",
+  "x-jsonize": {
+    "definition": "ip/oneline-address",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "index": {
+        "type": "integer"
+      },
+      "interface": {
+        "type": "string"
+      },
+      "family": {
+        "type": "string",
+        "enum": [
+          "inet",
+          "inet6"
+        ]
+      },
+      "address": {
+        "type": "string"
+      },
+      "broadcast": {
+        "type": "string"
+      },
+      "scope": {
+        "type": "string"
+      },
+      "attributes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "valid_lft": {
+        "type": "string"
+      },
+      "preferred_lft": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "index",
+      "interface",
+      "family",
+      "address",
+      "scope",
+      "valid_lft",
+      "preferred_lft"
+    ]
+  }
+}

@@ -95,6 +95,8 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `ip/oneline-address` reads `ip -o address`, one record per address,
+  with the words `ip/address` reads under the same names.
 - `ls/long-recursive` reads `ls -lR`, and `ls -l` given several
   directories, as one record per directory with its entries. It used to
   pass the signature of `ls/long` and fail on the first heading.

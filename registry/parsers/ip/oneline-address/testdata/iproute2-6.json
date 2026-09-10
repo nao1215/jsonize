@@ -1,0 +1,221 @@
+[
+  {
+    "index": 1,
+    "interface": "lo",
+    "family": "inet",
+    "address": "127.0.0.1/8",
+    "scope": "host",
+    "attributes": [
+      "lo"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 1,
+    "interface": "lo",
+    "family": "inet6",
+    "address": "::1/128",
+    "scope": "host",
+    "attributes": [
+      "noprefixroute"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 2,
+    "interface": "eno1",
+    "family": "inet",
+    "address": "192.0.2.2/24",
+    "broadcast": "192.0.2.255",
+    "scope": "global",
+    "attributes": [
+      "noprefixroute",
+      "eno1"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 2,
+    "interface": "eno1",
+    "family": "inet6",
+    "address": "fe80::1/64",
+    "scope": "link",
+    "attributes": [
+      "noprefixroute"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 3,
+    "interface": "wlp195s0",
+    "family": "inet",
+    "address": "198.51.100.60/24",
+    "broadcast": "198.51.100.255",
+    "scope": "global",
+    "attributes": [
+      "dynamic",
+      "noprefixroute",
+      "wlp195s0"
+    ],
+    "valid_lft": "160752sec",
+    "preferred_lft": "160752sec"
+  },
+  {
+    "index": 3,
+    "interface": "wlp195s0",
+    "family": "inet6",
+    "address": "fe80::2/64",
+    "scope": "link",
+    "attributes": [
+      "noprefixroute"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 4,
+    "interface": "br-000000000001",
+    "family": "inet",
+    "address": "172.18.0.1/16",
+    "broadcast": "172.18.255.255",
+    "scope": "global",
+    "attributes": [
+      "br-000000000001"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 5,
+    "interface": "br-000000000002",
+    "family": "inet",
+    "address": "172.19.0.1/16",
+    "broadcast": "172.19.255.255",
+    "scope": "global",
+    "attributes": [
+      "br-000000000002"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 5,
+    "interface": "br-000000000002",
+    "family": "inet6",
+    "address": "fd00:db8::1/64",
+    "scope": "global",
+    "attributes": [
+      "nodad"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 5,
+    "interface": "br-000000000002",
+    "family": "inet6",
+    "address": "fe80::3/64",
+    "scope": "link",
+    "attributes": [
+      "proto",
+      "kernel_ll"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 6,
+    "interface": "br-000000000003",
+    "family": "inet",
+    "address": "172.20.0.1/16",
+    "broadcast": "172.20.255.255",
+    "scope": "global",
+    "attributes": [
+      "br-000000000003"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 7,
+    "interface": "docker0",
+    "family": "inet",
+    "address": "172.17.0.1/16",
+    "broadcast": "172.17.255.255",
+    "scope": "global",
+    "attributes": [
+      "docker0"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 7,
+    "interface": "docker0",
+    "family": "inet6",
+    "address": "fe80::4/64",
+    "scope": "link",
+    "attributes": [
+      "proto",
+      "kernel_ll"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 8,
+    "interface": "veth0000001",
+    "family": "inet6",
+    "address": "fe80::5/64",
+    "scope": "link",
+    "attributes": [
+      "proto",
+      "kernel_ll"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 9,
+    "interface": "veth0000002",
+    "family": "inet6",
+    "address": "fe80::6/64",
+    "scope": "link",
+    "attributes": [
+      "proto",
+      "kernel_ll"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 10,
+    "interface": "veth0000003",
+    "family": "inet6",
+    "address": "fe80::7/64",
+    "scope": "link",
+    "attributes": [
+      "proto",
+      "kernel_ll"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  },
+  {
+    "index": 11,
+    "interface": "veth0000004",
+    "family": "inet6",
+    "address": "fe80::8/64",
+    "scope": "link",
+    "attributes": [
+      "proto",
+      "kernel_ll"
+    ],
+    "valid_lft": "forever",
+    "preferred_lft": "forever"
+  }
+]
