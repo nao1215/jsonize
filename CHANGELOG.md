@@ -33,6 +33,9 @@ project follows [Semantic Versioning](https://semver.org/).
   both lines. It used to keep the last value and drop the other.
 - A drawn table (`split: box`) refuses a line with no bar and no rule on
   it, and a cell past the header's last column; both used to vanish.
+- A tree whose `node` pattern names a group `children` is refused when
+  the definition is loaded. The node's children were written over the
+  value the group read.
 - `jz test` changes every fixture — a foreign line at the end and in the
   middle, the whole text twice — and fails a definition that still
   succeeds without the change showing in its result.

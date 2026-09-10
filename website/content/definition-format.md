@@ -347,7 +347,7 @@ writes `["  ", "`-"]`; the first form that fits at each step is the one
 taken, so the order is the order they are tried in.
 A node is the fields `node` reads from its line plus a `children` array,
 which is `[]` when nothing follows it — so a consumer walks every node
-the same way.
+the same way. A `node` pattern cannot name a group `children`.
 
 This is the one parser whose result has a depth the definition does not
 state. `lspci -vv` prints a device, its capabilities under it and a
