@@ -436,6 +436,19 @@ scenarios:
           exit_code: 2
           stderr:
             contains: expected at most COMMAND and VARIANT
+      # Two files for an option that reads one: the first used to be
+      # dropped without a word and the second converted at status 0.
+      - fixture:
+          file: one.txt
+          content: "a=1\n"
+      - run:
+          command: jz --parser kv --variant equals -f one.txt --file one.txt
+      - assert:
+          exit_code: 2
+          stdout:
+            empty: true
+          stderr:
+            contains: "--file was given twice, and it takes one value"
 
   - name: the options removed before release are usage errors
     steps:

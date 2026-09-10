@@ -168,6 +168,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- An option that takes one value, given two, kept the last without a
+  word: `jz -f a.txt -f b.txt` converted `b.txt` at status 0 and said
+  nothing about `a.txt`, and `--parser`, `--variant`, `--define`,
+  `--assume-year` and `--timeout` did the same. A second value is now a
+  usage error (exit 2). `--extract`, `--exclude`, `--assume-zone` and
+  `--env` take one value each time and may still be repeated.
 - `jz < /dev/null` printed the help on standard output with status 0.
   /dev/null is a character device, as a terminal is, and jz took any
   character device for the terminal it prints its help to. It now asks
