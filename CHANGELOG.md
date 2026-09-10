@@ -148,6 +148,9 @@ project follows [Semantic Versioning](https://semver.org/).
   signature of `lspci/kernel`, which then failed on the lines `-k` does
   not print. It now lands on `lspci/verbose`, which reads `-v` and `-vv`
   alike.
+- `iostat -m` read the megabyte columns as strings where the kilobyte
+  ones are numbers. They are numbers now in `iostat/linux`,
+  `iostat/device` and `iostat/extended`, whose schemas are version 2.
 - `df -a` was exit 3: an automount point nothing has mounted yet prints
   a dash in every figure. `df/gnu`, `df/gnu-type` and `df/gnu-inodes`
   read the dash as null, which their schemas now allow (version 2).

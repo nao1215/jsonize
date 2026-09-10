@@ -5,7 +5,7 @@
   "description": "iostat default report, one sample of CPU averages and per-device counters",
   "x-jsonize": {
     "definition": "iostat/linux",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -84,6 +84,42 @@
               ]
             },
             "kb_wrtn_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "mb_dscd": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "mb_dscd_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "mb_read": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "mb_read_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "mb_wrtn": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "mb_wrtn_s": {
               "type": [
                 "number",
                 "null"

@@ -46,3 +46,10 @@ parse:
         kb_read: {type: int}
         kb_wrtn: {type: int}
         kb_dscd: {type: int}
+        # -m prints the same figures in megabytes, under names of its own.
+        mb_read_s: {type: float}
+        mb_wrtn_s: {type: float}
+        mb_dscd_s: {type: float}
+        mb_read: {type: int}
+        mb_wrtn: {type: int}
+        mb_dscd: {type: int}

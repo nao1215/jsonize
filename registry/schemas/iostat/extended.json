@@ -5,7 +5,7 @@
   "description": "iostat -x, one sample of extended per-device statistics",
   "x-jsonize": {
     "definition": "iostat/extended",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -83,6 +83,12 @@
                 "null"
               ]
             },
+            "dmb_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
             "drqm_percent": {
               "type": [
                 "number",
@@ -131,6 +137,12 @@
                 "null"
               ]
             },
+            "rmb_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
             "rrqm_percent": {
               "type": [
                 "number",
@@ -168,6 +180,12 @@
               ]
             },
             "wkb_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "wmb_s": {
               "type": [
                 "number",
                 "null"
