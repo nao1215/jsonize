@@ -881,6 +881,20 @@ scenarios:
               - { path: "$[0].inet.address", equals: 127.0.0.1 }
               - { path: "$[0].inet.mask", equals: 255.0.0.0 }
 
+  # A diff with nothing in it prints nothing. --numstat is a list, so that
+  # is the empty list; git/diff-stat, an object, used to be judged with it
+  # and turned the answer into exit 4.
+  - name: git diff --numstat of no change is the empty list
+    only: {os: linux}
+    steps:
+      - run:
+          shell: true
+          command: git init -q repo && cd repo && jz run git diff --numstat
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+
   # A device file has no size; ls prints its major and minor numbers in
   # that column. /dev/null is 1, 3 on every Linux system, and a listing of
   # /dev used to be exit 4 for the first device in it.
