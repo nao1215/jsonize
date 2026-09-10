@@ -20,11 +20,11 @@ Checks parser definitions the way the official ones are checked. Each
 fixture is parsed with its own definition and compared with the JSON
 beside it; it must give the same answer with CRLF line endings, a byte
 order mark, or a blank line before or after it, which leave the text as
-it was;
-each is changed (a foreign line added, the text doubled) and must be
-refused or show the change, which proves the definition reads all of
-its input; and every definition is then named explicitly on every other
-definition's fixtures and must refuse them.
+it was; each is changed (a foreign line added, the text doubled) and
+must be refused or show the change, a doubled list being the records of
+one copy twice, which proves the definition reads all of its input; and
+every definition is then named explicitly on every other definition's
+fixtures and must refuse them.
 
 The official fixtures are built into jz, so a definition of your own is
 checked against them without a copy of the repository: a signature wide

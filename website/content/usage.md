@@ -552,9 +552,9 @@ Three things are checked. Every `testdata/<case>.txt` is parsed with its
 own definition and compared with the `.json` beside it, and has to give
 the same answer with CRLF line endings, a byte order mark or a blank
 line before or after it; every fixture is changed (a foreign line
-added, the whole text doubled) and must be refused
-or show the change in its result, which is what proves the definition
-reads all of its input; and every definition is then named explicitly on
+added, the whole text doubled) and must be refused or show the change
+in its result, a doubled list being the records of one copy twice,
+which is what proves the definition reads all of its input; and every definition is then named explicitly on
 every other definition's fixtures and must refuse them. The official fixtures travel inside the binary, so the
 second check covers your definitions against every format jz already
 reads without a copy of the repository: a signature wide enough to read
