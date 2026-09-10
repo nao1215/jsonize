@@ -129,11 +129,26 @@ project follows [Semantic Versioning](https://semver.org/).
 - `lspci/verbose`, `lsusb/verbose` and `iw/dev`, the first definitions to
   use it. `lspci/kernel` and `lsusb/linux` gained one exclusion each,
   because the output they read is a subset of the verbose output and only
-  the register dumps and descriptor blocks say which of the two a text
+  the lines the verbose output adds (the Flags line or register dumps of
+  `lspci`, the descriptor blocks of `lsusb`) say which of the two a text
   is.
 
 ### Fixed
 
+- `stat` of a device file was exit 3: the definition looked for the
+  device numbers on a line of their own, and GNU, uutils and BusyBox all
+  print them at the end of the Device line. They are read as
+  `device_type`, and the SELinux label as `context`; the label used to be
+  matched and left out.
+- `jz run lspci -v` was exit 3. The output of a single `-v` met the
+  signature of `lspci/kernel`, which then failed on the lines `-k` does
+  not print. It now lands on `lspci/verbose`, which reads `-v` and `-vv`
+  alike.
+- Some patterns matched values outside any named group, so the line
+  counted as read and the value was missing from the result: the server
+  name and transport on `dig`'s SERVER line (now `server_name` and
+  `protocol`; the `dig/bind` schema is version 2) and the name of the
+  programming interface that `lspci -v` prints (`prog_if_name`).
 - `--stream` on a `records` format with a record that could not be read
   lost the start of the next record as well, and reported the rest of it
   as text before the first record.
