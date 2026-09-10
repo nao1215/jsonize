@@ -389,6 +389,28 @@ scenarios:
               - { path: "$[0].size", equals: "20G" }
               - { path: "$[0].mountpoint", equals: null }
 
+  # docker ps names its first column with two words. Cut at the header's
+  # words, the id runs past where "ID" starts and leaves that column
+  # empty, which is also what a genuinely empty column after a long value
+  # would look like. The row does not say which, so it is refused; it used
+  # to be a row with "id": null at exit 0.
+  - name: a value that runs into an empty column is refused, not read as null
+    steps:
+      - fixture:
+          file: docker-ps.txt
+          from: "${specdir}/../../registry/parsers/docker/ps/testdata/docker-29-running.txt"
+      - run:
+          command: jz --parser table --variant aligned --file docker-ps.txt
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+          stderr:
+            contains: 'field "id": the value before it'
+      - assert:
+          stderr:
+            contains: "runs past where this column starts and leaves it empty"
+
   - name: an empty input ends differently depending on what was named
     steps:
       - fixture:

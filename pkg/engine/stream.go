@@ -359,7 +359,7 @@ func (s *streamer) row(l line) (*jsonutil.Object, error) {
 	)
 	switch s.split() {
 	case definition.SplitAligned:
-		cells = alignedCells(l.text, s.cols)
+		cells, err = s.alignedRow(l, s.cols)
 	case definition.SplitDelimiter:
 		cells, err = s.delimitedCells(s.p, l, len(s.cols))
 	default:

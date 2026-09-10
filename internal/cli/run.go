@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
@@ -332,7 +333,7 @@ func wrapperHint(reg *registry.Registry, opts, command []string) string {
 	name := command[0]
 	for _, arg := range command[1:] {
 		key := parserKey(arg)
-		if strings.HasPrefix(arg, "-") || key == parserKey(name) || len(reg.Variants(key)) == 0 {
+		if strings.HasPrefix(arg, "-") || key == parserKey(name) || len(reg.Variants(key)) == 0 || notRunnable(arg) {
 			continue
 		}
 		if n := len(opts); n > 0 && opts[n-1] == "--" {
@@ -342,6 +343,22 @@ func wrapperHint(reg *registry.Registry, opts, command []string) string {
 		return fmt.Sprintf("If %s runs %s, name that parser: %s", name, key, shellLine(line))
 	}
 	return ""
+}
+
+// notRunnable reports whether path names something that exists and is
+// not a program: a directory, or on a system with execute bits a file
+// without one. That is something the command reads (`tree /etc/apt`,
+// `stat /proc/uptime`) rather than a command a wrapper runs. A name that
+// names nothing here is left alone; it is looked up on PATH.
+func notRunnable(path string) bool {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	if fi.IsDir() {
+		return true
+	}
+	return runtime.GOOS != "windows" && fi.Mode()&0o111 == 0
 }
 
 // shellLine writes words as a shell would need them typed, quoting the

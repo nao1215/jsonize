@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemctl/units-jobs.json",
+  "title": "systemctl/units-jobs",
+  "description": "systemctl list-units table while a job is pending",
+  "x-jsonize": {
+    "definition": "systemctl/units-jobs",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "marker": {
+        "type": "string"
+      },
+      "unit": {
+        "type": "string"
+      },
+      "load": {
+        "type": "string"
+      },
+      "active": {
+        "type": "string"
+      },
+      "sub": {
+        "type": "string"
+      },
+      "job": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "unit",
+      "load",
+      "active",
+      "sub",
+      "description"
+    ]
+  }
+}

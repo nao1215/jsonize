@@ -925,12 +925,43 @@ func TestAlignedCells(t *testing.T) {
 		{"x    12345  z", []any{"x", "12345", "z"}},
 		{"x", []any{"x", nil, nil}},
 		{"", []any{nil, nil, nil}},
-		{"abcdefghijklmn", []any{"abcdefghijklmn", nil, nil}},
+		// A value wider than its column pushes the rest of the row right.
+		{"abcdefgh y   z", []any{"abcdefgh", "y", "z"}},
 	}
 	for _, tt := range tests {
-		if diff := cmp.Diff(tt.want, alignedCells(tt.row, cols)); diff != "" {
-			t.Errorf("alignedCells(%q): %s", tt.row, diff)
+		got, overrun := alignedCells(tt.row, cols)
+		if diff := cmp.Diff(tt.want, got); diff != "" || overrun != -1 {
+			t.Errorf("alignedCells(%q): overrun %d %s", tt.row, overrun, diff)
 		}
+	}
+	// A value that runs past the start of the next column and leaves it
+	// empty says nothing about whether that column was empty or its header
+	// word belongs to this one ("CONTAINER ID"), so the row has no reading.
+	for _, row := range []string{"abcdefghijklmn", "abcdefgh     z", "x    abcdefghij"} {
+		if _, overrun := alignedCells(row, cols); overrun == -1 {
+			t.Errorf("alignedCells(%q) read a row whose value ran into an empty column", row)
+		}
+	}
+}
+
+// docker ps printed through the shape definition: "CONTAINER ID" is one
+// column under two header words, and the id runs past where the second
+// one starts. That used to be a row with "id": null at exit 0.
+func TestAlignedRefusesAValueThatRunsIntoAnEmptyColumn(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned}\n")
+	in := "CONTAINER ID   IMAGE    NAMES\n43d84ed8db55   busybox  web\n"
+	_, err := Parse(def, []byte(in), Options{})
+	if err == nil || !strings.Contains(err.Error(), `line 2: field "id": `) {
+		t.Fatalf("err = %v", err)
+	}
+	var got []any
+	err = Stream(def, strings.NewReader(in), Options{}, func(v any) error {
+		got = append(got, v)
+		return nil
+	}, func(pe *ParseError) error { return pe })
+	if err == nil || len(got) != 0 {
+		t.Errorf("stream: err = %v, records = %v", err, got)
 	}
 }
 

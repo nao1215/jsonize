@@ -187,7 +187,7 @@ registry — no `format`, `command`, `variant` or `detect` — so what is
 left is `parse` and, if you want them, `input` and `fields`:
 
 ```console
-$ docker ps | jz --define 'parse: {type: table, split: box}'
+$ sqlite3 -box app.db 'select * from users' | jz --define 'parse: {type: table, split: box}'
 $ jz --define 'parse: {type: csv, delimiter: "|"}' --file export.txt
 $ mytool --list | jz --define '
     input: {select: {after: "^---"}}
@@ -204,10 +204,10 @@ The registry also carries a few definitions that describe a shape rather
 than a command, for the same job under a name:
 
 ```console
-$ docker ps | jz --parser table --variant box
-$ jz --parser ini --file ~/.gitconfig
+$ sqlite3 -box app.db 'select * from users' | jz --parser table --variant box
+$ jz --parser ini --file /etc/NetworkManager/NetworkManager.conf
 $ jz --parser csv --variant tab --file export.tsv
-$ ss -tunlp | jz --parser table --variant whitespace
+$ kubectl get nodes | jz --parser table --variant whitespace
 ```
 
 They are `table` (`whitespace`, `aligned`, `box`), `csv` (`comma`,
@@ -295,7 +295,6 @@ $ jz --explain --file df-gnu.txt
 jz: explain: chose df/gnu from embedded
 jz: explain: scope: every definition in the registry, by its signature alone
 jz: explain: matched: signature.all[0] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\.../
-jz: explain: rejected: tree/listing: signature.all[1] /^(?:\|-- |`-- )\S/ did not match
 jz: explain: not considered: 48 definitions only used when named
 jz: explain: read: 8 lines: 8 read
 ```
@@ -353,7 +352,6 @@ jz: explain: rejected: apt-cache/depends: signature.all[1] /^  (?:Pre)?Depends: 
 jz: explain: rejected: rustup/toolchains: no signature.any[] expression matched
 jz: explain: rejected: sensors/linux: signature.all[1] /^Adapter: \S/ did not match
 jz: explain: rejected: sensors/raw: signature.all[1] /^Adapter: \S/ did not match
-jz: explain: rejected: tree/listing: signature.all[1] /^(?:\|-- |`-- )\S/ did not match
 jz: explain: held back: etc/passwd: its signature fits, but it is only used when named (--parser etc)
 jz: explain: not considered: 47 definitions only used when named
 ```

@@ -53,7 +53,7 @@ func (r *run) parseTable(p *definition.Parse, fields map[string]*definition.Fiel
 		var err error
 		switch split {
 		case definition.SplitAligned:
-			cells = alignedCells(l.text, cols)
+			cells, err = r.alignedRow(l, cols)
 		case definition.SplitDelimiter:
 			cells, err = r.delimitedCells(p, l, len(cols))
 		default:
@@ -248,12 +248,20 @@ func splitFieldsN(s string, n int) []string {
 // The offsets are display columns, the way the table was lined up, so a
 // row holding wide characters is cut where the header says rather than a
 // character later for every one of them.
-func alignedCells(text string, cols []column) []any {
+//
+// A value that runs past the start of the next column is kept whole when
+// the rest of the row was pushed right by it, which leaves something in
+// that column. When it leaves that column empty, the row says nothing
+// about which of two things happened: the column was empty, or its header
+// word is the second word of this column's name ("CONTAINER ID"). The
+// index of such a column is returned, and -1 when there is none.
+func alignedCells(text string, cols []column) ([]any, int) {
 	runes := []rune(text)
 	n := len(runes)
 	cells := make([]any, len(cols))
 	narrow := allNarrow(text, runes)
 	prevEnd := 0
+	overran := -1
 	for i := range cols {
 		start := prevEnd
 		end := n
@@ -263,17 +271,35 @@ func alignedCells(text string, cols []column) []any {
 			if !narrow {
 				end = runeAt(runes, end)
 			}
-			end = cellEnd(runes, start, min(max(end, start), n))
+			boundary := min(max(end, start), n)
+			end = cellEnd(runes, start, boundary)
+			if end > boundary {
+				overran = i + 1
+			}
 		}
 		cell := strings.TrimSpace(string(runes[start:end]))
 		if cell == "" {
+			if overran == i {
+				return cells, i
+			}
 			cells[i] = nil
 		} else {
 			cells[i] = cell
 		}
 		prevEnd = end
 	}
-	return cells
+	return cells, -1
+}
+
+// alignedRow cuts a row of an aligned table, and refuses one whose value
+// ran into a column and left it empty (see alignedCells).
+func (r *run) alignedRow(l line, cols []column) ([]any, error) {
+	cells, overran := alignedCells(l.text, cols)
+	if overran < 0 {
+		return cells, nil
+	}
+	return nil, r.errorf(l.num, cols[overran].name, "the value before it, %q, runs past where this column starts and leaves it empty, so the header does not say where the cells of this row are: %q",
+		cells[overran-1], truncate(l.text, 80))
 }
 
 // cellEnd moves the boundary of a cell that starts at start and would end

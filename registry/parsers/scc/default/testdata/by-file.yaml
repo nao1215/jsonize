@@ -4,7 +4,8 @@ source: >-
 description: >-
   --by-file lists every file between the languages and the total, under
   the same header but with no file count; the rows are refused rather
-  than reported as languages
+  than reported as languages, since a path runs past where the Files
+  column starts and leaves it empty
 os: linux
 args: ["--by-file", "internal/cli"]
-expect_error: 'field "files": required value is missing'
+expect_error: 'field "files": the value before it, "internal/cli/cli_test.go", runs past where this column starts'
