@@ -639,6 +639,35 @@ func appendCriterion(list []string, when bool, key, detail string) []string {
 	return append(list, key+" "+detail)
 }
 
+// Candidates returns the definitions ctx scopes to that the system and
+// the arguments in ctx admit, without looking at any text. It is the
+// answer for a command that printed nothing: which formats could it have
+// been asked for. ctx.Input is not read.
+func Candidates(reg *registry.Registry, ctx Context) []*registry.Entry {
+	scope := reg.Variants(ctx.Parser)
+	if ctx.Variant != "" {
+		e, ok := reg.Lookup(ctx.Parser, ctx.Variant)
+		if !ok {
+			return nil
+		}
+		scope = []*registry.Entry{e}
+	}
+	var out []*registry.Entry
+	for _, e := range scope {
+		d := &e.Def.Detect
+		if ctx.OS != "" && len(d.OS) > 0 && !contains(d.OS, ctx.OS) {
+			continue
+		}
+		if args := e.Def.ArgsFor(ctx.Parser); ctx.Args != nil && !args.IsZero() {
+			if _, _, ok := matchArgs(args, ctx.Args); !ok {
+				continue
+			}
+		}
+		out = append(out, e)
+	}
+	return out
+}
+
 // Window returns how many leading lines a caller has to hold before a
 // selection can be trusted: the largest window any candidate signature
 // looks at. Reading fewer would let a definition through whose none[]
