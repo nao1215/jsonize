@@ -95,6 +95,12 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `ip/oneline-link` reads `ip -o link`, one record per interface. It
+  was added from the documentation alone, as a test of whether that is
+  enough; `ip/link` now states that its header line ends with the group
+  and the queue length, and `file/posix` that a kind is a word of its
+  own, so neither reads the one-line form. `file/posix` no longer reads
+  the MIME types of `file -i` as a kind either.
 - `iostat/human` reads `iostat -h`: the percentages as numbers, the
   rounded device figures as the strings printed. `iostat/cpu` used to
   take that report and fail on the percent signs.

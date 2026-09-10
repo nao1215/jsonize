@@ -1,0 +1,4 @@
+description: One interface asked for by name, the shortest line this form has.
+source: "`ip -o link show lo` on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C"
+os: linux
+args: ["-o", "link", "show", "lo"]

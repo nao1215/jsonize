@@ -1,0 +1,221 @@
+[
+  {
+    "index": 1,
+    "name": "lo",
+    "flags": [
+      "LOOPBACK",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 65536,
+    "qdisc": "noqueue",
+    "state": "UNKNOWN",
+    "mode": "DEFAULT",
+    "group": "default",
+    "qlen": 1000,
+    "link_type": "loopback",
+    "address": "00:00:00:00:00:00",
+    "broadcast": "00:00:00:00:00:00"
+  },
+  {
+    "index": 2,
+    "name": "eno1",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "fq_codel",
+    "state": "UP",
+    "mode": "DEFAULT",
+    "group": "default",
+    "qlen": 1000,
+    "link_type": "ether",
+    "address": "00:00:5e:00:53:01",
+    "broadcast": "ff:ff:ff:ff:ff:ff",
+    "altnames": [
+      "enp193s0",
+      "enx00005e005301"
+    ]
+  },
+  {
+    "index": 3,
+    "name": "wlp195s0",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "noqueue",
+    "state": "UP",
+    "mode": "DORMANT",
+    "group": "default",
+    "qlen": 1000,
+    "link_type": "ether",
+    "address": "00:00:5e:00:53:02",
+    "broadcast": "ff:ff:ff:ff:ff:ff",
+    "altnames": [
+      "wlx00005e005302"
+    ]
+  },
+  {
+    "index": 4,
+    "name": "br-000000000001",
+    "flags": [
+      "NO-CARRIER",
+      "BROADCAST",
+      "MULTICAST",
+      "UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "noqueue",
+    "state": "DOWN",
+    "mode": "DEFAULT",
+    "group": "default",
+    "link_type": "ether",
+    "address": "00:00:5e:00:53:03",
+    "broadcast": "ff:ff:ff:ff:ff:ff"
+  },
+  {
+    "index": 5,
+    "name": "br-000000000002",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "noqueue",
+    "state": "UP",
+    "mode": "DEFAULT",
+    "group": "default",
+    "link_type": "ether",
+    "address": "00:00:5e:00:53:04",
+    "broadcast": "ff:ff:ff:ff:ff:ff"
+  },
+  {
+    "index": 6,
+    "name": "br-000000000003",
+    "flags": [
+      "NO-CARRIER",
+      "BROADCAST",
+      "MULTICAST",
+      "UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "noqueue",
+    "state": "DOWN",
+    "mode": "DEFAULT",
+    "group": "default",
+    "link_type": "ether",
+    "address": "00:00:5e:00:53:05",
+    "broadcast": "ff:ff:ff:ff:ff:ff"
+  },
+  {
+    "index": 7,
+    "name": "docker0",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "noqueue",
+    "state": "UP",
+    "mode": "DEFAULT",
+    "group": "default",
+    "link_type": "ether",
+    "address": "00:00:5e:00:53:06",
+    "broadcast": "ff:ff:ff:ff:ff:ff"
+  },
+  {
+    "index": 8,
+    "name": "veth0000001",
+    "peer": "if2",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "noqueue",
+    "master": "docker0",
+    "state": "UP",
+    "mode": "DEFAULT",
+    "group": "default",
+    "link_type": "ether",
+    "address": "00:00:5e:00:53:07",
+    "broadcast": "ff:ff:ff:ff:ff:ff",
+    "netnsid": 0
+  },
+  {
+    "index": 9,
+    "name": "veth0000002",
+    "peer": "if2",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "noqueue",
+    "master": "br-000000000002",
+    "state": "UP",
+    "mode": "DEFAULT",
+    "group": "default",
+    "link_type": "ether",
+    "address": "00:00:5e:00:53:08",
+    "broadcast": "ff:ff:ff:ff:ff:ff",
+    "netnsid": 1
+  },
+  {
+    "index": 10,
+    "name": "veth0000003",
+    "peer": "if2",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "noqueue",
+    "master": "br-000000000002",
+    "state": "UP",
+    "mode": "DEFAULT",
+    "group": "default",
+    "link_type": "ether",
+    "address": "00:00:5e:00:53:09",
+    "broadcast": "ff:ff:ff:ff:ff:ff",
+    "netnsid": 2
+  },
+  {
+    "index": 11,
+    "name": "veth0000004",
+    "peer": "if2",
+    "flags": [
+      "BROADCAST",
+      "MULTICAST",
+      "UP",
+      "LOWER_UP"
+    ],
+    "mtu": 1500,
+    "qdisc": "noqueue",
+    "master": "br-000000000002",
+    "state": "UP",
+    "mode": "DEFAULT",
+    "group": "default",
+    "link_type": "ether",
+    "address": "00:00:5e:00:53:0a",
+    "broadcast": "ff:ff:ff:ff:ff:ff",
+    "netnsid": 3
+  }
+]

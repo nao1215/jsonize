@@ -45,7 +45,14 @@ detect:
       # with a proper noun ("Composite Document File V2 Document"). A
       # listing that names no kind at all is refused: "could not read it"
       # is a sentence other tools write too.
-      - '(?i)^\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed)\b'
+      #
+      # A kind is a word of the description's prose, so what follows it
+      # is the end of the line, a space or punctuation. A slash or a
+      # hyphen after it makes it part of a longer token: `link/ether` and
+      # `link-netnsid` in `ip -o link`, whose every line is also "word:
+      # text", or a MIME type, which `file -i` prints and this definition
+      # does not undertake to read.
+      - '(?i)^\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed)(?:[ \t,;:.()]|$)'
       # And every description does, or is one of the two file(1) writes
       # for a file it was given but could not identify. One line naming a
       # kind is not evidence on its own: any dump of a file's bytes has
@@ -54,7 +61,7 @@ detect:
       # long paths until this expression covered the whole text. An error
       # message rarer than these two is refused, which is the same answer
       # this definition gives for a kind it does not name.
-      - '(?i)\A(?:\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)\b[^\n]*\n)*\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)\b[^\n]*\z'
+      - '(?i)\A(?:\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)(?:[ \t,;:.()][^\n]*)?\n)*\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)(?:[ \t,;:.()][^\n]*)?\z'
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'
