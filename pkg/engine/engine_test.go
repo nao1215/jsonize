@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"bytes"
 	"errors"
 	"strings"
 	"testing"
@@ -817,6 +818,22 @@ func TestLimitsAndEncoding(t *testing.T) {
 	got, err := Parse(def, []byte("\xEF\xBB\xBFa\r\nb\r\n"), Options{})
 	if err != nil || mustJSON(t, got) != `[{"a":"a"},{"a":"b"}]` {
 		t.Errorf("BOM/CRLF: %v %v", mustJSON(t, got), err)
+	}
+	// A command run with -z or --zero ends its records with NUL instead
+	// of a newline. Read line by line, that is one line holding every
+	// record, and the last field of the first would take the rest.
+	zero := []byte("a.txt\x00b.txt\x00")
+	if _, err := Parse(def, zero, Options{}); err == nil || !strings.Contains(err.Error(), "NUL") {
+		t.Errorf("NUL in a line: %v", err)
+	}
+	err = Stream(def, bytes.NewReader(zero), Options{}, func(any) error { return nil }, nil)
+	if err == nil || !strings.Contains(err.Error(), "NUL") {
+		t.Errorf("NUL in a streamed line: %v", err)
+	}
+	// A format whose records end with NUL reads the same text.
+	nul := load(t, "format: 1\ncommand: t\nvariant: v\ninput: {record_separator: nul}\nparse: {type: regex, pattern: '(?P<a>.*)'}\n")
+	if got, err := Parse(nul, zero, Options{}); err != nil || mustJSON(t, got) != `[{"a":"a.txt"},{"a":"b.txt"}]` {
+		t.Errorf("NUL-separated: %v %v", mustJSON(t, got), err)
 	}
 }
 

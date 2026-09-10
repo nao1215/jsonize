@@ -36,6 +36,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/nao1215/jsonize/pkg/convert"
 	"github.com/nao1215/jsonize/pkg/definition"
@@ -58,6 +59,10 @@ type Context struct {
 	Args []string
 	// Input is the captured output. Only the leading lines are examined.
 	Input []byte
+
+	// nul records that Input holds a NUL byte, which Select works out
+	// once for every definition it checks.
+	nul bool
 }
 
 // Result is a successful selection.
@@ -190,7 +195,13 @@ type NoMatchError struct {
 	// read.
 	excluded    *registry.Entry
 	excludedArg string
+	// nul records that the text is text holding a NUL byte, which every
+	// format read line by line refuses.
+	nul bool
 }
+
+// nulHint says what text holding NUL bytes most likely is.
+const nulHint = "\n\nThe text holds NUL bytes: its records end with NUL rather than a newline, as a command run with -z or --zero writes them. Run it without that option."
 
 func (e *NoMatchError) Error() string {
 	var b strings.Builder
@@ -207,6 +218,10 @@ func (e *NoMatchError) Error() string {
 			fmt.Fprintf(&b, "\n\nConfirm it:\n  COMMAND | jz --parser %s", names[0])
 			return b.String()
 		}
+		if e.nul {
+			b.WriteString(nulHint)
+			return b.String()
+		}
 		fmt.Fprintf(&b, "\nno signature of the %d known parsers matched this text", e.Scanned)
 		if len(e.shapes) > 0 {
 			fmt.Fprintf(&b, "\n\nIf the text has one of the shapes read by name (%s), name it:\n  COMMAND | jz --parser %s", strings.Join(e.shapes, ", "), e.shapes[0])
@@ -221,6 +236,9 @@ func (e *NoMatchError) Error() string {
 		fmt.Fprintf(&b, "\n  %s: %s", r.Entry.Def.Variant, r.Reason)
 	}
 	switch {
+	case e.nul:
+		b.WriteString(nulHint)
+		return b.String()
 	case len(e.Hints) > 0:
 		fmt.Fprintf(&b, "\n\nName the variant explicitly:\n  COMMAND | jz --parser %s --variant %s", e.Parser, e.Hints[0].Def.Variant)
 		return b.String()
@@ -294,6 +312,7 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		candidates = reg.Entries()
 	}
 	window := signatureWindow(ctx.Input)
+	ctx.nul = bytes.IndexByte(ctx.Input, 0) >= 0
 
 	if ctx.Variant != "" {
 		e, ok := reg.Lookup(ctx.Parser, ctx.Variant)
@@ -335,7 +354,9 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 	case 1:
 		return result(sc.matched[0].entry, "", nil), nil
 	case 0:
-		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: sc.hints, Reported: reported, ExplicitOnly: sc.explicitOnly, shapes: dedupe(sc.shapes), excluded: sc.excluded, excludedArg: sc.excludedArg}
+		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: sc.hints, Reported: reported, ExplicitOnly: sc.explicitOnly, shapes: dedupe(sc.shapes), excluded: sc.excluded, excludedArg: sc.excludedArg,
+			// Binary holds NUL bytes too, and is not what the hint is about.
+			nul: ctx.nul && utf8.Valid(ctx.Input)}
 		if ctx.Parser != "" {
 			err.Rejections = sc.rejections
 		}
@@ -549,11 +570,23 @@ type verdict struct {
 
 func (v verdict) ok() bool { return v.Reason == "" }
 
+// nulReason is why a format read line by line is out for text holding a
+// NUL byte.
+const nulReason = "the text holds a NUL byte, and this format is read line by line (was the command run with -z or --zero?)"
+
 // check reports whether one definition can describe the input, why not
 // when it cannot, and what it did meet either way.
 func check(e *registry.Entry, ctx *Context, window []string) verdict {
 	d := &e.Def.Detect
 	var v verdict
+	// A command run with -z or --zero ends its records with NUL. A format
+	// read line by line would see one line holding all of them, and a
+	// signature that matches the first record would let the rest through
+	// inside its last field.
+	if ctx.nul && e.Def.Input.Separator() == '\n' {
+		v.Reason = nulReason
+		return v
+	}
 	if !d.Signature.IsZero() {
 		v = matchSignature(&d.Signature, window)
 		if !v.ok() {

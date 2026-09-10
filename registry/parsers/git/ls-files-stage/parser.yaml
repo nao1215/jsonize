@@ -15,9 +15,9 @@
 # ("docs/\346\227\245\346\234\254..."); jz keeps it exactly as printed.
 # `git -c core.quotePath=false ls-files -s` prints the raw name instead.
 #
-# Plain `git ls-files` prints paths alone and `git ls-files -s -z`
-# separates entries with NUL; neither is this format and the signature
-# refuses both.
+# Plain `git ls-files` prints paths alone, which the signature refuses.
+# `git ls-files -s -z` ends entries with NUL, which no format read line
+# by line accepts.
 format: 1
 command: git
 variant: ls-files-stage

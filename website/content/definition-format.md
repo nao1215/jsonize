@@ -180,7 +180,10 @@ and for the control files whose values continue on an indented line.
 
 With `record_separator: nul` the records are separated by NUL bytes instead,
 which is what makes a value containing a newline representable. Input
-must be valid UTF-8 and within the size limits.
+must be valid UTF-8 and within the size limits. A format read line by line
+refuses text holding a NUL byte, both when it is detected and when it is
+named: that is the output of a command run with `-z` or `--zero`, one line
+holding every record, and its last field would take all of them.
 
 ### Every line is read or left out by a rule
 
