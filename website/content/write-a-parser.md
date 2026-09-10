@@ -20,7 +20,9 @@ do not change the layout. Formats you cannot run yourself (another OS)
 need a fixture whose origin you can state; CI additionally runs the real
 command on Linux and macOS runners (`e2e/atago/exec_*.atago.yaml`), and
 a command that needs a device the runner lacks is run there on its
-captured output through the same path.
+captured output through the same path. An entry there is welcome when
+the command is on the runner, and not required: the fixtures are the
+contract, and the checks below run on them.
 
 ## 2. Decide the variant
 
@@ -88,6 +90,15 @@ you state what this definition does not undertake to read; that is a
 scope you choose, and the comment beside the expression is where you
 say it.
 
+Two facts about what the expressions see. The signature reads the first
+twenty lines (`window`), joined with line breaks and with no break after
+the last, so `\z` is the end of those lines, which is the end of the text
+only when it is that short: "every line looks like this" written with
+`\A` and `\z` holds for a long output too. And `detect.args` looks for a
+word anywhere among the arguments, not at a position, so
+`any: [madison]` is also met by `apt-cache policy madison`; the signature
+is what refuses that output.
+
 What not to reach for is `none`. If a neighbouring format matches your
 signature, the signature is not yet saying what your format is, and
 excluding the neighbour couples your definition to theirs: they change
@@ -115,12 +126,19 @@ os: linux
 args: [-p, "1234"]
 ```
 
+`args` is everything after the command name, a subcommand included
+(`args: [madison, bash]` for `apt-cache madison bash`): it is what
+`jz run` would see.
+
 To pin text the definition must refuse, add a fixture with
 `expect_error: <substring>` and no `.json`. It covers both ways a
 definition refuses: the signature not describing the text, and the parse
 failing on it. The substring is matched against whichever message comes
 out, so `expect_error: 'does not describe this input'` pins a signature
-that keeps a neighbouring format away.
+that keeps a neighbouring format away. Such a fixture is usually another
+format's output, so the check that no other definition reads your
+fixtures leaves it out; `os` and `args` are only needed when the refusal
+depends on them.
 
 ## 5. Generate the golden file and review it
 
@@ -131,7 +149,10 @@ $ cat registry/parsers/lsof/default/testdata/lsof-4.95.json
 ```
 
 In the jsonize repository itself, `make registry-update-golden` does the
-first step and `make registry-test` the check below.
+first step and `make registry-test` the check below. The repository's
+check also wants the definition's schema (step 6) and its row in the
+parsers page (step 9), and says so by name until both are there; the
+golden files are written either way.
 
 Check types, `null`s and the last column. A rounded, human-readable
 number stays a string: the output does not record the base and the value
@@ -209,14 +230,19 @@ $ jz test ./registry
 ```console
 $ go run ./cmd/jz run lsof -p $$
 $ lsof -p $$ | go run ./cmd/jz --pretty
+$ go run ./cmd/jz --parser lsof --variant default --file lsof.txt
 ```
+
+A definition is named by its command and its variant as two options;
+`lsof/default` is how messages write it, not an argument jz takes.
 
 ## 9. Open the pull request
 
 Include the definition, the fixtures, the golden JSON, the schema, any
 decoy you added and the variant in the table in
-`website/content/parsers.md`, linked to its schema. Use a
-`parser:` commit prefix.
+`website/content/parsers.md`, linked to its schema the way the rows
+around it are (`[`default`](../schemas/lsof/default.json)`, variants in
+alphabetical order). Use a `parser:` commit prefix.
 
 ## Working outside the repository
 
