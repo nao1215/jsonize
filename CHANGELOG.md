@@ -148,6 +148,11 @@ project follows [Semantic Versioning](https://semver.org/).
   signature of `lspci/kernel`, which then failed on the lines `-k` does
   not print. It now lands on `lspci/verbose`, which reads `-v` and `-vv`
   alike.
+- `ss -a` and `ss -l` were exit 3 wherever they list netlink or packet
+  sockets, whose peer is a bare `*`. Those rows are read now, with the
+  protocol and the process or interface as the local address and port,
+  and no `peer_port` (the `ss/linux` and `ss/single-protocol` schemas
+  are version 2).
 - `iostat -m` read the megabyte columns as strings where the kilobyte
   ones are numbers. They are numbers now in `iostat/linux`,
   `iostat/device` and `iostat/extended`, whose schemas are version 2.

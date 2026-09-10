@@ -1,0 +1,102 @@
+[
+  {
+    "netid": "nl",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "rtnl",
+    "local_port": "kernel",
+    "peer_address": "*"
+  },
+  {
+    "netid": "nl",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "rtnl",
+    "local_port": "NetworkManager/2201",
+    "peer_address": "*"
+  },
+  {
+    "netid": "nl",
+    "state": "UNCONN",
+    "recv_q": 960,
+    "send_q": 0,
+    "local_address": "tcpdiag",
+    "local_port": "kernel",
+    "peer_address": "*"
+  },
+  {
+    "netid": "nl",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "uevent",
+    "local_port": "-70577064",
+    "peer_address": "*"
+  },
+  {
+    "netid": "nl",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "genl",
+    "local_port": "kernel",
+    "peer_address": "*"
+  },
+  {
+    "netid": "nl",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "scsi-trans",
+    "local_port": "kernel",
+    "peer_address": "*"
+  },
+  {
+    "netid": "p_dgr",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "[34958]",
+    "local_port": "*",
+    "peer_address": "*"
+  },
+  {
+    "netid": "p_dgr",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "[35085]",
+    "local_port": "wlp195s0",
+    "peer_address": "*"
+  },
+  {
+    "netid": "p_dgr",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "arp",
+    "local_port": "eno1",
+    "peer_address": "*"
+  },
+  {
+    "netid": "p_dgr",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "arp",
+    "local_port": "wlp195s0",
+    "peer_address": "*"
+  },
+  {
+    "netid": "icmp6",
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "*",
+    "local_port": "ipv6-icmp",
+    "peer_address": "*",
+    "peer_port": "*"
+  }
+]
