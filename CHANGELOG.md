@@ -171,6 +171,13 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A command that ended and left a process behind holding its output
+  open, such as a script that starts something in the background, was
+  exit 1 with `WaitDelay expired before I/O complete` and nothing
+  converted; with `--stream`, jz waited for the process it left, which
+  for a daemon is for ever. What the command printed before it ended is
+  now read, three seconds after it ended at most, and standard error
+  says a process it started still held the output.
 - An option that takes one value, given two, kept the last without a
   word: `jz -f a.txt -f b.txt` converted `b.txt` at status 0 and said
   nothing about `a.txt`, and `--parser`, `--variant`, `--define`,

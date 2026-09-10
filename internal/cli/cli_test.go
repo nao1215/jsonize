@@ -1094,6 +1094,32 @@ func TestRunDoesNotReadOutputCutShort(t *testing.T) {
 	}
 }
 
+// A command that ends and leaves a process behind holding its output
+// open has still ended, and what it printed is converted. The whole
+// document used to fail with "WaitDelay expired before I/O complete" and
+// a stream to wait for the process it left, which for a daemon is for
+// ever.
+func TestRunCommandThatLeavesItsOutputOpen(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	h := newHarness(t)
+	for _, args := range [][]string{
+		{"run", "--define", "parse: {type: kv}", "--", "sh", "-c", "sleep 6 & echo a=b"},
+		{"run", "--stream", "--define", "parse: {type: kv}", "--", "sh", "-c", "sleep 6 & echo a=b"},
+	} {
+		start := time.Now()
+		code := h.run(args...)
+		if code != ExitOK || !strings.Contains(h.stdout.String(), `"value":"b"`) ||
+			!strings.Contains(h.stderr.String(), "sh ended, and a process it started still held its output open") {
+			t.Errorf("%v: %d stdout=%q stderr=%s", args, code, h.stdout.String(), h.stderr.String())
+		}
+		if time.Since(start) > 5*time.Second {
+			t.Errorf("%v: waited %s for the process sh left", args, time.Since(start))
+		}
+	}
+}
+
 // A wrapper puts its own name where jz looks for the parser. When what it
 // runs is a command jz knows, the refusal says how to name that parser,
 // instead of offering names that merely look like the wrapper's.
