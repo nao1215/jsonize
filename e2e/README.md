@@ -10,10 +10,10 @@ in CI (`.github/workflows/e2e.yml`) and locally with `make e2e`.
 
 | Spec | Runs on | What it pins |
 |------|---------|--------------|
-| `detect` | all | identification from a pipe or a file, `--extract`, `--raw`, `--explain`, the path of a file naming its definition |
-| `errors` | all | every refusal: unidentified, ambiguous, mismatched, oversized input, removed options, another command's output |
+| `detect` | all | identification from a pipe or a file, `--extract`, `--raw`, `--explain` and `--explain=json`, the path of a file naming its definition |
+| `errors` | all | every refusal: unidentified, ambiguous, mismatched, oversized input, text the definition did not read, removed options, another command's output |
 | `misdetect` | all | real output of one command is not read by another definition, with or without `--parser` |
-| `registry` | all | `jz list`, `jz test`, user and `JSONIZE_REGISTRY_PATH` registries, layering, broken definitions |
+| `registry` | all | `jz list` (with `--schema`), `jz test`, user and `JSONIZE_REGISTRY_PATH` registries, layering, broken definitions |
 | `report` | all | sysstat reports read as an array of samples, from captured output |
 | `adhoc` | all | `--define`, and the shape definitions (csv, ini, drawn table) |
 | `stream` | all | `--stream` writes one document per record and keeps what was written when a later record fails |
