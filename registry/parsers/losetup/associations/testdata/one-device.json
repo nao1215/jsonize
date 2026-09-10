@@ -1,0 +1,8 @@
+[
+  {
+    "device": "/dev/loop1",
+    "backing_device": null,
+    "inode": null,
+    "file": "/var/lib/snapd/snaps/brave_676.snap"
+  }
+]

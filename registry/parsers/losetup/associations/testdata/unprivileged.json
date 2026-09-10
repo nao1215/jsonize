@@ -1,0 +1,26 @@
+[
+  {
+    "device": "/dev/loop1",
+    "backing_device": null,
+    "inode": null,
+    "file": "/var/lib/snapd/snaps/brave_676.snap"
+  },
+  {
+    "device": "/dev/loop29",
+    "backing_device": null,
+    "inode": null,
+    "file": "/var/lib/snapd/snaps/icon-theme-breeze_5.snap"
+  },
+  {
+    "device": "/dev/loop19",
+    "backing_device": null,
+    "inode": null,
+    "file": "/var/lib/snapd/snaps/ghostty_718.snap"
+  },
+  {
+    "device": "/dev/loop47",
+    "backing_device": null,
+    "inode": null,
+    "file": "/var/lib/snapd/snaps/terraform_928.snap"
+  }
+]

@@ -131,6 +131,10 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `losetup/associations` reads `losetup -a` and `losetup DEVICE`, one
+  record per loop device with the backing file, its device number and
+  inode (null when the user may not ask for them), and the offset and
+  size limit when they are set. It was exit 4.
 - `ps/threads` reads `ps -eLf`, a line per thread with its LWP and the
   thread count of its process, and `ps/jobs` reads the BSD job format of
   `ps axj` and `ps axjf`, keeping the tree `f` draws into the command.

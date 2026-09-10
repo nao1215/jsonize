@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/losetup/associations.json",
+  "title": "losetup/associations",
+  "description": "losetup -a, each loop device and the file behind it",
+  "x-jsonize": {
+    "definition": "losetup/associations",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "string"
+      },
+      "lost": {
+        "type": "boolean"
+      },
+      "backing_device": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "inode": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "file": {
+        "type": "string"
+      },
+      "offset": {
+        "type": "integer"
+      },
+      "sizelimit": {
+        "type": "integer"
+      },
+      "encryption": {
+        "type": "string"
+      },
+      "encryption_type": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "device",
+      "backing_device",
+      "inode",
+      "file"
+    ]
+  }
+}
