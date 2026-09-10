@@ -187,6 +187,36 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- An aligned table whose header gives one column two words read the row
+  wrong at exit 0: `docker ps | jz --parser table --variant aligned`
+  split `CONTAINER ID` into two columns, kept the id whole under the
+  first and wrote `"id": null`, then carried the `7` of `7 weeks ago`
+  into the command. A value that runs past where the next column starts
+  and leaves that column empty is now refused with the line, the column
+  and the value, since the row does not say whether the column was empty
+  or its header word belongs to the one before. A value that pushes the
+  rest of the row to the right still reads.
+- `tree` printed more than twenty lines was exit 4: the signature asked
+  for the closing count, which is past the lines detection looks at.
+  `jz run tree -L 2 /etc/apt` is read now, and a short text still has to
+  end with the count.
+- `jz run systemctl list-units` was exit 4 while any unit had a job
+  pending, since systemctl then adds a JOB column. The new variant
+  `systemctl/units-jobs` reads that table, with `job` on the unit that has
+  one.
+- `gpg --list-keys --with-colons` on a keyring with no key prints the
+  trust database record alone, and `rustup toolchain list` with nothing
+  installed prints `no installed toolchains`. Both were exit 4; they are
+  the empty listings they are.
+- The hint for a wrapper named an argument that is a directory or a data
+  file: `jz run tree -L 2 /etc/apt` suggested
+  `jz run --parser apt -- tree ...`. Only something that can be run is
+  offered now.
+- The examples of the shape definitions piped `docker ps` into
+  `table/box` and read `~/.gitconfig` with `ini/default`; `docker ps` is
+  not drawn with rules, and a git config that sets a key twice is refused
+  by an object that holds one value per key. They use `sqlite3 -box`,
+  `kubectl get nodes` and a NetworkManager configuration instead.
 - The README, the usage page, `jz run --help` and the design page showed
   `jz run --stream ping` as the example of a stream. `ping/linux` reads
   one object, which has no streaming form, so the example was exit 2.
