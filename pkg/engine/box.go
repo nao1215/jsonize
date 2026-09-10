@@ -169,6 +169,9 @@ func (r *run) parseBox(p *definition.Parse, fields map[string]*definition.Field,
 	if len(blocks) == 0 {
 		return []any{}, nil
 	}
+	if len(blocks) == 1 && len(blocks[0]) > 1 {
+		return nil, r.noHeaderRule(blocks[0])
+	}
 	cols, err := r.boxColumns(p, blocks[0])
 	if err != nil {
 		return nil, err
@@ -189,6 +192,14 @@ func (r *run) parseBox(p *definition.Parse, fields map[string]*definition.Field,
 		}
 	}
 	return out, nil
+}
+
+// noHeaderRule refuses a drawn table whose lines all stand between the
+// same two rules. A header over two lines and rows with no rule under a
+// header are the same text there, and reading the first would make every
+// row part of the column names.
+func (r *run) noHeaderRule(block []line) error {
+	return r.errorf(block[0].num, "", "a drawn table with no rule under its header: its %d lines stand between the same two rules, so which are the header and which are rows is not written", len(block))
 }
 
 // boxLine refuses a line that is neither a rule nor cut by a bar. Such a

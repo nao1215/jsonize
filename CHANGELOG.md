@@ -190,6 +190,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A table drawn with a frame and no rule under its header (a headless
+  listing, as `psql` prints with a border and no headings) was read as
+  a header over several lines, and the answer was `[]` at exit 0. It is
+  refused, since the text does not say where a header would end.
 - Two outputs of one command in a row were read with the second one's
   header as a row: `docker network ls` twice gave
   `{"network_id":"NETWORK","name":"ID",...}` at exit 0, and so did 20
