@@ -63,7 +63,7 @@ scenarios:
               - { path: "$.source", equals: embedded }
               - { path: "$.detect.auto_detectable", equals: true }
               - { path: "$.detect.os[0]", equals: linux }
-              - { path: "$.fields.1k_blocks", equals: "int required" }
+              - { path: "$.fields.1k_blocks", equals: 'int null_if=["-"]' }
 
   # The output contract of one definition, derived from it and published
   # with a version of its own, apart from the definition format.
@@ -78,7 +78,9 @@ scenarios:
               - { path: "$.title", equals: df/gnu }
               - { path: "$.type", equals: array }
               - { path: "$.items.required[0]", equals: filesystem }
-              - { path: "$.items.properties.1k_blocks.type", equals: integer }
+              # df -a prints a dash for a figure it could not read.
+              - { path: "$.items.properties.1k_blocks.type[0]", equals: integer }
+              - { path: "$.items.properties.1k_blocks.type[1]", equals: "null" }
       - run:
           command: jz list --schema df
       - assert:
