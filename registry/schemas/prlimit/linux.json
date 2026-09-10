@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/prlimit/linux.json",
+  "title": "prlimit/linux",
+  "description": "prlimit table of soft and hard resource limits",
+  "x-jsonize": {
+    "definition": "prlimit/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "resource": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "soft": {
+        "type": "string"
+      },
+      "hard": {
+        "type": "string"
+      },
+      "units": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "resource",
+      "description",
+      "soft",
+      "hard",
+      "units"
+    ]
+  }
+}
