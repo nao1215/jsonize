@@ -176,6 +176,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `ls -l --si` was exit 3: `--si` writes the kilo step as a lower-case
+  `k` (`4.1k`), which the size in every `ls` definition left out, along
+  with the exa and larger steps. The sizes stay as printed.
 - A command that ended and left a process behind holding its output
   open, such as a script that starts something in the background, was
   exit 1 with `WaitDelay expired before I/O complete` and nothing

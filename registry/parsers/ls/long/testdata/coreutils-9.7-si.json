@@ -1,0 +1,38 @@
+[
+  {
+    "flags": "-rw-rw-r--",
+    "links": 1,
+    "owner": "bob",
+    "group": "bob",
+    "size": "0",
+    "date": "Sep  1 19:00",
+    "filename": "empty"
+  },
+  {
+    "flags": "-rw-rw-r--",
+    "links": 1,
+    "owner": "bob",
+    "group": "bob",
+    "size": "1.5k",
+    "date": "Sep  1 19:00",
+    "filename": "kilo"
+  },
+  {
+    "flags": "-rw-rw-r--",
+    "links": 1,
+    "owner": "bob",
+    "group": "bob",
+    "size": "2.5M",
+    "date": "Sep  1 19:00",
+    "filename": "mega"
+  },
+  {
+    "flags": "-rw-rw-r--",
+    "links": 1,
+    "owner": "bob",
+    "group": "bob",
+    "size": "999",
+    "date": "Sep  1 19:00",
+    "filename": "small"
+  }
+]
