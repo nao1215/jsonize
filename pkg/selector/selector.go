@@ -717,12 +717,19 @@ func signatureWindow(input []byte) []string {
 		} else {
 			l, input = input[:i], input[i+1:]
 		}
-		lines = append(lines, string(bytes.TrimSuffix(l, []byte{'\r'})))
+		line := string(bytes.TrimSuffix(l, []byte{'\r'}))
+		// Blank lines before the text are not part of it: the parser
+		// skips them, and a signature anchored at \A would otherwise meet
+		// the blank line where the text's first line is.
+		if len(lines) == 0 && strings.TrimSpace(line) == "" {
+			continue
+		}
+		lines = append(lines, line)
 	}
-	// Blank lines after the last of the text are not part of it: the
-	// parser skips them, and a signature that says every line has one
-	// shape would otherwise refuse `cat /proc/meminfo; echo`. Only where
-	// the input ends, since a blank line with text after it is inside.
+	// Blank lines after the last of the text are not part of it either,
+	// and a signature that says every line has one shape would otherwise
+	// refuse `cat /proc/meminfo; echo`. Only where the input ends, since
+	// a blank line with text after it is inside.
 	if len(input) == 0 {
 		for len(lines) > 0 && strings.TrimSpace(lines[len(lines)-1]) == "" {
 			lines = lines[:len(lines)-1]

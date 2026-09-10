@@ -19,7 +19,8 @@ const testUsage = `Usage: jz test [options] [DIR...]
 Checks parser definitions the way the official ones are checked. Each
 fixture is parsed with its own definition and compared with the JSON
 beside it; it must give the same answer with CRLF line endings, a byte
-order mark, or a blank line at the end, which leave the text as it was;
+order mark, or a blank line before or after it, which leave the text as
+it was;
 each is changed (a foreign line added, the text doubled) and must be
 refused or show the change, which proves the definition reads all of
 its input; and every definition is then named explicitly on every other

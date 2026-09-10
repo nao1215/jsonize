@@ -232,6 +232,17 @@ func foldLines(in *definition.Input, lines []line) ([]line, *splitError) {
 // prepare drops ignored and blank lines, counting them in acct when it
 // is not nil.
 func prepare(in *definition.Input, lines []line, acct *Account) []line {
+	// Blank lines before the text are not part of it, whatever skip_blank
+	// says: it keeps the blank lines that separate things, and nothing is
+	// separated from what comes before the first line.
+	lead := 0
+	for lead < len(lines) && strings.TrimSpace(lines[lead].text) == "" {
+		lead++
+	}
+	if acct != nil {
+		acct.Blank += lead
+	}
+	lines = lines[lead:]
 	ignore := in.IgnorePatterns()
 	skipBlank := in.SkipBlankLines()
 	if len(ignore) == 0 && !skipBlank {

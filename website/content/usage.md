@@ -549,8 +549,8 @@ jz test --decoys ./decoys .  # also require every file under ./decoys to be refu
 Three things are checked. Every `testdata/<case>.txt` is parsed with its
 own definition and compared with the `.json` beside it, and has to give
 the same answer with CRLF line endings, a byte order mark or a blank
-line at the end; every fixture is
-changed (a foreign line added, the whole text doubled) and must be refused
+line before or after it; every fixture is changed (a foreign line
+added, the whole text doubled) and must be refused
 or show the change in its result, which is what proves the definition
 reads all of its input; and every definition is then named explicitly on
 every other definition's fixtures and must refuse them. The official fixtures travel inside the binary, so the

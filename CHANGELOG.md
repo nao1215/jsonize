@@ -166,10 +166,13 @@ project follows [Semantic Versioning](https://semver.org/).
   unidentified: `cat /proc/meminfo; echo` was exit 4. A signature that
   says every line has one shape ends at `\z`, the end of the lines it
   looks at, and the blank line was one of them though the parser skips
-  it. Blank lines after the text are no longer part of what a signature
-  sees. `jz test` and `make registry-test` now require every fixture to
-  give the same answer with CRLF line endings, a byte order mark, no
-  line break at the end and a blank line after it.
+  it. A blank line before the first line did the same to 507 of the 743
+  fixtures, through signatures anchored at `\A`. Blank lines before and
+  after the text are no longer part of what a signature sees, and the
+  ones before it are skipped by `skip_blank: false` definitions too.
+  `jz test` and `make registry-test` now require every fixture to give
+  the same answer with CRLF line endings, a byte order mark, no line
+  break at the end and a blank line before or after it.
 - `lsblk -f -r` came back at exit 0 with its values under the wrong keys:
   `-r` prints the header of the aligned table one space apart and the
   rows unaligned, and cutting the rows where those header words start
