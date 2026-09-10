@@ -1,0 +1,4 @@
+description: --mime-type prints the type alone, with no character set.
+source: "`file --mime-type` on Ubuntu 26.04 (file-5.46) with LC_ALL=C"
+os: linux
+args: ["--mime-type", "/usr/share/doc/bash/copyright", "/usr/share/doc/bash/NEWS.gz", "/usr/bin/gnustat"]

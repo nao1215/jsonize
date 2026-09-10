@@ -1,0 +1,3 @@
+/usr/share/doc/bash/copyright: text/plain
+/usr/share/doc/bash/NEWS.gz:   application/gzip
+/usr/bin/gnustat:              application/x-pie-executable

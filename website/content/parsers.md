@@ -61,7 +61,7 @@ the same reading with settings of your own.
 | `factor` | [`default`](../schemas/factor/default.json) |
 | `fc-list` | [`posix`](../schemas/fc-list/posix.json) |
 | `fdisk` | [`linux`](../schemas/fdisk/linux.json) |
-| `file` | [`posix`](../schemas/file/posix.json) |
+| `file` | [`mime`](../schemas/file/mime.json), [`posix`](../schemas/file/posix.json) |
 | `findmnt` | [`df`](../schemas/findmnt/df.json), [`linux`](../schemas/findmnt/linux.json), [`source-first`](../schemas/findmnt/source-first.json) |
 | `free` | [`gnu`](../schemas/free/gnu.json), [`gnu-human`](../schemas/free/gnu-human.json), [`gnu-wide`](../schemas/free/gnu-wide.json) |
 | `getcap` | [`paths`](../schemas/getcap/paths.json) |

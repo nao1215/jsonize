@@ -1,0 +1,30 @@
+# `file -i` (`--mime`) reports each file as a MIME type and a character
+# set instead of a sentence, and `--mime-type` as the type alone. The
+# names are padded to one column, as in the sentence form file/posix
+# reads.
+#
+# A MIME type names one of a fixed set of top-level types, which is what
+# the signature holds every line to; a line that is not a type, such as
+# the message file prints for a file it cannot open, is refused.
+format: 1
+command: file
+variant: mime
+description: file -i and file --mime-type, one MIME type per file
+metadata:
+  tags: [linux, darwin, filesystem]
+  compatible: [file]
+  references:
+    - https://man7.org/linux/man-pages/man1/file.1.html
+detect:
+  args:
+    any: ["-i", "--mime", "--mime-type"]
+  signature:
+    all:
+      - '\A(?:[^:\n]+:[ \t]+(?:application|audio|font|image|inode|message|model|multipart|text|video)/[-+.\w]+(?:; charset=[-\w]+)?[ \t]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<file>[^:]+):[ \t]+(?P<mime_type>[a-z]+/[-+.\w]+)(?:; charset=(?P<charset>[-\w]+))?[ \t]*$'
+fields:
+  file: {required: true}
+  mime_type: {required: true}
+  charset: {when_missing: omit}
