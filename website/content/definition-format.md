@@ -291,7 +291,10 @@ repeat.
 
   A row whose first column is genuinely blank cannot be told from a
   continuation, because in this format they are the same line. A table
-  with such a column is one to read some other way.
+  with such a column is one to read some other way. For the same reason
+  a table with no rule under its header, several lines between its two
+  frame rules, is refused: a header over two lines and a headless table
+  of rows are the same text there.
 
   A line with neither a bar nor a rule on it has no cells, and a cell
   past the last column the header names has no name to go under; both

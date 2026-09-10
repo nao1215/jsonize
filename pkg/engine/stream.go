@@ -197,9 +197,12 @@ type streamer struct {
 	csvCols    []string
 	csvHeader  []string
 	// boxRow holds the lines between two rules of a drawn table, and
-	// boxHeader the cells of the header row.
-	boxRow    []line
-	boxHeader []any
+	// boxHeader the cells of the header row, read from boxHeaderLines;
+	// boxBody is set by the first group of lines after the header.
+	boxRow         []line
+	boxHeader      []any
+	boxHeaderLines []line
+	boxBody        bool
 	// tree holds the lines of the top-level node that is still open.
 	tree []line
 }
@@ -470,6 +473,9 @@ func (s *streamer) finish() error {
 	if err := s.flushBox(); err != nil {
 		return err
 	}
+	if s.header && !s.boxBody && len(s.boxHeaderLines) > 1 {
+		return s.noHeaderRule(s.boxHeaderLines)
+	}
 	if err := s.flushTree(); err != nil {
 		return err
 	}
@@ -617,6 +623,7 @@ func (s *streamer) flushBox() error {
 	if !s.header {
 		return s.closeBoxHeaderFrom(group)
 	}
+	s.boxBody = true
 	cells := boxJoin(group, "\n")
 	if slices.Equal(cells, s.boxHeader) {
 		return nil // the header of a second table drawn after the first
@@ -633,6 +640,6 @@ func (s *streamer) closeBoxHeaderFrom(group []line) error {
 	if err != nil {
 		return err
 	}
-	s.cols, s.header, s.boxHeader = cols, true, boxJoin(group, "\n")
+	s.cols, s.header, s.boxHeader, s.boxHeaderLines = cols, true, boxJoin(group, "\n"), group
 	return nil
 }

@@ -1023,6 +1023,31 @@ func TestARepeatedHeaderStartsAnotherTable(t *testing.T) {
 	}
 }
 
+// A drawn table whose only rules are its frame has no line that says
+// where the header ends: read as a header over two lines, its rows were
+// gone and the answer was [] at exit 0. psql with a border and no
+// headings prints this.
+func TestABoxWithNoRuleUnderItsHeaderIsRefused(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: box}\n")
+	for _, in := range []string{
+		"+---+-------+\n| 1 | alpha |\n| 2 | beta  |\n+---+-------+\n",
+		"+---+-------+\n+---+-------+\n| 1 | alpha |\n| 2 | beta  |\n+---+-------+\n",
+	} {
+		if v, err := Parse(def, []byte(in), Options{}); err == nil || !strings.Contains(err.Error(), "no rule under its header") {
+			t.Errorf("%q: %v, %v", in, v, err)
+		}
+		err := Stream(def, strings.NewReader(in), Options{}, func(any) error { return nil }, func(pe *ParseError) error { return pe })
+		if err == nil || !strings.Contains(err.Error(), "no rule under its header") {
+			t.Errorf("stream %q: %v", in, err)
+		}
+	}
+	// One line under the frame is a header over no rows.
+	if v, err := Parse(def, []byte("+----+\n| id |\n+----+\n"), Options{}); err != nil {
+		t.Errorf("a header alone: %v, %v", v, err)
+	}
+}
+
 // systemctl list-timers printed through the shape definition: LEFT is
 // right-aligned and "4min 27s" starts before its header, at a space, so
 // the cut left "... JST  4min" under NEXT at exit 0.
