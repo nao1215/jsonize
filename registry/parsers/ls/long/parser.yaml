@@ -49,7 +49,8 @@ detect:
     none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
   signature:
     all:
-      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+[\d.]+[kKMGTPEZYRQBi]*\s+\w{3}\s+\d{1,2}\s+'
+      # The size, or for a device file its major and minor numbers.
+      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+(?:[\d.]+[kKMGTPEZYRQBi]*|\d+,\s*\d+)\s+\w{3}\s+\d{1,2}\s+'
     none:
       # A directory heading with its total under it is the listing of
       # several directories (-R, or several operands), which
@@ -63,11 +64,17 @@ parse:
   type: regex
   # One space separates the date from the name, so a space after it is the
   # first character of the name (" notes" is not "notes").
+  #
+  # A character or block device has no size, and ls prints its major and
+  # minor device numbers in that column ("1,   3"). Such a line has
+  # major and minor and no size.
   patterns:
     - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
     - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
 fields:
   links: {type: int, required: true}
-  size: {required: true}
+  major: {type: int}
+  minor: {type: int}
   filename: {required: true}
   link_to: {when_missing: omit}

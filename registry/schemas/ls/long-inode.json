@@ -5,7 +5,7 @@
   "description": "ls -li long listing with the inode number",
   "x-jsonize": {
     "definition": "ls/long-inode",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -37,6 +37,12 @@
       },
       "link_to": {
         "type": "string"
+      },
+      "major": {
+        "type": "integer"
+      },
+      "minor": {
+        "type": "integer"
       }
     },
     "required": [
@@ -45,7 +51,6 @@
       "links",
       "owner",
       "group",
-      "size",
       "date",
       "filename"
     ]

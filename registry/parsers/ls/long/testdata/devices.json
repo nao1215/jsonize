@@ -1,0 +1,62 @@
+[
+  {
+    "flags": "crw-rw-rw-",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "major": 10,
+    "minor": 229,
+    "date": "Sep 10 22:57",
+    "filename": "/dev/fuse"
+  },
+  {
+    "flags": "brw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "disk",
+    "major": 7,
+    "minor": 0,
+    "date": "Sep 10 22:57",
+    "filename": "/dev/loop0"
+  },
+  {
+    "flags": "crw-rw-rw-",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "major": 1,
+    "minor": 3,
+    "date": "Sep 10 22:57",
+    "filename": "/dev/null"
+  },
+  {
+    "flags": "brw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "disk",
+    "major": 259,
+    "minor": 0,
+    "date": "Sep 10 22:57",
+    "filename": "/dev/nvme0n1"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "15",
+    "date": "Sep 10 22:57",
+    "filename": "/dev/stdin",
+    "link_to": "/proc/self/fd/0"
+  },
+  {
+    "flags": "crw-rw-rw-",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "major": 1,
+    "minor": 5,
+    "date": "Sep 10 22:57",
+    "filename": "/dev/zero"
+  }
+]

@@ -5,7 +5,7 @@
   "description": "ls -lR, or ls -l given several directories, as one record per directory",
   "x-jsonize": {
     "definition": "ls/long-recursive",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -50,6 +50,12 @@
             },
             "link_to": {
               "type": "string"
+            },
+            "major": {
+              "type": "integer"
+            },
+            "minor": {
+              "type": "integer"
             }
           },
           "required": [
@@ -57,7 +63,6 @@
             "links",
             "owner",
             "group",
-            "size",
             "date",
             "filename"
           ]

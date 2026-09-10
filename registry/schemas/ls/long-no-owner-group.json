@@ -5,7 +5,7 @@
   "description": "ls -og long listing without the owner and group columns",
   "x-jsonize": {
     "definition": "ls/long-no-owner-group",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -28,12 +28,17 @@
       },
       "link_to": {
         "type": "string"
+      },
+      "major": {
+        "type": "integer"
+      },
+      "minor": {
+        "type": "integer"
       }
     },
     "required": [
       "flags",
       "links",
-      "size",
       "date",
       "filename"
     ]

@@ -8,6 +8,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- The five `ls` long listings read a device file (contract version 2).
+  ls prints a device's major and minor numbers where the size goes
+  (`crw-rw-rw- 1 root root 1, 3 ... /dev/null`), and every definition
+  refused the line, so `jz run ls -l /dev` was exit 4. Such a record has
+  `major` and `minor` and no `size`.
 - `ping/linux` reads what iputils prints besides a clean run (contract
   version 2). A host that did not answer was the parse error it is run
   to find out: the summary then has no round trip times, and the lines

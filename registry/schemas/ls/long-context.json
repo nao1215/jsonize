@@ -5,7 +5,7 @@
   "description": "ls -lZ long listing with the security context",
   "x-jsonize": {
     "definition": "ls/long-context",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -40,6 +40,12 @@
       },
       "link_to": {
         "type": "string"
+      },
+      "major": {
+        "type": "integer"
+      },
+      "minor": {
+        "type": "integer"
       }
     },
     "required": [
@@ -48,7 +54,6 @@
       "owner",
       "group",
       "context",
-      "size",
       "date",
       "filename"
     ]

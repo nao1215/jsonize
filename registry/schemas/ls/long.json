@@ -5,7 +5,7 @@
   "description": "ls -l / ls -lh long listing on Linux, macOS and BusyBox",
   "x-jsonize": {
     "definition": "ls/long",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -34,6 +34,12 @@
       },
       "link_to": {
         "type": "string"
+      },
+      "major": {
+        "type": "integer"
+      },
+      "minor": {
+        "type": "integer"
       }
     },
     "required": [
@@ -41,7 +47,6 @@
       "links",
       "owner",
       "group",
-      "size",
       "date",
       "filename"
     ]
