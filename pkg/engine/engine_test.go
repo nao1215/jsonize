@@ -929,18 +929,48 @@ func TestAlignedCells(t *testing.T) {
 		{"abcdefgh y   z", []any{"abcdefgh", "y", "z"}},
 	}
 	for _, tt := range tests {
-		got, overrun := alignedCells(tt.row, cols)
-		if diff := cmp.Diff(tt.want, got); diff != "" || overrun != -1 {
-			t.Errorf("alignedCells(%q): overrun %d %s", tt.row, overrun, diff)
+		got, bad := alignedCells(tt.row, cols)
+		if diff := cmp.Diff(tt.want, got); diff != "" || bad != nil {
+			t.Errorf("alignedCells(%q): refused %+v %s", tt.row, bad, diff)
 		}
 	}
-	// A value that runs past the start of the next column and leaves it
-	// empty says nothing about whether that column was empty or its header
-	// word belongs to this one ("CONTAINER ID"), so the row has no reading.
-	for _, row := range []string{"abcdefghijklmn", "abcdefgh     z", "x    abcdefghij"} {
-		if _, overrun := alignedCells(row, cols); overrun == -1 {
-			t.Errorf("alignedCells(%q) read a row whose value ran into an empty column", row)
+	for _, tt := range []struct {
+		row    string
+		col    int
+		gutter bool
+	}{
+		// A value that runs past the start of the next column and leaves
+		// it empty says nothing about whether that column was empty or its
+		// header word belongs to this one ("CONTAINER ID").
+		{"abcdefghijklmn", 1, false},
+		{"abcdefgh     z", 1, false},
+		{"x    abcdefghij", 2, false},
+		// A cut inside a value with a space in it leaves the gap between
+		// two columns inside a cell: "4 27s" is right-aligned under b.
+		{"x  4 27s    z", 0, true},
+		{"x\ty   z", 0, true},
+	} {
+		if _, bad := alignedCells(tt.row, cols); bad == nil || bad.col != tt.col || bad.gutter != tt.gutter {
+			t.Errorf("alignedCells(%q) = %+v, want column %d refused (gutter %v)", tt.row, bad, tt.col, tt.gutter)
 		}
+	}
+	// The last column runs to the end of the line and may hold anything.
+	if got, bad := alignedCells("x     y     z  z", cols); bad != nil || got[2] != "z  z" {
+		t.Errorf("last column: %v %+v", got, bad)
+	}
+}
+
+// systemctl list-timers printed through the shape definition: LEFT is
+// right-aligned and "4min 27s" starts before its header, at a space, so
+// the cut left "... JST  4min" under NEXT at exit 0.
+func TestAlignedRefusesACellThatHoldsAColumnGap(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned}\n")
+	in := "NEXT                             LEFT LAST\n" +
+		"Fri 2026-09-11 06:55:28 JST  4min 27s Fri 2026-09-11 06:50:28 JST\n"
+	_, err := Parse(def, []byte(in), Options{})
+	if err == nil || !strings.Contains(err.Error(), `line 2: field "next": "Fri 2026-09-11 06:55:28 JST  4min" holds the gap`) {
+		t.Fatalf("err = %v", err)
 	}
 }
 

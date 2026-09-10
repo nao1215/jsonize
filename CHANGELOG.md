@@ -187,6 +187,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- An aligned table with a right-aligned value that has a space in it was
+  cut inside the value at exit 0: `systemctl list-timers | jz --parser
+  table --variant aligned` read `"next": "Fri 2026-09-11 06:55:28 JST
+  4min"` and `"left": "27s"`. A cell before the last that holds a tab or
+  two spaces in a row, the gap that stands between columns, is now
+  refused with the column and the value.
 - An aligned table whose header gives one column two words read the row
   wrong at exit 0: `docker ps | jz --parser table --variant aligned`
   split `CONTAINER ID` into two columns, kept the id whole under the
