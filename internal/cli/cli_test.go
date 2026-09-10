@@ -1141,6 +1141,23 @@ func TestRunNamesTheParserAWrapperRuns(t *testing.T) {
 	if code := h.run("run", "nice", "./script"); code != ExitSelect || strings.Contains(h.stderr.String(), "--parser") {
 		t.Errorf("no known command: %d %s", code, h.stderr.String())
 	}
+	// A directory is something a command reads, not a command it runs,
+	// whatever its name: `tree -L 2 /etc/apt` does not run apt.
+	dir := filepath.Join(t.TempDir(), "apt")
+	if err := os.Mkdir(dir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if code := h.run("run", "nice", "-n", "5", dir); code != ExitSelect || strings.Contains(h.stderr.String(), "--parser") {
+		t.Errorf("a directory named like a parser: %d %s", code, h.stderr.String())
+	}
+	// A file that is not a program is read, not run: `stat /proc/uptime`.
+	file := filepath.Join(t.TempDir(), "uptime")
+	if err := os.WriteFile(file, []byte("1 2\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if code := h.run("run", "nice", file); runtime.GOOS != "windows" && (code != ExitSelect || strings.Contains(h.stderr.String(), "--parser")) {
+		t.Errorf("a data file named like a parser: %d %s", code, h.stderr.String())
+	}
 	if runtime.GOOS == "windows" {
 		return
 	}
