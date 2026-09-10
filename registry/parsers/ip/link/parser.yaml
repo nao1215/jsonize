@@ -16,8 +16,10 @@ detect:
   os: [linux]
   signature:
     all:
-      # The mode the header carries is what `ip address` leaves out.
-      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+.* mode \S+'
+      # The mode the header carries is what `ip address` leaves out, and
+      # the header ends with the group and the queue length: `ip -o link`
+      # continues the same line with the link layer after a backslash.
+      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+.* mode \S+ group \S+(?: qlen \d+)?[ \t]*$'
     none:
       - '^[ \t]+RX:[ \t]+bytes[ \t]+packets[ \t]+errors'
 parse:
