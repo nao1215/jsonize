@@ -394,7 +394,7 @@ scenarios:
   # empty, which is also what a genuinely empty column after a long value
   # would look like. The row does not say which, so it is refused; it used
   # to be a row with "id": null at exit 0.
-  - name: a value that runs into an empty column is refused, not read as null
+  - name: an aligned row the header does not place is refused, not read into the wrong columns
     steps:
       - fixture:
           file: docker-ps.txt
@@ -410,6 +410,18 @@ scenarios:
       - assert:
           stderr:
             contains: "runs past where this column starts and leaves it empty"
+      # LEFT is right-aligned and its value has a space in it, so the cut
+      # at the header falls inside it and leaves the gap between two
+      # columns in the cell before. That was "... JST  4min" at exit 0.
+      - run:
+          command: jz --parser table --variant aligned
+          stdin: "NEXT                             LEFT LAST\nFri 2026-09-11 06:55:28 JST  4min 27s Fri 2026-09-11 06:50:28 JST\n"
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+          stderr:
+            contains: 'field "next": "Fri 2026-09-11 06:55:28 JST  4min" holds the gap that stands between two columns'
 
   - name: an empty input ends differently depending on what was named
     steps:

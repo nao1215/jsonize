@@ -249,13 +249,19 @@ func splitFieldsN(s string, n int) []string {
 // row holding wide characters is cut where the header says rather than a
 // character later for every one of them.
 //
-// A value that runs past the start of the next column is kept whole when
-// the rest of the row was pushed right by it, which leaves something in
-// that column. When it leaves that column empty, the row says nothing
-// about which of two things happened: the column was empty, or its header
-// word is the second word of this column's name ("CONTAINER ID"). The
-// index of such a column is returned, and -1 when there is none.
-func alignedCells(text string, cols []column) ([]any, int) {
+// Two rows are refused rather than cut, because the header does not say
+// where their cells are:
+//
+//   - A value runs past the start of the next column and leaves it
+//     empty. A value that pushed the rest of the row right leaves
+//     something there and is kept whole; an empty column says nothing
+//     about whether it was empty or its header word is the second word of
+//     this column's name ("CONTAINER ID").
+//   - A cell other than the last holds a tab or two spaces in a row,
+//     which is what stands between two columns: the cut fell inside the
+//     gutter's neighbour, as it does under a right-aligned value with a
+//     space in it ("4min 27s" under LEFT in systemctl list-timers).
+func alignedCells(text string, cols []column) ([]any, *misaligned) {
 	runes := []rune(text)
 	n := len(runes)
 	cells := make([]any, len(cols))
@@ -278,28 +284,44 @@ func alignedCells(text string, cols []column) ([]any, int) {
 			}
 		}
 		cell := strings.TrimSpace(string(runes[start:end]))
-		if cell == "" {
-			if overran == i {
-				return cells, i
-			}
+		switch {
+		case i+1 < len(cols) && (strings.Contains(cell, "\t") || strings.Contains(cell, "  ")):
+			return nil, &misaligned{col: i, value: cell, gutter: true}
+		case cell == "" && overran == i:
+			before, _ := cells[i-1].(string)
+			return nil, &misaligned{col: i, value: before}
+		case cell == "":
 			cells[i] = nil
-		} else {
+		default:
 			cells[i] = cell
 		}
 		prevEnd = end
 	}
-	return cells, -1
+	return cells, nil
 }
 
-// alignedRow cuts a row of an aligned table, and refuses one whose value
-// ran into a column and left it empty (see alignedCells).
+// misaligned is a row alignedCells refuses: the column it could not cut,
+// and the value that says why.
+type misaligned struct {
+	col    int
+	value  string
+	gutter bool // the value holds a column gap; otherwise the one before ran into this column
+}
+
+// alignedRow cuts a row of an aligned table, and refuses one the header
+// does not place (see alignedCells).
 func (r *run) alignedRow(l line, cols []column) ([]any, error) {
-	cells, overran := alignedCells(l.text, cols)
-	if overran < 0 {
+	cells, bad := alignedCells(l.text, cols)
+	switch {
+	case bad == nil:
 		return cells, nil
+	case bad.gutter:
+		return nil, r.errorf(l.num, cols[bad.col].name, "%q holds the gap that stands between two columns, so the values of this row are not under their headers: %q",
+			bad.value, truncate(l.text, 80))
+	default:
+		return nil, r.errorf(l.num, cols[bad.col].name, "the value before it, %q, runs past where this column starts and leaves it empty, so the header does not say where the cells of this row are: %q",
+			bad.value, truncate(l.text, 80))
 	}
-	return nil, r.errorf(l.num, cols[overran].name, "the value before it, %q, runs past where this column starts and leaves it empty, so the header does not say where the cells of this row are: %q",
-		cells[overran-1], truncate(l.text, 80))
 }
 
 // cellEnd moves the boundary of a cell that starts at start and would end
