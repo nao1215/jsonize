@@ -1,0 +1,11 @@
+Linux 7.0.0-31-generic (host01) 	09/10/26 	_x86_64_	(32 CPU)
+
+22:40:02    kbswpfree kbswpused  %swpused  kbswpcad   %swpcad
+22:50:15      8388604         0      0.00         0      0.00
+Average:      8388604         0      0.00         0      0.00
+
+22:57:47     LINUX RESTART	(32 CPU)
+
+23:00:02    kbswpfree kbswpused  %swpused  kbswpcad   %swpcad
+23:10:06      7293632   1094972     13.05    546104     49.87
+Average:      7293632   1094972     13.05    546104     49.87

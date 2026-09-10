@@ -1,0 +1,11 @@
+Linux 7.0.0-31-generic (host01) 	09/10/26 	_x86_64_	(32 CPU)
+
+22:40:02       proc/s   cswch/s
+22:50:15        46.77  34533.18
+Average:        46.77  34533.18
+
+22:57:47     LINUX RESTART	(32 CPU)
+
+23:00:02       proc/s   cswch/s
+23:10:06        85.91  44891.81
+Average:        85.91  44891.81

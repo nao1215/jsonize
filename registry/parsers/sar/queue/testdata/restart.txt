@@ -1,0 +1,11 @@
+Linux 7.0.0-31-generic (host01) 	09/10/26 	_x86_64_	(32 CPU)
+
+22:40:02      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+22:50:15            1      4340      0.84      2.73      5.19         0
+Average:            1      4340      0.84      2.73      5.19         0
+
+22:57:47     LINUX RESTART	(32 CPU)
+
+23:00:02      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+23:10:06            3      3714      3.39      2.96      1.77         0
+Average:            3      3714      3.39      2.96      1.77         0

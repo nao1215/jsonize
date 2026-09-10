@@ -1,0 +1,7 @@
+Linux 7.0.0-31-generic (host01) 	09/10/26 	_x86_64_	(32 CPU)
+
+19:46:51     LINUX RESTART	(32 CPU)
+
+19:50:21        CPU     %user     %nice   %system   %iowait    %steal     %idle
+20:00:18        all      0.39      0.00      0.18      0.03      0.00     99.40
+Average:        all      0.39      0.00      0.18      0.03      0.00     99.40

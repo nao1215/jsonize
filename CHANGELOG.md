@@ -144,6 +144,11 @@ project follows [Semantic Versioning](https://semver.org/).
   signature of `lspci/kernel`, which then failed on the lines `-k` does
   not print. It now lands on `lspci/verbose`, which reads `-v` and `-vv`
   alike.
+- `sar` on a day the machine rebooted was exit 3, in every report. The
+  daily file then holds a LINUX RESTART line and a second run with its
+  own column names and Average rows; the line is now left out like the
+  banner, and the rows of both runs are read. The banner is stated in
+  full rather than as any line that opens with "Linux ".
 - Some patterns matched values outside any named group, so the line
   counted as read and the value was missing from the result: the server
   name and transport on `dig`'s SERVER line (now `server_name` and

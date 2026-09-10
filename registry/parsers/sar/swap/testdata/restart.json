@@ -1,0 +1,34 @@
+[
+  {
+    "time": "22:50:15",
+    "kbswpfree": 8388604,
+    "kbswpused": 0,
+    "swpused_percent": 0,
+    "kbswpcad": 0,
+    "swpcad_percent": 0
+  },
+  {
+    "time": "Average",
+    "kbswpfree": 8388604,
+    "kbswpused": 0,
+    "swpused_percent": 0,
+    "kbswpcad": 0,
+    "swpcad_percent": 0
+  },
+  {
+    "time": "23:10:06",
+    "kbswpfree": 7293632,
+    "kbswpused": 1094972,
+    "swpused_percent": 13.05,
+    "kbswpcad": 546104,
+    "swpcad_percent": 49.87
+  },
+  {
+    "time": "Average",
+    "kbswpfree": 7293632,
+    "kbswpused": 1094972,
+    "swpused_percent": 13.05,
+    "kbswpcad": 546104,
+    "swpcad_percent": 49.87
+  }
+]
