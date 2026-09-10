@@ -25,6 +25,9 @@
         "items": {
           "type": "string"
         }
+      },
+      "label": {
+        "type": "string"
       }
     },
     "required": [

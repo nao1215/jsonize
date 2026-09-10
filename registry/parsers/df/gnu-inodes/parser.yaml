@@ -38,8 +38,10 @@ parse:
     columns: [filesystem, inodes, iused, ifree, iuse_percent, mounted_on]
 fields:
   filesystem: {required: true}
-  inodes: {type: int, required: true}
-  iused: {type: int, required: true}
-  ifree: {type: int, required: true}
+  # df -a lists automount points nothing has mounted yet, and df prints a
+  # dash for figures it could not read; that is null, not zero.
+  inodes: {type: int, null_if: ["-"]}
+  iused: {type: int, null_if: ["-"]}
+  ifree: {type: int, null_if: ["-"]}
   iuse_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
   mounted_on: {required: true}

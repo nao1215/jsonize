@@ -148,6 +148,11 @@ project follows [Semantic Versioning](https://semver.org/).
   signature of `lspci/kernel`, which then failed on the lines `-k` does
   not print. It now lands on `lspci/verbose`, which reads `-v` and `-vv`
   alike.
+- `df -a` was exit 3: an automount point nothing has mounted yet prints
+  a dash in every figure. `df/gnu`, `df/gnu-type` and `df/gnu-inodes`
+  read the dash as null, which their schemas now allow (version 2).
+- `mount -l` was exit 3 on a file system with a label. The label is
+  read as `label`.
 - `ls -lF` and `ls -lp` came back at exit 0 with the mark `-F` adds in
   `filename` ("docs/", "link@"). The long listings now exclude those
   arguments under `jz run`, and refuse a name that ends with "/", which

@@ -5,7 +5,7 @@
   "description": "df -i on GNU coreutils, exact inode counts",
   "x-jsonize": {
     "definition": "df/gnu-inodes",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -15,13 +15,22 @@
         "type": "string"
       },
       "inodes": {
-        "type": "integer"
+        "type": [
+          "integer",
+          "null"
+        ]
       },
       "iused": {
-        "type": "integer"
+        "type": [
+          "integer",
+          "null"
+        ]
       },
       "ifree": {
-        "type": "integer"
+        "type": [
+          "integer",
+          "null"
+        ]
       },
       "iuse_percent": {
         "type": [

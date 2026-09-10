@@ -1,0 +1,36 @@
+[
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "mount_point": "/",
+    "type": "ext4",
+    "options": [
+      "rw",
+      "relatime"
+    ]
+  },
+  {
+    "filesystem": "/dev/nvme1n1p1",
+    "mount_point": "/media/usr/2nd",
+    "type": "ext4",
+    "options": [
+      "rw",
+      "relatime"
+    ],
+    "label": "2nd"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p1",
+    "mount_point": "/boot/efi",
+    "type": "vfat",
+    "options": [
+      "rw",
+      "relatime",
+      "fmask=0022",
+      "dmask=0022",
+      "codepage=437",
+      "iocharset=iso8859-1",
+      "shortname=mixed",
+      "errors=remount-ro"
+    ]
+  }
+]

@@ -30,8 +30,10 @@ parse:
 fields:
   filesystem: {required: true}
   type: {required: true}
-  1k_blocks: {type: int, required: true}
-  used: {type: int, required: true}
-  available: {type: int, required: true}
+  # df -a lists automount points nothing has mounted yet, and df prints a
+  # dash for figures it could not read; that is null, not zero.
+  1k_blocks: {type: int, null_if: ["-"]}
+  used: {type: int, null_if: ["-"]}
+  available: {type: int, null_if: ["-"]}
   use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
   mounted_on: {required: true}

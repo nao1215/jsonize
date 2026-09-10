@@ -1,0 +1,15 @@
+Filesystem     Type             1K-blocks       Used Available Use% Mounted on
+tmpfs          tmpfs             12882672       4724  12877948   1% /run
+/dev/nvme0n1p2 ext4            1920641288 1643625792 179378532  91% /
+devtmpfs       devtmpfs          32095472          0  32095472   0% /dev
+tmpfs          tmpfs             32206676      75712  32130964   1% /dev/shm
+devpts         devpts                   0          0         0    - /dev/pts
+sysfs          sysfs                    0          0         0    - /sys
+securityfs     securityfs               0          0         0    - /sys/kernel/security
+cgroup2        cgroup2                  0          0         0    - /sys/fs/cgroup
+none           pstore                   0          0         0    - /sys/fs/pstore
+efivarfs       efivarfs               128         48        76  39% /sys/firmware/efi/efivars
+bpf            bpf                      0          0         0    - /sys/fs/bpf
+configfs       configfs                 0          0         0    - /sys/kernel/config
+proc           proc                     0          0         0    - /proc
+systemd-1      -                        -          -         -    - /proc/sys/fs/binfmt_misc
