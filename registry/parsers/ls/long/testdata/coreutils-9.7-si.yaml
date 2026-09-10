@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) as ls -l --si with LC_ALL=C over files of 0, 999, 1500 and 2500000 bytes; user and group names replaced by ones of the same length
+description: >-
+  --si rounds in powers of 1000 and writes the kilo step as a lower-case
+  k, where -h writes K for powers of 1024. The sizes stay as printed.
+os: linux
+args: ["-l", "--si"]

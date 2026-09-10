@@ -1,0 +1,5 @@
+total 2.6M
+-rw-rw-r-- 1 bob bob    0 Sep  1 19:00 empty
+-rw-rw-r-- 1 bob bob 1.5k Sep  1 19:00 kilo
+-rw-rw-r-- 1 bob bob 2.5M Sep  1 19:00 mega
+-rw-rw-r-- 1 bob bob  999 Sep  1 19:00 small
