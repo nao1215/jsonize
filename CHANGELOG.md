@@ -161,6 +161,12 @@ project follows [Semantic Versioning](https://semver.org/).
   signature of `lspci/kernel`, which then failed on the lines `-k` does
   not print. It now lands on `lspci/verbose`, which reads `-v` and `-vv`
   alike.
+- An option that takes a value, given an empty one (`--define ""`,
+  `--parser ""`, `--file ""`), counted as not given, so a script passing
+  an unset variable had its input read by whatever detection chose. It
+  is a usage error now. `jz version` refuses arguments as `jz list` does,
+  and `jz test` says a directory does not exist rather than that it has
+  no `parsers/` in it.
 - `ss -a` and `ss -l` were exit 3 wherever they list netlink or packet
   sockets, whose peer is a bare `*`. Those rows are read now, with the
   protocol and the process or interface as the local address and port,

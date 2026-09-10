@@ -22,6 +22,11 @@ import (
 type optionSet struct {
 	fs   *flag.FlagSet
 	docs []optionDoc
+	// valued names the options that take a value, under both their
+	// names. An empty value for one of them names nothing, and taking it
+	// for the option not being given would answer a question nobody
+	// asked.
+	valued map[string]bool
 }
 
 type optionDoc struct {
@@ -37,7 +42,7 @@ type optionDoc struct {
 func newOptions(name string) *optionSet {
 	fs := flag.NewFlagSet(name, flag.ContinueOnError)
 	fs.SetOutput(io.Discard)
-	return &optionSet{fs: fs}
+	return &optionSet{fs: fs, valued: map[string]bool{}}
 }
 
 func (o *optionSet) doc(short, long, arg, help string) {
@@ -48,10 +53,27 @@ func (o *optionSet) doc(short, long, arg, help string) {
 // its short one.
 func (o *optionSet) stringOpt(p *string, long, short, arg, value, help string) {
 	o.fs.StringVar(p, long, value, help)
+	o.valued[long] = true
 	if short != "" {
 		o.fs.StringVar(p, short, value, help)
+		o.valued[short] = true
 	}
 	o.doc(short, long, arg, help)
+}
+
+// emptyValue returns the first option given an empty value, as it was
+// written on the command line.
+func (o *optionSet) emptyValue() string {
+	var name string
+	o.fs.Visit(func(f *flag.Flag) {
+		if name == "" && o.valued[f.Name] && f.Value.String() == "" {
+			name = "--" + f.Name
+			if len(f.Name) == 1 {
+				name = "-" + f.Name
+			}
+		}
+	})
+	return name
 }
 
 func (o *optionSet) boolOpt(p *bool, long, short, help string) {
@@ -264,6 +286,11 @@ func (a *app) parse(o *optionSet, args []string, usage string) (int, bool) {
 		fmt.Fprintln(a.env.Stdout)
 		printLinks(a.env.Stdout)
 		return ExitOK, true
+	}
+	if err == nil {
+		if name := o.emptyValue(); name != "" {
+			err = fmt.Errorf("%s was given an empty value, which names nothing", name)
+		}
 	}
 	if err != nil {
 		a.errorf("%v", err)
