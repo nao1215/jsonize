@@ -16,14 +16,16 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\Aprocs[ \t]+-+memory-+'
+      # -w widens the columns and draws each group name with dashes on
+      # both sides ("--procs--"); the columns are the same.
+      - '\A(?:procs|-+procs-+)[ \t]+-+memory-+'
       # `vmstat -a` prints the same group header and the same first four
       # columns, and only then diverges: it reports inactive and active
       # memory where the default report has buffers and cache.
       - '^[ \t]*r[ \t]+b[ \t]+swpd[ \t]+free[ \t]+buff[ \t]+cache[ \t]'
 input:
   ignore:
-    - '\Aprocs\s+-'
+    - '\A(?:procs|-+procs-+)\s+-'
     - '^\s*r\s+b\s+swpd\s'
 parse:
   type: table

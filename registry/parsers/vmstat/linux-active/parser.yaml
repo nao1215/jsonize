@@ -14,11 +14,12 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\Aprocs[ \t]+-+memory-+'
+      # -w draws each group name with dashes on both sides ("--procs--").
+      - '\A(?:procs|-+procs-+)[ \t]+-+memory-+'
       - '^[ \t]*r[ \t]+b[ \t]+swpd[ \t]+free[ \t]+inact[ \t]+active[ \t]'
 input:
   ignore:
-    - '\Aprocs[ \t]+-'
+    - '\A(?:procs|-+procs-+)[ \t]+-'
     - '^[ \t]*r[ \t]+b[ \t]+swpd[ \t]'
 parse:
   type: table
