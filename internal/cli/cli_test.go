@@ -152,6 +152,27 @@ func TestConversionOptions(t *testing.T) {
 	}
 }
 
+// An option that takes a value, given an empty one, names nothing. It
+// used to count as not given at all, so a script passing --define "$DEF"
+// with DEF unset had its input read by whatever detection chose.
+func TestEmptyOptionValueIsAUsageError(t *testing.T) {
+	h := newHarness(t)
+	for _, args := range [][]string{
+		{"--define", ""},
+		{"--parser", ""},
+		{"--parser", "df", "--variant", ""},
+		{"--file", ""},
+		{"-f", ""},
+		{"--assume-year", ""},
+		{"run", "--parser", "", "df"},
+	} {
+		code := h.pipe(gnuDF, args...)
+		if code != ExitUsage || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), "empty value") {
+			t.Errorf("%q: code = %d, stdout = %q, stderr = %s", args, code, h.stdout.String(), h.stderr.String())
+		}
+	}
+}
+
 // TestRemovedOptionsAreGone pins that the options cut before release are
 // usage errors rather than silently accepted or ignored.
 func TestRemovedOptionsAreGone(t *testing.T) {
@@ -597,6 +618,15 @@ func TestUsageAndVersion(t *testing.T) {
 		if code := h.run(args...); code != ExitOK || !strings.HasPrefix(h.stdout.String(), "jz ") {
 			t.Errorf("%v: %d %q", args, code, h.stdout.String())
 		}
+	}
+	// version takes nothing, as list takes no more than it names.
+	if code := h.run("version", "extra"); code != ExitUsage || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), "takes no arguments") {
+		t.Errorf("version extra: %d %q %s", code, h.stdout.String(), h.stderr.String())
+	}
+	// A directory that does not exist is not described as one without
+	// parsers in it.
+	if code := h.run("test", filepath.Join(t.TempDir(), "absent")); code != ExitRegistry || !strings.Contains(h.stderr.String(), "does not exist") {
+		t.Errorf("test absent: %d %s", code, h.stderr.String())
 	}
 	if code := h.run("frobnicate"); code != ExitUsage || !strings.Contains(h.stderr.String(), `unknown command "frobnicate"`) {
 		t.Errorf("unknown command: %d %s", code, h.stderr.String())

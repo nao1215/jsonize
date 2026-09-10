@@ -3,6 +3,7 @@ package cli
 import (
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
@@ -132,6 +133,10 @@ func (a *app) testSources(dirs []string) ([]registry.Source, []string, int) {
 		abs, err := filepath.Abs(d)
 		if err != nil {
 			a.errorf("%v", err)
+			return nil, nil, ExitRegistry
+		}
+		if _, err := os.Stat(abs); errors.Is(err, fs.ErrNotExist) {
+			a.errorf("%s does not exist", abs)
 			return nil, nil, ExitRegistry
 		}
 		if _, err := os.Stat(filepath.Join(abs, registry.ParsersDir)); err != nil {

@@ -13,6 +13,10 @@ func (a *app) cmdVersion(args []string) int {
 		fmt.Fprintln(a.env.Stdout, "Usage: jz version\n\nPrints the jsonize version, the definition format it reads and the platform.")
 		return ExitOK
 	}
+	if len(args) > 0 {
+		a.errorf("version takes no arguments, got %q", args[0])
+		return ExitUsage
+	}
 	fmt.Fprintf(a.env.Stdout, "jz %s (definition format %d, %s/%s)\n", buildinfo.Get(), definition.CurrentFormat, runtime.GOOS, runtime.GOARCH)
 	return ExitOK
 }
