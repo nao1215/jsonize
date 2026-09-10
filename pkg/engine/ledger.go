@@ -167,10 +167,7 @@ func (l *ledger) markOne(x line) {
 func (l *ledger) unread(lines []line) []UnreadSpan {
 	var out []UnreadSpan
 	for _, x := range lines {
-		if blank(x.text) {
-			continue
-		}
-		if i := x.num - l.base; i >= 0 && i < len(l.read) && l.read[i] {
+		if l.isRead(x) || blank(x.text) {
 			continue
 		}
 		out = append(out, UnreadSpan{Line: x.num, Text: truncate(x.text, 80)})
@@ -185,12 +182,17 @@ func blank(s string) bool { return strings.TrimSpace(s) == "" }
 // (skip_blank: false) ends up when no parser asked for it.
 func (l *ledger) count(lines []line, acct *Account) {
 	for _, x := range lines {
-		if i := x.num - l.base; i >= 0 && i < len(l.read) && l.read[i] {
+		if l.isRead(x) {
 			acct.Read++
 		} else if blank(x.text) {
 			acct.Blank++
 		}
 	}
+}
+
+func (l *ledger) isRead(x line) bool {
+	i := x.num - l.base
+	return i >= 0 && i < len(l.read) && l.read[i]
 }
 
 // unreadError builds the error for spans, which must not be empty.
