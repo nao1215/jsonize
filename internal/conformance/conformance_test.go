@@ -94,6 +94,39 @@ func TestRun(t *testing.T) {
 	}
 }
 
+// A blank line after the text, CRLF line endings and a byte order mark
+// are not changes to the text, and a definition that answers differently
+// for them fails. Keeping blank lines as lines to read is how one does.
+func TestSameAnswer(t *testing.T) {
+	t.Parallel()
+	const blankKept = "format: 1\ncommand: n\nvariant: v\ndetect: {signature: {all: ['\\A\\d+$']}}\n" +
+		"input: {skip_blank: false}\nparse: {type: regex, pattern: '^(?P<n>\\d+)$'}\n"
+	fsys := fstest.MapFS{
+		"parsers/n/v/parser.yaml":      {Data: []byte(blankKept)},
+		"parsers/n/v/testdata/ok.txt":  {Data: []byte("1\n2\n")},
+		"parsers/n/v/testdata/ok.json": {Data: []byte(`[{"n":"1"},{"n":"2"}]`)},
+		"parsers/kv/v/parser.yaml":     {Data: []byte(kvDef)},
+		"parsers/kv/v/testdata/a.txt":  {Data: []byte("n=1\nm=2\n")},
+		"parsers/kv/v/testdata/a.json": {Data: []byte(`{"n":1,"m":"2"}`)},
+	}
+	reg, err := registry.Load(registry.Source{Name: "s", FS: fsys})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, r := range Run(reg, fsys, "s", Options{}) {
+		switch r.Definition {
+		case "n/v":
+			if r.Err == nil || !strings.Contains(r.Err.Error(), "a blank line at the end changes the answer") {
+				t.Errorf("n/v: %v", r.Err)
+			}
+		default:
+			if r.Err != nil {
+				t.Errorf("%s: %v", r.Definition, r.Err)
+			}
+		}
+	}
+}
+
 func TestDiff(t *testing.T) {
 	t.Parallel()
 	if d, err := Diff([]byte(`{"a":1,"b":[1,2]}`), []byte(`{"b":[1,2],"a":1}`)); err != nil || d != "" {

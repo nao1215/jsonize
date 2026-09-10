@@ -394,6 +394,16 @@ scenarios:
           stdout:
             json:
               - { path: "$.uptime_seconds", gt: 0 }
+      # A blank line after the text is not part of it. meminfo's signature
+      # says every line is a counter, and it used to count the blank one.
+      - run:
+          shell: true
+          command: "{ cat /proc/meminfo; echo; } | jz --extract name"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].name", equals: MemTotal }
 
   # util-linux prlimit, aligned and --raw. The raw form writes the spaces
   # inside a description as \x20 and lines nothing up, and both are read
