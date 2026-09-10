@@ -89,7 +89,7 @@ command that keeps printing after its reader has gone, or past
 line as each record is read:
 
 ```console
-$ jz run --stream ping -c 100 1.1.1.1 | jq -c 'select(.time_ms > 20)'
+$ jz run --stream vmstat 1 | jq -c 'select(.id < 50)'
 ```
 
 ## What it will not do

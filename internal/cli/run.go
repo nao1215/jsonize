@@ -41,7 +41,7 @@ state that boundary explicitly:
   jz run mytool --pretty              # --pretty goes to mytool
   jz run -- mytool --pretty           # the same, stated explicitly
   jz run --parser df -- sudo df -h    # a wrapper whose name is not the parser
-  jz run --stream ping -c 100 host    # one JSON document per line
+  jz run --stream vmstat 1            # one JSON document per line
 
 --stream answers a command that does not end: each record is written as
 soon as it can be read, instead of one array once the command has
