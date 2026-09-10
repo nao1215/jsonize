@@ -73,18 +73,11 @@ const (
 	FieldInt    = "int"
 	FieldFloat  = "float"
 	FieldBool   = "bool"
-	FieldSize   = "size"
 	FieldTime   = "time"
 	// FieldDuration is a printed length of time, reported in seconds.
 	FieldDuration = "duration"
 	FieldArray    = "array"
 	FieldObject   = "object"
-)
-
-// Size unit bases.
-const (
-	UnitBinary  = "binary"
-	UnitDecimal = "decimal"
 )
 
 // Year policies for a time field whose layout carries no year.
@@ -534,8 +527,6 @@ type Field struct {
 	// True / False list the spellings for bool fields.
 	True  []string `yaml:"true_values,omitempty"`
 	False []string `yaml:"false_values,omitempty"`
-	// Unit selects binary (default) or decimal multipliers for size fields.
-	Unit string `yaml:"unit,omitempty"`
 	// Layout is the Go reference layout a time field is written in
 	// ("2006-01-02T15:04:05-0700"). It is required for a time field, and
 	// it has to carry a year unless Year says the format prints none.

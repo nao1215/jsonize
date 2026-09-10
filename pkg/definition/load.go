@@ -715,12 +715,6 @@ func validateField(v *validator, path string, f *Field, depth int) {
 	case FieldString, FieldInt, FieldFloat:
 	case FieldBool:
 		validateBoolField(v, path, f)
-	case FieldSize:
-		switch f.Unit {
-		case "", UnitBinary, UnitDecimal:
-		default:
-			v.add(path+".unit", "must be binary or decimal")
-		}
 	case FieldTime:
 		validateTimeField(v, path, f)
 	case FieldDuration:
@@ -730,7 +724,7 @@ func validateField(v *validator, path string, f *Field, depth int) {
 	case FieldObject:
 		validateObjectField(v, path, f, depth)
 	default:
-		v.add(path+".type", "unknown type %q (expected string, int, float, bool, size, time, duration, array or object)", f.Type)
+		v.add(path+".type", "unknown type %q (expected string, int, float, bool, time, duration, array or object)", f.Type)
 	}
 	validateFieldKeys(v, path, f)
 }
@@ -835,9 +829,6 @@ func validateFieldKeys(v *validator, path string, f *Field) {
 	}
 	if f.EffectiveType() != FieldBool && (len(f.True) > 0 || len(f.False) > 0) {
 		v.add(path, "true_values/false_values are only valid for type bool")
-	}
-	if f.EffectiveType() != FieldSize && f.Unit != "" {
-		v.add(path+".unit", "only valid for type size")
 	}
 	switch f.EffectiveType() {
 	case FieldTime:

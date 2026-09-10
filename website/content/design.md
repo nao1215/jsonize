@@ -28,7 +28,7 @@ pkg/registry              load registry directories/FS, merge with precedence, t
 pkg/definition            YAML schema, validation, regex compilation, format checks
 pkg/selector              variant selection (os / args / signature filter → precedence → priority)
 pkg/engine                parse algorithms (table, csv, ini, tree, regex, kv, composite, records), streaming, field conversion
-pkg/convert               scalar conversions (int, float, bool, size with units, time, duration)
+pkg/convert               scalar conversions (int, float, bool, time, duration)
 pkg/jsonutil              insertion-ordered JSON object and encoder
 registry/                 the official definitions and fixtures (data) + a one-file embed
 e2e/atago                 end-to-end scenarios (e2e/README.md says what they guarantee where)

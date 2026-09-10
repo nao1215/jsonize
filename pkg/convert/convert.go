@@ -18,7 +18,6 @@ const (
 	typeInt   = "int"
 	typeFloat = "float"
 	typeBool  = "bool"
-	typeSize  = "size"
 	typeTime  = "time"
 
 	typeDuration = "duration"
@@ -124,80 +123,6 @@ func Bool(s string, trueValues, falseValues []string) (bool, error) {
 		}
 	}
 	return false, &Error{Type: typeBool, Input: s, Cause: errors.New("not a recognised boolean spelling")}
-}
-
-// SizeBase selects the multiplier used by Size for unit suffixes.
-type SizeBase int
-
-const (
-	// Binary interprets K/M/G as powers of 1024 (the df/free convention).
-	Binary SizeBase = 1024
-	// Decimal interprets K/M/G as powers of 1000.
-	Decimal SizeBase = 1000
-)
-
-var sizeExponent = map[byte]int{'b': 0, 'k': 1, 'm': 2, 'g': 3, 't': 4, 'p': 5, 'e': 6}
-
-// Size parses a human readable size such as "3.7G", "955M", "466Gi",
-// "1.2 MiB", "0B" or a bare number and returns the amount in bytes. The
-// base applies to single-letter suffixes; an explicit "i" (Gi, GiB) always
-// means 1024 and an explicit "B" after a bare letter (GB) follows base.
-// The result is rounded to the nearest integer; values that overflow int64
-// are rejected.
-func Size(s string, base SizeBase) (int64, error) {
-	if base == 0 {
-		base = Binary
-	}
-	t := strings.TrimSpace(s)
-	if t == "" {
-		return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("empty value")}
-	}
-	// Split numeric prefix from the unit.
-	i := 0
-	for i < len(t) && (t[i] >= '0' && t[i] <= '9' || t[i] == '.' || t[i] == '+' || t[i] == '-') {
-		i++
-	}
-	num, unit := t[:i], strings.TrimSpace(t[i:])
-	if num == "" {
-		return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("missing number")}
-	}
-	f, err := strconv.ParseFloat(num, 64)
-	if err != nil {
-		return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("invalid number")}
-	}
-	if f < 0 {
-		return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("negative size")}
-	}
-	mult := 1.0
-	if unit != "" {
-		u := strings.ToLower(unit)
-		u = strings.TrimSuffix(u, "b")
-		if u == "" && strings.ToLower(unit) != "b" {
-			return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("unknown unit")}
-		}
-		if u != "" {
-			b := float64(base)
-			if strings.HasSuffix(u, "i") {
-				b = float64(Binary)
-				u = strings.TrimSuffix(u, "i")
-			}
-			if len(u) != 1 {
-				return 0, &Error{Type: typeSize, Input: s, Cause: fmt.Errorf("unknown unit %q", unit)}
-			}
-			exp, ok := sizeExponent[u[0]]
-			if !ok {
-				return 0, &Error{Type: typeSize, Input: s, Cause: fmt.Errorf("unknown unit %q", unit)}
-			}
-			mult = math.Pow(b, float64(exp))
-		}
-	}
-	v := math.Round(f * mult)
-	// float64(math.MaxInt64) rounds up to 2^63, so >= is the correct
-	// overflow test; 8E is exactly 2^63 bytes and must be rejected.
-	if v >= math.MaxInt64 {
-		return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("value overflows int64")}
-	}
-	return int64(v), nil
 }
 
 // Assumptions carries what the command line allowed jz to assume about a

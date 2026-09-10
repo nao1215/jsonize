@@ -3,6 +3,7 @@ package convert
 import (
 	"errors"
 	"math"
+	"strings"
 	"testing"
 	"time"
 )
@@ -105,61 +106,6 @@ func TestBool(t *testing.T) {
 	}
 }
 
-func TestSize(t *testing.T) {
-	t.Parallel()
-	tests := []struct {
-		in      string
-		base    SizeBase
-		want    int64
-		wantErr bool
-	}{
-		{"0", Binary, 0, false},
-		{"1024", Binary, 1024, false},
-		{"0B", Binary, 0, false},
-		{"1K", Binary, 1024, false},
-		{"1k", Binary, 1024, false},
-		{"1.5K", Binary, 1536, false},
-		{"955M", Binary, 955 * 1024 * 1024, false},
-		{"3.7G", Binary, 3972844749, false},
-		{"466Gi", Binary, 466 * 1024 * 1024 * 1024, false},
-		{"6.0Gi", Binary, 6 * 1024 * 1024 * 1024, false},
-		{"1 MiB", Binary, 1048576, false},
-		{"1 MB", Decimal, 1000000, false},
-		{"1M", Decimal, 1000000, false},
-		{"1Mi", Decimal, 1048576, false},
-		{"2T", Binary, 2 * 1024 * 1024 * 1024 * 1024, false},
-		{"", Binary, 0, true},
-		{"G", Binary, 0, true},
-		{"-1K", Binary, 0, true},
-		{"1X", Binary, 0, true},
-		{"1KX", Binary, 0, true},
-		{"1..2K", Binary, 0, true},
-		{"99999999999E", Binary, 0, true},
-		{"8E", Binary, 0, true},
-		{"7E", Binary, 7 << 60, false},
-	}
-	for _, tt := range tests {
-		t.Run(tt.in, func(t *testing.T) {
-			t.Parallel()
-			got, err := Size(tt.in, tt.base)
-			if (err != nil) != tt.wantErr {
-				t.Fatalf("Size(%q) error = %v, wantErr %v", tt.in, err, tt.wantErr)
-			}
-			if got != tt.want {
-				t.Errorf("Size(%q) = %d, want %d", tt.in, got, tt.want)
-			}
-		})
-	}
-}
-
-func TestSizeDefaultBase(t *testing.T) {
-	t.Parallel()
-	got, err := Size("1K", 0)
-	if err != nil || got != 1024 {
-		t.Fatalf("Size with zero base = %d, %v; want 1024", got, err)
-	}
-}
-
 func TestStrip(t *testing.T) {
 	t.Parallel()
 	if got := Strip(" 32% ", "", "%"); got != "32" {
@@ -192,18 +138,24 @@ func TestErrorUnwrap(t *testing.T) {
 	}
 }
 
-func FuzzSize(f *testing.F) {
-	for _, s := range []string{"1K", "3.7G", "0B", "1 MiB", "", "-1", "1e400K", "999999999999999999999"} {
+// A float is a number JSON can carry, and an int or a float is only
+// read from text that says the number in decimal.
+func FuzzScalars(f *testing.F) {
+	for _, s := range []string{"1", "-2.5", "1e3", "", "-", "1e400", "999999999999999999999", "0x1p3", "1_0"} {
 		f.Add(s)
 	}
 	f.Fuzz(func(t *testing.T, s string) {
-		v, err := Size(s, Binary)
-		if err == nil && v < 0 {
-			t.Fatalf("negative size %d from %q", v, s)
+		if v, err := Float(s); err == nil {
+			if math.IsNaN(v) || math.IsInf(v, 0) {
+				t.Fatalf("Float(%q) = %v", s, v)
+			}
+			if strings.ContainsAny(s, "_xXpP") {
+				t.Fatalf("Float(%q) = %v read Go's own syntax", s, v)
+			}
 		}
-		_, _ = Size(s, Decimal)
-		_, _ = Int(s)
-		_, _ = Float(s)
+		if _, err := Int(s); err == nil && strings.ContainsAny(s, "_xX.eE") {
+			t.Fatalf("Int(%q) read something other than decimal digits", s)
+		}
 		_, _ = Bool(s, nil, nil)
 	})
 }

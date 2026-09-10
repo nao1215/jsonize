@@ -619,6 +619,11 @@ project follows [Semantic Versioning](https://semver.org/).
   own fixture. A composite part now names the lines of its region that
   belong to a sibling with `ignore`, and a line nothing claims is an
   error.
+- The `size` field type, its `unit` key and `convert.Size`. No
+  definition used it: a size printed with a unit is rounded, and turning
+  `1.8T` into bytes writes a number the command never printed. It also
+  lost precision on a plain count above 2^53, turning
+  `9007199254740993` into `9007199254740992`. A plain count is an `int`.
 
 ### Decisions worth knowing
 

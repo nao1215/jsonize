@@ -15,7 +15,7 @@ func BenchmarkLoadRegistry(b *testing.B) {
 		for i := 0; i < n; i++ {
 			cmd := fmt.Sprintf("cmd%d", i/3)
 			variant := fmt.Sprintf("v%d", i%3)
-			body := fmt.Sprintf("format: 1\ncommand: %s\nvariant: %s\ndetect: {os: [linux], signature: {all: ['^HEADER%d']}}\nparse: {type: table}\nfields: {a: {type: int}, b: {type: size}}\n", cmd, variant, i)
+			body := fmt.Sprintf("format: 1\ncommand: %s\nvariant: %s\ndetect: {os: [linux], signature: {all: ['^HEADER%d']}}\nparse: {type: table}\nfields: {a: {type: int}, b: {type: int}}\n", cmd, variant, i)
 			fsys[fmt.Sprintf("parsers/%s/%s/parser.yaml", cmd, variant)] = &fstest.MapFile{Data: []byte(body)}
 		}
 		b.Run(fmt.Sprintf("definitions=%d", n), func(b *testing.B) {

@@ -19,7 +19,7 @@ jobs:
         # going unfuzzed.
         target:
           - { pkg: ./pkg/convert, name: FuzzDuration }
-          - { pkg: ./pkg/convert, name: FuzzSize }
+          - { pkg: ./pkg/convert, name: FuzzScalars }
           - { pkg: ./pkg/definition, name: FuzzLoad }
           - { pkg: ./pkg/engine, name: FuzzFormats }
           - { pkg: ./pkg/engine, name: FuzzParse }

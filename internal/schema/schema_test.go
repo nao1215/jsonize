@@ -65,7 +65,7 @@ func TestGenerate(t *testing.T) {
 			// The names come from the input, so only the converted ones
 			// are named and the rest are text or null.
 			name: "a header that names the columns",
-			def:  "parse: {type: table}\nfields: {size: {type: size}}\n",
+			def:  "parse: {type: table}\nfields: {size: {type: int}}\n",
 			want: `{"type":"array","items":{"type":"object","properties":{"size":{"type":["integer","null"]}},"additionalProperties":{"type":["string","null"]}}}`,
 		},
 		{

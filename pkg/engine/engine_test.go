@@ -123,7 +123,6 @@ parse:
 fields:
   rm: {type: bool}
   ro: {type: bool}
-  size: {type: size}
 `)
 	input := "NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT\n" +
 		"sda               8:0    0   20G  0 disk \n" +
@@ -134,10 +133,10 @@ fields:
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := `[{"name":"sda","maj_min":"8:0","rm":false,"size":21474836480,"ro":false,"type":"disk","mountpoint":null},` +
-		`{"name":"├─sda1","maj_min":"8:1","rm":false,"size":1073741824,"ro":false,"type":"part","mountpoint":"/boot"},` +
-		`{"name":"├─centos-root","maj_min":"253:0","rm":false,"size":18253611008,"ro":false,"type":"lvm","mountpoint":"/"},` +
-		`{"name":"loop9","maj_min":"7:9","rm":false,"size":129394278,"ro":true,"type":"loop","mountpoint":"/snap/x y"}]`
+	want := `[{"name":"sda","maj_min":"8:0","rm":false,"size":"20G","ro":false,"type":"disk","mountpoint":null},` +
+		`{"name":"├─sda1","maj_min":"8:1","rm":false,"size":"1G","ro":false,"type":"part","mountpoint":"/boot"},` +
+		`{"name":"├─centos-root","maj_min":"253:0","rm":false,"size":"17G","ro":false,"type":"lvm","mountpoint":"/"},` +
+		`{"name":"loop9","maj_min":"7:9","rm":false,"size":"123.4M","ro":true,"type":"loop","mountpoint":"/snap/x y"}]`
 	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
@@ -759,25 +758,25 @@ fields:
   i: {type: int}
   f: {type: float}
   b: {type: bool, true_values: [up], false_values: [down]}
-  s: {type: size, unit: decimal}
+  s: {type: duration, layout: mm:ss}
   r: {required: true}
   n: {null_if: ["-"], required: true}
   o: {when_missing: omit}
 `)
-	got, err := Parse(def, []byte("1 2.5 up 1K x y\n"), Options{})
+	got, err := Parse(def, []byte("1 2.5 up 4:50 x y\n"), Options{})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if mustJSON(t, got) != `[{"i":1,"f":2.5,"b":true,"s":1000,"r":"x","n":"y"}]` {
+	if mustJSON(t, got) != `[{"i":1,"f":2.5,"b":true,"s":290,"r":"x","n":"y"}]` {
 		t.Error(mustJSON(t, got))
 	}
 	cases := map[string]string{
-		"x 2.5 up 1K x y":  `field "i": cannot convert "x" to int`,
-		"1 x up 1K x y":    `field "f"`,
-		"1 2.5 maybe 1K x": `field "b"`,
-		"1 2.5 up 1Q x y":  `field "s"`,
-		"1 2.5 up 1K":      `field "r": required value is missing`,
-		"1 2.5 up 1K x -":  `field "n": required value is null`,
+		"x 2.5 up 4:50 x y":  `field "i": cannot convert "x" to int`,
+		"1 x up 4:50 x y":    `field "f"`,
+		"1 2.5 maybe 4:50 x": `field "b"`,
+		"1 2.5 up 4:5x x y":  `field "s"`,
+		"1 2.5 up 4:50":      `field "r": required value is missing`,
+		"1 2.5 up 4:50 x -":  `field "n": required value is null`,
 	}
 	for in, want := range cases {
 		_, err := Parse(def, []byte(in+"\n"), Options{})
@@ -900,7 +899,7 @@ func TestAlignedCells(t *testing.T) {
 
 func FuzzParse(f *testing.F) {
 	defs := []string{dfDef,
-		"format: 1\ncommand: t\nvariant: a\nparse: {type: table, split: aligned}\nfields: {size: {type: size}}\n",
+		"format: 1\ncommand: t\nvariant: a\nparse: {type: table, split: aligned}\nfields: {size: {type: int}}\n",
 		"format: 1\ncommand: t\nvariant: k\nparse: {type: kv, as: map}\nfields: {n: {type: int}}\n",
 		"format: 1\ncommand: t\nvariant: r\nparse: {type: regex, each: input, pattern: '(?P<a>\\d+)(?P<b>x)?'}\nfields: {a: {type: int}, b: {when_missing: omit}}\n",
 	}
