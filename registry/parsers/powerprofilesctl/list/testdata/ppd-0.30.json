@@ -1,0 +1,50 @@
+[
+  {
+    "profile": {
+      "active": false,
+      "name": "performance"
+    },
+    "attributes": [
+      {
+        "name": "CpuDriver",
+        "value": "amd_pstate"
+      },
+      {
+        "name": "Degraded",
+        "value": "no"
+      }
+    ]
+  },
+  {
+    "profile": {
+      "active": true,
+      "name": "balanced"
+    },
+    "attributes": [
+      {
+        "name": "CpuDriver",
+        "value": "amd_pstate"
+      },
+      {
+        "name": "PlatformDriver",
+        "value": "placeholder"
+      }
+    ]
+  },
+  {
+    "profile": {
+      "active": false,
+      "name": "power-saver"
+    },
+    "attributes": [
+      {
+        "name": "CpuDriver",
+        "value": "amd_pstate"
+      },
+      {
+        "name": "PlatformDriver",
+        "value": "placeholder"
+      }
+    ]
+  }
+]

@@ -1,0 +1,11 @@
+  performance:
+    CpuDriver:	amd_pstate
+    Degraded:   no
+
+* balanced:
+    CpuDriver:	amd_pstate
+    PlatformDriver:	placeholder
+
+  power-saver:
+    CpuDriver:	amd_pstate
+    PlatformDriver:	placeholder

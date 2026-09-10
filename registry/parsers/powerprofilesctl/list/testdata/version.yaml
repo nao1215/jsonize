@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (power-profiles-daemon 0.30) as powerprofilesctl version with LC_ALL=C
+description: >-
+  The version of the client and the daemon, two lines of name and value
+  with no profile above them. They are not a profile's attributes.
+os: linux
+expect_error: 'does not describe this input'

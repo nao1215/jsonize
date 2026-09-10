@@ -142,3 +142,17 @@ scenarios:
             json:
               - { path: "$[0].uid", gte: 0 }
               - { path: "$[0].pid", gte: 1 }
+
+  # power-profiles-daemon has to be running for the list to be printed.
+  - name: jz run powerprofilesctl lands on the list of profiles
+    only: {os: linux, command: "LC_ALL=C powerprofilesctl list | grep -q '^[* ] [a-z]'"}
+    steps:
+      - run:
+          command: jz run --explain powerprofilesctl
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "powerprofilesctl/list from embedded"
+          stdout:
+            json:
+              - { path: "$[0].profile.name", matches: "^[a-z-]+$" }
