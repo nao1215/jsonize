@@ -29,9 +29,11 @@ detect:
       - '\A[-rwxsStT]{9} \d+/\d+[ \t]+\d+ [A-Z][a-z]{2} [ \d]\d [ \d]\d:\d{2} \d{4} \S'
 parse:
   type: regex
-  pattern: '^(?P<mode>[-rwxsStT]{9}) (?P<uid>\d+)/(?P<gid>\d+)[ \t]+(?P<size>\d+) (?P<date>[A-Z][a-z]{2} [ \d]\d [ \d]\d:\d{2} \d{4}) (?P<name>.+)$'
+  pattern: '^(?P<mode>[-rwxsStT]{9}) (?P<uid>\d+)/(?P<gid>\d+)[ \t]+(?P<size>\d+) (?P<date>[A-Z][a-z]{2} [ \d]\d [ \d]\d:\d{2} \d{4}) (?P<name>.+?)(?: (?P<offset>0x[0-9a-f]+))?$'
 fields:
   uid: {type: int}
   gid: {type: int}
   size: {type: int}
   name: {required: true}
+  # O prints each member's offset in the archive after its name.
+  offset: {when_missing: omit}

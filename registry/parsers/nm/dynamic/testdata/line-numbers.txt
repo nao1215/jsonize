@@ -1,0 +1,6 @@
+                 w _ITM_deregisterTMCloneTable
+                 w _ITM_registerTMCloneTable
+                 w __cxa_finalize
+                 w __gmon_start__
+0000000000001119 T foo	/src/m.c:1
+000000000000112c T main	/src/m.c:2

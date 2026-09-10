@@ -1,0 +1,20 @@
+[
+  {
+    "mode": "rw-r--r--",
+    "uid": 0,
+    "gid": 0,
+    "size": 3352,
+    "date": "Jan  1 09:00 1970",
+    "name": "m.o",
+    "offset": "0x96"
+  },
+  {
+    "mode": "rw-r--r--",
+    "uid": 0,
+    "gid": 0,
+    "size": 59,
+    "date": "Jan  1 09:00 1970",
+    "name": "m.c",
+    "offset": "0xdea"
+  }
+]
