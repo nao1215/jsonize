@@ -473,6 +473,35 @@ signature expression, or a signature that fits and an `auto_detect: false`
 holding it back. Those are the near misses, and a scoped search reports
 every variant because in that scope they all are.
 
+What the first version left out was everything between "which one" and
+"why that one". It said which definition was chosen and what it matched,
+and it did not say what the candidates had been (the whole registry, a
+parser named on the command line, the command `jz run` started, a file's
+path), whether several definitions had fit and which rule had settled
+it, how many definitions had taken no part because they are only used
+when named, or where the input's lines had gone. Each of those is a
+question someone debugging a wrong answer has to ask, and each answer was
+already in hand: the selector records the rule that settled a tie as it
+applies it, and the engine's ledger counts what `ignore` left out. So
+the explanation now has a line for each, and the first line says which of
+the outcomes it was: `chose`, `unidentified`, `ambiguous`, `mismatch`,
+or `defined`. No and several are different failures with different
+remedies — write or name a definition, or settle two that overlap — and
+the exit status (4 for both) does not tell them apart.
+
+There is no score. A confidence number would be one more thing to trust
+without being able to check; every line here names a rule a definition
+states or a rule of the selector, and can be checked against `jz list`.
+
+`--explain=json` is the same facts for a script, one document on one line
+that opens `jz: explain: ` like the text lines do. It goes to standard
+error, not standard output, because standard output carries the
+conversion and nothing else. The prefix is kept because `jz run` passes
+the command's own standard error through on the same stream, and a line
+a script can pick out is worth more than a stream it has to trust to be
+clean. Every key is present whatever the outcome, so a consumer reads
+every explanation the same way.
+
 ### A file path is evidence
 
 `jz run` narrows the variants with the command name and its arguments,

@@ -22,7 +22,11 @@ import (
 // signature in scope looks at, or until the input ends, and only then
 // commits to a definition. The lines it held take the same path as the
 // ones that follow, so nothing is read twice or read differently.
-func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, out *outputOptions, knownProducer, explain bool) int {
+//
+// An explanation is written as soon as the choice is made, before the
+// first record: a stream may never end, and the choice is what there is
+// to explain up front. It says nothing about how the lines were read.
+func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, out *outputOptions, knownProducer bool, exp *explanation) int {
 	filter, err := out.filter()
 	if err != nil {
 		a.errorf("%v", err)
@@ -44,14 +48,12 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	chosen, err := selector.Select(reg, ctx)
 	if err != nil {
 		code := a.exitFor(err)
-		if explain {
-			a.explainFailure(err)
-		}
+		exp.fail(err, code)
+		a.explainWrite(exp)
 		return code
 	}
-	if explain {
-		a.explain(chosen)
-	}
+	exp.chose(chosen)
+	a.explainWrite(exp)
 	// A key the format does not produce is a usage error, the same as it
 	// is for a whole document, so it is kept apart from a parse failure.
 	var narrowErr error

@@ -17,6 +17,18 @@ project follows [Semantic Versioning](https://semver.org/).
   cover its whole value, a part's `ignore` hands a line to a sibling
   rather than dropping it, and `--stream` reads past the end of
   `input.select` to report what it left out.
+- `--explain` says more and says it one fact per line, each opening with
+  `jz: explain: `: the outcome (`chose`, `unidentified`, `ambiguous`,
+  `mismatch`, `defined`), the scope the candidates came from (the whole
+  registry, `--parser`, the name of the command `jz run` started, the
+  path of `--file`, and a path that was dropped), what the chosen
+  definition matched, the rule that settled several that fit and each one
+  it outranked, the near misses, the definitions held back because they
+  are only used when named and how many took no part, and where the lines
+  of the input went. `--explain=json` writes the same facts as one JSON
+  document on one such line. The text of `--explain` changed with it:
+  `jz: df/gnu from embedded` is now `jz: explain: chose df/gnu from
+  embedded`, and the rejections are one per line.
 - A key printed twice into a kv map or an ini section is exit 3 naming
   both lines. It used to keep the last value and drop the other.
 - A drawn table (`split: box`) refuses a line with no bar and no rule on

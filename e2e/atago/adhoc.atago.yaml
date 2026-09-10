@@ -31,7 +31,7 @@ scenarios:
       - assert:
           exit_code: 0
           stderr:
-            contains: "inline/inline from --define"
+            contains: "jz: explain: defined inline/inline: the definition was given with --define"
 
   - name: a table drawn with rules is read cell by cell
     steps:

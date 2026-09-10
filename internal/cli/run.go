@@ -142,13 +142,18 @@ func (a *app) cmdRun(args []string) int {
 		KeepLocale: keepLocale,
 		MaxOutput:  MaxInputSize,
 	}
+	exp := newExplanation(sel.explain)
 	if hasInline {
-		return a.runWith(ctx, inline, command, &out, timeout, sel.explain)
+		return a.runWith(ctx, inline, command, &out, timeout, exp)
+	}
+	sctx := selector.Context{Parser: parser, Variant: sel.variant, OS: a.env.GOOS, Args: cmdArgs}
+	if sel.parser != "" {
+		exp.scope(sctx, fromFlag)
+	} else {
+		exp.scope(sctx, fromCommand)
 	}
 	if out.stream {
-		return a.runStream(ctx, reg, command, selector.Context{
-			Parser: parser, Variant: sel.variant, OS: a.env.GOOS, Args: cmdArgs,
-		}, &out, timeout, sel.explain)
+		return a.runStream(ctx, reg, command, sctx, &out, timeout, exp)
 	}
 	res, err := runner.Run(ctx, command, a.env.Stderr)
 	if err != nil {
@@ -180,29 +185,25 @@ func (a *app) cmdRun(args []string) int {
 
 	// jz ran the command, so it knows the arguments and the system it ran
 	// on; both narrow the variants before the output is checked.
-	chosen, err := selector.Select(reg, selector.Context{
-		Parser:  parser,
-		Variant: sel.variant,
-		OS:      a.env.GOOS,
-		Args:    cmdArgs,
-		Input:   res.Stdout,
-	})
+	sctx.Input = res.Stdout
+	exp.ran(name, cmdArgs, res.ExitCode)
+	chosen, err := selector.Select(reg, sctx)
 	if err != nil {
 		code := a.failedRun(err, res.ExitCode)
-		if sel.explain {
-			a.explainFailure(err)
-			a.explainCommand(name, cmdArgs, res.ExitCode)
-		}
+		exp.fail(err, code)
+		a.explainWrite(exp)
 		return code
 	}
-	if sel.explain {
-		a.explain(chosen)
-		a.explainCommand(name, cmdArgs, res.ExitCode)
-	}
-	data, err := engine.Parse(chosen.Entry.Def, res.Stdout, out.engineOptions())
+	exp.chose(chosen)
+	data, acct, err := engine.ParseAccounted(chosen.Entry.Def, res.Stdout, out.engineOptions())
 	if err != nil {
-		return a.failedRun(err, res.ExitCode)
+		code := a.failedRun(err, res.ExitCode)
+		exp.fail(err, code)
+		a.explainWrite(exp)
+		return code
 	}
+	exp.read(acct)
+	a.explainWrite(exp)
 	narrowed, code := a.narrow(data, &out)
 	if code != ExitOK {
 		return code
@@ -222,12 +223,12 @@ var errStreamFailed = errors.New("streaming failed")
 // runStream is `jz run --stream`: the command's output is read through a
 // pipe and converted as it arrives, instead of being collected first.
 // The child's status is mirrored the way it is without --stream.
-func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.Command, sctx selector.Context, out *outputOptions, timeout time.Duration, explain bool) int {
+func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.Command, sctx selector.Context, out *outputOptions, timeout time.Duration, exp *explanation) int {
 	childStderr := a.shareStderr()
 	defer a.restoreStderr(childStderr)
 	code := ExitOK
 	res, err := runner.Stream(ctx, cmd, childStderr, func(r io.Reader) error {
-		if code = a.stream(reg, r, sctx, out, true, explain); code != ExitOK {
+		if code = a.stream(reg, r, sctx, out, true, exp); code != ExitOK {
 			return errStreamFailed
 		}
 		return nil
@@ -236,7 +237,7 @@ func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.
 		a.errorf("%v", err)
 		return ExitError
 	}
-	return a.streamStatus(ctx, cmd, res, code, timeout, explain)
+	return a.streamStatus(ctx, cmd, res, code, timeout, exp)
 }
 
 // streamStatus settles what jz run --stream returns once the command has
@@ -245,17 +246,13 @@ func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.
 // the stream had failed has no status of its own to mirror, so the
 // failure is what is returned and the stop is not reported as the
 // command's doing.
-func (a *app) streamStatus(ctx context.Context, cmd runner.Command, res *runner.Result, code int, timeout time.Duration, explain bool) int {
+func (a *app) streamStatus(ctx context.Context, cmd runner.Command, res *runner.Result, code int, timeout time.Duration, exp *explanation) int {
 	if res.Stopped {
-		if explain {
-			a.explainCommand(cmd.Name, cmd.Args, res.ExitCode)
-		}
+		a.explainCommand(exp, cmd.Name, cmd.Args, res.ExitCode)
 		return code
 	}
 	a.reportChild(ctx, cmd.Name, res, timeout)
-	if explain {
-		a.explainCommand(cmd.Name, cmd.Args, res.ExitCode)
-	}
+	a.explainCommand(exp, cmd.Name, cmd.Args, res.ExitCode)
 	if code != ExitOK && res.ExitCode == 0 {
 		return code
 	}
@@ -372,13 +369,13 @@ func variantNames(entries []*registry.Entry) []string {
 // runWith runs the command and reads its output with a definition given
 // on the command line. It is the pipe case with jz starting the
 // producer, so the command's status is mirrored the way it always is.
-func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runner.Command, out *outputOptions, timeout time.Duration, explain bool) int {
+func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runner.Command, out *outputOptions, timeout time.Duration, exp *explanation) int {
 	if out.stream {
 		childStderr := a.shareStderr()
 		defer a.restoreStderr(childStderr)
 		code := ExitOK
 		res, err := runner.Stream(ctx, cmd, childStderr, func(r io.Reader) error {
-			if code = a.convertWith(def, r, out, explain); code != ExitOK {
+			if code = a.convertWith(def, r, out, exp); code != ExitOK {
 				return errStreamFailed
 			}
 			return nil
@@ -387,7 +384,7 @@ func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runne
 			a.errorf("%v", err)
 			return ExitError
 		}
-		return a.streamStatus(ctx, cmd, res, code, timeout, explain)
+		return a.streamStatus(ctx, cmd, res, code, timeout, exp)
 	}
 	res, err := runner.Run(ctx, cmd, a.env.Stderr)
 	if err != nil {
@@ -398,10 +395,8 @@ func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runne
 		return ExitError
 	}
 	a.reportChild(ctx, cmd.Name, res, timeout)
-	if explain {
-		a.explainCommand(cmd.Name, cmd.Args, res.ExitCode)
-	}
-	code := a.convertWith(def, bytes.NewReader(res.Stdout), out, explain)
+	exp.ran(cmd.Name, cmd.Args, res.ExitCode)
+	code := a.convertWith(def, bytes.NewReader(res.Stdout), out, exp)
 	if res.ExitCode != 0 {
 		return res.ExitCode
 	}
@@ -419,4 +414,15 @@ func (a *app) reportChild(ctx context.Context, name string, res *runner.Result, 
 	if ctx.Err() != nil && timeout > 0 {
 		a.errorf("timeout of %s reached", timeout)
 	}
+}
+
+// explainCommand reports, after a stream has ended, the command jz ran
+// and the status it gave. The rest of a stream's explanation was written
+// before its first record; in JSON that document stands as it was, and
+// the status is on the line jz writes for any command that fails.
+func (a *app) explainCommand(exp *explanation, name string, args []string, status int) {
+	if exp == nil || exp.mode != explainText {
+		return
+	}
+	a.errorf("explain: command: %s (exit %d)", commandLine(name, args), status)
 }

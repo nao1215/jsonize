@@ -44,7 +44,7 @@ scenarios:
             contains: "rejected: "
       - assert:
           stderr:
-            contains: "etc/passwd (needs --parser etc)"
+            contains: "jz: explain: held back: etc/passwd: its signature fits, but it is only used when named (--parser etc)"
 
   - name: the clock in BSD uptime output is not an IPv6 address
     steps:

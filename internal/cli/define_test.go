@@ -32,7 +32,7 @@ func TestDefineReadsWithAGivenDefinition(t *testing.T) {
 	}
 	// The definition it used is what --explain has to say.
 	if code := h.pipe("a,b\n1,2\n", "--define", "parse: {type: csv}", "--explain"); code != ExitOK ||
-		!strings.Contains(h.stderr.String(), "inline/inline from --define") {
+		!strings.Contains(h.stderr.String(), "jz: explain: defined inline/inline: the definition was given with --define") {
 		t.Errorf("explain: %d %s", code, h.stderr.String())
 	}
 }
