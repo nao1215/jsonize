@@ -198,13 +198,27 @@ type NoMatchError struct {
 	// nul records that the text is text holding a NUL byte, which every
 	// format read line by line refuses.
 	nul bool
+	// empty records that the input holds no text, only blank lines or
+	// nothing at all, which no signature can be asked about.
+	empty bool
 }
+
+// noText is what is said about input that holds no text.
+const noText = "it holds no text"
 
 // nulHint says what text holding NUL bytes most likely is.
 const nulHint = "\n\nThe text holds NUL bytes: its records end with NUL rather than a newline, as a command run with -z or --zero writes them. Run it without that option."
 
 func (e *NoMatchError) Error() string {
 	var b strings.Builder
+	if e.empty {
+		// Every signature fails on nothing, and listing them explains
+		// nothing about the input.
+		if e.Parser == "" {
+			return "unable to identify the input format: " + noText
+		}
+		return fmt.Sprintf("no %s variant matches this input, which holds no text", e.Parser)
+	}
 	if e.Parser == "" {
 		b.WriteString("unable to identify the input format")
 		if len(e.Hints) > 0 {
@@ -324,6 +338,9 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		// accept, the definition is what needs fixing.
 		v := check(e, &ctx, window)
 		if !v.ok() {
+			if len(window) == 0 {
+				v.Reason = noText
+			}
 			return nil, &MismatchError{Entry: e, Reason: v.Reason}
 		}
 		return &Result{Entry: e, Scanned: 1, Matched: v.Matched}, nil
@@ -356,7 +373,8 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 	case 0:
 		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: sc.hints, Reported: reported, ExplicitOnly: sc.explicitOnly, shapes: dedupe(sc.shapes), excluded: sc.excluded, excludedArg: sc.excludedArg,
 			// Binary holds NUL bytes too, and is not what the hint is about.
-			nul: ctx.nul && utf8.Valid(ctx.Input)}
+			nul:   ctx.nul && utf8.Valid(ctx.Input),
+			empty: len(window) == 0}
 		if ctx.Parser != "" {
 			err.Rejections = sc.rejections
 		}

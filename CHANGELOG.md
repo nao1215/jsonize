@@ -8,6 +8,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Input with no text in it, empty or blank lines only, is refused by
+  saying so (`unable to identify the input format: it holds no text`)
+  instead of that no signature matched it, and a search of one parser
+  no longer lists every variant's first expression against it.
 - `jz run nice -n 5 df -h` used to answer `did you mean file, ionice,
   mise?`. When the refused command's arguments name a command jz has a
   parser for, the refusal now prints the command line that names it:

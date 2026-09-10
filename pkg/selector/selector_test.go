@@ -84,7 +84,8 @@ func TestSelectAutomatic(t *testing.T) {
 func TestSelectNoMatch(t *testing.T) {
 	t.Parallel()
 	reg := testRegistry(t)
-	for _, input := range []string{"", "   \n\t\n", "this is not a filesystem table\n", "\xff\xfe\x00binary\n", "Filesystem\n"} {
+	// Input without text is TestInputWithoutTextSaysSo's.
+	for _, input := range []string{"this is not a filesystem table\n", "\xff\xfe\x00binary\n", "Filesystem\n"} {
 		_, err := Select(reg, Context{Input: []byte(input)})
 		var nm *NoMatchError
 		if !errors.As(err, &nm) {
@@ -299,6 +300,30 @@ func TestBlankLinesAroundTheTextAreNotPartOfIt(t *testing.T) {
 	for _, in := range []string{"1\n\n2\n", "1\n \n2\n"} {
 		if _, err := Select(reg, Context{Input: []byte(in)}); err == nil {
 			t.Errorf("%q: a blank line inside the text was dropped", in)
+		}
+	}
+}
+
+// Empty input, or input of blank lines only, holds no text to identify,
+// and saying that no signature matched it, or listing every variant's
+// first expression, sends the reader looking for a format.
+func TestInputWithoutTextSaysSo(t *testing.T) {
+	t.Parallel()
+	reg := testRegistry(t)
+	for _, in := range []string{"", "\n", "  \n\t\n"} {
+		_, err := Select(reg, Context{Input: []byte(in)})
+		var nm *NoMatchError
+		if !errors.As(err, &nm) || !strings.Contains(err.Error(), "holds no text") || strings.Contains(err.Error(), "signature") {
+			t.Errorf("%q, whole registry: %v", in, err)
+		}
+		_, err = Select(reg, Context{Parser: "df", Input: []byte(in)})
+		if !errors.As(err, &nm) || !strings.Contains(err.Error(), "no df variant matches this input, which holds no text") || strings.Contains(err.Error(), "signature") {
+			t.Errorf("%q, one parser: %v", in, err)
+		}
+		_, err = Select(reg, Context{Parser: "df", Variant: "gnu", Input: []byte(in)})
+		var me *MismatchError
+		if !errors.As(err, &me) || !strings.Contains(err.Error(), "df/gnu does not describe this input: it holds no text") {
+			t.Errorf("%q, one variant: %v", in, err)
 		}
 	}
 }
