@@ -276,11 +276,18 @@ func TestSelectWithParserScope(t *testing.T) {
 	if strings.Contains(err.Error(), "--variant") || !strings.Contains(err.Error(), "jz list df") {
 		t.Errorf("scoped hint for text no variant fits: %v", err)
 	}
-	// A variant whose signature fits and that only the arguments ruled out
-	// is the one to name: a pipe carries no arguments.
-	_, err = Select(reg, Context{Parser: "df", OS: "linux", Args: []string{"-hT"}, Input: []byte(gnuDF)})
-	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "--variant gnu") || strings.Contains(err.Error(), "--variant bsd") {
+	// A variant whose signature fits and that only lacked an argument it
+	// asks for is the one to name: a pipe carries no arguments.
+	_, err = Select(reg, Context{Parser: "df", OS: "linux", Args: []string{}, Input: []byte(humanDF)})
+	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "--variant gnu-human") || strings.Contains(err.Error(), "--variant bsd") {
 		t.Errorf("scoped hint for a variant the arguments ruled out: %v", err)
+	}
+	// A variant that lists the argument as one whose output it does not
+	// read has said so; offering it would send the reader back to it, and
+	// saying no signature fits would be untrue.
+	_, err = Select(reg, Context{Parser: "df", OS: "linux", Args: []string{"-hT"}, Input: []byte(gnuDF)})
+	if !errors.As(err, &nm) || strings.Contains(err.Error(), "--variant") || !strings.Contains(err.Error(), "does not read the output of") {
+		t.Errorf("scoped hint for a variant that excludes the argument: %v", err)
 	}
 }
 
