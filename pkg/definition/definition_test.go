@@ -307,6 +307,7 @@ func TestLoadErrors(t *testing.T) {
 		{"tree without a node", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \"}\n", "node: is required"},
 		{"tree node that is not a line", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \", node: {parse: {type: table}}}\n", "read with regex or kv"},
 		{"tree node matched against the whole input", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \", node: {parse: {type: regex, each: input, pattern: '(?P<a>.)'}}}\n", "each: input has nothing to match"},
+		{"tree node with a group the children overwrite", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \", node: {parse: {type: regex, pattern: '(?P<name>\\w+) (?P<children>\\d+)'}}}\n", `names a group "children"`},
 
 		{"indent on another parse type", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, indent: \"  \"}\n", "indent/node are only valid for type tree"},
 		{"duration with a time layout", base + "fields: {t: {type: duration, layout: '2006-01-02'}}\n", "must be h:mm or mm:ss"},

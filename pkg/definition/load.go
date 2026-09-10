@@ -453,6 +453,14 @@ func validateTree(v *validator, path string, p *Parse) {
 	}
 	validateParse(v, path+".node.parse", &p.Node.Parse, p.Node.Fields, TypeTree)
 	validateFields(v, path+".node.fields", p.Node.Fields, 0, p.Node.Parse.Type == TypeKV)
+	// Every node carries its children under "children", so a group of
+	// that name would be read and then written over.
+	for _, g := range p.Node.Parse.Groups() {
+		if g == "children" {
+			v.add(path+".node.parse", `names a group "children", which is where a node's children go; name it something else`)
+			break
+		}
+	}
 }
 
 // validateINI checks an ini parser. The sections make it an object of

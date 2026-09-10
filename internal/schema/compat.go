@@ -67,7 +67,7 @@ const (
 // The one change neither reader notices is a key that may now appear and
 // never has to.
 func Compare(prev, next *Schema) []Change {
-	c := &comparer{prevRoot: prev, nextRoot: next, seen: map[string]bool{}}
+	c := &comparer{prevRoot: prev, nextRoot: next, seen: map[[2]string]bool{}}
 	c.compare(prev, next, "$")
 	sort.SliceStable(c.out, func(i, j int) bool { return c.out[i].Path < c.out[j].Path })
 	return c.out
@@ -87,9 +87,12 @@ func Breaking(changes []Change) []Change {
 type comparer struct {
 	prevRoot, nextRoot *Schema
 	out                []Change
-	// seen stops a comparison that follows a $ref from following it
-	// again, which is what a tree's children would otherwise do forever.
-	seen map[string]bool
+	// seen stops a comparison that follows a pair of $refs from following
+	// the same pair again, which is what a tree's children would otherwise
+	// do forever. It is the pair and not one name: a tree that moved into
+	// a part is described under another name, and its old and new nodes
+	// still refer to themselves.
+	seen map[[2]string]bool
 }
 
 func (c *comparer) add(path, kind, detail string, breaking bool) {
@@ -110,11 +113,12 @@ func (c *comparer) resolve(root, s *Schema) (*Schema, string) {
 func (c *comparer) compare(prev, next *Schema, path string) {
 	prev, pref := c.resolve(c.prevRoot, prev)
 	next, nref := c.resolve(c.nextRoot, next)
-	if pref != "" && pref == nref {
-		if c.seen[pref] {
+	if pref != "" && nref != "" {
+		pair := [2]string{pref, nref}
+		if c.seen[pair] {
 			return
 		}
-		c.seen[pref] = true
+		c.seen[pair] = true
 	}
 	if !sameTypes(prev.Type, next.Type) {
 		detail := fmt.Sprintf("was %s, is %s", typeList(prev.Type), typeList(next.Type))
@@ -170,6 +174,16 @@ func (c *comparer) compareObject(prev, next *Schema, path string) {
 	for _, p := range prev.Properties {
 		sub := next.Prop(p.Name)
 		child := path + "." + p.Name
+		if sub == nil && next.AdditionalProperties != nil {
+			// The key is still produced when the input names it, now as one
+			// of the keys the schema does not name: what changed is its type
+			// and whether it has to be there.
+			if prev.IsRequired(p.Name) {
+				c.add(child, KindOptional, "the key was always there and may now be missing", true)
+			}
+			c.compare(p.Schema, next.AdditionalProperties, child)
+			continue
+		}
 		if sub == nil {
 			c.add(child, KindRemoved, "the key is no longer produced", true)
 			continue
@@ -187,6 +201,16 @@ func (c *comparer) compareObject(prev, next *Schema, path string) {
 			continue
 		}
 		child := path + "." + p.Name
+		if prev.AdditionalProperties != nil {
+			// The key could already appear when the input named it, as one
+			// the schema did not name; naming it now is only a change when
+			// its type or its presence is.
+			if next.IsRequired(p.Name) {
+				c.add(child, KindRequired, "the key may have been missing and is now always there", true)
+			}
+			c.compare(prev.AdditionalProperties, p.Schema, child)
+			continue
+		}
 		if next.IsRequired(p.Name) {
 			c.add(child, KindRequired, "a new key that is always there, which a document of the previous version lacks", true)
 			continue

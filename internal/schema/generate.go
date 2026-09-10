@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"fmt"
 	"regexp"
 	"regexp/syntax"
 	"sort"
@@ -29,7 +30,8 @@ const nodeDef = "node"
 // from its header, a key/value map), the schema says so and gives the
 // type of those values instead of naming them.
 func Generate(def *definition.Definition, version int) *Schema {
-	s := parse(&def.Parse, def.Fields, nodeDef)
+	g := &generator{taken: map[string]bool{}}
+	s := g.parse(&def.Parse, def.Fields, nodeDef)
 	// A $ref is resolved against the whole document, so a tree described
 	// inside a part keeps its node description at the top.
 	s.Defs = hoist(s)
@@ -41,10 +43,29 @@ func Generate(def *definition.Definition, version int) *Schema {
 	return s
 }
 
-// parse returns the schema of one parser's result. node names the $defs
-// entry a tree here describes its nodes under, which has to differ
-// between two trees in one definition.
-func parse(p *definition.Parse, fields map[string]*definition.Field, node string) *Schema {
+// generator carries what one Generate call shares between the parsers of
+// a definition.
+type generator struct {
+	// taken holds the $defs names given out, so that two trees never
+	// describe their nodes under one name.
+	taken map[string]bool
+}
+
+// defName returns want, or want with a number after it when want is
+// taken. Part names may themselves contain "_", so the part "a_b" and the
+// part "b" inside the part "a" both ask for "node_a_b".
+func (g *generator) defName(want string) string {
+	name := want
+	for i := 2; g.taken[name]; i++ {
+		name = fmt.Sprintf("%s_%d", want, i)
+	}
+	g.taken[name] = true
+	return name
+}
+
+// parse returns the schema of one parser's result. node is the $defs
+// name a tree here asks to describe its nodes under.
+func (g *generator) parse(p *definition.Parse, fields map[string]*definition.Field, node string) *Schema {
 	switch p.Type {
 	case definition.TypeTable, definition.TypeCSV:
 		return array(table(p, fields))
@@ -60,11 +81,11 @@ func parse(p *definition.Parse, fields map[string]*definition.Field, node string
 		section := mapOf(fields, &Schema{Type: []string{TypeString}})
 		return &Schema{Type: []string{TypeObject}, Properties: nil, AdditionalProperties: section}
 	case definition.TypeComposite:
-		return composite(p, node)
+		return g.composite(p, node)
 	case definition.TypeRecords:
-		return array(composite(p, node))
+		return array(g.composite(p, node))
 	case definition.TypeTree:
-		return tree(p, node)
+		return tree(p, g.defName(node))
 	}
 	return &Schema{}
 }
@@ -73,11 +94,11 @@ func array(items *Schema) *Schema {
 	return &Schema{Type: []string{TypeArray}, Items: items}
 }
 
-func composite(p *definition.Parse, node string) *Schema {
+func (g *generator) composite(p *definition.Parse, node string) *Schema {
 	obj := &Schema{Type: []string{TypeObject}, Properties: []Property{}}
 	for i := range p.Parts {
 		part := &p.Parts[i]
-		obj.Properties = append(obj.Properties, Property{Name: part.Name, Schema: parse(&part.Parse, part.Fields, node+"_"+part.Name)})
+		obj.Properties = append(obj.Properties, Property{Name: part.Name, Schema: g.parse(&part.Parse, part.Fields, node+"_"+part.Name)})
 		obj.Required = append(obj.Required, part.Name)
 	}
 	return obj
@@ -127,9 +148,13 @@ func table(p *definition.Parse, fields map[string]*definition.Field) *Schema {
 			row.Properties = append(row.Properties, Property{Name: name, Schema: v})
 		}
 		if lead := p.Header.LeadingLabel; lead != "" && row.Prop(lead) == nil {
-			v, _ := value(fields[lead], false)
+			// The label is the first column, so it can be empty where any
+			// first cell can: under an aligned or drawn heading.
+			v, omittable := value(fields[lead], cellMayBeEmpty(p, 0, 1))
 			row.Properties = append([]Property{{Name: lead, Schema: v}}, row.Properties...)
-			row.Required = append(row.Required, lead)
+			if !omittable {
+				row.Required = append(row.Required, lead)
+			}
 		}
 		row.AdditionalProperties = &Schema{Type: []string{TypeString, TypeNull}}
 		return row

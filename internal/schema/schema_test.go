@@ -151,6 +151,15 @@ func TestGeneratedSchemaFitsTheEngine(t *testing.T) {
 		{"parse: {type: regex, patterns: ['^(?P<kind>up|down) (?P<name>\\S+)(?: (?P<note>.+))?$', '^(?P<kind>gone) (?P<name>\\S+)$']}\nfields: {note: {when_missing: omit}}\n", "up a\ndown b why\ngone c\n"},
 		{"parse: {type: tree, indent: '  ', node: {parse: {type: regex, pattern: '^(?P<name>.+)$'}}}\n", "a\n  b\n    c\nd\n"},
 		{"parse: {type: kv}\nfields: {n: {type: int}, on: {type: bool}}\n", "n=1\non=yes\nx=y\n"},
+		// The label column is a first cell, and an aligned one can be
+		// empty.
+		{"parse: {type: table, split: aligned, header: {leading_label: label}}\n", "        a     b\nMem:    1     2\n        3     4\n"},
+		// Two trees whose paths join to the same name are described under
+		// two names, each with its own node.
+		{"parse:\n  type: composite\n  parts:\n" +
+			"    - {name: a_b, select: {until: '^---$'}, parse: {type: tree, indent: '  ', node: {parse: {type: regex, pattern: '(?P<x>\\w+)'}}}}\n" +
+			"    - name: a\n      select: {after: '^---$'}\n      parse: {type: records, start: '^\\w', parts: [{name: b, parse: {type: tree, indent: '  ', node: {parse: {type: kv, separator: '='}}}}]}\n",
+			"p\n  q\n---\nk=v\n  m=n\n"},
 	} {
 		def := load(t, tt.def)
 		v, err := engine.Parse(def, []byte(tt.input), engine.Options{})
@@ -310,6 +319,37 @@ func TestCompareTree(t *testing.T) {
 	}
 	if got := strings.Join(kinds, ", "); got != "$[].label: required, $[].name: removed" {
 		t.Errorf("got %s", got)
+	}
+	// A tree that moved into a part is described under another name; the
+	// comparison of the old node with the new one still ends.
+	moved := Generate(load(t, "parse: {type: records, start: '^\\w', parts: [{name: children, parse: {type: tree, indent: '  ', node: {parse: {type: regex, pattern: '(?P<x>\\w+)'}}}}]}\n"), 1)
+	if changes := Compare(gen(`(?P<x>\w+)`), moved); len(Breaking(changes)) == 0 {
+		t.Errorf("a tree moved into a part: %v", changes)
+	}
+}
+
+// Where the keys come from the input, a field rule that names one does not
+// add or remove the key: it changes the type of a key that was there
+// already, which a program reading the old text breaks on.
+func TestCompareInputNamedKeys(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct{ name, prev, next, want string }{
+		{"a header column given a type", "parse: {type: table}\n", "parse: {type: table}\nfields: {size: {type: int}}\n", "$[].size: type"},
+		{"a map key given a type", "parse: {type: kv, as: map}\n", "parse: {type: kv, as: map}\nfields: {size: {type: int}}\n", "$.size: type"},
+		{"a map key's type taken away", "parse: {type: kv, as: map}\nfields: {size: {type: int}}\n", "parse: {type: kv, as: map}\n", "$.size: type"},
+		{"a map key named with the type it had", "parse: {type: kv, as: map}\n", "parse: {type: kv, as: map}\nfields: {size: {type: string}}\n", ""},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			changes := Compare(Generate(load(t, tt.prev), 1), Generate(load(t, tt.next), 1))
+			got := make([]string, 0, len(changes))
+			for _, c := range changes {
+				got = append(got, c.Path+": "+c.Kind)
+			}
+			if strings.Join(got, ", ") != tt.want || (tt.want != "" && len(Breaking(changes)) != 1) {
+				t.Errorf("got %v, want %q (breaking)", changes, tt.want)
+			}
+		})
 	}
 }
 
