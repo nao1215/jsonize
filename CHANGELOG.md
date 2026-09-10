@@ -195,7 +195,7 @@ project follows [Semantic Versioning](https://semver.org/).
   of the gap before the name, and `du` and `wc` trimmed it off both
   ends (`trail ` read as `trail`). One space, or three for `unzip -l`,
   separates the name from what comes before it, and what follows is the
-  name. `tree` kept its escaped form but dropped the space of a trailing
+  name. `du -h` had the same trim. `tree` kept its escaped form but dropped the space of a trailing
   `\ `. The checksum listings refused a name that begins with a space;
   they read it.
 - `vmstat -w` was exit 4: the wide form draws each group name with
