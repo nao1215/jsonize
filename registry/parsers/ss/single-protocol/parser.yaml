@@ -35,6 +35,10 @@ parse:
     # a path and an inode where the internet table holds an address and a
     # port, separated by whitespace rather than by a colon.
     - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+)\s+(?P<local_port>\S+)\s+(?P<peer_address>\S+)\s+(?P<peer_port>\S+)(?:\s+(?P<process>users:\(\(.*\)\)))?\s*$'
+    # A netlink socket names a protocol and a process ("rtnl:kernel"),
+    # and a packet socket a protocol and an interface ("arp:eno1"); the
+    # peer of either is a bare "*" with no port, so there is no peer_port.
+    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+?):(?P<local_port>\S+)\s+(?P<peer_address>\*)(?:\s+(?P<process>users:\(\(.*\)\)))?\s*$'
 fields:
   state: {required: true}
   recv_q: {type: int, required: true}
@@ -42,5 +46,5 @@ fields:
   local_address: {required: true}
   local_port: {required: true}
   peer_address: {required: true}
-  peer_port: {required: true}
+  peer_port: {when_missing: omit}
   process: {when_missing: omit}

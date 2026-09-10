@@ -5,7 +5,7 @@
   "description": "ss socket table for one protocol, without the Netid column",
   "x-jsonize": {
     "definition": "ss/single-protocol",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -42,8 +42,7 @@
       "send_q",
       "local_address",
       "local_port",
-      "peer_address",
-      "peer_port"
+      "peer_address"
     ]
   }
 }
