@@ -14,10 +14,10 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [0-9a-f]{4}: [0-9a-f]{4}:[0-9a-f]{4}'
+      - '\A(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [0-9a-f]{4}: [0-9a-f]{4}:[0-9a-f]{4}'
 parse:
   type: regex
-  pattern: '^(?P<slot>[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class_id>[0-9a-f]{4}): (?P<vendor_id>[0-9a-f]{4}):(?P<device_id>[0-9a-f]{4})(?: \(rev (?P<revision>[0-9a-f]+)\))?(?: \(prog-if (?P<prog_if>[0-9a-f]+)\))?[ \t]*$'
+  pattern: '^(?P<slot>(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class_id>[0-9a-f]{4}): (?P<vendor_id>[0-9a-f]{4}):(?P<device_id>[0-9a-f]{4})(?: \(rev (?P<revision>[0-9a-f]+)\))?(?: \(prog-if (?P<prog_if>[0-9a-f]+)\))?[ \t]*$'
 fields:
   slot: {required: true}
   class_id: {required: true}

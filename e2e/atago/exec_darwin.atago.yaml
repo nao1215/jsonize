@@ -4,7 +4,10 @@ suite:
   name: real commands on macOS
 
 # The bsd variants ship transcribed fixtures; this suite is what proves
-# them against the real binaries on the macOS CI runner.
+# them against the real binaries on the macOS CI runner. Nothing here is
+# gated on a command being present: every command is part of macOS.
+# What is pinned is which definition the real output lands on and the
+# structure that differs from the GNU one, never a value of the machine's.
 scenarios:
   - name: df selects the bsd variants
     only: {os: darwin}
@@ -120,3 +123,86 @@ scenarios:
             json:
               - { path: "$[0].mount_point", equals: / }
               - { path: "$[0].type", matches: "^[a-z]+$" }
+
+  # The GNU and BSD shapes of the same commands are exclusive: the real
+  # BSD output is refused by the GNU definition, and the GNU fixture by
+  # the BSD one. Naming the variant does not get past the signature.
+  - name: the real BSD output lands on the bsd definitions and the GNU shape is refused
+    only: {os: darwin}
+    steps:
+      - run:
+          command: jz run --explain df
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "df/bsd from embedded"
+      - run:
+          command: jz run --explain df -h
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "df/bsd-human from embedded"
+      - run:
+          command: jz run --explain uptime
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "uptime/bsd from embedded"
+      - run:
+          command: jz run --explain ps aux
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ps/bsd from embedded"
+      - run:
+          command: jz run --explain mount
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "mount/bsd from embedded"
+      - run:
+          command: jz run --explain uname -a
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "uname/darwin from embedded"
+      - run:
+          shell: true
+          command: LC_ALL=C df | jz --parser df --variant gnu
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          shell: true
+          command: LC_ALL=C mount | jz --parser mount --variant linux
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          command: jz --parser df --variant bsd --file ${specdir}/testdata/df-gnu.txt
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  # --stream with a real command on macOS: du names no operating system,
+  # so it is selected here the way it is on Linux, and each operand is
+  # one line as soon as it is read.
+  - name: jz run --stream du writes one line per operand
+    only: {os: darwin}
+    steps:
+      - fixture:
+          file: a/x
+          content: "x\n"
+      - fixture:
+          file: b/y
+          content: "y\n"
+      - run:
+          command: jz run --stream du -s a b
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"name":'
+            count: 2
+      - assert:
+          stdout:
+            contains: '"name":"b"'

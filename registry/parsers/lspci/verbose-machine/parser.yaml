@@ -14,7 +14,7 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\ASlot:\t[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]'
+      - '\ASlot:\t(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]'
       - '^Class:\t'
       - '^Vendor:\t'
 parse:

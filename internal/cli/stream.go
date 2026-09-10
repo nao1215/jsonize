@@ -160,6 +160,9 @@ func (a *app) emptyStream(reg *registry.Registry, parser, variant string) int {
 // is the ordinary parse failure, reported after the records that were
 // already written.
 func (a *app) exitForStream(err error) int {
+	if outputClosed(err) {
+		return ExitOutputClosed
+	}
 	var ns *engine.NoStreamError
 	if errors.As(err, &ns) {
 		a.errorf("%v\nDrop --stream to read it as one document.", err)

@@ -15,17 +15,17 @@ detect:
     all:
       # No bracket before the colon, which is what tells the plain listing
       # apart from -nn, where the class carries its number in brackets.
-      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [^:\[]+: '
+      - '\A(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [^:\[]+: '
     none:
       # The other listings that start with a slot: -n numbers the class,
       # -mm quotes the names, and -k and -v indent extra lines under each
       # device. All four would be read wrongly or stop at the first line
       # this definition cannot parse.
-      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [0-9a-f]{4}: [0-9a-f]{4}:[0-9a-f]{4}'
+      - '\A(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [0-9a-f]{4}: [0-9a-f]{4}:[0-9a-f]{4}'
       - '^\t\S'
 parse:
   type: regex
-  pattern: '^(?P<slot>[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>[^:]+): (?P<device>.+?)(?: \(rev (?P<revision>[0-9a-f]+)\))?$'
+  pattern: '^(?P<slot>(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>[^:]+): (?P<device>.+?)(?: \(rev (?P<revision>[0-9a-f]+)\))?$'
 fields:
   slot: {required: true}
   class: {required: true}

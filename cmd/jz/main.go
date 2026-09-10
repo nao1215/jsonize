@@ -4,29 +4,28 @@ package main
 import (
 	"context"
 	"os"
-	"os/signal"
 	"runtime"
-	"syscall"
 
 	"github.com/nao1215/jsonize/internal/cli"
 	"github.com/nao1215/jsonize/pkg/registry"
 	official "github.com/nao1215/jsonize/registry"
 )
 
+// Interrupts are not subscribed to here: jz forwards them to the command
+// it runs, and only while that command runs, so the subscription lives
+// in the runner. Outside that window an interrupt ends jz, which is what
+// a filter with nothing to forward to should do.
 func main() {
-	sigs := make(chan os.Signal, 4)
-	signal.Notify(sigs, os.Interrupt, syscall.SIGTERM)
+	keepGoingOnClosedOutput()
 	code := cli.Main(os.Args[1:], cli.Env{
 		Stdin:           os.Stdin,
 		Stdout:          os.Stdout,
 		Stderr:          os.Stderr,
 		GOOS:            runtime.GOOS,
-		Signals:         sigs,
 		Context:         context.Background(),
 		Embedded:        registry.Source{Name: cli.SourceEmbedded, FS: official.FS()},
 		StdinIsTerminal: stdinIsTerminal,
 	})
-	signal.Stop(sigs)
 	os.Exit(code)
 }
 

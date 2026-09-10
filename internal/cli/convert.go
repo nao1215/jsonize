@@ -8,6 +8,7 @@ import (
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
+	"github.com/nao1215/jsonize/pkg/registry"
 	"github.com/nao1215/jsonize/pkg/selector"
 )
 
@@ -103,13 +104,15 @@ func (a *app) cmdConvert(args []string) int {
 		return code
 	}
 	ctx.Input = data
-	sel, err := selector.Select(reg, ctx)
+	sel, out, err := readWith(reg, ctx, data, co.output.engineOptions())
 	if err != nil && ctx.Parser != co.selects.parser {
-		// The path was a guess, so it never makes the answer worse: a
-		// definition it named that the text does not fit is dropped and
-		// the ordinary reading of the text decides.
+		// The path was a guess, so it never makes the answer worse. It
+		// is dropped when the definition it named does not describe the
+		// text and equally when it describes it but cannot read it:
+		// either way the guess was wrong, and the text is then read on
+		// its own terms.
 		ctx.Parser, ctx.Variant = co.selects.parser, co.selects.variant
-		sel, err = selector.Select(reg, ctx)
+		sel, out, err = readWith(reg, ctx, data, co.output.engineOptions())
 	}
 	if err != nil {
 		code := a.exitFor(err)
@@ -121,16 +124,11 @@ func (a *app) cmdConvert(args []string) int {
 	if co.selects.explain {
 		a.explain(sel)
 	}
-	out, err := engine.Parse(sel.Entry.Def, data, co.output.engineOptions())
-	if err != nil {
-		return a.exitFor(err)
-	}
 	if out, code = a.narrow(out, &co.output); code != ExitOK {
 		return code
 	}
 	if err := jsonutil.Encode(a.env.Stdout, out, co.output.pretty); err != nil {
-		a.errorf("writing output: %v", err)
-		return ExitError
+		return a.writeFailed(err)
 	}
 	return ExitOK
 }
@@ -187,8 +185,23 @@ func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOp
 		return code
 	}
 	if err := jsonutil.Encode(a.env.Stdout, v, out.pretty); err != nil {
-		a.errorf("writing output: %v", err)
-		return ExitError
+		return a.writeFailed(err)
 	}
 	return ExitOK
+}
+
+// readWith chooses a definition for the text and reads it with that one.
+// The two steps are taken together because a caller that may retry has
+// to treat them the same way: a definition that does not describe the
+// text and one that cannot read it are both the wrong definition.
+func readWith(reg *registry.Registry, ctx selector.Context, data []byte, opts engine.Options) (*selector.Result, any, error) {
+	sel, err := selector.Select(reg, ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	out, err := engine.Parse(sel.Entry.Def, data, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+	return sel, out, nil
 }

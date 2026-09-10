@@ -1,0 +1,112 @@
+[
+  {
+    "slot": "757d:00:00.0",
+    "class": "Non-Volatile memory controller",
+    "device": "Microsoft Corporation Device 00a9",
+    "prog_if": "02",
+    "children": [
+      {
+        "key": "Subsystem",
+        "value": "Microsoft Corporation Device 0000",
+        "children": []
+      },
+      {
+        "key": "Physical Slot",
+        "value": "1307906816",
+        "children": []
+      },
+      {
+        "key": "Control",
+        "value": "I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+",
+        "children": []
+      },
+      {
+        "key": "Status",
+        "value": "Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-",
+        "children": []
+      },
+      {
+        "key": "Latency",
+        "value": "0",
+        "children": []
+      },
+      {
+        "key": "NUMA node",
+        "value": "0",
+        "children": []
+      },
+      {
+        "key": "Region 0",
+        "value": "Memory at fc0080000 (64-bit, non-prefetchable) [size=512K]",
+        "children": []
+      },
+      {
+        "key": "Capabilities",
+        "value": "<access denied>",
+        "children": []
+      },
+      {
+        "key": "Kernel driver in use",
+        "value": "nvme",
+        "children": []
+      }
+    ]
+  },
+  {
+    "slot": "7870:00:00.0",
+    "class": "Ethernet controller",
+    "device": "Microsoft Corporation Device 00ba",
+    "children": [
+      {
+        "key": "Subsystem",
+        "value": "Microsoft Corporation Device 0003",
+        "children": []
+      },
+      {
+        "key": "Physical Slot",
+        "value": "1",
+        "children": []
+      },
+      {
+        "key": "Control",
+        "value": "I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+",
+        "children": []
+      },
+      {
+        "key": "Status",
+        "value": "Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-",
+        "children": []
+      },
+      {
+        "key": "Latency",
+        "value": "0",
+        "children": []
+      },
+      {
+        "key": "NUMA node",
+        "value": "0",
+        "children": []
+      },
+      {
+        "key": "Region 0",
+        "value": "Memory at fc4000000 (64-bit, prefetchable) [size=64M]",
+        "children": []
+      },
+      {
+        "key": "Region 4",
+        "value": "Memory at fc8000000 (64-bit, prefetchable) [size=64K]",
+        "children": []
+      },
+      {
+        "key": "Capabilities",
+        "value": "<access denied>",
+        "children": []
+      },
+      {
+        "key": "Kernel driver in use",
+        "value": "mana",
+        "children": []
+      }
+    ]
+  }
+]

@@ -15,10 +15,10 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] "[^"]*" "'
+      - '\A(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] "[^"]*" "'
 parse:
   type: regex
-  pattern: '^(?P<slot>[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) "(?P<class>[^"]*)" "(?P<vendor>[^"]*)" "(?P<device>[^"]*)"(?: -r(?P<revision>[0-9a-f]+))?(?: -p(?P<prog_if>[0-9a-f]+))?(?: "(?P<subsystem_vendor>[^"]*)" "(?P<subsystem_device>[^"]*)")?[ \t]*$'
+  pattern: '^(?P<slot>(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) "(?P<class>[^"]*)" "(?P<vendor>[^"]*)" "(?P<device>[^"]*)"(?: -r(?P<revision>[0-9a-f]+))?(?: -p(?P<prog_if>[0-9a-f]+))?(?: "(?P<subsystem_vendor>[^"]*)" "(?P<subsystem_device>[^"]*)")?[ \t]*$'
 fields:
   slot: {required: true}
   class: {required: true}

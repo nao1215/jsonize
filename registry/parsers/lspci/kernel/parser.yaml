@@ -16,7 +16,7 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [^:\[]+: '
+      - '\A(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [^:\[]+: '
     any:
       - '^\t(?:Subsystem|Kernel driver in use|Kernel modules|DeviceName): '
     none:
@@ -28,14 +28,14 @@ detect:
       - '^\t(?:Control|Status): '
 parse:
   type: records
-  start: '^[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] '
+  start: '^(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] '
   parts:
     - name: device
       select: {limit: 1}
       parse:
         type: regex
         each: input
-        pattern: '\A(?P<slot>[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>[^:]+): (?P<device>.+?)(?: \(rev (?P<revision>[0-9a-f]+)\))?[ \t]*\z'
+        pattern: '\A(?P<slot>(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>[^:]+): (?P<device>.+?)(?: \(rev (?P<revision>[0-9a-f]+)\))?[ \t]*\z'
       fields:
         slot: {required: true}
         class: {required: true}

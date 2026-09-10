@@ -47,13 +47,16 @@ the exact form of the command produce numbers.
 
    ```console
    $ make check      # fmt, vet, lint (three GOOS), test, race
-   $ make e2e        # needs atago: go install github.com/nao1215/atago@latest
+   $ make e2e        # needs atago: go install github.com/nao1215/atago@latest; see e2e/README.md
    $ make fuzz FUZZTIME=5s
    ```
 
 4. Add or extend tests next to the code. Golden tests for the registry,
    unit tests for engine/selector/convert behaviour, atago scenarios for
    anything visible on the command line (exit codes, stderr, JSON shape).
+   A scenario that needs a command the CI image lacks is installed by
+   `.github/workflows/e2e.yml`, not gated on the command being there;
+   only a scenario that needs a device may skip, in `hardware_linux`.
 5. If a change affects performance, run `make bench` and
    `make bench-compare`; commit an updated `bench/baseline.txt` only when
    the change is intentional.

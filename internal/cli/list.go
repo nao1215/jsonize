@@ -313,8 +313,7 @@ func (a *app) sourceExists(s registry.Source) bool {
 
 func finish(err error, a *app) int {
 	if err != nil {
-		a.errorf("%v", err)
-		return ExitError
+		return a.writeFailed(err)
 	}
 	return ExitOK
 }

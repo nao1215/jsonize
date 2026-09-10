@@ -3,9 +3,15 @@ version: "1"
 suite:
   name: real commands on Linux
 
-# Runs the host's own coreutils/procps binaries. CI runs this on
-# ubuntu-latest; the asserted structure is what differs between
-# implementations, never machine-specific values.
+# Runs the host's own binaries: coreutils, procps, util-linux, iproute2,
+# sysstat and BusyBox. CI runs this on ubuntu-latest and installs what
+# the image lacks (see .github/workflows/e2e.yml), and nothing here is
+# gated on a command being present: a missing one fails the scenario,
+# which is what a required dependency should do. What is asserted is
+# the structure that differs between implementations, never a value of
+# the machine's. Commands that need a device the runner does not have
+# are run in hardware_linux.atago.yaml when the device is there, and
+# are verified here on captured output through the same path.
 scenarios:
   - name: df, df -h and the variant they select
     only: {os: linux}
@@ -393,8 +399,7 @@ scenarios:
       - assert:
           exit_code: 0
 
-  # procps is on every ubuntu runner; sysstat may not be, so iostat and
-  # mpstat are asked for only when they are there.
+  # procps is on every ubuntu runner; sysstat is installed by CI.
   - name: jz run --stream vmstat writes the samples of an interval run
     only: {os: linux}
     steps:
@@ -408,7 +413,6 @@ scenarios:
 
   - name: jz run --stream iostat writes one sample per interval
     only: {os: linux}
-    skip: {command: "! command -v iostat > /dev/null"}
     steps:
       - run:
           command: jz run --stream iostat 1 3
@@ -428,7 +432,6 @@ scenarios:
 
   - name: jz run mpstat with an interval closes with its summary sample
     only: {os: linux}
-    skip: {command: "! command -v mpstat > /dev/null"}
     steps:
       - run:
           command: jz run mpstat -P ALL 1 2
@@ -439,90 +442,6 @@ scenarios:
               # Two samples and the closing summary.
               - { path: "$", length: 3 }
               - { path: "$[2].cpu[0].time", equals: Average }
-
-  # The host's own pciutils. What is pinned is the shape of the answer,
-  # never a slot number or a device name.
-  - name: jz run lspci -vv lands on the tree definition
-    only: {os: linux}
-    # A cloud runner has lspci but no PCI bus to list, so the probe is
-    # the output rather than the binary.
-    skip: {command: "! LC_ALL=C lspci -vv 2>/dev/null | grep -q '^[0-9a-f][0-9a-f]:'"}
-    steps:
-      - run:
-          command: jz run --explain lspci -vv
-      - assert:
-          exit_code: 0
-          stderr:
-            contains: "lspci/verbose from embedded"
-          stdout:
-            json:
-              - { path: "$[0].slot", matches: "^[0-9a-f]{2}:[0-9a-f]{2}\\.[0-9a-f]$" }
-              - { path: "$[0].children[0].children", length: 0 }
-      # One device per line, each a complete document.
-      - run:
-          command: jz run --stream lspci -vv
-      - assert:
-          exit_code: 0
-          stdout:
-            contains: '"children":'
-            min_count: 2
-
-  - name: jz run iw dev lands on the tree definition
-    only: {os: linux}
-    skip: {command: "! iw dev > /dev/null 2>&1 || [ -z \"$(iw dev)\" ]"}
-    steps:
-      - run:
-          command: jz run iw dev
-      - assert:
-          exit_code: 0
-          stdout:
-            json:
-              - { path: "$[0].phy", gte: 0 }
-
-  # A sample of the definitions added for commands the registry had no
-  # reading for. What is pinned is the shape of the answer, never a value
-  # of this machine's. Each command is probed on its own: a cloud runner
-  # may not have it, and systemd-analyze refuses to answer at all until
-  # the boot has finished, which on a runner it may never do.
-  - name: systemd-analyze critical-chain is read as a tree of durations
-    only: {os: linux}
-    skip: {command: "! systemd-analyze critical-chain > /dev/null 2>&1"}
-    steps:
-      - run:
-          command: jz run --explain systemd-analyze critical-chain
-      - assert:
-          exit_code: 0
-          stderr:
-            contains: "systemd-analyze/critical-chain from embedded"
-          stdout:
-            json:
-              - { path: "$[0].activated", gt: 0 }
-              - { path: "$[0].children[0].unit", matches: "\\." }
-
-  - name: systemd-analyze security scores each service
-    only: {os: linux}
-    skip: {command: "! systemd-analyze security --no-pager > /dev/null 2>&1"}
-    steps:
-      - run:
-          command: jz run --explain systemd-analyze security --no-pager
-      - assert:
-          exit_code: 0
-          stderr:
-            contains: "systemd-analyze/security from embedded"
-          stdout:
-            json:
-              - { path: "$[0].exposure", gte: 0 }
-
-  - name: blkid -o export is one block of attributes per device
-    only: {os: linux}
-    skip: {command: "[ -z \"$(blkid -o export 2>/dev/null)\" ]"}
-    steps:
-      - run:
-          command: jz run --explain blkid -o export
-      - assert:
-          exit_code: 0
-          stderr:
-            contains: "blkid/export from embedded"
 
   - name: the network and package listings land on their own definitions
     only: {os: linux}
@@ -561,15 +480,239 @@ scenarios:
               - { path: "$[0].package", equals: bash }
               - { path: "$[0].children[0].relation", matches: "Depends" }
 
-  # A cloud runner has no sound card and no alsa-utils, so the command
-  # itself is the probe.
-  - name: jz run aplay -l lands on the ALSA device listing
+  # The definitions for listings that need a device jz run cannot be
+  # given on a cloud runner: no sound card, no wireless interface, no
+  # block device it may look at. Each is verified here through the same
+  # path a real run takes, with a command of that name on PATH that
+  # prints output captured from the real one. What this proves is that
+  # the name, the arguments and the operating system land on the
+  # definition and that the definition reads what the command printed;
+  # the live run, when the device is there, is hardware_linux.atago.yaml.
+  - name: listings that need a device land on their definitions from captured output
     only: {os: linux}
-    skip: {command: "! command -v aplay > /dev/null"}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
     steps:
+      - fixture:
+          file: bin/aplay
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/aplay-l.txt"
+      - fixture:
+          file: captured/aplay-l.txt
+          from: "${specdir}/../../registry/parsers/aplay/devices/testdata/hdmi.txt"
       - run:
           command: jz run --explain aplay -l
       - assert:
           exit_code: 0
           stderr:
             contains: "aplay/devices from embedded"
+          stdout:
+            json:
+              - { path: "$[0].device.card", equals: 0 }
+              - { path: "$[0].subdevices[0].index", equals: 0 }
+      - fixture:
+          file: bin/iw
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/iw-dev.txt"
+      - fixture:
+          file: captured/iw-dev.txt
+          from: "${specdir}/../../registry/parsers/iw/dev/testdata/one-phy.txt"
+      - run:
+          command: jz run --explain iw dev
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "iw/dev from embedded"
+          stdout:
+            json:
+              - { path: "$[0].phy", equals: 0 }
+              - { path: "$[0].children[0].children[0].name", equals: wdev }
+      - fixture:
+          file: bin/lspci
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/lspci-vv.txt"
+      - fixture:
+          file: captured/lspci-vv.txt
+          from: "${specdir}/../../registry/parsers/lspci/verbose/testdata/two-devices.txt"
+      - run:
+          command: jz run --explain lspci -vv
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lspci/verbose from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].slot", equals: "00:00.0" }
+              - { path: "$[0].children[0].key", equals: Subsystem }
+      - fixture:
+          file: bin/systemd-analyze
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/systemd-analyze-$1.txt"
+      - fixture:
+          file: captured/systemd-analyze-critical-chain.txt
+          from: "${specdir}/../../registry/parsers/systemd-analyze/critical-chain/testdata/boot.txt"
+      - fixture:
+          file: captured/systemd-analyze-security.txt
+          from: "${specdir}/../../registry/parsers/systemd-analyze/security/testdata/services.txt"
+      - run:
+          command: jz run --explain systemd-analyze critical-chain
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemd-analyze/critical-chain from embedded"
+          stdout:
+            json:
+              - { path: "$[0].unit", equals: graphical.target }
+              - { path: "$[0].activated", equals: 8.581 }
+              - { path: "$[0].children[0].startup", equals: 0.034 }
+      - run:
+          command: jz run --explain systemd-analyze security --no-pager
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemd-analyze/security from embedded"
+          stdout:
+            json:
+              - { path: "$[0].unit", equals: ModemManager.service }
+              - { path: "$[0].exposure", equals: 6.3 }
+              - { path: "$[1].predicate", equals: EXPOSED }
+      - fixture:
+          file: bin/blkid
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/blkid-export.txt"
+      - fixture:
+          file: captured/blkid-export.txt
+          from: "${specdir}/../../registry/parsers/blkid/export/testdata/two-devices.txt"
+      - run:
+          command: jz run --explain blkid -o export
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "blkid/export from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].attributes.DEVNAME", equals: /dev/nvme1n1p2 }
+              - { path: "$[1].attributes.TYPE", equals: vfat }
+
+  # BusyBox prints its own shape for several commands, and each has a
+  # definition of its own. The host's busybox runs here, so what is
+  # pinned is that the shape selects the BusyBox variant and not the GNU
+  # one, and that the GNU shape is refused by the BusyBox variant: the
+  # two are exclusive, not one preferred over the other.
+  - name: BusyBox df, ps and ifconfig land on their own variants
+    only: {os: linux}
+    steps:
+      # One operand: a mount the caller may not read is a warning and a
+      # non-zero status from df, which jz mirrors, and which is not what
+      # is being pinned here.
+      - run:
+          command: jz run --explain --parser df -- busybox df -h /
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "df/busybox-human from embedded"
+          stdout:
+            json:
+              - { path: "$[0].mounted_on", matches: "^/" }
+              # A rounded size stays as printed.
+              - { path: "$[0].size", matches: "^[0-9.]+[KMGTP]?$" }
+      - run:
+          shell: true
+          command: LC_ALL=C busybox df -h / | jz --parser df --variant gnu-human
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          shell: true
+          command: LC_ALL=C df -h / | jz --parser df --variant busybox-human
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          command: jz run --explain --parser ps -- busybox ps
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ps/busybox from embedded"
+          stdout:
+            json:
+              - { path: "$[0].pid", equals: 1 }
+              - { path: "$[0].user", equals: root }
+      - run:
+          shell: true
+          command: LC_ALL=C ps | jz --parser ps --variant busybox
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          command: jz run --explain --parser ifconfig -- busybox ifconfig lo
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ifconfig/busybox from embedded"
+          stdout:
+            json:
+              - { path: "$[0].interface.name", equals: lo }
+              - { path: "$[0].inet.address", equals: 127.0.0.1 }
+              - { path: "$[0].inet.mask", equals: 255.0.0.0 }
+
+  # An archive made here, listed by both implementations: BusyBox prints
+  # the seconds of the timestamp and GNU tar does not, which is what
+  # keeps the two definitions apart.
+  - name: BusyBox tar and GNU tar list the same archive on different definitions
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: src/a.txt
+          content: "hi\n"
+      - run:
+          command: busybox tar -cf a.tar src
+      - assert:
+          exit_code: 0
+      - run:
+          command: jz run --explain --parser tar -- busybox tar -tvf a.tar
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "tar/busybox from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[1].name", equals: src/a.txt }
+              - { path: "$[1].size", equals: 3 }
+              - { path: "$[1].time", matches: "^[0-9]{2}:[0-9]{2}:[0-9]{2}$" }
+      - run:
+          command: jz run --explain tar -tvf a.tar
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "tar/gnu from embedded"
+          stdout:
+            json:
+              - { path: "$[1].name", equals: src/a.txt }
+              - { path: "$[1].size", equals: 3 }
+      # Each refuses the other's listing.
+      - run:
+          shell: true
+          command: LC_ALL=C tar -tvf a.tar | jz --parser tar --variant busybox
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          shell: true
+          command: LC_ALL=C busybox tar -tvf a.tar | jz --parser tar --variant gnu
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}

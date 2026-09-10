@@ -23,7 +23,7 @@ detect:
     any: ["-v", "-vv", "-vvv"]
   signature:
     all:
-      - '\A[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [^:\[]+: '
+      - '\A(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [^:\[]+: '
       # The register dumps are what -vv prints and -k does not.
       - '^\tControl: I/O'
       - '^\tStatus: Cap'
@@ -38,7 +38,7 @@ parse:
     parse:
       type: regex
       patterns:
-        - '^(?P<slot>[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>[^:]+): (?P<device>.+?)(?: \(rev (?P<revision>[0-9a-f]+)\))?(?: \(prog-if (?P<prog_if>[0-9a-f]+)[^)]*\))?[ \t]*$'
+        - '^(?P<slot>(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>[^:]+): (?P<device>.+?)(?: \(rev (?P<revision>[0-9a-f]+)\))?(?: \(prog-if (?P<prog_if>[0-9a-f]+)[^)]*\))?[ \t]*$'
         - '^(?P<key>[^:]+): ?(?P<value>.*)$'
         - '^(?P<text>.+)$'
     fields:

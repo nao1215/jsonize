@@ -8,6 +8,10 @@ import (
 	"syscall"
 )
 
+// hasSignals reports that a child ended by a signal is seen as such, so
+// a stop the runner asked for is told apart from the child's own status.
+const hasSignals = true
+
 // terminate asks the child to exit gracefully when the context is
 // cancelled; exec.Cmd.WaitDelay kills it if it ignores the request.
 func terminate(p *os.Process) error {

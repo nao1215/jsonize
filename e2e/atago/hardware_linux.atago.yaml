@@ -1,0 +1,113 @@
+version: "1"
+
+suite:
+  name: real hardware on Linux (optional)
+
+# Commands whose output depends on a device the machine may not have: a
+# sound card, a wireless interface, a PCI bus the kernel lists, a boot
+# systemd has finished, a block device blkid may read. These run only
+# where the device is there, and each probe asks for the output rather
+# than for the binary, so "aplay is installed but there is no card" is
+# a skip and not a failure to read nothing.
+#
+# The suite is optional by name: a skip here is expected, and the run
+# script lists every skip with its reason so the log says what was not
+# verified on this machine. Nothing else is skipped for a reason other
+# than the operating system. The definitions themselves are required
+# reading: exec_linux.atago.yaml runs each of these commands on captured
+# output through the same path, so a parser bug is never hidden by a
+# skip here.
+scenarios:
+  # The host's own pciutils. What is pinned is the shape of the answer,
+  # never a slot number or a device name.
+  - name: jz run lspci -vv lands on the tree definition
+    only: {os: linux, command: "LC_ALL=C lspci -vv | grep -q '^[0-9a-f]'"}
+    steps:
+      - run:
+          command: jz run --explain lspci -vv
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lspci/verbose from embedded"
+          stdout:
+            json:
+              - { path: "$[0].slot", matches: "^([0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\\.[0-9a-f]$" }
+              - { path: "$[0].children[0].children", length: 0 }
+      # One device per line, each a complete document.
+      - run:
+          command: jz run --stream lspci -vv
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"children":'
+            min_count: 2
+
+  - name: jz run iw dev lands on the tree definition
+    only: {os: linux, command: "[ -n \"$(LC_ALL=C iw dev)\" ]"}
+    steps:
+      - run:
+          command: jz run --explain iw dev
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "iw/dev from embedded"
+          stdout:
+            json:
+              - { path: "$[0].phy", gte: 0 }
+
+  # systemd-analyze refuses to answer until the boot has finished, which
+  # on a cloud runner it may never do.
+  - name: systemd-analyze critical-chain is read as a tree of durations
+    only: {os: linux, command: "systemd-analyze critical-chain > /dev/null"}
+    steps:
+      - run:
+          command: jz run --explain systemd-analyze critical-chain
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemd-analyze/critical-chain from embedded"
+          stdout:
+            json:
+              - { path: "$[0].activated", gt: 0 }
+              - { path: "$[0].children[0].unit", matches: "\\." }
+
+  - name: systemd-analyze security scores each service
+    only: {os: linux, command: "systemd-analyze security --no-pager > /dev/null"}
+    steps:
+      - run:
+          command: jz run --explain systemd-analyze security --no-pager
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemd-analyze/security from embedded"
+          stdout:
+            json:
+              - { path: "$[0].exposure", gte: 0 }
+
+  # blkid prints nothing at all without the right to read the devices.
+  - name: blkid -o export is one block of attributes per device
+    only: {os: linux, command: "[ -n \"$(blkid -o export)\" ]"}
+    steps:
+      - run:
+          command: jz run --explain blkid -o export
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "blkid/export from embedded"
+          stdout:
+            json:
+              - { path: "$[0].attributes.DEVNAME", matches: "^/dev/" }
+
+  - name: jz run aplay -l lands on the ALSA device listing
+    only: {os: linux, command: "LC_ALL=C aplay -l | grep -q '^card '"}
+    steps:
+      - run:
+          command: jz run --explain aplay -l
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "aplay/devices from embedded"
+          stdout:
+            json:
+              - { path: "$[0].device.card", gte: 0 }
+              - { path: "$[0].subdevice_count.total", gte: 1 }
