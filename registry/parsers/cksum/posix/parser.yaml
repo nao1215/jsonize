@@ -32,6 +32,11 @@ metadata:
     - https://man7.org/linux/man-pages/man1/cksum.1.html
 detect:
   auto_detect: false
+  args:
+    # -a sysv and -a bsd print the old sum(1) checksums, whose second
+    # cell counts blocks rather than bytes. The option and its value are
+    # separate arguments, so the values are what is listed.
+    none: ["sysv", "bsd", "--algorithm=sysv", "--algorithm=bsd", "-asysv", "-absd"]
   signature:
     all:
       # A CRC, a byte count and a name. The CRC is a 32-bit checksum

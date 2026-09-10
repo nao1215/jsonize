@@ -1,0 +1,34 @@
+[
+  {
+    "address": null,
+    "type": "w",
+    "name": "_ITM_deregisterTMCloneTable"
+  },
+  {
+    "address": null,
+    "type": "w",
+    "name": "_ITM_registerTMCloneTable"
+  },
+  {
+    "address": null,
+    "type": "w",
+    "name": "__cxa_finalize"
+  },
+  {
+    "address": null,
+    "type": "w",
+    "name": "__gmon_start__"
+  },
+  {
+    "address": "0000000000001119",
+    "type": "T",
+    "name": "foo",
+    "location": "/src/m.c:1"
+  },
+  {
+    "address": "000000000000112c",
+    "type": "T",
+    "name": "main",
+    "location": "/src/m.c:2"
+  }
+]

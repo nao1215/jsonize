@@ -30,7 +30,10 @@ detect:
       - '\A(?:[0-9a-fA-F]{16}|[0-9a-fA-F]{8}|[ ]{16}|[ ]{8}) [A-Za-z?-] \S+$'
 parse:
   type: regex
-  pattern: '^(?P<address>[0-9a-fA-F]*)[ ]+(?P<type>[A-Za-z?-]) (?P<name>.+)$'
+  # -l adds the source location of a symbol after a tab, when the object
+  # carries debugging information; a symbol name holds no tab.
+  pattern: '^(?P<address>[0-9a-fA-F]*)[ ]+(?P<type>[A-Za-z?-]) (?P<name>[^\t]+)(?:\t(?P<location>[^\t]+))?$'
 fields:
   address: {null_if: [""]}
   name: {required: true}
+  location: {when_missing: omit}

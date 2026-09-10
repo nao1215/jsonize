@@ -22,6 +22,9 @@
       },
       "name": {
         "type": "string"
+      },
+      "location": {
+        "type": "string"
       }
     },
     "required": [

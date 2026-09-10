@@ -1,0 +1,4 @@
+description: |
+  O adds each member's offset in the archive, in hex, after its name.
+source: built on Ubuntu 26.04 with GNU ar (GNU Binutils for Ubuntu) 2.46 as `ar rcD two.a m.o m.c`, then LC_ALL=C ar tvO two.a
+os: linux

@@ -1,0 +1,7 @@
+description: |
+  -l adds the source file and line of a defined symbol after a tab, when
+  the object carries debugging information. A symbol without one prints
+  nothing there.
+source: "a shared library built from a two-function C file with `gcc -g -shared` on Ubuntu 26.04, then LC_ALL=C nm -D -l with GNU nm (GNU Binutils for Ubuntu) 2.46; the build directory was replaced with /src"
+os: linux
+args: [-D, -l, libm1.so]

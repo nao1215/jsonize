@@ -41,7 +41,9 @@ detect:
       - '\A(?:[0-7]{6} [0-9a-f]{40,64} [0-3]\t[^\n]+\n)*[0-7]{6} [0-9a-f]{40,64} [0-3]\t[^\n]+\z'
 parse:
   type: regex
-  pattern: '^(?P<mode>[0-7]{6}) (?P<object>[0-9a-f]{40,64}) (?P<stage>[0-3])\t(?P<path>.*)$'
+  # git quotes a path that holds a tab, so a raw tab in the path is not
+  # one: it is the column --eol inserts before the path.
+  pattern: '^(?P<mode>[0-7]{6}) (?P<object>[0-9a-f]{40,64}) (?P<stage>[0-3])\t(?P<path>[^\t]*)$'
 fields:
   mode: {required: true}
   object: {required: true}

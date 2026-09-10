@@ -1,0 +1,4 @@
+description: -F appends a mark that says what kind of file a name is ("docs/", "run.sh*"). The mark is not part of the name, so the invocation is refused.
+source: "tree -F over a directory made for the fixture, on Ubuntu 26.04 with tree 2.3.1, LC_ALL=C"
+args: ["-F", "tree"]
+expect_error: excluded by the argument -F
