@@ -259,6 +259,23 @@ scenarios:
           stdout:
             not_contains: '"rx"'
 
+  # -o prints one line per address, joined by a backslash where the block
+  # form breaks the line; it lands on a definition of its own.
+  - name: ip -o address is one record per address
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain ip -o -4 address show dev lo
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ip/oneline-address from embedded"
+          stdout:
+            json:
+              - { path: "$[0].interface", equals: lo }
+              - { path: "$[0].address", equals: 127.0.0.1/8 }
+              - { path: "$[0].valid_lft", equals: forever }
+
   # Several operands mean several records. A definition that read only the
   # first block would drop the rest without saying so.
   - name: stat -f reports every filesystem it was asked about

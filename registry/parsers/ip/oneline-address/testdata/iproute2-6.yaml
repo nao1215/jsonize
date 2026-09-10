@@ -1,0 +1,4 @@
+description: Every address of every interface, IPv4 and IPv6, one per line.
+source: "`ip -o addr` on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C; the global addresses were replaced with documentation addresses, the link-local ones with short ones, and the bridge and veth names with names of the same width"
+os: linux
+args: ["-o", "addr"]
