@@ -45,6 +45,31 @@ scenarios:
           stderr:
             contains: unable to identify
 
+  # `git ls-files -s -z`: the records end with NUL, so read line by line
+  # it is one line whose last field would hold every record after the
+  # first. Neither detection nor naming the definition reads it.
+  - name: records separated by NUL are refused by every line-based format
+    steps:
+      - fixture:
+          file: zero.txt
+          base64: "MTAwNjQ0IDI5ODdmOTZmM2YwNzZlNGJlOTQxMTcyODgyNDFmMWE2ODAwZTM5OGEgMAlMSUNFTlNFADEwMDY0NCAyZjVmNDg1YWY3MGUxNmZkMDIwOGVlNjViNzE4ZjUzYTM4MjljZDgyIDAJZ28ubW9kAA=="
+      - run:
+          command: jz --file zero.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: "-z or --zero"
+      - run:
+          command: jz --parser git --variant ls-files-stage --file zero.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: "holds a NUL byte"
+
   - name: input that is not valid UTF-8 is refused before parsing
     steps:
       - fixture:
