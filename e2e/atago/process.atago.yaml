@@ -253,6 +253,39 @@ scenarios:
           stdout:
             contains: "producer=gone"
 
+  # A command ended from outside stops wherever its output had got to,
+  # here in the middle of a line. The stream keeps the record before the
+  # cut and leaves out the one it fell in. No whole document is written:
+  # the output never came to its end.
+  - name: output cut short by the deadline is not read past its last whole line
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: cut-du
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            printf '12\t/mnt/whole\n34\t/mnt/cut-sh'
+            exec sleep 30
+      - run:
+          command: jz run --stream --timeout 500ms --parser du -- sh ./cut-du
+          timeout: 30s
+      - assert:
+          exit_code: 143
+          stdout:
+            equals: |
+              {"size":12,"name":"/mnt/whole"}
+      - run:
+          command: jz run --timeout 500ms --parser du -- sh ./cut-du
+          timeout: 30s
+      - assert:
+          exit_code: 143
+          stdout:
+            empty: true
+      - assert:
+          stderr:
+            contains: "sh was ended before it finished its output"
+
   # A command that ignores the request to stop is killed after a grace
   # period, so a --timeout is a deadline and not a suggestion.
   - name: a command that ignores SIGTERM is killed after the grace period

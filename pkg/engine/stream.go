@@ -43,6 +43,10 @@ func (e *NoStreamError) Error() string {
 // onError. A format with no streaming form, an emit that fails and a
 // record over the length limit are not records to skip, so they end the
 // read whatever onError says.
+//
+// An error from r other than io.EOF is returned as it is, and the record
+// the read was in the middle of is not emitted: a reader that says its
+// input was cut short gets the records before the cut and none after.
 func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any) error, onError func(*ParseError) error) error {
 	if !def.Parse.YieldsArray() {
 		return &NoStreamError{Definition: def.ID()}
@@ -75,21 +79,21 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 		if errors.Is(err, ErrLineTooLong) {
 			return &ParseError{Definition: def.ID(), Line: num + 1, Msg: fmt.Sprintf("record exceeds %d bytes", opts.maxLine()), Cause: ErrLineTooLong}
 		}
-		if len(raw) == 0 && err != nil {
-			if errors.Is(err, io.EOF) {
-				break
-			}
+		// A read that fails ends the input where it stopped, which is not
+		// where a record ends: the record it was in the middle of, and one
+		// of several lines it left open, are not read.
+		if err != nil && !errors.Is(err, io.EOF) {
 			return err
+		}
+		if len(raw) == 0 && err != nil {
+			break
 		}
 		num++
 		if rerr := s.feedRecordText(def, prepareRecord(raw, sep, num), num); rerr != nil {
 			return rerr
 		}
-		if errors.Is(err, io.EOF) {
-			break
-		}
 		if err != nil {
-			return err
+			break
 		}
 	}
 	if err := s.finish(); err != nil {

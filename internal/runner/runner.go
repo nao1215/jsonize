@@ -28,6 +28,11 @@ const DefaultMaxOutput = 64 * 1024 * 1024
 // is killed in that case.
 var ErrOutputTooLarge = errors.New("command output exceeds the size limit")
 
+// ErrCut ends the output Stream hands over when the command was ended
+// from outside rather than by itself. Its output stops wherever it had
+// got to, so what follows the last line ending is not a line it finished.
+var ErrCut = errors.New("the command was ended before it finished its output")
+
 // Command describes what to run.
 type Command struct {
 	Name string
@@ -59,6 +64,31 @@ type Result struct {
 	// consumer of its output stopped, so the status is the runner's doing
 	// rather than anything the child said about itself.
 	Stopped bool
+	// Cut reports that the child was ended from outside: by a signal, or,
+	// where there are none, at the deadline. Its output stops wherever it
+	// had got to, not where the child would have ended it.
+	Cut bool
+}
+
+// ended records in res how the child ended, from what Wait returned. It
+// reports false for a failure to wait, which says nothing about the child.
+func (res *Result) ended(ctx context.Context, waitErr error) bool {
+	if waitErr == nil {
+		return true
+	}
+	var ee *exec.ExitError
+	if !errors.As(waitErr, &ee) {
+		return false
+	}
+	res.ExitCode = ee.ExitCode()
+	if sig, ok := signalName(ee.ProcessState); ok {
+		res.Signal = sig.name
+		res.ExitCode = 128 + sig.number
+	}
+	// On Windows there is no signal to see: a child killed at the deadline
+	// shows a plain non-zero status, and the deadline is what tells.
+	res.Cut = res.Signal != "" || (!hasSignals && ctx.Err() != nil)
+	return true
 }
 
 // Run executes cmd. stderr receives the child's stderr as it is produced.
@@ -109,16 +139,8 @@ func run(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay) (*Resu
 	if errors.Is(context.Cause(runCtx), ErrOutputTooLarge) {
 		return nil, fmt.Errorf("%w (%d bytes)", ErrOutputTooLarge, limit)
 	}
-	if waitErr != nil {
-		var ee *exec.ExitError
-		if !errors.As(waitErr, &ee) {
-			return nil, fmt.Errorf("waiting for %q: %w", cmd.Name, waitErr)
-		}
-		res.ExitCode = ee.ExitCode()
-		if sig, ok := signalName(ee.ProcessState); ok {
-			res.Signal = sig.name
-			res.ExitCode = 128 + sig.number
-		}
+	if !res.ended(ctx, waitErr) {
+		return nil, fmt.Errorf("waiting for %q: %w", cmd.Name, waitErr)
 	}
 	return res, nil
 }
@@ -177,7 +199,19 @@ func stream(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay, con
 	}
 	_ = pw.Close()
 	sigs.forwardTo(c.Process)
-	consumeErr := consume(pr)
+	// The command is waited for while its output is read, so that the
+	// end of the output can say how the command ended.
+	res := &Result{}
+	var waitErr error
+	waitedOK := false
+	waited := make(chan struct{})
+	go func() {
+		waitErr = c.Wait()
+		res.Duration = time.Since(start)
+		waitedOK = res.ended(ctx, waitErr)
+		close(waited)
+	}()
+	consumeErr := consume(&output{r: pr, waited: waited, res: res})
 	if consumeErr != nil {
 		stop()
 	}
@@ -185,28 +219,39 @@ func stream(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay, con
 	// so it cannot block on a full pipe; the drain ends with the pipe,
 	// which is closed once the command has, whoever else holds it.
 	go func() { _, _ = io.Copy(io.Discard, pr) }()
-	waitErr := c.Wait()
-	res := &Result{Duration: time.Since(start)}
-	if waitErr != nil {
-		var ee *exec.ExitError
-		if !errors.As(waitErr, &ee) {
-			if consumeErr != nil {
-				return res, consumeErr
-			}
-			return nil, fmt.Errorf("waiting for %q: %w", cmd.Name, waitErr)
+	<-waited
+	if !waitedOK {
+		if consumeErr != nil {
+			return res, consumeErr
 		}
-		res.ExitCode = ee.ExitCode()
-		if sig, ok := signalName(ee.ProcessState); ok {
-			res.Signal = sig.name
-			res.ExitCode = 128 + sig.number
-		}
-		// A child that ended by itself, however it ended, keeps its
-		// status; only one that had to be stopped is the runner's doing.
-		// On Windows there is no signal to see, so a kill is a plain
-		// non-zero status and the stop is what tells the two apart.
-		res.Stopped = consumeErr != nil && ctx.Err() == nil && (res.Signal != "" || !hasSignals)
+		return nil, fmt.Errorf("waiting for %q: %w", cmd.Name, waitErr)
 	}
+	// A child that ended by itself, however it ended, keeps its status;
+	// only one that had to be stopped is the runner's doing. On Windows
+	// there is no signal to see, so a kill is a plain non-zero status and
+	// the stop is what tells the two apart.
+	res.Stopped = waitErr != nil && consumeErr != nil && ctx.Err() == nil && (res.Signal != "" || !hasSignals)
 	return res, consumeErr
+}
+
+// output is the command's standard output as the consumer reads it. Its
+// end waits for the command to have ended, so that output the command
+// did not finish ends with ErrCut instead of passing for output it did.
+type output struct {
+	r      io.Reader
+	waited <-chan struct{}
+	res    *Result
+}
+
+func (o *output) Read(p []byte) (int, error) {
+	n, err := o.r.Read(p)
+	if errors.Is(err, io.EOF) {
+		<-o.waited
+		if o.res.Cut {
+			return n, ErrCut
+		}
+	}
+	return n, err
 }
 
 // relay carries the signals jz forwards to its child. It is subscribed

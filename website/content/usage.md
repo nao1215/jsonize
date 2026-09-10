@@ -170,6 +170,15 @@ command that failed explains both what it printed and what it did not.
 The skipped records are on standard error either way, so nothing is lost
 by the choice — only the number changes.
 
+### A command ended before it finished
+
+A command stopped by `--timeout`, by an interrupt or by any other signal
+stops wherever its output had got to, often in the middle of a line.
+With `--stream`, the records written before that point stay written and
+the one the cut fell in is left out. Without it nothing is written,
+because the output is not the whole of what the command prints. The
+status is 128 plus the signal either way.
+
 ## Output jz has no definition for
 
 `--define` takes the definition itself instead of the name of one. It is
