@@ -757,6 +757,40 @@ scenarios:
               - { path: "$[0].attributes.DEVNAME", equals: /dev/nvme1n1p2 }
               - { path: "$[1].attributes.TYPE", equals: vfat }
 
+  # A host that does not answer is what ping is run to find out, and its
+  # summary then has no round trip times. That run used to be a parse
+  # error with no JSON. It keeps ping's status and is read, the ICMP
+  # errors that came back in place of replies included. The real ping
+  # runs in hardware_linux.atago.yaml, since a machine may not let an
+  # unprivileged user send ICMP.
+  - name: ping that got no reply keeps its status and is still read
+    only: {os: linux}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
+    steps:
+      - fixture:
+          file: bin/ping
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/ping-unreachable.txt"
+            exit 1
+      - fixture:
+          file: captured/ping-unreachable.txt
+          from: "${specdir}/../../registry/parsers/ping/linux/testdata/unreachable.txt"
+      - run:
+          command: jz run --explain ping -c 3 192.0.2.10
+      - assert:
+          exit_code: 1
+          stderr:
+            contains: "ping/linux from embedded"
+          stdout:
+            json:
+              - { path: "$.replies[0].error", equals: Destination Host Unreachable }
+              - { path: "$.statistics.packets_received", equals: 0 }
+              - { path: "$.statistics.errors", equals: 3 }
+              - { path: "$.statistics.round_trip_avg_ms", equals: null }
+
   # BusyBox prints its own shape for several commands, and each has a
   # definition of its own. The host's busybox runs here, so what is
   # pinned is that the shape selects the BusyBox variant and not the GNU

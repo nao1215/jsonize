@@ -4,23 +4,23 @@
     "address": "127.0.0.1",
     "source": null,
     "device": null,
-    "data_bytes": 56,
-    "packet_bytes": 84
+    "data_bytes": 8,
+    "packet_bytes": 36
   },
   "replies": [
     {
-      "bytes": 64,
+      "bytes": 16,
       "responder": "127.0.0.1",
       "icmp_seq": 1,
       "ttl": 64,
-      "time_ms": 0.04
+      "time_ms": null
     },
     {
-      "bytes": 64,
+      "bytes": 16,
       "responder": "127.0.0.1",
       "icmp_seq": 2,
       "ttl": 64,
-      "time_ms": 0.039
+      "time_ms": null
     }
   ],
   "statistics": {
@@ -30,11 +30,11 @@
     "corrupted": null,
     "errors": null,
     "packet_loss_percent": 0,
-    "time_ms": 1012,
-    "round_trip_min_ms": 0.039,
-    "round_trip_avg_ms": 0.039,
-    "round_trip_max_ms": 0.04,
-    "round_trip_mdev_ms": 0,
+    "time_ms": 1032,
+    "round_trip_min_ms": null,
+    "round_trip_avg_ms": null,
+    "round_trip_max_ms": null,
+    "round_trip_mdev_ms": null,
     "pipe": null,
     "ipg_ms": null,
     "ewma_ms": null

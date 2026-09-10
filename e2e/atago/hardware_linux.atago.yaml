@@ -156,3 +156,22 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].profile.name", matches: "^[a-z-]+$" }
+
+  # Sending ICMP takes a capability or a ping_group_range that admits the
+  # user, which a container may not grant. -D prefixes each reply with the
+  # time it arrived, and the reply used to be refused for it.
+  - name: jz run ping -D reads the timestamp of each reply
+    only: {os: linux, command: "ping -c 1 -W 2 127.0.0.1 > /dev/null"}
+    steps:
+      - run:
+          command: jz run --explain ping -c 2 -D 127.0.0.1
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ping/linux from embedded"
+          stdout:
+            json:
+              - { path: "$.replies", length: 2 }
+              - { path: "$.replies[0].timestamp", gt: 1000000000 }
+              - { path: "$.replies[1].icmp_seq", equals: 2 }
+              - { path: "$.statistics.packets_received", equals: 2 }

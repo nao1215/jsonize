@@ -5,7 +5,7 @@
   "description": "ping replies and summary (iputils)",
   "x-jsonize": {
     "definition": "ping/linux",
-    "version": 1
+    "version": 2
   },
   "type": "object",
   "properties": {
@@ -18,16 +18,33 @@
         "address": {
           "type": "string"
         },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "device": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "data_bytes": {
           "type": "integer"
         },
         "packet_bytes": {
-          "type": "integer"
+          "type": [
+            "integer",
+            "null"
+          ]
         }
       },
       "required": [
         "name",
         "address",
+        "source",
+        "device",
         "data_bytes",
         "packet_bytes"
       ]
@@ -37,6 +54,9 @@
       "items": {
         "type": "object",
         "properties": {
+          "timestamp": {
+            "type": "number"
+          },
           "bytes": {
             "type": "integer"
           },
@@ -50,15 +70,17 @@
             "type": "integer"
           },
           "time_ms": {
-            "type": "number"
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "error": {
+            "type": "string"
           }
         },
         "required": [
-          "bytes",
-          "responder",
-          "icmp_seq",
-          "ttl",
-          "time_ms"
+          "icmp_seq"
         ]
       }
     },
@@ -71,6 +93,24 @@
         "packets_received": {
           "type": "integer"
         },
+        "duplicates": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "corrupted": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "errors": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
         "packet_loss_percent": {
           "type": "number"
         },
@@ -78,27 +118,63 @@
           "type": "integer"
         },
         "round_trip_min_ms": {
-          "type": "number"
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "round_trip_avg_ms": {
-          "type": "number"
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "round_trip_max_ms": {
-          "type": "number"
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "round_trip_mdev_ms": {
-          "type": "number"
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "pipe": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "ipg_ms": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "ewma_ms": {
+          "type": [
+            "number",
+            "null"
+          ]
         }
       },
       "required": [
         "packets_transmitted",
         "packets_received",
+        "duplicates",
+        "corrupted",
+        "errors",
         "packet_loss_percent",
         "time_ms",
         "round_trip_min_ms",
         "round_trip_avg_ms",
         "round_trip_max_ms",
-        "round_trip_mdev_ms"
+        "round_trip_mdev_ms",
+        "pipe",
+        "ipg_ms",
+        "ewma_ms"
       ]
     }
   },
