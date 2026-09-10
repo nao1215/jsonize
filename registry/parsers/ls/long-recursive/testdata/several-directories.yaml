@@ -1,0 +1,4 @@
+description: ls -l given two directories prints the same blocks as -R does, one per operand, without descending.
+source: "GNU coreutils 9.7 (gnuls) on Ubuntu 26.04, LC_ALL=C, ls -lh tree/docs tree/src; the sizes are rounded, so they stay the strings printed. The owner was replaced with a name of the same width"
+os: linux
+args: ["-lh", "tree/docs", "tree/src"]

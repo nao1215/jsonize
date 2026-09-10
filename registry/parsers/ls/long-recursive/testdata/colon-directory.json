@@ -1,0 +1,43 @@
+[
+  {
+    "directory": {
+      "path": "d:"
+    },
+    "entries": [
+      {
+        "flags": "-rw-rw-r--",
+        "links": 1,
+        "owner": "usr",
+        "group": "usr",
+        "size": "2",
+        "date": "Sep  1 10:30",
+        "filename": "file"
+      },
+      {
+        "flags": "drwxrwxr-x",
+        "links": 2,
+        "owner": "usr",
+        "group": "usr",
+        "size": "60",
+        "date": "Sep  1 10:30",
+        "filename": "sub"
+      }
+    ]
+  },
+  {
+    "directory": {
+      "path": "d:/sub"
+    },
+    "entries": [
+      {
+        "flags": "-rw-rw-r--",
+        "links": 1,
+        "owner": "usr",
+        "group": "usr",
+        "size": "1",
+        "date": "Sep  1 10:30",
+        "filename": "b::"
+      }
+    ]
+  }
+]

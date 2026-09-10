@@ -1,0 +1,8 @@
+d::
+total 4
+-rw-rw-r-- 1 usr usr  2 Sep  1 10:30 file
+drwxrwxr-x 2 usr usr 60 Sep  1 10:30 sub
+
+d:/sub:
+total 4
+-rw-rw-r-- 1 usr usr 1 Sep  1 10:30 b::

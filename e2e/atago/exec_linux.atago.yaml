@@ -683,6 +683,40 @@ scenarios:
               - { path: "$[0].inet.address", equals: 127.0.0.1 }
               - { path: "$[0].inet.mask", equals: 255.0.0.0 }
 
+  # A listing of several directories opens each with its path and a
+  # colon. A file whose name ends with a colon prints a line that ends the
+  # same way, and it has to stay an entry of the directory it is in.
+  - name: ls -lR is one record per directory, and one directory is ls -l
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: tree/a.txt
+          content: "hi\n"
+      - fixture:
+          file: "tree/sub/b:"
+          content: "x\n"
+      - run:
+          command: jz run --explain ls -lR tree
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ls/long-recursive from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].directory.path", equals: tree }
+              - { path: "$[1].directory.path", equals: tree/sub }
+              - { path: "$[1].entries[0].filename", equals: "b:" }
+      - run:
+          command: jz run --explain ls -l tree/sub
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ls/long from embedded"
+          stdout:
+            json:
+              - { path: "$[0].filename", equals: "b:" }
+
   # An archive made here, listed by both implementations: BusyBox prints
   # the seconds of the timestamp and GNU tar does not, which is what
   # keeps the two definitions apart.
