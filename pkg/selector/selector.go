@@ -719,6 +719,15 @@ func signatureWindow(input []byte) []string {
 		}
 		lines = append(lines, string(bytes.TrimSuffix(l, []byte{'\r'})))
 	}
+	// Blank lines after the last of the text are not part of it: the
+	// parser skips them, and a signature that says every line has one
+	// shape would otherwise refuse `cat /proc/meminfo; echo`. Only where
+	// the input ends, since a blank line with text after it is inside.
+	if len(input) == 0 {
+		for len(lines) > 0 && strings.TrimSpace(lines[len(lines)-1]) == "" {
+			lines = lines[:len(lines)-1]
+		}
+	}
 	return lines
 }
 

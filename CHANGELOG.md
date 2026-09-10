@@ -162,6 +162,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A blank line after the last line of the input made 44 definitions
+  unidentified: `cat /proc/meminfo; echo` was exit 4. A signature that
+  says every line has one shape ends at `\z`, the end of the lines it
+  looks at, and the blank line was one of them though the parser skips
+  it. Blank lines after the text are no longer part of what a signature
+  sees. `jz test` and `make registry-test` now require every fixture to
+  give the same answer with CRLF line endings, a byte order mark, no
+  line break at the end and a blank line after it.
 - `lsblk -f -r` came back at exit 0 with its values under the wrong keys:
   `-r` prints the header of the aligned table one space apart and the
   rows unaligned, and cutting the rows where those header words start

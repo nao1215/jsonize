@@ -3,7 +3,8 @@
 // Three things are checked. Every <case>.txt fixture stored next to a
 // definition is parsed with that definition and compared with
 // <case>.json, and is fed through selection to prove that it picks its
-// own definition unambiguously. Every fixture is then tampered with (see
+// own definition unambiguously, the same with the changes in sameText
+// that leave the text as it was. Every fixture is then tampered with (see
 // Tampering) to prove the definition reads all of what it is given.
 // Last, every definition is named explicitly on every other definition's
 // fixtures and must refuse them, which is what keeps a signature from
@@ -56,8 +57,7 @@ type Options struct {
 	Update bool
 	// Engine options for parsing.
 	Engine engine.Options
-	// Parallel bounds the goroutines the exclusivity check uses
-	// (0 = one per CPU).
+	// Parallel bounds the goroutines the checks use (0 = one per CPU).
 	Parallel int
 	// SkipExclusivity leaves out the definition/fixture cross product,
 	// which is the expensive half of a run.
@@ -69,7 +69,15 @@ type Options struct {
 // Run checks every case of every entry that belongs to the given source
 // FS. Entries from other sources are skipped.
 func Run(reg *registry.Registry, fsys fs.FS, sourceName string, opts Options) []Result {
-	var results []Result
+	type job struct {
+		e *registry.Entry
+		c registry.Case
+	}
+	var (
+		results []Result
+		jobs    []job
+		at      []int
+	)
 	for _, e := range reg.Entries() {
 		if e.Source != sourceName {
 			continue
@@ -84,9 +92,16 @@ func Run(reg *registry.Registry, fsys fs.FS, sourceName string, opts Options) []
 			continue
 		}
 		for _, c := range cases {
-			results = append(results, runCase(reg, e, c, opts))
+			jobs = append(jobs, job{e, c})
+			at = append(at, len(results))
+			results = append(results, Result{})
 		}
 	}
+	// Each case is checked on its own, so the order of the results is
+	// the order of the registry however the work is spread.
+	each(len(jobs), opts.Parallel, func(i int) {
+		results[at[i]] = runCase(reg, jobs[i].e, jobs[i].c, opts)
+	})
 	return results
 }
 
@@ -127,27 +142,9 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 	// Selection is part of the contract, not just parsing: a fixture has
 	// to identify its own definition the way a user's input would.
 	if c.Meta.ExpectError == "" {
-		explicit := selector.ExplicitOnly(e.Def)
-		if c.Meta.AutoDetects() && !explicit {
-			// What `COMMAND | jz` does: no parser, no OS, no arguments.
-			if err := selects(reg, e, selector.Context{Input: c.Input}); err != nil {
-				res.Err = fmt.Errorf("automatic detection: %w", err)
-				return res
-			}
-		}
-		if explicit {
-			if err := namedSelects(reg, e, c); err != nil {
-				res.Err = err
-				return res
-			}
-		}
-		// What `jz run` does when the metadata records the arguments.
-		if c.Meta.OS != "" || c.Meta.Args != nil {
-			ctx := selector.Context{Parser: e.Def.Command, OS: c.Meta.OS, Args: c.Meta.Args, Input: c.Input}
-			if err := selects(reg, e, ctx); err != nil {
-				res.Err = fmt.Errorf("selection with parser %s: %w", e.Def.Command, err)
-				return res
-			}
+		if err := selectsOwn(reg, e, c, c.Input); err != nil {
+			res.Err = err
+			return res
 		}
 	}
 	if c.Meta.ExpectError != "" {
@@ -174,6 +171,10 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 		return res
 	}
 	if err := streamMatches(e.Def, c.Input, got, opts); err != nil {
+		res.Err = err
+		return res
+	}
+	if err := sameAnswer(reg, e, c, got, opts); err != nil {
 		res.Err = err
 		return res
 	}
@@ -205,6 +206,78 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 		res.Err = fmt.Errorf("output differs from %s.json (-want +got):\n%s", c.Name, diff)
 	}
 	return res
+}
+
+// selectsOwn checks that input picks the case's own definition on every
+// path its metadata says a user reaches it by.
+func selectsOwn(reg *registry.Registry, e *registry.Entry, c registry.Case, input []byte) error {
+	explicit := selector.ExplicitOnly(e.Def)
+	if c.Meta.AutoDetects() && !explicit {
+		// What `COMMAND | jz` does: no parser, no OS, no arguments.
+		if err := selects(reg, e, selector.Context{Input: input}); err != nil {
+			return fmt.Errorf("automatic detection: %w", err)
+		}
+	}
+	if explicit {
+		c.Input = input
+		if err := namedSelects(reg, e, c); err != nil {
+			return err
+		}
+	}
+	// What `jz run` does when the metadata records the arguments.
+	if c.Meta.OS != "" || c.Meta.Args != nil {
+		ctx := selector.Context{Parser: e.Def.Command, OS: c.Meta.OS, Args: c.Meta.Args, Input: input}
+		if err := selects(reg, e, ctx); err != nil {
+			return fmt.Errorf("selection with parser %s: %w", e.Def.Command, err)
+		}
+	}
+	return nil
+}
+
+// sameText are changes to a fixture that leave the text what it was: a
+// byte order mark, CRLF line endings, no line break after the last line,
+// a blank line after it. Each has to leave the answer as it was, both the
+// definition chosen and the JSON. The line endings mean nothing to a
+// format whose records end with NUL, where a newline belongs to a value.
+var sameText = []struct {
+	name  string
+	lines bool
+	apply func([]byte) []byte
+}{
+	{"a byte order mark", false, func(b []byte) []byte { return append([]byte{0xEF, 0xBB, 0xBF}, b...) }},
+	{"CRLF line endings", true, func(b []byte) []byte { return bytes.ReplaceAll(b, []byte("\n"), []byte("\r\n")) }},
+	{"no line break at the end", true, func(b []byte) []byte { return bytes.TrimRight(b, "\n") }},
+	{"a blank line at the end", true, func(b []byte) []byte { return append(bytes.Clone(b), '\n') }},
+}
+
+// sameAnswer checks the fixture under each change in sameText against
+// the answer it gives as it is.
+func sameAnswer(reg *registry.Registry, e *registry.Entry, c registry.Case, want any, opts Options) error {
+	var w bytes.Buffer
+	if err := jsonutil.Encode(&w, want, false); err != nil {
+		return err
+	}
+	for _, t := range sameText {
+		if t.lines && e.Def.Input.Separator() != '\n' {
+			continue
+		}
+		input := t.apply(c.Input)
+		if err := selectsOwn(reg, e, c, input); err != nil {
+			return fmt.Errorf("%s changes the answer: %w", t.name, err)
+		}
+		got, err := engine.Parse(e.Def, input, opts.Engine)
+		if err != nil {
+			return fmt.Errorf("%s changes the answer: %w", t.name, err)
+		}
+		var g bytes.Buffer
+		if err := jsonutil.Encode(&g, got, false); err != nil {
+			return err
+		}
+		if g.String() != w.String() {
+			return fmt.Errorf("%s changes the answer (-as captured +changed):\n%s", t.name, lineDiff(w.Bytes(), g.Bytes()))
+		}
+	}
+	return nil
 }
 
 // namedSelects checks the paths a definition jz will not claim on its
