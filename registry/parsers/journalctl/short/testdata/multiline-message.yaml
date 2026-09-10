@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (systemd 259) as journalctl -o short with LC_ALL=C, six lines of a longer output; the host name replaced
+description: >-
+  A message of several lines: journalctl prints the rest of it on lines
+  indented to where the message began, and each one belongs to the
+  entry above it.
+os: linux
+args: [-o, short]

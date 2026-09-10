@@ -1,0 +1,4 @@
+[11421.772801] host01 kernel:  <TASK>
+[11422.141663] host01 kernel:  show_stack+0x49/0x60
+-- Boot 89901e8fc6604c69bf1415adfaaba3df --
+[    2.234532] host01 kernel: Linux version 7.0.0-31-generic (buildd@lcy02-amd64-091) (x86_64-linux-gnu-gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0, GNU ld (GNU Binutils for Ubuntu) 2.46) #31-Ubuntu SMP PREEMPT_DYNAMIC Sat Aug  1 04:26:38 UTC 2026 (Ubuntu 7.0.0-31.31-generic 7.0.14)

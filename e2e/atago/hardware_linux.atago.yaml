@@ -175,3 +175,20 @@ scenarios:
               - { path: "$.replies[0].timestamp", gt: 1000000000 }
               - { path: "$.replies[1].icmp_seq", equals: 2 }
               - { path: "$.statistics.packets_received", equals: 2 }
+
+  # The journal has to be readable by the user running the suite. A query
+  # that matched nothing says so on a line of its own, which is the empty
+  # list, and recent entries may hold messages over several lines.
+  - name: the journal reads a query that matched nothing, and recent entries
+    only: {os: linux, command: "journalctl -n 1 --no-pager | grep -q ."}
+    steps:
+      - run:
+          command: jz run journalctl -n 0 --no-pager
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+      - run:
+          command: jz run journalctl -n 200 --no-pager
+      - assert:
+          exit_code: 0
