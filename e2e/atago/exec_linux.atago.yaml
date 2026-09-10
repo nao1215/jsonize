@@ -716,6 +716,15 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].filename", equals: "b:" }
+      # -F marks each name with its kind ("sub/"), which is not the name.
+      - run:
+          command: jz run ls -lF tree
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: "excluded by the argument -F"
 
   # An archive made here, listed by both implementations: BusyBox prints
   # the seconds of the timestamp and GNU tar does not, which is what

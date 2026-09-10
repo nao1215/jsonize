@@ -148,6 +148,11 @@ project follows [Semantic Versioning](https://semver.org/).
   signature of `lspci/kernel`, which then failed on the lines `-k` does
   not print. It now lands on `lspci/verbose`, which reads `-v` and `-vv`
   alike.
+- `ls -lF` and `ls -lp` came back at exit 0 with the mark `-F` adds in
+  `filename` ("docs/", "link@"). The long listings now exclude those
+  arguments under `jz run`, and refuse a name that ends with "/", which
+  no name can, so the same listing piped in is refused too. A variant
+  that excludes an argument is no longer offered as the one to name.
 - `ss -e` and `ss -o` came back at exit 0 with the socket's uid, inode,
   cgroup and timers under `process`, padded with the spaces ss aligns its
   columns with. `process` is now the `users:((...))` list of `-p` and
