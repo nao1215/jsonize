@@ -158,6 +158,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- An aligned table cut a row holding CJK characters or kana one
+  character late for each of them, and wrote the result at exit 0:
+  `systemd-inhibit --list` gave an inhibitor named `スクリーンロッカー`
+  the user id and user name too, and moved every value after it one key
+  to the right. Positions are now counted in terminal columns, the way
+  the table was lined up.
 - A `float` field read Go's own number syntax, so `1_000.5` became
   1000.5 and `0x1p3` became 8; `int` already refused both. The days of a
   `duration` took any number too, `1_0-01:02:03` as ten days and
