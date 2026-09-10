@@ -33,11 +33,7 @@ func main() {
 // terminal. jz consults this for one thing only: running `jz` with no
 // arguments at all in a shell prints help instead of blocking forever on
 // a read. Piped and redirected input take exactly the same path either
-// way.
+// way, and that includes /dev/null.
 func stdinIsTerminal() bool {
-	fi, err := os.Stdin.Stat()
-	if err != nil {
-		return false
-	}
-	return fi.Mode()&os.ModeCharDevice != 0
+	return isTerminal(os.Stdin)
 }

@@ -45,6 +45,23 @@ scenarios:
           stderr:
             contains: unable to identify
 
+  # /dev/null is a character device, as a terminal is, but reading it is
+  # reading nothing, which is what cron, a CI step or `ssh -n` leave on
+  # standard input. jz used to take it for a terminal and print its help
+  # on standard output with status 0.
+  - name: standard input from /dev/null is empty input, not a terminal
+    skip: {os: windows}
+    steps:
+      - run:
+          shell: true
+          command: jz < /dev/null
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: unable to identify
+
   # `git ls-files -s -z`: the records end with NUL, so read line by line
   # it is one line whose last field would hold every record after the
   # first. Neither detection nor naming the definition reads it.
