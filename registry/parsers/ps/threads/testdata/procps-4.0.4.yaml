@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C, the first five lines
+description: one line per thread, so a process with several threads repeats its PID with a LWP of its own
+os: linux
+args: [-L, -f, -p, "1,2369"]

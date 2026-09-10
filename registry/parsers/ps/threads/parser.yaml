@@ -1,0 +1,32 @@
+# `ps -eLf`, and -L with -f for any selection of processes: the columns
+# of `ps -ef` with two more, the thread's id (LWP) and the number of
+# threads its process has (NLWP). A process with thirty threads is thirty
+# lines, each with the same PID and a LWP of its own.
+format: 1
+command: ps
+variant: threads
+description: ps -eLf, one line per thread (UID PID PPID LWP C NLWP STIME TTY TIME CMD)
+metadata:
+  tags: [linux, process]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/ps.1.html
+detect:
+  os: [linux]
+  args:
+    all: ["-L"]
+  signature:
+    all:
+      - '\A\s*UID\s+PID\s+PPID\s+LWP\s+C\s+NLWP\s+STIME\s+TTY\s+TIME\s+CMD\s*$'
+parse:
+  type: table
+  header:
+    columns: [uid, pid, ppid, lwp, c, nlwp, stime, tty, time, cmd]
+fields:
+  pid: {type: int}
+  ppid: {type: int}
+  lwp: {type: int}
+  c: {type: int}
+  nlwp: {type: int}
+  tty: {null_if: ["?"]}
+  time: {type: duration, layout: mm:ss}
