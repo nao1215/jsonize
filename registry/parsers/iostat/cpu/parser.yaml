@@ -28,6 +28,10 @@ detect:
       # the extended one that opens with r/s, means this is a fuller
       # report and not the CPU one.
       - '^Device[ \t]+\S'
+      # -h prints the percentages with a percent sign and moves the
+      # device name to the end of the table header; iostat/human reads it.
+      - '^[ \t]+\d+\.\d+%[ \t]'
+      - '^[ \t]*tps[ \t].*[ \t]Device[ \t]*$'
 input:
   select:
     # The banner is stated whole, so what is dropped is exactly the line

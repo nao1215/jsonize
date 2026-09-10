@@ -95,6 +95,9 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `iostat/human` reads `iostat -h`: the percentages as numbers, the
+  rounded device figures as the strings printed. `iostat/cpu` used to
+  take that report and fail on the percent signs.
 - `ip/oneline-address` reads `ip -o address`, one record per address,
   with the words `ip/address` reads under the same names.
 - `ls/long-recursive` reads `ls -lR`, and `ls -l` given several
