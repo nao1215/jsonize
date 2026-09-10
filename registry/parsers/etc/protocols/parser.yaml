@@ -19,7 +19,11 @@ detect:
       # A lower-case name, a number under 256, and then the same name in
       # upper case, which is the convention every line of this file
       # follows and which separates it from any other two-column listing.
-      - '\A(?:[ \t]*(?:#[^\n]*)?\n)*[a-z][a-z0-9-]*[ \t]+(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])[ \t]+[A-Za-z0-9-]+(?:[ \t]|$)'
+      # An expression cannot say "the same name", so it says what that
+      # name looks like: it opens with a capital (IP, IPv6, ICMP). A
+      # lower-case alias was how `ls -ld /etc` ("drwxr-xr-x 162 root")
+      # came to be read as a protocol.
+      - '\A(?:[ \t]*(?:#[^\n]*)?\n)*[a-z][a-z0-9-]*[ \t]+(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])[ \t]+[A-Z][A-Za-z0-9-]*(?:[ \t]|$)'
 input:
   ignore:
     - '^[ \t]*#'

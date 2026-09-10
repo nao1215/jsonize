@@ -176,6 +176,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `ls -ld /etc | jz` was ambiguous, and `jz --parser etc` read the same
+  line as a protocol named `drwxr-xr-x` with the number 162 at exit 0.
+  `etc/protocols` took any word after the number for the protocol's
+  upper-case alias; it now asks for one that opens with a capital, as
+  every entry in the file has.
 - `vmstat -t` and `vmstat -a -t` were exit 3: the date and time `-t`
   adds after the last column ran into it. Each sample now carries a
   `timestamp`, as printed, since the zone is named only by the
