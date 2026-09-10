@@ -58,18 +58,22 @@ parse:
         device: {required: true}
         r_s: {type: float}
         rkb_s: {type: float}
+        # -m names the megabyte column in its place.
+        rmb_s: {type: float}
         rrqm_s: {type: float}
         rrqm_percent: {type: float}
         r_await: {type: float}
         rareq_sz: {type: float}
         w_s: {type: float}
         wkb_s: {type: float}
+        wmb_s: {type: float}
         wrqm_s: {type: float}
         wrqm_percent: {type: float}
         w_await: {type: float}
         wareq_sz: {type: float}
         d_s: {type: float}
         dkb_s: {type: float}
+        dmb_s: {type: float}
         drqm_s: {type: float}
         drqm_percent: {type: float}
         d_await: {type: float}
