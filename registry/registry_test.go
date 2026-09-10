@@ -208,7 +208,9 @@ func TestParsersPageListsEveryDefinition(t *testing.T) {
 		t.Fatal(err)
 	}
 	got := map[string][]string{}
-	for _, line := range strings.Split(string(data), "\n") {
+	// A Windows checkout writes the page with CRLF, which $ does not
+	// match past.
+	for _, line := range strings.Split(strings.ReplaceAll(string(data), "\r\n", "\n"), "\n") {
 		m := parsersRow.FindStringSubmatch(line)
 		if m == nil || m[1] == "Command" {
 			continue
