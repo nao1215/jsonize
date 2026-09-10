@@ -85,6 +85,14 @@ func Float(s string) (float64, error) {
 	if math.IsNaN(v) || math.IsInf(v, 0) {
 		return 0, &Error{Type: typeFloat, Input: s, Cause: errors.New("non-finite value")}
 	}
+	// strconv also reads Go's own syntax: underscores between digits and
+	// hexadecimal with a binary exponent. No command prints a decimal
+	// that way, and Int already refuses both.
+	for i := 0; i < len(t); i++ {
+		if c := t[i]; !isDigit(c) && !strings.ContainsRune(".eE+-", rune(c)) {
+			return 0, &Error{Type: typeFloat, Input: s, Cause: strconv.ErrSyntax}
+		}
+	}
 	return v, nil
 }
 
@@ -498,8 +506,11 @@ func splitLeadingDays(t string) (days float64, rest string, ok bool) {
 func parseClock(t, layout string) (float64, error) {
 	var days float64
 	if i := strings.Index(t, "-"); i > 0 {
+		if !allDigits(t[:i]) {
+			return 0, errDurationShape
+		}
 		n, err := strconv.ParseFloat(t[:i], 64)
-		if err != nil || n < 0 {
+		if err != nil {
 			return 0, errDurationShape
 		}
 		days, t = n, t[i+1:]

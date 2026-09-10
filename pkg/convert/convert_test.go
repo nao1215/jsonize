@@ -54,6 +54,11 @@ func TestFloat(t *testing.T) {
 		{"Inf", 0, true},
 		{"", 0, true},
 		{"x", 0, true},
+		// Go's own number syntax, which no command prints for a decimal
+		// and which Int already refuses.
+		{"1_000.5", 0, true},
+		{"0x1p3", 0, true},
+		{"0X1P-2", 0, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.in, func(t *testing.T) {
@@ -387,6 +392,14 @@ func TestDurationRefuses(t *testing.T) {
 		"4:",           // an empty last part
 		"Jan  5 10:11", // a date
 		"3 days 4:11",  // the comma is what says the days ended
+		// The days before the dash are a count, printed as digits and
+		// nothing else: Go's number syntax is not what a command prints.
+		"1_0-01:02:03",
+		"0x1p1-01:02:03",
+		"1e3-00:00:00",
+		"1.5-01:02:03",
+		"+2-01:00:00",
+		"inf-01:00:00",
 	} {
 		if v, err := Duration(in, LayoutMinuteSecond); err == nil {
 			t.Errorf("Duration(%q) = %v, want an error", in, v)

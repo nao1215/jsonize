@@ -152,6 +152,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A `float` field read Go's own number syntax, so `1_000.5` became
+  1000.5 and `0x1p3` became 8; `int` already refused both. The days of a
+  `duration` took any number too, `1_0-01:02:03` as ten days and
+  `1e3-00:00:00` as a thousand. Both now take digits only.
 - A command `jz run` stopped at `--timeout`, or one ended by a signal,
   had the line it was writing when it stopped read as a whole record:
   `du` cut off in the middle of a path gave that path shortened. With
