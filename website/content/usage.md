@@ -325,7 +325,7 @@ jz: explain: scope: the variants of df, from the name of the command jz ran
 jz: explain: scope: narrowed by the system it ran on (linux) and its arguments (-h)
 jz: explain: matched: signature.all[0] /^Filesystem\s+Size\s+Used\s+Avail\s+Use%\s+Mounted.../
 jz: explain: matched: detect.os linux
-jz: explain: matched: detect.args any [-h --human-readable]
+jz: explain: matched: detect.args any [-h --human-readable -H --si]
 jz: explain: rejected: df/bsd: signature.all[0] /^Filesystem\s+512-blocks\s+Used\s+Available\s+Capa.../ did not match
 ...
 jz: explain: read: 12 lines: 12 read
@@ -347,7 +347,11 @@ it could be `etc` output, but that format is too generic for jz to claim on its 
 ...
 jz: explain: unidentified: no definition fits the text
 jz: explain: scope: every definition in the registry, by its signature alone
+jz: explain: rejected: apt-cache/depends: signature.all[1] /^  (?:Pre)?Depends: \S+[ \t]*$/ did not match
+jz: explain: rejected: rustup/toolchains: no signature.any[] expression matched
 jz: explain: rejected: sensors/linux: signature.all[1] /^Adapter: \S/ did not match
+jz: explain: rejected: sensors/raw: signature.all[1] /^Adapter: \S/ did not match
+jz: explain: rejected: tree/listing: signature.all[1] /^(?:\|-- |`-- )\S/ did not match
 jz: explain: held back: etc/passwd: its signature fits, but it is only used when named (--parser etc)
 jz: explain: not considered: 47 definitions only used when named
 ```
