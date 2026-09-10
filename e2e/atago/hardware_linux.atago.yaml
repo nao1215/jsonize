@@ -42,6 +42,21 @@ scenarios:
             contains: '"children":'
             min_count: 2
 
+  # One -v prints a Flags line where -vv prints the register dumps, and
+  # lspci -k prints neither, so the two verbosities land on one definition.
+  - name: jz run lspci -v lands on the tree definition
+    only: {os: linux, command: "LC_ALL=C lspci -v | grep -q '^[0-9a-f]'"}
+    steps:
+      - run:
+          command: jz run --explain lspci -v
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lspci/verbose from embedded"
+          stdout:
+            json:
+              - { path: "$[0].slot", matches: "^([0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\\.[0-9a-f]$" }
+
   - name: jz run iw dev lands on the tree definition
     only: {os: linux, command: "[ -n \"$(LC_ALL=C iw dev)\" ]"}
     steps:

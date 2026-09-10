@@ -19,7 +19,7 @@ detect:
       - '\[[0-9a-f]{4}:[0-9a-f]{4}\]'
 parse:
   type: regex
-  pattern: '^(?P<slot>(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>.+?) \[(?P<class_id>[0-9a-f]{4})\]: (?P<device>.+?) \[(?P<vendor_id>[0-9a-f]{4}):(?P<device_id>[0-9a-f]{4})\](?: \(rev (?P<revision>[0-9a-f]+)\))?(?: \(prog-if (?P<prog_if>[0-9a-f]+)[^)]*\))?[ \t]*$'
+  pattern: '^(?P<slot>(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>.+?) \[(?P<class_id>[0-9a-f]{4})\]: (?P<device>.+?) \[(?P<vendor_id>[0-9a-f]{4}):(?P<device_id>[0-9a-f]{4})\](?: \(rev (?P<revision>[0-9a-f]+)\))?(?: \(prog-if (?P<prog_if>[0-9a-f]+)(?: \[(?P<prog_if_name>[^]]*)\])?\))?[ \t]*$'
 fields:
   slot: {required: true}
   class: {required: true}
@@ -29,3 +29,4 @@ fields:
   device_id: {required: true}
   revision: {when_missing: omit}
   prog_if: {when_missing: omit}
+  prog_if_name: {when_missing: omit}

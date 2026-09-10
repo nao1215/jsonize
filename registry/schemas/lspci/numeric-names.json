@@ -34,6 +34,9 @@
       },
       "prog_if": {
         "type": "string"
+      },
+      "prog_if_name": {
+        "type": "string"
       }
     },
     "required": [

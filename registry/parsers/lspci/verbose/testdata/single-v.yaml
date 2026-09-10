@@ -1,0 +1,3 @@
+source: "lspci -v -s c6: on Ubuntu 26.04 with pciutils 3.13.0, LC_ALL=C, as a user; one -v prints a Flags line where -vv prints the Control and Status register dumps, and the capabilities need root"
+os: linux
+args: ["-v", "-s", "c6:"]

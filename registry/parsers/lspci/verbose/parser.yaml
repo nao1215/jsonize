@@ -1,8 +1,8 @@
-# `lspci -vv` is a tree, and the depth is a property of the machine
-# rather than of the format: a device has capabilities, a capability has
-# flags, and how far that goes depends on what is plugged in. Every line
-# is a node, its depth is how many tabs open it, and its children are the
-# lines under it.
+# `lspci -v` and `lspci -vv` are a tree, and the depth is a property of
+# the machine rather than of the format: a device has capabilities, a
+# capability has flags, and how far that goes depends on what is plugged
+# in. Every line is a node, its depth is how many tabs open it, and its
+# children are the lines under it.
 #
 # The device line and the lines under it have different shapes, so the
 # node is read by three expressions in order: the device line, a
@@ -11,7 +11,7 @@
 format: 1
 command: lspci
 variant: verbose
-description: lspci -vv devices as a tree of their attributes
+description: lspci -v and -vv devices as a tree of their attributes
 metadata:
   tags: [linux, hardware, pci, pciutils]
   compatible: [pciutils]
@@ -24,13 +24,9 @@ detect:
   signature:
     all:
       - '\A(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] [^:\[]+: '
-      # The register dumps are what -vv prints and -k does not.
-      - '^\tControl: I/O'
-      - '^\tStatus: Cap'
-  # `lspci -k` prints a subset of these lines, so its signature is met by
-  # this output too. The register dumps say which of the two this is, and
-  # priority is where a definition author states that.
-  priority: 10
+      # -v prints a Flags line for every device and -vv the Control and
+      # Status register dumps in its place. lspci -k prints neither.
+      - '^\t(?:Flags: |Control: I/O)'
 parse:
   type: tree
   indent: "\t"
@@ -38,9 +34,12 @@ parse:
     parse:
       type: regex
       patterns:
-        - '^(?P<slot>(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>[^:]+): (?P<device>.+?)(?: \(rev (?P<revision>[0-9a-f]+)\))?(?: \(prog-if (?P<prog_if>[0-9a-f]+)[^)]*\))?[ \t]*$'
+        - '^(?P<slot>(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f]) (?P<class>[^:]+): (?P<device>.+?)(?: \(rev (?P<revision>[0-9a-f]+)\))?(?: \(prog-if (?P<prog_if>[0-9a-f]+)(?: \[(?P<prog_if_name>[^]]*)\])?\))?[ \t]*$'
         - '^(?P<key>[^:]+): ?(?P<value>.*)$'
         - '^(?P<text>.+)$'
     fields:
       revision: {when_missing: omit}
       prog_if: {when_missing: omit}
+      # pci.ids does not name every programming interface, and one
+      # without a name is printed as the number alone.
+      prog_if_name: {when_missing: omit}
