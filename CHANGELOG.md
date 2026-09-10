@@ -8,6 +8,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `jz run nice -n 5 df -h` used to answer `did you mean file, ionice,
+  mise?`. When the refused command's arguments name a command jz has a
+  parser for, the refusal now prints the command line that names it:
+  `jz run --parser df -- nice -n 5 df -h`. The same line follows a
+  refusal after the run, as with `jz run env A=1 df`, where `env` is a
+  parser of its own.
 - A conversion that succeeds has read all of its input. Every line is
   read by a parser, joined by `fold`, blank, named by `ignore`, or the
   heading `select.after` states in full; anything else is exit 3 naming

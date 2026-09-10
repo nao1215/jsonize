@@ -445,7 +445,16 @@ $ jz run --parser ps -- busybox ps
 
 jz does not keep a list of which commands are wrappers. The list would
 never be complete, and a wrong entry would read some other command's
-output with the wrong definition.
+output with the wrong definition. What it does, when it refuses a
+command whose arguments name one it has a parser for, is print the
+command line that names that parser:
+
+```console
+$ jz run nice -n 5 df -h
+jz: no parser for "nice"
+run `jz list` to see the supported parsers
+If nice runs df, name that parser: jz run --parser df -- nice -n 5 df -h
+```
 
 A file is the other case. `/etc/fstab`, `/etc/passwd` and their
 neighbours have no argv to detect them from, so they are variants of a

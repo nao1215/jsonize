@@ -71,6 +71,10 @@ type Env struct {
 
 type app struct {
 	env Env
+	// wrapperHint is what `jz run` adds to a refusal when the command it
+	// was given looks like a wrapper around one jz has a parser for: the
+	// command line that names that parser.
+	wrapperHint string
 }
 
 type command struct {
@@ -225,6 +229,9 @@ func (a *app) exitFor(err error) int {
 		me *selector.MismatchError
 	)
 	if errors.As(err, &up) || errors.As(err, &uv) || errors.As(err, &nm) || errors.As(err, &am) || errors.As(err, &me) {
+		if a.wrapperHint != "" && (up != nil || nm != nil) {
+			fmt.Fprintln(a.env.Stderr, a.wrapperHint)
+		}
 		return ExitSelect
 	}
 	var vp *selector.VariantWithoutParserError
