@@ -28,6 +28,7 @@
     "device": "Advanced Micro Devices, Inc. [AMD] Example Root PCIe USB4 Bridge",
     "revision": "02",
     "prog_if": "00",
+    "prog_if_name": "Normal decode",
     "children": [
       {
         "key": "Subsystem",

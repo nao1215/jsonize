@@ -1,0 +1,3 @@
+source: stat /dev/null on Ubuntu 26.04 (uutils coreutils 0.8.0) with LC_ALL=C; a device file adds "Device Type:" to the Device line
+os: linux
+args: [/dev/null]

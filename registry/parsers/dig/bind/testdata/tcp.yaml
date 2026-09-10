@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C
+description: >-
+  A query sent over TCP to the local stub resolver. The SERVER line names
+  the transport, which is the one fact in it the address does not carry.
+os: linux
+args: ["+tcp", "+time=2", "+tries=1", "localhost", "@127.0.0.53"]

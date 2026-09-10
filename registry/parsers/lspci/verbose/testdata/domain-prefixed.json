@@ -4,6 +4,7 @@
     "class": "Non-Volatile memory controller",
     "device": "Microsoft Corporation Device 00a9",
     "prog_if": "02",
+    "prog_if_name": "NVM Express",
     "children": [
       {
         "key": "Subsystem",

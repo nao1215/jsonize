@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://nao1215.github.io/jsonize/schemas/lspci/verbose.json",
   "title": "lspci/verbose",
-  "description": "lspci -vv devices as a tree of their attributes",
+  "description": "lspci -v and -vv devices as a tree of their attributes",
   "x-jsonize": {
     "definition": "lspci/verbose",
     "version": 1
@@ -28,6 +28,9 @@
           "type": "string"
         },
         "prog_if": {
+          "type": "string"
+        },
+        "prog_if_name": {
           "type": "string"
         },
         "key": {

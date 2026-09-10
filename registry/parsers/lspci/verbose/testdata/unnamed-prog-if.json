@@ -1,0 +1,40 @@
+[
+  {
+    "slot": "c2:00.0",
+    "class": "SD Host controller",
+    "device": "Genesys Logic, Inc GL9755 SD Host Controller",
+    "revision": "01",
+    "prog_if": "01",
+    "children": [
+      {
+        "key": "Subsystem",
+        "value": "Genesys Logic, Inc GL9755 SD Host Controller",
+        "children": []
+      },
+      {
+        "key": "Flags",
+        "value": "bus master, fast devsel, latency 0, IRQ 70, IOMMU group 18",
+        "children": []
+      },
+      {
+        "text": "Memory at d4c00000 (32-bit, non-prefetchable) [size=4K]",
+        "children": []
+      },
+      {
+        "key": "Capabilities",
+        "value": "<access denied>",
+        "children": []
+      },
+      {
+        "key": "Kernel driver in use",
+        "value": "sdhci-pci",
+        "children": []
+      },
+      {
+        "key": "Kernel modules",
+        "value": "sdhci_pci",
+        "children": []
+      }
+    ]
+  }
+]

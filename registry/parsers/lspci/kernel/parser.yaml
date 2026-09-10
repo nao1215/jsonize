@@ -20,12 +20,14 @@ detect:
     any:
       - '^\t(?:Subsystem|Kernel driver in use|Kernel modules|DeviceName): '
     none:
-      # -k prints four kinds of indented line and no register dump. A
-      # Control or Status line means the output is -v or fuller, whose
+      # -k prints four kinds of indented line and no Flags line or
+      # register dump. Every device in -v output has a Flags line, and
+      # -vv output has the Control and Status register dumps in its place,
+      # so any of the three means the output is fuller than -k, whose
       # indented lines this definition would read as attributes of a
       # device and then fail on. It is a statement about what lspci -k
       # prints, not a list of the neighbours it must avoid.
-      - '^\t(?:Control|Status): '
+      - '^\t(?:Control|Status|Flags): '
 parse:
   type: records
   start: '^(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] '

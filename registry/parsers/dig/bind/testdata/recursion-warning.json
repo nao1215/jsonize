@@ -88,6 +88,8 @@
   "statistics": {
     "query_time_ms": 184,
     "server": "199.43.135.53#53",
+    "server_name": "a.iana-servers.net",
+    "protocol": "UDP",
     "when": "Thu Sep 10 21:40:24 JST 2026",
     "message_size": 136
   }
