@@ -1,0 +1,7 @@
+      tree |    2.3.1-1 | http://archive.ubuntu.com/ubuntu resolute/universe amd64 Packages
+       vim | 2:9.1.2141-1ubuntu4.9 | http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 Packages
+       vim | 2:9.1.2141-1ubuntu4.9 | http://security.ubuntu.com/ubuntu resolute-security/main amd64 Packages
+       vim | 2:9.1.2141-1ubuntu4 | http://archive.ubuntu.com/ubuntu resolute/main amd64 Packages
+libc6:i386 | 2.43-2ubuntu2.4 | http://archive.ubuntu.com/ubuntu resolute-updates/main i386 Packages
+libc6:i386 | 2.43-2ubuntu2.4 | http://security.ubuntu.com/ubuntu resolute-security/main i386 Packages
+libc6:i386 | 2.43-2ubuntu2 | http://archive.ubuntu.com/ubuntu resolute/main i386 Packages

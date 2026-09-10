@@ -1,0 +1,26 @@
+[
+  {
+    "package": "bash",
+    "version": "5.3-2ubuntu1",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute",
+    "component": "main",
+    "architecture": "amd64"
+  },
+  {
+    "package": "coreutils",
+    "version": "9.5-1ubuntu2+0.0.0~ubuntu25",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute",
+    "component": "main",
+    "architecture": "amd64"
+  },
+  {
+    "package": "coreutils",
+    "version": "9.5-1ubuntu2+0.0.0~ubuntu25",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute",
+    "component": "main",
+    "architecture": "i386"
+  }
+]
