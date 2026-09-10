@@ -87,7 +87,10 @@ detect:
   `-hT` satisfies `any: ["-h"]`.
 - `signature` expressions are matched against the first `window` lines
   joined with newlines, in multi-line mode (`^`/`$` match line
-  boundaries). `\A` anchors at the start of the input.
+  boundaries). `\A` anchors at the start of the input, and `\z` at the
+  end of the window, which is the end of the input only when the input
+  fits in it: a rule about every line holds for the lines the window
+  holds.
 - `auto_detect: false` marks a format whose text is not evidence on its
   own: three numbers in a row, or a number and a path, describe far too
   many things. Such a definition is skipped by automatic detection and

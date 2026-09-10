@@ -130,6 +130,9 @@ $ git diff --stat registry/parsers/lsof
 $ cat registry/parsers/lsof/default/testdata/lsof-4.95.json
 ```
 
+In the jsonize repository itself, `make registry-update-golden` does the
+first step and `make registry-test` the check below.
+
 Check types, `null`s and the last column. A rounded, human-readable
 number stays a string: the output does not record the base and the value
 is already rounded, so converting it would invent precision. Then:
@@ -141,7 +144,11 @@ $ jz test ./registry
 The check fails if the fixture does not select its own variant, does not
 parse, differs from the JSON, or if any definition reads a fixture that
 belongs to another one. That last check is the one that catches a
-signature written wide enough to swallow a neighbouring format.
+signature written wide enough to swallow a neighbouring format. When it
+is your fixture that another definition reads, that definition's
+signature says less than its format does: sharpen it to state what its
+own output has, rather than listing yours under its `none`, and never
+drop or trim your fixture to get past it.
 
 It also fails if the definition leaves text out without saying so. Every
 line of the fixture has to be read, blank, or named by an `ignore`
