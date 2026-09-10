@@ -148,6 +148,10 @@ project follows [Semantic Versioning](https://semver.org/).
   signature of `lspci/kernel`, which then failed on the lines `-k` does
   not print. It now lands on `lspci/verbose`, which reads `-v` and `-vv`
   alike.
+- `ss -e` and `ss -o` came back at exit 0 with the socket's uid, inode,
+  cgroup and timers under `process`, padded with the spaces ss aligns its
+  columns with. `process` is now the `users:((...))` list of `-p` and
+  nothing else, and a line carrying the other fields is refused.
 - The message for text jz could not identify told the reader to name a
   parser (`--parser df`, or the first variant of the command), and a named
   parser is held to its signature, so following it was refused the same
