@@ -439,6 +439,11 @@ func (a *app) reportChild(ctx context.Context, name string, res *runner.Result, 
 	if ctx.Err() != nil && timeout > 0 {
 		a.errorf("timeout of %s reached", timeout)
 	}
+	if res.LeftOpen {
+		// What that process writes is not the command's output, and
+		// waiting for it would wait as long as it runs.
+		a.errorf("%s ended, and a process it started still held its output open; what came before it ended was read", name)
+	}
 }
 
 // cutShort says why the output of a command ended from outside is not

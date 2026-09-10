@@ -221,6 +221,51 @@ func TestStreamSaysWhenTheOutputWasCutShort(t *testing.T) {
 	}
 }
 
+// A command that ends and leaves a process behind holding its output
+// open has still ended. What it printed is its output; waiting for the
+// process it left would wait as long as that runs, which for a daemon is
+// for ever.
+func TestCommandThatLeavesItsOutputOpen(t *testing.T) {
+	t.Parallel()
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	script := "sleep 6 & echo out"
+	t.Run("whole", func(t *testing.T) {
+		t.Parallel()
+		start := time.Now()
+		res, err := Run(context.Background(), Command{Name: "sh", Args: []string{"-c", script}}, io.Discard)
+		if err != nil {
+			t.Fatalf("Run: %v", err)
+		}
+		if string(res.Stdout) != "out\n" || res.ExitCode != 0 || !res.LeftOpen || res.Cut {
+			t.Errorf("res = %+v", res)
+		}
+		if time.Since(start) > 5*time.Second {
+			t.Errorf("waited %s for the process the command left", time.Since(start))
+		}
+	})
+	t.Run("stream", func(t *testing.T) {
+		t.Parallel()
+		start := time.Now()
+		var got []byte
+		var readErr error
+		res, err := Stream(context.Background(), Command{Name: "sh", Args: []string{"-c", script}}, io.Discard, func(r io.Reader) error {
+			got, readErr = io.ReadAll(r)
+			return nil
+		})
+		if err != nil || readErr != nil {
+			t.Fatalf("Stream: %v %v", err, readErr)
+		}
+		if string(got) != "out\n" || res.ExitCode != 0 || !res.LeftOpen || res.Cut {
+			t.Errorf("read %q, res = %+v", got, res)
+		}
+		if time.Since(start) > 5*time.Second {
+			t.Errorf("waited %s for the process the command left", time.Since(start))
+		}
+	})
+}
+
 // A consumer that has seen enough and returns nil must not leave the
 // child blocked on a full pipe: whatever it left is drained before the
 // wait, and the child's own status is what comes back.
