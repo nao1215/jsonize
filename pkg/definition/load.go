@@ -786,6 +786,11 @@ func validateArrayField(v *validator, path string, f *Field, depth int) {
 	}
 	if f.SplitRegex != "" {
 		f.splitRegex = v.regex(path+".split_regex", f.SplitRegex)
+		// A separator that can be nothing splits between every character,
+		// so "abc def" would read as a list of its letters.
+		if f.splitRegex != nil && f.splitRegex.MatchString("") {
+			v.add(path+".split_regex", "matches the empty string, which splits a value between every character; write a separator that is at least one character (`[ \\t]+`, not `[ \\t]*`)")
+		}
 	}
 	if f.Items != nil {
 		if f.Items.EffectiveType() == FieldArray {

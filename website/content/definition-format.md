@@ -600,7 +600,7 @@ fields:
 | `location` | time | how to read a timestamp that states no zone: `utc` (default) or `local`, the zone the running system is in |
 | `layout` | duration | `h:mm` or `mm:ss`, saying what the last part of a bare `4:50` is; required |
 | `true_values`, `false_values` | bool | spellings (case-insensitive); defaults are true/yes/on/1/y and false/no/off/0/n |
-| `split`, `split_regex` | array | how to split; items are trimmed |
+| `split`, `split_regex` | array | how to split; items are trimmed. A `split_regex` that matches the empty string is an error, since it would split between every character |
 | `items` | array | conversion applied to each element (arrays of arrays are not allowed) |
 | `regex`, `fields` | object | named groups become keys; `fields` converts them; the match has to cover the whole value |
 

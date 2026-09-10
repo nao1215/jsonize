@@ -187,6 +187,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A `split_regex` that can match nothing (`[ \t]*`) split a value between
+  every character, so `abc def` read as `["a","b","c","d","e","f"]`. It
+  is refused when the definition is loaded.
 - An aligned table with a right-aligned value that has a space in it was
   cut inside the value at exit 0: `systemctl list-timers | jz --parser
   table --variant aligned` read `"next": "Fri 2026-09-11 06:55:28 JST
