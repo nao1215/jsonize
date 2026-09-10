@@ -1,0 +1,43 @@
+# `df -P`, the POSIX output format: 1024-byte blocks under the header
+# "1024-blocks", and the percentage under "Capacity". GNU coreutils and
+# BusyBox print the same header; the figures are the exact counts df
+# prints without -P, and the capacity is the percentage each computed
+# (BusyBox rounds down where coreutils rounds up).
+#
+# -P with -h or -i prints the header those print without -P, and is read
+# by the definitions for them. With -B or -m the block size in the header
+# changes ("1M-blocks"), which this does not describe.
+format: 1
+command: df
+variant: portable
+aliases:
+  - name: gdf
+description: df -P, the POSIX format with 1024-byte blocks (GNU coreutils, BusyBox)
+metadata:
+  tags: [linux, filesystem, coreutils]
+  compatible: [GNU coreutils, BusyBox]
+  references:
+    - https://pubs.opengroup.org/onlinepubs/9799919799/utilities/df.html
+    - https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html
+detect:
+  os: [linux]
+  args:
+    any: ["-P", "--portability"]
+    none: ["-T", "--print-type"]
+  signature:
+    all:
+      - '\AFilesystem\s+1024-blocks\s+Used\s+Available\s+Capacity\s+Mounted on\s*$'
+input:
+  ignore:
+    - '^df: '
+parse:
+  type: table
+  header:
+    columns: [filesystem, 1024_blocks, used, available, capacity_percent, mounted_on]
+fields:
+  filesystem: {required: true}
+  1024_blocks: {type: int, null_if: ["-"]}
+  used: {type: int, null_if: ["-"]}
+  available: {type: int, null_if: ["-"]}
+  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  mounted_on: {required: true}

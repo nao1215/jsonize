@@ -124,6 +124,9 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `df/portable` and `df/portable-type` read `df -P` and `df -P -T`, the
+  POSIX format with `1024-blocks` and `Capacity`, from GNU coreutils and
+  BusyBox. It was exit 4.
 - `systemd-inhibit/list` reads `systemd-inhibit --list`, one record per
   inhibitor lock, with the operations the lock covers as an array.
 - `prlimit/linux` reads the resource limits `prlimit` prints, aligned or
@@ -187,6 +190,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `vmstat -w` was exit 4: the wide form draws each group name with
+  dashes on both sides (`--procs--`), which the signature did not allow.
+  The columns are the same, and `vmstat/linux` and `vmstat/linux-active`
+  read it.
 - A `split_regex` that can match nothing (`[ \t]*`) split a value between
   every character, so `abc def` read as `["a","b","c","d","e","f"]`. It
   is refused when the definition is loaded.

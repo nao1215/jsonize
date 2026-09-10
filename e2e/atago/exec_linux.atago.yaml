@@ -32,6 +32,25 @@ scenarios:
             json:
               # A rounded human-readable size stays as printed.
               - { path: "$[0].size", matches: "^[0-9.]+[KMGTP]?$" }
+      # -P prints the POSIX header, 1024-blocks and Capacity, which was
+      # exit 4 before it had a definition of its own.
+      - run:
+          command: jz run --explain df -P /
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/portable from embedded"
+          stdout:
+            json:
+              - { path: "$[0].mounted_on", equals: "/" }
+              - { path: "$[0].1024_blocks", gt: 0 }
+              - { path: "$[0].capacity_percent", gte: 0 }
+      - run:
+          command: jz run --explain df -P -T /
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/portable-type from embedded"
 
   - name: procps free, uptime and ps
     only: {os: linux}
@@ -519,6 +538,15 @@ scenarios:
           stdout:
             contains: '"swpd":'
             count: 3
+      # -w widens the columns and puts dashes on both sides of each group
+      # name ("--procs--"), which the signature used to turn away.
+      - run:
+          command: jz run vmstat -w
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].swpd", gte: 0 }
 
   - name: jz run --stream iostat writes one sample per interval
     only: {os: linux}

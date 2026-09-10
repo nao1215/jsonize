@@ -1,0 +1,6 @@
+Filesystem     1024-blocks       Used Available Capacity Mounted on
+/dev/nvme0n1p2  1920641288 1647218524 175785800      91% /
+tmpfs             12882672       4736  12877936       1% /run
+tmpfs             32206676      75712  32130964       1% /dev/shm
+efivarfs               128         48        76      39% /sys/firmware/efi/efivars
+none                  1024          0      1024       0% /run/credentials/systemd-journald.service

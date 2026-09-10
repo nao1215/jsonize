@@ -1,0 +1,4 @@
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C, naming three mount points
+description: BusyBox rounds the capacity down where coreutils rounds it up, and prints the figure it computed
+os: linux
+args: ["-P", "/", "/run", "/dev/shm"]

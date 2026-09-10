@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/portable-type.json",
+  "title": "df/portable-type",
+  "description": "df -P -T, the POSIX format with the filesystem type (GNU coreutils)",
+  "x-jsonize": {
+    "definition": "df/portable-type",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "1024_blocks": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "used": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "available": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "capacity_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "type",
+      "1024_blocks",
+      "used",
+      "available",
+      "capacity_percent",
+      "mounted_on"
+    ]
+  }
+}
