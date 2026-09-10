@@ -166,8 +166,11 @@ type NoMatchError struct {
 	// Scanned counts the definitions that were evaluated.
 	Scanned int
 	// Hints are definitions whose signature does fit the text but which
-	// jz refuses to choose on its own because their format is too
-	// generic. Naming one of them is the way forward.
+	// jz did not choose: in a search of the whole registry, because their
+	// format is too generic to claim on its own; in a search scoped to one
+	// parser, because the system or the arguments ruled them out. Naming
+	// one of them is the way forward, and naming any other would be
+	// refused.
 	Hints []*registry.Entry
 	// Reported carries the rejections --explain shows. It is the whole
 	// list when one parser was searched and the near misses otherwise,
@@ -176,6 +179,12 @@ type NoMatchError struct {
 	// ExplicitOnly counts the definitions left out because they are only
 	// used when named.
 	ExplicitOnly int
+	// shapes are the parsers whose definitions describe a shape rather
+	// than a command and carry no signature, so naming one reads any text
+	// that has that shape. They are what a search that found nothing can
+	// point to, since naming a parser that has a signature is checked the
+	// same way the search was.
+	shapes []string
 }
 
 func (e *NoMatchError) Error() string {
@@ -194,22 +203,26 @@ func (e *NoMatchError) Error() string {
 			return b.String()
 		}
 		fmt.Fprintf(&b, "\nno signature of the %d known parsers matched this text", e.Scanned)
-		b.WriteString("\n\nName the parser explicitly:\n  COMMAND | jz --parser df\nRun `jz list` to see the supported parsers.")
+		if len(e.shapes) > 0 {
+			fmt.Fprintf(&b, "\n\nIf the text has one of the shapes read by name (%s), name it:\n  COMMAND | jz --parser %s", strings.Join(e.shapes, ", "), e.shapes[0])
+			b.WriteString("\nor state the format with --define. Run `jz list` to see the supported parsers.")
+			return b.String()
+		}
+		b.WriteString("\n\nState the format with --define, or run `jz list` to see the supported parsers.")
 		return b.String()
 	}
 	fmt.Fprintf(&b, "no %s variant matches this input", e.Parser)
 	for _, r := range e.Rejections {
 		fmt.Fprintf(&b, "\n  %s: %s", r.Entry.Def.Variant, r.Reason)
 	}
-	fmt.Fprintf(&b, "\n\nName the variant explicitly:\n  COMMAND | jz --parser %s --variant %s", e.Parser, firstVariant(e.Rejections))
-	return b.String()
-}
-
-func firstVariant(rs []Rejection) string {
-	if len(rs) == 0 {
-		return "VARIANT"
+	if len(e.Hints) > 0 {
+		fmt.Fprintf(&b, "\n\nName the variant explicitly:\n  COMMAND | jz --parser %s --variant %s", e.Parser, e.Hints[0].Def.Variant)
+		return b.String()
 	}
-	return rs[0].Entry.Def.Variant
+	// A named variant is held to its signature like any other, so naming
+	// one of these would be refused the same way.
+	fmt.Fprintf(&b, "\n\nNo variant's signature fits this text, and naming one does not change that.\nRun `jz list %s` to see what each variant reads.", e.Parser)
+	return b.String()
 }
 
 // AmbiguousError is returned when several definitions match equally well.
@@ -289,6 +302,7 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		matched      []*registry.Entry
 		verdicts     = map[*registry.Entry]verdict{}
 		hints        []*registry.Entry
+		shapes       []string
 		rejections   []Rejection
 		explicitOnly int
 	)
@@ -305,6 +319,8 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 					hints = append(hints, e)
 					fits = true
 				}
+			} else {
+				shapes = append(shapes, e.Def.Command)
 			}
 			// A definition whose signature does fit the text and is only
 			// held back by auto_detect is the near miss most worth
@@ -316,8 +332,14 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		if v.ok() {
 			matched = append(matched, e)
 			verdicts[e] = v
-		} else {
-			rejections = append(rejections, Rejection{Entry: e, Reason: v.Reason, Close: v.Close})
+			continue
+		}
+		rejections = append(rejections, Rejection{Entry: e, Reason: v.Reason, Close: v.Close})
+		// Within one parser, a variant the text fits and only the system
+		// or the arguments ruled out is the one naming would reach, since
+		// a pipe carries neither.
+		if ctx.Parser != "" && v.fits {
+			hints = append(hints, e)
 		}
 	}
 	// A search of the whole registry rejects nearly all of it on the first
@@ -337,7 +359,7 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 	case 1:
 		return result(matched[0], "", nil), nil
 	case 0:
-		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: hints, Reported: reported, ExplicitOnly: explicitOnly}
+		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: hints, Reported: reported, ExplicitOnly: explicitOnly, shapes: dedupe(shapes)}
 		if ctx.Parser != "" {
 			err.Rejections = rejections
 		}
@@ -459,6 +481,9 @@ type verdict struct {
 	// for before being ruled out, which is what separates a near miss
 	// from an unrelated parser.
 	Close bool
+	// fits reports that the text met the signature, so that whatever ruled
+	// the definition out came from the system or the arguments.
+	fits bool
 }
 
 func (v verdict) ok() bool { return v.Reason == "" }
@@ -474,6 +499,7 @@ func check(e *registry.Entry, ctx *Context, window []string) verdict {
 			return v
 		}
 	}
+	v.fits = true
 	// Anything past the signature has already met it, so a rejection here
 	// is always worth reading.
 	if ctx.OS != "" && len(d.OS) > 0 && !contains(d.OS, ctx.OS) {

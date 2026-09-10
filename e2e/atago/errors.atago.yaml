@@ -18,7 +18,9 @@ scenarios:
             empty: true
           stderr:
             contains: unable to identify the input format
-            matches: "Name the parser explicitly"
+            # Naming a parser that has a signature is checked the same
+            # way, so the way forward offered is a shape or --define.
+            matches: "(?s)name it:.*jz --parser csv.*--define"
 
   - name: empty and blank input are refused the same way
     steps:
