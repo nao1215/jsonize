@@ -129,6 +129,10 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `apt-cache/madison` reads `apt-cache madison`, one record per version
+  and the index offering it. It was written from the documentation
+  alone, as a check of what a first-time contributor has to go on, and
+  what that contributor had to find out by trial is now in the guide.
 - `df/portable` and `df/portable-type` read `df -P` and `df -P -T`, the
   POSIX format with `1024-blocks` and `Capacity`, from GNU coreutils and
   BusyBox. It was exit 4.
@@ -195,6 +199,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run git diff --numstat` of no change was exit 4: `git/diff-stat`,
+  which reads one object and so has no empty form, was among the
+  variants the empty output was judged against. It is ruled out by
+  `--numstat`, and the answer is `[]`.
 - A duration read its one-letter units without regard to case, so `1M`,
   systemd's month and a size's megabyte, was 60 seconds. A unit of one
   or two letters is read as written; a unit spelled as a word still is

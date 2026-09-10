@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (apt 3.2.0) with LC_ALL=C as `apt-cache
+  madison libc6 linux-generic`. Each package has two versions offered by
+  three indexes, and linux-generic is wider than the ten-character name
+  column. The country mirror host was replaced with archive.ubuntu.com;
+  security.ubuntu.com is kept.
+os: linux
+args: ["madison", "libc6", "linux-generic"]

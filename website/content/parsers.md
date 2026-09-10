@@ -33,7 +33,7 @@ the same reading with settings of your own.
 | `amixer` | [`contents`](../schemas/amixer/contents.json), [`simple-controls`](../schemas/amixer/simple-controls.json) |
 | `aplay` | [`devices`](../schemas/aplay/devices.json) |
 | `apt` | [`list`](../schemas/apt/list.json), [`show`](../schemas/apt/show.json) |
-| `apt-cache` | [`depends`](../schemas/apt-cache/depends.json), [`policy`](../schemas/apt-cache/policy.json), [`stats`](../schemas/apt-cache/stats.json) |
+| `apt-cache` | [`depends`](../schemas/apt-cache/depends.json), [`madison`](../schemas/apt-cache/madison.json), [`policy`](../schemas/apt-cache/policy.json), [`stats`](../schemas/apt-cache/stats.json) |
 | `ar` | [`table-verbose`](../schemas/ar/table-verbose.json) |
 | `arp` | [`alternate`](../schemas/arp/alternate.json) |
 | `blkid` | [`export`](../schemas/blkid/export.json), [`linux`](../schemas/blkid/linux.json) |

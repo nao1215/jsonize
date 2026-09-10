@@ -1,0 +1,7 @@
+source: >-
+  captured on Ubuntu 26.04 (apt 3.2.0) with LC_ALL=C as `apt-cache
+  madison bash coreutils`. Two packages, one of them offered for two
+  architectures. The country mirror host was replaced with
+  archive.ubuntu.com.
+os: linux
+args: ["madison", "bash", "coreutils"]

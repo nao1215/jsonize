@@ -27,6 +27,10 @@ metadata:
 detect:
   args:
     any: ["diff"]
+    # --numstat prints its own format, which git/diff-numstat reads, and
+    # a diff with nothing in it prints nothing either way: the variants
+    # an empty output is judged against have to be that one alone.
+    none: ["--numstat"]
   signature:
     all:
       # The first line has to be a file line, which keeps out

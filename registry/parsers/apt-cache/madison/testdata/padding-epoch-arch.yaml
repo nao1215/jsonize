@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (apt 3.2.0) with LC_ALL=C as `apt-cache
+  madison tree vim libc6:i386`. A version shorter than its column and
+  padded on the left (tree), a version with an epoch (vim) and a name
+  qualified with a foreign architecture (libc6:i386). The country mirror
+  host was replaced with archive.ubuntu.com.
+os: linux
+args: ["madison", "tree", "vim", "libc6:i386"]
