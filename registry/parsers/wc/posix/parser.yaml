@@ -32,11 +32,11 @@ detect:
     all:
       - '\A\s*\d+\s+\d+\s+\d+(?:\s+\S.*)?$'
 parse:
-  type: table
-  header:
-    none: true
-    columns: [lines, words, bytes, filename]
-  min_fields: 3
+  # Matched rather than split on whitespace: one space separates the
+  # counts from the name, and a name that begins or ends with a space
+  # keeps it.
+  type: regex
+  pattern: '^[ \t]*(?P<lines>\d+)[ \t]+(?P<words>\d+)[ \t]+(?P<bytes>\d+)(?: (?P<filename>.+))?$'
 fields:
   lines: {type: int, required: true}
   words: {type: int, required: true}

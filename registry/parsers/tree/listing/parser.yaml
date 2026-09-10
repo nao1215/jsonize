@@ -44,10 +44,12 @@ parse:
   node:
     parse:
       type: regex
-      # tree prints a symbolic link as "name -> target".
+      # tree prints a symbolic link as "name -> target". A name is kept as
+      # printed, and tree 2 prints a space in it as "\ " and a backslash as
+      # "\\" (-N prints them raw), so a trailing space is part of it too.
       patterns:
-        - '^(?P<name>.+?) -> (?P<link_to>.+?)[ \t]*$'
-        - '^(?P<name>.+?)[ \t]*$'
+        - '^(?P<name>.+?) -> (?P<link_to>.+)$'
+        - '^(?P<name>.+)$'
     fields:
       name: {required: true}
       link_to: {when_missing: omit}

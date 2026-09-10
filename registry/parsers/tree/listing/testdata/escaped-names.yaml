@@ -1,0 +1,6 @@
+source: "tree over a directory made for the fixture, on Ubuntu 26.04 with tree 2.3.1, LC_ALL=C"
+description: >-
+  tree writes a space in a name as "\ " and a backslash as "\\", so a
+  name that ends with a space ends with "\ ", and an arrow in a regular
+  file's name is not the " -> " of a link. The names are kept as printed.
+args: ["edge"]

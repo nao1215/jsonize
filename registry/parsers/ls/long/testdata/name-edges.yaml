@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) as ls -l over a directory made for the fixture, with LC_ALL=C; the user name replaced
+description: >-
+  Names with a space at the start or the end, two spaces inside, and an
+  arrow in a regular file's name. One space separates the date from the
+  name, so a space after it is the first character of the name.
+os: linux
+args: ["-l", "edge"]

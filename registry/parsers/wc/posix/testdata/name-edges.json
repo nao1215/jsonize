@@ -1,0 +1,26 @@
+[
+  {
+    "lines": 1,
+    "words": 1,
+    "bytes": 2,
+    "filename": " lead"
+  },
+  {
+    "lines": 1,
+    "words": 1,
+    "bytes": 2,
+    "filename": "trail "
+  },
+  {
+    "lines": 0,
+    "words": 0,
+    "bytes": 0,
+    "filename": "two  spaces"
+  },
+  {
+    "lines": 2,
+    "words": 2,
+    "bytes": 4,
+    "filename": "total"
+  }
+]

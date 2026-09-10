@@ -1,0 +1,4 @@
+description: Member names that begin or end with a space, and one with two spaces inside. Three spaces separate the time from the name.
+source: captured on Ubuntu 26.04 with BusyBox v1.37.0, LC_ALL=C busybox unzip -l over an archive made for the fixture; the archive path shortened
+os: linux
+args: [-l]
