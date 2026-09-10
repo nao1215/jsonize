@@ -202,7 +202,9 @@ project follows [Semantic Versioning](https://semver.org/).
 - `jz run git diff --numstat` of no change was exit 4: `git/diff-stat`,
   which reads one object and so has no empty form, was among the
   variants the empty output was judged against. It is ruled out by
-  `--numstat`, and the answer is `[]`.
+  `--numstat`, and the answer is `[]`. `jz run pactl list sinks` on a
+  machine with no sinks had the same trouble with `pactl/info`, which
+  now asks for `info`.
 - A duration read its one-letter units without regard to case, so `1M`,
   systemd's month and a size's megabyte, was 60 seconds. A unit of one
   or two letters is read as written; a unit spelled as a word still is
