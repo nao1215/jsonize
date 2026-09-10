@@ -8,6 +8,17 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `ping/linux` reads what iputils prints besides a clean run (contract
+  version 2). A host that did not answer was the parse error it is run
+  to find out: the summary then has no round trip times, and the lines
+  between header and summary are ICMP errors (`From ... icmp_seq=1
+  Destination Host Unreachable`) or, with `-O`, `no answer yet`. Those
+  lines are in `replies` with an `error` key, the summary's counts of
+  errors, duplicates and corrupted replies, pipe size and inter-packet
+  gap are read when printed, an IPv6 header (`56 data bytes`, as
+  `ping6` prints) leaves `packet_bytes` null, `-I` fills `source` and
+  `device`, `-D` adds a `timestamp` to each reply, and a payload too
+  small to time leaves `time_ms` null.
 - `systemctl/show` is a list of names and values in the order printed
   instead of one object (contract version 2). A unit with two
   ExecReload= lines, which sshd's has, prints the property twice, and
@@ -176,6 +187,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- The README, the usage page, `jz run --help` and the design page showed
+  `jz run --stream ping` as the example of a stream. `ping/linux` reads
+  one object, which has no streaming form, so the example was exit 2.
+  They show `vmstat 1` and `iostat 5` now, and the sample of a skipped
+  record is one jz prints.
 - `jz run --explain` wrote nothing when the command printed nothing:
   `jz run --explain git stash list` answered `[]` with no word of why.
   It now says the outcome was `empty`, which variants the answer was

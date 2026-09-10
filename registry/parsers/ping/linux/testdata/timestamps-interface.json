@@ -2,25 +2,27 @@
   "destination": {
     "name": "127.0.0.1",
     "address": "127.0.0.1",
-    "source": null,
-    "device": null,
+    "source": "127.0.0.1",
+    "device": "lo",
     "data_bytes": 56,
     "packet_bytes": 84
   },
   "replies": [
     {
+      "timestamp": 1789074652.939018,
       "bytes": 64,
       "responder": "127.0.0.1",
       "icmp_seq": 1,
       "ttl": 64,
-      "time_ms": 0.04
+      "time_ms": 0.037
     },
     {
+      "timestamp": 1789074653.999139,
       "bytes": 64,
       "responder": "127.0.0.1",
       "icmp_seq": 2,
       "ttl": 64,
-      "time_ms": 0.039
+      "time_ms": 0.128
     }
   ],
   "statistics": {
@@ -30,11 +32,11 @@
     "corrupted": null,
     "errors": null,
     "packet_loss_percent": 0,
-    "time_ms": 1012,
-    "round_trip_min_ms": 0.039,
-    "round_trip_avg_ms": 0.039,
-    "round_trip_max_ms": 0.04,
-    "round_trip_mdev_ms": 0,
+    "time_ms": 1060,
+    "round_trip_min_ms": 0.037,
+    "round_trip_avg_ms": 0.082,
+    "round_trip_max_ms": 0.128,
+    "round_trip_mdev_ms": 0.045,
     "pipe": null,
     "ipg_ms": null,
     "ewma_ms": null

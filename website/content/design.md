@@ -595,7 +595,7 @@ disambiguates.
 
 ### Streaming is an option, not the default
 
-A command that does not end (`ping`, `vmstat 1`) has no whole document to
+A command that does not end (`vmstat 1`, `iostat 5`) has no whole document to
 write, so `--stream` writes one JSON document per line as each record is
 read. It is the only option that changes the output contract: everywhere
 else standard output carries a complete document or nothing, and here
@@ -614,12 +614,11 @@ left. So it takes the other one: a record jz cannot read is named on
 standard error with its line number, the records after it are still
 written, and the status is 3 at the end if anything was skipped.
 
-This is what the commands `--stream` exists for actually print. `ping`
-puts a request timeout among its replies, `rsync` puts progress among its
-file names, and a monitoring loop runs for hours. Ending at the first
-line with no reading for it would throw away everything still to come,
-which is a worse answer than a partial one for exactly the inputs the
-option is about. Batch mode is unchanged, so the guarantee is still there
+This is what the commands `--stream` exists for actually print. A
+monitoring loop runs for hours, and sooner or later it prints one line
+with no reading for it among thousands that have one. Ending at that
+line would throw away everything still to come, which is a worse answer
+than a partial one for exactly the inputs the option is about. Batch mode is unchanged, so the guarantee is still there
 for everyone not asking for a stream.
 
 Two failures are not records and still end a stream at once. Text whose

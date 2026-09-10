@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (iputils 20250605) with LC_ALL=C; a payload too small to carry a timestamp prints no times at all
+os: linux
+args: ["-c", "2", "-s", "8", "127.0.0.1"]

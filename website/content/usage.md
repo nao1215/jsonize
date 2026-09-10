@@ -100,13 +100,13 @@ inside an object keeps whatever it holds.
 
 ## Reading a command that keeps printing
 
-`ping`, `vmstat 1` and `tail -f` do not end, so there is no whole
+`vmstat 1`, `iostat 5` and `tail -f` do not end, so there is no whole
 document to write. `--stream` writes one JSON document per line, each one
 as soon as the record behind it is complete:
 
 ```console
-$ jz run --stream ping -c 100 1.1.1.1 | jq -c 'select(.time_ms > 20)'
-$ vmstat 1 | jz --stream
+$ jz run --stream vmstat 1 | jq -c 'select(.id < 50)'
+$ iostat -x 5 | jz --stream
 ```
 
 Only a format that yields records can be streamed: a table, a regex
@@ -122,7 +122,7 @@ holds back until it has as many leading lines as the widest signature
 among the parsers in scope looks at — twenty by default — because a
 definition can rule itself out with a line further down, and choosing
 before that would be guessing. Naming the parser narrows the scope, so
-`jz run ping` and `COMMAND | jz --stream --parser mount` usually wait for
+`jz run vmstat` and `COMMAND | jz --stream --parser mount` usually wait for
 twenty lines and no more. The lines held back are then read by the same
 code as everything after them.
 
@@ -143,14 +143,14 @@ already written have left, so jz cannot take that view: a record it
 cannot read is reported on standard error as
 
 ```text
-jz: ping/linux: line 42: line does not match /^\d+ bytes from/
+jz: du/posix: line 2: expected at least 2 fields but found 1: "garbage"
 ```
 
 and the records after it are still written. The status is 3 at the end if
-anything was skipped. This is what a command that does not finish needs.
-`ping` prints a request timeout among its replies and `rsync` prints
-progress among its file names; ending the stream at the first of those
-would throw away everything still to come.
+anything was skipped. This is what a command that does not finish needs:
+it can put one line jz has no reading for among thousands it has, and
+ending the stream at the first of those would throw away everything
+still to come.
 
 Both readings say the same thing with exit status 3: something in the
 input could not be read. What differs is how much of the rest survives,

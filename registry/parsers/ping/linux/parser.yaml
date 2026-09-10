@@ -1,6 +1,15 @@
 # ping is a header, one line per reply and a summary. The three parts
 # have nothing in common, so they are three parts of a composite result
 # rather than a flat list of dissimilar rows.
+#
+# The line formats follow iputils' own printf strings (ping_output.c,
+# ping_common.c, ping.c). IPv4 states the payload and the packet size in
+# its header, IPv6 only the payload. Between header and summary a line is
+# a reply, an ICMP error that came back instead ("From ... icmp_seq=N
+# Destination Host Unreachable"), or with -O a request that went
+# unanswered. The summary's second line holds whichever of the round
+# trip times, the pipe size and the inter-packet gap apply, and is empty
+# when none does, which is what a run with no replies prints.
 format: 1
 command: ping
 variant: linux
@@ -12,11 +21,12 @@ metadata:
   compatible: [iputils]
   references:
     - https://man7.org/linux/man-pages/man8/ping.8.html
+    - https://github.com/iputils/iputils/blob/master/ping/ping_output.c
 detect:
   os: [linux]
   signature:
     all:
-      - '\APING \S+ \([\d.:a-f]+\) \d+\(\d+\) bytes of data\.'
+      - '\APING \S+ \([\w.:%-]+\) (?:from \S+ \S*: )?(?:\d+\(\d+\) bytes of data\.|\d+ data bytes)$'
       - '^--- \S+ ping statistics ---$'
 parse:
   type: composite
@@ -26,16 +36,23 @@ parse:
       parse:
         type: regex
         each: input
-        pattern: '^PING (?P<name>\S+) \((?P<address>[^)]+)\) (?P<data_bytes>\d+)\((?P<packet_bytes>\d+)\) bytes of data\.$'
+        pattern: '^PING (?P<name>\S+) \((?P<address>[^)]+)\) (?:from (?P<source>\S+) (?P<device>\S*): )?(?P<data_bytes>\d+)(?:\((?P<packet_bytes>\d+)\) bytes of data\.| data bytes)$'
       fields:
         data_bytes: {type: int}
         packet_bytes: {type: int}
+        device: {null_if: [""]}
     - name: replies
-      select: {after: 'bytes of data\.', until: '^--- '}
+      select: {after: '^PING \S+ \(', until: '^--- '}
       parse:
         type: regex
-        pattern: '^(?P<bytes>\d+) bytes from (?P<responder>[^:]+): icmp_seq=(?P<icmp_seq>\d+) ttl=(?P<ttl>\d+) time=(?P<time_ms>[\d.]+) ms$'
+        patterns:
+          # A payload too small to carry the send time leaves time= out.
+          - '^(?:\[(?P<timestamp>\d+\.\d+)\] )?(?P<bytes>\d+) bytes from (?P<responder>.+?): icmp_seq=(?P<icmp_seq>\d+) ttl=(?P<ttl>\d+)(?: time=(?P<time_ms>[\d.]+) ms)?$'
+          - '^(?:\[(?P<timestamp>\d+\.\d+)\] )?From (?P<responder>.+?):? icmp_seq=(?P<icmp_seq>\d+) (?P<error>\S.*)$'
+          - '^(?:\[(?P<timestamp>\d+\.\d+)\] )?(?P<error>no answer yet) for icmp_seq=(?P<icmp_seq>\d+)$'
       fields:
+        # only -D prints it: seconds since the epoch, to the microsecond
+        timestamp: {type: float, when_missing: omit}
         bytes: {type: int}
         icmp_seq: {type: int}
         ttl: {type: int}
@@ -45,13 +62,19 @@ parse:
       parse:
         type: regex
         each: input
-        pattern: '(?s)(?P<packets_transmitted>\d+) packets transmitted, (?P<packets_received>\d+) received, (?P<packet_loss_percent>[\d.]+)% packet loss, time (?P<time_ms>\d+)ms\nrtt min/avg/max/mdev = (?P<round_trip_min_ms>[\d.]+)/(?P<round_trip_avg_ms>[\d.]+)/(?P<round_trip_max_ms>[\d.]+)/(?P<round_trip_mdev_ms>[\d.]+) ms'
+        pattern: '(?s)\A(?P<packets_transmitted>\d+) packets transmitted, (?P<packets_received>\d+) received(?:, \+(?P<duplicates>\d+) duplicates)?(?:, \+(?P<corrupted>\d+) corrupted)?(?:, \+(?P<errors>\d+) errors)?, (?P<packet_loss_percent>[\d.]+)% packet loss, time (?P<time_ms>\d+)ms(?:\n(?:rtt min/avg/max/mdev = (?P<round_trip_min_ms>[\d.]+)/(?P<round_trip_avg_ms>[\d.]+)/(?P<round_trip_max_ms>[\d.]+)/(?P<round_trip_mdev_ms>[\d.]+) ms)?(?:(?:, |\b)pipe (?P<pipe>\d+))?(?:(?:, |\b)ipg/ewma (?P<ipg_ms>[\d.]+)/(?P<ewma_ms>[\d.]+) ms)?)?\z'
       fields:
         packets_transmitted: {type: int}
         packets_received: {type: int}
+        duplicates: {type: int}
+        corrupted: {type: int}
+        errors: {type: int}
         packet_loss_percent: {type: float}
         time_ms: {type: int}
         round_trip_min_ms: {type: float}
         round_trip_avg_ms: {type: float}
         round_trip_max_ms: {type: float}
         round_trip_mdev_ms: {type: float}
+        pipe: {type: int}
+        ipg_ms: {type: float}
+        ewma_ms: {type: float}
