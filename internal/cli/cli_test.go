@@ -1047,6 +1047,46 @@ func TestRunDoesNotReadOutputCutShort(t *testing.T) {
 	}
 }
 
+// A wrapper puts its own name where jz looks for the parser. When what it
+// runs is a command jz knows, the refusal says how to name that parser,
+// instead of offering names that merely look like the wrapper's.
+func TestRunNamesTheParserAWrapperRuns(t *testing.T) {
+	h := newHarness(t)
+	for _, tt := range []struct {
+		args []string
+		want string
+	}{
+		{[]string{"run", "nice", "-n", "5", "df", "-h"}, "jz run --parser df -- nice -n 5 df -h"},
+		{[]string{"run", "--pretty", "stdbuf", "-oL", "/usr/bin/ps", "aux"}, "jz run --pretty --parser ps -- stdbuf -oL /usr/bin/ps aux"},
+	} {
+		code := h.run(tt.args...)
+		if code != ExitSelect || !strings.Contains(h.stderr.String(), tt.want) || strings.Contains(h.stderr.String(), "did you mean") {
+			t.Errorf("%v: %d %s", tt.args, code, h.stderr.String())
+		}
+	}
+	// Nothing jz knows among the arguments: the refusal is what it was.
+	if code := h.run("run", "nice", "./script"); code != ExitSelect || strings.Contains(h.stderr.String(), "--parser") {
+		t.Errorf("no known command: %d %s", code, h.stderr.String())
+	}
+	if runtime.GOOS == "windows" {
+		return
+	}
+	// env is a parser of its own, so jz runs it and only the output says
+	// it ran something else.
+	for _, tt := range []struct {
+		args []string
+		want string
+	}{
+		{[]string{"run", "env", "JZ_X=1", "df"}, "If env runs df, name that parser: jz run --parser df -- env JZ_X=1 df"},
+		{[]string{"run", "--stream", "env", "JZ_X=1", "df"}, "If env runs df, name that parser: jz run --stream --parser df -- env JZ_X=1 df"},
+	} {
+		code := h.run(tt.args...)
+		if code != ExitSelect || !strings.Contains(h.stderr.String(), tt.want) {
+			t.Errorf("%v: %d %s", tt.args, code, h.stderr.String())
+		}
+	}
+}
+
 func TestRunRealCommands(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("no POSIX commands")

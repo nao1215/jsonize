@@ -179,6 +179,17 @@ scenarios:
           dir:
             path: "${workdir}"
             not_contains: [marker]
+      # A wrapper is refused the same way, and when what it runs is a
+      # command jz knows, the refusal names the parser to use.
+      - run:
+          command: jz run --pretty nice -n 5 df -h
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: "If nice runs df, name that parser: jz run --pretty --parser df -- nice -n 5 df -h"
+      - assert:
+          stderr:
+            not_contains: did you mean
 
   - name: an unknown variant is refused before anything is executed
     skip: {os: windows}

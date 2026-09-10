@@ -111,10 +111,17 @@ func (a *app) cmdRun(args []string) int {
 	if code != 0 {
 		return code
 	}
+	if sel.parser == "" && !hasInline {
+		a.wrapperHint = wrapperHint(reg, args[:len(args)-len(rest)], rest)
+	}
 	// Nothing is executed until jz knows it can parse the result. A
 	// definition given on the command line is that knowledge already.
 	if !hasInline && len(reg.Variants(parser)) == 0 {
-		return a.exitFor(&selector.UnknownParserError{Parser: parser, Known: reg.Commands()})
+		known := reg.Commands()
+		if a.wrapperHint != "" {
+			known = nil
+		}
+		return a.exitFor(&selector.UnknownParserError{Parser: parser, Known: known})
 	}
 	if sel.variant != "" && !hasInline {
 		if _, ok := reg.Lookup(parser, sel.variant); !ok {
@@ -329,6 +336,42 @@ func parserKey(name string) string {
 		}
 	}
 	return base
+}
+
+// wrapperHint is the line a refusal adds when the command looks like a
+// wrapper (nice, stdbuf, env): it is named where the parser is looked for,
+// so when what it runs is a command jz knows, that command's parser is the
+// way forward, and the names that merely look like the wrapper's are no
+// help. opts are jz's own options and command is everything after them.
+// It is "" when no argument names a command jz has a parser for.
+func wrapperHint(reg *registry.Registry, opts, command []string) string {
+	name := command[0]
+	for _, arg := range command[1:] {
+		key := parserKey(arg)
+		if strings.HasPrefix(arg, "-") || key == parserKey(name) || len(reg.Variants(key)) == 0 {
+			continue
+		}
+		if n := len(opts); n > 0 && opts[n-1] == "--" {
+			opts = opts[:n-1]
+		}
+		line := append(append(append([]string{"jz", "run"}, opts...), "--parser", key, "--"), command...)
+		return fmt.Sprintf("If %s runs %s, name that parser: %s", name, key, shellLine(line))
+	}
+	return ""
+}
+
+// shellLine writes words as a shell would need them typed, quoting the
+// ones that carry anything but plain characters.
+func shellLine(words []string) string {
+	out := make([]string, len(words))
+	for i, w := range words {
+		if w != "" && strings.Trim(w, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-./:=,+@%") == "" {
+			out[i] = w
+			continue
+		}
+		out[i] = "'" + strings.ReplaceAll(w, "'", `'\''`) + "'"
+	}
+	return strings.Join(out, " ")
 }
 
 // mergedExecEnv collects exec.env entries of every variant of a command.
