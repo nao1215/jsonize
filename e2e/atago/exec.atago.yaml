@@ -87,6 +87,38 @@ scenarios:
           stdout:
             empty: true
 
+  # A command that prints nothing leaves no text to choose a definition
+  # by, so the answer rests on the variants its name and arguments leave.
+  # --explain says so instead of staying silent while [] comes back.
+  - name: a command that prints nothing is the empty list, and --explain says why
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            detect: {signature: {all: ['=']}}
+            parse: {type: kv}
+      - run:
+          command: jz run --explain -- sh -c true
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+      - assert:
+          stderr:
+            contains: "jz: explain: empty: the command printed nothing, so no definition was chosen by its text"
+      - assert:
+          stderr:
+            contains: "jz: explain: candidates: sh/default"
+      - assert:
+          stderr:
+            contains: "jz: explain: command: sh -c true (exit 0)"
+
   - name: a command killed by a signal yields 128+signal
     skip: {os: windows}
     steps:

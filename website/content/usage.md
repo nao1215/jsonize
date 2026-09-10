@@ -302,11 +302,13 @@ jz: explain: read: 8 lines: 8 read
 
 The first line is the outcome: `chose`, `unidentified` when no definition
 fits, `ambiguous` when several do and nothing settles it, `mismatch` when
-a named variant does not fit, or `defined` for `--define`. Then:
+a named variant does not fit, `defined` for `--define`, or `empty` when
+the command `jz run` started printed nothing. Then:
 
 | Line | What it says |
 |------|--------------|
 | `scope` | which definitions were candidates, and what named them: nothing (the whole registry), `--parser`, the name of the command `jz run` started, or the path of `--file` |
+| `candidates` | when the command printed nothing, the variants its system and arguments leave; the answer is `[]` when each of them reads a list |
 | `matched` | each condition the chosen definition states and the input met |
 | `settled by` / `outranked` | when several definitions fit, the rule that chose one (the registry layering, or `detect.priority` between variants of one command) and each one it chose over |
 | `rejected` | a definition that came close and why it was ruled out |
@@ -369,7 +371,7 @@ Every key is there whatever the outcome, `null` or empty where it does
 not apply: `outcome`, `scope` (`from`, `parser`, `variant`, `os`, `args`,
 `path`, `path_dropped`), `chosen` (`definition`, `registry`, `matched`,
 `settled_by`, `outranked`), `candidates` (the definitions an ambiguous
-input fits), `rejected`, `held_back`, `not_considered`, `read` (`lines`,
+input fits, or the ones an empty output was judged against), `rejected`, `held_back`, `not_considered`, `read` (`lines`,
 `read`, `folded`, `blank`, `ignored`), `command` and `error` (`message`,
 `exit`). The failure is still reported the ordinary way as well. In
 `jz run` the command's own standard error shares the stream, which is

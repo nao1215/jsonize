@@ -130,6 +130,63 @@ func TestExplainOnRun(t *testing.T) {
 	}
 }
 
+// A command that prints nothing gives jz no text to choose by, and the
+// answer rests on the variants its name and arguments leave instead. The
+// explanation says that, and says what the command did, rather than
+// staying silent while `[]` or a refusal comes back.
+func TestExplainOnRunThatPrintsNothing(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	h := newHarness(t)
+	shellRegistry(t, h)
+	expect := func(code, want int, lines ...string) {
+		t.Helper()
+		if code != want {
+			t.Errorf("code=%d, want %d; stderr=%s", code, want, h.stderr.String())
+		}
+		got := h.stderr.String()
+		for _, l := range lines {
+			if !strings.Contains(got, l) {
+				t.Errorf("no %q:\n%s", l, got)
+			}
+		}
+	}
+	const empty = "jz: explain: empty: the command printed nothing, so no definition was chosen by its text\n"
+
+	expect(h.run("run", "--explain", "--parser", "sh", "--variant", "alt", "--", "sh", "-c", "true"), ExitOK,
+		empty,
+		"jz: explain: scope: sh/alt, named by --parser and --variant\n",
+		"jz: explain: candidates: sh/alt\n",
+		"jz: explain: command: sh -c true (exit 0)\n")
+	if h.stdout.String() != "[]\n" {
+		t.Errorf("stdout = %q", h.stdout.String())
+	}
+	// One object has no empty form, so that answer is refused, and the
+	// explanation says what it was judged against.
+	writeRegistry(t, h.registryPath, map[string]string{
+		"parsers/one/default/parser.yaml": "format: 1\ncommand: one\nvariant: default\n" +
+			"detect: {signature: {all: ['=']}}\nparse: {type: kv, as: map}\n",
+	})
+	expect(h.run("run", "--explain", "--parser", "one", "--", "sh", "-c", "true"), ExitSelect,
+		"reads a format that has no empty form",
+		empty,
+		"jz: explain: candidates: one/default\n",
+		"jz: explain: command: sh -c true (exit 0)\n")
+	expect(h.run("run", "--explain", "--stream", "--parser", "sh", "--variant", "alt", "--", "sh", "-c", "true"), ExitOK,
+		empty,
+		"jz: explain: candidates: sh/alt\n",
+		"jz: explain: command: sh -c true (exit 0)\n")
+	// A command that failed without printing anything is its own answer.
+	expect(h.run("run", "--explain", "--", "sh", "-c", "exit 3"), 3,
+		"jz: explain: failed before a definition was chosen\n",
+		"jz: explain: command: sh -c exit 3 (exit 3)\n")
+	expect(h.run("run", "--explain=json", "--parser", "sh", "--variant", "alt", "--", "sh", "-c", "true"), ExitOK,
+		`"outcome":"empty"`,
+		`"candidates":["sh/alt"]`,
+		`"command":{"name":"sh","args":["-c","true"],"exit":0}`)
+}
+
 // A path is evidence about the text in it: the directory names the
 // parser and the file names the variant. It is what makes the formats
 // that are too unremarkable to claim on sight readable without naming

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
 	"sync"
 
@@ -43,7 +44,7 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		// jz started the command, so it knows what the format was meant
 		// to be. A list with nothing in it is no lines at all here, the
 		// same answer `[]` gives when the whole document is written.
-		return a.emptyFormats(reg, ctx, true)
+		return a.emptyFormats(reg, ctx, true, exp)
 	}
 	ctx.Input = head
 	chosen, err := selector.Select(reg, ctx)
@@ -144,27 +145,48 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 // streaming form either, which is the error reported then. Arguments
 // that no definition reads the output of are no request for a list at
 // all, the same as they would be with output.
-func (a *app) emptyFormats(reg *registry.Registry, ctx selector.Context, stream bool) int {
+//
+// The explanation is written here, since there is no text to choose by:
+// it names the variants the answer was judged against.
+func (a *app) emptyFormats(reg *registry.Registry, ctx selector.Context, stream bool, exp *explanation) int {
 	candidates := selector.Candidates(reg, ctx)
+	exp.printedNothing(candidates)
+	err := emptyForm(ctx, candidates, stream)
+	code := ExitOK
+	var ns *engine.NoStreamError
+	switch {
+	case errors.As(err, &ns):
+		code = a.exitForStream(err)
+	case err != nil:
+		a.errorf("%v", err)
+		code = ExitSelect
+	}
+	if err != nil {
+		exp.fail(err, code)
+	}
+	a.explainWrite(exp)
+	return code
+}
+
+// emptyForm says why no output is not an answer from the candidates, or
+// nil when every one of them reads a list.
+func emptyForm(ctx selector.Context, candidates []*registry.Entry, stream bool) error {
 	if len(candidates) == 0 {
 		if ctx.Variant != "" {
-			a.errorf("%s printed nothing, and %s/%s does not read what it prints with these arguments", ctx.Parser, ctx.Parser, ctx.Variant)
-		} else {
-			a.errorf("%s printed nothing, and no %s variant reads what it prints with these arguments", ctx.Parser, ctx.Parser)
+			return fmt.Errorf("%s printed nothing, and %s/%s does not read what it prints with these arguments", ctx.Parser, ctx.Parser, ctx.Variant)
 		}
-		return ExitSelect
+		return fmt.Errorf("%s printed nothing, and no %s variant reads what it prints with these arguments", ctx.Parser, ctx.Parser)
 	}
 	for _, e := range candidates {
 		switch {
 		case e.Def.Parse.YieldsArray():
 		case stream:
-			return a.exitForStream(&engine.NoStreamError{Definition: e.Def.ID()})
+			return &engine.NoStreamError{Definition: e.Def.ID()}
 		default:
-			a.errorf("%s printed nothing, and %s reads a format that has no empty form", ctx.Parser, e.Def.ID())
-			return ExitSelect
+			return fmt.Errorf("%s printed nothing, and %s reads a format that has no empty form", ctx.Parser, e.Def.ID())
 		}
 	}
-	return ExitOK
+	return nil
 }
 
 // exitForStream maps a streaming failure. A format with no streaming form
