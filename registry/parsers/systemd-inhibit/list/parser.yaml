@@ -1,0 +1,39 @@
+# The table `systemd-inhibit --list` prints: one row per inhibitor lock.
+# Without --list the command is a wrapper that runs another one, so the
+# argument is required. The trailing "N inhibitors listed." line is a
+# legend, not a row.
+#
+# The table is aligned rather than split on whitespace, because WHO and
+# WHY are free text an application registers ("Realtime Kit", "Pause
+# device polling"). systemd pads the columns by display width, and an
+# application may register a name in any script: a name in kana takes
+# two columns a character.
+#
+# WHAT lists the operations the lock covers, joined with ":".
+format: 1
+command: systemd-inhibit
+variant: list
+description: systemd-inhibit --list table of inhibitor locks
+metadata:
+  tags: [linux, systemd, power]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemd-inhibit.html
+detect:
+  os: [linux]
+  args:
+    all: ["--list"]
+  signature:
+    all:
+      - '^WHO[ \t]+UID[ \t]+USER[ \t]+PID[ \t]+COMM[ \t]+WHAT[ \t]+WHY[ \t]+MODE[ \t]*$'
+input:
+  ignore:
+    - '^[0-9]+ inhibitors listed\.$'
+parse:
+  type: table
+  split: aligned
+fields:
+  uid: {type: int, required: true}
+  pid: {type: int, required: true}
+  what: {type: array, split: ":"}
+  mode: {required: true}

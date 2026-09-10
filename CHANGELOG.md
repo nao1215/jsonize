@@ -101,6 +101,8 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `systemd-inhibit/list` reads `systemd-inhibit --list`, one record per
+  inhibitor lock, with the operations the lock covers as an array.
 - `file/mime` reads `file -i` and `file --mime-type`: the MIME type and,
   when printed, the character set of each file.
 - `ip/oneline-link` reads `ip -o link`, one record per interface. It

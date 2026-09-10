@@ -617,6 +617,28 @@ scenarios:
               - { path: "$[0].unit", equals: ModemManager.service }
               - { path: "$[0].exposure", equals: 6.3 }
               - { path: "$[1].predicate", equals: EXPOSED }
+      # A lock named in kana takes two columns a character, and the
+      # values after it stay under their own headers.
+      - fixture:
+          file: bin/systemd-inhibit
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/systemd-inhibit-list.txt"
+      - fixture:
+          file: captured/systemd-inhibit-list.txt
+          from: "${specdir}/../../registry/parsers/systemd-inhibit/list/testdata/systemd-259.txt"
+      - run:
+          command: jz run --explain systemd-inhibit --list
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemd-inhibit/list from embedded"
+          stdout:
+            json:
+              - { path: "$[8].who", equals: スクリーンロッカー }
+              - { path: "$[8].uid", equals: 1000 }
+              - { path: "$[8].mode", equals: delay }
       - fixture:
           file: bin/blkid
           mode: "0755"

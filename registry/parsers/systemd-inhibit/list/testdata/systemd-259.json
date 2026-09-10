@@ -1,0 +1,113 @@
+[
+  {
+    "who": "ModemManager",
+    "uid": 0,
+    "user": "root",
+    "pid": 2270,
+    "comm": "ModemManager",
+    "what": [
+      "sleep"
+    ],
+    "why": "ModemManager needs to reset devices",
+    "mode": "delay"
+  },
+  {
+    "who": "NetworkManager",
+    "uid": 0,
+    "user": "root",
+    "pid": 2201,
+    "comm": "NetworkManager",
+    "what": [
+      "sleep"
+    ],
+    "why": "NetworkManager needs to turn off networks",
+    "mode": "delay"
+  },
+  {
+    "who": "Realtime Kit",
+    "uid": 0,
+    "user": "root",
+    "pid": 3394,
+    "comm": "rtkit-daemon",
+    "what": [
+      "sleep"
+    ],
+    "why": "Demote realtime scheduling and stop canary.",
+    "mode": "delay"
+  },
+  {
+    "who": "UPower",
+    "uid": 0,
+    "user": "root",
+    "pid": 10648,
+    "comm": "upowerd",
+    "what": [
+      "sleep"
+    ],
+    "why": "Pause device polling",
+    "mode": "delay"
+  },
+  {
+    "who": "Unattended Upgrades Shutdown",
+    "uid": 0,
+    "user": "root",
+    "pid": 2357,
+    "comm": "unattended-upgr",
+    "what": [
+      "shutdown"
+    ],
+    "why": "Stop ongoing upgrades or perform upgrades before shutdown",
+    "mode": "delay"
+  },
+  {
+    "who": "PowerDevil",
+    "uid": 1000,
+    "user": "bob",
+    "pid": 10597,
+    "comm": "org_kde_powerde",
+    "what": [
+      "handle-power-key",
+      "handle-suspend-key",
+      "handle-hibernate-key",
+      "handle-lid-switch"
+    ],
+    "why": "KDE handles power events",
+    "mode": "block"
+  },
+  {
+    "who": "code",
+    "uid": 1000,
+    "user": "bob",
+    "pid": 20653,
+    "comm": "code",
+    "what": [
+      "shutdown"
+    ],
+    "why": "Ensure a clean shutdown",
+    "mode": "delay"
+  },
+  {
+    "who": "code",
+    "uid": 1000,
+    "user": "bob",
+    "pid": 20653,
+    "comm": "code",
+    "what": [
+      "sleep"
+    ],
+    "why": "Application cleanup before suspend",
+    "mode": "delay"
+  },
+  {
+    "who": "スクリーンロッカー",
+    "uid": 1000,
+    "user": "bob",
+    "pid": 10263,
+    "comm": "kwin_wayland",
+    "what": [
+      "sleep"
+    ],
+    "why": "スリープする前にスクリーンがロックされることを確実にしています",
+    "mode": "delay"
+  }
+]

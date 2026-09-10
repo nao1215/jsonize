@@ -1,0 +1,17 @@
+[
+  {
+    "who": "PowerDevil",
+    "uid": 1000,
+    "user": "bob",
+    "pid": 10597,
+    "comm": "org_kde_powerde",
+    "what": [
+      "handle-power-key",
+      "handle-suspend-key",
+      "handle-hibernate-key",
+      "handle-lid-switch"
+    ],
+    "why": "KDE handles power events",
+    "mode": "block"
+  }
+]

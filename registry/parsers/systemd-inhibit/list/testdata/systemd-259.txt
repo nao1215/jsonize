@@ -1,0 +1,12 @@
+WHO                          UID  USER PID   COMM            WHAT                                                                       WHY                                                            MODE
+ModemManager                 0    root 2270  ModemManager    sleep                                                                      ModemManager needs to reset devices                            delay
+NetworkManager               0    root 2201  NetworkManager  sleep                                                                      NetworkManager needs to turn off networks                      delay
+Realtime Kit                 0    root 3394  rtkit-daemon    sleep                                                                      Demote realtime scheduling and stop canary.                    delay
+UPower                       0    root 10648 upowerd         sleep                                                                      Pause device polling                                           delay
+Unattended Upgrades Shutdown 0    root 2357  unattended-upgr shutdown                                                                   Stop ongoing upgrades or perform upgrades before shutdown      delay
+PowerDevil                   1000 bob  10597 org_kde_powerde handle-power-key:handle-suspend-key:handle-hibernate-key:handle-lid-switch KDE handles power events                                       block
+code                         1000 bob  20653 code            shutdown                                                                   Ensure a clean shutdown                                        delay
+code                         1000 bob  20653 code            sleep                                                                      Application cleanup before suspend                             delay
+スクリーンロッカー           1000 bob  10263 kwin_wayland    sleep                                                                      スリープする前にスクリーンがロックされることを確実にしています delay
+
+9 inhibitors listed.

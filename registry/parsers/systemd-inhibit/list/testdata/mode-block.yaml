@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (systemd 259) as systemd-inhibit --list --mode=block with LC_ALL=C; user name replaced by one of the same length
+os: linux
+args: ["--list", "--mode=block"]
