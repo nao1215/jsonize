@@ -190,6 +190,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A duration read its one-letter units without regard to case, so `1M`,
+  systemd's month and a size's megabyte, was 60 seconds. A unit of one
+  or two letters is read as written; a unit spelled as a word still is
+  whatever its case.
 - `--assume-year 2025` over `Feb 29 10:00` said the value did not match
   the layout, and quoted a layout the definition never wrote (`2006 Jan
   _2 15:04`, with the year jz put in front). It now says the value is
