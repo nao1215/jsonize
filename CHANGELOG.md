@@ -176,6 +176,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `vmstat -t` and `vmstat -a -t` were exit 3: the date and time `-t`
+  adds after the last column ran into it. Each sample now carries a
+  `timestamp`, as printed, since the zone is named only by the
+  abbreviation at the head of the column.
 - `ls -l --si` was exit 3: `--si` writes the kilo step as a lower-case
   `k` (`4.1k`), which the size in every `ls` definition left out, along
   with the exa and larger steps. The sizes stay as printed.

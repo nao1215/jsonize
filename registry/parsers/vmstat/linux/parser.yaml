@@ -29,7 +29,7 @@ parse:
   type: table
   header:
     none: true
-    columns: [r, b, swpd, free, buff, cache, si, so, bi, bo, in, cs, us, sy, id, wa, st, gu]
+    columns: [r, b, swpd, free, buff, cache, si, so, bi, bo, in, cs, us, sy, id, wa, st, gu, timestamp]
   min_fields: 17
 fields:
   r: {type: int, required: true}
@@ -50,3 +50,6 @@ fields:
   wa: {type: int}
   st: {type: int}
   gu: {type: int, when_missing: omit}
+  # -t adds the date and time of each sample, in the zone the header of
+  # the column names by its abbreviation only, so it stays as printed.
+  timestamp: {when_missing: omit}
