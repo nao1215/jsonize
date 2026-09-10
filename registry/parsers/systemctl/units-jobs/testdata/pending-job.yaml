@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (systemd 257) with LC_ALL=C while an authorization helper was starting, trimmed to thirteen of the 77 units; the count line is as printed
+description: a unit with a pending job adds a JOB column between SUB and DESCRIPTION, blank for every other unit
+os: linux
+args: ["list-units", "--type=service"]
