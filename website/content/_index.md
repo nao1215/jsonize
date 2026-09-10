@@ -24,10 +24,10 @@ saying nothing is the failure that matters. jz refuses instead:
 ```console
 $ git diff --numstat | jz
 jz: unable to identify the input format
-it could be `du` output, but that format is too generic for jz to claim on its own
+it could be `git` output, but that format is too generic for jz to claim on its own
 
 Confirm it:
-  COMMAND | jz --parser du
+  COMMAND | jz --parser git
 ```
 
 A rounded size is reported the way it was printed rather than turned into
