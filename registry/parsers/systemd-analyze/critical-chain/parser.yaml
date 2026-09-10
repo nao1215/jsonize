@@ -24,8 +24,13 @@ detect:
       - '\AThe time when unit became active or started is printed after the "@" character\.'
       - '^`-\S+ @'
 input:
+  # The two sentences above the chain are the same on every system: they
+  # say what the "@" and "+" in the lines below mean, which is what the
+  # node pattern reads them as.
+  ignore:
+    - '^The time when unit became active or started is printed after the "@" character\.[ \t]*$'
   select:
-    after: '^The time the unit took to start is printed after'
+    after: '^The time the unit took to start is printed after the "\+" character\.$'
 parse:
   type: tree
   indent: ["  ", "`-"]

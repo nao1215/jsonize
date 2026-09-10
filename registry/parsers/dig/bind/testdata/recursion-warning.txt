@@ -1,0 +1,26 @@
+
+; <<>> DiG 9.20.24-1ubuntu0.3-Ubuntu <<>> example.com @a.iana-servers.net
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 10899
+;; flags: qr aa rd; QUERY: 1, ANSWER: 6, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;example.com.			IN	A
+
+;; ANSWER SECTION:
+example.com.		300	IN	A	23.192.228.80
+example.com.		300	IN	A	23.192.228.84
+example.com.		300	IN	A	23.215.0.136
+example.com.		300	IN	A	23.215.0.138
+example.com.		300	IN	A	23.220.75.232
+example.com.		300	IN	A	23.220.75.245
+
+;; Query time: 184 msec
+;; SERVER: 199.43.135.53#53(a.iana-servers.net) (UDP)
+;; WHEN: Thu Sep 10 21:40:24 JST 2026
+;; MSG SIZE  rcvd: 136
+

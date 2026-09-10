@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C
+description: >-
+  A name that does not exist under example.com, asked of a public
+  resolver. There is no answer and the zone's SOA record comes back in
+  the authority section.
+os: linux
+args: ["nonexistent-host.example.com", "@1.1.1.1"]

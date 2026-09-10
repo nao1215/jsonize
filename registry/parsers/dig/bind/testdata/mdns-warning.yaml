@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C
+description: >-
+  A .local name asked of the local router over unicast DNS. dig warns
+  about it in two lines between "Got answer:" and the header, and the
+  router answers NXDOMAIN.
+os: linux
+args: ["@192.168.11.1", "gateway.local"]

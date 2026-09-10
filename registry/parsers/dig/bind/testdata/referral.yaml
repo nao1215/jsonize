@@ -1,0 +1,8 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C
+description: >-
+  A non-recursive query to a .com server for a delegated name. It answers
+  with a referral: the delegation in the authority section and the name
+  servers' addresses in the additional section, which is every section
+  dig prints apart from the answer.
+os: linux
+args: ["+norec", "example.com", "NS", "@a.gtld-servers.net"]

@@ -4,10 +4,12 @@
 # depends on the device, so the pairs are a list of name/value objects
 # and the values stay strings, percent sign and all.
 #
-# What this definition loses: a line without a colon is dropped, so the
-# device type heading disappears and the pairs under it are flattened
-# into the same list. That also drops the rows of a "History (charge):"
-# block, which are three numbers and no colon.
+# The device type heading and the rows of a "History (charge):" block
+# have no colon. They are read as entries of the same list, the heading
+# as a label with an empty value and a history row as its time and the
+# rest of the row, so the list keeps every line in the order upower
+# printed it. icon-name is printed in single quotes, which are upower's
+# punctuation rather than part of the name.
 format: 1
 command: upower
 variant: device
@@ -29,13 +31,17 @@ detect:
       # `upower -d` repeats these pairs under a "Device:" heading for
       # every device it knows, which upower/dump reads as records.
       - '\ADevice:[ \t]+/org/freedesktop/UPower/devices/'
-input:
-  ignore:
-    - '^[^:]*$'
 parse:
-  type: kv
-  separator: ":"
-  as: list
-  # icon-name is printed in single quotes; the quotes are upower's
-  # punctuation, not part of the name.
-  unquote: true
+  type: regex
+  patterns:
+        # "label: value". A label may contain spaces, and the value runs
+        # to the end of the line, colons and all.
+        - '^[ \t]+(?P<name>icon-name):[ \t]*''(?P<value>.*)''[ \t]*$'
+        - '^[ \t]+(?P<name>[^:\t]+?)[ \t]*:[ \t]*(?P<value>.*?)[ \t]*$'
+        # The device type (battery, line-power, unknown, ...) on a line of
+        # its own above the pairs that apply to it. It is a label with no
+        # value, which is what the "History (charge):" heading is too.
+        - '^  (?P<name>[a-z][a-z-]*)(?P<value>)[ \t]*$'
+        # A history row under its heading: a time, a value and a state,
+        # tab-separated. The time is the label and the rest the value.
+        - '^    (?P<name>-?[0-9]+)\t(?P<value>[^\t]+\t\S+)$'

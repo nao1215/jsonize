@@ -61,7 +61,7 @@ parse:
     # interface with an alias or an alternative name has more lines above
     # them than one without.
     - name: rx
-      select: {after: '^[ \t]*RX:[ \t]*bytes', limit: 1}
+      select: {after: '^[ \t]*RX:[ \t]+bytes[ \t]+packets[ \t]+errors[ \t]+dropped[ \t]+missed[ \t]+mcast[ \t]*$', limit: 1}
       parse:
         type: regex
         each: input
@@ -74,7 +74,7 @@ parse:
         missed: {type: int}
         mcast: {type: int}
     - name: tx
-      select: {after: '^[ \t]*TX:[ \t]*bytes', limit: 1}
+      select: {after: '^[ \t]*TX:[ \t]+bytes[ \t]+packets[ \t]+errors[ \t]+dropped[ \t]+carrier[ \t]+collsns[ \t]*$', limit: 1}
       parse:
         type: regex
         each: input
@@ -90,7 +90,7 @@ parse:
     # than at a fixed offset, so each part names the lines that belong to
     # a sibling instead of taking a position.
     - name: rx_errors
-      select: {after: '^[ \t]*RX errors:', limit: 1}
+      select: {after: '^[ \t]*RX errors:[ \t]+length[ \t]+crc[ \t]+frame[ \t]+fifo[ \t]+overrun[ \t]*$', limit: 1}
       parse:
         type: regex
         each: input
@@ -102,7 +102,7 @@ parse:
         fifo: {type: int}
         overrun: {type: int}
     - name: tx_errors
-      select: {after: '^[ \t]*TX errors:', limit: 1}
+      select: {after: '^[ \t]*TX errors:[ \t]+aborted[ \t]+fifo[ \t]+window[ \t]+heartbt[ \t]+transns[ \t]*$', limit: 1}
       parse:
         type: regex
         each: input

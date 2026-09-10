@@ -159,6 +159,11 @@ func boxJoin(group []line, join string) []any {
 // counted or aligned: unlike split: aligned, a value wider than its
 // column cannot shift a boundary.
 func (r *run) parseBox(p *definition.Parse, fields map[string]*definition.Field, lines []line) (any, error) {
+	for _, l := range lines {
+		if err := r.boxLine(l); err != nil {
+			return nil, err
+		}
+	}
 	blocks := boxBlocks(lines)
 	if len(blocks) == 0 {
 		return []any{}, nil
@@ -170,21 +175,46 @@ func (r *run) parseBox(p *definition.Parse, fields map[string]*definition.Field,
 	out := []any{}
 	for _, block := range blocks[1:] {
 		for _, row := range boxBodyRows(block) {
-			obj := jsonutil.NewObject()
-			cells := boxJoin(row, "\n")
-			for i, c := range cols {
-				var raw any
-				if i < len(cells) {
-					raw = cells[i]
-				}
-				if err := r.setField(obj, c.name, raw, fields[c.name], row[0].num); err != nil {
-					return nil, err
-				}
+			obj, err := r.boxObject(cols, boxJoin(row, "\n"), fields, row[0].num)
+			if err != nil {
+				return nil, err
 			}
 			out = append(out, obj)
 		}
 	}
 	return out, nil
+}
+
+// boxLine refuses a line that is neither a rule nor cut by a bar. Such a
+// line has no cells, so as a continuation it would add nothing to the
+// row above and its text would be gone.
+func (r *run) boxLine(l line) error {
+	if isBoxRule(l.text) || strings.ContainsAny(l.text, boxVerticals) {
+		return nil
+	}
+	return r.errorf(l.num, "", "a line of a drawn table with no cell in it: %q", truncate(l.text, 80))
+}
+
+// boxObject builds the object for one row. A cell past the last column has
+// no name to go under, so a value in one is refused rather than left out
+// of the object; an empty one is only the frame.
+func (r *run) boxObject(cols []column, cells []any, fields map[string]*definition.Field, ln int) (*jsonutil.Object, error) {
+	for i := len(cols); i < len(cells); i++ {
+		if text, ok := cells[i].(string); ok {
+			return nil, r.errorf(ln, "", "cell %d has no column to go under (the header names %d): %q", i+1, len(cols), truncate(text, 80))
+		}
+	}
+	obj := jsonutil.NewObject()
+	for i, c := range cols {
+		var raw any
+		if i < len(cells) {
+			raw = cells[i]
+		}
+		if err := r.setField(obj, c.name, raw, fields[c.name], ln); err != nil {
+			return nil, err
+		}
+	}
+	return obj, nil
 }
 
 // boxColumns names the columns from the header row of a drawn table.

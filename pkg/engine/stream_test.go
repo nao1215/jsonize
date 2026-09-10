@@ -121,16 +121,37 @@ parse: {type: regex, pattern: '^(?P<k>\S+)=(?P<v>.+)$'}
 			input: "a=one\n   and more\nb=two\n",
 		},
 		{
-			name: "ignore, blank lines and select together",
+			name: "ignore, blank lines and a heading together",
 			def: `format: 1
 command: t
 variant: v
 input:
   ignore: ['^#']
-  select: {after: '^BEGIN', until: '^END', skip: 1, limit: 2}
+  select: {after: '^BEGIN$'}
 parse: {type: regex, pattern: '^(?P<v>\S+)$'}
 `,
-			input: "noise\nBEGIN\n# comment\nskipped\n\nkept1\nkept2\ntoo-many\nEND\nafter\n",
+			input: "# noise\nBEGIN\n# comment\n\nkept1\nkept2\n\n",
+		},
+		{
+			name: "a record read in full by its parts",
+			def: `format: 1
+command: t
+variant: v
+parse:
+  type: records
+  start: '^# '
+  parts:
+    - name: head
+      select: {limit: 1}
+      parse: {type: regex, each: input, pattern: '^# (?P<name>\S+)$'}
+    - name: values
+      select: {after: '^values:$', until: '^end$'}
+      parse: {type: kv, separator: '='}
+    - name: trailer
+      select: {after: '^end$'}
+      parse: {type: regex, pattern: '^(?P<note>.+)$'}
+`,
+			input: "# one\nvalues:\na=1\nend\nnote one\n# two\nvalues:\nb=2\nend\n",
 		},
 		{
 			name: "NUL separated records",

@@ -107,11 +107,21 @@ parse: {type: ini}
 	if err != nil || mustJSON(t, v) != `{"a":{"k":"1"}}` {
 		t.Errorf("no preamble: %v %v", mustJSON(t, v), err)
 	}
-	// A section written twice continues the first one, and a key written
-	// twice takes the last value.
-	v, err = Parse(load(t, src), []byte("[a]\nk = 1\n[b]\nj = 2\n[a]\nk = 3\n"), Options{})
-	if err != nil || mustJSON(t, v) != `{"a":{"k":"3"},"b":{"j":"2"}}` {
+	// A section written twice continues the first one.
+	v, err = Parse(load(t, src), []byte("[a]\nk = 1\n[b]\nj = 2\n[a]\nl = 3\n"), Options{})
+	if err != nil || mustJSON(t, v) != `{"a":{"k":"1","l":"3"},"b":{"j":"2"}}` {
 		t.Errorf("repeats: %v %v", mustJSON(t, v), err)
+	}
+	// A key written twice under one section, even in its second half,
+	// would lose a value whatever the two are.
+	for _, input := range []string{"[a]\nk = 1\n[b]\nj = 2\n[a]\nk = 3\n", "[a]\nk = 1\nk = 1\n"} {
+		if _, err = Parse(load(t, src), []byte(input), Options{}); err == nil || !strings.Contains(err.Error(), "already set on line 2") {
+			t.Errorf("a repeated key in %q: %v", input, err)
+		}
+	}
+	// The same key in two sections is two keys.
+	if v, err = Parse(load(t, src), []byte("[a]\nk = 1\n[b]\nk = 2\n"), Options{}); err != nil || mustJSON(t, v) != `{"a":{"k":"1"},"b":{"k":"2"}}` {
+		t.Errorf("one key in two sections: %v %v", mustJSON(t, v), err)
 	}
 	// A comment marker inside a value is part of the value: a password or
 	// a path may contain either character.

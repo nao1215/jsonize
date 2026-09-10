@@ -24,9 +24,9 @@ detect:
       - '^(?:\|-- |`-- )\S'
       - '^[0-9]+ director(?:y|ies)(?:, [0-9]+ files?)?[ \t]*$'
 input:
-  select:
-    # The count at the end is the same facts the tree already carries.
-    until: '^[0-9]+ director(?:y|ies)'
+  # The count at the end is the same facts the tree already carries: it
+  # counts the nodes above it, the top directory included.
+  ignore: ['^[0-9]+ director(?:y|ies)(?:, [0-9]+ files?)?[ \t]*$']
 parse:
   type: tree
   indent: ["|   ", "    ", "|-- ", "`-- "]

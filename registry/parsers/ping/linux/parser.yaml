@@ -41,7 +41,7 @@ parse:
         ttl: {type: int}
         time_ms: {type: float}
     - name: statistics
-      select: {after: '^--- '}
+      select: {after: '^--- \S+ ping statistics ---$'}
       parse:
         type: regex
         each: input

@@ -49,7 +49,7 @@ parse:
     # A disk with no partition table has no "Device" header and therefore
     # no partitions.
     - name: partitions
-      select: {after: '^Device[ \t]'}
+      select: {after: '^Device[ \t]+(?:Boot[ \t]+)?Start[ \t]+End[ \t]+Sectors[ \t]+Size[ \t]+(?:Id[ \t]+)?Type[ \t]*$'}
       parse:
         type: regex
         # A DOS table adds a Boot column and a one-byte type Id; a GPT

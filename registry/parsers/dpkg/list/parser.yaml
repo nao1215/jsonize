@@ -22,8 +22,16 @@ detect:
       - '(?m)^\+\+\+-='
 input:
   # Everything above the +++-=== rule is the legend and the column titles.
+  # The legend is the same three sentences on every system, spelling out
+  # the letters the rows use, and the titles name the columns the pattern
+  # below reads by position, so all four are stated in full and dropped.
+  ignore:
+    - '^\+-- Desired=Unknown/Install/Remove/Purge/Hold[ \t]*$'
+    - '^\|\+- Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-aWait/Trig-pend[ \t]*$'
+    - '^\|\|\+ Err\?=\(none\)/Reinst-required \(Status,Err: uppercase=bad\)[ \t]*$'
+    - '^\|\|[|/] Name[ \t]+Version[ \t]+Architecture[ \t]+Description[ \t]*$'
   select:
-    after: '^\+\+\+-='
+    after: '^\+\+\+-=+-=+-=+-=+$'
 parse:
   type: regex
   pattern: '^(?P<desired>[a-zA-Z])(?P<status>[a-zA-Z])(?P<error>[a-zA-Z])?[ \t]+(?P<name>\S+)[ \t]+(?P<version>\S+)[ \t]+(?P<architecture>\S+)(?:[ \t]+(?P<description>.+?))?[ \t]*$'

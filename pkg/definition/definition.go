@@ -320,6 +320,11 @@ type Select struct {
 	Limit int `yaml:"limit,omitempty"`
 
 	after, until *regexp.Regexp
+	// heading is after, required to cover the whole of the line it
+	// matches. A heading the expression describes completely is a line the
+	// definition has read; one it only opens with leaves the rest of the
+	// line unaccounted for.
+	heading *regexp.Regexp
 }
 
 // IsZero reports whether the selection keeps every line.
@@ -329,6 +334,14 @@ func (s Select) IsZero() bool {
 
 // CompiledAfter returns the compiled after expression (may be nil).
 func (s *Select) CompiledAfter() *regexp.Regexp { return s.after }
+
+// Heading reports whether text is a line that select.after describes
+// from end to end, surrounding whitespace aside. Such a line is the
+// heading of the region the selection opens, and it counts as read by the
+// parser that reads the region.
+func (s *Select) Heading(text string) bool {
+	return s.heading != nil && s.heading.MatchString(text)
+}
 
 // CompiledUntil returns the compiled until expression (may be nil).
 func (s *Select) CompiledUntil() *regexp.Regexp { return s.until }

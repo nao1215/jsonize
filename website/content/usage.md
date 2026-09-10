@@ -455,10 +455,12 @@ jz test --update ./registry  # write testdata/<case>.json from the current outpu
 jz test --decoys ./decoys .  # also require every file under ./decoys to be refused
 ```
 
-Two things are checked. Every `testdata/<case>.txt` is parsed with its own
-definition and compared with the `.json` beside it, and every definition
-is then named explicitly on every other definition's fixtures and must
-refuse them. The official fixtures travel inside the binary, so the
+Three things are checked. Every `testdata/<case>.txt` is parsed with its
+own definition and compared with the `.json` beside it; every fixture is
+changed (a foreign line added, the whole text doubled) and must be refused
+or show the change in its result, which is what proves the definition
+reads all of its input; and every definition is then named explicitly on
+every other definition's fixtures and must refuse them. The official fixtures travel inside the binary, so the
 second check covers your definitions against every format jz already
 reads without a copy of the repository: a signature wide enough to read
 `df` output fails here rather than in someone's pipeline.
@@ -479,7 +481,7 @@ when everything passed, 1 when something failed, 2 for a usage error and
 | 0 | success |
 | 1 | unexpected failure (I/O, internal) |
 | 2 | usage error |
-| 3 | the input did not match the chosen definition |
+| 3 | the input did not match the chosen definition, or held text the definition did not read |
 | 4 | the format could not be identified, several matched, or a named one did not fit |
 | 5 | a registry could not be loaded |
 | 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |

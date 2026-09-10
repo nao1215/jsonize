@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C
+description: >-
+  A recursive query sent to a server that is authoritative and does not
+  recurse. dig warns about it on the line after the flags, before the
+  sections.
+os: linux
+args: ["example.com", "@a.iana-servers.net"]

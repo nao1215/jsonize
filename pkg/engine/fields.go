@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/nao1215/jsonize/pkg/convert"
@@ -164,6 +165,13 @@ func (r *run) convertObject(name, s string, f *definition.Field, ln int) (any, e
 	m := re.FindStringSubmatchIndex(s)
 	if m == nil {
 		return nil, r.errorf(ln, name, "value %q does not match %s", truncate(s, 80), shortPattern(f.Regex))
+	}
+	// The value was read as a whole by the parser, so what the pattern
+	// matches around is text that would otherwise vanish between the
+	// value and the object made of it.
+	if text, _, ok := outside(s, m[0], m[1]); ok {
+		return nil, &ParseError{Definition: r.def.ID(), Line: ln, Field: name,
+			Msg: fmt.Sprintf("the pattern %s does not reach %q in %q", shortPattern(f.Regex), text, truncate(s, 80)), Cause: ErrUnread}
 	}
 	obj := jsonutil.NewObject()
 	for i, gname := range re.SubexpNames() {

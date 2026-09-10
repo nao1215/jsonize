@@ -24,7 +24,9 @@ detect:
       - '^\S+ (?:connected|disconnected)'
 input:
   select:
-    after: '\AScreen [0-9]+:'
+    # The Screen line is stated whole: it is the one line this definition
+    # leaves out, and the expression says which line that is.
+    after: '\AScreen [0-9]+: minimum [0-9]+ x [0-9]+, current [0-9]+ x [0-9]+, maximum [0-9]+ x [0-9]+[ \t]*$'
 parse:
   type: records
   start: '^\S+ (?:connected|disconnected)'

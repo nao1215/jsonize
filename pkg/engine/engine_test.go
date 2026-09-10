@@ -432,12 +432,25 @@ fields:
   count: {type: int}
   flag: {type: bool}
 `)
-	got, err = Parse(m, []byte("name : jsonize\ncount: 3\nflag: yes\nname: last wins\n"), Options{})
+	got, err = Parse(m, []byte("name : jsonize\ncount: 3\nflag: yes\n"), Options{})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if mustJSON(t, got) != `{"name":"last wins","count":3,"flag":true}` {
+	if mustJSON(t, got) != `{"name":"jsonize","count":3,"flag":true}` {
 		t.Error(mustJSON(t, got))
+	}
+	// A key printed twice would leave one of its values out of the
+	// object, or fold a second copy of the document into the first, so
+	// it is refused whatever the values are, and both places are named.
+	for _, input := range []string{
+		"name : jsonize\ncount: 3\nflag: yes\nname: last wins\n",
+		"name : jsonize\ncount: 3\nflag: yes\nname: jsonize\n",
+	} {
+		_, err = Parse(m, []byte(input), Options{})
+		var pe *ParseError
+		if !errors.As(err, &pe) || pe.Line != 4 || pe.Field != "name" || !strings.Contains(err.Error(), "line 1") {
+			t.Errorf("a repeated key in %q: %v", input, err)
+		}
 	}
 }
 
@@ -645,6 +658,44 @@ parse:
 
 func TestSelect(t *testing.T) {
 	t.Parallel()
+	// The steps apply in the order after, until, skip, limit. What the
+	// region leaves out is read by the second part, so the reading is
+	// complete and the region is what the first part reports.
+	def := load(t, `
+format: 1
+command: sec
+variant: v
+parse:
+  type: composite
+  parts:
+    - name: region
+      select:
+        after: '^BEGIN$'
+        until: '^END'
+        skip: 1
+        limit: 2
+      parse: {type: regex, pattern: '^(?P<v>.+)$'}
+    - name: rest
+      ignore: ['^BEGIN$', '^[ab]$']
+      parse: {type: regex, pattern: '^(?P<v>.+)$'}
+`)
+	got, err := Parse(def, []byte("junk\nBEGIN\nskipme\na\nb\nc\nEND\nafter\n"), Options{})
+	want := `{"region":[{"v":"a"},{"v":"b"}],"rest":[{"v":"junk"},{"v":"skipme"},{"v":"c"},{"v":"END"},{"v":"after"}]}`
+	if err != nil || mustJSON(t, got) != want {
+		t.Errorf("select: %v %v", mustJSON(t, got), err)
+	}
+	got, err = Parse(def, []byte("no begin marker\n"), Options{})
+	if err != nil || mustJSON(t, got) != `{"region":[],"rest":[{"v":"no begin marker"}]}` {
+		t.Errorf("missing after: %v %v", mustJSON(t, got), err)
+	}
+}
+
+// A selection at the top level has no sibling to hand what it leaves out
+// to, so everything it cuts off is text the definition did not read. The
+// lines are named, first one first, rather than the result coming back
+// shorter than the input.
+func TestSelectLeavesNothingUnread(t *testing.T) {
+	t.Parallel()
 	def := load(t, `
 format: 1
 command: sec
@@ -659,17 +710,37 @@ parse:
   type: regex
   pattern: '^(?P<v>.+)$'
 `)
-	got, err := Parse(def, []byte("junk\nBEGIN\nskipme\na\nb\nc\nEND\nafter\n"), Options{})
-	if err != nil || mustJSON(t, got) != `[{"v":"a"},{"v":"b"}]` {
-		t.Errorf("select: %v %v", mustJSON(t, got), err)
+	tests := []struct {
+		name, input  string
+		first, total int
+	}{
+		{"before, skipped, past the limit and after the end", "junk\nBEGIN\nskipme\na\nb\nc\nEND\nafter\n", 1, 5},
+		{"no heading at all", "no begin marker\n", 1, 1},
+		{"skip beyond the end", "BEGIN\nonly\n", 2, 1},
 	}
-	got, err = Parse(def, []byte("no begin marker\n"), Options{})
-	if err != nil || mustJSON(t, got) != `[]` {
-		t.Errorf("missing after: %v %v", mustJSON(t, got), err)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			_, err := Parse(def, []byte(tt.input), Options{})
+			var ue *UnreadError
+			if !errors.As(err, &ue) || !errors.Is(err, ErrUnread) {
+				t.Fatalf("want an unread error, got %v", err)
+			}
+			var pe *ParseError
+			if !errors.As(err, &pe) || pe.Line != tt.first || ue.Total != tt.total {
+				t.Errorf("want %d unread from line %d, got %v", tt.total, tt.first, err)
+			}
+		})
 	}
-	got, err = Parse(def, []byte("BEGIN\nonly\n"), Options{})
+	// Blank lines are not text anyone could be missing, and the heading
+	// the expression states whole counts as read.
+	got, err := Parse(def, []byte("BEGIN\nskip\n\n"), Options{})
+	if err == nil {
+		t.Errorf("a skipped line was left unread and the parse still succeeded: %v", mustJSON(t, got))
+	}
+	got, err = Parse(def, []byte("BEGIN\n\n\n"), Options{})
 	if err != nil || mustJSON(t, got) != `[]` {
-		t.Errorf("skip beyond end: %v %v", mustJSON(t, got), err)
+		t.Errorf("blank lines only: %v %v", mustJSON(t, got), err)
 	}
 }
 

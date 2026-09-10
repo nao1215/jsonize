@@ -1,4 +1,12 @@
 {
+  "query": {
+    "version": "9.20.24-1ubuntu0.3-Ubuntu",
+    "arguments": "@192.168.11.1 gateway.local",
+    "servers_found": 1,
+    "global_options": [
+      "+cmd"
+    ]
+  },
   "header": {
     "opcode": "QUERY",
     "status": "NOERROR",
@@ -11,6 +19,15 @@
     "authority_count": 0,
     "additional_count": 0
   },
+  "messages": [],
+  "edns": [],
+  "question": [
+    {
+      "name": "gateway.local.",
+      "class": "IN",
+      "type": "A"
+    }
+  ],
   "answers": [
     {
       "name": "gateway.local.",
@@ -20,6 +37,8 @@
       "data": "192.168.11.1"
     }
   ],
+  "authority": [],
+  "additional": [],
   "statistics": {
     "query_time_ms": 2,
     "server": "192.168.11.1#53",

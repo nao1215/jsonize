@@ -1,0 +1,56 @@
+{
+  "query": {
+    "version": "9.20.24-1ubuntu0.3-Ubuntu",
+    "arguments": "nonexistent-host.example.com @1.1.1.1",
+    "servers_found": null,
+    "global_options": [
+      "+cmd"
+    ]
+  },
+  "header": {
+    "opcode": "QUERY",
+    "status": "NOERROR",
+    "id": 57591,
+    "flags": [
+      "qr",
+      "rd",
+      "ra",
+      "ad"
+    ],
+    "question_count": 1,
+    "answer_count": 0,
+    "authority_count": 1,
+    "additional_count": 1
+  },
+  "messages": [],
+  "edns": [
+    {
+      "name": "EDNS",
+      "value": "version: 0, flags:; udp: 1232"
+    }
+  ],
+  "question": [
+    {
+      "name": "nonexistent-host.example.com.",
+      "class": "IN",
+      "type": "A"
+    }
+  ],
+  "answers": [],
+  "authority": [
+    {
+      "name": "example.com.",
+      "ttl": 1800,
+      "class": "IN",
+      "type": "SOA",
+      "data": "elliott.ns.cloudflare.com. dns.cloudflare.com. 2413856909 10000 2400 604800 1800"
+    }
+  ],
+  "additional": [],
+  "statistics": {
+    "query_time_ms": 14,
+    "server": "1.1.1.1#53",
+    "when": "Thu Sep 10 21:23:08 JST 2026",
+    "message_size": 119
+  }
+}

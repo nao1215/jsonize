@@ -320,6 +320,11 @@ func compileList(v *validator, path string, exprs []string, flags string) []*reg
 func validateSelect(v *validator, path string, s *Select) {
 	if s.After != "" {
 		s.after = v.regex(path+".after", s.After)
+		if s.after != nil {
+			// The expression compiled on its own, so it compiles inside a
+			// group too; the flags it may open with stay scoped to it.
+			s.heading = regexp.MustCompile(`\A[ \t]*(?:` + s.After + `)[ \t]*\z`)
+		}
 	}
 	if s.Until != "" {
 		s.until = v.regex(path+".until", s.Until)

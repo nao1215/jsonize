@@ -8,6 +8,33 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- A conversion that succeeds has read all of its input. Every line is
+  read by a parser, joined by `fold`, blank, named by `ignore`, or the
+  heading `select.after` states in full; anything else is exit 3 naming
+  the lines, instead of JSON that is missing them. Two `dig` replies in
+  one capture used to come back as the first one at exit 0. A pattern has
+  to reach both ends of the line it reads, a field of type object has to
+  cover its whole value, a part's `ignore` hands a line to a sibling
+  rather than dropping it, and `--stream` reads past the end of
+  `input.select` to report what it left out.
+- A key printed twice into a kv map or an ini section is exit 3 naming
+  both lines. It used to keep the last value and drop the other.
+- A drawn table (`split: box`) refuses a line with no bar and no rule on
+  it, and a cell past the header's last column; both used to vanish.
+- `jz test` changes every fixture — a foreign line at the end and in the
+  middle, the whole text twice — and fails a definition that still
+  succeeds without the change showing in its result.
+- Definitions that dropped text they did not state now read it or state
+  it: `dig` reads the command banner, warnings, the EDNS options and the
+  question, authority and additional sections; `mtr --report` the host;
+  `pactl list` the properties, ports and formats; `upower -i` and
+  `upower -d` the device type and the history rows. The headings that
+  others start after (`fdisk`, `ip -s link`, `ethtool -k`, `ss -s`,
+  `objdump -h`, `netstat`, the sysstat banner, `xrandr`'s Screen line)
+  are stated in full, and the legends and summary lines that are left out
+  (`dpkg -l`, `systemd-analyze critical-chain`, `tree`) are named by
+  `ignore`.
+
 - Loading and validating a registry is measurably slower in the
   benchmarks (13 to 32 percent on `LoadRegistry`, 7 to 12 percent on
   definition validation), which is the definition struct having grown and
@@ -79,6 +106,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `--stream` on a `records` format with a record that could not be read
+  lost the start of the next record as well, and reported the rest of it
+  as text before the first record.
 - `jz run --stream` waited for the command to end after the stream had
   failed for a reason of its own, such as `--extract` naming a key the
   format does not produce, and a command that never ends made that

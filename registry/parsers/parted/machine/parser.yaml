@@ -26,8 +26,11 @@ parse:
   type: records
   start: '^BYT;[ \t]*$'
   parts:
+    # "BYT;" says the positions are in bytes, which is the only unit this
+    # definition reads (the record starts only on it), so it is the
+    # heading of the disk line rather than a value of its own.
     - name: disk
-      select: {skip: 1, limit: 1}
+      select: {after: '^BYT;$', limit: 1}
       parse:
         type: regex
         each: input

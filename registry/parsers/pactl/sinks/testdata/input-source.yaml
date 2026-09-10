@@ -1,0 +1,6 @@
+source: "pactl list sources on Ubuntu 26.04 with PipeWire 1.6.2, LC_ALL=C, trimmed to the third of five sources"
+description: >-
+  A capture source rather than a monitor, so it has ports of its own. The
+  descriptions are in the language the audio server runs in.
+os: linux
+args: ["list", "sources"]

@@ -42,7 +42,7 @@ detect:
 input:
   select:
     # The header, which the signature has already read.
-    skip: 1
+    after: '\ALimit[ \t]+Soft Limit[ \t]+Hard Limit[ \t]+Units[ \t]*$'
 parse:
   type: regex
   pattern: '^(?P<limit>[A-Za-z][A-Za-z ]*[A-Za-z])[ \t]+(?P<soft_limit>unlimited|\d+)[ \t]+(?P<hard_limit>unlimited|\d+)(?:[ \t]+(?P<units>[A-Za-z]+))?[ \t]*$'

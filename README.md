@@ -156,7 +156,7 @@ Reference: https://pkg.go.dev/github.com/nao1215/jsonize/pkg/selector
 | 0 | success |
 | 1 | unexpected failure |
 | 2 | usage error |
-| 3 | the input did not match the chosen definition |
+| 3 | the input did not match the chosen definition, or held text the definition did not read |
 | 4 | unidentified, ambiguous, or a named parser that did not fit |
 | 5 | a registry could not be loaded |
 | 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |

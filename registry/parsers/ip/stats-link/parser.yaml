@@ -63,7 +63,7 @@ parse:
     # interface with an alias or an alternative name has more lines above
     # them than one without.
     - name: rx
-      select: {after: '^[ \t]*RX:[ \t]*bytes', limit: 1}
+      select: {after: '^[ \t]*RX:[ \t]+bytes[ \t]+packets[ \t]+errors[ \t]+dropped[ \t]+missed[ \t]+mcast[ \t]*$', limit: 1}
       parse:
         type: regex
         each: input
@@ -76,7 +76,7 @@ parse:
         missed: {type: int}
         mcast: {type: int}
     - name: tx
-      select: {after: '^[ \t]*TX:[ \t]*bytes', limit: 1}
+      select: {after: '^[ \t]*TX:[ \t]+bytes[ \t]+packets[ \t]+errors[ \t]+dropped[ \t]+carrier[ \t]+collsns[ \t]*$', limit: 1}
       parse:
         type: regex
         each: input

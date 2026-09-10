@@ -26,7 +26,9 @@ detect:
       - '^Device[ \t]+r/s[ \t]'
 input:
   select:
-    after: '\ALinux[ \t]'
+    # The banner is stated whole, so what is dropped is exactly the line
+    # described above and not whatever happens to open with "Linux".
+    after: '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)'
 parse:
   type: records
   start: '^avg-cpu:[ \t]'

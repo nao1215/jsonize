@@ -1,0 +1,20 @@
+
+; <<>> DiG 9.20.24-1ubuntu0.3-Ubuntu <<>> nonexistent-host.example.com @1.1.1.1
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 57591
+;; flags: qr rd ra ad; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;nonexistent-host.example.com.	IN	A
+
+;; AUTHORITY SECTION:
+example.com.		1800	IN	SOA	elliott.ns.cloudflare.com. dns.cloudflare.com. 2413856909 10000 2400 604800 1800
+
+;; Query time: 14 msec
+;; SERVER: 1.1.1.1#53(1.1.1.1) (UDP)
+;; WHEN: Thu Sep 10 21:23:08 JST 2026
+;; MSG SIZE  rcvd: 119
+

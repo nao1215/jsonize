@@ -31,6 +31,9 @@ detect:
       - '^Idx Name[ \t]+Size[ \t]+VMA[ \t]+LMA[ \t]+File off[ \t]+Algn[ \t]*$'
 input:
   fold: '^[ \t]+[A-Z]'
+  # The title above the column header; the column header itself opens
+  # the sections part below.
+  ignore: ['^Sections:[ \t]*$']
 parse:
   type: composite
   parts:
@@ -41,7 +44,7 @@ parse:
         each: input
         pattern: '^(?P<name>.+):[ \t]+file format (?P<format>\S+)$'
     - name: sections
-      select: {after: '^Idx Name[ \t]+Size'}
+      select: {after: '^Idx Name[ \t]+Size[ \t]+VMA[ \t]+LMA[ \t]+File off[ \t]+Algn[ \t]*$'}
       parse:
         type: regex
         pattern: '^[ \t]*(?P<idx>\d+) (?P<name>\S+)[ \t]+(?P<size>[0-9a-f]+)[ \t]+(?P<vma>[0-9a-f]+)[ \t]+(?P<lma>[0-9a-f]+)[ \t]+(?P<file_off>[0-9a-f]+)[ \t]+2\*\*(?P<align>\d+) (?P<flags>[A-Za-z_0-9]+(?:, [A-Za-z_0-9]+)*)$'

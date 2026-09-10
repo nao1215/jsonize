@@ -108,22 +108,48 @@ var ErrLineTooLong = errors.New("line too long")
 
 // Parse applies def to input. The result is either []any (one ordered
 // object per record) or *jsonutil.Object, depending on the parse type.
+//
+// A result comes back only when every line of the input was read or left
+// out by a rule the definition states (see Account); anything else is an
+// *UnreadError inside the *ParseError.
 func Parse(def *definition.Definition, input []byte, opts Options) (any, error) {
+	v, _, err := ParseAccounted(def, input, opts)
+	return v, err
+}
+
+// ParseAccounted is Parse, also reporting where the lines of the input
+// went. The account is filled as far as the reading got, so a failure
+// still says how much was read before it.
+func ParseAccounted(def *definition.Definition, input []byte, opts Options) (any, Account, error) {
+	var acct Account
 	if int64(len(input)) > opts.maxInput() {
-		return nil, &ParseError{Definition: def.ID(), Msg: fmt.Sprintf("input exceeds %d bytes", opts.maxInput()), Cause: ErrInputTooLarge}
+		return nil, acct, &ParseError{Definition: def.ID(), Msg: fmt.Sprintf("input exceeds %d bytes", opts.maxInput()), Cause: ErrInputTooLarge}
 	}
 	lines, err := splitRecords(input, def.Input.Separator(), opts.maxLine())
 	if err != nil {
-		return nil, &ParseError{Definition: def.ID(), Line: err.line, Msg: err.msg, Cause: err.cause}
+		return nil, acct, &ParseError{Definition: def.ID(), Line: err.line, Msg: err.msg, Cause: err.cause}
 	}
+	acct.Lines = len(lines)
 	lines, ferr := foldLines(&def.Input, lines)
 	if ferr != nil {
-		return nil, &ParseError{Definition: def.ID(), Line: ferr.line, Msg: ferr.msg, Cause: ferr.cause}
+		return nil, acct, &ParseError{Definition: def.ID(), Line: ferr.line, Msg: ferr.msg, Cause: ferr.cause}
 	}
-	lines = prepare(&def.Input, lines)
-	lines = applySelect(&def.Input.Select, lines)
-	r := &run{def: def, opts: opts}
-	return r.parse(&def.Parse, def.Fields, lines)
+	acct.Folded = acct.Lines - len(lines)
+	prepared := prepare(&def.Input, lines, &acct)
+	r := &run{def: def, opts: opts, ledger: newLedger(prepared)}
+	selected, heading := applySelect(&def.Input.Select, prepared)
+	v, perr := r.parse(&def.Parse, def.Fields, selected)
+	if perr == nil {
+		r.markHeading(&def.Input.Select, heading)
+	}
+	r.ledger.count(prepared, &acct)
+	if perr != nil {
+		return nil, acct, perr
+	}
+	if spans := r.ledger.unread(prepared); len(spans) > 0 {
+		return nil, acct, r.unreadError(spans)
+	}
+	return v, acct, nil
 }
 
 // line is one input line with its original 1-based number.
@@ -192,24 +218,48 @@ func foldLines(in *definition.Input, lines []line) ([]line, *splitError) {
 	return out, nil
 }
 
-// prepare drops ignored and blank lines.
-func prepare(in *definition.Input, lines []line) []line {
+// prepare drops ignored and blank lines, counting them in acct when it
+// is not nil.
+func prepare(in *definition.Input, lines []line, acct *Account) []line {
 	ignore := in.IgnorePatterns()
 	skipBlank := in.SkipBlankLines()
 	if len(ignore) == 0 && !skipBlank {
 		return lines
 	}
+	counts := make([]int, len(ignore))
 	out := lines[:0:0]
 	for _, l := range lines {
 		if skipBlank && strings.TrimSpace(l.text) == "" {
+			if acct != nil {
+				acct.Blank++
+			}
 			continue
 		}
-		if matchesAny(ignore, l.text) {
+		if i := firstMatching(ignore, l.text); i >= 0 {
+			counts[i]++
 			continue
 		}
 		out = append(out, l)
 	}
+	if acct != nil {
+		for i, n := range counts {
+			if n > 0 {
+				acct.Ignored = append(acct.Ignored, Ignored{Index: i, Expr: in.Ignore[i], Lines: n})
+			}
+		}
+	}
 	return out
+}
+
+// firstMatching returns the index of the first expression that matches
+// s, or -1.
+func firstMatching(res []*regexp.Regexp, s string) int {
+	for i, re := range res {
+		if re.MatchString(s) {
+			return i
+		}
+	}
+	return -1
 }
 
 // dropIgnored removes the lines a part declared as belonging to a
@@ -236,22 +286,26 @@ func matchesAny(res []*regexp.Regexp, s string) bool {
 	return false
 }
 
-// applySelect narrows lines with after/until/skip/limit.
-func applySelect(sel *definition.Select, lines []line) []line {
+// applySelect narrows lines with after/until/skip/limit. It also returns
+// the line select.after matched, which is the heading of the region and
+// not part of it, or nil when there is none.
+func applySelect(sel *definition.Select, lines []line) ([]line, *line) {
 	if sel.IsZero() {
-		return lines
+		return lines, nil
 	}
+	var heading *line
 	if re := sel.CompiledAfter(); re != nil {
 		found := false
 		for i, l := range lines {
 			if re.MatchString(l.text) {
+				heading = &lines[i]
 				lines = lines[i+1:]
 				found = true
 				break
 			}
 		}
 		if !found {
-			return nil
+			return nil, nil
 		}
 	}
 	if re := sel.CompiledUntil(); re != nil {
@@ -264,46 +318,77 @@ func applySelect(sel *definition.Select, lines []line) []line {
 	}
 	if sel.Skip > 0 {
 		if sel.Skip >= len(lines) {
-			return nil
+			return nil, heading
 		}
 		lines = lines[sel.Skip:]
 	}
 	if sel.Limit > 0 && sel.Limit < len(lines) {
 		lines = lines[:sel.Limit]
 	}
-	return lines
+	return lines, heading
+}
+
+// markHeading records the line select.after matched as read, when the
+// expression describes all of it. A heading is where a region starts, and
+// an expression that states the whole of one has said everything there is
+// to say about it; one that only matches how the line opens has not, and
+// the rest of the line is then as unread as any other.
+func (r *run) markHeading(sel *definition.Select, heading *line) {
+	if heading != nil && sel.Heading(heading.text) {
+		r.ledger.markOne(*heading)
+	}
 }
 
 type run struct {
 	def  *definition.Definition
 	opts Options
+	// ledger records the lines the parsers read. It is nil where nothing
+	// is being accounted for.
+	ledger *ledger
 }
 
 func (r *run) errorf(ln int, field, format string, args ...any) *ParseError {
 	return &ParseError{Definition: r.def.ID(), Line: ln, Field: field, Msg: fmt.Sprintf(format, args...)}
 }
 
+// parse runs one parser over its lines. A parser that reads line by line
+// either reads every line it is given or fails on the one it cannot, so a
+// success means all of them were read; the ones that decide for
+// themselves which lines they read (composite, records and a pattern
+// matched against the whole input) record that on their own.
 func (r *run) parse(p *definition.Parse, fields map[string]*definition.Field, lines []line) (any, error) {
+	var (
+		v   any
+		err error
+	)
 	switch p.Type {
-	case definition.TypeTable:
-		return r.parseTable(p, fields, lines)
-	case definition.TypeRegex:
-		return r.parseRegex(p, fields, lines)
-	case definition.TypeKV:
-		return r.parseKV(p, fields, lines)
 	case definition.TypeComposite:
 		return r.parseComposite(p, lines)
 	case definition.TypeRecords:
 		return r.parseRecords(p, lines)
+	case definition.TypeRegex:
+		if p.Each == definition.EachInput {
+			return r.parseRegex(p, fields, lines)
+		}
+		v, err = r.parseRegex(p, fields, lines)
+	case definition.TypeTable:
+		v, err = r.parseTable(p, fields, lines)
+	case definition.TypeKV:
+		v, err = r.parseKV(p, fields, lines)
 	case definition.TypeCSV:
-		return r.parseCSV(p, fields, lines)
+		v, err = r.parseCSV(p, fields, lines)
 	case definition.TypeINI:
-		return r.parseINI(p, fields, lines)
+		v, err = r.parseINI(p, fields, lines)
 	case definition.TypeTree:
-		return r.parseTree(p, lines)
+		v, err = r.parseTree(p, lines)
 	default:
 		return nil, r.errorf(0, "", "unsupported parse type %q", p.Type)
 	}
+	if err != nil {
+		return nil, err
+	}
+	r.ledger.mark(lines)
+	return v, nil
 }
 
 func (r *run) parseComposite(p *definition.Parse, lines []line) (any, error) {
@@ -313,7 +398,8 @@ func (r *run) parseComposite(p *definition.Parse, lines []line) (any, error) {
 		// The region comes first and the ignore list narrows it, so that
 		// select.skip and select.limit count the lines as they stand in
 		// the output rather than the ones left after dropping.
-		sub := dropIgnored(part.IgnorePatterns(), applySelect(&part.Select, lines))
+		region, heading := applySelect(&part.Select, lines)
+		sub := dropIgnored(part.IgnorePatterns(), region)
 		v, err := r.parse(&part.Parse, part.Fields, sub)
 		if err != nil {
 			var pe *ParseError
@@ -322,6 +408,7 @@ func (r *run) parseComposite(p *definition.Parse, lines []line) (any, error) {
 			}
 			return nil, err
 		}
+		r.markHeading(&part.Select, heading)
 		obj.Set(part.Name, v)
 	}
 	return obj, nil
@@ -372,13 +459,23 @@ func (r *run) parseRegex(p *definition.Parse, fields map[string]*definition.Fiel
 		if m == nil {
 			return nil, r.errorf(0, "", "input does not match %s", describePatterns(p))
 		}
-		return r.objectFromMatch(re, text, m, fields, firstLine(lines))
+		obj, err := r.objectFromMatch(re, text, m, fields, firstLine(lines))
+		if err != nil {
+			return nil, err
+		}
+		if err := r.markSpan(lines, m[0], m[1]); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	out := make([]any, 0, len(lines))
 	for _, l := range lines {
 		re, m := firstMatch(patterns, l.text)
 		if m == nil {
 			return nil, r.errorf(l.num, "", "line does not match %s: %q", describePatterns(p), truncate(l.text, 80))
+		}
+		if err := r.checkWhole(l, m[0], m[1]); err != nil {
+			return nil, err
 		}
 		obj, err := r.objectFromMatch(re, l.text, m, fields, l.num)
 		if err != nil {
@@ -480,6 +577,7 @@ func (r *run) parseKV(p *definition.Parse, fields map[string]*definition.Field, 
 		list = make([]any, 0, len(lines))
 	}
 	trim := p.TrimCells()
+	var keys keyLines
 	for _, l := range lines {
 		idx := strings.Index(l.text, sep)
 		key := ""
@@ -500,6 +598,9 @@ func (r *run) parseKV(p *definition.Parse, fields map[string]*definition.Field, 
 			value = unquote(value)
 		}
 		if asMap {
+			if err := keys.add(r, key, l.num); err != nil {
+				return nil, err
+			}
 			if err := r.setField(obj, key, value, fields[key], l.num); err != nil {
 				return nil, err
 			}
