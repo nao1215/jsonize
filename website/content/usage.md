@@ -450,8 +450,10 @@ $ jz run --parser ps -- busybox ps
 jz does not keep a list of which commands are wrappers. The list would
 never be complete, and a wrong entry would read some other command's
 output with the wrong definition. What it does, when it refuses a
-command whose arguments name one it has a parser for, is print the
-command line that names that parser:
+command whose arguments name a program it has a parser for, is print the
+command line that names that parser (a directory or a file that is not a
+program is something the command reads, whatever its name, and is not
+offered):
 
 ```console
 $ jz run nice -n 5 df -h
