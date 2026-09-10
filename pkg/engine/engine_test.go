@@ -285,7 +285,11 @@ func TestParseTableEmptyAndHeaderErrors(t *testing.T) {
 		t.Errorf("header only: %v %v", got, err)
 	}
 	derived := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table}\ninput: {skip_blank: false}\n")
-	_, err = Parse(derived, []byte("   \nx\n"), Options{})
+	// Blank lines before the text are skipped whatever skip_blank says, so
+	// the blank header is the one that follows the heading select.after
+	// names.
+	afterHeading := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table}\ninput: {skip_blank: false, select: {after: '^start$'}}\n")
+	_, err = Parse(afterHeading, []byte("start\n   \nx\n"), Options{})
 	if err == nil || !strings.Contains(err.Error(), "header line is empty") {
 		t.Errorf("empty header: %v", err)
 	}

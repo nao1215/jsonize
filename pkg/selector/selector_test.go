@@ -284,18 +284,19 @@ func TestDefinitionWithoutSignature(t *testing.T) {
 // A signature that says every line has one shape (\z is the end of the
 // window) held a blank line at the end of the input against the text,
 // though the parser skips it: `cat /proc/meminfo; echo` was unidentified.
-// A blank line inside the text is still part of it.
-func TestTrailingBlankLinesAreNotPartOfTheText(t *testing.T) {
+// A signature anchored at \A did the same with a blank line before the
+// text. A blank line inside the text is still part of it.
+func TestBlankLinesAroundTheTextAreNotPartOfIt(t *testing.T) {
 	t.Parallel()
 	reg := buildRegistry(t, map[string]string{
 		"n/digits": def("n", "digits", "detect:\n  signature: {all: ['\\A(?:\\d+\\n)*\\d+\\z']}\n"),
 	})
-	for _, in := range []string{"1\n2\n", "1\n2", "1\n2\n\n", "1\n2\n  \n\n", "1\r\n2\r\n\r\n"} {
+	for _, in := range []string{"1\n2\n", "1\n2", "1\n2\n\n", "1\n2\n  \n\n", "1\r\n2\r\n\r\n", "\n1\n2\n", " \n\r\n1\n2\n"} {
 		if res, err := Select(reg, Context{Input: []byte(in)}); err != nil || res.Entry.Def.ID() != "n/digits" {
 			t.Errorf("%q: %v", in, err)
 		}
 	}
-	for _, in := range []string{"1\n\n2\n", "\n1\n2\n"} {
+	for _, in := range []string{"1\n\n2\n", "1\n \n2\n"} {
 		if _, err := Select(reg, Context{Input: []byte(in)}); err == nil {
 			t.Errorf("%q: a blank line inside the text was dropped", in)
 		}

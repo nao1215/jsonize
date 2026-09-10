@@ -175,7 +175,9 @@ type streamer struct {
 	sel    *definition.Select
 
 	// held is the line a fold may still be joined to.
-	held    *line
+	held *line
+	// text is set by the first line that is not blank.
+	text    bool
 	started bool // input.select.after has been seen
 	skipped int
 	taken   int
@@ -231,11 +233,13 @@ func (s *streamer) feedRaw(l line) error {
 	return s.feedFolded(*prev)
 }
 
-// feedFolded drops the lines input.ignore and skip_blank name.
+// feedFolded drops the lines input.ignore and skip_blank name, and the
+// blank lines before the text, which prepare drops from a whole document.
 func (s *streamer) feedFolded(l line) error {
-	if s.blank && strings.TrimSpace(l.text) == "" {
+	if blank := strings.TrimSpace(l.text) == ""; blank && (s.blank || !s.text) {
 		return nil
 	}
+	s.text = true
 	if matchesAny(s.ignore, l.text) {
 		return nil
 	}

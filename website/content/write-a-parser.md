@@ -160,11 +160,11 @@ its result, or return more than one copy. An `ignore` that names more
 than the definition means to drop is what this catches.
 
 The opposite changes have to change nothing. The fixture with CRLF line
-endings, with a byte order mark, without its last line break and with a
-blank line after it is the same text, and it has to pick the same
-definition and give the same JSON. jz takes care of the first three; the
-last one is yours only if the definition keeps blank lines as lines to
-read (`skip_blank: false`).
+endings, with a byte order mark, without its last line break, and with a
+blank line before or after it is the same text, and it has to pick the
+same definition and give the same JSON. jz takes care of all but one: a
+blank line after the text is yours only if the definition keeps blank
+lines as lines to read (`skip_blank: false`).
 
 ## 6. Look at the schema of what it produces
 

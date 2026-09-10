@@ -236,9 +236,10 @@ func selectsOwn(reg *registry.Registry, e *registry.Entry, c registry.Case, inpu
 
 // sameText are changes to a fixture that leave the text what it was: a
 // byte order mark, CRLF line endings, no line break after the last line,
-// a blank line after it. Each has to leave the answer as it was, both the
-// definition chosen and the JSON. The line endings mean nothing to a
-// format whose records end with NUL, where a newline belongs to a value.
+// a blank line after it or before the first. Each has to leave the answer
+// as it was, both the definition chosen and the JSON. The line endings
+// mean nothing to a format whose records end with NUL, where a newline
+// belongs to a value.
 var sameText = []struct {
 	name  string
 	lines bool
@@ -248,6 +249,7 @@ var sameText = []struct {
 	{"CRLF line endings", true, func(b []byte) []byte { return bytes.ReplaceAll(b, []byte("\n"), []byte("\r\n")) }},
 	{"no line break at the end", true, func(b []byte) []byte { return bytes.TrimRight(b, "\n") }},
 	{"a blank line at the end", true, func(b []byte) []byte { return append(bytes.Clone(b), '\n') }},
+	{"a blank line at the start", true, func(b []byte) []byte { return append([]byte{'\n'}, b...) }},
 }
 
 // sameAnswer checks the fixture under each change in sameText against

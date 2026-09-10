@@ -173,6 +173,39 @@ parse:
 	}
 }
 
+// skip_blank: false keeps the blank lines that separate things, and
+// nothing is separated from what comes before the first line: a blank
+// line there is not part of the text, whole or streamed.
+func TestBlankLinesBeforeTheTextAreSkipped(t *testing.T) {
+	t.Parallel()
+	src := `format: 1
+command: t
+variant: v
+input:
+  skip_blank: false
+parse:
+  type: records
+  start: '^commit '
+  parts:
+    - name: head
+      select: {limit: 1}
+      parse: {type: regex, each: input, pattern: '^commit (?P<id>\S+)$'}
+    - name: body
+      select: {skip: 1}
+      parse: {type: regex, pattern: '^(?P<line>.*)$'}
+`
+	const input = "\n  \ncommit a\n\nmsg\n"
+	want := `[{"head":{"id":"a"},"body":[{"line":""},{"line":"msg"}]}]`
+	v, acct, err := ParseAccounted(load(t, src), []byte(input), Options{})
+	if err != nil || mustJSON(t, v) != want || acct.Blank != 2 {
+		t.Errorf("whole: %v %+v %v", mustJSON(t, v), acct, err)
+	}
+	got, err := streamAll(t, src, input)
+	if err != nil || got != want[1:len(want)-1]+"\n" {
+		t.Errorf("stream: %q %v", got, err)
+	}
+}
+
 // A heading select.after names counts as read only when the expression
 // states the whole line. One that states how the line opens leaves the
 // rest of it, which is where a value such as an interface name sits.
