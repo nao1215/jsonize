@@ -1,7 +1,7 @@
 {
   "query": {
     "version": "9.20.24-1ubuntu0.3-Ubuntu",
-    "arguments": "nonexistent-host.invalid",
+    "arguments": "+tcp +time=2 +tries=1 localhost @127.0.0.53",
     "servers_found": null,
     "global_options": [
       "+cmd"
@@ -9,8 +9,8 @@
   },
   "header": {
     "opcode": "QUERY",
-    "status": "NXDOMAIN",
-    "id": 49958,
+    "status": "NOERROR",
+    "id": 37140,
     "flags": [
       "qr",
       "aa",
@@ -19,7 +19,7 @@
       "ad"
     ],
     "question_count": 1,
-    "answer_count": 0,
+    "answer_count": 1,
     "authority_count": 0,
     "additional_count": 1
   },
@@ -32,20 +32,28 @@
   ],
   "question": [
     {
-      "name": "nonexistent-host.invalid.",
+      "name": "localhost.",
       "class": "IN",
       "type": "A"
     }
   ],
-  "answers": [],
+  "answers": [
+    {
+      "name": "localhost.",
+      "ttl": 0,
+      "class": "IN",
+      "type": "A",
+      "data": "127.0.0.1"
+    }
+  ],
   "authority": [],
   "additional": [],
   "statistics": {
     "query_time_ms": 0,
     "server": "127.0.0.53#53",
     "server_name": "127.0.0.53",
-    "protocol": "UDP",
-    "when": "Sun Sep 06 19:47:02 JST 2026",
-    "message_size": 53
+    "protocol": "TCP",
+    "when": "Thu Sep 10 23:40:10 JST 2026",
+    "message_size": 54
   }
 }

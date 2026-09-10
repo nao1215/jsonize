@@ -1,0 +1,20 @@
+
+; <<>> DiG 9.20.24-1ubuntu0.3-Ubuntu <<>> +tcp +time=2 +tries=1 localhost @127.0.0.53
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 37140
+;; flags: qr aa rd ra ad; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;localhost.			IN	A
+
+;; ANSWER SECTION:
+localhost.		0	IN	A	127.0.0.1
+
+;; Query time: 0 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53) (TCP)
+;; WHEN: Thu Sep 10 23:40:10 JST 2026
+;; MSG SIZE  rcvd: 54
+

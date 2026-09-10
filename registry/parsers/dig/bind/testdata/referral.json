@@ -139,6 +139,8 @@
   "statistics": {
     "query_time_ms": 338,
     "server": "192.5.6.30#53",
+    "server_name": "a.gtld-servers.net",
+    "protocol": "UDP",
     "when": "Thu Sep 10 21:23:08 JST 2026",
     "message_size": 359
   }
