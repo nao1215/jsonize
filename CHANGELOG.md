@@ -176,6 +176,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run --explain` wrote nothing when the command printed nothing:
+  `jz run --explain git stash list` answered `[]` with no word of why.
+  It now says the outcome was `empty`, which variants the answer was
+  judged against, and what the command did. A command that failed or was
+  ended before it finished is explained as well.
 - `ls -ld /etc | jz` was ambiguous, and `jz --parser etc` read the same
   line as a protocol named `drwxr-xr-x` with the number 162 at exit 0.
   `etc/protocols` took any word after the number for the protocol's

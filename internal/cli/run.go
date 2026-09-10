@@ -171,25 +171,27 @@ func (a *app) cmdRun(args []string) int {
 		return ExitError
 	}
 	a.reportChild(ctx, name, res, timeout)
+	exp.ran(name, cmdArgs, res.ExitCode)
 	if res.Cut {
 		a.cutShort(name)
+		a.explainWrite(exp)
 		return res.ExitCode
 	}
 	if len(strings.TrimSpace(string(res.Stdout))) == 0 {
 		if res.ExitCode != 0 {
+			a.explainWrite(exp)
 			return res.ExitCode
 		}
 		// The command succeeded and printed nothing, which is what a
 		// command that lists things does when there is nothing to list.
 		// Here, unlike on a pipe, jz knows which format was meant, so it
 		// can say the list is empty instead of that it could not tell.
-		return a.emptyResult(reg, sctx, out)
+		return a.emptyResult(reg, sctx, out, exp)
 	}
 
 	// jz ran the command, so it knows the arguments and the system it ran
 	// on; both narrow the variants before the output is checked.
 	sctx.Input = res.Stdout
-	exp.ran(name, cmdArgs, res.ExitCode)
 	chosen, err := selector.Select(reg, sctx)
 	if err != nil {
 		code := a.failedRun(err, res.ExitCode)
@@ -287,8 +289,8 @@ func (a *app) restoreStderr(io.Writer) {
 
 // emptyResult answers a command that succeeded without printing
 // anything with the empty list, when that is what it means.
-func (a *app) emptyResult(reg *registry.Registry, sctx selector.Context, out outputOptions) int {
-	if code := a.emptyFormats(reg, sctx, false); code != ExitOK {
+func (a *app) emptyResult(reg *registry.Registry, sctx selector.Context, out outputOptions, exp *explanation) int {
+	if code := a.emptyFormats(reg, sctx, false, exp); code != ExitOK {
 		return code
 	}
 	if err := jsonutil.Encode(a.env.Stdout, []any{}, out.pretty); err != nil {
@@ -416,11 +418,12 @@ func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runne
 		return ExitError
 	}
 	a.reportChild(ctx, cmd.Name, res, timeout)
+	exp.ran(cmd.Name, cmd.Args, res.ExitCode)
 	if res.Cut {
 		a.cutShort(cmd.Name)
+		a.explainWrite(exp)
 		return res.ExitCode
 	}
-	exp.ran(cmd.Name, cmd.Args, res.ExitCode)
 	code := a.convertWith(def, bytes.NewReader(res.Stdout), out, exp)
 	if res.ExitCode != 0 {
 		return res.ExitCode
