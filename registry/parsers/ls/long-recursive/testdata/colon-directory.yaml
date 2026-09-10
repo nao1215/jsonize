@@ -1,0 +1,4 @@
+description: A directory named "d:" is printed with its own colon and the heading one, "d::", which opens with a character a mode could open with. A file named "b::" is an entry, not a heading.
+source: "GNU coreutils 9.7 (gnuls) on Ubuntu 26.04, LC_ALL=C, ls -lR d: over a tree made for the fixture. The owner was replaced with a name of the same width"
+os: linux
+args: ["-lR", "d:"]

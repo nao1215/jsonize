@@ -95,6 +95,10 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `ls/long-recursive` reads `ls -lR`, and `ls -l` given several
+  directories, as one record per directory with its entries. It used to
+  pass the signature of `ls/long` and fail on the first heading.
+
 - Thirty definitions for formats that had none: `/etc/services` and
   `/etc/protocols` (also read through `getent`), `nslookup HOST`,
   `aplay -l` (and `arecord -l`), `smartctl --scan`, `systemctl
