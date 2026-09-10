@@ -7,6 +7,7 @@ import (
 	"io"
 	"sync"
 
+	"github.com/nao1215/jsonize/internal/runner"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
@@ -87,7 +88,10 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	case narrowErr != nil:
 		a.errorf("%v", narrowErr)
 		return ExitUsage
-	case err != nil:
+	case err != nil && !errors.Is(err, runner.ErrCut):
+		// A command ended from outside leaves its last record half
+		// written. The engine has left it out; the records before it
+		// stand, and the command's status says how it ended.
 		return a.exitForStream(err)
 	case skipped > 0:
 		return ExitParse
@@ -125,7 +129,7 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 	case narrowErr != nil:
 		a.errorf("%v", narrowErr)
 		return ExitUsage
-	case err != nil:
+	case err != nil && !errors.Is(err, runner.ErrCut):
 		return a.exitForStream(err)
 	case skipped > 0:
 		return ExitParse
@@ -188,7 +192,9 @@ func readHead(br *bufio.Reader, n int) ([]byte, error) {
 			continue
 		}
 		if err != nil {
-			if errors.Is(err, io.EOF) {
+			// The reader of a command ended from outside says so again
+			// when the rest is read, which is where the cut is dealt with.
+			if errors.Is(err, io.EOF) || errors.Is(err, runner.ErrCut) {
 				break
 			}
 			return nil, err

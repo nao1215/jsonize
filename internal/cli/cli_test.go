@@ -1012,6 +1012,41 @@ func TestRunPassesStdinToTheCommand(t *testing.T) {
 	}
 }
 
+// A command ended from outside stops wherever its output had got to, as
+// often as not in the middle of a line. A stream keeps the records it has
+// written but not the one the cut fell in; output that never came to its
+// end is not a whole document, so none is written.
+func TestRunDoesNotReadOutputCutShort(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	h := newHarness(t)
+	shellRegistry(t, h)
+	killed := "echo a=whole; printf b=cu; kill -TERM $$"
+	stalled := "echo a=whole; printf b=cu; exec sleep 5"
+	define := "parse: {type: kv}"
+	for _, args := range [][]string{
+		{"run", "--stream", "sh", "-c", killed},
+		{"run", "--stream", "--define", define, "sh", "-c", killed},
+		{"run", "--stream", "--timeout", "300ms", "sh", "-c", stalled},
+	} {
+		code := h.run(args...)
+		if code != 143 || !strings.Contains(h.stdout.String(), `"value":"whole"`) || strings.Contains(h.stdout.String(), `"cu"`) {
+			t.Errorf("%v: %d stdout=%q stderr=%s", args, code, h.stdout.String(), h.stderr.String())
+		}
+	}
+	for _, args := range [][]string{
+		{"run", "sh", "-c", killed},
+		{"run", "--define", define, "sh", "-c", killed},
+		{"run", "--timeout", "300ms", "sh", "-c", stalled},
+	} {
+		code := h.run(args...)
+		if code != 143 || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), "--stream") {
+			t.Errorf("%v: %d stdout=%q stderr=%s", args, code, h.stdout.String(), h.stderr.String())
+		}
+	}
+}
+
 func TestRunRealCommands(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("no POSIX commands")

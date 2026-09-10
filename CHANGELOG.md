@@ -152,6 +152,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A command `jz run` stopped at `--timeout`, or one ended by a signal,
+  had the line it was writing when it stopped read as a whole record:
+  `du` cut off in the middle of a path gave that path shortened. With
+  `--stream` that record is now left out and the ones before it stay;
+  without `--stream` nothing is written, since the output never came to
+  its end. The status is 128 plus the signal, as before.
 - `stat` of a device file was exit 3: the definition looked for the
   device numbers on a line of their own, and GNU, uutils and BusyBox all
   print them at the end of the Device line. They are read as

@@ -71,7 +71,7 @@ func TestRunPosix(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if string(res.Stdout) != "out\n" || res.ExitCode != 3 || stderr.String() != "err\n" {
+		if string(res.Stdout) != "out\n" || res.ExitCode != 3 || res.Cut || stderr.String() != "err\n" {
 			t.Errorf("result = %+v stderr=%q", res, stderr.String())
 		}
 	})
@@ -105,7 +105,7 @@ func TestRunPosix(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if res.ExitCode != 143 || res.Signal != "SIGTERM" {
+		if res.ExitCode != 143 || res.Signal != "SIGTERM" || !res.Cut {
 			t.Errorf("result = %+v", res)
 		}
 	})
@@ -132,7 +132,7 @@ func TestRunPosix(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if res.Signal != "SIGTERM" {
+		if res.Signal != "SIGTERM" || !res.Cut {
 			t.Errorf("result = %+v", res)
 		}
 	})
@@ -174,6 +174,50 @@ func TestStreamHandsOutputOverAsItArrives(t *testing.T) {
 	}
 	if res.ExitCode != 4 || !strings.Contains(stderr.String(), "problem") {
 		t.Errorf("res = %+v stderr = %q", res, stderr.String())
+	}
+}
+
+// A command ended from outside stops wherever its output had got to,
+// in the middle of a line as often as not. The reader says so at the
+// end instead of passing the cut for the end the command chose.
+func TestStreamSaysWhenTheOutputWasCutShort(t *testing.T) {
+	t.Parallel()
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	tests := []struct {
+		name   string
+		script string
+		ctx    time.Duration
+	}{
+		{"killed by a signal", "printf 'one\\ntw'; kill -TERM $$", 0},
+		{"stopped at the deadline", "printf 'one\\ntw'; exec sleep 30", 300 * time.Millisecond},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			ctx := context.Background()
+			if tt.ctx > 0 {
+				var cancel context.CancelFunc
+				ctx, cancel = context.WithTimeout(ctx, tt.ctx)
+				defer cancel()
+			}
+			var got []byte
+			var readErr error
+			res, err := Stream(ctx, Command{Name: "sh", Args: []string{"-c", tt.script}}, io.Discard, func(r io.Reader) error {
+				got, readErr = io.ReadAll(r)
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Stream: %v", err)
+			}
+			if string(got) != "one\ntw" || !errors.Is(readErr, ErrCut) {
+				t.Errorf("read %q, %v; want the text and ErrCut", got, readErr)
+			}
+			if res == nil || !res.Cut || res.Stopped || res.Signal != "SIGTERM" {
+				t.Errorf("res = %+v", res)
+			}
+		})
 	}
 }
 

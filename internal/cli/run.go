@@ -163,14 +163,10 @@ func (a *app) cmdRun(args []string) int {
 		}
 		return ExitError
 	}
-	switch {
-	case res.Signal != "":
-		a.errorf("%s was terminated by %s", name, res.Signal)
-	case res.ExitCode != 0:
-		a.errorf("%s exited with status %d", name, res.ExitCode)
-	}
-	if ctx.Err() != nil && timeout > 0 {
-		a.errorf("timeout of %s reached", timeout)
+	a.reportChild(ctx, name, res, timeout)
+	if res.Cut {
+		a.cutShort(name)
+		return res.ExitCode
 	}
 	if len(strings.TrimSpace(string(res.Stdout))) == 0 {
 		if res.ExitCode != 0 {
@@ -395,6 +391,10 @@ func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runne
 		return ExitError
 	}
 	a.reportChild(ctx, cmd.Name, res, timeout)
+	if res.Cut {
+		a.cutShort(cmd.Name)
+		return res.ExitCode
+	}
 	exp.ran(cmd.Name, cmd.Args, res.ExitCode)
 	code := a.convertWith(def, bytes.NewReader(res.Stdout), out, exp)
 	if res.ExitCode != 0 {
@@ -414,6 +414,14 @@ func (a *app) reportChild(ctx context.Context, name string, res *runner.Result, 
 	if ctx.Err() != nil && timeout > 0 {
 		a.errorf("timeout of %s reached", timeout)
 	}
+}
+
+// cutShort says why the output of a command ended from outside is not
+// read as a document. It stops wherever the command had got to, so its
+// last record may be half written, and a document of it would pass for
+// the whole of what the command prints.
+func (a *app) cutShort(name string) {
+	a.errorf("%s was ended before it finished its output, so none of it is read; --stream writes the records that came before", name)
 }
 
 // explainCommand reports, after a stream has ended, the command jz ran
