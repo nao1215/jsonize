@@ -131,6 +131,9 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `who/iso` reads `who` as a locale other than C prints it, the login
+  time with its year ("2025-11-04 13:17"); piped from a UTF-8 shell it
+  was exit 4.
 - `pidstat/io` and `pidstat/switches` read `pidstat -d` and `pidstat
   -w`, the I/O and the context switches of each task, sample by sample
   like the other pidstat reports. A rate pidstat could not read is
