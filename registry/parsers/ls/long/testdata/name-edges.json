@@ -1,0 +1,38 @@
+[
+  {
+    "flags": "-rw-rw-r--",
+    "links": 1,
+    "owner": "alice",
+    "group": "alice",
+    "size": "0",
+    "date": "Sep 11 07:18",
+    "filename": " lead"
+  },
+  {
+    "flags": "-rw-rw-r--",
+    "links": 1,
+    "owner": "alice",
+    "group": "alice",
+    "size": "0",
+    "date": "Sep 11 07:18",
+    "filename": "trail "
+  },
+  {
+    "flags": "-rw-rw-r--",
+    "links": 1,
+    "owner": "alice",
+    "group": "alice",
+    "size": "0",
+    "date": "Sep 11 07:18",
+    "filename": "two  spaces"
+  },
+  {
+    "flags": "-rw-rw-r--",
+    "links": 1,
+    "owner": "alice",
+    "group": "alice",
+    "size": "0",
+    "date": "Sep 11 07:18",
+    "filename": "x -> y"
+  }
+]

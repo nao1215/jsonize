@@ -42,6 +42,21 @@ scenarios:
             contains: '"children":'
             min_count: 2
 
+  # One -v prints a Flags line where -vv prints the register dumps, and
+  # lspci -k prints neither, so the two verbosities land on one definition.
+  - name: jz run lspci -v lands on the tree definition
+    only: {os: linux, command: "LC_ALL=C lspci -v | grep -q '^[0-9a-f]'"}
+    steps:
+      - run:
+          command: jz run --explain lspci -v
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lspci/verbose from embedded"
+          stdout:
+            json:
+              - { path: "$[0].slot", matches: "^([0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\\.[0-9a-f]$" }
+
   - name: jz run iw dev lands on the tree definition
     only: {os: linux, command: "[ -n \"$(LC_ALL=C iw dev)\" ]"}
     steps:
@@ -84,6 +99,20 @@ scenarios:
             json:
               - { path: "$[0].exposure", gte: 0 }
 
+  # losetup -a prints nothing on a machine without loop devices.
+  - name: losetup -a is one record per loop device
+    only: {os: linux, command: "[ -n \"$(losetup -a)\" ]"}
+    steps:
+      - run:
+          command: jz run --explain losetup -a
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "losetup/associations from embedded"
+          stdout:
+            json:
+              - { path: "$[0].device", matches: "^/dev/loop" }
+
   # blkid prints nothing at all without the right to read the devices.
   - name: blkid -o export is one block of attributes per device
     only: {os: linux, command: "[ -n \"$(blkid -o export)\" ]"}
@@ -111,3 +140,69 @@ scenarios:
             json:
               - { path: "$[0].device.card", gte: 0 }
               - { path: "$[0].subdevice_count.total", gte: 1 }
+
+  # An application registers the name and reason of its lock, in any
+  # script, and systemd lines the table up by display width.
+  - name: jz run systemd-inhibit --list lands on the table of locks
+    only: {os: linux, command: "LC_ALL=C systemd-inhibit --list | grep -q '^WHO '"}
+    steps:
+      - run:
+          command: jz run --explain systemd-inhibit --list
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemd-inhibit/list from embedded"
+          stdout:
+            json:
+              - { path: "$[0].uid", gte: 0 }
+              - { path: "$[0].pid", gte: 1 }
+
+  # power-profiles-daemon has to be running for the list to be printed.
+  - name: jz run powerprofilesctl lands on the list of profiles
+    only: {os: linux, command: "LC_ALL=C powerprofilesctl list | grep -q '^[* ] [a-z]'"}
+    steps:
+      - run:
+          command: jz run --explain powerprofilesctl
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "powerprofilesctl/list from embedded"
+          stdout:
+            json:
+              - { path: "$[0].profile.name", matches: "^[a-z-]+$" }
+
+  # Sending ICMP takes a capability or a ping_group_range that admits the
+  # user, which a container may not grant. -D prefixes each reply with the
+  # time it arrived, and the reply used to be refused for it.
+  - name: jz run ping -D reads the timestamp of each reply
+    only: {os: linux, command: "ping -c 1 -W 2 127.0.0.1 > /dev/null"}
+    steps:
+      - run:
+          command: jz run --explain ping -c 2 -D 127.0.0.1
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ping/linux from embedded"
+          stdout:
+            json:
+              - { path: "$.replies", length: 2 }
+              - { path: "$.replies[0].timestamp", gt: 1000000000 }
+              - { path: "$.replies[1].icmp_seq", equals: 2 }
+              - { path: "$.statistics.packets_received", equals: 2 }
+
+  # The journal has to be readable by the user running the suite. A query
+  # that matched nothing says so on a line of its own, which is the empty
+  # list, and recent entries may hold messages over several lines.
+  - name: the journal reads a query that matched nothing, and recent entries
+    only: {os: linux, command: "journalctl -n 1 --no-pager | grep -q ."}
+    steps:
+      - run:
+          command: jz run journalctl -n 0 --no-pager
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+      - run:
+          command: jz run journalctl -n 200 --no-pager
+      - assert:
+          exit_code: 0

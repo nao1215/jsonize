@@ -1,0 +1,6 @@
+Archive:  edge.zip
+Zip file size: 454 bytes, number of entries: 3
+-rw-rw-r--  3.0 unx        2 tx stor 26-Sep-11 07:22  lead
+-rw-rw-r--  3.0 unx        2 tx stor 26-Sep-11 07:22 trail 
+-rw-rw-r--  3.0 unx        0 bx stor 26-Sep-11 07:18 two  spaces
+3 files, 4 bytes uncompressed, 4 bytes compressed:  0.0%

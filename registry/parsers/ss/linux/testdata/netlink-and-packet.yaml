@@ -1,0 +1,4 @@
+description: Netlink and packet sockets name a protocol and a process, or an interface, where an internet socket has an address and a port, and their peer is a bare "*" with no port.
+source: "the header and eleven of the rows of `ss -l -A netlink,packet,raw` on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C, one of each kind"
+os: linux
+args: ["-l", "-A", "netlink,packet,raw"]

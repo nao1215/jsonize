@@ -1,0 +1,50 @@
+[
+  {
+    "uid": "root",
+    "pid": 1,
+    "ppid": 0,
+    "lwp": 1,
+    "c": 0,
+    "nlwp": 1,
+    "stime": "Sep10",
+    "tty": null,
+    "time": 96,
+    "cmd": "/usr/lib/systemd/systemd --system --deserialize=124 splash"
+  },
+  {
+    "uid": "root",
+    "pid": 2369,
+    "ppid": 1,
+    "lwp": 2369,
+    "c": 0,
+    "nlwp": 39,
+    "stime": "Sep10",
+    "tty": null,
+    "time": 0,
+    "cmd": "/usr/bin/containerd"
+  },
+  {
+    "uid": "root",
+    "pid": 2369,
+    "ppid": 1,
+    "lwp": 2379,
+    "c": 0,
+    "nlwp": 39,
+    "stime": "Sep10",
+    "tty": null,
+    "time": 5,
+    "cmd": "/usr/bin/containerd"
+  },
+  {
+    "uid": "root",
+    "pid": 2369,
+    "ppid": 1,
+    "lwp": 2380,
+    "c": 0,
+    "nlwp": 39,
+    "stime": "Sep10",
+    "tty": null,
+    "time": 0,
+    "cmd": "/usr/bin/containerd"
+  }
+]

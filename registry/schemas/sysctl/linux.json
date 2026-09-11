@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://nao1215.github.io/jsonize/schemas/sysctl/linux.json",
   "title": "sysctl/linux",
-  "description": "sysctl -a kernel parameters",
+  "description": "sysctl -a, or sysctl KEY..., kernel parameters",
   "x-jsonize": {
     "definition": "sysctl/linux",
     "version": 1

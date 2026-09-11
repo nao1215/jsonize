@@ -7,8 +7,8 @@
 # prefix and a suffix, with the differing middle in braces
 # ("{docs => website/content}/design.md"). A name with a space or a byte
 # above 127 keeps the C quoting git applies to it; jz does not decode
-# that. `-z` writes the paths on lines of their own instead and this
-# definition does not read it.
+# that. `-z` ends each record with NUL instead, which no format read
+# line by line accepts.
 #
 # Two numbers and a path is a shape far too many reports share, so jz
 # reads it only when the parser is named (`jz run git diff --numstat`,

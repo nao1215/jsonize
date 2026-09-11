@@ -32,8 +32,8 @@ detect:
 parse:
   type: regex
   patterns:
-    - '^(?P<mode>l[-rwxsStT]{9})[ \t]+(?P<owner>[^ \t/]*)/(?P<group>[^ \t]*)[ \t]+(?P<size>\d+)[ \t]+(?P<date>\d{4}-\d{2}-\d{2})[ \t]+(?P<time>\d{2}:\d{2})[ \t]+(?P<name>.+?) -> (?P<link_to>.+)$'
-    - '^(?P<mode>[-dlcbps][-rwxsStT]{9})[ \t]+(?P<owner>[^ \t/]*)/(?P<group>[^ \t]*)[ \t]+(?P<size>\d+)[ \t]+(?P<date>\d{4}-\d{2}-\d{2})[ \t]+(?P<time>\d{2}:\d{2})[ \t]+(?P<name>.+)$'
+    - '^(?P<mode>l[-rwxsStT]{9})[ \t]+(?P<owner>[^ \t/]*)/(?P<group>[^ \t]*)[ \t]+(?P<size>\d+)[ \t]+(?P<date>\d{4}-\d{2}-\d{2})[ \t]+(?P<time>\d{2}:\d{2}) (?P<name>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<mode>[-dlcbps][-rwxsStT]{9})[ \t]+(?P<owner>[^ \t/]*)/(?P<group>[^ \t]*)[ \t]+(?P<size>\d+)[ \t]+(?P<date>\d{4}-\d{2}-\d{2})[ \t]+(?P<time>\d{2}:\d{2}) (?P<name>.+)$'
 fields:
   size: {type: int, required: true}
   name: {required: true}

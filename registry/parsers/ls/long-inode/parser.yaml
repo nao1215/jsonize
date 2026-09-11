@@ -31,21 +31,26 @@ detect:
   auto_detect: false
   args:
     any: ["-i", "--inode"]
-    none: ["-s", "--size"]
+    # -s adds a column; -F and the rest mark each name, which ls/long explains.
+    none: ["-s", "--size", "-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
   signature:
     all:
-      - '(?m)^[ \t]*\d+\s+[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+[\d.]+[KMGTPBi]*\s+\w{3}\s+\d{1,2}\s+'
+      - '(?m)^[ \t]*\d+\s+[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+(?:[\d.]+[kKMGTPEZYRQBi]*|\d+,\s*\d+)\s+\w{3}\s+\d{1,2}\s+'
 input:
   ignore:
     - '^total\s'
 parse:
   type: regex
+  # A device file has major and minor numbers where the size goes, which
+  # ls/long explains.
   patterns:
-    - '^[ \t]*(?P<inode>\d+)\s+(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+?) -> (?P<link_to>.+)$'
-    - '^[ \t]*(?P<inode>\d+)\s+(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+)$'
+    - '^[ \t]*(?P<inode>\d+)\s+(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^[ \t]*(?P<inode>\d+)\s+(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
+    - '^[ \t]*(?P<inode>\d+)\s+(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
 fields:
   inode: {type: int, required: true}
   links: {type: int, required: true}
-  size: {required: true}
+  major: {type: int}
+  minor: {type: int}
   filename: {required: true}
   link_to: {when_missing: omit}

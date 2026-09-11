@@ -36,6 +36,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/nao1215/jsonize/pkg/convert"
 	"github.com/nao1215/jsonize/pkg/definition"
@@ -58,6 +59,10 @@ type Context struct {
 	Args []string
 	// Input is the captured output. Only the leading lines are examined.
 	Input []byte
+
+	// nul records that Input holds a NUL byte, which Select works out
+	// once for every definition it checks.
+	nul bool
 }
 
 // Result is a successful selection.
@@ -166,8 +171,11 @@ type NoMatchError struct {
 	// Scanned counts the definitions that were evaluated.
 	Scanned int
 	// Hints are definitions whose signature does fit the text but which
-	// jz refuses to choose on its own because their format is too
-	// generic. Naming one of them is the way forward.
+	// jz did not choose: in a search of the whole registry, because their
+	// format is too generic to claim on its own; in a search scoped to one
+	// parser, because the system or an argument they ask for ruled them
+	// out. Naming one of them is the way forward, and naming any other
+	// would be refused.
 	Hints []*registry.Entry
 	// Reported carries the rejections --explain shows. It is the whole
 	// list when one parser was searched and the near misses otherwise,
@@ -176,10 +184,41 @@ type NoMatchError struct {
 	// ExplicitOnly counts the definitions left out because they are only
 	// used when named.
 	ExplicitOnly int
+	// shapes are the parsers whose definitions describe a shape rather
+	// than a command and carry no signature, so naming one reads any text
+	// that has that shape. They are what a search that found nothing can
+	// point to, since naming a parser that has a signature is checked the
+	// same way the search was.
+	shapes []string
+	// excluded is a definition the text fits that lists an argument the
+	// command was run with (excludedArg) as one whose output it does not
+	// read.
+	excluded    *registry.Entry
+	excludedArg string
+	// nul records that the text is text holding a NUL byte, which every
+	// format read line by line refuses.
+	nul bool
+	// empty records that the input holds no text, only blank lines or
+	// nothing at all, which no signature can be asked about.
+	empty bool
 }
+
+// noText is what is said about input that holds no text.
+const noText = "it holds no text"
+
+// nulHint says what text holding NUL bytes most likely is.
+const nulHint = "\n\nThe text holds NUL bytes: its records end with NUL rather than a newline, as a command run with -z or --zero writes them. Run it without that option."
 
 func (e *NoMatchError) Error() string {
 	var b strings.Builder
+	if e.empty {
+		// Every signature fails on nothing, and listing them explains
+		// nothing about the input.
+		if e.Parser == "" {
+			return "unable to identify the input format: " + noText
+		}
+		return fmt.Sprintf("no %s variant matches this input, which holds no text", e.Parser)
+	}
 	if e.Parser == "" {
 		b.WriteString("unable to identify the input format")
 		if len(e.Hints) > 0 {
@@ -193,23 +232,41 @@ func (e *NoMatchError) Error() string {
 			fmt.Fprintf(&b, "\n\nConfirm it:\n  COMMAND | jz --parser %s", names[0])
 			return b.String()
 		}
+		if e.nul {
+			b.WriteString(nulHint)
+			return b.String()
+		}
 		fmt.Fprintf(&b, "\nno signature of the %d known parsers matched this text", e.Scanned)
-		b.WriteString("\n\nName the parser explicitly:\n  COMMAND | jz --parser df\nRun `jz list` to see the supported parsers.")
+		if len(e.shapes) > 0 {
+			fmt.Fprintf(&b, "\n\nIf the text has one of the shapes read by name (%s), name it:\n  COMMAND | jz --parser %s", strings.Join(e.shapes, ", "), e.shapes[0])
+			b.WriteString("\nor state the format with --define. Run `jz list` to see the supported parsers.")
+			return b.String()
+		}
+		b.WriteString("\n\nState the format with --define, or run `jz list` to see the supported parsers.")
 		return b.String()
 	}
 	fmt.Fprintf(&b, "no %s variant matches this input", e.Parser)
 	for _, r := range e.Rejections {
 		fmt.Fprintf(&b, "\n  %s: %s", r.Entry.Def.Variant, r.Reason)
 	}
-	fmt.Fprintf(&b, "\n\nName the variant explicitly:\n  COMMAND | jz --parser %s --variant %s", e.Parser, firstVariant(e.Rejections))
-	return b.String()
-}
-
-func firstVariant(rs []Rejection) string {
-	if len(rs) == 0 {
-		return "VARIANT"
+	switch {
+	case e.nul:
+		b.WriteString(nulHint)
+		return b.String()
+	case len(e.Hints) > 0:
+		fmt.Fprintf(&b, "\n\nName the variant explicitly:\n  COMMAND | jz --parser %s --variant %s", e.Parser, e.Hints[0].Def.Variant)
+		return b.String()
+	case e.excluded != nil:
+		// The text fits, and the definition says it does not read what
+		// the command prints with that argument.
+		fmt.Fprintf(&b, "\n\nThe text fits %s, which does not read the output of %s.", e.excluded.Def.ID(), e.excludedArg)
+	default:
+		// A named variant is held to its signature like any other, so
+		// naming one of these would be refused the same way.
+		b.WriteString("\n\nNo variant's signature fits this text, and naming one does not change that.")
 	}
-	return rs[0].Entry.Def.Variant
+	fmt.Fprintf(&b, "\nRun `jz list %s` to see what each variant reads.", e.Parser)
+	return b.String()
 }
 
 // AmbiguousError is returned when several definitions match equally well.
@@ -269,6 +326,7 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		candidates = reg.Entries()
 	}
 	window := signatureWindow(ctx.Input)
+	ctx.nul = bytes.IndexByte(ctx.Input, 0) >= 0
 
 	if ctx.Variant != "" {
 		e, ok := reg.Lookup(ctx.Parser, ctx.Variant)
@@ -280,74 +338,132 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		// accept, the definition is what needs fixing.
 		v := check(e, &ctx, window)
 		if !v.ok() {
+			if len(window) == 0 {
+				v.Reason = noText
+			}
 			return nil, &MismatchError{Entry: e, Reason: v.Reason}
 		}
 		return &Result{Entry: e, Scanned: 1, Matched: v.Matched}, nil
 	}
 
-	var (
-		matched      []*registry.Entry
-		verdicts     = map[*registry.Entry]verdict{}
-		hints        []*registry.Entry
-		rejections   []Rejection
-		explicitOnly int
-	)
+	var sc scan
 	for _, e := range candidates {
 		if ctx.Parser == "" && ExplicitOnly(e.Def) {
-			explicitOnly++
-			// The text cannot vouch for such a definition. A definition
-			// that does carry a signature can still say "this looks like
-			// me", which becomes a hint naming the parser to pass; one
-			// without a signature says nothing at all.
-			fits := false
-			if !e.Def.Detect.Signature.IsZero() {
-				if check(e, &ctx, window).ok() {
-					hints = append(hints, e)
-					fits = true
-				}
-			}
-			// A definition whose signature does fit the text and is only
-			// held back by auto_detect is the near miss most worth
-			// naming, since naming its parser is the way forward.
-			rejections = append(rejections, Rejection{Entry: e, Reason: "needs --parser " + e.Def.Command, Close: fits, ExplicitOnly: true})
+			sc.heldBack(e, &ctx, window)
 			continue
 		}
-		v := check(e, &ctx, window)
-		if v.ok() {
-			matched = append(matched, e)
-			verdicts[e] = v
-		} else {
-			rejections = append(rejections, Rejection{Entry: e, Reason: v.Reason, Close: v.Close})
-		}
+		sc.consider(e, &ctx, window)
 	}
 	// A search of the whole registry rejects nearly all of it on the first
 	// expression of a signature, which explains nothing; a search scoped
 	// to one parser is short enough to report whole.
-	reported := rejections
+	reported := sc.rejections
 	if ctx.Parser == "" {
-		reported = closeOnly(rejections)
+		reported = closeOnly(sc.rejections)
 	}
 	result := func(e *registry.Entry, settled string, outranked []Rejection) *Result {
 		return &Result{
-			Entry: e, Scanned: len(candidates), Matched: verdicts[e].Matched, Rejections: reported,
-			Settled: settled, Outranked: outranked, ExplicitOnly: explicitOnly,
+			Entry: e, Scanned: len(candidates), Matched: sc.verdict(e).Matched, Rejections: reported,
+			Settled: settled, Outranked: outranked, ExplicitOnly: sc.explicitOnly,
 		}
 	}
-	switch len(matched) {
+	switch len(sc.matched) {
 	case 1:
-		return result(matched[0], "", nil), nil
+		return result(sc.matched[0].entry, "", nil), nil
 	case 0:
-		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: hints, Reported: reported, ExplicitOnly: explicitOnly}
+		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: sc.hints, Reported: reported, ExplicitOnly: sc.explicitOnly, shapes: dedupe(sc.shapes), excluded: sc.excluded, excludedArg: sc.excludedArg,
+			// Binary holds NUL bytes too, and is not what the hint is about.
+			nul:   ctx.nul && utf8.Valid(ctx.Input),
+			empty: len(window) == 0}
 		if ctx.Parser != "" {
-			err.Rejections = rejections
+			err.Rejections = sc.rejections
 		}
 		return nil, err
 	}
-	best, rule, outranked, preferred := settle(matched)
+	best, rule, outranked, preferred := settle(sc.entries())
 	if best == nil {
-		return nil, &AmbiguousError{Candidates: preferred, Reported: reported, Scanned: len(candidates), ExplicitOnly: explicitOnly, Unsettled: unsettled(preferred)}
+		return nil, &AmbiguousError{Candidates: preferred, Reported: reported, Scanned: len(candidates), ExplicitOnly: sc.explicitOnly, Unsettled: unsettled(preferred)}
 	}
 	return result(best, rule, outranked), nil
+}
+
+// scan collects what one pass over the candidates found: the definitions
+// the text fits, why each other one was left out, and what an error can
+// point to when nothing was chosen.
+type scan struct {
+	matched      []match
+	hints        []*registry.Entry
+	shapes       []string
+	excluded     *registry.Entry
+	excludedArg  string
+	rejections   []Rejection
+	explicitOnly int
+}
+
+// match is a definition the text fits, with what it met.
+type match struct {
+	entry   *registry.Entry
+	verdict verdict
+}
+
+// entries lists the definitions the text fits.
+func (sc *scan) entries() []*registry.Entry {
+	out := make([]*registry.Entry, len(sc.matched))
+	for i, m := range sc.matched {
+		out[i] = m.entry
+	}
+	return out
+}
+
+// verdict returns what a definition the text fits met.
+func (sc *scan) verdict(e *registry.Entry) verdict {
+	for _, m := range sc.matched {
+		if m.entry == e {
+			return m.verdict
+		}
+	}
+	return verdict{}
+}
+
+// heldBack records a definition a search of the whole registry does not
+// choose on its own. The text cannot vouch for such a definition. One that
+// does carry a signature can still say "this looks like me", which becomes
+// a hint naming the parser to pass; one without a signature describes a
+// shape, which is what an error can offer when nothing fits.
+func (sc *scan) heldBack(e *registry.Entry, ctx *Context, window []string) {
+	sc.explicitOnly++
+	fits := false
+	if !e.Def.Detect.Signature.IsZero() {
+		if check(e, ctx, window).ok() {
+			sc.hints = append(sc.hints, e)
+			fits = true
+		}
+	} else {
+		sc.shapes = append(sc.shapes, e.Def.Command)
+	}
+	// A definition whose signature does fit the text and is only held back
+	// by auto_detect is the near miss most worth naming, since naming its
+	// parser is the way forward.
+	sc.rejections = append(sc.rejections, Rejection{Entry: e, Reason: "needs --parser " + e.Def.Command, Close: fits, ExplicitOnly: true})
+}
+
+// consider checks one candidate against the text.
+func (sc *scan) consider(e *registry.Entry, ctx *Context, window []string) {
+	v := check(e, ctx, window)
+	if v.ok() {
+		sc.matched = append(sc.matched, match{entry: e, verdict: v})
+		return
+	}
+	sc.rejections = append(sc.rejections, Rejection{Entry: e, Reason: v.Reason, Close: v.Close})
+	// Within one parser, a variant the text fits and only the system or an
+	// argument it asks for ruled out is the one naming would reach, since a
+	// pipe carries neither.
+	if ctx.Parser != "" && v.named {
+		sc.hints = append(sc.hints, e)
+	}
+	if sc.excluded == nil && v.excludedBy != "" {
+		sc.excluded, sc.excludedArg = e, v.excludedBy
+	}
 }
 
 // settle chooses among several definitions that all fit the text, and
@@ -459,21 +575,43 @@ type verdict struct {
 	// for before being ruled out, which is what separates a near miss
 	// from an unrelated parser.
 	Close bool
+	// named reports that naming the definition would read the text: the
+	// signature is met, and what ruled it out is the system or a missing
+	// argument, neither of which a pipe carries. An argument the
+	// definition lists under args.none is a statement that it does not
+	// read that output, so it is not one of these.
+	named bool
+	// excludedBy is the argument args.none named, when that is what ruled
+	// the definition out.
+	excludedBy string
 }
 
 func (v verdict) ok() bool { return v.Reason == "" }
+
+// nulReason is why a format read line by line is out for text holding a
+// NUL byte.
+const nulReason = "the text holds a NUL byte, and this format is read line by line (was the command run with -z or --zero?)"
 
 // check reports whether one definition can describe the input, why not
 // when it cannot, and what it did meet either way.
 func check(e *registry.Entry, ctx *Context, window []string) verdict {
 	d := &e.Def.Detect
 	var v verdict
+	// A command run with -z or --zero ends its records with NUL. A format
+	// read line by line would see one line holding all of them, and a
+	// signature that matches the first record would let the rest through
+	// inside its last field.
+	if ctx.nul && e.Def.Input.Separator() == '\n' {
+		v.Reason = nulReason
+		return v
+	}
 	if !d.Signature.IsZero() {
 		v = matchSignature(&d.Signature, window)
 		if !v.ok() {
 			return v
 		}
 	}
+	v.named = true
 	// Anything past the signature has already met it, so a rejection here
 	// is always worth reading.
 	if ctx.OS != "" && len(d.OS) > 0 && !contains(d.OS, ctx.OS) {
@@ -485,9 +623,9 @@ func check(e *registry.Entry, ctx *Context, window []string) verdict {
 	// An alias may need other arguments than the command does, so the
 	// filter comes from the name the definition was reached under.
 	if args := e.Def.ArgsFor(ctx.Parser); ctx.Args != nil && !args.IsZero() {
-		reason, ok := matchArgs(args, ctx.Args)
+		reason, excluded, ok := matchArgs(args, ctx.Args)
 		if !ok {
-			v.Reason, v.Close = reason, true
+			v.Reason, v.Close, v.named, v.excludedBy = reason, true, excluded == "", excluded
 			return v
 		}
 		v.Matched = append(v.Matched, "detect.args "+describeArgs(args))
@@ -517,6 +655,35 @@ func appendCriterion(list []string, when bool, key, detail string) []string {
 		return append(list, key)
 	}
 	return append(list, key+" "+detail)
+}
+
+// Candidates returns the definitions ctx scopes to that the system and
+// the arguments in ctx admit, without looking at any text. It is the
+// answer for a command that printed nothing: which formats could it have
+// been asked for. ctx.Input is not read.
+func Candidates(reg *registry.Registry, ctx Context) []*registry.Entry {
+	scope := reg.Variants(ctx.Parser)
+	if ctx.Variant != "" {
+		e, ok := reg.Lookup(ctx.Parser, ctx.Variant)
+		if !ok {
+			return nil
+		}
+		scope = []*registry.Entry{e}
+	}
+	var out []*registry.Entry
+	for _, e := range scope {
+		d := &e.Def.Detect
+		if ctx.OS != "" && len(d.OS) > 0 && !contains(d.OS, ctx.OS) {
+			continue
+		}
+		if args := e.Def.ArgsFor(ctx.Parser); ctx.Args != nil && !args.IsZero() {
+			if _, _, ok := matchArgs(args, ctx.Args); !ok {
+				continue
+			}
+		}
+		out = append(out, e)
+	}
+	return out
 }
 
 // Window returns how many leading lines a caller has to hold before a
@@ -568,7 +735,23 @@ func signatureWindow(input []byte) []string {
 		} else {
 			l, input = input[:i], input[i+1:]
 		}
-		lines = append(lines, string(bytes.TrimSuffix(l, []byte{'\r'})))
+		line := string(bytes.TrimSuffix(l, []byte{'\r'}))
+		// Blank lines before the text are not part of it: the parser
+		// skips them, and a signature anchored at \A would otherwise meet
+		// the blank line where the text's first line is.
+		if len(lines) == 0 && strings.TrimSpace(line) == "" {
+			continue
+		}
+		lines = append(lines, line)
+	}
+	// Blank lines after the last of the text are not part of it either,
+	// and a signature that says every line has one shape would otherwise
+	// refuse `cat /proc/meminfo; echo`. Only where the input ends, since
+	// a blank line with text after it is inside.
+	if len(input) == 0 {
+		for len(lines) > 0 && strings.TrimSpace(lines[len(lines)-1]) == "" {
+			lines = lines[:len(lines)-1]
+		}
 	}
 	return lines
 }
@@ -632,8 +815,9 @@ func short(re *regexp.Regexp) string {
 }
 
 // matchArgs applies any/all/none. Bundled short flags such as -hT count
-// as containing -h and -T.
-func matchArgs(a *definition.ArgsMatch, args []string) (string, bool) {
+// as containing -h and -T. excluded is the argument listed under none that
+// failed it, if that is what did.
+func matchArgs(a *definition.ArgsMatch, args []string) (reason, excluded string, ok bool) {
 	set := map[string]bool{}
 	for _, arg := range args {
 		set[arg] = true
@@ -652,20 +836,20 @@ func matchArgs(a *definition.ArgsMatch, args []string) (string, bool) {
 			}
 		}
 		if !hit {
-			return fmt.Sprintf("needs one of the arguments [%s]", strings.Join(a.Any, ", ")), false
+			return fmt.Sprintf("needs one of the arguments [%s]", strings.Join(a.Any, ", ")), "", false
 		}
 	}
 	for _, want := range a.All {
 		if !set[want] {
-			return "needs the argument " + want, false
+			return "needs the argument " + want, "", false
 		}
 	}
 	for _, bad := range a.None {
 		if set[bad] {
-			return "excluded by the argument " + bad, false
+			return "excluded by the argument " + bad, bad, false
 		}
 	}
-	return "", true
+	return "", "", true
 }
 
 // ExplicitOnly reports whether a definition may only be used once the

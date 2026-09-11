@@ -1,0 +1,4 @@
+description: -d adds the protocol that installed each rule after the table it looks up.
+source: "`ip -d rule` on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C"
+os: linux
+args: ["-d", "rule"]

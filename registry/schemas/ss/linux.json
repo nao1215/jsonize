@@ -5,7 +5,7 @@
   "description": "ss socket table (-t/-u/-l/-n and combinations)",
   "x-jsonize": {
     "definition": "ss/linux",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -46,8 +46,7 @@
       "send_q",
       "local_address",
       "local_port",
-      "peer_address",
-      "peer_port"
+      "peer_address"
     ]
   }
 }

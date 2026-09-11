@@ -1,0 +1,39 @@
+# `df -P -T`: the POSIX format of df/portable with the filesystem type
+# inserted as the second column, which GNU coreutils prints.
+format: 1
+command: df
+variant: portable-type
+aliases:
+  - name: gdf
+description: df -P -T, the POSIX format with the filesystem type (GNU coreutils)
+metadata:
+  tags: [linux, filesystem, coreutils]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html
+detect:
+  os: [linux]
+  args:
+    any: ["-P", "--portability"]
+  signature:
+    all:
+      - '\AFilesystem\s+Type\s+1024-blocks\s+Used\s+Available\s+Capacity\s+Mounted on\s*$'
+# A file system's name may hold spaces, so a line is read by what each
+# column holds (see df/gnu); the type is one word.
+input:
+  ignore:
+    - '^df: '
+    - '\AFilesystem\s+Type\s+1024-blocks\s+Used\s+Available\s+Capacity\s+Mounted on\s*$'
+parse:
+  type: regex
+  pattern: '^(?P<filesystem>\S.*?)\s+(?P<type>\S+)\s+(?P<1024_blocks>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<capacity_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
+# --total closes the table with a row named total whose mount point (and
+# type) is a dash; it is kept, as printed, since it is what was asked for.
+fields:
+  filesystem: {required: true}
+  type: {required: true}
+  1024_blocks: {type: int, null_if: ["-"]}
+  used: {type: int, null_if: ["-"]}
+  available: {type: int, null_if: ["-"]}
+  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  mounted_on: {required: true}

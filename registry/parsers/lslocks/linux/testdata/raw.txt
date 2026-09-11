@@ -1,0 +1,7 @@
+COMMAND PID TYPE SIZE MODE M START END PATH
+plasmashell 10541 POSIX 204K READ 0 1073741826 1073742335 /home/user01/.local/share/kactivitymanagerd/resources/database
+plasmashell 10541 POSIX 32K READ 0 128 128 /home/user01/.local/share/kactivitymanagerd/resources/database-shm
+containerd 5770 FLOCK  WRITE 0 0 0 
+containerd 2369 FLOCK  WRITE 0 0 0 /...
+codex 22574 POSIX 28K READ 0 1073741826 1073742335 /home/user01/.codex/queue_1.sqlite
+codex 22574 POSIX 32K READ 0 128 128 /home/user01/.codex/queue_1.sqlite-shm

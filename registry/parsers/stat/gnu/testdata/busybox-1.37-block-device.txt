@@ -1,0 +1,7 @@
+  File: /dev/loop0
+  Size: 0         	Blocks: 0          IO Block: 512    block special file
+Device: 7h/7d	Inode: 128         Links: 1     Device type: 7,0
+Access: (0660/brw-rw----)  Uid: (    0/    root)   Gid: (    6/    disk)
+Access: 2026-09-10 22:57:47.256501133 +0900
+Modify: 2026-09-10 22:57:47.256501133 +0900
+Change: 2026-09-10 22:57:47.256501133 +0900

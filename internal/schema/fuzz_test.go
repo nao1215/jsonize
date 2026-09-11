@@ -13,7 +13,7 @@ import (
 // for the text they hold; this checks it for text nobody thought of.
 func FuzzOutputFitsSchema(f *testing.F) {
 	defs := []string{
-		"parse: {type: table, split: aligned}\nfields: {size: {type: size}, n: {type: int, null_if: ['-']}}\n",
+		"parse: {type: table, split: aligned}\nfields: {size: {type: int}, n: {type: int, null_if: ['-']}}\n",
 		"parse: {type: table, min_fields: 1, header: {none: true, columns: [a, b, c]}}\nfields: {b: {type: int}, c: {when_missing: omit}}\n",
 		"parse: {type: regex, patterns: ['^(?P<k>up|down) (?P<n>\\d+)(?: (?P<x>\\S+))?$', '^(?P<k>gone)$']}\nfields: {n: {type: int}, x: {when_missing: omit}}\n",
 		"parse: {type: kv, as: map}\nfields: {n: {type: float}}\n",

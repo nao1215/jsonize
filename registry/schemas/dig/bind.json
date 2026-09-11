@@ -5,7 +5,7 @@
   "description": "dig reply in the default long form",
   "x-jsonize": {
     "definition": "dig/bind",
-    "version": 1
+    "version": 2
   },
   "type": "object",
   "properties": {
@@ -242,6 +242,12 @@
         "server": {
           "type": "string"
         },
+        "server_name": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
         "when": {
           "type": "string"
         },
@@ -252,6 +258,7 @@
       "required": [
         "query_time_ms",
         "server",
+        "server_name",
         "when",
         "message_size"
       ]

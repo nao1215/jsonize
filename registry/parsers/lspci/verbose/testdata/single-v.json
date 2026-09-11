@@ -1,0 +1,210 @@
+[
+  {
+    "slot": "c6:00.0",
+    "class": "Display controller",
+    "device": "Advanced Micro Devices, Inc. [AMD/ATI] Example Root [Radeon Graphics / Radeon Graphics]",
+    "revision": "c1",
+    "children": [
+      {
+        "key": "Subsystem",
+        "value": "Device 1234:5678",
+        "children": []
+      },
+      {
+        "key": "Flags",
+        "value": "bus master, fast devsel, latency 0, IRQ 177, IOMMU group 22",
+        "children": []
+      },
+      {
+        "text": "Memory at 4000000000 (64-bit, prefetchable) [size=64G]",
+        "children": []
+      },
+      {
+        "text": "Memory at 90000000 (64-bit, prefetchable) [size=256M]",
+        "children": []
+      },
+      {
+        "text": "I/O ports at e000 [size=256]",
+        "children": []
+      },
+      {
+        "text": "Memory at a0200000 (32-bit, non-prefetchable) [size=1M]",
+        "children": []
+      },
+      {
+        "key": "Capabilities",
+        "value": "<access denied>",
+        "children": []
+      },
+      {
+        "key": "Kernel driver in use",
+        "value": "amdgpu",
+        "children": []
+      },
+      {
+        "key": "Kernel modules",
+        "value": "amdgpu",
+        "children": []
+      }
+    ]
+  },
+  {
+    "slot": "c6:00.1",
+    "class": "Audio device",
+    "device": "Advanced Micro Devices, Inc. [AMD/ATI] Radeon High Definition Audio Controller",
+    "prog_if": "00",
+    "prog_if_name": "HDA compatible",
+    "children": [
+      {
+        "key": "Subsystem",
+        "value": "Device 1234:5678",
+        "children": []
+      },
+      {
+        "key": "Flags",
+        "value": "bus master, fast devsel, latency 0, IRQ 141, IOMMU group 23",
+        "children": []
+      },
+      {
+        "text": "Memory at a0308000 (32-bit, non-prefetchable) [size=16K]",
+        "children": []
+      },
+      {
+        "key": "Capabilities",
+        "value": "<access denied>",
+        "children": []
+      },
+      {
+        "key": "Kernel driver in use",
+        "value": "snd_hda_intel",
+        "children": []
+      },
+      {
+        "key": "Kernel modules",
+        "value": "snd_hda_intel",
+        "children": []
+      }
+    ]
+  },
+  {
+    "slot": "c6:00.2",
+    "class": "Encryption controller",
+    "device": "Advanced Micro Devices, Inc. [AMD] Example Root CCP/ASP",
+    "children": [
+      {
+        "key": "Subsystem",
+        "value": "Advanced Micro Devices, Inc. [AMD] Example Root CCP/ASP",
+        "children": []
+      },
+      {
+        "key": "Flags",
+        "value": "bus master, fast devsel, latency 0, IRQ 49, IOMMU group 24",
+        "children": []
+      },
+      {
+        "text": "Memory at a0100000 (32-bit, non-prefetchable) [size=1M]",
+        "children": []
+      },
+      {
+        "text": "Memory at a030c000 (32-bit, non-prefetchable) [size=8K]",
+        "children": []
+      },
+      {
+        "key": "Capabilities",
+        "value": "<access denied>",
+        "children": []
+      },
+      {
+        "key": "Kernel driver in use",
+        "value": "ccp",
+        "children": []
+      },
+      {
+        "key": "Kernel modules",
+        "value": "ccp",
+        "children": []
+      }
+    ]
+  },
+  {
+    "slot": "c6:00.4",
+    "class": "USB controller",
+    "device": "Advanced Micro Devices, Inc. [AMD] Example Root USB 3.1 xHCI",
+    "prog_if": "30",
+    "prog_if_name": "XHCI",
+    "children": [
+      {
+        "key": "Subsystem",
+        "value": "Advanced Micro Devices, Inc. [AMD] Device 15b9",
+        "children": []
+      },
+      {
+        "key": "Flags",
+        "value": "bus master, fast devsel, latency 0, IRQ 25, IOMMU group 25",
+        "children": []
+      },
+      {
+        "text": "Memory at a0000000 (64-bit, non-prefetchable) [size=1M]",
+        "children": []
+      },
+      {
+        "key": "Capabilities",
+        "value": "<access denied>",
+        "children": []
+      },
+      {
+        "key": "Kernel driver in use",
+        "value": "xhci_hcd",
+        "children": []
+      },
+      {
+        "key": "Kernel modules",
+        "value": "xhci_pci",
+        "children": []
+      }
+    ]
+  },
+  {
+    "slot": "c6:00.6",
+    "class": "Audio device",
+    "device": "Advanced Micro Devices, Inc. [AMD] Ryzen HD Audio Controller",
+    "prog_if": "00",
+    "prog_if_name": "HDA compatible",
+    "children": [
+      {
+        "key": "DeviceName",
+        "value": "OnBoard Audio",
+        "children": []
+      },
+      {
+        "key": "Subsystem",
+        "value": "Device 1234:5678",
+        "children": []
+      },
+      {
+        "key": "Flags",
+        "value": "bus master, fast devsel, latency 0, IRQ 142, IOMMU group 26",
+        "children": []
+      },
+      {
+        "text": "Memory at a0300000 (32-bit, non-prefetchable) [size=32K]",
+        "children": []
+      },
+      {
+        "key": "Capabilities",
+        "value": "<access denied>",
+        "children": []
+      },
+      {
+        "key": "Kernel driver in use",
+        "value": "snd_hda_intel",
+        "children": []
+      },
+      {
+        "key": "Kernel modules",
+        "value": "snd_hda_intel",
+        "children": []
+      }
+    ]
+  }
+]

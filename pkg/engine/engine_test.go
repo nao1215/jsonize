@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"bytes"
 	"errors"
 	"strings"
 	"testing"
@@ -110,6 +111,39 @@ parse:
 	}
 }
 
+// A table lines its columns up in the columns of a terminal, where a
+// kana or a CJK character takes two and a combining accent none. Counting
+// characters instead put the rest of such a row into the first cell.
+func TestParseTableAlignedByDisplayWidth(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned}\n")
+	input := "WHO                  UID  USER\n" +
+		"ModemManager         0    root\n" +
+		"スクリーンロッカー   1000 user01\n" +
+		"é́́́́                    1000 user01\n" +
+		"ｆｕｌｌ             7    x\n"
+	got, err := Parse(def, []byte(input), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `[{"who":"ModemManager","uid":"0","user":"root"},` +
+		`{"who":"スクリーンロッカー","uid":"1000","user":"user01"},` +
+		`{"who":"e` + strings.Repeat("́", 5) + `","uid":"1000","user":"user01"},` +
+		`{"who":"ｆｕｌｌ","uid":"7","user":"x"}]`
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	// A header in a wide script is measured the same way.
+	named := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned, header: {columns: [name, value, x]}}\n")
+	got, err = Parse(named, []byte("名前名前名前 値 X\na            1  z\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if mustJSON(t, got) != `[{"name":"a","value":"1","x":"z"}]` {
+		t.Error(mustJSON(t, got))
+	}
+}
+
 func TestParseTableAligned(t *testing.T) {
 	t.Parallel()
 	def := load(t, `
@@ -122,7 +156,6 @@ parse:
 fields:
   rm: {type: bool}
   ro: {type: bool}
-  size: {type: size}
 `)
 	input := "NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT\n" +
 		"sda               8:0    0   20G  0 disk \n" +
@@ -133,10 +166,10 @@ fields:
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := `[{"name":"sda","maj_min":"8:0","rm":false,"size":21474836480,"ro":false,"type":"disk","mountpoint":null},` +
-		`{"name":"├─sda1","maj_min":"8:1","rm":false,"size":1073741824,"ro":false,"type":"part","mountpoint":"/boot"},` +
-		`{"name":"├─centos-root","maj_min":"253:0","rm":false,"size":18253611008,"ro":false,"type":"lvm","mountpoint":"/"},` +
-		`{"name":"loop9","maj_min":"7:9","rm":false,"size":129394278,"ro":true,"type":"loop","mountpoint":"/snap/x y"}]`
+	want := `[{"name":"sda","maj_min":"8:0","rm":false,"size":"20G","ro":false,"type":"disk","mountpoint":null},` +
+		`{"name":"├─sda1","maj_min":"8:1","rm":false,"size":"1G","ro":false,"type":"part","mountpoint":"/boot"},` +
+		`{"name":"├─centos-root","maj_min":"253:0","rm":false,"size":"17G","ro":false,"type":"lvm","mountpoint":"/"},` +
+		`{"name":"loop9","maj_min":"7:9","rm":false,"size":"123.4M","ro":true,"type":"loop","mountpoint":"/snap/x y"}]`
 	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
@@ -252,7 +285,11 @@ func TestParseTableEmptyAndHeaderErrors(t *testing.T) {
 		t.Errorf("header only: %v %v", got, err)
 	}
 	derived := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table}\ninput: {skip_blank: false}\n")
-	_, err = Parse(derived, []byte("   \nx\n"), Options{})
+	// Blank lines before the text are skipped whatever skip_blank says, so
+	// the blank header is the one that follows the heading select.after
+	// names.
+	afterHeading := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table}\ninput: {skip_blank: false, select: {after: '^start$'}}\n")
+	_, err = Parse(afterHeading, []byte("start\n   \nx\n"), Options{})
 	if err == nil || !strings.Contains(err.Error(), "header line is empty") {
 		t.Errorf("empty header: %v", err)
 	}
@@ -758,25 +795,25 @@ fields:
   i: {type: int}
   f: {type: float}
   b: {type: bool, true_values: [up], false_values: [down]}
-  s: {type: size, unit: decimal}
+  s: {type: duration, layout: mm:ss}
   r: {required: true}
   n: {null_if: ["-"], required: true}
   o: {when_missing: omit}
 `)
-	got, err := Parse(def, []byte("1 2.5 up 1K x y\n"), Options{})
+	got, err := Parse(def, []byte("1 2.5 up 4:50 x y\n"), Options{})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if mustJSON(t, got) != `[{"i":1,"f":2.5,"b":true,"s":1000,"r":"x","n":"y"}]` {
+	if mustJSON(t, got) != `[{"i":1,"f":2.5,"b":true,"s":290,"r":"x","n":"y"}]` {
 		t.Error(mustJSON(t, got))
 	}
 	cases := map[string]string{
-		"x 2.5 up 1K x y":  `field "i": cannot convert "x" to int`,
-		"1 x up 1K x y":    `field "f"`,
-		"1 2.5 maybe 1K x": `field "b"`,
-		"1 2.5 up 1Q x y":  `field "s"`,
-		"1 2.5 up 1K":      `field "r": required value is missing`,
-		"1 2.5 up 1K x -":  `field "n": required value is null`,
+		"x 2.5 up 4:50 x y":  `field "i": cannot convert "x" to int`,
+		"1 x up 4:50 x y":    `field "f"`,
+		"1 2.5 maybe 4:50 x": `field "b"`,
+		"1 2.5 up 4:5x x y":  `field "s"`,
+		"1 2.5 up 4:50":      `field "r": required value is missing`,
+		"1 2.5 up 4:50 x -":  `field "n": required value is null`,
 	}
 	for in, want := range cases {
 		_, err := Parse(def, []byte(in+"\n"), Options{})
@@ -817,6 +854,22 @@ func TestLimitsAndEncoding(t *testing.T) {
 	got, err := Parse(def, []byte("\xEF\xBB\xBFa\r\nb\r\n"), Options{})
 	if err != nil || mustJSON(t, got) != `[{"a":"a"},{"a":"b"}]` {
 		t.Errorf("BOM/CRLF: %v %v", mustJSON(t, got), err)
+	}
+	// A command run with -z or --zero ends its records with NUL instead
+	// of a newline. Read line by line, that is one line holding every
+	// record, and the last field of the first would take the rest.
+	zero := []byte("a.txt\x00b.txt\x00")
+	if _, err := Parse(def, zero, Options{}); err == nil || !strings.Contains(err.Error(), "NUL") {
+		t.Errorf("NUL in a line: %v", err)
+	}
+	err = Stream(def, bytes.NewReader(zero), Options{}, func(any) error { return nil }, nil)
+	if err == nil || !strings.Contains(err.Error(), "NUL") {
+		t.Errorf("NUL in a streamed line: %v", err)
+	}
+	// A format whose records end with NUL reads the same text.
+	nul := load(t, "format: 1\ncommand: t\nvariant: v\ninput: {record_separator: nul}\nparse: {type: regex, pattern: '(?P<a>.*)'}\n")
+	if got, err := Parse(nul, zero, Options{}); err != nil || mustJSON(t, got) != `[{"a":"a.txt"},{"a":"b.txt"}]` {
+		t.Errorf("NUL-separated: %v %v", mustJSON(t, got), err)
 	}
 }
 
@@ -872,18 +925,167 @@ func TestAlignedCells(t *testing.T) {
 		{"x    12345  z", []any{"x", "12345", "z"}},
 		{"x", []any{"x", nil, nil}},
 		{"", []any{nil, nil, nil}},
-		{"abcdefghijklmn", []any{"abcdefghijklmn", nil, nil}},
+		// A value wider than its column pushes the rest of the row right.
+		{"abcdefgh y   z", []any{"abcdefgh", "y", "z"}},
 	}
 	for _, tt := range tests {
-		if diff := cmp.Diff(tt.want, alignedCells(tt.row, cols)); diff != "" {
-			t.Errorf("alignedCells(%q): %s", tt.row, diff)
+		got, bad := alignedCells(tt.row, cols)
+		if diff := cmp.Diff(tt.want, got); diff != "" || bad != nil {
+			t.Errorf("alignedCells(%q): refused %+v %s", tt.row, bad, diff)
 		}
+	}
+	for _, tt := range []struct {
+		row    string
+		col    int
+		gutter bool
+	}{
+		// A value that runs past the start of the next column and leaves
+		// it empty says nothing about whether that column was empty or its
+		// header word belongs to this one ("CONTAINER ID").
+		{"abcdefghijklmn", 1, false},
+		{"abcdefgh     z", 1, false},
+		{"x    abcdefghij", 2, false},
+		// A cut inside a value with a space in it leaves the gap between
+		// two columns inside a cell: "4 27s" is right-aligned under b.
+		{"x  4 27s    z", 0, true},
+		{"x\ty   z", 0, true},
+	} {
+		if _, bad := alignedCells(tt.row, cols); bad == nil || bad.col != tt.col || bad.gutter != tt.gutter {
+			t.Errorf("alignedCells(%q) = %+v, want column %d refused (gutter %v)", tt.row, bad, tt.col, tt.gutter)
+		}
+	}
+	// The last column runs to the end of the line and may hold anything.
+	if got, bad := alignedCells("x     y     z  z", cols); bad != nil || got[2] != "z  z" {
+		t.Errorf("last column: %v %+v", got, bad)
+	}
+}
+
+// Two outputs of one command in a row are two tables, the second opening
+// with the same header. That line is a header, not a row: reading it as
+// one wrote {"image":"IMAGE","id":"ID"} at exit 0. It is read as the
+// header again, so an aligned table cut to other widths the second time
+// is cut where its own header says.
+func TestARepeatedHeaderStartsAnotherTable(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		name, def, in, want string
+	}{
+		{"whitespace", "parse: {type: table}\n",
+			"A B\n1 2\nA B\n3 4\n",
+			`[{"a":"1","b":"2"},{"a":"3","b":"4"}]`},
+		{"aligned, other widths", "parse: {type: table, split: aligned}\n",
+			"NAME  SIZE\nsda   20G\nNAME        SIZE\nnvme0n1     1T\n",
+			`[{"name":"sda","size":"20G"},{"name":"nvme0n1","size":"1T"}]`},
+		{"delimiter", "parse: {type: table, split: delimiter, delimiter: ':'}\n",
+			"a:b\n1:2\na:b\n3:4\n",
+			`[{"a":"1","b":"2"},{"a":"3","b":"4"}]`},
+		{"csv", "parse: {type: csv}\n",
+			"name,count\nx,1\nname,count\ny,2\n",
+			`[{"name":"x","count":"1"},{"name":"y","count":"2"}]`},
+		{"box", "parse: {type: table, split: box}\n",
+			"+----+\n| id |\n+----+\n| 1  |\n+----+\n+----+\n| id |\n+----+\n| 2  |\n+----+\n",
+			`[{"id":"1"},{"id":"2"}]`},
+		// With no header line there is nothing to repeat, and a row that
+		// happens to read like the column names is a row.
+		{"no header", "parse: {type: table, header: {none: true, columns: [a, b]}}\n",
+			"a b\n1 2\n",
+			`[{"a":"a","b":"b"},{"a":"1","b":"2"}]`},
+	}
+	for _, tc := range cases {
+		def := load(t, "format: 1\ncommand: t\nvariant: v\n"+tc.def)
+		got, err := Parse(def, []byte(tc.in), Options{})
+		if err != nil {
+			t.Errorf("%s: %v", tc.name, err)
+			continue
+		}
+		var buf bytes.Buffer
+		if err := jsonutil.Encode(&buf, got, false); err != nil {
+			t.Fatal(err)
+		}
+		if strings.TrimSpace(buf.String()) != tc.want {
+			t.Errorf("%s: got %s, want %s", tc.name, buf.String(), tc.want)
+		}
+		var streamed []any
+		if err := Stream(def, strings.NewReader(tc.in), Options{}, func(v any) error {
+			streamed = append(streamed, v)
+			return nil
+		}, func(pe *ParseError) error { return pe }); err != nil {
+			t.Errorf("%s: stream: %v", tc.name, err)
+			continue
+		}
+		buf.Reset()
+		if err := jsonutil.Encode(&buf, streamed, false); err != nil {
+			t.Fatal(err)
+		}
+		if strings.TrimSpace(buf.String()) != tc.want {
+			t.Errorf("%s: stream got %s, want %s", tc.name, buf.String(), tc.want)
+		}
+	}
+}
+
+// A drawn table whose only rules are its frame has no line that says
+// where the header ends: read as a header over two lines, its rows were
+// gone and the answer was [] at exit 0. psql with a border and no
+// headings prints this.
+func TestABoxWithNoRuleUnderItsHeaderIsRefused(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: box}\n")
+	for _, in := range []string{
+		"+---+-------+\n| 1 | alpha |\n| 2 | beta  |\n+---+-------+\n",
+		"+---+-------+\n+---+-------+\n| 1 | alpha |\n| 2 | beta  |\n+---+-------+\n",
+	} {
+		if v, err := Parse(def, []byte(in), Options{}); err == nil || !strings.Contains(err.Error(), "no rule under its header") {
+			t.Errorf("%q: %v, %v", in, v, err)
+		}
+		err := Stream(def, strings.NewReader(in), Options{}, func(any) error { return nil }, func(pe *ParseError) error { return pe })
+		if err == nil || !strings.Contains(err.Error(), "no rule under its header") {
+			t.Errorf("stream %q: %v", in, err)
+		}
+	}
+	// One line under the frame is a header over no rows.
+	if v, err := Parse(def, []byte("+----+\n| id |\n+----+\n"), Options{}); err != nil {
+		t.Errorf("a header alone: %v, %v", v, err)
+	}
+}
+
+// systemctl list-timers printed through the shape definition: LEFT is
+// right-aligned and "4min 27s" starts before its header, at a space, so
+// the cut left "... JST  4min" under NEXT at exit 0.
+func TestAlignedRefusesACellThatHoldsAColumnGap(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned}\n")
+	in := "NEXT                             LEFT LAST\n" +
+		"Fri 2026-09-11 06:55:28 JST  4min 27s Fri 2026-09-11 06:50:28 JST\n"
+	_, err := Parse(def, []byte(in), Options{})
+	if err == nil || !strings.Contains(err.Error(), `line 2: field "next": "Fri 2026-09-11 06:55:28 JST  4min" holds the gap`) {
+		t.Fatalf("err = %v", err)
+	}
+}
+
+// docker ps printed through the shape definition: "CONTAINER ID" is one
+// column under two header words, and the id runs past where the second
+// one starts. That used to be a row with "id": null at exit 0.
+func TestAlignedRefusesAValueThatRunsIntoAnEmptyColumn(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned}\n")
+	in := "CONTAINER ID   IMAGE    NAMES\n43d84ed8db55   busybox  web\n"
+	_, err := Parse(def, []byte(in), Options{})
+	if err == nil || !strings.Contains(err.Error(), `line 2: field "id": `) {
+		t.Fatalf("err = %v", err)
+	}
+	var got []any
+	err = Stream(def, strings.NewReader(in), Options{}, func(v any) error {
+		got = append(got, v)
+		return nil
+	}, func(pe *ParseError) error { return pe })
+	if err == nil || len(got) != 0 {
+		t.Errorf("stream: err = %v, records = %v", err, got)
 	}
 }
 
 func FuzzParse(f *testing.F) {
 	defs := []string{dfDef,
-		"format: 1\ncommand: t\nvariant: a\nparse: {type: table, split: aligned}\nfields: {size: {type: size}}\n",
+		"format: 1\ncommand: t\nvariant: a\nparse: {type: table, split: aligned}\nfields: {size: {type: int}}\n",
 		"format: 1\ncommand: t\nvariant: k\nparse: {type: kv, as: map}\nfields: {n: {type: int}}\n",
 		"format: 1\ncommand: t\nvariant: r\nparse: {type: regex, each: input, pattern: '(?P<a>\\d+)(?P<b>x)?'}\nfields: {a: {type: int}, b: {when_missing: omit}}\n",
 	}

@@ -102,11 +102,16 @@ parse:
           columns: [name, ttl, class, type, data]
       fields:
         ttl: {type: int}
+    # The SERVER line gives the address that answered, then in parentheses
+    # the name the query was sent to (a host name given to @, otherwise
+    # the address again), then the transport. An older dig prints no
+    # transport.
     - name: statistics
       parse:
         type: regex
         each: input
-        pattern: ';; Query time: (?P<query_time_ms>\d+) msec\n;; SERVER: (?P<server>[^\s(]+)[^\n]*\n;; WHEN: (?P<when>[^\n]+)\n;; MSG SIZE  rcvd: (?P<message_size>\d+)'
+        pattern: ';; Query time: (?P<query_time_ms>\d+) msec\n;; SERVER: (?P<server>[^\s(]+)\((?P<server_name>[^)]*)\)(?: \((?P<protocol>[A-Z]+)\))?[ \t]*\n;; WHEN: (?P<when>[^\n]+)\n;; MSG SIZE  rcvd: (?P<message_size>\d+)'
       fields:
         query_time_ms: {type: int}
+        protocol: {when_missing: omit}
         message_size: {type: int}

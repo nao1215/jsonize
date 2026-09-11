@@ -1,5 +1,8 @@
 # vmstat prints a group header, a column header and then the samples.
-# The counters are exact numbers, so they are read as such.
+# The counters are exact numbers, so they are read as such. The memory
+# figures are in the unit vmstat was asked for: KiB by default, and -S
+# changes it without changing the header, so the output does not say
+# which and neither does this.
 format: 1
 command: vmstat
 variant: linux
@@ -13,20 +16,22 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\Aprocs[ \t]+-+memory-+'
+      # -w widens the columns and draws each group name with dashes on
+      # both sides ("--procs--"); the columns are the same.
+      - '\A(?:procs|-+procs-+)[ \t]+-+memory-+'
       # `vmstat -a` prints the same group header and the same first four
       # columns, and only then diverges: it reports inactive and active
       # memory where the default report has buffers and cache.
       - '^[ \t]*r[ \t]+b[ \t]+swpd[ \t]+free[ \t]+buff[ \t]+cache[ \t]'
 input:
   ignore:
-    - '\Aprocs\s+-'
+    - '\A(?:procs|-+procs-+)\s+-'
     - '^\s*r\s+b\s+swpd\s'
 parse:
   type: table
   header:
     none: true
-    columns: [r, b, swpd, free, buff, cache, si, so, bi, bo, in, cs, us, sy, id, wa, st, gu]
+    columns: [r, b, swpd, free, buff, cache, si, so, bi, bo, in, cs, us, sy, id, wa, st, gu, timestamp]
   min_fields: 17
 fields:
   r: {type: int, required: true}
@@ -47,3 +52,6 @@ fields:
   wa: {type: int}
   st: {type: int}
   gu: {type: int, when_missing: omit}
+  # -t adds the date and time of each sample, in the zone the header of
+  # the column names by its abbreviation only, so it stays as printed.
+  timestamp: {when_missing: omit}

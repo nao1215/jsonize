@@ -44,17 +44,19 @@ metadata:
     - https://man7.org/linux/man-pages/man1/gpg.1.html
 detect:
   signature:
-    all:
-      # An fpr record is eight empty fields followed by the fingerprint.
-      # No other listing in the registry has that shape.
-      - '^fpr:{9}[0-9A-F]{16,64}:'
     any:
-      # A primary key record: validity, key length, algorithm number,
-      # the 16 hex digit key id and the creation time. The sec form is
-      # what --list-secret-keys prints; the keyring this was written
-      # against holds no secret key, so only the pub form has a fixture.
-      - '^pub:[^:\n]*:\d+:\d+:[0-9A-F]{16}:\d+:'
-      - '^sec:[^:\n]*:\d+:\d+:[0-9A-F]{16}:\d+:'
+      # A primary key record (validity, key length, algorithm number,
+      # the 16 hex digit key id and the creation time) and the fpr record
+      # that follows it, eight empty fields and the fingerprint. No other
+      # listing in the registry has that shape. The sec form is what
+      # --list-secret-keys prints; the keyring this was written against
+      # holds no secret key, so only the pub form has a fixture.
+      - '^pub:[^:\n]*:\d+:\d+:[0-9A-F]{16}:\d+:[^\n]*\nfpr:{9}[0-9A-F]{16,64}:'
+      - '^sec:[^:\n]*:\d+:\d+:[0-9A-F]{16}:\d+:[^\n]*\nfpr:{9}[0-9A-F]{16,64}:'
+      # A keyring with no key in it: the listing is the trust database
+      # record and nothing else (flags, trust model, creation, expiry,
+      # marginals needed, completes needed, maximum depth).
+      - '\Atru:[^:\n]*:\d+:\d+:\d+:\d+:\d+:\d+\z'
 parse:
   type: regex
   # Every record type is three lower-case alphanumerics (pub, sub, uid,

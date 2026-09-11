@@ -22,6 +22,29 @@ import (
 type optionSet struct {
 	fs   *flag.FlagSet
 	docs []optionDoc
+	// valued names the options that take a value, under both their
+	// names. An empty value for one of them names nothing, and taking it
+	// for the option not being given would answer a question nobody
+	// asked.
+	valued map[string]bool
+	// given counts how often each option that takes one value was set,
+	// under its long name, whichever name it was given by. A second value
+	// is a second answer, and letting the last one win drops the first
+	// without a word.
+	given map[string]*int
+}
+
+// once is an option that takes one value. It counts how often it was set
+// so that parse can refuse a second one.
+type once struct {
+	flag.Value
+	n *int
+}
+
+// Set counts the value and hands it to the option.
+func (o once) Set(s string) error {
+	*o.n++
+	return o.Value.Set(s)
 }
 
 type optionDoc struct {
@@ -37,7 +60,29 @@ type optionDoc struct {
 func newOptions(name string) *optionSet {
 	fs := flag.NewFlagSet(name, flag.ContinueOnError)
 	fs.SetOutput(io.Discard)
-	return &optionSet{fs: fs}
+	return &optionSet{fs: fs, valued: map[string]bool{}, given: map[string]*int{}}
+}
+
+// single registers v under long and short as an option that takes one
+// value.
+func (o *optionSet) single(v flag.Value, long, short, help string) {
+	n := new(int)
+	o.given[long] = n
+	o.fs.Var(once{Value: v, n: n}, long, help)
+	if short != "" {
+		o.fs.Var(once{Value: v, n: n}, short, help)
+	}
+}
+
+// repeated returns the first option that takes one value and was given
+// more than one, by its long name.
+func (o *optionSet) repeated() string {
+	for _, d := range o.docs {
+		if n, ok := o.given[d.long]; ok && *n > 1 {
+			return "--" + d.long
+		}
+	}
+	return ""
 }
 
 func (o *optionSet) doc(short, long, arg, help string) {
@@ -47,11 +92,42 @@ func (o *optionSet) doc(short, long, arg, help string) {
 // stringOpt registers a string option under its long name and, when given,
 // its short one.
 func (o *optionSet) stringOpt(p *string, long, short, arg, value, help string) {
-	o.fs.StringVar(p, long, value, help)
+	*p = value
+	o.single((*stringValue)(p), long, short, help)
+	o.valued[long] = true
 	if short != "" {
-		o.fs.StringVar(p, short, value, help)
+		o.valued[short] = true
 	}
 	o.doc(short, long, arg, help)
+}
+
+// stringValue is a string option's value, the way flag.StringVar keeps
+// one.
+type stringValue string
+
+// Set stores the value as given.
+func (s *stringValue) Set(v string) error { *s = stringValue(v); return nil }
+
+func (s *stringValue) String() string {
+	if s == nil {
+		return ""
+	}
+	return string(*s)
+}
+
+// emptyValue returns the first option given an empty value, as it was
+// written on the command line.
+func (o *optionSet) emptyValue() string {
+	var name string
+	o.fs.Visit(func(f *flag.Flag) {
+		if name == "" && o.valued[f.Name] && f.Value.String() == "" {
+			name = "--" + f.Name
+			if len(f.Name) == 1 {
+				name = "-" + f.Name
+			}
+		}
+	})
+	return name
 }
 
 func (o *optionSet) boolOpt(p *bool, long, short, help string) {
@@ -70,8 +146,30 @@ func (o *optionSet) switchOpt(p flag.Value, long, optional, help string) {
 }
 
 func (o *optionSet) durationOpt(p *time.Duration, long, arg string, value time.Duration, help string) {
-	o.fs.DurationVar(p, long, value, help)
+	*p = value
+	o.single((*durationValue)(p), long, "", help)
 	o.doc("", long, arg, help)
+}
+
+// durationValue is a duration option's value, the way flag.DurationVar
+// keeps one.
+type durationValue time.Duration
+
+// Set reads the value as a Go duration ("500ms", "2m").
+func (d *durationValue) Set(v string) error {
+	parsed, err := time.ParseDuration(v)
+	if err != nil {
+		return errors.New("parse error")
+	}
+	*d = durationValue(parsed)
+	return nil
+}
+
+func (d *durationValue) String() string {
+	if d == nil {
+		return ""
+	}
+	return time.Duration(*d).String()
 }
 
 func (o *optionSet) listOpt(p *stringList, long, arg, help string) {
@@ -264,6 +362,13 @@ func (a *app) parse(o *optionSet, args []string, usage string) (int, bool) {
 		fmt.Fprintln(a.env.Stdout)
 		printLinks(a.env.Stdout)
 		return ExitOK, true
+	}
+	if err == nil {
+		if name := o.emptyValue(); name != "" {
+			err = fmt.Errorf("%s was given an empty value, which names nothing", name)
+		} else if name := o.repeated(); name != "" {
+			err = fmt.Errorf("%s was given twice, and it takes one value", name)
+		}
 	}
 	if err != nil {
 		a.errorf("%v", err)

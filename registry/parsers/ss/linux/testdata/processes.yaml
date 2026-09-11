@@ -1,0 +1,4 @@
+description: TCP and UDP listeners with -p. The Process column name is printed straight after "Port" with no space, and a socket whose process the user may not see has nothing in it.
+source: "`ss -tulnp` on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C, as a user; the two link-local addresses were replaced with addresses of the same width"
+os: linux
+args: ["-tulnp"]

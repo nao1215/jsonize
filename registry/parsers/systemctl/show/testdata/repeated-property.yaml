@@ -1,0 +1,8 @@
+source: "systemctl show -p Id -p Description -p Documentation -p ExecReload -p ExecReloadEx ssh.service --no-pager on Ubuntu 26.04 with systemd 259, LC_ALL=C"
+description: >-
+  A unit with two ExecReload= lines prints the property twice, once per
+  command, in the order they run. Both are kept. Documentation is among
+  the properties because its quoted value is what tells this output from
+  an environment, which is otherwise the same shape.
+os: linux
+args: ["show", "-p", "Id", "-p", "Description", "-p", "Documentation", "-p", "ExecReload", "-p", "ExecReloadEx", "ssh.service"]

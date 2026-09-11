@@ -95,18 +95,24 @@ jz: no key "mountpoint" in the output
 the keys it has are "1k_blocks", "available", "filesystem", "mounted_on", "use_percent", "used"
 ```
 
+What the format produces is what its definition says, the keys `jz list
+--schema` lists, not what one input happened to hold: a key some records
+leave out, or any key of an empty listing, narrows to nothing rather than
+being refused. Only a key the definition takes from the input, a column
+named by a header it does not list, is looked for in the result.
+
 The keys named are the ones at the top of each object. A value nested
 inside an object keeps whatever it holds.
 
 ## Reading a command that keeps printing
 
-`ping`, `vmstat 1` and `tail -f` do not end, so there is no whole
+`vmstat 1`, `iostat 5` and `tail -f` do not end, so there is no whole
 document to write. `--stream` writes one JSON document per line, each one
 as soon as the record behind it is complete:
 
 ```console
-$ jz run --stream ping -c 100 1.1.1.1 | jq -c 'select(.time_ms > 20)'
-$ vmstat 1 | jz --stream
+$ jz run --stream vmstat 1 | jq -c 'select(.id < 50)'
+$ iostat -x 5 | jz --stream
 ```
 
 Only a format that yields records can be streamed: a table, a regex
@@ -122,7 +128,7 @@ holds back until it has as many leading lines as the widest signature
 among the parsers in scope looks at — twenty by default — because a
 definition can rule itself out with a line further down, and choosing
 before that would be guessing. Naming the parser narrows the scope, so
-`jz run ping` and `COMMAND | jz --stream --parser mount` usually wait for
+`jz run vmstat` and `COMMAND | jz --stream --parser mount` usually wait for
 twenty lines and no more. The lines held back are then read by the same
 code as everything after them.
 
@@ -143,14 +149,14 @@ already written have left, so jz cannot take that view: a record it
 cannot read is reported on standard error as
 
 ```text
-jz: ping/linux: line 42: line does not match /^\d+ bytes from/
+jz: du/posix: line 2: expected at least 2 fields but found 1: "garbage"
 ```
 
 and the records after it are still written. The status is 3 at the end if
-anything was skipped. This is what a command that does not finish needs.
-`ping` prints a request timeout among its replies and `rsync` prints
-progress among its file names; ending the stream at the first of those
-would throw away everything still to come.
+anything was skipped. This is what a command that does not finish needs:
+it can put one line jz has no reading for among thousands it has, and
+ending the stream at the first of those would throw away everything
+still to come.
 
 Both readings say the same thing with exit status 3: something in the
 input could not be read. What differs is how much of the rest survives,
@@ -170,6 +176,15 @@ command that failed explains both what it printed and what it did not.
 The skipped records are on standard error either way, so nothing is lost
 by the choice — only the number changes.
 
+### A command ended before it finished
+
+A command stopped by `--timeout`, by an interrupt or by any other signal
+stops wherever its output had got to, often in the middle of a line.
+With `--stream`, the records written before that point stay written and
+the one the cut fell in is left out. Without it nothing is written,
+because the output is not the whole of what the command prints. The
+status is 128 plus the signal either way.
+
 ## Output jz has no definition for
 
 `--define` takes the definition itself instead of the name of one. It is
@@ -178,7 +193,7 @@ registry — no `format`, `command`, `variant` or `detect` — so what is
 left is `parse` and, if you want them, `input` and `fields`:
 
 ```console
-$ docker ps | jz --define 'parse: {type: table, split: box}'
+$ sqlite3 -box app.db 'select * from users' | jz --define 'parse: {type: table, split: box}'
 $ jz --define 'parse: {type: csv, delimiter: "|"}' --file export.txt
 $ mytool --list | jz --define '
     input: {select: {after: "^---"}}
@@ -195,10 +210,10 @@ The registry also carries a few definitions that describe a shape rather
 than a command, for the same job under a name:
 
 ```console
-$ docker ps | jz --parser table --variant box
-$ jz --parser ini --file ~/.gitconfig
+$ sqlite3 -box app.db 'select * from users' | jz --parser table --variant box
+$ jz --parser ini --file /etc/NetworkManager/NetworkManager.conf
 $ jz --parser csv --variant tab --file export.tsv
-$ ss -tunlp | jz --parser table --variant whitespace
+$ kubectl get nodes | jz --parser table --variant whitespace
 ```
 
 They are `table` (`whitespace`, `aligned`, `box`), `csv` (`comma`,
@@ -286,18 +301,19 @@ $ jz --explain --file df-gnu.txt
 jz: explain: chose df/gnu from embedded
 jz: explain: scope: every definition in the registry, by its signature alone
 jz: explain: matched: signature.all[0] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\.../
-jz: explain: rejected: tree/listing: signature.all[1] /^(?:\|-- |`-- )\S/ did not match
 jz: explain: not considered: 48 definitions only used when named
-jz: explain: read: 8 lines: 8 read
+jz: explain: read: 8 lines: 7 read, 1 left out by input.ignore[1] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$/
 ```
 
 The first line is the outcome: `chose`, `unidentified` when no definition
 fits, `ambiguous` when several do and nothing settles it, `mismatch` when
-a named variant does not fit, or `defined` for `--define`. Then:
+a named variant does not fit, `defined` for `--define`, or `empty` when
+the command `jz run` started printed nothing. Then:
 
 | Line | What it says |
 |------|--------------|
 | `scope` | which definitions were candidates, and what named them: nothing (the whole registry), `--parser`, the name of the command `jz run` started, or the path of `--file` |
+| `candidates` | when the command printed nothing, the variants its system and arguments leave; the answer is `[]` when each of them reads a list |
 | `matched` | each condition the chosen definition states and the input met |
 | `settled by` / `outranked` | when several definitions fit, the rule that chose one (the registry layering, or `detect.priority` between variants of one command) and each one it chose over |
 | `rejected` | a definition that came close and why it was ruled out |
@@ -316,10 +332,10 @@ jz: explain: scope: the variants of df, from the name of the command jz ran
 jz: explain: scope: narrowed by the system it ran on (linux) and its arguments (-h)
 jz: explain: matched: signature.all[0] /^Filesystem\s+Size\s+Used\s+Avail\s+Use%\s+Mounted.../
 jz: explain: matched: detect.os linux
-jz: explain: matched: detect.args any [-h --human-readable]
+jz: explain: matched: detect.args any [-h --human-readable -H --si]
 jz: explain: rejected: df/bsd: signature.all[0] /^Filesystem\s+512-blocks\s+Used\s+Available\s+Capa.../ did not match
 ...
-jz: explain: read: 12 lines: 12 read
+jz: explain: read: 12 lines: 11 read, 1 left out by input.ignore[1] /^Filesystem\s+Size\s+Used\s+Avail\s+Use%\s+Mounted on\s*$/
 jz: explain: command: df -h (exit 0)
 ```
 
@@ -338,7 +354,10 @@ it could be `etc` output, but that format is too generic for jz to claim on its 
 ...
 jz: explain: unidentified: no definition fits the text
 jz: explain: scope: every definition in the registry, by its signature alone
+jz: explain: rejected: apt-cache/depends: signature.all[1] /^  (?:Pre)?Depends: \S+[ \t]*$/ did not match
+jz: explain: rejected: rustup/toolchains: no signature.any[] expression matched
 jz: explain: rejected: sensors/linux: signature.all[1] /^Adapter: \S/ did not match
+jz: explain: rejected: sensors/raw: signature.all[1] /^Adapter: \S/ did not match
 jz: explain: held back: etc/passwd: its signature fits, but it is only used when named (--parser etc)
 jz: explain: not considered: 47 definitions only used when named
 ```
@@ -356,7 +375,7 @@ Every key is there whatever the outcome, `null` or empty where it does
 not apply: `outcome`, `scope` (`from`, `parser`, `variant`, `os`, `args`,
 `path`, `path_dropped`), `chosen` (`definition`, `registry`, `matched`,
 `settled_by`, `outranked`), `candidates` (the definitions an ambiguous
-input fits), `rejected`, `held_back`, `not_considered`, `read` (`lines`,
+input fits, or the ones an empty output was judged against), `rejected`, `held_back`, `not_considered`, `read` (`lines`,
 `read`, `folded`, `blank`, `ignored`), `command` and `error` (`message`,
 `exit`). The failure is still reported the ordinary way as well. In
 `jz run` the command's own standard error shares the stream, which is
@@ -436,7 +455,18 @@ $ jz run --parser ps -- busybox ps
 
 jz does not keep a list of which commands are wrappers. The list would
 never be complete, and a wrong entry would read some other command's
-output with the wrong definition.
+output with the wrong definition. What it does, when it refuses a
+command whose arguments name a program it has a parser for, is print the
+command line that names that parser (a directory or a file that is not a
+program is something the command reads, whatever its name, and is not
+offered):
+
+```console
+$ jz run nice -n 5 df -h
+jz: no parser for "nice"
+run `jz list` to see the supported parsers
+If nice runs df, name that parser: jz run --parser df -- nice -n 5 df -h
+```
 
 A file is the other case. `/etc/fstab`, `/etc/passwd` and their
 neighbours have no argv to detect them from, so they are variants of a
@@ -525,10 +555,12 @@ jz test --decoys ./decoys .  # also require every file under ./decoys to be refu
 ```
 
 Three things are checked. Every `testdata/<case>.txt` is parsed with its
-own definition and compared with the `.json` beside it; every fixture is
-changed (a foreign line added, the whole text doubled) and must be refused
-or show the change in its result, which is what proves the definition
-reads all of its input; and every definition is then named explicitly on
+own definition and compared with the `.json` beside it, and has to give
+the same answer with CRLF line endings, a byte order mark or a blank
+line before or after it; every fixture is changed (a foreign line
+added, the whole text doubled) and must be refused or show the change
+in its result, a doubled list being the records of one copy twice,
+which is what proves the definition reads all of its input; and every definition is then named explicitly on
 every other definition's fixtures and must refuse them. The official fixtures travel inside the binary, so the
 second check covers your definitions against every format jz already
 reads without a copy of the repository: a signature wide enough to read
@@ -576,7 +608,7 @@ a command and variant wins:
 never accesses the network, so the same input converts to the same JSON
 on the same machine.
 
-A registry's `registry.yaml` can also switch definitions of the
+A registry's optional `registry.yaml` can also switch definitions of the
 registries below it off:
 
 ```yaml

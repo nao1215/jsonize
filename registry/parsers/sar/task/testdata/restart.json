@@ -1,0 +1,22 @@
+[
+  {
+    "time": "22:50:15",
+    "proc_per_s": 46.77,
+    "cswch_per_s": 34533.18
+  },
+  {
+    "time": "Average",
+    "proc_per_s": 46.77,
+    "cswch_per_s": 34533.18
+  },
+  {
+    "time": "23:10:06",
+    "proc_per_s": 85.91,
+    "cswch_per_s": 44891.81
+  },
+  {
+    "time": "Average",
+    "proc_per_s": 85.91,
+    "cswch_per_s": 44891.81
+  }
+]

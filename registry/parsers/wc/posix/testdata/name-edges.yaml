@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C over files made for the fixture
+description: one space separates the counts from the name, so a space after it is the first character of the name, and a trailing one is the last
+os: linux
+args: [" lead", "trail ", "two  spaces"]

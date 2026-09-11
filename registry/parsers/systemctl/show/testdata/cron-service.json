@@ -1,42 +1,162 @@
-{
-  "Id": "cron.service",
-  "Names": "cron.service",
-  "Requires": "sysinit.target system.slice",
-  "WantedBy": "multi-user.target",
-  "Conflicts": "shutdown.target",
-  "Before": "shutdown.target multi-user.target",
-  "After": "sysinit.target basic.target nss-user-lookup.target systemd-journald.socket remote-fs.target system.slice",
-  "Documentation": "\"man:cron(8)\"",
-  "Description": "Regular background program processing daemon",
-  "LoadState": "loaded",
-  "ActiveState": "active",
-  "FreezerState": "running",
-  "SubState": "running",
-  "FragmentPath": "/usr/lib/systemd/system/cron.service",
-  "UnitFileState": "enabled",
-  "UnitFilePreset": "enabled",
-  "StateChangeTimestamp": "Mon 2026-08-24 09:19:47 JST",
-  "StateChangeTimestampMonotonic": "5968522",
-  "InactiveExitTimestamp": "Mon 2026-08-24 09:19:47 JST",
-  "InactiveExitTimestampMonotonic": "5968522",
-  "ActiveEnterTimestamp": "Mon 2026-08-24 09:19:47 JST",
-  "ActiveEnterTimestampMonotonic": "5968522",
-  "ActiveExitTimestampMonotonic": "0",
-  "InactiveEnterTimestampMonotonic": "0",
-  "CanStart": "yes",
-  "CanStop": "yes",
-  "CanReload": "no",
-  "CanIsolate": "no",
-  "CanFreeze": "yes",
-  "CanLiveMount": "no",
-  "StopWhenUnneeded": "no",
-  "RefuseManualStart": "no",
-  "RefuseManualStop": "no",
-  "AllowIsolate": "no",
-  "DefaultDependencies": "yes",
-  "SurviveFinalKillSignal": "no",
-  "OnSuccessJobMode": "fail",
-  "OnFailureJobMode": "replace",
-  "IgnoreOnIsolate": "no",
-  "NeedDaemonReload": "no"
-}
+[
+  {
+    "name": "Id",
+    "value": "cron.service"
+  },
+  {
+    "name": "Names",
+    "value": "cron.service"
+  },
+  {
+    "name": "Requires",
+    "value": "sysinit.target system.slice"
+  },
+  {
+    "name": "WantedBy",
+    "value": "multi-user.target"
+  },
+  {
+    "name": "Conflicts",
+    "value": "shutdown.target"
+  },
+  {
+    "name": "Before",
+    "value": "shutdown.target multi-user.target"
+  },
+  {
+    "name": "After",
+    "value": "sysinit.target basic.target nss-user-lookup.target systemd-journald.socket remote-fs.target system.slice"
+  },
+  {
+    "name": "Documentation",
+    "value": "\"man:cron(8)\""
+  },
+  {
+    "name": "Description",
+    "value": "Regular background program processing daemon"
+  },
+  {
+    "name": "LoadState",
+    "value": "loaded"
+  },
+  {
+    "name": "ActiveState",
+    "value": "active"
+  },
+  {
+    "name": "FreezerState",
+    "value": "running"
+  },
+  {
+    "name": "SubState",
+    "value": "running"
+  },
+  {
+    "name": "FragmentPath",
+    "value": "/usr/lib/systemd/system/cron.service"
+  },
+  {
+    "name": "UnitFileState",
+    "value": "enabled"
+  },
+  {
+    "name": "UnitFilePreset",
+    "value": "enabled"
+  },
+  {
+    "name": "StateChangeTimestamp",
+    "value": "Mon 2026-08-24 09:19:47 JST"
+  },
+  {
+    "name": "StateChangeTimestampMonotonic",
+    "value": "5968522"
+  },
+  {
+    "name": "InactiveExitTimestamp",
+    "value": "Mon 2026-08-24 09:19:47 JST"
+  },
+  {
+    "name": "InactiveExitTimestampMonotonic",
+    "value": "5968522"
+  },
+  {
+    "name": "ActiveEnterTimestamp",
+    "value": "Mon 2026-08-24 09:19:47 JST"
+  },
+  {
+    "name": "ActiveEnterTimestampMonotonic",
+    "value": "5968522"
+  },
+  {
+    "name": "ActiveExitTimestampMonotonic",
+    "value": "0"
+  },
+  {
+    "name": "InactiveEnterTimestampMonotonic",
+    "value": "0"
+  },
+  {
+    "name": "CanStart",
+    "value": "yes"
+  },
+  {
+    "name": "CanStop",
+    "value": "yes"
+  },
+  {
+    "name": "CanReload",
+    "value": "no"
+  },
+  {
+    "name": "CanIsolate",
+    "value": "no"
+  },
+  {
+    "name": "CanFreeze",
+    "value": "yes"
+  },
+  {
+    "name": "CanLiveMount",
+    "value": "no"
+  },
+  {
+    "name": "StopWhenUnneeded",
+    "value": "no"
+  },
+  {
+    "name": "RefuseManualStart",
+    "value": "no"
+  },
+  {
+    "name": "RefuseManualStop",
+    "value": "no"
+  },
+  {
+    "name": "AllowIsolate",
+    "value": "no"
+  },
+  {
+    "name": "DefaultDependencies",
+    "value": "yes"
+  },
+  {
+    "name": "SurviveFinalKillSignal",
+    "value": "no"
+  },
+  {
+    "name": "OnSuccessJobMode",
+    "value": "fail"
+  },
+  {
+    "name": "OnFailureJobMode",
+    "value": "replace"
+  },
+  {
+    "name": "IgnoreOnIsolate",
+    "value": "no"
+  },
+  {
+    "name": "NeedDaemonReload",
+    "value": "no"
+  }
+]

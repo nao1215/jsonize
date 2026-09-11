@@ -1,4 +1,4 @@
-Linux 7.0.0-30-generic (EVO-X2) 	09/08/26 	_x86_64_	(32 CPU)
+Linux 7.0.0-30-generic (host01)	09/08/26 	_x86_64_	(32 CPU)
 
 03:25:54        CPU     %user     %nice   %system   %iowait    %steal     %idle
 03:25:55        all      0.60      0.03      0.25      0.00      0.00     99.12

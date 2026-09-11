@@ -1,0 +1,6 @@
+     libc6 | 2.43-2ubuntu2.4 | http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 Packages
+     libc6 | 2.43-2ubuntu2.4 | http://security.ubuntu.com/ubuntu resolute-security/main amd64 Packages
+     libc6 | 2.43-2ubuntu2 | http://archive.ubuntu.com/ubuntu resolute/main amd64 Packages
+linux-generic | 7.0.0-31.31 | http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 Packages
+linux-generic | 7.0.0-31.31 | http://security.ubuntu.com/ubuntu resolute-security/main amd64 Packages
+linux-generic | 7.0.0-14.14 | http://archive.ubuntu.com/ubuntu resolute/main amd64 Packages

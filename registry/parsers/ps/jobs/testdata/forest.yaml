@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) as ps axjf with LC_ALL=C, the first six lines
+description: with f the tree is drawn into the command, and the drawing is kept as printed
+os: linux
+args: [axjf]

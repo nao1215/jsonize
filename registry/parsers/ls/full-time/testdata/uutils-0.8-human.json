@@ -1,0 +1,47 @@
+[
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "usr",
+    "group": "usr",
+    "size": "4.0K",
+    "date": "2026-09-07T15:12:10.350833955+09:00",
+    "filename": "buildinfo"
+  },
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "usr",
+    "group": "usr",
+    "size": "4.0K",
+    "date": "2026-09-11T10:15:54.042279841+09:00",
+    "filename": "cli"
+  },
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "usr",
+    "group": "usr",
+    "size": "4.0K",
+    "date": "2026-09-11T10:15:54.043769166+09:00",
+    "filename": "conformance"
+  },
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "usr",
+    "group": "usr",
+    "size": "4.0K",
+    "date": "2026-09-11T05:21:00.489663203+09:00",
+    "filename": "runner"
+  },
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "usr",
+    "group": "usr",
+    "size": "4.0K",
+    "date": "2026-09-11T03:40:43.972495972+09:00",
+    "filename": "schema"
+  }
+]

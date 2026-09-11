@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/uptime/pretty.json",
+  "title": "uptime/pretty",
+  "description": "uptime -p, the time since boot in words",
+  "x-jsonize": {
+    "definition": "uptime/pretty",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "decades": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "years": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "weeks": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "days": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "hours": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "minutes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "decades",
+    "years",
+    "weeks",
+    "days",
+    "hours",
+    "minutes"
+  ]
+}

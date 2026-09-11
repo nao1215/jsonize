@@ -79,7 +79,8 @@
         "unit": "C",
         "limits": [
           "low  =  -0.1 C",
-          "high = +82.8 C"
+          "high = +82.8 C",
+          "crit = +84.8 C"
         ],
         "alarm": false
       },
@@ -160,7 +161,8 @@
         "unit": "C",
         "limits": [
           "low  = -273.1 C",
-          "high = +89.8 C"
+          "high = +89.8 C",
+          "crit = +94.8 C"
         ],
         "alarm": false
       },

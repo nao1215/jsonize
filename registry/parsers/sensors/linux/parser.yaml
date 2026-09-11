@@ -24,9 +24,12 @@ detect:
       - '\A\S+$'
       - '^Adapter: \S'
       - '^[^ \t:][^:]*:[ \t]+[-+]?[0-9]'
+# A reading with more limits than fit on its line continues them on the
+# next, indented and in parentheses of their own ("(crit = +84.8 C)");
+# fold joins that line to its reading, so the limit is kept with the
+# others rather than left out.
 input:
-  ignore:
-    - '^[ \t]+\('
+  fold: '^[ \t]+\('
 parse:
   type: records
   # A chip name is the only line with no whitespace in it: the adapter
@@ -53,9 +56,14 @@ parse:
       select: {skip: 2}
       parse:
         type: regex
-        pattern: '^(?P<name>[^:]+):[ \t]+(?:(?P<value>[-+]?[0-9.]+)[ \t]+(?P<unit>\S+)|N/A)[ \t]*(?:\((?P<limits>[^)]*)\))?(?P<alarm>(?:[ \t]+ALARM)?)[ \t]*$'
+        # In a UTF-8 locale a temperature is "+38.0°C", the degree sign
+        # where the C locale prints a space; the unit is "C" either way.
+        pattern: '^(?P<name>[^:]+):[ \t]+(?:(?P<value>[-+]?[0-9.]+)[ \t]*(?P<unit>[^\s\d.+-]\S*)|N/A)[ \t]*(?:\((?P<limits>[^\n]*)\))?(?P<alarm>(?:[ \t]+ALARM)?)[ \t]*$'
       fields:
         name: {required: true}
         value: {type: float}
-        limits: {type: array, split_regex: ',[ \t]*'}
+        unit: {trim_prefix: "°"}
+        # One group of limits, or two once fold has joined the line they
+        # spilled onto: "low = -0.1 C, high = +82.8 C) (crit = +84.8 C".
+        limits: {type: array, split_regex: ',[ \t]*|\)[ \t]*\('}
         alarm: {type: bool, true_values: ["ALARM"], false_values: [""]}

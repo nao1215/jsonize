@@ -1,0 +1,42 @@
+[
+  {
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "rtnl",
+    "local_port": "code/21104",
+    "peer_address": "*"
+  },
+  {
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "rtnl",
+    "local_port": "evolution-calen/11208",
+    "peer_address": "*"
+  },
+  {
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "rtnl",
+    "local_port": "code/20653",
+    "peer_address": "*"
+  },
+  {
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "uevent",
+    "local_port": "-70577064",
+    "peer_address": "*"
+  },
+  {
+    "state": "UNCONN",
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "uevent",
+    "local_port": "-70577064",
+    "peer_address": "*"
+  }
+]

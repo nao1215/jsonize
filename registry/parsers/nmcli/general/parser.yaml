@@ -12,7 +12,9 @@ metadata:
 detect:
   os: [linux]
   args:
-    all: ["general"]
+    # nmcli takes any prefix of an object's name ("nmcli g"), as it does
+    # for device and connection.
+    any: ["general", "genera", "gener", "gene", "gen", "ge", "g"]
   signature:
     all:
       - '\ASTATE[ \t]+CONNECTIVITY[ \t]+WIFI-HW[ \t]+WIFI[ \t]+WWAN-HW[ \t]+WWAN'

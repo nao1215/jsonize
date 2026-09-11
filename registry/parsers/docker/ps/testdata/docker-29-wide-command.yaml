@@ -1,0 +1,7 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  A container whose command holds kana and kanji. Docker pads the columns
+  by display width, two columns a character, so CREATED starts under its
+  header although the command is seven characters shorter than it looks.
+os: linux
+args: ["ps", "-a", "--filter", "name=jz-width-test"]

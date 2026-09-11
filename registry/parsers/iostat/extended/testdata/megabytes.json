@@ -1,0 +1,66 @@
+[
+  {
+    "cpu": [
+      {
+        "user_percent": 3.43,
+        "nice_percent": 0,
+        "system_percent": 0.59,
+        "iowait_percent": 0.07,
+        "steal_percent": 0,
+        "idle_percent": 95.91
+      }
+    ],
+    "devices": [
+      {
+        "device": "nvme0n1",
+        "r_s": 135.46,
+        "rmb_s": 1.89,
+        "rrqm_s": 46.25,
+        "rrqm_percent": 25.45,
+        "r_await": 5.78,
+        "rareq_sz": 14.26,
+        "w_s": 48.28,
+        "wmb_s": 1.55,
+        "wrqm_s": 226.26,
+        "wrqm_percent": 82.42,
+        "w_await": 5.12,
+        "wareq_sz": 32.8,
+        "d_s": 0,
+        "dmb_s": 0,
+        "drqm_s": 0,
+        "drqm_percent": 0,
+        "d_await": 0,
+        "dareq_sz": 0,
+        "f_s": 4.81,
+        "f_await": 1.47,
+        "aqu_sz": 1.04,
+        "util_percent": 1.4
+      },
+      {
+        "device": "nvme1n1",
+        "r_s": 1.05,
+        "rmb_s": 0.01,
+        "rrqm_s": 0.8,
+        "rrqm_percent": 42.98,
+        "r_await": 1.91,
+        "rareq_sz": 13.51,
+        "w_s": 0.1,
+        "wmb_s": 0,
+        "wrqm_s": 0.48,
+        "wrqm_percent": 82.39,
+        "w_await": 0.68,
+        "wareq_sz": 22.67,
+        "d_s": 0,
+        "dmb_s": 0,
+        "drqm_s": 0,
+        "drqm_percent": 0,
+        "d_await": 0,
+        "dareq_sz": 0,
+        "f_s": 0,
+        "f_await": 2.67,
+        "aqu_sz": 0,
+        "util_percent": 0.02
+      }
+    ]
+  }
+]

@@ -1,0 +1,13 @@
+tree/
+|-- README.md
+|-- docs/
+|   |-- empty/
+|   |-- guide.txt
+|   `-- notes:\ draft.txt
+`-- src/
+    |-- a\ ->\ b
+    |-- link -> main.go
+    |-- main.go
+    `-- weird:
+
+4 directories, 7 files

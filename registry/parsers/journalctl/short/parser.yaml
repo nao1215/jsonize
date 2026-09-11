@@ -16,12 +16,25 @@ detect:
   os: [linux]
   auto_detect: false
   signature:
-    all:
+    any:
       # The journal opens with an entry. `systemctl status` ends each
       # unit block with entries in this very format, but it opens with
       # the unit, so a journal of its own is what starts with one rather
       # than what merely contains one.
       - '\A[A-Z][a-z]{2} [ 0-9][0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} \S+ [^\s\[:]+(?:\[[0-9]+\])?: '
+      # A query that matched nothing says so on a line of its own. The
+      # answer is the same empty list in every short format, so this one
+      # alone claims the line.
+      - '\A-- No entries --\z'
+input:
+  # A message of several lines goes on over lines indented to where it
+  # began; each is joined onto its entry with one space.
+  fold: '^[ \t]+\S'
+  # Between the entries of two boots journalctl names the next boot. An
+  # entry carries no boot of its own to put it in, so the line is left out.
+  ignore:
+    - '^-- Boot [0-9a-f]{32} --$'
+    - '^-- No entries --$'
 parse:
   type: regex
   pattern: '^(?P<timestamp>[A-Z][a-z]{2} [ 0-9][0-9] [0-9]{2}:[0-9]{2}:[0-9]{2}) (?P<hostname>\S+) (?P<identifier>[^\s\[:]+)(?:\[(?P<pid>[0-9]+)\])?: ?(?P<message>.*)$'

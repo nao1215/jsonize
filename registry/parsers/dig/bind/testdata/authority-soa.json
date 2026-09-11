@@ -50,6 +50,8 @@
   "statistics": {
     "query_time_ms": 14,
     "server": "1.1.1.1#53",
+    "server_name": "1.1.1.1",
+    "protocol": "UDP",
     "when": "Thu Sep 10 21:23:08 JST 2026",
     "message_size": 119
   }

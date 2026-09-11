@@ -1,0 +1,5 @@
+Documentation="man:cron(8)"
+ActiveState=active
+SubState=running
+MainPID=2052
+ExecMainStartTimestamp=Thu 2026-09-10 22:57:47 JST

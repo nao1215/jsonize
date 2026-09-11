@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C, naming device files and a link under /dev
+description: >-
+  A device file has no size; ls prints its major and minor device
+  numbers in that column instead ("1,   3"), and they are read as such.
+  The link beside them keeps its size.
+os: linux
+args: ["-l", "/dev/null", "/dev/zero", "/dev/loop0", "/dev/stdin", "/dev/fuse", "/dev/nvme0n1"]

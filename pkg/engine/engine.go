@@ -164,6 +164,12 @@ type splitError struct {
 	cause error
 }
 
+// nulInLine refuses a NUL byte in a format read line by line. A command
+// run with -z or --zero ends its records with NUL instead of a newline,
+// and read line by line that is one line holding every record, whose last
+// field would take all the records after the first.
+const nulInLine = "a NUL byte in a format read line by line; a command run with -z or --zero ends its records with NUL"
+
 // splitRecords cuts the input into records on sep, which is a newline for
 // ordinary command output and NUL for the record-separated output of
 // tools such as `env -0`.
@@ -177,6 +183,11 @@ func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
 	input = convert.StripANSI(input)
 	if !utf8.Valid(input) {
 		return nil, &splitError{msg: "input is not valid UTF-8"}
+	}
+	if sep == '\n' {
+		if i := bytes.IndexByte(input, 0); i >= 0 {
+			return nil, &splitError{line: 1 + bytes.Count(input[:i], []byte{'\n'}), msg: nulInLine}
+		}
 	}
 	parts := bytes.Split(input, []byte{sep})
 	if len(parts) > 0 && len(parts[len(parts)-1]) == 0 {
@@ -221,6 +232,17 @@ func foldLines(in *definition.Input, lines []line) ([]line, *splitError) {
 // prepare drops ignored and blank lines, counting them in acct when it
 // is not nil.
 func prepare(in *definition.Input, lines []line, acct *Account) []line {
+	// Blank lines before the text are not part of it, whatever skip_blank
+	// says: it keeps the blank lines that separate things, and nothing is
+	// separated from what comes before the first line.
+	lead := 0
+	for lead < len(lines) && strings.TrimSpace(lines[lead].text) == "" {
+		lead++
+	}
+	if acct != nil {
+		acct.Blank += lead
+	}
+	lines = lines[lead:]
 	ignore := in.IgnorePatterns()
 	skipBlank := in.SkipBlankLines()
 	if len(ignore) == 0 && !skipBlank {

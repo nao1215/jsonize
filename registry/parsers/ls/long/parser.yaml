@@ -22,12 +22,13 @@ aliases:
   # macOS installs GNU coreutils under a g prefix, and the g name prints
   # what the command prints.
   - name: gls
-  # vdir is ls -l under another name, so it needs no flag where ls does.
+  # vdir is ls -l under another name, so it needs no flag where ls does,
+  # and it refuses the same marks as ls.
   # The uutils build of vdir prints no date at the time of writing, which
   # this definition refuses rather than reads; the GNU one prints what ls
   # -l prints.
   - name: vdir
-    args: {}
+    args: {none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]}
 description: ls -l / ls -lh long listing on Linux, macOS and BusyBox
 metadata:
   tags: [linux, darwin, filesystem]
@@ -39,19 +40,41 @@ detect:
     # Bundled short flags are expanded before this is matched, so "-l"
     # alone covers -al, -lh, -ltr and the rest of the combinations.
     any: ["-l", "--format=long", "--format=verbose"]
+    # -F and -p append a mark that says what kind of file a name is
+    # ("docs/", "run.sh*", "link@"). The mark is not part of the name, and
+    # a text cannot say which trailing character is one, so the listing
+    # is refused. Only "/" can be told from a name, since no name ends
+    # with it, and the patterns below refuse a name that does: that is
+    # what stops the same output piped in.
+    none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
   signature:
     all:
-      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+[\d.]+[KMGTPBi]*\s+\w{3}\s+\d{1,2}\s+'
+      # The size, or for a device file its major and minor numbers.
+      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+(?:[\d.]+[kKMGTPEZYRQBi]*|\d+,\s*\d+)\s+\w{3}\s+\d{1,2}\s+'
+    none:
+      # A directory heading with its total under it is the listing of
+      # several directories (-R, or several operands), which
+      # ls/long-recursive reads. The heading expression is the one that
+      # definition explains.
+      - '^(?:[-dlcbps][-rwxsStT]{0,9}[.+@]?:|(?:[^-dlcbps\n]|[-dlcbps][-rwxsStT]{0,8}[^-rwxsStT\n]|[-dlcbps][-rwxsStT]{9}(?:[^.+@ \t\n]|[.+@][^ \t\n]))[^\n]*:)\ntotal [0-9.,]+[KMGTPEZYkB]*$'
 input:
   ignore:
     - '^total\s'
 parse:
   type: regex
+  # One space separates the date from the name, so a space after it is the
+  # first character of the name (" notes" is not "notes").
+  #
+  # A character or block device has no size, and ls prints its major and
+  # minor device numbers in that column ("1,   3"). Such a line has
+  # major and minor and no size.
   patterns:
-    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+?) -> (?P<link_to>.+)$'
-    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+)$'
+    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
+    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
 fields:
   links: {type: int, required: true}
-  size: {required: true}
+  major: {type: int}
+  minor: {type: int}
   filename: {required: true}
   link_to: {when_missing: omit}

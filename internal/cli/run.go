@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
@@ -41,7 +42,7 @@ state that boundary explicitly:
   jz run mytool --pretty              # --pretty goes to mytool
   jz run -- mytool --pretty           # the same, stated explicitly
   jz run --parser df -- sudo df -h    # a wrapper whose name is not the parser
-  jz run --stream ping -c 100 host    # one JSON document per line
+  jz run --stream vmstat 1            # one JSON document per line
 
 --stream answers a command that does not end: each record is written as
 soon as it can be read, instead of one array once the command has
@@ -111,10 +112,17 @@ func (a *app) cmdRun(args []string) int {
 	if code != 0 {
 		return code
 	}
+	if sel.parser == "" && !hasInline {
+		a.wrapperHint = wrapperHint(reg, args[:len(args)-len(rest)], rest)
+	}
 	// Nothing is executed until jz knows it can parse the result. A
 	// definition given on the command line is that knowledge already.
 	if !hasInline && len(reg.Variants(parser)) == 0 {
-		return a.exitFor(&selector.UnknownParserError{Parser: parser, Known: reg.Commands()})
+		known := reg.Commands()
+		if a.wrapperHint != "" {
+			known = nil
+		}
+		return a.exitFor(&selector.UnknownParserError{Parser: parser, Known: known})
 	}
 	if sel.variant != "" && !hasInline {
 		if _, ok := reg.Lookup(parser, sel.variant); !ok {
@@ -163,30 +171,28 @@ func (a *app) cmdRun(args []string) int {
 		}
 		return ExitError
 	}
-	switch {
-	case res.Signal != "":
-		a.errorf("%s was terminated by %s", name, res.Signal)
-	case res.ExitCode != 0:
-		a.errorf("%s exited with status %d", name, res.ExitCode)
-	}
-	if ctx.Err() != nil && timeout > 0 {
-		a.errorf("timeout of %s reached", timeout)
+	a.reportChild(ctx, name, res, timeout)
+	exp.ran(name, cmdArgs, res.ExitCode)
+	if res.Cut {
+		a.cutShort(name)
+		a.explainWrite(exp)
+		return res.ExitCode
 	}
 	if len(strings.TrimSpace(string(res.Stdout))) == 0 {
 		if res.ExitCode != 0 {
+			a.explainWrite(exp)
 			return res.ExitCode
 		}
 		// The command succeeded and printed nothing, which is what a
 		// command that lists things does when there is nothing to list.
 		// Here, unlike on a pipe, jz knows which format was meant, so it
 		// can say the list is empty instead of that it could not tell.
-		return a.emptyResult(reg, parser, sel.variant, out)
+		return a.emptyResult(reg, sctx, out, exp)
 	}
 
 	// jz ran the command, so it knows the arguments and the system it ran
 	// on; both narrow the variants before the output is checked.
 	sctx.Input = res.Stdout
-	exp.ran(name, cmdArgs, res.ExitCode)
 	chosen, err := selector.Select(reg, sctx)
 	if err != nil {
 		code := a.failedRun(err, res.ExitCode)
@@ -204,7 +210,7 @@ func (a *app) cmdRun(args []string) int {
 	}
 	exp.read(acct)
 	a.explainWrite(exp)
-	narrowed, code := a.narrow(data, &out)
+	narrowed, code := a.narrow(data, &out, chosen.Entry.Def)
 	if code != ExitOK {
 		return code
 	}
@@ -283,28 +289,10 @@ func (a *app) restoreStderr(io.Writer) {
 }
 
 // emptyResult answers a command that succeeded without printing
-// anything. Every definition the parser could have chosen has to produce
-// an array, or the empty answer is not knowable: a format that yields one
-// object has no empty form.
-func (a *app) emptyResult(reg *registry.Registry, parser, variant string, out outputOptions) int {
-	var candidates []*registry.Entry
-	if variant != "" {
-		e, ok := reg.Lookup(parser, variant)
-		if !ok {
-			return ExitSelect
-		}
-		candidates = []*registry.Entry{e}
-	} else {
-		candidates = reg.Variants(parser)
-	}
-	if len(candidates) == 0 {
-		return ExitSelect
-	}
-	for _, e := range candidates {
-		if !e.Def.Parse.YieldsArray() {
-			a.errorf("%s printed nothing, and %s reads a format that has no empty form", parser, e.Def.ID())
-			return ExitSelect
-		}
+// anything with the empty list, when that is what it means.
+func (a *app) emptyResult(reg *registry.Registry, sctx selector.Context, out outputOptions, exp *explanation) int {
+	if code := a.emptyFormats(reg, sctx, false, exp); code != ExitOK {
+		return code
 	}
 	if err := jsonutil.Encode(a.env.Stdout, []any{}, out.pretty); err != nil {
 		return a.writeFailed(err)
@@ -333,6 +321,58 @@ func parserKey(name string) string {
 		}
 	}
 	return base
+}
+
+// wrapperHint is the line a refusal adds when the command looks like a
+// wrapper (nice, stdbuf, env): it is named where the parser is looked for,
+// so when what it runs is a command jz knows, that command's parser is the
+// way forward, and the names that merely look like the wrapper's are no
+// help. opts are jz's own options and command is everything after them.
+// It is "" when no argument names a command jz has a parser for.
+func wrapperHint(reg *registry.Registry, opts, command []string) string {
+	name := command[0]
+	for _, arg := range command[1:] {
+		key := parserKey(arg)
+		if strings.HasPrefix(arg, "-") || key == parserKey(name) || len(reg.Variants(key)) == 0 || notRunnable(arg) {
+			continue
+		}
+		if n := len(opts); n > 0 && opts[n-1] == "--" {
+			opts = opts[:n-1]
+		}
+		line := append(append(append([]string{"jz", "run"}, opts...), "--parser", key, "--"), command...)
+		return fmt.Sprintf("If %s runs %s, name that parser: %s", name, key, shellLine(line))
+	}
+	return ""
+}
+
+// notRunnable reports whether path names something that exists and is
+// not a program: a directory, or on a system with execute bits a file
+// without one. That is something the command reads (`tree /etc/apt`,
+// `stat /proc/uptime`) rather than a command a wrapper runs. A name that
+// names nothing here is left alone; it is looked up on PATH.
+func notRunnable(path string) bool {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	if fi.IsDir() {
+		return true
+	}
+	return runtime.GOOS != "windows" && fi.Mode()&0o111 == 0
+}
+
+// shellLine writes words as a shell would need them typed, quoting the
+// ones that carry anything but plain characters.
+func shellLine(words []string) string {
+	out := make([]string, len(words))
+	for i, w := range words {
+		if w != "" && strings.Trim(w, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-./:=,+@%") == "" {
+			out[i] = w
+			continue
+		}
+		out[i] = "'" + strings.ReplaceAll(w, "'", `'\''`) + "'"
+	}
+	return strings.Join(out, " ")
 }
 
 // mergedExecEnv collects exec.env entries of every variant of a command.
@@ -396,6 +436,11 @@ func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runne
 	}
 	a.reportChild(ctx, cmd.Name, res, timeout)
 	exp.ran(cmd.Name, cmd.Args, res.ExitCode)
+	if res.Cut {
+		a.cutShort(cmd.Name)
+		a.explainWrite(exp)
+		return res.ExitCode
+	}
 	code := a.convertWith(def, bytes.NewReader(res.Stdout), out, exp)
 	if res.ExitCode != 0 {
 		return res.ExitCode
@@ -414,6 +459,19 @@ func (a *app) reportChild(ctx context.Context, name string, res *runner.Result, 
 	if ctx.Err() != nil && timeout > 0 {
 		a.errorf("timeout of %s reached", timeout)
 	}
+	if res.LeftOpen {
+		// What that process writes is not the command's output, and
+		// waiting for it would wait as long as it runs.
+		a.errorf("%s ended, and a process it started still held its output open; what came before it ended was read", name)
+	}
+}
+
+// cutShort says why the output of a command ended from outside is not
+// read as a document. It stops wherever the command had got to, so its
+// last record may be half written, and a document of it would pass for
+// the whole of what the command prints.
+func (a *app) cutShort(name string) {
+	a.errorf("%s was ended before it finished its output, so none of it is read; --stream writes the records that came before", name)
 }
 
 // explainCommand reports, after a stream has ended, the command jz ran

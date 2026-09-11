@@ -17,6 +17,10 @@ metadata:
 detect:
   args:
     any: ["log"]
+    # These put names or hashes before the subject, which cannot be told
+    # from a subject that opens the same way. log.decorate in a user's
+    # configuration does the same without an argument and is not seen.
+    none: ["--decorate", "--decorate=short", "--decorate=full", "--parents", "--children"]
   # A hexadecimal word and a line of text is the shape of far too many
   # reports to claim on sight, so jz reads it only when the parser is
   # named (`jz run git log --oneline`, `--parser git`).

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"regexp"
+	"slices"
 	"strings"
 	"unicode/utf8"
 
@@ -43,6 +44,10 @@ func (e *NoStreamError) Error() string {
 // onError. A format with no streaming form, an emit that fails and a
 // record over the length limit are not records to skip, so they end the
 // read whatever onError says.
+//
+// An error from r other than io.EOF is returned as it is, and the record
+// the read was in the middle of is not emitted: a reader that says its
+// input was cut short gets the records before the cut and none after.
 func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any) error, onError func(*ParseError) error) error {
 	if !def.Parse.YieldsArray() {
 		return &NoStreamError{Definition: def.ID()}
@@ -75,21 +80,21 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 		if errors.Is(err, ErrLineTooLong) {
 			return &ParseError{Definition: def.ID(), Line: num + 1, Msg: fmt.Sprintf("record exceeds %d bytes", opts.maxLine()), Cause: ErrLineTooLong}
 		}
-		if len(raw) == 0 && err != nil {
-			if errors.Is(err, io.EOF) {
-				break
-			}
+		// A read that fails ends the input where it stopped, which is not
+		// where a record ends: the record it was in the middle of, and one
+		// of several lines it left open, are not read.
+		if err != nil && !errors.Is(err, io.EOF) {
 			return err
+		}
+		if len(raw) == 0 && err != nil {
+			break
 		}
 		num++
 		if rerr := s.feedRecordText(def, prepareRecord(raw, sep, num), num); rerr != nil {
 			return rerr
 		}
-		if errors.Is(err, io.EOF) {
-			break
-		}
 		if err != nil {
-			return err
+			break
 		}
 	}
 	if err := s.finish(); err != nil {
@@ -120,6 +125,9 @@ func prepareRecord(raw []byte, sep byte, num int) []byte {
 func (s *streamer) feedRecordText(def *definition.Definition, text []byte, num int) error {
 	if !utf8.Valid(text) {
 		return s.report(&ParseError{Definition: def.ID(), Line: num, Msg: "input is not valid UTF-8"})
+	}
+	if def.Input.Separator() == '\n' && bytes.IndexByte(text, 0) >= 0 {
+		return s.report(&ParseError{Definition: def.ID(), Line: num, Msg: nulInLine})
 	}
 	if perr := s.feedRaw(line{text: string(text), num: num}); perr != nil {
 		return s.report(perr)
@@ -168,7 +176,9 @@ type streamer struct {
 	sel    *definition.Select
 
 	// held is the line a fold may still be joined to.
-	held    *line
+	held *line
+	// text is set by the first line that is not blank.
+	text    bool
 	started bool // input.select.after has been seen
 	skipped int
 	taken   int
@@ -177,13 +187,22 @@ type streamer struct {
 	cols   []column
 	header bool
 	block  []line
+	// headerText is the table's header line, which a second table repeats.
+	headerText string
 
 	// csvPending holds the lines of a record a quoted value has not
-	// finished yet; csvCols is the header once it has been read.
+	// finished yet; csvCols is the header once it has been read, and
+	// csvHeader the record it was read from.
 	csvPending []line
 	csvCols    []string
-	// boxRow holds the lines between two rules of a drawn table.
-	boxRow []line
+	csvHeader  []string
+	// boxRow holds the lines between two rules of a drawn table, and
+	// boxHeader the cells of the header row, read from boxHeaderLines;
+	// boxBody is set by the first group of lines after the header.
+	boxRow         []line
+	boxHeader      []any
+	boxHeaderLines []line
+	boxBody        bool
 	// tree holds the lines of the top-level node that is still open.
 	tree []line
 }
@@ -224,11 +243,13 @@ func (s *streamer) feedRaw(l line) error {
 	return s.feedFolded(*prev)
 }
 
-// feedFolded drops the lines input.ignore and skip_blank name.
+// feedFolded drops the lines input.ignore and skip_blank name, and the
+// blank lines before the text, which prepare drops from a whole document.
 func (s *streamer) feedFolded(l line) error {
-	if s.blank && strings.TrimSpace(l.text) == "" {
+	if blank := strings.TrimSpace(l.text) == ""; blank && (s.blank || !s.text) {
 		return nil
 	}
+	s.text = true
 	if matchesAny(s.ignore, l.text) {
 		return nil
 	}
@@ -324,7 +345,16 @@ func (s *streamer) feedTable(l line) error {
 		if err != nil {
 			return err
 		}
-		s.cols, s.header = cols, true
+		s.cols, s.header, s.headerText = cols, true, l.text
+		return nil
+	}
+	if !s.p.Header.None && sameHeader(s.p, s.split(), l.text, s.headerText) {
+		// A second table, whose header says where its own columns are.
+		cols, err := s.resolveHeader(s.p, l, s.split())
+		if err != nil {
+			return err
+		}
+		s.cols = cols
 		return nil
 	}
 	obj, err := s.row(l)
@@ -348,7 +378,7 @@ func (s *streamer) row(l line) (*jsonutil.Object, error) {
 	)
 	switch s.split() {
 	case definition.SplitAligned:
-		cells = alignedCells(l.text, s.cols)
+		cells, err = s.alignedRow(l, s.cols)
 	case definition.SplitDelimiter:
 		cells, err = s.delimitedCells(s.p, l, len(s.cols))
 	default:
@@ -443,6 +473,9 @@ func (s *streamer) finish() error {
 	if err := s.flushBox(); err != nil {
 		return err
 	}
+	if s.header && !s.boxBody && len(s.boxHeaderLines) > 1 {
+		return s.noHeaderRule(s.boxHeaderLines)
+	}
 	if err := s.flushTree(); err != nil {
 		return err
 	}
@@ -525,8 +558,11 @@ func (s *streamer) emitCSV(pending []line) error {
 	}
 	for _, row := range rows {
 		if s.csvCols == nil {
-			s.csvCols = csvColumns(s.p, row)
+			s.csvCols, s.csvHeader = csvColumns(s.p, row), row
 			continue
+		}
+		if !s.p.Header.None && slices.Equal(row, s.csvHeader) {
+			continue // the header of a second file joined to the first
 		}
 		obj, err := s.csvRow(s.fields, s.csvCols, row, pending[0].num)
 		if err != nil {
@@ -587,7 +623,12 @@ func (s *streamer) flushBox() error {
 	if !s.header {
 		return s.closeBoxHeaderFrom(group)
 	}
-	obj, err := s.boxObject(s.cols, boxJoin(group, "\n"), s.fields, group[0].num)
+	s.boxBody = true
+	cells := boxJoin(group, "\n")
+	if slices.Equal(cells, s.boxHeader) {
+		return nil // the header of a second table drawn after the first
+	}
+	obj, err := s.boxObject(s.cols, cells, s.fields, group[0].num)
 	if err != nil {
 		return err
 	}
@@ -599,6 +640,6 @@ func (s *streamer) closeBoxHeaderFrom(group []line) error {
 	if err != nil {
 		return err
 	}
-	s.cols, s.header = cols, true
+	s.cols, s.header, s.boxHeader, s.boxHeaderLines = cols, true, boxJoin(group, "\n"), group
 	return nil
 }

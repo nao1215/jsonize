@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (GnuPG 2.4.8) with LC_ALL=C and a GNUPGHOME created for the fixture
+description: a keyring with no key in it prints the trust database record and nothing else
+args: ["--list-keys", "--with-colons"]

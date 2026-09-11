@@ -11,6 +11,12 @@
 # The first cell is the time of the sample, except on a summary row where
 # it is the word Average. The trailing colon that only the summary rows
 # carry is removed so the cell holds one or the other and nothing else.
+#
+# A daily file that spans a reboot has a LINUX RESTART line where the
+# machine came back up, and the report starts again after it with its
+# own column names and its own Average rows. The line is dropped like
+# the banner: it marks a moment rather than a sample, and the rows on
+# either side of it keep their times.
 format: 1
 command: sar
 variant: swap
@@ -27,7 +33,10 @@ detect:
       - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+kbswpfree[ \t]+kbswpused[ \t]+%swpused[ \t]+kbswpcad[ \t]+%swpcad[ \t]*$'
 input:
   ignore:
-    - '\ALinux '
+    # The banner, and the line sar prints where the day's file records a
+    # reboot. Both are stated whole, so no other line is left out with them.
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
     - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+kbswpfree[ \t]+kbswpused'
 parse:
   type: table

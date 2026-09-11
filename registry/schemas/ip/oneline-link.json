@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ip/oneline-link.json",
+  "title": "ip/oneline-link",
+  "description": "ip -o link, one line per interface",
+  "x-jsonize": {
+    "definition": "ip/oneline-link",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "index": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "peer": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "mtu": {
+        "type": "integer"
+      },
+      "qdisc": {
+        "type": "string"
+      },
+      "master": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      },
+      "mode": {
+        "type": "string"
+      },
+      "group": {
+        "type": "string"
+      },
+      "qlen": {
+        "type": "integer"
+      },
+      "link_type": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "broadcast": {
+        "type": "string"
+      },
+      "netnsid": {
+        "type": "integer"
+      },
+      "alias": {
+        "type": "string"
+      },
+      "altnames": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "index",
+      "name",
+      "flags",
+      "mtu",
+      "qdisc",
+      "state",
+      "mode",
+      "group",
+      "link_type"
+    ]
+  }
+}

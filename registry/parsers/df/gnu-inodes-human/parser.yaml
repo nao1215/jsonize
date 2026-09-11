@@ -28,13 +28,20 @@ detect:
       # At least one count carries a suffix. Without one the output is
       # indistinguishable from `df -i`, and reading it as exact numbers
       # is then the right answer anyway.
-      - '^\S+[ \t]+[\d.]+[KMGTPE][ \t]'
+      # A name may hold spaces ("photos 2024"), so the count is looked
+      # for after any of them.
+      - '^\S[^\n]*?[ \t][\d.]+[KMGTPE][ \t]'
+# A file system's name may hold spaces, so a line is read by what each
+# column holds: three counts, a percentage and a mount point (see df/gnu).
 input:
-  ignore: ['^df: ']
+  ignore:
+    - '^df: '
+    - '^Filesystem\s+Inodes\s+IUsed\s+IFree\s+IUse%\s+Mounted on\s*$'
 parse:
-  type: table
-  header:
-    columns: [filesystem, inodes, iused, ifree, iuse_percent, mounted_on]
+  type: regex
+  pattern: '^(?P<filesystem>\S.*?)\s+(?P<inodes>\S+)\s+(?P<iused>\S+)\s+(?P<ifree>\S+)\s+(?P<iuse_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
+# --total closes the table with a row named total whose mount point (and
+# type) is a dash; it is kept, as printed, since it is what was asked for.
 fields:
   filesystem: {required: true}
   iuse_percent: {type: int, trim_suffix: "%", null_if: ["-"]}

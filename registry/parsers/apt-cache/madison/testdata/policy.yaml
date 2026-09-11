@@ -1,0 +1,7 @@
+source: >-
+  captured on Ubuntu 26.04 (apt 3.2.0) with LC_ALL=C as `apt-cache policy
+  bash`. It is the neighbouring report of the same command and names the
+  same index as a madison line does, so the definition is pinned to
+  refuse it. The country mirror host was replaced with archive.ubuntu.com.
+os: linux
+expect_error: "does not describe this input"

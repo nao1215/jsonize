@@ -1,8 +1,9 @@
 # `ip rule` prints one routing policy rule per line: a priority, the
 # selectors that decide whether the rule applies, and what to do when it
-# does. Most rules end in a table to look up; the rest name an action
-# (unreachable, prohibit, blackhole), which is why the second alternative
-# reads the rest of the line whole rather than insisting on a table.
+# does. Most rules look up a table; the rest name an action
+# (unreachable, prohibit, blackhole). What follows either is a set of
+# words: the protocol that installed the rule, which -d prints, and
+# options such as suppress_prefixlength.
 #
 # The selectors are kept as printed. They are a set of words whose names
 # and count come from what the rule was created with, and naming them
@@ -24,9 +25,11 @@ detect:
 parse:
   type: regex
   patterns:
-    - '^(?P<priority>\d+):[ \t]+(?P<selectors>.*?)[ \t]+lookup[ \t]+(?P<table>\S+)[ \t]*$'
-    - '^(?P<priority>\d+):[ \t]+(?P<selectors>.*?)[ \t]*$'
+    - '^(?P<priority>\d+):[ \t]+(?P<selectors>.*?)[ \t]+lookup[ \t]+(?P<table>\S+)(?:[ \t]+(?P<attributes>\S.*?))?[ \t]*$'
+    - '^(?P<priority>\d+):[ \t]+(?P<selectors>.*?)[ \t]+(?P<action>unreachable|prohibit|blackhole|nop|goto[ \t]+\d+)(?:[ \t]+(?P<attributes>\S.*?))?[ \t]*$'
 fields:
   priority: {type: int, required: true}
   selectors: {required: true}
   table: {when_missing: omit}
+  action: {when_missing: omit}
+  attributes: {type: array, split_regex: '[ \t]+', when_missing: omit}

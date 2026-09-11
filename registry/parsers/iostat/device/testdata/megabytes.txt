@@ -1,0 +1,7 @@
+Linux 7.0.0-31-generic (host01) 	09/11/26 	_x86_64_	(32 CPU)
+
+Device             tps    MB_read/s    MB_wrtn/s    MB_dscd/s    MB_read    MB_wrtn    MB_dscd
+nvme0n1         183.78         1.89         1.55         0.00      20998      17205          0
+nvme1n1           1.16         0.01         0.00         0.00        154         25          0
+
+

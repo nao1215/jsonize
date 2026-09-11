@@ -1,0 +1,12 @@
+Netid State  Recv-Q Send-Q Local Address:Port                  Peer Address:Port
+nl    UNCONN 0      0               rtnl:kernel                            *    
+nl    UNCONN 0      0               rtnl:NetworkManager/2201               *    
+nl    UNCONN 960    0            tcpdiag:kernel                            *    
+nl    UNCONN 0      0             uevent:-70577064                         *    
+nl    UNCONN 0      0               genl:kernel                            *    
+nl    UNCONN 0      0         scsi-trans:kernel                            *    
+p_dgr UNCONN 0      0            [34958]:*                                 *    
+p_dgr UNCONN 0      0            [35085]:wlp195s0                          *    
+p_dgr UNCONN 0      0                arp:eno1                              *    
+p_dgr UNCONN 0      0                arp:wlp195s0                          *    
+icmp6 UNCONN 0      0                  *:ipv6-icmp                        *:*   

@@ -1,0 +1,114 @@
+[
+  {
+    "name": "project",
+    "children": [
+      {
+        "name": "Makefile",
+        "children": []
+      },
+      {
+        "name": "README.md",
+        "children": []
+      },
+      {
+        "name": "cmd",
+        "children": [
+          {
+            "name": "jz",
+            "children": [
+              {
+                "name": "main.go",
+                "children": []
+              },
+              {
+                "name": "main_test.go",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "docs",
+        "children": [
+          {
+            "name": "design.md",
+            "children": []
+          },
+          {
+            "name": "format.md",
+            "children": []
+          },
+          {
+            "name": "index.md",
+            "link_to": "README.md",
+            "children": []
+          },
+          {
+            "name": "usage.md",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "go.mod",
+        "children": []
+      },
+      {
+        "name": "go.sum",
+        "children": []
+      },
+      {
+        "name": "internal",
+        "children": [
+          {
+            "name": "cli",
+            "children": [
+              {
+                "name": "cli.go",
+                "children": []
+              },
+              {
+                "name": "run.go",
+                "children": []
+              },
+              {
+                "name": "stream.go",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "testdata",
+        "children": [
+          {
+            "name": "a.txt",
+            "children": []
+          },
+          {
+            "name": "b.txt",
+            "children": []
+          },
+          {
+            "name": "c.txt",
+            "children": []
+          },
+          {
+            "name": "d.txt",
+            "children": []
+          },
+          {
+            "name": "e.txt",
+            "children": []
+          },
+          {
+            "name": "f.txt",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]

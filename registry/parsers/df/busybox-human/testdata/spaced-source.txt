@@ -1,0 +1,5 @@
+Filesystem                Size      Used Available Use% Mounted on
+/dev/nvme0n1p2            1.8T      1.5T    165.8G  90% /
+photos 2024              30.7G    274.6M     30.4G   1% /mnt/photos
+my photos backup 2024 drive
+                         30.7G    270.3M     30.5G   1% /mnt/backup

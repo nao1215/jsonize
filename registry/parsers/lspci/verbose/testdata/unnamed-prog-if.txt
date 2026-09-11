@@ -1,0 +1,8 @@
+c2:00.0 SD Host controller: Genesys Logic, Inc GL9755 SD Host Controller (rev 01) (prog-if 01)
+	Subsystem: Genesys Logic, Inc GL9755 SD Host Controller
+	Flags: bus master, fast devsel, latency 0, IRQ 70, IOMMU group 18
+	Memory at d4c00000 (32-bit, non-prefetchable) [size=4K]
+	Capabilities: <access denied>
+	Kernel driver in use: sdhci-pci
+	Kernel modules: sdhci_pci
+

@@ -20,19 +20,26 @@ metadata:
   references:
     - https://pubs.opengroup.org/onlinepubs/9699919799/utilities/ls.html
 detect:
+  args:
+    # A mark after each name (-F, -p) is not part of the name; see ls/long.
+    none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
   signature:
     all:
-      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+[\d.]+[KMGTPBi]*\s+\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})\s+\S'
+      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+(?:[\d.]+[kKMGTPEZYRQBi]*|\d+,\s*\d+)\s+\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})\s+\S'
 input:
   ignore:
     - '^total\s'
 parse:
   type: regex
+  # A device file has major and minor numbers where the size goes, which
+  # ls/long explains.
   patterns:
-    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+?) -> (?P<link_to>.+)$'
-    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<size>[\d.]+[KMGTPBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4}))\s+(?P<filename>.+)$'
+    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
+    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
 fields:
   links: {type: int, required: true}
-  size: {required: true}
+  major: {type: int}
+  minor: {type: int}
   filename: {required: true}
   link_to: {when_missing: omit}

@@ -1,0 +1,6 @@
+/usr/share/doc/bash/copyright: text/plain; charset=us-ascii
+/usr/share/doc/bash/NEWS.gz:   application/gzip; charset=binary
+/usr/bin/gnustat:              application/x-pie-executable; charset=binary
+/usr/share/doc:                inode/directory; charset=binary
+/dev/null:                     inode/chardevice; charset=binary
+/usr/bin/stat:                 inode/symlink; charset=binary

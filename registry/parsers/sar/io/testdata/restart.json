@@ -1,0 +1,42 @@
+[
+  {
+    "time": "22:50:15",
+    "tps": 57.46,
+    "rtps": 3.33,
+    "wtps": 54.13,
+    "dtps": 0,
+    "bread_per_s": 174.62,
+    "bwrtn_per_s": 2874.02,
+    "bdscd_per_s": 0
+  },
+  {
+    "time": "Average",
+    "tps": 57.46,
+    "rtps": 3.33,
+    "wtps": 54.13,
+    "dtps": 0,
+    "bread_per_s": 174.62,
+    "bwrtn_per_s": 2874.02,
+    "bdscd_per_s": 0
+  },
+  {
+    "time": "23:10:06",
+    "tps": 716.96,
+    "rtps": 669.83,
+    "wtps": 47.13,
+    "dtps": 0,
+    "bread_per_s": 16104.26,
+    "bwrtn_per_s": 2930.41,
+    "bdscd_per_s": 0
+  },
+  {
+    "time": "Average",
+    "tps": 716.96,
+    "rtps": 669.83,
+    "wtps": 47.13,
+    "dtps": 0,
+    "bread_per_s": 16104.26,
+    "bwrtn_per_s": 2930.41,
+    "bdscd_per_s": 0
+  }
+]

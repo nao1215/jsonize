@@ -1,0 +1,4 @@
+source: captured from BusyBox v1.37.0 (Ubuntu busybox package) with LC_ALL=C
+description: BusyBox pads the columns wider and prints the device numbers the same way
+os: linux
+args: ["-l", "/dev/null", "/dev/loop0", "/dev/stdin"]

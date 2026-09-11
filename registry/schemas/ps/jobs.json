@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ps/jobs.json",
+  "title": "ps/jobs",
+  "description": "ps axj and ps axjf, the BSD job format (PPID PID PGID SID TTY TPGID STAT UID TIME COMMAND)",
+  "x-jsonize": {
+    "definition": "ps/jobs",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "ppid": {
+        "type": "integer"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "pgid": {
+        "type": "integer"
+      },
+      "sid": {
+        "type": "integer"
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "tpgid": {
+        "type": "integer"
+      },
+      "stat": {
+        "type": "string"
+      },
+      "uid": {
+        "type": "integer"
+      },
+      "time": {
+        "type": "number"
+      },
+      "command": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "ppid",
+      "pid",
+      "pgid",
+      "sid",
+      "tty",
+      "tpgid",
+      "stat",
+      "uid",
+      "time",
+      "command"
+    ]
+  }
+}

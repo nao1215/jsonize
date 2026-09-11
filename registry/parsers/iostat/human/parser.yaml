@@ -1,0 +1,52 @@
+# `iostat -h` prints the report of iostat/linux for a person: the CPU
+# percentages carry a percent sign, the device figures are rounded to a
+# unit they name themselves ("1.6M", "20.7G"), and the device name moves
+# to the last column. The column names still say kB, and the values say
+# what they are in, so they stay the strings iostat printed.
+#
+# The banner is dropped as iostat/linux drops it.
+format: 1
+command: iostat
+variant: human
+description: iostat -h, one sample of CPU averages and rounded per-device figures
+metadata:
+  tags: [linux, io, cpu, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/iostat.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-h", "--human"]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^avg-cpu:[ \t]+%user[ \t]+%nice'
+      - '^[ \t]*tps[ \t].*[ \t]Device[ \t]*$'
+input:
+  select:
+    after: '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)'
+parse:
+  type: records
+  start: '^avg-cpu:[ \t]'
+  parts:
+    - name: cpu
+      select: {limit: 2}
+      parse:
+        type: table
+        header:
+          columns: [user_percent, nice_percent, system_percent, iowait_percent, steal_percent, idle_percent]
+      fields:
+        user_percent: {type: float, trim_suffix: "%", required: true}
+        nice_percent: {type: float, trim_suffix: "%"}
+        system_percent: {type: float, trim_suffix: "%"}
+        iowait_percent: {type: float, trim_suffix: "%"}
+        steal_percent: {type: float, trim_suffix: "%"}
+        idle_percent: {type: float, trim_suffix: "%"}
+    - name: devices
+      select: {skip: 2}
+      parse:
+        type: table
+      fields:
+        device: {required: true}
+        tps: {type: float}

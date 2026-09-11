@@ -1,0 +1,34 @@
+# `pactl list short cards` prints one sound card per line, three tab
+# separated cells: an index, the card name and the driver ("alsa" on
+# PipeWire, "module-alsa-card.c" on PulseAudio). A card is named after
+# the subsystem that found it, alsa_card or bluez_card, which is what
+# tells this listing from `pactl list short clients`.
+format: 1
+command: pactl
+variant: short-cards
+description: pactl list short cards
+metadata:
+  tags: [linux, audio, pulseaudio, pipewire]
+  compatible: [PulseAudio, PipeWire]
+  references:
+    - https://man.archlinux.org/man/pactl.1
+detect:
+  os: [linux]
+  args:
+    all: ["list", "short"]
+    any: ["cards"]
+  auto_detect: false
+  signature:
+    all:
+      - '\A(?:\d+\t(?:alsa|bluez)_card\.[^\t\n]+\t[^\t\n]+\n?)+\z'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [index, name, driver]
+fields:
+  index: {type: int, required: true}
+  name: {required: true}
+  driver: {required: true}

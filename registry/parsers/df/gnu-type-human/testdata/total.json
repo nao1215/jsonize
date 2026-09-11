@@ -1,0 +1,29 @@
+[
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "type": "ext4",
+    "size": "1.8T",
+    "used": "1.6T",
+    "available": "164G",
+    "use_percent": 91,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p1",
+    "type": "vfat",
+    "size": "1.1G",
+    "used": "6.4M",
+    "available": "1.1G",
+    "use_percent": 1,
+    "mounted_on": "/boot/efi"
+  },
+  {
+    "filesystem": "total",
+    "type": "-",
+    "size": "1.8T",
+    "used": "1.6T",
+    "available": "165G",
+    "use_percent": 91,
+    "mounted_on": "-"
+  }
+]

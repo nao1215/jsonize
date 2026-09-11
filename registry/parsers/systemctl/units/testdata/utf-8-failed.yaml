@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (systemd 259) as systemctl list-units --state=failed --no-pager with LC_ALL=C.UTF-8
+description: in a UTF-8 locale the failed unit is marked with a bullet and the legend points with an arrow character instead of "->"
+os: linux
+args: [list-units, --state=failed, --no-pager]

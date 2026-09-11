@@ -4,9 +4,11 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
 	"sync"
 
+	"github.com/nao1215/jsonize/internal/runner"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
@@ -42,7 +44,7 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		// jz started the command, so it knows what the format was meant
 		// to be. A list with nothing in it is no lines at all here, the
 		// same answer `[]` gives when the whole document is written.
-		return a.emptyStream(reg, ctx.Parser, ctx.Variant)
+		return a.emptyFormats(reg, ctx, true, exp)
 	}
 	ctx.Input = head
 	chosen, err := selector.Select(reg, ctx)
@@ -56,14 +58,14 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	a.explainWrite(exp)
 	// A key the format does not produce is a usage error, the same as it
 	// is for a whole document, so it is kept apart from a parse failure.
-	var narrowErr error
+	// One the definition does not name is refused before a record is
+	// written; one the input decides is judged when the stream ends.
+	if err := filter.know(chosen.Entry.Def); err != nil {
+		a.errorf("%v", err)
+		return ExitUsage
+	}
 	emit := func(v any) error {
-		narrowed, err := filter.apply(v)
-		if err != nil {
-			narrowErr = err
-			return err
-		}
-		return jsonutil.Encode(a.env.Stdout, narrowed, false)
+		return jsonutil.Encode(a.env.Stdout, filter.narrowRecord(v), false)
 	}
 	// A record jz cannot read is reported and left out, and the ones
 	// after it are still written. A command that keeps printing (ping,
@@ -83,11 +85,20 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
 	err = engine.Stream(chosen.Entry.Def, io.MultiReader(bytes.NewReader(head), br), eopts, emit, onError)
-	switch {
-	case narrowErr != nil:
-		a.errorf("%v", narrowErr)
+	return a.streamEnd(err, filter, skipped)
+}
+
+// streamEnd settles what a stream returns once its input has ended.
+func (a *app) streamEnd(err error, filter *keyFilter, skipped int) int {
+	if nerr := filter.unseen(); nerr != nil && (err == nil || errors.Is(err, runner.ErrCut)) {
+		a.errorf("%v", nerr)
 		return ExitUsage
-	case err != nil:
+	}
+	switch {
+	case err != nil && !errors.Is(err, runner.ErrCut):
+		// A command ended from outside leaves its last record half
+		// written. The engine has left it out; the records before it
+		// stand, and the command's status says how it ended.
 		return a.exitForStream(err)
 	case skipped > 0:
 		return ExitParse
@@ -104,14 +115,12 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 		a.errorf("%v", err)
 		return ExitUsage
 	}
-	var narrowErr error
+	if err := filter.know(def); err != nil {
+		a.errorf("%v", err)
+		return ExitUsage
+	}
 	emit := func(v any) error {
-		narrowed, err := filter.apply(v)
-		if err != nil {
-			narrowErr = err
-			return err
-		}
-		return jsonutil.Encode(a.env.Stdout, narrowed, false)
+		return jsonutil.Encode(a.env.Stdout, filter.narrowRecord(v), false)
 	}
 	skipped := 0
 	eopts := out.engineOptions()
@@ -121,40 +130,58 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 		a.errorf("%v", pe)
 		return nil
 	})
-	switch {
-	case narrowErr != nil:
-		a.errorf("%v", narrowErr)
-		return ExitUsage
-	case err != nil:
-		return a.exitForStream(err)
-	case skipped > 0:
-		return ExitParse
-	}
-	return ExitOK
+	return a.streamEnd(err, filter, skipped)
 }
 
-// emptyStream answers a command that succeeded without printing
-// anything. Every definition it could have chosen has to have a
-// streaming form, or writing nothing would be claiming an empty list for
-// a format that has none.
-func (a *app) emptyStream(reg *registry.Registry, parser, variant string) int {
-	candidates := reg.Variants(parser)
-	if variant != "" {
-		e, ok := reg.Lookup(parser, variant)
-		if !ok {
-			return ExitSelect
-		}
-		candidates = []*registry.Entry{e}
+// emptyFormats settles what a command that succeeded without printing
+// anything is an answer to. The formats its name and its arguments admit
+// have to be lists, or the empty answer is not knowable: a format that
+// yields one object has no empty form, and with --stream it has no
+// streaming form either, which is the error reported then. Arguments
+// that no definition reads the output of are no request for a list at
+// all, the same as they would be with output.
+//
+// The explanation is written here, since there is no text to choose by:
+// it names the variants the answer was judged against.
+func (a *app) emptyFormats(reg *registry.Registry, ctx selector.Context, stream bool, exp *explanation) int {
+	candidates := selector.Candidates(reg, ctx)
+	exp.printedNothing(candidates)
+	err := emptyForm(ctx, candidates, stream)
+	code := ExitOK
+	var ns *engine.NoStreamError
+	switch {
+	case errors.As(err, &ns):
+		code = a.exitForStream(err)
+	case err != nil:
+		a.errorf("%v", err)
+		code = ExitSelect
 	}
+	if err != nil {
+		exp.fail(err, code)
+	}
+	a.explainWrite(exp)
+	return code
+}
+
+// emptyForm says why no output is not an answer from the candidates, or
+// nil when every one of them reads a list.
+func emptyForm(ctx selector.Context, candidates []*registry.Entry, stream bool) error {
 	if len(candidates) == 0 {
-		return ExitSelect
+		if ctx.Variant != "" {
+			return fmt.Errorf("%s printed nothing, and %s/%s does not read what it prints with these arguments", ctx.Parser, ctx.Parser, ctx.Variant)
+		}
+		return fmt.Errorf("%s printed nothing, and no %s variant reads what it prints with these arguments", ctx.Parser, ctx.Parser)
 	}
 	for _, e := range candidates {
-		if !e.Def.Parse.YieldsArray() {
-			return a.exitForStream(&engine.NoStreamError{Definition: e.Def.ID()})
+		switch {
+		case e.Def.Parse.YieldsArray():
+		case stream:
+			return &engine.NoStreamError{Definition: e.Def.ID()}
+		default:
+			return fmt.Errorf("%s printed nothing, and %s reads a format that has no empty form", ctx.Parser, e.Def.ID())
 		}
 	}
-	return ExitOK
+	return nil
 }
 
 // exitForStream maps a streaming failure. A format with no streaming form
@@ -188,7 +215,9 @@ func readHead(br *bufio.Reader, n int) ([]byte, error) {
 			continue
 		}
 		if err != nil {
-			if errors.Is(err, io.EOF) {
+			// The reader of a command ended from outside says so again
+			// when the rest is read, which is where the cut is dealt with.
+			if errors.Is(err, io.EOF) || errors.Is(err, runner.ErrCut) {
 				break
 			}
 			return nil, err

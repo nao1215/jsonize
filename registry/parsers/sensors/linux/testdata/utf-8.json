@@ -1,0 +1,191 @@
+[
+  {
+    "chip": {
+      "name": "amdgpu",
+      "bus": "pci",
+      "address": "c600",
+      "adapter": "PCI adapter"
+    },
+    "readings": [
+      {
+        "name": "vddgfx",
+        "value": 0,
+        "unit": "V",
+        "limits": null,
+        "alarm": false
+      },
+      {
+        "name": "vddnb",
+        "value": 0,
+        "unit": "V",
+        "limits": null,
+        "alarm": false
+      },
+      {
+        "name": "edge",
+        "value": 37,
+        "unit": "C",
+        "limits": null,
+        "alarm": false
+      },
+      {
+        "name": "PPT",
+        "value": 11.1,
+        "unit": "W",
+        "limits": [
+          "avg =  11.10 W"
+        ],
+        "alarm": false
+      },
+      {
+        "name": "sclk",
+        "value": 818,
+        "unit": "MHz",
+        "limits": null,
+        "alarm": false
+      }
+    ]
+  },
+  {
+    "chip": {
+      "name": "r8169_0_c100:00",
+      "bus": "mdio",
+      "address": "0",
+      "adapter": "MDIO adapter"
+    },
+    "readings": [
+      {
+        "name": "temp1",
+        "value": 40.5,
+        "unit": "C",
+        "limits": [
+          "high = +120.0°C"
+        ],
+        "alarm": false
+      }
+    ]
+  },
+  {
+    "chip": {
+      "name": "nvme",
+      "bus": "pci",
+      "address": "c500",
+      "adapter": "PCI adapter"
+    },
+    "readings": [
+      {
+        "name": "Composite",
+        "value": 31.9,
+        "unit": "C",
+        "limits": [
+          "low  =  -0.1°C",
+          "high = +82.8°C",
+          "crit = +84.8°C"
+        ],
+        "alarm": false
+      },
+      {
+        "name": "Sensor 1",
+        "value": 31.9,
+        "unit": "C",
+        "limits": [
+          "low  = -273.1°C",
+          "high = +65261.8°C"
+        ],
+        "alarm": false
+      }
+    ]
+  },
+  {
+    "chip": {
+      "name": "acpitz",
+      "bus": "acpi",
+      "address": "0",
+      "adapter": "ACPI interface"
+    },
+    "readings": [
+      {
+        "name": "temp1",
+        "value": 39,
+        "unit": "C",
+        "limits": null,
+        "alarm": false
+      }
+    ]
+  },
+  {
+    "chip": {
+      "name": "mt7925_phy0",
+      "bus": "pci",
+      "address": "c300",
+      "adapter": "PCI adapter"
+    },
+    "readings": [
+      {
+        "name": "temp1",
+        "value": 43,
+        "unit": "C",
+        "limits": null,
+        "alarm": false
+      }
+    ]
+  },
+  {
+    "chip": {
+      "name": "k10temp",
+      "bus": "pci",
+      "address": "00c3",
+      "adapter": "PCI adapter"
+    },
+    "readings": [
+      {
+        "name": "Tctl",
+        "value": 39.2,
+        "unit": "C",
+        "limits": null,
+        "alarm": false
+      }
+    ]
+  },
+  {
+    "chip": {
+      "name": "nvme",
+      "bus": "pci",
+      "address": "c400",
+      "adapter": "PCI adapter"
+    },
+    "readings": [
+      {
+        "name": "Composite",
+        "value": 31.9,
+        "unit": "C",
+        "limits": [
+          "low  = -273.1°C",
+          "high = +89.8°C",
+          "crit = +94.8°C"
+        ],
+        "alarm": false
+      },
+      {
+        "name": "Sensor 1",
+        "value": 31.9,
+        "unit": "C",
+        "limits": [
+          "low  = -273.1°C",
+          "high = +65261.8°C"
+        ],
+        "alarm": false
+      },
+      {
+        "name": "Sensor 2",
+        "value": 31.9,
+        "unit": "C",
+        "limits": [
+          "low  = -273.1°C",
+          "high = +65261.8°C"
+        ],
+        "alarm": false
+      }
+    ]
+  }
+]

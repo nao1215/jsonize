@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) as losetup /dev/loop1 with LC_ALL=C by an unprivileged user
+description: naming one device prints its line in the same format
+os: linux
+args: [/dev/loop1]

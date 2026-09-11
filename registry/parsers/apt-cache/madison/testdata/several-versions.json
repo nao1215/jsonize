@@ -1,0 +1,50 @@
+[
+  {
+    "package": "libc6",
+    "version": "2.43-2ubuntu2.4",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute-updates",
+    "component": "main",
+    "architecture": "amd64"
+  },
+  {
+    "package": "libc6",
+    "version": "2.43-2ubuntu2.4",
+    "uri": "http://security.ubuntu.com/ubuntu",
+    "suite": "resolute-security",
+    "component": "main",
+    "architecture": "amd64"
+  },
+  {
+    "package": "libc6",
+    "version": "2.43-2ubuntu2",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute",
+    "component": "main",
+    "architecture": "amd64"
+  },
+  {
+    "package": "linux-generic",
+    "version": "7.0.0-31.31",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute-updates",
+    "component": "main",
+    "architecture": "amd64"
+  },
+  {
+    "package": "linux-generic",
+    "version": "7.0.0-31.31",
+    "uri": "http://security.ubuntu.com/ubuntu",
+    "suite": "resolute-security",
+    "component": "main",
+    "architecture": "amd64"
+  },
+  {
+    "package": "linux-generic",
+    "version": "7.0.0-14.14",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute",
+    "component": "main",
+    "architecture": "amd64"
+  }
+]

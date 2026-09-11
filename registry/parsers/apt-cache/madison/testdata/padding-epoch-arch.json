@@ -1,0 +1,58 @@
+[
+  {
+    "package": "tree",
+    "version": "2.3.1-1",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute",
+    "component": "universe",
+    "architecture": "amd64"
+  },
+  {
+    "package": "vim",
+    "version": "2:9.1.2141-1ubuntu4.9",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute-updates",
+    "component": "main",
+    "architecture": "amd64"
+  },
+  {
+    "package": "vim",
+    "version": "2:9.1.2141-1ubuntu4.9",
+    "uri": "http://security.ubuntu.com/ubuntu",
+    "suite": "resolute-security",
+    "component": "main",
+    "architecture": "amd64"
+  },
+  {
+    "package": "vim",
+    "version": "2:9.1.2141-1ubuntu4",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute",
+    "component": "main",
+    "architecture": "amd64"
+  },
+  {
+    "package": "libc6:i386",
+    "version": "2.43-2ubuntu2.4",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute-updates",
+    "component": "main",
+    "architecture": "i386"
+  },
+  {
+    "package": "libc6:i386",
+    "version": "2.43-2ubuntu2.4",
+    "uri": "http://security.ubuntu.com/ubuntu",
+    "suite": "resolute-security",
+    "component": "main",
+    "architecture": "i386"
+  },
+  {
+    "package": "libc6:i386",
+    "version": "2.43-2ubuntu2",
+    "uri": "http://archive.ubuntu.com/ubuntu",
+    "suite": "resolute",
+    "component": "main",
+    "architecture": "i386"
+  }
+]

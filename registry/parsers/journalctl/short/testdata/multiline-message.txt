@@ -1,0 +1,6 @@
+Sep 02 19:20:07 host01 dbus-daemon[1941]: [system] Activating service name='org.kde.kded.smart' requested by ':1.133' (uid=1000 pid=331289 comm="/usr/bin/kded6" label="unconfined") (using servicehelper)
+Sep 02 19:20:07 host01 org.kde.kded.smart[2913577]: Detected locale "C" with character encoding "ANSI_X3.4-1968", which is not UTF-8.
+                                                    Qt depends on a UTF-8 locale, and has switched to "C.UTF-8" instead.
+                                                    If this causes problems, reconfigure your locale. See the locale(1) manual
+                                                    for more information.
+Sep 02 19:20:07 host01 dbus-daemon[1941]: [system] Successfully activated service 'org.kde.kded.smart'

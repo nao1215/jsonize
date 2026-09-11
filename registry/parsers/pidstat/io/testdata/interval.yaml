@@ -1,0 +1,4 @@
+description: no task did any I/O in either interval, so every sample, the summary too, is a header alone
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C from `pidstat -d 1 2`; the host name in the banner was replaced
+os: linux
+args: ["-d", "1", "2"]

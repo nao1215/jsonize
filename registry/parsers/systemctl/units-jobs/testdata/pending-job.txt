@@ -1,0 +1,21 @@
+  UNIT                                                                                      LOAD   ACTIVE     SUB     JOB   DESCRIPTION
+  accounts-daemon.service                                                                   loaded active     running       Accounts Service
+  alsa-restore.service                                                                      loaded active     exited        Save/Restore Sound Card State
+* apport-autoreport.service                                                                 loaded failed     failed        Process error reports when automatic reporting is enabled
+  ModemManager.service                                                                      loaded active     running       Modem Manager
+  NetworkManager.service                                                                    loaded active     running       Network Manager
+* polkit-agent-helper@0-12298-10596_33070-1000.service                                      loaded activating start   start Authorization Manager Agent Helper (PID 10596/UID 1000)
+  polkit.service                                                                            loaded active     running       Authorization Manager
+  snapd.service                                                                             loaded active     running       Snap Daemon
+  ssh.service                                                                               loaded active     running       OpenBSD Secure Shell server
+  user@1000.service                                                                         loaded active     running       User Manager for UID 1000
+  whoopsie.service                                                                          loaded active     running       Service uploading crash reports to the Ubuntu Error Tracker
+  wpa_supplicant.service                                                                    loaded active     running       WPA supplicant
+
+Legend: LOAD   -> Reflects whether the unit definition was properly loaded.
+        ACTIVE -> The high-level unit activation state, i.e. generalization of SUB.
+        SUB    -> The low-level unit activation state, values depend on unit type.
+        JOB    -> Pending job for the unit.
+
+77 loaded units listed. Pass --all to see loaded but inactive units, too.
+To show all installed unit files use 'systemctl list-unit-files'.

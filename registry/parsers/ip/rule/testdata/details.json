@@ -1,0 +1,29 @@
+[
+  {
+    "priority": 0,
+    "selectors": "from all",
+    "table": "local",
+    "attributes": [
+      "proto",
+      "kernel"
+    ]
+  },
+  {
+    "priority": 32766,
+    "selectors": "from all",
+    "table": "main",
+    "attributes": [
+      "proto",
+      "kernel"
+    ]
+  },
+  {
+    "priority": 32767,
+    "selectors": "from all",
+    "table": "default",
+    "attributes": [
+      "proto",
+      "kernel"
+    ]
+  }
+]

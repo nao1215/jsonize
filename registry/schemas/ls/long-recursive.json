@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ls/long-recursive.json",
+  "title": "ls/long-recursive",
+  "description": "ls -lR, or ls -l given several directories, as one record per directory",
+  "x-jsonize": {
+    "definition": "ls/long-recursive",
+    "version": 2
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "directory": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "path"
+        ]
+      },
+      "entries": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "flags": {
+              "type": "string"
+            },
+            "links": {
+              "type": "integer"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "link_to": {
+              "type": "string"
+            },
+            "major": {
+              "type": "integer"
+            },
+            "minor": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "flags",
+            "links",
+            "owner",
+            "group",
+            "date",
+            "filename"
+          ]
+        }
+      }
+    },
+    "required": [
+      "directory",
+      "entries"
+    ]
+  }
+}

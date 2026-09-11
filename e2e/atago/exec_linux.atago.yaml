@@ -32,6 +32,25 @@ scenarios:
             json:
               # A rounded human-readable size stays as printed.
               - { path: "$[0].size", matches: "^[0-9.]+[KMGTP]?$" }
+      # -P prints the POSIX header, 1024-blocks and Capacity, which was
+      # exit 4 before it had a definition of its own.
+      - run:
+          command: jz run --explain df -P /
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/portable from embedded"
+          stdout:
+            json:
+              - { path: "$[0].mounted_on", equals: "/" }
+              - { path: "$[0].1024_blocks", gt: 0 }
+              - { path: "$[0].capacity_percent", gte: 0 }
+      - run:
+          command: jz run --explain df -P -T /
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/portable-type from embedded"
 
   - name: procps free, uptime and ps
     only: {os: linux}
@@ -70,6 +89,20 @@ scenarios:
             json:
               - { path: "$.users", gte: 0 }
               - { path: "$.load_1m", gte: 0 }
+      # -p says the same in words, and -s says when the system booted.
+      - run:
+          command: jz run uptime -p
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"minutes":'
+      - run:
+          command: jz run uptime -s
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.since", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2} " }
       - run:
           command: jz run ps -ef
       - assert:
@@ -88,7 +121,7 @@ scenarios:
   # One command, three output formats, and the arguments alone do not say
   # which: the shape of the text has to decide. Each of these asserts a
   # column that only its own variant produces.
-  - name: ps lands on a different variant for each of its three formats
+  - name: ps lands on a different variant for each of its formats
     only: {os: linux}
     steps:
       - run:
@@ -115,6 +148,55 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].cpu_percent", gte: 0 }
+      # Other BSD letters print the same columns: ww stops cutting the
+      # command line, f draws the process tree into it.
+      - run:
+          command: jz run ps auxww
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].pid", gte: 1 }
+      - run:
+          command: jz run ps auxf
+      - assert:
+          exit_code: 0
+      # Without u the BSD format has five columns, and -l is the long
+      # format of the other option syntax.
+      - run:
+          command: jz run ps ax
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].pid", equals: 1 }
+      - run:
+          command: jz run ps -el
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].pid", equals: 1 }
+      # -L prints a line per thread, and j the job format; with f the tree
+      # is drawn into the command, which keeps it.
+      - run:
+          command: jz run --explain ps -eLf
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ps/threads from embedded"
+          stdout:
+            json:
+              - { path: "$[0].nlwp", gte: 1 }
+      - run:
+          command: jz run --explain ps axjf
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ps/jobs from embedded"
+          stdout:
+            json:
+              - { path: "$[0].tpgid", gte: -1 }
 
   - name: uname, id, env, mount and du
     only: {os: linux}
@@ -239,6 +321,19 @@ scenarios:
               - { path: "$[0].tx.packets", gte: 0 }
               # An interface with no alternative names still has the key.
               - { path: "$[0].altnames", length: 0 }
+      # iproute2 takes any prefix of an object's name, and people type
+      # the shortest.
+      - run:
+          command: jz run ip -s l
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].interface.name", equals: lo }
+      - run:
+          command: jz run ip ro
+      - assert:
+          exit_code: 0
       # Without -s the same command prints no counter tables. It has a
       # definition of its own, and what this pins is that the two are not
       # confused: the plain form carries no counters at all.
@@ -259,6 +354,23 @@ scenarios:
           stdout:
             not_contains: '"rx"'
 
+  # -o prints one line per address, joined by a backslash where the block
+  # form breaks the line; it lands on a definition of its own.
+  - name: ip -o address is one record per address
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain ip -o -4 address show dev lo
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ip/oneline-address from embedded"
+          stdout:
+            json:
+              - { path: "$[0].interface", equals: lo }
+              - { path: "$[0].address", equals: 127.0.0.1/8 }
+              - { path: "$[0].valid_lft", equals: forever }
+
   # Several operands mean several records. A definition that read only the
   # first block would drop the rest without saying so.
   - name: stat -f reports every filesystem it was asked about
@@ -275,6 +387,21 @@ scenarios:
               - { path: "$[0].file.name", equals: "/" }
               - { path: "$[1].file.name", equals: /tmp }
               - { path: "$[0].blocks.total", gt: 0 }
+
+  # A device file adds its major and minor numbers to the Device line. GNU,
+  # uutils and BusyBox stat all print them there.
+  - name: stat of a device file carries its device numbers
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run stat /dev/null
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$.type", equals: "character special file" }
+              - { path: "$.device_type", equals: "1,3" }
 
   # BusyBox and kmod print the same three columns under the same header;
   # what separates them is that BusyBox continues the header with the
@@ -362,6 +489,83 @@ scenarios:
           stdout:
             json:
               - { path: "$.uptime_seconds", gt: 0 }
+      # A blank line after the text is not part of it. meminfo's signature
+      # says every line is a counter, and it used to count the blank one.
+      - run:
+          shell: true
+          command: "{ cat /proc/meminfo; echo; } | jz --extract name"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].name", equals: MemTotal }
+
+  # util-linux prlimit, aligned and --raw. The raw form writes the spaces
+  # inside a description as \x20 and lines nothing up, and both are read
+  # the same way.
+  - name: prlimit lands on its definition, aligned or raw
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain prlimit --nofile --nice
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "prlimit/linux from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].resource", equals: NOFILE }
+              - { path: "$[0].description", equals: max number of open files }
+              - { path: "$[0].soft", matches: "^(unlimited|[0-9]+)$" }
+              - { path: "$[1].units", equals: null }
+      - run:
+          command: jz run prlimit --raw --nofile
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].resource", equals: NOFILE }
+              - { path: "$[0].hard", matches: "^(unlimited|[0-9]+)$" }
+              - { path: "$[0].units", equals: files }
+
+  # util-linux -r prints the columns lsblk -f lines up, one space apart
+  # and not lined up. Cut where the header words start, it put the
+  # version under FSTYPE's neighbour and the use percentage under UUID.
+  # Captured output, since a runner may have no block devices to list.
+  - name: the unaligned -r form of a util-linux table is refused, not cut by the header
+    only: {os: linux}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
+    steps:
+      - fixture:
+          file: bin/lsblk
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            case " $* " in
+            *" -r "*) cat "$(dirname "$0")/../captured/lsblk-f-r.txt" ;;
+            *) cat "$(dirname "$0")/../captured/lsblk-f.txt" ;;
+            esac
+      - fixture:
+          file: captured/lsblk-f-r.txt
+          from: "${specdir}/../../registry/parsers/lsblk/filesystems/testdata/raw.txt"
+      - fixture:
+          file: captured/lsblk-f.txt
+          from: "${specdir}/../../registry/parsers/lsblk/filesystems/testdata/util-linux-2.41.txt"
+      - run:
+          command: jz run lsblk -f -r
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: "No variant's signature fits this text"
+      - run:
+          command: jz run --explain lsblk -f
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lsblk/filesystems from embedded"
 
   # The host's own procps, so what is pinned is the shape of the answer
   # rather than any particular machine's numbers.
@@ -410,6 +614,15 @@ scenarios:
           stdout:
             contains: '"swpd":'
             count: 3
+      # -w widens the columns and puts dashes on both sides of each group
+      # name ("--procs--"), which the signature used to turn away.
+      - run:
+          command: jz run vmstat -w
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].swpd", gte: 0 }
 
   - name: jz run --stream iostat writes one sample per interval
     only: {os: linux}
@@ -442,6 +655,30 @@ scenarios:
               # Two samples and the closing summary.
               - { path: "$", length: 3 }
               - { path: "$[2].cpu[0].time", equals: Average }
+
+  # Each pidstat report has its own columns under the same banner; the
+  # header names the report, so each lands on its own definition.
+  - name: pidstat -d and -w land on their own definitions
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain pidstat -d 1 1
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pidstat/io from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+      - run:
+          command: jz run --explain pidstat -w 1 1
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pidstat/switches from embedded"
+          stdout:
+            json:
+              - { path: "$[1].tasks[0].time", equals: Average }
 
   - name: the network and package listings land on their own definitions
     only: {os: linux}
@@ -585,6 +822,48 @@ scenarios:
               - { path: "$[0].unit", equals: ModemManager.service }
               - { path: "$[0].exposure", equals: 6.3 }
               - { path: "$[1].predicate", equals: EXPOSED }
+      # With no subcommand powerprofilesctl lists the profiles too.
+      - fixture:
+          file: bin/powerprofilesctl
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/powerprofilesctl-list.txt"
+      - fixture:
+          file: captured/powerprofilesctl-list.txt
+          from: "${specdir}/../../registry/parsers/powerprofilesctl/list/testdata/ppd-0.30.txt"
+      - run:
+          command: jz run --explain powerprofilesctl
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "powerprofilesctl/list from embedded"
+          stdout:
+            json:
+              - { path: "$[1].profile.active", equals: true }
+              - { path: "$[1].profile.name", equals: balanced }
+      # A lock named in kana takes two columns a character, and the
+      # values after it stay under their own headers.
+      - fixture:
+          file: bin/systemd-inhibit
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/systemd-inhibit-list.txt"
+      - fixture:
+          file: captured/systemd-inhibit-list.txt
+          from: "${specdir}/../../registry/parsers/systemd-inhibit/list/testdata/systemd-259.txt"
+      - run:
+          command: jz run --explain systemd-inhibit --list
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemd-inhibit/list from embedded"
+          stdout:
+            json:
+              - { path: "$[8].who", equals: スクリーンロッカー }
+              - { path: "$[8].uid", equals: 1000 }
+              - { path: "$[8].mode", equals: delay }
       - fixture:
           file: bin/blkid
           mode: "0755"
@@ -605,6 +884,40 @@ scenarios:
               - { path: "$", length: 2 }
               - { path: "$[0].attributes.DEVNAME", equals: /dev/nvme1n1p2 }
               - { path: "$[1].attributes.TYPE", equals: vfat }
+
+  # A host that does not answer is what ping is run to find out, and its
+  # summary then has no round trip times. That run used to be a parse
+  # error with no JSON. It keeps ping's status and is read, the ICMP
+  # errors that came back in place of replies included. The real ping
+  # runs in hardware_linux.atago.yaml, since a machine may not let an
+  # unprivileged user send ICMP.
+  - name: ping that got no reply keeps its status and is still read
+    only: {os: linux}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
+    steps:
+      - fixture:
+          file: bin/ping
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/ping-unreachable.txt"
+            exit 1
+      - fixture:
+          file: captured/ping-unreachable.txt
+          from: "${specdir}/../../registry/parsers/ping/linux/testdata/unreachable.txt"
+      - run:
+          command: jz run --explain ping -c 3 192.0.2.10
+      - assert:
+          exit_code: 1
+          stderr:
+            contains: "ping/linux from embedded"
+          stdout:
+            json:
+              - { path: "$.replies[0].error", equals: Destination Host Unreachable }
+              - { path: "$.statistics.packets_received", equals: 0 }
+              - { path: "$.statistics.errors", equals: 3 }
+              - { path: "$.statistics.round_trip_avg_ms", equals: null }
 
   # BusyBox prints its own shape for several commands, and each has a
   # definition of its own. The host's busybox runs here, so what is
@@ -667,6 +980,254 @@ scenarios:
               - { path: "$[0].interface.name", equals: lo }
               - { path: "$[0].inet.address", equals: 127.0.0.1 }
               - { path: "$[0].inet.mask", equals: 255.0.0.0 }
+
+  # The short listings of clients and of cards are both three tab
+  # separated cells; the arguments choose the definition, and each one's
+  # signature refuses the other's text. The fake pactl prints what a
+  # PipeWire server prints for each.
+  - name: pactl list short clients and cards land on their own definitions
+    only: {os: linux}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
+    steps:
+      - fixture:
+          file: bin/pactl
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            case "$3" in
+            clients) printf '33\tPipeWire\twireplumber\n37\tPipeWire\tpipewire\n' ;;
+            cards) printf '55\talsa_card.pci-0000_c6_00.1\talsa\n' ;;
+            esac
+      - run:
+          command: jz run --explain pactl list short clients
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pactl/short-clients from embedded"
+          stdout:
+            json:
+              - { path: "$[1].binary", equals: pipewire }
+      - run:
+          command: jz run --explain pactl list short cards
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pactl/short-cards from embedded"
+          stdout:
+            json:
+              - { path: "$[0].name", equals: alsa_card.pci-0000_c6_00.1 }
+
+  # A machine with no sound card has no sinks, and pactl lists them by
+  # printing nothing. That is the empty list; pactl/info, one object, used
+  # to be judged with the listings and turned the answer into exit 4.
+  - name: pactl list of no sinks is the empty list
+    only: {os: linux}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
+    steps:
+      - fixture:
+          file: bin/pactl
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            exit 0
+      - run:
+          command: jz run pactl list short sinks
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+      - run:
+          command: jz run pactl list sinks
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+
+  # A diff with nothing in it prints nothing. --numstat is a list, so that
+  # is the empty list; git/diff-stat, an object, used to be judged with it
+  # and turned the answer into exit 4.
+  - name: git diff --numstat of no change is the empty list
+    only: {os: linux}
+    steps:
+      - run:
+          shell: true
+          command: git init -q repo && cd repo && jz run git diff --numstat
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+
+  # A device file has no size; ls prints its major and minor numbers in
+  # that column. /dev/null is 1, 3 on every Linux system, and a listing of
+  # /dev used to be exit 4 for the first device in it.
+  # Asking for a few kernel parameters, or a few properties of a unit,
+  # prints the lines the full report prints for them.
+  - name: sysctl KEY and systemctl show -p land on their definitions
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run sysctl kernel.ostype
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].value", equals: Linux }
+      - run:
+          command: jz run --explain systemctl show -p ActiveState,SubState systemd-journald
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemctl/show-properties from embedded"
+
+  # The time styles scripts ask for print the year and the clock, and
+  # --full-time the offset too, which makes the time an instant.
+  - name: ls -l with an ISO time style lands on its own definition
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run ls -l --time-style=long-iso /dev/null
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].date", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}$" }
+      - run:
+          command: jz run ls -l --full-time /dev/null
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].date", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$" }
+
+  - name: ls -l reads the device numbers of a device file
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run ls -l /dev/null
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].major", equals: 1 }
+              - { path: "$[0].minor", equals: 3 }
+      - run:
+          command: jz run ls -l /dev
+      - assert:
+          exit_code: 0
+
+  # A name may begin or end with a space. The listings put a fixed
+  # separator in front of the name, and what follows it is the name: a
+  # leading space used to be taken for more of the separator and dropped.
+  # A key is judged by the format, not by the rows one run printed: the
+  # listing of a process that is gone has no rows, and pid is still one
+  # of its keys.
+  - name: --extract of a key the format has works on an empty listing
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --extract pid ps -p 2147483647
+      - assert:
+          exit_code: 1
+          stdout:
+            equals: "[]\n"
+
+  # du -h prints an empty file as a plain 0, which is also what du/posix
+  # reads; the rounded size on the next line decides.
+  - name: du -h naming an empty file first lands on the rounded definition
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: "duh/empty"
+          content: ""
+      - fixture:
+          file: "duh/full"
+          content: "x\n"
+      - run:
+          command: jz run du -h duh/empty duh/full
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].size", equals: "0" }
+              - { path: "$[1].size", matches: "^[0-9.]+K$" }
+
+  - name: a name that begins or ends with a space keeps it
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: "sp/ lead"
+          content: "x\n"
+      - fixture:
+          file: "sp/trail "
+          content: "y\n"
+      - run:
+          command: jz run ls -l sp
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].filename", equals: " lead" }
+              - { path: "$[1].filename", equals: "trail " }
+      - run:
+          command: jz run du -a sp
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"name":"sp/trail "'
+      - run:
+          shell: true
+          command: cd sp && jz run wc ' lead' 'trail '
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].filename", equals: " lead" }
+              - { path: "$[1].filename", equals: "trail " }
+
+  # A listing of several directories opens each with its path and a
+  # colon. A file whose name ends with a colon prints a line that ends the
+  # same way, and it has to stay an entry of the directory it is in.
+  - name: ls -lR is one record per directory, and one directory is ls -l
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: tree/a.txt
+          content: "hi\n"
+      - fixture:
+          file: "tree/sub/b:"
+          content: "x\n"
+      - run:
+          command: jz run --explain ls -lR tree
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ls/long-recursive from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].directory.path", equals: tree }
+              - { path: "$[1].directory.path", equals: tree/sub }
+              - { path: "$[1].entries[0].filename", equals: "b:" }
+      - run:
+          command: jz run --explain ls -l tree/sub
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ls/long from embedded"
+          stdout:
+            json:
+              - { path: "$[0].filename", equals: "b:" }
+      # -F marks each name with its kind ("sub/"), which is not the name.
+      - run:
+          command: jz run ls -lF tree
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: "excluded by the argument -F"
 
   # An archive made here, listed by both implementations: BusyBox prints
   # the seconds of the timestamp and GNU tar does not, which is what

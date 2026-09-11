@@ -87,7 +87,10 @@ detect:
   `-hT` satisfies `any: ["-h"]`.
 - `signature` expressions are matched against the first `window` lines
   joined with newlines, in multi-line mode (`^`/`$` match line
-  boundaries). `\A` anchors at the start of the input.
+  boundaries). `\A` anchors at the start of the input, and `\z` at the
+  end of the window, which is the end of the input only when the input
+  fits in it: a rule about every line holds for the lines the window
+  holds.
 - `auto_detect: false` marks a format whose text is not evidence on its
   own: three numbers in a row, or a number and a path, describe far too
   many things. Such a definition is skipped by automatic detection and
@@ -180,7 +183,10 @@ and for the control files whose values continue on an indented line.
 
 With `record_separator: nul` the records are separated by NUL bytes instead,
 which is what makes a value containing a newline representable. Input
-must be valid UTF-8 and within the size limits.
+must be valid UTF-8 and within the size limits. A format read line by line
+refuses text holding a NUL byte, both when it is detected and when it is
+named: that is the output of a command run with `-z` or `--zero`, one line
+holding every record, and its last field would take all of them.
 
 ### Every line is read or left out by a rule
 
@@ -233,14 +239,39 @@ non-alphanumerics become `_`, a leading or trailing `%` becomes
 `_percent` (`%CPU` → `cpu_percent`, `Use%` → `use_percent`,
 `1K-blocks` → `1k_blocks`, `Mounted on` → `mounted_on`).
 
+A line of the body that repeats the header, word for word (cell for
+cell with `split: delimiter`), starts a second table: the output of the
+command run twice, or two files joined. It is read as the header again,
+which with `split: aligned` says where the second table's columns are,
+and never as a row of column names. `csv` and `box` do the same with a
+row equal to the header row. A table with `header.none` has no header to
+repeat.
+
 - `whitespace`: cells are runs of non-space characters; at most
   `max_fields` (default: number of columns) cells are produced and the
   last one keeps the rest of the line verbatim.
 - `aligned`: cells are cut where the header words start. A value that
   crosses a boundary from the right (a wide, right-aligned number) moves
   the cut to the previous space; a value that overflows to the right is
-  kept whole. Empty cells are `null`. With explicit `columns`, extra
-  trailing header words ("Mounted on") belong to the last column.
+  kept whole when the rest of the row moved right with it. Empty cells
+  are `null`. With explicit `columns`, extra trailing header words
+  ("Mounted on") belong to the last column.
+
+  Two rows are refused, because the header does not say where their
+  cells are. One is a value that runs past where the next column starts
+  and leaves that column empty: the column may have been empty, or its
+  header word may be the second word of the name before it (`CONTAINER
+  ID`). The other is a cell before the last that holds a tab or two
+  spaces in a row, the gap that stands between columns: a right-aligned
+  value with a space in it (`4min 27s`) starts before its header at a
+  space, and the cut leaves part of it in the cell before. A value that
+  itself holds two spaces (a date padded as `Sep  4`) can only be read
+  in the last column, or by an expression.
+  Positions are counted in the columns of a terminal, the way C tools
+  and systemd line a table up: a CJK character or a kana takes two, a
+  combining accent none. A tool that pads by counting characters instead
+  (Go's `text/tabwriter`) lines up a row holding such characters
+  differently, and that row is cut in the wrong place.
 - `delimiter`: `strings.SplitN` on the literal, cells trimmed.
 - `box`: a table drawn with rules, as MySQL, psql and `sqlite3` in box
   mode print one. The vertical bars say where the cells are, so nothing
@@ -260,7 +291,10 @@ non-alphanumerics become `_`, a leading or trailing `%` becomes
 
   A row whose first column is genuinely blank cannot be told from a
   continuation, because in this format they are the same line. A table
-  with such a column is one to read some other way.
+  with such a column is one to read some other way. For the same reason
+  a table with no rule under its header, several lines between its two
+  frame rules, is refused: a header over two lines and a headless table
+  of rows are the same text there.
 
   A line with neither a bar nor a rule on it has no cells, and a cell
   past the last column the header names has no name to go under; both
@@ -342,9 +376,12 @@ levels of indentation open it, and its children are the lines under it.
 `indent` is one level as it is written — `"\t"`, `"  "` — or a list of
 the forms one level may take, for a report that marks a level with a
 branch character. `systemd-analyze critical-chain` indents by two
-characters that are either two spaces or a backtick and a dash, so it
-writes `["  ", "`-"]`; the first form that fits at each step is the one
-taken, so the order is the order they are tried in.
+characters that are two spaces or a backtick and a dash, `| ` and `|-`
+where the chain branches, and the same drawn with box-drawing
+characters in a UTF-8 locale, so it writes
+`["  ", "`-", "| ", "|-", "│ ", "└─", "├─"]`; the first form that fits
+at each step is the one taken, so the order is the order they are tried
+in.
 A node is the fields `node` reads from its line plus a `children` array,
 which is `[]` when nothing follows it — so a consumer walks every node
 the same way. A `node` pattern cannot name a group `children`.
@@ -549,7 +586,6 @@ conversion:
 ```yaml
 fields:
   use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
-  size:        {type: size, unit: binary}
   modified:    {type: time, layout: "2006-01-02 15:04:05 -0700"}
   login_at:    {type: time, layout: "Jan _2 15:04", year: assumed}
   elapsed:     {type: duration, layout: mm:ss}
@@ -568,26 +604,28 @@ fields:
 
 | Key | Applies to | Meaning |
 |-----|-----------|---------|
-| `type` | all | `string` (default), `int`, `float`, `bool`, `size`, `time`, `duration`, `array`, `object` |
+| `type` | all | `string` (default), `int`, `float`, `bool`, `time`, `duration`, `array`, `object` |
 | `trim_prefix`, `trim_suffix` | all | removed before conversion; without them a string value keeps its whitespace exactly as the parser produced it |
 | `null_if` | all | values (after trimming) that become `null` |
 | `required` | all | `null`/empty is an error |
 | `when_missing` | all | `null` (default) or `omit` the key when the value is missing |
-| `unit` | size | `binary` (K=1024, default) or `decimal` (K=1000); `Ki`/`Mi` always mean 1024 |
 | `layout` | time | the [Go reference layout](https://pkg.go.dev/time#pkg-constants) the timestamp is written in; required, and it has to state a year unless `year: assumed` says the format prints none |
 | `year` | time | `assumed` for a format that prints no year; the value stays a string until `--assume-year` says which year to read it in |
 | `location` | time | how to read a timestamp that states no zone: `utc` (default) or `local`, the zone the running system is in |
 | `layout` | duration | `h:mm` or `mm:ss`, saying what the last part of a bare `4:50` is; required |
 | `true_values`, `false_values` | bool | spellings (case-insensitive); defaults are true/yes/on/1/y and false/no/off/0/n |
-| `split`, `split_regex` | array | how to split; items are trimmed |
+| `split`, `split_regex` | array | how to split; items are trimmed. A `split_regex` that matches the empty string is an error, since it would split between every character |
 | `items` | array | conversion applied to each element (arrays of arrays are not allowed) |
 | `regex`, `fields` | object | named groups become keys; `fields` converts them; the match has to cover the whole value |
 
-`size` accepts `1024`, `955M`, `3.7G`, `466Gi`, `1.2 MiB`, `0B` and
-returns bytes as an integer (rounded). Use it only where the base is
-certain and the value is not already rounded: a human-readable size
-printed by `df -h` or `ls -lh` is neither, and the official definitions
-keep such values as the strings they were printed as.
+There is no type that turns `955M` or `1.8T` into bytes. A size printed
+with a unit is rounded to fit the column (`df -h`, `ls -lh`, `free -h`),
+so the number of bytes it stands for depends on a base and a precision
+the text does not state, and any integer jz wrote for it would be one
+the command never printed. Such a value stays the string it was printed
+as; a size printed as a plain count is an `int`. A value and its unit
+printed as an exact pair (`MemTotal: 32790384 kB`) can be read into an
+`object` with the two as separate keys.
 
 `time` writes the value as an RFC 3339 string and never as an epoch
 number, so a timestamp has one shape in the output and a consumer never
@@ -635,6 +673,11 @@ It reads the spellings commands print:
 3d4h
 ```
 
+A unit spelled as a word (`min`, `Hours`) is read whatever its case. A
+unit of one or two letters is read as written: `m` is a minute, and `M`,
+which systemd writes for a month and a size writes for a megabyte, is
+no unit a duration reads.
+
 `layout` is required and is one of two words rather than a Go layout. It
 says what the last part of a bare two-part reading is: `ps` prints four
 minutes fifty seconds as `4:50` and `uptime` prints an hour and
@@ -642,7 +685,7 @@ twenty-three minutes as `1:23`, and nothing in the text separates them.
 Being wrong about it is a factor of sixty that nothing downstream would
 notice, so there is no default.
 
-The rule about rounded values applies here as it does to `size`, and it
+The rule about rounded values applies here as it does to sizes, and it
 is about what the text names rather than how coarse it is.
 `13 days, 4:30` names exactly 1139400 seconds, so it converts, even
 though the machine has been up for some seconds more. `1.8T` names no
@@ -658,7 +701,8 @@ Nesting is limited to 8 levels.
 ## The registry manifest
 
 `registry.yaml` sits at the top of a registry directory and describes the
-registry rather than any one definition:
+registry rather than any one definition. It is optional: a directory
+holding only `parsers/` is a registry that disables nothing.
 
 ```yaml
 format: 1                 # required; the same schema version definitions carry
@@ -692,7 +736,7 @@ Validation errors carry the source and a dotted path:
 
 ```
 user:parsers/x/y/parser.yaml: parse.pattern: invalid regular expression: missing closing )
-user:parsers/x/y/parser.yaml: fields.size.unit: must be binary or decimal
+user:parsers/x/y/parser.yaml: fields.elapsed.layout: must be h:mm or mm:ss for type duration, not "hh:mm"
 ```
 
 Parse errors carry the definition, line number and field:

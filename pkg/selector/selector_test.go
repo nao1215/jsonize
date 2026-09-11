@@ -84,7 +84,8 @@ func TestSelectAutomatic(t *testing.T) {
 func TestSelectNoMatch(t *testing.T) {
 	t.Parallel()
 	reg := testRegistry(t)
-	for _, input := range []string{"", "   \n\t\n", "this is not a filesystem table\n", "\xff\xfe\x00binary\n", "Filesystem\n"} {
+	// Input without text is TestInputWithoutTextSaysSo's.
+	for _, input := range []string{"this is not a filesystem table\n", "\xff\xfe\x00binary\n", "Filesystem\n"} {
 		_, err := Select(reg, Context{Input: []byte(input)})
 		var nm *NoMatchError
 		if !errors.As(err, &nm) {
@@ -101,6 +102,35 @@ func TestSelectNoMatch(t *testing.T) {
 		if strings.Count(msg, "\n") > 6 {
 			t.Errorf("message too long:\n%s", msg)
 		}
+		// Naming a parser that has a signature would be refused the same
+		// way, so the way forward it offers is a definition that describes
+		// a shape (env here, the one without a signature) or --define.
+		if strings.Contains(msg, "--parser df") || !strings.Contains(msg, "--parser env") || !strings.Contains(msg, "--define") {
+			t.Errorf("input %q: the message offers a way forward that does not lead anywhere:\n%s", input, msg)
+		}
+	}
+}
+
+// A command run with -z or --zero ends its records with NUL. Read line by
+// line that is one line holding every record, which a signature matching
+// the first one would let through; a format read line by line is out.
+func TestTextWithNULIsNotReadLineByLine(t *testing.T) {
+	t.Parallel()
+	reg := buildRegistry(t, map[string]string{
+		"sum/lines": def("sum", "lines", "detect: {signature: {all: ['^[0-9a-f]{4}  \\S']}}\n"),
+	})
+	in := []byte("abcd  a.txt\x00abcd  b.txt\x00")
+	for name, ctx := range map[string]Context{
+		"automatic": {Input: in},
+		"scoped":    {Parser: "sum", Input: in},
+		"named":     {Parser: "sum", Variant: "lines", Input: in},
+	} {
+		if _, err := Select(reg, ctx); err == nil || !strings.Contains(err.Error(), "NUL") {
+			t.Errorf("%s: %v", name, err)
+		}
+	}
+	if _, err := Select(reg, Context{Input: []byte("abcd  a.txt\nabcd  b.txt\n")}); err != nil {
+		t.Errorf("the same records on lines: %v", err)
 	}
 }
 
@@ -252,6 +282,83 @@ func TestDefinitionWithoutSignature(t *testing.T) {
 	}
 }
 
+// A signature that says every line has one shape (\z is the end of the
+// window) held a blank line at the end of the input against the text,
+// though the parser skips it: `cat /proc/meminfo; echo` was unidentified.
+// A signature anchored at \A did the same with a blank line before the
+// text. A blank line inside the text is still part of it.
+func TestBlankLinesAroundTheTextAreNotPartOfIt(t *testing.T) {
+	t.Parallel()
+	reg := buildRegistry(t, map[string]string{
+		"n/digits": def("n", "digits", "detect:\n  signature: {all: ['\\A(?:\\d+\\n)*\\d+\\z']}\n"),
+	})
+	for _, in := range []string{"1\n2\n", "1\n2", "1\n2\n\n", "1\n2\n  \n\n", "1\r\n2\r\n\r\n", "\n1\n2\n", " \n\r\n1\n2\n"} {
+		if res, err := Select(reg, Context{Input: []byte(in)}); err != nil || res.Entry.Def.ID() != "n/digits" {
+			t.Errorf("%q: %v", in, err)
+		}
+	}
+	for _, in := range []string{"1\n\n2\n", "1\n \n2\n"} {
+		if _, err := Select(reg, Context{Input: []byte(in)}); err == nil {
+			t.Errorf("%q: a blank line inside the text was dropped", in)
+		}
+	}
+}
+
+// Empty input, or input of blank lines only, holds no text to identify,
+// and saying that no signature matched it, or listing every variant's
+// first expression, sends the reader looking for a format.
+func TestInputWithoutTextSaysSo(t *testing.T) {
+	t.Parallel()
+	reg := testRegistry(t)
+	for _, in := range []string{"", "\n", "  \n\t\n"} {
+		_, err := Select(reg, Context{Input: []byte(in)})
+		var nm *NoMatchError
+		if !errors.As(err, &nm) || !strings.Contains(err.Error(), "holds no text") || strings.Contains(err.Error(), "signature") {
+			t.Errorf("%q, whole registry: %v", in, err)
+		}
+		_, err = Select(reg, Context{Parser: "df", Input: []byte(in)})
+		if !errors.As(err, &nm) || !strings.Contains(err.Error(), "no df variant matches this input, which holds no text") || strings.Contains(err.Error(), "signature") {
+			t.Errorf("%q, one parser: %v", in, err)
+		}
+		_, err = Select(reg, Context{Parser: "df", Variant: "gnu", Input: []byte(in)})
+		var me *MismatchError
+		if !errors.As(err, &me) || !strings.Contains(err.Error(), "df/gnu does not describe this input: it holds no text") {
+			t.Errorf("%q, one variant: %v", in, err)
+		}
+	}
+}
+
+// The candidates for a command that printed nothing are the ones its
+// system and arguments admit, with no text to look at.
+func TestCandidates(t *testing.T) {
+	t.Parallel()
+	reg := testRegistry(t)
+	ids := func(ctx Context) string {
+		entries := Candidates(reg, ctx)
+		out := make([]string, 0, len(entries))
+		for _, e := range entries {
+			out = append(out, e.Def.ID())
+		}
+		return strings.Join(out, " ")
+	}
+	for _, tt := range []struct {
+		ctx  Context
+		want string
+	}{
+		{Context{Parser: "df"}, "df/bsd df/gnu df/gnu-human"},
+		{Context{Parser: "df", OS: "linux", Args: []string{}}, "df/gnu"},
+		{Context{Parser: "df", OS: "linux", Args: []string{"-h"}}, "df/gnu-human"},
+		{Context{Parser: "df", OS: "darwin", Args: []string{"-h"}}, "df/bsd"},
+		{Context{Parser: "df", Variant: "gnu-human", OS: "linux", Args: []string{}}, ""},
+		{Context{Parser: "df", Variant: "nope"}, ""},
+		{Context{Parser: "nope"}, ""},
+	} {
+		if got := ids(tt.ctx); got != tt.want {
+			t.Errorf("Candidates(%+v) = %q, want %q", tt.ctx, got, tt.want)
+		}
+	}
+}
+
 func TestSelectWithParserScope(t *testing.T) {
 	t.Parallel()
 	reg := testRegistry(t)
@@ -259,14 +366,29 @@ func TestSelectWithParserScope(t *testing.T) {
 	if err != nil || res.Entry.Def.ID() != "df/gnu" || res.Scanned != 3 {
 		t.Errorf("scoped select: %v %v", res, err)
 	}
-	// A parser scope does not excuse a signature mismatch.
+	// A parser scope does not excuse a signature mismatch, and naming a
+	// variant would not either: a named variant is checked the same way,
+	// so the message must not send the reader there.
 	_, err = Select(reg, Context{Parser: "df", Input: []byte(mounted)})
 	var nm *NoMatchError
 	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "no df variant matches") {
 		t.Errorf("scoped mismatch: %v", err)
 	}
-	if !strings.Contains(err.Error(), "--parser df --variant") {
-		t.Errorf("scoped hint: %v", err)
+	if strings.Contains(err.Error(), "--variant") || !strings.Contains(err.Error(), "jz list df") {
+		t.Errorf("scoped hint for text no variant fits: %v", err)
+	}
+	// A variant whose signature fits and that only lacked an argument it
+	// asks for is the one to name: a pipe carries no arguments.
+	_, err = Select(reg, Context{Parser: "df", OS: "linux", Args: []string{}, Input: []byte(humanDF)})
+	if !errors.As(err, &nm) || !strings.Contains(err.Error(), "--variant gnu-human") || strings.Contains(err.Error(), "--variant bsd") {
+		t.Errorf("scoped hint for a variant the arguments ruled out: %v", err)
+	}
+	// A variant that lists the argument as one whose output it does not
+	// read has said so; offering it would send the reader back to it, and
+	// saying no signature fits would be untrue.
+	_, err = Select(reg, Context{Parser: "df", OS: "linux", Args: []string{"-hT"}, Input: []byte(gnuDF)})
+	if !errors.As(err, &nm) || strings.Contains(err.Error(), "--variant") || !strings.Contains(err.Error(), "does not read the output of") {
+		t.Errorf("scoped hint for a variant that excludes the argument: %v", err)
 	}
 }
 

@@ -152,6 +152,64 @@ func TestConversionOptions(t *testing.T) {
 	}
 }
 
+// An option that takes a value, given an empty one, names nothing. It
+// used to count as not given at all, so a script passing --define "$DEF"
+// with DEF unset had its input read by whatever detection chose.
+func TestEmptyOptionValueIsAUsageError(t *testing.T) {
+	h := newHarness(t)
+	for _, args := range [][]string{
+		{"--define", ""},
+		{"--parser", ""},
+		{"--parser", "df", "--variant", ""},
+		{"--file", ""},
+		{"-f", ""},
+		{"--assume-year", ""},
+		{"run", "--parser", "", "df"},
+	} {
+		code := h.pipe(gnuDF, args...)
+		if code != ExitUsage || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), "empty value") {
+			t.Errorf("%q: code = %d, stdout = %q, stderr = %s", args, code, h.stdout.String(), h.stderr.String())
+		}
+	}
+}
+
+// An option that takes one value, given two, states two answers. The
+// last one used to win without a word, so `jz -f a -f b` converted b and
+// said nothing about a. An option that may be repeated, and a switch,
+// are not affected.
+func TestRepeatedOptionIsAUsageError(t *testing.T) {
+	h := newHarness(t)
+	dir := t.TempDir()
+	file := filepath.Join(dir, "df.txt")
+	if err := os.WriteFile(file, []byte(gnuDF), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	for _, args := range [][]string{
+		{"-f", file, "-f", file},
+		{"-f", file, "--file", file},
+		{"--parser", "df", "--parser", "ls"},
+		{"--parser", "df", "--variant", "gnu", "--variant", "gnu-human"},
+		{"--assume-year", "2024", "--assume-year", "2025"},
+		{"run", "--timeout", "1h", "--timeout", "1s", "df"},
+		{"list", "--json", "--json"},
+	} {
+		code := h.pipe(gnuDF, args...)
+		if args[0] == "list" {
+			// --json is a switch: saying it twice says one thing.
+			if code != ExitOK {
+				t.Errorf("%q: code = %d, stderr = %s", args, code, h.stderr.String())
+			}
+			continue
+		}
+		if code != ExitUsage || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), "was given twice") {
+			t.Errorf("%q: code = %d, stdout = %q, stderr = %s", args, code, h.stdout.String(), h.stderr.String())
+		}
+	}
+	if code := h.pipe(gnuDF, "--extract", "filesystem", "--extract", "used", "-p", "-p"); code != ExitOK {
+		t.Errorf("repeatable options: %d %s", code, h.stderr.String())
+	}
+}
+
 // TestRemovedOptionsAreGone pins that the options cut before release are
 // usage errors rather than silently accepted or ignored.
 func TestRemovedOptionsAreGone(t *testing.T) {
@@ -598,8 +656,27 @@ func TestUsageAndVersion(t *testing.T) {
 			t.Errorf("%v: %d %q", args, code, h.stdout.String())
 		}
 	}
+	// version takes nothing, as list takes no more than it names.
+	if code := h.run("version", "extra"); code != ExitUsage || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), "takes no arguments") {
+		t.Errorf("version extra: %d %q %s", code, h.stdout.String(), h.stderr.String())
+	}
+	// A directory that does not exist is not described as one without
+	// parsers in it.
+	if code := h.run("test", filepath.Join(t.TempDir(), "absent")); code != ExitRegistry || !strings.Contains(h.stderr.String(), "does not exist") {
+		t.Errorf("test absent: %d %s", code, h.stderr.String())
+	}
 	if code := h.run("frobnicate"); code != ExitUsage || !strings.Contains(h.stderr.String(), `unknown command "frobnicate"`) {
 		t.Errorf("unknown command: %d %s", code, h.stderr.String())
+	}
+	// A file where a subcommand goes is a file meant to be read, and the
+	// refusal says how, keeping the options it was given.
+	captured := filepath.Join(t.TempDir(), "df output.txt")
+	if err := os.WriteFile(captured, []byte(gnuDF), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if code := h.run("--pretty", captured); code != ExitUsage || h.stdout.Len() != 0 ||
+		!strings.Contains(h.stderr.String(), "jz --pretty --file '"+captured+"'") {
+		t.Errorf("file as a command: %d %s", code, h.stderr.String())
 	}
 	if code := h.pipe(gnuDF, "--pretty", "run"); code != ExitUsage || !strings.Contains(h.stderr.String(), "must come before") {
 		t.Errorf("subcommand after options: %d %s", code, h.stderr.String())
@@ -645,7 +722,7 @@ func TestList(t *testing.T) {
 		t.Fatal(h.stderr.String())
 	}
 	out = h.stdout.String()
-	for _, want := range []string{"df/gnu-human", "source:", "format:       1", "detection:", "signature", "table split=whitespace"} {
+	for _, want := range []string{"df/gnu-human", "source:", "format:       1", "detection:", "signature", "regex each=line groups=filesystem,size"} {
 		if !strings.Contains(out, want) {
 			t.Errorf("list df gnu-human missing %q:\n%s", want, out)
 		}
@@ -982,6 +1059,124 @@ func TestRunPassesStdinToTheCommand(t *testing.T) {
 	}
 }
 
+// A command ended from outside stops wherever its output had got to, as
+// often as not in the middle of a line. A stream keeps the records it has
+// written but not the one the cut fell in; output that never came to its
+// end is not a whole document, so none is written.
+func TestRunDoesNotReadOutputCutShort(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	h := newHarness(t)
+	shellRegistry(t, h)
+	killed := "echo a=whole; printf b=cu; kill -TERM $$"
+	stalled := "echo a=whole; printf b=cu; exec sleep 5"
+	define := "parse: {type: kv}"
+	for _, args := range [][]string{
+		{"run", "--stream", "sh", "-c", killed},
+		{"run", "--stream", "--define", define, "sh", "-c", killed},
+		{"run", "--stream", "--timeout", "300ms", "sh", "-c", stalled},
+	} {
+		code := h.run(args...)
+		if code != 143 || !strings.Contains(h.stdout.String(), `"value":"whole"`) || strings.Contains(h.stdout.String(), `"cu"`) {
+			t.Errorf("%v: %d stdout=%q stderr=%s", args, code, h.stdout.String(), h.stderr.String())
+		}
+	}
+	for _, args := range [][]string{
+		{"run", "sh", "-c", killed},
+		{"run", "--define", define, "sh", "-c", killed},
+		{"run", "--timeout", "300ms", "sh", "-c", stalled},
+	} {
+		code := h.run(args...)
+		if code != 143 || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), "--stream") {
+			t.Errorf("%v: %d stdout=%q stderr=%s", args, code, h.stdout.String(), h.stderr.String())
+		}
+	}
+}
+
+// A command that ends and leaves a process behind holding its output
+// open has still ended, and what it printed is converted. The whole
+// document used to fail with "WaitDelay expired before I/O complete" and
+// a stream to wait for the process it left, which for a daemon is for
+// ever.
+func TestRunCommandThatLeavesItsOutputOpen(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	h := newHarness(t)
+	for _, args := range [][]string{
+		{"run", "--define", "parse: {type: kv}", "--", "sh", "-c", "sleep 6 & echo a=b"},
+		{"run", "--stream", "--define", "parse: {type: kv}", "--", "sh", "-c", "sleep 6 & echo a=b"},
+	} {
+		start := time.Now()
+		code := h.run(args...)
+		if code != ExitOK || !strings.Contains(h.stdout.String(), `"value":"b"`) ||
+			!strings.Contains(h.stderr.String(), "sh ended, and a process it started still held its output open") {
+			t.Errorf("%v: %d stdout=%q stderr=%s", args, code, h.stdout.String(), h.stderr.String())
+		}
+		if time.Since(start) > 5*time.Second {
+			t.Errorf("%v: waited %s for the process sh left", args, time.Since(start))
+		}
+	}
+}
+
+// A wrapper puts its own name where jz looks for the parser. When what it
+// runs is a command jz knows, the refusal says how to name that parser,
+// instead of offering names that merely look like the wrapper's.
+func TestRunNamesTheParserAWrapperRuns(t *testing.T) {
+	h := newHarness(t)
+	for _, tt := range []struct {
+		args []string
+		want string
+	}{
+		{[]string{"run", "nice", "-n", "5", "df", "-h"}, "jz run --parser df -- nice -n 5 df -h"},
+		{[]string{"run", "--pretty", "stdbuf", "-oL", "/usr/bin/ps", "aux"}, "jz run --pretty --parser ps -- stdbuf -oL /usr/bin/ps aux"},
+	} {
+		code := h.run(tt.args...)
+		if code != ExitSelect || !strings.Contains(h.stderr.String(), tt.want) || strings.Contains(h.stderr.String(), "did you mean") {
+			t.Errorf("%v: %d %s", tt.args, code, h.stderr.String())
+		}
+	}
+	// Nothing jz knows among the arguments: the refusal is what it was.
+	if code := h.run("run", "nice", "./script"); code != ExitSelect || strings.Contains(h.stderr.String(), "--parser") {
+		t.Errorf("no known command: %d %s", code, h.stderr.String())
+	}
+	// A directory is something a command reads, not a command it runs,
+	// whatever its name: `tree -L 2 /etc/apt` does not run apt.
+	dir := filepath.Join(t.TempDir(), "apt")
+	if err := os.Mkdir(dir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if code := h.run("run", "nice", "-n", "5", dir); code != ExitSelect || strings.Contains(h.stderr.String(), "--parser") {
+		t.Errorf("a directory named like a parser: %d %s", code, h.stderr.String())
+	}
+	// A file that is not a program is read, not run: `stat /proc/uptime`.
+	file := filepath.Join(t.TempDir(), "uptime")
+	if err := os.WriteFile(file, []byte("1 2\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if code := h.run("run", "nice", file); runtime.GOOS != "windows" && (code != ExitSelect || strings.Contains(h.stderr.String(), "--parser")) {
+		t.Errorf("a data file named like a parser: %d %s", code, h.stderr.String())
+	}
+	if runtime.GOOS == "windows" {
+		return
+	}
+	// env is a parser of its own, so jz runs it and only the output says
+	// it ran something else.
+	for _, tt := range []struct {
+		args []string
+		want string
+	}{
+		{[]string{"run", "env", "JZ_X=1", "df"}, "If env runs df, name that parser: jz run --parser df -- env JZ_X=1 df"},
+		{[]string{"run", "--stream", "env", "JZ_X=1", "df"}, "If env runs df, name that parser: jz run --stream --parser df -- env JZ_X=1 df"},
+	} {
+		code := h.run(tt.args...)
+		if code != ExitSelect || !strings.Contains(h.stderr.String(), tt.want) {
+			t.Errorf("%v: %d %s", tt.args, code, h.stderr.String())
+		}
+	}
+}
+
 func TestRunRealCommands(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("no POSIX commands")
@@ -1136,17 +1331,35 @@ func TestRunWithNoOutputAnswersWithAnEmptyList(t *testing.T) {
 	h := newHarness(t)
 	// A command that lists things prints nothing when there is nothing
 	// to list. jz started this command, so it knows which format was
-	// meant and can say the list is empty; on a pipe it could not.
-	if code := h.run("run", "--parser", "git", "--variant", "stash-list", "true"); code != ExitOK {
+	// meant and can say the list is empty; on a pipe it could not. true
+	// ignores its arguments, so it stands in for `git stash list`.
+	if code := h.run("run", "--parser", "git", "--variant", "stash-list", "true", "stash", "list"); code != ExitOK {
 		t.Fatalf("code=%d %s", code, h.stderr.String())
 	}
 	if got := strings.TrimSpace(h.stdout.String()); got != "[]" {
 		t.Errorf("stdout = %q", got)
 	}
+	// The arguments still choose the variant. Without them the command
+	// was not asked for the list, and nothing printed is no answer: the
+	// same arguments with output would have been refused too.
+	for _, args := range [][]string{
+		{"run", "--parser", "git", "--variant", "stash-list", "true"},
+		{"run", "--parser", "git", "--variant", "stash-list", "--stream", "true"},
+		// systemd-inhibit without --list is a wrapper around another
+		// command, and what that one printed is no list of locks.
+		{"run", "--parser", "systemd-inhibit", "true", "--what=sleep", "true"},
+	} {
+		if code := h.run(args...); code != ExitSelect || h.stdout.Len() != 0 {
+			t.Errorf("%v: code=%d stdout=%q %s", args, code, h.stdout.String(), h.stderr.String())
+		}
+	}
 	// A format that yields one object has no empty form, so the answer
-	// is not knowable and jz says so rather than inventing one.
+	// is not knowable and jz says so rather than inventing one. id/posix
+	// is read on every system and with any arguments, so what is left
+	// to refuse is the missing empty form; uptime/linux would be ruled
+	// out on macOS and Windows before that.
 	h2 := newHarness(t)
-	if code := h2.run("run", "--parser", "uptime", "--variant", "linux", "true"); code != ExitSelect {
+	if code := h2.run("run", "--parser", "id", "--variant", "posix", "true"); code != ExitSelect {
 		t.Fatalf("code=%d %s", code, h2.stderr.String())
 	}
 	if h2.stdout.Len() != 0 {
@@ -1202,6 +1415,57 @@ func TestExtractAndExclude(t *testing.T) {
 	}
 	if !strings.Contains(h.stderr.String(), "cannot be used together") {
 		t.Error(h.stderr.String())
+	}
+}
+
+// A key is checked against what the definition can produce, not against
+// what one input happened to hold: an optional key no row has, and any
+// key of an empty listing, narrow to nothing rather than being refused,
+// and a stream does not refuse a key its first record omits. A key
+// outside what the definition can produce is refused before anything
+// is written.
+func TestExtractKnowsTheKeysOfTheFormat(t *testing.T) {
+	const lo = "lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> \n"
+	const veth = "veth0@if2        UP             52:54:00:10:00:06 <BROADCAST,MULTICAST,UP,LOWER_UP> \n"
+	for _, tc := range []struct {
+		name  string
+		input string
+		args  []string
+		code  int
+		want  string
+	}{
+		{"optional key no row has", lo, []string{"--extract", "peer"}, ExitOK, `[{}]`},
+		{"optional key in a later record of a stream", lo + veth, []string{"--stream", "--extract", "peer"}, ExitOK, "{}\n{\"peer\":\"if2\"}"},
+		{"exclude an optional key no row has", lo, []string{"--exclude", "peer"}, ExitOK,
+			`[{"interface":"lo","state":"UNKNOWN","lladdr":"00:00:00:00:00:00","flags":["LOOPBACK","UP","LOWER_UP"]}]`},
+		{"key the format cannot produce", lo + veth, []string{"--stream", "--extract", "nosuch"}, ExitUsage, ""},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			h := newHarness(t)
+			args := append([]string{"--parser", "ip", "--variant", "brief-link"}, tc.args...)
+			if code := h.pipe(tc.input, args...); code != tc.code {
+				t.Fatalf("code=%d want %d: %s", code, tc.code, h.stderr.String())
+			}
+			if got := strings.TrimSpace(h.stdout.String()); got != tc.want {
+				t.Errorf("stdout = %q, want %q", got, tc.want)
+			}
+		})
+	}
+	// The keys named in the refusal are the ones the format has.
+	h := newHarness(t)
+	if code := h.pipe(lo, "--parser", "ip", "--variant", "brief-link", "--extract", "nosuch"); code != ExitUsage {
+		t.Fatalf("code=%d", code)
+	}
+	if !strings.Contains(h.stderr.String(), `"peer"`) {
+		t.Errorf("the refusal should list peer among the keys: %s", h.stderr.String())
+	}
+	// An empty listing has every key of its format.
+	h = newHarness(t)
+	if code := h.pipe("PID TTY          TIME CMD\n", "--parser", "ps", "--variant", "posix", "--extract", "pid"); code != ExitOK {
+		t.Fatalf("empty listing: code=%d %s", code, h.stderr.String())
+	}
+	if got := strings.TrimSpace(h.stdout.String()); got != "[]" {
+		t.Errorf("empty listing = %q", got)
 	}
 }
 

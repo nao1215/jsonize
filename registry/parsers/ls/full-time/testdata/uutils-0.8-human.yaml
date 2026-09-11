@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (uutils coreutils 0.8.0) as ls -lh --full-time internal in the jsonize repository with LC_ALL=C; the user and group names replaced
+description: rounded sizes, kept as printed
+os: linux
+args: [-lh, --full-time, internal]

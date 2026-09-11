@@ -28,6 +28,9 @@
       },
       "name": {
         "type": "string"
+      },
+      "offset": {
+        "type": "string"
       }
     },
     "required": [

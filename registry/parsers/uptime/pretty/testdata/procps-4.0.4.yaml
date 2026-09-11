@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) as uptime -p with LC_ALL=C
+description: up for less than a day, so only hours and minutes are printed
+os: linux
+args: [-p]

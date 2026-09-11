@@ -28,6 +28,11 @@ const DefaultMaxOutput = 64 * 1024 * 1024
 // is killed in that case.
 var ErrOutputTooLarge = errors.New("command output exceeds the size limit")
 
+// ErrCut ends the output Stream hands over when the command was ended
+// from outside rather than by itself. Its output stops wherever it had
+// got to, so what follows the last line ending is not a line it finished.
+var ErrCut = errors.New("the command was ended before it finished its output")
+
 // Command describes what to run.
 type Command struct {
 	Name string
@@ -59,6 +64,48 @@ type Result struct {
 	// consumer of its output stopped, so the status is the runner's doing
 	// rather than anything the child said about itself.
 	Stopped bool
+	// Cut reports that the child was ended from outside: by a signal, or,
+	// where there are none, at the deadline. Its output stops wherever it
+	// had got to, not where the child would have ended it.
+	Cut bool
+	// LeftOpen reports that the child ended and a process it started still
+	// held its output open when jz stopped reading, which it does a grace
+	// period after the child ended. What that process writes is not the
+	// command's output, and waiting for it would wait as long as it runs.
+	LeftOpen bool
+}
+
+// grace is how long jz goes on reading after the command ended, for
+// output a process it left behind may still be writing, before it takes
+// the output as finished. It is also the time a command stopped by the
+// deadline gets before it is killed.
+const grace = 3 * time.Second
+
+// ended records in res how the child ended, from what Wait returned. It
+// reports false for a failure to wait, which says nothing about the child.
+func (res *Result) ended(ctx context.Context, waitErr error) bool {
+	if waitErr == nil {
+		return true
+	}
+	if errors.Is(waitErr, exec.ErrWaitDelay) {
+		// The child succeeded, and a process it started kept its output
+		// open past the grace period.
+		res.LeftOpen = true
+		return true
+	}
+	var ee *exec.ExitError
+	if !errors.As(waitErr, &ee) {
+		return false
+	}
+	res.ExitCode = ee.ExitCode()
+	if sig, ok := signalName(ee.ProcessState); ok {
+		res.Signal = sig.name
+		res.ExitCode = 128 + sig.number
+	}
+	// On Windows there is no signal to see: a child killed at the deadline
+	// shows a plain non-zero status, and the deadline is what tells.
+	res.Cut = res.Signal != "" || (!hasSignals && ctx.Err() != nil)
+	return true
 }
 
 // Run executes cmd. stderr receives the child's stderr as it is produced.
@@ -98,7 +145,7 @@ func run(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay) (*Resu
 	c.Cancel = func() error { return terminate(c.Process) }
 	// If the child exits but a grandchild keeps the pipes open, give up on
 	// them after this delay instead of hanging.
-	c.WaitDelay = 3 * time.Second
+	c.WaitDelay = grace
 	start := time.Now()
 	if err := c.Start(); err != nil {
 		return nil, fmt.Errorf("cannot run %q: %w", cmd.Name, err)
@@ -109,16 +156,8 @@ func run(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay) (*Resu
 	if errors.Is(context.Cause(runCtx), ErrOutputTooLarge) {
 		return nil, fmt.Errorf("%w (%d bytes)", ErrOutputTooLarge, limit)
 	}
-	if waitErr != nil {
-		var ee *exec.ExitError
-		if !errors.As(waitErr, &ee) {
-			return nil, fmt.Errorf("waiting for %q: %w", cmd.Name, waitErr)
-		}
-		res.ExitCode = ee.ExitCode()
-		if sig, ok := signalName(ee.ProcessState); ok {
-			res.Signal = sig.name
-			res.ExitCode = 128 + sig.number
-		}
+	if !res.ended(ctx, waitErr) {
+		return nil, fmt.Errorf("waiting for %q: %w", cmd.Name, waitErr)
 	}
 	return res, nil
 }
@@ -159,7 +198,7 @@ func stream(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay, con
 	c.Stdin = cmd.Stdin
 	c.Stderr = stderr
 	c.Cancel = func() error { return terminate(c.Process) }
-	c.WaitDelay = 3 * time.Second
+	c.WaitDelay = grace
 	// The pipe is jz's own rather than the one StdoutPipe would set up,
 	// so that waiting for the command is waiting for the command: a
 	// process it started and left behind may hold the writing end open,
@@ -177,7 +216,31 @@ func stream(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay, con
 	}
 	_ = pw.Close()
 	sigs.forwardTo(c.Process)
-	consumeErr := consume(pr)
+	// The command is waited for while its output is read, so that the
+	// end of the output can say how the command ended.
+	res := &Result{}
+	var (
+		waitErr  error
+		endedAt  time.Time
+		waitedOK bool
+	)
+	waited := make(chan struct{})
+	go func() {
+		waitErr = c.Wait()
+		endedAt = time.Now()
+		// Wait has already spent the grace period when a process the
+		// command left holds its standard error open as well.
+		if errors.Is(waitErr, exec.ErrWaitDelay) {
+			endedAt = endedAt.Add(-grace)
+		}
+		// A read already waiting when the command ended is waiting for a
+		// process it left behind; the grace period bounds that wait too.
+		_ = pr.SetReadDeadline(later(endedAt.Add(grace), time.Now().Add(settle)))
+		res.Duration = endedAt.Sub(start)
+		waitedOK = res.ended(ctx, waitErr)
+		close(waited)
+	}()
+	consumeErr := consume(&output{f: pr, waited: waited, endedAt: &endedAt, res: res})
 	if consumeErr != nil {
 		stop()
 	}
@@ -185,28 +248,72 @@ func stream(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay, con
 	// so it cannot block on a full pipe; the drain ends with the pipe,
 	// which is closed once the command has, whoever else holds it.
 	go func() { _, _ = io.Copy(io.Discard, pr) }()
-	waitErr := c.Wait()
-	res := &Result{Duration: time.Since(start)}
-	if waitErr != nil {
-		var ee *exec.ExitError
-		if !errors.As(waitErr, &ee) {
-			if consumeErr != nil {
-				return res, consumeErr
-			}
-			return nil, fmt.Errorf("waiting for %q: %w", cmd.Name, waitErr)
+	<-waited
+	if !waitedOK {
+		if consumeErr != nil {
+			return res, consumeErr
 		}
-		res.ExitCode = ee.ExitCode()
-		if sig, ok := signalName(ee.ProcessState); ok {
-			res.Signal = sig.name
-			res.ExitCode = 128 + sig.number
-		}
-		// A child that ended by itself, however it ended, keeps its
-		// status; only one that had to be stopped is the runner's doing.
-		// On Windows there is no signal to see, so a kill is a plain
-		// non-zero status and the stop is what tells the two apart.
-		res.Stopped = consumeErr != nil && ctx.Err() == nil && (res.Signal != "" || !hasSignals)
+		return nil, fmt.Errorf("waiting for %q: %w", cmd.Name, waitErr)
 	}
+	// A child that ended by itself, however it ended, keeps its status;
+	// only one that had to be stopped is the runner's doing. On Windows
+	// there is no signal to see, so a kill is a plain non-zero status and
+	// the stop is what tells the two apart.
+	res.Stopped = waitErr != nil && consumeErr != nil && ctx.Err() == nil && (res.Signal != "" || !hasSignals)
 	return res, consumeErr
+}
+
+// output is the command's standard output as the consumer reads it. Its
+// end waits for the command to have ended, so that output the command
+// did not finish ends with ErrCut instead of passing for output it did.
+//
+// Once the command has ended, what it wrote is in the pipe, and a read
+// that has to wait is waiting for a process it left behind holding the
+// pipe open. Such a read waits out the grace period; after that, only
+// what is already in the pipe is read, however slowly the consumer gets
+// to it, and the output ends there.
+type output struct {
+	f       *os.File
+	waited  <-chan struct{}
+	endedAt *time.Time
+	res     *Result
+}
+
+// settle is how long a read past the grace period may wait for bytes to
+// arrive: long enough for what is already in the pipe, too short to be
+// waiting for anything else.
+const settle = 50 * time.Millisecond
+
+// later returns the later of two times.
+func later(a, b time.Time) time.Time {
+	if a.After(b) {
+		return a
+	}
+	return b
+}
+
+func (o *output) Read(p []byte) (int, error) {
+	select {
+	case <-o.waited:
+		// Past the grace period, what is already in the pipe is still
+		// read. A pipe that cannot take a deadline (Windows) is read the
+		// way it always was, to its end.
+		_ = o.f.SetReadDeadline(later(o.endedAt.Add(grace), time.Now().Add(settle)))
+	default:
+	}
+	n, err := o.f.Read(p)
+	if errors.Is(err, os.ErrDeadlineExceeded) {
+		<-o.waited
+		o.res.LeftOpen = true
+		err = io.EOF
+	}
+	if errors.Is(err, io.EOF) {
+		<-o.waited
+		if o.res.Cut {
+			return n, ErrCut
+		}
+	}
+	return n, err
 }
 
 // relay carries the signals jz forwards to its child. It is subscribed

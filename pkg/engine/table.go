@@ -9,7 +9,7 @@ import (
 )
 
 // column is a resolved table column: its name and, for aligned tables, the
-// rune offset where its header starts.
+// display column where its header starts.
 type column struct {
 	name  string
 	start int
@@ -51,9 +51,17 @@ func (r *run) parseTable(p *definition.Parse, fields map[string]*definition.Fiel
 	for _, l := range lines {
 		var cells []any
 		var err error
+		if !p.Header.None && sameHeader(p, split, l.text, header.text) {
+			// The output of the command run twice: the second table's
+			// header, which says where its own columns are.
+			if cols, err = r.resolveHeader(p, l, split); err != nil {
+				return nil, err
+			}
+			continue
+		}
 		switch split {
 		case definition.SplitAligned:
-			cells = alignedCells(l.text, cols)
+			cells, err = r.alignedRow(l, cols)
 		case definition.SplitDelimiter:
 			cells, err = r.delimitedCells(p, l, len(cols))
 		default:
@@ -75,6 +83,51 @@ func (r *run) parseTable(p *definition.Parse, fields map[string]*definition.Fiel
 		out = append(out, obj)
 	}
 	return out, nil
+}
+
+// sameHeader reports whether a line of the body repeats the header: the
+// same words, or for a delimited table the same cells, in the same order.
+// That is where a second table starts, the output of the command run
+// twice or of two files joined, and reading it as a row would make a
+// record of the column names.
+//
+// It runs on every row, so it walks both texts without splitting them.
+func sameHeader(p *definition.Parse, split, text, header string) bool {
+	if split == definition.SplitDelimiter {
+		for {
+			a, restA, moreA := strings.Cut(text, p.Delimiter)
+			b, restB, moreB := strings.Cut(header, p.Delimiter)
+			if moreA != moreB || strings.TrimSpace(a) != strings.TrimSpace(b) {
+				return false
+			}
+			if !moreA {
+				return true
+			}
+			text, header = restA, restB
+		}
+	}
+	for {
+		a, restA := nextWord(text)
+		b, restB := nextWord(header)
+		if a != b {
+			return false
+		}
+		if a == "" {
+			return true
+		}
+		text, header = restA, restB
+	}
+}
+
+// nextWord returns the first run of non-space characters of s and what
+// follows it, or "" when s holds none.
+func nextWord(s string) (word, rest string) {
+	s = strings.TrimLeftFunc(s, unicode.IsSpace)
+	end := strings.IndexFunc(s, unicode.IsSpace)
+	if end < 0 {
+		return s, ""
+	}
+	return s[:end], s[end:]
 }
 
 // resolveHeader derives the column list from the header line and the
@@ -137,13 +190,15 @@ func (r *run) resolveHeader(p *definition.Parse, header line, split string) ([]c
 	return cols, nil
 }
 
-// token is a whitespace-delimited word with its rune offset.
+// token is a whitespace-delimited word with the display column it starts
+// at.
 type token struct {
 	text  string
 	start int
 }
 
-// tokenize splits s on runs of whitespace, recording rune offsets.
+// tokenize splits s on runs of whitespace, recording where each word
+// starts in the columns of a terminal (see cellWidth).
 func tokenize(s string) []token {
 	var toks []token
 	start := -1
@@ -162,7 +217,7 @@ func tokenize(s string) []token {
 			}
 			b.WriteRune(r)
 		}
-		pos++
+		pos += cellWidth(r)
 	}
 	if start >= 0 {
 		toks = append(toks, token{text: b.String(), start: start})
@@ -242,48 +297,135 @@ func splitFieldsN(s string, n int) []string {
 // crosses the nominal boundary between two columns (a right-aligned number
 // that is wider than its header) is assigned to the column on its right,
 // mirroring how humans read such tables. Empty cells become nil.
-func alignedCells(text string, cols []column) []any {
+//
+// The offsets are display columns, the way the table was lined up, so a
+// row holding wide characters is cut where the header says rather than a
+// character later for every one of them.
+//
+// Two rows are refused rather than cut, because the header does not say
+// where their cells are:
+//
+//   - A value runs past the start of the next column and leaves it
+//     empty. A value that pushed the rest of the row right leaves
+//     something there and is kept whole; an empty column says nothing
+//     about whether it was empty or its header word is the second word of
+//     this column's name ("CONTAINER ID").
+//   - A cell other than the last holds a tab or two spaces in a row,
+//     which is what stands between two columns: the cut fell inside the
+//     gutter's neighbour, as it does under a right-aligned value with a
+//     space in it ("4min 27s" under LEFT in systemctl list-timers).
+func alignedCells(text string, cols []column) ([]any, *misaligned) {
 	runes := []rune(text)
 	n := len(runes)
 	cells := make([]any, len(cols))
+	narrow := allNarrow(text, runes)
 	prevEnd := 0
+	overran := -1
 	for i := range cols {
 		start := prevEnd
 		end := n
 		if i+1 < len(cols) {
 			end = cols[i+1].start
-			if end > n {
-				end = n
+			// Where every character takes one column, a column is an index.
+			if !narrow {
+				end = runeAt(runes, end)
 			}
-			if end < start {
-				end = start
-			}
-			// The next column's value may start before its header does
-			// (right-aligned numbers). Walk left from the boundary to the
-			// previous whitespace.
-			if end > start && end < n && !unicode.IsSpace(runes[end]) && !unicode.IsSpace(runes[end-1]) {
-				j := end
-				for j > start && !unicode.IsSpace(runes[j-1]) {
-					j--
-				}
-				if j > start {
-					end = j
-				} else {
-					// No whitespace on the left: the token began in this
-					// column and overflows to the right. Keep it whole.
-					for end < n && !unicode.IsSpace(runes[end]) {
-						end++
-					}
-				}
+			boundary := min(max(end, start), n)
+			end = cellEnd(runes, start, boundary)
+			if end > boundary {
+				overran = i + 1
 			}
 		}
 		cell := strings.TrimSpace(string(runes[start:end]))
-		if cell == "" {
+		switch {
+		case i+1 < len(cols) && (strings.Contains(cell, "\t") || strings.Contains(cell, "  ")):
+			return nil, &misaligned{col: i, value: cell, gutter: true}
+		case cell == "" && overran == i:
+			before, _ := cells[i-1].(string)
+			return nil, &misaligned{col: i, value: before}
+		case cell == "":
 			cells[i] = nil
-		} else {
+		default:
 			cells[i] = cell
 		}
 		prevEnd = end
 	}
-	return cells
+	return cells, nil
+}
+
+// misaligned is a row alignedCells refuses: the column it could not cut,
+// and the value that says why.
+type misaligned struct {
+	col    int
+	value  string
+	gutter bool // the value holds a column gap; otherwise the one before ran into this column
+}
+
+// alignedRow cuts a row of an aligned table, and refuses one the header
+// does not place (see alignedCells).
+func (r *run) alignedRow(l line, cols []column) ([]any, error) {
+	cells, bad := alignedCells(l.text, cols)
+	switch {
+	case bad == nil:
+		return cells, nil
+	case bad.gutter:
+		return nil, r.errorf(l.num, cols[bad.col].name, "%q holds the gap that stands between two columns, so the values of this row are not under their headers: %q",
+			bad.value, truncate(l.text, 80))
+	default:
+		return nil, r.errorf(l.num, cols[bad.col].name, "the value before it, %q, runs past where this column starts and leaves it empty, so the header does not say where the cells of this row are: %q",
+			bad.value, truncate(l.text, 80))
+	}
+}
+
+// cellEnd moves the boundary of a cell that starts at start and would end
+// at end off a value that crosses it. The next column's value may start
+// before its header does (a right-aligned number), so the cut walks left
+// to the previous whitespace; with none there, the value began in this
+// column and overflows to the right, and it is kept whole.
+func cellEnd(runes []rune, start, end int) int {
+	n := len(runes)
+	if end <= start || end >= n || unicode.IsSpace(runes[end]) || unicode.IsSpace(runes[end-1]) {
+		return end
+	}
+	j := end
+	for j > start && !unicode.IsSpace(runes[j-1]) {
+		j--
+	}
+	if j > start {
+		return j
+	}
+	for end < n && !unicode.IsSpace(runes[end]) {
+		end++
+	}
+	return end
+}
+
+// allNarrow reports whether every rune of text takes exactly one column.
+func allNarrow(text string, runes []rune) bool {
+	if len(runes) == len(text) {
+		// ASCII, one byte a rune; only its control characters are not
+		// narrow by cellWidth, and it counts them as one column too.
+		return true
+	}
+	for _, r := range runes {
+		if cellWidth(r) != 1 {
+			return false
+		}
+	}
+	return true
+}
+
+// runeAt returns the index of the first rune of runes that starts at
+// display column col or after it, and len(runes) when none does. A wide
+// character that starts before col and covers it stays on the left, and
+// a combining mark stays with the character it modifies.
+func runeAt(runes []rune, col int) int {
+	pos := 0
+	for i, r := range runes {
+		if pos >= col && cellWidth(r) > 0 {
+			return i
+		}
+		pos += cellWidth(r)
+	}
+	return len(runes)
 }

@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) as ls -ld /etc with LC_ALL=C
+description: >-
+  One directory on its own, with no total line above it. A lower-case
+  word followed by a number under 256 is also how an /etc/protocols
+  entry opens, which made this line ambiguous on a pipe.
+os: linux
+args: ["-ld", "/etc"]

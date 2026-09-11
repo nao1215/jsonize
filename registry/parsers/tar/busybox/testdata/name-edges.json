@@ -1,0 +1,29 @@
+[
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 2,
+    "date": "2026-09-11",
+    "time": "07:22:34",
+    "name": " lead"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 2,
+    "date": "2026-09-11",
+    "time": "07:22:34",
+    "name": "trail "
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-09-11",
+    "time": "07:18:13",
+    "name": "two  spaces"
+  }
+]

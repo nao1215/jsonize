@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ps/threads.json",
+  "title": "ps/threads",
+  "description": "ps -eLf, one line per thread (UID PID PPID LWP C NLWP STIME TTY TIME CMD)",
+  "x-jsonize": {
+    "definition": "ps/threads",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "uid": {
+        "type": "string"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "ppid": {
+        "type": "integer"
+      },
+      "lwp": {
+        "type": "integer"
+      },
+      "c": {
+        "type": "integer"
+      },
+      "nlwp": {
+        "type": "integer"
+      },
+      "stime": {
+        "type": "string"
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "time": {
+        "type": "number"
+      },
+      "cmd": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "uid",
+      "pid",
+      "ppid",
+      "lwp",
+      "c",
+      "nlwp",
+      "stime",
+      "tty",
+      "time",
+      "cmd"
+    ]
+  }
+}

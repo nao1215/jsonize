@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C over files made for the fixture
+description: a name that begins or ends with a space, and one with two spaces inside, each after the tab exactly as printed
+os: linux
+args: [" lead", "trail ", "two  spaces"]

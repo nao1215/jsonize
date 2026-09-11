@@ -1,0 +1,4 @@
+description: Every interface, with alternative names, bridges, veth ends with their peer and netns id, and virtual interfaces without a queue length.
+source: "`ip -o link` on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C; the hardware addresses and the names derived from them were replaced with documentation addresses, and the bridge and veth names with names of the same width"
+os: linux
+args: ["-o", "link"]

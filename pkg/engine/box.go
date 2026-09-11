@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"slices"
 	"strings"
 
 	"github.com/nao1215/jsonize/pkg/definition"
@@ -168,14 +169,22 @@ func (r *run) parseBox(p *definition.Parse, fields map[string]*definition.Field,
 	if len(blocks) == 0 {
 		return []any{}, nil
 	}
+	if len(blocks) == 1 && len(blocks[0]) > 1 {
+		return nil, r.noHeaderRule(blocks[0])
+	}
 	cols, err := r.boxColumns(p, blocks[0])
 	if err != nil {
 		return nil, err
 	}
+	header := boxJoin(blocks[0], "\n")
 	out := []any{}
 	for _, block := range blocks[1:] {
 		for _, row := range boxBodyRows(block) {
-			obj, err := r.boxObject(cols, boxJoin(row, "\n"), fields, row[0].num)
+			cells := boxJoin(row, "\n")
+			if slices.Equal(cells, header) {
+				continue // the header of a second table drawn after the first
+			}
+			obj, err := r.boxObject(cols, cells, fields, row[0].num)
 			if err != nil {
 				return nil, err
 			}
@@ -183,6 +192,14 @@ func (r *run) parseBox(p *definition.Parse, fields map[string]*definition.Field,
 		}
 	}
 	return out, nil
+}
+
+// noHeaderRule refuses a drawn table whose lines all stand between the
+// same two rules. A header over two lines and rows with no rule under a
+// header are the same text there, and reading the first would make every
+// row part of the column names.
+func (r *run) noHeaderRule(block []line) error {
+	return r.errorf(block[0].num, "", "a drawn table with no rule under its header: its %d lines stand between the same two rules, so which are the header and which are rows is not written", len(block))
 }
 
 // boxLine refuses a line that is neither a rule nor cut by a bar. Such a

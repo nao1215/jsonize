@@ -89,7 +89,7 @@ command that keeps printing after its reader has gone, or past
 line as each record is read:
 
 ```console
-$ jz run --stream ping -c 100 1.1.1.1 | jq -c 'select(.time_ms > 20)'
+$ jz run --stream vmstat 1 | jq -c 'select(.id < 50)'
 ```
 
 ## What it will not do
@@ -100,10 +100,10 @@ so jz refuses rather than approximates:
 ```console
 $ git diff --numstat | jz
 jz: unable to identify the input format
-it could be `du` output, but that format is too generic for jz to claim on its own
+it could be `git` output, but that format is too generic for jz to claim on its own
 
 Confirm it:
-  COMMAND | jz --parser du
+  COMMAND | jz --parser git
 ```
 
 A rounded size stays the text that was printed. `df -h` counts 1024 per

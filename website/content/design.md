@@ -28,7 +28,7 @@ pkg/registry              load registry directories/FS, merge with precedence, t
 pkg/definition            YAML schema, validation, regex compilation, format checks
 pkg/selector              variant selection (os / args / signature filter → precedence → priority)
 pkg/engine                parse algorithms (table, csv, ini, tree, regex, kv, composite, records), streaming, field conversion
-pkg/convert               scalar conversions (int, float, bool, size with units, time, duration)
+pkg/convert               scalar conversions (int, float, bool, time, duration)
 pkg/jsonutil              insertion-ordered JSON object and encoder
 registry/                 the official definitions and fixtures (data) + a one-file embed
 e2e/atago                 end-to-end scenarios (e2e/README.md says what they guarantee where)
@@ -595,7 +595,7 @@ disambiguates.
 
 ### Streaming is an option, not the default
 
-A command that does not end (`ping`, `vmstat 1`) has no whole document to
+A command that does not end (`vmstat 1`, `iostat 5`) has no whole document to
 write, so `--stream` writes one JSON document per line as each record is
 read. It is the only option that changes the output contract: everywhere
 else standard output carries a complete document or nothing, and here
@@ -614,12 +614,11 @@ left. So it takes the other one: a record jz cannot read is named on
 standard error with its line number, the records after it are still
 written, and the status is 3 at the end if anything was skipped.
 
-This is what the commands `--stream` exists for actually print. `ping`
-puts a request timeout among its replies, `rsync` puts progress among its
-file names, and a monitoring loop runs for hours. Ending at the first
-line with no reading for it would throw away everything still to come,
-which is a worse answer than a partial one for exactly the inputs the
-option is about. Batch mode is unchanged, so the guarantee is still there
+This is what the commands `--stream` exists for actually print. A
+monitoring loop runs for hours, and sooner or later it prints one line
+with no reading for it among thousands that have one. Ending at that
+line would throw away everything still to come, which is a worse answer
+than a partial one for exactly the inputs the option is about. Batch mode is unchanged, so the guarantee is still there
 for everyone not asking for a stream.
 
 Two failures are not records and still end a stream at once. Text whose
@@ -701,10 +700,11 @@ The finer rules are the ones the first measurement asked for:
   trusted: what it names is what the definition declares worthless. That
   trust is checked from outside. `jz test` adds a foreign line to every
   fixture, at the end and in the middle, and reads every fixture twice
-  over; a definition that succeeds must carry the line in its result or
-  return more than one copy. That found `upower`'s catch-all
-  `ignore: ['^[^:]*$']`, which had been dropping the device type and the
-  history rows of a battery.
+  over; a definition that succeeds must carry the line in its result,
+  and a list read twice must be the records of one copy twice. That
+  found `upower`'s catch-all `ignore: ['^[^:]*$']`, which had been
+  dropping the device type and the history rows of a battery, and a
+  table's second header read as a row of column names.
 
 Blank lines are never unread. They carry no value that could be missing,
 and a definition that keeps them for a parser that wants them

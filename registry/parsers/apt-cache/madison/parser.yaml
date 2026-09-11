@@ -1,0 +1,48 @@
+# `apt-cache madison PKG...` prints one line for every version of every
+# package named and every index that offers it, in the three columns the
+# Debian archive tool of the same name uses:
+#
+#           bash | 5.3-2ubuntu1 | http://archive.ubuntu.com/ubuntu resolute/main amd64 Packages
+#           tree |    2.3.1-1 | http://archive.ubuntu.com/ubuntu resolute/universe amd64 Packages
+#
+# The package name and the version are right-aligned in ten characters
+# and pushed wider when longer, so the padding before either one is not
+# part of the value. The third column is the index the version comes
+# from, written as apt describes it: the archive URI, the suite and
+# component, the architecture, and the kind of index.
+#
+# A name qualified with an architecture ("libc6:i386") is kept as apt
+# printed it, since that is the name apt answers to. An installed version
+# that no index offers is not printed by apt at all, so the dpkg status
+# file never appears here.
+format: 1
+command: apt-cache
+variant: madison
+description: apt-cache madison PKG, every version of a package and the index offering it
+metadata:
+  tags: [linux, debian, package]
+  compatible: [APT]
+  references:
+    - https://manpages.debian.org/apt-cache
+detect:
+  os: [linux]
+  args:
+    any: ["madison"]
+  signature:
+    all:
+      # Every line is a madison line for a binary package index. Two
+      # things are left out on purpose: the "Sources" lines apt adds for a
+      # deb-src entry, and the index of a flat repository, which states no
+      # component and no architecture. Neither was available to capture,
+      # so output containing them is refused rather than guessed at.
+      - '\A(?:[ \t]*\S+ \| [ \t]*\S+ \| \S+ \S+/[^/ \t]+ \S+ Packages[ \t]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<package>\S+) \| [ \t]*(?P<version>\S+) \| (?P<uri>\S+) (?P<suite>\S+)/(?P<component>[^/ \t]+) (?P<architecture>\S+) Packages[ \t]*$'
+fields:
+  package: {required: true}
+  version: {required: true}
+  uri: {required: true}
+  suite: {required: true}
+  component: {required: true}
+  architecture: {required: true}

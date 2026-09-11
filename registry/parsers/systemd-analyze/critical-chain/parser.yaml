@@ -22,7 +22,10 @@ detect:
   signature:
     all:
       - '\AThe time when unit became active or started is printed after the "@" character\.'
-      - '^`-\S+ @'
+      # The first unit under the target. It is "`-" when the chain does
+      # not branch and "|-" when it does (--fuzz), and in a UTF-8 locale
+      # the same two are drawn "└─" and "├─".
+      - '^(?:`-|\|-|└─|├─)\S+ @'
 input:
   # The two sentences above the chain are the same on every system: they
   # say what the "@" and "+" in the lines below mean, which is what the
@@ -33,7 +36,7 @@ input:
     after: '^The time the unit took to start is printed after the "\+" character\.$'
 parse:
   type: tree
-  indent: ["  ", "`-"]
+  indent: ["  ", "`-", "| ", "|-", "│ ", "└─", "├─"]
   node:
     parse:
       type: regex

@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (apt 3.2.0) with LC_ALL=C, standard output only
+description: a pattern no package matches prints the opening line and nothing under it, which is the empty list
+os: linux
+args: [list, --installed, nosuchpkg]

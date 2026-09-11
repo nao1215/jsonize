@@ -16,6 +16,9 @@ detect:
   signature:
     all:
       - '^COMMAND[ \t]+PID[ \t]+TYPE[ \t]+SIZE[ \t]+MODE[ \t]+M[ \t]+START[ \t]+END[ \t]+PATH[ \t]*$'
+      # The header is lined up with the columns. -r prints the same words
+      # one space apart and the rows unaligned, which this cannot cut.
+      - '^COMMAND(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
 parse:
   type: table
   split: aligned

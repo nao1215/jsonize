@@ -22,8 +22,12 @@ detect:
       - '\A\S+[ \t]+(?:UP|DOWN|UNKNOWN|LOWERLAYERDOWN)(?:[ \t]+[0-9a-fA-F:][0-9a-fA-F.:]*/\d+)*[ \t]*$'
 parse:
   type: regex
-  pattern: '^(?P<interface>\S+)\s+(?P<state>UP|DOWN|UNKNOWN|LOWERLAYERDOWN)\s*(?P<addresses>.*?)\s*$'
+  pattern: '^(?P<interface>[^\s@]+)(?:@(?P<peer>\S+))?\s+(?P<state>UP|DOWN|UNKNOWN|LOWERLAYERDOWN)\s*(?P<addresses>.*?)\s*$'
 fields:
   interface: {required: true}
+  # A veth or a tunnel prints the device it is tied to after an at sign
+  # ("veth0@if2", "tunl0@NONE"); that is not part of its name, which is
+  # how ip/link reads it too.
+  peer: {when_missing: omit}
   state: {required: true}
   addresses: {type: array, split_regex: '\s+'}

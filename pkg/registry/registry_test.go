@@ -164,6 +164,39 @@ func TestCasesErrors(t *testing.T) {
 	}
 }
 
+// A case is found by its .txt, so a .yaml or .json beside no .txt (a
+// misnamed fixture) would describe a case that never runs, and a .json
+// next to expect_error states an answer that is never compared. Both
+// are reported rather than passing in silence.
+func TestCasesRefusesWhatWouldNeverRun(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name  string
+		files map[string]string
+		want  string
+	}{
+		{"yaml without txt", map[string]string{"x.txt": "in", "x.json": "[]", "y.yaml": "source: s\n"}, "y.yaml has no y.txt"},
+		{"json without txt", map[string]string{"x.text": "in", "x.json": "[]"}, "x.json has no x.txt"},
+		{"json beside expect_error", map[string]string{"x.txt": "in", "x.yaml": "expect_error: no\n", "x.json": "[]"}, "x.json states an answer for a case that expects an error"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			fsys := fstest.MapFS{"parsers/a/b/parser.yaml": {Data: []byte(def("a", "b"))}}
+			for name, data := range tc.files {
+				fsys["parsers/a/b/testdata/"+name] = &fstest.MapFile{Data: []byte(data)}
+			}
+			reg, err := Load(Source{Name: "s", FS: fsys})
+			if err != nil {
+				t.Fatal(err)
+			}
+			e, _ := reg.Lookup("a", "b")
+			if _, err := Cases(fsys, e); err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Errorf("Cases = %v, want an error containing %q", err, tc.want)
+			}
+		})
+	}
+}
+
 // A manifest's disable list switches off definitions of the registries
 // below it. A user who hits a misdetecting official definition can take
 // it out instead of rewriting it.

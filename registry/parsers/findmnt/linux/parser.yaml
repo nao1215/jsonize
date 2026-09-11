@@ -20,7 +20,11 @@ input:
     - '\ATARGET\s+SOURCE'
 parse:
   type: regex
-  pattern: '^(?P<tree_prefix>[|`\-\s]*)(?P<target>/\S*)\s+(?P<source>\S+)\s+(?P<fstype>\S+)\s+(?P<options>\S+)\s*$'
+  # `findmnt -s` lists /etc/fstab, where a swap area has no mount point
+  # and the field holds none or swap, which findmnt prints as it is.
+  # The tree is drawn with |- and `- in the C locale and with box-drawing
+  # characters in a UTF-8 one, which is what a pipe from a shell carries.
+  pattern: '^(?P<tree_prefix>[|`\-\s│├└─]*)(?P<target>/\S*|none|swap)\s+(?P<source>\S+)\s+(?P<fstype>\S+)\s+(?P<options>\S+)\s*$'
 fields:
   target: {required: true}
   source: {required: true}

@@ -1,0 +1,44 @@
+# `ls -l --time-style=long-iso` prints the long listing with the time as
+# "2025-11-04 13:04" in place of "Nov  4 13:04" or "Nov  4  2025": the
+# year is always there and the clock always is. It is the style scripts
+# ask for, since the default one drops the clock of an old file and the
+# year of a new one. The rest of the line is what ls/long reads (see
+# there for the size, the device numbers and the marks -F adds).
+#
+# The time states no zone, so it stays as printed; --full-time adds the
+# seconds and the offset and is read by ls/full-time.
+format: 1
+command: ls
+variant: long-iso
+aliases:
+  - name: gls
+description: ls -l --time-style=long-iso, the time with its year and clock
+metadata:
+  tags: [linux, darwin, filesystem]
+  compatible: [GNU coreutils, uutils coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/Formatting-file-timestamps.html
+detect:
+  args:
+    # "--time-style long-iso", the value as an argument of its own, is
+    # the same request.
+    any: ["--time-style=long-iso", "long-iso"]
+    none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
+  signature:
+    all:
+      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+(?:[\d.]+[kKMGTPEZYRQBi]*|\d+,\s*\d+)\s+\d{4}-\d{2}-\d{2} \d{2}:\d{2} '
+input:
+  ignore:
+    - '^total\s'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (?P<filename>.*[^/])$'
+    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (?P<filename>.*[^/])$'
+fields:
+  links: {type: int, required: true}
+  major: {type: int}
+  minor: {type: int}
+  filename: {required: true}
+  link_to: {when_missing: omit}

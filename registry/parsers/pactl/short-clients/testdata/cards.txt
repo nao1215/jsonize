@@ -1,0 +1,5 @@
+55	alsa_card.pci-0000_c6_00.1	alsa
+56	alsa_card.pci-0000_c6_00.6	alsa
+57	alsa_card.usb-046d_HD_Pro_Webcam_C920_0123ABCD-02	alsa
+58	alsa_card.usb-Fonglun_USB_PnP_Sound_Device_201801-00	alsa
+59	alsa_card.usb-C-Media_INC._USB_Sound_Device-00	alsa

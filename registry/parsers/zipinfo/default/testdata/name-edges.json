@@ -1,0 +1,35 @@
+[
+  {
+    "mode": "-rw-rw-r--",
+    "version": "3.0",
+    "os": "unx",
+    "size": 2,
+    "attributes": "tx",
+    "method": "stor",
+    "date": "26-Sep-11",
+    "time": "07:22",
+    "name": " lead"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "version": "3.0",
+    "os": "unx",
+    "size": 2,
+    "attributes": "tx",
+    "method": "stor",
+    "date": "26-Sep-11",
+    "time": "07:22",
+    "name": "trail "
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "version": "3.0",
+    "os": "unx",
+    "size": 0,
+    "attributes": "bx",
+    "method": "stor",
+    "date": "26-Sep-11",
+    "time": "07:18",
+    "name": "two  spaces"
+  }
+]

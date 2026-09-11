@@ -1,0 +1,5 @@
+description: -L adds the length of the longest line as a fourth count, which the three columns of this definition would take as the start of the file name. It is refused by the argument, since the text alone reads like a name with a space in it.
+source: "wc -lwcL /etc/hostname /etc/hosts on Ubuntu 26.04 (uutils coreutils 0.8.0) with LC_ALL=C"
+os: linux
+args: ["-lwcL", "/etc/hostname", "/etc/hosts"]
+expect_error: 'excluded by the argument -L'

@@ -18,8 +18,8 @@ two words above two words says nothing about what produced them — and
 are reached by naming both halves:
 
 ```console
-$ docker ps | jz --parser table --variant box
-$ jz --parser ini --file ~/.gitconfig
+$ sqlite3 -box app.db 'select * from users' | jz --parser table --variant box
+$ jz --parser ini --file /etc/NetworkManager/NetworkManager.conf
 ```
 
 They convert nothing: a shape says nothing about what its columns mean,
@@ -33,7 +33,7 @@ the same reading with settings of your own.
 | `amixer` | [`contents`](../schemas/amixer/contents.json), [`simple-controls`](../schemas/amixer/simple-controls.json) |
 | `aplay` | [`devices`](../schemas/aplay/devices.json) |
 | `apt` | [`list`](../schemas/apt/list.json), [`show`](../schemas/apt/show.json) |
-| `apt-cache` | [`depends`](../schemas/apt-cache/depends.json), [`policy`](../schemas/apt-cache/policy.json), [`stats`](../schemas/apt-cache/stats.json) |
+| `apt-cache` | [`depends`](../schemas/apt-cache/depends.json), [`madison`](../schemas/apt-cache/madison.json), [`policy`](../schemas/apt-cache/policy.json), [`stats`](../schemas/apt-cache/stats.json) |
 | `ar` | [`table-verbose`](../schemas/ar/table-verbose.json) |
 | `arp` | [`alternate`](../schemas/arp/alternate.json) |
 | `blkid` | [`export`](../schemas/blkid/export.json), [`linux`](../schemas/blkid/linux.json) |
@@ -49,7 +49,7 @@ the same reading with settings of your own.
 | `curl` | [`version`](../schemas/curl/version.json) |
 | `date` | [`posix`](../schemas/date/posix.json), [`rfc-email`](../schemas/date/rfc-email.json) |
 | `debconf-show` | [`linux`](../schemas/debconf-show/linux.json) |
-| `df` | [`bsd`](../schemas/df/bsd.json), [`bsd-human`](../schemas/df/bsd-human.json), [`busybox-human`](../schemas/df/busybox-human.json), [`gnu`](../schemas/df/gnu.json), [`gnu-human`](../schemas/df/gnu-human.json), [`gnu-inodes`](../schemas/df/gnu-inodes.json), [`gnu-inodes-human`](../schemas/df/gnu-inodes-human.json), [`gnu-type`](../schemas/df/gnu-type.json), [`gnu-type-human`](../schemas/df/gnu-type-human.json) |
+| `df` | [`bsd`](../schemas/df/bsd.json), [`bsd-human`](../schemas/df/bsd-human.json), [`busybox-human`](../schemas/df/busybox-human.json), [`gnu`](../schemas/df/gnu.json), [`gnu-human`](../schemas/df/gnu-human.json), [`gnu-inodes`](../schemas/df/gnu-inodes.json), [`gnu-inodes-human`](../schemas/df/gnu-inodes-human.json), [`gnu-type`](../schemas/df/gnu-type.json), [`gnu-type-human`](../schemas/df/gnu-type-human.json), [`portable`](../schemas/df/portable.json), [`portable-type`](../schemas/df/portable-type.json) |
 | `dig` | [`bind`](../schemas/dig/bind.json) |
 | `docker` | [`images-disk-usage`](../schemas/docker/images-disk-usage.json), [`images-repo-tag`](../schemas/docker/images-repo-tag.json), [`network-ls`](../schemas/docker/network-ls.json), [`ps`](../schemas/docker/ps.json), [`stats`](../schemas/docker/stats.json), [`volume-ls`](../schemas/docker/volume-ls.json) |
 | `dpkg` | [`list`](../schemas/dpkg/list.json), [`selections`](../schemas/dpkg/selections.json), [`status`](../schemas/dpkg/status.json) |
@@ -61,7 +61,7 @@ the same reading with settings of your own.
 | `factor` | [`default`](../schemas/factor/default.json) |
 | `fc-list` | [`posix`](../schemas/fc-list/posix.json) |
 | `fdisk` | [`linux`](../schemas/fdisk/linux.json) |
-| `file` | [`posix`](../schemas/file/posix.json) |
+| `file` | [`mime`](../schemas/file/mime.json), [`posix`](../schemas/file/posix.json) |
 | `findmnt` | [`df`](../schemas/findmnt/df.json), [`linux`](../schemas/findmnt/linux.json), [`source-first`](../schemas/findmnt/source-first.json) |
 | `free` | [`gnu`](../schemas/free/gnu.json), [`gnu-human`](../schemas/free/gnu-human.json), [`gnu-wide`](../schemas/free/gnu-wide.json) |
 | `getcap` | [`paths`](../schemas/getcap/paths.json) |
@@ -80,8 +80,8 @@ the same reading with settings of your own.
 | `ifconfig` | [`busybox`](../schemas/ifconfig/busybox.json) |
 | `ini` | [`default`](../schemas/ini/default.json) |
 | `ionice` | [`class`](../schemas/ionice/class.json) |
-| `iostat` | [`cpu`](../schemas/iostat/cpu.json), [`device`](../schemas/iostat/device.json), [`extended`](../schemas/iostat/extended.json), [`linux`](../schemas/iostat/linux.json) |
-| `ip` | [`address`](../schemas/ip/address.json), [`brief-address`](../schemas/ip/brief-address.json), [`brief-link`](../schemas/ip/brief-link.json), [`link`](../schemas/ip/link.json), [`multicast-address`](../schemas/ip/multicast-address.json), [`neighbour`](../schemas/ip/neighbour.json), [`route`](../schemas/ip/route.json), [`rule`](../schemas/ip/rule.json), [`stats-link`](../schemas/ip/stats-link.json), [`stats-link-detail`](../schemas/ip/stats-link-detail.json) |
+| `iostat` | [`cpu`](../schemas/iostat/cpu.json), [`device`](../schemas/iostat/device.json), [`extended`](../schemas/iostat/extended.json), [`human`](../schemas/iostat/human.json), [`linux`](../schemas/iostat/linux.json) |
+| `ip` | [`address`](../schemas/ip/address.json), [`brief-address`](../schemas/ip/brief-address.json), [`brief-link`](../schemas/ip/brief-link.json), [`link`](../schemas/ip/link.json), [`multicast-address`](../schemas/ip/multicast-address.json), [`neighbour`](../schemas/ip/neighbour.json), [`oneline-address`](../schemas/ip/oneline-address.json), [`oneline-link`](../schemas/ip/oneline-link.json), [`route`](../schemas/ip/route.json), [`rule`](../schemas/ip/rule.json), [`stats-link`](../schemas/ip/stats-link.json), [`stats-link-detail`](../schemas/ip/stats-link-detail.json) |
 | `ipcs` | [`linux`](../schemas/ipcs/linux.json), [`message-queues`](../schemas/ipcs/message-queues.json), [`semaphores`](../schemas/ipcs/semaphores.json), [`shared-memory`](../schemas/ipcs/shared-memory.json) |
 | `iw` | [`dev`](../schemas/iw/dev.json), [`link`](../schemas/iw/link.json) |
 | `journalctl` | [`boots`](../schemas/journalctl/boots.json), [`short`](../schemas/journalctl/short.json), [`short-iso`](../schemas/journalctl/short-iso.json), [`short-monotonic`](../schemas/journalctl/short-monotonic.json), [`short-precise`](../schemas/journalctl/short-precise.json) |
@@ -92,8 +92,8 @@ the same reading with settings of your own.
 | `locale` | [`keywords`](../schemas/locale/keywords.json), [`posix`](../schemas/locale/posix.json) |
 | `localectl` | [`linux`](../schemas/localectl/linux.json) |
 | `loginctl` | [`seats`](../schemas/loginctl/seats.json), [`sessions`](../schemas/loginctl/sessions.json), [`users`](../schemas/loginctl/users.json) |
-| `losetup` | [`linux`](../schemas/losetup/linux.json) |
-| `ls` | [`long`](../schemas/ls/long.json), [`long-context`](../schemas/ls/long-context.json), [`long-inode`](../schemas/ls/long-inode.json), [`long-no-owner-group`](../schemas/ls/long-no-owner-group.json) |
+| `losetup` | [`associations`](../schemas/losetup/associations.json), [`linux`](../schemas/losetup/linux.json) |
+| `ls` | [`full-time`](../schemas/ls/full-time.json), [`long`](../schemas/ls/long.json), [`long-context`](../schemas/ls/long-context.json), [`long-inode`](../schemas/ls/long-inode.json), [`long-iso`](../schemas/ls/long-iso.json), [`long-no-owner-group`](../schemas/ls/long-no-owner-group.json), [`long-recursive`](../schemas/ls/long-recursive.json) |
 | `lsattr` | [`linux`](../schemas/lsattr/linux.json) |
 | `lsb_release` | [`linux`](../schemas/lsb_release/linux.json) |
 | `lsblk` | [`bytes`](../schemas/lsblk/bytes.json), [`filesystems`](../schemas/lsblk/filesystems.json), [`linux`](../schemas/lsblk/linux.json), [`pairs`](../schemas/lsblk/pairs.json), [`topology`](../schemas/lsblk/topology.json) |
@@ -129,14 +129,16 @@ the same reading with settings of your own.
 | `objdump` | [`section-headers`](../schemas/objdump/section-headers.json) |
 | `od` | [`hex-bytes`](../schemas/od/hex-bytes.json) |
 | `openssl` | [`ciphers`](../schemas/openssl/ciphers.json), [`ciphers-codes`](../schemas/openssl/ciphers-codes.json), [`version-all`](../schemas/openssl/version-all.json) |
-| `pactl` | [`info`](../schemas/pactl/info.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
+| `pactl` | [`info`](../schemas/pactl/info.json), [`short-cards`](../schemas/pactl/short-cards.json), [`short-clients`](../schemas/pactl/short-clients.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
 | `parted` | [`machine`](../schemas/parted/machine.json) |
-| `pidstat` | [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json) |
+| `pidstat` | [`io`](../schemas/pidstat/io.json), [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json), [`switches`](../schemas/pidstat/switches.json) |
 | `ping` | [`linux`](../schemas/ping/linux.json) |
 | `pip` | [`columns`](../schemas/pip/columns.json) |
 | `pmap` | [`linux`](../schemas/pmap/linux.json) |
+| `powerprofilesctl` | [`list`](../schemas/powerprofilesctl/list.json) |
+| `prlimit` | [`linux`](../schemas/prlimit/linux.json) |
 | `proc` | [`buddyinfo`](../schemas/proc/buddyinfo.json), [`consoles`](../schemas/proc/consoles.json), [`cpuinfo-x86`](../schemas/proc/cpuinfo-x86.json), [`crypto`](../schemas/proc/crypto.json), [`devices`](../schemas/proc/devices.json), [`diskstats`](../schemas/proc/diskstats.json), [`filesystems`](../schemas/proc/filesystems.json), [`interrupts`](../schemas/proc/interrupts.json), [`loadavg`](../schemas/proc/loadavg.json), [`meminfo`](../schemas/proc/meminfo.json), [`modules`](../schemas/proc/modules.json), [`mountinfo`](../schemas/proc/mountinfo.json), [`net-arp`](../schemas/proc/net-arp.json), [`net-dev`](../schemas/proc/net-dev.json), [`net-route`](../schemas/proc/net-route.json), [`net-unix`](../schemas/proc/net-unix.json), [`partitions`](../schemas/proc/partitions.json), [`schedstat`](../schemas/proc/schedstat.json), [`self-limits`](../schemas/proc/self-limits.json), [`self-status`](../schemas/proc/self-status.json), [`softirqs`](../schemas/proc/softirqs.json), [`stat`](../schemas/proc/stat.json), [`uptime`](../schemas/proc/uptime.json), [`vmstat`](../schemas/proc/vmstat.json) |
-| `ps` | [`bsd`](../schemas/ps/bsd.json), [`busybox`](../schemas/ps/busybox.json), [`posix`](../schemas/ps/posix.json), [`unix`](../schemas/ps/unix.json) |
+| `ps` | [`bsd`](../schemas/ps/bsd.json), [`bsd-short`](../schemas/ps/bsd-short.json), [`busybox`](../schemas/ps/busybox.json), [`jobs`](../schemas/ps/jobs.json), [`long`](../schemas/ps/long.json), [`posix`](../schemas/ps/posix.json), [`threads`](../schemas/ps/threads.json), [`unix`](../schemas/ps/unix.json) |
 | `readelf` | [`header`](../schemas/readelf/header.json) |
 | `resolvectl` | [`status`](../schemas/resolvectl/status.json) |
 | `rfkill` | [`linux`](../schemas/rfkill/linux.json), [`list`](../schemas/rfkill/list.json) |
@@ -161,10 +163,11 @@ the same reading with settings of your own.
 | `stat` | [`gnu`](../schemas/stat/gnu.json), [`gnu-filesystem`](../schemas/stat/gnu-filesystem.json), [`gnu-terse`](../schemas/stat/gnu-terse.json) |
 | `swapon` | [`legacy`](../schemas/swapon/legacy.json), [`linux`](../schemas/swapon/linux.json) |
 | `sysctl` | [`linux`](../schemas/sysctl/linux.json) |
-| `systemctl` | [`dependencies`](../schemas/systemctl/dependencies.json), [`jobs`](../schemas/systemctl/jobs.json), [`show`](../schemas/systemctl/show.json), [`sockets`](../schemas/systemctl/sockets.json), [`status`](../schemas/systemctl/status.json), [`timers`](../schemas/systemctl/timers.json), [`unit-files`](../schemas/systemctl/unit-files.json), [`units`](../schemas/systemctl/units.json) |
+| `systemctl` | [`dependencies`](../schemas/systemctl/dependencies.json), [`jobs`](../schemas/systemctl/jobs.json), [`show`](../schemas/systemctl/show.json), [`show-properties`](../schemas/systemctl/show-properties.json), [`sockets`](../schemas/systemctl/sockets.json), [`status`](../schemas/systemctl/status.json), [`timers`](../schemas/systemctl/timers.json), [`unit-files`](../schemas/systemctl/unit-files.json), [`units`](../schemas/systemctl/units.json), [`units-jobs`](../schemas/systemctl/units-jobs.json) |
 | `systemd-analyze` | [`blame`](../schemas/systemd-analyze/blame.json), [`critical-chain`](../schemas/systemd-analyze/critical-chain.json), [`security`](../schemas/systemd-analyze/security.json), [`time`](../schemas/systemd-analyze/time.json) |
 | `systemd-cgtop` | [`batch`](../schemas/systemd-cgtop/batch.json) |
 | `systemd-id128` | [`show`](../schemas/systemd-id128/show.json) |
+| `systemd-inhibit` | [`list`](../schemas/systemd-inhibit/list.json) |
 | `systemd-path` | [`paths`](../schemas/systemd-path/paths.json) |
 | `table` | [`aligned`](../schemas/table/aligned.json), [`box`](../schemas/table/box.json), [`whitespace`](../schemas/table/whitespace.json) |
 | `tar` | [`busybox`](../schemas/tar/busybox.json), [`gnu`](../schemas/tar/gnu.json) |
@@ -180,13 +183,13 @@ the same reading with settings of your own.
 | `unzip` | [`busybox`](../schemas/unzip/busybox.json), [`info-zip`](../schemas/unzip/info-zip.json) |
 | `update-alternatives` | [`query`](../schemas/update-alternatives/query.json), [`selections`](../schemas/update-alternatives/selections.json) |
 | `upower` | [`device`](../schemas/upower/device.json), [`dump`](../schemas/upower/dump.json), [`enumerate`](../schemas/upower/enumerate.json) |
-| `uptime` | [`bsd`](../schemas/uptime/bsd.json), [`linux`](../schemas/uptime/linux.json) |
+| `uptime` | [`bsd`](../schemas/uptime/bsd.json), [`linux`](../schemas/uptime/linux.json), [`pretty`](../schemas/uptime/pretty.json), [`since`](../schemas/uptime/since.json) |
 | `uuidparse` | [`linux`](../schemas/uuidparse/linux.json) |
 | `uv` | [`pip-show`](../schemas/uv/pip-show.json), [`tool-list`](../schemas/uv/tool-list.json) |
 | `vmstat` | [`linux`](../schemas/vmstat/linux.json), [`linux-active`](../schemas/vmstat/linux-active.json), [`linux-disk`](../schemas/vmstat/linux-disk.json), [`linux-disk-summary`](../schemas/vmstat/linux-disk-summary.json), [`linux-stats`](../schemas/vmstat/linux-stats.json) |
 | `w` | [`bsd`](../schemas/w/bsd.json), [`linux`](../schemas/w/linux.json), [`linux-short`](../schemas/w/linux-short.json) |
 | `wc` | [`posix`](../schemas/wc/posix.json) |
-| `who` | [`posix`](../schemas/who/posix.json) |
+| `who` | [`iso`](../schemas/who/iso.json), [`posix`](../schemas/who/posix.json) |
 | `xrandr` | [`linux`](../schemas/xrandr/linux.json), [`listmonitors`](../schemas/xrandr/listmonitors.json) |
 | `xxd` | [`default`](../schemas/xxd/default.json) |
 | `zipinfo` | [`default`](../schemas/zipinfo/default.json) |

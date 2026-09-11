@@ -1,0 +1,114 @@
+[
+  {
+    "filesystem": "tmpfs",
+    "inodes": 819200,
+    "iused": 2548,
+    "ifree": 816652,
+    "iuse_percent": 1,
+    "mounted_on": "/run"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "inodes": 122028032,
+    "iused": 7312944,
+    "ifree": 114715088,
+    "iuse_percent": 6,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "devtmpfs",
+    "inodes": 8023868,
+    "iused": 1081,
+    "ifree": 8022787,
+    "iuse_percent": 1,
+    "mounted_on": "/dev"
+  },
+  {
+    "filesystem": "tmpfs",
+    "inodes": 8051669,
+    "iused": 80,
+    "ifree": 8051589,
+    "iuse_percent": 1,
+    "mounted_on": "/dev/shm"
+  },
+  {
+    "filesystem": "devpts",
+    "inodes": 0,
+    "iused": 0,
+    "ifree": 0,
+    "iuse_percent": null,
+    "mounted_on": "/dev/pts"
+  },
+  {
+    "filesystem": "sysfs",
+    "inodes": 0,
+    "iused": 0,
+    "ifree": 0,
+    "iuse_percent": null,
+    "mounted_on": "/sys"
+  },
+  {
+    "filesystem": "securityfs",
+    "inodes": 0,
+    "iused": 0,
+    "ifree": 0,
+    "iuse_percent": null,
+    "mounted_on": "/sys/kernel/security"
+  },
+  {
+    "filesystem": "cgroup2",
+    "inodes": 0,
+    "iused": 0,
+    "ifree": 0,
+    "iuse_percent": null,
+    "mounted_on": "/sys/fs/cgroup"
+  },
+  {
+    "filesystem": "none",
+    "inodes": 0,
+    "iused": 0,
+    "ifree": 0,
+    "iuse_percent": null,
+    "mounted_on": "/sys/fs/pstore"
+  },
+  {
+    "filesystem": "efivarfs",
+    "inodes": 0,
+    "iused": 0,
+    "ifree": 0,
+    "iuse_percent": null,
+    "mounted_on": "/sys/firmware/efi/efivars"
+  },
+  {
+    "filesystem": "bpf",
+    "inodes": 0,
+    "iused": 0,
+    "ifree": 0,
+    "iuse_percent": null,
+    "mounted_on": "/sys/fs/bpf"
+  },
+  {
+    "filesystem": "configfs",
+    "inodes": 0,
+    "iused": 0,
+    "ifree": 0,
+    "iuse_percent": null,
+    "mounted_on": "/sys/kernel/config"
+  },
+  {
+    "filesystem": "proc",
+    "inodes": 0,
+    "iused": 0,
+    "ifree": 0,
+    "iuse_percent": null,
+    "mounted_on": "/proc"
+  },
+  {
+    "filesystem": "systemd-1",
+    "inodes": null,
+    "iused": null,
+    "ifree": null,
+    "iuse_percent": null,
+    "mounted_on": "/proc/sys/fs/binfmt_misc"
+  }
+]

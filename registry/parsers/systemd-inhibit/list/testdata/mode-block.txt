@@ -1,0 +1,4 @@
+WHO        UID  USER PID   COMM            WHAT                                                                       WHY                      MODE
+PowerDevil 1000 bob  10597 org_kde_powerde handle-power-key:handle-suspend-key:handle-hibernate-key:handle-lid-switch KDE handles power events block
+
+1 inhibitors listed.

@@ -1,0 +1,8 @@
+alice    seat0        2025-11-04 13:17 (login screen)
+alice    tty2         2025-11-04 13:17 (tty2)
+alice    seat0        2025-11-04 13:30 (login screen)
+alice    :0           2025-11-04 13:30 (:0)
+alice                 2026-05-25 22:02
+alice                 2026-05-25 22:03
+alice    tty7         2026-05-25 22:04 (:0)
+alice    pts/5        2026-07-01 08:44 (fe80::5054:ff:fe10:1%eno1)

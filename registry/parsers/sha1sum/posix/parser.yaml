@@ -31,7 +31,8 @@ detect:
   auto_detect: false
   signature:
     all:
-      - '\A\\?[0-9a-fA-F]{40}[ \t][ *]\S'
+      # A name may begin with a space, so any character follows the mode.
+      - '\A\\?[0-9a-fA-F]{40}[ \t][ *][^\n]'
 parse:
   type: regex
   pattern: '^(?P<escaped>\\)?(?P<checksum>[0-9a-fA-F]{40})[ \t][ *](?P<file>.+)$'

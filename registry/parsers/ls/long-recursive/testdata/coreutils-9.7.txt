@@ -1,0 +1,21 @@
+tree:
+total 4
+-rw-rw-r-- 1 usr usr 120 Sep  1 10:30 README.md
+drwxrwxr-x 3 usr usr 100 Sep  1 10:30 docs
+drwxrwxr-x 2 usr usr 120 Sep  1 10:30 src
+
+tree/docs:
+total 8
+drwxrwxr-x 2 usr usr   40 Sep  1 10:30 empty
+-rw-rw-r-- 1 usr usr 4096 Sep  1 10:30 guide.txt
+-rw-rw-r-- 1 usr usr   10 Sep  1 10:30 notes: draft.txt
+
+tree/docs/empty:
+total 0
+
+tree/src:
+total 8
+-rw-rw-r-- 1 usr usr    5 Sep  1 10:30 a -> b
+lrwxrwxrwx 1 usr usr    7 Sep  1 10:30 link -> main.go
+-rw-rw-r-- 1 usr usr 2048 Sep  1 10:30 main.go
+-rw-rw-r-- 1 usr usr    0 Sep  1 10:30 weird:

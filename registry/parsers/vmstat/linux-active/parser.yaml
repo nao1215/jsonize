@@ -14,17 +14,18 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\Aprocs[ \t]+-+memory-+'
+      # -w draws each group name with dashes on both sides ("--procs--").
+      - '\A(?:procs|-+procs-+)[ \t]+-+memory-+'
       - '^[ \t]*r[ \t]+b[ \t]+swpd[ \t]+free[ \t]+inact[ \t]+active[ \t]'
 input:
   ignore:
-    - '\Aprocs[ \t]+-'
+    - '\A(?:procs|-+procs-+)[ \t]+-'
     - '^[ \t]*r[ \t]+b[ \t]+swpd[ \t]'
 parse:
   type: table
   header:
     none: true
-    columns: [r, b, swpd, free, inact, active, si, so, bi, bo, in, cs, us, sy, id, wa, st, gu]
+    columns: [r, b, swpd, free, inact, active, si, so, bi, bo, in, cs, us, sy, id, wa, st, gu, timestamp]
   min_fields: 17
 fields:
   r: {type: int, required: true}
@@ -45,3 +46,6 @@ fields:
   wa: {type: int}
   st: {type: int}
   gu: {type: int, when_missing: omit}
+  # -t adds the date and time of each sample, in the zone the header of
+  # the column names by its abbreviation only, so it stays as printed.
+  timestamp: {when_missing: omit}

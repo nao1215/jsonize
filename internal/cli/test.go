@@ -3,6 +3,7 @@ package cli
 import (
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
@@ -17,10 +18,13 @@ const testUsage = `Usage: jz test [options] [DIR...]
 
 Checks parser definitions the way the official ones are checked. Each
 fixture is parsed with its own definition and compared with the JSON
-beside it; each is changed (a foreign line added, the text doubled) and
-must be refused or show the change, which proves the definition reads
-all of its input; and every definition is then named explicitly on every
-other definition's fixtures and must refuse them.
+beside it; it must give the same answer with CRLF line endings, a byte
+order mark, or a blank line before or after it, which leave the text as
+it was; each is changed (a foreign line added, the text doubled) and
+must be refused or show the change, a doubled list being the records of
+one copy twice, which proves the definition reads all of its input; and
+every definition is then named explicitly on every other definition's
+fixtures and must refuse them.
 
 The official fixtures are built into jz, so a definition of your own is
 checked against them without a copy of the repository: a signature wide
@@ -68,15 +72,16 @@ func (a *app) cmdTest(args []string) int {
 		Engine: engine.Options{MaxInputSize: MaxInputSize},
 	}
 	if decoys != "" {
+		if _, err := os.Stat(decoys); errors.Is(err, fs.ErrNotExist) {
+			a.errorf("--decoys %s does not exist", decoys)
+			return ExitUsage
+		}
 		list, err := conformance.ReadDecoys(decoys)
 		if err != nil {
 			a.errorf("%v", err)
 			return ExitUsage
 		}
 		opts.Decoys = list
-	}
-	for _, w := range reg.Warnings {
-		a.errorf("warning: %v", w)
 	}
 	for _, w := range reg.Warnings {
 		a.errorf("warning: %v", w)
@@ -132,6 +137,10 @@ func (a *app) testSources(dirs []string) ([]registry.Source, []string, int) {
 		abs, err := filepath.Abs(d)
 		if err != nil {
 			a.errorf("%v", err)
+			return nil, nil, ExitRegistry
+		}
+		if _, err := os.Stat(abs); errors.Is(err, fs.ErrNotExist) {
+			a.errorf("%s does not exist", abs)
 			return nil, nil, ExitRegistry
 		}
 		if _, err := os.Stat(filepath.Join(abs, registry.ParsersDir)); err != nil {

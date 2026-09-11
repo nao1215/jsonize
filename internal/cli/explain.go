@@ -85,6 +85,11 @@ type explanation struct {
 	account  *engine.Account
 	defined  string // the id of a --define definition
 
+	// A command that printed nothing leaves no text to choose by; the
+	// answer rests on the variants its name and arguments leave.
+	empty      bool
+	candidates []*registry.Entry
+
 	command  string
 	args     []string
 	status   int
@@ -120,6 +125,14 @@ func (e *explanation) dropPath(err error) {
 func (e *explanation) chose(res *selector.Result) {
 	if e != nil {
 		e.selected = res
+	}
+}
+
+// printedNothing records that the command jz ran printed nothing, and the
+// variants the empty answer was judged against.
+func (e *explanation) printedNothing(candidates []*registry.Entry) {
+	if e != nil {
+		e.empty, e.candidates = true, candidates
 	}
 }
 
@@ -159,6 +172,8 @@ func (e *explanation) outcome() string {
 		return "defined"
 	case e.selected != nil:
 		return "chosen"
+	case e.empty:
+		return "empty"
 	case errors.As(e.failure, &nm):
 		return "unidentified"
 	case errors.As(e.failure, &am):
@@ -205,6 +220,8 @@ func (e *explanation) lines() []string {
 		add("defined %s: the definition was given with --define, so nothing was chosen", e.defined)
 	case "chosen":
 		add("chose %s from %s", e.selected.Entry.Def.ID(), e.selected.Entry.Source)
+	case "empty":
+		add("empty: the command printed nothing, so no definition was chosen by its text")
 	case "unidentified":
 		add("unidentified: no definition fits the text")
 	case "ambiguous":
@@ -223,6 +240,13 @@ func (e *explanation) lines() []string {
 		add("failed before a definition was chosen")
 	}
 	out = append(out, e.scopeLines()...)
+	if e.empty {
+		if len(e.candidates) == 0 {
+			add("candidates: none")
+		} else {
+			add("candidates: %s", ids(e.candidates))
+		}
+	}
 	if r := e.selected; r != nil {
 		for _, m := range r.Matched {
 			add("matched: %s", m)
@@ -360,7 +384,10 @@ func (e *explanation) document() *jsonutil.Object {
 
 	var candidates []any
 	var am *selector.AmbiguousError
-	if errors.As(e.failure, &am) {
+	switch {
+	case e.empty:
+		candidates = stringsToAny(idList(e.candidates))
+	case errors.As(e.failure, &am):
 		candidates = stringsToAny(idList(am.Candidates))
 	}
 	if candidates == nil {

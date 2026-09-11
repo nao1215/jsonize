@@ -1,0 +1,12 @@
+SOURCE                 TARGET                                                                                              FSTYPE          OPTIONS
+/dev/nvme0n1p2         /                                                                                                   ext4            rw,relatime
+tmpfs                  ├─/run                                                                                              tmpfs           rw,nosuid,nodev,size=12882672k,nr_inodes=819200,mode=755,inode64
+none                   │ ├─/run/credentials/systemd-journald.service                                                       tmpfs           ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,inode64,noswap
+none                   │ ├─/run/credentials/systemd-resolved.service                                                       tmpfs           ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,inode64,noswap
+tmpfs                  │ ├─/run/user/1000                                                                                  tmpfs           rw,nosuid,nodev,relatime,size=6441332k,nr_inodes=1610333,mode=700,uid=1000,gid=1000,inode64
+portal                 │ │ ├─/run/user/1000/doc                                                                            fuse.portal     rw,nosuid,nodev,relatime,user_id=1000,group_id=1000
+gvfsd-fuse             │ │ └─/run/user/1000/gvfs                                                                           fuse.gvfsd-fuse rw,nosuid,nodev,relatime,user_id=1000,group_id=1000
+tmpfs[/snapd/ns]       │ ├─/run/snapd/ns                                                                                   tmpfs           rw,nosuid,nodev,size=12882672k,nr_inodes=819200,mode=755,inode64
+nsfs[mnt:[4026533362]] │ │ ├─/run/snapd/ns/snapd-desktop-integration.mnt                                                   nsfs            rw
+nsfs[mnt:[4026534670]] │ │ ├─/run/snapd/ns/scc.mnt                                                                         nsfs            rw
+nsfs[mnt:[4026533361]] │ │ ├─/run/snapd/ns/prompting-client.mnt                                                            nsfs            rw

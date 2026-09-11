@@ -12,6 +12,11 @@ metadata:
     - https://man.archlinux.org/man/pactl.1
 detect:
   os: [linux]
+  # `pactl info` is the one way to print this. Saying so keeps it out of
+  # the variants `pactl list ...` printing nothing is judged against, so
+  # a machine with no sinks gets [] instead of a refusal.
+  args:
+    all: ["info"]
   signature:
     all:
       - '\AServer String: \S'

@@ -1,0 +1,36 @@
+# `pactl list short clients` prints one client per line, three tab
+# separated cells: an index, the driver, and the binary the client runs
+# ("(null)" when the client did not say). The driver is "PipeWire" on a
+# PipeWire server and the module that accepted the client on PulseAudio
+# ("protocol-native.c"), which is what tells this listing from
+# `pactl list short cards`, whose three cells are an index, a card name
+# and a driver.
+format: 1
+command: pactl
+variant: short-clients
+description: pactl list short clients
+metadata:
+  tags: [linux, audio, pulseaudio, pipewire]
+  compatible: [PulseAudio, PipeWire]
+  references:
+    - https://man.archlinux.org/man/pactl.1
+detect:
+  os: [linux]
+  args:
+    all: ["list", "short"]
+    any: ["clients"]
+  auto_detect: false
+  signature:
+    all:
+      - '\A(?:\d+\t(?:PipeWire|protocol-[^\t\n]+\.c|module-[^\t\n]+\.c)\t[^\t\n]*\n?)+\z'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [index, driver, binary]
+fields:
+  index: {type: int, required: true}
+  driver: {required: true}
+  binary: {null_if: ["(null)"]}

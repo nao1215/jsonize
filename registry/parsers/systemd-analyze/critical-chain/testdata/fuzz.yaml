@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (systemd 259) as systemd-analyze critical-chain --fuzz 1s with LC_ALL=C, the first 24 lines
+description: with --fuzz a unit has several units under it, so the chain branches and draws "|-" and "| "
+os: linux
+args: [critical-chain, --fuzz, 1s]

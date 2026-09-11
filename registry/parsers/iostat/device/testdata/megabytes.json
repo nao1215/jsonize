@@ -1,0 +1,26 @@
+[
+  {
+    "devices": [
+      {
+        "device": "nvme0n1",
+        "tps": 183.78,
+        "mb_read_s": 1.89,
+        "mb_wrtn_s": 1.55,
+        "mb_dscd_s": 0,
+        "mb_read": 20998,
+        "mb_wrtn": 17205,
+        "mb_dscd": 0
+      },
+      {
+        "device": "nvme1n1",
+        "tps": 1.16,
+        "mb_read_s": 0.01,
+        "mb_wrtn_s": 0,
+        "mb_dscd_s": 0,
+        "mb_read": 154,
+        "mb_wrtn": 25,
+        "mb_dscd": 0
+      }
+    ]
+  }
+]

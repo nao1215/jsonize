@@ -1,0 +1,4 @@
+description: -m reports in megabytes, and the columns are named for it (MB_read/s rather than kB_read/s).
+source: "`iostat -x -m nvme0n1 nvme1n1` on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C; the host name in the banner was replaced with a name of the same width"
+os: linux
+args: ["-x", "-m", "nvme0n1", "nvme1n1"]

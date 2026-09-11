@@ -1,0 +1,12 @@
+tree/docs:
+total 8.0K
+drwxrwxr-x 2 usr usr   40 Sep  1 10:30 empty
+-rw-rw-r-- 1 usr usr 4.0K Sep  1 10:30 guide.txt
+-rw-rw-r-- 1 usr usr   10 Sep  1 10:30 notes: draft.txt
+
+tree/src:
+total 8.0K
+-rw-rw-r-- 1 usr usr    5 Sep  1 10:30 a -> b
+lrwxrwxrwx 1 usr usr    7 Sep  1 10:30 link -> main.go
+-rw-rw-r-- 1 usr usr 2.0K Sep  1 10:30 main.go
+-rw-rw-r-- 1 usr usr    0 Sep  1 10:30 weird:

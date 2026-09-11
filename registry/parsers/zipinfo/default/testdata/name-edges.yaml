@@ -1,0 +1,4 @@
+description: Member names that begin or end with a space, and one with two spaces inside. One space separates the time from the name.
+source: captured on Ubuntu 26.04 with ZipInfo 3.00 (UnZip 6.00), LC_ALL=C zipinfo over an archive made for the fixture; the archive path shortened
+os: linux
+args: [edge.zip]

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/file/mime.json",
+  "title": "file/mime",
+  "description": "file -i and file --mime-type, one MIME type per file",
+  "x-jsonize": {
+    "definition": "file/mime",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "string"
+      },
+      "mime_type": {
+        "type": "string"
+      },
+      "charset": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "file",
+      "mime_type"
+    ]
+  }
+}

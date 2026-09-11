@@ -1,0 +1,42 @@
+# `ls -l --full-time` (and --time-style=full-iso) prints the long listing
+# with the time down to the nanosecond and with its offset:
+# "2025-11-04 13:04:07.841622100 +0900". BusyBox prints the same without
+# the fraction. The offset makes the time an instant of its own, so it is
+# read as one. The rest of the line is what ls/long reads (see there for
+# the size, the device numbers and the marks -F adds).
+format: 1
+command: ls
+variant: full-time
+aliases:
+  - name: gls
+description: ls -l --full-time, the time to the nanosecond with its offset
+metadata:
+  tags: [linux, darwin, filesystem]
+  compatible: [GNU coreutils, uutils coreutils, BusyBox]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/Formatting-file-timestamps.html
+detect:
+  args:
+    # "--time-style full-iso", the value as an argument of its own, is
+    # the same request.
+    any: ["--full-time", "--time-style=full-iso", "full-iso"]
+    none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
+  signature:
+    all:
+      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+(?:[\d.]+[kKMGTPEZYRQBi]*|\d+,\s*\d+)\s+\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)? [+-]\d{4} '
+input:
+  ignore:
+    - '^total\s'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)? [+-]\d{4}) (?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)? [+-]\d{4}) (?P<filename>.*[^/])$'
+    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)? [+-]\d{4}) (?P<filename>.*[^/])$'
+fields:
+  links: {type: int, required: true}
+  major: {type: int}
+  minor: {type: int}
+  date: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", required: true}
+  filename: {required: true}
+  link_to: {when_missing: omit}

@@ -1,0 +1,43 @@
+# `systemctl list-units` while a listed unit has a job pending: a JOB
+# column appears between SUB and DESCRIPTION, filled on that unit and
+# blank on the others. systemctl/units reads the table without it.
+#
+# The job ("start") is a word a description could begin with too, so the
+# rows are cut where the header's words start rather than matched word by
+# word. A unit without a job reads the same as it does in systemctl/units.
+format: 1
+command: systemctl
+variant: units-jobs
+description: systemctl list-units table while a job is pending
+metadata:
+  tags: [linux, systemd, service]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemctl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A\s*UNIT\s+LOAD\s+ACTIVE\s+SUB\s+JOB\s+DESCRIPTION\s*$'
+input:
+  ignore:
+    - '^\s*$'
+    - '^\d+ loaded units listed'
+    - '^To show all installed unit files'
+    - '^Legend:'
+    # "->" in the C locale, an arrow character in a UTF-8 one.
+    - '^\s+(?:LOAD|ACTIVE|SUB|JOB)\s+(?:->|→)'
+parse:
+  type: table
+  split: aligned
+  header:
+    leading_label: marker
+    columns: [marker, unit, load, active, sub, job, description]
+fields:
+  marker: {when_missing: omit}
+  unit: {required: true}
+  load: {required: true}
+  active: {required: true}
+  sub: {required: true}
+  job: {when_missing: omit}
+  description: {required: true}

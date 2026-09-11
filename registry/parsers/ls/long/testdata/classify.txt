@@ -1,0 +1,4 @@
+total 4
+-rw-rw-r-- 1 usr usr 120 Sep  1 10:30 README.md
+drwxrwxr-x 3 usr usr 100 Sep  1 10:30 docs/
+drwxrwxr-x 2 usr usr 120 Sep  1 10:30 src/

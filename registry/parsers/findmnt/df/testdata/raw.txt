@@ -1,0 +1,9 @@
+SOURCE FSTYPE SIZE USED AVAIL USE% TARGET
+tmpfs tmpfs 12.3G 4.6M 12.3G 0% /run
+/dev/nvme0n1p2 ext4 1.8T 1.5T 169.5G 86% /
+devtmpfs devtmpfs 30.6G 0 30.6G 0% /dev
+tmpfs tmpfs 30.7G 73.9M 30.6G 0% /dev/shm
+none tmpfs 1M 0 1M 0% /run/credentials/systemd-journald.service
+none tmpfs 1M 0 1M 0% /run/credentials/systemd-resolved.service
+/dev/loop0 squashfs 128K 128K 0 100% /snap/bare/5
+/dev/nvme1n1p1 ext4 1.8T 981.9G 799.4G 52% /media/user01/2nd

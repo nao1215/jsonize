@@ -8,6 +8,40 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- The five `ls` long listings read a device file (contract version 2).
+  ls prints a device's major and minor numbers where the size goes
+  (`crw-rw-rw- 1 root root 1, 3 ... /dev/null`), and every definition
+  refused the line, so `jz run ls -l /dev` was exit 4. Such a record has
+  `major` and `minor` and no `size`.
+- `ping/linux` reads what iputils prints besides a clean run (contract
+  version 2). A host that did not answer was the parse error it is run
+  to find out: the summary then has no round trip times, and the lines
+  between header and summary are ICMP errors (`From ... icmp_seq=1
+  Destination Host Unreachable`) or, with `-O`, `no answer yet`. Those
+  lines are in `replies` with an `error` key, the summary's counts of
+  errors, duplicates and corrupted replies, pipe size and inter-packet
+  gap are read when printed, an IPv6 header (`56 data bytes`, as
+  `ping6` prints) leaves `packet_bytes` null, `-I` fills `source` and
+  `device`, `-D` adds a `timestamp` to each reply, and a payload too
+  small to time leaves `time_ms` null.
+- `systemctl/show` is a list of names and values in the order printed
+  instead of one object (contract version 2). A unit with two
+  ExecReload= lines, which sshd's has, prints the property twice, and
+  the object could hold one of them: `jz run systemctl show ssh` was
+  exit 3.
+- `jz captured.txt` names a file where a subcommand goes. The refusal
+  now says how to read it, with the options it was given:
+  `jz --file captured.txt`.
+- Input with no text in it, empty or blank lines only, is refused by
+  saying so (`unable to identify the input format: it holds no text`)
+  instead of that no signature matched it, and a search of one parser
+  no longer lists every variant's first expression against it.
+- `jz run nice -n 5 df -h` used to answer `did you mean file, ionice,
+  mise?`. When the refused command's arguments name a command jz has a
+  parser for, the refusal now prints the command line that names it:
+  `jz run --parser df -- nice -n 5 df -h`. The same line follows a
+  refusal after the run, as with `jz run env A=1 df`, where `env` is a
+  parser of its own.
 - A conversion that succeeds has read all of its input. Every line is
   read by a parser, joined by `fold`, blank, named by `ignore`, or the
   heading `select.after` states in full; anything else is exit 3 naming
@@ -19,7 +53,8 @@ project follows [Semantic Versioning](https://semver.org/).
   `input.select` to report what it left out.
 - `--explain` says more and says it one fact per line, each opening with
   `jz: explain: `: the outcome (`chose`, `unidentified`, `ambiguous`,
-  `mismatch`, `defined`), the scope the candidates came from (the whole
+  `mismatch`, `defined`, and `empty` for a command that printed
+  nothing), the scope the candidates came from (the whole
   registry, `--parser`, the name of the command `jz run` started, the
   path of `--file`, and a path that was dropped), what the chosen
   definition matched, the rule that settled several that fit and each one
@@ -38,7 +73,8 @@ project follows [Semantic Versioning](https://semver.org/).
   value the group read.
 - `jz test` changes every fixture — a foreign line at the end and in the
   middle, the whole text twice — and fails a definition that still
-  succeeds without the change showing in its result.
+  succeeds without the change showing in its result. A list read from
+  the text twice has to be the records of one copy twice.
 - Definitions that dropped text they did not state now read it or state
   it: `dig` reads the command banner, warnings, the EDNS options and the
   question, authority and additional sections; `mtr --report` the host;
@@ -95,6 +131,62 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `ps/bsd-short` reads `ps ax` and `ps x` (PID TTY STAT TIME COMMAND),
+  and `ps/long` reads `ps -l` and `ps -el`, where a real-time thread's
+  nice value is a dash and so null. Both were exit 4.
+- `ls/long-iso` reads `ls -l --time-style=long-iso`, and `ls/full-time`
+  reads `ls -l --full-time`, whose time carries its offset and is read
+  as an instant. Both were exit 4.
+- `pactl/short-clients` and `pactl/short-cards` read `pactl list short
+  clients` and `pactl list short cards`. Both were exit 4.
+- `who/iso` reads `who` as a locale other than C prints it, the login
+  time with its year ("2025-11-04 13:17"); piped from a UTF-8 shell it
+  was exit 4.
+- `pidstat/io` and `pidstat/switches` read `pidstat -d` and `pidstat
+  -w`, the I/O and the context switches of each task, sample by sample
+  like the other pidstat reports. A rate pidstat could not read is
+  null. Both were exit 4.
+- `uptime/pretty` reads `uptime -p`, each unit as printed, and
+  `uptime/since` reads `uptime -s`, the time the system booted. Both
+  were exit 4.
+- `losetup/associations` reads `losetup -a` and `losetup DEVICE`, one
+  record per loop device with the backing file, its device number and
+  inode (null when the user may not ask for them), and the offset and
+  size limit when they are set. It was exit 4.
+- `ps/threads` reads `ps -eLf`, a line per thread with its LWP and the
+  thread count of its process, and `ps/jobs` reads the BSD job format of
+  `ps axj` and `ps axjf`, keeping the tree `f` draws into the command.
+  Both were exit 4.
+- `apt-cache/madison` reads `apt-cache madison`, one record per version
+  and the index offering it. It was written from the documentation
+  alone, as a check of what a first-time contributor has to go on, and
+  what that contributor had to find out by trial is now in the guide.
+- `df/portable` and `df/portable-type` read `df -P` and `df -P -T`, the
+  POSIX format with `1024-blocks` and `Capacity`, from GNU coreutils and
+  BusyBox. It was exit 4.
+- `systemd-inhibit/list` reads `systemd-inhibit --list`, one record per
+  inhibitor lock, with the operations the lock covers as an array.
+- `prlimit/linux` reads the resource limits `prlimit` prints, aligned or
+  with `--raw`.
+- `powerprofilesctl/list` reads the power profiles, which one is in use,
+  and each one's attributes.
+- `file/mime` reads `file -i` and `file --mime-type`: the MIME type and,
+  when printed, the character set of each file.
+- `ip/oneline-link` reads `ip -o link`, one record per interface. It
+  was added from the documentation alone, as a test of whether that is
+  enough; `ip/link` now states that its header line ends with the group
+  and the queue length, and `file/posix` that a kind is a word of its
+  own, so neither reads the one-line form. `file/posix` no longer reads
+  the MIME types of `file -i` as a kind either.
+- `iostat/human` reads `iostat -h`: the percentages as numbers, the
+  rounded device figures as the strings printed. `iostat/cpu` used to
+  take that report and fail on the percent signs.
+- `ip/oneline-address` reads `ip -o address`, one record per address,
+  with the words `ip/address` reads under the same names.
+- `ls/long-recursive` reads `ls -lR`, and `ls -l` given several
+  directories, as one record per directory with its entries. It used to
+  pass the signature of `ls/long` and fail on the first heading.
+
 - Thirty definitions for formats that had none: `/etc/services` and
   `/etc/protocols` (also read through `getent`), `nslookup HOST`,
   `aplay -l` (and `arecord -l`), `smartctl --scan`, `systemctl
@@ -129,11 +221,318 @@ project follows [Semantic Versioning](https://semver.org/).
 - `lspci/verbose`, `lsusb/verbose` and `iw/dev`, the first definitions to
   use it. `lspci/kernel` and `lsusb/linux` gained one exclusion each,
   because the output they read is a subset of the verbose output and only
-  the register dumps and descriptor blocks say which of the two a text
+  the lines the verbose output adds (the Flags line or register dumps of
+  `lspci`, the descriptor blocks of `lsusb`) say which of the two a text
   is.
 
 ### Fixed
 
+- `jz run sysctl KEY`, `sysctl -p` and `sysctl -w` were exit 4: the
+  definition asked for -a, though they print the same lines for the keys
+  they touch. `systemctl show -p PROPERTY UNIT` and `systemctl show` of
+  the manager are read by the new `systemctl/show-properties`; a query
+  of several units without their Id, which prints blocks that do not say
+  whose they are, is refused.
+- `jz run df --total` (with any of -h, -i, -T, -P) was exit 3 at the
+  closing row, whose mount point is a dash. The row is read, as
+  printed: filesystem `total`, mount point `-`.
+- `jz run ip -s l`, `ip ro`, `ip neig`, `tc q`, `bridge f` and the rest
+  of the abbreviations iproute2 accepts were exit 4: the definitions
+  named only the full word (and `r`, `n`), while iproute2 runs any
+  prefix. `ls --time-style long-iso`, the value as an argument of its
+  own, is read like `--time-style=long-iso`. `nmcli g` is read like
+  `nmcli general`, as `nmcli d` already was like `nmcli device`.
+- `jz run ps auxww`, `ps auxf`, `ps uax` and `ps u` were exit 4:
+  `ps/bsd` required the arguments to be one of aux, axu, -aux and -axu,
+  though any BSD letters that print its header print its columns. The
+  header alone decides now.
+- `sensors` left out the limits a reading continues on a second line
+  ("(crit = +84.8 C)") at exit 0; they are joined to the reading's other
+  limits. Piped from a UTF-8 shell, where a temperature is "+38.0°C",
+  it was exit 3; the unit is "C" in either locale.
+- `systemctl list-units` piped from a UTF-8 shell read the lines of its
+  legend as units, exit 0: there the legend points with "→" instead of
+  "->", which only the C form was left out for. Both are left out now,
+  and the three state columns have to be the lower-case words systemctl
+  prints, so a line of prose is refused rather than read as a unit.
+- `findmnt`, `tree` and `systemd-analyze critical-chain` piped from a
+  shell in a UTF-8 locale were exit 3 or 4: they draw their trees with
+  box-drawing characters there ("├─", and for tree "│" with two no-break
+  spaces) instead of the "|-" and "`-" of the C locale. `jz run
+  systemd-analyze critical-chain --fuzz 1s` was exit 4 in any locale,
+  since a chain that branches draws "|-" as well.
+- `jz run findmnt -s` was exit 3 on any system whose /etc/fstab lists a
+  swap area: its mount point is `none`, which the definition did not
+  take for a target.
+- `df`, `df -i` and `df -P` read a file system whose name holds a space
+  and a number ("photos 2024", a FUSE mount) with every figure one
+  column to the right, exit 0: 2024 as the block count and "1% /mnt" as
+  the mount point. The other GNU and BusyBox df variants stopped at such
+  a line with exit 3, and BusyBox's habit of printing a long name on a
+  line of its own was exit 3 too. The eight definitions now read a line
+  by what each column holds, and join BusyBox's two lines.
+- `--extract` and `--exclude` judged a key by the input rather than by
+  the format: `jz run --extract pid ps -p N` for a process that is gone
+  (the empty listing) was exit 2, `--extract peer` on `ip -brief link`
+  without a veth was exit 2, and with `--stream` the same key failed on
+  the first record that left it out. A key is now checked against the
+  keys the definition produces, refused before anything is written when
+  the definition cannot produce it, and looked for in the records only
+  when the definition takes it from the input.
+- `jz test` passed a definition whose testdata held a `.yaml` or
+  `.json` with no `.txt` beside it (a fixture renamed or never added),
+  a case that never ran, and a `.json` beside `expect_error`, an answer
+  never compared. Both fail now, and a testdata directory that cannot be
+  read is reported once instead of twice. A registry warning (a
+  `disable` that matches nothing) was printed twice as well, and a
+  `--decoys` directory that does not exist was reported as the `lstat`
+  call that failed.
+- `jz run du -h EMPTY FILE` was exit 4, ambiguous between `du/gnu-human`
+  and `du/posix`: the empty file prints a plain 0 on the opening line,
+  which is all `du/posix`'s signature looked at. A rounded size anywhere
+  in the listing now rules `du/posix` out.
+- `ip -brief link` and `ip -brief address` reported a veth as the
+  interface `veth0@if2`, a name no command accepts. The part after the
+  at sign is the `peer`, as `ip link` already read it.
+- The journal in its short formats was exit 3 as soon as a message ran
+  over several lines or the output crossed a boot: `jz run journalctl
+  -n 40000` stopped at a Qt warning continued on indented lines. The
+  continuation is joined onto its entry, the line naming the next boot
+  is left out, and `-- No entries --` is the empty list.
+- `jz run apt list --installed PATTERN` matching nothing printed the
+  opening line alone and was exit 4; it is the empty list.
+- `jz run git diff --numstat` of no change was exit 4: `git/diff-stat`,
+  which reads one object and so has no empty form, was among the
+  variants the empty output was judged against. It is ruled out by
+  `--numstat`, and the answer is `[]`. `jz run pactl list sinks` on a
+  machine with no sinks had the same trouble with `pactl/info`, which
+  now asks for `info`.
+- A duration read its one-letter units without regard to case, so `1M`,
+  systemd's month and a size's megabyte, was 60 seconds. A unit of one
+  or two letters is read as written; a unit spelled as a word still is
+  whatever its case.
+- `--assume-year 2025` over `Feb 29 10:00` said the value did not match
+  the layout, and quoted a layout the definition never wrote (`2006 Jan
+  _2 15:04`, with the year jz put in front). It now says the value is
+  not a date in 2025, and a value that does not fit names the layout as
+  written.
+- A table drawn with a frame and no rule under its header (a headless
+  listing, as `psql` prints with a border and no headings) was read as
+  a header over several lines, and the answer was `[]` at exit 0. It is
+  refused, since the text does not say where a header would end.
+- Two outputs of one command in a row were read with the second one's
+  header as a row: `docker network ls` twice gave
+  `{"network_id":"NETWORK","name":"ID",...}` at exit 0, and so did 20
+  definitions with a header line, `csv` and `table/box` among them. A
+  line that repeats the header starts a second table and is read as its
+  header, so an aligned table cut to other widths the second time is
+  cut where its own header says. `readelf -h` read its heading a second
+  time as a key; it is left out wherever it stands. `jz test` now checks
+  that a list read from the fixture twice is the records of one copy
+  twice, which is what finds this.
+- A file name that begins with a space lost it at exit 0: `ls -l`,
+  `tar -tv`, `unzip -l`, `zipinfo` and `lsattr` took the space for more
+  of the gap before the name, and `du` and `wc` trimmed it off both
+  ends (`trail ` read as `trail`). One space, or three for `unzip -l`,
+  separates the name from what comes before it, and what follows is the
+  name. `du -h` had the same trim. `tree` kept its escaped form but dropped the space of a trailing
+  `\ `. The checksum listings refused a name that begins with a space;
+  they read it.
+- `vmstat -w` was exit 4: the wide form draws each group name with
+  dashes on both sides (`--procs--`), which the signature did not allow.
+  The columns are the same, and `vmstat/linux` and `vmstat/linux-active`
+  read it.
+- A `split_regex` that can match nothing (`[ \t]*`) split a value between
+  every character, so `abc def` read as `["a","b","c","d","e","f"]`. It
+  is refused when the definition is loaded.
+- An aligned table with a right-aligned value that has a space in it was
+  cut inside the value at exit 0: `systemctl list-timers | jz --parser
+  table --variant aligned` read `"next": "Fri 2026-09-11 06:55:28 JST
+  4min"` and `"left": "27s"`. A cell before the last that holds a tab or
+  two spaces in a row, the gap that stands between columns, is now
+  refused with the column and the value.
+- An aligned table whose header gives one column two words read the row
+  wrong at exit 0: `docker ps | jz --parser table --variant aligned`
+  split `CONTAINER ID` into two columns, kept the id whole under the
+  first and wrote `"id": null`, then carried the `7` of `7 weeks ago`
+  into the command. A value that runs past where the next column starts
+  and leaves that column empty is now refused with the line, the column
+  and the value, since the row does not say whether the column was empty
+  or its header word belongs to the one before. A value that pushes the
+  rest of the row to the right still reads.
+- `tree` printed more than twenty lines was exit 4: the signature asked
+  for the closing count, which is past the lines detection looks at.
+  `jz run tree -L 2 /etc/apt` is read now, and a short text still has to
+  end with the count.
+- `jz run systemctl list-units` was exit 4 while any unit had a job
+  pending, since systemctl then adds a JOB column. The new variant
+  `systemctl/units-jobs` reads that table, with `job` on the unit that has
+  one.
+- `gpg --list-keys --with-colons` on a keyring with no key prints the
+  trust database record alone, and `rustup toolchain list` with nothing
+  installed prints `no installed toolchains`. Both were exit 4; they are
+  the empty listings they are.
+- The hint for a wrapper named an argument that is a directory or a data
+  file: `jz run tree -L 2 /etc/apt` suggested
+  `jz run --parser apt -- tree ...`. Only something that can be run is
+  offered now.
+- The examples of the shape definitions piped `docker ps` into
+  `table/box` and read `~/.gitconfig` with `ini/default`; `docker ps` is
+  not drawn with rules, and a git config that sets a key twice is refused
+  by an object that holds one value per key. They use `sqlite3 -box`,
+  `kubectl get nodes` and a NetworkManager configuration instead.
+- The README, the usage page, `jz run --help` and the design page showed
+  `jz run --stream ping` as the example of a stream. `ping/linux` reads
+  one object, which has no streaming form, so the example was exit 2.
+  They show `vmstat 1` and `iostat 5` now, and the sample of a skipped
+  record is one jz prints.
+- `jz run --explain` wrote nothing when the command printed nothing:
+  `jz run --explain git stash list` answered `[]` with no word of why.
+  It now says the outcome was `empty`, which variants the answer was
+  judged against, and what the command did. A command that failed or was
+  ended before it finished is explained as well.
+- `ls -ld /etc | jz` was ambiguous, and `jz --parser etc` read the same
+  line as a protocol named `drwxr-xr-x` with the number 162 at exit 0.
+  `etc/protocols` took any word after the number for the protocol's
+  upper-case alias; it now asks for one that opens with a capital, as
+  every entry in the file has.
+- `vmstat -t` and `vmstat -a -t` were exit 3: the date and time `-t`
+  adds after the last column ran into it. Each sample now carries a
+  `timestamp`, as printed, since the zone is named only by the
+  abbreviation at the head of the column.
+- `ls -l --si` was exit 3: `--si` writes the kilo step as a lower-case
+  `k` (`4.1k`), which the size in every `ls` definition left out, along
+  with the exa and larger steps. The sizes stay as printed.
+- A command that ended and left a process behind holding its output
+  open, such as a script that starts something in the background, was
+  exit 1 with `WaitDelay expired before I/O complete` and nothing
+  converted; with `--stream`, jz waited for the process it left, which
+  for a daemon is for ever. What the command printed before it ended is
+  now read, three seconds after it ended at most, and standard error
+  says a process it started still held the output.
+- An option that takes one value, given two, kept the last without a
+  word: `jz -f a.txt -f b.txt` converted `b.txt` at status 0 and said
+  nothing about `a.txt`, and `--parser`, `--variant`, `--define`,
+  `--assume-year` and `--timeout` did the same. A second value is now a
+  usage error (exit 2). `--extract`, `--exclude`, `--assume-zone` and
+  `--env` take one value each time and may still be repeated.
+- `jz < /dev/null` printed the help on standard output with status 0.
+  /dev/null is a character device, as a terminal is, and jz took any
+  character device for the terminal it prints its help to. It now asks
+  whether standard input is a terminal, so cron, a CI step or `ssh -n`,
+  which leave /dev/null there, get the refusal of empty input (exit 4).
+- A blank line after the last line of the input made 44 definitions
+  unidentified: `cat /proc/meminfo; echo` was exit 4. A signature that
+  says every line has one shape ends at `\z`, the end of the lines it
+  looks at, and the blank line was one of them though the parser skips
+  it. A blank line before the first line did the same to 507 of the 743
+  fixtures, through signatures anchored at `\A`. Blank lines before and
+  after the text are no longer part of what a signature sees, and the
+  ones before it are skipped by `skip_blank: false` definitions too.
+  `jz test` and `make registry-test` now require every fixture to give
+  the same answer with CRLF line endings, a byte order mark, no line
+  break at the end and a blank line before or after it.
+- `lsblk -f -r` came back at exit 0 with its values under the wrong keys:
+  `-r` prints the header of the aligned table one space apart and the
+  rows unaligned, and cutting the rows where those header words start
+  put the filesystem version under `fsver` together with the type, the
+  use percentage under `uuid` and the mount point under `fsavail`. The
+  util-linux table definitions (lsblk, findmnt --df, losetup, lsfd,
+  lsipc, lslocks, lslogins, lsns, uuidparse) now ask for a header that
+  is lined up, and refuse the raw form; the others used to fail on it by
+  chance, at exit 3.
+- An aligned table cut a row holding CJK characters or kana one
+  character late for each of them, and wrote the result at exit 0:
+  `systemd-inhibit --list` gave an inhibitor named `スクリーンロッカー`
+  the user id and user name too, and moved every value after it one key
+  to the right. Positions are now counted in terminal columns, the way
+  the table was lined up.
+- `jz run` answered a command that printed nothing with `[]` whatever
+  its arguments were, including arguments under which no definition
+  reads its output: `jz run systemd-inhibit --what=sleep true` ran a
+  wrapper, and the empty list claimed there were no locks. The
+  arguments now choose among the definitions the same way they would
+  with output, and with none left the answer is exit 4.
+- A `float` field read Go's own number syntax, so `1_000.5` became
+  1000.5 and `0x1p3` became 8; `int` already refused both. The days of a
+  `duration` took any number too, `1_0-01:02:03` as ten days and
+  `1e3-00:00:00` as a thousand. Both now take digits only.
+- A command `jz run` stopped at `--timeout`, or one ended by a signal,
+  had the line it was writing when it stopped read as a whole record:
+  `du` cut off in the middle of a path gave that path shortened. With
+  `--stream` that record is now left out and the ones before it stay;
+  without `--stream` nothing is written, since the output never came to
+  its end. The status is 128 plus the signal, as before.
+- `stat` of a device file was exit 3: the definition looked for the
+  device numbers on a line of their own, and GNU, uutils and BusyBox all
+  print them at the end of the Device line. They are read as
+  `device_type`, and the SELinux label as `context`; the label used to be
+  matched and left out.
+- `jz run lspci -v` was exit 3. The output of a single `-v` met the
+  signature of `lspci/kernel`, which then failed on the lines `-k` does
+  not print. It now lands on `lspci/verbose`, which reads `-v` and `-vv`
+  alike.
+- An option that takes a value, given an empty one (`--define ""`,
+  `--parser ""`, `--file ""`), counted as not given, so a script passing
+  an unset variable had its input read by whatever detection chose. It
+  is a usage error now. `jz version` refuses arguments as `jz list` does,
+  and `jz test` says a directory does not exist rather than that it has
+  no `parsers/` in it.
+- `ss -a` and `ss -l` were exit 3 wherever they list netlink or packet
+  sockets, whose peer is a bare `*`. Those rows are read now, with the
+  protocol and the process or interface as the local address and port,
+  and no `peer_port` (the `ss/linux` and `ss/single-protocol` schemas
+  are version 2).
+- `iostat -m` read the megabyte columns as strings where the kilobyte
+  ones are numbers. They are numbers now in `iostat/linux`,
+  `iostat/device` and `iostat/extended`, whose schemas are version 2.
+- `df -a` was exit 3: an automount point nothing has mounted yet prints
+  a dash in every figure. `df/gnu`, `df/gnu-type` and `df/gnu-inodes`
+  read the dash as null, which their schemas now allow (version 2).
+- `mount -l` was exit 3 on a file system with a label. The label is
+  read as `label`.
+- Output written with `-z` or `--zero` (`git ls-files -s -z`,
+  `git log --oneline -z`, `sha256sum -z`, `ls --zero`) came back at exit
+  0 as one record whose last field held every other record. A format
+  read line by line now refuses text holding a NUL byte, detected or
+  named, and the message says what the text most likely is.
+- Options that add to the end of a line came back at exit 0 inside the
+  last field. `ar tvO` and `nm -l` are read now (`offset`, `location`),
+  as is what `ip -d rule` prints after the table (`attributes`; a rule
+  with neither a table nor an action is refused rather than read whole
+  into `selectors`). `git ls-files -s --eol` and `fc-list` with element
+  names are refused by the text. `tree -F` and the tree options that put
+  metadata before a name, `git log --oneline --decorate`, `--parents`
+  and `--children`, `git branch -vv` and `cksum -a sysv` are refused
+  under `jz run`.
+- `jz run wc -lwcL` came back at exit 0 with the fourth count at the
+  start of `filename` ("6 /etc/hostname"). `-L` and `-m` are now
+  excluded; the comment already said `-m` output must not be read.
+- `ls -lF` and `ls -lp` came back at exit 0 with the mark `-F` adds in
+  `filename` ("docs/", "link@"). The long listings now exclude those
+  arguments under `jz run`, and refuse a name that ends with "/", which
+  no name can, so the same listing piped in is refused too. A variant
+  that excludes an argument is no longer offered as the one to name.
+- `ss -e` and `ss -o` came back at exit 0 with the socket's uid, inode,
+  cgroup and timers under `process`, padded with the spaces ss aligns its
+  columns with. `process` is now the `users:((...))` list of `-p` and
+  nothing else, and a line carrying the other fields is refused.
+- The message for text jz could not identify told the reader to name a
+  parser (`--parser df`, or the first variant of the command), and a named
+  parser is held to its signature, so following it was refused the same
+  way. It now names the variant the system or the arguments ruled out
+  when there is one, and otherwise the shapes read by name (`csv`, `ini`,
+  `kv`, `table`) and `--define`.
+- `sar` on a day the machine rebooted was exit 3, in every report. The
+  daily file then holds a LINUX RESTART line and a second run with its
+  own column names and Average rows; the line is now left out like the
+  banner, and the rows of both runs are read. The banner is stated in
+  full rather than as any line that opens with "Linux ".
+- Some patterns matched values outside any named group, so the line
+  counted as read and the value was missing from the result: the server
+  name and transport on `dig`'s SERVER line (now `server_name` and
+  `protocol`; the `dig/bind` schema is version 2) and the name of the
+  programming interface that `lspci -v` prints (`prog_if_name`).
 - `--stream` on a `records` format with a record that could not be read
   lost the start of the next record as well, and reported the rest of it
   as text before the first record.
@@ -521,6 +920,11 @@ project follows [Semantic Versioning](https://semver.org/).
   own fixture. A composite part now names the lines of its region that
   belong to a sibling with `ignore`, and a line nothing claims is an
   error.
+- The `size` field type, its `unit` key and `convert.Size`. No
+  definition used it: a size printed with a unit is rounded, and turning
+  `1.8T` into bytes writes a number the command never printed. It also
+  lost precision on a plain count above 2^53, turning
+  `9007199254740993` into `9007199254740992`. A plain count is an `int`.
 
 ### Decisions worth knowing
 

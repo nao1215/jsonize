@@ -64,6 +64,9 @@
       },
       "gu": {
         "type": "integer"
+      },
+      "timestamp": {
+        "type": "string"
       }
     },
     "required": [

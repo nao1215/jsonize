@@ -33,6 +33,9 @@
     "links": {
       "type": "integer"
     },
+    "device_type": {
+      "type": "string"
+    },
     "access_mode": {
       "type": "string"
     },
@@ -49,6 +52,9 @@
       "type": "integer"
     },
     "group": {
+      "type": "string"
+    },
+    "context": {
       "type": "string"
     },
     "access_time": {

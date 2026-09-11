@@ -1,0 +1,4 @@
+Filesystem           1024-blocks    Used Available Capacity Mounted on
+/dev/nvme0n1p2       1920641288 1649179756 173824568  90% /
+photos 2024           32206676    281220  31925456   1% /mnt/photos
+my photos backup 2024 drive         32206676    276816  31929860   1% /mnt/backup

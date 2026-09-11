@@ -18,7 +18,6 @@ const (
 	typeInt   = "int"
 	typeFloat = "float"
 	typeBool  = "bool"
-	typeSize  = "size"
 	typeTime  = "time"
 
 	typeDuration = "duration"
@@ -85,6 +84,14 @@ func Float(s string) (float64, error) {
 	if math.IsNaN(v) || math.IsInf(v, 0) {
 		return 0, &Error{Type: typeFloat, Input: s, Cause: errors.New("non-finite value")}
 	}
+	// strconv also reads Go's own syntax: underscores between digits and
+	// hexadecimal with a binary exponent. No command prints a decimal
+	// that way, and Int already refuses both.
+	for i := 0; i < len(t); i++ {
+		if c := t[i]; !isDigit(c) && !strings.ContainsRune(".eE+-", rune(c)) {
+			return 0, &Error{Type: typeFloat, Input: s, Cause: strconv.ErrSyntax}
+		}
+	}
 	return v, nil
 }
 
@@ -116,80 +123,6 @@ func Bool(s string, trueValues, falseValues []string) (bool, error) {
 		}
 	}
 	return false, &Error{Type: typeBool, Input: s, Cause: errors.New("not a recognised boolean spelling")}
-}
-
-// SizeBase selects the multiplier used by Size for unit suffixes.
-type SizeBase int
-
-const (
-	// Binary interprets K/M/G as powers of 1024 (the df/free convention).
-	Binary SizeBase = 1024
-	// Decimal interprets K/M/G as powers of 1000.
-	Decimal SizeBase = 1000
-)
-
-var sizeExponent = map[byte]int{'b': 0, 'k': 1, 'm': 2, 'g': 3, 't': 4, 'p': 5, 'e': 6}
-
-// Size parses a human readable size such as "3.7G", "955M", "466Gi",
-// "1.2 MiB", "0B" or a bare number and returns the amount in bytes. The
-// base applies to single-letter suffixes; an explicit "i" (Gi, GiB) always
-// means 1024 and an explicit "B" after a bare letter (GB) follows base.
-// The result is rounded to the nearest integer; values that overflow int64
-// are rejected.
-func Size(s string, base SizeBase) (int64, error) {
-	if base == 0 {
-		base = Binary
-	}
-	t := strings.TrimSpace(s)
-	if t == "" {
-		return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("empty value")}
-	}
-	// Split numeric prefix from the unit.
-	i := 0
-	for i < len(t) && (t[i] >= '0' && t[i] <= '9' || t[i] == '.' || t[i] == '+' || t[i] == '-') {
-		i++
-	}
-	num, unit := t[:i], strings.TrimSpace(t[i:])
-	if num == "" {
-		return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("missing number")}
-	}
-	f, err := strconv.ParseFloat(num, 64)
-	if err != nil {
-		return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("invalid number")}
-	}
-	if f < 0 {
-		return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("negative size")}
-	}
-	mult := 1.0
-	if unit != "" {
-		u := strings.ToLower(unit)
-		u = strings.TrimSuffix(u, "b")
-		if u == "" && strings.ToLower(unit) != "b" {
-			return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("unknown unit")}
-		}
-		if u != "" {
-			b := float64(base)
-			if strings.HasSuffix(u, "i") {
-				b = float64(Binary)
-				u = strings.TrimSuffix(u, "i")
-			}
-			if len(u) != 1 {
-				return 0, &Error{Type: typeSize, Input: s, Cause: fmt.Errorf("unknown unit %q", unit)}
-			}
-			exp, ok := sizeExponent[u[0]]
-			if !ok {
-				return 0, &Error{Type: typeSize, Input: s, Cause: fmt.Errorf("unknown unit %q", unit)}
-			}
-			mult = math.Pow(b, float64(exp))
-		}
-	}
-	v := math.Round(f * mult)
-	// float64(math.MaxInt64) rounds up to 2^63, so >= is the correct
-	// overflow test; 8E is exactly 2^63 bytes and must be rejected.
-	if v >= math.MaxInt64 {
-		return 0, &Error{Type: typeSize, Input: s, Cause: errors.New("value overflows int64")}
-	}
-	return int64(v), nil
 }
 
 // Assumptions carries what the command line allowed jz to assume about a
@@ -225,6 +158,7 @@ func TimeAssuming(s, layout string, loc *time.Location, a Assumptions) (string, 
 	if t == "" {
 		return "", false, &Error{Type: typeTime, Input: s, Cause: errors.New("empty value")}
 	}
+	written, assumed := layout, false
 	if !strings.Contains(layout, "06") {
 		if a.Year == 0 {
 			return s, false, nil
@@ -234,13 +168,23 @@ func TimeAssuming(s, layout string, loc *time.Location, a Assumptions) (string, 
 		// the rest of the layout.
 		layout = "2006 " + layout
 		t = strconv.Itoa(a.Year) + " " + t
+		assumed = true
 	}
 	if loc == nil {
 		loc = time.UTC
 	}
 	parsed, err := time.ParseInLocation(layout, t, loc)
 	if err != nil {
-		return "", false, &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("does not match the layout %q", layout)}
+		// A value that fits the layout can still name a day its year does
+		// not have (February 29), which is a different thing to say.
+		var pe *time.ParseError
+		if errors.As(err, &pe) && strings.Contains(pe.Message, "out of range") {
+			if assumed {
+				return "", false, &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("is not a date in %d, the year it was assumed to be in", a.Year)}
+			}
+			return "", false, &Error{Type: typeTime, Input: s, Cause: errors.New("is not a date: " + strings.TrimPrefix(pe.Message, ": "))}
+		}
+		return "", false, &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("does not match the layout %q", written)}
 	}
 	if strings.Contains(layout, "MST") {
 		resolved, ok := resolveZone(parsed, a.Zones)
@@ -498,8 +442,11 @@ func splitLeadingDays(t string) (days float64, rest string, ok bool) {
 func parseClock(t, layout string) (float64, error) {
 	var days float64
 	if i := strings.Index(t, "-"); i > 0 {
+		if !allDigits(t[:i]) {
+			return 0, errDurationShape
+		}
 		n, err := strconv.ParseFloat(t[:i], 64)
-		if err != nil || n < 0 {
+		if err != nil {
 			return 0, errDurationShape
 		}
 		days, t = n, t[i+1:]
@@ -579,6 +526,21 @@ var durationUnits = map[string]float64{
 	"w": 604800, "wk": 604800, "week": 604800, "weeks": 604800,
 }
 
+// durationUnit looks a unit up. An abbreviation of one or two letters is
+// matched as written, because its case is part of it: systemd writes a
+// month as "M" where "m" is a minute, and "M" after a number is as often
+// a megabyte. A unit spelled as a word is matched whatever its case.
+func durationUnit(u string) (float64, bool) {
+	if mult, ok := durationUnits[u]; ok {
+		return mult, true
+	}
+	if len(u) <= 2 {
+		return 0, false
+	}
+	mult, ok := durationUnits[strings.ToLower(u)]
+	return mult, ok
+}
+
 // parseUnits reads a number followed by its unit, repeated: "45 min",
 // "1h2m3s", "3days". A space between the number and the unit is
 // optional, and the parts must run from the largest unit to the
@@ -608,7 +570,7 @@ func parseUnits(t string) (float64, error) {
 		if k == 0 {
 			return 0, errDurationShape
 		}
-		mult, ok := durationUnits[strings.ToLower(t[:k])]
+		mult, ok := durationUnit(t[:k])
 		if !ok || mult >= prev {
 			return 0, errDurationShape
 		}

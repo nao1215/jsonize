@@ -1,0 +1,4 @@
+description: TCP listeners with -p. The process is the users:((...)) list, and only a socket the user owns has one.
+source: "`ss -tlnp` on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C, as a user"
+os: linux
+args: ["-tlnp"]

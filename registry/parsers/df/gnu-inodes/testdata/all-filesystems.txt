@@ -1,0 +1,15 @@
+Filesystem        Inodes   IUsed     IFree IUse% Mounted on
+tmpfs             819200    2548    816652    1% /run
+/dev/nvme0n1p2 122028032 7312944 114715088    6% /
+devtmpfs         8023868    1081   8022787    1% /dev
+tmpfs            8051669      80   8051589    1% /dev/shm
+devpts                 0       0         0     - /dev/pts
+sysfs                  0       0         0     - /sys
+securityfs             0       0         0     - /sys/kernel/security
+cgroup2                0       0         0     - /sys/fs/cgroup
+none                   0       0         0     - /sys/fs/pstore
+efivarfs               0       0         0     - /sys/firmware/efi/efivars
+bpf                    0       0         0     - /sys/fs/bpf
+configfs               0       0         0     - /sys/kernel/config
+proc                   0       0         0     - /proc
+systemd-1              -       -         -     - /proc/sys/fs/binfmt_misc

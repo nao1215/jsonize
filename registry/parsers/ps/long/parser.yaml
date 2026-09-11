@@ -1,0 +1,43 @@
+# `ps -l` (and `ps -el`) prints the long format: the process flags, the
+# state, the user and parent, the scheduling priority and nice value, the
+# address and size of the process image, what it is waiting in (WCHAN),
+# the terminal, the CPU time and the command name. procps prints "-" for
+# an address it does not show and for a process that waits in nothing;
+# those are null. SZ is the image size in pages.
+format: 1
+command: ps
+variant: long
+description: ps -l (F S UID PID PPID C PRI NI ADDR SZ WCHAN TTY TIME CMD)
+metadata:
+  tags: [linux, process]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/ps.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A\s*F[ \t]+S[ \t]+UID[ \t]+PID[ \t]+PPID[ \t]+C[ \t]+PRI[ \t]+NI[ \t]+ADDR[ \t]+SZ[ \t]+WCHAN[ \t]+TTY[ \t]+TIME[ \t]+CMD[ \t]*$'
+parse:
+  type: table
+  header:
+    columns: [f, s, uid, pid, ppid, c, pri, ni, addr, sz, wchan, tty, time, cmd]
+  # The command name is the last column and may hold spaces.
+  max_fields: 14
+fields:
+  f: {type: int, required: true}
+  s: {required: true}
+  uid: {type: int, required: true}
+  pid: {type: int, required: true}
+  ppid: {type: int, required: true}
+  c: {type: int}
+  pri: {type: int}
+  # A process outside the time-sharing class (a real-time one) prints a
+  # dash for its nice value.
+  ni: {type: int, null_if: ["-"]}
+  addr: {null_if: ["-"]}
+  sz: {type: int, null_if: ["-"]}
+  wchan: {null_if: ["-"]}
+  tty: {null_if: ["?"]}
+  time: {type: duration, layout: mm:ss, required: true}
+  cmd: {required: true}

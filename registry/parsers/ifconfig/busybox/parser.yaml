@@ -11,10 +11,10 @@
 # Two things this definition does not carry. An interface whose kernel
 # knows its IRQ or memory window prints a further line after the byte
 # totals ("Interrupt:16 Memory:f7c00000-f7c20000"); no interface on the
-# machine this was captured from printed one, so no part reads it and it
-# is dropped. An interface with no flags at all prints the literal
-# "[NO FLAGS]" where the flag names go, which `flags` then splits into
-# two words.
+# machine this was captured from printed one, so no part reads it and a
+# block that has one is refused as unread text. An interface with no
+# flags at all prints the literal "[NO FLAGS]" where the flag names go,
+# which `flags` then splits into two words.
 format: 1
 command: ifconfig
 variant: busybox

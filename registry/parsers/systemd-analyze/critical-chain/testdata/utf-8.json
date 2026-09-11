@@ -1,0 +1,146 @@
+[
+  {
+    "unit": "graphical.target",
+    "activated": 13.914,
+    "startup": null,
+    "children": [
+      {
+        "unit": "power-profiles-daemon.service",
+        "activated": 13.876,
+        "startup": 0.038,
+        "children": [
+          {
+            "unit": "multi-user.target",
+            "activated": 13.874,
+            "startup": null,
+            "children": [
+              {
+                "unit": "docker.service",
+                "activated": 12.4,
+                "startup": 1.474,
+                "children": [
+                  {
+                    "unit": "network-online.target",
+                    "activated": 12.397,
+                    "startup": null,
+                    "children": [
+                      {
+                        "unit": "NetworkManager-wait-online.service",
+                        "activated": 2.883,
+                        "startup": 9.513,
+                        "children": [
+                          {
+                            "unit": "NetworkManager.service",
+                            "activated": 2.507,
+                            "startup": 0.374,
+                            "children": [
+                              {
+                                "unit": "dbus.service",
+                                "activated": 2.408,
+                                "startup": 0.094,
+                                "children": [
+                                  {
+                                    "unit": "basic.target",
+                                    "activated": 2.404,
+                                    "startup": null,
+                                    "children": [
+                                      {
+                                        "unit": "sockets.target",
+                                        "activated": 2.404,
+                                        "startup": null,
+                                        "children": [
+                                          {
+                                            "unit": "snapd.socket",
+                                            "activated": 2.382,
+                                            "startup": 0.021,
+                                            "children": [
+                                              {
+                                                "unit": "sysinit.target",
+                                                "activated": 2.379,
+                                                "startup": null,
+                                                "children": [
+                                                  {
+                                                    "unit": "snapd.apparmor.service",
+                                                    "activated": 2.246,
+                                                    "startup": 0.132,
+                                                    "children": [
+                                                      {
+                                                        "unit": "apparmor.service",
+                                                        "activated": 2.162,
+                                                        "startup": 0.082,
+                                                        "children": [
+                                                          {
+                                                            "unit": "local-fs.target",
+                                                            "activated": 2.161,
+                                                            "startup": null,
+                                                            "children": [
+                                                              {
+                                                                "unit": "var-lib-docker-rootfs-overlayfs-01507c1fee51a4d7afc81732ee60afe4fe7b5f1e72e8fa94311e31513059cbec.mount",
+                                                                "activated": 13.662,
+                                                                "startup": null,
+                                                                "children": [
+                                                                  {
+                                                                    "unit": "local-fs-pre.target",
+                                                                    "activated": 0.626,
+                                                                    "startup": null,
+                                                                    "children": [
+                                                                      {
+                                                                        "unit": "systemd-tmpfiles-setup-dev.service",
+                                                                        "activated": 0.619,
+                                                                        "startup": 0.006,
+                                                                        "children": [
+                                                                          {
+                                                                            "unit": "systemd-tmpfiles-setup-dev-early.service",
+                                                                            "activated": 0.59,
+                                                                            "startup": 0.01,
+                                                                            "children": [
+                                                                              {
+                                                                                "unit": "kmod-static-nodes.service",
+                                                                                "activated": 0.583,
+                                                                                "startup": 0.006,
+                                                                                "children": [
+                                                                                  {
+                                                                                    "unit": "systemd-journald.socket",
+                                                                                    "children": []
+                                                                                  }
+                                                                                ]
+                                                                              }
+                                                                            ]
+                                                                          }
+                                                                        ]
+                                                                      }
+                                                                    ]
+                                                                  }
+                                                                ]
+                                                              }
+                                                            ]
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

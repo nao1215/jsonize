@@ -71,6 +71,10 @@ type Env struct {
 
 type app struct {
 	env Env
+	// wrapperHint is what `jz run` adds to a refusal when the command it
+	// was given looks like a wrapper around one jz has a parser for: the
+	// command line that names that parser.
+	wrapperHint string
 }
 
 type command struct {
@@ -225,6 +229,9 @@ func (a *app) exitFor(err error) int {
 		me *selector.MismatchError
 	)
 	if errors.As(err, &up) || errors.As(err, &uv) || errors.As(err, &nm) || errors.As(err, &am) || errors.As(err, &me) {
+		if a.wrapperHint != "" && (up != nil || nm != nil) {
+			fmt.Fprintln(a.env.Stderr, a.wrapperHint)
+		}
 		return ExitSelect
 	}
 	var vp *selector.VariantWithoutParserError
@@ -244,12 +251,16 @@ func (a *app) exitFor(err error) int {
 }
 
 // stringList is a repeatable flag.
-// narrow applies --extract or --exclude to a result. The options are
-// checked when they are parsed, so the only failure left here is a key
-// the format does not produce.
-func (a *app) narrow(v any, out *outputOptions) (any, int) {
+// narrow applies --extract or --exclude to a result read with def. The
+// options are checked when they are parsed, so the only failure left
+// here is a key the format does not produce.
+func (a *app) narrow(v any, out *outputOptions, def *definition.Definition) (any, int) {
 	f, err := out.filter()
 	if err != nil {
+		a.errorf("%v", err)
+		return nil, ExitUsage
+	}
+	if err := f.know(def); err != nil {
 		a.errorf("%v", err)
 		return nil, ExitUsage
 	}

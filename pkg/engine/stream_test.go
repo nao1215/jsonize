@@ -267,6 +267,50 @@ type errReader struct{}
 
 func (errReader) Read([]byte) (int, error) { return 0, errors.New("broken pipe") }
 
+// A read that fails part way through a record leaves that record out:
+// what arrived of it is where the input stopped, not where the record
+// ends. That holds for the line the failure fell in and for a record of
+// several lines the failure left open.
+func TestStreamLeavesOutTheRecordAFailedReadCut(t *testing.T) {
+	t.Parallel()
+	blocks := `format: 1
+command: t
+variant: v
+parse:
+  type: records
+  start: '^# '
+  parts:
+    - name: head
+      select: {limit: 1}
+      parse: {type: regex, each: input, pattern: '^# (?P<name>\S+)$'}
+    - name: values
+      select: {skip: 1}
+      parse: {type: kv, separator: '='}
+`
+	tests := []struct {
+		name, def, input, want string
+	}{
+		{"a line", streamTable, "1\n2\n3", "{\"n\":1}\n{\"n\":2}\n"},
+		{"a line cut after its separator", streamTable, "1\n2\n", "{\"n\":1}\n{\"n\":2}\n"},
+		{"a record of several lines", blocks, "# one\na=1\n# two\nb=2\n", "{\"head\":{\"name\":\"one\"},\"values\":[{\"name\":\"a\",\"value\":\"1\"}]}\n"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			var out bytes.Buffer
+			err := Stream(load(t, tt.def), io.MultiReader(strings.NewReader(tt.input), errReader{}), Options{}, func(v any) error {
+				return jsonutil.Encode(&out, v, false)
+			}, nil)
+			if err == nil || !strings.Contains(err.Error(), "broken") {
+				t.Errorf("err = %v", err)
+			}
+			if out.String() != tt.want {
+				t.Errorf("records = %q, want %q", out.String(), tt.want)
+			}
+		})
+	}
+}
+
 // With an onError that returns nil, a record jz cannot read is reported
 // and the ones after it are still read. It is what --stream needs from a
 // command that keeps printing: one unreadable line must not end the

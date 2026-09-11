@@ -1,0 +1,30 @@
+[
+  {
+    "resource": "NOFILE",
+    "description": "max number of open files",
+    "soft": "524288",
+    "hard": "524288",
+    "units": "files"
+  },
+  {
+    "resource": "NPROC",
+    "description": "max number of processes",
+    "soft": "251443",
+    "hard": "251443",
+    "units": "processes"
+  },
+  {
+    "resource": "CORE",
+    "description": "max core file size",
+    "soft": "0",
+    "hard": "unlimited",
+    "units": "bytes"
+  },
+  {
+    "resource": "NICE",
+    "description": "max nice prio allowed to raise",
+    "soft": "0",
+    "hard": "0",
+    "units": null
+  }
+]

@@ -301,7 +301,7 @@ func value(f *definition.Field, missing bool) (*Schema, bool) {
 // question of it being missing.
 func converted(f *definition.Field) *Schema {
 	switch f.EffectiveType() {
-	case definition.FieldInt, definition.FieldSize:
+	case definition.FieldInt:
 		return &Schema{Type: []string{TypeInteger}}
 	case definition.FieldFloat, definition.FieldDuration:
 		return &Schema{Type: []string{TypeNumber}}

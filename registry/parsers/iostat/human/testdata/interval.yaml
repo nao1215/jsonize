@@ -1,0 +1,4 @@
+description: Two samples a second apart, each with its own CPU line and device table.
+source: "`iostat -h nvme0n1 1 2` on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C; the host name in the banner was replaced with a name of the same width"
+os: linux
+args: ["-h", "nvme0n1", "1", "2"]

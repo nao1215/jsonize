@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (systemd 259) as systemctl show -p ActiveState,SubState,MainPID,ExecMainStartTimestamp,Documentation cron with LC_ALL=C
+description: five properties of one unit, without its Id; systemd prints them in its own order, not the order asked
+os: linux
+args: [show, -p, "ActiveState,SubState,MainPID,ExecMainStartTimestamp,Documentation", cron]

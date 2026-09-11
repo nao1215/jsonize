@@ -1,6 +1,9 @@
 # `systemctl show UNIT` prints one property per line as Key=value. The
-# keys are already identifiers and each appears once, so the result is
-# one object rather than a list of pairs.
+# result is a list of names and values in the order printed rather than
+# one object, because a property can appear more than once: a unit with
+# two ExecReload= lines (sshd checks its configuration, then signals the
+# daemon) prints ExecReload twice, one line per command, and an object
+# holds one value per key.
 #
 # The shape is the same as an environment dump, which is why the
 # signature asks for the two properties every unit has: an Id that ends
@@ -28,4 +31,4 @@ detect:
 parse:
   type: kv
   separator: "="
-  as: map
+  as: list

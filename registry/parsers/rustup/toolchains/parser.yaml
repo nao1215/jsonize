@@ -20,15 +20,19 @@ detect:
   args:
     all: ["toolchain", "list"]
   signature:
-    all:
-      # A bare toolchain name, optionally marked. `rustup toolchain list
-      # -v` puts the install path after the markers and fails this.
-      - '\A[^\s(]+(?: \((?:active|default|active, default)\))?$'
     any:
-      # rustup keeps a default toolchain, so at least one line is marked.
-      # `rustup target list` and `rustup component list` print the same
-      # bare names but mark them "(installed)".
-      - '^[^\s(]+ \((?:active|default|active, default)\)$'
+      # Bare toolchain names down to the first marked one: rustup keeps a
+      # default toolchain, so at least one line is marked. `rustup target
+      # list` and `rustup component list` print the same bare names but
+      # mark them "(installed)", and `rustup toolchain list -v` puts the
+      # install path after the markers.
+      - '\A(?:[^\s(]+\n)*[^\s(]+ \((?:active|default|active, default)\)$'
+      # With nothing installed rustup says so instead, with or without -v
+      # (the advice that follows goes to standard error), which is this
+      # listing with no toolchain in it.
+      - '\Ano installed toolchains\z'
+input:
+  ignore: ['\Ano installed toolchains$']
 parse:
   type: regex
   patterns:

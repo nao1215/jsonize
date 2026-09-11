@@ -18,13 +18,18 @@ detect:
   signature:
     all:
       - '^Filesystem\s+Size\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
+# A file system's name may hold spaces, so a line is read by what each
+# column holds (see df/gnu). A name longer than BusyBox's 20-column field
+# is printed on a line of its own and the figures, indented, on the
+# next; fold joins the two.
 input:
+  fold: '^[ \t]+[\d-]'
   ignore:
     - '^df: '
+    - '^Filesystem\s+Size\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
 parse:
-  type: table
-  header:
-    columns: [filesystem, size, used, available, use_percent, mounted_on]
+  type: regex
+  pattern: '^(?P<filesystem>\S.*?)\s+(?P<size>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*)$'
 fields:
   filesystem: {required: true}
   size: {required: true}

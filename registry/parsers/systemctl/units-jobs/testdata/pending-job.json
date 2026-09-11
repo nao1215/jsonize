@@ -1,0 +1,89 @@
+[
+  {
+    "unit": "accounts-daemon.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "running",
+    "description": "Accounts Service"
+  },
+  {
+    "unit": "alsa-restore.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "exited",
+    "description": "Save/Restore Sound Card State"
+  },
+  {
+    "marker": "*",
+    "unit": "apport-autoreport.service",
+    "load": "loaded",
+    "active": "failed",
+    "sub": "failed",
+    "description": "Process error reports when automatic reporting is enabled"
+  },
+  {
+    "unit": "ModemManager.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "running",
+    "description": "Modem Manager"
+  },
+  {
+    "unit": "NetworkManager.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "running",
+    "description": "Network Manager"
+  },
+  {
+    "marker": "*",
+    "unit": "polkit-agent-helper@0-12298-10596_33070-1000.service",
+    "load": "loaded",
+    "active": "activating",
+    "sub": "start",
+    "job": "start",
+    "description": "Authorization Manager Agent Helper (PID 10596/UID 1000)"
+  },
+  {
+    "unit": "polkit.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "running",
+    "description": "Authorization Manager"
+  },
+  {
+    "unit": "snapd.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "running",
+    "description": "Snap Daemon"
+  },
+  {
+    "unit": "ssh.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "running",
+    "description": "OpenBSD Secure Shell server"
+  },
+  {
+    "unit": "user@1000.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "running",
+    "description": "User Manager for UID 1000"
+  },
+  {
+    "unit": "whoopsie.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "running",
+    "description": "Service uploading crash reports to the Ubuntu Error Tracker"
+  },
+  {
+    "unit": "wpa_supplicant.service",
+    "load": "loaded",
+    "active": "active",
+    "sub": "running",
+    "description": "WPA supplicant"
+  }
+]

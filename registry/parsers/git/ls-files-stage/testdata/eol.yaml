@@ -1,0 +1,4 @@
+source: git 2.53 in the jsonize repository, `git ls-files -s --eol -- LICENSE go.mod` with LC_ALL=C
+description: --eol inserts the line endings of the index, the work tree and the attributes as a column between the stage and the path, separated by a tab, which a path never holds raw
+os: linux
+expect_error: does not match

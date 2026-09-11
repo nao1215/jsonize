@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (rustup 1.29.1) with LC_ALL=C and a HOME created for the fixture, standard output only
+description: with no toolchain installed rustup prints one sentence, which is the empty listing
+os: linux
+args: [toolchain, list]

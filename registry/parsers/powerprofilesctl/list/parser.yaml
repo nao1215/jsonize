@@ -1,0 +1,43 @@
+# `powerprofilesctl list`, which is also what the command prints with no
+# subcommand: one block per power profile, the name followed by a colon
+# and the attributes indented under it. The profile in use is marked
+# with an asterisk in front of its name, and the others with a space.
+#
+# The attributes are a list of names and values rather than named
+# fields: which ones a profile carries depends on the drivers the
+# daemon found (a platform driver only where the firmware offers one,
+# Degraded only on the profile that can be) and grows with the daemon.
+format: 1
+command: powerprofilesctl
+variant: list
+description: powerprofilesctl list of power profiles
+metadata:
+  tags: [linux, power]
+  compatible: [power-profiles-daemon]
+  references:
+    - https://gitlab.freedesktop.org/upower/power-profiles-daemon
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[* ] [a-z][a-z-]*:[ \t]*$'
+      - '^[ \t]+(?:CpuDriver|PlatformDriver|Driver):[ \t]'
+parse:
+  type: records
+  start: '^[* ] [a-z][a-z-]*:[ \t]*$'
+  parts:
+    - name: profile
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<active>[* ]) (?P<name>[a-z][a-z-]*):[ \t]*\z'
+      fields:
+        active: {type: bool, true_values: ["*"], false_values: [""]}
+        name: {required: true}
+    - name: attributes
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: list

@@ -1,0 +1,32 @@
+[
+  {
+    "file": "/usr/share/doc/bash/copyright",
+    "mime_type": "text/plain",
+    "charset": "us-ascii"
+  },
+  {
+    "file": "/usr/share/doc/bash/NEWS.gz",
+    "mime_type": "application/gzip",
+    "charset": "binary"
+  },
+  {
+    "file": "/usr/bin/gnustat",
+    "mime_type": "application/x-pie-executable",
+    "charset": "binary"
+  },
+  {
+    "file": "/usr/share/doc",
+    "mime_type": "inode/directory",
+    "charset": "binary"
+  },
+  {
+    "file": "/dev/null",
+    "mime_type": "inode/chardevice",
+    "charset": "binary"
+  },
+  {
+    "file": "/usr/bin/stat",
+    "mime_type": "inode/symlink",
+    "charset": "binary"
+  }
+]

@@ -1,0 +1,210 @@
+[
+  {
+    "flags": "drwxr-xr-x",
+    "links": 2,
+    "owner": "root",
+    "group": "root",
+    "size": "260",
+    "date": "Sep 10 22:57",
+    "filename": "by-id"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 2,
+    "owner": "root",
+    "group": "root",
+    "size": "540",
+    "date": "Sep 10 22:57",
+    "filename": "by-path"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 64,
+    "date": "Sep 10 22:57",
+    "filename": "event0"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 65,
+    "date": "Sep 10 22:57",
+    "filename": "event1"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 74,
+    "date": "Sep 10 22:57",
+    "filename": "event10"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 75,
+    "date": "Sep 10 22:57",
+    "filename": "event11"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 76,
+    "date": "Sep 10 22:57",
+    "filename": "event12"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 77,
+    "date": "Sep 10 22:57",
+    "filename": "event13"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 78,
+    "date": "Sep 10 22:57",
+    "filename": "event14"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 79,
+    "date": "Sep 10 22:57",
+    "filename": "event15"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 80,
+    "date": "Sep 10 22:57",
+    "filename": "event16"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 66,
+    "date": "Sep 10 22:57",
+    "filename": "event2"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 67,
+    "date": "Sep 10 22:57",
+    "filename": "event3"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 68,
+    "date": "Sep 10 22:57",
+    "filename": "event4"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 69,
+    "date": "Sep 10 22:57",
+    "filename": "event5"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 70,
+    "date": "Sep 10 22:57",
+    "filename": "event6"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 71,
+    "date": "Sep 10 22:57",
+    "filename": "event7"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 72,
+    "date": "Sep 10 22:57",
+    "filename": "event8"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 73,
+    "date": "Sep 10 22:57",
+    "filename": "event9"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 63,
+    "date": "Sep 10 22:57",
+    "filename": "mice"
+  },
+  {
+    "flags": "crw-rw----",
+    "links": 1,
+    "owner": "root",
+    "group": "input",
+    "major": 13,
+    "minor": 32,
+    "date": "Sep 10 22:57",
+    "filename": "mouse0"
+  }
+]

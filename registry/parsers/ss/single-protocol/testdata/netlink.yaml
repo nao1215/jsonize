@@ -1,0 +1,4 @@
+description: One family, netlink, so no Netid column. The peer is a bare "*" with no port.
+source: "the header, the first three rows and two later ones of `ss -l -A netlink -f netlink` on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C"
+os: linux
+args: ["-l", "-A", "netlink", "-f", "netlink"]

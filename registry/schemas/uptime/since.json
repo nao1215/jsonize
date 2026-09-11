@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/uptime/since.json",
+  "title": "uptime/since",
+  "description": "uptime -s, when the system booted",
+  "x-jsonize": {
+    "definition": "uptime/since",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "since": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "since"
+  ]
+}

@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) as sysctl net.ipv4.ip_forward vm.swappiness kernel.pid_max with LC_ALL=C
+description: parameters asked for by name print the lines -a prints for them
+os: linux
+args: [net.ipv4.ip_forward, vm.swappiness, kernel.pid_max]

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ls/full-time.json",
+  "title": "ls/full-time",
+  "description": "ls -l --full-time, the time to the nanosecond with its offset",
+  "x-jsonize": {
+    "definition": "ls/full-time",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "flags": {
+        "type": "string"
+      },
+      "links": {
+        "type": "integer"
+      },
+      "owner": {
+        "type": "string"
+      },
+      "group": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "date": {
+        "type": "string"
+      },
+      "filename": {
+        "type": "string"
+      },
+      "link_to": {
+        "type": "string"
+      },
+      "major": {
+        "type": "integer"
+      },
+      "minor": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "flags",
+      "links",
+      "owner",
+      "group",
+      "date",
+      "filename"
+    ]
+  }
+}

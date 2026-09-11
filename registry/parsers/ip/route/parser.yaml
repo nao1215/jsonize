@@ -1,6 +1,6 @@
 # `ip route` writes a destination followed by key/value words whose set
-# varies per route, so the words are read as an object and a flag that
-# stands alone (linkdown) is kept in its own list.
+# varies per route, mixed with flags that stand alone (linkdown), so the
+# words after the device are kept as one list in the order printed.
 format: 1
 command: ip
 variant: route
@@ -13,7 +13,10 @@ metadata:
 detect:
   os: [linux]
   args:
-    any: ["route", "r"]
+    # iproute2 takes any prefix of an object's name ("ip ro", "ip -s l",
+    # "tc q"), and the first object in its table that the prefix fits is
+    # the one it runs, so each prefix is listed.
+    any: ["route", "rout", "rou", "ro", "r"]
   signature:
     all:
       - '\A(?:default|\d+\.\d+\.\d+\.\d+/\d+|\S+/\d+) (?:via|dev|proto) '

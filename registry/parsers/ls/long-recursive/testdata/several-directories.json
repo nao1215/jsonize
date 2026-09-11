@@ -1,0 +1,80 @@
+[
+  {
+    "directory": {
+      "path": "tree/docs"
+    },
+    "entries": [
+      {
+        "flags": "drwxrwxr-x",
+        "links": 2,
+        "owner": "usr",
+        "group": "usr",
+        "size": "40",
+        "date": "Sep  1 10:30",
+        "filename": "empty"
+      },
+      {
+        "flags": "-rw-rw-r--",
+        "links": 1,
+        "owner": "usr",
+        "group": "usr",
+        "size": "4.0K",
+        "date": "Sep  1 10:30",
+        "filename": "guide.txt"
+      },
+      {
+        "flags": "-rw-rw-r--",
+        "links": 1,
+        "owner": "usr",
+        "group": "usr",
+        "size": "10",
+        "date": "Sep  1 10:30",
+        "filename": "notes: draft.txt"
+      }
+    ]
+  },
+  {
+    "directory": {
+      "path": "tree/src"
+    },
+    "entries": [
+      {
+        "flags": "-rw-rw-r--",
+        "links": 1,
+        "owner": "usr",
+        "group": "usr",
+        "size": "5",
+        "date": "Sep  1 10:30",
+        "filename": "a -> b"
+      },
+      {
+        "flags": "lrwxrwxrwx",
+        "links": 1,
+        "owner": "usr",
+        "group": "usr",
+        "size": "7",
+        "date": "Sep  1 10:30",
+        "filename": "link",
+        "link_to": "main.go"
+      },
+      {
+        "flags": "-rw-rw-r--",
+        "links": 1,
+        "owner": "usr",
+        "group": "usr",
+        "size": "2.0K",
+        "date": "Sep  1 10:30",
+        "filename": "main.go"
+      },
+      {
+        "flags": "-rw-rw-r--",
+        "links": 1,
+        "owner": "usr",
+        "group": "usr",
+        "size": "0",
+        "date": "Sep  1 10:30",
+        "filename": "weird:"
+      }
+    ]
+  }
+]

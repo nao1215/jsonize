@@ -1,0 +1,38 @@
+[
+  {
+    "time": "22:50:15",
+    "runq_sz": 1,
+    "plist_sz": 4340,
+    "ldavg_1": 0.84,
+    "ldavg_5": 2.73,
+    "ldavg_15": 5.19,
+    "blocked": 0
+  },
+  {
+    "time": "Average",
+    "runq_sz": 1,
+    "plist_sz": 4340,
+    "ldavg_1": 0.84,
+    "ldavg_5": 2.73,
+    "ldavg_15": 5.19,
+    "blocked": 0
+  },
+  {
+    "time": "23:10:06",
+    "runq_sz": 3,
+    "plist_sz": 3714,
+    "ldavg_1": 3.39,
+    "ldavg_5": 2.96,
+    "ldavg_15": 1.77,
+    "blocked": 0
+  },
+  {
+    "time": "Average",
+    "runq_sz": 3,
+    "plist_sz": 3714,
+    "ldavg_1": 3.39,
+    "ldavg_5": 2.96,
+    "ldavg_15": 1.77,
+    "blocked": 0
+  }
+]
