@@ -1,0 +1,38 @@
+[
+  {
+    "tree_prefix": null,
+    "target": "/",
+    "source": "/dev/disk/by-uuid/0e2f7d1c-4a3b-4f8e-9c5d-1a2b3c4d5e6f",
+    "fstype": "ext4",
+    "options": [
+      "defaults"
+    ]
+  },
+  {
+    "tree_prefix": null,
+    "target": "/boot/efi",
+    "source": "/dev/disk/by-uuid/1A2B-3C4D",
+    "fstype": "vfat",
+    "options": [
+      "defaults"
+    ]
+  },
+  {
+    "tree_prefix": null,
+    "target": "none",
+    "source": "/swap.img",
+    "fstype": "swap",
+    "options": [
+      "sw"
+    ]
+  },
+  {
+    "tree_prefix": null,
+    "target": "/media/usr/2nd",
+    "source": "UUID=3c9e5a1b-2d4f-4a6b-8c0d-1e2f3a4b5c6d",
+    "fstype": "ext4",
+    "options": [
+      "defaults"
+    ]
+  }
+]
