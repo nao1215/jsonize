@@ -614,6 +614,30 @@ scenarios:
               - { path: "$", length: 3 }
               - { path: "$[2].cpu[0].time", equals: Average }
 
+  # Each pidstat report has its own columns under the same banner; the
+  # header names the report, so each lands on its own definition.
+  - name: pidstat -d and -w land on their own definitions
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain pidstat -d 1 1
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pidstat/io from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+      - run:
+          command: jz run --explain pidstat -w 1 1
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pidstat/switches from embedded"
+          stdout:
+            json:
+              - { path: "$[1].tasks[0].time", equals: Average }
+
   - name: the network and package listings land on their own definitions
     only: {os: linux}
     steps:

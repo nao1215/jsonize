@@ -1,0 +1,118 @@
+[
+  {
+    "tasks": [
+      {
+        "time": "09:25:18",
+        "uid": 0,
+        "pid": 1,
+        "cswch_s": 2.97,
+        "nvcswch_s": 0,
+        "command": "systemd"
+      },
+      {
+        "time": "09:25:18",
+        "uid": 0,
+        "pid": 15,
+        "cswch_s": 88.12,
+        "nvcswch_s": 2.97,
+        "command": "rcu_preempt"
+      },
+      {
+        "time": "09:25:18",
+        "uid": 0,
+        "pid": 1512,
+        "cswch_s": 14.85,
+        "nvcswch_s": 0,
+        "command": "mt76-tx phy0"
+      },
+      {
+        "time": "09:25:18",
+        "uid": 996,
+        "pid": 730,
+        "cswch_s": 0.99,
+        "nvcswch_s": 0,
+        "command": "systemd-timesyn"
+      },
+      {
+        "time": "09:25:18",
+        "uid": 1000,
+        "pid": 1432012,
+        "cswch_s": 0.99,
+        "nvcswch_s": 1.98,
+        "command": "pidstat"
+      }
+    ]
+  },
+  {
+    "tasks": [
+      {
+        "time": "09:25:19",
+        "uid": 0,
+        "pid": 1,
+        "cswch_s": 3,
+        "nvcswch_s": 0,
+        "command": "systemd"
+      },
+      {
+        "time": "09:25:19",
+        "uid": 0,
+        "pid": 1512,
+        "cswch_s": 18,
+        "nvcswch_s": 0,
+        "command": "mt76-tx phy0"
+      },
+      {
+        "time": "09:25:19",
+        "uid": 1000,
+        "pid": 1432012,
+        "cswch_s": 1,
+        "nvcswch_s": 2,
+        "command": "pidstat"
+      }
+    ]
+  },
+  {
+    "tasks": [
+      {
+        "time": "Average",
+        "uid": 0,
+        "pid": 1,
+        "cswch_s": 2.99,
+        "nvcswch_s": 0,
+        "command": "systemd"
+      },
+      {
+        "time": "Average",
+        "uid": 0,
+        "pid": 15,
+        "cswch_s": 66.67,
+        "nvcswch_s": 1.49,
+        "command": "rcu_preempt"
+      },
+      {
+        "time": "Average",
+        "uid": 0,
+        "pid": 1512,
+        "cswch_s": 16.42,
+        "nvcswch_s": 0,
+        "command": "mt76-tx phy0"
+      },
+      {
+        "time": "Average",
+        "uid": 996,
+        "pid": 730,
+        "cswch_s": 0.5,
+        "nvcswch_s": 0,
+        "command": "systemd-timesyn"
+      },
+      {
+        "time": "Average",
+        "uid": 1000,
+        "pid": 1432012,
+        "cswch_s": 1,
+        "nvcswch_s": 1.99,
+        "command": "pidstat"
+      }
+    ]
+  }
+]

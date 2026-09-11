@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pidstat/io.json",
+  "title": "pidstat/io",
+  "description": "pidstat -d per-task I/O",
+  "x-jsonize": {
+    "definition": "pidstat/io",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "string"
+            },
+            "uid": {
+              "type": "integer"
+            },
+            "pid": {
+              "type": "integer"
+            },
+            "kb_rd_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "kb_wr_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "kb_ccwr_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "iodelay": {
+              "type": "integer"
+            },
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "time",
+            "uid",
+            "pid",
+            "kb_rd_s",
+            "kb_wr_s",
+            "kb_ccwr_s",
+            "iodelay",
+            "command"
+          ]
+        }
+      }
+    },
+    "required": [
+      "tasks"
+    ]
+  }
+}

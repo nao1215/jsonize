@@ -131,6 +131,10 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `pidstat/io` and `pidstat/switches` read `pidstat -d` and `pidstat
+  -w`, the I/O and the context switches of each task, sample by sample
+  like the other pidstat reports. A rate pidstat could not read is
+  null. Both were exit 4.
 - `uptime/pretty` reads `uptime -p`, each unit as printed, and
   `uptime/since` reads `uptime -s`, the time the system booted. Both
   were exit 4.

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pidstat/switches.json",
+  "title": "pidstat/switches",
+  "description": "pidstat -w per-task context switches",
+  "x-jsonize": {
+    "definition": "pidstat/switches",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "string"
+            },
+            "uid": {
+              "type": "integer"
+            },
+            "pid": {
+              "type": "integer"
+            },
+            "cswch_s": {
+              "type": "number"
+            },
+            "nvcswch_s": {
+              "type": "number"
+            },
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "time",
+            "uid",
+            "pid",
+            "cswch_s",
+            "nvcswch_s",
+            "command"
+          ]
+        }
+      }
+    },
+    "required": [
+      "tasks"
+    ]
+  }
+}

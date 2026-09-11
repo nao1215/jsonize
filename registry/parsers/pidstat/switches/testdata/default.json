@@ -1,0 +1,78 @@
+[
+  {
+    "tasks": [
+      {
+        "time": "09:25:14",
+        "uid": 0,
+        "pid": 1,
+        "cswch_s": 5.14,
+        "nvcswch_s": 1.74,
+        "command": "systemd"
+      },
+      {
+        "time": "09:25:14",
+        "uid": 0,
+        "pid": 2,
+        "cswch_s": 0.03,
+        "nvcswch_s": 0,
+        "command": "kthreadd"
+      },
+      {
+        "time": "09:25:14",
+        "uid": 0,
+        "pid": 3,
+        "cswch_s": 0,
+        "nvcswch_s": 0,
+        "command": "pool_workqueue_release"
+      },
+      {
+        "time": "09:25:14",
+        "uid": 0,
+        "pid": 4,
+        "cswch_s": 0,
+        "nvcswch_s": 0,
+        "command": "kworker/R-rcu_gp"
+      },
+      {
+        "time": "09:25:14",
+        "uid": 0,
+        "pid": 5,
+        "cswch_s": 0,
+        "nvcswch_s": 0,
+        "command": "kworker/R-sync_wq"
+      },
+      {
+        "time": "09:25:14",
+        "uid": 0,
+        "pid": 6,
+        "cswch_s": 0,
+        "nvcswch_s": 0,
+        "command": "kworker/R-kvfree_rcu_reclaim"
+      },
+      {
+        "time": "09:25:14",
+        "uid": 0,
+        "pid": 7,
+        "cswch_s": 0,
+        "nvcswch_s": 0,
+        "command": "kworker/R-slub_flushwq"
+      },
+      {
+        "time": "09:25:14",
+        "uid": 0,
+        "pid": 8,
+        "cswch_s": 0,
+        "nvcswch_s": 0,
+        "command": "kworker/R-netns"
+      },
+      {
+        "time": "09:25:14",
+        "uid": 0,
+        "pid": 10,
+        "cswch_s": 0,
+        "nvcswch_s": 0,
+        "command": "kworker/0:0H-kblockd"
+      }
+    ]
+  }
+]

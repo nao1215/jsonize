@@ -131,7 +131,7 @@ the same reading with settings of your own.
 | `openssl` | [`ciphers`](../schemas/openssl/ciphers.json), [`ciphers-codes`](../schemas/openssl/ciphers-codes.json), [`version-all`](../schemas/openssl/version-all.json) |
 | `pactl` | [`info`](../schemas/pactl/info.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
 | `parted` | [`machine`](../schemas/parted/machine.json) |
-| `pidstat` | [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json) |
+| `pidstat` | [`io`](../schemas/pidstat/io.json), [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json), [`switches`](../schemas/pidstat/switches.json) |
 | `ping` | [`linux`](../schemas/ping/linux.json) |
 | `pip` | [`columns`](../schemas/pip/columns.json) |
 | `pmap` | [`linux`](../schemas/pmap/linux.json) |
