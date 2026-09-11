@@ -224,6 +224,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run ps auxww`, `ps auxf`, `ps uax` and `ps u` were exit 4:
+  `ps/bsd` required the arguments to be one of aux, axu, -aux and -axu,
+  though any BSD letters that print its header print its columns. The
+  header alone decides now.
 - `sensors` left out the limits a reading continues on a second line
   ("(crit = +84.8 C)") at exit 0; they are joined to the reading's other
   limits. Piped from a UTF-8 shell, where a temperature is "+38.0°C",

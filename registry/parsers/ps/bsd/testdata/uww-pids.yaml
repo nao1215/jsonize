@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) as ps uww -p 1,2,700 with LC_ALL=C
+description: the same columns asked for with other BSD letters than aux, and with the command lines not cut
+os: linux
+args: [uww, -p, "1,2,700"]

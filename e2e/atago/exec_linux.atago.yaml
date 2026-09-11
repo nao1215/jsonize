@@ -148,6 +148,19 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].cpu_percent", gte: 0 }
+      # Other BSD letters print the same columns: ww stops cutting the
+      # command line, f draws the process tree into it.
+      - run:
+          command: jz run ps auxww
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].pid", gte: 1 }
+      - run:
+          command: jz run ps auxf
+      - assert:
+          exit_code: 0
       # -L prints a line per thread, and j the job format; with f the tree
       # is drawn into the command, which keeps it.
       - run:
