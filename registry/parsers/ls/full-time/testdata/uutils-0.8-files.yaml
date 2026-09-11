@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (uutils coreutils 0.8.0) as ls -l --full-time /dev/null /etc/hostname /etc/localtime /etc/os-release with LC_ALL=C
+description: a device file, a regular file and two symbolic links, each time to the nanosecond with its offset
+os: linux
+args: [-l, --full-time, /dev/null, /etc/hostname, /etc/localtime, /etc/os-release]

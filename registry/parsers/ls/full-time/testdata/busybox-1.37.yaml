@@ -1,0 +1,4 @@
+source: captured with BusyBox v1.37.0 (Ubuntu busybox package) as busybox ls -l --full-time /dev/null /etc/hostname /etc/localtime with LC_ALL=C
+description: BusyBox prints the time to the second, without a fraction
+os: linux
+args: [-l, --full-time, /dev/null, /etc/hostname, /etc/localtime]

@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (uutils coreutils 0.8.0) as ls -l --time-style=long-iso /dev/null /etc/hostname /etc/localtime /etc/os-release with LC_ALL=C
+description: a device file, a regular file and two symbolic links
+os: linux
+args: [-l, --time-style=long-iso, /dev/null, /etc/hostname, /etc/localtime, /etc/os-release]

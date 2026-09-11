@@ -1,0 +1,41 @@
+[
+  {
+    "flags": "crw-rw-rw-",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "major": 1,
+    "minor": 3,
+    "date": "2026-09-10 22:57",
+    "filename": "/dev/null"
+  },
+  {
+    "flags": "-rw-r--r--",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "7",
+    "date": "2025-11-04 13:04",
+    "filename": "/etc/hostname"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "30",
+    "date": "2025-11-04 05:17",
+    "filename": "/etc/localtime",
+    "link_to": "/usr/share/zoneinfo/Asia/Tokyo"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "21",
+    "date": "2026-04-24 19:24",
+    "filename": "/etc/os-release",
+    "link_to": "../usr/lib/os-release"
+  }
+]

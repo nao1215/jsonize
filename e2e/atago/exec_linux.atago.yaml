@@ -1020,6 +1020,26 @@ scenarios:
   # A device file has no size; ls prints its major and minor numbers in
   # that column. /dev/null is 1, 3 on every Linux system, and a listing of
   # /dev used to be exit 4 for the first device in it.
+  # The time styles scripts ask for print the year and the clock, and
+  # --full-time the offset too, which makes the time an instant.
+  - name: ls -l with an ISO time style lands on its own definition
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run ls -l --time-style=long-iso /dev/null
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].date", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}$" }
+      - run:
+          command: jz run ls -l --full-time /dev/null
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].date", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+(Z|[+-][0-9]{2}:[0-9]{2})$" }
+
   - name: ls -l reads the device numbers of a device file
     only: {os: linux}
     steps:

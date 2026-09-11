@@ -1,0 +1,31 @@
+[
+  {
+    "flags": "crw-rw-rw-",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "major": 1,
+    "minor": 3,
+    "date": "2026-09-10T22:57:46+09:00",
+    "filename": "/dev/null"
+  },
+  {
+    "flags": "-rw-r--r--",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "7",
+    "date": "2025-11-04T13:04:07+09:00",
+    "filename": "/etc/hostname"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "root",
+    "group": "root",
+    "size": "30",
+    "date": "2025-11-04T05:17:28+09:00",
+    "filename": "/etc/localtime",
+    "link_to": "/usr/share/zoneinfo/Asia/Tokyo"
+  }
+]
