@@ -25,16 +25,26 @@ const listUsage = `Usage: jz list [COMMAND [VARIANT]]
 Options:
 `
 
-func (a *app) cmdList(args []string) int {
-	o := newOptions("list")
-	var asJSON, sources, asSchema bool
-	o.boolOpt(&asJSON, "json", "", "print machine-readable JSON instead of a table")
-	o.boolOpt(&asSchema, "schema", "", "print the JSON Schema of one definition's output")
-	o.boolOpt(&sources, "sources", "", "list the registries in precedence order")
+// listOptions are the options of jz list.
+type listOptions struct {
+	asJSON, sources, asSchema bool
+}
+
+func (l *listOptions) bind(o *optionSet) {
+	o.boolOpt(&l.asJSON, "json", "", "print machine-readable JSON instead of a table")
+	o.boolOpt(&l.asSchema, "schema", "", "print the JSON Schema of one definition's output")
+	o.boolOpt(&l.sources, "sources", "", "list the registries in precedence order")
 	o.helpDoc()
+}
+
+func (a *app) cmdList(args []string) int {
+	o := newOptions(modeList)
+	var lo listOptions
+	lo.bind(o)
 	if code, done := a.parse(o, args, listUsage); done {
 		return code
 	}
+	asJSON, sources, asSchema := lo.asJSON, lo.sources, lo.asSchema
 	if o.fs.NArg() > 2 {
 		a.errorf("list: expected at most COMMAND and VARIANT, got %d arguments", o.fs.NArg())
 		return ExitUsage

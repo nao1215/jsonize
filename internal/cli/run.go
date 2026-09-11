@@ -55,24 +55,32 @@ terminated by a signal yields 128+signal.
 Options:
 `
 
-func (a *app) cmdRun(args []string) int {
-	o := newOptions("run")
-	var (
-		out        outputOptions
-		sel        selectOptions
-		envs       stringList
-		keepLocale bool
-		timeout    time.Duration
-	)
-	out.bind(o)
-	sel.bind(o)
-	o.listOpt(&envs, "env", "NAME=VALUE", "set a variable in the command's environment (repeatable)")
-	o.boolOpt(&keepLocale, "keep-locale", "", "do not force LC_ALL=C for the command")
-	o.durationOpt(&timeout, "timeout", "DURATION", 0, "kill the command after this long (0 = no limit)")
+// runOptions are the options of jz run.
+type runOptions struct {
+	out        outputOptions
+	sel        selectOptions
+	envs       stringList
+	keepLocale bool
+	timeout    time.Duration
+}
+
+func (r *runOptions) bind(o *optionSet) {
+	r.out.bind(o)
+	r.sel.bind(o)
+	o.listOpt(&r.envs, "env", "NAME=VALUE", "set a variable in the command's environment (repeatable)")
+	o.boolOpt(&r.keepLocale, "keep-locale", "", "do not force LC_ALL=C for the command")
+	o.durationOpt(&r.timeout, "timeout", "DURATION", 0, "kill the command after this long (0 = no limit)")
 	o.helpDoc()
+}
+
+func (a *app) cmdRun(args []string) int {
+	o := newOptions(modeRun)
+	var ro runOptions
+	ro.bind(o)
 	if code, done := a.parse(o, args, runUsage); done {
 		return code
 	}
+	out, sel, envs, keepLocale, timeout := ro.out, ro.sel, ro.envs, ro.keepLocale, ro.timeout
 	rest := o.fs.Args()
 	if len(rest) == 0 {
 		a.errorf("run: no command given")
@@ -341,7 +349,7 @@ func wrapperHint(reg *registry.Registry, opts, command []string) string {
 		if n := len(opts); n > 0 && opts[n-1] == "--" {
 			opts = opts[:n-1]
 		}
-		line := append(append(append([]string{"jz", "run"}, opts...), "--parser", key, "--"), command...)
+		line := append(append(append([]string{"jz", modeRun}, opts...), "--parser", key, "--"), command...)
 		return fmt.Sprintf("If %s runs %s, name that parser: %s", name, key, shellLine(line))
 	}
 	return ""

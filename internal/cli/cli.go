@@ -88,9 +88,10 @@ type command struct {
 
 func commands() []command {
 	return []command{
-		{"run", "run a command and convert its stdout to JSON", (*app).cmdRun},
-		{"list", "list supported parsers, or inspect one", (*app).cmdList},
-		{"test", "check parser definitions and their fixtures", (*app).cmdTest},
+		{modeRun, "run a command and convert its stdout to JSON", (*app).cmdRun},
+		{modeList, "list supported parsers, or inspect one", (*app).cmdList},
+		{modeTest, "check parser definitions and their fixtures", (*app).cmdTest},
+		{"completion", "print a shell completion script (bash, zsh)", (*app).cmdCompletion},
 		{"version", "print the version", (*app).cmdVersion},
 	}
 }
@@ -122,6 +123,8 @@ func Main(args []string, env Env) int {
 			return ExitOK
 		case "-v", "--version":
 			return a.cmdVersion(nil)
+		case completeCommand:
+			return a.cmdComplete(args[1:])
 		}
 		if c := lookup(args[0]); c != nil {
 			return c.run(a, args[1:])
@@ -154,6 +157,7 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "  jz run [options] COMMAND [args...]")
 	fmt.Fprintln(w, "  jz list [COMMAND [VARIANT]]")
 	fmt.Fprintln(w, "  jz test [DIR...]")
+	fmt.Fprintln(w, "  jz completion bash|zsh")
 	fmt.Fprintln(w, "  jz version")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Commands:")
@@ -174,8 +178,8 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "Exit codes: 0 ok, 1 error, 2 usage, 3 parse failure, 4 unidentified or")
 	fmt.Fprintln(w, "ambiguous input, 5 registry problem; `jz run` mirrors the command's own status.")
 	fmt.Fprintln(w)
-	fmt.Fprintln(w, "Run `jz run --help`, `jz list --help` or `jz test --help` for a subcommand's")
-	fmt.Fprintln(w, "own options.")
+	fmt.Fprintln(w, "Run `jz run --help`, `jz list --help`, `jz test --help` or `jz completion --help`")
+	fmt.Fprintln(w, "for a subcommand's own options.")
 	fmt.Fprintln(w)
 	printLinks(w)
 }

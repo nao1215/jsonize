@@ -517,3 +517,45 @@ func FuzzLoad(f *testing.F) {
 		}
 	})
 }
+
+// A csv with no header line may leave its columns to be numbered, and
+// WithColumns names them instead: a copy is returned, the names follow
+// the rules header.columns follows, and a definition that has nothing to
+// name, or converts a column the names leave out, is refused.
+func TestWithColumns(t *testing.T) {
+	t.Parallel()
+	const numbered = "format: 1\ncommand: csv\nvariant: v\ndetect: {auto_detect: false}\nparse: {type: csv, header: {none: true}}\n"
+	d, err := Load([]byte(numbered), "v.yaml")
+	if err != nil {
+		t.Fatalf("a headerless csv needs no column names: %v", err)
+	}
+	named, err := d.WithColumns([]string{"id", "name"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Join(named.Parse.Header.Columns, ",") != "id,name" || len(d.Parse.Header.Columns) != 0 || named.ID() != d.ID() {
+		t.Errorf("named %v, original %v", named.Parse.Header.Columns, d.Parse.Header.Columns)
+	}
+	for _, tt := range []struct {
+		src   string
+		names []string
+		want  string
+	}{
+		{numbered, []string{"a b"}, "invalid column name"},
+		{numbered, []string{"a", "a"}, "given twice"},
+		{numbered, nil, "no column names"},
+		{numbered, make([]string, MaxColumns+1), "more than"},
+		{"format: 1\ncommand: csv\nvariant: v\ndetect: {auto_detect: false}\nparse: {type: csv}\n", []string{"a"}, "does not read a csv without a header line"},
+		{"format: 1\ncommand: csv\nvariant: v\ndetect: {auto_detect: false}\nparse: {type: csv, header: {none: true, columns: [x]}}\n", []string{"a"}, "names its columns already"},
+		{"format: 1\ncommand: t\nvariant: v\nparse: {type: table, header: {none: true, columns: [x]}}\n", []string{"a"}, "does not read a csv"},
+		{"format: 1\ncommand: csv\nvariant: v\ndetect: {auto_detect: false}\nparse: {type: csv, header: {none: true}}\nfields: {column_2: {type: int}}\n", []string{"a", "b"}, `converts the column "column_2"`},
+	} {
+		d, err := Load([]byte(tt.src), "v.yaml")
+		if err != nil {
+			t.Fatalf("%s: %v", tt.src, err)
+		}
+		if _, err := d.WithColumns(tt.names); err == nil || !strings.Contains(err.Error(), tt.want) {
+			t.Errorf("%v on %s: %v, want %q", tt.names, tt.src, err, tt.want)
+		}
+	}
+}
