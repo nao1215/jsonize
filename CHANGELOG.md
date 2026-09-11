@@ -216,6 +216,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz test` passed a definition whose testdata held a `.yaml` or
+  `.json` with no `.txt` beside it (a fixture renamed or never added),
+  a case that never ran, and a `.json` beside `expect_error`, an answer
+  never compared. Both fail now, and a testdata directory that cannot be
+  read is reported once instead of twice.
 - `jz run du -h EMPTY FILE` was exit 4, ambiguous between `du/gnu-human`
   and `du/posix`: the empty file prints a plain 0 on the opening line,
   which is all `du/posix`'s signature looked at. A rounded size anywhere

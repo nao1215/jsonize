@@ -61,6 +61,24 @@ func Cases(fsys fs.FS, e *Entry) ([]Case, error) {
 		}
 		return nil, err
 	}
+	// A case is found by its .txt. A .yaml or .json that names no .txt is
+	// a fixture renamed or never added, and would otherwise describe a
+	// case that silently never runs.
+	inputs := map[string]bool{}
+	for _, de := range entries {
+		if !de.IsDir() && strings.HasSuffix(de.Name(), ".txt") {
+			inputs[strings.TrimSuffix(de.Name(), ".txt")] = true
+		}
+	}
+	for _, de := range entries {
+		ext := path.Ext(de.Name())
+		if de.IsDir() || (ext != ".yaml" && ext != ".json") {
+			continue
+		}
+		if name := strings.TrimSuffix(de.Name(), ext); !inputs[name] {
+			return nil, fmt.Errorf("%s has no %s.txt, so the case is never run", path.Join(dir, de.Name()), name)
+		}
+	}
 	var cases []Case
 	for _, de := range entries {
 		if de.IsDir() || !strings.HasSuffix(de.Name(), ".txt") {
@@ -82,6 +100,10 @@ func Cases(fsys fs.FS, e *Entry) ([]Case, error) {
 		c.Expected, err = fs.ReadFile(fsys, path.Join(dir, name+".json"))
 		if err != nil && !errors.Is(err, fs.ErrNotExist) {
 			return nil, err
+		}
+		if c.Meta.ExpectError != "" && c.Expected != nil {
+			return nil, fmt.Errorf("%s states an answer for a case that expects an error, and would never be compared; remove it or the expect_error in %s.yaml",
+				path.Join(dir, name+".json"), name)
 		}
 		cases = append(cases, c)
 	}
