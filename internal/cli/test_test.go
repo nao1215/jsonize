@@ -122,6 +122,31 @@ func TestTestUsageErrors(t *testing.T) {
 	if code := h.run("test", "--decoys", t.TempDir(), dir); code != ExitUsage {
 		t.Errorf("empty decoys: code=%d stderr=%s", code, h.stderr.String())
 	}
+	// A decoy directory that is not there is named as such, not as the
+	// system call that found it missing.
+	h.stderr.Reset()
+	missing := filepath.Join(t.TempDir(), "nodecoys")
+	if code := h.run("test", "--decoys", missing, dir); code != ExitUsage {
+		t.Errorf("missing decoys: code=%d stderr=%s", code, h.stderr.String())
+	}
+	if got := h.stderr.String(); !strings.Contains(got, "--decoys "+missing+" does not exist") || strings.Contains(got, "lstat") {
+		t.Errorf("stderr=%q", got)
+	}
+}
+
+// A warning from the registries under test is said once.
+func TestTestWarnsOnce(t *testing.T) {
+	h := newHarness(t)
+	dir := greetRegistry(t, greetDef, "hello atago\n", `[{"name": "atago"}]`)
+	if err := os.WriteFile(filepath.Join(dir, "registry.yaml"), []byte("format: 1\nname: local\ndisable: [nosuchcmd]\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if code := h.run("test", dir); code != ExitOK {
+		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
+	}
+	if n := strings.Count(h.stderr.String(), `disable "nosuchcmd" matches no definition`); n != 1 {
+		t.Errorf("warning said %d times: %q", n, h.stderr.String())
+	}
 }
 
 // With no directory the user registry is what gets checked, which is what
