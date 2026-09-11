@@ -131,6 +131,9 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `ps/bsd-short` reads `ps ax` and `ps x` (PID TTY STAT TIME COMMAND),
+  and `ps/long` reads `ps -l` and `ps -el`, where a real-time thread's
+  nice value is a dash and so null. Both were exit 4.
 - `ls/long-iso` reads `ls -l --time-style=long-iso`, and `ls/full-time`
   reads `ls -l --full-time`, whose time carries its offset and is read
   as an instant. Both were exit 4.

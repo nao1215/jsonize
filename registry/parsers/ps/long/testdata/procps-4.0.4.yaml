@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) as ps -el with LC_ALL=C, the header, three processes and two real-time kernel threads
+description: a real-time thread has a negative priority and a dash for its nice value, which is null
+os: linux
+args: [-el]

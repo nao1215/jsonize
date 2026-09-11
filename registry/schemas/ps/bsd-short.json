@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ps/bsd-short.json",
+  "title": "ps/bsd-short",
+  "description": "ps ax (PID TTY STAT TIME COMMAND) on Linux",
+  "x-jsonize": {
+    "definition": "ps/bsd-short",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "pid": {
+        "type": "integer"
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "stat": {
+        "type": "string"
+      },
+      "time": {
+        "type": "number"
+      },
+      "command": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "pid",
+      "tty",
+      "stat",
+      "time",
+      "command"
+    ]
+  }
+}
