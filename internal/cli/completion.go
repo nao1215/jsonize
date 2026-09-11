@@ -18,7 +18,7 @@ parser named on the line, and file paths where a path is expected.
 Completing reads the registries and nothing else: it runs no command and
 touches no network.
 
-  bash:  source <(jz completion bash)        # add to ~/.bashrc
+  bash:  eval "$(jz completion bash)"        # add to ~/.bashrc
   zsh:   source <(jz completion zsh)         # add to ~/.zshrc, after compinit
 `
 
@@ -50,11 +50,13 @@ func (a *app) cmdCompletion(args []string) int {
 		fmt.Fprint(a.env.Stderr, completionUsage)
 		return ExitUsage
 	}
+	// A Windows checkout gives the embedded scripts CRLF endings, and a
+	// shell reads the carriage return as part of each command.
 	switch args[0] {
 	case "bash":
-		fmt.Fprint(a.env.Stdout, bashCompletion)
+		fmt.Fprint(a.env.Stdout, strings.ReplaceAll(bashCompletion, "\r\n", "\n"))
 	case "zsh":
-		fmt.Fprint(a.env.Stdout, zshCompletion)
+		fmt.Fprint(a.env.Stdout, strings.ReplaceAll(zshCompletion, "\r\n", "\n"))
 	default:
 		a.errorf("completion: no script for %q; jz has bash and zsh", args[0])
 		return ExitUsage

@@ -138,6 +138,16 @@ func TestCompletionScripts(t *testing.T) {
 			t.Errorf("%s: code=%d\n%s", shell, code, h.stdout.String())
 		}
 	}
+	// Built from a checkout with CRLF endings, the scripts still reach the
+	// shell with LF.
+	if strings.Contains(bashCompletion+zshCompletion, "\r") {
+		for _, shell := range []string{"bash", "zsh"} {
+			h.run("completion", shell)
+			if strings.Contains(h.stdout.String(), "\r") {
+				t.Errorf("%s: the script carries a carriage return", shell)
+			}
+		}
+	}
 	for _, args := range [][]string{{"completion"}, {"completion", "fish"}, {"completion", "bash", "zsh"}} {
 		if code := h.run(args...); code != ExitUsage || h.stdout.Len() != 0 {
 			t.Errorf("%q: code=%d stdout=%q", args, code, h.stdout.String())
