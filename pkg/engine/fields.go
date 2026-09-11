@@ -12,7 +12,14 @@ import (
 // setField converts raw (a string or nil) with the field rules and stores
 // it in obj, honouring when_missing: omit.
 func (r *run) setField(obj *jsonutil.Object, name string, raw any, f *definition.Field, ln int) error {
-	v, omit, err := r.convert(name, raw, f, ln)
+	return r.setMatched(obj, name, raw, f, ln, nil)
+}
+
+// setMatched is setField for a value a pattern read. present holds the
+// groups that matched some text, which is what an unescape rule's when
+// is decided by.
+func (r *run) setMatched(obj *jsonutil.Object, name string, raw any, f *definition.Field, ln int, present map[string]bool) error {
+	v, omit, err := r.convertMatched(name, raw, f, ln, present)
 	if err != nil {
 		return err
 	}
@@ -26,6 +33,10 @@ func (r *run) setField(obj *jsonutil.Object, name string, raw any, f *definition
 // convert applies a field rule. The bool result is true when the value
 // should be omitted from its parent object.
 func (r *run) convert(name string, raw any, f *definition.Field, ln int) (any, bool, error) {
+	return r.convertMatched(name, raw, f, ln, nil)
+}
+
+func (r *run) convertMatched(name string, raw any, f *definition.Field, ln int, present map[string]bool) (any, bool, error) {
 	if r.opts.Raw {
 		// The field rules are the whole of what raw mode leaves out, and
 		// they are all applied from here, so this is the one place that
@@ -55,6 +66,16 @@ func (r *run) convert(name string, raw any, f *definition.Field, ln int) (any, b
 	if f.TrimPrefix != "" || f.TrimSuffix != "" {
 		s = convert.Strip(s, f.TrimPrefix, f.TrimSuffix)
 	}
+	if f.EffectiveType() == definition.FieldString {
+		kept, ok, err := r.stringRules(name, s, f, ln, present)
+		if err != nil {
+			return nil, false, err
+		}
+		if !ok {
+			return r.convertMatched(name, nil, f, ln, present)
+		}
+		s = kept
+	}
 	trimmed := strings.TrimSpace(s)
 	for _, n := range f.NullIf {
 		if trimmed == n {
@@ -72,6 +93,32 @@ func (r *run) convert(name string, raw any, f *definition.Field, ln int) (any, b
 		return nil, false, err
 	}
 	return v, false, nil
+}
+
+// stringRules applies what a string field says about its text: the
+// regex whose one group is the value, then the escapes to undo. The bool
+// result is false when the group did not take part, which leaves the
+// value missing.
+func (r *run) stringRules(name, s string, f *definition.Field, ln int, present map[string]bool) (string, bool, error) {
+	if re := f.CompiledRegex(); re != nil {
+		m := re.FindStringSubmatchIndex(s)
+		if m == nil {
+			return "", false, r.errorf(ln, name, "value %q does not have the shape %s", truncate(s, 80), shortPattern(f.Regex))
+		}
+		i := re.SubexpIndex(f.Group())
+		if m[2*i] < 0 {
+			return "", false, nil
+		}
+		s = s[m[2*i]:m[2*i+1]]
+	}
+	if u := f.Unescape; u != nil && (u.When == "" || present[u.When]) {
+		decoded, ok := u.Decode(s)
+		if !ok {
+			return "", false, r.errorf(ln, name, "value %q holds an escape the format does not write", truncate(s, 80))
+		}
+		s = decoded
+	}
+	return s, true, nil
 }
 
 func (r *run) convertScalar(name, s string, f *definition.Field, ln int) (any, error) {

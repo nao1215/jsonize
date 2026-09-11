@@ -401,14 +401,14 @@ func (s *streamer) row(l line) (*jsonutil.Object, error) {
 }
 
 func (s *streamer) regexObject(l line) (any, error) {
-	re, m := firstMatch(s.p.CompiledPatterns(), l.text)
+	re, m, which := firstMatch(s.p.CompiledPatterns(), l.text)
 	if m == nil {
 		return nil, s.errorf(l.num, "", "line does not match %s: %q", describePatterns(s.p), truncate(l.text, 80))
 	}
 	if err := s.checkWhole(l, m[0], m[1]); err != nil {
 		return nil, err
 	}
-	return s.objectFromMatch(re, l.text, m, s.fields, l.num)
+	return s.objectFromMatch(re, l.text, m, s.p.PatternValues(which), s.fields, l.num)
 }
 
 func (s *streamer) kvEntry(l line) (any, error) {

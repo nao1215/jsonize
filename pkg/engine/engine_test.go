@@ -1167,6 +1167,144 @@ parse:
 	}
 }
 
+func TestParsePatternValues(t *testing.T) {
+	t.Parallel()
+	// Each alternative states the kind of line it reads; the stated
+	// values come before the groups, and the order of the input stays.
+	def := load(t, `
+format: 1
+command: x
+variant: v
+parse:
+  type: regex
+  patterns:
+    - pattern: '^(?P<name>\w+)=(?P<value>.*)$'
+      values: {kind: environment}
+    - pattern: '^(?P<minute>\d+) (?P<command>.+)$'
+      values: {kind: job, a_first: "yes"}
+`)
+	input := "SHELL=/bin/sh\n5 run it\nMAILTO=\n"
+	want := `[{"kind":"environment","name":"SHELL","value":"/bin/sh"},` +
+		`{"a_first":"yes","kind":"job","minute":"5","command":"run it"},` +
+		`{"kind":"environment","name":"MAILTO","value":""}]`
+	got, err := Parse(def, []byte(input), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	var streamed []string
+	err = Stream(def, strings.NewReader(input), Options{}, func(v any) error {
+		streamed = append(streamed, mustJSON(t, v))
+		return nil
+	}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := "[" + strings.Join(streamed, ",") + "]"; got != want {
+		t.Errorf("stream = %s, want %s", got, want)
+	}
+}
+
+func TestStringFieldRegex(t *testing.T) {
+	t.Parallel()
+	// The one group of a string field's regex is the value; the rest of
+	// the match is taken off it.
+	def := load(t, `
+format: 1
+command: x
+variant: v
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+) (?P<note>.*)$'
+fields:
+  name: {regex: '(?:[|`+"`"+`]-)?(?P<name>.+)'}
+  note: {regex: '(?:\((?P<note>[^)]*)\))?', when_missing: omit}
+`)
+	got, err := Parse(def, []byte("|-sda1 (boot)\nsda x\n"), Options{})
+	if err == nil {
+		t.Fatalf("a value outside the shape was read: %s", mustJSON(t, got))
+	}
+	if !strings.Contains(err.Error(), `value "x" does not have the shape`) {
+		t.Errorf("error = %v", err)
+	}
+	got, err = Parse(def, []byte("|-sda1 (boot)\n`-sda2 \nsda \n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	// A group that takes no part leaves the value missing, and
+	// when_missing decides what that becomes.
+	want := `[{"name":"sda1","note":"boot"},{"name":"sda2"},{"name":"sda"}]`
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	// Raw mode leaves the field rules out, the regex with them.
+	got, err = Parse(def, []byte("|-sda1 (boot)\n"), Options{Raw: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := cmp.Diff(`[{"name":"|-sda1","note":"(boot)"}]`, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+}
+
+func TestStringFieldUnescape(t *testing.T) {
+	t.Parallel()
+	// The escapes are undone only on a line whose marker group took part,
+	// so an unmarked backslash stays what it is.
+	def := load(t, `
+format: 1
+command: x
+variant: v
+parse:
+  type: regex
+  pattern: '^(?P<escaped>\\)?(?P<sum>[0-9a-f]{4})  (?P<file>.+)$'
+fields:
+  escaped: {type: bool, true_values: ["\\"], when_missing: omit}
+  file: {unescape: {when: escaped, sequences: {'\\': '\', '\n': "\n", '\r': "\r"}}}
+`)
+	input := "\\abcd  back\\\\slash\\nnl\\r\n" +
+		"abcd  raw\\name\n" +
+		"\\abcd  lit\\\\n\n"
+	got, err := Parse(def, []byte(input), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `[{"escaped":true,"sum":"abcd","file":"back\\slash\nnl\r"},` +
+		`{"sum":"abcd","file":"raw\\name"},` +
+		`{"escaped":true,"sum":"abcd","file":"lit\\n"}]`
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	// An escape the format does not write is not guessed at, and neither
+	// is a backslash at the end.
+	for _, bad := range []string{"\\abcd  tab\\tname\n", "\\abcd  end\\\n"} {
+		got, err := Parse(def, []byte(bad), Options{})
+		if err == nil || !strings.Contains(err.Error(), "holds an escape the format does not write") {
+			t.Errorf("%q: got %s, %v", bad, mustJSON(t, got), err)
+		}
+	}
+	// Without when, every value is decoded.
+	always := load(t, `
+format: 1
+command: x
+variant: v
+parse:
+  type: regex
+  pattern: '^(?P<name>.+)$'
+fields:
+  name: {unescape: {sequences: {'\ ': ' ', '\\': '\'}}}
+`)
+	got, err = Parse(always, []byte("a\\ b\\\\c\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := cmp.Diff(`[{"name":"a b\\c"}]`, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+}
+
 func TestParseKVKeepsWhitespaceWhenAsked(t *testing.T) {
 	t.Parallel()
 	trimmed := load(t, "format: 1\ncommand: x\nvariant: v\nparse: {type: kv}\n")

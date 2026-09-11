@@ -441,6 +441,25 @@ fields:
 A group that only appears in some alternatives is simply absent from the
 objects the others produce.
 
+An alternative can also state values of its own, which is how a format
+that mixes two kinds of line says which kind a record is:
+
+```yaml
+parse:
+  type: regex
+  patterns:
+    - pattern: '^(?P<name>[^ =]+)=(?P<value>.*)$'
+      values: {kind: environment}
+    - pattern: '^(?P<minute>\S+) (?P<command>.+)$'
+      values: {kind: job}
+```
+
+A stated value is a string key the alternative always gives, written
+before its groups (in the order of their names when there are several),
+and it goes through `fields` like any other value. It may not have the
+name of a group of its own pattern. An alternative without values is
+written as the expression alone, as in the example before this one.
+
 `each: line` yields an array with one object per line built from the
 named groups; `each: input` matches the whole (pre-processed) text once
 and yields a single object. Groups that did not participate are `null`
@@ -616,7 +635,39 @@ fields:
 | `true_values`, `false_values` | bool | spellings (case-insensitive); defaults are true/yes/on/1/y and false/no/off/0/n |
 | `split`, `split_regex` | array | how to split; items are trimmed. A `split_regex` that matches the empty string is an error, since it would split between every character |
 | `items` | array | conversion applied to each element (arrays of arrays are not allowed) |
+| `regex` | string | the part of the value to keep: the one named group of the expression, which has to match the whole value. A value outside it is an error, and a group that takes no part leaves the value missing |
+| `unescape` | string | escapes to undo after `regex`: `sequences` maps each escape as printed to the text it stands for, and every escape begins with the same character; any other escape is an error. `when` names a group of the pattern, and the escapes are undone only on a line where that group matched some text |
 | `regex`, `fields` | object | named groups become keys; `fields` converts them; the match has to cover the whole value |
+
+`regex` on a string field takes off what a command prints around a
+value, such as the tree lsblk draws in front of a device name. The
+expression names the one group that is kept:
+
+```yaml
+fields:
+  name: {regex: '(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?(?P<name>.+)'}
+```
+
+It is also how a definition refuses a value it cannot read one way. A
+value outside the expression is an error, so an expression that leaves
+out the ambiguous text turns it into a refusal instead of a guess.
+
+`unescape` undoes an escaping that the format defines and the text
+declares. GNU md5sum puts a backslash in front of the digest of a line
+whose name it escaped, so `when` names the group that captures that
+mark, and a line without it keeps its backslashes:
+
+```yaml
+parse:
+  type: regex
+  pattern: '^(?P<escaped>\\)?(?P<checksum>[0-9a-fA-F]{32}) [ *](?P<file>.+)$'
+fields:
+  file: {unescape: {when: escaped, sequences: {'\\': '\', '\n': "\n", '\r': "\r"}}}
+```
+
+An escaping the text does not declare, such as a quoting style an
+option or a version chooses, is not one to decode: the same text then
+names two different files. Such a value is refused with a `regex`.
 
 There is no type that turns `955M` or `1.8T` into bytes. A size printed
 with a unit is rounded to fit the column (`df -h`, `ls -lh`, `free -h`),

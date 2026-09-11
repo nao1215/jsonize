@@ -122,12 +122,12 @@ func (r *run) treeNode(p *definition.Parse, l line) (*jsonutil.Object, error) {
 		}
 		return obj, nil
 	}
-	re, m := firstMatch(n.Parse.CompiledPatterns(), l.text)
+	re, m, which := firstMatch(n.Parse.CompiledPatterns(), l.text)
 	if m == nil {
 		return nil, r.errorf(l.num, "", "line does not match %s: %q", describePatterns(&n.Parse), truncate(l.text, 80))
 	}
 	if err := r.checkWhole(l, m[0], m[1]); err != nil {
 		return nil, err
 	}
-	return r.objectFromMatch(re, l.text, m, n.Fields, l.num)
+	return r.objectFromMatch(re, l.text, m, n.Parse.PatternValues(which), n.Fields, l.num)
 }

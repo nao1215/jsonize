@@ -346,6 +346,13 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 	if p.Type != TypeTree && (len(p.Indent) > 0 || p.Node != nil) {
 		v.add(path, "indent/node are only valid for type tree")
 	}
+	if p.Type != TypeRegex {
+		for name, f := range fields {
+			if f != nil && f.Unescape != nil && f.Unescape.When != "" {
+				v.add("fields."+name+".unescape.when", "names a group, and only a regex parser has groups")
+			}
+		}
+	}
 	switch p.Type {
 	case TypeTable:
 		validateTable(v, path, p, fields)
@@ -586,36 +593,43 @@ func validateHeader(v *validator, path string, p *Parse, fields map[string]*Fiel
 }
 
 func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*Field) {
-	exprs := p.Patterns
+	alts := p.Patterns
 	key := path + ".patterns"
 	switch {
 	case p.Pattern != "" && len(p.Patterns) > 0:
 		v.add(path, "pattern and patterns are mutually exclusive")
 		return
 	case p.Pattern != "":
-		exprs = []string{p.Pattern}
+		alts = []Alternative{{Pattern: p.Pattern}}
 		key = path + ".pattern"
 	case len(p.Patterns) == 0:
 		v.add(path+".pattern", "is required for type regex (or patterns for several alternatives)")
 		return
 	}
-	if len(exprs) > MaxPatterns {
+	if len(alts) > MaxPatterns {
 		v.add(key, "more than %d alternatives", MaxPatterns)
 		return
 	}
 	groupSet := map[string]bool{}
-	for i, expr := range exprs {
+	valueSet := map[string]bool{}
+	for i, alt := range alts {
 		ep := key
-		if len(exprs) > 1 {
+		if len(alts) > 1 {
 			ep = fmt.Sprintf("%s[%d]", key, i)
 		}
-		re := v.regex(ep, expr)
+		if alt.Pattern == "" {
+			v.add(ep+".pattern", "is required")
+			continue
+		}
+		re := v.regex(ep, alt.Pattern)
 		if re == nil {
 			continue
 		}
-		p.compiled = append(p.compiled, re)
 		groups := namedGroups(re)
-		if len(groups) == 0 {
+		vals := alternativeValues(v, ep, alt, groups)
+		p.compiled = append(p.compiled, re)
+		p.values = append(p.values, vals)
+		if len(groups) == 0 && len(vals) == 0 {
 			v.add(ep, "must contain at least one named group (?P<name>...)")
 		}
 		for _, g := range groups {
@@ -627,10 +641,16 @@ func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*
 				p.groups = append(p.groups, g)
 			}
 		}
+		for _, val := range vals {
+			valueSet[val.Name] = true
+		}
 	}
-	for name := range fields {
-		if !groupSet[name] {
+	for name, f := range fields {
+		if !groupSet[name] && !valueSet[name] {
 			v.add("fields."+name, "is not a named group of any pattern")
+		}
+		if f != nil && f.Unescape != nil && f.Unescape.When != "" && !groupSet[f.Unescape.When] {
+			v.add("fields."+name+".unescape.when", "%q is not a named group of any pattern", f.Unescape.When)
 		}
 	}
 	switch p.Each {
@@ -638,6 +658,35 @@ func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*
 	default:
 		v.add(path+".each", "must be line or input")
 	}
+}
+
+// alternativeValues checks the fixed values of one alternative and returns
+// them in the order of their names. A value may not share a name with a
+// group of its own pattern, which would give the key two answers.
+func alternativeValues(v *validator, path string, alt Alternative, groups []string) []Value {
+	if len(alt.Values) == 0 {
+		return nil
+	}
+	own := map[string]bool{}
+	for _, g := range groups {
+		own[g] = true
+	}
+	names := make([]string, 0, len(alt.Values))
+	for name := range alt.Values {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	out := make([]Value, 0, len(names))
+	for _, name := range names {
+		switch {
+		case !fieldRe.MatchString(name):
+			v.add(path+".values", "%q is not a valid field name", name)
+		case own[name]:
+			v.add(path+".values."+name, "is also a named group of the pattern")
+		}
+		out = append(out, Value{Name: name, Value: alt.Values[name]})
+	}
+	return out
 }
 
 func validateKV(v *validator, path string, p *Parse) {
@@ -712,7 +761,9 @@ func validateField(v *validator, path string, f *Field, depth int) {
 		return
 	}
 	switch f.EffectiveType() {
-	case FieldString, FieldInt, FieldFloat:
+	case FieldString:
+		validateStringField(v, path, f)
+	case FieldInt, FieldFloat:
 	case FieldBool:
 		validateBoolField(v, path, f)
 	case FieldTime:
@@ -727,6 +778,41 @@ func validateField(v *validator, path string, f *Field, depth int) {
 		v.add(path+".type", "unknown type %q (expected string, int, float, bool, time, duration, array or object)", f.Type)
 	}
 	validateFieldKeys(v, path, f)
+}
+
+// validateStringField checks what a string field may carry besides its
+// text: a regex whose one named group is the value, and the escapes to
+// undo in it.
+func validateStringField(v *validator, path string, f *Field) {
+	if f.Regex != "" {
+		// The expression describes the whole value, so it is anchored at
+		// both ends whatever it says itself: a value that only begins
+		// with the shape is not that shape.
+		if re := v.regex(path+".regex", `\A(?:`+f.Regex+`)\z`); re != nil {
+			f.regex = re
+			f.groups = namedGroups(re)
+			if len(f.groups) != 1 {
+				v.add(path+".regex", "on a string field must have exactly one named group, the part of the value that is kept")
+			}
+		}
+	}
+	if u := f.Unescape; u != nil {
+		if len(u.Sequences) == 0 {
+			v.add(path+".unescape.sequences", "is required: the escapes the format writes and what each stands for")
+		}
+		var esc byte
+		for k := range u.Sequences {
+			if len(k) < 2 {
+				v.add(path+".unescape.sequences", "%q is not an escape: an escape is its escape character and at least one more", k)
+				continue
+			}
+			if esc == 0 {
+				esc = k[0]
+			} else if k[0] != esc {
+				v.add(path+".unescape.sequences", "every escape begins with the same character, and %q does not begin with %q", k, string(esc))
+			}
+		}
+	}
 }
 
 func validateBoolField(v *validator, path string, f *Field) {
@@ -796,6 +882,9 @@ func validateArrayField(v *validator, path string, f *Field, depth int) {
 		if f.Items.EffectiveType() == FieldArray {
 			v.add(path+".items", "nested arrays are not supported; use an object item with an array field")
 		}
+		if f.Items.Unescape != nil && f.Items.Unescape.When != "" {
+			v.add(path+".items.unescape.when", "names a group, and an item of an array is not read by one")
+		}
 		validateField(v, path+".items", f.Items, depth+1)
 	}
 }
@@ -813,9 +902,12 @@ func validateObjectField(v *validator, path string, f *Field, depth int) {
 		for _, g := range f.groups {
 			groupSet[g] = true
 		}
-		for name := range f.Fields {
+		for name, sub := range f.Fields {
 			if !groupSet[name] {
 				v.add(path+".fields."+name, "is not a named group of the regex")
+			}
+			if sub != nil && sub.Unescape != nil && sub.Unescape.When != "" && !groupSet[sub.Unescape.When] {
+				v.add(path+".fields."+name+".unescape.when", "%q is not a named group of the regex", sub.Unescape.When)
 			}
 		}
 	}
@@ -829,8 +921,19 @@ func validateFieldKeys(v *validator, path string, f *Field) {
 	if f.EffectiveType() != FieldArray && (f.Split != "" || f.SplitRegex != "" || f.Items != nil) {
 		v.add(path, "split/split_regex/items are only valid for type array")
 	}
-	if f.EffectiveType() != FieldObject && (f.Regex != "" || len(f.Fields) > 0) {
-		v.add(path, "regex/fields are only valid for type object")
+	switch f.EffectiveType() {
+	case FieldObject:
+	case FieldString:
+		if len(f.Fields) > 0 {
+			v.add(path, "fields is only valid for type object")
+		}
+	default:
+		if f.Regex != "" || len(f.Fields) > 0 {
+			v.add(path, "regex is only valid for type object and type string, fields for type object")
+		}
+	}
+	if f.Unescape != nil && f.EffectiveType() != FieldString {
+		v.add(path+".unescape", "is only valid for type string")
 	}
 	if f.EffectiveType() != FieldBool && (len(f.True) > 0 || len(f.False) > 0) {
 		v.add(path, "true_values/false_values are only valid for type bool")
