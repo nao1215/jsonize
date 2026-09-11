@@ -210,7 +210,7 @@ func (a *app) cmdRun(args []string) int {
 	}
 	exp.read(acct)
 	a.explainWrite(exp)
-	narrowed, code := a.narrow(data, &out)
+	narrowed, code := a.narrow(data, &out, chosen.Entry.Def)
 	if code != ExitOK {
 		return code
 	}

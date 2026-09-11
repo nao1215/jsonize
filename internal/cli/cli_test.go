@@ -1415,6 +1415,57 @@ func TestExtractAndExclude(t *testing.T) {
 	}
 }
 
+// A key is checked against what the definition can produce, not against
+// what one input happened to hold: an optional key no row has, and any
+// key of an empty listing, narrow to nothing rather than being refused,
+// and a stream does not refuse a key its first record omits. A key
+// outside what the definition can produce is refused before anything
+// is written.
+func TestExtractKnowsTheKeysOfTheFormat(t *testing.T) {
+	const lo = "lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> \n"
+	const veth = "veth0@if2        UP             52:54:00:10:00:06 <BROADCAST,MULTICAST,UP,LOWER_UP> \n"
+	for _, tc := range []struct {
+		name  string
+		input string
+		args  []string
+		code  int
+		want  string
+	}{
+		{"optional key no row has", lo, []string{"--extract", "peer"}, ExitOK, `[{}]`},
+		{"optional key in a later record of a stream", lo + veth, []string{"--stream", "--extract", "peer"}, ExitOK, "{}\n{\"peer\":\"if2\"}"},
+		{"exclude an optional key no row has", lo, []string{"--exclude", "peer"}, ExitOK,
+			`[{"interface":"lo","state":"UNKNOWN","lladdr":"00:00:00:00:00:00","flags":["LOOPBACK","UP","LOWER_UP"]}]`},
+		{"key the format cannot produce", lo + veth, []string{"--stream", "--extract", "nosuch"}, ExitUsage, ""},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			h := newHarness(t)
+			args := append([]string{"--parser", "ip", "--variant", "brief-link"}, tc.args...)
+			if code := h.pipe(tc.input, args...); code != tc.code {
+				t.Fatalf("code=%d want %d: %s", code, tc.code, h.stderr.String())
+			}
+			if got := strings.TrimSpace(h.stdout.String()); got != tc.want {
+				t.Errorf("stdout = %q, want %q", got, tc.want)
+			}
+		})
+	}
+	// The keys named in the refusal are the ones the format has.
+	h := newHarness(t)
+	if code := h.pipe(lo, "--parser", "ip", "--variant", "brief-link", "--extract", "nosuch"); code != ExitUsage {
+		t.Fatalf("code=%d", code)
+	}
+	if !strings.Contains(h.stderr.String(), `"peer"`) {
+		t.Errorf("the refusal should list peer among the keys: %s", h.stderr.String())
+	}
+	// An empty listing has every key of its format.
+	h = newHarness(t)
+	if code := h.pipe("PID TTY          TIME CMD\n", "--parser", "ps", "--variant", "posix", "--extract", "pid"); code != ExitOK {
+		t.Fatalf("empty listing: code=%d %s", code, h.stderr.String())
+	}
+	if got := strings.TrimSpace(h.stdout.String()); got != "[]" {
+		t.Errorf("empty listing = %q", got)
+	}
+}
+
 func TestExtractOnASingleObject(t *testing.T) {
 	h := newHarness(t)
 	const input = "uid=1000(alice) gid=1000(alice) groups=1000(alice)\n"

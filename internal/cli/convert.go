@@ -132,7 +132,7 @@ func (a *app) cmdConvert(args []string) int {
 	}
 	exp.read(acct)
 	a.explainWrite(exp)
-	if out, code = a.narrow(out, &co.output); code != ExitOK {
+	if out, code = a.narrow(out, &co.output, sel.Entry.Def); code != ExitOK {
 		return code
 	}
 	if err := jsonutil.Encode(a.env.Stdout, out, co.output.pretty); err != nil {
@@ -204,7 +204,7 @@ func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOp
 	}
 	exp.read(acct)
 	a.explainWrite(exp)
-	if v, code = a.narrow(v, out); code != ExitOK {
+	if v, code = a.narrow(v, out, def); code != ExitOK {
 		return code
 	}
 	if err := jsonutil.Encode(a.env.Stdout, v, out.pretty); err != nil {

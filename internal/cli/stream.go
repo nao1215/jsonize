@@ -58,14 +58,14 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	a.explainWrite(exp)
 	// A key the format does not produce is a usage error, the same as it
 	// is for a whole document, so it is kept apart from a parse failure.
-	var narrowErr error
+	// One the definition does not name is refused before a record is
+	// written; one the input decides is judged when the stream ends.
+	if err := filter.know(chosen.Entry.Def); err != nil {
+		a.errorf("%v", err)
+		return ExitUsage
+	}
 	emit := func(v any) error {
-		narrowed, err := filter.apply(v)
-		if err != nil {
-			narrowErr = err
-			return err
-		}
-		return jsonutil.Encode(a.env.Stdout, narrowed, false)
+		return jsonutil.Encode(a.env.Stdout, filter.narrowRecord(v), false)
 	}
 	// A record jz cannot read is reported and left out, and the ones
 	// after it are still written. A command that keeps printing (ping,
@@ -85,10 +85,16 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
 	err = engine.Stream(chosen.Entry.Def, io.MultiReader(bytes.NewReader(head), br), eopts, emit, onError)
-	switch {
-	case narrowErr != nil:
-		a.errorf("%v", narrowErr)
+	return a.streamEnd(err, filter, skipped)
+}
+
+// streamEnd settles what a stream returns once its input has ended.
+func (a *app) streamEnd(err error, filter *keyFilter, skipped int) int {
+	if nerr := filter.unseen(); nerr != nil && (err == nil || errors.Is(err, runner.ErrCut)) {
+		a.errorf("%v", nerr)
 		return ExitUsage
+	}
+	switch {
 	case err != nil && !errors.Is(err, runner.ErrCut):
 		// A command ended from outside leaves its last record half
 		// written. The engine has left it out; the records before it
@@ -109,14 +115,12 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 		a.errorf("%v", err)
 		return ExitUsage
 	}
-	var narrowErr error
+	if err := filter.know(def); err != nil {
+		a.errorf("%v", err)
+		return ExitUsage
+	}
 	emit := func(v any) error {
-		narrowed, err := filter.apply(v)
-		if err != nil {
-			narrowErr = err
-			return err
-		}
-		return jsonutil.Encode(a.env.Stdout, narrowed, false)
+		return jsonutil.Encode(a.env.Stdout, filter.narrowRecord(v), false)
 	}
 	skipped := 0
 	eopts := out.engineOptions()
@@ -126,16 +130,7 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 		a.errorf("%v", pe)
 		return nil
 	})
-	switch {
-	case narrowErr != nil:
-		a.errorf("%v", narrowErr)
-		return ExitUsage
-	case err != nil && !errors.Is(err, runner.ErrCut):
-		return a.exitForStream(err)
-	case skipped > 0:
-		return ExitParse
-	}
-	return ExitOK
+	return a.streamEnd(err, filter, skipped)
 }
 
 // emptyFormats settles what a command that succeeded without printing

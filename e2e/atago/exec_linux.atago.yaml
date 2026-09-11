@@ -1002,6 +1002,19 @@ scenarios:
   # A name may begin or end with a space. The listings put a fixed
   # separator in front of the name, and what follows it is the name: a
   # leading space used to be taken for more of the separator and dropped.
+  # A key is judged by the format, not by the rows one run printed: the
+  # listing of a process that is gone has no rows, and pid is still one
+  # of its keys.
+  - name: --extract of a key the format has works on an empty listing
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --extract pid ps -p 2147483647
+      - assert:
+          exit_code: 1
+          stdout:
+            equals: "[]\n"
+
   # du -h prints an empty file as a plain 0, which is also what du/posix
   # reads; the rounded size on the next line decides.
   - name: du -h naming an empty file first lands on the rounded definition
