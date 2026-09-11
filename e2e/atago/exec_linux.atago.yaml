@@ -1277,3 +1277,162 @@ scenarios:
       - assert:
           exit_code: 4
           stdout: {empty: true}
+
+  # "link -> odd -> plain" is a link named "link -> odd" that points at
+  # plain, or a link named link that points at "odd -> plain", and the
+  # text does not say which. A link with one " -> " reads one way.
+  - name: a link line that reads two ways is refused, one that reads one way is read
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: one/target
+          content: "x\n"
+      - fixture:
+          file: "one/a -> b"
+          content: "y\n"
+      - fixture:
+          file: two/plain
+          content: "z\n"
+      - run:
+          shell: true
+          command: ln -s target one/link && ln -s plain 'two/link -> odd'
+      - assert:
+          exit_code: 0
+      - run:
+          command: jz run ls -l one
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"filename":"link","link_to":"target"'
+      - run:
+          command: jz run ls -l two
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "does not have the shape"
+      - run:
+          command: tar -cf two.tar two
+      - assert:
+          exit_code: 0
+      - run:
+          command: jz run tar -tvf two.tar
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+
+  # git quotes a name with a space, so the " -> " outside the quotes is
+  # the one that separates the two paths of a rename.
+  - name: git status splits a rename at the arrow outside the quotes
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: "repo/a -> b"
+          content: "x\n"
+      - run:
+          shell: true
+          command: cd repo && git init -q && git add . && git -c user.name=alice -c user.email=alice@example.com commit -qm init && git mv 'a -> b' 'c -> d'
+      - assert:
+          exit_code: 0
+      - run:
+          shell: true
+          command: cd repo && jz run git status --porcelain
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].index", equals: R }
+              - { path: "$[0].path", equals: '"a -> b"' }
+              - { path: "$[0].renamed_to", equals: '"c -> d"' }
+
+  # GNU md5sum marks a line whose name it escaped with a backslash in
+  # front of the digest; such a name is decoded. wc quotes a name with a
+  # newline the way a shell reads it, which a name printed as it is can
+  # also be, and tar escapes by a style the text does not name; both are
+  # refused.
+  - name: md5sum names are decoded, and names wc and tar quoted are refused
+    only: {os: linux}
+    steps:
+      - run:
+          shell: true
+          command: mkdir esc && printf 'x\n' > 'esc/back\slash' && printf 'x\n' > "$(printf 'esc/nl\nname')"
+      - assert:
+          exit_code: 0
+      - run:
+          shell: true
+          command: jz run md5sum esc/*
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].escaped", equals: true }
+              - { path: "$[0].file", equals: "esc/back\\slash" }
+              - { path: "$[1].file", equals: "esc/nl\nname" }
+      - run:
+          shell: true
+          command: jz run sha256sum esc/*
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].file", equals: "esc/nl\nname" }
+      - run:
+          shell: true
+          command: jz run --parser md5sum -- busybox md5sum 'esc/back\slash'
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].file", equals: "esc/back\\slash" }
+      - run:
+          shell: true
+          command: jz run wc esc/*
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "does not have the shape"
+      - run:
+          shell: true
+          command: tar -cf esc.tar esc && jz run tar -tvf esc.tar
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+
+  # lsblk draws the tree of devices in front of a child's name, in ASCII
+  # in the C locale and in box-drawing characters in a UTF-8 one.
+  # Captured output, since a runner may have no partitions to list.
+  - name: lsblk reports a child device by its name, without the tree
+    only: {os: linux}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
+    steps:
+      - fixture:
+          file: bin/lsblk
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/lsblk.txt"
+      - fixture:
+          file: captured/lsblk.txt
+          from: "${specdir}/../../registry/parsers/lsblk/linux/testdata/c-locale-tree.txt"
+      - fixture:
+          file: utf-8.txt
+          from: "${specdir}/../../registry/parsers/lsblk/linux/testdata/utf-8.txt"
+      - run:
+          command: jz run lsblk
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].name", equals: nvme0n1 }
+              - { path: "$[1].name", equals: nvme0n1p1 }
+              - { path: "$[2].name", equals: nvme0n1p2 }
+      - run:
+          command: jz --parser lsblk --variant linux --file utf-8.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].name", equals: nvme0n1p1 }
+              - { path: "$[4].name", equals: nvme1n1p1 }
