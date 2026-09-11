@@ -1,0 +1,77 @@
+[
+  {
+    "index": 33,
+    "driver": "PipeWire",
+    "binary": "wireplumber"
+  },
+  {
+    "index": 37,
+    "driver": "PipeWire",
+    "binary": "pipewire"
+  },
+  {
+    "index": 40,
+    "driver": "PipeWire",
+    "binary": "wireplumber"
+  },
+  {
+    "index": 51,
+    "driver": "PipeWire",
+    "binary": "kwin_wayland"
+  },
+  {
+    "index": 93,
+    "driver": "PipeWire",
+    "binary": "kded6"
+  },
+  {
+    "index": 94,
+    "driver": "PipeWire",
+    "binary": "kded6"
+  },
+  {
+    "index": 95,
+    "driver": "PipeWire",
+    "binary": "xdg-desktop-portal"
+  },
+  {
+    "index": 96,
+    "driver": "PipeWire",
+    "binary": "python3.14"
+  },
+  {
+    "index": 97,
+    "driver": "PipeWire",
+    "binary": "plasmashell"
+  },
+  {
+    "index": 98,
+    "driver": "PipeWire",
+    "binary": "plasmashell"
+  },
+  {
+    "index": 99,
+    "driver": "PipeWire",
+    "binary": "plasmashell"
+  },
+  {
+    "index": 284,
+    "driver": "PipeWire",
+    "binary": "polkit-kde-authentication-agent-1"
+  },
+  {
+    "index": 426,
+    "driver": "PipeWire",
+    "binary": "firefox"
+  },
+  {
+    "index": 868,
+    "driver": "PipeWire",
+    "binary": "chrome"
+  },
+  {
+    "index": 1206,
+    "driver": "PipeWire",
+    "binary": "pactl"
+  }
+]

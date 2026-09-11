@@ -129,7 +129,7 @@ the same reading with settings of your own.
 | `objdump` | [`section-headers`](../schemas/objdump/section-headers.json) |
 | `od` | [`hex-bytes`](../schemas/od/hex-bytes.json) |
 | `openssl` | [`ciphers`](../schemas/openssl/ciphers.json), [`ciphers-codes`](../schemas/openssl/ciphers-codes.json), [`version-all`](../schemas/openssl/version-all.json) |
-| `pactl` | [`info`](../schemas/pactl/info.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
+| `pactl` | [`info`](../schemas/pactl/info.json), [`short-cards`](../schemas/pactl/short-cards.json), [`short-clients`](../schemas/pactl/short-clients.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
 | `parted` | [`machine`](../schemas/parted/machine.json) |
 | `pidstat` | [`io`](../schemas/pidstat/io.json), [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json), [`switches`](../schemas/pidstat/switches.json) |
 | `ping` | [`linux`](../schemas/ping/linux.json) |

@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (pactl 17.0 on PipeWire 1.6.2) as pactl list short clients with LC_ALL=C
+description: the clients a PipeWire server has, each with the binary it runs
+os: linux
+args: [list, short, clients]

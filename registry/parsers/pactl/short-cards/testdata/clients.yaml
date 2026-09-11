@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (pactl 17.0 on PipeWire 1.6.2) as pactl list short clients with LC_ALL=C
+description: three tab separated cells as well, but a driver where the card name goes, which is pactl/short-clients to read
+os: linux
+expect_error: "does not describe this input"
