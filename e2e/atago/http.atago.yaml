@@ -1,0 +1,239 @@
+version: "1"
+
+suite:
+  name: HTTP headers from curl
+  # The server is e2ehelper serve, built here from the Go source next to
+  # this file: it listens on a free port of 127.0.0.1 and writes the
+  # address to a file when it is ready, so nothing here reaches past the
+  # machine. Every system this suite runs on ships curl.
+  setup:
+    - fixture:
+        file: bin/.keep
+        content: ""
+    - run:
+        command: go build -C ${specdir}/e2ehelper -o ${suitedir}/bin/ .
+
+# curl -I and curl -D - print the header block of every response they
+# read, and curl/headers reads each block as a record. What is pinned
+# here is what a real curl prints against a server that says the things
+# a server may say: a repeated header, a name in any case, an empty value,
+# a status line with no reason, an interim response, a redirect chain and
+# a proxy's reply to CONNECT.
+scenarios:
+  - name: jz run curl -sI reads one response, a repeated Set-Cookie as two headers
+    services:
+      - name: server
+        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        ready: {file: addr.txt, store: addr, timeout: 20s}
+    steps:
+      - run:
+          command: jz run curl -sI http://${addr}/plain
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].status.version", equals: "1.1" }
+              - { path: "$[0].status.code", equals: 200 }
+              - { path: "$[0].status.reason", equals: OK }
+              - { path: "$[0].headers[3].name", equals: Set-Cookie }
+              - { path: "$[0].headers[3].value", equals: "session=abc123; Path=/; HttpOnly" }
+              - { path: "$[0].headers[4].name", equals: Set-Cookie }
+              - { path: "$[0].headers[4].value", equals: "theme=dark; Path=/" }
+              # names keep the case they were sent in
+              - { path: "$[0].headers[5].name", equals: X-Request-ID }
+              - { path: "$[0].headers[6].name", equals: x-lower-case }
+              # a header sent with no value is there, empty
+              - { path: "$[0].headers[7].name", equals: X-Empty }
+              - { path: "$[0].headers[7].value", equals: "" }
+              - { path: "$[0].headers", length: 9 }
+
+  - name: a redirect chain followed with -L is one record per response
+    services:
+      - name: server
+        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        ready: {file: addr.txt, store: addr, timeout: 20s}
+    steps:
+      - run:
+          command: jz run curl -sIL http://${addr}/chain
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 3 }
+              - { path: "$[0].status.code", equals: 302 }
+              - { path: "$[0].headers[0].value", equals: /redirect }
+              - { path: "$[1].status.code", equals: 301 }
+              - { path: "$[1].status.reason", equals: Moved Permanently }
+              - { path: "$[2].status.code", equals: 200 }
+      # The same records one per line while curl runs.
+      - run:
+          command: jz run --stream curl -sIL http://${addr}/chain
+      - assert:
+          exit_code: 0
+          stdout:
+            matches: '\A\{"status":\{"version":"1.1","code":302,"reason":"Found"\},[^\n]*\}\n\{"status":\{[^\n]*"code":301[^\n]*\n\{"status":\{[^\n]*"code":200[^\n]*\n\z'
+
+  - name: interim responses, a status line with no reason and HTTP/1.0 keep their own records
+    services:
+      - name: server
+        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        ready: {file: addr.txt, store: addr, timeout: 20s}
+    steps:
+      - run:
+          command: jz run curl -sI http://${addr}/early-hints
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].status.code", equals: 103 }
+              - { path: "$[0].headers[0].name", equals: Link }
+              - { path: "$[1].status.code", equals: 200 }
+      - run:
+          command: jz run curl -sI http://${addr}/continue
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].status.code", equals: 100 }
+              - { path: "$[0].headers", length: 0 }
+              - { path: "$[1].status.code", equals: 200 }
+      - run:
+          command: jz run curl -sI http://${addr}/no-reason
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].status.code", equals: 204 }
+              - { path: "$[0].status.reason", equals: null }
+      - run:
+          command: jz run curl -sI http://${addr}/http10
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].status.version", equals: "1.0" }
+
+  - name: a proxy's reply to CONNECT is a record before the response through the tunnel
+    services:
+      - name: server
+        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        ready: {file: addr.txt, store: addr, timeout: 20s}
+    steps:
+      - run:
+          command: jz run curl -sI -p -x http://${addr} http://${addr}/plain
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].status.reason", equals: Connection established }
+              - { path: "$[0].headers", length: 0 }
+              - { path: "$[1].status.code", equals: 200 }
+
+  # Windows' curl and the one Git for Windows ships are built without
+  # HTTP/2 (their feature lists name no HTTP2), so this is Linux and
+  # macOS; the HTTP/2 and HTTP/3 fixtures are read on every system in
+  # detect.atago.yaml.
+  - name: HTTP/2 lower-cases every name and curl writes a status line with no reason
+    skip: {os: windows}
+    services:
+      - name: server
+        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        ready: {file: addr.txt, store: addr, timeout: 20s}
+    steps:
+      - run:
+          command: jz run curl -sIL --http2-prior-knowledge http://${addr}/redirect
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].status.version", equals: "2" }
+              - { path: "$[0].status.code", equals: 301 }
+              - { path: "$[0].status.reason", equals: null }
+              - { path: "$[1].headers[2].name", equals: set-cookie }
+              - { path: "$[1].headers[3].name", equals: set-cookie }
+
+  - name: headers saved by curl are read from the file on any system, and as YAML
+    services:
+      - name: server
+        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        ready: {file: addr.txt, store: addr, timeout: 20s}
+    steps:
+      # With -I the headers are what curl writes, so -o saves them.
+      - run:
+          command: curl -sIL -o ${workdir}/headers.txt http://${addr}/redirect
+      - assert:
+          exit_code: 0
+      - run:
+          command: jz --file ${workdir}/headers.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[1].status.code", equals: 200 }
+      - run:
+          command: jz --yaml --file ${workdir}/headers.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            yaml:
+              - { path: "$[0].status.code", equals: 301 }
+              - { path: "$[1].headers[3].value", equals: "session=abc123; Path=/; HttpOnly" }
+      # -D - writes the headers of a GET the same way.
+      - run:
+          command: jz run curl -s -D - -o ${workdir}/body.txt http://${addr}/plain
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].headers", length: 9 }
+
+  - name: a body after the headers and curl's verbose lines are not read as headers
+    services:
+      - name: server
+        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        ready: {file: addr.txt, store: addr, timeout: 20s}
+    steps:
+      # -i prints the body after the headers. jz run does not claim that
+      # output at all, and read from a file the body is refused where it
+      # starts, with nothing written.
+      - run:
+          command: jz run curl -si http://${addr}/plain
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr: {contains: "needs one of the arguments [-I, --head, -D, --dump-header]"}
+      - run:
+          command: curl -si -o ${workdir}/include.txt http://${addr}/plain
+      - assert:
+          exit_code: 0
+      - run:
+          command: jz --file ${workdir}/include.txt
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr: {contains: '"hello"'}
+      # -v writes the exchange to standard error, which jz passes
+      # through; standard output is the headers alone and is read.
+      - run:
+          command: jz run curl -sIv http://${addr}/plain
+      - assert:
+          exit_code: 0
+          stderr: {contains: "> HEAD /plain HTTP/1.1"}
+          stdout:
+            json: { path: "$[0].status.code", equals: 200 }
+      # Merged into the output (--stderr -), the verbose lines are no
+      # headers at all, and naming the variant does not change that.
+      - run:
+          command: jz run --parser curl --variant headers -- curl -sIv --stderr - http://${addr}/plain
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr: {contains: "curl/headers does not describe this input"}

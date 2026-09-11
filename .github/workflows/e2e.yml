@@ -28,13 +28,14 @@ jobs:
           version: v0.21.0
       # The commands the required Linux scenarios run that the image
       # does not ship: sysstat for iostat and mpstat, BusyBox for its
-      # variants. A scenario that needs a command fails when it is
-      # missing rather than skipping, so this list is checked by the run.
+      # variants, zsh for the completion script. A scenario that needs a
+      # command fails when it is missing rather than skipping, so this
+      # list is checked by the run.
       - name: install the commands the Linux scenarios run
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends sysstat busybox
+          sudo apt-get install -y --no-install-recommends sysstat busybox zsh
       # One script on every operating system: it builds jz, sandboxes
       # HOME, runs every spec under e2e/atago and fails on a skip that
       # is not the operating system's or an optional suite's. Windows

@@ -801,3 +801,264 @@ scenarios:
               - { path: "$[2].name", equals: manet }
               - { path: "$[2].number", equals: 138 }
               - { path: "$[2].aliases", length: 0 }
+
+  # Output saved on macOS or FreeBSD is read on any system: the operating
+  # system that printed it is not known on a pipe, and only the text
+  # decides. These captures are not the registry's fixtures.
+  - name: ping saved on macOS and FreeBSD is read as ping/bsd, timeouts and loss included
+    steps:
+      - fixture:
+          file: ping-macos.txt
+          from: "${specdir}/testdata/ping-macos-26-timeout.txt"
+      - run:
+          command: jz --explain --file ping-macos.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ping/bsd from embedded"
+          stdout:
+            json:
+              - { path: "$.destination.address", equals: 192.0.2.1 }
+              - { path: "$.destination.data_bytes", equals: 56 }
+              - { path: "$.replies", length: 1 }
+              - { path: "$.replies[0].kind", equals: no_answer }
+              - { path: "$.replies[0].icmp_seq", equals: 0 }
+              - { path: "$.statistics.packets_transmitted", equals: 2 }
+              - { path: "$.statistics.packets_received", equals: 0 }
+              - { path: "$.statistics.packet_loss_percent", equals: 100 }
+              - { path: "$.statistics.round_trip_avg_ms", equals: null }
+      # ping6 names no host in its header, only in the summary.
+      - fixture:
+          file: ping6.txt
+          from: "${specdir}/testdata/ping6-macos-14-quiet.txt"
+      - run:
+          command: jz --file ping6.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.destination.name", equals: null }
+              - { path: "$.destination.source", equals: "::1" }
+              - { path: "$.destination.packet_bytes", equals: 56 }
+              - { path: "$.replies", length: 0 }
+              - { path: "$.statistics.name", equals: "::1" }
+              - { path: "$.statistics.round_trip_min_ms", gt: 0 }
+      # FreeBSD, with a payload too small for the send time: no times.
+      - fixture:
+          file: ping-freebsd.txt
+          from: "${specdir}/testdata/ping-freebsd-small.txt"
+      - run:
+          command: jz --file ping-freebsd.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.destination.data_bytes", equals: 0 }
+              - { path: "$.replies[1].time_ms", equals: null }
+              - { path: "$.replies[1].bytes", equals: 8 }
+      # Naming the Linux variant does not get past its signature.
+      - run:
+          command: jz --parser ping --variant linux --file ping-macos.txt
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: stat saved on macOS and FreeBSD is read in both of its formats
+    steps:
+      - fixture:
+          file: stat-dir.txt
+          from: "${specdir}/testdata/stat-macos-26-dir.txt"
+      - run:
+          command: jz --file stat-dir.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$[0].file", equals: dir }
+              - { path: "$[0].access_flags", equals: drwxr-xr-x }
+              - { path: "$[0].size", equals: 64 }
+              - { path: "$[0].links", equals: 2 }
+              # the local time stat printed, with no zone to read it in
+              - { path: "$[0].modify_time", equals: "Sep 11 12:30:45 2026" }
+              - { path: "$[0].device", matches: "^[0-9]+$" }
+      - fixture:
+          file: stat-link-space.txt
+          from: "${specdir}/testdata/stat-macos-26-link-space.txt"
+      - run:
+          command: jz --file stat-link-space.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].access_flags", equals: lrwxr-xr-x }
+              - { path: "$[0].file", equals: link }
+              - { path: "$[1].file", equals: with space.txt }
+              - { path: "$[1].file_flags", equals: "0" }
+      - fixture:
+          file: stat-x.txt
+          from: "${specdir}/testdata/stat-x-freebsd-link.txt"
+      - run:
+          command: jz --file stat-x.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].type", equals: Symbolic Link }
+              - { path: "$[0].access_mode", equals: "0755" }
+              - { path: "$[0].group", equals: "(1001)" }
+              - { path: "$[0].birth_time", matches: "^[A-Z][a-z]{2} [A-Z][a-z]{2} [ 0-9][0-9] " }
+
+  - name: HTTP/2 and HTTP/3 headers saved by curl are read on any system
+    steps:
+      - fixture:
+          file: h2.txt
+          from: "${specdir}/testdata/curl-http2-404.txt"
+      - run:
+          command: jz --file h2.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              [{"status":{"version":"2","code":404,"reason":null},"headers":[{"name":"date","value":"Fri, 11 Sep 2026 12:00:00 GMT"}]}]
+      - fixture:
+          file: h3.txt
+          from: "${specdir}/testdata/curl-http3-redirect.txt"
+      - run:
+          command: jz --file h3.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].status.version", equals: "3" }
+              - { path: "$[0].status.code", equals: 301 }
+              - { path: "$[1].headers[1].value", equals: "a=1; Path=/; Secure" }
+              - { path: "$[1].headers[2].value", equals: "b=2; Path=/; Secure" }
+
+  # A list of names is any list of lines, so it is never guessed: naming
+  # the command alone does not reach it either, since that would read the
+  # output of an ls option the other variants refuse as a list of names.
+  - name: ls -1 output is read only when ls/names is named
+    steps:
+      - fixture:
+          file: names.txt
+          from: "${specdir}/testdata/ls-names-macos-26.txt"
+      - run:
+          command: jz --file names.txt
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          command: jz --parser ls --file names.txt
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: "COMMAND | jz --parser ls --variant names"
+      - run:
+          command: jz --parser ls --variant names --file names.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$[0].name", equals: "." }
+              - { path: "$[8].name", equals: with space.txt }
+              - { path: "$[9].name", equals: 日本語.txt }
+              - { path: "$", length: 10 }
+      # Spaces at either end and a line of spaces are names too.
+      - fixture:
+          file: odd.txt
+          content: "  \n leading\ntrailing \n-dash\na -> b\n"
+      - run:
+          command: jz --parser ls --variant names --file odd.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"  "},{"name":" leading"},{"name":"trailing "},{"name":"-dash"},{"name":"a -> b"}]
+      # Two directories' headings are refused rather than read as names.
+      - fixture:
+          file: two-dirs.txt
+          content: "a:\nx\n\nb:\ny\n"
+      - run:
+          command: jz --parser ls --variant names --file two-dirs.txt
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+      # ls of an empty directory prints nothing, and with the variant
+      # named that is the empty list; guessed, it is no text at all.
+      - fixture:
+          file: empty.txt
+          content: ""
+      - run:
+          command: jz --parser ls --variant names --file empty.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              []
+      - run:
+          command: jz --file empty.txt
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: a csv without a header line keeps its first record, numbered or named
+    steps:
+      - fixture:
+          file: rows.csv
+          content: |
+            name,value
+            "a, b","say ""hi"""
+            "first
+            second",
+      - run:
+          command: jz --parser csv --variant comma-no-header --file rows.csv
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              [{"column_1":"name","column_2":"value"},{"column_1":"a, b","column_2":"say \"hi\""},{"column_1":"first\nsecond","column_2":""}]
+      - run:
+          command: jz --parser csv --variant comma-no-header --columns key,text --file rows.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].key", equals: name }
+              - { path: "$[2].text", equals: "" }
+      # The same file with its first line as the header, as before.
+      - run:
+          command: jz --parser csv --variant comma --file rows.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"a, b","value":"say \"hi\""},{"name":"first\nsecond","value":""}]
+      - fixture:
+          file: rows.tsv
+          content: "1\ta b\t\n2\tc\td\n"
+      - run:
+          command: jz --parser csv --variant tab-no-header --columns id,word,note --file rows.tsv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"id":"1","word":"a b","note":""},{"id":"2","word":"c","note":"d"}]
+      # A row wider than the first record has a value with no column.
+      - fixture:
+          file: ragged.csv
+          content: "1,2\n3,4,5\n"
+      - run:
+          command: jz --parser csv --variant comma-no-header --file ragged.csv
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "row has 3 fields but the first record, which numbers the columns, has 2"

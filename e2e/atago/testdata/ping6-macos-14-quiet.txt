@@ -1,0 +1,5 @@
+PING6(56=40+8+8 bytes) ::1 --> ::1
+
+--- ::1 ping6 statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/std-dev = 0.058/0.114/0.169/0.056 ms

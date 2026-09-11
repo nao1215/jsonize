@@ -206,3 +206,133 @@ scenarios:
       - assert:
           stdout:
             contains: '"name":"b"'
+
+  # ping and ping6 as macOS ships them: every runner answers on the
+  # loopback, and nothing answers 192.0.2.1 (TEST-NET-1), which is how a
+  # timeout and a total loss are run for real.
+  - name: ping and ping6 land on ping/bsd, a timeout and a loss included
+    only: {os: darwin}
+    steps:
+      - run:
+          command: jz run --explain ping -c 2 -i 0.2 127.0.0.1
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ping/bsd from embedded"
+          stdout:
+            json:
+              - { path: "$.destination.address", equals: 127.0.0.1 }
+              - { path: "$.replies", length: 2 }
+              - { path: "$.replies[0].kind", equals: reply }
+              - { path: "$.replies[0].icmp_seq", equals: 0 }
+              - { path: "$.replies[0].time_ms", gte: 0 }
+              - { path: "$.statistics.packets_received", equals: 2 }
+              - { path: "$.statistics.round_trip_avg_ms", gte: 0 }
+      - run:
+          command: jz run ping6 -c 2 -i 0.2 ::1
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.destination.source", equals: "::1" }
+              - { path: "$.destination.name", equals: null }
+              - { path: "$.replies[1].responder", equals: "::1" }
+              - { path: "$.statistics.name", equals: "::1" }
+      # ping ends with status 2 when nothing came back, and jz mirrors it
+      # with the JSON of what was printed.
+      - run:
+          command: jz run ping -c 2 -t 3 192.0.2.1
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "ping exited with status 2"
+          stdout:
+            json:
+              - { path: "$.replies[0].kind", equals: no_answer }
+              - { path: "$.statistics.packets_received", equals: 0 }
+              - { path: "$.statistics.packet_loss_percent", equals: 100 }
+              - { path: "$.statistics.round_trip_avg_ms", equals: null }
+      - run:
+          command: jz run --stream ping -c 3 -i 0.2 127.0.0.1
+      - assert:
+          exit_code: 0
+          stdout:
+            matches: '\A\{"part":"destination",[^\n]*\n(?:\{"part":"replies","value":\{"kind":"reply",[^\n]*\n){3}\{"part":"statistics","value":\{"name":"127\.0\.0\.1","packets_transmitted":3,"packets_received":3,[^\n]*\n\z'
+      # The Linux variant does not read it, named or not.
+      - run:
+          command: jz run --parser ping --variant linux -- ping -c 1 127.0.0.1
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: stat and stat -x land on the bsd variants for a file, a directory and a link
+    only: {os: darwin}
+    steps:
+      - fixture:
+          file: file.txt
+          content: "hello\n"
+      - fixture:
+          file: with space.txt
+          content: "x"
+      - fixture:
+          file: dir/.keep
+          content: ""
+      - fixture:
+          file: link
+          symlink: file.txt
+      - run:
+          command: jz run --explain stat ${workdir}/file.txt ${workdir}/dir ${workdir}/link "${workdir}/with space.txt"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "stat/bsd from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 4 }
+              - { path: "$[0].access_flags", matches: "^-rw" }
+              - { path: "$[0].size", equals: 6 }
+              - { path: "$[1].access_flags", matches: "^d" }
+              - { path: "$[2].access_flags", matches: "^l" }
+              - { path: "$[2].size", equals: 8 }
+              - { path: "$[3].file", matches: "with space\\.txt$" }
+              - { path: "$[0].modify_time", matches: "^[A-Z][a-z]{2} [ 0-9][0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} [0-9]{4}$" }
+      - run:
+          command: jz run stat -L ${workdir}/link
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].access_flags", matches: "^-rw" }
+      - run:
+          command: jz run --explain stat -x ${workdir}/file.txt ${workdir}/link
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "stat/bsd-verbose from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].type", equals: Regular File }
+              - { path: "$[0].access_mode", matches: "^0[0-7]{3}$" }
+              - { path: "$[1].type", equals: Symbolic Link }
+      # A format this definition does not read is refused, not guessed.
+      - run:
+          command: jz run stat -r ${workdir}/file.txt
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: jz run ls reads the names macOS ls writes to a pipe
+    only: {os: darwin}
+    steps:
+      - fixture:
+          file: dir/a b.txt
+          content: ""
+      - fixture:
+          file: dir/日本語.txt
+          content: ""
+      - run:
+          command: jz run ls ${workdir}/dir
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: '[{"name":"a b.txt"},{"name":"日本語.txt"}]'

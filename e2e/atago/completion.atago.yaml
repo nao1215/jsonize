@@ -1,0 +1,167 @@
+version: "1"
+
+suite:
+  name: shell completion
+
+# jz completion bash|zsh prints a script that asks `jz __complete` what
+# to offer. These scenarios load the script into the real shell and
+# drive it: bash the way readline calls a completion function, zsh both
+# with the completion system's parameters set by hand and through a
+# pseudo-terminal where Tab is pressed. Each also has a registry of its
+# own on JSONIZE_REGISTRY_PATH, whose parser has to be offered, and a
+# program of the same name that leaves a file behind if anything runs
+# it while the words after it are completed.
+#
+# bash is on every runner (Git's bash on Windows, 3.2 on macOS). zsh is
+# on macOS and installed on Linux by the workflow; Windows has none.
+scenarios:
+  - name: bash completes subcommands, options, parsers, variants and paths, and runs nothing
+    steps:
+      - fixture:
+          file: reg/parsers/e2etool/plain/parser.yaml
+          content: |
+            format: 1
+            command: e2etool
+            variant: plain
+            detect: {signature: {all: ['\Ae2etool ']}}
+            parse: {type: regex, pattern: '^e2etool (?P<v>.+)$'}
+      - fixture:
+          file: bin/e2etool
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            touch "$(dirname "$0")/../ran"
+      - fixture:
+          file: files/file one.txt
+          content: "x\n"
+      - fixture:
+          file: files/filter.csv
+          content: "a,b\n"
+      - run:
+          command: bash --norc --noprofile ${specdir}/testdata/completion-bash.sh
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            matches: '(?s)\Acomplete -F _jz jz\n'
+      - assert:
+          stdout:
+            contains: |
+              [] [completion|help|list|run|test|version]
+              [--par] [--parser]
+              [--parser cur] [curl]
+              [--parser = cur] [curl]
+      - assert:
+          stdout:
+            matches: '\[=curl among [0-9]+, 0 without the =\]\n'
+      - assert:
+          stdout:
+            contains: |
+              [--parser curl --variant ] [headers|version]
+              [--parser stat --variant bsd] [bsd|bsd-verbose]
+              [run --parser csv --variant tab] [tab|tab-no-header]
+              [list ping ] [bsd|linux]
+              [list ping bsd ] []
+              [completion ] [bash|zsh]
+              [-f files/fil] [files/file one.txt|files/filter.csv]
+              [--file files/] [files/file one.txt|files/filter.csv]
+              [run curl -s] []
+              [--parser e2e] [e2etool]
+              [list e2etool ] [plain]
+              [run ./bin/e2etool files/f] [files/file one.txt|files/filter.csv]
+              [--define ] []
+      - assert:
+          file:
+            path: ran
+            exists: false
+
+  - name: zsh completes through the completion system's parameters, and runs nothing
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/e2etool/plain/parser.yaml
+          content: |
+            format: 1
+            command: e2etool
+            variant: plain
+            detect: {signature: {all: ['\Ae2etool ']}}
+            parse: {type: regex, pattern: '^e2etool (?P<v>.+)$'}
+      - fixture:
+          file: bin/e2etool
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            touch "$(dirname "$0")/../ran"
+      - run:
+          command: zsh -f ${specdir}/testdata/completion-zsh.zsh
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+            TMPDIR: "${workdir}"
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              registered: _jz
+              [] [run|list|test|completion|version|help]
+              [--par] [--parser]
+              [--parser cur] [curl]
+              [--parser=cur] [--parser=curl]
+              [--parser curl --variant ] [headers|version]
+              [--parser=stat --variant=bsd] [--variant=bsd|--variant=bsd-verbose]
+              [list ping ] [bsd|linux]
+              [completion ] [bash|zsh]
+              [-f ] [<files>]
+              [test ] [<files -/>]
+              [--parser e2e] [e2etool]
+              [run ./bin/e2etool ] [<files>]
+              [--define ] []
+      - assert:
+          file:
+            path: ran
+            exists: false
+
+  - name: Tab in an interactive zsh completes a parser, an option and a variant
+    skip: {os: windows}
+    steps:
+      - run:
+          command: zsh -f ${specdir}/testdata/completion-zpty.zsh
+          env:
+            TMPDIR: "${workdir}"
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              parser: curl
+              option: --variant
+              variant: headers
+
+  - name: the scripts and the help say how to load them
+    steps:
+      - run:
+          command: jz completion bash
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: complete -F _jz jz
+      - run:
+          command: jz completion zsh
+      - assert:
+          exit_code: 0
+          stdout:
+            matches: '(?s)\A#compdef jz\n.*compdef _jz jz'
+      - run:
+          command: jz completion fish
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr: {contains: "jz has bash and zsh"}
+      - run:
+          command: jz completion --help
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: 'eval "$(jz completion bash)"'

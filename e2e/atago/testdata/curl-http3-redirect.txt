@@ -1,0 +1,11 @@
+HTTP/3 301 
+location: https://www.example.com/
+date: Fri, 11 Sep 2026 12:00:00 GMT
+alt-svc: h3=":443"; ma=86400
+
+HTTP/3 200 
+content-type: text/html; charset=UTF-8
+set-cookie: a=1; Path=/; Secure
+set-cookie: b=2; Path=/; Secure
+content-length: 1256
+

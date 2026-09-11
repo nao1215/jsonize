@@ -206,3 +206,14 @@ scenarios:
           command: jz run journalctl -n 200 --no-pager
       - assert:
           exit_code: 0
+
+  # The live counterpart of the stand-in in exec_linux.atago.yaml.
+  - name: jz run --stream ping answers each reply as it arrives
+    only: {os: linux, command: "ping -c 1 -W 2 127.0.0.1 > /dev/null"}
+    steps:
+      - run:
+          command: jz run --stream ping -c 3 -i 0.2 127.0.0.1
+      - assert:
+          exit_code: 0
+          stdout:
+            matches: '\A\{"part":"destination",[^\n]*\n(?:\{"part":"replies",[^\n]*\n){3}\{"part":"statistics","value":\{"packets_transmitted":3,"packets_received":3,[^\n]*\n\z'
