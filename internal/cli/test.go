@@ -72,15 +72,16 @@ func (a *app) cmdTest(args []string) int {
 		Engine: engine.Options{MaxInputSize: MaxInputSize},
 	}
 	if decoys != "" {
+		if _, err := os.Stat(decoys); errors.Is(err, fs.ErrNotExist) {
+			a.errorf("--decoys %s does not exist", decoys)
+			return ExitUsage
+		}
 		list, err := conformance.ReadDecoys(decoys)
 		if err != nil {
 			a.errorf("%v", err)
 			return ExitUsage
 		}
 		opts.Decoys = list
-	}
-	for _, w := range reg.Warnings {
-		a.errorf("warning: %v", w)
 	}
 	for _, w := range reg.Warnings {
 		a.errorf("warning: %v", w)

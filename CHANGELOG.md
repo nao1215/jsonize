@@ -220,7 +220,10 @@ project follows [Semantic Versioning](https://semver.org/).
   `.json` with no `.txt` beside it (a fixture renamed or never added),
   a case that never ran, and a `.json` beside `expect_error`, an answer
   never compared. Both fail now, and a testdata directory that cannot be
-  read is reported once instead of twice.
+  read is reported once instead of twice. A registry warning (a
+  `disable` that matches nothing) was printed twice as well, and a
+  `--decoys` directory that does not exist was reported as the `lstat`
+  call that failed.
 - `jz run du -h EMPTY FILE` was exit 4, ambiguous between `du/gnu-human`
   and `du/posix`: the empty file prints a plain 0 on the opening line,
   which is all `du/posix`'s signature looked at. A rounded size anywhere
