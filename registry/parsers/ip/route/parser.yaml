@@ -1,6 +1,6 @@
 # `ip route` writes a destination followed by key/value words whose set
-# varies per route, so the words are read as an object and a flag that
-# stands alone (linkdown) is kept in its own list.
+# varies per route, mixed with flags that stand alone (linkdown), so the
+# words after the device are kept as one list in the order printed.
 format: 1
 command: ip
 variant: route

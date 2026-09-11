@@ -1,0 +1,26 @@
+[
+  {
+    "interface": "docker0",
+    "state": "UP",
+    "addresses": [
+      "172.17.0.1/16",
+      "fe80::5054:ff:fe10:4/64"
+    ]
+  },
+  {
+    "interface": "vethd9d64ba",
+    "peer": "if2",
+    "state": "UP",
+    "addresses": [
+      "fe80::5054:ff:fe10:6/64"
+    ]
+  },
+  {
+    "interface": "vetha23b967",
+    "peer": "if2",
+    "state": "UP",
+    "addresses": [
+      "fe80::5054:ff:fe10:7/64"
+    ]
+  }
+]

@@ -23,10 +23,13 @@ detect:
 parse:
   type: regex
   patterns:
-    - '^(?P<interface>\S+)[ \t]+(?P<state>UP|DOWN|UNKNOWN|LOWERLAYERDOWN)[ \t]+(?P<lladdr>[0-9a-fA-F:.]+)[ \t]+<(?P<flags>[^>]*)>[ \t]*$'
-    - '^(?P<interface>\S+)[ \t]+(?P<state>UP|DOWN|UNKNOWN|LOWERLAYERDOWN)[ \t]+<(?P<flags>[^>]*)>[ \t]*$'
+    - '^(?P<interface>[^\s@]+)(?:@(?P<peer>\S+))?[ \t]+(?P<state>UP|DOWN|UNKNOWN|LOWERLAYERDOWN)[ \t]+(?P<lladdr>[0-9a-fA-F:.]+)[ \t]+<(?P<flags>[^>]*)>[ \t]*$'
+    - '^(?P<interface>[^\s@]+)(?:@(?P<peer>\S+))?[ \t]+(?P<state>UP|DOWN|UNKNOWN|LOWERLAYERDOWN)[ \t]+<(?P<flags>[^>]*)>[ \t]*$'
 fields:
   interface: {required: true}
+  # "veth0@if2": the device a veth or a tunnel is tied to, which is not
+  # part of its name (ip/link reads it the same way).
+  peer: {when_missing: omit}
   state: {required: true}
   lladdr: {when_missing: omit}
   flags: {type: array, split: ","}
