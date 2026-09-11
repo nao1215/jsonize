@@ -1,0 +1,26 @@
+[
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "size": "1.8T",
+    "used": "1.5T",
+    "available": "165.8G",
+    "use_percent": 90,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "photos 2024",
+    "size": "30.7G",
+    "used": "274.6M",
+    "available": "30.4G",
+    "use_percent": 1,
+    "mounted_on": "/mnt/photos"
+  },
+  {
+    "filesystem": "my photos backup 2024 drive",
+    "size": "30.7G",
+    "used": "270.3M",
+    "available": "30.5G",
+    "use_percent": 1,
+    "mounted_on": "/mnt/backup"
+  }
+]

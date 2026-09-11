@@ -1,0 +1,26 @@
+[
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "inodes": 122028032,
+    "iused": 7384455,
+    "ifree": 114643577,
+    "iuse_percent": 7,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "photos 2024",
+    "inodes": 1000000000,
+    "iused": 0,
+    "ifree": 1000000000,
+    "iuse_percent": 0,
+    "mounted_on": "/mnt/photos"
+  },
+  {
+    "filesystem": "my photos backup 2024 drive",
+    "inodes": 1000000000,
+    "iused": 0,
+    "ifree": 1000000000,
+    "iuse_percent": 0,
+    "mounted_on": "/mnt/backup"
+  }
+]

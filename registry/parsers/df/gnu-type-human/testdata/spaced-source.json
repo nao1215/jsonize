@@ -1,0 +1,29 @@
+[
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "type": "ext4",
+    "size": "1.8T",
+    "used": "1.6T",
+    "available": "166G",
+    "use_percent": 91,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "photos 2024",
+    "type": "fuse.rclone",
+    "size": "31G",
+    "used": "275M",
+    "available": "31G",
+    "use_percent": 1,
+    "mounted_on": "/mnt/photos"
+  },
+  {
+    "filesystem": "my photos backup 2024 drive",
+    "type": "fuse.rclone",
+    "size": "31G",
+    "used": "271M",
+    "available": "31G",
+    "use_percent": 1,
+    "mounted_on": "/mnt/backup"
+  }
+]

@@ -268,11 +268,20 @@ scenarios:
     steps:
       - run:
           command: jz
+          stdin: "UID          PID    PPID  C STIME TTY          TIME CMD\nroot 1 0\n"
+      - assert:
+          exit_code: 3
+          stderr:
+            contains: expected at least 8 fields but found 3
+      # df reads a line by what each column holds, so a short line is
+      # one its pattern does not describe.
+      - run:
+          command: jz
           stdin: "Filesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs 1 2\n"
       - assert:
           exit_code: 3
           stderr:
-            contains: expected at least 6 fields but found 3
+            contains: 'df/gnu: line 2: line does not match pattern'
 
   - name: an unknown parser or variant name fails with what does exist
     steps:

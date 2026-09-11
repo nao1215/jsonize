@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (BusyBox v1.37.0) with LC_ALL=C as `busybox df / A B`, A and B two rclone mounts given the device names "photos 2024" and "my photos backup 2024 drive"; the mount points were renamed /mnt/photos and /mnt/backup
+description: BusyBox prints a name longer than its 20-column field on a line of its own and the figures on the next
+os: linux
+args: [/, /mnt/photos, /mnt/backup]

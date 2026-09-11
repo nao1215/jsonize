@@ -216,6 +216,13 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `df`, `df -i` and `df -P` read a file system whose name holds a space
+  and a number ("photos 2024", a FUSE mount) with every figure one
+  column to the right, exit 0: 2024 as the block count and "1% /mnt" as
+  the mount point. The other GNU and BusyBox df variants stopped at such
+  a line with exit 3, and BusyBox's habit of printing a long name on a
+  line of its own was exit 3 too. The eight definitions now read a line
+  by what each column holds, and join BusyBox's two lines.
 - `--extract` and `--exclude` judged a key by the input rather than by
   the format: `jz run --extract pid ps -p N` for a process that is gone
   (the empty listing) was exit 2, `--extract peer` on `ip -brief link`
