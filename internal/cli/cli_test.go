@@ -722,7 +722,7 @@ func TestList(t *testing.T) {
 		t.Fatal(h.stderr.String())
 	}
 	out = h.stdout.String()
-	for _, want := range []string{"df/gnu-human", "source:", "format:       1", "detection:", "signature", "table split=whitespace"} {
+	for _, want := range []string{"df/gnu-human", "source:", "format:       1", "detection:", "signature", "regex each=line groups=filesystem,size"} {
 		if !strings.Contains(out, want) {
 			t.Errorf("list df gnu-human missing %q:\n%s", want, out)
 		}

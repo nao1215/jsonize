@@ -21,12 +21,15 @@ detect:
   signature:
     all:
       - '^Filesystem[ \t]+Type[ \t]+Size[ \t]+Used[ \t]+Avail[ \t]+Use%[ \t]+Mounted on[ \t]*$'
+# A file system's name may hold spaces, so a line is read by what each
+# column holds (see df/gnu); the type is one word.
 input:
-  ignore: ['^df: ']
+  ignore:
+    - '^df: '
+    - '^Filesystem[ \t]+Type[ \t]+Size[ \t]+Used[ \t]+Avail[ \t]+Use%[ \t]+Mounted on[ \t]*$'
 parse:
-  type: table
-  header:
-    columns: [filesystem, type, size, used, available, use_percent, mounted_on]
+  type: regex
+  pattern: '^(?P<filesystem>\S.*?)\s+(?P<type>\S+)\s+(?P<size>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*)$'
 fields:
   filesystem: {required: true}
   type: {required: true}

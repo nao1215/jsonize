@@ -1,0 +1,26 @@
+[
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "1k_blocks": 1920641288,
+    "used": 1649179748,
+    "available": 173824576,
+    "use_percent": 90,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "photos 2024",
+    "1k_blocks": 32206676,
+    "used": 281220,
+    "available": 31925456,
+    "use_percent": 1,
+    "mounted_on": "/mnt/photos"
+  },
+  {
+    "filesystem": "my photos backup 2024 drive",
+    "1k_blocks": 32206676,
+    "used": 276816,
+    "available": 31929860,
+    "use_percent": 1,
+    "mounted_on": "/mnt/backup"
+  }
+]

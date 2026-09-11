@@ -1,0 +1,5 @@
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/nvme0n1p2       1920641288 1649179748 173824576  90% /
+photos 2024           32206676    281220  31925456   1% /mnt/photos
+my photos backup 2024 drive
+                      32206676    276816  31929860   1% /mnt/backup

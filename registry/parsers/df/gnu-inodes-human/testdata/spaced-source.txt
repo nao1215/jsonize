@@ -1,0 +1,4 @@
+Filesystem                  Inodes IUsed IFree IUse% Mounted on
+/dev/nvme0n1p2                117M  7.1M  110M    7% /
+photos 2024                   954M     0  954M    0% /mnt/photos
+my photos backup 2024 drive   954M     0  954M    0% /mnt/backup

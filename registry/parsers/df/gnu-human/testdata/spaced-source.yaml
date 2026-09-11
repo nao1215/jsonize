@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C as `df -h / A B`, A and B two rclone mounts given the device names "photos 2024" and "my photos backup 2024 drive"; the mount points were renamed /mnt/photos and /mnt/backup
+description: a file system whose name holds spaces, one of them ending in a number
+os: linux
+args: [-h, /, /mnt/photos, /mnt/backup]

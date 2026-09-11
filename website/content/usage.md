@@ -302,7 +302,7 @@ jz: explain: chose df/gnu from embedded
 jz: explain: scope: every definition in the registry, by its signature alone
 jz: explain: matched: signature.all[0] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\.../
 jz: explain: not considered: 48 definitions only used when named
-jz: explain: read: 8 lines: 8 read
+jz: explain: read: 8 lines: 7 read, 1 left out by input.ignore[1] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$/
 ```
 
 The first line is the outcome: `chose`, `unidentified` when no definition
@@ -335,7 +335,7 @@ jz: explain: matched: detect.os linux
 jz: explain: matched: detect.args any [-h --human-readable -H --si]
 jz: explain: rejected: df/bsd: signature.all[0] /^Filesystem\s+512-blocks\s+Used\s+Available\s+Capa.../ did not match
 ...
-jz: explain: read: 12 lines: 12 read
+jz: explain: read: 12 lines: 11 read, 1 left out by input.ignore[1] /^Filesystem\s+Size\s+Used\s+Avail\s+Use%\s+Mounted on\s*$/
 jz: explain: command: df -h (exit 0)
 ```
 

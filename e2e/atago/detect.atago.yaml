@@ -192,7 +192,7 @@ scenarios:
 
   - name: text the definition cannot skip is a parse failure, not a silent guess
     # Detection finds the header further down, so a parser is chosen; the
-    # unexpected first line then fails conversion. jz reports which
+    # unexpected first line then fails to read. jz reports which
     # definition it chose and why the text did not fit, rather than trying
     # another one behind the user's back.
     steps:
@@ -204,7 +204,7 @@ scenarios:
           stdout:
             empty: true
           stderr:
-            contains: "df/gnu: line 2:"
+            contains: 'df/gnu: line 1: line does not match pattern'
 
   - name: a rounded size is reported as printed, not as invented bytes
     # `df -h` steps by 1024 and `df -H` by 1000, the output does not say
@@ -455,7 +455,7 @@ scenarios:
             contains: "jz: explain: matched: signature.all[0] /"
       - assert:
           stderr:
-            contains: "jz: explain: read: 8 lines: 8 read"
+            contains: "jz: explain: read: 8 lines: 7 read, 1 left out by input.ignore[1]"
       # Naming the parser reports the variants that were left out, which
       # is what makes a wrong variant traceable.
       - run:
@@ -480,7 +480,7 @@ scenarios:
               - { path: "$.chosen.definition", equals: df/gnu }
               - { path: "$.chosen.registry", equals: embedded }
               - { path: "$.read.lines", equals: 8 }
-              - { path: "$.read.read", equals: 8 }
+              - { path: "$.read.read", equals: 7 }
               - { path: "$.error", equals: null }
 
   # Detection that cannot decide says which kind of undecided it is:

@@ -20,15 +20,24 @@ detect:
   signature:
     all:
       - '^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
+# A file system's name may hold spaces (a FUSE mount named "photos 2024"),
+# so a line is read by what each column holds rather than split at
+# blanks: four figures, a percentage, and a mount point that starts at
+# "/". Split at blanks, "photos 2024" put 2024 in 1k_blocks and every
+# figure one column to the right. BusyBox prints a name longer than its
+# 20-column field on a line of its own and the figures, indented, on the
+# next; fold joins the two.
+#
 # df writes "df: /path: Permission denied" for mount points it cannot
 # stat; those lines land in the output when stderr is merged into it.
 input:
+  fold: '^[ \t]+[\d-]'
   ignore:
     - '^df: '
+    - '^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
 parse:
-  type: table
-  header:
-    columns: [filesystem, 1k_blocks, used, available, use_percent, mounted_on]
+  type: regex
+  pattern: '^(?P<filesystem>\S.*?)\s+(?P<1k_blocks>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*)$'
 fields:
   filesystem: {required: true}
   # df -a lists automount points nothing has mounted yet, and df prints a

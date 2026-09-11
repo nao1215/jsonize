@@ -33,7 +33,7 @@ func TestExplainReportsTheChoice(t *testing.T) {
 	if !strings.HasPrefix(lines[2], "jz: explain: matched: signature.all[0] /") {
 		t.Errorf("third line = %q", lines[2])
 	}
-	if last := lines[len(lines)-1]; last != "jz: explain: read: 3 lines: 3 read" {
+	if last := lines[len(lines)-1]; last != `jz: explain: read: 3 lines: 2 read, 1 left out by input.ignore[1] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$/` {
 		t.Errorf("last line = %q", last)
 	}
 	// No clock reading: two runs of the same input explain themselves

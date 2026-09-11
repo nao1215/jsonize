@@ -27,13 +27,16 @@ detect:
   signature:
     all:
       - '\AFilesystem\s+1024-blocks\s+Used\s+Available\s+Capacity\s+Mounted on\s*$'
+# A file system's name may hold spaces, so a line is read by what each
+# column holds (see df/gnu). With -P BusyBox keeps a long name on the
+# line of its figures.
 input:
   ignore:
     - '^df: '
+    - '\AFilesystem\s+1024-blocks\s+Used\s+Available\s+Capacity\s+Mounted on\s*$'
 parse:
-  type: table
-  header:
-    columns: [filesystem, 1024_blocks, used, available, capacity_percent, mounted_on]
+  type: regex
+  pattern: '^(?P<filesystem>\S.*?)\s+(?P<1024_blocks>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<capacity_percent>\d+%|-)\s+(?P<mounted_on>/.*)$'
 fields:
   filesystem: {required: true}
   1024_blocks: {type: int, null_if: ["-"]}
