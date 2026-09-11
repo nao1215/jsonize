@@ -305,6 +305,19 @@ scenarios:
               - { path: "$[0].tx.packets", gte: 0 }
               # An interface with no alternative names still has the key.
               - { path: "$[0].altnames", length: 0 }
+      # iproute2 takes any prefix of an object's name, and people type
+      # the shortest.
+      - run:
+          command: jz run ip -s l
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].interface.name", equals: lo }
+      - run:
+          command: jz run ip ro
+      - assert:
+          exit_code: 0
       # Without -s the same command prints no counter tables. It has a
       # definition of its own, and what this pins is that the two are not
       # confused: the plain form carries no counters at all.

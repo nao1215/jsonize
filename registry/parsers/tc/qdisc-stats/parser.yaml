@@ -24,8 +24,11 @@ metadata:
 detect:
   os: [linux]
   args:
-    any: ["-s", "-stats", "-statistics", "--statistics"]
-    all: ["qdisc"]
+    # iproute2 takes any prefix of an object's name ("ip ro", "ip -s l",
+    # "tc q"), and the first object in its table that the prefix fits is
+    # the one it runs, so each prefix is listed.
+    # The statistics are in the text, which the signature reads.
+    any: ["qdisc", "qdis", "qdi", "qd", "q"]
   signature:
     all:
       - '\Aqdisc \S+ [0-9a-f]+: (?:dev \S+ )?(?:root|parent [0-9a-f:]+)\b'

@@ -14,8 +14,12 @@ metadata:
 detect:
   os: [linux]
   args:
-    any: ["-s", "-stats", "--stats"]
-    all: ["link"]
+    # iproute2 takes any prefix of an object's name ("ip ro", "ip -s l",
+    # "tc q"), and the first object in its table that the prefix fits is
+    # the one it runs, so each prefix is listed.
+    # The statistics are in the text (-s, -stats and their prefixes all
+    # ask for them), which the signature reads.
+    any: ["link", "lin", "li", "l"]
   signature:
     all:
       # An index, a name, the flag list, and the counter tables that -s
