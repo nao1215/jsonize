@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (iproute2 6.x) with LC_ALL=C, three of the lines; the link-local addresses replaced
+description: a veth prints the interface at the other end after an at sign, if2 when that one is in another network namespace
+os: linux
+args: ["-br", "addr"]

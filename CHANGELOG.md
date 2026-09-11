@@ -209,6 +209,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `ip -brief link` and `ip -brief address` reported a veth as the
+  interface `veth0@if2`, a name no command accepts. The part after the
+  at sign is the `peer`, as `ip link` already read it.
 - The journal in its short formats was exit 3 as soon as a message ran
   over several lines or the output crossed a boot: `jz run journalctl
   -n 40000` stopped at a Qt warning continued on indented lines. The

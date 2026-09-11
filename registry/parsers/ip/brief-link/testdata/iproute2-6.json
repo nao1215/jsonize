@@ -65,7 +65,8 @@
     ]
   },
   {
-    "interface": "veth0c4293d@if2",
+    "interface": "veth0c4293d",
+    "peer": "if2",
     "state": "UP",
     "lladdr": "52:54:00:10:00:06",
     "flags": [
@@ -76,7 +77,8 @@
     ]
   },
   {
-    "interface": "veth9363d1f@if2",
+    "interface": "veth9363d1f",
+    "peer": "if2",
     "state": "UP",
     "lladdr": "52:54:00:10:00:07",
     "flags": [
@@ -87,7 +89,8 @@
     ]
   },
   {
-    "interface": "veth5d856b9@if2",
+    "interface": "veth5d856b9",
+    "peer": "if2",
     "state": "UP",
     "lladdr": "52:54:00:10:00:08",
     "flags": [
@@ -98,7 +101,8 @@
     ]
   },
   {
-    "interface": "veth0d5de59@if2",
+    "interface": "veth0d5de59",
+    "peer": "if2",
     "state": "UP",
     "lladdr": "52:54:00:10:00:09",
     "flags": [
@@ -109,7 +113,8 @@
     ]
   },
   {
-    "interface": "veth3083cdb@if2",
+    "interface": "veth3083cdb",
+    "peer": "if2",
     "state": "UP",
     "lladdr": "52:54:00:10:00:0a",
     "flags": [
@@ -120,7 +125,8 @@
     ]
   },
   {
-    "interface": "vethceffd70@if2",
+    "interface": "vethceffd70",
+    "peer": "if2",
     "state": "UP",
     "lladdr": "52:54:00:10:00:0b",
     "flags": [
@@ -131,7 +137,8 @@
     ]
   },
   {
-    "interface": "veth65bc625@if2",
+    "interface": "veth65bc625",
+    "peer": "if2",
     "state": "UP",
     "lladdr": "52:54:00:10:00:0c",
     "flags": [
