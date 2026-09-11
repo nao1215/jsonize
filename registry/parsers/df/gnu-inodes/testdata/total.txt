@@ -1,0 +1,4 @@
+Filesystem        Inodes   IUsed     IFree IUse% Mounted on
+/dev/nvme0n1p2 122028032 7448413 114579619    7% /
+/dev/nvme0n1p1         0       0         0     - /boot/efi
+total          122028032 7448413 114579619    7% -

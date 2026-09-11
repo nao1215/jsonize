@@ -1,0 +1,4 @@
+Filesystem     Type  Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2 ext4  1.8T  1.6T  164G  91% /
+/dev/nvme0n1p1 vfat  1.1G  6.4M  1.1G   1% /boot/efi
+total          -     1.8T  1.6T  165G  91% -

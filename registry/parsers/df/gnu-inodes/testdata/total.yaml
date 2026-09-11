@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) as df -i --total / /boot/efi with LC_ALL=C
+description: a vfat file system has no inodes, which is a dash for its percentage, and the total row closes the table
+os: linux
+args: [-i, --total, /, /boot/efi]

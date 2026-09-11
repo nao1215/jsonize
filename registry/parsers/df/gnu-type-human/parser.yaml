@@ -29,7 +29,9 @@ input:
     - '^Filesystem[ \t]+Type[ \t]+Size[ \t]+Used[ \t]+Avail[ \t]+Use%[ \t]+Mounted on[ \t]*$'
 parse:
   type: regex
-  pattern: '^(?P<filesystem>\S.*?)\s+(?P<type>\S+)\s+(?P<size>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*)$'
+  pattern: '^(?P<filesystem>\S.*?)\s+(?P<type>\S+)\s+(?P<size>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
+# --total closes the table with a row named total whose mount point (and
+# type) is a dash; it is kept, as printed, since it is what was asked for.
 fields:
   filesystem: {required: true}
   type: {required: true}

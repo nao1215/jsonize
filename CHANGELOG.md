@@ -224,6 +224,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run df --total` (with any of -h, -i, -T, -P) was exit 3 at the
+  closing row, whose mount point is a dash. The row is read, as
+  printed: filesystem `total`, mount point `-`.
 - `jz run ip -s l`, `ip ro`, `ip neig`, `tc q`, `bridge f` and the rest
   of the abbreviations iproute2 accepts were exit 4: the definitions
   named only the full word (and `r`, `n`), while iproute2 runs any

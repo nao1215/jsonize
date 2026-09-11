@@ -37,7 +37,9 @@ input:
     - '^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
 parse:
   type: regex
-  pattern: '^(?P<filesystem>\S.*?)\s+(?P<1k_blocks>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*)$'
+  pattern: '^(?P<filesystem>\S.*?)\s+(?P<1k_blocks>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
+# --total closes the table with a row named total whose mount point (and
+# type) is a dash; it is kept, as printed, since it is what was asked for.
 fields:
   filesystem: {required: true}
   # df -a lists automount points nothing has mounted yet, and df prints a

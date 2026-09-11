@@ -1,0 +1,26 @@
+[
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "inodes": 122028032,
+    "iused": 7448413,
+    "ifree": 114579619,
+    "iuse_percent": 7,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p1",
+    "inodes": 0,
+    "iused": 0,
+    "ifree": 0,
+    "iuse_percent": null,
+    "mounted_on": "/boot/efi"
+  },
+  {
+    "filesystem": "total",
+    "inodes": 122028032,
+    "iused": 7448413,
+    "ifree": 114579619,
+    "iuse_percent": 7,
+    "mounted_on": "-"
+  }
+]
