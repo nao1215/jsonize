@@ -22,7 +22,12 @@ parse:
   type: table
   split: aligned
 fields:
-  name: {required: true}
+  # lsblk draws the tree of devices in front of a name: a child starts
+  # with "|-" or "`-" in the C locale and "├─" or "└─" in a UTF-8 one,
+  # after "| " ("│ ") or two spaces for each level above it. The drawing
+  # is not part of the name. A name without it, a disk at the top, is
+  # kept whole.
+  name: {required: true, regex: '(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?(?P<name>.+)'}
   alignment: {type: int, required: true}
   min_io: {type: int, required: true}
   opt_io: {type: int, required: true}

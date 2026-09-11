@@ -32,7 +32,12 @@ parse:
 # optional column; a row that stops before RO is a truncated listing and
 # is reported as an error rather than filled with nulls.
 fields:
-  name: {required: true}
+  # lsblk draws the tree of devices in front of a name: a child starts
+  # with "|-" or "`-" in the C locale and "├─" or "└─" in a UTF-8 one,
+  # after "| " ("│ ") or two spaces for each level above it. The drawing
+  # is not part of the name. A name without it, a disk at the top, is
+  # kept whole.
+  name: {required: true, regex: '(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?(?P<name>.+)'}
   maj_min: {required: true}
   rm: {type: bool, required: true}
   # SIZE is rounded ("20G" for 20401094656 bytes) and lsblk offers -b for
