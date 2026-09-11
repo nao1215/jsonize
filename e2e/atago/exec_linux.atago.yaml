@@ -1002,6 +1002,26 @@ scenarios:
   # A name may begin or end with a space. The listings put a fixed
   # separator in front of the name, and what follows it is the name: a
   # leading space used to be taken for more of the separator and dropped.
+  # du -h prints an empty file as a plain 0, which is also what du/posix
+  # reads; the rounded size on the next line decides.
+  - name: du -h naming an empty file first lands on the rounded definition
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: "duh/empty"
+          content: ""
+      - fixture:
+          file: "duh/full"
+          content: "x\n"
+      - run:
+          command: jz run du -h duh/empty duh/full
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].size", equals: "0" }
+              - { path: "$[1].size", matches: "^[0-9.]+K$" }
+
   - name: a name that begins or ends with a space keeps it
     only: {os: linux}
     steps:
