@@ -22,7 +22,9 @@ parse:
   type: regex
   # `findmnt -s` lists /etc/fstab, where a swap area has no mount point
   # and the field holds none or swap, which findmnt prints as it is.
-  pattern: '^(?P<tree_prefix>[|`\-\s]*)(?P<target>/\S*|none|swap)\s+(?P<source>\S+)\s+(?P<fstype>\S+)\s+(?P<options>\S+)\s*$'
+  # The tree is drawn with |- and `- in the C locale and with box-drawing
+  # characters in a UTF-8 one, which is what a pipe from a shell carries.
+  pattern: '^(?P<tree_prefix>[|`\-\s│├└─]*)(?P<target>/\S*|none|swap)\s+(?P<source>\S+)\s+(?P<fstype>\S+)\s+(?P<options>\S+)\s*$'
 fields:
   target: {required: true}
   source: {required: true}

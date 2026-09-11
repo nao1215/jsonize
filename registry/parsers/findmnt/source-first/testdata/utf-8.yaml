@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) as findmnt -o SOURCE,TARGET,FSTYPE,OPTIONS with LC_ALL=C.UTF-8, the first twelve lines
+description: the tree in the middle column drawn with box-drawing characters
+os: linux
+args: [-o, "SOURCE,TARGET,FSTYPE,OPTIONS"]
