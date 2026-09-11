@@ -1,0 +1,4 @@
+description: Names with a space and a double quote inside, which the default quoting style leaves alone.
+source: captured on Ubuntu 26.04 with GNU tar 1.35, LC_ALL=C tar -tvf over an archive made for the fixture; the user name replaced
+os: linux
+args: [-tvf, kept.tar]

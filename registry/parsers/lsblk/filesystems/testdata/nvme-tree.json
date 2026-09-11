@@ -10,7 +10,7 @@
     "mountpoint": null
   },
   {
-    "name": "|-nvme1n1p1",
+    "name": "nvme1n1p1",
     "fstype": "vfat",
     "fsver": "FAT32",
     "label": null,
@@ -20,7 +20,7 @@
     "mountpoint": "/boot/efi"
   },
   {
-    "name": "`-nvme1n1p2",
+    "name": "nvme1n1p2",
     "fstype": "ext4",
     "fsver": "1.0",
     "label": null,
@@ -40,7 +40,7 @@
     "mountpoint": null
   },
   {
-    "name": "`-nvme0n1p1",
+    "name": "nvme0n1p1",
     "fstype": "ext4",
     "fsver": "1.0",
     "label": "2nd",

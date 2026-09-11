@@ -6,9 +6,13 @@
 #
 # Reading standard input leaves out the name, so the second pattern
 # covers the two cell line and file is absent from the object it makes.
-# A name containing a backslash or a newline is printed escaped, with a
-# backslash in front of the CRC to mark it; escaped is true on such a
-# line and absent everywhere else.
+# uutils prints a name holding a backslash, a newline or a carriage
+# return escaped, as "\\", "\n" and "\r", and puts a backslash in
+# front of the CRC to say so. Such a name is decoded; escaped is true on
+# its line and absent everywhere else. GNU cksum prints every name as it
+# is and never marks a line, so a line without the mark carries the name
+# as it is. A newline printed as it is splits the line, and the second
+# half is not a cksum line, so the text is refused.
 #
 # `cksum -a <algorithm>` prints a tagged line instead ("SHA256 (f) = ...")
 # and is not read here.
@@ -55,4 +59,6 @@ fields:
   escaped: {type: bool, true_values: ["\\"], when_missing: omit}
   checksum: {type: int, required: true}
   size: {type: int, required: true}
-  file: {when_missing: omit}
+  # The three escapes are all the format writes, so another one on a
+  # marked line is refused rather than guessed at.
+  file: {when_missing: omit, unescape: {when: escaped, sequences: {'\\': '\', '\n': "\n", '\r': "\r"}}}

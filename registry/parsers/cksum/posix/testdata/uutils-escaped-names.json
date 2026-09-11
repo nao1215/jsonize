@@ -1,0 +1,56 @@
+[
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/plain"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/sp ace"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/q\"uote"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/q'uote"
+  },
+  {
+    "escaped": true,
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/back\\slash"
+  },
+  {
+    "escaped": true,
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/lit\\nname"
+  },
+  {
+    "escaped": true,
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/nl\nname"
+  },
+  {
+    "escaped": true,
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/cr\rname"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/tab\tname"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/日本"
+  }
+]

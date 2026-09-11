@@ -1,8 +1,22 @@
-# /etc/crontab and the files in /etc/cron.d: five time fields, the user
-# the job runs as, and the command. The variable assignments these files
-# may carry (SHELL, PATH, MAILTO) are dropped: they are not jobs, and a
-# table cannot hold two kinds of row without one of them being a
-# different object shape than the other.
+# /etc/crontab and the files in /etc/cron.d hold two kinds of line:
+# variable assignments, which set the environment of the jobs after them
+# (SHELL, PATH, MAILTO, CRON_TZ), and jobs, which are five time fields or
+# an @ keyword, the user the job runs as, and the command. Both are kept,
+# in the order of the file, in one array, and kind says which a record
+# is: {kind: environment, name, value} or {kind: job, ...}. Only comments
+# and blank lines are dropped.
+#
+# The two cron implementations read an assignment differently. Debian's
+# cron takes the value up to a "#", refuses an empty one, and drops a
+# pair of quotes only when the value starts and ends with the same one;
+# cronie keeps a "#", takes an empty value, and refuses anything after a
+# closing quote. What is read here is the part they agree on, which is
+# what crontab(5) documents: name = value, spaces around "=" optional,
+# the value in single or double quotes to keep blanks at its ends or to
+# be empty, and trailing blanks of an unquoted value dropped. A line
+# outside it, such as NAME= with no quotes, a "#" in a value, or text
+# after the closing quote, is refused rather than read the way one of
+# them would.
 #
 # A user crontab has no user field and is otherwise the same text, so a
 # user crontab whose command is a bare word would read as a system entry
@@ -14,41 +28,58 @@
 format: 1
 command: etc
 variant: crontab
-description: /etc/crontab and /etc/cron.d job entries
+description: /etc/crontab and /etc/cron.d jobs and variable assignments
 metadata:
   tags: [linux, scheduling]
-  compatible: [cron, vixie-cron]
+  compatible: [cron, vixie-cron, cronie]
   references:
     - https://man7.org/linux/man-pages/man5/crontab.5.html
 detect:
   auto_detect: false
   signature:
     all:
-      # Five time fields, a user name, and a command. Written out rather
-      # than repeated with a count so that the day and month names cron
-      # accepts stay inside the fields that accept them.
-      - '^(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+\S'
+      # A job: five time fields, a user name, and a command. Written out
+      # rather than repeated with a count so that the day and month names
+      # cron accepts stay inside the fields that accept them. Or an
+      # assignment to a variable only cron gives a meaning to, which is
+      # what a file of assignments alone (cronie's stock /etc/crontab) has
+      # to go on; SHELL and PATH are in every environment file.
+      - '^(?:(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+\S|[ \t]*(?:MAILTO|MAILFROM|CRON_TZ|RANDOM_DELAY|CONTENT_TYPE|CONTENT_TRANSFER_ENCODING)(?: [ \t]*)?=)'
       # And nothing else in the file. One entry is not evidence: a script
       # that installs a cron entry carries one, and so does a document
       # that quotes one. A crontab is entries, variable assignments,
-      # comments and blank lines, all the way down.
-      - '\A(?:(?:[ \t]*#[^\n]*|[ \t]*[A-Za-z_][A-Za-z0-9_]*=[^\n]*|[ \t]*|(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*|@(?:reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*)\n)*(?:[ \t]*#[^\n]*|[ \t]*[A-Za-z_][A-Za-z0-9_]*=[^\n]*|[ \t]*|(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*|@(?:reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*)\z'
+      # comments and blank lines, all the way down. An assignment is any
+      # word before "=" here, so that one the patterns below refuse is
+      # refused as an assignment rather than as a text of another kind.
+      - '\A(?:(?:[ \t]*#[^\n]*|[ \t]*[^ \t\n#=][^ \t\n=]*[ \t]*=[^\n]*|[ \t]*|(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*|@(?:reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*)\n)*(?:[ \t]*#[^\n]*|[ \t]*[^ \t\n#=][^ \t\n=]*[ \t]*=[^\n]*|[ \t]*|(?:[-0-9*,/]+[ \t]+){3}[-0-9*,/a-zA-Z]+[ \t]+[-0-9*,/a-zA-Z]+[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*|@(?:reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+[A-Za-z_][A-Za-z0-9_.-]*[ \t]+[^\n]*)\z'
 input:
   ignore:
     - '^\s*#'
-    - '^\s*[A-Za-z_][A-Za-z0-9_]*='
 parse:
   type: regex
   patterns:
+    # Assignments first, as cron tries them first. The name is a word
+    # that does not start with a quote; Debian's cron counts a tab before
+    # "=" as part of it and cronie does not, so only spaces may come
+    # between. The value is in double quotes, in single quotes, or bare.
+    - pattern: '^[ \t]*(?P<name>[^ \t"''#=][^ \t=]*)(?: [ \t]*)?=[ \t]*"(?P<value>[^"#]*)"[ \t]*$'
+      values: {kind: environment}
+    - pattern: '^[ \t]*(?P<name>[^ \t"''#=][^ \t=]*)(?: [ \t]*)?=[ \t]*''(?P<value>[^''#]*)''[ \t]*$'
+      values: {kind: environment}
+    - pattern: '^[ \t]*(?P<name>[^ \t"''#=][^ \t=]*)(?: [ \t]*)?=[ \t]*(?P<value>[^ \t"''#](?:[^#]*[^ \t#])?)[ \t]*$'
+      values: {kind: environment}
     # The five time fields repeat the vocabulary the signature checked
     # for, rather than taking any non-blank word. A signature only has to
     # find one entry to vouch for the file, so a script that carries a
     # single cron line used to have its other lines read as entries too,
     # with `echo` as the minute and the rest of the sentence spread over
     # the remaining columns.
-    - '^(?P<minute>[-0-9*,/]+)[ \t]+(?P<hour>[-0-9*,/]+)[ \t]+(?P<day_of_month>[-0-9*,/]+)[ \t]+(?P<month>[-0-9*,/a-zA-Z]+)[ \t]+(?P<day_of_week>[-0-9*,/a-zA-Z]+)[ \t]+(?P<user>[A-Za-z_][A-Za-z0-9_.-]*)[ \t]+(?P<command>.+?)[ \t]*$'
-    - '^@(?P<special>reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+(?P<user>[A-Za-z_][A-Za-z0-9_.-]*)[ \t]+(?P<command>.+?)[ \t]*$'
+    - pattern: '^(?P<minute>[-0-9*,/]+)[ \t]+(?P<hour>[-0-9*,/]+)[ \t]+(?P<day_of_month>[-0-9*,/]+)[ \t]+(?P<month>[-0-9*,/a-zA-Z]+)[ \t]+(?P<day_of_week>[-0-9*,/a-zA-Z]+)[ \t]+(?P<user>[A-Za-z_][A-Za-z0-9_.-]*)[ \t]+(?P<command>.+?)[ \t]*$'
+      values: {kind: job}
+    - pattern: '^@(?P<special>reboot|yearly|annually|monthly|weekly|daily|midnight|hourly)[ \t]+(?P<user>[A-Za-z_][A-Za-z0-9_.-]*)[ \t]+(?P<command>.+?)[ \t]*$'
+      values: {kind: job}
 fields:
+  name: {required: true}
   user: {required: true}
   command: {required: true}
   minute: {when_missing: omit}

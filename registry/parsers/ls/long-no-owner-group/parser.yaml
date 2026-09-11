@@ -42,4 +42,9 @@ fields:
   major: {type: int}
   minor: {type: int}
   filename: {required: true}
-  link_to: {when_missing: omit}
+  # The pattern splits at the first " -> ", so any other one is in the
+  # target, and then the text says two things: the name may hold one as
+  # well as the target. So may a target that starts with "-> ", where two
+  # arrows share a space. Such a line is refused rather than read either
+  # way.
+  link_to: {when_missing: omit, regex: '(?P<link_to>(?: |- )*(?:(?:[^ -]|-[^ >]|->[^ ])(?:[^ ]| (?: |- )*(?:[^ -]|-[^ >]|->[^ ]))*(?: (?: |- )*(?:-|->)?)?|-|->)?)'}

@@ -9,7 +9,7 @@
     "mountpoint": null
   },
   {
-    "name": "|-nvme1n1p1",
+    "name": "nvme1n1p1",
     "maj_min": "259:1",
     "rm": false,
     "size": 1127219200,
@@ -18,7 +18,7 @@
     "mountpoint": "/boot/efi"
   },
   {
-    "name": "`-nvme1n1p2",
+    "name": "nvme1n1p2",
     "maj_min": "259:2",
     "rm": false,
     "size": 1999269527552,
@@ -36,7 +36,7 @@
     "mountpoint": null
   },
   {
-    "name": "`-nvme0n1p1",
+    "name": "nvme0n1p1",
     "maj_min": "259:4",
     "rm": false,
     "size": 2048406847488,

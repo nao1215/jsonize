@@ -1,0 +1,5 @@
+description: A name with a newline, which BusyBox prints as it is, so the member runs onto a second line that is not a member. It is refused.
+source: captured on Ubuntu 26.04 with BusyBox v1.37.0, LC_ALL=C busybox tar -tvf over an archive made for the fixture; the user name replaced
+os: linux
+args: [-tvf]
+expect_error: line does not match any of the 2 patterns

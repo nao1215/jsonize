@@ -1,0 +1,5 @@
+description: A name with a newline and a name with a backslash, which the default style writes as "\n" and "\\". The literal style prints other names the same way, so they are refused.
+source: captured on Ubuntu 26.04 with GNU tar 1.35, LC_ALL=C tar -tvf over an archive made for the fixture; the user name replaced
+os: linux
+args: [-tvf, backslash.tar]
+expect_error: does not have the shape

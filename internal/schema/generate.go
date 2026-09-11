@@ -70,7 +70,7 @@ func (g *generator) parse(p *definition.Parse, fields map[string]*definition.Fie
 	case definition.TypeTable, definition.TypeCSV:
 		return array(table(p, fields))
 	case definition.TypeRegex:
-		obj := regexObject(p.CompiledPatterns(), fields)
+		obj := regexObject(p.CompiledPatterns(), patternValues(p), fields)
 		if p.Each == definition.EachInput {
 			return obj
 		}
@@ -111,7 +111,7 @@ func tree(p *definition.Parse, name string) *Schema {
 	if p.Node.Parse.Type == definition.TypeKV {
 		node = kvEntry(&p.Node.Parse, p.Node.Fields)
 	} else {
-		node = regexObject(p.Node.Parse.CompiledPatterns(), p.Node.Fields)
+		node = regexObject(p.Node.Parse.CompiledPatterns(), patternValues(&p.Node.Parse), p.Node.Fields)
 	}
 	ref := &Schema{Ref: "#/$defs/" + name}
 	node.Properties = append(node.Properties, Property{Name: childrenKey, Schema: array(ref)})
@@ -234,7 +234,7 @@ func mapOf(fields map[string]*definition.Field, rest *Schema) *Schema {
 // becomes. A group every pattern has is required unless the definition
 // omits it; one that only some patterns have is not, since the objects
 // the others produce lack it.
-func regexObject(patterns []*regexp.Regexp, fields map[string]*definition.Field) *Schema {
+func regexObject(patterns []*regexp.Regexp, values [][]definition.Value, fields map[string]*definition.Field) *Schema {
 	type group struct {
 		name     string
 		in       int  // patterns that have it
@@ -244,8 +244,16 @@ func regexObject(patterns []*regexp.Regexp, fields map[string]*definition.Field)
 	}
 	var order []string
 	groups := map[string]*group{}
-	for _, re := range patterns {
-		for _, g := range captures(re) {
+	for i, re := range patterns {
+		// A value an alternative states is a key that alternative always
+		// gives, and the one text it can have.
+		caps := make([]capture, 0, 4)
+		if i < len(values) {
+			for _, v := range values[i] {
+				caps = append(caps, capture{name: v.Name, values: []string{v.Value}, finite: true})
+			}
+		}
+		for _, g := range append(caps, captures(re)...) {
 			cur, ok := groups[g.name]
 			if !ok {
 				cur = &group{name: g.name, enum: g.values, enumOK: g.finite}
@@ -276,6 +284,16 @@ func regexObject(patterns []*regexp.Regexp, fields map[string]*definition.Field)
 	return obj
 }
 
+// patternValues lists the fixed values of each alternative of a regex
+// parser, in the order the alternatives are tried.
+func patternValues(p *definition.Parse) [][]definition.Value {
+	out := make([][]definition.Value, len(p.CompiledPatterns()))
+	for i := range out {
+		out[i] = p.PatternValues(i)
+	}
+	return out
+}
+
 // value describes the value one field rule produces. missing says the
 // raw value can be absent (an empty cell, a group that did not take
 // part). The second result reports that the key itself may be left out,
@@ -288,7 +306,7 @@ func value(f *definition.Field, missing bool) (*Schema, bool) {
 		}
 		return &Schema{Type: []string{TypeString}}, false
 	}
-	empty := missing || len(f.NullIf) > 0
+	empty := missing || len(f.NullIf) > 0 || optionalGroup(f)
 	omit := f.WhenMissing == definition.MissingOmit
 	s := converted(f)
 	if empty && !f.Required && !omit {
@@ -319,7 +337,7 @@ func converted(f *definition.Field) *Schema {
 		}
 		return array(items)
 	case definition.FieldObject:
-		return regexObject([]*regexp.Regexp{f.CompiledRegex()}, f.Fields)
+		return regexObject([]*regexp.Regexp{f.CompiledRegex()}, nil, f.Fields)
 	default:
 		// string and time: a time is written as RFC 3339 when the text
 		// says what it means and kept as printed when it does not, and
@@ -332,7 +350,22 @@ func converted(f *definition.Field) *Schema {
 // group matched, so the values that group can match are the values the
 // key can have.
 func plainString(f *definition.Field) bool {
-	return f == nil || (f.EffectiveType() == definition.FieldString && f.TrimPrefix == "" && f.TrimSuffix == "" && len(f.NullIf) == 0)
+	return f == nil || (f.EffectiveType() == definition.FieldString && f.TrimPrefix == "" && f.TrimSuffix == "" && len(f.NullIf) == 0 &&
+		f.Regex == "" && f.Unescape == nil)
+}
+
+// optionalGroup reports a string field whose regex keeps a group the
+// value may leave out, which leaves the value missing.
+func optionalGroup(f *definition.Field) bool {
+	if f.EffectiveType() != definition.FieldString || f.CompiledRegex() == nil {
+		return false
+	}
+	for _, c := range captures(f.CompiledRegex()) {
+		if c.name == f.Group() {
+			return c.optional
+		}
+	}
+	return false
 }
 
 func sortedFields(fields map[string]*definition.Field) []string {

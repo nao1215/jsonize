@@ -1,0 +1,46 @@
+[
+  {
+    "checksum": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac",
+    "file": "names/plain"
+  },
+  {
+    "checksum": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac",
+    "file": "names/sp ace"
+  },
+  {
+    "checksum": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac",
+    "file": "names/q\"uote"
+  },
+  {
+    "checksum": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac",
+    "file": "names/q'uote"
+  },
+  {
+    "escaped": true,
+    "checksum": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac",
+    "file": "names/back\\slash"
+  },
+  {
+    "escaped": true,
+    "checksum": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac",
+    "file": "names/lit\\nname"
+  },
+  {
+    "escaped": true,
+    "checksum": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac",
+    "file": "names/nl\nname"
+  },
+  {
+    "escaped": true,
+    "checksum": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac",
+    "file": "names/cr\rname"
+  },
+  {
+    "checksum": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac",
+    "file": "names/tab\tname"
+  },
+  {
+    "checksum": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac",
+    "file": "names/日本"
+  }
+]

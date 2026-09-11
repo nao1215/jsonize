@@ -1,6 +1,7 @@
 package registry
 
 import (
+	"encoding/json"
 	"flag"
 	"os"
 	"path/filepath"
@@ -11,6 +12,8 @@ import (
 
 	"github.com/nao1215/jsonize/internal/conformance"
 	"github.com/nao1215/jsonize/internal/schema"
+	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/registry"
 )
 
@@ -181,6 +184,95 @@ func TestSchemasAgainstBase(t *testing.T) {
 	}
 	for _, p := range problems {
 		t.Error(p)
+	}
+}
+
+// TestLsblkTreeDrawing reads trees deeper than a fixture can show. lsblk
+// draws a level below a partition only for a stack such as LUKS or LVM,
+// which the machine the fixtures come from does not have, so the text is
+// written here the way util-linux draws it: two characters per level
+// above a device and two in front of it.
+func TestLsblkTreeDrawing(t *testing.T) {
+	reg, err := registry.Load(registry.Source{Name: "embedded", FS: FS()})
+	if err != nil {
+		t.Fatal(err)
+	}
+	e, ok := reg.Lookup("lsblk", "linux")
+	if !ok {
+		t.Fatal("lsblk/linux is not in the registry")
+	}
+	want := []string{"sda", "sda1", "cryptroot", "vg-root", "vg-home", "sdb", "sdb1", "md0", "-odd", "sdb2"}
+	tests := []struct {
+		name  string
+		input string
+	}{
+		{
+			name: "C locale",
+			input: "NAME            MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINTS\n" +
+				"sda               8:0    0  100G  0 disk  \n" +
+				"`-sda1            8:1    0  100G  0 part  \n" +
+				"  `-cryptroot   252:0    0  100G  0 crypt \n" +
+				"    |-vg-root   252:1    0   50G  0 lvm   /\n" +
+				"    `-vg-home   252:2    0   50G  0 lvm   /home\n" +
+				"sdb               8:16   0   10G  0 disk  \n" +
+				"|-sdb1            8:17   0    5G  0 part  \n" +
+				"| |-md0           9:0    0    5G  0 raid1 /srv\n" +
+				"| `--odd        252:3    0    1G  0 lvm   \n" +
+				"`-sdb2            8:18   0    5G  0 part  [SWAP]\n",
+		},
+		{
+			name: "UTF-8",
+			input: "NAME            MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINTS\n" +
+				"sda               8:0    0  100G  0 disk  \n" +
+				"└─sda1            8:1    0  100G  0 part  \n" +
+				"  └─cryptroot   252:0    0  100G  0 crypt \n" +
+				"    ├─vg-root   252:1    0   50G  0 lvm   /\n" +
+				"    └─vg-home   252:2    0   50G  0 lvm   /home\n" +
+				"sdb               8:16   0   10G  0 disk  \n" +
+				"├─sdb1            8:17   0    5G  0 part  \n" +
+				"│ ├─md0           9:0    0    5G  0 raid1 /srv\n" +
+				"│ └─-odd        252:3    0    1G  0 lvm   \n" +
+				"└─sdb2            8:18   0    5G  0 part  [SWAP]\n",
+		},
+		{
+			name: "no tree",
+			input: "NAME      MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINTS\n" +
+				"sda         8:0    0  100G  0 disk  \n" +
+				"sda1        8:1    0  100G  0 part  \n" +
+				"cryptroot 252:0    0  100G  0 crypt \n" +
+				"vg-root   252:1    0   50G  0 lvm   /\n" +
+				"vg-home   252:2    0   50G  0 lvm   /home\n" +
+				"sdb         8:16   0   10G  0 disk  \n" +
+				"sdb1        8:17   0    5G  0 part  \n" +
+				"md0         9:0    0    5G  0 raid1 /srv\n" +
+				"-odd      252:3    0    1G  0 lvm   \n" +
+				"sdb2        8:18   0    5G  0 part  [SWAP]\n",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			v, err := engine.Parse(e.Def, []byte(tt.input), engine.Options{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			data, err := jsonutil.Marshal(v)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var rows []struct {
+				Name string `json:"name"`
+			}
+			if err := json.Unmarshal(data, &rows); err != nil {
+				t.Fatal(err)
+			}
+			got := make([]string, 0, len(rows))
+			for _, r := range rows {
+				got = append(got, r.Name)
+			}
+			if strings.Join(got, ",") != strings.Join(want, ",") {
+				t.Errorf("names = %q, want %q", got, want)
+			}
+		})
 	}
 }
 

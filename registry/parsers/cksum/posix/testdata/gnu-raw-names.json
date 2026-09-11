@@ -1,0 +1,42 @@
+[
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/plain"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/sp ace"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/q\"uote"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/q'uote"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/back\\slash"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/lit\\nname"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/tab\tname"
+  },
+  {
+    "checksum": 2192966820,
+    "size": 2,
+    "file": "names/日本"
+  }
+]

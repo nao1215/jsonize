@@ -1,0 +1,8 @@
+source: captured on Ubuntu 26.04 with GNU coreutils 9.7 (gnuwc), LC_ALL=C wc over files made for the fixture
+description: >
+  The same names and one with a newline, which wc quotes as
+  'names/nl'$'\n''name'. A file may have that text for its name, so
+  the line is refused rather than decoded.
+os: linux
+args: []
+expect_error: does not have the shape

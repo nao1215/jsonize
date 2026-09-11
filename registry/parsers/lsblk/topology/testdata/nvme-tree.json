@@ -13,7 +13,7 @@
     "wsame": "0B"
   },
   {
-    "name": "|-nvme1n1p1",
+    "name": "nvme1n1p1",
     "alignment": 0,
     "min_io": 512,
     "opt_io": 0,
@@ -26,7 +26,7 @@
     "wsame": "0B"
   },
   {
-    "name": "`-nvme1n1p2",
+    "name": "nvme1n1p2",
     "alignment": 0,
     "min_io": 512,
     "opt_io": 0,
@@ -52,7 +52,7 @@
     "wsame": "0B"
   },
   {
-    "name": "`-nvme0n1p1",
+    "name": "nvme0n1p1",
     "alignment": 0,
     "min_io": 512,
     "opt_io": 0,

@@ -8,6 +8,11 @@
 # above 127 ("docs/\346\227\245..."); jz does not decode it. Run
 # `git -c core.quotePath=false status --porcelain` to get the raw name.
 #
+# The quoting is also what makes a rename line say one thing. A name with
+# a space in it is always quoted, so " -> " outside quotes is the
+# separator and nothing else; "a -> b" -> c is a rename of "a -> b". A
+# rename line that is not two such paths is refused.
+#
 # This is porcelain v1 only. `--porcelain=v2` prints a different format
 # (header lines, a mode and two object names per entry) that this
 # definition rejects rather than misreads.
@@ -33,9 +38,11 @@ detect:
 parse:
   type: regex
   patterns:
-    # Only R and C in the index column make " -> " a path separator.
-    - '^(?P<index>[RC])(?P<worktree>.) (?P<path>.+?) -> (?P<renamed_to>.+)$'
-    - '^(?P<index>.)(?P<worktree>.) (?P<path>.+)$'
+    # Only R and C make " -> " a path separator, in the index column or,
+    # for a file added with --intent-to-add, in the work tree column.
+    - '^(?P<index>[RC])(?P<worktree>.) (?P<path>"(?:[^"\\]|\\.)*"|[^" ][^ ]*) -> (?P<renamed_to>"(?:[^"\\]|\\.)*"|[^" ][^ ]*)$'
+    - '^(?P<index>[^RC])(?P<worktree>[RC]) (?P<path>"(?:[^"\\]|\\.)*"|[^" ][^ ]*) -> (?P<renamed_to>"(?:[^"\\]|\\.)*"|[^" ][^ ]*)$'
+    - '^(?P<index>[^RC])(?P<worktree>[^RC]) (?P<path>.+)$'
 fields:
   index: {null_if: [""]}
   worktree: {null_if: [""]}

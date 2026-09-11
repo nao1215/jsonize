@@ -1,5 +1,11 @@
 [
   {
+    "kind": "environment",
+    "name": "SHELL",
+    "value": "/bin/sh"
+  },
+  {
+    "kind": "job",
     "minute": "17",
     "hour": "*",
     "day_of_month": "*",
@@ -9,6 +15,7 @@
     "command": "cd / && run-parts --report /etc/cron.hourly"
   },
   {
+    "kind": "job",
     "minute": "25",
     "hour": "6",
     "day_of_month": "*",
@@ -18,6 +25,7 @@
     "command": "test -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.daily; }"
   },
   {
+    "kind": "job",
     "minute": "47",
     "hour": "6",
     "day_of_month": "*",
@@ -27,6 +35,7 @@
     "command": "test -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.weekly; }"
   },
   {
+    "kind": "job",
     "minute": "52",
     "hour": "6",
     "day_of_month": "1",

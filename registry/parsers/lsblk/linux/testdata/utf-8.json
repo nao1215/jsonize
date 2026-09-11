@@ -1,0 +1,47 @@
+[
+  {
+    "name": "nvme0n1",
+    "maj_min": "259:0",
+    "rm": false,
+    "size": "1.8T",
+    "ro": false,
+    "type": "disk",
+    "mountpoint": null
+  },
+  {
+    "name": "nvme0n1p1",
+    "maj_min": "259:1",
+    "rm": false,
+    "size": "1G",
+    "ro": false,
+    "type": "part",
+    "mountpoint": "/boot/efi"
+  },
+  {
+    "name": "nvme0n1p2",
+    "maj_min": "259:2",
+    "rm": false,
+    "size": "1.8T",
+    "ro": false,
+    "type": "part",
+    "mountpoint": "/"
+  },
+  {
+    "name": "nvme1n1",
+    "maj_min": "259:3",
+    "rm": false,
+    "size": "1.9T",
+    "ro": false,
+    "type": "disk",
+    "mountpoint": null
+  },
+  {
+    "name": "nvme1n1p1",
+    "maj_min": "259:4",
+    "rm": false,
+    "size": "1.9T",
+    "ro": false,
+    "type": "part",
+    "mountpoint": "/media/usr/2nd"
+  }
+]

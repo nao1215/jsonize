@@ -8,6 +8,41 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `etc/crontab` keeps the variable assignments of the file (contract
+  version 2). SHELL, PATH, MAILTO and CRON_TZ change what the jobs after
+  them do, and they were dropped. Assignments and jobs are one array in
+  the order of the file, each record with `kind`: `environment` with
+  `name` and `value`, or `job` with the fields a job had. The value is
+  read by the part of the crontab(5) grammar Debian's cron and cronie
+  agree on (quotes keep blanks and allow an empty value, `=` may appear
+  in a value); `NAME=` without quotes, a `#` in a value and text after a
+  closing quote are exit 3. A file of assignments alone, as cronie
+  installs `/etc/crontab`, is read when it sets a variable only cron
+  uses, such as MAILTO.
+- `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`,
+  `sha512sum` and `cksum` decode a name printed escaped. GNU and uutils
+  mark such a line with a backslash in front of the checksum and write a
+  backslash, a newline and a carriage return as `\\`, `\n` and `\r`;
+  `file` used to be the escaped text (`back\\slash.txt`). A line without
+  the mark, which is every line BusyBox and GNU cksum print, is left as
+  it is.
+- The `lsblk` definitions report `name` without the tree lsblk draws in
+  front of a child device (`|-nvme0n1p1`, `└─nvme0n1p1`), at any depth.
+- A symbolic link line with more than one ` -> ` is exit 3 in the `ls`
+  long listings, `tar`, `namei`, `rsync --itemize-changes` and `tree`.
+  `link -> odd -> plain` is a link named `link -> odd` or a link to
+  `odd -> plain`, and it used to be read as the second at exit 0.
+  `git status --porcelain` splits a rename at the ` -> ` outside the
+  quotes git puts around a name with a space, and reads a rename in the
+  work tree column as one; `R  "a -> b" -> c` used to give the path `"a`.
+- `tar/gnu` refuses a member name or link target with a backslash in it
+  or a quote at its start, and `wc` a name with `$'` in it. Both are a
+  name quoted by an option or an implementation the text does not name
+  (GNU tar's `--quoting-style`, GNU wc's quoting of a name with a
+  newline), and the same text is also a name printed as it is. Under
+  `jz run`, which runs tar in the C locale, that includes a non-ASCII
+  name tar writes in octal; `jz run --keep-locale` in a UTF-8 locale
+  gets it as it is.
 - The five `ls` long listings read a device file (contract version 2).
   ls prints a device's major and minor numbers where the size goes
   (`crw-rw-rw- 1 root root 1, 3 ... /dev/null`), and every definition
@@ -110,6 +145,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Three keys in the definition format. A string field takes `regex`,
+  whose one named group is the part of the value kept, and `unescape`,
+  the escapes a format writes and what each stands for, applied only on
+  a line where the group `when` names matched some text. An alternative in
+  `patterns` may state `values`, keys it always gives, which is how
+  `etc/crontab` marks its two kinds of line.
 - Every definition has a JSON Schema of its output, derived from the
   definition: keys, types, which keys are always there, which values may
   be null, the values a key can take when the definition names them.

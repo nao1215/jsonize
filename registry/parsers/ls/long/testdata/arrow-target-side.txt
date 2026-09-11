@@ -1,0 +1,3 @@
+total 4
+-rw-rw-r-- 1 alice alice 8 Sep 11 03:09 a -> b
+lrwxrwxrwx 1 alice alice 6 Sep 11 03:09 to-arrow -> a -> b

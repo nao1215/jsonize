@@ -1,0 +1,5 @@
+description: A link named "link -> odd" that points at plain. The line also reads as a link named link that points at "odd -> plain", so it is refused.
+source: captured on Ubuntu 26.04 with GNU tar 1.35, LC_ALL=C tar -tvf over an archive made for the fixture; the user name replaced
+os: linux
+args: [-tvf, name.tar]
+expect_error: does not have the shape

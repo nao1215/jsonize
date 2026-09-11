@@ -41,4 +41,10 @@ fields:
   lines: {type: int, required: true}
   words: {type: int, required: true}
   bytes: {type: int, required: true}
-  filename: {when_missing: omit}
+  # GNU and uutils wc print a name as it is unless it holds a newline,
+  # and then quote it the way a shell reads it: 'a'$'\n''b'. A name as it
+  # is may hold those characters too, so a name with $' in it says two
+  # things and is refused rather than decoded by guess. BusyBox and macOS
+  # print the newline as it is, which splits the line, and the second
+  # half is not a wc line.
+  filename: {when_missing: omit, regex: '(?P<filename>(?:[^$]|\$+[^$''])*\$*)'}

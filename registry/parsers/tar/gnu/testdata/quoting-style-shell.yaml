@@ -1,0 +1,5 @@
+description: The names of names-kept under --quoting-style=shell, which puts them in single quotes. A name that starts with a quote is refused.
+source: captured on Ubuntu 26.04 with GNU tar 1.35, LC_ALL=C tar --quoting-style=shell -tvf over an archive made for the fixture; the user name replaced
+os: linux
+args: [--quoting-style=shell, -tvf, kept.tar]
+expect_error: does not have the shape

@@ -1,0 +1,17 @@
+[
+  {
+    "kind": "environment",
+    "name": "SHELL",
+    "value": "/bin/bash"
+  },
+  {
+    "kind": "environment",
+    "name": "PATH",
+    "value": "/sbin:/bin:/usr/sbin:/usr/bin"
+  },
+  {
+    "kind": "environment",
+    "name": "MAILTO",
+    "value": "root"
+  }
+]

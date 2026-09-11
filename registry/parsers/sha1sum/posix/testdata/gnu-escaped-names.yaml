@@ -1,0 +1,10 @@
+source: captured on Ubuntu 26.04 with GNU coreutils 9.7 (gnusha1sum), LC_ALL=C sha1sum over files made for the fixture
+description: >
+  Ten names: plain, with a space, with a double and a single quote,
+  with a backslash, with a backslash and an n (not a newline), with a
+  newline, with a carriage return, with a tab and in Japanese. The
+  backslash, newline and carriage return lines are marked and escaped,
+  and read back as the names they are; the tab and the Japanese name
+  are printed as they are.
+os: linux
+args: []

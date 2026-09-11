@@ -1,0 +1,7 @@
+source: GNU coreutils 9.7 (gnuls) on Ubuntu 26.04, LC_ALL=C TZ=UTC ls -l over a directory made for the fixture; the user name replaced
+description: >
+  a link pointing at a file named "a -> b". The line reads as that or as a link named "to-arrow -> a" pointing at b. Nothing in the text decides between them, so the line is
+  refused.
+os: linux
+args: ["-l"]
+expect_error: does not have the shape

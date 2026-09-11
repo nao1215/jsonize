@@ -40,7 +40,7 @@ lacks:
 |---------|-------------------------|---------|
 | `iostat`, `mpstat`, `vmstat` | `sysstat`, `procps` | `exec_linux` |
 | `busybox` | `busybox` | `exec_linux` |
-| `df`, `free`, `ps`, `uptime`, `id`, `env`, `mount`, `du`, `stat`, `lscpu`, `lsmod`, `who`, `wc` | on every runner | `exec_linux` |
+| `df`, `free`, `ps`, `uptime`, `id`, `env`, `mount`, `du`, `stat`, `lscpu`, `lsmod`, `who`, `wc`, `ls`, `ln`, `md5sum`, `sha256sum`, `tar`, `git` | on every runner | `exec_linux` |
 | `ip`, `dpkg`, `apt-cache` | on every runner | `exec_linux` |
 | `go` | the toolchain | `process` builds `e2ehelper` |
 

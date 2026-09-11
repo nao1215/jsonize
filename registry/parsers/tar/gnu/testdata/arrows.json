@@ -1,0 +1,39 @@
+[
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-09-11",
+    "time": "03:09",
+    "name": "ok/"
+  },
+  {
+    "mode": "lrwxrwxrwx",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-09-11",
+    "time": "03:09",
+    "name": "ok/link",
+    "link_to": "target"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 7,
+    "date": "2026-09-11",
+    "time": "03:09",
+    "name": "ok/target"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 8,
+    "date": "2026-09-11",
+    "time": "03:09",
+    "name": "ok/a -> b"
+  }
+]

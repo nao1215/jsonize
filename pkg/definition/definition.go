@@ -360,8 +360,8 @@ type Parse struct {
 	// matches wins. They let a definition treat structurally different
 	// lines differently (an ls symlink line and an ordinary one) without
 	// a single expression having to guess.
-	Patterns []string `yaml:"patterns,omitempty"`
-	Each     string   `yaml:"each,omitempty"`
+	Patterns []Alternative `yaml:"patterns,omitempty"`
+	Each     string        `yaml:"each,omitempty"`
 
 	// kv
 	Separator string `yaml:"separator,omitempty"`
@@ -395,7 +395,10 @@ type Parse struct {
 	Start string `yaml:"start,omitempty"`
 
 	compiled []*regexp.Regexp
-	start    *regexp.Regexp
+	// values are the fixed values each compiled pattern adds, in the
+	// same order.
+	values [][]Value
+	start  *regexp.Regexp
 	// groups are the named capture groups of every pattern, in order and
 	// without duplicates.
 	groups []string
@@ -424,6 +427,15 @@ func (p *Parse) CompiledStart() *regexp.Regexp { return p.start }
 // the order they are tried.
 func (p *Parse) CompiledPatterns() []*regexp.Regexp { return p.compiled }
 
+// PatternValues returns the fixed values the i-th compiled pattern adds
+// to what it reads.
+func (p *Parse) PatternValues(i int) []Value {
+	if i < 0 || i >= len(p.values) {
+		return nil
+	}
+	return p.values[i]
+}
+
 // Groups returns the named capture groups of every pattern.
 func (p *Parse) Groups() []string { return p.groups }
 
@@ -432,7 +444,46 @@ func (p *Parse) PatternSources() []string {
 	if p.Pattern != "" {
 		return []string{p.Pattern}
 	}
-	return p.Patterns
+	if len(p.Patterns) == 0 {
+		return nil
+	}
+	out := make([]string, len(p.Patterns))
+	for i, a := range p.Patterns {
+		out[i] = a.Pattern
+	}
+	return out
+}
+
+// Alternative is one entry of patterns: an expression, and the values a
+// line it matches carries whatever its text says. The values are what
+// the line is rather than what it prints (a crontab line that sets a
+// variable and one that schedules a job), so a record can say which it
+// is. An entry written as a plain string is an expression with none.
+type Alternative struct {
+	Pattern string            `yaml:"pattern"`
+	Values  map[string]string `yaml:"values,omitempty"`
+}
+
+// UnmarshalYAML accepts a string or a mapping of pattern and values.
+func (a *Alternative) UnmarshalYAML(b []byte) error {
+	var one string
+	if err := DecodeYAML(b, &one); err == nil {
+		*a = Alternative{Pattern: one}
+		return nil
+	}
+	type plain Alternative
+	var full plain
+	if err := DecodeYAML(b, &full); err != nil {
+		return fmt.Errorf("a pattern is a string, or a mapping of pattern and values: %w", err)
+	}
+	*a = Alternative(full)
+	return nil
+}
+
+// Value is one fixed key and value an alternative adds.
+type Value struct {
+	Name  string
+	Value string
 }
 
 // TrimCells reports the effective kv trim setting.
@@ -556,13 +607,70 @@ type Field struct {
 	SplitRegex string `yaml:"split_regex,omitempty"`
 	Items      *Field `yaml:"items,omitempty"`
 
+	// Regex is how an object field is cut into keys. On a string field it
+	// is the shape the whole value has to have, and its one named group
+	// is the part of it that is the value: the name under the tree lsblk
+	// draws in front of it.
+	Regex string `yaml:"regex,omitempty"`
 	// object
-	Regex  string            `yaml:"regex,omitempty"`
 	Fields map[string]*Field `yaml:"fields,omitempty"`
+
+	// Unescape undoes the escapes a command writes into a string value
+	// (md5sum's "\n" for a newline in a file name), exactly the ones it
+	// lists.
+	Unescape *Unescape `yaml:"unescape,omitempty"`
 
 	splitRegex *regexp.Regexp
 	regex      *regexp.Regexp
 	groups     []string
+}
+
+// Unescape lists the escapes one format writes and what each stands for.
+// Every escape begins with the same character, and an occurrence of it
+// that begins none of them is an error rather than something kept: the
+// text is then not the format the definition describes.
+type Unescape struct {
+	// When names a group of the same pattern. The value is decoded only
+	// when that group matched some text: GNU md5sum marks a line
+	// whose name it escaped with a backslash in front of the checksum,
+	// and a line without it holds the name as it is.
+	When string `yaml:"when,omitempty"`
+	// Sequences maps each escape, as it is written, to the text it
+	// stands for.
+	Sequences map[string]string `yaml:"sequences"`
+}
+
+// Decode replaces each escape in s. It reports false when s holds the
+// escape character where no listed escape begins.
+func (u *Unescape) Decode(s string) (string, bool) {
+	var esc byte
+	for k := range u.Sequences {
+		esc = k[0]
+		break
+	}
+	if strings.IndexByte(s, esc) < 0 {
+		return s, true
+	}
+	var b strings.Builder
+	for i := 0; i < len(s); {
+		if s[i] != esc {
+			b.WriteByte(s[i])
+			i++
+			continue
+		}
+		best := ""
+		for k := range u.Sequences {
+			if len(k) > len(best) && strings.HasPrefix(s[i:], k) {
+				best = k
+			}
+		}
+		if best == "" {
+			return "", false
+		}
+		b.WriteString(u.Sequences[best])
+		i += len(best)
+	}
+	return b.String(), true
 }
 
 // EffectiveType returns the type, defaulting to string.
@@ -578,6 +686,15 @@ func (f *Field) CompiledSplit() *regexp.Regexp { return f.splitRegex }
 
 // CompiledRegex returns the compiled object regex (may be nil).
 func (f *Field) CompiledRegex() *regexp.Regexp { return f.regex }
+
+// Group returns the named group of a string field's regex, the part of
+// the value that is kept.
+func (f *Field) Group() string {
+	if len(f.groups) == 0 {
+		return ""
+	}
+	return f.groups[0]
+}
 
 // Groups returns the named groups of the object regex.
 func (f *Field) Groups() []string { return f.groups }

@@ -1,0 +1,4 @@
+drwxrwxr-x alice/alice         0 2026-09-11 03:09:17 ok/
+lrwxrwxrwx alice/alice         0 2026-09-11 03:09:00 ok/link -> target
+-rw-rw-r-- alice/alice         7 2026-09-11 03:09:00 ok/target
+-rw-rw-r-- alice/alice         8 2026-09-11 03:09:00 ok/a -> b

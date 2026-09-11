@@ -644,3 +644,44 @@ scenarios:
           exit_code: 4
           stdout:
             empty: true
+
+  # A crontab assignment changes what the jobs after it do, so it is kept
+  # in its place. One that Debian's cron and cronie read differently is
+  # refused rather than read the way one of them would.
+  - name: crontab assignments keep their place, and one read two ways is refused
+    steps:
+      - fixture:
+          file: crontab
+          content: |
+            SHELL=/bin/sh
+            MAILTO=""
+            0 1 * * * root /usr/local/bin/first
+            CRON_TZ = 'Asia/Tokyo'
+            30 2 * * * root /usr/local/bin/second
+      - run:
+          command: jz --parser etc --variant crontab --file crontab
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 5 }
+              - { path: "$[0].kind", equals: environment }
+              - { path: "$[0].name", equals: SHELL }
+              - { path: "$[1].value", equals: "" }
+              - { path: "$[2].kind", equals: job }
+              - { path: "$[2].user", equals: root }
+              - { path: "$[3].name", equals: CRON_TZ }
+              - { path: "$[3].value", equals: Asia/Tokyo }
+      - fixture:
+          file: crontab-empty
+          content: |
+            MAILTO=
+            0 1 * * * root /usr/local/bin/first
+      - run:
+          command: jz --parser etc --variant crontab --file crontab-empty
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+          stderr:
+            contains: "line 1"

@@ -1,0 +1,10 @@
+ 1  1  2 names/plain
+ 1  1  2 names/sp ace
+ 1  1  2 names/q"uote
+ 1  1  2 names/q'uote
+ 1  1  2 names/back\slash
+ 1  1  2 names/lit\nname
+ 1  1  2 'names/nl'$'\n''name'
+ 1  1  2 names/tab	name
+ 1  1  2 names/日本
+ 9  9 18 total

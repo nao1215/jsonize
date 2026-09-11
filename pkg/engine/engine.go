@@ -477,11 +477,11 @@ func (r *run) parseRegex(p *definition.Parse, fields map[string]*definition.Fiel
 			texts[i] = l.text
 		}
 		text := strings.Join(texts, "\n")
-		re, m := firstMatch(patterns, text)
+		re, m, which := firstMatch(patterns, text)
 		if m == nil {
 			return nil, r.errorf(0, "", "input does not match %s", describePatterns(p))
 		}
-		obj, err := r.objectFromMatch(re, text, m, fields, firstLine(lines))
+		obj, err := r.objectFromMatch(re, text, m, p.PatternValues(which), fields, firstLine(lines))
 		if err != nil {
 			return nil, err
 		}
@@ -492,14 +492,14 @@ func (r *run) parseRegex(p *definition.Parse, fields map[string]*definition.Fiel
 	}
 	out := make([]any, 0, len(lines))
 	for _, l := range lines {
-		re, m := firstMatch(patterns, l.text)
+		re, m, which := firstMatch(patterns, l.text)
 		if m == nil {
 			return nil, r.errorf(l.num, "", "line does not match %s: %q", describePatterns(p), truncate(l.text, 80))
 		}
 		if err := r.checkWhole(l, m[0], m[1]); err != nil {
 			return nil, err
 		}
-		obj, err := r.objectFromMatch(re, l.text, m, fields, l.num)
+		obj, err := r.objectFromMatch(re, l.text, m, p.PatternValues(which), fields, l.num)
 		if err != nil {
 			return nil, err
 		}
@@ -510,13 +510,13 @@ func (r *run) parseRegex(p *definition.Parse, fields map[string]*definition.Fiel
 
 // firstMatch returns the first pattern that matches and its submatch
 // indices.
-func firstMatch(patterns []*regexp.Regexp, text string) (*regexp.Regexp, []int) {
-	for _, re := range patterns {
+func firstMatch(patterns []*regexp.Regexp, text string) (*regexp.Regexp, []int, int) {
+	for i, re := range patterns {
 		if m := re.FindStringSubmatchIndex(text); m != nil {
-			return re, m
+			return re, m, i
 		}
 	}
-	return nil, nil
+	return nil, nil, -1
 }
 
 // describePatterns renders the alternatives for an error message.
@@ -550,10 +550,22 @@ func truncate(s string, n int) string {
 	return s[:n] + "..."
 }
 
-// objectFromMatch builds an object from a submatch index slice.
-func (r *run) objectFromMatch(re *regexp.Regexp, text string, m []int, fields map[string]*definition.Field, ln int) (*jsonutil.Object, error) {
+// objectFromMatch builds an object from a submatch index slice. vals are
+// the fixed values the pattern that matched adds, which come first.
+func (r *run) objectFromMatch(re *regexp.Regexp, text string, m []int, vals []definition.Value, fields map[string]*definition.Field, ln int) (*jsonutil.Object, error) {
 	obj := jsonutil.NewObject()
+	for _, v := range vals {
+		if err := r.setField(obj, v.Name, v.Value, fields[v.Name], ln); err != nil {
+			return nil, err
+		}
+	}
 	names := re.SubexpNames()
+	present := map[string]bool{}
+	for i, name := range names {
+		if name != "" && m[2*i] >= 0 && m[2*i+1] > m[2*i] {
+			present[name] = true
+		}
+	}
 	for i, name := range names {
 		if name == "" {
 			continue
@@ -562,7 +574,7 @@ func (r *run) objectFromMatch(re *regexp.Regexp, text string, m []int, fields ma
 		if m[2*i] >= 0 {
 			raw = text[m[2*i]:m[2*i+1]]
 		}
-		if err := r.setField(obj, name, raw, fields[name], ln); err != nil {
+		if err := r.setMatched(obj, name, raw, fields[name], ln, present); err != nil {
 			return nil, err
 		}
 	}

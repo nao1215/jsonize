@@ -149,6 +149,32 @@ fields:
 		t.Errorf("separator = %q", d.Input.Separator())
 	}
 
+	// An alternative may state values of its own, kept in the order of
+	// their names; a plain string is an alternative with none.
+	d, err = Load([]byte(`
+format: 1
+command: c
+variant: v
+parse:
+  type: regex
+  patterns:
+    - pattern: '^(?P<name>\w+)=(?P<value>.*)$'
+      values: {kind: environment, a: first}
+    - '^(?P<command>.+)$'
+`), "c.yaml")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if got := d.Parse.PatternValues(0); len(got) != 2 || got[0] != (Value{Name: "a", Value: "first"}) || got[1] != (Value{Name: "kind", Value: "environment"}) {
+		t.Errorf("values of the first alternative = %v", got)
+	}
+	if got := d.Parse.PatternValues(1); got != nil {
+		t.Errorf("a plain pattern has no values: %v", got)
+	}
+	if got := d.Parse.PatternValues(5); got != nil {
+		t.Errorf("an alternative that is not there has no values: %v", got)
+	}
+
 	// Defaults.
 	d, err = Load([]byte("format: 1\ncommand: c\nvariant: v\nparse: {type: kv}\n"), "d.yaml")
 	if err != nil {
@@ -352,7 +378,20 @@ func TestLoadErrors(t *testing.T) {
 		{"object no groups", base + "fields: {a: {type: object, regex: 'x'}}\n", "at least one named group"},
 		{"object field not group", base + "fields: {a: {type: object, regex: '(?P<x>.)', fields: {y: {}}}}\n", "not a named group"},
 		{"string with split", base + "fields: {a: {split: ','}}\n", "only valid for type array"},
-		{"string with regex", base + "fields: {a: {regex: 'x'}}\n", "only valid for type object"},
+		{"int with regex", base + "fields: {a: {type: int, regex: '(?P<a>x)'}}\n", "only valid for type object and type string"},
+		{"string regex without a group", base + "fields: {a: {regex: 'x'}}\n", "exactly one named group"},
+		{"string regex with two groups", base + "fields: {a: {regex: '(?P<a>x)(?P<b>y)'}}\n", "exactly one named group"},
+		{"string with fields", base + "fields: {a: {regex: '(?P<a>x)', fields: {a: {}}}}\n", "fields is only valid for type object"},
+		{"unescape without sequences", base + "fields: {a: {unescape: {}}}\n", "unescape.sequences: is required"},
+		{"unescape of one character", base + "fields: {a: {unescape: {sequences: {'n': 'x'}}}}\n", "is not an escape"},
+		{"unescape of two escape characters", base + "fields: {a: {unescape: {sequences: {'\\n': 'x', '%n': 'y'}}}}\n", "every escape begins with the same character"},
+		{"unescape on an int", base + "fields: {a: {type: int, unescape: {sequences: {'\\n': 'x'}}}}\n", "only valid for type string"},
+		{"unescape when outside a regex", base + "fields: {a: {unescape: {when: b, sequences: {'\\n': 'x'}}}}\n", "only a regex parser has groups"},
+		{"unescape when not a group", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.*)'}\nfields: {a: {unescape: {when: nope, sequences: {'\\n': 'x'}}}}\n", `"nope" is not a named group`},
+		{"pattern without its expression", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: [{values: {kind: x}}]}\n", "pattern: is required"},
+		{"pattern value named like a group", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: [{pattern: '(?P<kind>.)', values: {kind: x}}]}\n", "is also a named group of the pattern"},
+		{"pattern value bad name", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: [{pattern: '(?P<a>.)', values: {'a b': x}}]}\n", "not a valid field name"},
+		{"pattern with an unknown key", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: [{pattern: '(?P<a>.)', value: {k: x}}]}\n", `unknown key "value"`},
 		{"string with true", base + "fields: {a: {true_values: [x]}}\n", "only valid for type bool"},
 		{"bad when_missing", base + "fields: {a: {when_missing: skip}}\n", "must be null or omit"},
 		{"required omit", base + "fields: {a: {required: true, when_missing: omit}}\n", "contradictory"},
@@ -437,6 +476,31 @@ func TestNormalizeName(t *testing.T) {
 	for in, want := range tests {
 		if got := NormalizeName(in); got != want {
 			t.Errorf("NormalizeName(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
+
+// Decode undoes exactly the escapes it is given and refuses an escape
+// character that begins none of them, rather than keeping it.
+func TestUnescapeDecode(t *testing.T) {
+	t.Parallel()
+	gnu := &Unescape{Sequences: map[string]string{`\\`: `\`, `\n`: "\n", `\r`: "\r"}}
+	for _, tc := range []struct {
+		in, want string
+		ok       bool
+	}{
+		{"plain name", "plain name", true},
+		{`nl\nname`, "nl\nname", true},
+		{`back\\slash`, `back\slash`, true},
+		{`lit\\nname`, `lit\nname`, true},
+		{`cr\rx`, "cr\rx", true},
+		{`a\\\\b`, `a\\b`, true},
+		{`tab\tname`, "", false},
+		{`ends with\`, "", false},
+	} {
+		got, ok := gnu.Decode(tc.in)
+		if ok != tc.ok || (ok && got != tc.want) {
+			t.Errorf("Decode(%q) = %q, %v; want %q, %v", tc.in, got, ok, tc.want, tc.ok)
 		}
 	}
 }

@@ -1,0 +1,4 @@
+description: A regular file named "a -> b" and a link with one " -> ", which reads one way.
+source: captured on Ubuntu 26.04 with BusyBox v1.37.0, LC_ALL=C busybox tar -tvf over an archive made for the fixture; the user name replaced
+os: linux
+args: [-tvf]

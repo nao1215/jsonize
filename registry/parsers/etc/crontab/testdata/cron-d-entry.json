@@ -1,5 +1,6 @@
 [
   {
+    "kind": "job",
     "minute": "30",
     "hour": "3",
     "day_of_month": "*",
@@ -9,6 +10,7 @@
     "command": "test -e /run/systemd/system || SERVICE_MODE=1 /usr/libexec/e2fsprogs/e2scrub_all_cron"
   },
   {
+    "kind": "job",
     "minute": "10",
     "hour": "3",
     "day_of_month": "*",

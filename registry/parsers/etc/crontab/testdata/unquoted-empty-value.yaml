@@ -1,0 +1,8 @@
+description: >
+  MAILTO= with no quotes. cronie reads it as an empty value; Debian's cron
+  does not read it as an assignment, and crontab(5) says an empty value
+  needs quotes. The line is refused rather than read the way one of them
+  would.
+source: written for this fixture
+os: linux
+expect_error: does not match

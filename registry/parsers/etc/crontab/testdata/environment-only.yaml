@@ -1,0 +1,3 @@
+description: The /etc/crontab cronie systems install, which sets SHELL, PATH and MAILTO and has no job. MAILTO is what says the file is a crontab.
+source: the crontab file of the crontabs project (github.com/cronie-crond/crontabs), installed as /etc/crontab by Fedora and RHEL
+os: linux

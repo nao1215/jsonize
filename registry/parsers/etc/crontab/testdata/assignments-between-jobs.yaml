@@ -1,0 +1,8 @@
+description: >
+  Assignments between the jobs they apply to, in the forms crontab(5)
+  gives: spaces around "=", a value in double or single quotes, an empty
+  value in quotes, blanks kept inside quotes, and "=" inside a value. The
+  records keep the order of the file, and MAILTO appears twice because
+  the second one changes it for the jobs after it.
+source: written for this fixture in the grammar crontab(5) gives an /etc/cron.d file, on which Debian's cron and cronie agree
+os: linux

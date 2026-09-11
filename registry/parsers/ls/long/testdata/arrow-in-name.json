@@ -1,31 +1,30 @@
 [
   {
-    "flags": "-rw-r--r--",
+    "flags": "-rw-rw-r--",
     "links": 1,
     "owner": "alice",
-    "group": "staff",
-    "size": "42",
-    "date": "Jan  5 10:11",
+    "group": "alice",
+    "size": "8",
+    "date": "Sep 11 03:09",
     "filename": "a -> b"
   },
   {
     "flags": "lrwxrwxrwx",
     "links": 1,
     "owner": "alice",
-    "group": "staff",
-    "size": "7",
-    "date": "Jan  5 10:12",
+    "group": "alice",
+    "size": "6",
+    "date": "Sep 11 03:09",
     "filename": "link",
     "link_to": "target"
   },
   {
-    "flags": "lrwxrwxrwx",
+    "flags": "-rw-rw-r--",
     "links": 1,
     "owner": "alice",
-    "group": "staff",
-    "size": "9",
-    "date": "Jan  5 10:13",
-    "filename": "odd",
-    "link_to": "name -> target"
+    "group": "alice",
+    "size": "7",
+    "date": "Sep 11 03:09",
+    "filename": "target"
   }
 ]

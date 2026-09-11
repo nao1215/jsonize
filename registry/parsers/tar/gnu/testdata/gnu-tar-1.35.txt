@@ -1,5 +1,4 @@
 drwxrwxr-x alice/alice       0 2026-01-15 09:30 src/
--rw-rw-r-- alice/alice      15 2026-01-15 09:30 src/back\\slash.txt
 lrwxrwxrwx alice/alice       0 2026-01-15 09:30 src/link.txt -> README.txt
 -rw-rw-r-- alice/alice       0 2026-01-15 09:30 src/empty.bin
 -rw-rw-r-- alice/alice      15 2026-01-15 09:30 src/two words.txt
@@ -16,6 +15,5 @@ drwxrwxr-x alice/alice       0 2026-01-15 09:30 src/deep/very/long/nested/direct
 drwxrwxr-x alice/alice       0 2026-01-15 09:30 src/deep/very/long/nested/directory/path/for/boundary/testing/
 -rw-rw-r-- alice/alice       2 2026-01-15 09:30 src/deep/very/long/nested/directory/path/for/boundary/testing/leaf-file-with-a-rather-long-name.txt
 drwxrwxr-x alice/alice       0 2026-01-15 09:30 src/docs/
--rw-rw-r-- alice/alice      21 2026-01-15 09:30 src/docs/\346\227\245\346\234\254\350\252\236.txt
 drwxrwxr-x alice/alice       0 2026-01-15 09:30 src/docs/manual/
 -rw-rw-r-- alice/alice      12 2026-01-15 09:30 src/docs/manual/chapter.txt
