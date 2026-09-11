@@ -1,0 +1,6 @@
+description: >
+  A "#" after a value. Debian's cron ends the value there and reads root;
+  cronie keeps "root # the administrator". It is refused.
+source: written for this fixture
+os: linux
+expect_error: does not match

@@ -1,0 +1,2 @@
+MAILTO=root # the administrator
+0 1 * * * root /usr/local/bin/first

@@ -1,0 +1,14 @@
+SHELL=/bin/bash
+PATH = /usr/local/bin:/usr/bin:/bin
+MAILTO=ops@example.com
+CRON_TZ=Asia/Tokyo
+0 1 * * * root /usr/local/bin/first
+# Mail nothing from here on.
+MAILTO=""
+MAILFROM='cron@example.com'
+GREETING="  two blanks at each end  "
+QUERY=a=b&c=d
+NOTE=several words here
+@reboot root /usr/local/bin/warm-cache
+30 2 * * mon-fri backup /usr/local/bin/second --full
+EMPTY=''

@@ -1,0 +1,78 @@
+[
+  {
+    "kind": "environment",
+    "name": "SHELL",
+    "value": "/bin/bash"
+  },
+  {
+    "kind": "environment",
+    "name": "PATH",
+    "value": "/usr/local/bin:/usr/bin:/bin"
+  },
+  {
+    "kind": "environment",
+    "name": "MAILTO",
+    "value": "ops@example.com"
+  },
+  {
+    "kind": "environment",
+    "name": "CRON_TZ",
+    "value": "Asia/Tokyo"
+  },
+  {
+    "kind": "job",
+    "minute": "0",
+    "hour": "1",
+    "day_of_month": "*",
+    "month": "*",
+    "day_of_week": "*",
+    "user": "root",
+    "command": "/usr/local/bin/first"
+  },
+  {
+    "kind": "environment",
+    "name": "MAILTO",
+    "value": ""
+  },
+  {
+    "kind": "environment",
+    "name": "MAILFROM",
+    "value": "cron@example.com"
+  },
+  {
+    "kind": "environment",
+    "name": "GREETING",
+    "value": "  two blanks at each end  "
+  },
+  {
+    "kind": "environment",
+    "name": "QUERY",
+    "value": "a=b&c=d"
+  },
+  {
+    "kind": "environment",
+    "name": "NOTE",
+    "value": "several words here"
+  },
+  {
+    "kind": "job",
+    "special": "reboot",
+    "user": "root",
+    "command": "/usr/local/bin/warm-cache"
+  },
+  {
+    "kind": "job",
+    "minute": "30",
+    "hour": "2",
+    "day_of_month": "*",
+    "month": "*",
+    "day_of_week": "mon-fri",
+    "user": "backup",
+    "command": "/usr/local/bin/second --full"
+  },
+  {
+    "kind": "environment",
+    "name": "EMPTY",
+    "value": ""
+  }
+]

@@ -1,0 +1,7 @@
+description: >
+  Text after the closing quote of a value. Debian's cron keeps the whole
+  of "root" admin, quotes included; cronie does not read the line as an
+  assignment. It is refused.
+source: written for this fixture
+os: linux
+expect_error: does not match
