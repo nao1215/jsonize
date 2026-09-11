@@ -89,6 +89,20 @@ scenarios:
             json:
               - { path: "$.users", gte: 0 }
               - { path: "$.load_1m", gte: 0 }
+      # -p says the same in words, and -s says when the system booted.
+      - run:
+          command: jz run uptime -p
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"minutes":'
+      - run:
+          command: jz run uptime -s
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.since", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2} " }
       - run:
           command: jz run ps -ef
       - assert:

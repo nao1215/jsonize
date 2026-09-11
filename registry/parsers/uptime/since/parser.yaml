@@ -1,0 +1,31 @@
+# `uptime -s` (procps) prints when the system booted, as a local date and
+# time with no zone: "2026-09-10 22:57:41". The zone is the one of the
+# machine that printed it, which the text does not name, so the value
+# stays as printed rather than being read in the zone of the machine
+# running jz.
+#
+# One timestamp on a line is not something only uptime prints, so this is
+# read only when uptime -s is named or run.
+format: 1
+command: uptime
+variant: since
+description: uptime -s, when the system booted
+metadata:
+  tags: [linux, system]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/uptime.1.html
+detect:
+  os: [linux]
+  auto_detect: false
+  args:
+    any: ["-s", "--since"]
+  signature:
+    all:
+      - '\A\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}[ \t]*\n?\z'
+parse:
+  type: regex
+  each: input
+  pattern: '^(?P<since>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})[ \t]*$'
+fields:
+  since: {required: true}
