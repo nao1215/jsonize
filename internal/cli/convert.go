@@ -6,7 +6,6 @@ import (
 
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
-	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/registry"
 	"github.com/nao1215/jsonize/pkg/selector"
 )
@@ -72,6 +71,9 @@ func (a *app) cmdConvert(args []string) int {
 	if code != 0 {
 		return code
 	}
+	if inline, code = a.nameColumns(reg, &co.selects, inline); code != ExitOK {
+		return code
+	}
 	r := a.env.Stdin
 	if co.file != "-" {
 		f, err := os.Open(co.file)
@@ -111,7 +113,7 @@ func (a *app) cmdConvert(args []string) int {
 		return code
 	}
 	ctx.Input = data
-	sel, out, acct, err := readWith(reg, ctx, data, co.output.engineOptions())
+	sel, out, acct, err := a.readWith(reg, ctx, data, co.output.engineOptions())
 	if err != nil && ctx.Parser != co.selects.parser {
 		// The path was a guess, so it never makes the answer worse. It
 		// is dropped when the definition it named does not describe the
@@ -121,7 +123,7 @@ func (a *app) cmdConvert(args []string) int {
 		exp.dropPath(err)
 		ctx.Parser, ctx.Variant = co.selects.parser, co.selects.variant
 		exp.scope(ctx, fromRegistry)
-		sel, out, acct, err = readWith(reg, ctx, data, co.output.engineOptions())
+		sel, out, acct, err = a.readWith(reg, ctx, data, co.output.engineOptions())
 	}
 	exp.chose(sel)
 	if err != nil {
@@ -132,10 +134,10 @@ func (a *app) cmdConvert(args []string) int {
 	}
 	exp.read(acct)
 	a.explainWrite(exp)
-	if out, code = a.narrow(out, &co.output, sel.Entry.Def); code != ExitOK {
+	if out, code = a.narrow(out, &co.output, a.reading(sel.Entry.Def)); code != ExitOK {
 		return code
 	}
-	if err := jsonutil.Encode(a.env.Stdout, out, co.output.pretty); err != nil {
+	if err := co.output.write(a.env.Stdout, out); err != nil {
 		return a.writeFailed(err)
 	}
 	return ExitOK
@@ -207,7 +209,7 @@ func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOp
 	if v, code = a.narrow(v, out, def); code != ExitOK {
 		return code
 	}
-	if err := jsonutil.Encode(a.env.Stdout, v, out.pretty); err != nil {
+	if err := out.write(a.env.Stdout, v); err != nil {
 		return a.writeFailed(err)
 	}
 	return ExitOK
@@ -219,12 +221,12 @@ func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOp
 // text and one that cannot read it are both the wrong definition. The
 // selection comes back even when the reading fails, since which
 // definition failed is part of explaining the failure.
-func readWith(reg *registry.Registry, ctx selector.Context, data []byte, opts engine.Options) (*selector.Result, any, engine.Account, error) {
+func (a *app) readWith(reg *registry.Registry, ctx selector.Context, data []byte, opts engine.Options) (*selector.Result, any, engine.Account, error) {
 	sel, err := selector.Select(reg, ctx)
 	if err != nil {
 		return nil, nil, engine.Account{}, err
 	}
-	out, acct, err := engine.ParseAccounted(sel.Entry.Def, data, opts)
+	out, acct, err := engine.ParseAccounted(a.reading(sel.Entry.Def), data, opts)
 	if err != nil {
 		return sel, nil, acct, err
 	}

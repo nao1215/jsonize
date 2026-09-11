@@ -75,6 +75,9 @@ type app struct {
 	// was given looks like a wrapper around one jz has a parser for: the
 	// command line that names that parser.
 	wrapperHint string
+	// named and renamed are the definition --variant named and its copy
+	// with the columns --columns gave, which is read in its place.
+	named, renamed *definition.Definition
 }
 
 type command struct {

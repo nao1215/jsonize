@@ -15,7 +15,6 @@ import (
 	"github.com/nao1215/jsonize/internal/runner"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
-	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/registry"
 	"github.com/nao1215/jsonize/pkg/selector"
 )
@@ -133,6 +132,9 @@ func (a *app) cmdRun(args []string) int {
 			})
 		}
 	}
+	if inline, code = a.nameColumns(reg, &sel, inline); code != ExitOK {
+		return code
+	}
 
 	ctx := a.env.Context
 	if timeout > 0 {
@@ -201,7 +203,7 @@ func (a *app) cmdRun(args []string) int {
 		return code
 	}
 	exp.chose(chosen)
-	data, acct, err := engine.ParseAccounted(chosen.Entry.Def, res.Stdout, out.engineOptions())
+	data, acct, err := engine.ParseAccounted(a.reading(chosen.Entry.Def), res.Stdout, out.engineOptions())
 	if err != nil {
 		code := a.failedRun(err, res.ExitCode)
 		exp.fail(err, code)
@@ -210,12 +212,12 @@ func (a *app) cmdRun(args []string) int {
 	}
 	exp.read(acct)
 	a.explainWrite(exp)
-	narrowed, code := a.narrow(data, &out, chosen.Entry.Def)
+	narrowed, code := a.narrow(data, &out, a.reading(chosen.Entry.Def))
 	if code != ExitOK {
 		return code
 	}
 	data = narrowed
-	if err := jsonutil.Encode(a.env.Stdout, data, out.pretty); err != nil {
+	if err := out.write(a.env.Stdout, data); err != nil {
 		return a.writeFailed(err)
 	}
 	return res.ExitCode
@@ -294,7 +296,7 @@ func (a *app) emptyResult(reg *registry.Registry, sctx selector.Context, out out
 	if code := a.emptyFormats(reg, sctx, false, exp); code != ExitOK {
 		return code
 	}
-	if err := jsonutil.Encode(a.env.Stdout, []any{}, out.pretty); err != nil {
+	if err := out.write(a.env.Stdout, []any{}); err != nil {
 		return a.writeFailed(err)
 	}
 	return ExitOK
