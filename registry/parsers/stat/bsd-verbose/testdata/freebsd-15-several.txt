@@ -1,0 +1,24 @@
+  File: "file.txt"
+  Size: 6            FileType: Regular File
+  Mode: (0644/-rw-r--r--)         Uid: (    0/    root)  Gid: ( 1001/  (1001))
+Device: 18446744071898351913,276037858   Inode: 5275    Links: 1
+Access: Fri Sep 11 12:30:45 2026
+Modify: Fri Sep 11 12:30:45 2026
+Change: Fri Sep 11 12:38:00 2026
+ Birth: Fri Sep 11 12:30:45 2026
+  File: "dir"
+  Size: 2            FileType: Directory
+  Mode: (0755/drwxr-xr-x)         Uid: (    0/    root)  Gid: ( 1001/  (1001))
+Device: 18446744071898351913,276037858   Inode: 3995    Links: 2
+Access: Fri Sep 11 12:30:45 2026
+Modify: Fri Sep 11 12:30:45 2026
+Change: Fri Sep 11 12:38:00 2026
+ Birth: Fri Sep 11 12:30:45 2026
+  File: "link"
+  Size: 8            FileType: Symbolic Link
+  Mode: (0755/lrwxr-xr-x)         Uid: (    0/    root)  Gid: ( 1001/  (1001))
+Device: 18446744071898351913,276037858   Inode: 5247    Links: 1
+Access: Fri Sep 11 12:38:00 2026
+Modify: Fri Sep 11 12:38:00 2026
+Change: Fri Sep 11 12:38:00 2026
+ Birth: Fri Sep 11 12:38:00 2026

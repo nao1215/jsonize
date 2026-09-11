@@ -1,0 +1,3 @@
+source: "ping6 -c 3 ::1 on a GitHub Actions macOS 26.6.2 runner with LC_ALL=C (capture run 34599785859 of the temporary capture workflow)"
+os: darwin
+args: ["-c", "3", "::1"]

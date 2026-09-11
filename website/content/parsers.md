@@ -45,8 +45,8 @@ the same reading with settings of your own.
 | `chage` | [`linux`](../schemas/chage/linux.json) |
 | `chrt` | [`policy`](../schemas/chrt/policy.json) |
 | `cksum` | [`posix`](../schemas/cksum/posix.json) |
-| `csv` | [`comma`](../schemas/csv/comma.json), [`tab`](../schemas/csv/tab.json) |
-| `curl` | [`version`](../schemas/curl/version.json) |
+| `csv` | [`comma`](../schemas/csv/comma.json), [`comma-no-header`](../schemas/csv/comma-no-header.json), [`tab`](../schemas/csv/tab.json), [`tab-no-header`](../schemas/csv/tab-no-header.json) |
+| `curl` | [`headers`](../schemas/curl/headers.json), [`version`](../schemas/curl/version.json) |
 | `date` | [`posix`](../schemas/date/posix.json), [`rfc-email`](../schemas/date/rfc-email.json) |
 | `debconf-show` | [`linux`](../schemas/debconf-show/linux.json) |
 | `df` | [`bsd`](../schemas/df/bsd.json), [`bsd-human`](../schemas/df/bsd-human.json), [`busybox-human`](../schemas/df/busybox-human.json), [`gnu`](../schemas/df/gnu.json), [`gnu-human`](../schemas/df/gnu-human.json), [`gnu-inodes`](../schemas/df/gnu-inodes.json), [`gnu-inodes-human`](../schemas/df/gnu-inodes-human.json), [`gnu-type`](../schemas/df/gnu-type.json), [`gnu-type-human`](../schemas/df/gnu-type-human.json), [`portable`](../schemas/df/portable.json), [`portable-type`](../schemas/df/portable-type.json) |
@@ -93,7 +93,7 @@ the same reading with settings of your own.
 | `localectl` | [`linux`](../schemas/localectl/linux.json) |
 | `loginctl` | [`seats`](../schemas/loginctl/seats.json), [`sessions`](../schemas/loginctl/sessions.json), [`users`](../schemas/loginctl/users.json) |
 | `losetup` | [`associations`](../schemas/losetup/associations.json), [`linux`](../schemas/losetup/linux.json) |
-| `ls` | [`full-time`](../schemas/ls/full-time.json), [`long`](../schemas/ls/long.json), [`long-context`](../schemas/ls/long-context.json), [`long-inode`](../schemas/ls/long-inode.json), [`long-iso`](../schemas/ls/long-iso.json), [`long-no-owner-group`](../schemas/ls/long-no-owner-group.json), [`long-recursive`](../schemas/ls/long-recursive.json) |
+| `ls` | [`full-time`](../schemas/ls/full-time.json), [`long`](../schemas/ls/long.json), [`long-context`](../schemas/ls/long-context.json), [`long-inode`](../schemas/ls/long-inode.json), [`long-iso`](../schemas/ls/long-iso.json), [`long-no-owner-group`](../schemas/ls/long-no-owner-group.json), [`long-recursive`](../schemas/ls/long-recursive.json), [`names`](../schemas/ls/names.json), [`names-zero`](../schemas/ls/names-zero.json) |
 | `lsattr` | [`linux`](../schemas/lsattr/linux.json) |
 | `lsb_release` | [`linux`](../schemas/lsb_release/linux.json) |
 | `lsblk` | [`bytes`](../schemas/lsblk/bytes.json), [`filesystems`](../schemas/lsblk/filesystems.json), [`linux`](../schemas/lsblk/linux.json), [`pairs`](../schemas/lsblk/pairs.json), [`topology`](../schemas/lsblk/topology.json) |
@@ -132,7 +132,7 @@ the same reading with settings of your own.
 | `pactl` | [`info`](../schemas/pactl/info.json), [`short-cards`](../schemas/pactl/short-cards.json), [`short-clients`](../schemas/pactl/short-clients.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
 | `parted` | [`machine`](../schemas/parted/machine.json) |
 | `pidstat` | [`io`](../schemas/pidstat/io.json), [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json), [`switches`](../schemas/pidstat/switches.json) |
-| `ping` | [`linux`](../schemas/ping/linux.json) |
+| `ping` | [`bsd`](../schemas/ping/bsd.json), [`linux`](../schemas/ping/linux.json) |
 | `pip` | [`columns`](../schemas/pip/columns.json) |
 | `pmap` | [`linux`](../schemas/pmap/linux.json) |
 | `powerprofilesctl` | [`list`](../schemas/powerprofilesctl/list.json) |
@@ -160,7 +160,7 @@ the same reading with settings of your own.
 | `snap` | [`list`](../schemas/snap/list.json) |
 | `ss` | [`linux`](../schemas/ss/linux.json), [`single-protocol`](../schemas/ss/single-protocol.json), [`summary`](../schemas/ss/summary.json) |
 | `ssh-keygen` | [`fingerprint`](../schemas/ssh-keygen/fingerprint.json) |
-| `stat` | [`gnu`](../schemas/stat/gnu.json), [`gnu-filesystem`](../schemas/stat/gnu-filesystem.json), [`gnu-terse`](../schemas/stat/gnu-terse.json) |
+| `stat` | [`bsd`](../schemas/stat/bsd.json), [`bsd-verbose`](../schemas/stat/bsd-verbose.json), [`gnu`](../schemas/stat/gnu.json), [`gnu-filesystem`](../schemas/stat/gnu-filesystem.json), [`gnu-terse`](../schemas/stat/gnu-terse.json) |
 | `swapon` | [`legacy`](../schemas/swapon/legacy.json), [`linux`](../schemas/swapon/linux.json) |
 | `sysctl` | [`linux`](../schemas/sysctl/linux.json) |
 | `systemctl` | [`dependencies`](../schemas/systemctl/dependencies.json), [`jobs`](../schemas/systemctl/jobs.json), [`show`](../schemas/systemctl/show.json), [`show-properties`](../schemas/systemctl/show-properties.json), [`sockets`](../schemas/systemctl/sockets.json), [`status`](../schemas/systemctl/status.json), [`timers`](../schemas/systemctl/timers.json), [`unit-files`](../schemas/systemctl/unit-files.json), [`units`](../schemas/systemctl/units.json), [`units-jobs`](../schemas/systemctl/units-jobs.json) |

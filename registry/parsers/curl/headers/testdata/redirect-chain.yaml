@@ -1,0 +1,2 @@
+source: "curl 8.18.0 -sIL against the e2ehelper server: a 302 to a 301 to a 200, one block per response"
+args: ["-sIL", "http://127.0.0.1/chain"]

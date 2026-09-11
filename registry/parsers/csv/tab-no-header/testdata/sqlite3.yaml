@@ -1,0 +1,1 @@
+source: "sqlite3 3.44.4 -list with a tab separator, no header: a space and a comma inside values, an empty last field"

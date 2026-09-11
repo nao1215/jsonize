@@ -1,0 +1,10 @@
+HTTP/2 301 
+date: Fri, 11 Sep 2026 12:00:00 GMT
+location: /plain
+
+HTTP/2 200 
+content-type: text/plain; charset=utf-8
+date: Fri, 11 Sep 2026 12:00:00 GMT
+set-cookie: session=abc123; Path=/; HttpOnly
+set-cookie: theme=dark; Path=/
+

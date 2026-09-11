@@ -1,0 +1,2 @@
+source: "transcribed from how curl writes an HTTP/3 response header: \"HTTP/3 \" + status + \" \\r\\n\", then \"name: value\\r\\n\" per field (lib/vquic/cf-ngtcp2.c at curl commit 65f685742ccf, https://github.com/curl/curl/blob/65f685742ccf40d685cb2899618125bd25a49a66/lib/vquic/cf-ngtcp2.c#L314-L343); QPACK names are lower case. Not captured: the curl on this machine has no HTTP/3."
+args: ["-sI", "--http3-only", "https://example.com/"]

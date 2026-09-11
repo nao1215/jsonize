@@ -1,0 +1,7 @@
+PING6(56=40+8+8 bytes) ::1 --> ::1
+16 bytes from ::1, icmp_seq=0 hlim=64 time=0.082 ms
+16 bytes from ::1, icmp_seq=1 hlim=64 time=0.157 ms
+
+--- localhost ping6 statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/std-dev = 0.082/0.119/0.157/0.038 ms

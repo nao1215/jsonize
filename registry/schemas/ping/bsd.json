@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ping/bsd.json",
+  "title": "ping/bsd",
+  "description": "ping replies and summary (macOS, FreeBSD)",
+  "x-jsonize": {
+    "definition": "ping/bsd",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "destination": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "address": {
+          "type": "string"
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_bytes": {
+          "type": "integer"
+        },
+        "packet_bytes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "address",
+        "source",
+        "data_bytes",
+        "packet_bytes"
+      ]
+    },
+    "replies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "duplicate",
+              "no_answer",
+              "reply"
+            ]
+          },
+          "time_of_day": {
+            "type": "string"
+          },
+          "bytes": {
+            "type": "integer"
+          },
+          "responder": {
+            "type": "string"
+          },
+          "icmp_seq": {
+            "type": "integer"
+          },
+          "ttl": {
+            "type": "integer"
+          },
+          "time_ms": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "error": {
+            "type": "string",
+            "enum": [
+              "Request timeout"
+            ]
+          }
+        },
+        "required": [
+          "kind",
+          "icmp_seq"
+        ]
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "packets_transmitted": {
+          "type": "integer"
+        },
+        "packets_received": {
+          "type": "integer"
+        },
+        "duplicates": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "packet_loss_percent": {
+          "type": "number"
+        },
+        "out_of_wait_time": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "round_trip_min_ms": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "round_trip_avg_ms": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "round_trip_max_ms": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "round_trip_stddev_ms": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "packets_transmitted",
+        "packets_received",
+        "duplicates",
+        "packet_loss_percent",
+        "out_of_wait_time",
+        "round_trip_min_ms",
+        "round_trip_avg_ms",
+        "round_trip_max_ms",
+        "round_trip_stddev_ms"
+      ]
+    }
+  },
+  "required": [
+    "destination",
+    "replies",
+    "statistics"
+  ]
+}

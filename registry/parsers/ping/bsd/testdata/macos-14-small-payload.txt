@@ -1,0 +1,6 @@
+PING 127.0.0.1 (127.0.0.1): 0 data bytes
+8 bytes from 127.0.0.1: icmp_seq=0 ttl=64
+8 bytes from 127.0.0.1: icmp_seq=1 ttl=64
+
+--- 127.0.0.1 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss

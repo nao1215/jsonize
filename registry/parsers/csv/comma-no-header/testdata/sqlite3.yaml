@@ -1,0 +1,1 @@
+source: "sqlite3 3.44.4 -csv (header off by default) selecting a comma, a quote, a line break, an empty string and a NULL; the NULL is the unquoted empty field"

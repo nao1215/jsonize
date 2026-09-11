@@ -1,0 +1,36 @@
+[
+  {
+    "status": {
+      "version": "2",
+      "code": 103,
+      "reason": null
+    },
+    "headers": [
+      {
+        "name": "link",
+        "value": "</style.css>; rel=preload; as=style"
+      }
+    ]
+  },
+  {
+    "status": {
+      "version": "2",
+      "code": 200,
+      "reason": null
+    },
+    "headers": [
+      {
+        "name": "content-type",
+        "value": "text/html"
+      },
+      {
+        "name": "date",
+        "value": "Fri, 11 Sep 2026 12:00:00 GMT"
+      },
+      {
+        "name": "link",
+        "value": "</style.css>; rel=preload; as=style"
+      }
+    ]
+  }
+]

@@ -1,0 +1,3 @@
+source: "BusyBox v1.37.0 (Ubuntu busybox package) ls -1 with LC_ALL=C over the same directory as gnu-9.7: BusyBox writes ? for each byte it does not print, so the UTF-8 name comes out as question marks and is read as they are"
+os: linux
+args: ["-1"]

@@ -1,0 +1,38 @@
+[
+  {
+    "name": " leading"
+  },
+  {
+    "name": "#hash"
+  },
+  {
+    "name": "-dash"
+  },
+  {
+    "name": "."
+  },
+  {
+    "name": ".."
+  },
+  {
+    "name": "a -> b"
+  },
+  {
+    "name": "new\nline"
+  },
+  {
+    "name": "plain.txt"
+  },
+  {
+    "name": "trailing "
+  },
+  {
+    "name": "with space.txt"
+  },
+  {
+    "name": "x:y"
+  },
+  {
+    "name": "日本語.txt"
+  }
+]

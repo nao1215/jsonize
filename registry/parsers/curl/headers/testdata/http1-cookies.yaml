@@ -1,0 +1,2 @@
+source: "curl 8.18.0 -sI against the e2ehelper server (e2e/atago/e2ehelper/serve.go), captured byte for byte with CRLF; two Set-Cookie headers, names in mixed case and an empty value"
+args: ["-sI", "http://127.0.0.1/plain"]

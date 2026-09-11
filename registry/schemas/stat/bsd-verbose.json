@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/stat/bsd-verbose.json",
+  "title": "stat/bsd-verbose",
+  "description": "stat -x on macOS and FreeBSD (a block of labelled lines per file)",
+  "x-jsonize": {
+    "definition": "stat/bsd-verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "string"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "type": {
+        "type": "string"
+      },
+      "access_mode": {
+        "type": "string"
+      },
+      "access_flags": {
+        "type": "string"
+      },
+      "uid": {
+        "type": "integer"
+      },
+      "user": {
+        "type": "string"
+      },
+      "gid": {
+        "type": "integer"
+      },
+      "group": {
+        "type": "string"
+      },
+      "device": {
+        "type": "string"
+      },
+      "inode": {
+        "type": "integer"
+      },
+      "links": {
+        "type": "integer"
+      },
+      "access_time": {
+        "type": "string"
+      },
+      "modify_time": {
+        "type": "string"
+      },
+      "change_time": {
+        "type": "string"
+      },
+      "birth_time": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "file",
+      "size",
+      "type",
+      "access_mode",
+      "access_flags",
+      "uid",
+      "user",
+      "gid",
+      "group",
+      "device",
+      "inode",
+      "links",
+      "access_time",
+      "modify_time",
+      "change_time"
+    ]
+  }
+}

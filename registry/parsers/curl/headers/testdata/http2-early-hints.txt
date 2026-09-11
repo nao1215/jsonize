@@ -1,0 +1,8 @@
+HTTP/2 103 
+link: </style.css>; rel=preload; as=style
+
+HTTP/2 200 
+content-type: text/html
+date: Fri, 11 Sep 2026 12:00:00 GMT
+link: </style.css>; rel=preload; as=style
+

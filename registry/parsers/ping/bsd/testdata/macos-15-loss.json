@@ -1,0 +1,38 @@
+{
+  "destination": {
+    "name": "198.51.100.7",
+    "address": "198.51.100.7",
+    "source": null,
+    "data_bytes": 56,
+    "packet_bytes": null
+  },
+  "replies": [
+    {
+      "kind": "no_answer",
+      "error": "Request timeout",
+      "icmp_seq": 0
+    },
+    {
+      "kind": "no_answer",
+      "error": "Request timeout",
+      "icmp_seq": 1
+    },
+    {
+      "kind": "no_answer",
+      "error": "Request timeout",
+      "icmp_seq": 2
+    }
+  ],
+  "statistics": {
+    "name": "198.51.100.7",
+    "packets_transmitted": 4,
+    "packets_received": 0,
+    "duplicates": null,
+    "packet_loss_percent": 100,
+    "out_of_wait_time": null,
+    "round_trip_min_ms": null,
+    "round_trip_avg_ms": null,
+    "round_trip_max_ms": null,
+    "round_trip_stddev_ms": null
+  }
+}

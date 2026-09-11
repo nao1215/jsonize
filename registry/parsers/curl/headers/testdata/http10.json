@@ -1,0 +1,19 @@
+[
+  {
+    "status": {
+      "version": "1.0",
+      "code": 200,
+      "reason": "OK"
+    },
+    "headers": [
+      {
+        "name": "Server",
+        "value": "e2ehelper"
+      },
+      {
+        "name": "Content-Length",
+        "value": "6"
+      }
+    ]
+  }
+]

@@ -1,0 +1,112 @@
+# The ping macOS and FreeBSD ship prints what iputils does in another
+# spelling: a header, a line per reply and a summary, read here into the
+# same three parts ping/linux has.
+#
+# The header of an IPv4 run names the host, its address and the payload.
+# An IPv6 run (ping6 on macOS, ping on FreeBSD) states the packet size as
+# a sum, the source and the address instead, and no name: the name it was
+# given is printed only in the summary's heading, which is why the
+# statistics part reads that heading too.
+#
+# Between header and summary a line is one of three kinds, which each
+# reply states as kind:
+#
+#   reply      an echo reply; IPv6 calls the TTL hlim, reported as ttl
+#   duplicate  a second reply to one request, marked "(DUP!)"
+#   no_answer  on macOS, a request that went unanswered ("Request
+#              timeout for icmp_seq N"); FreeBSD prints nothing for it and
+#              only the summary's counts say so
+#
+# A payload too small to carry the send time leaves time= out, and
+# --apple-time (macOS) opens each reply with the time of day it arrived.
+# The round trip line is missing when nothing came back or the payload
+# was too small, and a run of one reply on macOS 26 prints its standard
+# deviation as "nan", which is read as null.
+#
+# Not read, and refused where they appear: the IP header dump that
+# follows an ICMP error, -R and -M option output, and the summary's
+# "somebody's duplicating packets" in place of the loss.
+#
+# Checked against captured output of macOS 14.8, 15.7 and 26.6 (ping and
+# ping6) and FreeBSD 15.1 (ping, IPv4 and IPv6); other BSDs are not
+# claimed.
+format: 1
+command: ping
+variant: bsd
+aliases:
+  - name: ping6
+description: ping replies and summary (macOS, FreeBSD)
+metadata:
+  tags: [darwin, freebsd, network]
+  compatible: [macOS 14-26 ping and ping6, FreeBSD 15 ping]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?query=ping&sektion=8
+    - https://github.com/freebsd/freebsd-src/blob/main/sbin/ping/ping.c
+    - https://github.com/freebsd/freebsd-src/blob/main/sbin/ping/ping6.c
+detect:
+  os: [darwin, freebsd]
+  signature:
+    all:
+      - '\A(?:PING \S+ \([\w.:%-]+\): [0-9]+ data bytes|PING6?\([0-9]+=[0-9]+\+[0-9]+\+[0-9]+ bytes\) \S+ --> \S+)$'
+parse:
+  type: composite
+  parts:
+    - name: destination
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        # The empty groups give both headers the same keys, null where a
+        # header does not say.
+        patterns:
+          - '\APING (?P<name>\S+) \((?P<address>[^)]+)\)(?P<source>): (?P<data_bytes>[0-9]+)(?P<packet_bytes>) data bytes\z'
+          - '\APING6?(?P<name>)\((?P<packet_bytes>[0-9]+)=[0-9]+\+[0-9]+\+(?P<data_bytes>[0-9]+) bytes\) (?P<source>\S+) --> (?P<address>\S+)\z'
+      fields:
+        name: {null_if: [""]}
+        source: {null_if: [""]}
+        data_bytes: {type: int}
+        packet_bytes: {type: int, null_if: [""]}
+    - name: replies
+      select: {after: '^PING', until: '^--- '}
+      parse:
+        type: regex
+        patterns:
+          - pattern: '^(?:(?P<time_of_day>[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+) )?(?P<bytes>[0-9]+) bytes from (?P<responder>[^ :]+): icmp_seq=(?P<icmp_seq>[0-9]+) ttl=(?P<ttl>[0-9]+)(?: time=(?P<time_ms>[0-9.]+) ms)?$'
+            values: {kind: reply}
+          - pattern: '^(?:(?P<time_of_day>[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+) )?(?P<bytes>[0-9]+) bytes from (?P<responder>[^ ,]+), icmp_seq=(?P<icmp_seq>[0-9]+) hlim=(?P<ttl>[0-9]+)(?: time=(?P<time_ms>[0-9.]+) ms)?$'
+            values: {kind: reply}
+          - pattern: '^(?:(?P<time_of_day>[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+) )?(?P<bytes>[0-9]+) bytes from (?P<responder>[^ :]+): icmp_seq=(?P<icmp_seq>[0-9]+) ttl=(?P<ttl>[0-9]+)(?: time=(?P<time_ms>[0-9.]+) ms)? \(DUP!\)$'
+            values: {kind: duplicate}
+          - pattern: '^(?:(?P<time_of_day>[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+) )?(?P<bytes>[0-9]+) bytes from (?P<responder>[^ ,]+), icmp_seq=(?P<icmp_seq>[0-9]+) hlim=(?P<ttl>[0-9]+)(?: time=(?P<time_ms>[0-9.]+) ms)? \(DUP!\)$'
+            values: {kind: duplicate}
+          - pattern: '^(?P<error>Request timeout) for icmp_seq (?P<icmp_seq>[0-9]+)$'
+            values: {kind: no_answer}
+      fields:
+        # only --apple-time prints it: the local time of day, with no date
+        time_of_day: {when_missing: omit}
+        bytes: {type: int}
+        icmp_seq: {type: int}
+        ttl: {type: int}
+        time_ms: {type: float}
+    - name: statistics
+      # The heading names the destination as ping was given it, which an
+      # IPv6 header does not, so the part starts after the header and the
+      # reply lines are left to the replies part.
+      select: {after: '^PING'}
+      ignore:
+        - '^(?:[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+ )?[0-9]+ bytes from '
+        - '^Request timeout for icmp_seq [0-9]+$'
+      parse:
+        type: regex
+        each: input
+        pattern: '\A--- (?P<name>\S+) ping6? statistics ---\n(?P<packets_transmitted>[0-9]+) packets transmitted, (?P<packets_received>[0-9]+) packets received, (?:\+(?P<duplicates>[0-9]+) duplicates, )?(?P<packet_loss_percent>[0-9.]+)% packet loss(?:, (?P<out_of_wait_time>[0-9]+) packets out of wait time)?(?:\nround-trip min/avg/max/std-?dev = (?P<round_trip_min_ms>[0-9.]+)/(?P<round_trip_avg_ms>[0-9.]+)/(?P<round_trip_max_ms>[0-9.]+)/(?P<round_trip_stddev_ms>[0-9.]+|nan) ms)?\z'
+      fields:
+        packets_transmitted: {type: int}
+        packets_received: {type: int}
+        duplicates: {type: int}
+        packet_loss_percent: {type: float}
+        out_of_wait_time: {type: int}
+        round_trip_min_ms: {type: float}
+        round_trip_avg_ms: {type: float}
+        round_trip_max_ms: {type: float}
+        round_trip_stddev_ms: {type: float, null_if: [nan]}

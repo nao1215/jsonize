@@ -1,0 +1,2 @@
+source: "curl 8.18.0 -sIL --http2-prior-knowledge against the e2ehelper server: a redirect followed over HTTP/2"
+args: ["-sIL", "--http2-prior-knowledge", "http://127.0.0.1/redirect"]

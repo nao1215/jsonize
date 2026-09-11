@@ -1,0 +1,2 @@
+source: "curl 8.18.0 -sI against the e2ehelper server: a 100 Continue before the 200"
+args: ["--head", "http://127.0.0.1/continue"]

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ls/names.json",
+  "title": "ls/names",
+  "description": "ls -1, one file name per line, read only when named",
+  "x-jsonize": {
+    "definition": "ls/names",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name"
+    ]
+  }
+}

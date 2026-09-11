@@ -1,0 +1,44 @@
+# stat -x on macOS and FreeBSD prints a block of labelled lines per file,
+# close to the GNU layout and different in every detail: the name is in
+# quotes, the type is spelled out on the Size line, and the times carry
+# no zone.
+#
+# The lines after File: are joined onto it (input.fold), so each file is
+# one record however many files were named. The name is what stands
+# between the first quote and the last one on the File: line; a name with
+# a line break in it is refused.
+#
+# The times are the local time of the machine that ran stat, with no
+# zone, and stay the text stat printed. The Device line holds the device
+# as major,minor, which stays text.
+#
+# Checked against captured output of macOS 14.8, 15.7 and 26.6 and
+# FreeBSD 15.1.
+format: 1
+command: stat
+variant: bsd-verbose
+description: stat -x on macOS and FreeBSD (a block of labelled lines per file)
+metadata:
+  tags: [darwin, freebsd, filesystem]
+  compatible: [macOS 14-26 stat -x, FreeBSD 15 stat -x]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?query=stat&sektion=1
+detect:
+  os: [darwin, freebsd]
+  args:
+    any: ["-x"]
+  signature:
+    all:
+      - '\A  File: "[^\n]*"\n  Size: [0-9]+ +FileType: [^\n]+\n  Mode: \([0-7]{4}/[-bcdlpsw][-rwxsStT]{9}\) +Uid: \( *[0-9]+/ *[^)\n]*\) +Gid: \( *[0-9]+/ *[^\n]*\)$'
+input:
+  fold: '^(?:  Size|  Mode|Device|Access|Modify|Change| Birth): '
+parse:
+  type: regex
+  pattern: '^  File: "(?P<file>.*)" Size: (?P<size>[0-9]+) +FileType: (?P<type>.+?) Mode: \((?P<access_mode>[0-7]{4})/(?P<access_flags>[-bcdlpsw][-rwxsStT]{9})\) +Uid: \( *(?P<uid>[0-9]+)/ *(?P<user>[^)]*?)\) +Gid: \( *(?P<gid>[0-9]+)/ *(?P<group>.*?)\) Device: (?P<device>[0-9]+,[0-9]+) +Inode: (?P<inode>[0-9]+) +Links: (?P<links>[0-9]+) Access: (?P<access_time>.+?) Modify: (?P<modify_time>.+?) Change: (?P<change_time>.+?)(?: Birth: (?P<birth_time>.+?))?$'
+fields:
+  size: {type: int}
+  uid: {type: int}
+  gid: {type: int}
+  inode: {type: int}
+  links: {type: int}
+  birth_time: {when_missing: omit}

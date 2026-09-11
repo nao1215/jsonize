@@ -1,0 +1,20 @@
+[
+  {
+    "file": "/dev/null",
+    "size": 0,
+    "type": "Character Device",
+    "access_mode": "0666",
+    "access_flags": "crw-rw-rw-",
+    "uid": 0,
+    "user": "root",
+    "gid": 0,
+    "group": "wheel",
+    "device": "144,14228993",
+    "inode": 334,
+    "links": 1,
+    "access_time": "Fri Sep 11 12:35:06 2026",
+    "modify_time": "Fri Sep 11 12:37:01 2026",
+    "change_time": "Fri Sep 11 12:37:01 2026",
+    "birth_time": "Thu Jan  1 00:00:00 1970"
+  }
+]

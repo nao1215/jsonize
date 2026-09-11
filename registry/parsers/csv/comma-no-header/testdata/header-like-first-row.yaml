@@ -1,0 +1,1 @@
+source: "sqlite3 3.44.4 -csv: the first record holds what a header would, and it is a record, as is the same values again"

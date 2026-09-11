@@ -1,0 +1,54 @@
+# ls writes one name per line when its output is not a terminal, and
+# with -1 when it is: the form a script reads, and what `jz run ls`
+# receives. A line is a name and nothing else, so the text says nothing
+# about which command wrote it, and any list of words fits. The
+# definition therefore has no signature and is read only when it is
+# named: `jz run ls`, or --parser ls --variant names on a pipe. Naming
+# the parser alone does not reach it, since that would read the output of
+# any other ls option the long variants refuse as a list of names.
+#
+# Every line is kept exactly, leading and trailing spaces included, and
+# a line of spaces is a name like any other; an empty line is not a name
+# and is refused, which is also what refuses the headings ls prints for
+# several directories ("dir:" and a blank line).
+#
+# What the text cannot say: a name with a line break in it is printed as
+# two lines, and is read as two names. GNU and uutils ls print raw bytes
+# when writing to a pipe; BusyBox writes "?" for a byte it does not
+# print, so its names may differ from the ones on disk. `ls --zero`
+# (GNU coreutils 9.1 and later, uutils) ends each name with a NUL
+# instead, which the names-zero variant reads without that loss.
+format: 1
+command: ls
+variant: names
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gls
+description: ls -1, one file name per line, read only when named
+metadata:
+  tags: [linux, darwin, filesystem]
+  compatible: [GNU coreutils, uutils coreutils, macOS ls, FreeBSD ls, BusyBox]
+  references:
+    - https://pubs.opengroup.org/onlinepubs/9699919799/utilities/ls.html
+detect:
+  auto_detect: false
+  args:
+    # Every option that puts something other than the name on a line, or
+    # several names on one: the long formats, the size and inode columns,
+    # the marks -F and -p add, quoting and escaping, columns, and the
+    # headings of a recursive or several-directory listing. --format and
+    # --quoting-style given with their value as a separate word are
+    # refused whatever the value, since the value is not seen here.
+    none: ["-l", "-g", "-o", "-n", "-s", "--size", "-i", "--inode", "-F", "-p", "--classify", "--classify=always", "--file-type",
+           "--indicator-style", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify",
+           "-Q", "--quote-name", "--quoting-style", "--quoting-style=shell", "--quoting-style=shell-always", "--quoting-style=shell-escape",
+           "--quoting-style=shell-escape-always", "--quoting-style=c", "--quoting-style=escape", "--quoting-style=locale", "--quoting-style=clocale",
+           "-b", "--escape", "-B", "-q", "--hide-control-chars", "-C", "-x", "-m", "--format", "--format=long", "--format=verbose",
+           "--format=commas", "--format=horizontal", "--format=across", "--format=vertical", "-R", "--recursive", "-Z", "--context",
+           "-D", "--dired", "--zero", "--hyperlink", "--hyperlink=always", "--full-time"]
+input:
+  skip_blank: false
+parse:
+  type: regex
+  pattern: '^(?P<name>.+)$'

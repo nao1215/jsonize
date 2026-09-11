@@ -1,0 +1,39 @@
+{
+  "destination": {
+    "name": "127.0.0.1",
+    "address": "127.0.0.1",
+    "source": null,
+    "data_bytes": 0,
+    "packet_bytes": null
+  },
+  "replies": [
+    {
+      "kind": "reply",
+      "bytes": 8,
+      "responder": "127.0.0.1",
+      "icmp_seq": 0,
+      "ttl": 64,
+      "time_ms": null
+    },
+    {
+      "kind": "reply",
+      "bytes": 8,
+      "responder": "127.0.0.1",
+      "icmp_seq": 1,
+      "ttl": 64,
+      "time_ms": null
+    }
+  ],
+  "statistics": {
+    "name": "127.0.0.1",
+    "packets_transmitted": 2,
+    "packets_received": 2,
+    "duplicates": null,
+    "packet_loss_percent": 0,
+    "out_of_wait_time": null,
+    "round_trip_min_ms": null,
+    "round_trip_avg_ms": null,
+    "round_trip_max_ms": null,
+    "round_trip_stddev_ms": null
+  }
+}

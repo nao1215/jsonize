@@ -1,0 +1,26 @@
+[
+  {
+    "name": "dangling"
+  },
+  {
+    "name": "dir"
+  },
+  {
+    "name": "empty"
+  },
+  {
+    "name": "fifo"
+  },
+  {
+    "name": "file.txt"
+  },
+  {
+    "name": "link"
+  },
+  {
+    "name": "with space.txt"
+  },
+  {
+    "name": "日本語.txt"
+  }
+]
