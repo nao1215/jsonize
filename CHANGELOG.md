@@ -131,6 +131,9 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `ls/long-iso` reads `ls -l --time-style=long-iso`, and `ls/full-time`
+  reads `ls -l --full-time`, whose time carries its offset and is read
+  as an instant. Both were exit 4.
 - `pactl/short-clients` and `pactl/short-cards` read `pactl list short
   clients` and `pactl list short cards`. Both were exit 4.
 - `who/iso` reads `who` as a locale other than C prints it, the login

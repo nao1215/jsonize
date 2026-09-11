@@ -1,0 +1,6 @@
+total 20
+drwxrwxr-x 2 usr usr 4096 2026-09-07 15:12 buildinfo
+drwxrwxr-x 2 usr usr 4096 2026-09-11 10:15 cli
+drwxrwxr-x 2 usr usr 4096 2026-09-11 10:15 conformance
+drwxrwxr-x 2 usr usr 4096 2026-09-11 05:21 runner
+drwxrwxr-x 2 usr usr 4096 2026-09-11 03:40 schema
