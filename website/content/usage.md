@@ -335,6 +335,36 @@ $ sqlite3 -csv app.db 'select id, name from users' | jz --parser csv --variant c
   no header line and no names of its own; anywhere else it is a usage
   error, reported before the input is opened.
 
+## HTTP headers
+
+`curl -I` and `curl -D -` print the header block of every response they
+read, and `curl/headers` reads each block as a record:
+
+```console
+$ curl -sIL https://example.com/old | jz
+[{"status":{"version":"1.1","code":301,"reason":"Moved Permanently"},"headers":[{"name":"Location","value":"https://example.com/new"}]},
+ {"status":{"version":"2","code":200,"reason":null},"headers":[{"name":"set-cookie","value":"a=1"},{"name":"set-cookie","value":"b=2"}]}]
+```
+
+- A redirect followed with `-L`, a 1xx interim response (`100
+  Continue`, `103 Early Hints`) and a proxy's reply to CONNECT are
+  records of their own, in the order curl read them; the last one is the
+  final response.
+- `code` is an integer. `reason` is `null` when the status line has
+  none, which is always the case for HTTP/2 and HTTP/3, where curl writes
+  the status line itself (`HTTP/2 200 `).
+- Headers are a list in the order they came, so a header sent twice
+  (`Set-Cookie`, `Link`, `Via`) is two entries. A name is kept as it was
+  sent: HTTP/2 and HTTP/3 lower-case every name, an HTTP/1.1 server may
+  write any case, and a name is compared without regard to case
+  (`jq '.[-1].headers[] | select(.name | ascii_downcase == "set-cookie")'`).
+  Values are text: which ones are numbers or dates depends on the header,
+  and the list gives no place to say so.
+- `-v` writes the exchange to standard error, which `jz run` passes
+  through, so `curl -sIv` is read the same as `curl -sI`. Merged into the
+  output (`2>&1`, `--stderr -`) its lines are no headers and the text is
+  refused, and so is a body after the headers (`curl -i`).
+
 ## Timestamps a format does not fully state
 
 Two things a command prints cannot be read from the text alone.
