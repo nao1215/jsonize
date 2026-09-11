@@ -131,6 +131,9 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `uptime/pretty` reads `uptime -p`, each unit as printed, and
+  `uptime/since` reads `uptime -s`, the time the system booted. Both
+  were exit 4.
 - `losetup/associations` reads `losetup -a` and `losetup DEVICE`, one
   record per loop device with the backing file, its device number and
   inode (null when the user may not ask for them), and the offset and

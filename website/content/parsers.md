@@ -183,7 +183,7 @@ the same reading with settings of your own.
 | `unzip` | [`busybox`](../schemas/unzip/busybox.json), [`info-zip`](../schemas/unzip/info-zip.json) |
 | `update-alternatives` | [`query`](../schemas/update-alternatives/query.json), [`selections`](../schemas/update-alternatives/selections.json) |
 | `upower` | [`device`](../schemas/upower/device.json), [`dump`](../schemas/upower/dump.json), [`enumerate`](../schemas/upower/enumerate.json) |
-| `uptime` | [`bsd`](../schemas/uptime/bsd.json), [`linux`](../schemas/uptime/linux.json) |
+| `uptime` | [`bsd`](../schemas/uptime/bsd.json), [`linux`](../schemas/uptime/linux.json), [`pretty`](../schemas/uptime/pretty.json), [`since`](../schemas/uptime/since.json) |
 | `uuidparse` | [`linux`](../schemas/uuidparse/linux.json) |
 | `uv` | [`pip-show`](../schemas/uv/pip-show.json), [`tool-list`](../schemas/uv/tool-list.json) |
 | `vmstat` | [`linux`](../schemas/vmstat/linux.json), [`linux-active`](../schemas/vmstat/linux-active.json), [`linux-disk`](../schemas/vmstat/linux-disk.json), [`linux-disk-summary`](../schemas/vmstat/linux-disk-summary.json), [`linux-stats`](../schemas/vmstat/linux-stats.json) |
