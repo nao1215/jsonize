@@ -23,13 +23,18 @@ input:
     - '^To show all installed unit files'
     - '^Legend:'
     - '^LOAD\s+='
-    - '^\s+(?:LOAD|ACTIVE|SUB)\s+->'
-    - '^LOAD\s+->'
+    # The legend points with "->" in the C locale and with an arrow
+    # character in a UTF-8 one.
+    - '^\s+(?:LOAD|ACTIVE|SUB)\s+(?:->|→)'
+    - '^LOAD\s+(?:->|→)'
     - '^ACTIVE\s+='
     - '^SUB\s+='
 parse:
   type: regex
-  pattern: '^(?P<marker>\S)?\s+(?P<unit>\S+)\s+(?P<load>\S+)\s+(?P<active>\S+)\s+(?P<sub>\S+)\s+(?P<description>.+?)\s*$'
+  # The three states are lower-case words ("not-found", "activating"),
+  # which is what keeps a line of prose, a legend written some other way,
+  # from being read as a unit.
+  pattern: '^(?P<marker>\S)?\s+(?P<unit>\S+)\s+(?P<load>[a-z][a-z-]*)\s+(?P<active>[a-z][a-z-]*)\s+(?P<sub>[a-z][a-z-]*)\s+(?P<description>.+?)\s*$'
 fields:
   marker: {when_missing: omit}
   unit: {required: true}

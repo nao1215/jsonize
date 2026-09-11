@@ -25,7 +25,8 @@ input:
     - '^\d+ loaded units listed'
     - '^To show all installed unit files'
     - '^Legend:'
-    - '^\s+(?:LOAD|ACTIVE|SUB|JOB)\s+->'
+    # "->" in the C locale, an arrow character in a UTF-8 one.
+    - '^\s+(?:LOAD|ACTIVE|SUB|JOB)\s+(?:->|→)'
 parse:
   type: table
   split: aligned
