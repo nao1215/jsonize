@@ -11,8 +11,9 @@ metadata:
     - https://man.freebsd.org/cgi/man.cgi?ps(1)
 detect:
   os: [linux, darwin, freebsd]
-  args:
-    any: ["aux", "axu", "-aux", "-axu"]
+  # No argument list: BSD options come bundled in any order and with more
+  # letters ("auxww", "auxf", "uax"), none of which changes the columns,
+  # and the header says which format this is on its own.
   signature:
     all:
       - '^USER\s+PID\s+%CPU\s+%MEM\s+VSZ\s+RSS\s+TTY?\s+STAT\s+START(?:ED)?\s+TIME\s+COMMAND\s*$'
