@@ -219,6 +219,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `sensors` left out the limits a reading continues on a second line
+  ("(crit = +84.8 C)") at exit 0; they are joined to the reading's other
+  limits. Piped from a UTF-8 shell, where a temperature is "+38.0°C",
+  it was exit 3; the unit is "C" in either locale.
 - `systemctl list-units` piped from a UTF-8 shell read the lines of its
   legend as units, exit 0: there the legend points with "→" instead of
   "->", which only the C form was left out for. Both are left out now,
