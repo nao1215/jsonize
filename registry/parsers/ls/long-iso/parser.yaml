@@ -20,7 +20,9 @@ metadata:
     - https://www.gnu.org/software/coreutils/manual/html_node/Formatting-file-timestamps.html
 detect:
   args:
-    any: ["--time-style=long-iso"]
+    # "--time-style long-iso", the value as an argument of its own, is
+    # the same request.
+    any: ["--time-style=long-iso", "long-iso"]
     none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
   signature:
     all:

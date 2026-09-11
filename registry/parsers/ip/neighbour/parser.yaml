@@ -14,7 +14,10 @@ metadata:
 detect:
   os: [linux]
   args:
-    any: ["neighbour", "neighbor", "neigh", "n"]
+    # iproute2 takes any prefix of an object's name ("ip ro", "ip -s l",
+    # "tc q"), and the first object in its table that the prefix fits is
+    # the one it runs, so each prefix is listed.
+    any: ["neighbour", "neighbou", "neighbor", "neighbo", "neighb", "neigh", "neig", "nei", "ne", "n"]
   signature:
     all:
       - '\A\S+ dev \S+ (?:lladdr \S+ )?(?:(?:router|proxy) )*(?:PERMANENT|NOARP|REACHABLE|STALE|DELAY|PROBE|INCOMPLETE|FAILED|NONE)[ \t]*$'
