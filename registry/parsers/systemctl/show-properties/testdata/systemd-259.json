@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Documentation",
+    "value": "\"man:cron(8)\""
+  },
+  {
+    "name": "ActiveState",
+    "value": "active"
+  },
+  {
+    "name": "SubState",
+    "value": "running"
+  },
+  {
+    "name": "MainPID",
+    "value": "2052"
+  },
+  {
+    "name": "ExecMainStartTimestamp",
+    "value": "Thu 2026-09-10 22:57:47 JST"
+  }
+]

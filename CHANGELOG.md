@@ -224,6 +224,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run sysctl KEY`, `sysctl -p` and `sysctl -w` were exit 4: the
+  definition asked for -a, though they print the same lines for the keys
+  they touch. `systemctl show -p PROPERTY UNIT` and `systemctl show` of
+  the manager are read by the new `systemctl/show-properties`; a query
+  of several units without their Id, which prints blocks that do not say
+  whose they are, is refused.
 - `jz run df --total` (with any of -h, -i, -T, -P) was exit 3 at the
   closing row, whose mount point is a dash. The row is read, as
   printed: filesystem `total`, mount point `-`.

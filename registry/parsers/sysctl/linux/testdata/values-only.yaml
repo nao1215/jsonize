@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) as sysctl -n vm.swappiness kernel.pid_max with LC_ALL=C
+description: -n prints the values alone, with nothing to say which parameter each belongs to
+os: linux
+expect_error: "does not describe this input"

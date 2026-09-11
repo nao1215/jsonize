@@ -1,0 +1,39 @@
+# `systemctl show -p PROPERTY UNIT` (or --property=) prints only the
+# properties asked for, one Key=value per line, and `systemctl show` with
+# no unit prints the manager's. Without the unit's Id and Description the
+# lines are the shape of any environment file, so this is read only when
+# systemctl show is named or run. The result is the list systemctl/show
+# gives: names and values in the order printed.
+#
+# Asked about several units, systemctl prints one block per unit with a
+# blank line between, and the blocks name no unit, so nothing in the
+# text says which value is whose. That is refused rather than read as
+# one list: ask for Id as well, which systemctl/show reads.
+format: 1
+command: systemctl
+variant: show-properties
+description: systemctl show -p PROPERTY, the properties asked for
+metadata:
+  tags: [linux, systemd, service]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/systemctl.html
+detect:
+  os: [linux]
+  auto_detect: false
+  args:
+    all: ["show"]
+  signature:
+    all:
+      # One block of Key=value lines and nothing else. A systemd property
+      # is named in CamelCase (Id, ActiveState, MainPID), which an
+      # environment variable (PATH, LANG) and lsblk -P (NAME, MAJ:MIN)
+      # are not.
+      - '\A(?:[A-Z][a-z][A-Za-z0-9]*=[^\n]*\n)*[A-Z][a-z][A-Za-z0-9]*=[^\n]*\n?\z'
+    none:
+      # A unit's whole report, or one that names its unit: systemctl/show.
+      - '\AId=[^\n]+\.(?:service|socket|target|device|mount|automount|swap|path|timer|slice|scope)$'
+parse:
+  type: kv
+  separator: "="
+  as: list

@@ -1046,6 +1046,25 @@ scenarios:
   # A device file has no size; ls prints its major and minor numbers in
   # that column. /dev/null is 1, 3 on every Linux system, and a listing of
   # /dev used to be exit 4 for the first device in it.
+  # Asking for a few kernel parameters, or a few properties of a unit,
+  # prints the lines the full report prints for them.
+  - name: sysctl KEY and systemctl show -p land on their definitions
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run sysctl kernel.ostype
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].value", equals: Linux }
+      - run:
+          command: jz run --explain systemctl show -p ActiveState,SubState systemd-journald
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "systemctl/show-properties from embedded"
+
   # The time styles scripts ask for print the year and the clock, and
   # --full-time the offset too, which makes the time an instant.
   - name: ls -l with an ISO time style lands on its own definition

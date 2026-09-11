@@ -1,0 +1,14 @@
+[
+  {
+    "name": "net.ipv4.ip_forward",
+    "value": "1"
+  },
+  {
+    "name": "vm.swappiness",
+    "value": "60"
+  },
+  {
+    "name": "kernel.pid_max",
+    "value": "4194304"
+  }
+]
