@@ -1,0 +1,26 @@
+[
+  {
+    "filesystem": "/dev/nvme0n1p2",
+    "1k_blocks": 1920641288,
+    "used": 1651843448,
+    "available": 171160876,
+    "use_percent": 91,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p1",
+    "1k_blocks": 1098632,
+    "used": 6456,
+    "available": 1092176,
+    "use_percent": 1,
+    "mounted_on": "/boot/efi"
+  },
+  {
+    "filesystem": "total",
+    "1k_blocks": 1921739920,
+    "used": 1651849904,
+    "available": 172253052,
+    "use_percent": 91,
+    "mounted_on": "-"
+  }
+]

@@ -26,7 +26,9 @@ input:
     - '\AFilesystem\s+Type\s+1024-blocks\s+Used\s+Available\s+Capacity\s+Mounted on\s*$'
 parse:
   type: regex
-  pattern: '^(?P<filesystem>\S.*?)\s+(?P<type>\S+)\s+(?P<1024_blocks>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<capacity_percent>\d+%|-)\s+(?P<mounted_on>/.*)$'
+  pattern: '^(?P<filesystem>\S.*?)\s+(?P<type>\S+)\s+(?P<1024_blocks>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<capacity_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
+# --total closes the table with a row named total whose mount point (and
+# type) is a dash; it is kept, as printed, since it is what was asked for.
 fields:
   filesystem: {required: true}
   type: {required: true}
