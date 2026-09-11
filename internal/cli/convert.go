@@ -25,6 +25,9 @@ Text that matches none, or more than one, is an error naming what to pass.
   df -h | jz --parser df
   df -h | jz --parser df --variant gnu-human
   vmstat 1 | jz --stream               # one JSON document per line
+  curl -sIL https://example.com | jz   # one record per response
+  df -h | jz --yaml                    # the same values as YAML
+  jz --parser csv --variant comma-no-header --columns id,name --file rows.csv
 
 Options:
 `

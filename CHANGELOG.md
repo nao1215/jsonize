@@ -8,6 +8,25 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `--parser COMMAND` on a pipe no longer reaches a variant that has no
+  signature when the command's other variants have one; that variant is
+  used when it is named with `--variant`, or by `jz run`, whose
+  arguments narrow the variants first. `ls/names` is the one such
+  variant: it reads any list of lines, and `ls -s | jz --parser ls`
+  would otherwise have come back as names with a size in front of each.
+  Commands whose variants all lack a signature (`csv`, `table`, `kv`,
+  `ini`) behave as before.
+- A csv definition with `header.none: true` may leave out `columns`; its
+  columns are then `column_1`, `column_2` and so on, as many as the
+  first record has, and the first record is read as a record in the
+  whole document and in `--stream` alike.
+- Where a definition keeps blank lines (`skip_blank: false`), empty
+  lines after the text are left out as well as those before it, and a
+  line of spaces is text at either end rather than a blank line.
+- `cksum/posix` refuses the default line of the macOS and FreeBSD `stat`
+  (a device and an inode number, then a mode, counts and four quoted
+  times), which it read as a CRC, a size and a name.
+
 - `etc/crontab` keeps the variable assignments of the file (contract
   version 2). SHELL, PATH, MAILTO and CRON_TZ change what the jobs after
   them do, and they were dropped. Assignments and jobs are one array in
@@ -145,6 +164,38 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `--yaml` writes the same values as YAML instead of JSON: key order,
+  types and nulls as the JSON has them, a decimal always with a decimal
+  point, and a string quoted whenever a YAML 1.1 or 1.2 reader could
+  take it for a number, a date, a boolean or a null. With `--stream`
+  each record is a document between `---` and `...`. `--yaml` with
+  `--pretty` is exit 2, before the input is read or a command run.
+- `csv/comma-no-header` and `csv/tab-no-header` read a csv whose first
+  line is data, and `--columns NAME,...` names their columns without a
+  `--define`. A row wider than the first record (or than the names) is
+  exit 3; `--columns` where there are no columns to name is exit 2 before
+  the input is opened.
+- `jz completion bash|zsh` prints a completion script for subcommands,
+  options, the parsers of every registry jz reads, the variants of the
+  parser on the line and file paths. It reads the registries and runs
+  nothing; a test checks that no network package is linked into jz.
+- `--stream` streams a composite part by part, as `{"part", "value"}`
+  documents: one per element of a list part, one per single-value part
+  once its region has ended. `ping` is answered reply by reply, and
+  `--extract` and `--exclude` name the parts.
+- Definitions: `curl/headers` (`curl -I`, `curl -D -`: one record per
+  response with its status line and its headers as an ordered
+  `{name, value}` list, so a repeated `Set-Cookie` is two entries and a
+  name keeps its case; redirects followed with `-L`, 1xx interim
+  responses, a proxy's reply to CONNECT, HTTP/1.x, 2 and 3), `ping/bsd`
+  (macOS `ping` and `ping6`, FreeBSD `ping`), `stat/bsd` and
+  `stat/bsd-verbose` (macOS and FreeBSD `stat` and `stat -x`),
+  `ls/names` and `ls/names-zero` (`ls -1` and `ls --zero`, read only
+  when named). The BSD definitions were written against output captured
+  on macOS 14, 15 and 26 and FreeBSD 15.1 runners.
+- `e2ehelper serve`, a local HTTP server for the end-to-end suite, and
+  the `http` and `completion` specs; the Linux runner installs zsh.
+
 - Three keys in the definition format. A string field takes `regex`,
   whose one named group is the part of the value kept, and `unescape`,
   the escapes a format writes and what each stands for, applied only on
@@ -268,6 +319,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A csv stream held a record back while its text had an odd number of
+  quotes, so a quote in the middle of a value (`1,x"y`) held every line
+  after it and lost them with it. Only a quote that opens a value holds
+  the next line now; the bad line is reported and the stream goes on.
 - `jz run sysctl KEY`, `sysctl -p` and `sysctl -w` were exit 4: the
   definition asked for -a, though they print the same lines for the keys
   they touch. `systemctl show -p PROPERTY UNIT` and `systemctl show` of
@@ -969,6 +1024,20 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Decisions worth knowing
 
+- YAML output is a second spelling of the JSON, not a second contract:
+  the schemas describe both and no definition knows about it. A string
+  is written plain only when it begins with a letter, `_` or `/` and a
+  YAML 1.1 or 1.2 reader could take it for nothing else, which quotes
+  more than YAML needs (`"1.8T"`, `"1k_blocks"`) and means the same to
+  every reader.
+- A variant without a signature is reached by naming it, not the
+  command: under a command whose other variants make a claim about the
+  text, the name alone would let the one that makes none read what the
+  others refuse.
+- HTTP header names are kept as they were sent and headers stay a list.
+  A name is compared without regard to case, which a reader does with
+  one call; rewriting the names would print what the server did not
+  send, and a map keyed by them would keep one value per name.
 - A signature says what a format is, not what it is not. `none` is a
   safety valve for the case where there is no positive form to write,
   with the reason beside it, rather than the way a definition keeps its
@@ -977,7 +1046,10 @@ project follows [Semantic Versioning](https://semver.org/).
   two together: `file/posix` had collected fourteen such expressions and
   now has none. Of the 68 the registry carried, 31 excluded nothing at
   all, 13 named another command, and 11 remain, every one telling
-  variants of a single command apart.
+  variants of a single command apart. One has been added since that
+  names another command, in `cksum/posix`: a name can be any text, so no
+  positive form keeps out the BSD `stat` line, and the exception is
+  written beside the expression.
 - Adding a definition needs nothing but its own signature and its own
   fixtures. Needing to edit somebody else's definition means the two
   were coupled through an exclusion, and `jz test` is what shows it.

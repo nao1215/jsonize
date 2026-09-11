@@ -2,7 +2,9 @@
 #
 # Load it for the current shell, or add the line to ~/.bashrc:
 #
-#   source <(jz completion bash)
+#   eval "$(jz completion bash)"
+#
+# (bash 3.2, the one macOS ships, reads nothing from `source <(...)`.)
 #
 # Every candidate comes from `jz __complete`, which reads the registries
 # jz reads (the built-in one, your own and JSONIZE_REGISTRY_PATH) and

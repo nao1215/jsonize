@@ -228,7 +228,7 @@ type outputOptions struct {
 func (f *outputOptions) bind(o *optionSet) {
 	o.boolOpt(&f.pretty, "pretty", "p", "indent JSON output")
 	o.boolOpt(&f.yaml, "yaml", "", "write YAML instead of JSON")
-	o.boolOpt(&f.stream, "stream", "", "write one record per line as it is read")
+	o.boolOpt(&f.stream, "stream", "", "write each record as soon as it is read")
 	o.boolOpt(&f.raw, "raw", "", "skip the field rules and report every value as text")
 	o.listOpt(&f.extract, "extract", "KEY", "keep only this key (repeatable)")
 	o.listOpt(&f.exclude, "exclude", "KEY", "drop this key (repeatable)")

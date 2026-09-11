@@ -36,7 +36,8 @@ $ go install github.com/nao1215/jsonize/cmd/jz@latest
 ```
 
 Release archives for Linux, macOS and Windows are attached to every
-release.
+release. Shell completion: `eval "$(jz completion bash)"` in `~/.bashrc`,
+`source <(jz completion zsh)` in `~/.zshrc`.
 
 ## Using it
 
@@ -48,6 +49,7 @@ jz run COMMAND [args...]     # let jz run the command and convert its stdout
 jz list                      # what jz can read
 jz list --schema df gnu      # the JSON Schema of what one definition produces
 jz test [DIR...]             # check parser definitions of your own
+jz completion bash|zsh       # a shell completion script
 ```
 
 Options:
@@ -55,7 +57,8 @@ Options:
 ```text
   -f, --file PATH               read input from PATH instead of stdin
   -p, --pretty                  indent JSON output
-      --stream                  write one record per line as it is read
+      --yaml                    write YAML instead of JSON
+      --stream                  write each record as soon as it is read
       --raw                     skip the field rules and report every value as text
       --extract KEY             keep only this key (repeatable)
       --exclude KEY             drop this key (repeatable)
@@ -64,6 +67,7 @@ Options:
       --parser NAME             restrict detection to one parser
       --variant NAME            use a variant of --parser
       --define YAML             read with a definition given here instead of a registered one
+      --columns NAME,...        name the columns of a csv read without a header line
       --explain[=json]          report the chosen definition and why, on stderr
   -h, --help                    show help
 ```
@@ -164,7 +168,7 @@ Reference: https://pkg.go.dev/github.com/nao1215/jsonize/pkg/selector
 | *n* | `jz run` mirrors the command's own status, or 128+signal |
 
 Diagnostics go to standard error. Standard output carries a complete JSON
-document or nothing.
+document (a YAML one with `--yaml`) or nothing.
 
 ## Development
 
