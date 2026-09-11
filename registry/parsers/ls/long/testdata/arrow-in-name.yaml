@@ -1,8 +1,7 @@
-source: hand-written in GNU ls -l format
+source: GNU coreutils 9.7 (gnuls) on Ubuntu 26.04, LC_ALL=C TZ=UTC ls -l over a directory made for the fixture; the user name replaced
 description: >
   " -> " is only a link separator on a line whose mode says symbolic
-  link; a regular file may be called "a -> b". A link whose own name
-  contains " -> " is split at the first one, and joining filename and
-  link_to back with " -> " reproduces the line.
+  link; a regular file may be called "a -> b". A link line with one
+  " -> " reads one way.
 os: linux
 args: ["-l"]

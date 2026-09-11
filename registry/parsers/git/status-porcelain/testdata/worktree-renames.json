@@ -1,0 +1,14 @@
+[
+  {
+    "index": null,
+    "worktree": "R",
+    "path": "\"a -> b\"",
+    "renamed_to": "\"c -> d\""
+  },
+  {
+    "index": null,
+    "worktree": "R",
+    "path": "plain.txt",
+    "renamed_to": "moved.txt"
+  }
+]

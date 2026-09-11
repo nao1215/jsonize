@@ -12,9 +12,9 @@
 #
 # Two patterns rather than one: only a line whose mode starts with "l" is
 # a symbolic link, so " -> " is a target separator there and an ordinary
-# part of the file name everywhere else. A name that contains " -> " is
-# split at its first occurrence; joining filename and link_to back with
-# " -> " reproduces what ls printed.
+# part of the file name everywhere else. A link line with more than one
+# " -> " can be split more than one way, and nothing in it says which, so
+# it is refused (see link_to).
 format: 1
 command: ls
 variant: long
@@ -77,4 +77,9 @@ fields:
   major: {type: int}
   minor: {type: int}
   filename: {required: true}
-  link_to: {when_missing: omit}
+  # The pattern splits at the first " -> ", so any other one is in the
+  # target, and then the text says two things: the name may hold one as
+  # well as the target. So may a target that starts with "-> ", where two
+  # arrows share a space. Such a line is refused rather than read either
+  # way.
+  link_to: {when_missing: omit, regex: '(?P<link_to>(?: |- )*(?:(?:[^ -]|-[^ >]|->[^ ])(?:[^ ]| (?: |- )*(?:[^ -]|-[^ >]|->[^ ]))*(?: (?: |- )*(?:-|->)?)?|-|->)?)'}

@@ -1,0 +1,31 @@
+[
+  {
+    "index": "R",
+    "worktree": null,
+    "path": "\"a -> b\"",
+    "renamed_to": "\"c -> d\""
+  },
+  {
+    "index": "R",
+    "worktree": null,
+    "path": "plain.txt",
+    "renamed_to": "renamed.txt"
+  },
+  {
+    "index": "R",
+    "worktree": null,
+    "path": "\"with space.txt\"",
+    "renamed_to": "\"still spaced.txt\""
+  },
+  {
+    "index": "R",
+    "worktree": null,
+    "path": "\"q\\\"uote\"",
+    "renamed_to": "\"x -> y\""
+  },
+  {
+    "index": "?",
+    "worktree": "?",
+    "path": "\"new -> file\""
+  }
+]

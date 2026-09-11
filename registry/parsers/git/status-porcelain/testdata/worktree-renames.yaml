@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C; the files were moved and added with --intent-to-add
+description: renames in the work tree column, which git prints for a file added with --intent-to-add
+os: linux
+args: ["status", "--porcelain"]

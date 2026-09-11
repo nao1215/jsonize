@@ -1,0 +1,2 @@
+ R "a -> b" -> "c -> d"
+ R plain.txt -> moved.txt

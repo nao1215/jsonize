@@ -1,0 +1,4 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: renames whose names hold " -> " and a quote; git quotes every name with a space, so the " -> " outside quotes is the one separator
+os: linux
+args: ["status", "--porcelain"]

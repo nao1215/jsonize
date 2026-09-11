@@ -1,0 +1,5 @@
+R  "a -> b" -> "c -> d"
+R  plain.txt -> renamed.txt
+R  "with space.txt" -> "still spaced.txt"
+R  "q\"uote" -> "x -> y"
+?? "new -> file"
