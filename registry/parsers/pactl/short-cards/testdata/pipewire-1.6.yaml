@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (pactl 17.0 on PipeWire 1.6.2) as pactl list short cards with LC_ALL=C; the serial number of the webcam replaced
+description: the sound cards PipeWire found through ALSA, two on the PCI bus and three on USB
+os: linux
+args: [list, short, cards]

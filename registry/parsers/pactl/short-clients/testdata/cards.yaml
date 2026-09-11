@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (pactl 17.0 on PipeWire 1.6.2) as pactl list short cards with LC_ALL=C; the serial number of the webcam replaced
+description: three tab separated cells as well, but a card name where the driver goes, which is pactl/short-cards to read
+os: linux
+expect_error: "does not describe this input"

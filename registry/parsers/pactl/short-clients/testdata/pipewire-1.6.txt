@@ -1,0 +1,15 @@
+33	PipeWire	wireplumber
+37	PipeWire	pipewire
+40	PipeWire	wireplumber
+51	PipeWire	kwin_wayland
+93	PipeWire	kded6
+94	PipeWire	kded6
+95	PipeWire	xdg-desktop-portal
+96	PipeWire	python3.14
+97	PipeWire	plasmashell
+98	PipeWire	plasmashell
+99	PipeWire	plasmashell
+284	PipeWire	polkit-kde-authentication-agent-1
+426	PipeWire	firefox
+868	PipeWire	chrome
+1206	PipeWire	pactl

@@ -939,6 +939,43 @@ scenarios:
               - { path: "$[0].inet.address", equals: 127.0.0.1 }
               - { path: "$[0].inet.mask", equals: 255.0.0.0 }
 
+  # The short listings of clients and of cards are both three tab
+  # separated cells; the arguments choose the definition, and each one's
+  # signature refuses the other's text. The fake pactl prints what a
+  # PipeWire server prints for each.
+  - name: pactl list short clients and cards land on their own definitions
+    only: {os: linux}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
+    steps:
+      - fixture:
+          file: bin/pactl
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            case "$3" in
+            clients) printf '33\tPipeWire\twireplumber\n37\tPipeWire\tpipewire\n' ;;
+            cards) printf '55\talsa_card.pci-0000_c6_00.1\talsa\n' ;;
+            esac
+      - run:
+          command: jz run --explain pactl list short clients
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pactl/short-clients from embedded"
+          stdout:
+            json:
+              - { path: "$[1].binary", equals: pipewire }
+      - run:
+          command: jz run --explain pactl list short cards
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pactl/short-cards from embedded"
+          stdout:
+            json:
+              - { path: "$[0].name", equals: alsa_card.pci-0000_c6_00.1 }
+
   # A machine with no sound card has no sinks, and pactl lists them by
   # printing nothing. That is the empty list; pactl/info, one object, used
   # to be judged with the listings and turned the answer into exit 4.
