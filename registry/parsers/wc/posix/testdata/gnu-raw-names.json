@@ -1,0 +1,62 @@
+[
+  {
+    "lines": 1,
+    "words": 1,
+    "bytes": 2,
+    "filename": "names/plain"
+  },
+  {
+    "lines": 1,
+    "words": 1,
+    "bytes": 2,
+    "filename": "names/sp ace"
+  },
+  {
+    "lines": 1,
+    "words": 1,
+    "bytes": 2,
+    "filename": "names/q\"uote"
+  },
+  {
+    "lines": 1,
+    "words": 1,
+    "bytes": 2,
+    "filename": "names/q'uote"
+  },
+  {
+    "lines": 1,
+    "words": 1,
+    "bytes": 2,
+    "filename": "names/do$llar"
+  },
+  {
+    "lines": 1,
+    "words": 1,
+    "bytes": 2,
+    "filename": "names/back\\slash"
+  },
+  {
+    "lines": 1,
+    "words": 1,
+    "bytes": 2,
+    "filename": "names/lit\\nname"
+  },
+  {
+    "lines": 1,
+    "words": 1,
+    "bytes": 2,
+    "filename": "names/tab\tname"
+  },
+  {
+    "lines": 1,
+    "words": 1,
+    "bytes": 2,
+    "filename": "names/日本"
+  },
+  {
+    "lines": 9,
+    "words": 9,
+    "bytes": 18,
+    "filename": "total"
+  }
+]

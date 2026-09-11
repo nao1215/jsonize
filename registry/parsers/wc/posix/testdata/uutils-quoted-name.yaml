@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 with uutils coreutils 0.8.0, LC_ALL=C wc over a file made for the fixture
+description: >
+  uutils quotes a name with a newline the way GNU wc does, and the line
+  is refused for the same reason.
+os: linux
+args: []
+expect_error: does not have the shape

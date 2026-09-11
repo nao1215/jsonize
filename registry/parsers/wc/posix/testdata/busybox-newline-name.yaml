@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 with BusyBox v1.37.0, LC_ALL=C busybox wc over a file made for the fixture
+description: >
+  BusyBox prints a name with a newline as it is. The second half of the
+  name is a line of its own and not a wc line, so the text is refused.
+os: linux
+args: []
+expect_error: does not match

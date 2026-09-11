@@ -1,0 +1,5 @@
+description: The same Japanese name under LC_ALL=C, which tar writes in octal. The text is also what the literal style prints for a name made of those backslashes and digits, so it is refused.
+source: captured on Ubuntu 26.04 with GNU tar 1.35, LC_ALL=C tar -tvf over an archive made for the fixture; the user name replaced
+os: linux
+args: [-tvf, utf8.tar]
+expect_error: does not have the shape

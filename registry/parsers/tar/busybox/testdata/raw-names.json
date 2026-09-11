@@ -1,0 +1,65 @@
+[
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-09-11",
+    "time": "03:10:46",
+    "name": "busyraw/"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 2,
+    "date": "2026-09-11",
+    "time": "03:10:46",
+    "name": "busyraw/日本"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 2,
+    "date": "2026-09-11",
+    "time": "03:10:46",
+    "name": "busyraw/back\\slash"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 2,
+    "date": "2026-09-11",
+    "time": "03:10:46",
+    "name": "busyraw/lit\\nname"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 2,
+    "date": "2026-09-11",
+    "time": "03:10:46",
+    "name": "busyraw/sp ace"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 2,
+    "date": "2026-09-11",
+    "time": "03:10:46",
+    "name": "busyraw/q\"uote"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 2,
+    "date": "2026-09-11",
+    "time": "03:10:46",
+    "name": "busyraw/plain"
+  }
+]

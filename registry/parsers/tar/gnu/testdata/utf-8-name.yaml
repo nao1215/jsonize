@@ -1,0 +1,4 @@
+description: A Japanese name, which tar prints as it is in a UTF-8 locale.
+source: captured on Ubuntu 26.04 with GNU tar 1.35, LC_ALL=C.UTF-8 tar -tvf over an archive made for the fixture; the user name replaced
+os: linux
+args: [-tvf, utf8.tar]

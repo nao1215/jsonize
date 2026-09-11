@@ -1,0 +1,20 @@
+[
+  {
+    "mode": "drwxrwxr-x",
+    "owner": "alice",
+    "group": "alice",
+    "size": 0,
+    "date": "2026-09-11",
+    "time": "03:10",
+    "name": "utf8/"
+  },
+  {
+    "mode": "-rw-rw-r--",
+    "owner": "alice",
+    "group": "alice",
+    "size": 2,
+    "date": "2026-09-11",
+    "time": "03:10",
+    "name": "utf8/日本"
+  }
+]

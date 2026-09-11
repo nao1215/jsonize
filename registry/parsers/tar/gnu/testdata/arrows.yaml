@@ -1,0 +1,4 @@
+description: A regular file named "a -> b" and a link with one " -> ", which reads one way.
+source: captured on Ubuntu 26.04 with GNU tar 1.35, LC_ALL=C tar -tvf over an archive made for the fixture; the user name replaced
+os: linux
+args: [-tvf, ok.tar]

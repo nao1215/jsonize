@@ -6,13 +6,19 @@
 #
 # Two patterns rather than one: only a member whose mode starts with l is
 # a symbolic link, so " -> " is a target separator there and an ordinary
-# part of the name everywhere else. Joining name and link_to back with
-# " -> " reproduces the line.
+# part of the name everywhere else.
 #
-# GNU tar escapes a name containing a backslash or a control character,
-# and under LC_ALL=C it also escapes non-ASCII bytes in octal, so a name
-# is reported exactly as tar printed it. The size of a device member is
-# printed as major,minor rather than a byte count and is not read here.
+# GNU tar quotes a name by its --quoting-style, and the text does not say
+# which style that was. The default writes a backslash as "\\", a newline
+# as "\n" and, under LC_ALL=C, a non-ASCII byte in octal; the literal
+# style writes them as they are; the others put the name in quotes. A
+# backslash, or a quote at the start, therefore means two names at once,
+# and such a name is refused rather than decoded by guess. A name tar
+# leaves alone is the name. Run tar in a UTF-8 locale (`jz run
+# --keep-locale`) to get non-ASCII names as they are.
+#
+# The size of a device member is printed as major,minor rather than a
+# byte count and is not read here.
 format: 1
 command: tar
 variant: gnu
@@ -36,5 +42,10 @@ parse:
     - '^(?P<mode>[-dlcbps][-rwxsStT]{9})[ \t]+(?P<owner>[^ \t/]*)/(?P<group>[^ \t]*)[ \t]+(?P<size>\d+)[ \t]+(?P<date>\d{4}-\d{2}-\d{2})[ \t]+(?P<time>\d{2}:\d{2}) (?P<name>.+)$'
 fields:
   size: {type: int, required: true}
-  name: {required: true}
-  link_to: {when_missing: omit}
+  name: {required: true, regex: '(?P<name>[^\\''"‘][^\\]*)'}
+  # The pattern splits at the first " -> ", so any other one is in the
+  # target, and then the text says two things: the name may hold one as
+  # well as the target. So may a target that starts with "-> ", where two
+  # arrows share a space. Such a line is refused rather than read either
+  # way, and so is a target tar quoted or escaped, as a name is.
+  link_to: {when_missing: omit, regex: '(?P<link_to>(?: |- )*(?:(?:[^ \\''"‘-]|-[^ >\\]|->[^ \\])(?:[^ \\]| (?: |- )*(?:[^ \\-]|-[^ >\\]|->[^ \\]))*(?: (?: |- )*(?:-|->)?)?|-|->)?)'}
