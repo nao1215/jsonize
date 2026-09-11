@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) as ps ax with LC_ALL=C, the first eight lines
+description: the first processes, kernel threads among them, whose names are in brackets
+os: linux
+args: [ax]

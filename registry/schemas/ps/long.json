@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ps/long.json",
+  "title": "ps/long",
+  "description": "ps -l (F S UID PID PPID C PRI NI ADDR SZ WCHAN TTY TIME CMD)",
+  "x-jsonize": {
+    "definition": "ps/long",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "f": {
+        "type": "integer"
+      },
+      "s": {
+        "type": "string"
+      },
+      "uid": {
+        "type": "integer"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "ppid": {
+        "type": "integer"
+      },
+      "c": {
+        "type": "integer"
+      },
+      "pri": {
+        "type": "integer"
+      },
+      "ni": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "addr": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "sz": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "wchan": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "time": {
+        "type": "number"
+      },
+      "cmd": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "f",
+      "s",
+      "uid",
+      "pid",
+      "ppid",
+      "c",
+      "pri",
+      "ni",
+      "addr",
+      "sz",
+      "wchan",
+      "tty",
+      "time",
+      "cmd"
+    ]
+  }
+}

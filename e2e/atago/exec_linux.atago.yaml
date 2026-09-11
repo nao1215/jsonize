@@ -161,6 +161,22 @@ scenarios:
           command: jz run ps auxf
       - assert:
           exit_code: 0
+      # Without u the BSD format has five columns, and -l is the long
+      # format of the other option syntax.
+      - run:
+          command: jz run ps ax
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].pid", equals: 1 }
+      - run:
+          command: jz run ps -el
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].pid", equals: 1 }
       # -L prints a line per thread, and j the job format; with f the tree
       # is drawn into the command, which keeps it.
       - run:

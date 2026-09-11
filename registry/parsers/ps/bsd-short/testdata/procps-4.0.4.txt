@@ -1,0 +1,8 @@
+    PID TTY      STAT   TIME COMMAND
+      1 ?        Ss     2:23 /usr/lib/systemd/systemd --system --deserialize=124 splash
+      2 ?        S      0:00 [kthreadd]
+      3 ?        S      0:00 [pool_workqueue_release]
+      4 ?        I<     0:00 [kworker/R-rcu_gp]
+      5 ?        I<     0:00 [kworker/R-sync_wq]
+      6 ?        I<     0:00 [kworker/R-kvfree_rcu_reclaim]
+      7 ?        I<     0:00 [kworker/R-slub_flushwq]

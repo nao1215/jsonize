@@ -1,0 +1,32 @@
+# `ps ax`, `ps x` and `ps a` without u print the BSD format's short
+# columns: PID TTY STAT TIME COMMAND. TIME is the CPU time the process
+# used, minutes and seconds ("2:23"), as in ps aux. macOS prints the same
+# columns with TT for TTY, which is not claimed here until a capture of
+# it is a fixture.
+format: 1
+command: ps
+variant: bsd-short
+description: ps ax (PID TTY STAT TIME COMMAND) on Linux
+metadata:
+  tags: [linux, process]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/ps.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A\s*PID[ \t]+TTY[ \t]+STAT[ \t]+TIME[ \t]+COMMAND[ \t]*$'
+parse:
+  type: table
+  header:
+    columns: [pid, tty, stat, time, command]
+  # Everything after the fourth column is the command line, spaces and
+  # all.
+  max_fields: 5
+fields:
+  pid: {type: int, required: true}
+  tty: {null_if: ["?"]}
+  stat: {required: true}
+  time: {type: duration, layout: mm:ss, required: true}
+  command: {required: true}
