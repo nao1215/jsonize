@@ -163,7 +163,7 @@ the same reading with settings of your own.
 | `stat` | [`gnu`](../schemas/stat/gnu.json), [`gnu-filesystem`](../schemas/stat/gnu-filesystem.json), [`gnu-terse`](../schemas/stat/gnu-terse.json) |
 | `swapon` | [`legacy`](../schemas/swapon/legacy.json), [`linux`](../schemas/swapon/linux.json) |
 | `sysctl` | [`linux`](../schemas/sysctl/linux.json) |
-| `systemctl` | [`dependencies`](../schemas/systemctl/dependencies.json), [`jobs`](../schemas/systemctl/jobs.json), [`show`](../schemas/systemctl/show.json), [`sockets`](../schemas/systemctl/sockets.json), [`status`](../schemas/systemctl/status.json), [`timers`](../schemas/systemctl/timers.json), [`unit-files`](../schemas/systemctl/unit-files.json), [`units`](../schemas/systemctl/units.json), [`units-jobs`](../schemas/systemctl/units-jobs.json) |
+| `systemctl` | [`dependencies`](../schemas/systemctl/dependencies.json), [`jobs`](../schemas/systemctl/jobs.json), [`show`](../schemas/systemctl/show.json), [`show-properties`](../schemas/systemctl/show-properties.json), [`sockets`](../schemas/systemctl/sockets.json), [`status`](../schemas/systemctl/status.json), [`timers`](../schemas/systemctl/timers.json), [`unit-files`](../schemas/systemctl/unit-files.json), [`units`](../schemas/systemctl/units.json), [`units-jobs`](../schemas/systemctl/units-jobs.json) |
 | `systemd-analyze` | [`blame`](../schemas/systemd-analyze/blame.json), [`critical-chain`](../schemas/systemd-analyze/critical-chain.json), [`security`](../schemas/systemd-analyze/security.json), [`time`](../schemas/systemd-analyze/time.json) |
 | `systemd-cgtop` | [`batch`](../schemas/systemd-cgtop/batch.json) |
 | `systemd-id128` | [`show`](../schemas/systemd-id128/show.json) |

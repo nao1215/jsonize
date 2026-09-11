@@ -4,7 +4,7 @@
 format: 1
 command: sysctl
 variant: linux
-description: sysctl -a kernel parameters
+description: sysctl -a, or sysctl KEY..., kernel parameters
 metadata:
   tags: [linux, kernel, procps]
   compatible: [procps-ng, BusyBox]
@@ -12,8 +12,9 @@ metadata:
     - https://man7.org/linux/man-pages/man8/sysctl.8.html
 detect:
   os: [linux]
-  args:
-    any: ["-a", "--all", "-A"]
+  # No argument list: `sysctl KEY`, `sysctl -p` and `sysctl -w KEY=VALUE`
+  # print the same "key = value" lines as -a, for the keys they touch.
+  # -n and -N print values or names alone, which the signature refuses.
   signature:
     all:
       # Any dotted key with spaces around "=" is also a properties file
