@@ -55,9 +55,16 @@ scenarios:
                 COMP_CWORD=$((${#COMP_WORDS[@]} - 1))
                 COMPREPLY=()
                 _jz
-                local offered
+                local offered label= sep= i=1
                 offered=$(printf '%s\n' "${COMPREPLY[@]}" | LC_ALL=C sort | paste -sd '|' -)
-                printf '[%s] [%s]\n' "${*:2}" "$offered"
+                # Joined by hand: bash 3.2 writes a stray byte for an empty
+                # word in "${*:2}".
+                while [ $i -lt ${#COMP_WORDS[@]} ]; do
+                    label=$label$sep${COMP_WORDS[$i]}
+                    sep=' '
+                    i=$((i + 1))
+                done
+                printf '[%s] [%s]\n' "$label" "$offered"
             }
             t jz ''
             t jz --par
