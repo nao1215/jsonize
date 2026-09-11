@@ -96,15 +96,24 @@ func TestRun(t *testing.T) {
 
 // A blank line after the text, CRLF line endings and a byte order mark
 // are not changes to the text, and a definition that answers differently
-// for them fails. Keeping blank lines as lines to read is how one does.
+// for them fails. The reading leaves blank lines at the edges out before
+// any rule sees them, except input.fold, which joins lines first: one
+// that takes an empty line for a continuation joins a blank last line
+// onto the line above it. A definition that keeps blank lines answers the
+// same, since an empty line after the text is not part of it.
 func TestSameAnswer(t *testing.T) {
 	t.Parallel()
 	const blankKept = "format: 1\ncommand: n\nvariant: v\ndetect: {signature: {all: ['\\A\\d+$']}}\n" +
 		"input: {skip_blank: false}\nparse: {type: regex, pattern: '^(?P<n>\\d+)$'}\n"
+	const foldsBlank = "format: 1\ncommand: f\nvariant: v\ndetect: {signature: {all: ['\\Af\\d+$']}}\n" +
+		"input: {fold: '^$'}\nparse: {type: regex, pattern: '^f(?P<n>\\d+)$'}\n"
 	fsys := fstest.MapFS{
 		"parsers/n/v/parser.yaml":      {Data: []byte(blankKept)},
 		"parsers/n/v/testdata/ok.txt":  {Data: []byte("1\n2\n")},
 		"parsers/n/v/testdata/ok.json": {Data: []byte(`[{"n":"1"},{"n":"2"}]`)},
+		"parsers/f/v/parser.yaml":      {Data: []byte(foldsBlank)},
+		"parsers/f/v/testdata/ok.txt":  {Data: []byte("f1\nf2\n")},
+		"parsers/f/v/testdata/ok.json": {Data: []byte(`[{"n":"1"},{"n":"2"}]`)},
 		"parsers/kv/v/parser.yaml":     {Data: []byte(kvDef)},
 		"parsers/kv/v/testdata/a.txt":  {Data: []byte("n=1\nm=2\n")},
 		"parsers/kv/v/testdata/a.json": {Data: []byte(`{"n":1,"m":"2"}`)},
@@ -122,9 +131,9 @@ func TestSameAnswer(t *testing.T) {
 	}
 	for _, r := range Run(reg, fsys, "s", Options{}) {
 		switch r.Definition {
-		case "n/v":
+		case "f/v":
 			if r.Err == nil || !strings.Contains(r.Err.Error(), "a blank line at the end changes the answer") {
-				t.Errorf("n/v: %v", r.Err)
+				t.Errorf("f/v: %v", r.Err)
 			}
 		default:
 			if r.Err != nil {

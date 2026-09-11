@@ -190,6 +190,9 @@ type NoMatchError struct {
 	// point to, since naming a parser that has a signature is checked the
 	// same way the search was.
 	shapes []string
+	// unclaimed are variants of the named command that carry no signature
+	// and so were not tried; naming one reads any text.
+	unclaimed []*registry.Entry
 	// excluded is a definition the text fits that lists an argument the
 	// command was run with (excludedArg) as one whose output it does not
 	// read.
@@ -255,6 +258,10 @@ func (e *NoMatchError) Error() string {
 		return b.String()
 	case len(e.Hints) > 0:
 		fmt.Fprintf(&b, "\n\nName the variant explicitly:\n  COMMAND | jz --parser %s --variant %s", e.Parser, e.Hints[0].Def.Variant)
+		return b.String()
+	case len(e.unclaimed) > 0:
+		u := e.unclaimed[0].Def
+		fmt.Fprintf(&b, "\n\nNo variant that checks the text fits it. If it is %s (%s), which takes any text, name that variant:\n  COMMAND | jz --parser %s --variant %s", u.ID(), u.Description, e.Parser, u.Variant)
 		return b.String()
 	case e.excluded != nil:
 		// The text fits, and the definition says it does not read what
@@ -347,9 +354,14 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 	}
 
 	var sc scan
+	claims := ctx.Parser != "" && ctx.Args == nil && anyClaims(candidates)
 	for _, e := range candidates {
 		if ctx.Parser == "" && ExplicitOnly(e.Def) {
 			sc.heldBack(e, &ctx, window)
+			continue
+		}
+		if claims && ShapeOnly(e.Def) {
+			sc.unclaimed(e)
 			continue
 		}
 		sc.consider(e, &ctx, window)
@@ -371,7 +383,7 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 	case 1:
 		return result(sc.matched[0].entry, "", nil), nil
 	case 0:
-		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: sc.hints, Reported: reported, ExplicitOnly: sc.explicitOnly, shapes: dedupe(sc.shapes), excluded: sc.excluded, excludedArg: sc.excludedArg,
+		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: sc.hints, Reported: reported, ExplicitOnly: sc.explicitOnly, shapes: dedupe(sc.shapes), excluded: sc.excluded, excludedArg: sc.excludedArg, unclaimed: sc.shapeOnly,
 			// Binary holds NUL bytes too, and is not what the hint is about.
 			nul:   ctx.nul && utf8.Valid(ctx.Input),
 			empty: len(window) == 0}
@@ -391,7 +403,10 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 // the text fits, why each other one was left out, and what an error can
 // point to when nothing was chosen.
 type scan struct {
-	matched      []match
+	matched []match
+	// shapeOnly are the variants of a named command that describe a
+	// shape and make no claim about the text (see unclaimed).
+	shapeOnly    []*registry.Entry
 	hints        []*registry.Entry
 	shapes       []string
 	excluded     *registry.Entry
@@ -447,6 +462,29 @@ func (sc *scan) heldBack(e *registry.Entry, ctx *Context, window []string) {
 	sc.rejections = append(sc.rejections, Rejection{Entry: e, Reason: "needs --parser " + e.Def.Command, Close: fits, ExplicitOnly: true})
 }
 
+// unclaimed records a variant with no signature under a command whose
+// other variants carry one. The command's name is a claim that the text
+// is that command's output, and each of those variants checks the claim;
+// this one would take any text, including the output of an option none
+// of them reads, so the name alone does not reach it. Naming the variant
+// does, and so does jz run, where the arguments the command was given
+// narrow the variants before the text is looked at.
+func (sc *scan) unclaimed(e *registry.Entry) {
+	sc.explicitOnly++
+	sc.shapeOnly = append(sc.shapeOnly, e)
+	sc.rejections = append(sc.rejections, Rejection{Entry: e, Reason: "has no signature, so it reads any text and is used only when named with --variant " + e.Def.Variant, ExplicitOnly: true})
+}
+
+// anyClaims reports whether one of the definitions carries a signature.
+func anyClaims(entries []*registry.Entry) bool {
+	for _, e := range entries {
+		if !e.Def.Detect.Signature.IsZero() {
+			return true
+		}
+	}
+	return false
+}
+
 // consider checks one candidate against the text.
 func (sc *scan) consider(e *registry.Entry, ctx *Context, window []string) {
 	v := check(e, ctx, window)
@@ -458,10 +496,13 @@ func (sc *scan) consider(e *registry.Entry, ctx *Context, window []string) {
 	// Within one parser, a variant the text fits and only the system or an
 	// argument it asks for ruled out is the one naming would reach, since a
 	// pipe carries neither.
-	if ctx.Parser != "" && v.named {
+	// A definition with no signature fits any text, so fitting says
+	// nothing about the text and is no way forward to point to.
+	shape := ShapeOnly(e.Def)
+	if ctx.Parser != "" && v.named && !shape {
 		sc.hints = append(sc.hints, e)
 	}
-	if sc.excluded == nil && v.excludedBy != "" {
+	if sc.excluded == nil && v.excludedBy != "" && !shape {
 		sc.excluded, sc.excludedArg = e, v.excludedBy
 	}
 }

@@ -36,6 +36,63 @@ fields: {count: {type: int}}
 	}
 }
 
+// A csv with no header line and no names numbers its columns from its
+// first record, which is data like the rest. The whole document and the
+// stream say the same records, for the comma and the tab, through
+// quotes, line breaks inside a value and empty values; a row wider than
+// the first record is refused in both, and a narrower one leaves nulls.
+func TestParseCSVWithoutAHeaderLine(t *testing.T) {
+	t.Parallel()
+	const comma = "format: 1\ncommand: t\nvariant: v\nparse: {type: csv, header: {none: true}}\n"
+	const tab = "format: 1\ncommand: t\nvariant: v\nparse: {type: csv, delimiter: \"\\t\", header: {none: true}}\n"
+	const named = "format: 1\ncommand: t\nvariant: v\nparse: {type: csv, header: {none: true, columns: [id, note]}}\n"
+	tests := []struct {
+		name, src, input, want, err string
+	}{
+		{"the first record is a record", comma, "name,value\nid,3\n", `{"column_1":"name","column_2":"value"}` + "\n" + `{"column_1":"id","column_2":"3"}` + "\n", ""},
+		{"quotes and a line break", comma, "1,\"a, b\"\n2,\"say \"\"hi\"\"\"\n3,\"first\nsecond\"\n", `{"column_1":"1","column_2":"a, b"}` + "\n" + `{"column_1":"2","column_2":"say \"hi\""}` + "\n" + `{"column_1":"3","column_2":"first\nsecond"}` + "\n", ""},
+		{"empty values stay empty", comma, "a,,\n,,\n\"\",x,\n", `{"column_1":"a","column_2":"","column_3":""}` + "\n" + `{"column_1":"","column_2":"","column_3":""}` + "\n" + `{"column_1":"","column_2":"x","column_3":""}` + "\n", ""},
+		{"a narrower row leaves nulls", comma, "1,2,3\n4\n", `{"column_1":"1","column_2":"2","column_3":"3"}` + "\n" + `{"column_1":"4","column_2":null,"column_3":null}` + "\n", ""},
+		{"a wider row is refused", comma, "1,2\n3,4,5\n", "", "row has 3 fields but the first record, which numbers the columns, has 2"},
+		{"tabs", tab, "a b\tc,d\n\"x\ty\"\t\n", `{"column_1":"a b","column_2":"c,d"}` + "\n" + `{"column_1":"x\ty","column_2":""}` + "\n", ""},
+		{"named columns", named, "1,one\n2\n", `{"id":"1","note":"one"}` + "\n" + `{"id":"2","note":null}` + "\n", ""},
+		{"more fields than names", named, "1,one,extra\n", "", "row has 3 fields but 2 columns are named"},
+		{"CRLF", comma, "1,2\r\n3,4\r\n", `{"column_1":"1","column_2":"2"}` + "\n" + `{"column_1":"3","column_2":"4"}` + "\n", ""},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			streamed, serr := streamAll(t, tt.src, tt.input)
+			v, berr := Parse(load(t, tt.src), []byte(tt.input), Options{})
+			if tt.err != "" {
+				if berr == nil || !strings.Contains(berr.Error(), tt.err) {
+					t.Errorf("whole: %v, want %q", berr, tt.err)
+				}
+				if serr == nil || !strings.Contains(serr.Error(), tt.err) {
+					t.Errorf("stream: %v, want %q", serr, tt.err)
+				}
+				return
+			}
+			if berr != nil || serr != nil {
+				t.Fatalf("whole: %v, stream: %v", berr, serr)
+			}
+			var whole bytes.Buffer
+			for _, rec := range v.([]any) {
+				if err := jsonutil.Encode(&whole, rec, false); err != nil {
+					t.Fatal(err)
+				}
+			}
+			if whole.String() != tt.want || streamed != tt.want {
+				t.Errorf("whole  %s\nstream %s\nwant   %s", whole.String(), streamed, tt.want)
+			}
+		})
+	}
+	// Nothing at all is no records, not a header waiting for rows.
+	if v, err := Parse(load(t, comma), nil, Options{}); err != nil || mustJSON(t, v) != "[]" {
+		t.Errorf("empty: %v %v", mustJSON(t, v), err)
+	}
+}
+
 func TestParseCSVDelimiterAndHeader(t *testing.T) {
 	t.Parallel()
 	tab := `format: 1

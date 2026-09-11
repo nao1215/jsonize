@@ -17,9 +17,9 @@ import (
 )
 
 // NoStreamError reports a format whose records cannot be handed over one
-// at a time. A composite result is one object built from the whole text,
-// and a kv map or a regex matched against the whole input is one object
-// too; none of them exists until the last line has been read.
+// at a time. A kv map, an ini file and a regex matched against the whole
+// input are one object each, and none of them exists until the last line
+// has been read.
 type NoStreamError struct {
 	Definition string
 }
@@ -33,8 +33,9 @@ func (e *NoStreamError) Error() string {
 // the same reading as Parse, arranged so that a command that keeps
 // printing (ping, vmstat 1) is answered while it is still running.
 //
-// Only a definition whose Parse.YieldsArray reports true has records to
-// hand over one at a time; anything else is a NoStreamError.
+// Only a definition whose Parse.Streams reports true has records to hand
+// over one at a time; anything else is a NoStreamError. A composite is
+// handed over part by part (see composite_stream.go).
 //
 // onError decides what a record jz could not read means. Returning nil
 // keeps the stream going and the record is left out; returning an error
@@ -49,7 +50,7 @@ func (e *NoStreamError) Error() string {
 // the read was in the middle of is not emitted: a reader that says its
 // input was cut short gets the records before the cut and none after.
 func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any) error, onError func(*ParseError) error) error {
-	if !def.Parse.YieldsArray() {
+	if !def.Parse.Streams() {
 		return &NoStreamError{Definition: def.ID()}
 	}
 	s := &streamer{
@@ -66,8 +67,11 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 	if def.Parse.Type == definition.TypeTable && def.Parse.Header.None {
 		s.columns()
 	}
-	if def.Parse.Type == definition.TypeCSV && def.Parse.Header.None {
+	if def.Parse.Type == definition.TypeCSV && def.Parse.Header.None && len(def.Parse.Header.Columns) > 0 {
 		s.csvCols = def.Parse.Header.Columns
+	}
+	if def.Parse.Type == definition.TypeComposite {
+		s.startComposite()
 	}
 	br := bufio.NewReaderSize(r, 64*1024)
 	sep := def.Input.Separator()
@@ -91,16 +95,26 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 		}
 		num++
 		if rerr := s.feedRecordText(def, prepareRecord(raw, sep, num), num); rerr != nil {
-			return rerr
+			return unwrapStopped(rerr)
 		}
 		if err != nil {
 			break
 		}
 	}
 	if err := s.finish(); err != nil {
-		return s.report(err)
+		return unwrapStopped(s.report(err))
 	}
 	return nil
+}
+
+// unwrapStopped hands back the error a composite stream stopped on as it
+// was reported.
+func unwrapStopped(err error) error {
+	var done *reportedError
+	if errors.As(err, &done) {
+		return done.err
+	}
+	return err
 }
 
 // prepareRecord brings one record to the form the whole-document reader
@@ -177,6 +191,9 @@ type streamer struct {
 
 	// held is the line a fold may still be joined to.
 	held *line
+	// empty holds the empty lines a definition that keeps blank lines
+	// has seen since the last line with text.
+	empty []line
 	// text is set by the first line that is not blank.
 	text    bool
 	started bool // input.select.after has been seen
@@ -205,13 +222,16 @@ type streamer struct {
 	boxBody        bool
 	// tree holds the lines of the top-level node that is still open.
 	tree []line
+	// comp is the state of a composite, whose parts are streamed apart.
+	comp *composite
 }
 
 // report hands a failed record to onError. It returns nil when the read
 // should carry on, and the error that must end it otherwise. Anything
 // that is not a record jz failed to read passes straight through.
 func (s *streamer) report(err error) error {
-	if err == nil || s.onError == nil {
+	var done *reportedError
+	if err == nil || s.onError == nil || errors.As(err, &done) {
 		return err
 	}
 	var pe *ParseError
@@ -244,12 +264,26 @@ func (s *streamer) feedRaw(l line) error {
 }
 
 // feedFolded drops the lines input.ignore and skip_blank name, and the
-// blank lines before the text, which prepare drops from a whole document.
+// blank lines before the text and after it, which prepare drops from a
+// whole document. Where blank lines are kept, an empty line is held
+// until a line with text follows it, since until then it may be one of
+// the lines after the text.
 func (s *streamer) feedFolded(l line) error {
-	if blank := strings.TrimSpace(l.text) == ""; blank && (s.blank || !s.text) {
+	if edgeBlank(l.text, s.blank) {
+		if s.blank || !s.text {
+			return nil
+		}
+		s.empty = append(s.empty, l)
 		return nil
 	}
 	s.text = true
+	for len(s.empty) > 0 {
+		e := s.empty[0]
+		s.empty = s.empty[1:]
+		if err := s.feedSelected(e); err != nil {
+			return err
+		}
+	}
 	if matchesAny(s.ignore, l.text) {
 		return nil
 	}
@@ -324,6 +358,8 @@ func (s *streamer) feedRecord(l line) error {
 		return s.feedBlock(l)
 	case definition.TypeTree:
 		return s.feedTree(l)
+	case definition.TypeComposite:
+		return s.feedComposite(l)
 	default:
 		return &NoStreamError{Definition: s.def.ID()}
 	}
@@ -486,6 +522,9 @@ func (s *streamer) finish() error {
 		s.csvPending = nil
 		return s.emitCSV(pending)
 	}
+	if s.comp != nil {
+		return s.finishComposite()
+	}
 	return s.flushBlock()
 }
 
@@ -527,22 +566,47 @@ func (s *streamer) flushTree() error {
 	return nil
 }
 
-// feedCSV holds a line back while a quoted value is still open. A record
-// is finished when the text so far carries an even number of quotes:
-// every quoted value opens and closes with one, and a quote inside one is
-// written twice.
+// feedCSV holds a line back while a quoted value is still open, and hands
+// the record over once it is closed.
 func (s *streamer) feedCSV(l line) error {
 	s.csvPending = append(s.csvPending, l)
-	quotes := 0
-	for _, p := range s.csvPending {
-		quotes += strings.Count(p.text, `"`)
+	texts := make([]string, len(s.csvPending))
+	for i, p := range s.csvPending {
+		texts[i] = p.text
 	}
-	if quotes%2 != 0 {
+	if csvQuoteOpen(strings.Join(texts, "\n"), csvDelimiter(s.p)) {
 		return nil
 	}
 	pending := s.csvPending
 	s.csvPending = nil
 	return s.emitCSV(pending)
+}
+
+// csvQuoteOpen reports whether text ends inside a quoted value. Only a
+// quote that begins a value opens one, and inside it a quote written
+// twice is a quote. Counting the quotes instead took one in the middle
+// of a value, which opens nothing and is an error of its own line, for
+// a value going on to the next line, and held every line after it.
+func csvQuoteOpen(text string, delim rune) bool {
+	quoted, start := false, true
+	runes := []rune(text)
+	for i := 0; i < len(runes); i++ {
+		r := runes[i]
+		switch {
+		case quoted && r == '"' && i+1 < len(runes) && runes[i+1] == '"':
+			i++
+		case quoted && r == '"':
+			quoted = false
+		case quoted:
+		case start && r == '"':
+			quoted, start = true, false
+		case r == delim || r == '\n':
+			start = true
+		default:
+			start = false
+		}
+	}
+	return quoted
 }
 
 // emitCSV reads one finished record, taking the first one as the header
@@ -557,14 +621,18 @@ func (s *streamer) emitCSV(pending []line) error {
 		return s.errorf(pending[0].num, "", "%s", err.Error())
 	}
 	for _, row := range rows {
-		if s.csvCols == nil {
+		switch {
+		case s.csvCols != nil:
+		case s.p.Header.None:
+			s.csvCols = csvNumbered(len(row))
+		default:
 			s.csvCols, s.csvHeader = csvColumns(s.p, row), row
 			continue
 		}
 		if !s.p.Header.None && slices.Equal(row, s.csvHeader) {
 			continue // the header of a second file joined to the first
 		}
-		obj, err := s.csvRow(s.fields, s.csvCols, row, pending[0].num)
+		obj, err := s.csvRow(s.p, s.fields, s.csvCols, row, pending[0].num)
 		if err != nil {
 			return err
 		}

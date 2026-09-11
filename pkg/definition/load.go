@@ -545,7 +545,11 @@ func validateTable(v *validator, path string, p *Parse, fields map[string]*Field
 // validateHeader checks the header block of a table parser.
 func validateHeader(v *validator, path string, p *Parse, fields map[string]*Field) {
 	h := &p.Header
-	if h.None && len(h.Columns) == 0 {
+	// A csv with no header line and no names numbers its columns from the
+	// width of its first record; a table cut on whitespace or alignment
+	// has no such record to count, since how many cells a line holds is
+	// what the columns decide there.
+	if h.None && len(h.Columns) == 0 && p.Type != TypeCSV {
 		v.add(path+".header.columns", "is required when header.none is true")
 	}
 	if h.None && h.LeadingLabel != "" {
@@ -973,4 +977,43 @@ func namedGroups(re *regexp.Regexp) []string {
 		}
 	}
 	return out
+}
+
+// WithColumns returns a copy of a csv definition with no header line and
+// no column names, naming the columns it would otherwise number
+// (column_1, column_2, ...). It is how a caller names the columns of a
+// file whose definition can only count them, without writing the
+// definition out. The names follow the rules header.columns does, and a
+// definition that converts a numbered column cannot have it renamed from
+// under the conversion.
+func (d *Definition) WithColumns(names []string) (*Definition, error) {
+	p := &d.Parse
+	switch {
+	case p.Type != TypeCSV || !p.Header.None:
+		return nil, fmt.Errorf("%s does not read a csv without a header line, so there are no columns to name", d.ID())
+	case len(p.Header.Columns) > 0:
+		return nil, fmt.Errorf("%s names its columns already: %s", d.ID(), strings.Join(p.Header.Columns, ", "))
+	case len(names) == 0:
+		return nil, errors.New("no column names given")
+	case len(names) > MaxColumns:
+		return nil, fmt.Errorf("%d column names, more than the %d a definition may name", len(names), MaxColumns)
+	}
+	seen := map[string]bool{}
+	for _, n := range names {
+		if !fieldRe.MatchString(n) {
+			return nil, fmt.Errorf("invalid column name %q: a name is letters, digits and _ . : @ -, and starts with a letter, a digit or _", n)
+		}
+		if seen[n] {
+			return nil, fmt.Errorf("column name %q is given twice", n)
+		}
+		seen[n] = true
+	}
+	for name := range d.Fields {
+		if !seen[name] {
+			return nil, fmt.Errorf("%s converts the column %q, which the names given do not include", d.ID(), name)
+		}
+	}
+	c := *d
+	c.Parse.Header.Columns = append([]string(nil), names...)
+	return &c, nil
 }

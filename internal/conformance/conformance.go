@@ -324,6 +324,9 @@ func namedSelects(reg *registry.Registry, e *registry.Entry, c registry.Case) er
 // record is written, never what it says, so a definition whose two
 // readings disagree would answer differently depending on a flag.
 func streamMatches(def *definition.Definition, input []byte, batch any, opts Options) error {
+	if def.Parse.Type == definition.TypeComposite {
+		return compositeStreamMatches(def, input, batch, opts)
+	}
 	list, ok := batch.([]any)
 	if !ok || !def.Parse.YieldsArray() {
 		return nil
@@ -347,6 +350,59 @@ func streamMatches(def *definition.Definition, input []byte, batch any, opts Opt
 	if want.String() != got.String() {
 		return fmt.Errorf("--stream reads this differently than the whole document (-whole +stream):\n%s",
 			lineDiff(want.Bytes(), got.Bytes()))
+	}
+	return nil
+}
+
+// compositeStreamMatches checks a composite's stream against its whole
+// reading: every document is {"part", "value"}, the values of a part that
+// yields a list are its list in order, and a part that yields one value
+// has exactly one document holding it.
+func compositeStreamMatches(def *definition.Definition, input []byte, batch any, opts Options) error {
+	values := map[string][]any{}
+	err := engine.Stream(def, bytes.NewReader(input), opts.Engine, func(v any) error {
+		doc, ok := v.(*jsonutil.Object)
+		if !ok || doc.Len() != 2 {
+			return fmt.Errorf("a composite stream wrote %T, not a {part, value} document", v)
+		}
+		name, _ := doc.Get("part")
+		value, _ := doc.Get("value")
+		part, _ := name.(string)
+		values[part] = append(values[part], value)
+		return nil
+	}, nil)
+	if err != nil {
+		return fmt.Errorf("reading with --stream: %w", err)
+	}
+	rebuilt := jsonutil.NewObject()
+	for i := range def.Parse.Parts {
+		part := &def.Parse.Parts[i]
+		got := values[part.Name]
+		delete(values, part.Name)
+		if part.Parse.YieldsArray() {
+			if got == nil {
+				got = []any{}
+			}
+			rebuilt.Set(part.Name, got)
+			continue
+		}
+		if len(got) != 1 {
+			return fmt.Errorf("--stream wrote %d documents for part %q, which is one value", len(got), part.Name)
+		}
+		rebuilt.Set(part.Name, got[0])
+	}
+	for name := range values {
+		return fmt.Errorf("--stream wrote a document for %q, which is not a part", name)
+	}
+	var want, got bytes.Buffer
+	if err := jsonutil.Encode(&want, batch, true); err != nil {
+		return err
+	}
+	if err := jsonutil.Encode(&got, rebuilt, true); err != nil {
+		return err
+	}
+	if want.String() != got.String() {
+		return fmt.Errorf("--stream reads this differently than the whole document (-whole +stream):\n%s", lineDiff(want.Bytes(), got.Bytes()))
 	}
 	return nil
 }

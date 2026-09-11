@@ -420,6 +420,12 @@ func (p *Parse) YieldsArray() bool {
 	}
 }
 
+// Streams reports whether the result can be handed over as it is read:
+// the records of a list one at a time, or a composite part by part.
+func (p *Parse) Streams() bool {
+	return p.YieldsArray() || p.Type == TypeComposite
+}
+
 // CompiledStart returns the compiled expression that opens a record.
 func (p *Parse) CompiledStart() *regexp.Regexp { return p.start }
 

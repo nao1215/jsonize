@@ -232,19 +232,26 @@ func foldLines(in *definition.Input, lines []line) ([]line, *splitError) {
 // prepare drops ignored and blank lines, counting them in acct when it
 // is not nil.
 func prepare(in *definition.Input, lines []line, acct *Account) []line {
-	// Blank lines before the text are not part of it, whatever skip_blank
-	// says: it keeps the blank lines that separate things, and nothing is
-	// separated from what comes before the first line.
+	// Blank lines before the text and after it are not part of it,
+	// whatever skip_blank says: it keeps the blank lines that separate
+	// things, and nothing is separated from what comes before the first
+	// line or after the last. Where blank lines are kept, a line of spaces
+	// may be a value (a file named " "), so only an empty line is taken
+	// for the edge of the text there.
+	skipBlank := in.SkipBlankLines()
 	lead := 0
-	for lead < len(lines) && strings.TrimSpace(lines[lead].text) == "" {
+	for lead < len(lines) && edgeBlank(lines[lead].text, skipBlank) {
 		lead++
 	}
-	if acct != nil {
-		acct.Blank += lead
+	trail := len(lines)
+	for trail > lead && edgeBlank(lines[trail-1].text, skipBlank) {
+		trail--
 	}
-	lines = lines[lead:]
+	if acct != nil {
+		acct.Blank += lead + len(lines) - trail
+	}
+	lines = lines[lead:trail]
 	ignore := in.IgnorePatterns()
-	skipBlank := in.SkipBlankLines()
 	if len(ignore) == 0 && !skipBlank {
 		return lines
 	}
@@ -271,6 +278,15 @@ func prepare(in *definition.Input, lines []line, acct *Account) []line {
 		}
 	}
 	return out
+}
+
+// edgeBlank reports whether a line before or after the text is blank:
+// empty, or with skip_blank on, nothing but whitespace.
+func edgeBlank(text string, skipBlank bool) bool {
+	if skipBlank {
+		return strings.TrimSpace(text) == ""
+	}
+	return text == ""
 }
 
 // firstMatching returns the index of the first expression that matches
