@@ -1,0 +1,10 @@
+[
+  {
+    "marker": "●",
+    "unit": "apport-autoreport.service",
+    "load": "loaded",
+    "active": "failed",
+    "sub": "failed",
+    "description": "Process error reports when automatic reporting is enabled"
+  }
+]

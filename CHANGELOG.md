@@ -219,6 +219,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `systemctl list-units` piped from a UTF-8 shell read the lines of its
+  legend as units, exit 0: there the legend points with "→" instead of
+  "->", which only the C form was left out for. Both are left out now,
+  and the three state columns have to be the lower-case words systemctl
+  prints, so a line of prose is refused rather than read as a unit.
 - `findmnt`, `tree` and `systemd-analyze critical-chain` piped from a
   shell in a UTF-8 locale were exit 3 or 4: they draw their trees with
   box-drawing characters there ("├─", and for tree "│" with two no-break
