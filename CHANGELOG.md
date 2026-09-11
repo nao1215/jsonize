@@ -228,7 +228,8 @@ project follows [Semantic Versioning](https://semver.org/).
   of the abbreviations iproute2 accepts were exit 4: the definitions
   named only the full word (and `r`, `n`), while iproute2 runs any
   prefix. `ls --time-style long-iso`, the value as an argument of its
-  own, is read like `--time-style=long-iso`.
+  own, is read like `--time-style=long-iso`. `nmcli g` is read like
+  `nmcli general`, as `nmcli d` already was like `nmcli device`.
 - `jz run ps auxww`, `ps auxf`, `ps uax` and `ps u` were exit 4:
   `ps/bsd` required the arguments to be one of aux, axu, -aux and -axu,
   though any BSD letters that print its header print its columns. The
