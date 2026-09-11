@@ -376,9 +376,12 @@ levels of indentation open it, and its children are the lines under it.
 `indent` is one level as it is written — `"\t"`, `"  "` — or a list of
 the forms one level may take, for a report that marks a level with a
 branch character. `systemd-analyze critical-chain` indents by two
-characters that are either two spaces or a backtick and a dash, so it
-writes `["  ", "`-"]`; the first form that fits at each step is the one
-taken, so the order is the order they are tried in.
+characters that are two spaces or a backtick and a dash, `| ` and `|-`
+where the chain branches, and the same drawn with box-drawing
+characters in a UTF-8 locale, so it writes
+`["  ", "`-", "| ", "|-", "│ ", "└─", "├─"]`; the first form that fits
+at each step is the one taken, so the order is the order they are tried
+in.
 A node is the fields `node` reads from its line plus a `children` array,
 which is `[]` when nothing follows it — so a consumer walks every node
 the same way. A `node` pattern cannot name a group `children`.

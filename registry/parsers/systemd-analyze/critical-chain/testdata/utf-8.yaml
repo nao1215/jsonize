@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (systemd 259) as systemd-analyze critical-chain --fuzz 1s with LC_ALL=C.UTF-8, the first 24 lines
+description: the same branching chain drawn with box-drawing characters, as a UTF-8 locale prints it
+os: linux
+args: [critical-chain, --fuzz, 1s]

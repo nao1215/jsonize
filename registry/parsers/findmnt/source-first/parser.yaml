@@ -21,7 +21,8 @@ input:
     - '\ASOURCE[ \t]+TARGET'
 parse:
   type: regex
-  pattern: '^(?P<source>\S+)[ \t]+(?P<tree_prefix>[|`\-\s]*)(?P<target>/\S*)[ \t]+(?P<fstype>\S+)[ \t]+(?P<options>\S+)[ \t]*$'
+  # |- and `- in the C locale, box-drawing characters in a UTF-8 one.
+  pattern: '^(?P<source>\S+)[ \t]+(?P<tree_prefix>[|`\-\s│├└─]*)(?P<target>/\S*)[ \t]+(?P<fstype>\S+)[ \t]+(?P<options>\S+)[ \t]*$'
 fields:
   source: {required: true}
   target: {required: true}

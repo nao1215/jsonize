@@ -1,0 +1,50 @@
+[
+  {
+    "user": "alice",
+    "line": "seat0",
+    "time": "2025-11-04 13:17",
+    "comment": "login screen"
+  },
+  {
+    "user": "alice",
+    "line": "tty2",
+    "time": "2025-11-04 13:17",
+    "comment": "tty2"
+  },
+  {
+    "user": "alice",
+    "line": "seat0",
+    "time": "2025-11-04 13:30",
+    "comment": "login screen"
+  },
+  {
+    "user": "alice",
+    "line": ":0",
+    "time": "2025-11-04 13:30",
+    "comment": ":0"
+  },
+  {
+    "user": "alice",
+    "line": null,
+    "time": "2026-05-25 22:02",
+    "comment": null
+  },
+  {
+    "user": "alice",
+    "line": null,
+    "time": "2026-05-25 22:03",
+    "comment": null
+  },
+  {
+    "user": "alice",
+    "line": "tty7",
+    "time": "2026-05-25 22:04",
+    "comment": ":0"
+  },
+  {
+    "user": "alice",
+    "line": "pts/5",
+    "time": "2026-07-01 08:44",
+    "comment": "fe80::5054:ff:fe10:1%eno1"
+  }
+]

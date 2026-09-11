@@ -131,6 +131,9 @@ project follows [Semantic Versioning](https://semver.org/).
   does when its reader leaves, when it is interrupted and when
   `--timeout` passes. `e2e/README.md` says what is guaranteed where.
 
+- `who/iso` reads `who` as a locale other than C prints it, the login
+  time with its year ("2025-11-04 13:17"); piped from a UTF-8 shell it
+  was exit 4.
 - `pidstat/io` and `pidstat/switches` read `pidstat -d` and `pidstat
   -w`, the I/O and the context switches of each task, sample by sample
   like the other pidstat reports. A rate pidstat could not read is
@@ -216,6 +219,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `findmnt`, `tree` and `systemd-analyze critical-chain` piped from a
+  shell in a UTF-8 locale were exit 3 or 4: they draw their trees with
+  box-drawing characters there ("├─", and for tree "│" with two no-break
+  spaces) instead of the "|-" and "`-" of the C locale. `jz run
+  systemd-analyze critical-chain --fuzz 1s` was exit 4 in any locale,
+  since a chain that branches draws "|-" as well.
 - `jz run findmnt -s` was exit 3 on any system whose /etc/fstab lists a
   swap area: its mount point is `none`, which the definition did not
   take for a target.

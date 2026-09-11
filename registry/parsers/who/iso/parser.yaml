@@ -1,0 +1,29 @@
+# who prints the login time as "Nov  4 13:17" only in the C locale. In
+# any other, which is what a pipe from an ordinary shell carries, GNU who
+# prints it as "2025-11-04 13:17", with the year. The rest of the row is
+# the one who/posix reads: a name, an optional line, the time and an
+# optional comment in parentheses.
+format: 1
+command: who
+variant: iso
+aliases:
+  - name: gwho
+description: who listing in a locale other than C, with the year in the login time
+metadata:
+  tags: [linux, darwin, user, login]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/who-invocation.html
+detect:
+  signature:
+    all:
+      - '\A\S+(?:[ \t]+\S+)?[ \t]+[0-9]{4}-[0-9]{2}-[0-9]{2}[ \t]+[0-9]{2}:[0-9]{2}(?:[ \t]+\([^\n]*\))?[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<user>\S+)(?:[ \t]+(?P<line>\S+))??[ \t]+(?P<time>[0-9]{4}-[0-9]{2}-[0-9]{2}[ \t]+[0-9]{2}:[0-9]{2})(?:[ \t]+\((?P<comment>.*)\))?[ \t]*$'
+fields:
+  user: {required: true}
+  # The time is the machine's local time and says no zone, so it stays
+  # as printed rather than being read in the zone of the machine running
+  # jz.
+  time: {required: true}

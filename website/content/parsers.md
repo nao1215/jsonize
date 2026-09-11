@@ -189,7 +189,7 @@ the same reading with settings of your own.
 | `vmstat` | [`linux`](../schemas/vmstat/linux.json), [`linux-active`](../schemas/vmstat/linux-active.json), [`linux-disk`](../schemas/vmstat/linux-disk.json), [`linux-disk-summary`](../schemas/vmstat/linux-disk-summary.json), [`linux-stats`](../schemas/vmstat/linux-stats.json) |
 | `w` | [`bsd`](../schemas/w/bsd.json), [`linux`](../schemas/w/linux.json), [`linux-short`](../schemas/w/linux-short.json) |
 | `wc` | [`posix`](../schemas/wc/posix.json) |
-| `who` | [`posix`](../schemas/who/posix.json) |
+| `who` | [`iso`](../schemas/who/iso.json), [`posix`](../schemas/who/posix.json) |
 | `xrandr` | [`linux`](../schemas/xrandr/linux.json), [`listmonitors`](../schemas/xrandr/listmonitors.json) |
 | `xxd` | [`default`](../schemas/xxd/default.json) |
 | `zipinfo` | [`default`](../schemas/zipinfo/default.json) |

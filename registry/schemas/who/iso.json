@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/who/iso.json",
+  "title": "who/iso",
+  "description": "who listing in a locale other than C, with the year in the login time",
+  "x-jsonize": {
+    "definition": "who/iso",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "user": {
+        "type": "string"
+      },
+      "line": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "time": {
+        "type": "string"
+      },
+      "comment": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "user",
+      "line",
+      "time",
+      "comment"
+    ]
+  }
+}

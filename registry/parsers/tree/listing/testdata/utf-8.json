@@ -1,0 +1,173 @@
+[
+  {
+    "name": "pkg",
+    "children": [
+      {
+        "name": "convert",
+        "children": [
+          {
+            "name": "convert.go",
+            "children": []
+          },
+          {
+            "name": "convert_test.go",
+            "children": []
+          },
+          {
+            "name": "testdata",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "definition",
+        "children": [
+          {
+            "name": "bench_test.go",
+            "children": []
+          },
+          {
+            "name": "definition.go",
+            "children": []
+          },
+          {
+            "name": "definition_test.go",
+            "children": []
+          },
+          {
+            "name": "load.go",
+            "children": []
+          },
+          {
+            "name": "testdata",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "engine",
+        "children": [
+          {
+            "name": "bench_test.go",
+            "children": []
+          },
+          {
+            "name": "box.go",
+            "children": []
+          },
+          {
+            "name": "csv.go",
+            "children": []
+          },
+          {
+            "name": "engine.go",
+            "children": []
+          },
+          {
+            "name": "engine_test.go",
+            "children": []
+          },
+          {
+            "name": "fields.go",
+            "children": []
+          },
+          {
+            "name": "formats_test.go",
+            "children": []
+          },
+          {
+            "name": "ini.go",
+            "children": []
+          },
+          {
+            "name": "ledger.go",
+            "children": []
+          },
+          {
+            "name": "ledger_test.go",
+            "children": []
+          },
+          {
+            "name": "stream.go",
+            "children": []
+          },
+          {
+            "name": "stream_test.go",
+            "children": []
+          },
+          {
+            "name": "table.go",
+            "children": []
+          },
+          {
+            "name": "testdata",
+            "children": []
+          },
+          {
+            "name": "tree.go",
+            "children": []
+          },
+          {
+            "name": "tree_test.go",
+            "children": []
+          },
+          {
+            "name": "width.go",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "jsonutil",
+        "children": [
+          {
+            "name": "object.go",
+            "children": []
+          },
+          {
+            "name": "object_test.go",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "registry",
+        "children": [
+          {
+            "name": "bench_test.go",
+            "children": []
+          },
+          {
+            "name": "registry.go",
+            "children": []
+          },
+          {
+            "name": "registry_test.go",
+            "children": []
+          },
+          {
+            "name": "testcase.go",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "selector",
+        "children": [
+          {
+            "name": "bench_test.go",
+            "children": []
+          },
+          {
+            "name": "selector.go",
+            "children": []
+          },
+          {
+            "name": "selector_test.go",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]

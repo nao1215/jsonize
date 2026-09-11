@@ -1,0 +1,153 @@
+[
+  {
+    "source": "/dev/nvme0n1p2",
+    "tree_prefix": null,
+    "target": "/",
+    "fstype": "ext4",
+    "options": [
+      "rw",
+      "relatime"
+    ]
+  },
+  {
+    "source": "tmpfs",
+    "tree_prefix": "├─",
+    "target": "/run",
+    "fstype": "tmpfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "size=12882672k",
+      "nr_inodes=819200",
+      "mode=755",
+      "inode64"
+    ]
+  },
+  {
+    "source": "none",
+    "tree_prefix": "│ ├─",
+    "target": "/run/credentials/systemd-journald.service",
+    "fstype": "tmpfs",
+    "options": [
+      "ro",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime",
+      "nosymfollow",
+      "size=1024k",
+      "nr_inodes=1024",
+      "mode=700",
+      "inode64",
+      "noswap"
+    ]
+  },
+  {
+    "source": "none",
+    "tree_prefix": "│ ├─",
+    "target": "/run/credentials/systemd-resolved.service",
+    "fstype": "tmpfs",
+    "options": [
+      "ro",
+      "nosuid",
+      "nodev",
+      "noexec",
+      "relatime",
+      "nosymfollow",
+      "size=1024k",
+      "nr_inodes=1024",
+      "mode=700",
+      "inode64",
+      "noswap"
+    ]
+  },
+  {
+    "source": "tmpfs",
+    "tree_prefix": "│ ├─",
+    "target": "/run/user/1000",
+    "fstype": "tmpfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "relatime",
+      "size=6441332k",
+      "nr_inodes=1610333",
+      "mode=700",
+      "uid=1000",
+      "gid=1000",
+      "inode64"
+    ]
+  },
+  {
+    "source": "portal",
+    "tree_prefix": "│ │ ├─",
+    "target": "/run/user/1000/doc",
+    "fstype": "fuse.portal",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "relatime",
+      "user_id=1000",
+      "group_id=1000"
+    ]
+  },
+  {
+    "source": "gvfsd-fuse",
+    "tree_prefix": "│ │ └─",
+    "target": "/run/user/1000/gvfs",
+    "fstype": "fuse.gvfsd-fuse",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "relatime",
+      "user_id=1000",
+      "group_id=1000"
+    ]
+  },
+  {
+    "source": "tmpfs[/snapd/ns]",
+    "tree_prefix": "│ ├─",
+    "target": "/run/snapd/ns",
+    "fstype": "tmpfs",
+    "options": [
+      "rw",
+      "nosuid",
+      "nodev",
+      "size=12882672k",
+      "nr_inodes=819200",
+      "mode=755",
+      "inode64"
+    ]
+  },
+  {
+    "source": "nsfs[mnt:[4026533362]]",
+    "tree_prefix": "│ │ ├─",
+    "target": "/run/snapd/ns/snapd-desktop-integration.mnt",
+    "fstype": "nsfs",
+    "options": [
+      "rw"
+    ]
+  },
+  {
+    "source": "nsfs[mnt:[4026534670]]",
+    "tree_prefix": "│ │ ├─",
+    "target": "/run/snapd/ns/scc.mnt",
+    "fstype": "nsfs",
+    "options": [
+      "rw"
+    ]
+  },
+  {
+    "source": "nsfs[mnt:[4026533361]]",
+    "tree_prefix": "│ │ ├─",
+    "target": "/run/snapd/ns/prompting-client.mnt",
+    "fstype": "nsfs",
+    "options": [
+      "rw"
+    ]
+  }
+]

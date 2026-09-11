@@ -1,0 +1,24 @@
+The time when unit became active or started is printed after the "@" character.
+The time the unit took to start is printed after the "+" character.
+
+graphical.target @13.914s
+|-power-profiles-daemon.service @13.876s +38ms
+| `-multi-user.target @13.874s
+|   `-docker.service @12.400s +1.474s
+|     `-network-online.target @12.397s
+|       `-NetworkManager-wait-online.service @2.883s +9.513s
+|         |-NetworkManager.service @2.507s +374ms
+|         | |-dbus.service @2.408s +94ms
+|         | | |-basic.target @2.404s
+|         | | | |-sockets.target @2.404s
+|         | | | | |-snapd.socket @2.382s +21ms
+|         | | | | | `-sysinit.target @2.379s
+|         | | | | |   |-snapd.apparmor.service @2.246s +132ms
+|         | | | | |   | |-apparmor.service @2.162s +82ms
+|         | | | | |   | | `-local-fs.target @2.161s
+|         | | | | |   | |   |-var-lib-docker-rootfs-overlayfs-01507c1fee51a4d7afc81732ee60afe4fe7b5f1e72e8fa94311e31513059cbec.mount @13.662s
+|         | | | | |   | |   | `-local-fs-pre.target @626ms
+|         | | | | |   | |   |   |-systemd-tmpfiles-setup-dev.service @619ms +6ms
+|         | | | | |   | |   |   | `-systemd-tmpfiles-setup-dev-early.service @590ms +10ms
+|         | | | | |   | |   |   |   `-kmod-static-nodes.service @583ms +6ms
+|         | | | | |   | |   |   |     |-systemd-journald.socket

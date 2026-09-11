@@ -1,0 +1,43 @@
+pkg
+├── convert
+│   ├── convert.go
+│   ├── convert_test.go
+│   └── testdata
+├── definition
+│   ├── bench_test.go
+│   ├── definition.go
+│   ├── definition_test.go
+│   ├── load.go
+│   └── testdata
+├── engine
+│   ├── bench_test.go
+│   ├── box.go
+│   ├── csv.go
+│   ├── engine.go
+│   ├── engine_test.go
+│   ├── fields.go
+│   ├── formats_test.go
+│   ├── ini.go
+│   ├── ledger.go
+│   ├── ledger_test.go
+│   ├── stream.go
+│   ├── stream_test.go
+│   ├── table.go
+│   ├── testdata
+│   ├── tree.go
+│   ├── tree_test.go
+│   └── width.go
+├── jsonutil
+│   ├── object.go
+│   └── object_test.go
+├── registry
+│   ├── bench_test.go
+│   ├── registry.go
+│   ├── registry_test.go
+│   └── testcase.go
+└── selector
+    ├── bench_test.go
+    ├── selector.go
+    └── selector_test.go
+
+10 directories, 31 files
