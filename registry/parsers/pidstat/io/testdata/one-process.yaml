@@ -1,0 +1,4 @@
+description: tasks of another user, whose I/O an unprivileged pidstat cannot read, print -1.00, which is null
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C from `pidstat -d -p 1,2369,9721` by an unprivileged user; the host name in the banner was replaced
+os: linux
+args: ["-d", "-p", "1,2369,9721"]

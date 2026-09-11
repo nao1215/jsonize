@@ -1,0 +1,39 @@
+# `pidstat -w` reports the context switches of each task per second,
+# voluntary (cswch/s) and not (nvcswch/s), in the same run of samples as
+# the other pidstat reports (see pidstat/linux for why the banner is
+# dropped). A kernel thread's name can hold a space ("mt76-tx phy0"),
+# which the last column keeps.
+format: 1
+command: pidstat
+variant: switches
+description: pidstat -w per-task context switches
+metadata:
+  tags: [linux, cpu, process, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/pidstat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+UID[ \t]+PID[ \t]+cswch/s[ \t]+nvcswch/s[ \t]+Command[ \t]*$'
+input:
+  select:
+    after: '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)'
+parse:
+  type: records
+  start: '^(?:[0-9]{2}:[0-9]{2}:[0-9]{2}|Average:)[ \t]+UID[ \t]+PID[ \t]+cswch/s'
+  parts:
+    - name: tasks
+      parse:
+        type: table
+        header:
+          columns: [time, uid, pid, cswch_s, nvcswch_s, command]
+      fields:
+        time: {required: true, trim_suffix: ":"}
+        uid: {type: int}
+        pid: {type: int, required: true}
+        cswch_s: {type: float}
+        nvcswch_s: {type: float}
+        command: {required: true}

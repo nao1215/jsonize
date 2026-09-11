@@ -1,0 +1,12 @@
+Linux 7.0.0-31-generic (host01) 	09/11/26 	_x86_64_	(32 CPU)
+
+09:25:09      UID       PID   kB_rd/s   kB_wr/s kB_ccwr/s iodelay  Command
+09:25:09     1000      9743      0.10      0.00      0.00       0  dbus-daemon
+09:25:09     1000      9744      0.04      0.00      0.00       0  pipewire
+09:25:09     1000      9747      0.24      0.00      0.00       0  user-session-he
+09:25:09     1000      9748      0.10      0.00      0.00       0  gnome-keyring-d
+09:25:09     1000      9758      0.00      0.00      0.00       0  mpris-proxy
+09:25:09     1000      9759      0.04      0.00      0.00       0  wireplumber
+09:25:09     1000      9761      0.04      0.00      0.00       0  pipewire-pulse
+09:25:09     1000      9780      0.97      0.00      0.00       0  startplasma-way
+09:25:09     1000      9912      0.06      0.00      0.00       0  xdg-document-po

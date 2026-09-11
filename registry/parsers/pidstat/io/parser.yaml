@@ -1,0 +1,44 @@
+# `pidstat -d` reports the I/O of each task, in the same run of samples
+# as the other pidstat reports: a banner, then a column header opening
+# every sample, and with an interval a closing summary whose rows are
+# labelled Average (see pidstat/linux for why the banner is dropped).
+#
+# A task whose I/O statistics could not be read, one owned by another
+# user when pidstat is not run as root, prints -1.00 in the three rate
+# columns; those are null. iodelay is a count of clock ticks.
+format: 1
+command: pidstat
+variant: io
+description: pidstat -d per-task I/O
+metadata:
+  tags: [linux, disk, process, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/pidstat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+UID[ \t]+PID[ \t]+kB_rd/s[ \t]+kB_wr/s[ \t]+kB_ccwr/s[ \t]+iodelay[ \t]+Command[ \t]*$'
+input:
+  select:
+    after: '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)'
+parse:
+  type: records
+  start: '^(?:[0-9]{2}:[0-9]{2}:[0-9]{2}|Average:)[ \t]+UID[ \t]+PID[ \t]+kB_rd/s'
+  parts:
+    - name: tasks
+      parse:
+        type: table
+        header:
+          columns: [time, uid, pid, kb_rd_s, kb_wr_s, kb_ccwr_s, iodelay, command]
+      fields:
+        time: {required: true, trim_suffix: ":"}
+        uid: {type: int}
+        pid: {type: int, required: true}
+        kb_rd_s: {type: float, null_if: ["-1.00"]}
+        kb_wr_s: {type: float, null_if: ["-1.00"]}
+        kb_ccwr_s: {type: float, null_if: ["-1.00"]}
+        iodelay: {type: int}
+        command: {required: true}

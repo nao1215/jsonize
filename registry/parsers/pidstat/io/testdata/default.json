@@ -1,0 +1,96 @@
+[
+  {
+    "tasks": [
+      {
+        "time": "09:25:09",
+        "uid": 1000,
+        "pid": 9743,
+        "kb_rd_s": 0.1,
+        "kb_wr_s": 0,
+        "kb_ccwr_s": 0,
+        "iodelay": 0,
+        "command": "dbus-daemon"
+      },
+      {
+        "time": "09:25:09",
+        "uid": 1000,
+        "pid": 9744,
+        "kb_rd_s": 0.04,
+        "kb_wr_s": 0,
+        "kb_ccwr_s": 0,
+        "iodelay": 0,
+        "command": "pipewire"
+      },
+      {
+        "time": "09:25:09",
+        "uid": 1000,
+        "pid": 9747,
+        "kb_rd_s": 0.24,
+        "kb_wr_s": 0,
+        "kb_ccwr_s": 0,
+        "iodelay": 0,
+        "command": "user-session-he"
+      },
+      {
+        "time": "09:25:09",
+        "uid": 1000,
+        "pid": 9748,
+        "kb_rd_s": 0.1,
+        "kb_wr_s": 0,
+        "kb_ccwr_s": 0,
+        "iodelay": 0,
+        "command": "gnome-keyring-d"
+      },
+      {
+        "time": "09:25:09",
+        "uid": 1000,
+        "pid": 9758,
+        "kb_rd_s": 0,
+        "kb_wr_s": 0,
+        "kb_ccwr_s": 0,
+        "iodelay": 0,
+        "command": "mpris-proxy"
+      },
+      {
+        "time": "09:25:09",
+        "uid": 1000,
+        "pid": 9759,
+        "kb_rd_s": 0.04,
+        "kb_wr_s": 0,
+        "kb_ccwr_s": 0,
+        "iodelay": 0,
+        "command": "wireplumber"
+      },
+      {
+        "time": "09:25:09",
+        "uid": 1000,
+        "pid": 9761,
+        "kb_rd_s": 0.04,
+        "kb_wr_s": 0,
+        "kb_ccwr_s": 0,
+        "iodelay": 0,
+        "command": "pipewire-pulse"
+      },
+      {
+        "time": "09:25:09",
+        "uid": 1000,
+        "pid": 9780,
+        "kb_rd_s": 0.97,
+        "kb_wr_s": 0,
+        "kb_ccwr_s": 0,
+        "iodelay": 0,
+        "command": "startplasma-way"
+      },
+      {
+        "time": "09:25:09",
+        "uid": 1000,
+        "pid": 9912,
+        "kb_rd_s": 0.06,
+        "kb_wr_s": 0,
+        "kb_ccwr_s": 0,
+        "iodelay": 0,
+        "command": "xdg-document-po"
+      }
+    ]
+  }
+]
