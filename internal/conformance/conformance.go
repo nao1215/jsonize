@@ -127,7 +127,13 @@ func Check(reg *registry.Registry, sources []registry.Source, targets []string, 
 		}
 	}
 	fixtures, problems := Fixtures(reg, sources)
-	results = append(results, problems...)
+	for _, p := range problems {
+		// Run has already reported the cases of a source under test that
+		// could not be loaded; saying it twice is noise.
+		if !underTest[p.Source] {
+			results = append(results, p)
+		}
+	}
 	target := func(src string) bool { return underTest[src] }
 	results = append(results, Tampering(reg, fixtures, target, opts)...)
 	if opts.SkipExclusivity {

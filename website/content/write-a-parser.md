@@ -113,6 +113,10 @@ registry/parsers/lsof/default/testdata/lsof-4.95.txt
 registry/parsers/lsof/default/testdata/lsof-4.95.yaml
 ```
 
+A case is found by its `.txt`; the `.yaml` and `.json` of the same name
+go with it, and `jz test` fails on one that has no `.txt` beside it, as
+a case that would never run.
+
 Fixtures verify the signature you decided on; they do not decide it.
 Capture one per thing the definition claims, including the shapes it
 claims to refuse, so that the file beside the definition says what the
@@ -131,7 +135,8 @@ args: [-p, "1234"]
 `jz run` would see.
 
 To pin text the definition must refuse, add a fixture with
-`expect_error: <substring>` and no `.json`. It covers both ways a
+`expect_error: <substring>` and no `.json` (a `.json` there would never
+be compared, so `jz test` refuses it). It covers both ways a
 definition refuses: the signature not describing the text, and the parse
 failing on it. The substring is matched against whichever message comes
 out, so `expect_error: 'does not describe this input'` pins a signature
