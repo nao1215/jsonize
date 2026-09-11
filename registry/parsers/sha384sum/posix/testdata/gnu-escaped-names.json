@@ -1,0 +1,46 @@
+[
+  {
+    "checksum": "bed4e0f8b9c0ec8bee077c2d5ffea39f5b8858458f2694cbe3bd50e137dedb806c76781c53e7cf25dd074855dbbfe3d4",
+    "file": "names/plain"
+  },
+  {
+    "checksum": "bed4e0f8b9c0ec8bee077c2d5ffea39f5b8858458f2694cbe3bd50e137dedb806c76781c53e7cf25dd074855dbbfe3d4",
+    "file": "names/sp ace"
+  },
+  {
+    "checksum": "bed4e0f8b9c0ec8bee077c2d5ffea39f5b8858458f2694cbe3bd50e137dedb806c76781c53e7cf25dd074855dbbfe3d4",
+    "file": "names/q\"uote"
+  },
+  {
+    "checksum": "bed4e0f8b9c0ec8bee077c2d5ffea39f5b8858458f2694cbe3bd50e137dedb806c76781c53e7cf25dd074855dbbfe3d4",
+    "file": "names/q'uote"
+  },
+  {
+    "escaped": true,
+    "checksum": "bed4e0f8b9c0ec8bee077c2d5ffea39f5b8858458f2694cbe3bd50e137dedb806c76781c53e7cf25dd074855dbbfe3d4",
+    "file": "names/back\\slash"
+  },
+  {
+    "escaped": true,
+    "checksum": "bed4e0f8b9c0ec8bee077c2d5ffea39f5b8858458f2694cbe3bd50e137dedb806c76781c53e7cf25dd074855dbbfe3d4",
+    "file": "names/lit\\nname"
+  },
+  {
+    "escaped": true,
+    "checksum": "bed4e0f8b9c0ec8bee077c2d5ffea39f5b8858458f2694cbe3bd50e137dedb806c76781c53e7cf25dd074855dbbfe3d4",
+    "file": "names/nl\nname"
+  },
+  {
+    "escaped": true,
+    "checksum": "bed4e0f8b9c0ec8bee077c2d5ffea39f5b8858458f2694cbe3bd50e137dedb806c76781c53e7cf25dd074855dbbfe3d4",
+    "file": "names/cr\rname"
+  },
+  {
+    "checksum": "bed4e0f8b9c0ec8bee077c2d5ffea39f5b8858458f2694cbe3bd50e137dedb806c76781c53e7cf25dd074855dbbfe3d4",
+    "file": "names/tab\tname"
+  },
+  {
+    "checksum": "bed4e0f8b9c0ec8bee077c2d5ffea39f5b8858458f2694cbe3bd50e137dedb806c76781c53e7cf25dd074855dbbfe3d4",
+    "file": "names/日本"
+  }
+]

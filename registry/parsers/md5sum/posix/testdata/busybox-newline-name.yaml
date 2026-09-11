@@ -1,0 +1,8 @@
+source: captured on Ubuntu 26.04 with BusyBox v1.37.0, LC_ALL=C busybox md5sum over a file made for the fixture
+description: >
+  A name with a newline, which BusyBox prints as it is. The second half
+  of the name is a line of its own and not a checksum line, so the text
+  is refused.
+os: linux
+args: []
+expect_error: does not match

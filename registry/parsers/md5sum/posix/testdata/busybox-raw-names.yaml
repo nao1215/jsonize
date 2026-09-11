@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 with BusyBox v1.37.0, LC_ALL=C busybox md5sum over files made for the fixture
+description: >
+  The same names without the newline and the carriage return. BusyBox
+  escapes nothing and marks no line, so the backslash and the
+  backslash and n are the names as they are.
+os: linux
+args: []

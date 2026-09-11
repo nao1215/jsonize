@@ -5,9 +5,16 @@
 # checked then, and the digest length is what keeps md5sum and sha256sum
 # from reading each other's output.
 #
-# A name containing a backslash or a newline is printed escaped, with a
-# backslash in front of the digest to mark it; escaped is true on such a
-# line and absent everywhere else. `md5sum -c` prints a different format
+# GNU and uutils print a name holding a backslash, a newline or a
+# carriage return escaped, as "\\", "\n" and "\r", and put a
+# backslash in front of the digest to say so. Such a name is decoded;
+# escaped is true on its line and absent everywhere else. A line
+# without the mark carries the name as it is: GNU and uutils mark every
+# name they escape, and BusyBox escapes none. A newline that BusyBox
+# prints as it is splits the line, and the second half is not a
+# checksum line, so the text is refused.
+# `md5sum --zero` ends a line with NUL and escapes nothing, and jz
+# refuses text with NUL in it. `md5sum -c` prints a different format
 # and is not read here.
 format: 1
 command: md5sum
@@ -34,4 +41,6 @@ parse:
 fields:
   escaped: {type: bool, true_values: ["\\"], when_missing: omit}
   checksum: {required: true}
-  file: {required: true}
+  # The three escapes are all the format writes, so another one on a
+  # marked line is refused rather than guessed at.
+  file: {required: true, unescape: {when: escaped, sequences: {'\\': '\', '\n': "\n", '\r': "\r"}}}
