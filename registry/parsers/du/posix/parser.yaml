@@ -28,6 +28,11 @@ detect:
       # report with more of them is not this one (`git diff --numstat`,
       # `pactl list short sinks`).
       - '\A\d+\t[^\t\n]*$'
+    none:
+      # du -h prints an empty file as a plain 0, so a listing that names
+      # one first opens with a line this signature fits; the rounded
+      # sizes further down are du/gnu-human's.
+      - '^[ \t]*[\d.]+[KMGTPEZY]\t'
 parse:
   # Matched rather than split on the tab: a split trims its cells, and a
   # name that begins or ends with a space would lose it.

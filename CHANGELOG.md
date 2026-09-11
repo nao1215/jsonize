@@ -216,6 +216,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run du -h EMPTY FILE` was exit 4, ambiguous between `du/gnu-human`
+  and `du/posix`: the empty file prints a plain 0 on the opening line,
+  which is all `du/posix`'s signature looked at. A rounded size anywhere
+  in the listing now rules `du/posix` out.
 - `ip -brief link` and `ip -brief address` reported a veth as the
   interface `veth0@if2`, a name no command accepts. The part after the
   at sign is the `peer`, as `ip link` already read it.

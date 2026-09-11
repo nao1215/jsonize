@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C as du -h duh/empty duh/full
+description: an empty file named first prints a plain 0 on the opening line, which du/posix's signature also fits; the rounded size on the next line is not du/posix's
+os: linux
+args: [-h, duh/empty, duh/full]
