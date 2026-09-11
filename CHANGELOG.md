@@ -216,6 +216,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `--extract` and `--exclude` judged a key by the input rather than by
+  the format: `jz run --extract pid ps -p N` for a process that is gone
+  (the empty listing) was exit 2, `--extract peer` on `ip -brief link`
+  without a veth was exit 2, and with `--stream` the same key failed on
+  the first record that left it out. A key is now checked against the
+  keys the definition produces, refused before anything is written when
+  the definition cannot produce it, and looked for in the records only
+  when the definition takes it from the input.
 - `jz test` passed a definition whose testdata held a `.yaml` or
   `.json` with no `.txt` beside it (a fixture renamed or never added),
   a case that never ran, and a `.json` beside `expect_error`, an answer

@@ -95,6 +95,12 @@ jz: no key "mountpoint" in the output
 the keys it has are "1k_blocks", "available", "filesystem", "mounted_on", "use_percent", "used"
 ```
 
+What the format produces is what its definition says, the keys `jz list
+--schema` lists, not what one input happened to hold: a key some records
+leave out, or any key of an empty listing, narrows to nothing rather than
+being refused. Only a key the definition takes from the input, a column
+named by a header it does not list, is looked for in the result.
+
 The keys named are the ones at the top of each object. A value nested
 inside an object keeps whatever it holds.
 
