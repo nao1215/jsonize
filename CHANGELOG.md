@@ -216,6 +216,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run findmnt -s` was exit 3 on any system whose /etc/fstab lists a
+  swap area: its mount point is `none`, which the definition did not
+  take for a target.
 - `df`, `df -i` and `df -P` read a file system whose name holds a space
   and a number ("photos 2024", a FUSE mount) with every figure one
   column to the right, exit 0: 2024 as the block count and "1% /mnt" as

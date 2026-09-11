@@ -1,0 +1,5 @@
+TARGET         SOURCE                                                 FSTYPE OPTIONS
+/              /dev/disk/by-uuid/0e2f7d1c-4a3b-4f8e-9c5d-1a2b3c4d5e6f ext4   defaults
+/boot/efi      /dev/disk/by-uuid/1A2B-3C4D                            vfat   defaults
+none           /swap.img                                              swap   sw
+/media/usr/2nd UUID=3c9e5a1b-2d4f-4a6b-8c0d-1e2f3a4b5c6d              ext4   defaults
