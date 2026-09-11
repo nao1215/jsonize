@@ -1354,9 +1354,12 @@ func TestRunWithNoOutputAnswersWithAnEmptyList(t *testing.T) {
 		}
 	}
 	// A format that yields one object has no empty form, so the answer
-	// is not knowable and jz says so rather than inventing one.
+	// is not knowable and jz says so rather than inventing one. id/posix
+	// is read on every system and with any arguments, so what is left
+	// to refuse is the missing empty form; uptime/linux would be ruled
+	// out on macOS and Windows before that.
 	h2 := newHarness(t)
-	if code := h2.run("run", "--parser", "uptime", "--variant", "linux", "true"); code != ExitSelect {
+	if code := h2.run("run", "--parser", "id", "--variant", "posix", "true"); code != ExitSelect {
 		t.Fatalf("code=%d %s", code, h2.stderr.String())
 	}
 	if h2.stdout.Len() != 0 {

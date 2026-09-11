@@ -252,7 +252,11 @@ var sameText = []struct {
 	apply func([]byte) []byte
 }{
 	{"a byte order mark", false, func(b []byte) []byte { return append([]byte{0xEF, 0xBB, 0xBF}, b...) }},
-	{"CRLF line endings", true, func(b []byte) []byte { return bytes.ReplaceAll(b, []byte("\n"), []byte("\r\n")) }},
+	// A checkout with CRLF endings already has them, so the text is
+	// brought to LF first rather than given a second carriage return.
+	{"CRLF line endings", true, func(b []byte) []byte {
+		return bytes.ReplaceAll(bytes.ReplaceAll(b, []byte("\r\n"), []byte("\n")), []byte("\n"), []byte("\r\n"))
+	}},
 	{"no line break at the end", true, func(b []byte) []byte { return bytes.TrimRight(b, "\n") }},
 	{"a blank line at the end", true, func(b []byte) []byte { return append(bytes.Clone(b), '\n') }},
 	{"a blank line at the start", true, func(b []byte) []byte { return append([]byte{'\n'}, b...) }},

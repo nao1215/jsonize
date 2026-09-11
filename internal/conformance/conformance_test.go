@@ -108,6 +108,13 @@ func TestSameAnswer(t *testing.T) {
 		"parsers/kv/v/parser.yaml":     {Data: []byte(kvDef)},
 		"parsers/kv/v/testdata/a.txt":  {Data: []byte("n=1\nm=2\n")},
 		"parsers/kv/v/testdata/a.json": {Data: []byte(`{"n":1,"m":"2"}`)},
+		// A Windows checkout turns every line ending into CRLF. Giving
+		// such a fixture CRLF endings again is no change to it, and must
+		// not add a second carriage return that no text has.
+		"parsers/r/v/parser.yaml": {Data: []byte("format: 1\ncommand: r\nvariant: v\ndetect: {signature: {all: ['\\Ar\\d+']}}\n" +
+			"parse: {type: regex, pattern: '^r(?P<n>\\d+)$'}\n")},
+		"parsers/r/v/testdata/crlf.txt":  {Data: []byte("r1\r\nr2\r\n")},
+		"parsers/r/v/testdata/crlf.json": {Data: []byte("[{\"n\":\"1\"},{\"n\":\"2\"}]\r\n")},
 	}
 	reg, err := registry.Load(registry.Source{Name: "s", FS: fsys})
 	if err != nil {
