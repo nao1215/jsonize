@@ -258,6 +258,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- The end-to-end suite runs on FreeBSD as well, in a virtual machine on
+  the Linux runner, since GitHub hosts no BSD runner. Eight definitions
+  say they read what a command prints there and five had never been run
+  on it. golangci-lint and the build now cover freebsd, openbsd and
+  netbsd too, and `cmd/jz` asks every BSD for terminal attributes rather
+  than falling back to the character-device check that made
+  `jz < /dev/null` print its help on standard output.
+
 - The unaligned `-r` form of six more util-linux tables, which was
   refused rather than cut in the wrong places: `lsipc/raw`,
   `lslocks/raw`, `lslogins/raw`, `lsfd/raw`, `uuidparse/raw` and

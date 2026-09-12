@@ -3,8 +3,10 @@
 The suite under `e2e/atago` runs the built `jz` binary the way a user
 does and pins the command line contract: exit codes, standard error,
 the JSON shape, and which definition real output lands on. It is run by
-[atago](https://github.com/nao1215/atago) on Linux, macOS and Windows
-in CI (`.github/workflows/e2e.yml`) and locally with `make e2e`.
+[atago](https://github.com/nao1215/atago) on Linux, macOS, Windows and
+FreeBSD in CI (`.github/workflows/e2e.yml`) and locally with `make e2e`.
+FreeBSD has no hosted runner, so it runs in a virtual machine on the
+Linux one.
 
 ## What it guarantees
 
