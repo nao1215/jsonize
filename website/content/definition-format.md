@@ -283,7 +283,9 @@ and `repeated` cannot be written beside it.
 
 - `whitespace`: cells are runs of non-space characters; at most
   `max_fields` (default: number of columns) cells are produced and the
-  last one keeps the rest of the line verbatim.
+  last one is the rest of the line, without the whitespace at its two
+  ends and with every run inside it kept. A value with whitespace in it
+  can therefore be read in the last cell and in no other.
 - `aligned`: cells are cut where the header words start. A value that
   crosses a boundary from the right (a wide, right-aligned number) moves
   the cut to the previous space; a value that overflows to the right is
