@@ -154,3 +154,247 @@ scenarios:
       - assert:
           exit_code: 3
           stdout: {empty: true}
+
+  # A csv file is data. Two headings with one name are numbered so that
+  # every value keeps a key of its own, and the number never lands on a
+  # heading the file already has; a row that holds the header's values
+  # is a row unless the definition says the header is printed again; a
+  # quoted value keeps every line it holds, a blank one included. The
+  # stream reads all of it the same way.
+  - name: a csv keeps every value under a key of its own
+    steps:
+      - run:
+          command: jz --parser csv --variant comma
+          stdin: |
+            x,x,x_2
+            1,2,3
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              [{"x":"1","x_3":"2","x_2":"3"}]
+      - run:
+          command: jz --stream --parser csv --variant comma
+          stdin: |
+            x,x,x_2
+            1,2,3
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"x":"1","x_3":"2","x_2":"3"}
+
+  - name: a csv row that repeats the header is a row unless the definition says the header is printed again
+    steps:
+      - fixture:
+          file: rows.csv
+          content: |
+            name,count
+            x,1
+            name,count
+            y,2
+      - run:
+          command: jz --parser csv --variant comma --file ${workdir}/rows.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"x","count":"1"},{"name":"name","count":"count"},{"name":"y","count":"2"}]
+      - run:
+          command: jz --stream --parser csv --variant comma --file ${workdir}/rows.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"x","count":"1"}
+              {"name":"name","count":"count"}
+              {"name":"y","count":"2"}
+      - run:
+          command: "jz --define 'parse: {type: csv, header: {repeated: true}}' --file ${workdir}/rows.csv"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"x","count":"1"},{"name":"y","count":"2"}]
+      - run:
+          command: "jz --stream --define 'parse: {type: csv, header: {repeated: true}}' --file ${workdir}/rows.csv"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"x","count":"1"}
+              {"name":"y","count":"2"}
+      # With no header line there is nothing to repeat, and saying so is
+      # refused where the definition is read.
+      - run:
+          command: "jz --define 'parse: {type: csv, header: {none: true, repeated: true}}' --file ${workdir}/rows.csv"
+      - assert:
+          exit_code: 5
+          stdout: {empty: true}
+          stderr: {contains: "nothing to repeat"}
+
+  - name: a quoted csv value keeps the blank line it holds
+    steps:
+      - fixture:
+          file: quoted.csv
+          content: |
+            x
+            "a
+
+            b"
+            # not a comment
+      - run:
+          command: jz --parser csv --variant comma --file ${workdir}/quoted.csv
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].x", equals: "a\n\nb" }
+              - { path: "$[1].x", equals: "# not a comment" }
+      - run:
+          command: jz --stream --parser csv --variant comma --file ${workdir}/quoted.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"x":"a\n\nb"}
+              {"x":"# not a comment"}
+      # input.ignore names records, not the lines inside a quoted value:
+      # the line that looks like a comment inside the value stays, the
+      # record that is one goes.
+      - run:
+          command: "jz --define '{input: {ignore: [\"^#\"]}, parse: {type: csv}}' --file ${workdir}/quoted.csv"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"x":"a\n\nb"}]
+
+  - name: a csv error names the line of the input it is on
+    steps:
+      - fixture:
+          file: bad.csv
+          content: |
+            x,y
+            1,"a
+            b"
+            4,5
+            abc,6
+      - run:
+          command: "jz --define '{parse: {type: csv}, fields: {x: {type: int}}}' --file ${workdir}/bad.csv"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr: {contains: "line 5: field \"x\": cannot convert \"abc\" to int"}
+      - run:
+          command: "jz --stream --define '{parse: {type: csv}, fields: {x: {type: int}}}' --file ${workdir}/bad.csv"
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"x":1,"y":"a\nb"}
+              {"x":4,"y":"5"}
+          stderr: {contains: "line 5: field \"x\": cannot convert \"abc\" to int"}
+      # A quote in the middle of a field is refused on its own line, and
+      # the message is about the input rather than about a record.
+      - fixture:
+          file: quote.csv
+          content: |
+            x,y
+            1,"a
+            b",c"d
+      - run:
+          command: jz --parser csv --variant comma --file ${workdir}/quote.csv
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr: {contains: "line 3: column 5: bare \" in non-quoted-field"}
+      - assert:
+          stderr: {not_contains: "record on line"}
+
+  # A definition is refused where it is read, not where it fails to
+  # apply: a group named twice in one pattern, a fixed value named
+  # after the key a tree writes its children under, and a fields map
+  # beside a parser that reads its values through parts or nodes would
+  # each write over a value in silence.
+  - name: a definition that would write over one of its own values is refused before anything is read
+    steps:
+      - run:
+          command: "jz --define 'parse: {type: regex, pattern: \"(?P<x>a)(?P<x>b)\"}'"
+          stdin: "ab\n"
+      - assert:
+          exit_code: 5
+          stdout: {empty: true}
+          stderr: {contains: "names the group \"x\" twice"}
+      - run:
+          command: "jz --define 'parse: {type: tree, indent: \"  \", node: {parse: {type: regex, patterns: [{pattern: \"(?P<name>[a-z]+)\", values: {children: lost}}]}}}'"
+          stdin: "a\n"
+      - assert:
+          exit_code: 5
+          stdout: {empty: true}
+          stderr: {contains: "names a key \"children\""}
+      - run:
+          command: "jz --define '{parse: {type: composite, parts: [{name: p, parse: {type: kv}}]}, fields: {value: {type: int}}}'"
+          stdin: "a=1\n"
+      - assert:
+          exit_code: 5
+          stdout: {empty: true}
+          stderr: {contains: "fields: does not apply to type composite"}
+      - run:
+          command: "jz --define '{parse: {type: tree, indent: \"  \", node: {parse: {type: regex, pattern: \"(?P<name>[a-z]+)\"}}}, fields: {name: {required: true}}}'"
+          stdin: "a\n"
+      - assert:
+          exit_code: 5
+          stdout: {empty: true}
+          stderr: {contains: "fields: does not apply to type tree"}
+      # The same rules in the right place read the same text.
+      - run:
+          command: "jz --define '{parse: {type: composite, parts: [{name: p, parse: {type: kv}, fields: {value: {type: int}}}]}}'"
+          stdin: "a=1\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$.p[0].value", equals: 1 }
+
+  - name: an integer has one sign
+    steps:
+      - run:
+          command: "jz --define '{parse: {type: kv}, fields: {n: {type: int}, m: {type: int}}}'"
+          stdin: "n=+1\nm=-2\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"n","value":1},{"name":"m","value":-2}]
+      - run:
+          command: "jz --define '{parse: {type: kv}, fields: {n: {type: int}}}'"
+          stdin: "n=++1\n"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr: {contains: "cannot convert \"++1\" to int"}
+      - run:
+          command: "jz --define '{parse: {type: kv}, fields: {n: {type: int}}}'"
+          stdin: "n=+-1\n"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr: {contains: "cannot convert \"+-1\" to int"}
+
+  # A sub-field of an object is read in the object's own match: the
+  # group its unescape rule names is a group of the object's pattern,
+  # and whether that group took part is what decides.
+  - name: a nested object decodes an escape when its own group says so
+    steps:
+      - run:
+          command: >-
+            jz --define '{parse: {type: regex, pattern: "(?P<x>.*)"}, fields: {x: {type: object, regex: "(?P<flag>!)?(?P<name>.*)", fields: {name: {unescape: {when: flag, sequences: {"\\n": "\n"}}}}}}}'
+          stdin: "!a\\nb\nc\\nd\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"x":{"flag":"!","name":"a\nb"}},{"x":{"flag":null,"name":"c\\nd"}}]

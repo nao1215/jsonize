@@ -2,6 +2,17 @@ version: "1"
 
 suite:
   name: registries, list and version
+  # standin is a copy of e2ehelper under another name, for the scenarios
+  # that need jz run to land on a command of the suite's own; it relays
+  # its input and prints what the environment tells it to.
+  setup:
+    - fixture:
+        file: bin/.keep
+        content: ""
+    - run:
+        command: go build -C ${specdir}/e2ehelper -o ${suitedir}/bin/ .
+    - run:
+        command: ${suitedir}/bin/e2ehelper as standin ${suitedir}/bin
 
 # Users extend jz with YAML only: a definition in a registry directory is
 # detected automatically, exactly like an official one.
@@ -594,3 +605,156 @@ scenarios:
       - assert:
           stderr:
             contains: "1 definition failed to load and is not listed"
+
+  # A definition given on the command line is the whole of what is
+  # needed, so the registries are not read: a registry that cannot be
+  # loaded stops a conversion that would use it and nothing else.
+  - name: a registry that cannot be loaded does not stand in the way of --define
+    steps:
+      - fixture:
+          file: reg/registry.yaml
+          content: |
+            format: 999
+      - run:
+          command: jz
+          stdin: "a,b\n1,2\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+      - assert:
+          exit_code: 5
+          stdout: {empty: true}
+          stderr:
+            contains: "format 999 is not supported"
+      - run:
+          command: "jz --define 'parse: {type: csv}'"
+          stdin: "a,b\n1,2\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              [{"a":"1","b":"2"}]
+      - run:
+          command: "jz run --define 'parse: {type: kv}' -- ${suitedir}/bin/standin"
+          stdin: "a=1\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              [{"name":"a","value":"1"}]
+      # The definition given carries its own exec.env, and that is what
+      # the command runs with.
+      - run:
+          command: "jz run --define '{parse: {type: kv}, exec: {env: {JZ_GIVEN: here}}}' -- ${suitedir}/bin/standin"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+            E2EHELPER_PRINT_ENV: JZ_GIVEN
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"JZ_GIVEN","value":"here"}]
+
+  # A registry named on the path that exists and cannot be read is an
+  # error rather than a directory to skip: reading the text with the
+  # registries below it would answer with a definition the user did not
+  # mean. Only a directory that does not exist is skipped. Root reads
+  # anything, so this is a scenario for an ordinary user.
+  - name: a registry directory that exists but cannot be read is an error, not a silent fallback
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: absent/.keep
+          content: ""
+      - fixture:
+          file: reg/parsers/x/y/parser.yaml
+          content: |
+            format: 1
+            command: x
+            variant: y
+            parse: {type: kv}
+      - run:
+          command: chmod 000 ${workdir}/reg
+      - run:
+          command: jz
+          stdin: "Filesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs            1000000    5000    995000   1% /run\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+      - assert:
+          exit_code: 5
+          stdout: {empty: true}
+          stderr:
+            contains: "permission denied"
+      - run:
+          command: chmod 755 ${workdir}/reg
+      - run:
+          command: jz
+          stdin: "Filesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs            1000000    5000    995000   1% /run\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/absent/nothing-here:${workdir}/reg"
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json: { path: "$[0].mounted_on", equals: /run }
+
+  # exec.env belongs to the definition that reads the output. A variant
+  # named on the command line applies its entries as they stand; with the
+  # variant unknown, a variable two variants set differently is not set
+  # at all, so that no variant is favoured before the command has run.
+  - name: the variant named on the command line is the one whose exec.env applies
+    steps:
+      - fixture:
+          file: reg/parsers/probe/a/parser.yaml
+          content: |
+            format: 1
+            command: probe
+            variant: a
+            detect: {signature: {all: ['^JZ_PICK=a$']}}
+            exec: {env: {JZ_PICK: a}}
+            parse: {type: kv}
+      - fixture:
+          file: reg/parsers/probe/b/parser.yaml
+          content: |
+            format: 1
+            command: probe
+            variant: b
+            detect: {signature: {all: ['^JZ_PICK=b$']}}
+            exec: {env: {JZ_PICK: b}}
+            parse: {type: kv}
+      - run:
+          command: jz run --parser probe --variant b -- ${suitedir}/bin/standin
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+            E2EHELPER_PRINT_ENV: JZ_PICK
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              [{"name":"JZ_PICK","value":"b"}]
+      - run:
+          command: jz run --parser probe --variant a -- ${suitedir}/bin/standin
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+            E2EHELPER_PRINT_ENV: JZ_PICK
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"JZ_PICK","value":"a"}]
+      - run:
+          command: jz run --parser probe -- ${suitedir}/bin/standin
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+            E2EHELPER_PRINT_ENV: JZ_PICK
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: "no probe variant matches this input"

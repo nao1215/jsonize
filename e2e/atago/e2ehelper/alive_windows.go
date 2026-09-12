@@ -2,7 +2,11 @@
 
 package main
 
-import "syscall"
+import (
+	"errors"
+	"os"
+	"syscall"
+)
 
 // alive reports whether a process with this id is still running. On
 // Windows a process that has ended can still be opened while a handle
@@ -19,4 +23,10 @@ func alive(pid int) bool {
 		return false
 	}
 	return code == stillActive
+}
+
+// signalProcess is not available on Windows, which has no signals to send
+// another process; a scenario that needs one is POSIX only.
+func signalProcess(*os.Process, string) error {
+	return errors.New("signal steps are POSIX only")
 }

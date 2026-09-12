@@ -37,6 +37,9 @@
 //
 // is the local HTTP server the curl scenarios read headers from (see
 // serve.go).
+//
+// feed and relay are described in feed.go, and as and the stand-ins it
+// makes in standin.go.
 package main
 
 import (
@@ -48,18 +51,24 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 )
 
 func main() {
+	// A copy started under another name is a stand-in for that command,
+	// which only has to pass on what it is given.
+	if name := strings.TrimSuffix(filepath.Base(os.Args[0]), ".exe"); name != "e2ehelper" {
+		os.Exit(relay(os.Stdin, os.Stdout, os.Stderr))
+	}
 	os.Exit(run(os.Args[1:], os.Stdout, os.Stderr))
 }
 
 func run(args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 {
-		fmt.Fprintln(stderr, "usage: e2ehelper emit|pipe|gone|serve [options]")
+		fmt.Fprintln(stderr, "usage: e2ehelper emit|pipe|gone|serve|feed|relay|as [options]")
 		return 2
 	}
 	var err error
@@ -72,6 +81,12 @@ func run(args []string, stdout, stderr io.Writer) int {
 		err = gone(args[1:], stdout)
 	case "serve":
 		err = serve(args[1:])
+	case "feed":
+		err = feed(args[1:], stdout)
+	case "relay":
+		return relay(os.Stdin, stdout, stderr)
+	case "as":
+		err = as(args[1:], stdout)
 	default:
 		err = fmt.Errorf("unknown mode %q", args[0])
 	}
