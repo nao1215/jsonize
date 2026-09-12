@@ -473,10 +473,14 @@ func (s *streamer) columns() {
 func (s *streamer) feedTable(l line) error {
 	if !s.header {
 		// The header is the first line the selection let through, which
-		// is where the batch reader takes it from too.
+		// is where the batch reader takes it from too. A header jz
+		// cannot read ends the stream rather than leaving out a record:
+		// no row can be cut without the columns, and the next row would
+		// be taken for another header and report the same failure again
+		// against a line that is not one.
 		cols, err := s.resolveHeader(s.p, l, s.split())
 		if err != nil {
-			return err
+			return stopped(err)
 		}
 		s.cols, s.header, s.headerText = cols, true, l.text
 		return nil
@@ -485,7 +489,7 @@ func (s *streamer) feedTable(l line) error {
 		// A second table, whose header says where its own columns are.
 		cols, err := s.resolveHeader(s.p, l, s.split())
 		if err != nil {
-			return err
+			return stopped(err)
 		}
 		s.cols = cols
 		return nil

@@ -424,6 +424,30 @@ func TestStreamOnErrorDoesNotSwallowTheOtherFailures(t *testing.T) {
 	}
 }
 
+// A header the definition cannot read ends the stream. No row after it
+// can be cut without knowing where the columns are, and the reader used
+// to take each of those rows for another header: the same failure was
+// reported once per line, naming a row's number and quoting the row as
+// though it were the header.
+func TestStreamStopsAtAHeaderItCannotRead(t *testing.T) {
+	t.Parallel()
+	src := "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned, header: {columns: [a, b, c]}}\n"
+	var reported []string
+	out, err := StreamCollect(t, src, "NAME AGE\nbob 30\nann 40\n", func(pe *ParseError) error {
+		reported = append(reported, pe.Error())
+		return nil
+	})
+	if err == nil || !strings.Contains(err.Error(), `line 1: header has 2 columns but the definition declares 3`) {
+		t.Fatalf("err = %v", err)
+	}
+	if out != "" {
+		t.Errorf("records written: %q", out)
+	}
+	if len(reported) != 0 {
+		t.Errorf("a header jz cannot read is not a record to leave out: %v", reported)
+	}
+}
+
 // StreamCollect runs Stream with an onError of the caller's choosing.
 func StreamCollect(t *testing.T, src, input string, onError func(*ParseError) error) (string, error) {
 	t.Helper()

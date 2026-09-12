@@ -495,6 +495,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `--stream` reported a header it could not read once for every line
+  that came after it, because each of those lines was taken for another
+  header: the same failure three times over, two of them naming a row
+  and quoting the row as the header. A header jz cannot read now ends
+  the stream where it is, which is what reading the same input whole has
+  always done.
 - Three ways of writing a table header were accepted and then did not do
   what they said. A `header.rename` beside `header.columns` is refused,
   since names written out are already the names;
