@@ -9,7 +9,9 @@ metadata:
   references:
     - https://man7.org/linux/man-pages/man1/ps.1.html
 detect:
-  os: [linux, darwin, freebsd]
+  # FreeBSD ps has no SysV full format: `ps -ef` there prints the
+  # default columns (PID TT STAT TIME COMMAND), which this does not read.
+  os: [linux, darwin]
   args:
     any: ["-ef", "-e", "-f", "-A"]
   signature:

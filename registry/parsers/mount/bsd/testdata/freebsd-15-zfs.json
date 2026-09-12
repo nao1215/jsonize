@@ -1,0 +1,124 @@
+[
+  {
+    "filesystem": "zroot/ROOT/default",
+    "mount_point": "/",
+    "type": "zfs",
+    "options": [
+      "local",
+      "nfsv4acls"
+    ]
+  },
+  {
+    "filesystem": "devfs",
+    "mount_point": "/dev",
+    "type": "devfs",
+    "options": null
+  },
+  {
+    "filesystem": "/dev/gpt/efiboot0",
+    "mount_point": "/boot/efi",
+    "type": "msdosfs",
+    "options": [
+      "local"
+    ]
+  },
+  {
+    "filesystem": "zroot/tmp",
+    "mount_point": "/tmp",
+    "type": "zfs",
+    "options": [
+      "local",
+      "nosuid",
+      "nfsv4acls"
+    ]
+  },
+  {
+    "filesystem": "zroot/home",
+    "mount_point": "/home",
+    "type": "zfs",
+    "options": [
+      "local",
+      "nfsv4acls"
+    ]
+  },
+  {
+    "filesystem": "zroot/usr/obj",
+    "mount_point": "/usr/obj",
+    "type": "zfs",
+    "options": [
+      "local",
+      "nfsv4acls"
+    ]
+  },
+  {
+    "filesystem": "zroot/usr/ports",
+    "mount_point": "/usr/ports",
+    "type": "zfs",
+    "options": [
+      "local",
+      "nosuid",
+      "nfsv4acls"
+    ]
+  },
+  {
+    "filesystem": "zroot/var/log",
+    "mount_point": "/var/log",
+    "type": "zfs",
+    "options": [
+      "local",
+      "noexec",
+      "nosuid",
+      "nfsv4acls"
+    ]
+  },
+  {
+    "filesystem": "zroot/usr/src",
+    "mount_point": "/usr/src",
+    "type": "zfs",
+    "options": [
+      "local",
+      "nfsv4acls"
+    ]
+  },
+  {
+    "filesystem": "zroot/var/mail",
+    "mount_point": "/var/mail",
+    "type": "zfs",
+    "options": [
+      "local",
+      "nfsv4acls"
+    ]
+  },
+  {
+    "filesystem": "zroot/var/tmp",
+    "mount_point": "/var/tmp",
+    "type": "zfs",
+    "options": [
+      "local",
+      "nosuid",
+      "nfsv4acls"
+    ]
+  },
+  {
+    "filesystem": "zroot/var/crash",
+    "mount_point": "/var/crash",
+    "type": "zfs",
+    "options": [
+      "local",
+      "noexec",
+      "nosuid",
+      "nfsv4acls"
+    ]
+  },
+  {
+    "filesystem": "zroot/var/audit",
+    "mount_point": "/var/audit",
+    "type": "zfs",
+    "options": [
+      "local",
+      "noexec",
+      "nosuid",
+      "nfsv4acls"
+    ]
+  }
+]

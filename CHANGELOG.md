@@ -8,6 +8,18 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Five definitions said they read what a command prints on FreeBSD; the
+  machine says otherwise for three of them. `uptime/bsd` and `w/bsd` read
+  the macOS summary line, and every other BSD writes it from w(1) with a
+  12-hour time and comma-separated load averages ("10:07AM  up 7 secs, 1
+  user, load averages: 0.23, 0.05, 0.02"), so they are macOS only now.
+  FreeBSD `ps` has no SysV full format, so `ps -ef` there prints the
+  default columns and `ps/unix` no longer claims it. `ps/bsd` and
+  `mount/bsd` do read what FreeBSD prints and now carry a fixture
+  captured on one; `ps/bsd` also reads the "-" FreeBSD writes for a
+  process with no controlling terminal as the same absence procps writes
+  "?" and macOS writes "??".
+
 - `stat` prints one block per operand and only the first was read; a run
   naming several files is now one object per file and a run naming one is
   that list with one element in it (contract version 2). `type: records`

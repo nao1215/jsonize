@@ -1,0 +1,9 @@
+USER    PID  %CPU %MEM   VSZ   RSS TT  STAT STARTED    TIME COMMAND
+root     11 361.8  0.0     0    64  -  RNL  10:07   0:22.51 [idle]
+root      0 174.3  0.0     0  2368  -  DLs  10:07   0:00.09 [kernel]
+root      6  12.7  0.0     0   880  -  DL   10:07   0:00.42 [zfskern]
+root     15  10.5  0.0     0    64  -  DL   10:07   0:00.00 [bufdaemon]
+root      8   7.9  0.0     0    48  -  DL   10:07   0:00.00 [pagedaemon]
+root      4   3.3  0.0     0    48  -  DL   10:07   0:00.22 [cam]
+ntpd   1255   3.2  0.1 26444  6436  -  Ss   10:07   0:00.01 /usr/sbin/ntpd -p /var/db/ntp/ntpd.pid -c /etc/ntp.conf -f /var/db/ntp/ntpd.drift
+root      9   2.6  0.0     0    16  -  DL   10:07   0:00.00 [vmdaemon]
