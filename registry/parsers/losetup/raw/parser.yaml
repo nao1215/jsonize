@@ -1,0 +1,44 @@
+# `losetup --raw` prints the same columns as `losetup --list` with one
+# space between cells instead of padding them. A loop device with no
+# backing file leaves BACK-FILE empty; the separator for that cell is
+# still printed, so every row carries seven of them.
+#
+# `-r` is not the short spelling of this option: losetup reads it as
+# --read-only, and --raw has no short spelling.
+#
+# A space inside BACK-FILE is printed as \x20, which is what keeps a
+# path in one cell, and jz keeps the value as losetup wrote it.
+format: 1
+command: losetup
+variant: raw
+description: losetup --raw, the loop device columns one space apart
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/losetup.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["--raw"]
+  signature:
+    all:
+      # The header opens the output and its words stand one space apart.
+      # `losetup --list` pads them over the columns, which losetup/linux
+      # cuts at the header offsets.
+      - '\ANAME SIZELIMIT OFFSET AUTOCLEAR RO BACK-FILE DIO LOG-SEC[ \t]*$'
+parse:
+  type: table
+  split: delimiter
+  delimiter: " "
+# SIZELIMIT, OFFSET and LOG-SEC are always printed in bytes, so they
+# convert to integers.
+fields:
+  name: {required: true}
+  sizelimit: {type: int}
+  offset: {type: int}
+  autoclear: {type: bool}
+  ro: {type: bool}
+  back_file: {null_if: [""]}
+  dio: {type: bool}
+  log_sec: {type: int}

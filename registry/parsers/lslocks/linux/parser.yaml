@@ -1,7 +1,7 @@
 # SIZE is blank for a lock on a file whose size lslocks cannot read, and
 # PATH may contain spaces, so cells are cut at the header offsets rather
 # than on whitespace. `lslocks --raw` prints the same columns separated by
-# single spaces instead of padded, which the signature rejects.
+# single spaces instead of padded, which lslocks/raw reads.
 format: 1
 command: lslocks
 variant: linux
@@ -17,7 +17,7 @@ detect:
     all:
       - '^COMMAND[ \t]+PID[ \t]+TYPE[ \t]+SIZE[ \t]+MODE[ \t]+M[ \t]+START[ \t]+END[ \t]+PATH[ \t]*$'
       # The header is lined up with the columns. -r prints the same words
-      # one space apart and the rows unaligned, which this cannot cut.
+      # one space apart and the rows unaligned, which lslocks/raw reads.
       - '^COMMAND(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
 parse:
   type: table

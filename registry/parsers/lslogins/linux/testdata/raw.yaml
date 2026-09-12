@@ -1,7 +1,0 @@
-description: >-
-  The same columns printed by lslogins -r, one space apart and not lined up.
-  Cutting that where the header words start moves values into the wrong
-  columns, so the signature asks for a header that is lined up.
-source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; user names replaced
-os: linux
-expect_error: 'does not describe this input'

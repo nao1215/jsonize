@@ -1,0 +1,4 @@
+description: the same summary with --bytes, where every limit is an exact count and still not an integer
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; nothing replaced
+os: linux
+args: [--raw, --bytes]

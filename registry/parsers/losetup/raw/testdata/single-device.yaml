@@ -1,0 +1,4 @@
+description: one row, whose cells stay one space apart however narrow the column would have been
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+os: linux
+args: [--raw, -l, -j, /var/lib/snapd/snaps/bare_5.snap]

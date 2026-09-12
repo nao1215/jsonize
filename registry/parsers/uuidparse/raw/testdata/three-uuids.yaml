@@ -1,0 +1,4 @@
+description: a random UUID, the nil UUID whose type and time cells are empty, and a time-based one whose timestamp carries its space as \x20
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+os: linux
+args: [-r]

@@ -1,0 +1,43 @@
+# `lslogins -r` prints the same columns as the default table with one
+# space between cells instead of padding them. An account with no
+# password entry, one that has never logged in and one that carries no
+# comment leave PWD-LOCK, PWD-DENY, LAST-LOGIN and GECOS empty; the
+# separators for those cells are still printed, so every row carries six
+# of them.
+#
+# A space inside GECOS is printed as \x20, which is what keeps a comment
+# in one cell, and jz keeps the value as lslogins wrote it.
+format: 1
+command: lslogins
+variant: raw
+description: lslogins -r, the account columns one space apart
+metadata:
+  tags: [linux, user, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lslogins.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-r", "--raw"]
+  signature:
+    all:
+      # The header opens the output and its words stand one space apart.
+      # The default output pads them over the columns and right-aligns
+      # UID over its numbers, which lslogins/linux cuts at the header
+      # offsets.
+      - '\AUID USER PROC PWD-LOCK PWD-DENY LAST-LOGIN GECOS[ \t]*$'
+parse:
+  type: table
+  split: delimiter
+  delimiter: " "
+# LAST-LOGIN is printed as "Aug24/19:20" by default and as a full date
+# with --time-format, so it stays the string it was printed as.
+fields:
+  uid: {type: int, required: true}
+  user: {required: true}
+  proc: {type: int, null_if: [""]}
+  pwd_lock: {type: bool, null_if: [""]}
+  pwd_deny: {type: bool, null_if: [""]}
+  last_login: {null_if: [""]}
+  gecos: {null_if: [""]}

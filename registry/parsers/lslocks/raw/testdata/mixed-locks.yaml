@@ -1,0 +1,4 @@
+description: POSIX and FLOCK locks, including the empty SIZE of a lock whose file has no size and the empty PATH of one the kernel reports without a name
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C, first 6 lines; user names replaced
+os: linux
+args: [-r]

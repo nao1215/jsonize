@@ -93,18 +93,18 @@ the same reading with settings of your own.
 | `locale` | [`keywords`](../schemas/locale/keywords.json), [`posix`](../schemas/locale/posix.json) |
 | `localectl` | [`linux`](../schemas/localectl/linux.json) |
 | `loginctl` | [`seats`](../schemas/loginctl/seats.json), [`sessions`](../schemas/loginctl/sessions.json), [`users`](../schemas/loginctl/users.json) |
-| `losetup` | [`associations`](../schemas/losetup/associations.json), [`linux`](../schemas/losetup/linux.json) |
+| `losetup` | [`associations`](../schemas/losetup/associations.json), [`linux`](../schemas/losetup/linux.json), [`raw`](../schemas/losetup/raw.json) |
 | `ls` | [`full-time`](../schemas/ls/full-time.json), [`long`](../schemas/ls/long.json), [`long-context`](../schemas/ls/long-context.json), [`long-inode`](../schemas/ls/long-inode.json), [`long-iso`](../schemas/ls/long-iso.json), [`long-no-group`](../schemas/ls/long-no-group.json), [`long-no-owner`](../schemas/ls/long-no-owner.json), [`long-no-owner-group`](../schemas/ls/long-no-owner-group.json), [`long-recursive`](../schemas/ls/long-recursive.json), [`names`](../schemas/ls/names.json), [`names-zero`](../schemas/ls/names-zero.json) |
 | `lsattr` | [`linux`](../schemas/lsattr/linux.json) |
 | `lsb_release` | [`linux`](../schemas/lsb_release/linux.json) |
 | `lsblk` | [`bytes`](../schemas/lsblk/bytes.json), [`filesystems`](../schemas/lsblk/filesystems.json), [`linux`](../schemas/lsblk/linux.json), [`no-headings`](../schemas/lsblk/no-headings.json), [`pairs`](../schemas/lsblk/pairs.json), [`permissions`](../schemas/lsblk/permissions.json), [`raw`](../schemas/lsblk/raw.json), [`topology`](../schemas/lsblk/topology.json) |
 | `lsclocks` | [`linux`](../schemas/lsclocks/linux.json) |
 | `lscpu` | [`caches`](../schemas/lscpu/caches.json), [`extended`](../schemas/lscpu/extended.json), [`linux`](../schemas/lscpu/linux.json) |
-| `lsfd` | [`linux`](../schemas/lsfd/linux.json) |
-| `lsipc` | [`linux`](../schemas/lsipc/linux.json) |
+| `lsfd` | [`linux`](../schemas/lsfd/linux.json), [`raw`](../schemas/lsfd/raw.json) |
+| `lsipc` | [`linux`](../schemas/lsipc/linux.json), [`raw`](../schemas/lsipc/raw.json) |
 | `lsirq` | [`linux`](../schemas/lsirq/linux.json) |
-| `lslocks` | [`linux`](../schemas/lslocks/linux.json) |
-| `lslogins` | [`linux`](../schemas/lslogins/linux.json) |
+| `lslocks` | [`linux`](../schemas/lslocks/linux.json), [`raw`](../schemas/lslocks/raw.json) |
+| `lslogins` | [`linux`](../schemas/lslogins/linux.json), [`raw`](../schemas/lslogins/raw.json) |
 | `lsmem` | [`linux`](../schemas/lsmem/linux.json) |
 | `lsmod` | [`busybox`](../schemas/lsmod/busybox.json), [`linux`](../schemas/lsmod/linux.json) |
 | `lsns` | [`linux`](../schemas/lsns/linux.json) |
@@ -187,7 +187,7 @@ the same reading with settings of your own.
 | `update-alternatives` | [`query`](../schemas/update-alternatives/query.json), [`selections`](../schemas/update-alternatives/selections.json) |
 | `upower` | [`device`](../schemas/upower/device.json), [`dump`](../schemas/upower/dump.json), [`enumerate`](../schemas/upower/enumerate.json) |
 | `uptime` | [`bsd`](../schemas/uptime/bsd.json), [`linux`](../schemas/uptime/linux.json), [`pretty`](../schemas/uptime/pretty.json), [`since`](../schemas/uptime/since.json) |
-| `uuidparse` | [`linux`](../schemas/uuidparse/linux.json) |
+| `uuidparse` | [`linux`](../schemas/uuidparse/linux.json), [`raw`](../schemas/uuidparse/raw.json) |
 | `uv` | [`pip-show`](../schemas/uv/pip-show.json), [`tool-list`](../schemas/uv/tool-list.json) |
 | `vmstat` | [`linux`](../schemas/vmstat/linux.json), [`linux-active`](../schemas/vmstat/linux-active.json), [`linux-disk`](../schemas/vmstat/linux-disk.json), [`linux-disk-summary`](../schemas/vmstat/linux-disk-summary.json), [`linux-stats`](../schemas/vmstat/linux-stats.json) |
 | `w` | [`bsd`](../schemas/w/bsd.json), [`linux`](../schemas/w/linux.json), [`linux-short`](../schemas/w/linux-short.json) |

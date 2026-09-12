@@ -1,0 +1,4 @@
+COMMAND PID USER ASSOC XMODE TYPE SOURCE MNTID INODE NAME
+dbus-daemon 9743 alice mem ????-- ERROR stat:EPERM   /usr/lib/x86_64-linux-gnu/libm.so.6\x20(deleted)
+dbus-daemon 9743 alice exe ------ REG nvme0n1p2 0 28967328 /usr/bin/dbus-daemon
+dbus-daemon 9743 alice cwd ------ DIR nvme0n1p2 0 100663298 /home/alice

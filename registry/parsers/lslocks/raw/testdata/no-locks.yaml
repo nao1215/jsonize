@@ -1,0 +1,4 @@
+description: the header alone, which is what lslocks prints when nothing holds a lock
+source: the header of a captured listing with every row removed
+os: linux
+args: [--raw]

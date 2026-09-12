@@ -1,0 +1,6 @@
+UID USER PROC PWD-LOCK PWD-DENY LAST-LOGIN GECOS
+0 root 464 0 0  root
+1 daemon 0    daemon
+2 bin 0    bin
+3 sys 0    sys
+4 sync 0    sync
