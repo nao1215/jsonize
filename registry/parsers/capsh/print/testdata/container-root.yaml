@@ -1,0 +1,4 @@
+description: root inside a container, whose bounding set holds the fourteen capabilities the runtime left and whose IAB lists the rest as dropped
+source: captured with LC_ALL=C from `capsh --print` inside `docker run --rm ubuntu:24.04` (libcap 2.66)
+os: linux
+args: ["--print"]
