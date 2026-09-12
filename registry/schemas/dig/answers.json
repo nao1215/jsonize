@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/dig/answers.json",
+  "title": "dig/answers",
+  "description": "dig resource records alone (+noall +answer)",
+  "x-jsonize": {
+    "definition": "dig/answers",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "ttl": {
+        "type": "integer"
+      },
+      "class": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "data": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "ttl",
+      "class",
+      "type",
+      "data"
+    ]
+  }
+}

@@ -1,20 +1,22 @@
-{
-  "file": "/dev/loop0",
-  "size": 0,
-  "blocks": 0,
-  "io_block": 512,
-  "type": "block special file",
-  "device": "7h/7d",
-  "inode": 128,
-  "links": 1,
-  "device_type": "7,0",
-  "access_mode": "0660",
-  "access_flags": "brw-rw----",
-  "uid": 0,
-  "user": "root",
-  "gid": 6,
-  "group": "disk",
-  "access_time": "2026-09-10T22:57:47.256501133+09:00",
-  "modify_time": "2026-09-10T22:57:47.256501133+09:00",
-  "change_time": "2026-09-10T22:57:47.256501133+09:00"
-}
+[
+  {
+    "file": "/dev/loop0",
+    "size": 0,
+    "blocks": 0,
+    "io_block": 512,
+    "type": "block special file",
+    "device": "7h/7d",
+    "inode": 128,
+    "links": 1,
+    "device_type": "7,0",
+    "access_mode": "0660",
+    "access_flags": "brw-rw----",
+    "uid": 0,
+    "user": "root",
+    "gid": 6,
+    "group": "disk",
+    "access_time": "2026-09-10T22:57:47.256501133+09:00",
+    "modify_time": "2026-09-10T22:57:47.256501133+09:00",
+    "change_time": "2026-09-10T22:57:47.256501133+09:00"
+  }
+]

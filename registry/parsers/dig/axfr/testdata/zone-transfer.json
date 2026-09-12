@@ -1,0 +1,385 @@
+{
+  "query": {
+    "version": "9.20.24-1ubuntu0.3-Ubuntu",
+    "arguments": "axfr zonetransfer.me @nsztm1.digi.ninja",
+    "global_options": [
+      "+cmd"
+    ]
+  },
+  "transport": [],
+  "records": [
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "SOA",
+      "data": "nsztm1.digi.ninja. robin.digi.ninja. 2019100801 172800 900 1209600 3600"
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "DNSKEY",
+      "data": "256 3 7 AwEAAapoL+InQBYx2oi3dI424+dEDFgnVW0cOINfCY3jLrngZxBsEur8 ByhMOQsxoIOYu/7b3c8tj2BwlQquqxZe79QHSW78fK7D+bP/8AosnBG5 K5gJXEvphEtJ9x8/X0Y971XaW9lLmtJ6h4AXsrbgTr2g9KOiPSIbvDPM W8qLMaQkTm89hvPc+NuzrOEOPNhoXs/iPM+SQzrvTBfr6y0w2yPtYYdW I1kN76OQBxh0xjIdlyT0QKiohKq2bybPROJO7K3NlDc8oaOZoXH5/RfL DQzxzXyYSV8fLwimUeulo7YA11I/AHQ7DsUsFu2S2vxGCyR8nmx9gYbN 4sBvTF2i5eM="
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 301,
+      "class": "IN",
+      "type": "TXT",
+      "data": "\"google-site-verification=tyP28J7JAUHA9fw2sHXMgcCC0I6XBmmoVi04VlMewxA\""
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "MX",
+      "data": "0 ASPMX.L.GOOGLE.COM."
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "MX",
+      "data": "10 ALT1.ASPMX.L.GOOGLE.COM."
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "MX",
+      "data": "10 ALT2.ASPMX.L.GOOGLE.COM."
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "MX",
+      "data": "20 ASPMX2.GOOGLEMAIL.COM."
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "MX",
+      "data": "20 ASPMX3.GOOGLEMAIL.COM."
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "MX",
+      "data": "20 ASPMX4.GOOGLEMAIL.COM."
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "MX",
+      "data": "20 ASPMX5.GOOGLEMAIL.COM."
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "A",
+      "data": "5.196.105.14"
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "NS",
+      "data": "nsztm1.digi.ninja."
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "NS",
+      "data": "nsztm2.digi.ninja."
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "CERT",
+      "data": "PKIX 0 0 MIIDvTCCAqUCFHh5BGzOrlYrXo5h90ipm0aDUEz9MA0GCSqGSIb3DQEB CwUAMIGaMQswCQYDVQQGEwJHQjEYMBYGA1UECAwPU291dGggWW9ya3No aXJlMRIwEAYDVQQHDAlTaGVmZmllbGQxEjAQBgNVBAoMCURpZ2luaW5q YTEQMA4GA1UECwwHSGFja2luZzEYMBYGA1UEAwwPem9uZXRyYW5zZmVy Lm1lMR0wGwYJKoZIhvcNAQkBFg56dG1AZGlnaS5uaW5qYTAeFw0yNTA3 MDIxMzU1MTNaFw0yNjA3MDIxMzU1MTNaMIGaMQswCQYDVQQGEwJHQjEY MBYGA1UECAwPU291dGggWW9ya3NoaXJlMRIwEAYDVQQHDAlTaGVmZmll bGQxEjAQBgNVBAoMCURpZ2luaW5qYTEQMA4GA1UECwwHSGFja2luZzEY MBYGA1UEAwwPem9uZXRyYW5zZmVyLm1lMR0wGwYJKoZIhvcNAQkBFg56 dG1AZGlnaS5uaW5qYTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC ggEBALzYVM9WlBqOKU1lmnKJkKdIEZOhkscHQktEJORXCismSWV3Ffbs Lw7D3sfCc0h9ecZglsYvFUmEM0I0noYtuHPAlF2+FotVuoFrYuMYrEQo Zs4kuORIEx8pwHMZQUSM6KwVVLIB/FE956GfovgxGxWs33QaTKATAVCh D9KTLf6wVh/eC+0GI6mbvGvjqZFmmV/SYmmkdqEBWB7q3+SByfVrUohC A2GO30dwk6vUBtIj+J+i4SzKzLXIvFEfbCirMPQvdflgwPbjwp+cWG7o UBvfQZfZbaTp+9+V8FoBl0f8fGj/Mae1n0rSV5hnuXot8d3PAoAWQtW3 HJUv1nEboAMCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAXop6ftpV2/r7 tkXqFCsMwub7ZBd12U14nsBon+X7K5Nr6obrVAtnWO+XwD8x2UgvYIQB uRLK9LOX6VYoiWMVrItIN8KRSsin5eJe4tzewsNGrVtkVbbKULViCeBt DgmImk8rkZeWU1uNOsq0t/wd3GUZe2CM9DpKVhPFhc9Uq3pYbAsidYlp SApuuj8ka3L+VruzJVwveyKTUkWAsN1iSv7BGgEF0039WW3IEv1ZP81c AdWFy1fx+tuteM6Iz5xkx1tp0/eLtb39cnKFQnrs8itDG2j3yBc3CClY mw4NNU2nODN4COt7uzXBez6iIFSNqQjVyFyomtPn4ae0cYRHEw=="
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 300,
+      "class": "IN",
+      "type": "HINFO",
+      "data": "\"Casio fx-700G\" \"Windows XP\""
+    },
+    {
+      "name": "_acme-challenge.zonetransfer.me.",
+      "ttl": 301,
+      "class": "IN",
+      "type": "TXT",
+      "data": "\"6Oa05hbUJ9xSsvYy7pApQvwCUSSGgxvrbdizjePEsZI\""
+    },
+    {
+      "name": "_sip._tcp.zonetransfer.me.",
+      "ttl": 14000,
+      "class": "IN",
+      "type": "SRV",
+      "data": "0 0 5060 www.zonetransfer.me."
+    },
+    {
+      "name": "14.105.196.5.IN-ADDR.ARPA.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "PTR",
+      "data": "www.zonetransfer.me."
+    },
+    {
+      "name": "asfdbauthdns.zonetransfer.me.",
+      "ttl": 7900,
+      "class": "IN",
+      "type": "AFSDB",
+      "data": "1 asfdbbox.zonetransfer.me."
+    },
+    {
+      "name": "asfdbbox.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "A",
+      "data": "127.0.0.1"
+    },
+    {
+      "name": "asfdbvolume.zonetransfer.me.",
+      "ttl": 7800,
+      "class": "IN",
+      "type": "AFSDB",
+      "data": "1 asfdbbox.zonetransfer.me."
+    },
+    {
+      "name": "canberra-office.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "A",
+      "data": "202.14.81.230"
+    },
+    {
+      "name": "cmdexec.zonetransfer.me.",
+      "ttl": 300,
+      "class": "IN",
+      "type": "TXT",
+      "data": "\"; ls\""
+    },
+    {
+      "name": "contact.zonetransfer.me.",
+      "ttl": 2592000,
+      "class": "IN",
+      "type": "TXT",
+      "data": "\"Remember to call or email Pippa on +44 123 4567890 or pippa@zonetransfer.me when making DNS changes\""
+    },
+    {
+      "name": "dc-office.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "A",
+      "data": "143.228.181.132"
+    },
+    {
+      "name": "deadbeef.zonetransfer.me.",
+      "ttl": 7201,
+      "class": "IN",
+      "type": "AAAA",
+      "data": "dead:beaf::"
+    },
+    {
+      "name": "dr.zonetransfer.me.",
+      "ttl": 300,
+      "class": "IN",
+      "type": "LOC",
+      "data": "53 20 56.558 N 1 38 33.526 W 0.00m 1m 10000m 10m"
+    },
+    {
+      "name": "DZC.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "TXT",
+      "data": "\"AbCdEfG\""
+    },
+    {
+      "name": "email.zonetransfer.me.",
+      "ttl": 2222,
+      "class": "IN",
+      "type": "NAPTR",
+      "data": "1 1 \"P\" \"E2U+email\" \"\" email.zonetransfer.me.zonetransfer.me."
+    },
+    {
+      "name": "email.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "A",
+      "data": "74.125.206.26"
+    },
+    {
+      "name": "Hello.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "TXT",
+      "data": "\"Hi to Josh and all his class\""
+    },
+    {
+      "name": "home.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "A",
+      "data": "127.0.0.1"
+    },
+    {
+      "name": "Info.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "TXT",
+      "data": "\"ZoneTransfer.me service provided by Robin Wood - robin@digi.ninja. See http://digi.ninja/projects/zonetransferme.php for more information.\""
+    },
+    {
+      "name": "internal.zonetransfer.me.",
+      "ttl": 300,
+      "class": "IN",
+      "type": "NS",
+      "data": "intns1.zonetransfer.me."
+    },
+    {
+      "name": "internal.zonetransfer.me.",
+      "ttl": 300,
+      "class": "IN",
+      "type": "NS",
+      "data": "intns2.zonetransfer.me."
+    },
+    {
+      "name": "intns1.zonetransfer.me.",
+      "ttl": 300,
+      "class": "IN",
+      "type": "A",
+      "data": "81.4.108.41"
+    },
+    {
+      "name": "intns2.zonetransfer.me.",
+      "ttl": 300,
+      "class": "IN",
+      "type": "A",
+      "data": "5.196.105.10"
+    },
+    {
+      "name": "office.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "A",
+      "data": "4.23.39.254"
+    },
+    {
+      "name": "ipv6actnow.org.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "AAAA",
+      "data": "2001:67c:2e8:11::c100:1332"
+    },
+    {
+      "name": "owa.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "A",
+      "data": "207.46.197.32"
+    },
+    {
+      "name": "robinwood.zonetransfer.me.",
+      "ttl": 302,
+      "class": "IN",
+      "type": "TXT",
+      "data": "\"Robin Wood\""
+    },
+    {
+      "name": "rp.zonetransfer.me.",
+      "ttl": 321,
+      "class": "IN",
+      "type": "RP",
+      "data": "robin.zonetransfer.me. robinwood.zonetransfer.me."
+    },
+    {
+      "name": "sip.zonetransfer.me.",
+      "ttl": 3333,
+      "class": "IN",
+      "type": "NAPTR",
+      "data": "2 3 \"P\" \"E2U+sip\" \"!^.*$!sip:customer-service@zonetransfer.me!\" ."
+    },
+    {
+      "name": "sqli.zonetransfer.me.",
+      "ttl": 300,
+      "class": "IN",
+      "type": "TXT",
+      "data": "\"' or 1=1 --\""
+    },
+    {
+      "name": "sshock.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "TXT",
+      "data": "\"() { :]}; echo ShellShocked\""
+    },
+    {
+      "name": "staging.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "CNAME",
+      "data": "www.sydneyoperahouse.com."
+    },
+    {
+      "name": "alltcpportsopen.firewall.test.zonetransfer.me.",
+      "ttl": 301,
+      "class": "IN",
+      "type": "A",
+      "data": "127.0.0.1"
+    },
+    {
+      "name": "testing.zonetransfer.me.",
+      "ttl": 301,
+      "class": "IN",
+      "type": "CNAME",
+      "data": "www.zonetransfer.me."
+    },
+    {
+      "name": "vpn.zonetransfer.me.",
+      "ttl": 4000,
+      "class": "IN",
+      "type": "A",
+      "data": "174.36.59.154"
+    },
+    {
+      "name": "www.zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "A",
+      "data": "5.196.105.14"
+    },
+    {
+      "name": "xss.zonetransfer.me.",
+      "ttl": 300,
+      "class": "IN",
+      "type": "TXT",
+      "data": "\"'><script>alert('Boo')</script>\""
+    },
+    {
+      "name": "zonetransfer.me.",
+      "ttl": 7200,
+      "class": "IN",
+      "type": "SOA",
+      "data": "nsztm1.digi.ninja. robin.digi.ninja. 2019100801 172800 900 1209600 3600"
+    }
+  ],
+  "statistics": {
+    "server": "81.4.108.41#53",
+    "server_name": "nsztm1.digi.ninja",
+    "protocol": "TCP",
+    "when": "Sat Sep 12 11:21:40 JST 2026",
+    "records": 52,
+    "messages": 1,
+    "bytes": 3339
+  }
+}

@@ -1,21 +1,23 @@
-{
-  "file": "/dev/null",
-  "size": 0,
-  "blocks": 0,
-  "io_block": 4096,
-  "type": "character special file",
-  "device": "0,7",
-  "inode": 5,
-  "links": 1,
-  "device_type": "1,3",
-  "access_mode": "0666",
-  "access_flags": "crw-rw-rw-",
-  "uid": 0,
-  "user": "root",
-  "gid": 0,
-  "group": "root",
-  "access_time": "2026-09-10T22:57:46.202347433+09:00",
-  "modify_time": "2026-09-10T22:57:46.202347433+09:00",
-  "change_time": "2026-09-10T22:57:46.202347433+09:00",
-  "birth_time": "2026-09-10T22:57:41.412+09:00"
-}
+[
+  {
+    "file": "/dev/null",
+    "size": 0,
+    "blocks": 0,
+    "io_block": 4096,
+    "type": "character special file",
+    "device": "0,7",
+    "inode": 5,
+    "links": 1,
+    "device_type": "1,3",
+    "access_mode": "0666",
+    "access_flags": "crw-rw-rw-",
+    "uid": 0,
+    "user": "root",
+    "gid": 0,
+    "group": "root",
+    "access_time": "2026-09-10T22:57:46.202347433+09:00",
+    "modify_time": "2026-09-10T22:57:46.202347433+09:00",
+    "change_time": "2026-09-10T22:57:46.202347433+09:00",
+    "birth_time": "2026-09-10T22:57:41.412+09:00"
+  }
+]

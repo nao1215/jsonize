@@ -394,7 +394,11 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 	switch p.Type {
 	case TypeComposite, TypeRecords:
 		if len(fields) > 0 {
-			v.add(fieldsPath, "does not apply to type %s, whose values are read by its parts; write the rules under parts[].fields", p.Type)
+			where := "parts[].fields"
+			if p.Type == TypeRecords && p.Record != nil {
+				where = "record.fields"
+			}
+			v.add(fieldsPath, "does not apply to type %s, whose values are read by what it is made of; write the rules under %s", p.Type, where)
 		}
 	case TypeTree:
 		if len(fields) > 0 {
@@ -426,6 +430,9 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 		if p.Start != "" {
 			v.add(path+".start", "only valid for type records")
 		}
+		if p.Record != nil {
+			v.add(path+".record", "only valid for type records")
+		}
 		validateComposite(v, path, p, TypeComposite)
 		rejectKeys(v, path, p, "table", "regex", "kv")
 	case TypeRecords:
@@ -438,7 +445,7 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 		} else {
 			p.start = v.regex(path+".start", p.Start)
 		}
-		validateComposite(v, path, p, TypeRecords)
+		validateRecords(v, path, p)
 		rejectKeys(v, path, p, "table", "regex", "kv")
 	case TypeCSV:
 		validateCSV(v, path, p, fields)
@@ -586,6 +593,9 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 			}
 			if p.Start != "" {
 				v.add(path+".start", "only valid for type records")
+			}
+			if p.Record != nil {
+				v.add(path+".record", "only valid for type records")
 			}
 		}
 	}
@@ -791,6 +801,31 @@ func validateKV(v *validator, path string, p *Parse) {
 	case "", AsList, AsMap:
 	default:
 		v.add(path+".as", "must be list or map")
+	}
+}
+
+// validateRecords checks the two ways a record says how it is read:
+// parts, the named regions of a block, or record, one parser over the
+// whole of it. Exactly one of them describes a record; a block with
+// nothing to name has no part names to invent, and a block with regions
+// has no single parser to read all of it.
+func validateRecords(v *validator, path string, p *Parse) {
+	switch {
+	case p.Record == nil:
+		validateComposite(v, path, p, TypeRecords)
+	case len(p.Parts) > 0:
+		v.add(path, "record and parts both say how a record is read; write one of them")
+	default:
+		rp := path + ".record.parse"
+		validateParse(v, rp, &p.Record.Parse, p.Record.Fields, path+".record.fields", TypeRecords)
+		validateFields(v, path+".record.fields", p.Record.Fields, 0, p.Record.Parse.Type == TypeKV || p.Record.Parse.Type == TypeINI)
+		// A record is one object, so the parser over it has to yield
+		// one. A parser that yields a list would make the result a list
+		// of lists, where what the definition meant is either a list of
+		// objects or a part with a name to hold the list.
+		if p.Record.Parse.Type != "" && p.Record.Parse.YieldsArray() {
+			v.add(rp, "yields a list, and a record is one object; read the block with parts so the list has a name")
+		}
 	}
 }
 

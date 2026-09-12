@@ -1,7 +1,7 @@
 {
   "query": {
     "version": "9.20.24-1ubuntu0.3-Ubuntu",
-    "arguments": "nonexistent-host.example.com @1.1.1.1",
+    "arguments": "+nsid example.com @1.1.1.1",
     "global_options": [
       "+cmd"
     ]
@@ -12,16 +12,15 @@
       "header": {
         "opcode": "QUERY",
         "status": "NOERROR",
-        "id": 57591,
+        "id": 25507,
         "flags": [
           "qr",
           "rd",
-          "ra",
-          "ad"
+          "ra"
         ],
         "question_count": 1,
-        "answer_count": 0,
-        "authority_count": 1,
+        "answer_count": 2,
+        "authority_count": 0,
         "additional_count": 1
       },
       "messages": [],
@@ -29,33 +28,44 @@
         {
           "name": "EDNS",
           "value": "version: 0, flags:; udp: 1232"
+        },
+        {
+          "name": "NSID",
+          "value": "6e 72 74 30 35 (\"nrt05\")"
         }
       ],
       "question": [
         {
-          "name": "nonexistent-host.example.com.",
+          "name": "example.com.",
           "class": "IN",
           "type": "A"
         }
       ],
-      "answers": [],
-      "authority": [
+      "answers": [
         {
           "name": "example.com.",
-          "ttl": 1800,
+          "ttl": 18,
           "class": "IN",
-          "type": "SOA",
-          "data": "elliott.ns.cloudflare.com. dns.cloudflare.com. 2413856909 10000 2400 604800 1800"
+          "type": "A",
+          "data": "104.20.23.154"
+        },
+        {
+          "name": "example.com.",
+          "ttl": 18,
+          "class": "IN",
+          "type": "A",
+          "data": "172.66.147.243"
         }
       ],
+      "authority": [],
       "additional": [],
       "statistics": {
-        "query_time_ms": 14,
+        "query_time_ms": 13,
         "server": "1.1.1.1#53",
         "server_name": "1.1.1.1",
         "protocol": "UDP",
-        "when": "Thu Sep 10 21:23:08 JST 2026",
-        "message_size": 119
+        "when": "Sat Sep 12 11:19:50 JST 2026",
+        "message_size": 81
       }
     }
   ]

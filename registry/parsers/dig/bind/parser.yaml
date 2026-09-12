@@ -1,14 +1,20 @@
-# dig prints what it asked, the decoded header, the sections of the
-# reply and how the query went. Every section that holds resource records
-# (answer, authority, additional) is the same five-column table, so each
-# is read the same way; the question section names what was asked, and
-# the OPT pseudosection carries the EDNS options the server answered
-# with. A reply without one of the sections leaves that list empty rather
-# than failing.
+# dig prints one reply per query: what it asked, the decoded header, the
+# sections of the reply and how the query went. A command line naming
+# several names, or several types, prints several of those blocks one
+# after another, so the replies are a list and a single query is that
+# list with one element in it.
 #
-# Only one reply is read. dig prints one per query, and a text holding
-# two has lines no part of this definition reads, so it is refused rather
-# than answered with the first.
+# Every section that holds resource records (answer, authority,
+# additional) is the same five-column table, so each is read the same
+# way; the question section names what was asked, and the OPT
+# pseudosection carries the EDNS options the server answered with,
+# including the NSID a server sends when it was asked for one. A reply
+# without one of the sections leaves that list empty rather than failing.
+#
+# The banner is what "+nocmd" leaves out, so it is a part that may read
+# nothing rather than a line the format requires. A reply that never
+# arrived leaves the list of replies empty and says why under transport:
+# that is what dig writes when no server could be reached.
 format: 1
 command: dig
 variant: bind
@@ -20,98 +26,144 @@ metadata:
     - https://bind9.readthedocs.io/en/latest/manpages.html#dig-dns-lookup-utility
 detect:
   signature:
-    all:
-      - '^; <<>> DiG '
+    any:
+      # A reply, or a run that reached no server. One of the two is in
+      # every output this definition reads, and the banner alone is not:
+      # it is also the first line of a zone transfer, which dig/axfr
+      # reads.
       - '^;; ->>HEADER<<- opcode: '
+      - '^;; no servers could be reached$'
 parse:
   type: composite
   parts:
     # The banner restates the command line: the version, the arguments,
     # how many servers the name given with @ resolved to, and the options
-    # in effect.
+    # in effect. "+nocmd" prints none of it, which is the empty
+    # alternative below and an empty object in the result.
     - name: query
       select: {until: '^;; Got answer:$'}
+      ignore:
+        - '^;; communications error '
+        - '^;; no servers could be reached$'
       parse:
         type: regex
         each: input
-        pattern: '\A; <<>> DiG (?P<version>\S+) <<>>(?:[ \t]+(?P<arguments>[^\n]*?))?[ \t]*\n(?:; \((?P<servers_found>\d+) servers? found\)[ \t]*\n)?;; global options:[ \t]*(?P<global_options>[^\n]*?)[ \t]*\z'
+        # The whole banner is optional, so a region "+nocmd" left empty
+        # matches with no group taking part and the result is an empty
+        # object; a region holding something else is not a banner and is
+        # an error rather than a value nobody looked at.
+        pattern: '\A(?:; <<>> DiG (?P<version>\S+) <<>>(?:[ \t]+(?P<arguments>[^\n]*?))?[ \t]*\n(?:; \((?P<servers_found>\d+) servers? found\)[ \t]*\n)?;; global options:[ \t]*(?P<global_options>[^\n]*?)[ \t]*)?\z'
       fields:
-        version: {required: true}
-        arguments: {null_if: [""]}
-        servers_found: {type: int}
-        global_options: {type: array, split_regex: '[ \t]+', null_if: [""]}
-    - name: header
-      parse:
-        type: regex
-        each: input
-        pattern: ';; ->>HEADER<<- opcode: (?P<opcode>\w+), status: (?P<status>\w+), id: (?P<id>\d+)\n;; flags: (?P<flags>[^;]*); QUERY: (?P<question_count>\d+), ANSWER: (?P<answer_count>\d+), AUTHORITY: (?P<authority_count>\d+), ADDITIONAL: (?P<additional_count>\d+)'
-      fields:
-        id: {type: int}
-        flags: {type: array, split: " ", null_if: [""]}
-        question_count: {type: int}
-        answer_count: {type: int}
-        authority_count: {type: int}
-        additional_count: {type: int}
-    # What dig says about the reply rather than what the reply holds:
-    # ";; WARNING: recursion requested but not available" after the
-    # flags, or a warning about a .local name above the header. They are
-    # read in the order dig printed them, each line as it was written.
-    - name: messages
-      select: {after: '^;; Got answer:$', until: '^;; [A-Z ]*SECTION:$|^;; Query time: '}
-      ignore: ['^;; ->>HEADER<<- ', '^;; flags: ']
+        version: {when_missing: omit}
+        arguments: {null_if: [""], when_missing: omit}
+        servers_found: {type: int, when_missing: omit}
+        global_options: {type: array, split_regex: '[ \t]+', null_if: [""], when_missing: omit}
+    # What dig says about reaching a server rather than about a reply:
+    # the error it got from one address before trying the next, and the
+    # line it ends with when none of them answered. Each line as it was
+    # written, in the order dig printed them.
+    - name: transport
+      select: {until: '^;; Got answer:$'}
+      ignore:
+        - '^; <<>> DiG '
+        - '^; \(\d+ servers? found\)[ \t]*$'
+        - '^;; global options:'
       parse:
         type: regex
         pattern: '^;; (?P<text>.+?)[ \t]*$'
-    # "; EDNS: version: 0, flags:; udp: 1232", and a COOKIE line when the
-    # server sent one. Each line is an option name and what dig printed
-    # for it.
-    - name: edns
-      select: {after: '^;; OPT PSEUDOSECTION:$', until: '^;; '}
+    - name: replies
+      ignore:
+        - '^; <<>> DiG '
+        - '^; \(\d+ servers? found\)[ \t]*$'
+        - '^;; global options:'
+        - '^;; communications error '
+        - '^;; no servers could be reached$'
       parse:
-        type: regex
-        pattern: '^; (?P<name>[A-Z][A-Z0-9-]*):[ \t]*(?P<value>.*?)[ \t]*$'
-    - name: question
-      select: {after: '^;; QUESTION SECTION:$', until: '^;; '}
-      parse:
-        type: regex
-        pattern: '^;(?P<name>\S+)[ \t]+(?P<class>\S+)[ \t]+(?P<type>\S+)[ \t]*$'
-    - name: answers
-      select: {after: '^;; ANSWER SECTION:$', until: '^;; '}
-      parse:
-        type: table
-        header:
-          none: true
-          columns: [name, ttl, class, type, data]
-      fields:
-        ttl: {type: int}
-    - name: authority
-      select: {after: '^;; AUTHORITY SECTION:$', until: '^;; '}
-      parse:
-        type: table
-        header:
-          none: true
-          columns: [name, ttl, class, type, data]
-      fields:
-        ttl: {type: int}
-    - name: additional
-      select: {after: '^;; ADDITIONAL SECTION:$', until: '^;; '}
-      parse:
-        type: table
-        header:
-          none: true
-          columns: [name, ttl, class, type, data]
-      fields:
-        ttl: {type: int}
-    # The SERVER line gives the address that answered, then in parentheses
-    # the name the query was sent to (a host name given to @, otherwise
-    # the address again), then the transport. An older dig prints no
-    # transport.
-    - name: statistics
-      parse:
-        type: regex
-        each: input
-        pattern: ';; Query time: (?P<query_time_ms>\d+) msec\n;; SERVER: (?P<server>[^\s(]+)\((?P<server_name>[^)]*)\)(?: \((?P<protocol>[A-Z]+)\))?[ \t]*\n;; WHEN: (?P<when>[^\n]+)\n;; MSG SIZE  rcvd: (?P<message_size>\d+)'
-      fields:
-        query_time_ms: {type: int}
-        protocol: {when_missing: omit}
-        message_size: {type: int}
+        type: records
+        start: '^;; Got answer:$'
+        parts:
+          - name: header
+            parse:
+              type: regex
+              each: input
+              pattern: ';; ->>HEADER<<- opcode: (?P<opcode>\w+), status: (?P<status>\w+), id: (?P<id>\d+)\n;; flags: (?P<flags>[^;]*); QUERY: (?P<question_count>\d+), ANSWER: (?P<answer_count>\d+), AUTHORITY: (?P<authority_count>\d+), ADDITIONAL: (?P<additional_count>\d+)'
+            fields:
+              id: {type: int}
+              flags: {type: array, split: " ", null_if: [""]}
+              question_count: {type: int}
+              answer_count: {type: int}
+              authority_count: {type: int}
+              additional_count: {type: int}
+          # What dig says about the reply rather than what the reply
+          # holds: ";; WARNING: recursion requested but not available"
+          # after the flags, or a warning about a .local name above the
+          # header. They are read in the order dig printed them, each
+          # line as it was written.
+          - name: messages
+            select: {after: '^;; Got answer:$', until: '^;; [A-Z ]*SECTION:$|^;; Query time: '}
+            ignore: ['^;; ->>HEADER<<- ', '^;; flags: ']
+            parse:
+              type: regex
+              pattern: '^;; (?P<text>.+?)[ \t]*$'
+          # "; EDNS: version: 0, flags:; udp: 1232", and a COOKIE or NSID
+          # line when the server sent one. Each line is an option name
+          # and what dig printed for it.
+          - name: edns
+            select: {after: '^;; OPT PSEUDOSECTION:$', until: '^;; '}
+            parse:
+              type: regex
+              pattern: '^; (?P<name>[A-Z][A-Z0-9-]*):[ \t]*(?P<value>.*?)[ \t]*$'
+          - name: question
+            select: {after: '^;; QUESTION SECTION:$', until: '^;; '}
+            parse:
+              type: regex
+              pattern: '^;(?P<name>\S+)[ \t]+(?P<class>\S+)[ \t]+(?P<type>\S+)[ \t]*$'
+          - name: answers
+            select: {after: '^;; ANSWER SECTION:$', until: '^;; '}
+            parse:
+              type: table
+              header:
+                none: true
+                columns: [name, ttl, class, type, data]
+            fields:
+              ttl: {type: int}
+          - name: authority
+            select: {after: '^;; AUTHORITY SECTION:$', until: '^;; '}
+            parse:
+              type: table
+              header:
+                none: true
+                columns: [name, ttl, class, type, data]
+            fields:
+              ttl: {type: int}
+          - name: additional
+            select: {after: '^;; ADDITIONAL SECTION:$', until: '^;; '}
+            parse:
+              type: table
+              header:
+                none: true
+                columns: [name, ttl, class, type, data]
+            fields:
+              ttl: {type: int}
+          # The SERVER line gives the address that answered, then in
+          # parentheses the name the query was sent to (a host name given
+          # to @, otherwise the address again), then the transport. An
+          # older dig prints no transport.
+          - name: statistics
+            select: {after: '^;; [A-Z ]*SECTION:$|^;; Got answer:$'}
+            ignore:
+              - '^;[^;]'
+              - '^;; ->>HEADER<<- '
+              - '^;; flags: '
+              - '^;; [A-Z ]*SECTION:$'
+              - '^;; OPT PSEUDOSECTION:$'
+              - '^;; WARNING: '
+              - '^[^;]'
+            parse:
+              type: regex
+              each: input
+              pattern: ';; Query time: (?P<query_time_ms>\d+) msec\n;; SERVER: (?P<server>[^\s(]+)\((?P<server_name>[^)]*)\)(?: \((?P<protocol>[A-Z]+)\))?[ \t]*\n;; WHEN: (?P<when>[^\n]+)\n;; MSG SIZE  rcvd: (?P<message_size>\d+)'
+            fields:
+              query_time_ms: {type: int}
+              protocol: {when_missing: omit}
+              message_size: {type: int}

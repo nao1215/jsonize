@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C
+description: >-
+  Two queries with +noall +answer. The answers run together with nothing
+  between them, so the records of both are one list and the name and
+  type columns are what say which query each came from.
+os: linux
+args: ["+noall", "+answer", "example.org", "MX", "example.com", "NS"]

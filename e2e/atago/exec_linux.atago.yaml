@@ -390,6 +390,8 @@ scenarios:
 
   # A device file adds its major and minor numbers to the Device line. GNU,
   # uutils and BusyBox stat all print them there.
+  # stat prints one block per operand, so the result is a list whether it
+  # was given one file or several.
   - name: stat of a device file carries its device numbers
     only: {os: linux}
     steps:
@@ -400,8 +402,19 @@ scenarios:
           stderr: {empty: true}
           stdout:
             json:
-              - { path: "$.type", equals: "character special file" }
-              - { path: "$.device_type", equals: "1,3" }
+              - { path: "$", length: 1 }
+              - { path: "$[0].type", equals: "character special file" }
+              - { path: "$[0].device_type", equals: "1,3" }
+      - run:
+          command: jz run stat /dev/null /dev/zero
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].device_type", equals: "1,3" }
+              - { path: "$[1].device_type", equals: "1,5" }
 
   # BusyBox and kmod print the same three columns under the same header;
   # what separates them is that BusyBox continues the header with the

@@ -1,0 +1,3 @@
+example.org.		300	IN	MX	0 .
+example.com.		86400	IN	NS	hera.ns.cloudflare.com.
+example.com.		86400	IN	NS	elliott.ns.cloudflare.com.

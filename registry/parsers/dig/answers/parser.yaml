@@ -1,0 +1,42 @@
+# "+noall +answer" turns off every part of the long form but the answer
+# section, which leaves the resource records alone: the five columns of
+# master file syntax, one record per line. It is what a script asks for
+# when it wants the records and nothing about the exchange that carried
+# them.
+#
+# Those five columns are also what a zone file holds, and a zone file
+# says nothing that separates it from this, so the text is not evidence
+# that dig wrote it: this variant is reached by naming the parser
+# (`jz --parser dig`), or by `jz run dig +noall +answer`, and never by
+# automatic detection. The same shape comes from "+short +answer" and
+# from "+noall +authority", which name the section they asked for
+# rather than change how a record is written.
+#
+# A query that is answered by nothing prints nothing, and an empty input
+# is an empty list.
+format: 1
+command: dig
+variant: answers
+description: dig resource records alone (+noall +answer)
+metadata:
+  tags: [linux, darwin, network, dns]
+  compatible: [BIND dig]
+  references:
+    - https://bind9.readthedocs.io/en/latest/manpages.html#dig-dns-lookup-utility
+detect:
+  auto_detect: false
+  args:
+    all: ["+noall"]
+  signature:
+    # Every line is a record: an owner name, a time to live, a class and
+    # a type, then the data. The window is what the rule is checked
+    # against, so a longer answer is judged on the records it opens with.
+    all:
+      - '\A(?:\S+[ \t]+\d+[ \t]+[A-Z]+[ \t]+[A-Z][A-Z0-9-]*[ \t]+\S[^\n]*\n?)+\z'
+parse:
+  type: table
+  header:
+    none: true
+    columns: [name, ttl, class, type, data]
+fields:
+  ttl: {type: int}

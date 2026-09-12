@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C, from
+  zonetransfer.me, a zone its owner publishes for anyone to transfer
+description: >-
+  A transfer that the server allowed. The zone is one table between the
+  banner and the statistics, opening and closing with its SOA record the
+  way a transfer does.
+os: linux
+args: ["axfr", "zonetransfer.me", "@nsztm1.digi.ninja"]

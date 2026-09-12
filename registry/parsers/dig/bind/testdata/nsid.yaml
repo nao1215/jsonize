@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C, asking a public resolver
+description: >-
+  +nsid asks the server to name itself. The answer comes back in the OPT
+  pseudosection beside the EDNS line, and is read as one more option
+  there rather than by a rule of its own.
+os: linux
+args: ["+nsid", "example.com", "@1.1.1.1"]

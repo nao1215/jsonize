@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C
+description: >-
+  +nocmd prints no banner, so the query object is empty and the reply is
+  read the same way as one that has a banner above it.
+os: linux
+args: ["+nocmd", "example.com"]

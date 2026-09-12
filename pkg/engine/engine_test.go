@@ -1575,3 +1575,46 @@ func TestRecordPreparationIsTheSameBothWays(t *testing.T) {
 		}
 	}
 }
+
+// A record may be one value rather than named regions: a report whose
+// block is one labelled list, or one expression over the whole block,
+// has nothing to name the regions of, and the record is then the object
+// that parser yields.
+func TestParseRecordsWithOneParser(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: blocks
+parse:
+  type: records
+  start: '^name: '
+  record:
+    parse:
+      type: kv
+      separator: ':'
+      as: map
+    fields:
+      size: {type: int}
+`)
+	got, err := Parse(def, []byte("name: a\nsize: 1\nname: b\nsize: 2\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	const want = `[{"name":"a","size":1},{"name":"b","size":2}]`
+	if mustJSON(t, got) != want {
+		t.Error(mustJSON(t, got))
+	}
+
+	// The stream reads the same records in the same order.
+	var stream strings.Builder
+	if err := Stream(def, strings.NewReader("name: a\nsize: 1\nname: b\nsize: 2\n"), Options{}, func(v any) error {
+		stream.WriteString(mustJSON(t, v))
+		return nil
+	}, nil); err != nil {
+		t.Fatal(err)
+	}
+	if stream.String() != `{"name":"a","size":1}{"name":"b","size":2}` {
+		t.Error(stream.String())
+	}
+}

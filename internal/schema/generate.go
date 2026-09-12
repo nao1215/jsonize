@@ -83,6 +83,9 @@ func (g *generator) parse(p *definition.Parse, fields map[string]*definition.Fie
 	case definition.TypeComposite:
 		return g.composite(p, node)
 	case definition.TypeRecords:
+		if p.Record != nil {
+			return array(g.parse(&p.Record.Parse, p.Record.Fields, node))
+		}
 		return array(g.composite(p, node))
 	case definition.TypeTree:
 		return tree(p, g.defName(node))

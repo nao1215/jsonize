@@ -395,6 +395,12 @@ type Parse struct {
 	// way composite reads a whole input, so the parts vocabulary is the
 	// same one.
 	Start string `yaml:"start,omitempty"`
+	// Record is the other way to say how a record is read: by one parser
+	// over the whole block rather than by named regions of it. A report
+	// whose block is one labelled list, or one expression, has nothing to
+	// name the regions of, and the record is then the object that parser
+	// yields rather than an object holding it under a part's name.
+	Record *Record `yaml:"record,omitempty"`
 
 	compiled []*regexp.Regexp
 	// values are the fixed values each compiled pattern adds, in the
@@ -570,6 +576,14 @@ func (i *Indent) UnmarshalYAML(b []byte) error {
 // name or a region: a tree has one description for every node, and what
 // differs between them is only how deep they are.
 type Node struct {
+	Parse  Parse             `yaml:"parse"`
+	Fields map[string]*Field `yaml:"fields,omitempty"`
+}
+
+// Record says how one record of a records parser is read when the block
+// is one value: the parser reads the whole block and its result is the
+// record. It is what parts would be with nothing to name.
+type Record struct {
 	Parse  Parse             `yaml:"parse"`
 	Fields map[string]*Field `yaml:"fields,omitempty"`
 }

@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/dig/axfr.json",
+  "title": "dig/axfr",
+  "description": "dig zone transfer (dig axfr)",
+  "x-jsonize": {
+    "definition": "dig/axfr",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "arguments": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "servers_found": {
+          "type": "integer"
+        },
+        "global_options": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "version",
+        "arguments",
+        "global_options"
+      ]
+    },
+    "transport": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "ttl": {
+            "type": "integer"
+          },
+          "class": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "ttl",
+          "class",
+          "type",
+          "data"
+        ]
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "properties": {
+        "server": {
+          "type": "string"
+        },
+        "server_name": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "when": {
+          "type": "string"
+        },
+        "records": {
+          "type": "integer"
+        },
+        "messages": {
+          "type": "integer"
+        },
+        "bytes": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "required": [
+    "query",
+    "transport",
+    "records",
+    "statistics"
+  ]
+}

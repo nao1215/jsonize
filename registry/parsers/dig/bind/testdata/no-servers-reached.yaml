@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C, querying an
+  address reserved for documentation (RFC 5737) so that nothing answers
+description: >-
+  No server answered. dig prints what went wrong on the way and then the
+  line it ends with; there is no reply, so the replies list is empty
+  rather than the output being refused.
+os: linux
+args: ["+time=1", "+tries=1", "example.com", "@192.0.2.1"]

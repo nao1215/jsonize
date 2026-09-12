@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (uutils coreutils 0.8.0) with LC_ALL=C
+description: >-
+  Two operands. stat prints one block per file, so the result is one
+  object per block; a run naming one file is the same list with one
+  element in it.
+os: linux
+args: ["/etc/hosts", "/etc/passwd"]

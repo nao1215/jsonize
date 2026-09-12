@@ -591,7 +591,7 @@ func (s *streamer) flushBlock() error {
 	// accounted for the same way, one record at a time.
 	s.ledger = newLedger(block)
 	defer func() { s.ledger = nil }()
-	v, err := s.parseComposite(s.p, block)
+	v, err := s.parseRecord(s.p, block)
 	if err != nil {
 		return err
 	}
