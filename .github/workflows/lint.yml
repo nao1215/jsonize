@@ -12,7 +12,7 @@ jobs:
   golangci:
     strategy:
       matrix:
-        goos: [linux, darwin, windows]
+        goos: [linux, darwin, windows, freebsd, openbsd, netbsd]
     runs-on: ubuntu-latest
     env:
       GOOS: ${{ matrix.goos }}
