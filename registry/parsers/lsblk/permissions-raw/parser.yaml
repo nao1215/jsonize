@@ -1,0 +1,44 @@
+# `lsblk -m -r` prints who owns each device node with one space between
+# cells and no tree drawing. The five columns are filled on every row,
+# so a row is the same five cells whatever the device is.
+format: 1
+command: lsblk
+variant: permissions-raw
+description: lsblk -m -r, the owner, group and mode one space apart
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsblk.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-r", "--raw"]
+  signature:
+    all:
+      # The header opens the output and its words stand one space apart.
+      # `lsblk -m` lines the same words up over the columns, which is
+      # another format.
+      - '\ANAME SIZE OWNER GROUP MODE[ \t]*$'
+      # SIZE is rounded and printed with its unit, down to "0B".
+      # `lsblk -m -b -r` prints these same five columns with SIZE as a
+      # bare byte count, which belongs to a definition that reports it as
+      # an integer, and one data row is enough to decide.
+      - '^\S+ \d+(?:\.\d+)?[BKMGTPEZY] \S+ \S+ \S+[ \t]*$'
+parse:
+  type: table
+  split: delimiter
+  delimiter: " "
+fields:
+  # -r draws no tree: a child is written under its own name and the
+  # parent is the device it followed.
+  name: {required: true}
+  # SIZE is rounded ("1.8T" for 2000398934016 bytes) and lsblk offers -b
+  # for the exact byte count, so the printed text is kept as it is.
+  size: {required: true}
+  owner: {required: true}
+  group: {required: true}
+  # MODE is the permission bits of the device node as ls writes them,
+  # "brw-rw----", and the letters are what the format prints rather than
+  # a number to convert.
+  mode: {required: true}

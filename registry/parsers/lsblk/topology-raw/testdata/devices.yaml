@@ -1,0 +1,4 @@
+description: loop devices and two NVMe disks with their partitions
+source: captured on Ubuntu 26.04 (util-linux 2.41) with LC_ALL=C from `lsblk -t -r`; the loop devices after the third were dropped
+os: linux
+args: ["-t", "-r"]

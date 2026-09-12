@@ -1,0 +1,9 @@
+NAME FSTYPE FSVER LABEL UUID FSAVAIL FSUSE% MOUNTPOINTS
+loop0 squashfs 4.0   0 100% /snap/bare/5
+loop2 squashfs 4.0   0 100% /snap/core18/2999
+loop3 squashfs 4.0   0 100% /snap/terraform/933
+nvme0n1       
+nvme0n1p1 vfat FAT32  1234-ABCD 1G 1% /boot/efi
+nvme0n1p2 ext4 1.0  4f3c1b2a-8d7e-4a5b-9c6d-0e1f2a3b4c5d 152.4G 87% /
+nvme1n1       
+nvme1n1p1 ext4 1.0 data 7a8b9c0d-1e2f-4031-8425-36475869708a 799.4G 52% /media/user/data

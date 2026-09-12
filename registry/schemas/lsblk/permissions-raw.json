@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsblk/permissions-raw.json",
+  "title": "lsblk/permissions-raw",
+  "description": "lsblk -m -r, the owner, group and mode one space apart",
+  "x-jsonize": {
+    "definition": "lsblk/permissions-raw",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "group": {
+        "type": "string"
+      },
+      "mode": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "owner": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

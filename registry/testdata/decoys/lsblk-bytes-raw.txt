@@ -1,0 +1,9 @@
+NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+loop0 7:0 0 4096 1 loop /snap/bare/5
+loop1 7:1 0 224915456 1 loop /snap/brave/678
+loop2 7:2 0 225308672 1 loop /snap/brave/680
+nvme1n1 259:0 0 2000398934016 0 disk 
+nvme1n1p1 259:1 0 1127219200 0 part /boot/efi
+nvme1n1p2 259:2 0 1999269527552 0 part /
+nvme0n1 259:3 0 2048408248320 0 disk 
+nvme0n1p1 259:4 0 2048406847488 0 part /media/user/data

@@ -1,0 +1,41 @@
+# `lsblk -t -r` prints the queue geometry with one space between cells
+# and no tree drawing. Every column is an exact number except SCHED,
+# which names the I/O scheduler, and WSAME, which lsblk rounds ("0B",
+# "2G"), so those two stay text.
+format: 1
+command: lsblk
+variant: topology-raw
+description: lsblk -t -r, the topology columns one space apart
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsblk.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-r", "--raw"]
+  signature:
+    all:
+      # The header opens the output and its words stand one space apart.
+      # `lsblk -t` lines the same words up over the columns, which is
+      # another format.
+      - '\ANAME ALIGNMENT MIN-IO OPT-IO PHY-SEC LOG-SEC ROTA SCHED RQ-SIZE RA WSAME[ \t]*$'
+parse:
+  type: table
+  split: delimiter
+  delimiter: " "
+fields:
+  # -r draws no tree: a child is written under its own name and the
+  # parent is the device it followed.
+  name: {required: true}
+  alignment: {type: int, required: true}
+  min_io: {type: int, required: true}
+  opt_io: {type: int, required: true}
+  phy_sec: {type: int, required: true}
+  log_sec: {type: int, required: true}
+  rota: {type: bool, required: true}
+  sched: {null_if: [""]}
+  rq_size: {type: int, null_if: [""]}
+  ra: {type: int, null_if: [""]}
+  wsame: {null_if: [""]}
