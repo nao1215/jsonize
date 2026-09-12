@@ -72,10 +72,17 @@ jobs:
           GOOS=freebsd GOARCH=amd64 go build -o "${GITHUB_WORKSPACE}/bin/atago" github.com/nao1215/atago
       - uses: vmactions/freebsd-vm@8b0f1a8fc0ea0def307835c258940ca358fe6480 # v1.5.6
         with:
-          usesh: true
+          copyback: false
           # bash for the runner script, go for the jz and the helper the
-          # scenarios build.
-          prepare: pkg install -y bash go
+          # scenarios build, and the two commands the required scenarios
+          # run that FreeBSD does not ship.
+          prepare: pkg install -y bash go curl zsh
+          # The machine logs in as root, and root reads a directory
+          # whatever its mode says, so the scenarios for a registry that
+          # cannot be read would pass for the wrong reason. The suite runs
+          # as an ordinary user, which is what the other runners do and
+          # what the people running jz are.
           run: |
-            export PATH="$PWD/bin:$PATH"
-            bash ./scripts/run_e2e.sh
+            pw useradd -n tester -m
+            chown -R tester "$(pwd)"
+            su -l tester -c "cd $(pwd) && PATH=$(pwd)/bin:\$PATH bash ./scripts/run_e2e.sh"
