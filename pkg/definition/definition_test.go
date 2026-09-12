@@ -333,7 +333,20 @@ func TestLoadErrors(t *testing.T) {
 		{"tree without a node", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \"}\n", "node: is required"},
 		{"tree node that is not a line", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \", node: {parse: {type: table}}}\n", "read with regex or kv"},
 		{"tree node matched against the whole input", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \", node: {parse: {type: regex, each: input, pattern: '(?P<a>.)'}}}\n", "each: input has nothing to match"},
-		{"tree node with a group the children overwrite", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \", node: {parse: {type: regex, pattern: '(?P<name>\\w+) (?P<children>\\d+)'}}}\n", `names a group "children"`},
+		{"tree node with a group the children overwrite", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \", node: {parse: {type: regex, pattern: '(?P<name>\\w+) (?P<children>\\d+)'}}}\n", `names a key "children"`},
+		{"tree node with a fixed value the children overwrite", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \", node: {parse: {type: regex, patterns: [{pattern: '(?P<name>\\w+)', values: {children: lost}}]}}}\n", `names a key "children"`},
+		{"one pattern naming a group twice", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<x>a)(?P<x>b)'}\n", `names the group "x" twice`},
+		{"one alternative naming a group twice", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: ['(?P<y>.)', '(?P<x>a)|(?P<x>b)']}\n", `patterns[1]: names the group "x" twice`},
+		{"fields beside a composite", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: p, parse: {type: kv}}]}\nfields: {x: {type: int}}\n", "fields: does not apply to type composite"},
+		{"fields beside a records parser", "format: 1\ncommand: c\nvariant: v\nparse: {type: records, start: '^a', parts: [{name: p, parse: {type: kv}}]}\nfields: {x: {required: true}}\n", "fields: does not apply to type records"},
+		{"fields beside a tree", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \", node: {parse: {type: regex, pattern: '(?P<a>.)'}}}\nfields: {a: {type: int}}\n", "fields: does not apply to type tree"},
+		{"fields beside a records part", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: p, parse: {type: records, start: '^a', parts: [{name: q, parse: {type: kv}}]}, fields: {x: {type: int}}}]}\n", "parse.parts[0].fields: does not apply to type records"},
+		{"fields beside a tree part", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: p, parse: {type: tree, indent: \"  \", node: {parse: {type: regex, pattern: '(?P<a>.)'}}}, fields: {a: {type: int}}}]}\n", "parse.parts[0].fields: does not apply to type tree"},
+		{"csv NUL delimiter", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, delimiter: \"\\0\"}\n", "delimiter"},
+		{"csv quote delimiter", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, delimiter: '\"'}\n", "delimiter"},
+		{"csv line break delimiter", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, delimiter: \"\\n\"}\n", "delimiter"},
+		{"header repeated with no header line", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, header: {none: true, repeated: true}}\n", "nothing to repeat"},
+		{"header repeated outside table and csv", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, header: {repeated: false}}\n", "only valid for type table and type csv"},
 
 		{"indent on another parse type", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, indent: \"  \"}\n", "indent/node are only valid for type tree"},
 		{"duration with a time layout", base + "fields: {t: {type: duration, layout: '2006-01-02'}}\n", "must be h:mm or mm:ss"},
@@ -558,4 +571,63 @@ func TestWithColumns(t *testing.T) {
 			t.Errorf("%v on %s: %v, want %q", tt.names, tt.src, err, tt.want)
 		}
 	}
+}
+
+// A definition given on the command line is the schema of a file without
+// the keys that place a definition in a registry, in block style or as
+// one flow mapping, and it is bounded and checked the way a file is.
+func TestLoadInline(t *testing.T) {
+	t.Parallel()
+	for _, body := range []string{
+		"parse: {type: csv}\nfields: {a: {type: int}}\n",
+		"{parse: {type: csv}, fields: {a: {type: int}}}",
+		"  {parse: {type: csv}, fields: {a: {type: int}}}\n",
+	} {
+		d, err := LoadInline([]byte(body), "--define")
+		if err != nil {
+			t.Errorf("%q: %v", body, err)
+			continue
+		}
+		if d.ID() != "inline/inline" || d.Format != CurrentFormat || d.Parse.Type != TypeCSV || d.Fields["a"].Type != FieldInt {
+			t.Errorf("%q: loaded %+v", body, d)
+		}
+	}
+	for _, tc := range []struct{ body, want string }{
+		{"format: 1\nparse: {type: kv}\n", "states no format"},
+		{"command: x\nparse: {type: kv}\n", "states no command"},
+		{"{variant: x, parse: {type: kv}}", "states no variant"},
+		{"detect: {signature: {all: ['x']}}\nparse: {type: kv}\n", "states no detect"},
+		{"parse: {type: nope}\n", "unknown parse type"},
+		{"parse: {type: kv, bogus: 1}\n", `unknown key "bogus"`},
+		{"[1, 2]", "invalid YAML"},
+		{"parse: {type: kv}\n" + strings.Repeat("#", MaxDefinitionSize), "exceeds"},
+	} {
+		if _, err := LoadInline([]byte(tc.body), "--define"); err == nil || !strings.Contains(err.Error(), tc.want) {
+			t.Errorf("%.40q: %v, want %q", tc.body, err, tc.want)
+		}
+	}
+}
+
+// FuzzLoadInline drives the inline loader, whose probe reads the body
+// loosely before the strict pass: neither may panic, and a body that
+// loads is a definition the engine may be given.
+func FuzzLoadInline(f *testing.F) {
+	f.Add("parse: {type: csv}\n")
+	f.Add("{parse: {type: kv}, fields: {a: {type: int}}}")
+	f.Add("format: 1\nparse: {type: kv}\n")
+	f.Add("!!binary x\n")
+	f.Add("- a\n- b\n")
+	f.Add("parse: !!map {type: regex, pattern: '(?P<a>.)'}\n")
+	f.Fuzz(func(t *testing.T, body string) {
+		d, err := LoadInline([]byte(body), "fuzz")
+		if err != nil {
+			return
+		}
+		if d.ID() != "inline/inline" || d.Format != CurrentFormat {
+			t.Errorf("loaded %q as %s format %d", body, d.ID(), d.Format)
+		}
+		if d.Parse.Type == "" {
+			t.Errorf("loaded %q with no parse type", body)
+		}
+	})
 }

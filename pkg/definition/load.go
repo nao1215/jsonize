@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/goccy/go-yaml"
 
@@ -107,6 +108,16 @@ var unknownFieldRe = regexp.MustCompile(`(?:\[(\d+):\d+\] )?unknown field "([^"]
 // Load decodes, validates and compiles a definition. source is used in
 // error messages and stored in Definition.Source.
 func Load(data []byte, source string) (*Definition, error) {
+	d, err := decode(data, source)
+	if err != nil {
+		return nil, err
+	}
+	return d.finish(source)
+}
+
+// decode reads one YAML document into a definition, refusing one over
+// the size limit and naming a key this build does not know.
+func decode(data []byte, source string) (*Definition, error) {
 	if len(data) > MaxDefinitionSize {
 		return nil, &ValidationError{Source: source, Msg: fmt.Sprintf("definition exceeds %d bytes", MaxDefinitionSize)}
 	}
@@ -118,6 +129,13 @@ func Load(data []byte, source string) (*Definition, error) {
 		}
 		return nil, &ValidationError{Source: source, Msg: "invalid YAML: " + err.Error()}
 	}
+	return &d, nil
+}
+
+// finish checks the format, validates the definition and compiles its
+// expressions, which is what makes a decoded definition one the engine
+// may be given.
+func (d *Definition) finish(source string) (*Definition, error) {
 	d.Source = source
 	if d.Format != CurrentFormat {
 		return nil, &FormatError{Source: source, Got: d.Format}
@@ -125,7 +143,7 @@ func Load(data []byte, source string) (*Definition, error) {
 	if err := d.validate(); err != nil {
 		return nil, err
 	}
-	return &d, nil
+	return d, nil
 }
 
 // InlineCommand and InlineVariant name a definition given on the command
@@ -140,10 +158,15 @@ const (
 // parser.yaml without the four keys that place a definition in a
 // registry: format is this build's, command and variant are the inline
 // pair, and detect is meaningless for a definition nothing chooses.
-// Everything else — input, parse, fields — is the same schema and goes
-// through the same validation, so an inline definition cannot express
-// anything a file cannot.
+// Everything else (input, parse, fields, exec) is the same schema and
+// goes through the same validation, so an inline definition cannot
+// express anything a file cannot. The body may be written in block
+// style or as one flow mapping, whichever a command line is easier
+// with.
 func LoadInline(body []byte, source string) (*Definition, error) {
+	if len(body) > MaxDefinitionSize {
+		return nil, &ValidationError{Source: source, Msg: fmt.Sprintf("definition exceeds %d bytes", MaxDefinitionSize)}
+	}
 	var probe struct {
 		Format  int    `yaml:"format"`
 		Command string `yaml:"command"`
@@ -152,8 +175,10 @@ func LoadInline(body []byte, source string) (*Definition, error) {
 	}
 	// A body is decoded loosely once to name the keys that place a
 	// definition, so that writing one gets an explanation rather than
-	// "unknown key" from the strict pass below.
-	if err := yaml.Unmarshal(body, &probe); err == nil {
+	// "unknown key" from the strict pass below. It goes through the same
+	// guarded decoder as everything else, so a body the library cannot
+	// read is an error here too rather than a crash.
+	if err := decodeYAML(body, &probe, false); err == nil {
 		for _, k := range []struct {
 			name string
 			set  bool
@@ -168,21 +193,36 @@ func LoadInline(body []byte, source string) (*Definition, error) {
 			}
 		}
 	}
-	full := fmt.Sprintf("format: %d\ncommand: %s\nvariant: %s\n", CurrentFormat, InlineCommand, InlineVariant)
-	return Load(append([]byte(full), body...), source)
+	d, err := decode(body, source)
+	if err != nil {
+		return nil, err
+	}
+	d.Format, d.Command, d.Variant = CurrentFormat, InlineCommand, InlineVariant
+	return d.finish(source)
 }
 
 // DecodeYAML decodes strictly and turns a decoder panic into an error. A
 // definition may come from an untrusted registry, and the YAML library
 // has been observed to panic on some malformed tagged scalars; a broken
 // file must never take jz down.
-func DecodeYAML(data []byte, v any) (err error) {
+func DecodeYAML(data []byte, v any) error {
+	return decodeYAML(data, v, true)
+}
+
+// decodeYAML is DecodeYAML with the strictness chosen: a probe that
+// only looks for a few keys reads loosely, everything else refuses a key
+// it does not know.
+func decodeYAML(data []byte, v any, strict bool) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("decoder failure: %v", r)
 		}
 	}()
-	if err := yaml.UnmarshalWithOptions(data, v, yaml.Strict()); err != nil {
+	var opts []yaml.DecodeOption
+	if strict {
+		opts = append(opts, yaml.Strict())
+	}
+	if err := yaml.UnmarshalWithOptions(data, v, opts...); err != nil {
 		return errors.New(strings.TrimSpace(yaml.FormatError(err, false, false)))
 	}
 	return nil
@@ -298,7 +338,7 @@ func (d *Definition) validate() error {
 		d.Input.fold = v.regex("input.fold", d.Input.Fold)
 	}
 	validateSelect(v, "input.select", &d.Input.Select)
-	validateParse(v, "parse", &d.Parse, d.Fields, "")
+	validateParse(v, "parse", &d.Parse, d.Fields, "fields", "")
 	validateFields(v, "fields", d.Fields, 0, d.Parse.Type == TypeKV || d.Parse.Type == TypeINI)
 	if len(v.errs) == 0 {
 		return nil
@@ -337,14 +377,29 @@ func validateSelect(v *validator, path string, s *Select) {
 	}
 }
 
-// validateParse checks one parser. parent is the type of the parser this
-// one is a part of, empty at the top level. A composite part may be
-// records, which is what a banner followed by repeating blocks needs; no
-// other nesting is allowed, because anything deeper describes a tree
-// whose shape comes from the input rather than from the definition.
-func validateParse(v *validator, path string, p *Parse, fields map[string]*Field, parent string) {
+// validateParse checks one parser. fields is the fields map beside it
+// and fieldsPath where that map is written. parent is the type of the
+// parser this one is a part of, empty at the top level. A composite part
+// may be records, which is what a banner followed by repeating blocks
+// needs; no other nesting is allowed, because anything deeper describes a
+// tree whose shape comes from the input rather than from the definition.
+func validateParse(v *validator, path string, p *Parse, fields map[string]*Field, fieldsPath, parent string) {
 	if p.Type != TypeTree && (len(p.Indent) > 0 || p.Node != nil) {
 		v.add(path, "indent/node are only valid for type tree")
+	}
+	// A parser that reads its values through parts or nodes has no
+	// values of its own to convert, so a fields map beside it would
+	// apply to nothing. Refusing it is what keeps a rule written in the
+	// wrong place from being silently left out.
+	switch p.Type {
+	case TypeComposite, TypeRecords:
+		if len(fields) > 0 {
+			v.add(fieldsPath, "does not apply to type %s, whose values are read by its parts; write the rules under parts[].fields", p.Type)
+		}
+	case TypeTree:
+		if len(fields) > 0 {
+			v.add(fieldsPath, "does not apply to type tree, whose values are read by its node; write the rules under node.fields")
+		}
 	}
 	if p.Type != TypeRegex {
 		for name, f := range fields {
@@ -413,8 +468,8 @@ func validateCSV(v *validator, path string, p *Parse, fields map[string]*Field) 
 	}
 	if d := []rune(p.Delimiter); len(d) > 1 {
 		v.add(path+".delimiter", "must be a single character, not %q", p.Delimiter)
-	} else if len(d) == 1 && (d[0] == '"' || d[0] == '\r' || d[0] == '\n') {
-		v.add(path+".delimiter", "cannot be %q: a quote and a line break are what the quoting rules are about", p.Delimiter)
+	} else if len(d) == 1 && !csvDelimiter(d[0]) {
+		v.add(path+".delimiter", "cannot be %q: a quote, a line break, a NUL byte and a character that is not valid UTF-8 are what the quoting rules and the record separator are about", p.Delimiter)
 	}
 	if p.MaxFields != 0 || p.MinFields != 0 {
 		v.add(path, "max_fields/min_fields are only valid for type table; a csv row states its own width")
@@ -423,6 +478,13 @@ func validateCSV(v *validator, path string, p *Parse, fields map[string]*Field) 
 		v.add(path+".header.leading_label", "only valid for type table")
 	}
 	validateHeader(v, path, p, fields)
+}
+
+// csvDelimiter reports whether r can cut a csv record, which is the
+// rule the csv reader applies when it runs; checking it here is what
+// makes a definition fail when it is loaded rather than when it is used.
+func csvDelimiter(r rune) bool {
+	return r != 0 && r != '"' && r != '\r' && r != '\n' && r != utf8.RuneError && utf8.ValidRune(r)
 }
 
 // validateTree checks a tree parser. The indentation unit is written out
@@ -458,16 +520,36 @@ func validateTree(v *validator, path string, p *Parse) {
 		v.add(path+".node.parse.type", "a tree node is read with regex or kv, not %q", p.Node.Parse.Type)
 		return
 	}
-	validateParse(v, path+".node.parse", &p.Node.Parse, p.Node.Fields, TypeTree)
+	validateParse(v, path+".node.parse", &p.Node.Parse, p.Node.Fields, path+".node.fields", TypeTree)
 	validateFields(v, path+".node.fields", p.Node.Fields, 0, p.Node.Parse.Type == TypeKV)
-	// Every node carries its children under "children", so a group of
-	// that name would be read and then written over.
-	for _, g := range p.Node.Parse.Groups() {
-		if g == "children" {
-			v.add(path+".node.parse", `names a group "children", which is where a node's children go; name it something else`)
+	// Every node carries its children under "children", so a key of
+	// that name, whether a group reads it or a pattern's values state
+	// it, would be set and then written over.
+	for _, key := range p.Node.Parse.outputKeys() {
+		if key == "children" {
+			v.add(path+".node.parse", `names a key "children", which is where a node's children go; name it something else`)
 			break
 		}
 	}
+}
+
+// outputKeys lists every key a regex parser can set: the named groups of
+// its patterns and the fixed values they add.
+func (p *Parse) outputKeys() []string {
+	out := append([]string(nil), p.groups...)
+	seen := map[string]bool{}
+	for _, g := range out {
+		seen[g] = true
+	}
+	for _, vals := range p.values {
+		for _, val := range vals {
+			if !seen[val.Name] {
+				seen[val.Name] = true
+				out = append(out, val.Name)
+			}
+		}
+	}
+	return out
 }
 
 // validateINI checks an ini parser. The sections make it an object of
@@ -484,7 +566,7 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 	for _, f := range families {
 		switch f {
 		case "table":
-			if len(p.Header.Columns) > 0 || p.Header.None || p.Header.LeadingLabel != "" || len(p.Header.Rename) > 0 {
+			if len(p.Header.Columns) > 0 || p.Header.None || p.Header.LeadingLabel != "" || len(p.Header.Rename) > 0 || p.Header.Repeated != nil {
 				v.add(path+".header", "only valid for type table and type csv")
 			}
 			if p.Split != "" || p.Delimiter != "" || p.MaxFields != 0 || p.MinFields != 0 {
@@ -554,6 +636,9 @@ func validateHeader(v *validator, path string, p *Parse, fields map[string]*Fiel
 	}
 	if h.None && h.LeadingLabel != "" {
 		v.add(path+".header.leading_label", "cannot be combined with header.none")
+	}
+	if h.None && h.Repeated != nil {
+		v.add(path+".header.repeated", "cannot be combined with header.none: with no header line there is nothing to repeat")
 	}
 	if h.None && p.Split == SplitAligned {
 		v.add(path+".split", "aligned requires a header line")
@@ -636,10 +721,18 @@ func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*
 		if len(groups) == 0 && len(vals) == 0 {
 			v.add(ep, "must contain at least one named group (?P<name>...)")
 		}
+		own := map[string]bool{}
 		for _, g := range groups {
 			if !fieldRe.MatchString(g) {
 				v.add(ep, "group name %q is not a valid field name", g)
 			}
+			// Two groups of one pattern under one name would give the key
+			// two answers, and the second would write over the first.
+			// Two patterns may share a name: only one of them reads a line.
+			if own[g] {
+				v.add(ep, "names the group %q twice; a key holds one value, so the second would write over the first", g)
+			}
+			own[g] = true
 			if !groupSet[g] {
 				groupSet[g] = true
 				p.groups = append(p.groups, g)
@@ -723,7 +816,7 @@ func validateComposite(v *validator, path string, p *Parse, kind string) {
 		seen[part.Name] = true
 		validateSelect(v, pp+".select", &part.Select)
 		part.ignore = compileList(v, pp+".ignore", part.Ignore, "")
-		validateParse(v, pp+".parse", &part.Parse, part.Fields, kind)
+		validateParse(v, pp+".parse", &part.Parse, part.Fields, pp+".fields", kind)
 		validateFields(v, pp+".fields", part.Fields, 0, part.Parse.Type == TypeKV || part.Parse.Type == TypeINI)
 	}
 }
