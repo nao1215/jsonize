@@ -1,0 +1,3 @@
+description: the table snap find prints, which opens with the same Name and Version columns and has no Rev or Tracking, and which the signature must refuse
+source: captured on Ubuntu 26.04 (snapd 2.76.3) with LC_ALL=C, lines 1-6 of snap find hello-world
+expect_error: 'does not describe this input'

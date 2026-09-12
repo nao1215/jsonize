@@ -1,0 +1,4 @@
+description: a snap installed from a file, whose revision is x1 and whose tracking channel and publisher print as a dash
+source: written by hand to exercise the null_if rules the definition states for tracking and publisher and the non-numeric revision; the column widths follow the padding snapd uses (widest cell plus two spaces)
+os: linux
+args: [list]

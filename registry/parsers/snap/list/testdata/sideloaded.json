@@ -1,0 +1,26 @@
+[
+  {
+    "name": "core22",
+    "version": "20260410",
+    "rev": "2437",
+    "tracking": "latest/stable",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "hello-world",
+    "version": "6.4",
+    "rev": "x1",
+    "tracking": null,
+    "publisher": null,
+    "verified": false,
+    "starred": false,
+    "notes": [
+      "devmode"
+    ]
+  }
+]
