@@ -627,7 +627,7 @@ func validateTable(v *validator, path string, p *Parse, fields map[string]*Field
 	if p.MaxFields < 0 || p.MinFields < 0 {
 		v.add(path, "max_fields/min_fields must not be negative")
 	}
-	if p.MaxFields != 0 && p.MinFields > p.MaxFields {
+	if p.MaxFields > 0 && p.MinFields > p.MaxFields {
 		v.add(path+".min_fields", "exceeds max_fields")
 	}
 	if p.Split == SplitAligned && (p.MaxFields != 0 || p.MinFields != 0) {
@@ -639,6 +639,9 @@ func validateTable(v *validator, path string, p *Parse, fields map[string]*Field
 		}
 		if p.Header.None {
 			v.add(path+".header.none", "cannot be combined with split: box; a box table draws its header row")
+		}
+		if p.Header.LeadingLabel != "" {
+			v.add(path+".header.leading_label", "cannot be combined with split: box; the bars say where the first cell is, so there is no unlabelled column to name")
 		}
 	}
 	validateHeader(v, path, p, fields)
@@ -679,6 +682,9 @@ func validateHeader(v *validator, path string, p *Parse, fields map[string]*Fiel
 	}
 	if h.LeadingLabel != "" && !fieldRe.MatchString(h.LeadingLabel) {
 		v.add(path+".header.leading_label", "invalid name %q", h.LeadingLabel)
+	}
+	if len(h.Columns) > 0 && len(h.Rename) > 0 {
+		v.add(path+".header.rename", "cannot be combined with header.columns: explicit columns are the names, so a rename of a derived one would do nothing")
 	}
 	for from, to := range h.Rename {
 		if !fieldRe.MatchString(to) {

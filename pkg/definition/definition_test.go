@@ -302,6 +302,9 @@ func TestLoadErrors(t *testing.T) {
 		{"dup column", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {columns: [a, a]}}\n", "duplicate column"},
 		{"bad leading", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {leading_label: 'x y'}}\n", "leading_label"},
 		{"bad rename", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {rename: {a: 'x y'}}}\n", "rename"},
+		{"rename beside explicit columns", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {columns: [a, b], rename: {a: z}}}\n", "header.rename: cannot be combined with header.columns"},
+		{"rename beside explicit columns in a csv", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, header: {columns: [a], rename: {a: z}}}\n", "header.rename: cannot be combined with header.columns"},
+		{"leading label on a box table", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, split: box, header: {leading_label: x}}\n", "cannot be combined with split: box"},
 		{"max > columns", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {columns: [a]}, max_fields: 2}\n", "exceeds the number of columns"},
 		{"field not column", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {columns: [a]}}\nfields: {b: {type: int}}\n", "not one of the declared columns"},
 		{"table with regex keys", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, pattern: x}\n", "only valid for type regex"},
@@ -451,6 +454,24 @@ func TestLoadCollectsMultipleErrors(t *testing.T) {
 	var ve *ValidationError
 	if !errors.As(err, &ve) {
 		t.Errorf("errors.As ValidationError failed: %T", err)
+	}
+}
+
+func TestNegativeMaxFieldsSaysOnlyThat(t *testing.T) {
+	t.Parallel()
+	// min_fields is not written here, so its zero is not a width that
+	// exceeds anything: the comparison with a negative max_fields would
+	// only send the reader after a key they never typed.
+	_, err := Load([]byte("format: 1\ncommand: c\nvariant: v\nparse: {type: table, max_fields: -1}\n"), "negative.yaml")
+	if err == nil {
+		t.Fatal("expected error")
+	}
+	msg := err.Error()
+	if !strings.Contains(msg, "max_fields/min_fields must not be negative") {
+		t.Errorf("missing the negative width in:\n%s", msg)
+	}
+	if strings.Contains(msg, "exceeds max_fields") {
+		t.Errorf("min_fields was not written, yet it is reported as too large:\n%s", msg)
 	}
 }
 

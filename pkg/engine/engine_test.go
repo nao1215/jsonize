@@ -1091,6 +1091,20 @@ func TestAlignedRefusesAValueThatRunsIntoAnEmptyColumn(t *testing.T) {
 	}
 }
 
+// A `free`-shaped definition read against a header that begins at the
+// left edge. The unlabelled column is cut from the start of the line to
+// where the first header word begins, so there it is empty and every
+// value moves one column left. That used to be exit 0.
+func TestAlignedRefusesALeadingLabelWithNoRoom(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned, header: {leading_label: kind}}\n")
+	in := "total used\nMem: 10 5\n"
+	_, err := Parse(def, []byte(in), Options{})
+	if err == nil || !strings.Contains(err.Error(), `line 1: the header begins at the left edge, so the unlabelled column "kind" has no width`) {
+		t.Fatalf("err = %v", err)
+	}
+}
+
 func FuzzParse(f *testing.F) {
 	defs := []string{dfDef,
 		"format: 1\ncommand: t\nvariant: a\nparse: {type: table, split: aligned}\nfields: {size: {type: int}}\n",

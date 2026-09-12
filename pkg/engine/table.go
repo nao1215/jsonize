@@ -145,6 +145,13 @@ func (r *run) resolveHeader(p *definition.Parse, header line, split string) ([]c
 	}
 	if h.LeadingLabel != "" {
 		toks = append([]token{{text: h.LeadingLabel, start: 0}}, toks...)
+		// The unlabelled column is cut from the start of the line to
+		// where the first header word begins, so a header written
+		// against the left edge leaves it nothing: its cell is empty on
+		// every row and the values move one column left.
+		if split == definition.SplitAligned && len(toks) > 1 && toks[1].start == 0 {
+			return nil, r.errorf(header.num, "", "the header begins at the left edge, so the unlabelled column %q has no width: %q", h.LeadingLabel, truncate(header.text, 80))
+		}
 	}
 	if len(toks) > definition.MaxColumns {
 		return nil, r.errorf(header.num, "", "header has more than %d columns", definition.MaxColumns)
