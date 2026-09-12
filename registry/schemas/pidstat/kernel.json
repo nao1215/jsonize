@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pidstat/kernel.json",
+  "title": "pidstat/kernel",
+  "description": "pidstat -v per-task kernel tables",
+  "x-jsonize": {
+    "definition": "pidstat/kernel",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "string"
+            },
+            "uid": {
+              "type": "integer"
+            },
+            "pid": {
+              "type": "integer"
+            },
+            "threads": {
+              "type": "integer"
+            },
+            "fd_nr": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "time",
+            "uid",
+            "pid",
+            "threads",
+            "fd_nr",
+            "command"
+          ]
+        }
+      }
+    },
+    "required": [
+      "tasks"
+    ]
+  }
+}

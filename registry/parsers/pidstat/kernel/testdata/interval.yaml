@@ -1,0 +1,4 @@
+description: two samples of one task under one header, and the Average row sysstat writes without one
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C from `pidstat -v -p 1 1 2`; the host name in the banner was replaced
+os: linux
+args: ["-v", "-p", "1"]

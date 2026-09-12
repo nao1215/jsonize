@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pidstat/threads.json",
+  "title": "pidstat/threads",
+  "description": "pidstat -t per-thread CPU use",
+  "x-jsonize": {
+    "definition": "pidstat/threads",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "string"
+            },
+            "uid": {
+              "type": "integer"
+            },
+            "tgid": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "tid": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "usr_percent": {
+              "type": "number"
+            },
+            "system_percent": {
+              "type": "number"
+            },
+            "guest_percent": {
+              "type": "number"
+            },
+            "wait_percent": {
+              "type": "number"
+            },
+            "cpu_percent": {
+              "type": "number"
+            },
+            "cpu": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "time",
+            "uid",
+            "tgid",
+            "tid",
+            "usr_percent",
+            "system_percent",
+            "guest_percent",
+            "wait_percent",
+            "cpu_percent",
+            "cpu",
+            "command"
+          ]
+        }
+      }
+    },
+    "required": [
+      "tasks"
+    ]
+  }
+}

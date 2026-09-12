@@ -1,0 +1,110 @@
+[
+  {
+    "tasks": [
+      {
+        "time": "22:31:09",
+        "uid": 0,
+        "pid": 1,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "systemd"
+      },
+      {
+        "time": "22:31:09",
+        "uid": 0,
+        "pid": 2,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kthreadd"
+      },
+      {
+        "time": "22:31:09",
+        "uid": 0,
+        "pid": 3,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "pool_workqueue_release"
+      },
+      {
+        "time": "22:31:09",
+        "uid": 0,
+        "pid": 4,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kworker/R-rcu_gp"
+      }
+    ]
+  },
+  {
+    "tasks": [
+      {
+        "time": "22:31:10",
+        "uid": 0,
+        "pid": 1,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "systemd"
+      },
+      {
+        "time": "22:31:10",
+        "uid": 0,
+        "pid": 2,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kthreadd"
+      },
+      {
+        "time": "22:31:10",
+        "uid": 0,
+        "pid": 3,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "pool_workqueue_release"
+      },
+      {
+        "time": "22:31:10",
+        "uid": 0,
+        "pid": 4,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kworker/R-rcu_gp"
+      }
+    ]
+  },
+  {
+    "tasks": [
+      {
+        "time": "Average",
+        "uid": 0,
+        "pid": 1,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "systemd"
+      },
+      {
+        "time": "Average",
+        "uid": 0,
+        "pid": 2,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kthreadd"
+      },
+      {
+        "time": "Average",
+        "uid": 0,
+        "pid": 3,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "pool_workqueue_release"
+      },
+      {
+        "time": "Average",
+        "uid": 0,
+        "pid": 4,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kworker/R-rcu_gp"
+      }
+    ]
+  }
+]

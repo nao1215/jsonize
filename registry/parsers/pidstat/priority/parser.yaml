@@ -1,0 +1,43 @@
+# `pidstat -R` reports the scheduling priority and policy of each task,
+# in the same shape as every other pidstat report (see pidstat/linux for
+# why the banner is dropped): a banner, a column header opening each
+# sample, and with an interval a closing block whose rows are labelled
+# Average.
+#
+# prio is the priority the scheduler was given, which is 0 for a task
+# under the default policy; policy is the name sysstat prints for it
+# (NORMAL, FIFO, RR, BATCH, IDLE, DLINE or UNKNOWN).
+format: 1
+command: pidstat
+variant: priority
+description: pidstat -R per-task scheduling priority
+metadata:
+  tags: [linux, process, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/pidstat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+UID[ \t]+PID[ \t]+prio[ \t]+policy[ \t]+Command[ \t]*$'
+input:
+  select:
+    after: '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)'
+parse:
+  type: records
+  start: '^(?:[0-9]{2}:[0-9]{2}:[0-9]{2}|Average:)[ \t]+UID[ \t]+PID[ \t]+prio[ \t]+policy'
+  parts:
+    - name: tasks
+      parse:
+        type: table
+        header:
+          columns: [time, uid, pid, prio, policy, command]
+      fields:
+        time: {required: true, trim_suffix: ":"}
+        uid: {type: int}
+        pid: {type: int, required: true}
+        prio: {type: int}
+        policy: {required: true}
+        command: {required: true}

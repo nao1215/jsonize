@@ -708,6 +708,61 @@ scenarios:
             json:
               - { path: "$[1].tasks[0].time", equals: Average }
 
+  # The reports of the same run that name threads, priorities, stacks and
+  # per-thread CPU. -t prints a row for a task and a row for each of its
+  # threads, and whichever of TGID and TID is a dash says which kind of
+  # row it is.
+  - name: pidstat -v, -R, -s and -t land on their own definitions
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain pidstat -v -p 1 1 1
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pidstat/kernel from embedded"
+          stdout:
+            json:
+              - { path: "$[0].tasks[0].pid", equals: 1 }
+      - run:
+          command: jz run --explain pidstat -R -p 1 1 1
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pidstat/priority from embedded"
+          stdout:
+            json:
+              - { path: "$[0].tasks[0].pid", equals: 1 }
+      # An ordinary user cannot read the stack of a task that is not
+      # theirs, and pid 1 is root's: the report is then a header with no
+      # rows under it, which is an empty list rather than a failure. Run
+      # as root it holds the task, so the length of the list is not what
+      # this pins.
+      - run:
+          command: jz run --explain pidstat -s -p 1 1 1
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pidstat/stack from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+      - run:
+          command: jz run --explain pidstat -t -p 1 1 1
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "pidstat/threads from embedded"
+          stdout:
+            json:
+              - { path: "$[0].tasks[0].tgid", equals: 1 }
+              - { path: "$[0].tasks[0].tid", equals: null }
+              - { path: "$[0].tasks[1].tgid", equals: null }
+              - { path: "$[0].tasks[1].tid", equals: 1 }
+              # The drawing that puts a thread under its task is not part
+              # of its name.
+              - { path: "$[0].tasks[1].command", equals: systemd }
+
   - name: the network and package listings land on their own definitions
     only: {os: linux}
     steps:

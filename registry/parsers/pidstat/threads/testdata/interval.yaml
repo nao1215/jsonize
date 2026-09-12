@@ -1,0 +1,4 @@
+description: two samples of one task and its thread, and the Average rows whose CPU is a dash
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C from `pidstat -t -p 1 1 2`; the host name in the banner was replaced
+os: linux
+args: ["-t", "-p", "1"]

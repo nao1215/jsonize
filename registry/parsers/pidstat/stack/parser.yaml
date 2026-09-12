@@ -1,0 +1,45 @@
+# `pidstat -s` reports the stack of each task in kilobytes: the space
+# reserved for it and the space referenced so far. The run is shaped
+# like every other pidstat report (see pidstat/linux for why the banner
+# is dropped): a banner, a column header opening each sample, and with
+# an interval a closing block whose rows are labelled Average.
+#
+# The figures come from /proc/<pid>/status, which a task owned by
+# another user does not show, so the report of a machine where pidstat
+# is not run as root holds the tasks it could read and nothing about the
+# rest: a header with no rows under it is an empty list, not a format jz
+# could not read.
+format: 1
+command: pidstat
+variant: stack
+description: pidstat -s per-task stack use
+metadata:
+  tags: [linux, memory, process, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/pidstat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+UID[ \t]+PID[ \t]+StkSize[ \t]+StkRef[ \t]+Command[ \t]*$'
+input:
+  select:
+    after: '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)'
+parse:
+  type: records
+  start: '^(?:[0-9]{2}:[0-9]{2}:[0-9]{2}|Average:)[ \t]+UID[ \t]+PID[ \t]+StkSize[ \t]+StkRef'
+  parts:
+    - name: tasks
+      parse:
+        type: table
+        header:
+          columns: [time, uid, pid, stksize, stkref, command]
+      fields:
+        time: {required: true, trim_suffix: ":"}
+        uid: {type: int}
+        pid: {type: int, required: true}
+        stksize: {type: int}
+        stkref: {type: int}
+        command: {required: true}

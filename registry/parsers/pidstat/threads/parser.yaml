@@ -1,0 +1,51 @@
+# `pidstat -t` reports the CPU use of pidstat/linux one thread at a
+# time: a row per task, then a row per thread of it. The run is shaped
+# like every other pidstat report (see pidstat/linux for why the banner
+# is dropped): a banner, a column header opening each sample, and with
+# an interval a closing block whose rows are labelled Average.
+#
+# A task's row carries its TGID and no TID, and a thread's row carries
+# its TID and no TGID: whichever of the two is "-" says which kind of
+# row it is, so both are null where sysstat prints the dash. A thread's
+# name is drawn under its task with "|__" in front of it, which is not
+# part of the name. CPU is the processor the task ran on and the Average
+# rows have no single one, which is the same dash.
+format: 1
+command: pidstat
+variant: threads
+description: pidstat -t per-thread CPU use
+metadata:
+  tags: [linux, cpu, process, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/pidstat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+UID[ \t]+TGID[ \t]+TID[ \t]+%usr[ \t]+%system[ \t]+%guest[ \t]+%wait[ \t]+%CPU[ \t]+CPU[ \t]+Command[ \t]*$'
+input:
+  select:
+    after: '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)'
+parse:
+  type: records
+  start: '^(?:[0-9]{2}:[0-9]{2}:[0-9]{2}|Average:)[ \t]+UID[ \t]+TGID[ \t]+TID[ \t]+%usr'
+  parts:
+    - name: tasks
+      parse:
+        type: table
+        header:
+          columns: [time, uid, tgid, tid, usr_percent, system_percent, guest_percent, wait_percent, cpu_percent, cpu, command]
+      fields:
+        time: {required: true, trim_suffix: ":"}
+        uid: {type: int}
+        tgid: {type: int, null_if: ["-"]}
+        tid: {type: int, null_if: ["-"]}
+        usr_percent: {type: float}
+        system_percent: {type: float}
+        guest_percent: {type: float}
+        wait_percent: {type: float}
+        cpu_percent: {type: float}
+        cpu: {type: int, null_if: ["-"]}
+        command: {required: true, regex: '(?:\|__)?(?P<command>.+)'}

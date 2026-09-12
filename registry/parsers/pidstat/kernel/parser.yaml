@@ -1,0 +1,48 @@
+# `pidstat -v` reports the kernel tables of each task: how many threads
+# it has and how many file descriptors it holds. The run is shaped like
+# every other pidstat report (see pidstat/linux for why the banner is
+# dropped): a banner, a column header opening each sample, and with an
+# interval a closing block whose rows are labelled Average.
+#
+# fd-nr is -1 for a task whose /proc/<pid>/fd pidstat could not read, a
+# kernel thread or a task owned by another user; that is null rather
+# than a count of minus one.
+format: 1
+command: pidstat
+variant: kernel
+description: pidstat -v per-task kernel tables
+metadata:
+  tags: [linux, process, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/pidstat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+UID[ \t]+PID[ \t]+threads[ \t]+fd-nr[ \t]+Command[ \t]*$'
+input:
+  select:
+    # The banner is stated whole, so what is dropped is exactly the line
+    # described above and not whatever happens to open with "Linux".
+    after: '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)'
+parse:
+  type: records
+  start: '^(?:[0-9]{2}:[0-9]{2}:[0-9]{2}|Average:)[ \t]+UID[ \t]+PID[ \t]+threads[ \t]+fd-nr'
+  parts:
+    - name: tasks
+      parse:
+        type: table
+        # The header's own words are the column titles of a report, not
+        # names to derive keys from, and its first word is the sample's
+        # time rather than a title at all.
+        header:
+          columns: [time, uid, pid, threads, fd_nr, command]
+      fields:
+        time: {required: true, trim_suffix: ":"}
+        uid: {type: int}
+        pid: {type: int, required: true}
+        threads: {type: int}
+        fd_nr: {type: int, null_if: ["-1"]}
+        command: {required: true}
