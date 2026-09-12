@@ -1,0 +1,3 @@
+source: "stat on a file, a directory, a symbolic link and a name with a space, on FreeBSD 15.1-RELEASE (vmactions/freebsd-vm) with LC_ALL=C: a group with no name, file flags 0x800, and device numbers past 2^63 (capture run 34599785859 of the temporary capture workflow; the directory prefix of the names removed)"
+os: freebsd
+args: ["file.txt", "dir", "link", "with space.txt"]

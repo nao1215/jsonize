@@ -15,7 +15,6 @@ import (
 	"github.com/nao1215/jsonize/internal/runner"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
-	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/registry"
 	"github.com/nao1215/jsonize/pkg/selector"
 )
@@ -46,8 +45,9 @@ state that boundary explicitly:
 
 --stream answers a command that does not end: each record is written as
 soon as it can be read, instead of one array once the command has
-finished. It applies to the formats that yield records; a format read
-into one object is a usage error.
+finished; a composite (ping) is written part by part. A format read into
+one object is a usage error. --yaml writes YAML instead of JSON, one
+document per record with --stream.
 
 If the command exits non-zero, jz still parses whatever it printed,
 reports the status on stderr and exits with that same status. A command
@@ -56,24 +56,32 @@ terminated by a signal yields 128+signal.
 Options:
 `
 
-func (a *app) cmdRun(args []string) int {
-	o := newOptions("run")
-	var (
-		out        outputOptions
-		sel        selectOptions
-		envs       stringList
-		keepLocale bool
-		timeout    time.Duration
-	)
-	out.bind(o)
-	sel.bind(o)
-	o.listOpt(&envs, "env", "NAME=VALUE", "set a variable in the command's environment (repeatable)")
-	o.boolOpt(&keepLocale, "keep-locale", "", "do not force LC_ALL=C for the command")
-	o.durationOpt(&timeout, "timeout", "DURATION", 0, "kill the command after this long (0 = no limit)")
+// runOptions are the options of jz run.
+type runOptions struct {
+	out        outputOptions
+	sel        selectOptions
+	envs       stringList
+	keepLocale bool
+	timeout    time.Duration
+}
+
+func (r *runOptions) bind(o *optionSet) {
+	r.out.bind(o)
+	r.sel.bind(o)
+	o.listOpt(&r.envs, "env", "NAME=VALUE", "set a variable in the command's environment (repeatable)")
+	o.boolOpt(&r.keepLocale, "keep-locale", "", "do not force LC_ALL=C for the command")
+	o.durationOpt(&r.timeout, "timeout", "DURATION", 0, "kill the command after this long (0 = no limit)")
 	o.helpDoc()
+}
+
+func (a *app) cmdRun(args []string) int {
+	o := newOptions(modeRun)
+	var ro runOptions
+	ro.bind(o)
 	if code, done := a.parse(o, args, runUsage); done {
 		return code
 	}
+	out, sel, envs, keepLocale, timeout := ro.out, ro.sel, ro.envs, ro.keepLocale, ro.timeout
 	rest := o.fs.Args()
 	if len(rest) == 0 {
 		a.errorf("run: no command given")
@@ -132,6 +140,9 @@ func (a *app) cmdRun(args []string) int {
 				Available: variantNames(reg.Variants(parser)),
 			})
 		}
+	}
+	if inline, code = a.nameColumns(reg, &sel, inline); code != ExitOK {
+		return code
 	}
 
 	ctx := a.env.Context
@@ -201,7 +212,7 @@ func (a *app) cmdRun(args []string) int {
 		return code
 	}
 	exp.chose(chosen)
-	data, acct, err := engine.ParseAccounted(chosen.Entry.Def, res.Stdout, out.engineOptions())
+	data, acct, err := engine.ParseAccounted(a.reading(chosen.Entry.Def), res.Stdout, out.engineOptions())
 	if err != nil {
 		code := a.failedRun(err, res.ExitCode)
 		exp.fail(err, code)
@@ -210,12 +221,12 @@ func (a *app) cmdRun(args []string) int {
 	}
 	exp.read(acct)
 	a.explainWrite(exp)
-	narrowed, code := a.narrow(data, &out, chosen.Entry.Def)
+	narrowed, code := a.narrow(data, &out, a.reading(chosen.Entry.Def))
 	if code != ExitOK {
 		return code
 	}
 	data = narrowed
-	if err := jsonutil.Encode(a.env.Stdout, data, out.pretty); err != nil {
+	if err := out.write(a.env.Stdout, data); err != nil {
 		return a.writeFailed(err)
 	}
 	return res.ExitCode
@@ -294,7 +305,7 @@ func (a *app) emptyResult(reg *registry.Registry, sctx selector.Context, out out
 	if code := a.emptyFormats(reg, sctx, false, exp); code != ExitOK {
 		return code
 	}
-	if err := jsonutil.Encode(a.env.Stdout, []any{}, out.pretty); err != nil {
+	if err := out.write(a.env.Stdout, []any{}); err != nil {
 		return a.writeFailed(err)
 	}
 	return ExitOK
@@ -339,7 +350,7 @@ func wrapperHint(reg *registry.Registry, opts, command []string) string {
 		if n := len(opts); n > 0 && opts[n-1] == "--" {
 			opts = opts[:n-1]
 		}
-		line := append(append(append([]string{"jz", "run"}, opts...), "--parser", key, "--"), command...)
+		line := append(append(append([]string{"jz", modeRun}, opts...), "--parser", key, "--"), command...)
 		return fmt.Sprintf("If %s runs %s, name that parser: %s", name, key, shellLine(line))
 	}
 	return ""

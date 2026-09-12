@@ -1,0 +1,7 @@
+PING 255.255.255.255 (255.255.255.255): 56 data bytes
+64 bytes from 192.0.2.5: icmp_seq=0 ttl=64 time=0.150 ms
+64 bytes from 192.0.2.5: icmp_seq=1 ttl=64 time=0.120 ms
+
+--- 255.255.255.255 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 0.120/0.135/0.150/0.015 ms

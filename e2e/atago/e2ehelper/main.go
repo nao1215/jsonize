@@ -32,6 +32,11 @@
 //
 // waits for the process recorded in FILE to end and prints whether it
 // did, for a scenario that ran the pipeline some other way.
+//
+//	e2ehelper serve -addr FILE
+//
+// is the local HTTP server the curl scenarios read headers from (see
+// serve.go).
 package main
 
 import (
@@ -54,7 +59,7 @@ func main() {
 
 func run(args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 {
-		fmt.Fprintln(stderr, "usage: e2ehelper emit|pipe [options]")
+		fmt.Fprintln(stderr, "usage: e2ehelper emit|pipe|gone|serve [options]")
 		return 2
 	}
 	var err error
@@ -65,6 +70,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		err = pipe(args[1:], stdout)
 	case "gone":
 		err = gone(args[1:], stdout)
+	case "serve":
+		err = serve(args[1:])
 	default:
 		err = fmt.Errorf("unknown mode %q", args[0])
 	}

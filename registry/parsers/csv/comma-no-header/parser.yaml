@@ -1,0 +1,23 @@
+# Comma-separated values with RFC 4180 quoting and no header line: every
+# line is a record, the first one included. The columns are named
+# column_1, column_2 and so on, as many as the first record has, or by
+# --columns NAME,... on the command line. A later record with more fields
+# than that is refused, since its last values would have no column; one
+# with fewer leaves the columns it lacks null.
+#
+# An empty field is "" whether it was quoted or not, which is how RFC 4180
+# reads it: a tool that writes NULL as nothing and an empty string as ""
+# (sqlite3 -csv) says something the format itself does not.
+format: 1
+command: csv
+variant: comma-no-header
+description: comma-separated values without a header line; columns column_1, column_2, ... or --columns
+metadata:
+  tags: [generic]
+  references:
+    - https://www.rfc-editor.org/rfc/rfc4180
+detect:
+  auto_detect: false
+parse:
+  type: csv
+  header: {none: true}

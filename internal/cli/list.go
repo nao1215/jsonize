@@ -25,16 +25,26 @@ const listUsage = `Usage: jz list [COMMAND [VARIANT]]
 Options:
 `
 
-func (a *app) cmdList(args []string) int {
-	o := newOptions("list")
-	var asJSON, sources, asSchema bool
-	o.boolOpt(&asJSON, "json", "", "print machine-readable JSON instead of a table")
-	o.boolOpt(&asSchema, "schema", "", "print the JSON Schema of one definition's output")
-	o.boolOpt(&sources, "sources", "", "list the registries in precedence order")
+// listOptions are the options of jz list.
+type listOptions struct {
+	asJSON, sources, asSchema bool
+}
+
+func (l *listOptions) bind(o *optionSet) {
+	o.boolOpt(&l.asJSON, "json", "", "print machine-readable JSON instead of a table")
+	o.boolOpt(&l.asSchema, "schema", "", "print the JSON Schema of one definition's output")
+	o.boolOpt(&l.sources, "sources", "", "list the registries in precedence order")
 	o.helpDoc()
+}
+
+func (a *app) cmdList(args []string) int {
+	o := newOptions(modeList)
+	var lo listOptions
+	lo.bind(o)
 	if code, done := a.parse(o, args, listUsage); done {
 		return code
 	}
+	asJSON, sources, asSchema := lo.asJSON, lo.sources, lo.asSchema
 	if o.fs.NArg() > 2 {
 		a.errorf("list: expected at most COMMAND and VARIANT, got %d arguments", o.fs.NArg())
 		return ExitUsage
@@ -262,7 +272,7 @@ func (a *app) listDefinition(reg *registry.Registry, command, variant string, as
 	for _, ref := range d.Metadata.References {
 		fmt.Fprintf(w, "  reference:    %s\n", ref)
 	}
-	fmt.Fprintf(w, "  detection:    %s\n", describeDetect(&d.Detect))
+	fmt.Fprintf(w, "  detection:    %s\n", describeDetect(d))
 	for _, line := range signatureLines(&d.Detect.Signature) {
 		fmt.Fprintf(w, "                %s\n", line)
 	}
@@ -413,10 +423,11 @@ func fieldsObject(fields map[string]*definition.Field) *jsonutil.Object {
 	return o
 }
 
-func describeDetect(d *definition.Detect) string {
+func describeDetect(def *definition.Definition) string {
+	d := &def.Detect
 	var parts []string
 	if d.Signature.IsZero() {
-		parts = append(parts, "no signature (needs --parser "+"or jz run)")
+		parts = append(parts, fmt.Sprintf("no signature (read when named: --parser %s --variant %s, or jz run)", def.Command, def.Variant))
 	} else {
 		n := len(d.Signature.All) + len(d.Signature.Any) + len(d.Signature.None)
 		parts = append(parts, fmt.Sprintf("signature (%d expressions)", n))

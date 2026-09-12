@@ -97,6 +97,34 @@ func (f *keyFilter) narrowRecord(v any) any {
 	return f.walk(v)
 }
 
+// streamEmit returns what writes one document of a stream through write.
+// A composite is streamed as {"part", "value"} documents, and the keys a
+// caller names for it are its parts, the keys of the object the whole
+// document would have been: a document for a part left out is not written
+// at all, and one for a part kept is written whole.
+func (f *keyFilter) streamEmit(write func(any) error, def *definition.Definition) func(any) error {
+	if def.Parse.Type != definition.TypeComposite {
+		return func(v any) error {
+			return write(f.narrowRecord(v))
+		}
+	}
+	return func(v any) error {
+		if doc, ok := v.(*jsonutil.Object); ok && len(f.keys) > 0 {
+			name, _ := doc.Get("part")
+			part, _ := name.(string)
+			f.present[part] = true
+			named := f.keys[part]
+			if named {
+				f.seen[part] = true
+			}
+			if named != f.keep {
+				return nil
+			}
+		}
+		return write(v)
+	}
+}
+
 // unseen reports a named key the definition does not declare and that no
 // record narrowed so far had.
 func (f *keyFilter) unseen() error {

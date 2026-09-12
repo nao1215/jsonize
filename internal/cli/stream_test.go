@@ -178,3 +178,50 @@ func TestRunStream(t *testing.T) {
 		t.Errorf("empty output, no streaming form: %d %s", code, h.stderr.String())
 	}
 }
+
+// A composite is streamed part by part, as {"part", "value"} documents,
+// and --extract and --exclude name the parts.
+func TestStreamComposite(t *testing.T) {
+	const ping = "PING 192.0.2.10 (192.0.2.10) 56(84) bytes of data.\n" +
+		"64 bytes from 192.0.2.10: icmp_seq=1 ttl=64 time=0.045 ms\n" +
+		"From 192.0.2.1 icmp_seq=2 Destination Host Unreachable\n" +
+		"\n--- 192.0.2.10 ping statistics ---\n" +
+		"2 packets transmitted, 1 received, +1 errors, 50% packet loss, time 1003ms\n" +
+		"rtt min/avg/max/mdev = 0.045/0.045/0.045/0.000 ms\n"
+	h := newHarness(t)
+	if code := h.pipe(ping, "--stream"); code != ExitOK {
+		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
+	}
+	recs := h.records()
+	parts := make([]string, 0, len(recs))
+	for _, r := range recs {
+		if len(r) != 2 || r["value"] == nil {
+			t.Fatalf("record %v is not a {part, value} document", r)
+		}
+		parts = append(parts, r["part"].(string))
+	}
+	if got := strings.Join(parts, ","); got != "destination,replies,replies,statistics" {
+		t.Errorf("parts = %s", got)
+	}
+	// The same documents with --yaml, one per record.
+	if code := h.pipe(ping, "--stream", "--yaml"); code != ExitOK {
+		t.Fatalf("--yaml: code=%d stderr=%s", code, h.stderr.String())
+	}
+	if n := strings.Count(h.stdout.String(), "---\npart: "); n != 4 {
+		t.Errorf("%d YAML documents:\n%s", n, h.stdout.String())
+	}
+	if code := h.pipe(ping, "--stream", "--extract", "replies"); code != ExitOK {
+		t.Fatalf("extract: code=%d stderr=%s", code, h.stderr.String())
+	}
+	for _, r := range h.records() {
+		if r["part"] != "replies" {
+			t.Errorf("--extract replies wrote %v", r)
+		}
+	}
+	if code := h.pipe(ping, "--stream", "--exclude", "replies"); code != ExitOK || strings.Contains(h.stdout.String(), `"replies"`) {
+		t.Errorf("exclude: code=%d stdout=%s", code, h.stdout.String())
+	}
+	if code := h.pipe(ping, "--stream", "--extract", "reply"); code != ExitUsage || h.stdout.Len() != 0 {
+		t.Errorf("an unknown part: code=%d stdout=%s stderr=%s", code, h.stdout.String(), h.stderr.String())
+	}
+}

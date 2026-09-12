@@ -46,18 +46,26 @@ registry could not be read.
 Options:
 `
 
-func (a *app) cmdTest(args []string) int {
-	o := newOptions("test")
-	var (
-		update bool
-		decoys string
-	)
-	o.boolOpt(&update, "update", "", "rewrite testdata/<case>.json from the current output")
-	o.stringOpt(&decoys, "decoys", "", "DIR", "", "require every file under DIR to be refused by every parser")
+// testOptions are the options of jz test.
+type testOptions struct {
+	update bool
+	decoys string
+}
+
+func (t *testOptions) bind(o *optionSet) {
+	o.boolOpt(&t.update, "update", "", "rewrite testdata/<case>.json from the current output")
+	o.stringOpt(&t.decoys, "decoys", "", "DIR", "", "require every file under DIR to be refused by every parser")
 	o.helpDoc()
+}
+
+func (a *app) cmdTest(args []string) int {
+	o := newOptions(modeTest)
+	var to testOptions
+	to.bind(o)
 	if code, done := a.parse(o, args, testUsage); done {
 		return code
 	}
+	update, decoys := to.update, to.decoys
 	srcs, targets, code := a.testSources(o.fs.Args())
 	if code != ExitOK {
 		return code

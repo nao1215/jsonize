@@ -96,6 +96,13 @@ detect:
   many things. Such a definition is skipped by automatic detection and
   used only when the parser is named (`--parser du`, or `jz run du`),
   where its signature is still checked.
+- A definition with `auto_detect: false` and no signature at all reads
+  any text of its shape. Under a command whose other variants have a
+  signature (`ls/names` beside the long listings), naming the command
+  on a pipe does not reach it, since it would take the output of an
+  option the others refuse; it is used when its variant is named, or by
+  `jz run`, where the arguments have narrowed the variants first. A
+  command whose variants all lack one (`csv`, `table`) is unaffected.
 
 ### Writing a signature
 
@@ -169,7 +176,12 @@ where `until`, `skip` and `limit` earn their keep: what they leave out of
 one part is what its siblings read.
 
 Input is split on the record separator, a newline by default; a trailing
-`\r` is then removed from every line and a UTF-8 BOM is dropped.
+`\r` is then removed from every line and a UTF-8 BOM is dropped. Blank
+lines before the first line of text and after the last are not part of
+it, whatever `skip_blank` says. With `skip_blank: false` only an empty
+line counts as blank there, since a definition that keeps blank lines
+may be reading lines of spaces as values (`ls/names` reads a file named
+with spaces).
 
 `fold` names the continuation of the line above it. A matching line is
 joined onto the previous one with a single space and its own leading and
@@ -310,7 +322,7 @@ parse:
   delimiter: ","                             # default ","; "\t" for TSV
   header:
     columns: [name, size]                    # explicit names
-    none: true                               # no header line (columns required)
+    none: true                               # no header line
     rename: {qty: quantity}
 ```
 
@@ -324,7 +336,17 @@ normalised the way a table header is.
 A row shorter than the header leaves the remaining keys `null`, so every
 object of a document carries the same keys. A row longer than the header
 is an error: a value with no column to go under has nowhere to be
-reported. A header naming one column twice numbers the repeats
+reported.
+
+With `header.none: true` every line is a record, the first one included.
+The columns are the ones `columns` names, or, when it names none,
+`column_1`, `column_2` and so on, as many as the first record has; a
+later record with more fields is then the error above, and one with
+fewer leaves nulls. The first record is what fixes the count because it
+is the one thing a stream knows before the rest has arrived, so the
+whole document and `--stream` agree. `--columns NAME,...` on the command
+line gives such a definition its names without writing it out
+(`csv/comma-no-header` and `csv/tab-no-header` are the registered ones). A header naming one column twice numbers the repeats
 (`a`, `a_2`), because refusing a file a spreadsheet exported would be
 the wrong answer and hiding one of the values would be worse.
 
@@ -595,6 +617,18 @@ No other nesting is allowed. A part cannot be `composite`, and a part of
 `records` cannot be `records`: both describe a depth that comes from the
 input rather than from the definition, which is the shape jz does not
 promise.
+
+With `--stream`, a composite is one document per part as each part is
+read: `{"part": NAME, "value": VALUE}`. A part whose parser yields a list
+(a table, csv, a tree, a regex matched per line, a kv list, `records`) is
+one document per element, written when the element is complete; any
+other part is one document, written when its region has ended: at its
+`until` line, when it has taken its `limit`, or at the end of the input.
+The values of a list part, in order, are that part's list in the whole
+document, and a part that is one value has exactly one document. A line
+no part's region takes is reported where it is; a line that only
+single-value parts took, and that none of them read, is reported once
+they have all been read.
 
 ## fields
 

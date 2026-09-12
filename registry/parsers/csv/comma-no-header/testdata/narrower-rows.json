@@ -1,0 +1,17 @@
+[
+  {
+    "column_1": "1",
+    "column_2": "2",
+    "column_3": "3"
+  },
+  {
+    "column_1": "4",
+    "column_2": "5",
+    "column_3": null
+  },
+  {
+    "column_1": "6",
+    "column_2": null,
+    "column_3": null
+  }
+]

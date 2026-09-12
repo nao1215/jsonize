@@ -1,0 +1,3 @@
+source: "stat -x on a file, a directory and a symbolic link, on FreeBSD 15.1-RELEASE (vmactions/freebsd-vm) with LC_ALL=C: a group with no name, and a device major past 2^63 (capture run 34599785859 of the temporary capture workflow; the directory prefix of the names removed)"
+os: freebsd
+args: ["-x", "file.txt", "dir", "link"]

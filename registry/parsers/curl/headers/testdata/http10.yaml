@@ -1,0 +1,2 @@
+source: "curl 8.18.0 -sI against the e2ehelper server answering HTTP/1.0"
+args: ["-sI", "http://127.0.0.1/http10"]

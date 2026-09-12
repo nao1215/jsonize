@@ -1,0 +1,17 @@
+# Tab-separated values with no header line, read with the same quoting
+# rules as the comma form: every line is a record, the first one
+# included, and the columns are column_1, column_2 and so on, as many as
+# the first record has, or the names given with --columns. This is what
+# `mysql -B -N`, `sqlite3 -separator` and `cut` print.
+format: 1
+command: csv
+variant: tab-no-header
+description: tab-separated values without a header line; columns column_1, column_2, ... or --columns
+metadata:
+  tags: [generic]
+detect:
+  auto_detect: false
+parse:
+  type: csv
+  delimiter: "\t"
+  header: {none: true}

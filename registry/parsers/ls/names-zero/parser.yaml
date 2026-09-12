@@ -1,0 +1,36 @@
+# ls --zero ends every name with a NUL instead of a line break (GNU
+# coreutils 9.1 and later, uutils). No name can hold a NUL, so this is
+# the listing that says exactly which names there are: a name with a line
+# break in it is one name here, where ls/names reads it as two.
+#
+# Like ls/names the text is no evidence of what wrote it, so there is no
+# signature and the definition is read only when named: `jz run ls
+# --zero`, or --parser ls --variant names-zero on a pipe.
+format: 1
+command: ls
+variant: names-zero
+aliases:
+  - name: gls
+description: ls --zero, NUL-separated file names, read only when named
+metadata:
+  tags: [linux, filesystem]
+  compatible: [GNU coreutils 9.1+, uutils coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/General-output-formatting.html
+detect:
+  auto_detect: false
+  args:
+    any: ["--zero"]
+    none: ["-l", "-g", "-o", "-n", "-s", "--size", "-i", "--inode", "-F", "-p", "--classify", "--classify=always", "--file-type",
+           "--indicator-style", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify",
+           "-Q", "--quote-name", "--quoting-style", "--quoting-style=shell", "--quoting-style=shell-always", "--quoting-style=shell-escape",
+           "--quoting-style=shell-escape-always", "--quoting-style=c", "--quoting-style=escape", "--quoting-style=locale", "--quoting-style=clocale",
+           "-b", "--escape", "-q", "--hide-control-chars", "-C", "-x", "-m", "--format", "--format=long", "--format=verbose",
+           "--format=commas", "--format=horizontal", "--format=across", "--format=vertical", "-R", "--recursive", "-Z", "--context",
+           "-D", "--dired", "--hyperlink", "--hyperlink=always", "--full-time"]
+input:
+  record_separator: nul
+  skip_blank: false
+parse:
+  type: regex
+  pattern: '\A(?P<name>(?s:.+))\z'

@@ -1,0 +1,13 @@
+HTTP/1.1 200 Connection established
+
+HTTP/1.1 200 OK
+Date: Fri, 11 Sep 2026 12:00:00 GMT
+Content-Type: text/plain; charset=utf-8
+Content-Length: 6
+Set-Cookie: session=abc123; Path=/; HttpOnly
+Set-Cookie: theme=dark; Path=/
+X-Request-ID: 7f3a
+x-lower-case: yes
+X-Empty:
+Cache-Control: no-cache, no-store
+

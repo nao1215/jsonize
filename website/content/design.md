@@ -226,8 +226,9 @@ one record.
 
 A CSV value may contain the delimiter, a quote, or a line break, so the
 lines are joined back together and read with `encoding/csv`. A streamed
-CSV holds a line back while the quote count is odd, which is exactly when
-a value is still open. An ini file is sections of keys and so is one
+CSV holds a line back while a quote that opened a value is still open;
+counting quotes instead took one in the middle of a value for an open
+one, and held every line after it. An ini file is sections of keys and so is one
 object with no streaming form at all. A drawn table takes its cells from
 the bars rather than from whitespace, and a value the table wrapped over
 three lines is one cell.
@@ -360,6 +361,31 @@ while `--parser du` and `jz run du` still reach it, signature check
 included. The alternative, adding exclusion patterns for every other
 format that happens to look similar, is a list that can never be
 finished.
+
+A definition with no signature at all goes one step further. `ls -1` is
+one name per line, which any list of lines is, so `ls/names` makes no
+claim about the text. Under the name `ls` it sits beside the long
+listings, which do make one, and `--parser ls` on a pipe cannot tell
+`ls -1` from the output of `ls -s` that the long variants refuse: taking
+the signature-less variant then would read a size column as part of each
+name and return it with status 0. So such a variant is reached only by
+naming it (`--variant names`), or by `jz run`, where the arguments have
+already ruled out the options that put more than a name on a line.
+
+### YAML is a second spelling, not a second contract
+
+`--yaml` writes the values the JSON carries and nothing else, so the
+schemas describe it too and no definition knows it exists. What YAML adds
+is ambiguity: an unquoted scalar is typed by how it looks, and YAML 1.1
+and 1.2 readers disagree about `yes`, `on`, `1:20`, `2026-09-11` and
+`0o17`. A string is therefore written plain only when it begins with a
+letter, `_` or `/` and holds nothing a reader of either version could
+take for another type, and is double-quoted otherwise; a decimal always
+carries a decimal point. That quotes more than YAML strictly needs
+(`"1.8T"`, `"1k_blocks"`), which is the price of a document that means
+the same thing to every reader. The encoder is a small one in
+`internal/yamlout` rather than a YAML library's marshaller, because the
+quoting rule is the whole point and a library's rule is its own.
 
 ### Signatures say what a format is
 
@@ -649,11 +675,20 @@ them. The held lines are then read by the same code as the rest, so there
 is one reading, not two: `jz test` checks every fixture both ways and
 fails a definition whose two readings disagree.
 
-Only a format that yields records can be streamed. `composite`,
-`each: input` and a kv map build one object out of the whole text, and
+A format that yields records streams them one at a time. `each: input`,
+a kv map and an ini file build one object out of the whole text, and
 that object does not exist until the last line has arrived; asking for it
 one record at a time is a request jz cannot carry out, so it is a usage
 error rather than a silent fallback.
+
+A composite is one object too, but its parts are not: ping's header, its
+replies and its summary each become readable at a different moment, and
+a ping that runs for an hour should not be answered at the end of it. So
+a composite streams as `{"part", "value"}` documents, one per element of
+a part that is a list and one per part that is a single value, which is
+the whole document rearranged rather than a second reading of it. The
+conformance check rebuilds the whole document from the stream for every
+composite fixture and compares the two.
 
 ### Every line is accounted for
 

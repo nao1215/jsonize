@@ -1,0 +1,49 @@
+# The stat of macOS and FreeBSD prints one line per file by default, in
+# the format "%d %i %Sp %l %Su %Sg %r %z "%Sa" "%Sm" "%Sc" "%SB" %k %b
+# %#Xf %N": device, inode, mode, links, owner, group, device number,
+# size, the four times in quotes, block size, blocks, file flags and the
+# name, which is the rest of the line and may hold spaces.
+#
+# The times are the local time of the machine that ran stat, with no
+# zone and no year-less form, so they stay the text stat printed: reading
+# them as an instant would need the zone of that machine, which the text
+# does not carry. The device and the device number stay text as well
+# (see fields). The flags are printed in hexadecimal with 0x, or as 0,
+# and stay text too. A group or owner with no name is printed as its
+# number, in parentheses on FreeBSD.
+#
+# A name with a line break in it ends the line early and is refused.
+# -l, -r, -s, -F and -f FORMAT print other formats and are not read here;
+# -x is stat/bsd-verbose.
+#
+# Checked against captured output of macOS 14.8, 15.7 and 26.6 and
+# FreeBSD 15.1.
+format: 1
+command: stat
+variant: bsd
+description: stat on macOS and FreeBSD (default format, one line per file)
+metadata:
+  tags: [darwin, freebsd, filesystem]
+  compatible: [macOS 14-26 stat, FreeBSD 15 stat]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?query=stat&sektion=1
+detect:
+  os: [darwin, freebsd]
+  args:
+    none: ["-x", "-l", "-r", "-s", "-F", "-f", "--version"]
+  signature:
+    all:
+      - '\A[0-9]+ [0-9]+ [-bcdlpsw][-rwxsStT]{9}[@+.]? [0-9]+ \S+ \S+ [0-9]+ [0-9]+ "[^"\n]*" "[^"\n]*" "[^"\n]*" "[^"\n]*" [0-9]+ [0-9]+ (?:0|0x[0-9a-fA-F]+) '
+parse:
+  type: regex
+  pattern: '^(?P<device>[0-9]+) (?P<inode>[0-9]+) (?P<access_flags>[-bcdlpsw][-rwxsStT]{9}[@+.]?) (?P<links>[0-9]+) (?P<user>\S+) (?P<group>\S+) (?P<rdev>[0-9]+) (?P<size>[0-9]+) "(?P<access_time>[^"]*)" "(?P<modify_time>[^"]*)" "(?P<change_time>[^"]*)" "(?P<birth_time>[^"]*)" (?P<block_size>[0-9]+) (?P<blocks>[0-9]+) (?P<file_flags>0|0x[0-9a-fA-F]+) (?P<file>.+)$'
+fields:
+  # The device numbers are identifiers, not quantities, and FreeBSD prints
+  # them as unsigned 64 bit values (a file with no device number has
+  # 18446744073709551615), past what a JSON integer holds exactly. They
+  # stay the digits stat printed.
+  inode: {type: int}
+  links: {type: int}
+  size: {type: int}
+  block_size: {type: int}
+  blocks: {type: int}

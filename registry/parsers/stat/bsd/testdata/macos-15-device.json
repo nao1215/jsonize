@@ -1,0 +1,20 @@
+[
+  {
+    "device": "1760271370",
+    "inode": 328,
+    "access_flags": "crw-rw-rw-",
+    "links": 1,
+    "user": "root",
+    "group": "wheel",
+    "rdev": "50331650",
+    "size": 0,
+    "access_time": "Sep 11 12:32:16 2026",
+    "modify_time": "Sep 11 12:37:00 2026",
+    "change_time": "Sep 11 12:37:00 2026",
+    "birth_time": "Jan  1 00:00:00 1970",
+    "block_size": 65536,
+    "blocks": 0,
+    "file_flags": "0",
+    "file": "/dev/null"
+  }
+]

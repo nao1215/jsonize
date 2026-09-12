@@ -1,0 +1,3 @@
+source: "ls -1a captured on FreeBSD 15.1-RELEASE (vmactions/freebsd-vm on GitHub Actions, capture run 34599785859) with LC_ALL=C"
+os: freebsd
+args: ["-1a"]

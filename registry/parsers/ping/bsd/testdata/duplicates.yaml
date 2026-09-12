@@ -1,0 +1,3 @@
+source: "transcribed from the printf calls of FreeBSD ping at commit 8bda488114f3 (sbin/ping/ping.c pr_pack: \" (DUP!)\" after the time; sbin/ping/main.c pr_summary: \"+N duplicates, \" and \", N packets out of wait time\"), https://github.com/freebsd/freebsd-src/blob/8bda488114f330d758e6741ff44882bb12b76c0d/sbin/ping/main.c#L216-L240; not captured, since a runner has no second host to answer a broadcast"
+os: freebsd
+args: ["-c", "2", "192.0.2.255"]

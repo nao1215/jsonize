@@ -1,0 +1,2 @@
+source: "curl 8.18.0 -sI --http2-prior-knowledge against the e2ehelper server (Go net/http, h2c): lower-case names, curl's own status line with a space after the code"
+args: ["-sI", "--http2-prior-knowledge", "http://127.0.0.1/plain"]

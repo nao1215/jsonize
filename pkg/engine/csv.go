@@ -37,6 +37,9 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 	)
 	if p.Header.None {
 		cols = p.Header.Columns
+		if len(cols) == 0 && len(rows) > 0 {
+			cols = csvNumbered(len(rows[0]))
+		}
 	} else {
 		if len(rows) == 0 {
 			return []any{}, nil
@@ -49,7 +52,7 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 		if header != nil && slices.Equal(row, header) {
 			continue // the header of a second file joined to the first
 		}
-		obj, err := r.csvRow(fields, cols, row, lines[0].num+i)
+		obj, err := r.csvRow(p, fields, cols, row, lines[0].num+i)
 		if err != nil {
 			return nil, err
 		}
@@ -63,9 +66,16 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 // document carries the same keys; a row longer than the header is an
 // error, because a value with no column to go under has nowhere to be
 // reported.
-func (r *run) csvRow(fields map[string]*definition.Field, cols, row []string, ln int) (*jsonutil.Object, error) {
+func (r *run) csvRow(p *definition.Parse, fields map[string]*definition.Field, cols, row []string, ln int) (*jsonutil.Object, error) {
 	if len(row) > len(cols) {
-		return nil, r.errorf(ln, "", "row has %d fields but the header names %d", len(row), len(cols))
+		switch {
+		case !p.Header.None:
+			return nil, r.errorf(ln, "", "row has %d fields but the header names %d", len(row), len(cols))
+		case len(p.Header.Columns) == 0:
+			return nil, r.errorf(ln, "", "row has %d fields but the first record, which numbers the columns, has %d", len(row), len(cols))
+		default:
+			return nil, r.errorf(ln, "", "row has %d fields but %d columns are named", len(row), len(cols))
+		}
 	}
 	obj := jsonutil.NewObject()
 	for i, name := range cols {
@@ -78,6 +88,19 @@ func (r *run) csvRow(fields map[string]*definition.Field, cols, row []string, ln
 		}
 	}
 	return obj, nil
+}
+
+// csvNumbered names the columns of a csv that has no header line and
+// whose definition names none: column_1, column_2 and so on, as many as
+// the first record has. The first record is data like every other one;
+// it is only what says how many columns there are, which is the one
+// thing a stream can know before the rest has arrived.
+func csvNumbered(n int) []string {
+	out := make([]string, n)
+	for i := range out {
+		out[i] = "column_" + strconv.Itoa(i+1)
+	}
+	return out
 }
 
 // csvColumns names the columns: the ones the definition states, or the

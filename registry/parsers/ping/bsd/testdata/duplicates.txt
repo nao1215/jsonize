@@ -1,0 +1,8 @@
+PING 192.0.2.255 (192.0.2.255): 56 data bytes
+64 bytes from 192.0.2.5: icmp_seq=0 ttl=64 time=0.412 ms
+64 bytes from 192.0.2.6: icmp_seq=0 ttl=64 time=0.518 ms (DUP!)
+64 bytes from 192.0.2.5: icmp_seq=1 ttl=64 time=0.398 ms
+
+--- 192.0.2.255 ping statistics ---
+2 packets transmitted, 2 packets received, +1 duplicates, 0.0% packet loss, 1 packets out of wait time
+round-trip min/avg/max/stddev = 0.398/0.443/0.518/0.053 ms

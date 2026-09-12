@@ -50,6 +50,14 @@ detect:
       # what tells the two apart, rather than a description of what a
       # crontab line looks like.
       - '\A\\?\d{3,10} \d+(?: \S|$)'
+    none:
+      # Any text may follow a CRC and a size, since it is a file name, so
+      # there is no positive form that keeps out the default line of the
+      # macOS and FreeBSD stat, which opens with a device and an inode
+      # number: a "name" of a mode, counts and four quoted times. That
+      # shape is refused here, which is the narrowing this definition
+      # accepts; a file really named that way is read with --define.
+      - '^\d+ \d+ [-bcdlpsw][-rwxsStT]{9}[@+.]? \d+ \S+ \S+ \d+ \d+ "[^"\n]*" "[^"\n]*" "[^"\n]*" "[^"\n]*" \d+ \d+ (?:0|0x[0-9a-fA-F]+) '
 parse:
   type: regex
   patterns:

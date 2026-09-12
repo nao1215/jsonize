@@ -1436,3 +1436,104 @@ scenarios:
             json:
               - { path: "$[1].name", equals: nvme0n1p1 }
               - { path: "$[4].name", equals: nvme1n1p1 }
+
+  # A ping that keeps running is answered reply by reply with --stream:
+  # the header, each reply and the summary, as a document of their own.
+  # The stand-in prints what iputils printed; the real ping streams in
+  # hardware_linux.atago.yaml, where the machine has to allow ICMP.
+  - name: jz run --stream ping writes the header, each reply and the summary as they come
+    only: {os: linux}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
+    steps:
+      - fixture:
+          file: bin/ping
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            cat "$(dirname "$0")/../captured/ping.txt"
+      - fixture:
+          file: captured/ping.txt
+          from: "${specdir}/../../registry/parsers/ping/linux/testdata/iputils-2.txt"
+      - run:
+          command: jz run --stream ping -c 2 127.0.0.1
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            matches: '\A\{"part":"destination","value":\{"name":"127\.0\.0\.1",[^\n]*\}\n\{"part":"replies","value":\{[^\n]*"icmp_seq":1,[^\n]*\n\{"part":"replies","value":\{[^\n]*"icmp_seq":2,[^\n]*\n\{"part":"statistics","value":\{"packets_transmitted":2,[^\n]*\n\z'
+
+  # ls writes one name per line to a pipe, which is what jz run gets:
+  # names with spaces, a leading space and UTF-8 come back whole, an empty
+  # directory is the empty list, and -l still lands on the long listing.
+  # A name with a line break is two lines to ls -1 and one name to
+  # ls --zero, which is the constraint the text format cannot get past.
+  - name: jz run ls reads the names ls writes to a pipe, and ls --zero keeps a line break
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: dir/a b.txt
+          content: ""
+      - fixture:
+          file: dir/ lead
+          content: ""
+      - fixture:
+          file: dir/日本語.txt
+          content: ""
+      - fixture:
+          file: empty/.keep
+          content: ""
+      - run:
+          command: jz run ls ${workdir}/dir
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: '[{"name":" lead"},{"name":"a b.txt"},{"name":"日本語.txt"}]'
+      - run:
+          command: jz run ls -1 ${workdir}/empty
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]"
+      - run:
+          command: jz run --stream ls -1 ${workdir}/dir
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":" lead"}
+              {"name":"a b.txt"}
+              {"name":"日本語.txt"}
+      - run:
+          command: jz run ls -l ${workdir}/dir
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].flags", matches: "^-rw" }
+      - run:
+          shell: true
+          command: touch "${workdir}/dir/$(printf 'new\nline')"
+      - run:
+          command: jz run ls --zero ${workdir}/dir
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 4 }
+              - { path: "$[2].name", equals: "new\nline" }
+      - run:
+          command: jz run ls ${workdir}/dir
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 5 }
+              - { path: "$[2].name", equals: new }
+              - { path: "$[3].name", equals: line }
+      # An option that puts more than the name on the line is refused.
+      - run:
+          command: jz run ls -s ${workdir}/dir
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}

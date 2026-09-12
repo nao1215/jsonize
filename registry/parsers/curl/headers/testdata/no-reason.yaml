@@ -1,0 +1,2 @@
+source: "curl 8.18.0 -sI against the e2ehelper server: an HTTP/1.1 status line with no reason phrase"
+args: ["-sI", "http://127.0.0.1/no-reason"]

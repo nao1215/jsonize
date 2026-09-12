@@ -1,0 +1,3 @@
+source: "GNU coreutils 9.7 ls -1 with LC_ALL=C over a directory holding a file whose name has a line break in it (\"new\\nline\"): ls prints it as two lines, and they are read as two names, because nothing in the text says otherwise. ls --zero (ls/names-zero) keeps it whole."
+os: linux
+args: ["-1"]

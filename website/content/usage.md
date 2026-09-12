@@ -34,7 +34,8 @@ pipe there is no such answer at all: nothing identifies an empty input.
 ```text
   -f, --file PATH               read input from PATH instead of stdin
   -p, --pretty                  indent JSON output
-      --stream                  write one record per line as it is read
+      --yaml                    write YAML instead of JSON
+      --stream                  write each record as soon as it is read
       --raw                     skip the field rules and report every value as text
       --extract KEY             keep only this key (repeatable)
       --exclude KEY             drop this key (repeatable)
@@ -43,6 +44,7 @@ pipe there is no such answer at all: nothing identifies an empty input.
       --parser NAME             restrict detection to one parser
       --variant NAME            use a variant of --parser
       --define YAML             read with a definition given here instead of a registered one
+      --columns NAME,...        name the columns of a csv read without a header line
       --explain[=json]          report the chosen definition and why, on stderr
   -h, --help                    show help
 ```
@@ -50,6 +52,13 @@ pipe there is no such answer at all: nothing identifies an empty input.
 `jz run` adds `--env NAME=VALUE`, `--keep-locale` and `--timeout`, which
 control the command rather than the conversion. `jz list` adds `--json`,
 `--schema` and `--sources`, and `jz test` adds `--update` and `--decoys`.
+`jz completion bash|zsh` prints a shell completion script (see
+[Install](../install/#shell-completion)).
+
+Options that state two answers at once are refused before the input is
+opened or a command is started, with exit status 2: `--pretty` with
+`--stream` or `--yaml`, `--extract` with `--exclude`, `--define` with
+`--parser`, and `--columns` where there are no columns to name.
 
 ## The shape of the output
 
@@ -72,6 +81,54 @@ version goes up whenever a change could break a program reading the
 output, and nothing else moves it; the JSON jz prints stays as it is,
 with no version inside it. [Parsers](../parsers/#what-each-definition-produces)
 lists what counts as breaking.
+
+## YAML instead of JSON
+
+`--yaml` writes the same values as YAML. It is a second spelling of the
+one document, not a second contract: the schema `jz list --schema`
+prints describes both.
+
+```console
+$ df -h | jz --yaml
+- filesystem: /dev/nvme0n1p2
+  size: "1.8T"
+  used: "1.6T"
+  available: "145G"
+  use_percent: 92
+  mounted_on: /
+```
+
+- Keys stay in the order the JSON has them, and a nested object or list
+  is a nested mapping or sequence. An empty one is `{}` or `[]`.
+- `null`, `true`, `false` and integers are written as they are, and a
+  decimal always has a decimal point (`100.0`, `1.0e+21`), so a reader
+  gets back a decimal and not an integer. A value that is not a finite
+  number is refused, as it is in JSON.
+- A string is written without quotes only when no YAML reader, 1.1 or
+  1.2, could take it for anything else. Anything that could be a number,
+  a date, a time, a boolean (`yes`, `no`, `on`, `off`), a null (`~`), an
+  indicator or a comment, or that has a line break or a space at either
+  end, is double-quoted: `"1.8T"`, `"007"`, `"yes"`, `"12:30:45"`,
+  `" leading"`. A key follows the same rule.
+- With `--stream`, every record is a YAML document of its own that opens
+  with a `---` line and closes with a `...` line. The `...` is written
+  with the record, so a reader acting on documents as they arrive knows
+  a record is whole without waiting for the next one to begin.
+
+```console
+$ jz run --stream --yaml ls -1
+---
+name: a b.txt
+...
+---
+name: notes
+...
+```
+
+`--pretty` is about indenting JSON and says nothing YAML does not
+already do, so `--yaml --pretty` is refused with exit status 2 before
+anything is read or run. `--explain=json` still writes JSON on standard
+error: it reports on the conversion rather than being its output.
 
 ## Choosing the keys
 
@@ -115,13 +172,13 @@ $ jz run --stream vmstat 1 | jq -c 'select(.id < 50)'
 $ iostat -x 5 | jz --stream
 ```
 
-Only a format that yields records can be streamed: a table, a regex
-matched per line, a key/value list, and `records`. A format read into one
-object (`composite`, `each: input`, a kv map) is refused with
-`format <id> has no streaming form` and exit status 2, because there is
-nothing to hand over until the last line has arrived. `--pretty` is
-refused with it for the same reason: a stream is one record per line, and
-indenting spreads a record over several.
+A table, csv, a regex matched per line, a key/value list, `records` and
+a tree stream one record at a time; a composite streams one document per
+part (below). A format read into one object (`each: input`, a kv map, an
+ini file) is refused with `format <id> has no streaming form` and exit
+status 2, because there is nothing to hand over until the last line has
+arrived. `--pretty` is refused with it for the same reason: a stream is
+one record per line, and indenting spreads a record over several.
 
 Detection is unchanged, and it is what the first records wait for. jz
 holds back until it has as many leading lines as the widest signature
@@ -135,6 +192,29 @@ code as everything after them.
 `--extract` and `--exclude` apply to each record. The 64 MiB input limit
 does not apply, since nothing is held; the 1 MiB limit on a single line
 is what bounds a producer that never prints a separator.
+
+### A composite as a stream
+
+ping prints a header, a line per reply and a summary. Read whole, that is
+one object with a key per part. Streamed, it is written part by part as
+each becomes readable:
+
+```console
+$ jz run --stream ping -c 2 192.0.2.1          # macOS
+{"part":"destination","value":{"name":"192.0.2.1","address":"192.0.2.1",...}}
+{"part":"replies","value":{"kind":"no_answer","error":"Request timeout","icmp_seq":0}}
+{"part":"statistics","value":{"name":"192.0.2.1","packets_transmitted":2,"packets_received":0,...}}
+```
+
+A part that is a list (the replies) is one document per element, written
+when its line is read. A part that is one value (the destination, the
+summary) is one document, written when its lines have all come, which for
+a part that runs to the end is the end of the input. The values of a list
+part, in order, are that part's list in the whole document, and the one
+document of a single-value part holds that part.
+
+`--extract` and `--exclude` name the parts, the keys the whole document
+has: `--extract replies` writes the reply documents and nothing else.
 
 ### What --stream changes about the output
 
@@ -217,10 +297,73 @@ $ kubectl get nodes | jz --parser table --variant whitespace
 ```
 
 They are `table` (`whitespace`, `aligned`, `box`), `csv` (`comma`,
-`tab`), `kv` (`colon`, `equals`) and `ini` (`default`). Automatic
-detection never reaches them — two words above two words says nothing
-about what produced them — and every value comes out as text, because a
-shape says nothing about what its columns mean.
+`tab`, `comma-no-header`, `tab-no-header`), `kv` (`colon`, `equals`) and
+`ini` (`default`). Automatic detection never reaches them — two words
+above two words says nothing about what produced them — and every value
+comes out as text, because a shape says nothing about what its columns
+mean.
+
+### A csv without a header line
+
+`csv/comma` and `csv/tab` take the first line for the names of the
+columns. A file with no such line (`sqlite3 -csv`, `mysql -B -N`, most
+exports with the header turned off) is read with the `-no-header`
+variants, where the first line is a record like the rest:
+
+```console
+$ sqlite3 -csv app.db 'select id, name from users' | jz --parser csv --variant comma-no-header
+[{"column_1":"1","column_2":"alice"},{"column_1":"2","column_2":"bob"}]
+
+$ sqlite3 -csv app.db 'select id, name from users' | jz --parser csv --variant comma-no-header --columns id,name
+[{"id":"1","name":"alice"},{"id":"2","name":"bob"}]
+```
+
+- Without `--columns` the columns are `column_1`, `column_2` and so on,
+  as many as the first record has. With it they are the names given, in
+  order; a name is letters, digits and `_ . : @ -`, and a name given
+  twice is refused.
+- A record with fewer fields than there are columns leaves the rest
+  `null`, and one with more is refused (exit 3): its last values would
+  have no column to go under.
+- An empty field is `""`, quoted or not, which is how RFC 4180 reads it;
+  a tool that writes NULL as nothing and an empty string as `""` says
+  something the format does not.
+- A quoted value may hold the delimiter, a quote written twice or a line
+  break, and `--stream` writes the records the whole document holds, the
+  first one included.
+- `--columns` works with a variant or a `--define` that reads a csv with
+  no header line and no names of its own; anywhere else it is a usage
+  error, reported before the input is opened.
+
+## HTTP headers
+
+`curl -I` and `curl -D -` print the header block of every response they
+read, and `curl/headers` reads each block as a record:
+
+```console
+$ curl -sIL https://example.com/old | jz
+[{"status":{"version":"1.1","code":301,"reason":"Moved Permanently"},"headers":[{"name":"Location","value":"https://example.com/new"}]},
+ {"status":{"version":"2","code":200,"reason":null},"headers":[{"name":"set-cookie","value":"a=1"},{"name":"set-cookie","value":"b=2"}]}]
+```
+
+- A redirect followed with `-L`, a 1xx interim response (`100
+  Continue`, `103 Early Hints`) and a proxy's reply to CONNECT are
+  records of their own, in the order curl read them; the last one is the
+  final response.
+- `code` is an integer. `reason` is `null` when the status line has
+  none, which is always the case for HTTP/2 and HTTP/3, where curl writes
+  the status line itself (`HTTP/2 200 `).
+- Headers are a list in the order they came, so a header sent twice
+  (`Set-Cookie`, `Link`, `Via`) is two entries. A name is kept as it was
+  sent: HTTP/2 and HTTP/3 lower-case every name, an HTTP/1.1 server may
+  write any case, and a name is compared without regard to case
+  (`jq '.[-1].headers[] | select(.name | ascii_downcase == "set-cookie")'`).
+  Values are text: which ones are numbers or dates depends on the header,
+  and the list gives no place to say so.
+- `-v` writes the exchange to standard error, which `jz run` passes
+  through, so `curl -sIv` is read the same as `curl -sI`. Merged into the
+  output (`2>&1`, `--stderr -`) its lines are no headers and the text is
+  refused, and so is a body after the headers (`curl -i`).
 
 ## Timestamps a format does not fully state
 
@@ -441,6 +584,31 @@ together with its parser. Naming either is a claim about the input, not a
 way around the checks. The definition's signature still has to fit the
 text, and jz fails if it does not; there is no option that turns that
 off.
+
+A variant with no signature at all, under a command whose other variants
+have one, is reached only by naming the variant or by `jz run`. `ls -1`
+prints one name per line, which any list of lines fits, so `ls/names` is
+read that way:
+
+```console
+$ ls -1 | jz --parser ls --variant names
+[{"name":"a b.txt"},{"name":"notes"}]
+$ jz run ls /tmp/empty
+[]
+$ ls -1 | jz --parser ls
+jz: no ls variant matches this input
+...
+No variant that checks the text fits it. If it is ls/names (...), which takes any text, name that variant:
+  COMMAND | jz --parser ls --variant names
+```
+
+Naming `ls` alone does not reach it, since that would read the output of
+an `ls` option the long variants refuse (`ls -s`, `ls -i`) as a list of
+names. `jz run ls` does, because jz saw the arguments: an option that
+puts more than the name on a line is not one `ls/names` accepts. A name
+with a line break in it is two lines to `ls -1` and is read as two
+names; `ls --zero` (GNU coreutils 9.1 and later) keeps it whole and is
+read by `ls/names-zero`.
 
 A wrapper is the common case for naming one. `jz run` takes the parser
 from the name of the command it starts, so `sudo`, `env`, `nice`,

@@ -685,3 +685,64 @@ scenarios:
             empty: true
           stderr:
             contains: "line 1"
+
+  # --pretty indents JSON, and YAML is always one value per line, so the
+  # pair says two things about the output. It is refused before the file
+  # is opened and before a command is run: the file here does not exist
+  # and the command is not one, and both would be other errors.
+  - name: --yaml with --pretty is refused before anything is read or run
+    steps:
+      - run:
+          command: jz --yaml --pretty --file ${workdir}/missing.txt
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "--pretty and --yaml cannot be used together"
+      - run:
+          command: jz run --yaml -p jz-no-such-command
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "--pretty and --yaml cannot be used together"
+
+  - name: --columns is refused where there are no columns to name, before anything is read
+    steps:
+      - run:
+          command: jz --columns a,b --file ${workdir}/missing.txt
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "--parser csv --variant comma-no-header"
+      - run:
+          command: jz --parser csv --variant comma --columns a,b --file ${workdir}/missing.txt
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "csv/comma does not read a csv without a header line"
+      - run:
+          command: jz --parser df --variant gnu --columns a,b --file ${workdir}/missing.txt
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "df/gnu does not read a csv without a header line"
+      - run:
+          command: jz --parser csv --variant comma-no-header --columns "a,,b" --file ${workdir}/missing.txt
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "holds an empty name"
+      - run:
+          command: jz --parser csv --variant comma-no-header --columns "first name,age" --file ${workdir}/missing.txt
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: 'invalid column name "first name"'
+      - run:
+          command: jz run --parser csv --variant comma-no-header --columns a,a jz-no-such-command
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: 'column name "a" is given twice'

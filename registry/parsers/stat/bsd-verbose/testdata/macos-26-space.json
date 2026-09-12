@@ -1,0 +1,20 @@
+[
+  {
+    "file": "with space.txt",
+    "size": 1,
+    "type": "Regular File",
+    "access_mode": "0644",
+    "access_flags": "-rw-r--r--",
+    "uid": 501,
+    "user": "runner",
+    "gid": 20,
+    "group": "staff",
+    "device": "1,10",
+    "inode": 2950035,
+    "links": 1,
+    "access_time": "Fri Sep 11 12:30:45 2026",
+    "modify_time": "Fri Sep 11 12:30:45 2026",
+    "change_time": "Fri Sep 11 12:37:05 2026",
+    "birth_time": "Fri Sep 11 12:30:45 2026"
+  }
+]

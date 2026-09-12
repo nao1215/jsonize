@@ -2,7 +2,9 @@ package main
 
 import (
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -31,5 +33,31 @@ func TestOnlyATerminalIsATerminal(t *testing.T) {
 	defer file.Close()
 	if isTerminal(file) {
 		t.Error("a regular file was taken for a terminal")
+	}
+}
+
+// jz reads text and local directories and nothing else: conversion, jz
+// run's reading of a command's output and shell completion alike. No
+// package that can open a connection is compiled in, on any system jz
+// is built for, which is a stronger statement than a test that watches
+// one run for traffic.
+func TestNoNetworkPackages(t *testing.T) {
+	t.Parallel()
+	gotool, err := exec.LookPath("go")
+	if err != nil {
+		t.Fatalf("the go command lists the packages jz is built from: %v", err)
+	}
+	for _, goos := range []string{"linux", "darwin", "windows"} {
+		cmd := exec.CommandContext(t.Context(), gotool, "list", "-deps", ".")
+		cmd.Env = append(os.Environ(), "GOOS="+goos)
+		out, err := cmd.Output()
+		if err != nil {
+			t.Fatalf("go list (%s): %v", goos, err)
+		}
+		for _, pkg := range strings.Fields(string(out)) {
+			if pkg == "net" || strings.HasPrefix(pkg, "net/") || pkg == "crypto/tls" {
+				t.Errorf("%s: jz is built with %s", goos, pkg)
+			}
+		}
 	}
 }

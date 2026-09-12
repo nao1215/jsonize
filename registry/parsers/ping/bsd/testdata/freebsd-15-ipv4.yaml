@@ -1,0 +1,3 @@
+source: "ping -c 3 127.0.0.1 on FreeBSD 15.1-RELEASE (vmactions/freebsd-vm) with LC_ALL=C (capture run 34599785859 of the temporary capture workflow)"
+os: freebsd
+args: ["-c", "3", "127.0.0.1"]

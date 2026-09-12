@@ -1,0 +1,64 @@
+# curl -I (--head) and curl -D - print the header block of every
+# response they read, in the order they read them: an interim 1xx
+# response, the reply of a proxy to CONNECT, each redirect -L followed,
+# then the final response. A block is a status line, its header lines
+# and the blank line that ends it, so every block is one record, and a
+# redirect chain is a list of them rather than the last one alone.
+#
+# The status line is what the server sent for HTTP/1.x, reason phrase
+# and all, which a server may leave out ("HTTP/1.1 204"). For HTTP/2 and
+# HTTP/3 there is no status line on the wire, and curl writes one of its
+# own with no reason and a space after the code ("HTTP/2 200 "); both
+# ways the reason is null when there is none.
+#
+# Headers are a list of {name, value} in the order they came, which is
+# what keeps a header sent twice (Set-Cookie, Link, Via) as two entries.
+# The name is kept as it was sent: HTTP/1.x servers write any case, and
+# HTTP/2 and HTTP/3 lower-case every name. A name is compared without
+# regard to case, which the list leaves to the reader (in jq,
+# `select(.name | ascii_downcase == "set-cookie")`); rewriting the names
+# would print what the server did not send, and a map keyed by them would
+# hold one value per name.
+#
+# Read: -I, -D - (the headers of a GET), with or without -L, -s, -v (the
+# verbose lines go to standard error). Refused: a body after the headers
+# (-i), and the verbose lines once standard error is merged into the
+# output (2>&1), which begin with "*", ">" and "<".
+format: 1
+command: curl
+variant: headers
+description: HTTP response headers, one record per response (curl -I, curl -D -)
+metadata:
+  tags: [network, http]
+  compatible: [curl 8]
+  references:
+    - https://curl.se/docs/manpage.html#-I
+    - https://curl.se/docs/manpage.html#-D
+    - https://www.rfc-editor.org/rfc/rfc9110#name-field-names
+    - https://www.rfc-editor.org/rfc/rfc9112#name-status-line
+detect:
+  args:
+    any: ["-I", "--head", "-D", "--dump-header"]
+  signature:
+    all:
+      - '\AHTTP/[0-9](?:\.[0-9])? [0-9]{3}(?: [^\n]*)?$'
+parse:
+  type: records
+  start: '^HTTP/[0-9](?:\.[0-9])? [0-9]{3}(?: [^\n]*)?$'
+  parts:
+    - name: status
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AHTTP/(?P<version>[0-9](?:\.[0-9])?) (?P<code>[0-9]{3})(?: (?P<reason>[^\n]*))?\z'
+      fields:
+        code: {type: int}
+        reason: {null_if: [""]}
+    - name: headers
+      select: {skip: 1}
+      parse:
+        type: regex
+        # A field name is a token (RFC 9110, section 5.1); anything else
+        # before a colon is not a header line.
+        pattern: '^(?P<name>[!#$%&''*+.^_`|~0-9A-Za-z-]+):[ \t]*(?P<value>.*?)[ \t]*$'

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/curl/headers.json",
+  "title": "curl/headers",
+  "description": "HTTP response headers, one record per response (curl -I, curl -D -)",
+  "x-jsonize": {
+    "definition": "curl/headers",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "code": {
+            "type": "integer"
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "version",
+          "code",
+          "reason"
+        ]
+      },
+      "headers": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        }
+      }
+    },
+    "required": [
+      "status",
+      "headers"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "status": {
+      "version": "3",
+      "code": 200,
+      "reason": null
+    },
+    "headers": [
+      {
+        "name": "content-type",
+        "value": "text/html; charset=UTF-8"
+      },
+      {
+        "name": "date",
+        "value": "Fri, 11 Sep 2026 12:00:00 GMT"
+      },
+      {
+        "name": "alt-svc",
+        "value": "h3=\":443\"; ma=86400"
+      },
+      {
+        "name": "set-cookie",
+        "value": "session=abc123; Path=/; Secure; HttpOnly"
+      },
+      {
+        "name": "set-cookie",
+        "value": "theme=dark; Path=/; Secure"
+      },
+      {
+        "name": "content-length",
+        "value": "1256"
+      }
+    ]
+  }
+]

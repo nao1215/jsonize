@@ -1,0 +1,25 @@
+Spider mode enabled. Check if remote file exists.
+--2026-09-11 12:00:00--  http://127.0.0.1:8080/redirect
+Connecting to 127.0.0.1:8080... connected.
+HTTP request sent, awaiting response... 
+  HTTP/1.1 301 Moved Permanently
+  Location: /plain
+  Content-Length: 0
+Location: /plain [following]
+Spider mode enabled. Check if remote file exists.
+--2026-09-11 12:00:00--  http://127.0.0.1:8080/plain
+Connecting to 127.0.0.1:8080... connected.
+HTTP request sent, awaiting response... 
+  HTTP/1.1 200 OK
+  Date: Fri, 11 Sep 2026 12:00:00 GMT
+  Content-Type: text/plain; charset=utf-8
+  Content-Length: 6
+  Set-Cookie: session=abc123; Path=/; HttpOnly
+  Set-Cookie: theme=dark; Path=/
+  X-Request-ID: 7f3a
+  x-lower-case: yes
+  X-Empty:
+  Cache-Control: no-cache, no-store
+Length: 6 [text/plain]
+Remote file exists.
+

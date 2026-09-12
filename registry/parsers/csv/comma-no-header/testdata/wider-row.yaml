@@ -1,0 +1,2 @@
+source: "a hand-written example of the shape: a row wider than the first record has a value with no column"
+expect_error: "row has 3 fields but the first record, which numbers the columns, has 2"

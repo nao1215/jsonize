@@ -9,9 +9,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/nao1215/jsonize/internal/yamlout"
 	"github.com/nao1215/jsonize/pkg/convert"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
+	"github.com/nao1215/jsonize/pkg/registry"
 	"github.com/nao1215/jsonize/pkg/selector"
 )
 
@@ -211,6 +214,7 @@ func (o *optionSet) print(w io.Writer) {
 // outputOptions control how the JSON is written.
 type outputOptions struct {
 	pretty  bool
+	yaml    bool
 	stream  bool
 	raw     bool
 	extract stringList
@@ -223,12 +227,31 @@ type outputOptions struct {
 
 func (f *outputOptions) bind(o *optionSet) {
 	o.boolOpt(&f.pretty, "pretty", "p", "indent JSON output")
-	o.boolOpt(&f.stream, "stream", "", "write one record per line as it is read")
+	o.boolOpt(&f.yaml, "yaml", "", "write YAML instead of JSON")
+	o.boolOpt(&f.stream, "stream", "", "write each record as soon as it is read")
 	o.boolOpt(&f.raw, "raw", "", "skip the field rules and report every value as text")
 	o.listOpt(&f.extract, "extract", "KEY", "keep only this key (repeatable)")
 	o.listOpt(&f.exclude, "exclude", "KEY", "drop this key (repeatable)")
 	o.stringOpt(&f.year, "assume-year", "", "YEAR", "", "date the timestamps a format prints without a year (or \"now\")")
 	o.listOpt(&f.zones, "assume-zone", "ABBR=+HHMM", "give a zone abbreviation an offset (repeatable)")
+}
+
+// write writes one whole document in the format the options ask for.
+// Nothing is written when the value cannot be written.
+func (f *outputOptions) write(w io.Writer, v any) error {
+	if f.yaml {
+		return yamlout.Encode(w, v)
+	}
+	return jsonutil.Encode(w, v, f.pretty)
+}
+
+// recordWriter returns what writes one record of a stream: a line of
+// JSON, or a YAML document between "---" and "..." lines.
+func (f *outputOptions) recordWriter(w io.Writer) func(any) error {
+	if f.yaml {
+		return func(v any) error { return yamlout.EncodeDocument(w, v) }
+	}
+	return func(v any) error { return jsonutil.Encode(w, v, false) }
 }
 
 // engineOptions is what the output options say about reading, as opposed
@@ -281,6 +304,9 @@ func (f *outputOptions) assumptions() (convert.Assumptions, error) {
 // check reports the option pairs that state two answers at once. It is
 // called before anything is read or executed.
 func (f *outputOptions) check() error {
+	if f.pretty && f.yaml {
+		return errors.New("--pretty and --yaml cannot be used together: --pretty indents JSON, and YAML is always written one value per line")
+	}
 	if f.pretty && f.stream {
 		return errors.New("--pretty and --stream cannot be used together: a stream is one record per line, and indenting spreads a record over several")
 	}
@@ -312,6 +338,7 @@ type selectOptions struct {
 	parser  string
 	variant string
 	define  string
+	columns string
 	explain explainMode
 }
 
@@ -319,6 +346,7 @@ func (f *selectOptions) bind(o *optionSet) {
 	o.stringOpt(&f.parser, "parser", "", "NAME", "", "restrict detection to one parser")
 	o.stringOpt(&f.variant, "variant", "", "NAME", "", "use a variant of --parser")
 	o.stringOpt(&f.define, "define", "", "YAML", "", "read with a definition given here instead of a registered one")
+	o.stringOpt(&f.columns, "columns", "", "NAME,...", "", "name the columns of a csv read without a header line")
 	o.switchOpt(&f.explain, "explain", "json", "report the chosen definition and why, on stderr")
 }
 
@@ -330,7 +358,29 @@ func (f *selectOptions) check() error {
 	if f.variant != "" && f.parser == "" {
 		return &selector.VariantWithoutParserError{Variant: f.variant}
 	}
+	if f.columns != "" {
+		if f.define == "" && f.variant == "" {
+			return errors.New("--columns names the columns of a csv read without a header line, so it needs the variant that reads one: --parser csv --variant comma-no-header (or tab-no-header), or a --define")
+		}
+		if _, err := f.columnNames(); err != nil {
+			return err
+		}
+	}
 	return nil
+}
+
+// columnNames splits --columns at its commas. A space around a name is
+// not part of it; an empty name names nothing.
+func (f *selectOptions) columnNames() ([]string, error) {
+	var out []string
+	for _, n := range strings.Split(f.columns, ",") {
+		n = strings.TrimSpace(n)
+		if n == "" {
+			return nil, fmt.Errorf("--columns %q holds an empty name", f.columns)
+		}
+		out = append(out, n)
+	}
+	return out, nil
 }
 
 // definition returns the inline definition. The bool result is false
@@ -388,4 +438,48 @@ func splitEnvFlag(entries []string) ([]string, error) {
 		}
 	}
 	return entries, nil
+}
+
+// nameColumns applies --columns before anything is read or run. The
+// definition it applies to is the one named: the inline one, which is
+// returned renamed, or the registered variant, which is read renamed from
+// then on (reading). A definition that has no columns to name is a usage
+// error here rather than a reading that ignores the names.
+func (a *app) nameColumns(reg *registry.Registry, sel *selectOptions, inline *definition.Definition) (*definition.Definition, int) {
+	if sel.columns == "" {
+		return inline, ExitOK
+	}
+	names, err := sel.columnNames()
+	if err != nil {
+		a.errorf("%v", err)
+		return nil, ExitUsage
+	}
+	target := inline
+	if target == nil {
+		e, ok := reg.Lookup(sel.parser, sel.variant)
+		if !ok {
+			return nil, a.exitFor(&selector.UnknownVariantError{Parser: sel.parser, Variant: sel.variant, Available: variantNames(reg.Variants(sel.parser))})
+		}
+		target = e.Def
+	}
+	renamed, err := target.WithColumns(names)
+	if err != nil {
+		a.errorf("--columns: %v", err)
+		return nil, ExitUsage
+	}
+	if inline != nil {
+		return renamed, ExitOK
+	}
+	a.named, a.renamed = target, renamed
+	return nil, ExitOK
+}
+
+// reading returns the definition to read with once d has been chosen:
+// d itself, or its copy with the names --columns gave when d is the
+// variant --columns applies to.
+func (a *app) reading(d *definition.Definition) *definition.Definition {
+	if a.renamed != nil && d == a.named {
+		return a.renamed
+	}
+	return d
 }

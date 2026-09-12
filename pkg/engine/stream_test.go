@@ -207,7 +207,7 @@ func TestStreamRefusesFormatsWithoutRecords(t *testing.T) {
 	for _, src := range []string{
 		"format: 1\ncommand: t\nvariant: v\nparse: {type: kv, as: map}\n",
 		"format: 1\ncommand: t\nvariant: v\nparse: {type: regex, each: input, pattern: '(?P<a>.+)'}\n",
-		"format: 1\ncommand: t\nvariant: v\nparse: {type: composite, parts: [{name: p, parse: {type: kv}}]}\n",
+		"format: 1\ncommand: t\nvariant: v\nparse: {type: ini}\n",
 	} {
 		_, err := streamAll(t, src, "a=1\n")
 		var ns *NoStreamError
@@ -333,6 +333,46 @@ func TestStreamContinuesPastAnUnreadableRecord(t *testing.T) {
 	}
 	if len(reported) != 1 || reported[0].Line != 2 {
 		t.Fatalf("reported = %v", reported)
+	}
+}
+
+// A csv line with a quote that cannot open a quoted value (one in the
+// middle of a value) is a bad record of its own. Counting quotes took it
+// for a value that goes on to the next line, held every line after it
+// and lost them all with it.
+func TestStreamCSVBadQuoteLosesOnlyItsOwnRecord(t *testing.T) {
+	t.Parallel()
+	const def = "format: 1\ncommand: t\nvariant: v\nparse: {type: csv}\n"
+	keepGoing := func(pe *ParseError) error { return nil }
+	tests := []struct {
+		name, input, want string
+		bad               int
+	}{
+		{"a bare quote", "a,b\n1,x\"y\n2,z\n3,w\n", "{\"a\":\"2\",\"b\":\"z\"}\n{\"a\":\"3\",\"b\":\"w\"}\n", 1},
+		{"text after a closing quote", "a,b\n1,\"x\"y\n2,z\n", "{\"a\":\"2\",\"b\":\"z\"}\n", 1},
+		// A quote that opens a value does hold the next line.
+		{"a value over two lines", "a,b\n1,\"x\ny\"\n2,z\n", "{\"a\":\"1\",\"b\":\"x\\ny\"}\n{\"a\":\"2\",\"b\":\"z\"}\n", 0},
+		{"a doubled quote inside a value", "a,b\n1,\"say \"\"hi\n\"\"\"\n2,z\n", "{\"a\":\"1\",\"b\":\"say \\\"hi\\n\\\"\"}\n{\"a\":\"2\",\"b\":\"z\"}\n", 0},
+		{"an empty quoted value", "a,b\n1,\"\"\n2,z\n", "{\"a\":\"1\",\"b\":\"\"}\n{\"a\":\"2\",\"b\":\"z\"}\n", 0},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			var out bytes.Buffer
+			bad := 0
+			err := Stream(load(t, def), strings.NewReader(tt.input), Options{}, func(v any) error {
+				return jsonutil.Encode(&out, v, false)
+			}, func(pe *ParseError) error {
+				bad++
+				return keepGoing(pe)
+			})
+			if err != nil {
+				t.Fatalf("err = %v", err)
+			}
+			if out.String() != tt.want || bad != tt.bad {
+				t.Errorf("records = %q (%d bad), want %q (%d bad)", out.String(), bad, tt.want, tt.bad)
+			}
+		})
 	}
 }
 

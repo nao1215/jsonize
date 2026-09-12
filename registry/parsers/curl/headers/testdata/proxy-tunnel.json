@@ -1,0 +1,55 @@
+[
+  {
+    "status": {
+      "version": "1.1",
+      "code": 200,
+      "reason": "Connection established"
+    },
+    "headers": []
+  },
+  {
+    "status": {
+      "version": "1.1",
+      "code": 200,
+      "reason": "OK"
+    },
+    "headers": [
+      {
+        "name": "Date",
+        "value": "Fri, 11 Sep 2026 12:00:00 GMT"
+      },
+      {
+        "name": "Content-Type",
+        "value": "text/plain; charset=utf-8"
+      },
+      {
+        "name": "Content-Length",
+        "value": "6"
+      },
+      {
+        "name": "Set-Cookie",
+        "value": "session=abc123; Path=/; HttpOnly"
+      },
+      {
+        "name": "Set-Cookie",
+        "value": "theme=dark; Path=/"
+      },
+      {
+        "name": "X-Request-ID",
+        "value": "7f3a"
+      },
+      {
+        "name": "x-lower-case",
+        "value": "yes"
+      },
+      {
+        "name": "X-Empty",
+        "value": ""
+      },
+      {
+        "name": "Cache-Control",
+        "value": "no-cache, no-store"
+      }
+    ]
+  }
+]

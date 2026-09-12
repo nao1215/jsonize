@@ -1,0 +1,2 @@
+source: "curl 8.18.0 -sI -p -x against the e2ehelper server acting as the proxy: the reply to CONNECT, then the response through the tunnel"
+args: ["-sI", "-p", "-x", "http://127.0.0.1:3128", "http://127.0.0.1/plain"]

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/csv/tab-no-header.json",
+  "title": "csv/tab-no-header",
+  "description": "tab-separated values without a header line; columns column_1, column_2, ... or --columns",
+  "x-jsonize": {
+    "definition": "csv/tab-no-header",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {},
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,3 @@
+source: "ping -c 2 -s 0 127.0.0.1 on a GitHub Actions macOS 14.8.9 runner with LC_ALL=C: no room for the send time, so no times and no round trip line (capture run 34599785859 of the temporary capture workflow)"
+os: darwin
+args: ["-c", "2", "-s", "0", "127.0.0.1"]

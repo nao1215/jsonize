@@ -1,0 +1,20 @@
+[
+  {
+    "column_1": "1",
+    "column_2": "a,b",
+    "column_3": "say \"hi\"",
+    "column_4": "first\nsecond",
+    "column_5": "",
+    "column_6": "",
+    "column_7": "3.5"
+  },
+  {
+    "column_1": "2",
+    "column_2": "x",
+    "column_3": "",
+    "column_4": "y",
+    "column_5": "z",
+    "column_6": "w",
+    "column_7": "-1"
+  }
+]

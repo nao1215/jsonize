@@ -211,3 +211,187 @@ scenarios:
       - assert:
           stderr:
             contains: "exited with status 1"
+
+  # A composite is one object read whole; streamed, it is one document per
+  # part as each part becomes readable, a list part one per element.
+  - name: a composite streams part by part, and --extract names the parts
+    steps:
+      - fixture:
+          file: ping.txt
+          from: "${specdir}/testdata/ping-macos-26-timeout.txt"
+      - run:
+          command: jz --stream --file ${workdir}/ping.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              {"part":"destination","value":{"name":"192.0.2.1","address":"192.0.2.1","source":null,"data_bytes":56,"packet_bytes":null}}
+              {"part":"replies","value":{"kind":"no_answer","error":"Request timeout","icmp_seq":0}}
+              {"part":"statistics","value":{"name":"192.0.2.1","packets_transmitted":2,"packets_received":0,"duplicates":null,"packet_loss_percent":100,"out_of_wait_time":null,"round_trip_min_ms":null,"round_trip_avg_ms":null,"round_trip_max_ms":null,"round_trip_stddev_ms":null}}
+      - run:
+          command: jz --stream --extract statistics --file ${workdir}/ping.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            matches: '\A\{"part":"statistics",[^\n]*\}\n\z'
+
+  # The first record of a csv read without a header line is a record, in
+  # a stream as in the whole document, and the columns it numbers are the
+  # ones every later record is read under.
+  - name: a csv without a header line streams the records it reads whole
+    steps:
+      - fixture:
+          file: rows.csv
+          content: |
+            id,note
+            1,"two
+            lines"
+            2,
+      - run:
+          command: jz --stream --parser csv --variant comma-no-header --file ${workdir}/rows.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"column_1":"id","column_2":"note"}
+              {"column_1":"1","column_2":"two\nlines"}
+              {"column_1":"2","column_2":""}
+      - run:
+          command: jz --stream --parser csv --variant comma-no-header --columns key,text --file ${workdir}/rows.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"key":"id","text":"note"}
+              {"key":"1","text":"two\nlines"}
+              {"key":"2","text":""}
+      # A quote in the middle of a value opens nothing: the bad line is
+      # reported and the lines after it are still records.
+      - fixture:
+          file: bad-quote.csv
+          content: "1,x\"y\n2,z\n3,w\n"
+      - run:
+          command: jz --stream --parser csv --variant comma-no-header --file ${workdir}/bad-quote.csv
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"column_1":"2","column_2":"z"}
+              {"column_1":"3","column_2":"w"}
+          stderr:
+            contains: "line 1"
+
+  # YAML streams the way JSON does, one document per record, and every
+  # document opens with "---" and closes with "...": a reader knows a
+  # record is whole when its "..." arrives, without waiting for the next.
+  - name: --yaml with --stream writes one marked YAML document per record
+    steps:
+      - fixture:
+          file: df.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz --stream --yaml --file ${workdir}/df.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            matches: '\A---\nfilesystem: tmpfs\n"1k_blocks": 12882672\n(?s:.*)\n\.\.\.\n\z'
+      - assert:
+          stdout:
+            matches: '\A(?:---\n(?:[^\n]+\n)+\.\.\.\n){7}\z'
+      - run:
+          command: jz --stream --yaml --parser csv --variant comma-no-header --file ${workdir}/df.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            matches: '\A---\ncolumn_1: "Filesystem +1K-blocks [^"\n]+"\n\.\.\.\n---\n'
+
+  - name: --yaml keeps types, nulls, order and the strings that look like something else
+    steps:
+      - fixture:
+          file: df.txt
+          content: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            tmpfs           1.0G     0  1.0G   0% /run
+            yes             955M  1.8T   no%  -  /mnt/on
+      # A rounded size, a count that stayed text and a word a YAML reader
+      # takes for a boolean are all quoted; a number is not.
+      - run:
+          command: jz --yaml --parser df --variant gnu-human --file ${workdir}/df.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              - filesystem: tmpfs
+                size: "1.0G"
+                used: "0"
+                available: "1.0G"
+                use_percent: 0
+                mounted_on: /run
+              - filesystem: "yes"
+                size: "955M"
+                used: "1.8T"
+                available: no%
+                use_percent: null
+                mounted_on: /mnt/on
+      - fixture:
+          file: kv.txt
+          content: |
+            name=yes
+            count=007
+            empty=
+            path=/usr/local
+            time=12:30:45
+      - run:
+          command: jz --yaml --parser kv --variant equals --file ${workdir}/kv.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              - name: name
+                value: "yes"
+              - name: count
+                value: "007"
+              - name: empty
+                value: ""
+              - name: path
+                value: /usr/local
+              - name: time
+                value: "12:30:45"
+      - fixture:
+          file: ping.txt
+          from: "${specdir}/testdata/ping-macos-26-timeout.txt"
+      - run:
+          command: jz --yaml --file ${workdir}/ping.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              destination:
+                name: "192.0.2.1"
+                address: "192.0.2.1"
+                source: null
+                data_bytes: 56
+                packet_bytes: null
+              replies:
+                - kind: no_answer
+                  error: Request timeout
+                  icmp_seq: 0
+              statistics:
+                name: "192.0.2.1"
+                packets_transmitted: 2
+                packets_received: 0
+                duplicates: null
+                packet_loss_percent: 100.0
+                out_of_wait_time: null
+                round_trip_min_ms: null
+                round_trip_avg_ms: null
+                round_trip_max_ms: null
+                round_trip_stddev_ms: null
+      - assert:
+          stdout:
+            yaml:
+              - { path: "$.statistics.packet_loss_percent", equals: 100 }
+              - { path: "$.replies[0].icmp_seq", equals: 0 }
+              - { path: "$.destination.address", equals: "192.0.2.1" }

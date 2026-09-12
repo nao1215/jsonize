@@ -174,9 +174,11 @@ parse:
 }
 
 // skip_blank: false keeps the blank lines that separate things, and
-// nothing is separated from what comes before the first line: a blank
-// line there is not part of the text, whole or streamed.
-func TestBlankLinesBeforeTheTextAreSkipped(t *testing.T) {
+// nothing is separated from what comes before the first line or after
+// the last: an empty line there is not part of the text, whole or
+// streamed. A line of spaces is, since where blank lines are kept it can
+// be a value.
+func TestBlankLinesAroundTheTextAreSkipped(t *testing.T) {
 	t.Parallel()
 	src := `format: 1
 command: t
@@ -194,15 +196,25 @@ parse:
       select: {skip: 1}
       parse: {type: regex, pattern: '^(?P<line>.*)$'}
 `
-	const input = "\n  \ncommit a\n\nmsg\n"
-	want := `[{"head":{"id":"a"},"body":[{"line":""},{"line":"msg"}]}]`
+	const input = "\n\ncommit a\n\nmsg\n\n  \n\n\n"
+	want := `[{"head":{"id":"a"},"body":[{"line":""},{"line":"msg"},{"line":""},{"line":"  "}]}]`
 	v, acct, err := ParseAccounted(load(t, src), []byte(input), Options{})
-	if err != nil || mustJSON(t, v) != want || acct.Blank != 2 {
+	if err != nil || mustJSON(t, v) != want || acct.Blank != 4 {
 		t.Errorf("whole: %v %+v %v", mustJSON(t, v), acct, err)
 	}
 	got, err := streamAll(t, src, input)
 	if err != nil || got != want[1:len(want)-1]+"\n" {
 		t.Errorf("stream: %q %v", got, err)
+	}
+	// A line of spaces before the text is text, and here it comes before
+	// the first record, which is refused the same way in both readings.
+	for _, read := range []func() error{
+		func() error { _, err := Parse(load(t, src), []byte("  \ncommit a\n"), Options{}); return err },
+		func() error { _, err := streamAll(t, src, "  \ncommit a\n"); return err },
+	} {
+		if err := read(); err == nil || !strings.Contains(err.Error(), "line 1") {
+			t.Errorf("a line of spaces before the first record: %v", err)
+		}
 	}
 }
 

@@ -1,0 +1,3 @@
+source: "stat on a dangling symbolic link, a UTF-8 name and a fifo, on a GitHub Actions macOS 14.8.9 runner with LC_ALL=C (three runs joined) (capture run 34599785859 of the temporary capture workflow; the directory prefix of the names removed)"
+os: darwin
+args: ["dangling", "日本語.txt", "fifo"]

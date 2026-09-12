@@ -11,7 +11,6 @@ import (
 	"github.com/nao1215/jsonize/internal/runner"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
-	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/registry"
 	"github.com/nao1215/jsonize/pkg/selector"
 )
@@ -56,17 +55,16 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	}
 	exp.chose(chosen)
 	a.explainWrite(exp)
+	def := a.reading(chosen.Entry.Def)
 	// A key the format does not produce is a usage error, the same as it
 	// is for a whole document, so it is kept apart from a parse failure.
 	// One the definition does not name is refused before a record is
 	// written; one the input decides is judged when the stream ends.
-	if err := filter.know(chosen.Entry.Def); err != nil {
+	if err := filter.know(def); err != nil {
 		a.errorf("%v", err)
 		return ExitUsage
 	}
-	emit := func(v any) error {
-		return jsonutil.Encode(a.env.Stdout, filter.narrowRecord(v), false)
-	}
+	emit := filter.streamEmit(out.recordWriter(a.env.Stdout), def)
 	// A record jz cannot read is reported and left out, and the ones
 	// after it are still written. A command that keeps printing (ping,
 	// rsync) puts a line jz has no reading for among thousands it has,
@@ -84,7 +82,7 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	// what the line limit is there for.
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
-	err = engine.Stream(chosen.Entry.Def, io.MultiReader(bytes.NewReader(head), br), eopts, emit, onError)
+	err = engine.Stream(def, io.MultiReader(bytes.NewReader(head), br), eopts, emit, onError)
 	return a.streamEnd(err, filter, skipped)
 }
 
@@ -119,9 +117,7 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 		a.errorf("%v", err)
 		return ExitUsage
 	}
-	emit := func(v any) error {
-		return jsonutil.Encode(a.env.Stdout, filter.narrowRecord(v), false)
-	}
+	emit := filter.streamEmit(out.recordWriter(a.env.Stdout), def)
 	skipped := 0
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
@@ -175,7 +171,7 @@ func emptyForm(ctx selector.Context, candidates []*registry.Entry, stream bool) 
 	for _, e := range candidates {
 		switch {
 		case e.Def.Parse.YieldsArray():
-		case stream:
+		case stream && !e.Def.Parse.Streams():
 			return &engine.NoStreamError{Definition: e.Def.ID()}
 		default:
 			return fmt.Errorf("%s printed nothing, and %s reads a format that has no empty form", ctx.Parser, e.Def.ID())

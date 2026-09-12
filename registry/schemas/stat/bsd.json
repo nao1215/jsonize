@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/stat/bsd.json",
+  "title": "stat/bsd",
+  "description": "stat on macOS and FreeBSD (default format, one line per file)",
+  "x-jsonize": {
+    "definition": "stat/bsd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "string"
+      },
+      "inode": {
+        "type": "integer"
+      },
+      "access_flags": {
+        "type": "string"
+      },
+      "links": {
+        "type": "integer"
+      },
+      "user": {
+        "type": "string"
+      },
+      "group": {
+        "type": "string"
+      },
+      "rdev": {
+        "type": "string"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "access_time": {
+        "type": "string"
+      },
+      "modify_time": {
+        "type": "string"
+      },
+      "change_time": {
+        "type": "string"
+      },
+      "birth_time": {
+        "type": "string"
+      },
+      "block_size": {
+        "type": "integer"
+      },
+      "blocks": {
+        "type": "integer"
+      },
+      "file_flags": {
+        "type": "string"
+      },
+      "file": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "device",
+      "inode",
+      "access_flags",
+      "links",
+      "user",
+      "group",
+      "rdev",
+      "size",
+      "access_time",
+      "modify_time",
+      "change_time",
+      "birth_time",
+      "block_size",
+      "blocks",
+      "file_flags",
+      "file"
+    ]
+  }
+}
