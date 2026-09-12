@@ -1,0 +1,4 @@
+description: a mapping of a file that was replaced, whose name carries the space before "(deleted)" as \x20, next to rows that name a mount and an inode
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; user names replaced
+os: linux
+args: [--raw]

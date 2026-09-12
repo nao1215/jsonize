@@ -1,0 +1,8 @@
+COMMAND PID USER ASSOC XMODE TYPE SOURCE MNTID INODE NAME
+systemd 1 root exe ????-- ERROR readlink:EACCES   
+systemd 1 root cwd ????-- ERROR readlink:EACCES   
+systemd 1 root rtd ????-- ERROR readlink:EACCES   
+systemd 1 root cgroup ------ DIR proc 0 523366 
+systemd 1 root ipc ------ DIR proc 0 523366 
+systemd 1 root mnt ------ DIR proc 0 523366 
+systemd 1 root net ------ DIR proc 0 523366 

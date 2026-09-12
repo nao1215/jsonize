@@ -1,0 +1,107 @@
+[
+  {
+    "resource": "MSGMNI",
+    "description": "Number\\x20of\\x20System\\x20V\\x20message\\x20queues",
+    "limit": "32000",
+    "used": 0,
+    "use_percent": 0
+  },
+  {
+    "resource": "MSGMAX",
+    "description": "Max\\x20size\\x20of\\x20System\\x20V\\x20message\\x20(bytes)",
+    "limit": "8K",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "MSGMNB",
+    "description": "Default\\x20max\\x20size\\x20of\\x20System\\x20V\\x20queue\\x20(bytes)",
+    "limit": "16K",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "MQUMNI",
+    "description": "Number\\x20of\\x20POSIX\\x20message\\x20queues",
+    "limit": "256",
+    "used": 0,
+    "use_percent": 0
+  },
+  {
+    "resource": "MQUMAX",
+    "description": "Max\\x20size\\x20of\\x20POSIX\\x20message\\x20(bytes)",
+    "limit": "8K",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "MQUMNB",
+    "description": "Number\\x20of\\x20messages\\x20in\\x20POSIX\\x20message\\x20queue",
+    "limit": "10",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "SHMMNI",
+    "description": "Shared\\x20memory\\x20segments",
+    "limit": "4096",
+    "used": 0,
+    "use_percent": 0
+  },
+  {
+    "resource": "SHMALL",
+    "description": "Shared\\x20memory\\x20pages",
+    "limit": "18446744073692774399",
+    "used": 0,
+    "use_percent": 0
+  },
+  {
+    "resource": "SHMMAX",
+    "description": "Max\\x20size\\x20of\\x20shared\\x20memory\\x20segment\\x20(bytes)",
+    "limit": "16E",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "SHMMIN",
+    "description": "Min\\x20size\\x20of\\x20shared\\x20memory\\x20segment\\x20(bytes)",
+    "limit": "1B",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "SEMMNI",
+    "description": "Number\\x20of\\x20semaphore\\x20identifiers",
+    "limit": "32000",
+    "used": 0,
+    "use_percent": 0
+  },
+  {
+    "resource": "SEMMNS",
+    "description": "Total\\x20number\\x20of\\x20semaphores",
+    "limit": "1024000000",
+    "used": 0,
+    "use_percent": 0
+  },
+  {
+    "resource": "SEMMSL",
+    "description": "Max\\x20semaphores\\x20per\\x20semaphore\\x20set.",
+    "limit": "32000",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "SEMOPM",
+    "description": "Max\\x20number\\x20of\\x20operations\\x20per\\x20semop(2)",
+    "limit": "500",
+    "used": null,
+    "use_percent": null
+  },
+  {
+    "resource": "SEMVMX",
+    "description": "Semaphore\\x20max\\x20value",
+    "limit": "32767",
+    "used": null,
+    "use_percent": null
+  }
+]

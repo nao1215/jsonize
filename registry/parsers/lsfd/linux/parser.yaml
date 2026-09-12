@@ -21,7 +21,7 @@ detect:
     all:
       - '\ACOMMAND[ \t]+PID[ \t]+USER[ \t]+ASSOC[ \t]+XMODE[ \t]+TYPE[ \t]+SOURCE[ \t]+MNTID[ \t]+INODE[ \t]+NAME[ \t]*$'
       # The header is lined up with the columns. -r prints the same words
-      # one space apart and the rows unaligned, which this cannot cut.
+      # one space apart and the rows unaligned, which lsfd/raw reads.
       - '\ACOMMAND(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
 parse:
   type: table

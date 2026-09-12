@@ -1,0 +1,4 @@
+description: system accounts that have never logged in, whose four trailing cells are all empty
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C, first 5 lines; user names replaced
+os: linux
+args: [--raw]

@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsfd/raw.json",
+  "title": "lsfd/raw",
+  "description": "lsfd -r, the open file columns one space apart",
+  "x-jsonize": {
+    "definition": "lsfd/raw",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string"
+      },
+      "inode": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mntid": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "source": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "user": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

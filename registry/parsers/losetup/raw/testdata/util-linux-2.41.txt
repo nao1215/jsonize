@@ -1,0 +1,4 @@
+NAME SIZELIMIT OFFSET AUTOCLEAR RO BACK-FILE DIO LOG-SEC
+/dev/loop29 0 0 1 1 /var/lib/snapd/snaps/icon-theme-breeze_5.snap 0 512
+/dev/loop57 0 0 1 1 /var/lib/snapd/snaps/core20_2922.snap 0 512
+/dev/loop19 0 0 1 1 /var/lib/snapd/snaps/ghostty_718.snap 0 512

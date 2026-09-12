@@ -1,0 +1,16 @@
+RESOURCE DESCRIPTION LIMIT USED USE%
+MSGMNI Number\x20of\x20System\x20V\x20message\x20queues 32000 0 0.00%
+MSGMAX Max\x20size\x20of\x20System\x20V\x20message\x20(bytes) 8192 - -
+MSGMNB Default\x20max\x20size\x20of\x20System\x20V\x20queue\x20(bytes) 16384 - -
+MQUMNI Number\x20of\x20POSIX\x20message\x20queues 256 0 0.00%
+MQUMAX Max\x20size\x20of\x20POSIX\x20message\x20(bytes) 8192 - -
+MQUMNB Number\x20of\x20messages\x20in\x20POSIX\x20message\x20queue 10 - -
+SHMMNI Shared\x20memory\x20segments 4096 0 0.00%
+SHMALL Shared\x20memory\x20pages 18446744073692774399 0 0.00%
+SHMMAX Max\x20size\x20of\x20shared\x20memory\x20segment\x20(bytes) 18446744073692774399 - -
+SHMMIN Min\x20size\x20of\x20shared\x20memory\x20segment\x20(bytes) 1 - -
+SEMMNI Number\x20of\x20semaphore\x20identifiers 32000 0 0.00%
+SEMMNS Total\x20number\x20of\x20semaphores 1024000000 0 0.00%
+SEMMSL Max\x20semaphores\x20per\x20semaphore\x20set. 32000 - -
+SEMOPM Max\x20number\x20of\x20operations\x20per\x20semop(2) 500 - -
+SEMVMX Semaphore\x20max\x20value 32767 - -

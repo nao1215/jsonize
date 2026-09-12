@@ -113,6 +113,34 @@ scenarios:
             json:
               - { path: "$[0].device", matches: "^/dev/loop" }
 
+  # util-linux prints its tables two ways: padded into columns, and with
+  # -r, one space between cells with the spaces inside a value written as
+  # \x20. Each is a variant of its own, and the raw one hands back the
+  # value as util-linux wrote it rather than guessing which backslashes
+  # were already there.
+  - name: lsipc -r lands on the raw variant and keeps the escaped spaces
+    only: {os: linux, command: "lsipc > /dev/null"}
+    steps:
+      - run:
+          command: jz run --explain lsipc
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lsipc/linux from embedded"
+          stdout:
+            json:
+              - { path: "$[0].description", matches: " " }
+      - run:
+          command: jz run --explain lsipc -r
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lsipc/raw from embedded"
+          stdout:
+            json:
+              - { path: "$[0].description", matches: "\\\\x20" }
+              - { path: "$[0].description", matches: "^[^ ]+$" }
+
   # blkid prints nothing at all without the right to read the devices.
   - name: blkid -o export is one block of attributes per device
     only: {os: linux, command: "[ -n \"$(blkid -o export)\" ]"}

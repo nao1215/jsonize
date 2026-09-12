@@ -1,0 +1,39 @@
+# `lsipc -r` prints the summary of IPC limits with one space between
+# cells instead of padding them into columns. The spaces inside
+# DESCRIPTION are printed as \x20, which is what keeps a sentence in one
+# cell, and jz keeps the value as lsipc wrote it: undoing the escape
+# would make a description indistinguishable from one that really
+# contains a backslash.
+format: 1
+command: lsipc
+variant: raw
+description: lsipc -r, the summary columns one space apart
+metadata:
+  tags: [linux, ipc, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lsipc.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-r", "--raw"]
+  signature:
+    all:
+      # The header opens the output and its words stand one space apart.
+      # The default output pads them over the columns, which lsipc/linux
+      # cuts at the header offsets.
+      - '\ARESOURCE DESCRIPTION LIMIT USED USE%[ \t]*$'
+parse:
+  type: table
+  split: delimiter
+  delimiter: " "
+# LIMIT is rounded and unit-suffixed by default ("8K", "16E") and exact
+# with --bytes, and the exact value exceeds what an integer holds, so it
+# stays as printed. USED and USE% are "-" for a limit that nothing can
+# consume.
+fields:
+  resource: {required: true}
+  description: {required: true}
+  limit: {required: true}
+  used: {type: int, null_if: ["-"]}
+  use_percent: {type: float, trim_suffix: "%", null_if: ["-"]}

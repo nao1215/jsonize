@@ -1,0 +1,39 @@
+# `lsfd -r` prints the same columns as the default listing with one
+# space between cells instead of padding them. A mapping the caller may
+# not stat reports an error where the type belongs and leaves MNTID,
+# INODE and NAME empty; the separators for those cells are still
+# printed, so every row carries nine of them.
+#
+# A space inside NAME is printed as \x20, which is what keeps a path in
+# one cell, and jz keeps the value as lsfd wrote it.
+format: 1
+command: lsfd
+variant: raw
+description: lsfd -r, the open file columns one space apart
+metadata:
+  tags: [linux, process, file, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lsfd.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-r", "--raw"]
+  signature:
+    all:
+      # The header opens the output and its words stand one space apart.
+      # The default output pads each header to the width of its column,
+      # which lsfd/linux cuts at the header words.
+      - '\ACOMMAND PID USER ASSOC XMODE TYPE SOURCE MNTID INODE NAME[ \t]*$'
+parse:
+  type: table
+  split: delimiter
+  delimiter: " "
+fields:
+  command: {required: true}
+  pid: {type: int, required: true}
+  user: {null_if: [""]}
+  source: {null_if: [""]}
+  mntid: {type: int, null_if: [""]}
+  inode: {type: int, null_if: [""]}
+  name: {null_if: [""]}

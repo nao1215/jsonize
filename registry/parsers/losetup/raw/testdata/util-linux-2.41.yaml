@@ -1,0 +1,4 @@
+description: the first loop devices of a listing, each one read-only and auto-cleared
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C, first 3 rows; nothing replaced
+os: linux
+args: [--raw]

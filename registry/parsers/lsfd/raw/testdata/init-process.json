@@ -1,0 +1,86 @@
+[
+  {
+    "command": "systemd",
+    "pid": 1,
+    "user": "root",
+    "assoc": "exe",
+    "xmode": "????--",
+    "type": "ERROR",
+    "source": "readlink:EACCES",
+    "mntid": null,
+    "inode": null,
+    "name": null
+  },
+  {
+    "command": "systemd",
+    "pid": 1,
+    "user": "root",
+    "assoc": "cwd",
+    "xmode": "????--",
+    "type": "ERROR",
+    "source": "readlink:EACCES",
+    "mntid": null,
+    "inode": null,
+    "name": null
+  },
+  {
+    "command": "systemd",
+    "pid": 1,
+    "user": "root",
+    "assoc": "rtd",
+    "xmode": "????--",
+    "type": "ERROR",
+    "source": "readlink:EACCES",
+    "mntid": null,
+    "inode": null,
+    "name": null
+  },
+  {
+    "command": "systemd",
+    "pid": 1,
+    "user": "root",
+    "assoc": "cgroup",
+    "xmode": "------",
+    "type": "DIR",
+    "source": "proc",
+    "mntid": 0,
+    "inode": 523366,
+    "name": null
+  },
+  {
+    "command": "systemd",
+    "pid": 1,
+    "user": "root",
+    "assoc": "ipc",
+    "xmode": "------",
+    "type": "DIR",
+    "source": "proc",
+    "mntid": 0,
+    "inode": 523366,
+    "name": null
+  },
+  {
+    "command": "systemd",
+    "pid": 1,
+    "user": "root",
+    "assoc": "mnt",
+    "xmode": "------",
+    "type": "DIR",
+    "source": "proc",
+    "mntid": 0,
+    "inode": 523366,
+    "name": null
+  },
+  {
+    "command": "systemd",
+    "pid": 1,
+    "user": "root",
+    "assoc": "net",
+    "xmode": "------",
+    "type": "DIR",
+    "source": "proc",
+    "mntid": 0,
+    "inode": 523366,
+    "name": null
+  }
+]

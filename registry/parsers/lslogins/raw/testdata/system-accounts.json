@@ -1,0 +1,47 @@
+[
+  {
+    "uid": 0,
+    "user": "root",
+    "proc": 464,
+    "pwd_lock": false,
+    "pwd_deny": false,
+    "last_login": null,
+    "gecos": "root"
+  },
+  {
+    "uid": 1,
+    "user": "daemon",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "daemon"
+  },
+  {
+    "uid": 2,
+    "user": "bin",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "bin"
+  },
+  {
+    "uid": 3,
+    "user": "sys",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "sys"
+  },
+  {
+    "uid": 4,
+    "user": "sync",
+    "proc": 0,
+    "pwd_lock": null,
+    "pwd_deny": null,
+    "last_login": null,
+    "gecos": "sync"
+  }
+]
