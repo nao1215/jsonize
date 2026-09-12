@@ -19,9 +19,11 @@ package registry
 import (
 	"errors"
 	"fmt"
+	"io"
 	"io/fs"
 	"path"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 
@@ -84,11 +86,16 @@ type Source struct {
 	Name string
 	// FS is rooted at the registry directory.
 	FS fs.FS
-	// Optional sources are skipped silently when the directory is absent.
+	// Optional sources are skipped silently when the directory does not
+	// exist. A directory that exists and cannot be read is an error even
+	// then: falling back to the definitions below it would read the text
+	// with a registry the user did not mean.
 	Optional bool
 }
 
-// Entry is a loaded definition with its provenance.
+// Entry is a loaded definition with its provenance. The registry hands
+// out its entries as they are, and every lookup of the same definition
+// returns the same one: a caller reads them and does not change them.
 type Entry struct {
 	Def    *definition.Definition
 	Source string
@@ -167,7 +174,7 @@ func (r *Registry) addSource(precedence int, src Source) error {
 		return fmt.Errorf("source %q has no filesystem", src.Name)
 	}
 	if _, err := fs.Stat(src.FS, "."); err != nil {
-		if src.Optional {
+		if src.Optional && errors.Is(err, fs.ErrNotExist) {
 			return nil
 		}
 		return fmt.Errorf("registry %q: %w", src.Name, err)
@@ -175,7 +182,7 @@ func (r *Registry) addSource(precedence int, src Source) error {
 	// The manifest is read for its format version: a registry written for
 	// a newer jsonize must be refused rather than half understood.
 	var m manifest
-	if data, err := fs.ReadFile(src.FS, ManifestFile); err == nil {
+	if data, err := ReadBounded(src.FS, ManifestFile, definition.MaxDefinitionSize); err == nil {
 		if err := definition.DecodeYAML(data, &m); err != nil {
 			return &LoadError{Source: src.Name, Path: ManifestFile, Err: fmt.Errorf("invalid manifest: %w", err)}
 		}
@@ -211,7 +218,13 @@ func (r *Registry) addSource(precedence int, src Source) error {
 		if count > MaxDefinitions {
 			return &LoadError{Source: src.Name, Path: p, Err: fmt.Errorf("more than %d definitions", MaxDefinitions)}
 		}
-		data, err := fs.ReadFile(src.FS, p)
+		data, err := ReadBounded(src.FS, p, definition.MaxDefinitionSize)
+		if errors.Is(err, errTooLarge) {
+			// One oversized file is that file's problem, like one that
+			// does not parse; the other definitions still load.
+			r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: p, Err: err})
+			return nil
+		}
 		if err != nil {
 			return &LoadError{Source: src.Name, Path: p, Err: err}
 		}
@@ -320,9 +333,10 @@ func (r *Registry) Lookup(command, variant string) (*Entry, bool) {
 	return nil, false
 }
 
-// Variants returns the entries for a command sorted by variant name.
+// Variants returns the entries for a command sorted by variant name. The
+// slice is the caller's; the entries in it are the registry's.
 func (r *Registry) Variants(command string) []*Entry {
-	return r.byCommand[command]
+	return slices.Clone(r.byCommand[command])
 }
 
 // Commands returns the known command names sorted. An alias is not one:
@@ -372,7 +386,24 @@ func (r *Registry) Len() int {
 	return len(r.entries)
 }
 
-// TestdataPath returns the testdata directory of an entry inside its FS.
-func (e *Entry) TestdataPath() string {
-	return path.Join(path.Dir(e.Path), TestdataDir)
+// errTooLarge marks a file over its limit.
+var errTooLarge = errors.New("file too large")
+
+// ReadBounded reads a file of at most limit bytes. A file over the limit
+// is an error that names it, and no more than limit+1 bytes of it are
+// ever read: a registry cannot make jz read a file without bound.
+func ReadBounded(fsys fs.FS, name string, limit int64) ([]byte, error) {
+	f, err := fsys.Open(name)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = f.Close() }()
+	data, err := io.ReadAll(io.LimitReader(f, limit+1))
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", name, err)
+	}
+	if int64(len(data)) > limit {
+		return nil, fmt.Errorf("%s exceeds %d bytes: %w", name, limit, errTooLarge)
+	}
+	return data, nil
 }
