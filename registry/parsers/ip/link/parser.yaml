@@ -47,9 +47,11 @@ parse:
       parse:
         type: regex
         each: input
-        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
+        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: permaddr (?P<permanent_address>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
       fields:
         netnsid: {type: int, when_missing: omit}
+        # A tunnel device reports the address it was built from.
+        permanent_address: {when_missing: omit}
     # An interface may carry a free-text alias and any number of
     # alternative names. Both sit under the link line, so each part names
     # the other's lines as belonging to a sibling rather than taking a

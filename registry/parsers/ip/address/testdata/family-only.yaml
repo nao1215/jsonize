@@ -1,0 +1,10 @@
+source: >-
+  captured on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C; the
+  link-local address was replaced
+description: >-
+  `ip -6 address` with no interface named is answered from the address
+  table alone, so each header carries neither the queueing discipline nor
+  the group and the queue length follows the state; there is no link
+  layer line either.
+os: linux
+args: ["-6", "address"]

@@ -1,0 +1,86 @@
+[
+  {
+    "interface": {
+      "index": 1,
+      "name": "lo",
+      "flags": [
+        "LOOPBACK",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 65536,
+      "qdisc": "noqueue",
+      "state": "UNKNOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "loopback",
+        "address": "00:00:00:00:00:00",
+        "broadcast": "00:00:00:00:00:00"
+      },
+      {
+        "kind": "inet",
+        "address": "127.0.0.1/8",
+        "scope": "host",
+        "attributes": [
+          "lo"
+        ]
+      },
+      {
+        "kind": "valid_lft",
+        "valid_lft": "forever",
+        "preferred_lft": "forever"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 20,
+      "name": "ip6tnl0",
+      "peer": "NONE",
+      "flags": [
+        "NOARP"
+      ],
+      "mtu": 1452,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "tunnel6",
+        "address": "::",
+        "broadcast": "::",
+        "permanent_address": "4e76:da7a:cec8::"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 21,
+      "name": "sit0",
+      "peer": "NONE",
+      "flags": [
+        "NOARP"
+      ],
+      "mtu": 1480,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "sit",
+        "address": "0.0.0.0",
+        "broadcast": "0.0.0.0"
+      }
+    ]
+  }
+]

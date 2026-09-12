@@ -56,9 +56,11 @@ parse:
         type: regex
         each: input
         # A veth end inside a namespace also reports the namespace id.
-        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
+        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: permaddr (?P<permanent_address>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
       fields:
         netnsid: {type: int, when_missing: omit}
+        # A tunnel device reports the address it was built from.
+        permanent_address: {when_missing: omit}
     # The header line above each table names the same columns every time,
     # so the counters are read from the value line alone. The tables are
     # found by their header rather than by counting lines, because an
@@ -93,18 +95,23 @@ parse:
     # The alias and the alternative names sit among the tables rather
     # than at a fixed offset, so each part names the lines that belong to
     # a sibling instead of taking a position.
+    # A kernel that counts frames addressed to another host reports one
+    # more column here, and one that does not prints neither the heading
+    # nor the figure, so the column is read where it is there and absent
+    # where it is not.
     - name: rx_errors
-      select: {after: '^[ \t]*RX errors:[ \t]+length[ \t]+crc[ \t]+frame[ \t]+fifo[ \t]+overrun[ \t]*$', limit: 1}
+      select: {after: '^[ \t]*RX errors:[ \t]+length[ \t]+crc[ \t]+frame[ \t]+fifo[ \t]+overrun(?:[ \t]+otherhost)?[ \t]*$', limit: 1}
       parse:
         type: regex
         each: input
-        pattern: '^\s*(?P<length>\d+)\s+(?P<crc>\d+)\s+(?P<frame>\d+)\s+(?P<fifo>\d+)\s+(?P<overrun>\d+)\s*$'
+        pattern: '^\s*(?P<length>\d+)\s+(?P<crc>\d+)\s+(?P<frame>\d+)\s+(?P<fifo>\d+)\s+(?P<overrun>\d+)(?:\s+(?P<otherhost>\d+))?\s*$'
       fields:
         length: {type: int}
         crc: {type: int}
         frame: {type: int}
         fifo: {type: int}
         overrun: {type: int}
+        otherhost: {type: int, when_missing: omit}
     - name: tx_errors
       select: {after: '^[ \t]*TX errors:[ \t]+aborted[ \t]+fifo[ \t]+window[ \t]+heartbt[ \t]+transns[ \t]*$', limit: 1}
       parse:

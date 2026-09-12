@@ -80,6 +80,9 @@
               "null"
             ]
           },
+          "permanent_address": {
+            "type": "string"
+          },
           "netnsid": {
             "type": "integer"
           }

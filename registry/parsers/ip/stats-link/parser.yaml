@@ -58,9 +58,11 @@ parse:
         type: regex
         each: input
         # A veth end inside a namespace also reports the namespace id.
-        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
+        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: permaddr (?P<permanent_address>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
       fields:
         netnsid: {type: int, when_missing: omit}
+        # A tunnel device reports the address it was built from.
+        permanent_address: {when_missing: omit}
     # The header line above each table names the same columns every time,
     # so the counters are read from the value line alone. The tables are
     # found by their header rather than by counting lines, because an
