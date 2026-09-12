@@ -2,16 +2,10 @@ version: "1"
 
 suite:
   name: HTTP headers from curl
-  # The server is e2ehelper serve, built here from the Go source next to
-  # this file: it listens on a free port of 127.0.0.1 and writes the
+  # The server is e2ehelper serve, which scripts/run_e2e.sh builds and
+  # puts on PATH: it listens on a free port of 127.0.0.1 and writes the
   # address to a file when it is ready, so nothing here reaches past the
   # machine. Every system this suite runs on ships curl.
-  setup:
-    - fixture:
-        file: bin/.keep
-        content: ""
-    - run:
-        command: go build -C ${specdir}/e2ehelper -o ${suitedir}/bin/ .
 
 # curl -I and curl -D - print the header block of every response they
 # read, and curl/headers reads each block as a record. What is pinned
@@ -23,7 +17,7 @@ scenarios:
   - name: jz run curl -sI reads one response, a repeated Set-Cookie as two headers
     services:
       - name: server
-        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        command: e2ehelper serve -addr ${workdir}/addr.txt
         ready: {file: addr.txt, store: addr, timeout: 20s}
     steps:
       - run:
@@ -52,7 +46,7 @@ scenarios:
   - name: a redirect chain followed with -L is one record per response
     services:
       - name: server
-        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        command: e2ehelper serve -addr ${workdir}/addr.txt
         ready: {file: addr.txt, store: addr, timeout: 20s}
     steps:
       - run:
@@ -79,7 +73,7 @@ scenarios:
   - name: interim responses, a status line with no reason and HTTP/1.0 keep their own records
     services:
       - name: server
-        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        command: e2ehelper serve -addr ${workdir}/addr.txt
         ready: {file: addr.txt, store: addr, timeout: 20s}
     steps:
       - run:
@@ -120,7 +114,7 @@ scenarios:
   - name: a proxy's reply to CONNECT is a record before the response through the tunnel
     services:
       - name: server
-        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        command: e2ehelper serve -addr ${workdir}/addr.txt
         ready: {file: addr.txt, store: addr, timeout: 20s}
     steps:
       - run:
@@ -142,7 +136,7 @@ scenarios:
     skip: {os: windows}
     services:
       - name: server
-        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        command: e2ehelper serve -addr ${workdir}/addr.txt
         ready: {file: addr.txt, store: addr, timeout: 20s}
     steps:
       - run:
@@ -162,7 +156,7 @@ scenarios:
   - name: headers saved by curl are read from the file on any system, and as YAML
     services:
       - name: server
-        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        command: e2ehelper serve -addr ${workdir}/addr.txt
         ready: {file: addr.txt, store: addr, timeout: 20s}
     steps:
       # With -I the headers are what curl writes, so -o saves them.
@@ -198,7 +192,7 @@ scenarios:
   - name: a body after the headers and curl's verbose lines are not read as headers
     services:
       - name: server
-        command: ${suitedir}/bin/e2ehelper serve -addr ${workdir}/addr.txt
+        command: e2ehelper serve -addr ${workdir}/addr.txt
         ready: {file: addr.txt, store: addr, timeout: 20s}
     steps:
       # -i prints the body after the headers. jz run does not claim that

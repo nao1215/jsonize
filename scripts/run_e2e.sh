@@ -39,6 +39,15 @@ else
   go build -o "$sandbox/bin/jz$exe" ./cmd/jz
 fi
 
+# The producer, reader, server and stand-in the suites run. It is built
+# here rather than in four suite setups so that one build serves them
+# all, and so that the file exists, and has been through whatever the
+# system does to a new executable, before any suite starts: on Windows a
+# binary run in the same breath as the build that wrote it has twice
+# been reported as not found. Running it once proves it can be.
+go build -o "$sandbox/bin/e2ehelper$exe" ./e2e/atago/e2ehelper
+"$sandbox/bin/e2ehelper$exe" relay < /dev/null > /dev/null
+
 export PATH="$sandbox/bin:$PATH"
 export HOME="$sandbox/home"
 export USERPROFILE="$sandbox/home"

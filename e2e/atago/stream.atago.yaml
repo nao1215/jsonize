@@ -4,17 +4,16 @@ suite:
   name: streaming
   # e2ehelper feed is the producer that does not end: it hands jz its
   # input a piece at a time and waits, up to a deadline, for the records
-  # each piece should produce before it sends the next. It is built once
-  # here from the Go source next to this file, with standin, the copy of
-  # it that jz run lands on by name and that relays its input.
+  # each piece should produce before it sends the next.
+  # scripts/run_e2e.sh builds it and puts it on PATH; the setup makes
+  # standin, the copy of it that jz run lands on by name and that relays
+  # its input.
   setup:
     - fixture:
         file: bin/.keep
         content: ""
     - run:
-        command: go build -C ${specdir}/e2ehelper -o ${suitedir}/bin/ .
-    - run:
-        command: ${suitedir}/bin/e2ehelper as standin ${suitedir}/bin
+        command: e2ehelper as standin ${suitedir}/bin
 
 # --stream writes one JSON document per line as each record becomes
 # readable, instead of one array once the input has ended. It is the only
@@ -428,7 +427,7 @@ scenarios:
             close
             wait
       - run:
-          command: ${suitedir}/bin/e2ehelper feed -deadline 10s -script zero.feed -- jz --stream --parser ls --variant names-zero
+          command: e2ehelper feed -deadline 10s -script zero.feed -- jz --stream --parser ls --variant names-zero
           timeout: 60s
       - assert:
           exit_code: 0
@@ -441,7 +440,7 @@ scenarios:
               {"name":"with a\nline break"}
               status=0
       - run:
-          command: ${suitedir}/bin/e2ehelper feed -deadline 10s -script zero.feed -- jz run --stream --parser ls --variant names-zero -- ${suitedir}/bin/standin --zero
+          command: e2ehelper feed -deadline 10s -script zero.feed -- jz run --stream --parser ls --variant names-zero -- ${suitedir}/bin/standin --zero
           timeout: 60s
       - assert:
           exit_code: 0
@@ -472,7 +471,7 @@ scenarios:
             close
             wait
       - run:
-          command: ${suitedir}/bin/e2ehelper feed -deadline 10s -script csv.feed -- jz --stream --parser csv --variant comma
+          command: e2ehelper feed -deadline 10s -script csv.feed -- jz --stream --parser csv --variant comma
           timeout: 60s
       - assert:
           exit_code: 0
