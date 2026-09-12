@@ -50,41 +50,6 @@
       "name": "zonetransfer.me.",
       "ttl": 7200,
       "class": "IN",
-      "type": "MX",
-      "data": "10 ALT2.ASPMX.L.GOOGLE.COM."
-    },
-    {
-      "name": "zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "MX",
-      "data": "20 ASPMX2.GOOGLEMAIL.COM."
-    },
-    {
-      "name": "zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "MX",
-      "data": "20 ASPMX3.GOOGLEMAIL.COM."
-    },
-    {
-      "name": "zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "MX",
-      "data": "20 ASPMX4.GOOGLEMAIL.COM."
-    },
-    {
-      "name": "zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "MX",
-      "data": "20 ASPMX5.GOOGLEMAIL.COM."
-    },
-    {
-      "name": "zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
       "type": "A",
       "data": "5.196.105.14"
     },
@@ -159,34 +124,6 @@
       "data": "1 asfdbbox.zonetransfer.me."
     },
     {
-      "name": "canberra-office.zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "A",
-      "data": "202.14.81.230"
-    },
-    {
-      "name": "cmdexec.zonetransfer.me.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "TXT",
-      "data": "\"; ls\""
-    },
-    {
-      "name": "contact.zonetransfer.me.",
-      "ttl": 2592000,
-      "class": "IN",
-      "type": "TXT",
-      "data": "\"Remember to call or email Pippa on +44 123 4567890 or pippa@zonetransfer.me when making DNS changes\""
-    },
-    {
-      "name": "dc-office.zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "A",
-      "data": "143.228.181.132"
-    },
-    {
       "name": "deadbeef.zonetransfer.me.",
       "ttl": 7201,
       "class": "IN",
@@ -201,13 +138,6 @@
       "data": "53 20 56.558 N 1 38 33.526 W 0.00m 1m 10000m 10m"
     },
     {
-      "name": "DZC.zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "TXT",
-      "data": "\"AbCdEfG\""
-    },
-    {
       "name": "email.zonetransfer.me.",
       "ttl": 2222,
       "class": "IN",
@@ -215,88 +145,11 @@
       "data": "1 1 \"P\" \"E2U+email\" \"\" email.zonetransfer.me.zonetransfer.me."
     },
     {
-      "name": "email.zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "A",
-      "data": "74.125.206.26"
-    },
-    {
-      "name": "Hello.zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "TXT",
-      "data": "\"Hi to Josh and all his class\""
-    },
-    {
-      "name": "home.zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "A",
-      "data": "127.0.0.1"
-    },
-    {
-      "name": "Info.zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "TXT",
-      "data": "\"ZoneTransfer.me service provided by Robin Wood - robin@digi.ninja. See http://digi.ninja/projects/zonetransferme.php for more information.\""
-    },
-    {
-      "name": "internal.zonetransfer.me.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "NS",
-      "data": "intns1.zonetransfer.me."
-    },
-    {
-      "name": "internal.zonetransfer.me.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "NS",
-      "data": "intns2.zonetransfer.me."
-    },
-    {
-      "name": "intns1.zonetransfer.me.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "A",
-      "data": "81.4.108.41"
-    },
-    {
-      "name": "intns2.zonetransfer.me.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "A",
-      "data": "5.196.105.10"
-    },
-    {
-      "name": "office.zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "A",
-      "data": "4.23.39.254"
-    },
-    {
       "name": "ipv6actnow.org.zonetransfer.me.",
       "ttl": 7200,
       "class": "IN",
       "type": "AAAA",
       "data": "2001:67c:2e8:11::c100:1332"
-    },
-    {
-      "name": "owa.zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "A",
-      "data": "207.46.197.32"
-    },
-    {
-      "name": "robinwood.zonetransfer.me.",
-      "ttl": 302,
-      "class": "IN",
-      "type": "TXT",
-      "data": "\"Robin Wood\""
     },
     {
       "name": "rp.zonetransfer.me.",
@@ -313,20 +166,6 @@
       "data": "2 3 \"P\" \"E2U+sip\" \"!^.*$!sip:customer-service@zonetransfer.me!\" ."
     },
     {
-      "name": "sqli.zonetransfer.me.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "TXT",
-      "data": "\"' or 1=1 --\""
-    },
-    {
-      "name": "sshock.zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "TXT",
-      "data": "\"() { :]}; echo ShellShocked\""
-    },
-    {
       "name": "staging.zonetransfer.me.",
       "ttl": 7200,
       "class": "IN",
@@ -334,39 +173,11 @@
       "data": "www.sydneyoperahouse.com."
     },
     {
-      "name": "alltcpportsopen.firewall.test.zonetransfer.me.",
-      "ttl": 301,
-      "class": "IN",
-      "type": "A",
-      "data": "127.0.0.1"
-    },
-    {
       "name": "testing.zonetransfer.me.",
       "ttl": 301,
       "class": "IN",
       "type": "CNAME",
       "data": "www.zonetransfer.me."
-    },
-    {
-      "name": "vpn.zonetransfer.me.",
-      "ttl": 4000,
-      "class": "IN",
-      "type": "A",
-      "data": "174.36.59.154"
-    },
-    {
-      "name": "www.zonetransfer.me.",
-      "ttl": 7200,
-      "class": "IN",
-      "type": "A",
-      "data": "5.196.105.14"
-    },
-    {
-      "name": "xss.zonetransfer.me.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "TXT",
-      "data": "\"'><script>alert('Boo')</script>\""
     },
     {
       "name": "zonetransfer.me.",

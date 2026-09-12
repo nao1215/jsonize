@@ -1,0 +1,9 @@
+source: >-
+  two blocks of `busybox ip link` captured on Ubuntu 26.04 (BusyBox
+  1.37.0) with LC_ALL=C; the hardware address was replaced
+description: >-
+  BusyBox prints neither the state, the mode nor the group, so what
+  separates this from an address listing is that it holds no address
+  lines rather than what its header ends with.
+os: linux
+args: ["link"]

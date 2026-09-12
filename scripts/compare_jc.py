@@ -267,8 +267,15 @@ def run(cmd, data):
         return None, "output is not JSON: %s" % exc
 
 
-def fixtures(commands):
-    """Yield (command, variant, path) for every mapped fixture."""
+def fixtures(commands, refused):
+    """Yield (command, variant, path) for every mapped fixture.
+
+    With refused set, the fixtures a definition is written to refuse are
+    the ones yielded instead: text of a neighbouring format, a row cut
+    short, a line the definition never looked at. What the other tool
+    does with those is the other half of the comparison, since a tool
+    that reads them is reading something the text does not say.
+    """
     for command in sorted(os.listdir(REGISTRY)):
         if commands and command not in commands:
             continue
@@ -286,7 +293,8 @@ def fixtures(commands):
                 if not name.endswith(".txt"):
                     continue
                 meta = os.path.join(td, name[:-4] + ".yaml")
-                if os.path.exists(meta) and "expect_error:" in open(meta).read():
+                expects = os.path.exists(meta) and "expect_error:" in open(meta).read()
+                if expects != refused:
                     continue
                 yield command, variant, os.path.join(td, name)
 
@@ -303,6 +311,11 @@ def main():
     ap.add_argument("--jz", default=os.path.join(ROOT, "dist", "jz"), help="path to the jz binary")
     ap.add_argument("--jc", default="jc", help="path to the jc command")
     ap.add_argument("--verbose", action="store_true", help="name the words neither tool carried")
+    ap.add_argument(
+        "--refused",
+        action="store_true",
+        help="use the fixtures jz refuses instead of the ones it reads, to see what jc does with them",
+    )
     ap.add_argument("--json", action="store_true", help="write the report as JSON")
     args = ap.parse_args()
 
@@ -316,7 +329,7 @@ def main():
         )
 
     rows = []
-    for command, variant, path in fixtures(args.commands):
+    for command, variant, path in fixtures(args.commands, args.refused):
         text = open(path, "rb").read()
         jc_parser = MAPPING["%s/%s" % (command, variant)]
         jz_doc, jz_err = run([args.jz, "--parser", command, "--variant", variant], text)
@@ -377,6 +390,8 @@ def main():
     refused_jc = sum(1 for r in rows if not r["jc"]["ok"])
     print()
     print("%d fixtures compared; jz refused %d, jc refused %d" % (len(rows), refused_jz, refused_jc))
+    if args.refused:
+        print("these are the fixtures jz is written to refuse, so refusing them is the right answer")
     return 0
 
 

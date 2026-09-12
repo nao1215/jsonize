@@ -1,13 +1,20 @@
-[
-  {
-    "mode": "-rw-rw-r--",
-    "version": "3.0",
-    "os": "unx",
-    "size": 14,
-    "attributes": "t-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/README.txt"
-  }
-]
+{
+  "archive": {
+    "name": "single.zip",
+    "size": 140,
+    "entries": 1
+  },
+  "members": [
+    {
+      "mode": "-rw-rw-r--",
+      "version": "3.0",
+      "os": "unx",
+      "size": 14,
+      "attributes": "t-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/README.txt"
+    }
+  ]
+}

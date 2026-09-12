@@ -281,6 +281,20 @@ project follows [Semantic Versioning](https://semver.org/).
   line a refused transfer ends with. The five columns of an answer
   section are also what a zone file holds, so `dig/answers` is reached by
   naming the parser and never by detection.
+- `ipconfig/all`, `ipconfig/windows` and `systeminfo/windows` read three
+  Windows formats, and `netstat/interface` reads `netstat -i`. No machine
+  in this project runs any of them: the fixtures are quoted from output
+  the vendor published, or rendered from the format strings net-tools
+  prints a row with, and each fixture says which and names the document.
+  `route/linux` answers to `netstat -e -r`, whose columns are its table
+  rather than the one `netstat/routing` reads.
+- `ip address` and `ip link` read what BusyBox prints, which carries
+  neither the state nor the group in its header, and `ls -l` of a
+  directory with nothing in it is an empty list rather than a text jz
+  could not identify.
+- `zipinfo` reads the archive's name and its size on disk (contract
+  version 2). Neither is in any row and neither is the sum of the rows,
+  and the definition used to say otherwise while dropping both.
 - `syslog/rfc5424` and `syslog/rfc3164` read the two syslog line formats.
   RFC 5424 names itself in its first characters; RFC 3164 without its
   priority prefix is a date, a word and some text, so it is reached only

@@ -1,0 +1,17 @@
+description: The head of a systeminfo report, the machine's name and the six operating system labels the article publishes before its snip.
+source: >-
+  the systeminfo.exe output published at
+  https://learn.microsoft.com/en-us/azure/azure-local/deploy/enable-sdn-integration
+  ("Prerequisites"), from a machine running Azure Local 2506, which the
+  report names Microsoft Azure Stack HCI, OS version 10.0.26100. The
+  article prints the first six labelled lines, then a line reading
+  SNIPPED, then the last two lines; this fixture is the part before that
+  line, quoted as published with the eight spaces the article indents its
+  code block by removed and the prompt line above the output dropped. The
+  host name (V-HOST1) was replaced with a made-up value of the same
+  shape. It is the whole of the citable capture: no published systeminfo
+  output with its layout intact was found for the rest of the report, so
+  the counted lists (Hotfix(s), Network Card(s)) are described in the
+  definition but not pinned by a fixture.
+os: windows
+args: []

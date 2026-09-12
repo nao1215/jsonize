@@ -1,0 +1,29 @@
+The Windows reports write a label and a value per line, and a document
+about them quotes those lines. The network report opens with a banner of
+its own:
+
+Windows IP Configuration
+
+and names the machine on the line under it, padding the label with dots
+out to the value column:
+
+   Host Name . . . . . . . . . . . . : EXAMPLE
+   Primary Dns Suffix  . . . . . . . : example.invalid
+
+The blocks that follow it open with a heading naming the adapter, such
+as
+
+Ethernet adapter Ethernet:
+
+The system report pads its values into a column instead and writes no
+dots at all:
+
+Host Name:                     EXAMPLE
+OS Name:                       Microsoft Windows
+OS Version:                    0.0.00000 N/A Build 00000
+
+A memory figure is written rounded there, as 16,384 MB, with a
+separator in the number and a unit after it.
+
+None of these lines is output on its own; they are quoted here so that a
+reader can recognise one when it arrives.

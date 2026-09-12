@@ -1,0 +1,10 @@
+description: Two adapters, one of them a virtual switch whose name carries brackets, and gateways printed with no value.
+source: >-
+  the ipconfig output published at
+  https://learn.microsoft.com/en-us/azure/aks-hybrid-edge/edge-essentials/aks-edge-howto-setup-nested-environment
+  (step 2 of "Configure the network"). The article says the machine is a
+  Windows host running Hyper-V and does not name the Windows release.
+  Quoted as published, with the three spaces the article indents its code
+  block by removed and the prompt line above the output dropped.
+os: windows
+args: []

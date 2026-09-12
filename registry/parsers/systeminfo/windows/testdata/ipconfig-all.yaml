@@ -1,0 +1,8 @@
+description: "`ipconfig /all` is the other Windows report of labelled lines, and its labels are padded with dots instead of into a column; it must not be read as systeminfo."
+source: >-
+  the ipconfig /all output published at
+  https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/virtual-network-multiple-ip-addresses-portal
+  (step 16 of the Windows section), prepared the way the valid fixture of
+  ipconfig/all was: code block de-indented, prompt line dropped, host name
+  and MAC address replaced with made-up values.
+expect_error: 'does not describe this input'

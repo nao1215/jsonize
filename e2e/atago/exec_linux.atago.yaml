@@ -337,6 +337,9 @@ scenarios:
       # Without -s the same command prints no counter tables. It has a
       # definition of its own, and what this pins is that the two are not
       # confused: the plain form carries no counters at all.
+      # Without -s the alias, the alternative names and, with -d, the
+      # settings of the kind of device are one list, since which of them
+      # appear and in what order is a property of the interface.
       - run:
           command: jz run ip link
       - assert:
@@ -346,7 +349,16 @@ scenarios:
             json:
               - { path: "$[0].interface.name", equals: lo }
               - { path: "$[0].link.type", equals: loopback }
-              - { path: "$[0].altnames", length: 0 }
+              - { path: "$[0].details", length: 0 }
+      - run:
+          command: jz run ip -d link
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$[0].interface.name", equals: lo }
+              - { path: "$[0].link.settings", matches: "promiscuity" }
       - run:
           command: jz run ip link
       - assert:
@@ -1581,3 +1593,191 @@ scenarios:
             json:
               - { path: "$", length: 1 }
               - { path: "$[0].filename", equals: "-l" }
+
+  # An option that changes the columns changes the format, and the
+  # arguments are what says which. Each of these was refused before the
+  # variant for it existed, so what this pins is that `jz run` lands on
+  # the one written for the option rather than on a neighbour.
+  - name: the option forms of df, free, ps and lsblk land on the variants written for them
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain df -m
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/gnu-blocks from embedded"
+          stdout:
+            json:
+              - { path: "$.header.block_size", equals: "1M" }
+              - { path: "$.filesystems[0].blocks", gte: 0 }
+      - run:
+          command: jz run --explain df -k
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/gnu from embedded"
+      - run:
+          command: jz run --explain free -h -w
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose free/gnu-wide-human from embedded"
+          stdout:
+            json:
+              - { path: "$[0].type", equals: "Mem" }
+      - run:
+          command: jz run --explain free -w
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose free/gnu-wide from embedded"
+          stdout:
+            json:
+              - { path: "$[0].total", gt: 0 }
+      - run:
+          command: jz run --explain ps -eF
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ps/full-format from embedded"
+          stdout:
+            json:
+              - { path: "$[0].pid", gt: 0 }
+      - run:
+          command: jz run --explain ps -ely
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ps/long-y from embedded"
+      - run:
+          command: jz run --explain lsblk -m
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose lsblk/permissions from embedded"
+
+  # -lG and -lg print the same text and differ in whether the one name
+  # column is the owner or the group. Nothing in the output says which,
+  # so the arguments are the whole of it: `jz run` reaches the right one,
+  # and a pipe that names only the command reports both rather than
+  # choosing.
+  - name: ls -lG and ls -lg land on different variants for the same text
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain ls -lG /etc/hostname
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ls/long-no-group from embedded"
+          stdout:
+            json:
+              - { path: "$[0].owner", equals: root }
+      - run:
+          command: jz run --explain ls -lg /etc/hostname
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ls/long-no-owner from embedded"
+          stdout:
+            json:
+              - { path: "$[0].group", equals: root }
+      - run:
+          shell: true
+          command: LC_ALL=C ls -lG /etc/hostname | jz --parser ls
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: "ls/long-no-group"
+
+  # -t opens each sample with the time it was taken, which is a different
+  # place for a sample to start, so it is a different format.
+  - name: iostat -t opens each sample with its time
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain iostat -t
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose iostat/linux-timestamped from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].timestamp.value", matches: "[0-9]" }
+              - { path: "$[0].cpu", length: 1 }
+      - run:
+          command: jz run --explain iostat
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose iostat/linux from embedded"
+
+  # ss keeps what -e, -o, -m and -i append after the address columns, and
+  # folds the indented lines -i and -m add back onto their row. A tail it
+  # refused used to be exit 3 on the most ordinary invocations.
+  - name: ss keeps what its options append, and ss -u drops two columns
+    only: {os: linux}
+    steps:
+      - run:
+          shell: true
+          command: LC_ALL=C ss -tln -e | jz --explain
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ss/single-protocol from embedded"
+          stdout:
+            json:
+              - { path: "$[0].info", matches: "ino:" }
+      - run:
+          shell: true
+          command: LC_ALL=C ss -u | jz --explain
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ss/connected from embedded"
+
+  # systemctl printed three tables no definition read, and its own
+  # properties are the same Key=value block a unit's selected properties
+  # are, so naming the parser is what reaches them.
+  - name: the systemctl tables and the manager's own properties are read
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain systemctl list-machines
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose systemctl/machines from embedded"
+          stdout:
+            json:
+              - { path: "$[0].state", matches: "[a-z]" }
+      - run:
+          command: jz run --explain systemctl list-paths
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose systemctl/paths from embedded"
+      - run:
+          command: jz run --explain systemctl list-automounts
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose systemctl/automounts from embedded"
+      - run:
+          command: jz run --explain systemctl show
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose systemctl/show-properties from embedded"
+          stdout:
+            json:
+              - { path: "$[0].name", equals: "Version" }
+      - run:
+          command: jz run --explain systemctl list-units --plain --no-pager
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose systemctl/units from embedded"

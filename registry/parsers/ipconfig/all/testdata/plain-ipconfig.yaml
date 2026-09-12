@@ -1,0 +1,8 @@
+description: "`ipconfig` without options prints the same banner and the same adapter blocks with none of the machine's own settings above them; it is the other variant's format and must not be read as this one."
+source: >-
+  the ipconfig output published at
+  https://learn.microsoft.com/en-us/azure/aks-hybrid-edge/edge-essentials/aks-edge-howto-setup-nested-environment
+  (step 2 of "Configure the network"), quoted as published with the three
+  spaces the article indents its code block by removed and the prompt
+  line dropped. The same text is the valid fixture of ipconfig/windows.
+expect_error: 'does not describe this input'

@@ -1,233 +1,240 @@
-[
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/"
+{
+  "archive": {
+    "name": "sample.zip",
+    "size": 2861,
+    "entries": 21
   },
-  {
-    "mode": "-rw-rw-r--",
-    "version": "3.0",
-    "os": "unx",
-    "size": 15,
-    "attributes": "t-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/back\\slash.txt"
-  },
-  {
-    "mode": "-rw-rw-r--",
-    "version": "3.0",
-    "os": "unx",
-    "size": 14,
-    "attributes": "t-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/link.txt"
-  },
-  {
-    "mode": "-rw-rw-r--",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/empty.bin"
-  },
-  {
-    "mode": "-rw-rw-r--",
-    "version": "3.0",
-    "os": "unx",
-    "size": 15,
-    "attributes": "t-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/two words.txt"
-  },
-  {
-    "mode": "-rw-rw-r--",
-    "version": "3.0",
-    "os": "unx",
-    "size": 12,
-    "attributes": "t-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/data.csv"
-  },
-  {
-    "mode": "-rw-rw-r--",
-    "version": "3.0",
-    "os": "unx",
-    "size": 14,
-    "attributes": "t-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/README.txt"
-  },
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/deep/"
-  },
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/deep/very/"
-  },
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/deep/very/long/"
-  },
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/deep/very/long/nested/"
-  },
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/deep/very/long/nested/directory/"
-  },
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/deep/very/long/nested/directory/path/"
-  },
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/deep/very/long/nested/directory/path/for/"
-  },
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/deep/very/long/nested/directory/path/for/boundary/"
-  },
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/deep/very/long/nested/directory/path/for/boundary/testing/"
-  },
-  {
-    "mode": "-rw-rw-r--",
-    "version": "3.0",
-    "os": "unx",
-    "size": 2,
-    "attributes": "t-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/deep/very/long/nested/directory/path/for/boundary/testing/leaf-file-with-a-rather-long-name.txt"
-  },
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/docs/"
-  },
-  {
-    "mode": "-rw-rw-r--",
-    "version": "3.0",
-    "os": "unx",
-    "size": 21,
-    "attributes": "t-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/docs/日本語.txt"
-  },
-  {
-    "mode": "drwxrwxr-x",
-    "version": "3.0",
-    "os": "unx",
-    "size": 0,
-    "attributes": "b-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/docs/manual/"
-  },
-  {
-    "mode": "-rw-rw-r--",
-    "version": "3.0",
-    "os": "unx",
-    "size": 12,
-    "attributes": "t-",
-    "method": "stor",
-    "date": "26-Jan-15",
-    "time": "09:30",
-    "name": "src/docs/manual/chapter.txt"
-  }
-]
+  "members": [
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/"
+    },
+    {
+      "mode": "-rw-rw-r--",
+      "version": "3.0",
+      "os": "unx",
+      "size": 15,
+      "attributes": "t-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/back\\slash.txt"
+    },
+    {
+      "mode": "-rw-rw-r--",
+      "version": "3.0",
+      "os": "unx",
+      "size": 14,
+      "attributes": "t-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/link.txt"
+    },
+    {
+      "mode": "-rw-rw-r--",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/empty.bin"
+    },
+    {
+      "mode": "-rw-rw-r--",
+      "version": "3.0",
+      "os": "unx",
+      "size": 15,
+      "attributes": "t-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/two words.txt"
+    },
+    {
+      "mode": "-rw-rw-r--",
+      "version": "3.0",
+      "os": "unx",
+      "size": 12,
+      "attributes": "t-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/data.csv"
+    },
+    {
+      "mode": "-rw-rw-r--",
+      "version": "3.0",
+      "os": "unx",
+      "size": 14,
+      "attributes": "t-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/README.txt"
+    },
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/deep/"
+    },
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/deep/very/"
+    },
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/deep/very/long/"
+    },
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/deep/very/long/nested/"
+    },
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/deep/very/long/nested/directory/"
+    },
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/deep/very/long/nested/directory/path/"
+    },
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/deep/very/long/nested/directory/path/for/"
+    },
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/deep/very/long/nested/directory/path/for/boundary/"
+    },
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/deep/very/long/nested/directory/path/for/boundary/testing/"
+    },
+    {
+      "mode": "-rw-rw-r--",
+      "version": "3.0",
+      "os": "unx",
+      "size": 2,
+      "attributes": "t-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/deep/very/long/nested/directory/path/for/boundary/testing/leaf-file-with-a-rather-long-name.txt"
+    },
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/docs/"
+    },
+    {
+      "mode": "-rw-rw-r--",
+      "version": "3.0",
+      "os": "unx",
+      "size": 21,
+      "attributes": "t-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/docs/日本語.txt"
+    },
+    {
+      "mode": "drwxrwxr-x",
+      "version": "3.0",
+      "os": "unx",
+      "size": 0,
+      "attributes": "b-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/docs/manual/"
+    },
+    {
+      "mode": "-rw-rw-r--",
+      "version": "3.0",
+      "os": "unx",
+      "size": 12,
+      "attributes": "t-",
+      "method": "stor",
+      "date": "26-Jan-15",
+      "time": "09:30",
+      "name": "src/docs/manual/chapter.txt"
+    }
+  ]
+}

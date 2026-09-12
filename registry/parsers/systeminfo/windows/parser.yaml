@@ -1,0 +1,75 @@
+# systeminfo prints one label and one value per line, the labels ending
+# in a colon at the left margin and the values padded into a column of
+# their own. The labels are not a fixed set: which of them appear
+# depends on the edition, on the domain the machine is in and on what
+# the firmware reports. The pairs are therefore a list of name/value
+# objects, and the label is whatever stands before the first colon of
+# the line, which is what a kv parser reads: a label that carries a
+# colon of its own keeps the rest of the line as its value, rather than
+# the definition deciding which colon of a line it has not seen is the
+# separator.
+#
+# A value with more than one entry announces a count on the label's own
+# line and then writes the entries on lines of their own, aligned with
+# the value column and carrying no label: the Hotfix(s) and Network
+# Card(s) lines are printed that way, and the published capture under
+# metadata.references shows the same shape under the security features.
+# input.fold joins those lines onto the label that announced them, so
+# the count and its entries stay one value. They are not carved into a
+# list: the numbering ([01], [02]) is the only thing separating the
+# entries, a network card writes its own properties under its entry in
+# the same column, and a definition that split on the numbers would be
+# stating a structure the text does not delimit. Every line the command
+# indents is such a continuation, since a label always starts at the
+# left margin.
+#
+# Every value stays a string. A memory figure is printed rounded, with a
+# thousands separator and a unit ("16,384 MB"), and the text does not
+# say which base it was rounded in, so any number written for it would
+# be one systeminfo never printed; this is the rule the rest of this
+# registry follows for a size printed with a unit. A timestamp is
+# written in the date format the machine is set to, which the text does
+# not name, so it stays as printed too. A kv parser looks a
+# field up by the key the command wrote, and keys such as "Hotfix(s)"
+# and "Network Card(s)" are not legal field names, so there is nowhere
+# to write a conversion even for the values that would take one.
+format: 1
+command: systeminfo
+variant: windows
+description: systeminfo, the labelled list of machine and operating system properties
+metadata:
+  tags: [windows, system]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/systeminfo
+    - https://learn.microsoft.com/en-us/azure/azure-local/deploy/enable-sdn-integration
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    # /fo names the format to print in, and the table and the csv it can
+    # ask for are not this one. What this definition reads is the form
+    # printed when no format is named; a csv asked for with /fo csv is
+    # read by the csv definition.
+    none: ["/fo"]
+  signature:
+    all:
+      # The report opens with the name of the machine it describes and
+      # names the operating system in the lines after it. Each of the
+      # three is written with its value padded out to the value column,
+      # which is what a sentence that happens to start with one of these
+      # words does not do. A capture that starts in the middle of the
+      # report is refused, since the first line is part of what this
+      # says.
+      - '\AHost Name:[ \t]{2,}\S'
+      - '^OS Name:[ \t]{2,}\S'
+      - '^OS Version:[ \t]{2,}\S'
+input:
+  # A label starts at the left margin, so an indented line is the
+  # continuation of the line above it.
+  fold: '^[ \t]+\S'
+parse:
+  type: kv
+  separator: ":"
+  as: list

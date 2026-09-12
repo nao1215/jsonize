@@ -5,50 +5,78 @@
   "description": "zipinfo short archive listing",
   "x-jsonize": {
     "definition": "zipinfo/default",
-    "version": 1
+    "version": 2
   },
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "mode": {
-        "type": "string"
+  "type": "object",
+  "properties": {
+    "archive": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer"
+        },
+        "entries": {
+          "type": "integer"
+        }
       },
-      "version": {
-        "type": "string"
-      },
-      "os": {
-        "type": "string"
-      },
-      "size": {
-        "type": "integer"
-      },
-      "attributes": {
-        "type": "string"
-      },
-      "method": {
-        "type": "string"
-      },
-      "date": {
-        "type": "string"
-      },
-      "time": {
-        "type": "string"
-      },
-      "name": {
-        "type": "string"
-      }
+      "required": [
+        "name",
+        "size",
+        "entries"
+      ]
     },
-    "required": [
-      "mode",
-      "version",
-      "os",
-      "size",
-      "attributes",
-      "method",
-      "date",
-      "time",
-      "name"
-    ]
-  }
+    "members": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "os": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "attributes": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "mode",
+          "version",
+          "os",
+          "size",
+          "attributes",
+          "method",
+          "date",
+          "time",
+          "name"
+        ]
+      }
+    }
+  },
+  "required": [
+    "archive",
+    "members"
+  ]
 }

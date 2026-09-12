@@ -1,0 +1,7 @@
+description: The two lines the article prints after its snip. They start in the middle of the report, so the first of them is a continuation with no label above it, and text that does not begin with the machine's name is not this format.
+source: >-
+  the last two lines of the systeminfo.exe output published at
+  https://learn.microsoft.com/en-us/azure/azure-local/deploy/enable-sdn-integration
+  ("Prerequisites"), quoted as published with the eight spaces the
+  article indents its code block by removed.
+expect_error: 'does not describe this input'

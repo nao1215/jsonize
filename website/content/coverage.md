@@ -27,7 +27,11 @@ exit 4.
 Everything below was run on Ubuntu 26.04 (Linux 7.0) with `LC_ALL=C`:
 GNU coreutils 9.7 and uutils coreutils 0.8.0, procps-ng 4.0.4,
 util-linux 2.41.3, iproute2 6.19.0, systemd 259, sysstat 12.7,
-BIND dig 9.20.24, iputils, BusyBox 1.37.0.
+BIND dig 9.20.24, iputils, BusyBox 1.37.0. net-tools was not installed,
+so the `netstat` rows below were checked with BusyBox netstat, whose
+socket and routing tables the existing definitions read, and the
+interface table was written from the format strings net-tools prints it
+with rather than captured.
 
 ## Storage and memory
 
@@ -131,7 +135,12 @@ than choosing.
 | `ss -u`, `ss -w` | read | `ss/connected` |
 | `ss -s` | read | `ss/summary` |
 | `ss -H` | refused | `-H` removes the header, which is the line that says what the format is |
-| `netstat` | read | the `netstat` variants, per socket family |
+| `netstat`, `-a`, `-t`, `-u`, `-x`, `-w`, `-l`, `-n`, `-e` | read | `netstat/all-sockets`, `netstat/internet`, `netstat/unix` |
+| `netstat -r`, `netstat -rn` | read | `netstat/routing` |
+| `netstat -e -r` | read | `route/linux`, which is the table those columns are |
+| `netstat -i` | read | `netstat/interface` |
+| `netstat -s` | refused | which counters appear, in which order and at which indent comes from the kernel and the net-tools build; there is no capture here to write it against |
+| `netstat` on Windows | refused | no definition; no vendor-published text sample was found to write one against, only screenshots |
 | `dig NAME` | read | `dig/bind` |
 | `dig NAME A NAME MX` | read | `dig/bind`, one entry in `replies` per query |
 | `dig +nocmd` | read | `dig/bind`, with an empty `query` |
@@ -184,10 +193,33 @@ than choosing.
 ## Windows
 
 jz builds and runs on Windows, and that is a different thing from reading
-what Windows commands print. The definitions for Windows formats are
-written from published sample output and verified against it; no machine
-here runs them, so their row says unverified and the fixture beside each
-one names the document it came from.
+what Windows commands print. No machine in this project runs a Windows
+command, so the definitions below were written against output published
+by the vendor, each fixture naming the page it was quoted from and what
+was replaced in it. They are unverified against a running command, and
+that is what the rows say.
+
+| invocation | | definition |
+|---|---|---|
+| `ipconfig /all` | unverified | `ipconfig/all` |
+| `ipconfig` | unverified | `ipconfig/windows` |
+| `systeminfo` | unverified | `systeminfo/windows` |
+| `ipconfig /displaydns` | refused | a different format; pinned as a refusal rather than read |
+| `systeminfo /fo csv`, `/fo list` | refused | `jz --parser csv` reads the first; the second is a labelled list with no definition |
+| `netstat` on Windows | refused | no vendor-published text sample was found to write one against, only screenshots |
+| `net user`, `net localgroup`, `dir`, `route print`, `ver`, `tasklist`, `wmic` | refused | no definition |
+
+What could not be pinned, and is therefore described in the definition
+rather than held to a fixture: the counted lists of `systeminfo`
+(`Hotfix(s)`, `Network Card(s)`) and its memory figures, because the one
+citable capture is snipped before them; and the continuation line
+`ipconfig /all` writes for a second DNS server, because the article that
+shows it renders the block as prose and its columns do not survive on
+the page.
+
+A rounded figure with a separator and a unit (`16,384 MB`) stays a
+string here for the reason it does everywhere else: the text does not say
+which base it was rounded in.
 
 ## What is not read on purpose
 
@@ -222,11 +254,21 @@ between the two documents on purpose: the two name and nest their keys
 differently, and normalising that away would also hide a value one of them
 dropped.
 
-Over the 374 fixtures with a jc parser to compare against, jz read all of
-them and jc refused 27. The refusals are a file system name containing a
-space (`df`), every `ip address` fixture, the headerless and raw forms of
-`lsblk`, most `ss` forms, `pidstat`, `swapon`, an empty zip listing, and
-`who` with an ISO time.
+`--refused` turns the harness around and runs it over the fixtures a
+definition is written to refuse: text of a neighbouring format, a row cut
+short, a line the definition never looked at. There are 47 of those with
+a jc parser to compare against. jz refuses 46 of them, jc reads 34. The
+one jz reads is `wc -lwcL` output given to `jz --parser wc --variant
+posix`, where the fourth count and a file name beginning with a number
+are the same text and the arguments are the only thing that separates
+them; `jz run wc -lwcL` refuses it on the argument.
+
+Over the 380 fixtures a definition is written to read, jz read all of
+them and jc refused 30. The refusals are a file system name containing a
+space (`df`), every `ip address` fixture, an `ls -l` of a directory with
+nothing in it, the headerless and raw forms of `lsblk`, most `ss` forms,
+`pidstat`, `swapon`, an empty zip listing, `who` with an ISO time, and
+the `systeminfo` excerpt.
 
 Where both read a text, the differences worth knowing are these.
 
@@ -254,10 +296,13 @@ shell and string values (`jwt`, `url`, `semver`, `path`, `timestamp`,
 everywhere (`xml`, `yaml`, `toml`, `plist`, `x509_*`), and a set of
 commands with no definition here yet (`traceroute`, `iptables`,
 `iwconfig`, `dmidecode`, `mdadm`, `ntpq`, `find`, `finger`, `rpm -qi`,
-`tune2fs`, `ufw`, `zpool`). The string and file formats are a different
-job from reading what a command printed: a JWT or a URL is not a
-command's output, and `jq`, a YAML reader or an XML reader is the tool
-for a file that already has a grammar.
+`tune2fs`, `ufw`, `zpool`, `net user`, `net localgroup`, `dir`). The
+string and file formats are a different job from reading what a command
+printed: a JWT or a URL is not a command's output, and `jq`, a YAML
+reader or an XML reader is the tool for a file that already has a
+grammar. Adding them would make the count of formats larger without
+making the thing jz is for any better, which is why they are listed here
+rather than written.
 
 jz reads around ninety commands jc has no parser for, among them the
 `systemd-*` tools, most of util-linux (`lsfd`, `lsns`, `lsmem`,

@@ -13,7 +13,7 @@ variant: address
 description: ip address, one block per interface
 metadata:
   tags: [linux, network, iproute2]
-  compatible: [iproute2]
+  compatible: [iproute2, BusyBox]
   references:
     - https://man7.org/linux/man-pages/man8/ip-address.8.html
 detect:
@@ -24,7 +24,7 @@ detect:
       # narrowed to one family and no interface (`ip -6 address`) is
       # answered from the address table alone, so the header it prints
       # carries neither the queueing discipline nor the group.
-      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ (?:qdisc \S+ )?(?:master \S+ )?state \S+'
+      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ (?:qdisc \S+ ?)?(?:master \S+ ?)?(?:state \S+ ?)?'
       - '^[ \t]+inet6?[ \t]+\S+'
 parse:
   type: records
@@ -38,12 +38,13 @@ parse:
         # A dump narrowed to one family and no interface knows nothing
         # about the link, so it prints neither the queueing discipline
         # nor the group and puts the queue length straight after the
-        # state.
-        pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>\S+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+)(?: qdisc (?P<qdisc>\S+))?(?: master (?P<master>\S+))? state (?P<state>\S+)(?: group (?P<group>\S+))?(?: qlen (?P<qlen>\d+))?\s*$'
+        # state. BusyBox prints neither the state nor the group.
+        pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>\S+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+)(?: qdisc (?P<qdisc>\S+))?(?: master (?P<master>\S+))?(?: state (?P<state>\S+))?(?: group (?P<group>\S+))?(?: qlen (?P<qlen>\d+))?\s*$'
       fields:
         index: {type: int}
         mtu: {type: int}
         qdisc: {when_missing: omit}
+        state: {when_missing: omit}
         group: {when_missing: omit}
         qlen: {type: int, when_missing: omit}
         master: {when_missing: omit}

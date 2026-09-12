@@ -5,7 +5,7 @@
   "description": "ip address, one block per interface",
   "x-jsonize": {
     "definition": "ip/address",
-    "version": 2
+    "version": 3
   },
   "type": "array",
   "items": {
@@ -52,8 +52,7 @@
           "index",
           "name",
           "flags",
-          "mtu",
-          "state"
+          "mtu"
         ]
       },
       "details": {

@@ -1,9 +1,15 @@
 source: >-
-  captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C, from
+  captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C from
   zonetransfer.me, a zone its owner publishes for anyone to transfer
+  (http://digi.ninja/projects/zonetransferme.php). The record list was
+  cut down to the first two records of each type, and the two records
+  holding a person's contact details were left out; the banner and the
+  statistics are as captured, so the XFR count is the count of the whole
+  zone rather than of the records kept here.
 description: >-
-  A transfer that the server allowed. The zone is one table between the
-  banner and the statistics, opening and closing with its SOA record the
-  way a transfer does.
+  A transfer the server allowed. The zone is one table between the banner
+  and the statistics, opening and closing with its SOA record the way a
+  transfer does, and its records carry base64 keys, quoted strings with
+  spaces in them and values that are several words.
 os: linux
 args: ["axfr", "zonetransfer.me", "@nsztm1.digi.ninja"]
