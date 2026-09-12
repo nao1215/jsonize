@@ -2,6 +2,19 @@ version: "1"
 
 suite:
   name: streaming
+  # e2ehelper feed is the producer that does not end: it hands jz its
+  # input a piece at a time and waits, up to a deadline, for the records
+  # each piece should produce before it sends the next. It is built once
+  # here from the Go source next to this file, with standin, the copy of
+  # it that jz run lands on by name and that relays its input.
+  setup:
+    - fixture:
+        file: bin/.keep
+        content: ""
+    - run:
+        command: go build -C ${specdir}/e2ehelper -o ${suitedir}/bin/ .
+    - run:
+        command: ${suitedir}/bin/e2ehelper as standin ${suitedir}/bin
 
 # --stream writes one JSON document per line as each record becomes
 # readable, instead of one array once the input has ended. It is the only
@@ -395,3 +408,177 @@ scenarios:
               - { path: "$.statistics.packet_loss_percent", equals: 100 }
               - { path: "$.replies[0].icmp_seq", equals: 0 }
               - { path: "$.destination.address", equals: "192.0.2.1" }
+
+  # A NUL-separated stream is read record by record: a variant that reads
+  # one, named, writes each record when its NUL arrives, with the input
+  # still open and no newline anywhere in it. The feed closes jz's input
+  # only at the end, so a record held back until then fails its expect
+  # at the deadline. Through jz run the same, with the stand-in relaying
+  # what it is fed.
+  - name: a NUL-separated record is written when its NUL arrives, with the input still open
+    steps:
+      - fixture:
+          file: zero.feed
+          content: |
+            send hello\x00
+            expect 1
+            send with
+            send  a\nline break\x00
+            expect 1
+            close
+            wait
+      - run:
+          command: ${suitedir}/bin/e2ehelper feed -deadline 10s -script zero.feed -- jz --stream --parser ls --variant names-zero
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              > expect 1
+              {"name":"hello"}
+              > expect 1
+              {"name":"with a\nline break"}
+              status=0
+      - run:
+          command: ${suitedir}/bin/e2ehelper feed -deadline 10s -script zero.feed -- jz run --stream --parser ls --variant names-zero -- ${suitedir}/bin/standin --zero
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              > expect 1
+              {"name":"hello"}
+              > expect 1
+              {"name":"with a\nline break"}
+              status=0
+
+  # A quoted csv value may hold line breaks and blank lines, and the
+  # record is whole only when the quote closes: its lines are held, the
+  # blank one among them, and the record comes out with all of them.
+  - name: a quoted csv value over several lines is one record, blank line included
+    steps:
+      - fixture:
+          file: csv.feed
+          content: |
+            send x\n
+            send "a\n
+            send \n
+            send b"\n
+            expect 1
+            send 1\n
+            expect 1
+            close
+            wait
+      - run:
+          command: ${suitedir}/bin/e2ehelper feed -deadline 10s -script csv.feed -- jz --stream --parser csv --variant comma
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              > expect 1
+              {"x":"a\n\nb"}
+              > expect 1
+              {"x":"1"}
+              status=0
+
+  # The blank lines before the text are not lines a signature sees, so
+  # the stream does not wait for a window of them: the text after a few
+  # hundred empty lines is identified from its first lines, the way it
+  # is in the whole document.
+  - name: text after hundreds of blank lines streams as it converts whole
+    steps:
+      - fixture:
+          file: df.txt
+          from: "${specdir}/testdata/df-after-blank-lines.txt"
+      - run:
+          command: jz --file ${workdir}/df.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json: { path: "$", length: 2 }
+      - run:
+          command: jz --stream --file ${workdir}/df.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              {"filesystem":"tmpfs","1k_blocks":1000000,"used":5000,"available":995000,"use_percent":1,"mounted_on":"/run"}
+              {"filesystem":"/dev/sda1","1k_blocks":20000000,"used":5000000,"available":15000000,"use_percent":25,"mounted_on":"/"}
+      - run:
+          command: jz --stream --parser df --file ${workdir}/df.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"filesystem":"tmpfs","1k_blocks":1000000,"used":5000,"available":995000,"use_percent":1,"mounted_on":"/run"}
+              {"filesystem":"/dev/sda1","1k_blocks":20000000,"used":5000000,"available":15000000,"use_percent":25,"mounted_on":"/"}
+
+  # The escape sequences come off first, then the carriage return, then
+  # the byte order mark, in the whole document as in the stream, so a
+  # mark behind a colour code is a mark either way and reaches no value.
+  - name: a byte order mark behind a colour code reads the same whole and streamed
+    steps:
+      - fixture:
+          file: marked.txt
+          content: "\x1b[31m\uFEFFFilesystem     1K-blocks    Used Available Use% Mounted on\x1b[0m\r\ntmpfs            1000000    5000    995000   1% /run\r\n"
+      - run:
+          command: jz --file ${workdir}/marked.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              [{"filesystem":"tmpfs","1k_blocks":1000000,"used":5000,"available":995000,"use_percent":1,"mounted_on":"/run"}]
+      - run:
+          command: jz --stream --file ${workdir}/marked.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              {"filesystem":"tmpfs","1k_blocks":1000000,"used":5000,"available":995000,"use_percent":1,"mounted_on":"/run"}
+      - run:
+          command: >-
+            jz --stream --define 'parse: {type: regex, pattern: "(?P<line>.*)"}' --file ${workdir}/marked.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            matches: '\A\{"line":"Filesystem '
+
+  # A blank line a definition keeps is still a line input.ignore may
+  # name: the stream holds it back until text follows, and then judges
+  # it the way the whole document does.
+  - name: a blank line the definition keeps still goes through input.ignore in a stream
+    steps:
+      - fixture:
+          file: gaps.txt
+          content: |
+            a
+
+            b
+
+
+            c
+      - run:
+          command: "jz --define '{input: {skip_blank: false, ignore: [\"^$\"]}, parse: {type: regex, pattern: \"(?P<x>.+)\"}}' --file ${workdir}/gaps.txt"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"x":"a"},{"x":"b"},{"x":"c"}]
+      - run:
+          command: "jz --stream --define '{input: {skip_blank: false, ignore: [\"^$\"]}, parse: {type: regex, pattern: \"(?P<x>.+)\"}}' --file ${workdir}/gaps.txt"
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              {"x":"a"}
+              {"x":"b"}
+              {"x":"c"}

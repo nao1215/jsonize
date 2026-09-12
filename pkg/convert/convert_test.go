@@ -19,6 +19,12 @@ func TestInt(t *testing.T) {
 		{" 42 ", 42, false},
 		{"+7", 7, false},
 		{"-13", -13, false},
+		// One sign, not two: a second one is not something a number
+		// prints, and reading past it would turn "+-1" into -1.
+		{"++1", 0, true},
+		{"+-1", 0, true},
+		{"-+1", 0, true},
+		{"--1", 0, true},
 		{"9223372036854775807", math.MaxInt64, false},
 		{"9223372036854775808", 0, true},
 		{"", 0, true},

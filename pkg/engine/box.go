@@ -181,7 +181,7 @@ func (r *run) parseBox(p *definition.Parse, fields map[string]*definition.Field,
 	for _, block := range blocks[1:] {
 		for _, row := range boxBodyRows(block) {
 			cells := boxJoin(row, "\n")
-			if slices.Equal(cells, header) {
+			if p.RepeatedHeader() && slices.Equal(cells, header) {
 				continue // the header of a second table drawn after the first
 			}
 			obj, err := r.boxObject(cols, cells, fields, row[0].num)

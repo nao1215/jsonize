@@ -979,9 +979,17 @@ func TestARepeatedHeaderStartsAnotherTable(t *testing.T) {
 		{"delimiter", "parse: {type: table, split: delimiter, delimiter: ':'}\n",
 			"a:b\n1:2\na:b\n3:4\n",
 			`[{"a":"1","b":"2"},{"a":"3","b":"4"}]`},
+		// A csv file is data, so a row that holds the header's values is a
+		// row unless the definition says the header is printed again.
 		{"csv", "parse: {type: csv}\n",
 			"name,count\nx,1\nname,count\ny,2\n",
+			`[{"name":"x","count":"1"},{"name":"name","count":"count"},{"name":"y","count":"2"}]`},
+		{"csv with a repeated header", "parse: {type: csv, header: {repeated: true}}\n",
+			"name,count\nx,1\nname,count\ny,2\n",
 			`[{"name":"x","count":"1"},{"name":"y","count":"2"}]`},
+		{"table that says its header is not repeated", "parse: {type: table, header: {repeated: false}}\n",
+			"A B\n1 2\nA B\n3 4\n",
+			`[{"a":"1","b":"2"},{"a":"A","b":"B"},{"a":"3","b":"4"}]`},
 		{"box", "parse: {type: table, split: box}\n",
 			"+----+\n| id |\n+----+\n| 1  |\n+----+\n+----+\n| id |\n+----+\n| 2  |\n+----+\n",
 			`[{"id":"1"},{"id":"2"}]`},
@@ -1093,6 +1101,9 @@ func FuzzParse(f *testing.F) {
 	f.Add(1, []byte("NAME SIZE\nsda 20G\n"))
 	f.Add(2, []byte("n=1\n"))
 	f.Add(3, []byte("12x"))
+	f.Add(0, []byte("\x1b[31m\xef\xbb\xbfFilesystem 1K-blocks Used Available Use% Mounted on\x1b[0m\r\n/dev/sda1 1 2 3 4% /\r\n"))
+	f.Add(0, []byte("\n\n\nFilesystem 1K-blocks Used Available Use% Mounted on\n/dev/sda1 1 2 3 4% /\n\n"))
+	f.Add(1, []byte("NAME  SIZE\nsda   20G\nNAME  SIZE\nsdb   1T\n"))
 	f.Fuzz(func(t *testing.T, which int, input []byte) {
 		if which < 0 {
 			which = -which
@@ -1117,6 +1128,7 @@ func FuzzParse(f *testing.F) {
 		if accounted != acct.Lines {
 			t.Fatalf("the account covers %d of %d lines: %+v", accounted, acct.Lines, acct)
 		}
+		sameAsStream(t, d, input, v)
 	})
 }
 
@@ -1497,5 +1509,69 @@ fields:
 	// exists to show.
 	if _, err := Parse(def, []byte("xyz\n"), Options{}); err == nil {
 		t.Error("typed accepted a value it cannot convert")
+	}
+}
+
+// An object field's sub-fields are read in the object's own match: an
+// unescape rule whose when names a group of the object's regex is
+// decided by that group, not by the groups of the line's pattern.
+func TestNestedObjectUnescapeWhen(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: t
+variant: v
+parse: {type: regex, pattern: '(?P<x>.*)'}
+fields:
+  x:
+    type: object
+    regex: '(?P<flag>!)?(?P<name>.*)'
+    fields:
+      name: {unescape: {when: flag, sequences: {'\n': "\n"}}}
+`)
+	got, err := Parse(def, []byte("!a\\nb\nc\\nd\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `[{"x":{"flag":"!","name":"a\nb"}},{"x":{"flag":null,"name":"c\\nd"}}]`
+	if s := mustJSON(t, got); s != want {
+		t.Errorf("got %s, want %s", s, want)
+	}
+}
+
+// The escape sequences come off first, then the carriage return, then
+// the byte order mark, in a whole document as in a stream, so a byte
+// order mark behind a colour code and a carriage return inside a
+// sequence read the same both ways.
+func TestRecordPreparationIsTheSameBothWays(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: regex, pattern: '(?P<x>.*)'}\n")
+	inputs := []string{
+		"\x1b[31m\xef\xbb\xbfabc\n",
+		"\xef\xbb\xbf\x1b[31mabc\x1b[0m\r\n",
+		"abc\x1b[31m\r\n\x1b[0mdef\r\n",
+		"\x1b[31mabc\x1b[K\r\n",
+		"a\r\nb\rc\n",
+	}
+	for _, in := range inputs {
+		whole, err := Parse(def, []byte(in), Options{})
+		if err != nil {
+			t.Errorf("%q: whole: %v", in, err)
+			continue
+		}
+		var streamed []any
+		if err := Stream(def, strings.NewReader(in), Options{}, func(v any) error {
+			streamed = append(streamed, v)
+			return nil
+		}, nil); err != nil {
+			t.Errorf("%q: stream: %v", in, err)
+			continue
+		}
+		if a, b := mustJSON(t, whole), mustJSON(t, streamed); a != b {
+			t.Errorf("%q: whole %s, stream %s", in, a, b)
+		}
+		if s := mustJSON(t, whole); strings.Contains(s, "\\ufeff") || strings.Contains(s, "\\u001b") {
+			t.Errorf("%q: %s keeps a mark or an escape", in, s)
+		}
 	}
 }

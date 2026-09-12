@@ -1,4 +1,4 @@
-package registry
+package conformance
 
 import (
 	"errors"
@@ -9,10 +9,14 @@ import (
 	"strings"
 
 	"github.com/nao1215/jsonize/pkg/definition"
+	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/registry"
 )
 
 // Case is one golden test case stored next to a definition: an input
-// fixture, the expected JSON and optional metadata.
+// fixture, the expected JSON and optional metadata. It is what the
+// checks here run; a program that only converts text has no use for it,
+// which is why it lives with the checks rather than with the registry.
 type Case struct {
 	Name     string
 	Input    []byte
@@ -49,11 +53,19 @@ func (m CaseMeta) AutoDetects() bool {
 	return m.AutoDetect == nil || *m.AutoDetect
 }
 
+// testdataPath returns the testdata directory of an entry inside its FS.
+func testdataPath(e *registry.Entry) string {
+	return path.Join(path.Dir(e.Path), registry.TestdataDir)
+}
+
 // Cases loads the golden cases of an entry. Expected is nil when no
 // <case>.json exists; the conformance runner decides whether that is an
-// error (it is, unless golden files are being generated).
-func Cases(fsys fs.FS, e *Entry) ([]Case, error) {
-	dir := e.TestdataPath()
+// error (it is, unless golden files are being generated). A fixture is
+// bounded the way an input is, and the files beside it the way a
+// definition is, so that a registry cannot make the check read without
+// bound.
+func Cases(fsys fs.FS, e *registry.Entry) ([]Case, error) {
+	dir := testdataPath(e)
 	entries, err := fs.ReadDir(fsys, dir)
 	if err != nil {
 		if errors.Is(err, fs.ErrNotExist) {
@@ -86,18 +98,18 @@ func Cases(fsys fs.FS, e *Entry) ([]Case, error) {
 		}
 		name := strings.TrimSuffix(de.Name(), ".txt")
 		c := Case{Name: name, Dir: dir}
-		c.Input, err = fs.ReadFile(fsys, path.Join(dir, de.Name()))
+		c.Input, err = registry.ReadBounded(fsys, path.Join(dir, de.Name()), engine.DefaultMaxInputSize)
 		if err != nil {
 			return nil, err
 		}
-		if meta, err := fs.ReadFile(fsys, path.Join(dir, name+".yaml")); err == nil {
+		if meta, err := registry.ReadBounded(fsys, path.Join(dir, name+".yaml"), definition.MaxDefinitionSize); err == nil {
 			if err := definition.DecodeYAML(meta, &c.Meta); err != nil {
 				return nil, fmt.Errorf("%s: invalid case metadata: %w", path.Join(dir, name+".yaml"), err)
 			}
 		} else if !errors.Is(err, fs.ErrNotExist) {
 			return nil, err
 		}
-		c.Expected, err = fs.ReadFile(fsys, path.Join(dir, name+".json"))
+		c.Expected, err = registry.ReadBounded(fsys, path.Join(dir, name+".json"), engine.DefaultMaxInputSize)
 		if err != nil && !errors.Is(err, fs.ErrNotExist) {
 			return nil, err
 		}

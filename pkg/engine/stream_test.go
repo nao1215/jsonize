@@ -433,3 +433,109 @@ func StreamCollect(t *testing.T, src, input string, onError func(*ParseError) er
 	}, onError)
 	return out.String(), err
 }
+
+// The length limit counts the bytes between two separators as they were
+// read, and the last record of the input is held to it whether or not a
+// separator follows it, in a stream as in a whole document.
+func TestLineLimitIsTheSameBothWays(t *testing.T) {
+	t.Parallel()
+	for _, sep := range []string{"newline", "nul"} {
+		def := load(t, "format: 1\ncommand: t\nvariant: v\ninput: {record_separator: "+sep+", skip_blank: false}\nparse: {type: regex, pattern: '(?s)(?P<x>.*)'}\n")
+		end := "\n"
+		if sep == "nul" {
+			end = "\x00"
+		}
+		for _, tc := range []struct {
+			text string
+			ok   bool
+		}{
+			{"abcd" + end, true},
+			{"abcd", true},
+			{"abcde" + end, false},
+			{"abcde", false},
+			{"ab" + end + "abcde", false},
+			{"ab" + end + "abcde" + end, false},
+			// The carriage return of a CRLF ending and an escape sequence
+			// are bytes of the record as it was read.
+			{"abc\r" + end, true},
+			{"abcd\r" + end, false},
+			{"a\x1b[0m" + end, false},
+		} {
+			_, werr := Parse(def, []byte(tc.text), Options{MaxLineLength: 4})
+			serr := Stream(def, strings.NewReader(tc.text), Options{MaxLineLength: 4}, func(any) error { return nil }, nil)
+			if (werr == nil) != tc.ok || (serr == nil) != tc.ok {
+				t.Errorf("%s %q: whole %v, stream %v, want ok=%v", sep, tc.text, werr, serr, tc.ok)
+			}
+			if werr != nil && !errors.Is(werr, ErrLineTooLong) || serr != nil && !errors.Is(serr, ErrLineTooLong) {
+				t.Errorf("%s %q: whole %v, stream %v: not the line limit", sep, tc.text, werr, serr)
+			}
+		}
+	}
+}
+
+// A blank line a definition keeps is still a line input.ignore may name,
+// in a stream as in a whole document.
+func TestStreamHeldBlankLinesPassThroughIgnore(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\ninput: {skip_blank: false, ignore: ['^$']}\nparse: {type: regex, pattern: '(?P<x>.+)'}\n")
+	const in = "a\n\nb\n\n\nc\n"
+	whole, err := Parse(def, []byte(in), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var streamed []any
+	if err := Stream(def, strings.NewReader(in), Options{}, func(v any) error {
+		streamed = append(streamed, v)
+		return nil
+	}, nil); err != nil {
+		t.Fatal(err)
+	}
+	if a, b := mustJSON(t, whole), mustJSON(t, streamed); a != b || a != `[{"x":"a"},{"x":"b"},{"x":"c"}]` {
+		t.Errorf("whole %s, stream %s", a, b)
+	}
+}
+
+// What a stream holds back while it waits for a record to end is bounded
+// the way a whole document is: a fold that never stops, a block that
+// never closes, a node with endless children, a quote that never closes,
+// a composite part whose region never ends. Each stops at the bound,
+// and the error is not one a record could be skipped over.
+func TestStreamBoundsWhatItHolds(t *testing.T) {
+	t.Parallel()
+	cases := []struct{ name, def, in string }{
+		{"fold", "input: {fold: '^ '}\nparse: {type: regex, pattern: '(?P<x>.*)'}\n", "abc\n" + strings.Repeat(" def\n", 100)},
+		{"records", "parse: {type: records, start: '^start', parts: [{name: p, parse: {type: kv}}]}\n", "start=1\n" + strings.Repeat("k=v\n", 100)},
+		{"tree", "parse: {type: tree, indent: ' ', node: {parse: {type: regex, pattern: '(?P<x>.*)'}}}\n", "root\n" + strings.Repeat(" leaf\n", 100)},
+		{"csv", "parse: {type: csv}\n", "x\n\"open\n" + strings.Repeat("more\n", 100)},
+		{"csv part", "parse: {type: composite, parts: [{name: p, parse: {type: csv}}]}\n", "x\n\"open\n" + strings.Repeat("more\n", 100)},
+		{"single part", "parse: {type: composite, parts: [{name: p, parse: {type: kv, as: map}}]}\n", strings.Repeat("k=v\n", 100)},
+		{"box", "parse: {type: table, split: box}\n", "+---+\n" + strings.Repeat("| a |\n", 100)},
+		{"blank lines kept", "input: {skip_blank: false}\nparse: {type: regex, pattern: '(?P<x>.*)'}\n", "a\n" + strings.Repeat("\n", 300)},
+	}
+	for _, tc := range cases {
+		def := load(t, "format: 1\ncommand: t\nvariant: v\n"+tc.def)
+		var got int
+		keepGoing := func(*ParseError) error { return nil }
+		err := Stream(def, strings.NewReader(tc.in), Options{MaxInputSize: 200}, func(any) error {
+			got++
+			return nil
+		}, keepGoing)
+		if err == nil || !errors.Is(err, ErrInputTooLarge) || !strings.Contains(err.Error(), "exceeds 200 bytes") {
+			t.Errorf("%s: %v", tc.name, err)
+		}
+		// The same text is read whole within a larger bound.
+		if err := Stream(def, strings.NewReader(tc.in), Options{MaxInputSize: 100000}, func(any) error { return nil }, keepGoing); err != nil {
+			t.Errorf("%s within the bound: %v", tc.name, err)
+		}
+	}
+	// What is released is given back: many small records in a row do not
+	// add up to the bound.
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: records, start: '^start', parts: [{name: p, parse: {type: kv}}]}\n")
+	n := 0
+	if err := Stream(def, strings.NewReader(strings.Repeat("start=1\nk=v\n", 100)), Options{MaxInputSize: 40}, func(any) error {
+		n++
+		return nil
+	}, nil); err != nil || n != 100 {
+		t.Errorf("released records: %d, %v", n, err)
+	}
+}

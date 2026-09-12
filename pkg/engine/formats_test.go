@@ -2,8 +2,10 @@ package engine
 
 import (
 	"bytes"
+	"io"
 	"strings"
 	"testing"
+	"testing/iotest"
 
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
@@ -359,17 +361,28 @@ func FuzzFormats(f *testing.F) {
 		if accounted != acct.Lines {
 			t.Fatalf("the account covers %d of %d lines: %+v", accounted, acct.Lines, acct)
 		}
-		if !d.Parse.YieldsArray() {
-			return
+		sameAsStream(t, d, input, v)
+	})
+}
+
+// sameAsStream checks that a text read whole is read the same way one
+// record at a time, for a definition that has a streaming form. The
+// stream is given the same limits, and is also fed the text one byte at
+// a time, since the two readings must not depend on how the bytes come.
+func sameAsStream(t *testing.T, d *definition.Definition, input []byte, whole any) {
+	t.Helper()
+	if !d.Parse.YieldsArray() {
+		return
+	}
+	var batch bytes.Buffer
+	for _, rec := range whole.([]any) {
+		if err := jsonutil.Encode(&batch, rec, false); err != nil {
+			t.Fatal(err)
 		}
-		var batch bytes.Buffer
-		for _, rec := range v.([]any) {
-			if err := jsonutil.Encode(&batch, rec, false); err != nil {
-				t.Fatal(err)
-			}
-		}
+	}
+	for _, r := range []io.Reader{bytes.NewReader(input), iotest.OneByteReader(bytes.NewReader(input))} {
 		var streamed bytes.Buffer
-		err = Stream(d, bytes.NewReader(input), Options{}, func(rec any) error {
+		err := Stream(d, r, Options{MaxInputSize: 1 << 20}, func(rec any) error {
 			return jsonutil.Encode(&streamed, rec, false)
 		}, nil)
 		if err != nil {
@@ -378,5 +391,158 @@ func FuzzFormats(f *testing.F) {
 		if streamed.String() != batch.String() {
 			t.Fatalf("the two readings differ:\nwhole  %q\nstream %q", batch.String(), streamed.String())
 		}
-	})
+	}
+}
+
+// Numbering a repeated heading must not land on a heading the file
+// already has: "x, x, x_2" used to put the second x under x_2, over the
+// value of the third column.
+func TestCSVColumnNamesAreUnique(t *testing.T) {
+	t.Parallel()
+	cases := []struct{ header, want string }{
+		{"x,x,x_2", "x,x_3,x_2"},
+		{"x_2,x,x", "x_2,x,x_3"},
+		{"a,a,a,a_2,a_3", "a,a_4,a_5,a_2,a_3"},
+		{",,", "column,column_2,column_3"},
+		{"a b,a-b,a_b", "a_b,a_b_2,a_b_3"},
+	}
+	for _, tc := range cases {
+		def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: csv}\n")
+		got, err := Parse(def, []byte(tc.header+"\n1,2,3,4,5\n"[:2*len(strings.Split(tc.header, ","))]+"\n"), Options{})
+		if err != nil {
+			t.Fatalf("%q: %v", tc.header, err)
+		}
+		obj := got.([]any)[0].(*jsonutil.Object)
+		var names []string
+		for _, m := range obj.Members() {
+			names = append(names, m.Key)
+		}
+		if strings.Join(names, ",") != tc.want {
+			t.Errorf("%q: columns %v, want %s", tc.header, names, tc.want)
+		}
+		if len(obj.Members()) != len(strings.Split(tc.header, ",")) {
+			t.Errorf("%q: %d values for %d columns", tc.header, len(obj.Members()), len(strings.Split(tc.header, ",")))
+		}
+	}
+	// A rename that lands on another heading is numbered the same way.
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: csv, header: {rename: {b: a}}}\n")
+	got, err := Parse(def, []byte("a,b\n1,2\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s := mustJSON(t, got); s != `[{"a":"1","a_2":"2"}]` {
+		t.Error(s)
+	}
+}
+
+// A quoted value keeps every line it holds, a blank one included, and
+// the lines a quoted value holds are not lines input.ignore or
+// input.select look at: the record is made before they do. The stream
+// reads it the same way.
+func TestCSVQuotedValueKeepsBlankLines(t *testing.T) {
+	t.Parallel()
+	cases := []struct{ name, def, in, want string }{
+		{"blank line inside a value", "parse: {type: csv}\n", "x\n\"a\n\nb\"\n", `[{"x":"a\n\nb"}]`},
+		{"blank lines kept and a value over several", "input: {skip_blank: false}\nparse: {type: csv}\n", "x\n\"a\n\n\nb\"\n1\n", `[{"x":"a\n\n\nb"},{"x":"1"}]`},
+		{"ignore does not see inside a value", "input: {ignore: ['^#']}\nparse: {type: csv}\n", "# comment\nx\n\"#not\na comment\"\n# also\n", `[{"x":"#not\na comment"}]`},
+		{"fold runs on records", "input: {fold: '^ '}\nparse: {type: csv}\n", "x\n\"a\nb\"\n1\n 2\n", `[{"x":"a\nb"},{"x":"1 2"}]`},
+		{"a value over lines with a delimiter and a quote inside", "parse: {type: csv}\n", "a,b\n\"1,\"\"\n\",2\n", `[{"a":"1,\"\n","b":"2"}]`},
+	}
+	for _, tc := range cases {
+		def := load(t, "format: 1\ncommand: t\nvariant: v\n"+tc.def)
+		got, err := Parse(def, []byte(tc.in), Options{})
+		if err != nil {
+			t.Errorf("%s: %v", tc.name, err)
+			continue
+		}
+		if s := mustJSON(t, got); s != tc.want {
+			t.Errorf("%s: got %s, want %s", tc.name, s, tc.want)
+		}
+		var streamed []any
+		if err := Stream(def, strings.NewReader(tc.in), Options{}, func(v any) error {
+			streamed = append(streamed, v)
+			return nil
+		}, nil); err != nil {
+			t.Errorf("%s: stream: %v", tc.name, err)
+			continue
+		}
+		if s := mustJSON(t, streamed); s != tc.want {
+			t.Errorf("%s: stream got %s, want %s", tc.name, s, tc.want)
+		}
+	}
+	// select counts records: a record select.limit leaves out is one
+	// unread record, however many lines its value holds.
+	def := load(t, "format: 1\ncommand: t\nvariant: v\ninput: {select: {limit: 1}}\nparse: {type: csv}\n")
+	_, err := Parse(def, []byte("x\n\"a\nb\"\n"), Options{})
+	if err == nil || !strings.Contains(err.Error(), "line 2:") || strings.Contains(err.Error(), "line 3") {
+		t.Errorf("a record select left out: %v", err)
+	}
+}
+
+// The line a csv error names is the line of the input the record is on,
+// whatever came before it: a header, a value over several lines, a line
+// input.ignore dropped.
+func TestCSVErrorsNameTheirLine(t *testing.T) {
+	t.Parallel()
+	cases := []struct{ name, def, in, want string }{
+		{"a row after the header", "parse: {type: csv}\nfields: {x: {type: int}}\n", "x\nabc\n", "line 2:"},
+		{"a row after a value over two lines", "parse: {type: csv}\nfields: {x: {type: int}}\n", "x,y\n1,\"a\nb\"\n4,5\nabc,6\n", "line 5:"},
+		{"a row after an ignored line", "input: {ignore: ['^#']}\nparse: {type: csv}\nfields: {x: {type: int}}\n", "x\n# note\n# note\nabc\n", "line 4:"},
+		{"a bare quote in a value over two lines", "parse: {type: csv}\n", "x,y\n\"a\nb\",c\"d\n", "line 3:"},
+		{"too many fields", "parse: {type: csv}\n", "x\n1\n2,3\n", "line 3:"},
+		// A quote that never closes is found where the input ends.
+		{"a quote that never closes", "parse: {type: csv}\n", "x\n1\n\"open\n2\n", "line 4: column 2: extraneous or missing \" in quoted-field"},
+	}
+	for _, tc := range cases {
+		def := load(t, "format: 1\ncommand: t\nvariant: v\n"+tc.def)
+		_, err := Parse(def, []byte(tc.in), Options{})
+		if err == nil || !strings.Contains(err.Error(), tc.want) {
+			t.Errorf("%s: whole: %v, want %s", tc.name, err, tc.want)
+		}
+		err = Stream(def, strings.NewReader(tc.in), Options{}, func(any) error { return nil }, nil)
+		if err == nil || !strings.Contains(err.Error(), tc.want) {
+			t.Errorf("%s: stream: %v, want %s", tc.name, err, tc.want)
+		}
+	}
+}
+
+// csvQuote follows the quoting rules one line at a time and says the
+// same thing about every prefix that reading the text at once would.
+func TestCSVQuoteFollowsLines(t *testing.T) {
+	t.Parallel()
+	text := "a,\"b\nc\"\"d\",e\n\"f\n\ng\",h\ni\"j,k\n\"\"\"\nl\"\n"
+	lines := strings.Split(strings.TrimSuffix(text, "\n"), "\n")
+	q := newCSVQuote(',')
+	for i, l := range lines {
+		got := q.feed(l)
+		// The reference reading: the whole text so far, one scan.
+		want := csvOpenAtOnce(strings.Join(lines[:i+1], "\n"), ',')
+		if got != want {
+			t.Errorf("after line %d %q: open=%v, at once %v", i+1, l, got, want)
+		}
+	}
+}
+
+// csvOpenAtOnce is the one-pass reading csvQuote replaced, kept as the
+// reference for the test above.
+func csvOpenAtOnce(text string, delim rune) bool {
+	quoted, start := false, true
+	runes := []rune(text)
+	for i := 0; i < len(runes); i++ {
+		r := runes[i]
+		switch {
+		case quoted && r == '"' && i+1 < len(runes) && runes[i+1] == '"':
+			i++
+		case quoted && r == '"':
+			quoted = false
+		case quoted:
+		case start && r == '"':
+			quoted, start = true, false
+		case r == delim || r == '\n':
+			start = true
+		default:
+			start = false
+		}
+	}
+	return quoted
 }

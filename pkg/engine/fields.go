@@ -211,6 +211,10 @@ func (r *run) convertObject(name, s string, f *definition.Field, ln int) (any, e
 			Msg: fmt.Sprintf("the pattern %s does not reach %q in %q", shortPattern(f.Regex), text, truncate(s, 80)), Cause: ErrUnread}
 	}
 	obj := jsonutil.NewObject()
+	// The object's own match is the context its sub-fields are read in:
+	// an unescape rule's when names a group of this pattern, and it is
+	// decided by whether that group took part here.
+	present := presentGroups(re, m)
 	for i, gname := range re.SubexpNames() {
 		if gname == "" {
 			continue
@@ -219,7 +223,7 @@ func (r *run) convertObject(name, s string, f *definition.Field, ln int) (any, e
 		if m[2*i] >= 0 {
 			raw = s[m[2*i]:m[2*i+1]]
 		}
-		if err := r.setField(obj, gname, raw, f.Fields[gname], ln); err != nil {
+		if err := r.setMatched(obj, gname, raw, f.Fields[gname], ln, present); err != nil {
 			return nil, err
 		}
 	}

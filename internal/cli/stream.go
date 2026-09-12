@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/nao1215/jsonize/internal/runner"
+	"github.com/nao1215/jsonize/pkg/convert"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/registry"
@@ -34,7 +35,8 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		return ExitUsage
 	}
 	br := bufio.NewReaderSize(r, 64*1024)
-	head, err := readHead(br, selector.Window(reg, ctx.Parser))
+	n, sep := selector.Window(reg, ctx)
+	head, err := readHead(br, n, sep)
 	if err != nil {
 		a.errorf("reading input: %v", err)
 		return ExitError
@@ -78,8 +80,9 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		a.errorf("%v", pe)
 		return nil
 	}
-	// A stream has no total size to bound; a record that never ends is
-	// what the line limit is there for.
+	// A stream has no total size to bound; the line limit bounds a
+	// record that never ends, and the input limit bounds what is held
+	// while a record waits for its end.
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
 	err = engine.Stream(def, io.MultiReader(bytes.NewReader(head), br), eopts, emit, onError)
@@ -196,13 +199,21 @@ func (a *app) exitForStream(err error) int {
 	return a.exitFor(err)
 }
 
-// readHead reads the leading n lines. They are handed back rather than
-// left in the reader, and the caller replays them, so the lines detection
-// looked at are read exactly once and by the same code as the rest.
-func readHead(br *bufio.Reader, n int) ([]byte, error) {
+// readHead reads the leading n records, ended by sep, that a signature
+// sees. They are handed back rather than left in the reader, and the
+// caller replays them, so the lines detection looked at are read exactly
+// once and by the same code as the rest.
+//
+// The blank lines before the text are not lines a signature sees (the
+// selector leaves them out), so they are not counted here either: a
+// report that opens with a few hundred empty lines is still identified
+// from its first lines of text. The input limit bounds them the way it
+// bounds everything read.
+func readHead(br *bufio.Reader, n int, sep byte) ([]byte, error) {
 	var out []byte
-	for lines := 0; lines < n; {
-		chunk, err := br.ReadSlice('\n')
+	lines, text, start := 0, false, 0
+	for lines < n {
+		chunk, err := br.ReadSlice(sep)
 		if int64(len(out))+int64(len(chunk)) > MaxInputSize {
 			return nil, errors.New("the lines jz needs to identify the format exceed the input limit")
 		}
@@ -218,9 +229,26 @@ func readHead(br *bufio.Reader, n int) ([]byte, error) {
 			}
 			return nil, err
 		}
+		line := out[start:]
+		start = len(out)
+		if sep == '\n' && !text && blankHead(line, start == len(line)) {
+			continue
+		}
+		text = true
 		lines++
 	}
 	return out, nil
+}
+
+// blankHead reports a line before the text: nothing on it once the
+// escape sequences and, on the first line, the byte order mark are off,
+// which is how the selector reads it.
+func blankHead(line []byte, first bool) bool {
+	line = convert.StripANSI(line)
+	if first {
+		line = bytes.TrimPrefix(line, []byte{0xEF, 0xBB, 0xBF})
+	}
+	return len(bytes.TrimSpace(line)) == 0
 }
 
 // syncWriter serialises writes to one destination. In streaming exec mode

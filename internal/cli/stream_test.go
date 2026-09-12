@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"bufio"
 	"encoding/json"
 	"path/filepath"
 	"runtime"
@@ -223,5 +224,91 @@ func TestStreamComposite(t *testing.T) {
 	}
 	if code := h.pipe(ping, "--stream", "--extract", "reply"); code != ExitUsage || h.stdout.Len() != 0 {
 		t.Errorf("an unknown part: code=%d stdout=%s stderr=%s", code, h.stdout.String(), h.stderr.String())
+	}
+}
+
+// The blank lines before the text are not lines a signature sees, so a
+// stream does not count them among the lines it holds back: a report
+// that opens with a few hundred empty lines is identified from its
+// first lines of text, as the whole document is.
+func TestStreamSkipsBlankLinesBeforeTheText(t *testing.T) {
+	h := newHarness(t)
+	in := strings.Repeat("\n", 300) + gnuDF
+	if code := h.pipe(in); code != ExitOK {
+		t.Fatalf("whole: %d %s", code, h.stderr.String())
+	}
+	if code := h.pipe(in, "--stream"); code != ExitOK {
+		t.Fatalf("stream: %d %s", code, h.stderr.String())
+	}
+	if recs := h.records(); len(recs) != 2 || recs[1]["mounted_on"] != "/" {
+		t.Errorf("records = %v", recs)
+	}
+	// Lines of spaces, escape sequences and a byte order mark before
+	// the text are blank lines too.
+	noise := "\xef\xbb\xbf\x1b[0m\n   \n\t\n" + gnuDF
+	if code := h.pipe(noise, "--stream"); code != ExitOK || len(h.records()) != 2 {
+		t.Errorf("noise before the text: %d %s", code, h.stderr.String())
+	}
+	// Named, the same.
+	if code := h.pipe(in, "--stream", "--parser", "df"); code != ExitOK || len(h.records()) != 2 {
+		t.Errorf("named: %d %s", code, h.stderr.String())
+	}
+	// Blank lines that never end are bounded by the input limit rather
+	// than held for ever.
+	if code := h.pipe(strings.Repeat("\n", MaxInputSize+1), "--stream"); code != ExitError ||
+		!strings.Contains(h.stderr.String(), "exceed the input limit") {
+		t.Errorf("endless blank lines: %d %s", code, h.stderr.String())
+	}
+}
+
+// A stream of NUL-separated records is read record by record, so a
+// variant that reads them, named, needs no newline to write its first
+// record. The whole document reads it the same way.
+func TestStreamReadsNULSeparatedRecords(t *testing.T) {
+	h := newHarness(t)
+	const in = "one\x00two\nlines\x00three\x00"
+	if code := h.pipe(in, "--stream", "--parser", "ls", "--variant", "names-zero"); code != ExitOK {
+		t.Fatalf("stream: %d %s", code, h.stderr.String())
+	}
+	recs := h.records()
+	if len(recs) != 3 || recs[1]["name"] != "two\nlines" {
+		t.Errorf("records = %v", recs)
+	}
+	if code := h.pipe(in, "--parser", "ls", "--variant", "names-zero"); code != ExitOK || len(h.rows()) != 3 {
+		t.Errorf("whole: %d %s", code, h.stderr.String())
+	}
+	// The same input with no NUL at all is one record either way.
+	if code := h.pipe("just one", "--stream", "--parser", "ls", "--variant", "names-zero"); code != ExitOK || len(h.records()) != 1 {
+		t.Errorf("one record: %d %s", code, h.stderr.String())
+	}
+}
+
+// readHead hands back the leading records a signature sees, and the
+// selector sees the same lines in them that it sees in the whole text:
+// what is held back is never fewer lines than the selector would look
+// at, unless the input ends first.
+func TestReadHeadCountsTheLinesTheSelectorSees(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name  string
+		input string
+		n     int
+		want  string
+	}{
+		{"plain", "a\nb\nc\n", 2, "a\nb\n"},
+		{"leading blank lines", "\n \n\x1b[0m\nb\nc\nd\n", 2, "\n \n\x1b[0m\nb\nc\n"},
+		{"a mark on the first line", "\xef\xbb\xbf\nb\nc\n", 1, "\xef\xbb\xbf\nb\n"},
+		{"input ends first", "a\n", 5, "a\n"},
+		{"no line break at the end", "a\nb", 5, "a\nb"},
+		{"blank lines inside the text count", "a\n\nb\n", 2, "a\n\n"},
+	} {
+		got, err := readHead(bufio.NewReader(strings.NewReader(tc.input)), tc.n, '\n')
+		if err != nil || string(got) != tc.want {
+			t.Errorf("%s: readHead = %q, %v, want %q", tc.name, got, err, tc.want)
+		}
+	}
+	got, err := readHead(bufio.NewReader(strings.NewReader("a\x00\x00b\x00c")), 2, 0)
+	if err != nil || string(got) != "a\x00\x00" {
+		t.Errorf("NUL: readHead = %q, %v", got, err)
 	}
 }

@@ -69,10 +69,17 @@ func (a *app) cmdConvert(args []string) int {
 		a.errorf("%v", err)
 		return ExitRegistry
 	}
-
-	reg, code := a.loadRegistry()
-	if code != 0 {
-		return code
+	// A definition given on the command line is the whole of what is
+	// needed, so the registries are not read: a broken one cannot stand
+	// in the way of a definition that does not use it.
+	var (
+		reg  *registry.Registry
+		code int
+	)
+	if !hasInline {
+		if reg, code = a.loadRegistry(); code != 0 {
+			return code
+		}
 	}
 	if inline, code = a.nameColumns(reg, &co.selects, inline); code != ExitOK {
 		return code

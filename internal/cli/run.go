@@ -116,33 +116,30 @@ func (a *app) cmdRun(args []string) int {
 		parser = parserKey(name)
 	}
 
-	reg, code := a.loadRegistry()
-	if code != 0 {
-		return code
-	}
-	if sel.parser == "" && !hasInline {
-		a.wrapperHint = wrapperHint(reg, args[:len(args)-len(rest)], rest)
-	}
 	// Nothing is executed until jz knows it can parse the result. A
-	// definition given on the command line is that knowledge already.
-	if !hasInline && len(reg.Variants(parser)) == 0 {
-		known := reg.Commands()
-		if a.wrapperHint != "" {
-			known = nil
-		}
-		return a.exitFor(&selector.UnknownParserError{Parser: parser, Known: known})
-	}
-	if sel.variant != "" && !hasInline {
-		if _, ok := reg.Lookup(parser, sel.variant); !ok {
-			return a.exitFor(&selector.UnknownVariantError{
-				Parser:    parser,
-				Variant:   sel.variant,
-				Available: variantNames(reg.Variants(parser)),
-			})
+	// definition given on the command line is that knowledge already,
+	// and the registries are then not read at all.
+	var (
+		reg  *registry.Registry
+		code int
+	)
+	if !hasInline {
+		if reg, code = a.runRegistry(&sel, parser, args[:len(args)-len(rest)], rest); code != ExitOK {
+			return code
 		}
 	}
 	if inline, code = a.nameColumns(reg, &sel, inline); code != ExitOK {
 		return code
+	}
+	// The environment a definition asks for is the one the definition
+	// that will read the output asks for: the one given on the command
+	// line, the variant named, or what every variant of the command
+	// agrees on.
+	var env []string
+	if hasInline {
+		env = append(envList(inline.Exec.Env), extraEnv...)
+	} else {
+		env = append(execEnv(reg, parser, sel.variant), extraEnv...)
 	}
 
 	ctx := a.env.Context
@@ -154,7 +151,7 @@ func (a *app) cmdRun(args []string) int {
 	command := runner.Command{
 		Name: name,
 		Args: cmdArgs,
-		Env:  append(mergedExecEnv(reg, parser), extraEnv...),
+		Env:  env,
 		// jz reads nothing from standard input in this mode, so the
 		// command gets it: `printf ... | jz run wc` has to reach wc.
 		Stdin:      a.env.Stdin,
@@ -230,6 +227,36 @@ func (a *app) cmdRun(args []string) int {
 		return a.writeFailed(err)
 	}
 	return res.ExitCode
+}
+
+// runRegistry loads the registries for jz run and checks that the
+// command has a parser and, when named, the variant, before anything is
+// executed. opts are jz's own options and command what follows them.
+func (a *app) runRegistry(sel *selectOptions, parser string, opts, command []string) (*registry.Registry, int) {
+	reg, code := a.loadRegistry()
+	if code != ExitOK {
+		return nil, code
+	}
+	if sel.parser == "" {
+		a.wrapperHint = wrapperHint(reg, opts, command)
+	}
+	if len(reg.Variants(parser)) == 0 {
+		known := reg.Commands()
+		if a.wrapperHint != "" {
+			known = nil
+		}
+		return nil, a.exitFor(&selector.UnknownParserError{Parser: parser, Known: known})
+	}
+	if sel.variant != "" {
+		if _, ok := reg.Lookup(parser, sel.variant); !ok {
+			return nil, a.exitFor(&selector.UnknownVariantError{
+				Parser:    parser,
+				Variant:   sel.variant,
+				Available: variantNames(reg.Variants(parser)),
+			})
+		}
+	}
+	return reg, ExitOK
 }
 
 // errStreamFailed marks a streaming failure that has already been
@@ -386,10 +413,19 @@ func shellLine(words []string) string {
 	return strings.Join(out, " ")
 }
 
-// mergedExecEnv collects exec.env entries of every variant of a command.
-// Conflicting values are dropped so that no variant is favoured before
-// the command has even run.
-func mergedExecEnv(reg *registry.Registry, parser string) []string {
+// execEnv is the exec.env the command runs with. A variant named on the
+// command line is the definition that will read the output, so its
+// entries apply as they stand. With the variant still unknown, the
+// entries of every variant of the command are collected, and a variable
+// two of them set differently is not set at all, so that no variant is
+// favoured before the command has even run.
+func execEnv(reg *registry.Registry, parser, variant string) []string {
+	if variant != "" {
+		if e, ok := reg.Lookup(parser, variant); ok {
+			return envList(e.Def.Exec.Env)
+		}
+		return nil
+	}
 	values := map[string]string{}
 	conflict := map[string]bool{}
 	for _, e := range reg.Variants(parser) {
@@ -400,11 +436,17 @@ func mergedExecEnv(reg *registry.Registry, parser string) []string {
 			values[k] = v
 		}
 	}
-	var out []string
+	for k := range conflict {
+		delete(values, k)
+	}
+	return envList(values)
+}
+
+// envList renders a map as NAME=VALUE entries in a fixed order.
+func envList(values map[string]string) []string {
+	out := make([]string, 0, len(values))
 	for _, k := range sortedKeys(values) {
-		if !conflict[k] {
-			out = append(out, k+"="+values[k])
-		}
+		out = append(out, k+"="+values[k])
 	}
 	return out
 }

@@ -109,7 +109,7 @@ func (s *streamer) startComposite() {
 		ps := &partStream{part: part, sel: region{sel: &part.Select}}
 		if part.Parse.YieldsArray() {
 			name := part.Name
-			ps.sub = newStreamer(s.def, &part.Parse, part.Fields, s.opts, func(v any) error {
+			ps.sub = newStreamer(s.def, &part.Parse, part.Fields, s.opts, s.held, func(v any) error {
 				return s.emit(partDocument(name, v))
 			}, s.onError)
 		}
@@ -149,6 +149,9 @@ func (s *streamer) feedComposite(l line) error {
 					return stopped(err)
 				}
 			} else {
+				if err := s.held.take(lineBytes(l.text), s.def, l.num); err != nil {
+					return err
+				}
 				ps.lines = append(ps.lines, l)
 				single = append(single, ps)
 			}
@@ -188,6 +191,7 @@ func (s *streamer) readSingle(ps *partStream) error {
 	ps.read = true
 	lines := ps.lines
 	ps.lines = nil
+	s.held.give(linesBytes(lines))
 	r := run{def: s.def, opts: s.opts, ledger: newLedger(lines)}
 	v, err := r.parse(&ps.part.Parse, ps.part.Fields, lines)
 	var pe *ParseError
@@ -263,8 +267,9 @@ func stopped(err error) error {
 }
 
 // newStreamer prepares a streamer for one parser with no input stage of
-// its own: the lines it is given have been through the definition's.
-func newStreamer(def *definition.Definition, p *definition.Parse, fields map[string]*definition.Field, opts Options, emit func(any) error, onError func(*ParseError) error) *streamer {
+// its own: the lines it is given have been through the definition's. It
+// holds lines against the same bound as the stream it is part of.
+func newStreamer(def *definition.Definition, p *definition.Parse, fields map[string]*definition.Field, opts Options, held *hold, emit func(any) error, onError func(*ParseError) error) *streamer {
 	s := &streamer{
 		run:     run{def: def, opts: opts},
 		p:       p,
@@ -273,12 +278,13 @@ func newStreamer(def *definition.Definition, p *definition.Parse, fields map[str
 		onError: onError,
 		sel:     &definition.Select{},
 		ignore:  []*regexp.Regexp{},
+		held:    held,
 	}
 	if p.Type == definition.TypeTable && p.Header.None {
 		s.columns()
 	}
-	if p.Type == definition.TypeCSV && p.Header.None && len(p.Header.Columns) > 0 {
-		s.csvCols = p.Header.Columns
+	if p.Type == definition.TypeCSV {
+		s.startCSV()
 	}
 	return s
 }

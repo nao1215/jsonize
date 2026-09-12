@@ -71,7 +71,7 @@ type Options struct {
 func Run(reg *registry.Registry, fsys fs.FS, sourceName string, opts Options) []Result {
 	type job struct {
 		e *registry.Entry
-		c registry.Case
+		c Case
 	}
 	var (
 		results []Result
@@ -82,13 +82,13 @@ func Run(reg *registry.Registry, fsys fs.FS, sourceName string, opts Options) []
 		if e.Source != sourceName {
 			continue
 		}
-		cases, err := registry.Cases(fsys, e)
+		cases, err := Cases(fsys, e)
 		if err != nil {
 			results = append(results, Result{Definition: e.Def.ID(), Source: e.Source, Err: err})
 			continue
 		}
 		if len(cases) == 0 {
-			results = append(results, Result{Definition: e.Def.ID(), Source: e.Source, Err: fmt.Errorf("no testdata cases; add at least one <case>.txt and <case>.json under %s", e.TestdataPath())})
+			results = append(results, Result{Definition: e.Def.ID(), Source: e.Source, Err: fmt.Errorf("no testdata cases; add at least one <case>.txt and <case>.json under %s", testdataPath(e))})
 			continue
 		}
 		for _, c := range cases {
@@ -143,7 +143,7 @@ func Check(reg *registry.Registry, sources []registry.Source, targets []string, 
 	return append(results, Decoys(reg, opts.Decoys, opts)...)
 }
 
-func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Options) Result {
+func runCase(reg *registry.Registry, e *registry.Entry, c Case, opts Options) Result {
 	res := Result{Definition: e.Def.ID(), Case: c.Name, Path: path.Join(c.Dir, c.Name+".txt"), Source: e.Source}
 	// Selection is part of the contract, not just parsing: a fixture has
 	// to identify its own definition the way a user's input would.
@@ -216,7 +216,7 @@ func runCase(reg *registry.Registry, e *registry.Entry, c registry.Case, opts Op
 
 // selectsOwn checks that input picks the case's own definition on every
 // path its metadata says a user reaches it by.
-func selectsOwn(reg *registry.Registry, e *registry.Entry, c registry.Case, input []byte) error {
+func selectsOwn(reg *registry.Registry, e *registry.Entry, c Case, input []byte) error {
 	explicit := selector.ExplicitOnly(e.Def)
 	if c.Meta.AutoDetects() && !explicit {
 		// What `COMMAND | jz` does: no parser, no OS, no arguments.
@@ -264,7 +264,7 @@ var sameText = []struct {
 
 // sameAnswer checks the fixture under each change in sameText against
 // the answer it gives as it is.
-func sameAnswer(reg *registry.Registry, e *registry.Entry, c registry.Case, want any, opts Options) error {
+func sameAnswer(reg *registry.Registry, e *registry.Entry, c Case, want any, opts Options) error {
 	var w bytes.Buffer
 	if err := jsonutil.Encode(&w, want, false); err != nil {
 		return err
@@ -301,7 +301,7 @@ func sameAnswer(reg *registry.Registry, e *registry.Entry, c registry.Case, want
 // text: table/whitespace and table/aligned read the same lines two ways.
 // Naming the variant is what picks one, and that is what is required of
 // those.
-func namedSelects(reg *registry.Registry, e *registry.Entry, c registry.Case) error {
+func namedSelects(reg *registry.Registry, e *registry.Entry, c Case) error {
 	ctx := selector.Context{Parser: e.Def.Command, Input: c.Input}
 	named := "--parser " + e.Def.Command
 	if selector.ShapeOnly(e.Def) {

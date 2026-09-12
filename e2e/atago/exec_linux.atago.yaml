@@ -953,6 +953,8 @@ scenarios:
       - assert:
           exit_code: 4
           stdout: {empty: true}
+      # Process 1 is whoever the host runs it as: root on a machine, the
+      # user of a container or a namespace.
       - run:
           command: jz run --explain --parser ps -- busybox ps
       - assert:
@@ -962,7 +964,7 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].pid", equals: 1 }
-              - { path: "$[0].user", equals: root }
+              - { path: "$[0].user", matches: "^\\S+$" }
       - run:
           shell: true
           command: LC_ALL=C ps | jz --parser ps --variant busybox
@@ -1537,3 +1539,32 @@ scenarios:
       - assert:
           exit_code: 4
           stdout: {empty: true}
+
+  # A "--" ends the options: what follows it is an operand, whatever it
+  # looks like. `ls -- -l` lists a file named -l, and the names variant
+  # is the one that reads it, since no option was given.
+  - name: ls -- -l lists a file named -l rather than the long listing
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: "-l"
+          content: ""
+      - run:
+          command: jz run --explain ls -- -l
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ls/names from embedded"
+          stdout:
+            equals: |
+              [{"name":"-l"}]
+      - run:
+          command: jz run --explain ls -l -- -l
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ls/long from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].filename", equals: "-l" }

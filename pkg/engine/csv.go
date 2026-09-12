@@ -3,10 +3,12 @@ package engine
 import (
 	"encoding/csv"
 	"errors"
+	"fmt"
 	"io"
 	"slices"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
@@ -14,22 +16,17 @@ import (
 
 // parseCSV handles type: csv.
 //
-// The lines are joined back together before they are read, because a
-// quoted value may contain the line break that split them. Everything
-// before this point still applies: input.ignore and input.select choose
-// which lines take part, and joining what they left is what a CSV of
-// those lines would be.
+// A quoted value may hold the line break that split the input, so the
+// lines are first grouped into records, a record being the lines from
+// one that opens outside a quoted value to the one that closes it. At
+// the top level that grouping has already happened, before the lines
+// were folded, selected or dropped, and every line here is one record;
+// a csv part of a composite reads the physical lines of its region, and
+// the grouping happens here. Each record is then read on its own, so
+// that a row is reported on the line it stands on.
 func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field, lines []line) (any, error) {
 	if len(lines) == 0 {
 		return []any{}, nil
-	}
-	texts := make([]string, len(lines))
-	for i, l := range lines {
-		texts[i] = l.text
-	}
-	rows, err := readCSV(strings.Join(texts, "\n"), p)
-	if err != nil {
-		return nil, r.errorf(lines[0].num+csvLine(err)-1, "", "%s", err.Error())
 	}
 	var (
 		cols   []string
@@ -37,28 +34,111 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 	)
 	if p.Header.None {
 		cols = p.Header.Columns
-		if len(cols) == 0 && len(rows) > 0 {
-			cols = csvNumbered(len(rows[0]))
-		}
-	} else {
-		if len(rows) == 0 {
-			return []any{}, nil
-		}
-		cols, header = csvColumns(p, rows[0]), rows[0]
-		rows = rows[1:]
 	}
-	out := make([]any, 0, len(rows))
-	for i, row := range rows {
-		if header != nil && slices.Equal(row, header) {
-			continue // the header of a second file joined to the first
-		}
-		obj, err := r.csvRow(p, fields, cols, row, lines[0].num+i)
+	out := make([]any, 0, len(lines))
+	for _, rec := range csvRecords(p, lines) {
+		rows, err := readCSV(rec.text, p)
 		if err != nil {
-			return nil, err
+			ln, msg := csvFailure(rec, err)
+			return nil, r.errorf(ln, "", "%s", msg)
 		}
-		out = append(out, obj)
+		for _, row := range rows {
+			switch {
+			case cols != nil:
+			case p.Header.None:
+				cols = csvNumbered(len(row))
+			default:
+				cols, header = csvColumns(p, row), row
+				continue
+			}
+			// A csv file is data: a row that holds the header's values is
+			// a row, unless the definition says the header is printed
+			// again, as a command that prints a report per interval does.
+			if p.RepeatedHeader() && slices.Equal(row, header) {
+				continue
+			}
+			obj, err := r.csvRow(p, fields, cols, row, rec.num)
+			if err != nil {
+				return nil, err
+			}
+			out = append(out, obj)
+		}
 	}
 	return out, nil
+}
+
+// csvRecords groups lines into csv records: a line that ends inside a
+// quoted value is joined with the ones after it up to the line that
+// closes the value. A record keeps the number of the line it starts on.
+// Lines that are records already pass through as they are.
+func csvRecords(p *definition.Parse, lines []line) []line {
+	q := newCSVQuote(csvDelimiter(p))
+	out := lines[:0:0]
+	var pieces []string
+	num := 0
+	for _, l := range lines {
+		if pieces == nil {
+			num = l.num
+		}
+		pieces = append(pieces, l.text)
+		if q.feed(l.text) {
+			continue
+		}
+		out = append(out, line{text: strings.Join(pieces, "\n"), num: num})
+		pieces = nil
+	}
+	if pieces != nil {
+		// A quoted value that never closes is a record the input did not
+		// finish, and reporting it is better than dropping it.
+		out = append(out, line{text: strings.Join(pieces, "\n"), num: num})
+	}
+	return out
+}
+
+// csvQuote follows the quoting rules of a csv text one line at a time,
+// so that a reader knows whether a line ends inside a quoted value
+// without reading the lines before it again. Only a quote that begins a
+// value opens one, and inside it a quote written twice is a quote.
+// Counting the quotes instead took one in the middle of a value, which
+// opens nothing and is an error of its own line, for a value going on
+// to the next line, and held every line after it.
+type csvQuote struct {
+	delim rune
+	// quoted is set inside a quoted value; start is set where a value
+	// begins, which is the one place a quote opens one.
+	quoted, start bool
+}
+
+func newCSVQuote(delim rune) csvQuote {
+	return csvQuote{delim: delim, start: true}
+}
+
+// feed reads one line and the line break after it, and reports whether a
+// quoted value is still open at the end of it.
+func (q *csvQuote) feed(text string) bool {
+	for i := 0; i < len(text); {
+		r, size := utf8.DecodeRuneInString(text[i:])
+		i += size
+		switch {
+		case q.quoted && r == '"':
+			if i < len(text) && text[i] == '"' {
+				i++ // a quote written twice
+				continue
+			}
+			q.quoted = false
+		case q.quoted:
+		case q.start && r == '"':
+			q.quoted, q.start = true, false
+		case r == q.delim || r == '\n':
+			q.start = true
+		default:
+			q.start = false
+		}
+	}
+	if !q.quoted {
+		q.start = true
+	}
+	return q.quoted
 }
 
 // csvRow builds one object. A row shorter than the header leaves the
@@ -104,13 +184,13 @@ func csvNumbered(n int) []string {
 }
 
 // csvColumns names the columns: the ones the definition states, or the
-// first row normalised the way a table header is.
+// first row normalised the way a table header is. Every name is unique,
+// so that every value of a row has a key of its own.
 func csvColumns(p *definition.Parse, header []string) []string {
 	if len(p.Header.Columns) > 0 {
 		return p.Header.Columns
 	}
 	out := make([]string, len(header))
-	used := map[string]int{}
 	for i, cell := range header {
 		name := definition.NormalizeName(cell)
 		if renamed, ok := p.Header.Rename[name]; ok {
@@ -119,21 +199,35 @@ func csvColumns(p *definition.Parse, header []string) []string {
 		if name == "" {
 			name = "column"
 		}
-		// A spreadsheet exports two columns under one heading often
-		// enough that refusing the file would be the wrong answer;
-		// numbering the repeats keeps every value reachable.
-		if n := used[name]; n > 0 {
-			used[name] = n + 1
-			name = name + "_" + strconv.Itoa(n+1)
-		} else {
-			used[name] = 1
-		}
 		out[i] = name
+	}
+	// A spreadsheet exports two columns under one heading often enough
+	// that refusing the file would be the wrong answer; numbering the
+	// repeats keeps every value reachable. A number is only given where
+	// no heading already has that name, so that "x, x, x_2" does not put
+	// two values under x_2.
+	taken := map[string]bool{}
+	for _, name := range out {
+		taken[name] = true
+	}
+	given := map[string]bool{}
+	for i, name := range out {
+		if given[name] {
+			for n := 2; ; n++ {
+				numbered := name + "_" + strconv.Itoa(n)
+				if !taken[numbered] && !given[numbered] {
+					name = numbered
+					break
+				}
+			}
+			out[i] = name
+		}
+		given[name] = true
 	}
 	return out
 }
 
-// readCSV reads the whole text with the definition's delimiter.
+// readCSV reads one record with the definition's delimiter.
 func readCSV(text string, p *definition.Parse) ([][]string, error) {
 	cr := csv.NewReader(strings.NewReader(text))
 	cr.Comma = csvDelimiter(p)
@@ -156,12 +250,14 @@ func csvDelimiter(p *definition.Parse) rune {
 	return ','
 }
 
-// csvLine returns the 1-based line a csv failure names, so the message
-// can point at the input rather than at the joined text.
-func csvLine(err error) int {
+// csvFailure places a csv reader's error in the input: the line it
+// names is the line of the record it was in, and the message says what
+// was wrong without the record's own line numbers, which count from the
+// record rather than from the input.
+func csvFailure(rec line, err error) (int, string) {
 	var pe *csv.ParseError
 	if errors.As(err, &pe) && pe.Line > 0 {
-		return pe.Line
+		return rec.num + pe.Line - 1, fmt.Sprintf("column %d: %v", pe.Column, pe.Err)
 	}
-	return 1
+	return rec.num, err.Error()
 }

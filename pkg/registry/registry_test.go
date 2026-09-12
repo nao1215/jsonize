@@ -64,26 +64,11 @@ func TestLoadMergesSourcesWithPrecedence(t *testing.T) {
 	if len(reg.Problems) != 0 {
 		t.Errorf("Problems = %v", reg.Problems)
 	}
-
-	bsd, _ := reg.Lookup("df", "bsd")
-	cases, err := Cases(low, bsd)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(cases) != 1 || cases[0].Name != "a" || string(cases[0].Input) != "x" || string(cases[0].Expected) != "[]" {
-		t.Errorf("cases = %+v", cases)
-	}
-	up, _ := reg.Lookup("uptime", "linux")
-	cases, err = Cases(low, up)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(cases) != 2 || cases[0].Name != "fail" || cases[0].Meta.ExpectError != "does not match" || cases[0].Meta.OS != "linux" || cases[1].Name != "ok" {
-		t.Errorf("cases = %+v", cases)
-	}
-	custom, _ := reg.Lookup("custom", "default")
-	if cases, err := Cases(high, custom); err != nil || len(cases) != 0 {
-		t.Errorf("no testdata dir: %v %v", cases, err)
+	// The slice Variants hands out is the caller's: changing it changes
+	// nothing in the registry.
+	vs[0], vs[1] = vs[1], vs[0]
+	if again := reg.Variants("df"); again[0].Def.Variant != "bsd" {
+		t.Errorf("Variants after the caller reordered its copy = %v", again)
 	}
 }
 
@@ -135,65 +120,6 @@ func TestLoadFatalErrors(t *testing.T) {
 	reg, err := Load(Source{Name: "m", FS: fstest.MapFS{"registry.yaml": {Data: []byte("format: 1\nname: empty\n")}}})
 	if err != nil || reg.Len() != 0 {
 		t.Errorf("manifest only: %v %v", reg, err)
-	}
-}
-
-func TestCasesErrors(t *testing.T) {
-	t.Parallel()
-	fsys := fstest.MapFS{
-		"parsers/a/b/parser.yaml":     {Data: []byte(def("a", "b"))},
-		"parsers/a/b/testdata/x.txt":  {Data: []byte("in")},
-		"parsers/c/d/parser.yaml":     {Data: []byte(def("c", "d"))},
-		"parsers/c/d/testdata/x.txt":  {Data: []byte("in")},
-		"parsers/c/d/testdata/x.yaml": {Data: []byte("bogus: 1\n")},
-	}
-	reg, err := Load(Source{Name: "s", FS: fsys})
-	if err != nil {
-		t.Fatal(err)
-	}
-	e, _ := reg.Lookup("a", "b")
-	if cases, err := Cases(fsys, e); err != nil || len(cases) != 1 || cases[0].Expected != nil {
-		t.Errorf("missing json should load with nil Expected: %v %v", cases, err)
-	}
-	e, _ = reg.Lookup("c", "d")
-	if _, err := Cases(fsys, e); err == nil || !strings.Contains(err.Error(), "invalid case metadata") {
-		t.Errorf("bad meta: %v", err)
-	}
-	if e.TestdataPath() != "parsers/c/d/testdata" {
-		t.Error(e.TestdataPath())
-	}
-}
-
-// A case is found by its .txt, so a .yaml or .json beside no .txt (a
-// misnamed fixture) would describe a case that never runs, and a .json
-// next to expect_error states an answer that is never compared. Both
-// are reported rather than passing in silence.
-func TestCasesRefusesWhatWouldNeverRun(t *testing.T) {
-	t.Parallel()
-	for _, tc := range []struct {
-		name  string
-		files map[string]string
-		want  string
-	}{
-		{"yaml without txt", map[string]string{"x.txt": "in", "x.json": "[]", "y.yaml": "source: s\n"}, "y.yaml has no y.txt"},
-		{"json without txt", map[string]string{"x.text": "in", "x.json": "[]"}, "x.json has no x.txt"},
-		{"json beside expect_error", map[string]string{"x.txt": "in", "x.yaml": "expect_error: no\n", "x.json": "[]"}, "x.json states an answer for a case that expects an error"},
-	} {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-			fsys := fstest.MapFS{"parsers/a/b/parser.yaml": {Data: []byte(def("a", "b"))}}
-			for name, data := range tc.files {
-				fsys["parsers/a/b/testdata/"+name] = &fstest.MapFile{Data: []byte(data)}
-			}
-			reg, err := Load(Source{Name: "s", FS: fsys})
-			if err != nil {
-				t.Fatal(err)
-			}
-			e, _ := reg.Lookup("a", "b")
-			if _, err := Cases(fsys, e); err == nil || !strings.Contains(err.Error(), tc.want) {
-				t.Errorf("Cases = %v, want an error containing %q", err, tc.want)
-			}
-		})
 	}
 }
 

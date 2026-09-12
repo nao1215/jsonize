@@ -51,7 +51,7 @@ func (r *run) parseTable(p *definition.Parse, fields map[string]*definition.Fiel
 	for _, l := range lines {
 		var cells []any
 		var err error
-		if !p.Header.None && sameHeader(p, split, l.text, header.text) {
+		if p.RepeatedHeader() && sameHeader(p, split, l.text, header.text) {
 			// The output of the command run twice: the second table's
 			// header, which says where its own columns are.
 			if cols, err = r.resolveHeader(p, l, split); err != nil {

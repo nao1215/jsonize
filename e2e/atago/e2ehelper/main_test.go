@@ -15,6 +15,10 @@ func TestMain(m *testing.M) {
 	if args := os.Getenv("E2EHELPER_ARGS"); args != "" {
 		os.Exit(run(strings.Fields(args), os.Stdout, os.Stderr))
 	}
+	// The process a stand-in leaves behind is a copy of this binary too.
+	if os.Getenv(holdKey) != "" {
+		os.Exit(relay(os.Stdin, os.Stdout, os.Stderr))
+	}
 	os.Exit(m.Run())
 }
 

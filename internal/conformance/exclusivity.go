@@ -19,7 +19,7 @@ import (
 // to.
 type Fixture struct {
 	Entry *registry.Entry
-	Case  registry.Case
+	Case  Case
 }
 
 // Path returns the fixture path inside its source filesystem.
@@ -54,16 +54,15 @@ func ReadDecoys(dir string) ([]Decoy, error) {
 		if len(out) >= MaxDecoyFiles {
 			return fmt.Errorf("more than %d files under %s", MaxDecoyFiles, dir)
 		}
-		data, err := os.ReadFile(p) //nolint:gosec // a decoy directory is named by the caller
-		if err != nil {
-			return err
-		}
-		if int64(len(data)) > engine.DefaultMaxInputSize {
-			return fmt.Errorf("%s exceeds the %d byte limit", p, engine.DefaultMaxInputSize)
-		}
 		rel, err := filepath.Rel(dir, p)
 		if err != nil {
 			rel = p
+		}
+		// A decoy is an input, and is bounded the way one is before it is
+		// read rather than after.
+		data, err := registry.ReadBounded(os.DirFS(dir), filepath.ToSlash(rel), engine.DefaultMaxInputSize)
+		if err != nil {
+			return err
 		}
 		out = append(out, Decoy{Name: filepath.ToSlash(rel), Input: data})
 		return nil
@@ -98,7 +97,7 @@ func Fixtures(reg *registry.Registry, sources []registry.Source) ([]Fixture, []R
 		if !ok {
 			continue
 		}
-		cases, err := registry.Cases(fsys, e)
+		cases, err := Cases(fsys, e)
 		if err != nil {
 			problems = append(problems, Result{Definition: e.Def.ID(), Source: e.Source, Err: err})
 			continue

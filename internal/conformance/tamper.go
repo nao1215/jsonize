@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/registry"
@@ -133,7 +134,14 @@ func tamperFixture(reg *registry.Registry, f Fixture, opts Options) []Result {
 		if isList && errA == nil {
 			want, errA = encode(append(append([]any{}, list...), list...))
 		}
+		headerRow := isList && errA == nil && errB == nil && headerIsARow(def)
 		switch {
+		case headerRow:
+			// A header the definition does not take for one printed again
+			// is a row of the second copy, between the two sets of records.
+			if !recordsAroundOne(v, list) {
+				fail("the fixture twice", fmt.Errorf("the definition does not take a repeated header for one, so two copies are the records of one, the header as a row and the records of one again; got %s", firstDifference(want, b)))
+			}
 		case errA != nil:
 			fail("the fixture twice", errA)
 		case errB != nil:
@@ -145,6 +153,32 @@ func tamperFixture(reg *registry.Registry, f Fixture, opts Options) []Result {
 		}
 	}
 	return out
+}
+
+// headerIsARow reports a definition that reads a header line and does not
+// take the same line further down for that header printed again.
+func headerIsARow(def *definition.Definition) bool {
+	switch def.Parse.Type {
+	case definition.TypeTable, definition.TypeCSV:
+		return !def.Parse.Header.None && !def.Parse.RepeatedHeader()
+	}
+	return false
+}
+
+// recordsAroundOne reports whether v is list, one more record, and list
+// again.
+func recordsAroundOne(v any, list []any) bool {
+	got, ok := v.([]any)
+	if !ok || len(got) != 2*len(list)+1 {
+		return false
+	}
+	whole, err := encode(list)
+	if err != nil {
+		return false
+	}
+	first, errFirst := encode(got[:len(list)])
+	second, errSecond := encode(got[len(list)+1:])
+	return errFirst == nil && errSecond == nil && first == whole && second == whole
 }
 
 // firstDifference quotes two encodings from a little before where they

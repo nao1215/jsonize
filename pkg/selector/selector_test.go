@@ -785,3 +785,69 @@ func TestMatchedNamesTheArgumentFilter(t *testing.T) {
 		t.Errorf("matched = %s", got)
 	}
 }
+
+// A "--" ends the options: what follows it is an operand, whatever it
+// looks like, so `ls -- -l` lists a file named -l and is not the long
+// listing. Nothing after it reaches a filter, expanded or whole.
+func TestArgumentsAfterADoubleDashAreOperands(t *testing.T) {
+	t.Parallel()
+	reg := testRegistry(t)
+	res, err := Select(reg, Context{Parser: "df", OS: "linux", Args: []string{"--", "-hT"}, Input: []byte(gnuDF)})
+	if err != nil || res.Entry.Def.ID() != "df/gnu" {
+		t.Errorf("-h after --: %v %v", res, err)
+	}
+	var nm *NoMatchError
+	if _, err := Select(reg, Context{Parser: "df", OS: "linux", Args: []string{"--", "-h"}, Input: []byte(humanDF)}); !errors.As(err, &nm) {
+		t.Errorf("an option after -- does not satisfy any: %v", err)
+	}
+	// The options before it still count.
+	if res, err := Select(reg, Context{Parser: "df", OS: "linux", Args: []string{"-h", "--", "-i"}, Input: []byte(humanDF)}); err != nil || res.Entry.Def.Variant != "gnu-human" {
+		t.Errorf("-h before --: %v %v", res, err)
+	}
+	// Candidates, which answers for a command that printed nothing, reads
+	// the arguments the same way.
+	if got := Candidates(reg, Context{Parser: "df", OS: "linux", Args: []string{"--", "-h"}}); len(got) != 1 || got[0].Def.Variant != "gnu" {
+		t.Errorf("candidates after --: %v", got)
+	}
+}
+
+// Window says how many records a stream holds back before choosing, and
+// what ends one: the widest signature among the candidates, one record
+// when none of them has a signature, and NUL when all of them read
+// NUL-separated output.
+func TestWindowFollowsTheCandidates(t *testing.T) {
+	t.Parallel()
+	reg := buildRegistry(t, map[string]string{
+		"wide/a":     def("wide", "a", "detect: {signature: {all: ['^A'], window: 50}}\n"),
+		"wide/b":     def("wide", "b", "detect: {signature: {all: ['^B']}}\n"),
+		"shape/a":    def("shape", "a", "detect: {auto_detect: false}\n"),
+		"shape/b":    def("shape", "b", "detect: {auto_detect: false}\ninput: {record_separator: nul}\n"),
+		"zero/a":     def("zero", "a", "detect: {auto_detect: false}\ninput: {record_separator: nul}\n"),
+		"zero/b":     def("zero", "b", "detect: {auto_detect: false, args: {any: ['-0']}}\ninput: {record_separator: nul}\n"),
+		"mixed/a":    def("mixed", "a", "detect: {args: {none: ['-z']}, signature: {all: ['^A']}}\n"),
+		"mixed/zero": def("mixed", "zero", "detect: {auto_detect: false, args: {any: ['-z']}}\ninput: {record_separator: nul}\n"),
+	})
+	cases := []struct {
+		name string
+		ctx  Context
+		n    int
+		sep  byte
+	}{
+		{"the whole registry", Context{}, 50, '\n'},
+		{"a command", Context{Parser: "wide"}, 50, '\n'},
+		{"a variant", Context{Parser: "wide", Variant: "b"}, 20, '\n'},
+		{"a shape with no signature", Context{Parser: "shape", Variant: "a"}, 1, '\n'},
+		{"shapes with both separators", Context{Parser: "shape"}, 1, '\n'},
+		{"a NUL variant", Context{Parser: "shape", Variant: "b"}, 1, 0},
+		{"a command whose variants all read NUL", Context{Parser: "zero"}, 1, 0},
+		{"a command narrowed by its arguments", Context{Parser: "mixed", Args: []string{"-z"}}, 1, 0},
+		{"the same command with other arguments", Context{Parser: "mixed", Args: []string{"-a"}}, 20, '\n'},
+		{"an unknown command", Context{Parser: "nope"}, 1, '\n'},
+	}
+	for _, tc := range cases {
+		n, sep := Window(reg, tc.ctx)
+		if n != tc.n || sep != tc.sep {
+			t.Errorf("%s: Window = %d, %q, want %d, %q", tc.name, n, sep, tc.n, tc.sep)
+		}
+	}
+}

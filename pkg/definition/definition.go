@@ -198,8 +198,10 @@ type Detect struct {
 	Priority int `yaml:"priority,omitempty"`
 }
 
-// ArgsMatch matches command line arguments. Single-letter flags bundled as
-// "-hT" are expanded, so "-h" matches "-hT".
+// ArgsMatch matches command line arguments, each as one whole word:
+// "--format=long" is the word "--format=long". Single-letter flags
+// bundled as "-hT" are expanded, so "-h" matches "-hT". The words after
+// a "--" are operands, which no filter sees.
 type ArgsMatch struct {
 	Any  []string `yaml:"any,omitempty"`
 	All  []string `yaml:"all,omitempty"`
@@ -509,6 +511,25 @@ type Header struct {
 	LeadingLabel string `yaml:"leading_label,omitempty"`
 	// Rename maps normalised header names to field names.
 	Rename map[string]string `yaml:"rename,omitempty"`
+	// Repeated says whether a body line holding the same cells as the
+	// header is that header printed again (true), which starts another
+	// table, or a row that happens to hold those values (false). A
+	// command that reprints its header every few rows or once per report
+	// is the first; a csv file of names and values may hold the second.
+	// It defaults to true for a table and to false for csv.
+	Repeated *bool `yaml:"repeated,omitempty"`
+}
+
+// RepeatedHeader reports whether a body line that repeats the header is
+// the header printed again rather than a row.
+func (p *Parse) RepeatedHeader() bool {
+	if p.Header.None {
+		return false
+	}
+	if p.Header.Repeated != nil {
+		return *p.Header.Repeated
+	}
+	return p.Type != TypeCSV
 }
 
 // Indent is one level of a tree's indentation, or the forms one level

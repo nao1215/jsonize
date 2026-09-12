@@ -893,8 +893,16 @@ and the process handling are decisions about a command line, not about
 reading text, and a library that carried them would be answering
 questions its caller has already answered. What crosses the line is the
 registry, the definition schema, the selector, the engine, the scalar
-conversions and the ordered object — everything between a piece of text
-and the JSON for it.
+conversions and the ordered object: everything between a piece of text
+and the JSON for it. The fixtures beside a definition and the checks
+that run them are not part of reading text, so they live with the
+conformance runner under `internal/`.
+
+A `Definition` comes out of `Load` and nothing else: its compiled
+expressions are set there and are not exported, so a definition built
+by hand, or changed after loading, is not one the engine reads as
+written. The registry hands out its entries as they are, and a caller
+reads them; the slice `Variants` returns is the caller's own.
 
 The surface is kept small deliberately: what `cmd/jz` and the tests do
 not reach is unexported, and what stays is what a caller cannot avoid
