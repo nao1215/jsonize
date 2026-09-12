@@ -517,6 +517,13 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A clock reading whose minutes or seconds were 60 or more was added up
+  rather than refused: `1:60` under `layout: h:mm` was two hours, and
+  `1:99` under `mm:ss` was 159 seconds, which is not what either text
+  says. Every part after the first is a minute or a second of the clock
+  now, so it is 0 to 59, and the first part still carries the length
+  (`100:30` is a hundred and a half hours). The `time` type has always
+  refused the same values.
 - A count written with a fractional part was read as the whole number
   below it: `select: {limit: 1.5}` kept one line, `max_fields: 2.5` cut
   two cells, and nothing said so, since the decoded value no longer

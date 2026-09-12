@@ -848,6 +848,12 @@ unit of one or two letters is read as written: `m` is a minute, and `M`,
 which systemd writes for a month and a size writes for a megabyte, is
 no unit a duration reads.
 
+In a clock reading every part after the first is a minute or a second of
+the clock, so it is 0 to 59; the first part carries the length and may be
+any number of hours or minutes (`100:30` is a hundred and a half hours).
+A reading that breaks that, `1:60`, is refused rather than added up,
+which is what `time` does with the same value.
+
 `layout` is required and is one of two words rather than a Go layout. It
 says what the last part of a bare two-part reading is: `ps` prints four
 minutes fifty seconds as `4:50` and `uptime` prints an hour and

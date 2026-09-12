@@ -502,9 +502,27 @@ func parseClock(t, layout string) (float64, error) {
 		if err != nil || n < 0 {
 			return 0, errDurationShape
 		}
+		// Every part after the first is a minute or a second of the
+		// clock, so it is under 60; the first part carries the length
+		// and may be any number of hours or minutes. A reading that
+		// breaks that is not a length written oddly but text that is
+		// not a clock reading, and adding it up would report a number
+		// nothing printed. The time type refuses the same way.
+		if i > 0 && n >= 60 {
+			return 0, fmt.Errorf("%s is not a %s of a clock reading, which is 0 to 59", p, clockUnitName(units[i]))
+		}
 		total += n * units[i]
 	}
 	return total + days*86400, nil
+}
+
+// clockUnitName names a part of a clock reading by its length in
+// seconds, for the message a part out of range gets.
+func clockUnitName(seconds float64) string {
+	if seconds == 60 {
+		return "minute"
+	}
+	return "second"
 }
 
 // isDecimal reports a run of digits with one dot in it, which is what a
