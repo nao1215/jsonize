@@ -703,6 +703,81 @@ scenarios:
           stdout:
             json: { path: "$[0].mounted_on", equals: /run }
 
+  # One file inside a readable registry is a smaller thing than the
+  # registry itself: the definitions beside it, and the built-in ones,
+  # are still the ones the user meant. Root reads anything, so this is a
+  # scenario for an ordinary user.
+  - name: a definition file that cannot be read is skipped and the rest of the registry still loads
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/locked/one/parser.yaml
+          content: |
+            format: 1
+            command: locked
+            variant: one
+            detect: {signature: {all: ['^locked']}}
+            parse: {type: kv}
+      - fixture:
+          file: reg/parsers/good/one/parser.yaml
+          content: |
+            format: 1
+            command: good
+            variant: one
+            detect: {signature: {all: ['^good']}}
+            parse:
+              type: regex
+              pattern: '^good (?P<v>\S+)$'
+      - run:
+          command: chmod 000 ${workdir}/reg/parsers/locked/one/parser.yaml
+      - run:
+          command: jz
+          stdin: "good news\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].v", equals: news }
+          stderr:
+            contains: "permission denied"
+      # The built-in parsers are untouched by it.
+      - run:
+          command: jz
+          stdin: "Filesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs            1000000    5000    995000   1% /run\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].mounted_on", equals: /run }
+      - run:
+          command: chmod 644 ${workdir}/reg/parsers/locked/one/parser.yaml
+
+  # A registry whose parsers is a regular file finds no definitions in
+  # it, and loading it as an empty one would leave nothing to go on.
+  - name: a registry whose parsers is a file says so
+    steps:
+      - fixture:
+          file: filereg/registry.yaml
+          content: |
+            format: 1
+            name: filereg
+      - fixture:
+          file: filereg/parsers
+          content: "not a directory\n"
+      - run:
+          command: jz
+          stdin: "Filesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs            1000000    5000    995000   1% /run\n"
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/filereg"
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].mounted_on", equals: /run }
+          stderr:
+            contains: "parsers: not a directory"
+
   # exec.env belongs to the definition that reads the output. A variant
   # named on the command line applies its entries as they stand; with the
   # variant unknown, a variable two variants set differently is not set

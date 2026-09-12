@@ -169,6 +169,16 @@ func Load(sources ...Source) (*Registry, error) {
 	return r, nil
 }
 
+// addSource reads one registry. What goes wrong in it falls into two
+// kinds. A registry that is not the one the caller meant -- no
+// filesystem, a root that is not there or cannot be read, a manifest
+// that cannot be read or names another format, a disable list that is
+// not written as names -- is refused whole, because reading the
+// registries below it instead would answer with definitions the caller
+// did not ask for. Anything smaller -- one file that is too large, does
+// not parse, sits at the wrong path or cannot be read, one directory
+// that cannot be read -- is that file's or that directory's problem: it
+// is named in Problems and everything beside it still loads.
 func (r *Registry) addSource(precedence int, src Source) error {
 	if src.FS == nil {
 		return fmt.Errorf("source %q has no filesystem", src.Name)
@@ -200,16 +210,27 @@ func (r *Registry) addSource(precedence int, src Source) error {
 		return err
 	}
 	defer func() { r.rules = append(r.rules, rules...) }()
-	if _, err := fs.Stat(src.FS, ParsersDir); err != nil {
-		if errors.Is(err, fs.ErrNotExist) {
-			return nil
-		}
-		return &LoadError{Source: src.Name, Path: ParsersDir, Err: err}
+	switch fi, err := fs.Stat(src.FS, ParsersDir); {
+	case errors.Is(err, fs.ErrNotExist):
+		return nil
+	case err != nil:
+		r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: ParsersDir, Err: err})
+		return nil
+	case !fi.IsDir():
+		// Walking a file finds no definitions, so loading such a source
+		// as an empty one would leave its author with a registry that
+		// changes nothing and no reason why.
+		r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: ParsersDir, Err: errors.New("not a directory")})
+		return nil
 	}
 	count := 0
 	err = fs.WalkDir(src.FS, ParsersDir, func(p string, d fs.DirEntry, err error) error {
 		if err != nil {
-			return &LoadError{Source: src.Name, Path: p, Err: err}
+			// A directory jz may not read is that directory's problem,
+			// like a file that does not parse: it is named, and what is
+			// beside it still loads.
+			r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: p, Err: err})
+			return nil //nolint:nilerr // recorded in Problems so the rest of the registry still loads
 		}
 		if d.IsDir() || d.Name() != DefinitionFile {
 			return nil
@@ -219,14 +240,11 @@ func (r *Registry) addSource(precedence int, src Source) error {
 			return &LoadError{Source: src.Name, Path: p, Err: fmt.Errorf("more than %d definitions", MaxDefinitions)}
 		}
 		data, err := ReadBounded(src.FS, p, definition.MaxDefinitionSize)
-		if errors.Is(err, errTooLarge) {
-			// One oversized file is that file's problem, like one that
-			// does not parse; the other definitions still load.
-			r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: p, Err: err})
-			return nil
-		}
 		if err != nil {
-			return &LoadError{Source: src.Name, Path: p, Err: err}
+			// One file jz cannot read, for being too large or for any
+			// other reason, is that file's problem in the same way.
+			r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: p, Err: err})
+			return nil //nolint:nilerr // recorded in Problems so the other definitions still load
 		}
 		def, err := definition.Load(data, src.Name+":"+p)
 		if err != nil {
@@ -386,9 +404,6 @@ func (r *Registry) Len() int {
 	return len(r.entries)
 }
 
-// errTooLarge marks a file over its limit.
-var errTooLarge = errors.New("file too large")
-
 // ReadBounded reads a file of at most limit bytes. A file over the limit
 // is an error that names it, and no more than limit+1 bytes of it are
 // ever read: a registry cannot make jz read a file without bound.
@@ -403,7 +418,7 @@ func ReadBounded(fsys fs.FS, name string, limit int64) ([]byte, error) {
 		return nil, fmt.Errorf("%s: %w", name, err)
 	}
 	if int64(len(data)) > limit {
-		return nil, fmt.Errorf("%s exceeds %d bytes: %w", name, limit, errTooLarge)
+		return nil, fmt.Errorf("%s exceeds %d bytes", name, limit)
 	}
 	return data, nil
 }

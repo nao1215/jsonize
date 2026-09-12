@@ -1,6 +1,7 @@
 package definition
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"regexp"
@@ -121,6 +122,12 @@ func decode(data []byte, source string) (*Definition, error) {
 	if len(data) > MaxDefinitionSize {
 		return nil, &ValidationError{Source: source, Msg: fmt.Sprintf("definition exceeds %d bytes", MaxDefinitionSize)}
 	}
+	// A file with nothing in it decodes to a definition with every key
+	// unset, and reporting that as format 0 names a version nobody wrote
+	// and tells the reader to update jz, which will not help.
+	if len(bytes.TrimSpace(data)) == 0 {
+		return nil, &ValidationError{Source: source, Msg: "the file is empty"}
+	}
 	var d Definition
 	if err := DecodeYAML(data, &d); err != nil {
 		if m := unknownFieldRe.FindStringSubmatch(err.Error()); m != nil {
@@ -128,6 +135,9 @@ func decode(data []byte, source string) (*Definition, error) {
 			return nil, &UnknownKeyError{Source: source, Key: m[2], Line: line}
 		}
 		return nil, &ValidationError{Source: source, Msg: "invalid YAML: " + err.Error()}
+	}
+	if d.Format == 0 && d.Command == "" && d.Variant == "" && d.Parse.Type == "" {
+		return nil, &ValidationError{Source: source, Msg: "holds no definition"}
 	}
 	return &d, nil
 }

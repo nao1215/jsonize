@@ -1,6 +1,9 @@
 name: Fuzz
 
 on:
+  push:
+    branches: [main]
+  pull_request:
   schedule:
     - cron: "0 4 * * *"
   workflow_dispatch:
@@ -9,7 +12,12 @@ permissions:
   contents: read
 
 jobs:
+  # Fuzzing itself stays nightly: a five-minute job per target is too
+  # much to run on every push. The check below it is not, and runs on
+  # every event, so a target added without a line in the matrix is caught
+  # where it was written rather than at four the next morning.
   fuzz:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     strategy:
       fail-fast: false
       matrix:
@@ -21,10 +29,12 @@ jobs:
           - { pkg: ./pkg/convert, name: FuzzDuration }
           - { pkg: ./pkg/convert, name: FuzzScalars }
           - { pkg: ./pkg/definition, name: FuzzLoad }
+          - { pkg: ./pkg/definition, name: FuzzLoadInline }
           - { pkg: ./pkg/engine, name: FuzzFormats }
           - { pkg: ./pkg/engine, name: FuzzParse }
           - { pkg: ./internal/schema, name: FuzzOutputFitsSchema }
           - { pkg: ./pkg/selector, name: FuzzSelect }
+          - { pkg: ./internal/yamlout, name: FuzzEncodeString }
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

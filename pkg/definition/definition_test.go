@@ -264,6 +264,8 @@ func TestLoadErrors(t *testing.T) {
 		want string // substring expected in the error
 	}{
 		{"not yaml", "format: [", "invalid YAML"},
+		{"empty file", "", "is empty"},
+		{"only a comment", "# nothing here\n", "holds no definition"},
 		{"unknown key", base + "bogus: 1\n", `unknown key "bogus"; this definition may need a newer jz`},
 		{"format 2", "format: 2\ncommand: c\nvariant: v\nparse: {type: kv}\n", "format 2 is not supported"},
 		{"missing command", "format: 1\nvariant: v\nparse: {type: kv}\n", "command: is required"},
