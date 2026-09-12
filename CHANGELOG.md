@@ -270,6 +270,15 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- The raw forms of the `lsblk` column sets that had one only for the
+  default columns: `lsblk/filesystems-raw` (`-f -r`),
+  `lsblk/topology-raw` (`-t -r`) and `lsblk/permissions-raw` (`-m -r`).
+  Each reads the cells one space apart, with a disk that carries no
+  filesystem of its own printing the separators of its empty cells, and
+  no tree drawing in front of a name. `lsblk -b -r` still has no
+  variant, which is now a decoy every definition is held against rather
+  than a table read with the cells one column over.
+
 - The four `pidstat` reports that were exit 4: `pidstat/kernel` (`-v`,
   the thread count and the number of file descriptors, with the -1 of a
   task pidstat could not read as null), `pidstat/priority` (`-R`, the

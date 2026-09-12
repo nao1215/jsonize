@@ -1,0 +1,82 @@
+[
+  {
+    "name": "loop0",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/bare/5"
+  },
+  {
+    "name": "loop2",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/core18/2999"
+  },
+  {
+    "name": "loop3",
+    "fstype": "squashfs",
+    "fsver": "4.0",
+    "label": null,
+    "uuid": null,
+    "fsavail": "0",
+    "fsuse_percent": 100,
+    "mountpoint": "/snap/terraform/933"
+  },
+  {
+    "name": "nvme0n1",
+    "fstype": null,
+    "fsver": null,
+    "label": null,
+    "uuid": null,
+    "fsavail": null,
+    "fsuse_percent": null,
+    "mountpoint": null
+  },
+  {
+    "name": "nvme0n1p1",
+    "fstype": "vfat",
+    "fsver": "FAT32",
+    "label": null,
+    "uuid": "1234-ABCD",
+    "fsavail": "1G",
+    "fsuse_percent": 1,
+    "mountpoint": "/boot/efi"
+  },
+  {
+    "name": "nvme0n1p2",
+    "fstype": "ext4",
+    "fsver": "1.0",
+    "label": null,
+    "uuid": "4f3c1b2a-8d7e-4a5b-9c6d-0e1f2a3b4c5d",
+    "fsavail": "152.4G",
+    "fsuse_percent": 87,
+    "mountpoint": "/"
+  },
+  {
+    "name": "nvme1n1",
+    "fstype": null,
+    "fsver": null,
+    "label": null,
+    "uuid": null,
+    "fsavail": null,
+    "fsuse_percent": null,
+    "mountpoint": null
+  },
+  {
+    "name": "nvme1n1p1",
+    "fstype": "ext4",
+    "fsver": "1.0",
+    "label": "data",
+    "uuid": "7a8b9c0d-1e2f-4031-8425-36475869708a",
+    "fsavail": "799.4G",
+    "fsuse_percent": 52,
+    "mountpoint": "/media/user/data"
+  }
+]

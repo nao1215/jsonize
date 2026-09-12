@@ -1,0 +1,4 @@
+description: one disk named on the command line, which prints it and its partitions
+source: captured on Ubuntu 26.04 (util-linux 2.41) with LC_ALL=C from `lsblk -m -r /dev/nvme0n1`
+os: linux
+args: ["-m", "-r"]

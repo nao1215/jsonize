@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsblk/filesystems-raw.json",
+  "title": "lsblk/filesystems-raw",
+  "description": "lsblk -f -r, the filesystem columns one space apart",
+  "x-jsonize": {
+    "definition": "lsblk/filesystems-raw",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "fsavail": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "fstype": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "fsuse_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "fsver": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "label": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "mountpoint": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "name": {
+        "type": "string"
+      },
+      "uuid": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

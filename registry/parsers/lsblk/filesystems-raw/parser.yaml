@@ -1,0 +1,46 @@
+# `lsblk -f -r` prints the filesystem columns with one space between
+# cells and no tree drawing, which is the shape meant to be read by a
+# program. A device that carries no filesystem prints NAME and then the
+# separators of the seven empty cells, so every row has the same cells
+# whatever a device holds.
+#
+# A space inside a LABEL or a MOUNTPOINT is printed as \x20, which is
+# what keeps one cell to a column. jz keeps such a value as lsblk wrote
+# it, for the reason lsblk/raw gives.
+format: 1
+command: lsblk
+variant: filesystems-raw
+description: lsblk -f -r, the filesystem columns one space apart
+metadata:
+  tags: [linux, block-device, filesystem, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsblk.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-r", "--raw"]
+  signature:
+    all:
+      # The header opens the output and its words stand one space apart.
+      # `lsblk -f` lines the same words up over the columns, which is
+      # another format.
+      - '\ANAME FSTYPE FSVER LABEL UUID FSAVAIL FSUSE% MOUNTPOINTS?[ \t]*$'
+parse:
+  type: table
+  split: delimiter
+  delimiter: " "
+  header:
+    rename: {mountpoints: mountpoint}
+fields:
+  # -r draws no tree: a child is written under its own name and the
+  # parent is the device it followed.
+  name: {required: true}
+  fstype: {null_if: [""]}
+  fsver: {null_if: [""]}
+  label: {null_if: [""]}
+  uuid: {null_if: [""]}
+  # FSAVAIL is rounded ("152.4G"), so it is kept as printed.
+  fsavail: {null_if: [""]}
+  fsuse_percent: {type: int, trim_suffix: "%", null_if: [""]}
+  mountpoint: {null_if: [""]}

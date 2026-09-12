@@ -1,0 +1,4 @@
+description: loop devices, two disks with no filesystem of their own and their partitions
+source: captured on Ubuntu 26.04 (util-linux 2.41) with LC_ALL=C from `lsblk -f -r`; the UUIDs, one label and the mount point under /media were replaced, and the loop devices after the third were dropped
+os: linux
+args: ["-f", "-r"]

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsblk/topology-raw.json",
+  "title": "lsblk/topology-raw",
+  "description": "lsblk -t -r, the topology columns one space apart",
+  "x-jsonize": {
+    "definition": "lsblk/topology-raw",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "alignment": {
+        "type": "integer"
+      },
+      "log_sec": {
+        "type": "integer"
+      },
+      "min_io": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "opt_io": {
+        "type": "integer"
+      },
+      "phy_sec": {
+        "type": "integer"
+      },
+      "ra": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "rota": {
+        "type": "boolean"
+      },
+      "rq_size": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "sched": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "wsame": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

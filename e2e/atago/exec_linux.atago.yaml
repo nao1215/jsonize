@@ -554,14 +554,15 @@ scenarios:
               - { path: "$[0].hard", matches: "^(unlimited|[0-9]+)$" }
               - { path: "$[0].units", equals: files }
 
-  # util-linux -r prints the columns lsblk -f lines up, one space apart
-  # and not lined up. Cut where the header words start, it put the
-  # version under FSTYPE's neighbour and the use percentage under UUID.
-  # Column sets that have a raw variant of their own are read there; this
-  # one has none, and being unreadable is the answer rather than a table
-  # cut in the wrong places. Captured output, since a runner may have no
-  # block devices to list.
-  - name: a -r form with no raw variant is refused, not cut by the header
+  # util-linux -r prints the columns lsblk lines up, one space apart and
+  # not lined up. Cutting that where the header words start moved the
+  # filesystem version under FSTYPE's neighbour and the use percentage
+  # under UUID, so each column set is read by a raw variant of its own
+  # instead. A set whose raw form has no variant is refused rather than
+  # cut in the wrong places: -b prints SIZE as a byte count, which no
+  # definition claims. Captured output, since a runner may have no block
+  # devices to list.
+  - name: each raw column set is read by its own variant, and one with none is refused
     only: {os: linux}
     env:
       PATH: "${workdir}/bin:${env:PATH}"
@@ -572,17 +573,38 @@ scenarios:
           content: |
             #!/bin/sh
             case " $* " in
+            *" -b "*) cat "$(dirname "$0")/../captured/lsblk-b-r.txt" ;;
             *" -r "*) cat "$(dirname "$0")/../captured/lsblk-f-r.txt" ;;
             *) cat "$(dirname "$0")/../captured/lsblk-f.txt" ;;
             esac
       - fixture:
           file: captured/lsblk-f-r.txt
-          from: "${specdir}/../../registry/parsers/lsblk/filesystems/testdata/raw.txt"
+          from: "${specdir}/../../registry/parsers/lsblk/filesystems-raw/testdata/devices.txt"
       - fixture:
           file: captured/lsblk-f.txt
           from: "${specdir}/../../registry/parsers/lsblk/filesystems/testdata/util-linux-2.41.txt"
+      - fixture:
+          file: captured/lsblk-b-r.txt
+          from: "${specdir}/../../registry/testdata/decoys/lsblk-bytes-raw.txt"
       - run:
-          command: jz run lsblk -f -r
+          command: jz run --explain lsblk -f -r
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lsblk/filesystems-raw from embedded"
+          stdout:
+            json:
+              # A disk that carries no filesystem of its own prints the
+              # separators of the empty cells and nothing else.
+              - { path: "$[3].name", equals: nvme0n1 }
+              - { path: "$[3].fstype", equals: null }
+              # The columns the aligned reading used to shift.
+              - { path: "$[4].fsver", equals: FAT32 }
+              - { path: "$[4].uuid", equals: 1234-ABCD }
+              - { path: "$[4].fsuse_percent", equals: 1 }
+              - { path: "$[4].mountpoint", equals: /boot/efi }
+      - run:
+          command: jz run lsblk -b -r
       - assert:
           exit_code: 4
           stdout: {empty: true}
