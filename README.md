@@ -39,6 +39,15 @@ Release archives for Linux, macOS and Windows are attached to every
 release. Shell completion: `eval "$(jz completion bash)"` in `~/.bashrc`,
 `source <(jz completion zsh)` in `~/.zshrc`.
 
+## Supported OS (tested on GitHub Actions)
+
+- Linux
+- macOS
+- Windows
+- FreeBSD (the end-to-end suite, in a virtual machine)
+
+OpenBSD and NetBSD are built and linted, not run.
+
 ## Using it
 
 ```console

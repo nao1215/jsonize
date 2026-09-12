@@ -27,8 +27,8 @@ vet: ## Run go vet
 	go vet $(PKGS)
 
 .PHONY: lint
-lint: ## Run golangci-lint for linux, darwin and windows
-	@for os in linux darwin windows; do echo "== GOOS=$$os"; GOOS=$$os golangci-lint run ./... || exit 1; done
+lint: ## Run golangci-lint for every operating system jz is built for
+	@for os in linux darwin windows freebsd openbsd netbsd; do echo "== GOOS=$$os"; GOOS=$$os golangci-lint run ./... || exit 1; done
 
 .PHONY: test
 test: ## Run unit and golden tests with coverage
