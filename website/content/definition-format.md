@@ -83,8 +83,13 @@ detect:
 
 - `os` is compared with the running OS in exec mode. In pipe mode the
   producing OS is unknown and the criterion is skipped.
-- `args` applies only in exec mode. Bundled short flags are expanded, so
-  `-hT` satisfies `any: ["-h"]`.
+- `args` applies only in exec mode. Each entry is one whole word as it
+  was typed, so `--format=long` is the word `--format=long` and a
+  definition that means both spellings lists both. Bundled short flags
+  are expanded, so `-hT` satisfies `any: ["-h"]`. A `--` ends the
+  options: the words after it are operands whatever they look like, and
+  no filter sees them, so `ls -- -l` lists a file named `-l` and reaches
+  the variant that reads names.
 - `signature` expressions are matched against the first `window` lines
   joined with newlines, in multi-line mode (`^`/`$` match line
   boundaries). `\A` anchors at the start of the input, and `\z` at the
@@ -175,18 +180,30 @@ The same four `select` keys narrow a `composite` part's region, which is
 where `until`, `skip` and `limit` earn their keep: what they leave out of
 one part is what its siblings read.
 
-Input is split on the record separator, a newline by default; a trailing
-`\r` is then removed from every line and a UTF-8 BOM is dropped. Blank
+Input is split on the record separator, a newline by default. Each
+record is then prepared in this order: the ANSI escape sequences come
+off (a command that keeps colouring its output through a pipe would
+otherwise hide its format, and its values, behind them), then the
+trailing `\r` of a CRLF ending, then the UTF-8 BOM of the first record.
+The order is the same for detection, for the whole document and for
+`--stream`, so a mark behind a colour code is a mark in every reading.
+The 1 MiB limit on a record counts the bytes between two separators as
+they were read, the escapes and the `\r` included, and the last record
+of an input is held to it whether or not a separator follows it. Blank
 lines before the first line of text and after the last are not part of
 it, whatever `skip_blank` says. With `skip_blank: false` only an empty
 line counts as blank there, since a definition that keeps blank lines
 may be reading lines of spaces as values (`ls/names` reads a file named
-with spaces).
+with spaces); a blank line the definition keeps is still a line
+`ignore` may name.
 
 `fold` names the continuation of the line above it. A matching line is
 joined onto the previous one with a single space and its own leading and
 trailing whitespace removed, and the joined line keeps the number of the
-line it started on. It runs before `ignore` and `skip_blank`, so a
+line it started on. What `--stream` holds while it waits for a record to
+end (a fold, a `records` block, a tree node with its children, a quoted
+csv value, a composite part's region) is bounded by the input limit, and
+a record that grows past it ends the stream. It runs before `ignore` and `skip_blank`, so a
 continuation is joined even where the line it belongs to would be
 dropped. A continuation with nothing above it is an error naming the
 line, rather than something quietly dropped. This is for a report that
@@ -241,6 +258,7 @@ parse:
     none: true                               # no header line (columns required)
     leading_label: type                      # name for an unlabelled first column
     rename: {login: login_at}                # rename derived names
+    repeated: true                           # a body line equal to the header starts another table (default true)
   max_fields: 6                              # whitespace/delimiter: last cell absorbs the rest
   min_fields: 3                              # rows with fewer cells are errors (default: column count)
 ```
@@ -255,9 +273,13 @@ A line of the body that repeats the header, word for word (cell for
 cell with `split: delimiter`), starts a second table: the output of the
 command run twice, or two files joined. It is read as the header again,
 which with `split: aligned` says where the second table's columns are,
-and never as a row of column names. `csv` and `box` do the same with a
-row equal to the header row. A table with `header.none` has no header to
-repeat.
+and never as a row of column names. `box` does the same with a row equal
+to the header row. That is what `header.repeated` says, and it is the
+default for a table, since a command that prints a report per interval
+prints its header with each; `repeated: false` makes such a line a row,
+for a table whose cells may hold the column names. A `csv` defaults the
+other way (below). A table with `header.none` has no header to repeat,
+and `repeated` cannot be written beside it.
 
 - `whitespace`: cells are runs of non-space characters; at most
   `max_fields` (default: number of columns) cells are produced and the
@@ -336,7 +358,23 @@ normalised the way a table header is.
 A row shorter than the header leaves the remaining keys `null`, so every
 object of a document carries the same keys. A row longer than the header
 is an error: a value with no column to go under has nowhere to be
-reported.
+reported. An error names the line of the input the record starts on,
+whatever came before it.
+
+A csv is data, so a row that holds the header's values is a row:
+`header.repeated` defaults to false here, and a definition for a
+command that prints its header again writes `repeated: true` to have
+such a row start another table instead.
+
+The records are made before anything else looks at the lines: a quoted
+value may hold line breaks, and the lines it holds are part of the
+record before they are lines. So `skip_blank` does not drop a blank
+line inside a quoted value, `input.ignore` does not see inside one (an
+expression is matched against the record, whose first line it opens
+with), `input.fold` joins a continuation onto a record, and
+`input.select` counts records. A csv part of a `composite` reads the
+lines of its region as the top level left them, which have been through
+`skip_blank` and `ignore` line by line.
 
 With `header.none: true` every line is a record, the first one included.
 The columns are the ones `columns` names, or, when it names none,
@@ -348,7 +386,13 @@ whole document and `--stream` agree. `--columns NAME,...` on the command
 line gives such a definition its names without writing it out
 (`csv/comma-no-header` and `csv/tab-no-header` are the registered ones). A header naming one column twice numbers the repeats
 (`a`, `a_2`), because refusing a file a spreadsheet exported would be
-the wrong answer and hiding one of the values would be worse.
+the wrong answer and hiding one of the values would be worse. A number
+is only given where no heading already has that name, so `x, x, x_2`
+becomes `x`, `x_3`, `x_2` and every value keeps a key of its own; a
+`rename` that lands on another heading is numbered the same way. The
+delimiter is one character that is not a quote, a line break, a NUL
+byte or invalid UTF-8, and one that is not is refused when the
+definition is loaded.
 
 ### type: ini
 
@@ -634,7 +678,12 @@ they have all been read.
 
 Every extracted value is a string (or `null` for an empty aligned cell /
 non-participating group). `fields` maps a column, group or key name to a
-conversion:
+conversion. It sits beside the parser that reads the values: at the top
+level for a table, csv, regex, kv, ini or tree-less parser, under
+`parts[]` for a `composite` or `records`, and under `node` for a `tree`.
+A `fields` map beside a composite, records or tree parser applies to
+nothing and is refused when the definition is loaded, rather than left
+out in silence.
 
 ```yaml
 fields:
@@ -852,4 +901,5 @@ dig/bind: line 21: 11 lines no part of the definition read: line 21 "; <<>> DiG 
 | field nesting | 8 |
 | signature window | 200 lines |
 | input, and a command's stdout | 64 MiB (internal) |
+| what `--stream` holds while a record waits for its end | 64 MiB |
 | line | 1 MiB |

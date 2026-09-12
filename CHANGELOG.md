@@ -8,6 +8,60 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- A csv row that holds the header's values is a row. `header.repeated`
+  says whether a body line equal to the header is the header printed
+  again, which starts another table; it defaults to true for a table
+  and to false for csv, and cannot be written beside `header.none`.
+- A csv is read record by record before anything else looks at its
+  lines: a blank line inside a quoted value is text, `input.ignore` is
+  matched against the record, `input.fold` joins onto a record and
+  `input.select` counts records. The line a csv error names is the line
+  of the input the record starts on, and the message no longer carries
+  the record's own line numbers.
+- A heading repeated in a csv header is numbered where no heading has
+  that name already: `x, x, x_2` gives `x`, `x_3`, `x_2` rather than two
+  values under `x_2`.
+- The escape sequences come off a record first, then the carriage
+  return, then the byte order mark of the first record, in detection,
+  in the whole document and in `--stream` alike. The line limit counts
+  the bytes between two separators as they were read, and the last
+  record of an input is held to it whether or not a separator follows.
+- `--stream` holds what it waits on (a fold, a `records` block, a tree
+  node, a quoted csv value, a composite part's region) against the
+  input limit, and a record that grows past it ends the stream; a
+  wrapped value is joined once rather than once per line.
+- `--stream` does not count the blank lines before the text among the
+  lines it holds back for detection, and a named variant that has no
+  signature waits for one record, which ends at NUL for a
+  NUL-separated format.
+- A `--` among a command's arguments ends its options: the words after
+  it are operands and no `detect.args` filter sees them, so `jz run ls
+  -- -l` reads a file named `-l` with `ls/names`.
+- `--define` reads no registry, so a registry that cannot be loaded does
+  not stand in the way of a definition that does not use it, and the
+  body may be one flow mapping (`{parse: ..., fields: ...}`). Under
+  `jz run` the given definition's `exec.env` is what the command runs
+  with; a variant named with `--variant` applies its own `exec.env` as
+  it stands, instead of the merge of every variant's.
+- The loader refuses a pattern that names one group twice, a tree node
+  whose pattern or fixed values name `children`, a `fields` map beside
+  a composite, records or tree parser (write it under `parts[]` or
+  `node`), and a csv delimiter the reader would refuse when run (NUL,
+  a quote, a line break, invalid UTF-8).
+- An integer has one sign: `++1` and `+-1` are refused.
+- A registry directory that exists and cannot be read is an error even
+  on `JSONIZE_REGISTRY_PATH`, where only a directory that does not exist
+  is skipped. A definition, manifest, fixture, case file or decoy is
+  read up to its limit and no further, and a definition over 256 KiB is
+  one skipped definition rather than a failed registry.
+- The fixture API (`Case`, `CaseMeta`, `Cases`) moved from `pkg/registry`
+  to `internal/conformance`, which is the only code that runs fixtures;
+  `Registry.Variants` returns a slice of the caller's own.
+- The `e2ehelper` of the E2E suite gained `feed`, which hands a filter
+  its input one piece at a time and waits for the output each piece
+  should produce, and `as`, which makes a stand-in command out of a copy
+  of itself.
+
 - `--parser COMMAND` on a pipe no longer reaches a variant that has no
   signature when the command's other variants have one; that variant is
   used when it is named with `--variant`, or by `jz run`, whose
@@ -319,6 +373,13 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A nested object's sub-field ignored `unescape.when`: the object was
+  read with the groups of the line's pattern, where the group named is
+  one of the object's own. `!a\nb` read with `(?P<flag>!)?(?P<name>.*)`
+  and `when: flag` kept the escape as text.
+- A blank line a definition keeps (`skip_blank: false`) went past
+  `input.ignore` in a stream, so `ignore: ['^$']` read the line whole
+  and refused it streamed.
 - A csv stream held a record back while its text had an odd number of
   quotes, so a quote in the middle of a value (`1,x"y`) held every line
   after it and lost them with it. Only a quote that opens a value holds

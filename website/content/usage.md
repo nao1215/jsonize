@@ -182,16 +182,23 @@ one record per line, and indenting spreads a record over several.
 
 Detection is unchanged, and it is what the first records wait for. jz
 holds back until it has as many leading lines as the widest signature
-among the parsers in scope looks at — twenty by default — because a
+among the parsers in scope looks at, twenty by default, because a
 definition can rule itself out with a line further down, and choosing
-before that would be guessing. Naming the parser narrows the scope, so
-`jz run vmstat` and `COMMAND | jz --stream --parser mount` usually wait for
-twenty lines and no more. The lines held back are then read by the same
-code as everything after them.
+before that would be guessing. The blank lines before the text are not
+among them: a signature never sees them, so a report that opens with a
+few hundred empty lines is identified from its first lines of text.
+Naming the parser narrows the scope, so `jz run vmstat` and `COMMAND |
+jz --stream --parser mount` usually wait for twenty lines and no more,
+and naming a variant that has no signature (`--parser ls --variant
+names-zero`) waits for one record, which for a NUL-separated format
+ends at its NUL rather than at a newline. The lines held back are then
+read by the same code as everything after them.
 
 `--extract` and `--exclude` apply to each record. The 64 MiB input limit
-does not apply, since nothing is held; the 1 MiB limit on a single line
-is what bounds a producer that never prints a separator.
+does not apply to the stream as a whole, since a finished record is not
+kept; it bounds what is held while a record waits for its end (a fold,
+a block, a quoted csv value), and the 1 MiB limit on a single line is
+what bounds a producer that never prints a separator.
 
 ### A composite as a stream
 
