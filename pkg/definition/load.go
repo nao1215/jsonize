@@ -158,6 +158,52 @@ var wholeNumberKeys = map[string]bool{
 	"min_fields": true,
 }
 
+// hasFractionalCount reports one of those keys written with a fraction,
+// wherever the key stands: block style at the start of a line, flow
+// style after a brace or a comma. It is a scan over the bytes, and a
+// hand-written one, because it runs over every definition of every
+// registry jz loads: reading each of them a second time as YAML costs
+// more than the rest of loading a registry, and an expression over the
+// bytes still costs a quarter of it.
+func hasFractionalCount(data []byte) bool {
+	for i := 0; i < len(data); i++ {
+		if data[i] != ':' {
+			continue
+		}
+		j := i
+		for j > 0 && isKeyByte(data[j-1]) {
+			j--
+		}
+		if !wholeNumberKeys[string(data[j:i])] {
+			continue
+		}
+		k := i + 1
+		for k < len(data) && (data[k] == ' ' || data[k] == '\t' || data[k] == '\n' || data[k] == '\r') {
+			k++
+		}
+		if k < len(data) && (data[k] == '+' || data[k] == '-') {
+			k++
+		}
+		start := k
+		for k < len(data) && isDigitByte(data[k]) {
+			k++
+		}
+		if k == start || k+1 >= len(data) || data[k] != '.' || !isDigitByte(data[k+1]) {
+			continue
+		}
+		return true
+	}
+	return false
+}
+
+// isKeyByte reports a byte a definition's key may be written with.
+func isKeyByte(b byte) bool {
+	return b == '_' || b >= 'a' && b <= 'z' || b >= 'A' && b <= 'Z' || isDigitByte(b)
+}
+
+// isDigitByte reports an ASCII digit.
+func isDigitByte(b byte) bool { return b >= '0' && b <= '9' }
+
 // checkWholeNumbers refuses a count written with a fractional part. The
 // YAML library reads 1.5 into an int as 1, which leaves the definition
 // counting a number its author did not write and nothing to say so, and
@@ -166,6 +212,9 @@ var wholeNumberKeys = map[string]bool{
 // quoted "2", a hexadecimal 0x10 or a float 2.0: those are the number
 // they say they are.
 func checkWholeNumbers(data []byte, source string) error {
+	if !hasFractionalCount(data) {
+		return nil
+	}
 	var doc any
 	if err := decodeYAML(data, &doc, false); err != nil {
 		// The strict pass above has already read the document; a body
