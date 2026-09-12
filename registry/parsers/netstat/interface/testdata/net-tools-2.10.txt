@@ -1,0 +1,8 @@
+Kernel Interface table
+Iface             MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+br-1a2b3c4d5e6f  1500    11559      0      0 0         13702      0      8      0 BMRU
+docker0          1500    94412      0      0 0        183024      0      6      0 BMRU
+eno1             1500   111467      0  47145 0         59754      0      0      0 BMRU
+lo              65536   114378      0      0 0        114378      0      0      0 LRU
+veth1a2b3c4      1500   532966      0      0 0        438961      0      0      0 ABMPRU
+wlp195s0         1500  6125860      0  46359 0       3018358      0      0      0 BMRU

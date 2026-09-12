@@ -1,0 +1,5 @@
+PATH                           CONDITION         UNIT                               ACTIVATES
+/var/lib/example               PathExists        example.path                       -
+
+1 paths listed.
+Pass --all to see loaded but inactive paths, too.

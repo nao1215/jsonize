@@ -5,7 +5,7 @@
   "description": "ip link, one block per interface",
   "x-jsonize": {
     "definition": "ip/link",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -85,6 +85,9 @@
           },
           "netnsid": {
             "type": "integer"
+          },
+          "settings": {
+            "type": "string"
           }
         },
         "required": [
@@ -93,31 +96,28 @@
           "broadcast"
         ]
       },
-      "alias": {
+      "details": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "alias",
+                "altname",
+                "settings"
+              ]
+            },
             "name": {
+              "type": "string"
+            },
+            "text": {
               "type": "string"
             }
           },
           "required": [
-            "name"
-          ]
-        }
-      },
-      "altnames": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "name"
+            "kind"
           ]
         }
       }
@@ -125,8 +125,7 @@
     "required": [
       "interface",
       "link",
-      "alias",
-      "altnames"
+      "details"
     ]
   }
 }

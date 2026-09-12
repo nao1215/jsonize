@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemctl/paths.json",
+  "title": "systemctl/paths",
+  "description": "systemctl list-paths table",
+  "x-jsonize": {
+    "definition": "systemctl/paths",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "activates": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "condition": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

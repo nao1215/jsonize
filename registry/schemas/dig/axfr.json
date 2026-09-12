@@ -54,6 +54,17 @@
         ]
       }
     },
+    "query_time": {
+      "type": "object",
+      "properties": {
+        "milliseconds": {
+          "type": "integer"
+        },
+        "queries": {
+          "type": "integer"
+        }
+      }
+    },
     "records": {
       "type": "array",
       "items": {
@@ -114,6 +125,7 @@
   "required": [
     "query",
     "transport",
+    "query_time",
     "records",
     "statistics"
   ]

@@ -118,7 +118,7 @@ the same reading with settings of your own.
 | `mpstat` | [`interrupts`](../schemas/mpstat/interrupts.json), [`linux`](../schemas/mpstat/linux.json) |
 | `mtr` | [`report`](../schemas/mtr/report.json) |
 | `namei` | [`long`](../schemas/namei/long.json) |
-| `netstat` | [`all-sockets`](../schemas/netstat/all-sockets.json), [`internet`](../schemas/netstat/internet.json), [`routing`](../schemas/netstat/routing.json), [`unix`](../schemas/netstat/unix.json) |
+| `netstat` | [`all-sockets`](../schemas/netstat/all-sockets.json), [`interface`](../schemas/netstat/interface.json), [`internet`](../schemas/netstat/internet.json), [`routing`](../schemas/netstat/routing.json), [`unix`](../schemas/netstat/unix.json) |
 | `networkctl` | [`list`](../schemas/networkctl/list.json) |
 | `nm` | [`dynamic`](../schemas/nm/dynamic.json) |
 | `nmcli` | [`connection`](../schemas/nmcli/connection.json), [`device`](../schemas/nmcli/device.json), [`device-show`](../schemas/nmcli/device-show.json), [`general`](../schemas/nmcli/general.json), [`wifi`](../schemas/nmcli/wifi.json) |
@@ -164,7 +164,7 @@ the same reading with settings of your own.
 | `swapon` | [`legacy`](../schemas/swapon/legacy.json), [`linux`](../schemas/swapon/linux.json) |
 | `sysctl` | [`linux`](../schemas/sysctl/linux.json) |
 | `syslog` | [`rfc3164`](../schemas/syslog/rfc3164.json), [`rfc5424`](../schemas/syslog/rfc5424.json) |
-| `systemctl` | [`dependencies`](../schemas/systemctl/dependencies.json), [`jobs`](../schemas/systemctl/jobs.json), [`show`](../schemas/systemctl/show.json), [`show-properties`](../schemas/systemctl/show-properties.json), [`sockets`](../schemas/systemctl/sockets.json), [`status`](../schemas/systemctl/status.json), [`timers`](../schemas/systemctl/timers.json), [`unit-files`](../schemas/systemctl/unit-files.json), [`units`](../schemas/systemctl/units.json), [`units-jobs`](../schemas/systemctl/units-jobs.json) |
+| `systemctl` | [`automounts`](../schemas/systemctl/automounts.json), [`dependencies`](../schemas/systemctl/dependencies.json), [`jobs`](../schemas/systemctl/jobs.json), [`machines`](../schemas/systemctl/machines.json), [`paths`](../schemas/systemctl/paths.json), [`show`](../schemas/systemctl/show.json), [`show-properties`](../schemas/systemctl/show-properties.json), [`sockets`](../schemas/systemctl/sockets.json), [`status`](../schemas/systemctl/status.json), [`timers`](../schemas/systemctl/timers.json), [`unit-files`](../schemas/systemctl/unit-files.json), [`units`](../schemas/systemctl/units.json), [`units-jobs`](../schemas/systemctl/units-jobs.json) |
 | `systemd-analyze` | [`blame`](../schemas/systemd-analyze/blame.json), [`critical-chain`](../schemas/systemd-analyze/critical-chain.json), [`security`](../schemas/systemd-analyze/security.json), [`time`](../schemas/systemd-analyze/time.json) |
 | `systemd-cgtop` | [`batch`](../schemas/systemd-cgtop/batch.json) |
 | `systemd-id128` | [`show`](../schemas/systemd-id128/show.json) |

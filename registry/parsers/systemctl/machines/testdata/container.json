@@ -1,0 +1,15 @@
+[
+  {
+    "name": "host01 (host)",
+    "state": "running",
+    "failed": 0,
+    "jobs": 0
+  },
+  {
+    "marker": "*",
+    "name": "container1",
+    "state": "degraded",
+    "failed": 2,
+    "jobs": 1
+  }
+]

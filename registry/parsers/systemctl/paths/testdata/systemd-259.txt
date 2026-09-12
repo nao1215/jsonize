@@ -1,0 +1,10 @@
+PATH                           CONDITION         UNIT                               ACTIVATES
+/run/systemd/ask-password      DirectoryNotEmpty systemd-ask-password-plymouth.path systemd-ask-password-plymouth.service
+/run/systemd/ask-password      DirectoryNotEmpty systemd-ask-password-wall.path     systemd-ask-password-wall.service
+/var/cache/cups/org.cups.cupsd PathExists        cups.path                          cups.service
+/var/crash                     PathChanged       apport-autoreport.path             apport-autoreport.service
+/var/crash                     PathChanged       whoopsie.path                      whoopsie.service
+/var/lib/AccountsService/users PathModified      sddm-backgrounds-cache.path        sddm-backgrounds-cache.service
+
+6 paths listed.
+Pass --all to see loaded but inactive paths, too.

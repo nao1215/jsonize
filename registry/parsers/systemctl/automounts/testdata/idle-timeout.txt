@@ -1,0 +1,5 @@
+WHAT        WHERE                    MOUNTED IDLE TIMEOUT UNIT
+binfmt_misc /proc/sys/fs/binfmt_misc no      1min 30s     proc-sys-fs-binfmt_misc.automount
+
+1 automount listed.
+Pass --all to see loaded but inactive automounts, too.

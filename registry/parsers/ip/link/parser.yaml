@@ -1,8 +1,8 @@
 # `ip link` prints one block per interface: a header line, the link layer
-# address, and then the interface's alias and alternative names, of which
-# it may have neither. It is `ip -s link` without the counter tables and
-# `ip address` without the addresses, so the signature has to name both
-# of those absences.
+# address, and then the interface's alias, its alternative names and, with
+# -d, the settings of the kind of device it is. It may have none of those.
+# It is `ip -s link` without the counter tables and `ip address` without
+# the addresses, so the signature has to name both of those absences.
 format: 1
 command: ip
 variant: link
@@ -47,25 +47,29 @@ parse:
       parse:
         type: regex
         each: input
-        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: permaddr (?P<permanent_address>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
+        # -d continues this line with the driver's own settings, whose
+        # names and number come from the kernel module rather than from
+        # the format, so they are kept as the text ip printed.
+        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: permaddr (?P<permanent_address>\S+))?(?: link-netnsid (?P<netnsid>\d+))?(?:\s+(?P<settings>\S.*?))?\s*$'
       fields:
         netnsid: {type: int, when_missing: omit}
         # A tunnel device reports the address it was built from.
         permanent_address: {when_missing: omit}
-    # An interface may carry a free-text alias and any number of
-    # alternative names. Both sit under the link line, so each part names
-    # the other's lines as belonging to a sibling rather than taking a
-    # position: which of the two comes first is not something the format
-    # promises.
-    - name: alias
+        settings: {when_missing: omit}
+    # What follows the link line is a free-text alias, any number of
+    # alternative names, and, with -d, a line per kind of device holding
+    # that kind's settings. Which of them appear and in what order is a
+    # property of the interface, so they are read as a list where every
+    # entry names its kind rather than as parts at fixed positions.
+    - name: details
       select: {skip: 2}
-      ignore: ['^\s*altname ']
       parse:
         type: regex
-        pattern: '^\s*alias (?P<name>.+?)\s*$'
-    - name: altnames
-      select: {skip: 2}
-      ignore: ['^\s*alias ']
-      parse:
-        type: regex
-        pattern: '^\s*altname (?P<name>\S+)\s*$'
+        patterns:
+          - '^\s*(?P<kind>altname) (?P<name>\S+)\s*$'
+          - '^\s*(?P<kind>alias) (?P<name>.+?)\s*$'
+          - pattern: '^\s*(?P<text>\S.*?)\s*$'
+            values: {kind: settings}
+      fields:
+        name: {when_missing: omit}
+        text: {when_missing: omit}

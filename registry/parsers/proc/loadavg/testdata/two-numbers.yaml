@@ -1,3 +1,4 @@
+source: captured on Ubuntu 26.04 (Linux 7.0) from /proc/uptime
 description: |
   /proc/uptime is a line of numbers too, and it is the neighbour this
   file is most easily confused with. It has two of them and no slash, so

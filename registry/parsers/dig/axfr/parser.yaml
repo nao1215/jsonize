@@ -59,6 +59,24 @@ parse:
       parse:
         type: regex
         pattern: '^;[ \t]*(?P<text>.+?)[ \t]*$'
+    # How long the transfer took. dig prints it above the server line, so
+    # it is the heading the statistics region starts after and is read
+    # here rather than by the rule that reads the rest of them.
+    - name: query_time
+      select: {skip: 2}
+      ignore:
+        - '^[^;]'
+        - '^; '
+        - '^;; SERVER: '
+        - '^;; WHEN: '
+        - '^;; XFR size: '
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?:;; Query time: (?P<milliseconds>\d+) msec(?: \((?P<queries>\d+) queries\))?[ \t]*)?\z'
+      fields:
+        milliseconds: {type: int, when_missing: omit}
+        queries: {type: int, when_missing: omit}
     - name: records
       select: {skip: 2}
       ignore: ['^;']
@@ -73,7 +91,8 @@ parse:
     # optional and the statistics are an empty object when the transfer
     # did not happen.
     - name: statistics
-      select: {after: '^;; Query time: .*$'}
+      select: {after: '^;; Query time: \d+ msec$|^;; Query time: \d+ msec \(\d+ queries\)$'}
+      ignore: ['^[^;]', '^;[^;]']
       parse:
         type: regex
         each: input

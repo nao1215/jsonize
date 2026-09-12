@@ -20,8 +20,7 @@
       "broadcast": "::",
       "permanent_address": "4e76:da7a:cec8::"
     },
-    "alias": [],
-    "altnames": []
+    "details": []
   },
   {
     "interface": {
@@ -43,7 +42,6 @@
       "address": "0.0.0.0",
       "broadcast": "0.0.0.0"
     },
-    "alias": [],
-    "altnames": []
+    "details": []
   }
 ]

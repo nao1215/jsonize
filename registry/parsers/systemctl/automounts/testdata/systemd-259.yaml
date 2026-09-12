@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C
+description: >-
+  One automount with no idle timeout, which systemd prints as a dash and
+  which is therefore null rather than the string.
+os: linux
+args: ["list-automounts"]

@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C
+description: >-
+  Six path units, two of them watching the same directory under different
+  conditions. Every row activates a unit, so no cell of the last column
+  is a dash here.
+os: linux
+args: ["list-paths"]

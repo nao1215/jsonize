@@ -1,0 +1,71 @@
+# The interface table `netstat -i` prints: one row per interface, with the
+# packet counters the kernel keeps for it. The banner is the same wording
+# `route` and `netstat -r` use for the routing table ("Kernel ..."), so the
+# header row is what says which of the two tables this is, and the
+# signature pins it whole.
+#
+# The rows are read with an expression rather than by header offset. Two
+# columns make an offset reading wrong: RX-OVR is printed left-aligned
+# inside a right-aligned header, and the flag column has no width at all,
+# since it is the letters of whichever flags are set written one after
+# another.
+#
+# Ten of the eleven cells are counters, and the expression requires all
+# ten to be digits. That is what refuses the row netstat prints for an
+# interface it has no counters for, which reads
+# "     - no statistics available -" across the whole of the numeric part:
+# reading that row as numbers is the one mistake this table invites.
+#
+# What this definition does not undertake to read is the table net-tools
+# printed before 2.0, which carries a Met (metric) column between MTU and
+# RX-OK. Those are different columns in different places, and a row of one
+# is a row of the other with every counter shifted by one, so the two
+# cannot share an expression. The header row is what tells them apart, and
+# pinning this one whole is what keeps the older table out.
+format: 1
+command: netstat
+variant: interface
+description: netstat -i kernel interface table
+metadata:
+  tags: [linux, network, net-tools]
+  # net-tools is not installed on the machine the fixtures were made on,
+  # and BusyBox netstat has no -i, so the fixtures are rendered from this
+  # machine's counters by the format strings named below rather than
+  # captured. Each fixture says so.
+  compatible: [net-tools]
+  references:
+    - https://man7.org/linux/man-pages/man8/netstat.8.html
+    # The banner and the header row.
+    - https://github.com/ecki/net-tools/blob/v2.10/netstat.c
+    # ife_print_short, which prints one row.
+    - https://github.com/ecki/net-tools/blob/v2.10/lib/interface.c
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AKernel Interface table[ \t]*$'
+      - '^Iface[ \t]+MTU[ \t]+RX-OK[ \t]+RX-ERR[ \t]+RX-DRP[ \t]+RX-OVR[ \t]+TX-OK[ \t]+TX-ERR[ \t]+TX-DRP[ \t]+TX-OVR[ \t]+Flg[ \t]*$'
+input:
+  ignore:
+    - '^Kernel Interface table[ \t]*$'
+    - '^Iface[ \t]+MTU[ \t]+RX-OK'
+parse:
+  type: regex
+  pattern: '^(?P<iface>\S+)[ \t]+(?P<mtu>\d+)[ \t]+(?P<rx_ok>\d+)[ \t]+(?P<rx_err>\d+)[ \t]+(?P<rx_drp>\d+)[ \t]+(?P<rx_ovr>\d+)[ \t]+(?P<tx_ok>\d+)[ \t]+(?P<tx_err>\d+)[ \t]+(?P<tx_drp>\d+)[ \t]+(?P<tx_ovr>\d+)[ \t]+(?P<flags>\S.*?)[ \t]*$'
+fields:
+  iface: {required: true}
+  mtu: {type: int, required: true}
+  rx_ok: {type: int, required: true}
+  rx_err: {type: int, required: true}
+  rx_drp: {type: int, required: true}
+  rx_ovr: {type: int, required: true}
+  tx_ok: {type: int, required: true}
+  tx_err: {type: int, required: true}
+  tx_drp: {type: int, required: true}
+  tx_ovr: {type: int, required: true}
+  # The cell is the letters of the flags that are set, written with nothing
+  # between them, and "[NO FLAGS]" when none are. One letter is not always
+  # one flag either: in this release P stands for both PROMISC and
+  # POINTOPOINT. Splitting the cell would have to decide which, so it stays
+  # the string it was printed as.
+  flags: {required: true}

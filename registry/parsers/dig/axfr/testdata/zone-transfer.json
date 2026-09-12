@@ -7,6 +7,9 @@
     ]
   },
   "transport": [],
+  "query_time": {
+    "milliseconds": 262
+  },
   "records": [
     {
       "name": "zonetransfer.me.",
