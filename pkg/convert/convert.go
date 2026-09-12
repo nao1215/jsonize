@@ -48,14 +48,15 @@ func (e *Error) Error() string {
 
 func (e *Error) Unwrap() error { return e.Cause }
 
-// Int parses a base-10 integer. A leading '+' is accepted; thousands
-// separators are not, because jsonize always runs commands with LC_ALL=C.
+// Int parses a base-10 integer. One leading sign is accepted, '+' or
+// '-'; thousands separators are not, because jsonize always runs
+// commands with LC_ALL=C.
 func Int(s string) (int64, error) {
 	t := strings.TrimSpace(s)
 	if t == "" {
 		return 0, &Error{Type: typeInt, Input: s, Cause: errors.New("empty value")}
 	}
-	v, err := strconv.ParseInt(strings.TrimPrefix(t, "+"), 10, 64)
+	v, err := strconv.ParseInt(t, 10, 64)
 	if err != nil {
 		var ne *strconv.NumError
 		if errors.As(err, &ne) {

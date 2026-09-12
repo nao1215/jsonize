@@ -2,16 +2,13 @@ package engine
 
 import (
 	"bufio"
-	"bytes"
 	"errors"
 	"fmt"
 	"io"
 	"regexp"
 	"slices"
 	"strings"
-	"unicode/utf8"
 
-	"github.com/nao1215/jsonize/pkg/convert"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
@@ -63,12 +60,17 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 		ignore:  def.Input.IgnorePatterns(),
 		blank:   def.Input.SkipBlankLines(),
 		sel:     &def.Input.Select,
+		held:    &hold{limit: int(opts.maxInput())},
 	}
 	if def.Parse.Type == definition.TypeTable && def.Parse.Header.None {
 		s.columns()
 	}
-	if def.Parse.Type == definition.TypeCSV && def.Parse.Header.None && len(def.Parse.Header.Columns) > 0 {
-		s.csvCols = def.Parse.Header.Columns
+	if def.Parse.Type == definition.TypeCSV {
+		// The records are made before anything else sees the lines, the
+		// way the whole-document reader makes them (see ParseAccounted).
+		q := newCSVQuote(csvDelimiter(&def.Parse))
+		s.csvIn = &q
+		s.startCSV()
 	}
 	if def.Parse.Type == definition.TypeComposite {
 		s.startComposite()
@@ -117,33 +119,13 @@ func unwrapStopped(err error) error {
 	return err
 }
 
-// prepareRecord brings one record to the form the whole-document reader
-// produces: the escape sequences come off first, then the carriage
-// return of a CRLF ending, then the byte order mark of the first record.
-// The order is the whole point — doing any of it the other way round
-// made the two readings disagree on text neither of them should have
-// treated specially.
-func prepareRecord(raw []byte, sep byte, num int) []byte {
-	out := convert.StripANSI(raw)
-	if sep == '\n' {
-		out = bytes.TrimSuffix(out, []byte{'\r'})
-	}
-	if num == 1 {
-		out = bytes.TrimPrefix(out, []byte{0xEF, 0xBB, 0xBF})
-	}
-	return out
-}
-
 // feedRecordText hands one prepared record to the parser, reporting a
 // record that is not valid UTF-8 the same way as one that does not fit.
 func (s *streamer) feedRecordText(def *definition.Definition, text []byte, num int) error {
-	if !utf8.Valid(text) {
-		return s.report(&ParseError{Definition: def.ID(), Line: num, Msg: "input is not valid UTF-8"})
+	if err := checkRecord(text, def.Input.Separator()); err != nil {
+		return s.report(&ParseError{Definition: def.ID(), Line: num, Msg: err.msg})
 	}
-	if def.Input.Separator() == '\n' && bytes.IndexByte(text, 0) >= 0 {
-		return s.report(&ParseError{Definition: def.ID(), Line: num, Msg: nulInLine})
-	}
-	if perr := s.feedRaw(line{text: string(text), num: num}); perr != nil {
+	if perr := s.feedPhysical(line{text: string(text), num: num}); perr != nil {
 		return s.report(perr)
 	}
 	return nil
@@ -152,7 +134,9 @@ func (s *streamer) feedRecordText(def *definition.Definition, text []byte, num i
 // readRecord reads one record up to sep, refusing one longer than maxLen
 // rather than letting a producer with no separators in its output grow
 // the buffer without bound. The record comes back without the separator,
-// and io.EOF alongside the last one.
+// and io.EOF alongside the last one. The limit counts the bytes between
+// two separators as they were read, the way the whole-document reader
+// counts them, whether or not a separator follows the last of them.
 func readRecord(br *bufio.Reader, sep byte, maxLen int) ([]byte, error) {
 	var out []byte
 	for {
@@ -167,11 +151,52 @@ func readRecord(br *bufio.Reader, sep byte, maxLen int) ([]byte, error) {
 		if len(out) > 0 && out[len(out)-1] == sep {
 			out = out[:len(out)-1]
 		}
+		if len(out) > maxLen {
+			return nil, ErrLineTooLong
+		}
 		// The carriage return of a CRLF line ending is trimmed by the
 		// caller rather than here, because the whole-document reader
 		// removes the escape sequences first and the two have to agree.
 		return out, err
 	}
+}
+
+// hold is what a stream is holding back while it waits for a record to
+// finish: the line a fold may still join, the lines of a block or a
+// node, a quoted csv value, the region of a single-value part. A whole
+// document is bounded by its size, and a record of a stream is bounded
+// the same way, so that a producer that never finishes a record cannot
+// make jz hold its output without bound. Every streamer of one stream
+// shares one hold, since the parts of a composite hold at the same time.
+type hold struct {
+	bytes int
+	limit int
+}
+
+// take charges n bytes to the hold and reports the record that exceeds
+// it. The error is not one a record could be skipped over: what came
+// before is not a record, and what comes after is more of the same.
+func (h *hold) take(n int, def *definition.Definition, ln int) error {
+	h.bytes += n
+	if h.bytes > h.limit {
+		return &ParseError{Definition: def.ID(), Line: ln, Msg: fmt.Sprintf("a record held while waiting for its end exceeds %d bytes", h.limit), Cause: ErrInputTooLarge}
+	}
+	return nil
+}
+
+// give returns n bytes to the hold once the lines are released.
+func (h *hold) give(n int) { h.bytes -= n }
+
+// lineBytes is what one held line costs: its text and its line break,
+// so that a run of empty lines is bounded by its count.
+func lineBytes(text string) int { return len(text) + 1 }
+
+func linesBytes(lines []line) int {
+	n := 0
+	for _, l := range lines {
+		n += lineBytes(l.text)
+	}
+	return n
 }
 
 // streamer holds the state the batch reader keeps in slices: the line a
@@ -189,8 +214,18 @@ type streamer struct {
 	blank  bool
 	sel    *definition.Select
 
-	// held is the line a fold may still be joined to.
-	held *line
+	// held bounds what the stream is holding back.
+	held *hold
+	// folding is the line a fold may still join, in pieces: the line and
+	// each continuation joined to it so far.
+	folding []string
+	foldNum int
+	// csvIn groups the physical lines of a csv into records before they
+	// are folded, dropped or selected, the way the whole-document reader
+	// does; csvRec holds the lines of the record that is still open.
+	csvIn  *csvQuote
+	csvRec []string
+	csvNum int
 	// empty holds the empty lines a definition that keeps blank lines
 	// has seen since the last line with text.
 	empty []line
@@ -208,9 +243,11 @@ type streamer struct {
 	headerText string
 
 	// csvPending holds the lines of a record a quoted value has not
-	// finished yet; csvCols is the header once it has been read, and
-	// csvHeader the record it was read from.
-	csvPending []line
+	// finished yet, which csvQuote follows; csvCols is the header once it
+	// has been read, and csvHeader the record it was read from.
+	csvPending []string
+	csvPendNum int
+	csvQuote   csvQuote
 	csvCols    []string
 	csvHeader  []string
 	// boxRow holds the lines between two rules of a drawn table, and
@@ -235,10 +272,41 @@ func (s *streamer) report(err error) error {
 		return err
 	}
 	var pe *ParseError
-	if !errors.As(err, &pe) || errors.Is(err, ErrLineTooLong) {
+	if !errors.As(err, &pe) || errors.Is(err, ErrLineTooLong) || errors.Is(err, ErrInputTooLarge) {
 		return err
 	}
 	return s.onError(pe)
+}
+
+// feedPhysical takes one line as the input split it. For a csv it is
+// grouped into a record first, since a quoted value may hold the line
+// break, and the record is what the stages after this one see.
+func (s *streamer) feedPhysical(l line) error {
+	if s.csvIn == nil {
+		return s.feedRaw(l)
+	}
+	if s.csvRec == nil {
+		s.csvNum = l.num
+	}
+	if err := s.held.take(lineBytes(l.text), s.def, l.num); err != nil {
+		return err
+	}
+	s.csvRec = append(s.csvRec, l.text)
+	if s.csvIn.feed(l.text) {
+		return nil
+	}
+	return s.flushCSVRecord()
+}
+
+// flushCSVRecord hands the record being grouped on, whole.
+func (s *streamer) flushCSVRecord() error {
+	if s.csvRec == nil {
+		return nil
+	}
+	rec := line{text: strings.Join(s.csvRec, "\n"), num: s.csvNum}
+	s.held.give(lineBytes(rec.text))
+	s.csvRec = nil
+	return s.feedRaw(rec)
 }
 
 // feedRaw applies input.fold, which is the one stage that needs to see
@@ -248,19 +316,39 @@ func (s *streamer) feedRaw(l line) error {
 		return s.feedFolded(l)
 	}
 	if s.fold.MatchString(l.text) {
-		if s.held == nil {
+		if s.folding == nil {
 			return &ParseError{Definition: s.def.ID(), Line: l.num, Msg: fmt.Sprintf("continuation line with nothing to join it to: %q", l.text)}
 		}
-		s.held.text += " " + strings.TrimSpace(l.text)
+		piece := strings.TrimSpace(l.text)
+		if err := s.held.take(lineBytes(piece), s.def, l.num); err != nil {
+			return err
+		}
+		s.folding = append(s.folding, piece)
 		return nil
 	}
-	prev := s.held
-	held := l
-	s.held = &held
+	prev := s.releaseFolding()
+	if err := s.held.take(lineBytes(l.text), s.def, l.num); err != nil {
+		return err
+	}
+	s.folding, s.foldNum = []string{l.text}, l.num
 	if prev == nil {
 		return nil
 	}
 	return s.feedFolded(*prev)
+}
+
+// releaseFolding joins the pieces of the line a fold was holding and
+// hands it back, or nil when none was held.
+func (s *streamer) releaseFolding() *line {
+	if s.folding == nil {
+		return nil
+	}
+	held := line{text: strings.Join(s.folding, " "), num: s.foldNum}
+	for _, piece := range s.folding {
+		s.held.give(lineBytes(piece))
+	}
+	s.folding = nil
+	return &held
 }
 
 // feedFolded drops the lines input.ignore and skip_blank name, and the
@@ -273,6 +361,9 @@ func (s *streamer) feedFolded(l line) error {
 		if s.blank || !s.text {
 			return nil
 		}
+		if err := s.held.take(lineBytes(l.text), s.def, l.num); err != nil {
+			return err
+		}
 		s.empty = append(s.empty, l)
 		return nil
 	}
@@ -280,6 +371,12 @@ func (s *streamer) feedFolded(l line) error {
 	for len(s.empty) > 0 {
 		e := s.empty[0]
 		s.empty = s.empty[1:]
+		s.held.give(lineBytes(e.text))
+		// A line held back is still a line input.ignore may name, the
+		// way it is in a whole document.
+		if matchesAny(s.ignore, e.text) {
+			continue
+		}
 		if err := s.feedSelected(e); err != nil {
 			return err
 		}
@@ -384,7 +481,7 @@ func (s *streamer) feedTable(l line) error {
 		s.cols, s.header, s.headerText = cols, true, l.text
 		return nil
 	}
-	if !s.p.Header.None && sameHeader(s.p, s.split(), l.text, s.headerText) {
+	if s.p.RepeatedHeader() && sameHeader(s.p, s.split(), l.text, s.headerText) {
 		// A second table, whose header says where its own columns are.
 		cols, err := s.resolveHeader(s.p, l, s.split())
 		if err != nil {
@@ -467,11 +564,17 @@ func (s *streamer) feedBlock(l line) error {
 		// could be read: a caller that skips a bad record still gets the
 		// ones after it.
 		err := s.flushBlock()
+		if herr := s.held.take(lineBytes(l.text), s.def, l.num); herr != nil {
+			return herr
+		}
 		s.block = []line{l}
 		return err
 	}
 	if len(s.block) == 0 {
 		return s.errorf(l.num, "", "line precedes the first record: %q", l.text)
+	}
+	if err := s.held.take(lineBytes(l.text), s.def, l.num); err != nil {
+		return err
 	}
 	s.block = append(s.block, l)
 	return nil
@@ -483,6 +586,7 @@ func (s *streamer) flushBlock() error {
 	}
 	block := s.block
 	s.block = nil
+	s.held.give(linesBytes(block))
 	// A record is read the way a whole composite is, so its lines are
 	// accounted for the same way, one record at a time.
 	s.ledger = newLedger(block)
@@ -499,10 +603,13 @@ func (s *streamer) flushBlock() error {
 
 // finish releases what the lookahead and the open record were holding.
 func (s *streamer) finish() error {
-	if s.held != nil {
-		held := *s.held
-		s.held = nil
-		if err := s.feedFolded(held); err != nil {
+	// A quoted value that never closes is a record the input did not
+	// finish, and reporting it is better than dropping it.
+	if err := s.flushCSVRecord(); err != nil {
+		return err
+	}
+	if held := s.releaseFolding(); held != nil {
+		if err := s.feedFolded(*held); err != nil {
 			return err
 		}
 	}
@@ -515,12 +622,8 @@ func (s *streamer) finish() error {
 	if err := s.flushTree(); err != nil {
 		return err
 	}
-	if len(s.csvPending) > 0 {
-		// A quoted value that never closes is a record the input did not
-		// finish, and reporting it is better than dropping it.
-		pending := s.csvPending
-		s.csvPending = nil
-		return s.emitCSV(pending)
+	if err := s.flushCSV(); err != nil {
+		return err
 	}
 	if s.comp != nil {
 		return s.finishComposite()
@@ -544,6 +647,9 @@ func (s *streamer) feedTree(l line) error {
 	} else if len(s.tree) == 0 {
 		return s.errorf(l.num, "", "indented %d levels below a line at level 0, so it has no parent", depth)
 	}
+	if err := s.held.take(lineBytes(l.text), s.def, l.num); err != nil {
+		return err
+	}
 	s.tree = append(s.tree, l)
 	return nil
 }
@@ -554,6 +660,7 @@ func (s *streamer) flushTree() error {
 	}
 	group := s.tree
 	s.tree = nil
+	s.held.give(linesBytes(group))
 	nodes, _, err := s.treeNodes(s.p, group, 0, 0)
 	if err != nil {
 		return err
@@ -566,59 +673,51 @@ func (s *streamer) flushTree() error {
 	return nil
 }
 
-// feedCSV holds a line back while a quoted value is still open, and hands
-// the record over once it is closed.
-func (s *streamer) feedCSV(l line) error {
-	s.csvPending = append(s.csvPending, l)
-	texts := make([]string, len(s.csvPending))
-	for i, p := range s.csvPending {
-		texts[i] = p.text
+// startCSV prepares the csv state: the columns the definition names, and
+// the quoting rules the lines of a record are followed with.
+func (s *streamer) startCSV() {
+	if s.p.Header.None && len(s.p.Header.Columns) > 0 {
+		s.csvCols = s.p.Header.Columns
 	}
-	if csvQuoteOpen(strings.Join(texts, "\n"), csvDelimiter(s.p)) {
-		return nil
-	}
-	pending := s.csvPending
-	s.csvPending = nil
-	return s.emitCSV(pending)
+	s.csvQuote = newCSVQuote(csvDelimiter(s.p))
 }
 
-// csvQuoteOpen reports whether text ends inside a quoted value. Only a
-// quote that begins a value opens one, and inside it a quote written
-// twice is a quote. Counting the quotes instead took one in the middle
-// of a value, which opens nothing and is an error of its own line, for
-// a value going on to the next line, and held every line after it.
-func csvQuoteOpen(text string, delim rune) bool {
-	quoted, start := false, true
-	runes := []rune(text)
-	for i := 0; i < len(runes); i++ {
-		r := runes[i]
-		switch {
-		case quoted && r == '"' && i+1 < len(runes) && runes[i+1] == '"':
-			i++
-		case quoted && r == '"':
-			quoted = false
-		case quoted:
-		case start && r == '"':
-			quoted, start = true, false
-		case r == delim || r == '\n':
-			start = true
-		default:
-			start = false
-		}
+// feedCSV holds a line back while a quoted value is still open, and hands
+// the record over once it is closed. At the top level every line is a
+// record already (see feedPhysical); the lines of a csv part of a
+// composite are grouped here.
+func (s *streamer) feedCSV(l line) error {
+	if s.csvPending == nil {
+		s.csvPendNum = l.num
 	}
-	return quoted
+	if err := s.held.take(lineBytes(l.text), s.def, l.num); err != nil {
+		return err
+	}
+	s.csvPending = append(s.csvPending, l.text)
+	if s.csvQuote.feed(l.text) {
+		return nil
+	}
+	return s.flushCSV()
+}
+
+// flushCSV reads the record being held, whole, or nothing when none is.
+func (s *streamer) flushCSV() error {
+	if s.csvPending == nil {
+		return nil
+	}
+	rec := line{text: strings.Join(s.csvPending, "\n"), num: s.csvPendNum}
+	s.held.give(lineBytes(rec.text))
+	s.csvPending = nil
+	return s.emitCSV(rec)
 }
 
 // emitCSV reads one finished record, taking the first one as the header
 // unless the definition named the columns.
-func (s *streamer) emitCSV(pending []line) error {
-	texts := make([]string, len(pending))
-	for i, p := range pending {
-		texts[i] = p.text
-	}
-	rows, err := readCSV(strings.Join(texts, "\n"), s.p)
+func (s *streamer) emitCSV(rec line) error {
+	rows, err := readCSV(rec.text, s.p)
 	if err != nil {
-		return s.errorf(pending[0].num, "", "%s", err.Error())
+		ln, msg := csvFailure(rec, err)
+		return s.errorf(ln, "", "%s", msg)
 	}
 	for _, row := range rows {
 		switch {
@@ -629,10 +728,12 @@ func (s *streamer) emitCSV(pending []line) error {
 			s.csvCols, s.csvHeader = csvColumns(s.p, row), row
 			continue
 		}
-		if !s.p.Header.None && slices.Equal(row, s.csvHeader) {
-			continue // the header of a second file joined to the first
+		// A csv file is data: a row that holds the header's values is a
+		// row, unless the definition says the header is printed again.
+		if s.p.RepeatedHeader() && slices.Equal(row, s.csvHeader) {
+			continue
 		}
-		obj, err := s.csvRow(s.p, s.fields, s.csvCols, row, pending[0].num)
+		obj, err := s.csvRow(s.p, s.fields, s.csvCols, row, rec.num)
 		if err != nil {
 			return err
 		}
@@ -657,6 +758,9 @@ func (s *streamer) feedBox(l line) error {
 		}
 		return s.flushBox()
 	}
+	if err := s.held.take(lineBytes(l.text), s.def, l.num); err != nil {
+		return err
+	}
 	if !s.header {
 		s.boxRow = append(s.boxRow, l)
 		return nil
@@ -679,6 +783,7 @@ func (s *streamer) closeBoxHeader() error {
 	}
 	group := s.boxRow
 	s.boxRow = nil
+	s.held.give(linesBytes(group))
 	return s.closeBoxHeaderFrom(group)
 }
 
@@ -688,12 +793,13 @@ func (s *streamer) flushBox() error {
 	}
 	group := s.boxRow
 	s.boxRow = nil
+	s.held.give(linesBytes(group))
 	if !s.header {
 		return s.closeBoxHeaderFrom(group)
 	}
 	s.boxBody = true
 	cells := boxJoin(group, "\n")
-	if slices.Equal(cells, s.boxHeader) {
+	if s.p.RepeatedHeader() && slices.Equal(cells, s.boxHeader) {
 		return nil // the header of a second table drawn after the first
 	}
 	obj, err := s.boxObject(s.cols, cells, s.fields, group[0].num)

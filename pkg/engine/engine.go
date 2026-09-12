@@ -130,6 +130,14 @@ func ParseAccounted(def *definition.Definition, input []byte, opts Options) (any
 		return nil, acct, &ParseError{Definition: def.ID(), Line: err.line, Msg: err.msg, Cause: err.cause}
 	}
 	acct.Lines = len(lines)
+	if def.Parse.Type == definition.TypeCSV {
+		// A quoted csv value may hold line breaks, and the lines it holds
+		// are part of a record before they are anything else: a blank
+		// line inside it is text, not a blank line, and a line that
+		// input.ignore would name is a value. So the records are made
+		// first, and everything after this sees one record at a time.
+		lines = csvRecords(&def.Parse, lines)
+	}
 	lines, ferr := foldLines(&def.Input, lines)
 	if ferr != nil {
 		return nil, acct, &ParseError{Definition: def.ID(), Line: ferr.line, Msg: ferr.msg, Cause: ferr.cause}
@@ -172,22 +180,13 @@ const nulInLine = "a NUL byte in a format read line by line; a command run with 
 
 // splitRecords cuts the input into records on sep, which is a newline for
 // ordinary command output and NUL for the record-separated output of
-// tools such as `env -0`.
+// tools such as `env -0`. Each record is then brought to the form the
+// parsers read by prepareRecord and checked by checkRecord, the same two
+// steps a stream applies to a record as it arrives, so the two readings
+// cannot disagree about a record.
 func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
 	if len(input) == 0 {
 		return nil, nil
-	}
-	input = bytes.TrimPrefix(input, []byte{0xEF, 0xBB, 0xBF}) // UTF-8 BOM
-	// Detection strips these too; doing it here as well keeps the
-	// escapes out of the values when a parser is named instead.
-	input = convert.StripANSI(input)
-	if !utf8.Valid(input) {
-		return nil, &splitError{msg: "input is not valid UTF-8"}
-	}
-	if sep == '\n' {
-		if i := bytes.IndexByte(input, 0); i >= 0 {
-			return nil, &splitError{line: 1 + bytes.Count(input[:i], []byte{'\n'}), msg: nulInLine}
-		}
 	}
 	parts := bytes.Split(input, []byte{sep})
 	if len(parts) > 0 && len(parts[len(parts)-1]) == 0 {
@@ -195,15 +194,51 @@ func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
 	}
 	out := make([]line, 0, len(parts))
 	for i, p := range parts {
+		// The limit counts the bytes between two separators as they were
+		// read, escape sequences and a carriage return included, which is
+		// what a stream can count before it has read the whole record.
 		if len(p) > maxLen {
 			return nil, &splitError{line: i + 1, msg: fmt.Sprintf("record exceeds %d bytes", maxLen), cause: ErrLineTooLong}
 		}
-		if sep == '\n' {
-			p = bytes.TrimSuffix(p, []byte{'\r'})
+		p = prepareRecord(p, sep, i+1)
+		if err := checkRecord(p, sep); err != nil {
+			return nil, &splitError{line: i + 1, msg: err.msg}
 		}
 		out = append(out, line{text: string(p), num: i + 1})
 	}
 	return out, nil
+}
+
+// prepareRecord brings one record to the form the parsers read: the
+// escape sequences come off first, then the carriage return of a CRLF
+// ending, then the byte order mark of the first record. Detection strips
+// the escapes too; doing it here as well keeps them out of the values
+// when a parser is named instead. The order is the same everywhere a
+// record is prepared, since a byte order mark behind a colour code and
+// a carriage return inside an escape sequence are only the same text
+// under one order.
+func prepareRecord(raw []byte, sep byte, num int) []byte {
+	out := convert.StripANSI(raw)
+	if sep == '\n' {
+		out = bytes.TrimSuffix(out, []byte{'\r'})
+	}
+	if num == 1 {
+		out = bytes.TrimPrefix(out, []byte{0xEF, 0xBB, 0xBF})
+	}
+	return out
+}
+
+// checkRecord refuses a prepared record that no parser reads: one that
+// is not UTF-8, and one holding a NUL byte in a format read line by
+// line.
+func checkRecord(text []byte, sep byte) *splitError {
+	if !utf8.Valid(text) {
+		return &splitError{msg: "input is not valid UTF-8"}
+	}
+	if sep == '\n' && bytes.IndexByte(text, 0) >= 0 {
+		return &splitError{msg: nulInLine}
+	}
+	return nil
 }
 
 // foldLines joins a wrapped continuation onto the line above it. It runs
@@ -216,16 +251,29 @@ func foldLines(in *definition.Input, lines []line) ([]line, *splitError) {
 		return lines, nil
 	}
 	out := lines[:0:0]
+	// The pieces of the line being joined are kept apart until the next
+	// line that is not a continuation, so that a value wrapped over many
+	// lines is joined once rather than once per line.
+	var pieces []string
+	flush := func() {
+		if len(pieces) > 1 {
+			out[len(out)-1].text = strings.Join(pieces, " ")
+		}
+		pieces = nil
+	}
 	for _, l := range lines {
 		if !fold.MatchString(l.text) {
+			flush()
 			out = append(out, l)
+			pieces = append(pieces, l.text)
 			continue
 		}
 		if len(out) == 0 {
 			return nil, &splitError{line: l.num, msg: fmt.Sprintf("continuation line with nothing to join it to: %q", l.text)}
 		}
-		out[len(out)-1].text += " " + strings.TrimSpace(l.text)
+		pieces = append(pieces, strings.TrimSpace(l.text))
 	}
+	flush()
 	return out, nil
 }
 
@@ -576,12 +624,7 @@ func (r *run) objectFromMatch(re *regexp.Regexp, text string, m []int, vals []de
 		}
 	}
 	names := re.SubexpNames()
-	present := map[string]bool{}
-	for i, name := range names {
-		if name != "" && m[2*i] >= 0 && m[2*i+1] > m[2*i] {
-			present[name] = true
-		}
-	}
+	present := presentGroups(re, m)
 	for i, name := range names {
 		if name == "" {
 			continue
@@ -595,6 +638,18 @@ func (r *run) objectFromMatch(re *regexp.Regexp, text string, m []int, vals []de
 		}
 	}
 	return obj, nil
+}
+
+// presentGroups lists the named groups of a match that took part in it
+// with some text, which is what an unescape rule's when is decided by.
+func presentGroups(re *regexp.Regexp, m []int) map[string]bool {
+	present := map[string]bool{}
+	for i, name := range re.SubexpNames() {
+		if name != "" && m[2*i] >= 0 && m[2*i+1] > m[2*i] {
+			present[name] = true
+		}
+	}
+	return present
 }
 
 // unquote removes one matching pair of surrounding quotes, which is what
