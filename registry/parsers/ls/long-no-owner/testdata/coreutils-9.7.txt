@@ -1,0 +1,5 @@
+drwxr-s--- 2 dip    4096 May 25 09:15 /etc/chatscripts
+drwxr-xr-x 5 lp     4096 Sep 12 00:32 /etc/cups
+-rw-r----- 1 shadow 1021 May 26 21:02 /etc/gshadow
+-rw-r--r-- 1 root    221 Nov  4  2025 /etc/hosts
+-rw-r----- 1 shadow 1448 May 26 21:02 /etc/shadow

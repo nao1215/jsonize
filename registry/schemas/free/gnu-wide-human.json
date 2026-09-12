@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/free/gnu-wide-human.json",
+  "title": "free/gnu-wide-human",
+  "description": "procps free -h -w (buffers and cache in separate columns, sizes kept as printed)",
+  "x-jsonize": {
+    "definition": "free/gnu-wide-human",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "free": {
+        "type": "string"
+      },
+      "total": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "used": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

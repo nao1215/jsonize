@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C, the header and fourteen of the processes; this format prints the user id as a number and the command as a name, so no name or path had to be replaced
+description: a real-time thread prints a dash for its nice value, a process waiting in nothing prints a dash for WCHAN, and a wide SZ pushes the columns to the right
+os: linux
+args: [-ely]

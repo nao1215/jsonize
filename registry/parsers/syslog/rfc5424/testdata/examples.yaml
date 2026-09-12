@@ -1,0 +1,9 @@
+description: >
+  The four messages RFC 5424 shows: one with no structured data, one
+  whose timestamp carries a microsecond fraction and a negative offset
+  and whose message id is the nil value, one with a structured data
+  element, and one that is structured data and nothing else, so its
+  message is null. Where the RFC writes BOM the message begins with the
+  UTF-8 byte order mark, which is how the format says the message is
+  UTF-8; the mark is inside the message and is kept there.
+source: the examples of RFC 5424 section 6.5, each joined onto one line where the RFC broke it for the page width, and with the BOM the RFC spells out written as the byte order mark it stands for

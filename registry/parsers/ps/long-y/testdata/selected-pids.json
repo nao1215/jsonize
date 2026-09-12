@@ -1,0 +1,47 @@
+[
+  {
+    "s": "S",
+    "uid": 0,
+    "pid": 1,
+    "ppid": 0,
+    "c": 0,
+    "pri": 80,
+    "ni": 0,
+    "rss": 19124,
+    "sz": 7016,
+    "wchan": null,
+    "tty": null,
+    "time": 177,
+    "cmd": "systemd"
+  },
+  {
+    "s": "S",
+    "uid": 0,
+    "pid": 18,
+    "ppid": 2,
+    "c": 0,
+    "pri": -40,
+    "ni": null,
+    "rss": 0,
+    "sz": 0,
+    "wchan": null,
+    "tty": null,
+    "time": 3,
+    "cmd": "migration/0"
+  },
+  {
+    "s": "S",
+    "uid": 1000,
+    "pid": 23440,
+    "ppid": 21434,
+    "c": 0,
+    "pri": 80,
+    "ni": 0,
+    "rss": 6052,
+    "sz": 1815,
+    "wchan": "poll_s",
+    "tty": "pts/4",
+    "time": 0,
+    "cmd": "bash"
+  }
+]

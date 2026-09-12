@@ -1,0 +1,6 @@
+description: >
+  What a syslog daemon writes into /var/log/syslog: the same messages
+  with the PRI part taken off, so priority is null. The shape that is
+  left is a date, a word and some text, which is why this variant is
+  never chosen automatically.
+source: RFC 3164 section 5.4, the relayed form of example 2 and example 1, with the PRI part removed the way a syslog daemon removes it when it writes the message to a file

@@ -1,0 +1,62 @@
+[
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "0.0.0.0",
+    "local_port": "22",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*",
+    "info": "ino:4088 sk:400b cgroup:/system.slice/ssh.socket <->"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.1",
+    "local_port": "631",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*",
+    "info": "ino:908506 sk:6054 cgroup:/system.slice/system-cups.slice/cups.service <->"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.54",
+    "local_port": "53",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*",
+    "info": "uid:990 ino:20721 sk:400d cgroup:/system.slice/systemd-resolved.service <->"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.53%lo",
+    "local_port": "53",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*",
+    "info": "uid:990 ino:20719 sk:400e cgroup:/system.slice/systemd-resolved.service <->"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 511,
+    "local_address": "127.0.0.1",
+    "local_port": "36367",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*",
+    "info": "uid:1000 ino:70607 sk:400f cgroup:/user.slice/user-1000.slice/user@1000.service/app.slice/app-code-20653.scope <->"
+  },
+  {
+    "state": "LISTEN",
+    "recv_q": 0,
+    "send_q": 4096,
+    "local_address": "127.0.0.1",
+    "local_port": "8080",
+    "peer_address": "0.0.0.0",
+    "peer_port": "*",
+    "info": "ino:49408 sk:4011 cgroup:/system.slice/docker.service <->"
+  }
+]

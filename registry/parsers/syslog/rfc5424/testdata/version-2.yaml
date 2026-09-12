@@ -1,0 +1,7 @@
+description: >
+  A message whose version is 2. RFC 5424 section 6.2.2 reserves a higher
+  version for a format incompatible with this one, so a line carrying it
+  is not this format and is refused rather than read as if the fields
+  had not moved.
+source: RFC 5424 section 6.5 example 1 with the VERSION changed to 2
+expect_error: 'does not describe this input'

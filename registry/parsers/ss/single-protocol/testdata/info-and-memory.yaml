@@ -1,0 +1,11 @@
+source: >-
+  the header and four rows of `ss -tnim` on Ubuntu 26.04 (iproute2
+  6.19.0) with LC_ALL=C; the local and peer addresses were replaced with
+  addresses reserved for documentation
+description: >-
+  -i and -m continue each row on an indented line, which is joined back
+  onto the row it belongs to. What they add is the congestion control
+  state and the socket memory, which ss writes partly as name:value and
+  partly as two words, so it is kept as printed.
+os: linux
+args: ["-tnim"]

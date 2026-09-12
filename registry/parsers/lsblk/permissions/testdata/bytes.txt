@@ -1,0 +1,6 @@
+NAME                 SIZE OWNER GROUP MODE
+nvme0n1     2000398934016 root  disk  brw-rw----
+|-nvme0n1p1    1127219200 root  disk  brw-rw----
+`-nvme0n1p2 1999269527552 root  disk  brw-rw----
+nvme1n1     2048408248320 root  disk  brw-rw----
+`-nvme1n1p1 2048406847488 root  disk  brw-rw----

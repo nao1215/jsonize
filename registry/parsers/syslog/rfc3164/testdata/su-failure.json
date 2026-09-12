@@ -1,0 +1,10 @@
+[
+  {
+    "priority": 34,
+    "timestamp": "Oct 11 22:14:15",
+    "hostname": "mymachine",
+    "tag": "su",
+    "pid": null,
+    "message": "'su root' failed for lonvick on /dev/pts/8"
+  }
+]

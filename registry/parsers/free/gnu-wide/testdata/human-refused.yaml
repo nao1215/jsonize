@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C from free -h -w
+description: >-
+  The same header with rounded sizes under it, which is free -h -w. This
+  definition converts its figures to kibibyte counts, so reading this
+  text with it would either fail on the suffix or invent a number; it is
+  refused and free/gnu-wide-human reads it.
+expect_error: "does not describe this input"

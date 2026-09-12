@@ -1,0 +1,4 @@
+description: two disks and their partitions, so the tree drawing in NAME is covered
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; nothing replaced, as -m prints no UUID and no mount point
+os: linux
+args: [-m, /dev/nvme0n1, /dev/nvme1n1]

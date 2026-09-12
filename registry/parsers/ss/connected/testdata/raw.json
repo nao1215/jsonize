@@ -1,0 +1,18 @@
+[
+  {
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "*",
+    "local_port": "ipv6-icmp",
+    "peer_address": "*",
+    "peer_port": "*"
+  },
+  {
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "*",
+    "local_port": "ipv6-icmp",
+    "peer_address": "*",
+    "peer_port": "*"
+  }
+]

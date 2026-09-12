@@ -1,0 +1,6 @@
+NAME         SIZE OWNER GROUP MODE
+nvme0n1      1.8T root  disk  brw-rw----
+|-nvme0n1p1    1G root  disk  brw-rw----
+`-nvme0n1p2  1.8T root  disk  brw-rw----
+nvme1n1      1.9T root  disk  brw-rw----
+`-nvme1n1p1  1.9T root  disk  brw-rw----

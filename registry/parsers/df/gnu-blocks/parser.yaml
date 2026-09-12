@@ -1,0 +1,67 @@
+# -B, -m and --block-size ask df to count in a unit other than the
+# default, and df names that unit in the column heading: "1M-blocks",
+# "512B-blocks", "1024-blocks". The figures are exact counts of that
+# unit, so the unit has to come out with them; it is read from the
+# heading rather than built into a key name, which is what df/gnu does
+# with the 1K it counts in by default.
+#
+# The heading rule below spells out every unit but that default one, so
+# the two definitions describe different text rather than the same text
+# with a tie to break.
+#
+# A file system's name may hold spaces (a FUSE mount named "photos
+# 2024"), so a line is read by what each column holds rather than split
+# at blanks: four figures, a percentage, and a mount point that
+# starts at "/". df writes "df: /path: Permission denied" for mount
+# points it cannot stat; those lines land in the output when stderr is
+# merged into it.
+format: 1
+command: df
+variant: gnu-blocks
+aliases:
+  - name: gdf
+description: GNU coreutils df -B/-m (counts in the unit the heading names)
+metadata:
+  tags: [linux, filesystem, coreutils]
+  compatible: [GNU coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html
+detect:
+  os: [linux]
+  args:
+    none: ["-h", "--human-readable", "-H", "--si", "-i", "--inodes", "-T", "--print-type", "-P", "--portability"]
+  signature:
+    all:
+      - '\AFilesystem\s+(?:[0-9]+|[0-9]{2,}[A-Z]+|[02-9][A-Z]+|1[A-JL-Z][A-Z]*|1K[A-Z]+)-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
+input:
+  fold: '^[ \t]+[\d-]'
+  ignore:
+    - '^df: '
+parse:
+  type: composite
+  parts:
+    - name: header
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AFilesystem\s+(?P<block_size>(?:[0-9]+|[0-9]{2,}[A-Z]+|[02-9][A-Z]+|1[A-JL-Z][A-Z]*|1K[A-Z]+))-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*\z'
+      fields:
+        block_size: {required: true}
+    # --total closes the table with a row named total whose mount point
+    # is a dash; it is kept, as printed, since it is what was asked for.
+    - name: filesystems
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^(?P<filesystem>\S.*?)\s+(?P<blocks>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
+      fields:
+        filesystem: {required: true}
+        # df -a lists automount points nothing has mounted yet, and df
+        # prints a dash for figures it could not read; that is null, not
+        # zero.
+        blocks: {type: int, null_if: ["-"]}
+        used: {type: int, null_if: ["-"]}
+        available: {type: int, null_if: ["-"]}
+        use_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+        mounted_on: {required: true}

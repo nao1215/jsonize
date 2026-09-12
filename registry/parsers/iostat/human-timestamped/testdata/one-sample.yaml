@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C; the host name in
+  the banner was replaced with a name of the same width
+description: >-
+  -t above the human-readable report. One sample, opened by the time it was
+  taken.
+os: linux
+args: ["-h", "-t", "nvme0n1"]

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsblk/no-headings.json",
+  "title": "lsblk/no-headings",
+  "description": "lsblk -n, the default columns with no header line",
+  "x-jsonize": {
+    "definition": "lsblk/no-headings",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "maj_min": {
+        "type": "string"
+      },
+      "rm": {
+        "type": "boolean"
+      },
+      "size": {
+        "type": "string"
+      },
+      "ro": {
+        "type": "boolean"
+      },
+      "type": {
+        "type": "string"
+      },
+      "mountpoint": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "maj_min",
+      "rm",
+      "size",
+      "ro",
+      "type",
+      "mountpoint"
+    ]
+  }
+}

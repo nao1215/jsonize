@@ -1,0 +1,55 @@
+# `lsblk -n` prints the default columns with the header line taken off.
+# Nothing is then left to name the columns, so the definition names them,
+# and nothing is left to say whose output this is either: a word, a pair
+# of numbers, two flags and a path describe far too many reports for this
+# to be evidence on its own, so the definition is used only when the
+# parser is named and its signature is checked there.
+#
+# The columns are still lined up, but a header is what says where an
+# aligned cell starts, and cutting on whitespace instead would read the
+# tree drawing as cells of its own: a grandchild is written under "| |-"
+# or "  |-", which holds a space. So a row is read by one pattern, which
+# takes the drawing off the name where the drawing stands.
+format: 1
+command: lsblk
+variant: no-headings
+description: lsblk -n, the default columns with no header line
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsblk.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-n", "--noheadings"]
+  auto_detect: false
+  signature:
+    all:
+      # Every line of the output is a device row: a name under its tree
+      # drawing, the device number, the removable flag, a rounded size
+      # with its unit, the read-only flag, the device type, and the mount
+      # point of a device that has one. What this leaves out is -n with
+      # other columns: -f, -m, -t and -o print something else in the same
+      # headerless shape, and -b prints SIZE as a bare byte count.
+      - '\A(?:(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?\S+[ \t]+\d+:\d+[ \t]+[01][ \t]+\d+(?:\.\d+)?[BKMGTPEZY][ \t]+[01][ \t]+\S+[^\n]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  # lsblk draws the tree of devices in front of a name: a child starts
+  # with "|-" or "`-" in the C locale and "├─" or "└─" in a UTF-8 one,
+  # after "| " ("│ ") or two spaces for each level above it. The drawing
+  # is not part of the name, so it is matched outside the group that
+  # keeps one. MOUNTPOINTS is the last column and may hold a space, so it
+  # runs to the end of the line.
+  pattern: '^(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?(?P<name>\S+)[ \t]+(?P<maj_min>\d+:\d+)[ \t]+(?P<rm>[01])[ \t]+(?P<size>\S+)[ \t]+(?P<ro>[01])[ \t]+(?P<type>\S+)(?:[ \t]+(?P<mountpoint>\S[^\n]*?))?[ \t]*$'
+fields:
+  name: {required: true}
+  maj_min: {required: true}
+  rm: {type: bool, required: true}
+  # SIZE is rounded ("1.8T" for 2000398934016 bytes) and lsblk offers -b
+  # for the exact byte count, so the printed text is kept as it is.
+  size: {required: true}
+  ro: {type: bool, required: true}
+  type: {required: true}
+  # A device that is not mounted prints nothing in the last column, and
+  # the group takes no part in the match.

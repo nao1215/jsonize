@@ -1,6 +1,11 @@
 # `systemctl list-jobs` prints the jobs the manager is running now, and
 # closes with a count that repeats the number of rows. The count is
 # dropped: it says nothing the array does not.
+#
+# A manager with nothing to do prints one line and no table at all, so
+# the column names are written here rather than read from a header line
+# that is not always there, and the heading is dropped where it is. An
+# empty list is what that run means, not a format jz could not read.
 format: 1
 command: systemctl
 variant: jobs
@@ -15,15 +20,18 @@ detect:
   args:
     any: ["list-jobs"]
   signature:
-    all:
+    any:
       - '\A[ \t]*JOB[ \t]+UNIT[ \t]+TYPE[ \t]+STATE[ \t]*$'
+      - '\ANo jobs running\.[ \t]*\z'
 input:
   ignore:
-    - '^[0-9]+ jobs listed\.'
+    - '^[ \t]*JOB[ \t]+UNIT[ \t]+TYPE[ \t]+STATE[ \t]*$'
+    - '^[0-9]+ jobs? listed\.'
     - '^No jobs running\.'
 parse:
   type: table
   header:
+    none: true
     columns: [job, unit, type, state]
 fields:
   job: {type: int, required: true}

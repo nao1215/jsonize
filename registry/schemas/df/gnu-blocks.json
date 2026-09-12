@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/gnu-blocks.json",
+  "title": "df/gnu-blocks",
+  "description": "GNU coreutils df -B/-m (counts in the unit the heading names)",
+  "x-jsonize": {
+    "definition": "df/gnu-blocks",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "header": {
+      "type": "object",
+      "properties": {
+        "block_size": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "block_size"
+      ]
+    },
+    "filesystems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "filesystem": {
+            "type": "string"
+          },
+          "blocks": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "used": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "available": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "use_percent": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "mounted_on": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "filesystem",
+          "blocks",
+          "used",
+          "available",
+          "use_percent",
+          "mounted_on"
+        ]
+      }
+    }
+  },
+  "required": [
+    "header",
+    "filesystems"
+  ]
+}

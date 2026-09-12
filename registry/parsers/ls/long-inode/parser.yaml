@@ -28,6 +28,10 @@ metadata:
   references:
     - https://pubs.opengroup.org/onlinepubs/9699919799/utilities/ls.html
 detect:
+  # A leading number in front of the mode is what `ls -ls` prints too,
+  # and it counts blocks there; the permission string after it says the
+  # line is an ls listing but not which of the two options wrote it, so
+  # the text is not evidence on its own.
   auto_detect: false
   args:
     any: ["-i", "--inode"]

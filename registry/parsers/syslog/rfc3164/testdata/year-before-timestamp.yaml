@@ -1,0 +1,7 @@
+description: >
+  A message whose header opens with a year, so the first field is not a
+  timestamp in the format section 4.1.2 defines. RFC 3164 says a relay
+  must rewrite such a message; this definition refuses it rather than
+  reading 1990 as a month.
+source: RFC 3164 section 5.4 example 4, joined onto one line where the RFC broke it for the page width
+expect_error: 'does not describe this input'

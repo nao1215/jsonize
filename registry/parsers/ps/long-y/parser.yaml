@@ -1,0 +1,52 @@
+# `ps -ely` (and `ps -ly` for a selection of processes) prints the long
+# format as -y changes it: the process flags and the address of the
+# process image are gone, and the resident set size stands where ADDR
+# was. What is left is the state, the user and parent, the scheduling
+# priority and nice value, the resident set in kilobytes, the image size
+# in pages, what the process waits in (WCHAN), the terminal, the CPU
+# time and the command name. procps prints "-" for a process that waits
+# in nothing; that is null.
+format: 1
+command: ps
+variant: long-y
+description: ps -ely (S UID PID PPID C PRI NI RSS SZ WCHAN TTY TIME CMD)
+metadata:
+  tags: [linux, process]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/ps.1.html
+detect:
+  os: [linux]
+  # -y is what drops the flags and the address; it is only used with the
+  # long format, so -l and the selection options say nothing here.
+  args:
+    all: ["-y"]
+  signature:
+    all:
+      - '\A\s*S\s+UID\s+PID\s+PPID\s+C\s+PRI\s+NI\s+RSS\s+SZ\s+WCHAN\s+TTY\s+TIME\s+CMD\s*$'
+parse:
+  type: table
+  header:
+    columns: [s, uid, pid, ppid, c, pri, ni, rss, sz, wchan, tty, time, cmd]
+  # The command name is the last column and may hold spaces.
+  max_fields: 13
+fields:
+  s: {required: true}
+  # This format prints the user id as a number, not as a name.
+  uid: {type: int, required: true}
+  pid: {type: int, required: true}
+  ppid: {type: int, required: true}
+  # Processor use, an integer percentage.
+  c: {type: int}
+  pri: {type: int}
+  # A process outside the time-sharing class (a real-time one) prints a
+  # dash for its nice value.
+  ni: {type: int, null_if: ["-"]}
+  # Kilobytes resident, and pages of the process image.
+  rss: {type: int}
+  sz: {type: int}
+  wchan: {null_if: ["-"]}
+  tty: {null_if: ["?"]}
+  # Cumulative CPU time, printed as hours, minutes and seconds.
+  time: {type: duration, layout: mm:ss, required: true}
+  cmd: {required: true}

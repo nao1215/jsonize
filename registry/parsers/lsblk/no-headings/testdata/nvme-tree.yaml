@@ -1,0 +1,4 @@
+description: two disks and their partitions, so the tree drawing and an unmounted disk are both covered
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; the mount point under /media renamed
+os: linux
+args: [-n, /dev/nvme0n1, /dev/nvme1n1]

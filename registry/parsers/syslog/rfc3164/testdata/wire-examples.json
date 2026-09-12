@@ -1,0 +1,34 @@
+[
+  {
+    "priority": 34,
+    "timestamp": "Oct 11 22:14:15",
+    "hostname": "mymachine",
+    "tag": "su",
+    "pid": null,
+    "message": "'su root' failed for lonvick on /dev/pts/8"
+  },
+  {
+    "priority": 13,
+    "timestamp": "Feb  5 17:32:18",
+    "hostname": "10.0.0.99",
+    "tag": null,
+    "pid": null,
+    "message": "Use the BFG!"
+  },
+  {
+    "priority": 165,
+    "timestamp": "Aug 24 05:34:00",
+    "hostname": "CST",
+    "tag": null,
+    "pid": null,
+    "message": "1987 mymachine myproc[10]: %% It's time to make the do-nuts.  %%  Ingredients: Mix=OK, Jelly=OK # Devices: Mixer=OK, Jelly_Injector=OK, Frier=OK # Transport: Conveyer1=OK, Conveyer2=OK # %%"
+  },
+  {
+    "priority": 0,
+    "timestamp": "Oct 22 10:52:12",
+    "hostname": "scapegoat",
+    "tag": null,
+    "pid": null,
+    "message": "1990 Oct 22 10:52:01 TZ-6 scapegoat.dmz.example.org 10.1.2.3 sched[0]: That's All Folks!"
+  }
+]

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/syslog/rfc5424.json",
+  "title": "syslog/rfc5424",
+  "description": "syslog protocol messages, RFC 5424, one message per line",
+  "x-jsonize": {
+    "definition": "syslog/rfc5424",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "priority": {
+        "type": "integer"
+      },
+      "timestamp": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "hostname": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "app_name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "procid": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "msgid": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "structured_data": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "message": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "priority",
+      "timestamp",
+      "hostname",
+      "app_name",
+      "procid",
+      "msgid",
+      "structured_data",
+      "message"
+    ]
+  }
+}

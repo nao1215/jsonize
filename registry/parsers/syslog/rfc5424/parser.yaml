@@ -1,0 +1,83 @@
+# The syslog protocol of RFC 5424: a PRI part, the version, a timestamp,
+# five header fields, the structured data, and the message. Every field
+# has a place of its own, so unlike RFC 3164 nothing here has to be
+# guessed from where a colon fell.
+#
+# Any header field may be the nil value, written "-". It is read as null
+# rather than as the string "-", because RFC 5424 section 6.2 defines it
+# as "this field has no value" and a consumer testing for null should not
+# have to know the spelling.
+#
+# The PRI part carries a facility and a severity in one number, the same
+# way RFC 3164 section 4.1.1 defines it. The definition format has no
+# arithmetic, so priority is read as the integer it is printed as and the
+# division by eight is left to the consumer.
+#
+# The version is not in the output. This definition reads version 1 and
+# nothing else, so a version key would carry the constant 1 on every
+# message and say nothing; a line with any other version is refused
+# instead, because RFC 5424 section 6.2.2 reserves the next version for a
+# format that is not this one.
+#
+# PROCID stays a string. RFC 5424 section 6.2.6 defines it as an opaque
+# value whose change marks a discontinuity in the log, and a process id
+# is only the usual choice for it, so reading it as an integer would
+# refuse the other choices.
+#
+# STRUCTURED-DATA is kept as the text between and including the brackets.
+# It is a list of elements with no separator between them, each holding
+# parameter names the format does not fix, and a value in which a quote,
+# a backslash or a closing bracket is written with a backslash in front
+# of it. fields has array with a split and object with a regex of named
+# groups; neither can split on a bracket that an escape may have taken
+# out of play, and neither can name keys that the message chooses. An
+# expression that came close would quietly cut an element in half on the
+# first value holding a "]", which is worse than handing the consumer the
+# text and letting it parse the grammar the RFC writes out.
+format: 1
+command: syslog
+variant: rfc5424
+description: syslog protocol messages, RFC 5424, one message per line
+metadata:
+  tags: [log, network, syslog]
+  compatible: [rsyslog, syslog-ng, systemd-journal-remote]
+  references:
+    - https://www.rfc-editor.org/rfc/rfc5424
+detect:
+  signature:
+    all:
+      # The text opens with a PRI part, the version 1, and a timestamp
+      # that is either the nil value or a full RFC 3339 reading. Three
+      # fixed things in the first twenty characters is a claim about the
+      # format rather than about its shape, so this variant is detected
+      # without being named.
+      - '\A<(?:19[01]|1[0-8][0-9]|[1-9][0-9]|[0-9])>1 (?:-|[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\.[0-9]{1,6})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])) '
+      # And every line of the window is such a message, so that a file
+      # opening with one and continuing as something else is refused
+      # here rather than at the first line that will not parse.
+      - '\A(?:<(?:19[01]|1[0-8][0-9]|[1-9][0-9]|[0-9])>1 [^\n]*\n)*<(?:19[01]|1[0-8][0-9]|[1-9][0-9]|[0-9])>1 [^\n]*\z'
+parse:
+  type: regex
+  # The header fields are printable ASCII with no space in them, bounded
+  # by the lengths RFC 5424 section 6 gives each one. STRUCTURED-DATA is
+  # the nil value or one or more bracketed elements, where a quoted
+  # parameter value may hold an escaped quote, backslash or bracket and
+  # an unescaped bracket ends the element. The message is optional, as a
+  # message that is structured data alone has none, and when it is there
+  # it runs to the end of the line.
+  pattern: '^<(?P<priority>19[01]|1[0-8][0-9]|[1-9][0-9]|[0-9])>1 (?P<timestamp>-|[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](?:\.[0-9]{1,6})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])) (?P<hostname>[!-~]{1,255}) (?P<app_name>[!-~]{1,48}) (?P<procid>[!-~]{1,128}) (?P<msgid>[!-~]{1,32}) (?P<structured_data>-|(?:\[[^ \]="]{1,32}(?: [^ \]="]{1,32}="(?:[^"\\\]]|\\["\\\]])*")*\])+)(?: (?P<message>.*))?$'
+fields:
+  # facility is priority / 8 and severity is priority % 8; the definition
+  # format cannot divide, so the consumer does it.
+  priority: {type: int, required: true}
+  # RFC 3339 with an optional fraction of a second and a real offset, so
+  # the text says which instant it means and the conversion invents
+  # nothing. A message that states no time writes the nil value.
+  timestamp: {type: time, layout: "2006-01-02T15:04:05.999999999Z07:00", null_if: ["-"]}
+  hostname: {null_if: ["-"]}
+  app_name: {null_if: ["-"]}
+  procid: {null_if: ["-"]}
+  msgid: {null_if: ["-"]}
+  # The brackets as printed, for a consumer that reads the grammar of
+  # RFC 5424 section 6.3; null when the message carries none.
+  structured_data: {null_if: ["-"]}

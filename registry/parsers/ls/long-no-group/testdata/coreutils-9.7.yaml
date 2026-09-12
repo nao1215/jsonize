@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C; the home directory's owner name replaced with user1 and its path with /home/user1, the column padding kept as it was
+description: paths whose owners differ, so the one name column holds more than one value, with both date forms
+os: linux
+args: ["-lGd", "/etc/colord", "/etc/cups", "/etc/hosts", "/etc/shadow", "/home/user1"]

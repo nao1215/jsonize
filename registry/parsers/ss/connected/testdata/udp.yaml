@@ -1,0 +1,11 @@
+source: >-
+  `ss -u` on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C; the local and
+  peer addresses were replaced with addresses reserved for documentation
+description: >-
+  The connected UDP sockets. There is no Netid column because one
+  protocol was asked for and no State column because every socket shown
+  is connected. A local address may carry the interface it is scoped to
+  after a percent sign, and a port may be the service name when -n was
+  not given.
+os: linux
+args: ["-u"]

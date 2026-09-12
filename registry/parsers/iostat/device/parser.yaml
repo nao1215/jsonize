@@ -24,6 +24,9 @@ detect:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
       - '^Device[ \t]+tps[ \t]'
     none:
+      # -t prints the time above each sample, which opens the sample
+      # there; iostat/device-timestamped reads that report.
+      - '^(?:\d{2}/\d{2}/\d{2,4}[ \t]+\d{2}:\d{2}:\d{2}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{4})[ \t]*$'
       - '^avg-cpu:[ \t]+%user[ \t]+%nice'
 input:
   select:

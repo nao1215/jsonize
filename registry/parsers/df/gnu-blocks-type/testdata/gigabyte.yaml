@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C; the rows
+  for mount points under a user's home were left out
+description: >-
+  df -B 1G -T. A unit large enough to round every figure to nothing is
+  still an exact count of that unit, so it is a number.
+os: linux
+args: ["-B", "1G", "-T"]

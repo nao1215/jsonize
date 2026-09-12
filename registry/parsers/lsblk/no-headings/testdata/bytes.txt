@@ -1,0 +1,5 @@
+nvme0n1     259:0   0 2000398934016 0 disk 
+|-nvme0n1p1 259:1   0    1127219200 0 part /boot/efi
+`-nvme0n1p2 259:2   0 1999269527552 0 part /
+nvme1n1     259:3   0 2048408248320 0 disk 
+`-nvme1n1p1 259:4   0 2048406847488 0 part /media/user01/2nd

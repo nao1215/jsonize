@@ -1,0 +1,14 @@
+Linux 7.0.0-31-generic (host01)  	09/12/26 	_x86_64_	(32 CPU)
+
+09/12/26 11:43:56
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           3.19    0.00    0.46    0.03    0.00   96.32
+
+
+
+09/12/26 11:43:57
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           2.73    0.00    0.72    0.03    0.00   96.51
+
+
+

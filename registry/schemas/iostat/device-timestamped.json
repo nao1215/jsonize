@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/iostat/device-timestamped.json",
+  "title": "iostat/device-timestamped",
+  "description": "iostat -t -d, one sample of per-device counters without the CPU table",
+  "x-jsonize": {
+    "definition": "iostat/device-timestamped",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "timestamp": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "devices": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "device": {
+              "type": "string"
+            },
+            "kb_dscd": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "kb_dscd_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "kb_read": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "kb_read_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "kb_wrtn": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "kb_wrtn_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "mb_dscd": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "mb_dscd_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "mb_read": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "mb_read_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "mb_wrtn": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "mb_wrtn_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "tps": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "required": [
+      "timestamp",
+      "devices"
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "name": "loop0",
+    "size": "4K",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "loop2",
+    "size": "55.5M",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "loop3",
+    "size": "37.6M",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "loop4",
+    "size": "214.5M",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "loop5",
+    "size": "74M",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "loop6",
+    "size": "63.8M",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "loop7",
+    "size": "66.8M",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "loop8",
+    "size": "74M",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "loop9",
+    "size": "66.8M",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  }
+]

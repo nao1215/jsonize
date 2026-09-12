@@ -15,6 +15,11 @@ detect:
   signature:
     all:
       - '^\s+total\s+used\s+free\s+shared\s+buffers\s+cache\s+available\s*$'
+      # -h and -w together print the same header over rounded figures
+      # with a suffix, which free/gnu-wide-human reads. The row says
+      # which of the two it is, and reading one as the other would
+      # convert "61Gi" to a number or leave a kibibyte count a string.
+      - '^Mem:\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s*$'
 parse:
   type: table
   header:

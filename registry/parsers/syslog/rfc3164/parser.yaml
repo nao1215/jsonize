@@ -1,0 +1,85 @@
+# BSD syslog, the format RFC 3164 wrote down: an optional PRI part, a
+# timestamp with no year and no zone, the host the message came from, and
+# the message, which usually opens with a tag and the process id in
+# brackets. It is what a syslog daemon receives on the wire and, with the
+# PRI part taken off, what it writes into /var/log/syslog and
+# /var/log/messages.
+#
+# Three things the format gives no way to read, and what is done instead.
+#
+# The PRI part carries a facility and a severity in one number: RFC 3164
+# section 4.1.1 defines the facility as the number divided by eight and
+# the severity as the remainder. The definition format has no arithmetic,
+# so priority is read as the integer it is printed as and the division is
+# left to the consumer. Writing the pair out as a lookup table of 192
+# entries would put two derived values in the output that the text never
+# printed, and they would be wrong the moment a facility is added.
+#
+# The timestamp stays a string. It carries no year, which --assume-year
+# could supply, but it also carries no zone, and RFC 3164 section 4.1.2
+# makes it the local time of the device that sent the message. A file
+# collects messages from several devices, so there is no one zone to read
+# them in: neither location: utc nor location: local describes it, and
+# converting under either would name an instant the text does not. This
+# is the rule the format reference states for an archive listing, and a
+# relayed syslog line is the same case.
+#
+# The tag and the bracketed process id are what a daemon writes rather
+# than what RFC 3164 requires, so a line may carry a tag and a pid, a tag
+# alone, or neither. RFC 3164 section 4.1.3 ends the TAG at the first
+# character that is not alphanumeric and counts the colon and the space
+# after it as the first two characters of CONTENT; the colon and one
+# space are separators here and are not kept, so that message is the text
+# an operator reads. The cost is that a message opening with a word and a
+# colon has that word read as a tag. Nothing in the line tells the two
+# apart, and RFC 3164 section 5.4 example 3 is the RFC's own instance of
+# the same ambiguity one field earlier: it reads CST as the host name
+# because the format has no other answer.
+format: 1
+command: syslog
+variant: rfc3164
+description: BSD syslog lines, RFC 3164, one message per line
+metadata:
+  tags: [log, network, syslog]
+  compatible: [syslogd, rsyslog, syslog-ng]
+  references:
+    - https://www.rfc-editor.org/rfc/rfc3164
+detect:
+  # A line of this format is a date, a word and some text. So is
+  # journalctl -o short, which this registry already reads, and so is
+  # half the application logs ever written; the PRI part is the only
+  # thing that makes it recognisable, and a daemon writing to a file
+  # takes it off. The shape is therefore not evidence of the format, and
+  # guessing with it would mean reading somebody else's log as syslog.
+  # The definition is reached by naming it, as
+  # `jz --parser syslog --variant rfc3164`, where the signature below is
+  # still checked.
+  auto_detect: false
+  signature:
+    all:
+      # Every line of the window is a syslog line: an optional PRI part
+      # holding a value of 0 to 191 with no leading zero, one of the
+      # twelve month names, a day of the month padded with a space rather
+      # than a zero, a time of day, a host and the rest. The day is where
+      # this parts company with journalctl -o short, which prints the
+      # same line with the day zero-padded; RFC 3164 section 4.1.2
+      # requires the space, and section 5.4 spells out that a day under
+      # ten leaves two spaces after the month.
+      - '\A(?:(?:<(?:19[01]|1[0-8][0-9]|[1-9][0-9]|[0-9])>)?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (?: [1-9]|[12][0-9]|3[01]) (?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9] \S+ [^\n]*\n)*(?:<(?:19[01]|1[0-8][0-9]|[1-9][0-9]|[0-9])>)?(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (?: [1-9]|[12][0-9]|3[01]) (?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9] \S+ [^\n]*\z'
+parse:
+  type: regex
+  # One expression rather than alternatives, so that every message
+  # carries the same keys and a line with no tag says so with a null
+  # instead of leaving the key out. The message group runs to the end of
+  # the line, and a line the expression does not match is an error naming
+  # it rather than a line missing from the result.
+  pattern: '^(?:<(?P<priority>19[01]|1[0-8][0-9]|[1-9][0-9]|[0-9])>)?(?P<timestamp>(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (?: [1-9]|[12][0-9]|3[01]) (?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]) (?P<hostname>\S+) (?:(?P<tag>[A-Za-z0-9][A-Za-z0-9_./-]{0,31})(?:\[(?P<pid>[0-9]+)\])?: ?)?(?P<message>.*)$'
+fields:
+  # The number in the angle brackets, as printed. facility and severity
+  # are priority / 8 and priority % 8; the definition format cannot
+  # divide, so the consumer does it.
+  priority: {type: int}
+  # No year and no zone: see the note at the top of this file.
+  timestamp: {required: true}
+  hostname: {required: true}
+  pid: {type: int}

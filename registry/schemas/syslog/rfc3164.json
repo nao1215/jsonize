@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/syslog/rfc3164.json",
+  "title": "syslog/rfc3164",
+  "description": "BSD syslog lines, RFC 3164, one message per line",
+  "x-jsonize": {
+    "definition": "syslog/rfc3164",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "priority": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "timestamp": {
+        "type": "string"
+      },
+      "hostname": {
+        "type": "string"
+      },
+      "tag": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "pid": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "message": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "priority",
+      "timestamp",
+      "hostname",
+      "tag",
+      "pid",
+      "message"
+    ]
+  }
+}

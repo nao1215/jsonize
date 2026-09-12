@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C
+description: >-
+  A manager with nothing queued prints this line and no table. The run
+  succeeded and the answer is an empty list.
+os: linux
+args: ["list-jobs"]

@@ -1,0 +1,37 @@
+[
+  {
+    "name": "nvme0n1",
+    "size": "1.8T",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "nvme0n1p1",
+    "size": "1G",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "nvme0n1p2",
+    "size": "1.8T",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "nvme1n1",
+    "size": "1.9T",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "nvme1n1p1",
+    "size": "1.9T",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  }
+]

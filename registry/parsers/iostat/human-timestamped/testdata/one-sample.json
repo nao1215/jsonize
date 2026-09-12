@@ -1,0 +1,29 @@
+[
+  {
+    "timestamp": {
+      "value": "09/12/26 11:43:55"
+    },
+    "cpu": [
+      {
+        "user_percent": 3.2,
+        "nice_percent": 0,
+        "system_percent": 0.5,
+        "iowait_percent": 0,
+        "steal_percent": 0,
+        "idle_percent": 96.3
+      }
+    ],
+    "devices": [
+      {
+        "tps": 41.31,
+        "kb_read_s": "227.3k",
+        "kb_wrtn_s": "583.7k",
+        "kb_dscd_s": "0.0k",
+        "kb_read": "28.7G",
+        "kb_wrtn": "73.7G",
+        "kb_dscd": "0.0k",
+        "device": "nvme0n1"
+      }
+    ]
+  }
+]

@@ -29,6 +29,12 @@ detect:
       # is named in CamelCase (Id, ActiveState, MainPID), which an
       # environment variable (PATH, LANG) and lsblk -P (NAME, MAJ:MIN)
       # are not.
+      #
+      # `systemctl show` with no unit named prints the manager's own
+      # properties, which are the same block and are read here. Those are
+      # plain words and unquoted values throughout, so the text is also
+      # legal `env` output and jz will not claim either on its own; the
+      # end-to-end suite pins where `jz run systemctl show` lands.
       - '\A(?:[A-Z][a-z][A-Za-z0-9]*=[^\n]*\n)*[A-Z][a-z][A-Za-z0-9]*=[^\n]*\n?\z'
     none:
       # A unit's whole report, or one that names its unit: systemctl/show.

@@ -1,0 +1,75 @@
+# `ls -lG` and `ls -lo` print the long listing without the group column,
+# so the one name column left in it is the owner: mode, links, owner,
+# size, date, name.
+#
+# `ls -lg` drops the owner instead and prints those same five columns.
+# The two outputs are byte-identical and nothing in either says whether
+# the name that remains is an owner or a group, so the text cannot say
+# which command wrote it: this definition declines automatic detection,
+# and the arguments are the only thing that separates it from
+# ls/long-no-owner. A piped listing is refused rather than guessed at.
+# `ls -log`, which drops both columns, is read by ls/long-no-owner-group.
+#
+# BSD and macOS ls spell these options for other things -- -G asks for
+# colour and -o adds the file flags column -- so what they print is a
+# listing of six or seven columns, which the signature refuses. GNU
+# coreutils under its g name prints what is described here.
+format: 1
+command: ls
+variant: long-no-group
+aliases:
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gls
+description: ls -lG / ls -lo long listing without the group column
+metadata:
+  tags: [linux, darwin, filesystem]
+  compatible: [GNU coreutils, uutils coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/What-information-is-listed.html
+detect:
+  # The two formats are the same text, so nothing in it is evidence of
+  # which option produced it; see the top of this file.
+  auto_detect: false
+  args:
+    any: ["-o", "-G", "--no-group"]
+    # -g drops the owner as well, which leaves the four columns
+    # ls/long-no-owner-group reads.
+    #
+    # A mark after each name (-F, -p) is not part of the name; see ls/long.
+    none: ["-g", "-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
+  signature:
+    all:
+      # Five columns, and the whole of the shape rather than one line of
+      # it: mode, link count, name, size, date, and a name after the
+      # single space that follows the date.
+      #
+      # A character or block device has no size and prints its major and
+      # minor numbers in that column ("7, 0"), which is two words. Such a
+      # line is stated as its own case instead of being folded into the
+      # size, because read the other way round the four columns of
+      # `ls -og` would be a name and a size here, and this definition
+      # would claim that listing too.
+      - '^(?:[cb][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\d+,\s*\d+|[-dlps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+[\d.]+[kKMGTPEZYRQBi]*)\s+\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})\s+\S'
+input:
+  ignore:
+    - '^total\s'
+parse:
+  type: regex
+  # A device file has major and minor numbers where the size goes, which
+  # ls/long explains.
+  patterns:
+    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
+    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
+fields:
+  links: {type: int, required: true}
+  major: {type: int}
+  minor: {type: int}
+  filename: {required: true}
+  # The pattern splits at the first " -> ", so any other one is in the
+  # target, and then the text says two things: the name may hold one as
+  # well as the target. So may a target that starts with "-> ", where two
+  # arrows share a space. Such a line is refused rather than read either
+  # way.
+  link_to: {when_missing: omit, regex: '(?P<link_to>(?: |- )*(?:(?:[^ -]|-[^ >]|->[^ ])(?:[^ ]| (?: |- )*(?:[^ -]|-[^ >]|->[^ ]))*(?: (?: |- )*(?:-|->)?)?|-|->)?)'}

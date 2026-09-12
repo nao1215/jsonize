@@ -1,0 +1,7 @@
+description: >
+  A tag with the process id in brackets, which is the form a daemon
+  writes and the one the bracketed number is read from. It is example 3
+  of section 5.4 with the two fields the RFC calls inconsistent with
+  section 4 taken out, so the host name and the tag fall where section 4
+  puts them instead of inside the message.
+source: RFC 3164 section 5.4 example 3, joined onto one line where the RFC broke it for the page width, with the zone and year that section 4.1.2 does not allow in a TIMESTAMP removed

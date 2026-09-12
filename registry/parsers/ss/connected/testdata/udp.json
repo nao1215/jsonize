@@ -1,0 +1,66 @@
+[
+  {
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "59225",
+    "peer_address": "203.0.113.6",
+    "peer_port": "https"
+  },
+  {
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60%wlp195s0",
+    "local_port": "bootpc",
+    "peer_address": "198.51.100.1",
+    "peer_port": "bootps"
+  },
+  {
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "37579",
+    "peer_address": "203.0.113.1",
+    "peer_port": "https"
+  },
+  {
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "37590",
+    "peer_address": "203.0.113.4",
+    "peer_port": "https"
+  },
+  {
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "37763",
+    "peer_address": "203.0.113.2",
+    "peer_port": "https"
+  },
+  {
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "39739",
+    "peer_address": "203.0.113.5",
+    "peer_port": "https"
+  },
+  {
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "51978",
+    "peer_address": "203.0.113.6",
+    "peer_port": "https"
+  },
+  {
+    "recv_q": 0,
+    "send_q": 0,
+    "local_address": "198.51.100.60",
+    "local_port": "58684",
+    "peer_address": "203.0.113.3",
+    "peer_port": "https"
+  }
+]

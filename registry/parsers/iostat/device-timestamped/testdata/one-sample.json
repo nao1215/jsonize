@@ -1,0 +1,19 @@
+[
+  {
+    "timestamp": {
+      "value": "09/12/26 11:43:55"
+    },
+    "devices": [
+      {
+        "device": "nvme0n1",
+        "tps": 41.31,
+        "kb_read_s": 227.3,
+        "kb_wrtn_s": 583.66,
+        "kb_dscd_s": 0,
+        "kb_read": 30088903,
+        "kb_wrtn": 77262037,
+        "kb_dscd": 0
+      }
+    ]
+  }
+]

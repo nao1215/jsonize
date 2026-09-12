@@ -1,0 +1,12 @@
+A message as RFC 3164 writes it on the wire opens with the priority in
+angle brackets, and the rest of the line is the header and the message:
+
+<34>Oct 11 22:14:15 mymachine su: 'su root' failed for lonvick on /dev/pts/8
+
+The same event in the format of RFC 5424 names a version, a timestamp
+that says which instant it means, and a field for the structured data:
+
+<34>1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - 'su root' failed for lonvick on /dev/pts/8
+
+Neither line is a log of its own; both are quoted here so that a reader
+can recognise one when it arrives.

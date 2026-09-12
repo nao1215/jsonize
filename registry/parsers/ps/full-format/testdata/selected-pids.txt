@@ -1,0 +1,4 @@
+UID          PID    PPID  C    SZ   RSS PSR STIME TTY          TIME CMD
+root           1       0  0  7016 19124   3 Sep10 ?        00:02:57 /usr/lib/systemd/systemd --system --deserialize=124 splash
+avahi       2094    2021  0  1640   348  18 Sep10 ?        00:00:00 avahi-daemon: chroot helper
+user1      23440   21434  0  1815  6052  30 Sep10 pts/4    00:00:00 /usr/bin/bash --init-file /etc/bash.bashrc

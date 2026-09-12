@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C, the header and fourteen of the processes; the login name and one service account name were replaced with user1 inside the width of the UID column, and the shell's --init-file path was rewritten
+description: kernel threads whose command is a name in brackets, command lines with spaces and options, and rows whose SZ is wide enough to push the columns to the right
+os: linux
+args: [-eF]

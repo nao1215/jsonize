@@ -1,0 +1,5 @@
+drwxr-xr-x  2 colord 4096 Nov  4  2025 /etc/colord
+drwxr-xr-x  5 root   4096 Sep 12 00:32 /etc/cups
+-rw-r--r--  1 root    221 Nov  4  2025 /etc/hosts
+-rw-r-----  1 root   1448 May 26 21:02 /etc/shadow
+drwxr-x--- 71 user1  4096 Sep 12 11:22 /home/user1
