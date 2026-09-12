@@ -1,0 +1,113 @@
+version: "1"
+
+suite:
+  name: real commands on FreeBSD
+
+# Eight definitions say they read what a command prints on FreeBSD. This
+# suite is what holds that claim to the machine: every command here is
+# part of the base system, and what is pinned is which definition the
+# real output lands on, never a value of the machine's.
+#
+# The refusals are pinned as firmly as the readings. FreeBSD writes
+# several of these formats differently from macOS, and a definition
+# written from macOS output has to refuse them rather than cut them in
+# the wrong places.
+scenarios:
+  - name: ps aux and mount land on the bsd definitions
+    only: {os: freebsd}
+    steps:
+      - run:
+          command: jz run --explain ps aux
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ps/bsd from embedded"
+          stdout:
+            json:
+              # FreeBSD writes TT and STARTED where procps writes TTY and
+              # START, and the header alone tells the format apart.
+              - { path: "$[0].pid", gte: 0 }
+              - { path: "$[0].command", matches: ".+" }
+              - { path: "$[0].cpu_percent", gte: 0 }
+      - run:
+          command: jz run --explain mount
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "mount/bsd from embedded"
+          stdout:
+            json:
+              # A FreeBSD root is a ZFS dataset, so what stands where a
+              # device does on macOS is a name with no leading slash.
+              - { path: "$[0].mount_point", equals: / }
+              - { path: "$[0].type", matches: "^[a-z0-9]+$" }
+
+  - name: the POSIX definitions read what FreeBSD prints
+    only: {os: freebsd}
+    steps:
+      - run:
+          command: jz run id
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.uid.name", matches: ".+" }
+              - { path: "$.gid.id", gte: 0 }
+      - run:
+          command: jz run du -s .
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].name", equals: "." }
+      - fixture:
+          file: words.txt
+          content: "one two\nthree\n"
+      - run:
+          command: jz run wc words.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].lines", equals: 2 }
+              - { path: "$[0].words", equals: 3 }
+              - { path: "$[0].filename", equals: words.txt }
+
+  # FreeBSD, OpenBSD and NetBSD print this summary from w(1), which writes
+  # the time as %l:%M%p and separates the load averages with commas
+  # ("10:07AM  up 7 secs, 1 user, load averages: 0.23, 0.05, 0.02").
+  # macOS writes a 24-hour time and spaces. uptime/bsd and w/bsd read the
+  # macOS one and say so, so here there is no variant to reach.
+  - name: the summary line macOS shares with no other BSD is refused
+    only: {os: freebsd}
+    steps:
+      - run:
+          command: jz run uptime
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: "no uptime variant matches this input"
+      - run:
+          command: jz run w
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: "no w variant matches this input"
+
+  # FreeBSD ps has no SysV full format: -e and -f are other options there
+  # and `ps -ef` prints the default columns (PID TT STAT TIME COMMAND),
+  # which is not the table ps/unix reads.
+  - name: ps -ef is not the SysV format on FreeBSD
+    only: {os: freebsd}
+    steps:
+      - run:
+          command: jz run ps -ef
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: "no ps variant matches this input"

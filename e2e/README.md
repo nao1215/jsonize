@@ -25,6 +25,7 @@ Linux one.
 | `exec` | POSIX | `jz run` with a shell script standing in for the command: status mirroring, signals, `--timeout`, argument boundary |
 | `exec_linux` | Linux | the host's real coreutils, procps, util-linux, iproute2, sysstat and BusyBox; hardware listings on captured output |
 | `exec_darwin` | macOS | the real BSD commands land on the `bsd` definitions and the GNU shape is refused, ping, ping6 and stat included |
+| `exec_freebsd` | FreeBSD | the real commands land where a FreeBSD machine showed they do: `ps aux` and `mount` on the `bsd` definitions, `id`, `du` and `wc` on the POSIX ones, and the summary line macOS shares with no other BSD refused rather than cut |
 | `hardware_linux` | Linux, optional | the same hardware listings on a real device, where there is one |
 
 Windows runs every spec: a scenario that belongs to one operating system
