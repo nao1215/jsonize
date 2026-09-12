@@ -27,7 +27,9 @@ fields:
   mem_percent: {type: float}
   vsz: {type: int}
   rss: {type: int}
-  tty: {null_if: ["?", "??"]}
+  # No controlling terminal is "?" under procps, "??" on macOS and "-"
+  # on FreeBSD; all three are the same absence.
+  tty: {null_if: ["?", "??", "-"]}
   # Cumulative CPU time. procps prints "4:50" and macOS prints "0:00.09",
   # both minutes and seconds, and both name one length exactly.
   time: {type: duration, layout: mm:ss}

@@ -1,0 +1,3 @@
+description: a FreeBSD root on ZFS, where a dataset name stands where a device does on macOS and every row carries options
+source: "mount on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C"
+os: freebsd

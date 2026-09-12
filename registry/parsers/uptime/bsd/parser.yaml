@@ -8,7 +8,12 @@ metadata:
   references:
     - https://man.freebsd.org/cgi/man.cgi?uptime(1)
 detect:
-  os: [darwin, freebsd, openbsd, netbsd]
+  # macOS only. FreeBSD, OpenBSD and NetBSD print this line from w(1),
+  # which writes the time as %l:%M%p and separates the load averages
+  # with commas ("10:07AM  up 7 secs, 1 user, load averages: 0.23, 0.05,
+  # 0.02"), so the signature below does not fit them and claiming them
+  # would only mean a refusal with the wrong reason.
+  os: [darwin]
   signature:
     # The whole output is this one line; `w` opens with the same summary
     # and then continues into a table of users.

@@ -8,7 +8,10 @@ metadata:
   references:
     - https://man.freebsd.org/cgi/man.cgi?w(1)
 detect:
-  os: [darwin, freebsd, openbsd, netbsd]
+  # macOS only, for the reason uptime/bsd states: the other BSDs write
+  # the summary line with a 12-hour time and comma-separated load
+  # averages.
+  os: [darwin]
   signature:
     all:
       - '^.*load averages: '

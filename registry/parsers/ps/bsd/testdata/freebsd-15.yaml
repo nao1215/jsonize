@@ -1,0 +1,4 @@
+description: FreeBSD ps aux, whose header says TT and STARTED where the GNU one says TTY and START, with kernel threads that have no address space
+source: "ps aux on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C, first 8 rows"
+os: freebsd
+args: [aux]
