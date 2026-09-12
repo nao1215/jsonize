@@ -517,6 +517,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A count written with a fractional part was read as the whole number
+  below it: `select: {limit: 1.5}` kept one line, `max_fields: 2.5` cut
+  two cells, and nothing said so, since the decoded value no longer
+  shows what the definition had written. `format`, `detect.priority`,
+  `signature.window`, `select.skip`, `select.limit`, `max_fields` and
+  `min_fields` are refused when they carry a fraction. A spelling that
+  means exactly one integer is still read: a quoted `"2"`, a
+  hexadecimal `0x10`, a `2.0`.
 - `--stream` reported a header it could not read once for every line
   that came after it, because each of those lines was taken for another
   header: the same failure three times over, two of them naming a row
