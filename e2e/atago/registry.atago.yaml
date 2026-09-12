@@ -10,9 +10,7 @@ suite:
         file: bin/.keep
         content: ""
     - run:
-        command: go build -C ${specdir}/e2ehelper -o ${suitedir}/bin/ .
-    - run:
-        command: ${suitedir}/bin/e2ehelper as standin ${suitedir}/bin
+        command: e2ehelper as standin ${suitedir}/bin
 
 # Users extend jz with YAML only: a definition in a registry directory is
 # detected automatically, exactly like an official one.

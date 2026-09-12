@@ -4,15 +4,9 @@ suite:
   name: jz run - the process it started and the reader it writes to
   # e2ehelper is the producer and the reader in the scenarios that run
   # everywhere: it prints du-shaped lines at a pace, and reports what
-  # became of the process on the other end. It is built once here from
-  # the Go source next to this file, which is the one build tool every
-  # machine running this suite has.
-  setup:
-    - fixture:
-        file: bin/.keep
-        content: ""
-    - run:
-        command: go build -C ${specdir}/e2ehelper -o ${suitedir}/bin/ .
+  # became of the process on the other end. scripts/run_e2e.sh builds it
+  # from the Go source next to this file, which is the one build tool
+  # every machine running this suite has, and puts it on PATH.
 
 # What jz does about the process it started when the run does not end
 # the way both sides expected: the reader leaves, jz is told to stop, the
@@ -39,7 +33,7 @@ scenarios:
   - name: jz run --stream hands over records while the command runs, and stops it when the reader leaves
     steps:
       - run:
-          command: ${suitedir}/bin/e2ehelper pipe -take 2 -pid ${workdir}/producer.pid -- jz run --stream --parser du -- ${suitedir}/bin/e2ehelper emit -lines 1000 -burst 250 -interval 100ms -pid ${workdir}/producer.pid
+          command: e2ehelper pipe -take 2 -pid ${workdir}/producer.pid -- jz run --stream --parser du -- e2ehelper emit -lines 1000 -burst 250 -interval 100ms -pid ${workdir}/producer.pid
           timeout: 30s
       - assert:
           duration:
@@ -66,7 +60,7 @@ scenarios:
   - name: a stream that cannot go on stops the command instead of waiting for it
     steps:
       - run:
-          command: jz run --stream --extract nope --parser du -- ${suitedir}/bin/e2ehelper emit -lines 1000 -burst 250 -interval 100ms -pid ${workdir}/producer.pid
+          command: jz run --stream --extract nope --parser du -- e2ehelper emit -lines 1000 -burst 250 -interval 100ms -pid ${workdir}/producer.pid
           timeout: 30s
       - assert:
           duration:
@@ -82,7 +76,7 @@ scenarios:
           stderr:
             not_contains: "terminated"
       - run:
-          command: ${suitedir}/bin/e2ehelper gone -pid ${workdir}/producer.pid
+          command: e2ehelper gone -pid ${workdir}/producer.pid
       - assert:
           exit_code: 0
           stdout:
@@ -247,7 +241,7 @@ scenarios:
           stderr:
             contains: "timeout of 500ms reached"
       - run:
-          command: ${suitedir}/bin/e2ehelper gone -pid ${workdir}/producer.pid
+          command: e2ehelper gone -pid ${workdir}/producer.pid
       - assert:
           exit_code: 0
           stdout:
