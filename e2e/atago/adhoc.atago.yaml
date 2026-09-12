@@ -185,7 +185,7 @@ scenarios:
             equals: |
               {"x":"1","x_3":"2","x_2":"3"}
 
-  - name: a csv row that repeats the header is a row unless the definition says the header is printed again
+  - name: a csv row that repeats the header is a row
     steps:
       - fixture:
           file: rows.csv
@@ -210,29 +210,24 @@ scenarios:
               {"name":"x","count":"1"}
               {"name":"name","count":"count"}
               {"name":"y","count":"2"}
+      # A table is read the other way round: the same line there is the
+      # header printed again. Which of the two a format is, is the
+      # definition's type rather than a key beside it.
       - run:
-          command: "jz --define 'parse: {type: csv, header: {repeated: true}}' --file ${workdir}/rows.csv"
+          command: "jz --define 'parse: {type: table, split: delimiter, delimiter: \",\"}' --file ${workdir}/rows.csv"
       - assert:
           exit_code: 0
           stdout:
             equals: |
               [{"name":"x","count":"1"},{"name":"y","count":"2"}]
+      # The key that used to choose between the two is gone, and a
+      # definition that writes it is refused where it is read.
       - run:
-          command: "jz --stream --define 'parse: {type: csv, header: {repeated: true}}' --file ${workdir}/rows.csv"
-      - assert:
-          exit_code: 0
-          stdout:
-            equals: |
-              {"name":"x","count":"1"}
-              {"name":"y","count":"2"}
-      # With no header line there is nothing to repeat, and saying so is
-      # refused where the definition is read.
-      - run:
-          command: "jz --define 'parse: {type: csv, header: {none: true, repeated: true}}' --file ${workdir}/rows.csv"
+          command: "jz --define 'parse: {type: csv, header: {repeated: true}}' --file ${workdir}/rows.csv"
       - assert:
           exit_code: 5
           stdout: {empty: true}
-          stderr: {contains: "nothing to repeat"}
+          stderr: {contains: "unknown key \"repeated\""}
 
   - name: a quoted csv value keeps the blank line it holds
     steps:

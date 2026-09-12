@@ -60,10 +60,13 @@ project follows [Semantic Versioning](https://semver.org/).
   reports both; and that a fixture recording the command line it came
   from says which siblings could ever be given it.
 
-- A csv row that holds the header's values is a row. `header.repeated`
-  says whether a body line equal to the header is the header printed
-  again, which starts another table; it defaults to true for a table
-  and to false for csv, and cannot be written beside `header.none`.
+- A csv row that holds the header's values is a row, and the same line
+  in a table is the header printed again, which starts another table.
+  Which of the two a format is comes from its type rather than from a
+  key beside it: a command that prints a report per interval prints its
+  header with each, and a csv file is data. A table whose cells may hold
+  the column names is one to read by an expression, or with
+  `header.none` and `columns`, which has no header to repeat.
 - A csv is read record by record before anything else looks at its
   lines: a blank line inside a quoted value is text, `input.ignore` is
   matched against the record, `input.fold` joins onto a record and
