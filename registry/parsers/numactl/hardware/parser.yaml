@@ -9,6 +9,11 @@
 # The sizes are printed in whole megabytes and are exact, so they are
 # numbers; the unit is on the line rather than in the value, and is left
 # out of the JSON the way every other exact number in the registry is.
+#
+# The size and free lines repeat the node number, and it is not read
+# there: the record the three lines belong to is opened by the cpus
+# line, which is where the number comes from. RE2 has no backreference,
+# so the definition cannot say that the two are the same number.
 format: 1
 command: numactl
 variant: hardware
