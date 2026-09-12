@@ -1,0 +1,13 @@
+The interface table opens with a banner and a row of column names. The
+two together are what identify it:
+
+Kernel Interface table
+Iface             MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+
+Releases before 2.0 wrote a metric between the MTU and the counters, and
+cut the interface name at five characters, so the same table read:
+
+Iface   MTU Met   RX-OK RX-ERR RX-DRP RX-OVR   TX-OK TX-ERR TX-DRP TX-OVR Flg
+
+Neither is output on its own; both are quoted here so that a reader can
+tell which release a capture came from.

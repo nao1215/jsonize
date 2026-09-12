@@ -45,6 +45,11 @@ pageRef = "/definition-format"
 weight = 50
 
 [[menus.main]]
+name = "Coverage"
+pageRef = "/coverage"
+weight = 35
+
+[[menus.main]]
 name = "Design"
 pageRef = "/design"
 weight = 60

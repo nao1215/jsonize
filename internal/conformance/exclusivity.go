@@ -222,7 +222,7 @@ func crossFixture(reg *registry.Registry, f Fixture, readers []reader, target fu
 		if !ownerUnderTest && !target(r.entry.Source) {
 			continue
 		}
-		if unreachableFor(reg, r, f, opts) {
+		if unreachableFor(reg, r, f) {
 			continue
 		}
 		res, ok := reads(reg, r, f.Case.Input, opts)
@@ -249,7 +249,7 @@ func crossFixture(reg *registry.Registry, f Fixture, readers []reader, target fu
 // is the owner or the group, and the arguments are the only thing that
 // says which; holding each against the other's output would be asking a
 // rule about the text for something the text does not carry.
-func unreachableFor(reg *registry.Registry, r reader, f Fixture, opts Options) bool {
+func unreachableFor(reg *registry.Registry, r reader, f Fixture) bool {
 	// The arguments a fixture records are the ones its own command takes,
 	// so they say nothing about a definition for another command.
 	if r.entry.Def.Command != f.Entry.Def.Command {

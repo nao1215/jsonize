@@ -130,6 +130,18 @@ os: linux
 args: [-p, "1234"]
 ```
 
+`source` is required, and what belongs in it is how the text came to
+exist: the command line, the implementation and its version, the
+operating system, the locale, and what you replaced afterwards. Say which
+of three things it is, because a reader cannot tell from the text and the
+three mean different things. Output *captured* from a running command is
+evidence that the definition describes what the command does. Text
+*written by hand* exercises a rule the definition states and is evidence
+only that the definition does what it says, which is what an
+`expect_error` case and a boundary usually are. Text *quoted* from a
+document is how a format you cannot run is described at all, and the
+document belongs in `metadata.references` as well.
+
 `args` is everything after the command name, a subcommand included
 (`args: [madison, bash]` for `apt-cache madison bash`): it is what
 `jz run` would see.
