@@ -269,6 +269,25 @@ non-alphanumerics become `_`, a leading or trailing `%` becomes
 `_percent` (`%CPU` → `cpu_percent`, `Use%` → `use_percent`,
 `1K-blocks` → `1k_blocks`, `Mounted on` → `mounted_on`).
 
+`rename` corrects one of those derived names, and so it cannot be
+written beside `columns`: names written out are already the names, and
+there is no derived name left to correct. A `rename` of a name the
+header does not carry is not an error, so one definition can cover a
+command that renamed a column between versions: `lsblk` prints
+MOUNTPOINT or MOUNTPOINTS depending on its version, and one definition
+reads either.
+
+`leading_label` names the first column of a table whose header leaves it
+unnamed, as `free` does. With `split: whitespace` that column is the
+row's first word, and with `split: delimiter` its first cell; the rows
+then hold one field more than the header names. With `split: aligned` it
+is what stands between the start of the line and the first header word,
+so the header has to be indented: a header written against the left edge
+leaves the column no width, and such a header is refused rather than
+read with every value under its neighbour's name. `split: box` draws its
+first cell like every other cell, so there is no unlabelled column to
+name and `leading_label` cannot be written beside it.
+
 A line of the body that repeats the header, word for word (cell for
 cell with `split: delimiter`), starts a second table: the output of the
 command run twice, or two files joined. It is read as the header again,

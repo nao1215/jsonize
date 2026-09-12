@@ -495,6 +495,22 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `--stream` reported a header it could not read once for every line
+  that came after it, because each of those lines was taken for another
+  header: the same failure three times over, two of them naming a row
+  and quoting the row as the header. A header jz cannot read now ends
+  the stream where it is, which is what reading the same input whole has
+  always done.
+- Three ways of writing a table header were accepted and then did not do
+  what they said. A `header.rename` beside `header.columns` is refused,
+  since names written out are already the names;
+  `header.leading_label` beside `split: box` is refused, since the bars
+  draw the first cell like every other cell; and in an `aligned` table a
+  `leading_label` over a header that begins at the left edge is refused
+  rather than read one column over, which used to put every value under
+  its neighbour's name and still exit 0. A negative `max_fields` also
+  reported an unwritten `min_fields` as exceeding it, and now reports
+  only the negative value.
 - One definition file jz had no permission to read took the whole
   registry down, the built-in parsers with it, so `jz run df` exited 5
   over an unrelated file's mode. A file that cannot be read, and a
