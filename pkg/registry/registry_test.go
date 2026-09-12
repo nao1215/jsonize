@@ -2,6 +2,7 @@ package registry
 
 import (
 	"errors"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -209,5 +210,95 @@ func TestDisableSyntaxIsChecked(t *testing.T) {
 		if !strings.Contains(err.Error(), "must be a command or a command/variant") {
 			t.Errorf("disable %q: %v", entry, err)
 		}
+	}
+}
+
+// failingFS refuses one path with the error it is given and answers for
+// everything else, which is what a directory jz has no permission on
+// looks like from here.
+type failingFS struct {
+	fs.FS
+	path string
+	err  error
+}
+
+func (f failingFS) Open(name string) (fs.File, error) {
+	if name == f.path {
+		return nil, &fs.PathError{Op: "open", Path: name, Err: f.err}
+	}
+	return f.FS.Open(name)
+}
+
+func (f failingFS) ReadDir(name string) ([]fs.DirEntry, error) {
+	if name == f.path {
+		return nil, &fs.PathError{Op: "open", Path: name, Err: f.err}
+	}
+	return fs.ReadDir(f.FS, name)
+}
+
+// A definition jz cannot read is that definition's problem, the same as
+// one that does not parse or one over the size bound: the registry it
+// sits in, and the registries below it, still load.
+func TestUnreadableDefinitionIsOneDefinitionsProblem(t *testing.T) {
+	t.Parallel()
+	base := fstest.MapFS{
+		"registry.yaml":                   {Data: []byte("format: 1\nname: s\n")},
+		"parsers/ok/default/parser.yaml":  {Data: []byte(def("ok", "default"))},
+		"parsers/bad/one/parser.yaml":     {Data: []byte(def("bad", "one"))},
+		"parsers/bad/one/testdata/a.txt":  {Data: []byte("x")},
+		"parsers/bad/one/testdata/a.json": {Data: []byte("[]")},
+	}
+	for _, tt := range []struct {
+		name string
+		path string
+	}{
+		{"file", "parsers/bad/one/parser.yaml"},
+		{"directory", "parsers/bad"},
+		{"the parsers directory itself", "parsers"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			reg, err := Load(Source{Name: "s", FS: failingFS{FS: base, path: tt.path, err: fs.ErrPermission}})
+			if err != nil {
+				t.Fatalf("Load = %v, want the other definitions to load", err)
+			}
+			if len(reg.Problems) != 1 {
+				t.Fatalf("Problems = %v, want the one file that could not be read", reg.Problems)
+			}
+			if msg := reg.Problems[0].Error(); !strings.Contains(msg, tt.path) || !strings.Contains(msg, "permission denied") {
+				t.Errorf("problem = %s, want it to name %s", msg, tt.path)
+			}
+			want := 1
+			if tt.path == "parsers" {
+				want = 0
+			}
+			if reg.Len() != want {
+				t.Errorf("Len = %d, want %d", reg.Len(), want)
+			}
+			if _, ok := reg.Lookup("bad", "one"); ok {
+				t.Error("a definition that could not be read must not be in the registry")
+			}
+		})
+	}
+}
+
+// A registry whose parsers is a file rather than a directory says so.
+// Loading it as empty leaves the author with a registry that changes
+// nothing and no reason why.
+func TestParsersMustBeADirectory(t *testing.T) {
+	t.Parallel()
+	fsys := fstest.MapFS{
+		"registry.yaml": {Data: []byte("format: 1\nname: s\n")},
+		"parsers":       {Data: []byte("not a directory\n")},
+	}
+	reg, err := Load(Source{Name: "s", FS: fsys})
+	if err != nil {
+		t.Fatalf("Load = %v", err)
+	}
+	if len(reg.Problems) != 1 {
+		t.Fatalf("Problems = %v, want one naming parsers", reg.Problems)
+	}
+	if msg := reg.Problems[0].Error(); !strings.Contains(msg, "parsers") || !strings.Contains(msg, "not a directory") {
+		t.Errorf("problem = %s", msg)
 	}
 }
