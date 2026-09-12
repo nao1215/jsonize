@@ -1,0 +1,10 @@
+description: the interface table of net-tools 1.60, which carries a Met column between MTU and RX-OK, so that this definition is held to refusing it
+source: >-
+  not captured: transcribed from the format strings of net-tools 1.60
+  (netstat.c iface_info prints the header "Iface   MTU Met   RX-OK ...",
+  lib/interface.c ife_print_short prints a row as "%-5.5s " "%5d %3d" and
+  the counters),
+  https://github.com/ecki/net-tools/blob/v1.60/lib/interface.c. The
+  interface names and counters are made up; only the layout is taken from
+  the source.
+expect_error: does not describe this input

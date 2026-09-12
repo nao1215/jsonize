@@ -1,0 +1,10 @@
+NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+loop0 7:0 0 4K 1 loop /snap/bare/5
+loop2 7:2 0 55.5M 1 loop /snap/core18/2999
+loop3 7:3 0 37.6M 1 loop /snap/terraform/933
+loop4 7:4 0 214.5M 1 loop /snap/brave/678
+loop5 7:5 0 74M 1 loop /snap/core22/2411
+loop6 7:6 0 63.8M 1 loop /snap/core20/2866
+loop7 7:7 0 66.8M 1 loop /snap/core24/1643
+loop8 7:8 0 74M 1 loop /snap/core22/2437
+loop9 7:9 0 66.8M 1 loop /snap/core24/1587

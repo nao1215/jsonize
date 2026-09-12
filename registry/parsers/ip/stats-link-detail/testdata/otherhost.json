@@ -1,0 +1,112 @@
+[
+  {
+    "interface": {
+      "index": 1,
+      "name": "lo",
+      "flags": [
+        "LOOPBACK",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 65536,
+      "qdisc": "noqueue",
+      "state": "UNKNOWN",
+      "mode": "DEFAULT",
+      "group": "default",
+      "qlen": 1000
+    },
+    "link": {
+      "type": "loopback",
+      "address": "00:00:00:00:00:00",
+      "broadcast": "00:00:00:00:00:00"
+    },
+    "rx": {
+      "bytes": 35872578,
+      "packets": 105471,
+      "errors": 0,
+      "dropped": 0,
+      "missed": 0,
+      "mcast": 0
+    },
+    "tx": {
+      "bytes": 35872578,
+      "packets": 105471,
+      "errors": 0,
+      "dropped": 0,
+      "carrier": 0,
+      "collsns": 0
+    },
+    "rx_errors": {
+      "length": 0,
+      "crc": 0,
+      "frame": 0,
+      "fifo": 0,
+      "overrun": 0
+    },
+    "tx_errors": {
+      "aborted": 0,
+      "fifo": 0,
+      "window": 0,
+      "heartbeat": 0,
+      "transns": 0
+    },
+    "alias": [],
+    "altnames": []
+  },
+  {
+    "interface": {
+      "index": 2,
+      "name": "eno1",
+      "flags": [
+        "BROADCAST",
+        "MULTICAST",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 1500,
+      "qdisc": "fq_codel",
+      "state": "UP",
+      "mode": "DEFAULT",
+      "group": "default",
+      "qlen": 1000
+    },
+    "link": {
+      "type": "ether",
+      "address": "52:54:00:11:22:33",
+      "broadcast": "ff:ff:ff:ff:ff:ff"
+    },
+    "rx": {
+      "bytes": 27084581,
+      "packets": 108956,
+      "errors": 0,
+      "dropped": 46340,
+      "missed": 0,
+      "mcast": 56234
+    },
+    "tx": {
+      "bytes": 5849720,
+      "packets": 58246,
+      "errors": 0,
+      "dropped": 0,
+      "carrier": 0,
+      "collsns": 0
+    },
+    "rx_errors": {
+      "length": 0,
+      "crc": 0,
+      "frame": 0,
+      "fifo": 0,
+      "overrun": 0,
+      "otherhost": 7
+    },
+    "tx_errors": {
+      "aborted": 0,
+      "fifo": 0,
+      "window": 0,
+      "heartbeat": 0,
+      "transns": 2
+    },
+    "alias": [],
+    "altnames": []
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "path": "/var/lib/example",
+    "condition": "PathExists",
+    "unit": "example.path",
+    "activates": null
+  }
+]

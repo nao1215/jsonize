@@ -222,6 +222,9 @@ func crossFixture(reg *registry.Registry, f Fixture, readers []reader, target fu
 		if !ownerUnderTest && !target(r.entry.Source) {
 			continue
 		}
+		if unreachableFor(reg, r, f) {
+			continue
+		}
 		res, ok := reads(reg, r, f.Case.Input, opts)
 		if !ok {
 			continue
@@ -235,6 +238,35 @@ func crossFixture(reg *registry.Registry, f Fixture, readers []reader, target fu
 		out = append(out, res)
 	}
 	return out
+}
+
+// unreachableFor reports a definition that could not be given this text
+// however the caller asked. A definition jz will not claim on its own is
+// reached by naming it or by `jz run`; when the fixture records the
+// command line it came from and the definition's own argument filter
+// refuses that command line, neither path leads here. `ls -lG` and
+// `ls -lg` print the same text and differ in whether the one name column
+// is the owner or the group, and the arguments are the only thing that
+// says which; holding each against the other's output would be asking a
+// rule about the text for something the text does not carry.
+func unreachableFor(reg *registry.Registry, r reader, f Fixture) bool {
+	// The arguments a fixture records are the ones its own command takes,
+	// so they say nothing about a definition for another command.
+	if r.entry.Def.Command != f.Entry.Def.Command {
+		return false
+	}
+	if f.Case.Meta.Args == nil || !selector.ExplicitOnly(r.entry.Def) {
+		return false
+	}
+	ctx := selector.Context{
+		Parser:  r.name,
+		Variant: r.entry.Def.Variant,
+		OS:      f.Case.Meta.OS,
+		Args:    f.Case.Meta.Args,
+		Input:   f.Case.Input,
+	}
+	sel, err := selector.Select(reg, ctx)
+	return err != nil || sel.Entry.Def.ID() != r.entry.Def.ID()
 }
 
 // reads reports whether the definition, named explicitly, accepts the

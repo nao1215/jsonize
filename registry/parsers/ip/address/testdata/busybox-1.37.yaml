@@ -1,0 +1,10 @@
+source: >-
+  two blocks of `busybox ip addr` captured on Ubuntu 26.04 (BusyBox
+  1.37.0) with LC_ALL=C; the hardware address and the IPv4 address were
+  replaced
+description: >-
+  BusyBox prints neither the state nor the group in the header, so the
+  queue length follows the queueing discipline. The lines under it are
+  the ones iproute2 prints.
+os: linux
+args: ["addr"]

@@ -1,0 +1,15 @@
+UID          PID    PPID  C    SZ   RSS PSR STIME TTY          TIME CMD
+root           1       0  0  7016 19124   0 Sep10 ?        00:02:57 /usr/lib/systemd/systemd --system --deserialize=124 splash
+root           2       0  0     0     0   2 Sep10 ?        00:00:00 [kthreadd]
+root           4       2  0     0     0   0 Sep10 ?        00:00:00 [kworker/R-rcu_gp]
+root          15       2  0     0     0   3 Sep10 ?        00:02:41 [rcu_preempt]
+systemd+     729       1  0  6004  8572  29 Sep10 ?        00:00:11 /usr/lib/systemd/systemd-resolved
+message+    2024       1  0  3252  7916  13 Sep10 ?        00:01:11 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+polkitd     2034       1  0 96354 10616  14 Sep10 ?        00:00:04 /usr/lib/polkit-1/polkitd --no-debug --log-level=notice
+avahi       2094    2021  0  1640   348  18 Sep10 ?        00:00:00 avahi-daemon: chroot helper
+user1       4279       1  0 651462 21048  7 Sep10 ?        00:00:04 /usr/local/bin/ollama serve
+65535       6610    6511  0   257    40   5 Sep10 ?        00:00:00 /pause
+65532       8153    7679  0 326884 36516  3 Sep10 ?        00:03:31 /coredns -conf /etc/coredns/Corefile
+user1      23440   21434  0  1815  6052  30 Sep10 pts/4    00:00:00 /usr/bin/bash --init-file /etc/bash.bashrc
+user1    3092255  205350  0  4029  7920  13 11:34 ?        00:00:00 sleep 5
+user1    3092293 3092290  0  1973  5440   5 11:34 ?        00:00:00 ps -eF

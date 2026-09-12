@@ -1,0 +1,8 @@
+source: >-
+  written by hand from the capture beside it, with a container added and
+  the host left unmarked
+description: >-
+  A healthy machine has no marker and the column is blank, so the row
+  opens with whitespace rather than with a glyph.
+os: linux
+args: ["list-machines"]

@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C
+description: >-
+  The wide header over rounded sizes. Swap has no shared, buffers, cache
+  or available figure, so those cells are missing from its row rather
+  than zero.
+os: linux
+args: ["-h", "-w"]

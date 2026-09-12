@@ -100,9 +100,9 @@ scenarios:
           stdout:
             empty: true
 
-  # A reading that succeeds has read all of its input. Two dig replies
-  # in one capture used to come back as the first reply at exit 0; the
-  # second one is now named where it starts, and nothing is written.
+  # A reading that succeeds has read all of its input. dig prints a reply
+  # per query, so two of them in one text are two replies and not a
+  # reason to refuse it; a line no reply accounts for still is.
   - name: text the definition does not read is refused, not dropped
     steps:
       - fixture:
@@ -117,7 +117,23 @@ scenarios:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.header.status", equals: NOERROR }
+              - { path: "$.replies", length: 1 }
+              - { path: "$.replies[0].header.status", equals: NOERROR }
+      # One run that asked two questions is two replies under one banner.
+      - fixture:
+          file: dig-two.txt
+          from: "${specdir}/testdata/dig-two-queries.txt"
+      - run:
+          command: jz --file dig-two.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.replies", length: 2 }
+              - { path: "$.replies[0].question[0].type", equals: A }
+              - { path: "$.replies[1].question[0].type", equals: MX }
+      # Two runs pasted together are not one run: the second banner says
+      # so, and it is named rather than dropped to make the text fit.
       - run:
           command: sh -c 'cat dig-reply.txt dig-nxdomain.txt | jz'
       - assert:
@@ -125,7 +141,7 @@ scenarios:
           stdout:
             empty: true
           stderr:
-            contains: "dig/bind: line 21: 11 lines no part of the definition read: line 21"
+            contains: "no part of the definition read"
       # A line nothing prints, added at the end, is the same failure.
       - run:
           command: sh -c '{ cat dig-reply.txt; echo "unexpected trailer"; } | jz'
@@ -306,7 +322,7 @@ scenarios:
       - assert:
           exit_code: 4
           stderr:
-            contains: "available: bsd, bsd-human, busybox-human, gnu, gnu-human"
+            contains: "available: bsd, bsd-human, busybox-human, gnu, gnu-blocks"
 
   - name: a variant without a parser is a usage error
     steps:

@@ -1,0 +1,10 @@
+NAME          SIZE OWNER GROUP MODE
+loop0           4K root  disk  brw-rw----
+loop2        55.5M root  disk  brw-rw----
+loop3        37.6M root  disk  brw-rw----
+loop4       214.5M root  disk  brw-rw----
+loop5          74M root  disk  brw-rw----
+loop6        63.8M root  disk  brw-rw----
+loop7        66.8M root  disk  brw-rw----
+loop8          74M root  disk  brw-rw----
+loop9        66.8M root  disk  brw-rw----

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsblk/raw.json",
+  "title": "lsblk/raw",
+  "description": "lsblk -r, the default columns one space apart",
+  "x-jsonize": {
+    "definition": "lsblk/raw",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "maj_min": {
+        "type": "string"
+      },
+      "mountpoint": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "name": {
+        "type": "string"
+      },
+      "rm": {
+        "type": "boolean"
+      },
+      "ro": {
+        "type": "boolean"
+      },
+      "size": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

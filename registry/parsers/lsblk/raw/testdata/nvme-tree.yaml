@@ -1,0 +1,4 @@
+description: two disks and their partitions, including the empty last cell of a disk that is not mounted
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; the mount point under /media renamed
+os: linux
+args: [-r, /dev/nvme0n1, /dev/nvme1n1]

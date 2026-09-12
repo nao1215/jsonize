@@ -1,0 +1,107 @@
+# A zone transfer prints the banner, then the records of the zone in
+# master file syntax, then how the transfer went. There is no header and
+# there are no sections: the server sends the zone and dig writes it out,
+# so the whole of it is one table between the banner and the statistics.
+#
+# A server that refuses the transfer prints "; Transfer failed." instead
+# of the records, which leaves the records list empty and says so under
+# transport.
+format: 1
+command: dig
+variant: axfr
+description: dig zone transfer (dig axfr)
+metadata:
+  tags: [linux, darwin, network, dns]
+  compatible: [BIND dig]
+  references:
+    - https://bind9.readthedocs.io/en/latest/manpages.html#dig-dns-lookup-utility
+detect:
+  args:
+    any: ["axfr", "AXFR", "ixfr", "IXFR"]
+  signature:
+    all:
+      # dig restates the command line, so the request is in the first
+      # line whatever the zone turns out to hold.
+      - '\A; <<>> DiG \S+ <<>>[^\n]*\b(?i:axfr|ixfr)\b'
+    any:
+      # Then either the zone starts right under the banner, or dig says
+      # the transfer did not happen. The statistics that close a transfer
+      # are past the end of the window for any zone worth transferring,
+      # so they are not what this is read from.
+      - '^;; global options:[^\n]*\n[^;]'
+      - '^; Transfer failed\.'
+      - '^;; XFR size: '
+parse:
+  type: composite
+  parts:
+    - name: query
+      select: {limit: 2}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A; <<>> DiG (?P<version>\S+) <<>>(?:[ \t]+(?P<arguments>[^\n]*?))?[ \t]*\n(?:; \((?P<servers_found>\d+) servers? found\)[ \t]*\n)?;; global options:[ \t]*(?P<global_options>[^\n]*?)[ \t]*\z'
+      fields:
+        version: {required: true}
+        arguments: {null_if: [""]}
+        servers_found: {type: int, when_missing: omit}
+        global_options: {type: array, split_regex: '[ \t]+', null_if: [""]}
+    # What dig says about the transfer rather than about the zone: the
+    # line a refused transfer ends with, and the expired or truncated
+    # ones it writes in place of the records.
+    - name: transport
+      select: {skip: 2}
+      ignore:
+        - '^[^;]'
+        - '^;; Query time: '
+        - '^;; SERVER: '
+        - '^;; WHEN: '
+        - '^;; XFR size: '
+      parse:
+        type: regex
+        pattern: '^;[ \t]*(?P<text>.+?)[ \t]*$'
+    # How long the transfer took. dig prints it above the server line, so
+    # it is the heading the statistics region starts after and is read
+    # here rather than by the rule that reads the rest of them.
+    - name: query_time
+      select: {skip: 2}
+      ignore:
+        - '^[^;]'
+        - '^; '
+        - '^;; SERVER: '
+        - '^;; WHEN: '
+        - '^;; XFR size: '
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?:;; Query time: (?P<milliseconds>\d+) msec(?: \((?P<queries>\d+) queries\))?[ \t]*)?\z'
+      fields:
+        milliseconds: {type: int, when_missing: omit}
+        queries: {type: int, when_missing: omit}
+    - name: records
+      select: {skip: 2}
+      ignore: ['^;']
+      parse:
+        type: table
+        header:
+          none: true
+          columns: [name, ttl, class, type, data]
+      fields:
+        ttl: {type: int}
+    # A refused transfer prints none of this, so the whole of it is
+    # optional and the statistics are an empty object when the transfer
+    # did not happen.
+    - name: statistics
+      select: {after: '^;; Query time: \d+ msec$|^;; Query time: \d+ msec \(\d+ queries\)$'}
+      ignore: ['^[^;]', '^;[^;]']
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?:;; SERVER: (?P<server>[^\s(]+)\((?P<server_name>[^)]*)\)(?: \((?P<protocol>[A-Z]+)\))?[ \t]*\n;; WHEN: (?P<when>[^\n]+)\n;; XFR size: (?P<records>\d+) records \(messages (?P<messages>\d+), bytes (?P<bytes>\d+)\)[ \t]*)?\z'
+      fields:
+        server: {when_missing: omit}
+        server_name: {when_missing: omit}
+        protocol: {when_missing: omit}
+        when: {when_missing: omit}
+        records: {type: int, when_missing: omit}
+        messages: {type: int, when_missing: omit}
+        bytes: {type: int, when_missing: omit}

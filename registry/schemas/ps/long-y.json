@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ps/long-y.json",
+  "title": "ps/long-y",
+  "description": "ps -ely (S UID PID PPID C PRI NI RSS SZ WCHAN TTY TIME CMD)",
+  "x-jsonize": {
+    "definition": "ps/long-y",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "s": {
+        "type": "string"
+      },
+      "uid": {
+        "type": "integer"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "ppid": {
+        "type": "integer"
+      },
+      "c": {
+        "type": "integer"
+      },
+      "pri": {
+        "type": "integer"
+      },
+      "ni": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "rss": {
+        "type": "integer"
+      },
+      "sz": {
+        "type": "integer"
+      },
+      "wchan": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "time": {
+        "type": "number"
+      },
+      "cmd": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "s",
+      "uid",
+      "pid",
+      "ppid",
+      "c",
+      "pri",
+      "ni",
+      "rss",
+      "sz",
+      "wchan",
+      "tty",
+      "time",
+      "cmd"
+    ]
+  }
+}

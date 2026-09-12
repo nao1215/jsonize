@@ -1,0 +1,22 @@
+
+; <<>> DiG 9.20.24-1ubuntu0.3-Ubuntu <<>> +nsid example.com @1.1.1.1
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 25507
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; NSID: 6e 72 74 30 35 ("nrt05")
+;; QUESTION SECTION:
+;example.com.			IN	A
+
+;; ANSWER SECTION:
+example.com.		18	IN	A	104.20.23.154
+example.com.		18	IN	A	172.66.147.243
+
+;; Query time: 13 msec
+;; SERVER: 1.1.1.1#53(1.1.1.1) (UDP)
+;; WHEN: Sat Sep 12 11:19:50 JST 2026
+;; MSG SIZE  rcvd: 81
+

@@ -1,0 +1,17 @@
+Windows IP Configuration
+
+Ethernet adapter Ethernet 2:
+
+   Connection-specific DNS Suffix  . : mshome.net
+   Link-local IPv6 Address . . . . . : fe80::f4b3:63b3:20d0:2e60%12
+   Autoconfiguration IPv4 Address. . : 169.254.233.233
+   Subnet Mask . . . . . . . . . . . : 255.255.0.0
+   Default Gateway . . . . . . . . . :
+
+Ethernet adapter vEthernet (Default Switch):
+
+   Connection-specific DNS Suffix  . :
+   Link-local IPv6 Address . . . . . : fe80::545e:7d5:812b:c17b%18
+   IPv4 Address. . . . . . . . . . . : 172.21.144.1
+   Subnet Mask . . . . . . . . . . . : 255.255.240.0
+   Default Gateway . . . . . . . . . :

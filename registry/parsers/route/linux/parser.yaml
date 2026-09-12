@@ -5,10 +5,15 @@
 # `netstat -r` prints the same banner and the same first four columns.
 # The two are separated by the header row, which reports Metric, Ref and
 # Use here and MSS, Window and irtt there; netstat/routing pins the other
-# one.
+# one. `netstat -e -r` is this table rather than that one, which is what
+# the alias says, so `jz run netstat -re` reaches the definition written
+# for the columns it prints.
 format: 1
 command: route
 variant: linux
+aliases:
+  - name: netstat
+    args: {all: ["-e", "-r"]}
 description: route kernel IP routing table
 metadata:
   tags: [linux, network, net-tools]

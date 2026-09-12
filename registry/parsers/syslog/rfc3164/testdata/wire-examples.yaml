@@ -1,0 +1,9 @@
+description: >
+  The four messages RFC 3164 shows as valid on the wire: a tag with no
+  process id, a relayed message with no tag at all, a message whose
+  timestamp carries a zone and a year so that the RFC itself reads CST
+  as the host name and 1987 as the start of the message, and the relayed
+  form of a message a device wrote its own way. The last two are read
+  the way section 5.4 says they are read, which is what makes them worth
+  keeping: the format has no other answer for them.
+source: the examples of RFC 3164 section 5.4, each joined onto one line where the RFC broke it for the page width

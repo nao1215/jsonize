@@ -1,0 +1,10 @@
+Windows IP Configuration
+
+2003server1
+
+Record Name . . . . . : 2003server1.contoso.com
+Record Type . . . . . : 1
+Time To Live . . . . : 882
+Data Length . . . . . : 4
+Section . . . . . . . : Answer
+A (Host) Record . . . : 192.168.1.11

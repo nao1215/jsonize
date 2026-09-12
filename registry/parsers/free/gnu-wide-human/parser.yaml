@@ -1,0 +1,37 @@
+# `free -h -w` prints the wide header over rounded figures with a suffix.
+# Which of them is a kibibyte count and which is a rounded size is not in
+# the header, it is in the row, so that is what separates this from
+# free/gnu-wide.
+#
+# `free -h` counts 1024 per suffix step and `free -h --si` counts 1000,
+# and the output does not say which is in use. The values are rounded in
+# either case, so they are reported as printed; run `free -w` for exact
+# kibibyte numbers.
+format: 1
+command: free
+variant: gnu-wide-human
+description: procps free -h -w (buffers and cache in separate columns, sizes kept as printed)
+metadata:
+  tags: [linux, memory, procps]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/free.1.html
+detect:
+  os: [linux]
+  args:
+    all: ["-w"]
+    any: ["-h", "--human"]
+  signature:
+    all:
+      - '^\s+total\s+used\s+free\s+shared\s+buffers\s+cache\s+available\s*$'
+      - '^Mem:\s+[\d.]+[KMGTPB]i?\b'
+parse:
+  type: table
+  header:
+    leading_label: type
+  min_fields: 4
+fields:
+  type: {trim_suffix: ":", required: true}
+  total: {required: true}
+  used: {required: true}
+  free: {required: true}

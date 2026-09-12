@@ -1,0 +1,117 @@
+{
+  "query": {
+    "version": "9.20.24-1ubuntu0.3-Ubuntu",
+    "arguments": "example.com A example.org MX",
+    "global_options": [
+      "+cmd"
+    ]
+  },
+  "transport": [],
+  "replies": [
+    {
+      "header": {
+        "opcode": "QUERY",
+        "status": "NOERROR",
+        "id": 63271,
+        "flags": [
+          "qr",
+          "rd",
+          "ra"
+        ],
+        "question_count": 1,
+        "answer_count": 2,
+        "authority_count": 0,
+        "additional_count": 1
+      },
+      "messages": [],
+      "edns": [
+        {
+          "name": "EDNS",
+          "value": "version: 0, flags:; udp: 65494"
+        }
+      ],
+      "question": [
+        {
+          "name": "example.com.",
+          "class": "IN",
+          "type": "A"
+        }
+      ],
+      "answers": [
+        {
+          "name": "example.com.",
+          "ttl": 42,
+          "class": "IN",
+          "type": "A",
+          "data": "172.66.147.243"
+        },
+        {
+          "name": "example.com.",
+          "ttl": 42,
+          "class": "IN",
+          "type": "A",
+          "data": "104.20.23.154"
+        }
+      ],
+      "authority": [],
+      "additional": [],
+      "statistics": {
+        "query_time_ms": 0,
+        "server": "127.0.0.53#53",
+        "server_name": "127.0.0.53",
+        "protocol": "UDP",
+        "when": "Sat Sep 12 11:19:50 JST 2026",
+        "message_size": 72
+      }
+    },
+    {
+      "header": {
+        "opcode": "QUERY",
+        "status": "NOERROR",
+        "id": 62207,
+        "flags": [
+          "qr",
+          "rd",
+          "ra"
+        ],
+        "question_count": 1,
+        "answer_count": 1,
+        "authority_count": 0,
+        "additional_count": 1
+      },
+      "messages": [],
+      "edns": [
+        {
+          "name": "EDNS",
+          "value": "version: 0, flags:; udp: 65494"
+        }
+      ],
+      "question": [
+        {
+          "name": "example.org.",
+          "class": "IN",
+          "type": "MX"
+        }
+      ],
+      "answers": [
+        {
+          "name": "example.org.",
+          "ttl": 300,
+          "class": "IN",
+          "type": "MX",
+          "data": "0 ."
+        }
+      ],
+      "authority": [],
+      "additional": [],
+      "statistics": {
+        "query_time_ms": 17,
+        "server": "127.0.0.53#53",
+        "server_name": "127.0.0.53",
+        "protocol": "UDP",
+        "when": "Sat Sep 12 11:19:50 JST 2026",
+        "message_size": 55
+      }
+    }
+  ]
+}

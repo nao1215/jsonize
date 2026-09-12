@@ -1,0 +1,8 @@
+source: captured on Ubuntu 26.04 (uutils coreutils 0.8.0) with LC_ALL=C from a directory with nothing in it
+description: >-
+  A directory with nothing in it prints its total and no rows, which is
+  an empty list rather than a text jz could not identify. Every long
+  listing prints the same line, so this definition is the one that reads
+  it and the answer is the same whichever was run.
+os: linux
+args: ["-l", "/tmp/empty"]

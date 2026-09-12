@@ -1,0 +1,36 @@
+[
+  {
+    "timestamp": {
+      "value": "09/12/26 11:43:57"
+    },
+    "devices": [
+      {
+        "device": "nvme0n1",
+        "tps": 41.31,
+        "kb_read_s": 227.3,
+        "kb_wrtn_s": 583.66,
+        "kb_dscd_s": 0,
+        "kb_read": 30088903,
+        "kb_wrtn": 77262493,
+        "kb_dscd": 0
+      }
+    ]
+  },
+  {
+    "timestamp": {
+      "value": "09/12/26 11:43:58"
+    },
+    "devices": [
+      {
+        "device": "nvme0n1",
+        "tps": 23,
+        "kb_read_s": 0,
+        "kb_wrtn_s": 300,
+        "kb_dscd_s": 0,
+        "kb_read": 0,
+        "kb_wrtn": 300,
+        "kb_dscd": 0
+      }
+    ]
+  }
+]

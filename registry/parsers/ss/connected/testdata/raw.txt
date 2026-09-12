@@ -1,0 +1,3 @@
+Recv-Q Send-Q Local Address:Port      Peer Address:Port
+0      0                  *:ipv6-icmp            *:*   
+0      0                  *:ipv6-icmp            *:*   

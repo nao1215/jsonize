@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C from a directory under /tmp; the owner name replaced with user1
+description: a symbolic link and a name with a space in it, listed with -o rather than -G to pin the other spelling of the same format
+os: linux
+args: ["-lo"]

@@ -1,0 +1,88 @@
+[
+  {
+    "interface": {
+      "index": 1,
+      "name": "lo",
+      "flags": [
+        "LOOPBACK",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 65536,
+      "qdisc": "noqueue",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "loopback",
+        "address": "00:00:00:00:00:00",
+        "broadcast": "00:00:00:00:00:00"
+      },
+      {
+        "kind": "inet",
+        "address": "127.0.0.1/8",
+        "scope": "host",
+        "attributes": [
+          "lo"
+        ]
+      },
+      {
+        "kind": "valid_lft",
+        "valid_lft": "forever",
+        "preferred_lft": "forever"
+      },
+      {
+        "kind": "inet6",
+        "address": "::1/128",
+        "scope": "host",
+        "attributes": [
+          "noprefixroute"
+        ]
+      },
+      {
+        "kind": "valid_lft",
+        "valid_lft": "forever",
+        "preferred_lft": "forever"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 2,
+      "name": "eno1",
+      "flags": [
+        "BROADCAST",
+        "MULTICAST",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 1500,
+      "qdisc": "fq_codel",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "52:54:00:11:22:33",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      },
+      {
+        "kind": "inet",
+        "address": "192.0.2.2/24",
+        "broadcast": "192.0.2.255",
+        "scope": "global",
+        "attributes": [
+          "noprefixroute",
+          "eno1"
+        ]
+      },
+      {
+        "kind": "valid_lft",
+        "valid_lft": "forever",
+        "preferred_lft": "forever"
+      }
+    ]
+  }
+]

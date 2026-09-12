@@ -1,0 +1,10 @@
+Filesystem     512B-blocks       Used  Available Use% Mounted on
+tmpfs             25765344      11424   25753920   1% /run
+/dev/nvme0n1p2  3841282576 3307511184  338497464  91% /
+tmpfs             64413352     853856   63559496   2% /dev/shm
+efivarfs               256         95        152  39% /sys/firmware/efi/efivars
+none                  2048          0       2048   0% /run/credentials/systemd-journald.service
+none                  2048          0       2048   0% /run/credentials/systemd-resolved.service
+tmpfs             64413352    1875064   62538288   3% /tmp
+/dev/nvme0n1p1     2197264      12912    2184352   1% /boot/efi
+none                  2048          0       2048   0% /run/credentials/getty@tty1.service

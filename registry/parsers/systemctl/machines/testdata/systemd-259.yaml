@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C; the host name was
+  replaced
+description: >-
+  A manager with no containers lists the host alone. It is marked because
+  one of its units has failed, and it names itself with "(host)" after
+  its name.
+os: linux
+args: ["list-machines"]

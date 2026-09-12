@@ -1,0 +1,110 @@
+# `ipconfig /all` prints the settings that belong to the machine under a
+# "Windows IP Configuration" banner and then one block per adapter. A
+# block opens with a heading naming the kind of adapter and the
+# connection ("Ethernet adapter Ethernet:", "Wireless LAN adapter
+# Wi-Fi:") and every line under it is a label padded with dots to a
+# fixed column, a colon, and a value that may be empty.
+#
+# The labels are not a fixed set: which of them appear depends on the
+# adapter, on whether DHCP answered and on which addresses are
+# configured, and several of them occur more than once in one block, an
+# IPv4 address and its subnet mask once per address. The pairs are
+# therefore a list of name/value objects rather than an object, which is
+# what keeps the second address from hiding the first.
+#
+# The dots are padding rather than part of the label, so the name stops
+# where the run of dots begins. A value keeps whatever the command wrote
+# after the colon; the parenthesised state of an address ("(Preferred)")
+# and the scope identifier of a link-local address are printed as one
+# word with it and are left that way.
+#
+# A value with more than one entry continues on the next line, aligned
+# with the value column and carrying no label of its own, which is how a
+# list of DNS servers is printed: the shared-printer article under
+# metadata.references quotes a report with three of them. That article
+# writes the block as quoted prose and its columns do not survive on the
+# page, so it is cited here rather than kept as a fixture, and no
+# fixture pins the joining. input.fold joins such a line onto the line
+# it belongs to, so the entries stay under the label that announced
+# them. The label column is a few characters wide, so a line indented
+# far past it is a continuation and not a label.
+#
+# Every value stays a string. The text states no units and no types, and
+# the one field that reads as a number, the DHCPv6 IAID, is an
+# identifier rather than a quantity.
+format: 1
+command: ipconfig
+variant: all
+description: ipconfig /all, the machine's IP configuration and one block per adapter
+metadata:
+  tags: [windows, network]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig
+    - https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/virtual-network-multiple-ip-addresses-portal
+    - https://learn.microsoft.com/en-us/training/modules/understand-active-directory-domain-name-system/8-guided-troubleshooting-exercise
+    - https://learn.microsoft.com/en-us/troubleshoot/windows-server/printing/cannot-install-shared-network-printer-locally
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    any: ["/all"]
+  signature:
+    all:
+      # The banner opens the output and the machine's own settings
+      # follow it: a labelled line indented under the banner is what
+      # /all prints and what ipconfig without it does not. Written as
+      # one expression because the blank line between them is the only
+      # thing in between, and because it is the two lines together that
+      # separate this format from the plain listing.
+      - '\AWindows IP Configuration[ \t]*\n(?:[ \t]*\n)*[ \t]+Host Name[ \t.]*:'
+      # The adapter blocks are the rest of the output. `ipconfig
+      # /allcompartments /all` repeats them under a banner naming each
+      # compartment, so its text does not open with the line above and
+      # this definition does not undertake to read it.
+      - '^[^ \t].* adapter .*:[ \t]*$'
+input:
+  # A label sits a few characters from the left margin, so a line
+  # indented as far as the value column is the continuation of the line
+  # above it rather than a label of its own.
+  fold: '^[ \t]{10,}\S'
+  # The banner names the report rather than any adapter, and nothing is
+  # read from it.
+  select:
+    after: '^Windows IP Configuration[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: configuration
+      select: {until: '^[^ \t].* adapter .*:[ \t]*$'}
+      parse:
+        type: regex
+        pattern: '^[ \t]+(?P<name>[^:.]+?)[ \t]*(?:\.(?:[ \t]\.)*)?[ \t]*:[ \t]?(?P<value>.*?)[ \t]*$'
+    - name: adapters
+      # The machine's settings stand above the first adapter block and
+      # cannot be cut away by a range, because both are written in the
+      # same label column. The labels Windows prints there are a fixed
+      # set, so they are named here and read by the part above; a label
+      # this list does not know is an error rather than a value quietly
+      # attached to the first adapter.
+      ignore:
+        - '^[ \t]+(?:Host Name|Primary Dns Suffix|Node Type|IP Routing Enabled|WINS Proxy Enabled|DNS Suffix Search List)[ \t.]*:'
+      parse:
+        type: records
+        start: '^[^ \t].* adapter .*:[ \t]*$'
+        parts:
+          - name: adapter
+            select: {limit: 1}
+            parse:
+              type: regex
+              each: input
+              pattern: '\A(?P<type>[^ \t].*?) adapter (?P<name>.+?):[ \t]*$'
+            fields:
+              type: {required: true}
+              name: {required: true}
+          - name: properties
+            select: {skip: 1}
+            parse:
+              type: regex
+              pattern: '^[ \t]+(?P<name>[^:.]+?)[ \t]*(?:\.(?:[ \t]\.)*)?[ \t]*:[ \t]?(?P<value>.*?)[ \t]*$'

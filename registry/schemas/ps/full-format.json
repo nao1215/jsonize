@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ps/full-format.json",
+  "title": "ps/full-format",
+  "description": "ps -eF (UID PID PPID C SZ RSS PSR STIME TTY TIME CMD)",
+  "x-jsonize": {
+    "definition": "ps/full-format",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "uid": {
+        "type": "string"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "ppid": {
+        "type": "integer"
+      },
+      "c": {
+        "type": "integer"
+      },
+      "sz": {
+        "type": "integer"
+      },
+      "rss": {
+        "type": "integer"
+      },
+      "psr": {
+        "type": "integer"
+      },
+      "stime": {
+        "type": "string"
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "time": {
+        "type": "number"
+      },
+      "cmd": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "uid",
+      "pid",
+      "ppid",
+      "c",
+      "sz",
+      "rss",
+      "psr",
+      "stime",
+      "tty",
+      "time",
+      "cmd"
+    ]
+  }
+}

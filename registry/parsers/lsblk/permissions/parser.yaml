@@ -1,0 +1,48 @@
+# `lsblk -m` reports who owns each device node instead of its geometry:
+# NAME, SIZE, OWNER, GROUP and MODE. The columns are fixed and every one
+# of them is filled on every row, so the only thing the layout has to
+# survive is the tree lsblk draws in NAME, and cells are cut at the
+# header offsets as they are for the default output.
+format: 1
+command: lsblk
+variant: permissions
+description: lsblk -m, the owner, group and mode of each device node
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsblk.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-m", "--perms"]
+  signature:
+    all:
+      - '^NAME[ \t]+SIZE[ \t]+OWNER[ \t]+GROUP[ \t]+MODE[ \t]*$'
+      # The header is lined up with the columns. -r prints the same words
+      # one space apart and the rows unaligned, which this cannot cut.
+      - '^NAME(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
+      # SIZE is rounded and printed with its unit, down to "0B". `lsblk -m -b`
+      # prints these same five columns with SIZE as a bare byte count,
+      # which belongs to a definition that reports it as an integer
+      # rather than to this one, and one data row is enough to decide.
+      - '^\S+[ \t]+\d+(?:\.\d+)?[BKMGTPEZY][ \t]+\S+[ \t]+\S+[ \t]+\S+[ \t]*$'
+parse:
+  type: table
+  split: aligned
+fields:
+  # lsblk draws the tree of devices in front of a name: a child starts
+  # with "|-" or "`-" in the C locale and "├─" or "└─" in a UTF-8 one,
+  # after "| " ("│ ") or two spaces for each level above it. The drawing
+  # is not part of the name. A name without it, a disk at the top, is
+  # kept whole.
+  name: {required: true, regex: '(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?(?P<name>.+)'}
+  # SIZE is rounded ("1.8T" for 2000398934016 bytes) and lsblk offers -b
+  # for the exact byte count, so the printed text is kept as it is.
+  size: {required: true}
+  owner: {required: true}
+  group: {required: true}
+  # MODE is the permission bits of the device node as ls writes them,
+  # "brw-rw----", and the letters are what the format prints rather than
+  # a number to convert.
+  mode: {required: true}

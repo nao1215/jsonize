@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C
+description: >-
+  -t closes the table with a Total row, which is a row like the others
+  and carries the three figures that are the sum of both.
+os: linux
+args: ["-h", "-w", "-t"]

@@ -8,6 +8,46 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `stat` prints one block per operand and only the first was read; a run
+  naming several files is now one object per file and a run naming one is
+  that list with one element in it (contract version 2). `type: records`
+  gained `record`, one parser over the whole of a block, for a block that
+  is one labelled list or one expression and so has no regions to name.
+- `dig` prints one reply per query and a text holding two was refused
+  (contract version 3). A run naming several names or types is a list of
+  replies under one banner; `+nocmd` prints no banner and gives an empty
+  `query` rather than an unreadable format; and a run that reached no
+  server keeps what dig said about the attempt under `transport` with an
+  empty list of replies. A text made of two whole dig runs is still
+  refused: a run has one banner.
+- `ip -d link` continues the link line with the driver's own settings and
+  adds a line per kind of device under it, which was exit 3 (contract
+  version 2). The settings are one string and the extra lines are entries
+  of a `details` list, which replaces the `alias` and `altnames` parts
+  and reads the lines under the header the way `ip/address` does.
+- `ip address` reads the header `ip -6 address` prints when no interface
+  is named, which carries neither the queueing discipline nor the group
+  (contract version 2), and every `ip` definition reads the `permaddr` a
+  tunnel device reports. `ip -s -s link` reads the `otherhost` counter a
+  newer kernel adds under RX errors.
+- `free -h -w` was read by `free/gnu-wide`, which converts its figures,
+  so the run failed on the suffix. It is `free/gnu-wide-human` now, and
+  `free/gnu-wide` states that its rows are numbers.
+- `ss -e`, `-o`, `-m` and `-i` were refused. What they append after the
+  address columns is kept under `info` as the text ss printed, since what
+  is there depends on the options and on the congestion control module;
+  the indented lines `-i` and `-m` add are folded back onto their row.
+- `systemctl list-units --plain` prints no marker column and was exit 3.
+  `systemctl list-jobs` with nothing queued prints one line and no table,
+  which is an empty list rather than a format jz could not read.
+- Every fixture in the registry records its source, and a check holds
+  new ones to it: what produced the text, on what, with which locale, and
+  what was replaced afterwards.
+- The conformance checks learned that a definition jz will not claim on
+  its own may share its text with a sibling, so naming the command
+  reports both; and that a fixture recording the command line it came
+  from says which siblings could ever be given it.
+
 - A csv row that holds the header's values is a row. `header.repeated`
   says whether a body line equal to the header is the header printed
   again, which starts another table; it defaults to true for a table
@@ -218,6 +258,47 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- A coverage page on the site says, for the commands asked about most,
+  which forms of their output are read, which are reached only by naming
+  the parser, and which are not read and why, together with what jz and
+  [jc](https://github.com/kellyjonbrazil/jc) do differently with the same
+  text. `scripts/compare_jc.py` is the harness behind it; it needs jc
+  installed and nothing else in this repository depends on it.
+- Definitions for the option forms of the commands people ask about most
+  that were refused before: `df -B/-m` (`df/gnu-blocks`,
+  `df/gnu-blocks-type`, which read the unit out of the heading),
+  `free -h -w` (`free/gnu-wide-human`), `iostat -t` for each of the five
+  reports (`iostat/*-timestamped`), `ls -lG`/`-lo` and `ls -lg`
+  (`ls/long-no-group`, `ls/long-no-owner`, which print the same text and
+  are told apart by the arguments alone), `lsblk -m`, `-r` and `-n`
+  (`lsblk/permissions`, `lsblk/raw`, `lsblk/no-headings`), `ps -eF` and
+  `ps -ely` (`ps/full-format`, `ps/long-y`), `ss -u` and `ss -w`
+  (`ss/connected`), and `systemctl list-machines`, `list-paths` and
+  `list-automounts`.
+- `dig/answers` reads the records `+noall +answer` leaves on their own,
+  and `dig/axfr` reads a zone transfer: the banner, the zone as one
+  table, how long it took, and the XFR statistics that close it, or the
+  line a refused transfer ends with. The five columns of an answer
+  section are also what a zone file holds, so `dig/answers` is reached by
+  naming the parser and never by detection.
+- `ipconfig/all`, `ipconfig/windows` and `systeminfo/windows` read three
+  Windows formats, and `netstat/interface` reads `netstat -i`. No machine
+  in this project runs any of them: the fixtures are quoted from output
+  the vendor published, or rendered from the format strings net-tools
+  prints a row with, and each fixture says which and names the document.
+  `route/linux` answers to `netstat -e -r`, whose columns are its table
+  rather than the one `netstat/routing` reads.
+- `ip address` and `ip link` read what BusyBox prints, which carries
+  neither the state nor the group in its header, and `ls -l` of a
+  directory with nothing in it is an empty list rather than a text jz
+  could not identify.
+- `zipinfo` reads the archive's name and its size on disk (contract
+  version 2). Neither is in any row and neither is the sum of the rows,
+  and the definition used to say otherwise while dropping both.
+- `syslog/rfc5424` and `syslog/rfc3164` read the two syslog line formats.
+  RFC 5424 names itself in its first characters; RFC 3164 without its
+  priority prefix is a date, a word and some text, so it is reached only
+  by naming it.
 - `--yaml` writes the same values as YAML instead of JSON: key order,
   types and nulls as the JSON has them, a decimal always with a decimal
   point, and a string quoted whenever a YAML 1.1 or 1.2 reader could

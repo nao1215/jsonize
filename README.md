@@ -119,6 +119,14 @@ Naming a parser is a claim about the input, not a way past the checks:
 the definition's signature still has to fit, and there is no option that
 turns that off.
 
+Which forms of which commands are read, and which are refused and why,
+are listed at https://nao1215.github.io/jsonize/coverage/.
+
+jz builds and runs on Windows, which is a different thing from reading
+what Windows commands print. The definitions for Windows formats are
+written from published sample output, and say so in the fixture beside
+each one; no machine in this project runs them.
+
 ## Adding a parser
 
 A definition and a captured fixture, no Go:

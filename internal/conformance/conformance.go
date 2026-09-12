@@ -308,7 +308,21 @@ func namedSelects(reg *registry.Registry, e *registry.Entry, c Case) error {
 		ctx.Variant = e.Def.Variant
 		named += " --variant " + e.Def.Variant
 	}
-	if err := selects(reg, e, ctx); err != nil {
+	err := selects(reg, e, ctx)
+	// Two variants of one command may print the same text and differ in
+	// what a column of it means, which is what `ls -lG` and `ls -lg` do:
+	// one names the owner where the other names the group, and no rule
+	// about the text can say which. Naming the command reports both,
+	// which is the right answer, and naming the variant is how the caller
+	// says which they ran. That concession is granted on the evidence
+	// that the command alone is ambiguous and this definition is one of
+	// the candidates, not on a definition claiming it.
+	if amb := ambiguousOver(err, e); amb && ctx.Variant == "" {
+		ctx.Variant = e.Def.Variant
+		named += " --variant " + e.Def.Variant
+		err = selects(reg, e, ctx)
+	}
+	if err != nil {
 		return fmt.Errorf("selection with %s: %w", named, err)
 	}
 	// Automatic detection may well land on another definition whose
@@ -317,6 +331,22 @@ func namedSelects(reg *registry.Registry, e *registry.Entry, c Case) error {
 		return fmt.Errorf("%s declares auto_detect: false but automatic detection still chose it", e.Def.ID())
 	}
 	return nil
+}
+
+// ambiguousOver reports an ambiguity whose candidates include this
+// definition: the selection did not go elsewhere, it declined to choose
+// between formats the text does not separate.
+func ambiguousOver(err error, e *registry.Entry) bool {
+	var amb *selector.AmbiguousError
+	if !errors.As(err, &amb) {
+		return false
+	}
+	for _, c := range amb.Candidates {
+		if c.Def.ID() == e.Def.ID() {
+			return true
+		}
+	}
+	return false
 }
 
 // streamMatches checks that reading the fixture one record at a time

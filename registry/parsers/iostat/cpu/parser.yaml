@@ -24,6 +24,9 @@ detect:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
       - '^avg-cpu:[ \t]+%user[ \t]+%nice'
     none:
+      # -t prints the time above each sample, which opens the sample
+      # there; iostat/cpu-timestamped reads that report.
+      - '^(?:\d{2}/\d{2}/\d{2,4}[ \t]+\d{2}:\d{2}:\d{2}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{4})[ \t]*$'
       # Any device table, whether the default one that opens with tps or
       # the extended one that opens with r/s, means this is a fuller
       # report and not the CPU one.

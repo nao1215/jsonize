@@ -702,7 +702,9 @@ list sinks` lost every property, port and format of every sink the same
 way, because the part that read the attributes named those lines as
 belonging to a sibling that did not exist. Golden files could not show
 either: they hold what a definition read, and a line it skipped leaves no
-trace in them.
+trace in them. The ledger turned that dig capture into exit 3, which was
+the honest answer for a definition that read one reply; the definition
+now reads a reply per query, and the ledger is what said it had to.
 
 So the engine keeps a ledger. A line is read when a parser turned it into
 part of the result, left out when a rule the definition states says so

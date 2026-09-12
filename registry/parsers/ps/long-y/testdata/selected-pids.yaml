@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) as ps -ly -p 1,18,23440 with LC_ALL=C; this format prints the user id as a number and the command as a name, so no name or path had to be replaced
+description: -ly for named processes prints the same columns as -ely, here with a real-time thread whose nice value is a dash and a shell on a terminal
+os: linux
+args: [-ly, -p, "1,18,23440"]

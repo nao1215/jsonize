@@ -2,146 +2,150 @@
   "query": {
     "version": "9.20.24-1ubuntu0.3-Ubuntu",
     "arguments": "+norec example.com NS @a.gtld-servers.net",
-    "servers_found": null,
     "global_options": [
       "+cmd"
     ]
   },
-  "header": {
-    "opcode": "QUERY",
-    "status": "NOERROR",
-    "id": 43457,
-    "flags": [
-      "qr"
-    ],
-    "question_count": 1,
-    "answer_count": 0,
-    "authority_count": 2,
-    "additional_count": 13
-  },
-  "messages": [],
-  "edns": [
+  "transport": [],
+  "replies": [
     {
-      "name": "EDNS",
-      "value": "version: 0, flags:; udp: 4096"
+      "header": {
+        "opcode": "QUERY",
+        "status": "NOERROR",
+        "id": 43457,
+        "flags": [
+          "qr"
+        ],
+        "question_count": 1,
+        "answer_count": 0,
+        "authority_count": 2,
+        "additional_count": 13
+      },
+      "messages": [],
+      "edns": [
+        {
+          "name": "EDNS",
+          "value": "version: 0, flags:; udp: 4096"
+        }
+      ],
+      "question": [
+        {
+          "name": "example.com.",
+          "class": "IN",
+          "type": "NS"
+        }
+      ],
+      "answers": [],
+      "authority": [
+        {
+          "name": "example.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "NS",
+          "data": "hera.ns.cloudflare.com."
+        },
+        {
+          "name": "example.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "NS",
+          "data": "elliott.ns.cloudflare.com."
+        }
+      ],
+      "additional": [
+        {
+          "name": "hera.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "A",
+          "data": "108.162.192.162"
+        },
+        {
+          "name": "hera.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "A",
+          "data": "172.64.32.162"
+        },
+        {
+          "name": "hera.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "A",
+          "data": "173.245.58.162"
+        },
+        {
+          "name": "hera.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "AAAA",
+          "data": "2606:4700:50::adf5:3aa2"
+        },
+        {
+          "name": "hera.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "AAAA",
+          "data": "2803:f800:50::6ca2:c0a2"
+        },
+        {
+          "name": "hera.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "AAAA",
+          "data": "2a06:98c1:50::ac40:20a2"
+        },
+        {
+          "name": "elliott.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "A",
+          "data": "108.162.195.228"
+        },
+        {
+          "name": "elliott.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "A",
+          "data": "162.159.44.228"
+        },
+        {
+          "name": "elliott.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "A",
+          "data": "172.64.35.228"
+        },
+        {
+          "name": "elliott.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "AAAA",
+          "data": "2606:4700:58::a29f:2ce4"
+        },
+        {
+          "name": "elliott.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "AAAA",
+          "data": "2803:f800:50::6ca2:c3e4"
+        },
+        {
+          "name": "elliott.ns.cloudflare.com.",
+          "ttl": 172800,
+          "class": "IN",
+          "type": "AAAA",
+          "data": "2a06:98c1:50::ac40:23e4"
+        }
+      ],
+      "statistics": {
+        "query_time_ms": 338,
+        "server": "192.5.6.30#53",
+        "server_name": "a.gtld-servers.net",
+        "protocol": "UDP",
+        "when": "Thu Sep 10 21:23:08 JST 2026",
+        "message_size": 359
+      }
     }
-  ],
-  "question": [
-    {
-      "name": "example.com.",
-      "class": "IN",
-      "type": "NS"
-    }
-  ],
-  "answers": [],
-  "authority": [
-    {
-      "name": "example.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "NS",
-      "data": "hera.ns.cloudflare.com."
-    },
-    {
-      "name": "example.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "NS",
-      "data": "elliott.ns.cloudflare.com."
-    }
-  ],
-  "additional": [
-    {
-      "name": "hera.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "A",
-      "data": "108.162.192.162"
-    },
-    {
-      "name": "hera.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "A",
-      "data": "172.64.32.162"
-    },
-    {
-      "name": "hera.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "A",
-      "data": "173.245.58.162"
-    },
-    {
-      "name": "hera.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "AAAA",
-      "data": "2606:4700:50::adf5:3aa2"
-    },
-    {
-      "name": "hera.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "AAAA",
-      "data": "2803:f800:50::6ca2:c0a2"
-    },
-    {
-      "name": "hera.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "AAAA",
-      "data": "2a06:98c1:50::ac40:20a2"
-    },
-    {
-      "name": "elliott.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "A",
-      "data": "108.162.195.228"
-    },
-    {
-      "name": "elliott.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "A",
-      "data": "162.159.44.228"
-    },
-    {
-      "name": "elliott.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "A",
-      "data": "172.64.35.228"
-    },
-    {
-      "name": "elliott.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "AAAA",
-      "data": "2606:4700:58::a29f:2ce4"
-    },
-    {
-      "name": "elliott.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "AAAA",
-      "data": "2803:f800:50::6ca2:c3e4"
-    },
-    {
-      "name": "elliott.ns.cloudflare.com.",
-      "ttl": 172800,
-      "class": "IN",
-      "type": "AAAA",
-      "data": "2a06:98c1:50::ac40:23e4"
-    }
-  ],
-  "statistics": {
-    "query_time_ms": 338,
-    "server": "192.5.6.30#53",
-    "server_name": "a.gtld-servers.net",
-    "protocol": "UDP",
-    "when": "Thu Sep 10 21:23:08 JST 2026",
-    "message_size": 359
-  }
+  ]
 }

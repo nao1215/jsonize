@@ -1,0 +1,18 @@
+{
+  "query": {
+    "version": "9.20.24-1ubuntu0.3-Ubuntu",
+    "arguments": "+time=1 +tries=1 example.com @192.0.2.1",
+    "global_options": [
+      "+cmd"
+    ]
+  },
+  "transport": [
+    {
+      "text": "communications error to 192.0.2.1#53: timed out"
+    },
+    {
+      "text": "no servers could be reached"
+    }
+  ],
+  "replies": []
+}

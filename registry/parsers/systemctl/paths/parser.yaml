@@ -1,0 +1,30 @@
+# `systemctl list-paths` prints the path being watched, the condition
+# that activates on it, the path unit and the unit it activates. A path
+# can contain a space, so the row is cut where the header words start
+# rather than on runs of whitespace.
+format: 1
+command: systemctl
+variant: paths
+description: systemctl list-paths table
+metadata:
+  tags: [linux, systemd]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemctl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*PATH[ \t]+CONDITION[ \t]+UNIT[ \t]+ACTIVATES[ \t]*$'
+input:
+  ignore:
+    - '^[0-9]+ paths listed\.$'
+    - '^Pass --all to see loaded but inactive paths, too\.$'
+parse:
+  type: table
+  split: aligned
+fields:
+  path: {required: true}
+  condition: {required: true}
+  unit: {required: true}
+  activates: {null_if: ["-"]}

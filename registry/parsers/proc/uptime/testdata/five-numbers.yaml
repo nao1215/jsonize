@@ -1,3 +1,4 @@
+source: written by hand as a line of five numbers, the shape /proc/uptime does not have
 description: |
   /proc/loadavg is the neighbouring one-line file. Naming this parser
   does not make it read that one: the signature is checked when the

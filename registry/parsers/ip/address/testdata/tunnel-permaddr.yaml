@@ -1,0 +1,10 @@
+source: >-
+  three blocks of `ip address` captured on Ubuntu 26.04 (iproute2
+  6.19.0) with LC_ALL=C; the permanent address was replaced
+description: >-
+  A tunnel device reports the address it was built from after its
+  broadcast address, which the loopback above it does not have. Neither
+  tunnel holds an address of its own, so the details of each are the
+  link layer line alone.
+os: linux
+args: ["address"]

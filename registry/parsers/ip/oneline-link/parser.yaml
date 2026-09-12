@@ -37,7 +37,7 @@ parse:
   # and the state, and a veth end names its peer after an @. Both are
   # absent on an ordinary interface, and so is the queue length on a
   # virtual one, which leaves a space before the backslash.
-  pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>\S+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+) qdisc (?P<qdisc>\S+)(?: master (?P<master>\S+))? state (?P<state>\S+) mode (?P<mode>\S+) group (?P<group>\S+)(?: qlen (?P<qlen>\d+))?[ \t]*\\[ \t]+link/(?P<link_type>\S+)(?: (?P<address>[0-9a-fA-F:.]+))?(?: brd (?P<broadcast>[0-9a-fA-F:.]+))?(?: link-netnsid (?P<netnsid>\d+))?(?:[ \t]*\\[ \t]+alias (?P<alias>.+?))?(?:[ \t]*\\[ \t]+altname (?P<altnames>\S+(?:[ \t]*\\[ \t]+altname \S+)*))?[ \t]*$'
+  pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>\S+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+) qdisc (?P<qdisc>\S+)(?: master (?P<master>\S+))? state (?P<state>\S+) mode (?P<mode>\S+) group (?P<group>\S+)(?: qlen (?P<qlen>\d+))?[ \t]*\\[ \t]+link/(?P<link_type>\S+)(?: (?P<address>[0-9a-fA-F:.]+))?(?: brd (?P<broadcast>[0-9a-fA-F:.]+))?(?: permaddr (?P<permanent_address>\S+))?(?: link-netnsid (?P<netnsid>\d+))?(?:[ \t]*\\[ \t]+alias (?P<alias>.+?))?(?:[ \t]*\\[ \t]+altname (?P<altnames>\S+(?:[ \t]*\\[ \t]+altname \S+)*))?[ \t]*$'
 fields:
   index: {type: int, required: true}
   name: {required: true}
@@ -53,6 +53,8 @@ fields:
   link_type: {required: true}
   address: {when_missing: omit}
   broadcast: {when_missing: omit}
+  # A tunnel device reports the address it was built from.
+  permanent_address: {when_missing: omit}
   netnsid: {type: int, when_missing: omit}
   alias: {when_missing: omit}
   altnames: {type: array, split_regex: '[ \t]*\\[ \t]+altname[ \t]+', when_missing: omit}

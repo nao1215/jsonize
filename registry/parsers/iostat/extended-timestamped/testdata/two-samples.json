@@ -1,0 +1,86 @@
+[
+  {
+    "timestamp": {
+      "value": "09/12/26 11:43:58"
+    },
+    "cpu": [
+      {
+        "user_percent": 3.19,
+        "nice_percent": 0,
+        "system_percent": 0.46,
+        "iowait_percent": 0.03,
+        "steal_percent": 0,
+        "idle_percent": 96.32
+      }
+    ],
+    "devices": [
+      {
+        "device": "nvme0n1",
+        "r_s": 16.48,
+        "rkb_s": 227.3,
+        "rrqm_s": 4.71,
+        "rrqm_percent": 22.22,
+        "r_await": 24.03,
+        "rareq_sz": 13.79,
+        "w_s": 24.83,
+        "wkb_s": 583.66,
+        "wrqm_s": 34.42,
+        "wrqm_percent": 58.1,
+        "w_await": 224.71,
+        "wareq_sz": 23.51,
+        "d_s": 0,
+        "dkb_s": 0,
+        "drqm_s": 0,
+        "drqm_percent": 0,
+        "d_await": 0,
+        "dareq_sz": 0,
+        "f_s": 4.46,
+        "f_await": 1.49,
+        "aqu_sz": 5.98,
+        "util_percent": 1.03
+      }
+    ]
+  },
+  {
+    "timestamp": {
+      "value": "09/12/26 11:43:59"
+    },
+    "cpu": [
+      {
+        "user_percent": 0.85,
+        "nice_percent": 0,
+        "system_percent": 0.38,
+        "iowait_percent": 0.06,
+        "steal_percent": 0,
+        "idle_percent": 98.71
+      }
+    ],
+    "devices": [
+      {
+        "device": "nvme0n1",
+        "r_s": 0,
+        "rkb_s": 0,
+        "rrqm_s": 0,
+        "rrqm_percent": 0,
+        "r_await": 0,
+        "rareq_sz": 0,
+        "w_s": 36,
+        "wkb_s": 280,
+        "wrqm_s": 23,
+        "wrqm_percent": 38.98,
+        "w_await": 0.58,
+        "wareq_sz": 7.78,
+        "d_s": 0,
+        "dkb_s": 0,
+        "drqm_s": 0,
+        "drqm_percent": 0,
+        "d_await": 0,
+        "dareq_sz": 0,
+        "f_s": 8,
+        "f_await": 1.62,
+        "aqu_sz": 0.03,
+        "util_percent": 1.7
+      }
+    ]
+  }
+]

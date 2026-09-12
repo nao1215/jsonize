@@ -1,0 +1,42 @@
+[
+  {
+    "flags": "drwxr-xr-x",
+    "links": 2,
+    "owner": "colord",
+    "size": "4096",
+    "date": "Nov  4  2025",
+    "filename": "/etc/colord"
+  },
+  {
+    "flags": "drwxr-xr-x",
+    "links": 5,
+    "owner": "root",
+    "size": "4096",
+    "date": "Sep 12 00:32",
+    "filename": "/etc/cups"
+  },
+  {
+    "flags": "-rw-r--r--",
+    "links": 1,
+    "owner": "root",
+    "size": "221",
+    "date": "Nov  4  2025",
+    "filename": "/etc/hosts"
+  },
+  {
+    "flags": "-rw-r-----",
+    "links": 1,
+    "owner": "root",
+    "size": "1448",
+    "date": "May 26 21:02",
+    "filename": "/etc/shadow"
+  },
+  {
+    "flags": "drwxr-x---",
+    "links": 71,
+    "owner": "user1",
+    "size": "4096",
+    "date": "Sep 12 11:22",
+    "filename": "/home/user1"
+  }
+]

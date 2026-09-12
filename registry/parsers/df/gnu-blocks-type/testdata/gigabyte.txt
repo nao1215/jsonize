@@ -1,0 +1,10 @@
+Filesystem     Type     1G-blocks  Used Available Use% Mounted on
+tmpfs          tmpfs           13     1        13   1% /run
+/dev/nvme0n1p2 ext4          1832  1578       162  91% /
+tmpfs          tmpfs           31     1        31   2% /dev/shm
+efivarfs       efivarfs         1     1         1  39% /sys/firmware/efi/efivars
+none           tmpfs            1     0         1   0% /run/credentials/systemd-journald.service
+none           tmpfs            1     0         1   0% /run/credentials/systemd-resolved.service
+tmpfs          tmpfs           31     1        30   3% /tmp
+/dev/nvme0n1p1 vfat             2     1         2   1% /boot/efi
+none           tmpfs            1     0         1   0% /run/credentials/getty@tty1.service

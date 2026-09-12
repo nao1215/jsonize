@@ -1,0 +1,13 @@
+description: the interfaces that are up, with a bridge, a veth and the loopback among them
+source: >-
+  not captured: net-tools is not installed on this machine and BusyBox
+  netstat has no -i. Rendered on Ubuntu 26.04 from this machine's
+  /proc/net/dev counters, /sys/class/net/*/mtu and the interface flags,
+  by the format strings net-tools v2.10 prints them with (netstat.c
+  iface_info for the banner and the header row, lib/interface.c
+  ife_print_short for a row),
+  https://github.com/ecki/net-tools/blob/v2.10/lib/interface.c. The bridge
+  and veth names are replaced, the other interface names are this
+  machine's; no address appears in this table.
+os: linux
+args: ["-i"]

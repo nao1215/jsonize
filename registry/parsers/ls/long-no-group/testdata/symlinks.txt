@@ -1,0 +1,6 @@
+total 0
+drwxrwxr-x 2 user1 60 Sep 12 11:37 archive
+drwxrwxr-x 2 user1 60 Sep 12 11:37 empty
+lrwxrwxrwx 1 user1 10 Sep 12 11:37 hosts-link -> /etc/hosts
+drwxrwxr-x 2 user1 60 Sep 12 11:37 old
+drwxrwxr-x 2 user1 60 Sep 12 11:37 old drafts

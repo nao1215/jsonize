@@ -1,0 +1,5 @@
+  NAME          STATE    FAILED JOBS
+  host01 (host) running  0      0
+* container1    degraded 2      1
+
+2 machines listed.

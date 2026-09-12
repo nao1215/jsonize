@@ -1,0 +1,34 @@
+# `systemctl list-machines` prints the host and every container the
+# manager can reach, with a leading marker column that is blank for a
+# healthy machine and a glyph for one that needs attention. The host
+# names itself with "(host)" after its name, which is part of the name
+# column as printed.
+format: 1
+command: systemctl
+variant: machines
+description: systemctl list-machines table
+metadata:
+  tags: [linux, systemd]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemctl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*NAME[ \t]+STATE[ \t]+FAILED[ \t]+JOBS[ \t]*$'
+input:
+  ignore:
+    - '\A[ \t]*NAME[ \t]+STATE[ \t]+FAILED[ \t]+JOBS[ \t]*$'
+    - '^[0-9]+ machines? listed\.$'
+parse:
+  type: regex
+  # The state is a lower-case word, which is what keeps a line of prose
+  # from being read as a machine.
+  pattern: '^(?:(?P<marker>\S)\s+|\s+)?(?P<name>\S.*?)\s+(?P<state>[a-z][a-z-]*)\s+(?P<failed>\d+)\s+(?P<jobs>\d+)\s*$'
+fields:
+  marker: {when_missing: omit}
+  name: {required: true}
+  state: {required: true}
+  failed: {type: int, required: true}
+  jobs: {type: int, required: true}

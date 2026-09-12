@@ -7,8 +7,18 @@
 # makes an IPv6 address ("[::]:22") and a scoped one ("127.0.0.53%lo:53")
 # readable; both parts are reported separately as well as together.
 #
-# The last column is the process list -p prints, users:((...)), and
-# nothing else, for the reason ss/linux gives.
+# After the two address columns ss writes what the options asked for.
+# -p prints the process list, users:((...)), which is read on its own;
+# everything else -e, -o, -m and -i add -- the socket's uid, inode,
+# cookie and cgroup, its timers, its memory and the congestion control
+# state -- is kept under info as the text ss printed. What is there
+# depends on the options and on the congestion control module in use,
+# and ss writes some of it as name:value and some as two words, so a rule
+# naming the parts of it would be a rule about this machine. A tail that
+# holds the process list beside anything else is one string as well.
+#
+# -i and -m continue a row on an indented line, which input.fold joins
+# back onto the row it belongs to.
 format: 1
 command: ss
 variant: single-protocol
@@ -24,21 +34,22 @@ detect:
     all:
       - '\AState\s+Recv-Q\s+Send-Q\s+Local Address:Port\s+Peer Address:Port'
 input:
+  fold: '^[ \t]+\S'
   ignore:
     - '\AState\s+Recv-Q'
     - '^RTNETLINK answers:'
 parse:
   type: regex
   patterns:
-    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+):(?P<local_port>[^\s:]+)\s+(?P<peer_address>\S+):(?P<peer_port>[^\s:]+)(?:\s+(?P<process>users:\(\(.*\)\)))?\s*$'
+    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+):(?P<local_port>[^\s:]+)\s+(?P<peer_address>\S+):(?P<peer_port>[^\s:]+)(?:\s+(?P<process>users:\(\(.*?\)\)))?(?:\s+(?P<info>\S.*?))?\s*$'
     # A unix socket table asked for with -x has the same header and holds
     # a path and an inode where the internet table holds an address and a
     # port, separated by whitespace rather than by a colon.
-    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+)\s+(?P<local_port>\S+)\s+(?P<peer_address>\S+)\s+(?P<peer_port>\S+)(?:\s+(?P<process>users:\(\(.*\)\)))?\s*$'
+    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+)\s+(?P<local_port>\S+)\s+(?P<peer_address>\S+)\s+(?P<peer_port>\S+)(?:\s+(?P<process>users:\(\(.*?\)\)))?(?:\s+(?P<info>\S.*?))?\s*$'
     # A netlink socket names a protocol and a process ("rtnl:kernel"),
     # and a packet socket a protocol and an interface ("arp:eno1"); the
     # peer of either is a bare "*" with no port, so there is no peer_port.
-    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+?):(?P<local_port>\S+)\s+(?P<peer_address>\*)(?:\s+(?P<process>users:\(\(.*\)\)))?\s*$'
+    - '^(?P<state>\S+)\s+(?P<recv_q>\d+)\s+(?P<send_q>\d+)\s+(?P<local_address>\S+?):(?P<local_port>\S+)\s+(?P<peer_address>\*)(?:\s+(?P<process>users:\(\(.*?\)\)))?(?:\s+(?P<info>\S.*?))?\s*$'
 fields:
   state: {required: true}
   recv_q: {type: int, required: true}
@@ -48,3 +59,4 @@ fields:
   peer_address: {required: true}
   peer_port: {when_missing: omit}
   process: {when_missing: omit}
+  info: {when_missing: omit}

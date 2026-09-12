@@ -1,0 +1,32 @@
+[
+  {
+    "timestamp": {
+      "value": "09/12/26 11:43:56"
+    },
+    "cpu": [
+      {
+        "user_percent": 3.19,
+        "nice_percent": 0,
+        "system_percent": 0.46,
+        "iowait_percent": 0.03,
+        "steal_percent": 0,
+        "idle_percent": 96.32
+      }
+    ]
+  },
+  {
+    "timestamp": {
+      "value": "09/12/26 11:43:57"
+    },
+    "cpu": [
+      {
+        "user_percent": 2.73,
+        "nice_percent": 0,
+        "system_percent": 0.72,
+        "iowait_percent": 0.03,
+        "steal_percent": 0,
+        "idle_percent": 96.51
+      }
+    ]
+  }
+]

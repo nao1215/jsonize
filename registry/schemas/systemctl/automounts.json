@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemctl/automounts.json",
+  "title": "systemctl/automounts",
+  "description": "systemctl list-automounts table",
+  "x-jsonize": {
+    "definition": "systemctl/automounts",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "what": {
+        "type": "string"
+      },
+      "where": {
+        "type": "string"
+      },
+      "mounted": {
+        "type": "boolean"
+      },
+      "idle_timeout": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "unit": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "what",
+      "where",
+      "mounted",
+      "idle_timeout",
+      "unit"
+    ]
+  }
+}

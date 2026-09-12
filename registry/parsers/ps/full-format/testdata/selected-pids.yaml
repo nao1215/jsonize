@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) as ps -F -p 1,2094,23440 with LC_ALL=C; the login name was replaced with user1 inside the width of the UID column, and the shell's --init-file path was rewritten
+description: -F for named processes prints the same columns as -eF, here with a process on a terminal beside two with none
+os: linux
+args: [-F, -p, "1,2094,23440"]

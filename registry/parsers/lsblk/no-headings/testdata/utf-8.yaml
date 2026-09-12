@@ -1,0 +1,4 @@
+description: in a UTF-8 locale the tree is drawn with box-drawing characters, which are not part of the name
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) as lsblk -n /dev/nvme0n1 /dev/nvme1n1 with LC_ALL=C.UTF-8; the mount point under /media renamed
+os: linux
+args: [-n, /dev/nvme0n1, /dev/nvme1n1]

@@ -1,0 +1,16 @@
+  File: /etc/hosts
+  size: 221       	Blocks: 8          IO Block: 4096   regular file
+Device: 259,2	Inode: 80216458    Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2026-09-11 19:47:07.375674260 +0900
+Modify: 2025-11-04 13:04:07.841815606 +0900
+Change: 2025-11-04 13:04:07.841815606 +0900
+ Birth: 2025-11-04 13:04:07.841622100 +0900
+  File: /etc/passwd
+  size: 3154      	Blocks: 8          IO Block: 4096   regular file
+Device: 259,2	Inode: 80217733    Links: 1
+Access: (0644/-rw-r--r--)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2026-09-11 19:50:07.431253829 +0900
+Modify: 2026-05-26 21:02:02.288774499 +0900
+Change: 2026-05-26 21:02:02.288774499 +0900
+ Birth: 2026-05-26 21:02:02.288537302 +0900

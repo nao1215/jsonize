@@ -1,0 +1,43 @@
+[
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "user1",
+    "size": "60",
+    "date": "Sep 12 11:37",
+    "filename": "archive"
+  },
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "user1",
+    "size": "60",
+    "date": "Sep 12 11:37",
+    "filename": "empty"
+  },
+  {
+    "flags": "lrwxrwxrwx",
+    "links": 1,
+    "owner": "user1",
+    "size": "10",
+    "date": "Sep 12 11:37",
+    "filename": "hosts-link",
+    "link_to": "/etc/hosts"
+  },
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "user1",
+    "size": "60",
+    "date": "Sep 12 11:37",
+    "filename": "old"
+  },
+  {
+    "flags": "drwxrwxr-x",
+    "links": 2,
+    "owner": "user1",
+    "size": "60",
+    "date": "Sep 12 11:37",
+    "filename": "old drafts"
+  }
+]

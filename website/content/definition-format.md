@@ -578,23 +578,40 @@ parse:
   type: records
   start: '^\d+: '        # a line matching this opens a record
   parts: [...]           # the same parts as composite
+  # or, where a block is one value rather than named regions:
+  record:
+    parse: {type: kv, separator: ':', as: map}
+    fields: {...}
 ```
 
 A line matching `start` opens a record and everything up to the next such
 line belongs to it, which is the shape of a report of repeating blocks:
 an interface followed by its counters, a crate followed by its binaries.
-Each record is then read the way `composite` reads a whole input, so the
-`parts` are written once and applied to every block. The result is an
-array with one object per record.
+The result is an array with one object per record.
+
+How a block is read is said once, by `parts` or by `record`. With `parts`
+the block is read the way `composite` reads a whole input, so the parts
+are written once and applied to every block and each record is an object
+keyed by part name. With `record` one parser reads the whole block and
+the record is the object that parser yields, which is what a block that
+is one labelled list (`stat` printing a file) or one expression has:
+there are no regions to name, and a name invented for the only one would
+be in every object of the result.
+
+`record.parse` has to yield one object, so it is a `regex` with
+`each: input`, a `kv` with `as: map`, or an `ini`. A parser that yields a
+list is refused there: a record that is a list has nowhere to be, and
+what the definition means is either a list of objects or a part with a
+name to hold the list.
 
 Text before the first record is an error naming the line, rather than
 something quietly dropped. A banner belongs in `input.select`, or in a
 `composite` part of its own with the blocks in a second part.
 
 `records` is not recursive: a part of it cannot be `records` or
-`composite`. A record is a block that repeats at one level, so its own
-depth is stated by the definition and there is nothing for the input to
-say about it. A part may be a `tree`, which decides a different thing —
+`composite`, and neither can `record.parse`. A record is a block that
+repeats at one level, so its own depth is stated by the definition and
+there is nothing for the input to say about it. A part may be a `tree`, which decides a different thing —
 how deep a line inside one block is — and `sensors -u` needs both.
 
 ### type: composite
@@ -680,10 +697,12 @@ Every extracted value is a string (or `null` for an empty aligned cell /
 non-participating group). `fields` maps a column, group or key name to a
 conversion. It sits beside the parser that reads the values: at the top
 level for a table, csv, regex, kv, ini or tree-less parser, under
-`parts[]` for a `composite` or `records`, and under `node` for a `tree`.
+`parts[]` for a `composite` or `records`, under `record` for a `records`
+whose block is one value, and under `node` for a `tree`.
 A `fields` map beside a composite, records or tree parser applies to
 nothing and is refused when the definition is loaded, rather than left
-out in silence.
+out in silence; for a `records` written with `record` the rules go under
+`record.fields`.
 
 ```yaml
 fields:

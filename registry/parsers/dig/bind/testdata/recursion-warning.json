@@ -2,95 +2,99 @@
   "query": {
     "version": "9.20.24-1ubuntu0.3-Ubuntu",
     "arguments": "example.com @a.iana-servers.net",
-    "servers_found": null,
     "global_options": [
       "+cmd"
     ]
   },
-  "header": {
-    "opcode": "QUERY",
-    "status": "NOERROR",
-    "id": 10899,
-    "flags": [
-      "qr",
-      "aa",
-      "rd"
-    ],
-    "question_count": 1,
-    "answer_count": 6,
-    "authority_count": 0,
-    "additional_count": 1
-  },
-  "messages": [
+  "transport": [],
+  "replies": [
     {
-      "text": "WARNING: recursion requested but not available"
+      "header": {
+        "opcode": "QUERY",
+        "status": "NOERROR",
+        "id": 10899,
+        "flags": [
+          "qr",
+          "aa",
+          "rd"
+        ],
+        "question_count": 1,
+        "answer_count": 6,
+        "authority_count": 0,
+        "additional_count": 1
+      },
+      "messages": [
+        {
+          "text": "WARNING: recursion requested but not available"
+        }
+      ],
+      "edns": [
+        {
+          "name": "EDNS",
+          "value": "version: 0, flags:; udp: 4096"
+        }
+      ],
+      "question": [
+        {
+          "name": "example.com.",
+          "class": "IN",
+          "type": "A"
+        }
+      ],
+      "answers": [
+        {
+          "name": "example.com.",
+          "ttl": 300,
+          "class": "IN",
+          "type": "A",
+          "data": "23.192.228.80"
+        },
+        {
+          "name": "example.com.",
+          "ttl": 300,
+          "class": "IN",
+          "type": "A",
+          "data": "23.192.228.84"
+        },
+        {
+          "name": "example.com.",
+          "ttl": 300,
+          "class": "IN",
+          "type": "A",
+          "data": "23.215.0.136"
+        },
+        {
+          "name": "example.com.",
+          "ttl": 300,
+          "class": "IN",
+          "type": "A",
+          "data": "23.215.0.138"
+        },
+        {
+          "name": "example.com.",
+          "ttl": 300,
+          "class": "IN",
+          "type": "A",
+          "data": "23.220.75.232"
+        },
+        {
+          "name": "example.com.",
+          "ttl": 300,
+          "class": "IN",
+          "type": "A",
+          "data": "23.220.75.245"
+        }
+      ],
+      "authority": [],
+      "additional": [],
+      "statistics": {
+        "query_time_ms": 184,
+        "server": "199.43.135.53#53",
+        "server_name": "a.iana-servers.net",
+        "protocol": "UDP",
+        "when": "Thu Sep 10 21:40:24 JST 2026",
+        "message_size": 136
+      }
     }
-  ],
-  "edns": [
-    {
-      "name": "EDNS",
-      "value": "version: 0, flags:; udp: 4096"
-    }
-  ],
-  "question": [
-    {
-      "name": "example.com.",
-      "class": "IN",
-      "type": "A"
-    }
-  ],
-  "answers": [
-    {
-      "name": "example.com.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "A",
-      "data": "23.192.228.80"
-    },
-    {
-      "name": "example.com.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "A",
-      "data": "23.192.228.84"
-    },
-    {
-      "name": "example.com.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "A",
-      "data": "23.215.0.136"
-    },
-    {
-      "name": "example.com.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "A",
-      "data": "23.215.0.138"
-    },
-    {
-      "name": "example.com.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "A",
-      "data": "23.220.75.232"
-    },
-    {
-      "name": "example.com.",
-      "ttl": 300,
-      "class": "IN",
-      "type": "A",
-      "data": "23.220.75.245"
-    }
-  ],
-  "authority": [],
-  "additional": [],
-  "statistics": {
-    "query_time_ms": 184,
-    "server": "199.43.135.53#53",
-    "server_name": "a.iana-servers.net",
-    "protocol": "UDP",
-    "when": "Thu Sep 10 21:40:24 JST 2026",
-    "message_size": 136
-  }
+  ]
 }

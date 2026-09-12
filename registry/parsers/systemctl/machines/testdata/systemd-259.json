@@ -1,0 +1,9 @@
+[
+  {
+    "marker": "*",
+    "name": "host01 (host)",
+    "state": "degraded",
+    "failed": 1,
+    "jobs": 0
+  }
+]

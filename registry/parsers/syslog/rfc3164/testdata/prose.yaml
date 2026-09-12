@@ -1,0 +1,8 @@
+description: >
+  A message with no PRI part, no timestamp and no host: a sentence. RFC
+  3164 calls it a valid message that a relay must rewrite before
+  forwarding, and until something rewrites it there is no header to
+  read, so it is refused rather than read as a message whose every field
+  is missing.
+source: RFC 3164 section 5.4 example 2
+expect_error: 'does not describe this input'

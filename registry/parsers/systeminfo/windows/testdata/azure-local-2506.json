@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Host Name",
+    "value": "V-HOST4"
+  },
+  {
+    "name": "OS Name",
+    "value": "Microsoft Azure Stack HCI"
+  },
+  {
+    "name": "OS Version",
+    "value": "10.0.26100 N/A Build 26100"
+  },
+  {
+    "name": "OS Manufacturer",
+    "value": "Microsoft Corporation"
+  },
+  {
+    "name": "OS Configuration",
+    "value": "Member Server"
+  },
+  {
+    "name": "OS Build Type",
+    "value": "Multiprocessor Free"
+  }
+]

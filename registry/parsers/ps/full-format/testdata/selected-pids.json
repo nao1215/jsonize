@@ -1,0 +1,41 @@
+[
+  {
+    "uid": "root",
+    "pid": 1,
+    "ppid": 0,
+    "c": 0,
+    "sz": 7016,
+    "rss": 19124,
+    "psr": 3,
+    "stime": "Sep10",
+    "tty": null,
+    "time": 177,
+    "cmd": "/usr/lib/systemd/systemd --system --deserialize=124 splash"
+  },
+  {
+    "uid": "avahi",
+    "pid": 2094,
+    "ppid": 2021,
+    "c": 0,
+    "sz": 1640,
+    "rss": 348,
+    "psr": 18,
+    "stime": "Sep10",
+    "tty": null,
+    "time": 0,
+    "cmd": "avahi-daemon: chroot helper"
+  },
+  {
+    "uid": "user1",
+    "pid": 23440,
+    "ppid": 21434,
+    "c": 0,
+    "sz": 1815,
+    "rss": 6052,
+    "psr": 30,
+    "stime": "Sep10",
+    "tty": "pts/4",
+    "time": 0,
+    "cmd": "/usr/bin/bash --init-file /etc/bash.bashrc"
+  }
+]

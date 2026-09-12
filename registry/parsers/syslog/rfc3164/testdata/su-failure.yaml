@@ -1,0 +1,4 @@
+description: >
+  One message with a tag and no process id. The colon and the space
+  after the tag separate it from the message and are not part of either.
+source: RFC 3164 section 5.4 example 1, joined onto one line where the RFC broke it for the page width

@@ -1,0 +1,10 @@
+description: "`ipconfig /displaydns` opens with the same banner and then lists cached records, whose labels are padded with the same dots; naming a record is not naming an adapter, and this text must be refused."
+source: >-
+  the ipconfig /displaydns example published at
+  https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/dfsn-access-failures
+  ("DNS resolution"), an article about Windows Server 2003 clients.
+  Quoted as published, with the four spaces the article indents the block
+  by removed and the two trailing spaces Markdown uses for a line break
+  stripped. The host name and the domain are the article's own
+  placeholders.
+expect_error: 'does not describe this input'

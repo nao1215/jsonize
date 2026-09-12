@@ -1,0 +1,57 @@
+# `lsblk -r` prints the default columns with one space between cells and
+# no tree drawing, which is the shape meant to be read by a program: the
+# header words name the columns and every row carries the same seven
+# cells in the same order, whatever a device is called.
+#
+# A space inside a NAME, LABEL, PARTLABEL or MOUNTPOINT is printed as
+# \x20, which is what keeps one cell to a column. jz keeps such a value
+# as lsblk wrote it, the way lsblk/pairs keeps what stands between the
+# quotes: the line does not say which backslashes lsblk put there, so
+# undoing the escape would give the same name to two different devices.
+format: 1
+command: lsblk
+variant: raw
+description: lsblk -r, the default columns one space apart
+metadata:
+  tags: [linux, block-device, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lsblk.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-r", "--raw"]
+  signature:
+    all:
+      # The header opens the output and its words stand one space apart.
+      # The default output lines the same words up over the columns and
+      # draws a tree in NAME, which is another format.
+      - '\ANAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS?[ \t]*$'
+      # SIZE is rounded and printed with its unit, down to "0B".
+      # `lsblk -b -r` prints this same header with SIZE as a bare byte
+      # count, which belongs to a definition that reports it as an
+      # integer, and one data row is enough to decide.
+      - '^\S+ \d+:\d+ [01] \d+(?:\.\d+)?[BKMGTPEZY] [01] \S+'
+parse:
+  type: table
+  split: delimiter
+  delimiter: " "
+  header:
+    rename: {mountpoints: mountpoint}
+  # A device that is not mounted ends its row at the separator before the
+  # empty MOUNTPOINTS, and a row that ends at TYPE says the same thing,
+  # so six cells are a whole row.
+  min_fields: 6
+fields:
+  # -r draws no tree: a child is written under its own name and the
+  # parent is the device it followed.
+  name: {required: true}
+  maj_min: {required: true}
+  rm: {type: bool, required: true}
+  # SIZE is rounded here as it is in the default output, so it is kept as
+  # printed.
+  size: {required: true}
+  ro: {type: bool, required: true}
+  type: {required: true}
+  # An unmounted device leaves the last cell empty.
+  mountpoint: {null_if: [""]}

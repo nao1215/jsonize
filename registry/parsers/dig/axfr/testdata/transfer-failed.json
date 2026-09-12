@@ -1,0 +1,17 @@
+{
+  "query": {
+    "version": "9.20.24-1ubuntu0.3-Ubuntu",
+    "arguments": "axfr zonetransfer.me",
+    "global_options": [
+      "+cmd"
+    ]
+  },
+  "transport": [
+    {
+      "text": "Transfer failed."
+    }
+  ],
+  "query_time": {},
+  "records": [],
+  "statistics": {}
+}

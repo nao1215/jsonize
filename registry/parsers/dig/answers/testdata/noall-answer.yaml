@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C
+description: >-
+  The answer section on its own. Two records for one name, which is what
+  a script reading addresses out of dig asks for.
+os: linux
+args: ["+noall", "+answer", "example.com"]

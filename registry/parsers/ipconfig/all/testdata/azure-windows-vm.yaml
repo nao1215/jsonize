@@ -1,0 +1,13 @@
+description: One adapter carrying three IPv4 addresses, so the address and mask labels repeat inside one block, and a machine block with an empty value in it.
+source: >-
+  the ipconfig /all output published at
+  https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/virtual-network-multiple-ip-addresses-portal
+  (step 16 of the Windows section). The article says the machine is an
+  Azure virtual machine and does not name the Windows release; the
+  adapter is a Microsoft Hyper-V Network Adapter. Quoted as published,
+  with the four spaces the article indents its code block by removed and
+  the prompt line above the output dropped. The host name (myVM) and the
+  MAC address, which the DHCPv6 client DUID repeats, were replaced with
+  made-up values of the same shape.
+os: windows
+args: ["/all"]

@@ -1,0 +1,38 @@
+[
+  {
+    "path": "/run/systemd/ask-password",
+    "condition": "DirectoryNotEmpty",
+    "unit": "systemd-ask-password-plymouth.path",
+    "activates": "systemd-ask-password-plymouth.service"
+  },
+  {
+    "path": "/run/systemd/ask-password",
+    "condition": "DirectoryNotEmpty",
+    "unit": "systemd-ask-password-wall.path",
+    "activates": "systemd-ask-password-wall.service"
+  },
+  {
+    "path": "/var/cache/cups/org.cups.cupsd",
+    "condition": "PathExists",
+    "unit": "cups.path",
+    "activates": "cups.service"
+  },
+  {
+    "path": "/var/crash",
+    "condition": "PathChanged",
+    "unit": "apport-autoreport.path",
+    "activates": "apport-autoreport.service"
+  },
+  {
+    "path": "/var/crash",
+    "condition": "PathChanged",
+    "unit": "whoopsie.path",
+    "activates": "whoopsie.service"
+  },
+  {
+    "path": "/var/lib/AccountsService/users",
+    "condition": "PathModified",
+    "unit": "sddm-backgrounds-cache.path",
+    "activates": "sddm-backgrounds-cache.service"
+  }
+]

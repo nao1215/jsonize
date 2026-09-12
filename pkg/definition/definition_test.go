@@ -631,3 +631,69 @@ func FuzzLoadInline(f *testing.F) {
 		}
 	})
 }
+
+// A records parser says how a record is read once: by named regions, or
+// by one parser over the whole block. Saying it twice, saying it not at
+// all, or naming a parser whose result is a list are all refused when the
+// definition is loaded.
+func TestRecordsRecordForm(t *testing.T) {
+	t.Parallel()
+	base := "format: 1\ncommand: x\nvariant: y\nparse:\n  type: records\n  start: '^a'\n"
+	tests := []struct {
+		name string
+		yaml string
+		want string
+	}{
+		{
+			name: "record and parts together",
+			yaml: base + "  record:\n    parse: {type: kv}\n  parts:\n    - name: p\n      parse: {type: kv}\n",
+			want: "write one of them",
+		},
+		{
+			name: "neither",
+			yaml: base,
+			want: "parts",
+		},
+		{
+			name: "a record that is a list",
+			yaml: base + "  record:\n    parse: {type: regex, pattern: '^(?P<a>.+)$'}\n",
+			want: "yields a list",
+		},
+		{
+			name: "fields beside the records parser",
+			yaml: base + "  record:\n    parse: {type: kv, as: map}\nfields:\n  a: {type: int}\n",
+			want: "record.fields",
+		},
+		{
+			name: "record on a composite",
+			yaml: "format: 1\ncommand: x\nvariant: y\nparse:\n  type: composite\n  record:\n    parse: {type: kv, as: map}\n  parts:\n    - name: p\n      parse: {type: kv}\n",
+			want: "only valid for type records",
+		},
+		{
+			name: "record on a table",
+			yaml: "format: 1\ncommand: x\nvariant: y\nparse:\n  type: table\n  record:\n    parse: {type: kv, as: map}\n",
+			want: "only valid for type records",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			_, err := Load([]byte(tt.yaml), "x/y")
+			if err == nil {
+				t.Fatal("expected an error")
+			}
+			if !strings.Contains(err.Error(), tt.want) {
+				t.Errorf("got %v, want it to mention %q", err, tt.want)
+			}
+		})
+	}
+
+	// The accepted form loads and keeps the fields under record.
+	d, err := Load([]byte(base+"  record:\n    parse: {type: kv, as: map}\n    fields:\n      n: {type: int}\n"), "x/y")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if d.Parse.Record == nil || d.Parse.Record.Fields["n"].Type != "int" {
+		t.Errorf("record not loaded: %+v", d.Parse.Record)
+	}
+}

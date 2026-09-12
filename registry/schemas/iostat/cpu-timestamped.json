@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/iostat/cpu-timestamped.json",
+  "title": "iostat/cpu-timestamped",
+  "description": "iostat -t -c, one sample of CPU averages without the device table",
+  "x-jsonize": {
+    "definition": "iostat/cpu-timestamped",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "timestamp": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "cpu": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "user_percent": {
+              "type": "number"
+            },
+            "nice_percent": {
+              "type": "number"
+            },
+            "system_percent": {
+              "type": "number"
+            },
+            "iowait_percent": {
+              "type": "number"
+            },
+            "steal_percent": {
+              "type": "number"
+            },
+            "idle_percent": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "user_percent",
+            "nice_percent",
+            "system_percent",
+            "iowait_percent",
+            "steal_percent",
+            "idle_percent"
+          ]
+        }
+      }
+    },
+    "required": [
+      "timestamp",
+      "cpu"
+    ]
+  }
+}

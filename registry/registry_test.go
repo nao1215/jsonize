@@ -334,3 +334,35 @@ func TestParsersPageListsEveryDefinition(t *testing.T) {
 		}
 	}
 }
+
+// TestEveryFixtureRecordsItsSource checks that each fixture says where
+// its text came from. A fixture is the contract of a definition, and a
+// reader has to be able to tell output a real command wrote from text
+// somebody assembled to exercise a rule: the first says the definition
+// describes what the command does, the second says only that the
+// definition does what it says. What belongs in source is the command
+// line, the implementation and its version, the operating system, the
+// locale, and anything replaced afterwards; where the text was not run
+// but quoted from a document, the document.
+func TestEveryFixtureRecordsItsSource(t *testing.T) {
+	reg, err := registry.Load(registry.Source{Name: "embedded", FS: FS()})
+	if err != nil {
+		t.Fatal(err)
+	}
+	fixtures, problems := conformance.Fixtures(reg, []registry.Source{{Name: "embedded", FS: FS()}})
+	for _, p := range problems {
+		t.Errorf("%s: %v", p.Definition, p.Err)
+	}
+	if len(fixtures) == 0 {
+		t.Fatal("no fixtures were found")
+	}
+	// Twenty characters is not a judgement of what a source says; it is
+	// the length below which it cannot be saying any of it.
+	const least = 20
+	for _, f := range fixtures {
+		if src := strings.TrimSpace(f.Case.Meta.Source); len(src) < least {
+			t.Errorf("%s: %s records no source; say what produced the text, on what and with which locale",
+				f.Entry.Def.ID(), f.Path())
+		}
+	}
+}

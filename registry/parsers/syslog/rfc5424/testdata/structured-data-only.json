@@ -1,0 +1,12 @@
+[
+  {
+    "priority": 165,
+    "timestamp": "2003-10-11T22:14:15.003Z",
+    "hostname": "mymachine.example.com",
+    "app_name": "evntslog",
+    "procid": null,
+    "msgid": "ID47",
+    "structured_data": "[exampleSDID@32473 iut=\"3\" eventSource=\"Application\" eventID=\"1011\"][examplePriority@32473 class=\"high\"]",
+    "message": null
+  }
+]

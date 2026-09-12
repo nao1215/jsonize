@@ -1,0 +1,11 @@
+Windows IP Configuration
+
+   Host Name . . . . . . . . . . . . : MEL-APP2
+   Primary Dns Suffix  . . . . . . . : corp.contoso.com
+   Node Type . . . . . . . . . . . . : Hybrid
+
+Ethernet adapter Ethernet:
+   IPv4 Address. . . . . . . . . . . : 10.20.15.27
+   Subnet Mask . . . . . . . . . . . : 255.255.0.0
+   Default Gateway . . . . . . . . . : 10.20.0.1
+   DNS Servers . . . . . . . . . . . : 10.20.0.53

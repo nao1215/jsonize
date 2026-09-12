@@ -1,0 +1,9 @@
+source: >-
+  written by hand from the capture beside it, with an idle timeout set
+  and the mount released
+description: >-
+  systemd spells a duration with a space in it, so the timeout column
+  cannot be cut at the header words; it is read by what the columns
+  around it hold.
+os: linux
+args: ["list-automounts"]

@@ -1,0 +1,8 @@
+source: >-
+  written by hand from the capture beside it, with the unit renamed and
+  the last column emptied
+description: >-
+  systemd prints a dash where a path unit activates nothing, which is
+  null rather than the string.
+os: linux
+args: ["list-paths"]

@@ -5,7 +5,7 @@
   "description": "ip address, one block per interface",
   "x-jsonize": {
     "definition": "ip/address",
-    "version": 1
+    "version": 3
   },
   "type": "array",
   "items": {
@@ -52,10 +52,7 @@
           "index",
           "name",
           "flags",
-          "mtu",
-          "qdisc",
-          "state",
-          "group"
+          "mtu"
         ]
       },
       "details": {
@@ -81,6 +78,9 @@
               "type": "string"
             },
             "broadcast": {
+              "type": "string"
+            },
+            "permanent_address": {
               "type": "string"
             },
             "netnsid": {

@@ -1,0 +1,6 @@
+description: >
+  A message that is two structured data elements written one after the
+  other with nothing between them, and no message after them. The
+  message key is null rather than an empty string, so a consumer can
+  tell a message the format left out from one that was empty.
+source: RFC 5424 section 6.5 example 4, joined onto one line where the RFC broke it for the page width

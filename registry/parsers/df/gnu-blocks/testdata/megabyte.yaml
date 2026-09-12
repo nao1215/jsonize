@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C; the rows
+  for mount points under a user's home were left out
+description: >-
+  df -m. The heading names the unit the figures count in, so the unit is
+  read from it and the figures are exact counts of that unit.
+os: linux
+args: ["-m"]

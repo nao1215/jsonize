@@ -1,3 +1,4 @@
+source: written by hand from the error lines file(1) writes for a path it cannot read
 description: |
   Nothing here names a kind of file, and "could not read it" is a
   sentence other tools write too, so jz says it cannot identify the text

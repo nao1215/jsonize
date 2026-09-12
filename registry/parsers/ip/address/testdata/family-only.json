@@ -1,0 +1,61 @@
+[
+  {
+    "interface": {
+      "index": 1,
+      "name": "lo",
+      "flags": [
+        "LOOPBACK",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 65536,
+      "state": "UNKNOWN",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "inet6",
+        "address": "::1/128",
+        "scope": "host",
+        "attributes": [
+          "noprefixroute"
+        ]
+      },
+      {
+        "kind": "valid_lft",
+        "valid_lft": "forever",
+        "preferred_lft": "forever"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 2,
+      "name": "eno1",
+      "flags": [
+        "BROADCAST",
+        "MULTICAST",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 1500,
+      "state": "UP",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "inet6",
+        "address": "fe80::5054:ff:fe11:2233/64",
+        "scope": "link",
+        "attributes": [
+          "noprefixroute"
+        ]
+      },
+      {
+        "kind": "valid_lft",
+        "valid_lft": "forever",
+        "preferred_lft": "forever"
+      }
+    ]
+  }
+]

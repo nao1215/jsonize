@@ -521,13 +521,23 @@ func (r *run) parseRecords(p *definition.Parse, lines []line) (any, error) {
 	}
 	out := make([]any, 0, len(groups))
 	for _, g := range groups {
-		v, err := r.parseComposite(p, g)
+		v, err := r.parseRecord(p, g)
 		if err != nil {
 			return nil, err
 		}
 		out = append(out, v)
 	}
 	return out, nil
+}
+
+// parseRecord reads one block of a records parser: by its named regions,
+// or, where the block is one value, by the single parser over the whole
+// of it.
+func (r *run) parseRecord(p *definition.Parse, block []line) (any, error) {
+	if p.Record != nil {
+		return r.parse(&p.Record.Parse, p.Record.Fields, block)
+	}
+	return r.parseComposite(p, block)
 }
 
 // parseRegex handles type: regex. Several patterns are tried in the

@@ -1,0 +1,23 @@
+[
+  {
+    "name": "example.org.",
+    "ttl": 300,
+    "class": "IN",
+    "type": "MX",
+    "data": "0 ."
+  },
+  {
+    "name": "example.com.",
+    "ttl": 86400,
+    "class": "IN",
+    "type": "NS",
+    "data": "hera.ns.cloudflare.com."
+  },
+  {
+    "name": "example.com.",
+    "ttl": 86400,
+    "class": "IN",
+    "type": "NS",
+    "data": "elliott.ns.cloudflare.com."
+  }
+]

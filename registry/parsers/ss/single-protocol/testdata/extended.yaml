@@ -1,5 +1,7 @@
-description: -e appends the socket's uid, inode, cookie and cgroup where -p puts the process. That is not a process, and this definition does not read it.
 source: "the header and the first six rows of `ss -tlne` on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C"
+description: >-
+  -e appends the socket's uid, inode, cookie and cgroup where -p puts the
+  process. None of that is a process, so it is kept under info as the
+  text ss printed rather than under the key that names one.
 os: linux
 args: ["-tlne"]
-expect_error: 'does not match'

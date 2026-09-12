@@ -1,0 +1,9 @@
+[
+  {
+    "what": "binfmt_misc",
+    "where": "/proc/sys/fs/binfmt_misc",
+    "mounted": false,
+    "idle_timeout": "1min 30s",
+    "unit": "proc-sys-fs-binfmt_misc.automount"
+  }
+]

@@ -37,6 +37,9 @@
       },
       "process": {
         "type": "string"
+      },
+      "info": {
+        "type": "string"
       }
     },
     "required": [

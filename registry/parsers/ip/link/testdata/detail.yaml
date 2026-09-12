@@ -1,0 +1,11 @@
+source: >-
+  three blocks of `ip -d link` captured on Ubuntu 26.04 (iproute2 6.19.0)
+  with LC_ALL=C; the hardware addresses and the bridge name were
+  replaced, and each settings run was cut short
+description: >-
+  -d continues the link line with the driver's own settings and adds a
+  line per kind of device under it. Their names and number come from the
+  kernel module, so the continuation is one string and the extra line is
+  one entry of the details list beside the alternative names.
+os: linux
+args: ["-d", "link"]

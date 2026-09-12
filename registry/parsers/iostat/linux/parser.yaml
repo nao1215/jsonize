@@ -24,6 +24,10 @@ detect:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
       - '^avg-cpu:[ \t]+%user[ \t]+%nice'
       - '^Device[ \t]+tps[ \t]'
+    none:
+      # -t prints the time above each sample, which opens the sample
+      # there; iostat/linux-timestamped reads that report.
+      - '^(?:\d{2}/\d{2}/\d{2,4}[ \t]+\d{2}:\d{2}:\d{2}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{4})[ \t]*$'
 input:
   select:
     # The banner is stated whole, so what is dropped is exactly the line

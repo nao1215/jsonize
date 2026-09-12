@@ -1,0 +1,37 @@
+[
+  {
+    "index": 20,
+    "name": "ip6tnl0",
+    "peer": "NONE",
+    "flags": [
+      "NOARP"
+    ],
+    "mtu": 1452,
+    "qdisc": "noop",
+    "state": "DOWN",
+    "mode": "DEFAULT",
+    "group": "default",
+    "qlen": 1000,
+    "link_type": "tunnel6",
+    "address": "::",
+    "broadcast": "::",
+    "permanent_address": "4e76:da7a:cec8::"
+  },
+  {
+    "index": 21,
+    "name": "sit0",
+    "peer": "NONE",
+    "flags": [
+      "NOARP"
+    ],
+    "mtu": 1480,
+    "qdisc": "noop",
+    "state": "DOWN",
+    "mode": "DEFAULT",
+    "group": "default",
+    "qlen": 1000,
+    "link_type": "sit",
+    "address": "0.0.0.0",
+    "broadcast": "0.0.0.0"
+  }
+]

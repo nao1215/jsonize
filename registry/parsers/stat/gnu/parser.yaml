@@ -26,35 +26,43 @@ detect:
       - '\A\s*File: '
       - '^\s*(?:Size|size): \d+'
       - '^Access: \(\d+/'
+# stat prints one block per operand, so a run naming several files is a
+# list of blocks and a run naming one is a list of a single block: the
+# shape of the result says what the command does rather than how many
+# arguments it was given.
 parse:
-  type: regex
-  each: input
-  pattern: '(?s)\A\s*File: (?P<file>[^\n]+)\n\s*[Ss]ize: (?P<size>\d+)\s+Blocks: (?P<blocks>\d+)\s+IO Block: (?P<io_block>\d+)\s+(?P<type>[^\n]+)\nDevice: (?P<device>\S+)\s+Inode: (?P<inode>\d+)\s+Links: (?P<links>\d+)(?:[ \t]+Device [Tt]ype: (?P<device_type>[0-9a-f]+,[0-9a-f]+))?[ \t]*\nAccess: \((?P<access_mode>\d+)/(?P<access_flags>\S+)\)\s+Uid: \(\s*(?P<uid>\d+)/\s*(?P<user>[^)]+?)\)\s+Gid: \(\s*(?P<gid>\d+)/\s*(?P<group>[^)]+?)\)\n(?:Context: (?P<context>[^\n]+)\n)?Access: (?P<access_time>[^\n]+)\nModify: (?P<modify_time>[^\n]+)\nChange: (?P<change_time>[^\n]+)(?:\n\s*Birth: (?P<birth_time>[^\n]+))?'
-fields:
-  file: {required: true}
-  size: {type: int, required: true}
-  blocks: {type: int, required: true}
-  io_block: {type: int, required: true}
-  type: {required: true}
-  device: {required: true}
-  inode: {type: int, required: true}
-  links: {type: int, required: true}
-  # Only a device file has these numbers, so another file carries no key
-  # rather than a null. They stay the string stat printed: the fixtures
-  # print decimal, and not every implementation is known to.
-  device_type: {when_missing: omit}
-  access_mode: {required: true}
-  access_flags: {required: true}
-  uid: {type: int, required: true}
-  user: {required: true}
-  gid: {type: int, required: true}
-  group: {required: true}
-  # Only a system running SELinux prints the label.
-  context: {when_missing: omit}
-  # Every one of these carries the offset the file system recorded, so
-  # the instant is in the text and not in the machine reading it. A file
-  # system that keeps no birth time prints a dash.
-  access_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", required: true}
-  modify_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", required: true}
-  change_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", required: true}
-  birth_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", null_if: ["-"], when_missing: omit}
+  type: records
+  start: '^\s*File: '
+  record:
+    parse:
+      type: regex
+      each: input
+      pattern: '(?s)\A\s*File: (?P<file>[^\n]+)\n\s*[Ss]ize: (?P<size>\d+)\s+Blocks: (?P<blocks>\d+)\s+IO Block: (?P<io_block>\d+)\s+(?P<type>[^\n]+)\nDevice: (?P<device>\S+)\s+Inode: (?P<inode>\d+)\s+Links: (?P<links>\d+)(?:[ \t]+Device [Tt]ype: (?P<device_type>[0-9a-f]+,[0-9a-f]+))?[ \t]*\nAccess: \((?P<access_mode>\d+)/(?P<access_flags>\S+)\)\s+Uid: \(\s*(?P<uid>\d+)/\s*(?P<user>[^)]+?)\)\s+Gid: \(\s*(?P<gid>\d+)/\s*(?P<group>[^)]+?)\)\n(?:Context: (?P<context>[^\n]+)\n)?Access: (?P<access_time>[^\n]+)\nModify: (?P<modify_time>[^\n]+)\nChange: (?P<change_time>[^\n]+)(?:\n\s*Birth: (?P<birth_time>[^\n]+))?'
+    fields:
+      file: {required: true}
+      size: {type: int, required: true}
+      blocks: {type: int, required: true}
+      io_block: {type: int, required: true}
+      type: {required: true}
+      device: {required: true}
+      inode: {type: int, required: true}
+      links: {type: int, required: true}
+      # Only a device file has these numbers, so another file carries no key
+      # rather than a null. They stay the string stat printed: the fixtures
+      # print decimal, and not every implementation is known to.
+      device_type: {when_missing: omit}
+      access_mode: {required: true}
+      access_flags: {required: true}
+      uid: {type: int, required: true}
+      user: {required: true}
+      gid: {type: int, required: true}
+      group: {required: true}
+      # Only a system running SELinux prints the label.
+      context: {when_missing: omit}
+      # Every one of these carries the offset the file system recorded, so
+      # the instant is in the text and not in the machine reading it. A file
+      # system that keeps no birth time prints a dash.
+      access_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", required: true}
+      modify_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", required: true}
+      change_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", required: true}
+      birth_time: {type: time, layout: "2006-01-02 15:04:05.999999999 -0700", null_if: ["-"], when_missing: omit}

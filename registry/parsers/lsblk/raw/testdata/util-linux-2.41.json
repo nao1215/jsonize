@@ -1,0 +1,83 @@
+[
+  {
+    "name": "loop0",
+    "maj_min": "7:0",
+    "rm": false,
+    "size": "4K",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/bare/5"
+  },
+  {
+    "name": "loop2",
+    "maj_min": "7:2",
+    "rm": false,
+    "size": "55.5M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core18/2999"
+  },
+  {
+    "name": "loop3",
+    "maj_min": "7:3",
+    "rm": false,
+    "size": "37.6M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/terraform/933"
+  },
+  {
+    "name": "loop4",
+    "maj_min": "7:4",
+    "rm": false,
+    "size": "214.5M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/brave/678"
+  },
+  {
+    "name": "loop5",
+    "maj_min": "7:5",
+    "rm": false,
+    "size": "74M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core22/2411"
+  },
+  {
+    "name": "loop6",
+    "maj_min": "7:6",
+    "rm": false,
+    "size": "63.8M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core20/2866"
+  },
+  {
+    "name": "loop7",
+    "maj_min": "7:7",
+    "rm": false,
+    "size": "66.8M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core24/1643"
+  },
+  {
+    "name": "loop8",
+    "maj_min": "7:8",
+    "rm": false,
+    "size": "74M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core22/2437"
+  },
+  {
+    "name": "loop9",
+    "maj_min": "7:9",
+    "rm": false,
+    "size": "66.8M",
+    "ro": true,
+    "type": "loop",
+    "mountpoint": "/snap/core24/1587"
+  }
+]

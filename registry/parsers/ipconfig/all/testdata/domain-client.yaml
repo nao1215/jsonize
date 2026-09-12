@@ -1,0 +1,9 @@
+description: A domain member, whose adapter block follows its heading with no blank line and whose machine block carries only the three labels the exercise prints.
+source: >-
+  the ipconfig /all output published at
+  https://learn.microsoft.com/en-us/training/modules/understand-active-directory-domain-name-system/8-guided-troubleshooting-exercise
+  (task 2). The exercise does not name the Windows release and prints an
+  abbreviated report. Quoted as published, with the host name (BNE-APP7)
+  replaced with a made-up value of the same shape.
+os: windows
+args: ["/all"]

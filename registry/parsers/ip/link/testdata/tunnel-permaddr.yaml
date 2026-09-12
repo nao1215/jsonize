@@ -1,0 +1,8 @@
+source: >-
+  two blocks of `ip link` captured on Ubuntu 26.04 (iproute2 6.19.0)
+  with LC_ALL=C; the permanent address was replaced
+description: >-
+  A tunnel device reports the address it was built from after its
+  broadcast address, which the interfaces above it do not have.
+os: linux
+args: ["link"]

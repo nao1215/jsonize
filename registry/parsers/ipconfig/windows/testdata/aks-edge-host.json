@@ -1,0 +1,58 @@
+[
+  {
+    "adapter": {
+      "type": "Ethernet",
+      "name": "Ethernet 2"
+    },
+    "properties": [
+      {
+        "name": "Connection-specific DNS Suffix",
+        "value": "mshome.net"
+      },
+      {
+        "name": "Link-local IPv6 Address",
+        "value": "fe80::f4b3:63b3:20d0:2e60%12"
+      },
+      {
+        "name": "Autoconfiguration IPv4 Address",
+        "value": "169.254.233.233"
+      },
+      {
+        "name": "Subnet Mask",
+        "value": "255.255.0.0"
+      },
+      {
+        "name": "Default Gateway",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "adapter": {
+      "type": "Ethernet",
+      "name": "vEthernet (Default Switch)"
+    },
+    "properties": [
+      {
+        "name": "Connection-specific DNS Suffix",
+        "value": ""
+      },
+      {
+        "name": "Link-local IPv6 Address",
+        "value": "fe80::545e:7d5:812b:c17b%18"
+      },
+      {
+        "name": "IPv4 Address",
+        "value": "172.21.144.1"
+      },
+      {
+        "name": "Subnet Mask",
+        "value": "255.255.240.0"
+      },
+      {
+        "name": "Default Gateway",
+        "value": ""
+      }
+    ]
+  }
+]

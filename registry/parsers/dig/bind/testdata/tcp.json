@@ -2,58 +2,62 @@
   "query": {
     "version": "9.20.24-1ubuntu0.3-Ubuntu",
     "arguments": "+tcp +time=2 +tries=1 localhost @127.0.0.53",
-    "servers_found": null,
     "global_options": [
       "+cmd"
     ]
   },
-  "header": {
-    "opcode": "QUERY",
-    "status": "NOERROR",
-    "id": 37140,
-    "flags": [
-      "qr",
-      "aa",
-      "rd",
-      "ra",
-      "ad"
-    ],
-    "question_count": 1,
-    "answer_count": 1,
-    "authority_count": 0,
-    "additional_count": 1
-  },
-  "messages": [],
-  "edns": [
+  "transport": [],
+  "replies": [
     {
-      "name": "EDNS",
-      "value": "version: 0, flags:; udp: 65494"
+      "header": {
+        "opcode": "QUERY",
+        "status": "NOERROR",
+        "id": 37140,
+        "flags": [
+          "qr",
+          "aa",
+          "rd",
+          "ra",
+          "ad"
+        ],
+        "question_count": 1,
+        "answer_count": 1,
+        "authority_count": 0,
+        "additional_count": 1
+      },
+      "messages": [],
+      "edns": [
+        {
+          "name": "EDNS",
+          "value": "version: 0, flags:; udp: 65494"
+        }
+      ],
+      "question": [
+        {
+          "name": "localhost.",
+          "class": "IN",
+          "type": "A"
+        }
+      ],
+      "answers": [
+        {
+          "name": "localhost.",
+          "ttl": 0,
+          "class": "IN",
+          "type": "A",
+          "data": "127.0.0.1"
+        }
+      ],
+      "authority": [],
+      "additional": [],
+      "statistics": {
+        "query_time_ms": 0,
+        "server": "127.0.0.53#53",
+        "server_name": "127.0.0.53",
+        "protocol": "TCP",
+        "when": "Thu Sep 10 23:40:10 JST 2026",
+        "message_size": 54
+      }
     }
-  ],
-  "question": [
-    {
-      "name": "localhost.",
-      "class": "IN",
-      "type": "A"
-    }
-  ],
-  "answers": [
-    {
-      "name": "localhost.",
-      "ttl": 0,
-      "class": "IN",
-      "type": "A",
-      "data": "127.0.0.1"
-    }
-  ],
-  "authority": [],
-  "additional": [],
-  "statistics": {
-    "query_time_ms": 0,
-    "server": "127.0.0.53#53",
-    "server_name": "127.0.0.53",
-    "protocol": "TCP",
-    "when": "Thu Sep 10 23:40:10 JST 2026",
-    "message_size": 54
-  }
+  ]
 }

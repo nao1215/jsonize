@@ -1,27 +1,32 @@
 # `ip link` prints one block per interface: a header line, the link layer
-# address, and then the interface's alias and alternative names, of which
-# it may have neither. It is `ip -s link` without the counter tables and
-# `ip address` without the addresses, so the signature has to name both
-# of those absences.
+# address, and then the interface's alias, its alternative names and, with
+# -d, the settings of the kind of device it is. It may have none of those.
+# It is `ip -s link` without the counter tables and `ip address` without
+# the addresses, so the signature has to name both of those absences.
 format: 1
 command: ip
 variant: link
 description: ip link, one block per interface
 metadata:
   tags: [linux, network, iproute2]
-  compatible: [iproute2]
+  compatible: [iproute2, BusyBox]
   references:
     - https://man7.org/linux/man-pages/man8/ip-link.8.html
 detect:
   os: [linux]
   signature:
     all:
-      # The mode the header carries is what `ip address` leaves out, and
-      # the header ends with the group and the queue length: `ip -o link`
-      # continues the same line with the link layer after a backslash.
-      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+.* mode \S+ group \S+(?: qlen \d+)?[ \t]*$'
+      # `ip -o link` continues the same line with the link layer after a
+      # backslash, so the header is stated to the end of its line. iproute2
+      # carries the mode and the group there and BusyBox carries neither,
+      # which is why both are optional rather than what this is
+      # recognised by.
+      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+(?: master \S+)?(?: state \S+)?(?: mode \S+)?(?: group \S+)?(?: qlen \d+)?[ \t]*$'
     none:
+      # What `ip -s link` adds and what `ip address` adds: this form has
+      # the counters of neither and the addresses of neither.
       - '^[ \t]+RX:[ \t]+bytes[ \t]+packets[ \t]+errors'
+      - '^[ \t]+inet6?[ \t]+\S'
 parse:
   type: records
   start: '^\d+: '
@@ -34,10 +39,14 @@ parse:
         # A bridged interface names its bridge between the queueing
         # discipline and the state, and a veth end names its peer after
         # an @. Both are absent on an ordinary interface.
-        pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>\S+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+) qdisc (?P<qdisc>\S+)(?: master (?P<master>\S+))? state (?P<state>\S+) mode (?P<mode>\S+) group (?P<group>\S+)(?: qlen (?P<qlen>\d+))?\s*$'
+        # BusyBox prints no state, no mode and no group.
+        pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>\S+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+) qdisc (?P<qdisc>\S+)(?: master (?P<master>\S+))?(?: state (?P<state>\S+))?(?: mode (?P<mode>\S+))?(?: group (?P<group>\S+))?(?: qlen (?P<qlen>\d+))?\s*$'
       fields:
         index: {type: int}
         mtu: {type: int}
+        state: {when_missing: omit}
+        mode: {when_missing: omit}
+        group: {when_missing: omit}
         qlen: {type: int, when_missing: omit}
         master: {when_missing: omit}
         peer: {when_missing: omit}
@@ -47,23 +56,29 @@ parse:
       parse:
         type: regex
         each: input
-        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: link-netnsid (?P<netnsid>\d+))?\s*$'
+        # -d continues this line with the driver's own settings, whose
+        # names and number come from the kernel module rather than from
+        # the format, so they are kept as the text ip printed.
+        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: permaddr (?P<permanent_address>\S+))?(?: link-netnsid (?P<netnsid>\d+))?(?:\s+(?P<settings>\S.*?))?\s*$'
       fields:
         netnsid: {type: int, when_missing: omit}
-    # An interface may carry a free-text alias and any number of
-    # alternative names. Both sit under the link line, so each part names
-    # the other's lines as belonging to a sibling rather than taking a
-    # position: which of the two comes first is not something the format
-    # promises.
-    - name: alias
+        # A tunnel device reports the address it was built from.
+        permanent_address: {when_missing: omit}
+        settings: {when_missing: omit}
+    # What follows the link line is a free-text alias, any number of
+    # alternative names, and, with -d, a line per kind of device holding
+    # that kind's settings. Which of them appear and in what order is a
+    # property of the interface, so they are read as a list where every
+    # entry names its kind rather than as parts at fixed positions.
+    - name: details
       select: {skip: 2}
-      ignore: ['^\s*altname ']
       parse:
         type: regex
-        pattern: '^\s*alias (?P<name>.+?)\s*$'
-    - name: altnames
-      select: {skip: 2}
-      ignore: ['^\s*alias ']
-      parse:
-        type: regex
-        pattern: '^\s*altname (?P<name>\S+)\s*$'
+        patterns:
+          - '^\s*(?P<kind>altname) (?P<name>\S+)\s*$'
+          - '^\s*(?P<kind>alias) (?P<name>.+?)\s*$'
+          - pattern: '^\s*(?P<text>\S.*?)\s*$'
+            values: {kind: settings}
+      fields:
+        name: {when_missing: omit}
+        text: {when_missing: omit}

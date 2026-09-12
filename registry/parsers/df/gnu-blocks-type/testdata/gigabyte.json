@@ -1,0 +1,88 @@
+{
+  "header": {
+    "block_size": "1G"
+  },
+  "filesystems": [
+    {
+      "filesystem": "tmpfs",
+      "type": "tmpfs",
+      "blocks": 13,
+      "used": 1,
+      "available": 13,
+      "use_percent": 1,
+      "mounted_on": "/run"
+    },
+    {
+      "filesystem": "/dev/nvme0n1p2",
+      "type": "ext4",
+      "blocks": 1832,
+      "used": 1578,
+      "available": 162,
+      "use_percent": 91,
+      "mounted_on": "/"
+    },
+    {
+      "filesystem": "tmpfs",
+      "type": "tmpfs",
+      "blocks": 31,
+      "used": 1,
+      "available": 31,
+      "use_percent": 2,
+      "mounted_on": "/dev/shm"
+    },
+    {
+      "filesystem": "efivarfs",
+      "type": "efivarfs",
+      "blocks": 1,
+      "used": 1,
+      "available": 1,
+      "use_percent": 39,
+      "mounted_on": "/sys/firmware/efi/efivars"
+    },
+    {
+      "filesystem": "none",
+      "type": "tmpfs",
+      "blocks": 1,
+      "used": 0,
+      "available": 1,
+      "use_percent": 0,
+      "mounted_on": "/run/credentials/systemd-journald.service"
+    },
+    {
+      "filesystem": "none",
+      "type": "tmpfs",
+      "blocks": 1,
+      "used": 0,
+      "available": 1,
+      "use_percent": 0,
+      "mounted_on": "/run/credentials/systemd-resolved.service"
+    },
+    {
+      "filesystem": "tmpfs",
+      "type": "tmpfs",
+      "blocks": 31,
+      "used": 1,
+      "available": 30,
+      "use_percent": 3,
+      "mounted_on": "/tmp"
+    },
+    {
+      "filesystem": "/dev/nvme0n1p1",
+      "type": "vfat",
+      "blocks": 2,
+      "used": 1,
+      "available": 2,
+      "use_percent": 1,
+      "mounted_on": "/boot/efi"
+    },
+    {
+      "filesystem": "none",
+      "type": "tmpfs",
+      "blocks": 1,
+      "used": 0,
+      "available": 1,
+      "use_percent": 0,
+      "mounted_on": "/run/credentials/getty@tty1.service"
+    }
+  ]
+}

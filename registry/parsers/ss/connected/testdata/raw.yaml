@@ -1,0 +1,7 @@
+source: "`ss -w` on Ubuntu 26.04 (iproute2 6.19.0) with LC_ALL=C"
+description: >-
+  The raw sockets, whose addresses are a bare asterisk and whose ports
+  are protocol names. The same two columns are missing for the same
+  reason.
+os: linux
+args: ["-w"]

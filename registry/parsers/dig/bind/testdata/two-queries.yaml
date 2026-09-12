@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (BIND dig 9.20.24) with LC_ALL=C
+description: >-
+  Two queries on one command line. dig prints a reply for each, so the
+  replies list holds both in the order they were asked; the banner above
+  them is printed once and belongs to the run rather than to a reply.
+os: linux
+args: ["example.com", "A", "example.org", "MX"]

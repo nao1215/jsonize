@@ -1,0 +1,102 @@
+{
+  "configuration": [
+    {
+      "name": "Host Name",
+      "value": "WINVM01"
+    },
+    {
+      "name": "Primary Dns Suffix",
+      "value": ""
+    },
+    {
+      "name": "Node Type",
+      "value": "Hybrid"
+    },
+    {
+      "name": "IP Routing Enabled",
+      "value": "No"
+    },
+    {
+      "name": "WINS Proxy Enabled",
+      "value": "No"
+    }
+  ],
+  "adapters": [
+    {
+      "adapter": {
+        "type": "Ethernet",
+        "name": "Ethernet"
+      },
+      "properties": [
+        {
+          "name": "Connection-specific DNS Suffix",
+          "value": ""
+        },
+        {
+          "name": "Description",
+          "value": "Microsoft Hyper-V Network Adapter"
+        },
+        {
+          "name": "Physical Address",
+          "value": "00-15-5D-01-2F-9C"
+        },
+        {
+          "name": "DHCP Enabled",
+          "value": "No"
+        },
+        {
+          "name": "Autoconfiguration Enabled",
+          "value": "Yes"
+        },
+        {
+          "name": "Link-local IPv6 Address",
+          "value": "fe80::a8d1:11d5:3ab2:6a51%5(Preferred)"
+        },
+        {
+          "name": "IPv4 Address",
+          "value": "10.1.0.4(Preferred)"
+        },
+        {
+          "name": "Subnet Mask",
+          "value": "255.255.255.0"
+        },
+        {
+          "name": "IPv4 Address",
+          "value": "10.1.0.5(Preferred)"
+        },
+        {
+          "name": "Subnet Mask",
+          "value": "255.255.255.0"
+        },
+        {
+          "name": "IPv4 Address",
+          "value": "10.1.0.6(Preferred)"
+        },
+        {
+          "name": "Subnet Mask",
+          "value": "255.255.255.0"
+        },
+        {
+          "name": "Default Gateway",
+          "value": "10.1.0.1"
+        },
+        {
+          "name": "DHCPv6 IAID",
+          "value": "100666682"
+        },
+        {
+          "name": "DHCPv6 Client DUID",
+          "value": "00-01-00-01-2A-A8-26-B1-00-15-5D-01-2F-9C"
+        },
+        {
+          "name": "DNS Servers",
+          "value": "168.63.129.16"
+        },
+        {
+          "name": "NetBIOS over Tcpip",
+          "value": "Enabled"
+        }
+      ]
+    }
+  ]
+}

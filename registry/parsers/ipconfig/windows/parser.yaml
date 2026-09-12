@@ -1,0 +1,80 @@
+# `ipconfig` without options prints a "Windows IP Configuration" banner
+# and then one block per adapter, and nothing about the machine itself:
+# the addresses of an adapter, its mask and its gateway, which is the
+# handful of lines /all prints in the middle of a much longer block.
+# That is the difference between the two formats, and it is what the
+# signature states: here the banner is followed by an adapter heading,
+# where under /all it is followed by the machine's own labelled lines.
+#
+# A block opens with a heading naming the kind of adapter and the
+# connection ("Ethernet adapter Ethernet 2:", "Ethernet adapter
+# vEthernet (Default Switch):") and every line under it is a label
+# padded with dots to a fixed column, a colon, and a value that may be
+# empty: a gateway is printed with no value when the adapter has none.
+#
+# The labels are not a fixed set, and an adapter with more than one
+# address repeats them, so the pairs are a list of name/value objects
+# rather than an object. The dots are padding and stop the name; the
+# value is whatever follows the colon, the scope identifier of a
+# link-local address included.
+#
+# A value with more than one entry continues on the next line, aligned
+# with the value column and carrying no label, which is how a second
+# gateway is printed. input.fold joins such a line onto the line it
+# belongs to.
+#
+# Every value stays a string: the text states no units and no types.
+format: 1
+command: ipconfig
+variant: windows
+description: ipconfig, the addresses of each adapter
+metadata:
+  tags: [windows, network]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ipconfig
+    - https://learn.microsoft.com/en-us/azure/aks-hybrid-edge/edge-essentials/aks-edge-howto-setup-nested-environment
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    none: ["/all"]
+  signature:
+    all:
+      # The banner and then an adapter heading, with nothing but blank
+      # lines between them. `ipconfig /displaydns` opens with the same
+      # banner and names a cached record there instead, and /all names
+      # the machine.
+      - '\AWindows IP Configuration[ \t]*\n(?:[ \t]*\n)*[^ \t].* adapter .*:[ \t]*$'
+      # Every adapter block states its connection-specific suffix,
+      # empty or not, which is what the address listing has and the
+      # other reports printed under this banner do not.
+      - '^[ \t]+Connection-specific DNS Suffix[ \t.]*:'
+input:
+  # A label sits a few characters from the left margin, so a line
+  # indented as far as the value column is the continuation of the line
+  # above it rather than a label of its own.
+  fold: '^[ \t]{10,}\S'
+  # The banner names the report rather than any adapter, and nothing is
+  # read from it.
+  select:
+    after: '^Windows IP Configuration[ \t]*$'
+parse:
+  type: records
+  start: '^[^ \t].* adapter .*:[ \t]*$'
+  parts:
+    - name: adapter
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<type>[^ \t].*?) adapter (?P<name>.+?):[ \t]*$'
+      fields:
+        type: {required: true}
+        name: {required: true}
+    - name: properties
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^[ \t]+(?P<name>[^:.]+?)[ \t]*(?:\.(?:[ \t]\.)*)?[ \t]*:[ \t]?(?P<value>.*?)[ \t]*$'

@@ -1,0 +1,4 @@
+S   UID     PID    PPID  C PRI  NI   RSS    SZ WCHAN  TTY          TIME CMD
+S     0       1       0  0  80   0 19124  7016 -      ?        00:02:57 systemd
+S     0      18       2  0 -40   -     0     0 -      ?        00:00:03 migration/0
+S  1000   23440   21434  0  80   0  6052  1815 poll_s pts/4    00:00:00 bash

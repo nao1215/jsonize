@@ -1,20 +1,22 @@
-{
-  "file": "/etc/hosts",
-  "size": 221,
-  "blocks": 8,
-  "io_block": 4096,
-  "type": "regular file",
-  "device": "259,2",
-  "inode": 80216458,
-  "links": 1,
-  "access_mode": "0644",
-  "access_flags": "-rw-r--r--",
-  "uid": 0,
-  "user": "root",
-  "gid": 0,
-  "group": "root",
-  "access_time": "2026-09-10T19:46:51.720186377+09:00",
-  "modify_time": "2025-11-04T13:04:07.841815606+09:00",
-  "change_time": "2025-11-04T13:04:07.841815606+09:00",
-  "birth_time": "2025-11-04T13:04:07.8416221+09:00"
-}
+[
+  {
+    "file": "/etc/hosts",
+    "size": 221,
+    "blocks": 8,
+    "io_block": 4096,
+    "type": "regular file",
+    "device": "259,2",
+    "inode": 80216458,
+    "links": 1,
+    "access_mode": "0644",
+    "access_flags": "-rw-r--r--",
+    "uid": 0,
+    "user": "root",
+    "gid": 0,
+    "group": "root",
+    "access_time": "2026-09-10T19:46:51.720186377+09:00",
+    "modify_time": "2025-11-04T13:04:07.841815606+09:00",
+    "change_time": "2025-11-04T13:04:07.841815606+09:00",
+    "birth_time": "2025-11-04T13:04:07.8416221+09:00"
+  }
+]

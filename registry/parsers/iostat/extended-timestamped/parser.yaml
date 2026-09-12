@@ -1,0 +1,101 @@
+# A sysstat report is a run of samples: the banner names the machine
+# once, and everything after it repeats once per interval. Reading it as
+# an array of samples is what lets `iostat 1 3` be read at all (the
+# second header used to reach a table as a row) and what lets --stream
+# hand over a sample as soon as it is complete.
+#
+# The banner is dropped with it. It carries the kernel, the host and the
+# CPU count, which `uname -a` and `nproc` also print and jz also reads;
+# what it does not carry is a sample, and a shape that had one object for
+# it and an array for the rest could not be streamed.
+# -t prints the time a sample was taken on a line above it, which opens
+# the sample here in place of the heading that opens it without -t. The
+# report says nothing about the zone that clock is in and the form of the
+# line follows S_TIME_FORMAT, so the time is kept as printed rather than
+# turned into an instant that would have to invent one.
+format: 1
+command: iostat
+variant: extended-timestamped
+description: iostat -t -x, one sample of extended per-device statistics
+metadata:
+  tags: [linux, io, cpu, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/iostat.1.html
+detect:
+  os: [linux]
+  args:
+    all: ["-t"]
+  signature:
+    all:
+      - '^(?:\d{2}/\d{2}/\d{2,4}[ \t]+\d{2}:\d{2}:\d{2}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{4})[ \t]*$'
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^avg-cpu:[ \t]+%user[ \t]+%nice'
+      - '^Device[ \t]+r/s[ \t]'
+input:
+  select:
+    # The banner is stated whole, so what is dropped is exactly the line
+    # described above and not whatever happens to open with "Linux".
+    after: '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)'
+parse:
+  type: records
+  # -t opens a sample with the time it was taken.
+  start: '^(?:\d{2}/\d{2}/\d{2,4}[ \t]+\d{2}:\d{2}:\d{2}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{4})[ \t]*$'
+  parts:
+    - name: timestamp
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<value>\S.*?)[ \t]*\z'
+      fields:
+        value: {required: true}
+    # The avg-cpu header carries a leading "avg-cpu:" label that the rows do
+    # not repeat, so the column names are declared instead of derived.
+    - name: cpu
+      select: {skip: 1, limit: 2}
+      parse:
+        type: table
+        header:
+          columns: [user_percent, nice_percent, system_percent, iowait_percent, steal_percent, idle_percent]
+      fields:
+        user_percent: {type: float, required: true}
+        nice_percent: {type: float}
+        system_percent: {type: float}
+        iowait_percent: {type: float}
+        steal_percent: {type: float}
+        idle_percent: {type: float}
+    # The device columns differ between sysstat releases (kB_dscd was added
+    # for discards), so they are taken from the header line as printed.
+    - name: devices
+      select: {skip: 3}
+      parse:
+        type: table
+      fields:
+        device: {required: true}
+        r_s: {type: float}
+        rkb_s: {type: float}
+        # -m names the megabyte column in its place.
+        rmb_s: {type: float}
+        rrqm_s: {type: float}
+        rrqm_percent: {type: float}
+        r_await: {type: float}
+        rareq_sz: {type: float}
+        w_s: {type: float}
+        wkb_s: {type: float}
+        wmb_s: {type: float}
+        wrqm_s: {type: float}
+        wrqm_percent: {type: float}
+        w_await: {type: float}
+        wareq_sz: {type: float}
+        d_s: {type: float}
+        dkb_s: {type: float}
+        dmb_s: {type: float}
+        drqm_s: {type: float}
+        drqm_percent: {type: float}
+        d_await: {type: float}
+        dareq_sz: {type: float}
+        f_s: {type: float}
+        f_await: {type: float}
+        aqu_sz: {type: float}
+        util_percent: {type: float}

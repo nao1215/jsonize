@@ -278,8 +278,12 @@ func (a *app) listDefinition(reg *registry.Registry, command, variant string, as
 	}
 	fmt.Fprintf(w, "  parse:        %s\n", describeParse(&d.Parse))
 	printFields(w, "  ", d.Fields)
-	// A composite parser keeps its fields inside the parts, so they are
+	// A composite parser keeps its fields inside the parts, and a records
+	// parser reading one value keeps them under record, so they are
 	// listed where they belong rather than being lost here.
+	if r := d.Parse.Record; r != nil {
+		printFields(w, "    ", r.Fields)
+	}
 	for i := range d.Parse.Parts {
 		part := &d.Parse.Parts[i]
 		fmt.Fprintf(w, "  part %s: %s\n", part.Name, describeParse(&part.Parse))
@@ -400,6 +404,9 @@ func describe(e *registry.Entry) *jsonutil.Object {
 	o.Set("detect", det)
 	o.Set("parse", describeParse(&d.Parse))
 	o.Set("fields", fieldsObject(d.Fields))
+	if r := d.Parse.Record; r != nil {
+		o.Set("record_fields", fieldsObject(r.Fields))
+	}
 	if len(d.Parse.Parts) > 0 {
 		parts := make([]any, 0, len(d.Parse.Parts))
 		for i := range d.Parse.Parts {
@@ -498,6 +505,9 @@ func describeParse(p *definition.Parse) string {
 		}
 		return fmt.Sprintf("kv separator=%q as=%s", sep, as)
 	case definition.TypeComposite, definition.TypeRecords:
+		if p.Record != nil {
+			return p.Type + " record=" + describeParse(&p.Record.Parse)
+		}
 		names := make([]string, len(p.Parts))
 		for i, part := range p.Parts {
 			names[i] = part.Name + ":" + part.Parse.Type

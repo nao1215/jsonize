@@ -80,6 +80,9 @@
               "null"
             ]
           },
+          "permanent_address": {
+            "type": "string"
+          },
           "netnsid": {
             "type": "integer"
           }
@@ -168,6 +171,9 @@
             "type": "integer"
           },
           "overrun": {
+            "type": "integer"
+          },
+          "otherhost": {
             "type": "integer"
           }
         },

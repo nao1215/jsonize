@@ -1,0 +1,18 @@
+[
+  {
+    "priority": null,
+    "timestamp": "Feb  5 17:32:18",
+    "hostname": "10.0.0.99",
+    "tag": null,
+    "pid": null,
+    "message": "Use the BFG!"
+  },
+  {
+    "priority": null,
+    "timestamp": "Oct 11 22:14:15",
+    "hostname": "mymachine",
+    "tag": "su",
+    "pid": null,
+    "message": "'su root' failed for lonvick on /dev/pts/8"
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "configuration": [
+    {
+      "name": "Host Name",
+      "value": "MEL-APP2"
+    },
+    {
+      "name": "Primary Dns Suffix",
+      "value": "corp.contoso.com"
+    },
+    {
+      "name": "Node Type",
+      "value": "Hybrid"
+    }
+  ],
+  "adapters": [
+    {
+      "adapter": {
+        "type": "Ethernet",
+        "name": "Ethernet"
+      },
+      "properties": [
+        {
+          "name": "IPv4 Address",
+          "value": "10.20.15.27"
+        },
+        {
+          "name": "Subnet Mask",
+          "value": "255.255.0.0"
+        },
+        {
+          "name": "Default Gateway",
+          "value": "10.20.0.1"
+        },
+        {
+          "name": "DNS Servers",
+          "value": "10.20.0.53"
+        }
+      ]
+    }
+  ]
+}

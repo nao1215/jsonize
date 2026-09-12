@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C; the host name in
+  the banner was replaced with a name of the same width
+description: >-
+  An interval run of the device report alone with -t. Each sample opens
+  with its own time, so the times are what tell the samples apart.
+os: linux
+args: ["-d", "-t", "nvme0n1", "1", "2"]

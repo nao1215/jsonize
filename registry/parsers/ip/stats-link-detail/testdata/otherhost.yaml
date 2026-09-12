@@ -1,0 +1,10 @@
+source: >-
+  two blocks of `ip -s -s link` captured on Ubuntu 26.04 (iproute2
+  6.19.0) with LC_ALL=C; the hardware address was replaced
+description: >-
+  One interface whose kernel counts frames addressed to another host and
+  one whose kernel does not. The column is there in the first and absent
+  in the second, and each block is read by the headings it prints rather
+  than by a fixed set of columns.
+os: linux
+args: ["-s", "-s", "link"]

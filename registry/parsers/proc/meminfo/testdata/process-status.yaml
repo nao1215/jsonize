@@ -1,3 +1,4 @@
+source: captured on Ubuntu 26.04 (Linux 7.0) with LC_ALL=C from /proc/self/status
 description: |
   /proc/<pid>/status is labelled the same way and reports several of its
   counters in kilobytes, but its lines are not all labelled counters:

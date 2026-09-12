@@ -1,0 +1,8 @@
+description: >-
+  The same five columns printed by lsblk -m -b, with SIZE as an exact byte
+  count. This definition reports SIZE as the text lsblk printed, so reading
+  a count here would hand back a string that looks like a number; the
+  signature asks for a size that carries its unit.
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; nothing replaced
+os: linux
+expect_error: 'does not describe this input'

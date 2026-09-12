@@ -1,0 +1,8 @@
+source: written by hand from the +noall +answer capture beside it
+description: >-
+  The records with one line of the long form left under them, which is
+  what a text assembled from two runs, or a capture of a command that
+  was not +noall +answer, looks like. Every line of this format is a
+  record, so the text is refused rather than read down to the line that
+  is not one.
+expect_error: "does not describe this input"
