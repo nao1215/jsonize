@@ -122,13 +122,21 @@ Capture one per thing the definition claims, including the shapes it
 claims to refuse, so that the file beside the definition says what the
 definition means rather than what happened to pass.
 
+The base name of the `.txt` says what the case is (`interval.txt`,
+`one-snap.txt`) or which implementation the text came from
+(`lsof-4.95.txt`), whichever tells the next reader why the case is there.
+
 The `.yaml` file documents the capture and feeds the selection test:
 
 ```yaml
+description: one process named on the command line, with a deleted file open
 source: captured on Ubuntu 24.04 (lsof 4.95) with LC_ALL=C; user names replaced
 os: linux
 args: [-p, "1234"]
 ```
+
+`description` is optional and says in one line which of the definition's
+claims this case is there for.
 
 `source` is required, and what belongs in it is how the text came to
 exist: the command line, the implementation and its version, the
@@ -219,7 +227,9 @@ be null. Read it the way a consumer would. A key you meant to be always
 there that shows as optional, or a number that shows as a string, is the
 definition saying something other than what you meant. In the official
 registry `make registry-update-schema` writes it to
-`registry/schemas/lsof/default.json`, where it is published.
+`registry/schemas/lsof/default.json`, where it is published. Run it when
+a definition is added or its output changes; a change that only adds a
+fixture leaves the schema as it was.
 
 ## 7. Check it against the decoys
 

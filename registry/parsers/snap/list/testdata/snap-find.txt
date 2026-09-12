@@ -1,0 +1,6 @@
+Name                             Version              Publisher         Notes  Summary
+hello-world                      6.4                  canonical**       -      The 'hello-world' of snaps
+hello-world-java-flavian         0                    iot-mraa-upm      -      A java example
+hello-world-lc                   0.1                  lolachangmwc2017  -      Just testing
+hello-world-java-maven           0                    iot-mraa-upm      -      A java with maven example
+hello-world-jbennett             0.1                  jamiebennett      -      Just testing
