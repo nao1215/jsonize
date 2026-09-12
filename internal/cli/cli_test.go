@@ -1237,8 +1237,13 @@ func TestMergedExecEnv(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got := strings.Join(mergedExecEnv(reg, "c"), ","); got != "TZ=UTC" {
-		t.Errorf("mergedExecEnv = %q", got)
+	if got := strings.Join(execEnv(reg, "c", ""), ","); got != "TZ=UTC" {
+		t.Errorf("execEnv = %q", got)
+	}
+	// A variant named on the command line is the definition that reads
+	// the output, so its entries apply as they stand.
+	if got := strings.Join(execEnv(reg, "c", "b"), ","); got != "TZ=UTC,X=2" {
+		t.Errorf("execEnv for the variant = %q", got)
 	}
 }
 

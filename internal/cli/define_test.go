@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -110,5 +112,46 @@ func TestGenericDefinitionsAreNamedOrNothing(t *testing.T) {
 	h.json(&obj)
 	if a, ok := obj["a"].(map[string]any); !ok || a["k"] != "1" {
 		t.Errorf("ini = %v", obj)
+	}
+}
+
+// A definition given on the command line is the whole of what is
+// needed, so the registries are not read: a registry that cannot be
+// loaded does not stand in the way of a definition that does not use
+// it, and the definition's own exec.env is what jz run applies.
+func TestDefineDoesNotReadTheRegistries(t *testing.T) {
+	h := newHarness(t)
+	dir := filepath.Join(h.home, "reg")
+	writeRegistry(t, dir, map[string]string{"registry.yaml": "format: 999\n"})
+	h.registryPath = dir
+	// The registry is refused where it is read.
+	if code := h.pipe("a,b\n1,2\n"); code != ExitRegistry {
+		t.Fatalf("without --define: %d %s", code, h.stderr.String())
+	}
+	if code := h.pipe("a,b\n1,2\n", "--define", "parse: {type: csv}"); code != ExitOK || h.stderr.Len() != 0 {
+		t.Fatalf("--define: %d %s", code, h.stderr.String())
+	}
+	if rows := h.rows(); len(rows) != 1 || rows[0]["b"] != "2" {
+		t.Errorf("rows = %v", rows)
+	}
+	if code := h.pipe("a,b\n1,2\n", "--define", "parse: {type: csv}", "--stream"); code != ExitOK || len(h.records()) != 1 {
+		t.Errorf("--define --stream: %d %s", code, h.stderr.String())
+	}
+	// --columns names the columns of the definition given, and needs no
+	// registry either.
+	if code := h.pipe("1,2\n", "--define", "parse: {type: csv, header: {none: true}}", "--columns", "x,y"); code != ExitOK || h.rows()[0]["y"] != "2" {
+		t.Errorf("--define --columns: %d %s %s", code, h.stdout.String(), h.stderr.String())
+	}
+	if runtime.GOOS == "windows" {
+		return
+	}
+	if code := h.run("run", "--define", "parse: {type: kv}\nexec: {env: {JZ_INLINE: given}}", "--", "sh", "-c", "echo x=$JZ_INLINE"); code != ExitOK {
+		t.Fatalf("run --define: %d %s", code, h.stderr.String())
+	}
+	if rows := h.rows(); len(rows) != 1 || rows[0]["value"] != "given" {
+		t.Errorf("exec.env of the definition given: %v", rows)
+	}
+	if code := h.run("run", "--define", "parse: {type: kv}", "--stream", "--", "sh", "-c", "echo x=1; echo y=2"); code != ExitOK || len(h.records()) != 2 {
+		t.Errorf("run --define --stream: %d %s", code, h.stderr.String())
 	}
 }

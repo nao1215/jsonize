@@ -727,34 +727,46 @@ func Candidates(reg *registry.Registry, ctx Context) []*registry.Entry {
 	return out
 }
 
-// Window returns how many leading lines a caller has to hold before a
-// selection can be trusted: the largest window any candidate signature
-// looks at. Reading fewer would let a definition through whose none[]
-// expression sits further down, which is a false accept rather than a
-// slower answer.
+// Window returns how many leading records a caller has to hold before a
+// selection can be trusted, and what ends a record: the largest window
+// any candidate signature looks at, over the lines a signature sees
+// (the blank lines before the text are not among them, see
+// signatureWindow). Reading fewer would let a definition through whose
+// none[] expression sits further down, which is a false accept rather
+// than a slower answer.
 //
-// parser scopes the candidates the way Select does, so naming a command
+// ctx scopes the candidates the way Candidates does, so naming a command
 // (which `jz run` always does) usually brings this down to the default
-// twenty lines.
-func Window(reg *registry.Registry, parser string) int {
-	candidates := reg.Entries()
-	if parser != "" {
-		candidates = reg.Variants(parser)
+// twenty lines, and naming a variant with no signature to one record:
+// there is nothing to wait for, and one record says whether there is
+// any text. Records end with NUL when every candidate reads
+// NUL-separated output, since such output may hold no newline at all.
+func Window(reg *registry.Registry, ctx Context) (lines int, sep byte) {
+	candidates := Candidates(reg, ctx)
+	if ctx.Parser == "" {
+		candidates = reg.Entries()
 	}
-	n := 1
+	n := 0
+	nul := len(candidates) > 0
 	for _, e := range candidates {
+		if e.Def.Input.Separator() != 0 {
+			nul = false
+		}
+		if e.Def.Detect.Signature.IsZero() {
+			continue
+		}
 		w := e.Def.Detect.Signature.Window
 		if w == 0 {
 			w = definition.DefaultSignatureWindow
 		}
-		if w > n {
-			n = w
-		}
+		n = max(n, w)
 	}
-	if n > definition.MaxSignatureWindow {
-		n = definition.MaxSignatureWindow
+	n = min(max(n, 1), definition.MaxSignatureWindow)
+	sep = '\n'
+	if nul {
+		sep = 0
 	}
-	return n
+	return n, sep
 }
 
 // signatureWindow returns the leading lines of input, which is all a
@@ -763,10 +775,12 @@ func signatureWindow(input []byte) []string {
 	if len(input) == 0 {
 		return nil
 	}
-	input = bytes.TrimPrefix(input, []byte{0xEF, 0xBB, 0xBF})
 	// A command that keeps colouring its output through a pipe would
-	// otherwise hide its own format behind the escapes.
+	// otherwise hide its own format behind the escapes. They come off
+	// before the byte order mark, the order the engine prepares a record
+	// in, so that the two see the same first line.
 	input = convert.StripANSI(input)
+	input = bytes.TrimPrefix(input, []byte{0xEF, 0xBB, 0xBF})
 	var lines []string
 	for len(input) > 0 && len(lines) < definition.MaxSignatureWindow {
 		i := bytes.IndexByte(input, '\n')
@@ -856,11 +870,17 @@ func short(re *regexp.Regexp) string {
 }
 
 // matchArgs applies any/all/none. Bundled short flags such as -hT count
-// as containing -h and -T. excluded is the argument listed under none that
-// failed it, if that is what did.
+// as containing -h and -T. A "--" ends the options: what follows it is
+// an operand whatever it looks like, and says nothing about the format,
+// so `ls -- -l` lists a file named -l rather than the long listing.
+// excluded is the argument listed under none that failed it, if that is
+// what did.
 func matchArgs(a *definition.ArgsMatch, args []string) (reason, excluded string, ok bool) {
 	set := map[string]bool{}
 	for _, arg := range args {
+		if arg == "--" {
+			break
+		}
 		set[arg] = true
 		if len(arg) > 2 && arg[0] == '-' && arg[1] != '-' {
 			for _, r := range arg[1:] {
