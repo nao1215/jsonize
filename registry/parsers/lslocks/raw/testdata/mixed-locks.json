@@ -1,0 +1,68 @@
+[
+  {
+    "command": "plasmashell",
+    "pid": 10541,
+    "type": "POSIX",
+    "size": "204K",
+    "mode": "READ",
+    "m": false,
+    "start": 1073741826,
+    "end": 1073742335,
+    "path": "/home/user01/.local/share/kactivitymanagerd/resources/database"
+  },
+  {
+    "command": "plasmashell",
+    "pid": 10541,
+    "type": "POSIX",
+    "size": "32K",
+    "mode": "READ",
+    "m": false,
+    "start": 128,
+    "end": 128,
+    "path": "/home/user01/.local/share/kactivitymanagerd/resources/database-shm"
+  },
+  {
+    "command": "containerd",
+    "pid": 5770,
+    "type": "FLOCK",
+    "size": null,
+    "mode": "WRITE",
+    "m": false,
+    "start": 0,
+    "end": 0,
+    "path": null
+  },
+  {
+    "command": "containerd",
+    "pid": 2369,
+    "type": "FLOCK",
+    "size": null,
+    "mode": "WRITE",
+    "m": false,
+    "start": 0,
+    "end": 0,
+    "path": "/..."
+  },
+  {
+    "command": "codex",
+    "pid": 22574,
+    "type": "POSIX",
+    "size": "28K",
+    "mode": "READ",
+    "m": false,
+    "start": 1073741826,
+    "end": 1073742335,
+    "path": "/home/user01/.codex/queue_1.sqlite"
+  },
+  {
+    "command": "codex",
+    "pid": 22574,
+    "type": "POSIX",
+    "size": "32K",
+    "mode": "READ",
+    "m": false,
+    "start": 128,
+    "end": 128,
+    "path": "/home/user01/.codex/queue_1.sqlite-shm"
+  }
+]

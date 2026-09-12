@@ -2,7 +2,8 @@
 # device with no backing file, so cells are cut at the header offsets
 # rather than on whitespace. `losetup -a` prints one line per device in a
 # different shape, and `losetup --raw` prints the same columns separated
-# by single spaces instead of padded; neither is accepted here.
+# by single spaces instead of padded; the first is read by
+# losetup/associations and the second by losetup/raw.
 format: 1
 command: losetup
 variant: linux
@@ -18,7 +19,7 @@ detect:
     all:
       - '^NAME[ \t]+SIZELIMIT[ \t]+OFFSET[ \t]+AUTOCLEAR[ \t]+RO[ \t]+BACK-FILE[ \t]+DIO[ \t]+LOG-SEC[ \t]*$'
       # The header is lined up with the columns. --raw prints the same
-      # words one space apart and the rows unaligned, which this cannot cut.
+      # words one space apart and the rows unaligned, which losetup/raw reads.
       - '^NAME(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
 parse:
   type: table

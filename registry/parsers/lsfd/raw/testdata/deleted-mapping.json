@@ -1,0 +1,38 @@
+[
+  {
+    "command": "dbus-daemon",
+    "pid": 9743,
+    "user": "alice",
+    "assoc": "mem",
+    "xmode": "????--",
+    "type": "ERROR",
+    "source": "stat:EPERM",
+    "mntid": null,
+    "inode": null,
+    "name": "/usr/lib/x86_64-linux-gnu/libm.so.6\\x20(deleted)"
+  },
+  {
+    "command": "dbus-daemon",
+    "pid": 9743,
+    "user": "alice",
+    "assoc": "exe",
+    "xmode": "------",
+    "type": "REG",
+    "source": "nvme0n1p2",
+    "mntid": 0,
+    "inode": 28967328,
+    "name": "/usr/bin/dbus-daemon"
+  },
+  {
+    "command": "dbus-daemon",
+    "pid": 9743,
+    "user": "alice",
+    "assoc": "cwd",
+    "xmode": "------",
+    "type": "DIR",
+    "source": "nvme0n1p2",
+    "mntid": 0,
+    "inode": 100663298,
+    "name": "/home/alice"
+  }
+]

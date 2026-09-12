@@ -557,8 +557,11 @@ scenarios:
   # util-linux -r prints the columns lsblk -f lines up, one space apart
   # and not lined up. Cut where the header words start, it put the
   # version under FSTYPE's neighbour and the use percentage under UUID.
-  # Captured output, since a runner may have no block devices to list.
-  - name: the unaligned -r form of a util-linux table is refused, not cut by the header
+  # Column sets that have a raw variant of their own are read there; this
+  # one has none, and being unreadable is the answer rather than a table
+  # cut in the wrong places. Captured output, since a runner may have no
+  # block devices to list.
+  - name: a -r form with no raw variant is refused, not cut by the header
     only: {os: linux}
     env:
       PATH: "${workdir}/bin:${env:PATH}"

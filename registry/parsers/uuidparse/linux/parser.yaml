@@ -17,7 +17,7 @@ detect:
     all:
       - '\AUUID[ \t]+VARIANT[ \t]+TYPE[ \t]+TIME[ \t]*$'
       # The header is lined up with the columns. -r prints the same words
-      # one space apart and the rows unaligned, which this cannot cut.
+      # one space apart and the rows unaligned, which uuidparse/raw reads.
       - '\AUUID(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
 parse:
   type: table

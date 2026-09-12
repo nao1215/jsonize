@@ -3,7 +3,8 @@
 # whose header starts much further right), so cells are cut at the header
 # offsets, which moves a wide right-aligned number back to its own column.
 # `lsipc --raw` prints the same columns separated by single spaces with
-# the spaces inside DESCRIPTION escaped, which the signature rejects.
+# the spaces inside DESCRIPTION escaped, which the signature rejects and
+# lsipc/raw reads.
 format: 1
 command: lsipc
 variant: linux
@@ -19,7 +20,7 @@ detect:
     all:
       - '^RESOURCE[ \t]+DESCRIPTION[ \t]+LIMIT[ \t]+USED[ \t]+USE%[ \t]*$'
       # The header is lined up with the columns. -r prints the same words
-      # one space apart and the rows unaligned, which this cannot cut.
+      # one space apart and the rows unaligned, which lsipc/raw reads.
       - '^RESOURCE(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
 parse:
   type: table

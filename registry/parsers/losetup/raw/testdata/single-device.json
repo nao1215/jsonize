@@ -1,0 +1,12 @@
+[
+  {
+    "name": "/dev/loop0",
+    "sizelimit": 0,
+    "offset": 0,
+    "autoclear": true,
+    "ro": true,
+    "back_file": "/var/lib/snapd/snaps/bare_5.snap",
+    "dio": false,
+    "log_sec": 512
+  }
+]

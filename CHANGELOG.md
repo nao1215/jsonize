@@ -258,6 +258,15 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- The unaligned `-r` form of six more util-linux tables, which was
+  refused rather than cut in the wrong places: `lsipc/raw`,
+  `lslocks/raw`, `lslogins/raw`, `lsfd/raw`, `uuidparse/raw` and
+  `losetup/raw` (reached by `--raw`, since losetup reads `-r` as
+  `--read-only`). Each row carries every separator, so a cell the
+  padded form leaves blank is null here too, and a space inside a value
+  stays the `\x20` util-linux printed rather than being turned back into
+  a space that would put two different paths under one name.
+
 - A coverage page on the site says, for the commands asked about most,
   which forms of their output are read, which are reached only by naming
   the parser, and which are not read and why, together with what jz and

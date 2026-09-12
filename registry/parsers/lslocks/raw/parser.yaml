@@ -1,0 +1,46 @@
+# `lslocks -r` prints the same columns as the default table with one
+# space between cells instead of padding them. A lock on a file whose
+# size lslocks cannot read leaves SIZE empty, and a lock the kernel
+# reports without a path leaves PATH empty; the separators for those
+# cells are still printed, so every row carries nine of them.
+#
+# A space inside PATH is printed as \x20, which is what keeps a path in
+# one cell. jz keeps the value as lslocks wrote it: the line does not
+# say which backslashes lslocks put there, so undoing the escape would
+# give the same path to two different files.
+format: 1
+command: lslocks
+variant: raw
+description: lslocks -r, the lock columns one space apart
+metadata:
+  tags: [linux, file, process, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/lslocks.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-r", "--raw"]
+  signature:
+    all:
+      # The header opens the output and its words stand one space apart.
+      # The default output pads them over the columns, which
+      # lslocks/linux cuts at the header offsets.
+      - '\ACOMMAND PID TYPE SIZE MODE M START END PATH[ \t]*$'
+parse:
+  type: table
+  split: delimiter
+  delimiter: " "
+# SIZE is rounded and unit-suffixed by default ("100.4M") and exact with
+# --bytes, so it stays as printed. PID is -1 and COMMAND is "(undefined)"
+# for an open file description lock, which belongs to no process.
+fields:
+  command: {required: true}
+  pid: {type: int, required: true}
+  type: {required: true}
+  size: {null_if: [""]}
+  mode: {null_if: [""]}
+  m: {type: bool}
+  start: {type: int}
+  end: {type: int}
+  path: {null_if: [""]}

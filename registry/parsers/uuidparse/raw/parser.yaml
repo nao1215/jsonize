@@ -1,0 +1,37 @@
+# `uuidparse -r` prints the same columns as the default table with one
+# space between cells instead of padding them. A UUID that encodes
+# neither a type nor a time leaves TYPE and TIME empty; the separators
+# for those cells are still printed, so every row carries three of them.
+#
+# The space between the date and the clock in TIME is printed as \x20,
+# which is what keeps a timestamp in one cell. jz keeps the value as
+# uuidparse wrote it, so the same UUID reads as "2023-10-20\x2014:54:20"
+# here and as "2023-10-20 14:54:20" under uuidparse/linux.
+format: 1
+command: uuidparse
+variant: raw
+description: uuidparse -r, the UUID columns one space apart
+metadata:
+  tags: [linux, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/uuidparse.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-r", "--raw"]
+  signature:
+    all:
+      # The header opens the output and its words stand one space apart.
+      # The default output pads them over the columns, which
+      # uuidparse/linux cuts at the header words.
+      - '\AUUID VARIANT TYPE TIME[ \t]*$'
+parse:
+  type: table
+  split: delimiter
+  delimiter: " "
+fields:
+  uuid: {required: true}
+  variant: {required: true}
+  type: {null_if: [""]}
+  time: {null_if: [""]}

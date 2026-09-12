@@ -2,8 +2,8 @@
 # that has no password entry, has never logged in or carries no comment,
 # and GECOS itself contains spaces and commas, so cells are cut at the
 # header offsets rather than on whitespace. `lslogins --raw` prints the
-# same columns separated by single spaces instead of padded, which the
-# signature rejects.
+# same columns separated by single spaces instead of padded, which
+# lslogins/raw reads.
 format: 1
 command: lslogins
 variant: linux
@@ -20,7 +20,7 @@ detect:
       - '^[ \t]*UID[ \t]+USER[ \t]+PROC[ \t]+PWD-LOCK[ \t]+PWD-DENY[ \t]+LAST-LOGIN[ \t]+GECOS[ \t]*$'
       # The header is lined up with the columns: UID sits over right-aligned
       # numbers. -r prints the same words one space apart and the rows
-      # unaligned, which this cannot cut.
+      # unaligned, which lslogins/raw reads.
       - '^(?:[ \t]+UID[ \t]|UID(?:[ \t][^\n]*\S)?[ \t]{2,}\S)'
 parse:
   type: table

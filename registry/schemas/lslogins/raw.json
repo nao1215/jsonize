@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lslogins/raw.json",
+  "title": "lslogins/raw",
+  "description": "lslogins -r, the account columns one space apart",
+  "x-jsonize": {
+    "definition": "lslogins/raw",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "gecos": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "last_login": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "proc": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "pwd_deny": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "pwd_lock": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "uid": {
+        "type": "integer"
+      },
+      "user": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

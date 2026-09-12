@@ -1,0 +1,4 @@
+description: a root account that has logged in and a user account, with the empty password and login cells printed as separators
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; user names replaced
+os: linux
+args: [-r]
