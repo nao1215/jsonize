@@ -799,6 +799,16 @@ automatic detection all stop seeing it. Shadowing replaces a definition
 and needs a whole one written under the same name; disabling takes one
 out. An entry that names nothing is a warning, not an error.
 
+What goes wrong inside a registry falls into two kinds. One file that
+does not parse, is too large, sits at a path that disagrees with the
+command and variant inside it, or cannot be read at all is named on
+standard error and skipped; so is one directory jz has no permission on.
+Everything beside it still loads, so a stray file cannot take the
+built-in parsers down with it. A registry that is not the one you meant
+is refused whole and jz exits 5: its directory is not there or cannot be
+read, its `registry.yaml` cannot be read or names another format, or its
+`disable` list is not written as names.
+
 The order settles more than definitions of the same name. When automatic
 detection is left with definitions of different commands that all fit the
 text, the one from the earlier registry is the answer, because that order

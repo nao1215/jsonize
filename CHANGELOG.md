@@ -454,6 +454,23 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- One definition file jz had no permission to read took the whole
+  registry down, the built-in parsers with it, so `jz run df` exited 5
+  over an unrelated file's mode. A file that cannot be read, and a
+  directory jz cannot list, are now named on standard error and skipped,
+  the way a file that does not parse or is over the size bound already
+  was. What is refused whole stays the registry that is not the one you
+  meant: a root that is not there or cannot be read, a manifest that
+  cannot be read or names another format, a `disable` list not written as
+  names.
+- A registry whose `parsers` is a regular file rather than a directory
+  loaded as an empty one without saying anything, which left its author a
+  registry that changed nothing and no reason why. It is reported like
+  any other thing in a registry that cannot be read.
+- An empty `parser.yaml` was reported as "format 0 is not supported by
+  this jsonize", naming a version nobody wrote and telling the reader to
+  update jz. It says the file is empty, and a file holding only comments
+  says it holds no definition.
 - A nested object's sub-field ignored `unescape.when`: the object was
   read with the groups of the line's pattern, where the group named is
   one of the object's own. `!a\nb` read with `(?P<flag>!)?(?P<name>.*)`
