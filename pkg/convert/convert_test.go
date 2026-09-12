@@ -353,6 +353,15 @@ func TestDurationRefuses(t *testing.T) {
 		"4:",           // an empty last part
 		"Jan  5 10:11", // a date
 		"3 days 4:11",  // the comma is what says the days ended
+		// A part after the first is a minute or a second of a clock, so
+		// it is 0 to 59. The first part carries the length and may be
+		// any number of hours or minutes.
+		"1:60",
+		"1:99",
+		"1:60:00",
+		"1:00:60",
+		"1-00:60:00",
+		"13 days, 4:60",
 		// The days before the dash are a count, printed as digits and
 		// nothing else: Go's number syntax is not what a command prints.
 		"1_0-01:02:03",
