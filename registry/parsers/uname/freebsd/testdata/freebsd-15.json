@@ -1,0 +1,8 @@
+{
+  "kernel_name": "FreeBSD",
+  "node_name": "freebsd",
+  "kernel_release": "15.1-RELEASE-p3",
+  "kernel_version": "FreeBSD 15.1-RELEASE-p3 releng/15.1-n283611-88e7371d9dc2",
+  "kernel_config": "GENERIC",
+  "machine": "amd64"
+}

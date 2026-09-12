@@ -1,0 +1,4 @@
+description: the same listing narrowed to two filesystem types, which leaves out the rows whose device is not a path
+source: "df -t ufs,zfs on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C"
+os: freebsd
+args: [-t, "ufs,zfs"]

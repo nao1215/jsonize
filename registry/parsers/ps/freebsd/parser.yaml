@@ -1,0 +1,34 @@
+# The columns FreeBSD ps prints for a listing: PID TT STAT TIME COMMAND.
+# macOS and the POSIX form print PID TTY TIME CMD, with no state column,
+# and the GNU long form is different again, so the header names this one
+# on its own.
+format: 1
+command: ps
+variant: freebsd
+description: FreeBSD ps default columns (PID TT STAT TIME COMMAND)
+metadata:
+  tags: [freebsd, bsd, process]
+  compatible: [FreeBSD ps]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?ps(1)
+detect:
+  os: [freebsd]
+  signature:
+    all:
+      - '\A\s*PID[ \t]+TT[ \t]+STAT[ \t]+TIME[ \t]+COMMAND\s*$'
+parse:
+  type: table
+  header:
+    # The heading is TT; the key is the one every other ps definition
+    # uses for the same column.
+    rename: {tt: tty}
+  # Everything after the fourth column is the command, spaces and all.
+  max_fields: 5
+fields:
+  pid: {type: int, required: true}
+  # A process with no controlling terminal prints "-".
+  tty: {null_if: ["-"]}
+  stat: {required: true}
+  # Cumulative CPU time, minutes and seconds with hundredths.
+  time: {type: duration, layout: mm:ss, required: true}
+  command: {required: true}

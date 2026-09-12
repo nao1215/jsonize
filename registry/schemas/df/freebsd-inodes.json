@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/freebsd-inodes.json",
+  "title": "df/freebsd-inodes",
+  "description": "FreeBSD df -i, the block columns and the inode counts",
+  "x-jsonize": {
+    "definition": "df/freebsd-inodes",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "1k_blocks": {
+        "type": "integer"
+      },
+      "used": {
+        "type": "integer"
+      },
+      "available": {
+        "type": "integer"
+      },
+      "capacity_percent": {
+        "type": "integer"
+      },
+      "iused": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "ifree": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "iused_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "1k_blocks",
+      "used",
+      "available",
+      "capacity_percent",
+      "iused",
+      "ifree",
+      "iused_percent",
+      "mounted_on"
+    ]
+  }
+}

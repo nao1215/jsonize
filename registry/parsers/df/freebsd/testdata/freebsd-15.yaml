@@ -1,0 +1,3 @@
+description: a root on ZFS, where every dataset name is wider than the column the header drew and devfs reports a single block
+source: "df on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C"
+os: freebsd

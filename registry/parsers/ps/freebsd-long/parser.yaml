@@ -1,0 +1,42 @@
+# FreeBSD ps -l. The GNU long form prints F S UID PID PPID C PRI NI ADDR
+# SZ WCHAN TTY TIME CMD; this one has no flags or state column of its
+# own, names the wait channel MWCHAN, and carries VSZ and RSS instead of
+# a single size.
+format: 1
+command: ps
+variant: freebsd-long
+description: FreeBSD ps -l, the long format
+metadata:
+  tags: [freebsd, bsd, process]
+  compatible: [FreeBSD ps]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?ps(1)
+detect:
+  os: [freebsd]
+  args:
+    any: ["-l"]
+  signature:
+    all:
+      - '\A\s*UID[ \t]+PID[ \t]+PPID[ \t]+C[ \t]+PRI[ \t]+NI[ \t]+VSZ[ \t]+RSS[ \t]+MWCHAN[ \t]+STAT[ \t]+TT[ \t]+TIME[ \t]+COMMAND\s*$'
+parse:
+  type: table
+  header:
+    rename: {tt: tty}
+  # Everything after the twelfth column is the command, spaces and all.
+  max_fields: 13
+fields:
+  uid: {type: int, required: true}
+  pid: {type: int, required: true}
+  ppid: {type: int, required: true}
+  c: {type: int}
+  # A kernel thread runs at a negative priority.
+  pri: {type: int}
+  ni: {type: int}
+  vsz: {type: int}
+  rss: {type: int}
+  # The wait channel is "-" for a process that is not asleep.
+  mwchan: {null_if: ["-"]}
+  stat: {required: true}
+  tty: {null_if: ["-"]}
+  time: {type: duration, layout: mm:ss, required: true}
+  command: {required: true}

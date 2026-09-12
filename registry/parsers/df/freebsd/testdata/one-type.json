@@ -1,0 +1,90 @@
+[
+  {
+    "filesystem": "zroot/ROOT/default",
+    "1k_blocks": 207712072,
+    "used": 3313372,
+    "available": 204398700,
+    "capacity_percent": 2,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "zroot/var/crash",
+    "1k_blocks": 204398804,
+    "used": 104,
+    "available": 204398700,
+    "capacity_percent": 0,
+    "mounted_on": "/var/crash"
+  },
+  {
+    "filesystem": "zroot/tmp",
+    "1k_blocks": 204398848,
+    "used": 148,
+    "available": 204398700,
+    "capacity_percent": 0,
+    "mounted_on": "/tmp"
+  },
+  {
+    "filesystem": "zroot/usr/ports",
+    "1k_blocks": 204399120,
+    "used": 420,
+    "available": 204398700,
+    "capacity_percent": 0,
+    "mounted_on": "/usr/ports"
+  },
+  {
+    "filesystem": "zroot/home",
+    "1k_blocks": 204426944,
+    "used": 28244,
+    "available": 204398700,
+    "capacity_percent": 0,
+    "mounted_on": "/home"
+  },
+  {
+    "filesystem": "zroot/var/tmp",
+    "1k_blocks": 204399124,
+    "used": 424,
+    "available": 204398700,
+    "capacity_percent": 0,
+    "mounted_on": "/var/tmp"
+  },
+  {
+    "filesystem": "zroot/var/mail",
+    "1k_blocks": 204399120,
+    "used": 420,
+    "available": 204398700,
+    "capacity_percent": 0,
+    "mounted_on": "/var/mail"
+  },
+  {
+    "filesystem": "zroot/var/audit",
+    "1k_blocks": 204399128,
+    "used": 428,
+    "available": 204398700,
+    "capacity_percent": 0,
+    "mounted_on": "/var/audit"
+  },
+  {
+    "filesystem": "zroot/usr/src",
+    "1k_blocks": 204399120,
+    "used": 420,
+    "available": 204398700,
+    "capacity_percent": 0,
+    "mounted_on": "/usr/src"
+  },
+  {
+    "filesystem": "zroot/usr/obj",
+    "1k_blocks": 204399120,
+    "used": 420,
+    "available": 204398700,
+    "capacity_percent": 0,
+    "mounted_on": "/usr/obj"
+  },
+  {
+    "filesystem": "zroot/var/log",
+    "1k_blocks": 204398924,
+    "used": 224,
+    "available": 204398700,
+    "capacity_percent": 0,
+    "mounted_on": "/var/log"
+  }
+]

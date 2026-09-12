@@ -1,0 +1,205 @@
+[
+  {
+    "pid": 0,
+    "tty": null,
+    "stat": "DLs",
+    "time": 0.23,
+    "command": "[kernel]"
+  },
+  {
+    "pid": 1,
+    "tty": null,
+    "stat": "SLs",
+    "time": 0.05,
+    "command": "/sbin/init"
+  },
+  {
+    "pid": 2,
+    "tty": null,
+    "stat": "WL",
+    "time": 0.03,
+    "command": "[clock]"
+  },
+  {
+    "pid": 3,
+    "tty": null,
+    "stat": "DL",
+    "time": 0,
+    "command": "[crypto]"
+  },
+  {
+    "pid": 4,
+    "tty": null,
+    "stat": "DL",
+    "time": 0.22,
+    "command": "[cam]"
+  },
+  {
+    "pid": 5,
+    "tty": null,
+    "stat": "DL",
+    "time": 0,
+    "command": "[busdma]"
+  },
+  {
+    "pid": 6,
+    "tty": null,
+    "stat": "DL",
+    "time": 0.49,
+    "command": "[zfskern]"
+  },
+  {
+    "pid": 7,
+    "tty": null,
+    "stat": "DL",
+    "time": 0,
+    "command": "[rand_harvestq]"
+  },
+  {
+    "pid": 8,
+    "tty": null,
+    "stat": "DL",
+    "time": 0,
+    "command": "[pagedaemon]"
+  },
+  {
+    "pid": 9,
+    "tty": null,
+    "stat": "DL",
+    "time": 0,
+    "command": "[vmdaemon]"
+  },
+  {
+    "pid": 10,
+    "tty": null,
+    "stat": "DL",
+    "time": 0,
+    "command": "[audit]"
+  },
+  {
+    "pid": 11,
+    "tty": null,
+    "stat": "RNL",
+    "time": 45.79,
+    "command": "[idle]"
+  },
+  {
+    "pid": 12,
+    "tty": null,
+    "stat": "WL",
+    "time": 0.17,
+    "command": "[intr]"
+  },
+  {
+    "pid": 13,
+    "tty": null,
+    "stat": "DL",
+    "time": 0.01,
+    "command": "[geom]"
+  },
+  {
+    "pid": 14,
+    "tty": null,
+    "stat": "DL",
+    "time": 0,
+    "command": "[usb]"
+  },
+  {
+    "pid": 15,
+    "tty": null,
+    "stat": "DL",
+    "time": 0,
+    "command": "[bufdaemon]"
+  },
+  {
+    "pid": 16,
+    "tty": null,
+    "stat": "DL",
+    "time": 0,
+    "command": "[vnlru]"
+  },
+  {
+    "pid": 17,
+    "tty": null,
+    "stat": "DL",
+    "time": 0,
+    "command": "[syncer]"
+  },
+  {
+    "pid": 750,
+    "tty": null,
+    "stat": "Ss",
+    "time": 0,
+    "command": "dhclient: system.syslog (dhclient)"
+  },
+  {
+    "pid": 753,
+    "tty": null,
+    "stat": "Ss",
+    "time": 0,
+    "command": "dhclient: vtnet0 [priv] (dhclient)"
+  },
+  {
+    "pid": 836,
+    "tty": null,
+    "stat": "SCs",
+    "time": 0,
+    "command": "dhclient: vtnet0 (dhclient)"
+  },
+  {
+    "pid": 837,
+    "tty": null,
+    "stat": "Ss",
+    "time": 0,
+    "command": "/sbin/devd"
+  },
+  {
+    "pid": 1129,
+    "tty": null,
+    "stat": "SCs",
+    "time": 0,
+    "command": "/usr/sbin/syslogd -s"
+  },
+  {
+    "pid": 1132,
+    "tty": null,
+    "stat": "S",
+    "time": 0,
+    "command": "syslogd: syslogd.casper (syslogd)"
+  },
+  {
+    "pid": 1133,
+    "tty": null,
+    "stat": "Ss",
+    "time": 0,
+    "command": "syslogd: system.net (syslogd)"
+  },
+  {
+    "pid": 1255,
+    "tty": null,
+    "stat": "Ss",
+    "time": 0.01,
+    "command": "/usr/sbin/ntpd -p /var/db/ntp/ntpd.pid -c /etc/ntp.conf -f /var/db/ntp/ntpd.drift"
+  },
+  {
+    "pid": 1309,
+    "tty": null,
+    "stat": "Ss",
+    "time": 0,
+    "command": "/usr/sbin/cron -s"
+  },
+  {
+    "pid": 1331,
+    "tty": null,
+    "stat": "Ss",
+    "time": 0.02,
+    "command": "sshd: /usr/sbin/sshd [listener] 0 of 10-100 startups (sshd)"
+  },
+  {
+    "pid": 1375,
+    "tty": null,
+    "stat": "Ss",
+    "time": 0,
+    "command": "logger: system.syslog (logger)"
+  }
+]

@@ -270,6 +270,18 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- The formats FreeBSD prints where macOS and GNU print something else,
+  all of which were unreadable: `df/freebsd`, `df/freebsd-human` and
+  `df/freebsd-inodes` (1024-byte blocks, `Avail` and `Capacity` where GNU
+  writes `Available` and `Use%`, and no inode columns unless `-i` asks),
+  `uname/freebsd` (which names the release twice, once on its own and
+  once inside the kernel version, and carries the kernel configuration),
+  `ps/freebsd` (`PID TT STAT TIME COMMAND`) and `ps/freebsd-long` (`ps
+  -l`, which names the wait channel `MWCHAN` and carries VSZ and RSS
+  where the GNU long format carries one size). Each fixture was captured
+  on a FreeBSD 15.1 machine, and the scenarios that land on them run on
+  one in CI.
+
 - The end-to-end suite runs on FreeBSD as well, in a virtual machine on
   the Linux runner, since GitHub hosts no BSD runner. Eight definitions
   say they read what a command prints there and five had never been run

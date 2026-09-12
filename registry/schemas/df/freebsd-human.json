@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/freebsd-human.json",
+  "title": "df/freebsd-human",
+  "description": "FreeBSD df -h, sizes rounded with their unit",
+  "x-jsonize": {
+    "definition": "df/freebsd-human",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "used": {
+        "type": "string"
+      },
+      "available": {
+        "type": "string"
+      },
+      "capacity_percent": {
+        "type": "integer"
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "size",
+      "used",
+      "available",
+      "capacity_percent",
+      "mounted_on"
+    ]
+  }
+}

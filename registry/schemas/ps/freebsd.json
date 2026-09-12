@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ps/freebsd.json",
+  "title": "ps/freebsd",
+  "description": "FreeBSD ps default columns (PID TT STAT TIME COMMAND)",
+  "x-jsonize": {
+    "definition": "ps/freebsd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "stat": {
+        "type": "string"
+      },
+      "time": {
+        "type": "number"
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/freebsd.json",
+  "title": "df/freebsd",
+  "description": "FreeBSD df default output (1024-byte blocks)",
+  "x-jsonize": {
+    "definition": "df/freebsd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "filesystem": {
+        "type": "string"
+      },
+      "1k_blocks": {
+        "type": "integer"
+      },
+      "used": {
+        "type": "integer"
+      },
+      "available": {
+        "type": "integer"
+      },
+      "capacity_percent": {
+        "type": "integer"
+      },
+      "mounted_on": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "filesystem",
+      "1k_blocks",
+      "used",
+      "available",
+      "capacity_percent",
+      "mounted_on"
+    ]
+  }
+}

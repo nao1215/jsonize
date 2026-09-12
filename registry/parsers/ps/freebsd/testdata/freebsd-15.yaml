@@ -1,0 +1,4 @@
+description: every process, including kernel threads with no controlling terminal and a command written in brackets
+source: "ps -A on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C, first 29 rows"
+os: freebsd
+args: [-A]

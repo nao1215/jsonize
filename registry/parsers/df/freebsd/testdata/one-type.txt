@@ -1,0 +1,12 @@
+Filesystem         1K-blocks    Used     Avail Capacity  Mounted on
+zroot/ROOT/default 207712072 3313372 204398700     2%    /
+zroot/var/crash    204398804     104 204398700     0%    /var/crash
+zroot/tmp          204398848     148 204398700     0%    /tmp
+zroot/usr/ports    204399120     420 204398700     0%    /usr/ports
+zroot/home         204426944   28244 204398700     0%    /home
+zroot/var/tmp      204399124     424 204398700     0%    /var/tmp
+zroot/var/mail     204399120     420 204398700     0%    /var/mail
+zroot/var/audit    204399128     428 204398700     0%    /var/audit
+zroot/usr/src      204399120     420 204398700     0%    /usr/src
+zroot/usr/obj      204399120     420 204398700     0%    /usr/obj
+zroot/var/log      204398924     224 204398700     0%    /var/log
