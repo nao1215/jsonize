@@ -350,6 +350,9 @@ func TestLoadErrors(t *testing.T) {
 		{"csv NUL delimiter", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, delimiter: \"\\0\"}\n", "delimiter"},
 		{"csv quote delimiter", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, delimiter: '\"'}\n", "delimiter"},
 		{"csv line break delimiter", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, delimiter: \"\\n\"}\n", "delimiter"},
+		{"a fractional limit", base + "input: {select: {limit: 1.5}}\n", "input.select.limit: must be written as a whole number, not 1.5"},
+		{"a fractional width", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, max_fields: 2.5}\n", "parse.max_fields: must be written as a whole number, not 2.5"},
+		{"a fractional window", base + "detect: {signature: {window: 1.5}}\n", "detect.signature.window: must be written as a whole number, not 1.5"},
 		{"repeated is gone", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {repeated: false}}\n", `unknown key "repeated"`},
 		{"header outside table and csv", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, header: {columns: [a]}}\n", "only valid for type table and type csv"},
 

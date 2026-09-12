@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"math"
 	"regexp"
 	"regexp/syntax"
 	"sort"
@@ -139,7 +140,75 @@ func decode(data []byte, source string) (*Definition, error) {
 	if d.Format == 0 && d.Command == "" && d.Variant == "" && d.Parse.Type == "" {
 		return nil, &ValidationError{Source: source, Msg: "holds no definition"}
 	}
+	if err := checkWholeNumbers(data, source); err != nil {
+		return nil, err
+	}
 	return &d, nil
+}
+
+// wholeNumberKeys are the keys whose value counts lines, columns or
+// characters.
+var wholeNumberKeys = map[string]bool{
+	"format":     true,
+	"window":     true,
+	"priority":   true,
+	"skip":       true,
+	"limit":      true,
+	"max_fields": true,
+	"min_fields": true,
+}
+
+// checkWholeNumbers refuses a count written with a fractional part. The
+// YAML library reads 1.5 into an int as 1, which leaves the definition
+// counting a number its author did not write and nothing to say so, and
+// the decoded value no longer shows what was there. A spelling that
+// means exactly one integer is left alone, whether it is written as a
+// quoted "2", a hexadecimal 0x10 or a float 2.0: those are the number
+// they say they are.
+func checkWholeNumbers(data []byte, source string) error {
+	var doc any
+	if err := decodeYAML(data, &doc, false); err != nil {
+		// The strict pass above has already read the document; a body
+		// this one cannot read has nothing to report here.
+		return nil //nolint:nilerr
+	}
+	var problems []string
+	var walk func(path string, v any)
+	walk = func(path string, v any) {
+		switch t := v.(type) {
+		case map[string]any:
+			for _, k := range sortedKeys(t) {
+				p := k
+				if path != "" {
+					p = path + "." + k
+				}
+				if f, ok := t[k].(float64); ok && wholeNumberKeys[k] && f != math.Trunc(f) {
+					problems = append(problems, fmt.Sprintf("%s: must be written as a whole number, not %v", p, f))
+				}
+				walk(p, t[k])
+			}
+		case []any:
+			for i, v := range t {
+				walk(fmt.Sprintf("%s[%d]", path, i), v)
+			}
+		}
+	}
+	walk("", doc)
+	if len(problems) == 0 {
+		return nil
+	}
+	return &ValidationError{Source: source, Msg: strings.Join(problems, "\n"+source+": ")}
+}
+
+// sortedKeys names a mapping's keys in order, so that a document with
+// several problems reports them the same way every time.
+func sortedKeys(m map[string]any) []string {
+	out := make([]string, 0, len(m))
+	for k := range m {
+		out = append(out, k)
+	}
+	sort.Strings(out)
+	return out
 }
 
 // finish checks the format, validates the definition and compiles its
