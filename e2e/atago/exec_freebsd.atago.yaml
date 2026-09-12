@@ -97,21 +97,18 @@ scenarios:
           stderr:
             contains: "no w variant matches this input"
 
-  # FreeBSD ps has no SysV full format. `ps -ef` is a usage error there,
-  # which jz reports by mirroring the status and writing nothing, and the
-  # default columns it prints instead (PID TT STAT TIME COMMAND) are not
-  # a table any definition reads: ps/posix wants PID TTY TIME CMD.
-  - name: the SysV format is not what ps prints on FreeBSD
+  # FreeBSD ps has no SysV full format, so the columns it prints for a
+  # listing are its own: PID TT STAT TIME COMMAND. ps/unix reads UID PID
+  # PPID C STIME TTY TIME CMD and ps/posix reads PID TTY TIME CMD, so
+  # neither fits, and being unreadable is the answer rather than a table
+  # cut where the header does not say. -A asks for every process, which
+  # is what makes this listing rather than the processes of a terminal
+  # the machine does not have.
+  - name: the columns ps prints on FreeBSD are read by no definition
     only: {os: freebsd}
     steps:
       - run:
-          command: jz run ps -ef
-      - assert:
-          exit_code: 1
-          stdout:
-            empty: true
-      - run:
-          command: jz run ps
+          command: jz run ps -A
       - assert:
           exit_code: 4
           stdout:
