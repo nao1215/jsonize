@@ -1,0 +1,26 @@
+# uname -a on FreeBSD. The kernel version FreeBSD prints is itself
+# "FreeBSD <release>", so the release appears twice, and the branch and
+# build identifier follow it before the kernel configuration name.
+format: 1
+command: uname
+variant: freebsd
+description: uname -a on FreeBSD
+metadata:
+  tags: [freebsd, bsd, system]
+  compatible: [FreeBSD uname]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?uname(1)
+detect:
+  os: [freebsd]
+  args:
+    any: ["-a"]
+  signature:
+    all:
+      # The kernel name alone is not enough: anything quoting the banner
+      # starts with it. uname -a puts the node name and the release
+      # before the version, which opens with the name again.
+      - '\AFreeBSD \S+ \S+ FreeBSD '
+parse:
+  type: regex
+  each: input
+  pattern: '^(?P<kernel_name>FreeBSD) (?P<node_name>\S+) (?P<kernel_release>\S+) (?P<kernel_version>.+?) (?P<kernel_config>\S+) (?P<machine>\S+)\s*$'

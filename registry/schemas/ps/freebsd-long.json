@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ps/freebsd-long.json",
+  "title": "ps/freebsd-long",
+  "description": "FreeBSD ps -l, the long format",
+  "x-jsonize": {
+    "definition": "ps/freebsd-long",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "c": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "command": {
+        "type": "string"
+      },
+      "mwchan": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "ni": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "ppid": {
+        "type": "integer"
+      },
+      "pri": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "rss": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "stat": {
+        "type": "string"
+      },
+      "time": {
+        "type": "number"
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "uid": {
+        "type": "integer"
+      },
+      "vsz": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

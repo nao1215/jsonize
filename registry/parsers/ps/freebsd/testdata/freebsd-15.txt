@@ -1,0 +1,30 @@
+ PID TT  STAT    TIME COMMAND
+   0  -  DLs  0:00.23 [kernel]
+   1  -  SLs  0:00.05 /sbin/init
+   2  -  WL   0:00.03 [clock]
+   3  -  DL   0:00.00 [crypto]
+   4  -  DL   0:00.22 [cam]
+   5  -  DL   0:00.00 [busdma]
+   6  -  DL   0:00.49 [zfskern]
+   7  -  DL   0:00.00 [rand_harvestq]
+   8  -  DL   0:00.00 [pagedaemon]
+   9  -  DL   0:00.00 [vmdaemon]
+  10  -  DL   0:00.00 [audit]
+  11  -  RNL  0:45.79 [idle]
+  12  -  WL   0:00.17 [intr]
+  13  -  DL   0:00.01 [geom]
+  14  -  DL   0:00.00 [usb]
+  15  -  DL   0:00.00 [bufdaemon]
+  16  -  DL   0:00.00 [vnlru]
+  17  -  DL   0:00.00 [syncer]
+ 750  -  Ss   0:00.00 dhclient: system.syslog (dhclient)
+ 753  -  Ss   0:00.00 dhclient: vtnet0 [priv] (dhclient)
+ 836  -  SCs  0:00.00 dhclient: vtnet0 (dhclient)
+ 837  -  Ss   0:00.00 /sbin/devd
+1129  -  SCs  0:00.00 /usr/sbin/syslogd -s
+1132  -  S    0:00.00 syslogd: syslogd.casper (syslogd)
+1133  -  Ss   0:00.00 syslogd: system.net (syslogd)
+1255  -  Ss   0:00.01 /usr/sbin/ntpd -p /var/db/ntp/ntpd.pid -c /etc/ntp.conf -f /var/db/ntp/ntpd.drift
+1309  -  Ss   0:00.00 /usr/sbin/cron -s
+1331  -  Ss   0:00.02 sshd: /usr/sbin/sshd [listener] 0 of 10-100 startups (sshd)
+1375  -  Ss   0:00.00 logger: system.syslog (logger)

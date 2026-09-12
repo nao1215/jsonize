@@ -1,0 +1,106 @@
+[
+  {
+    "filesystem": "zroot/ROOT/default",
+    "size": "198G",
+    "used": "3.2G",
+    "available": "195G",
+    "capacity_percent": 2,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "devfs",
+    "size": "1.0K",
+    "used": "0B",
+    "available": "1.0K",
+    "capacity_percent": 0,
+    "mounted_on": "/dev"
+  },
+  {
+    "filesystem": "/dev/gpt/efiboot0",
+    "size": "32M",
+    "used": "662K",
+    "available": "31M",
+    "capacity_percent": 2,
+    "mounted_on": "/boot/efi"
+  },
+  {
+    "filesystem": "zroot/var/crash",
+    "size": "195G",
+    "used": "104K",
+    "available": "195G",
+    "capacity_percent": 0,
+    "mounted_on": "/var/crash"
+  },
+  {
+    "filesystem": "zroot/tmp",
+    "size": "195G",
+    "used": "148K",
+    "available": "195G",
+    "capacity_percent": 0,
+    "mounted_on": "/tmp"
+  },
+  {
+    "filesystem": "zroot/usr/ports",
+    "size": "195G",
+    "used": "420K",
+    "available": "195G",
+    "capacity_percent": 0,
+    "mounted_on": "/usr/ports"
+  },
+  {
+    "filesystem": "zroot/home",
+    "size": "195G",
+    "used": "28M",
+    "available": "195G",
+    "capacity_percent": 0,
+    "mounted_on": "/home"
+  },
+  {
+    "filesystem": "zroot/var/tmp",
+    "size": "195G",
+    "used": "424K",
+    "available": "195G",
+    "capacity_percent": 0,
+    "mounted_on": "/var/tmp"
+  },
+  {
+    "filesystem": "zroot/var/mail",
+    "size": "195G",
+    "used": "420K",
+    "available": "195G",
+    "capacity_percent": 0,
+    "mounted_on": "/var/mail"
+  },
+  {
+    "filesystem": "zroot/var/audit",
+    "size": "195G",
+    "used": "428K",
+    "available": "195G",
+    "capacity_percent": 0,
+    "mounted_on": "/var/audit"
+  },
+  {
+    "filesystem": "zroot/usr/src",
+    "size": "195G",
+    "used": "420K",
+    "available": "195G",
+    "capacity_percent": 0,
+    "mounted_on": "/usr/src"
+  },
+  {
+    "filesystem": "zroot/usr/obj",
+    "size": "195G",
+    "used": "420K",
+    "available": "195G",
+    "capacity_percent": 0,
+    "mounted_on": "/usr/obj"
+  },
+  {
+    "filesystem": "zroot/var/log",
+    "size": "195G",
+    "used": "224K",
+    "available": "195G",
+    "capacity_percent": 0,
+    "mounted_on": "/var/log"
+  }
+]

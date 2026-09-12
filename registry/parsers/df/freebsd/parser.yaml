@@ -1,0 +1,39 @@
+# FreeBSD df default output: 1024-byte blocks and no inode columns, which
+# is what tells it apart from macOS (512-byte blocks, inode counts always
+# there) and from GNU (which writes "Available" and "Use%" where this
+# writes "Avail" and "Capacity").
+#
+# Read by pattern rather than by header alignment: a ZFS dataset name is
+# often wider than the column the header drew for it, and anchoring the
+# mount point at "/" is what keeps the two apart.
+format: 1
+command: df
+variant: freebsd
+description: FreeBSD df default output (1024-byte blocks)
+metadata:
+  tags: [freebsd, bsd, filesystem]
+  compatible: [FreeBSD df]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?df(1)
+detect:
+  os: [freebsd]
+  args:
+    none: ["-h", "-H", "-i", "-m", "-g"]
+  signature:
+    all:
+      - '\AFilesystem\s+1K-blocks\s+Used\s+Avail\s+Capacity\s+Mounted on\s*$'
+input:
+  ignore:
+    - '\AFilesystem\s+1K-blocks'
+parse:
+  type: regex
+  pattern: '^(?P<filesystem>.+?)\s+(?P<1k_blocks>\d+)\s+(?P<used>\d+)\s+(?P<available>\d+)\s+(?P<capacity_percent>\S+)\s+(?P<mounted_on>/.*?)\s*$'
+fields:
+  filesystem: {required: true}
+  1k_blocks: {type: int, required: true}
+  used: {type: int, required: true}
+  # The heading says Avail; the key is the one every other df definition
+  # uses for the same number.
+  available: {type: int, required: true}
+  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  mounted_on: {required: true}

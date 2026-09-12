@@ -1,0 +1,34 @@
+# FreeBSD df -h: the three sizes are rounded and carry their unit, and
+# there are no inode columns, which is what tells this apart from macOS
+# df -h.
+format: 1
+command: df
+variant: freebsd-human
+description: FreeBSD df -h, sizes rounded with their unit
+metadata:
+  tags: [freebsd, bsd, filesystem]
+  compatible: [FreeBSD df]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?df(1)
+detect:
+  os: [freebsd]
+  args:
+    any: ["-h", "-H"]
+  signature:
+    all:
+      - '\AFilesystem\s+Size\s+Used\s+Avail\s+Capacity\s+Mounted on\s*$'
+input:
+  ignore:
+    - '\AFilesystem\s+Size'
+parse:
+  type: regex
+  pattern: '^(?P<filesystem>.+?)\s+(?P<size>[\d.]+[KMGTPBEi]*)\s+(?P<used>[\d.]+[KMGTPBEi]*)\s+(?P<available>[\d.]+[KMGTPBEi]*)\s+(?P<capacity_percent>\S+)\s+(?P<mounted_on>/.*?)\s*$'
+fields:
+  filesystem: {required: true}
+  # -h counts 1024 per step and -H counts 1000; the output records
+  # neither, so a rounded size stays the text that was printed.
+  size: {required: true}
+  used: {required: true}
+  available: {required: true}
+  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  mounted_on: {required: true}

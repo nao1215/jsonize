@@ -1,0 +1,4 @@
+description: the long format, where a kernel thread runs at a negative priority and a sleeping process names the channel it waits on
+source: "ps -lA on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C, first 29 rows"
+os: freebsd
+args: [-l, -A]

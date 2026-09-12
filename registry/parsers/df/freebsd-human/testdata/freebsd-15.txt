@@ -1,0 +1,14 @@
+Filesystem            Size    Used   Avail Capacity  Mounted on
+zroot/ROOT/default    198G    3.2G    195G     2%    /
+devfs                 1.0K      0B    1.0K     0%    /dev
+/dev/gpt/efiboot0      32M    662K     31M     2%    /boot/efi
+zroot/var/crash       195G    104K    195G     0%    /var/crash
+zroot/tmp             195G    148K    195G     0%    /tmp
+zroot/usr/ports       195G    420K    195G     0%    /usr/ports
+zroot/home            195G     28M    195G     0%    /home
+zroot/var/tmp         195G    424K    195G     0%    /var/tmp
+zroot/var/mail        195G    420K    195G     0%    /var/mail
+zroot/var/audit       195G    428K    195G     0%    /var/audit
+zroot/usr/src         195G    420K    195G     0%    /usr/src
+zroot/usr/obj         195G    420K    195G     0%    /usr/obj
+zroot/var/log         195G    224K    195G     0%    /var/log

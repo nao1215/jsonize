@@ -1,0 +1,4 @@
+description: the same filesystems with every size rounded and carrying its unit, down to "0B"
+source: "df -h on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C"
+os: freebsd
+args: [-h]

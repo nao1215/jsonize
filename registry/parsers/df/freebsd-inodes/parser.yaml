@@ -1,0 +1,35 @@
+# FreeBSD df -i: the default columns with the inode counts after them.
+# A filesystem that keeps no inode counts prints "-" for the percentage
+# and zeroes for the counts.
+format: 1
+command: df
+variant: freebsd-inodes
+description: FreeBSD df -i, the block columns and the inode counts
+metadata:
+  tags: [freebsd, bsd, filesystem]
+  compatible: [FreeBSD df]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?df(1)
+detect:
+  os: [freebsd]
+  args:
+    any: ["-i"]
+  signature:
+    all:
+      - '\AFilesystem\s+1K-blocks\s+Used\s+Avail\s+Capacity\s+iused\s+ifree\s+%iused\s+Mounted on\s*$'
+input:
+  ignore:
+    - '\AFilesystem\s+1K-blocks'
+parse:
+  type: regex
+  pattern: '^(?P<filesystem>.+?)\s+(?P<1k_blocks>\d+)\s+(?P<used>\d+)\s+(?P<available>\d+)\s+(?P<capacity_percent>\S+)\s+(?P<iused>\S+)\s+(?P<ifree>\S+)\s+(?P<iused_percent>\S+)\s+(?P<mounted_on>/.*?)\s*$'
+fields:
+  filesystem: {required: true}
+  1k_blocks: {type: int, required: true}
+  used: {type: int, required: true}
+  available: {type: int, required: true}
+  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  iused: {type: int, null_if: ["-"]}
+  ifree: {type: int, null_if: ["-"]}
+  iused_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  mounted_on: {required: true}

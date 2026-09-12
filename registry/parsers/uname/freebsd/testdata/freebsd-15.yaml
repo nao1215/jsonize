@@ -1,0 +1,4 @@
+description: the release named twice, once on its own and once inside the kernel version, followed by the branch and the kernel configuration
+source: "uname -a on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; the node name is the one the machine had"
+os: freebsd
+args: [-a]

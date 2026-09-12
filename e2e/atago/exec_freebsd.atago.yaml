@@ -97,21 +97,77 @@ scenarios:
           stderr:
             contains: "no w variant matches this input"
 
-  # FreeBSD ps has no SysV full format, so the columns it prints for a
-  # listing are its own: PID TT STAT TIME COMMAND. ps/unix reads UID PID
-  # PPID C STIME TTY TIME CMD and ps/posix reads PID TTY TIME CMD, so
-  # neither fits, and being unreadable is the answer rather than a table
-  # cut where the header does not say. -A asks for every process, which
-  # is what makes this listing rather than the processes of a terminal
-  # the machine does not have.
-  - name: the columns ps prints on FreeBSD are read by no definition
+  # FreeBSD ps has no SysV full format, so the columns it prints are its
+  # own: PID TT STAT TIME COMMAND for a listing and a longer set for -l,
+  # each read by a definition of its own. -A asks for every process,
+  # which is what makes these listings rather than the processes of a
+  # terminal the machine does not have.
+  - name: the columns ps prints on FreeBSD land on the freebsd variants
     only: {os: freebsd}
     steps:
       - run:
-          command: jz run ps -A
+          command: jz run --explain ps -A
       - assert:
-          exit_code: 4
-          stdout:
-            empty: true
+          exit_code: 0
           stderr:
-            contains: "no ps variant matches this input"
+            contains: "ps/freebsd from embedded"
+          stdout:
+            json:
+              # A kernel thread has no controlling terminal and writes
+              # its name in brackets.
+              - { path: "$[0].pid", equals: 0 }
+              - { path: "$[0].tty", equals: null }
+              - { path: "$[0].command", matches: "^\\[" }
+      - run:
+          command: jz run --explain ps -lA
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ps/freebsd-long from embedded"
+          stdout:
+            json:
+              - { path: "$[0].ppid", gte: 0 }
+              - { path: "$[0].pri", matches: "^-?[0-9]+$" }
+
+  - name: df and uname land on the freebsd variants
+    only: {os: freebsd}
+    steps:
+      - run:
+          command: jz run --explain df
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "df/freebsd from embedded"
+          stdout:
+            json:
+              - { path: "$[0].mounted_on", equals: / }
+              - { path: "$[0].1k_blocks", gt: 0 }
+      - run:
+          command: jz run --explain df -h
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "df/freebsd-human from embedded"
+          stdout:
+            json:
+              # -h rounds, so the size stays the text that was printed.
+              - { path: "$[0].size", matches: "^[0-9.]+[KMGTPBE]" }
+      - run:
+          command: jz run --explain df -i
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "df/freebsd-inodes from embedded"
+          stdout:
+            json:
+              - { path: "$[0].iused", gte: 0 }
+      - run:
+          command: jz run --explain uname -a
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "uname/freebsd from embedded"
+          stdout:
+            json:
+              - { path: "$.kernel_name", equals: FreeBSD }
+              - { path: "$.machine", matches: "^(amd64|arm64|i386)$" }

@@ -1,0 +1,4 @@
+description: the block columns followed by the inode counts, where a filesystem that keeps none reports zeroes and a dash for the percentage
+source: "df -i on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C"
+os: freebsd
+args: [-i]
