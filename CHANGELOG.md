@@ -270,6 +270,16 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- The four `pidstat` reports that were exit 4: `pidstat/kernel` (`-v`,
+  the thread count and the number of file descriptors, with the -1 of a
+  task pidstat could not read as null), `pidstat/priority` (`-R`, the
+  scheduling priority and the name of the policy), `pidstat/stack`
+  (`-s`, the stack reserved and referenced, where a task owned by
+  another user leaves a header with no rows under it) and
+  `pidstat/threads` (`-t`, a row per task and a row per thread of it,
+  where whichever of TGID and TID is a dash says which kind of row it is
+  and the drawing in front of a thread's name is not part of the name).
+
 - The formats FreeBSD prints where macOS and GNU print something else,
   all of which were unreadable: `df/freebsd`, `df/freebsd-human` and
   `df/freebsd-inodes` (1024-byte blocks, `Avail` and `Capacity` where GNU

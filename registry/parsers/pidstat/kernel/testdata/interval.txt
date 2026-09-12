@@ -1,0 +1,6 @@
+Linux 7.0.0-31-generic (host01) 	09/12/26 	_x86_64_	(32 CPU)
+
+22:30:36      UID       PID threads   fd-nr  Command
+22:30:37        0         1       1      -1  systemd
+22:30:38        0         1       1      -1  systemd
+Average:        0         1       1      -1  systemd

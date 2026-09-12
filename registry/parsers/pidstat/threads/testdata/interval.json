@@ -1,0 +1,84 @@
+[
+  {
+    "tasks": [
+      {
+        "time": "22:30:42",
+        "uid": 0,
+        "tgid": 1,
+        "tid": null,
+        "usr_percent": 0,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0,
+        "cpu": 4,
+        "command": "systemd"
+      },
+      {
+        "time": "22:30:42",
+        "uid": 0,
+        "tgid": null,
+        "tid": 1,
+        "usr_percent": 0,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0,
+        "cpu": 4,
+        "command": "systemd"
+      },
+      {
+        "time": "22:30:43",
+        "uid": 0,
+        "tgid": 1,
+        "tid": null,
+        "usr_percent": 0,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0,
+        "cpu": 4,
+        "command": "systemd"
+      },
+      {
+        "time": "22:30:43",
+        "uid": 0,
+        "tgid": null,
+        "tid": 1,
+        "usr_percent": 0,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0,
+        "cpu": 4,
+        "command": "systemd"
+      },
+      {
+        "time": "Average",
+        "uid": 0,
+        "tgid": 1,
+        "tid": null,
+        "usr_percent": 0,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0,
+        "cpu": null,
+        "command": "systemd"
+      },
+      {
+        "time": "Average",
+        "uid": 0,
+        "tgid": null,
+        "tid": 1,
+        "usr_percent": 0,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0,
+        "cpu": null,
+        "command": "systemd"
+      }
+    ]
+  }
+]

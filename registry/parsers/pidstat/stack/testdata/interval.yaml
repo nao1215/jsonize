@@ -1,0 +1,4 @@
+description: a header with no rows under it, which is what a task owned by another user leaves
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C from `pidstat -s -p 1 1 2` as an ordinary user; the host name in the banner was replaced
+os: linux
+args: ["-s", "-p", "1"]

@@ -1,0 +1,30 @@
+[
+  {
+    "tasks": [
+      {
+        "time": "22:30:37",
+        "uid": 0,
+        "pid": 1,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "systemd"
+      },
+      {
+        "time": "22:30:38",
+        "uid": 0,
+        "pid": 1,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "systemd"
+      },
+      {
+        "time": "Average",
+        "uid": 0,
+        "pid": 1,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "systemd"
+      }
+    ]
+  }
+]

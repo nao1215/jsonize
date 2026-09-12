@@ -1,0 +1,4 @@
+description: two samples and the Average block, each opening with its own header
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C from `pidstat -v -p ALL 1 2`; the host name in the banner was replaced and the tasks after the fourth of every block were dropped
+os: linux
+args: ["-v"]

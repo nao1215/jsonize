@@ -1,0 +1,70 @@
+[
+  {
+    "tasks": [
+      {
+        "time": "22:29:21",
+        "uid": 0,
+        "pid": 1,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "systemd"
+      },
+      {
+        "time": "22:29:21",
+        "uid": 0,
+        "pid": 2,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kthreadd"
+      },
+      {
+        "time": "22:29:21",
+        "uid": 0,
+        "pid": 3,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "pool_workqueue_release"
+      },
+      {
+        "time": "22:29:21",
+        "uid": 0,
+        "pid": 4,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kworker/R-rcu_gp"
+      },
+      {
+        "time": "22:29:21",
+        "uid": 0,
+        "pid": 5,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kworker/R-sync_wq"
+      },
+      {
+        "time": "22:29:21",
+        "uid": 0,
+        "pid": 6,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kworker/R-kvfree_rcu_reclaim"
+      },
+      {
+        "time": "22:29:21",
+        "uid": 0,
+        "pid": 7,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kworker/R-slub_flushwq"
+      },
+      {
+        "time": "22:29:21",
+        "uid": 0,
+        "pid": 8,
+        "threads": 1,
+        "fd_nr": null,
+        "command": "kworker/R-netns"
+      }
+    ]
+  }
+]

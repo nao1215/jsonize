@@ -1,0 +1,4 @@
+description: the report since boot, the first eight rows, tasks and their threads
+source: captured on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C from `pidstat -t 1 1`; the host name in the banner was replaced and the rows after the eighth were dropped
+os: linux
+args: ["-t"]

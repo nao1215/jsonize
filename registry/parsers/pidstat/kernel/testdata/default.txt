@@ -1,0 +1,11 @@
+Linux 7.0.0-31-generic (host01) 	09/12/26 	_x86_64_	(32 CPU)
+
+22:29:20      UID       PID threads   fd-nr  Command
+22:29:21        0         1       1      -1  systemd
+22:29:21        0         2       1      -1  kthreadd
+22:29:21        0         3       1      -1  pool_workqueue_release
+22:29:21        0         4       1      -1  kworker/R-rcu_gp
+22:29:21        0         5       1      -1  kworker/R-sync_wq
+22:29:21        0         6       1      -1  kworker/R-kvfree_rcu_reclaim
+22:29:21        0         7       1      -1  kworker/R-slub_flushwq
+22:29:21        0         8       1      -1  kworker/R-netns
