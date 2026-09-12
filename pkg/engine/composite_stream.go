@@ -280,6 +280,7 @@ func newStreamer(def *definition.Definition, p *definition.Parse, fields map[str
 		ignore:  []*regexp.Regexp{},
 		held:    held,
 	}
+	s.emit = s.handingOn(emit)
 	if p.Type == definition.TypeTable && p.Header.None {
 		s.columns()
 	}

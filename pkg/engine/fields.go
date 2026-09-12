@@ -27,7 +27,7 @@ func (r *run) setMatched(obj *jsonutil.Object, name string, raw any, f *definiti
 		return nil
 	}
 	obj.Set(name, v)
-	return nil
+	return r.countValue(ln)
 }
 
 // convert applies a field rule. The bool result is true when the value

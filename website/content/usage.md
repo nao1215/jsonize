@@ -198,7 +198,10 @@ read by the same code as everything after them.
 does not apply to the stream as a whole, since a finished record is not
 kept; it bounds what is held while a record waits for its end (a fold,
 a block, a quoted csv value), and the 1 MiB limit on a single line is
-what bounds a producer that never prints a separator.
+what bounds a producer that never prints a separator. The same goes for
+the bound on what a reading retains: a document may hold 4,194,304
+values, and a stream holds one record at a time, so that is the bound
+on a record there.
 
 ### A composite as a stream
 
@@ -757,7 +760,7 @@ when everything passed, 1 when something failed, 2 for a usage error and
 | 0 | success |
 | 1 | unexpected failure (I/O, internal) |
 | 2 | usage error |
-| 3 | the input did not match the chosen definition, or held text the definition did not read |
+| 3 | the input did not match the chosen definition, held text the definition did not read, or yields more than 4,194,304 values, which is more than one document holds |
 | 4 | the format could not be identified, several matched, or a named one did not fit |
 | 5 | a registry could not be loaded |
 | 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |

@@ -62,6 +62,7 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 		sel:     &def.Input.Select,
 		held:    &hold{limit: int(opts.maxInput())},
 	}
+	s.emit = s.handingOn(emit)
 	if def.Parse.Type == definition.TypeTable && def.Parse.Header.None {
 		s.columns()
 	}
@@ -107,6 +108,16 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 		return unwrapStopped(s.report(err))
 	}
 	return nil
+}
+
+// handingOn wraps emit so that a record handed on is no longer counted:
+// what a stream retains is one record, so the bound on values starts
+// over with each.
+func (s *streamer) handingOn(emit func(any) error) func(any) error {
+	return func(v any) error {
+		s.values = 0
+		return emit(v)
+	}
 }
 
 // unwrapStopped hands back the error a composite stream stopped on as it
