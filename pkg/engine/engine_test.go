@@ -3,6 +3,7 @@ package engine
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"strings"
 	"testing"
 
@@ -1099,6 +1100,55 @@ func TestAlignedRefusesALeadingLabelWithNoRoom(t *testing.T) {
 	}
 }
 
+// A parse retains one value per cell, so a wide header over many short
+// rows retains far more than the input holds: 256 columns over rows of
+// one letter is some thirteen thousand times the input on the heap. The
+// input limit does not see it, since the input is small. What is bounded
+// is what the reading produces.
+func TestParseRefusesMoreValuesThanADocumentHolds(t *testing.T) {
+	t.Parallel()
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned}\n")
+	var b strings.Builder
+	for i := range 8 {
+		if i > 0 {
+			b.WriteByte(' ')
+		}
+		fmt.Fprintf(&b, "c%d", i)
+	}
+	b.WriteByte('\n')
+	for range 100 {
+		b.WriteString("x\n")
+	}
+	in := b.String()
+	// 100 rows of 8 cells are 800 values.
+	if _, err := Parse(def, []byte(in), Options{MaxValues: 800}); err != nil {
+		t.Fatalf("800 values within a limit of 800: %v", err)
+	}
+	_, err := Parse(def, []byte(in), Options{MaxValues: 799})
+	if err == nil || !errors.Is(err, ErrTooManyValues) || !strings.Contains(err.Error(), "more than 799 values") {
+		t.Fatalf("err = %v", err)
+	}
+	// A stream keeps one record at a time, so the limit is a record's:
+	// the same input streams whole under a limit its rows fit in, and a
+	// record that does not fit is the one refused.
+	var got []any
+	err = Stream(def, strings.NewReader(in), Options{MaxValues: 8}, func(v any) error {
+		got = append(got, v)
+		return nil
+	}, nil)
+	if err != nil || len(got) != 100 {
+		t.Fatalf("stream under a record's worth: err = %v, records = %d", err, len(got))
+	}
+	got = nil
+	err = Stream(def, strings.NewReader(in), Options{MaxValues: 7}, func(v any) error {
+		got = append(got, v)
+		return nil
+	}, nil)
+	if err == nil || !errors.Is(err, ErrTooManyValues) || len(got) != 0 {
+		t.Fatalf("stream over a record's worth: err = %v, records = %d", err, len(got))
+	}
+}
+
 func FuzzParse(f *testing.F) {
 	defs := []string{dfDef,
 		"format: 1\ncommand: t\nvariant: a\nparse: {type: table, split: aligned}\nfields: {size: {type: int}}\n",
@@ -1121,7 +1171,7 @@ func FuzzParse(f *testing.F) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		v, acct, err := ParseAccounted(d, input, Options{MaxInputSize: 1 << 20})
+		v, acct, err := ParseAccounted(d, input, Options{MaxInputSize: 1 << 20, MaxValues: 1 << 16})
 		if err != nil {
 			return
 		}

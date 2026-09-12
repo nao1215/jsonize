@@ -50,7 +50,7 @@ func FuzzOutputFitsSchema(f *testing.F) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		v, err := engine.Parse(def, input, engine.Options{MaxInputSize: 1 << 20})
+		v, err := engine.Parse(def, input, engine.Options{MaxInputSize: 1 << 20, MaxValues: 1 << 16})
 		if err != nil {
 			return
 		}

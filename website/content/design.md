@@ -52,7 +52,7 @@ contract, was removed before release:
 | `--meta` | an envelope that changed the JSON schema depending on a flag |
 | `--os` | asking the user to declare the producing system instead of matching the text; jz knows the system when it runs the command itself |
 | `--force` | a way to parse with a definition whose signature says the text is something else, which is exactly the failure jz exists to prevent |
-| `--max-input` | a safety limit, not a preference: 64 MiB, internal |
+| `--max-input` | a safety limit, not a preference: 64 MiB of input and 4,194,304 retained values, internal |
 | `--embedded-only`, `--registry` | registry plumbing; `JSONIZE_REGISTRY_PATH` covers the real use and tests inject sources directly |
 
 ### Definitions in YAML rather than Go plugins or a scripting language

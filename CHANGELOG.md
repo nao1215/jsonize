@@ -517,6 +517,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- The input limit bounded what a reading was given and nothing bounded
+  what it retained. A parse keeps one value per cell, so a header of 256
+  columns over rows of one letter retained some thirteen thousand times
+  its input: 313 KB in, 3.8 GB on the heap, and a fuzz run of the schema
+  package reached 58 GB before the kernel killed it. A document may hold
+  4,194,304 values now and a reading that yields more is refused (exit
+  3), with the same message that names `--stream`, which holds one
+  record at a time and is bounded per record.
 - A clock reading whose minutes or seconds were 60 or more was added up
   rather than refused: `1:60` under `layout: h:mm` was two hours, and
   `1:99` under `mm:ss` was 159 seconds, which is not what either text

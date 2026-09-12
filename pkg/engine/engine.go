@@ -29,6 +29,10 @@ import (
 const (
 	DefaultMaxInputSize  = 64 * 1024 * 1024
 	DefaultMaxLineLength = 1024 * 1024
+	// DefaultMaxValues bounds what one reading retains rather than what
+	// it reads: a parse keeps one value per cell, so a header of many
+	// columns over many short rows retains far more than the input holds.
+	DefaultMaxValues = 4 * 1024 * 1024
 )
 
 // Options tunes a parse run.
@@ -37,6 +41,10 @@ type Options struct {
 	MaxInputSize int64
 	// MaxLineLength bounds a single line in bytes (0 = default).
 	MaxLineLength int
+	// MaxValues bounds the values one document may hold, or one record
+	// of a stream (0 = default). It is the bound on what a reading
+	// retains, where MaxInputSize is the bound on what it is given.
+	MaxValues int
 	// Assume carries what the command line allowed jz to assume about a
 	// timestamp that does not say it itself: which year a format that
 	// prints none meant, and what offset a zone abbreviation stands for.
@@ -56,6 +64,13 @@ func (o Options) maxInput() int64 {
 		return DefaultMaxInputSize
 	}
 	return o.MaxInputSize
+}
+
+func (o Options) maxValues() int {
+	if o.MaxValues <= 0 {
+		return DefaultMaxValues
+	}
+	return o.MaxValues
 }
 
 func (o Options) maxLine() int {
@@ -105,6 +120,10 @@ var ErrInputTooLarge = errors.New("input too large")
 
 // ErrLineTooLong is wrapped when a single line exceeds the limit.
 var ErrLineTooLong = errors.New("line too long")
+
+// ErrTooManyValues is wrapped when a reading produces more values than
+// one document, or one record of a stream, may hold.
+var ErrTooManyValues = errors.New("too many values")
 
 // Parse applies def to input. The result is either []any (one ordered
 // object per record) or *jsonutil.Object, depending on the parse type.
@@ -431,6 +450,21 @@ type run struct {
 	// ledger records the lines the parsers read. It is nil where nothing
 	// is being accounted for.
 	ledger *ledger
+	// values counts what the reading has retained so far. A stream
+	// starts it over at every record it hands on.
+	values int
+}
+
+// countValue records one more retained value and refuses the reading
+// once there are more than the document may hold. The input limit does
+// not see this: a table of many columns over rows of one letter retains
+// thousands of times its size, and it is the product that is bounded.
+func (r *run) countValue(ln int) error {
+	r.values++
+	if r.values <= r.opts.maxValues() {
+		return nil
+	}
+	return &ParseError{Definition: r.def.ID(), Line: ln, Msg: fmt.Sprintf("the input yields more than %d values, more than one document holds; --stream reads it one record at a time", r.opts.maxValues()), Cause: ErrTooManyValues}
 }
 
 func (r *run) errorf(ln int, field, format string, args ...any) *ParseError {
