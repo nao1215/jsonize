@@ -40,6 +40,12 @@ jobs:
       # HOME, runs every spec under e2e/atago and fails on a skip that
       # is not the operating system's or an optional suite's. Windows
       # runs it under the bash that ships with Git.
+      #
+      # The jz this builds is the one the scenarios run, so Windows
+      # leaves out the garbage collector that has been crashing the unit
+      # job; see the comment in unit_test.yml.
       - name: run E2E
         shell: bash
         run: bash ./scripts/run_e2e.sh
+        env:
+          GOEXPERIMENT: ${{ runner.os == 'Windows' && 'nogreenteagc' || '' }}
