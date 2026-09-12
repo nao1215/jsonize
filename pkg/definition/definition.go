@@ -517,23 +517,16 @@ type Header struct {
 	LeadingLabel string `yaml:"leading_label,omitempty"`
 	// Rename maps normalised header names to field names.
 	Rename map[string]string `yaml:"rename,omitempty"`
-	// Repeated says whether a body line holding the same cells as the
-	// header is that header printed again (true), which starts another
-	// table, or a row that happens to hold those values (false). A
-	// command that reprints its header every few rows or once per report
-	// is the first; a csv file of names and values may hold the second.
-	// It defaults to true for a table and to false for csv.
-	Repeated *bool `yaml:"repeated,omitempty"`
 }
 
-// RepeatedHeader reports whether a body line that repeats the header is
-// the header printed again rather than a row.
+// RepeatedHeader reports whether a body line holding the same cells as
+// the header is that header printed again rather than a row. A table's
+// is, since a command that prints a report per interval prints its
+// header with each; a csv file is data, so such a row is a row; and
+// with no header line there is nothing to repeat.
 func (p *Parse) RepeatedHeader() bool {
 	if p.Header.None {
 		return false
-	}
-	if p.Header.Repeated != nil {
-		return *p.Header.Repeated
 	}
 	return p.Type != TypeCSV
 }

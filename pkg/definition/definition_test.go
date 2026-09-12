@@ -350,8 +350,8 @@ func TestLoadErrors(t *testing.T) {
 		{"csv NUL delimiter", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, delimiter: \"\\0\"}\n", "delimiter"},
 		{"csv quote delimiter", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, delimiter: '\"'}\n", "delimiter"},
 		{"csv line break delimiter", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, delimiter: \"\\n\"}\n", "delimiter"},
-		{"header repeated with no header line", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, header: {none: true, repeated: true}}\n", "nothing to repeat"},
-		{"header repeated outside table and csv", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, header: {repeated: false}}\n", "only valid for type table and type csv"},
+		{"repeated is gone", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {repeated: false}}\n", `unknown key "repeated"`},
+		{"header outside table and csv", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, header: {columns: [a]}}\n", "only valid for type table and type csv"},
 
 		{"indent on another parse type", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, indent: \"  \"}\n", "indent/node are only valid for type tree"},
 		{"duration with a time layout", base + "fields: {t: {type: duration, layout: '2006-01-02'}}\n", "must be h:mm or mm:ss"},

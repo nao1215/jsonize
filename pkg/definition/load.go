@@ -583,7 +583,7 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 	for _, f := range families {
 		switch f {
 		case "table":
-			if len(p.Header.Columns) > 0 || p.Header.None || p.Header.LeadingLabel != "" || len(p.Header.Rename) > 0 || p.Header.Repeated != nil {
+			if len(p.Header.Columns) > 0 || p.Header.None || p.Header.LeadingLabel != "" || len(p.Header.Rename) > 0 {
 				v.add(path+".header", "only valid for type table and type csv")
 			}
 			if p.Split != "" || p.Delimiter != "" || p.MaxFields != 0 || p.MinFields != 0 {
@@ -659,9 +659,6 @@ func validateHeader(v *validator, path string, p *Parse, fields map[string]*Fiel
 	}
 	if h.None && h.LeadingLabel != "" {
 		v.add(path+".header.leading_label", "cannot be combined with header.none")
-	}
-	if h.None && h.Repeated != nil {
-		v.add(path+".header.repeated", "cannot be combined with header.none: with no header line there is nothing to repeat")
 	}
 	if h.None && p.Split == SplitAligned {
 		v.add(path+".split", "aligned requires a header line")

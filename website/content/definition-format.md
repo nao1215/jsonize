@@ -258,7 +258,6 @@ parse:
     none: true                               # no header line (columns required)
     leading_label: type                      # name for an unlabelled first column
     rename: {login: login_at}                # rename derived names
-    repeated: true                           # a body line equal to the header starts another table (default true)
   max_fields: 6                              # whitespace/delimiter: last cell absorbs the rest
   min_fields: 3                              # rows with fewer cells are errors (default: column count)
 ```
@@ -293,12 +292,11 @@ cell with `split: delimiter`), starts a second table: the output of the
 command run twice, or two files joined. It is read as the header again,
 which with `split: aligned` says where the second table's columns are,
 and never as a row of column names. `box` does the same with a row equal
-to the header row. That is what `header.repeated` says, and it is the
-default for a table, since a command that prints a report per interval
-prints its header with each; `repeated: false` makes such a line a row,
-for a table whose cells may hold the column names. A `csv` defaults the
-other way (below). A table with `header.none` has no header to repeat,
-and `repeated` cannot be written beside it.
+to the header row. A table is read that way because a command that
+prints a report per interval prints its header with each, so a table
+whose cells may hold the column names is one to read some other way: by
+an expression, or with `header.none` and `columns`, which has no header
+to repeat. A `csv` is read the other way (below).
 
 - `whitespace`: cells are runs of non-space characters; at most
   `max_fields` (default: number of columns) cells are produced and the
@@ -382,10 +380,8 @@ is an error: a value with no column to go under has nowhere to be
 reported. An error names the line of the input the record starts on,
 whatever came before it.
 
-A csv is data, so a row that holds the header's values is a row:
-`header.repeated` defaults to false here, and a definition for a
-command that prints its header again writes `repeated: true` to have
-such a row start another table instead.
+A csv is data, so a row that holds the header's values is a row, which
+is the opposite of what a table does with such a line.
 
 The records are made before anything else looks at the lines: a quoted
 value may hold line breaks, and the lines it holds are part of the
