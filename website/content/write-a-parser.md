@@ -7,6 +7,21 @@ toc: true
 This is the walkthrough for a pull request that adds `lsof` support, but
 the same steps apply to any command. Nothing here requires Go.
 
+## 0. Look at what is already there
+
+```console
+$ ls registry/parsers/lsof
+$ jz list lsof
+```
+
+A command with a definition already has a directory of variants, and
+what you are adding is likely a variant beside them: another
+implementation, or an option that changes the columns. `jz list` names
+every command the registry reads, and `jz list <command>` names its
+variants. The paths in this walkthrough are the ones a new command
+takes; `lsof` itself is in the registry, so the reader following along
+will find its variants where the text puts theirs.
+
 ## 1. Capture output
 
 ```console
