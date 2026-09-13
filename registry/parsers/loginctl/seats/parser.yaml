@@ -17,11 +17,15 @@ detect:
   args:
     any: ["list-seats"]
   signature:
+    # The header is one word, which a list of anything else can open with
+    # ("SEAT", then "A12"), so the legend loginctl closes the table with
+    # is required too.
     all:
       - '\A[ \t]*SEAT[ \t]*$'
+      - '^[0-9]+ seats? listed\.$'
 input:
   ignore:
-    - '^[0-9]+ seats listed\.$'
+    - '^[0-9]+ seats? listed\.$'
 parse:
   type: table
   split: whitespace

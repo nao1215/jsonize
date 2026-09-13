@@ -19,6 +19,14 @@ detect:
   signature:
     all:
       - '\A\[[ \t]*[0-9]+\.[0-9]{6}\] \S+ \S'
+      # dmesg prints the same seconds since boot in the same brackets, and
+      # its lines are "usb 1-1: message", a word and a word before a
+      # colon, as a host and an identifier are here. What dmesg never
+      # prints is the host in front of an identifier: the kernel's own
+      # entries are "host kernel:", and an entry from a process carries
+      # its pid in brackets. A journal with neither is refused rather than
+      # read as dmesg would be.
+      - '^\[[ \t]*[0-9]+\.[0-9]{6}\] \S+ (?:kernel|[^\s\[:]+\[[0-9]+\]):'
 input:
   # A message of several lines and the line between two boots, which
   # journalctl/short explains.

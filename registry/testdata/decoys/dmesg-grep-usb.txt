@@ -1,0 +1,5 @@
+[    1.402361] usb 1-1: new high-speed USB device number 2 using xhci_hcd
+[    1.551734] usb 1-1: New USB device found, idVendor=05e3, idProduct=0610, bcdDevice=93.04
+[    1.551740] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[    1.551743] usb 1-1: Product: USB2.1 Hub
+[    1.551746] usb 1-1: Manufacturer: GenesysLogic
