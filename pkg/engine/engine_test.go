@@ -1086,6 +1086,59 @@ func TestAlignedRefusesAValueThatRunsIntoAnEmptyColumn(t *testing.T) {
 	}
 }
 
+// A column named in header.columns by the name its header words derive
+// ("CONTAINER ID" is container_id, "H/W path" is h_w_path) starts at the
+// first of those words, so the table the test above refuses reads when
+// the definition names that column. Words a gap apart are two columns
+// even when their joined name is the declared one.
+func TestAlignedColumnNamedByTwoHeaderWords(t *testing.T) {
+	t.Parallel()
+	docker := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned, header: {columns: [container_id, image, names]}}\n")
+	in := "CONTAINER ID   IMAGE    NAMES\n43d84ed8db55   busybox  web\n"
+	want := `[{"container_id":"43d84ed8db55","image":"busybox","names":"web"}]`
+	got, err := Parse(docker, []byte(in), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	var streamed []any
+	err = Stream(docker, strings.NewReader(in), Options{}, func(v any) error {
+		streamed = append(streamed, v)
+		return nil
+	}, func(pe *ParseError) error { return pe })
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := cmp.Diff(want, mustJSON(t, streamed)); diff != "" {
+		t.Errorf("stream: %s", diff)
+	}
+
+	lshw := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned, header: {columns: [h_w_path, device, class, description]}}\n")
+	in = "H/W path        Device      Class      Description\n" +
+		"                            system     Computer\n" +
+		"/0/100/2.1/0    eno1        network    RTL8125 2.5GbE Controller\n"
+	got, err = Parse(lshw, []byte(in), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want = `[{"h_w_path":null,"device":null,"class":"system","description":"Computer"},` +
+		`{"h_w_path":"/0/100/2.1/0","device":"eno1","class":"network","description":"RTL8125 2.5GbE Controller"}]`
+	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+
+	gap := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned, header: {columns: [a_b, c]}}\n")
+	got, err = Parse(gap, []byte("A  B  C\n1  2  3\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := cmp.Diff(`[{"a_b":"1","c":"2  3"}]`, mustJSON(t, got)); diff != "" {
+		t.Errorf("words a gap apart: %s", diff)
+	}
+}
+
 // A `free`-shaped definition read against a header that begins at the
 // left edge. The unlabelled column is cut from the start of the line to
 // where the first header word begins, so there it is empty and every

@@ -2,11 +2,10 @@
 # `docker container ls` spellings, which all produce these seven columns.
 #
 # The row is read with an expression rather than by cutting at the header
-# words. `split: aligned` takes the column offsets from the words of the
-# header, and the very first cell here is two words ("CONTAINER ID"), which
-# puts a spurious boundary in front of every remaining column. Docker pads
-# the columns with three spaces and no cell holds two spaces in a row, so
-# two spaces are an unambiguous separator instead.
+# words, because two of the cells are not values as printed: COMMAND is
+# quoted and PORTS and NAMES are lists. Docker pads the columns with three
+# spaces and no cell holds two spaces in a row, so two spaces are an
+# unambiguous separator.
 #
 # Five of the seven cells can hold a space. COMMAND is the entrypoint as
 # docker printed it: quoted, and truncated to twenty characters with a

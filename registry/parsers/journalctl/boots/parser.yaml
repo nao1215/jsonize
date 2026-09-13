@@ -1,8 +1,9 @@
 # `journalctl --list-boots` prints one row per boot: an index counting
 # back from the current boot, the boot id, and the timestamps of the
-# first and last entry recorded for it. Two header labels are two words
-# each and the index is right-aligned, so the row is read by its shape
-# rather than cut on the header positions.
+# first and last entry recorded for it. The columns stand one space
+# apart, so a value one character wider than the others would reach into
+# the next column; the row is read by its shape rather than cut on the
+# header positions.
 format: 1
 command: journalctl
 variant: boots
