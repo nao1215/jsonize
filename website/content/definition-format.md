@@ -86,7 +86,11 @@ detect:
 - `args` applies only in exec mode. Each entry is one whole word as it
   was typed, so `--format=long` is the word `--format=long` and a
   definition that means both spellings lists both. Bundled short flags
-  are expanded, so `-hT` satisfies `any: ["-h"]`. A `--` ends the
+  are expanded, so `-hT` satisfies `any: ["-h"]`, and a short flag given
+  n times holds every bundle of it up to n letters, so `-v -v` and `-vvv`
+  are both refused by `none: ["-vv"]`. A long option given twice is the
+  same word twice and counts once; a definition that must refuse a second
+  one lists the long option itself. A `--` ends the
   options: the words after it are operands whatever they look like, and
   no filter sees them, so `ls -- -l` lists a file named `-l` and reaches
   the variant that reads names.

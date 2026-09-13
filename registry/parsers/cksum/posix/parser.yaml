@@ -39,8 +39,14 @@ detect:
   args:
     # -a sysv and -a bsd print the old sum(1) checksums, whose second
     # cell counts blocks rather than bytes. The option and its value are
-    # separate arguments, so the values are what is listed.
-    none: ["sysv", "bsd", "--algorithm=sysv", "--algorithm=bsd", "-asysv", "-absd"]
+    # separate arguments, so the values are what is listed. No other long
+    # option of cksum begins with a, so --algorithm may be cut to any
+    # prefix of itself, and each prefix is listed too.
+    none: ["sysv", "bsd", "-asysv", "-absd",
+           "--algorithm=sysv", "--algorith=sysv", "--algorit=sysv", "--algori=sysv", "--algor=sysv",
+           "--algo=sysv", "--alg=sysv", "--al=sysv", "--a=sysv",
+           "--algorithm=bsd", "--algorith=bsd", "--algorit=bsd", "--algori=bsd", "--algor=bsd",
+           "--algo=bsd", "--alg=bsd", "--al=bsd", "--a=bsd"]
   signature:
     all:
       # A CRC, a byte count and a name. The CRC is a 32-bit checksum

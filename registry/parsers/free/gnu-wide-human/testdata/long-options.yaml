@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C
+description: the output of procps-4.0.4, requested with the long spelling --wide beside -h, which prints the same table as -hw
+os: linux
+args: ["--wide", "-h"]

@@ -870,22 +870,32 @@ func short(re *regexp.Regexp) string {
 }
 
 // matchArgs applies any/all/none. Bundled short flags such as -hT count
-// as containing -h and -T. A "--" ends the options: what follows it is
-// an operand whatever it looks like, and says nothing about the format,
-// so `ls -- -l` lists a file named -l rather than the long listing.
+// as containing -h and -T, and a short flag given n times, however it
+// was split, counts as containing each bundle of it from two to n
+// letters: `-v -v` and `-vvv` both hold -vv. A "--" ends the options:
+// what follows it is an operand whatever it looks like, and says nothing
+// about the format, so `ls -- -l` lists a file named -l rather than the
+// long listing.
 // excluded is the argument listed under none that failed it, if that is
 // what did.
 func matchArgs(a *definition.ArgsMatch, args []string) (reason, excluded string, ok bool) {
 	set := map[string]bool{}
+	count := map[rune]int{}
 	for _, arg := range args {
 		if arg == "--" {
 			break
 		}
 		set[arg] = true
-		if len(arg) > 2 && arg[0] == '-' && arg[1] != '-' {
+		if len(arg) > 1 && arg[0] == '-' && arg[1] != '-' {
 			for _, r := range arg[1:] {
 				set["-"+string(r)] = true
+				count[r]++
 			}
+		}
+	}
+	for r, n := range count {
+		for k := 2; k <= n; k++ {
+			set["-"+strings.Repeat(string(r), k)] = true
 		}
 	}
 	if len(a.Any) > 0 {

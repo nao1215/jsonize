@@ -517,6 +517,18 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run` read two outputs whose options a definition refuses, when the
+  options were spelled another way. `git branch -v -v`, `-vvv` and
+  `--verbose --verbose` print the upstream in brackets as `-vv` does, and
+  `git/branch-verbose` returned it inside the subject with exit 0;
+  `cksum --algo=sysv` prints a block count where the size goes, and
+  `cksum/posix` returned it as bytes. A short flag given more than once
+  now counts as its bundle (`-v -v` holds `-vv`), `git/branch-verbose`
+  refuses `--verbose` itself, since a second one cannot be counted, and
+  `cksum/posix` lists every prefix of `--algorithm` that cksum accepts.
+  The other way round, `df --inodes -h` and `free --wide -h` were exit 4,
+  because their variants required `-i` and `-w`. They now require
+  neither, since the header already says which table it is.
 - The input limit bounded what a reading was given and nothing bounded
   what it retained. A parse keeps one value per cell, so a header of 256
   columns over rows of one letter retained some thirteen thousand times
