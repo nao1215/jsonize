@@ -34,8 +34,12 @@ scenarios:
           from:
             stdout:
               json: {path: "$[0].adapter.name"}
+      # This PowerShell probe and the one under ipconfig /all have run past
+      # atago's default of one minute on a windows-latest runner while
+      # every jz step beside them finished. The limit is for the probe.
       - run:
           command: powershell -NoProfile -NonInteractive -Command "(Get-NetIPAddress -InterfaceAlias '${adapter}' -AddressFamily IPv4 | Select-Object -First 1).IPAddress"
+          timeout: 5m
       - assert:
           exit_code: 0
       - store:
@@ -96,6 +100,7 @@ scenarios:
               json: {path: "$.adapters[0].adapter.name"}
       - run:
           command: powershell -NoProfile -NonInteractive -Command "(Get-NetAdapter -Name '${adapter}').MacAddress"
+          timeout: 5m
       - assert:
           exit_code: 0
       - store:
