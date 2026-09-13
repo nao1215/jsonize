@@ -45,8 +45,8 @@ jobs:
       # runs it under the bash that ships with Git.
       #
       # The jz this builds is the one the scenarios run, so Windows
-      # leaves out the garbage collector that has been crashing the unit
-      # job; see the comment in unit_test.yml.
+      # builds it with the collector setting the unit job and the release
+      # use; see the comment in unit_test.yml.
       - name: run E2E
         shell: bash
         run: bash ./scripts/run_e2e.sh
