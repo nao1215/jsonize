@@ -16,7 +16,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        # windows-2022 beside windows-latest (2025): ipconfig and
+        # systeminfo change their layout between releases, and
+        # exec_windows.atago.yaml runs the real commands on both.
+        os: [ubuntu-latest, macos-latest, windows-latest, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

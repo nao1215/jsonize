@@ -1,0 +1,16 @@
+description: >-
+  ipconfig /all run for real on a Windows Server 2022 machine. The NAT
+  switch lists three DNS servers, the second and third on lines of their
+  own under the value column, which is the continuation input.fold joins
+  onto the DNS Servers line. An address carries its state
+  ("(Preferred)") and the trailing space Windows prints after it.
+source: >-
+  captured on a GitHub-hosted windows-2022 runner (Windows Server 2022
+  Datacenter, build 20348, en-US culture and UI language, console code
+  page 65001) on 2026-09-13 with `ipconfig /all > ipconfig-all.txt` in
+  cmd.exe. Replaced with made-up values of the same shape: the host
+  name, the DNS suffix, the MAC addresses, the DHCPv6 client DUID (which
+  repeats a MAC address) and the link-local IPv6 addresses. The private
+  IPv4 addresses and the Azure DHCP and DNS server address were kept.
+os: windows
+args: ["/all"]

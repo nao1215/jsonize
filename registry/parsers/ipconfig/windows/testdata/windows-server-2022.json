@@ -1,0 +1,58 @@
+[
+  {
+    "adapter": {
+      "type": "Ethernet",
+      "name": "Ethernet 4"
+    },
+    "properties": [
+      {
+        "name": "Connection-specific DNS Suffix",
+        "value": "abcdefghijklmnopqrstuvwxyz.bx.internal.cloudapp.net"
+      },
+      {
+        "name": "Link-local IPv6 Address",
+        "value": "fe80::1111:2222:3333:4444%15"
+      },
+      {
+        "name": "IPv4 Address",
+        "value": "10.1.0.10"
+      },
+      {
+        "name": "Subnet Mask",
+        "value": "255.255.240.0"
+      },
+      {
+        "name": "Default Gateway",
+        "value": "10.1.0.1"
+      }
+    ]
+  },
+  {
+    "adapter": {
+      "type": "Ethernet",
+      "name": "vEthernet (nat)"
+    },
+    "properties": [
+      {
+        "name": "Connection-specific DNS Suffix",
+        "value": ""
+      },
+      {
+        "name": "Link-local IPv6 Address",
+        "value": "fe80::5555:6666:7777:8888%12"
+      },
+      {
+        "name": "IPv4 Address",
+        "value": "172.18.80.1"
+      },
+      {
+        "name": "Subnet Mask",
+        "value": "255.255.240.0"
+      },
+      {
+        "name": "Default Gateway",
+        "value": ""
+      }
+    ]
+  }
+]

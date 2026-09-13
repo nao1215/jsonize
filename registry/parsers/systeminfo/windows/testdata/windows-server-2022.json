@@ -1,0 +1,134 @@
+[
+  {
+    "name": "Host Name",
+    "value": "runnervmaaaaa"
+  },
+  {
+    "name": "OS Name",
+    "value": "Microsoft Windows Server 2022 Datacenter"
+  },
+  {
+    "name": "OS Version",
+    "value": "10.0.20348 N/A Build 20348"
+  },
+  {
+    "name": "OS Manufacturer",
+    "value": "Microsoft Corporation"
+  },
+  {
+    "name": "OS Configuration",
+    "value": "Standalone Server"
+  },
+  {
+    "name": "OS Build Type",
+    "value": "Multiprocessor Free"
+  },
+  {
+    "name": "Registered Owner",
+    "value": "N/A"
+  },
+  {
+    "name": "Registered Organization",
+    "value": "N/A"
+  },
+  {
+    "name": "Product ID",
+    "value": "00000-00000-00000-AA000"
+  },
+  {
+    "name": "Original Install Date",
+    "value": "9/7/2026, 3:11:08 PM"
+  },
+  {
+    "name": "System Boot Time",
+    "value": "9/13/2026, 3:32:55 AM"
+  },
+  {
+    "name": "System Manufacturer",
+    "value": "Microsoft Corporation"
+  },
+  {
+    "name": "System Model",
+    "value": "Virtual Machine"
+  },
+  {
+    "name": "System Type",
+    "value": "x64-based PC"
+  },
+  {
+    "name": "Processor(s)",
+    "value": "1 Processor(s) Installed. [01]: AMD64 Family 25 Model 17 Stepping 1 AuthenticAMD ~2596 Mhz"
+  },
+  {
+    "name": "BIOS Version",
+    "value": "Microsoft Corporation Hyper-V UEFI Release v4.1, 1/8/2026"
+  },
+  {
+    "name": "Windows Directory",
+    "value": "C:\\Windows"
+  },
+  {
+    "name": "System Directory",
+    "value": "C:\\Windows\\system32"
+  },
+  {
+    "name": "Boot Device",
+    "value": "\\Device\\HarddiskVolume3"
+  },
+  {
+    "name": "System Locale",
+    "value": "en-us;English (United States)"
+  },
+  {
+    "name": "Input Locale",
+    "value": "en-us;English (United States)"
+  },
+  {
+    "name": "Time Zone",
+    "value": "(UTC) Coordinated Universal Time"
+  },
+  {
+    "name": "Total Physical Memory",
+    "value": "16,379 MB"
+  },
+  {
+    "name": "Available Physical Memory",
+    "value": "13,514 MB"
+  },
+  {
+    "name": "Virtual Memory",
+    "value": "Max Size:  19,323 MB"
+  },
+  {
+    "name": "Virtual Memory",
+    "value": "Available: 16,747 MB"
+  },
+  {
+    "name": "Virtual Memory",
+    "value": "In Use:    2,576 MB"
+  },
+  {
+    "name": "Page File Location(s)",
+    "value": "C:\\pagefile.sys"
+  },
+  {
+    "name": "Domain",
+    "value": "WORKGROUP"
+  },
+  {
+    "name": "Logon Server",
+    "value": "\\\\runnervmaaaaa"
+  },
+  {
+    "name": "Hotfix(s)",
+    "value": "5 Hotfix(s) Installed. [01]: KB5120714 [02]: KB5120705 [03]: KB5011048 [04]: KB5120242 [05]: KB5120241"
+  },
+  {
+    "name": "Network Card(s)",
+    "value": "2 NIC(s) Installed. [01]: Mellanox ConnectX-5 Ex Virtual Adapter Connection Name: Ethernet 5 DHCP Enabled:    No IP address(es) [02]: Microsoft Hyper-V Network Adapter Connection Name: Ethernet 4 DHCP Enabled:    Yes DHCP Server:     168.63.129.16 IP address(es) [01]: 10.1.0.10 [02]: fe80::1111:2222:3333:4444"
+  },
+  {
+    "name": "Hyper-V Requirements",
+    "value": "A hypervisor has been detected. Features required for Hyper-V will not be displayed."
+  }
+]

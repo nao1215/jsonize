@@ -1,0 +1,51 @@
+
+Host Name:                 runnervmaaaaa
+OS Name:                   Microsoft Windows Server 2022 Datacenter
+OS Version:                10.0.20348 N/A Build 20348
+OS Manufacturer:           Microsoft Corporation
+OS Configuration:          Standalone Server
+OS Build Type:             Multiprocessor Free
+Registered Owner:          N/A
+Registered Organization:   N/A
+Product ID:                00000-00000-00000-AA000
+Original Install Date:     9/7/2026, 3:11:08 PM
+System Boot Time:          9/13/2026, 3:32:55 AM
+System Manufacturer:       Microsoft Corporation
+System Model:              Virtual Machine
+System Type:               x64-based PC
+Processor(s):              1 Processor(s) Installed.
+                           [01]: AMD64 Family 25 Model 17 Stepping 1 AuthenticAMD ~2596 Mhz
+BIOS Version:              Microsoft Corporation Hyper-V UEFI Release v4.1, 1/8/2026
+Windows Directory:         C:\Windows
+System Directory:          C:\Windows\system32
+Boot Device:               \Device\HarddiskVolume3
+System Locale:             en-us;English (United States)
+Input Locale:              en-us;English (United States)
+Time Zone:                 (UTC) Coordinated Universal Time
+Total Physical Memory:     16,379 MB
+Available Physical Memory: 13,514 MB
+Virtual Memory: Max Size:  19,323 MB
+Virtual Memory: Available: 16,747 MB
+Virtual Memory: In Use:    2,576 MB
+Page File Location(s):     C:\pagefile.sys
+Domain:                    WORKGROUP
+Logon Server:              \\runnervmaaaaa
+Hotfix(s):                 5 Hotfix(s) Installed.
+                           [01]: KB5120714
+                           [02]: KB5120705
+                           [03]: KB5011048
+                           [04]: KB5120242
+                           [05]: KB5120241
+Network Card(s):           2 NIC(s) Installed.
+                           [01]: Mellanox ConnectX-5 Ex Virtual Adapter
+                                 Connection Name: Ethernet 5
+                                 DHCP Enabled:    No
+                                 IP address(es)
+                           [02]: Microsoft Hyper-V Network Adapter
+                                 Connection Name: Ethernet 4
+                                 DHCP Enabled:    Yes
+                                 DHCP Server:     168.63.129.16
+                                 IP address(es)
+                                 [01]: 10.1.0.10
+                                 [02]: fe80::1111:2222:3333:4444
+Hyper-V Requirements:      A hypervisor has been detected. Features required for Hyper-V will not be displayed.

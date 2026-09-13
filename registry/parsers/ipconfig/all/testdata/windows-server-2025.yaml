@@ -1,0 +1,14 @@
+description: >-
+  ipconfig /all run for real on a Windows Server 2025 machine. Unlike the
+  2022 capture the NAT switch lists no DNS server, so the block has no
+  continuation line and one label fewer.
+source: >-
+  captured on a GitHub-hosted windows-2025 runner (Windows Server 2025
+  Datacenter, build 26100, en-US culture and UI language, console code
+  page 65001) on 2026-09-13 with `ipconfig /all > ipconfig-all.txt` in
+  cmd.exe. Replaced with made-up values of the same shape: the host
+  name, the DNS suffix, the MAC addresses, the DHCPv6 client DUID and
+  the link-local IPv6 addresses. The private IPv4 addresses and the
+  Azure DHCP and DNS server address were kept.
+os: windows
+args: ["/all"]
