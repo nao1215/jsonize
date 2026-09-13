@@ -32,6 +32,8 @@ jobs:
       # leg is green. Green Tea, the garbage collector Go 1.26 turned on
       # by default, is what changed under those crashes, so Windows runs
       # with the collector before it until the reports upstream settle.
+      # The release builds its Windows binaries the same way
+      # (.goreleaser.yml), and release_smoke.yml checks the three agree.
       - run: go test -timeout 5m -cover ./...
         env:
           GOEXPERIMENT: ${{ matrix.os == 'windows-latest' && 'nogreenteagc' || '' }}

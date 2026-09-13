@@ -103,6 +103,18 @@ jobs:
           for b in dist/jz_*/jz; do
             if go version -m "$b" | grep GOEXPERIMENT > /dev/null; then echo "$b: unexpected GOEXPERIMENT"; exit 1; fi
           done
+      # The Windows jobs of unit_test.yml and e2e.yml and the Windows
+      # release build name one collector setting; a change to one of
+      # them alone would test one binary and ship another.
+      - name: check the Windows collector setting is the same in CI and the release
+        run: |
+          set -euo pipefail
+          release="$(yq -r '.builds[] | select(.id == "jz-windows") | .env[] | select(test("^GOEXPERIMENT="))' .goreleaser.yml)"
+          test -n "${release#GOEXPERIMENT=}" || { echo ".goreleaser.yml sets no GOEXPERIMENT for Windows"; exit 1; }
+          for wf in unit_test.yml e2e.yml; do
+            grep -F "'${release#GOEXPERIMENT=}'" ".github/workflows/${wf}" > /dev/null || { echo "${wf} does not run Windows with ${release}"; exit 1; }
+          done
+          echo "${release}"
       - name: extract the release notes of the newest CHANGELOG version
         run: |
           newest="$(grep -m1 -oE '^## \[[0-9][^]]*\]' CHANGELOG.md | sed -E 's/^## \[(.*)\]$/\1/')"
