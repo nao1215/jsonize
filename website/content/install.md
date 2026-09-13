@@ -28,7 +28,8 @@ Extract the archive and put `jz` (Windows: `jz.exe`) in a directory on
 packages:
 
 ```sh
-sha256sum --ignore-missing -c checksums.txt
+sha256sum --ignore-missing -c checksums.txt            # Linux
+shasum -a 256 --ignore-missing -c checksums.txt        # macOS
 gh attestation verify jsonize_<version>_linux_amd64.tar.gz --repo nao1215/jsonize
 ```
 
