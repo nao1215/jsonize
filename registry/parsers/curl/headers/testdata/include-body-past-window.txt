@@ -1,0 +1,33 @@
+HTTP/1.1 200 OK
+Server: BaseHTTP/0.6 Python/3.14.4
+Date: Sun, 13 Sep 2026 02:49:19 GMT
+Content-Type: text/plain
+Content-Length: 62
+X-Trace-01: hop-1
+X-Trace-02: hop-2
+X-Trace-03: hop-3
+X-Trace-04: hop-4
+X-Trace-05: hop-5
+X-Trace-06: hop-6
+X-Trace-07: hop-7
+X-Trace-08: hop-8
+X-Trace-09: hop-9
+X-Trace-10: hop-10
+X-Trace-11: hop-11
+X-Trace-12: hop-12
+X-Trace-13: hop-13
+X-Trace-14: hop-14
+X-Trace-15: hop-15
+X-Trace-16: hop-16
+X-Trace-17: hop-17
+X-Trace-18: hop-18
+X-Trace-19: hop-19
+X-Trace-20: hop-20
+X-Trace-21: hop-21
+X-Trace-22: hop-22
+X-Trace-23: hop-23
+X-Trace-24: hop-24
+
+User-agent: *
+Disallow: /private/
+Allow: /private/public.html

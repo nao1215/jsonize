@@ -525,6 +525,28 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- The long listings of `ls` returned wrong columns with exit 0 when one
+  name was taken away and a column added. `ls -lgZ` and `ls -loZ` print
+  two names before the size as `ls -l` does, the second being the
+  security context, and `ls -lo --author` the author; `ls -lg` of a
+  device file prints one name and "7, 0", which was read as a group "7,"
+  and a size of 0. Both came through a pipe as well as `jz run`, across
+  `ls/long`, `ls/full-time`, `ls/long-iso`, `ls/long-inode` and
+  `ls/long-recursive`. A group is now a name with no colon that does not
+  start with "?", a device line is read only with its major and minor
+  numbers, and `-Z` and `--author` are refused by the arguments.
+- `jz run lsblk -n -o +FSTYPE` returned the added column inside
+  `mountpoint`. `lsblk/no-headings` refuses `-o` and `-O`, and a mount
+  point is a path or `[SWAP]` with no run of spaces in it.
+- `curl/headers` read the body of `curl -i` as headers when its lines
+  had the shape of one, as a robots.txt or a security.txt does. The
+  blank line that ends a block now ends its headers, and only the next
+  status line may follow it.
+- Three signatures described too little: `uname/freebsd` read a sentence
+  that names FreeBSD twice, `systemctl/machines` read any table headed
+  NAME STATE FAILED JOBS, and `ps/freebsd` took a page quoting its
+  heading. They now ask for the release string, the host's own row and a
+  process row.
 - `jz run` read two outputs whose options a definition refuses, when the
   options were spelled another way. `git branch -v -v`, `-vvv` and
   `--verbose --verbose` print the upstream in brackets as `-vv` does, and

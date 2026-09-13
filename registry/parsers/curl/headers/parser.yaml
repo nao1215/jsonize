@@ -24,6 +24,12 @@
 # verbose lines go to standard error). Refused: a body after the headers
 # (-i), and the verbose lines once standard error is merged into the
 # output (2>&1), which begin with "*", ">" and "<".
+#
+# The blank line that ends a block is what tells a body from headers: a
+# robots.txt or a security.txt is lines of "Name: value", each of which
+# could be a header. So blank lines are kept, a block's headers stop at
+# the first one, and after it only the status line of the next response
+# may come.
 format: 1
 command: curl
 variant: headers
@@ -41,7 +47,15 @@ detect:
     any: ["-I", "--head", "-D", "--dump-header"]
   signature:
     all:
-      - '\AHTTP/[0-9](?:\.[0-9])? [0-9]{3}(?: [^\n]*)?$'
+      # A status line, and under it a header line, the blank line that
+      # ends the block, or nothing: a sentence that opens by quoting a
+      # status line goes on with words.
+      - '\AHTTP/[0-9](?:\.[0-9])? [0-9]{3}(?: [^\n]*)?(?:\n(?:[!#$%&''*+.^_`|~0-9A-Za-z-]+:|\n|\z)|\z)'
+    none:
+      # A blank line followed by anything but a status line: a body.
+      - '\n\n(?:[^H\n]|H[^T\n]|HT[^T\n]|HTT[^P\n]|HTTP[^/\n])'
+input:
+  skip_blank: false
 parse:
   type: records
   start: '^HTTP/[0-9](?:\.[0-9])? [0-9]{3}(?: [^\n]*)?$'
@@ -56,7 +70,7 @@ parse:
         code: {type: int}
         reason: {null_if: [""]}
     - name: headers
-      select: {skip: 1}
+      select: {skip: 1, until: '^$'}
       parse:
         type: regex
         # A field name is a token (RFC 9110, section 5.1); anything else

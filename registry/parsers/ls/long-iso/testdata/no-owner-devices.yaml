@@ -1,0 +1,6 @@
+description: >-
+  ls -lg --time-style=long-iso of device files: one name and "7, 0", which
+  read with two names would be a group "7," and a size of 0 (see ls/long).
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C; nothing replaced
+os: linux
+expect_error: 'does not describe this input'

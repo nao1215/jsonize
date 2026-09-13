@@ -1,0 +1,3 @@
+HTTP/1.1 200 OK
+was returned for GET /index.html
+and the cache was warm, so the second request took 3 ms.

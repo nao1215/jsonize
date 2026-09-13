@@ -1,0 +1,8 @@
+description: >-
+  lsblk -n -o +FSTYPE over whole disks, piped in with the parser named. A
+  mount point shorter than the widest one is padded to the width of its
+  column, and that run of spaces before the added value is where one
+  column ends and the next begins, so the signature refuses the text.
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C, loop devices left out with -e 7; the mount point under /media renamed and the column widened to match
+os: linux
+expect_error: 'does not describe this input'

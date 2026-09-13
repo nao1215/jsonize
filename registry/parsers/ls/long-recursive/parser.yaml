@@ -23,7 +23,7 @@ aliases:
   # vdir is ls -l under another name, so it needs no flag.
   - name: gls
   - name: vdir
-    args: {none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]}
+    args: {none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify", "-Z", "--context", "--author"]}
 description: ls -lR, or ls -l given several directories, as one record per directory
 metadata:
   tags: [linux, filesystem]
@@ -33,12 +33,18 @@ metadata:
 detect:
   args:
     any: ["-l", "--format=long", "--format=verbose"]
-    # A mark after each name (-F, -p) is not part of the name; see ls/long.
-    none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
+    # A mark after each name (-F, -p) is not part of the name, and -Z and
+    # --author paired with -g, -o or -G print two names under other
+    # meanings; see ls/long.
+    none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify", "-Z", "--context", "--author"]
   signature:
     all:
       # The output opens with a heading and the total under it.
       - '\A(?:[-dlcbps][-rwxsStT]{0,9}[.+@]?:|(?:[^-dlcbps\n]|[-dlcbps][-rwxsStT]{0,8}[^-rwxsStT\n]|[-dlcbps][-rwxsStT]{9}(?:[^.+@ \t\n]|[.+@][^ \t\n]))[^\n]*:)\ntotal [0-9.,]+[KMGTPEZYkB]*$'
+    none:
+      # An entry whose second name is a security context: the listing of
+      # ls -lRZ with the owner or the group taken away (see ls/long).
+      - '(?m)^[-dlcbps][-rwxsStT]{9}[.+@]?[ \t]+\d+[ \t]+\S+[ \t]+(?:\?|\S*:\S*)[ \t]+(?:[\d.]+[kKMGTPEZYRQBi]*|\d+,[ \t]*\d+)[ \t]+\w{3}[ \t]+\d{1,2}[ \t]'
 input:
   ignore:
     - '^total [0-9.,]+[KMGTPEZYkB]*$'
@@ -61,9 +67,9 @@ parse:
         # A device file has major and minor numbers where the size goes,
         # which ls/long explains.
         patterns:
-          - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.+?) -> (?P<link_to>.+)$'
-          - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
-          - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
+          - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>[^\s:?][^\s:]*)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.+?) -> (?P<link_to>.+)$'
+          - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>[^\s:?][^\s:]*)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
+          - '^(?P<flags>[-dlps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>[^\s:?][^\s:]*)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
       fields:
         links: {type: int, required: true}
         major: {type: int}

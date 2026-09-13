@@ -1,0 +1,6 @@
+description: >-
+  The same kind of body after more header lines than the signature reads,
+  so it is the reading of the block that has to stop at the blank line and
+  leave the body unread.
+source: "curl 8.18.0 -si against a Python http.server handler on 127.0.0.1 that sends 24 headers of its own before a robots.txt made for the fixture"
+expect_error: 'line 31'

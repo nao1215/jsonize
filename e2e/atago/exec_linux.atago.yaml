@@ -1815,6 +1815,31 @@ scenarios:
           stdout: {empty: true}
           stderr:
             contains: "ls/long-no-group"
+      # Taking one name away and adding a column after the group leaves
+      # two names again, under other meanings: -Z prints the security
+      # context there, which no group name looks like, and --author a user
+      # name, which only the argument tells from a group.
+      - run:
+          shell: true
+          command: LC_ALL=C ls -lgZ /etc/hostname | jz
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          command: jz run ls -lo --author /etc/hostname
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: "excluded by the argument --author"
+      # A device file with one name left prints that name and "1, 3",
+      # which is not a group and a size.
+      - run:
+          shell: true
+          command: LC_ALL=C ls -lg /dev/null | jz
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
 
   # -t opens each sample with the time it was taken, which is a different
   # place for a sample to start, so it is a different format.

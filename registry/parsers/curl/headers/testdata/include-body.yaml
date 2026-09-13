@@ -1,2 +1,2 @@
 source: "curl 8.18.0 -si against the e2ehelper server: -i puts the body after the headers, and a body is not a header"
-expect_error: "line 12"
+expect_error: "does not describe this input"

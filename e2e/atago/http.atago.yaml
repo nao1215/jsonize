@@ -195,15 +195,15 @@ scenarios:
         command: e2ehelper serve -addr ${workdir}/addr.txt
         ready: {file: addr.txt, store: addr, timeout: 20s}
     steps:
-      # -i prints the body after the headers. jz run does not claim that
-      # output at all, and read from a file the body is refused where it
-      # starts, with nothing written.
+      # -i prints the body after the headers, past the blank line that
+      # ends them. Neither jz run nor a file read claims that output, and
+      # nothing is written.
       - run:
           command: jz run curl -si http://${addr}/plain
       - assert:
           exit_code: 4
           stdout: {empty: true}
-          stderr: {contains: "needs one of the arguments [-I, --head, -D, --dump-header]"}
+          stderr: {contains: "no curl variant matches this input"}
       - run:
           command: curl -si -o ${workdir}/include.txt http://${addr}/plain
       - assert:
@@ -211,9 +211,9 @@ scenarios:
       - run:
           command: jz --file ${workdir}/include.txt
       - assert:
-          exit_code: 3
+          exit_code: 4
           stdout: {empty: true}
-          stderr: {contains: '"hello"'}
+          stderr: {contains: "unable to identify the input format"}
       # -v writes the exchange to standard error, which jz passes
       # through; standard output is the headers alone and is read.
       - run:

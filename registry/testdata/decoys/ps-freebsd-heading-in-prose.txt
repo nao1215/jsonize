@@ -1,0 +1,3 @@
+PID TT STAT TIME COMMAND
+The columns above are the ones ps prints by default on FreeBSD.
+Each is explained in the manual page.
