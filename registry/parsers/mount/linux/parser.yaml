@@ -10,13 +10,16 @@ metadata:
 detect:
   os: [linux]
   signature:
+    # The whole line: a mount point is an absolute path, and the options
+    # in parentheses end it. A sentence such as "Meeting on Friday about
+    # type safety (draft)" has the words and the parenthesis but neither.
     all:
-      - '^\S.* on .* type \S+ \('
+      - '^\S.* on /.* type \S+ \([^)\n]*\)(?: \[[^]\n]*\])?[ \t]*$'
 parse:
   type: regex
   # -l adds a file system's label in brackets after the options, and only
   # when it has one.
-  pattern: '^(?P<filesystem>.+?) on (?P<mount_point>.+?) type (?P<type>\S+) \((?P<options>[^)]*)\)(?: \[(?P<label>[^]]*)\])?\s*$'
+  pattern: '^(?P<filesystem>.+?) on (?P<mount_point>/.*?) type (?P<type>\S+) \((?P<options>[^)]*)\)(?: \[(?P<label>[^]]*)\])?\s*$'
 fields:
   options: {type: array, split: ","}
   label: {when_missing: omit}

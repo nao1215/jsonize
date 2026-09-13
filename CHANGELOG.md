@@ -553,6 +553,15 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Four signatures took text they do not describe, three of them with
+  exit 0. `journalctl/short-monotonic` read `dmesg | grep usb` as a
+  journal whose host was "usb"; it now also asks for a line with the
+  kernel's identifier or a pid, which dmesg never prints after a host.
+  `iconv/list` read `ls -d */*/` as encodings and now asks for a name
+  with the doubled slash. `mount/linux` read a sentence with "on",
+  "type" and a parenthesis, and now asks for an absolute mount point
+  and the options closing the line. `loginctl/seats` read any list
+  headed SEAT and now asks for the legend under it.
 - An uptime of more than a day followed by whole hours ("4 days, 3 hrs")
   or by minutes alone ("1 day, 5 mins") was refused as a duration, so
   `uptime/bsd` and `w/bsd` failed on it. The duration type now reads the

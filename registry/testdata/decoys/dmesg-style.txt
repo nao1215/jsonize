@@ -1,0 +1,6 @@
+[    0.000000] Linux version 7.0.0-31-generic (buildd@lcy02-amd64-001) (x86_64-linux-gnu-gcc-15 (Ubuntu 15.2.0-4ubuntu1) 15.2.0, GNU ld (GNU Binutils for Ubuntu) 2.45) #31-Ubuntu SMP PREEMPT_DYNAMIC
+[    0.000000] Command line: BOOT_IMAGE=/boot/vmlinuz-7.0.0-31-generic root=UUID=00000000-0000-0000-0000-000000000000 ro quiet splash
+[    0.000000] KERNEL supported cpus:
+[    0.000000]   Intel GenuineIntel
+[    0.000000]   AMD AuthenticAMD
+[    0.012345] BIOS-provided physical RAM map:

@@ -7,8 +7,10 @@
 #
 # Because the suffix fills the name up to two slashes, every line holds
 # exactly two of them and the last character is one, and that is what the
-# signature says. A listing of directory names carries one trailing slash
-# per line and no second one.
+# signature says. A listing of directory names two levels deep has that
+# shape too (`ls -d */*/` prints "cmd/jz/"), so the signature also asks
+# for a plain name, which is what the doubled slash marks: glibc lists
+# hundreds of them, and a path never has an empty part.
 format: 1
 command: iconv
 variant: list
@@ -26,6 +28,7 @@ detect:
       # separated by commas, which is a different format and is refused
       # here rather than misread.
       - '\A(?:[^/\n]*/[^/\n]*/\n)*[^/\n]*/[^/\n]*/\z'
+      - '^[^/\n]+//$'
 parse:
   type: regex
   pattern: '^(?P<encoding>.+?)/{1,2}$'
