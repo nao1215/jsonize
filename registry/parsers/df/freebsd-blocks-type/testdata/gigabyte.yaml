@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: df -gT, 1G blocks with the type, where the file systems smaller than a block count 0.
+os: freebsd
+args: ["-gT"]

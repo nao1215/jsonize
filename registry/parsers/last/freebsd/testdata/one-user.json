@@ -1,0 +1,20 @@
+[
+  {
+    "user": "root",
+    "tty": "ttyv0",
+    "host": null,
+    "login_time": "Sun Sep 13 10:44",
+    "still_logged_in": true,
+    "logout": null,
+    "duration": null
+  },
+  {
+    "user": "root",
+    "tty": "ttyv0",
+    "host": null,
+    "login_time": "Wed Sep  9 07:24",
+    "still_logged_in": false,
+    "logout": "07:30",
+    "duration": "00:06"
+  }
+]

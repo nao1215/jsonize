@@ -1,0 +1,39 @@
+# FreeBSD uptime prints the summary line w(1) opens with: the time of day
+# in 12-hour form ("10:44AM"), how long the machine has been up, the
+# number of users, and the load averages separated by commas. macOS
+# writes 24-hour time and no commas between the averages, which is
+# uptime/bsd.
+#
+# How long it has been up is written in the largest units that apply:
+# "8 secs", "1 min", "2 mins", "3 hrs", "2:05", with "1 day," or "4 days,"
+# before any of them. It is read as a duration.
+format: 1
+command: uptime
+variant: freebsd
+description: "FreeBSD uptime: 12-hour time and comma separated load averages"
+metadata:
+  tags: [freebsd, bsd, system]
+  compatible: [FreeBSD uptime]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?uptime(1)
+    # pr_header, which writes the line.
+    - https://github.com/freebsd/freebsd-src/blob/main/usr.bin/w/w.c
+detect:
+  os: [freebsd]
+  signature:
+    # The whole output is this one line; w opens with the same line and
+    # continues into a table of users.
+    all:
+      - '\A[ \t]*\d{1,2}:\d{2}[AP]M[ \t]+up[ \t]+.*,[ \t]+\d+ users?,[ \t]+load averages: [\d.]+, [\d.]+, [\d.]+[ \t]*\z'
+parse:
+  type: regex
+  each: input
+  pattern: '^[ \t]*(?P<time>\d{1,2}:\d{2}[AP]M)[ \t]+up[ \t]+(?P<uptime>\S.*?),[ \t]+(?P<users>\d+) users?,[ \t]+load averages: (?P<load_1m>[\d.]+), (?P<load_5m>[\d.]+), (?P<load_15m>[\d.]+)[ \t]*$'
+fields:
+  # The time of day carries no date, so it stays as printed.
+  time: {required: true}
+  uptime: {type: duration, layout: h:mm, required: true}
+  users: {type: int}
+  load_1m: {type: float}
+  load_5m: {type: float}
+  load_15m: {type: float}

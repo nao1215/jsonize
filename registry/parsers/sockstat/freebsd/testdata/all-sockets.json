@@ -1,0 +1,398 @@
+[
+  {
+    "user": "root",
+    "command": "sockstat",
+    "pid": 1503,
+    "fd": 6,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1497 8]"
+  },
+  {
+    "user": "root",
+    "command": "sockstat",
+    "pid": 1502,
+    "fd": 6,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1497 7]"
+  },
+  {
+    "user": "root",
+    "command": "sockstat",
+    "pid": 1501,
+    "fd": 6,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1497 6]"
+  },
+  {
+    "user": "root",
+    "command": "sockstat",
+    "pid": 1500,
+    "fd": 6,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1497 4]"
+  },
+  {
+    "user": "root",
+    "command": "sockstat",
+    "pid": 1497,
+    "fd": 4,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1500 6]"
+  },
+  {
+    "user": "root",
+    "command": "sockstat",
+    "pid": 1497,
+    "fd": 6,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1501 6]"
+  },
+  {
+    "user": "root",
+    "command": "sockstat",
+    "pid": 1497,
+    "fd": 7,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1502 6]"
+  },
+  {
+    "user": "root",
+    "command": "sockstat",
+    "pid": 1497,
+    "fd": 8,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1503 6]"
+  },
+  {
+    "user": "root",
+    "command": "nc",
+    "pid": 1429,
+    "fd": 3,
+    "proto": "tcp4",
+    "local_address": "127.0.0.1:7777",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "root",
+    "command": "nc",
+    "pid": 1428,
+    "fd": 3,
+    "proto": "udp4",
+    "local_address": "127.0.0.1:7778",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "root",
+    "command": "sshd-sessi",
+    "pid": 1421,
+    "fd": 6,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1419 8]"
+  },
+  {
+    "user": "root",
+    "command": "sshd-sessi",
+    "pid": 1421,
+    "fd": 7,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:22",
+    "foreign_address": "192.168.122.2:44116"
+  },
+  {
+    "user": "root",
+    "command": "sshd-sessi",
+    "pid": 1421,
+    "fd": 9,
+    "proto": "stream",
+    "local_address": "(not connected)",
+    "foreign_address": null
+  },
+  {
+    "user": "root",
+    "command": "sshd-sessi",
+    "pid": 1419,
+    "fd": 7,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:22",
+    "foreign_address": "192.168.122.2:44116"
+  },
+  {
+    "user": "root",
+    "command": "sshd-sessi",
+    "pid": 1419,
+    "fd": 8,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1421 6]"
+  },
+  {
+    "user": "root",
+    "command": "sshd-sessi",
+    "pid": 1419,
+    "fd": 9,
+    "proto": "stream",
+    "local_address": "(not connected)",
+    "foreign_address": null
+  },
+  {
+    "user": "root",
+    "command": "login",
+    "pid": 1382,
+    "fd": 3,
+    "proto": "dgram",
+    "local_address": null,
+    "foreign_address": "-> /var/run/log"
+  },
+  {
+    "user": "root",
+    "command": "logger",
+    "pid": 1375,
+    "fd": 6,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1369 4]"
+  },
+  {
+    "user": "root",
+    "command": "logger",
+    "pid": 1369,
+    "fd": 4,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1375 6]"
+  },
+  {
+    "user": "root",
+    "command": "sshd",
+    "pid": 1331,
+    "fd": 6,
+    "proto": "tcp6",
+    "local_address": "*:22",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "root",
+    "command": "sshd",
+    "pid": 1331,
+    "fd": 7,
+    "proto": "tcp4",
+    "local_address": "*:22",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 3,
+    "proto": "dgram",
+    "local_address": null,
+    "foreign_address": "-> /var/run/log"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 20,
+    "proto": "udp6",
+    "local_address": "*:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 21,
+    "proto": "udp4",
+    "local_address": "*:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 22,
+    "proto": "udp4",
+    "local_address": "192.168.122.10:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 23,
+    "proto": "udp6",
+    "local_address": "[::1]:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 24,
+    "proto": "udp6",
+    "local_address": "[fe80::1%lo0]:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 25,
+    "proto": "udp4",
+    "local_address": "127.0.0.1:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 27,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1255 28]"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 28,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1255 27]"
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1133,
+    "fd": 18,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1129 18]"
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1132,
+    "fd": 18,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1129 16]"
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1129,
+    "fd": 6,
+    "proto": "udp6",
+    "local_address": "*:514",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1129,
+    "fd": 7,
+    "proto": "udp4",
+    "local_address": "*:514",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1129,
+    "fd": 8,
+    "proto": "dgram",
+    "local_address": "/var/run/log",
+    "foreign_address": "<- [837 8],[1382 3],"
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1129,
+    "fd": 10,
+    "proto": "dgram",
+    "local_address": "/var/run/logpriv",
+    "foreign_address": null
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1129,
+    "fd": 16,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1132 18]"
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1129,
+    "fd": 18,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [1133 18]"
+  },
+  {
+    "user": "root",
+    "command": "devd",
+    "pid": 837,
+    "fd": 4,
+    "proto": "stream",
+    "local_address": "/var/run/devd.pipe",
+    "foreign_address": null
+  },
+  {
+    "user": "root",
+    "command": "devd",
+    "pid": 837,
+    "fd": 5,
+    "proto": "seqpack",
+    "local_address": "/var/run/devd.seqpack",
+    "foreign_address": null
+  },
+  {
+    "user": "root",
+    "command": "devd",
+    "pid": 837,
+    "fd": 8,
+    "proto": "dgram",
+    "local_address": null,
+    "foreign_address": "-> /var/run/log"
+  },
+  {
+    "user": "_dhcp",
+    "command": "dhclient",
+    "pid": 836,
+    "fd": 4,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [750 6]"
+  },
+  {
+    "user": "root",
+    "command": "dhclient",
+    "pid": 753,
+    "fd": 4,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [750 6]"
+  },
+  {
+    "user": "root",
+    "command": "dhclient",
+    "pid": 750,
+    "fd": 6,
+    "proto": "stream",
+    "local_address": null,
+    "foreign_address": "-> [836 4]"
+  }
+]

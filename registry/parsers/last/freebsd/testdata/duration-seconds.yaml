@@ -1,0 +1,7 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: >-
+  last -s writes the duration as a count of seconds padded inside the
+  parentheses ("(     379)"). That is not the hh:mm this reads, and the
+  row is refused rather than given a duration of another unit.
+os: freebsd
+expect_error: 'does not match'

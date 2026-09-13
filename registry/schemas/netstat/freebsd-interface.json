@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/netstat/freebsd-interface.json",
+  "title": "netstat/freebsd-interface",
+  "description": "FreeBSD netstat -i interface and address counters",
+  "x-jsonize": {
+    "definition": "netstat/freebsd-interface",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "up": {
+        "type": "boolean"
+      },
+      "mtu": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "network": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "ipkts": {
+        "type": "integer"
+      },
+      "ierrs": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "idrop": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "opkts": {
+        "type": "integer"
+      },
+      "oerrs": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "coll": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "up",
+      "mtu",
+      "network",
+      "address",
+      "ipkts",
+      "ierrs",
+      "idrop",
+      "opkts",
+      "oerrs",
+      "coll"
+    ]
+  }
+}

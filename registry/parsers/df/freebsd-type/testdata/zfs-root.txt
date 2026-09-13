@@ -1,0 +1,14 @@
+Filesystem          Type    1K-blocks    Used     Avail Capacity  Mounted on
+zroot/ROOT/default  zfs     207710944 3379564 204331380     2%    /
+devfs               devfs           1       0         1     0%    /dev
+/dev/gpt/efiboot0   msdosfs     32764     661     32102     2%    /boot/efi
+zroot/tmp           zfs     204331520     140 204331380     0%    /tmp
+zroot/home          zfs     204360772   29392 204331380     0%    /home
+zroot/var/crash     zfs     204331484     104 204331380     0%    /var/crash
+zroot/usr/ports     zfs     204331800     420 204331380     0%    /usr/ports
+zroot/var/log       zfs     204331604     224 204331380     0%    /var/log
+zroot/usr/obj       zfs     204331800     420 204331380     0%    /usr/obj
+zroot/var/tmp       zfs     204331804     424 204331380     0%    /var/tmp
+zroot/var/mail      zfs     204331800     420 204331380     0%    /var/mail
+zroot/var/audit     zfs     204331808     428 204331380     0%    /var/audit
+zroot/usr/src       zfs     204331800     420 204331380     0%    /usr/src

@@ -1,0 +1,11 @@
+[
+  {
+    "filesystem": "zroot/ROOT/default",
+    "type": "zfs",
+    "1k_blocks": 207710788,
+    "used": 3314020,
+    "available": 204396768,
+    "capacity_percent": 2,
+    "mounted_on": "/"
+  }
+]

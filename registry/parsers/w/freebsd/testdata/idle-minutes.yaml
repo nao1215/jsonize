@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: w two minutes after boot, with the console idle for two minutes, printed as "2".
+os: freebsd
+args: []

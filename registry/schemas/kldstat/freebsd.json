@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/kldstat/freebsd.json",
+  "title": "kldstat/freebsd",
+  "description": "FreeBSD kldstat loaded kernel files",
+  "x-jsonize": {
+    "definition": "kldstat/freebsd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "refs": {
+        "type": "integer"
+      },
+      "address": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "refs",
+      "address",
+      "size",
+      "name"
+    ]
+  }
+}

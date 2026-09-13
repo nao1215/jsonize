@@ -1,0 +1,7 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; two nc listeners were started for the capture
+description: >-
+  sockstat with unix and internet sockets. A unix socket's addresses are a
+  path, "(not connected)", "??" (null) or its peer after "->" or "<-", and
+  the foreign cell of the syslog socket is cut at its column.
+os: freebsd
+args: []

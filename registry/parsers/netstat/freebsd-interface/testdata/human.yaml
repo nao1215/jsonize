@@ -1,0 +1,7 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: >-
+  netstat -ihn rounds the MTU and the counters ("1.5K", "7.4k") under the
+  heading -i prints. The rounded figures are not counts, and the text is
+  refused.
+os: freebsd
+expect_error: 'does not describe this input'

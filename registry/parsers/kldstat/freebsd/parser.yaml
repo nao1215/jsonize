@@ -1,0 +1,42 @@
+# kldstat lists the files the kernel has loaded: the kernel itself and
+# each module file, with its id, how many references hold it, the address
+# it was loaded at and its size. The address and the size are printed in
+# hexadecimal (the size without 0x) and stay strings, as every address
+# jz reads does.
+#
+# The name is one word. -v writes the path in parentheses after it and
+# lists the modules each file contains on indented lines, which is a tree
+# this does not read; the parenthesis keeps such a row from being read as
+# a name. -h rounds the size and -m lists modules under another heading.
+format: 1
+command: kldstat
+variant: freebsd
+description: FreeBSD kldstat loaded kernel files
+metadata:
+  tags: [freebsd, bsd, kernel]
+  compatible: [FreeBSD kldstat]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?kldstat(8)
+    # The heading and the row format.
+    - https://github.com/freebsd/freebsd-src/blob/main/sbin/kldstat/kldstat.c
+detect:
+  os: [freebsd]
+  args:
+    none: ["-h", "-v", "-m", "-n", "-i", "-q"]
+  signature:
+    all:
+      - '\AId Refs Address[ \t]+Size Name[ \t]*$'
+      # The kernel is always loaded, and always file 1.
+      - '^[ \t]*1[ \t]+\d+[ \t]+0x[0-9a-f]+[ \t]+[0-9a-f]+[ \t]+kernel[ \t]*$'
+input:
+  ignore:
+    - '\AId Refs Address[ \t]+Size Name[ \t]*$'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<id>\d+)[ \t]+(?P<refs>\d+)[ \t]+(?P<address>0x[0-9a-f]+)[ \t]+(?P<size>[0-9a-f]+)[ \t]+(?P<name>[^\s()]+)[ \t]*$'
+fields:
+  id: {type: int, required: true}
+  refs: {type: int, required: true}
+  address: {required: true}
+  size: {required: true}
+  name: {required: true}

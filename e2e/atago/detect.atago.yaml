@@ -911,6 +911,66 @@ scenarios:
               - { path: "$[0].group", equals: "(1001)" }
               - { path: "$[0].birth_time", matches: "^[A-Z][a-z]{2} [A-Z][a-z]{2} [ 0-9][0-9] " }
 
+  - name: swapinfo, sockstat, last and w saved on FreeBSD are read on any system
+    steps:
+      - fixture:
+          file: swapinfo.txt
+          from: "${specdir}/testdata/swapinfo-freebsd.txt"
+      - run:
+          command: jz --file swapinfo.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.header.block_size", equals: 1K }
+              # Two devices make swapinfo add a Total row.
+              - { path: "$.devices", length: 3 }
+              - { path: "$.devices[2].device", equals: Total }
+      - fixture:
+          file: sockstat.txt
+          from: "${specdir}/testdata/sockstat-freebsd.txt"
+      - run:
+          command: jz --file sockstat.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              # "??" is an address sockstat could not find.
+              - { path: "$[0].local_address", equals: null }
+              - { path: "$[0].foreign_address", equals: "-> [1497 8]" }
+              - { path: "$[8].local_address", equals: "127.0.0.1:7777" }
+      - fixture:
+          file: last.txt
+          from: "${specdir}/testdata/last-freebsd.txt"
+      - run:
+          command: jz --file last.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 3 }
+              - { path: "$[0].still_logged_in", equals: true }
+              - { path: "$[1].duration", equals: "00:06" }
+              - { path: "$[2].user", equals: boot time }
+              - { path: "$[2].still_logged_in", equals: null }
+      - fixture:
+          file: w.txt
+          from: "${specdir}/testdata/w-freebsd.txt"
+      - run:
+          command: jz --file w.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.uptime.uptime", equals: 120 }
+              - { path: "$.users[0].what", equals: "-sh (sh)" }
+      # The macOS definition does not read the FreeBSD summary line.
+      - run:
+          command: jz --parser w --variant bsd --file w.txt
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
   - name: HTTP/2 and HTTP/3 headers saved by curl are read on any system
     steps:
       - fixture:

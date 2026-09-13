@@ -1,0 +1,47 @@
+[
+  {
+    "user": "root",
+    "command": "sshd",
+    "pid": 1331,
+    "fd": 6,
+    "proto": "tcp6",
+    "local_address": "*:22",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 20,
+    "proto": "udp6",
+    "local_address": "*:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 23,
+    "proto": "udp6",
+    "local_address": "[::1]:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 24,
+    "proto": "udp6",
+    "local_address": "[fe80::1%lo0]:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1129,
+    "fd": 6,
+    "proto": "udp6",
+    "local_address": "*:514",
+    "foreign_address": "*:*"
+  }
+]

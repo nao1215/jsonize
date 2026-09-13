@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; md99 is a 64 MiB swap file attached for the capture
+description: swapinfo -m. The heading names 1M blocks and the figures are whole counts of them.
+os: freebsd
+args: ["-m"]

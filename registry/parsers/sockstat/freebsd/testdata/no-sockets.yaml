@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: sockstat -4 -P sctp on a machine with no SCTP sockets prints the heading alone, which is an empty list.
+os: freebsd
+args: ["-4", "-P", "sctp"]

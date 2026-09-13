@@ -1,0 +1,2 @@
+Filesystem         Type    512-blocks Used Avail Capacity  Mounted on
+/dev/gpt/efiboot0  msdosfs      65528 1323 64205     2%    /boot/efi

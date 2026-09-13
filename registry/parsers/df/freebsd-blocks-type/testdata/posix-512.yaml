@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: df -PT /boot/efi, 512-byte blocks with the type, for one msdosfs partition.
+os: freebsd
+args: ["-PT", "/boot/efi"]

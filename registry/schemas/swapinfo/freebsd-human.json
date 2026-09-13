@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/swapinfo/freebsd-human.json",
+  "title": "swapinfo/freebsd-human",
+  "description": "FreeBSD swapinfo -h swap devices with rounded sizes",
+  "x-jsonize": {
+    "definition": "swapinfo/freebsd-human",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "used": {
+        "type": "string"
+      },
+      "available": {
+        "type": "string"
+      },
+      "capacity_percent": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "device",
+      "size",
+      "used",
+      "available",
+      "capacity_percent"
+    ]
+  }
+}

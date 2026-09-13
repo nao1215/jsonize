@@ -1,0 +1,48 @@
+# sockstat lists open sockets: the user and command that hold one, the
+# process and descriptor, the protocol, and the local and foreign
+# addresses. Internet sockets print host:port ("*:22", "[::1]:123");
+# a unix socket prints the path it is bound to, "(not connected)", or
+# "??" when the address cannot be found, and on the foreign side the peer
+# as "-> [pid fd]", "-> /var/run/log" or "<- " and the processes on the
+# other end.
+#
+# The columns are sized to their widest cell and a cell may overflow its
+# column, so a row is read by what each column holds rather than cut at
+# the heading: a user, a command that may hold spaces, two numbers, the
+# protocol, the local address and the rest of the line. The command is
+# cut to ten characters and a long foreign cell to its column; both stay
+# as printed.
+#
+# Several options add columns after FOREIGN ADDRESS (-s adds CONN STATE),
+# and the heading is pinned to its end so those tables are not read with
+# the new cells inside the foreign address. -q prints no heading at all.
+format: 1
+command: sockstat
+variant: freebsd
+description: FreeBSD sockstat open sockets
+metadata:
+  tags: [freebsd, bsd, network]
+  compatible: [FreeBSD sockstat]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?sockstat(1)
+detect:
+  os: [freebsd]
+  signature:
+    all:
+      - '\AUSER[ \t]+COMMAND[ \t]+PID[ \t]+FD[ \t]+PROTO[ \t]+LOCAL ADDRESS[ \t]+FOREIGN ADDRESS[ \t]*$'
+input:
+  ignore:
+    - '\AUSER[ \t]+COMMAND[ \t]+PID[ \t]+FD[ \t]+PROTO[ \t]+LOCAL ADDRESS[ \t]+FOREIGN ADDRESS[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<user>\S+)[ \t]+(?P<command>\S.*?)[ \t]+(?P<pid>\d+)[ \t]+(?P<fd>\d+)[ \t]+(?P<proto>[a-z]+[0-9]*)[ \t]+(?P<local_address>\(not connected\)|\S+)[ \t]+(?P<foreign_address>\S.*?)[ \t]*$'
+fields:
+  user: {required: true}
+  command: {required: true}
+  pid: {type: int, required: true}
+  fd: {type: int, required: true}
+  proto: {required: true}
+  # "??" is sockstat saying it could not find the address, which is null
+  # rather than an address.
+  local_address: {null_if: ["??"]}
+  foreign_address: {null_if: ["??"]}

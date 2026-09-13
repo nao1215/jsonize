@@ -1,0 +1,6 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: >-
+  w eight seconds after boot with root on the console. A local login's
+  FROM and an idle time under a minute are both "-", which is null.
+os: freebsd
+args: []

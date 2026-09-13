@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: last -y puts the year inside the login time, which this does not read, and the rows are refused.
+os: freebsd
+expect_error: 'does not match'

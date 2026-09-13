@@ -1,0 +1,45 @@
+USER  COMMAND     PID FD PROTO   LOCAL ADDRESS                        FOREIGN ADDRESS              
+root  sockstat   1652  6 stream  ??                                   -> [1645 8]                  
+root  sockstat   1651  6 stream  ??                                   -> [1645 7]                  
+root  sockstat   1650  6 stream  ??                                   -> [1645 6]                  
+root  sockstat   1648  6 stream  ??                                   -> [1645 4]                  
+root  sockstat   1645  4 stream  ??                                   -> [1648 6]                  
+root  sockstat   1645  6 stream  ??                                   -> [1650 6]                  
+root  sockstat   1645  7 stream  ??                                   -> [1651 6]                  
+root  sockstat   1645  8 stream  ??                                   -> [1652 6]                  
+root  nc         1440  3 tcp4    127.0.0.1:7777                       *:*                          
+root  sshd-sessi 1421  6 stream  ??                                   -> [1419 8]                  
+root  sshd-sessi 1421  7 tcp4    192.168.122.10:22                    192.168.122.2:34718          
+root  sshd-sessi 1421  9 stream  (not connected)                      ??                           
+root  sshd-sessi 1419  7 tcp4    192.168.122.10:22                    192.168.122.2:34718          
+root  sshd-sessi 1419  8 stream  ??                                   -> [1421 6]                  
+root  sshd-sessi 1419  9 stream  (not connected)                      ??                           
+root  login      1382  3 dgram   ??                                   -> /var/run/log              
+root  logger     1375  6 stream  ??                                   -> [1369 4]                  
+root  logger     1369  4 stream  ??                                   -> [1375 6]                  
+root  sshd       1331  6 tcp6    *:22                                 *:*                          
+root  sshd       1331  7 tcp4    *:22                                 *:*                          
+ntpd  ntpd       1255  3 dgram   ??                                   -> /var/run/log              
+ntpd  ntpd       1255 20 udp6    *:123                                *:*                          
+ntpd  ntpd       1255 21 udp4    *:123                                *:*                          
+ntpd  ntpd       1255 22 udp6    [fe80::5054:ff:fe12:3456%vtnet0]:123 *:*                          
+ntpd  ntpd       1255 23 udp4    192.168.122.10:123                   *:*                          
+ntpd  ntpd       1255 24 udp6    [::1]:123                            *:*                          
+ntpd  ntpd       1255 25 udp6    [fe80::1%lo0]:123                    *:*                          
+ntpd  ntpd       1255 26 udp4    127.0.0.1:123                        *:*                          
+ntpd  ntpd       1255 28 stream  ??                                   -> [1255 29]                 
+ntpd  ntpd       1255 29 stream  ??                                   -> [1255 28]                 
+root  syslogd    1133 18 stream  ??                                   -> [1129 18]                 
+root  syslogd    1132 18 stream  ??                                   -> [1129 16]                 
+root  syslogd    1129  6 udp6    *:514                                *:*                          
+root  syslogd    1129  7 udp4    *:514                                *:*                          
+root  syslogd    1129  8 dgram   /var/run/log                          <- [837 8],[1382 3],[1255 3]
+root  syslogd    1129 10 dgram   /var/run/logpriv                     ??                           
+root  syslogd    1129 16 stream  ??                                   -> [1132 18]                 
+root  syslogd    1129 18 stream  ??                                   -> [1133 18]                 
+root  devd        837  4 stream  /var/run/devd.pipe                   ??                           
+root  devd        837  5 seqpack /var/run/devd.seqpacket.pipe         ??                           
+root  devd        837  8 dgram   ??                                   -> /var/run/log              
+_dhcp dhclient    836  4 stream  ??                                   -> [750 6]                   
+root  dhclient    753  4 stream  ??                                   -> [750 6]                   
+root  dhclient    750  6 stream  ??                                   -> [836 4]                   

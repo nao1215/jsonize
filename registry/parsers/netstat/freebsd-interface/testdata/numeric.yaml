@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; bridge0 and lo1 were created for the capture and bridge0 left down
+description: netstat -in, the same table with every network and address as numbers.
+os: freebsd
+args: ["-in"]

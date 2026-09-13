@@ -1,0 +1,6 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; md99 is a 64 MiB swap file attached for the capture
+description: >-
+  swapinfo -g. A device smaller than one block counts 0 blocks, which is
+  what swapinfo printed and not a missing value.
+os: freebsd
+args: ["-g"]

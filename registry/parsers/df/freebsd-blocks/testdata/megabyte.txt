@@ -1,0 +1,14 @@
+Filesystem         1M-blocks Used  Avail Capacity  Mounted on
+zroot/ROOT/default    202842 3300 199542     2%    /
+devfs                      0    0      0     0%    /dev
+/dev/gpt/efiboot0         31    0     31     2%    /boot/efi
+zroot/tmp             199542    0 199542     0%    /tmp
+zroot/home            199571   28 199542     0%    /home
+zroot/var/crash       199542    0 199542     0%    /var/crash
+zroot/usr/ports       199542    0 199542     0%    /usr/ports
+zroot/var/log         199542    0 199542     0%    /var/log
+zroot/usr/obj         199542    0 199542     0%    /usr/obj
+zroot/var/tmp         199542    0 199542     0%    /var/tmp
+zroot/var/mail        199542    0 199542     0%    /var/mail
+zroot/var/audit       199542    0 199542     0%    /var/audit
+zroot/usr/src         199542    0 199542     0%    /usr/src

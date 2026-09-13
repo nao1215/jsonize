@@ -14,7 +14,10 @@ detect:
   os: [darwin]
   signature:
     all:
-      - '^.*load averages: '
+      # The summary line whole, with the 24-hour time and the averages
+      # separated by spaces: a line that only mentions load averages is
+      # the FreeBSD one, which w/freebsd reads.
+      - '\A[ \t]*\d{1,2}:\d{2}(?::\d{2})?[ \t]+up[ \t]+.*,[ \t]+load averages: [\d.]+ [\d.]+ [\d.]+[ \t]*$'
       - '^USER\s+TTY\s+FROM\s+LOGIN@\s+IDLE\s+WHAT\s*$'
 parse:
   type: composite

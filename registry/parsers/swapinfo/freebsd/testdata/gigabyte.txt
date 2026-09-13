@@ -1,0 +1,4 @@
+Device          1G-blocks     Used    Avail Capacity
+/dev/gpt/swapfs         1        0        1     0%
+/dev/md99               0        0        0     0%
+Total                   1        0        1     0%

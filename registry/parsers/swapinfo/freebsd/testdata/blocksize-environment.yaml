@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C and BLOCKSIZE=4k
+description: swapinfo with BLOCKSIZE=4k in the environment, which heads the column 4K-blocks.
+os: freebsd
+args: []

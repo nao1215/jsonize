@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/w/freebsd.json",
+  "title": "w/freebsd",
+  "description": "FreeBSD w: uptime summary plus logged-in users",
+  "x-jsonize": {
+    "definition": "w/freebsd",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "uptime": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string"
+        },
+        "uptime": {
+          "type": "number"
+        },
+        "users": {
+          "type": "integer"
+        },
+        "load_1m": {
+          "type": "number"
+        },
+        "load_5m": {
+          "type": "number"
+        },
+        "load_15m": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "time",
+        "uptime",
+        "users",
+        "load_1m",
+        "load_5m",
+        "load_15m"
+      ]
+    },
+    "users": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string"
+          },
+          "tty": {
+            "type": "string"
+          },
+          "from": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "login_at": {
+            "type": "string"
+          },
+          "idle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "what": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user",
+          "tty",
+          "from",
+          "login_at",
+          "idle",
+          "what"
+        ]
+      }
+    }
+  },
+  "required": [
+    "uptime",
+    "users"
+  ]
+}

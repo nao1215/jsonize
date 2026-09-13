@@ -1,0 +1,111 @@
+{
+  "header": {
+    "block_size": "512"
+  },
+  "filesystems": [
+    {
+      "filesystem": "zroot/ROOT/default",
+      "blocks": 415421888,
+      "used": 6759128,
+      "available": 408662760,
+      "capacity_percent": 2,
+      "mounted_on": "/"
+    },
+    {
+      "filesystem": "devfs",
+      "blocks": 2,
+      "used": 0,
+      "available": 2,
+      "capacity_percent": 0,
+      "mounted_on": "/dev"
+    },
+    {
+      "filesystem": "/dev/gpt/efiboot0",
+      "blocks": 65528,
+      "used": 1323,
+      "available": 64205,
+      "capacity_percent": 2,
+      "mounted_on": "/boot/efi"
+    },
+    {
+      "filesystem": "zroot/tmp",
+      "blocks": 408663040,
+      "used": 280,
+      "available": 408662760,
+      "capacity_percent": 0,
+      "mounted_on": "/tmp"
+    },
+    {
+      "filesystem": "zroot/home",
+      "blocks": 408721544,
+      "used": 58784,
+      "available": 408662760,
+      "capacity_percent": 0,
+      "mounted_on": "/home"
+    },
+    {
+      "filesystem": "zroot/var/crash",
+      "blocks": 408662968,
+      "used": 208,
+      "available": 408662760,
+      "capacity_percent": 0,
+      "mounted_on": "/var/crash"
+    },
+    {
+      "filesystem": "zroot/usr/ports",
+      "blocks": 408663600,
+      "used": 840,
+      "available": 408662760,
+      "capacity_percent": 0,
+      "mounted_on": "/usr/ports"
+    },
+    {
+      "filesystem": "zroot/var/log",
+      "blocks": 408663208,
+      "used": 448,
+      "available": 408662760,
+      "capacity_percent": 0,
+      "mounted_on": "/var/log"
+    },
+    {
+      "filesystem": "zroot/usr/obj",
+      "blocks": 408663600,
+      "used": 840,
+      "available": 408662760,
+      "capacity_percent": 0,
+      "mounted_on": "/usr/obj"
+    },
+    {
+      "filesystem": "zroot/var/tmp",
+      "blocks": 408663608,
+      "used": 848,
+      "available": 408662760,
+      "capacity_percent": 0,
+      "mounted_on": "/var/tmp"
+    },
+    {
+      "filesystem": "zroot/var/mail",
+      "blocks": 408663600,
+      "used": 840,
+      "available": 408662760,
+      "capacity_percent": 0,
+      "mounted_on": "/var/mail"
+    },
+    {
+      "filesystem": "zroot/var/audit",
+      "blocks": 408663616,
+      "used": 856,
+      "available": 408662760,
+      "capacity_percent": 0,
+      "mounted_on": "/var/audit"
+    },
+    {
+      "filesystem": "zroot/usr/src",
+      "blocks": 408663600,
+      "used": 840,
+      "available": 408662760,
+      "capacity_percent": 0,
+      "mounted_on": "/usr/src"
+    }
+  ]
+}

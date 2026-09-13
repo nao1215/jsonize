@@ -1,0 +1,50 @@
+# netstat -i on FreeBSD prints a row for each interface's link level and
+# a row for each address on it. The link row carries the MTU and the error
+# and collision counters; an address row repeats the interface name,
+# prints "-" for the MTU and for the counters the kernel keeps only per
+# interface, and has the network and address in place of <Link#n> and the
+# hardware address. Without -n the network and address are names where a
+# name is known ("localhost", "your-net"), and they stay as printed.
+#
+# A name followed by "*" is an interface that is not up. The star is not
+# part of the name, so it is read into up.
+#
+# -b adds byte counters and -d a Drop column, which changes the heading;
+# the heading is pinned whole. -h rounds the counters ("7.4k") under the
+# same heading, and the link row the signature asks for has an exact MTU
+# and exact counters, so a rounded table is not read.
+format: 1
+command: netstat
+variant: freebsd-interface
+description: FreeBSD netstat -i interface and address counters
+metadata:
+  tags: [freebsd, bsd, network]
+  compatible: [FreeBSD netstat]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?netstat(1)
+detect:
+  os: [freebsd]
+  signature:
+    all:
+      - '\AName[ \t]+Mtu[ \t]+Network[ \t]+Address[ \t]+Ipkts[ \t]+Ierrs[ \t]+Idrop[ \t]+Opkts[ \t]+Oerrs[ \t]+Coll[ \t]*$'
+      - '^[^\s*]+\*?[ \t]+\d+[ \t]+<Link#\d+>[ \t]+\S+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]*$'
+input:
+  ignore:
+    - '\AName[ \t]+Mtu[ \t]+Network[ \t]+Address[ \t]+Ipkts'
+parse:
+  type: regex
+  pattern: '^(?P<name>[^\s*]+)(?P<up>\*?)[ \t]+(?P<mtu>\d+|-)[ \t]+(?P<network>\S+)[ \t]+(?P<address>\S+)[ \t]+(?P<ipkts>\d+)[ \t]+(?P<ierrs>\d+|-)[ \t]+(?P<idrop>\d+|-)[ \t]+(?P<opkts>\d+)[ \t]+(?P<oerrs>\d+|-)[ \t]+(?P<coll>\d+|-)[ \t]*$'
+fields:
+  name: {required: true}
+  up: {type: bool, true_values: [""], false_values: ["*"]}
+  # The dashes on an address row are counters kept for the interface and
+  # not for the address: null, not zero.
+  mtu: {type: int, null_if: ["-"]}
+  network: {required: true}
+  address: {required: true}
+  ipkts: {type: int, required: true}
+  ierrs: {type: int, null_if: ["-"]}
+  idrop: {type: int, null_if: ["-"]}
+  opkts: {type: int, required: true}
+  oerrs: {type: int, null_if: ["-"]}
+  coll: {type: int, null_if: ["-"]}

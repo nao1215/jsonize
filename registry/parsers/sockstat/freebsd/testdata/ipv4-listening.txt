@@ -1,0 +1,8 @@
+USER COMMAND     PID FD PROTO LOCAL ADDRESS         FOREIGN ADDRESS      
+root nc         1429  3 tcp4  127.0.0.1:7777        *:*                  
+root nc         1428  3 udp4  127.0.0.1:7778        *:*                  
+root sshd       1331  7 tcp4  *:22                  *:*                  
+ntpd ntpd       1255 21 udp4  *:123                 *:*                  
+ntpd ntpd       1255 22 udp4  192.168.122.10:123    *:*                  
+ntpd ntpd       1255 25 udp4  127.0.0.1:123         *:*                  
+root syslogd    1129  7 udp4  *:514                 *:*                  

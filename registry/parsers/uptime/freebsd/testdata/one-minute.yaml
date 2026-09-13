@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: uptime past the first minute, "1 min" with no plural.
+os: freebsd
+args: []

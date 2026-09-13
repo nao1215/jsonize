@@ -1,0 +1,14 @@
+Filesystem         512-blocks    Used     Avail Capacity  Mounted on
+zroot/ROOT/default  415421888 6759128 408662760     2%    /
+devfs                       2       0         2     0%    /dev
+/dev/gpt/efiboot0       65528    1323     64205     2%    /boot/efi
+zroot/tmp           408663040     280 408662760     0%    /tmp
+zroot/home          408721544   58784 408662760     0%    /home
+zroot/var/crash     408662968     208 408662760     0%    /var/crash
+zroot/usr/ports     408663600     840 408662760     0%    /usr/ports
+zroot/var/log       408663208     448 408662760     0%    /var/log
+zroot/usr/obj       408663600     840 408662760     0%    /usr/obj
+zroot/var/tmp       408663608     848 408662760     0%    /var/tmp
+zroot/var/mail      408663600     840 408662760     0%    /var/mail
+zroot/var/audit     408663616     856 408662760     0%    /var/audit
+zroot/usr/src       408663600     840 408662760     0%    /usr/src

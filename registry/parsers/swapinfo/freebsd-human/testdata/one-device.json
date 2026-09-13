@@ -1,0 +1,9 @@
+[
+  {
+    "device": "/dev/gpt/swapfs",
+    "size": "1.0G",
+    "used": "0B",
+    "available": "1.0G",
+    "capacity_percent": 0
+  }
+]

@@ -1,0 +1,41 @@
+# FreeBSD df -T with a block other than the default 1K (-m, -g, -k, -P or
+# BLOCKSIZE): the type column of df/freebsd-type and the heading-named
+# block of df/freebsd-blocks.
+format: 1
+command: df
+variant: freebsd-blocks-type
+description: FreeBSD df -T -m/-g/-k/-P (counts in the block the heading names, with the type)
+metadata:
+  tags: [freebsd, bsd, filesystem]
+  compatible: [FreeBSD df]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?df(1)
+detect:
+  os: [freebsd]
+  signature:
+    all:
+      - '\AFilesystem\s+Type\s+(?:[0-9]+|[02-9][KMG]|[0-9]{2,}[KMG]|1[MG])-blocks\s+Used\s+Avail\s+Capacity\s+Mounted on\s*$'
+parse:
+  type: composite
+  parts:
+    - name: header
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AFilesystem\s+Type\s+(?P<block_size>(?:[0-9]+|[02-9][KMG]|[0-9]{2,}[KMG]|1[MG]))-blocks\s+Used\s+Avail\s+Capacity\s+Mounted on\s*\z'
+      fields:
+        block_size: {required: true}
+    - name: filesystems
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^(?P<filesystem>.+?)\s+(?P<type>\S+)\s+(?P<blocks>\d+)\s+(?P<used>\d+)\s+(?P<available>\d+)\s+(?P<capacity_percent>\d+%|-)\s+(?P<mounted_on>/.*?)\s*$'
+      fields:
+        filesystem: {required: true}
+        type: {required: true}
+        blocks: {type: int, required: true}
+        used: {type: int, required: true}
+        available: {type: int, required: true}
+        capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+        mounted_on: {required: true}

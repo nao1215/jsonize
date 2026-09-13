@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; lo1 was created for the capture
+description: netstat -i -I lo1, one interface, with the columns narrowed to its cells.
+os: freebsd
+args: ["-i", "-I", "lo1"]

@@ -1,0 +1,55 @@
+# swapinfo (pstat -s) prints one row per swap device: its size, the part
+# in use, the part free and the percentage in use. The figures are whole
+# counts of the block the heading names, which BLOCKSIZE sets and -k, -m
+# and -g override ("1K-blocks", "1M-blocks", "512-blocks"), so the unit
+# is read from the heading rather than built into a key name.
+#
+# With more than one device swapinfo closes the table with a row named
+# Total. It is kept as printed, as df --total is; a device is a path, so
+# the name does not collide with one.
+#
+# -h prints rounded sizes under a Size heading and is read by
+# swapinfo/freebsd-human. -s prints one line of totals and is not read.
+format: 1
+command: swapinfo
+variant: freebsd
+description: FreeBSD swapinfo swap devices in the block size the heading names
+metadata:
+  tags: [freebsd, bsd, memory]
+  compatible: [FreeBSD swapinfo]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?swapinfo(8)
+    # print_swap_header and print_swap_line.
+    - https://github.com/freebsd/freebsd-src/blob/main/usr.sbin/pstat/pstat.c
+detect:
+  os: [freebsd]
+  signature:
+    # A machine with no swap configured prints the heading alone, so the
+    # heading is the whole signature. The swapctl -l of NetBSD and
+    # OpenBSD ends its heading with Priority and is not this.
+    all:
+      - '\ADevice[ \t]+[0-9]+[KMG]?-blocks[ \t]+Used[ \t]+Avail[ \t]+Capacity[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: header
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ADevice[ \t]+(?P<block_size>[0-9]+[KMG]?)-blocks[ \t]+Used[ \t]+Avail[ \t]+Capacity[ \t]*\z'
+      fields:
+        block_size: {required: true}
+    - name: devices
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^(?P<device>\S+)[ \t]+(?P<blocks>\d+)[ \t]+(?P<used>\d+)[ \t]+(?P<available>\d+)[ \t]+(?P<capacity_percent>\d+)%[ \t]*$'
+      fields:
+        device: {required: true}
+        blocks: {type: int, required: true}
+        used: {type: int, required: true}
+        # The heading says Avail; the key is the one df uses for the same
+        # number.
+        available: {type: int, required: true}
+        capacity_percent: {type: int, required: true}

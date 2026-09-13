@@ -1,0 +1,119 @@
+[
+  {
+    "filesystem": "zroot/ROOT/default",
+    "type": "zfs",
+    "1k_blocks": 207710944,
+    "used": 3379564,
+    "available": 204331380,
+    "capacity_percent": 2,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "devfs",
+    "type": "devfs",
+    "1k_blocks": 1,
+    "used": 0,
+    "available": 1,
+    "capacity_percent": 0,
+    "mounted_on": "/dev"
+  },
+  {
+    "filesystem": "/dev/gpt/efiboot0",
+    "type": "msdosfs",
+    "1k_blocks": 32764,
+    "used": 661,
+    "available": 32102,
+    "capacity_percent": 2,
+    "mounted_on": "/boot/efi"
+  },
+  {
+    "filesystem": "zroot/tmp",
+    "type": "zfs",
+    "1k_blocks": 204331520,
+    "used": 140,
+    "available": 204331380,
+    "capacity_percent": 0,
+    "mounted_on": "/tmp"
+  },
+  {
+    "filesystem": "zroot/home",
+    "type": "zfs",
+    "1k_blocks": 204360772,
+    "used": 29392,
+    "available": 204331380,
+    "capacity_percent": 0,
+    "mounted_on": "/home"
+  },
+  {
+    "filesystem": "zroot/var/crash",
+    "type": "zfs",
+    "1k_blocks": 204331484,
+    "used": 104,
+    "available": 204331380,
+    "capacity_percent": 0,
+    "mounted_on": "/var/crash"
+  },
+  {
+    "filesystem": "zroot/usr/ports",
+    "type": "zfs",
+    "1k_blocks": 204331800,
+    "used": 420,
+    "available": 204331380,
+    "capacity_percent": 0,
+    "mounted_on": "/usr/ports"
+  },
+  {
+    "filesystem": "zroot/var/log",
+    "type": "zfs",
+    "1k_blocks": 204331604,
+    "used": 224,
+    "available": 204331380,
+    "capacity_percent": 0,
+    "mounted_on": "/var/log"
+  },
+  {
+    "filesystem": "zroot/usr/obj",
+    "type": "zfs",
+    "1k_blocks": 204331800,
+    "used": 420,
+    "available": 204331380,
+    "capacity_percent": 0,
+    "mounted_on": "/usr/obj"
+  },
+  {
+    "filesystem": "zroot/var/tmp",
+    "type": "zfs",
+    "1k_blocks": 204331804,
+    "used": 424,
+    "available": 204331380,
+    "capacity_percent": 0,
+    "mounted_on": "/var/tmp"
+  },
+  {
+    "filesystem": "zroot/var/mail",
+    "type": "zfs",
+    "1k_blocks": 204331800,
+    "used": 420,
+    "available": 204331380,
+    "capacity_percent": 0,
+    "mounted_on": "/var/mail"
+  },
+  {
+    "filesystem": "zroot/var/audit",
+    "type": "zfs",
+    "1k_blocks": 204331808,
+    "used": 428,
+    "available": 204331380,
+    "capacity_percent": 0,
+    "mounted_on": "/var/audit"
+  },
+  {
+    "filesystem": "zroot/usr/src",
+    "type": "zfs",
+    "1k_blocks": 204331800,
+    "used": 420,
+    "available": 204331380,
+    "capacity_percent": 0,
+    "mounted_on": "/usr/src"
+  }
+]

@@ -1,0 +1,14 @@
+Filesystem          Type    1G-blocks Used Avail Capacity  Mounted on
+zroot/ROOT/default  zfs           198    3   194     2%    /
+devfs               devfs           0    0     0     0%    /dev
+/dev/gpt/efiboot0   msdosfs         0    0     0     2%    /boot/efi
+zroot/tmp           zfs           194    0   194     0%    /tmp
+zroot/var/crash     zfs           194    0   194     0%    /var/crash
+zroot/usr/ports     zfs           194    0   194     0%    /usr/ports
+zroot/usr/obj       zfs           194    0   194     0%    /usr/obj
+zroot/home          zfs           194    0   194     0%    /home
+zroot/var/audit     zfs           194    0   194     0%    /var/audit
+zroot/usr/src       zfs           194    0   194     0%    /usr/src
+zroot/var/log       zfs           194    0   194     0%    /var/log
+zroot/var/tmp       zfs           194    0   194     0%    /var/tmp
+zroot/var/mail      zfs           194    0   194     0%    /var/mail
