@@ -12,11 +12,26 @@ builds:
     binary: jz
     env:
       - CGO_ENABLED=0
-    goos: [linux, darwin, windows]
+    goos: [linux, darwin]
     goarch: [amd64, arm64]
     flags: [-trimpath]
     ldflags:
-      - -s -w -X github.com/nao1215/jsonize/internal/buildinfo.Version={{ .Version }}
+      - -s -w -X github.com/nao1215/jsonize/internal/buildinfo.Version=v{{ .Version }}
+  # Windows is built with the garbage collector configuration its CI
+  # jobs test: GOEXPERIMENT=nogreenteagc. See the comment in
+  # .github/workflows/unit_test.yml for why, and release_smoke.yml for
+  # the check that runs these binaries on Windows.
+  - id: jz-windows
+    main: ./cmd/jz
+    binary: jz
+    env:
+      - CGO_ENABLED=0
+      - GOEXPERIMENT=nogreenteagc
+    goos: [windows]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+    ldflags:
+      - -s -w -X github.com/nao1215/jsonize/internal/buildinfo.Version=v{{ .Version }}
 
 archives:
   - id: default
@@ -47,26 +62,9 @@ nfpms:
     formats: [deb, rpm, apk]
     bindir: /usr/bin
 
-changelog:
-  sort: asc
-  use: github
-  filters:
-    exclude:
-      - "^docs:"
-      - "^test:"
-      - "^chore:"
-  groups:
-    - title: Features
-      regexp: '^.*?feat(\(.+\))??!?:.+$'
-      order: 0
-    - title: Bug fixes
-      regexp: '^.*?fix(\(.+\))??!?:.+$'
-      order: 1
-    - title: Parsers
-      regexp: '^.*?parser(\(.+\))??!?:.+$'
-      order: 2
-    - title: Others
-      order: 999
+# The release notes are the CHANGELOG.md section of the tag, passed with
+# --release-notes by .github/workflows/release.yml, so no changelog is
+# generated from commit messages.
 
 snapshot:
   version_template: "{{ incpatch .Version }}-next"

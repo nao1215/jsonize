@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Run the atago end-to-end suite against a freshly built jz.
+# Run the atago end-to-end suite against a freshly built jz, or against
+# the binary JZ_BINARY names.
 #
 # The binary is placed first on PATH inside a throw-away sandbox whose
 # HOME, XDG and cache directories point into the sandbox, so the suite can
@@ -68,7 +69,12 @@ trap 'rm -rf "$sandbox"' EXIT
 mkdir -p "$sandbox/bin" "$sandbox/home"
 
 exe="$(go env GOEXE)"
-if [ -n "${COVER:-}" ]; then
+if [ -n "${JZ_BINARY:-}" ]; then
+  # A jz built elsewhere, such as a release archive: the suite checks
+  # that binary instead of one built from this tree.
+  cp "$JZ_BINARY" "$sandbox/bin/jz$exe"
+  "$sandbox/bin/jz$exe" version
+elif [ -n "${COVER:-}" ]; then
   mkdir -p "$COVER"
   go build -cover -covermode=atomic -coverpkg=./... -o "$sandbox/bin/jz$exe" ./cmd/jz
   export GOCOVERDIR="$COVER"
