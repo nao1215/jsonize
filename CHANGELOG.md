@@ -292,11 +292,11 @@ project follows [Semantic Versioning](https://semver.org/).
   `kldstat/freebsd`, `sockstat/freebsd`, `netstat/freebsd-interface`
   (with a name followed by "*" read as an interface that is not up),
   `last/freebsd`, `uptime/freebsd` and `w/freebsd` (the 12-hour time and
-  comma separated load averages that uptime/bsd and w/bsd refuse), and
+  comma-separated load averages that uptime/bsd and w/bsd refuse), and
   `df/freebsd-blocks`, `df/freebsd-type` and `df/freebsd-blocks-type`.
 - Option forms that were exit 3: `df -BK`, `df -BK -T`, `df -P -BK` and
-  `df -P -T -BK`, which keep the default heading and put a K after each
-  figure, are read by `df/gnu`, `df/gnu-type`, `df/portable` and
+  `df -P -T -BK`, which keep the heading they print without -BK and put
+  a K after each figure, are read by `df/gnu`, `df/gnu-type`, `df/portable` and
   `df/portable-type`; `df/gnu-blocks-type` reads the unit after each
   figure as `df/gnu-blocks` does (`-BM -T`, `-T --block-size=KiB`); and
   `systemctl/automounts` reads the row `list-automounts --all` prints with
@@ -553,10 +553,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
-- An uptime of more than a day with no minutes past the hour ("4 days,
-  3 hrs") or under an hour ("1 day, 5 mins") was refused as a duration,
-  so `uptime/bsd` and `w/bsd` failed on it. The duration type reads a
-  run of units after the days as it reads one on its own.
+- An uptime of more than a day followed by whole hours ("4 days, 3 hrs")
+  or by minutes alone ("1 day, 5 mins") was refused as a duration, so
+  `uptime/bsd` and `w/bsd` failed on it. The duration type now reads the
+  units after the days as it reads them without days.
 - `w/bsd` took any text with "load averages: " on a line and the w
   heading as its own, and failed on the FreeBSD summary line instead of
   leaving it to another definition. Its signature is now the macOS line.

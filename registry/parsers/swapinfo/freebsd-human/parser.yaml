@@ -1,4 +1,4 @@
-# swapinfo -h prints each size rounded to four characters with a unit
+# swapinfo -h prints each size rounded to at most four characters with its unit
 # ("1.0G", "64M", "0B") under a Size heading. The rounding loses the
 # exact figure, so the sizes stay the strings swapinfo printed; the
 # percentage is computed from the exact counts and is a number.

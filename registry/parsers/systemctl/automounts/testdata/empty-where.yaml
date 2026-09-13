@@ -1,7 +1,7 @@
 source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C
 description: >-
-  list-automounts --all. --all also lists an automount unit that is not
-  loaded from a file, and systemd prints nothing under WHERE for it, so its
-  where is null; the next column is still yes or no.
+  list-automounts --all. systemd prints nothing under WHERE for
+  boot.automount, so its where is null; the next column is still yes or
+  no.
 os: linux
 args: ["list-automounts", "--all"]

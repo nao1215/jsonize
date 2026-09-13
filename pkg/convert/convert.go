@@ -409,10 +409,10 @@ func parseDuration(t, layout string) (float64, error) {
 		if rest == "" {
 			return days * 86400, nil
 		}
-		// The BSD w writes "4 days, 3 hrs" when the minutes are zero, and
-		// a count of minutes or seconds alone below an hour. Read with the
-		// days as one run of units, a unit no smaller than a day after
-		// them is refused as out of order.
+		// After the days the BSD w writes whole hours ("4 days, 3 hrs")
+		// or, under an hour, a count of minutes or seconds. The days and
+		// that count are read as one run of units, so a day or a larger
+		// unit after the days is refused as out of order.
 		if !strings.Contains(rest, ":") {
 			return parseUnits(strconv.FormatFloat(days, 'f', -1, 64) + " days " + rest)
 		}

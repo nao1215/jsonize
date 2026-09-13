@@ -1,7 +1,7 @@
 # FreeBSD df counts in the block its heading names. -m and -g ask for 1M
 # and 1G blocks, -k for 1024-byte blocks (headed "1024-blocks"), -P for
 # 512-byte blocks, and BLOCKSIZE in the environment for any other. The
-# figures are exact counts of that block, so the unit is read from the
+# figures are whole counts of that block, so the unit is read from the
 # heading, as df/gnu-blocks does. The default heading, "1K-blocks", is
 # left to df/freebsd, and the heading rule below spells out every block
 # but that one.

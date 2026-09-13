@@ -1,8 +1,8 @@
 # FreeBSD uptime prints the summary line w(1) opens with: the time of day
 # in 12-hour form ("10:44AM"), how long the machine has been up, the
 # number of users, and the load averages separated by commas. macOS
-# writes 24-hour time and no commas between the averages, which is
-# uptime/bsd.
+# writes a 24-hour time and no commas between the averages, which
+# uptime/bsd reads.
 #
 # How long it has been up is written in the largest units that apply:
 # "8 secs", "1 min", "2 mins", "3 hrs", "2:05", with "1 day," or "4 days,"
@@ -10,7 +10,7 @@
 format: 1
 command: uptime
 variant: freebsd
-description: "FreeBSD uptime: 12-hour time and comma separated load averages"
+description: "FreeBSD uptime: 12-hour time and comma-separated load averages"
 metadata:
   tags: [freebsd, bsd, system]
   compatible: [FreeBSD uptime]

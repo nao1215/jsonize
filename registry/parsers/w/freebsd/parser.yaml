@@ -3,11 +3,11 @@
 # from ("-" for a local login), when they logged in, how long the terminal
 # has been idle, and what they are running.
 #
-# The login time is the time of day ("10:44AM") for a login today and a
-# shorter form with no time for an older one; neither is a full time and
-# it stays as printed. Idle is "-" under a minute and a count otherwise
-# ("2" is two minutes), also kept as printed. The command may hold spaces
-# and takes the rest of the line.
+# The login time is the time of day ("10:44AM") for a login today and
+# another short form for an older one. Neither is a full time, so it
+# stays as printed. Idle is "-" under a minute, which is null, and a count
+# otherwise ("2" is two minutes), kept as printed. The command may hold
+# spaces and takes the rest of the line.
 #
 # -h prints the users without the two lines above them, which is not
 # read.

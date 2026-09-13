@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://nao1215.github.io/jsonize/schemas/uptime/freebsd.json",
   "title": "uptime/freebsd",
-  "description": "FreeBSD uptime: 12-hour time and comma separated load averages",
+  "description": "FreeBSD uptime: 12-hour time and comma-separated load averages",
   "x-jsonize": {
     "definition": "uptime/freebsd",
     "version": 1

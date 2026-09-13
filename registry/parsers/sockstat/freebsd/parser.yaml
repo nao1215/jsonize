@@ -2,9 +2,9 @@
 # process and descriptor, the protocol, and the local and foreign
 # addresses. Internet sockets print host:port ("*:22", "[::1]:123");
 # a unix socket prints the path it is bound to, "(not connected)", or
-# "??" when the address cannot be found, and on the foreign side the peer
-# as "-> [pid fd]", "-> /var/run/log" or "<- " and the processes on the
-# other end.
+# "??" when the address cannot be found. On the foreign side it prints the
+# peer as "-> [pid fd]" or "-> /var/run/log", or "<- " followed by the
+# processes at the other end.
 #
 # The columns are sized to their widest cell and a cell may overflow its
 # column, so a row is read by what each column holds rather than cut at

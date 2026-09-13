@@ -30,9 +30,8 @@ detect:
   args:
     none: ["-y", "-s"]
   signature:
-    # The closing line, after the blank line last writes before it, at the
-    # very end: a line of a log that happens to say "begins" and a date is
-    # not a listing that closes with it.
+    # The closing line must follow a blank line and end the input, so a
+    # log line that happens to say "begins" and a date does not match.
     all:
       - '(?:\A|\n)[ \t]*\n\S+ begins [A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2} [A-Z][A-Za-z0-9+-]* \d{4}[ \t]*\n?\z'
 input:
@@ -44,12 +43,12 @@ parse:
     # A session that is still open. The host is optional and taken up to
     # the login time, so a local login leaves it null.
     - '^(?P<user>\S+)[ \t]+(?P<tty>\S+)[ \t]+(?:(?P<host>\S.*?)[ \t]+)?(?P<login_time>[A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2})[ \t]+(?P<still_logged_in>still logged in)(?P<logout>)??(?P<duration>)??[ \t]*$'
-    # A session that ended, with the time or the reason and the length:
-    # hh:mm, hh:mm:ss with -w, and a day count before a plus sign past a
+    # A session that ended: the logout time or reason, then the length as
+    # hh:mm, or hh:mm:ss with -w, with a day count and "+" in front past a
     # day.
     - '^(?P<user>\S+)[ \t]+(?P<tty>\S+)[ \t]+(?:(?P<host>\S.*?)[ \t]+)?(?P<login_time>[A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2})(?P<still_logged_in>)[ \t]+- (?P<logout>\d{2}:\d{2}|crash|shutdown)[ \t]+\((?P<duration>(?:\d+\+)?\d{2}:\d{2}(?::\d{2})?)\)[ \t]*$'
     # A system event, which is not a session: it has no terminal, host or
-    # logout, and it is neither still logged in nor not.
+    # logout, and still_logged_in is null rather than false.
     - '^(?P<user>boot time|shutdown time|old time|new time)(?P<tty>)??(?P<host>)??[ \t]+(?P<login_time>[A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2})(?P<still_logged_in>)??(?P<logout>)??(?P<duration>)??[ \t]*$'
 # Every pattern names the same groups so every row has the same keys. A
 # group written "(?P<name>)??" prefers to take no part in the match, and a
