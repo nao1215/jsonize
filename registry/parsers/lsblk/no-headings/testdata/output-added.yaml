@@ -1,0 +1,10 @@
+description: >-
+  lsblk -n -o +FSTYPE on one partition prints the default columns and the
+  filesystem type one space after the mount point, with no header to say a
+  column was added. The text is a mount point with a space in it as far as
+  anything in it shows, so -o is what refuses the definition when jz runs
+  lsblk.
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C; the mount point under /media renamed
+os: linux
+args: [-n, -o, +FSTYPE, /dev/nvme0n1p1]
+expect_error: 'excluded by the argument -o'

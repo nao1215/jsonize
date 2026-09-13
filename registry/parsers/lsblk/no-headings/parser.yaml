@@ -23,6 +23,11 @@ detect:
   os: [linux]
   args:
     any: ["-n", "--noheadings"]
+    # -o and -O choose the columns, and "-o +FSTYPE" adds one after the
+    # mount point. With no header nothing in the text says a column was
+    # added, and a value one space after a mount point reads as a mount
+    # point with a space in it, so the arguments are what refuse it.
+    none: ["-o", "--output", "-O", "--output-all"]
   auto_detect: false
   signature:
     all:
@@ -32,7 +37,10 @@ detect:
       # point of a device that has one. What this leaves out is -n with
       # other columns: -f, -m, -t and -o print something else in the same
       # headerless shape, and -b prints SIZE as a bare byte count.
-      - '\A(?:(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?\S+[ \t]+\d+:\d+[ \t]+[01][ \t]+\d+(?:\.\d+)?[BKMGTPEZY][ \t]+[01][ \t]+\S+[^\n]*(?:\n|\z))+\z'
+      #
+      # A mount point is a path or [SWAP], and a run of spaces in it is
+      # the gap before another column rather than part of a path.
+      - '\A(?:(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?\S+[ \t]+\d+:\d+[ \t]+[01][ \t]+\d+(?:\.\d+)?[BKMGTPEZY][ \t]+[01][ \t]+\S+(?:[ \t]+(?:/|\[SWAP\])(?:[^ \t\n]|[ \t][^ \t\n])*)?[ \t]*(?:\n|\z))+\z'
 parse:
   type: regex
   # lsblk draws the tree of devices in front of a name: a child starts
@@ -40,8 +48,9 @@ parse:
   # after "| " ("│ ") or two spaces for each level above it. The drawing
   # is not part of the name, so it is matched outside the group that
   # keeps one. MOUNTPOINTS is the last column and may hold a space, so it
-  # runs to the end of the line.
-  pattern: '^(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?(?P<name>\S+)[ \t]+(?P<maj_min>\d+:\d+)[ \t]+(?P<rm>[01])[ \t]+(?P<size>\S+)[ \t]+(?P<ro>[01])[ \t]+(?P<type>\S+)(?:[ \t]+(?P<mountpoint>\S[^\n]*?))?[ \t]*$'
+  # runs to the end of the line, but not across a run of spaces, which is
+  # where a column after it would start.
+  pattern: '^(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?(?P<name>\S+)[ \t]+(?P<maj_min>\d+:\d+)[ \t]+(?P<rm>[01])[ \t]+(?P<size>\S+)[ \t]+(?P<ro>[01])[ \t]+(?P<type>\S+)(?:[ \t]+(?P<mountpoint>(?:/|\[SWAP\])(?:[^ \t\n]|[ \t][^ \t\n])*))?[ \t]*$'
 fields:
   name: {required: true}
   maj_min: {required: true}
