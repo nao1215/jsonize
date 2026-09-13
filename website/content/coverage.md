@@ -10,21 +10,21 @@ supports df" says less than it sounds like. This page says, for the
 commands asked about most, what each form of their output does when it
 reaches jz.
 
-Four things can happen, and three of them are answers:
+Three things can happen, and each of them is an answer:
 
 | | what it means |
 |---|---|
 | read | piping the output in identifies it and converts it |
 | named | jz will not claim the text on its own; `jz --parser NAME` or `jz run` reaches it |
 | refused | jz does not read it, and the reason is below |
-| unverified | no machine here runs it; what is in the registry came from a fixture |
 
 "named" is not a shortcoming. A format whose text could be half a dozen
 other things is one jz declines to guess at, because the failure worth
 designing against is confident JSON from the wrong parser rather than
 exit 4.
 
-Everything below was run on Ubuntu 26.04 (Linux 7.0) with `LC_ALL=C`:
+Everything below but the Windows section, which names its own machines,
+was run on Ubuntu 26.04 (Linux 7.0) with `LC_ALL=C`:
 GNU coreutils 9.7 and uutils coreutils 0.8.0, procps-ng 4.0.4,
 util-linux 2.41.3, iproute2 6.19.0, systemd 259, sysstat 12.7,
 BIND dig 9.20.24, iputils, BusyBox 1.37.0. net-tools was not installed,
@@ -57,7 +57,7 @@ with rather than captured.
 | `lsblk -b` | read | `lsblk/bytes` |
 | `lsblk -f` | read | `lsblk/filesystems` |
 | `lsblk -t` | read | `lsblk/topology` |
-| `lsblk -m` | read | `lsblk/permissions` |
+| `lsblk -m` | read | `lsblk/permissions`; in a container without the device nodes, owner, group and mode are `null` together |
 | `lsblk -P` | read | `lsblk/pairs` |
 | `lsblk -r` | read | `lsblk/raw` |
 | `lsblk -n` | named | `lsblk/no-headings`; with no header the text is a tree drawing and some words |
@@ -193,33 +193,36 @@ than choosing.
 ## Windows
 
 jz builds and runs on Windows, and that is a different thing from reading
-what Windows commands print. No machine in this project runs a Windows
-command, so the definitions below were written against output published
-by the vendor, each fixture naming the page it was quoted from and what
-was replaced in it. They are unverified against a running command, and
-that is what the rows say.
+what Windows commands print. The rows below were checked against the
+real commands on the GitHub-hosted Windows Server 2022 and 2025 runners,
+English, with the console on code page 65001: the end-to-end suite runs
+each command there on every change and compares what jz reports with
+`hostname`, `ver` and PowerShell on the same machine, and a capture from
+each release is kept as a fixture beside the output published by the
+vendor.
 
 | invocation | | definition |
 |---|---|---|
-| `ipconfig /all` | unverified | `ipconfig/all` |
-| `ipconfig` | unverified | `ipconfig/windows` |
-| `systeminfo` | unverified | `systeminfo/windows` |
+| `ipconfig /all` | read | `ipconfig/all` |
+| `ipconfig` | read | `ipconfig/windows` |
+| `systeminfo`, `systeminfo /fo list` | read | `systeminfo/windows`; `/fo list` prints the same lines, and `jz run` refuses it on the argument, since `/fo` also names the csv and table forms |
+| `systeminfo /fo csv` | named | `jz --parser csv --variant comma` |
 | `ipconfig /displaydns` | refused | a different format; pinned as a refusal rather than read |
-| `systeminfo /fo csv`, `/fo list` | refused | `jz --parser csv` reads the first; the second is a labelled list with no definition |
 | `netstat` on Windows | refused | no vendor-published text sample was found to write one against, only screenshots |
 | `net user`, `net localgroup`, `dir`, `route print`, `ver`, `tasklist`, `wmic` | refused | no definition |
 
-What could not be pinned, and is therefore described in the definition
-rather than held to a fixture: the counted lists of `systeminfo`
-(`Hotfix(s)`, `Network Card(s)`) and its memory figures, because the one
-citable capture is snipped before them; and the continuation line
-`ipconfig /all` writes for a second DNS server, because the article that
-shows it renders the block as prose and its columns do not survive on
-the page.
+Not checked, and not claimed: a Windows in another display language,
+whose labels the signatures do not describe, so its output is refused
+rather than read; a console code page other than UTF-8, where a name
+outside ASCII is not valid UTF-8 and the input is refused; and a desktop
+edition, which no runner provides.
 
 A rounded figure with a separator and a unit (`16,384 MB`) stays a
 string here for the reason it does everywhere else: the text does not say
-which base it was rounded in.
+which base it was rounded in. A label that holds a colon of its own
+(`Virtual Memory: Max Size:`) keeps what follows its first colon as the
+value, since a list of labels the definition has not seen cannot say
+which colon is the separator.
 
 ## What is not read on purpose
 
@@ -256,14 +259,15 @@ dropped.
 
 `--refused` turns the harness around and runs it over the fixtures a
 definition is written to refuse: text of a neighbouring format, a row cut
-short, a line the definition never looked at. There are 47 of those with
-a jc parser to compare against. jz refuses 46 of them, jc reads 34. The
-one jz reads is `wc -lwcL` output given to `jz --parser wc --variant
-posix`, where the fourth count and a file name beginning with a number
-are the same text and the arguments are the only thing that separates
-them; `jz run wc -lwcL` refuses it on the argument.
+short, a line the definition never looked at. The counts here are those
+of the run that was made, and the registry has grown since. There were
+47 such fixtures with a jc parser to compare against. jz refused 46 of
+them, jc read 34. The one jz read is `wc -lwcL` output given to `jz
+--parser wc --variant posix`, where the fourth count and a file name
+beginning with a number are the same text and the arguments are the only
+thing that separates them; `jz run wc -lwcL` refuses it on the argument.
 
-Over the 380 fixtures a definition is written to read, jz read all of
+Over the 380 fixtures a definition was written to read, jz read all of
 them and jc refused 30. The refusals are a file system name containing a
 space (`df`), every `ip address` fixture, an `ls -l` of a directory with
 nothing in it, the headerless and raw forms of `lsblk`, most `ss` forms,

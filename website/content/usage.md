@@ -454,7 +454,7 @@ $ jz --explain --file df-gnu.txt
 jz: explain: chose df/gnu from embedded
 jz: explain: scope: every definition in the registry, by its signature alone
 jz: explain: matched: signature.all[0] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\.../
-jz: explain: not considered: 48 definitions only used when named
+jz: explain: not considered: <N> definitions only used when named
 jz: explain: read: 8 lines: 7 read, 1 left out by input.ignore[1] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$/
 ```
 
@@ -471,7 +471,7 @@ the command `jz run` started printed nothing. Then:
 | `settled by` / `outranked` | when several definitions fit, the rule that chose one (the registry layering, or `detect.priority` between variants of one command) and each one it chose over |
 | `rejected` | a definition that came close and why it was ruled out |
 | `held back` | a definition whose signature fits but which is only used when named |
-| `not considered` | how many definitions are only used when named, and so took no part |
+| `not considered` | how many definitions are only used when named, and so took no part (`<N>` in the examples here, since it follows the registry) |
 | `read` | where the lines of the input went: read, joined by `fold`, blank, or left out by each `input.ignore` expression |
 | `command` | for `jz run`, the command and the status it gave |
 
@@ -493,8 +493,8 @@ jz: explain: command: df -h (exit 0)
 ```
 
 Without a parser the search covers the whole registry, which rejects
-almost all of it on the first expression of a signature. Saying so three
-hundred times explains nothing, so only the definitions that came close
+almost all of it on the first expression of a signature. Saying so for
+each of them explains nothing, so only the definitions that came close
 are listed: one that got past its first expression, and one whose
 signature does fit but which jz will not choose on its own. A search
 scoped to one parser lists every variant it left out. When nothing is
@@ -512,7 +512,7 @@ jz: explain: rejected: rustup/toolchains: no signature.any[] expression matched
 jz: explain: rejected: sensors/linux: signature.all[1] /^Adapter: \S/ did not match
 jz: explain: rejected: sensors/raw: signature.all[1] /^Adapter: \S/ did not match
 jz: explain: held back: etc/passwd: its signature fits, but it is only used when named (--parser etc)
-jz: explain: not considered: 47 definitions only used when named
+jz: explain: not considered: <N> definitions only used when named
 ```
 
 `--explain=json` writes the same facts as one JSON document, on a single

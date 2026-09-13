@@ -711,9 +711,9 @@ part of the result, left out when a rule the definition states says so
 (`ignore`, a blank line, a `fold` continuation), or it is unread, and
 unread text is exit 3 with the line quoted rather than a smaller answer.
 The rule lives in the engine and not in the definitions, so a definition
-gets it without asking and cannot opt out. None of the 355 definitions
-had to be edited to acquire it; 37 of them then failed on their own
-fixtures, most for a heading they had never stated in full, and the
+gets it without asking and cannot opt out. None of the definitions the
+registry held then had to be edited to acquire it; 37 of them failed on
+their own fixtures, most for a heading they had never stated in full, and the
 checks below found two more that only real output exposed.
 
 The finer rules are the ones the first measurement asked for:

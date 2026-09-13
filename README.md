@@ -132,9 +132,9 @@ Which forms of which commands are read, and which are refused and why,
 are listed at https://nao1215.github.io/jsonize/coverage/.
 
 jz builds and runs on Windows, which is a different thing from reading
-what Windows commands print. The definitions for Windows formats are
-written from published sample output, and say so in the fixture beside
-each one; no machine in this project runs them.
+what Windows commands print. `ipconfig`, `ipconfig /all` and
+`systeminfo` are read, and CI runs them on English Windows Server 2022
+and 2025; other display languages and code pages are not checked.
 
 ## Adding a parser
 

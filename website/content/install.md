@@ -26,9 +26,10 @@ the code and the definitions and jz never fetches anything at run time.
 
 The Windows archive is a Windows binary: it runs, reads a file or a pipe
 and writes JSON there like anywhere else. What it reads is a separate
-question, answered on the [coverage page](/jsonize/coverage/): the
-definitions for the formats Windows commands print are written from
-published sample output rather than from a machine in this project.
+question, answered on the [coverage page](/jsonize/coverage/): `ipconfig`,
+`ipconfig /all` and `systeminfo` are read, checked against the real
+commands on English Windows Server 2022 and 2025, and no other Windows
+command has a definition of its own.
 
 ## Check that it works
 
