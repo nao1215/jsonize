@@ -1,10 +1,51 @@
 name: ReleaseSmoke
 
+# Builds the release with the configuration a tag uses, checks what it
+# would publish, and runs the Windows binaries from those archives on
+# Windows. The Windows builds carry a garbage collector setting of their
+# own (see .goreleaser.yml), so a binary built from this tree by
+# `go build` is not the one people download.
+
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".goreleaser.yml"
+      - ".github/workflows/release.yml"
+      - ".github/workflows/release_smoke.yml"
+      - ".github/workflows/e2e.yml"
+      - ".github/workflows/unit_test.yml"
+      - "CHANGELOG.md"
+      - "LICENSE"
+      - "README.md"
+      - "cmd/**"
+      - "e2e/**"
+      - "go.mod"
+      - "go.sum"
+      - "internal/**"
+      - "pkg/**"
+      - "registry/**"
+      - "scripts/release_notes.sh"
+      - "scripts/run_e2e.sh"
   pull_request:
     paths:
       - ".goreleaser.yml"
+      - ".github/workflows/release.yml"
+      - ".github/workflows/release_smoke.yml"
+      - ".github/workflows/e2e.yml"
+      - ".github/workflows/unit_test.yml"
+      - "CHANGELOG.md"
+      - "LICENSE"
+      - "README.md"
       - "cmd/**"
+      - "e2e/**"
+      - "go.mod"
+      - "go.sum"
+      - "internal/**"
+      - "pkg/**"
+      - "registry/**"
+      - "scripts/release_notes.sh"
+      - "scripts/run_e2e.sh"
   workflow_dispatch:
 
 permissions:
@@ -24,8 +65,132 @@ jobs:
         with:
           distribution: goreleaser
           version: "~> v2"
+          args: check
+      - uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
+        with:
+          distribution: goreleaser
+          version: "~> v2"
           args: release --snapshot --clean --skip=publish
-      - name: smoke test the built binary
+      - name: check the archives, packages and checksums
         run: |
-          ./dist/jz_linux_amd64_v1/jz version
+          set -euo pipefail
+          cd dist
+          version="$(jq -r .version metadata.json)"
+          for target in linux_amd64 linux_arm64 darwin_amd64 darwin_arm64; do
+            archive="jsonize_${version}_${target}.tar.gz"
+            listing="$(tar -tzf "$archive")"
+            for f in jz LICENSE README.md; do
+              grep -qx "$f" <<<"$listing" || { echo "$archive lacks $f"; exit 1; }
+            done
+          done
+          for target in windows_amd64 windows_arm64; do
+            archive="jsonize_${version}_${target}.zip"
+            listing="$(unzip -Z1 "$archive")"
+            for f in jz.exe LICENSE README.md; do
+              grep -qx "$f" <<<"$listing" || { echo "$archive lacks $f"; exit 1; }
+            done
+          done
+          for arch in amd64 arm64; do
+            for ext in deb rpm apk; do
+              test -s "jsonize_${version}_linux_${arch}.${ext}"
+            done
+            dpkg-deb -c "jsonize_${version}_linux_${arch}.deb" | grep ' \./usr/bin/jz$' > /dev/null
+          done
+          test "$(wc -l < checksums.txt)" -eq 12
+          sha256sum -c checksums.txt
+      - name: check the binaries
+        run: |
+          set -euo pipefail
+          version="$(jq -r .version dist/metadata.json)"
+          reported="$(./dist/jz_linux_amd64_v1/jz version)"
+          echo "$reported"
+          test "$reported" = "jz v${version} (definition format 1, linux/amd64)"
           printf 'Filesystem     1K-blocks    Used Available Use%% Mounted on\ntmpfs 100 10 90 10%% /run\n' | ./dist/jz_linux_amd64_v1/jz
+          # Windows is built without Green Tea and nothing else is.
+          for b in dist/jz-windows_*/jz.exe; do
+            go version -m "$b" | grep 'GOEXPERIMENT=nogreenteagc' > /dev/null || { echo "$b: built with Green Tea"; exit 1; }
+          done
+          for b in dist/jz_*/jz; do
+            if go version -m "$b" | grep GOEXPERIMENT > /dev/null; then echo "$b: unexpected GOEXPERIMENT"; exit 1; fi
+          done
+      # The Windows jobs of unit_test.yml and e2e.yml and the Windows
+      # release build name one collector setting; a change to one of
+      # them alone would test one binary and ship another.
+      - name: check the Windows collector setting is the same in CI and the release
+        run: |
+          set -euo pipefail
+          release="$(yq -r '.builds[] | select(.id == "jz-windows") | .env[] | select(test("^GOEXPERIMENT="))' .goreleaser.yml)"
+          test -n "${release#GOEXPERIMENT=}" || { echo ".goreleaser.yml sets no GOEXPERIMENT for Windows"; exit 1; }
+          for wf in unit_test.yml e2e.yml; do
+            grep -F "'${release#GOEXPERIMENT=}'" ".github/workflows/${wf}" > /dev/null || { echo "${wf} does not run Windows with ${release}"; exit 1; }
+          done
+          echo "${release}"
+      - name: extract the release notes of the newest CHANGELOG version
+        run: |
+          newest="$(grep -m1 -oE '^## \[[0-9][^]]*\]' CHANGELOG.md | sed -E 's/^## \[(.*)\]$/\1/')"
+          bash scripts/release_notes.sh "v${newest}"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: windows-archives
+          path: dist/jsonize_*_windows_*.zip
+          if-no-files-found: error
+
+  windows:
+    name: release binary (${{ matrix.os }})
+    needs: snapshot
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            arch: amd64
+          - os: windows-2022
+            arch: amd64
+          - os: windows-11-arm
+            arch: arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # Go builds only the helper the scenarios run; jz comes from the
+      # archive.
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+      - uses: nao1215/setup-atago@e4b6719aea547a68e6c15252222babab7f492a88 # v0.1.1
+        with:
+          version: v0.22.0
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: windows-archives
+          path: archives
+      - name: unpack the ${{ matrix.arch }} archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/release"
+          unzip -q archives/jsonize_*_windows_${{ matrix.arch }}.zip -d "$RUNNER_TEMP/release"
+          # Git's bash on Windows has no /dev/stderr to tee to.
+          version="$("$RUNNER_TEMP/release/jz.exe" version)"
+          echo "$version"
+          grep "windows/${{ matrix.arch }})$" <<<"$version" > /dev/null
+          go version -m "$RUNNER_TEMP/release/jz.exe" | grep 'GOEXPERIMENT=nogreenteagc' > /dev/null
+      - name: run E2E against the release binary
+        shell: bash
+        run: JZ_BINARY="$RUNNER_TEMP/release/jz.exe" bash ./scripts/run_e2e.sh
+      # jz test over the whole registry is the heaviest allocation the
+      # binary does: 1,200 fixtures decoded, parsed and cross-checked in
+      # parallel. The crashes this build setting answers came from the
+      # same YAML decoding and flag parsing, so repeating it is the check
+      # that the downloaded binary survives the load.
+      - name: repeat jz test over the registry
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 100); do
+            if ! "$RUNNER_TEMP/release/jz.exe" test ./registry > run.log 2>&1; then
+              echo "iteration $i failed"
+              cat run.log
+              exit 1
+            fi
+          done
+          tail -1 run.log

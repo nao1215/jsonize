@@ -10,6 +10,7 @@
 {{- $desc := or .Params.description site.Params.description }}
 <meta name="description" content="{{ $desc }}">
 <link rel="canonical" href="{{ .Permalink }}">
+<link rel="icon" href="data:,">
 <meta property="og:title" content="{{ $title }}">
 <meta property="og:description" content="{{ $desc }}">
 <meta property="og:type" content="website">
@@ -37,9 +38,9 @@
 <a{{ if or ($.IsMenuCurrent "main" .) ($.HasMenuCurrent "main" .) }} class="active"{{ end }} href="{{ .URL }}">{{ .Name }}</a>
 {{- end }}
 <a href="https://github.com/nao1215/jsonize">GitHub</a>
-<a class="sponsor" href="https://github.com/sponsors/nao1215">&#9825; Sponsor</a>
+<a href="https://github.com/sponsors/nao1215">Sponsor</a>
 <div class="search">
-<input type="search" id="search-box" class="search-box" placeholder="Search…" aria-label="Search the documentation" autocomplete="off" data-pagefind-base="{{ relURL "" }}">
+<button type="button" id="search-box" class="search-box" aria-label="Search the documentation" aria-expanded="false" aria-controls="search-ui" data-pagefind-base="{{ relURL "" }}">Search</button>
 <div id="search-ui" class="search-ui" hidden></div>
 </div>
 </nav>
@@ -48,15 +49,11 @@
 {{ block "main" . }}{{ end }}
 </main>
 <footer>
-<p>MIT licensed · <a href="https://github.com/nao1215/jsonize">nao1215/jsonize</a> · every page on this site is generated from files committed in the repository.</p>
+<p><a href="https://github.com/nao1215/jsonize/blob/main/LICENSE">MIT license</a> · <a href="https://github.com/nao1215/jsonize">nao1215/jsonize</a></p>
 </footer>
 <script>
-// Lazy copy buttons: building a button for every <pre> at load is ~1,896
-// synchronous DOM insertions on the heaviest real-world page, before first
-// paint. Create each button only when its block scrolls near the viewport, via
-// IntersectionObserver — off-screen blocks stay button-free, and a block a
-// finger can reach on a touch device is one that has scrolled into view. CSS
-// reveals the button on hover, keyboard focus, and always on hover-less pointers.
+// Add copy buttons as code blocks approach the viewport. Reveal them on
+// hover, keyboard focus, and touch devices.
 (function () {
   if (!(navigator.clipboard && window.isSecureContext)) return;
   var main = document.getElementById("main");
@@ -94,44 +91,68 @@
 })();
 </script>
 <script>
-// Client-side search, lazy: the Pagefind UI (script, stylesheet, and the WASM
-// index chunks) is self-hosted under /pagefind/ and fetched only when the user
-// first focuses the search box, so it adds nothing to a normal page load. The
-// index is built in CI by the Pagefind pass in .github/workflows/website.yml;
-// on a local `make website` (no Pagefind) the assets are absent and the box
-// simply does nothing.
+// Load the self-hosted Pagefind index only when search is opened.
 (function () {
   var box = document.getElementById("search-box");
   var ui = document.getElementById("search-ui");
   if (!box || !ui) return;
   var base = box.getAttribute("data-pagefind-base") || "/";
-  var loaded = false;
+  var ready = false;
+  var loading = false;
+  function focusInput() {
+    var input = ui.querySelector("input");
+    if (input && !ui.hidden) input.focus();
+  }
+  function close(restoreFocus) {
+    ui.hidden = true;
+    box.setAttribute("aria-expanded", "false");
+    if (restoreFocus) box.focus();
+  }
+  function failed() {
+    loading = false;
+    ui.textContent = "Search is unavailable. Close it and try again.";
+  }
   function load() {
-    if (loaded) return;
-    loaded = true;
-    var css = document.createElement("link");
-    css.rel = "stylesheet";
-    css.href = base + "pagefind/pagefind-ui.css";
-    document.head.appendChild(css);
+    if (ready) { focusInput(); return; }
+    if (loading) return;
+    loading = true;
+    ui.textContent = "Loading search…";
+    if (!document.getElementById("pagefind-css")) {
+      var css = document.createElement("link");
+      css.id = "pagefind-css";
+      css.rel = "stylesheet";
+      css.href = base + "pagefind/pagefind-ui.css";
+      document.head.appendChild(css);
+    }
     var s = document.createElement("script");
     s.src = base + "pagefind/pagefind-ui.js";
     s.onload = function () {
-      if (typeof PagefindUI === "undefined") return;
+      if (typeof PagefindUI === "undefined") { failed(); return; }
+      ui.textContent = "";
       /* global PagefindUI */
       new PagefindUI({ element: "#search-ui", showImages: false, showSubResults: true });
-      ui.hidden = false;
-      var real = ui.querySelector("input");
-      if (real) {
-        real.value = box.value;
-        real.focus();
-        real.dispatchEvent(new Event("input", { bubbles: true }));
-      }
-      box.hidden = true;
+      ready = true;
+      loading = false;
+      focusInput();
     };
-    s.onerror = function () { loaded = false; }; // let a later focus retry
+    s.onerror = failed;
     document.body.appendChild(s);
   }
-  box.addEventListener("focus", load);
+  box.addEventListener("click", function () {
+    if (!ui.hidden) { close(false); return; }
+    ui.hidden = false;
+    box.setAttribute("aria-expanded", "true");
+    load();
+  });
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && !ui.hidden) {
+      event.preventDefault();
+      close(true);
+    }
+  });
+  document.addEventListener("click", function (event) {
+    if (!box.parentElement.contains(event.target)) close(false);
+  });
 })();
 </script>
 </body>

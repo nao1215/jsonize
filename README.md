@@ -1,17 +1,13 @@
 ![Coverage](https://raw.githubusercontent.com/nao1215/octocovs-central-repo/main/badges/nao1215/jsonize/coverage.svg)
 [![UnitTest](https://github.com/nao1215/jsonize/actions/workflows/unit_test.yml/badge.svg)](https://github.com/nao1215/jsonize/actions/workflows/unit_test.yml)
-[![Lint](https://github.com/nao1215/jsonize/actions/workflows/lint.yml/badge.svg)](https://github.com/nao1215/jsonize/actions/workflows/lint.yml)
-[![E2E](https://github.com/nao1215/jsonize/actions/workflows/e2e.yml/badge.svg)](https://github.com/nao1215/jsonize/actions/workflows/e2e.yml)
 [![tested with atago](https://img.shields.io/badge/tested%20with-atago-7c3aed?logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2ZmZiIgZD0iTTMuNiA0LjIgMTEuOSAxMmwtOC4zIDcuOC0xLjktMi4yTDcuOSAxMiAxLjcgNi40eiIvPjxyZWN0IGZpbGw9IiNmZmYiIHg9IjEyLjYiIHk9IjE3LjIiIHdpZHRoPSI5LjciIGhlaWdodD0iMi44IiByeD0iMS40Ii8%2BPC9zdmc%2B&logoColor=white)](https://github.com/nao1215/atago)
 [![Go Reference](https://pkg.go.dev/badge/github.com/nao1215/jsonize.svg)](https://pkg.go.dev/github.com/nao1215/jsonize)
 ![GitHub](https://img.shields.io/github/license/nao1215/jsonize)
-[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/nao1215/jsonize/total)](https://github.com/nao1215/jsonize/releases)
 
 # jsonize
 
-jsonize turns command output into JSON. Pipe a command to `jz` and it
-works out which command produced the text and how to read it, so there is
-nothing to name and nothing to configure.
+jsonize turns command output into JSON. Pipe a command to `jz` to detect
+its format and convert it. It also supports YAML output and streaming.
 
 ```console
 $ df -h | jz
@@ -23,28 +19,31 @@ $ ps aux | jz | jq '.[] | select(.cpu_percent > 10) | .command'
 
 ![jz reading df, uptime and free, and refusing input it cannot identify](demo/jsonize.gif)
 
-Parsers are YAML definitions in a registry, not Go code, so another
-command or another system's variant of one is a file and a fixture rather
-than a release.
+Parsers are YAML definitions. Add a definition and captured output to a
+local registry to support another format without rebuilding jz.
 
 Documentation: https://nao1215.github.io/jsonize/
 
 ## Install
 
+Go 1.26 or later:
+
 ```console
 $ go install github.com/nao1215/jsonize/cmd/jz@latest
 ```
 
-Release archives for Linux, macOS and Windows are attached to every
-release. Shell completion: `eval "$(jz completion bash)"` in `~/.bashrc`,
-`source <(jz completion zsh)` in `~/.zshrc`.
+[GitHub Releases](https://github.com/nao1215/jsonize/releases) has
+archives for Linux, macOS and Windows (amd64 and arm64), and `.deb`,
+`.rpm` and `.apk` packages for Linux. See the
+[install guide](https://nao1215.github.io/jsonize/install/) for archive
+installation and bash/zsh completion.
 
 ## Supported OS (tested on GitHub Actions)
 
 - Linux
 - macOS
 - Windows
-- FreeBSD (the end-to-end suite, in a virtual machine)
+- FreeBSD (the end-to-end suite, in a virtual machine; install with `go install`)
 
 OpenBSD and NetBSD are built and linted, not run.
 
@@ -82,9 +81,8 @@ Options:
 ```
 
 `--extract` and `--exclude` name keys of the objects jz prints, and
-either may be repeated. Naming a key the format does not produce is an
-error listing the keys it does have, because a document quietly missing
-what was asked for is the wrong answer this tool exists to avoid.
+either may be repeated. An unknown key is an error that lists the
+available keys.
 
 ```console
 $ df -h | jz --extract filesystem --extract mounted_on
@@ -105,10 +103,10 @@ line as each record is read:
 $ jz run --stream vmstat 1 | jq -c 'select(.id < 50)'
 ```
 
-## What it will not do
+## Detection and limits
 
-Wrong JSON returned with a zero exit status is the failure that matters,
-so jz refuses rather than approximates:
+Some formats need a parser name because their text is too generic to
+identify automatically:
 
 ```console
 $ git diff --numstat | jz
@@ -119,10 +117,9 @@ Confirm it:
   COMMAND | jz --parser git
 ```
 
-A rounded size stays the text that was printed. `df -h` counts 1024 per
-suffix step and `df -H` counts 1000, the output records neither, and both
-round, so a byte count would be two guesses stacked. Run `df`, `free`,
-`ls -l` or `lsblk -b` when you need numbers.
+A rounded size such as `"1.8T"` stays a string. Use `df`, `free` or
+`lsblk -b` for exact numbers. The `size` field from `ls -l` also stays a
+string because the same format reads `ls -lh`.
 
 Naming a parser is a claim about the input, not a way past the checks:
 the definition's signature still has to fit, and there is no option that
@@ -138,38 +135,26 @@ and 2025; other display languages and code pages are not checked.
 
 ## Adding a parser
 
-A definition and a captured fixture, no Go:
-
-```console
-$ mkdir -p ~/.config/jsonize/registry/parsers/greet/default/testdata
-$ $EDITOR ~/.config/jsonize/registry/parsers/greet/default/parser.yaml
-$ jz test --update            # write testdata/<case>.json from the output
-$ jz test                     # check it, and check it reads nothing else
-$ greet | jz
-```
-
-The official fixtures are built into the binary, so `jz test` also proves
-your definition refuses every format jz already reads.
+Add a YAML definition, a captured `.txt` fixture and its `.yaml` capture
+metadata, then run `jz test --update` to generate its expected JSON. Review that output and
+run `jz test` to validate the definition against its fixtures and the
+official fixture corpus.
 
 Registries are layered: `JSONIZE_REGISTRY_PATH`, then the user registry
-under the config directory, then the one built into the binary. jz never
-accesses the network, so the same input converts to the same JSON on the
-same machine. The guide is at
+under the config directory, then the one built into the binary. Conversion
+uses local definitions and does not access the network. The guide is at
 https://nao1215.github.io/jsonize/write-a-parser/ and the reference at
 https://nao1215.github.io/jsonize/definition-format/.
 
 ## From Go
 
-The registry, the selector and the engine are a library:
-
-```go
-reg, _ := registry.Load(registry.Source{Name: "embedded", FS: official.FS()})
-sel, err := selector.Select(reg, selector.Context{Input: text})  // err: unidentified or ambiguous
-out, err := engine.Parse(sel.Entry.Def, text, engine.Options{})  // out: ordered objects
-jsonutil.Encode(os.Stdout, out, true)
-```
-
-Reference: https://pkg.go.dev/github.com/nao1215/jsonize/pkg/selector
+Use [registry](https://pkg.go.dev/github.com/nao1215/jsonize/pkg/registry)
+to load definitions,
+[selector](https://pkg.go.dev/github.com/nao1215/jsonize/pkg/selector)
+to identify the input, and
+[engine](https://pkg.go.dev/github.com/nao1215/jsonize/pkg/engine)
+to parse it. The embedded registry is available from
+[`registry.FS`](https://pkg.go.dev/github.com/nao1215/jsonize/registry#FS).
 
 ## Exit codes
 
@@ -184,8 +169,10 @@ Reference: https://pkg.go.dev/github.com/nao1215/jsonize/pkg/selector
 | 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |
 | *n* | `jz run` mirrors the command's own status, or 128+signal |
 
-Diagnostics go to standard error. Standard output carries a complete JSON
-document (a YAML one with `--yaml`) or nothing.
+Diagnostics go to standard error. By default, parsing finishes before
+JSON is written, so a parse error leaves standard output empty. `--yaml`
+writes YAML instead. With `--stream`, records already written remain
+when a later record fails; check the exit status for skipped records.
 
 ## Development
 

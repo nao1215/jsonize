@@ -22,16 +22,22 @@ jobs:
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: ${{ matrix.go }}
-      # Four times on 2026-09-11 and 2026-09-12 the Windows leg died
-      # inside internal/cli with heap bookkeeping the runtime itself
-      # found impossible (`s.allocCount= 500 s.nelems= 496`) or a pointer
-      # whose upper half was gone. It happened on both toolchains, never
-      # twice on the same commit, and never on Linux or macOS. No code
-      # here can corrupt a heap: the only unsafe in the tree is two ioctl
-      # wrappers Windows does not build, there is no cgo, and the race
-      # leg is green. Green Tea, the garbage collector Go 1.26 turned on
-      # by default, is what changed under those crashes, so Windows runs
-      # with the collector before it until the reports upstream settle.
+      # Windows runs without Green Tea, the collector Go 1.26 made the
+      # default, and the release builds Windows the same way
+      # (.goreleaser.yml; release_smoke.yml checks the three agree).
+      #
+      # Why, and how little is known: 4 of the 98 Windows legs run with
+      # Green Tea (2026-09-06 to 2026-09-12) died inside the runtime (heap
+      # bookkeeping it found impossible, `s.allocCount= 500 s.nelems=
+      # 496`, or a fault on a pointer whose upper half was gone), on Go
+      # 1.26.8 and 1.27.1 and never on Linux or macOS. Since this setting,
+      # 1 of 120 legs has: an access violation in pkg/definition on
+      # 2026-09-12. So the collector is not shown to be the cause. On
+      # 2026-09-13 neither setting crashed on the same runner image in
+      # about 260 repeats each of this command, nor under the race
+      # detector on Windows. The setting stays because it is what the
+      # Windows jobs have tested since; drop it here, in e2e.yml and in
+      # .goreleaser.yml together.
       - run: go test -timeout 5m -cover ./...
         env:
           GOEXPERIMENT: ${{ matrix.os == 'windows-latest' && 'nogreenteagc' || '' }}

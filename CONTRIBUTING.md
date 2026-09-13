@@ -61,7 +61,7 @@ the exact form of the command produce numbers.
 3. Run the same checks as CI before opening a pull request:
 
    ```console
-   $ make check      # fmt, vet, lint (three GOOS), test, race
+   $ make check      # fmt, vet, lint (six GOOS), test, race
    $ make e2e        # needs atago: go install github.com/nao1215/atago@latest; see e2e/README.md
    $ make fuzz FUZZTIME=5s
    ```

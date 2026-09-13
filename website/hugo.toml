@@ -10,7 +10,7 @@ timeZone = "UTC"
 
 [params]
 tagline = "Turn command output into JSON"
-description = "jsonize (jz) reads what a command printed, works out which command printed it, and writes JSON. Parsers are YAML definitions, not code."
+description = "jsonize (jz) detects command output formats and converts them to JSON or YAML, with streaming and parsers defined in YAML."
 
 [markup.highlight]
 noClasses = false
