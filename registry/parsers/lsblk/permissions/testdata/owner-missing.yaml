@@ -1,0 +1,12 @@
+description: >-
+  A row whose owner is blank while its group and mode are filled. lsblk
+  fills the three from one look at the device node, so they are blank
+  together or not at all, and a row blank in one of them is not lsblk
+  output. Read by the cut under the header it would come back with the
+  owner null and nothing said about it.
+source: >-
+  container.txt with the owner of loop1 overwritten by spaces, so that
+  the columns stay where lsblk put them
+os: linux
+args: [-m]
+expect_error: 'line does not match pattern'

@@ -1,0 +1,44 @@
+[
+  {
+    "name": "loop0",
+    "size": "4K",
+    "owner": null,
+    "group": null,
+    "mode": null
+  },
+  {
+    "name": "loop1",
+    "size": "214.5M",
+    "owner": "root",
+    "group": "disk",
+    "mode": "brw-rw----"
+  },
+  {
+    "name": "loop2",
+    "size": "214.9M",
+    "owner": null,
+    "group": null,
+    "mode": null
+  },
+  {
+    "name": "nvme1n1",
+    "size": "1.8T",
+    "owner": null,
+    "group": null,
+    "mode": null
+  },
+  {
+    "name": "nvme1n1p1",
+    "size": "1G",
+    "owner": null,
+    "group": null,
+    "mode": null
+  },
+  {
+    "name": "nvme1n1p2",
+    "size": "1.8T",
+    "owner": null,
+    "group": null,
+    "mode": null
+  }
+]

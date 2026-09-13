@@ -1,0 +1,11 @@
+description: >-
+  Run in a container given no device node at all, the default for
+  docker. Every row is a name, a size and the separators of three blank
+  cells.
+source: >-
+  captured on Ubuntu 26.04 with `docker run --rm -e LC_ALL=C
+  debian:stable-slim lsblk -m -r` (util-linux 2.41.5); lines 1-4 and
+  58-62 of the output kept, the rest of the loop devices dropped; nothing
+  replaced
+os: linux
+args: [-m, -r]

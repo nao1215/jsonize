@@ -1,0 +1,11 @@
+description: >-
+  lsblk -m -b in the same container: blank owner, group and mode beside
+  SIZE as an exact byte count. A row with the three cells blank is two
+  words, and the signature still asks for a size that carries its unit,
+  so this is refused as the filled listing with -b is.
+source: >-
+  captured on Ubuntu 26.04 with `docker run --rm -e LC_ALL=C --device
+  /dev/loop1 debian:stable-slim lsblk -m -b` (util-linux 2.41.5); lines
+  1-4 and 58-60 of the output kept; nothing replaced
+os: linux
+expect_error: 'does not describe this input'

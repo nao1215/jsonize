@@ -1,0 +1,13 @@
+description: >-
+  Run in a container that has the device node of loop1 and of no other
+  device. lsblk takes the owner, the group and the mode from the node in
+  /dev, so a device whose node is missing prints its name and size and
+  leaves the three cells blank together, which is what a container
+  usually shows for every device.
+source: >-
+  captured on Ubuntu 26.04 with `docker run --rm -e LC_ALL=C --device
+  /dev/loop1 debian:stable-slim lsblk -m` (util-linux 2.41.5); lines 1-4
+  and 58-60 of the output kept, the rest of the loop devices dropped;
+  nothing replaced, as -m prints no UUID and no mount point
+os: linux
+args: [-m]

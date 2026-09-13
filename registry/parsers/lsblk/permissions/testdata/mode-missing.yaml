@@ -1,0 +1,10 @@
+description: >-
+  A row whose owner and group are filled and whose mode is blank, the
+  other half of a set of cells lsblk writes whole or not at all. It is
+  refused rather than read with the mode null.
+source: >-
+  container.txt with the mode of loop1 overwritten by spaces, so that the
+  columns stay where lsblk put them
+os: linux
+args: [-m]
+expect_error: 'line does not match pattern'
