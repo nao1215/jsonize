@@ -1,0 +1,12 @@
+description: >-
+  Run in a container that has the device node of loop1 and of no other
+  device. A device whose node is missing prints its name and size and
+  then the separators of three blank cells, owner, group and mode
+  together.
+source: >-
+  captured on Ubuntu 26.04 with `docker run --rm -e LC_ALL=C --device
+  /dev/loop1 debian:stable-slim lsblk -m -r` (util-linux 2.41.5); lines
+  1-4 and 58-60 of the output kept, the rest of the loop devices dropped;
+  nothing replaced
+os: linux
+args: [-m, -r]

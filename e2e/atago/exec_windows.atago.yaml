@@ -1,0 +1,195 @@
+version: "1"
+
+suite:
+  name: real commands on Windows
+
+# ipconfig, ipconfig /all and systeminfo as Windows ships them, run on the
+# CI runners (Windows Server 2022 and 2025, English, console code page
+# 65001). Nothing here is gated on a command being present: all three are
+# part of Windows. What is pinned is which definition the real output
+# lands on, that the neighbouring format is refused, and values checked
+# against a second source on the same machine rather than against a
+# machine's constants: hostname for the host name, ver for the build
+# number, and PowerShell's own view of the adapter jz reported.
+#
+# A Windows set to another display language prints these labels in that
+# language, which the signatures do not describe; that is exit 4, and it
+# is not run here because the runners have no other language installed.
+scenarios:
+  - name: ipconfig lands on ipconfig/windows and reads the adapter Windows reports
+    only: {os: windows}
+    steps:
+      - run:
+          command: jz run --explain ipconfig
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ipconfig/windows from embedded"
+          stdout:
+            json:
+              - { path: "$[0].adapter.type", matches: '^\S' }
+              - { path: "$[0].properties[0].name", equals: Connection-specific DNS Suffix }
+      - store:
+          name: adapter
+          from:
+            stdout:
+              json: {path: "$[0].adapter.name"}
+      - run:
+          command: powershell -NoProfile -NonInteractive -Command "(Get-NetIPAddress -InterfaceAlias '${adapter}' -AddressFamily IPv4 | Select-Object -First 1).IPAddress"
+      - assert:
+          exit_code: 0
+      - store:
+          name: ipv4
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run ipconfig
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].adapter.name", equals: "${adapter}" }
+              - { path: "$[0].properties[?(@.name=='IPv4 Address')].value", equals: "${ipv4}" }
+      # The same text through a pipe, where nothing says which command
+      # printed it, lands on the same definition.
+      - run:
+          shell: true
+          command: ipconfig | jz --explain
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ipconfig/windows from embedded"
+          stdout:
+            json: { path: "$[0].adapter.name", equals: "${adapter}" }
+      # /all prints the machine's settings above the same adapters, which
+      # is another format; naming the wrong variant does not get past it.
+      - run:
+          command: jz run --parser ipconfig --variant all -- ipconfig
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: ipconfig /all lands on ipconfig/all with the host name and each adapter's address
+    only: {os: windows}
+    steps:
+      - run:
+          command: hostname
+      - store:
+          name: host
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run --explain ipconfig /all
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ipconfig/all from embedded"
+          stdout:
+            json:
+              - { path: "$.configuration[0].name", equals: Host Name }
+              - { path: "$.configuration[0].value", matches: "(?i)^${host}$" }
+              - { path: "$.adapters[0].properties[0].name", equals: Connection-specific DNS Suffix }
+      - store:
+          name: adapter
+          from:
+            stdout:
+              json: {path: "$.adapters[0].adapter.name"}
+      - run:
+          command: powershell -NoProfile -NonInteractive -Command "(Get-NetAdapter -Name '${adapter}').MacAddress"
+      - assert:
+          exit_code: 0
+      - store:
+          name: mac
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run ipconfig /all
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.adapters[0].adapter.name", equals: "${adapter}" }
+              - { path: "$.adapters[0].properties[?(@.name=='Physical Address')].value", equals: "${mac}" }
+      - run:
+          shell: true
+          command: ipconfig /all | jz --explain
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ipconfig/all from embedded"
+      - run:
+          command: jz run --parser ipconfig --variant windows -- ipconfig /all
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: systeminfo lands on systeminfo/windows with the host name and the build
+    only: {os: windows}
+    steps:
+      - run:
+          command: hostname
+      - store:
+          name: host
+          from:
+            stdout: {trim: true}
+      # ver prints "Microsoft Windows [Version 10.0.26100.1234]"; the third
+      # number is the build systeminfo names on its OS Version line.
+      - run:
+          shell: true
+          command: ver
+      - store:
+          name: build
+          from:
+            stdout: {matches: 'Version 10\.0\.([0-9]+)\.'}
+      - run:
+          command: jz run --explain systeminfo
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose systeminfo/windows from embedded"
+          stdout:
+            json:
+              - { path: "$[0].name", equals: Host Name }
+              - { path: "$[0].value", matches: "(?i)^${host}$" }
+              - { path: "$[1].name", equals: OS Name }
+              - { path: "$[1].value", matches: '^Microsoft Windows' }
+              - { path: "$[2].name", equals: OS Version }
+              - { path: "$[2].value", matches: '^10\.0\.${build} .*Build ${build}$' }
+              # A counted list and the entries under it are one value.
+              - { path: "$[?(@.name=='Hotfix(s)')].value", matches: '^[0-9]+ Hotfix\(s\) Installed\.' }
+              - { path: "$[?(@.name=='Network Card(s)')].value", matches: '^[0-9]+ NIC\(s\) Installed\. \[01\]: ' }
+      # /fo list prints the same labelled lines, and /fo csv a header row
+      # and one record, which is the csv definition's to read once it is
+      # named with its variant.
+      - run:
+          shell: true
+          command: systeminfo /fo list | jz --explain
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose systeminfo/windows from embedded"
+          stdout:
+            json: { path: "$[0].value", matches: "(?i)^${host}$" }
+      # jz run goes by the arguments, and the definition leaves out any
+      # run given /fo, which names the csv and table forms as well as the
+      # list, so /fo list is refused there though its text is read above.
+      - run:
+          command: jz run systeminfo /fo list
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          command: jz run systeminfo /fo csv
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          shell: true
+          command: systeminfo /fo csv | jz --parser csv --variant comma
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].host_name", matches: "(?i)^${host}$" }
+              - { path: "$[0].os_version", matches: 'Build ${build}$' }

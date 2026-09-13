@@ -1,6 +1,10 @@
 # `lsblk -m -r` prints who owns each device node with one space between
-# cells and no tree drawing. The five columns are filled on every row,
-# so a row is the same five cells whatever the device is.
+# cells and no tree drawing. lsblk takes the owner, the group and the mode
+# from one stat of the node under /dev, so a device whose node is not
+# there, as in a container given none, prints its name, its size and the
+# separators of three blank cells. The three are blank together or filled
+# together, and a row with only some of them is not lsblk output, so a
+# row is read by one pattern that takes them as a set.
 format: 1
 command: lsblk
 variant: permissions-raw
@@ -23,22 +27,26 @@ detect:
       # SIZE is rounded and printed with its unit, down to "0B".
       # `lsblk -m -b -r` prints these same five columns with SIZE as a
       # bare byte count, which belongs to a definition that reports it as
-      # an integer, and one data row is enough to decide.
-      - '^\S+ \d+(?:\.\d+)?[BKMGTPEZY] \S+ \S+ \S+[ \t]*$'
+      # an integer, and one data row is enough to decide. The three cells
+      # after it are there or blank together.
+      - '^\S+ \d+(?:\.\d+)?[BKMGTPEZY](?: \S+ \S+ \S+)?[ \t]*$'
+input:
+  # The header names the columns the pattern below spells out, and
+  # nothing is read from it.
+  select:
+    after: '^NAME SIZE OWNER GROUP MODE[ \t]*$'
 parse:
-  type: table
-  split: delimiter
-  delimiter: " "
-fields:
+  type: regex
   # -r draws no tree: a child is written under its own name and the
-  # parent is the device it followed.
+  # parent is the device it followed. MODE is the permission bits of the
+  # node as ls writes them, "brw-rw----", and the pattern holds it to
+  # that shape.
+  pattern: '^(?P<name>\S+) (?P<size>\d+(?:\.\d+)?[BKMGTPEZY])(?: (?P<owner>\S+) (?P<group>\S+) (?P<mode>[-bcdlps?][-r][-w][-xsS][-r][-w][-xsS][-r][-w][-xtT]))?[ \t]*$'
+fields:
   name: {required: true}
   # SIZE is rounded ("1.8T" for 2000398934016 bytes) and lsblk offers -b
   # for the exact byte count, so the printed text is kept as it is.
   size: {required: true}
-  owner: {required: true}
-  group: {required: true}
-  # MODE is the permission bits of the device node as ls writes them,
-  # "brw-rw----", and the letters are what the format prints rather than
-  # a number to convert.
-  mode: {required: true}
+  # A device whose node lsblk could not stat prints the three blank, and
+  # the group takes no part in the match: owner, group and mode are then
+  # null together.

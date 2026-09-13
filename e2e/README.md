@@ -23,17 +23,29 @@ Linux one.
 | `completion` | all, zsh not on Windows | the bash and zsh scripts loaded into the real shell: subcommands, options, parsers of every registry, variants, paths, nothing run |
 | `process` | all, part POSIX | what `jz run` does when the reader leaves, when it is interrupted, when `--timeout` passes: no hang, no process left behind, the status the shell sees |
 | `exec` | POSIX | `jz run` with a shell script standing in for the command: status mirroring, signals, `--timeout`, argument boundary |
-| `exec_linux` | Linux | the host's real coreutils, procps, util-linux, iproute2, sysstat and BusyBox; hardware listings on captured output |
+| `exec_linux` | Linux | the host's real coreutils, procps, util-linux, iproute2, sysstat, systemd and BusyBox, on files, processes and sockets the scenarios make themselves; hardware listings on captured output |
 | `exec_darwin` | macOS | the real BSD commands land on the `bsd` definitions and the GNU shape is refused, ping, ping6 and stat included |
 | `exec_freebsd` | FreeBSD | the real commands land where a FreeBSD machine showed they do: `ps aux` and `mount` on the `bsd` definitions, `id`, `du` and `wc` on the POSIX ones, and the summary line macOS shares with no other BSD refused rather than cut |
+| `exec_windows` | Windows | the real `ipconfig`, `ipconfig /all` and `systeminfo` land on their definitions, the neighbouring variant is refused, and the host name, the build number and an adapter's address and MAC agree with `hostname`, `ver` and PowerShell |
 | `hardware_linux` | Linux, optional | the same hardware listings on a real device, where there is one |
 
 Windows runs every spec: a scenario that belongs to one operating system
 says so with `only:` or `skip:`, so a spec added later is on Windows
-from the day it exists. Windows has no parser definitions of its own,
-so what it verifies is the command line contract and the pipe, file and
-`--stream` paths, plus `jz run` with the suite's own helper as the
-command.
+from the day it exists. Besides `exec_windows`, what Windows verifies is
+the command line contract and the pipe, file and `--stream` paths, plus
+`jz run` with the suite's own helper as the command. CI runs it on
+windows-latest (Server 2025) and on windows-2022, both English with the
+console on code page 65001. Output in another display language, or in a
+code page that is not UTF-8, is not run anywhere.
+
+A value the machine decides is never pinned as a constant. Where a
+scenario needs a known process, file or socket, it makes one: a `sleep`
+it starts for `pidstat -p`, a file it writes for `ls -lG`, a listening
+and a connected socket for `ss`. Each is a service or a file of the
+scenario and goes away with it. Where the value can only be the
+machine's, it is compared with a second source on the same machine
+(`stat`, `hostname`, PowerShell) rather than with what one runner
+printed once.
 
 ## Required commands
 
@@ -43,13 +55,19 @@ lacks:
 
 | Command | Package (Debian/Ubuntu) | Used by |
 |---------|-------------------------|---------|
-| `iostat`, `mpstat`, `vmstat` | `sysstat`, `procps` | `exec_linux` |
+| `iostat`, `mpstat`, `pidstat`, `vmstat` | `sysstat`, `procps` | `exec_linux` |
 | `busybox` | `busybox` | `exec_linux` |
 | `zsh` | `zsh` | `completion` (macOS ships it; Windows has none, and those scenarios say so) |
-| `bash`, `curl` | on every runner, Windows through Git | `completion`, `http` |
-| `df`, `free`, `ps`, `uptime`, `id`, `env`, `mount`, `du`, `stat`, `lscpu`, `lsmod`, `who`, `wc`, `ls`, `ln`, `md5sum`, `sha256sum`, `tar`, `git` | on every runner | `exec_linux` |
-| `ip`, `dpkg`, `apt-cache` | on every runner | `exec_linux` |
-| `go` | the toolchain | `process` and `http` build `e2ehelper` |
+| `bash`, `curl` | on every runner, Windows through Git | `completion`, `http`, and bash for the connected socket in `exec_linux` |
+| `df`, `free`, `ps`, `uptime`, `id`, `env`, `mount`, `du`, `stat`, `lscpu`, `lsmod`, `prlimit`, `who`, `wc`, `ls`, `ln`, `md5sum`, `sha256sum`, `tar`, `git` | on every runner | `exec_linux` |
+| `ip`, `ss`, `dpkg`, `apt-cache` | on every runner | `exec_linux` |
+| a running systemd | the runner boots with it; a container usually does not | `exec_linux` (`systemctl`) |
+| `ipconfig`, `systeminfo`, `hostname`, `powershell` | part of Windows | `exec_windows` |
+| `go` | the toolchain | `scripts/run_e2e.sh` builds `jz` and `e2ehelper` |
+
+`scripts/run_e2e.sh` checks for these before the run and names what is
+missing, before the report and again under a failed one, so a scenario
+that failed for want of a command is not mistaken for a bug in jz.
 
 ## Optional: real hardware
 
@@ -78,10 +96,12 @@ $ scripts/run_e2e.sh --filter 'BusyBox'   # any atago run flag passes through
 
 ## The helper
 
-`e2e/atago/e2ehelper` is a small Go program the `process` suite builds
-in its setup. `emit` is a command that keeps printing (a burst, then a
+`e2e/atago/e2ehelper` is a small Go program `scripts/run_e2e.sh` builds
+before the run. `emit` is a command that keeps printing (a burst, then a
 line at a time), `pipe` is a reader that takes a few lines and leaves,
 then reports what became of `jz` and of the producer, and `gone` waits
 for a process to end. It is there so the scenarios about a reader that
 leaves or a command that is stopped run on Windows too, where there is
-no shell script to stand in for either.
+no shell script to stand in for either. `serve` is the local HTTP
+server the `curl` scenarios read and whose listening socket `ss` lists,
+and `as` makes the stand-ins `jz run` is pointed at.

@@ -1,0 +1,16 @@
+description: >-
+  A whole systeminfo report run for real on a Windows Server 2025
+  machine. 2025 lines the values up four columns further right than 2022
+  and adds a Virtualization-based security label whose continuation
+  lines hold colons of their own; they are joined onto that label as
+  text.
+source: >-
+  captured on a GitHub-hosted windows-2025 runner (Windows Server 2025
+  Datacenter, build 26100, en-US culture and UI language, console code
+  page 65001) on 2026-09-13 with `systeminfo > systeminfo.txt` in
+  cmd.exe. Replaced with made-up values of the same shape: the host name
+  (on the Host Name and Logon Server lines), the product ID and the
+  link-local IPv6 address. The hotfix numbers, the private IPv4 address
+  and the Azure DHCP server address were kept.
+os: windows
+args: []

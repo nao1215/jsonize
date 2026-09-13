@@ -23,9 +23,9 @@ reproducible without external fixtures.
 
 | Benchmark | Measures |
 |-----------|----------|
-| `LoadRegistry/definitions=N` | indexing a registry, paid on every jz start; N brackets the official registry (26) and one twenty times larger |
+| `LoadRegistry/definitions=N` | indexing a synthetic registry of N definitions, the cost every jz start pays; N is 26, 500 and 1000, so the curve shows how the cost grows with the size of a registry, and the official one, a few hundred definitions (`jz list` names them), falls inside it |
 | `LoadAndValidate`, `ValidateNested` | decoding and validating one definition |
-| `Detect/definitions=N` | `COMMAND \| jz`: every signature is evaluated because no parser was named |
+| `Detect/definitions=N` | `COMMAND \| jz` over the same synthetic sizes: every signature is evaluated because no parser was named |
 | `DetectWithParser`, `DetectWithVariant` | `--parser` and `--variant`, which narrow the scan to one command or one definition |
 | `DetectNoMatch` | the worst case, where every candidate is evaluated and rejected |
 | `DetectLargeInput` | detection over a 1 MB input, to show the cost follows the signature window and not the input size |

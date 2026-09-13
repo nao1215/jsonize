@@ -1,0 +1,162 @@
+{
+  "configuration": [
+    {
+      "name": "Host Name",
+      "value": "runnervmaaaaa"
+    },
+    {
+      "name": "Primary Dns Suffix",
+      "value": ""
+    },
+    {
+      "name": "Node Type",
+      "value": "Hybrid"
+    },
+    {
+      "name": "IP Routing Enabled",
+      "value": "No"
+    },
+    {
+      "name": "WINS Proxy Enabled",
+      "value": "No"
+    },
+    {
+      "name": "DNS Suffix Search List",
+      "value": "abcdefghijklmnopqrstuvwxyz.bx.internal.cloudapp.net"
+    }
+  ],
+  "adapters": [
+    {
+      "adapter": {
+        "type": "Ethernet",
+        "name": "Ethernet 4"
+      },
+      "properties": [
+        {
+          "name": "Connection-specific DNS Suffix",
+          "value": "abcdefghijklmnopqrstuvwxyz.bx.internal.cloudapp.net"
+        },
+        {
+          "name": "Description",
+          "value": "Microsoft Hyper-V Network Adapter #4"
+        },
+        {
+          "name": "Physical Address",
+          "value": "00-15-5D-00-00-01"
+        },
+        {
+          "name": "DHCP Enabled",
+          "value": "Yes"
+        },
+        {
+          "name": "Autoconfiguration Enabled",
+          "value": "Yes"
+        },
+        {
+          "name": "Link-local IPv6 Address",
+          "value": "fe80::1111:2222:3333:4444%15(Preferred)"
+        },
+        {
+          "name": "IPv4 Address",
+          "value": "10.1.0.10(Preferred)"
+        },
+        {
+          "name": "Subnet Mask",
+          "value": "255.255.240.0"
+        },
+        {
+          "name": "Lease Obtained",
+          "value": "Sunday, September 13, 2026 3:33:11 AM"
+        },
+        {
+          "name": "Lease Expires",
+          "value": "Wednesday, October 20, 2162 10:21:18 AM"
+        },
+        {
+          "name": "Default Gateway",
+          "value": "10.1.0.1"
+        },
+        {
+          "name": "DHCP Server",
+          "value": "168.63.129.16"
+        },
+        {
+          "name": "DHCPv6 IAID",
+          "value": "257967549"
+        },
+        {
+          "name": "DHCPv6 Client DUID",
+          "value": "00-01-00-01-00-00-00-00-00-15-5D-00-00-0A"
+        },
+        {
+          "name": "DNS Servers",
+          "value": "168.63.129.16"
+        },
+        {
+          "name": "NetBIOS over Tcpip",
+          "value": "Enabled"
+        }
+      ]
+    },
+    {
+      "adapter": {
+        "type": "Ethernet",
+        "name": "vEthernet (nat)"
+      },
+      "properties": [
+        {
+          "name": "Connection-specific DNS Suffix",
+          "value": ""
+        },
+        {
+          "name": "Description",
+          "value": "Hyper-V Virtual Ethernet Adapter"
+        },
+        {
+          "name": "Physical Address",
+          "value": "00-15-5D-00-00-02"
+        },
+        {
+          "name": "DHCP Enabled",
+          "value": "No"
+        },
+        {
+          "name": "Autoconfiguration Enabled",
+          "value": "Yes"
+        },
+        {
+          "name": "Link-local IPv6 Address",
+          "value": "fe80::5555:6666:7777:8888%12(Preferred)"
+        },
+        {
+          "name": "IPv4 Address",
+          "value": "172.18.80.1(Preferred)"
+        },
+        {
+          "name": "Subnet Mask",
+          "value": "255.255.240.0"
+        },
+        {
+          "name": "Default Gateway",
+          "value": ""
+        },
+        {
+          "name": "DHCPv6 IAID",
+          "value": "201332061"
+        },
+        {
+          "name": "DHCPv6 Client DUID",
+          "value": "00-01-00-01-00-00-00-00-00-15-5D-00-00-0A"
+        },
+        {
+          "name": "DNS Servers",
+          "value": "fec0:0:0:ffff::1%1 fec0:0:0:ffff::2%1 fec0:0:0:ffff::3%1"
+        },
+        {
+          "name": "NetBIOS over Tcpip",
+          "value": "Enabled"
+        }
+      ]
+    }
+  ]
+}

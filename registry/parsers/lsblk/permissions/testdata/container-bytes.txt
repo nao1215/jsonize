@@ -1,0 +1,7 @@
+NAME                 SIZE OWNER GROUP MODE
+loop0                4096             
+loop1           224915456 root  disk  brw-rw----
+loop2           225308672             
+nvme1n1     2000398934016             
+|-nvme1n1p1    1127219200             
+`-nvme1n1p2 1999269527552             

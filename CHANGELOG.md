@@ -8,6 +8,19 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `lsblk -m` and `lsblk -m -r` in a container without the device nodes
+  print the owner, group and mode blank while lsblk exits 0, and jz
+  refused that output with exit 4. The three are now `null` together
+  (contract version 2 of `lsblk/permissions` and
+  `lsblk/permissions-raw`), and a row with only some of them blank, which
+  lsblk never prints, is exit 3 rather than a row with a null in the
+  wrong place.
+- `ipconfig`, `ipconfig /all` and `systeminfo` are checked against the
+  real commands on Windows Server 2022 and 2025 (English, code page
+  65001) in CI, with a capture from each kept as a fixture; they were
+  written from published samples only. `systeminfo /fo list` is the same
+  text and is read through a pipe; `/fo csv` is read with `--parser csv
+  --variant comma`.
 - Five definitions said they read what a command prints on FreeBSD; the
   machine says otherwise for three of them. `uptime/bsd` and `w/bsd` read
   the macOS summary line, and every other BSD writes it from w(1) with a
@@ -1194,7 +1207,7 @@ project follows [Semantic Versioning](https://semver.org/).
   line it belongs to, for the reports that break a long value at the
   terminal width (`ethtool`) and for the control files whose values
   continue on an indented line (`dpkg -s`, `apt show`).
-- Official definitions for 160 commands in 355 output formats, covering
+- Official definitions, one per output format, covering
   coreutils and procps, the util-linux listings, the systemd tools, the
   classic network commands and the iproute2 ones, sysstat, the disk
   layout tools, the hardware and display tools, the archive and checksum

@@ -20,14 +20,11 @@
 #
 # A value with more than one entry continues on the next line, aligned
 # with the value column and carrying no label of its own, which is how a
-# list of DNS servers is printed: the shared-printer article under
-# metadata.references quotes a report with three of them. That article
-# writes the block as quoted prose and its columns do not survive on the
-# page, so it is cited here rather than kept as a fixture, and no
-# fixture pins the joining. input.fold joins such a line onto the line
-# it belongs to, so the entries stay under the label that announced
-# them. The label column is a few characters wide, so a line indented
-# far past it is a continuation and not a label.
+# list of DNS servers is printed: the windows-server-2022 fixture, run on
+# a real machine, lists three for one adapter. input.fold joins such a
+# line onto the line it belongs to, so the entries stay under the label
+# that announced them. The label column is a few characters wide, so a
+# line indented far past it is a continuation and not a label.
 #
 # Every value stays a string. The text states no units and no types, and
 # the one field that reads as a number, the DHCPv6 IAID, is an

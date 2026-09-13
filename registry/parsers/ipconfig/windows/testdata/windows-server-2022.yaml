@@ -1,0 +1,15 @@
+description: >-
+  ipconfig run for real on a Windows Server 2022 machine: an Azure
+  adapter with a DNS suffix and a gateway, and the NAT switch with an
+  empty suffix and an empty gateway. CRLF line endings and the blank line
+  above the banner are as the command wrote them.
+source: >-
+  captured on a GitHub-hosted windows-2022 runner (Windows Server 2022
+  Datacenter, build 20348, en-US culture and UI language, console code
+  page 65001) on 2026-09-13 with `ipconfig > ipconfig.txt` in cmd.exe.
+  Replaced with made-up values of the same shape: the DNS suffix, which
+  names the virtual network, and the link-local IPv6 addresses. The
+  private IPv4 addresses are the ones every hosted runner is given and
+  were kept.
+os: windows
+args: []

@@ -1,8 +1,13 @@
 # `lsblk -m` reports who owns each device node instead of its geometry:
-# NAME, SIZE, OWNER, GROUP and MODE. The columns are fixed and every one
-# of them is filled on every row, so the only thing the layout has to
-# survive is the tree lsblk draws in NAME, and cells are cut at the
-# header offsets as they are for the default output.
+# NAME, SIZE, OWNER, GROUP and MODE. The columns are fixed. lsblk takes
+# the owner, the group and the mode from one stat of the node under /dev,
+# so a device whose node is not there, which is every device in a
+# container that was given none, prints its name and size and leaves the
+# other three blank. They are blank together or filled together: a row
+# with one of them blank and another filled is not something lsblk
+# prints, and a cut at the header offsets would read it with a null in
+# the wrong place. So a row is read by one pattern that takes the three
+# as a set, and a row that has only some of them does not match.
 format: 1
 command: lsblk
 variant: permissions
@@ -20,29 +25,35 @@ detect:
     all:
       - '^NAME[ \t]+SIZE[ \t]+OWNER[ \t]+GROUP[ \t]+MODE[ \t]*$'
       # The header is lined up with the columns. -r prints the same words
-      # one space apart and the rows unaligned, which this cannot cut.
+      # one space apart and the rows unaligned, which is another format.
       - '^NAME(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
       # SIZE is rounded and printed with its unit, down to "0B". `lsblk -m -b`
       # prints these same five columns with SIZE as a bare byte count,
       # which belongs to a definition that reports it as an integer
       # rather than to this one, and one data row is enough to decide.
-      - '^\S+[ \t]+\d+(?:\.\d+)?[BKMGTPEZY][ \t]+\S+[ \t]+\S+[ \t]+\S+[ \t]*$'
+      # The three cells after it are there or blank together.
+      - '^\S+[ \t]+\d+(?:\.\d+)?[BKMGTPEZY](?:[ \t]+\S+[ \t]+\S+[ \t]+\S+)?[ \t]*$'
+input:
+  # The header names the columns the pattern below spells out, and
+  # nothing is read from it.
+  select:
+    after: '^NAME[ \t]+SIZE[ \t]+OWNER[ \t]+GROUP[ \t]+MODE[ \t]*$'
 parse:
-  type: table
-  split: aligned
-fields:
+  type: regex
   # lsblk draws the tree of devices in front of a name: a child starts
   # with "|-" or "`-" in the C locale and "├─" or "└─" in a UTF-8 one,
   # after "| " ("│ ") or two spaces for each level above it. The drawing
-  # is not part of the name. A name without it, a disk at the top, is
-  # kept whole.
-  name: {required: true, regex: '(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?(?P<name>.+)'}
+  # is not part of the name, so it is matched outside the group that
+  # keeps one. MODE is the permission bits of the node as ls writes them,
+  # "brw-rw----", and the pattern holds it to that shape, so that a row
+  # missing a cell cannot pass the next word off as the mode.
+  pattern: '^(?:(?:[|│] |  )*(?:[|`]-|[├└]─))?(?P<name>\S+)[ \t]+(?P<size>\d+(?:\.\d+)?[BKMGTPEZY])(?:[ \t]+(?P<owner>\S+)[ \t]+(?P<group>\S+)[ \t]+(?P<mode>[-bcdlps?][-r][-w][-xsS][-r][-w][-xsS][-r][-w][-xtT]))?[ \t]*$'
+fields:
+  name: {required: true}
   # SIZE is rounded ("1.8T" for 2000398934016 bytes) and lsblk offers -b
   # for the exact byte count, so the printed text is kept as it is.
   size: {required: true}
-  owner: {required: true}
-  group: {required: true}
-  # MODE is the permission bits of the device node as ls writes them,
-  # "brw-rw----", and the letters are what the format prints rather than
-  # a number to convert.
-  mode: {required: true}
+  # A device whose node lsblk could not stat prints the three blank, and
+  # the group takes no part in the match: owner, group and mode are then
+  # null together. The letters of the mode are what the format prints
+  # rather than a number to convert.

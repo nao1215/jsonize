@@ -5,33 +5,43 @@
   "description": "lsblk -m -r, the owner, group and mode one space apart",
   "x-jsonize": {
     "definition": "lsblk/permissions-raw",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
     "type": "object",
     "properties": {
-      "group": {
-        "type": "string"
-      },
-      "mode": {
-        "type": "string"
-      },
       "name": {
-        "type": "string"
-      },
-      "owner": {
         "type": "string"
       },
       "size": {
         "type": "string"
+      },
+      "owner": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "group": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "mode": {
+        "type": [
+          "string",
+          "null"
+        ]
       }
     },
-    "additionalProperties": {
-      "type": [
-        "string",
-        "null"
-      ]
-    }
+    "required": [
+      "name",
+      "size",
+      "owner",
+      "group",
+      "mode"
+    ]
   }
 }

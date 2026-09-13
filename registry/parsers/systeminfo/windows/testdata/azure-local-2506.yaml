@@ -9,9 +9,8 @@ source: >-
   line, quoted as published with the eight spaces the article indents its
   code block by removed and the prompt line above the output dropped. The
   host name (V-HOST1) was replaced with a made-up value of the same
-  shape. It is the whole of the citable capture: no published systeminfo
-  output with its layout intact was found for the rest of the report, so
-  the counted lists (Hotfix(s), Network Card(s)) are described in the
-  definition but not pinned by a fixture.
+  shape. The rest of the report, the counted lists (Hotfix(s), Network
+  Card(s)) included, is pinned by the windows-server-2022 and
+  windows-server-2025 fixtures, captured on real machines.
 os: windows
 args: []

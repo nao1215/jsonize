@@ -7,8 +7,9 @@ import (
 )
 
 // BenchmarkLoadRegistry measures the cost of indexing a registry, which
-// every jz invocation pays before anything else. The sizes bracket the
-// official registry (26) and a registry an order of magnitude larger.
+// every jz invocation pays before anything else. The sizes are fixed so
+// results stay comparable with bench/baseline.txt as the official
+// registry grows; they show how the cost scales rather than stand for it.
 func BenchmarkLoadRegistry(b *testing.B) {
 	for _, n := range []int{26, 500, 1000} {
 		fsys := fstest.MapFS{"registry.yaml": {Data: []byte("format: 1\nname: bench\n")}}

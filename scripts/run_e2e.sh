@@ -26,6 +26,43 @@ if ! command -v atago >/dev/null 2>&1; then
   exit 127
 fi
 
+# What the required scenarios take from the machine besides jz. Nothing
+# is skipped for want of it: the scenarios that use it fail, which is what
+# a requirement should do. Listing it before the run, and again under a
+# failed report, is what tells such a failure apart from a bug in jz. The
+# list follows the table in e2e/README.md.
+missing=()
+need() {
+  command -v "$1" >/dev/null 2>&1 || missing+=("$1 ($2)")
+}
+need go "builds jz and e2ehelper"
+need curl "http"
+need bash "completion"
+case "$(uname -s)" in
+Linux)
+  for c in iostat mpstat pidstat; do need "$c" "sysstat, exec_linux"; done
+  for c in ps free vmstat uptime; do need "$c" "procps, exec_linux"; done
+  for c in ss ip; do need "$c" "iproute2, exec_linux"; done
+  for c in df id env mount du who wc ls ln md5sum sha256sum; do need "$c" "coreutils, exec_linux"; done
+  for c in busybox lscpu lsmod prlimit dpkg apt-cache git tar stat; do need "$c" "exec_linux"; done
+  need zsh "completion"
+  need systemctl "exec_linux"
+  if [ ! -d /run/systemd/system ]; then
+    missing+=("a running systemd (exec_linux: systemctl)")
+  fi
+  ;;
+Darwin | FreeBSD)
+  need zsh "completion"
+  ;;
+MINGW* | MSYS* | CYGWIN*)
+  for c in ipconfig systeminfo hostname powershell; do need "$c" "exec_windows"; done
+  ;;
+esac
+if [ "${#missing[@]}" -gt 0 ]; then
+  echo "this machine lacks what some required scenarios run; those scenarios will fail:" >&2
+  printf '  %s\n' "${missing[@]}" >&2
+fi
+
 sandbox="$(mktemp -d)"
 trap 'rm -rf "$sandbox"' EXIT
 mkdir -p "$sandbox/bin" "$sandbox/home"
@@ -80,5 +117,10 @@ if [ -n "$unexpected" ]; then
   echo "required scenarios were skipped; install what they need or gate them on the operating system:" >&2
   echo "$unexpected" | sed -E 's/^ok [0-9]+ - /  /' >&2
   status=1
+fi
+if [ "$status" -ne 0 ] && [ "${#missing[@]}" -gt 0 ]; then
+  echo >&2
+  echo "some failures may come from what this machine lacks rather than from jz:" >&2
+  printf '  %s\n' "${missing[@]}" >&2
 fi
 exit "$status"

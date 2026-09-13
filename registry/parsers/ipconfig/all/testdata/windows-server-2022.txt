@@ -1,0 +1,46 @@
+
+Windows IP Configuration
+
+   Host Name . . . . . . . . . . . . : runnervmaaaaa
+   Primary Dns Suffix  . . . . . . . : 
+   Node Type . . . . . . . . . . . . : Hybrid
+   IP Routing Enabled. . . . . . . . : No
+   WINS Proxy Enabled. . . . . . . . : No
+   DNS Suffix Search List. . . . . . : abcdefghijklmnopqrstuvwxyz.bx.internal.cloudapp.net
+
+Ethernet adapter Ethernet 4:
+
+   Connection-specific DNS Suffix  . : abcdefghijklmnopqrstuvwxyz.bx.internal.cloudapp.net
+   Description . . . . . . . . . . . : Microsoft Hyper-V Network Adapter #4
+   Physical Address. . . . . . . . . : 00-15-5D-00-00-01
+   DHCP Enabled. . . . . . . . . . . : Yes
+   Autoconfiguration Enabled . . . . : Yes
+   Link-local IPv6 Address . . . . . : fe80::1111:2222:3333:4444%15(Preferred) 
+   IPv4 Address. . . . . . . . . . . : 10.1.0.10(Preferred) 
+   Subnet Mask . . . . . . . . . . . : 255.255.240.0
+   Lease Obtained. . . . . . . . . . : Sunday, September 13, 2026 3:33:11 AM
+   Lease Expires . . . . . . . . . . : Wednesday, October 20, 2162 10:21:18 AM
+   Default Gateway . . . . . . . . . : 10.1.0.1
+   DHCP Server . . . . . . . . . . . : 168.63.129.16
+   DHCPv6 IAID . . . . . . . . . . . : 257967549
+   DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-00-00-00-00-00-15-5D-00-00-0A
+   DNS Servers . . . . . . . . . . . : 168.63.129.16
+   NetBIOS over Tcpip. . . . . . . . : Enabled
+
+Ethernet adapter vEthernet (nat):
+
+   Connection-specific DNS Suffix  . : 
+   Description . . . . . . . . . . . : Hyper-V Virtual Ethernet Adapter
+   Physical Address. . . . . . . . . : 00-15-5D-00-00-02
+   DHCP Enabled. . . . . . . . . . . : No
+   Autoconfiguration Enabled . . . . : Yes
+   Link-local IPv6 Address . . . . . : fe80::5555:6666:7777:8888%12(Preferred) 
+   IPv4 Address. . . . . . . . . . . : 172.18.80.1(Preferred) 
+   Subnet Mask . . . . . . . . . . . : 255.255.240.0
+   Default Gateway . . . . . . . . . : 
+   DHCPv6 IAID . . . . . . . . . . . : 201332061
+   DHCPv6 Client DUID. . . . . . . . : 00-01-00-01-00-00-00-00-00-15-5D-00-00-0A
+   DNS Servers . . . . . . . . . . . : fec0:0:0:ffff::1%1
+                                       fec0:0:0:ffff::2%1
+                                       fec0:0:0:ffff::3%1
+   NetBIOS over Tcpip. . . . . . . . : Enabled

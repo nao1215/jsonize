@@ -12,8 +12,9 @@
 # A value with more than one entry announces a count on the label's own
 # line and then writes the entries on lines of their own, aligned with
 # the value column and carrying no label: the Hotfix(s) and Network
-# Card(s) lines are printed that way, and the published capture under
-# metadata.references shows the same shape under the security features.
+# Card(s) lines are printed that way, and so are the security features
+# Windows Server 2025 lists; the windows-server-2022 and 2025 fixtures,
+# run on real machines, hold all three.
 # input.fold joins those lines onto the label that announced them, so
 # the count and its entries stay one value. They are not carved into a
 # list: the numbering ([01], [02]) is the only thing separating the

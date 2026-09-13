@@ -1,0 +1,11 @@
+description: >-
+  A row whose owner is blank while its group and mode are filled. lsblk
+  fills the three from one look at the device node, so they are blank
+  together or not at all, and this row is refused rather than read with
+  the owner null.
+source: >-
+  container.txt with the owner of loop1 deleted and the spaces around it
+  kept
+os: linux
+args: [-m, -r]
+expect_error: 'line does not match pattern'

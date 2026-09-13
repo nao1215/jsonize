@@ -1,0 +1,11 @@
+description: >-
+  Run in a container given no device node at all, the default for
+  docker. Every row has its owner, group and mode blank, the first data
+  row included, and lsblk exits 0.
+source: >-
+  captured on Ubuntu 26.04 with `docker run --rm -e LC_ALL=C
+  debian:stable-slim lsblk -m` (util-linux 2.41.5); lines 1-4 and 58-62
+  of the output kept, the rest of the loop devices dropped; nothing
+  replaced
+os: linux
+args: [-m]

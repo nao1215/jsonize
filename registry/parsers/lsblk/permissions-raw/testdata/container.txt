@@ -1,0 +1,7 @@
+NAME SIZE OWNER GROUP MODE
+loop0 4K   
+loop1 214.5M root disk brw-rw----
+loop2 214.9M   
+nvme1n1 1.8T   
+nvme1n1p1 1G   
+nvme1n1p2 1.8T   

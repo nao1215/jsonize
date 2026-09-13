@@ -734,34 +734,51 @@ scenarios:
   # per-thread CPU. -t prints a row for a task and a row for each of its
   # threads, and whichever of TGID and TID is a dash says which kind of
   # row it is.
+  #
+  # The task is one the scenario starts, a sleep of the user running the
+  # suite, rather than pid 1: what pid 1 is called depends on the machine
+  # (systemd, init, a container's shell), and a /proc mounted with hidepid
+  # hides it. A single-threaded sleep has one task row and one thread row,
+  # both with its own pid, and the service ends with the scenario.
   - name: pidstat -v, -R, -s and -t land on their own definitions
     only: {os: linux}
+    services:
+      - name: sleeper
+        shell: true
+        command: echo $$ > pid.tmp && mv pid.tmp pid.txt && exec sleep 300
+        ready: {file: pid.txt, store: pid, timeout: 20s}
     steps:
+      # The pid is written before the shell becomes sleep; pidstat names
+      # the task by what it is when it samples, so wait for the exec.
       - run:
-          command: jz run --explain pidstat -v -p 1 1 1
+          command: sh -c 'i=0; while [ "$(cat /proc/$1/comm)" != sleep ]; do [ $i -ge 100 ] && exit 1; sleep 0.1; i=$((i+1)); done' sh ${pid}
+      - assert:
+          exit_code: 0
+      - run:
+          command: jz run --explain pidstat -v -p ${pid} 1 1
       - assert:
           exit_code: 0
           stderr:
             contains: "pidstat/kernel from embedded"
           stdout:
             json:
-              - { path: "$[0].tasks[0].pid", equals: 1 }
+              - { path: "$[0].tasks[0].pid", gt: 0 }
+              - { path: "$[0].tasks[0].pid", equals: "${pid}" }
+              - { path: "$[0].tasks[0].command", equals: sleep }
       - run:
-          command: jz run --explain pidstat -R -p 1 1 1
+          command: jz run --explain pidstat -R -p ${pid} 1 1
       - assert:
           exit_code: 0
           stderr:
             contains: "pidstat/priority from embedded"
           stdout:
             json:
-              - { path: "$[0].tasks[0].pid", equals: 1 }
-      # An ordinary user cannot read the stack of a task that is not
-      # theirs, and pid 1 is root's: the report is then a header with no
-      # rows under it, which is an empty list rather than a failure. Run
-      # as root it holds the task, so the length of the list is not what
-      # this pins.
+              - { path: "$[0].tasks[0].pid", equals: "${pid}" }
+              - { path: "$[0].tasks[0].command", equals: sleep }
+      # The task is the user's own, so its stack can be read and the
+      # report has a row for it.
       - run:
-          command: jz run --explain pidstat -s -p 1 1 1
+          command: jz run --explain pidstat -s -p ${pid} 1 1
       - assert:
           exit_code: 0
           stderr:
@@ -769,21 +786,25 @@ scenarios:
           stdout:
             json:
               - { path: "$", length: 1 }
+              - { path: "$[0].tasks[0].pid", equals: "${pid}" }
+              - { path: "$[0].tasks[0].command", equals: sleep }
       - run:
-          command: jz run --explain pidstat -t -p 1 1 1
+          command: jz run --explain pidstat -t -p ${pid} 1 1
       - assert:
           exit_code: 0
           stderr:
             contains: "pidstat/threads from embedded"
           stdout:
             json:
-              - { path: "$[0].tasks[0].tgid", equals: 1 }
+              - { path: "$[0].tasks[0].tgid", gt: 0 }
+              - { path: "$[0].tasks[0].tgid", equals: "${pid}" }
               - { path: "$[0].tasks[0].tid", equals: null }
+              - { path: "$[0].tasks[0].command", equals: sleep }
               - { path: "$[0].tasks[1].tgid", equals: null }
-              - { path: "$[0].tasks[1].tid", equals: 1 }
-              # The drawing that puts a thread under its task is not part
-              # of its name.
-              - { path: "$[0].tasks[1].command", equals: systemd }
+              - { path: "$[0].tasks[1].tid", equals: "${pid}" }
+              # The drawing that puts a thread under its task ("|__sleep")
+              # is not part of its name.
+              - { path: "$[0].tasks[1].command", equals: sleep }
 
   - name: the network and package listings land on their own definitions
     only: {os: linux}
@@ -1181,6 +1202,14 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].value", equals: Linux }
+      # systemctl answers only on a machine systemd booted, which the CI
+      # runners are and a container usually is not. This is the check
+      # systemd itself makes (sd_booted), so a host without it fails here,
+      # on the requirement, rather than on what jz did with a refusal.
+      - run:
+          command: test -d /run/systemd/system
+      - assert:
+          exit_code: 0
       - run:
           command: jz run --explain systemctl show -p ActiveState,SubState systemd-journald
       - assert:
@@ -1544,6 +1573,70 @@ scenarios:
               - { path: "$[1].name", equals: nvme0n1p1 }
               - { path: "$[4].name", equals: nvme1n1p1 }
 
+  # lsblk -m takes the owner, group and mode from the device node, and a
+  # container that was given no node prints the three blank for every
+  # device while lsblk exits 0. That run is read with the three null
+  # together; a row blank in only some of them is not lsblk output and is
+  # refused. Captured output, since what a runner has under /dev is not
+  # the scenario's to choose.
+  - name: lsblk -m in a container reads blank owner, group and mode as null, and a partial row is refused
+    only: {os: linux}
+    env:
+      PATH: "${workdir}/bin:${env:PATH}"
+    steps:
+      - fixture:
+          file: bin/lsblk
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            case " $* " in
+            *" -r "*) cat "$(dirname "$0")/../captured/lsblk-m-r.txt" ;;
+            *) cat "$(dirname "$0")/../captured/lsblk-m.txt" ;;
+            esac
+      - fixture:
+          file: captured/lsblk-m.txt
+          from: "${specdir}/../../registry/parsers/lsblk/permissions/testdata/no-device-nodes.txt"
+      - fixture:
+          file: captured/lsblk-m-r.txt
+          from: "${specdir}/../../registry/parsers/lsblk/permissions-raw/testdata/container.txt"
+      - fixture:
+          file: owner-missing.txt
+          from: "${specdir}/../../registry/parsers/lsblk/permissions/testdata/owner-missing.txt"
+      - run:
+          command: jz run --explain lsblk -m
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose lsblk/permissions from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 8 }
+              - { path: "$[0].name", equals: loop0 }
+              - { path: "$[0].size", equals: 4K }
+              - { path: "$[0].owner", equals: null }
+              - { path: "$[0].group", equals: null }
+              - { path: "$[0].mode", equals: null }
+              - { path: "$[5].name", equals: nvme1n1p2 }
+      - run:
+          command: jz run --explain lsblk -m -r
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose lsblk/permissions-raw from embedded"
+          stdout:
+            json:
+              - { path: "$[0].owner", equals: null }
+              - { path: "$[1].owner", equals: root }
+              - { path: "$[1].group", equals: disk }
+              - { path: "$[1].mode", equals: brw-rw---- }
+      - run:
+          command: jz --file owner-missing.txt
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: 'line 3: line does not match pattern'
+
   # A ping that keeps running is answered reply by reply with --stream:
   # the header, each reply and the summary, as a document of their own.
   # The stand-in prints what iputils printed; the real ping streams in
@@ -1786,30 +1879,53 @@ scenarios:
   # so the arguments are the whole of it: `jz run` reaches the right one,
   # and a pipe that names only the command reports both rather than
   # choosing.
+  #
+  # The file is one the scenario writes, and the names it is checked
+  # against are what stat reports for it, so the scenario holds wherever
+  # the suite runs and whoever runs it.
   - name: ls -lG and ls -lg land on different variants for the same text
     only: {os: linux}
     steps:
+      - fixture:
+          file: owned.txt
+          content: "x\n"
       - run:
-          command: jz run --explain ls -lG /etc/hostname
+          command: stat -c %U owned.txt
+      - store:
+          name: owner
+          from:
+            stdout: {trim: true}
+      - run:
+          command: stat -c %G owned.txt
+      - store:
+          name: group
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run --explain ls -lG owned.txt
       - assert:
           exit_code: 0
           stderr:
             contains: "chose ls/long-no-group from embedded"
           stdout:
             json:
-              - { path: "$[0].owner", equals: root }
+              - { path: "$[0].owner", matches: "^${owner}$" }
+              - { path: "$[0].size", equals: "2" }
+              - { path: "$[0].filename", equals: owned.txt }
       - run:
-          command: jz run --explain ls -lg /etc/hostname
+          command: jz run --explain ls -lg owned.txt
       - assert:
           exit_code: 0
           stderr:
             contains: "chose ls/long-no-owner from embedded"
           stdout:
             json:
-              - { path: "$[0].group", equals: root }
+              - { path: "$[0].group", matches: "^${group}$" }
+              - { path: "$[0].size", equals: "2" }
+              - { path: "$[0].filename", equals: owned.txt }
       - run:
           shell: true
-          command: LC_ALL=C ls -lG /etc/hostname | jz --parser ls
+          command: LC_ALL=C ls -lG owned.txt | jz --parser ls
       - assert:
           exit_code: 4
           stdout: {empty: true}
@@ -1821,12 +1937,12 @@ scenarios:
       # name, which only the argument tells from a group.
       - run:
           shell: true
-          command: LC_ALL=C ls -lgZ /etc/hostname | jz
+          command: LC_ALL=C ls -lgZ owned.txt | jz
       - assert:
           exit_code: 4
           stdout: {empty: true}
       - run:
-          command: jz run ls -lo --author /etc/hostname
+          command: jz run ls -lo --author owned.txt
       - assert:
           exit_code: 4
           stdout: {empty: true}
@@ -1867,26 +1983,55 @@ scenarios:
   # ss keeps what -e, -o, -m and -i append after the address columns, and
   # folds the indented lines -i and -m add back onto their row. A tail it
   # refused used to be exit 3 on the most ordinary invocations.
+  #
+  # The sockets are ones the scenario opens, so the rows do not depend on
+  # what the machine happens to be listening on: the suite's own HTTP
+  # server on a free port of 127.0.0.1, and a UDP socket bash connects to
+  # 127.0.0.1:9, which needs nothing listening there. Each ss is filtered
+  # to that one socket. Both services end with the scenario.
   - name: ss keeps what its options append, and ss -u drops two columns
     only: {os: linux}
+    services:
+      - name: server
+        command: e2ehelper serve -addr ${workdir}/addr.txt
+        ready: {file: addr.txt, store: addr, timeout: 20s}
+      - name: udp
+        command: bash -c 'exec 3>/dev/udp/127.0.0.1/9 && echo connected > udp.tmp && mv udp.tmp udp.txt && exec sleep 300'
+        ready: {file: udp.txt, timeout: 20s}
     steps:
       - run:
+          command: cat addr.txt
+      - store:
+          name: port
+          from:
+            stdout: {matches: ':([0-9]+)'}
+      - run:
           shell: true
-          command: LC_ALL=C ss -tln -e | jz --explain
+          command: LC_ALL=C ss -tln -e src ${addr} | jz --explain
       - assert:
           exit_code: 0
           stderr:
             contains: "chose ss/single-protocol from embedded"
           stdout:
             json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].state", equals: LISTEN }
+              - { path: "$[0].local_address", equals: 127.0.0.1 }
+              - { path: "$[0].local_port", matches: "^${port}$" }
               - { path: "$[0].info", matches: "ino:" }
       - run:
           shell: true
-          command: LC_ALL=C ss -u | jz --explain
+          command: LC_ALL=C ss -un dst 127.0.0.1:9 | jz --explain
       - assert:
           exit_code: 0
           stderr:
             contains: "chose ss/connected from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].local_address", equals: 127.0.0.1 }
+              - { path: "$[0].peer_address", equals: 127.0.0.1 }
+              - { path: "$[0].peer_port", equals: "9" }
 
   # systemctl printed three tables no definition read, and its own
   # properties are the same Key=value block a unit's selected properties
@@ -1894,6 +2039,11 @@ scenarios:
   - name: the systemctl tables and the manager's own properties are read
     only: {os: linux}
     steps:
+      # A machine systemd booted, as above.
+      - run:
+          command: test -d /run/systemd/system
+      - assert:
+          exit_code: 0
       - run:
           command: jz run --explain systemctl list-machines
       - assert:

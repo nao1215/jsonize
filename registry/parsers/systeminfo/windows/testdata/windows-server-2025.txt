@@ -1,0 +1,60 @@
+
+Host Name:                     runnervmbbbbb
+OS Name:                       Microsoft Windows Server 2025 Datacenter
+OS Version:                    10.0.26100 N/A Build 26100
+OS Manufacturer:               Microsoft Corporation
+OS Configuration:              Standalone Server
+OS Build Type:                 Multiprocessor Free
+Registered Owner:              N/A
+Registered Organization:       N/A
+Product ID:                    00000-00000-00000-AA000
+Original Install Date:         9/8/2026, 1:39:14 AM
+System Boot Time:              9/13/2026, 3:49:26 AM
+System Manufacturer:           Microsoft Corporation
+System Model:                  Virtual Machine
+System Type:                   x64-based PC
+Processor(s):                  1 Processor(s) Installed.
+                               [01]: AMD64 Family 26 Model 2 Stepping 1 AuthenticAMD ~2596 Mhz
+BIOS Version:                  Microsoft Corporation Hyper-V UEFI Release v4.1, 4/22/2026
+Windows Directory:             C:\Windows
+System Directory:              C:\Windows\system32
+Boot Device:                   \Device\HarddiskVolume3
+System Locale:                 en-us;English (United States)
+Input Locale:                  en-us;English (United States)
+Time Zone:                     (UTC) Coordinated Universal Time
+Total Physical Memory:         16,379 MB
+Available Physical Memory:     13,125 MB
+Virtual Memory: Max Size:      19,323 MB
+Virtual Memory: Available:     16,686 MB
+Virtual Memory: In Use:        2,637 MB
+Page File Location(s):         C:\pagefile.sys
+Domain:                        WORKGROUP
+Logon Server:                  \\runnervmbbbbb
+Hotfix(s):                     3 Hotfix(s) Installed.
+                               [01]: KB5120708
+                               [02]: KB5120233
+                               [03]: KB5120232
+Network Card(s):               2 NIC(s) Installed.
+                               [01]: Microsoft Azure Network Adapter
+                                     Connection Name: Ethernet 4
+                                     DHCP Enabled:    No
+                                     IP address(es)
+                               [02]: Microsoft Hyper-V Network Adapter
+                                     Connection Name: Ethernet 3
+                                     DHCP Enabled:    Yes
+                                     DHCP Server:     168.63.129.16
+                                     IP address(es)
+                                     [01]: 10.1.0.10
+                                     [02]: fe80::aaaa:bbbb:cccc:dddd
+Virtualization-based security: Status: Running
+                               Required Security Properties:
+                               Available Security Properties:
+                                     Base Virtualization Support
+                                     UEFI Code Readonly
+                                     Mode Based Execution Control
+                               Services Configured:
+                               Services Running:
+                               App Control for Business policy: Enforced
+                               App Control for Business user mode policy: Off
+                               Security Features Enabled:
+Hyper-V Requirements:          A hypervisor has been detected. Features required for Hyper-V will not be displayed.

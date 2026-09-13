@@ -1,0 +1,138 @@
+[
+  {
+    "name": "Host Name",
+    "value": "runnervmbbbbb"
+  },
+  {
+    "name": "OS Name",
+    "value": "Microsoft Windows Server 2025 Datacenter"
+  },
+  {
+    "name": "OS Version",
+    "value": "10.0.26100 N/A Build 26100"
+  },
+  {
+    "name": "OS Manufacturer",
+    "value": "Microsoft Corporation"
+  },
+  {
+    "name": "OS Configuration",
+    "value": "Standalone Server"
+  },
+  {
+    "name": "OS Build Type",
+    "value": "Multiprocessor Free"
+  },
+  {
+    "name": "Registered Owner",
+    "value": "N/A"
+  },
+  {
+    "name": "Registered Organization",
+    "value": "N/A"
+  },
+  {
+    "name": "Product ID",
+    "value": "00000-00000-00000-AA000"
+  },
+  {
+    "name": "Original Install Date",
+    "value": "9/8/2026, 1:39:14 AM"
+  },
+  {
+    "name": "System Boot Time",
+    "value": "9/13/2026, 3:49:26 AM"
+  },
+  {
+    "name": "System Manufacturer",
+    "value": "Microsoft Corporation"
+  },
+  {
+    "name": "System Model",
+    "value": "Virtual Machine"
+  },
+  {
+    "name": "System Type",
+    "value": "x64-based PC"
+  },
+  {
+    "name": "Processor(s)",
+    "value": "1 Processor(s) Installed. [01]: AMD64 Family 26 Model 2 Stepping 1 AuthenticAMD ~2596 Mhz"
+  },
+  {
+    "name": "BIOS Version",
+    "value": "Microsoft Corporation Hyper-V UEFI Release v4.1, 4/22/2026"
+  },
+  {
+    "name": "Windows Directory",
+    "value": "C:\\Windows"
+  },
+  {
+    "name": "System Directory",
+    "value": "C:\\Windows\\system32"
+  },
+  {
+    "name": "Boot Device",
+    "value": "\\Device\\HarddiskVolume3"
+  },
+  {
+    "name": "System Locale",
+    "value": "en-us;English (United States)"
+  },
+  {
+    "name": "Input Locale",
+    "value": "en-us;English (United States)"
+  },
+  {
+    "name": "Time Zone",
+    "value": "(UTC) Coordinated Universal Time"
+  },
+  {
+    "name": "Total Physical Memory",
+    "value": "16,379 MB"
+  },
+  {
+    "name": "Available Physical Memory",
+    "value": "13,125 MB"
+  },
+  {
+    "name": "Virtual Memory",
+    "value": "Max Size:      19,323 MB"
+  },
+  {
+    "name": "Virtual Memory",
+    "value": "Available:     16,686 MB"
+  },
+  {
+    "name": "Virtual Memory",
+    "value": "In Use:        2,637 MB"
+  },
+  {
+    "name": "Page File Location(s)",
+    "value": "C:\\pagefile.sys"
+  },
+  {
+    "name": "Domain",
+    "value": "WORKGROUP"
+  },
+  {
+    "name": "Logon Server",
+    "value": "\\\\runnervmbbbbb"
+  },
+  {
+    "name": "Hotfix(s)",
+    "value": "3 Hotfix(s) Installed. [01]: KB5120708 [02]: KB5120233 [03]: KB5120232"
+  },
+  {
+    "name": "Network Card(s)",
+    "value": "2 NIC(s) Installed. [01]: Microsoft Azure Network Adapter Connection Name: Ethernet 4 DHCP Enabled:    No IP address(es) [02]: Microsoft Hyper-V Network Adapter Connection Name: Ethernet 3 DHCP Enabled:    Yes DHCP Server:     168.63.129.16 IP address(es) [01]: 10.1.0.10 [02]: fe80::aaaa:bbbb:cccc:dddd"
+  },
+  {
+    "name": "Virtualization-based security",
+    "value": "Status: Running Required Security Properties: Available Security Properties: Base Virtualization Support UEFI Code Readonly Mode Based Execution Control Services Configured: Services Running: App Control for Business policy: Enforced App Control for Business user mode policy: Off Security Features Enabled:"
+  },
+  {
+    "name": "Hyper-V Requirements",
+    "value": "A hypervisor has been detected. Features required for Hyper-V will not be displayed."
+  }
+]
