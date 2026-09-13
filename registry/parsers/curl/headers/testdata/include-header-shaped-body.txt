@@ -1,0 +1,11 @@
+HTTP/1.0 200 OK
+Server: SimpleHTTP/0.6 Python/3.14.4
+Date: Sun, 13 Sep 2026 02:44:34 GMT
+Content-type: text/plain
+Content-Length: 100
+Last-Modified: Sun, 13 Sep 2026 02:44:28 GMT
+
+User-agent: *
+Disallow: /private/
+Allow: /private/public.html
+Sitemap: http://127.0.0.1/sitemap.xml

@@ -1,0 +1,7 @@
+description: >-
+  curl -i of a robots.txt, whose lines have the shape of header lines. A
+  blank line ends the headers of a response, and only the status line of
+  the next response may follow it, so a body is refused even when each of
+  its lines could be a header.
+source: "curl 8.18.0 -si against python3 -m http.server on 127.0.0.1 serving a robots.txt made for the fixture"
+expect_error: 'does not describe this input'
