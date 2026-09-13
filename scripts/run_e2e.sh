@@ -75,6 +75,7 @@ Linux)
   for c in ss ip; do need "$c" "iproute2, exec_linux"; done
   for c in busybox lscpu lsmod prlimit dpkg apt-cache git tar stat; do need "$c" "exec_linux"; done
   need zsh "completion"
+  need systemctl "exec_linux"
   if [ ! -d /run/systemd/system ]; then
     missing+=("a running systemd (exec_linux: systemctl)")
   fi
