@@ -526,7 +526,10 @@ fields:
 ```
 
 A group that only appears in some alternatives is simply absent from the
-objects the others produce.
+objects the others produce. To give every object the same keys, write
+the group into the other alternatives as `(?P<link_to>)??`: an empty
+group that prefers to take no part, and so is `null`. `(?P<link_to>)`
+without the `??` takes part and gives the empty string.
 
 An alternative can also state values of its own, which is how a format
 that mixes two kinds of line says which kind a record is:
