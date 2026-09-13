@@ -30,6 +30,11 @@ detect:
 #
 # df writes "df: /path: Permission denied" for mount points it cannot
 # stat; those lines land in the output when stderr is merged into it.
+#
+# -BK counts in the default unit, so the heading does not change, but a
+# unit given without a number makes df print it after every figure
+# ("4740K"). The figure is still a whole count of 1K blocks, so the letter
+# is matched and left out.
 input:
   fold: '^[ \t]+[\d-]'
   ignore:
@@ -37,7 +42,7 @@ input:
     - '^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
 parse:
   type: regex
-  pattern: '^(?P<filesystem>\S.*?)\s+(?P<1k_blocks>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
+  pattern: '^(?P<filesystem>\S.*?)\s+(?P<1k_blocks>\S+?)K?\s+(?P<used>\S+?)K?\s+(?P<available>\S+?)K?\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
 # --total closes the table with a row named total whose mount point (and
 # type) is a dash; it is kept, as printed, since it is what was asked for.
 fields:

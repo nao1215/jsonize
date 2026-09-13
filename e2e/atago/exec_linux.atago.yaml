@@ -1820,6 +1820,36 @@ scenarios:
           exit_code: 0
           stderr:
             contains: "chose df/gnu from embedded"
+      # -BK keeps the default heading and still puts a K after every
+      # figure, with and without -T and -P.
+      - run:
+          command: jz run --explain df -BK
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/gnu from embedded"
+          stdout:
+            json:
+              - { path: "$[0].1k_blocks", gte: 0 }
+      - run:
+          command: jz run --explain df -P -BK
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/portable from embedded"
+          stdout:
+            json:
+              - { path: "$[0].1024_blocks", gte: 0 }
+      - run:
+          command: jz run --explain df -BM -T
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/gnu-blocks-type from embedded"
+          stdout:
+            json:
+              - { path: "$.header.block_size", equals: "1M" }
+              - { path: "$.filesystems[0].blocks", gte: 0 }
       - run:
           command: jz run --explain free -h -w
       - assert:
@@ -2061,6 +2091,14 @@ scenarios:
             contains: "chose systemctl/paths from embedded"
       - run:
           command: jz run --explain systemctl list-automounts
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose systemctl/automounts from embedded"
+      # --all adds automounts not loaded from a unit file, which print
+      # nothing under WHERE.
+      - run:
+          command: jz run --explain systemctl list-automounts --all
       - assert:
           exit_code: 0
           stderr:

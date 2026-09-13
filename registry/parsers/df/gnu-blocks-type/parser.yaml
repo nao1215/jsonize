@@ -33,7 +33,7 @@ detect:
     none: ["-h", "--human-readable", "-H", "--si", "-i", "--inodes", "-P", "--portability"]
   signature:
     all:
-      - '\AFilesystem\s+Type\s+(?:[0-9]+|[0-9]{2,}[A-Z]+|[02-9][A-Z]+|1[A-JL-Z][A-Z]*|1K[A-Z]+)-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
+      - '\AFilesystem\s+Type\s+(?:[0-9]+|[0-9]{2,}[A-Z]+|[02-9][A-Z]+|1[A-JL-Z][A-Z]*|1K[A-Z]+|[0-9]+(?:kB|[KMGTPEZYRQ]iB))-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
 input:
   fold: '^[ \t]+[\d-]'
   ignore:
@@ -46,7 +46,7 @@ parse:
       parse:
         type: regex
         each: input
-        pattern: '\AFilesystem\s+Type\s+(?P<block_size>(?:[0-9]+|[0-9]{2,}[A-Z]+|[02-9][A-Z]+|1[A-JL-Z][A-Z]*|1K[A-Z]+))-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*\z'
+        pattern: '\AFilesystem\s+Type\s+(?P<block_size>(?:[0-9]+|[0-9]{2,}[A-Z]+|[02-9][A-Z]+|1[A-JL-Z][A-Z]*|1K[A-Z]+|[0-9]+(?:kB|[KMGTPEZYRQ]iB)))-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*\z'
       fields:
         block_size: {required: true}
     # --total closes the table with a row named total whose mount point
@@ -55,7 +55,9 @@ parse:
       select: {skip: 1}
       parse:
         type: regex
-        pattern: '^(?P<filesystem>\S.*?)\s+(?P<type>\S+)\s+(?P<blocks>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
+        # A unit given with no number is printed after every figure too,
+        # and left out as it is in df/gnu-blocks.
+        pattern: '^(?P<filesystem>\S.*?)\s+(?P<type>\S+)\s+(?P<blocks>\d+|-)(?:[KMGTPEZYRQ](?:i?B)?|kB)?\s+(?P<used>\d+|-)(?:[KMGTPEZYRQ](?:i?B)?|kB)?\s+(?P<available>\d+|-)(?:[KMGTPEZYRQ](?:i?B)?|kB)?\s+(?P<use_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
       fields:
         filesystem: {required: true}
         type: {required: true}

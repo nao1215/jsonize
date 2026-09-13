@@ -286,6 +286,13 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Option forms that were exit 3: `df -BK`, `df -BK -T`, `df -P -BK` and
+  `df -P -T -BK`, which keep the default heading and put a K after each
+  figure, are read by `df/gnu`, `df/gnu-type`, `df/portable` and
+  `df/portable-type`; `df/gnu-blocks-type` reads the unit after each
+  figure as `df/gnu-blocks` does (`-BM -T`, `-T --block-size=KiB`); and
+  `systemctl/automounts` reads the row `list-automounts --all` prints with
+  nothing under WHERE, as a null `where` (schema version 2).
 - Four option forms that were exit 3 or 4: `iostat/human-sizes` and
   `iostat/human-sizes-timestamped` (`--human` without `-h`, which rounds
   the figures but keeps the default layout, so `iostat/linux` was chosen

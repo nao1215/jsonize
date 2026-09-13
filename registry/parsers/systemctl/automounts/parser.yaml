@@ -29,11 +29,13 @@ parse:
   # systemd spells a duration there with a space in it ("1min 30s"), so
   # the row is read by what each column holds rather than cut at the
   # header words: a source, a path, yes or no, the timeout, and a unit
-  # whose name ends in .automount.
-  pattern: '^(?P<what>\S.*?)\s+(?P<where>/\S*)\s+(?P<mounted>yes|no)\s+(?P<idle_timeout>\S.*?)\s+(?P<unit>\S+\.automount)\s*$'
+  # whose name ends in .automount. With --all systemd also lists an
+  # automount that was not loaded from a unit file, and prints nothing
+  # under WHERE for it; the path is then absent and where is null.
+  pattern: '^(?P<what>\S.*?)\s+(?:(?P<where>/\S*)\s+)?(?P<mounted>yes|no)\s+(?P<idle_timeout>\S.*?)\s+(?P<unit>\S+\.automount)\s*$'
 fields:
   what: {required: true}
-  where: {required: true}
+  where: {null_if: [""]}
   mounted: {type: bool, true_values: [yes], false_values: [no]}
   # systemd prints a dash where no timeout is set, and otherwise a
   # duration in its own spelling ("30s", "1min 30s"), which is kept as

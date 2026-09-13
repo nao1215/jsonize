@@ -1,0 +1,90 @@
+[
+  {
+    "filesystem": "tmpfs",
+    "1024_blocks": 12882672,
+    "used": 4744,
+    "available": 12877928,
+    "capacity_percent": 1,
+    "mounted_on": "/run"
+  },
+  {
+    "filesystem": "/dev/nvme1n1p2",
+    "1024_blocks": 1920641288,
+    "used": 1664913976,
+    "available": 158090348,
+    "capacity_percent": 92,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "tmpfs",
+    "1024_blocks": 32206672,
+    "used": 114256,
+    "available": 32092416,
+    "capacity_percent": 1,
+    "mounted_on": "/dev/shm"
+  },
+  {
+    "filesystem": "efivarfs",
+    "1024_blocks": 128,
+    "used": 48,
+    "available": 76,
+    "capacity_percent": 39,
+    "mounted_on": "/sys/firmware/efi/efivars"
+  },
+  {
+    "filesystem": "none",
+    "1024_blocks": 1024,
+    "used": 0,
+    "available": 1024,
+    "capacity_percent": 0,
+    "mounted_on": "/run/credentials/systemd-journald.service"
+  },
+  {
+    "filesystem": "none",
+    "1024_blocks": 1024,
+    "used": 0,
+    "available": 1024,
+    "capacity_percent": 0,
+    "mounted_on": "/run/credentials/systemd-resolved.service"
+  },
+  {
+    "filesystem": "/dev/nvme0n1p1",
+    "1024_blocks": 1967874000,
+    "used": 1029562020,
+    "available": 838275732,
+    "capacity_percent": 56,
+    "mounted_on": "/media/user/2nd"
+  },
+  {
+    "filesystem": "tmpfs",
+    "1024_blocks": 32206672,
+    "used": 1877596,
+    "available": 30329076,
+    "capacity_percent": 6,
+    "mounted_on": "/tmp"
+  },
+  {
+    "filesystem": "/dev/nvme1n1p1",
+    "1024_blocks": 1098632,
+    "used": 6456,
+    "available": 1092176,
+    "capacity_percent": 1,
+    "mounted_on": "/boot/efi"
+  },
+  {
+    "filesystem": "none",
+    "1024_blocks": 1024,
+    "used": 0,
+    "available": 1024,
+    "capacity_percent": 0,
+    "mounted_on": "/run/credentials/getty@tty1.service"
+  },
+  {
+    "filesystem": "tmpfs",
+    "1024_blocks": 6441332,
+    "used": 288,
+    "available": 6441044,
+    "capacity_percent": 1,
+    "mounted_on": "/run/user/1000"
+  }
+]

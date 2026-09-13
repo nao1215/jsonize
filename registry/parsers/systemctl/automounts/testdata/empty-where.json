@@ -1,0 +1,16 @@
+[
+  {
+    "what": "/dev/nvme1n1p2",
+    "where": null,
+    "mounted": true,
+    "idle_timeout": null,
+    "unit": "boot.automount"
+  },
+  {
+    "what": "binfmt_misc",
+    "where": "/proc/sys/fs/binfmt_misc",
+    "mounted": true,
+    "idle_timeout": null,
+    "unit": "proc-sys-fs-binfmt_misc.automount"
+  }
+]

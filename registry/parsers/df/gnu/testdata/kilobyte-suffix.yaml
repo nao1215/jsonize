@@ -1,0 +1,8 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C; the user name in one mount point replaced
+description: >-
+  df -BK. The unit is the default one, so the heading is the one df prints
+  without options, but a unit given without a number makes df print a K
+  after every figure. The figures are still whole counts of 1K blocks, so
+  the letter is left off.
+os: linux
+args: ["-BK"]

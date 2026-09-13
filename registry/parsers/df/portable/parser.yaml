@@ -29,14 +29,15 @@ detect:
       - '\AFilesystem\s+1024-blocks\s+Used\s+Available\s+Capacity\s+Mounted on\s*$'
 # A file system's name may hold spaces, so a line is read by what each
 # column holds (see df/gnu). With -P BusyBox keeps a long name on the
-# line of its figures.
+# line of its figures. -BK keeps the heading and puts a K after every
+# figure (see df/gnu).
 input:
   ignore:
     - '^df: '
     - '\AFilesystem\s+1024-blocks\s+Used\s+Available\s+Capacity\s+Mounted on\s*$'
 parse:
   type: regex
-  pattern: '^(?P<filesystem>\S.*?)\s+(?P<1024_blocks>\S+)\s+(?P<used>\S+)\s+(?P<available>\S+)\s+(?P<capacity_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
+  pattern: '^(?P<filesystem>\S.*?)\s+(?P<1024_blocks>\S+?)K?\s+(?P<used>\S+?)K?\s+(?P<available>\S+?)K?\s+(?P<capacity_percent>\d+%|-)\s+(?P<mounted_on>/.*|-)$'
 # --total closes the table with a row named total whose mount point (and
 # type) is a dash; it is kept, as printed, since it is what was asked for.
 fields:

@@ -1,0 +1,12 @@
+Filesystem     Type     1M-blocks     Used Available Use% Mounted on
+tmpfs          tmpfs       12581M       5M    12577M   1% /run
+/dev/nvme1n1p2 ext4      1875627M 1625893M   154386M  92% /
+tmpfs          tmpfs       31452M     112M    31341M   1% /dev/shm
+efivarfs       efivarfs        1M       1M        1M  39% /sys/firmware/efi/efivars
+none           tmpfs           1M       0M        1M   0% /run/credentials/systemd-journald.service
+none           tmpfs           1M       0M        1M   0% /run/credentials/systemd-resolved.service
+/dev/nvme0n1p1 ext4      1921752M 1005432M   818629M  56% /media/user/2nd
+tmpfs          tmpfs       31452M    1834M    29619M   6% /tmp
+/dev/nvme1n1p1 vfat         1073M       7M     1067M   1% /boot/efi
+none           tmpfs           1M       0M        1M   0% /run/credentials/getty@tty1.service
+tmpfs          tmpfs        6291M       1M     6291M   1% /run/user/1000

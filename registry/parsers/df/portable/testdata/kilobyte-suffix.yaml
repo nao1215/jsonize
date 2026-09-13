@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C; the user name in one mount point replaced
+description: >-
+  df -P -BK. -P keeps its 1024-blocks heading, and a unit given without a
+  number makes df print a K after every figure. The letter is left off.
+os: linux
+args: ["-P", "-BK"]

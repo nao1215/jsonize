@@ -5,7 +5,7 @@
   "description": "systemctl list-automounts table",
   "x-jsonize": {
     "definition": "systemctl/automounts",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -15,7 +15,10 @@
         "type": "string"
       },
       "where": {
-        "type": "string"
+        "type": [
+          "string",
+          "null"
+        ]
       },
       "mounted": {
         "type": "boolean"
