@@ -17,6 +17,11 @@ detect:
   signature:
     all:
       - '\A[ \t]*NAME[ \t]+STATE[ \t]+FAILED[ \t]+JOBS[ \t]*$'
+      # The four words are what any list of jobs might be headed with.
+      # The manager lists the host it runs on first, named "(host)", which
+      # is what says this is its list; `systemctl list-machines PATTERN`
+      # can leave the host out, and that output is refused.
+      - '^[ \t]*(?:\S[ \t]+)?\S+ \(host\)[ \t]+[a-z][a-z-]*[ \t]+[0-9]+[ \t]+[0-9]+[ \t]*$'
 input:
   ignore:
     - '\A[ \t]*NAME[ \t]+STATE[ \t]+FAILED[ \t]+JOBS[ \t]*$'

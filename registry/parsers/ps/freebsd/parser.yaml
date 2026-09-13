@@ -16,6 +16,11 @@ detect:
   signature:
     all:
       - '\A\s*PID[ \t]+TT[ \t]+STAT[ \t]+TIME[ \t]+COMMAND\s*$'
+      # A heading alone is what a page describing the columns quotes. ps
+      # lists itself at least, so there is a row: a process id, a
+      # terminal, a state, and the time in minutes, seconds and
+      # hundredths.
+      - '^[ \t]*[0-9]+[ \t]+\S+[ \t]+\S+[ \t]+[0-9]+:[0-9]{2}\.[0-9]{2}[ \t]+\S'
 parse:
   type: table
   header:

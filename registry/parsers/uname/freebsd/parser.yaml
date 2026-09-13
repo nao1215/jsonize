@@ -18,9 +18,13 @@ detect:
     all:
       # The kernel name alone is not enough: anything quoting the banner
       # starts with it. uname -a puts the node name and the release
-      # before the version, which opens with the name again.
-      - '\AFreeBSD \S+ \S+ FreeBSD '
+      # before the version, which opens with the name and the release
+      # again. A release is a version number and the branch it was built
+      # from, with a patch level after a release ("15.1-RELEASE-p3",
+      # "15.0-CURRENT", "14.2-RC1"), which a sentence that happens to
+      # name FreeBSD twice does not have.
+      - '\AFreeBSD \S+ [0-9]+\.[0-9]+-[A-Z]+[0-9]*(?:-p[0-9]+)? FreeBSD [0-9]+\.[0-9]+-[A-Z]+[0-9]*(?:-p[0-9]+)? '
 parse:
   type: regex
   each: input
-  pattern: '^(?P<kernel_name>FreeBSD) (?P<node_name>\S+) (?P<kernel_release>\S+) (?P<kernel_version>.+?) (?P<kernel_config>\S+) (?P<machine>\S+)\s*$'
+  pattern: '^(?P<kernel_name>FreeBSD) (?P<node_name>\S+) (?P<kernel_release>[0-9]+\.[0-9]+-[A-Z]+[0-9]*(?:-p[0-9]+)?) (?P<kernel_version>FreeBSD .+?) (?P<kernel_config>\S+) (?P<machine>\S+)\s*$'
