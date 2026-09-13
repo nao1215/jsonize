@@ -49,9 +49,11 @@ jobs:
 
       - name: Build the site
         run: make website
+        env:
+          HUGO_PARAMS_BUILDCOMMIT: ${{ github.sha }}
 
-      # The search box on every page loads this index lazily; without the
-      # pass the box is simply inert, which is what a local build gets.
+      # The search button loads this index when opened. A local Hugo-only
+      # build reports search as unavailable until this pass is run.
       - name: Index the site with Pagefind
         run: |
           curl -fsSL -o "${RUNNER_TEMP}/pagefind.tar.gz" \

@@ -8,14 +8,16 @@
   Regular expressions are compiled by Go's `regexp` (RE2) which guarantees
   linear-time matching; their length is capped. Nesting depth, column
   counts and part counts are bounded by the validator.
-- Input is bounded. jz refuses input above 64 MiB and lines above
-  1 MiB, in both modes. The limit is internal on purpose: it is a safety
-  property, not a preference to tune.
+- Input is bounded. Whole-document mode refuses input above 64 MiB.
+  Streaming bounds the input retained for an unfinished record at 64 MiB,
+  rather than limiting the total stream. Both modes limit lines to 1 MiB.
+  These limits are internal.
 - `jz run` executes exactly the command you named. No shell is
   involved, arguments are passed verbatim, and the command is looked up on
-  `PATH` like any other program. jz will not execute a command it has no
-  definition for.
-- No network access. jz never fetches anything: the official registry
+  `PATH` like any other program. It needs a registered parser for that
+  name, an explicit `--parser`, or an inline `--define`. The command
+  itself runs with your permissions and may access files or the network.
+- No registry downloads. jz never fetches definitions: the official registry
   is embedded in the binary and additional definitions come from local
   directories only.
 - Layered registries. A definition in the user registry or in a

@@ -226,11 +226,11 @@ document of a single-value part holds that part.
 `--extract` and `--exclude` name the parts, the keys the whole document
 has: `--extract replies` writes the reply documents and nothing else.
 
-### What --stream changes about the output
+### What `--stream` changes about the output
 
-Everywhere else, standard output carries a complete JSON document or
-nothing at all. With `--stream` that reads: every line of standard output
-is a complete JSON document.
+By default, parsing finishes before output is written. With `--stream`,
+each record is written as a JSON document on its own line. With
+`--yaml --stream`, records are YAML documents separated by `---`.
 
 The second difference follows from the first. Reading a whole document,
 one record that does not fit means the text is not the format it claimed
@@ -257,7 +257,7 @@ whose format cannot be identified is exit 4 and is settled on the leading
 lines, before a single record is written. A format that reads its whole
 output into one object has no streaming form at all, which is exit 2.
 
-### jz run --stream and the command's own status
+### `jz run --stream` and the command's own status
 
 `jz run` mirrors the status of the command it started, and it has one
 number to return. When the command fails and a record was also skipped,
@@ -766,10 +766,12 @@ when everything passed, 1 when something failed, 2 for a usage error and
 | 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |
 | *n* | `jz run` mirrors the command's own non-zero status, or 128+signal when it was killed |
 
-Diagnostics go to standard error with a `jz:` prefix. Standard output
-carries a complete JSON document or nothing at all: a failure never
-leaves half a document behind, so a consumer downstream sees valid JSON
-or an empty stream.
+Diagnostics go to standard error with a `jz:` prefix. By default,
+parsing finishes before JSON is written, so a parse error leaves standard
+output empty. `--yaml` writes YAML instead. With `--stream`, records
+already written remain when a later record fails; check the exit status
+for skipped records. An output error, such as a closed pipe or a full
+disk, can interrupt a write in either mode.
 
 ## Registries
 
@@ -783,8 +785,9 @@ a command and variant wins:
 3. the registry built into the binary
 
 `jz list --sources` prints them with what exists on your machine. jz
-never accesses the network, so the same input converts to the same JSON
-on the same machine.
+uses local definitions without network access. Conversion depends on the
+input, the selected definition and explicit assumptions such as
+`--assume-year now`, which uses the current year.
 
 A registry's optional `registry.yaml` can also switch definitions of the
 registries below it off:

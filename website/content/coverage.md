@@ -15,7 +15,7 @@ Three things can happen, and each of them is an answer:
 | | what it means |
 |---|---|
 | read | piping the output in identifies it and converts it |
-| named | jz will not claim the text on its own; `jz --parser NAME` or `jz run` reaches it |
+| named | use `jz --parser NAME` or `jz run`; some formats also need `--variant VARIANT` |
 | refused | jz does not read it, and the reason is below |
 
 "named" is not a shortcoming. A format whose text could be half a dozen
@@ -104,10 +104,10 @@ is in the heading and comes out beside the rows.
 | `ls -lZ` | read | `ls/long-context` |
 | `ls -lR` | read | `ls/long-recursive` |
 | `ls -log`, `ls -lgG` | read | `ls/long-no-owner-group` |
-| `ls -lG`, `ls -lo` | named | `ls --variant long-no-group` |
-| `ls -lg` | named | `ls --variant long-no-owner` |
+| `ls -lG`, `ls -lo` | named | `ls/long-no-group` |
+| `ls -lg` | named | `ls/long-no-owner` |
 | `ls -li` | named | `ls/long-inode`; `ls -ls` prints a number in the same place |
-| `ls`, `ls -1` | named | `ls --variant names`; a list of lines is not evidence of anything |
+| `ls`, `ls -1` | named | `ls/names`; a list of lines is not evidence of anything |
 | `ls -F`, `ls -p` | refused | the mark after a name is not part of the name and no rule can say which trailing character is one |
 
 `ls -lG` and `ls -lg` print the same text: one drops the group column and

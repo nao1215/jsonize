@@ -4,8 +4,10 @@ description: How to add a parser to jsonize with YAML and a fixture, and how to 
 toc: true
 ---
 
-This is the walkthrough for a pull request that adds `lsof` support, but
-the same steps apply to any command. Nothing here requires Go.
+This walkthrough uses the existing `lsof/linux` definition as an example.
+The same steps apply to a new command or variant. Writing a parser needs
+YAML and captured output; contributing to this repository also needs Go
+to run its checks.
 
 ## 0. Look at what is already there
 
@@ -18,14 +20,14 @@ A command with a definition already has a directory of variants, and
 what you are adding is likely a variant beside them: another
 implementation, or an option that changes the columns. `jz list` names
 every command the registry reads, and `jz list <command>` names its
-variants. The paths in this walkthrough are the ones a new command
-takes; `lsof` itself is in the registry, so the reader following along
-will find its variants where the text puts theirs.
+variants. For a contribution, choose a format that is not already
+covered. To try this example without editing the official definition,
+use the personal registry described at the end of this guide.
 
 ## 1. Capture output
 
 ```console
-$ LC_ALL=C lsof -p $$ | head -20 > lsof.txt
+$ LC_ALL=C lsof -p $$ > lsof.txt
 ```
 
 Capture from the real implementation you are describing and record what
@@ -66,28 +68,30 @@ Start from the closest existing definition:
 | a block per subject, repeated | `registry/parsers/ip/stats-link/parser.yaml` |
 | a header block, then repeated blocks | `registry/parsers/update-alternatives/query/parser.yaml` |
 
-For `lsof`, the header is `COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME`
-and `NAME` may contain spaces, so a whitespace table with explicit columns
-fits:
+For `lsof`, `SIZE/OFF` may be blank and `NAME` may contain spaces.
+Split at the header's column positions to keep those cells in place:
 
 ```yaml
 format: 1
 command: lsof
-variant: default
+variant: linux
 description: lsof default columns
 metadata:
   compatible: [lsof]
   references: [https://github.com/lsof-org/lsof]
 detect:
+  os: [linux]
   signature:
     all: ['^COMMAND\s+PID\s+USER\s+FD\s+TYPE\s+DEVICE\s+SIZE/OFF\s+NODE\s+NAME\s*$']
 parse:
   type: table
-  header:
-    columns: [command, pid, user, fd, type, device, size_off, node, name]
-  min_fields: 8
+  split: aligned
 fields:
-  pid: {type: int}
+  command: {required: true}
+  pid: {type: int, required: true}
+  user: {required: true}
+  fd: {required: true}
+  name: {required: true}
 ```
 
 Always add a `detect.signature`, even for a single variant: it is what
@@ -118,14 +122,14 @@ What not to reach for is `none`. If a neighbouring format matches your
 signature, the signature is not yet saying what your format is, and
 excluding the neighbour couples your definition to theirs: they change
 it, your definition breaks, and the list never stops growing.
-[The reference](/jsonize/definition-format/#writing-a-signature) has the
+[The reference](../definition-format/#writing-a-signature) has the
 detail.
 
 ## 4. Add fixtures
 
 ```
-registry/parsers/lsof/default/testdata/lsof-4.95.txt
-registry/parsers/lsof/default/testdata/lsof-4.95.yaml
+registry/parsers/lsof/linux/testdata/lsof-4.95.txt
+registry/parsers/lsof/linux/testdata/lsof-4.95.yaml
 ```
 
 A case is found by its `.txt`; the `.yaml` and `.json` of the same name
@@ -185,7 +189,7 @@ depends on them.
 ```console
 $ jz test --update ./registry
 $ git diff --stat registry/parsers/lsof
-$ cat registry/parsers/lsof/default/testdata/lsof-4.95.json
+$ cat registry/parsers/lsof/linux/testdata/lsof-4.95.json
 ```
 
 In the jsonize repository itself, `make registry-update-golden` does the
@@ -233,7 +237,7 @@ lines as lines to read (`skip_blank: false`).
 ## 6. Look at the schema of what it produces
 
 ```console
-$ jz list --schema lsof default
+$ jz list --schema lsof linux
 ```
 
 The schema is derived from the definition: its keys, the types the
@@ -242,7 +246,7 @@ be null. Read it the way a consumer would. A key you meant to be always
 there that shows as optional, or a number that shows as a string, is the
 definition saying something other than what you meant. In the official
 registry `make registry-update-schema` writes it to
-`registry/schemas/lsof/default.json`, where it is published. Run it when
+`registry/schemas/lsof/linux.json`, where it is published. Run it when
 a definition is added or its output changes; a change that only adds a
 fixture leaves the schema as it was.
 
@@ -272,35 +276,45 @@ $ jz test ./registry
 ```console
 $ go run ./cmd/jz run lsof -p $$
 $ lsof -p $$ | go run ./cmd/jz --pretty
-$ go run ./cmd/jz --parser lsof --variant default --file lsof.txt
+$ go run ./cmd/jz --parser lsof --variant linux --file lsof.txt
 ```
 
 A definition is named by its command and its variant as two options;
-`lsof/default` is how messages write it, not an argument jz takes.
+`lsof/linux` is how messages write it, not an argument jz takes.
 
 ## 9. Open the pull request
 
 Include the definition, the fixtures, the golden JSON, the schema, any
 decoy you added and the variant in the table in
-`website/content/parsers.md`, linked to its schema the way the rows
-around it are (`[`default`](../schemas/lsof/default.json)`, variants in
-alphabetical order). Use a `parser:` commit prefix.
+`website/content/parsers.md`. Link each variant to its schema and keep
+the variants in alphabetical order. Use a `parser:` commit prefix.
 
 ## Working outside the repository
 
-The same loop works with a personal registry and the released binary:
+The same loop works with an installed `jz` and a local registry. On
+Linux with `lsof` installed, save the definition above as
+`my-registry/parsers/lsof/linux/parser.yaml`, then capture a fixture:
 
-```console
-$ mkdir -p ~/.config/jsonize/registry/parsers/lsof/default/testdata
-$ $EDITOR ~/.config/jsonize/registry/parsers/lsof/default/parser.yaml
-$ jz test --update
-$ jz test
+```sh
+mkdir -p my-registry/parsers/lsof/linux/testdata
+# Save the definition above as my-registry/parsers/lsof/linux/parser.yaml.
+LC_ALL=C lsof -p $$ > my-registry/parsers/lsof/linux/testdata/process.txt
+cat > my-registry/parsers/lsof/linux/testdata/process.yaml <<EOF
+source: captured locally with LC_ALL=C lsof -p $$ on Linux
+os: linux
+args: [-p, "$$"]
+EOF
+jz test --update ./my-registry
+# Review my-registry/parsers/lsof/linux/testdata/process.json.
+jz test ./my-registry
+JSONIZE_REGISTRY_PATH="$PWD/my-registry" jz list lsof linux
+JSONIZE_REGISTRY_PATH="$PWD/my-registry" jz --file my-registry/parsers/lsof/linux/testdata/process.txt
 ```
 
-With no directory, `jz test` checks the registries jz would use and
-leaves the built-in one alone. The official fixtures are inside the
-binary either way, so your definition is held to the same exclusivity
-check as an official one without a copy of the repository.
+Record your lsof and OS versions in the fixture's `source` before sharing
+it. The official fixtures are inside the binary, so the local definition
+is checked against them without a copy of the repository.
 
-`jz list` shows the definition with source `user`, and it shadows an
-official definition of the same command and variant.
+`JSONIZE_REGISTRY_PATH` makes the local definition shadow the official
+one of the same command and variant. For a persistent installation, move
+the definition into the [user registry](../usage/#registries).

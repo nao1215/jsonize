@@ -1,5 +1,5 @@
-{{- /* Site-absolute destinations ("/cookbook/") are prefixed with the base
-     path so pages work under https://<host>/sqly/. Everything else —
+{{- /* Site-absolute destinations ("/usage/") are prefixed with the base
+     path so pages work under https://<host>/jsonize/. Everything else —
      external URLs, fragments, page-relative paths — passes through. */ -}}
 {{- $u := .Destination -}}
 {{- if and (hasPrefix $u "/") (not (hasPrefix $u "//")) -}}

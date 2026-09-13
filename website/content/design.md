@@ -42,7 +42,7 @@ compiled definition and the whole text; encoding never sees definitions.
 
 ### A small public surface
 
-The command line is four subcommands (`run`, `list`, `test`, `version`)
+The command line has five subcommands (`run`, `list`, `test`, `completion`, `version`)
 and the options listed in the usage page. Every option that asked the
 user to make a decision jz should be making, or that changed the output
 contract, was removed before release:
@@ -57,16 +57,12 @@ contract, was removed before release:
 
 ### Definitions in YAML rather than Go plugins or a scripting language
 
-Per-command code is the obvious design and it is where most output
-converters end up: hundreds of hand-written parsers whose variant
-detection is ad-hoc string sniffing and whose schema lives in comments.
-jsonize instead fixes a small declarative language. The price is
-expressiveness: a format whose shape comes from the input rather than
-from the definition, such as a tree of arbitrary depth, cannot be
-expressed. The gain is that every definition is reviewable, testable by
-a fixture, and safe to load from a third party. YAML was chosen over JSON (no
-comments) and TOML (awkward nesting); `goccy/go-yaml` provides strict
-decoding and line numbers in errors.
+Definitions use a fixed set of parsing rules. They can split fields,
+match expressions and build nested records, including trees whose depth
+comes from the input. They cannot execute code or evaluate arbitrary
+expressions. Each definition can be reviewed and tested against captured
+output. YAML supports comments and nested structures; `goccy/go-yaml`
+provides strict decoding and line numbers in errors.
 
 ### A handful of parse types, not a general pipeline
 
@@ -453,7 +449,7 @@ could not read, and a listing that names no kind at all and is refused.
 Each of the three exists because the signature says something, not the
 other way round.
 
-### --raw came back, for a different reason
+### `--raw` came back, for a different reason
 
 `--raw` was removed before release as a second output shape for the same
 input: two answers to the same question, and the typed one is the
@@ -868,16 +864,22 @@ dependency. CI checks the same fixtures with the Python `jsonschema`
 package, so the two agreeing is evidence rather than one piece of code
 agreeing with itself.
 
-No CLI framework: four subcommands with a handful of flags each are
+No CLI framework: five subcommands with a handful of flags each are
 served by `flag` and a dispatch table, and the `run` subcommand needs
 "stop at the first non-flag" semantics that `flag` gives for free.
 
+### Commands that share a format
+
+An `aliases` entry lets one definition read output from several command
+names. `vdir` uses the `ls` definitions, `getent passwd` uses `etc/passwd`,
+and `printenv` uses `env`. An alias can replace the argument filter when
+its command line differs. See [aliases](../definition-format/#aliases).
+
 ## Deliberately out of scope for the MVP
 
-- Derived fields (computing `uptime_seconds` from `"13 days, 4:30"`).
-- Two commands that print the same format under both their names.
-  Nothing in the text says which of them wrote it, so `vdir`, `getent`
-  and `printenv` are left to `ls`, `etc` and `env`.
+- Computed fields that combine input fields, such as subtracting used
+  space from total space. Converting one duration field to seconds is
+  supported.
 - Fetching or updating registries over the network.
 - A JSON Schema for editor completion of `parser.yaml`; validation is
   done in Go with path-qualified messages instead.
@@ -934,12 +936,11 @@ where they belong.
 ### Where the sysstat banner went
 
 Reading `iostat` as an array of samples dropped the banner, which named
-the kernel, the host, the architecture and the CPU count. The reason is
-sound — a shape with one object for the banner and an array for the rest
-has no streaming form, and the option is the point of the change — but
-the information is gone rather than moved. `uname -a` and `nproc` print
-the same facts and jz reads both, which is an answer for a script and not
-for someone reading one command's output.
+the kernel, the host, the architecture and the CPU count. A composite
+could preserve it and stream it as a separate part, but that would
+change the published output schema. Keeping the context on every sample
+would need another rule. `uname -a` and `nproc` can supply system
+information separately.
 
 What would close it is a way for a definition to say that some fields
 belong to every record of a stream. Nothing in the format says that

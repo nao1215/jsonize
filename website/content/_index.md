@@ -1,6 +1,5 @@
-jsonize reads the output a command already printed and writes JSON. It
-works out which command produced the text, so there is nothing to name
-and nothing to configure:
+jsonize turns command output into JSON. Pipe a command to `jz` to detect
+its format and convert it. It also supports YAML output and streaming.
 
 ```console
 $ df -h | jz
@@ -12,14 +11,20 @@ $ ps aux | jz | jq '.[] | select(.cpu_percent > 10) | .command'
 
 ![jz reading df, uptime and free, and refusing input it cannot identify](demo/jsonize.gif)
 
-Parsers are YAML definitions in a registry rather than Go code, so
-supporting another command, another system's variant of it, or another
-option is a file and a fixture, not a release.
+## Install
 
-## Why the guessing stops where it does
+With Go 1.26 or later:
 
-Converting output nobody asked about is easy; converting it wrongly and
-saying nothing is the failure that matters. jz refuses instead:
+```sh
+go install github.com/nao1215/jsonize/cmd/jz@latest
+```
+
+See the [install guide](install/) for release archives and shell completion.
+
+## Detection and limits
+
+Some formats need a parser name because their text is too generic to
+identify automatically:
 
 ```console
 $ git diff --numstat | jz
@@ -30,17 +35,18 @@ Confirm it:
   COMMAND | jz --parser git
 ```
 
-A rounded size is reported the way it was printed rather than turned into
-a byte count. `df -h` counts 1024 per suffix step and `df -H` counts
-1000, the output records neither, and both round, so `"1.8T"` is what jz
-knows and all it claims. Run the exact form of a command when you need
-numbers.
+A rounded size such as `"1.8T"` stays a string. Use `df`, `free` or
+`lsblk -b` for exact numbers.
+
+Parsers are YAML definitions. Add a definition and captured output to a
+local registry to support another format without rebuilding jz.
 
 ## Where to go next
 
 - [Install](install/) the binary.
 - [Usage](usage/) covers the two ways in and the exit codes.
 - [Parsers](parsers/) lists what jz reads today.
+- [Coverage](coverage/) lists supported options and known limitations.
 - [Write a parser](write-a-parser/) is the guide for adding one.
 - [Definition format](definition-format/) is the reference for the YAML.
 - [Design](design/) records why the tool is shaped this way.
