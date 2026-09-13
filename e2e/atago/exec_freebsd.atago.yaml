@@ -140,6 +140,8 @@ scenarios:
           exit_code: 4
           stdout:
             empty: true
+      # The suite starts right after pkg install, whose connections are
+      # left in TIME_WAIT with no process: rows of "??" owners.
       - run:
           command: jz run --explain sockstat -4
       - assert:

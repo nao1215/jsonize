@@ -35,14 +35,16 @@ input:
     - '\AUSER[ \t]+COMMAND[ \t]+PID[ \t]+FD[ \t]+PROTO[ \t]+LOCAL ADDRESS[ \t]+FOREIGN ADDRESS[ \t]*$'
 parse:
   type: regex
-  pattern: '^(?P<user>\S+)[ \t]+(?P<command>\S.*?)[ \t]+(?P<pid>\d+)[ \t]+(?P<fd>\d+)[ \t]+(?P<proto>[a-z]+[0-9]*)[ \t]+(?P<local_address>\(not connected\)|\S+)[ \t]+(?P<foreign_address>\S.*?)[ \t]*$'
+  pattern: '^(?P<user>\S+)[ \t]+(?P<command>\S.*?)[ \t]+(?P<pid>\d+|\?\?)[ \t]+(?P<fd>\d+|\?\?)[ \t]+(?P<proto>[a-z]+[0-9]*)[ \t]+(?P<local_address>\(not connected\)|\S+)[ \t]+(?P<foreign_address>\S.*?)[ \t]*$'
+# "??" is sockstat saying it could not find a value, which is null rather
+# than the value. A socket no process holds any more, such as a TCP
+# connection in TIME_WAIT after the program that made it exited, prints
+# "??" for its user, command, process and descriptor.
 fields:
-  user: {required: true}
-  command: {required: true}
-  pid: {type: int, required: true}
-  fd: {type: int, required: true}
+  user: {null_if: ["??"]}
+  command: {null_if: ["??"]}
+  pid: {type: int, null_if: ["??"]}
+  fd: {type: int, null_if: ["??"]}
   proto: {required: true}
-  # "??" is sockstat saying it could not find the address, which is null
-  # rather than an address.
   local_address: {null_if: ["??"]}
   foreign_address: {null_if: ["??"]}

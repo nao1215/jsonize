@@ -12,16 +12,28 @@
     "type": "object",
     "properties": {
       "user": {
-        "type": "string"
+        "type": [
+          "string",
+          "null"
+        ]
       },
       "command": {
-        "type": "string"
+        "type": [
+          "string",
+          "null"
+        ]
       },
       "pid": {
-        "type": "integer"
+        "type": [
+          "integer",
+          "null"
+        ]
       },
       "fd": {
-        "type": "integer"
+        "type": [
+          "integer",
+          "null"
+        ]
       },
       "proto": {
         "type": "string"
