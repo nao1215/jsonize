@@ -1,0 +1,47 @@
+# `lshw -businfo` prints the hardware tree as a table of bus addresses:
+# the bus address, the logical device name, the class and a description,
+# under a rule of equals signs. It is the lshw/short table with the bus
+# address in the first column. A node on no bus (the machine, a memory
+# bank, a hwmon device) leaves that cell blank, and a node with no
+# device name leaves the second one blank, so the row is cut where the
+# header words start.
+#
+# The first heading is two words, "Bus info". Naming that column bus_info
+# in header.columns makes it one column that starts at "Bus".
+format: 1
+command: lshw
+variant: businfo
+description: lshw -businfo, the hardware tree as a table of bus addresses
+metadata:
+  tags: [linux, hardware]
+  compatible: [lshw B.02.19]
+  references:
+    - https://ezix.org/project/wiki/HardwareLiSter
+    - https://manpages.ubuntu.com/manpages/noble/man1/lshw.1.html
+detect:
+  os: [linux]
+  args:
+    # -short wins over -businfo when both are given, and -businfo wins
+    # over -json, -xml and -html.
+    all: ["-businfo"]
+    none: ["-short"]
+  signature:
+    all:
+      # The header, the rule of equals signs under it, and nothing after
+      # them but rows: a bus address or its blank, a device name or its
+      # blank, a lower-case class word and the description. The header
+      # and the rule again are the output of two runs joined.
+      - '\ABus info {2,}Device {2,}Class {2,}Description *\n=+ *(?:\n(?:Bus info {2,}Device {2,}Class {2,}Description *|=+ *|\S* *(?:\S+ {2,})?[a-z]+(?: {2,}\S[^\n]*)? *))*\n?\z'
+input:
+  # A class that matches nothing prints the header and the rule alone,
+  # which is an empty array.
+  ignore:
+    - '^=+ *$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [bus_info, device, class, description]
+fields:
+  # lshw names its classes with one lower-case word ("bridge", "disk").
+  class: {required: true, regex: '(?P<class>[a-z]+)'}

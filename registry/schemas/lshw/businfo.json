@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lshw/businfo.json",
+  "title": "lshw/businfo",
+  "description": "lshw -businfo, the hardware tree as a table of bus addresses",
+  "x-jsonize": {
+    "definition": "lshw/businfo",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "bus_info": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "device": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "class": {
+        "type": "string"
+      },
+      "description": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "bus_info",
+      "device",
+      "class",
+      "description"
+    ]
+  }
+}

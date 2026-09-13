@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 (lshw B.02.19) as an ordinary user with
+  LC_ALL=C lshw -businfo -quiet -class memory -class processor
+description: >-
+  A memory bank on no bus leaves the first two cells blank. lshw pads the
+  first column to the widest address of the whole tree, not of the rows
+  it prints.
+os: linux
+args: ["-businfo", "-quiet", "-class", "memory", "-class", "processor"]

@@ -4,6 +4,15 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `split: aligned` reads a heading of several words, such as
+  `CONTAINER ID` or `Soft Limit`, as one column when `header.columns`
+  gives it the name those words derive together.
+- Definitions for `lshw -short` and `lshw -businfo`.
+
 ## [0.1.0]
 
 The first release of jsonize and its `jz` command.

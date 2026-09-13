@@ -1,0 +1,5 @@
+H/W path          Device        Class       Description
+=======================================================
+The table above is what lshw -short prints on the build machine.
+Every node lshw found is one row, and the path column is blank for the
+machine itself.

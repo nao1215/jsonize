@@ -1,0 +1,10 @@
+source: >-
+  captured on Ubuntu 26.04 (lshw B.02.19) as an ordinary user with
+  LC_ALL=C lshw -businfo -quiet; nothing replaced, the listing holds no
+  serial number, address, host or user name
+description: >-
+  The whole tree: PCI, NVMe and CPU addresses, nodes on no bus with and
+  without a device name, and descriptions with spaces, brackets and
+  commas in the last column.
+os: linux
+args: ["-businfo", "-quiet"]

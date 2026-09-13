@@ -1,0 +1,5 @@
+H/W path          Device        Class       Description
+=======================================================
+/0/100/2.1/0      eno1          network     RTL8125 2.5GbE Controller [10EC:8125]
+/0/100/2.3/0      wlp195s0      network     MT7925 (RZ717) Wi-Fi 7 160MHz [14C3:717]
+/0/100/8.1/0      /dev/fb0      display     Strix Halo [Radeon Graphics / Radeon 8050S Graphics / Radeon 8060S Graphics] [1002:1586]

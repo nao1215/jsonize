@@ -1,0 +1,20 @@
+[
+  {
+    "h_w_path": "/0/100/2.1/0",
+    "device": "eno1",
+    "class": "network",
+    "description": "RTL8125 2.5GbE Controller [10EC:8125]"
+  },
+  {
+    "h_w_path": "/0/100/2.3/0",
+    "device": "wlp195s0",
+    "class": "network",
+    "description": "MT7925 (RZ717) Wi-Fi 7 160MHz [14C3:717]"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0",
+    "device": "/dev/fb0",
+    "class": "display",
+    "description": "Strix Halo [Radeon Graphics / Radeon 8050S Graphics / Radeon 8060S Graphics] [1002:1586]"
+  }
+]

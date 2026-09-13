@@ -1,0 +1,440 @@
+[
+  {
+    "h_w_path": null,
+    "device": null,
+    "class": "system",
+    "description": "Computer"
+  },
+  {
+    "h_w_path": "/0",
+    "device": null,
+    "class": "bus",
+    "description": "Motherboard"
+  },
+  {
+    "h_w_path": "/0/0",
+    "device": null,
+    "class": "memory",
+    "description": "64GiB System memory"
+  },
+  {
+    "h_w_path": "/0/1",
+    "device": null,
+    "class": "processor",
+    "description": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  },
+  {
+    "h_w_path": "/0/100",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Root Complex"
+  },
+  {
+    "h_w_path": "/0/100/0.2",
+    "device": null,
+    "class": "generic",
+    "description": "Strix/Strix Halo IOMMU"
+  },
+  {
+    "h_w_path": "/0/100/1.1",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo PCIe USB4 Bridge"
+  },
+  {
+    "h_w_path": "/0/100/1.2",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo PCIe USB4 Bridge"
+  },
+  {
+    "h_w_path": "/0/100/2.1",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo GPP Bridge"
+  },
+  {
+    "h_w_path": "/0/100/2.1/0",
+    "device": "eno1",
+    "class": "network",
+    "description": "RTL8125 2.5GbE Controller"
+  },
+  {
+    "h_w_path": "/0/100/2.2",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo GPP Bridge"
+  },
+  {
+    "h_w_path": "/0/100/2.2/0",
+    "device": "mmc0",
+    "class": "bus",
+    "description": "GL9755 SD Host Controller"
+  },
+  {
+    "h_w_path": "/0/100/2.3",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo GPP Bridge"
+  },
+  {
+    "h_w_path": "/0/100/2.3/0",
+    "device": "wlp195s0",
+    "class": "network",
+    "description": "MT7925 (RZ717) Wi-Fi 7 160MHz"
+  },
+  {
+    "h_w_path": "/0/100/2.5",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo GPP Bridge"
+  },
+  {
+    "h_w_path": "/0/100/2.5/0",
+    "device": "/dev/nvme0",
+    "class": "storage",
+    "description": "Lexar SSD ARES 2TB"
+  },
+  {
+    "h_w_path": "/0/100/2.5/0/0",
+    "device": "hwmon1",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "h_w_path": "/0/100/2.5/0/2",
+    "device": "/dev/ng0n1",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "h_w_path": "/0/100/2.5/0/1",
+    "device": "/dev/nvme0n1",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "h_w_path": "/0/100/3.1",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo GPP Bridge"
+  },
+  {
+    "h_w_path": "/0/100/3.1/0",
+    "device": "/dev/nvme1",
+    "class": "storage",
+    "description": "KIOXIA-EXCERIA PLUS G4 SSD"
+  },
+  {
+    "h_w_path": "/0/100/3.1/0/0",
+    "device": "hwmon2",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "h_w_path": "/0/100/3.1/0/2",
+    "device": "/dev/ng1n1",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "h_w_path": "/0/100/3.1/0/1",
+    "device": "/dev/nvme1n1",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "h_w_path": "/0/100/8.1",
+    "device": "input3",
+    "class": "bridge",
+    "description": "Video Bus"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0",
+    "device": "/dev/fb0",
+    "class": "display",
+    "description": "Strix Halo [Radeon Graphics / Radeon 8050S Graphics / Radeon 8060S Graphics]"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.1",
+    "device": "card0",
+    "class": "multimedia",
+    "description": "Radeon High Definition Audio Controller"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.1/0",
+    "device": "input10",
+    "class": "input",
+    "description": "HD-Audio Generic HDMI/DP,pcm=7"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.1/1",
+    "device": "input11",
+    "class": "input",
+    "description": "HD-Audio Generic HDMI/DP,pcm=8"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.1/2",
+    "device": "input12",
+    "class": "input",
+    "description": "HD-Audio Generic HDMI/DP,pcm=9"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.1/3",
+    "device": "input9",
+    "class": "input",
+    "description": "HD-Audio Generic HDMI/DP,pcm=3"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.2",
+    "device": null,
+    "class": "generic",
+    "description": "Strix/Krackan/Strix Halo CCP/ASP"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.4",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB 3.1 xHCI"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.6",
+    "device": "card2",
+    "class": "multimedia",
+    "description": "Ryzen HD Audio Controller"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.6/0",
+    "device": "input13",
+    "class": "input",
+    "description": "HD-Audio Generic Rear Mic"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.6/1",
+    "device": "input14",
+    "class": "input",
+    "description": "HD-Audio Generic Front Mic"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.6/2",
+    "device": "input15",
+    "class": "input",
+    "description": "HD-Audio Generic Front Line Out"
+  },
+  {
+    "h_w_path": "/0/100/8.1/0.6/3",
+    "device": "input16",
+    "class": "input",
+    "description": "HD-Audio Generic Headphone"
+  },
+  {
+    "h_w_path": "/0/100/8.2",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Internal GPP Bridge to Bus [C:A]"
+  },
+  {
+    "h_w_path": "/0/100/8.2/0",
+    "device": null,
+    "class": "generic",
+    "description": "Strix/Strix Halo PCIe Dummy Function"
+  },
+  {
+    "h_w_path": "/0/100/8.2/0.1",
+    "device": null,
+    "class": "generic",
+    "description": "Strix/Krackan/Strix Halo Neural Processing Unit"
+  },
+  {
+    "h_w_path": "/0/100/8.3",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Internal GPP Bridge to Bus [C:A]"
+  },
+  {
+    "h_w_path": "/0/100/8.3/0",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB 3.1 xHCI"
+  },
+  {
+    "h_w_path": "/0/100/8.3/0.3",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB 3.1 xHCI"
+  },
+  {
+    "h_w_path": "/0/100/8.3/0.4",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB 3.1 xHCI"
+  },
+  {
+    "h_w_path": "/0/100/8.3/0.5",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB4 Host Router"
+  },
+  {
+    "h_w_path": "/0/100/8.3/0.6",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB4 Host Router"
+  },
+  {
+    "h_w_path": "/0/100/14",
+    "device": null,
+    "class": "bus",
+    "description": "FCH SMBus Controller"
+  },
+  {
+    "h_w_path": "/0/100/14.3",
+    "device": null,
+    "class": "bridge",
+    "description": "FCH LPC Bridge"
+  },
+  {
+    "h_w_path": "/0/100/14.3/0",
+    "device": null,
+    "class": "system",
+    "description": "PnP device PNP0b00"
+  },
+  {
+    "h_w_path": "/0/101",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Dummy Host Bridge"
+  },
+  {
+    "h_w_path": "/0/102",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Dummy Host Bridge"
+  },
+  {
+    "h_w_path": "/0/103",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Dummy Host Bridge"
+  },
+  {
+    "h_w_path": "/0/104",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Dummy Host Bridge"
+  },
+  {
+    "h_w_path": "/0/105",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 0"
+  },
+  {
+    "h_w_path": "/0/106",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 1"
+  },
+  {
+    "h_w_path": "/0/107",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 2"
+  },
+  {
+    "h_w_path": "/0/108",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 3"
+  },
+  {
+    "h_w_path": "/0/109",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 4"
+  },
+  {
+    "h_w_path": "/0/10a",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 5"
+  },
+  {
+    "h_w_path": "/0/10b",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 6"
+  },
+  {
+    "h_w_path": "/0/10c",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 7"
+  },
+  {
+    "h_w_path": "/1",
+    "device": "card1",
+    "class": "multimedia",
+    "description": "Device"
+  },
+  {
+    "h_w_path": "/2",
+    "device": "card3",
+    "class": "multimedia",
+    "description": "C920"
+  },
+  {
+    "h_w_path": "/3",
+    "device": "card4",
+    "class": "multimedia",
+    "description": "MicroII"
+  },
+  {
+    "h_w_path": "/4",
+    "device": "input0",
+    "class": "input",
+    "description": "Power Button"
+  },
+  {
+    "h_w_path": "/5",
+    "device": "input1",
+    "class": "input",
+    "description": "Sleep Button"
+  },
+  {
+    "h_w_path": "/6",
+    "device": "input2",
+    "class": "input",
+    "description": "AT Raw Set 2 keyboard"
+  },
+  {
+    "h_w_path": "/7",
+    "device": "input4",
+    "class": "input",
+    "description": "Fonglun USB PnP Sound Device"
+  },
+  {
+    "h_w_path": "/8",
+    "device": "input5",
+    "class": "input",
+    "description": "ELECOM ELECOM BlueLED Mouse"
+  },
+  {
+    "h_w_path": "/9",
+    "device": "input6",
+    "class": "input",
+    "description": "Topre REALFORCE 91 JP"
+  },
+  {
+    "h_w_path": "/a",
+    "device": "input7",
+    "class": "input",
+    "description": "Topre REALFORCE 91 JP Consumer Control"
+  },
+  {
+    "h_w_path": "/b",
+    "device": "input8",
+    "class": "input",
+    "description": "Topre REALFORCE 91 JP Keyboard"
+  }
+]

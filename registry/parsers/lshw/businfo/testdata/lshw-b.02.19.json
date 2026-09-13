@@ -1,0 +1,440 @@
+[
+  {
+    "bus_info": null,
+    "device": null,
+    "class": "system",
+    "description": "Computer"
+  },
+  {
+    "bus_info": null,
+    "device": null,
+    "class": "bus",
+    "description": "Motherboard"
+  },
+  {
+    "bus_info": null,
+    "device": null,
+    "class": "memory",
+    "description": "64GiB System memory"
+  },
+  {
+    "bus_info": "cpu@0",
+    "device": null,
+    "class": "processor",
+    "description": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  },
+  {
+    "bus_info": "pci@0000:00:00.0",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Root Complex"
+  },
+  {
+    "bus_info": "pci@0000:00:00.2",
+    "device": null,
+    "class": "generic",
+    "description": "Strix/Strix Halo IOMMU"
+  },
+  {
+    "bus_info": "pci@0000:00:01.1",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo PCIe USB4 Bridge"
+  },
+  {
+    "bus_info": "pci@0000:00:01.2",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo PCIe USB4 Bridge"
+  },
+  {
+    "bus_info": "pci@0000:00:02.1",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo GPP Bridge"
+  },
+  {
+    "bus_info": "pci@0000:c1:00.0",
+    "device": "eno1",
+    "class": "network",
+    "description": "RTL8125 2.5GbE Controller"
+  },
+  {
+    "bus_info": "pci@0000:00:02.2",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo GPP Bridge"
+  },
+  {
+    "bus_info": "pci@0000:c2:00.0",
+    "device": "mmc0",
+    "class": "bus",
+    "description": "GL9755 SD Host Controller"
+  },
+  {
+    "bus_info": "pci@0000:00:02.3",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo GPP Bridge"
+  },
+  {
+    "bus_info": "pci@0000:c3:00.0",
+    "device": "wlp195s0",
+    "class": "network",
+    "description": "MT7925 (RZ717) Wi-Fi 7 160MHz"
+  },
+  {
+    "bus_info": "pci@0000:00:02.5",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo GPP Bridge"
+  },
+  {
+    "bus_info": "pci@0000:c4:00.0",
+    "device": "/dev/nvme0",
+    "class": "storage",
+    "description": "Lexar SSD ARES 2TB"
+  },
+  {
+    "bus_info": null,
+    "device": "hwmon1",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "bus_info": null,
+    "device": "/dev/ng0n1",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "bus_info": "nvme@0:1",
+    "device": "/dev/nvme0n1",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "bus_info": "pci@0000:00:03.1",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo GPP Bridge"
+  },
+  {
+    "bus_info": "pci@0000:c5:00.0",
+    "device": "/dev/nvme1",
+    "class": "storage",
+    "description": "KIOXIA-EXCERIA PLUS G4 SSD"
+  },
+  {
+    "bus_info": null,
+    "device": "hwmon2",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "bus_info": null,
+    "device": "/dev/ng1n1",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "bus_info": "nvme@1:1",
+    "device": "/dev/nvme1n1",
+    "class": "disk",
+    "description": "NVMe disk"
+  },
+  {
+    "bus_info": "pci@0000:00:08.1",
+    "device": "input3",
+    "class": "bridge",
+    "description": "Video Bus"
+  },
+  {
+    "bus_info": "pci@0000:c6:00.0",
+    "device": "/dev/fb0",
+    "class": "display",
+    "description": "Strix Halo [Radeon Graphics / Radeon 8050S Graphics / Radeon 8060S Graphics]"
+  },
+  {
+    "bus_info": "pci@0000:c6:00.1",
+    "device": "card0",
+    "class": "multimedia",
+    "description": "Radeon High Definition Audio Controller"
+  },
+  {
+    "bus_info": null,
+    "device": "input10",
+    "class": "input",
+    "description": "HD-Audio Generic HDMI/DP,pcm=7"
+  },
+  {
+    "bus_info": null,
+    "device": "input11",
+    "class": "input",
+    "description": "HD-Audio Generic HDMI/DP,pcm=8"
+  },
+  {
+    "bus_info": null,
+    "device": "input12",
+    "class": "input",
+    "description": "HD-Audio Generic HDMI/DP,pcm=9"
+  },
+  {
+    "bus_info": null,
+    "device": "input9",
+    "class": "input",
+    "description": "HD-Audio Generic HDMI/DP,pcm=3"
+  },
+  {
+    "bus_info": "pci@0000:c6:00.2",
+    "device": null,
+    "class": "generic",
+    "description": "Strix/Krackan/Strix Halo CCP/ASP"
+  },
+  {
+    "bus_info": "pci@0000:c6:00.4",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB 3.1 xHCI"
+  },
+  {
+    "bus_info": "pci@0000:c6:00.6",
+    "device": "card2",
+    "class": "multimedia",
+    "description": "Ryzen HD Audio Controller"
+  },
+  {
+    "bus_info": null,
+    "device": "input13",
+    "class": "input",
+    "description": "HD-Audio Generic Rear Mic"
+  },
+  {
+    "bus_info": null,
+    "device": "input14",
+    "class": "input",
+    "description": "HD-Audio Generic Front Mic"
+  },
+  {
+    "bus_info": null,
+    "device": "input15",
+    "class": "input",
+    "description": "HD-Audio Generic Front Line Out"
+  },
+  {
+    "bus_info": null,
+    "device": "input16",
+    "class": "input",
+    "description": "HD-Audio Generic Headphone"
+  },
+  {
+    "bus_info": "pci@0000:00:08.2",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Internal GPP Bridge to Bus [C:A]"
+  },
+  {
+    "bus_info": "pci@0000:c7:00.0",
+    "device": null,
+    "class": "generic",
+    "description": "Strix/Strix Halo PCIe Dummy Function"
+  },
+  {
+    "bus_info": "pci@0000:c7:00.1",
+    "device": null,
+    "class": "generic",
+    "description": "Strix/Krackan/Strix Halo Neural Processing Unit"
+  },
+  {
+    "bus_info": "pci@0000:00:08.3",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Internal GPP Bridge to Bus [C:A]"
+  },
+  {
+    "bus_info": "pci@0000:c8:00.0",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB 3.1 xHCI"
+  },
+  {
+    "bus_info": "pci@0000:c8:00.3",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB 3.1 xHCI"
+  },
+  {
+    "bus_info": "pci@0000:c8:00.4",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB 3.1 xHCI"
+  },
+  {
+    "bus_info": "pci@0000:c8:00.5",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB4 Host Router"
+  },
+  {
+    "bus_info": "pci@0000:c8:00.6",
+    "device": null,
+    "class": "bus",
+    "description": "Strix Halo USB4 Host Router"
+  },
+  {
+    "bus_info": "pci@0000:00:14.0",
+    "device": null,
+    "class": "bus",
+    "description": "FCH SMBus Controller"
+  },
+  {
+    "bus_info": "pci@0000:00:14.3",
+    "device": null,
+    "class": "bridge",
+    "description": "FCH LPC Bridge"
+  },
+  {
+    "bus_info": null,
+    "device": null,
+    "class": "system",
+    "description": "PnP device PNP0b00"
+  },
+  {
+    "bus_info": "pci@0000:00:01.0",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Dummy Host Bridge"
+  },
+  {
+    "bus_info": "pci@0000:00:02.0",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Dummy Host Bridge"
+  },
+  {
+    "bus_info": "pci@0000:00:03.0",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Dummy Host Bridge"
+  },
+  {
+    "bus_info": "pci@0000:00:08.0",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix/Strix Halo Dummy Host Bridge"
+  },
+  {
+    "bus_info": "pci@0000:00:18.0",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 0"
+  },
+  {
+    "bus_info": "pci@0000:00:18.1",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 1"
+  },
+  {
+    "bus_info": "pci@0000:00:18.2",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 2"
+  },
+  {
+    "bus_info": "pci@0000:00:18.3",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 3"
+  },
+  {
+    "bus_info": "pci@0000:00:18.4",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 4"
+  },
+  {
+    "bus_info": "pci@0000:00:18.5",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 5"
+  },
+  {
+    "bus_info": "pci@0000:00:18.6",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 6"
+  },
+  {
+    "bus_info": "pci@0000:00:18.7",
+    "device": null,
+    "class": "bridge",
+    "description": "Strix Halo Data Fabric; Function 7"
+  },
+  {
+    "bus_info": null,
+    "device": "card1",
+    "class": "multimedia",
+    "description": "Device"
+  },
+  {
+    "bus_info": null,
+    "device": "card3",
+    "class": "multimedia",
+    "description": "C920"
+  },
+  {
+    "bus_info": null,
+    "device": "card4",
+    "class": "multimedia",
+    "description": "MicroII"
+  },
+  {
+    "bus_info": null,
+    "device": "input0",
+    "class": "input",
+    "description": "Power Button"
+  },
+  {
+    "bus_info": null,
+    "device": "input1",
+    "class": "input",
+    "description": "Sleep Button"
+  },
+  {
+    "bus_info": null,
+    "device": "input2",
+    "class": "input",
+    "description": "AT Raw Set 2 keyboard"
+  },
+  {
+    "bus_info": null,
+    "device": "input4",
+    "class": "input",
+    "description": "Fonglun USB PnP Sound Device"
+  },
+  {
+    "bus_info": null,
+    "device": "input5",
+    "class": "input",
+    "description": "ELECOM ELECOM BlueLED Mouse"
+  },
+  {
+    "bus_info": null,
+    "device": "input6",
+    "class": "input",
+    "description": "Topre REALFORCE 91 JP"
+  },
+  {
+    "bus_info": null,
+    "device": "input7",
+    "class": "input",
+    "description": "Topre REALFORCE 91 JP Consumer Control"
+  },
+  {
+    "bus_info": null,
+    "device": "input8",
+    "class": "input",
+    "description": "Topre REALFORCE 91 JP Keyboard"
+  }
+]

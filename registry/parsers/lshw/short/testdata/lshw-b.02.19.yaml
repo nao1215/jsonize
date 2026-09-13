@@ -1,0 +1,10 @@
+source: >-
+  captured on Ubuntu 26.04 (lshw B.02.19) as an ordinary user with
+  LC_ALL=C lshw -short -quiet; nothing replaced, the listing holds no
+  serial number, address, host or user name
+description: >-
+  The whole tree: the top node with neither a path nor a device name,
+  nodes with a path and no device name, and descriptions with spaces,
+  brackets and commas in the last column.
+os: linux
+args: ["-short", "-quiet"]
