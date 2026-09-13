@@ -273,6 +273,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Four option forms that were exit 3 or 4: `iostat/human-sizes` and
+  `iostat/human-sizes-timestamped` (`--human` without `-h`, which rounds
+  the figures but keeps the default layout, so `iostat/linux` was chosen
+  and failed on the first percent sign), `sensors/no-adapter` (`-A`, the
+  chip blocks without their adapter line) and `locale/locales`
+  (`locale -a`). `df/gnu-blocks` also reads `-BM`, `--block-size=KiB` and
+  the other units given without a number, where df prints the unit after
+  each figure.
 - The raw forms of the `lsblk` column sets that had one only for the
   default columns: `lsblk/filesystems-raw` (`-f -r`),
   `lsblk/topology-raw` (`-t -r`) and `lsblk/permissions-raw` (`-m -r`).

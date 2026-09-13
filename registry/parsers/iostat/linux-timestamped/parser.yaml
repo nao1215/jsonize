@@ -32,6 +32,10 @@ detect:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
       - '^avg-cpu:[ \t]+%user[ \t]+%nice'
       - '^Device[ \t]+tps[ \t]'
+    none:
+      # --human prints the percentages with a percent sign and rounds the device
+      # figures; iostat/human-sizes-timestamped reads that report.
+      - '^[ \t]+[\d.]+%[ \t]+[\d.]+%[ \t]'
 input:
   select:
     # The banner is stated whole, so what is dropped is exactly the line

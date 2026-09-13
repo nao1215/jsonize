@@ -1,0 +1,55 @@
+# `sensors -A` prints the blocks of sensors/linux without the Adapter line
+# under each chip name. A chip name on its own line over "label: value"
+# lines is a shape other reports share once that line is gone, so jz reads
+# it only when the parser is named (`jz run sensors -A`, `--parser
+# sensors`), and the signature still asks for the chip name and a reading
+# under it.
+format: 1
+command: sensors
+variant: no-adapter
+description: sensors -A readings grouped by chip, without the adapter line
+metadata:
+  tags: [linux, hardware, temperature, lm-sensors]
+  compatible: [lm-sensors]
+  references:
+    - https://man7.org/linux/man-pages/man1/sensors.1.html
+detect:
+  os: [linux]
+  auto_detect: false
+  signature:
+    all:
+      # A chip name, and a labelled reading straight under it: a value
+      # and its unit, or N/A. A chip name does not end in a colon, which
+      # keeps out factor output opening with a number that has no factors
+      # ("0:" or "1:").
+      - '\A\S*[^\s:]\n[^ \t:\n][^:\n]*:[ \t]+(?:[-+]?[0-9.]+[ \t]*[^\s\d.+-]|N/A)'
+    none:
+      # With the adapter line it is sensors/linux.
+      - '^Adapter: '
+# A reading's limits that spill onto a second line are joined to it, as
+# sensors/linux does.
+input:
+  fold: '^[ \t]+\('
+parse:
+  type: records
+  start: '^\S+$'
+  parts:
+    - name: chip
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>\S+?)(?:-(?P<bus>[a-z0-9]+)-(?P<address>\S+))?[ \t]*\z'
+      fields:
+        name: {required: true}
+    - name: readings
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^(?P<name>[^:]+):[ \t]+(?:(?P<value>[-+]?[0-9.]+)[ \t]*(?P<unit>[^\s\d.+-]\S*)|N/A)[ \t]*(?:\((?P<limits>[^\n]*)\))?(?P<alarm>(?:[ \t]+ALARM)?)[ \t]*$'
+      fields:
+        name: {required: true}
+        value: {type: float}
+        unit: {trim_prefix: "°"}
+        limits: {type: array, split_regex: ',[ \t]*|\)[ \t]*\('}
+        alarm: {type: bool, true_values: ["ALARM"], false_values: [""]}

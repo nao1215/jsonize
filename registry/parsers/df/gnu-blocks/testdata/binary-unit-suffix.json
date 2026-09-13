@@ -1,0 +1,31 @@
+{
+  "header": {
+    "block_size": "1KiB"
+  },
+  "filesystems": [
+    {
+      "filesystem": "/dev/nvme1n1p2",
+      "blocks": 1920641288,
+      "used": 1663266168,
+      "available": 159738156,
+      "use_percent": 92,
+      "mounted_on": "/"
+    },
+    {
+      "filesystem": "tmpfs",
+      "blocks": 32206672,
+      "used": 1041732,
+      "available": 31164940,
+      "use_percent": 4,
+      "mounted_on": "/tmp"
+    },
+    {
+      "filesystem": "/dev/nvme1n1p1",
+      "blocks": 1098632,
+      "used": 6456,
+      "available": 1092176,
+      "use_percent": 1,
+      "mounted_on": "/boot/efi"
+    }
+  ]
+}

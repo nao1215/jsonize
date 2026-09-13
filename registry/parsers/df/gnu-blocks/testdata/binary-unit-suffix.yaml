@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C
+description: >-
+  df --block-size=KiB for three mount points. The heading and every figure
+  carry the unit, spelled with a lower-case i, and the figures are whole
+  counts of it.
+os: linux
+args: ["--block-size=KiB", "/", "/tmp", "/boot/efi"]

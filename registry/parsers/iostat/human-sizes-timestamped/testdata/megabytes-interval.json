@@ -1,0 +1,56 @@
+[
+  {
+    "timestamp": {
+      "value": "09/13/26 10:12:04"
+    },
+    "cpu": [
+      {
+        "user_percent": 3.4,
+        "nice_percent": 0,
+        "system_percent": 0.4,
+        "iowait_percent": 0,
+        "steal_percent": 0,
+        "idle_percent": 96.2
+      }
+    ],
+    "devices": [
+      {
+        "device": "nvme1n1",
+        "tps": 41.48,
+        "mb_read_s": "337.4k",
+        "mb_wrtn_s": "486.8k",
+        "mb_dscd_s": "0.0k",
+        "mb_read": "13.2G",
+        "mb_wrtn": "19.0G",
+        "mb_dscd": "0.0k"
+      }
+    ]
+  },
+  {
+    "timestamp": {
+      "value": "09/13/26 10:12:05"
+    },
+    "cpu": [
+      {
+        "user_percent": 0.6,
+        "nice_percent": 0,
+        "system_percent": 0.3,
+        "iowait_percent": 0,
+        "steal_percent": 0,
+        "idle_percent": 99.1
+      }
+    ],
+    "devices": [
+      {
+        "device": "nvme1n1",
+        "tps": 12,
+        "mb_read_s": "0.0k",
+        "mb_wrtn_s": "104.0k",
+        "mb_dscd_s": "0.0k",
+        "mb_read": "0.0k",
+        "mb_wrtn": "104.0k",
+        "mb_dscd": "0.0k"
+      }
+    ]
+  }
+]

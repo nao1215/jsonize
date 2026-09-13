@@ -1,0 +1,4 @@
+description: --human rounds each device figure to a unit it names and signs the CPU percentages, in the layout of the default report
+source: "`iostat --human nvme1n1 nvme0n1` on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C; the host name in the banner was replaced with a name of the same width"
+os: linux
+args: ["--human", "nvme1n1", "nvme0n1"]

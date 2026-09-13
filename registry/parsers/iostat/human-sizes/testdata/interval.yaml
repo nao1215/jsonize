@@ -1,0 +1,4 @@
+description: two samples a second apart, each one record
+source: "`iostat --human nvme0n1 1 2` on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C; the host name in the banner was replaced with a name of the same width"
+os: linux
+args: ["--human", "nvme0n1", "1", "2"]

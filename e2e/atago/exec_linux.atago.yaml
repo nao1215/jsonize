@@ -1678,9 +1678,39 @@ scenarios:
   # arguments are what says which. Each of these was refused before the
   # variant for it existed, so what this pins is that `jz run` lands on
   # the one written for the option rather than on a neighbour.
-  - name: the option forms of df, free, ps and lsblk land on the variants written for them
+  - name: the option forms of df, free, ps, lsblk, iostat and locale land on the variants written for them
     only: {os: linux}
     steps:
+      # A unit given without a number is printed after every figure.
+      - run:
+          command: jz run --explain df -BM
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/gnu-blocks from embedded"
+          stdout:
+            json:
+              - { path: "$.header.block_size", equals: "1M" }
+              - { path: "$.filesystems[0].blocks", gte: 0 }
+      # --human rounds the figures in the default layout; -h also moves
+      # the device name to the end.
+      - run:
+          command: jz run --explain iostat --human
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose iostat/human-sizes from embedded"
+          stdout:
+            json:
+              - { path: "$[0].cpu[0].idle_percent", gte: 0 }
+      - run:
+          command: jz run --explain locale -a
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose locale/locales from embedded"
+          stdout:
+            contains: '{"locale":"POSIX"}'
       - run:
           command: jz run --explain df -m
       - assert:
