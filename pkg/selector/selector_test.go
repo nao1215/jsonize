@@ -811,6 +811,41 @@ func TestArgumentsAfterADoubleDashAreOperands(t *testing.T) {
 	}
 }
 
+// A short flag given more than once counts as the bundle of that many,
+// however it was typed: `-v -v`, `-vv` and `-vvv` all hold "-vv", since a
+// command reading them with getopt sees the same thing. A filter that
+// refuses a second -v is otherwise passed by typing it apart.
+func TestRepeatedShortFlagsCountAsTheirBundle(t *testing.T) {
+	t.Parallel()
+	reg := buildRegistry(t, map[string]string{
+		"tool/once":  def("tool", "once", "detect:\n  args: {none: ['-vv']}\n  signature: {all: ['^A']}\n"),
+		"tool/twice": def("tool", "twice", "detect:\n  args: {any: ['-vv']}\n  signature: {all: ['^A']}\n"),
+	})
+	cases := []struct {
+		args []string
+		want string
+	}{
+		{[]string{"-v"}, "tool/once"},
+		{[]string{"-vx", "-x"}, "tool/once"},
+		{[]string{"-vv"}, "tool/twice"},
+		{[]string{"-v", "-v"}, "tool/twice"},
+		{[]string{"-vvv"}, "tool/twice"},
+		{[]string{"-xv", "-vy"}, "tool/twice"},
+		{[]string{"-v", "--", "-v"}, "tool/once"},
+		{[]string{"--verbose", "--verbose"}, "tool/once"},
+	}
+	for _, tc := range cases {
+		res, err := Select(reg, Context{Parser: "tool", OS: "linux", Args: tc.args, Input: []byte("A\n")})
+		if err != nil {
+			t.Errorf("%v: %v", tc.args, err)
+			continue
+		}
+		if got := res.Entry.Def.ID(); got != tc.want {
+			t.Errorf("%v: chose %s, want %s", tc.args, got, tc.want)
+		}
+	}
+}
+
 // Window says how many records a stream holds back before choosing, and
 // what ends one: the widest signature among the candidates, one record
 // when none of them has a signature, and NUL when all of them read

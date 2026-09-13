@@ -15,8 +15,9 @@ metadata:
     - https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html
 detect:
   os: [linux]
+  # Neither -i nor --inodes is required: the header already says inodes,
+  # and the one any list is taken by the spellings of -h.
   args:
-    all: ["-i"]
     any: ["-h", "--human-readable", "-H", "--si"]
   signature:
     # The rule below reads the shape of the values, so it has to see

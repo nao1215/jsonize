@@ -1,0 +1,5 @@
+description: --algorithm may be shortened to any prefix of itself, so --algo=sysv prints the System V checksum and a block count as -a sysv does and is refused the same way
+source: "cksum --algo=sysv LICENSE go.mod in the jsonize repository on Ubuntu 26.04 (uutils coreutils 0.8.0) with LC_ALL=C"
+os: linux
+args: ["--algo=sysv", "LICENSE", "go.mod"]
+expect_error: excluded by the argument --algo=sysv

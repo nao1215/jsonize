@@ -1,0 +1,4 @@
+description: the output of coreutils-9, requested with the long spelling --inodes beside -h, which prints the same table as -ih
+source: captured on Ubuntu 26.04 (GNU coreutils 9.x) with LC_ALL=C; device name replaced
+os: linux
+args: [--inodes, -h]

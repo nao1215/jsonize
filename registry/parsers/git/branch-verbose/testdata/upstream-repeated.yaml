@@ -1,0 +1,5 @@
+source: git 2.53 in the jsonize repository, `git branch -v -v` with LC_ALL=C
+description: -v given twice as two words prints the upstream in brackets exactly as -vv does, so it is refused the same way
+os: linux
+args: ["branch", "-v", "-v", "--list", "main", "fix/args-repeats-and-abbreviations"]
+expect_error: excluded by the argument -vv

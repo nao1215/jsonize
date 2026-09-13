@@ -200,8 +200,10 @@ type Detect struct {
 
 // ArgsMatch matches command line arguments, each as one whole word:
 // "--format=long" is the word "--format=long". Single-letter flags
-// bundled as "-hT" are expanded, so "-h" matches "-hT". The words after
-// a "--" are operands, which no filter sees.
+// bundled as "-hT" are expanded, so "-h" matches "-hT", and a
+// single-letter flag given more than once holds its bundle, so "-vv"
+// matches "-v -v" and "-vvv". The words after a "--" are operands, which
+// no filter sees.
 type ArgsMatch struct {
 	Any  []string `yaml:"any,omitempty"`
 	All  []string `yaml:"all,omitempty"`

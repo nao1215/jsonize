@@ -1,0 +1,5 @@
+source: git 2.53 in the jsonize repository, `git branch --verbose --verbose` with LC_ALL=C
+description: the long spelling given twice prints the upstream in brackets as -vv does. A second --verbose cannot be counted from the words, so any --verbose is refused.
+os: linux
+args: ["branch", "--verbose", "--verbose", "--list", "main", "fix/args-repeats-and-abbreviations"]
+expect_error: excluded by the argument --verbose

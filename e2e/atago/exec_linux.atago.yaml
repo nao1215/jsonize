@@ -1706,6 +1706,20 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].type", equals: "Mem" }
+      # The long spelling of one option beside the short spelling of the
+      # other lands where the two short ones do.
+      - run:
+          command: jz run --explain free --wide -h
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose free/gnu-wide-human from embedded"
+      - run:
+          command: jz run --explain df --inodes -h
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/gnu-inodes-human from embedded"
       - run:
           command: jz run --explain free -w
       - assert:
