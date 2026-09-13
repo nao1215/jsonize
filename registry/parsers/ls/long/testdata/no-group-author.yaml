@@ -1,0 +1,9 @@
+description: >-
+  ls -lo --author drops the group and adds the author, which leaves two
+  names before the size as ls -l has. The second name is the author, not a
+  group, and nothing in the text says so, so the argument is what refuses
+  it.
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C in a directory made for the fixture; user name replaced
+os: linux
+args: [-lo, --author]
+expect_error: 'excluded by the argument --author'

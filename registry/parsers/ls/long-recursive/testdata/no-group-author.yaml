@@ -1,0 +1,8 @@
+description: >-
+  ls -loR --author drops the group and adds the author, which leaves two
+  names before the size as ls -lR has. The second is the author, and only
+  the argument says so.
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C in a directory made for the fixture; user name replaced
+os: linux
+args: [-loR, --author]
+expect_error: 'excluded by the argument --author'

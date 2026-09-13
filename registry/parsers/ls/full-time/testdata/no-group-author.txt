@@ -1,0 +1,4 @@
+total 4
+drwxrwxr-x 2 alice alice 40 2026-09-13 11:47:03.412112233 +0900 archive
+-rw-rw-r-- 1 alice alice 27 2026-09-13 11:47:04.772068206 +0900 notes.txt
+lrwxrwxrwx 1 alice alice  9 2026-09-13 11:47:07.813969709 +0900 today -> notes.txt

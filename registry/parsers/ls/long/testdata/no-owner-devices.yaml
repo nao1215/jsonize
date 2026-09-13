@@ -1,0 +1,8 @@
+description: >-
+  ls -lg of device files, which ls/long-no-owner reads. With the owner
+  gone a line has one name and "7, 0", and read with two names it would
+  be a group "7," and a size of 0, so a device line is refused unless its
+  major and minor numbers are where the size would be.
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C; nothing replaced
+os: linux
+expect_error: 'does not describe this input'

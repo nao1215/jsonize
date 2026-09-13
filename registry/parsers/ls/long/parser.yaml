@@ -28,7 +28,7 @@ aliases:
   # this definition refuses rather than reads; the GNU one prints what ls
   # -l prints.
   - name: vdir
-    args: {none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]}
+    args: {none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify", "-Z", "--context", "--author"]}
 description: ls -l / ls -lh long listing on Linux, macOS and BusyBox
 metadata:
   tags: [linux, darwin, filesystem]
@@ -46,11 +46,21 @@ detect:
     # is refused. Only "/" can be told from a name, since no name ends
     # with it, and the patterns below refuse a name that does: that is
     # what stops the same output piped in.
-    none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
+    #
+    # -Z and --author each add a column after the group, and -g, -o and
+    # -G each take one of the two names away, so a pair of them prints
+    # two names before the size as this listing does, under other
+    # meanings. A security context is "?" or a label with colons, which
+    # no group name can be, so the patterns refuse that one in the text
+    # as well; an author is a user name and only the argument tells it.
+    none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify", "-Z", "--context", "--author"]
   signature:
     any:
-      # The size, or for a device file its major and minor numbers.
-      - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\S+\s+(?:[\d.]+[kKMGTPEZYRQBi]*|\d+,\s*\d+)\s+\w{3}\s+\d{1,2}\s+'
+      # The size, or for a device file its major and minor numbers. The
+      # two are stated apart: `ls -lg` of a device file prints one name
+      # and "7, 0", which read as the other case would be a group "7,"
+      # and a size of 0.
+      - '^(?:[-dlps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+[^\s:?][^\s:]*\s+[\d.]+[kKMGTPEZYRQBi]*|[cb][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+[^\s:?][^\s:]*\s+\d+,\s*\d+)\s+\w{3}\s+\d{1,2}\s+'
       # A directory with nothing in it is its total and nothing else.
       # Every long listing prints that same line, and each of them would
       # answer with an empty list, so the one written for the plain long
@@ -73,11 +83,16 @@ parse:
   #
   # A character or block device has no size, and ls prints its major and
   # minor device numbers in that column ("1,   3"). Such a line has
-  # major and minor and no size.
+  # major and minor and no size, and only such a line has them: a device
+  # line that the device pattern does not match is refused rather than
+  # read as a size.
+  #
+  # A group name holds no colon and does not start with "?", which is
+  # what tells it from the security context -Z prints (see detect.args).
   patterns:
-    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.+?) -> (?P<link_to>.+)$'
-    - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
-    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
+    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>[^\s:?][^\s:]*)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>[^\s:?][^\s:]*)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
+    - '^(?P<flags>[-dlps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<group>[^\s:?][^\s:]*)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
 fields:
   links: {type: int, required: true}
   major: {type: int}

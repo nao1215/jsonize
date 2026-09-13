@@ -1,0 +1,4 @@
+total 4
+drwxrwxr-x 2 alice ? 40 2026-09-13 11:47 archive
+-rw-rw-r-- 1 alice ? 27 2026-09-13 11:47 notes.txt
+lrwxrwxrwx 1 alice ?  9 2026-09-13 11:47 today -> notes.txt

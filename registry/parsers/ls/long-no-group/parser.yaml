@@ -50,7 +50,11 @@ detect:
       # size, because read the other way round the four columns of
       # `ls -og` would be a name and a size here, and this definition
       # would claim that listing too.
-      - '^(?:[cb][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+\d+,\s*\d+|[-dlps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+[\d.]+[kKMGTPEZYRQBi]*)\s+\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})\s+\S'
+      #
+      # The name holds no colon and does not start with "?": that is the
+      # security context `ls -lgoZ` prints where the name was (see
+      # ls/long).
+      - '^(?:[cb][-rwxsStT]{9}[.+@]?\s+\d+\s+[^\s:?][^\s:]*\s+\d+,\s*\d+|[-dlps][-rwxsStT]{9}[.+@]?\s+\d+\s+[^\s:?][^\s:]*\s+[\d.]+[kKMGTPEZYRQBi]*)\s+\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})\s+\S'
 input:
   ignore:
     - '^total\s'
@@ -59,9 +63,9 @@ parse:
   # A device file has major and minor numbers where the size goes, which
   # ls/long explains.
   patterns:
-    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.+?) -> (?P<link_to>.+)$'
-    - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
-    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>\S+)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
+    - '^(?P<flags>l[-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>[^\s:?][^\s:]*)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.+?) -> (?P<link_to>.+)$'
+    - '^(?P<flags>[cb][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>[^\s:?][^\s:]*)\s+(?P<major>\d+),\s*(?P<minor>\d+)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
+    - '^(?P<flags>[-dlcbps][-rwxsStT]{9}[.+@]?)\s+(?P<links>\d+)\s+(?P<owner>[^\s:?][^\s:]*)\s+(?P<size>[\d.]+[kKMGTPEZYRQBi]*)\s+(?P<date>\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})) (?P<filename>.*[^/])$'
 fields:
   links: {type: int, required: true}
   major: {type: int}

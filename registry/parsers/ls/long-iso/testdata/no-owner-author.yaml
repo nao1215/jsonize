@@ -1,0 +1,9 @@
+description: >-
+  ls -lg --author --time-style=long-iso drops the owner and adds the
+  author, which leaves two names before the size as the plain listing has.
+  The first is the group and the second the author, and only the arguments
+  say so.
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C in a directory made for the fixture; user name replaced
+os: linux
+args: [-lg, --author, --time-style=long-iso]
+expect_error: 'excluded by the argument --author'
