@@ -311,6 +311,11 @@ func TestDuration(t *testing.T) {
 		{"13 days, 4:22", LayoutMinuteSecond, int64(1138920)},
 		{"1 day, 0:01", LayoutMinuteSecond, int64(86460)},
 		{"3 days,  4:11", LayoutMinuteSecond, int64(274260)},
+		// The BSD w writes a whole number of hours, or minutes or seconds
+		// alone, after the days instead of a clock reading.
+		{"4 days, 3 hrs", LayoutHourMinute, int64(356400)},
+		{"1 day, 5 mins", LayoutHourMinute, int64(86700)},
+		{"2 days, 7 secs", LayoutHourMinute, int64(172807)},
 		// A number and its unit, run together or spelled out.
 		{"45 min", LayoutMinuteSecond, int64(2700)},
 		{"12 sec", LayoutMinuteSecond, int64(12)},
@@ -362,6 +367,8 @@ func TestDurationRefuses(t *testing.T) {
 		"1:00:60",
 		"1-00:60:00",
 		"13 days, 4:60",
+		"1 day, 2 days",
+		"1 day, 4",
 		// The days before the dash are a count, printed as digits and
 		// nothing else: Go's number syntax is not what a command prints.
 		"1_0-01:02:03",
