@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (lshw B.02.19) as an ordinary user with
+  LC_ALL=C lshw -short -quiet -class tape
+description: >-
+  A class no node has prints the header and the rule alone, which is an
+  empty array.
+os: linux
+args: ["-short", "-quiet", "-class", "tape"]

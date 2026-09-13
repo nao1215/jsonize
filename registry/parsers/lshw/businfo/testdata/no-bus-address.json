@@ -1,0 +1,14 @@
+[
+  {
+    "bus_info": null,
+    "device": null,
+    "class": "memory",
+    "description": "64GiB System memory"
+  },
+  {
+    "bus_info": "cpu@0",
+    "device": null,
+    "class": "processor",
+    "description": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  }
+]

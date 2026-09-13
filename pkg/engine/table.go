@@ -159,18 +159,26 @@ func (r *run) resolveHeader(p *definition.Parse, header line, split string) ([]c
 	cols := make([]column, 0, len(toks))
 	seen := map[string]bool{}
 	if len(h.Columns) > 0 {
-		// Aligned tables need one header token per declared column; extra
-		// trailing tokens ("Mounted on") belong to the last column, which
-		// extends to the end of the line anyway.
-		if split == definition.SplitAligned && len(toks) < len(h.Columns) {
-			return nil, r.errorf(header.num, "", "header has %d columns but the definition declares %d: %q", len(toks), len(h.Columns), truncate(header.text, 80))
-		}
-		for i, name := range h.Columns {
-			start := 0
-			if i < len(toks) {
-				start = toks[i].start
+		if split != definition.SplitAligned {
+			for _, name := range h.Columns {
+				cols = append(cols, column{name: name})
 			}
-			cols = append(cols, column{name: name, start: start})
+			return cols, nil
+		}
+		// Aligned tables need header words for every declared column; extra
+		// trailing words ("Mounted on") belong to the last column, which
+		// extends to the end of the line anyway.
+		i := 0
+		for k, name := range h.Columns {
+			if i >= len(toks) {
+				return nil, r.errorf(header.num, "", "header has %d columns but the definition declares %d: %q", k, len(h.Columns), truncate(header.text, 80))
+			}
+			cols = append(cols, column{name: name, start: toks[i].start})
+			if k == 0 && h.LeadingLabel != "" {
+				i++
+				continue
+			}
+			i += wordsNamed(toks[i:], name)
 		}
 		return cols, nil
 	}
@@ -197,11 +205,32 @@ func (r *run) resolveHeader(p *definition.Parse, header line, split string) ([]c
 	return cols, nil
 }
 
-// token is a whitespace-delimited word with the display column it starts
-// at.
+// wordsNamed returns how many header words, from the first of toks, make
+// the column called name: more than one when the words stand a single
+// space apart and name is what they derive together ("CONTAINER ID" is
+// container_id), and otherwise one. A gap wider than a space stands
+// between two columns, so words across it are never joined.
+func wordsNamed(toks []token, name string) int {
+	if definition.NormalizeName(toks[0].text) == name {
+		return 1
+	}
+	var joined strings.Builder
+	joined.WriteString(toks[0].text)
+	for j := 1; j < len(toks) && toks[j].start == toks[j-1].end+1; j++ {
+		joined.WriteByte(' ')
+		joined.WriteString(toks[j].text)
+		if definition.NormalizeName(joined.String()) == name {
+			return j + 1
+		}
+	}
+	return 1
+}
+
+// token is a whitespace-delimited word with the display columns it starts
+// at and ends before.
 type token struct {
-	text  string
-	start int
+	text       string
+	start, end int
 }
 
 // tokenize splits s on runs of whitespace, recording where each word
@@ -214,7 +243,7 @@ func tokenize(s string) []token {
 	for _, r := range s {
 		if unicode.IsSpace(r) {
 			if start >= 0 {
-				toks = append(toks, token{text: b.String(), start: start})
+				toks = append(toks, token{text: b.String(), start: start, end: pos})
 				b.Reset()
 				start = -1
 			}
@@ -227,7 +256,7 @@ func tokenize(s string) []token {
 		pos += cellWidth(r)
 	}
 	if start >= 0 {
-		toks = append(toks, token{text: b.String(), start: start})
+		toks = append(toks, token{text: b.String(), start: start, end: pos})
 	}
 	return toks
 }

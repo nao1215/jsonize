@@ -312,13 +312,17 @@ to repeat. A `csv` is read the other way (below).
   the cut to the previous space; a value that overflows to the right is
   kept whole when the rest of the row moved right with it. Empty cells
   are `null`. With explicit `columns`, extra trailing header words
-  ("Mounted on") belong to the last column.
+  ("Mounted on") belong to the last column, and a heading of several
+  words one space apart is one column when `columns` gives it the name
+  those words derive together: `columns: [container_id, image]` reads
+  `CONTAINER ID   IMAGE` as two columns, the first starting at
+  `CONTAINER`. Words further apart than one space are never joined.
 
   Two rows are refused, because the header does not say where their
   cells are. One is a value that runs past where the next column starts
   and leaves that column empty: the column may have been empty, or its
   header word may be the second word of the name before it (`CONTAINER
-  ID`). The other is a cell before the last that holds a tab or two
+  ID` read without `columns`). The other is a cell before the last that holds a tab or two
   spaces in a row, the gap that stands between columns: a right-aligned
   value with a space in it (`4min 27s`) starts before its header at a
   space, and the cut leaves part of it in the cell before. A value that

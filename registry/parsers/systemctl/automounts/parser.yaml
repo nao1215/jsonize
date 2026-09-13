@@ -20,25 +20,21 @@ detect:
       - '\A[ \t]*WHAT[ \t]+WHERE[ \t]+MOUNTED[ \t]+IDLE TIMEOUT[ \t]+UNIT[ \t]*$'
 input:
   ignore:
-    - '\A[ \t]*WHAT[ \t]+WHERE[ \t]+MOUNTED[ \t]+IDLE TIMEOUT[ \t]+UNIT[ \t]*$'
     - '^[0-9]+ automounts? listed\.$'
     - '^Pass --all to see loaded but inactive automounts, too\.$'
 parse:
-  type: regex
-  # The idle timeout is one column under a heading of two words, and
-  # systemd spells a duration there with a space in it ("1min 30s"), so
-  # the row is read by what each column holds rather than cut at the
-  # header words: a source, a path, yes or no, the timeout, and a unit
-  # whose name ends in .automount. With --all systemd can also list an
-  # automount with nothing under WHERE; the path is then absent and where
-  # is null.
-  pattern: '^(?P<what>\S.*?)\s+(?:(?P<where>/\S*)\s+)?(?P<mounted>yes|no)\s+(?P<idle_timeout>\S.*?)\s+(?P<unit>\S+\.automount)\s*$'
+  type: table
+  split: aligned
+  # The idle timeout is one column under a heading of two words, which
+  # naming it idle_timeout says. With --all systemd can also list an
+  # automount with nothing under WHERE, and where is then null.
+  header:
+    columns: [what, where, mounted, idle_timeout, unit]
 fields:
   what: {required: true}
-  where: {null_if: [""]}
-  mounted: {type: bool, true_values: [yes], false_values: [no]}
+  mounted: {type: bool, required: true, true_values: [yes], false_values: [no]}
   # systemd prints a dash where no timeout is set, and otherwise a
   # duration in its own spelling ("30s", "1min 30s"), which is kept as
   # printed for the reason every other printed duration is.
   idle_timeout: {null_if: ["-"]}
-  unit: {required: true}
+  unit: {required: true, regex: '(?P<unit>\S+\.automount)'}

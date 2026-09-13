@@ -102,6 +102,7 @@ the same reading with settings of your own.
 | `lsclocks` | [`linux`](../schemas/lsclocks/linux.json) |
 | `lscpu` | [`caches`](../schemas/lscpu/caches.json), [`extended`](../schemas/lscpu/extended.json), [`linux`](../schemas/lscpu/linux.json) |
 | `lsfd` | [`linux`](../schemas/lsfd/linux.json), [`raw`](../schemas/lsfd/raw.json) |
+| `lshw` | [`businfo`](../schemas/lshw/businfo.json), [`short`](../schemas/lshw/short.json) |
 | `lsipc` | [`linux`](../schemas/lsipc/linux.json), [`raw`](../schemas/lsipc/raw.json) |
 | `lsirq` | [`linux`](../schemas/lsirq/linux.json) |
 | `lslocks` | [`linux`](../schemas/lslocks/linux.json), [`raw`](../schemas/lslocks/raw.json) |

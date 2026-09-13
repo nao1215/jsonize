@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 (lshw B.02.19) as an ordinary user with
+  LC_ALL=C lshw -short -quiet -numeric -class display -class network
+description: >-
+  -numeric appends the vendor and product IDs to the description, and
+  two -class options keep the nodes of both classes.
+os: linux
+args: ["-short", "-quiet", "-numeric", "-class", "display", "-class", "network"]

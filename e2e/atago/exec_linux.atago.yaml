@@ -968,6 +968,48 @@ scenarios:
             json:
               - { path: "$[1].profile.active", equals: true }
               - { path: "$[1].profile.name", equals: balanced }
+      # The first heading of both lshw tables is two words, and the
+      # blank path or bus address of a node stays null rather than moving
+      # the device name into that column. -short wins when both are given.
+      - fixture:
+          file: bin/lshw
+          mode: "0755"
+          content: |
+            #!/bin/sh
+            case " $* " in
+            *" -short "*) cat "$(dirname "$0")/../captured/lshw-short.txt" ;;
+            *) cat "$(dirname "$0")/../captured/lshw-businfo.txt" ;;
+            esac
+      - fixture:
+          file: captured/lshw-short.txt
+          from: "${specdir}/../../registry/parsers/lshw/short/testdata/lshw-b.02.19.txt"
+      - fixture:
+          file: captured/lshw-businfo.txt
+          from: "${specdir}/../../registry/parsers/lshw/businfo/testdata/lshw-b.02.19.txt"
+      - run:
+          command: jz run --explain lshw -businfo -short
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lshw/short from embedded"
+          stdout:
+            json:
+              - { path: "$[0].h_w_path", equals: null }
+              - { path: "$[0].device", equals: null }
+              - { path: "$[0].class", equals: system }
+              - { path: "$[9].h_w_path", equals: "/0/100/2.1/0" }
+              - { path: "$[9].device", equals: eno1 }
+      - run:
+          command: jz run --explain lshw -businfo
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lshw/businfo from embedded"
+          stdout:
+            json:
+              - { path: "$[3].bus_info", equals: "cpu@0" }
+              - { path: "$[16].bus_info", equals: null }
+              - { path: "$[16].device", equals: hwmon1 }
       # A lock named in kana takes two columns a character, and the
       # values after it stay under their own headers.
       - fixture:

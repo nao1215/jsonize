@@ -2,9 +2,9 @@
 # (without it the command redraws the table forever and jz never sees the
 # end of the output).
 #
-# Every header cell but NAME and PIDS holds a space, so the row is read with
-# an expression rather than by cutting at the header words. Three of the
-# columns print two values around a slash, and each becomes two fields:
+# The row is read with an expression rather than by cutting at the header
+# words, because three of the columns print two values around a slash,
+# and each becomes two fields:
 # MEM USAGE / LIMIT is what the container uses and what it may use, NET I/O
 # is what it received and what it sent, BLOCK I/O is what it read from and
 # wrote to block devices.

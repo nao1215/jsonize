@@ -1,0 +1,75 @@
+H/W path          Device        Class       Description
+=======================================================
+                                system      Computer
+/0                              bus         Motherboard
+/0/0                            memory      64GiB System memory
+/0/1                            processor   AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+/0/100                          bridge      Strix/Strix Halo Root Complex
+/0/100/0.2                      generic     Strix/Strix Halo IOMMU
+/0/100/1.1                      bridge      Strix/Strix Halo PCIe USB4 Bridge
+/0/100/1.2                      bridge      Strix/Strix Halo PCIe USB4 Bridge
+/0/100/2.1                      bridge      Strix/Strix Halo GPP Bridge
+/0/100/2.1/0      eno1          network     RTL8125 2.5GbE Controller
+/0/100/2.2                      bridge      Strix/Strix Halo GPP Bridge
+/0/100/2.2/0      mmc0          bus         GL9755 SD Host Controller
+/0/100/2.3                      bridge      Strix/Strix Halo GPP Bridge
+/0/100/2.3/0      wlp195s0      network     MT7925 (RZ717) Wi-Fi 7 160MHz
+/0/100/2.5                      bridge      Strix/Strix Halo GPP Bridge
+/0/100/2.5/0      /dev/nvme0    storage     Lexar SSD ARES 2TB
+/0/100/2.5/0/0    hwmon1        disk        NVMe disk
+/0/100/2.5/0/2    /dev/ng0n1    disk        NVMe disk
+/0/100/2.5/0/1    /dev/nvme0n1  disk        NVMe disk
+/0/100/3.1                      bridge      Strix/Strix Halo GPP Bridge
+/0/100/3.1/0      /dev/nvme1    storage     KIOXIA-EXCERIA PLUS G4 SSD
+/0/100/3.1/0/0    hwmon2        disk        NVMe disk
+/0/100/3.1/0/2    /dev/ng1n1    disk        NVMe disk
+/0/100/3.1/0/1    /dev/nvme1n1  disk        NVMe disk
+/0/100/8.1        input3        bridge      Video Bus
+/0/100/8.1/0      /dev/fb0      display     Strix Halo [Radeon Graphics / Radeon 8050S Graphics / Radeon 8060S Graphics]
+/0/100/8.1/0.1    card0         multimedia  Radeon High Definition Audio Controller
+/0/100/8.1/0.1/0  input10       input       HD-Audio Generic HDMI/DP,pcm=7
+/0/100/8.1/0.1/1  input11       input       HD-Audio Generic HDMI/DP,pcm=8
+/0/100/8.1/0.1/2  input12       input       HD-Audio Generic HDMI/DP,pcm=9
+/0/100/8.1/0.1/3  input9        input       HD-Audio Generic HDMI/DP,pcm=3
+/0/100/8.1/0.2                  generic     Strix/Krackan/Strix Halo CCP/ASP
+/0/100/8.1/0.4                  bus         Strix Halo USB 3.1 xHCI
+/0/100/8.1/0.6    card2         multimedia  Ryzen HD Audio Controller
+/0/100/8.1/0.6/0  input13       input       HD-Audio Generic Rear Mic
+/0/100/8.1/0.6/1  input14       input       HD-Audio Generic Front Mic
+/0/100/8.1/0.6/2  input15       input       HD-Audio Generic Front Line Out
+/0/100/8.1/0.6/3  input16       input       HD-Audio Generic Headphone
+/0/100/8.2                      bridge      Strix/Strix Halo Internal GPP Bridge to Bus [C:A]
+/0/100/8.2/0                    generic     Strix/Strix Halo PCIe Dummy Function
+/0/100/8.2/0.1                  generic     Strix/Krackan/Strix Halo Neural Processing Unit
+/0/100/8.3                      bridge      Strix/Strix Halo Internal GPP Bridge to Bus [C:A]
+/0/100/8.3/0                    bus         Strix Halo USB 3.1 xHCI
+/0/100/8.3/0.3                  bus         Strix Halo USB 3.1 xHCI
+/0/100/8.3/0.4                  bus         Strix Halo USB 3.1 xHCI
+/0/100/8.3/0.5                  bus         Strix Halo USB4 Host Router
+/0/100/8.3/0.6                  bus         Strix Halo USB4 Host Router
+/0/100/14                       bus         FCH SMBus Controller
+/0/100/14.3                     bridge      FCH LPC Bridge
+/0/100/14.3/0                   system      PnP device PNP0b00
+/0/101                          bridge      Strix/Strix Halo Dummy Host Bridge
+/0/102                          bridge      Strix/Strix Halo Dummy Host Bridge
+/0/103                          bridge      Strix/Strix Halo Dummy Host Bridge
+/0/104                          bridge      Strix/Strix Halo Dummy Host Bridge
+/0/105                          bridge      Strix Halo Data Fabric; Function 0
+/0/106                          bridge      Strix Halo Data Fabric; Function 1
+/0/107                          bridge      Strix Halo Data Fabric; Function 2
+/0/108                          bridge      Strix Halo Data Fabric; Function 3
+/0/109                          bridge      Strix Halo Data Fabric; Function 4
+/0/10a                          bridge      Strix Halo Data Fabric; Function 5
+/0/10b                          bridge      Strix Halo Data Fabric; Function 6
+/0/10c                          bridge      Strix Halo Data Fabric; Function 7
+/1                card1         multimedia  Device
+/2                card3         multimedia  C920
+/3                card4         multimedia  MicroII
+/4                input0        input       Power Button
+/5                input1        input       Sleep Button
+/6                input2        input       AT Raw Set 2 keyboard
+/7                input4        input       Fonglun USB PnP Sound Device
+/8                input5        input       ELECOM ELECOM BlueLED Mouse
+/9                input6        input       Topre REALFORCE 91 JP
+/a                input7        input       Topre REALFORCE 91 JP Consumer Control
+/b                input8        input       Topre REALFORCE 91 JP Keyboard

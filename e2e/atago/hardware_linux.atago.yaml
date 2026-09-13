@@ -57,6 +57,30 @@ scenarios:
             json:
               - { path: "$[0].slot", matches: "^([0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\\.[0-9a-f]$" }
 
+  # lshw lists what an ordinary user may read and warns on stderr that it
+  # is not root; the table on stdout is complete for that user.
+  - name: jz run lshw -short and -businfo land on their tables
+    only: {os: linux, command: "LC_ALL=C lshw -short -quiet | grep -q '^H/W path '"}
+    steps:
+      - run:
+          command: jz run --explain lshw -short -quiet
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lshw/short from embedded"
+          stdout:
+            json:
+              - { path: "$[0].class", matches: "^[a-z]+$" }
+      - run:
+          command: jz run --explain lshw -businfo -quiet
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "lshw/businfo from embedded"
+          stdout:
+            json:
+              - { path: "$[0].class", matches: "^[a-z]+$" }
+
   - name: jz run iw dev lands on the tree definition
     only: {os: linux, command: "[ -n \"$(LC_ALL=C iw dev)\" ]"}
     steps:

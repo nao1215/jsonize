@@ -1,0 +1,4 @@
+Bus info          Device        Class       Description
+=======================================================
+                                memory      64GiB System memory
+cpu@0                           processor   AMD RYZEN AI MAX+ 395 w/ Radeon 8060S

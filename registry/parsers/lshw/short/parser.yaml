@@ -1,0 +1,47 @@
+# `lshw -short` prints the hardware tree as a table: the hardware path,
+# the logical device name, the class and a description, under a rule of
+# equals signs. lshw pads each column to its widest value over the whole
+# tree, so a cell is left blank where a node has no path (the machine
+# itself, at the top) or no device name (a bridge, a memory bank), and
+# the row is cut where the header words start.
+#
+# The first heading is two words, "H/W path". Naming that column h_w_path
+# in header.columns makes it one column that starts at "H/W".
+format: 1
+command: lshw
+variant: short
+description: lshw -short, the hardware tree as a table of paths
+metadata:
+  tags: [linux, hardware]
+  compatible: [lshw B.02.19]
+  references:
+    - https://ezix.org/project/wiki/HardwareLiSter
+    - https://manpages.ubuntu.com/manpages/noble/man1/lshw.1.html
+detect:
+  os: [linux]
+  args:
+    # -short wins over -businfo, -json, -xml and -html when several are
+    # given, so a word that names another format does not refuse it.
+    all: ["-short"]
+  signature:
+    all:
+      # The header, the rule of equals signs under it, and nothing after
+      # them but rows: a path or the blank of the top node, a device name
+      # or its blank, a lower-case class word and the description. The
+      # header and the rule again are the output of two runs joined.
+      # `lshw -businfo` prints the same table with "Bus info" and a bus
+      # address in the first column, which is lshw/businfo.
+      - '\AH/W path {2,}Device {2,}Class {2,}Description *\n=+ *(?:\n(?:H/W path {2,}Device {2,}Class {2,}Description *|=+ *|\S* *(?:\S+ {2,})?[a-z]+(?: {2,}\S[^\n]*)? *))*\n?\z'
+input:
+  # A class that matches nothing prints the header and the rule alone,
+  # which is an empty array.
+  ignore:
+    - '^=+ *$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [h_w_path, device, class, description]
+fields:
+  # lshw names its classes with one lower-case word ("bridge", "disk").
+  class: {required: true, regex: '(?P<class>[a-z]+)'}

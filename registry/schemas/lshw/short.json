@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lshw/short.json",
+  "title": "lshw/short",
+  "description": "lshw -short, the hardware tree as a table of paths",
+  "x-jsonize": {
+    "definition": "lshw/short",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "h_w_path": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "device": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "class": {
+        "type": "string"
+      },
+      "description": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "h_w_path",
+      "device",
+      "class",
+      "description"
+    ]
+  }
+}
