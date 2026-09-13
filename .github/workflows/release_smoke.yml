@@ -13,6 +13,8 @@ on:
       - ".goreleaser.yml"
       - ".github/workflows/release.yml"
       - ".github/workflows/release_smoke.yml"
+      - ".github/workflows/e2e.yml"
+      - ".github/workflows/unit_test.yml"
       - "CHANGELOG.md"
       - "cmd/**"
       - "e2e/**"
@@ -28,6 +30,8 @@ on:
       - ".goreleaser.yml"
       - ".github/workflows/release.yml"
       - ".github/workflows/release_smoke.yml"
+      - ".github/workflows/e2e.yml"
+      - ".github/workflows/unit_test.yml"
       - "CHANGELOG.md"
       - "cmd/**"
       - "e2e/**"
@@ -94,7 +98,9 @@ jobs:
         run: |
           set -euo pipefail
           version="$(jq -r .version dist/metadata.json)"
-          ./dist/jz_linux_amd64_v1/jz version | tee /dev/stderr | grep -x "jz v${version} (definition format 1, linux/amd64)" > /dev/null
+          reported="$(./dist/jz_linux_amd64_v1/jz version)"
+          echo "$reported"
+          test "$reported" = "jz v${version} (definition format 1, linux/amd64)"
           printf 'Filesystem     1K-blocks    Used Available Use%% Mounted on\ntmpfs 100 10 90 10%% /run\n' | ./dist/jz_linux_amd64_v1/jz
           # Windows is built without Green Tea and nothing else is.
           for b in dist/jz-windows_*/jz.exe; do
@@ -159,7 +165,10 @@ jobs:
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/release"
           unzip -q archives/jsonize_*_windows_${{ matrix.arch }}.zip -d "$RUNNER_TEMP/release"
-          "$RUNNER_TEMP/release/jz.exe" version | tee /dev/stderr | grep "windows/${{ matrix.arch }})$" > /dev/null
+          # Git's bash on Windows has no /dev/stderr to tee to.
+          version="$("$RUNNER_TEMP/release/jz.exe" version)"
+          echo "$version"
+          grep "windows/${{ matrix.arch }})$" <<<"$version" > /dev/null
           go version -m "$RUNNER_TEMP/release/jz.exe" | grep 'GOEXPERIMENT=nogreenteagc' > /dev/null
       - name: run E2E against the release binary
         shell: bash
