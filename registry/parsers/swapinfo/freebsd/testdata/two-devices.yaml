@@ -1,0 +1,6 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; md99 is a 64 MiB swap file attached for the capture
+description: >-
+  swapinfo with a swap partition and a swap file. Two devices make
+  swapinfo add a Total row, which is kept as a row.
+os: freebsd
+args: []

@@ -1,0 +1,62 @@
+# FreeBSD w opens with the line uptime/freebsd reads and then lists the
+# users logged in: the user, the terminal without its "tty" prefix, where
+# from ("-" for a local login), when they logged in, how long the terminal
+# has been idle, and what they are running.
+#
+# The login time is the time of day ("10:44AM") for a login today and
+# another short form for an older one. Neither is a full time, so it
+# stays as printed. Idle is "-" under a minute, which is null, and a count
+# otherwise ("2" is two minutes), kept as printed. The command may hold
+# spaces and takes the rest of the line.
+#
+# -h prints the users without the two lines above them, which is not
+# read.
+format: 1
+command: w
+variant: freebsd
+description: "FreeBSD w: uptime summary plus logged-in users"
+metadata:
+  tags: [freebsd, bsd, user, system]
+  compatible: [FreeBSD w]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?w(1)
+    - https://github.com/freebsd/freebsd-src/blob/main/usr.bin/w/w.c
+detect:
+  os: [freebsd]
+  args:
+    none: ["-h"]
+  signature:
+    all:
+      - '\A[ \t]*\d{1,2}:\d{2}[AP]M[ \t]+up[ \t]+.*,[ \t]+\d+ users?,[ \t]+load averages: [\d.]+, [\d.]+, [\d.]+[ \t]*$'
+      - '^USER[ \t]+TTY[ \t]+FROM[ \t]+LOGIN@[ \t]+IDLE[ \t]+WHAT[ \t]*$'
+input:
+  ignore:
+    - '^USER[ \t]+TTY[ \t]+FROM[ \t]+LOGIN@[ \t]+IDLE[ \t]+WHAT[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: uptime
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^[ \t]*(?P<time>\d{1,2}:\d{2}[AP]M)[ \t]+up[ \t]+(?P<uptime>\S.*?),[ \t]+(?P<users>\d+) users?,[ \t]+load averages: (?P<load_1m>[\d.]+), (?P<load_5m>[\d.]+), (?P<load_15m>[\d.]+)[ \t]*$'
+      fields:
+        time: {required: true}
+        uptime: {type: duration, layout: h:mm, required: true}
+        users: {type: int}
+        load_1m: {type: float}
+        load_5m: {type: float}
+        load_15m: {type: float}
+    - name: users
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^(?P<user>\S+)[ \t]+(?P<tty>\S+)[ \t]+(?P<from>\S+)[ \t]+(?P<login_at>\S+)[ \t]+(?P<idle>\S+)[ \t]+(?P<what>\S.*?)[ \t]*$'
+      fields:
+        user: {required: true}
+        tty: {required: true}
+        from: {null_if: ["-"]}
+        login_at: {required: true}
+        idle: {null_if: ["-"]}
+        what: {required: true}

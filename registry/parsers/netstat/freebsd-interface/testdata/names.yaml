@@ -1,0 +1,7 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; bridge0 and lo1 were created for the capture and bridge0 left down
+description: >-
+  netstat -i with a link row and address rows per interface. bridge0 is
+  not up and printed as "bridge0*"; without -n the loopback networks
+  print as localhost and your-net, and their addresses as localhost.
+os: freebsd
+args: ["-i"]

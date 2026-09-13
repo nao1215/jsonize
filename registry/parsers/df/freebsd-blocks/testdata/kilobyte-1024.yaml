@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: df -k / heads the column 1024-blocks rather than the default 1K-blocks, for one file system.
+os: freebsd
+args: ["-k", "/"]

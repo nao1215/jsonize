@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: df -g, with the EFI partition at 0 blocks and 2% in use, the percentage being computed from the exact counts.
+os: freebsd
+args: ["-g"]

@@ -1,0 +1,4 @@
+Device              Size     Used    Avail Capacity
+/dev/gpt/swapfs     1.0G       0B     1.0G     0%
+/dev/md99            64M       0B      64M     0%
+Total               1.1G       0B     1.1G     0%

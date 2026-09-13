@@ -1,0 +1,20 @@
+{
+  "uptime": {
+    "time": "10:46AM",
+    "uptime": 120,
+    "users": 1,
+    "load_1m": 0.2,
+    "load_5m": 0.08,
+    "load_15m": 0.03
+  },
+  "users": [
+    {
+      "user": "root",
+      "tty": "v0",
+      "from": null,
+      "login_at": "10:44AM",
+      "idle": "2",
+      "what": "-sh (sh)"
+    }
+  ]
+}

@@ -409,6 +409,13 @@ func parseDuration(t, layout string) (float64, error) {
 		if rest == "" {
 			return days * 86400, nil
 		}
+		// After the days the BSD w writes whole hours ("4 days, 3 hrs")
+		// or, under an hour, a count of minutes or seconds. The days and
+		// that count are read as one run of units, so a day or a larger
+		// unit after the days is refused as out of order.
+		if !strings.Contains(rest, ":") {
+			return parseUnits(strconv.FormatFloat(days, 'f', -1, 64) + " days " + rest)
+		}
 		secs, err := parseClock(rest, LayoutHourMinute)
 		if err != nil {
 			return 0, err
@@ -422,9 +429,9 @@ func parseDuration(t, layout string) (float64, error) {
 }
 
 // splitLeadingDays reads the "13 days," or "1 day," that uptime puts in
-// front of a clock reading. What follows it is hours and minutes
-// whatever the field's layout says, because a reading that already
-// carries its days cannot be minutes and seconds.
+// front of the rest of its reading. A clock reading after it is hours and
+// minutes whatever the field's layout says, because a reading that
+// already carries its days cannot be minutes and seconds.
 func splitLeadingDays(t string) (days float64, rest string, ok bool) {
 	i := strings.Index(t, ",")
 	if i < 0 {

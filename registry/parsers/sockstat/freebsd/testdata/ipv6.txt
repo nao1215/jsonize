@@ -1,0 +1,6 @@
+USER COMMAND     PID FD PROTO LOCAL ADDRESS         FOREIGN ADDRESS      
+root sshd       1331  6 tcp6  *:22                  *:*                  
+ntpd ntpd       1255 20 udp6  *:123                 *:*                  
+ntpd ntpd       1255 23 udp6  [::1]:123             *:*                  
+ntpd ntpd       1255 24 udp6  [fe80::1%lo0]:123     *:*                  
+root syslogd    1129  6 udp6  *:514                 *:*                  

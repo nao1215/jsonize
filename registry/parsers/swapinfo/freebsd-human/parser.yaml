@@ -1,0 +1,35 @@
+# swapinfo -h prints each size rounded to at most four characters with its unit
+# ("1.0G", "64M", "0B") under a Size heading. The rounding loses the
+# exact figure, so the sizes stay the strings swapinfo printed; the
+# percentage is computed from the exact counts and is a number.
+#
+# With more than one device the table closes with a Total row, kept as a
+# row (see swapinfo/freebsd).
+format: 1
+command: swapinfo
+variant: freebsd-human
+description: FreeBSD swapinfo -h swap devices with rounded sizes
+metadata:
+  tags: [freebsd, bsd, memory]
+  compatible: [FreeBSD swapinfo]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?swapinfo(8)
+    # print_swap_line, which rounds with humanize_number.
+    - https://github.com/freebsd/freebsd-src/blob/main/usr.sbin/pstat/pstat.c
+detect:
+  os: [freebsd]
+  signature:
+    all:
+      - '\ADevice[ \t]+Size[ \t]+Used[ \t]+Avail[ \t]+Capacity[ \t]*$'
+input:
+  ignore:
+    - '\ADevice[ \t]+Size[ \t]+Used[ \t]+Avail[ \t]+Capacity[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<device>\S+)[ \t]+(?P<size>[\d.]+[BKMGTPE])[ \t]+(?P<used>[\d.]+[BKMGTPE])[ \t]+(?P<available>[\d.]+[BKMGTPE])[ \t]+(?P<capacity_percent>\d+)%[ \t]*$'
+fields:
+  device: {required: true}
+  size: {required: true}
+  used: {required: true}
+  available: {required: true}
+  capacity_percent: {type: int, required: true}

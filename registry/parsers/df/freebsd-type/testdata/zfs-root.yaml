@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: df -T on a ZFS root, with devfs and an msdosfs EFI partition beside the datasets.
+os: freebsd
+args: ["-T"]

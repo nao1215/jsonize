@@ -1,0 +1,7 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; an nc listener was started for the capture
+description: >-
+  sockstat -w widens the address columns so an IPv6 address with its
+  zone, the devd socket path and the peer list of the syslog socket are
+  printed whole; the command stays cut at ten characters.
+os: freebsd
+args: ["-w"]

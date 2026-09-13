@@ -1,0 +1,4 @@
+Device          1K-blocks     Used    Avail Capacity
+/dev/gpt/swapfs   1048576        0  1048576     0%
+/dev/md99           65536        0    65536     0%
+Total             1114112        0  1114112     0%

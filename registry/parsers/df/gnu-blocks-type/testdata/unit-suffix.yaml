@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C; the user name in one mount point replaced
+description: >-
+  df -BM -T. A unit given without a number makes df print that unit after
+  every figure as well as in the heading, and -T does not change that. The
+  letter is left off, as it is without -T.
+os: linux
+args: ["-BM", "-T"]

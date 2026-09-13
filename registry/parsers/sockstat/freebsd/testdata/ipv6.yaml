@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: sockstat -6. An IPv6 address is written in brackets before its port, with a zone after a percent sign.
+os: freebsd
+args: ["-6"]

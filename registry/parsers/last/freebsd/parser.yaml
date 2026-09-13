@@ -1,0 +1,59 @@
+# FreeBSD last reads utx.log and prints a row per login session, newest
+# first: the user, the terminal, the host (blank for a local login), the
+# login time, and then either "still logged in" or the logout time and how
+# long the session lasted. A logout written as "crash" or "shutdown" is
+# the reason the session ended rather than a time. Boot, shutdown and
+# clock changes are rows of their own, named "boot time", "shutdown time",
+# "old time" and "new time" in place of the user, with only a time after.
+#
+# The listing ends with a blank line and "utx.log begins" and the time of
+# the first record, with its zone; util-linux ends with "wtmp begins" and
+# no zone. That closing line is what the signature asks for, since the
+# rows alone are the shape of other login listings.
+#
+# The login time has no year and stays a string until --assume-year says
+# which year to read it in. -y prints the year and -s the duration in
+# seconds, both in places this does not read, so both are refused.
+format: 1
+command: last
+variant: freebsd
+description: FreeBSD last login sessions and system events
+metadata:
+  tags: [freebsd, bsd, login]
+  compatible: [FreeBSD last]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?last(1)
+    # printentry, which prints each row.
+    - https://github.com/freebsd/freebsd-src/blob/main/usr.bin/last/last.c
+detect:
+  os: [freebsd]
+  args:
+    none: ["-y", "-s"]
+  signature:
+    # The closing line must follow a blank line and end the input, so a
+    # log line that happens to say "begins" and a date does not match.
+    all:
+      - '(?:\A|\n)[ \t]*\n\S+ begins [A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2} [A-Z][A-Za-z0-9+-]* \d{4}[ \t]*\n?\z'
+input:
+  ignore:
+    - '^\S+ begins [A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2} [A-Z][A-Za-z0-9+-]* \d{4}[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    # A session that is still open. The host is optional and taken up to
+    # the login time, so a local login leaves it null.
+    - '^(?P<user>\S+)[ \t]+(?P<tty>\S+)[ \t]+(?:(?P<host>\S.*?)[ \t]+)?(?P<login_time>[A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2})[ \t]+(?P<still_logged_in>still logged in)(?P<logout>)??(?P<duration>)??[ \t]*$'
+    # A session that ended: the logout time or reason, then the length as
+    # hh:mm, or hh:mm:ss with -w, with a day count and "+" in front past a
+    # day.
+    - '^(?P<user>\S+)[ \t]+(?P<tty>\S+)[ \t]+(?:(?P<host>\S.*?)[ \t]+)?(?P<login_time>[A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2})(?P<still_logged_in>)[ \t]+- (?P<logout>\d{2}:\d{2}|crash|shutdown)[ \t]+\((?P<duration>(?:\d+\+)?\d{2}:\d{2}(?::\d{2})?)\)[ \t]*$'
+    # A system event, which is not a session: it has no terminal, host or
+    # logout, and still_logged_in is null rather than false.
+    - '^(?P<user>boot time|shutdown time|old time|new time)(?P<tty>)??(?P<host>)??[ \t]+(?P<login_time>[A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2})(?P<still_logged_in>)??(?P<logout>)??(?P<duration>)??[ \t]*$'
+# Every pattern names the same groups so every row has the same keys. A
+# group written "(?P<name>)??" prefers to take no part in the match, and a
+# group that takes no part is null.
+fields:
+  user: {required: true}
+  login_time: {type: time, layout: "Mon Jan _2 15:04", year: assumed, required: true}
+  still_logged_in: {type: bool, true_values: ["still logged in"], false_values: [""]}

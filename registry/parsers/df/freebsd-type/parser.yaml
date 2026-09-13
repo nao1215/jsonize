@@ -1,0 +1,32 @@
+# FreeBSD df -T adds the file system type as the second column of the
+# default 1K-block listing. A type is one word ("zfs", "msdosfs"), so the
+# type is the last word before the three counts and the percentage, and
+# the name is everything ahead of it.
+format: 1
+command: df
+variant: freebsd-type
+description: FreeBSD df -T, with the file system type column
+metadata:
+  tags: [freebsd, bsd, filesystem]
+  compatible: [FreeBSD df]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?df(1)
+detect:
+  os: [freebsd]
+  signature:
+    all:
+      - '\AFilesystem\s+Type\s+1K-blocks\s+Used\s+Avail\s+Capacity\s+Mounted on\s*$'
+input:
+  ignore:
+    - '\AFilesystem\s+Type\s+1K-blocks'
+parse:
+  type: regex
+  pattern: '^(?P<filesystem>.+?)\s+(?P<type>\S+)\s+(?P<1k_blocks>\d+)\s+(?P<used>\d+)\s+(?P<available>\d+)\s+(?P<capacity_percent>\d+%|-)\s+(?P<mounted_on>/.*?)\s*$'
+fields:
+  filesystem: {required: true}
+  type: {required: true}
+  1k_blocks: {type: int, required: true}
+  used: {type: int, required: true}
+  available: {type: int, required: true}
+  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  mounted_on: {required: true}

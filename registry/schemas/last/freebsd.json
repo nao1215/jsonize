@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/last/freebsd.json",
+  "title": "last/freebsd",
+  "description": "FreeBSD last login sessions and system events",
+  "x-jsonize": {
+    "definition": "last/freebsd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "user": {
+        "type": "string"
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "host": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "login_time": {
+        "type": "string"
+      },
+      "still_logged_in": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "logout": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "duration": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "user",
+      "tty",
+      "host",
+      "login_time",
+      "still_logged_in",
+      "logout",
+      "duration"
+    ]
+  }
+}

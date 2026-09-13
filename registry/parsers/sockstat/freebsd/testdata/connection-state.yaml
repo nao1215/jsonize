@@ -1,0 +1,7 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; two nc listeners were started for the capture
+description: >-
+  sockstat -s adds a CONN STATE column after the foreign address. Read
+  with this heading the state would land inside the foreign address, so
+  the text is refused.
+os: freebsd
+expect_error: 'does not describe this input'

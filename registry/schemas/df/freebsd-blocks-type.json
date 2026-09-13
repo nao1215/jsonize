@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/freebsd-blocks-type.json",
+  "title": "df/freebsd-blocks-type",
+  "description": "FreeBSD df -T -m/-g/-k/-P (counts in the block the heading names, with the type)",
+  "x-jsonize": {
+    "definition": "df/freebsd-blocks-type",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "header": {
+      "type": "object",
+      "properties": {
+        "block_size": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "block_size"
+      ]
+    },
+    "filesystems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "filesystem": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "blocks": {
+            "type": "integer"
+          },
+          "used": {
+            "type": "integer"
+          },
+          "available": {
+            "type": "integer"
+          },
+          "capacity_percent": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "mounted_on": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "filesystem",
+          "type",
+          "blocks",
+          "used",
+          "available",
+          "capacity_percent",
+          "mounted_on"
+        ]
+      }
+    }
+  },
+  "required": [
+    "header",
+    "filesystems"
+  ]
+}

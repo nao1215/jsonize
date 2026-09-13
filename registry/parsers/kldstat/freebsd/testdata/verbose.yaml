@@ -1,0 +1,7 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: >-
+  kldstat -v writes each file's path after its name and the modules it
+  contains below it. That is a tree this definition does not read, and it
+  refuses the text rather than reading the rows without their modules.
+os: freebsd
+expect_error: 'does not describe this input'

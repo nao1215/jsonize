@@ -1,0 +1,16 @@
+{
+  "header": {
+    "block_size": "512"
+  },
+  "filesystems": [
+    {
+      "filesystem": "/dev/gpt/efiboot0",
+      "type": "msdosfs",
+      "blocks": 65528,
+      "used": 1323,
+      "available": 64205,
+      "capacity_percent": 2,
+      "mounted_on": "/boot/efi"
+    }
+  ]
+}

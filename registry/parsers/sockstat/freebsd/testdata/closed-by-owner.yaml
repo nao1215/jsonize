@@ -1,0 +1,10 @@
+source: >-
+  captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+  right after pkg install; the public addresses of the package mirrors
+  replaced with documentation addresses, the columns kept
+description: >-
+  sockstat -4c after pkg exited. Its connections are in TIME_WAIT and no
+  process holds them, so sockstat prints "??" for the user, command,
+  process and descriptor, which are null.
+os: freebsd
+args: ["-4c"]

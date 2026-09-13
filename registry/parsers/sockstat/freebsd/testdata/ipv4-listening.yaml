@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; two nc listeners were started for the capture
+description: sockstat -4l, the listening IPv4 sockets, with a user column only four characters wide.
+os: freebsd
+args: ["-4l"]

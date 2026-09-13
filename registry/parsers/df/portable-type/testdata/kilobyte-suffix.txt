@@ -1,0 +1,12 @@
+Filesystem     Type     1024-blocks        Used  Available Capacity Mounted on
+tmpfs          tmpfs      12882672K       4744K  12877928K       1% /run
+/dev/nvme1n1p2 ext4     1920641288K 1664913976K 158090348K      92% /
+tmpfs          tmpfs      32206672K     114384K  32092288K       1% /dev/shm
+efivarfs       efivarfs        128K         48K        76K      39% /sys/firmware/efi/efivars
+none           tmpfs          1024K          0K      1024K       0% /run/credentials/systemd-journald.service
+none           tmpfs          1024K          0K      1024K       0% /run/credentials/systemd-resolved.service
+/dev/nvme0n1p1 ext4     1967874000K 1029562020K 838275732K      56% /media/user/2nd
+tmpfs          tmpfs      32206672K    1877596K  30329076K       6% /tmp
+/dev/nvme1n1p1 vfat        1098632K       6456K   1092176K       1% /boot/efi
+none           tmpfs          1024K          0K      1024K       0% /run/credentials/getty@tty1.service
+tmpfs          tmpfs       6441332K        288K   6441044K       1% /run/user/1000

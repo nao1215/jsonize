@@ -1,0 +1,23 @@
+[
+  {
+    "device": "/dev/gpt/swapfs",
+    "size": "1.0G",
+    "used": "0B",
+    "available": "1.0G",
+    "capacity_percent": 0
+  },
+  {
+    "device": "/dev/md99",
+    "size": "64M",
+    "used": "0B",
+    "available": "64M",
+    "capacity_percent": 0
+  },
+  {
+    "device": "Total",
+    "size": "1.1G",
+    "used": "0B",
+    "available": "1.1G",
+    "capacity_percent": 0
+  }
+]

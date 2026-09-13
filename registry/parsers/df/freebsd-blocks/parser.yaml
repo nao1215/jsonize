@@ -1,0 +1,47 @@
+# FreeBSD df counts in the block its heading names. -m and -g ask for 1M
+# and 1G blocks, -k for 1024-byte blocks (headed "1024-blocks"), -P for
+# 512-byte blocks, and BLOCKSIZE in the environment for any other. The
+# figures are whole counts of that block, so the unit is read from the
+# heading, as df/gnu-blocks does. The default heading, "1K-blocks", is
+# left to df/freebsd, and the heading rule below spells out every block
+# but that one.
+#
+# Rows are read as df/freebsd reads them: by what each column holds, with
+# the mount point starting at "/".
+format: 1
+command: df
+variant: freebsd-blocks
+description: FreeBSD df -m/-g/-k/-P (counts in the block the heading names)
+metadata:
+  tags: [freebsd, bsd, filesystem]
+  compatible: [FreeBSD df]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?df(1)
+detect:
+  os: [freebsd]
+  signature:
+    all:
+      - '\AFilesystem\s+(?:[0-9]+|[02-9][KMG]|[0-9]{2,}[KMG]|1[MG])-blocks\s+Used\s+Avail\s+Capacity\s+Mounted on\s*$'
+parse:
+  type: composite
+  parts:
+    - name: header
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AFilesystem\s+(?P<block_size>(?:[0-9]+|[02-9][KMG]|[0-9]{2,}[KMG]|1[MG]))-blocks\s+Used\s+Avail\s+Capacity\s+Mounted on\s*\z'
+      fields:
+        block_size: {required: true}
+    - name: filesystems
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^(?P<filesystem>.+?)\s+(?P<blocks>\d+)\s+(?P<used>\d+)\s+(?P<available>\d+)\s+(?P<capacity_percent>\d+%|-)\s+(?P<mounted_on>/.*?)\s*$'
+      fields:
+        filesystem: {required: true}
+        blocks: {type: int, required: true}
+        used: {type: int, required: true}
+        available: {type: int, required: true}
+        capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+        mounted_on: {required: true}

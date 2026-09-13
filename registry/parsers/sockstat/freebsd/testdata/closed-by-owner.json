@@ -1,0 +1,119 @@
+[
+  {
+    "user": "root",
+    "command": "sshd-sessi",
+    "pid": 1421,
+    "fd": 7,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:22",
+    "foreign_address": "192.168.122.2:39832"
+  },
+  {
+    "user": "root",
+    "command": "sshd-sessi",
+    "pid": 1419,
+    "fd": 7,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:22",
+    "foreign_address": "192.168.122.2:39832"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:13448",
+    "foreign_address": "203.0.113.167:443"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:61378",
+    "foreign_address": "203.0.113.169:443"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:58237",
+    "foreign_address": "203.0.113.167:443"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:12789",
+    "foreign_address": "203.0.113.167:443"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:39475",
+    "foreign_address": "203.0.113.167:443"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:49552",
+    "foreign_address": "198.51.100.30:443"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:17089",
+    "foreign_address": "203.0.113.167:443"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:18949",
+    "foreign_address": "198.51.100.129:443"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:54455",
+    "foreign_address": "203.0.113.167:443"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:24664",
+    "foreign_address": "203.0.113.167:443"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:34000",
+    "foreign_address": "203.0.113.167:443"
+  }
+]

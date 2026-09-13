@@ -1,0 +1,65 @@
+[
+  {
+    "user": "root",
+    "command": "nc",
+    "pid": 1429,
+    "fd": 3,
+    "proto": "tcp4",
+    "local_address": "127.0.0.1:7777",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "root",
+    "command": "nc",
+    "pid": 1428,
+    "fd": 3,
+    "proto": "udp4",
+    "local_address": "127.0.0.1:7778",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "root",
+    "command": "sshd",
+    "pid": 1331,
+    "fd": 7,
+    "proto": "tcp4",
+    "local_address": "*:22",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 21,
+    "proto": "udp4",
+    "local_address": "*:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 22,
+    "proto": "udp4",
+    "local_address": "192.168.122.10:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 25,
+    "proto": "udp4",
+    "local_address": "127.0.0.1:123",
+    "foreign_address": "*:*"
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1129,
+    "fd": 7,
+    "proto": "udp4",
+    "local_address": "*:514",
+    "foreign_address": "*:*"
+  }
+]

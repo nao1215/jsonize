@@ -1,0 +1,6 @@
+source: captured on Ubuntu 26.04 (GNU coreutils 9.7) with LC_ALL=C; the user name in one mount point replaced
+description: >-
+  df -T --block-size=KiB. The heading names the unit as 1KiB and every
+  figure ends in KiB; the figures are whole counts of 1024 bytes.
+os: linux
+args: ["-T", "--block-size=KiB"]

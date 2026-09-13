@@ -1,0 +1,4 @@
+Name    Mtu Network        Address        Ipkts Ierrs Idrop    Opkts Oerrs  Coll
+lo1   16384 <Link#4>       lo1                0     0     0        0     0     0
+lo1       - 10.99.0.0/24   10.99.0.1          0     -     -        0     -     -
+lo1       - fe80::%lo1/64  fe80::1%lo1        0     -     -        0     -     -

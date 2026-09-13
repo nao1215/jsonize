@@ -1,0 +1,15 @@
+{
+  "header": {
+    "block_size": "1024"
+  },
+  "filesystems": [
+    {
+      "filesystem": "zroot/ROOT/default",
+      "blocks": 207710788,
+      "used": 3314020,
+      "available": 204396768,
+      "capacity_percent": 2,
+      "mounted_on": "/"
+    }
+  ]
+}

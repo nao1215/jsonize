@@ -1,0 +1,41 @@
+[
+  {
+    "name": "lo1",
+    "up": true,
+    "mtu": 16384,
+    "network": "<Link#4>",
+    "address": "lo1",
+    "ipkts": 0,
+    "ierrs": 0,
+    "idrop": 0,
+    "opkts": 0,
+    "oerrs": 0,
+    "coll": 0
+  },
+  {
+    "name": "lo1",
+    "up": true,
+    "mtu": null,
+    "network": "10.99.0.0/24",
+    "address": "10.99.0.1",
+    "ipkts": 0,
+    "ierrs": null,
+    "idrop": null,
+    "opkts": 0,
+    "oerrs": null,
+    "coll": null
+  },
+  {
+    "name": "lo1",
+    "up": true,
+    "mtu": null,
+    "network": "fe80::%lo1/64",
+    "address": "fe80::1%lo1",
+    "ipkts": 0,
+    "ierrs": null,
+    "idrop": null,
+    "opkts": 0,
+    "oerrs": null,
+    "coll": null
+  }
+]

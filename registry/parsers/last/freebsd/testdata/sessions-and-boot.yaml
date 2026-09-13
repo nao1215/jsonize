@@ -1,0 +1,6 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: >-
+  last with a console session still open, one that ended after six
+  minutes, and the boot. A local login has no host, which is null.
+os: freebsd
+args: []

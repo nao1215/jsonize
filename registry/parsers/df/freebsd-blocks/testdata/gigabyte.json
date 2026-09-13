@@ -1,0 +1,111 @@
+{
+  "header": {
+    "block_size": "1G"
+  },
+  "filesystems": [
+    {
+      "filesystem": "zroot/ROOT/default",
+      "blocks": 198,
+      "used": 3,
+      "available": 194,
+      "capacity_percent": 2,
+      "mounted_on": "/"
+    },
+    {
+      "filesystem": "devfs",
+      "blocks": 0,
+      "used": 0,
+      "available": 0,
+      "capacity_percent": 0,
+      "mounted_on": "/dev"
+    },
+    {
+      "filesystem": "/dev/gpt/efiboot0",
+      "blocks": 0,
+      "used": 0,
+      "available": 0,
+      "capacity_percent": 2,
+      "mounted_on": "/boot/efi"
+    },
+    {
+      "filesystem": "zroot/tmp",
+      "blocks": 194,
+      "used": 0,
+      "available": 194,
+      "capacity_percent": 0,
+      "mounted_on": "/tmp"
+    },
+    {
+      "filesystem": "zroot/home",
+      "blocks": 194,
+      "used": 0,
+      "available": 194,
+      "capacity_percent": 0,
+      "mounted_on": "/home"
+    },
+    {
+      "filesystem": "zroot/var/crash",
+      "blocks": 194,
+      "used": 0,
+      "available": 194,
+      "capacity_percent": 0,
+      "mounted_on": "/var/crash"
+    },
+    {
+      "filesystem": "zroot/usr/ports",
+      "blocks": 194,
+      "used": 0,
+      "available": 194,
+      "capacity_percent": 0,
+      "mounted_on": "/usr/ports"
+    },
+    {
+      "filesystem": "zroot/var/log",
+      "blocks": 194,
+      "used": 0,
+      "available": 194,
+      "capacity_percent": 0,
+      "mounted_on": "/var/log"
+    },
+    {
+      "filesystem": "zroot/usr/obj",
+      "blocks": 194,
+      "used": 0,
+      "available": 194,
+      "capacity_percent": 0,
+      "mounted_on": "/usr/obj"
+    },
+    {
+      "filesystem": "zroot/var/tmp",
+      "blocks": 194,
+      "used": 0,
+      "available": 194,
+      "capacity_percent": 0,
+      "mounted_on": "/var/tmp"
+    },
+    {
+      "filesystem": "zroot/var/mail",
+      "blocks": 194,
+      "used": 0,
+      "available": 194,
+      "capacity_percent": 0,
+      "mounted_on": "/var/mail"
+    },
+    {
+      "filesystem": "zroot/var/audit",
+      "blocks": 194,
+      "used": 0,
+      "available": 194,
+      "capacity_percent": 0,
+      "mounted_on": "/var/audit"
+    },
+    {
+      "filesystem": "zroot/usr/src",
+      "blocks": 194,
+      "used": 0,
+      "available": 194,
+      "capacity_percent": 0,
+      "mounted_on": "/usr/src"
+    }
+  ]
+}

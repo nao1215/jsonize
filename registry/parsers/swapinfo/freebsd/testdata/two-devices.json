@@ -1,0 +1,28 @@
+{
+  "header": {
+    "block_size": "1K"
+  },
+  "devices": [
+    {
+      "device": "/dev/gpt/swapfs",
+      "blocks": 1048576,
+      "used": 0,
+      "available": 1048576,
+      "capacity_percent": 0
+    },
+    {
+      "device": "/dev/md99",
+      "blocks": 65536,
+      "used": 0,
+      "available": 65536,
+      "capacity_percent": 0
+    },
+    {
+      "device": "Total",
+      "blocks": 1114112,
+      "used": 0,
+      "available": 1114112,
+      "capacity_percent": 0
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sockstat/freebsd.json",
+  "title": "sockstat/freebsd",
+  "description": "FreeBSD sockstat open sockets",
+  "x-jsonize": {
+    "definition": "sockstat/freebsd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "user": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "command": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "pid": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "fd": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "proto": {
+        "type": "string"
+      },
+      "local_address": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "foreign_address": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "user",
+      "command",
+      "pid",
+      "fd",
+      "proto",
+      "local_address",
+      "foreign_address"
+    ]
+  }
+}

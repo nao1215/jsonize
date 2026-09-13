@@ -3,7 +3,7 @@ version: "1"
 suite:
   name: real commands on FreeBSD
 
-# Eight definitions say they read what a command prints on FreeBSD. This
+# Several definitions say they read what a command prints on FreeBSD. This
 # suite is what holds that claim to the machine: every command here is
 # part of the base system, and what is pinned is which definition the
 # real output lands on, never a value of the machine's.
@@ -72,30 +72,130 @@ scenarios:
               - { path: "$[0].words", equals: 3 }
               - { path: "$[0].filename", equals: words.txt }
 
-  # FreeBSD, OpenBSD and NetBSD print this summary from w(1), which writes
-  # the time as %l:%M%p and separates the load averages with commas
-  # ("10:07AM  up 7 secs, 1 user, load averages: 0.23, 0.05, 0.02").
-  # macOS writes a 24-hour time and spaces. uptime/bsd and w/bsd read the
-  # macOS one and say so, so here there is no variant to reach.
-  - name: the summary line macOS shares with no other BSD is refused
+  # FreeBSD prints this summary from w(1), which writes the time as
+  # %l:%M%p and separates the load averages with commas ("10:07AM  up 7
+  # secs, 1 user, load averages: 0.23, 0.05, 0.02"). macOS writes a 24-hour
+  # time and spaces, which uptime/bsd and w/bsd read; the FreeBSD line
+  # lands on the freebsd variants and not on those.
+  - name: the summary line of uptime and w lands on the freebsd variants
     only: {os: freebsd}
     steps:
       - run:
-          command: jz run uptime
+          command: jz run --explain uptime
       - assert:
-          exit_code: 4
-          stdout:
-            empty: true
+          exit_code: 0
           stderr:
-            contains: "no uptime variant matches this input"
+            contains: "uptime/freebsd from embedded"
+          stdout:
+            json:
+              - { path: "$.time", matches: "^[0-9]{1,2}:[0-9]{2}[AP]M$" }
+              - { path: "$.uptime", gte: 0 }
+              - { path: "$.load_15m", gte: 0 }
       - run:
-          command: jz run w
+          command: jz run --explain w
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "w/freebsd from embedded"
+          stdout:
+            json:
+              - { path: "$.uptime.users", gte: 0 }
+
+  # Commands FreeBSD has and Linux does not, and the FreeBSD forms of
+  # ones both have. The machine the suite runs on has a swap partition
+  # and an sshd listening, and it booted, so each listing has rows.
+  - name: swapinfo, kldstat, sockstat, netstat -i and last land on the freebsd variants
+    only: {os: freebsd}
+    steps:
+      - run:
+          command: jz run --explain swapinfo
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "swapinfo/freebsd from embedded"
+          stdout:
+            json:
+              - { path: "$.header.block_size", equals: 1K }
+              - { path: "$.devices[0].blocks", gt: 0 }
+      - run:
+          command: jz run --explain swapinfo -h
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "swapinfo/freebsd-human from embedded"
+      - run:
+          command: jz run --explain kldstat
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "kldstat/freebsd from embedded"
+          stdout:
+            json:
+              - { path: "$[0].name", equals: kernel }
+              - { path: "$[0].id", equals: 1 }
+      # kldstat -v lists the modules inside each file, which is not read.
+      - run:
+          command: jz run kldstat -v
       - assert:
           exit_code: 4
           stdout:
             empty: true
+      # The suite starts right after pkg install, whose connections are
+      # left in TIME_WAIT with no process: rows of "??" owners.
+      - run:
+          command: jz run --explain sockstat -4
+      - assert:
+          exit_code: 0
           stderr:
-            contains: "no w variant matches this input"
+            contains: "sockstat/freebsd from embedded"
+      - run:
+          command: jz run --explain netstat -in
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "netstat/freebsd-interface from embedded"
+          stdout:
+            json:
+              - { path: "$[0].network", matches: "^<Link#[0-9]+>$" }
+              - { path: "$[0].mtu", gt: 0 }
+      - run:
+          command: jz run --explain last
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "last/freebsd from embedded"
+
+  - name: df with a block size or a type column lands on the freebsd variants
+    only: {os: freebsd}
+    steps:
+      - run:
+          command: jz run --explain df -m
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "df/freebsd-blocks from embedded"
+          stdout:
+            json:
+              - { path: "$.header.block_size", equals: 1M }
+              - { path: "$.filesystems[0].mounted_on", equals: / }
+      - run:
+          command: jz run --explain df -T
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "df/freebsd-type from embedded"
+          stdout:
+            json:
+              - { path: "$[0].type", matches: "^[a-z0-9]+$" }
+      - run:
+          command: jz run --explain df -gT
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "df/freebsd-blocks-type from embedded"
+          stdout:
+            json:
+              - { path: "$.header.block_size", equals: 1G }
 
   # FreeBSD ps has no SysV full format, so the columns it prints are its
   # own: PID TT STAT TIME COMMAND for a listing and a longer set for -l,
