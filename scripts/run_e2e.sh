@@ -83,6 +83,9 @@ Linux)
 Darwin | FreeBSD)
   need zsh "completion"
   ;;
+MINGW* | MSYS* | CYGWIN*)
+  for c in ipconfig systeminfo hostname powershell; do need "$c" "exec_windows"; done
+  ;;
 esac
 if [ "${#missing[@]}" -gt 0 ]; then
   echo "this machine lacks what some required scenarios run; those scenarios will fail:" >&2
