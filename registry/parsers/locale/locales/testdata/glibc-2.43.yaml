@@ -1,0 +1,4 @@
+source: "`locale -a` on Ubuntu 26.04 (glibc 2.43) with LC_ALL=C"
+description: the C and POSIX locales glibc always has, its C.utf8 and one generated locale
+os: linux
+args: ["-a"]

@@ -1,0 +1,64 @@
+[
+  {
+    "chip": {
+      "name": "k10temp",
+      "bus": "pci",
+      "address": "00c3"
+    },
+    "readings": [
+      {
+        "name": "Tctl",
+        "value": 40,
+        "unit": "C",
+        "limits": null,
+        "alarm": false
+      }
+    ]
+  },
+  {
+    "chip": {
+      "name": "amdgpu",
+      "bus": "pci",
+      "address": "c600"
+    },
+    "readings": [
+      {
+        "name": "vddgfx",
+        "value": 0,
+        "unit": "V",
+        "limits": null,
+        "alarm": false
+      },
+      {
+        "name": "vddnb",
+        "value": 0,
+        "unit": "V",
+        "limits": null,
+        "alarm": false
+      },
+      {
+        "name": "edge",
+        "value": 38,
+        "unit": "C",
+        "limits": null,
+        "alarm": false
+      },
+      {
+        "name": "PPT",
+        "value": 11.07,
+        "unit": "W",
+        "limits": [
+          "avg =  11.07 W"
+        ],
+        "alarm": false
+      },
+      {
+        "name": "sclk",
+        "value": 684,
+        "unit": "MHz",
+        "limits": null,
+        "alarm": false
+      }
+    ]
+  }
+]

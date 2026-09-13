@@ -1,0 +1,10 @@
+k10temp-pci-00c3
+Tctl:         +40.0 C  
+
+amdgpu-pci-c600
+vddgfx:        0.00 V  
+vddnb:         0.00 V  
+edge:         +38.0 C  
+PPT:          11.07 W  (avg =  11.07 W)
+sclk:         684 MHz 
+

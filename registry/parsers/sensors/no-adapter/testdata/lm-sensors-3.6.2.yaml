@@ -1,0 +1,4 @@
+description: every chip on a machine with an AMD GPU, two NVMe drives, an Ethernet adapter and a Wi-Fi card; the NVMe composite limits continue on a second line
+source: "`sensors -A` on Ubuntu 26.04 (lm-sensors 3.6.2) with LC_ALL=C"
+os: linux
+args: ["-A"]

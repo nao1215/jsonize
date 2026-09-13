@@ -1,0 +1,4 @@
+source: "the first 20 lines of `locale -m` on Ubuntu 26.04 (glibc 2.43) with LC_ALL=C"
+description: locale -m lists charmap names one per line, the same shape, with no POSIX line
+os: linux
+expect_error: does not describe this input

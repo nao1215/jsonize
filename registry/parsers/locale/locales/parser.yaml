@@ -1,0 +1,35 @@
+# `locale -a` prints the name of every locale the system can load, one per
+# line. A column of single words is the output of many commands, so the
+# text is not evidence on its own and the definition is used only when the
+# parser is named.
+#
+# glibc sorts the list byte by byte and always has the C and POSIX locales,
+# so POSIX is among the first lines, after C and C.utf8 and before any
+# locale named in lower case. That line is what tells the list from
+# `locale -m`, which lists charmap names in the same shape. macOS prints
+# its list in another order, with C and POSIX at the end, and is not read
+# here.
+format: 1
+command: locale
+variant: locales
+description: locale -a, one locale name per line
+metadata:
+  tags: [linux, locale]
+  compatible: [glibc]
+  references:
+    - https://man7.org/linux/man-pages/man1/locale.1.html
+detect:
+  os: [linux]
+  auto_detect: false
+  args:
+    any: ["-a", "--all-locales"]
+  signature:
+    all:
+      # Nothing but names, and POSIX among them.
+      - '\A(?:[A-Za-z][A-Za-z0-9_.@+-]*\n)*[A-Za-z][A-Za-z0-9_.@+-]*\n?\z'
+      - '^POSIX$'
+parse:
+  type: regex
+  pattern: '^(?P<locale>[A-Za-z][A-Za-z0-9_.@+-]*)$'
+fields:
+  locale: {required: true}

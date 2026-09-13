@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/iostat/human-sizes.json",
+  "title": "iostat/human-sizes",
+  "description": "iostat --human, one sample of CPU averages and rounded per-device figures in the default layout",
+  "x-jsonize": {
+    "definition": "iostat/human-sizes",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "cpu": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "user_percent": {
+              "type": "number"
+            },
+            "nice_percent": {
+              "type": "number"
+            },
+            "system_percent": {
+              "type": "number"
+            },
+            "iowait_percent": {
+              "type": "number"
+            },
+            "steal_percent": {
+              "type": "number"
+            },
+            "idle_percent": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "user_percent",
+            "nice_percent",
+            "system_percent",
+            "iowait_percent",
+            "steal_percent",
+            "idle_percent"
+          ]
+        }
+      },
+      "devices": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "device": {
+              "type": "string"
+            },
+            "tps": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "required": [
+      "cpu",
+      "devices"
+    ]
+  }
+}

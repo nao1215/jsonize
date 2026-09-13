@@ -28,6 +28,9 @@ detect:
       # -t prints the time above each sample, which opens the sample
       # there; iostat/linux-timestamped reads that report.
       - '^(?:\d{2}/\d{2}/\d{2,4}[ \t]+\d{2}:\d{2}:\d{2}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{4})[ \t]*$'
+      # --human prints the percentages with a percent sign and rounds the device
+      # figures; iostat/human-sizes reads that report.
+      - '^[ \t]+[\d.]+%[ \t]+[\d.]+%[ \t]'
 input:
   select:
     # The banner is stated whole, so what is dropped is exactly the line

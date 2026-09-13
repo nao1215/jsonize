@@ -1,0 +1,4 @@
+description: under -m the column names say MB while --human still rounds each figure to the unit it names, so the names do not give the unit
+source: "`iostat -t --human -m nvme1n1 1 2` on Ubuntu 26.04 (sysstat 12.7) with LC_ALL=C; the host name in the banner was replaced with a name of the same width"
+os: linux
+args: ["-t", "--human", "-m", "nvme1n1", "1", "2"]

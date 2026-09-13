@@ -245,3 +245,24 @@ scenarios:
           exit_code: 0
           stdout:
             matches: '\A\{"part":"destination",[^\n]*\n(?:\{"part":"replies",[^\n]*\n){3}\{"part":"statistics","value":\{"packets_transmitted":3,"packets_received":3,[^\n]*\n\z'
+
+  # sensors -A leaves out the adapter line under each chip name, which is
+  # what tells its blocks apart from sensors/linux.
+  - name: jz run sensors -A lands on the definition without the adapter line
+    only: {os: linux, command: "LC_ALL=C sensors -A | grep -q ':'"}
+    steps:
+      - run:
+          command: jz run --explain sensors -A
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "sensors/no-adapter from embedded"
+          stdout:
+            json:
+              - { path: "$[0].chip.name", matches: "^\\S+$" }
+      - run:
+          command: jz run --explain sensors
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "sensors/linux from embedded"

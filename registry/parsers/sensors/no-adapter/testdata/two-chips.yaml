@@ -1,0 +1,4 @@
+description: two chips named on the command line with the long spelling of the option
+source: "`sensors --no-adapter k10temp-pci-00c3 amdgpu-pci-c600` on Ubuntu 26.04 (lm-sensors 3.6.2) with LC_ALL=C"
+os: linux
+args: ["--no-adapter", "k10temp-pci-00c3", "amdgpu-pci-c600"]

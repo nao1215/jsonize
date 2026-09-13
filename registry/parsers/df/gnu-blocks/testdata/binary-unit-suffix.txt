@@ -1,0 +1,4 @@
+Filesystem       1KiB-blocks          Used    Available Use% Mounted on
+/dev/nvme1n1p2 1920641288KiB 1663266168KiB 159738156KiB  92% /
+tmpfs            32206672KiB    1041732KiB  31164940KiB   4% /tmp
+/dev/nvme1n1p1    1098632KiB       6456KiB   1092176KiB   1% /boot/efi

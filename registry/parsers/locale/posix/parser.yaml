@@ -20,7 +20,7 @@ detect:
   args:
     # -a lists locale names and -m charmap names, one per line; -k prints
     # the keywords of one category. None of those are this format.
-    none: ["-a", "-m", "-k"]
+    none: ["-a", "--all-locales", "-m", "--charmaps", "-k", "--keyword-name"]
   signature:
     all:
       - '^LANG='
