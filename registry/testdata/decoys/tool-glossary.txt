@@ -1,0 +1,7 @@
+Tools used in this repository
+
+jq - a command-line JSON processor, used by the release script.
+Hugo - the static site generator behind the website.
+golangci-lint - runs the linters CI runs, locally.
+atago - the end-to-end test runner; see e2e/atago.
+vhs - records the terminal GIFs in the README.

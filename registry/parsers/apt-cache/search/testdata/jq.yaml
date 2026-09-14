@@ -1,0 +1,4 @@
+description: forty matches for a pattern, four of whose descriptions themselves contain " - " and are kept whole after the first one
+source: captured on Ubuntu 26.04 (apt 3.2.0) with LC_ALL=C, lines 1-40 of apt-cache search jq
+os: linux
+args: [search, jq]

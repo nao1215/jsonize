@@ -1,0 +1,10 @@
+[
+  {
+    "package": "libjq-dev",
+    "description": "lightweight and flexible command-line JSON processor - development files"
+  },
+  {
+    "package": "libjq1",
+    "description": "lightweight and flexible command-line JSON processor - shared library"
+  }
+]

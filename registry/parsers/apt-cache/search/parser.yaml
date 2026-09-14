@@ -1,0 +1,38 @@
+# `apt-cache search PATTERN` prints one line per package whose name or
+# description matches: the package name, a space, a dash, a space, and
+# the short description. A description may itself contain " - " ("JSON
+# processor - development files"), so the line is split at the first
+# one, which is where the name ends: a package name never holds a
+# space. A pattern that matches nothing prints nothing at all; `jz run`
+# reports that as an empty list, and the empty text on a pipe is
+# refused as holding nothing to read.
+#
+# The shape is a name and a phrase, which is also what a glossary or a
+# list of tools in a README looks like, so the definition is used only
+# when it is named: the description is free text and nothing in it says
+# apt wrote the line. --full prints the package records instead, in the
+# paragraphs `apt-cache show` prints, and is refused by the signature.
+format: 1
+command: apt-cache
+variant: search
+description: apt-cache search PATTERN, the packages whose name or description matches
+metadata:
+  tags: [linux, debian, package]
+  compatible: [APT]
+  references:
+    - https://manpages.debian.org/apt-cache
+detect:
+  os: [linux]
+  args:
+    any: ["search"]
+  auto_detect: false
+  signature:
+    all:
+      # Every line is a Debian package name, which is lower case and at
+      # least two characters, then " - " and the description.
+      - '\A(?:[a-z0-9][a-z0-9.+-]+ - [^\n]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<package>[a-z0-9][a-z0-9.+-]+) - (?P<description>.*)$'
+fields:
+  package: {required: true}
