@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/redis-cli/info.json",
+  "title": "redis-cli/info",
+  "description": "redis-cli info, the server statistics by section",
+  "x-jsonize": {
+    "definition": "redis-cli/info",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "section": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "fields": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "section",
+      "fields"
+    ]
+  }
+}

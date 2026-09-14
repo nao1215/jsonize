@@ -1,0 +1,6 @@
+source: captured from Redis 8.8.0 on Linux with LC_ALL=C from a server started for the capture on port 16379 (redis-cli -p 16379 info commandstats); CRLF line endings as redis-cli wrote them
+description: >-
+  The command statistics, whose keys for subcommands hold a bar
+  ("cmdstat_client|list") and whose values are comma-joined pairs.
+os: linux
+args: ["-p", "16379", "info", "commandstats"]
