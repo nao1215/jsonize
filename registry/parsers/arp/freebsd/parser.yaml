@@ -1,0 +1,37 @@
+# FreeBSD arp -a and arp -an: one line per cache entry, the host name
+# ("?" with -n or when the address does not resolve), the address, the
+# hardware address, the interface, how long the entry stays and the link
+# type in brackets. An entry the system added itself (the interface's
+# own address) is permanent and has no expiry, so expires_in is null on
+# it; otherwise it is the seconds left.
+#
+# Only resolved entries of those two kinds were captured. Any other
+# wording between the interface and the brackets is refused rather than
+# guessed at.
+format: 1
+command: arp
+variant: freebsd
+description: FreeBSD arp -a, the ARP cache with each entry's expiry
+metadata:
+  tags: [freebsd, bsd, network]
+  compatible: [FreeBSD arp]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?query=arp&sektion=8
+detect:
+  os: [freebsd]
+  args:
+    # Bundled short flags are expanded, so -an holds -a.
+    all: ["-a"]
+  signature:
+    all:
+      - '\A\S+ \([0-9a-fA-F.:%]+\) at [0-9a-fA-F]{2}(?::[0-9a-fA-F]{2}){5} on \S+ (?:permanent|expires in \d+ seconds) \[[a-z]+\]$'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+) \((?P<address>[^)]+)\) at (?P<hwaddress>[0-9a-fA-F]{2}(?::[0-9a-fA-F]{2}){5}) on (?P<interface>\S+) (?:permanent|expires in (?P<expires_in>\d+) seconds) \[(?P<type>[a-z]+)\][ \t]*$'
+fields:
+  name: {required: true}
+  address: {required: true}
+  hwaddress: {required: true}
+  interface: {required: true}
+  expires_in: {type: int}
+  type: {required: true}

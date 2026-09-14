@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C df -hT
+description: df -hT on a ZFS root, with devfs and an msdosfs EFI partition beside the datasets, and a 0B used size.
+os: freebsd
+args: ["-hT"]

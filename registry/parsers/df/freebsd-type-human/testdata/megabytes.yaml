@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C df -mT
+description: df -mT prints exact counts under a 1M-blocks header, which df/freebsd-blocks-type reads and this definition does not.
+os: freebsd
+expect_error: 'does not describe this input'

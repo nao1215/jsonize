@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/vmstat/freebsd-interrupts.json",
+  "title": "vmstat/freebsd-interrupts",
+  "description": "FreeBSD vmstat -i, interrupt counts and rates per source",
+  "x-jsonize": {
+    "definition": "vmstat/freebsd-interrupts",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "interrupt": {
+        "type": "string"
+      },
+      "total": {
+        "type": "integer"
+      },
+      "rate": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "interrupt",
+      "total",
+      "rate"
+    ]
+  }
+}

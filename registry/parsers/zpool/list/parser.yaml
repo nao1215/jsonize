@@ -1,0 +1,42 @@
+# zpool list: one row per pool with its size, allocated and free space,
+# checkpoint and expandable size, fragmentation, capacity, deduplication
+# ratio, health and alternate root. The sizes are rounded to fit the
+# column and stay the text that was printed; FRAG and CAP are whole
+# percentages. A dash is a value the pool does not have: no checkpoint,
+# nothing to expand into, no alternate root.
+#
+# -v adds a row for every vdev under its pool, -o chooses other columns,
+# -H drops the header and -p prints exact numbers, so jz run refuses
+# them.
+format: 1
+command: zpool
+variant: list
+description: zpool list, pools with their size, capacity and health
+metadata:
+  tags: [freebsd, linux, zfs, filesystem]
+  compatible: [OpenZFS]
+  references:
+    - https://openzfs.github.io/openzfs-docs/man/master/8/zpool-list.8.html
+detect:
+  args:
+    all: ["list"]
+    none: ["-v", "-o", "-H", "-p", "-P", "-L", "-g"]
+  signature:
+    all:
+      - '\ANAME[ \t]+SIZE[ \t]+ALLOC[ \t]+FREE[ \t]+CKPOINT[ \t]+EXPANDSZ[ \t]+FRAG[ \t]+CAP[ \t]+DEDUP[ \t]+HEALTH[ \t]+ALTROOT[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+fields:
+  name: {required: true}
+  size: {required: true}
+  alloc: {required: true}
+  free: {required: true}
+  ckpoint: {null_if: ["-"]}
+  expandsz: {null_if: ["-"]}
+  frag: {type: int, trim_suffix: "%", null_if: ["-"]}
+  cap: {type: int, trim_suffix: "%", required: true}
+  # A ratio printed to two decimals ("1.00x").
+  dedup: {required: true}
+  health: {required: true}
+  altroot: {null_if: ["-"]}

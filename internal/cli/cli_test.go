@@ -708,7 +708,7 @@ func TestList(t *testing.T) {
 		t.Fatal(h.stderr.String())
 	}
 	out := h.stdout.String()
-	if !strings.Contains(out, "COMMAND") || !strings.Contains(out, "bsd, bsd-human, busybox-human, freebsd, freebsd-blocks, freebsd-blocks-type, freebsd-human, freebsd-inodes, freebsd-type, gnu") {
+	if !strings.Contains(out, "COMMAND") || !strings.Contains(out, "bsd, bsd-human, busybox-human, freebsd, freebsd-blocks, freebsd-blocks-type, freebsd-human, freebsd-inodes, freebsd-type, freebsd-type-human, gnu") {
 		t.Errorf("list:\n%s", out)
 	}
 	if code := h.run("list", "df"); code != ExitOK {

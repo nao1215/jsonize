@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C vmstat
+description: vmstat without -i prints the process, memory and CPU summary, another format.
+os: freebsd
+expect_error: 'does not describe this input'

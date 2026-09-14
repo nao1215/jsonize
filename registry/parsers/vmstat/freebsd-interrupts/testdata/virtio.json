@@ -1,0 +1,52 @@
+[
+  {
+    "interrupt": "irq1: atkbd0",
+    "total": 2,
+    "rate": 0
+  },
+  {
+    "interrupt": "irq4: uart0",
+    "total": 190,
+    "rate": 18
+  },
+  {
+    "interrupt": "irq15: ata1",
+    "total": 31,
+    "rate": 3
+  },
+  {
+    "interrupt": "cpu0:timer",
+    "total": 4214,
+    "rate": 399
+  },
+  {
+    "interrupt": "cpu1:timer",
+    "total": 3890,
+    "rate": 368
+  },
+  {
+    "interrupt": "cpu2:timer",
+    "total": 3984,
+    "rate": 377
+  },
+  {
+    "interrupt": "cpu3:timer",
+    "total": 3787,
+    "rate": 358
+  },
+  {
+    "interrupt": "irq25: virtio_pci1",
+    "total": 1572,
+    "rate": 149
+  },
+  {
+    "interrupt": "irq27: virtio_pci2",
+    "total": 606,
+    "rate": 57
+  },
+  {
+    "interrupt": "irq28: virtio_pci2",
+    "total": 1,
+    "rate": 0
+  }
+]

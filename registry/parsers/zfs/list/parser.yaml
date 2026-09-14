@@ -1,0 +1,37 @@
+# zfs list: one row per dataset with the space it uses, the space
+# available to it, the data it references and where it is mounted.
+# USED, AVAIL and REFER are rounded to fit the column ("3.26G", "424K")
+# and stay the text that was printed. A dataset name holds no space; a
+# mount point may, so it is the last column and takes the rest of the
+# line. MOUNTPOINT is "none" for a dataset that is not mounted and
+# "legacy" for one mounted through fstab, and both are kept.
+#
+# -o chooses other columns, -H drops the header and separates the cells
+# with tabs, and -p prints exact byte counts under the same header, so
+# jz run refuses them.
+format: 1
+command: zfs
+variant: list
+description: zfs list, datasets with their space and mount point
+metadata:
+  tags: [freebsd, linux, zfs, filesystem]
+  compatible: [OpenZFS]
+  references:
+    - https://openzfs.github.io/openzfs-docs/man/master/8/zfs-list.8.html
+detect:
+  args:
+    all: ["list"]
+    none: ["-o", "-H", "-p"]
+  signature:
+    all:
+      - '\ANAME[ \t]+USED[ \t]+AVAIL[ \t]+REFER[ \t]+MOUNTPOINT[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  max_fields: 5
+fields:
+  name: {required: true}
+  used: {required: true}
+  avail: {required: true}
+  refer: {required: true}
+  mountpoint: {required: true}

@@ -23,7 +23,7 @@ scenarios:
           exit_code: 0
           stdout:
             contains: "COMMAND"
-            matches: "df +bsd, bsd-human, busybox-human, freebsd, freebsd-blocks, freebsd-blocks-type, freebsd-human, freebsd-inodes, freebsd-type, gnu"
+            matches: "df +bsd, bsd-human, busybox-human, freebsd, freebsd-blocks, freebsd-blocks-type, freebsd-human, freebsd-inodes, freebsd-type, freebsd-type-human, gnu"
       - run:
           command: jz list df
       - assert:

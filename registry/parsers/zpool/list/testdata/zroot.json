@@ -1,0 +1,15 @@
+[
+  {
+    "name": "zroot",
+    "size": "204G",
+    "alloc": "3.26G",
+    "free": "201G",
+    "ckpoint": null,
+    "expandsz": null,
+    "frag": 0,
+    "cap": 1,
+    "dedup": "1.00x",
+    "health": "ONLINE",
+    "altroot": null
+  }
+]

@@ -1,0 +1,12 @@
+interrupt                          total       rate
+irq1: atkbd0                           2          0
+irq4: uart0                          190         18
+irq15: ata1                           31          3
+cpu0:timer                          4214        399
+cpu1:timer                          3890        368
+cpu2:timer                          3984        377
+cpu3:timer                          3787        358
+irq25: virtio_pci1                  1572        149
+irq27: virtio_pci2                   606         57
+irq28: virtio_pci2                     1          0
+Total                              18277       1729

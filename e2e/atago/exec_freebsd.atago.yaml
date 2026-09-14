@@ -229,6 +229,105 @@ scenarios:
               - { path: "$[0].ppid", gte: 0 }
               - { path: "$[0].pri", matches: "^-?[0-9]+$" }
 
+  # The digest programs, sysctl's "name: value", the interrupt counts, the
+  # ZFS listings of the root pool the machine boots from, df -hT and the
+  # ARP cache of its one network interface.
+  - name: md5, sysctl, vmstat -i, zfs, zpool, df -hT and arp land on their FreeBSD definitions
+    only: {os: freebsd}
+    steps:
+      - run:
+          command: jz run --explain md5 /etc/passwd
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "md5/bsd from embedded"
+          stdout:
+            json:
+              - { path: "$[0].algorithm", equals: MD5 }
+              - { path: "$[0].file", equals: /etc/passwd }
+              - { path: "$[0].checksum", matches: "^[0-9a-f]{32}$" }
+      - run:
+          command: jz run --explain sha256 /etc/passwd /etc/group
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "md5/bsd from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[1].algorithm", equals: SHA256 }
+      # -r writes the digest first, which this definition does not read.
+      - run:
+          command: jz run md5 -r /etc/passwd
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+      - run:
+          command: jz run --explain sysctl kern.ostype hw.ncpu
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "sysctl/freebsd from embedded"
+          stdout:
+            json:
+              - { path: "$[0].name", equals: kern.ostype }
+              - { path: "$[0].value", equals: FreeBSD }
+              - { path: "$[1].value", matches: "^[0-9]+$" }
+      - run:
+          command: jz run sysctl -d kern.ostype
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+      - run:
+          command: jz run --explain vmstat -i
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "vmstat/freebsd-interrupts from embedded"
+          stdout:
+            json:
+              - { path: "$[0].total", gte: 0 }
+      - run:
+          command: jz run --explain zfs list
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "zfs/list from embedded"
+          stdout:
+            json:
+              - { path: "$[0].name", matches: "^[^/ ]+$" }
+      - run:
+          command: jz run --explain zpool list
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "zpool/list from embedded"
+          stdout:
+            json:
+              - { path: "$[0].cap", gte: 0 }
+              - { path: "$[0].health", matches: "^[A-Z]+$" }
+      - run:
+          command: jz run --explain df -hT
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "df/freebsd-type-human from embedded"
+          stdout:
+            json:
+              - { path: "$[0].mounted_on", equals: / }
+              - { path: "$[0].size", matches: "^[0-9.]+[KMGTPBE]" }
+      - run:
+          command: jz run --explain arp -an
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "arp/freebsd from embedded"
+          stdout:
+            json:
+              - { path: "$[0].hwaddress", matches: "^[0-9a-f]{2}(:[0-9a-f]{2}){5}$" }
+
   - name: df and uname land on the freebsd variants
     only: {os: freebsd}
     steps:

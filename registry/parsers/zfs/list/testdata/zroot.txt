@@ -1,0 +1,16 @@
+NAME                 USED  AVAIL  REFER  MOUNTPOINT
+zroot               3.26G   195G   424K  none
+zroot/ROOT          3.22G   195G   424K  none
+zroot/ROOT/default  3.22G   195G  3.22G  /
+zroot/home          28.7M   195G  28.7M  /home
+zroot/tmp            140K   195G   140K  /tmp
+zroot/usr           1.64M   195G   424K  /usr
+zroot/usr/obj        420K   195G   420K  /usr/obj
+zroot/usr/ports      420K   195G   420K  /usr/ports
+zroot/usr/src        420K   195G   420K  /usr/src
+zroot/var           1.98M   195G   424K  /var
+zroot/var/audit      428K   195G   428K  /var/audit
+zroot/var/crash      104K   195G   104K  /var/crash
+zroot/var/log        224K   195G   224K  /var/log
+zroot/var/mail       420K   195G   420K  /var/mail
+zroot/var/tmp        424K   195G   424K  /var/tmp

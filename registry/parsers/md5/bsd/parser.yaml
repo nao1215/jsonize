@@ -1,0 +1,53 @@
+# The checksum lines the BSD digest commands print by default: the
+# algorithm, the file name in parentheses and the digest after " = ".
+# FreeBSD ships one program under a name per algorithm, and each name
+# prints its own algorithm in front, so the definition covers them all
+# and algorithm says which one it was.
+#
+# -r prints the digest and the name the other way round, -q the digest
+# alone, and -s a quoted string where the name goes, so none of them is
+# read here. The names that end in "sum" print the GNU format, which is
+# the md5sum and sha256sum definitions.
+#
+# The manual says nothing about names holding a backslash or a newline,
+# and GNU's --tag output of the same shape escapes them and marks the
+# line with a leading backslash. A name with a backslash, and one that
+# begins with a quote as -s prints its string, is refused rather than
+# guessed at.
+format: 1
+command: md5
+variant: bsd
+aliases:
+  - name: sha1
+  - name: sha224
+  - name: sha256
+  - name: sha384
+  - name: sha512
+  - name: sha512t224
+  - name: sha512t256
+  - name: rmd160
+  - name: skein256
+  - name: skein512
+  - name: skein1024
+description: md5, sha256 and the other BSD digest commands, "ALGORITHM (file) = digest"
+metadata:
+  tags: [freebsd, bsd, checksum]
+  compatible: [FreeBSD md5]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?query=md5&sektion=1
+detect:
+  os: [freebsd]
+  args:
+    none: ["-r", "--reverse", "-q", "--quiet", "-s", "--string", "-c", "--check", "-p", "--passthrough", "-t", "--time-trial", "-x", "--self-test"]
+  signature:
+    all:
+      # Every line is one checksum line, the digest lower-case hex.
+      - '\A(?:[A-Z][A-Z0-9-]* \([^\n]*\) = [0-9a-f]+[ \t]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  # The digest never holds ") = ", so the name runs to the last one.
+  pattern: '^(?P<algorithm>[A-Z][A-Z0-9-]*) \((?P<file>.*)\) = (?P<checksum>[0-9a-f]+)[ \t]*$'
+fields:
+  algorithm: {required: true}
+  file: {required: true, regex: '(?P<file>[^"\\][^\\]*)'}
+  checksum: {required: true}

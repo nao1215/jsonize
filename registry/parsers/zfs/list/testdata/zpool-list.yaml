@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C zpool list
+description: zpool list shares the NAME and size columns but lists pools, which zpool/list reads and this definition does not.
+os: freebsd
+expect_error: 'does not describe this input'

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/zpool/list.json",
+  "title": "zpool/list",
+  "description": "zpool list, pools with their size, capacity and health",
+  "x-jsonize": {
+    "definition": "zpool/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "alloc": {
+        "type": "string"
+      },
+      "altroot": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "cap": {
+        "type": "integer"
+      },
+      "ckpoint": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "dedup": {
+        "type": "string"
+      },
+      "expandsz": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "frag": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "free": {
+        "type": "string"
+      },
+      "health": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

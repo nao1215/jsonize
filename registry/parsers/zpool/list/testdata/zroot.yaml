@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm, OpenZFS as shipped) with LC_ALL=C zpool list
+description: one pool with no checkpoint, nothing to expand into and no alternate root.
+os: freebsd
+args: ["list"]

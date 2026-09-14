@@ -1,0 +1,36 @@
+# FreeBSD df -hT: the file system type as the second column, and the
+# three sizes rounded with their unit as df -h prints them. A type is one
+# word ("zfs", "msdosfs"), so the name is everything ahead of the last
+# word before the sizes.
+format: 1
+command: df
+variant: freebsd-type-human
+description: FreeBSD df -hT, the type column and sizes rounded with their unit
+metadata:
+  tags: [freebsd, bsd, filesystem]
+  compatible: [FreeBSD df]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?df(1)
+detect:
+  os: [freebsd]
+  args:
+    any: ["-h", "-H"]
+  signature:
+    all:
+      - '\AFilesystem\s+Type\s+Size\s+Used\s+Avail\s+Capacity\s+Mounted on\s*$'
+input:
+  ignore:
+    - '\AFilesystem\s+Type\s+Size'
+parse:
+  type: regex
+  pattern: '^(?P<filesystem>.+?)\s+(?P<type>\S+)\s+(?P<size>[\d.]+[KMGTPBEi]*)\s+(?P<used>[\d.]+[KMGTPBEi]*)\s+(?P<available>[\d.]+[KMGTPBEi]*)\s+(?P<capacity_percent>\d+%|-)\s+(?P<mounted_on>/.*?)\s*$'
+fields:
+  filesystem: {required: true}
+  type: {required: true}
+  # -h counts 1024 per step and -H counts 1000; the output records
+  # neither, so a rounded size stays the text that was printed.
+  size: {required: true}
+  used: {required: true}
+  available: {required: true}
+  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"]}
+  mounted_on: {required: true}

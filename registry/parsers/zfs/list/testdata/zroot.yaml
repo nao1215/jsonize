@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm, OpenZFS as shipped) with LC_ALL=C zfs list
+description: the datasets of a default ZFS install, with "none" for the unmounted parents.
+os: freebsd
+args: ["list"]

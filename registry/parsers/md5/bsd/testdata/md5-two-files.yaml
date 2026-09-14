@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C md5 /etc/passwd /etc/group
+description: md5 over two files, one line each in the order given.
+os: freebsd
+args: ["/etc/passwd", "/etc/group"]

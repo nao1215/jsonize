@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C sysctl kern.ostype kern.osrelease hw.ncpu
+description: three variables named on the command line, text and a number.
+os: freebsd
+args: ["kern.ostype", "kern.osrelease", "hw.ncpu"]

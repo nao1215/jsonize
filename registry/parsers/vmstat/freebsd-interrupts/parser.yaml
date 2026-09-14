@@ -1,0 +1,36 @@
+# FreeBSD vmstat -i: the interrupts each source has raised since boot and
+# its average rate per second. A source is named by its line and device
+# ("irq4: uart0") or by the CPU and the timer ("cpu0:timer"), and the
+# name holds spaces, so the two counts at the end of the line are what
+# the row is read by.
+#
+# The Total line is the sum of the rows above it, both columns, so it is
+# left out rather than read as a source named "Total".
+format: 1
+command: vmstat
+variant: freebsd-interrupts
+description: FreeBSD vmstat -i, interrupt counts and rates per source
+metadata:
+  tags: [freebsd, bsd, kernel]
+  compatible: [FreeBSD vmstat]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?query=vmstat&sektion=8
+detect:
+  os: [freebsd]
+  args:
+    all: ["-i"]
+  signature:
+    all:
+      - '\Ainterrupt[ \t]+total[ \t]+rate[ \t]*$'
+      - '^Total[ \t]+\d+[ \t]+\d+[ \t]*$'
+input:
+  ignore:
+    - '\Ainterrupt[ \t]+total[ \t]+rate[ \t]*$'
+    - '^Total[ \t]+\d+[ \t]+\d+[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<interrupt>\S.*?)[ \t]+(?P<total>\d+)[ \t]+(?P<rate>\d+)[ \t]*$'
+fields:
+  interrupt: {required: true}
+  total: {type: int, required: true}
+  rate: {type: int, required: true}
