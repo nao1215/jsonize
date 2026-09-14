@@ -4,11 +4,10 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
-
-	"github.com/google/go-cmp/cmp"
 
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
@@ -66,7 +65,7 @@ func TestParseTableWhitespace(t *testing.T) {
 	want := `[{"filesystem":"devtmpfs","1k_blocks":1918816,"used":0,"available":1918816,"use_percent":0,"mounted_on":"/dev"},` +
 		`{"filesystem":"/dev/mapper/centos-root","1k_blocks":17811456,"used":1805580,"available":16005876,"use_percent":11,"mounted_on":"/"},` +
 		`{"filesystem":"tmpfs","1k_blocks":386136,"used":0,"available":386136,"use_percent":null,"mounted_on":"/run/user 1000"}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 }
@@ -95,7 +94,7 @@ fields:
 	}
 	want := `[{"type":"Mem","total":3861332,"used":"222820","free":"3364176","shared":"11832","cache":274336,"available":"3389588"},` +
 		`{"type":"Swap","total":2097148,"used":"0","free":"2097148","shared":null,"cache":null,"available":null}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	// Swap has only 4 cells; min_fields defaults to column count so it
@@ -132,7 +131,7 @@ func TestParseTableAlignedByDisplayWidth(t *testing.T) {
 		`{"who":"スクリーンロッカー","uid":"1000","user":"user01"},` +
 		`{"who":"e` + strings.Repeat("́", 5) + `","uid":"1000","user":"user01"},` +
 		`{"who":"ｆｕｌｌ","uid":"7","user":"x"}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	// A header in a wide script is measured the same way.
@@ -172,7 +171,7 @@ fields:
 		`{"name":"├─sda1","maj_min":"8:1","rm":false,"size":"1G","ro":false,"type":"part","mountpoint":"/boot"},` +
 		`{"name":"├─centos-root","maj_min":"253:0","rm":false,"size":"17G","ro":false,"type":"lvm","mountpoint":"/"},` +
 		`{"name":"loop9","maj_min":"7:9","rm":false,"size":"123.4M","ro":true,"type":"loop","mountpoint":"/snap/x y"}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	// aligned with explicit columns requires the same count as the header
@@ -243,7 +242,7 @@ fields:
 		t.Fatal(err)
 	}
 	want := `[{"size":134164,"name":"/usr/bin"},{"size":0,"name":"/usr/lib/debug\twith tab"}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	_, err = Parse(def, []byte("134164\n"), Options{})
@@ -328,7 +327,7 @@ fields:
 		t.Fatal(err)
 	}
 	want := `[{"filesystem":"sysfs","mount_point":"/sys","type":"sysfs","options":["rw","nosuid"]},{"filesystem":"proc","mount_point":"/proc","type":"proc","options":[]}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	_, err = Parse(def, []byte("garbage line\n"), Options{})
@@ -406,7 +405,7 @@ fields:
 		t.Fatal(err)
 	}
 	want := `{"uid":{"id":1000,"name":"kbrazil"},"gid":{"id":1000,"name":"kbrazil"},"groups":[{"id":1000,"name":"kbrazil"},{"id":10,"name":"wheel"}],"context":{"user":"unconfined_u","role":"unconfined_r","type":"unconfined_t","level":"s0-s0:c0.c1023"}}`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	got, err = Parse(def, []byte("uid=501(k) gid=20 groups=20(staff)\n"), Options{})
@@ -414,7 +413,7 @@ fields:
 		t.Fatal(err)
 	}
 	want = `{"uid":{"id":501,"name":"k"},"gid":{"id":20},"groups":[{"id":20,"name":"staff"}]}`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	_, err = Parse(def, []byte("nothing here\n"), Options{})
@@ -448,7 +447,7 @@ fields:
 		t.Fatal(err)
 	}
 	want := `[{"name":"HOME","value":"/root"},{"name":"EMPTY","value":""},{"name":"SHLVL","value":2},{"name":"WITH","value":"a=b"}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	_, err = Parse(list, []byte("no separator\n"), Options{})
@@ -686,7 +685,7 @@ parse:
 	want := `{"uptime":{"time":"10:25:20","uptime":"16:03","users":2,"load_1m":0,"load_5m":0.01,"load_15m":0.05},` +
 		`"users":[{"user":"kbrazil","tty":"ttyS0","from":null,"login_at":"Fri18","idle":"32:16","jcpu":"2.66s","pcpu":"2.66s","what":"-bash"},` +
 		`{"user":"kbrazil","tty":"pts/0","from":"192.168.71.1","login_at":"09:53","idle":"8.00s","jcpu":"0.10s","pcpu":"0.00s","what":"w"}]}`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	_, err = Parse(def, []byte("bogus\nUSER TTY\n"), Options{})
@@ -909,7 +908,7 @@ func TestSplitFieldsN(t *testing.T) {
 		{"a\tb", 1, []string{"a\tb"}},
 	}
 	for _, tt := range tests {
-		if diff := cmp.Diff(tt.want, splitFieldsN(tt.s, tt.n)); diff != "" {
+		if diff := diff(tt.want, splitFieldsN(tt.s, tt.n)); diff != "" {
 			t.Errorf("splitFieldsN(%q,%d): %s", tt.s, tt.n, diff)
 		}
 	}
@@ -1104,7 +1103,7 @@ func TestAlignedColumnNamedByTwoHeaderWords(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	var streamed []any
@@ -1115,7 +1114,7 @@ func TestAlignedColumnNamedByTwoHeaderWords(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if diff := cmp.Diff(want, mustJSON(t, streamed)); diff != "" {
+	if diff := diff(want, mustJSON(t, streamed)); diff != "" {
 		t.Errorf("stream: %s", diff)
 	}
 
@@ -1129,7 +1128,7 @@ func TestAlignedColumnNamedByTwoHeaderWords(t *testing.T) {
 	}
 	want = `[{"h_w_path":null,"device":null,"class":"system","description":"Computer"},` +
 		`{"h_w_path":"/0/100/2.1/0","device":"eno1","class":"network","description":"RTL8125 2.5GbE Controller"}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 
@@ -1138,7 +1137,7 @@ func TestAlignedColumnNamedByTwoHeaderWords(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if diff := cmp.Diff(`[{"a_b":"1","c":"2  3"}]`, mustJSON(t, got)); diff != "" {
+	if diff := diff(`[{"a_b":"1","c":"2  3"}]`, mustJSON(t, got)); diff != "" {
 		t.Errorf("words a gap apart: %s", diff)
 	}
 }
@@ -1271,7 +1270,7 @@ fields:
 	want := `[{"flags":"lrwxrwxrwx","filename":"bin","link_to":"usr/bin"},` +
 		`{"flags":"-rw-r--r--","filename":"a -> b"},` +
 		`{"flags":"lrwxrwxrwx","filename":"a","link_to":"b -> c"}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	// A line that fits none of the alternatives names them all.
@@ -1318,7 +1317,7 @@ parse:
 	if err != nil {
 		t.Fatal(err)
 	}
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	var streamed []string
@@ -1363,7 +1362,7 @@ fields:
 	// A group that takes no part leaves the value missing, and
 	// when_missing decides what that becomes.
 	want := `[{"name":"sda1","note":"boot"},{"name":"sda2"},{"name":"sda"}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	// Raw mode leaves the field rules out, the regex with them.
@@ -1371,7 +1370,7 @@ fields:
 	if err != nil {
 		t.Fatal(err)
 	}
-	if diff := cmp.Diff(`[{"name":"|-sda1","note":"(boot)"}]`, mustJSON(t, got)); diff != "" {
+	if diff := diff(`[{"name":"|-sda1","note":"(boot)"}]`, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 }
@@ -1401,7 +1400,7 @@ fields:
 	want := `[{"escaped":true,"sum":"abcd","file":"back\\slash\nnl\r"},` +
 		`{"sum":"abcd","file":"raw\\name"},` +
 		`{"escaped":true,"sum":"abcd","file":"lit\\n"}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	// An escape the format does not write is not guessed at, and neither
@@ -1427,7 +1426,7 @@ fields:
 	if err != nil {
 		t.Fatal(err)
 	}
-	if diff := cmp.Diff(`[{"name":"a b\\c"}]`, mustJSON(t, got)); diff != "" {
+	if diff := diff(`[{"name":"a b\\c"}]`, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 }
@@ -1449,7 +1448,7 @@ func TestParseKVKeepsWhitespaceWhenAsked(t *testing.T) {
 		t.Fatal(err)
 	}
 	want := `[{"name":"A","value":"  padded  "},{"name":"B","value":"x"},{"name":"C","value":""}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	// A field rule must not quietly undo the preservation either.
@@ -1468,7 +1467,7 @@ fields:
 		t.Fatal(err)
 	}
 	want = `{"PADDED":"  keep me  ","NUM":42,"DASH":null}`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	// Required still rejects a value that is only whitespace.
@@ -1496,7 +1495,7 @@ parse: {type: kv, trim: false}
 		t.Fatal(err)
 	}
 	want := `[{"name":"A","value":"one\nstill A"},{"name":"B","value":"two"},{"name":"PADDED","value":"  x  "}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	// The same bytes read as lines cannot tell the two apart, which is
@@ -1531,7 +1530,7 @@ fields:
 	// Without an explicit trim rule the captured text is untouched; with
 	// one, the surrounding space goes with it.
 	want := `[{"padded":"  a  ","trimmed":"b"}]`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 }
@@ -1550,7 +1549,7 @@ EMPTY=""
 		t.Fatal(err)
 	}
 	want := `{"NAME":"Ubuntu","VERSION":"26.04 LTS (Resolute Raccoon)","ID":"ubuntu","SINGLE":"quoted","UNBALANCED":"\"left","EMPTY":""}`
-	if diff := cmp.Diff(want, mustJSON(t, got)); diff != "" {
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
 		t.Error(diff)
 	}
 	// Without the option the quotes are content.
@@ -1732,4 +1731,16 @@ parse:
 	if stream.String() != `{"name":"a","size":1}{"name":"b","size":2}` {
 		t.Error(stream.String())
 	}
+}
+
+// diff reports how got differs from want, or nothing when they are the
+// same. Strings are shown as they are, since most of them are JSON.
+func diff(want, got any) string {
+	if reflect.DeepEqual(want, got) {
+		return ""
+	}
+	if w, ok := want.(string); ok {
+		return fmt.Sprintf("\n want %s\n  got %v", w, got)
+	}
+	return fmt.Sprintf("\n want %#v\n  got %#v", want, got)
 }

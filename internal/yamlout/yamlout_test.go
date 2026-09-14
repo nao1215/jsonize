@@ -3,14 +3,14 @@ package yamlout
 import (
 	"bytes"
 	"errors"
-	"io"
+	"fmt"
 	"math"
+	"reflect"
+	"strconv"
 	"strings"
 	"testing"
 
-	"github.com/goccy/go-yaml"
-	"github.com/google/go-cmp/cmp"
-
+	"github.com/nao1215/jsonize/internal/yaml"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
@@ -23,23 +23,52 @@ func obj(kv ...any) *jsonutil.Object {
 	return o
 }
 
-// decodeAll reads every document of a YAML stream with an independent
-// reader, keeping the order of mapping keys.
+// pair and pairs are a mapping in the order its keys stand, which is
+// what jz wrote and what a reader hands back.
+type pair struct {
+	key   string
+	value any
+}
+
+type pairs []pair
+
+// decodeAll reads every document of a YAML stream, keeping the order of
+// mapping keys. A stream is documents between "---" and "..." lines; a
+// text that opens with neither is one document.
 func decodeAll(t *testing.T, text string) []any {
 	t.Helper()
-	dec := yaml.NewDecoder(strings.NewReader(text), yaml.UseOrderedMap())
-	var out []any
-	for {
-		var v any
-		err := dec.Decode(&v)
-		if errors.Is(err, io.EOF) {
-			return out
+	docs := []string{text}
+	if strings.HasPrefix(text, "---\n") {
+		docs = nil
+		var cur strings.Builder
+		open := false
+		for _, line := range strings.SplitAfter(text, "\n") {
+			switch {
+			case line == "---\n":
+				open = true
+				cur.Reset()
+			case line == "...\n":
+				docs = append(docs, cur.String())
+				open = false
+			case open:
+				cur.WriteString(line)
+			case line != "":
+				t.Fatalf("text outside a document in %q: %q", text, line)
+			}
 		}
-		if err != nil {
-			t.Fatalf("decoding %q: %v", text, err)
+		if open {
+			t.Fatalf("unclosed document in %q", text)
 		}
-		out = append(out, v)
 	}
+	out := make([]any, 0, len(docs))
+	for _, doc := range docs {
+		n, err := yaml.Parse([]byte(doc))
+		if err != nil {
+			t.Fatalf("decoding %q: %v", doc, err)
+		}
+		out = append(out, fromNode(t, n))
+	}
+	return out
 }
 
 // plainGo turns a value jz produces into what a YAML reader hands back
@@ -50,9 +79,9 @@ func plainGo(v any) any {
 		if t == nil {
 			return nil
 		}
-		out := yaml.MapSlice{}
+		out := pairs{}
 		for _, m := range t.Members() {
-			out = append(out, yaml.MapItem{Key: m.Key, Value: plainGo(m.Value)})
+			out = append(out, pair{key: m.Key, value: plainGo(m.Value)})
 		}
 		return out
 	case []any:
@@ -68,27 +97,61 @@ func plainGo(v any) any {
 	}
 }
 
-// fromReader brings what the reader decoded to the same form.
-func fromReader(v any) any {
+// fromNode brings what the reader decoded to the same form.
+func fromNode(t *testing.T, n *yaml.Node) any {
+	t.Helper()
+	if n == nil {
+		return nil
+	}
+	switch n.Kind {
+	case yaml.MappingNode:
+		out := make(pairs, 0, len(n.Pairs))
+		for _, p := range n.Pairs {
+			out = append(out, pair{key: p.Key.Value, value: fromNode(t, p.Value)})
+		}
+		return out
+	case yaml.SequenceNode:
+		out := make([]any, len(n.Items))
+		for i, e := range n.Items {
+			out[i] = fromNode(t, e)
+		}
+		return out
+	case yaml.ScalarNode:
+	}
+	var v any
+	if err := yaml.Decode(n, &v, true); err != nil {
+		t.Fatal(err)
+	}
+	return v
+}
+
+// same reports how read differs from what was written, or nothing.
+func same(wrote, read any) string {
+	if reflect.DeepEqual(wrote, read) {
+		return ""
+	}
+	return "wrote " + describe(wrote) + "\nread  " + describe(read)
+}
+
+// describe renders a value with its mappings in order.
+func describe(v any) string {
 	switch t := v.(type) {
-	case yaml.MapSlice:
-		out := make(yaml.MapSlice, 0, len(t))
-		for _, m := range t {
-			out = append(out, yaml.MapItem{Key: m.Key, Value: fromReader(m.Value)})
+	case pairs:
+		parts := make([]string, len(t))
+		for i, p := range t {
+			parts[i] = strconvQuote(p.key) + ": " + describe(p.value)
 		}
-		return out
+		return "{" + strings.Join(parts, ", ") + "}"
 	case []any:
-		out := make([]any, len(t))
+		parts := make([]string, len(t))
 		for i, e := range t {
-			out[i] = fromReader(e)
+			parts[i] = describe(e)
 		}
-		return out
-	case uint64:
-		return int64(t)
-	case int:
-		return int64(t)
+		return "[" + strings.Join(parts, ", ") + "]"
+	case string:
+		return strconvQuote(t)
 	default:
-		return v
+		return strings.TrimSpace(strings.ReplaceAll(strings.ReplaceAll(fmtV(v), "\n", " "), "  ", " "))
 	}
 }
 
@@ -102,8 +165,8 @@ func roundTrip(t *testing.T, v any) string {
 	if len(docs) != 1 {
 		t.Fatalf("%d documents in %q", len(docs), b.String())
 	}
-	if diff := cmp.Diff(plainGo(v), fromReader(docs[0])); diff != "" {
-		t.Errorf("read back differently (-wrote +read):\n%s\nYAML:\n%s", diff, b.String())
+	if diff := same(plainGo(v), docs[0]); diff != "" {
+		t.Errorf("read back differently:\n%s\nYAML:\n%s", diff, b.String())
 	}
 	return b.String()
 }
@@ -251,7 +314,7 @@ func TestEncodeDocumentMarksEachRecord(t *testing.T) {
 		t.Fatalf("%d documents", len(docs))
 	}
 	for i, r := range records {
-		if diff := cmp.Diff(plainGo(r), fromReader(docs[i])); diff != "" {
+		if diff := same(plainGo(r), docs[i]); diff != "" {
 			t.Errorf("document %d: %s", i, diff)
 		}
 	}
@@ -293,9 +356,13 @@ func FuzzEncodeString(f *testing.F) {
 		if len(docs) != 1 {
 			t.Fatalf("%d documents in %q", len(docs), b.String())
 		}
-		m, ok := docs[0].(yaml.MapSlice)
-		if !ok || len(m) != 2 || m[0].Value != want || m[1].Key != want+"!" {
+		m, ok := docs[0].(pairs)
+		if !ok || len(m) != 2 || m[0].value != want || m[1].key != want+"!" {
 			t.Fatalf("%q read back as %#v from %q", s, docs[0], b.String())
 		}
 	})
 }
+
+func strconvQuote(s string) string { return strconv.Quote(s) }
+
+func fmtV(v any) string { return fmt.Sprintf("%#v", v) }
