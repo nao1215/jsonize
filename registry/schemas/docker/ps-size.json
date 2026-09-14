@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/docker/ps-size.json",
+  "title": "docker/ps-size",
+  "description": "docker ps -s, the container table with the SIZE column",
+  "x-jsonize": {
+    "definition": "docker/ps-size",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "container_id": {
+        "type": "string"
+      },
+      "image": {
+        "type": "string"
+      },
+      "command": {
+        "type": "string"
+      },
+      "created": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      },
+      "ports": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "names": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "size": {
+        "type": "string"
+      },
+      "virtual_size": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "container_id",
+      "image",
+      "command",
+      "created",
+      "status",
+      "ports",
+      "names",
+      "size",
+      "virtual_size"
+    ]
+  }
+}

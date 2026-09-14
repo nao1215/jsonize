@@ -1,0 +1,5 @@
+CONTAINER ID   IMAGE                           COMMAND                  CREATED        STATUS      PORTS                                                                        NAMES                                  SIZE
+7d6c5b4a3f2e   kindest/node:v1.35.0            "/usr/local/bin/entr…"   7 weeks ago    Up 2 days                                                                                example-worker2                        233kB (virtual 956MB)
+1e2d3c4b5a69   kindest/node:v1.35.0            "/usr/local/bin/entr…"   7 weeks ago    Up 2 days                                                                                example-worker                         233kB (virtual 956MB)
+9f8e7d6c5b4a   kindest/node:v1.35.0            "/usr/local/bin/entr…"   7 weeks ago    Up 2 days   127.0.0.1:8080->80/tcp, 127.0.0.1:8443->443/tcp, 127.0.0.1:42765->6443/tcp   example-control-plane                  3.58MB (virtual 959MB)
+4a5b6c7d8e9f   moby/buildkit:buildx-stable-1   "/usr/bin/buildkitd-…"   2 months ago   Up 2 days                                                                                buildx_buildkit_example-builder0       41kB (virtual 244MB)

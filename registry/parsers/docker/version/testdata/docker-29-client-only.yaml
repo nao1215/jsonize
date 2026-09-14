@@ -1,0 +1,6 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C and DOCKER_HOST pointing at a closed port
+description: >-
+  The daemon could not be reached, so only the client block is on standard
+  output; the error went to standard error and is not part of the text.
+os: linux
+args: ["version"]

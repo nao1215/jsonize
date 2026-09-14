@@ -1,0 +1,43 @@
+[
+  {
+    "name": "Client",
+    "value": "Docker Engine - Community",
+    "children": [
+      {
+        "name": "Version",
+        "value": "29.2.1",
+        "children": []
+      },
+      {
+        "name": "API version",
+        "value": "1.53",
+        "children": []
+      },
+      {
+        "name": "Go version",
+        "value": "go1.25.6",
+        "children": []
+      },
+      {
+        "name": "Git commit",
+        "value": "a5c7197",
+        "children": []
+      },
+      {
+        "name": "Built",
+        "value": "Mon Feb  2 17:17:42 2026",
+        "children": []
+      },
+      {
+        "name": "OS/Arch",
+        "value": "linux/amd64",
+        "children": []
+      },
+      {
+        "name": "Context",
+        "value": "default",
+        "children": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,4 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: Client and server, the server with its four components under it.
+os: linux
+args: ["version"]

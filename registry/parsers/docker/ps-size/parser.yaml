@@ -1,0 +1,52 @@
+# The container table with the SIZE column that `docker ps -s` adds: the
+# seven columns docker/ps reads and then the writable layer's size with
+# the whole image's size in parentheses, "233kB (virtual 956MB)".
+#
+# The row is read with the expression docker/ps uses, extended by the
+# last cell, which is two values and becomes size and virtual_size. Both
+# are rounded for reading and stay the strings docker printed. The
+# signature is what tells the two tables apart: docker/ps ends its header
+# at NAMES and this one continues to SIZE, so `docker ps` without -s still
+# lands on docker/ps, and the argument filter here keeps this variant out
+# of the way unless -s or --size was given.
+#
+# The other cells are what docker/ps says of them: COMMAND is a quoted
+# display string, CREATED and STATUS are English phrases, PORTS and NAMES
+# are lists, and an empty PORTS cell is an empty list.
+format: 1
+command: docker
+variant: ps-size
+aliases:
+  # podman and nerdctl print the same tables under the same
+  # subcommands.
+  - name: podman
+  - name: nerdctl
+description: docker ps -s, the container table with the SIZE column
+metadata:
+  tags: [container, docker, process, disk]
+  compatible: [Docker CLI]
+  references:
+    - https://docs.docker.com/reference/cli/docker/container/ls/
+detect:
+  args:
+    any: ["-s", "--size"]
+  signature:
+    all:
+      - '\ACONTAINER ID[ \t]+IMAGE[ \t]+COMMAND[ \t]+CREATED[ \t]+STATUS[ \t]+PORTS[ \t]+NAMES[ \t]+SIZE[ \t]*$'
+input:
+  # A listing with no containers prints the header and nothing else, which
+  # is an empty array rather than no output at all.
+  ignore:
+    - '^CONTAINER ID[ \t]+IMAGE[ \t]'
+parse:
+  type: regex
+  pattern: '^(?P<container_id>\S+) {2,}(?P<image>\S+) {2,}"(?P<command>.*?)" {2,}(?P<created>\S.*?) {2,}(?P<status>\S.*?) {2,}(?P<ports>.*?) *(?P<names>\S+) {2,}(?P<size>\S+) \(virtual (?P<virtual_size>\S+)\)[ \t]*$'
+fields:
+  container_id: {required: true}
+  image: {required: true}
+  created: {required: true}
+  status: {required: true}
+  ports: {type: array, split: ","}
+  names: {type: array, split: ","}
+  size: {required: true}
+  virtual_size: {required: true}
