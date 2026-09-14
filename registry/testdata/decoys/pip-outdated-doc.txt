@@ -1,0 +1,7 @@
+Package  Version Latest Type
+-------- ------- ------ -----
+The Package column is the distribution name as PyPI knows it.
+The Version column is what is installed and Latest is the newest
+release on the index, and Type says whether that release ships as a
+wheel or only as an sdist.
+Run pip list --outdated to print it.

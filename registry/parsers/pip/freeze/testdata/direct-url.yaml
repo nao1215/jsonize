@@ -1,0 +1,4 @@
+description: a package installed from a local tree without -e, which freeze writes as name @ file:// URL, beside an index package
+source: "`uv pip freeze` with uv 0.9.7 on CPython 3.12 (Ubuntu 26.04) with LC_ALL=C, in a virtual environment holding six and a local project installed by path; the path of the tree was replaced"
+os: linux
+args: [freeze]

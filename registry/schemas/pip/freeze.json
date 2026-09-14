@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pip/freeze.json",
+  "title": "pip/freeze",
+  "description": "pip freeze, the installed packages as requirement lines",
+  "x-jsonize": {
+    "definition": "pip/freeze",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "editable": {
+        "type": "boolean"
+      },
+      "name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "version": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "url": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "editable",
+      "name",
+      "version",
+      "url"
+    ]
+  }
+}

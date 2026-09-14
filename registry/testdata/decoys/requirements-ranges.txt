@@ -1,0 +1,6 @@
+requests>=2.25,<3
+# pinned for the CI image
+flask==2.0.3 ; python_version < "3.12"
+-r base.txt
+--index-url https://pypi.example.com/simple
+numpy~=1.26

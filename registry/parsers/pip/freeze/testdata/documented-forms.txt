@@ -1,0 +1,4 @@
+certifi==2026.7.22
+-e git+https://git.example.com/MyProject.git@da39a3ee5e6b4b0d3255bfef95601890afd80709#egg=MyProject
+MyOtherProject @ file:///home/alice/dist/MyOtherProject-1.0-py3-none-any.whl
+six==1.17.0

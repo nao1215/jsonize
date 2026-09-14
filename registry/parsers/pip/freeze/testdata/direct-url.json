@@ -1,0 +1,14 @@
+[
+  {
+    "editable": false,
+    "name": "hello-agent",
+    "url": "file:///home/alice/src/hello-agent",
+    "version": null
+  },
+  {
+    "editable": false,
+    "name": "six",
+    "version": "1.17.0",
+    "url": null
+  }
+]

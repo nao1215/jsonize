@@ -1,0 +1,4 @@
+description: the two spellings pip documents that uv does not write, an editable VCS install named after #egg= and a direct reference to a wheel, between two index packages
+source: written by hand from the forms pip's requirements file format and VCS support pages give (https://pip.pypa.io/en/stable/topics/vcs-support/), to exercise the name pip freeze takes from #egg= and the name @ url spelling
+os: linux
+args: [freeze]
