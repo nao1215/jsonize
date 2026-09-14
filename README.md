@@ -32,11 +32,24 @@ Go 1.26 or later:
 $ go install github.com/nao1215/jsonize/cmd/jz@latest
 ```
 
+On Arch Linux, the [`jsonize-bin`](https://aur.archlinux.org/packages/jsonize-bin)
+package in the AUR:
+
+```console
+$ yay -S jsonize-bin
+```
+
+Homebrew, on macOS and Linux, for releases after v0.1.0:
+
+```console
+$ brew install --cask nao1215/tap/jsonize
+```
+
 [GitHub Releases](https://github.com/nao1215/jsonize/releases) has
 archives for Linux, macOS and Windows (amd64 and arm64), and `.deb`,
 `.rpm` and `.apk` packages for Linux. See the
 [install guide](https://nao1215.github.io/jsonize/install/) for archive
-installation and bash/zsh completion.
+installation, verifying a download and bash/zsh completion.
 
 ## Supported OS (tested on GitHub Actions)
 
@@ -184,6 +197,12 @@ $ make registry-test           # the same checks `jz test` runs, on the official
 $ make website-serve           # the documentation site locally
 $ make demo                    # re-record demo/jsonize.gif with vhs
 ```
+
+## Contributors
+
+- [Naohiro CHIKAMATSU](https://github.com/nao1215): code and documentation
+- [Rafael Baboni Dominiquini](https://github.com/Dominiquini): the
+  [`jsonize-bin`](https://aur.archlinux.org/packages/jsonize-bin) AUR package
 
 ## License
 
