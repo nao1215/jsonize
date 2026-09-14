@@ -16,7 +16,8 @@ detect:
     all:
       # -w draws each group name with dashes on both sides ("--procs--").
       - '\A(?:procs|-+procs-+)[ \t]+-+memory-+'
-      - '^[ \t]*r[ \t]+b[ \t]+swpd[ \t]+free[ \t]+inact[ \t]+active[ \t]'
+      # The column header is always the second line.
+      - '\A[^\n]*\n[ \t]*r[ \t]+b[ \t]+swpd[ \t]+free[ \t]+inact[ \t]+active[ \t]'
 input:
   ignore:
     - '\A(?:procs|-+procs-+)[ \t]+-'

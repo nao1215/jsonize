@@ -20,6 +20,8 @@ detect:
     any: ["-a"]
   signature:
     all:
+      # The text opens with a limit.
+      - '\A[a-z][a-z -]*[ \t]+\((?:[a-z]+, )?-[A-Za-z]\)[ \t]'
       - '^core file size[ \t]+\(blocks, -c\)'
       - '^open files[ \t]+\(-n\)'
 parse:

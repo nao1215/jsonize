@@ -19,6 +19,8 @@ detect:
     none: ["-h", "-H", "-g", "-k", "-m"]
   signature:
     all:
+      # The text opens with the header.
+      - '\AFilesystem[ \t]'
       - '^Filesystem\s+512-blocks\s+Used\s+Available\s+Capacity\s+iused\s+ifree\s+%iused\s+Mounted on\s*$'
 input:
   ignore:

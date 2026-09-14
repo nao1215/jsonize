@@ -30,7 +30,7 @@ detect:
   os: [linux]
   signature:
     all:
-      - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+tps[ \t]+rtps[ \t]+wtps[ \t]+dtps[ \t]+bread/s[ \t]+bwrtn/s[ \t]+bdscd/s[ \t]*$'
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+tps[ \t]+rtps[ \t]+wtps[ \t]+dtps[ \t]+bread/s[ \t]+bwrtn/s[ \t]+bdscd/s[ \t]*$'
 input:
   ignore:
     # The banner, and the line sar prints where the day's file records a

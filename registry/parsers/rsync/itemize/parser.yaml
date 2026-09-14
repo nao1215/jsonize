@@ -39,6 +39,8 @@ metadata:
 detect:
   signature:
     all:
+      # The text opens with an item or a message.
+      - '\A(?:\*[^ \t\n]+|[<>ch.][fdLDS].{9}) '
       # An eleven character change string followed by a space and a
       # path. Every position is drawn from its own small alphabet.
       - '^[<>ch.][fdLDS][c.+ ?][s.+ ?][tT.+ ?][p.+ ?][o.+ ?][g.+ ?][unb.+ ?][a.+ ?][x.+ ?] \S'

@@ -25,6 +25,8 @@ detect:
     none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify"]
   signature:
     all:
+      # The text opens with the total, or with an entry where there is none.
+      - '\A(?:total [^\n]*$|[-dlcbps][-rwxsStT]{9})'
       - '^[-dlcbps][-rwxsStT]{9}[.+@]?\s+\d+\s+(?:[\d.]+[kKMGTPEZYRQBi]*|\d+,\s*\d+)\s+\w{3}\s+\d{1,2}\s+(?:\d{2}:\d{2}|\d{4})\s+\S'
 input:
   ignore:

@@ -14,6 +14,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the header.
+      - '\ANAME[ \t]'
       - '^NAME[ \t]+ALIGNMENT[ \t]+MIN-IO[ \t]+OPT-IO[ \t]+PHY-SEC[ \t]+LOG-SEC[ \t]+ROTA[ \t]+SCHED[ \t]+RQ-SIZE[ \t]+RA[ \t]+WSAME[ \t]*$'
       # The header is lined up with the columns. -r prints the same words
       # one space apart and the rows unaligned, which this cannot cut.

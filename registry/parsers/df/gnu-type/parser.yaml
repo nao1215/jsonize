@@ -20,6 +20,8 @@ detect:
     none: ["-h", "--human-readable", "-H", "--si", "-i", "--inodes"]
   signature:
     all:
+      # The text opens with the header, after any df: warnings.
+      - '\A(?:df: [^\n]*\n)*Filesystem[ \t]'
       - '^Filesystem\s+Type\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
 # A file system's name may hold spaces, so a line is read by what each
 # column holds (see df/gnu); the type is one word. -BK puts a K after

@@ -17,6 +17,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the header.
+      - '\ANAME[ \t]'
       - '^NAME[ \t]+SIZELIMIT[ \t]+OFFSET[ \t]+AUTOCLEAR[ \t]+RO[ \t]+BACK-FILE[ \t]+DIO[ \t]+LOG-SEC[ \t]*$'
       # The header is lined up with the columns. --raw prints the same
       # words one space apart and the rows unaligned, which losetup/raw reads.

@@ -32,6 +32,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the file or the name.
+      - '\A(?:filename|name):[ \t]'
       # Every module prints a filename, padded to the sixteen-column
       # label field: "(builtin)" for a built-in module, a path for one
       # loaded from disk.

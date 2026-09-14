@@ -16,6 +16,8 @@ detect:
     any: ["list-users"]
   signature:
     all:
+      # The text opens with the header.
+      - '\A[ \t]*UID[ \t]+USER[ \t]'
       - '^[ \t]*UID[ \t]+USER[ \t]+LINGER[ \t]+STATE[ \t]*$'
 input:
   ignore:

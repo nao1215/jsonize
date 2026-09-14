@@ -21,8 +21,10 @@ detect:
       - '\A(?:procs|-+procs-+)[ \t]+-+memory-+'
       # `vmstat -a` prints the same group header and the same first four
       # columns, and only then diverges: it reports inactive and active
-      # memory where the default report has buffers and cache.
-      - '^[ \t]*r[ \t]+b[ \t]+swpd[ \t]+free[ \t]+buff[ \t]+cache[ \t]'
+      # memory where the default report has buffers and cache. The column
+      # header is always the second line, and saying so lets a stream
+      # choose between the two once that line has come.
+      - '\A[^\n]*\n[ \t]*r[ \t]+b[ \t]+swpd[ \t]+free[ \t]+buff[ \t]+cache[ \t]'
 input:
   ignore:
     - '\A(?:procs|-+procs-+)\s+-'

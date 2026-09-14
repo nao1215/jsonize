@@ -29,6 +29,8 @@ detect:
     # components that precede them.
     window: 40
     all:
+      # The text opens with a component.
+      - '\A[a-z0-9][a-z0-9._-]*(?: \([a-z]+\))?$'
       - '^rust-src(?: \(installed\))?$'
       - '^rust-std-aarch64-apple-darwin(?: \(installed\))?$'
       - '^rust-std-aarch64-apple-ios(?: \(installed\))?$'

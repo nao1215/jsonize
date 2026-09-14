@@ -30,7 +30,7 @@ detect:
   os: [linux]
   signature:
     all:
-      - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+kbswpfree[ \t]+kbswpused[ \t]+%swpused[ \t]+kbswpcad[ \t]+%swpcad[ \t]*$'
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+kbswpfree[ \t]+kbswpused[ \t]+%swpused[ \t]+kbswpcad[ \t]+%swpcad[ \t]*$'
 input:
   ignore:
     # The banner, and the line sar prints where the day's file records a

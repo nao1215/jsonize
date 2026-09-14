@@ -23,6 +23,8 @@ detect:
     any: ["-h", "--human-readable", "-H", "--si"]
   signature:
     all:
+      # The text opens with the header, after any df: warnings.
+      - '\A(?:df: [^\n]*\n)*Filesystem[ \t]'
       - '^Filesystem\s+Size\s+Used\s+Avail\s+Use%\s+Mounted on\s*$'
 # df writes "df: /path: Permission denied" for mount points it cannot
 # stat; those lines land in the output when stderr is merged into it.

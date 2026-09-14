@@ -17,6 +17,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the header.
+      - '\A[ \t]*UID[ \t]'
       - '^[ \t]*UID[ \t]+USER[ \t]+PROC[ \t]+PWD-LOCK[ \t]+PWD-DENY[ \t]+LAST-LOGIN[ \t]+GECOS[ \t]*$'
       # The header is lined up with the columns: UID sits over right-aligned
       # numbers. -r prints the same words one space apart and the rows

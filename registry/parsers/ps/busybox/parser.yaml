@@ -11,6 +11,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the header.
+      - '\A[ \t]*PID[ \t]+USER[ \t]'
       - '^\s*PID\s+USER\s+COMMAND\s*$'
 parse:
   type: table

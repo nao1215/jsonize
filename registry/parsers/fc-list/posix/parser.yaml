@@ -22,6 +22,8 @@ metadata:
 detect:
   signature:
     all:
+      # The text opens with a font path.
+      - '\A/[^\n:]*: '
       # Any line with a style, not the first: a variable font names no
       # style, and a listing may open with one.
       - '^/\S+: [^:\n]+:style=\S'

@@ -17,6 +17,8 @@ detect:
     any: ["-h", "--human"]
   signature:
     all:
+      # The text opens with the header.
+      - '\A[ \t]+total[ \t]'
       - '^\s+total\s+used\s+free\s+shared\s+buff/cache\s+available\s*$'
       - '^Mem:\s+[\d.]+[KMGTPB]i?\b'
 parse:

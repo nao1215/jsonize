@@ -20,6 +20,8 @@ detect:
     none: ["list-users", "list-seats"]
   signature:
     all:
+      # The text opens with the header.
+      - '\ASESSION[ \t]'
       - '^SESSION[ \t]+UID[ \t]+USER[ \t]+SEAT[ \t]+LEADER[ \t]+CLASS[ \t]+TTY[ \t]+IDLE[ \t]+SINCE[ \t]*$'
 input:
   ignore:

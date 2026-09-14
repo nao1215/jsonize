@@ -34,6 +34,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with a Boot or Timeout line.
+      - '\A(?:Boot|Timeout: )'
       # "Boot" followed by exactly four hex digits and the marker column.
       # BootCurrent, BootOrder and BootNext do not match it: none of them
       # has four hex digits after "Boot".

@@ -22,6 +22,9 @@ detect:
     any: ["-a"]
   signature:
     all:
+      # The text opens with a variable, its value padded to column 36; a
+      # name that long is followed by one space.
+      - '\A(?:[A-Z_][A-Z0-9_]*[ \t]{2,}|[A-Z_][A-Z0-9_]{34,} )\S'
       # Names glibc always prints, whichever part of the listing is seen.
       - '^(?:LINK_MAX|NAME_MAX|PATH_MAX|SYMLINK_MAX|GNU_LIBC_VERSION|_POSIX_VDISABLE)[ \t]'
       # Two adjacent lines of the same shape; one alone is any two-column

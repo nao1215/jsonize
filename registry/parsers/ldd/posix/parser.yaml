@@ -19,6 +19,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with a library line.
+      - '\A\t\S'
       - '^[ \t]+\S+ => \S+ \(0x[0-9a-f]+\)[ \t]*$'
     none:
       # A line naming the program, which ldd prints above each program's
