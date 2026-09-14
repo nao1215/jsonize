@@ -1,0 +1,20 @@
+{
+  "sessions": [
+    {
+      "pid": 668374,
+      "name": "jz-second",
+      "started": "09/14/26 22:32:09",
+      "state": "Detached"
+    },
+    {
+      "pid": 668372,
+      "name": "jz-fixture",
+      "started": "09/14/26 22:32:09",
+      "state": "Detached"
+    }
+  ],
+  "sockets": {
+    "count": 2,
+    "directory": "/run/screen/S-user"
+  }
+}

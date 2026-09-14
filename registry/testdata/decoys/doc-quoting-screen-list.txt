@@ -1,0 +1,9 @@
+Reattaching a session
+
+screen -ls shows what is running:
+
+There are screens on:
+	668372.jz-fixture	(09/14/26 22:32:09)	(Detached)
+
+Reattach with screen -r and the name after the dot. When the list says
+"No Sockets found", nothing is running for this user.
