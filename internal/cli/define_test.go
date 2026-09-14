@@ -26,6 +26,11 @@ func TestDefineReadsWithAGivenDefinition(t *testing.T) {
 	if got := len(h.records()); got != 2 {
 		t.Errorf("streamed %d records", got)
 	}
+	// A key the definition does not produce is refused before a record is
+	// streamed, as it is from a registered definition.
+	if code := h.pipe("a b\n1 2\n", "--define", "parse: {type: table, header: {columns: [a, b]}}", "--stream", "--extract", "c"); code != ExitUsage || h.stdout.Len() != 0 {
+		t.Errorf("stream, unknown key: %d stdout=%q stderr=%s", code, h.stdout.String(), h.stderr.String())
+	}
 	if code := h.pipe("a,b\n1,2\n", "--define", "parse: {type: csv}", "--extract", "a"); code != ExitOK {
 		t.Fatalf("extract: %d %s", code, h.stderr.String())
 	}
