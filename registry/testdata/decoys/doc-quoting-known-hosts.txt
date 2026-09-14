@@ -1,0 +1,9 @@
+Pinning a host key
+
+Run ssh-keyscan once and paste the line it prints into known_hosts:
+
+github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+
+The comment line above it ("# github.com:22 SSH-2.0-...") names the
+server version and is not part of the key. Compare the key against the
+one the provider publishes before trusting it.
