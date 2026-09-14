@@ -1,0 +1,5 @@
+description: the values alone, as --value prints them, which the signature must refuse
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, timedatectl show --value
+os: linux
+args: [show, --value]
+expect_error: 'does not describe this input'

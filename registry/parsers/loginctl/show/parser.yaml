@@ -1,0 +1,65 @@
+# `loginctl show-user USER`, `show-session ID` and `show-seat SEAT`
+# print the properties of one logind object as Key=value, one per line.
+# The three objects carry different keys (a user has a Linger, a session
+# a Leader and a Seat, a seat a CanGraphical), so the result is one
+# object with the keys as logind names them, and the keys whose values
+# are exact integers or yes/no are converted where the object has them.
+# The Sessions of a user or a seat is a space separated list of session
+# ids, which are not numbers (a greeter session is c1), so it is an
+# array of strings. The timestamps are stated in a zone abbreviation
+# and stay strings until --assume-zone gives it an offset.
+#
+# The shape is an environment dump, so the signature asks for the two
+# idle properties every logind object prints and for the first line to
+# be a user's UID or an object's Id. Without an argument the three
+# verbs print the properties of the login manager itself, which opens
+# with EnableWallMessages and is a different report; it is refused, as
+# is `-p NAME`, which prints one property alone.
+format: 1
+command: loginctl
+variant: show
+description: loginctl show-user, show-session and show-seat properties
+metadata:
+  tags: [linux, systemd, session]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/loginctl.html
+detect:
+  os: [linux]
+  args:
+    any: ["show-user", "show-session", "show-seat"]
+  signature:
+    # A session prints its idle properties past the twentieth line.
+    window: 40
+    all:
+      - '\A(?:UID=[0-9]+|Id=\S+)$'
+      - '^IdleHint=(?:yes|no)$'
+      - '^IdleSinceHintMonotonic=[0-9]+$'
+      # Every line is a property.
+      - '\A(?:[A-Za-z]+=[^\n]*(?:\n|\z))+\z'
+parse:
+  type: kv
+  separator: "="
+  as: map
+fields:
+  UID: {type: int}
+  GID: {type: int}
+  User: {type: int}
+  Leader: {type: int}
+  LeaderPIDFDId: {type: int}
+  VTNr: {type: int}
+  Audit: {type: int}
+  TimestampMonotonic: {type: int}
+  IdleSinceHint: {type: int}
+  IdleSinceHintMonotonic: {type: int}
+  IdleHint: {type: bool}
+  Linger: {type: bool}
+  Remote: {type: bool}
+  Active: {type: bool}
+  LockedHint: {type: bool}
+  CanIdle: {type: bool}
+  CanLock: {type: bool}
+  CanTTY: {type: bool}
+  CanGraphical: {type: bool}
+  Sessions: {type: array, split: " "}
+  Timestamp: {type: time, layout: "Mon 2006-01-02 15:04:05 MST"}

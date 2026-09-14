@@ -1,0 +1,5 @@
+description: the timesync properties show-timesync prints in the same Key=value shape under other keys, which the signature must refuse
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, timedatectl show-timesync
+os: linux
+args: [show-timesync]
+expect_error: 'does not describe this input'

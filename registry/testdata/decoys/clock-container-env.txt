@@ -1,0 +1,6 @@
+# clock settings for the container, read by docker compose
+Timezone=Asia/Tokyo
+NTP=yes
+NTP_SERVER=ntp.example.com
+LocalRTC=no
+TimeUSec="Mon 2026-09-14 22:27:42 JST"

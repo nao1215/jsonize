@@ -1,0 +1,5 @@
+description: one property asked for with -p, which the signature must refuse for lacking the others
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, loginctl show-user USER -p Linger
+os: linux
+args: [show-user, alice, -p, Linger]
+expect_error: 'does not describe this input'

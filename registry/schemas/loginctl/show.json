@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/loginctl/show.json",
+  "title": "loginctl/show",
+  "description": "loginctl show-user, show-session and show-seat properties",
+  "x-jsonize": {
+    "definition": "loginctl/show",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "Active": {
+      "type": "boolean"
+    },
+    "Audit": {
+      "type": "integer"
+    },
+    "CanGraphical": {
+      "type": "boolean"
+    },
+    "CanIdle": {
+      "type": "boolean"
+    },
+    "CanLock": {
+      "type": "boolean"
+    },
+    "CanTTY": {
+      "type": "boolean"
+    },
+    "GID": {
+      "type": "integer"
+    },
+    "IdleHint": {
+      "type": "boolean"
+    },
+    "IdleSinceHint": {
+      "type": "integer"
+    },
+    "IdleSinceHintMonotonic": {
+      "type": "integer"
+    },
+    "Leader": {
+      "type": "integer"
+    },
+    "LeaderPIDFDId": {
+      "type": "integer"
+    },
+    "Linger": {
+      "type": "boolean"
+    },
+    "LockedHint": {
+      "type": "boolean"
+    },
+    "Remote": {
+      "type": "boolean"
+    },
+    "Sessions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "Timestamp": {
+      "type": "string"
+    },
+    "TimestampMonotonic": {
+      "type": "integer"
+    },
+    "UID": {
+      "type": "integer"
+    },
+    "User": {
+      "type": "integer"
+    },
+    "VTNr": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": {
+    "type": "string"
+  }
+}

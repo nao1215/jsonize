@@ -1,0 +1,8 @@
+Id=seat0
+ActiveSession=2
+CanTTY=yes
+CanGraphical=yes
+Sessions=2
+IdleHint=no
+IdleSinceHint=0
+IdleSinceHintMonotonic=0
