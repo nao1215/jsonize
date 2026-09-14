@@ -42,4 +42,6 @@ parse:
     columns: [package, version]
 fields:
   package: {required: true}
-  version: {required: true}
+  # A version opens with a digit (PEP 440), so a line of two words of
+  # prose is not a package.
+  version: {required: true, regex: '(?P<version>[0-9]\S*)'}
