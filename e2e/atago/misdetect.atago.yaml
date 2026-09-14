@@ -233,6 +233,29 @@ scenarios:
           stderr:
             contains: "line 5: field \"version\""
 
+  # go list prints one import path per line, which is what go test's
+  # result lines are built around; without the status and the time in
+  # front it is not a result.
+  - name: go list output is not read as go test results
+    steps:
+      - fixture:
+          file: go-list.txt
+          from: "${specdir}/testdata/decoys/go-list-packages.txt"
+      - run:
+          command: jz --file go-list.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: unable to identify
+      - run:
+          command: jz --parser go --variant test --file go-list.txt
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+
   # A file's path names the definition to read it with, and the danger of
   # that is a directory name deciding what a file holds. A definition
   # that describes a shape carries no signature, so nothing about the

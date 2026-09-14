@@ -2192,3 +2192,40 @@ scenarios:
           exit_code: 0
           stderr:
             matches: "chose systemctl/units(-jobs)? from embedded"
+
+  # gzip is on every Linux runner. The listing of an archive made here
+  # lands on gzip/list, and -v on gzip/list-verbose, whose extra columns
+  # are what tells the two apart.
+  - name: jz run gzip -l lands on gzip/list and -lv on gzip/list-verbose
+    steps:
+      - fixture:
+          file: plain.txt
+          content: "hello world\nhello world\nhello world\n"
+      - run:
+          command: gzip -k plain.txt
+      - assert:
+          exit_code: 0
+      - run:
+          command: jz run --explain gzip -l plain.txt.gz
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose gzip/list from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].uncompressed", equals: 36 }
+              - { path: "$[0].compressed", gte: 1 }
+              - { path: "$[0].uncompressed_name", equals: plain.txt }
+      - run:
+          command: jz run --explain gzip -lv plain.txt.gz
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose gzip/list-verbose from embedded"
+          stdout:
+            json:
+              - { path: "$[0].method", equals: defla }
+              - { path: "$[0].crc", matches: "^[0-9a-f]{8}$" }
+              - { path: "$[0].uncompressed", equals: 36 }
+

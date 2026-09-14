@@ -1,0 +1,6 @@
+github.com/nao1215/jsonize/pkg/convert
+github.com/nao1215/jsonize/pkg/definition
+github.com/nao1215/jsonize/pkg/engine
+github.com/nao1215/jsonize/pkg/jsonutil
+github.com/nao1215/jsonize/pkg/registry
+github.com/nao1215/jsonize/pkg/selector

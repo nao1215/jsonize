@@ -1167,3 +1167,60 @@ scenarios:
           stdout: {empty: true}
           stderr:
             contains: "row has 3 fields but the first record, which numbers the columns, has 2"
+
+  # Tables from cluster and build tooling: the shapes a developer pipes in
+  # most, each identified from its header or its result lines alone.
+  - name: kubectl get pods is read with its ready count and restarts split
+    steps:
+      - fixture:
+          file: kubectl-pods.txt
+          from: "${specdir}/testdata/kubectl-pods-kube-system.txt"
+      - run:
+          command: jz --explain --file kubectl-pods.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose kubectl/pods from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 12 }
+              - { path: "$[0].ready.ready", equals: 1 }
+              - { path: "$[0].ready.total", equals: 1 }
+              - { path: "$[0].status", equals: Running }
+              - { path: "$[0].restarts", equals: 25 }
+              - { path: "$[0].last_restart", matches: "^[0-9]+[dhms]" }
+              - { path: "$[0].age", matches: "^[0-9]+d$" }
+
+  - name: go test result lines are read with the elapsed time as a number
+    steps:
+      - fixture:
+          file: go-test.txt
+          from: "${specdir}/testdata/go-test-three-packages.txt"
+      - run:
+          command: jz --file go-test.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 3 }
+              - { path: "$[0].status", equals: ok }
+              - { path: "$[0].package", equals: github.com/nao1215/jsonize/pkg/convert }
+              - { path: "$[0].elapsed", equals: 0.003 }
+              - { path: "$[0].cached", equals: false }
+              - { path: "$[1].coverage", equals: null }
+
+  - name: gzip -l is read with exact sizes as numbers and the ratio as printed
+    steps:
+      - fixture:
+          file: gzip-l.txt
+          from: "${specdir}/testdata/gzip-list-one.txt"
+      - run:
+          command: jz --file gzip-l.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              [{"compressed":58,"uncompressed":2400,"ratio":"98.6%","uncompressed_name":"a.txt"}]
+
