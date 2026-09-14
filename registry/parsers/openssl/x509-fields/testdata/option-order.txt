@@ -1,0 +1,6 @@
+SHA1 Fingerprint=35:BE:AA:85:24:05:FA:2F:ED:E1:1A:BB:52:07:4B:64:17:FE:9D:54
+serial=160A9B68B611147ABD40C03DA21300A870B91B6B
+notBefore=Sep 14 13:32:06 2026 GMT
+notAfter=Oct 14 13:32:06 2026 GMT
+issuer=CN=example.test, O=Example
+subject=CN=example.test, O=Example

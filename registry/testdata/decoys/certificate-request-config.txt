@@ -1,0 +1,6 @@
+[ req ]
+subject = /CN=example.test/O=Example
+issuer = /CN=example.test/O=Example
+serial = 01
+days = 30
+notBefore = Sep 14 13:32:06 2026 GMT
