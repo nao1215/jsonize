@@ -1068,6 +1068,39 @@ scenarios:
           exit_code: 4
           stdout: {empty: true}
 
+  # A signature sees the first twenty lines. Interfaces without an
+  # address can fill them, so no inet line is among them and every
+  # line there has the shape ip link prints.
+  - name: ip address whose first address is past the first twenty lines is not read as ip link
+    steps:
+      - fixture:
+          file: ip-address.txt
+          from: "${specdir}/testdata/ip-address-late-addresses.txt"
+      - fixture:
+          file: busybox-ip-address.txt
+          from: "${specdir}/testdata/busybox-ip-address-late-addresses.txt"
+      # iproute2 prints the mode in the header for ip link and never for
+      # ip address.
+      - run:
+          command: jz --explain --file ip-address.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ip/address from embedded"
+          stdout:
+            json:
+              - { path: "$[10].details[1].kind", equals: inet }
+              - { path: "$[10].details[1].address", equals: 192.0.2.10/24 }
+      # BusyBox prints one header for both, so nothing says which it is
+      # until the address, and the address is refused as a detail of a link.
+      - run:
+          command: jz --file busybox-ip-address.txt
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: 'field "kind": value "inet"'
+
   - name: a csv without a header line keeps its first record, numbered or named
     steps:
       - fixture:

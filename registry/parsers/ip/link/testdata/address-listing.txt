@@ -1,0 +1,26 @@
+2: dummy1: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 66:2a:d3:45:e4:45 brd ff:ff:ff:ff:ff:ff
+3: dummy2: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 6a:49:5b:1b:a6:1a brd ff:ff:ff:ff:ff:ff
+4: dummy3: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether b2:e9:63:88:6a:42 brd ff:ff:ff:ff:ff:ff
+5: dummy4: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether ae:7c:45:00:47:db brd ff:ff:ff:ff:ff:ff
+6: dummy5: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether b6:c3:bf:6c:3d:91 brd ff:ff:ff:ff:ff:ff
+7: dummy6: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether b2:ff:b0:4e:9c:31 brd ff:ff:ff:ff:ff:ff
+8: dummy7: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether ba:87:2d:5a:69:b2 brd ff:ff:ff:ff:ff:ff
+9: dummy8: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 0e:b3:fd:c6:4a:4a brd ff:ff:ff:ff:ff:ff
+10: dummy9: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether a6:11:ab:96:8a:9d brd ff:ff:ff:ff:ff:ff
+11: dummy10: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 52:08:dc:4b:07:d3 brd ff:ff:ff:ff:ff:ff
+12: dummy11: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/ether d2:9a:49:00:bb:4d brd ff:ff:ff:ff:ff:ff
+    inet 192.0.2.10/24 scope global dummy11
+       valid_lft forever preferred_lft forever
+    inet6 fe80::d09a:49ff:fe00:bb4d/64 scope link 
+       valid_lft forever preferred_lft forever

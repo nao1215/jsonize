@@ -25,6 +25,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `ip address` output whose first `inet` line is past the first twenty
+  lines, as when nine or more interfaces without an address come first,
+  was read as `ip link` with each address and lifetime as a setting.
+  iproute2's output is now read as `ip address` (its header has the
+  group and no mode), and BusyBox's, whose header is the same for both,
+  is refused.
 - `sysctl/freebsd` no longer reads the lines of a value printed over
   several lines as variables of their own (`sysctl hw.intrs` returned a
   variable named `irq1`), and reads a name part holding a space, as the

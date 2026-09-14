@@ -1,0 +1,281 @@
+[
+  {
+    "interface": {
+      "index": 2,
+      "name": "dummy1",
+      "flags": [
+        "BROADCAST",
+        "NOARP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "66:2a:d3:45:e4:45",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 3,
+      "name": "dummy2",
+      "flags": [
+        "BROADCAST",
+        "NOARP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "6a:49:5b:1b:a6:1a",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 4,
+      "name": "dummy3",
+      "flags": [
+        "BROADCAST",
+        "NOARP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "b2:e9:63:88:6a:42",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 5,
+      "name": "dummy4",
+      "flags": [
+        "BROADCAST",
+        "NOARP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "ae:7c:45:00:47:db",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 6,
+      "name": "dummy5",
+      "flags": [
+        "BROADCAST",
+        "NOARP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "b6:c3:bf:6c:3d:91",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 7,
+      "name": "dummy6",
+      "flags": [
+        "BROADCAST",
+        "NOARP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "b2:ff:b0:4e:9c:31",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 8,
+      "name": "dummy7",
+      "flags": [
+        "BROADCAST",
+        "NOARP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "ba:87:2d:5a:69:b2",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 9,
+      "name": "dummy8",
+      "flags": [
+        "BROADCAST",
+        "NOARP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "0e:b3:fd:c6:4a:4a",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 10,
+      "name": "dummy9",
+      "flags": [
+        "BROADCAST",
+        "NOARP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "a6:11:ab:96:8a:9d",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 11,
+      "name": "dummy10",
+      "flags": [
+        "BROADCAST",
+        "NOARP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noop",
+      "state": "DOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "52:08:dc:4b:07:d3",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "index": 12,
+      "name": "dummy11",
+      "flags": [
+        "BROADCAST",
+        "NOARP",
+        "UP",
+        "LOWER_UP"
+      ],
+      "mtu": 1500,
+      "qdisc": "noqueue",
+      "state": "UNKNOWN",
+      "group": "default",
+      "qlen": 1000
+    },
+    "details": [
+      {
+        "kind": "link",
+        "link_type": "ether",
+        "address": "d2:9a:49:00:bb:4d",
+        "broadcast": "ff:ff:ff:ff:ff:ff"
+      },
+      {
+        "kind": "inet",
+        "address": "192.0.2.10/24",
+        "scope": "global",
+        "attributes": [
+          "dummy11"
+        ]
+      },
+      {
+        "kind": "valid_lft",
+        "valid_lft": "forever",
+        "preferred_lft": "forever"
+      },
+      {
+        "kind": "inet6",
+        "address": "fe80::d09a:49ff:fe00:bb4d/64",
+        "scope": "link",
+        "attributes": []
+      },
+      {
+        "kind": "valid_lft",
+        "valid_lft": "forever",
+        "preferred_lft": "forever"
+      }
+    ]
+  }
+]

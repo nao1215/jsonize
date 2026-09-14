@@ -1,0 +1,28 @@
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: dummy1: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 1000
+    link/ether 5e:68:67:12:aa:ce brd ff:ff:ff:ff:ff:ff
+3: dummy2: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 1000
+    link/ether b2:ef:bd:78:a1:ca brd ff:ff:ff:ff:ff:ff
+4: dummy3: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 1000
+    link/ether 92:39:5a:c1:aa:d2 brd ff:ff:ff:ff:ff:ff
+5: dummy4: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 1000
+    link/ether 92:23:f3:bc:0e:c8 brd ff:ff:ff:ff:ff:ff
+6: dummy5: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 1000
+    link/ether 66:44:a7:20:fd:88 brd ff:ff:ff:ff:ff:ff
+7: dummy6: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 1000
+    link/ether 02:7b:ae:5f:ac:b2 brd ff:ff:ff:ff:ff:ff
+8: dummy7: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 1000
+    link/ether a6:47:93:71:c1:cb brd ff:ff:ff:ff:ff:ff
+9: dummy8: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 1000
+    link/ether ae:f5:50:0d:f5:66 brd ff:ff:ff:ff:ff:ff
+10: dummy9: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 1000
+    link/ether 4a:fe:7e:92:68:18 brd ff:ff:ff:ff:ff:ff
+11: dummy10: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN qlen 1000
+    link/ether de:dd:a8:03:54:68 brd ff:ff:ff:ff:ff:ff
+12: dummy11: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN qlen 1000
+    link/ether ce:0f:77:e0:e7:6a brd ff:ff:ff:ff:ff:ff
+    inet 192.0.2.10/24 scope global dummy11
+       valid_lft forever preferred_lft forever
+    inet6 fe80::cc0f:77ff:fee0:e76a/64 scope link 
+       valid_lft forever preferred_lft forever

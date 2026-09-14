@@ -27,6 +27,11 @@ detect:
       # the counters of neither and the addresses of neither.
       - '^[ \t]+RX:[ \t]+bytes[ \t]+packets[ \t]+errors'
       - '^[ \t]+inet6?[ \t]+\S'
+      # An interface with no address prints no inet line, so ip address
+      # output whose first address is past the window has none here. Its
+      # header still differs: iproute2 prints the mode before the group for
+      # ip link and never for ip address.
+      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+(?: master \S+)?(?: state \S+)? group \S+'
 parse:
   type: records
   start: '^\d+: '
@@ -39,7 +44,8 @@ parse:
         # A bridged interface names its bridge between the queueing
         # discipline and the state, and a veth end names its peer after
         # an @. Both are absent on an ordinary interface.
-        # BusyBox prints no state, no mode and no group.
+        # BusyBox prints no mode and no group, and Ubuntu's build prints
+        # no state either.
         pattern: '^(?P<index>\d+): (?P<name>[^:@]+)(?:@(?P<peer>\S+))?: <(?P<flags>[^>]*)> mtu (?P<mtu>\d+) qdisc (?P<qdisc>\S+)(?: master (?P<master>\S+))?(?: state (?P<state>\S+))?(?: mode (?P<mode>\S+))?(?: group (?P<group>\S+))?(?: qlen (?P<qlen>\d+))?\s*$'
       fields:
         index: {type: int}
@@ -72,6 +78,13 @@ parse:
     # entry names its kind rather than as parts at fixed positions.
     # ip indents every one of them, so a line at the margin is not the
     # interface's, whatever it says.
+    #
+    # ip address indents its addresses and their lifetimes too, and
+    # BusyBox prints the same header for both commands. The signature
+    # refuses those lines only within its window, and interfaces with no
+    # address can push the first one past it, so an inet, inet6 or
+    # valid_lft line is matched here and refused by the kind field rather
+    # than read as settings.
     - name: details
       select: {skip: 2}
       parse:
@@ -79,8 +92,10 @@ parse:
         patterns:
           - '^[ \t]+(?P<kind>altname) (?P<name>\S+)\s*$'
           - '^[ \t]+(?P<kind>alias) (?P<name>.+?)\s*$'
+          - '^[ \t]+(?P<kind>inet6?|valid_lft)[ \t]+(?P<text>\S.*?)\s*$'
           - pattern: '^[ \t]+(?P<text>\S.*?)\s*$'
             values: {kind: settings}
       fields:
+        kind: {regex: '(?P<kind>altname|alias|settings)'}
         name: {when_missing: omit}
         text: {when_missing: omit}
