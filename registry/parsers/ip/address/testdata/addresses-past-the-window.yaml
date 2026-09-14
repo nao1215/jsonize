@@ -1,0 +1,10 @@
+source: >-
+  `ip address show type dummy` captured with LC_ALL=C in an Ubuntu 24.04
+  container (iproute2 6.1.0) with its own network namespace, after adding
+  eleven dummy interfaces and an address to the last one; the hardware
+  addresses are the random ones the kernel gave them
+description: >-
+  Ten interfaces without an address come first, so no inet line is in the
+  first twenty lines. The header, which ip address prints with the group
+  and without the mode, is what says this is not ip link.
+os: linux

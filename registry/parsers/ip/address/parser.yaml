@@ -25,7 +25,12 @@ detect:
       # answered from the address table alone, so the header it prints
       # carries neither the queueing discipline nor the group.
       - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ (?:qdisc \S+ ?)?(?:master \S+ ?)?(?:state \S+ ?)?'
+    any:
       - '^[ \t]+inet6?[ \t]+\S+'
+      # Interfaces with no address print no inet line, and enough of them
+      # first leave every address past the window. iproute2's header still
+      # tells them apart: it has the group and no mode.
+      - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+(?: master \S+)?(?: state \S+)? group \S+'
 parse:
   type: records
   start: '^\d+: '

@@ -2,4 +2,4 @@ source: the loopback fixture followed by what `ip -br address show lo` prints, c
 description: >-
   Two commands run one after the other. `ip link` indents every line below an interface header, so the unindented line is not a detail of lo.
 os: linux
-expect_error: 'line 3: part "details": line does not match any of the 3 patterns'
+expect_error: 'line 3: part "details": line does not match any of the 4 patterns'

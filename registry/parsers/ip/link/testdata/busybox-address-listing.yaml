@@ -1,0 +1,11 @@
+source: >-
+  `ip address` captured with LC_ALL=C in an Alpine container (BusyBox
+  1.37.0) with its own network namespace, after flushing the loopback's
+  addresses, adding eleven dummy interfaces and an address to the last
+  one; the hardware addresses are the random ones the kernel gave them
+description: >-
+  BusyBox prints the same header for ip link and ip address, and the
+  first inet line is past the first twenty lines, so the signature cannot
+  tell them apart. The inet line is refused rather than read as a setting.
+os: linux
+expect_error: 'line 25: field "kind": value "inet" does not have the shape'
