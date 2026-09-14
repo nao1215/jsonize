@@ -1,0 +1,255 @@
+[
+  {
+    "group": {
+      "name": null
+    },
+    "recipes": [
+      {
+        "name": "audit",
+        "parameters": null,
+        "doc": "Run security audit (requires cargo-audit)",
+        "aliases": null
+      },
+      {
+        "name": "bench",
+        "parameters": "*ARGS",
+        "doc": "Run criterion benchmarks (use `just bench -- <filter>` to run a subset)",
+        "aliases": null
+      },
+      {
+        "name": "build",
+        "parameters": null,
+        "doc": "Build debug binary",
+        "aliases": null
+      },
+      {
+        "name": "build-release",
+        "parameters": null,
+        "doc": "Build release binary",
+        "aliases": null
+      },
+      {
+        "name": "changelog",
+        "parameters": null,
+        "doc": "Generate CHANGELOG.md from git history (requires git-cliff)",
+        "aliases": null
+      },
+      {
+        "name": "ci",
+        "parameters": null,
+        "doc": "Run all CI checks locally (test + lint + fmt + doc + audit + release tooling)",
+        "aliases": null
+      },
+      {
+        "name": "clean",
+        "parameters": null,
+        "doc": "Remove build artifacts",
+        "aliases": null
+      },
+      {
+        "name": "coverage",
+        "parameters": null,
+        "doc": "Run code coverage (requires cargo-llvm-cov)",
+        "aliases": null
+      },
+      {
+        "name": "coverage-html",
+        "parameters": null,
+        "doc": "Run code coverage with HTML report",
+        "aliases": null
+      },
+      {
+        "name": "default",
+        "parameters": null,
+        "doc": "Default recipe: show available tasks",
+        "aliases": null
+      },
+      {
+        "name": "deny",
+        "parameters": null,
+        "doc": "Check dependency licenses and advisories (requires cargo-deny)",
+        "aliases": null
+      },
+      {
+        "name": "doc",
+        "parameters": null,
+        "doc": "Build documentation with strict warnings",
+        "aliases": null
+      },
+      {
+        "name": "docker-build",
+        "parameters": null,
+        "doc": "Build Docker image",
+        "aliases": null
+      },
+      {
+        "name": "fmt",
+        "parameters": null,
+        "doc": "Format all source files",
+        "aliases": null
+      },
+      {
+        "name": "fmt-check",
+        "parameters": null,
+        "doc": "Check code formatting (does not modify files)",
+        "aliases": null
+      },
+      {
+        "name": "generate-fixtures",
+        "parameters": null,
+        "doc": "Generate integration test fixture images (requires ImageMagick 7 + Python 3)",
+        "aliases": null
+      },
+      {
+        "name": "integration",
+        "parameters": null,
+        "doc": "Run all integration tests",
+        "aliases": null
+      },
+      {
+        "name": "integration-api",
+        "parameters": null,
+        "doc": "Run API server integration tests with runn in Docker Compose",
+        "aliases": null
+      },
+      {
+        "name": "integration-api-clean",
+        "parameters": null,
+        "doc": "Clean up API integration test containers",
+        "aliases": null
+      },
+      {
+        "name": "integration-cli",
+        "parameters": null,
+        "doc": "Run CLI end-to-end tests with atago (builds truss, needs atago on PATH)",
+        "aliases": null
+      },
+      {
+        "name": "integration-s3",
+        "parameters": null,
+        "doc": "Run S3 backend integration tests (runn → nginx → truss → s3mock)",
+        "aliases": null
+      },
+      {
+        "name": "integration-s3-clean",
+        "parameters": null,
+        "doc": "Clean up S3 integration test containers",
+        "aliases": null
+      },
+      {
+        "name": "lint",
+        "parameters": null,
+        "doc": "Run clippy linter with strict warnings",
+        "aliases": null
+      },
+      {
+        "name": "release-test",
+        "parameters": null,
+        "doc": "Test the release manifest generator, verifier, and archive normalization",
+        "aliases": null
+      },
+      {
+        "name": "release-toolchain-check",
+        "parameters": null,
+        "doc": "Check the release workflow's pinned Rust toolchain against Cargo.toml rust-version",
+        "aliases": null
+      },
+      {
+        "name": "serve",
+        "parameters": "*ARGS",
+        "doc": "Start development server (cargo run)",
+        "aliases": null
+      },
+      {
+        "name": "serve-docker",
+        "parameters": null,
+        "doc": "Start development server with Docker Compose",
+        "aliases": null
+      },
+      {
+        "name": "setup",
+        "parameters": null,
+        "doc": "Install development tools",
+        "aliases": null
+      },
+      {
+        "name": "test",
+        "parameters": null,
+        "doc": "Run unit tests and doc tests (use `just integration` for Docker-based tests)",
+        "aliases": null
+      },
+      {
+        "name": "test-unit",
+        "parameters": null,
+        "doc": "Run only unit tests (fast, no integration)",
+        "aliases": null
+      },
+      {
+        "name": "url-signer-package-pack",
+        "parameters": null,
+        "doc": "Pack the TypeScript URL signer package without publishing",
+        "aliases": null
+      },
+      {
+        "name": "url-signer-package-test",
+        "parameters": null,
+        "doc": "Run the official TypeScript URL signer package tests",
+        "aliases": null
+      },
+      {
+        "name": "url-signer-package-typecheck",
+        "parameters": null,
+        "doc": "Run the official TypeScript URL signer package tests",
+        "aliases": null
+      },
+      {
+        "name": "wasm-build",
+        "parameters": null,
+        "doc": "Build WASM demo for GitHub Pages",
+        "aliases": null
+      },
+      {
+        "name": "wasm-check",
+        "parameters": null,
+        "doc": "Check WASM feature slice compiles",
+        "aliases": null
+      },
+      {
+        "name": "wasm-lint",
+        "parameters": null,
+        "doc": "Lint WASM feature slice",
+        "aliases": null
+      },
+      {
+        "name": "wasm-package-build",
+        "parameters": null,
+        "doc": "Build official npm package bindings",
+        "aliases": null
+      },
+      {
+        "name": "wasm-package-consumer-smoke",
+        "parameters": null,
+        "doc": "Install the local npm package tarball into a throwaway consumer and run one transform",
+        "aliases": null
+      },
+      {
+        "name": "wasm-package-pack",
+        "parameters": null,
+        "doc": "Pack official npm package without publishing",
+        "aliases": null
+      },
+      {
+        "name": "wasm-vite-example-runtime-smoke",
+        "parameters": "# Install the checked-in Vite example dependencies, serve it, and verify runtime output in headless Chrome",
+        "doc": null,
+        "aliases": null
+      },
+      {
+        "name": "wasm-vite-example-smoke",
+        "parameters": null,
+        "doc": "Install the local npm package tarball into a temporary Vite app and verify bundler build succeeds",
+        "aliases": null
+      }
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+Available recipes:
+    audit                           # Run security audit (requires cargo-audit)
+    bench *ARGS                     # Run criterion benchmarks (use `just bench -- <filter>` to run a subset)
+    build                           # Build debug binary
+    build-release                   # Build release binary
+    changelog                       # Generate CHANGELOG.md from git history (requires git-cliff)
+    ci                              # Run all CI checks locally (test + lint + fmt + doc + audit + release tooling)
+    clean                           # Remove build artifacts
+    coverage                        # Run code coverage (requires cargo-llvm-cov)
+    coverage-html                   # Run code coverage with HTML report
+    default                         # Default recipe: show available tasks
+    deny                            # Check dependency licenses and advisories (requires cargo-deny)
+    doc                             # Build documentation with strict warnings
+    docker-build                    # Build Docker image
+    fmt                             # Format all source files
+    fmt-check                       # Check code formatting (does not modify files)
+    generate-fixtures               # Generate integration test fixture images (requires ImageMagick 7 + Python 3)
+    integration                     # Run all integration tests
+    integration-api                 # Run API server integration tests with runn in Docker Compose
+    integration-api-clean           # Clean up API integration test containers
+    integration-cli                 # Run CLI end-to-end tests with atago (builds truss, needs atago on PATH)
+    integration-s3                  # Run S3 backend integration tests (runn → nginx → truss → s3mock)
+    integration-s3-clean            # Clean up S3 integration test containers
+    lint                            # Run clippy linter with strict warnings
+    release-test                    # Test the release manifest generator, verifier, and archive normalization
+    release-toolchain-check         # Check the release workflow's pinned Rust toolchain against Cargo.toml rust-version
+    serve *ARGS                     # Start development server (cargo run)
+    serve-docker                    # Start development server with Docker Compose
+    setup                           # Install development tools
+    test                            # Run unit tests and doc tests (use `just integration` for Docker-based tests)
+    test-unit                       # Run only unit tests (fast, no integration)
+    url-signer-package-pack         # Pack the TypeScript URL signer package without publishing
+    url-signer-package-test         # Run the official TypeScript URL signer package tests
+    url-signer-package-typecheck    # Run the official TypeScript URL signer package tests
+    wasm-build                      # Build WASM demo for GitHub Pages
+    wasm-check                      # Check WASM feature slice compiles
+    wasm-lint                       # Lint WASM feature slice
+    wasm-package-build              # Build official npm package bindings
+    wasm-package-consumer-smoke     # Install the local npm package tarball into a throwaway consumer and run one transform
+    wasm-package-pack               # Pack official npm package without publishing
+    wasm-vite-example-runtime-smoke # Install the checked-in Vite example dependencies, serve it, and verify runtime output in headless Chrome
+    wasm-vite-example-smoke         # Install the local npm package tarball into a temporary Vite app and verify bundler build succeeds

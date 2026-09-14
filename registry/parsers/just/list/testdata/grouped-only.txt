@@ -1,0 +1,7 @@
+Available recipes:
+    [check]
+    lint            # [alias: l]
+    test +ARGS=''   # Run the tests
+
+    [release]
+    publish version # [aliases: p, pub]

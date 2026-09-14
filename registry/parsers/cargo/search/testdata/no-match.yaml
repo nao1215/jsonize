@@ -1,0 +1,4 @@
+description: a query matching no crate prints nothing, which jz refuses rather than reporting an empty list
+source: captured with LC_ALL=C cargo search nonexistent-crate-name-zzz-qq --limit 5 on Linux (cargo 1.98.0), standard output to a file; zero bytes
+args: [search, nonexistent-crate-name-zzz-qq, --limit, "5"]
+expect_error: holds no text

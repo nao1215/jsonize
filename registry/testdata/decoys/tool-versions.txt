@@ -1,0 +1,4 @@
+node 22.22.1
+go 1.26.4
+java 17.0.2
+shellcheck 0.11.0

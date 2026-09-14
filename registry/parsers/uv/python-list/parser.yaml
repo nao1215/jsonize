@@ -1,0 +1,40 @@
+# `uv python list` prints one line per Python interpreter uv knows of:
+# a key naming the implementation, the version, the operating system,
+# the architecture and the C library, joined with hyphens, and then the
+# path the interpreter is installed at, or `<download available>` for
+# one uv could fetch. A path that is a symbolic link is followed by an
+# arrow and what it points to. The key is kept whole, since it is what
+# `uv python install` takes, and its parts are read beside it; a
+# version may carry a variant after a plus sign (`3.14.0+freethreaded`),
+# which is its own key. The path is null for an interpreter that is not
+# installed, and the link target null for a path that is not a link.
+#
+# The path has to be one: `--show-urls` prints the download address in
+# its place, and that listing is refused rather than read with an
+# address as a path. Every line has the five-part key and a path or the
+# download marker, and the signature asks that of every line.
+format: 1
+command: uv
+variant: python-list
+description: uv python list, the Python interpreters uv finds or can download
+metadata:
+  tags: [python, toolchain]
+  compatible: [uv]
+  references:
+    - https://docs.astral.sh/uv/reference/cli/#uv-python-list
+detect:
+  args:
+    all: ["python", "list"]
+  signature:
+    all:
+      - '\A(?:^[a-z]+-\d[^\s-]*-[a-z]+-[^\s-]+-[^\s-]+[ \t]{2,}(?:<download available>|/[^\n]*|[A-Za-z]:[\\/][^\n]*)$\n?)+\z'
+parse:
+  type: regex
+  pattern: '^(?P<key>(?P<implementation>[a-z]+)-(?P<version>\d[^\s+-]*)(?:\+(?P<variant>[^\s-]+))?-(?P<os>[a-z]+)-(?P<arch>[^\s-]+)-(?P<libc>[^\s-]+))[ \t]{2,}(?:<download available>|(?P<path>(?:/|[A-Za-z]:[\\/]).*?)(?: -> (?P<target>.+))?)$'
+fields:
+  key: {required: true}
+  implementation: {required: true}
+  version: {required: true}
+  os: {required: true}
+  arch: {required: true}
+  libc: {required: true}

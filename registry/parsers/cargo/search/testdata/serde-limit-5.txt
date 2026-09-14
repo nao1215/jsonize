@@ -1,0 +1,6 @@
+serde = "1.0.229"         # A generic serialization/deserialization framework
+serde-saphyr = "1.2.0"    # YAML (de)serializer for Serde, emphasizing panic-free parsing, fast builds and good error reporting. …
+clickhouse = "0.15.2"     # Official Rust client for ClickHouse DB
+serde_yml = "0.0.13"      # DEPRECATED — `serde_yml` is unmaintained. This release is a thin compatibility shim that forwards eve…
+serde_valid = "3.1.2"     # JSON Schema based validation tool using serde.
+... and 21668 crates more (use --limit N to see more)

@@ -1,0 +1,52 @@
+# `cargo search` prints one line per crate found, in the form a
+# dependency is written in Cargo.toml: the name, ` = `, the newest
+# version in double quotes, and then, padded to a common column, a `#`
+# and the crate's description. A crate without a description prints
+# the name and version alone. The description is cut to fit and ends in
+# an ellipsis when it was; it is kept as printed. When more crates
+# match than the limit asked for, a last line says how many more and,
+# in parentheses, how to see them; it is read into a list of its own,
+# which is empty when every match was printed. A search that finds
+# nothing prints nothing, which jz refuses as text it cannot read.
+# The note cargo prints about `cargo info` goes to standard error.
+#
+# The line is the shape of a Cargo.toml dependency, and a file of those
+# with a comment after each is the same text, so the definition is used
+# only when it is named (`jz run cargo search serde`, `--parser cargo
+# --variant search`); the signature still asks the shape of every line.
+format: 1
+command: cargo
+variant: search
+description: cargo search, crates matching a query with their newest version
+metadata:
+  tags: [rust, package, registry]
+  compatible: [cargo]
+  references:
+    - https://doc.rust-lang.org/cargo/commands/cargo-search.html
+detect:
+  args:
+    all: ["search"]
+  auto_detect: false
+  signature:
+    all:
+      - '\A(?:^(?:\S+ = "[^"\n]+"(?: {4,}# [^\n]*)?|\.\.\. and \d+ crates more(?: \([^\n]*\))?)$\n?)+\z'
+parse:
+  type: composite
+  parts:
+    - name: crates
+      select: {until: '^\.\.\. and \d+ crates more'}
+      parse:
+        type: regex
+        pattern: '^(?P<name>\S+) = "(?P<version>[^"]+)"(?: {4,}# (?P<description>.*))?$'
+      fields:
+        name: {required: true}
+        version: {required: true}
+    # The parenthesised hint restates the command line and is matched
+    # without being kept.
+    - name: more
+      ignore: ['^\S+ = "']
+      parse:
+        type: regex
+        pattern: '^\.\.\. and (?P<count>\d+) crates more(?: \([^\n]*\))?$'
+      fields:
+        count: {type: int, required: true}

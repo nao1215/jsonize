@@ -1,0 +1,3 @@
+description: mise ls has two cells on most lines and four on the rest, and is refused
+source: captured with LC_ALL=C mise ls on Linux (mise 2026.2.21), output to a file
+expect_error: does not describe this input

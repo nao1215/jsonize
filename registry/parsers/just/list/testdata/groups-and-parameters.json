@@ -1,0 +1,61 @@
+[
+  {
+    "group": {
+      "name": null
+    },
+    "recipes": [
+      {
+        "name": "build",
+        "parameters": "target='debug'",
+        "doc": "Build the binary",
+        "aliases": [
+          "b"
+        ]
+      },
+      {
+        "name": "clean",
+        "parameters": null,
+        "doc": null,
+        "aliases": null
+      },
+      {
+        "name": "greet",
+        "parameters": "name='World' greeting=\"Hello there\"",
+        "doc": "Greet someone",
+        "aliases": null
+      }
+    ]
+  },
+  {
+    "group": {
+      "name": "check"
+    },
+    "recipes": [
+      {
+        "name": "lint",
+        "parameters": null,
+        "doc": null,
+        "aliases": null
+      },
+      {
+        "name": "test",
+        "parameters": "+ARGS=''",
+        "doc": "Run the tests",
+        "aliases": null
+      }
+    ]
+  },
+  {
+    "group": {
+      "name": "release"
+    },
+    "recipes": [
+      {
+        "name": "publish",
+        "parameters": "version",
+        "doc": "Publish a release",
+        "aliases": null
+      }
+    ]
+  }
+]

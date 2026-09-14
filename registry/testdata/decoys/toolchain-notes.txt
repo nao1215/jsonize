@@ -1,0 +1,3 @@
+stable-x86_64-unknown-linux-gnu - update available since Monday, 1.98.1 fixes the linker regression
+1.92-x86_64-unknown-linux-gnu - up to date as far as we need, pinned for the MSRV check
+rustup - up to date, nothing to do here
