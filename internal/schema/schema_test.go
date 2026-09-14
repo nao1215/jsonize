@@ -77,6 +77,14 @@ func TestGenerate(t *testing.T) {
 			want: `{"type":"array","items":{"type":"object","properties":{"kind":{"type":"string","enum":["down","gone","up"]},"name":{"type":"string"},"note":{"type":"string"}},"required":["kind","name"]}}`,
 		},
 		{
+			// A string field's regex refuses a value it does not match and
+			// keeps only its group of one it does, so a group that is a list
+			// of literals is the enum, whatever the pattern let through.
+			name: "a field regex that keeps a list of literals",
+			def:  "parse: {type: regex, pattern: '^(?P<kind>up|down|gone|\\S+x) (?P<name>\\S+)$'}\nfields: {kind: {regex: '(?P<kind>up|down)'}}\n",
+			want: `{"type":"array","items":{"type":"object","properties":{"kind":{"type":"string","enum":["down","up"]},"name":{"type":"string"}},"required":["kind","name"]}}`,
+		},
+		{
 			name: "regex against the whole input",
 			def:  "parse: {type: regex, each: input, pattern: 'sent (?P<sent>\\d+)(?:, lost (?P<lost>\\d+))?'}\nfields: {sent: {type: int}, lost: {type: float}}\n",
 			want: `{"type":"object","properties":{"sent":{"type":"integer"},"lost":{"type":["number","null"]}},"required":["sent","lost"]}`,

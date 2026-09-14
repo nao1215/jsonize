@@ -276,8 +276,8 @@ func regexObject(patterns []*regexp.Regexp, values [][]definition.Value, fields 
 		v, omittable := value(f, g.optional)
 		// A value that can also be null keeps its type list and no enum:
 		// the list of values would have to name null as one of them.
-		if g.enumOK && plainString(f) && !v.Has(TypeNull) {
-			v.Enum = g.enum
+		if enum, ok := fieldEnum(g.enum, g.enumOK, f); ok && !v.Has(TypeNull) {
+			v.Enum = enum
 		}
 		obj.Properties = append(obj.Properties, Property{Name: name, Schema: v})
 		if g.in == len(patterns) && !omittable {
@@ -355,6 +355,26 @@ func converted(f *definition.Field) *Schema {
 func plainString(f *definition.Field) bool {
 	return f == nil || (f.EffectiveType() == definition.FieldString && f.TrimPrefix == "" && f.TrimSuffix == "" && len(f.NullIf) == 0 &&
 		f.Regex == "" && f.Unescape == nil)
+}
+
+// fieldEnum returns the values a key can have when they are a finite
+// list: the ones the pattern's group matches for a plain string, or the
+// ones the field's own regex group matches, since that group's text is
+// what is kept and a value the regex does not match is refused.
+func fieldEnum(values []string, finite bool, f *definition.Field) ([]string, bool) {
+	if plainString(f) {
+		return values, finite
+	}
+	if f.EffectiveType() != definition.FieldString || f.TrimPrefix != "" || f.TrimSuffix != "" || len(f.NullIf) > 0 ||
+		f.Unescape != nil || f.CompiledRegex() == nil {
+		return nil, false
+	}
+	for _, c := range captures(f.CompiledRegex()) {
+		if c.name == f.Group() && c.finite {
+			return unionEnum(c.values, true, nil, true)
+		}
+	}
+	return nil, false
 }
 
 // optionalGroup reports a string field whose regex keeps a group the
