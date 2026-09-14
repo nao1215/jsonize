@@ -1,0 +1,4 @@
+description: With --client, so only the client and kustomize lines are printed.
+source: captured from kubectl v1.35.0 on Linux with LC_ALL=C
+os: linux
+args: [version, --client]

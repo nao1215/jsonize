@@ -1,0 +1,1272 @@
+[
+  {
+    "name": "bindings",
+    "shortnames": null,
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Binding",
+    "verbs": [
+      "create"
+    ],
+    "categories": null
+  },
+  {
+    "name": "componentstatuses",
+    "shortnames": [
+      "cs"
+    ],
+    "apiversion": "v1",
+    "namespaced": false,
+    "kind": "ComponentStatus",
+    "verbs": [
+      "get",
+      "list"
+    ],
+    "categories": null
+  },
+  {
+    "name": "configmaps",
+    "shortnames": [
+      "cm"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "ConfigMap",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "endpoints",
+    "shortnames": [
+      "ep"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Endpoints",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "events",
+    "shortnames": [
+      "ev"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Event",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "limitranges",
+    "shortnames": [
+      "limits"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "LimitRange",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "namespaces",
+    "shortnames": [
+      "ns"
+    ],
+    "apiversion": "v1",
+    "namespaced": false,
+    "kind": "Namespace",
+    "verbs": [
+      "create",
+      "delete",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "nodes",
+    "shortnames": [
+      "no"
+    ],
+    "apiversion": "v1",
+    "namespaced": false,
+    "kind": "Node",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "persistentvolumeclaims",
+    "shortnames": [
+      "pvc"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "PersistentVolumeClaim",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "persistentvolumes",
+    "shortnames": [
+      "pv"
+    ],
+    "apiversion": "v1",
+    "namespaced": false,
+    "kind": "PersistentVolume",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "pods",
+    "shortnames": [
+      "po"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Pod",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "all"
+    ]
+  },
+  {
+    "name": "podtemplates",
+    "shortnames": null,
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "PodTemplate",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "replicationcontrollers",
+    "shortnames": [
+      "rc"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "ReplicationController",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "all"
+    ]
+  },
+  {
+    "name": "resourcequotas",
+    "shortnames": [
+      "quota"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "ResourceQuota",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "secrets",
+    "shortnames": null,
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Secret",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "serviceaccounts",
+    "shortnames": [
+      "sa"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "ServiceAccount",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "services",
+    "shortnames": [
+      "svc"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Service",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "all"
+    ]
+  },
+  {
+    "name": "mutatingwebhookconfigurations",
+    "shortnames": null,
+    "apiversion": "admissionregistration.k8s.io/v1",
+    "namespaced": false,
+    "kind": "MutatingWebhookConfiguration",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "api-extensions"
+    ]
+  },
+  {
+    "name": "validatingadmissionpolicies",
+    "shortnames": null,
+    "apiversion": "admissionregistration.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ValidatingAdmissionPolicy",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "api-extensions"
+    ]
+  },
+  {
+    "name": "validatingadmissionpolicybindings",
+    "shortnames": null,
+    "apiversion": "admissionregistration.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ValidatingAdmissionPolicyBinding",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "api-extensions"
+    ]
+  },
+  {
+    "name": "validatingwebhookconfigurations",
+    "shortnames": null,
+    "apiversion": "admissionregistration.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ValidatingWebhookConfiguration",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "api-extensions"
+    ]
+  },
+  {
+    "name": "customresourcedefinitions",
+    "shortnames": [
+      "crd",
+      "crds"
+    ],
+    "apiversion": "apiextensions.k8s.io/v1",
+    "namespaced": false,
+    "kind": "CustomResourceDefinition",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "api-extensions"
+    ]
+  },
+  {
+    "name": "apiservices",
+    "shortnames": null,
+    "apiversion": "apiregistration.k8s.io/v1",
+    "namespaced": false,
+    "kind": "APIService",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "api-extensions"
+    ]
+  },
+  {
+    "name": "controllerrevisions",
+    "shortnames": null,
+    "apiversion": "apps/v1",
+    "namespaced": true,
+    "kind": "ControllerRevision",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "daemonsets",
+    "shortnames": [
+      "ds"
+    ],
+    "apiversion": "apps/v1",
+    "namespaced": true,
+    "kind": "DaemonSet",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "all"
+    ]
+  },
+  {
+    "name": "deployments",
+    "shortnames": [
+      "deploy"
+    ],
+    "apiversion": "apps/v1",
+    "namespaced": true,
+    "kind": "Deployment",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "all"
+    ]
+  },
+  {
+    "name": "replicasets",
+    "shortnames": [
+      "rs"
+    ],
+    "apiversion": "apps/v1",
+    "namespaced": true,
+    "kind": "ReplicaSet",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "all"
+    ]
+  },
+  {
+    "name": "statefulsets",
+    "shortnames": [
+      "sts"
+    ],
+    "apiversion": "apps/v1",
+    "namespaced": true,
+    "kind": "StatefulSet",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "all"
+    ]
+  },
+  {
+    "name": "applications",
+    "shortnames": [
+      "app",
+      "apps"
+    ],
+    "apiversion": "argoproj.io/v1alpha1",
+    "namespaced": true,
+    "kind": "Application",
+    "verbs": [
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "create",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "applicationsets",
+    "shortnames": [
+      "appset",
+      "appsets"
+    ],
+    "apiversion": "argoproj.io/v1alpha1",
+    "namespaced": true,
+    "kind": "ApplicationSet",
+    "verbs": [
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "create",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "appprojects",
+    "shortnames": [
+      "appproj",
+      "appprojs"
+    ],
+    "apiversion": "argoproj.io/v1alpha1",
+    "namespaced": true,
+    "kind": "AppProject",
+    "verbs": [
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "create",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "selfsubjectreviews",
+    "shortnames": null,
+    "apiversion": "authentication.k8s.io/v1",
+    "namespaced": false,
+    "kind": "SelfSubjectReview",
+    "verbs": [
+      "create"
+    ],
+    "categories": null
+  },
+  {
+    "name": "tokenreviews",
+    "shortnames": null,
+    "apiversion": "authentication.k8s.io/v1",
+    "namespaced": false,
+    "kind": "TokenReview",
+    "verbs": [
+      "create"
+    ],
+    "categories": null
+  },
+  {
+    "name": "localsubjectaccessreviews",
+    "shortnames": null,
+    "apiversion": "authorization.k8s.io/v1",
+    "namespaced": true,
+    "kind": "LocalSubjectAccessReview",
+    "verbs": [
+      "create"
+    ],
+    "categories": null
+  },
+  {
+    "name": "selfsubjectaccessreviews",
+    "shortnames": null,
+    "apiversion": "authorization.k8s.io/v1",
+    "namespaced": false,
+    "kind": "SelfSubjectAccessReview",
+    "verbs": [
+      "create"
+    ],
+    "categories": null
+  },
+  {
+    "name": "selfsubjectrulesreviews",
+    "shortnames": null,
+    "apiversion": "authorization.k8s.io/v1",
+    "namespaced": false,
+    "kind": "SelfSubjectRulesReview",
+    "verbs": [
+      "create"
+    ],
+    "categories": null
+  },
+  {
+    "name": "subjectaccessreviews",
+    "shortnames": null,
+    "apiversion": "authorization.k8s.io/v1",
+    "namespaced": false,
+    "kind": "SubjectAccessReview",
+    "verbs": [
+      "create"
+    ],
+    "categories": null
+  },
+  {
+    "name": "horizontalpodautoscalers",
+    "shortnames": [
+      "hpa"
+    ],
+    "apiversion": "autoscaling/v2",
+    "namespaced": true,
+    "kind": "HorizontalPodAutoscaler",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "all"
+    ]
+  },
+  {
+    "name": "cronjobs",
+    "shortnames": [
+      "cj"
+    ],
+    "apiversion": "batch/v1",
+    "namespaced": true,
+    "kind": "CronJob",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "all"
+    ]
+  },
+  {
+    "name": "jobs",
+    "shortnames": null,
+    "apiversion": "batch/v1",
+    "namespaced": true,
+    "kind": "Job",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": [
+      "all"
+    ]
+  },
+  {
+    "name": "certificatesigningrequests",
+    "shortnames": [
+      "csr"
+    ],
+    "apiversion": "certificates.k8s.io/v1",
+    "namespaced": false,
+    "kind": "CertificateSigningRequest",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "leases",
+    "shortnames": null,
+    "apiversion": "coordination.k8s.io/v1",
+    "namespaced": true,
+    "kind": "Lease",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "endpointslices",
+    "shortnames": null,
+    "apiversion": "discovery.k8s.io/v1",
+    "namespaced": true,
+    "kind": "EndpointSlice",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "events",
+    "shortnames": [
+      "ev"
+    ],
+    "apiversion": "events.k8s.io/v1",
+    "namespaced": true,
+    "kind": "Event",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "flowschemas",
+    "shortnames": null,
+    "apiversion": "flowcontrol.apiserver.k8s.io/v1",
+    "namespaced": false,
+    "kind": "FlowSchema",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "prioritylevelconfigurations",
+    "shortnames": null,
+    "apiversion": "flowcontrol.apiserver.k8s.io/v1",
+    "namespaced": false,
+    "kind": "PriorityLevelConfiguration",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "ingressclasses",
+    "shortnames": null,
+    "apiversion": "networking.k8s.io/v1",
+    "namespaced": false,
+    "kind": "IngressClass",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "ingresses",
+    "shortnames": [
+      "ing"
+    ],
+    "apiversion": "networking.k8s.io/v1",
+    "namespaced": true,
+    "kind": "Ingress",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "ipaddresses",
+    "shortnames": [
+      "ip"
+    ],
+    "apiversion": "networking.k8s.io/v1",
+    "namespaced": false,
+    "kind": "IPAddress",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "networkpolicies",
+    "shortnames": [
+      "netpol"
+    ],
+    "apiversion": "networking.k8s.io/v1",
+    "namespaced": true,
+    "kind": "NetworkPolicy",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "servicecidrs",
+    "shortnames": null,
+    "apiversion": "networking.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ServiceCIDR",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "runtimeclasses",
+    "shortnames": null,
+    "apiversion": "node.k8s.io/v1",
+    "namespaced": false,
+    "kind": "RuntimeClass",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "poddisruptionbudgets",
+    "shortnames": [
+      "pdb"
+    ],
+    "apiversion": "policy/v1",
+    "namespaced": true,
+    "kind": "PodDisruptionBudget",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "clusterrolebindings",
+    "shortnames": null,
+    "apiversion": "rbac.authorization.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ClusterRoleBinding",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "clusterroles",
+    "shortnames": null,
+    "apiversion": "rbac.authorization.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ClusterRole",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "rolebindings",
+    "shortnames": null,
+    "apiversion": "rbac.authorization.k8s.io/v1",
+    "namespaced": true,
+    "kind": "RoleBinding",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "roles",
+    "shortnames": null,
+    "apiversion": "rbac.authorization.k8s.io/v1",
+    "namespaced": true,
+    "kind": "Role",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "deviceclasses",
+    "shortnames": null,
+    "apiversion": "resource.k8s.io/v1",
+    "namespaced": false,
+    "kind": "DeviceClass",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "resourceclaims",
+    "shortnames": null,
+    "apiversion": "resource.k8s.io/v1",
+    "namespaced": true,
+    "kind": "ResourceClaim",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "resourceclaimtemplates",
+    "shortnames": null,
+    "apiversion": "resource.k8s.io/v1",
+    "namespaced": true,
+    "kind": "ResourceClaimTemplate",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "resourceslices",
+    "shortnames": null,
+    "apiversion": "resource.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ResourceSlice",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "priorityclasses",
+    "shortnames": [
+      "pc"
+    ],
+    "apiversion": "scheduling.k8s.io/v1",
+    "namespaced": false,
+    "kind": "PriorityClass",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "csidrivers",
+    "shortnames": null,
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": false,
+    "kind": "CSIDriver",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "csinodes",
+    "shortnames": null,
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": false,
+    "kind": "CSINode",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "csistoragecapacities",
+    "shortnames": null,
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": true,
+    "kind": "CSIStorageCapacity",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "storageclasses",
+    "shortnames": [
+      "sc"
+    ],
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": false,
+    "kind": "StorageClass",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "volumeattachments",
+    "shortnames": null,
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": false,
+    "kind": "VolumeAttachment",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  },
+  {
+    "name": "volumeattributesclasses",
+    "shortnames": [
+      "vac"
+    ],
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": false,
+    "kind": "VolumeAttributesClass",
+    "verbs": [
+      "create",
+      "delete",
+      "deletecollection",
+      "get",
+      "list",
+      "patch",
+      "update",
+      "watch"
+    ],
+    "categories": null
+  }
+]

@@ -1,0 +1,4 @@
+description: With -o wide, so VERBS and CATEGORIES follow KIND; CATEGORIES is empty for most rows.
+source: captured from kubectl v1.35.0 against a kind v1.35.0 cluster on Linux with LC_ALL=C
+os: linux
+args: [api-resources, -o, wide]

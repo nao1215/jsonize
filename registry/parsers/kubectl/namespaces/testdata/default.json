@@ -1,0 +1,32 @@
+[
+  {
+    "name": "argocd",
+    "status": "Active",
+    "age": "53d"
+  },
+  {
+    "name": "default",
+    "status": "Active",
+    "age": "53d"
+  },
+  {
+    "name": "kube-node-lease",
+    "status": "Active",
+    "age": "53d"
+  },
+  {
+    "name": "kube-public",
+    "status": "Active",
+    "age": "53d"
+  },
+  {
+    "name": "kube-system",
+    "status": "Active",
+    "age": "53d"
+  },
+  {
+    "name": "local-path-storage",
+    "status": "Active",
+    "age": "53d"
+  }
+]

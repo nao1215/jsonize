@@ -1,0 +1,4 @@
+description: The client, kustomize and server versions, with a server reachable.
+source: captured from kubectl v1.35.0 against a kind v1.35.0 cluster on Linux with LC_ALL=C
+os: linux
+args: [version]

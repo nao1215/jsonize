@@ -1,0 +1,31 @@
+# `kubectl version` prints one "Label: value" line per component: the
+# client, the kustomize it embeds, and the server it reached. With
+# `--client` the server line is absent, and when the server cannot be
+# reached kubectl prints the two client lines and reports the failure on
+# standard error. The lines are read as a map of the labels as printed.
+#
+# kubectl before 1.28 printed the versions as Go struct literals
+# ("version.Info{Major:"1", ...}") under the same labels, and that output
+# is refused: the signature asks for a version tag after each label.
+format: 1
+command: kubectl
+variant: version
+description: kubectl version
+metadata:
+  tags: [kubernetes, kubectl, version]
+  compatible: [kubectl]
+  references:
+    - https://kubernetes.io/docs/reference/kubectl/generated/kubectl_version/
+detect:
+  args:
+    all: [version]
+  signature:
+    all:
+      # The text opens with the client version, and every line is a
+      # labelled version tag.
+      - '\AClient Version: v\d+\.\d+\.\d+'
+      - '\A(?:[A-Z][A-Za-z]* Version: v\d+\.\d+\.\d+\S*[ \t]*\n?)+\z'
+parse:
+  type: kv
+  separator: ":"
+  as: map

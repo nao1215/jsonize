@@ -1,0 +1,39 @@
+# The namespace table printed by `kubectl get namespaces`, also spelled
+# `namespace` and `ns`: NAME, STATUS and AGE, with LABELS after them
+# under `--show-labels`. `-o wide` adds nothing and namespaces are not
+# namespaced, so `-A` changes nothing either. The cells are cut at the
+# header words and the names come from the header.
+#
+# Three short column names are not much to claim a text by, so the
+# signature also asks that every row carry one of the two phases a
+# namespace can be in, Active or Terminating; a table of some other tool
+# with the same header is refused by its rows. AGE is rounded and stays a
+# string. Labels are key=value pairs joined with commas and become an
+# array.
+format: 1
+command: kubectl
+variant: namespaces
+description: kubectl get namespaces, with --show-labels
+metadata:
+  tags: [kubernetes, kubectl]
+  compatible: [kubectl]
+  references:
+    - https://kubernetes.io/docs/reference/kubectl/generated/kubectl_get/
+detect:
+  args:
+    all: [get]
+    any: [namespaces, namespace, ns]
+  signature:
+    all:
+      # The text opens with the header, with or without LABELS.
+      - '\ANAME[ \t]+STATUS[ \t]+AGE(?:[ \t]+LABELS)?[ \t]*$'
+      # Every line after it is a row: a DNS label, a phase and an age.
+      - '\A[^\n]*(?:\n[a-z0-9][a-z0-9-]*[ \t]+(?:Active|Terminating)[ \t]+\d+[a-z0-9]*[^\n]*)*\z'
+parse:
+  type: table
+  split: aligned
+fields:
+  name: {required: true}
+  status: {required: true, regex: '(?P<status>Active|Terminating)'}
+  age: {required: true}
+  labels: {type: array, split: ","}
