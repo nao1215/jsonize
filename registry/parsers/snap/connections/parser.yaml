@@ -1,0 +1,48 @@
+# `snap connections` prints one row per plug or slot: the interface it
+# is of, the plug and the slot written as snap:name, and the notes snapd
+# has about the connection. Without a snap name it lists every connected
+# plug of every snap; with one it lists that snap's plugs and slots
+# whether connected or not, and --all does that for every snap.
+#
+# A plug or a slot is written as snap:name, and a slot whose snap part is
+# empty (":audio-playback") is one the system snap provides. The text is
+# kept as snapd writes it rather than split into a snap and a name,
+# because the empty snap part is how snapd names the system and a key
+# holding "" would say less than the colon does. A dash is a plug or a
+# slot with nothing on the other side, and becomes null. Notes is a
+# comma separated list ("manual,gadget") or a dash, and is split into an
+# array the way snap/list splits its Notes column.
+#
+# No cell holds a space, and the plug and slot cells hold a colon or are
+# a dash, which is what the expression asks for: a sentence of four
+# words has no colon in its second and third word.
+format: 1
+command: snap
+variant: connections
+description: snap connections, the plugs and slots of installed snaps
+metadata:
+  tags: [linux, package, snap]
+  compatible: [snapd]
+  references:
+    - https://snapcraft.io/docs/snap-command-reference
+detect:
+  os: [linux]
+  args:
+    all: ["connections"]
+  signature:
+    all:
+      # The header, then nothing but rows whose plug and slot cells are
+      # snap:name or a dash. A document that quotes the header above a
+      # paragraph is not this format.
+      - '\AInterface[ \t]+Plug[ \t]+Slot[ \t]+Notes[ \t]*\n(?:\S+[ \t]+(?:[^\s:]*:[^\s:]+|-)[ \t]+(?:[^\s:]*:[^\s:]+|-)[ \t]+\S+[ \t]*(?:\n|\z))+\z'
+input:
+  ignore:
+    - '^Interface[ \t]+Plug[ \t]+Slot[ \t]+Notes[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<interface>\S+)[ \t]+(?P<plug>[^\s:]*:[^\s:]+|-)[ \t]+(?P<slot>[^\s:]*:[^\s:]+|-)[ \t]+(?P<notes>\S+)[ \t]*$'
+fields:
+  interface: {required: true}
+  plug: {null_if: ["-"]}
+  slot: {null_if: ["-"]}
+  notes: {type: array, split: ",", null_if: ["-"]}

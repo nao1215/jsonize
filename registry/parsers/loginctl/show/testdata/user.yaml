@@ -1,0 +1,4 @@
+description: a logged-in user with four sessions, whose Sessions line is a space separated list and whose Linger is no
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, loginctl show-user USER; the user name was replaced
+os: linux
+args: [show-user, alice]

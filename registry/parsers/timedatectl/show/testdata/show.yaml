@@ -1,0 +1,4 @@
+description: the seven properties of a machine with a hardware clock, synchronised over NTP, in a zone named by its abbreviation
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C
+os: linux
+args: [show]

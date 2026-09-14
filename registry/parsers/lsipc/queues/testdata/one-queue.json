@@ -1,0 +1,12 @@
+[
+  {
+    "key": "0x242a76e0",
+    "id": 0,
+    "perms": "rw-r--r--",
+    "owner": "bob",
+    "usedbytes": "0B",
+    "msgs": 0,
+    "lspid": 0,
+    "lrpid": 0
+  }
+]

@@ -1,0 +1,5 @@
+description: one property asked for with -p, which the signature must refuse for lacking the others
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, timedatectl show -p Timezone
+os: linux
+args: [show, -p, Timezone]
+expect_error: 'does not describe this input'

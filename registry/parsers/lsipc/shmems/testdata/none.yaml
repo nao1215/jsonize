@@ -1,0 +1,5 @@
+description: no segment prints nothing at all, not even the header, which jz run reports as an empty list and which is refused on a pipe as holding nothing to read
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C on a system with no shared memory segment, which writes no byte
+os: linux
+args: [-m]
+expect_error: 'holds no text'

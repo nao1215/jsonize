@@ -1,0 +1,7 @@
+Service                                              Startup   Current   Notes
+firmware-updater.firmware-notifier                   enabled   active    user,timer-activated
+firmware-updater.firmware-updater-app                enabled   inactive  user,dbus-activated
+mesa-2404.component-monitor                          disabled  inactive  -
+prompting-client.daemon                              enabled   inactive  user
+snap-store.packagekit-session-installer              enabled   inactive  user,dbus-activated
+snapd-desktop-integration.snapd-desktop-integration  enabled   active    user

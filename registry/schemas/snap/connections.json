@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/snap/connections.json",
+  "title": "snap/connections",
+  "description": "snap connections, the plugs and slots of installed snaps",
+  "x-jsonize": {
+    "definition": "snap/connections",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "interface": {
+        "type": "string"
+      },
+      "plug": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "slot": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "notes": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "interface",
+      "plug",
+      "slot",
+      "notes"
+    ]
+  }
+}

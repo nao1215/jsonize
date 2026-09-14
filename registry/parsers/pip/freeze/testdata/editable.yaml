@@ -1,0 +1,4 @@
+description: an editable install of a local tree among index packages, which uv writes as -e and a file:// URL with no name
+source: "`uv pip freeze` with uv 0.9.7 on CPython 3.12 (Ubuntu 26.04) with LC_ALL=C, in the same virtual environment after `uv pip install -e` of a local project; the path of the tree was replaced"
+os: linux
+args: [freeze]

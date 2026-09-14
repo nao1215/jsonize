@@ -1,0 +1,5 @@
+WIFI-HW  WIFI     WWAN-HW  WWAN
+The two HW columns say whether the hardware switch for each radio is
+on, and the other two whether NetworkManager has the radio enabled.
+A machine without a modem prints missing under WWAN-HW.
+Use nmcli radio wifi off to switch the Wi-Fi radio off.

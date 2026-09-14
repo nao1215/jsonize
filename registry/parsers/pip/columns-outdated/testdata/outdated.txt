@@ -1,0 +1,6 @@
+Package  Version Latest Type
+-------- ------- ------ -----
+chardet  3.0.4   7.6.0  wheel
+idna     2.10    3.19   wheel
+requests 2.25.0  2.34.2 wheel
+urllib3  1.26.20 2.7.0  wheel

@@ -1,0 +1,5 @@
+description: the package records --full prints instead of one line per match, which the signature must refuse
+source: captured on Ubuntu 26.04 (apt 3.2.0) with LC_ALL=C, apt-cache search --full libjq1
+os: linux
+args: [search, --full, libjq1]
+expect_error: 'does not describe this input'

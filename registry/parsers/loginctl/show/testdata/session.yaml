@@ -1,0 +1,4 @@
+description: a graphical session on a seat, with a leader pid, a VT number and the yes/no properties a session carries
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, loginctl show-session 2; the user name was replaced
+os: linux
+args: [show-session, "2"]

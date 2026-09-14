@@ -37,8 +37,11 @@ detect:
       # end-to-end suite pins where `jz run systemctl show` lands.
       - '\A(?:[A-Z][a-z][A-Za-z0-9]*=[^\n]*\n)*[A-Z][a-z][A-Za-z0-9]*=[^\n]*\n?\z'
     none:
-      # A unit's whole report, or one that names its unit: systemctl/show.
-      - '\AId=[^\n]+\.(?:service|socket|target|device|mount|automount|swap|path|timer|slice|scope)$'
+      # A report that opens by naming its object is that object's whole
+      # report rather than properties asked for: a unit's, which
+      # systemctl/show reads, or a logind session's or seat's, which
+      # loginctl/show reads in the same Key=value shape.
+      - '\AId='
 parse:
   type: kv
   separator: "="

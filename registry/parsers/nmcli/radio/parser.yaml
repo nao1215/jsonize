@@ -1,0 +1,40 @@
+# `nmcli radio` prints one row under four headings: whether the Wi-Fi
+# and WWAN hardware switches are on, and whether NetworkManager has each
+# radio enabled. The row is the state of the machine's radios as a
+# whole, so the result is one object rather than a list of one.
+#
+# Each cell is "enabled", "disabled" or "missing", the last for hardware
+# the machine does not have, which is why the values are not booleans.
+# `nmcli radio wifi` and `nmcli radio wwan` print one of those words
+# alone, with no header, and are refused.
+format: 1
+command: nmcli
+variant: radio
+description: nmcli radio, the state of the Wi-Fi and WWAN radios
+metadata:
+  tags: [linux, network, networkmanager]
+  compatible: [NetworkManager]
+  references:
+    - https://networkmanager.dev/docs/api/latest/nmcli.html
+detect:
+  os: [linux]
+  args:
+    # nmcli takes any prefix of an object's name ("nmcli r"), as it does
+    # for general, device and connection.
+    any: ["radio", "radi", "rad", "ra", "r"]
+  signature:
+    all:
+      # The header and one row of the three words, and nothing else.
+      - '\AWIFI-HW[ \t]+WIFI[ \t]+WWAN-HW[ \t]+WWAN[ \t]*\n(?:(?:enabled|disabled|missing)[ \t]+){3}(?:enabled|disabled|missing)[ \t]*\z'
+input:
+  ignore:
+    - '^WIFI-HW[ \t]+WIFI[ \t]+WWAN-HW[ \t]+WWAN[ \t]*$'
+parse:
+  type: regex
+  each: input
+  pattern: '\A(?P<wifi_hw>enabled|disabled|missing)[ \t]+(?P<wifi>enabled|disabled|missing)[ \t]+(?P<wwan_hw>enabled|disabled|missing)[ \t]+(?P<wwan>enabled|disabled|missing)[ \t]*\z'
+fields:
+  wifi_hw: {required: true}
+  wifi: {required: true}
+  wwan_hw: {required: true}
+  wwan: {required: true}

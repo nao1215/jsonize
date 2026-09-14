@@ -1,0 +1,56 @@
+# `pip list --outdated` prints the packages a newer release exists for:
+# the package, the version installed, the latest version on the index
+# and whether that release is a wheel or an sdist, under a rule of
+# dashes. An editable install adds a fifth column with the path of its
+# tree, which pip and uv print only when such a package is listed, so
+# the column is optional and its key is null on the other rows.
+#
+# The rows are read with one expression rather than cut at whitespace
+# because Type has a vocabulary of two words, and asking for one of them
+# is what keeps a paragraph under a quoted header from being read as
+# packages. When nothing is outdated pip prints nothing at all; `jz run`
+# reports that as an empty list, and the empty text on a pipe is
+# refused as holding nothing to read.
+format: 1
+command: pip
+variant: columns-outdated
+aliases:
+  - name: uv
+    args:
+      all: ["pip", "list", "--outdated"]
+  # The interpreter runs pip as a module, which is how a system without a
+  # pip on PATH installs and lists packages.
+  - name: python3
+    args:
+      all: ["-m", "pip", "list", "--outdated"]
+  - name: python
+    args:
+      all: ["-m", "pip", "list", "--outdated"]
+  - name: pip3
+description: pip list --outdated, installed packages with a newer release
+metadata:
+  tags: [python, package]
+  compatible: [pip, uv]
+  references:
+    - https://pip.pypa.io/en/stable/cli/pip_list/
+detect:
+  args:
+    all: ["list", "--outdated"]
+  signature:
+    all:
+      # The header, the rule, then nothing but rows whose fourth cell is
+      # wheel or sdist. A document that quotes the header and the rule
+      # above a paragraph is not this format.
+      - '\APackage[ \t]+Version[ \t]+Latest[ \t]+Type(?:[ \t]+Editable project location)?[ \t]*\n-{2,}[ \t]+-{2,}[ \t]+-{2,}[ \t]+-{2,}(?:[ \t]+-{2,})?[ \t]*\n(?:\S+[ \t]+\S+[ \t]+\S+[ \t]+(?:wheel|sdist)(?:[ \t]+\S[^\n]*)?[ \t]*(?:\n|\z))+\z'
+input:
+  ignore:
+    - '^Package[ \t]+Version[ \t]+Latest[ \t]+Type(?:[ \t]+Editable project location)?[ \t]*$'
+    - '^-{2,}[ \t]+-{2,}[ \t]+-{2,}[ \t]+-{2,}(?:[ \t]+-{2,})?[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<package>\S+)[ \t]+(?P<version>\S+)[ \t]+(?P<latest>\S+)[ \t]+(?P<type>wheel|sdist)(?:[ \t]+(?P<editable_project_location>\S.*?))?[ \t]*$'
+fields:
+  package: {required: true}
+  version: {required: true}
+  latest: {required: true}
+  type: {required: true}

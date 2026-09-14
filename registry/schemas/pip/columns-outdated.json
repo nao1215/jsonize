@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pip/columns-outdated.json",
+  "title": "pip/columns-outdated",
+  "description": "pip list --outdated, installed packages with a newer release",
+  "x-jsonize": {
+    "definition": "pip/columns-outdated",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "package": {
+        "type": "string"
+      },
+      "version": {
+        "type": "string"
+      },
+      "latest": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "sdist",
+          "wheel"
+        ]
+      },
+      "editable_project_location": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "package",
+      "version",
+      "latest",
+      "type",
+      "editable_project_location"
+    ]
+  }
+}

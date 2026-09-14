@@ -1,0 +1,4 @@
+description: two packages named on the command line, printed in alphabetical order
+source: captured on Ubuntu 26.04 (dpkg 1.23.7) with LC_ALL=C, dpkg-query -W jq curl
+os: linux
+args: [-W, jq, curl]

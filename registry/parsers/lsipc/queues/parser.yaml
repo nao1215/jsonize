@@ -1,0 +1,42 @@
+# `lsipc -q` prints one row per System V message queue: the key, the
+# id, the permissions, the owner, the bytes held, the number of messages
+# and the pids of the last sender and receiver. No cell holds a space, so
+# the cells are cut at whitespace. When there is no queue lsipc prints
+# nothing at all, not even the header; `jz run` reports that as an
+# empty list, and the empty text on a pipe is refused as holding
+# nothing to read.
+#
+# USEDBYTES is rounded to a unit ("0B", "4K") unless --bytes is given,
+# so it stays as printed. -t adds time columns, -c the creator columns
+# and -i turns the listing into one queue's labelled properties; all
+# three change the header and are refused.
+format: 1
+command: lsipc
+variant: queues
+description: lsipc -q, the System V message queues
+metadata:
+  tags: [linux, ipc, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lsipc.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-q", "--queues"]
+  signature:
+    all:
+      # The header, then nothing but rows that open with a hexadecimal
+      # key and a numeric id and end with three counts.
+      - '\AKEY[ \t]+ID[ \t]+PERMS[ \t]+OWNER[ \t]+USEDBYTES[ \t]+MSGS[ \t]+LSPID[ \t]+LRPID[ \t]*\n(?:0x[0-9a-f]+[ \t]+[0-9]+[ \t]+\S+[ \t]+\S+[ \t]+\S+[ \t]+[0-9]+[ \t]+[0-9]+[ \t]+[0-9]+[ \t]*(?:\n|\z))+\z'
+parse:
+  type: table
+  split: whitespace
+fields:
+  key: {required: true}
+  id: {type: int, required: true}
+  perms: {required: true}
+  owner: {required: true}
+  usedbytes: {required: true}
+  msgs: {type: int, required: true}
+  lspid: {type: int, required: true}
+  lrpid: {type: int, required: true}

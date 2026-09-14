@@ -1,0 +1,6 @@
+Interface                         Plug                                               Slot                               Notes
+An interface is the contract between a plug and a slot.
+The plug side asks for access and the slot side provides it.
+Every plug and every slot is named snap:name in the listing.
+Notes says whether the connection was made by hand or automatically.
+Interface names such as home and network are provided by the system.

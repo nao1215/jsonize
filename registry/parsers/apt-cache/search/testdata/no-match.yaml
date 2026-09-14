@@ -1,0 +1,5 @@
+description: a pattern no package matches prints nothing at all, which jz run reports as an empty list and which is refused on a pipe as holding nothing to read
+source: captured on Ubuntu 26.04 (apt 3.2.0) with LC_ALL=C, apt-cache search zzzzqqqqnomatch, which exits 0 and writes no byte
+os: linux
+args: [search, zzzzqqqqnomatch]
+expect_error: 'holds no text'

@@ -1,0 +1,260 @@
+[
+  {
+    "interface": "alsa",
+    "plug": "firefox:alsa",
+    "slot": null,
+    "notes": null
+  },
+  {
+    "interface": "audio-playback",
+    "plug": "firefox:audio-playback",
+    "slot": ":audio-playback",
+    "notes": null
+  },
+  {
+    "interface": "audio-record",
+    "plug": "firefox:audio-record",
+    "slot": ":audio-record",
+    "notes": null
+  },
+  {
+    "interface": "avahi-observe",
+    "plug": "firefox:avahi-observe",
+    "slot": ":avahi-observe",
+    "notes": null
+  },
+  {
+    "interface": "browser-support",
+    "plug": "firefox:browser-sandbox",
+    "slot": ":browser-support",
+    "notes": null
+  },
+  {
+    "interface": "camera",
+    "plug": "firefox:camera",
+    "slot": ":camera",
+    "notes": null
+  },
+  {
+    "interface": "content[gnome-46-2404]",
+    "plug": "firefox:gnome-46-2404",
+    "slot": "gnome-46-2404:gnome-46-2404",
+    "notes": null
+  },
+  {
+    "interface": "content[gpu-2404]",
+    "plug": "firefox:gpu-2404",
+    "slot": "mesa-2404:gpu-2404",
+    "notes": null
+  },
+  {
+    "interface": "content[gtk-3-themes]",
+    "plug": "firefox:gtk-3-themes",
+    "slot": "gtk-common-themes:gtk-3-themes",
+    "notes": null
+  },
+  {
+    "interface": "content[icon-themes]",
+    "plug": "firefox:icon-themes",
+    "slot": "gtk-common-themes:icon-themes",
+    "notes": null
+  },
+  {
+    "interface": "content[icon-themes]",
+    "plug": "firefox:icon-themes",
+    "slot": "icon-theme-breeze:icon-themes",
+    "notes": null
+  },
+  {
+    "interface": "content[sound-themes]",
+    "plug": "firefox:sound-themes",
+    "slot": "gtk-common-themes:sound-themes",
+    "notes": null
+  },
+  {
+    "interface": "cups-control",
+    "plug": "firefox:cups-control",
+    "slot": ":cups-control",
+    "notes": null
+  },
+  {
+    "interface": "dbus",
+    "plug": null,
+    "slot": "firefox:dbus-daemon",
+    "notes": null
+  },
+  {
+    "interface": "desktop",
+    "plug": "firefox:desktop",
+    "slot": ":desktop",
+    "notes": null
+  },
+  {
+    "interface": "desktop-legacy",
+    "plug": "firefox:desktop-legacy",
+    "slot": ":desktop-legacy",
+    "notes": null
+  },
+  {
+    "interface": "gsettings",
+    "plug": "firefox:gsettings",
+    "slot": ":gsettings",
+    "notes": null
+  },
+  {
+    "interface": "hardware-observe",
+    "plug": "firefox:hardware-observe",
+    "slot": ":hardware-observe",
+    "notes": null
+  },
+  {
+    "interface": "home",
+    "plug": "firefox:home",
+    "slot": ":home",
+    "notes": null
+  },
+  {
+    "interface": "joystick",
+    "plug": "firefox:joystick",
+    "slot": ":joystick",
+    "notes": null
+  },
+  {
+    "interface": "kerberos-tickets",
+    "plug": "firefox:kerberos-tickets",
+    "slot": ":kerberos-tickets",
+    "notes": null
+  },
+  {
+    "interface": "login-session-observe",
+    "plug": "firefox:login-session-observe",
+    "slot": ":login-session-observe",
+    "notes": null
+  },
+  {
+    "interface": "mount-control",
+    "plug": "firefox:host-hunspell",
+    "slot": ":mount-control",
+    "notes": null
+  },
+  {
+    "interface": "mount-observe",
+    "plug": "firefox:mount-observe",
+    "slot": ":mount-observe",
+    "notes": null
+  },
+  {
+    "interface": "mpris",
+    "plug": null,
+    "slot": "firefox:mpris",
+    "notes": null
+  },
+  {
+    "interface": "network",
+    "plug": "firefox:network",
+    "slot": ":network",
+    "notes": null
+  },
+  {
+    "interface": "network-bind",
+    "plug": "firefox:network-bind",
+    "slot": ":network-bind",
+    "notes": null
+  },
+  {
+    "interface": "network-observe",
+    "plug": "firefox:network-observe",
+    "slot": null,
+    "notes": null
+  },
+  {
+    "interface": "opengl",
+    "plug": "firefox:opengl",
+    "slot": ":opengl",
+    "notes": null
+  },
+  {
+    "interface": "password-manager-service",
+    "plug": "firefox:password-manager-service",
+    "slot": null,
+    "notes": null
+  },
+  {
+    "interface": "pcscd",
+    "plug": "firefox:pcscd",
+    "slot": null,
+    "notes": null
+  },
+  {
+    "interface": "personal-files",
+    "plug": "firefox:dot-mozilla-firefox",
+    "slot": ":personal-files",
+    "notes": null
+  },
+  {
+    "interface": "removable-media",
+    "plug": "firefox:removable-media",
+    "slot": ":removable-media",
+    "notes": null
+  },
+  {
+    "interface": "screen-inhibit-control",
+    "plug": "firefox:screen-inhibit-control",
+    "slot": ":screen-inhibit-control",
+    "notes": null
+  },
+  {
+    "interface": "system-files",
+    "plug": "firefox:etc-firefox",
+    "slot": ":system-files",
+    "notes": null
+  },
+  {
+    "interface": "system-files",
+    "plug": "firefox:host-usr-share-hunspell",
+    "slot": ":system-files",
+    "notes": null
+  },
+  {
+    "interface": "system-packages-doc",
+    "plug": "firefox:system-packages-doc",
+    "slot": ":system-packages-doc",
+    "notes": null
+  },
+  {
+    "interface": "timezone-control",
+    "plug": "firefox:timezone-control",
+    "slot": ":timezone-control",
+    "notes": null
+  },
+  {
+    "interface": "u2f-devices",
+    "plug": "firefox:u2f-devices",
+    "slot": ":u2f-devices",
+    "notes": null
+  },
+  {
+    "interface": "unity7",
+    "plug": "firefox:unity7",
+    "slot": ":unity7",
+    "notes": null
+  },
+  {
+    "interface": "upower-observe",
+    "plug": "firefox:upower-observe",
+    "slot": ":upower-observe",
+    "notes": null
+  },
+  {
+    "interface": "wayland",
+    "plug": "firefox:wayland",
+    "slot": ":wayland",
+    "notes": null
+  },
+  {
+    "interface": "x11",
+    "plug": "firefox:x11",
+    "slot": ":x11",
+    "notes": null
+  }
+]

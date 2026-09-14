@@ -1,0 +1,15 @@
+[
+  {
+    "key": "0x95d7ef24",
+    "id": 32788,
+    "perms": "rw-r--r--",
+    "owner": "bob",
+    "size": "4K",
+    "nattch": 0,
+    "status": null,
+    "ctime": "22:30",
+    "cpid": 664755,
+    "lpid": 0,
+    "command": null
+  }
+]

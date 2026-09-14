@@ -1,0 +1,10 @@
+[
+  {
+    "package": "curl",
+    "version": "8.18.0-1ubuntu2.5"
+  },
+  {
+    "package": "jq",
+    "version": "1.8.1-4ubuntu2"
+  }
+]

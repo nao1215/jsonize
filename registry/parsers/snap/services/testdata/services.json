@@ -1,0 +1,51 @@
+[
+  {
+    "service": "firmware-updater.firmware-notifier",
+    "startup": "enabled",
+    "current": "active",
+    "notes": [
+      "user",
+      "timer-activated"
+    ]
+  },
+  {
+    "service": "firmware-updater.firmware-updater-app",
+    "startup": "enabled",
+    "current": "inactive",
+    "notes": [
+      "user",
+      "dbus-activated"
+    ]
+  },
+  {
+    "service": "mesa-2404.component-monitor",
+    "startup": "disabled",
+    "current": "inactive",
+    "notes": null
+  },
+  {
+    "service": "prompting-client.daemon",
+    "startup": "enabled",
+    "current": "inactive",
+    "notes": [
+      "user"
+    ]
+  },
+  {
+    "service": "snap-store.packagekit-session-installer",
+    "startup": "enabled",
+    "current": "inactive",
+    "notes": [
+      "user",
+      "dbus-activated"
+    ]
+  },
+  {
+    "service": "snapd-desktop-integration.snapd-desktop-integration",
+    "startup": "enabled",
+    "current": "active",
+    "notes": [
+      "user"
+    ]
+  }
+]

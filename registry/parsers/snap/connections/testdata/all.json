@@ -1,0 +1,236 @@
+[
+  {
+    "interface": "alsa",
+    "plug": "firefox:alsa",
+    "slot": null,
+    "notes": null
+  },
+  {
+    "interface": "appstream-metadata",
+    "plug": "snap-store:appstream-metadata",
+    "slot": ":appstream-metadata",
+    "notes": null
+  },
+  {
+    "interface": "audio-playback",
+    "plug": "brave:audio-playback",
+    "slot": ":audio-playback",
+    "notes": null
+  },
+  {
+    "interface": "audio-playback",
+    "plug": "drawio:audio-playback",
+    "slot": ":audio-playback",
+    "notes": null
+  },
+  {
+    "interface": "audio-playback",
+    "plug": "firefox:audio-playback",
+    "slot": ":audio-playback",
+    "notes": null
+  },
+  {
+    "interface": "audio-playback",
+    "plug": "kooha:audio-playback",
+    "slot": ":audio-playback",
+    "notes": null
+  },
+  {
+    "interface": "audio-playback",
+    "plug": "prompting-client:audio-playback",
+    "slot": ":audio-playback",
+    "notes": null
+  },
+  {
+    "interface": "audio-playback",
+    "plug": "spotify:audio-playback",
+    "slot": ":audio-playback",
+    "notes": null
+  },
+  {
+    "interface": "audio-playback",
+    "plug": "telegram-desktop:audio-playback",
+    "slot": ":audio-playback",
+    "notes": null
+  },
+  {
+    "interface": "audio-playback",
+    "plug": "thunderbird:audio-playback",
+    "slot": ":audio-playback",
+    "notes": null
+  },
+  {
+    "interface": "audio-playback",
+    "plug": "zoom-client:audio-playback",
+    "slot": ":audio-playback",
+    "notes": null
+  },
+  {
+    "interface": "audio-record",
+    "plug": "brave:audio-record",
+    "slot": ":audio-record",
+    "notes": null
+  },
+  {
+    "interface": "audio-record",
+    "plug": "firefox:audio-record",
+    "slot": ":audio-record",
+    "notes": null
+  },
+  {
+    "interface": "audio-record",
+    "plug": "kooha:audio-record",
+    "slot": null,
+    "notes": null
+  },
+  {
+    "interface": "audio-record",
+    "plug": "prompting-client:audio-record",
+    "slot": null,
+    "notes": null
+  },
+  {
+    "interface": "audio-record",
+    "plug": "telegram-desktop:audio-record",
+    "slot": ":audio-record",
+    "notes": null
+  },
+  {
+    "interface": "audio-record",
+    "plug": "zoom-client:audio-record",
+    "slot": ":audio-record",
+    "notes": null
+  },
+  {
+    "interface": "avahi-observe",
+    "plug": "firefox:avahi-observe",
+    "slot": ":avahi-observe",
+    "notes": null
+  },
+  {
+    "interface": "avahi-observe",
+    "plug": "thunderbird:avahi-observe",
+    "slot": null,
+    "notes": null
+  },
+  {
+    "interface": "bluez",
+    "plug": "brave:bluez",
+    "slot": ":bluez",
+    "notes": null
+  },
+  {
+    "interface": "bluez",
+    "plug": "telegram-desktop:bluez",
+    "slot": ":bluez",
+    "notes": null
+  },
+  {
+    "interface": "browser-support",
+    "plug": "brave:browser-sandbox",
+    "slot": ":browser-support",
+    "notes": null
+  },
+  {
+    "interface": "browser-support",
+    "plug": "drawio:browser-support",
+    "slot": ":browser-support",
+    "notes": null
+  },
+  {
+    "interface": "browser-support",
+    "plug": "firefox:browser-sandbox",
+    "slot": ":browser-support",
+    "notes": null
+  },
+  {
+    "interface": "browser-support",
+    "plug": "spotify:browser-support",
+    "slot": ":browser-support",
+    "notes": null
+  },
+  {
+    "interface": "browser-support",
+    "plug": "thunderbird:browser-sandbox",
+    "slot": ":browser-support",
+    "notes": null
+  },
+  {
+    "interface": "browser-support",
+    "plug": "zoom-client:browser-sandbox",
+    "slot": ":browser-support",
+    "notes": null
+  },
+  {
+    "interface": "camera",
+    "plug": "brave:camera",
+    "slot": ":camera",
+    "notes": null
+  },
+  {
+    "interface": "camera",
+    "plug": "firefox:camera",
+    "slot": ":camera",
+    "notes": null
+  },
+  {
+    "interface": "camera",
+    "plug": "prompting-client:camera",
+    "slot": null,
+    "notes": null
+  },
+  {
+    "interface": "camera",
+    "plug": "telegram-desktop:camera",
+    "slot": ":camera",
+    "notes": null
+  },
+  {
+    "interface": "camera",
+    "plug": "thunderbird:camera",
+    "slot": null,
+    "notes": null
+  },
+  {
+    "interface": "camera",
+    "plug": "zoom-client:camera",
+    "slot": ":camera",
+    "notes": null
+  },
+  {
+    "interface": "content",
+    "plug": null,
+    "slot": "gnome-3-28-1804:gnome-3-28-1804",
+    "notes": null
+  },
+  {
+    "interface": "content",
+    "plug": null,
+    "slot": "gnome-3-38-2004:gnome-3-38-2004",
+    "notes": null
+  },
+  {
+    "interface": "content",
+    "plug": null,
+    "slot": "gtk-common-themes:gtk-2-themes",
+    "notes": null
+  },
+  {
+    "interface": "content[gnome-42-2204]",
+    "plug": "brave:gnome-42-2204",
+    "slot": "gnome-42-2204:gnome-42-2204",
+    "notes": null
+  },
+  {
+    "interface": "content[gtk-3-themes]",
+    "plug": "brave:gtk-3-themes",
+    "slot": "gtk-common-themes:gtk-3-themes",
+    "notes": null
+  },
+  {
+    "interface": "content[icon-themes]",
+    "plug": "brave:icon-themes",
+    "slot": "gtk-common-themes:icon-themes",
+    "notes": null
+  }
+]

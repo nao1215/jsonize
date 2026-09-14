@@ -1,0 +1,5 @@
+description: one radio asked for prints its state as a bare word with no header, which the signature must refuse
+source: captured on Ubuntu 26.04 (NetworkManager 1.54.3) with LC_ALL=C, nmcli radio wifi
+os: linux
+args: [radio, wifi]
+expect_error: 'does not describe this input'

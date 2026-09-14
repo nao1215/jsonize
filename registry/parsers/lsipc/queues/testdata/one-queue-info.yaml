@@ -1,0 +1,5 @@
+description: the labelled properties of one queue that -i prints instead of the table, which the signature must refuse
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C, lsipc -q -i 0; the owner was replaced
+os: linux
+args: [-q, -i, "0"]
+expect_error: 'does not describe this input'

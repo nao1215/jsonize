@@ -1,0 +1,4 @@
+description: the same table under the explicit all object
+source: captured on Ubuntu 26.04 (NetworkManager 1.54.3) with LC_ALL=C, nmcli radio all
+os: linux
+args: [radio, all]

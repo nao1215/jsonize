@@ -1,0 +1,4 @@
+description: the start of the whole listing, with versions carrying an epoch, a plus and an Ubuntu revision
+source: captured on Ubuntu 26.04 (dpkg 1.23.7) with LC_ALL=C, lines 1-30 of dpkg-query -W
+os: linux
+args: [-W]

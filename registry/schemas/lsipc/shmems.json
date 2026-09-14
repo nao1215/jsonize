@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsipc/shmems.json",
+  "title": "lsipc/shmems",
+  "description": "lsipc -m, the System V shared memory segments",
+  "x-jsonize": {
+    "definition": "lsipc/shmems",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "cpid": {
+        "type": "integer"
+      },
+      "ctime": {
+        "type": "string"
+      },
+      "id": {
+        "type": "integer"
+      },
+      "key": {
+        "type": "string"
+      },
+      "lpid": {
+        "type": "integer"
+      },
+      "nattch": {
+        "type": "integer"
+      },
+      "owner": {
+        "type": "string"
+      },
+      "perms": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "editable": false,
+    "name": "certifi",
+    "version": "2026.7.22",
+    "url": null
+  },
+  {
+    "editable": false,
+    "name": "chardet",
+    "version": "3.0.4",
+    "url": null
+  },
+  {
+    "editable": false,
+    "name": "idna",
+    "version": "2.10",
+    "url": null
+  },
+  {
+    "editable": false,
+    "name": "requests",
+    "version": "2.25.0",
+    "url": null
+  },
+  {
+    "editable": false,
+    "name": "six",
+    "version": "1.17.0",
+    "url": null
+  },
+  {
+    "editable": false,
+    "name": "urllib3",
+    "version": "1.26.20",
+    "url": null
+  }
+]
