@@ -1,0 +1,4 @@
+description: A file with a skippable frame in front of its data frame, counted in the Skips column, beside a plain one.
+source: captured on Ubuntu 26.04 with Zstandard CLI 1.5.7, LC_ALL=C zstd -l over files made for the fixture, the skippable frame written by hand in front of a compressed file; the banner went to standard error
+os: linux
+args: [-l, skippable.zst, hello.txt.zst]

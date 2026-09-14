@@ -1,0 +1,8 @@
+notes on the frame layout
+# Zstandard Frames: 1
+A frame opens with a magic number and a frame header. The header says
+whether the content size is stored; when it is not, zstd -lv prints no
+Decompressed Size line and no Ratio line for the file.
+DictID: 0
+Window Size: 12 B (12 B)
+The window size is what the decoder has to keep in memory.

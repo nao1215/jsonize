@@ -1,0 +1,4 @@
+description: One file, so no rule and no totals row.
+source: captured on Ubuntu 26.04 with Zstandard CLI 1.5.7, LC_ALL=C zstd -l over a file made for the fixture; the banner went to standard error
+os: linux
+args: [-l, hello.txt.zst]

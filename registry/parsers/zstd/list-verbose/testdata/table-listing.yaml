@@ -1,0 +1,5 @@
+description: The output of zstd -l without -v, a table with a header, which belongs to zstd/list.
+source: captured on Ubuntu 26.04 with Zstandard CLI 1.5.7, LC_ALL=C zstd -l over a file made for the fixture; the banner went to standard error
+os: linux
+args: [-l, hello.txt.zst]
+expect_error: 'does not describe this input'

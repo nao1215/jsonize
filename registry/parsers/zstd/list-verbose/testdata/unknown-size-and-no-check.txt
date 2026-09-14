@@ -1,0 +1,25 @@
+zst/big.txt.zst 
+# Zstandard Frames: 1
+DictID: 0
+Window Size: 264 KiB (270177 B)
+Compressed Size: 199 KiB (203691 B)
+Decompressed Size: 264 KiB (270177 B)
+Ratio: 1.3264
+Check: XXH64 feb5de37
+
+zst/nosize.zst 
+# Zstandard Frames: 1
+DictID: 0
+Window Size: 1.000 KiB (1024 B)
+Compressed Size: 25 B (25 B)
+Check: XXH64 207d6d8c
+
+zst/nocheck.zst 
+# Zstandard Frames: 1
+DictID: 0
+Window Size: 12 B (12 B)
+Compressed Size: 21 B (21 B)
+Decompressed Size: 12 B (12 B)
+Ratio: 0.5714
+Check: None
+
