@@ -1,0 +1,7 @@
+[
+  {
+    "type": "ssh-ed25519",
+    "key": "AAAAC3NzaC1lZDI1NTE5AAAAIFN1rjREJdLw/KS0qqNqkFflwNQUB2qrS2mxM8SV5XHr",
+    "comment": "user@example.test"
+  }
+]

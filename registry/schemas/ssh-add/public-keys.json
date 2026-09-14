@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ssh-add/public-keys.json",
+  "title": "ssh-add/public-keys",
+  "description": "ssh-add -L public keys held by the agent",
+  "x-jsonize": {
+    "definition": "ssh-add/public-keys",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string"
+      },
+      "key": {
+        "type": "string"
+      },
+      "comment": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "type",
+      "key",
+      "comment"
+    ]
+  }
+}
