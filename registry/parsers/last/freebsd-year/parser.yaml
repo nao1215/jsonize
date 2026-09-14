@@ -1,0 +1,48 @@
+# FreeBSD last -y puts the year inside the login time, between the day and
+# the clock ("Sun Sep 13 2026 10:44"). The rows are the ones last/freebsd
+# describes. The logout time is hh:mm in both listings.
+#
+# With the year the login time is a whole date and is read as one, with
+# no --assume-year. The closing "utx.log begins" line is the same in both
+# listings, so the rows tell the two apart: a login time without a year
+# belongs to last/freebsd.
+#
+# -s writes the length in seconds, which the patterns do not read, and
+# jz run refuses it on the argument.
+format: 1
+command: last
+variant: freebsd-year
+description: FreeBSD last -y login sessions and system events with the year
+metadata:
+  tags: [freebsd, bsd, login]
+  compatible: [FreeBSD last]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?last(1)
+    # printentry, which picks the time format by -y.
+    - https://github.com/freebsd/freebsd-src/blob/main/usr.bin/last/last.c
+detect:
+  os: [freebsd]
+  args:
+    any: ["-y"]
+    none: ["-s"]
+  signature:
+    all:
+      - '(?:\A|\n)[ \t]*\n\S+ begins [A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2} [A-Z][A-Za-z0-9+-]* \d{4}[ \t]*\n?\z'
+    none:
+      # A login time without a year, which is last without -y.
+      - '[A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}(?:[ \t]+(?:still logged in|- )|[ \t]*$)'
+input:
+  ignore:
+    - '^\S+ begins [A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2} [A-Z][A-Za-z0-9+-]* \d{4}[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<user>\S+)[ \t]+(?P<tty>\S+)[ \t]+(?:(?P<host>\S.*?)[ \t]+)?(?P<login_time>[A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{4} \d{2}:\d{2})[ \t]+(?P<still_logged_in>still logged in)(?P<logout>)??(?P<duration>)??[ \t]*$'
+    # The length is hh:mm, or hh:mm:ss with -w, with a day count and "+"
+    # in front past a day.
+    - '^(?P<user>\S+)[ \t]+(?P<tty>\S+)[ \t]+(?:(?P<host>\S.*?)[ \t]+)?(?P<login_time>[A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{4} \d{2}:\d{2})(?P<still_logged_in>)[ \t]+- (?P<logout>\d{2}:\d{2}|crash|shutdown)[ \t]+\((?P<duration>(?:\d+\+)?\d{2}:\d{2}(?::\d{2})?)\)[ \t]*$'
+    - '^(?P<user>boot time|shutdown time|old time|new time)(?P<tty>)??(?P<host>)??[ \t]+(?P<login_time>[A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{4} \d{2}:\d{2})(?P<still_logged_in>)??(?P<logout>)??(?P<duration>)??[ \t]*$'
+fields:
+  user: {required: true}
+  login_time: {type: time, layout: "Mon Jan _2 2006 15:04", required: true}
+  still_logged_in: {type: bool, true_values: ["still logged in"], false_values: [""]}

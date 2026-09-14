@@ -1,0 +1,54 @@
+# iostat -x on FreeBSD prints a sample as a banner, "extended device
+# statistics", a heading, and a row per device. With a count and a wait
+# (iostat -x -c 3 -w 1) the banner and the heading repeat before each
+# sample, so each sample is a record holding its devices. The first sample
+# counts from boot and the ones after it cover one wait each.
+#
+# The banner is ignored and the heading opens each record. The device name
+# is cut to eight characters and stays as printed. r/s and w/s are printed
+# to a whole number and kr/s and kw/s to a tenth; every figure but qlen, a
+# count of queued transactions, is read as a float.
+#
+# -I prints totals under another heading, -T adds tin and tout after %b
+# and -C prints the CPU above the banner. The heading is pinned whole, so
+# those reports are not read.
+format: 1
+command: iostat
+variant: freebsd-extended
+description: FreeBSD iostat -x extended device statistics per sample
+metadata:
+  tags: [freebsd, bsd, io]
+  compatible: [FreeBSD iostat]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?iostat(8)
+    # devstats, which prints the banner, the heading and each row.
+    - https://github.com/freebsd/freebsd-src/blob/main/usr.sbin/iostat/iostat.c
+detect:
+  os: [freebsd]
+  signature:
+    all:
+      - '\A[ \t]*extended device statistics[ \t]*$'
+      - '^device[ \t]+r/s[ \t]+w/s[ \t]+kr/s[ \t]+kw/s[ \t]+ms/r[ \t]+ms/w[ \t]+ms/o[ \t]+ms/t[ \t]+qlen[ \t]+%b[ \t]*$'
+input:
+  ignore:
+    - '^[ \t]*extended device statistics[ \t]*$'
+parse:
+  type: records
+  start: '^device[ \t]+r/s[ \t]'
+  parts:
+    - name: devices
+      parse:
+        type: table
+        split: whitespace
+      fields:
+        device: {required: true}
+        r_s: {type: float, required: true}
+        w_s: {type: float, required: true}
+        kr_s: {type: float, required: true}
+        kw_s: {type: float, required: true}
+        ms_r: {type: float, required: true}
+        ms_w: {type: float, required: true}
+        ms_o: {type: float, required: true}
+        ms_t: {type: float, required: true}
+        qlen: {type: int, required: true}
+        b_percent: {type: float, required: true}

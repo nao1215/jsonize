@@ -1,0 +1,6 @@
+/bin/sh:
+	libedit.so.8 => /lib/libedit.so.8 (0x25cc3429000)
+	libc.so.7 => /lib/libc.so.7 (0x25cc3cbd000)
+	libtinfow.so.9 => /lib/libtinfow.so.9 (0x25cc20b0000)
+	libsys.so.7 => /lib/libsys.so.7 (0x25cc4dd2000)
+	[vdso] (0x25cc1bcb000)

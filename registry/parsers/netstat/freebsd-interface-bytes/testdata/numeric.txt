@@ -1,0 +1,8 @@
+Name     Mtu Network           Address                           Ipkts Ierrs Idrop     Ibytes    Opkts Oerrs     Obytes  Coll
+vtnet0  1500 <Link#1>          52:54:00:12:34:56                  7395     0     0   10167690     3993     0     354545     0
+vtnet0     - fe80::%vtnet0/64  fe80::5054:ff:fe12:3456%vtnet0        0     -     -          0        1     -        116     -
+vtnet0     - 192.168.122.0/24  192.168.122.10                     7390     -     -   10062864     3985     -     297643     -
+lo0    16384 <Link#2>          lo0                                   0     0     0          0        0     0          0     0
+lo0        - ::1/128           ::1                                   0     -     -          0        0     -          0     -
+lo0        - fe80::%lo0/64     fe80::1%lo0                           0     -     -          0        0     -          0     -
+lo0        - 127.0.0.0/8       127.0.0.1                             0     -     -          0        0     -          0     -

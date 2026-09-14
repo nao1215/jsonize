@@ -1,4 +1,4 @@
 source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
-description: last -y puts the year inside the login time, which last/freebsd-year reads, and the text is refused here.
+description: last -s without -y. The login time has no year, and the text is refused.
 os: freebsd
 expect_error: 'does not describe this input'

@@ -1,7 +1,7 @@
 source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
 description: >-
   kldstat -h rounds each size ("35M", "8.4K") under the same heading. The
-  kernel row the signature asks for has an exact size, and the text is
-  refused.
+  kernel row the signature asks for has an exact size; kldstat/freebsd-human
+  reads it, and the text is refused here.
 os: freebsd
 expect_error: 'does not describe this input'

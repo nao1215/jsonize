@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/iostat/freebsd-extended.json",
+  "title": "iostat/freebsd-extended",
+  "description": "FreeBSD iostat -x extended device statistics per sample",
+  "x-jsonize": {
+    "definition": "iostat/freebsd-extended",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "devices": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "b_percent": {
+              "type": "number"
+            },
+            "device": {
+              "type": "string"
+            },
+            "kr_s": {
+              "type": "number"
+            },
+            "kw_s": {
+              "type": "number"
+            },
+            "ms_o": {
+              "type": "number"
+            },
+            "ms_r": {
+              "type": "number"
+            },
+            "ms_t": {
+              "type": "number"
+            },
+            "ms_w": {
+              "type": "number"
+            },
+            "qlen": {
+              "type": "integer"
+            },
+            "r_s": {
+              "type": "number"
+            },
+            "w_s": {
+              "type": "number"
+            }
+          },
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "required": [
+      "devices"
+    ]
+  }
+}

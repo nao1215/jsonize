@@ -1,0 +1,6 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: >-
+  last -y with a console session still open, one that ended after six
+  minutes, and the boot. Each login time is a whole date.
+os: freebsd
+args: ["-y"]

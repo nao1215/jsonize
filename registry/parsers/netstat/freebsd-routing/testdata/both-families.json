@@ -1,0 +1,107 @@
+[
+  {
+    "family": {
+      "name": "Internet"
+    },
+    "routes": [
+      {
+        "destination": "default",
+        "gateway": "192.168.122.2",
+        "flags": "UGS",
+        "netif": "vtnet0",
+        "expire": null
+      },
+      {
+        "destination": "127.0.0.1",
+        "gateway": "link#2",
+        "flags": "UH",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "192.168.122.0/24",
+        "gateway": "link#1",
+        "flags": "U",
+        "netif": "vtnet0",
+        "expire": null
+      },
+      {
+        "destination": "192.168.122.10",
+        "gateway": "link#2",
+        "flags": "UHS",
+        "netif": "lo0",
+        "expire": null
+      }
+    ]
+  },
+  {
+    "family": {
+      "name": "Internet6"
+    },
+    "routes": [
+      {
+        "destination": "::/96",
+        "gateway": "link#2",
+        "flags": "URS",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "::1",
+        "gateway": "link#2",
+        "flags": "UHS",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "::ffff:0.0.0.0/96",
+        "gateway": "link#2",
+        "flags": "URS",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::%lo0/10",
+        "gateway": "link#2",
+        "flags": "URS",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::%vtnet0/64",
+        "gateway": "link#1",
+        "flags": "U",
+        "netif": "vtnet0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::5054:ff:fe12:3456%lo0",
+        "gateway": "link#2",
+        "flags": "UHS",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::%lo0/64",
+        "gateway": "link#2",
+        "flags": "U",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::1%lo0",
+        "gateway": "link#2",
+        "flags": "UHS",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "ff02::/16",
+        "gateway": "link#2",
+        "flags": "URS",
+        "netif": "lo0",
+        "expire": null
+      }
+    ]
+  }
+]

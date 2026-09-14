@@ -1,0 +1,6 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: >-
+  FreeBSD ldd names the program even when it is the only one. The virtual
+  DSO is written "[vdso]".
+os: freebsd
+args: ["/bin/sh"]

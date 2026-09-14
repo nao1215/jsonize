@@ -1,0 +1,6 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; if_bridge and nullfs were loaded for the capture
+description: >-
+  kldstat -h with if_bridge (which pulls in bridgestp) and nullfs loaded.
+  Each size is rounded to a unit and stays a string.
+os: freebsd
+args: ["-h"]

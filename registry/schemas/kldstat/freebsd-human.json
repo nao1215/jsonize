@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/kldstat/freebsd-human.json",
+  "title": "kldstat/freebsd-human",
+  "description": "FreeBSD kldstat -h loaded kernel files with rounded sizes",
+  "x-jsonize": {
+    "definition": "kldstat/freebsd-human",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "refs": {
+        "type": "integer"
+      },
+      "address": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "id",
+      "refs",
+      "address",
+      "size",
+      "name"
+    ]
+  }
+}

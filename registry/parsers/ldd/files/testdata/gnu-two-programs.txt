@@ -1,0 +1,16 @@
+/usr/bin/ls:
+	linux-vdso.so.1 (0x0000726099d85000)
+	libselinux.so.1 => /usr/lib/x86_64-linux-gnu/libselinux.so.1 (0x0000726099d29000)
+	libgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000726099cfb000)
+	libm.so.6 => /usr/lib/x86_64-linux-gnu/libm.so.6 (0x00007260990da000)
+	libc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x0000726098e00000)
+	/lib64/ld-linux-x86-64.so.2 (0x0000726099d87000)
+	libpcre2-8.so.0 => /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0 (0x000072609902e000)
+/usr/bin/cat:
+	linux-vdso.so.1 (0x00007454838a4000)
+	libselinux.so.1 => /usr/lib/x86_64-linux-gnu/libselinux.so.1 (0x0000745483848000)
+	libgcc_s.so.1 => /usr/lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000074548381a000)
+	libm.so.6 => /usr/lib/x86_64-linux-gnu/libm.so.6 (0x00007454836f4000)
+	libc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x0000745482800000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007454838a6000)
+	libpcre2-8.so.0 => /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0 (0x0000745482b54000)

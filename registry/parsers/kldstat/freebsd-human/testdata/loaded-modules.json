@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "refs": 28,
+    "address": "0xffffffff80200000",
+    "size": "35M",
+    "name": "kernel"
+  },
+  {
+    "id": 2,
+    "refs": 1,
+    "address": "0xffffffff82554000",
+    "size": "6.2M",
+    "name": "zfs.ko"
+  },
+  {
+    "id": 3,
+    "refs": 1,
+    "address": "0xffffffff837f8000",
+    "size": "13K",
+    "name": "intpm.ko"
+  },
+  {
+    "id": 4,
+    "refs": 1,
+    "address": "0xffffffff837fc000",
+    "size": "8.4K",
+    "name": "smbus.ko"
+  },
+  {
+    "id": 5,
+    "refs": 1,
+    "address": "0xffffffff837ff000",
+    "size": "8.6K",
+    "name": "virtio_random.ko"
+  },
+  {
+    "id": 6,
+    "refs": 1,
+    "address": "0xffffffff83802000",
+    "size": "11K",
+    "name": "mac_ntpd.ko"
+  },
+  {
+    "id": 7,
+    "refs": 1,
+    "address": "0xffffffff83805000",
+    "size": "34K",
+    "name": "if_bridge.ko"
+  },
+  {
+    "id": 8,
+    "refs": 1,
+    "address": "0xffffffff8380e000",
+    "size": "24K",
+    "name": "bridgestp.ko"
+  },
+  {
+    "id": 9,
+    "refs": 1,
+    "address": "0xffffffff83815000",
+    "size": "19K",
+    "name": "nullfs.ko"
+  }
+]

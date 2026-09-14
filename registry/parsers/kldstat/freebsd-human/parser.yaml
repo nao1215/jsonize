@@ -1,0 +1,44 @@
+# kldstat -h rounds each size to a unit ("35M", "8.4K") in place of the
+# exact size in hexadecimal. A rounded size is not a count of bytes and
+# stays a string, as printed.
+#
+# humanize_number fits the size in at most four characters: up to three
+# digits and a unit letter, a digit, a point, a digit and a letter, or up to
+# three digits and no letter for a size under 1000 bytes. The kernel is
+# always file 1 and far larger than 1000 bytes, so its row has a unit
+# letter, and that row keeps an exact table (hexadecimal, no unit letter)
+# from being read here.
+#
+# -v and -m are refused, as in kldstat/freebsd.
+format: 1
+command: kldstat
+variant: freebsd-human
+description: FreeBSD kldstat -h loaded kernel files with rounded sizes
+metadata:
+  tags: [freebsd, bsd, kernel]
+  compatible: [FreeBSD kldstat]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?kldstat(8)
+    # printfile, and the heading with its -h width.
+    - https://github.com/freebsd/freebsd-src/blob/main/sbin/kldstat/kldstat.c
+detect:
+  os: [freebsd]
+  args:
+    any: ["-h"]
+    none: ["-v", "-m"]
+  signature:
+    all:
+      - '\AId Refs Address[ \t]+Size Name[ \t]*$'
+      - '^[ \t]*1[ \t]+\d+[ \t]+0x[0-9a-f]+[ \t]+(?:\d{1,3}|\d\.\d)[KMGTPE][ \t]+kernel[ \t]*$'
+input:
+  ignore:
+    - '\AId Refs Address[ \t]+Size Name[ \t]*$'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<id>\d+)[ \t]+(?P<refs>\d+)[ \t]+(?P<address>0x[0-9a-f]+)[ \t]+(?P<size>(?:\d{1,3}|\d\.\d)[KMGTPE]|\d{1,3})[ \t]+(?P<name>[^\s()]+)[ \t]*$'
+fields:
+  id: {type: int, required: true}
+  refs: {type: int, required: true}
+  address: {required: true}
+  size: {required: true}
+  name: {required: true}

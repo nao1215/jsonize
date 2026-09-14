@@ -12,8 +12,8 @@
 # rows alone are the shape of other login listings.
 #
 # The login time has no year and stays a string until --assume-year says
-# which year to read it in. -y prints the year and -s the duration in
-# seconds, both in places this does not read, so both are refused.
+# which year to read it in. -y prints the year, which last/freebsd-year
+# reads, and -s the duration in seconds; both are refused here.
 format: 1
 command: last
 variant: freebsd
@@ -34,6 +34,10 @@ detect:
     # log line that happens to say "begins" and a date does not match.
     all:
       - '(?:\A|\n)[ \t]*\n\S+ begins [A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2} [A-Z][A-Za-z0-9+-]* \d{4}[ \t]*\n?\z'
+    none:
+      # A login time with the year in it, which is last -y and
+      # last/freebsd-year.
+      - '[A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{4} \d{2}:\d{2}'
 input:
   ignore:
     - '^\S+ begins [A-Z][a-z]{2} [A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2} [A-Z][A-Za-z0-9+-]* \d{4}[ \t]*$'

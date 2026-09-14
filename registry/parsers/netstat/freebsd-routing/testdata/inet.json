@@ -1,0 +1,37 @@
+[
+  {
+    "family": {
+      "name": "Internet"
+    },
+    "routes": [
+      {
+        "destination": "default",
+        "gateway": "192.168.122.2",
+        "flags": "UGS",
+        "netif": "vtnet0",
+        "expire": null
+      },
+      {
+        "destination": "127.0.0.1",
+        "gateway": "link#2",
+        "flags": "UH",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "192.168.122.0/24",
+        "gateway": "link#1",
+        "flags": "U",
+        "netif": "vtnet0",
+        "expire": null
+      },
+      {
+        "destination": "192.168.122.10",
+        "gateway": "link#2",
+        "flags": "UHS",
+        "netif": "lo0",
+        "expire": null
+      }
+    ]
+  }
+]

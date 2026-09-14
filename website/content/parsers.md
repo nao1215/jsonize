@@ -80,17 +80,17 @@ the same reading with settings of your own.
 | `ifconfig` | [`busybox`](../schemas/ifconfig/busybox.json) |
 | `ini` | [`default`](../schemas/ini/default.json) |
 | `ionice` | [`class`](../schemas/ionice/class.json) |
-| `iostat` | [`cpu`](../schemas/iostat/cpu.json), [`cpu-timestamped`](../schemas/iostat/cpu-timestamped.json), [`device`](../schemas/iostat/device.json), [`device-timestamped`](../schemas/iostat/device-timestamped.json), [`extended`](../schemas/iostat/extended.json), [`extended-timestamped`](../schemas/iostat/extended-timestamped.json), [`human`](../schemas/iostat/human.json), [`human-sizes`](../schemas/iostat/human-sizes.json), [`human-sizes-timestamped`](../schemas/iostat/human-sizes-timestamped.json), [`human-timestamped`](../schemas/iostat/human-timestamped.json), [`linux`](../schemas/iostat/linux.json), [`linux-timestamped`](../schemas/iostat/linux-timestamped.json) |
+| `iostat` | [`cpu`](../schemas/iostat/cpu.json), [`cpu-timestamped`](../schemas/iostat/cpu-timestamped.json), [`device`](../schemas/iostat/device.json), [`device-timestamped`](../schemas/iostat/device-timestamped.json), [`extended`](../schemas/iostat/extended.json), [`extended-timestamped`](../schemas/iostat/extended-timestamped.json), [`freebsd-extended`](../schemas/iostat/freebsd-extended.json), [`human`](../schemas/iostat/human.json), [`human-sizes`](../schemas/iostat/human-sizes.json), [`human-sizes-timestamped`](../schemas/iostat/human-sizes-timestamped.json), [`human-timestamped`](../schemas/iostat/human-timestamped.json), [`linux`](../schemas/iostat/linux.json), [`linux-timestamped`](../schemas/iostat/linux-timestamped.json) |
 | `ip` | [`address`](../schemas/ip/address.json), [`brief-address`](../schemas/ip/brief-address.json), [`brief-link`](../schemas/ip/brief-link.json), [`link`](../schemas/ip/link.json), [`multicast-address`](../schemas/ip/multicast-address.json), [`neighbour`](../schemas/ip/neighbour.json), [`oneline-address`](../schemas/ip/oneline-address.json), [`oneline-link`](../schemas/ip/oneline-link.json), [`route`](../schemas/ip/route.json), [`rule`](../schemas/ip/rule.json), [`stats-link`](../schemas/ip/stats-link.json), [`stats-link-detail`](../schemas/ip/stats-link-detail.json) |
 | `ipconfig` | [`all`](../schemas/ipconfig/all.json), [`windows`](../schemas/ipconfig/windows.json) |
 | `ipcs` | [`linux`](../schemas/ipcs/linux.json), [`message-queues`](../schemas/ipcs/message-queues.json), [`semaphores`](../schemas/ipcs/semaphores.json), [`shared-memory`](../schemas/ipcs/shared-memory.json) |
 | `iw` | [`dev`](../schemas/iw/dev.json), [`link`](../schemas/iw/link.json) |
 | `journalctl` | [`boots`](../schemas/journalctl/boots.json), [`short`](../schemas/journalctl/short.json), [`short-iso`](../schemas/journalctl/short-iso.json), [`short-monotonic`](../schemas/journalctl/short-monotonic.json), [`short-precise`](../schemas/journalctl/short-precise.json) |
-| `kldstat` | [`freebsd`](../schemas/kldstat/freebsd.json) |
+| `kldstat` | [`freebsd`](../schemas/kldstat/freebsd.json), [`freebsd-human`](../schemas/kldstat/freebsd-human.json) |
 | `kv` | [`colon`](../schemas/kv/colon.json), [`equals`](../schemas/kv/equals.json) |
-| `last` | [`busybox`](../schemas/last/busybox.json), [`freebsd`](../schemas/last/freebsd.json) |
+| `last` | [`busybox`](../schemas/last/busybox.json), [`freebsd`](../schemas/last/freebsd.json), [`freebsd-year`](../schemas/last/freebsd-year.json) |
 | `ldconfig` | [`cache`](../schemas/ldconfig/cache.json) |
-| `ldd` | [`posix`](../schemas/ldd/posix.json) |
+| `ldd` | [`files`](../schemas/ldd/files.json), [`posix`](../schemas/ldd/posix.json) |
 | `locale` | [`keywords`](../schemas/locale/keywords.json), [`locales`](../schemas/locale/locales.json), [`posix`](../schemas/locale/posix.json) |
 | `localectl` | [`linux`](../schemas/localectl/linux.json) |
 | `loginctl` | [`seats`](../schemas/loginctl/seats.json), [`sessions`](../schemas/loginctl/sessions.json), [`users`](../schemas/loginctl/users.json) |
@@ -122,7 +122,7 @@ the same reading with settings of your own.
 | `mpstat` | [`interrupts`](../schemas/mpstat/interrupts.json), [`linux`](../schemas/mpstat/linux.json) |
 | `mtr` | [`report`](../schemas/mtr/report.json) |
 | `namei` | [`long`](../schemas/namei/long.json) |
-| `netstat` | [`all-sockets`](../schemas/netstat/all-sockets.json), [`freebsd-interface`](../schemas/netstat/freebsd-interface.json), [`interface`](../schemas/netstat/interface.json), [`internet`](../schemas/netstat/internet.json), [`routing`](../schemas/netstat/routing.json), [`unix`](../schemas/netstat/unix.json) |
+| `netstat` | [`all-sockets`](../schemas/netstat/all-sockets.json), [`freebsd-interface`](../schemas/netstat/freebsd-interface.json), [`freebsd-interface-bytes`](../schemas/netstat/freebsd-interface-bytes.json), [`freebsd-routing`](../schemas/netstat/freebsd-routing.json), [`interface`](../schemas/netstat/interface.json), [`internet`](../schemas/netstat/internet.json), [`routing`](../schemas/netstat/routing.json), [`unix`](../schemas/netstat/unix.json) |
 | `networkctl` | [`list`](../schemas/networkctl/list.json) |
 | `nm` | [`dynamic`](../schemas/nm/dynamic.json) |
 | `nmcli` | [`connection`](../schemas/nmcli/connection.json), [`device`](../schemas/nmcli/device.json), [`device-show`](../schemas/nmcli/device-show.json), [`general`](../schemas/nmcli/general.json), [`wifi`](../schemas/nmcli/wifi.json) |
@@ -162,7 +162,7 @@ the same reading with settings of your own.
 | `size` | [`gnu`](../schemas/size/gnu.json) |
 | `smartctl` | [`scan`](../schemas/smartctl/scan.json) |
 | `snap` | [`list`](../schemas/snap/list.json) |
-| `sockstat` | [`freebsd`](../schemas/sockstat/freebsd.json) |
+| `sockstat` | [`freebsd`](../schemas/sockstat/freebsd.json), [`freebsd-state`](../schemas/sockstat/freebsd-state.json) |
 | `ss` | [`connected`](../schemas/ss/connected.json), [`linux`](../schemas/ss/linux.json), [`single-protocol`](../schemas/ss/single-protocol.json), [`summary`](../schemas/ss/summary.json) |
 | `ssh-keygen` | [`fingerprint`](../schemas/ssh-keygen/fingerprint.json) |
 | `stat` | [`bsd`](../schemas/stat/bsd.json), [`bsd-verbose`](../schemas/stat/bsd-verbose.json), [`gnu`](../schemas/stat/gnu.json), [`gnu-filesystem`](../schemas/stat/gnu-filesystem.json), [`gnu-terse`](../schemas/stat/gnu-terse.json) |

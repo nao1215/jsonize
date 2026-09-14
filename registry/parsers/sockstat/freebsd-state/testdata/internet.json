@@ -1,0 +1,232 @@
+[
+  {
+    "user": "root",
+    "command": "sshd-sessi",
+    "pid": 1421,
+    "fd": 7,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:22",
+    "foreign_address": "192.168.122.2:39832",
+    "conn_state": "ESTABLISHED"
+  },
+  {
+    "user": "root",
+    "command": "sshd-sessi",
+    "pid": 1419,
+    "fd": 7,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:22",
+    "foreign_address": "192.168.122.2:39832",
+    "conn_state": "ESTABLISHED"
+  },
+  {
+    "user": "root",
+    "command": "sshd",
+    "pid": 1331,
+    "fd": 6,
+    "proto": "tcp6",
+    "local_address": "*:22",
+    "foreign_address": "*:*",
+    "conn_state": "LISTEN"
+  },
+  {
+    "user": "root",
+    "command": "sshd",
+    "pid": 1331,
+    "fd": 7,
+    "proto": "tcp4",
+    "local_address": "*:22",
+    "foreign_address": "*:*",
+    "conn_state": "LISTEN"
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 20,
+    "proto": "udp6",
+    "local_address": "*:123",
+    "foreign_address": "*:*",
+    "conn_state": null
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 21,
+    "proto": "udp4",
+    "local_address": "*:123",
+    "foreign_address": "*:*",
+    "conn_state": null
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 22,
+    "proto": "udp4",
+    "local_address": "192.168.122.10:123",
+    "foreign_address": "*:*",
+    "conn_state": null
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 23,
+    "proto": "udp6",
+    "local_address": "[::1]:123",
+    "foreign_address": "*:*",
+    "conn_state": null
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 24,
+    "proto": "udp6",
+    "local_address": "[fe80::1%lo0]:123",
+    "foreign_address": "*:*",
+    "conn_state": null
+  },
+  {
+    "user": "ntpd",
+    "command": "ntpd",
+    "pid": 1255,
+    "fd": 25,
+    "proto": "udp4",
+    "local_address": "127.0.0.1:123",
+    "foreign_address": "*:*",
+    "conn_state": null
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1129,
+    "fd": 6,
+    "proto": "udp6",
+    "local_address": "*:514",
+    "foreign_address": "*:*",
+    "conn_state": null
+  },
+  {
+    "user": "root",
+    "command": "syslogd",
+    "pid": 1129,
+    "fd": 7,
+    "proto": "udp4",
+    "local_address": "*:514",
+    "foreign_address": "*:*",
+    "conn_state": null
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:13448",
+    "foreign_address": "203.0.113.167:443",
+    "conn_state": "TIME_WAIT"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:61378",
+    "foreign_address": "203.0.113.169:443",
+    "conn_state": "TIME_WAIT"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:58237",
+    "foreign_address": "203.0.113.167:443",
+    "conn_state": "TIME_WAIT"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:12789",
+    "foreign_address": "203.0.113.167:443",
+    "conn_state": "TIME_WAIT"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:39475",
+    "foreign_address": "203.0.113.167:443",
+    "conn_state": "TIME_WAIT"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:49552",
+    "foreign_address": "198.51.100.30:443",
+    "conn_state": "TIME_WAIT"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:17089",
+    "foreign_address": "203.0.113.167:443",
+    "conn_state": "TIME_WAIT"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:18949",
+    "foreign_address": "198.51.100.129:443",
+    "conn_state": "TIME_WAIT"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:54455",
+    "foreign_address": "203.0.113.167:443",
+    "conn_state": "TIME_WAIT"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:24664",
+    "foreign_address": "203.0.113.167:443",
+    "conn_state": "TIME_WAIT"
+  },
+  {
+    "user": null,
+    "command": null,
+    "pid": null,
+    "fd": null,
+    "proto": "tcp4",
+    "local_address": "192.168.122.10:34000",
+    "foreign_address": "203.0.113.167:443",
+    "conn_state": "TIME_WAIT"
+  }
+]

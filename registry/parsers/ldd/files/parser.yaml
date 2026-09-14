@@ -1,0 +1,53 @@
+# ldd prints "path:" above each program's objects: glibc when given more
+# than one program, FreeBSD always. Each program is a record: its path as
+# given, and its objects, read as ldd/posix reads them. The virtual DSO is
+# "linux-vdso.so.1" on glibc and "[vdso]" on FreeBSD.
+#
+# glibc prints the line of a program that is not dynamically linked with
+# nothing under it, and writes "not a dynamic executable" to standard
+# error, so the record has an empty list of libraries. FreeBSD prints no
+# line for such a program.
+#
+# The load address changes from run to run and stays a string, as
+# printed.
+format: 1
+command: ldd
+variant: files
+description: ldd shared object dependencies of each program named
+metadata:
+  tags: [linux, freebsd, binary]
+  compatible: [glibc, FreeBSD ldd]
+  references:
+    - https://man7.org/linux/man-pages/man1/ldd.1.html
+    - https://man.freebsd.org/cgi/man.cgi?ldd(1)
+detect:
+  os: [linux, freebsd]
+  signature:
+    all:
+      - '\A\S[^\n]*:[ \t]*$'
+      - '^[ \t]+\S+ => \S+ \(0x[0-9a-f]+\)[ \t]*$'
+parse:
+  type: records
+  start: '^\S.*:[ \t]*$'
+  parts:
+    - name: program
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<path>\S.*):[ \t]*$'
+      fields:
+        path: {required: true}
+    - name: libraries
+      select: {skip: 1}
+      parse:
+        type: regex
+        patterns:
+          - '^[ \t]+(?P<name>\S+) => (?P<path>\S+) \((?P<address>0x[0-9a-f]+)\)[ \t]*$'
+          - '^[ \t]+(?P<name>\S+) => (?P<status>not found)[ \t]*$'
+          - '^[ \t]+(?P<name>\S+) \((?P<address>0x[0-9a-f]+)\)[ \t]*$'
+      fields:
+        name: {required: true}
+        path: {when_missing: omit}
+        status: {when_missing: omit}
+        address: {when_missing: omit}

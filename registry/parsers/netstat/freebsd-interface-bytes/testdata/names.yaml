@@ -1,0 +1,7 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; bridge0 and lo1 were created for the capture
+description: >-
+  netstat -ib with the networks and addresses as names where a name is
+  known ("localhost", "your-net"). The byte counters of an address row
+  are numbers.
+os: freebsd
+args: ["-ib"]

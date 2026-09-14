@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (glibc 2.43) with LC_ALL=C
+description: glibc ldd given two programs names each before its libraries.
+os: linux
+args: ["/usr/bin/ls", "/usr/bin/cat"]

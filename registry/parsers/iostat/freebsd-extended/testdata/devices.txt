@@ -1,0 +1,6 @@
+                        extended device statistics  
+device       r/s     w/s     kr/s     kw/s  ms/r  ms/w  ms/o  ms/t qlen  %b  
+vtbd0        133      53   4312.7   9599.1     0     0     0     0    0   3 
+md99           2       0      7.3      0.0     0     0     0     0    0   0 
+cd0            0       0      0.0      0.0     0     0     0     0    0   0 
+pass0          0       0      0.0      0.0     0     0     0     0    0   0 

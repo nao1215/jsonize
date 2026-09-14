@@ -9,7 +9,8 @@
 # A name followed by "*" is an interface that is not up. The star is not
 # part of the name, so it is read into up.
 #
-# -b adds byte counters and -d a Drop column, which changes the heading;
+# -b adds byte counters, which netstat/freebsd-interface-bytes reads, and
+# -d a Drop column, which changes the heading;
 # the heading is pinned whole. -h rounds the counters ("7.4k") under the
 # same heading, and the link row the signature asks for has an exact MTU
 # and exact counters, so a rounded table is not read.

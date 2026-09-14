@@ -1,0 +1,6 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: >-
+  netstat -rn with an IPv4 and an IPv6 block. No route expires, so every
+  expire is null.
+os: freebsd
+args: ["-rn"]
