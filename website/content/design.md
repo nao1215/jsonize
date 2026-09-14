@@ -61,8 +61,9 @@ Definitions use a fixed set of parsing rules. They can split fields,
 match expressions and build nested records, including trees whose depth
 comes from the input. They cannot execute code or evaluate arbitrary
 expressions. Each definition can be reviewed and tested against captured
-output. YAML supports comments and nested structures; `goccy/go-yaml`
-provides strict decoding and line numbers in errors.
+output. YAML supports comments and nested structures. jz reads it with
+its own reader, which covers the part of YAML definitions use and names
+the line of every problem, including a key this build does not know.
 
 ### A handful of parse types, not a general pipeline
 
@@ -880,8 +881,13 @@ the key that is the problem.
 
 ### Dependencies
 
-- `github.com/goccy/go-yaml` — strict YAML decoding with positions.
-- `github.com/google/go-cmp` — structural diffs in golden failures.
+None outside the Go standard library. The YAML reader (`internal/yaml`)
+reads block and flow mappings and sequences, plain, quoted and block
+scalars, comments and one document per file, and refuses anchors,
+aliases, tags and keys that are not one scalar with a message that names
+them. Before the YAML library was dropped, the reader was held to the
+same values over every file in the registry, and the round-trip tests
+hold it to the YAML jz writes. A golden failure shows the two texts.
 
 No JSON Schema library: the generator emits a small subset of draft
 2020-12, and a validator for exactly that subset is shorter than the

@@ -33,6 +33,7 @@ jobs:
           - { pkg: ./pkg/engine, name: FuzzFormats }
           - { pkg: ./pkg/engine, name: FuzzParse }
           - { pkg: ./internal/schema, name: FuzzOutputFitsSchema }
+          - { pkg: ./internal/yaml, name: FuzzParseYAML }
           - { pkg: ./pkg/selector, name: FuzzSelect }
           - { pkg: ./internal/yamlout, name: FuzzEncodeString }
     runs-on: ubuntu-latest

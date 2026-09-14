@@ -17,6 +17,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/nao1215/jsonize/internal/yaml"
 )
 
 // CurrentFormat is the definition format version this build understands.
@@ -481,15 +483,15 @@ type Alternative struct {
 }
 
 // UnmarshalYAML accepts a string or a mapping of pattern and values.
-func (a *Alternative) UnmarshalYAML(b []byte) error {
+func (a *Alternative) UnmarshalYAML(n *yaml.Node) error {
 	var one string
-	if err := DecodeYAML(b, &one); err == nil {
+	if err := yaml.Decode(n, &one, true); err == nil {
 		*a = Alternative{Pattern: one}
 		return nil
 	}
 	type plain Alternative
 	var full plain
-	if err := DecodeYAML(b, &full); err != nil {
+	if err := yaml.Decode(n, &full, true); err != nil {
 		return fmt.Errorf("a pattern is a string, or a mapping of pattern and values: %w", err)
 	}
 	*a = Alternative(full)
@@ -546,21 +548,21 @@ func (p *Parse) RepeatedHeader() bool {
 type Indent []string
 
 // UnmarshalYAML accepts either a string or a list of them.
-func (i *Indent) UnmarshalYAML(b []byte) error {
+func (i *Indent) UnmarshalYAML(n *yaml.Node) error {
 	// A number would decode as the digits of itself, which is a level of
 	// indentation nothing prints. Saying so beats accepting "2" as two
 	// characters that happen to be a two.
-	var n int
-	if err := DecodeYAML(b, &n); err == nil {
+	var count int
+	if err := yaml.Decode(n, &count, true); err == nil {
 		return fmt.Errorf("indent is the indentation as it is written, not how many characters it is: %q for a tab, %q for two spaces", "\\t", "  ")
 	}
 	var one string
-	if err := DecodeYAML(b, &one); err == nil {
+	if err := yaml.Decode(n, &one, true); err == nil {
 		*i = Indent{one}
 		return nil
 	}
 	var many []string
-	if err := DecodeYAML(b, &many); err != nil {
+	if err := yaml.Decode(n, &many, true); err != nil {
 		return errors.New("indent must be a string or a list of strings")
 	}
 	*i = many

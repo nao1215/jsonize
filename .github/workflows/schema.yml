@@ -6,7 +6,9 @@ name: Schema
 # tree in front of it: an independent validator reading every fixture
 # against its schema, and a comparison with what the branch being merged
 # into published, which is where a breaking change edited in by hand
-# without a new contract version is caught.
+# without a new contract version is caught. The YAML output is read
+# back by an independent reader the same way, since jz reads YAML with
+# a reader of its own.
 
 on:
   push:
@@ -30,6 +32,25 @@ jobs:
           "${RUNNER_TEMP}/venv/bin/pip" install --quiet jsonschema==4.23.0
       - name: Validate every fixture against its published schema
         run: '"${RUNNER_TEMP}/venv/bin/python" scripts/check_schemas.py'
+
+  yaml-output:
+    name: YAML output against an independent reader
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+      - name: Build jz
+        run: go build -o "${RUNNER_TEMP}/jz" ./cmd/jz
+      - name: Install PyYAML
+        run: |
+          python3 -m venv "${RUNNER_TEMP}/venv"
+          "${RUNNER_TEMP}/venv/bin/pip" install --quiet pyyaml==6.0.3
+      - name: Read every fixture's YAML output back with PyYAML
+        run: '"${RUNNER_TEMP}/venv/bin/python" scripts/check_yaml_output.py "${RUNNER_TEMP}/jz"'
 
   against-base:
     name: compatible with the base branch

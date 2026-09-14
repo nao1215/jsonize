@@ -2,13 +2,12 @@ package cli
 
 import (
 	"encoding/json"
-	"errors"
 	"io"
 	"reflect"
 	"strings"
 	"testing"
 
-	"github.com/goccy/go-yaml"
+	"github.com/nao1215/jsonize/internal/yaml"
 )
 
 // untouchedInput fails the test that reads it: an option pair refused
@@ -28,7 +27,7 @@ func sameValue(t *testing.T, jsonText, yamlText string) {
 	if err := json.Unmarshal([]byte(jsonText), &fromJSON); err != nil {
 		t.Fatalf("JSON: %v\n%s", err, jsonText)
 	}
-	if err := yaml.Unmarshal([]byte(yamlText), &fromYAML); err != nil {
+	if err := yaml.Unmarshal([]byte(yamlText), &fromYAML, true); err != nil {
 		t.Fatalf("YAML: %v\n%s", err, yamlText)
 	}
 	if !reflect.DeepEqual(fromJSON, numbersAsFloat(fromYAML)) {
@@ -123,22 +122,6 @@ func TestYAMLStreamIsOneDocumentPerRecord(t *testing.T) {
 	}
 	for i := range docs {
 		sameValue(t, lines[i], docs[i])
-	}
-	dec := yaml.NewDecoder(strings.NewReader(out))
-	n := 0
-	for {
-		var v any
-		err := dec.Decode(&v)
-		if errors.Is(err, io.EOF) {
-			break
-		}
-		if err != nil {
-			t.Fatal(err)
-		}
-		n++
-	}
-	if n != len(lines) {
-		t.Errorf("a YAML reader found %d documents, want %d", n, len(lines))
 	}
 }
 

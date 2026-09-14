@@ -431,10 +431,11 @@ func TestLoadErrors(t *testing.T) {
 	}
 }
 
-func TestLoadRecoversFromDecoderPanic(t *testing.T) {
+func TestLoadRefusesTags(t *testing.T) {
 	t.Parallel()
-	// A tagged scalar where a sequence is expected makes the YAML library
-	// panic; Load must report an error instead.
+	// A tagged scalar is outside the YAML definitions are written in,
+	// and one where a sequence is expected once made the decoder panic;
+	// Load reports it as text that is not YAML.
 	src := "format: 1\ncommand: c\nvariant: v\nparse:\n  type: table\n  header:\n   columns: !x\n0000"
 	_, err := Load([]byte(src), "panic.yaml")
 	if err == nil || !strings.Contains(err.Error(), "invalid YAML") {
@@ -625,7 +626,7 @@ func TestLoadInline(t *testing.T) {
 		{"detect: {signature: {all: ['x']}}\nparse: {type: kv}\n", "states no detect"},
 		{"parse: {type: nope}\n", "unknown parse type"},
 		{"parse: {type: kv, bogus: 1}\n", `unknown key "bogus"`},
-		{"[1, 2]", "invalid YAML"},
+		{"[1, 2]", "expected a mapping, not a list"},
 		{"parse: {type: kv}\n" + strings.Repeat("#", MaxDefinitionSize), "exceeds"},
 	} {
 		if _, err := LoadInline([]byte(tc.body), "--define"); err == nil || !strings.Contains(err.Error(), tc.want) {

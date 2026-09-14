@@ -11,6 +11,9 @@ $ ps aux | jz | jq '.[] | select(.cpu_percent > 10) | .command'
 
 ![jz reading df, uptime and free, and refusing input it cannot identify](demo/jsonize.gif)
 
+Parsers are YAML definitions, and jz is one binary with no dependencies
+outside the Go standard library.
+
 ## Install
 
 With Go 1.26 or later:
