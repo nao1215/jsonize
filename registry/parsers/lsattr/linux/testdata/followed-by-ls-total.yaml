@@ -1,0 +1,5 @@
+source: the e2fsprogs fixture followed by the first line of ls -l, captured on Ubuntu 26.04 with LC_ALL=C
+description: >-
+  Two commands run one after the other. `total` is a word and not a set of attribute letters.
+os: linux
+expect_error: 'line 3: line does not match pattern'

@@ -12,11 +12,13 @@
 # the module -- a built-in module prints "file", one loaded from disk
 # prints "vermagic" and the four sig_ fields instead.
 #
-# The signature is not carried. modinfo wraps its hex bytes over as many
-# tab-indented continuation lines as it needs, and a continuation line is
-# not a field; keeping only the first line of it would report a signature
-# that is not the module's. Both the label and its continuation lines are
-# dropped here rather than reported wrongly.
+# modinfo continues a value on lines indented by two tabs: the hex bytes
+# of a signature, and a parameter description written over several lines
+# (drm's debug parameter describes each bit on its own). A continuation
+# line is not a field, so it is joined to the value it continues.
+#
+# The signature is not carried. Joined, it is only hex bytes, which the
+# signer and sig_key lines already identify, and it is dropped whole.
 format: 1
 command: modinfo
 variant: linux
@@ -35,16 +37,24 @@ detect:
       # loaded from disk.
       - '^filename:[ \t]{2,}\S'
     any:
-      # Which of the rest a module carries is up to the module.
+      # Which of the rest a module carries is up to the module. A driver
+      # that loads firmware names every file before anything else, and
+      # r8169 names 29, so firmware is what the first twenty lines show.
+      - '^firmware:[ \t]{2,}\S'
       - '^license:[ \t]{2,}\S'
       - '^description:[ \t]{2,}\S'
       - '^vermagic:[ \t]{2,}\S'
       - '^alias:[ \t]{2,}\S'
 input:
+  fold: '^\t\t\S'
   ignore:
-    - '\Asignature:'
-    - '\A\t'
+    # Stated to the end, so what is dropped is the signature and not a
+    # line of another command's output that follows it.
+    - '\Asignature:[ \t]+(?:[0-9A-F]{2}: ?)*[0-9A-F]{2}[ \t]*\z'
 parse:
-  type: kv
-  separator: ":"
-  as: list
+  type: regex
+  # A label is a lower-case word, as the kernel's module macros name
+  # them, and the padding follows its colon, so the pairs are read with a
+  # pattern rather than as any text around a colon:
+  # `c1:00.0 Ethernet controller: ...` from lspci has a colon too.
+  pattern: '^(?P<name>[a-z][a-z0-9_]*):(?:[ \t]+|$)(?P<value>.*?)[ \t]*$'

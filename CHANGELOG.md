@@ -25,6 +25,18 @@ project follows [Semantic Versioning](https://semver.org/).
   several lines as variables of their own (`sysctl hw.intrs` returned a
   variable named `irq1`), and reads a name part holding a space, as the
   ZFS kstat histograms print.
+- Eleven definitions no longer read a line of another command's output
+  printed after their own. `ip link` took an unindented line as a
+  setting of the last interface, `tc -s qdisc` as a statistic,
+  `bridge fdb` as an entry, `systemd-analyze blame`, `getconf -a`,
+  `lsattr`, `loginctl list-seats`, `systemd-id128 show` and
+  `git status --porcelain` as rows, and `unzip -l` and `modinfo`
+  dropped such a line through an ignore rule that matched only its
+  start. Each now refuses it.
+- `modinfo` reads a parameter description written over several lines
+  (`modinfo drm`), which lost every line after the first, and a driver
+  that names more than nineteen firmware files (`modinfo r8169`), which
+  was not recognised.
 
 ### Changed
 

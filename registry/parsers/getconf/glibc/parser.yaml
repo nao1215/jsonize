@@ -29,7 +29,10 @@ detect:
       - '^[A-Z_][A-Z0-9_]*[ \t]+[^\n]*\n[A-Z_][A-Z0-9_]*[ \t]+'
 parse:
   type: regex
-  pattern: '^(?P<name>\S+)[ \t]*(?P<value>.*?)[ \t]*$'
+  # Every name is the shape the signature gives it, so a line without
+  # one, such as the bare number `getconf LONG_BIT` prints, is not a
+  # variable with no value.
+  pattern: '^(?P<name>[A-Z_][A-Z0-9_]*)(?:[ \t]+|$)(?P<value>.*?)[ \t]*$'
 fields:
   name: {required: true}
   value: {null_if: [""]}

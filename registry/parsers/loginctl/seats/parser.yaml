@@ -30,4 +30,7 @@ parse:
   type: table
   split: whitespace
 fields:
-  seat: {required: true}
+  # logind accepts a seat name only when it starts with "seat", and the
+  # one column takes the whole line, so the name is what keeps a row of
+  # another table printed after this one from becoming a seat.
+  seat: {required: true, regex: '(?P<seat>seat[A-Za-z0-9_-]*)'}

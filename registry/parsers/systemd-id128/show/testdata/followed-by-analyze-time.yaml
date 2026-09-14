@@ -1,0 +1,5 @@
+source: the two-names fixture followed by systemd-analyze time, captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C
+description: >-
+  Two commands run one after the other. Every identifier is 32 hexadecimal digits, and the summary's second word is not one.
+os: linux
+expect_error: 'line 4: field "id"'

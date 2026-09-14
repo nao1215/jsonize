@@ -1,0 +1,246 @@
+[
+  {
+    "name": "filename",
+    "value": "/lib/modules/7.0.0-31-generic/kernel/drivers/net/ethernet/realtek/r8169.ko.zst"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8127a-1.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8126a-3.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8126a-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl9151a-1.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8125bp-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8125k-1.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8125d-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8125d-1.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8125b-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8125a-3.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8107e-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8168fp-3.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8168h-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8168g-3.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8168g-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8106e-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8106e-1.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8411-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8411-1.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8402-1.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8168f-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8168f-1.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8105e-1.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8168e-3.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8168e-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8168e-1.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8168d-2.fw"
+  },
+  {
+    "name": "firmware",
+    "value": "rtl_nic/rtl8168d-1.fw"
+  },
+  {
+    "name": "license",
+    "value": "GPL"
+  },
+  {
+    "name": "softdep",
+    "value": "pre: realtek"
+  },
+  {
+    "name": "description",
+    "value": "RealTek RTL-8169 Gigabit Ethernet driver"
+  },
+  {
+    "name": "author",
+    "value": "Realtek and the Linux r8169 crew <netdev@vger.kernel.org>"
+  },
+  {
+    "name": "srcversion",
+    "value": "997888E1ECA4EA2C2C90B45"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00000E10sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00005000sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00003000sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00008127sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00008126sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00008125sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v00000001d00008168sv*sd00002410bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v00001737d00001032sv*sd00000024bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000016ECd00000116sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v00001259d0000C107sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v00001186d00004302sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v00001186d00004300sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00008169sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010FFd00008168sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00008168sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00008167sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00008162sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00008161sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00008136sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00008129sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00002600sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "alias",
+    "value": "pci:v000010ECd00002502sv*sd*bc*sc*i*"
+  },
+  {
+    "name": "depends",
+    "value": ""
+  },
+  {
+    "name": "intree",
+    "value": "Y"
+  },
+  {
+    "name": "name",
+    "value": "r8169"
+  },
+  {
+    "name": "retpoline",
+    "value": "Y"
+  },
+  {
+    "name": "vermagic",
+    "value": "7.0.0-31-generic SMP preempt mod_unload modversions"
+  }
+]

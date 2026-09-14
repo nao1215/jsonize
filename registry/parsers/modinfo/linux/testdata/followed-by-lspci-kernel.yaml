@@ -1,0 +1,5 @@
+source: six lines of the loop-builtin fixture followed by lspci -k for one device, captured on Ubuntu 26.04 (kmod 34, pciutils) with LC_ALL=C
+description: >-
+  Two commands run one after the other. modinfo indents only the hex bytes that continue a signature, and the device's tab-indented lines are not those.
+os: linux
+expect_error: 'line 7: line does not match pattern'

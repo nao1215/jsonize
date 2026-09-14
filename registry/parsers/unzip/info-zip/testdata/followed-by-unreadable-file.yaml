@@ -1,0 +1,5 @@
+source: the single-file fixture followed by ls -l of a file with mode 000, captured on Ubuntu 26.04 with LC_ALL=C; user names replaced
+description: >-
+  Two commands run one after the other. The mode of the file is ten dashes, which opens like the rule under the header and is not one.
+os: linux
+expect_error: 'line 7: line does not match pattern'

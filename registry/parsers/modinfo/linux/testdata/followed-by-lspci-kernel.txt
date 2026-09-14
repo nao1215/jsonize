@@ -1,0 +1,11 @@
+name:           loop
+filename:       (builtin)
+alias:          devname:loop-control
+license:        GPL
+file:           drivers/block/loop
+description:    Loopback device support
+c1:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8125 2.5GbE Controller (rev 05)
+	DeviceName: OnBoard LAN
+	Subsystem: Realtek Semiconductor Co., Ltd. RTL8125 2.5GbE Controller
+	Kernel driver in use: r8169
+	Kernel modules: r8169

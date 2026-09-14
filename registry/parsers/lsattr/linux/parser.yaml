@@ -24,8 +24,10 @@ detect:
 parse:
   type: regex
   # One space separates the attributes from the name, so a space after it
-  # is the first character of the name.
-  pattern: '^(?P<attributes>[-a-zA-Z]+) (?P<file>.+)$'
+  # is the first character of the name. The attributes are the letters
+  # and the width the signature names on every line, not only the first:
+  # `total 8` is a word and a name.
+  pattern: '^(?P<attributes>[-aAcCdDeEFiIjmNPsStTuVx]{10,25}) (?P<file>.+)$'
 fields:
   attributes: {required: true}
   file: {required: true}

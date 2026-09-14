@@ -1,0 +1,5 @@
+           2min 44.575s fstrim.service
+            1min 1.969s apt-daily-upgrade.service
+                30.105s apport-autoreport.service
+Startup finished in 5.564s (firmware) + 1.341s (loader) + 2.133s (kernel) + 1.942s (initrd) + 7.071s (userspace) = 18.053s
+graphical.target reached after 7.067s in userspace.
