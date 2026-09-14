@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
@@ -209,6 +210,63 @@ func (a *app) explainWrite(e *explanation) {
 	for _, l := range e.lines() {
 		a.errorf("explain: %s", l)
 	}
+}
+
+// maxSkipReason bounds the reason an event carries, so that the line it is
+// written on stays one write short enough to reach a pipe whole, beside
+// the output of a command writing to the same standard error.
+const maxSkipReason = 1024
+
+// explainSkip reports, with --explain and while a stream goes on, a record
+// it could not read and left out. The explanation itself was written
+// before the first record; this is a fact that only arrives later. The
+// text form is one line like the others. The JSON form is one line with
+// the same opening and a document of its own, told apart from the
+// explanation by its event key:
+//
+//	{"event":"skipped","definition":"df/gnu","line":7,"reason":"...","skipped":2}
+//
+// line is the line of the input the failure is on, and null when the
+// failure has none; skipped counts the records left out so far, this one
+// included.
+func (a *app) explainSkip(e *explanation, def string, pe *engine.ParseError, skipped int) {
+	if !e.on() {
+		return
+	}
+	bare := *pe
+	bare.Definition, bare.Line = "", 0
+	reason := bare.Error()
+	if e.mode != explainJSON {
+		where := ""
+		if pe.Line > 0 {
+			where = fmt.Sprintf(" at line %d", pe.Line)
+		}
+		a.errorf("explain: skipped: a record of %s%s (%s so far): %s", def, where, count(skipped, "record", "records"), reason)
+		return
+	}
+	if len(reason) > maxSkipReason {
+		cut := maxSkipReason
+		for cut > 0 && !utf8.RuneStart(reason[cut]) {
+			cut--
+		}
+		reason = reason[:cut] + "..."
+	}
+	doc := jsonutil.NewObject()
+	doc.Set("event", "skipped")
+	doc.Set("definition", def)
+	var line any
+	if pe.Line > 0 {
+		line = int64(pe.Line)
+	}
+	doc.Set("line", line)
+	doc.Set("reason", reason)
+	doc.Set("skipped", int64(skipped))
+	var b bytes.Buffer
+	if err := jsonutil.Encode(&b, doc, false); err != nil {
+		a.errorf("explain: %v", err)
+		return
+	}
+	a.errorf("explain: %s", strings.TrimSpace(b.String()))
 }
 
 // lines renders the explanation for a person.

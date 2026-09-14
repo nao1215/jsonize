@@ -201,7 +201,7 @@ func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOp
 	}
 	if out.stream {
 		a.explainWrite(exp)
-		return a.streamWith(def, r, out)
+		return a.streamWith(def, r, out, exp)
 	}
 	data, code := a.readAll(r)
 	if code != ExitOK {
