@@ -1,0 +1,4 @@
+description: Five files in one run, an empty one and a name with spaces among them; lz4 prints no totals.
+source: captured on Ubuntu 26.04 with lz4 1.10.0, LC_ALL=C lz4 --list over files made for the fixture
+os: linux
+args: [--list, hello.txt.lz4, repeat.txt.lz4, empty.txt.lz4, name with spaces.txt.lz4, a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt.lz4]

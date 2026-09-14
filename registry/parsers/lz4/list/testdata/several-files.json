@@ -1,0 +1,47 @@
+[
+  {
+    "frames": 1,
+    "type": "LZ4Frame",
+    "block": "B4I",
+    "compressed": "31.00",
+    "uncompressed": null,
+    "ratio": null,
+    "filename": "hello.txt.lz4"
+  },
+  {
+    "frames": 1,
+    "type": "LZ4Frame",
+    "block": "B4I",
+    "compressed": "54.00",
+    "uncompressed": null,
+    "ratio": null,
+    "filename": "repeat.txt.lz4"
+  },
+  {
+    "frames": 1,
+    "type": "LZ4Frame",
+    "block": "B4I",
+    "compressed": "15.00",
+    "uncompressed": null,
+    "ratio": null,
+    "filename": "empty.txt.lz4"
+  },
+  {
+    "frames": 1,
+    "type": "LZ4Frame",
+    "block": "B4I",
+    "compressed": "38.00",
+    "uncompressed": null,
+    "ratio": null,
+    "filename": "name with spaces.txt.lz4"
+  },
+  {
+    "frames": 1,
+    "type": "LZ4Frame",
+    "block": "B4I",
+    "compressed": "24.00",
+    "uncompressed": null,
+    "ratio": null,
+    "filename": "a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt.lz4"
+  }
+]

@@ -1,0 +1,4 @@
+description: One file written without a content size, so the uncompressed size and the ratio are dashes.
+source: captured on Ubuntu 26.04 with lz4 1.10.0, LC_ALL=C lz4 --list over a file made for the fixture
+os: linux
+args: [--list, hello.txt.lz4]

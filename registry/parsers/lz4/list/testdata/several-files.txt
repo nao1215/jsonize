@@ -1,0 +1,6 @@
+    Frames           Type Block  Compressed  Uncompressed    Ratio   Filename
+         1       LZ4Frame   B4I       31.00             -        -   hello.txt.lz4
+         1       LZ4Frame   B4I       54.00             -        -   repeat.txt.lz4
+         1       LZ4Frame   B4I       15.00             -        -   empty.txt.lz4
+         1       LZ4Frame   B4I       38.00             -        -   name with spaces.txt.lz4
+         1       LZ4Frame   B4I       24.00             -        -   a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt.lz4

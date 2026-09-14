@@ -1,0 +1,4 @@
+description: A file of a few hundred kilobytes (size with a unit letter), one written with --content-size (uncompressed size and ratio present, and a trailing space after the name) and one without.
+source: captured on Ubuntu 26.04 with lz4 1.10.0, LC_ALL=C lz4 --list over files made for the fixture
+os: linux
+args: [--list, big.txt.lz4, with-size.lz4, hello.txt.lz4]
