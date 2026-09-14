@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/kubectl/deployments.json",
+  "title": "kubectl/deployments",
+  "description": "kubectl get deployments, with -A and -o wide",
+  "x-jsonize": {
+    "definition": "kubectl/deployments",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "age": {
+        "type": "string"
+      },
+      "available": {
+        "type": "integer"
+      },
+      "containers": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      },
+      "images": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      },
+      "name": {
+        "type": "string"
+      },
+      "ready": {
+        "type": "object",
+        "properties": {
+          "ready": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ready",
+          "total"
+        ]
+      },
+      "up_to_date": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

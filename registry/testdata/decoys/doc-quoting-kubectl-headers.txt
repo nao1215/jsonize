@@ -1,0 +1,32 @@
+Reading kubectl tables
+
+kubectl prints most listings as an aligned table whose first line names
+the columns. The columns depend on the resource kind. For pods:
+
+NAME                                READY   STATUS    RESTARTS   AGE
+web-7d4b9c6f5-x2k9q                 1/1     Running   0          2d
+worker-0                            0/1     Pending   3 (5m ago) 1h
+
+With --all-namespaces a NAMESPACE column is put in front:
+
+NAMESPACE     NAME                       READY   STATUS    RESTARTS   AGE
+
+Nodes, services, deployments and namespaces have tables of their own:
+
+NAME       STATUS   ROLES           AGE   VERSION
+NAME       TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+NAME       STATUS   AGE
+
+Contexts and resource kinds are listed the same way:
+
+CURRENT   NAME           CLUSTER        AUTHINFO       NAMESPACE
+NAME      SHORTNAMES   APIVERSION   NAMESPACED   KIND
+
+The version subcommand prints one line per component:
+
+Client Version: v1.35.0
+Kustomize Version: v5.7.1
+Server Version: v1.35.0
+
+None of these lines is the output itself: this is a document about it.

@@ -1,0 +1,10 @@
+# Cluster status
+
+| NAME | READY | STATUS | RESTARTS | AGE |
+|------|-------|--------|----------|-----|
+| web-7d4b9c6f5-x2k9q | 1/1 | Running | 0 | 2d |
+| worker-0 | 0/1 | Pending | 3 | 1h |
+
+| NAMESPACE | NAME | TYPE | CLUSTER-IP | EXTERNAL-IP | PORT(S) | AGE |
+|-----------|------|------|------------|-------------|---------|-----|
+| default | kubernetes | ClusterIP | 10.96.0.1 | <none> | 443/TCP | 53d |

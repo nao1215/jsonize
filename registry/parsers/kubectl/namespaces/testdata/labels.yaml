@@ -1,0 +1,4 @@
+description: With --show-labels under the short name ns, so LABELS follows AGE.
+source: captured from kubectl v1.35.0 against a kind v1.35.0 cluster on Linux with LC_ALL=C
+os: linux
+args: [get, ns, --show-labels]

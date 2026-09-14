@@ -1,0 +1,37 @@
+# The context table printed by `kubectl config get-contexts`: CURRENT,
+# NAME, CLUSTER, AUTHINFO and NAMESPACE. CURRENT holds "*" on the row of
+# the current context and nothing on the others, and NAMESPACE is empty
+# for a context that names none, so the cells are cut at the header
+# words: an empty cell is then read as empty rather than shifting the
+# cells after it. The names come from the header.
+#
+# The marker becomes a boolean, true for "*" and false for an empty
+# cell, and an empty NAMESPACE is null. `-o name` prints the names one
+# per line with no header and is not read here.
+format: 1
+command: kubectl
+variant: contexts
+description: kubectl config get-contexts
+metadata:
+  tags: [kubernetes, kubectl]
+  compatible: [kubectl]
+  references:
+    - https://kubernetes.io/docs/reference/kubectl/generated/kubectl_config/kubectl_config_get-contexts/
+detect:
+  args:
+    all: [config, get-contexts]
+  signature:
+    all:
+      # The text opens with the header.
+      - '\ACURRENT[ \t]+NAME[ \t]+CLUSTER[ \t]+AUTHINFO[ \t]+NAMESPACE[ \t]*$'
+      # Every line after it is a row: the marker or its blank, then a
+      # context, a cluster and a user.
+      - '\A[^\n]*(?:\n(?:\*[ \t]+|[ \t]+)\S+[ \t]+\S+[ \t]+\S+[^\n]*)*\z'
+parse:
+  type: table
+  split: aligned
+fields:
+  current: {type: bool, true_values: ["*"], false_values: [""]}
+  name: {required: true}
+  cluster: {required: true}
+  authinfo: {required: true}

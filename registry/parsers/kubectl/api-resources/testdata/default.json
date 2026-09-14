@@ -1,0 +1,548 @@
+[
+  {
+    "name": "bindings",
+    "shortnames": null,
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Binding"
+  },
+  {
+    "name": "componentstatuses",
+    "shortnames": [
+      "cs"
+    ],
+    "apiversion": "v1",
+    "namespaced": false,
+    "kind": "ComponentStatus"
+  },
+  {
+    "name": "configmaps",
+    "shortnames": [
+      "cm"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "ConfigMap"
+  },
+  {
+    "name": "endpoints",
+    "shortnames": [
+      "ep"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Endpoints"
+  },
+  {
+    "name": "events",
+    "shortnames": [
+      "ev"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Event"
+  },
+  {
+    "name": "limitranges",
+    "shortnames": [
+      "limits"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "LimitRange"
+  },
+  {
+    "name": "namespaces",
+    "shortnames": [
+      "ns"
+    ],
+    "apiversion": "v1",
+    "namespaced": false,
+    "kind": "Namespace"
+  },
+  {
+    "name": "nodes",
+    "shortnames": [
+      "no"
+    ],
+    "apiversion": "v1",
+    "namespaced": false,
+    "kind": "Node"
+  },
+  {
+    "name": "persistentvolumeclaims",
+    "shortnames": [
+      "pvc"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "PersistentVolumeClaim"
+  },
+  {
+    "name": "persistentvolumes",
+    "shortnames": [
+      "pv"
+    ],
+    "apiversion": "v1",
+    "namespaced": false,
+    "kind": "PersistentVolume"
+  },
+  {
+    "name": "pods",
+    "shortnames": [
+      "po"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Pod"
+  },
+  {
+    "name": "podtemplates",
+    "shortnames": null,
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "PodTemplate"
+  },
+  {
+    "name": "replicationcontrollers",
+    "shortnames": [
+      "rc"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "ReplicationController"
+  },
+  {
+    "name": "resourcequotas",
+    "shortnames": [
+      "quota"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "ResourceQuota"
+  },
+  {
+    "name": "secrets",
+    "shortnames": null,
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Secret"
+  },
+  {
+    "name": "serviceaccounts",
+    "shortnames": [
+      "sa"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "ServiceAccount"
+  },
+  {
+    "name": "services",
+    "shortnames": [
+      "svc"
+    ],
+    "apiversion": "v1",
+    "namespaced": true,
+    "kind": "Service"
+  },
+  {
+    "name": "mutatingwebhookconfigurations",
+    "shortnames": null,
+    "apiversion": "admissionregistration.k8s.io/v1",
+    "namespaced": false,
+    "kind": "MutatingWebhookConfiguration"
+  },
+  {
+    "name": "validatingadmissionpolicies",
+    "shortnames": null,
+    "apiversion": "admissionregistration.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ValidatingAdmissionPolicy"
+  },
+  {
+    "name": "validatingadmissionpolicybindings",
+    "shortnames": null,
+    "apiversion": "admissionregistration.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ValidatingAdmissionPolicyBinding"
+  },
+  {
+    "name": "validatingwebhookconfigurations",
+    "shortnames": null,
+    "apiversion": "admissionregistration.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ValidatingWebhookConfiguration"
+  },
+  {
+    "name": "customresourcedefinitions",
+    "shortnames": [
+      "crd",
+      "crds"
+    ],
+    "apiversion": "apiextensions.k8s.io/v1",
+    "namespaced": false,
+    "kind": "CustomResourceDefinition"
+  },
+  {
+    "name": "apiservices",
+    "shortnames": null,
+    "apiversion": "apiregistration.k8s.io/v1",
+    "namespaced": false,
+    "kind": "APIService"
+  },
+  {
+    "name": "controllerrevisions",
+    "shortnames": null,
+    "apiversion": "apps/v1",
+    "namespaced": true,
+    "kind": "ControllerRevision"
+  },
+  {
+    "name": "daemonsets",
+    "shortnames": [
+      "ds"
+    ],
+    "apiversion": "apps/v1",
+    "namespaced": true,
+    "kind": "DaemonSet"
+  },
+  {
+    "name": "deployments",
+    "shortnames": [
+      "deploy"
+    ],
+    "apiversion": "apps/v1",
+    "namespaced": true,
+    "kind": "Deployment"
+  },
+  {
+    "name": "replicasets",
+    "shortnames": [
+      "rs"
+    ],
+    "apiversion": "apps/v1",
+    "namespaced": true,
+    "kind": "ReplicaSet"
+  },
+  {
+    "name": "statefulsets",
+    "shortnames": [
+      "sts"
+    ],
+    "apiversion": "apps/v1",
+    "namespaced": true,
+    "kind": "StatefulSet"
+  },
+  {
+    "name": "applications",
+    "shortnames": [
+      "app",
+      "apps"
+    ],
+    "apiversion": "argoproj.io/v1alpha1",
+    "namespaced": true,
+    "kind": "Application"
+  },
+  {
+    "name": "applicationsets",
+    "shortnames": [
+      "appset",
+      "appsets"
+    ],
+    "apiversion": "argoproj.io/v1alpha1",
+    "namespaced": true,
+    "kind": "ApplicationSet"
+  },
+  {
+    "name": "appprojects",
+    "shortnames": [
+      "appproj",
+      "appprojs"
+    ],
+    "apiversion": "argoproj.io/v1alpha1",
+    "namespaced": true,
+    "kind": "AppProject"
+  },
+  {
+    "name": "selfsubjectreviews",
+    "shortnames": null,
+    "apiversion": "authentication.k8s.io/v1",
+    "namespaced": false,
+    "kind": "SelfSubjectReview"
+  },
+  {
+    "name": "tokenreviews",
+    "shortnames": null,
+    "apiversion": "authentication.k8s.io/v1",
+    "namespaced": false,
+    "kind": "TokenReview"
+  },
+  {
+    "name": "localsubjectaccessreviews",
+    "shortnames": null,
+    "apiversion": "authorization.k8s.io/v1",
+    "namespaced": true,
+    "kind": "LocalSubjectAccessReview"
+  },
+  {
+    "name": "selfsubjectaccessreviews",
+    "shortnames": null,
+    "apiversion": "authorization.k8s.io/v1",
+    "namespaced": false,
+    "kind": "SelfSubjectAccessReview"
+  },
+  {
+    "name": "selfsubjectrulesreviews",
+    "shortnames": null,
+    "apiversion": "authorization.k8s.io/v1",
+    "namespaced": false,
+    "kind": "SelfSubjectRulesReview"
+  },
+  {
+    "name": "subjectaccessreviews",
+    "shortnames": null,
+    "apiversion": "authorization.k8s.io/v1",
+    "namespaced": false,
+    "kind": "SubjectAccessReview"
+  },
+  {
+    "name": "horizontalpodautoscalers",
+    "shortnames": [
+      "hpa"
+    ],
+    "apiversion": "autoscaling/v2",
+    "namespaced": true,
+    "kind": "HorizontalPodAutoscaler"
+  },
+  {
+    "name": "cronjobs",
+    "shortnames": [
+      "cj"
+    ],
+    "apiversion": "batch/v1",
+    "namespaced": true,
+    "kind": "CronJob"
+  },
+  {
+    "name": "jobs",
+    "shortnames": null,
+    "apiversion": "batch/v1",
+    "namespaced": true,
+    "kind": "Job"
+  },
+  {
+    "name": "certificatesigningrequests",
+    "shortnames": [
+      "csr"
+    ],
+    "apiversion": "certificates.k8s.io/v1",
+    "namespaced": false,
+    "kind": "CertificateSigningRequest"
+  },
+  {
+    "name": "leases",
+    "shortnames": null,
+    "apiversion": "coordination.k8s.io/v1",
+    "namespaced": true,
+    "kind": "Lease"
+  },
+  {
+    "name": "endpointslices",
+    "shortnames": null,
+    "apiversion": "discovery.k8s.io/v1",
+    "namespaced": true,
+    "kind": "EndpointSlice"
+  },
+  {
+    "name": "events",
+    "shortnames": [
+      "ev"
+    ],
+    "apiversion": "events.k8s.io/v1",
+    "namespaced": true,
+    "kind": "Event"
+  },
+  {
+    "name": "flowschemas",
+    "shortnames": null,
+    "apiversion": "flowcontrol.apiserver.k8s.io/v1",
+    "namespaced": false,
+    "kind": "FlowSchema"
+  },
+  {
+    "name": "prioritylevelconfigurations",
+    "shortnames": null,
+    "apiversion": "flowcontrol.apiserver.k8s.io/v1",
+    "namespaced": false,
+    "kind": "PriorityLevelConfiguration"
+  },
+  {
+    "name": "ingressclasses",
+    "shortnames": null,
+    "apiversion": "networking.k8s.io/v1",
+    "namespaced": false,
+    "kind": "IngressClass"
+  },
+  {
+    "name": "ingresses",
+    "shortnames": [
+      "ing"
+    ],
+    "apiversion": "networking.k8s.io/v1",
+    "namespaced": true,
+    "kind": "Ingress"
+  },
+  {
+    "name": "ipaddresses",
+    "shortnames": [
+      "ip"
+    ],
+    "apiversion": "networking.k8s.io/v1",
+    "namespaced": false,
+    "kind": "IPAddress"
+  },
+  {
+    "name": "networkpolicies",
+    "shortnames": [
+      "netpol"
+    ],
+    "apiversion": "networking.k8s.io/v1",
+    "namespaced": true,
+    "kind": "NetworkPolicy"
+  },
+  {
+    "name": "servicecidrs",
+    "shortnames": null,
+    "apiversion": "networking.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ServiceCIDR"
+  },
+  {
+    "name": "runtimeclasses",
+    "shortnames": null,
+    "apiversion": "node.k8s.io/v1",
+    "namespaced": false,
+    "kind": "RuntimeClass"
+  },
+  {
+    "name": "poddisruptionbudgets",
+    "shortnames": [
+      "pdb"
+    ],
+    "apiversion": "policy/v1",
+    "namespaced": true,
+    "kind": "PodDisruptionBudget"
+  },
+  {
+    "name": "clusterrolebindings",
+    "shortnames": null,
+    "apiversion": "rbac.authorization.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ClusterRoleBinding"
+  },
+  {
+    "name": "clusterroles",
+    "shortnames": null,
+    "apiversion": "rbac.authorization.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ClusterRole"
+  },
+  {
+    "name": "rolebindings",
+    "shortnames": null,
+    "apiversion": "rbac.authorization.k8s.io/v1",
+    "namespaced": true,
+    "kind": "RoleBinding"
+  },
+  {
+    "name": "roles",
+    "shortnames": null,
+    "apiversion": "rbac.authorization.k8s.io/v1",
+    "namespaced": true,
+    "kind": "Role"
+  },
+  {
+    "name": "deviceclasses",
+    "shortnames": null,
+    "apiversion": "resource.k8s.io/v1",
+    "namespaced": false,
+    "kind": "DeviceClass"
+  },
+  {
+    "name": "resourceclaims",
+    "shortnames": null,
+    "apiversion": "resource.k8s.io/v1",
+    "namespaced": true,
+    "kind": "ResourceClaim"
+  },
+  {
+    "name": "resourceclaimtemplates",
+    "shortnames": null,
+    "apiversion": "resource.k8s.io/v1",
+    "namespaced": true,
+    "kind": "ResourceClaimTemplate"
+  },
+  {
+    "name": "resourceslices",
+    "shortnames": null,
+    "apiversion": "resource.k8s.io/v1",
+    "namespaced": false,
+    "kind": "ResourceSlice"
+  },
+  {
+    "name": "priorityclasses",
+    "shortnames": [
+      "pc"
+    ],
+    "apiversion": "scheduling.k8s.io/v1",
+    "namespaced": false,
+    "kind": "PriorityClass"
+  },
+  {
+    "name": "csidrivers",
+    "shortnames": null,
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": false,
+    "kind": "CSIDriver"
+  },
+  {
+    "name": "csinodes",
+    "shortnames": null,
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": false,
+    "kind": "CSINode"
+  },
+  {
+    "name": "csistoragecapacities",
+    "shortnames": null,
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": true,
+    "kind": "CSIStorageCapacity"
+  },
+  {
+    "name": "storageclasses",
+    "shortnames": [
+      "sc"
+    ],
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": false,
+    "kind": "StorageClass"
+  },
+  {
+    "name": "volumeattachments",
+    "shortnames": null,
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": false,
+    "kind": "VolumeAttachment"
+  },
+  {
+    "name": "volumeattributesclasses",
+    "shortnames": [
+      "vac"
+    ],
+    "apiversion": "storage.k8s.io/v1",
+    "namespaced": false,
+    "kind": "VolumeAttributesClass"
+  }
+]

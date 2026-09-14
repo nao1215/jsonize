@@ -1,0 +1,51 @@
+# The service table printed by `kubectl get services`, also spelled
+# `service` and `svc`. The default columns are NAME, TYPE, CLUSTER-IP,
+# EXTERNAL-IP, PORT(S) and AGE; `-A` (`--all-namespaces`) puts NAMESPACE
+# in front of them and `-o wide` adds SELECTOR after them. The cells are
+# cut at the header words and the names come from the header, with
+# PORT(S) renamed to ports.
+#
+# TYPE is one of ClusterIP, NodePort, LoadBalancer and ExternalName.
+# CLUSTER-IP is "None" for a headless service, which becomes null.
+# EXTERNAL-IP is <none> for a service that has no external address and
+# "<pending>" while a load balancer is being provisioned; only <none>
+# becomes null, since pending is a state. PORT(S) is a comma list of
+# port/protocol pairs ("80/TCP,443/TCP", "80:30080/TCP" for a node port)
+# and is read as an array; <none> becomes null. SELECTOR is a label
+# selector and stays a string, since a set-based selector ("key in
+# (a,b)") holds commas of its own; <none> becomes null. AGE is rounded
+# and stays a string.
+format: 1
+command: kubectl
+variant: services
+description: kubectl get services, with -A and -o wide
+metadata:
+  tags: [kubernetes, kubectl, network]
+  compatible: [kubectl]
+  references:
+    - https://kubernetes.io/docs/reference/kubectl/generated/kubectl_get/
+detect:
+  args:
+    all: [get]
+    any: [services, service, svc]
+  signature:
+    all:
+      # The text opens with the header, with or without NAMESPACE in
+      # front and with or without SELECTOR after AGE.
+      - '\A(?:NAMESPACE[ \t]+)?NAME[ \t]+TYPE[ \t]+CLUSTER-IP[ \t]+EXTERNAL-IP[ \t]+PORT\(S\)[ \t]+AGE(?:[ \t]+SELECTOR)?[ \t]*$'
+      # Every line after it is a row with one of the four service types
+      # in it.
+      - '\A[^\n]*(?:\n[a-z0-9][a-z0-9.-]*[ \t]+(?:[a-z0-9][a-z0-9.-]*[ \t]+)?(?:ClusterIP|NodePort|LoadBalancer|ExternalName)[ \t]+\S+[ \t]+\S+[ \t]+\S+[ \t]+\d+[a-z0-9]*[^\n]*)*\z'
+parse:
+  type: table
+  split: aligned
+  header:
+    rename: {port_s: ports}
+fields:
+  name: {required: true}
+  type: {required: true, regex: '(?P<type>ClusterIP|NodePort|LoadBalancer|ExternalName)'}
+  cluster_ip: {required: true, null_if: ["None"]}
+  external_ip: {null_if: ["<none>"]}
+  ports: {type: array, split: ",", null_if: ["<none>"]}
+  age: {required: true}
+  selector: {null_if: ["<none>"]}

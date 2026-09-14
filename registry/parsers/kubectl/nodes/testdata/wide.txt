@@ -1,0 +1,4 @@
+NAME                                   STATUS   ROLES           AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                         KERNEL-VERSION     CONTAINER-RUNTIME
+example-control-plane                  Ready    control-plane   53d   v1.35.0   172.19.0.3    <none>        Debian GNU/Linux 12 (bookworm)   7.0.0-31-generic   containerd://2.2.0
+example-worker                         Ready    <none>          53d   v1.35.0   172.19.0.2    <none>        Debian GNU/Linux 12 (bookworm)   7.0.0-31-generic   containerd://2.2.0
+example-worker2                        Ready    <none>          53d   v1.35.0   172.19.0.4    <none>        Debian GNU/Linux 12 (bookworm)   7.0.0-31-generic   containerd://2.2.0

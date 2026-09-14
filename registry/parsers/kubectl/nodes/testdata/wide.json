@@ -1,0 +1,40 @@
+[
+  {
+    "name": "example-control-plane",
+    "status": "Ready",
+    "roles": [
+      "control-plane"
+    ],
+    "age": "53d",
+    "version": "v1.35.0",
+    "internal_ip": "172.19.0.3",
+    "external_ip": null,
+    "os_image": "Debian GNU/Linux 12 (bookworm)",
+    "kernel_version": "7.0.0-31-generic",
+    "container_runtime": "containerd://2.2.0"
+  },
+  {
+    "name": "example-worker",
+    "status": "Ready",
+    "roles": null,
+    "age": "53d",
+    "version": "v1.35.0",
+    "internal_ip": "172.19.0.2",
+    "external_ip": null,
+    "os_image": "Debian GNU/Linux 12 (bookworm)",
+    "kernel_version": "7.0.0-31-generic",
+    "container_runtime": "containerd://2.2.0"
+  },
+  {
+    "name": "example-worker2",
+    "status": "Ready",
+    "roles": null,
+    "age": "53d",
+    "version": "v1.35.0",
+    "internal_ip": "172.19.0.4",
+    "external_ip": null,
+    "os_image": "Debian GNU/Linux 12 (bookworm)",
+    "kernel_version": "7.0.0-31-generic",
+    "container_runtime": "containerd://2.2.0"
+  }
+]

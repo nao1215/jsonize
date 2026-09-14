@@ -1,0 +1,52 @@
+# The deployment table printed by `kubectl get deployments`, also spelled
+# `deployment` and `deploy`. The default columns are NAME, READY,
+# UP-TO-DATE, AVAILABLE and AGE; `-A` (`--all-namespaces`) puts NAMESPACE
+# in front of them and `-o wide` adds CONTAINERS, IMAGES and SELECTOR
+# after them. The cells are cut at the header words and the names come
+# from the header.
+#
+# READY is two replica counts ("1/1", "0/3", ready over wanted) and is
+# read as an object of the two integers; UP-TO-DATE and AVAILABLE are
+# exact counts. AGE is rounded and stays a string. CONTAINERS and IMAGES
+# are comma lists with one entry per container of the pod template, so
+# they are arrays of the same length. SELECTOR is a label selector and
+# stays a string, since a set-based selector ("key in (a,b)") holds
+# commas of its own.
+format: 1
+command: kubectl
+variant: deployments
+description: kubectl get deployments, with -A and -o wide
+metadata:
+  tags: [kubernetes, kubectl]
+  compatible: [kubectl]
+  references:
+    - https://kubernetes.io/docs/reference/kubectl/generated/kubectl_get/
+detect:
+  args:
+    all: [get]
+    any: [deployments, deployment, deploy]
+  signature:
+    all:
+      # The text opens with the header, with or without NAMESPACE in
+      # front and with or without the wide columns after AGE.
+      - '\A(?:NAMESPACE[ \t]+)?NAME[ \t]+READY[ \t]+UP-TO-DATE[ \t]+AVAILABLE[ \t]+AGE(?:[ \t]+CONTAINERS[ \t]+IMAGES[ \t]+SELECTOR)?[ \t]*$'
+      # Every line after it is a row: one or two DNS labels, the ready
+      # counts, two integers and an age.
+      - '\A[^\n]*(?:\n[a-z0-9][a-z0-9.-]*[ \t]+(?:[a-z0-9][a-z0-9.-]*[ \t]+)?\d+/\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[a-z0-9]*[^\n]*)*\z'
+parse:
+  type: table
+  split: aligned
+fields:
+  name: {required: true}
+  ready:
+    type: object
+    required: true
+    regex: '^(?P<ready>\d+)/(?P<total>\d+)$'
+    fields:
+      ready: {type: int, required: true}
+      total: {type: int, required: true}
+  up_to_date: {type: int, required: true}
+  available: {type: int, required: true}
+  age: {required: true}
+  containers: {type: array, split: ","}
+  images: {type: array, split: ","}

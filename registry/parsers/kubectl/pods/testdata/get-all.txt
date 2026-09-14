@@ -1,0 +1,60 @@
+NAMESPACE            NAME                                                               READY   STATUS    RESTARTS       AGE
+argocd               pod/argocd-application-controller-0                                1/1     Running   28 (47h ago)   53d
+argocd               pod/argocd-applicationset-controller-bc84c94bc-m79tt               1/1     Running   27 (47h ago)   53d
+argocd               pod/argocd-dex-server-598547cb8-fxqch                              1/1     Running   26 (47h ago)   53d
+argocd               pod/argocd-notifications-controller-5f59d79f8c-bn8xq               1/1     Running   27 (47h ago)   53d
+argocd               pod/argocd-redis-8b5b5b56d-zqqgp                                   1/1     Running   25 (47h ago)   53d
+argocd               pod/argocd-repo-server-ff5578b69-grd5z                             1/1     Running   28 (47h ago)   53d
+argocd               pod/argocd-server-5f898b9cbc-9twdw                                 1/1     Running   32 (47h ago)   53d
+kube-system          pod/coredns-7d764666f9-dbchh                                       1/1     Running   25 (47h ago)   53d
+kube-system          pod/coredns-7d764666f9-htjqm                                       1/1     Running   25 (47h ago)   53d
+kube-system          pod/etcd-example-control-plane                                     1/1     Running   1 (47h ago)    3d23h
+kube-system          pod/kindnet-5hjp4                                                  1/1     Running   23 (47h ago)   53d
+kube-system          pod/kindnet-hpvqz                                                  1/1     Running   23 (47h ago)   53d
+kube-system          pod/kindnet-p7pm6                                                  1/1     Running   23 (47h ago)   53d
+kube-system          pod/kube-apiserver-example-control-plane                           1/1     Running   1 (47h ago)    3d23h
+kube-system          pod/kube-controller-manager-example-control-plane                  1/1     Running   27 (47h ago)   53d
+kube-system          pod/kube-proxy-k25tg                                               1/1     Running   23 (47h ago)   53d
+kube-system          pod/kube-proxy-qwxpb                                               1/1     Running   23 (47h ago)   53d
+kube-system          pod/kube-proxy-vc6gj                                               1/1     Running   23 (47h ago)   53d
+kube-system          pod/kube-scheduler-example-control-plane                           1/1     Running   28 (47h ago)   53d
+local-path-storage   pod/local-path-provisioner-67b8995b4b-x2nhx                        1/1     Running   48 (47h ago)   53d
+
+NAMESPACE     NAME                                              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+argocd        service/argocd-applicationset-controller          ClusterIP   10.96.253.184   <none>        7000/TCP,8080/TCP            53d
+argocd        service/argocd-dex-server                         ClusterIP   10.96.251.218   <none>        5556/TCP,5557/TCP,5558/TCP   53d
+argocd        service/argocd-metrics                            ClusterIP   10.96.218.74    <none>        8082/TCP                     53d
+argocd        service/argocd-notifications-controller-metrics   ClusterIP   10.96.159.235   <none>        9001/TCP                     53d
+argocd        service/argocd-redis                              ClusterIP   10.96.101.49    <none>        6379/TCP                     53d
+argocd        service/argocd-repo-server                        ClusterIP   10.96.40.10     <none>        8081/TCP,8084/TCP            53d
+argocd        service/argocd-server                             ClusterIP   10.96.168.85    <none>        80/TCP,443/TCP               53d
+argocd        service/argocd-server-metrics                     ClusterIP   10.96.224.140   <none>        8083/TCP                     53d
+default       service/kubernetes                                ClusterIP   10.96.0.1       <none>        443/TCP                      53d
+kube-system   service/kube-dns                                  ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP       53d
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+kube-system   daemonset.apps/kindnet      3         3         3       3            3           kubernetes.io/os=linux   53d
+kube-system   daemonset.apps/kube-proxy   3         3         3       3            3           kubernetes.io/os=linux   53d
+
+NAMESPACE            NAME                                               READY   UP-TO-DATE   AVAILABLE   AGE
+argocd               deployment.apps/argocd-applicationset-controller   1/1     1            1           53d
+argocd               deployment.apps/argocd-dex-server                  1/1     1            1           53d
+argocd               deployment.apps/argocd-notifications-controller    1/1     1            1           53d
+argocd               deployment.apps/argocd-redis                       1/1     1            1           53d
+argocd               deployment.apps/argocd-repo-server                 1/1     1            1           53d
+argocd               deployment.apps/argocd-server                      1/1     1            1           53d
+kube-system          deployment.apps/coredns                            2/2     2            2           53d
+local-path-storage   deployment.apps/local-path-provisioner             1/1     1            1           53d
+
+NAMESPACE            NAME                                                         DESIRED   CURRENT   READY   AGE
+argocd               replicaset.apps/argocd-applicationset-controller-bc84c94bc   1         1         1       53d
+argocd               replicaset.apps/argocd-dex-server-598547cb8                  1         1         1       53d
+argocd               replicaset.apps/argocd-notifications-controller-5f59d79f8c   1         1         1       53d
+argocd               replicaset.apps/argocd-redis-8b5b5b56d                       1         1         1       53d
+argocd               replicaset.apps/argocd-repo-server-ff5578b69                 1         1         1       53d
+argocd               replicaset.apps/argocd-server-5f898b9cbc                     1         1         1       53d
+kube-system          replicaset.apps/coredns-7d764666f9                           2         2         2       53d
+local-path-storage   replicaset.apps/local-path-provisioner-67b8995b4b            1         1         1       53d
+
+NAMESPACE   NAME                                             READY   AGE
+argocd      statefulset.apps/argocd-application-controller   1/1     53d

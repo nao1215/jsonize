@@ -1,0 +1,11 @@
+NAMESPACE     NAME                                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+argocd        argocd-applicationset-controller          ClusterIP   10.96.253.184   <none>        7000/TCP,8080/TCP            53d
+argocd        argocd-dex-server                         ClusterIP   10.96.251.218   <none>        5556/TCP,5557/TCP,5558/TCP   53d
+argocd        argocd-metrics                            ClusterIP   10.96.218.74    <none>        8082/TCP                     53d
+argocd        argocd-notifications-controller-metrics   ClusterIP   10.96.159.235   <none>        9001/TCP                     53d
+argocd        argocd-redis                              ClusterIP   10.96.101.49    <none>        6379/TCP                     53d
+argocd        argocd-repo-server                        ClusterIP   10.96.40.10     <none>        8081/TCP,8084/TCP            53d
+argocd        argocd-server                             ClusterIP   10.96.168.85    <none>        80/TCP,443/TCP               53d
+argocd        argocd-server-metrics                     ClusterIP   10.96.224.140   <none>        8083/TCP                     53d
+default       kubernetes                                ClusterIP   10.96.0.1       <none>        443/TCP                      53d
+kube-system   kube-dns                                  ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP       53d

@@ -1,0 +1,21 @@
+NAMESPACE            NAME                                                           READY   STATUS    RESTARTS       AGE
+argocd               argocd-application-controller-0                                1/1     Running   28 (47h ago)   53d
+argocd               argocd-applicationset-controller-bc84c94bc-m79tt               1/1     Running   27 (47h ago)   53d
+argocd               argocd-dex-server-598547cb8-fxqch                              1/1     Running   26 (47h ago)   53d
+argocd               argocd-notifications-controller-5f59d79f8c-bn8xq               1/1     Running   27 (47h ago)   53d
+argocd               argocd-redis-8b5b5b56d-zqqgp                                   1/1     Running   25 (47h ago)   53d
+argocd               argocd-repo-server-ff5578b69-grd5z                             1/1     Running   28 (47h ago)   53d
+argocd               argocd-server-5f898b9cbc-9twdw                                 1/1     Running   32 (47h ago)   53d
+kube-system          coredns-7d764666f9-dbchh                                       1/1     Running   25 (47h ago)   53d
+kube-system          coredns-7d764666f9-htjqm                                       1/1     Running   25 (47h ago)   53d
+kube-system          etcd-example-control-plane                                     1/1     Running   1 (47h ago)    3d23h
+kube-system          kindnet-5hjp4                                                  1/1     Running   23 (47h ago)   53d
+kube-system          kindnet-hpvqz                                                  1/1     Running   23 (47h ago)   53d
+kube-system          kindnet-p7pm6                                                  1/1     Running   23 (47h ago)   53d
+kube-system          kube-apiserver-example-control-plane                           1/1     Running   1 (47h ago)    3d23h
+kube-system          kube-controller-manager-example-control-plane                  1/1     Running   27 (47h ago)   53d
+kube-system          kube-proxy-k25tg                                               1/1     Running   23 (47h ago)   53d
+kube-system          kube-proxy-qwxpb                                               1/1     Running   23 (47h ago)   53d
+kube-system          kube-proxy-vc6gj                                               1/1     Running   23 (47h ago)   53d
+kube-system          kube-scheduler-example-control-plane                           1/1     Running   28 (47h ago)   53d
+local-path-storage   local-path-provisioner-67b8995b4b-x2nhx                        1/1     Running   48 (47h ago)   53d

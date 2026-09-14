@@ -1,0 +1,4 @@
+NAME                                   STATUS   ROLES           AGE   VERSION
+example-control-plane                  Ready    control-plane   53d   v1.35.0
+example-worker                         Ready    <none>          53d   v1.35.0
+example-worker2                        Ready    <none>          53d   v1.35.0
