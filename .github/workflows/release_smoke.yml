@@ -47,6 +47,8 @@ on:
       - "scripts/release_notes.sh"
       - "scripts/run_e2e.sh"
   workflow_dispatch:
+  # release.yml runs this before it publishes a tag.
+  workflow_call:
 
 permissions:
   contents: read
@@ -61,16 +63,21 @@ jobs:
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: stable
+      # The SBOMs are built here as the release builds them; only the
+      # signature, which needs the release job's OIDC identity, is skipped.
+      - name: Install Syft (SBOM generator)
+        uses: anchore/sbom-action/download-syft@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26 # v0.24.2
+      # The same GoReleaser as release.yml.
       - uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
         with:
           distribution: goreleaser
-          version: "~> v2"
+          version: "v2.16.0"
           args: check
       - uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
         with:
           distribution: goreleaser
-          version: "~> v2"
-          args: release --snapshot --clean --skip=publish
+          version: "v2.16.0"
+          args: release --snapshot --clean --skip=publish,sign
       - name: check the archives, packages and checksums
         run: |
           set -euo pipefail
@@ -96,8 +103,19 @@ jobs:
             done
             dpkg-deb -c "jsonize_${version}_linux_${arch}.deb" | grep ' \./usr/bin/jz$' > /dev/null
           done
-          test "$(wc -l < checksums.txt)" -eq 12
+          # Six archives, six packages and one SBOM per archive.
+          for archive in jsonize_"${version}"_*.tar.gz jsonize_"${version}"_*.zip; do
+            jq -e '.spdxVersion' "${archive}.sbom.json" > /dev/null || { echo "${archive} has no SBOM"; exit 1; }
+          done
+          test "$(wc -l < checksums.txt)" -eq 18
           sha256sum -c checksums.txt
+          # The cask installs jz from the macOS and Linux archives.
+          cask=homebrew/Casks/jsonize.rb
+          grep -F 'binary "jz"' "$cask" > /dev/null
+          for target in darwin_arm64 darwin_amd64 linux_arm64 linux_amd64; do
+            sum="$(awk -v f="jsonize_${version}_${target}.tar.gz" '$2 == f {print $1}' checksums.txt)"
+            grep -F "sha256 \"${sum}\"" "$cask" > /dev/null || { echo "$cask lacks the checksum of ${target}"; exit 1; }
+          done
       - name: check the binaries
         run: |
           set -euo pipefail

@@ -14,6 +14,23 @@ go install github.com/nao1215/jsonize/cmd/jz@latest
 The executable is named `jz`. Add `$(go env GOPATH)/bin` to `PATH`, or
 the directory named by `GOBIN` if you set it.
 
+## From a package manager
+
+On Arch Linux, the [`jsonize-bin`](https://aur.archlinux.org/packages/jsonize-bin)
+package in the AUR installs the release binary:
+
+```sh
+yay -S jsonize-bin      # or: paru -S jsonize-bin
+```
+
+Releases after v0.1.0 publish a Homebrew cask in
+[nao1215/homebrew-tap](https://github.com/nao1215/homebrew-tap), for
+macOS and Linux:
+
+```sh
+brew install --cask nao1215/tap/jsonize
+```
+
 ## From a release archive
 
 [GitHub Releases](https://github.com/nao1215/jsonize/releases) has
@@ -32,6 +49,23 @@ sha256sum --ignore-missing -c checksums.txt            # Linux
 shasum -a 256 --ignore-missing -c checksums.txt        # macOS
 gh attestation verify jsonize_<version>_linux_amd64.tar.gz --repo nao1215/jsonize
 ```
+
+Releases after v0.1.0 also sign `checksums.txt` with
+[cosign](https://github.com/sigstore/cosign), without a key: the
+signature in `checksums.txt.sigstore.json` names the release workflow
+of this repository as the signer. Verify it before the checksums:
+
+```sh
+cosign verify-blob \
+  --bundle checksums.txt.sigstore.json \
+  --certificate-identity-regexp '^https://github.com/nao1215/jsonize/\.github/workflows/release\.yml@refs/tags/v' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  checksums.txt
+```
+
+Each archive has an SPDX software bill of materials beside it,
+`<archive>.sbom.json`, listing the Go modules and the Go standard library
+built into `jz`.
 
 The parser registry ships inside the binary, so a release carries both
 the code and the definitions and jz never fetches anything at run time.

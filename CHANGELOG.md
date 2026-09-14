@@ -12,6 +12,9 @@ project follows [Semantic Versioning](https://semver.org/).
   `CONTAINER ID` or `Soft Limit`, as one column when `header.columns`
   gives it the name those words derive together.
 - Definitions for `lshw -short` and `lshw -businfo`.
+- Releases sign `checksums.txt` with cosign, include an SPDX SBOM for
+  each archive, and publish a Homebrew cask to `nao1215/homebrew-tap`.
+  A tag is published only after the release smoke checks pass on it.
 
 ## [0.1.0]
 
