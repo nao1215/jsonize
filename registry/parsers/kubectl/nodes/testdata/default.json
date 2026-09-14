@@ -1,0 +1,25 @@
+[
+  {
+    "name": "example-control-plane",
+    "status": "Ready",
+    "roles": [
+      "control-plane"
+    ],
+    "age": "53d",
+    "version": "v1.35.0"
+  },
+  {
+    "name": "example-worker",
+    "status": "Ready",
+    "roles": null,
+    "age": "53d",
+    "version": "v1.35.0"
+  },
+  {
+    "name": "example-worker2",
+    "status": "Ready",
+    "roles": null,
+    "age": "53d",
+    "version": "v1.35.0"
+  }
+]

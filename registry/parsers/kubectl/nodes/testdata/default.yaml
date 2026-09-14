@@ -1,0 +1,4 @@
+description: The default columns; the two workers have no role, so ROLES is <none>.
+source: captured from kubectl v1.35.0 against a kind v1.35.0 cluster on Linux with LC_ALL=C; the cluster name in the node names was replaced by "example", padded to the printed width
+os: linux
+args: [get, nodes]

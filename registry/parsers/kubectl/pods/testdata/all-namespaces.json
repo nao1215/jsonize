@@ -1,0 +1,242 @@
+[
+  {
+    "namespace": "argocd",
+    "name": "argocd-application-controller-0",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 28,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-applicationset-controller-bc84c94bc-m79tt",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 27,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-dex-server-598547cb8-fxqch",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 26,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-notifications-controller-5f59d79f8c-bn8xq",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 27,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-redis-8b5b5b56d-zqqgp",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 25,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-repo-server-ff5578b69-grd5z",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 28,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-server-5f898b9cbc-9twdw",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 32,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "coredns-7d764666f9-dbchh",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 25,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "coredns-7d764666f9-htjqm",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 25,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "etcd-example-control-plane",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 1,
+    "last_restart": "47h",
+    "age": "3d23h"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "kindnet-5hjp4",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 23,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "kindnet-hpvqz",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 23,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "kindnet-p7pm6",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 23,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "kube-apiserver-example-control-plane",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 1,
+    "last_restart": "47h",
+    "age": "3d23h"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "kube-controller-manager-example-control-plane",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 27,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "kube-proxy-k25tg",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 23,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "kube-proxy-qwxpb",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 23,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "kube-proxy-vc6gj",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 23,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "kube-scheduler-example-control-plane",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 28,
+    "last_restart": "47h",
+    "age": "53d"
+  },
+  {
+    "namespace": "local-path-storage",
+    "name": "local-path-provisioner-67b8995b4b-x2nhx",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "status": "Running",
+    "restarts": 48,
+    "last_restart": "47h",
+    "age": "53d"
+  }
+]

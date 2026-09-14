@@ -1,0 +1,49 @@
+[
+  {
+    "name": "example-control-plane",
+    "status": "Ready",
+    "roles": [
+      "control-plane"
+    ],
+    "age": "53d",
+    "version": "v1.35.0",
+    "labels": [
+      "beta.kubernetes.io/arch=amd64",
+      "beta.kubernetes.io/os=linux",
+      "ingress-ready=true",
+      "kubernetes.io/arch=amd64",
+      "kubernetes.io/hostname=example-control-plane",
+      "kubernetes.io/os=linux",
+      "node-role.kubernetes.io/control-plane=",
+      "node.kubernetes.io/exclude-from-external-load-balancers="
+    ]
+  },
+  {
+    "name": "example-worker",
+    "status": "Ready",
+    "roles": null,
+    "age": "53d",
+    "version": "v1.35.0",
+    "labels": [
+      "beta.kubernetes.io/arch=amd64",
+      "beta.kubernetes.io/os=linux",
+      "kubernetes.io/arch=amd64",
+      "kubernetes.io/hostname=example-worker",
+      "kubernetes.io/os=linux"
+    ]
+  },
+  {
+    "name": "example-worker2",
+    "status": "Ready",
+    "roles": null,
+    "age": "53d",
+    "version": "v1.35.0",
+    "labels": [
+      "beta.kubernetes.io/arch=amd64",
+      "beta.kubernetes.io/os=linux",
+      "kubernetes.io/arch=amd64",
+      "kubernetes.io/hostname=example-worker2",
+      "kubernetes.io/os=linux"
+    ]
+  }
+]

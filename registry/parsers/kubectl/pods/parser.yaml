@@ -1,0 +1,79 @@
+# The pod table printed by `kubectl get pods`, also spelled `pod` and
+# `po`. The default columns are NAME, READY, STATUS, RESTARTS and AGE;
+# `-A` (`--all-namespaces`) puts NAMESPACE in front of them and `-o wide`
+# adds IP, NODE, NOMINATED NODE and READINESS GATES after them. One
+# definition reads the four forms.
+#
+# The rows are read with an expression rather than by cutting at the
+# header words, because the wide header names two of its columns with two
+# words each and both of them end in NODE, so names derived from the
+# header would collide. The header line is dropped, and a listing with no
+# pods prints nothing at all, which `jz run` answers with an empty array.
+#
+# No cell holds a space except RESTARTS, which is a count alone ("3") or
+# a count and how long ago the last restart was ("3 (47h ago)"); the two
+# are read as an integer and a separate age, null when kubectl printed
+# none. READY is two counts of containers ("1/1", "0/2") and is read as
+# an object of the two integers. AGE and the age of the last restart are
+# rounded ("53d", "3d23h", "5m30s") and stay strings. STATUS is a word or
+# a phase with a count in it ("Running", "Init:0/1", "CrashLoopBackOff")
+# and stays a string.
+#
+# A namespace and a pod name are DNS labels, lower-case letters, digits,
+# dots and dashes, which is what tells this table from the pod section of
+# `kubectl get all`: there the names carry a "pod/" prefix and other
+# tables follow under headers of their own, and that output is refused.
+format: 1
+command: kubectl
+variant: pods
+description: kubectl get pods, with -A and -o wide
+metadata:
+  tags: [kubernetes, container, kubectl]
+  compatible: [kubectl]
+  references:
+    - https://kubernetes.io/docs/reference/kubectl/generated/kubectl_get/
+detect:
+  args:
+    all: [get]
+    any: [pods, pod, po]
+  signature:
+    all:
+      # The text opens with the header, with or without NAMESPACE in
+      # front and with or without the wide columns after AGE.
+      - '\A(?:NAMESPACE[ \t]+)?NAME[ \t]+READY[ \t]+STATUS[ \t]+RESTARTS[ \t]+AGE(?:[ \t]+IP[ \t]+NODE[ \t]+NOMINATED NODE[ \t]+READINESS GATES)?[ \t]*$'
+      # Every line after it is a row: one or two DNS labels, the ready
+      # count, a status word, the restart count and an age.
+      - '\A[^\n]*(?:\n[a-z0-9][a-z0-9.-]*(?:[ \t]+[a-z0-9][a-z0-9.-]*)?[ \t]+\d+/\d+[ \t]+\S+[ \t]+\d+(?: \([^)]+ ago\))?[ \t]+\d+[a-z0-9]*[^\n]*)*\z'
+input:
+  ignore:
+    - '\A(?:NAMESPACE[ \t]+)?NAME[ \t]+READY[ \t]+STATUS[ \t]+RESTARTS[ \t]+AGE'
+parse:
+  type: regex
+  patterns:
+    # The wide form, ten cells with NAMESPACE and nine without. The
+    # namespace group takes part only when the line holds one more cell
+    # than the wide columns need, since a pod name cannot hold a slash
+    # and the ready count must follow the name.
+    - '^(?:(?P<namespace>[a-z0-9][a-z0-9-]*)[ \t]+)?(?P<name>[a-z0-9][a-z0-9.-]*)[ \t]+(?P<ready>\d+/\d+)[ \t]+(?P<status>\S+)[ \t]+(?P<restarts>\d+)(?: \((?P<last_restart>[^)]+) ago\))?[ \t]+(?P<age>\S+)[ \t]+(?P<ip>\S+)[ \t]+(?P<node>\S+)[ \t]+(?P<nominated_node>\S+)[ \t]+(?P<readiness_gates>\S+)[ \t]*$'
+    # The default form, six cells with NAMESPACE and five without.
+    - '^(?:(?P<namespace>[a-z0-9][a-z0-9-]*)[ \t]+)?(?P<name>[a-z0-9][a-z0-9.-]*)[ \t]+(?P<ready>\d+/\d+)[ \t]+(?P<status>\S+)[ \t]+(?P<restarts>\d+)(?: \((?P<last_restart>[^)]+) ago\))?[ \t]+(?P<age>\S+)[ \t]*$'
+fields:
+  # Absent, rather than null, when the listing is of one namespace.
+  namespace: {when_missing: omit}
+  name: {required: true}
+  ready:
+    type: object
+    required: true
+    regex: '^(?P<ready>\d+)/(?P<total>\d+)$'
+    fields:
+      ready: {type: int, required: true}
+      total: {type: int, required: true}
+  status: {required: true}
+  restarts: {type: int, required: true}
+  age: {required: true}
+  # The wide columns. A pod that is not scheduled yet has no IP and no
+  # node, and kubectl prints <none> for a column it has nothing for.
+  ip: {null_if: ["<none>"]}
+  node: {null_if: ["<none>"]}
+  nominated_node: {null_if: ["<none>"]}
+  readiness_gates: {null_if: ["<none>"]}

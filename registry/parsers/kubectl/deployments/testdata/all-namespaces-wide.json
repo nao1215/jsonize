@@ -1,0 +1,146 @@
+[
+  {
+    "namespace": "argocd",
+    "name": "argocd-applicationset-controller",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d",
+    "containers": [
+      "argocd-applicationset-controller"
+    ],
+    "images": [
+      "quay.io/argoproj/argocd:v3.4.2"
+    ],
+    "selector": "app.kubernetes.io/name=argocd-applicationset-controller"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-dex-server",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d",
+    "containers": [
+      "dex"
+    ],
+    "images": [
+      "ghcr.io/dexidp/dex:v2.45.0"
+    ],
+    "selector": "app.kubernetes.io/name=argocd-dex-server"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-notifications-controller",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d",
+    "containers": [
+      "argocd-notifications-controller"
+    ],
+    "images": [
+      "quay.io/argoproj/argocd:v3.4.2"
+    ],
+    "selector": "app.kubernetes.io/name=argocd-notifications-controller"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-redis",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d",
+    "containers": [
+      "redis"
+    ],
+    "images": [
+      "public.ecr.aws/docker/library/redis:8.2.3-alpine"
+    ],
+    "selector": "app.kubernetes.io/name=argocd-redis"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-repo-server",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d",
+    "containers": [
+      "argocd-repo-server"
+    ],
+    "images": [
+      "quay.io/argoproj/argocd:v3.4.2"
+    ],
+    "selector": "app.kubernetes.io/name=argocd-repo-server"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-server",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d",
+    "containers": [
+      "argocd-server"
+    ],
+    "images": [
+      "quay.io/argoproj/argocd:v3.4.2"
+    ],
+    "selector": "app.kubernetes.io/name=argocd-server"
+  },
+  {
+    "namespace": "kube-system",
+    "name": "coredns",
+    "ready": {
+      "ready": 2,
+      "total": 2
+    },
+    "up_to_date": 2,
+    "available": 2,
+    "age": "53d",
+    "containers": [
+      "coredns"
+    ],
+    "images": [
+      "registry.k8s.io/coredns/coredns:v1.13.1"
+    ],
+    "selector": "k8s-app=kube-dns"
+  },
+  {
+    "namespace": "local-path-storage",
+    "name": "local-path-provisioner",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d",
+    "containers": [
+      "local-path-provisioner"
+    ],
+    "images": [
+      "docker.io/kindest/local-path-provisioner:v20251212-v0.29.0-alpha-105-g20ccfc88"
+    ],
+    "selector": "app=local-path-provisioner"
+  }
+]

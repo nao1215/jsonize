@@ -1,0 +1,4 @@
+description: Every namespace, so NAMESPACE leads the columns; PORT(S) holds one to three ports and EXTERNAL-IP is <none> throughout.
+source: captured from kubectl v1.35.0 against a kind v1.35.0 cluster on Linux with LC_ALL=C
+os: linux
+args: [get, services, -A]

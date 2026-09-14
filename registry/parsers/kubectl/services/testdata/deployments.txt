@@ -1,0 +1,9 @@
+NAMESPACE            NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+argocd               argocd-applicationset-controller   1/1     1            1           53d
+argocd               argocd-dex-server                  1/1     1            1           53d
+argocd               argocd-notifications-controller    1/1     1            1           53d
+argocd               argocd-redis                       1/1     1            1           53d
+argocd               argocd-repo-server                 1/1     1            1           53d
+argocd               argocd-server                      1/1     1            1           53d
+kube-system          coredns                            2/2     2            2           53d
+local-path-storage   local-path-provisioner             1/1     1            1           53d
