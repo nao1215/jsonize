@@ -1,0 +1,8 @@
+source: >-
+  captured with LC_ALL=C scc internal on the jsonize checkout with scc
+  4.1.0
+description: >-
+  scc 4.1 prints the byte count with thousands separators too, where 3.7
+  printed it as a plain number
+os: linux
+args: ["internal"]
