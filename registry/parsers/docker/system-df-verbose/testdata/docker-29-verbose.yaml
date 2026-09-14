@@ -1,0 +1,9 @@
+source: >-
+  captured from Docker 29.2.1 on Linux with LC_ALL=C; container names, image
+  names and container IDs of other projects replaced, keeping the printed width
+description: >-
+  All four tables. Untagged images print "<none>" twice, a container started
+  from an untagged image prints its ID under IMAGE, and one local volume is
+  named rather than an identifier.
+os: linux
+args: ["system", "df", "-v"]

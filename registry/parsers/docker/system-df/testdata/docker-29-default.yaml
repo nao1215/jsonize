@@ -1,0 +1,6 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  The four rows docker prints. Three carry a percentage in RECLAIMABLE and
+  the build cache row carries none, which is the null in reclaimable_percent.
+os: linux
+args: ["system", "df"]
