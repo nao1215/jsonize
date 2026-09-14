@@ -8,6 +8,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- A tree definition can state what its top-level line looks like with
+  `parse.root`. The node alternatives read every depth, and the one
+  that reads the continuation of a wrapped list reads any text, so a
+  word printed after `lspci -v`, or another command's output piped in
+  behind it, was read as one more device with no children; with `root`
+  it is refused, naming the line. `lspci -v`, `lsusb -v`, `lsusb -t`,
+  `iw dev`, `apt-cache depends`, `systemctl list-dependencies` and
+  `systemd-analyze critical-chain` state theirs.
 - `split: aligned` reads a heading of several words, such as
   `CONTAINER ID` or `Soft Limit`, as one column when `header.columns`
   gives it the name those words derive together.
@@ -55,6 +63,23 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Fourteen table definitions state the shape of the cells that tell a
+  row from prose: a version opens with a digit (`pip list`, `mise ls`,
+  `npm outdated`), an address is one (`/etc/hosts`), a unit file ends
+  in its type (`systemctl list-unit-files`), a row of `free` is `Mem`,
+  `Swap`, `Total`, `Low` or `High`, a git configuration name has a dot,
+  a docker identifier is hex, a scope is one of three words, a volume
+  name holds no space, and an alternative's status is `auto` or
+  `manual` with an absolute path. A shell prompt or a word echoed after
+  the command's output used to be read as one more row and is now
+  refused with the line named. Joined to the tree change above, the
+  pairs of one command's fixture followed by another's that a
+  definition read as its own fell from 19,582 to 9,512 of 1.1 million
+  tried; what is left is the `Label: value` shape and two-word tables,
+  where no cell has a shape to hold a line to.
+- The Go toolchain the module asks for is 1.26.6, so a build with an
+  older 1.26 fetches it: govulncheck names four standard library
+  fixes between 1.26.4 and 1.26.6 that reach jz's code.
 - jz has no dependencies outside the Go standard library. The YAML of
   definitions, manifests, fixture metadata and `--define` is read by
   jz's own reader, which covers the part of YAML those files use (block
