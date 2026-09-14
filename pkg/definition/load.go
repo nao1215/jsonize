@@ -4,19 +4,14 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"maps"
-	"math"
 	"regexp"
 	"regexp/syntax"
-	"slices"
 	"sort"
-	"strconv"
 	"strings"
 	"unicode/utf8"
 
-	"github.com/goccy/go-yaml"
-
 	"github.com/nao1215/jsonize/internal/buildinfo"
+	"github.com/nao1215/jsonize/internal/yaml"
 	"github.com/nao1215/jsonize/pkg/convert"
 )
 
@@ -105,10 +100,6 @@ func (e *UnknownKeyError) Error() string {
 		e.Source, where, e.Key, CurrentFormat, buildinfo.Get())
 }
 
-// unknownFieldRe reads the key and its position out of the strict
-// decoder's message, which is the only place they are reported.
-var unknownFieldRe = regexp.MustCompile(`(?:\[(\d+):\d+\] )?unknown field "([^"]+)"`)
-
 // Load decodes, validates and compiles a definition. source is used in
 // error messages and stored in Definition.Source.
 func Load(data []byte, source string) (*Definition, error) {
@@ -133,122 +124,27 @@ func decode(data []byte, source string) (*Definition, error) {
 	}
 	var d Definition
 	if err := DecodeYAML(data, &d); err != nil {
-		if m := unknownFieldRe.FindStringSubmatch(err.Error()); m != nil {
-			line, _ := strconv.Atoi(m[1])
-			return nil, &UnknownKeyError{Source: source, Key: m[2], Line: line}
-		}
-		return nil, &ValidationError{Source: source, Msg: "invalid YAML: " + err.Error()}
+		return nil, decodeError(err, source)
 	}
 	if d.Format == 0 && d.Command == "" && d.Variant == "" && d.Parse.Type == "" {
 		return nil, &ValidationError{Source: source, Msg: "holds no definition"}
 	}
-	if err := checkWholeNumbers(data, source); err != nil {
-		return nil, err
-	}
 	return &d, nil
 }
 
-// wholeNumberKeys are the keys whose value counts lines, columns or
-// characters.
-var wholeNumberKeys = map[string]bool{
-	"format":     true,
-	"window":     true,
-	"priority":   true,
-	"skip":       true,
-	"limit":      true,
-	"max_fields": true,
-	"min_fields": true,
-}
-
-// hasFractionalCount reports one of those keys written with a fraction,
-// wherever the key stands: block style at the start of a line, flow
-// style after a brace or a comma. It is a scan over the bytes, and a
-// hand-written one, because it runs over every definition of every
-// registry jz loads: reading each of them a second time as YAML costs
-// more than the rest of loading a registry, and an expression over the
-// bytes still costs a quarter of it.
-func hasFractionalCount(data []byte) bool {
-	for i := 0; i < len(data); i++ {
-		if data[i] != ':' {
-			continue
-		}
-		j := i
-		for j > 0 && isKeyByte(data[j-1]) {
-			j--
-		}
-		if !wholeNumberKeys[string(data[j:i])] {
-			continue
-		}
-		k := i + 1
-		for k < len(data) && (data[k] == ' ' || data[k] == '\t' || data[k] == '\n' || data[k] == '\r') {
-			k++
-		}
-		if k < len(data) && (data[k] == '+' || data[k] == '-') {
-			k++
-		}
-		start := k
-		for k < len(data) && isDigitByte(data[k]) {
-			k++
-		}
-		if k == start || k+1 >= len(data) || data[k] != '.' || !isDigitByte(data[k+1]) {
-			continue
-		}
-		return true
+// decodeError names what the decoder refused: a key this build does not
+// know, a value that does not fit the key it is under, or text that is
+// not YAML.
+func decodeError(err error, source string) error {
+	var unknown *yaml.UnknownFieldError
+	if errors.As(err, &unknown) {
+		return &UnknownKeyError{Source: source, Key: unknown.Key, Line: unknown.Line}
 	}
-	return false
-}
-
-// isKeyByte reports a byte a definition's key may be written with.
-func isKeyByte(b byte) bool {
-	return b == '_' || b >= 'a' && b <= 'z' || b >= 'A' && b <= 'Z' || isDigitByte(b)
-}
-
-// isDigitByte reports an ASCII digit.
-func isDigitByte(b byte) bool { return b >= '0' && b <= '9' }
-
-// checkWholeNumbers refuses a count written with a fractional part. The
-// YAML library reads 1.5 into an int as 1, which leaves the definition
-// counting a number its author did not write and nothing to say so, and
-// the decoded value no longer shows what was there. A spelling that
-// means exactly one integer is left alone, whether it is written as a
-// quoted "2", a hexadecimal 0x10 or a float 2.0: those are the number
-// they say they are.
-func checkWholeNumbers(data []byte, source string) error {
-	if !hasFractionalCount(data) {
-		return nil
+	var mismatch *yaml.DecodeError
+	if errors.As(err, &mismatch) {
+		return &ValidationError{Source: source, Msg: mismatch.Error()}
 	}
-	var doc any
-	if err := decodeYAML(data, &doc, false); err != nil {
-		// The strict pass above has already read the document; a body
-		// this one cannot read has nothing to report here.
-		return nil //nolint:nilerr
-	}
-	var problems []string
-	var walk func(path string, v any)
-	walk = func(path string, v any) {
-		switch t := v.(type) {
-		case map[string]any:
-			for _, k := range slices.Sorted(maps.Keys(t)) {
-				p := k
-				if path != "" {
-					p = path + "." + k
-				}
-				if f, ok := t[k].(float64); ok && wholeNumberKeys[k] && f != math.Trunc(f) {
-					problems = append(problems, fmt.Sprintf("%s: must be written as a whole number, not %v", p, f))
-				}
-				walk(p, t[k])
-			}
-		case []any:
-			for i, v := range t {
-				walk(fmt.Sprintf("%s[%d]", path, i), v)
-			}
-		}
-	}
-	walk("", doc)
-	if len(problems) == 0 {
-		return nil
-	}
-	return &ValidationError{Source: source, Msg: strings.Join(problems, "\n"+source+": ")}
+	return &ValidationError{Source: source, Msg: "invalid YAML: " + err.Error()}
 }
 
 // finish checks the format, validates the definition and compiles its
@@ -320,10 +216,10 @@ func LoadInline(body []byte, source string) (*Definition, error) {
 	return d.finish(source)
 }
 
-// DecodeYAML decodes strictly and turns a decoder panic into an error. A
-// definition may come from an untrusted registry, and the YAML library
-// has been observed to panic on some malformed tagged scalars; a broken
-// file must never take jz down.
+// DecodeYAML decodes strictly: a key the value has no field for is an
+// error. A definition may come from a registry jz was pointed at, so a
+// decoder panic, which none is expected to raise, is an error rather
+// than the end of jz.
 func DecodeYAML(data []byte, v any) error {
 	return decodeYAML(data, v, true)
 }
@@ -337,14 +233,7 @@ func decodeYAML(data []byte, v any, strict bool) (err error) {
 			err = fmt.Errorf("decoder failure: %v", r)
 		}
 	}()
-	var opts []yaml.DecodeOption
-	if strict {
-		opts = append(opts, yaml.Strict())
-	}
-	if err := yaml.UnmarshalWithOptions(data, v, opts...); err != nil {
-		return errors.New(strings.TrimSpace(yaml.FormatError(err, false, false)))
-	}
-	return nil
+	return yaml.Unmarshal(data, v, strict)
 }
 
 // validator accumulates problems for one definition.
