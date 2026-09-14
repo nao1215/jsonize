@@ -1,0 +1,6 @@
+Client Version: 2.4.0
+Server Version: 2.3.9
+Protocol Version: 7
+
+The client refuses to connect because the server is one minor version
+behind. Upgrading the server to 2.4.0 clears the error.

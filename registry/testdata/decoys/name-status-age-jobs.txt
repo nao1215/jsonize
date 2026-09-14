@@ -1,0 +1,4 @@
+NAME                 STATUS    AGE
+nightly-build        passed    3h
+release-candidate    failed    2d
+docs-preview         running   12m
