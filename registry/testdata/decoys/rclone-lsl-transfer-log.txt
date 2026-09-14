@@ -1,0 +1,5 @@
+     2400 2026-09-14 22:21:39.615246212 a.txt
+     4096 2026-09-14 22:21:40.001922711 nested dir/b.txt
+Transferred:   6.5 KiB / 6.5 KiB, 100%, 0 B/s, ETA -
+Checks:        2 / 2, 100%
+Elapsed time:  0.3s

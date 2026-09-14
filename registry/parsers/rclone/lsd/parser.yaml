@@ -1,0 +1,43 @@
+# `rclone lsd PATH` prints one line per directory directly under the
+# path: a size right-aligned in a field of twelve, the modification time
+# to the second, a count right-aligned in a field of nine, and the name.
+# A name may hold spaces and is the rest of the line.
+#
+# The size and the count are what the backend reports, and a backend that
+# does not keep them prints -1 for either, the local one printing -1 for
+# the count of every directory. Both stay ints, -1 included: it is the
+# value rclone printed, and turning it into null would hide that the
+# backend answered with a sentinel rather than nothing.
+#
+# The time is printed in the local zone of the machine rclone ran on and
+# states no zone, so it stays a string, as ls/long-iso keeps its zoneless
+# time.
+#
+# Two numbers around a timestamp and a name is a shape other listings
+# share, so the text is read only when the parser is named (`jz run
+# rclone lsd`, `--parser rclone`), and the signature asks that every line
+# in the window be one such line.
+format: 1
+command: rclone
+variant: lsd
+description: rclone lsd, the directories under a path
+metadata:
+  tags: [files, transfer, sync, cloud]
+  compatible: [rclone]
+  references:
+    - https://rclone.org/commands/rclone_lsd/
+detect:
+  args:
+    all: ["lsd"]
+  auto_detect: false
+  signature:
+    all:
+      - '\A(?:[ \t]*-?\d+ \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}[ \t]+-?\d+ [^\n]+(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<size>-?\d+) (?P<modified>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})[ \t]+(?P<count>-?\d+) (?P<name>.+)$'
+fields:
+  size: {type: int, required: true}
+  modified: {required: true}
+  count: {type: int, required: true}
+  name: {required: true}

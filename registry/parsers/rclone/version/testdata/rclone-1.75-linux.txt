@@ -1,0 +1,8 @@
+rclone v1.75.1-DEV
+- os/version: ubuntu 26.04 (64 bit)
+- os/kernel: 7.0.0-31-generic (x86_64)
+- os/type: linux
+- os/arch: amd64
+- go/version: go1.26.4
+- go/linking: dynamic
+- go/tags: none
