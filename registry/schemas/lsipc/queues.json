@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lsipc/queues.json",
+  "title": "lsipc/queues",
+  "description": "lsipc -q, the System V message queues",
+  "x-jsonize": {
+    "definition": "lsipc/queues",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "key": {
+        "type": "string"
+      },
+      "lrpid": {
+        "type": "integer"
+      },
+      "lspid": {
+        "type": "integer"
+      },
+      "msgs": {
+        "type": "integer"
+      },
+      "owner": {
+        "type": "string"
+      },
+      "perms": {
+        "type": "string"
+      },
+      "usedbytes": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

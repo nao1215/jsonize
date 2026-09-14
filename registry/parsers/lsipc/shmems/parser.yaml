@@ -1,0 +1,47 @@
+# `lsipc -m` prints one row per System V shared memory segment: the
+# key, the id, the permissions, the owner, the size, how many processes
+# are attached, the status flags, when it was last changed, the pids of
+# the creator and the last process to use it, and the creator's command.
+# STATUS is empty for a segment that is neither destroyed nor locked and
+# COMMAND is empty when the creator is gone, and the command may hold
+# spaces, so the cells are cut at the header offsets and an empty cell
+# is null. When there is no segment lsipc prints nothing at all, not
+# even the header; `jz run` reports that as an empty list, and the
+# empty text on a pipe is refused as holding nothing to read.
+#
+# SIZE is rounded to a unit ("4K") unless --bytes is given, so it stays
+# as printed. CTIME is a clock time for today and a date otherwise, and
+# names no year, so it stays a string. -t, -c and -i change the header
+# and are refused.
+format: 1
+command: lsipc
+variant: shmems
+description: lsipc -m, the System V shared memory segments
+metadata:
+  tags: [linux, ipc, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lsipc.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-m", "--shmems"]
+  signature:
+    all:
+      # The header, then nothing but rows that open with a hexadecimal
+      # key, a numeric id, the permissions, the owner, the size and the
+      # attach count.
+      - '\AKEY[ \t]+ID[ \t]+PERMS[ \t]+OWNER[ \t]+SIZE[ \t]+NATTCH[ \t]+STATUS[ \t]+CTIME[ \t]+CPID[ \t]+LPID[ \t]+COMMAND[ \t]*\n(?:0x[0-9a-f]+[ \t]+[0-9]+[ \t]+\S+[ \t]+\S+[ \t]+\S+[ \t]+[0-9]+[ \t]+[^\n]*(?:\n|\z))+\z'
+parse:
+  type: table
+  split: aligned
+fields:
+  key: {required: true}
+  id: {type: int, required: true}
+  perms: {required: true}
+  owner: {required: true}
+  size: {required: true}
+  nattch: {type: int, required: true}
+  ctime: {required: true}
+  cpid: {type: int, required: true}
+  lpid: {type: int, required: true}

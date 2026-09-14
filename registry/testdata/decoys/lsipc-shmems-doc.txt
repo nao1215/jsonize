@@ -1,0 +1,7 @@
+KEY        ID        PERMS OWNER SIZE NATTCH STATUS CTIME   CPID LPID COMMAND
+The KEY column is the key the segment was created with, in hexadecimal,
+and ID is the identifier shmget returned. SIZE is rounded to a unit
+unless --bytes is given. NATTCH counts the attached processes, STATUS
+says dest or locked when either applies, and CTIME is when the segment
+last changed. CPID and LPID are the creator and the last user, and
+COMMAND is the creator's command line when it is still running.
