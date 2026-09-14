@@ -471,6 +471,7 @@ parse:
   indent: "\t"                  # one level of indentation, as it is written
   # or the forms one level may take, tried in the order written:
   # indent: ["  ", "`-"]
+  root: '^[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] '   # optional; what a top-level line matches
   node:
     parse:
       type: regex               # or kv; a node is one line
@@ -507,6 +508,15 @@ a node is; what the input states is nothing but how deep the nodes go.
 `node.parse` is `regex` (with `pattern` or an ordered `patterns` list) or
 `kv`, and the same description applies at every depth: the shapes that
 appear at different depths are what the alternatives are for.
+
+`root` is what a line at depth zero has to match, for a format whose
+top-level line has a shape of its own: the device line of `lspci -v`,
+the bus line of `lsusb -v`. The node alternatives read every depth, and
+the one that reads the continuation of a wrapped list reads any text, so
+without `root` a line printed after the report, or another command's
+output piped in behind it, is read as a root with no children. With
+`root` such a line is refused, naming the line. A line below the top is
+not held to it.
 
 Three things the input may not decide:
 

@@ -25,6 +25,8 @@ detect:
 parse:
   type: tree
   indent: "    "
+  # A top-level line is a root hub.
+  root: '^/:  Bus [0-9]+\.Port [0-9]+: Dev '
   node:
     parse:
       type: regex

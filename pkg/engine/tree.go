@@ -53,6 +53,12 @@ func (r *run) treeNodes(p *definition.Parse, lines []line, i, depth int) ([]any,
 			// is no node for it to hang from.
 			return nil, 0, r.errorf(lines[i].num, "", "indented %d levels below a line at level %d, so it has no parent", d-depth, depth)
 		}
+		// A definition that says what a top-level line looks like is
+		// saying that a line at depth zero of any other shape is not
+		// part of the report, however well a node pattern reads it.
+		if re := p.CompiledRoot(); depth == 0 && re != nil && !re.MatchString(text) {
+			return nil, 0, r.errorf(lines[i].num, "", "line at the top level does not match root %s: %q", shortPattern(p.Root), truncate(text, 80))
+		}
 		obj, err := r.treeNode(p, line{text: text, num: lines[i].num})
 		if err != nil {
 			return nil, 0, err

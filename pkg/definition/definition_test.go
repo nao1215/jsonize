@@ -344,6 +344,8 @@ func TestLoadErrors(t *testing.T) {
 		{"one alternative naming a group twice", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: ['(?P<y>.)', '(?P<x>a)|(?P<x>b)']}\n", `patterns[1]: names the group "x" twice`},
 		{"fields beside a composite", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: p, parse: {type: kv}}]}\nfields: {x: {type: int}}\n", "fields: does not apply to type composite"},
 		{"fields beside a records parser", "format: 1\ncommand: c\nvariant: v\nparse: {type: records, start: '^a', parts: [{name: p, parse: {type: kv}}]}\nfields: {x: {required: true}}\n", "fields: does not apply to type records"},
+		{"root outside a tree", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.)', root: '^a'}\n", "indent/node/root are only valid for type tree"},
+		{"root that is not an expression", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \", root: '(', node: {parse: {type: regex, pattern: '(?P<a>.)'}}}\n", "parse.root"},
 		{"fields beside a tree", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, indent: \"  \", node: {parse: {type: regex, pattern: '(?P<a>.)'}}}\nfields: {a: {type: int}}\n", "fields: does not apply to type tree"},
 		{"fields beside a records part", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: p, parse: {type: records, start: '^a', parts: [{name: q, parse: {type: kv}}]}, fields: {x: {type: int}}}]}\n", "parse.parts[0].fields: does not apply to type records"},
 		{"fields beside a tree part", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: p, parse: {type: tree, indent: \"  \", node: {parse: {type: regex, pattern: '(?P<a>.)'}}}, fields: {a: {type: int}}}]}\n", "parse.parts[0].fields: does not apply to type tree"},
@@ -356,7 +358,7 @@ func TestLoadErrors(t *testing.T) {
 		{"repeated is gone", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {repeated: false}}\n", `unknown key "repeated"`},
 		{"header outside table and csv", "format: 1\ncommand: c\nvariant: v\nparse: {type: kv, header: {columns: [a]}}\n", "only valid for type table and type csv"},
 
-		{"indent on another parse type", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, indent: \"  \"}\n", "indent/node are only valid for type tree"},
+		{"indent on another parse type", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, indent: \"  \"}\n", "indent/node/root are only valid for type tree"},
 		{"duration with a time layout", base + "fields: {t: {type: duration, layout: '2006-01-02'}}\n", "must be h:mm or mm:ss"},
 		{"location on a duration", base + "fields: {t: {type: duration, layout: 'mm:ss', location: utc}}\n", "only valid for type time"},
 		{"bad part ignore", "format: 1\ncommand: c\nvariant: v\nparse: {type: composite, parts: [{name: p, ignore: ['('], parse: {type: kv}}]}\n", "parts[0].ignore[0]"},

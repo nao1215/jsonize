@@ -35,6 +35,12 @@ detect:
 parse:
   type: tree
   indent: "  "
+  # A top-level line is a device, or a labelled section or value of it
+  # written against the left edge: "Device Descriptor:", "Hub
+  # Descriptor:", "Negotiated speed: High Speed (480Mbps)". The label
+  # opens with a capital, so a line of any other shape at the top is
+  # not part of the report.
+  root: '^(?:Bus \d{3} Device \d{3}: ID [0-9a-f]{4}:[0-9a-f]{4}|[A-Z][A-Za-z ]*:(?: .*)?$)'
   node:
     parse:
       type: regex

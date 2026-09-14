@@ -27,6 +27,10 @@ detect:
 parse:
   type: tree
   indent: "  "
+  # A top-level line is the unit the report is about, and a unit name
+  # ends in its type; a line of any other shape at the top is not part
+  # of the report.
+  root: '^\S+\.(?:service|socket|device|mount|automount|swap|target|path|timer|slice|scope)[ \t]*$'
   node:
     parse:
       type: regex
