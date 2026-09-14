@@ -55,6 +55,15 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- jz has no dependencies outside the Go standard library. The YAML of
+  definitions, manifests, fixture metadata and `--define` is read by
+  jz's own reader, which covers the part of YAML those files use (block
+  and flow collections, plain, quoted and block scalars, comments, one
+  document per file) and refuses anchors, aliases, tags and keys that
+  are not one scalar, naming the line. A value that does not fit its key
+  (`limit: abc`, `columns: x`) is now refused with its line and path.
+  Loading the registry takes a third of what it did: `df -h | jz` 48 ms
+  to 21 ms on the machine below.
 - jz starts faster. The definitions of a registry are decoded side by
   side, and the sorted views a selection asks for are made once when the
   registry is loaded rather than on every lookup. On a 32-thread machine

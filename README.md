@@ -20,7 +20,8 @@ $ ps aux | jz | jq '.[] | select(.cpu_percent > 10) | .command'
 ![jz reading df, uptime and free, and refusing input it cannot identify](demo/jsonize.gif)
 
 Parsers are YAML definitions. Add a definition and captured output to a
-local registry to support another format without rebuilding jz.
+local registry to support another format without rebuilding jz. jz is
+one binary with no dependencies outside the Go standard library.
 
 Documentation: https://nao1215.github.io/jsonize/
 

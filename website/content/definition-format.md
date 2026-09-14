@@ -9,6 +9,13 @@ A parser definition is one YAML document, `parser.yaml`, stored at
 must match the `command` and `variant` keys. The registry itself is
 described by [its manifest](#the-registry-manifest).
 
+jz reads the part of YAML that definitions use: block and flow mappings
+and sequences, plain, single-quoted, double-quoted and block (`|`, `>`)
+scalars, and comments. Anchors, aliases, tags, keys that are not one
+scalar and a second document in the file are refused, with a message
+that names them and the line. A count written with a fraction
+(`limit: 1.5`) is refused rather than rounded.
+
 ```yaml
 format: 1                       # required; the schema version
 command: df                     # required; [a-z0-9][a-z0-9._+-]*
