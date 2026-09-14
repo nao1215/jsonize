@@ -127,7 +127,7 @@ func TestEncodeAgreesWithStdlib(t *testing.T) {
 	t.Parallel()
 	strs := []string{
 		"", "plain", "quote\"back\\slash", "tab\tnl\nret\rbell\a", "\x00\x1f\x7f",
-		"a<b>&c", "é日本語😀", "line\xe2\x80\xa8sep\xe2\x80\xa9", "bad\xffutf8\xc3", "\xed\xa0\x80",
+		"a<b>&c", "é日本語😀", "line\xe2\x80\xa8sep\xe2\x80\xa9",
 	}
 	floats := []float64{0, -0, 1, 1.5, -2.25, 1e20, 1e21, 1e-6, 1e-7, 123456789.125, 5e-324, math.MaxFloat64, 0.1, 1e100}
 	values := make([]any, 0, len(strs)+len(floats)+6)
@@ -151,6 +151,28 @@ func TestEncodeAgreesWithStdlib(t *testing.T) {
 		}
 		if want := strings.TrimSuffix(std.String(), "\n"); string(got) != want {
 			t.Errorf("Marshal(%#v) = %s, encoding/json writes %s", v, got, want)
+		}
+	}
+	// A byte that is not UTF-8 is written as the escape of U+FFFD.
+	// encoding/json wrote that escape up to Go 1.26 and writes the
+	// character itself after, and the two read back the same; jz writes
+	// the escape so that its output does not depend on the Go it was
+	// built with.
+	escape := `\u` + "fffd"
+	for in, want := range map[string]string{
+		"bad\xffutf8\xc3": `"bad` + escape + `utf8` + escape + `"`,
+		"\xed\xa0\x80":    `"` + escape + escape + escape + `"`,
+	} {
+		got, err := Marshal(in)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if string(got) != want {
+			t.Errorf("Marshal(%q) = %s, want %s", in, got, want)
+		}
+		var back string
+		if err := json.Unmarshal(got, &back); err != nil || back != string([]rune(in)) {
+			t.Errorf("Marshal(%q) reads back as %q, %v", in, back, err)
 		}
 	}
 	o := NewObject()
