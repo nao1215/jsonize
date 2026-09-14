@@ -300,7 +300,7 @@ shell and string values (`jwt`, `url`, `semver`, `path`, `timestamp`,
 everywhere (`xml`, `yaml`, `toml`, `plist`, `x509_*`), and a set of
 commands with no definition here yet (`traceroute`, `iptables`,
 `iwconfig`, `dmidecode`, `mdadm`, `ntpq`, `find`, `finger`, `rpm -qi`,
-`tune2fs`, `ufw`, `zpool`, `net user`, `net localgroup`, `dir`). The
+`tune2fs`, `ufw`, `zpool status`, `zpool iostat`, `net user`, `net localgroup`, `dir`). The
 string and file formats are a different job from reading what a command
 printed: a JWT or a URL is not a command's output, and `jq`, a YAML
 reader or an XML reader is the tool for a file that already has a
