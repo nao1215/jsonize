@@ -1,0 +1,4 @@
+description: Three files that all match, one with spaces in its name.
+source: captured on Ubuntu 26.04 with uutils coreutils 0.8.0, LC_ALL=C md5sum -c over a checksum file made for the fixture
+os: linux
+args: [-c, sums.md5]

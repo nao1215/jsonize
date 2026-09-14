@@ -1,0 +1,6 @@
+Health checks:
+  disk: OK
+  network: OK
+  backup: FAILED
+  mail relay: FAILED open or read
+Summary: 2 of 4 checks passed

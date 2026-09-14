@@ -1,0 +1,5 @@
+hello.txt: OK
+repeat.txt: FAILED
+name with spaces.txt: FAILED open or read
+\back\\slash.txt: OK
+\new\nline.txt: OK

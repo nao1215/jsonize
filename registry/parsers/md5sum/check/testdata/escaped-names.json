@@ -1,0 +1,24 @@
+[
+  {
+    "file": "hello.txt",
+    "status": "OK"
+  },
+  {
+    "file": "repeat.txt",
+    "status": "OK"
+  },
+  {
+    "file": "name with spaces.txt",
+    "status": "OK"
+  },
+  {
+    "escaped": true,
+    "file": "back\\slash.txt",
+    "status": "OK"
+  },
+  {
+    "escaped": true,
+    "file": "new\nline.txt",
+    "status": "OK"
+  }
+]
