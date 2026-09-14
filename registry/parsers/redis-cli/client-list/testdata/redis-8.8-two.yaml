@@ -1,0 +1,6 @@
+source: captured from Redis 8.8.0 on Linux with LC_ALL=C from a server started for the capture on port 16379, while a second redis-cli was blocked in BLPOP; CRLF line endings as redis-cli wrote them
+description: >-
+  Two clients: one blocked in BLPOP (flags "b", an idle count of seconds,
+  an empty query buffer) and the redis-cli that asked.
+os: linux
+args: ["-p", "16379", "client", "list"]

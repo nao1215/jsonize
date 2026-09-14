@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/docker/context-ls.json",
+  "title": "docker/context-ls",
+  "description": "docker context ls",
+  "x-jsonize": {
+    "definition": "docker/context-ls",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "current": {
+        "type": "boolean"
+      },
+      "description": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "docker_endpoint": {
+        "type": "string"
+      },
+      "error": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "current",
+      "description",
+      "docker_endpoint",
+      "error"
+    ]
+  }
+}

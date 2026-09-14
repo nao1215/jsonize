@@ -1,0 +1,48 @@
+# The container table `docker compose ps` prints for one project: the
+# container's name, its image, the command, the service it runs, when it
+# was created, its state and the ports it publishes.
+#
+# The row is read with an expression rather than by cutting at the header
+# words, because COMMAND is quoted and PORTS is a list. Docker pads the
+# columns with at least two spaces and no cell holds two in a row, so two
+# spaces are the gap. COMMAND is the entrypoint as docker printed it:
+# quoted and truncated with an ellipsis, a display string rather than the
+# command. CREATED and STATUS are English phrases ("11 days ago", "Exited
+# (0) 11 days ago", "Less than a second ago") and stay strings.
+#
+# PORTS is the last column, empty for a container that publishes nothing
+# and comma-joined for one that publishes several, so it is a list and the
+# empty cell is an empty list. Without -a the table holds the running
+# containers only and may be the header alone.
+format: 1
+command: docker
+variant: compose-ps
+description: docker compose ps and docker compose ps -a
+metadata:
+  tags: [container, docker, compose, process]
+  compatible: [Docker Compose]
+  references:
+    - https://docs.docker.com/reference/cli/docker/compose/ps/
+detect:
+  args:
+    all: ["compose", "ps"]
+  signature:
+    all:
+      - '\ANAME[ \t]+IMAGE[ \t]+COMMAND[ \t]+SERVICE[ \t]+CREATED[ \t]+STATUS[ \t]+PORTS[ \t]*$'
+input:
+  ignore:
+    - '^NAME[ \t]+IMAGE[ \t]+COMMAND[ \t]'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<name>\S+) {2,}(?P<image>\S+) {2,}"(?P<command>.*?)" {2,}(?P<service>\S+) {2,}(?P<created>\S.*?) {2,}(?P<status>\S.*?) {2,}(?P<ports>\S.*?)[ \t]*$'
+    # A container that publishes nothing ends its row with the status
+    # and the padding docker wrote for the empty cell.
+    - '^(?P<name>\S+) {2,}(?P<image>\S+) {2,}"(?P<command>.*?)" {2,}(?P<service>\S+) {2,}(?P<created>\S.*?) {2,}(?P<status>\S.*?)(?P<ports>)[ \t]*$'
+fields:
+  name: {required: true}
+  image: {required: true}
+  service: {required: true}
+  created: {required: true}
+  status: {required: true}
+  ports: {type: array, split: ","}

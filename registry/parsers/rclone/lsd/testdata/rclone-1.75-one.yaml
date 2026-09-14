@@ -1,0 +1,6 @@
+source: captured from rclone v1.75.1 on Linux with LC_ALL=C on a directory made for the capture
+description: >-
+  One directory whose name holds a space. The local backend prints -1 for
+  the count, which stays -1.
+os: linux
+args: ["lsd", "tree"]

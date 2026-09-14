@@ -1,0 +1,8 @@
+Client: Acme Mail Agent
+Version: 4.2.0
+API version: 7
+Built: Mon Feb  2 17:17:42 2026
+Subject: Weekly build report
+From: builds@example.com
+
+The client above was used to send this report.

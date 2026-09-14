@@ -1,0 +1,9 @@
+[
+  {
+    "name": "default",
+    "current": true,
+    "description": "Current DOCKER_HOST based configuration",
+    "docker_endpoint": "unix:///var/run/docker.sock",
+    "error": null
+  }
+]

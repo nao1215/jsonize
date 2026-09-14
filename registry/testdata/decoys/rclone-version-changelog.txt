@@ -1,0 +1,7 @@
+rclone v1.75.0
+
+Changes since v1.74:
+- os/version: bumped the minimum supported macOS to 12
+- new backend: filescom
+- bug fixes for the sftp backend
+- go/version: go1.24.2 is now required to build

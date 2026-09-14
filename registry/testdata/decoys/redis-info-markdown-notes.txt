@@ -1,0 +1,9 @@
+# Server
+redis_version: 8.8.0
+tcp_port: 16379
+
+# Memory
+used_memory_human: 744.23K
+maxmemory_policy: noeviction
+
+These are the settings we care about when the alert fires.

@@ -1,0 +1,4 @@
+source: captured from Docker Compose v5 (Docker 29.2.1) on Linux with LC_ALL=C; image and service names replaced
+description: A project whose two containers have exited, so PORTS is empty in both rows.
+os: linux
+args: ["compose", "-f", "compose.yml", "ps", "-a"]

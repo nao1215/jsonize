@@ -1,0 +1,4 @@
+source: captured from rclone v1.75.1-DEV (built from source with Go 1.26.4) on Ubuntu 26.04 with LC_ALL=C
+description: A development build, so the version carries a suffix and go/tags is "none".
+os: linux
+args: ["version"]

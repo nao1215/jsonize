@@ -1,0 +1,39 @@
+# The context table `docker context ls` prints: the name, its description,
+# the endpoint of the daemon it points at and an error column that is
+# filled when the context's metadata could not be read.
+#
+# The row is read with an expression rather than by cutting at the header
+# words, because the current context is marked by " *" after its name in
+# the NAME cell, and that mark is a fact of its own: it comes off the name
+# and becomes the boolean current. Docker pads the columns with at least
+# two spaces and no cell holds two in a row, so two spaces are the gap.
+#
+# DESCRIPTION is empty for a context created without one, and ERROR is
+# empty for one whose metadata loads, so both are null when empty.
+format: 1
+command: docker
+variant: context-ls
+description: docker context ls
+metadata:
+  tags: [container, docker, context]
+  compatible: [Docker CLI]
+  references:
+    - https://docs.docker.com/reference/cli/docker/context/ls/
+detect:
+  args:
+    all: ["context", "ls"]
+  signature:
+    all:
+      - '\ANAME[ \t]+DESCRIPTION[ \t]+DOCKER ENDPOINT[ \t]+ERROR[ \t]*$'
+input:
+  ignore:
+    - '^NAME[ \t]+DESCRIPTION[ \t]+DOCKER ENDPOINT[ \t]'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+)(?P<current>(?: \*)?) {2,}(?P<description>(?:\S.*?)?) {2,}(?P<docker_endpoint>\S+)(?: {2,}(?P<error>\S.*?))?[ \t]*$'
+fields:
+  name: {required: true}
+  current: {type: bool, trim_prefix: " ", true_values: ["*"], false_values: [""]}
+  description: {null_if: [""]}
+  docker_endpoint: {required: true}
+  error: {}

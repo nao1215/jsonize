@@ -1,0 +1,22 @@
+[
+  {
+    "name": "example1-job-1",
+    "image": "alpine:latest",
+    "command": "true",
+    "service": "job",
+    "created": "Less than a second ago",
+    "status": "Exited (0) Less than a second ago",
+    "ports": []
+  },
+  {
+    "name": "example1-web-1",
+    "image": "alpine:latest",
+    "command": "sleep 300",
+    "service": "web",
+    "created": "Less than a second ago",
+    "status": "Up Less than a second",
+    "ports": [
+      "127.0.0.1:18080->80/tcp"
+    ]
+  }
+]

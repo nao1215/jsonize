@@ -1,0 +1,43 @@
+[
+  {
+    "name": "api",
+    "status": [
+      {
+        "state": "exited",
+        "count": 2
+      }
+    ],
+    "config_files": [
+      "/home/user/go/github.com/example/myapp/integration/api/compose.yml"
+    ]
+  },
+  {
+    "name": "jzagent4",
+    "status": [
+      {
+        "state": "exited",
+        "count": 1
+      },
+      {
+        "state": "running",
+        "count": 1
+      }
+    ],
+    "config_files": [
+      "/home/user/projects/example-app/compose.yml",
+      "/home/user/projects/example-app/override.yml"
+    ]
+  },
+  {
+    "name": "store",
+    "status": [
+      {
+        "state": "exited",
+        "count": 8
+      }
+    ],
+    "config_files": [
+      "/home/user/go/github.com/example/store/docker-compose.yml"
+    ]
+  }
+]

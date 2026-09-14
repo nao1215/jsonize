@@ -1,0 +1,2 @@
+NAME                STATUS              CONFIG FILES
+jzagent4            running(2)          /home/user/projects/example-app/compose.yml,/home/user/projects/example-app/override.yml

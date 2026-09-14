@@ -1,0 +1,78 @@
+# `redis-cli client list` prints one line per connected client, a run
+# of "key=value" pairs separated by single spaces. The keys and their
+# order are fixed by the server: they are written out in one place in
+# its source and every line of a given version carries all of them in
+# that order, so the line is read by one expression that names each key.
+#
+# Later servers add keys at the end of the line, and a few were added in
+# the middle over the years (ssub, watch, multi-mem, rbs, rbp, resp, the
+# lib-* pair, io-thread and the tot-* counters), so those are optional
+# and a line from an older server leaves them null. A key this
+# definition does not know is not skipped over: a line that carries one
+# fails to match and is refused, since a value nobody looked at would
+# otherwise be silently dropped.
+#
+# The counters and sizes are exact and become ints; -1 is a value the
+# server prints for a client that is not in a transaction (multi) and
+# not redirecting (redir), and it stays -1. name, lib-name and lib-ver
+# are empty for a client that never set them and are null then. flags
+# and events are letters the manual spells out and stay strings.
+format: 1
+command: redis-cli
+variant: client-list
+description: redis-cli client list, the connected clients
+metadata:
+  tags: [redis, database, server, connection]
+  compatible: [Redis, Valkey]
+  references:
+    - https://redis.io/docs/latest/commands/client-list/
+detect:
+  args:
+    any: ["client", "CLIENT"]
+  signature:
+    all:
+      - '\Aid=\d+ addr=\S+ laddr=\S+ fd=\d+ name=\S* age=\d+ idle=\d+ flags=\S+ db=\d+ '
+parse:
+  type: regex
+  pattern: '^id=(?P<id>\d+) addr=(?P<addr>\S+) laddr=(?P<laddr>\S+) fd=(?P<fd>-?\d+) name=(?P<name>\S*) age=(?P<age>\d+) idle=(?P<idle>\d+) flags=(?P<flags>\S+) db=(?P<db>\d+) sub=(?P<sub>\d+) psub=(?P<psub>\d+)(?: ssub=(?P<ssub>\d+))? multi=(?P<multi>-?\d+)(?: watch=(?P<watch>\d+))? qbuf=(?P<qbuf>\d+) qbuf-free=(?P<qbuf_free>\d+) argv-mem=(?P<argv_mem>\d+)(?: multi-mem=(?P<multi_mem>\d+))?(?: rbs=(?P<rbs>\d+) rbp=(?P<rbp>\d+))? obl=(?P<obl>\d+) oll=(?P<oll>\d+) omem=(?P<omem>\d+)(?: omem-shared=(?P<omem_shared>\d+) omem-unshared=(?P<omem_unshared>\d+))? tot-mem=(?P<tot_mem>\d+) events=(?P<events>\S+) cmd=(?P<cmd>\S+) user=(?P<user>\S+) redir=(?P<redir>-?\d+)(?: resp=(?P<resp>\d+))?(?: lib-name=(?P<lib_name>\S*) lib-ver=(?P<lib_ver>\S*))?(?: io-thread=(?P<io_thread>\d+))?(?: tot-net-in=(?P<tot_net_in>\d+) tot-net-out=(?P<tot_net_out>\d+) tot-cmds=(?P<tot_cmds>\d+))?(?: read-events=(?P<read_events>\d+))?(?: avg-pipeline-len-sum=(?P<avg_pipeline_len_sum>\d+) avg-pipeline-len-cnt=(?P<avg_pipeline_len_cnt>\d+))?[ \t]*$'
+fields:
+  id: {type: int, required: true}
+  addr: {required: true}
+  laddr: {required: true}
+  fd: {type: int, required: true}
+  name: {null_if: [""]}
+  age: {type: int, required: true}
+  idle: {type: int, required: true}
+  flags: {required: true}
+  db: {type: int, required: true}
+  sub: {type: int, required: true}
+  psub: {type: int, required: true}
+  ssub: {type: int}
+  multi: {type: int, required: true}
+  watch: {type: int}
+  qbuf: {type: int, required: true}
+  qbuf_free: {type: int, required: true}
+  argv_mem: {type: int, required: true}
+  multi_mem: {type: int}
+  rbs: {type: int}
+  rbp: {type: int}
+  obl: {type: int, required: true}
+  oll: {type: int, required: true}
+  omem: {type: int, required: true}
+  omem_shared: {type: int}
+  omem_unshared: {type: int}
+  tot_mem: {type: int, required: true}
+  events: {required: true}
+  cmd: {required: true}
+  user: {required: true}
+  redir: {type: int, required: true}
+  resp: {type: int}
+  lib_name: {null_if: [""]}
+  lib_ver: {null_if: [""]}
+  io_thread: {type: int}
+  tot_net_in: {type: int}
+  tot_net_out: {type: int}
+  tot_cmds: {type: int}
+  read_events: {type: int}
+  avg_pipeline_len_sum: {type: int}
+  avg_pipeline_len_cnt: {type: int}

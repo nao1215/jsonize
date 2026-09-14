@@ -1,0 +1,232 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/redis-cli/client-list.json",
+  "title": "redis-cli/client-list",
+  "description": "redis-cli client list, the connected clients",
+  "x-jsonize": {
+    "definition": "redis-cli/client-list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "addr": {
+        "type": "string"
+      },
+      "laddr": {
+        "type": "string"
+      },
+      "fd": {
+        "type": "integer"
+      },
+      "name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "age": {
+        "type": "integer"
+      },
+      "idle": {
+        "type": "integer"
+      },
+      "flags": {
+        "type": "string"
+      },
+      "db": {
+        "type": "integer"
+      },
+      "sub": {
+        "type": "integer"
+      },
+      "psub": {
+        "type": "integer"
+      },
+      "ssub": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "multi": {
+        "type": "integer"
+      },
+      "watch": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "qbuf": {
+        "type": "integer"
+      },
+      "qbuf_free": {
+        "type": "integer"
+      },
+      "argv_mem": {
+        "type": "integer"
+      },
+      "multi_mem": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "rbs": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "rbp": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "obl": {
+        "type": "integer"
+      },
+      "oll": {
+        "type": "integer"
+      },
+      "omem": {
+        "type": "integer"
+      },
+      "omem_shared": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "omem_unshared": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "tot_mem": {
+        "type": "integer"
+      },
+      "events": {
+        "type": "string"
+      },
+      "cmd": {
+        "type": "string"
+      },
+      "user": {
+        "type": "string"
+      },
+      "redir": {
+        "type": "integer"
+      },
+      "resp": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "lib_name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "lib_ver": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "io_thread": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "tot_net_in": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "tot_net_out": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "tot_cmds": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "read_events": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "avg_pipeline_len_sum": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "avg_pipeline_len_cnt": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "addr",
+      "laddr",
+      "fd",
+      "name",
+      "age",
+      "idle",
+      "flags",
+      "db",
+      "sub",
+      "psub",
+      "ssub",
+      "multi",
+      "watch",
+      "qbuf",
+      "qbuf_free",
+      "argv_mem",
+      "multi_mem",
+      "rbs",
+      "rbp",
+      "obl",
+      "oll",
+      "omem",
+      "omem_shared",
+      "omem_unshared",
+      "tot_mem",
+      "events",
+      "cmd",
+      "user",
+      "redir",
+      "resp",
+      "lib_name",
+      "lib_ver",
+      "io_thread",
+      "tot_net_in",
+      "tot_net_out",
+      "tot_cmds",
+      "read_events",
+      "avg_pipeline_len_sum",
+      "avg_pipeline_len_cnt"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+$ docker compose ps -a
+NAME          IMAGE                       COMMAND                  SERVICE   CREATED       STATUS                   PORTS
+api-web-1     nginx:alpine                "/docker-entrypoint.…"   web       2 days ago    Up 2 days                0.0.0.0:8080->80/tcp
+
+The compose ps table names each container of the project, the image it
+runs, the service it belongs to and the ports it publishes. Containers
+that exited stay in the table only with -a.

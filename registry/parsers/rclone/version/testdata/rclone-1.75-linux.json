@@ -1,0 +1,35 @@
+{
+  "version": {
+    "version": "v1.75.1-DEV"
+  },
+  "build": [
+    {
+      "name": "os/version",
+      "value": "ubuntu 26.04 (64 bit)"
+    },
+    {
+      "name": "os/kernel",
+      "value": "7.0.0-31-generic (x86_64)"
+    },
+    {
+      "name": "os/type",
+      "value": "linux"
+    },
+    {
+      "name": "os/arch",
+      "value": "amd64"
+    },
+    {
+      "name": "go/version",
+      "value": "go1.26.4"
+    },
+    {
+      "name": "go/linking",
+      "value": "dynamic"
+    },
+    {
+      "name": "go/tags",
+      "value": "none"
+    }
+  ]
+}

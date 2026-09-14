@@ -1,0 +1,2 @@
+A CLIENT LIST reply from the old cluster, with the region tag our proxy adds:
+id=3 addr=10.0.0.5:51234 laddr=10.0.0.1:6379 fd=8 name=worker age=120 idle=3 flags=N db=0 sub=0 psub=0 multi=-1 qbuf=0 qbuf-free=0 obl=0 oll=0 omem=0 events=r cmd=get user=default redir=-1 region=eu-west

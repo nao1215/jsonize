@@ -1,0 +1,6 @@
+source: captured from rclone v1.75.1 on Linux with LC_ALL=C on a directory made for the capture
+description: >-
+  Five files, one of them empty, one named with spaces and two in nested
+  directories, so the path holds a slash and a space.
+os: linux
+args: ["lsl", "tree"]

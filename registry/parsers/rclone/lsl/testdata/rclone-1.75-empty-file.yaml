@@ -1,0 +1,4 @@
+source: captured from rclone v1.75.1 on Linux with LC_ALL=C, naming one empty file
+description: One file of size zero, the smallest listing rclone prints.
+os: linux
+args: ["lsl", "tree/empty"]

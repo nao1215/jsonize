@@ -1,0 +1,7 @@
+$ docker context ls
+NAME        DESCRIPTION                               DOCKER ENDPOINT               ERROR
+default *   Current DOCKER_HOST based configuration   unix:///var/run/docker.sock
+
+The current context is marked with an asterisk after its name. Create one
+with docker context create NAME --docker host=ssh://user@host and switch
+with docker context use NAME.

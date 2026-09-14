@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/docker/system-df-verbose.json",
+  "title": "docker/system-df-verbose",
+  "description": "docker system df -v",
+  "x-jsonize": {
+    "definition": "docker/system-df-verbose",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "repository": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "tag": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "image_id": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "shared_size": {
+            "type": "string"
+          },
+          "unique_size": {
+            "type": "string"
+          },
+          "containers": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "repository",
+          "tag",
+          "image_id",
+          "created",
+          "size",
+          "shared_size",
+          "unique_size",
+          "containers"
+        ]
+      }
+    },
+    "containers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "container_id": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "command": {
+            "type": "string"
+          },
+          "local_volumes": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "container_id",
+          "image",
+          "command",
+          "local_volumes",
+          "size",
+          "created",
+          "status",
+          "names"
+        ]
+      }
+    },
+    "volumes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "volume_name": {
+            "type": "string"
+          },
+          "links": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "volume_name",
+          "links",
+          "size"
+        ]
+      }
+    },
+    "build_cache_usage": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "size"
+      ]
+    },
+    "build_cache": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "cache_id": {
+            "type": "string"
+          },
+          "cache_type": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "last_used": {
+            "type": "string"
+          },
+          "usage": {
+            "type": "integer"
+          },
+          "shared": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "cache_id",
+          "cache_type",
+          "size",
+          "created",
+          "last_used",
+          "usage",
+          "shared"
+        ]
+      }
+    }
+  },
+  "required": [
+    "images",
+    "containers",
+    "volumes",
+    "build_cache_usage",
+    "build_cache"
+  ]
+}

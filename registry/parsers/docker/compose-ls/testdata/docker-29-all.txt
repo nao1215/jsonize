@@ -1,0 +1,4 @@
+NAME                STATUS                  CONFIG FILES
+api                 exited(2)               /home/user/go/github.com/example/myapp/integration/api/compose.yml
+jzagent4            exited(1), running(1)   /home/user/projects/example-app/compose.yml,/home/user/projects/example-app/override.yml
+store               exited(8)               /home/user/go/github.com/example/store/docker-compose.yml

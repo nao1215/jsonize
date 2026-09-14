@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/docker/compose-ps.json",
+  "title": "docker/compose-ps",
+  "description": "docker compose ps and docker compose ps -a",
+  "x-jsonize": {
+    "definition": "docker/compose-ps",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "image": {
+        "type": "string"
+      },
+      "command": {
+        "type": "string"
+      },
+      "service": {
+        "type": "string"
+      },
+      "created": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      },
+      "ports": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "name",
+      "image",
+      "command",
+      "service",
+      "created",
+      "status",
+      "ports"
+    ]
+  }
+}

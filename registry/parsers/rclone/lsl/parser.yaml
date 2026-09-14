@@ -1,0 +1,37 @@
+# `rclone lsl PATH` prints one line per file under the path, recursively:
+# the size in bytes right-aligned in a field of nine, the modification
+# time to the nanosecond, and the path relative to the argument. A path
+# may hold spaces and is the rest of the line.
+#
+# The size is an exact count and becomes an int. The time is printed in
+# the local zone of the machine rclone ran on and states no zone, so it
+# stays the string rclone printed, as ls/long-iso keeps its zoneless
+# time; a consumer that knows the zone can read it.
+#
+# A size, a timestamp and a path is a shape a number of listings share,
+# and the nine-digit fraction between the two is what sets this one
+# apart: no other listing writes its time that way without a zone or a
+# flags column, so the signature asks that every line in the window be
+# one such line and the text is then evidence enough on its own.
+format: 1
+command: rclone
+variant: lsl
+description: rclone lsl, files with their size and modification time
+metadata:
+  tags: [files, transfer, sync, cloud]
+  compatible: [rclone]
+  references:
+    - https://rclone.org/commands/rclone_lsl/
+detect:
+  args:
+    all: ["lsl"]
+  signature:
+    all:
+      - '\A(?:[ \t]*\d+ \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{9} [^\n]+(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<size>\d+) (?P<modified>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{9}) (?P<path>.+)$'
+fields:
+  size: {type: int, required: true}
+  modified: {required: true}
+  path: {required: true}

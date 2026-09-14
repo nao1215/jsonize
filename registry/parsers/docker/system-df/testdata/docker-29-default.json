@@ -1,0 +1,34 @@
+[
+  {
+    "type": "Images",
+    "total": 72,
+    "active": 12,
+    "size": "94.26GB",
+    "reclaimable": "80.05GB",
+    "reclaimable_percent": 84
+  },
+  {
+    "type": "Containers",
+    "total": 15,
+    "active": 4,
+    "size": "4.219MB",
+    "reclaimable": "135.2kB",
+    "reclaimable_percent": 3
+  },
+  {
+    "type": "Local Volumes",
+    "total": 85,
+    "active": 12,
+    "size": "17.43GB",
+    "reclaimable": "4.107GB",
+    "reclaimable_percent": 23
+  },
+  {
+    "type": "Build Cache",
+    "total": 429,
+    "active": 0,
+    "size": "80.04GB",
+    "reclaimable": "78.3GB",
+    "reclaimable_percent": null
+  }
+]

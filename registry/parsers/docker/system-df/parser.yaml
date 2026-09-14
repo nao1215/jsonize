@@ -1,0 +1,49 @@
+# The summary `docker system df` prints: one row per kind of object
+# (images, containers, local volumes, build cache) with how many there
+# are, how many a container uses, what they take up and what could be
+# freed.
+#
+# The row is read with an expression rather than by cutting at the header
+# words, because the last cell is two values: the reclaimable size and,
+# in parentheses, the share of the size it is. The build cache row prints
+# the size alone, so the percentage is null there. TYPE holds a space
+# ("Local Volumes", "Build Cache") and docker pads the columns with at
+# least two, so two spaces are the column gap.
+#
+# TOTAL and ACTIVE are counts and become ints. SIZE and RECLAIMABLE are
+# rounded for reading ("94.26GB", "135.2kB") and stay the strings docker
+# printed.
+#
+# `docker system df -v` prints a table per kind instead of this summary
+# and is read by docker/system-df-verbose.
+format: 1
+command: docker
+variant: system-df
+aliases:
+  # podman prints the same summary under the same subcommand.
+  - name: podman
+description: docker system df
+metadata:
+  tags: [container, docker, disk]
+  compatible: [Docker CLI]
+  references:
+    - https://docs.docker.com/reference/cli/docker/system/df/
+detect:
+  args:
+    all: ["system", "df"]
+  signature:
+    all:
+      - '\ATYPE[ \t]+TOTAL[ \t]+ACTIVE[ \t]+SIZE[ \t]+RECLAIMABLE[ \t]*$'
+input:
+  ignore:
+    - '^TYPE[ \t]+TOTAL[ \t]+ACTIVE[ \t]'
+parse:
+  type: regex
+  pattern: '^(?P<type>\S.*?) {2,}(?P<total>\d+) {2,}(?P<active>\d+) {2,}(?P<size>\S+) {2,}(?P<reclaimable>\S+)(?: \((?P<reclaimable_percent>\d+)%\))?[ \t]*$'
+fields:
+  type: {required: true}
+  total: {type: int, required: true}
+  active: {type: int, required: true}
+  size: {required: true}
+  reclaimable: {required: true}
+  reclaimable_percent: {type: int}

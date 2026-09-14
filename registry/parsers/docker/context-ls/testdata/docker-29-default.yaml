@@ -1,0 +1,6 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C
+description: >-
+  A machine with the default context only, marked as current, with an
+  empty ERROR cell.
+os: linux
+args: ["context", "ls"]

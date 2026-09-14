@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/rclone/lsl.json",
+  "title": "rclone/lsl",
+  "description": "rclone lsl, files with their size and modification time",
+  "x-jsonize": {
+    "definition": "rclone/lsl",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "size": {
+        "type": "integer"
+      },
+      "modified": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "size",
+      "modified",
+      "path"
+    ]
+  }
+}
