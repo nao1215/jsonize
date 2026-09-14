@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C sysctl hw.physmem hw.pagesize
+description: two hw variables, the first line starting with hw rather than kern.
+os: freebsd
+args: ["hw.physmem", "hw.pagesize"]

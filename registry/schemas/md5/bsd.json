@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/md5/bsd.json",
+  "title": "md5/bsd",
+  "description": "md5, sha256 and the other BSD digest commands, \"ALGORITHM (file) = digest\"",
+  "x-jsonize": {
+    "definition": "md5/bsd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "algorithm": {
+        "type": "string"
+      },
+      "file": {
+        "type": "string"
+      },
+      "checksum": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "algorithm",
+      "file",
+      "checksum"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "algorithm": "MD5",
+    "file": "/etc/passwd",
+    "checksum": "c7a9525ff1005b236e3c733c7122cb29"
+  },
+  {
+    "algorithm": "MD5",
+    "file": "/etc/group",
+    "checksum": "b4f0f4fedc471b05ba04dfae11f22de8"
+  }
+]

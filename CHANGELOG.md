@@ -12,9 +12,18 @@ project follows [Semantic Versioning](https://semver.org/).
   `CONTAINER ID` or `Soft Limit`, as one column when `header.columns`
   gives it the name those words derive together.
 - Definitions for `lshw -short` and `lshw -businfo`.
+- Definitions for FreeBSD `md5` and the other BSD digest commands,
+  `sysctl`, `vmstat -i`, `df -hT` and `arp -a`, and for OpenZFS
+  `zfs list` and `zpool list`.
 - Releases sign `checksums.txt` with cosign, include an SPDX SBOM for
   each archive, and publish a Homebrew cask to `nao1215/homebrew-tap`.
   A tag is published only after the release smoke checks pass on it.
+
+### Changed
+
+- `scc/default` reports the byte count as the string scc printed, as it
+  does every other count: scc 4.1 prints it with thousands separators,
+  which was refused. Its output schema is version 2.
 
 ## [0.1.0]
 

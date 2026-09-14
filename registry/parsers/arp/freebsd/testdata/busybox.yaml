@@ -1,0 +1,4 @@
+source: the BusyBox v1.37.0 capture of arp/alternate (resolved.txt), copied
+description: the Linux alternate style prints the link type before " on " and no expiry, which arp/alternate reads and this definition does not.
+os: linux
+expect_error: 'does not describe this input'

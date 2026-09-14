@@ -1,0 +1,10 @@
+[
+  {
+    "name": "hw.physmem",
+    "value": "6387589120"
+  },
+  {
+    "name": "hw.pagesize",
+    "value": "4096"
+  }
+]

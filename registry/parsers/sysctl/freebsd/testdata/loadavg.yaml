@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C sysctl vm.loadavg
+description: a structure the kernel formats for reading, kept as the text in braces.
+os: freebsd
+args: ["vm.loadavg"]

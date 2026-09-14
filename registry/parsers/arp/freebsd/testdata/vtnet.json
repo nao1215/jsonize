@@ -1,0 +1,26 @@
+[
+  {
+    "name": "?",
+    "address": "192.168.122.2",
+    "hwaddress": "52:55:c0:a8:7a:02",
+    "interface": "vtnet0",
+    "expires_in": 1193,
+    "type": "ethernet"
+  },
+  {
+    "name": "?",
+    "address": "192.168.122.3",
+    "hwaddress": "52:55:c0:a8:7a:03",
+    "interface": "vtnet0",
+    "expires_in": 1193,
+    "type": "ethernet"
+  },
+  {
+    "name": "?",
+    "address": "192.168.122.10",
+    "hwaddress": "52:54:00:12:34:56",
+    "interface": "vtnet0",
+    "expires_in": null,
+    "type": "ethernet"
+  }
+]

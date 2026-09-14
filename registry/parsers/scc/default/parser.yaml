@@ -8,8 +8,9 @@
 # is not an integer to this format and a comma is not a digit; converting
 # would mean deciding that the separator is always a comma, which is a
 # property of the locale scc was built for and not of the text. The cost
-# carries a currency symbol for the same reason. The byte count is the
-# one number printed with a plain %d, and it converts.
+# carries a currency symbol for the same reason. The byte count follows
+# the same rule: scc 3.7 printed it as a plain number and 4.1 prints it
+# with separators, so it is a string in both.
 #
 # The total is matched by name rather than by position because the number
 # of language rows above it is not known in advance. The estimates and
@@ -79,8 +80,6 @@ parse:
       ignore: ['^Estimated ']
       parse:
         type: regex
-        pattern: '^Processed (?P<bytes>\d+) bytes, (?P<megabytes>\S+) megabytes \((?P<unit>[^)]*)\)[ \t]*$'
-      fields:
         # The size beside the byte count is written by more than one
         # formatter depending on --size-unit and stays as printed.
-        bytes: {type: int}
+        pattern: '^Processed (?P<bytes>\d[\d,]*) bytes, (?P<megabytes>\S+) megabytes \((?P<unit>[^)]*)\)[ \t]*$'

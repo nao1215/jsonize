@@ -5,7 +5,7 @@
   "description": "scc source line count table",
   "x-jsonize": {
     "definition": "scc/default",
-    "version": 1
+    "version": 2
   },
   "type": "object",
   "properties": {
@@ -85,7 +85,7 @@
         "type": "object",
         "properties": {
           "bytes": {
-            "type": "integer"
+            "type": "string"
           },
           "megabytes": {
             "type": "string"

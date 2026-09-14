@@ -1,0 +1,14 @@
+Filesystem          Type       Size    Used   Avail Capacity  Mounted on
+zroot/ROOT/default  zfs        198G    3.2G    195G     2%    /
+devfs               devfs      1.0K      0B    1.0K     0%    /dev
+/dev/gpt/efiboot0   msdosfs     32M    662K     31M     2%    /boot/efi
+zroot/tmp           zfs        195G    140K    195G     0%    /tmp
+zroot/home          zfs        195G     29M    195G     0%    /home
+zroot/var/crash     zfs        195G    104K    195G     0%    /var/crash
+zroot/usr/ports     zfs        195G    420K    195G     0%    /usr/ports
+zroot/var/log       zfs        195G    224K    195G     0%    /var/log
+zroot/usr/obj       zfs        195G    420K    195G     0%    /usr/obj
+zroot/var/tmp       zfs        195G    424K    195G     0%    /var/tmp
+zroot/var/mail      zfs        195G    420K    195G     0%    /var/mail
+zroot/var/audit     zfs        195G    428K    195G     0%    /var/audit
+zroot/usr/src       zfs        195G    420K    195G     0%    /usr/src

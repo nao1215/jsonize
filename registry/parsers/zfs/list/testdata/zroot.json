@@ -1,0 +1,107 @@
+[
+  {
+    "name": "zroot",
+    "used": "3.26G",
+    "avail": "195G",
+    "refer": "424K",
+    "mountpoint": "none"
+  },
+  {
+    "name": "zroot/ROOT",
+    "used": "3.22G",
+    "avail": "195G",
+    "refer": "424K",
+    "mountpoint": "none"
+  },
+  {
+    "name": "zroot/ROOT/default",
+    "used": "3.22G",
+    "avail": "195G",
+    "refer": "3.22G",
+    "mountpoint": "/"
+  },
+  {
+    "name": "zroot/home",
+    "used": "28.7M",
+    "avail": "195G",
+    "refer": "28.7M",
+    "mountpoint": "/home"
+  },
+  {
+    "name": "zroot/tmp",
+    "used": "140K",
+    "avail": "195G",
+    "refer": "140K",
+    "mountpoint": "/tmp"
+  },
+  {
+    "name": "zroot/usr",
+    "used": "1.64M",
+    "avail": "195G",
+    "refer": "424K",
+    "mountpoint": "/usr"
+  },
+  {
+    "name": "zroot/usr/obj",
+    "used": "420K",
+    "avail": "195G",
+    "refer": "420K",
+    "mountpoint": "/usr/obj"
+  },
+  {
+    "name": "zroot/usr/ports",
+    "used": "420K",
+    "avail": "195G",
+    "refer": "420K",
+    "mountpoint": "/usr/ports"
+  },
+  {
+    "name": "zroot/usr/src",
+    "used": "420K",
+    "avail": "195G",
+    "refer": "420K",
+    "mountpoint": "/usr/src"
+  },
+  {
+    "name": "zroot/var",
+    "used": "1.98M",
+    "avail": "195G",
+    "refer": "424K",
+    "mountpoint": "/var"
+  },
+  {
+    "name": "zroot/var/audit",
+    "used": "428K",
+    "avail": "195G",
+    "refer": "428K",
+    "mountpoint": "/var/audit"
+  },
+  {
+    "name": "zroot/var/crash",
+    "used": "104K",
+    "avail": "195G",
+    "refer": "104K",
+    "mountpoint": "/var/crash"
+  },
+  {
+    "name": "zroot/var/log",
+    "used": "224K",
+    "avail": "195G",
+    "refer": "224K",
+    "mountpoint": "/var/log"
+  },
+  {
+    "name": "zroot/var/mail",
+    "used": "420K",
+    "avail": "195G",
+    "refer": "420K",
+    "mountpoint": "/var/mail"
+  },
+  {
+    "name": "zroot/var/tmp",
+    "used": "424K",
+    "avail": "195G",
+    "refer": "424K",
+    "mountpoint": "/var/tmp"
+  }
+]

@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C arp -an; the addresses are the VM's private QEMU network
+description: two entries that expire and the interface's own address, which is permanent.
+os: freebsd
+args: ["-an"]

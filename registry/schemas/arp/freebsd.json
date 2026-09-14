@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/arp/freebsd.json",
+  "title": "arp/freebsd",
+  "description": "FreeBSD arp -a, the ARP cache with each entry's expiry",
+  "x-jsonize": {
+    "definition": "arp/freebsd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "hwaddress": {
+        "type": "string"
+      },
+      "interface": {
+        "type": "string"
+      },
+      "expires_in": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "type": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "address",
+      "hwaddress",
+      "interface",
+      "expires_in",
+      "type"
+    ]
+  }
+}

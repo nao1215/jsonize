@@ -1,0 +1,63 @@
+{
+  "languages": [
+    {
+      "language": "Go",
+      "files": "47",
+      "lines": "12,800",
+      "blanks": "672",
+      "comments": "1,749",
+      "code": "10,379",
+      "complexity": "3,459"
+    },
+    {
+      "language": "BASH",
+      "files": "1",
+      "lines": "51",
+      "blanks": "0",
+      "comments": "13",
+      "code": "38",
+      "complexity": "6"
+    },
+    {
+      "language": "Zsh",
+      "files": "1",
+      "lines": "31",
+      "blanks": "1",
+      "comments": "10",
+      "code": "20",
+      "complexity": "2"
+    }
+  ],
+  "total": {
+    "files": "49",
+    "lines": "12,882",
+    "blanks": "673",
+    "comments": "1,772",
+    "code": "10,437",
+    "complexity": "3,467"
+  },
+  "estimates": [
+    {
+      "name": "Cost to Develop",
+      "model": "organic",
+      "value": "$317,063"
+    },
+    {
+      "name": "Schedule Effort",
+      "model": "organic",
+      "value": "8.89 months"
+    },
+    {
+      "name": "People Required",
+      "model": "organic",
+      "value": "3.17"
+    }
+  ],
+  "processed": [
+    {
+      "bytes": "441,890",
+      "megabytes": "0.442",
+      "unit": "SI"
+    }
+  ]
+}

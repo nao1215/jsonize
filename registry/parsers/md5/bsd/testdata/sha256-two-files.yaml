@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C sha256 /etc/passwd /etc/group
+description: sha256, the same program under another name, which prints SHA256 in front and a 64 digit digest.
+os: freebsd
+args: ["/etc/passwd", "/etc/group"]

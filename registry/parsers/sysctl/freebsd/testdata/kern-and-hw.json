@@ -1,0 +1,14 @@
+[
+  {
+    "name": "kern.ostype",
+    "value": "FreeBSD"
+  },
+  {
+    "name": "kern.osrelease",
+    "value": "15.1-RELEASE-p3"
+  },
+  {
+    "name": "hw.ncpu",
+    "value": "4"
+  }
+]

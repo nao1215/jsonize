@@ -1,0 +1,31 @@
+# FreeBSD sysctl prints "name: value", one variable a line, where Linux
+# prints "name = value". Values keep their text: many are structures the
+# kernel formats for reading (vm.loadavg is "{ 0.07 0.02 0.01 }"), and a
+# number here is not more useful than the string that was printed.
+#
+# -d prints each variable's description in the same "name: text" shape,
+# -n the values alone and -N the names alone, so jz run refuses all three.
+# A description piped in reads as a value; the text cannot tell them apart.
+format: 1
+command: sysctl
+variant: freebsd
+description: 'FreeBSD sysctl KEY... and sysctl -a, "name: value" lines'
+metadata:
+  tags: [freebsd, bsd, kernel]
+  compatible: [FreeBSD sysctl]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?query=sysctl&sektion=8
+detect:
+  os: [freebsd]
+  args:
+    none: ["-d", "-n", "-N", "-e", "-o", "-x", "-h", "-b", "-t"]
+  signature:
+    all:
+      # A dotted name followed by ": " is also YAML and plenty of reports,
+      # so the first line has to start with one of the kernel's own
+      # top-level names.
+      - '\A(?:kern|vm|vfs|net|debug|hw|machdep|user|p1003_1b|compat|security|dev|kstat)\.[A-Za-z0-9_.%-]+: '
+parse:
+  type: kv
+  separator: ": "
+  as: list

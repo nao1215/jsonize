@@ -322,7 +322,7 @@ scenarios:
       - assert:
           exit_code: 4
           stderr:
-            contains: "available: bsd, bsd-human, busybox-human, freebsd, freebsd-blocks, freebsd-blocks-type, freebsd-human, freebsd-inodes, freebsd-type, gnu"
+            contains: "available: bsd, bsd-human, busybox-human, freebsd, freebsd-blocks, freebsd-blocks-type, freebsd-human, freebsd-inodes, freebsd-type, freebsd-type-human, gnu"
 
   - name: a variant without a parser is a usage error
     steps:

@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C vmstat -i
+description: IRQ lines named with a device, per-CPU timers, and the Total line, which is the sum of the rows.
+os: freebsd
+args: ["-i"]
