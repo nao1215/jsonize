@@ -1,0 +1,4 @@
+description: Five files in one run, an empty one (no blocks, ratio "---") and a name with spaces among them, then the rule and the totals row, both dropped.
+source: captured on Ubuntu 26.04 with XZ Utils 5.8.3, LC_ALL=C xz -l over files made for the fixture
+os: linux
+args: [-l, hello.txt.xz, repeat.txt.xz, empty.txt.xz, name with spaces.txt.xz, a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt.xz]

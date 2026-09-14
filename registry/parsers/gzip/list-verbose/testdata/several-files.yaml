@@ -1,0 +1,4 @@
+description: Five files in one run, an empty one (CRC of all zeros) and a name with spaces among them; the last row is the totals, which is dropped.
+source: captured on Ubuntu 26.04 with GNU gzip 1.14, LC_ALL=C gzip -lv over files made for the fixture
+os: linux
+args: [-lv, hello.txt.gz, repeat.txt.gz, empty.txt.gz, name with spaces.txt.gz, a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt.gz]

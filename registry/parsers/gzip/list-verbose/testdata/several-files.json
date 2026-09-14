@@ -1,0 +1,52 @@
+[
+  {
+    "method": "defla",
+    "crc": "af083b2d",
+    "date": "Sep 14",
+    "time": "22:27",
+    "compressed": 42,
+    "uncompressed": 12,
+    "ratio": "-16.7%",
+    "uncompressed_name": "hello.txt"
+  },
+  {
+    "method": "defla",
+    "crc": "a415a90e",
+    "date": "Sep 14",
+    "time": "22:27",
+    "compressed": 59,
+    "uncompressed": 460,
+    "ratio": "93.5%",
+    "uncompressed_name": "repeat.txt"
+  },
+  {
+    "method": "defla",
+    "crc": "00000000",
+    "date": "Sep 14",
+    "time": "22:27",
+    "compressed": 30,
+    "uncompressed": 0,
+    "ratio": "0.0%",
+    "uncompressed_name": "empty.txt"
+  },
+  {
+    "method": "defla",
+    "crc": "f064eaa2",
+    "date": "Sep 14",
+    "time": "22:27",
+    "compressed": 60,
+    "uncompressed": 19,
+    "ratio": "-10.5%",
+    "uncompressed_name": "name with spaces.txt"
+  },
+  {
+    "method": "defla",
+    "crc": "71857850",
+    "date": "Sep 14",
+    "time": "22:27",
+    "compressed": 121,
+    "uncompressed": 5,
+    "ratio": "-40.0%",
+    "uncompressed_name": "a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt"
+  }
+]

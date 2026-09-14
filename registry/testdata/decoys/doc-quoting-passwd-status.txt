@@ -1,0 +1,10 @@
+Checking whether an account is locked
+
+passwd -S prints seven fields, the second of which is the status:
+
+alice L 2025-11-03 0 99999 7 -1
+
+L means the password is locked, P that it is usable and NP that the
+account has none. The date is the last change; the four numbers are
+the minimum age, maximum age, warning period and inactivity period in
+days.

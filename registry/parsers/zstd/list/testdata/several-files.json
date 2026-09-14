@@ -1,0 +1,77 @@
+[
+  {
+    "frames": 1,
+    "skips": 0,
+    "compressed": {
+      "value": "25",
+      "unit": "B"
+    },
+    "uncompressed": {
+      "value": "12",
+      "unit": "B"
+    },
+    "ratio": "0.480",
+    "check": "XXH64",
+    "filename": "hello.txt.zst"
+  },
+  {
+    "frames": 1,
+    "skips": 0,
+    "compressed": {
+      "value": "44",
+      "unit": "B"
+    },
+    "uncompressed": {
+      "value": "460",
+      "unit": "B"
+    },
+    "ratio": "10.455",
+    "check": "XXH64",
+    "filename": "repeat.txt.zst"
+  },
+  {
+    "frames": 1,
+    "skips": 0,
+    "compressed": {
+      "value": "13",
+      "unit": "B"
+    },
+    "uncompressed": {
+      "value": "0",
+      "unit": "B"
+    },
+    "ratio": "0.000",
+    "check": "XXH64",
+    "filename": "empty.txt.zst"
+  },
+  {
+    "frames": 1,
+    "skips": 0,
+    "compressed": {
+      "value": "32",
+      "unit": "B"
+    },
+    "uncompressed": {
+      "value": "19",
+      "unit": "B"
+    },
+    "ratio": "0.594",
+    "check": "XXH64",
+    "filename": "name with spaces.txt.zst"
+  },
+  {
+    "frames": 1,
+    "skips": 0,
+    "compressed": {
+      "value": "18",
+      "unit": "B"
+    },
+    "uncompressed": {
+      "value": "5",
+      "unit": "B"
+    },
+    "ratio": "0.278",
+    "check": "XXH64",
+    "filename": "a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt.zst"
+  }
+]

@@ -1,0 +1,4 @@
+description: A file of a few hundred kilobytes (sizes in KiB), one written with --no-content-size (blank uncompressed size and ratio, also blank in the totals) and one written with --no-check (check "None").
+source: captured on Ubuntu 26.04 with Zstandard CLI 1.5.7, LC_ALL=C zstd -l over files made for the fixture; the banner went to standard error
+os: linux
+args: [-l, zst/big.txt.zst, zst/nosize.zst, zst/nocheck.zst]

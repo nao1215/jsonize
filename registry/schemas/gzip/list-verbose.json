@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gzip/list-verbose.json",
+  "title": "gzip/list-verbose",
+  "description": "gzip -lv method, CRC, timestamp and sizes",
+  "x-jsonize": {
+    "definition": "gzip/list-verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "method": {
+        "type": "string"
+      },
+      "crc": {
+        "type": "string"
+      },
+      "date": {
+        "type": "string"
+      },
+      "time": {
+        "type": "string"
+      },
+      "compressed": {
+        "type": "integer"
+      },
+      "uncompressed": {
+        "type": "integer"
+      },
+      "ratio": {
+        "type": "string"
+      },
+      "uncompressed_name": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "method",
+      "crc",
+      "date",
+      "time",
+      "compressed",
+      "uncompressed",
+      "ratio",
+      "uncompressed_name"
+    ]
+  }
+}

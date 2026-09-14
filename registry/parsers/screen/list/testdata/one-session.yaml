@@ -1,0 +1,4 @@
+description: One session, where the heading and the count are in the singular.
+source: captured on Ubuntu 26.04 with GNU screen 4.09.01, LC_ALL=C screen -ls with one session started by screen -dmS; the user name in the socket directory replaced
+os: linux
+args: [-ls]

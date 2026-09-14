@@ -1,0 +1,4 @@
+description: One file, so no rule and no totals row.
+source: captured on Ubuntu 26.04 with XZ Utils 5.8.3, LC_ALL=C xz -l over a file made for the fixture
+os: linux
+args: [-l, hello.txt.xz]

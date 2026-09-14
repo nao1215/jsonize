@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/xz/list.json",
+  "title": "xz/list",
+  "description": "xz -l stream, block, size and check summary",
+  "x-jsonize": {
+    "definition": "xz/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "streams": {
+        "type": "integer"
+      },
+      "blocks": {
+        "type": "integer"
+      },
+      "compressed": {
+        "type": "string"
+      },
+      "uncompressed": {
+        "type": "string"
+      },
+      "ratio": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "check": {
+        "type": "string"
+      },
+      "filename": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "streams",
+      "blocks",
+      "compressed",
+      "uncompressed",
+      "ratio",
+      "check",
+      "filename"
+    ]
+  }
+}

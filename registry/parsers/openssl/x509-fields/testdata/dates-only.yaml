@@ -1,0 +1,4 @@
+description: Only -dates, so the object holds the two dates and nothing else.
+source: captured on Ubuntu 26.04 with OpenSSL 3.5.5, LC_ALL=C openssl x509 -noout -dates over a certificate made for the fixture
+os: linux
+args: [x509, -in, c.pem, -noout, -dates]

@@ -1,0 +1,10 @@
+[
+  {
+    "file": "repeat.txt",
+    "status": "FAILED"
+  },
+  {
+    "file": "name with spaces.txt",
+    "status": "FAILED open or read"
+  }
+]

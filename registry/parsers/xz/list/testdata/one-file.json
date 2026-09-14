@@ -1,0 +1,11 @@
+[
+  {
+    "streams": 1,
+    "blocks": 1,
+    "compressed": "76 B",
+    "uncompressed": "12 B",
+    "ratio": "6.333",
+    "check": "CRC64",
+    "filename": "hello.txt.xz"
+  }
+]

@@ -1,0 +1,5 @@
+Frames  Skips  Compressed  Uncompressed  Ratio  Check  Filename
+     2      1      37   B        12   B  0.324  XXH64  skippable.zst
+     1      0      25   B        12   B  0.480  XXH64  hello.txt.zst
+----------------------------------------------------------------- 
+     3      1      62   B        24   B  0.387  XXH64  2 files

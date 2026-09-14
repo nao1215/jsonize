@@ -1,0 +1,55 @@
+# `zstd -lv` prints a block per .zst file: the name on a line of its
+# own, a count of Zstandard frames and, when there are any, of
+# skippable frames, the dictionary id, the window size, the compressed
+# size, the uncompressed size and the ratio where the frames state the
+# content size, and the checksum. The banner naming the zstd version
+# goes to standard error and is not part of the text.
+#
+# zstd ends the name line with a space, and no other line of a block
+# ends with one, which is what marks where a block starts. Each size is
+# printed rounded and then exact in parentheses ("264 KiB (270177 B)"),
+# so the exact byte count is what is read and the rounded form is left
+# behind. A file written with --no-content-size has no decompressed
+# size and no ratio, and both keys are absent from its block. The check
+# line is a hash name and its value, or "None" for a file written
+# without one: check is the name and check_value is the digest or null.
+#
+# `zstd -l` without -v prints a table and is read by zstd/list.
+format: 1
+command: zstd
+variant: list-verbose
+description: zstd -lv one block of frame details per file
+metadata:
+  tags: [linux, darwin, archive, compression]
+  compatible: [Zstandard CLI]
+  references:
+    - https://github.com/facebook/zstd/blob/dev/programs/zstd.1.md
+detect:
+  args:
+    any: ["-l", "--list"]
+  signature:
+    all:
+      # The first block opens the text: its name line and the frame
+      # count under it.
+      - '\A[^\n]* \n# Zstandard Frames: \d+$'
+      - '^Compressed Size: [^\n]* \(\d+ B\)$'
+parse:
+  type: records
+  start: '^[^\n]* $'
+  record:
+    parse:
+      type: regex
+      each: input
+      pattern: '\A(?P<name>[^\n]*?) \n# Zstandard Frames: (?P<frames>\d+)\n(?:# Skippable Frames: (?P<skippable_frames>\d+)\n)?DictID: (?P<dict_id>\d+)\nWindow Size: [^\n]* \((?P<window_size>\d+) B\)\nCompressed Size: [^\n]* \((?P<compressed_size>\d+) B\)\n(?:Decompressed Size: [^\n]* \((?P<decompressed_size>\d+) B\)\nRatio: (?P<ratio>\d+\.\d+)\n)?Check: (?P<check>[A-Za-z0-9]+)(?: (?P<check_value>[0-9a-f]+))?\z'
+    fields:
+      name: {required: true}
+      frames: {type: int, required: true}
+      skippable_frames: {type: int, when_missing: omit}
+      dict_id: {type: int, required: true}
+      window_size: {type: int, required: true}
+      compressed_size: {type: int, required: true}
+      decompressed_size: {type: int, when_missing: omit}
+      # Rounded to four places by zstd, so it stays a string.
+      ratio: {when_missing: omit}
+      check: {required: true}
+      check_value: {}

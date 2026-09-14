@@ -1,0 +1,47 @@
+[
+  {
+    "streams": 1,
+    "blocks": 1,
+    "compressed": "76 B",
+    "uncompressed": "12 B",
+    "ratio": "6.333",
+    "check": "CRC64",
+    "filename": "hello.txt.xz"
+  },
+  {
+    "streams": 1,
+    "blocks": 1,
+    "compressed": "104 B",
+    "uncompressed": "460 B",
+    "ratio": "0.226",
+    "check": "CRC64",
+    "filename": "repeat.txt.xz"
+  },
+  {
+    "streams": 1,
+    "blocks": 0,
+    "compressed": "32 B",
+    "uncompressed": "0 B",
+    "ratio": null,
+    "check": "CRC64",
+    "filename": "empty.txt.xz"
+  },
+  {
+    "streams": 1,
+    "blocks": 1,
+    "compressed": "84 B",
+    "uncompressed": "19 B",
+    "ratio": "4.421",
+    "check": "CRC64",
+    "filename": "name with spaces.txt.xz"
+  },
+  {
+    "streams": 1,
+    "blocks": 1,
+    "compressed": "72 B",
+    "uncompressed": "5 B",
+    "ratio": null,
+    "check": "CRC64",
+    "filename": "a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt.xz"
+  }
+]

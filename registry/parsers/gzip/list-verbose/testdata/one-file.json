@@ -1,0 +1,12 @@
+[
+  {
+    "method": "defla",
+    "crc": "af083b2d",
+    "date": "Sep 14",
+    "time": "22:27",
+    "compressed": 42,
+    "uncompressed": 12,
+    "ratio": "-16.7%",
+    "uncompressed_name": "hello.txt"
+  }
+]

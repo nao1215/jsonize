@@ -1,0 +1,4 @@
+description: One file, one block.
+source: captured on Ubuntu 26.04 with Zstandard CLI 1.5.7, LC_ALL=C zstd -lv over a file made for the fixture; the banner went to standard error
+os: linux
+args: [-lv, hello.txt.zst]

@@ -1,0 +1,14 @@
+{
+  "sessions": [
+    {
+      "pid": 671510,
+      "name": "jz-fixture",
+      "started": "09/14/26 22:34:11",
+      "state": "Detached"
+    }
+  ],
+  "sockets": {
+    "count": 1,
+    "directory": "/run/screen/S-user"
+  }
+}

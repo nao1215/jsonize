@@ -1,0 +1,42 @@
+# `passwd -S` prints one line about an account's password: the login
+# name, a status letter, the date of the last change, and the minimum
+# age, maximum age, warning period and inactivity period in days. The
+# status is P for a usable password, L for a locked one and NP for none,
+# as passwd(1) documents them, and is kept as the letters printed. The
+# date is a day with no time, so it stays a string. The four ages are
+# integers, and -1 is what passwd prints for a period that is not set.
+#
+# `passwd -Sa`, which root may run, prints the same line for every
+# account, so the text is read as a list whatever its length. A name,
+# a letter, a date and four numbers is the shape of many reports, so jz
+# does not claim it on its own: `jz --parser passwd` or `jz run passwd
+# -S` says what produced it, and the signature then checks that every
+# line has that shape.
+format: 1
+command: passwd
+variant: status
+description: passwd -S password status of an account
+metadata:
+  tags: [linux, accounts, security]
+  compatible: [shadow-utils]
+  references:
+    - https://man7.org/linux/man-pages/man1/passwd.1.html
+detect:
+  os: [linux]
+  auto_detect: false
+  args:
+    any: ["-S", "--status"]
+  signature:
+    all:
+      - '\A(?:\S+ (?:P|L|NP) \S+ -?\d+ -?\d+ -?\d+ -?\d+\n)*\S+ (?:P|L|NP) \S+ -?\d+ -?\d+ -?\d+ -?\d+\z'
+parse:
+  type: regex
+  pattern: '^(?P<user>\S+) (?P<status>P|L|NP) (?P<last_change>\S+) (?P<min_days>-?\d+) (?P<max_days>-?\d+) (?P<warn_days>-?\d+) (?P<inactive_days>-?\d+)$'
+fields:
+  user: {required: true}
+  status: {required: true}
+  last_change: {required: true}
+  min_days: {type: int, required: true}
+  max_days: {type: int, required: true}
+  warn_days: {type: int, required: true}
+  inactive_days: {type: int, required: true}

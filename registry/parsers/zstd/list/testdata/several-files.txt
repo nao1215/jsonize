@@ -1,0 +1,8 @@
+Frames  Skips  Compressed  Uncompressed  Ratio  Check  Filename
+     1      0      25   B        12   B  0.480  XXH64  hello.txt.zst
+     1      0      44   B       460   B  10.455  XXH64  repeat.txt.zst
+     1      0      13   B         0   B  0.000  XXH64  empty.txt.zst
+     1      0      32   B        19   B  0.594  XXH64  name with spaces.txt.zst
+     1      0      18   B         5   B  0.278  XXH64  a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt.zst
+----------------------------------------------------------------- 
+     5      0     132   B       496   B  3.758  XXH64  5 files

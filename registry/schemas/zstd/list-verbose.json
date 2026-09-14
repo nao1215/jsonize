@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/zstd/list-verbose.json",
+  "title": "zstd/list-verbose",
+  "description": "zstd -lv one block of frame details per file",
+  "x-jsonize": {
+    "definition": "zstd/list-verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "frames": {
+        "type": "integer"
+      },
+      "skippable_frames": {
+        "type": "integer"
+      },
+      "dict_id": {
+        "type": "integer"
+      },
+      "window_size": {
+        "type": "integer"
+      },
+      "compressed_size": {
+        "type": "integer"
+      },
+      "decompressed_size": {
+        "type": "integer"
+      },
+      "ratio": {
+        "type": "string"
+      },
+      "check": {
+        "type": "string"
+      },
+      "check_value": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "frames",
+      "dict_id",
+      "window_size",
+      "compressed_size",
+      "check",
+      "check_value"
+    ]
+  }
+}

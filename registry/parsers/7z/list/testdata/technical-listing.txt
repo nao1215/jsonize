@@ -1,0 +1,69 @@
+
+7-Zip 26.00 (x64) : Copyright (c) 1999-2026 Igor Pavlov : 2026-02-12
+ 64-bit locale=C.UTF-8 Threads:32 OPEN_MAX:524288, ASM
+
+Scanning the drive for archives:
+1 file, 380 bytes (1 KiB)
+
+Listing archive: many.7z
+
+--
+Path = many.7z
+Type = 7z
+Physical Size = 380
+Headers Size = 310
+Method = LZMA2:12
+Solid = +
+Blocks = 1
+
+----------
+Path = empty.txt
+Size = 0
+Packed Size = 0
+Modified = 2026-09-14 22:27:11.3430821
+Attributes = A -rw-rw-r--
+CRC = 
+Encrypted = -
+Method = 
+Block = 
+
+Path = a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt
+Size = 5
+Packed Size = 70
+Modified = 2026-09-14 22:27:11.3430821
+Attributes = A -rw-rw-r--
+CRC = 71857850
+Encrypted = -
+Method = LZMA2:12
+Block = 0
+
+Path = hello.txt
+Size = 12
+Packed Size = 
+Modified = 2026-09-14 22:27:11.3430821
+Attributes = A -rw-rw-r--
+CRC = AF083B2D
+Encrypted = -
+Method = LZMA2:12
+Block = 0
+
+Path = name with spaces.txt
+Size = 19
+Packed Size = 
+Modified = 2026-09-14 22:27:11.3430821
+Attributes = A -rw-rw-r--
+CRC = F064EAA2
+Encrypted = -
+Method = LZMA2:12
+Block = 0
+
+Path = repeat.txt
+Size = 460
+Packed Size = 
+Modified = 2026-09-14 22:27:11.3430821
+Attributes = A -rw-rw-r--
+CRC = A415A90E
+Encrypted = -
+Method = LZMA2:12
+Block = 0
+

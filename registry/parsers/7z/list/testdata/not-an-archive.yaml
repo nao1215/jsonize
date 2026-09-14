@@ -1,0 +1,5 @@
+description: A run over a plain text file, which 7-Zip cannot open as an archive; the error went to standard error, and standard output has the banner, the archive name and an error count but no property block and no table.
+source: captured on Ubuntu 26.04 with 7-Zip 26.00 (x64), LC_ALL=C 7z l over a plain text file
+os: linux
+args: [l, ../src/hello.txt]
+expect_error: 'does not describe this input'

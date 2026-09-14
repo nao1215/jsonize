@@ -1,0 +1,33 @@
+[
+  {
+    "name": "zst/big.txt.zst",
+    "frames": 1,
+    "dict_id": 0,
+    "window_size": 270177,
+    "compressed_size": 203691,
+    "decompressed_size": 270177,
+    "ratio": "1.3264",
+    "check": "XXH64",
+    "check_value": "feb5de37"
+  },
+  {
+    "name": "zst/nosize.zst",
+    "frames": 1,
+    "dict_id": 0,
+    "window_size": 1024,
+    "compressed_size": 25,
+    "check": "XXH64",
+    "check_value": "207d6d8c"
+  },
+  {
+    "name": "zst/nocheck.zst",
+    "frames": 1,
+    "dict_id": 0,
+    "window_size": 12,
+    "compressed_size": 21,
+    "decompressed_size": 12,
+    "ratio": "0.5714",
+    "check": "None",
+    "check_value": null
+  }
+]

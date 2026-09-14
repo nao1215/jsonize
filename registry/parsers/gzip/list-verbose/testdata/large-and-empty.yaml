@@ -1,0 +1,4 @@
+description: A file of a few hundred kilobytes and an empty one, named with a directory in front, and the totals row.
+source: captured on Ubuntu 26.04 with GNU gzip 1.14, LC_ALL=C gzip -lv over files made for the fixture
+os: linux
+args: [-lv, gz/big.txt.gz, gz/empty.txt.gz]

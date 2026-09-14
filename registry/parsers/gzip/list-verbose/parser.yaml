@@ -1,0 +1,59 @@
+# `gzip -lv` prints the columns of `gzip -l` behind four more: the
+# compression method as gzip abbreviates it ("defla"), the CRC of the
+# uncompressed data as eight hex digits, and the modification date and
+# time stored in the header. The date is a month name and a day with no
+# year and the time has no zone, so both stay the strings gzip printed,
+# under the names the header gives them.
+#
+# The two sizes are exact byte counts; the ratio is rounded to a tenth
+# of a percent and stays a string, sign included.
+#
+# With several files gzip adds a totals row, which has blanks where the
+# method, CRC, date and time would be and "(totals)" for its name. It is
+# dropped rather than read: it restates the rows, and a record named
+# "(totals)" in a list of files would be one a consumer has to know to
+# skip. A file really named "(totals)" has a method and a CRC on its
+# row, so it is kept.
+#
+# The plain `gzip -l` listing has no method column and is read by
+# gzip/list.
+format: 1
+command: gzip
+variant: list-verbose
+description: gzip -lv method, CRC, timestamp and sizes
+metadata:
+  tags: [linux, darwin, archive, compression]
+  compatible: [GNU gzip]
+  references:
+    - https://www.gnu.org/software/gzip/manual/gzip.html
+detect:
+  args:
+    # -l is what both listings share; -v is what tells this one apart,
+    # and the signature refuses the output of gzip -v without -l.
+    any: ["-v", "--verbose"]
+  signature:
+    all:
+      # The header is the first line and opens with the method column,
+      # which the plain listing lacks.
+      - '\A[ \t]*method[ \t]+crc[ \t]+date[ \t]+time[ \t]+compressed[ \t]+uncompressed[ \t]+ratio[ \t]+uncompressed_name[ \t]*$'
+      # And at least one row under it. gzip prints the header only when
+      # it has a file to list, so a header alone is not its output.
+      - '^\S+[ \t]+[0-9a-f]{8}[ \t]+[A-Z][a-z]{2} [ \d]\d[ \t]+\d{2}:\d{2}[ \t]+-?\d+[ \t]+-?\d+[ \t]+-?\d+\.\d%[ \t]'
+input:
+  ignore:
+    - '^[ \t]*method[ \t]+crc[ \t]+date[ \t]+time[ \t]+compressed[ \t]+uncompressed[ \t]+ratio[ \t]+uncompressed_name[ \t]*$'
+    - '^[ \t]*-?\d+[ \t]+-?\d+[ \t]+-?\d+\.\d% \(totals\)$'
+parse:
+  type: regex
+  # gzip separates the ratio from the name with one space, so a name that
+  # begins with a space keeps it.
+  pattern: '^(?P<method>\S+)[ \t]+(?P<crc>[0-9a-f]{8})[ \t]+(?P<date>[A-Z][a-z]{2} [ \d]\d)[ \t]+(?P<time>\d{2}:\d{2})[ \t]+(?P<compressed>-?\d+)[ \t]+(?P<uncompressed>-?\d+)[ \t]+(?P<ratio>-?\d+\.\d%) (?P<uncompressed_name>.+)$'
+fields:
+  method: {required: true}
+  crc: {required: true}
+  date: {required: true}
+  time: {required: true}
+  compressed: {type: int, required: true}
+  uncompressed: {type: int, required: true}
+  ratio: {required: true}
+  uncompressed_name: {required: true}

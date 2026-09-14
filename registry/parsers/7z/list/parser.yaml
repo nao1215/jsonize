@@ -1,0 +1,141 @@
+# `7z l` prints a banner naming the 7-Zip version and the machine it
+# runs on, what it scanned ("1 file, 380 bytes (1 KiB)"), the archive it
+# is listing, a block of "Name = value" properties of the archive (its
+# type, physical size, and for a .7z the method, whether it is solid and
+# how many blocks it has), then a table of the entries between two rules,
+# and a totals row under the second rule.
+#
+# The banner's second line describes the machine (word size, locale,
+# thread count) and is kept as one string. The scan line's byte count is
+# exact and its size in parentheses is rounded, so the count is an
+# integer and the size stays a string.
+#
+# The entry table is fixed width: a date and a time, or nineteen blanks
+# for an archive stored without times, five attribute characters
+# ("D....", "....A", "....." when the format records none), the size and
+# the compressed size right aligned in twelve columns each, two spaces
+# and the name. The columns are cut at those widths rather than at runs
+# of spaces, so a name that opens with digits is never taken for a size.
+# A blank size or compressed size (a member of a solid block after the
+# first, a directory) is null. The date and time are the archive's own
+# stamp with no zone, so they stay strings.
+#
+# The totals row is read as a key of its own: its counts of files and
+# folders are the one thing the rows do not state as such, and a record
+# named "5 files" in a list of entries would be one a consumer has to
+# know to skip. The two rules are dropped.
+#
+# One archive is listed per run. 7-Zip reads a second operand as a name
+# to select inside the first archive, so there is no listing with two
+# archives in it. A file 7-Zip cannot open as an archive prints the
+# banner, the archive name and "Errors: 1" with no property block and no
+# table, and is refused. `7z l -slt` prints the entries as property
+# blocks and is read by 7z/list-technical.
+format: 1
+command: 7z
+variant: list
+aliases:
+  # 7za, the build without plugins, prints the same text with "(a)" in
+  # its banner. 7zr opens its banner with "Public domain" in place of
+  # the copyright and is not read.
+  - name: 7za
+description: 7z l archive properties, entry table and totals
+metadata:
+  tags: [linux, darwin, archive]
+  compatible: [7-Zip]
+  references:
+    - https://documentation.help/7-Zip/list.htm
+detect:
+  args:
+    all: [l]
+    none: [-slt]
+  signature:
+    # The property block of an archive can be long, and the table header
+    # has to be in the window.
+    window: 60
+    all:
+      - '\A7-Zip [^\n]* : Copyright \(c\) '
+      - '^Listing archive: '
+      - '^--$'
+      - '^Path = '
+      - '^[ \t]+Date[ \t]+Time[ \t]+Attr[ \t]+Size[ \t]+Compressed[ \t]+Name[ \t]*$'
+input:
+  ignore:
+    # The rule above and below the entries.
+    - '^-{19} -{5} -{12} -{12}  -{24}$'
+parse:
+  type: composite
+  parts:
+    - name: banner
+      select: {limit: 2}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A7-Zip (?P<version>[^\n]*?) : Copyright \(c\) (?P<copyright>[^\n]*?) : (?P<date>\S+)\n[ \t]*(?P<environment>[^\n]*?)[ \t]*\z'
+      fields:
+        version: {required: true}
+        copyright: {required: true}
+        date: {required: true}
+        environment: {required: true}
+    - name: scan
+      select: {after: '^Scanning the drive for archives:$', limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<files>\d+) files?, (?P<bytes>\d+) bytes \((?P<size>[^)\n]*)\)\z'
+      fields:
+        files: {type: int, required: true}
+        bytes: {type: int, required: true}
+        size: {required: true}
+    - name: archive
+      select: {after: '^\d+ files?, \d+ bytes \([^)\n]*\)$', limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AListing archive: (?P<name>.+)\z'
+      fields:
+        name: {required: true}
+    - name: properties
+      select: {after: '^--$', until: '^[ \t]+Date[ \t]+Time[ \t]+Attr[ \t]+Size[ \t]+Compressed[ \t]+Name[ \t]*$'}
+      parse:
+        type: kv
+        separator: "="
+        as: map
+      fields:
+        Physical Size: {type: int}
+        Headers Size: {type: int}
+        Blocks: {type: int}
+        Solid: {type: bool, true_values: ["+"], false_values: ["-"]}
+    - name: entries
+      select: {after: '^[ \t]+Date[ \t]+Time[ \t]+Attr[ \t]+Size[ \t]+Compressed[ \t]+Name[ \t]*$'}
+      # The totals row is the totals part's.
+      ignore: ['^(?:\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}| {19}) {7}[ \d]{12} [ \d]{12}  \d+ files?(?:, \d+ folders?)?$']
+      parse:
+        type: regex
+        # The size columns are twelve wide and right aligned, so a value
+        # is at most eleven spaces and digits, or twelve spaces when it
+        # is blank; written that way, a name that opens with digits is
+        # never taken for a size.
+        pattern: '^(?:(?P<date>\d{4}-\d{2}-\d{2}) (?P<time>\d{2}:\d{2}:\d{2})| {19}) (?P<attributes>[^ ]{5}) (?: {0,11}(?P<size>\d+)| {12}) (?: {0,11}(?P<compressed>\d+)| {12})  (?P<name>.+)$'
+      fields:
+        date: {}
+        time: {}
+        attributes: {required: true}
+        size: {type: int}
+        compressed: {type: int}
+        name: {required: true}
+    - name: totals
+      select: {after: '^[ \t]+Date[ \t]+Time[ \t]+Attr[ \t]+Size[ \t]+Compressed[ \t]+Name[ \t]*$'}
+      # The entry rows are the entries part's.
+      ignore: ['^(?:\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}| {19}) [^ ]{5} [ \d]{12} [ \d]{12}  ']
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?:(?P<date>\d{4}-\d{2}-\d{2}) (?P<time>\d{2}:\d{2}:\d{2})| {19}) {7}(?: {0,11}(?P<size>\d+)| {12}) (?: {0,11}(?P<compressed>\d+)| {12})  (?P<files>\d+) files?(?:, (?P<folders>\d+) folders?)?\z'
+      fields:
+        date: {}
+        time: {}
+        size: {type: int}
+        compressed: {type: int}
+        files: {type: int, required: true}
+        folders: {type: int}

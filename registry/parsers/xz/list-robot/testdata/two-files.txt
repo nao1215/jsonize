@@ -1,0 +1,5 @@
+name	hello.txt.xz
+file	1	1	76	12	6.333	CRC64	0
+name	repeat.txt.xz
+file	1	1	104	460	0.226	CRC64	0
+totals	2	2	180	472	0.381	CRC64	0	2

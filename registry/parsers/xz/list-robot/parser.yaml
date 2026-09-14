@@ -1,0 +1,77 @@
+# `xz --robot -l` prints the listing as tab separated lines, each
+# opening with a word that says what the line is. A "name" line carries
+# the file name and the "file" line under it carries the file's
+# numbers: streams, blocks, compressed size, uncompressed size, ratio,
+# the check types used (a comma separated list when the streams differ),
+# and the total stream padding. The sizes are in bytes here, unlike the
+# rounded ones of `xz -l`, so they are integers. The ratio is "---" for
+# a file that holds nothing and becomes null.
+#
+# A "totals" line always ends the listing, even for one file: the same
+# seven numbers summed over the files, then the number of files. It is
+# read as a key of its own because it is not a file, and the number of
+# files is the one value in it the "file" lines do not carry as text.
+#
+# `xz --robot -lv` adds "stream" and "block" lines under each file and
+# `-lvv` adds a "summary" line; those are not read here, and their
+# presence refuses the text rather than being dropped. xz documents this
+# format as stable across versions.
+format: 1
+command: xz
+variant: list-robot
+description: xz --robot -l tab separated listing
+metadata:
+  tags: [linux, darwin, archive, compression]
+  compatible: [XZ Utils]
+  references:
+    - https://tukaani.org/xz/xz-man.html
+detect:
+  args:
+    any: ["--robot"]
+    none: ["-v", "--verbose"]
+  signature:
+    all:
+      # The first line names a file, and every line is one of the three
+      # kinds, down to the totals line at the end. Written out so that a
+      # verbose listing, with stream and block lines, is not this.
+      - '\Aname\t'
+      - '\A(?:name\t[^\n]*\nfile\t\d+\t\d+\t\d+\t\d+\t(?:\d+\.\d+|---)\t[^\t\n]*\t\d+\n)+totals\t\d+\t\d+\t\d+\t\d+\t(?:\d+\.\d+|---)\t[^\t\n]*\t\d+\t\d+\z'
+parse:
+  type: composite
+  parts:
+    - name: files
+      select: {until: '^totals\t'}
+      parse:
+        type: records
+        start: '^name\t'
+        record:
+          parse:
+            type: regex
+            each: input
+            pattern: '\Aname\t(?P<name>[^\n]*)\nfile\t(?P<streams>\d+)\t(?P<blocks>\d+)\t(?P<compressed>\d+)\t(?P<uncompressed>\d+)\t(?P<ratio>\d+\.\d+|---)\t(?P<check>[^\t\n]*)\t(?P<padding>\d+)\z'
+          fields:
+            name: {required: true}
+            streams: {type: int, required: true}
+            blocks: {type: int, required: true}
+            compressed: {type: int, required: true}
+            uncompressed: {type: int, required: true}
+            ratio: {null_if: ["---"]}
+            check: {type: array, split: ","}
+            padding: {type: int, required: true}
+    - name: totals
+      select: {after: '^file\t[^\n]*$'}
+      # The lines of every file after the first are the files part's.
+      ignore: ['^name\t', '^file\t']
+      parse:
+        type: regex
+        each: input
+        pattern: '\Atotals\t(?P<streams>\d+)\t(?P<blocks>\d+)\t(?P<compressed>\d+)\t(?P<uncompressed>\d+)\t(?P<ratio>\d+\.\d+|---)\t(?P<check>[^\t\n]*)\t(?P<padding>\d+)\t(?P<files>\d+)\z'
+      fields:
+        streams: {type: int, required: true}
+        blocks: {type: int, required: true}
+        compressed: {type: int, required: true}
+        uncompressed: {type: int, required: true}
+        ratio: {null_if: ["---"]}
+        check: {type: array, split: ","}
+        padding: {type: int, required: true}
+        files: {type: int, required: true}

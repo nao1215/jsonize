@@ -1,0 +1,54 @@
+# `gzip -l` prints one row per file named on the command line: the size
+# of the compressed file, the size of what it holds, how much of that the
+# compression saved, and the name the file would be uncompressed to
+# ("stdout" when the file came in on standard input). The two sizes are
+# exact byte counts; the ratio is rounded to a tenth of a percent and
+# stays the string gzip printed, sign included, since a file that grew
+# has a negative one.
+#
+# With several files gzip adds a row whose name is "(totals)" and whose
+# sizes are the sums of the rows above it. It is dropped rather than
+# read: it restates the rows, and a record named "(totals)" in a list of
+# files would be one a consumer has to know to skip. The one thing this
+# costs is a file really named "(totals)", which is dropped with it.
+#
+# A file that is not in gzip format leaves no row here: gzip writes
+# "not in gzip format" on standard error and nothing on standard output
+# for it, so a run over such files alone gives an empty text, which is
+# not this format. `gzip -lv` adds four columns in front of these and is
+# read by gzip/list-verbose.
+format: 1
+command: gzip
+variant: list
+description: gzip -l compressed and uncompressed sizes
+metadata:
+  tags: [linux, darwin, archive, compression]
+  compatible: [GNU gzip]
+  references:
+    - https://www.gnu.org/software/gzip/manual/gzip.html
+detect:
+  args:
+    any: ["-l", "--list"]
+    none: ["-v", "--verbose"]
+  signature:
+    all:
+      # The header is the first line and names the four columns; the
+      # verbose listing opens with "method" instead.
+      - '\A[ \t]*compressed[ \t]+uncompressed[ \t]+ratio[ \t]+uncompressed_name[ \t]*$'
+      # And at least one row under it. gzip prints the header only when
+      # it has a file to list, so a header alone is not its output.
+      - '^[ \t]*-?\d+[ \t]+-?\d+[ \t]+-?\d+\.\d%[ \t]'
+input:
+  ignore:
+    - '^[ \t]*compressed[ \t]+uncompressed[ \t]+ratio[ \t]+uncompressed_name[ \t]*$'
+    - '^[ \t]*-?\d+[ \t]+-?\d+[ \t]+-?\d+\.\d% \(totals\)$'
+parse:
+  type: regex
+  # gzip separates the ratio from the name with one space, so a name that
+  # begins with a space keeps it.
+  pattern: '^[ \t]*(?P<compressed>-?\d+)[ \t]+(?P<uncompressed>-?\d+)[ \t]+(?P<ratio>-?\d+\.\d%) (?P<uncompressed_name>.+)$'
+fields:
+  compressed: {type: int, required: true}
+  uncompressed: {type: int, required: true}
+  ratio: {required: true}
+  uncompressed_name: {required: true}

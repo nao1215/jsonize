@@ -1,0 +1,32 @@
+[
+  {
+    "compressed": 42,
+    "uncompressed": 12,
+    "ratio": "-16.7%",
+    "uncompressed_name": "hello.txt"
+  },
+  {
+    "compressed": 59,
+    "uncompressed": 460,
+    "ratio": "93.5%",
+    "uncompressed_name": "repeat.txt"
+  },
+  {
+    "compressed": 30,
+    "uncompressed": 0,
+    "ratio": "0.0%",
+    "uncompressed_name": "empty.txt"
+  },
+  {
+    "compressed": 60,
+    "uncompressed": 19,
+    "ratio": "-10.5%",
+    "uncompressed_name": "name with spaces.txt"
+  },
+  {
+    "compressed": 121,
+    "uncompressed": 5,
+    "ratio": "-40.0%",
+    "uncompressed_name": "a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt"
+  }
+]

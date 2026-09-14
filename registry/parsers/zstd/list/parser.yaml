@@ -1,0 +1,67 @@
+# `zstd -l` prints one row per .zst file: the number of Zstandard frames
+# and of skippable frames in it, the compressed and uncompressed sizes,
+# the ratio between them, the checksum the frames carry, and the name.
+# The banner naming the zstd version goes to standard error and is not
+# part of the text.
+#
+# The sizes are rounded to fit the column and stay as printed, but
+# zstd pads the number and the unit apart ("25   B", "199 KiB"), so
+# each is an object of the number and the unit rather than a string
+# with a run of spaces inside it. A file whose frames do not state the
+# content size has no uncompressed size and no ratio, and both are null.
+# The check is the hash name ("XXH64"), or "None" as zstd prints it for
+# a file written without one; that word is kept because it is what zstd
+# says and a consumer can read it.
+#
+# With several files zstd adds a rule and a totals row whose name
+# column says "N files". Both are dropped: the totals restate the rows,
+# and a record named "5 files" in a list of files would be one a
+# consumer has to know to skip. A file really named that way, with a
+# blank check column as the totals row has, is dropped with it.
+#
+# `zstd -lv` prints a block per file and is read by zstd/list-verbose. A
+# file that is not in zstd format leaves no row (zstd says so on
+# standard error); a run over such files alone prints nothing on
+# standard output.
+format: 1
+command: zstd
+variant: list
+description: zstd -l frame, size and check summary
+metadata:
+  tags: [linux, darwin, archive, compression]
+  compatible: [Zstandard CLI]
+  references:
+    - https://github.com/facebook/zstd/blob/dev/programs/zstd.1.md
+detect:
+  args:
+    any: ["-l", "--list"]
+    none: ["-v", "--verbose"]
+  signature:
+    all:
+      # The header is the first line.
+      - '\A[ \t]*Frames[ \t]+Skips[ \t]+Compressed[ \t]+Uncompressed[ \t]+Ratio[ \t]+Check[ \t]+Filename[ \t]*$'
+      # And a row under it: two counts, a size with a unit, then either
+      # the uncompressed size and the ratio or the blank where they
+      # would be, a check name and a name.
+      - '^[ \t]*\d+[ \t]+\d+[ \t]+\d+(?:\.\d+)?[ \t]+[A-Za-z]+[ \t]+(?:\d+(?:\.\d+)?[ \t]+[A-Za-z]+[ \t]+\d+\.\d+[ \t]+)?[A-Za-z0-9]+[ \t]+\S'
+input:
+  ignore:
+    - '^[ \t]*Frames[ \t]+Skips[ \t]+Compressed[ \t]+Uncompressed[ \t]+Ratio[ \t]+Check[ \t]+Filename[ \t]*$'
+    - '^-{20,}[ \t]*$'
+    - '^[ \t]*\d+[ \t]+\d+[ \t]+\d+(?:\.\d+)?[ \t]+[A-Za-z]+[ \t]+(?:\d+(?:\.\d+)?[ \t]+[A-Za-z]+[ \t]+\d+\.\d+[ \t]+)?(?:[A-Za-z0-9]+[ \t]+)?\d+ files?[ \t]*$'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<frames>\d+)[ \t]+(?P<skips>\d+)[ \t]+(?P<compressed>\d+(?:\.\d+)?[ \t]+[A-Za-z]+)[ \t]+(?:(?P<uncompressed>\d+(?:\.\d+)?[ \t]+[A-Za-z]+)[ \t]+(?P<ratio>\d+\.\d+)[ \t]+)?(?P<check>[A-Za-z0-9]+)[ \t]+(?P<filename>.+?)[ \t]*$'
+fields:
+  frames: {type: int, required: true}
+  skips: {type: int, required: true}
+  compressed:
+    type: object
+    required: true
+    regex: '^(?P<value>\d+(?:\.\d+)?)[ \t]+(?P<unit>[A-Za-z]+)$'
+  uncompressed:
+    type: object
+    regex: '^(?P<value>\d+(?:\.\d+)?)[ \t]+(?P<unit>[A-Za-z]+)$'
+  ratio: {}
+  check: {required: true}
+  filename: {required: true}

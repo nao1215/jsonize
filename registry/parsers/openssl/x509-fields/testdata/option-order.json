@@ -1,0 +1,8 @@
+{
+  "SHA1 Fingerprint": "35:BE:AA:85:24:05:FA:2F:ED:E1:1A:BB:52:07:4B:64:17:FE:9D:54",
+  "serial": "160A9B68B611147ABD40C03DA21300A870B91B6B",
+  "notBefore": "2026-09-14T13:32:06Z",
+  "notAfter": "2026-10-14T13:32:06Z",
+  "issuer": "CN=example.test, O=Example",
+  "subject": "CN=example.test, O=Example"
+}

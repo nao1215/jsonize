@@ -1,0 +1,5 @@
+description: An agent holding no keys, which prints a sentence and exits 1; refused rather than read as an empty list.
+source: captured on Ubuntu 26.04 with OpenSSH 10.2p1, LC_ALL=C ssh-add -L against a throwaway agent holding nothing
+os: linux
+args: [-L]
+expect_error: 'does not describe this input'

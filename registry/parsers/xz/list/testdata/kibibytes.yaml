@@ -1,0 +1,4 @@
+description: A file of a few hundred kilobytes, whose sizes xz rounds to KiB with one decimal, beside two small ones.
+source: captured on Ubuntu 26.04 with XZ Utils 5.8.3, LC_ALL=C xz -l over files made for the fixture
+os: linux
+args: [-l, xz/big.txt.xz, xz/hello.txt.xz, xz/empty.txt.xz]

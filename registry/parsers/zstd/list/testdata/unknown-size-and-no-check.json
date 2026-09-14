@@ -1,0 +1,44 @@
+[
+  {
+    "frames": 1,
+    "skips": 0,
+    "compressed": {
+      "value": "199",
+      "unit": "KiB"
+    },
+    "uncompressed": {
+      "value": "264",
+      "unit": "KiB"
+    },
+    "ratio": "1.326",
+    "check": "XXH64",
+    "filename": "zst/big.txt.zst"
+  },
+  {
+    "frames": 1,
+    "skips": 0,
+    "compressed": {
+      "value": "25",
+      "unit": "B"
+    },
+    "uncompressed": null,
+    "ratio": null,
+    "check": "XXH64",
+    "filename": "zst/nosize.zst"
+  },
+  {
+    "frames": 1,
+    "skips": 0,
+    "compressed": {
+      "value": "21",
+      "unit": "B"
+    },
+    "uncompressed": {
+      "value": "12",
+      "unit": "B"
+    },
+    "ratio": "0.571",
+    "check": "None",
+    "filename": "zst/nocheck.zst"
+  }
+]

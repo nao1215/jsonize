@@ -1,0 +1,3 @@
+256 SHA256:B2lnkNGF/KGJjxNbmPu56DcjGuDSTUWBsZ8ixxxxfmo user@example.test (ED25519)
+2048 SHA256:ku7qmXHTgIy7jXS1k2FhrrCgUMAoe3RfrJGxUIGjyhM deploy@example.test (RSA)
+256 SHA256:LrcdNtOhqinpx+T8Lj3rV8hBqdxrOF5kRAZH9alGieQ agent/id_ecdsa (ECDSA)

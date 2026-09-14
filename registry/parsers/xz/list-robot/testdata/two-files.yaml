@@ -1,0 +1,4 @@
+description: Two files and the totals line.
+source: captured on Ubuntu 26.04 with XZ Utils 5.8.3, LC_ALL=C xz --robot -l over files made for the fixture
+os: linux
+args: [--robot, -l, hello.txt.xz, repeat.txt.xz]

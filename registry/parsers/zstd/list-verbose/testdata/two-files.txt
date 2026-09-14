@@ -1,0 +1,18 @@
+hello.txt.zst 
+# Zstandard Frames: 1
+DictID: 0
+Window Size: 12 B (12 B)
+Compressed Size: 25 B (25 B)
+Decompressed Size: 12 B (12 B)
+Ratio: 0.4800
+Check: XXH64 207d6d8c
+
+repeat.txt.zst 
+# Zstandard Frames: 1
+DictID: 0
+Window Size: 460 B (460 B)
+Compressed Size: 44 B (44 B)
+Decompressed Size: 460 B (460 B)
+Ratio: 10.4545
+Check: XXH64 8eae2a5f
+

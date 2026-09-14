@@ -1,0 +1,13 @@
+[
+  {
+    "name": "hello.txt.zst",
+    "frames": 1,
+    "dict_id": 0,
+    "window_size": 12,
+    "compressed_size": 25,
+    "decompressed_size": 12,
+    "ratio": "0.4800",
+    "check": "XXH64",
+    "check_value": "207d6d8c"
+  }
+]

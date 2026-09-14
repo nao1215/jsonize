@@ -1,0 +1,5 @@
+hello.txt: OK
+repeat.txt: OK
+name with spaces.txt: OK
+\back\\slash.txt: OK
+\new\nline.txt: OK

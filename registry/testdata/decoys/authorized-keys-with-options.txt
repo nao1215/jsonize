@@ -1,0 +1,3 @@
+# keys allowed to run the backup, each restricted to one command
+command="/usr/local/bin/backup",no-pty,no-port-forwarding ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFN1rjREJdLw/KS0qqNqkFflwNQUB2qrS2mxM8SV5XHr backup@example.test
+from="10.0.0.0/8" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHrQ3dT6kWryPOxe44p6uLMsD0rmJc95OSTUP5nqdM4z monitor@example.test

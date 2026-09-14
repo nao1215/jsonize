@@ -1,0 +1,29 @@
+[
+  {
+    "frames": 1,
+    "type": "LZ4Frame",
+    "block": "B6I",
+    "compressed": "263.86K",
+    "uncompressed": null,
+    "ratio": null,
+    "filename": "big.txt.lz4"
+  },
+  {
+    "frames": 1,
+    "type": "LZ4Frame",
+    "block": "B4I",
+    "compressed": "43.00",
+    "uncompressed": "12.00",
+    "ratio": "358.33%",
+    "filename": "with-size.lz4"
+  },
+  {
+    "frames": 1,
+    "type": "LZ4Frame",
+    "block": "B4I",
+    "compressed": "31.00",
+    "uncompressed": null,
+    "ratio": null,
+    "filename": "hello.txt.lz4"
+  }
+]

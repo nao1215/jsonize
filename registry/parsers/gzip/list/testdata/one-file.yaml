@@ -1,0 +1,4 @@
+description: One file, so no totals row; the ratio is negative because the file grew.
+source: captured on Ubuntu 26.04 with GNU gzip 1.14, LC_ALL=C gzip -l over a file made for the fixture
+os: linux
+args: [-l, hello.txt.gz]

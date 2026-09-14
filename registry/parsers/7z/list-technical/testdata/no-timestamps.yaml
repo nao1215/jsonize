@@ -1,0 +1,4 @@
+description: A .7z made with -mtm-, which stores no modification times, so Modified is empty in every entry.
+source: captured on Ubuntu 26.04 with 7-Zip 26.00 (x64), LC_ALL=C 7z l -slt over an archive made for the fixture
+os: linux
+args: [l, -slt, notime.7z]

@@ -1,0 +1,14 @@
+[
+  {
+    "file": "hello.txt",
+    "status": "OK"
+  },
+  {
+    "file": "repeat.txt",
+    "status": "OK"
+  },
+  {
+    "file": "name with spaces.txt",
+    "status": "OK"
+  }
+]

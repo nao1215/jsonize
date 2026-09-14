@@ -1,0 +1,11 @@
+[
+  {
+    "frames": 1,
+    "type": "LZ4Frame",
+    "block": "B4I",
+    "compressed": "31.00",
+    "uncompressed": null,
+    "ratio": null,
+    "filename": "hello.txt.lz4"
+  }
+]

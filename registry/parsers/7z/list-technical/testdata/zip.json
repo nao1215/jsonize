@@ -1,0 +1,80 @@
+{
+  "banner": {
+    "version": "26.00 (x64)",
+    "copyright": "1999-2026 Igor Pavlov",
+    "date": "2026-02-12",
+    "environment": "64-bit locale=C.UTF-8 Threads:32 OPEN_MAX:524288, ASM"
+  },
+  "scan": {
+    "files": 1,
+    "bytes": 465,
+    "size": "1 KiB"
+  },
+  "archive": {
+    "name": "many.zip"
+  },
+  "properties": {
+    "Path": "many.zip",
+    "Type": "zip",
+    "Physical Size": 465
+  },
+  "entries": [
+    {
+      "Path": "empty.txt",
+      "Folder": false,
+      "Size": 0,
+      "Packed Size": 0,
+      "Modified": "2026-09-14 22:27:11.3430821",
+      "Created": null,
+      "Accessed": null,
+      "Attributes": "-rw-rw-r--",
+      "Encrypted": false,
+      "Comment": null,
+      "CRC": "00000000",
+      "Method": "Store",
+      "Characteristics": "NTFS",
+      "Host OS": "Unix",
+      "Version": "10",
+      "Volume Index": "0",
+      "Offset": "0"
+    },
+    {
+      "Path": "hello.txt",
+      "Folder": false,
+      "Size": 12,
+      "Packed Size": 12,
+      "Modified": "2026-09-14 22:27:11.3430821",
+      "Created": null,
+      "Accessed": null,
+      "Attributes": "-rw-rw-r--",
+      "Encrypted": false,
+      "Comment": null,
+      "CRC": "AF083B2D",
+      "Method": "Store",
+      "Characteristics": "NTFS",
+      "Host OS": "Unix",
+      "Version": "10",
+      "Volume Index": "0",
+      "Offset": "39"
+    },
+    {
+      "Path": "name with spaces.txt",
+      "Folder": false,
+      "Size": 19,
+      "Packed Size": 19,
+      "Modified": "2026-09-14 22:27:11.3430821",
+      "Created": null,
+      "Accessed": null,
+      "Attributes": "-rw-rw-r--",
+      "Encrypted": false,
+      "Comment": null,
+      "CRC": "F064EAA2",
+      "Method": "Store",
+      "Characteristics": "NTFS",
+      "Host OS": "Unix",
+      "Version": "10",
+      "Volume Index": "0",
+      "Offset": "90"
+    }
+  ]
+}

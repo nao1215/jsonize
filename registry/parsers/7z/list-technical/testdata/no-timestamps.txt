@@ -1,0 +1,39 @@
+
+7-Zip 26.00 (x64) : Copyright (c) 1999-2026 Igor Pavlov : 2026-02-12
+ 64-bit locale=C.UTF-8 Threads:32 OPEN_MAX:524288, ASM
+
+Scanning the drive for archives:
+1 file, 164 bytes (1 KiB)
+
+Listing archive: notime.7z
+
+--
+Path = notime.7z
+Type = 7z
+Physical Size = 164
+Headers Size = 148
+Method = LZMA2:12
+Solid = -
+Blocks = 1
+
+----------
+Path = empty.txt
+Size = 0
+Packed Size = 0
+Modified = 
+Attributes = A -rw-rw-r--
+CRC = 
+Encrypted = -
+Method = 
+Block = 
+
+Path = hello.txt
+Size = 12
+Packed Size = 16
+Modified = 
+Attributes = A -rw-rw-r--
+CRC = AF083B2D
+Encrypted = -
+Method = LZMA2:12
+Block = 0
+

@@ -1,0 +1,66 @@
+# `md5sum -c` reads a file of checksum lines and prints one line per
+# name in it: the name, a colon and a space, and a verdict. The verdict
+# is OK, FAILED when the digest differs, or "FAILED open or read" when
+# the file could not be read. Every hashing tool of the coreutils family
+# prints exactly this when checking, so one definition answers for all
+# of them under aliases, each reached by its -c or --check argument;
+# what the digest was is not in the text and does not matter to it.
+#
+# A name, a colon and a word is the shape of far too many reports for jz
+# to claim it on its own, so this definition is used only when the
+# parser is named (`jz --parser md5sum`, or `jz run sha256sum -c sums`),
+# where the signature still checks that every line carries one of the
+# three verdicts.
+#
+# The counts the tool prints afterwards ("WARNING: 1 computed checksum
+# did NOT match") go to standard error, as does the reason a file could
+# not be read, so neither is part of the text. `--quiet` leaves out the
+# OK lines and `--ignore-missing` leaves out the missing files, and the
+# lines that remain are the same shape.
+#
+# GNU coreutils prints a name holding a backslash, a newline or a
+# carriage return escaped, as "\\", "\n" and "\r", and puts a backslash
+# in front of the line to say so. Such a name is decoded; escaped is
+# true on its line and absent everywhere else. A line without the mark
+# carries the name as it is.
+format: 1
+command: md5sum
+variant: check
+aliases:
+  - name: sha1sum
+    args: {any: ["-c", "--check"]}
+  - name: sha224sum
+    args: {any: ["-c", "--check"]}
+  - name: sha256sum
+    args: {any: ["-c", "--check"]}
+  - name: sha384sum
+    args: {any: ["-c", "--check"]}
+  - name: sha512sum
+    args: {any: ["-c", "--check"]}
+  - name: b2sum
+    args: {any: ["-c", "--check"]}
+  - name: cksum
+    args: {any: ["-c", "--check"]}
+description: md5sum -c and the other checksum tools' verification verdicts
+metadata:
+  tags: [linux, darwin, checksum]
+  compatible: [GNU coreutils, uutils coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/md5sum-invocation.html
+detect:
+  auto_detect: false
+  args:
+    any: ["-c", "--check"]
+  signature:
+    all:
+      # Every line is a name and one of the three verdicts.
+      - '\A(?:[^\n]+: (?:OK|FAILED|FAILED open or read)\n)*[^\n]+: (?:OK|FAILED|FAILED open or read)\z'
+parse:
+  type: regex
+  pattern: '^(?P<escaped>\\)?(?P<file>.+): (?P<status>OK|FAILED|FAILED open or read)$'
+fields:
+  escaped: {type: bool, true_values: ["\\"], when_missing: omit}
+  # The three escapes are all the format writes, so another one on a
+  # marked line is refused rather than guessed at.
+  file: {required: true, unescape: {when: escaped, sequences: {'\\': '\', '\n': "\n", '\r': "\r"}}}
+  status: {required: true}

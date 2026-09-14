@@ -1,0 +1,4 @@
+description: A .7z made with -mtm-, which stores no modification times, so the date and time columns are blank in every row and in the totals.
+source: captured on Ubuntu 26.04 with 7-Zip 26.00 (x64), LC_ALL=C 7z l over an archive made for the fixture
+os: linux
+args: [l, notime.7z]

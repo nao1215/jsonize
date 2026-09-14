@@ -1,0 +1,5 @@
+description: The output of zstd -lv, a block per file rather than a row, which belongs to zstd/list-verbose.
+source: captured on Ubuntu 26.04 with Zstandard CLI 1.5.7, LC_ALL=C zstd -lv over a file made for the fixture; the banner went to standard error
+os: linux
+args: [-lv, hello.txt.zst]
+expect_error: 'does not describe this input'
