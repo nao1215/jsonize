@@ -1,0 +1,10 @@
+593	CLOSED	The published schema types every text field as a string, so an unquoted number in env is flagged on specs atago runs	bug	2026-08-18T04:15:04Z
+589	CLOSED	The file assert's no-matcher diagnostic omits size/min_size/max_size, which satisfy it on their own	bug	2026-08-18T04:00:15Z
+588	CLOSED	Schema conformance is guarded on two demo specs, so fourteen shipped specs drifted out of conformance unseen	bug	2026-08-18T03:53:37Z
+587	CLOSED	The published JSON Schema rejects every store json-path capture, including three shipped examples	bug	2026-08-18T03:53:37Z
+586	CLOSED	The published JSON Schema rejects composable file matchers (size with a content matcher, min_size with max_size)	bug	2026-08-18T03:53:37Z
+585	CLOSED	A plain YAML scalar in a text field is retyped, so contains: 1.20 matches "1.2" and env: {V: 007} exports "7"	bug	2026-08-18T04:07:43Z
+564	CLOSED	An explicitly empty collection is silently read as unset (deterministic.compare: [], skip: {}, only: {})		2026-08-17T12:49:29Z
+563	CLOSED	explain and manifest leave matrix row variables unexpanded while doc substitutes them		2026-08-17T12:59:27Z
+562	CLOSED	A teardown failure overwrites the scenario steps' failure artifacts at the same step index		2026-08-17T12:24:50Z
+561	CLOSED	Every matrix validation error is emitted without an ATG diagnostic code		2026-08-17T12:44:07Z

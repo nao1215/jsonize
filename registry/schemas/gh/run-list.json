@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gh/run-list.json",
+  "title": "gh/run-list",
+  "description": "gh run list, one workflow run per line when the output is not a terminal",
+  "x-jsonize": {
+    "definition": "gh/run-list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string"
+      },
+      "conclusion": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "title": {
+        "type": "string"
+      },
+      "workflow": {
+        "type": "string"
+      },
+      "branch": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "event": {
+        "type": "string"
+      },
+      "id": {
+        "type": "integer"
+      },
+      "elapsed": {
+        "type": "number"
+      },
+      "started": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "status",
+      "conclusion",
+      "title",
+      "workflow",
+      "branch",
+      "event",
+      "id",
+      "elapsed",
+      "started"
+    ]
+  }
+}

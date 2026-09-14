@@ -1,0 +1,222 @@
+[
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "Graph Update: go_modules in /. #1575576356",
+    "workflow": "Dependency Graph",
+    "branch": "main",
+    "event": "dynamic",
+    "id": 34847247844,
+    "elapsed": 40,
+    "started": "2026-09-14T13:07:07Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "Merge pull request #46 from nao1215/refactor/zero-deps",
+    "workflow": "Fuzz",
+    "branch": "main",
+    "event": "push",
+    "id": 34847241277,
+    "elapsed": 11,
+    "started": "2026-09-14T13:07:03Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "Merge pull request #46 from nao1215/refactor/zero-deps",
+    "workflow": "UnitTest",
+    "branch": "main",
+    "event": "push",
+    "id": 34847241169,
+    "elapsed": 136,
+    "started": "2026-09-14T13:07:03Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "Merge pull request #46 from nao1215/refactor/zero-deps",
+    "workflow": "Lint",
+    "branch": "main",
+    "event": "push",
+    "id": 34847241151,
+    "elapsed": 61,
+    "started": "2026-09-14T13:07:03Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "Merge pull request #46 from nao1215/refactor/zero-deps",
+    "workflow": "ReleaseSmoke",
+    "branch": "main",
+    "event": "push",
+    "id": 34847241131,
+    "elapsed": 628,
+    "started": "2026-09-14T13:07:03Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "Merge pull request #46 from nao1215/refactor/zero-deps",
+    "workflow": "Schema",
+    "branch": "main",
+    "event": "push",
+    "id": 34847241120,
+    "elapsed": 73,
+    "started": "2026-09-14T13:07:03Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "Merge pull request #46 from nao1215/refactor/zero-deps",
+    "workflow": "Coverage",
+    "branch": "main",
+    "event": "push",
+    "id": 34847241099,
+    "elapsed": 77,
+    "started": "2026-09-14T13:07:03Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "Merge pull request #46 from nao1215/refactor/zero-deps",
+    "workflow": "Website",
+    "branch": "main",
+    "event": "push",
+    "id": 34847241082,
+    "elapsed": 29,
+    "started": "2026-09-14T13:07:03Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "Merge pull request #46 from nao1215/refactor/zero-deps",
+    "workflow": "E2E",
+    "branch": "main",
+    "event": "push",
+    "id": 34847241070,
+    "elapsed": 156,
+    "started": "2026-09-14T13:07:03Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "Merge pull request #46 from nao1215/refactor/zero-deps",
+    "workflow": "govulncheck",
+    "branch": "main",
+    "event": "push",
+    "id": 34847241031,
+    "elapsed": 38,
+    "started": "2026-09-14T13:07:03Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "refactor: drop every module dependency with a YAML reader of jz's own",
+    "workflow": "UnitTest",
+    "branch": "refactor/zero-deps",
+    "event": "pull_request",
+    "id": 34846226177,
+    "elapsed": 163,
+    "started": "2026-09-14T12:56:39Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "refactor: drop every module dependency with a YAML reader of jz's own",
+    "workflow": "Schema",
+    "branch": "refactor/zero-deps",
+    "event": "pull_request",
+    "id": 34846225888,
+    "elapsed": 79,
+    "started": "2026-09-14T12:56:39Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "refactor: drop every module dependency with a YAML reader of jz's own",
+    "workflow": "Website",
+    "branch": "refactor/zero-deps",
+    "event": "pull_request",
+    "id": 34846225882,
+    "elapsed": 10,
+    "started": "2026-09-14T12:56:39Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "refactor: drop every module dependency with a YAML reader of jz's own",
+    "workflow": "govulncheck",
+    "branch": "refactor/zero-deps",
+    "event": "pull_request",
+    "id": 34846225856,
+    "elapsed": 43,
+    "started": "2026-09-14T12:56:39Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "refactor: drop every module dependency with a YAML reader of jz's own",
+    "workflow": "Benchmark",
+    "branch": "refactor/zero-deps",
+    "event": "pull_request",
+    "id": 34846225853,
+    "elapsed": 126,
+    "started": "2026-09-14T12:56:39Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "refactor: drop every module dependency with a YAML reader of jz's own",
+    "workflow": "Coverage",
+    "branch": "refactor/zero-deps",
+    "event": "pull_request",
+    "id": 34846225825,
+    "elapsed": 80,
+    "started": "2026-09-14T12:56:39Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "refactor: drop every module dependency with a YAML reader of jz's own",
+    "workflow": "Lint",
+    "branch": "refactor/zero-deps",
+    "event": "pull_request",
+    "id": 34846225813,
+    "elapsed": 49,
+    "started": "2026-09-14T12:56:39Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "refactor: drop every module dependency with a YAML reader of jz's own",
+    "workflow": "Fuzz",
+    "branch": "refactor/zero-deps",
+    "event": "pull_request",
+    "id": 34846225812,
+    "elapsed": 11,
+    "started": "2026-09-14T12:56:39Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "refactor: drop every module dependency with a YAML reader of jz's own",
+    "workflow": "E2E",
+    "branch": "refactor/zero-deps",
+    "event": "pull_request",
+    "id": 34846225800,
+    "elapsed": 148,
+    "started": "2026-09-14T12:56:39Z"
+  },
+  {
+    "status": "completed",
+    "conclusion": "success",
+    "title": "refactor: drop every module dependency with a YAML reader of jz's own",
+    "workflow": "ReleaseSmoke",
+    "branch": "refactor/zero-deps",
+    "event": "pull_request",
+    "id": 34846225798,
+    "elapsed": 576,
+    "started": "2026-09-14T12:56:39Z"
+  }
+]

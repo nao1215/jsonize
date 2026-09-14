@@ -1,0 +1,3 @@
+description: eight releases, the badge empty on all but the latest
+source: captured with LC_ALL=C gh release list --repo nao1215/atago --limit 8 on Linux (GitHub CLI 2.87.3), output to a file
+args: [release, list, --repo, nao1215/atago, --limit, "8"]

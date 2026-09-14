@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gh/pr-list.json",
+  "title": "gh/pr-list",
+  "description": "gh pr list, one pull request per line when the output is not a terminal",
+  "x-jsonize": {
+    "definition": "gh/pr-list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "number": {
+        "type": "integer"
+      },
+      "title": {
+        "type": "string"
+      },
+      "branch": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      },
+      "created": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "number",
+      "title",
+      "branch",
+      "state",
+      "created"
+    ]
+  }
+}

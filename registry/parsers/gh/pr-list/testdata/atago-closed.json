@@ -1,0 +1,72 @@
+[
+  {
+    "number": 646,
+    "title": "chore: maintenance pass — dependency bumps, BSD lint legs, tape command test",
+    "branch": "chore/maintenance-20260912",
+    "state": "MERGED",
+    "created": "2026-09-12T12:22:28Z"
+  },
+  {
+    "number": 645,
+    "title": "chore(release): cut v0.22.0",
+    "branch": "chore/release-v0.22.0",
+    "state": "MERGED",
+    "created": "2026-09-12T11:09:10Z"
+  },
+  {
+    "number": 644,
+    "title": "ci: move misspell to v1.28.0, whose base image still has a package index",
+    "branch": "ci/misspell-bullseye",
+    "state": "MERGED",
+    "created": "2026-09-12T10:29:23Z"
+  },
+  {
+    "number": 643,
+    "title": "feat(loader): gate scenarios on FreeBSD, OpenBSD and NetBSD by name",
+    "branch": "feat/bsd-os-gates",
+    "state": "MERGED",
+    "created": "2026-09-12T10:21:40Z"
+  },
+  {
+    "number": 642,
+    "title": "chore(deps): bump golang.org/x/image from 0.45.0 to 0.46.0",
+    "branch": "dependabot/go_modules/golang.org/x/image-0.46.0",
+    "state": "CLOSED",
+    "created": "2026-09-11T20:07:21Z"
+  },
+  {
+    "number": 641,
+    "title": "chore(deps): bump golang.org/x/term from 0.45.0 to 0.46.0",
+    "branch": "dependabot/go_modules/golang.org/x/term-0.46.0",
+    "state": "CLOSED",
+    "created": "2026-09-11T20:07:08Z"
+  },
+  {
+    "number": 640,
+    "title": "chore(deps): bump golang.org/x/crypto from 0.55.0 to 0.57.0",
+    "branch": "dependabot/go_modules/golang.org/x/crypto-0.57.0",
+    "state": "CLOSED",
+    "created": "2026-09-11T20:07:02Z"
+  },
+  {
+    "number": 639,
+    "title": "chore(deps): bump reviewdog/action-misspell from 1.27.0 to 1.28.0",
+    "branch": "dependabot/github_actions/reviewdog/action-misspell-1.28.0",
+    "state": "CLOSED",
+    "created": "2026-09-09T12:34:23Z"
+  },
+  {
+    "number": 638,
+    "title": "chore(deps): bump golang.org/x/sys from 0.47.0 to 0.48.0",
+    "branch": "dependabot/go_modules/golang.org/x/sys-0.48.0",
+    "state": "CLOSED",
+    "created": "2026-09-08T20:05:08Z"
+  },
+  {
+    "number": 637,
+    "title": "chore(deps): bump github.com/go-sql-driver/mysql from 1.10.0 to 1.10.1",
+    "branch": "dependabot/go_modules/github.com/go-sql-driver/mysql-1.10.1",
+    "state": "CLOSED",
+    "created": "2026-09-07T20:07:33Z"
+  }
+]

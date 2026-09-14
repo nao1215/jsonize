@@ -1,0 +1,47 @@
+# `gh run list` writes, when its output is not a terminal, one workflow
+# run per line as tab-separated cells with no header: the status, the
+# conclusion, the title of the run, the workflow's name, the branch, the
+# event that started it, the run's id, how long it ran, and when it
+# started, as a UTC timestamp. The conclusion is empty until the run has
+# completed, and is null then. The elapsed cell is a duration in the
+# units Go prints (`2m16s`, `1h2m3s`) and is read into seconds. A
+# listing with no runs is no output at all, which jz refuses as text it
+# cannot read rather than reporting an empty list.
+#
+# The status and the conclusion are words from a fixed vocabulary, the
+# id is a number and the last cell a timestamp of one shape, and the
+# signature asks that of every line, which is evidence enough to read
+# the text when it is piped in. A status or conclusion GitHub adds later
+# is refused by name rather than read.
+format: 1
+command: gh
+variant: run-list
+description: gh run list, one workflow run per line when the output is not a terminal
+metadata:
+  tags: [git, github, ci]
+  compatible: [GitHub CLI]
+  references:
+    - https://cli.github.com/manual/gh_run_list
+detect:
+  args:
+    all: ["run"]
+    any: ["list", "ls"]
+  signature:
+    all:
+      - '\A(?:^(?:completed|in_progress|queued|requested|waiting|pending)\t(?:success|failure|cancelled|skipped|timed_out|action_required|neutral|stale|startup_failure)?\t[^\t\n]*\t[^\t\n]+\t[^\t\n]*\t[^\t\n]+\t\d+\t\d[0-9hms.]*\t\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$\n?)+\z'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [status, conclusion, title, workflow, branch, event, id, elapsed, started]
+fields:
+  status: {required: true}
+  conclusion: {null_if: [""]}
+  workflow: {required: true}
+  branch: {null_if: [""]}
+  event: {required: true}
+  id: {type: int, required: true}
+  elapsed: {type: duration, layout: mm:ss, required: true}
+  started: {type: time, layout: "2006-01-02T15:04:05Z07:00", required: true}

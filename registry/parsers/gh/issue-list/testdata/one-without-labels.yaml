@@ -1,0 +1,3 @@
+description: one closed issue with no labels, an empty cell that becomes an empty list
+source: captured with LC_ALL=C gh issue list --repo nao1215/jsonize --state all on Linux (GitHub CLI 2.87.3), output to a file
+args: [issue, list, --repo, nao1215/jsonize, --state, all]

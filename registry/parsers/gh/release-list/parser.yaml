@@ -1,0 +1,44 @@
+# `gh release list` writes, when its output is not a terminal, one
+# release per line as tab-separated cells with no header: the title (the
+# tag name when the release has none), a badge that is `Latest`, `Draft`
+# or `Pre-release` or empty, the tag, and a UTC timestamp, which is when
+# the release was published or, for a draft, when it was created. The
+# empty badge is null. A listing with no releases is no output at all,
+# which jz refuses as text it cannot read rather than reporting an empty
+# list.
+#
+# The badge is the only word of the format's own, and it stands on one
+# line of a listing and on none of a listing that excludes the latest
+# release; what remains is a name, a tag and a date, which describes far
+# too many listings. The definition is therefore used only when it is
+# named (`jz run gh release list`, `--parser gh --variant release-list`),
+# where the signature still asks the shape of every line.
+format: 1
+command: gh
+variant: release-list
+description: gh release list, one release per line when the output is not a terminal
+metadata:
+  tags: [git, github, release]
+  compatible: [GitHub CLI]
+  references:
+    - https://cli.github.com/manual/gh_release_list
+detect:
+  args:
+    all: ["release"]
+    any: ["list", "ls"]
+  auto_detect: false
+  signature:
+    all:
+      - '\A(?:^[^\t\n]+\t(?:Latest|Draft|Pre-release)?\t[^\t\n]+\t\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$\n?)+\z'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [title, type, tag, published]
+fields:
+  title: {required: true}
+  type: {null_if: [""]}
+  tag: {required: true}
+  published: {type: time, layout: "2006-01-02T15:04:05Z07:00", required: true}

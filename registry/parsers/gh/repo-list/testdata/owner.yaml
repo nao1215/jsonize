@@ -1,0 +1,3 @@
+description: public and private repositories, one with a Japanese description and one with none
+source: captured with LC_ALL=C gh repo list nao1215 --limit 15 on Linux (GitHub CLI 2.87.3), output to a file
+args: [repo, list, nao1215, --limit, "15"]

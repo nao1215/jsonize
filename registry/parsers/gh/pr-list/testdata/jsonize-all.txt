@@ -1,0 +1,30 @@
+46	refactor: drop every module dependency with a YAML reader of jz's own	refactor/zero-deps	MERGED	2026-09-14T12:56:36Z
+45	perf: start faster and allocate less in detection, parsing and JSON output	refactor/hot-paths	MERGED	2026-09-14T11:57:04Z
+44	feat(stream): commit as soon as the leading lines settle the choice, and report skipped records with --explain	feat/stream-early-choice	MERGED	2026-09-14T10:42:29Z
+43	fix(registry): stop ip/link reading ip address output whose first address is past the window	fix/ip-link-late-addresses	MERGED	2026-09-14T08:29:26Z
+42	parser: read FreeBSD kldstat -h, netstat -ib and -r, sockstat -s, last -y and iostat -x, and ldd output that names each program	parser/freebsd-option-variants	MERGED	2026-09-14T07:41:10Z
+41	fix(registry): stop eleven definitions reading another command's output printed after their own	fix/foreign-lines-catch-alls	MERGED	2026-09-14T06:49:24Z
+40	fix(registry): stop sysctl/freebsd reading the lines of a multi-line value as variables	fix/sysctl-freebsd-multiline-values	MERGED	2026-09-14T05:02:29Z
+39	parser: FreeBSD md5, sysctl, vmstat -i, df -hT, arp -a and OpenZFS zfs/zpool list; read scc 4.1	parser/freebsd-sysctl-checksums-zfs	MERGED	2026-09-14T04:08:48Z
+38	build(release): sign, SBOM and Homebrew cask, gated on the release smoke checks	chore/secure-release-and-homebrew	MERGED	2026-09-14T01:23:52Z
+37	test(e2e): give the PowerShell probes of the ipconfig scenarios five minutes	ci/powershell-probe-timeout	MERGED	2026-09-13T23:24:23Z
+36	feat: read multi-word headings in aligned tables, and add lshw -short and -businfo	feat/aligned-multiword-columns	MERGED	2026-09-13T22:21:09Z
+35	chore(release): prepare v0.1.0	chore/release-v0.1.0	MERGED	2026-09-13T13:54:37Z
+34	fix(registry): stop four short signatures reading dmesg, ls and prose	fix/signature-dmesg-ls-prose	MERGED	2026-09-13T12:18:59Z
+33	parser: FreeBSD swapinfo, kldstat, sockstat, netstat -i, last, uptime, w and df forms; df -BK	parser/freebsd-admin-and-df-units	MERGED	2026-09-13T11:17:45Z
+32	fix: read blank lsblk -m cells, make E2E host-independent, verify Windows output on real runners	fix/real-output-and-e2e-reproducibility	MERGED	2026-09-13T04:17:21Z
+31	fix(registry): refuse column changes and text that recent signatures let through	fix/signature-decoys-and-column-flags	MERGED	2026-09-13T03:16:44Z
+30	parser: read iostat --human, sensors -A, locale -a and df -BM	parser/argument-gaps	MERGED	2026-09-13T01:30:24Z
+29	fix(selector): refuse an excluded option however it is spelled	fix/args-repeats-and-abbreviations	MERGED	2026-09-13T00:14:21Z
+28	fix(engine): bound what a reading retains, not only what it is given	fix/bound-retained-values	MERGED	2026-09-12T16:19:24Z
+27	perf: find a fractional count with a scan, not a second read	perf/whole-number-scan	MERGED	2026-09-12T15:07:38Z
+26	fix: refuse a clock reading whose minutes or seconds are 60	fix/clock-parts-in-range	MERGED	2026-09-12T14:51:45Z
+25	fix: refuse a count written with a fraction	fix/whole-number-counts	MERGED	2026-09-12T14:47:05Z
+23	docs: tell the reader to look at what the registry already has	docs/check-what-exists	MERGED	2026-09-12T14:37:09Z
+22	test: pin capsh --print inside a container, and say why numactl drops a node number	test/capsh-container-fixture	MERGED	2026-09-12T14:28:24Z
+21	test(e2e): build the helper once, before any suite runs	test/helper-built-once	MERGED	2026-09-12T14:21:47Z
+20	refactor: drop header.repeated, which no definition wrote	refactor/drop-header-repeated	MERGED	2026-09-12T14:13:06Z
+19	docs: say what a fixture's yaml may carry, and pin two snap list claims	docs/fixture-metadata	MERGED	2026-09-12T14:06:01Z
+18	parser: read the raw form of the other lsblk column sets	parser/lsblk-raw-columns	MERGED	2026-09-12T13:58:16Z
+17	parser: read the four pidstat reports that were exit 4	parser/pidstat-reports	MERGED	2026-09-12T13:45:15Z
+16	fix: refuse the table header keys that did nothing, and end a stream at a header it cannot read	fix/header-key-noops	MERGED	2026-09-12T13:26:59Z

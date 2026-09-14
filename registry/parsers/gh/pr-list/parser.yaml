@@ -1,0 +1,45 @@
+# `gh pr list` writes, when its output is not a terminal, one pull
+# request per line as tab-separated cells with no header: the number,
+# the title, the head branch (with the fork's owner and a colon in front
+# of it for a pull request from a fork), the state, and when the pull
+# request was opened, as a UTC timestamp. The columns are the same
+# whatever filter the command was given, so this one definition reads
+# `--state all`, `--author` and the rest. A listing with no pull
+# requests is no output at all, which jz refuses as text it cannot read
+# rather than reporting an empty list.
+#
+# The state is one of four words, DRAFT being an open pull request
+# marked as a draft, and it stands on every line beside a timestamp of
+# one fixed shape; that is what the signature asks of every line, and
+# it is evidence enough to read the text when it is piped in. On a
+# terminal gh prints a title line and a coloured table with relative
+# dates instead, which is not this format.
+format: 1
+command: gh
+variant: pr-list
+description: gh pr list, one pull request per line when the output is not a terminal
+metadata:
+  tags: [git, github, pull-request]
+  compatible: [GitHub CLI]
+  references:
+    - https://cli.github.com/manual/gh_pr_list
+detect:
+  args:
+    all: ["pr"]
+    any: ["list", "ls"]
+  signature:
+    all:
+      - '\A(?:^\d+\t[^\t\n]*\t[^\t\n]+\t(?:OPEN|DRAFT|MERGED|CLOSED)\t\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$\n?)+\z'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [number, title, branch, state, created]
+fields:
+  number: {type: int, required: true}
+  title: {required: true}
+  branch: {required: true}
+  state: {required: true}
+  created: {type: time, layout: "2006-01-02T15:04:05Z07:00", required: true}
