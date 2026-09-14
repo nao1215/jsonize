@@ -48,8 +48,8 @@ func (r *run) parseTable(p *definition.Parse, fields map[string]*definition.Fiel
 		}
 	}
 	out := make([]any, 0, len(lines))
+	var cells []raw
 	for _, l := range lines {
-		var cells []any
 		var err error
 		if p.RepeatedHeader() && sameHeader(p, split, l.text, header.text) {
 			// The output of the command run twice: the second table's
@@ -59,30 +59,38 @@ func (r *run) parseTable(p *definition.Parse, fields map[string]*definition.Fiel
 			}
 			continue
 		}
-		switch split {
-		case definition.SplitAligned:
-			cells, err = r.alignedRow(l, cols)
-		case definition.SplitDelimiter:
-			cells, err = r.delimitedCells(p, l, len(cols))
-		default:
-			cells, err = r.whitespaceCells(p, l, len(cols))
-		}
+		// The cells of one row are copied into its object, so the same
+		// slice serves every row.
+		cells, err = r.rowCells(p, split, l, cols, cells[:0])
 		if err != nil {
 			return nil, err
 		}
 		obj := jsonutil.NewObject()
 		for i, c := range cols {
-			var raw any
+			var v raw
 			if i < len(cells) {
-				raw = cells[i]
+				v = cells[i]
 			}
-			if err := r.setField(obj, c.name, raw, fields[c.name], l.num); err != nil {
+			if err := r.setField(obj, c.name, v, fields[c.name], l.num); err != nil {
 				return nil, err
 			}
 		}
 		out = append(out, obj)
 	}
 	return out, nil
+}
+
+// rowCells cuts one row of a table the way its split mode says, into
+// buf, which it returns grown to the row's cells.
+func (r *run) rowCells(p *definition.Parse, split string, l line, cols []column, buf []raw) ([]raw, error) {
+	switch split {
+	case definition.SplitAligned:
+		return r.alignedRow(l, cols, buf)
+	case definition.SplitDelimiter:
+		return r.delimitedCells(p, l, len(cols), buf)
+	default:
+		return r.whitespaceCells(p, l, len(cols), buf)
+	}
 }
 
 // sameHeader reports whether a line of the body repeats the header: the
@@ -263,17 +271,17 @@ func tokenize(s string) []token {
 
 // whitespaceCells splits a row on whitespace into at most len(cols)
 // (or max_fields) cells; the last cell absorbs the remainder of the line.
-func (r *run) whitespaceCells(p *definition.Parse, l line, ncols int) ([]any, error) {
+func (r *run) whitespaceCells(p *definition.Parse, l line, ncols int, buf []raw) ([]raw, error) {
 	limit := p.MaxFields
 	if limit == 0 {
 		limit = ncols
 	}
 	parts := splitFieldsN(l.text, limit)
-	return r.checkCount(p, l, parts, ncols)
+	return r.checkCount(p, l, parts, ncols, buf)
 }
 
 // delimitedCells splits a row on the delimiter.
-func (r *run) delimitedCells(p *definition.Parse, l line, ncols int) ([]any, error) {
+func (r *run) delimitedCells(p *definition.Parse, l line, ncols int, buf []raw) ([]raw, error) {
 	limit := p.MaxFields
 	if limit == 0 {
 		limit = ncols
@@ -281,15 +289,16 @@ func (r *run) delimitedCells(p *definition.Parse, l line, ncols int) ([]any, err
 	if limit <= 0 {
 		limit = -1
 	}
-	raw := strings.SplitN(l.text, p.Delimiter, limit)
-	parts := make([]string, len(raw))
-	for i, s := range raw {
+	parts := strings.SplitN(l.text, p.Delimiter, limit)
+	for i, s := range parts {
 		parts[i] = strings.TrimSpace(s)
 	}
-	return r.checkCount(p, l, parts, ncols)
+	return r.checkCount(p, l, parts, ncols, buf)
 }
 
-func (r *run) checkCount(p *definition.Parse, l line, parts []string, ncols int) ([]any, error) {
+// checkCount holds a row to the number of fields the definition allows,
+// and returns its cells appended to buf.
+func (r *run) checkCount(p *definition.Parse, l line, parts []string, ncols int, buf []raw) ([]raw, error) {
 	minFields := p.MinFields
 	if minFields == 0 {
 		minFields = ncols
@@ -300,11 +309,10 @@ func (r *run) checkCount(p *definition.Parse, l line, parts []string, ncols int)
 	if len(parts) > ncols {
 		return nil, r.errorf(l.num, "", "expected at most %d fields but found %d: %q", ncols, len(parts), truncate(l.text, 80))
 	}
-	cells := make([]any, len(parts))
-	for i, s := range parts {
-		cells[i] = s
+	for _, s := range parts {
+		buf = append(buf, some(s))
 	}
-	return cells, nil
+	return buf, nil
 }
 
 // splitFieldsN behaves like strings.Fields but returns at most n elements,
@@ -313,8 +321,11 @@ func splitFieldsN(s string, n int) []string {
 	if n <= 0 {
 		return strings.Fields(s)
 	}
-	var out []string
 	rest := strings.TrimSpace(s)
+	if rest == "" {
+		return nil
+	}
+	out := make([]string, 0, n)
 	for len(out) < n-1 && rest != "" {
 		i := strings.IndexFunc(rest, unicode.IsSpace)
 		if i < 0 {
@@ -350,11 +361,14 @@ func splitFieldsN(s string, n int) []string {
 //     which is what stands between two columns: the cut fell inside the
 //     gutter's neighbour, as it does under a right-aligned value with a
 //     space in it ("4min 27s" under LEFT in systemctl list-timers).
-func alignedCells(text string, cols []column) ([]any, *misaligned) {
+func alignedCells(text string, cols []column, buf []raw) ([]raw, *misaligned) {
 	runes := []rune(text)
 	n := len(runes)
-	cells := make([]any, len(cols))
+	cells := buf
 	narrow := allNarrow(text, runes)
+	// Where every character is one byte, a run of the runes is the same
+	// run of the text, and cutting the text costs nothing.
+	ascii := n == len(text)
 	prevEnd := 0
 	overran := -1
 	for i := range cols {
@@ -372,17 +386,22 @@ func alignedCells(text string, cols []column) ([]any, *misaligned) {
 				overran = i + 1
 			}
 		}
-		cell := strings.TrimSpace(string(runes[start:end]))
+		var cell string
+		if ascii {
+			cell = text[start:end]
+		} else {
+			cell = string(runes[start:end])
+		}
+		cell = strings.TrimSpace(cell)
 		switch {
 		case i+1 < len(cols) && (strings.Contains(cell, "\t") || strings.Contains(cell, "  ")):
 			return nil, &misaligned{col: i, value: cell, gutter: true}
 		case cell == "" && overran == i:
-			before, _ := cells[i-1].(string)
-			return nil, &misaligned{col: i, value: before}
+			return nil, &misaligned{col: i, value: cells[i-1].text}
 		case cell == "":
-			cells[i] = nil
+			cells = append(cells, raw{})
 		default:
-			cells[i] = cell
+			cells = append(cells, some(cell))
 		}
 		prevEnd = end
 	}
@@ -399,8 +418,8 @@ type misaligned struct {
 
 // alignedRow cuts a row of an aligned table, and refuses one the header
 // does not place (see alignedCells).
-func (r *run) alignedRow(l line, cols []column) ([]any, error) {
-	cells, bad := alignedCells(l.text, cols)
+func (r *run) alignedRow(l line, cols []column, buf []raw) ([]raw, error) {
+	cells, bad := alignedCells(l.text, cols, buf)
 	switch {
 	case bad == nil:
 		return cells, nil

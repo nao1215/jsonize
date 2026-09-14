@@ -128,7 +128,7 @@ func boxBodyRows(block []line) [][]line {
 // boxJoin merges the cells of the lines that make up one row. join is
 // "\n" for a value, which is how the pieces were printed, and "_" for a
 // header, whose pieces are one name broken over two lines.
-func boxJoin(group []line, join string) []any {
+func boxJoin(group []line, join string) []raw {
 	width := 0
 	cells := make([][]string, 0, len(group))
 	for _, l := range group {
@@ -138,7 +138,7 @@ func boxJoin(group []line, join string) []any {
 		}
 		cells = append(cells, c)
 	}
-	out := make([]any, width)
+	out := make([]raw, width)
 	for i := range width {
 		var pieces []string
 		for _, c := range cells {
@@ -147,10 +147,9 @@ func boxJoin(group []line, join string) []any {
 			}
 		}
 		if len(pieces) == 0 {
-			out[i] = nil // an empty cell, which is not the empty string
-			continue
+			continue // an empty cell, which is not the empty string
 		}
-		out[i] = strings.Join(pieces, join)
+		out[i] = some(strings.Join(pieces, join))
 	}
 	return out
 }
@@ -215,19 +214,19 @@ func (r *run) boxLine(l line) error {
 // boxObject builds the object for one row. A cell past the last column has
 // no name to go under, so a value in one is refused rather than left out
 // of the object; an empty one is only the frame.
-func (r *run) boxObject(cols []column, cells []any, fields map[string]*definition.Field, ln int) (*jsonutil.Object, error) {
+func (r *run) boxObject(cols []column, cells []raw, fields map[string]*definition.Field, ln int) (*jsonutil.Object, error) {
 	for i := len(cols); i < len(cells); i++ {
-		if text, ok := cells[i].(string); ok {
-			return nil, r.errorf(ln, "", "cell %d has no column to go under (the header names %d): %q", i+1, len(cols), truncate(text, 80))
+		if cells[i].has {
+			return nil, r.errorf(ln, "", "cell %d has no column to go under (the header names %d): %q", i+1, len(cols), truncate(cells[i].text, 80))
 		}
 	}
 	obj := jsonutil.NewObject()
 	for i, c := range cols {
-		var raw any
+		var v raw
 		if i < len(cells) {
-			raw = cells[i]
+			v = cells[i]
 		}
-		if err := r.setField(obj, c.name, raw, fields[c.name], ln); err != nil {
+		if err := r.setField(obj, c.name, v, fields[c.name], ln); err != nil {
 			return nil, err
 		}
 	}
@@ -247,8 +246,7 @@ func (r *run) boxColumns(p *definition.Parse, header []line) ([]column, error) {
 	cols := make([]column, 0, len(cells))
 	seen := map[string]bool{}
 	for i, c := range cells {
-		text, _ := c.(string)
-		name := definition.NormalizeName(text)
+		name := definition.NormalizeName(c.text)
 		if renamed, ok := p.Header.Rename[name]; ok {
 			name = renamed
 		}

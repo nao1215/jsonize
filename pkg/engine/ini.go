@@ -73,7 +73,7 @@ func (r *run) parseINI(p *definition.Parse, fields map[string]*definition.Field,
 		if err := keys[name].add(r, key, l.num); err != nil {
 			return nil, err
 		}
-		if err := r.setField(section, key, value, fields[key], l.num); err != nil {
+		if err := r.setField(section, key, some(value), fields[key], l.num); err != nil {
 			return nil, err
 		}
 	}
