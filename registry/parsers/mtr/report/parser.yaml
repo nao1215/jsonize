@@ -18,6 +18,8 @@ metadata:
 detect:
   signature:
     all:
+      # The text opens with the start time or the header.
+      - '\A(?:Start: [^\n]*\n)?HOST:[ \t]'
       - '^HOST:[ \t]+\S+[ \t]+Loss%[ \t]+Snt[ \t]+Last[ \t]+Avg[ \t]+Best[ \t]+Wrst[ \t]+StDev[ \t]*$'
       # A hop, so that a document quoting the header line is not read as
       # a report with no hops in it. The header alone says what the

@@ -21,6 +21,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the header.
+      - '\ACOMMAND[ \t]'
       - '^COMMAND[ \t]+PID[ \t]+TID[ \t]+TASKCMD[ \t]+USER[ \t]+FD[ \t]+TYPE[ \t]+DEVICE[ \t]+SIZE/OFF[ \t]+NODE[ \t]+NAME[ \t]*$'
 parse:
   type: table

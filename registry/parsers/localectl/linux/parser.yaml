@@ -20,6 +20,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the locale line.
+      - '\A[ \t]*System Locale: '
       - '^[ \t]*System Locale: '
       - '^[ \t]*VC Keymap: '
 parse:

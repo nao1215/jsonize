@@ -34,6 +34,8 @@ metadata:
 detect:
   signature:
     all:
+      # The text opens with an entry.
+      - '\A[-dlcbps][-rwxsStT]{9}[ \t]+[^ \t/]*/'
       - '^[-dlcbps][-rwxsStT]{9}[ \t]+[^ \t/]*/[^ \t]*[ \t]+\d+[ \t]+\d{4}-\d{2}-\d{2}[ \t]+\d{2}:\d{2}[ \t]'
 parse:
   type: regex

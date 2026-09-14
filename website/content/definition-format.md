@@ -126,6 +126,20 @@ to the end, where `ipcs` has two more. Inside the text, `^` and `$` are
 line anchors, so a rule about every line is written as the whole text
 made of those lines.
 
+Say what the text opens with, as an expression anchored with `\A`,
+whenever the format has a first line of its own: a header, a banner,
+the first entry. It is what lets `--stream` rule the definition out on
+the first lines of some other format and commit without waiting. An
+expression that is not anchored to the start (`^Filesystem`) could still
+match on a later line, so the definition stays undecided until its
+window is full, and a stream waits with it unless a definition that
+already fits would win anyway. Allow for what the
+command prints above its own first line where it does (`df/gnu` opens
+with `\A(?:df: [^\n]*\n)*Filesystem[ \t]`, for the warnings df writes
+about mounts it cannot read). `make registry-test` checks, for every
+fixture, that a stream choosing on the leading lines chooses what the
+whole text does.
+
 A signature may also narrow what the definition undertakes to read, and
 that is a decision worth writing down rather than a shortcoming.
 `git log --oneline` is read for an abbreviated hash of seven to twenty

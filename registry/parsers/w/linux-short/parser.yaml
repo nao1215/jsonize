@@ -15,6 +15,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the uptime line and the header follows it.
+      - '\A[^\n]*load average: [^\n]*\nUSER[ \t]'
       - '^.*load average: '
       - '^USER[ \t]+TTY[ \t]+FROM[ \t]+IDLE[ \t]+WHAT[ \t]*$'
 parse:

@@ -32,6 +32,8 @@ metadata:
 detect:
   signature:
     all:
+      # The text opens with a rule.
+      - '\A(?:\x{2500}{10,}|-{10,})[ \t]*$'
       - '^Language[ \t]+Files[ \t]+Lines[ \t]+Blanks[ \t]+Comments[ \t]+Code[ \t]+Complexity[ \t]*$'
       - '^Total[ \t]+[\d,]+[ \t]'
     window: 200

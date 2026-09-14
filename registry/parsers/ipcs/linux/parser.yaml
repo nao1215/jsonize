@@ -28,6 +28,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the message queue heading.
+      - '\A-+ Message Queues -+$'
       - '^-+ Message Queues -+$'
       - '^-+ Shared Memory Segments -+$'
       - '^-+ Semaphore Arrays -+$'

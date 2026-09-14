@@ -18,6 +18,8 @@ detect:
   # which is enough to read /etc/os-release without being asked.
   signature:
     all:
+      # An assignment opens the file.
+      - '\A[A-Z_][A-Z0-9_]*='
       - '^PRETTY_NAME='
       - '^NAME='
       - '^ID='

@@ -30,7 +30,7 @@ detect:
   os: [linux]
   signature:
     all:
-      - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+kbmemfree[ \t]+kbavail[ \t]+kbmemused[ \t]+%memused[ \t]+kbbuffers[ \t]+kbcached[ \t]+kbcommit[ \t]+%commit[ \t]+kbactive[ \t]+kbinact[ \t]+kbdirty[ \t]*$'
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+kbmemfree[ \t]+kbavail[ \t]+kbmemused[ \t]+%memused[ \t]+kbbuffers[ \t]+kbcached[ \t]+kbcommit[ \t]+%commit[ \t]+kbactive[ \t]+kbinact[ \t]+kbdirty[ \t]*$'
 input:
   ignore:
     # The banner, and the line sar prints where the day's file records a

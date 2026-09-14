@@ -27,6 +27,8 @@ metadata:
 detect:
   signature:
     all:
+      # The text opens with the file line.
+      - '\A\S[^\n]*:[ \t]+file format '
       - '^Sections:[ \t]*$'
       - '^Idx Name[ \t]+Size[ \t]+VMA[ \t]+LMA[ \t]+File off[ \t]+Algn[ \t]*$'
 input:

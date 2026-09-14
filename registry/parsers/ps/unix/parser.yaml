@@ -16,6 +16,8 @@ detect:
     any: ["-ef", "-e", "-f", "-A"]
   signature:
     all:
+      # The text opens with the header.
+      - '\A[ \t]*UID[ \t]+PID[ \t]+PPID[ \t]'
       - '^\s*UID\s+PID\s+PPID\s+C\s+STIME\s+TTY\s+TIME\s+CMD\s*$'
 parse:
   type: table

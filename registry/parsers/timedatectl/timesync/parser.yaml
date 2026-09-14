@@ -15,6 +15,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the server or the poll interval.
+      - '\A[ \t]*(?:Server|Poll interval): '
       - '^[ \t]*Poll interval: '
       - '^[ \t]*Root distance: '
 parse:

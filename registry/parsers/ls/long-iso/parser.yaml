@@ -28,6 +28,8 @@ detect:
     none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify", "-Z", "--context", "--author"]
   signature:
     all:
+      # The text opens with the total, or with an entry where there is none.
+      - '\A(?:total [^\n]*$|[-dlcbps][-rwxsStT]{9})'
       - '^(?:[-dlps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+[^\s:?][^\s:]*\s+[\d.]+[kKMGTPEZYRQBi]*|[cb][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+[^\s:?][^\s:]*\s+\d+,\s*\d+)\s+\d{4}-\d{2}-\d{2} \d{2}:\d{2} '
 input:
   ignore:

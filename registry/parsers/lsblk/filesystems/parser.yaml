@@ -15,6 +15,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the header.
+      - '\ANAME[ \t]'
       - '^NAME[ \t]+FSTYPE[ \t]+FSVER[ \t]+LABEL[ \t]+UUID[ \t]+FSAVAIL[ \t]+FSUSE%[ \t]+MOUNTPOINTS?[ \t]*$'
       # The header is lined up with the columns. -r prints the same words
       # one space apart and the rows unaligned, which this cannot cut.

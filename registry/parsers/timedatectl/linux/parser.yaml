@@ -14,6 +14,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the local time.
+      - '\A[ \t]*Local time: '
       - '^\s*Local time: '
       - '^\s*Time zone: '
 parse:

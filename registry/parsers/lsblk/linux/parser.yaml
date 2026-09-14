@@ -13,6 +13,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the header.
+      - '\ANAME[ \t]'
       - '^NAME\s+MAJ:MIN\s+RM\s+SIZE\s+RO\s+TYPE\s+MOUNTPOINTS?\s*$'
       # The header is lined up with the columns. -r prints the same words
       # one space apart and the rows unaligned, which lsblk/raw reads.

@@ -22,6 +22,8 @@ metadata:
 detect:
   signature:
     all:
+      # The text opens with the archive line.
+      - '\AArchive:[ \t]'
       - '^[ \t]*Length[ \t]+Date[ \t]+Time[ \t]+Name[ \t]*$'
       - '^[ \t]*\d+[ \t]+\d{4}-\d{2}-\d{2}[ \t]+\d{2}:\d{2}[ \t]'
 input:

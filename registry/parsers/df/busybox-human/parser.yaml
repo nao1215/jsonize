@@ -17,6 +17,8 @@ detect:
     any: ["-h"]
   signature:
     all:
+      # The text opens with the header, after any df: warnings.
+      - '\A(?:df: [^\n]*\n)*Filesystem[ \t]'
       - '^Filesystem\s+Size\s+Used\s+Available\s+Use%\s+Mounted on\s*$'
 # A file system's name may hold spaces, so a line is read by what each
 # column holds (see df/gnu). A name longer than BusyBox's 20-column field

@@ -25,6 +25,8 @@ detect:
     all: ["--list"]
   signature:
     all:
+      # The text opens with the header.
+      - '\AWHO[ \t]'
       - '^WHO[ \t]+UID[ \t]+USER[ \t]+PID[ \t]+COMM[ \t]+WHAT[ \t]+WHY[ \t]+MODE[ \t]*$'
 input:
   ignore:

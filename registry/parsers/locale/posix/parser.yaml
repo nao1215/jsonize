@@ -23,6 +23,8 @@ detect:
     none: ["-a", "--all-locales", "-m", "--charmaps", "-k", "--keyword-name"]
   signature:
     all:
+      # The text opens with LANG.
+      - '\ALANG='
       - '^LANG='
       - '^LC_CTYPE='
       - '^LC_ALL='

@@ -46,6 +46,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with a unit line.
+      - '\A\S [^ ]+\.(?:service|socket|target|device|mount|automount|swap|path|timer|slice|scope)(?: - |$)'
       # A header line: the state marker, the unit id, and the description
       # systemd omits when it repeats the id.
       - '^\S [^ ]+\.(?:service|socket|target|device|mount|automount|swap|path|timer|slice|scope)(?: - |$)'

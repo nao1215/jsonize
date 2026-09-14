@@ -55,6 +55,9 @@ detect:
     # as well; an author is a user name and only the argument tells it.
     none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify", "-Z", "--context", "--author"]
   signature:
+    all:
+      # The text opens with the total, or with an entry where there is none.
+      - '\A(?:total [^\n]*$|[-dlcbps][-rwxsStT]{9})'
     any:
       # The size, or for a device file its major and minor numbers. The
       # two are stated apart: `ls -lg` of a device file prints one name

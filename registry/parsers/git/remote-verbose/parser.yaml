@@ -16,6 +16,8 @@ detect:
     any: ["remote"]
   signature:
     all:
+      # The text opens with a remote.
+      - '\A[^\t\n]+\t[^\n]* \((?:fetch|push)\)$'
       - '(?m)^[^\t\n]+\t[^\n]* \((?:fetch|push)\)$'
 parse:
   type: regex

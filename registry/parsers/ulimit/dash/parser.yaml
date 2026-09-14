@@ -20,6 +20,8 @@ detect:
     any: ["-a"]
   signature:
     all:
+      # The text opens with the time limit.
+      - '\Atime\(seconds\)[ \t]'
       - '^time\(seconds\)[ \t]'
       - '^(?:nofiles|process)[ \t]'
 parse:

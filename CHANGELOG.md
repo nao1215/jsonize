@@ -19,6 +19,11 @@ project follows [Semantic Versioning](https://semver.org/).
   `sockstat -s`, `last -y` and `iostat -x`, and for `ldd` output that
   names each program above its libraries (glibc given several programs,
   FreeBSD always).
+- With `--stream` and `--explain=json`, a record the stream leaves out is
+  reported when it is left out, on its own `jz: explain: ` line of
+  standard error: `{"event":"skipped","definition":...,"line":...,
+  "reason":...,"skipped":N}`, where `skipped` counts the records left out
+  so far. `--explain` writes the same fact as a line of text.
 - Releases sign `checksums.txt` with cosign, include an SPDX SBOM for
   each archive, and publish a Homebrew cask to `nao1215/homebrew-tap`.
   A tag is published only after the release smoke checks pass on it.
@@ -50,6 +55,22 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `--stream` commits to a definition as soon as the lines that have come
+  can no longer change the choice, instead of holding back the widest
+  signature window of every candidate. `jz run --stream vmstat 1` wrote
+  its first record after about 17 seconds and now writes it after the
+  header and the first sample; piped with automatic detection it chose
+  after 200 lines and now after 2, writing the first record on the third.
+  A definition whose signature a later line could still meet or rule out
+  keeps the stream waiting, up to its window, unless a definition that
+  already fits would win over it.
+- 83 more definitions state what their text opens with (`\A` in
+  `signature.all`), and `vmstat/linux` and `vmstat/linux-active` now also
+  anchor their second line, which is what lets a stream rule them out on
+  its first lines. Text with a line before the one a definition opens with
+  (a warning above the `df` header that is not a `df:` message) is now
+  refused as unidentified, exit 4, where it was chosen and failed to
+  parse, exit 3.
 - `scc/default` reports the byte count as the string scc printed, as it
   does every other count: scc 4.1 prints it with thousands separators,
   which was refused. Its output schema is version 2.

@@ -23,6 +23,8 @@ detect:
     any: ["-m", "--perms"]
   signature:
     all:
+      # The text opens with the header.
+      - '\ANAME[ \t]'
       - '^NAME[ \t]+SIZE[ \t]+OWNER[ \t]+GROUP[ \t]+MODE[ \t]*$'
       # The header is lined up with the columns. -r prints the same words
       # one space apart and the rows unaligned, which is another format.

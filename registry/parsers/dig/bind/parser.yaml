@@ -26,6 +26,11 @@ metadata:
     - https://bind9.readthedocs.io/en/latest/manpages.html#dig-dns-lookup-utility
 detect:
   signature:
+    all:
+      # Every line dig prints outside a section's records opens with a
+      # semicolon, and so does its first: the banner, or with +nocmd the
+      # reply.
+      - '\A;'
     any:
       # A reply, or a run that reached no server. One of the two is in
       # every output this definition reads, and the banner alone is not:

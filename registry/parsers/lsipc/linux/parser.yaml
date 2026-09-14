@@ -18,6 +18,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the header.
+      - '\ARESOURCE[ \t]'
       - '^RESOURCE[ \t]+DESCRIPTION[ \t]+LIMIT[ \t]+USED[ \t]+USE%[ \t]*$'
       # The header is lined up with the columns. -r prints the same words
       # one space apart and the rows unaligned, which lsipc/raw reads.

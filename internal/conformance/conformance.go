@@ -152,6 +152,10 @@ func runCase(reg *registry.Registry, e *registry.Entry, c Case, opts Options) Re
 			res.Err = err
 			return res
 		}
+		if err := streamSelectsOwn(reg, e, c); err != nil {
+			res.Err = err
+			return res
+		}
 	}
 	if c.Meta.ExpectError != "" {
 		// A definition refuses text either by not describing it or by
@@ -159,6 +163,10 @@ func runCase(reg *registry.Registry, e *registry.Entry, c Case, opts Options) Re
 		// pin. Naming the definition is what a caller does when they
 		// believe the text is theirs, so that is the path checked.
 		ctx := selector.Context{Parser: e.Def.Command, Variant: e.Def.Variant, OS: c.Meta.OS, Args: c.Meta.Args, Input: c.Input}
+		if err := settlesAsWhole(reg, ctx, c.Input); err != nil {
+			res.Err = fmt.Errorf("selection with --parser %s --variant %s: %w", e.Def.Command, e.Def.Variant, err)
+			return res
+		}
 		_, err := selector.Select(reg, ctx)
 		if err == nil {
 			_, err = engine.Parse(e.Def, c.Input, opts.Engine)

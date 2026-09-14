@@ -14,6 +14,8 @@ detect:
     # in parentheses end it. A sentence such as "Meeting on Friday about
     # type safety (draft)" has the words and the parenthesis but neither.
     all:
+      # The text opens with a mount.
+      - '\A\S[^\n]* on [^\n]* type \S+ \('
       - '^\S.* on /.* type \S+ \([^)\n]*\)(?: \[[^]\n]*\])?[ \t]*$'
 parse:
   type: regex

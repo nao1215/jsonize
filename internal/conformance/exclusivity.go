@@ -179,6 +179,12 @@ func Decoys(reg *registry.Registry, decoys []Decoy, opts Options) []Result {
 	each(len(decoys), opts.Parallel, func(i int) {
 		d := decoys[i]
 		var out []Result
+		// A stream that commits on the leading lines must refuse the decoy
+		// the way the whole text does, rather than choose before the line
+		// that gives it away has come.
+		if err := settlesAsWhole(reg, selector.Context{}, d.Input); err != nil {
+			out = append(out, Result{Definition: "(stream)", Case: d.Name, Path: d.Name, Err: fmt.Errorf("automatic detection of the decoy %s: %w", d.Name, err)})
+		}
 		if sel, err := selector.Select(reg, selector.Context{Input: d.Input}); err == nil {
 			out = append(out, Result{
 				Definition: sel.Entry.Def.ID(),

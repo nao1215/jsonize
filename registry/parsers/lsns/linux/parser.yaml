@@ -16,6 +16,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with the header.
+      - '\A[ \t]*NS[ \t]'
       - '^[ \t]*NS[ \t]+TYPE[ \t]+NPROCS[ \t]+PID[ \t]+USER[ \t]+COMMAND[ \t]*$'
       # The header is lined up with the columns: NS sits over right-aligned
       # inode numbers. -r prints the same words one space apart and the

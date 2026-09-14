@@ -20,10 +20,13 @@ import (
 // becomes readable.
 //
 // Identification still happens the way it always does, on the leading
-// lines: jz holds back until it has as many of them as the widest
+// lines: jz holds them back until the choice they make can no longer
+// change (selector.Watch), until it has as many of them as the widest
 // signature in scope looks at, or until the input ends, and only then
-// commits to a definition. The lines it held take the same path as the
-// ones that follow, so nothing is read twice or read differently.
+// commits to a definition. A command that prints a line a second gets its
+// first record once the lines that decide its format have come, not once
+// the whole window has. The lines it held take the same path as the ones that
+// follow, so nothing is read twice or read differently.
 //
 // An explanation is written as soon as the choice is made, before the
 // first record: a stream may never end, and the choice is what there is
@@ -36,7 +39,7 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	}
 	br := bufio.NewReaderSize(r, 64*1024)
 	n, sep := selector.Window(reg, ctx)
-	head, err := readHead(br, n, sep)
+	head, err := readHead(br, n, sep, selector.Watch(reg, ctx))
 	if err != nil {
 		a.errorf("reading input: %v", err)
 		return ExitError
@@ -67,26 +70,36 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		return ExitUsage
 	}
 	emit := filter.streamEmit(out.recordWriter(a.env.Stdout), def)
-	// A record jz cannot read is reported and left out, and the ones
-	// after it are still written. A command that keeps printing (ping,
-	// rsync) puts a line jz has no reading for among thousands it has,
-	// and ending the stream there would throw away everything still to
-	// come. Reading a whole document is the other answer and keeps it:
-	// there, one unreadable line means the document is not the format it
-	// claimed to be, so nothing is written at all.
-	skipped := 0
-	onError := func(pe *engine.ParseError) error {
-		skipped++
-		a.errorf("%v", pe)
-		return nil
-	}
+	skipped, onError := a.skipping(exp, def.ID())
 	// A stream has no total size to bound; the line limit bounds a
 	// record that never ends, and the input limit bounds what is held
 	// while a record waits for its end.
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
 	err = engine.Stream(def, io.MultiReader(bytes.NewReader(head), br), eopts, emit, onError)
-	return a.streamEnd(err, filter, skipped)
+	return a.streamEnd(err, filter, *skipped)
+}
+
+// skipping returns the count of records left out so far and what a
+// stream does with a record it cannot read.
+//
+// The record is reported and left out, and the ones after it are still
+// written. A command that keeps printing (ping, rsync) puts a line jz has
+// no reading for among thousands it has, and ending the stream there
+// would throw away everything still to come. Reading a whole document is
+// the other answer and keeps it: there, one unreadable line means the
+// document is not the format it claimed to be, so nothing is written at
+// all. With --explain the record left out is also reported as a fact of
+// its own, when it happens, so a stream that never ends can be watched
+// for what it drops.
+func (a *app) skipping(exp *explanation, def string) (*int, func(*engine.ParseError) error) {
+	skipped := new(int)
+	return skipped, func(pe *engine.ParseError) error {
+		*skipped++
+		a.errorf("%v", pe)
+		a.explainSkip(exp, def, pe, *skipped)
+		return nil
+	}
 }
 
 // streamEnd settles what a stream returns once its input has ended.
@@ -110,7 +123,7 @@ func (a *app) streamEnd(err error, filter *keyFilter, skipped int) int {
 // streamWith streams the input with a definition given on the command
 // line. Detection is what the leading lines are held back for, and there
 // is none here, so the first record is written as soon as it is read.
-func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOptions) int {
+func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOptions, exp *explanation) int {
 	filter, err := out.filter()
 	if err != nil {
 		a.errorf("%v", err)
@@ -121,15 +134,11 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 		return ExitUsage
 	}
 	emit := filter.streamEmit(out.recordWriter(a.env.Stdout), def)
-	skipped := 0
+	skipped, onError := a.skipping(exp, def.ID())
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
-	err = engine.Stream(def, r, eopts, emit, func(pe *engine.ParseError) error {
-		skipped++
-		a.errorf("%v", pe)
-		return nil
-	})
-	return a.streamEnd(err, filter, skipped)
+	err = engine.Stream(def, r, eopts, emit, onError)
+	return a.streamEnd(err, filter, *skipped)
 }
 
 // emptyFormats settles what a command that succeeded without printing
@@ -199,17 +208,18 @@ func (a *app) exitForStream(err error) int {
 	return a.exitFor(err)
 }
 
-// readHead reads the leading n records, ended by sep, that a signature
-// sees. They are handed back rather than left in the reader, and the
-// caller replays them, so the lines detection looked at are read exactly
-// once and by the same code as the rest.
+// readHead reads the leading records, ended by sep, that a signature
+// sees: at most n of them, and fewer once settled reports that the ones
+// read so far decide the choice. They are handed back rather than left in
+// the reader, and the caller replays them, so the lines detection looked
+// at are read exactly once and by the same code as the rest.
 //
 // The blank lines before the text are not lines a signature sees (the
-// selector leaves them out), so they are not counted here either: a
-// report that opens with a few hundred empty lines is still identified
-// from its first lines of text. The input limit bounds them the way it
-// bounds everything read.
-func readHead(br *bufio.Reader, n int, sep byte) ([]byte, error) {
+// selector leaves them out), so they are not counted here either, and
+// settled is not asked about them: a report that opens with a few hundred
+// empty lines is still identified from its first lines of text. The input
+// limit bounds them the way it bounds everything read.
+func readHead(br *bufio.Reader, n int, sep byte, settled func([]byte) bool) ([]byte, error) {
 	var out []byte
 	lines, text, start := 0, false, 0
 	for lines < n {
@@ -236,6 +246,9 @@ func readHead(br *bufio.Reader, n int, sep byte) ([]byte, error) {
 		}
 		text = true
 		lines++
+		if lines < n && settled(out) {
+			break
+		}
 	}
 	return out, nil
 }

@@ -191,20 +191,32 @@ scenarios:
             json: { path: "$", length: 1 }
 
   - name: text the definition cannot skip is a parse failure, not a silent guess
-    # Detection finds the header further down, so a parser is chosen; the
-    # unexpected first line then fails to read. jz reports which
-    # definition it chose and why the text did not fit, rather than trying
-    # another one behind the user's back.
+    # The text opens with the df header, so a parser is chosen; the line
+    # after it then fails to read. jz reports which definition it chose
+    # and why the text did not fit, rather than trying another one behind
+    # the user's back.
     steps:
       - run:
           command: jz
-          stdin: "WARNING: something else\nFilesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs 100 10 90 10% /run\n"
+          stdin: "Filesystem     1K-blocks    Used Available Use% Mounted on\nWARNING: something else\ntmpfs 100 10 90 10% /run\n"
       - assert:
           exit_code: 3
           stdout:
             empty: true
           stderr:
-            contains: 'df/gnu: line 1: line does not match pattern'
+            contains: 'df/gnu: line 2: line does not match pattern'
+      # A line df does not print, above the header, means the text is not
+      # df's output: every df definition says what the text opens with, and
+      # none opens this way.
+      - run:
+          command: jz
+          stdin: "WARNING: something else\nFilesystem     1K-blocks    Used Available Use% Mounted on\ntmpfs 100 10 90 10% /run\n"
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
+          stderr:
+            contains: 'unable to identify the input format'
 
   - name: a rounded size is reported as printed, not as invented bytes
     # `df -h` steps by 1024 and `df -H` by 1000, the output does not say
@@ -466,7 +478,7 @@ scenarios:
             contains: "jz: explain: scope: the variants of df, named by --parser"
       - assert:
           stderr:
-            contains: "jz: explain: rejected: df/gnu-human: signature.all[0]"
+            contains: "jz: explain: rejected: df/gnu-human: signature.all[1]"
       # The same facts as one JSON document, on the one line that opens
       # with "jz: explain: ", for a script to read.
       - run:

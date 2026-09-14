@@ -14,6 +14,8 @@ detect:
     none: ["-h", "--human"]
   signature:
     all:
+      # The text opens with the header.
+      - '\A[ \t]+total[ \t]'
       - '^\s+total\s+used\s+free\s+shared\s+buffers\s+cache\s+available\s*$'
       # -h and -w together print the same header over rounded figures
       # with a suffix, which free/gnu-wide-human reads. The row says

@@ -453,6 +453,127 @@ scenarios:
               {"name":"with a\nline break"}
               status=0
 
+  # A stream commits to a definition as soon as the lines that came can
+  # no longer change the choice, not once twenty lines (or, on automatic
+  # detection, two hundred) have come. vmstat's two header lines decide it
+  # on every path, so its first sample is written while the input is
+  # still open and nothing more has been sent.
+  - name: the first record is written once the lines that decide the format have come
+    steps:
+      - fixture:
+          file: vmstat.feed
+          content: |
+            send procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu-------\n
+            send  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st gu\n
+            send  0  0 1595796 5840084 2080604 38598064    5   17   561  1735 16905    8  3  1 97  0  0  0\n
+            expect 1
+            send  1  0 1595796 5840000 2080604 38598064    0    0     0     0   100   200  1  1 98  0  0  0\n
+            expect 1
+            close
+            wait
+      - run:
+          command: e2ehelper feed -deadline 10s -script vmstat.feed -- jz --stream
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              > expect 1
+              {"r":0,"b":0,"swpd":1595796,"free":5840084,"buff":2080604,"cache":38598064,"si":5,"so":17,"bi":561,"bo":1735,"in":16905,"cs":8,"us":3,"sy":1,"id":97,"wa":0,"st":0,"gu":0}
+              > expect 1
+              {"r":1,"b":0,"swpd":1595796,"free":5840000,"buff":2080604,"cache":38598064,"si":0,"so":0,"bi":0,"bo":0,"in":100,"cs":200,"us":1,"sy":1,"id":98,"wa":0,"st":0,"gu":0}
+              status=0
+      - run:
+          command: e2ehelper feed -deadline 10s -script vmstat.feed -- jz --stream --parser vmstat
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "> expect 1\n{\"r\":1,"
+      - run:
+          command: e2ehelper feed -deadline 10s -script vmstat.feed -- jz --stream --parser vmstat --variant linux
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "> expect 1\n{\"r\":1,"
+
+  # Through jz run the same: the stand-in relays what it is fed, under the
+  # vmstat parser. vmstat/linux is written for Linux, which is what the
+  # command jz runs is checked against.
+  - name: jz run --stream writes the first vmstat sample before the command prints more
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: vmstat.feed
+          content: |
+            send procs -----------memory---------- ---swap-- -----io---- -system-- -------cpu-------\n
+            send  r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st gu\n
+            send  0  0 1595796 5840084 2080604 38598064    5   17   561  1735 16905    8  3  1 97  0  0  0\n
+            expect 1
+            close
+            wait
+      - run:
+          command: e2ehelper feed -deadline 10s -script vmstat.feed -- jz run --stream --explain --parser vmstat -- ${suitedir}/bin/standin 1
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "jz: explain: chose vmstat/linux from embedded"
+          stdout:
+            contains: "> expect 1\n{\"r\":0,"
+
+  # With --explain=json a record the stream leaves out is reported when
+  # it is left out, on its own line of standard error, as a document with
+  # an event key, and the records after it are still written. Through jz
+  # run, the command's standard error goes to the same place, and a line
+  # it writes that looks like an event does not open with "jz: explain: ".
+  - name: a skipped record is reported as an event while the stream goes on
+    steps:
+      - fixture:
+          file: skip.feed
+          content: |
+            send root:x:0:0:root:/root:/bin/bash\n
+            expect 1
+            send not a passwd entry\n
+            send daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\n
+            expect 1
+            close
+            wait
+      - run:
+          command: e2ehelper feed -deadline 10s -script skip.feed -- jz --stream --explain=json --parser etc --variant passwd
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              > expect 1
+              {"username":"root","password":"x","uid":0,"gid":0,"gecos":"root","home":"/root","shell":"/bin/bash"}
+              > expect 1
+              {"username":"daemon","password":"x","uid":1,"gid":1,"gecos":"daemon","home":"/usr/sbin","shell":"/usr/sbin/nologin"}
+              status=3
+      - assert:
+          stderr:
+            contains: 'jz: explain: {"event":"skipped","definition":"etc/passwd","line":2,"reason":'
+      - assert:
+          stderr:
+            contains: '"skipped":1}'
+      - run:
+          command: >-
+            e2ehelper feed -deadline 10s -script skip.feed -- jz run --stream --explain=json --parser etc --variant passwd
+            --env 'E2EHELPER_STDERR=from the command: {"event":"skipped","line":2}' -- ${suitedir}/bin/standin
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "status=3"
+      - assert:
+          stderr:
+            contains: 'jz: explain: {"event":"skipped","definition":"etc/passwd","line":2,"reason":'
+      - assert:
+          stderr:
+            contains: "from the command: {\"event\":\"skipped\",\"line\":2}\n"
+
   # A quoted csv value may hold line breaks and blank lines, and the
   # record is whole only when the quote closes: its lines are held, the
   # blank one among them, and the record comes out with all of them.

@@ -25,6 +25,8 @@ detect:
     any: ["-i", "--show-info"]
   signature:
     all:
+      # The text opens with an indented property.
+      - '\A[ \t]+[a-z][a-z -]*:[ \t]'
       - '^[ \t]*power supply:[ \t]'
       - '^[ \t]*has history:[ \t]'
     none:

@@ -16,6 +16,8 @@ detect:
   os: [linux]
   signature:
     all:
+      # The text opens with a host name line.
+      - '\A[ \t]*(?:Static|Transient|Pretty) hostname: '
       - '^[ \t]*Icon name: '
       - '^[ \t]*Chassis: '
 parse:

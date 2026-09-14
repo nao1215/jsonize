@@ -20,6 +20,8 @@ detect:
     any: ["stash"]
   signature:
     all:
+      # The text opens with a stash entry.
+      - '\Astash@\{\d+\}: '
       - '(?m)^stash@\{\d+\}: '
 parse:
   type: regex

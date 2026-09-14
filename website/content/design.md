@@ -661,15 +661,40 @@ command's status wins. jz has one number to return and mirrors the
 command's, which is the more useful of the two; the skipped records are
 on standard error either way, so only the number is given up.
 
-Detection is unchanged and it is what the first record waits for. jz
-holds back until it has as many leading lines as the widest signature
-among the candidates looks at — twenty by default — because a definition
-can rule itself out with a line further down, and committing before that
-would be the guess the selector exists to avoid. Naming the parser, which
-`jz run` always does, narrows the candidates and usually the wait with
-them. The held lines are then read by the same code as the rest, so there
-is one reading, not two: `jz test` checks every fixture both ways and
-fails a definition whose two readings disagree.
+Detection is unchanged and it is what the first record waits for, but a
+stream does not wait for lines that cannot change the answer.
+`selector.Watch` follows the leading lines as they arrive and says when
+the choice they make is the one `Select` would make on any continuation:
+an expression that matched stays matched (unless it looks at the end of
+the text), one anchored with `\A` that the lines so far leave no way to
+match stays unmatched, a signature whose window is full is decided
+whole, and anything else is waited for, a `none` that could still match
+included. The choice is settled when every candidate is decided, or when the
+ones still open would lose to one that fits whatever they turn out to
+be. Committing before that would be the guess the selector exists to
+avoid; committing later only delays a command that prints a line a
+second. How soon that is depends on the definitions saying what their
+text opens with, so a signature states its first line with `\A` where
+the format has one.
+
+The rule is checked, not trusted. For every fixture, on automatic
+detection, with the command named, with the variant named and, where the
+fixture records them, with the system and arguments `jz run` would pass,
+the conformance run hands the lines over
+one at a time and compares the choice at the first settled point with
+the choice for the whole text; every decoy is checked the same way. The
+held lines are then read by the same code as the rest, so there is one
+reading, not two: `jz test` checks every fixture both ways and fails a
+definition whose two readings disagree.
+
+A stream that never ends has no status to look at, so what it leaves out
+has to be visible while it runs. `--explain` already writes facts on
+standard error under `jz: explain: `, and a record left out is one more:
+with `--explain=json` it is a line with a document holding an `event`
+key, the definition, the line, the reason and the count so far. It is
+not a new option, because it is the same promise `--explain` makes (say
+what happened, change neither standard output nor the status), and not
+a line on standard output, which is data and nothing else.
 
 A format that yields records streams them one at a time. `each: input`,
 a kv map and an ini file build one object out of the whole text, and

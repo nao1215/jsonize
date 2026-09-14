@@ -104,7 +104,10 @@ signature is still checked there.
 Write the signature as what must be true of the output, and decide it
 before you look at whether the fixtures pass. Anchor the whole text with
 `\A` and `\z` where the format is short enough to say so, and where it
-is not, say what every line of it looks like. A signature is also where
+is not, say what every line of it looks like. Where the format has a
+first line of its own, state it with an expression starting with `\A`;
+[Writing a signature](../definition-format/#writing-a-signature) says
+why. A signature is also where
 you state what this definition does not undertake to read; that is a
 scope you choose, and the comment beside the expression is where you
 say it.
