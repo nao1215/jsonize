@@ -16,6 +16,27 @@ project follows [Semantic Versioning](https://semver.org/).
   it is refused, naming the line. `lspci -v`, `lsusb -v`, `lsusb -t`,
   `iw dev`, `apt-cache depends`, `systemctl list-dependencies` and
   `systemd-analyze critical-chain` state theirs.
+- 61 definitions for 25 more commands, 187 commands and 528 definitions
+  in all. Archive listings: `gzip -l` and `-lv`, `xz -l` and `--robot
+  -l`, `zstd -l` and `-lv`, `lz4 --list`, `7z l` and `7z l -slt`.
+  Checks and keys: `md5sum -c` and the other digest commands' `-c`,
+  `ssh-keyscan`, `ssh-add -L` (and `ssh-add -l` as `ssh-keygen -l`),
+  `openssl x509 -noout` with `-subject`, `-issuer`, `-dates`, `-serial`
+  and `-fingerprint`, `passwd -S`, `screen -ls`. System: `snap services`,
+  `snap connections` and `snap changes`, `lsipc -q`, `-m` and `-s`,
+  `nmcli radio`, `timedatectl show`, `loginctl show-user`, `show-session`
+  and `show-seat`, `apt-cache search`, `dpkg-query -W`, `pip freeze` and
+  `pip list --outdated`. Developer tooling: `go test` result lines and
+  `go test -bench` reports, `gh pr list`, `issue list`, `run list`,
+  `release list`, `workflow list` and `repo list`, `rustup check`,
+  `cargo search`, `just --list`, `uv python list`, `mise outdated`.
+  Containers and clusters: `docker system df` and `system df -v`,
+  `docker context ls`, `docker compose ls` and `compose ps`,
+  `docker ps -s`, `docker version`, `kubectl get pods`, `nodes`,
+  `services`, `deployments` and `namespaces` in their default, wide and
+  all-namespaces forms, `kubectl config get-contexts`,
+  `kubectl api-resources`, `kubectl version`, `rclone lsl`, `lsd` and
+  `version`, `redis-cli info` and `client list`.
 - `split: aligned` reads a heading of several words, such as
   `CONTAINER ID` or `Soft Limit`, as one column when `header.columns`
   gives it the name those words derive together.
