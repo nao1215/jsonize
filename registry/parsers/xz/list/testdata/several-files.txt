@@ -1,0 +1,8 @@
+Strms  Blocks   Compressed Uncompressed  Ratio  Check   Filename
+    1       1         76 B         12 B  6.333  CRC64   hello.txt.xz
+    1       1        104 B        460 B  0.226  CRC64   repeat.txt.xz
+    1       0         32 B          0 B    ---  CRC64   empty.txt.xz
+    1       1         84 B         19 B  4.421  CRC64   name with spaces.txt.xz
+    1       1         72 B          5 B    ---  CRC64   a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt.xz
+-------------------------------------------------------------------------------
+    5       4        368 B        496 B  0.742  CRC64   5 files

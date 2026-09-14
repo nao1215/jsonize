@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/xz/list-robot.json",
+  "title": "xz/list-robot",
+  "description": "xz --robot -l tab separated listing",
+  "x-jsonize": {
+    "definition": "xz/list-robot",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "streams": {
+            "type": "integer"
+          },
+          "blocks": {
+            "type": "integer"
+          },
+          "compressed": {
+            "type": "integer"
+          },
+          "uncompressed": {
+            "type": "integer"
+          },
+          "ratio": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "check": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "padding": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "streams",
+          "blocks",
+          "compressed",
+          "uncompressed",
+          "ratio",
+          "check",
+          "padding"
+        ]
+      }
+    },
+    "totals": {
+      "type": "object",
+      "properties": {
+        "streams": {
+          "type": "integer"
+        },
+        "blocks": {
+          "type": "integer"
+        },
+        "compressed": {
+          "type": "integer"
+        },
+        "uncompressed": {
+          "type": "integer"
+        },
+        "ratio": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "check": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "padding": {
+          "type": "integer"
+        },
+        "files": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "streams",
+        "blocks",
+        "compressed",
+        "uncompressed",
+        "ratio",
+        "check",
+        "padding",
+        "files"
+      ]
+    }
+  },
+  "required": [
+    "files",
+    "totals"
+  ]
+}

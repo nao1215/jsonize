@@ -1,0 +1,54 @@
+# `xz -l` prints one row per .xz file: the number of streams and blocks
+# in it, the compressed and uncompressed sizes, the ratio between them,
+# the integrity check the file uses, and its name. The two sizes are
+# rounded to fit the column ("203.2 KiB", "76 B") and stay the strings
+# xz printed; `xz --robot -l` prints them in bytes and is read by
+# xz/list-robot. The ratio is "---" where xz has none to show, for a
+# file that holds nothing and for one that grew past ten times its size,
+# and becomes null.
+#
+# With several files xz adds a rule and a totals row whose name column
+# says "N files". Both are dropped: the totals restate the rows, and a
+# record named "5 files" in a list of files would be one a consumer has
+# to know to skip. A file really named that way, with sizes that also
+# fit the row, is dropped with it.
+#
+# `xz -lv` and `xz -lvv` print a block per file instead of a row, and
+# a file that is not in .xz format leaves no row (xz says so on standard
+# error); neither text is this format.
+format: 1
+command: xz
+variant: list
+description: xz -l stream, block, size and check summary
+metadata:
+  tags: [linux, darwin, archive, compression]
+  compatible: [XZ Utils]
+  references:
+    - https://tukaani.org/xz/xz-man.html
+detect:
+  args:
+    any: ["-l", "--list"]
+    none: ["--robot", "-v", "--verbose"]
+  signature:
+    all:
+      # The header is the first line.
+      - '\A[ \t]*Strms[ \t]+Blocks[ \t]+Compressed[ \t]+Uncompressed[ \t]+Ratio[ \t]+Check[ \t]+Filename[ \t]*$'
+      # And a row under it: two counts, two sizes with a unit, a ratio
+      # or the dashes of an empty file, a check name and a name.
+      - '^[ \t]*\d+[ \t]+\d+[ \t]+[\d.,]+ [A-Za-z]+[ \t]+[\d.,]+ [A-Za-z]+[ \t]+(?:\d+\.\d+|---)[ \t]+\S+[ \t]+\S'
+input:
+  ignore:
+    - '^[ \t]*Strms[ \t]+Blocks[ \t]+Compressed[ \t]+Uncompressed[ \t]+Ratio[ \t]+Check[ \t]+Filename[ \t]*$'
+    - '^-{20,}[ \t]*$'
+    - '^[ \t]*\d+[ \t]+\d+[ \t]+[\d.,]+ [A-Za-z]+[ \t]+[\d.,]+ [A-Za-z]+[ \t]+(?:\d+\.\d+|---)[ \t]+\S+[ \t]+\d+ files?[ \t]*$'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<streams>\d+)[ \t]+(?P<blocks>\d+)[ \t]+(?P<compressed>[\d.,]+ [A-Za-z]+)[ \t]+(?P<uncompressed>[\d.,]+ [A-Za-z]+)[ \t]+(?P<ratio>\d+\.\d+|---)[ \t]+(?P<check>\S+)[ \t]+(?P<filename>.+?)[ \t]*$'
+fields:
+  streams: {type: int, required: true}
+  blocks: {type: int, required: true}
+  compressed: {required: true}
+  uncompressed: {required: true}
+  ratio: {null_if: ["---"]}
+  check: {required: true}
+  filename: {required: true}

@@ -1,0 +1,40 @@
+{
+  "files": [
+    {
+      "name": "hello.txt.xz",
+      "streams": 1,
+      "blocks": 1,
+      "compressed": 76,
+      "uncompressed": 12,
+      "ratio": "6.333",
+      "check": [
+        "CRC64"
+      ],
+      "padding": 0
+    },
+    {
+      "name": "repeat.txt.xz",
+      "streams": 1,
+      "blocks": 1,
+      "compressed": 104,
+      "uncompressed": 460,
+      "ratio": "0.226",
+      "check": [
+        "CRC64"
+      ],
+      "padding": 0
+    }
+  ],
+  "totals": {
+    "streams": 2,
+    "blocks": 2,
+    "compressed": 180,
+    "uncompressed": 472,
+    "ratio": "0.381",
+    "check": [
+      "CRC64"
+    ],
+    "padding": 0,
+    "files": 2
+  }
+}

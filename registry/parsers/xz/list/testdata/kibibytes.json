@@ -1,0 +1,29 @@
+[
+  {
+    "streams": 1,
+    "blocks": 1,
+    "compressed": "203.2 KiB",
+    "uncompressed": "263.8 KiB",
+    "ratio": "0.770",
+    "check": "CRC64",
+    "filename": "xz/big.txt.xz"
+  },
+  {
+    "streams": 1,
+    "blocks": 1,
+    "compressed": "76 B",
+    "uncompressed": "12 B",
+    "ratio": "6.333",
+    "check": "CRC64",
+    "filename": "xz/hello.txt.xz"
+  },
+  {
+    "streams": 1,
+    "blocks": 0,
+    "compressed": "32 B",
+    "uncompressed": "0 B",
+    "ratio": null,
+    "check": "CRC64",
+    "filename": "xz/empty.txt.xz"
+  }
+]

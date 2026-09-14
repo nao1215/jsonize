@@ -1,0 +1,4 @@
+description: A file of a few hundred kilobytes, whose sizes are printed in bytes here, and an empty one.
+source: captured on Ubuntu 26.04 with XZ Utils 5.8.3, LC_ALL=C xz --robot -l over files made for the fixture
+os: linux
+args: [--robot, -l, xz/big.txt.xz, xz/empty.txt.xz]

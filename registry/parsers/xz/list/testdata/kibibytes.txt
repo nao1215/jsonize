@@ -1,0 +1,6 @@
+Strms  Blocks   Compressed Uncompressed  Ratio  Check   Filename
+    1       1    203.2 KiB    263.8 KiB  0.770  CRC64   xz/big.txt.xz
+    1       1         76 B         12 B  6.333  CRC64   xz/hello.txt.xz
+    1       0         32 B          0 B    ---  CRC64   xz/empty.txt.xz
+-------------------------------------------------------------------------------
+    3       2    203.3 KiB    263.9 KiB  0.771  CRC64   3 files
