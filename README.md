@@ -116,6 +116,12 @@ line as each record is read:
 $ jz run --stream vmstat 1 | jq -c 'select(.id < 50)'
 ```
 
+The first record is written as soon as the leading lines decide the
+format (vmstat's two header lines). With `--explain=json`, each record
+the stream leaves out is reported on standard error as it happens. The
+[usage guide](https://nao1215.github.io/jsonize/usage/#reading-a-command-that-keeps-printing)
+has the details.
+
 ## Detection and limits
 
 Some formats need a parser name because their text is too generic to

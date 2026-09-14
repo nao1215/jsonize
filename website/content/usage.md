@@ -180,19 +180,53 @@ status 2, because there is nothing to hand over until the last line has
 arrived. `--pretty` is refused with it for the same reason: a stream is
 one record per line, and indenting spreads a record over several.
 
+### When the first record is written
+
 Detection is unchanged, and it is what the first records wait for. jz
-holds back until it has as many leading lines as the widest signature
-among the parsers in scope looks at, twenty by default, because a
-definition can rule itself out with a line further down, and choosing
-before that would be guessing. The blank lines before the text are not
-among them: a signature never sees them, so a report that opens with a
-few hundred empty lines is identified from its first lines of text.
-Naming the parser narrows the scope, so `jz run vmstat` and `COMMAND |
-jz --stream --parser mount` usually wait for twenty lines and no more,
-and naming a variant that has no signature (`--parser ls --variant
-names-zero`) waits for one record, which for a NUL-separated format
-ends at its NUL rather than at a newline. The lines held back are then
+reads the leading lines and chooses a definition as soon as no line that
+may still come could change the choice, which is the choice the whole
+text would make. `vmstat 1` is decided by its two header lines, so `jz
+run --stream vmstat 1`, `vmstat 1 | jz --stream` and `vmstat 1 | jz
+--stream --parser vmstat` all write the first sample as soon as it has
+been printed.
+
+A definition keeps the stream waiting while a later line could still
+decide it:
+
+- A signature expression that has not matched and is not anchored to the
+  start of the text (`^Filesystem`, not `\AFilesystem`) could still
+  match on a later line. The definition is undecided until it matches or
+  its window, twenty lines by default, is full.
+- A `none` expression that has not matched could still match, so a
+  definition that fits the lines so far is not chosen until every `none`
+  it has is decided.
+- An expression that looks at the end of the text (`\z`) and matches the
+  lines so far is not decided until the window is full or the input
+  ends.
+- When one definition fits and another is still undecided, the stream
+  waits if that other one would win over it, or tie with it, once a
+  later line made it fit.
+
+The wait is never longer than it was before: at most the widest window
+among the definitions in scope (up to 200 lines), or the end of the
+input. Automatic detection has every definition not reserved for naming
+in scope, so a format
+that opens like several others waits longer piped than it does with
+`--parser` or `jz run`, where the command's name, its arguments and the
+system narrow the candidates first. Naming a variant that has no
+signature (`--parser ls --variant names-zero`) waits for one record,
+which for a NUL-separated format ends at its NUL rather than at a
+newline. The blank lines before the text are not counted: a signature
+never sees them, so a report that opens with a few hundred empty lines
+is identified from its first lines of text. The lines held back are then
 read by the same code as everything after them.
+
+A record is written when it is complete, which is a question of the
+format rather than of detection. A table row or a regex line is
+complete at its line break. A `records` block (`iostat`, the sysstat
+reports) is complete when the next block starts or the input ends, so
+`iostat 1` writes a sample when the next one begins, a second later. A
+definition whose block never repeats writes it only at the end.
 
 `--extract` and `--exclude` apply to each record. The 64 MiB input limit
 does not apply to the stream as a whole, since a finished record is not
@@ -251,6 +285,40 @@ still to come.
 Both readings say the same thing with exit status 3: something in the
 input could not be read. What differs is how much of the rest survives,
 and that is the whole of the difference.
+
+### Watching a stream for the records it left out
+
+A stream that never ends has no final status to read, so `--explain`
+reports each record it leaves out when it leaves it out. With
+`--explain=json` that is one line of standard error, opening with
+`jz: explain: ` like the explanation, with a document of its own:
+
+```console
+$ printf 'root:x:0:0:root:/root:/bin/bash\nbroken\n' | jz --stream --explain=json --parser etc --variant passwd 2>&1 >/dev/null | sed -n 's/^jz: explain: //p'
+{"outcome":"chosen","scope":{"from":"--parser","parser":"etc","variant":"passwd",...},...}
+{"event":"skipped","definition":"etc/passwd","line":2,"reason":"expected at least 7 fields but found 1: \"broken\"","skipped":1}
+```
+
+The explanation has an `outcome` key and an event has an `event` key,
+which is `skipped`. `definition` is the definition the stream reads
+with, `line` the line of the input the failure is on (`null` when the
+failure is not about one line), `reason` the error without the
+definition and the line in front of it, cut at 1,024 bytes and ended
+with `...` when cut, and `skipped` the number of records left out so
+far, this one included. `--explain` writes the same fact as text:
+
+```text
+jz: explain: skipped: a record of etc/passwd at line 2 (1 record so far): expected at least 7 fields but found 1: "broken"
+```
+
+The ordinary diagnostic is still written before it, and the status at
+the end is still 3.
+
+In `jz run` the command's standard error is the same stream. Each
+explain line is a single write that opens with `jz: explain: `, so a
+consumer takes the lines that open that way and leaves the rest. A command that writes a line without ending it can put its text
+in front of jz's on the same line; `sed -n 's/.*jz: explain: //p'` still
+finds the document there.
 
 Two failures are not records to skip and still end a stream at once. Text
 whose format cannot be identified is exit 4 and is settled on the leading
@@ -453,7 +521,10 @@ one fact per line, each line opening with `jz: explain: `.
 $ jz --explain --file df-gnu.txt
 jz: explain: chose df/gnu from embedded
 jz: explain: scope: every definition in the registry, by its signature alone
-jz: explain: matched: signature.all[0] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\.../
+jz: explain: matched: signature.all[0] /\A(?:df: [^\n]*\n)*Filesystem[ \t]/
+jz: explain: matched: signature.all[1] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\.../
+jz: explain: rejected: df/bsd: signature.all[1] /^Filesystem\s+512-blocks\s+Used\s+Available\s+Capa.../ did not match
+...
 jz: explain: not considered: <N> definitions only used when named
 jz: explain: read: 8 lines: 7 read, 1 left out by input.ignore[1] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$/
 ```
@@ -483,10 +554,11 @@ $ jz run --explain df -h
 jz: explain: chose df/gnu-human from embedded
 jz: explain: scope: the variants of df, from the name of the command jz ran
 jz: explain: scope: narrowed by the system it ran on (linux) and its arguments (-h)
-jz: explain: matched: signature.all[0] /^Filesystem\s+Size\s+Used\s+Avail\s+Use%\s+Mounted.../
+jz: explain: matched: signature.all[0] /\A(?:df: [^\n]*\n)*Filesystem[ \t]/
+jz: explain: matched: signature.all[1] /^Filesystem\s+Size\s+Used\s+Avail\s+Use%\s+Mounted.../
 jz: explain: matched: detect.os linux
 jz: explain: matched: detect.args any [-h --human-readable -H --si]
-jz: explain: rejected: df/bsd: signature.all[0] /^Filesystem\s+512-blocks\s+Used\s+Available\s+Capa.../ did not match
+jz: explain: rejected: df/bsd: signature.all[1] /^Filesystem\s+512-blocks\s+Used\s+Available\s+Capa.../ did not match
 ...
 jz: explain: read: 12 lines: 11 read, 1 left out by input.ignore[1] /^Filesystem\s+Size\s+Used\s+Avail\s+Use%\s+Mounted on\s*$/
 jz: explain: command: df -h (exit 0)
@@ -508,7 +580,6 @@ it could be `etc` output, but that format is too generic for jz to claim on its 
 jz: explain: unidentified: no definition fits the text
 jz: explain: scope: every definition in the registry, by its signature alone
 jz: explain: rejected: apt-cache/depends: signature.all[1] /^  (?:Pre)?Depends: \S+[ \t]*$/ did not match
-jz: explain: rejected: rustup/toolchains: no signature.any[] expression matched
 jz: explain: rejected: sensors/linux: signature.all[1] /^Adapter: \S/ did not match
 jz: explain: rejected: sensors/raw: signature.all[1] /^Adapter: \S/ did not match
 jz: explain: held back: etc/passwd: its signature fits, but it is only used when named (--parser etc)
@@ -537,7 +608,9 @@ only thing there.
 
 With `--stream` the explanation is written when the choice is made,
 before the first record, so it has no `read` counts; a stream may never
-end.
+end. Each record the stream leaves out after that is reported on a line
+of its own ([Watching a stream for the records it left
+out](#watching-a-stream-for-the-records-it-left-out)).
 
 `--explain` changes neither standard output nor the exit status, and it
 writes no clock reading, so two runs over the same input explain
