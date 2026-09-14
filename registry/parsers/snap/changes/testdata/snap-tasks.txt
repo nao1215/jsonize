@@ -1,0 +1,31 @@
+Status  Spawn               Ready               Summary
+Done    today at 11:51 JST  today at 11:51 JST  Ensure prerequisites for "scc" are available
+Done    today at 11:51 JST  today at 11:51 JST  Download snap "scc" (27) from channel "latest/stable"
+Done    today at 11:51 JST  today at 11:51 JST  Fetch and check assertions for snap "scc" (27)
+Done    today at 11:51 JST  today at 11:51 JST  Mount snap "scc" (27)
+Done    today at 11:51 JST  today at 11:51 JST  Run pre-refresh hook of "scc" snap if present
+Done    today at 11:51 JST  today at 11:51 JST  Stop snap "scc" services
+Done    today at 11:51 JST  today at 11:51 JST  Remove aliases for snap "scc"
+Done    today at 11:51 JST  today at 11:51 JST  Make current revision for snap "scc" unavailable
+Done    today at 11:51 JST  today at 11:51 JST  Copy snap "scc" data
+Done    today at 11:51 JST  today at 11:51 JST  Prepare snap "scc" (27) for security profile setup
+Done    today at 11:51 JST  today at 11:51 JST  Make snap "scc" (27) available to the system
+Done    today at 11:51 JST  today at 11:51 JST  Automatically connect eligible plugs and slots of snap "scc"
+Done    today at 11:51 JST  today at 11:51 JST  Set automatic aliases for snap "scc"
+Done    today at 11:51 JST  today at 11:51 JST  Setup snap "scc" aliases
+Done    today at 11:51 JST  today at 11:51 JST  Run post-refresh hook of "scc" snap if present
+Done    today at 11:51 JST  today at 11:51 JST  Start snap "scc" (27) services
+Done    today at 11:51 JST  today at 11:51 JST  Remove data for snap "scc" (18)
+Done    today at 11:51 JST  today at 11:51 JST  Remove snap "scc" (18) from the system
+Done    today at 11:51 JST  today at 11:51 JST  Clean up "scc" (27) install
+Done    today at 11:51 JST  today at 11:51 JST  Run configure hook of "scc" snap if present
+Done    today at 11:51 JST  today at 11:51 JST  Run health check of "scc" snap
+Done    today at 11:51 JST  today at 11:51 JST  Monitoring snap "scc" to determine whether extra refresh steps are required
+Done    today at 11:51 JST  today at 11:51 JST  Process delayed security backend side effects for affected snaps
+Done    today at 11:51 JST  today at 11:51 JST  Setup snap "scc" (27) security profiles
+
+......................................................................
+Monitoring snap "scc" to determine whether extra refresh steps are required
+
+2026-09-14T11:51:31+09:00 INFO No re-refreshes found.
+

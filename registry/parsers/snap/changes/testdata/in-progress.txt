@@ -1,0 +1,5 @@
+ID   Status  Spawn                   Ready                   Summary
+315  Done    today at 11:51 JST      today at 11:51 JST      Auto-refresh snap "scc"
+316  Doing   today at 12:03 JST      -                       Install "hello-world" snap
+317  Error   yesterday at 09:14 JST  yesterday at 09:15 JST  Refresh "firefox" snap from "latest/stable" channel
+

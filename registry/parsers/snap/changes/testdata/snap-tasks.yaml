@@ -1,0 +1,4 @@
+description: the tasks of one change as snap tasks prints them, under a header without the ID column and followed by the log of the change, which the signature must refuse
+source: captured on Ubuntu 26.04 (snapd 2.76.3) with LC_ALL=C, snap tasks 315
+os: linux
+expect_error: 'does not describe this input'
