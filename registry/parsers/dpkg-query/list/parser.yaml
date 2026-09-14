@@ -1,0 +1,39 @@
+# `dpkg-query -W` prints one line per installed package: the name and
+# the version, separated by a tab. A package installed for a foreign
+# architecture is named with it ("libjq1:amd64"), and the name is kept
+# as dpkg prints it, since that is the name dpkg answers to. The
+# version is kept as printed: an epoch, a tilde and a Debian revision
+# are all part of what dpkg compares.
+#
+# Two columns separated by a tab is the shape of any exported table, so
+# the definition is used only when it is named. What the signature can
+# say is that every line is a Debian package name, a tab and a version
+# that opens with a digit, which is what refuses a table with a header
+# row and a listing printed with -f in some other layout.
+format: 1
+command: dpkg-query
+variant: list
+description: dpkg-query -W, each installed package and its version
+metadata:
+  tags: [linux, debian, package]
+  compatible: [dpkg]
+  references:
+    - https://manpages.debian.org/dpkg-query
+detect:
+  os: [linux]
+  args:
+    any: ["-W", "--show"]
+  auto_detect: false
+  signature:
+    all:
+      - '\A(?:[a-z0-9][a-z0-9.+-]+(?::[a-z0-9-]+)?\t[0-9][A-Za-z0-9.+~:-]*(?:\n|\z))+\z'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [package, version]
+fields:
+  package: {required: true}
+  version: {required: true}
