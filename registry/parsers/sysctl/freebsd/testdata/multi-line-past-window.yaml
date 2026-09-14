@@ -1,0 +1,7 @@
+source: lines 9570 to 9621 of LC_ALL=C sysctl -a on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm)
+description: >-
+  24 variables of one line each and then hw.intrs, whose value runs over
+  28 lines. The signature looks at the first 20 lines, which are all
+  variables, so the line that is not one is refused where it is read.
+os: freebsd
+expect_error: 'line 26: line does not match pattern'

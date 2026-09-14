@@ -19,6 +19,13 @@ project follows [Semantic Versioning](https://semver.org/).
   each archive, and publish a Homebrew cask to `nao1215/homebrew-tap`.
   A tag is published only after the release smoke checks pass on it.
 
+### Fixed
+
+- `sysctl/freebsd` no longer reads the lines of a value printed over
+  several lines as variables of their own (`sysctl hw.intrs` returned a
+  variable named `irq1`), and reads a name part holding a space, as the
+  ZFS kstat histograms print.
+
 ### Changed
 
 - `scc/default` reports the byte count as the string scc printed, as it

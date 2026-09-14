@@ -1,0 +1,78 @@
+[
+  {
+    "name": "kern.ostype",
+    "value": "FreeBSD"
+  },
+  {
+    "name": "kern.osrelease",
+    "value": "15.1-RELEASE-p3"
+  },
+  {
+    "name": "kern.osrevision",
+    "value": "199506"
+  },
+  {
+    "name": "kern.version",
+    "value": "FreeBSD 15.1-RELEASE-p3 releng/15.1-n283611-88e7371d9dc2 GENERIC"
+  },
+  {
+    "name": "kern.maxvnodes",
+    "value": "250607"
+  },
+  {
+    "name": "kern.maxproc",
+    "value": "11476"
+  },
+  {
+    "name": "kern.maxfiles",
+    "value": "194933"
+  },
+  {
+    "name": "kern.argmax",
+    "value": "524288"
+  },
+  {
+    "name": "kern.securelevel",
+    "value": "-1"
+  },
+  {
+    "name": "kern.hostname",
+    "value": "freebsd"
+  },
+  {
+    "name": "kern.hostid",
+    "value": "391687614"
+  },
+  {
+    "name": "kern.clockrate",
+    "value": "{ hz = 100, tick = 10000, profhz = 8128, stathz = 127 }"
+  },
+  {
+    "name": "kern.posix1version",
+    "value": "200809"
+  },
+  {
+    "name": "kern.ngroups",
+    "value": "1023"
+  },
+  {
+    "name": "kern.job_control",
+    "value": "1"
+  },
+  {
+    "name": "kern.saved_ids",
+    "value": "0"
+  },
+  {
+    "name": "kern.boottime",
+    "value": "{ sec = 1789295943, usec = 867950 } Sun Sep 13 10:39:03 2026"
+  },
+  {
+    "name": "kern.domainname",
+    "value": ""
+  },
+  {
+    "name": "kern.osreldate",
+    "value": "1501000"
+  }
+]

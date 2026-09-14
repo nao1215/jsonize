@@ -1,0 +1,52 @@
+hw.ixl.enable_head_writeback: 1
+hw.ixl.enable_vf_loopback: 1
+hw.ixl.i2c_access_method: 0
+hw.ice.rdma_max_msix: 64
+hw.ice.irdma: 1
+hw.ice.enable_health_events: 1
+hw.iavf.tx_itr: 122
+hw.iavf.rx_itr: 62
+hw.iavf.shared_debug_mask: 0
+hw.iavf.core_debug_mask: 0
+hw.iavf.enable_head_writeback: 0
+hw.lower_amd64_sharedpage: 0
+hw.instruction_sse: 1
+hw.mca.force_scan: 0
+hw.mca.interval: 300
+hw.mca.maxcount: -1
+hw.mca.count: 0
+hw.mca.log_interval: 0
+hw.mca.uselog: 0
+hw.mca.erratum383: 0
+hw.mca.intel6h_HSD131: 0
+hw.mca.amd10h_L1TP: 1
+hw.mca.log_corrected: 1
+hw.mca.enabled: 1
+hw.intrs: irq0: attimer0:3 @cpu0(domain0): 0
+irq1: atkbd0:1 @cpu0(domain0): 2
+irq3::5 @cpu0(domain0): 0
+irq4: uart0:7 @cpu0(domain0): 190
+irq5::9 @cpu0(domain0): 0
+irq6::11 @cpu0(domain0): 0
+irq7: ppc0:13 @cpu0(domain0): 0
+irq8: atrtc0:15 @cpu0(domain0): 0
+irq9: acpi0 intsmb0:17 @cpu0(domain0): 0
+irq10: virtio_pci3:19 @cpu0(domain0): 0
+irq11: uhci0:21 @cpu0(domain0): 0
+irq12: psm0:23 @cpu0(domain0): 0
+irq13::25 @cpu0(domain0): 0
+irq14: ata0:27 @cpu0(domain0): 0
+irq15: ata1:29 @cpu0(domain0): 33
+irq16::31 @cpu0(domain0): 0
+irq17::33 @cpu0(domain0): 0
+irq18::35 @cpu0(domain0): 0
+irq19::37 @cpu0(domain0): 0
+irq20::39 @cpu0(domain0): 0
+irq21::41 @cpu0(domain0): 0
+irq22::43 @cpu0(domain0): 0
+irq23::45 @cpu0(domain0): 0
+irq24: virtio_pci1:51 @cpu0(domain0): 0
+irq25: virtio_pci1:53 @cpu0(domain0): 1751
+irq26: virtio_pci2:55 @cpu0(domain0): 0
+irq27: virtio_pci2:57 @cpu0(domain0): 673
+irq28: virtio_pci2:59 @cpu0(domain0): 1

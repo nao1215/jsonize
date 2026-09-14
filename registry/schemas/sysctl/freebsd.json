@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://nao1215.github.io/jsonize/schemas/sysctl/freebsd.json",
   "title": "sysctl/freebsd",
-  "description": "FreeBSD sysctl KEY... and sysctl -a, \"name: value\" lines",
+  "description": "FreeBSD sysctl KEY..., \"name: value\" lines",
   "x-jsonize": {
     "definition": "sysctl/freebsd",
     "version": 1
