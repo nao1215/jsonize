@@ -1,0 +1,38 @@
+[
+  {
+    "user": "root",
+    "status": "L",
+    "last_change": "2025-11-03",
+    "min_days": 0,
+    "max_days": 99999,
+    "warn_days": 7,
+    "inactive_days": -1
+  },
+  {
+    "user": "daemon",
+    "status": "L",
+    "last_change": "2025-11-03",
+    "min_days": 0,
+    "max_days": 99999,
+    "warn_days": 7,
+    "inactive_days": -1
+  },
+  {
+    "user": "user",
+    "status": "P",
+    "last_change": "2025-11-03",
+    "min_days": 0,
+    "max_days": 99999,
+    "warn_days": 7,
+    "inactive_days": -1
+  },
+  {
+    "user": "guest",
+    "status": "NP",
+    "last_change": "2026-01-15",
+    "min_days": 0,
+    "max_days": 99999,
+    "warn_days": 7,
+    "inactive_days": -1
+  }
+]

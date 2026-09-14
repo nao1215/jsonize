@@ -1,0 +1,4 @@
+description: The many-line form of passwd -Sa, one line per account, with the three status letters passwd(1) documents.
+source: written for this fixture after the seven fields passwd(1) describes for -S, in the date form the captured one-account fixture shows; -Sa needs root and was not run
+os: linux
+args: [-Sa]
