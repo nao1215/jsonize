@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/cargo/search.json",
+  "title": "cargo/search",
+  "description": "cargo search, crates matching a query with their newest version",
+  "x-jsonize": {
+    "definition": "cargo/search",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "crates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "version",
+          "description"
+        ]
+      }
+    },
+    "more": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "count"
+        ]
+      }
+    }
+  },
+  "required": [
+    "crates",
+    "more"
+  ]
+}

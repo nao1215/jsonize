@@ -1,0 +1,37 @@
+# `gh workflow list` writes, when its output is not a terminal, one
+# workflow per line as tab-separated cells with no header: the name, the
+# state, and the workflow's id. The state is `active`, or one of the two
+# disabled states `--all` adds to the listing. The name is whatever the
+# workflow file's `name:` says, spaces included, and the id is a number.
+#
+# The state word stands on every line between the name and the id, and
+# the signature asks that of every line; two of the three words are
+# gh's own, and the third with a bare number after it is evidence
+# enough to read the text when it is piped in.
+format: 1
+command: gh
+variant: workflow-list
+description: gh workflow list, one workflow per line when the output is not a terminal
+metadata:
+  tags: [git, github, ci]
+  compatible: [GitHub CLI]
+  references:
+    - https://cli.github.com/manual/gh_workflow_list
+detect:
+  args:
+    all: ["workflow"]
+    any: ["list", "ls"]
+  signature:
+    all:
+      - '\A(?:^[^\t\n]+\t(?:active|disabled_manually|disabled_inactivity)\t\d+$\n?)+\z'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [name, state, id]
+fields:
+  name: {required: true}
+  state: {required: true}
+  id: {type: int, required: true}

@@ -1,0 +1,34 @@
+{
+  "crates": [
+    {
+      "name": "serde",
+      "version": "1.0.229",
+      "description": "A generic serialization/deserialization framework"
+    },
+    {
+      "name": "serde-saphyr",
+      "version": "1.2.0",
+      "description": "YAML (de)serializer for Serde, emphasizing panic-free parsing, fast builds and good error reporting. …"
+    },
+    {
+      "name": "clickhouse",
+      "version": "0.15.2",
+      "description": "Official Rust client for ClickHouse DB"
+    },
+    {
+      "name": "serde_yml",
+      "version": "0.0.13",
+      "description": "DEPRECATED — `serde_yml` is unmaintained. This release is a thin compatibility shim that forwards eve…"
+    },
+    {
+      "name": "serde_valid",
+      "version": "3.1.2",
+      "description": "JSON Schema based validation tool using serde."
+    }
+  ],
+  "more": [
+    {
+      "count": 21668
+    }
+  ]
+}

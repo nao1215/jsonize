@@ -1,0 +1,4 @@
+description: statement coverage in a fourth cell
+source: captured with LC_ALL=C go test -cover ./pkg/... in the jsonize repository on Linux (go1.26.4)
+os: linux
+args: [test, -cover, ./pkg/...]

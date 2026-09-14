@@ -1,0 +1,11 @@
+Available recipes:
+    build target='debug'                      # Build the binary [alias: b]
+    clean
+    greet name='World' greeting="Hello there" # Greet someone
+
+    [check]
+    lint
+    test +ARGS=''                             # Run the tests
+
+    [release]
+    publish version                           # Publish a release

@@ -1,0 +1,3 @@
+description: runs started by a schedule, whose title is the workflow name
+source: captured with LC_ALL=C gh run list --repo nao1215/atago --limit 8 on Linux (GitHub CLI 2.87.3), output to a file
+args: [run, list, --repo, nao1215/atago, --limit, "8"]

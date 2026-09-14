@@ -1,0 +1,20 @@
+completed	success	Graph Update: go_modules in /. #1575576356	Dependency Graph	main	dynamic	34847247844	40s	2026-09-14T13:07:07Z
+completed	success	Merge pull request #46 from nao1215/refactor/zero-deps	Fuzz	main	push	34847241277	11s	2026-09-14T13:07:03Z
+completed	success	Merge pull request #46 from nao1215/refactor/zero-deps	UnitTest	main	push	34847241169	2m16s	2026-09-14T13:07:03Z
+completed	success	Merge pull request #46 from nao1215/refactor/zero-deps	Lint	main	push	34847241151	1m1s	2026-09-14T13:07:03Z
+completed	success	Merge pull request #46 from nao1215/refactor/zero-deps	ReleaseSmoke	main	push	34847241131	10m28s	2026-09-14T13:07:03Z
+completed	success	Merge pull request #46 from nao1215/refactor/zero-deps	Schema	main	push	34847241120	1m13s	2026-09-14T13:07:03Z
+completed	success	Merge pull request #46 from nao1215/refactor/zero-deps	Coverage	main	push	34847241099	1m17s	2026-09-14T13:07:03Z
+completed	success	Merge pull request #46 from nao1215/refactor/zero-deps	Website	main	push	34847241082	29s	2026-09-14T13:07:03Z
+completed	success	Merge pull request #46 from nao1215/refactor/zero-deps	E2E	main	push	34847241070	2m36s	2026-09-14T13:07:03Z
+completed	success	Merge pull request #46 from nao1215/refactor/zero-deps	govulncheck	main	push	34847241031	38s	2026-09-14T13:07:03Z
+completed	success	refactor: drop every module dependency with a YAML reader of jz's own	UnitTest	refactor/zero-deps	pull_request	34846226177	2m43s	2026-09-14T12:56:39Z
+completed	success	refactor: drop every module dependency with a YAML reader of jz's own	Schema	refactor/zero-deps	pull_request	34846225888	1m19s	2026-09-14T12:56:39Z
+completed	success	refactor: drop every module dependency with a YAML reader of jz's own	Website	refactor/zero-deps	pull_request	34846225882	10s	2026-09-14T12:56:39Z
+completed	success	refactor: drop every module dependency with a YAML reader of jz's own	govulncheck	refactor/zero-deps	pull_request	34846225856	43s	2026-09-14T12:56:39Z
+completed	success	refactor: drop every module dependency with a YAML reader of jz's own	Benchmark	refactor/zero-deps	pull_request	34846225853	2m6s	2026-09-14T12:56:39Z
+completed	success	refactor: drop every module dependency with a YAML reader of jz's own	Coverage	refactor/zero-deps	pull_request	34846225825	1m20s	2026-09-14T12:56:39Z
+completed	success	refactor: drop every module dependency with a YAML reader of jz's own	Lint	refactor/zero-deps	pull_request	34846225813	49s	2026-09-14T12:56:39Z
+completed	success	refactor: drop every module dependency with a YAML reader of jz's own	Fuzz	refactor/zero-deps	pull_request	34846225812	11s	2026-09-14T12:56:39Z
+completed	success	refactor: drop every module dependency with a YAML reader of jz's own	E2E	refactor/zero-deps	pull_request	34846225800	2m28s	2026-09-14T12:56:39Z
+completed	success	refactor: drop every module dependency with a YAML reader of jz's own	ReleaseSmoke	refactor/zero-deps	pull_request	34846225798	9m36s	2026-09-14T12:56:39Z

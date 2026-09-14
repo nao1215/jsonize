@@ -1,0 +1,84 @@
+[
+  {
+    "number": 593,
+    "state": "CLOSED",
+    "title": "The published schema types every text field as a string, so an unquoted number in env is flagged on specs atago runs",
+    "labels": [
+      "bug"
+    ],
+    "updated": "2026-08-18T04:15:04Z"
+  },
+  {
+    "number": 589,
+    "state": "CLOSED",
+    "title": "The file assert's no-matcher diagnostic omits size/min_size/max_size, which satisfy it on their own",
+    "labels": [
+      "bug"
+    ],
+    "updated": "2026-08-18T04:00:15Z"
+  },
+  {
+    "number": 588,
+    "state": "CLOSED",
+    "title": "Schema conformance is guarded on two demo specs, so fourteen shipped specs drifted out of conformance unseen",
+    "labels": [
+      "bug"
+    ],
+    "updated": "2026-08-18T03:53:37Z"
+  },
+  {
+    "number": 587,
+    "state": "CLOSED",
+    "title": "The published JSON Schema rejects every store json-path capture, including three shipped examples",
+    "labels": [
+      "bug"
+    ],
+    "updated": "2026-08-18T03:53:37Z"
+  },
+  {
+    "number": 586,
+    "state": "CLOSED",
+    "title": "The published JSON Schema rejects composable file matchers (size with a content matcher, min_size with max_size)",
+    "labels": [
+      "bug"
+    ],
+    "updated": "2026-08-18T03:53:37Z"
+  },
+  {
+    "number": 585,
+    "state": "CLOSED",
+    "title": "A plain YAML scalar in a text field is retyped, so contains: 1.20 matches \"1.2\" and env: {V: 007} exports \"7\"",
+    "labels": [
+      "bug"
+    ],
+    "updated": "2026-08-18T04:07:43Z"
+  },
+  {
+    "number": 564,
+    "state": "CLOSED",
+    "title": "An explicitly empty collection is silently read as unset (deterministic.compare: [], skip: {}, only: {})",
+    "labels": [],
+    "updated": "2026-08-17T12:49:29Z"
+  },
+  {
+    "number": 563,
+    "state": "CLOSED",
+    "title": "explain and manifest leave matrix row variables unexpanded while doc substitutes them",
+    "labels": [],
+    "updated": "2026-08-17T12:59:27Z"
+  },
+  {
+    "number": 562,
+    "state": "CLOSED",
+    "title": "A teardown failure overwrites the scenario steps' failure artifacts at the same step index",
+    "labels": [],
+    "updated": "2026-08-17T12:24:50Z"
+  },
+  {
+    "number": 561,
+    "state": "CLOSED",
+    "title": "Every matrix validation error is emitted without an ATG diagnostic code",
+    "labels": [],
+    "updated": "2026-08-17T12:44:07Z"
+  }
+]

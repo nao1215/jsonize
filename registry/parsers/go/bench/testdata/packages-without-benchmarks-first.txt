@@ -1,0 +1,29 @@
+PASS
+ok  	github.com/nao1215/jsonize/internal/buildinfo	0.002s
+PASS
+ok  	github.com/nao1215/jsonize/internal/cli	0.002s
+PASS
+ok  	github.com/nao1215/jsonize/internal/conformance	0.002s
+PASS
+ok  	github.com/nao1215/jsonize/internal/runner	0.002s
+PASS
+ok  	github.com/nao1215/jsonize/internal/schema	0.002s
+PASS
+ok  	github.com/nao1215/jsonize/internal/yaml	0.002s
+PASS
+ok  	github.com/nao1215/jsonize/internal/yamlout	0.002s
+PASS
+ok  	github.com/nao1215/jsonize/pkg/convert	0.002s
+goos: linux
+goarch: amd64
+pkg: github.com/nao1215/jsonize/pkg/definition
+cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
+BenchmarkLoadAndValidate-32    	   71175	     17113 ns/op	   23697 B/op	     384 allocs/op
+BenchmarkLoadAndValidate-32    	   70338	     16923 ns/op	   23697 B/op	     384 allocs/op
+BenchmarkLoadAndValidate-32    	   64870	     16708 ns/op	   23697 B/op	     384 allocs/op
+BenchmarkValidateNested-32     	   47625	     24779 ns/op	   43307 B/op	     623 allocs/op
+BenchmarkValidateNested-32     	   50469	     24355 ns/op	   43308 B/op	     623 allocs/op
+BenchmarkValidateNested-32     	   49683	     24561 ns/op	   43309 B/op	     623 allocs/op
+PASS
+ok  	github.com/nao1215/jsonize/pkg/definition	8.401s
+goos: linux

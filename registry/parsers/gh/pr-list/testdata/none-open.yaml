@@ -1,0 +1,4 @@
+description: a repository with no open pull request prints nothing, which jz refuses rather than reporting an empty list
+source: captured with LC_ALL=C gh pr list --repo nao1215/jsonize --state open on Linux (GitHub CLI 2.87.3), output to a file; zero bytes
+args: [pr, list, --repo, nao1215/jsonize, --state, open]
+expect_error: holds no text

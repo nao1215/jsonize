@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/mise/outdated.json",
+  "title": "mise/outdated",
+  "description": "mise outdated, installed tools with a newer version available",
+  "x-jsonize": {
+    "definition": "mise/outdated",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "requested": {
+        "type": "string"
+      },
+      "current": {
+        "type": "string"
+      },
+      "latest": {
+        "type": "string"
+      },
+      "source": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "requested",
+      "current",
+      "latest",
+      "source"
+    ]
+  }
+}

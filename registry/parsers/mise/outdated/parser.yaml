@@ -1,0 +1,43 @@
+# `mise outdated` writes one line per tool whose installed version is
+# behind the newest: the tool, the version a configuration file asks
+# for, the version installed, the newest version, and the configuration
+# file that asked. On a terminal mise puts a title row above them; on a
+# pipe, which is what jz reads, there is none. When every tool is
+# current mise prints nothing on standard output, which jz refuses as
+# text it cannot read rather than reporting an empty list.
+#
+# There is no title row and the cells are words and version numbers,
+# which describe far too much, so the definition is only used when it
+# is named (`jz run mise outdated`, `--parser mise --variant outdated`)
+# and the evidence it asks of every line is a mise configuration file
+# in the last cell.
+format: 1
+command: mise
+variant: outdated
+description: mise outdated, installed tools with a newer version available
+metadata:
+  tags: [toolchain, version-manager]
+  compatible: [mise]
+  references:
+    - https://mise.jdx.dev/cli/outdated.html
+detect:
+  args:
+    all: ["outdated"]
+  auto_detect: false
+  signature:
+    all:
+      - '\A(?:^[A-Za-z0-9][A-Za-z0-9._+-]*[ \t]+\S+[ \t]+\S+[ \t]+\S+[ \t]+\S*(?:\.toml|\.tool-versions)[ \t]*$\n?)+\z'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [name, requested, current, latest, source]
+fields:
+  name: {required: true}
+  requested: {required: true}
+  # A version opens with a digit, so two words of prose are not a
+  # version pair.
+  current: {required: true, regex: '(?P<current>[0-9]\S*)'}
+  latest: {required: true, regex: '(?P<latest>[0-9]\S*)'}
+  source: {required: true}

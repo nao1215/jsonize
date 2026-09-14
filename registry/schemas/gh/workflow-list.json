@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gh/workflow-list.json",
+  "title": "gh/workflow-list",
+  "description": "gh workflow list, one workflow per line when the output is not a terminal",
+  "x-jsonize": {
+    "definition": "gh/workflow-list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      },
+      "id": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "name",
+      "state",
+      "id"
+    ]
+  }
+}

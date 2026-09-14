@@ -1,0 +1,34 @@
+[
+  {
+    "cached": false,
+    "status": "FAIL",
+    "package": "example.com/scratch/broken",
+    "elapsed": null,
+    "note": "build failed",
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "FAIL",
+    "package": "example.com/scratch/failing",
+    "elapsed": 0.002,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "?",
+    "package": "example.com/scratch/notests",
+    "elapsed": null,
+    "note": "no test files",
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "example.com/scratch/passing",
+    "elapsed": 0.002,
+    "note": null,
+    "coverage": null
+  }
+]

@@ -1,0 +1,3 @@
+nao1215/fileframe	DataFrame API for CSV/TSV/LTSV, Parquet, Excel.	public, archived	2026-07-19T13:23:49Z
+nao1215/fileparser	parser for fileprep, filesql, fileframe	public, archived	2026-07-19T13:23:33Z
+nao1215/fileprep	struct-tag preprocessing and validation for CSV/TSV/LTSV, JSON/JSONL, Parquet, Excel.	public, archived	2026-07-19T13:22:49Z

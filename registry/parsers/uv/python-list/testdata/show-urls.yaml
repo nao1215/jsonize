@@ -1,0 +1,5 @@
+description: --show-urls prints a download address where the path stands, and is refused
+source: captured with LC_ALL=C uv python list --show-urls on Linux (uv 0.9.7), output to a file; the first three lines
+os: linux
+args: [python, list, --show-urls]
+expect_error: does not describe this input

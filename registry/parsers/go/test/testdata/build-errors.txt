@@ -1,0 +1,2 @@
+# example.com/scratch/broken [example.com/scratch/broken.test]
+broken/broken.go:3:28: cannot use "not an int" (untyped string constant) as int value in return statement

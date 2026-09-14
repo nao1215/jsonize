@@ -1,0 +1,4 @@
+description: eight packages without benchmarks print PASS and their result line before the first block, and -count repeats each benchmark
+source: captured with go test -bench . -benchmem -count 6 ./... in the jsonize repository on Linux and kept there as bench/baseline.txt; its first 29 lines
+os: linux
+args: [test, -bench, ., -benchmem, -count, "6", ./...]

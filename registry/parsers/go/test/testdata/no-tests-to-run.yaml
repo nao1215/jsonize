@@ -1,0 +1,4 @@
+description: -run matching nothing appends a note after the elapsed time
+source: captured with LC_ALL=C go test -run NoSuchTest ./pkg/jsonutil/ ./pkg/convert/ in the jsonize repository on Linux (go1.26.4)
+os: linux
+args: [test, -run, NoSuchTest, ./pkg/jsonutil/, ./pkg/convert/]

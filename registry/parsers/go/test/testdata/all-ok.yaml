@@ -1,0 +1,4 @@
+description: every package passed, with the time each took
+source: captured with LC_ALL=C go test ./... in the jsonize repository on Linux (go1.26.4)
+os: linux
+args: [test, ./...]

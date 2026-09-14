@@ -1,0 +1,132 @@
+[
+  {
+    "environment": {
+      "goos": "linux",
+      "goarch": "amd64",
+      "pkg": "github.com/nao1215/jsonize/pkg/definition",
+      "cpu": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+    },
+    "benchmarks": [
+      {
+        "name": "BenchmarkLoadAndValidate",
+        "gomaxprocs": 32,
+        "iterations": 71175,
+        "metrics": [
+          {
+            "value": 17113,
+            "unit": "ns/op"
+          },
+          {
+            "value": 23697,
+            "unit": "B/op"
+          },
+          {
+            "value": 384,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkLoadAndValidate",
+        "gomaxprocs": 32,
+        "iterations": 70338,
+        "metrics": [
+          {
+            "value": 16923,
+            "unit": "ns/op"
+          },
+          {
+            "value": 23697,
+            "unit": "B/op"
+          },
+          {
+            "value": 384,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkLoadAndValidate",
+        "gomaxprocs": 32,
+        "iterations": 64870,
+        "metrics": [
+          {
+            "value": 16708,
+            "unit": "ns/op"
+          },
+          {
+            "value": 23697,
+            "unit": "B/op"
+          },
+          {
+            "value": 384,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkValidateNested",
+        "gomaxprocs": 32,
+        "iterations": 47625,
+        "metrics": [
+          {
+            "value": 24779,
+            "unit": "ns/op"
+          },
+          {
+            "value": 43307,
+            "unit": "B/op"
+          },
+          {
+            "value": 623,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkValidateNested",
+        "gomaxprocs": 32,
+        "iterations": 50469,
+        "metrics": [
+          {
+            "value": 24355,
+            "unit": "ns/op"
+          },
+          {
+            "value": 43308,
+            "unit": "B/op"
+          },
+          {
+            "value": 623,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkValidateNested",
+        "gomaxprocs": 32,
+        "iterations": 49683,
+        "metrics": [
+          {
+            "value": 24561,
+            "unit": "ns/op"
+          },
+          {
+            "value": 43309,
+            "unit": "B/op"
+          },
+          {
+            "value": 623,
+            "unit": "allocs/op"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "environment": {
+      "goos": "linux"
+    },
+    "benchmarks": []
+  }
+]

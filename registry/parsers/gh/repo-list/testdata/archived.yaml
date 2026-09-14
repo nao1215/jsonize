@@ -1,0 +1,3 @@
+description: archived repositories carry a second word in the visibility cell
+source: captured with LC_ALL=C gh repo list nao1215 --archived --limit 3 on Linux (GitHub CLI 2.87.3), output to a file
+args: [repo, list, nao1215, --archived, --limit, "3"]

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gh/issue-list.json",
+  "title": "gh/issue-list",
+  "description": "gh issue list, one issue per line when the output is not a terminal",
+  "x-jsonize": {
+    "definition": "gh/issue-list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "number": {
+        "type": "integer"
+      },
+      "state": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "labels": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "updated": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "number",
+      "state",
+      "title",
+      "labels",
+      "updated"
+    ]
+  }
+}

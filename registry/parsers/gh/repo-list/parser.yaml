@@ -1,0 +1,43 @@
+# `gh repo list OWNER` writes, when its output is not a terminal, one
+# repository per line as tab-separated cells with no header: the name
+# with its owner, the description, the visibility, and when the
+# repository was last pushed to (or created, when it never was), as a
+# UTC timestamp. The description is empty for a repository without one,
+# and is null then.
+#
+# The visibility cell is `public`, `private` or `internal`, and gh
+# appends `, fork` and `, archived` to it for a repository that is one
+# or the other; the cell is read as a list so that the first word is
+# the visibility on every row and the rest are the flags, rather than a
+# string a consumer would have to take apart. The visibility word stands
+# on every line beside a timestamp of one shape, and the signature asks
+# that of every line, which is evidence enough to read the text when it
+# is piped in.
+format: 1
+command: gh
+variant: repo-list
+description: gh repo list, one repository per line when the output is not a terminal
+metadata:
+  tags: [git, github, repository]
+  compatible: [GitHub CLI]
+  references:
+    - https://cli.github.com/manual/gh_repo_list
+detect:
+  args:
+    all: ["repo"]
+    any: ["list", "ls"]
+  signature:
+    all:
+      - '\A(?:^[^\t\n/]+/[^\t\n]+\t[^\t\n]*\t(?:public|private|internal)(?:, (?:fork|archived))*\t\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$\n?)+\z'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [name, description, info, pushed]
+fields:
+  name: {required: true}
+  description: {null_if: [""]}
+  info: {type: array, split: ",", required: true}
+  pushed: {type: time, layout: "2006-01-02T15:04:05Z07:00", required: true}
