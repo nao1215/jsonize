@@ -1,0 +1,45 @@
+# The project table `docker compose ls` prints: the project name, the
+# state of its containers and the compose files it was started from.
+#
+# STATUS counts the containers by state, "running(2)", and a project whose
+# containers are in more than one state lists each, "exited(1),
+# running(1)", so it is read as a list of state and count. CONFIG FILES is
+# comma-joined when the project was started with several -f files, and a
+# path may hold a space, so it is the last column and is read as a list.
+#
+# The columns are cut at the header's positions with the names declared
+# here, because the last header cell is two words. Without -a the table
+# holds the running projects only and may be the header alone, which is
+# an empty list.
+format: 1
+command: docker
+variant: compose-ls
+description: docker compose ls and docker compose ls -a
+metadata:
+  tags: [container, docker, compose]
+  compatible: [Docker Compose]
+  references:
+    - https://docs.docker.com/reference/cli/docker/compose/ls/
+detect:
+  args:
+    all: ["compose", "ls"]
+  signature:
+    all:
+      - '\ANAME[ \t]+STATUS[ \t]+CONFIG FILES[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [name, status, config_files]
+fields:
+  name: {required: true}
+  status:
+    type: array
+    split: ","
+    required: true
+    items:
+      type: object
+      regex: '^(?P<state>[a-z]+)\((?P<count>\d+)\)$'
+      fields:
+        count: {type: int}
+  config_files: {type: array, split: ",", required: true}

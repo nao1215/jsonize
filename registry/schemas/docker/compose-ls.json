@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/docker/compose-ls.json",
+  "title": "docker/compose-ls",
+  "description": "docker compose ls and docker compose ls -a",
+  "x-jsonize": {
+    "definition": "docker/compose-ls",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "status": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "state": {
+              "type": "string"
+            },
+            "count": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "state",
+            "count"
+          ]
+        }
+      },
+      "config_files": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "name",
+      "status",
+      "config_files"
+    ]
+  }
+}

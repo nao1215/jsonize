@@ -1,0 +1,8 @@
+source: >-
+  captured from Docker 29.2.1 on Linux with LC_ALL=C after creating a second
+  context with no description; the context name replaced, keeping the width
+description: >-
+  Two contexts, the second created without a description, so its
+  DESCRIPTION cell is empty and it carries no current mark.
+os: linux
+args: ["context", "ls"]

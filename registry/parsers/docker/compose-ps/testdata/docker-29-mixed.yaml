@@ -1,0 +1,6 @@
+source: captured from Docker Compose v5 (Docker 29.2.1) on Linux with LC_ALL=C; the project name replaced
+description: >-
+  One container running and publishing a port, one that exited at once, so
+  CREATED and STATUS print "Less than a second ago".
+os: linux
+args: ["compose", "-f", "compose.yml", "-f", "override.yml", "ps", "-a"]

@@ -1,0 +1,5 @@
+Projects on the staging host as of Monday:
+
+NAME                STATUS              CONFIG FILES
+api                 up                  compose.yml
+worker              down                compose.yml, override.yml

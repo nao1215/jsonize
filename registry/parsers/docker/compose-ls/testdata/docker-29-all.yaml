@@ -1,0 +1,6 @@
+source: captured from Docker Compose v5 (Docker 29.2.1) on Linux with LC_ALL=C; project names and paths replaced
+description: >-
+  Every project. One has containers in two states and was started from two
+  compose files, so STATUS and CONFIG FILES both hold a comma-joined list.
+os: linux
+args: ["compose", "ls", "-a"]
