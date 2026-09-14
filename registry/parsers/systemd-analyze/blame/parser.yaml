@@ -22,7 +22,10 @@ detect:
       - '^[ \t]*[0-9][^\n]*[ \t]\S+\.(?:service|socket|target|device|mount|automount|swap|path|timer|slice|scope)[ \t]*$'
 parse:
   type: regex
-  pattern: '^[ \t]*(?P<time>.+)[ \t]+(?P<unit>\S+)[ \t]*$'
+  # The duration is numbers each followed by one of the units systemd
+  # formats a timespan with, so a line that only ends in a word, such as
+  # the summary `systemd-analyze time` prints, is not an entry.
+  pattern: '^[ \t]*(?P<time>(?:\d+(?:\.\d+)?(?:y|month|w|d|h|min|s|ms|us|μs|µs) )*\d+(?:\.\d+)?(?:y|month|w|d|h|min|s|ms|us|μs|µs))[ \t]+(?P<unit>\S+)[ \t]*$'
 fields:
   time: {required: true}
   unit: {required: true}

@@ -28,7 +28,7 @@ input:
   ignore:
     - '^Archive:[ \t]'
     - '^[ \t]*Length[ \t]+Date[ \t]+Time[ \t]+Name[ \t]*$'
-    - '^[ \t]*-{3,}'
+    - '^[ \t]*-{3,}(?:[ \t]+-{3,})*[ \t]*$'
     - '^[ \t]*\d+[ \t]+\d+ files?$'
 parse:
   type: regex

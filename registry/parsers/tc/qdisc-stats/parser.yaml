@@ -78,6 +78,8 @@ parse:
       parse:
         type: regex
         each: input
-        pattern: '(?s)\A[ \t]*(?P<words>.*?)[ \t]*\z'
+        # tc indents every line of it, so a line at the margin belongs to
+        # something else printed after the block.
+        pattern: '\A(?:[ \t]+|\z)(?P<words>(?:\S[^\n]*?(?:[ \t]*\n[ \t]+\S[^\n]*?)*)?)[ \t]*\z'
       fields:
         words: {type: array, split_regex: '\s+'}

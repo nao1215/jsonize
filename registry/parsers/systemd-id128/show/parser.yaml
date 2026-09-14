@@ -21,4 +21,6 @@ parse:
   split: whitespace
 fields:
   name: {required: true}
-  id: {required: true}
+  # The identifier column takes the rest of the line, so its shape is what
+  # keeps a line printed after the table from becoming a row.
+  id: {required: true, regex: '(?P<id>[0-9a-f]{32})'}

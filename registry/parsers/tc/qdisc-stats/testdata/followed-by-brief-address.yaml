@@ -1,0 +1,5 @@
+source: the fq_codel block of the interfaces fixture followed by what `ip -br address show lo` prints, captured on Ubuntu 26.04 (iproute2 6.19) with LC_ALL=C
+description: >-
+  Two commands run one after the other. tc indents a discipline's statistics under its qdisc line, so the unindented line is not a statistic of eno1.
+os: linux
+expect_error: 'part "kind_stats": input does not match pattern'

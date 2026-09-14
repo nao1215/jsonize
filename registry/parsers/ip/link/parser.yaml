@@ -59,7 +59,7 @@ parse:
         # -d continues this line with the driver's own settings, whose
         # names and number come from the kernel module rather than from
         # the format, so they are kept as the text ip printed.
-        pattern: '^\s*link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: permaddr (?P<permanent_address>\S+))?(?: link-netnsid (?P<netnsid>\d+))?(?:\s+(?P<settings>\S.*?))?\s*$'
+        pattern: '^[ \t]+link/(?P<type>\S+)(?: (?P<address>\S+))?(?: brd (?P<broadcast>\S+))?(?: permaddr (?P<permanent_address>\S+))?(?: link-netnsid (?P<netnsid>\d+))?(?:\s+(?P<settings>\S.*?))?\s*$'
       fields:
         netnsid: {type: int, when_missing: omit}
         # A tunnel device reports the address it was built from.
@@ -70,14 +70,16 @@ parse:
     # that kind's settings. Which of them appear and in what order is a
     # property of the interface, so they are read as a list where every
     # entry names its kind rather than as parts at fixed positions.
+    # ip indents every one of them, so a line at the margin is not the
+    # interface's, whatever it says.
     - name: details
       select: {skip: 2}
       parse:
         type: regex
         patterns:
-          - '^\s*(?P<kind>altname) (?P<name>\S+)\s*$'
-          - '^\s*(?P<kind>alias) (?P<name>.+?)\s*$'
-          - pattern: '^\s*(?P<text>\S.*?)\s*$'
+          - '^[ \t]+(?P<kind>altname) (?P<name>\S+)\s*$'
+          - '^[ \t]+(?P<kind>alias) (?P<name>.+?)\s*$'
+          - pattern: '^[ \t]+(?P<text>\S.*?)\s*$'
             values: {kind: settings}
       fields:
         name: {when_missing: omit}

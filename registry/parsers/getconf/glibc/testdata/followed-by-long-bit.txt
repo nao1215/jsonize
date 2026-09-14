@@ -1,0 +1,7 @@
+POSIX_REC_MIN_XFER_SIZE             4096
+POSIX_REC_XFER_ALIGN                4096
+SYMLINK_MAX
+GNU_LIBC_VERSION                    glibc 2.43
+GNU_LIBPTHREAD_VERSION              NPTL 2.43
+POSIX2_SYMLINKS                     1
+64

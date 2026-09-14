@@ -1,0 +1,5 @@
+source: six lines of the string-values fixture followed by getconf LONG_BIT, captured on Ubuntu 26.04 (glibc 2.43) with LC_ALL=C
+description: >-
+  Two commands run one after the other. getconf -a names every variable in capitals, and a bare number is a value without one.
+os: linux
+expect_error: 'line 7: line does not match pattern'

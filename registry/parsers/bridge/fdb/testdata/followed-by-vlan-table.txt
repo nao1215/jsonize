@@ -1,0 +1,5 @@
+52:54:00:1a:00:02 dev br-d647a5eb3b66 self permanent
+52:54:00:1a:00:13 dev veth0c4293d master br-088d49b64243
+port              vlan-id
+br-088d49b64243   1 PVID Egress Untagged
+veth33c9daf       1 PVID Egress Untagged

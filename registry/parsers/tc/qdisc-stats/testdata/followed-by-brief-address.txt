@@ -1,0 +1,6 @@
+qdisc fq_codel 0: dev eno1 root refcnt 2 limit 10240p flows 1024 quantum 1514 target 5ms interval 100ms memory_limit 32Mb ecn drop_batch 64
+ Sent 1489762848 bytes 3144004 pkt (dropped 0, overlimits 0 requeues 267)
+ backlog 0b 0p requeues 267
+  maxpacket 66616 drop_overlimit 0 new_flow_count 25666 ecn_mark 0
+  new_flows_len 0 old_flows_len 0
+lo               UNKNOWN        127.0.0.1/8 ::1/128

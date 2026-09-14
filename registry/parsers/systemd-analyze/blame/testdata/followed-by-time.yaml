@@ -1,0 +1,5 @@
+source: three lines of systemd-analyze blame followed by systemd-analyze time, captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C
+description: >-
+  Two commands run one after the other. The summary of systemd-analyze time ends in a word, and what comes before it is not a duration.
+os: linux
+expect_error: 'line 4: line does not match pattern'

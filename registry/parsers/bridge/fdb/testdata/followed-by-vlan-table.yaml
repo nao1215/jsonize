@@ -1,0 +1,5 @@
+source: two lines of the entries fixture followed by the first lines of `bridge vlan show`, captured on Ubuntu 26.04 (iproute2 6.19) with LC_ALL=C
+description: >-
+  Two commands run one after the other. Every fdb entry opens with a link-layer address, and the VLAN table's lines open with a port name.
+os: linux
+expect_error: 'line 3: line does not match pattern'

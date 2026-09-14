@@ -38,10 +38,11 @@ detect:
       - '\A[0-9a-f]{2}(?::[0-9a-f]{2}){5} [^\n]*\b(?:self|master|permanent|static|dynamic|extern_learn)\b'
 parse:
   type: regex
-  # The address is not pinned to the ethernet shape here: a port on a
-  # non-ethernet link prints a longer one, and the signature has already
-  # decided the text is a forwarding database.
-  pattern: '^(?P<address>\S+)(?: dev (?P<dev>\S+))?[ \t]*(?P<attributes>.*?)[ \t]*$'
+  # The address is not pinned to the ethernet length here: a port on a
+  # non-ethernet link prints a longer one. It is still colon-separated
+  # hex bytes, which is what keeps a line printed after the listing,
+  # such as a row of `bridge vlan`, from being read as an entry.
+  pattern: '^(?P<address>[0-9a-f]{2}(?::[0-9a-f]{2})+)(?: dev (?P<dev>\S+))?[ \t]*(?P<attributes>.*?)[ \t]*$'
 fields:
   address: {required: true}
   dev: {when_missing: omit}

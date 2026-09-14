@@ -1,0 +1,5 @@
+source: three lines of the mixed fixture followed by the line git diff --shortstat prints, git 2.53 on Ubuntu, LC_ALL=C
+description: >-
+  Two commands run one after the other. The summary opens with a space and a digit, and a digit is no status letter.
+os: linux
+expect_error: 'line 4: line does not match any of the 4 patterns'

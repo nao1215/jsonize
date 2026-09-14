@@ -40,9 +40,13 @@ parse:
   patterns:
     # Only R and C make " -> " a path separator, in the index column or,
     # for a file added with --intent-to-add, in the work tree column.
-    - '^(?P<index>[RC])(?P<worktree>.) (?P<path>"(?:[^"\\]|\\.)*"|[^" ][^ ]*) -> (?P<renamed_to>"(?:[^"\\]|\\.)*"|[^" ][^ ]*)$'
-    - '^(?P<index>[^RC])(?P<worktree>[RC]) (?P<path>"(?:[^"\\]|\\.)*"|[^" ][^ ]*) -> (?P<renamed_to>"(?:[^"\\]|\\.)*"|[^" ][^ ]*)$'
-    - '^(?P<index>[^RC])(?P<worktree>[^RC]) (?P<path>.+)$'
+    - '^(?P<index>[RC])(?P<worktree>[ MTADRCU]) (?P<path>"(?:[^"\\]|\\.)*"|[^" ][^ ]*) -> (?P<renamed_to>"(?:[^"\\]|\\.)*"|[^" ][^ ]*)$'
+    - '^(?P<index>[ MTADU])(?P<worktree>[RC]) (?P<path>"(?:[^"\\]|\\.)*"|[^" ][^ ]*) -> (?P<renamed_to>"(?:[^"\\]|\\.)*"|[^" ][^ ]*)$'
+    # The letters are the ones git documents, and two spaces is no status:
+    # the summary `git diff --shortstat` prints opens with a space and a
+    # digit, and a line indented by two spaces opens like an unchanged file.
+    - '^(?P<index>[MTADU?!])(?P<worktree>[ MTADU?!]) (?P<path>.+)$'
+    - '^(?P<index> )(?P<worktree>[MTADU?!]) (?P<path>.+)$'
 fields:
   index: {null_if: [""]}
   worktree: {null_if: [""]}
