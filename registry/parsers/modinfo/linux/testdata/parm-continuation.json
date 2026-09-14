@@ -1,0 +1,102 @@
+[
+  {
+    "name": "name",
+    "value": "drm"
+  },
+  {
+    "name": "filename",
+    "value": "(builtin)"
+  },
+  {
+    "name": "license",
+    "value": "GPL and additional rights"
+  },
+  {
+    "name": "file",
+    "value": "drivers/gpu/drm/drm"
+  },
+  {
+    "name": "description",
+    "value": "DRM bridge infrastructure"
+  },
+  {
+    "name": "author",
+    "value": "Ajay Kumar <ajaykumar.rs@samsung.com>"
+  },
+  {
+    "name": "license",
+    "value": "GPL and additional rights"
+  },
+  {
+    "name": "file",
+    "value": "drivers/gpu/drm/drm"
+  },
+  {
+    "name": "description",
+    "value": "DRM shared core routines"
+  },
+  {
+    "name": "author",
+    "value": "Gareth Hughes, Leif Delgass, José Fonseca, Jon Smirl"
+  },
+  {
+    "name": "import_ns",
+    "value": "DMA_BUF"
+  },
+  {
+    "name": "license",
+    "value": "GPL and additional rights"
+  },
+  {
+    "name": "file",
+    "value": "drivers/gpu/drm/drm"
+  },
+  {
+    "name": "description",
+    "value": "DRM panel infrastructure"
+  },
+  {
+    "name": "author",
+    "value": "Thierry Reding <treding@nvidia.com>"
+  },
+  {
+    "name": "license",
+    "value": "GPL"
+  },
+  {
+    "name": "file",
+    "value": "drivers/gpu/drm/drm"
+  },
+  {
+    "name": "description",
+    "value": "DRM panic handler"
+  },
+  {
+    "name": "author",
+    "value": "Jocelyn Falempe"
+  },
+  {
+    "name": "parm",
+    "value": "panic_screen:Choose what will be displayed by drm_panic, 'user' or 'kmsg' [default=user]"
+  },
+  {
+    "name": "parm",
+    "value": "edid_firmware:Do not probe monitor, use specified EDID blob from /lib/firmware instead. (string)"
+  },
+  {
+    "name": "parm",
+    "value": "vblankoffdelay:Delay until vblank irq auto-disable [msecs] (0: never disable, <0: disable immediately) (int)"
+  },
+  {
+    "name": "parm",
+    "value": "timestamp_precision_usec:Max. error on timestamps [usecs] (int)"
+  },
+  {
+    "name": "parm",
+    "value": "debug:Enable debug output, where each bit enables a debug category. Bit 0 (0x01)  will enable CORE messages (drm core code) Bit 1 (0x02)  will enable DRIVER messages (drm controller code) Bit 2 (0x04)  will enable KMS messages (modesetting code) Bit 3 (0x08)  will enable PRIME messages (prime code) Bit 4 (0x10)  will enable ATOMIC messages (atomic code) Bit 5 (0x20)  will enable VBL messages (vblank code) Bit 7 (0x80)  will enable LEASE messages (leasing code) Bit 8 (0x100) will enable DP messages (displayport code) (ulong)"
+  },
+  {
+    "name": "parm",
+    "value": "edid_fixup:Minimum number of valid EDID header bytes (0-8, default 6) (int)"
+  }
+]

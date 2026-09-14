@@ -1,0 +1,8 @@
+description: >-
+  a driver that names 29 firmware files before any other label, so the
+  first twenty lines hold only filename and firmware
+source: >-
+  captured with LC_ALL=C from kmod 34 on Ubuntu 26.04 as "modinfo r8169",
+  lines 1 to 61 of 91; the signer lines and the signature are left out
+os: linux
+args: [r8169]

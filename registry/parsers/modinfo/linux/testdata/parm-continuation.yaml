@@ -1,0 +1,6 @@
+description: >-
+  a built-in module whose debug parameter describes each bit on a
+  tab-indented line of its own below the parm line
+source: captured with LC_ALL=C from kmod 34 on Ubuntu 26.04 as "modinfo drm"
+os: linux
+args: [drm]
