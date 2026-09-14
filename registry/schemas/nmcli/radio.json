@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/nmcli/radio.json",
+  "title": "nmcli/radio",
+  "description": "nmcli radio, the state of the Wi-Fi and WWAN radios",
+  "x-jsonize": {
+    "definition": "nmcli/radio",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "wifi_hw": {
+      "type": "string",
+      "enum": [
+        "disabled",
+        "enabled",
+        "missing"
+      ]
+    },
+    "wifi": {
+      "type": "string",
+      "enum": [
+        "disabled",
+        "enabled",
+        "missing"
+      ]
+    },
+    "wwan_hw": {
+      "type": "string",
+      "enum": [
+        "disabled",
+        "enabled",
+        "missing"
+      ]
+    },
+    "wwan": {
+      "type": "string",
+      "enum": [
+        "disabled",
+        "enabled",
+        "missing"
+      ]
+    }
+  },
+  "required": [
+    "wifi_hw",
+    "wifi",
+    "wwan_hw",
+    "wwan"
+  ]
+}
