@@ -7,7 +7,8 @@
 # The name is one word. -v writes the path in parentheses after it and
 # lists the modules each file contains on indented lines, which is a tree
 # this does not read; the parenthesis keeps such a row from being read as
-# a name. -h rounds the size and -m lists modules under another heading.
+# a name. -h rounds the size (kldstat/freebsd-human) and -m lists modules
+# under another heading.
 format: 1
 command: kldstat
 variant: freebsd

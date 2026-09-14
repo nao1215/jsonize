@@ -1,0 +1,6 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; nc listened on 127.0.0.1:7777 (tcp) and 127.0.0.1:7778 (udp) for the capture
+description: >-
+  sockstat -s with unix, TCP and UDP sockets. Only the TCP sockets have a
+  state. The foreign cell of syslogd's log socket is cut at its column.
+os: freebsd
+args: ["-s"]

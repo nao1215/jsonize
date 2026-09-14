@@ -1,0 +1,33 @@
+[
+  {
+    "program": {
+      "path": "/bin/sh"
+    },
+    "libraries": [
+      {
+        "name": "libedit.so.8",
+        "path": "/lib/libedit.so.8",
+        "address": "0x25cc3429000"
+      },
+      {
+        "name": "libc.so.7",
+        "path": "/lib/libc.so.7",
+        "address": "0x25cc3cbd000"
+      },
+      {
+        "name": "libtinfow.so.9",
+        "path": "/lib/libtinfow.so.9",
+        "address": "0x25cc20b0000"
+      },
+      {
+        "name": "libsys.so.7",
+        "path": "/lib/libsys.so.7",
+        "address": "0x25cc4dd2000"
+      },
+      {
+        "name": "[vdso]",
+        "address": "0x25cc1bcb000"
+      }
+    ]
+  }
+]

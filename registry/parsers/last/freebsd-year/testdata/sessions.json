@@ -1,0 +1,29 @@
+[
+  {
+    "user": "root",
+    "tty": "ttyv0",
+    "host": null,
+    "login_time": "2026-09-13T10:44:00Z",
+    "still_logged_in": true,
+    "logout": null,
+    "duration": null
+  },
+  {
+    "user": "root",
+    "tty": "ttyv0",
+    "host": null,
+    "login_time": "2026-09-09T07:24:00Z",
+    "still_logged_in": false,
+    "logout": "07:30",
+    "duration": "00:06"
+  },
+  {
+    "user": "boot time",
+    "tty": null,
+    "host": null,
+    "login_time": "2026-09-09T07:24:00Z",
+    "still_logged_in": null,
+    "logout": null,
+    "duration": null
+  }
+]

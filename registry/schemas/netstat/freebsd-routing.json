@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/netstat/freebsd-routing.json",
+  "title": "netstat/freebsd-routing",
+  "description": "FreeBSD netstat -r routing tables by address family",
+  "x-jsonize": {
+    "definition": "netstat/freebsd-routing",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "family": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "routes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "destination": {
+              "type": "string"
+            },
+            "expire": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "flags": {
+              "type": "string"
+            },
+            "gateway": {
+              "type": "string"
+            },
+            "netif": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "required": [
+      "family",
+      "routes"
+    ]
+  }
+}

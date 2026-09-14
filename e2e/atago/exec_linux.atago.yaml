@@ -241,6 +241,33 @@ scenarios:
               - { path: "$[0].name", equals: "." }
               - { path: "$[0].size", gte: 0 }
 
+  # glibc ldd names each program above its libraries only when it was
+  # given more than one, and the two listings are read by two definitions.
+  - name: ldd of one program is a list of libraries, of two a record per program
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain ldd /bin/sh
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ldd/posix from embedded"
+          stdout:
+            json:
+              - { path: "$[0].name", matches: ".+" }
+      - run:
+          command: jz run --explain ldd /bin/sh /bin/ls
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "ldd/files from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].program.path", equals: /bin/sh }
+              - { path: "$[1].program.path", equals: /bin/ls }
+              - { path: "$[1].libraries[0].name", matches: ".+" }
+
   - name: piping a real command into jz identifies it without any hint
     only: {os: linux}
     steps:

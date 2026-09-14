@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/netstat/freebsd-interface-bytes.json",
+  "title": "netstat/freebsd-interface-bytes",
+  "description": "FreeBSD netstat -ib interface and address counters with bytes",
+  "x-jsonize": {
+    "definition": "netstat/freebsd-interface-bytes",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "up": {
+        "type": "boolean"
+      },
+      "mtu": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "network": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "ipkts": {
+        "type": "integer"
+      },
+      "ierrs": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "idrop": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "ibytes": {
+        "type": "integer"
+      },
+      "opkts": {
+        "type": "integer"
+      },
+      "oerrs": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "obytes": {
+        "type": "integer"
+      },
+      "coll": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "up",
+      "mtu",
+      "network",
+      "address",
+      "ipkts",
+      "ierrs",
+      "idrop",
+      "ibytes",
+      "opkts",
+      "oerrs",
+      "obytes",
+      "coll"
+    ]
+  }
+}

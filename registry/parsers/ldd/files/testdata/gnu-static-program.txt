@@ -1,0 +1,5 @@
+/usr/bin/true:
+	linux-vdso.so.1 (0x0000762e65f9e000)
+	libc.so.6 => /usr/lib/x86_64-linux-gnu/libc.so.6 (0x0000762e65c00000)
+	/lib64/ld-linux-x86-64.so.2 (0x0000762e65fa0000)
+jz:

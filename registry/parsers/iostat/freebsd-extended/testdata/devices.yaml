@@ -1,0 +1,6 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: >-
+  iostat -x, one sample counted from boot: the virtio disk, a memory
+  disk, the CD drive and a pass-through device.
+os: freebsd
+args: ["-x"]

@@ -1,0 +1,10 @@
+Id Refs Address             Size Name
+ 1   28 0xffffffff80200000   35M kernel
+ 2    1 0xffffffff82554000  6.2M zfs.ko
+ 3    1 0xffffffff837f8000   13K intpm.ko
+ 4    1 0xffffffff837fc000  8.4K smbus.ko
+ 5    1 0xffffffff837ff000  8.6K virtio_random.ko
+ 6    1 0xffffffff83802000   11K mac_ntpd.ko
+ 7    1 0xffffffff83805000   34K if_bridge.ko
+ 8    1 0xffffffff8380e000   24K bridgestp.ko
+ 9    1 0xffffffff83815000   19K nullfs.ko

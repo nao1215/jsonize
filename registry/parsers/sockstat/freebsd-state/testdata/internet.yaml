@@ -1,0 +1,10 @@
+source: >-
+  captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+  right after pkg install; the public addresses of the package mirrors
+  replaced with documentation addresses, the columns kept
+description: >-
+  sockstat -46s, the IPv4 and IPv6 sockets. The connections pkg left in
+  TIME_WAIT have no owner and print "??" for the user, command, process and
+  descriptor, but have a state.
+os: freebsd
+args: ["-46s"]

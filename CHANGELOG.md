@@ -15,6 +15,10 @@ project follows [Semantic Versioning](https://semver.org/).
 - Definitions for FreeBSD `md5` and the other BSD digest commands,
   `sysctl`, `vmstat -i`, `df -hT` and `arp -a`, and for OpenZFS
   `zfs list` and `zpool list`.
+- Definitions for FreeBSD `kldstat -h`, `netstat -ib`, `netstat -r`,
+  `sockstat -s`, `last -y` and `iostat -x`, and for `ldd` output that
+  names each program above its libraries (glibc given several programs,
+  FreeBSD always).
 - Releases sign `checksums.txt` with cosign, include an SPDX SBOM for
   each archive, and publish a Homebrew cask to `nao1215/homebrew-tap`.
   A tag is published only after the release smoke checks pass on it.

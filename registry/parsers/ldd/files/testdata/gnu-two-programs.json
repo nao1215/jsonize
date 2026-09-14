@@ -1,0 +1,82 @@
+[
+  {
+    "program": {
+      "path": "/usr/bin/ls"
+    },
+    "libraries": [
+      {
+        "name": "linux-vdso.so.1",
+        "address": "0x0000726099d85000"
+      },
+      {
+        "name": "libselinux.so.1",
+        "path": "/usr/lib/x86_64-linux-gnu/libselinux.so.1",
+        "address": "0x0000726099d29000"
+      },
+      {
+        "name": "libgcc_s.so.1",
+        "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "address": "0x0000726099cfb000"
+      },
+      {
+        "name": "libm.so.6",
+        "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+        "address": "0x00007260990da000"
+      },
+      {
+        "name": "libc.so.6",
+        "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "address": "0x0000726098e00000"
+      },
+      {
+        "name": "/lib64/ld-linux-x86-64.so.2",
+        "address": "0x0000726099d87000"
+      },
+      {
+        "name": "libpcre2-8.so.0",
+        "path": "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0",
+        "address": "0x000072609902e000"
+      }
+    ]
+  },
+  {
+    "program": {
+      "path": "/usr/bin/cat"
+    },
+    "libraries": [
+      {
+        "name": "linux-vdso.so.1",
+        "address": "0x00007454838a4000"
+      },
+      {
+        "name": "libselinux.so.1",
+        "path": "/usr/lib/x86_64-linux-gnu/libselinux.so.1",
+        "address": "0x0000745483848000"
+      },
+      {
+        "name": "libgcc_s.so.1",
+        "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+        "address": "0x000074548381a000"
+      },
+      {
+        "name": "libm.so.6",
+        "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+        "address": "0x00007454836f4000"
+      },
+      {
+        "name": "libc.so.6",
+        "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+        "address": "0x0000745482800000"
+      },
+      {
+        "name": "/lib64/ld-linux-x86-64.so.2",
+        "address": "0x00007454838a6000"
+      },
+      {
+        "name": "libpcre2-8.so.0",
+        "path": "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0",
+        "address": "0x0000745482b54000"
+      }
+    ]
+  }
+]

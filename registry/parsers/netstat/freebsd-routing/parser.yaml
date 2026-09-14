@@ -1,0 +1,62 @@
+# netstat -r on FreeBSD prints a "Routing tables" banner and then a block
+# for each address family: a blank line, the family's name and a colon
+# ("Internet:", "Internet6:"), and a table of its routes under its own
+# heading. Each block is a record: the family, and the routes.
+#
+# Without -n the destination and the gateway are names where a name is
+# known ("localhost", a network named in /etc/networks), and "default"
+# is the default route either way. A route with no gateway address, such
+# as one to an attached network or a local address, shows the interface's
+# link ("link#1"). The flags are a set of letters (U up, G gateway, H
+# host, S static and so on) and stay a word. Expire is the number of
+# seconds a route has left, and is printed only for a route that expires.
+#
+# -W adds Nhop#, Mtu and Metric; the heading is pinned whole so that table
+# is not read.
+format: 1
+command: netstat
+variant: freebsd-routing
+description: FreeBSD netstat -r routing tables by address family
+metadata:
+  tags: [freebsd, bsd, network]
+  compatible: [FreeBSD netstat]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?netstat(1)
+    # routepr, pr_family and pr_rthdr.
+    - https://github.com/freebsd/freebsd-src/blob/main/usr.bin/netstat/route.c
+detect:
+  os: [freebsd]
+  signature:
+    all:
+      - '\ARouting tables(?: \(fib: \d+\))?[ \t]*$'
+      - '^Destination[ \t]+Gateway[ \t]+Flags[ \t]+Netif[ \t]+Expire[ \t]*$'
+input:
+  select:
+    # A table other than fib 0 prints its number in the banner
+    # ("Routing tables (fib: 1)"); the pattern covers it so the banner is
+    # read whole.
+    after: '\ARouting tables(?: \(fib: \d+\))?[ \t]*$'
+parse:
+  type: records
+  start: '^(?:Internet6?|ISO|X\.25|Netgraph|Protocol Family \d+):[ \t]*$'
+  parts:
+    - name: family
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>Internet6?|ISO|X\.25|Netgraph|Protocol Family \d+):[ \t]*$'
+      fields:
+        name: {required: true}
+    - name: routes
+      select: {skip: 1}
+      parse:
+        type: table
+        split: whitespace
+        min_fields: 4
+      fields:
+        destination: {required: true}
+        gateway: {required: true}
+        flags: {required: true}
+        netif: {required: true}
+        expire: {type: int}

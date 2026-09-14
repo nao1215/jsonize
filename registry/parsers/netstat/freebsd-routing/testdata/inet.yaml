@@ -1,0 +1,4 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C
+description: netstat -rn -f inet prints the IPv4 block alone, which is one record.
+os: freebsd
+args: ["-rn", "-f", "inet"]

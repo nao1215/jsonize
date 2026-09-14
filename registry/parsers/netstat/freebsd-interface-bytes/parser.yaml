@@ -1,0 +1,47 @@
+# netstat -ib on FreeBSD adds two counters to the netstat -i table: the
+# bytes received after Idrop and the bytes sent after Oerrs.
+# netstat/freebsd-interface describes the rows. An address row prints its
+# byte counters as numbers, like its packet counters.
+#
+# -d adds a Drop column and -h rounds the counters; the heading is pinned
+# whole and the link row the signature asks for is exact, so neither table
+# is read.
+format: 1
+command: netstat
+variant: freebsd-interface-bytes
+description: FreeBSD netstat -ib interface and address counters with bytes
+metadata:
+  tags: [freebsd, bsd, network]
+  compatible: [FreeBSD netstat]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?netstat(1)
+    # intpr, which prints the heading and each row.
+    - https://github.com/freebsd/freebsd-src/blob/main/usr.bin/netstat/if.c
+detect:
+  os: [freebsd]
+  signature:
+    all:
+      - '\AName[ \t]+Mtu[ \t]+Network[ \t]+Address[ \t]+Ipkts[ \t]+Ierrs[ \t]+Idrop[ \t]+Ibytes[ \t]+Opkts[ \t]+Oerrs[ \t]+Obytes[ \t]+Coll[ \t]*$'
+      - '^[^\s*]+\*?[ \t]+\d+[ \t]+<Link#\d+>[ \t]+\S+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]*$'
+input:
+  ignore:
+    - '\AName[ \t]+Mtu[ \t]+Network[ \t]+Address[ \t]+Ipkts'
+parse:
+  type: regex
+  pattern: '^(?P<name>[^\s*]+)(?P<up>\*?)[ \t]+(?P<mtu>\d+|-)[ \t]+(?P<network>\S+)[ \t]+(?P<address>\S+)[ \t]+(?P<ipkts>\d+)[ \t]+(?P<ierrs>\d+|-)[ \t]+(?P<idrop>\d+|-)[ \t]+(?P<ibytes>\d+)[ \t]+(?P<opkts>\d+)[ \t]+(?P<oerrs>\d+|-)[ \t]+(?P<obytes>\d+)[ \t]+(?P<coll>\d+|-)[ \t]*$'
+fields:
+  name: {required: true}
+  up: {type: bool, true_values: [""], false_values: ["*"]}
+  # The dashes on an address row are counters kept for the interface and
+  # not for the address: null, not zero.
+  mtu: {type: int, null_if: ["-"]}
+  network: {required: true}
+  address: {required: true}
+  ipkts: {type: int, required: true}
+  ierrs: {type: int, null_if: ["-"]}
+  idrop: {type: int, null_if: ["-"]}
+  ibytes: {type: int, required: true}
+  opkts: {type: int, required: true}
+  oerrs: {type: int, null_if: ["-"]}
+  obytes: {type: int, required: true}
+  coll: {type: int, null_if: ["-"]}

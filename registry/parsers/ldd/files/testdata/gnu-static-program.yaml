@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (glibc 2.43) with LC_ALL=C; the second program is a statically linked Go binary named jz, and standard error was not captured
+description: >-
+  glibc ldd given a dynamic program and a static one. The static program's
+  line has nothing under it, which is an empty list of libraries.
+# No args: the static program was a local build, so jz run cannot repeat
+# the capture. The text is checked by detection and by naming the parser.
+os: linux

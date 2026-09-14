@@ -1,0 +1,58 @@
+[
+  {
+    "devices": [
+      {
+        "device": "vtbd0",
+        "r_s": 133,
+        "w_s": 53,
+        "kr_s": 4312.7,
+        "kw_s": 9599.1,
+        "ms_r": 0,
+        "ms_w": 0,
+        "ms_o": 0,
+        "ms_t": 0,
+        "qlen": 0,
+        "b_percent": 3
+      },
+      {
+        "device": "md99",
+        "r_s": 2,
+        "w_s": 0,
+        "kr_s": 7.3,
+        "kw_s": 0,
+        "ms_r": 0,
+        "ms_w": 0,
+        "ms_o": 0,
+        "ms_t": 0,
+        "qlen": 0,
+        "b_percent": 0
+      },
+      {
+        "device": "cd0",
+        "r_s": 0,
+        "w_s": 0,
+        "kr_s": 0,
+        "kw_s": 0,
+        "ms_r": 0,
+        "ms_w": 0,
+        "ms_o": 0,
+        "ms_t": 0,
+        "qlen": 0,
+        "b_percent": 0
+      },
+      {
+        "device": "pass0",
+        "r_s": 0,
+        "w_s": 0,
+        "kr_s": 0,
+        "kw_s": 0,
+        "ms_r": 0,
+        "ms_w": 0,
+        "ms_o": 0,
+        "ms_t": 0,
+        "qlen": 0,
+        "b_percent": 0
+      }
+    ]
+  }
+]

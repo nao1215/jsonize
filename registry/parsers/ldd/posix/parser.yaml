@@ -20,6 +20,10 @@ detect:
   signature:
     all:
       - '^[ \t]+\S+ => \S+ \(0x[0-9a-f]+\)[ \t]*$'
+    none:
+      # A line naming the program, which ldd prints above each program's
+      # objects when it was given several; ldd/files reads that listing.
+      - '^\S[^\n]*:[ \t]*$'
 parse:
   type: regex
   patterns:

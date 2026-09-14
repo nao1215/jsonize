@@ -1,0 +1,6 @@
+source: captured on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm) with LC_ALL=C; if_bridge and nullfs were loaded for the capture
+description: >-
+  kldstat without -h prints each size exactly, in hexadecimal. The kernel
+  row has no unit letter, and the text is refused.
+os: freebsd
+expect_error: 'does not describe this input'

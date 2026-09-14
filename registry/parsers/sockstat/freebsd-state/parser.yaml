@@ -1,0 +1,47 @@
+# sockstat -s on FreeBSD prints the table sockstat prints with a CONN STATE
+# column after FOREIGN ADDRESS: the TCP state of a TCP socket (LISTEN,
+# ESTABLISHED, TIME_WAIT) or the association state of an SCTP one, and
+# "??" for a socket of any other protocol. sockstat/freebsd describes the
+# columns before it.
+#
+# A state is one word, so the last word is the state and the text before
+# it is the foreign address. A foreign cell with spaces in it
+# ("<- [837 8],[1382 3],", cut at its column) stays whole.
+#
+# -A, -f, -I, -i and -U, and PATH STATE for an SCTP association, add
+# columns before CONN STATE; -b, -S and -C add columns after it. The
+# heading is pinned whole, so none of those tables is read.
+format: 1
+command: sockstat
+variant: freebsd-state
+description: FreeBSD sockstat -s open sockets with their connection state
+metadata:
+  tags: [freebsd, bsd, network]
+  compatible: [FreeBSD sockstat]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?sockstat(1)
+    # display and displaysock, which print the heading and each row.
+    - https://github.com/freebsd/freebsd-src/blob/main/usr.bin/sockstat/main.c
+detect:
+  os: [freebsd]
+  signature:
+    all:
+      - '\AUSER[ \t]+COMMAND[ \t]+PID[ \t]+FD[ \t]+PROTO[ \t]+LOCAL ADDRESS[ \t]+FOREIGN ADDRESS[ \t]+CONN STATE[ \t]*$'
+input:
+  ignore:
+    - '\AUSER[ \t]+COMMAND[ \t]+PID[ \t]+FD[ \t]+PROTO[ \t]+LOCAL ADDRESS[ \t]+FOREIGN ADDRESS[ \t]+CONN STATE[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<user>\S+)[ \t]+(?P<command>\S.*?)[ \t]+(?P<pid>\d+|\?\?)[ \t]+(?P<fd>\d+|\?\?)[ \t]+(?P<proto>[a-z]+[0-9]*)[ \t]+(?P<local_address>\(not connected\)|\S+)[ \t]+(?P<foreign_address>\S.*?)[ \t]+(?P<conn_state>[A-Z][A-Z0-9_]*|\?\?)[ \t]*$'
+# "??" is sockstat saying it could not find a value, which is null rather
+# than the value. For the state it is also what a protocol without states
+# prints.
+fields:
+  user: {null_if: ["??"]}
+  command: {null_if: ["??"]}
+  pid: {type: int, null_if: ["??"]}
+  fd: {type: int, null_if: ["??"]}
+  proto: {required: true}
+  local_address: {null_if: ["??"]}
+  foreign_address: {null_if: ["??"]}
+  conn_state: {null_if: ["??"]}
