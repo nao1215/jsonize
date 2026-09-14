@@ -1,0 +1,5 @@
+description: The output of gzip -l without -v, whose header opens with "compressed"; it belongs to gzip/list.
+source: captured on Ubuntu 26.04 with GNU gzip 1.14, LC_ALL=C gzip -l over a file made for the fixture
+os: linux
+args: [-l, hello.txt.gz]
+expect_error: 'does not describe this input'

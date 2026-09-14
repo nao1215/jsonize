@@ -1,0 +1,30 @@
+Listing compressed files
+
+Each compressor has a listing option. gzip -l prints the sizes and the
+ratio under this header:
+
+         compressed        uncompressed  ratio uncompressed_name
+                 42                  12 -16.7% hello.txt
+
+xz -l prints one row per file, with the check type in its own column:
+
+Strms  Blocks   Compressed Uncompressed  Ratio  Check   Filename
+    1       1         76 B         12 B  6.333  CRC64   hello.txt.xz
+
+zstd -l prints much the same, with the banner on standard error:
+
+Frames  Skips  Compressed  Uncompressed  Ratio  Check  Filename
+     1      0      25   B        12   B  0.480  XXH64  hello.txt.zst
+
+and lz4 --list prints dashes where the frame does not state its size:
+
+    Frames           Type Block  Compressed  Uncompressed    Ratio   Filename
+         1       LZ4Frame   B4I       31.00             -        -   hello.txt.lz4
+
+With --robot, xz prints tab separated lines that open with a word:
+
+name	hello.txt.xz
+file	1	1	76	12	6.333	CRC64	0
+
+None of these is a format a shell script should parse by column
+position; use the robot form or a tool that reads the listing.
