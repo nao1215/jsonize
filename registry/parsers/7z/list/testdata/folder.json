@@ -1,0 +1,51 @@
+{
+  "banner": {
+    "version": "26.00 (x64)",
+    "copyright": "1999-2026 Igor Pavlov",
+    "date": "2026-02-12",
+    "environment": "64-bit locale=C.UTF-8 Threads:32 OPEN_MAX:524288, ASM"
+  },
+  "scan": {
+    "files": 1,
+    "bytes": 173,
+    "size": "1 KiB"
+  },
+  "archive": {
+    "name": "withdir.7z"
+  },
+  "properties": {
+    "Path": "withdir.7z",
+    "Type": "7z",
+    "Physical Size": 173,
+    "Headers Size": 157,
+    "Method": "LZMA2:12",
+    "Solid": false,
+    "Blocks": 1
+  },
+  "entries": [
+    {
+      "date": "2026-09-14",
+      "time": "22:28:00",
+      "attributes": "D....",
+      "size": 0,
+      "compressed": 0,
+      "name": "d"
+    },
+    {
+      "date": "2026-09-14",
+      "time": "22:28:00",
+      "attributes": "....A",
+      "size": 12,
+      "compressed": 16,
+      "name": "d/hello.txt"
+    }
+  ],
+  "totals": {
+    "date": "2026-09-14",
+    "time": "22:28:00",
+    "size": 12,
+    "compressed": 16,
+    "files": 1,
+    "folders": 1
+  }
+}

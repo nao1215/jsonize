@@ -1,0 +1,19 @@
+7-Zip 26.00 (x64) : Copyright (c) 1999-2026 Igor Pavlov : 2026-02-12
+
+What's new
+
+- The listing command prints "Listing archive: NAME" before the
+  property block, which opens with a line of two dashes:
+
+  --
+  Path = many.7z
+  Type = 7z
+
+- 7z l -slt separates the archive properties from the entries with a
+  line of ten dashes.
+- Entries stored without a modification time print a blank date.
+
+Known issues
+
+- A second operand after the archive is a name to select inside it,
+  not a second archive to list.

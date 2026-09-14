@@ -1,0 +1,4 @@
+description: A .zip, whose entries carry a different set of properties (Folder, Host OS, Version, empty Created and Accessed) and whose archive block has only a type and a size.
+source: captured on Ubuntu 26.04 with 7-Zip 26.00 (x64), LC_ALL=C 7z l -slt over an archive made for the fixture
+os: linux
+args: [l, -slt, many.zip]

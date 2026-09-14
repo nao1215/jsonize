@@ -1,0 +1,82 @@
+{
+  "banner": {
+    "version": "26.00 (x64)",
+    "copyright": "1999-2026 Igor Pavlov",
+    "date": "2026-02-12",
+    "environment": "64-bit locale=C.UTF-8 Threads:32 OPEN_MAX:524288, ASM"
+  },
+  "scan": {
+    "files": 1,
+    "bytes": 380,
+    "size": "1 KiB"
+  },
+  "archive": {
+    "name": "many.7z"
+  },
+  "properties": {
+    "Path": "many.7z",
+    "Type": "7z",
+    "Physical Size": 380,
+    "Headers Size": 310,
+    "Method": "LZMA2:12",
+    "Solid": true,
+    "Blocks": 1
+  },
+  "entries": [
+    {
+      "Path": "empty.txt",
+      "Size": 0,
+      "Packed Size": 0,
+      "Modified": "2026-09-14 22:27:11.3430821",
+      "Attributes": "A -rw-rw-r--",
+      "CRC": null,
+      "Encrypted": false,
+      "Method": null,
+      "Block": null
+    },
+    {
+      "Path": "a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt",
+      "Size": 5,
+      "Packed Size": 70,
+      "Modified": "2026-09-14 22:27:11.3430821",
+      "Attributes": "A -rw-rw-r--",
+      "CRC": "71857850",
+      "Encrypted": false,
+      "Method": "LZMA2:12",
+      "Block": 0
+    },
+    {
+      "Path": "hello.txt",
+      "Size": 12,
+      "Packed Size": null,
+      "Modified": "2026-09-14 22:27:11.3430821",
+      "Attributes": "A -rw-rw-r--",
+      "CRC": "AF083B2D",
+      "Encrypted": false,
+      "Method": "LZMA2:12",
+      "Block": 0
+    },
+    {
+      "Path": "name with spaces.txt",
+      "Size": 19,
+      "Packed Size": null,
+      "Modified": "2026-09-14 22:27:11.3430821",
+      "Attributes": "A -rw-rw-r--",
+      "CRC": "F064EAA2",
+      "Encrypted": false,
+      "Method": "LZMA2:12",
+      "Block": 0
+    },
+    {
+      "Path": "repeat.txt",
+      "Size": 460,
+      "Packed Size": null,
+      "Modified": "2026-09-14 22:27:11.3430821",
+      "Attributes": "A -rw-rw-r--",
+      "CRC": "A415A90E",
+      "Encrypted": false,
+      "Method": "LZMA2:12",
+      "Block": 0
+    }
+  ]
+}

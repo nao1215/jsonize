@@ -1,0 +1,4 @@
+description: A solid .7z of five files, an empty one and a name with spaces among them; only the first member of the solid block has a packed size, the empty file has no CRC, method or block.
+source: captured on Ubuntu 26.04 with 7-Zip 26.00 (x64), LC_ALL=C 7z l -slt over an archive made for the fixture
+os: linux
+args: [l, -slt, many.7z]

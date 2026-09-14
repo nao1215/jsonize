@@ -1,0 +1,23 @@
+
+7-Zip 26.00 (x64) : Copyright (c) 1999-2026 Igor Pavlov : 2026-02-12
+ 64-bit locale=C.UTF-8 Threads:32 OPEN_MAX:524288, ASM
+
+Scanning the drive for archives:
+1 file, 138 bytes (1 KiB)
+
+Listing archive: one.7z
+
+--
+Path = one.7z
+Type = 7z
+Physical Size = 138
+Headers Size = 122
+Method = LZMA2:12
+Solid = -
+Blocks = 1
+
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+2026-09-14 22:27:11 ....A           12           16  hello.txt
+------------------- ----- ------------ ------------  ------------------------
+2026-09-14 22:27:11                 12           16  1 files
