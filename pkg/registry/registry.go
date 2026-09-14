@@ -21,11 +21,14 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"maps"
 	"path"
 	"regexp"
+	"runtime"
 	"slices"
-	"sort"
 	"strings"
+	"sync"
+	"sync/atomic"
 
 	"github.com/nao1215/jsonize/pkg/definition"
 )
@@ -117,6 +120,12 @@ type Registry struct {
 	// commands holds the names a definition calls its own, which is what
 	// Commands reports; byCommand also answers to the aliases.
 	commands map[string]bool
+	// all is every entry sorted by id, and names the commands sorted,
+	// made once the sources are read: a selection over the whole
+	// registry asks for them every time, and the registry does not change
+	// after Load.
+	all   []*Entry
+	names []string
 	// Problems lists definitions that failed to load. The registry stays
 	// usable; callers decide whether problems are fatal.
 	Problems []error
@@ -164,8 +173,10 @@ func Load(sources ...Source) (*Registry, error) {
 		}
 	}
 	for _, list := range r.byCommand {
-		sort.Slice(list, func(i, j int) bool { return list[i].Def.Variant < list[j].Def.Variant })
+		slices.SortFunc(list, func(a, b *Entry) int { return strings.Compare(a.Def.Variant, b.Def.Variant) })
 	}
+	r.all = slices.SortedFunc(maps.Values(r.entries), func(a, b *Entry) int { return strings.Compare(a.Def.ID(), b.Def.ID()) })
+	r.names = slices.Sorted(maps.Keys(r.commands))
 	return r, nil
 }
 
@@ -223,14 +234,61 @@ func (r *Registry) addSource(precedence int, src Source) error {
 		r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: ParsersDir, Err: errors.New("not a directory")})
 		return nil
 	}
+	files, err := readFiles(src)
+	if err != nil {
+		return err
+	}
+	// The files are decoded side by side: a definition says nothing
+	// about another, so the order they are read in changes nothing, and
+	// the decoding is what a registry of several hundred files costs
+	// every time jz starts. What was found is then taken in the order of
+	// the walk, so the problems are reported and the definitions indexed
+	// the same way every time.
+	decodeAll(files, src.Name)
+	for _, f := range files {
+		if f.err != nil {
+			r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: f.path, Err: f.err})
+			continue
+		}
+		if r.disable(f.def) {
+			r.disabled[src.Name]++
+			continue
+		}
+		f.def.Origin = src.Name
+		r.add(&Entry{Def: f.def, Source: src.Name, Path: f.path, Precedence: precedence})
+	}
+	return nil
+}
+
+// filesPerWorker is how many files each goroutine of decodeAll is
+// given at the least, so that a small registry is not spread thinner
+// than starting the goroutines is worth.
+const filesPerWorker = 8
+
+// file is one definition file of a source as the walk found it: its
+// bytes, or the reason it could not be read, and once decoded the
+// definition or the reason it is not one.
+type file struct {
+	path string
+	data []byte
+	def  *definition.Definition
+	err  error
+}
+
+// readFiles walks a source's parsers directory and reads every
+// definition file. What cannot be read is kept in the list as that
+// file's or that directory's problem, in the position the walk found
+// it, so that the problems come out in the order of the walk.
+func readFiles(src Source) ([]*file, error) {
+	var files []*file
 	count := 0
-	err = fs.WalkDir(src.FS, ParsersDir, func(p string, d fs.DirEntry, err error) error {
+	err := fs.WalkDir(src.FS, ParsersDir, func(p string, d fs.DirEntry, err error) error {
 		if err != nil {
 			// A directory jz may not read is that directory's problem,
 			// like a file that does not parse: it is named, and what is
 			// beside it still loads.
-			r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: p, Err: err})
-			return nil //nolint:nilerr // recorded in Problems so the rest of the registry still loads
+			files = append(files, &file{path: p, err: err})
+			return nil //nolint:nilerr // recorded so the rest of the registry still loads
 		}
 		if d.IsDir() || d.Name() != DefinitionFile {
 			return nil
@@ -239,34 +297,52 @@ func (r *Registry) addSource(precedence int, src Source) error {
 		if count > MaxDefinitions {
 			return &LoadError{Source: src.Name, Path: p, Err: fmt.Errorf("more than %d definitions", MaxDefinitions)}
 		}
+		// One file jz cannot read, for being too large or for any other
+		// reason, is that file's problem in the same way.
 		data, err := ReadBounded(src.FS, p, definition.MaxDefinitionSize)
-		if err != nil {
-			// One file jz cannot read, for being too large or for any
-			// other reason, is that file's problem in the same way.
-			r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: p, Err: err})
-			return nil //nolint:nilerr // recorded in Problems so the other definitions still load
-		}
-		def, err := definition.Load(data, src.Name+":"+p)
-		if err != nil {
-			r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: p, Err: err})
-			return nil //nolint:nilerr // recorded in Problems so other definitions still load
-		}
-		if err := checkLayout(p, def); err != nil {
-			r.Problems = append(r.Problems, &LoadError{Source: src.Name, Path: p, Err: err})
-			return nil //nolint:nilerr // recorded in Problems so other definitions still load
-		}
-		if r.disable(def) {
-			r.disabled[src.Name]++
-			return nil
-		}
-		def.Origin = src.Name
-		r.add(&Entry{Def: def, Source: src.Name, Path: p, Precedence: precedence})
+		files = append(files, &file{path: p, data: data, err: err})
 		return nil
 	})
-	if err != nil {
-		return err
+	return files, err
+}
+
+// decodeAll decodes the files that were read, as many at a time as
+// there are processors to do it on. A registry of a few files is decoded
+// one by one: it is done sooner than the goroutines would be started.
+func decodeAll(files []*file, source string) {
+	decode := func(f *file) {
+		if f.err != nil {
+			return
+		}
+		def, err := definition.Load(f.data, source+":"+f.path)
+		if err == nil {
+			err = checkLayout(f.path, def)
+		}
+		f.def, f.err, f.data = def, err, nil
 	}
-	return nil
+	workers := min(runtime.GOMAXPROCS(0), len(files)/filesPerWorker)
+	if workers <= 1 {
+		for _, f := range files {
+			decode(f)
+		}
+		return
+	}
+	var (
+		wg   sync.WaitGroup
+		next atomic.Int64
+	)
+	for range workers {
+		wg.Go(func() {
+			for {
+				i := int(next.Add(1)) - 1
+				if i >= len(files) {
+					return
+				}
+				decode(files[i])
+			}
+		})
+	}
+	wg.Wait()
 }
 
 // parseDisable turns a manifest's disable list into rules, rejecting an
@@ -361,12 +437,7 @@ func (r *Registry) Variants(command string) []*Entry {
 // it answers to Variants and Lookup, and the command it belongs to
 // reports it.
 func (r *Registry) Commands() []string {
-	out := make([]string, 0, len(r.commands))
-	for c := range r.commands {
-		out = append(out, c)
-	}
-	sort.Strings(out)
-	return out
+	return slices.Clone(r.names)
 }
 
 // Aliases returns the other names the definitions of a command answer
@@ -385,18 +456,14 @@ func (r *Registry) Aliases(command string) []string {
 			}
 		}
 	}
-	sort.Strings(out)
+	slices.Sort(out)
 	return out
 }
 
-// Entries returns every entry sorted by id.
+// Entries returns every entry sorted by id. The slice is the caller's;
+// the entries in it are the registry's.
 func (r *Registry) Entries() []*Entry {
-	out := make([]*Entry, 0, len(r.entries))
-	for _, e := range r.entries {
-		out = append(out, e)
-	}
-	sort.Slice(out, func(i, j int) bool { return out[i].Def.ID() < out[j].Def.ID() })
-	return out
+	return slices.Clone(r.all)
 }
 
 // Len returns the number of distinct definitions.

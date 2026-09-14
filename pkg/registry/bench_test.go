@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 	"testing/fstest"
+
+	embedded "github.com/nao1215/jsonize/registry"
 )
 
 // BenchmarkLoadRegistry measures the cost of indexing a registry, which
@@ -28,5 +30,17 @@ func BenchmarkLoadRegistry(b *testing.B) {
 				}
 			}
 		})
+	}
+}
+
+// BenchmarkLoadEmbedded measures loading the official registry itself,
+// which is what every jz invocation pays before reading any text.
+func BenchmarkLoadEmbedded(b *testing.B) {
+	b.ReportAllocs()
+	for range b.N {
+		reg, err := Load(Source{Name: "embedded", FS: embedded.FS()})
+		if err != nil || reg.Len() == 0 {
+			b.Fatal(err, reg.Len())
+		}
 	}
 }
