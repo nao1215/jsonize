@@ -1,0 +1,20 @@
+kern.ostype: FreeBSD
+kern.osrelease: 15.1-RELEASE-p3
+kern.osrevision: 199506
+kern.version: FreeBSD 15.1-RELEASE-p3 releng/15.1-n283611-88e7371d9dc2 GENERIC
+
+kern.maxvnodes: 250607
+kern.maxproc: 11476
+kern.maxfiles: 194933
+kern.argmax: 524288
+kern.securelevel: -1
+kern.hostname: freebsd
+kern.hostid: 391687614
+kern.clockrate: { hz = 100, tick = 10000, profhz = 8128, stathz = 127 }
+kern.posix1version: 200809
+kern.ngroups: 1023
+kern.job_control: 1
+kern.saved_ids: 0
+kern.boottime: { sec = 1789295943, usec = 867950 } Sun Sep 13 10:39:03 2026
+kern.domainname: 
+kern.osreldate: 1501000

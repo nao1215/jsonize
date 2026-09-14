@@ -1,0 +1,7 @@
+source: the hw.intrs variable as LC_ALL=C sysctl -a printed it on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm), lines 9594 to 9621 of that capture
+description: >-
+  hw.intrs prints its value over 28 lines, and every line after the first
+  holds ": " too. Read line by line, each would be a variable named irq1,
+  irq3::5 @cpu0(domain0) and so on, so the text is refused.
+os: freebsd
+expect_error: 'does not describe this input'

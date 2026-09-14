@@ -1,0 +1,6 @@
+source: the first 20 lines of LC_ALL=C sysctl -a on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm); the host name is the VM's default, freebsd
+description: >-
+  kern.version ends its value with a newline and leaves a blank line,
+  kern.domainname is empty, and kern.clockrate and kern.boottime are
+  structures printed in braces.
+os: freebsd

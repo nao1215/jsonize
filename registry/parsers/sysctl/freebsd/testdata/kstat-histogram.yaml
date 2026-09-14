@@ -1,0 +1,5 @@
+source: lines 10604 to 10612 of LC_ALL=C sysctl -a on FreeBSD 15.1-RELEASE-p3 (vmactions/freebsd-vm)
+description: >-
+  The ZFS kstat histogram buckets are variables whose last name part holds
+  a space ("dmu_tx_assign.1024 ns").
+os: freebsd

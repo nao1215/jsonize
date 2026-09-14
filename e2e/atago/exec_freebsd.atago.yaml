@@ -274,6 +274,14 @@ scenarios:
               - { path: "$[0].name", equals: kern.ostype }
               - { path: "$[0].value", equals: FreeBSD }
               - { path: "$[1].value", matches: "^[0-9]+$" }
+      # hw.intrs prints its value over many lines that hold ": " too, and
+      # a line that is not a variable is refused, never read as one.
+      - run:
+          command: jz run sysctl hw.intrs
+      - assert:
+          exit_code: 4
+          stdout:
+            empty: true
       - run:
           command: jz run sysctl -d kern.ostype
       - assert:

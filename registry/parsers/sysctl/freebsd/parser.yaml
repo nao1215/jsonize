@@ -3,13 +3,20 @@
 # kernel formats for reading (vm.loadavg is "{ 0.07 0.02 0.01 }"), and a
 # number here is not more useful than the string that was printed.
 #
+# Some variables print a value over several lines (hw.intrs, the
+# vm.phys_* tables, kern.msgbuf), and a line of such a value may hold
+# ": " itself ("irq1: atkbd0:1 @cpu0(domain0): 2"). The text does not say
+# where a value ends, so a line that is not a variable is refused rather
+# than read as one. sysctl -a prints several of those values and is
+# refused for that reason; name the variables instead.
+#
 # -d prints each variable's description in the same "name: text" shape,
 # -n the values alone and -N the names alone, so jz run refuses all three.
 # A description piped in reads as a value; the text cannot tell them apart.
 format: 1
 command: sysctl
 variant: freebsd
-description: 'FreeBSD sysctl KEY... and sysctl -a, "name: value" lines'
+description: 'FreeBSD sysctl KEY..., "name: value" lines'
 metadata:
   tags: [freebsd, bsd, kernel]
   compatible: [FreeBSD sysctl]
@@ -25,7 +32,15 @@ detect:
       # so the first line has to start with one of the kernel's own
       # top-level names.
       - '\A(?:kern|vm|vfs|net|debug|hw|machdep|user|p1003_1b|compat|security|dev|kstat)\.[A-Za-z0-9_.%-]+: '
+      # Every line in the window is a variable or blank: a dotted name,
+      # then ": ". A part of a name may hold a single space, as the ZFS
+      # kstat histograms do ("dmu_tx_assign.1024 ns"), but no colon, and
+      # a value ending in a newline (kern.version) leaves a blank line.
+      - '\A(?:(?:[A-Za-z][A-Za-z0-9_%-]*(?:\.[A-Za-z0-9_%-]+(?: [A-Za-z0-9_%-]+)*)+: [^\n]*|[ \t]*)(?:\n|\z))+\z'
 parse:
-  type: kv
-  separator: ": "
-  as: list
+  type: regex
+  # The lines past the signature's window are held to the same shape. A
+  # variable with an empty value prints "name: " and its value is "".
+  pattern: '^(?P<name>[A-Za-z][A-Za-z0-9_%-]*(?:\.[A-Za-z0-9_%-]+(?: [A-Za-z0-9_%-]+)*)+): ?(?P<value>.*?)[ \t]*$'
+fields:
+  name: {required: true}
