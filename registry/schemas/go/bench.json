@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/go/bench.json",
+  "title": "go/bench",
+  "description": "go test -bench benchmark results, one block per package",
+  "x-jsonize": {
+    "definition": "go/bench",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "environment": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "benchmarks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "gomaxprocs": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "iterations": {
+              "type": "integer"
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "number"
+                  },
+                  "unit": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "value",
+                  "unit"
+                ]
+              }
+            }
+          },
+          "required": [
+            "name",
+            "gomaxprocs",
+            "iterations",
+            "metrics"
+          ]
+        }
+      }
+    },
+    "required": [
+      "environment",
+      "benchmarks"
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+description: -v prints every test, and -cover the coverage on a line of its own, all left out by name
+source: captured with LC_ALL=C go test -v -cover ./pkg/jsonutil/ in the jsonize repository on Linux (go1.26.4)
+os: linux
+args: [test, -v, -cover, ./pkg/jsonutil/]

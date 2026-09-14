@@ -1,0 +1,197 @@
+[
+  {
+    "environment": {
+      "goos": "linux",
+      "goarch": "amd64",
+      "pkg": "github.com/nao1215/jsonize/pkg/selector",
+      "cpu": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+    },
+    "benchmarks": [
+      {
+        "name": "BenchmarkDetect/definitions=26",
+        "gomaxprocs": 32,
+        "iterations": 100,
+        "metrics": [
+          {
+            "value": 18292,
+            "unit": "ns/op"
+          },
+          {
+            "value": 1199,
+            "unit": "B/op"
+          },
+          {
+            "value": 14,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkDetect/definitions=500",
+        "gomaxprocs": 32,
+        "iterations": 100,
+        "metrics": [
+          {
+            "value": 340909,
+            "unit": "ns/op"
+          },
+          {
+            "value": 4729,
+            "unit": "B/op"
+          },
+          {
+            "value": 14,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkDetect/definitions=1000",
+        "gomaxprocs": 32,
+        "iterations": 100,
+        "metrics": [
+          {
+            "value": 701333,
+            "unit": "ns/op"
+          },
+          {
+            "value": 8825,
+            "unit": "B/op"
+          },
+          {
+            "value": 14,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkDetectWithParser",
+        "gomaxprocs": 32,
+        "iterations": 100,
+        "metrics": [
+          {
+            "value": 2547,
+            "unit": "ns/op"
+          },
+          {
+            "value": 1547,
+            "unit": "B/op"
+          },
+          {
+            "value": 26,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkDetectWithVariant",
+        "gomaxprocs": 32,
+        "iterations": 100,
+        "metrics": [
+          {
+            "value": 638.5,
+            "unit": "ns/op"
+          },
+          {
+            "value": 907,
+            "unit": "B/op"
+          },
+          {
+            "value": 13,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkDetectNoMatch",
+        "gomaxprocs": 32,
+        "iterations": 100,
+        "metrics": [
+          {
+            "value": 466511,
+            "unit": "ns/op"
+          },
+          {
+            "value": 8979,
+            "unit": "B/op"
+          },
+          {
+            "value": 7,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkDetectLargeInput",
+        "gomaxprocs": 32,
+        "iterations": 100,
+        "metrics": [
+          {
+            "value": 2279492,
+            "unit": "ns/op"
+          },
+          {
+            "value": 438.72,
+            "unit": "MB/s"
+          },
+          {
+            "value": 21691,
+            "unit": "B/op"
+          },
+          {
+            "value": 217,
+            "unit": "allocs/op"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "environment": {
+      "goos": "linux",
+      "goarch": "amd64",
+      "pkg": "github.com/nao1215/jsonize/pkg/definition",
+      "cpu": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+    },
+    "benchmarks": [
+      {
+        "name": "BenchmarkLoadAndValidate",
+        "gomaxprocs": 32,
+        "iterations": 100,
+        "metrics": [
+          {
+            "value": 20647,
+            "unit": "ns/op"
+          },
+          {
+            "value": 23847,
+            "unit": "B/op"
+          },
+          {
+            "value": 384,
+            "unit": "allocs/op"
+          }
+        ]
+      },
+      {
+        "name": "BenchmarkValidateNested",
+        "gomaxprocs": 32,
+        "iterations": 100,
+        "metrics": [
+          {
+            "value": 40337,
+            "unit": "ns/op"
+          },
+          {
+            "value": 43550,
+            "unit": "B/op"
+          },
+          {
+            "value": 623,
+            "unit": "allocs/op"
+          }
+        ]
+      }
+    ]
+  }
+]

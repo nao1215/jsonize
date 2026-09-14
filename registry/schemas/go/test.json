@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/go/test.json",
+  "title": "go/test",
+  "description": "go test result lines, one per package",
+  "x-jsonize": {
+    "definition": "go/test",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "cached": {
+        "type": "boolean"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "?",
+          "FAIL",
+          "ok"
+        ]
+      },
+      "package": {
+        "type": "string"
+      },
+      "elapsed": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "note": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "coverage": {
+        "type": [
+          "number",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "cached",
+      "status",
+      "package",
+      "elapsed",
+      "note",
+      "coverage"
+    ]
+  }
+}

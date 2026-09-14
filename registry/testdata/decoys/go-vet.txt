@@ -1,0 +1,6 @@
+# example.com/scratch/broken
+# [example.com/scratch/broken]
+vet: broken/broken.go:3:28: cannot use "not an int" (untyped string constant) as int value in return statement
+# example.com/scratch/passing
+passing/passing.go:9:2: fmt.Printf format %d has arg name of wrong type string
+passing/passing_test.go:14:2: self-assignment of got to got

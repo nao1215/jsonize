@@ -1,0 +1,50 @@
+[
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/convert",
+    "elapsed": 0.003,
+    "note": null,
+    "coverage": 93.7
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/definition",
+    "elapsed": 0.007,
+    "note": null,
+    "coverage": 90.6
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/engine",
+    "elapsed": 0.013,
+    "note": null,
+    "coverage": 94.9
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/jsonutil",
+    "elapsed": 0.002,
+    "note": null,
+    "coverage": 98.7
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/registry",
+    "elapsed": 0.003,
+    "note": null,
+    "coverage": 81.3
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/selector",
+    "elapsed": 0.007,
+    "note": null,
+    "coverage": 94.8
+  }
+]

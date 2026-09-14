@@ -1,0 +1,21 @@
+goos: linux
+goarch: amd64
+pkg: github.com/nao1215/jsonize/pkg/selector
+cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
+BenchmarkDetect/definitions=26-32         	     100	     18292 ns/op	    1199 B/op	      14 allocs/op
+BenchmarkDetect/definitions=500-32        	     100	    340909 ns/op	    4729 B/op	      14 allocs/op
+BenchmarkDetect/definitions=1000-32       	     100	    701333 ns/op	    8825 B/op	      14 allocs/op
+BenchmarkDetectWithParser-32              	     100	      2547 ns/op	    1547 B/op	      26 allocs/op
+BenchmarkDetectWithVariant-32             	     100	       638.5 ns/op	     907 B/op	      13 allocs/op
+BenchmarkDetectNoMatch-32                 	     100	    466511 ns/op	    8979 B/op	       7 allocs/op
+BenchmarkDetectLargeInput-32              	     100	   2279492 ns/op	 438.72 MB/s	   21691 B/op	     217 allocs/op
+PASS
+ok  	github.com/nao1215/jsonize/pkg/selector	0.580s
+goos: linux
+goarch: amd64
+pkg: github.com/nao1215/jsonize/pkg/definition
+cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
+BenchmarkLoadAndValidate-32    	     100	     20647 ns/op	   23847 B/op	     384 allocs/op
+BenchmarkValidateNested-32     	     100	     40337 ns/op	   43550 B/op	     623 allocs/op
+PASS
+ok  	github.com/nao1215/jsonize/pkg/definition	0.011s

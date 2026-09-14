@@ -1,0 +1,8 @@
+FAIL	example.com/scratch/broken [build failed]
+--- FAIL: TestSubFails (0.00s)
+    failing_test.go:6: Sub(3, 1) = 2, want 5
+FAIL
+FAIL	example.com/scratch/failing	0.002s
+?   	example.com/scratch/notests	[no test files]
+ok  	example.com/scratch/passing	0.002s
+FAIL

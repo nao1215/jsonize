@@ -1,0 +1,10 @@
+[
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/jsonutil",
+    "elapsed": 0.003,
+    "note": null,
+    "coverage": 98.7
+  }
+]

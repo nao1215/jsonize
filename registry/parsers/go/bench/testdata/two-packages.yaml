@@ -1,0 +1,4 @@
+description: two packages, one benchmark reporting MB/s beside the memory measurements
+source: captured with LC_ALL=C go test -run NoSuchTest -bench . -benchmem -benchtime 100x -count 1 ./pkg/selector/ ./pkg/definition/ in the jsonize repository on Linux (go1.26.4)
+os: linux
+args: [test, -run, NoSuchTest, -bench, ., -benchmem, -benchtime, 100x, -count, "1", ./pkg/selector/, ./pkg/definition/]

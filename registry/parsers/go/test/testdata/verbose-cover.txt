@@ -1,0 +1,27 @@
+=== RUN   TestObjectOrderAndReplace
+=== PAUSE TestObjectOrderAndReplace
+=== RUN   TestEncodeValues
+=== PAUSE TestEncodeValues
+=== RUN   TestEncodeNonFinite
+=== PAUSE TestEncodeNonFinite
+=== RUN   TestMarshalJSONViaStdlib
+=== PAUSE TestMarshalJSONViaStdlib
+=== RUN   TestEncodeAgreesWithStdlib
+=== PAUSE TestEncodeAgreesWithStdlib
+=== RUN   TestObjectIndex
+=== PAUSE TestObjectIndex
+=== CONT  TestObjectOrderAndReplace
+--- PASS: TestObjectOrderAndReplace (0.00s)
+=== CONT  TestEncodeNonFinite
+=== CONT  TestObjectIndex
+=== CONT  TestEncodeAgreesWithStdlib
+=== CONT  TestMarshalJSONViaStdlib
+--- PASS: TestEncodeNonFinite (0.00s)
+--- PASS: TestObjectIndex (0.00s)
+--- PASS: TestEncodeAgreesWithStdlib (0.00s)
+--- PASS: TestMarshalJSONViaStdlib (0.00s)
+=== CONT  TestEncodeValues
+--- PASS: TestEncodeValues (0.00s)
+PASS
+coverage: 98.7% of statements
+ok  	github.com/nao1215/jsonize/pkg/jsonutil	0.003s	coverage: 98.7% of statements

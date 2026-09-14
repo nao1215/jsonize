@@ -1,0 +1,74 @@
+# `go test -bench` prints one block per package that has benchmarks:
+# four labelled lines naming the operating system, the architecture, the
+# package and the processor, then one line per benchmark, then `PASS` and
+# the package's result line. A block repeats for every package, so the
+# definition describes one and `records` applies it to each.
+#
+# A benchmark line is the name (with `-N` for GOMAXPROCS appended, which
+# is read into its own key), the number of iterations, and then
+# measurements, each a number and its unit separated by a tab. The
+# measurements are read as a list of value and unit pairs rather than
+# into fixed keys, because the set is not fixed: `-benchmem` adds
+# `B/op` and `allocs/op`, `b.SetBytes` adds `MB/s`, and `b.ReportMetric`
+# adds any unit the benchmark chooses. A consumer looking for `ns/op`
+# finds it by its unit.
+#
+# `PASS` and the result line are left out by name. They say the run
+# finished, which the rows already say, and a package without
+# benchmarks prints only those two lines, before the first block when
+# several packages are named; leaving them out is what lets such a
+# package contribute nothing rather than stop the read. A benchmark that
+# fails prints `--- FAIL:` and `FAIL` instead, and that run is refused
+# naming the line: its numbers are not a result.
+format: 1
+command: go
+variant: bench
+description: go test -bench benchmark results, one block per package
+metadata:
+  tags: [go, toolchain, benchmark]
+  compatible: [gc]
+  references:
+    - https://pkg.go.dev/cmd/go#hdr-Testing_flags
+    - https://go.googlesource.com/proposal/+/master/design/14313-benchmark-format.md
+detect:
+  args:
+    all: ["test"]
+    any: ["-bench", "-bench=."]
+  signature:
+    all:
+      # The text opens with the first block, after the result lines of
+      # any package that has no benchmarks.
+      - '\A(?:PASS\nok  \t\S+\t\d+\.\d{3}s\n)*goos: \S+\ngoarch: \S+\npkg: \S+$'
+      - '^Benchmark\S+[ \t]+\d+\t[ \t]*[0-9.]+ ns/op'
+    window: 200
+input:
+  ignore:
+    - '^PASS$'
+    - '^ok  \t\S+\t\d+\.\d{3}s$'
+parse:
+  type: records
+  start: '^goos: '
+  parts:
+    - name: environment
+      select: {until: '^Benchmark'}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+    - name: benchmarks
+      ignore: ['^(?:goos|goarch|pkg|cpu): ']
+      parse:
+        type: regex
+        pattern: '^(?P<name>Benchmark\S*?)(?:-(?P<gomaxprocs>\d+))?[ \t]+(?P<iterations>\d+)\t(?P<metrics>.+?)[ \t]*$'
+      fields:
+        name: {required: true}
+        gomaxprocs: {type: int}
+        iterations: {type: int, required: true}
+        metrics:
+          type: array
+          split: "\t"
+          items:
+            type: object
+            regex: '^(?P<value>[0-9]+(?:\.[0-9]+)?(?:e[+-]?[0-9]+)?) (?P<unit>\S+)$'
+            fields:
+              value: {type: float}

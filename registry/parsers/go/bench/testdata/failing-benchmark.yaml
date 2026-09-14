@@ -1,0 +1,5 @@
+description: a benchmark that fails prints a report and FAIL in place of PASS, and the run is refused
+source: captured with LC_ALL=C go test -run NoSuchTest -bench . -benchtime 100x ./passing/ in a throwaway module (example.com/scratch) written for this fixture, on Linux (go1.26.4)
+os: linux
+args: [test, -run, NoSuchTest, -bench, ., -benchtime, 100x, ./passing/]
+expect_error: "--- FAIL"

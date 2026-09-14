@@ -1,0 +1,16 @@
+ok  	github.com/nao1215/jsonize/cmd/jz	0.195s
+ok  	github.com/nao1215/jsonize/e2e/atago/e2ehelper	1.349s
+ok  	github.com/nao1215/jsonize/internal/buildinfo	0.002s
+ok  	github.com/nao1215/jsonize/internal/cli	12.313s
+ok  	github.com/nao1215/jsonize/internal/conformance	0.065s
+ok  	github.com/nao1215/jsonize/internal/runner	3.068s
+ok  	github.com/nao1215/jsonize/internal/schema	0.008s
+ok  	github.com/nao1215/jsonize/internal/yaml	0.003s
+ok  	github.com/nao1215/jsonize/internal/yamlout	0.003s
+ok  	github.com/nao1215/jsonize/pkg/convert	0.003s
+ok  	github.com/nao1215/jsonize/pkg/definition	0.007s
+ok  	github.com/nao1215/jsonize/pkg/engine	0.019s
+ok  	github.com/nao1215/jsonize/pkg/jsonutil	0.002s
+ok  	github.com/nao1215/jsonize/pkg/registry	0.003s
+ok  	github.com/nao1215/jsonize/pkg/selector	0.007s
+ok  	github.com/nao1215/jsonize/registry	0.959s

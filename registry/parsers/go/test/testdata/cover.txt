@@ -1,0 +1,6 @@
+ok  	github.com/nao1215/jsonize/pkg/convert	0.003s	coverage: 93.7% of statements
+ok  	github.com/nao1215/jsonize/pkg/definition	0.007s	coverage: 90.6% of statements
+ok  	github.com/nao1215/jsonize/pkg/engine	0.013s	coverage: 94.9% of statements
+ok  	github.com/nao1215/jsonize/pkg/jsonutil	0.002s	coverage: 98.7% of statements
+ok  	github.com/nao1215/jsonize/pkg/registry	0.003s	coverage: 81.3% of statements
+ok  	github.com/nao1215/jsonize/pkg/selector	0.007s	coverage: 94.8% of statements
