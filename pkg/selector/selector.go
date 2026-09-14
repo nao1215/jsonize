@@ -34,6 +34,7 @@ import (
 	"bytes"
 	"fmt"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 	"unicode/utf8"
@@ -332,7 +333,8 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 	} else {
 		candidates = reg.Entries()
 	}
-	window := signatureWindow(ctx.Input)
+	w := signatureWindow(ctx.Input)
+	sw := &w
 	ctx.nul = bytes.IndexByte(ctx.Input, 0) >= 0
 
 	if ctx.Variant != "" {
@@ -343,9 +345,9 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		// A name is not evidence: a variant the user asked for still has
 		// to fit the text. If a definition rejects output it should
 		// accept, the definition is what needs fixing.
-		v := check(e, &ctx, window)
+		v := check(e, &ctx, sw)
 		if !v.ok() {
-			if len(window) == 0 {
+			if len(w.lines) == 0 {
 				v.Reason = noText
 			}
 			return nil, &MismatchError{Entry: e, Reason: v.Reason}
@@ -353,26 +355,23 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		return &Result{Entry: e, Scanned: 1, Matched: v.Matched}, nil
 	}
 
-	var sc scan
+	// A search of the whole registry rejects nearly all of it on the first
+	// expression of a signature, which explains nothing; a search scoped
+	// to one parser is short enough to report whole.
+	sc := scan{whole: ctx.Parser != ""}
 	claims := ctx.Parser != "" && ctx.Args == nil && anyClaims(candidates)
 	for _, e := range candidates {
 		if ctx.Parser == "" && ExplicitOnly(e.Def) {
-			sc.heldBack(e, &ctx, window)
+			sc.heldBack(e, &ctx, sw)
 			continue
 		}
 		if claims && ShapeOnly(e.Def) {
 			sc.unclaimed(e)
 			continue
 		}
-		sc.consider(e, &ctx, window)
+		sc.consider(e, &ctx, sw)
 	}
-	// A search of the whole registry rejects nearly all of it on the first
-	// expression of a signature, which explains nothing; a search scoped
-	// to one parser is short enough to report whole.
 	reported := sc.rejections
-	if ctx.Parser == "" {
-		reported = closeOnly(sc.rejections)
-	}
 	result := func(e *registry.Entry, settled string, outranked []Rejection) *Result {
 		return &Result{
 			Entry: e, Scanned: len(candidates), Matched: sc.verdict(e).Matched, Rejections: reported,
@@ -386,7 +385,7 @@ func Select(reg *registry.Registry, ctx Context) (*Result, error) {
 		err := &NoMatchError{Parser: ctx.Parser, Scanned: len(candidates), Hints: sc.hints, Reported: reported, ExplicitOnly: sc.explicitOnly, shapes: dedupe(sc.shapes), excluded: sc.excluded, excludedArg: sc.excludedArg, unclaimed: sc.shapeOnly,
 			// Binary holds NUL bytes too, and is not what the hint is about.
 			nul:   ctx.nul && utf8.Valid(ctx.Input),
-			empty: len(window) == 0}
+			empty: len(w.lines) == 0}
 		if ctx.Parser != "" {
 			err.Rejections = sc.rejections
 		}
@@ -406,13 +405,25 @@ type scan struct {
 	matched []match
 	// shapeOnly are the variants of a named command that describe a
 	// shape and make no claim about the text (see unclaimed).
-	shapeOnly    []*registry.Entry
-	hints        []*registry.Entry
-	shapes       []string
-	excluded     *registry.Entry
-	excludedArg  string
+	shapeOnly   []*registry.Entry
+	hints       []*registry.Entry
+	shapes      []string
+	excluded    *registry.Entry
+	excludedArg string
+	// rejections are the ones worth reading: every one when the search
+	// is scoped to one parser (whole), and otherwise only the near
+	// misses, since a definition that failed the very first expression
+	// of its signature is every unrelated parser in the registry.
 	rejections   []Rejection
+	whole        bool
 	explicitOnly int
+}
+
+// reject records one rejection, when it is one the caller will read.
+func (sc *scan) reject(r Rejection) {
+	if sc.whole || r.Close {
+		sc.rejections = append(sc.rejections, r)
+	}
 }
 
 // match is a definition the text fits, with what it met.
@@ -445,11 +456,11 @@ func (sc *scan) verdict(e *registry.Entry) verdict {
 // does carry a signature can still say "this looks like me", which becomes
 // a hint naming the parser to pass; one without a signature describes a
 // shape, which is what an error can offer when nothing fits.
-func (sc *scan) heldBack(e *registry.Entry, ctx *Context, window []string) {
+func (sc *scan) heldBack(e *registry.Entry, ctx *Context, w *window) {
 	sc.explicitOnly++
 	fits := false
 	if !e.Def.Detect.Signature.IsZero() {
-		if check(e, ctx, window).ok() {
+		if check(e, ctx, w).ok() {
 			sc.hints = append(sc.hints, e)
 			fits = true
 		}
@@ -459,7 +470,7 @@ func (sc *scan) heldBack(e *registry.Entry, ctx *Context, window []string) {
 	// A definition whose signature does fit the text and is only held back
 	// by auto_detect is the near miss most worth naming, since naming its
 	// parser is the way forward.
-	sc.rejections = append(sc.rejections, Rejection{Entry: e, Reason: "needs --parser " + e.Def.Command, Close: fits, ExplicitOnly: true})
+	sc.reject(Rejection{Entry: e, Reason: "needs --parser " + e.Def.Command, Close: fits, ExplicitOnly: true})
 }
 
 // unclaimed records a variant with no signature under a command whose
@@ -472,7 +483,7 @@ func (sc *scan) heldBack(e *registry.Entry, ctx *Context, window []string) {
 func (sc *scan) unclaimed(e *registry.Entry) {
 	sc.explicitOnly++
 	sc.shapeOnly = append(sc.shapeOnly, e)
-	sc.rejections = append(sc.rejections, Rejection{Entry: e, Reason: "has no signature, so it reads any text and is used only when named with --variant " + e.Def.Variant, ExplicitOnly: true})
+	sc.reject(Rejection{Entry: e, Reason: "has no signature, so it reads any text and is used only when named with --variant " + e.Def.Variant, ExplicitOnly: true})
 }
 
 // anyClaims reports whether one of the definitions carries a signature.
@@ -486,13 +497,13 @@ func anyClaims(entries []*registry.Entry) bool {
 }
 
 // consider checks one candidate against the text.
-func (sc *scan) consider(e *registry.Entry, ctx *Context, window []string) {
-	v := check(e, ctx, window)
+func (sc *scan) consider(e *registry.Entry, ctx *Context, w *window) {
+	v := check(e, ctx, w)
 	if v.ok() {
 		sc.matched = append(sc.matched, match{entry: e, verdict: v})
 		return
 	}
-	sc.rejections = append(sc.rejections, Rejection{Entry: e, Reason: v.Reason, Close: v.Close})
+	sc.reject(Rejection{Entry: e, Reason: v.Reason, Close: v.Close})
 	// Within one parser, a variant the text fits and only the system or an
 	// argument it asks for ruled out is the one naming would reach, since a
 	// pipe carries neither.
@@ -635,7 +646,7 @@ const nulReason = "the text holds a NUL byte, and this format is read line by li
 
 // check reports whether one definition can describe the input, why not
 // when it cannot, and what it did meet either way.
-func check(e *registry.Entry, ctx *Context, window []string) verdict {
+func check(e *registry.Entry, ctx *Context, w *window) verdict {
 	d := &e.Def.Detect
 	var v verdict
 	// A command run with -z or --zero ends its records with NUL. A format
@@ -647,7 +658,7 @@ func check(e *registry.Entry, ctx *Context, window []string) verdict {
 		return v
 	}
 	if !d.Signature.IsZero() {
-		v = matchSignature(&d.Signature, window)
+		v = matchSignature(&d.Signature, w, ctx.Parser != "")
 		if !v.ok() {
 			return v
 		}
@@ -655,7 +666,7 @@ func check(e *registry.Entry, ctx *Context, window []string) verdict {
 	v.named = true
 	// Anything past the signature has already met it, so a rejection here
 	// is always worth reading.
-	if ctx.OS != "" && len(d.OS) > 0 && !contains(d.OS, ctx.OS) {
+	if ctx.OS != "" && len(d.OS) > 0 && !slices.Contains(d.OS, ctx.OS) {
 		v.Reason = fmt.Sprintf("written for %s, not %s", strings.Join(d.OS, "/"), ctx.OS)
 		v.Close = true
 		return v
@@ -714,7 +725,7 @@ func Candidates(reg *registry.Registry, ctx Context) []*registry.Entry {
 	var out []*registry.Entry
 	for _, e := range scope {
 		d := &e.Def.Detect
-		if ctx.OS != "" && len(d.OS) > 0 && !contains(d.OS, ctx.OS) {
+		if ctx.OS != "" && len(d.OS) > 0 && !slices.Contains(d.OS, ctx.OS) {
 			continue
 		}
 		if args := e.Def.ArgsFor(ctx.Parser); ctx.Args != nil && !args.IsZero() {
@@ -769,20 +780,53 @@ func Window(reg *registry.Registry, ctx Context) (lines int, sep byte) {
 	return n, sep
 }
 
-// signatureWindow returns the leading lines of input, which is all a
-// signature may look at.
-func signatureWindow(input []byte) []string {
-	if len(input) == 0 {
-		return nil
+// window is the leading lines of the input, which is all a signature may
+// look at, and the text of them joined for each length a signature asks
+// for. Nearly every signature asks for the default, so the join is made
+// once for the registry rather than once for each definition in it.
+type window struct {
+	lines []string
+	// The first join is kept on its own, since a search scoped to one
+	// parser rarely needs another; the rest go in a map made when a
+	// signature asks for a different length.
+	n      int
+	joined string
+	have   bool
+	more   map[int]string
+}
+
+// text returns the first n lines joined by newlines, or all of them
+// when there are fewer.
+func (w *window) text(n int) string {
+	n = min(n, len(w.lines))
+	if w.have && w.n == n {
+		return w.joined
 	}
-	// A command that keeps colouring its output through a pipe would
-	// otherwise hide its own format behind the escapes. They come off
-	// before the byte order mark, the order the engine prepares a record
-	// in, so that the two see the same first line.
-	input = convert.StripANSI(input)
-	input = bytes.TrimPrefix(input, []byte{0xEF, 0xBB, 0xBF})
-	var lines []string
-	for len(input) > 0 && len(lines) < definition.MaxSignatureWindow {
+	if s, ok := w.more[n]; ok {
+		return s
+	}
+	s := strings.Join(w.lines[:n], "\n")
+	switch {
+	case !w.have:
+		w.n, w.joined, w.have = n, s, true
+	case w.more == nil:
+		w.more = map[int]string{n: s}
+	default:
+		w.more[n] = s
+	}
+	return s
+}
+
+// signatureWindow returns the leading lines of input. Each line is
+// brought to the form the engine reads it in, escape sequences off first
+// and then the carriage return and the byte order mark, so that the two
+// see the same first line; only the lines the window holds are touched,
+// since the rest of the text is not looked at.
+func signatureWindow(input []byte) window {
+	var w window
+	bom := []byte{0xEF, 0xBB, 0xBF}
+	first := true
+	for len(input) > 0 && len(w.lines) < definition.MaxSignatureWindow {
 		i := bytes.IndexByte(input, '\n')
 		var l []byte
 		if i < 0 {
@@ -790,45 +834,62 @@ func signatureWindow(input []byte) []string {
 		} else {
 			l, input = input[:i], input[i+1:]
 		}
-		line := string(bytes.TrimSuffix(l, []byte{'\r'}))
+		l = bytes.TrimSuffix(convert.StripANSI(l), []byte{'\r'})
+		if first {
+			l = bytes.TrimPrefix(l, bom)
+			first = false
+		}
+		line := string(l)
 		// Blank lines before the text are not part of it: the parser
 		// skips them, and a signature anchored at \A would otherwise meet
 		// the blank line where the text's first line is.
-		if len(lines) == 0 && strings.TrimSpace(line) == "" {
+		if len(w.lines) == 0 && strings.TrimSpace(line) == "" {
 			continue
 		}
-		lines = append(lines, line)
+		w.lines = append(w.lines, line)
 	}
 	// Blank lines after the last of the text are not part of it either,
 	// and a signature that says every line has one shape would otherwise
 	// refuse `cat /proc/meminfo; echo`. Only where the input ends, since
 	// a blank line with text after it is inside.
 	if len(input) == 0 {
-		for len(lines) > 0 && strings.TrimSpace(lines[len(lines)-1]) == "" {
-			lines = lines[:len(lines)-1]
+		for len(w.lines) > 0 && strings.TrimSpace(w.lines[len(w.lines)-1]) == "" {
+			w.lines = w.lines[:len(w.lines)-1]
 		}
 	}
-	return lines
+	return w
 }
 
-func matchSignature(s *definition.Signature, window []string) verdict {
+// firstExpressionFailed is what is said of a definition the very first
+// expression of whose signature did not match, in a search of the whole
+// registry: almost every definition fails almost every input that way,
+// nobody reads those, and rendering the expression for each would cost
+// more than testing it did.
+const firstExpressionFailed = "signature.all[0] did not match"
+
+// matchSignature tests a signature against the window. explain asks for
+// the failing expression to be rendered even when it is the first one,
+// which a search scoped to one parser reports and a search of the whole
+// registry does not.
+func matchSignature(s *definition.Signature, w *window, explain bool) verdict {
 	n := s.Window
 	if n == 0 {
 		n = definition.DefaultSignatureWindow
 	}
-	if n > len(window) {
-		n = len(window)
-	}
-	text := strings.Join(window[:n], "\n")
+	text := w.text(n)
 	all, anyOf, none := s.Compiled()
 	var v verdict
 	for i, re := range all {
 		if !re.MatchString(text) {
-			v.Reason = fmt.Sprintf("signature.all[%d] %s did not match", i, short(re))
 			// Getting past an earlier expression is what makes this
 			// worth reading; failing the first one is what almost every
 			// definition in the registry does with almost every input.
 			v.Close = i > 0
+			if !v.Close && !explain {
+				v.Reason = firstExpressionFailed
+				return v
+			}
+			v.Reason = fmt.Sprintf("signature.all[%d] %s did not match", i, short(re))
 			return v
 		}
 		v.Matched = append(v.Matched, fmt.Sprintf("signature.all[%d] %s", i, short(re)))
@@ -973,15 +1034,6 @@ func variantNames(entries []*registry.Entry) []string {
 	return out
 }
 
-func contains(list []string, s string) bool {
-	for _, v := range list {
-		if v == s {
-			return true
-		}
-	}
-	return false
-}
-
 // suggest returns known names within a small edit distance of s.
 // suggest names the commands closest to one that does not exist. Only
 // the closest are offered: a registry of a few hundred commands has
@@ -1041,16 +1093,4 @@ func levenshtein(a, b string) int {
 		prev, cur = cur, prev
 	}
 	return prev[len(rb)]
-}
-
-// closeOnly keeps the rejections that explain something: a definition
-// that met part of what it asks for before being ruled out.
-func closeOnly(rs []Rejection) []Rejection {
-	out := rs[:0:0]
-	for _, r := range rs {
-		if r.Close {
-			out = append(out, r)
-		}
-	}
-	return out
 }

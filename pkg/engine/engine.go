@@ -13,7 +13,6 @@
 package engine
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"regexp"
@@ -207,25 +206,32 @@ func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
 	if len(input) == 0 {
 		return nil, nil
 	}
-	parts := bytes.Split(input, []byte{sep})
-	if len(parts) > 0 && len(parts[len(parts)-1]) == 0 {
-		parts = parts[:len(parts)-1] // trailing separator
-	}
-	out := make([]line, 0, len(parts))
-	for i, p := range parts {
+	// The input is copied once, and every record is then a piece of that
+	// copy: a record is a string once it is read, and making each its
+	// own string would copy the input a record at a time.
+	text := strings.TrimSuffix(string(input), string(sep))
+	out := make([]line, 0, strings.Count(text, string(sep))+1)
+	for num := 1; ; num++ {
+		rec := text
+		i := strings.IndexByte(text, sep)
+		if i >= 0 {
+			rec, text = text[:i], text[i+1:]
+		}
 		// The limit counts the bytes between two separators as they were
 		// read, escape sequences and a carriage return included, which is
 		// what a stream can count before it has read the whole record.
-		if len(p) > maxLen {
-			return nil, &splitError{line: i + 1, msg: fmt.Sprintf("record exceeds %d bytes", maxLen), cause: ErrLineTooLong}
+		if len(rec) > maxLen {
+			return nil, &splitError{line: num, msg: fmt.Sprintf("record exceeds %d bytes", maxLen), cause: ErrLineTooLong}
 		}
-		p = prepareRecord(p, sep, i+1)
-		if err := checkRecord(p, sep); err != nil {
-			return nil, &splitError{line: i + 1, msg: err.msg}
+		rec = prepareRecord(rec, sep, num)
+		if err := checkRecord(rec, sep); err != nil {
+			return nil, &splitError{line: num, msg: err.msg}
 		}
-		out = append(out, line{text: string(p), num: i + 1})
+		out = append(out, line{text: rec, num: num})
+		if i < 0 {
+			return out, nil
+		}
 	}
-	return out, nil
 }
 
 // prepareRecord brings one record to the form the parsers read: the
@@ -236,25 +242,27 @@ func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
 // record is prepared, since a byte order mark behind a colour code and
 // a carriage return inside an escape sequence are only the same text
 // under one order.
-func prepareRecord(raw []byte, sep byte, num int) []byte {
-	out := convert.StripANSI(raw)
+func prepareRecord(text string, sep byte, num int) string {
+	if strings.IndexByte(text, 0x1b) >= 0 {
+		text = string(convert.StripANSI([]byte(text)))
+	}
 	if sep == '\n' {
-		out = bytes.TrimSuffix(out, []byte{'\r'})
+		text = strings.TrimSuffix(text, "\r")
 	}
 	if num == 1 {
-		out = bytes.TrimPrefix(out, []byte{0xEF, 0xBB, 0xBF})
+		text = strings.TrimPrefix(text, "\xEF\xBB\xBF")
 	}
-	return out
+	return text
 }
 
 // checkRecord refuses a prepared record that no parser reads: one that
 // is not UTF-8, and one holding a NUL byte in a format read line by
 // line.
-func checkRecord(text []byte, sep byte) *splitError {
-	if !utf8.Valid(text) {
+func checkRecord(text string, sep byte) *splitError {
+	if !utf8.ValidString(text) {
 		return &splitError{msg: "input is not valid UTF-8"}
 	}
-	if sep == '\n' && bytes.IndexByte(text, 0) >= 0 {
+	if sep == '\n' && strings.IndexByte(text, 0) >= 0 {
 		return &splitError{msg: nulInLine}
 	}
 	return nil
@@ -663,30 +671,40 @@ func truncate(s string, n int) string {
 func (r *run) objectFromMatch(re *regexp.Regexp, text string, m []int, vals []definition.Value, fields map[string]*definition.Field, ln int) (*jsonutil.Object, error) {
 	obj := jsonutil.NewObject()
 	for _, v := range vals {
-		if err := r.setField(obj, v.Name, v.Value, fields[v.Name], ln); err != nil {
+		if err := r.setField(obj, v.Name, some(v.Value), fields[v.Name], ln); err != nil {
 			return nil, err
 		}
 	}
 	names := re.SubexpNames()
-	present := presentGroups(re, m)
+	present := presentGroups(re, m, fields)
 	for i, name := range names {
 		if name == "" {
 			continue
 		}
-		var raw any
-		if m[2*i] >= 0 {
-			raw = text[m[2*i]:m[2*i+1]]
-		}
-		if err := r.setMatched(obj, name, raw, fields[name], ln, present); err != nil {
+		if err := r.setMatched(obj, name, group(text, m, i), fields[name], ln, present); err != nil {
 			return nil, err
 		}
 	}
 	return obj, nil
 }
 
+// group returns what the i-th group of a match read: its text, or
+// nothing when it took no part in the match.
+func group(text string, m []int, i int) raw {
+	if m[2*i] < 0 {
+		return raw{}
+	}
+	return some(text[m[2*i]:m[2*i+1]])
+}
+
 // presentGroups lists the named groups of a match that took part in it
 // with some text, which is what an unescape rule's when is decided by.
-func presentGroups(re *regexp.Regexp, m []int) map[string]bool {
+// It is nil when no rule among fields asks, which is nearly every line
+// of nearly every format, so the list is not made for those.
+func presentGroups(re *regexp.Regexp, m []int, fields map[string]*definition.Field) map[string]bool {
+	if !asksPresent(fields) {
+		return nil
+	}
 	present := map[string]bool{}
 	for i, name := range re.SubexpNames() {
 		if name != "" && m[2*i] >= 0 && m[2*i+1] > m[2*i] {
@@ -694,6 +712,17 @@ func presentGroups(re *regexp.Regexp, m []int) map[string]bool {
 		}
 	}
 	return present
+}
+
+// asksPresent reports whether a rule among fields decides by which
+// groups took part in the match.
+func asksPresent(fields map[string]*definition.Field) bool {
+	for _, f := range fields {
+		if f != nil && f.Unescape != nil && f.Unescape.When != "" {
+			return true
+		}
+	}
+	return false
 }
 
 // unquote removes one matching pair of surrounding quotes, which is what
@@ -750,14 +779,14 @@ func (r *run) parseKV(p *definition.Parse, fields map[string]*definition.Field, 
 			if err := keys.add(r, key, l.num); err != nil {
 				return nil, err
 			}
-			if err := r.setField(obj, key, value, fields[key], l.num); err != nil {
+			if err := r.setField(obj, key, some(value), fields[key], l.num); err != nil {
 				return nil, err
 			}
 			continue
 		}
 		entry := jsonutil.NewObject()
 		entry.Set(keyName, key)
-		if err := r.setField(entry, valueName, value, fields[key], l.num); err != nil {
+		if err := r.setField(entry, valueName, some(value), fields[key], l.num); err != nil {
 			return nil, err
 		}
 		list = append(list, entry)

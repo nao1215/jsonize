@@ -3,8 +3,10 @@ package cli
 import (
 	"fmt"
 	"io"
+	"maps"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"text/tabwriter"
 
@@ -297,7 +299,7 @@ func printFields(w io.Writer, indent string, fields map[string]*definition.Field
 		return
 	}
 	fmt.Fprintf(w, "%sfields:\n", indent)
-	for _, name := range sortedKeys(fields) {
+	for _, name := range slices.Sorted(maps.Keys(fields)) {
 		fmt.Fprintf(w, "%s  %-20s %s\n", indent, name, describeField(fields[name]))
 	}
 }
@@ -424,7 +426,7 @@ func describe(e *registry.Entry) *jsonutil.Object {
 
 func fieldsObject(fields map[string]*definition.Field) *jsonutil.Object {
 	o := jsonutil.NewObject()
-	for _, name := range sortedKeys(fields) {
+	for _, name := range slices.Sorted(maps.Keys(fields)) {
 		o.Set(name, describeField(fields[name]))
 	}
 	return o

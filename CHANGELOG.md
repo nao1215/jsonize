@@ -55,6 +55,24 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- jz starts faster. The definitions of a registry are decoded side by
+  side, and the sorted views a selection asks for are made once when the
+  registry is loaded rather than on every lookup. On a 32-thread machine
+  `df -h | jz` took 137 ms and takes 48 ms; `jz version`, which loads no
+  registry, takes 1 ms either way.
+- Detection over the whole registry joins the signature window once
+  rather than once per definition, and no longer renders a reason for a
+  definition whose first expression did not match, which `--explain`
+  never showed. A scan of 1000 definitions takes half the time and 14
+  allocations where it took 4000.
+- The engine and the JSON writer allocate less: the records of an input
+  are pieces of one copy of it, a table row is cut into cells without
+  boxing each of them twice, an object keeps an index of its members only
+  past eight of them, and strings and numbers are written without an
+  encoder per value. A table of 100 000 rows is read in 59 ms where it
+  took 109 ms, and its JSON is written in 19 ms where it took 73 ms (26
+  ms where it took 125 ms indented). The output is byte for byte what it
+  was, and the jsonutil tests now pin it against encoding/json.
 - `--stream` commits to a definition as soon as the lines that have come
   can no longer change the choice, instead of holding back the widest
   signature window of every candidate. `jz run --stream vmstat 1` wrote

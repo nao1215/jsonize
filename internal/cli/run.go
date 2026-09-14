@@ -6,9 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"maps"
 	"os"
 	"path/filepath"
 	"runtime"
+	"slices"
 	"strings"
 	"time"
 
@@ -445,7 +447,7 @@ func execEnv(reg *registry.Registry, parser, variant string) []string {
 // envList renders a map as NAME=VALUE entries in a fixed order.
 func envList(values map[string]string) []string {
 	out := make([]string, 0, len(values))
-	for _, k := range sortedKeys(values) {
+	for _, k := range slices.Sorted(maps.Keys(values)) {
 		out = append(out, k+"="+values[k])
 	}
 	return out

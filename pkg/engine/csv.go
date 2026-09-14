@@ -159,11 +159,11 @@ func (r *run) csvRow(p *definition.Parse, fields map[string]*definition.Field, c
 	}
 	obj := jsonutil.NewObject()
 	for i, name := range cols {
-		var raw any
+		var v raw
 		if i < len(row) {
-			raw = row[i]
+			v = some(row[i])
 		}
-		if err := r.setField(obj, name, raw, fields[name], ln); err != nil {
+		if err := r.setField(obj, name, v, fields[name], ln); err != nil {
 			return nil, err
 		}
 	}

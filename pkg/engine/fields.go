@@ -9,53 +9,63 @@ import (
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
-// setField converts raw (a string or nil) with the field rules and stores
-// it in obj, honouring when_missing: omit.
-func (r *run) setField(obj *jsonutil.Object, name string, raw any, f *definition.Field, ln int) error {
-	return r.setMatched(obj, name, raw, f, ln, nil)
+// raw is what a parser read for one field: its text, and whether it read
+// anything, since an empty column of an aligned table and a group that
+// took no part in a match read nothing rather than an empty string.
+type raw struct {
+	text string
+	has  bool
+}
+
+// some is a raw that holds text.
+func some(text string) raw { return raw{text: text, has: true} }
+
+// setField converts what was read with the field rules and stores it in
+// obj, honouring when_missing: omit.
+func (r *run) setField(obj *jsonutil.Object, name string, v raw, f *definition.Field, ln int) error {
+	return r.setMatched(obj, name, v, f, ln, nil)
 }
 
 // setMatched is setField for a value a pattern read. present holds the
 // groups that matched some text, which is what an unescape rule's when
 // is decided by.
-func (r *run) setMatched(obj *jsonutil.Object, name string, raw any, f *definition.Field, ln int, present map[string]bool) error {
-	v, omit, err := r.convertMatched(name, raw, f, ln, present)
+func (r *run) setMatched(obj *jsonutil.Object, name string, v raw, f *definition.Field, ln int, present map[string]bool) error {
+	converted, omit, err := r.convertMatched(name, v, f, ln, present)
 	if err != nil {
 		return err
 	}
 	if omit {
 		return nil
 	}
-	obj.Set(name, v)
+	obj.Set(name, converted)
 	return r.countValue(ln)
 }
 
 // convert applies a field rule. The bool result is true when the value
 // should be omitted from its parent object.
-func (r *run) convert(name string, raw any, f *definition.Field, ln int) (any, bool, error) {
-	return r.convertMatched(name, raw, f, ln, nil)
+func (r *run) convert(name, text string, f *definition.Field, ln int) (any, bool, error) {
+	return r.convertMatched(name, some(text), f, ln, nil)
 }
 
-func (r *run) convertMatched(name string, raw any, f *definition.Field, ln int, present map[string]bool) (any, bool, error) {
+func (r *run) convertMatched(name string, v raw, f *definition.Field, ln int, present map[string]bool) (any, bool, error) {
 	if r.opts.Raw {
 		// The field rules are the whole of what raw mode leaves out, and
 		// they are all applied from here, so this is the one place that
 		// has to know about it. when_missing and required are field rules
 		// too: a shape that changed with the values in it would defeat
 		// the point of looking at what was extracted.
-		if raw == nil {
+		if !v.has {
 			return nil, false, nil
 		}
-		s, _ := raw.(string)
-		return s, false, nil
+		return v.text, false, nil
 	}
-	if raw == nil {
+	if !v.has {
 		if f != nil && f.Required {
 			return nil, false, r.errorf(ln, name, "required value is missing")
 		}
 		return nil, f != nil && f.WhenMissing == definition.MissingOmit, nil
 	}
-	s, _ := raw.(string)
+	s := v.text
 	if f == nil {
 		return s, false, nil
 	}
@@ -72,7 +82,7 @@ func (r *run) convertMatched(name string, raw any, f *definition.Field, ln int, 
 			return nil, false, err
 		}
 		if !ok {
-			return r.convertMatched(name, nil, f, ln, present)
+			return r.convertMatched(name, raw{}, f, ln, present)
 		}
 		s = kept
 	}
@@ -88,11 +98,11 @@ func (r *run) convertMatched(name string, raw any, f *definition.Field, ln int, 
 	if f.Required && trimmed == "" {
 		return nil, false, r.errorf(ln, name, "required value is empty")
 	}
-	v, err := r.convertScalar(name, s, f, ln)
+	converted, err := r.convertScalar(name, s, f, ln)
 	if err != nil {
 		return nil, false, err
 	}
-	return v, false, nil
+	return converted, false, nil
 }
 
 // stringRules applies what a string field says about its text: the
@@ -214,16 +224,12 @@ func (r *run) convertObject(name, s string, f *definition.Field, ln int) (any, e
 	// The object's own match is the context its sub-fields are read in:
 	// an unescape rule's when names a group of this pattern, and it is
 	// decided by whether that group took part here.
-	present := presentGroups(re, m)
+	present := presentGroups(re, m, f.Fields)
 	for i, gname := range re.SubexpNames() {
 		if gname == "" {
 			continue
 		}
-		var raw any
-		if m[2*i] >= 0 {
-			raw = s[m[2*i]:m[2*i+1]]
-		}
-		if err := r.setMatched(obj, gname, raw, f.Fields[gname], ln, present); err != nil {
+		if err := r.setMatched(obj, gname, group(s, m, i), f.Fields[gname], ln, present); err != nil {
 			return nil, err
 		}
 	}

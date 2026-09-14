@@ -5,7 +5,6 @@ import (
 	"regexp"
 	"regexp/syntax"
 	"slices"
-	"strings"
 	"sync"
 
 	"github.com/nao1215/jsonize/pkg/definition"
@@ -66,10 +65,10 @@ func Watch(reg *registry.Registry, ctx Context) func(input []byte) bool {
 	return func(input []byte) bool {
 		c := ctx
 		c.nul = bytes.IndexByte(input, 0) >= 0
-		window := signatureWindow(input)
+		w := signatureWindow(input)
 		still := open[:0:0]
 		for _, e := range open {
-			switch decide(e, &c, window) {
+			switch decide(e, &c, &w) {
 			case decidedFits:
 				fits = append(fits, e)
 			case undecided:
@@ -146,12 +145,12 @@ const (
 
 // decide says whether one definition's verdict on the lines so far is
 // final, and what it is.
-func decide(e *registry.Entry, ctx *Context, window []string) decision {
+func decide(e *registry.Entry, ctx *Context, w *window) decision {
 	d := &e.Def.Detect
 	if ctx.nul && e.Def.Input.Separator() == '\n' {
 		return decidedOut
 	}
-	if ctx.OS != "" && len(d.OS) > 0 && !contains(d.OS, ctx.OS) {
+	if ctx.OS != "" && len(d.OS) > 0 && !slices.Contains(d.OS, ctx.OS) {
 		return decidedOut
 	}
 	if args := e.Def.ArgsFor(ctx.Parser); ctx.Args != nil && !args.IsZero() {
@@ -166,18 +165,18 @@ func decide(e *registry.Entry, ctx *Context, window []string) decision {
 	if n == 0 {
 		n = definition.DefaultSignatureWindow
 	}
-	if len(window) >= n {
-		if matchSignature(&d.Signature, window).ok() {
+	if len(w.lines) >= n {
+		if matchSignature(&d.Signature, w, false).ok() {
 			return decidedFits
 		}
 		return decidedOut
 	}
-	if len(window) == 0 {
+	if len(w.lines) == 0 {
 		// The blank lines before the text are not part of it, so nothing
 		// is known yet about how it starts.
 		return undecided
 	}
-	text := strings.Join(window, "\n")
+	text := w.text(len(w.lines))
 	all, anyOf, none := d.Signature.Compiled()
 	result := decidedFits
 	for _, re := range all {

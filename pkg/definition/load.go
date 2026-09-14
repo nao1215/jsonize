@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"maps"
 	"math"
 	"regexp"
 	"regexp/syntax"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -226,7 +228,7 @@ func checkWholeNumbers(data []byte, source string) error {
 	walk = func(path string, v any) {
 		switch t := v.(type) {
 		case map[string]any:
-			for _, k := range sortedKeys(t) {
+			for _, k := range slices.Sorted(maps.Keys(t)) {
 				p := k
 				if path != "" {
 					p = path + "." + k
@@ -247,17 +249,6 @@ func checkWholeNumbers(data []byte, source string) error {
 		return nil
 	}
 	return &ValidationError{Source: source, Msg: strings.Join(problems, "\n"+source+": ")}
-}
-
-// sortedKeys names a mapping's keys in order, so that a document with
-// several problems reports them the same way every time.
-func sortedKeys(m map[string]any) []string {
-	out := make([]string, 0, len(m))
-	for k := range m {
-		out = append(out, k)
-	}
-	sort.Strings(out)
-	return out
 }
 
 // finish checks the format, validates the definition and compiles its

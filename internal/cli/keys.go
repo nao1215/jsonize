@@ -2,6 +2,8 @@ package cli
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 	"strings"
 
 	"github.com/nao1215/jsonize/internal/schema"
@@ -58,7 +60,7 @@ func (f *keyFilter) know(def *definition.Definition) error {
 		}
 	}
 	if len(unknown) > 0 {
-		return &unknownKeyError{keys: sortStrings(unknown), present: sortedKeys(f.known)}
+		return &unknownKeyError{keys: sortStrings(unknown), present: slices.Sorted(maps.Keys(f.known))}
 	}
 	return nil
 }
@@ -144,7 +146,7 @@ func (f *keyFilter) unseen() error {
 	for k := range f.present {
 		present[k] = true
 	}
-	return &unknownKeyError{keys: sortStrings(missing), present: sortedKeys(present)}
+	return &unknownKeyError{keys: sortStrings(missing), present: slices.Sorted(maps.Keys(present))}
 }
 
 // walk narrows the objects it finds at the top level of the result. A
@@ -181,11 +183,7 @@ func (f *keyFilter) narrow(o *jsonutil.Object) *jsonutil.Object {
 }
 
 func sortStrings(s []string) []string {
-	set := make(map[string]bool, len(s))
-	for _, v := range s {
-		set[v] = true
-	}
-	return sortedKeys(set)
+	return slices.Compact(slices.Sorted(slices.Values(s)))
 }
 
 // unknownKeyError reports keys the result does not have.

@@ -97,7 +97,7 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 			break
 		}
 		num++
-		if rerr := s.feedRecordText(def, prepareRecord(raw, sep, num), num); rerr != nil {
+		if rerr := s.feedRecordText(def, prepareRecord(string(raw), sep, num), num); rerr != nil {
 			return unwrapStopped(rerr)
 		}
 		if err != nil {
@@ -132,11 +132,11 @@ func unwrapStopped(err error) error {
 
 // feedRecordText hands one prepared record to the parser, reporting a
 // record that is not valid UTF-8 the same way as one that does not fit.
-func (s *streamer) feedRecordText(def *definition.Definition, text []byte, num int) error {
+func (s *streamer) feedRecordText(def *definition.Definition, text string, num int) error {
 	if err := checkRecord(text, def.Input.Separator()); err != nil {
 		return s.report(&ParseError{Definition: def.ID(), Line: num, Msg: err.msg})
 	}
-	if perr := s.feedPhysical(line{text: string(text), num: num}); perr != nil {
+	if perr := s.feedPhysical(line{text: text, num: num}); perr != nil {
 		return s.report(perr)
 	}
 	return nil
@@ -265,7 +265,7 @@ type streamer struct {
 	// boxHeader the cells of the header row, read from boxHeaderLines;
 	// boxBody is set by the first group of lines after the header.
 	boxRow         []line
-	boxHeader      []any
+	boxHeader      []raw
 	boxHeaderLines []line
 	boxBody        bool
 	// tree holds the lines of the top-level node that is still open.
@@ -520,28 +520,17 @@ func (s *streamer) split() string {
 }
 
 func (s *streamer) row(l line) (*jsonutil.Object, error) {
-	var (
-		cells []any
-		err   error
-	)
-	switch s.split() {
-	case definition.SplitAligned:
-		cells, err = s.alignedRow(l, s.cols)
-	case definition.SplitDelimiter:
-		cells, err = s.delimitedCells(s.p, l, len(s.cols))
-	default:
-		cells, err = s.whitespaceCells(s.p, l, len(s.cols))
-	}
+	cells, err := s.rowCells(s.p, s.split(), l, s.cols, nil)
 	if err != nil {
 		return nil, err
 	}
 	obj := jsonutil.NewObject()
 	for i, c := range s.cols {
-		var raw any
+		var v raw
 		if i < len(cells) {
-			raw = cells[i]
+			v = cells[i]
 		}
-		if err := s.setField(obj, c.name, raw, s.fields[c.name], l.num); err != nil {
+		if err := s.setField(obj, c.name, v, s.fields[c.name], l.num); err != nil {
 			return nil, err
 		}
 	}

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 	"testing"
 
@@ -919,20 +920,23 @@ func TestAlignedCells(t *testing.T) {
 	cols := []column{{"a", 0}, {"b", 6}, {"c", 12}}
 	tests := []struct {
 		row  string
-		want []any
+		want []raw
 	}{
-		{"x     y     z", []any{"x", "y", "z"}},
-		{"x           z", []any{"x", nil, "z"}},
-		{"x    12345  z", []any{"x", "12345", "z"}},
-		{"x", []any{"x", nil, nil}},
-		{"", []any{nil, nil, nil}},
+		{"x     y     z", []raw{some("x"), some("y"), some("z")}},
+		{"x           z", []raw{some("x"), {}, some("z")}},
+		{"x    12345  z", []raw{some("x"), some("12345"), some("z")}},
+		{"x", []raw{some("x"), {}, {}}},
+		{"", []raw{{}, {}, {}}},
 		// A value wider than its column pushes the rest of the row right.
-		{"abcdefgh y   z", []any{"abcdefgh", "y", "z"}},
+		{"abcdefgh y   z", []raw{some("abcdefgh"), some("y"), some("z")}},
+		// A row that is not ASCII is cut by display column, not by byte.
+		{"é     ü     z", []raw{some("é"), some("ü"), some("z")}},
+		{"日本  y     z", []raw{some("日本"), some("y"), some("z")}},
 	}
 	for _, tt := range tests {
-		got, bad := alignedCells(tt.row, cols)
-		if diff := cmp.Diff(tt.want, got); diff != "" || bad != nil {
-			t.Errorf("alignedCells(%q): refused %+v %s", tt.row, bad, diff)
+		got, bad := alignedCells(tt.row, cols, nil)
+		if !slices.Equal(tt.want, got) || bad != nil {
+			t.Errorf("alignedCells(%q) = %+v, refused %+v; want %+v", tt.row, got, bad, tt.want)
 		}
 	}
 	for _, tt := range []struct {
@@ -951,12 +955,12 @@ func TestAlignedCells(t *testing.T) {
 		{"x  4 27s    z", 0, true},
 		{"x\ty   z", 0, true},
 	} {
-		if _, bad := alignedCells(tt.row, cols); bad == nil || bad.col != tt.col || bad.gutter != tt.gutter {
+		if _, bad := alignedCells(tt.row, cols, nil); bad == nil || bad.col != tt.col || bad.gutter != tt.gutter {
 			t.Errorf("alignedCells(%q) = %+v, want column %d refused (gutter %v)", tt.row, bad, tt.col, tt.gutter)
 		}
 	}
 	// The last column runs to the end of the line and may hold anything.
-	if got, bad := alignedCells("x     y     z  z", cols); bad != nil || got[2] != "z  z" {
+	if got, bad := alignedCells("x     y     z  z", cols, nil); bad != nil || got[2] != some("z  z") {
 		t.Errorf("last column: %v %+v", got, bad)
 	}
 }
