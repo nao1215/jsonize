@@ -1,0 +1,5 @@
+Package    Version
+---------- -------
+certifi    2026.7.22
+idna       3.10
+user@host:~/src$ exit

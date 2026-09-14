@@ -193,6 +193,46 @@ scenarios:
           stderr:
             contains: does not describe this input
 
+  # Output piped into jz can carry a line that is not the command's: a
+  # word a script echoes after it, a shell prompt. A tree definition
+  # states what its top-level line looks like, and a table definition
+  # states the shape of the cells that tell a row from prose, so such a
+  # line is refused with the line named rather than read as one more
+  # device or package.
+  - name: a line printed after lspci -v is not read as a device
+    steps:
+      - fixture:
+          file: lspci-v-then-prose.txt
+          from: "${specdir}/testdata/decoys/lspci-v-then-prose.txt"
+      - run:
+          command: jz --file lspci-v-then-prose.txt
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+          stderr:
+            contains: "line 16: line at the top level does not match root"
+      - run:
+          command: jz --parser lspci --variant verbose --file lspci-v-then-prose.txt
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+
+  - name: a shell prompt after pip list is not read as a package
+    steps:
+      - fixture:
+          file: pip-list-then-prompt.txt
+          from: "${specdir}/testdata/decoys/pip-list-then-prompt.txt"
+      - run:
+          command: jz --file pip-list-then-prompt.txt
+      - assert:
+          exit_code: 3
+          stdout:
+            empty: true
+          stderr:
+            contains: "line 5: field \"version\""
+
   # A file's path names the definition to read it with, and the danger of
   # that is a directory name deciding what a file holds. A definition
   # that describes a shape carries no signature, so nothing about the

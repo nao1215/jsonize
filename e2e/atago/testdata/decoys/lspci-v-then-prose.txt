@@ -1,0 +1,16 @@
+00:00.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Root Complex (rev 02)
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo Root Complex
+	Flags: fast devsel
+
+00:01.1 PCI bridge: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe USB4 Bridge (rev 02) (prog-if 00 [Normal decode])
+	Subsystem: Advanced Micro Devices, Inc. [AMD] Strix/Strix Halo PCIe USB4 Bridge
+	Flags: bus master, fast devsel, latency 0, IRQ 32, IOMMU group 2
+	Bus: primary=00, secondary=01, subordinate=60, sec-latency=0
+	I/O behind bridge: a000-dfff [size=16K] [16-bit]
+	Memory behind bridge: bc000000-d3ffffff [size=384M] [32-bit]
+	Prefetchable memory behind bridge: 7000000000-8fffffffff [size=128G] [32-bit]
+	Capabilities: <access denied>
+	Kernel driver in use: pcieport
+	Kernel modules: shpchp
+
+done
