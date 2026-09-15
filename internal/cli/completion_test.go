@@ -44,6 +44,8 @@ func TestComplete(t *testing.T) {
 		{[]string{"--file=a"}, completeFiles, nil, nil},
 		{[]string{"--explain="}, completeWords, []string{"--explain=json"}, nil},
 		{[]string{"--format", "j"}, completeWords, []string{"jsonl", "json"}, []string{"csv", "yaml"}},
+		{[]string{"new", "-"}, completeWords, []string{"--array", "--pretty", "--yaml"}, []string{"--file", "--stream"}},
+		{[]string{"new", "a=1", ""}, completeNone, nil, nil},
 		{[]string{"--format="}, completeWords, []string{"--format=csv", "--format=yaml"}, nil},
 		{[]string{"--define", ""}, completeNone, nil, nil},
 		{[]string{"--yaml", "--pa"}, completeWords, []string{"--parser"}, nil},
