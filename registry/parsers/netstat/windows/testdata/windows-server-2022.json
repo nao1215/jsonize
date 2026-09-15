@@ -171,7 +171,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49391",
-    "foreign_address": "23.11.32.159",
+    "foreign_address": "198.51.100.2",
     "foreign_port": "80",
     "state": "TIME_WAIT"
   },
@@ -179,7 +179,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49643",
-    "foreign_address": "20.42.65.84",
+    "foreign_address": "203.0.113.1",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -187,7 +187,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49652",
-    "foreign_address": "20.190.190.193",
+    "foreign_address": "198.51.100.106",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -195,7 +195,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49653",
-    "foreign_address": "172.66.2.5",
+    "foreign_address": "192.0.2.11",
     "foreign_port": "80",
     "state": "ESTABLISHED"
   },
@@ -203,7 +203,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49654",
-    "foreign_address": "20.190.190.193",
+    "foreign_address": "198.51.100.106",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -211,7 +211,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49655",
-    "foreign_address": "4.153.29.52",
+    "foreign_address": "203.0.113.7",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -219,7 +219,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49656",
-    "foreign_address": "172.66.2.5",
+    "foreign_address": "192.0.2.11",
     "foreign_port": "80",
     "state": "ESTABLISHED"
   },
@@ -227,7 +227,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49658",
-    "foreign_address": "4.153.29.52",
+    "foreign_address": "203.0.113.7",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -275,7 +275,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49714",
-    "foreign_address": "140.82.114.24",
+    "foreign_address": "198.51.100.15",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -283,7 +283,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49716",
-    "foreign_address": "140.82.114.24",
+    "foreign_address": "198.51.100.15",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -291,7 +291,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49722",
-    "foreign_address": "20.85.130.105",
+    "foreign_address": "198.51.100.18",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -299,7 +299,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49723",
-    "foreign_address": "20.85.130.105",
+    "foreign_address": "198.51.100.18",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -307,7 +307,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49724",
-    "foreign_address": "20.85.130.105",
+    "foreign_address": "198.51.100.18",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -315,7 +315,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49725",
-    "foreign_address": "140.82.113.21",
+    "foreign_address": "198.51.100.13",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -323,7 +323,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49726",
-    "foreign_address": "140.82.114.21",
+    "foreign_address": "198.51.100.14",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -331,7 +331,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49727",
-    "foreign_address": "140.82.113.21",
+    "foreign_address": "198.51.100.13",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -339,7 +339,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49728",
-    "foreign_address": "52.239.172.36",
+    "foreign_address": "198.51.100.20",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },
@@ -347,7 +347,7 @@
     "proto": "TCP",
     "local_address": "192.0.2.192",
     "local_port": "49729",
-    "foreign_address": "140.82.113.21",
+    "foreign_address": "198.51.100.13",
     "foreign_port": "443",
     "state": "ESTABLISHED"
   },

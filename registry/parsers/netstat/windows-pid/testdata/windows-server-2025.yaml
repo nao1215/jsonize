@@ -10,6 +10,7 @@ source: >-
   addresses were replaced: its private IPv4 address with 192.0.2.108,
   one space of the padding after it removed to keep the columns, and its
   link-local IPv6 address with a made-up one of the same length. The
-  remote addresses were kept.
+  Azure host address (168.63.129.16) was kept, and each public remote
+  address was replaced with a documentation address of the same length.
 os: windows
 args: ["-ano"]
