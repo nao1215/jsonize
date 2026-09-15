@@ -33,14 +33,14 @@ detect:
     all:
       # Every line is a comment or a host, a key type and a key, and at
       # least one is a key.
-      - '\A(?:(?:#[^\n]*|\S+ (?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com) [A-Za-z0-9+/]+=*)\n)*(?:#[^\n]*|\S+ (?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com) [A-Za-z0-9+/]+=*)\z'
-      - '^\S+ (?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com) [A-Za-z0-9+/]+=*$'
+      - '\A(?:(?:#[^\n]*|\S+ (?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com|[a-z0-9-]+-cert-v01@openssh\.com) AAAA[A-Za-z0-9+/]+=*)\n)*(?:#[^\n]*|\S+ (?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com|[a-z0-9-]+-cert-v01@openssh\.com) AAAA[A-Za-z0-9+/]+=*)\z'
+      - '^\S+ (?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com|[a-z0-9-]+-cert-v01@openssh\.com) AAAA[A-Za-z0-9+/]+=*$'
 input:
   ignore:
     - '^#'
 parse:
   type: regex
-  pattern: '^(?P<host>\S+) (?P<type>ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com) (?P<key>[A-Za-z0-9+/]+=*)$'
+  pattern: '^(?P<host>\S+) (?P<type>ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com) (?P<key>AAAA[A-Za-z0-9+/]+=*)$'
 fields:
   host: {required: true}
   type: {required: true}

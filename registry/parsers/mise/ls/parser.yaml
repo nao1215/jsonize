@@ -31,6 +31,7 @@ parse:
     columns: [tool, version, source, requested]
 fields:
   tool: {required: true}
-  # A version opens with a digit, so two words of prose are not a tool
-  # and its version.
-  version: {required: true, regex: '(?P<version>[0-9]\S*)'}
+  # A version opens with a digit, or is one of the forms mise names a
+  # version by (ref:main, path:/opt/x, prefix:22, sub-1:latest, latest,
+  # lts, system), so two words of prose are not a tool and its version.
+  version: {required: true, regex: '(?P<version>[0-9]\S*|(?:ref|path|prefix|sub-[0-9]+):\S+|latest|lts|system)'}

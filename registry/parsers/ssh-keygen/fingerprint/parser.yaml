@@ -16,10 +16,11 @@ command: ssh-keygen
 variant: fingerprint
 aliases:
   # `ssh-add -l` prints the same lines for the keys the agent holds;
-  # -E chooses the hash there as it does here. `ssh-add -L` prints the
-  # keys themselves and is read by ssh-add/public-keys.
+  # -E chooses the hash there as it does here, and without -l ssh-add
+  # adds a key and prints nothing to read. `ssh-add -L` prints the keys
+  # themselves and is read by ssh-add/public-keys.
   - name: ssh-add
-    args: {any: ["-l", "-E"]}
+    args: {all: ["-l"]}
 description: ssh-keygen -l public key fingerprints
 metadata:
   tags: [linux, darwin, ssh, security]

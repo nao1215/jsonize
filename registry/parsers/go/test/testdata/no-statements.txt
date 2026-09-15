@@ -1,0 +1,2 @@
+ok  	example.test/nostmt/calc	0.002s	coverage: 100.0% of statements
+ok  	example.test/nostmt/empty	0.002s	coverage: [no statements]

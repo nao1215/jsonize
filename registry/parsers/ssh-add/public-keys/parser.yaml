@@ -31,10 +31,10 @@ detect:
   signature:
     all:
       # Every line is a key type, a key and a comment.
-      - '\A(?:(?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com) [A-Za-z0-9+/]+=* [^\n]*\n)*(?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com) [A-Za-z0-9+/]+=* [^\n]*\z'
+      - '\A(?:(?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com|[a-z0-9-]+-cert-v01@openssh\.com) AAAA[A-Za-z0-9+/]+=* [^\n]*\n)*(?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com|[a-z0-9-]+-cert-v01@openssh\.com) AAAA[A-Za-z0-9+/]+=* [^\n]*\z'
 parse:
   type: regex
-  pattern: '^(?P<type>ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com) (?P<key>[A-Za-z0-9+/]+=*) (?P<comment>.*)$'
+  pattern: '^(?P<type>ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com) (?P<key>AAAA[A-Za-z0-9+/]+=*) (?P<comment>.*)$'
 fields:
   type: {required: true}
   key: {required: true}
