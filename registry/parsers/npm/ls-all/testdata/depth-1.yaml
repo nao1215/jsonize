@@ -1,0 +1,4 @@
+description: The tree cut at the second level, where a package whose children are hidden is drawn like a leaf.
+source: "captured with `npm ls --depth=1` (npm 10.9.4, node 22.22.1) on Ubuntu 26.04 with LC_ALL=C, in the same project as deduped.txt; the project directory replaced with /home/user/webapp"
+os: linux
+args: [ls, --depth=1]

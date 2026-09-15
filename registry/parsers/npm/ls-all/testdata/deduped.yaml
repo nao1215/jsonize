@@ -1,0 +1,4 @@
+description: A package required twice, printed in full once and marked deduped where it is required again.
+source: "captured with `npm ls --all` (npm 10.9.4, node 22.22.1) on Ubuntu 26.04 with LC_ALL=C, in a project made with `npm init -y` and `npm install chalk@4 semver supports-color@7 debug@4`; the project directory replaced with /home/user/webapp"
+os: linux
+args: [ls, --all]
