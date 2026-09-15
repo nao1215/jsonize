@@ -9,7 +9,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"slices"
 	"strconv"
 	"strings"
 	"testing"
@@ -186,6 +185,7 @@ func parseCommandLine(args []string) error {
 		return nil
 	}
 	o := newOptions("jz")
+	var n newCmdOptions
 	switch mode {
 	case modeRun:
 		var r runOptions
@@ -197,7 +197,6 @@ func parseCommandLine(args []string) error {
 		var tt testOptions
 		tt.bind(o)
 	case modeNew:
-		var n newCmdOptions
 		n.bind(o)
 	case "completion", "version":
 	default:
@@ -231,13 +230,11 @@ func parseCommandLine(args []string) error {
 	case modeNew:
 		// The arguments are checked for what they say, with files that are
 		// never read: a documented argument that is not KEY=VALUE fails.
-		src := jsonbuild.Sources{ReadFile: func(string) ([]byte, error) { return []byte("{}"), nil }, Stdin: strings.NewReader("{}"), MaxSize: 1 << 10}
-		var err error
-		if slices.Contains(args, "--array") {
-			_, err = jsonbuild.Array(rest, src)
-		} else {
-			_, err = jsonbuild.Object(rest, src)
+		all := n.placed
+		for _, text := range rest {
+			all = append(all, jsonbuild.Arg{Form: jsonbuild.Plain, Text: text})
 		}
+		_, err := jsonbuild.Parse(all, n.array)
 		var ue *jsonbuild.UsageError
 		if errors.As(err, &ue) {
 			return err

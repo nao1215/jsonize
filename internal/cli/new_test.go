@@ -23,6 +23,10 @@ func TestNew(t *testing.T) {
 		{"standard input", `{"a":[1]}`, []string{"new", "pod:=@-"}, `{"pod":{"a":[1]}}` + "\n"},
 		{"pretty", "", []string{"new", "-p", "a:=[1]"}, "{\n  \"a\": [\n    1\n  ]\n}\n"},
 		{"after --", "", []string{"new", "--", "-x=1"}, `{"-x":"1"}` + "\n"},
+		{"literal strings", "", []string{"new", "--string", "m=@VERSION", "--string=flag=--pretty", "--string", "e="}, `{"m":"@VERSION","flag":"--pretty","e":""}` + "\n"},
+		{"a text file keeps its line endings", "one\r\n\n", []string{"new", "--text-file", "body=-", "--text-file", "v=" + version, "less=@" + version}, `{"body":"one\r\n\n","v":"1.4.0\n","less":"1.4.0"}` + "\n"},
+		{"pointers", "", []string{"new", "--path", "/metadata/name=api", "--path", "/spec/replicas:=3", "--string", "/metadata/labels/app=@web", "kind=Deployment"}, `{"metadata":{"name":"api","labels":{"app":"@web"}},"spec":{"replicas":3},"kind":"Deployment"}` + "\n"},
+		{"an array of objects", "", []string{"new", "--array", "--path", "/-/name=a", "--path", "/0/port:=80", "--string", "=@b"}, `[{"name":"a","port":80},"@b"]` + "\n"},
 	} {
 		if code := h.pipe(tt.stdin, tt.args...); code != ExitOK || h.stdout.String() != tt.want {
 			t.Errorf("%s: exit %d, stdout %q, stderr %q, want %q", tt.name, code, h.stdout.String(), h.stderr.String(), tt.want)
@@ -47,6 +51,13 @@ func TestNewFailures(t *testing.T) {
 		{"an option after the arguments", []string{"new", "a=1", "-p"}, ExitUsage, "options come before the arguments"},
 		{"yaml output", []string{"new", "-p", "--yaml"}, ExitUsage, "--yaml was removed"},
 		{"an unknown option", []string{"new", "--stream"}, ExitUsage, "flag provided but not defined"},
+		{"--string split in two", []string{"new", "--string", "message", "hello"}, ExitUsage, `jz: new: "--string message": --string takes KEY=TEXT or POINTER=TEXT as one argument`},
+		{"a location given twice", []string{"new", "--path", "/a/b=1", "--path", "/a/b=2"}, ExitUsage, `/a/b is given twice, first by "--path /a/b=1"`},
+		{"a pointer into a value", []string{"new", "--path", "/spec/x=1", "spec:=3"}, ExitUsage, `"spec:=3": /spec is given twice, first by "--path /spec/x=1"`},
+		{"an index past the end", []string{"new", "--path", "/a/1=x"}, ExitUsage, "/a does not exist yet, so 1 cannot be an index in it"},
+		{"a text file that is not UTF-8", []string{"new", "--text-file", "a=" + latin}, ExitParse, "not valid UTF-8"},
+		{"a missing text file", []string{"new", "--text-file", "a=" + latin + ".missing"}, ExitError, "--text-file a="},
+		{"an option after a plain argument", []string{"new", "a=1", "--string", "b=2"}, ExitUsage, "options come before the arguments"},
 		{"a data file that is not its format", []string{"new", "a:=@" + bad}, ExitParse, "yaml: line 1: .nan is not a number JSON can hold"},
 		{"text that is not UTF-8", []string{"new", "a=@" + latin}, ExitParse, "not valid UTF-8"},
 		{"damaged compression", []string{"new", "a:=@" + broken}, ExitParse, "cannot be decompressed"},
