@@ -1,0 +1,255 @@
+// Package datafile reads the data file formats jz converts to JSON as
+// they are, rather than as the output of a command: JSON, JSON Lines,
+// LTSV and YAML. CSV and TSV are read by the csv shapes of the registry,
+// so this package only names them.
+//
+// A format is chosen by the caller, with --format, or by the extension of
+// the file (data.csv, events.jsonl.gz). Nothing is guessed from the text:
+// an extension is a claim the person who named the file made, and a
+// reader that finds text the format does not allow says where, and gives
+// no JSON at all.
+//
+// Every reader refuses what it cannot represent faithfully rather than
+// reading part of it: a key given twice, a value that is not UTF-8, text
+// after a JSON document, a YAML number JSON has no spelling for.
+package datafile
+
+import (
+	"bufio"
+	"bytes"
+	"compress/bzip2"
+	"compress/gzip"
+	"errors"
+	"fmt"
+	"io"
+	"path/filepath"
+	"slices"
+	"strings"
+	"unicode/utf8"
+
+	"github.com/nao1215/jsonize/pkg/engine"
+)
+
+// The formats, by the name --format takes.
+const (
+	CSV   = "csv"
+	TSV   = "tsv"
+	LTSV  = "ltsv"
+	JSONL = "jsonl"
+	JSON  = "json"
+	YAML  = "yaml"
+)
+
+// The compressions a file name may end in.
+const (
+	Gzip  = "gzip"
+	Bzip2 = "bzip2"
+)
+
+// Names lists the formats in the order help shows them.
+func Names() []string {
+	return []string{CSV, TSV, LTSV, JSONL, JSON, YAML}
+}
+
+// Known reports whether name is a format --format takes.
+func Known(name string) bool {
+	return slices.Contains(Names(), name)
+}
+
+// Tabular reports a format the csv shapes of the registry read.
+func Tabular(name string) bool {
+	return name == CSV || name == TSV
+}
+
+// Streams reports a format made of records, one per line, which --stream
+// can write as they are read. A JSON or YAML document is one value, and
+// there is nothing to write before its end.
+func Streams(name string) bool {
+	return name == LTSV || name == JSONL
+}
+
+var extensions = map[string]string{
+	".csv":    CSV,
+	".tsv":    TSV,
+	".ltsv":   LTSV,
+	".jsonl":  JSONL,
+	".ndjson": JSONL,
+	".json":   JSON,
+	".yaml":   YAML,
+	".yml":    YAML,
+}
+
+var compressions = map[string]string{
+	".gz":  Gzip,
+	".bz2": Bzip2,
+}
+
+// FromPath reads the extensions of a file name. compression is the
+// compression its last extension names, and format the format the one
+// before names, or the last one when there is no compression. Either is
+// "" when the name says nothing about it. Case does not matter:
+// EXPORT.CSV is a csv.
+func FromPath(path string) (format, compression string) {
+	base := strings.ToLower(filepath.Base(path))
+	ext := filepath.Ext(base)
+	if c, ok := compressions[ext]; ok {
+		compression = c
+		base = strings.TrimSuffix(base, ext)
+		ext = filepath.Ext(base)
+	}
+	// A name that is only an extension (".json", ".csv.gz") is a hidden
+	// file named after one, not a file of that format.
+	if ext == base {
+		return "", compression
+	}
+	return extensions[ext], compression
+}
+
+// CompressionError is compressed input that cannot be decompressed: a
+// file named .gz that is not gzip, or one cut short or damaged.
+type CompressionError struct {
+	Compression string
+	Err         error
+}
+
+func (e *CompressionError) Error() string {
+	return fmt.Sprintf("the %s data cannot be decompressed: %v", e.Compression, e.Err)
+}
+
+func (e *CompressionError) Unwrap() error { return e.Err }
+
+// Decompress wraps r in the reader of compression, or returns r as it is
+// when compression is "". An error the decompression meets, then or
+// while reading, is a CompressionError.
+func Decompress(r io.Reader, compression string) (io.Reader, error) {
+	switch compression {
+	case "":
+		return r, nil
+	case Gzip:
+		zr, err := gzip.NewReader(r)
+		if err != nil {
+			return nil, &CompressionError{Compression: compression, Err: err}
+		}
+		return &decompressed{r: zr, compression: compression}, nil
+	case Bzip2:
+		return &decompressed{r: bzip2.NewReader(r), compression: compression}, nil
+	}
+	return nil, fmt.Errorf("unknown compression %q", compression)
+}
+
+// decompressed marks the errors of a decompressing reader, so that a
+// damaged file is told from a failing disk.
+type decompressed struct {
+	r           io.Reader
+	compression string
+}
+
+func (d *decompressed) Read(p []byte) (int, error) {
+	n, err := d.r.Read(p)
+	if err != nil && !errors.Is(err, io.EOF) {
+		var ce *CompressionError
+		if !errors.As(err, &ce) {
+			err = &CompressionError{Compression: d.compression, Err: err}
+		}
+	}
+	return n, err
+}
+
+// Read reads a whole document of format. The size of data is the
+// caller's to bound.
+func Read(format string, data []byte) (any, error) {
+	switch format {
+	case JSON:
+		return readJSON(data)
+	case YAML:
+		return readYAML(data)
+	case JSONL, LTSV:
+		out := []any{}
+		err := Stream(format, bytes.NewReader(data), len(data)+1, func(v any) error {
+			out = append(out, v)
+			return nil
+		})
+		if err != nil {
+			return nil, err
+		}
+		return out, nil
+	}
+	return nil, fmt.Errorf("datafile: %q is not read here", format)
+}
+
+// Stream reads the records of a line format from r and hands each to
+// emit as soon as its line has ended. A line longer than maxLine bytes is
+// refused, which bounds what is held while a line waits for its end. The
+// first error, the reader's, a record's or emit's, ends the stream.
+func Stream(format string, r io.Reader, maxLine int, emit func(any) error) error {
+	var record func([]byte, int) (any, error)
+	switch format {
+	case JSONL:
+		record = jsonLine
+	case LTSV:
+		record = ltsvLine
+	default:
+		return fmt.Errorf("datafile: %q is not a line format", format)
+	}
+	br := bufio.NewReader(r)
+	for num := 1; ; num++ {
+		line, err := readLine(br, maxLine)
+		switch {
+		case errors.Is(err, errLineTooLong):
+			return lineError(format, num, fmt.Sprintf("the line is longer than %d bytes", maxLine))
+		case err != nil && !errors.Is(err, io.EOF):
+			// What was read of a line the input failed on is not the line.
+			return err
+		}
+		if len(line) > 0 || err == nil {
+			if num == 1 {
+				line = bytes.TrimPrefix(line, []byte("\xEF\xBB\xBF"))
+			}
+			line = bytes.TrimSuffix(line, []byte("\r"))
+			if len(bytes.TrimSpace(line)) > 0 {
+				if !utf8.Valid(line) {
+					return lineError(format, num, "the line is not valid UTF-8")
+				}
+				v, rerr := record(line, num)
+				if rerr != nil {
+					return rerr
+				}
+				if eerr := emit(v); eerr != nil {
+					return eerr
+				}
+			}
+		}
+		if errors.Is(err, io.EOF) {
+			return nil
+		}
+	}
+}
+
+var errLineTooLong = errors.New("line too long")
+
+// readLine returns the next line without its newline. At the end of the
+// input it returns what is left with io.EOF.
+func readLine(br *bufio.Reader, maxLine int) ([]byte, error) {
+	var line []byte
+	for {
+		chunk, err := br.ReadSlice('\n')
+		if len(line)+len(chunk) > maxLine+1 {
+			return nil, errLineTooLong
+		}
+		line = append(line, chunk...)
+		switch {
+		case err == nil:
+			return line[:len(line)-1], nil
+		case errors.Is(err, bufio.ErrBufferFull):
+			continue
+		default:
+			return line, err
+		}
+	}
+}
+
+// lineError is a parse failure on one line, which is exit 3 to the
+// command line the same as a definition's.
+func lineError(format string, line int, msg string) error {
+	return &engine.ParseError{Definition: format, Line: line, Msg: msg}
+}

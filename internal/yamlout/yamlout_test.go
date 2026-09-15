@@ -2,6 +2,7 @@ package yamlout
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
@@ -243,6 +244,31 @@ func TestEncodeDecimals(t *testing.T) {
 		var b bytes.Buffer
 		if err := Encode(&b, []any{f}); !errors.Is(err, ErrNonFiniteNumber) || b.Len() != 0 {
 			t.Errorf("%v: err=%v wrote %q", f, err, b.String())
+		}
+	}
+}
+
+// A number read from a JSON document keeps its digits, and one written
+// with only an exponent gets the decimal point a YAML reader needs.
+func TestEncodeJSONNumbers(t *testing.T) {
+	t.Parallel()
+	for _, c := range []struct{ in, want string }{
+		{"12345678901234567890", "12345678901234567890"},
+		{"2.50", "2.50"},
+		{"-0", "-0"},
+		{"1e3", "1.0e3"},
+		{"-2E-5", "-2.0E-5"},
+		{"1.5e10", "1.5e10"},
+	} {
+		var b bytes.Buffer
+		if err := Encode(&b, json.Number(c.in)); err != nil || b.String() != c.want+"\n" {
+			t.Errorf("%s: got %q %v, want %q", c.in, b.String(), err, c.want)
+		}
+	}
+	for _, bad := range []string{"", "01", "1.", "true", "\"x\"", "1 2"} {
+		var b bytes.Buffer
+		if err := Encode(&b, []any{json.Number(bad)}); err == nil || b.Len() != 0 {
+			t.Errorf("%q: err=%v wrote %q", bad, err, b.String())
 		}
 	}
 }
