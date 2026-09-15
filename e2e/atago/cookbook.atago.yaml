@@ -72,6 +72,31 @@ scenarios:
               {"r":1,"b":0,"swpd":1950392,"free":7552816,"buff":2853928,"cache":39453912,"si":4,"so":16,"bi":511,"bo":1601,"in":20347,"cs":9,"us":3,"sy":1,"id":96,"wa":0,"st":0,"gu":0}
               {"r":0,"b":0,"swpd":1950392,"free":7560728,"buff":2853928,"cache":39453924,"si":0,"so":0,"bi":0,"bo":60,"in":9188,"cs":12769,"us":1,"sy":0,"id":99,"wa":0,"st":0,"gu":0}
 
+  - name: "Add fields to every record of a stream: jz new --each wraps each record"
+    steps:
+      - run:
+          command: jz new --each --string host=server-a sample:=@-
+          stdin: "{\"r\":1,\"b\":0}\n{\"r\":0,\"b\":0}\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"host":"server-a","sample":{"r":1,"b":0}}
+              {"host":"server-a","sample":{"r":0,"b":0}}
+
+  - name: "Stop a stream at the first bad record: --stop-on-error keeps what came before"
+    steps:
+      - run:
+          command: jz --format jsonl --stream --stop-on-error
+          stdin: "{\"n\":1}\nnot json\n{\"n\":2}\n"
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"n":1}
+          stderr:
+            contains: "jz: jsonl: line 2: the line is not one JSON value"
+
   - name: "See which parser jz chose: --explain names the definition on standard error"
     steps:
       - run:

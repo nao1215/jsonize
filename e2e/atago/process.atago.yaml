@@ -52,6 +52,39 @@ scenarios:
           stdout:
             contains: "producer=gone"
 
+  # A stream of a data format and jz new --each learn that the reader has
+  # gone the same way, from a write that fails, and end with 128+SIGPIPE
+  # without a word, long before the input is used up.
+  - name: a lines stream and jz new --each end with 141 when the reader leaves
+    steps:
+      - run:
+          command: e2ehelper emit -lines 200000
+          stdout_to: ${workdir}/many.txt
+      - assert:
+          exit_code: 0
+      - run:
+          command: e2ehelper pipe -take 2 -stdin ${workdir}/many.txt -- jz --format lines --stream
+          timeout: 30s
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            contains: "lines=2"
+      - assert:
+          stdout:
+            contains: "status=141"
+      - run:
+          command: e2ehelper pipe -take 2 -stdin ${workdir}/many.txt -- jz new --each host=a line=@-
+          timeout: 30s
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            contains: "lines=2"
+      - assert:
+          stdout:
+            contains: "status=141"
+
   # A stream that fails for a reason of its own will write nothing more,
   # so the command is stopped: with a command that keeps printing, jz
   # used to wait for it to end, which it never did. The failure is what

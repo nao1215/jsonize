@@ -582,3 +582,96 @@ scenarios:
               {"x":"a"}
               {"x":"b"}
               {"x":"c"}
+
+  # A record a stream cannot read is reported and left out, whatever the
+  # input is: a command's output, a data file or plain lines. The status
+  # is 3 once the input has ended. --stop-on-error ends the stream at that
+  # record instead: what was written before it stands, the failure is on
+  # standard error once, and a command jz run started is stopped.
+  - name: every stream leaves out a record it cannot read, and --stop-on-error ends it there
+    steps:
+      - run:
+          command: jz --format jsonl --stream
+          stdin: "{\"n\":1}\nnot json\n{\"n\":2}\n"
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"n":1}
+              {"n":2}
+          stderr:
+            contains: "jz: jsonl: line 2: the line is not one JSON value"
+      - run:
+          command: jz --format jsonl --stream --stop-on-error
+          stdin: "{\"n\":1}\nnot json\n{\"n\":2}\n"
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"n":1}
+          stderr:
+            contains: "jz: jsonl: line 2: the line is not one JSON value"
+      - fixture:
+          file: mixed.ltsv
+          content: "host:a\tstatus:200\nbroken line\nhost:b\tstatus:500\n"
+      - run:
+          command: jz --file ${workdir}/mixed.ltsv --stream
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"host":"a","status":"200"}
+              {"host":"b","status":"500"}
+      - fixture:
+          file: latin1.lines
+          base64: "b25lCmNhZukKdHdvCg=="
+      - run:
+          command: jz --format lines --stream --stop-on-error --file ${workdir}/latin1.lines
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              "one"
+          stderr:
+            contains: "jz: lines: line 2: the text is not valid UTF-8"
+      - fixture:
+          file: df.txt
+          content: |
+            Filesystem     1K-blocks    Used Available Use% Mounted on
+            tmpfs           12882672    2388  12880284   1% /run
+            garbage
+            /dev/sda1      999999999  111111 888888888   1% /
+      - run:
+          command: jz --stream --parser df --file ${workdir}/df.txt
+      - assert:
+          exit_code: 3
+          stdout:
+            matches: '\A\{"filesystem":"tmpfs",[^\n]*\}\n\{"filesystem":"/dev/sda1",[^\n]*\}\n\z'
+      - run:
+          command: jz --stream --stop-on-error --parser df --file ${workdir}/df.txt
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"filesystem":"tmpfs","1k_blocks":12882672,"used":2388,"available":12880284,"use_percent":1,"mounted_on":"/run"}
+          stderr:
+            contains: "line 3"
+      - run:
+          command: jz run --stream --stop-on-error --parser kv --variant equals -- ${suitedir}/bin/standin
+          stdin: "a=1\nnoise\nb=2\n"
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"name":"a","value":"1"}
+          stderr:
+            contains: 'jz: kv/equals: line 2: expected "key=value": "noise"'
+      # Without --stream nothing is written after a failure anyway, so the
+      # option is refused before the file, which does not exist, is opened.
+      - run:
+          command: jz --stop-on-error --file ${workdir}/missing.txt
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "--stop-on-error ends a stream at a record it cannot read"

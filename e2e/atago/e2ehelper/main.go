@@ -18,7 +18,7 @@
 // fails on once the reader has gone, and what is left unprinted when
 // the producer is stopped.
 //
-//	e2ehelper pipe [-take N] [-deadline D] [-pid FILE] -- COMMAND [ARG...]
+//	e2ehelper pipe [-take N] [-deadline D] [-pid FILE] [-stdin FILE] -- COMMAND [ARG...]
 //
 // runs COMMAND with its standard output piped here, reads N lines, then
 // closes its end of the pipe the way `head` does and waits for COMMAND
@@ -135,6 +135,7 @@ func pipe(args []string, stdout io.Writer) error {
 	take := fs.Int("take", 1, "how many lines to read before closing the pipe")
 	deadline := fs.Duration("deadline", 10*time.Second, "how long the command may take to end")
 	pidFile := fs.String("pid", "", "the file the producer records its process id in")
+	stdinFile := fs.String("stdin", "", "a file to give the command as its standard input")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -143,6 +144,14 @@ func pipe(args []string, stdout io.Writer) error {
 	}
 	cmd := exec.CommandContext(context.Background(), fs.Arg(0), fs.Args()[1:]...)
 	cmd.Stderr = os.Stderr
+	if *stdinFile != "" {
+		in, err := os.Open(*stdinFile)
+		if err != nil {
+			return err
+		}
+		defer in.Close()
+		cmd.Stdin = in
+	}
 	out, err := cmd.StdoutPipe()
 	if err != nil {
 		return err

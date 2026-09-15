@@ -348,3 +348,160 @@ scenarios:
           stdout:
             equals: |
               {"source":"@ci","payload":{"name":"api","replicas":3},"kind":"Deployment"}
+
+  # --each makes one document per line of standard input, around the
+  # record: KEY:=@- is the line read as JSON, whatever JSON it is, and
+  # KEY=@- the line as a string. The files the other arguments name are
+  # read once. jz new sample:=@- without --each still wraps the whole of
+  # standard input once.
+  - name: --each wraps every JSON Lines record, object, array or scalar, with the fields the arguments give
+    steps:
+      - fixture:
+          file: VERSION
+          content: |
+            1.4.0
+      - run:
+          command: jz new --each --path /agent/version=@${workdir}/VERSION host=server-a sample:=@-
+          stdin: "{\"used\":42}\n\n[1,2]\n\"text\"\nnull\n"
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              {"agent":{"version":"1.4.0"},"host":"server-a","sample":{"used":42}}
+              {"agent":{"version":"1.4.0"},"host":"server-a","sample":[1,2]}
+              {"agent":{"version":"1.4.0"},"host":"server-a","sample":"text"}
+              {"agent":{"version":"1.4.0"},"host":"server-a","sample":null}
+      - run:
+          command: jz new --each --string source=@syslog line=@-
+          stdin: "first\r\n\n  spaced  \nlast"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"source":"@syslog","line":"first"}
+              {"source":"@syslog","line":""}
+              {"source":"@syslog","line":"  spaced  "}
+              {"source":"@syslog","line":"last"}
+      - run:
+          command: jz new host=server-a sample:=@-
+          stdin: "{\"used\":42}"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"host":"server-a","sample":{"used":42}}
+      - run:
+          command: jz new --each sample:=@-
+          stdin: ""
+      - assert:
+          exit_code: 0
+          stdout: {empty: true}
+
+  # Each document is written when its line has come, while standard input
+  # is still open, so a producer that never ends is wrapped as it goes.
+  - name: --each writes a document as each line arrives
+    steps:
+      - fixture:
+          file: each.feed
+          content: |
+            send {"used":1}\n
+            expect 1
+            send {"used":
+            send 2}\n
+            expect 1
+            close
+            wait
+      - run:
+          command: e2ehelper feed -deadline 10s -script each.feed -- jz new --each host=a sample:=@-
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              > expect 1
+              {"host":"a","sample":{"used":1}}
+              > expect 1
+              {"host":"a","sample":{"used":2}}
+              status=0
+
+  # A line that cannot be read, late in the input, is reported and left
+  # out, and the documents after it are still written; the status is 3.
+  # --stop-on-error ends at that line, keeping what was written. The
+  # option pairs that cannot work are refused before standard input or a
+  # file is read.
+  - name: --each leaves out a line it cannot read, or stops there with --stop-on-error, and refuses what cannot work
+    steps:
+      - run:
+          command: jz new --each n:=@-
+          stdin: "1\n2\nthree\n4\n"
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"n":1}
+              {"n":2}
+              {"n":4}
+          stderr:
+            contains: "jz: new: n:=@-: jsonl: line 3: the line is not one JSON value"
+      - run:
+          command: jz new --each --stop-on-error n:=@-
+          stdin: "1\n2\nthree\n4\n"
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"n":1}
+              {"n":2}
+          stderr:
+            contains: "jz: new: n:=@-: jsonl: line 3"
+      - fixture:
+          file: latin1.txt
+          base64: "b2sKY2Fm6QpvawpbMQ=="
+      - run:
+          command: e2ehelper pipe -take 5 -stdin ${workdir}/latin1.txt -- jz new --each line=@-
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: "lines=3"
+      - assert:
+          stdout:
+            contains: "status=3"
+      - run:
+          command: jz new --each name=api
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "--each makes one document per line of standard input, and no argument reads it"
+      - run:
+          command: jz new --each --text-file body=-
+          stdin: "x\n"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: '"--text-file body=-" reads standard input whole'
+      - run:
+          command: jz new --each --pretty n:=@-
+          stdin: "1\n"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "--pretty and --each cannot be used together"
+      - run:
+          command: jz new --stop-on-error n=1
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "--stop-on-error ends --each at a line it cannot read"
+      - run:
+          command: jz new --each n:=@- v=@${workdir}/missing.txt
+          stdin: "1\n"
+      - assert:
+          exit_code: 1
+          stdout: {empty: true}
+          stderr:
+            contains: "missing.txt"
