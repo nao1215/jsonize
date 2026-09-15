@@ -154,12 +154,12 @@ scenarios:
           content: |
             1.4.0
       - run:
-          command: "jz new --string note=@VERSION --string 'eq=a=b:=c' --string \"q=it's \\\"quoted\\\"\" --string 'space= two  spaces ' --string empty= --string flag=--pretty --string 'lines=one\ntwo\r\n' --string 'unicode=日本語 κ' version=@${workdir}/VERSION"
+          command: "jz new --string note=@VERSION --string 'eq=a=b:=c' --string 'q=\"quoted\"' --string \"a=it's\" --string 'space= two  spaces ' --string empty= --string flag=--pretty --string 'lines=one\ntwo\r\n' --string 'unicode=日本語 κ' version=@${workdir}/VERSION"
       - assert:
           exit_code: 0
           stderr: {empty: true}
           stdout:
-            equals: "{\"note\":\"@VERSION\",\"eq\":\"a=b:=c\",\"q\":\"it's \\\"quoted\\\"\",\"space\":\" two  spaces \",\"empty\":\"\",\"flag\":\"--pretty\",\"lines\":\"one\\ntwo\\r\\n\",\"unicode\":\"日本語 κ\",\"version\":\"1.4.0\"}\n"
+            equals: "{\"note\":\"@VERSION\",\"eq\":\"a=b:=c\",\"q\":\"\\\"quoted\\\"\",\"a\":\"it's\",\"space\":\" two  spaces \",\"empty\":\"\",\"flag\":\"--pretty\",\"lines\":\"one\\ntwo\\r\\n\",\"unicode\":\"日本語 κ\",\"version\":\"1.4.0\"}\n"
       - run:
           command: jz new --array --string =@VERSION --string =:=1 plain :=1
       - assert:
