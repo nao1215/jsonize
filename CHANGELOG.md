@@ -4,7 +4,12 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.2.0]
+
+145 definitions for 55 more commands, 224 commands and 596 definitions
+in all, the system commands of Windows and macOS among them. Where one
+command's output is followed by another's, more definitions now refuse
+the text instead of reading the other command's lines as their own.
 
 ### Added
 
@@ -16,8 +21,8 @@ project follows [Semantic Versioning](https://semver.org/).
   it is refused, naming the line. `lspci -v`, `lsusb -v`, `lsusb -t`,
   `iw dev`, `apt-cache depends`, `systemctl list-dependencies` and
   `systemd-analyze critical-chain` state theirs.
-- 61 definitions for 25 more commands, 187 commands and 528 definitions
-  in all. Archive listings: `gzip -l` and `-lv`, `xz -l` and `--robot
+- Definitions for 25 more traditional and modern commands. Archive
+  listings: `gzip -l` and `-lv`, `xz -l` and `--robot
   -l`, `zstd -l` and `-lv`, `lz4 --list`, `7z l` and `7z l -slt`.
   Checks and keys: `md5sum -c` and the other digest commands' `-c`,
   `ssh-keyscan`, `ssh-add -L` (and `ssh-add -l` as `ssh-keygen -l`),
@@ -104,10 +109,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
-- `chage -l` is read only as the seven lines it prints, and `lscpu
-  --caches` holds each row to a cache name and type. Lines another
-  command printed after them were read as more fields of the account and
-  as more caches.
+- `chage -l`, `curl --version`, `git count-objects -v` and `ethtool -i`
+  are read only as the lines they print, `readelf -h` only as the fields
+  of an ELF header, and `lscpu --caches` holds each row to a cache name
+  and type. Lines another command printed after them were read as more
+  fields and as more caches. The `readelf -h` schema names the fields it
+  can hold, and is version 2.
 - `systemctl list-sockets`, `list-paths`, `list-timers`,
   `list-automounts`, `list-machines`, `list-unit-files`, `list-jobs` and
   `list-units`, `networkctl list`, `loginctl list-sessions`,

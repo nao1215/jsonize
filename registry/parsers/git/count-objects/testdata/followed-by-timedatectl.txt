@@ -1,0 +1,21 @@
+count: 10
+size: 40
+in-pack: 0
+packs: 0
+size-pack: 0
+prune-packable: 0
+garbage: 0
+size-garbage: 0
+       Server: 185.125.190.57 (ntp.ubuntu.com)
+Poll interval: 34min 8s (min: 32s; max 34min 8s)
+         Leap: normal
+      Version: 4
+      Stratum: 2
+    Reference: 1D586304
+    Precision: 1us (-25)
+Root distance: 3.653ms (max: 5s)
+       Offset: +12.604ms
+        Delay: 237.481ms
+       Jitter: 48.459ms
+ Packet count: 672
+    Frequency: -47.597ppm

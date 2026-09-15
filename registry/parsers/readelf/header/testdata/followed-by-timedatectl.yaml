@@ -1,0 +1,5 @@
+source: the definition's own coreutils-ls.txt followed by timedatectl/timesync's systemd-259.txt, joined for this case
+description: timedatectl's labelled lines after the header are refused, since none of their labels is a field of an ELF header; they were read as more fields
+os: linux
+args: ["-h", "/bin/ls"]
+expect_error: line does not match

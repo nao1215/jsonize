@@ -1,0 +1,5 @@
+source: the definition's own ethtool-6.txt followed by timedatectl/timesync's systemd-259.txt, joined for this case
+description: timedatectl's labelled lines after the ten driver properties are refused; they were read as more properties
+os: linux
+args: ["-i", "eno1"]
+expect_error: does not describe this input

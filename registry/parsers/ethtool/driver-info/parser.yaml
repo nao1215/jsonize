@@ -16,8 +16,10 @@ detect:
     any: ["-i", "--driver"]
   signature:
     all:
-      - '\Adriver:[ \t]'
-      - '^supports-statistics:[ \t]'
+      # ethtool -i prints these ten lines in this order and nothing
+      # else, so a line after the last is another command's and is
+      # refused rather than read as one more property.
+      - '\Adriver:[^\n]*\nversion:[^\n]*\nfirmware-version:[^\n]*\nexpansion-rom-version:[^\n]*\nbus-info:[^\n]*\nsupports-statistics:[^\n]*\nsupports-test:[^\n]*\nsupports-eeprom-access:[^\n]*\nsupports-register-dump:[^\n]*\nsupports-priv-flags:[^\n]*\n?\z'
 parse:
   type: kv
   separator: ":"
