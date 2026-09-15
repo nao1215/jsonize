@@ -194,6 +194,7 @@ func (a *app) cmdConvert(args []string) int {
 		return a.convertWith(inline, r, &co.output, exp)
 	}
 	ctx := selector.Context{Parser: co.selects.parser, Variant: co.selects.variant}
+	scoped := ctx
 	from := fromRegistry
 	if co.selects.parser != "" {
 		from = fromFlag
@@ -209,7 +210,11 @@ func (a *app) cmdConvert(args []string) int {
 	}
 	exp.scope(ctx, from)
 	if co.output.stream {
-		return a.stream(reg, r, ctx, &co.output, false, exp)
+		var retract *selector.Context
+		if from == fromPath {
+			retract = &scoped
+		}
+		return a.stream(reg, r, ctx, retract, &co.output, false, exp)
 	}
 	// The size limit is not negotiable from the command line: it exists so
 	// that a runaway producer cannot make jz allocate without bound.

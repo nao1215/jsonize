@@ -19,6 +19,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/nao1215/jsonize/internal/recordio"
 	"github.com/nao1215/jsonize/pkg/convert"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
@@ -122,8 +123,11 @@ func (e *ParseError) Unwrap() error { return e.Cause }
 // configured limit.
 var ErrInputTooLarge = errors.New("input too large")
 
-// ErrLineTooLong is wrapped when a single line exceeds the limit.
-var ErrLineTooLong = errors.New("line too long")
+// ErrLineTooLong is wrapped when a single line exceeds the limit. It is
+// the error the shared record reader reports, so that a line refused
+// while a format is still being identified and one refused while it is
+// read are the same error.
+var ErrLineTooLong = recordio.ErrTooLong
 
 // ErrTooManyValues is wrapped when a reading produces more values than
 // one document, or one record of a stream, may hold.

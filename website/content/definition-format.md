@@ -226,7 +226,10 @@ The order is the same for detection, for the whole document and for
 `--stream`, so a mark behind a colour code is a mark in every reading.
 The 1 MiB limit on a record counts the bytes between two separators as
 they were read, the escapes and the `\r` included, and the last record
-of an input is held to it whether or not a separator follows it. Blank
+of an input is held to it whether or not a separator follows it. It
+holds while the format is still being identified as well, so a producer
+that never ends a record is refused at the byte past the limit rather
+than waited for until the text says what it is. Blank
 lines before the first line of text and after the last are not part of
 it, whatever `skip_blank` says. With `skip_blank: false` only an empty
 line counts as blank there, since a definition that keeps blank lines

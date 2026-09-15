@@ -49,6 +49,12 @@ const flagHelp = "--help"
 // than a second number that happens to agree with it.
 const MaxInputSize = engine.DefaultMaxInputSize
 
+// MaxLineLength bounds one record of the input for the same reason, and
+// applies before a format has been identified as well as after: a
+// producer that never ends a record must not be able to make jz wait for
+// one it would refuse anyway.
+const MaxLineLength = engine.DefaultMaxLineLength
+
 // Env is the process environment the CLI runs in, injected for tests.
 type Env struct {
 	Stdin  io.Reader

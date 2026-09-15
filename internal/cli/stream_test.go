@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"path/filepath"
 	"runtime"
@@ -11,6 +12,8 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/nao1215/jsonize/pkg/engine"
 )
 
 // records splits NDJSON output into the documents it carries, checking
@@ -336,13 +339,14 @@ func TestReadHeadCountsTheLinesTheSelectorSees(t *testing.T) {
 		{"input ends first", "a\n", 5, "a\n"},
 		{"no line break at the end", "a\nb", 5, "a\nb"},
 		{"blank lines inside the text count", "a\n\nb\n", 2, "a\n\n"},
+		{"a carriage return stays on", "a\r\nb\r\n", 1, "a\r\n"},
 	} {
-		got, err := readHead(bufio.NewReader(strings.NewReader(tc.input)), tc.n, '\n', never)
+		got, err := readHead(bufio.NewReader(strings.NewReader(tc.input)), tc.n, '\n', MaxLineLength, never)
 		if err != nil || string(got) != tc.want {
 			t.Errorf("%s: readHead = %q, %v, want %q", tc.name, got, err, tc.want)
 		}
 	}
-	got, err := readHead(bufio.NewReader(strings.NewReader("a\x00\x00b\x00c")), 2, 0, never)
+	got, err := readHead(bufio.NewReader(strings.NewReader("a\x00\x00b\x00c")), 2, 0, MaxLineLength, never)
 	if err != nil || string(got) != "a\x00\x00" {
 		t.Errorf("NUL: readHead = %q, %v", got, err)
 	}
@@ -615,7 +619,7 @@ func TestReadHeadStopsOnceTheChoiceIsSettled(t *testing.T) {
 		asked = append(asked, string(head))
 		return strings.Count(string(head), "x") == 2
 	}
-	got, err := readHead(bufio.NewReader(strings.NewReader("\n\nx\ny\nx\nz\nw\n")), 20, '\n', settled)
+	got, err := readHead(bufio.NewReader(strings.NewReader("\n\nx\ny\nx\nz\nw\n")), 20, '\n', MaxLineLength, settled)
 	if err != nil || string(got) != "\n\nx\ny\nx\n" {
 		t.Errorf("readHead = %q, %v", got, err)
 	}
@@ -624,7 +628,116 @@ func TestReadHeadStopsOnceTheChoiceIsSettled(t *testing.T) {
 	}
 	// The last line of the window is read whatever settled would say.
 	asked = nil
-	if got, _ := readHead(bufio.NewReader(strings.NewReader("a\nb\nc\n")), 2, '\n', settled); string(got) != "a\nb\n" || len(asked) != 1 {
+	if got, _ := readHead(bufio.NewReader(strings.NewReader("a\nb\nc\n")), 2, '\n', MaxLineLength, settled); string(got) != "a\nb\n" || len(asked) != 1 {
 		t.Errorf("full window: %q, asked %d times", got, len(asked))
+	}
+}
+
+// A record longer than the limit is refused where it passes the limit,
+// whether or not a format has been chosen yet: the reading that
+// identifies the text and the reading that converts it cut records the
+// same way and bound them by the same number.
+func TestReadHeadRefusesARecordPastTheLengthLimit(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name  string
+		input string
+		sep   byte
+		max   int
+		want  string
+	}{
+		{"at the limit", strings.Repeat("x", 8) + "\n", '\n', 8, strings.Repeat("x", 8) + "\n"},
+		{"one byte over", strings.Repeat("x", 9) + "\n", '\n', 8, ""},
+		{"at the limit with no line break", strings.Repeat("x", 8), '\n', 8, strings.Repeat("x", 8)},
+		{"one byte over with no line break", strings.Repeat("x", 9), '\n', 8, ""},
+		{"a carriage return counts", strings.Repeat("x", 8) + "\r\n", '\n', 8, ""},
+		{"a second record over the limit", "a\n" + strings.Repeat("x", 9) + "\n", '\n', 8, ""},
+		{"NUL separated", strings.Repeat("x", 9) + "\x00", 0, 8, ""},
+	} {
+		got, err := readHead(bufio.NewReader(strings.NewReader(tc.input)), 5, tc.sep, tc.max, never)
+		if tc.want != "" {
+			if err != nil || string(got) != tc.want {
+				t.Errorf("%s: readHead = %q, %v, want %q", tc.name, got, err, tc.want)
+			}
+			continue
+		}
+		if !errors.Is(err, engine.ErrLineTooLong) {
+			t.Errorf("%s: readHead = %q, %v, want a refusal", tc.name, got, err)
+		}
+	}
+}
+
+// The line limit holds before the format is known, so a producer that
+// never ends a record is refused rather than waited for. The words and
+// the status are the ones a stream read with a definition given on the
+// command line answers with, which is the reading that already applied
+// the limit.
+func TestStreamRefusesALongRecordWhetherOrNotItHasChosen(t *testing.T) {
+	h := newHarness(t)
+	long := strings.Repeat("x", MaxLineLength+1)
+	const msg = "line 1: record exceeds 1048576 bytes: line too long"
+	for _, tc := range []struct {
+		name string
+		args []string
+	}{
+		{"detected", []string{"--stream"}},
+		{"named", []string{"--stream", "--parser", "df", "--variant", "gnu"}},
+		{"defined", []string{"--stream", "--define", "parse: {type: regex, pattern: '^(?P<text>.*)$'}"}},
+	} {
+		if code := h.pipe(long, tc.args...); code != ExitParse || !strings.Contains(h.stderr.String(), msg) {
+			t.Errorf("%s: %d %s", tc.name, code, h.stderr.String())
+		}
+		if h.stdout.Len() != 0 {
+			t.Errorf("%s: stdout = %q", tc.name, h.stdout.String())
+		}
+	}
+	// A record at the limit is still read, so the refusal is of the byte
+	// past it and not of a long record as such.
+	at := strings.Repeat("x", MaxLineLength) + "\n"
+	if code := h.pipe(at, "--stream", "--define", "parse: {type: regex, pattern: '^(?P<text>.*)$'}"); code != ExitOK {
+		t.Errorf("at the limit: %d %s", code, h.stderr.String())
+	}
+}
+
+// A file name is a guess about the text in it, and a guess never makes
+// the answer worse. The whole-document reading drops it once the
+// definition it named does not describe the text; a stream drops it the
+// same way, since nothing has been written while the choice is made.
+func TestStreamDropsAPathGuessThatDoesNotFit(t *testing.T) {
+	h := newHarness(t)
+	p := h.writeFile("etc/fstab", []byte(gnuDF))
+	if code := h.run("--file", p, "--stream"); code != ExitOK {
+		t.Fatalf("stream: %d %s", code, h.stderr.String())
+	}
+	recs := h.records()
+	if len(recs) != 2 || recs[0]["mounted_on"] != "/run" {
+		t.Errorf("records = %v", recs)
+	}
+	// The same file read whole carries the same records, which is the
+	// reading the stream is held to.
+	if code := h.run("--file", p); code != ExitOK || len(h.rows()) != len(recs) {
+		t.Errorf("whole: %d %s", code, h.stderr.String())
+	}
+	// A parser named on the command line is not a guess, so it is not
+	// dropped and the text it does not describe is refused.
+	if code := h.run("--file", p, "--stream", "--parser", "fstab"); code != ExitSelect {
+		t.Errorf("named: %d %s", code, h.stderr.String())
+	}
+}
+
+// Input that cannot be read at all ends a stream with the status that
+// reading it as a whole document ends with: the failure is the same
+// failure, and it happens before anything is written either way.
+func TestStreamReportsAnUnreadableInputAsTheDocumentReadingDoes(t *testing.T) {
+	h := newHarness(t)
+	broken := gzipBytes(t, "x")
+	broken[len(broken)-5] ^= 1
+	p := h.writeFile("broken.txt.gz", broken)
+	const msg = "the gzip data cannot be decompressed"
+	if code := h.run("--file", p); code != ExitParse || !strings.Contains(h.stderr.String(), msg) {
+		t.Errorf("whole: %d %s", code, h.stderr.String())
+	}
+	if code := h.run("--file", p, "--stream"); code != ExitParse || !strings.Contains(h.stderr.String(), msg) {
+		t.Errorf("stream: %d %s", code, h.stderr.String())
 	}
 }

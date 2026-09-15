@@ -8,6 +8,19 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `--stream` holds the lines it identifies the format by to the 1 MiB
+  record limit that the reading of a record already applied, so a
+  producer that never ends a record is refused at the byte past the
+  limit with exit 3 instead of waited for. Two megabytes with no line
+  break were refused at once with `--define` and waited for with
+  `--parser df --variant gnu`.
+- `--stream --file` drops a file path that named a definition the text
+  does not fit, the way the whole-document reading does, and reads the
+  text on its own terms. A df report saved as `/etc/fstab` was exit 4
+  with `--stream` and exit 0 without it.
+- Input that cannot be read at all, such as a gzip file whose checksum
+  does not match, ends `--stream` with the status the whole-document
+  reading ends with: exit 3 rather than exit 1.
 - JSON, JSON Lines, YAML, LTSV, `lines` and `nul` input, read with
   `--format`, a file's extension or `jz new key:=@file`, is held to the
   4,194,304 values a csv and a definition's reading were already held to:
