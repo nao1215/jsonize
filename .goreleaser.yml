@@ -78,7 +78,7 @@ nfpms:
     vendor: Naohiro CHIKAMATSU
     homepage: https://github.com/nao1215/jsonize
     maintainer: Naohiro CHIKAMATSU <n.chika156@gmail.com>
-    description: Turn command output into JSON.
+    description: Make JSON from command output, files and arguments for the next command.
     license: MIT
     formats: [deb, rpm, apk]
     bindir: /usr/bin
@@ -95,7 +95,7 @@ homebrew_casks:
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
     directory: Casks
     homepage: https://github.com/nao1215/jsonize
-    description: Turn command output into JSON
+    description: Make JSON from command output, files and arguments for the next command
     license: MIT
     # The binary is not signed or notarized for macOS, so the quarantine
     # attribute is removed on install; otherwise Gatekeeper refuses to

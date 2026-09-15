@@ -19,28 +19,27 @@ const convertUsage = `Usage: COMMAND | jz [options]
        jz [options] < FILE
        jz [options] --file FILE
 
-Reads output that a command produced earlier and converts it to JSON.
-Nothing is executed. The parser is identified from the text itself: every
-parser signature is tested and jz succeeds only when exactly one matches.
-Text that matches none, or more than one, is an error naming what to pass.
+Turns text into JSON for the next command. Nothing is executed.
 
-A data file is read as the format its extension names: .csv, .tsv,
-.ltsv, .jsonl (or .ndjson), .json and .yaml (or .yml), each also
-compressed as .gz or .bz2. Input from a pipe is read as a data file when
---format names the format. Nothing is detected for a data file.
+Output a command printed is identified from the text itself: every parser
+signature is tested and jz succeeds only when exactly one matches. Text
+that matches none, or more than one, is an error naming what to pass.
+
+Data is read as the format --format names, and a file as the format its
+extension names: .csv, .tsv, .ltsv, .jsonl (or .ndjson), .json and .yaml
+(or .yml), each also compressed as .gz or .bz2. Nothing is detected for
+data. --format text, lines and nul read plain text as one string or as a
+list of strings.
 
   df -h | jz
   jz --file captured.txt
-  df -h | jz --parser df
-  df -h | jz --parser df --variant gnu-human
-  vmstat 1 | jz --stream               # one JSON document per line
-  curl -sIL https://example.com | jz   # one record per response
-  jz --parser csv --variant comma-no-header --columns id,name --file rows.csv
-  jz --file users.csv                  # one object per row, keys from the header
-  jz --file events.jsonl.gz --stream   # a data file, decompressed, record by record
+  vmstat 1 | jz --stream                       # one JSON document per line
+  jz --file users.csv --type age=int           # one object per row, age a number
   kubectl get pods -o yaml | jz --format yaml
+  find . -print0 | jz --format nul             # one string per name
+  jz --file events.jsonl.gz --stream --stop-on-error
+  df -h | jz --parser df --variant gnu-human   # name the parser detection could not settle
 
-Options:
 `
 
 // convertOptions are the options of the default mode.
@@ -52,10 +51,15 @@ type convertOptions struct {
 }
 
 func (c *convertOptions) bind(o *optionSet) {
+	o.group("Input:")
 	o.stringOpt(&c.file, "file", "f", "PATH", "-", "read input from PATH instead of stdin")
 	o.stringOpt(&c.format, "format", "", "NAME", "", "read the input as this format: "+strings.Join(datafile.Names(), ", "))
-	c.output.bind(o)
-	c.selects.bind(o)
+	c.selects.bindColumns(o)
+	o.group("Output:")
+	c.output.bindOutput(o)
+	o.group("Choosing and checking the parser of command output:")
+	c.selects.bindParser(o)
+	c.output.bindReading(o)
 	o.helpDoc()
 }
 

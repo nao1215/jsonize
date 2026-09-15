@@ -161,6 +161,9 @@ type optionInfo struct {
 func infoOf(o *optionSet) optionInfo {
 	info := optionInfo{valued: map[string]bool{}}
 	for _, d := range o.docs {
+		if d.heading != "" {
+			continue
+		}
 		long := "--" + d.long
 		info.names = append(info.names, long)
 		if d.short != "" {

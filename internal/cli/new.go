@@ -42,7 +42,6 @@ line of JSON as soon as its line has come: KEY:=@- is the line read as
 JSON, KEY=@- the line as a string. A line that cannot be read is reported
 and left out, and the status is 3; --stop-on-error ends there instead.
 
-Options:
 `
 
 type newCmdOptions struct {
@@ -70,6 +69,7 @@ func (p placedValue) Set(v string) error {
 }
 
 func (n *newCmdOptions) bind(o *optionSet) {
+	o.group("Building:")
 	o.boolOpt(&n.array, "array", "", "make an array of the values instead of an object")
 	o.fs.Var(placedValue{jsonbuild.String, &n.placed}, "string", "")
 	o.doc("", "string", "KEY=TEXT", "put TEXT at KEY as a string, as it is (repeatable)")
@@ -77,6 +77,7 @@ func (n *newCmdOptions) bind(o *optionSet) {
 	o.doc("", "text-file", "KEY=PATH", "put a file's text at KEY, line endings kept; - is stdin (repeatable)")
 	o.fs.Var(placedValue{jsonbuild.Path, &n.placed}, "path", "")
 	o.doc("", "path", "POINTER=VALUE", "put a value at a JSON Pointer, with =, :=, =@ or :=@ (repeatable)")
+	o.group("Output:")
 	o.boolOpt(&n.each, "each", "", "make one document per line of standard input, which @- stands for")
 	o.boolOpt(&n.output.stopOnError, "stop-on-error", "", "with --each, end at the first line that cannot be read")
 	o.boolOpt(&n.output.pretty, "pretty", "p", "indent JSON output")

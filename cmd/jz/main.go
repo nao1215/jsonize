@@ -1,4 +1,5 @@
-// Command jz turns command output into JSON.
+// Command jz makes JSON from command output, files and arguments, for the
+// next command in a pipeline.
 package main
 
 import (

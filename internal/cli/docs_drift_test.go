@@ -14,6 +14,7 @@ import (
 	"testing"
 
 	"github.com/nao1215/jsonize/internal/jsonbuild"
+	"github.com/nao1215/jsonize/internal/yaml"
 	"github.com/nao1215/jsonize/pkg/registry"
 	official "github.com/nao1215/jsonize/registry"
 )
@@ -348,11 +349,11 @@ func TestParseCommandLineRefuses(t *testing.T) {
 	}
 }
 
-// optionsBlock returns the lines of the fenced block that follows the
-// first "Options:" heading or line in a document.
+// optionsBlock returns the lines of the option list a document prints,
+// from its first group heading, Input:, to the end of its fenced block.
 func optionsBlock(t *testing.T, text string) string {
 	t.Helper()
-	i := strings.Index(text, "\n  -f, --file PATH")
+	i := strings.Index(text, "\nInput:\n  -f, --file PATH")
 	if i < 0 {
 		return ""
 	}
@@ -589,5 +590,151 @@ func TestLandingPageCounts(t *testing.T) {
 	}
 	if want := fmt.Sprintf("%d commands through %d definitions", len(commands), len(reg.Entries())); m[0] != want {
 		t.Errorf("the landing page says %q; the registry holds %q", m[0], want)
+	}
+}
+
+// shownWithOutput returns the command lines of a page's console blocks
+// that are followed by what they print, with the line each is on: the
+// examples a reader takes at their word.
+func shownWithOutput(text string) map[int]string {
+	out := map[int]string{}
+	lines := strings.Split(text, "\n")
+	inConsole := false
+	pending, pendingAt := "", 0
+	flush := func(printed bool) {
+		if pending != "" && printed {
+			out[pendingAt] = pending
+		}
+		pending = ""
+	}
+	for i := 0; i < len(lines); i++ {
+		trimmed := strings.TrimSpace(lines[i])
+		if strings.HasPrefix(trimmed, "```") {
+			if !inConsole && strings.TrimPrefix(trimmed, "```") == "console" {
+				inConsole = true
+				continue
+			}
+			if inConsole {
+				flush(false)
+			}
+			inConsole = false
+			continue
+		}
+		if !inConsole {
+			continue
+		}
+		if cmd, ok := strings.CutPrefix(trimmed, "$ "); ok {
+			flush(false)
+			// A quote left open continues on the next lines.
+			at := i + 1
+			for {
+				if _, err := shellWords(cmd); err == nil || i+1 >= len(lines) {
+					break
+				}
+				i++
+				cmd += "\n" + lines[i]
+			}
+			pending, pendingAt = cmd, at
+			continue
+		}
+		if trimmed != "" {
+			flush(true)
+		}
+	}
+	return out
+}
+
+// specCommands returns every command line the end-to-end specs run.
+func specCommands(t *testing.T, root string) []string {
+	t.Helper()
+	paths, err := filepath.Glob(filepath.Join(root, "e2e", "atago", "*.atago.yaml"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var out []string
+	var walk func(v any)
+	walk = func(v any) {
+		switch t := v.(type) {
+		case map[string]any:
+			for k, e := range t {
+				if s, ok := e.(string); ok && k == "command" {
+					out = append(out, s)
+					continue
+				}
+				walk(e)
+			}
+		case []any:
+			for _, e := range t {
+				walk(e)
+			}
+		}
+	}
+	for _, p := range paths {
+		var doc any
+		if err := yaml.Unmarshal([]byte(readText(t, p)), &doc, false); err != nil {
+			t.Fatalf("%s: %v", p, err)
+		}
+		walk(doc)
+	}
+	return out
+}
+
+var specPath = regexp.MustCompile(`\$\{(?:workdir|suitedir|specdir)\}[/\\](?:[^\s/\\]*[/\\])*`)
+
+// Every jz command a page shows together with its output is run by the
+// end-to-end suite, so the output shown is output jz printed. A file a
+// page names by itself is the fixture a spec names under its work
+// directory, and a shell variable on the page stands for any text.
+func TestDocumentedExamplesAreRun(t *testing.T) {
+	t.Parallel()
+	root := repoRoot(t)
+	run := map[string]bool{}
+	for _, line := range specCommands(t, root) {
+		invocations, err := jzInvocations(specPath.ReplaceAllString(line, ""))
+		if err != nil {
+			continue
+		}
+		for _, inv := range invocations {
+			run[strings.Join(inv, "\x00")] = true
+		}
+	}
+	pages := []string{
+		filepath.Join(root, "README.md"),
+		filepath.Join(root, "website", "content", "_index.md"),
+		filepath.Join(root, "website", "content", "usage.md"),
+		filepath.Join(root, "website", "content", "cookbook.md"),
+	}
+	variable := regexp.MustCompile(`\$[A-Za-z_][A-Za-z0-9_]*`)
+	for _, page := range pages {
+		for n, line := range shownWithOutput(readText(t, page)) {
+			invocations, err := jzInvocations(line)
+			if err != nil {
+				t.Errorf("%s:%d: %v", filepath.Base(page), n, err)
+				continue
+			}
+			for _, inv := range invocations {
+				key := strings.Join(inv, "\x00")
+				if run[key] {
+					continue
+				}
+				found := false
+				if variable.MatchString(key) {
+					parts := variable.Split(key, -1)
+					for i := range parts {
+						parts[i] = regexp.QuoteMeta(parts[i])
+					}
+					pattern := regexp.MustCompile("^" + strings.Join(parts, ".*") + "$")
+					for k := range run {
+						if pattern.MatchString(k) {
+							found = true
+							break
+						}
+					}
+				}
+				if !found {
+					t.Errorf("%s:%d: `jz %s` is shown with its output and no end-to-end scenario runs it", filepath.Base(page), n, strings.Join(inv, " "))
+				}
+			}
+		}
 	}
 }
