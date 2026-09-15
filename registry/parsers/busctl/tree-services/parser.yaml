@@ -1,0 +1,65 @@
+# `busctl tree` with no service, or with more than one, prints a block per
+# service: a "Service NAME:" heading and then the object paths of that
+# service drawn as a tree, the way busctl/tree reads them for one service.
+# A record is therefore a service, and the tree inside it is a part.
+#
+# In place of a tree busctl prints a sentence for a service it could not
+# read: "Only root object discovered." for one that exports nothing below
+# "/", and "Failed to introspect object ...: REASON" followed by "No
+# objects discovered." for one the caller may not introspect. Those are
+# kept in a messages list beside the tree rather than dropped, since they
+# are what says why a service has no objects.
+format: 1
+command: busctl
+variant: tree-services
+description: busctl tree with a heading per service, the object paths of each
+metadata:
+  tags: [linux, dbus, systemd]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/busctl.html
+detect:
+  os: [linux]
+  args:
+    all: [tree]
+  signature:
+    all:
+      # A heading first, and then every line is a heading, a drawn object
+      # path, one of the three sentences, or the blank line between
+      # blocks.
+      - '\AService \S+:[ \t]*(?:\n(?:Service \S+:|(?:  |\| |│ )*(?:`-|\|-|└─|├─) /\S*|Only root object discovered\.|No objects discovered\.|Failed to introspect object \S+ of service \S+: [^\n]+|)[ \t]*)*\z'
+parse:
+  type: records
+  start: '^Service \S+:[ \t]*$'
+  parts:
+    - name: service
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^Service (?P<name>\S+):[ \t]*$'
+      fields:
+        name: {required: true}
+    - name: objects
+      select: {skip: 1}
+      ignore:
+        - '^(?:Only root object discovered\.|No objects discovered\.|Failed to introspect object \S+ of service \S+: .+)$'
+      parse:
+        type: tree
+        indent: ["  ", "| ", "│ "]
+        root: '^(?:`-|\|-|└─|├─) /'
+        node:
+          parse:
+            type: regex
+            pattern: '^(?:`-|\|-|└─|├─) (?P<path>/\S*)[ \t]*$'
+          fields:
+            path: {required: true}
+    - name: messages
+      select: {skip: 1}
+      ignore: ['^(?:  |\| |│ )*(?:`-|\|-|└─|├─) /']
+      parse:
+        type: regex
+        patterns:
+          - '^(?P<message>Only root object discovered\.)[ \t]*$'
+          - '^(?P<message>No objects discovered\.)[ \t]*$'
+          - '^(?P<message>Failed to introspect object \S+ of service \S+: .+?)[ \t]*$'

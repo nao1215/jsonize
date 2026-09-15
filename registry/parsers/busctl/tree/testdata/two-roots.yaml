@@ -1,0 +1,4 @@
+description: A service whose objects sit under two top-level paths, so the tree has two roots.
+source: "captured with `busctl tree net.hadess.PowerProfiles` (systemd 259) on Ubuntu 26.04 with LC_ALL=C"
+os: linux
+args: [tree, net.hadess.PowerProfiles]

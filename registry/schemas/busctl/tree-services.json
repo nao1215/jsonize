@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/busctl/tree-services.json",
+  "title": "busctl/tree-services",
+  "description": "busctl tree with a heading per service, the object paths of each",
+  "x-jsonize": {
+    "definition": "busctl/tree-services",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "service": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "objects": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/node_objects"
+        }
+      },
+      "messages": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "message"
+          ]
+        }
+      }
+    },
+    "required": [
+      "service",
+      "objects",
+      "messages"
+    ]
+  },
+  "$defs": {
+    "node_objects": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node_objects"
+          }
+        }
+      },
+      "required": [
+        "path",
+        "children"
+      ]
+    }
+  }
+}

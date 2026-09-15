@@ -1,0 +1,72 @@
+[
+  {
+    "path": "/org",
+    "children": [
+      {
+        "path": "/org/freedesktop",
+        "children": [
+          {
+            "path": "/org/freedesktop/LogControl1",
+            "children": []
+          },
+          {
+            "path": "/org/freedesktop/login1",
+            "children": [
+              {
+                "path": "/org/freedesktop/login1/seat",
+                "children": [
+                  {
+                    "path": "/org/freedesktop/login1/seat/auto",
+                    "children": []
+                  },
+                  {
+                    "path": "/org/freedesktop/login1/seat/seat0",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "path": "/org/freedesktop/login1/session",
+                "children": [
+                  {
+                    "path": "/org/freedesktop/login1/session/_3100",
+                    "children": []
+                  },
+                  {
+                    "path": "/org/freedesktop/login1/session/_32",
+                    "children": []
+                  },
+                  {
+                    "path": "/org/freedesktop/login1/session/_33",
+                    "children": []
+                  },
+                  {
+                    "path": "/org/freedesktop/login1/session/_34",
+                    "children": []
+                  },
+                  {
+                    "path": "/org/freedesktop/login1/session/auto",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "path": "/org/freedesktop/login1/user",
+                "children": [
+                  {
+                    "path": "/org/freedesktop/login1/user/_1000",
+                    "children": []
+                  },
+                  {
+                    "path": "/org/freedesktop/login1/user/self",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

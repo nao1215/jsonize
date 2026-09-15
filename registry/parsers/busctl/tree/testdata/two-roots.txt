@@ -1,0 +1,7 @@
+|- /net
+| `- /net/hadess
+|   `- /net/hadess/PowerProfiles
+`- /org
+  `- /org/freedesktop
+    `- /org/freedesktop/UPower
+      `- /org/freedesktop/UPower/PowerProfiles
