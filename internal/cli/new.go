@@ -142,11 +142,7 @@ func (a *app) newEach(plan *jsonbuild.Plan, src jsonbuild.Sources, stop bool) in
 	}
 	skipped := 0
 	err = datafile.Stream(format, a.env.Stdin, int(MaxInputSize), func(v any) error {
-		doc, err := fixed.With(v)
-		if err != nil {
-			return err
-		}
-		return jsonutil.Encode(a.env.Stdout, doc, false)
+		return a.eachDocument(fixed, v, arg, stop, &skipped)
 	}, func(pe *engine.ParseError) error {
 		if stop {
 			return pe
@@ -169,6 +165,23 @@ func (a *app) newEach(plan *jsonbuild.Plan, src jsonbuild.Sources, stop bool) in
 		return ExitParse
 	}
 	return ExitOK
+}
+
+// eachDocument writes the document fixed makes with a record's value v.
+// A document past the value limit is a record that cannot be made into
+// one, so it is treated as a record that cannot be read: reported and left
+// out, or with stop, the end of the documents.
+func (a *app) eachDocument(fixed *jsonbuild.Fixed, v any, arg string, stop bool, skipped *int) error {
+	doc, err := fixed.With(v)
+	if err != nil {
+		if stop {
+			return err
+		}
+		*skipped++
+		a.errorf("new: %s: %v", arg, err)
+		return nil
+	}
+	return jsonutil.Encode(a.env.Stdout, doc, false)
 }
 
 // newFailed reports why the arguments made no JSON: an argument that
