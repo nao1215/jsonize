@@ -1,0 +1,4 @@
+description: macOS netstat -rn, with hardware addresses as gateways, scoped IPv6 routes and routes whose expiry has come marked "!"
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C netstat -rn; the runner's network 192.168.64 replaced by 192.0.2, its MAC addresses by 02:00:00:00:00:0x and its en0 link-local address by fe80::200:ff:fe00:3, with the columns padded to where they started
+os: darwin
+args: ["-rn"]

@@ -1,0 +1,345 @@
+[
+  {
+    "family": {
+      "name": "Internet"
+    },
+    "routes": [
+      {
+        "destination": "default",
+        "gateway": "192.0.2.1",
+        "flags": "UGScg",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "127",
+        "gateway": "127.0.0.1",
+        "flags": "UCS",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "127.0.0.1",
+        "gateway": "127.0.0.1",
+        "flags": "UH",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "169.254",
+        "gateway": "link#7",
+        "flags": "UCS",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "192.0.2",
+        "gateway": "link#7",
+        "flags": "UCS",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "192.0.2.1/32",
+        "gateway": "link#7",
+        "flags": "UCS",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "192.0.2.1",
+        "gateway": "02:00:00:00:00:01",
+        "flags": "UHLWIir",
+        "netif": "en0",
+        "expire": 1186
+      },
+      {
+        "destination": "192.0.2.3/32",
+        "gateway": "link#7",
+        "flags": "UCS",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "192.0.2.255",
+        "gateway": "ff:ff:ff:ff:ff:ff",
+        "flags": "UHLWbI",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "224.0.0/4",
+        "gateway": "link#7",
+        "flags": "UmCS",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "224.0.0.251",
+        "gateway": "1:0:5e:0:0:fb",
+        "flags": "UHmLWI",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "255.255.255.255/32",
+        "gateway": "link#7",
+        "flags": "UCS",
+        "netif": "en0",
+        "expire": null
+      }
+    ]
+  },
+  {
+    "family": {
+      "name": "Internet6"
+    },
+    "routes": [
+      {
+        "destination": "default",
+        "gateway": "fe80::%utun0",
+        "flags": "UGcIg",
+        "netif": "utun0",
+        "expire": null
+      },
+      {
+        "destination": "default",
+        "gateway": "fe80::%utun1",
+        "flags": "UGcIg",
+        "netif": "utun1",
+        "expire": null
+      },
+      {
+        "destination": "default",
+        "gateway": "fe80::%utun2",
+        "flags": "UGcIg",
+        "netif": "utun2",
+        "expire": null
+      },
+      {
+        "destination": "default",
+        "gateway": "fe80::%utun3",
+        "flags": "UGcIg",
+        "netif": "utun3",
+        "expire": null
+      },
+      {
+        "destination": "::1",
+        "gateway": "::1",
+        "flags": "UHL",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::%lo0/64",
+        "gateway": "fe80::1%lo0",
+        "flags": "UcI",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::1%lo0",
+        "gateway": "link#1",
+        "flags": "UHLI",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::%en0/64",
+        "gateway": "link#7",
+        "flags": "UCI",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::200:ff:fe00:3%en0",
+        "gateway": "02:00:00:00:00:03",
+        "flags": "UHLI",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::%utun0/64",
+        "gateway": "fe80::1379:72af:1707:be6b%utun0",
+        "flags": "UcI",
+        "netif": "utun0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::1379:72af:1707:be6b%utun0",
+        "gateway": "link#8",
+        "flags": "UHLI",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::%utun1/64",
+        "gateway": "fe80::e95b:3ab2:abee:476a%utun1",
+        "flags": "UcI",
+        "netif": "utun1",
+        "expire": null
+      },
+      {
+        "destination": "fe80::e95b:3ab2:abee:476a%utun1",
+        "gateway": "link#9",
+        "flags": "UHLI",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::%utun2/64",
+        "gateway": "fe80::eeae:c307:af7a:1e58%utun2",
+        "flags": "UcI",
+        "netif": "utun2",
+        "expire": null
+      },
+      {
+        "destination": "fe80::eeae:c307:af7a:1e58%utun2",
+        "gateway": "link#10",
+        "flags": "UHLI",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "fe80::%utun3/64",
+        "gateway": "fe80::ce81:b1c:bd2c:69e%utun3",
+        "flags": "UcI",
+        "netif": "utun3",
+        "expire": null
+      },
+      {
+        "destination": "fe80::ce81:b1c:bd2c:69e%utun3",
+        "gateway": "link#11",
+        "flags": "UHLI",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "ff00::/8",
+        "gateway": "::1",
+        "flags": "UmCI",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "ff00::/8",
+        "gateway": "link#7",
+        "flags": "UmCI",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "ff00::/8",
+        "gateway": "fe80::1379:72af:1707:be6b%utun0",
+        "flags": "UmCI",
+        "netif": "utun0",
+        "expire": null
+      },
+      {
+        "destination": "ff00::/8",
+        "gateway": "fe80::e95b:3ab2:abee:476a%utun1",
+        "flags": "UmCI",
+        "netif": "utun1",
+        "expire": null
+      },
+      {
+        "destination": "ff00::/8",
+        "gateway": "fe80::eeae:c307:af7a:1e58%utun2",
+        "flags": "UmCI",
+        "netif": "utun2",
+        "expire": null
+      },
+      {
+        "destination": "ff00::/8",
+        "gateway": "fe80::ce81:b1c:bd2c:69e%utun3",
+        "flags": "UmCI",
+        "netif": "utun3",
+        "expire": null
+      },
+      {
+        "destination": "ff01::%lo0/32",
+        "gateway": "::1",
+        "flags": "UmCI",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "ff01::%en0/32",
+        "gateway": "link#7",
+        "flags": "UmCI",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "ff01::%utun0/32",
+        "gateway": "fe80::1379:72af:1707:be6b%utun0",
+        "flags": "UmCI",
+        "netif": "utun0",
+        "expire": null
+      },
+      {
+        "destination": "ff01::%utun1/32",
+        "gateway": "fe80::e95b:3ab2:abee:476a%utun1",
+        "flags": "UmCI",
+        "netif": "utun1",
+        "expire": null
+      },
+      {
+        "destination": "ff01::%utun2/32",
+        "gateway": "fe80::eeae:c307:af7a:1e58%utun2",
+        "flags": "UmCI",
+        "netif": "utun2",
+        "expire": null
+      },
+      {
+        "destination": "ff01::%utun3/32",
+        "gateway": "fe80::ce81:b1c:bd2c:69e%utun3",
+        "flags": "UmCI",
+        "netif": "utun3",
+        "expire": null
+      },
+      {
+        "destination": "ff02::%lo0/32",
+        "gateway": "::1",
+        "flags": "UmCI",
+        "netif": "lo0",
+        "expire": null
+      },
+      {
+        "destination": "ff02::%en0/32",
+        "gateway": "link#7",
+        "flags": "UmCI",
+        "netif": "en0",
+        "expire": null
+      },
+      {
+        "destination": "ff02::%utun0/32",
+        "gateway": "fe80::1379:72af:1707:be6b%utun0",
+        "flags": "UmCI",
+        "netif": "utun0",
+        "expire": null
+      },
+      {
+        "destination": "ff02::%utun1/32",
+        "gateway": "fe80::e95b:3ab2:abee:476a%utun1",
+        "flags": "UmCI",
+        "netif": "utun1",
+        "expire": null
+      },
+      {
+        "destination": "ff02::%utun2/32",
+        "gateway": "fe80::eeae:c307:af7a:1e58%utun2",
+        "flags": "UmCI",
+        "netif": "utun2",
+        "expire": null
+      },
+      {
+        "destination": "ff02::%utun3/32",
+        "gateway": "fe80::ce81:b1c:bd2c:69e%utun3",
+        "flags": "UmCI",
+        "netif": "utun3",
+        "expire": null
+      }
+    ]
+  }
+]

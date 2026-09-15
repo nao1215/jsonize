@@ -1,0 +1,6 @@
+Routing tables
+
+Internet:
+Destination        Gateway            Flags               Netif Expire
+The default route above disappeared after the VPN client reconnected, and
+the en0 routes came back only after the interface was toggled twice.
