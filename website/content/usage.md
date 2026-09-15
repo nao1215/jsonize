@@ -114,10 +114,14 @@ $ kubectl get deploy api -o yaml | jz --format yaml
 `--format` wins over the extension, and `--parser` or `--define` read the
 file as a command's output.
 
-- csv and tsv are read by the [csv shapes](#a-csv-without-a-header-line):
+- csv and tsv are read with the quoting rules of the [csv shapes](#a-csv-without-a-header-line):
   every value is text, an empty field is `""`, a row with more fields
   than the header is refused, and `--columns` names the columns of a
   file without a header line (`jz --file rows.csv --columns id,name`).
+  They are read as data rather than as a command's output: an escape
+  sequence and a line of spaces are part of the values, an empty line
+  holds no row, and a csv definition in a user registry changes only
+  what `--parser csv` reads.
 - An LTSV value is everything after the first colon. A label is letters,
   digits and `_ . -`; a missing label, an empty field and a label given
   twice on one line are refused.

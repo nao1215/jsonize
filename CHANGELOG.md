@@ -74,6 +74,17 @@ project follows [Semantic Versioning](https://semver.org/).
   unchanged: a `.yaml` or `.yml` file, `--format yaml`, `jz new
   key:=@file.yaml` and definitions written in YAML all work as before.
 
+### Fixed
+
+- A csv or tsv read as data (`--format csv`, a `.csv` or `.tsv` file, `jz
+  new key:=@file.csv`) keeps what it holds: an escape sequence stays in
+  its value, where it was taken off as colour, and a line of spaces is a
+  row, where it was dropped (`printf 'key\n   \nx\n' | jz --format csv`
+  gave one row). A csv definition in the user registry no longer changes
+  such a reading, which made `007` a number with `--format csv` and left
+  it `"007"` with `jz new`; only `--parser csv` reads with it. `--explain`
+  now says the file was read as csv rather than naming `csv/comma`.
+
 ## [0.3.0]
 
 jz makes JSON from more than command output: from data files (CSV, TSV,
