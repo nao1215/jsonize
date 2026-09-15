@@ -1,0 +1,270 @@
+
+Image Name                     PID Services                                    
+========================= ======== ============================================
+System Idle Process              0 N/A                                         
+System                           4 N/A                                         
+Secure System                   72 N/A                                         
+Registry                       124 N/A                                         
+smss.exe                       492 N/A                                         
+csrss.exe                      628 N/A                                         
+wininit.exe                    752 N/A                                         
+services.exe                   844 N/A                                         
+LsaIso.exe                     864 N/A                                         
+lsass.exe                      872 KeyIso, SamSs, VaultSvc                     
+svchost.exe                    996 BrokerInfrastructure, DcomLaunch, PlugPlay, 
+                                   Power, SystemEventsBroker                   
+fontdrvhost.exe                552 N/A                                         
+svchost.exe                    632 RpcEptMapper, RpcSs                         
+svchost.exe                    576 LSM                                         
+svchost.exe                   1116 DeviceInstall                               
+svchost.exe                   1124 NetSetupSvc                                 
+svchost.exe                   1132 TermService                                 
+svchost.exe                   1204 HvHost                                      
+svchost.exe                   1260 NcbService                                  
+svchost.exe                   1292 lmhosts                                     
+svchost.exe                   1356 vmicheartbeat                               
+svchost.exe                   1364 vmickvpexchange                             
+svchost.exe                   1372 vmicshutdown                                
+svchost.exe                   1400 WPDBusEnum                                  
+svchost.exe                   1436 vmictimesync                                
+svchost.exe                   1500 EventLog                                    
+svchost.exe                   1644 Winmgmt                                     
+svchost.exe                   1676 nsi                                         
+svchost.exe                   1708 Dhcp                                        
+svchost.exe                   1736 gpsvc                                       
+vmms.exe                      1796 vmms                                        
+svchost.exe                   1816 NlaSvc                                      
+svchost.exe                   1860 Dnscache                                    
+svchost.exe                   1884 Schedule                                    
+svchost.exe                   2008 netprofm                                    
+svchost.exe                   1980 UmRdpService                                
+svchost.exe                   2164 TimeBrokerSvc                               
+svchost.exe                   2248 CertPropSvc                                 
+svchost.exe                   2272 hns                                         
+svchost.exe                   2316 LanmanWorkstation                           
+svchost.exe                   2364 ProfSvc                                     
+svchost.exe                   2372 Themes                                      
+svchost.exe                   2388 EventSystem                                 
+svchost.exe                   2460 WinHttpAutoProxySvc                         
+svchost.exe                   2480 SessionEnv                                  
+svchost.exe                   2648 SENS                                        
+svchost.exe                   2656 UserManager                                 
+svchost.exe                   2768 nvagent                                     
+svchost.exe                   2792 Wcmsvc                                      
+svchost.exe                   2836 ShellHWDetection                            
+svchost.exe                   2876 FontCache                                   
+svchost.exe                   2916 BFE, mpssvc                                 
+svchost.exe                   1832 CoreMessagingRegistrar                      
+spoolsv.exe                   3084 Spooler                                     
+svchost.exe                   3208 CryptSvc                                    
+svchost.exe                   3216 iphlpsvc                                    
+svchost.exe                   3224 sacsvr                                      
+svchost.exe                   3236 StateRepository                             
+svchost.exe                   3244 RemoteRegistry                              
+svchost.exe                   3252 AppHostSvc                                  
+svchost.exe                   3264 TrkWks                                      
+svchost.exe                   3272 W32Time                                     
+svchost.exe                   3280 W3SVC, WAS                                  
+svchost.exe                   3344 WinRM                                       
+svchost.exe                   3388 WpnService                                  
+sqlwriter.exe                 3448 SQLWriter                                   
+MsMpEng.exe                   3508 WinDefend                                   
+SMSvcHost.exe                 3528 NetPipeActivator, NetTcpActivator,          
+                                   NetTcpPortSharing                           
+MpDefenderCoreService.exe     3560 MDCoreSvc                                   
+mqsvc.exe                     3616 MSMQ                                        
+dockerd.exe                   3672 docker                                      
+svchost.exe                   3840 LanmanServer                                
+SMSvcHost.exe                 4320 NetMsmqActivator                            
+svchost.exe                   4352 DispBrokerDesktopSvc                        
+vmcompute.exe                 4772 vmcompute                                   
+dllhost.exe                   4900 N/A                                         
+WmiPrvSE.exe                  4560 N/A                                         
+taskhostw.exe                 6048 N/A                                         
+svchost.exe                   5304 pla                                         
+svchost.exe                   5792 BITS                                        
+WmiPrvSE.exe                  5208 N/A                                         
+csrss.exe                     6676 N/A                                         
+winlogon.exe                  6724 N/A                                         
+fontdrvhost.exe               6772 N/A                                         
+dwm.exe                       6808 N/A                                         
+svchost.exe                   7076 NgcSvc                                      
+vds.exe                       7148 vds                                         
+DefenderSessionHelper.exe     1612 N/A                                         
+svchost.exe                   1484 WpnUserService_969fe                        
+sihost.exe                    2192 N/A                                         
+svchost.exe                   3376 TabletInputService                          
+ctfmon.exe                    5728 N/A                                         
+taskhostw.exe                 4456 N/A                                         
+taskhostw.exe                 6472 N/A                                         
+svchost.exe                   5948 camsvc                                      
+explorer.exe                  1152 N/A                                         
+svchost.exe                   3304 AppXSvc                                     
+svchost.exe                    900 AppReadiness                                
+svchost.exe                   2452 ClipSVC                                     
+smartscreen.exe               5964 N/A                                         
+svchost.exe                   5412 wlidsvc                                     
+svchost.exe                   5036 TokenBroker                                 
+OpenWith.exe                   712 N/A                                         
+svchost.exe                   6148 LicenseManager                              
+StartMenuExperienceHost.e     7284 N/A                                         
+TextInputHost.exe             7344 N/A                                         
+RuntimeBroker.exe             7412 N/A                                         
+SearchApp.exe                 7564 N/A                                         
+RuntimeBroker.exe             7628 N/A                                         
+AzureArcSysTray.exe           6992 N/A                                         
+RuntimeBroker.exe              640 N/A                                         
+ServiceFabricLocalCluster     5068 N/A                                         
+ShellExperienceHost.exe       7396 N/A                                         
+RuntimeBroker.exe             7916 N/A                                         
+taskhostw.exe                 1544 N/A                                         
+WaAppAgent.exe                3568 RdAgent                                     
+WindowsAzureGuestAgent.ex     6424 WindowsAzureGuestAgent                      
+WaSecAgentProv.exe            5004 N/A                                         
+conhost.exe                   5236 N/A                                         
+WmiPrvSE.exe                  6316 N/A                                         
+hosted-compute-agent          6872 N/A                                         
+conhost.exe                   7176 N/A                                         
+provjobd.exe770167439         8048 N/A                                         
+sppsvc.exe                    1964 sppsvc                                      
+svchost.exe                   6768 LxssManager                                 
+Runner.Listener.exe           7584 N/A                                         
+Runner.Worker.exe             7548 N/A                                         
+conhost.exe                    776 N/A                                         
+pwsh.exe                      7180 N/A                                         
+cmd.exe                       5024 N/A                                         
+tasklist.exe                  4468 N/A                                         
+
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+System Idle Process              0 Services                   0          8 K
+System                           4 Services                   0        148 K
+Secure System                   72 Services                   0     79,584 K
+Registry                       124 Services                   0     23,744 K
+smss.exe                       492 Services                   0      1,312 K
+csrss.exe                      628 Services                   0      5,460 K
+wininit.exe                    752 Services                   0      6,680 K
+services.exe                   844 Services                   0      9,736 K
+LsaIso.exe                     864 Services                   0      3,284 K
+lsass.exe                      872 Services                   0     22,864 K
+svchost.exe                    996 Services                   0     23,648 K
+fontdrvhost.exe                552 Services                   0      3,572 K
+svchost.exe                    632 Services                   0     11,952 K
+svchost.exe                    576 Services                   0      9,564 K
+svchost.exe                   1116 Services                   0      4,564 K
+svchost.exe                   1124 Services                   0      7,336 K
+svchost.exe                   1132 Services                   0     13,200 K
+svchost.exe                   1204 Services                   0      5,524 K
+svchost.exe                   1260 Services                   0     10,736 K
+svchost.exe                   1292 Services                   0      5,548 K
+svchost.exe                   1356 Services                   0      7,676 K
+svchost.exe                   1364 Services                   0      6,204 K
+svchost.exe                   1372 Services                   0      5,984 K
+svchost.exe                   1400 Services                   0      7,896 K
+svchost.exe                   1436 Services                   0      6,084 K
+svchost.exe                   1500 Services                   0     26,552 K
+svchost.exe                   1644 Services                   0     26,508 K
+svchost.exe                   1676 Services                   0      7,636 K
+svchost.exe                   1708 Services                   0      8,204 K
+svchost.exe                   1736 Services                   0     10,684 K
+vmms.exe                      1796 Services                   0     28,452 K
+svchost.exe                   1816 Services                   0     12,916 K
+svchost.exe                   1860 Services                   0      8,980 K
+svchost.exe                   1884 Services                   0     16,168 K
+svchost.exe                   2008 Services                   0     11,060 K
+svchost.exe                   1980 Services                   0      6,704 K
+svchost.exe                   2164 Services                   0     12,300 K
+svchost.exe                   2248 Services                   0      6,880 K
+svchost.exe                   2272 Services                   0     13,756 K
+svchost.exe                   2316 Services                   0      8,364 K
+svchost.exe                   2364 Services                   0     11,636 K
+svchost.exe                   2372 Services                   0      5,900 K
+svchost.exe                   2388 Services                   0      8,276 K
+svchost.exe                   2460 Services                   0      7,716 K
+svchost.exe                   2480 Services                   0      8,880 K
+svchost.exe                   2648 Services                   0      8,364 K
+svchost.exe                   2656 Services                   0      9,444 K
+svchost.exe                   2768 Services                   0      7,228 K
+svchost.exe                   2792 Services                   0      9,640 K
+svchost.exe                   2836 Services                   0     13,944 K
+svchost.exe                   2876 Services                   0      7,620 K
+svchost.exe                   2916 Services                   0     20,196 K
+svchost.exe                   1832 Services                   0      6,244 K
+spoolsv.exe                   3084 Services                   0     16,644 K
+svchost.exe                   3208 Services                   0     10,736 K
+svchost.exe                   3216 Services                   0     11,528 K
+svchost.exe                   3224 Services                   0      5,484 K
+svchost.exe                   3236 Services                   0     20,060 K
+svchost.exe                   3244 Services                   0      5,680 K
+svchost.exe                   3252 Services                   0     11,396 K
+svchost.exe                   3264 Services                   0      5,856 K
+svchost.exe                   3272 Services                   0      7,820 K
+svchost.exe                   3280 Services                   0     12,000 K
+svchost.exe                   3344 Services                   0     17,420 K
+svchost.exe                   3388 Services                   0     11,748 K
+sqlwriter.exe                 3448 Services                   0      8,272 K
+MsMpEng.exe                   3508 Services                   0    196,772 K
+SMSvcHost.exe                 3528 Services                   0     28,192 K
+MpDefenderCoreService.exe     3560 Services                   0     24,880 K
+mqsvc.exe                     3616 Services                   0     14,948 K
+dockerd.exe                   3672 Services                   0     45,656 K
+svchost.exe                   3840 Services                   0      9,168 K
+SMSvcHost.exe                 4320 Services                   0     17,660 K
+svchost.exe                   4352 Services                   0      7,272 K
+vmcompute.exe                 4772 Services                   0      8,408 K
+dllhost.exe                   4900 Services                   0     12,296 K
+WmiPrvSE.exe                  4560 Services                   0     20,316 K
+taskhostw.exe                 6048 Services                   0     18,528 K
+svchost.exe                   5304 Services                   0      7,140 K
+svchost.exe                   5792 Services                   0     22,536 K
+WmiPrvSE.exe                  5208 Services                   0      9,268 K
+csrss.exe                     6676 Console                    2      7,060 K
+winlogon.exe                  6724 Console                    2     10,152 K
+fontdrvhost.exe               6772 Console                    2      4,788 K
+dwm.exe                       6808 Console                    2     56,136 K
+svchost.exe                   7076 Services                   0      7,164 K
+vds.exe                       7148 Services                   0     12,648 K
+DefenderSessionHelper.exe     1612 Console                    2      4,988 K
+svchost.exe                   1484 Console                    2     35,388 K
+sihost.exe                    2192 Console                    2     28,044 K
+svchost.exe                   3376 Services                   0      6,764 K
+ctfmon.exe                    5728 Console                    2     15,216 K
+taskhostw.exe                 4456 Console                    2     16,212 K
+taskhostw.exe                 6472 Console                    2     14,004 K
+svchost.exe                   5948 Services                   0     12,280 K
+explorer.exe                  1152 Console                    2    103,132 K
+svchost.exe                   3304 Services                   0     90,040 K
+svchost.exe                    900 Services                   0     19,684 K
+svchost.exe                   2452 Services                   0      8,924 K
+smartscreen.exe               5964 Console                    2     27,276 K
+svchost.exe                   5412 Services                   0     17,936 K
+svchost.exe                   5036 Services                   0     21,896 K
+OpenWith.exe                   712 Services                   0     29,084 K
+svchost.exe                   6148 Services                   0      7,224 K
+StartMenuExperienceHost.e     7284 Console                    2     63,156 K
+TextInputHost.exe             7344 Console                    2     44,676 K
+RuntimeBroker.exe             7412 Console                    2     26,740 K
+SearchApp.exe                 7564 Console                    2     68,044 K
+RuntimeBroker.exe             7628 Console                    2     61,632 K
+AzureArcSysTray.exe           6992 Console                    2     12,592 K
+RuntimeBroker.exe              640 Console                    2     16,032 K
+ServiceFabricLocalCluster     5068 Console                    2     31,992 K
+ShellExperienceHost.exe       7396 Console                    2     48,160 K
+RuntimeBroker.exe             7916 Console                    2     19,968 K
+taskhostw.exe                 1544 Console                    2     10,656 K
+WaAppAgent.exe                3568 Services                   0     81,708 K
+WindowsAzureGuestAgent.ex     6424 Services                   0     66,044 K
+WaSecAgentProv.exe            5004 Services                   0      4,240 K
+conhost.exe                   5236 Services                   0     10,248 K
+WmiPrvSE.exe                  6316 Services                   0      9,940 K
+hosted-compute-agent          6872 Console                    2     18,244 K
+conhost.exe                   7176 Console                    2     17,948 K
+provjobd.exe770167439         8048 Console                    2     24,328 K
+sppsvc.exe                    1964 Services                   0     14,912 K
+svchost.exe                   6768 Services                   0     11,516 K
+Runner.Listener.exe           7584 Console                    2     68,820 K
+Runner.Worker.exe             7548 Console                    2     88,628 K
+conhost.exe                    776 Console                    2     10,816 K
+pwsh.exe                      7180 Console                    2     75,956 K
+cmd.exe                       6460 Console                    2      4,288 K
+tasklist.exe                  5524 Console                    2      9,268 K

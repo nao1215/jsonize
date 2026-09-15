@@ -1,0 +1,832 @@
+[
+  {
+    "image_name": "System Idle Process",
+    "pid": 0,
+    "services": null
+  },
+  {
+    "image_name": "System",
+    "pid": 4,
+    "services": null
+  },
+  {
+    "image_name": "Secure System",
+    "pid": 72,
+    "services": null
+  },
+  {
+    "image_name": "Registry",
+    "pid": 124,
+    "services": null
+  },
+  {
+    "image_name": "smss.exe",
+    "pid": 492,
+    "services": null
+  },
+  {
+    "image_name": "csrss.exe",
+    "pid": 628,
+    "services": null
+  },
+  {
+    "image_name": "wininit.exe",
+    "pid": 752,
+    "services": null
+  },
+  {
+    "image_name": "services.exe",
+    "pid": 844,
+    "services": null
+  },
+  {
+    "image_name": "LsaIso.exe",
+    "pid": 864,
+    "services": null
+  },
+  {
+    "image_name": "lsass.exe",
+    "pid": 872,
+    "services": [
+      "KeyIso",
+      "SamSs",
+      "VaultSvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 996,
+    "services": [
+      "BrokerInfrastructure",
+      "DcomLaunch",
+      "PlugPlay",
+      "Power",
+      "SystemEventsBroker"
+    ]
+  },
+  {
+    "image_name": "fontdrvhost.exe",
+    "pid": 552,
+    "services": null
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 632,
+    "services": [
+      "RpcEptMapper",
+      "RpcSs"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 576,
+    "services": [
+      "LSM"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1116,
+    "services": [
+      "DeviceInstall"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1124,
+    "services": [
+      "NetSetupSvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1132,
+    "services": [
+      "TermService"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1204,
+    "services": [
+      "HvHost"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1260,
+    "services": [
+      "NcbService"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1292,
+    "services": [
+      "lmhosts"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1356,
+    "services": [
+      "vmicheartbeat"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1364,
+    "services": [
+      "vmickvpexchange"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1372,
+    "services": [
+      "vmicshutdown"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1400,
+    "services": [
+      "WPDBusEnum"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1436,
+    "services": [
+      "vmictimesync"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1500,
+    "services": [
+      "EventLog"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1644,
+    "services": [
+      "Winmgmt"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1676,
+    "services": [
+      "nsi"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1708,
+    "services": [
+      "Dhcp"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1736,
+    "services": [
+      "gpsvc"
+    ]
+  },
+  {
+    "image_name": "vmms.exe",
+    "pid": 1796,
+    "services": [
+      "vmms"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1816,
+    "services": [
+      "NlaSvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1860,
+    "services": [
+      "Dnscache"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1884,
+    "services": [
+      "Schedule"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2008,
+    "services": [
+      "netprofm"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1980,
+    "services": [
+      "UmRdpService"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2164,
+    "services": [
+      "TimeBrokerSvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2248,
+    "services": [
+      "CertPropSvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2272,
+    "services": [
+      "hns"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2316,
+    "services": [
+      "LanmanWorkstation"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2364,
+    "services": [
+      "ProfSvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2372,
+    "services": [
+      "Themes"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2388,
+    "services": [
+      "EventSystem"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2460,
+    "services": [
+      "WinHttpAutoProxySvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2480,
+    "services": [
+      "SessionEnv"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2648,
+    "services": [
+      "SENS"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2656,
+    "services": [
+      "UserManager"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2768,
+    "services": [
+      "nvagent"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2792,
+    "services": [
+      "Wcmsvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2836,
+    "services": [
+      "ShellHWDetection"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2876,
+    "services": [
+      "FontCache"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2916,
+    "services": [
+      "BFE",
+      "mpssvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1832,
+    "services": [
+      "CoreMessagingRegistrar"
+    ]
+  },
+  {
+    "image_name": "spoolsv.exe",
+    "pid": 3084,
+    "services": [
+      "Spooler"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3208,
+    "services": [
+      "CryptSvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3216,
+    "services": [
+      "iphlpsvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3224,
+    "services": [
+      "sacsvr"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3236,
+    "services": [
+      "StateRepository"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3244,
+    "services": [
+      "RemoteRegistry"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3252,
+    "services": [
+      "AppHostSvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3264,
+    "services": [
+      "TrkWks"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3272,
+    "services": [
+      "W32Time"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3280,
+    "services": [
+      "W3SVC",
+      "WAS"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3344,
+    "services": [
+      "WinRM"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3388,
+    "services": [
+      "WpnService"
+    ]
+  },
+  {
+    "image_name": "sqlwriter.exe",
+    "pid": 3448,
+    "services": [
+      "SQLWriter"
+    ]
+  },
+  {
+    "image_name": "MsMpEng.exe",
+    "pid": 3508,
+    "services": [
+      "WinDefend"
+    ]
+  },
+  {
+    "image_name": "SMSvcHost.exe",
+    "pid": 3528,
+    "services": [
+      "NetPipeActivator",
+      "NetTcpActivator",
+      "NetTcpPortSharing"
+    ]
+  },
+  {
+    "image_name": "MpDefenderCoreService.exe",
+    "pid": 3560,
+    "services": [
+      "MDCoreSvc"
+    ]
+  },
+  {
+    "image_name": "mqsvc.exe",
+    "pid": 3616,
+    "services": [
+      "MSMQ"
+    ]
+  },
+  {
+    "image_name": "dockerd.exe",
+    "pid": 3672,
+    "services": [
+      "docker"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3840,
+    "services": [
+      "LanmanServer"
+    ]
+  },
+  {
+    "image_name": "SMSvcHost.exe",
+    "pid": 4320,
+    "services": [
+      "NetMsmqActivator"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 4352,
+    "services": [
+      "DispBrokerDesktopSvc"
+    ]
+  },
+  {
+    "image_name": "vmcompute.exe",
+    "pid": 4772,
+    "services": [
+      "vmcompute"
+    ]
+  },
+  {
+    "image_name": "dllhost.exe",
+    "pid": 4900,
+    "services": null
+  },
+  {
+    "image_name": "WmiPrvSE.exe",
+    "pid": 4560,
+    "services": null
+  },
+  {
+    "image_name": "taskhostw.exe",
+    "pid": 6048,
+    "services": null
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 5304,
+    "services": [
+      "pla"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 5792,
+    "services": [
+      "BITS"
+    ]
+  },
+  {
+    "image_name": "WmiPrvSE.exe",
+    "pid": 5208,
+    "services": null
+  },
+  {
+    "image_name": "csrss.exe",
+    "pid": 6676,
+    "services": null
+  },
+  {
+    "image_name": "winlogon.exe",
+    "pid": 6724,
+    "services": null
+  },
+  {
+    "image_name": "fontdrvhost.exe",
+    "pid": 6772,
+    "services": null
+  },
+  {
+    "image_name": "dwm.exe",
+    "pid": 6808,
+    "services": null
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 7076,
+    "services": [
+      "NgcSvc"
+    ]
+  },
+  {
+    "image_name": "vds.exe",
+    "pid": 7148,
+    "services": [
+      "vds"
+    ]
+  },
+  {
+    "image_name": "DefenderSessionHelper.exe",
+    "pid": 1612,
+    "services": null
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1484,
+    "services": [
+      "WpnUserService_969fe"
+    ]
+  },
+  {
+    "image_name": "sihost.exe",
+    "pid": 2192,
+    "services": null
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3376,
+    "services": [
+      "TabletInputService"
+    ]
+  },
+  {
+    "image_name": "ctfmon.exe",
+    "pid": 5728,
+    "services": null
+  },
+  {
+    "image_name": "taskhostw.exe",
+    "pid": 4456,
+    "services": null
+  },
+  {
+    "image_name": "taskhostw.exe",
+    "pid": 6472,
+    "services": null
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 5948,
+    "services": [
+      "camsvc"
+    ]
+  },
+  {
+    "image_name": "explorer.exe",
+    "pid": 1152,
+    "services": null
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3304,
+    "services": [
+      "AppXSvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 900,
+    "services": [
+      "AppReadiness"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2452,
+    "services": [
+      "ClipSVC"
+    ]
+  },
+  {
+    "image_name": "smartscreen.exe",
+    "pid": 5964,
+    "services": null
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 5412,
+    "services": [
+      "wlidsvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 5036,
+    "services": [
+      "TokenBroker"
+    ]
+  },
+  {
+    "image_name": "OpenWith.exe",
+    "pid": 712,
+    "services": null
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 6148,
+    "services": [
+      "LicenseManager"
+    ]
+  },
+  {
+    "image_name": "StartMenuExperienceHost.e",
+    "pid": 7284,
+    "services": null
+  },
+  {
+    "image_name": "TextInputHost.exe",
+    "pid": 7344,
+    "services": null
+  },
+  {
+    "image_name": "RuntimeBroker.exe",
+    "pid": 7412,
+    "services": null
+  },
+  {
+    "image_name": "SearchApp.exe",
+    "pid": 7564,
+    "services": null
+  },
+  {
+    "image_name": "RuntimeBroker.exe",
+    "pid": 7628,
+    "services": null
+  },
+  {
+    "image_name": "AzureArcSysTray.exe",
+    "pid": 6992,
+    "services": null
+  },
+  {
+    "image_name": "RuntimeBroker.exe",
+    "pid": 640,
+    "services": null
+  },
+  {
+    "image_name": "ServiceFabricLocalCluster",
+    "pid": 5068,
+    "services": null
+  },
+  {
+    "image_name": "ShellExperienceHost.exe",
+    "pid": 7396,
+    "services": null
+  },
+  {
+    "image_name": "RuntimeBroker.exe",
+    "pid": 7916,
+    "services": null
+  },
+  {
+    "image_name": "taskhostw.exe",
+    "pid": 1544,
+    "services": null
+  },
+  {
+    "image_name": "WaAppAgent.exe",
+    "pid": 3568,
+    "services": [
+      "RdAgent"
+    ]
+  },
+  {
+    "image_name": "WindowsAzureGuestAgent.ex",
+    "pid": 6424,
+    "services": [
+      "WindowsAzureGuestAgent"
+    ]
+  },
+  {
+    "image_name": "WaSecAgentProv.exe",
+    "pid": 5004,
+    "services": null
+  },
+  {
+    "image_name": "conhost.exe",
+    "pid": 5236,
+    "services": null
+  },
+  {
+    "image_name": "WmiPrvSE.exe",
+    "pid": 6316,
+    "services": null
+  },
+  {
+    "image_name": "hosted-compute-agent",
+    "pid": 6872,
+    "services": null
+  },
+  {
+    "image_name": "conhost.exe",
+    "pid": 7176,
+    "services": null
+  },
+  {
+    "image_name": "provjobd.exe770167439",
+    "pid": 8048,
+    "services": null
+  },
+  {
+    "image_name": "sppsvc.exe",
+    "pid": 1964,
+    "services": [
+      "sppsvc"
+    ]
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 6768,
+    "services": [
+      "LxssManager"
+    ]
+  },
+  {
+    "image_name": "Runner.Listener.exe",
+    "pid": 7584,
+    "services": null
+  },
+  {
+    "image_name": "Runner.Worker.exe",
+    "pid": 7548,
+    "services": null
+  },
+  {
+    "image_name": "conhost.exe",
+    "pid": 776,
+    "services": null
+  },
+  {
+    "image_name": "pwsh.exe",
+    "pid": 7180,
+    "services": null
+  },
+  {
+    "image_name": "cmd.exe",
+    "pid": 5024,
+    "services": null
+  },
+  {
+    "image_name": "tasklist.exe",
+    "pid": 4468,
+    "services": null
+  }
+]
