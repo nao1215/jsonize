@@ -1,0 +1,32 @@
+# `chcp` without an argument prints the active console code page on one
+# line: "Active code page: 65001". The code page is the number Windows
+# identifies it by (65001 is UTF-8, 437 the United States OEM page) and
+# is read as an integer.
+#
+# The line is translated in a console that speaks another language; this
+# definition reads the English one. `chcp NNN` sets the code page and
+# prints the same line naming the new one.
+format: 1
+command: chcp
+variant: windows
+description: chcp, the active console code page
+metadata:
+  tags: [windows, locale]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/chcp
+    - https://learn.microsoft.com/en-us/windows/win32/intl/code-page-identifiers
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The whole output is this one line.
+      - '\AActive code page: \d+[ \t]*\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\AActive code page: (?P<code_page>\d+)[ \t]*\z'
+fields:
+  code_page: {type: int, required: true}

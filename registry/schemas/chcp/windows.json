@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/chcp/windows.json",
+  "title": "chcp/windows",
+  "description": "chcp, the active console code page",
+  "x-jsonize": {
+    "definition": "chcp/windows",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "code_page": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "code_page"
+  ]
+}

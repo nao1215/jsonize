@@ -1,0 +1,5 @@
+Q: Why does the build log show garbled characters?
+
+A: The console was not using UTF-8. Run chcp and check that it reports
+Active code page: 65001 before the build starts; if it names another
+page, run chcp 65001 first.
