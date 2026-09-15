@@ -72,8 +72,8 @@ Options that state two answers at once are refused with exit status 2
 before the input is opened or a command is started: `--pretty` with
 `--stream`, `--extract` with `--exclude`, `--define` with
 `--parser`, `--format` with `--parser` or `--define`, `--columns` and
-`--type` where there are no columns, and `--stop-on-error` without
-`--stream`.
+`--type` where there are no columns, `--type` with `--raw`, and
+`--stop-on-error` without `--stream`.
 
 ## Data files
 
