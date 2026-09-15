@@ -1,0 +1,13 @@
+description: >-
+  getmac /v run for real on Windows Server 2025: the synthetic adapter
+  bound to TCP/IP and the virtual function that shares its address with
+  N/A for a transport, both adapter names cut to the column's width.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "getmac /v 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  line above the header as the command wrote it). The MAC address, the
+  same on both adapters, was replaced with 00-00-5E-00-53-01 and the
+  GUID in the transport name with a made-up one of the same shape.
+os: windows
+args: ["/v"]

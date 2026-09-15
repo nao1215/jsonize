@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/driverquery/verbose.json",
+  "title": "driverquery/verbose",
+  "description": "driverquery /v, the installed drivers with start mode, state, section sizes and path",
+  "x-jsonize": {
+    "definition": "driverquery/verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "module_name": {
+        "type": "string"
+      },
+      "display_name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "description": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "driver_type": {
+        "type": "string"
+      },
+      "start_mode": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      },
+      "accept_stop": {
+        "type": "boolean"
+      },
+      "accept_pause": {
+        "type": "boolean"
+      },
+      "paged_pool_bytes": {
+        "type": "string"
+      },
+      "code_bytes": {
+        "type": "string"
+      },
+      "bss_bytes": {
+        "type": "string"
+      },
+      "link_date": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "path": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "init_bytes": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "module_name",
+      "display_name",
+      "description",
+      "driver_type",
+      "start_mode",
+      "state",
+      "status",
+      "accept_stop",
+      "accept_pause",
+      "paged_pool_bytes",
+      "code_bytes",
+      "bss_bytes",
+      "link_date",
+      "path",
+      "init_bytes"
+    ]
+  }
+}

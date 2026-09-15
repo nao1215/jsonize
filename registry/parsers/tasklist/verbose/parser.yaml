@@ -1,0 +1,53 @@
+# `tasklist /v` prints the columns of tasklist without options and four
+# more: the status of the process, the account it runs as, the processor
+# time it has used and the title of its main window. The header is
+# underlined by a rule of equals signs, one run per column, and every
+# column has a fixed width; the rows are cut where the header's words
+# start.
+#
+# The memory in use keeps the thousands separator of the user's locale
+# and its "K", and stays the string it was printed as, as in
+# tasklist/table. The processor time is hours, minutes and seconds
+# ("0:00:01") and is read as a number of seconds.
+#
+# N/A stands where there is no value: the account of a process tasklist
+# may not open, the title of a process with no window. Both become null.
+# The status is one of the four words tasklist documents for its STATUS
+# filter, which is also what tells a process row from a row of another
+# table.
+format: 1
+command: tasklist
+variant: verbose
+description: tasklist /v, processes with status, account, processor time and window title
+metadata:
+  tags: [windows, process]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tasklist
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The nine headings and the rule of nine runs under them.
+      - '\AImage Name[ \t]+PID Session Name[ \t]+Session#[ \t]+Mem Usage Status[ \t]+User Name[ \t]+CPU Time Window Title[ \t]*\n=+(?: =+){8}[ \t]*$'
+input:
+  ignore:
+    # The rule under the header.
+    - '^=+(?: =+){8}[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [image_name, pid, session_name, session_number, mem_usage, status, user_name, cpu_time, window_title]
+fields:
+  image_name: {required: true}
+  pid: {type: int, required: true}
+  session_name: {regex: '(?P<session_name>\S+)'}
+  session_number: {type: int, required: true}
+  mem_usage: {required: true, regex: '(?P<mem_usage>\d[\d,.]* K)'}
+  status: {required: true, regex: '(?P<status>Running|Suspended|Not Responding|Unknown)'}
+  user_name: {null_if: ["N/A"]}
+  cpu_time: {type: duration, layout: "h:mm", required: true}
+  window_title: {null_if: ["N/A"]}

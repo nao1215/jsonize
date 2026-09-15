@@ -1,0 +1,10 @@
+Column notes for the verbose driver listing
+
+driverquery /v widens the table to fifteen columns. Its header reads
+Module Name, Display Name, Description, Driver Type, Start Mode, State,
+Status, Accept Stop, Accept Pause, Paged Pool(bytes), Code(bytes),
+BSS(bytes), Link Date, Path and Init(bytes). A row looks like
+
+1394ohci     1394 OHCI Compliant Ho 1394 OHCI Compliant Ho Kernel        Manual     Stopped    OK         FALSE       FALSE        4,096             229,376     0                                 C:\Windows\system32\drivers\1394ohci.sys         4,096
+
+The byte counts carry the thousands separator of the locale.

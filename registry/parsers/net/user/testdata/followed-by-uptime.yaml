@@ -1,0 +1,4 @@
+source: the windows-server-2022 fixture followed by the procps-4.0.4 fixture of uptime/linux, joined for this case
+description: a line after the completion line is refused, since that line closes the listing
+args: [user]
+expect_error: does not match pattern

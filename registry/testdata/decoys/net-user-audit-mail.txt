@@ -1,0 +1,11 @@
+Subject: local accounts on the build servers
+
+Hi all, the audit script collected this from each server:
+
+User accounts for \\BUILD01
+
+-------------------------------------------------------------------------------
+Administrator            DefaultAccount           Guest
+The command completed successfully.
+
+Please disable Guest where it is still enabled.

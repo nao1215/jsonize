@@ -1,0 +1,12 @@
+description: >-
+  getmac /v run for real on Windows Server 2022, the same two adapters
+  listed in the other order, with the N/A transport on the first row.
+source: >-
+  captured on GitHub Actions windows-2022 (Windows Server 2022, build
+  20348.5499) on 2026-09-15 with `cmd /c "getmac /v 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  line above the header as the command wrote it). The MAC address, the
+  same on both adapters, was replaced with 00-00-5E-00-53-03 and the
+  GUID in the transport name with a made-up one of the same shape.
+os: windows
+args: ["/v"]

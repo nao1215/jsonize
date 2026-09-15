@@ -47,6 +47,13 @@ project follows [Semantic Versioning](https://semver.org/).
 - Definitions for `eza -l` (with `--header`, `-a`, `-B`, and in its
   long-iso, full-iso, `-g` and `-H` column sets), `procs`, `tokei`,
   `bat --list-languages` and `hyperfine --style basic`.
+- Definitions for Windows: `tasklist` in its table, `/v`, `/svc`, `/m`,
+  `/fo list` and `/fo csv` forms, `netstat -an`, `-ano` and `-e`,
+  `route print`, `arp -a`, `getmac /v`, `driverquery` and `driverquery
+  /v`, `sc query` and `sc queryex`, `schtasks /query` as a table and as
+  a list, `net user`, `net localgroup`, `net share` and `net start`,
+  `whoami /groups` and `/priv`, `chcp` and `ver`, from output captured on
+  Windows Server 2022 and 2025 runners.
 - Definitions for `cargo tree`, `uv tree`, `npm ls --all`, `busctl tree`
   (one service or several), `docker buildx ls` and `xinput list`.
 - `md5sum --tag`, `sha1sum --tag`, `sha256sum --tag`, `b2sum --tag` and

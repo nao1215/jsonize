@@ -1,0 +1,40 @@
+# `net start` without a service name lists the services that are
+# running: a heading, one display name per line indented by three
+# spaces, and the line saying the command completed.
+#
+# A display name is free text, spaces and brackets included ("AppX
+# Deployment Service (AppXSVC)"), so a name is the whole of its line
+# after the indentation. The indentation is what separates a name from
+# the heading and the completion line, and a line printed without it is
+# not a name.
+#
+# The whole output is one object holding the list of names. The
+# completion line closes it, so a line printed after it is refused.
+format: 1
+command: net
+variant: start
+description: net start, the display names of the running services
+metadata:
+  tags: [windows, service]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/hh875577(v=ws.11)
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    any: [start, START]
+  signature:
+    all:
+      # The heading and the first indented name under it.
+      - '\AThese Windows services are started:[ \t]*\n(?:[ \t]*\n)*   \S'
+parse:
+  type: regex
+  each: input
+  pattern: '\AThese Windows services are started:[ \t]*\n(?:[ \t]*\n)*(?:(?P<services>   \S[^\n]*(?:\n   \S[^\n]*)*)\n)?(?:[ \t]*\n)*The command completed successfully\.[ \t]*\z'
+fields:
+  services:
+    type: array
+    split: "\n"
+    items: {required: true}

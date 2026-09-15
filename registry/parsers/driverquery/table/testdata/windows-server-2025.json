@@ -1,0 +1,2534 @@
+[
+  {
+    "module_name": "1394ohci",
+    "display_name": "1394 OHCI Compliant Ho",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "3ware",
+    "display_name": "3ware",
+    "driver_type": "Kernel",
+    "link_date": "5/18/2015 10:28:03 PM"
+  },
+  {
+    "module_name": "ACPI",
+    "display_name": "Microsoft ACPI Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "AcpiAudioCom",
+    "display_name": "ACPI Audio Compositor",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "AcpiDev",
+    "display_name": "ACPI Devices driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "acpiex",
+    "display_name": "Microsoft ACPIEx Drive",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "acpipagr",
+    "display_name": "ACPI Processor Aggrega",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "AcpiPmi",
+    "display_name": "ACPI Power Meter Drive",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "acpitime",
+    "display_name": "ACPI Wake Alarm Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Acx01000",
+    "display_name": "Acx01000",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ADP80XX",
+    "display_name": "ADP80XX",
+    "driver_type": "Kernel",
+    "link_date": "4/9/2015 8:49:48 PM"
+  },
+  {
+    "module_name": "AFD",
+    "display_name": "Ancillary Function Dri",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "afunix",
+    "display_name": "afunix",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ahcache",
+    "display_name": "Application Compatibil",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "amdgpio2",
+    "display_name": "AMD GPIO Client Driver",
+    "driver_type": "Kernel",
+    "link_date": "2/7/2019 9:32:20 AM"
+  },
+  {
+    "module_name": "amdi2c",
+    "display_name": "AMD I2C Controller Ser",
+    "driver_type": "Kernel",
+    "link_date": "3/20/2019 4:57:33 AM"
+  },
+  {
+    "module_name": "AmdK8",
+    "display_name": "AMD K8 Processor Drive",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "AmdPPM",
+    "display_name": "AMD Processor Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "amdsata",
+    "display_name": "amdsata",
+    "driver_type": "Kernel",
+    "link_date": "5/14/2015 12:14:52 PM"
+  },
+  {
+    "module_name": "amdsbs",
+    "display_name": "amdsbs",
+    "driver_type": "Kernel",
+    "link_date": "12/11/2012 9:21:44 PM"
+  },
+  {
+    "module_name": "amdwps",
+    "display_name": "AMD Workload Profiling",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "amdxata",
+    "display_name": "amdxata",
+    "driver_type": "Kernel",
+    "link_date": "5/1/2015 12:55:35 AM"
+  },
+  {
+    "module_name": "AppID",
+    "display_name": "AppID Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "AppleSSD",
+    "display_name": "Apple Solid State Driv",
+    "driver_type": "Kernel",
+    "link_date": "11/11/2019 9:24:17 PM"
+  },
+  {
+    "module_name": "applockerflt",
+    "display_name": "Smartlocker Filter Dri",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "AppvStrm",
+    "display_name": "AppvStrm",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "AppvVemgr",
+    "display_name": "AppvVemgr",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "AppvVfs",
+    "display_name": "AppvVfs",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "arcsas",
+    "display_name": "Adaptec SAS/SATA-II RA",
+    "driver_type": "Kernel",
+    "link_date": "4/9/2015 7:12:07 PM"
+  },
+  {
+    "module_name": "AsyncMac",
+    "display_name": "RAS Asynchronous Media",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "atapi",
+    "display_name": "IDE Channel",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "AziHSMDevice",
+    "display_name": "Microsoft Azure Integr",
+    "driver_type": "Kernel",
+    "link_date": "2/13/2026 6:29:58 PM"
+  },
+  {
+    "module_name": "b06bdrv",
+    "display_name": "QLogic Network Adapter",
+    "driver_type": "Kernel",
+    "link_date": "5/25/2016 7:03:08 AM"
+  },
+  {
+    "module_name": "bam",
+    "display_name": "Background Activity Mo",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "BasicDisplay",
+    "display_name": "BasicDisplay",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "BasicRender",
+    "display_name": "BasicRender",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "bcmfn2",
+    "display_name": "bcmfn2 Service",
+    "driver_type": "Kernel",
+    "link_date": "11/1/2016 2:09:15 AM"
+  },
+  {
+    "module_name": "Beep",
+    "display_name": "Beep",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "bfadfcoei",
+    "display_name": "bfadfcoei",
+    "driver_type": "Kernel",
+    "link_date": "4/14/2015 11:01:58 PM"
+  },
+  {
+    "module_name": "bfadi",
+    "display_name": "bfadi",
+    "driver_type": "Kernel",
+    "link_date": "4/10/2015 10:23:08 PM"
+  },
+  {
+    "module_name": "bfs",
+    "display_name": "Brokering File System",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "bindflt",
+    "display_name": "Windows Bind Filter Dr",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "bowser",
+    "display_name": "Browser",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "BthA2dp",
+    "display_name": "Microsoft Bluetooth A2",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "BthEnum",
+    "display_name": "Bluetooth Enumerator S",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "BthHFEnum",
+    "display_name": "Microsoft Bluetooth Ha",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "BthLEEnum",
+    "display_name": "Bluetooth Low Energy D",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "BthMini",
+    "display_name": "Bluetooth Radio Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "BTHPORT",
+    "display_name": "Bluetooth Port Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "BTHUSB",
+    "display_name": "Bluetooth Radio USB Dr",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "bttflt",
+    "display_name": "Microsoft Hyper-V VHDP",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "buttonconver",
+    "display_name": "Service for Portable D",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "bxfcoe",
+    "display_name": "QLogic FCoE Offload dr",
+    "driver_type": "Kernel",
+    "link_date": "4/21/2020 11:12:14 PM"
+  },
+  {
+    "module_name": "bxois",
+    "display_name": "QLogic Offload iSCSI D",
+    "driver_type": "Kernel",
+    "link_date": "4/21/2020 11:04:12 PM"
+  },
+  {
+    "module_name": "CAD",
+    "display_name": "Charge Arbitration Dri",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "CDD",
+    "display_name": "Canonical Display Driv",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "cdfs",
+    "display_name": "CD/DVD File System Rea",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "cdrom",
+    "display_name": "CD-ROM Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "cht4iscsi",
+    "display_name": "cht4iscsi",
+    "driver_type": "Kernel",
+    "link_date": "2/5/2019 1:51:31 PM"
+  },
+  {
+    "module_name": "cht4vbd",
+    "display_name": "Chelsio Virtual Bus Dr",
+    "driver_type": "Kernel",
+    "link_date": "2/5/2019 1:47:51 PM"
+  },
+  {
+    "module_name": "CimFS",
+    "display_name": "CimFS",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "CldFlt",
+    "display_name": "Windows Cloud Files Fi",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "CLFS",
+    "display_name": "Common Log (CLFS)",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "CmBatt",
+    "display_name": "Microsoft ACPI Control",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "CNG",
+    "display_name": "CNG",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "cnghwassist",
+    "display_name": "CNG Hardware Assist al",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "CompositeBus",
+    "display_name": "Composite Bus Enumerat",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "condrv",
+    "display_name": "Console Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "CSC",
+    "display_name": "Offline Files Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "dam",
+    "display_name": "Desktop Activity Moder",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "devmap",
+    "display_name": "Usermode Device Mapper",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Dfsc",
+    "display_name": "DFS Namespace Client D",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "disk",
+    "display_name": "Disk Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "DisplayMux",
+    "display_name": "Microsoft DisplayMux",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "dmvsc",
+    "display_name": "dmvsc",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "drmkaud",
+    "display_name": "Microsoft Trusted Audi",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "DTrace",
+    "display_name": "DTrace",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "DXGKrnl",
+    "display_name": "LDDM Graphics Subsyste",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ebdrv",
+    "display_name": "QLogic 10 Gigabit Ethe",
+    "driver_type": "Kernel",
+    "link_date": "11/15/2020 10:12:10 AM"
+  },
+  {
+    "module_name": "ebdrv0",
+    "display_name": "QLogic Legacy Ethernet",
+    "driver_type": "Kernel",
+    "link_date": "11/7/2020 10:07:41 AM"
+  },
+  {
+    "module_name": "EhStorClass",
+    "display_name": "Enhanced Storage Filte",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "EhStorTcgDrv",
+    "display_name": "Microsoft driver for s",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "elxfcoe",
+    "display_name": "elxfcoe",
+    "driver_type": "Kernel",
+    "link_date": "1/26/2016 11:52:14 PM"
+  },
+  {
+    "module_name": "elxstor",
+    "display_name": "elxstor",
+    "driver_type": "Kernel",
+    "link_date": "1/9/2020 7:05:00 PM"
+  },
+  {
+    "module_name": "ErrDev",
+    "display_name": "Microsoft Hardware Err",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ExecutionCon",
+    "display_name": "CPU Scheduler for High",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "exfat",
+    "display_name": "exFAT File System Driv",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "fastfat",
+    "display_name": "FAT12/16/32 File Syste",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "fcvsc",
+    "display_name": "fcvsc",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "fdc",
+    "display_name": "Floppy Disk Controller",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "FileCrypt",
+    "display_name": "FileCrypt",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "FileInfo",
+    "display_name": "File Information FS Mi",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "Filetrace",
+    "display_name": "Filetrace",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "flpydisk",
+    "display_name": "Floppy Disk Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "FltMgr",
+    "display_name": "FltMgr",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "FsDepends",
+    "display_name": "File System Dependency",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "fse",
+    "display_name": "Flow steering engine",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "fvevol",
+    "display_name": "BitLocker Drive Encryp",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "gencounter",
+    "display_name": "Microsoft Hyper-V Gene",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "genericusbfn",
+    "display_name": "Generic USB Function C",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "GenPass",
+    "display_name": "Microsoft GenPass Driv",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "GPIOClx0101",
+    "display_name": "Microsoft GPIO Class E",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "HdAudAddServ",
+    "display_name": "Microsoft 1.1 UAA Func",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "HDAudBus",
+    "display_name": "Microsoft UAA Bus Driv",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "HidBatt",
+    "display_name": "HID UPS Battery Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "hidinterrupt",
+    "display_name": "Common Driver for HID",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "HidSpiCx",
+    "display_name": "HidSpi KMDF Class Exte",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "HidUsb",
+    "display_name": "Microsoft HID Class Dr",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "hnswfpdriver",
+    "display_name": "HNS WFP Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "HpSAMD",
+    "display_name": "HpSAMD",
+    "driver_type": "Kernel",
+    "link_date": "3/26/2013 9:36:54 PM"
+  },
+  {
+    "module_name": "HTTP",
+    "display_name": "HTTP Service",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "hvcrash",
+    "display_name": "hvcrash",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "hvservice",
+    "display_name": "Microsoft Hypervisor S",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "hvsocketcont",
+    "display_name": "hvsocketcontrol",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "HwNClx0101",
+    "display_name": "Microsoft Hardware Not",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "hwpolicy",
+    "display_name": "Hardware Policy Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "hyperkbd",
+    "display_name": "hyperkbd",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "HyperVideo",
+    "display_name": "HyperVideo",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "I3CHost",
+    "display_name": "I3C Host Controller Se",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "i8042prt",
+    "display_name": "i8042 Keyboard and PS/",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "iagpio",
+    "display_name": "Intel Serial IO GPIO C",
+    "driver_type": "Kernel",
+    "link_date": "7/23/2018 9:04:46 AM"
+  },
+  {
+    "module_name": "iai2c",
+    "display_name": "Intel(R) Serial IO I2C",
+    "driver_type": "Kernel",
+    "link_date": "7/23/2018 9:04:39 AM"
+  },
+  {
+    "module_name": "iaLPSS2i_GPI",
+    "display_name": "Intel(R) Serial IO GPI",
+    "driver_type": "Kernel",
+    "link_date": "4/19/2018 7:53:24 AM"
+  },
+  {
+    "module_name": "iaLPSS2i_GPI",
+    "display_name": "Intel(R) Serial IO GPI",
+    "driver_type": "Kernel",
+    "link_date": "4/17/2018 9:25:15 AM"
+  },
+  {
+    "module_name": "iaLPSS2i_GPI",
+    "display_name": "Intel(R) Serial IO GPI",
+    "driver_type": "Kernel",
+    "link_date": "4/17/2018 7:07:03 AM"
+  },
+  {
+    "module_name": "iaLPSS2i_GPI",
+    "display_name": "Intel(R) Serial IO GPI",
+    "driver_type": "Kernel",
+    "link_date": "5/16/2018 5:46:36 AM"
+  },
+  {
+    "module_name": "iaLPSS2i_I2C",
+    "display_name": "Intel(R) Serial IO I2C",
+    "driver_type": "Kernel",
+    "link_date": "4/19/2018 7:52:58 AM"
+  },
+  {
+    "module_name": "iaLPSS2i_I2C",
+    "display_name": "Intel(R) Serial IO I2C",
+    "driver_type": "Kernel",
+    "link_date": "4/17/2018 9:24:40 AM"
+  },
+  {
+    "module_name": "iaLPSS2i_I2C",
+    "display_name": "Intel(R) Serial IO I2C",
+    "driver_type": "Kernel",
+    "link_date": "7/15/2019 5:12:12 AM"
+  },
+  {
+    "module_name": "iaLPSS2i_I2C",
+    "display_name": "Intel(R) Serial IO I2C",
+    "driver_type": "Kernel",
+    "link_date": "5/16/2018 5:46:02 AM"
+  },
+  {
+    "module_name": "iaLPSSi_GPIO",
+    "display_name": "Intel(R) Serial IO GPI",
+    "driver_type": "Kernel",
+    "link_date": "2/2/2015 9:00:09 AM"
+  },
+  {
+    "module_name": "iaLPSSi_I2C",
+    "display_name": "Intel(R) Serial IO I2C",
+    "driver_type": "Kernel",
+    "link_date": "2/24/2015 3:52:07 PM"
+  },
+  {
+    "module_name": "iaStorAVC",
+    "display_name": "Intel Chipset SATA RAI",
+    "driver_type": "Kernel",
+    "link_date": "9/5/2019 12:07:32 PM"
+  },
+  {
+    "module_name": "iaStorV",
+    "display_name": "Intel RAID Controller",
+    "driver_type": "Kernel",
+    "link_date": "4/11/2011 6:48:16 PM"
+  },
+  {
+    "module_name": "ibbus",
+    "display_name": "Mellanox InfiniBand Bu",
+    "driver_type": "Kernel",
+    "link_date": "2/10/2020 4:37:35 PM"
+  },
+  {
+    "module_name": "IndirectKmd",
+    "display_name": "Indirect Displays Kern",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "intelide",
+    "display_name": "intelide",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "intelpep",
+    "display_name": "Intel(R) Power Engine",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "intelpmax",
+    "display_name": "Intel(R) Dynamic Devic",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "IntelPMT",
+    "display_name": "Intel(R) Platform Moni",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "intelppm",
+    "display_name": "Intel Processor Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "iorate",
+    "display_name": "Disk I/O Rate Filter D",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "IpFilterDriv",
+    "display_name": "IP Traffic Filter Driv",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "IPMIDRV",
+    "display_name": "IPMIDRV",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "IPNAT",
+    "display_name": "IP Network Address Tra",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "IPT",
+    "display_name": "IPT",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "isapnp",
+    "display_name": "isapnp",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "iScsiPrt",
+    "display_name": "iScsiPort Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ItSas35i",
+    "display_name": "ItSas35i",
+    "driver_type": "Kernel",
+    "link_date": "3/1/2021 10:15:20 AM"
+  },
+  {
+    "module_name": "kbdclass",
+    "display_name": "Keyboard Class Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "kbdhid",
+    "display_name": "Keyboard HID Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "kdnic",
+    "display_name": "Microsoft Kernel Debug",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "kdnic_legacy",
+    "display_name": "Microsoft Kernel Debug",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "KernelFSForm",
+    "display_name": "KernelFSFormatter",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "KSecDD",
+    "display_name": "KSecDD",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "KSecPkg",
+    "display_name": "KSecPkg",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "KslD",
+    "display_name": "KslD",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ksthunk",
+    "display_name": "Kernel Streaming Thunk",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "KtlLogger",
+    "display_name": "KtlLogger",
+    "driver_type": "Kernel",
+    "link_date": "7/22/2026 2:10:58 AM"
+  },
+  {
+    "module_name": "l1vhlwf",
+    "display_name": "Nested Network Virtual",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "l2bridge",
+    "display_name": "Bridge Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "LeasLayr",
+    "display_name": "LeasLayr",
+    "driver_type": "Kernel",
+    "link_date": "7/22/2026 2:10:44 AM"
+  },
+  {
+    "module_name": "lltdio",
+    "display_name": "Link-Layer Topology Di",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "LSI_SAS",
+    "display_name": "LSI_SAS",
+    "driver_type": "Kernel",
+    "link_date": "3/25/2015 7:36:48 PM"
+  },
+  {
+    "module_name": "LSI_SAS2i",
+    "display_name": "LSI_SAS2i",
+    "driver_type": "Kernel",
+    "link_date": "8/2/2017 1:29:59 PM"
+  },
+  {
+    "module_name": "LSI_SAS3i",
+    "display_name": "LSI_SAS3i",
+    "driver_type": "Kernel",
+    "link_date": "8/21/2020 7:33:28 AM"
+  },
+  {
+    "module_name": "luafv",
+    "display_name": "UAC File Virtualizatio",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "lunparser",
+    "display_name": "LUN Parser",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "lxss",
+    "display_name": "lxss",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mausbhost",
+    "display_name": "MA-USB Host Controller",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mausbip",
+    "display_name": "MA-USB IP Filter Drive",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "megasas2i",
+    "display_name": "megasas2i",
+    "driver_type": "Kernel",
+    "link_date": "1/22/2020 9:57:48 AM"
+  },
+  {
+    "module_name": "megasas35i",
+    "display_name": "megasas35i",
+    "driver_type": "Kernel",
+    "link_date": "1/12/2021 7:59:10 AM"
+  },
+  {
+    "module_name": "megasr",
+    "display_name": "megasr",
+    "driver_type": "Kernel",
+    "link_date": "6/3/2013 10:02:39 PM"
+  },
+  {
+    "module_name": "Microsoft_Bl",
+    "display_name": "Microsoft Bluetooth Av",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mlx4_bus",
+    "display_name": "Mellanox ConnectX Bus",
+    "driver_type": "Kernel",
+    "link_date": "2/10/2020 4:41:44 PM"
+  },
+  {
+    "module_name": "MMCSS",
+    "display_name": "Multimedia Class Sched",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Modem",
+    "display_name": "Modem",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "monitor",
+    "display_name": "Microsoft Monitor Clas",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mouclass",
+    "display_name": "Mouse Class Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mouhid",
+    "display_name": "Mouse HID Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mountmgr",
+    "display_name": "Mount Point Manager",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mpi3drvi",
+    "display_name": "mpi3drvi",
+    "driver_type": "Kernel",
+    "link_date": "11/16/2021 10:22:38 PM"
+  },
+  {
+    "module_name": "mpsdrv",
+    "display_name": "Windows Defender Firew",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MQAC",
+    "display_name": "Message Queuing Access",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mrxsmb",
+    "display_name": "SMB MiniRedirector Wra",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "mrxsmb20",
+    "display_name": "SMB 2.0 MiniRedirector",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "MsBridge",
+    "display_name": "Microsoft MAC Bridge",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Msfs",
+    "display_name": "Msfs",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "msgpiowin32",
+    "display_name": "Common Driver for Butt",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mshidkmdf",
+    "display_name": "Pass-through HID to KM",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mshidumdf",
+    "display_name": "Pass-through HID to UM",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "msisadrv",
+    "display_name": "msisadrv",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MSKSSRV",
+    "display_name": "Microsoft Streaming Se",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MsLbfoProvid",
+    "display_name": "Microsoft Load Balanci",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MsLldp",
+    "display_name": "Microsoft Link-Layer D",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MSPCLOCK",
+    "display_name": "Microsoft Streaming Cl",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MSPQM",
+    "display_name": "Microsoft Streaming Qu",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MsQuic",
+    "display_name": "MsQuic",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MsQuicPrev",
+    "display_name": "MSQUIC",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MsRPC",
+    "display_name": "MsRPC",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MsSecCore",
+    "display_name": "Microsoft Security Cor",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MsSecFlt",
+    "display_name": "Microsoft Security Eve",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MsSecWfp",
+    "display_name": "Microsoft Security WFP",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mssmbios",
+    "display_name": "Microsoft System Manag",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MSTEE",
+    "display_name": "Microsoft Streaming Te",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "MTConfig",
+    "display_name": "Microsoft Input Config",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Mup",
+    "display_name": "Mup",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "mvumis",
+    "display_name": "mvumis",
+    "driver_type": "Kernel",
+    "link_date": "5/23/2014 8:39:04 PM"
+  },
+  {
+    "module_name": "NativeWifiP",
+    "display_name": "NativeWiFi Filter",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ndfltr",
+    "display_name": "NetworkDirect Service",
+    "driver_type": "Kernel",
+    "link_date": "2/10/2020 4:29:06 PM"
+  },
+  {
+    "module_name": "NDIS",
+    "display_name": "NDIS System Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "NdisCap",
+    "display_name": "Microsoft NDIS Capture",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "NdisImPlatfo",
+    "display_name": "Microsoft Network Adap",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "NdisTapi",
+    "display_name": "Remote Access NDIS TAP",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Ndisuio",
+    "display_name": "NDIS Usermode I/O Prot",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "NdisVirtualB",
+    "display_name": "Microsoft Virtual Netw",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "NdisWan",
+    "display_name": "Remote Access NDIS WAN",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ndiswanlegac",
+    "display_name": "Remote Access LEGACY N",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "NDKPerf",
+    "display_name": "NDKPerf Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "NDKPing",
+    "display_name": "NDKPing Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ndproxy",
+    "display_name": "NDIS Proxy Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "NetAdapterCx",
+    "display_name": "Network Adapter WDF Cl",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "NetBIOS",
+    "display_name": "NetBIOS Interface",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "NetBT",
+    "display_name": "NetBT",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "netvsc",
+    "display_name": "netvsc",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Npfs",
+    "display_name": "Npfs",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "npsvctrig",
+    "display_name": "Named pipe service tri",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "nsiproxy",
+    "display_name": "NSI Proxy Service Driv",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Ntfs",
+    "display_name": "Ntfs",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "Null",
+    "display_name": "Null",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "nvdimm",
+    "display_name": "Microsoft NVDIMM devic",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "nvmedisk",
+    "display_name": "Microsoft NVMe disk dr",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "nvraid",
+    "display_name": "nvraid",
+    "driver_type": "Kernel",
+    "link_date": "4/21/2014 6:28:42 PM"
+  },
+  {
+    "module_name": "nvstor",
+    "display_name": "nvstor",
+    "driver_type": "Kernel",
+    "link_date": "4/21/2014 6:34:03 PM"
+  },
+  {
+    "module_name": "P9Rdr",
+    "display_name": "Plan 9 Redirector Driv",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Parport",
+    "display_name": "Parallel port driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "partmgr",
+    "display_name": "Partition driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "passthrupars",
+    "display_name": "PassthroughParser",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "pci",
+    "display_name": "PCI Bus Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "pciide",
+    "display_name": "pciide",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "pcip",
+    "display_name": "PCI Proxy driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "pcmcia",
+    "display_name": "pcmcia",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "pcw",
+    "display_name": "Performance Counters f",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "pdc",
+    "display_name": "pdc",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "PEAUTH",
+    "display_name": "PEAUTH",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "percsas2i",
+    "display_name": "percsas2i",
+    "driver_type": "Kernel",
+    "link_date": "3/15/2016 12:50:11 AM"
+  },
+  {
+    "module_name": "percsas3i",
+    "display_name": "percsas3i",
+    "driver_type": "Kernel",
+    "link_date": "6/1/2018 9:47:02 PM"
+  },
+  {
+    "module_name": "PktMon",
+    "display_name": "Packet Monitor Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "PktMonApi",
+    "display_name": "Packet Monitor Export",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "pmem",
+    "display_name": "Microsoft persistent m",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "PNPMEM",
+    "display_name": "Microsoft Memory Modul",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "portcfg",
+    "display_name": "portcfg",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "PptpMiniport",
+    "display_name": "WAN Miniport (PPTP)",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "PrjFlt",
+    "display_name": "Windows Projected File",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "PRM",
+    "display_name": "Microsoft PRM Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Processor",
+    "display_name": "Processor Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Psched",
+    "display_name": "QoS Packet Scheduler",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "pvhdparser",
+    "display_name": "pvhdparser",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "pvscsi",
+    "display_name": "pvscsi Storage Control",
+    "driver_type": "Kernel",
+    "link_date": "5/20/2021 3:55:26 AM"
+  },
+  {
+    "module_name": "qebdrv",
+    "display_name": "QLogic FastLinQ Ethern",
+    "driver_type": "Kernel",
+    "link_date": "4/24/2020 11:01:55 AM"
+  },
+  {
+    "module_name": "qefcoe",
+    "display_name": "QLogic FCoE driver",
+    "driver_type": "Kernel",
+    "link_date": "4/21/2020 11:30:52 PM"
+  },
+  {
+    "module_name": "qeois",
+    "display_name": "QLogic 40G iSCSI Drive",
+    "driver_type": "Kernel",
+    "link_date": "4/21/2020 11:22:38 PM"
+  },
+  {
+    "module_name": "ql2300i",
+    "display_name": "QLogic Fibre Channel S",
+    "driver_type": "Kernel",
+    "link_date": "10/28/2020 9:43:08 PM"
+  },
+  {
+    "module_name": "ql40xx2i",
+    "display_name": "QLogic iSCSI Miniport",
+    "driver_type": "Kernel",
+    "link_date": "3/25/2013 10:43:47 PM"
+  },
+  {
+    "module_name": "qlfcoei",
+    "display_name": "QLogic [FCoE] STOR Min",
+    "driver_type": "Kernel",
+    "link_date": "6/7/2013 7:07:04 PM"
+  },
+  {
+    "module_name": "QWAVEdrv",
+    "display_name": "QWAVE driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Ramdisk",
+    "display_name": "Windows RAM Disk Drive",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ramparser",
+    "display_name": "ramparser",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "RasAcd",
+    "display_name": "Remote Access Auto Con",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "RasAgileVpn",
+    "display_name": "WAN Miniport (IKEv2)",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "RasGre",
+    "display_name": "WAN Miniport (GRE)",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Rasl2tp",
+    "display_name": "WAN Miniport (L2TP)",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "RasPppoe",
+    "display_name": "Remote Access PPPOE Dr",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "RasSstp",
+    "display_name": "WAN Miniport (SSTP)",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "rdbss",
+    "display_name": "Redirected Buffering S",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "rdpbus",
+    "display_name": "Remote Desktop Device",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "RDPDR",
+    "display_name": "Remote Desktop Device",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ReFS",
+    "display_name": "ReFS",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "ReFSv1",
+    "display_name": "ReFSv1",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "RFCOMM",
+    "display_name": "Bluetooth Device (RFCO",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "rhproxy",
+    "display_name": "Resource Hub proxy dri",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "rspndr",
+    "display_name": "Link-Layer Topology Di",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "s3cap",
+    "display_name": "s3cap",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "sacdrv",
+    "display_name": "sacdrv",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "sbp2port",
+    "display_name": "SBP-2 Transport/Protoc",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "scfilter",
+    "display_name": "Smart card PnP Class F",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "scmbus",
+    "display_name": "Microsoft Storage Clas",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "sdbus",
+    "display_name": "sdbus",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "SdcaHidInbox",
+    "display_name": "SoundWire HID Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "SdcaMfdInbox",
+    "display_name": "SoundWire Audio Multif",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "sdstor",
+    "display_name": "SD Storage Port Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "SerCx",
+    "display_name": "Serial UART Support Li",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "SerCx2",
+    "display_name": "Serial UART Support Li",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Serenum",
+    "display_name": "Serenum Filter Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Serial",
+    "display_name": "Serial port driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "sermouse",
+    "display_name": "Serial Mouse Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "sfloppy",
+    "display_name": "High-Capacity Floppy D",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "SiSRaid2",
+    "display_name": "SiSRaid2",
+    "driver_type": "Kernel",
+    "link_date": "9/24/2008 6:28:20 PM"
+  },
+  {
+    "module_name": "SiSRaid4",
+    "display_name": "SiSRaid4",
+    "driver_type": "Kernel",
+    "link_date": "10/1/2008 9:56:04 PM"
+  },
+  {
+    "module_name": "SmartSAMD",
+    "display_name": "SmartSAMD",
+    "driver_type": "Kernel",
+    "link_date": "2/21/2019 5:54:44 PM"
+  },
+  {
+    "module_name": "smbdirect",
+    "display_name": "smbdirect",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "spaceparser",
+    "display_name": "spaceparser",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "spaceport",
+    "display_name": "Storage Spaces Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "SpbCx",
+    "display_name": "Simple Peripheral Bus",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "srv2",
+    "display_name": "Server SMB 2.xxx Drive",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "srvnet",
+    "display_name": "srvnet",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "stexstor",
+    "display_name": "stexstor",
+    "driver_type": "Kernel",
+    "link_date": "11/27/2012 12:02:51 AM"
+  },
+  {
+    "module_name": "storahci",
+    "display_name": "Microsoft Standard SAT",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "storflt",
+    "display_name": "Microsoft Hyper-V Stor",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "stornvme",
+    "display_name": "Microsoft ASAP NVM Exp",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "stornvmeofi",
+    "display_name": "Microsoft NVMeoF Initi",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "storqosflt",
+    "display_name": "Storage QoS Filter Dri",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "storufs",
+    "display_name": "Microsoft Universal Fl",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "storvsc",
+    "display_name": "storvsc",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "storvsp",
+    "display_name": "storvsp",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "swenum",
+    "display_name": "Software Bus Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Tcpip",
+    "display_name": "TCP/IP Protocol Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Tcpip6",
+    "display_name": "@todo.dll,-100;Microso",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "tcpipreg",
+    "display_name": "@%SystemRoot%\\System32",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "tdx",
+    "display_name": "NetIO Legacy TDI Suppo",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "terminpt",
+    "display_name": "Microsoft Remote Deskt",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ThermalFilte",
+    "display_name": "Microsoft Thermal Filt",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "TPM",
+    "display_name": "TPM",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "TsUsbFlt",
+    "display_name": "Remote Desktop USB Hub",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "TsUsbGD",
+    "display_name": "Remote Desktop Generic",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "tsusbhub",
+    "display_name": "Remote Desktop USB Hub",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "tunnel",
+    "display_name": "Microsoft Tunnel Minip",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UASPStor",
+    "display_name": "USB Attached SCSI (UAS",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UcmCx0101",
+    "display_name": "USB Connector Manager",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UcmTcpciCx01",
+    "display_name": "UCM-TCPCI KMDF Class E",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UcmUcsiAcpiC",
+    "display_name": "UCM-UCSI ACPI Client",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UcmUcsiCx010",
+    "display_name": "UCM-UCSI KMDF Class Ex",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Ucx01000",
+    "display_name": "USB Host Support Libra",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UdeCx",
+    "display_name": "USB Device Emulation S",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "udfs",
+    "display_name": "udfs",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "UEFI",
+    "display_name": "Microsoft UEFI Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UevAgentDriv",
+    "display_name": "UevAgentDriver",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "Ufx01000",
+    "display_name": "USB Function Class Ext",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UfxChipidea",
+    "display_name": "USB Chipidea Controlle",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ufxsynopsys",
+    "display_name": "USB Synopsys Controlle",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "uiomap",
+    "display_name": "Microsoft UIO Mapper D",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "umbus",
+    "display_name": "UMBus Enumerator Drive",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UmPass",
+    "display_name": "Microsoft UMPass Drive",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UnionFS",
+    "display_name": "UnionFS",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "UrsChipidea",
+    "display_name": "Chipidea USB Role-Swit",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UrsCx01000",
+    "display_name": "USB Role-Switch Suppor",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "UrsSynopsys",
+    "display_name": "Synopsys USB Role-Swit",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "usb-platform",
+    "display_name": "Usb Platform Detection",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Usb4DeviceRo",
+    "display_name": "USB4 Device Router Ser",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Usb4HostRout",
+    "display_name": "USB4 Host Router Servi",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "usbaudio",
+    "display_name": "USB Audio Driver (WDM)",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "usbaudio2",
+    "display_name": "USB Audio 2.0 Service",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "usbccgp",
+    "display_name": "Microsoft USB Generic",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "usbehci",
+    "display_name": "Microsoft USB 2.0 Enha",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "usbhub",
+    "display_name": "Microsoft USB Standard",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "USBHUB3",
+    "display_name": "SuperSpeed Hub",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "usbohci",
+    "display_name": "Microsoft USB Open Hos",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "usbprint",
+    "display_name": "Microsoft USB PRINTER",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "usbser",
+    "display_name": "Microsoft USB Serial D",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "USBSTOR",
+    "display_name": "USB Mass Storage Drive",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "usbuhci",
+    "display_name": "Microsoft USB Universa",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "USBXHCI",
+    "display_name": "USB xHCI Compliant Hos",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vdrvroot",
+    "display_name": "Microsoft Virtual Driv",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "VerifierExt",
+    "display_name": "Driver Verifier Extens",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "VfpExt",
+    "display_name": "Microsoft Azure VFP Sw",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vhdmp",
+    "display_name": "vhdmp",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vhdparser",
+    "display_name": "vhdparser",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vhf",
+    "display_name": "Virtual HID Framework",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Vid",
+    "display_name": "Vid",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "VirtualRende",
+    "display_name": "VirtualRender",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vmbus",
+    "display_name": "Virtual Machine Bus",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "VMBusHID",
+    "display_name": "VMBusHID",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vmbusproxy",
+    "display_name": "vmbusproxy",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vmbusr",
+    "display_name": "Virtual Machine Bus Pr",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vmgid",
+    "display_name": "Microsoft Hyper-V Gues",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vmsmp",
+    "display_name": "vmsmp",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "VMSNPXY",
+    "display_name": "VmSwitch NIC Proxy Dri",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "VMSP",
+    "display_name": "VmSwitch Protocol Driv",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "VmsProxy",
+    "display_name": "VmSwitch Proxy Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "VMSVSF",
+    "display_name": "VmSwitch Extensibility",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "VMSVSP",
+    "display_name": "VmSwitch Extensibility",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "volmgr",
+    "display_name": "Volume Manager Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "volmgrx",
+    "display_name": "Dynamic Volume Manager",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "volsnap",
+    "display_name": "Volume Shadow Copy dri",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "volume",
+    "display_name": "Volume driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vpci",
+    "display_name": "Microsoft Hyper-V Virt",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vpcivsp",
+    "display_name": "Microsoft Hyper-V PCI",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vsmraid",
+    "display_name": "vsmraid",
+    "driver_type": "Kernel",
+    "link_date": "4/22/2014 7:21:41 PM"
+  },
+  {
+    "module_name": "VSTXRAID",
+    "display_name": "VIA StorX Storage RAID",
+    "driver_type": "Kernel",
+    "link_date": "1/21/2013 7:00:28 PM"
+  },
+  {
+    "module_name": "vwifibus",
+    "display_name": "Virtual Wireless Bus D",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "vwififlt",
+    "display_name": "Virtual WiFi Filter Dr",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WacomPen",
+    "display_name": "Wacom Serial Pen HID D",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "wanarp",
+    "display_name": "Remote Access IP ARP D",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "wanarpv6",
+    "display_name": "Remote Access IPv6 ARP",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "wcifs",
+    "display_name": "Windows Container Isol",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "WdAiNisDrv",
+    "display_name": "Microsoft WdAiNisDrv D",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WdBoot",
+    "display_name": "Microsoft Defender Ant",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Wdf01000",
+    "display_name": "Kernel Mode Driver Fra",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WdFilter",
+    "display_name": "Microsoft Defender Ant",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "wdiwifi",
+    "display_name": "WDI Driver Framework",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WdmCompanion",
+    "display_name": "WdmCompanionFilter",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WdNisDrv",
+    "display_name": "Microsoft Defender Ant",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WFPLWFS",
+    "display_name": "Microsoft Windows Filt",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Wificx",
+    "display_name": "Wifi Network Adapter C",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WIMMount",
+    "display_name": "WIMMount",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "WinAccelCx01",
+    "display_name": "Microsoft Accelerator",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WindowsTrust",
+    "display_name": "Windows Trusted Execut",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WindowsTrust",
+    "display_name": "Microsoft Windows Trus",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "wini3ctarget",
+    "display_name": "Generic driver for I3C",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WinMad",
+    "display_name": "WinMad Service",
+    "driver_type": "Kernel",
+    "link_date": "2/10/2020 4:28:47 PM"
+  },
+  {
+    "module_name": "WinNat",
+    "display_name": "Windows NAT Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WINUSB",
+    "display_name": "WinUsb Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WinVerbs",
+    "display_name": "WinVerbs Service",
+    "driver_type": "Kernel",
+    "link_date": "2/10/2020 4:28:57 PM"
+  },
+  {
+    "module_name": "WmiAcpi",
+    "display_name": "Microsoft Windows Mana",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "Wof",
+    "display_name": "Windows Overlay File S",
+    "driver_type": "File System",
+    "link_date": null
+  },
+  {
+    "module_name": "WpdUpFltr",
+    "display_name": "WPD Upper Class Filter",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ws2ifsl",
+    "display_name": "Winsock IFS Driver",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WudfPf",
+    "display_name": "User Mode Driver Frame",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "WUDFRd",
+    "display_name": "Windows Driver Foundat",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "ZTDNS",
+    "display_name": "ZTDNS",
+    "driver_type": "Kernel",
+    "link_date": null
+  },
+  {
+    "module_name": "mlx5",
+    "display_name": "Mellanox WinOF-2 Netwo",
+    "driver_type": "Kernel",
+    "link_date": "5/3/2023 12:23:22 AM"
+  }
+]

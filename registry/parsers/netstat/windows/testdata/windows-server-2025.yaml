@@ -1,0 +1,17 @@
+description: >-
+  netstat -an run for real on Windows Server 2025: listening sockets on
+  IPv4 and IPv6, established and closing connections, link-local IPv6
+  addresses with a scope that run past the column width, and UDP
+  endpoints with no state, one of them connected to a peer.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "netstat -an 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  line above the banner as the command wrote it). The runner's own
+  addresses were replaced: its private IPv4 address with 192.0.2.108,
+  one space of the padding after it removed to keep the columns, and its
+  link-local IPv6 address with a made-up one of the same length. The
+  Azure host address (168.63.129.16) was kept, and each public remote
+  address was replaced with a documentation address of the same length.
+os: windows
+args: ["-an"]

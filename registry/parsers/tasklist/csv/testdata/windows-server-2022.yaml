@@ -1,0 +1,10 @@
+description: >-
+  tasklist /fo csv run for real on Windows Server 2022, the same five
+  quoted columns as on 2025.
+source: >-
+  captured on GitHub Actions windows-2022 (Windows Server 2022, build
+  20348.5499) on 2026-09-15 with `cmd /c "tasklist /fo csv 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings). Nothing
+  was replaced: the listing names no user, host or address.
+os: windows
+args: [/fo, csv]

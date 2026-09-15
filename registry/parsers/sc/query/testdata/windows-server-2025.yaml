@@ -1,0 +1,12 @@
+description: >-
+  sc query run for real on Windows Server 2025: a block per running
+  service, share and own process types, one interactive service, and the
+  controls each service accepts on the line under its state.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "sc query 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  lines between the blocks as the command wrote them). Nothing was
+  replaced: the blocks name no user, host or address.
+os: windows
+args: [query]

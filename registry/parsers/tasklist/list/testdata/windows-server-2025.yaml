@@ -1,0 +1,11 @@
+description: >-
+  tasklist /fo list for one process run for real on Windows Server 2025,
+  a single block of the five labels.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with
+  `cmd /c "tasklist /fo list /fi "IMAGENAME eq lsass.exe" 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  line above the block as the command wrote it). Nothing was replaced.
+os: windows
+args: ["/fo", "list", "/fi", "IMAGENAME eq lsass.exe"]

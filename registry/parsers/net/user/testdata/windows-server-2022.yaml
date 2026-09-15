@@ -1,0 +1,13 @@
+description: >-
+  net user run for real on Windows Server 2022: five accounts, so the
+  second line holds two names and ends in the padding of the second.
+source: >-
+  captured on GitHub Actions windows-2022 (Windows Server 2022, build
+  20348.5499) on 2026-09-15 with `cmd /c "net user 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  lines around the listing as the command wrote them). The host name was
+  replaced with examplehost02 and the runner's account name
+  (runneradmin) with user, padded with spaces to the column's width. The
+  installer account the image creates was kept.
+os: windows
+args: [user]

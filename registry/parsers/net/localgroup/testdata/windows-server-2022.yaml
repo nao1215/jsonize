@@ -1,0 +1,11 @@
+description: >-
+  net localgroup run for real on Windows Server 2022, the same layout as
+  on 2025 with two groups fewer.
+source: >-
+  captured on GitHub Actions windows-2022 (Windows Server 2022, build
+  20348.5499) on 2026-09-15 with `cmd /c "net localgroup 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  lines around the listing as the command wrote them). The host name was
+  replaced with examplehost02.
+os: windows
+args: [localgroup]

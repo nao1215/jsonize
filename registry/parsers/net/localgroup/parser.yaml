@@ -1,0 +1,45 @@
+# `net localgroup` without a group name lists the local groups of the
+# machine: a line naming the computer ("Aliases for \\HOST"), a rule of
+# hyphens, one group per line marked with an asterisk, and the line
+# saying the command completed.
+#
+# The asterisk marks the start of a name and is not part of it. A group
+# name may hold spaces and runs to the end of its line, so the names are
+# split at the line breaks, each after its asterisk.
+#
+# The whole output is one object: the computer and the list of names.
+# The completion line closes it, so a line printed after it is refused.
+# `net localgroup NAME` prints the members of one group under an
+# "Alias name" label instead and is not this format.
+format: 1
+command: net
+variant: localgroup
+description: net localgroup, the local groups of the machine
+metadata:
+  tags: [windows, user]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/cc725622(v=ws.11)
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    any: [localgroup, LOCALGROUP]
+  signature:
+    all:
+      # The computer, the rule, and the first group after its asterisk.
+      # The completion line comes after every group and is past the
+      # window on a machine with more than a few, so it is the pattern
+      # below that holds the text to it.
+      - '\AAliases for \\\\[^\s\\]+[ \t]*\n(?:[ \t]*\n)*-{20,}[ \t]*\n\*\S'
+parse:
+  type: regex
+  each: input
+  pattern: '\AAliases for \\\\(?P<computer>[^\s\\]+)[ \t]*\n(?:[ \t]*\n)*-{20,}[ \t]*\n(?:\*(?P<groups>[^\n]*(?:\n\*[^\n]*)*)\n)?The command completed successfully\.[ \t]*\z'
+fields:
+  computer: {required: true}
+  groups:
+    type: array
+    split_regex: '[ \t]*\n\*'
+    items: {regex: '(?P<groups>[^"/\\\[\]:;|=,+*?<>\s](?:[^"/\\\[\]:;|=,+*?<>\n]*[^"/\\\[\]:;|=,+*?<>\s])?)'}

@@ -1,0 +1,139 @@
+{
+  "interfaces": [
+    {
+      "index": 14,
+      "mac_address": "00 00 5e 00 53 01",
+      "description": "Microsoft Hyper-V Network Adapter #3"
+    },
+    {
+      "index": 1,
+      "mac_address": null,
+      "description": "Software Loopback Interface 1"
+    }
+  ],
+  "ipv4_routes": [
+    {
+      "network_destination": "0.0.0.0",
+      "netmask": "0.0.0.0",
+      "gateway": "192.0.2.1",
+      "interface": "192.0.2.108",
+      "metric": 11
+    },
+    {
+      "network_destination": "192.0.2.0",
+      "netmask": "255.255.240.0",
+      "gateway": "On-link",
+      "interface": "192.0.2.108",
+      "metric": 266
+    },
+    {
+      "network_destination": "192.0.2.108",
+      "netmask": "255.255.255.255",
+      "gateway": "On-link",
+      "interface": "192.0.2.108",
+      "metric": 266
+    },
+    {
+      "network_destination": "192.0.2.255",
+      "netmask": "255.255.255.255",
+      "gateway": "On-link",
+      "interface": "192.0.2.108",
+      "metric": 266
+    },
+    {
+      "network_destination": "127.0.0.0",
+      "netmask": "255.0.0.0",
+      "gateway": "On-link",
+      "interface": "127.0.0.1",
+      "metric": 331
+    },
+    {
+      "network_destination": "127.0.0.1",
+      "netmask": "255.255.255.255",
+      "gateway": "On-link",
+      "interface": "127.0.0.1",
+      "metric": 331
+    },
+    {
+      "network_destination": "127.255.255.255",
+      "netmask": "255.255.255.255",
+      "gateway": "On-link",
+      "interface": "127.0.0.1",
+      "metric": 331
+    },
+    {
+      "network_destination": "168.63.129.16",
+      "netmask": "255.255.255.255",
+      "gateway": "192.0.2.1",
+      "interface": "192.0.2.108",
+      "metric": 11
+    },
+    {
+      "network_destination": "169.254.169.254",
+      "netmask": "255.255.255.255",
+      "gateway": "192.0.2.1",
+      "interface": "192.0.2.108",
+      "metric": 11
+    },
+    {
+      "network_destination": "224.0.0.0",
+      "netmask": "240.0.0.0",
+      "gateway": "On-link",
+      "interface": "127.0.0.1",
+      "metric": 331
+    },
+    {
+      "network_destination": "224.0.0.0",
+      "netmask": "240.0.0.0",
+      "gateway": "On-link",
+      "interface": "192.0.2.108",
+      "metric": 266
+    },
+    {
+      "network_destination": "255.255.255.255",
+      "netmask": "255.255.255.255",
+      "gateway": "On-link",
+      "interface": "127.0.0.1",
+      "metric": 331
+    },
+    {
+      "network_destination": "255.255.255.255",
+      "netmask": "255.255.255.255",
+      "gateway": "On-link",
+      "interface": "192.0.2.108",
+      "metric": 266
+    }
+  ],
+  "ipv6_routes": [
+    {
+      "interface_index": 1,
+      "metric": 331,
+      "network_destination": "::1/128",
+      "gateway": "On-link"
+    },
+    {
+      "interface_index": 14,
+      "metric": 266,
+      "network_destination": "fe80::/64",
+      "gateway": "On-link"
+    },
+    {
+      "interface_index": 14,
+      "metric": 266,
+      "network_destination": "fe80::1a2b:3c4d:5e6f:7081/128",
+      "gateway": "On-link"
+    },
+    {
+      "interface_index": 1,
+      "metric": 331,
+      "network_destination": "ff00::/8",
+      "gateway": "On-link"
+    },
+    {
+      "interface_index": 14,
+      "metric": 266,
+      "network_destination": "ff00::/8",
+      "gateway": "On-link"
+    }
+  ]
+}

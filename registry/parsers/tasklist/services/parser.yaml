@@ -1,0 +1,54 @@
+# `tasklist /svc` prints one row per process with the services it hosts,
+# under a header and a rule of equals signs. The image name is cut to 25
+# characters and the process id is right-aligned, as in tasklist without
+# options; the third column is the list of service names, separated by a
+# comma and a space, or N/A for a process that hosts none.
+#
+# The list column is 44 characters wide. A list longer than that breaks
+# after a comma and continues on the next line, indented to where the
+# column starts and with nothing in the columns before it. input.fold
+# joins such a line onto the row it belongs to, so a process's services
+# stay one list.
+#
+# A service name holds no space and no comma, which is what each entry
+# is held to; a row of another table whose third column is prose is
+# refused rather than read as a list of services.
+format: 1
+command: tasklist
+variant: services
+description: tasklist /svc, the services each process hosts
+metadata:
+  tags: [windows, process, service]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tasklist
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The header naming the Services column, and the rule of three
+      # runs under it. /m prints the same layout with Modules there.
+      - '\AImage Name[ \t]+PID Services[ \t]*\n=+ =+ =+[ \t]*$'
+input:
+  # The image name and the process id take the first 35 characters, so a
+  # line that is blank that far and then has text is the rest of the
+  # list on the line above.
+  fold: '^ {35}\S'
+  ignore:
+    # The rule under the header.
+    - '^=+ =+ =+[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [image_name, pid, services]
+fields:
+  image_name: {required: true}
+  pid: {type: int, required: true}
+  services:
+    type: array
+    split: ","
+    null_if: ["N/A"]
+    items: {regex: '(?P<services>[^\s,]+)'}

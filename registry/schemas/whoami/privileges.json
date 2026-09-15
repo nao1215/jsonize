@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/whoami/privileges.json",
+  "title": "whoami/privileges",
+  "description": "whoami /priv on Windows, the privileges in the current user's access token",
+  "x-jsonize": {
+    "definition": "whoami/privileges",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "privilege_name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "privilege_name",
+      "description",
+      "state"
+    ]
+  }
+}

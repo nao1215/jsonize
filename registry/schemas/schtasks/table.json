@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/schtasks/table.json",
+  "title": "schtasks/table",
+  "description": "schtasks /query, the scheduled tasks of each folder with next run time and status",
+  "x-jsonize": {
+    "definition": "schtasks/table",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "folder": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "task_name": {
+              "type": "string"
+            },
+            "next_run_time": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "status": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "task_name",
+            "next_run_time",
+            "status"
+          ]
+        }
+      }
+    },
+    "required": [
+      "folder",
+      "tasks"
+    ]
+  }
+}

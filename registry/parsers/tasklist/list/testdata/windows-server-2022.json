@@ -1,0 +1,9 @@
+[
+  {
+    "image_name": "lsass.exe",
+    "pid": 872,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "22,836 K"
+  }
+]

@@ -1,0 +1,3 @@
+source: the windows-server-2022 fixture followed by the procps-4.0.4 fixture of uptime/linux, joined for this case
+description: an uptime line after the process rows is refused, since it is not cut where the tasklist columns stand
+expect_error: holds the gap that stands between two columns

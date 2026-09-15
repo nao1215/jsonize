@@ -1,0 +1,17 @@
+description: >-
+  route print run for real on Windows Server 2025: one network adapter
+  and the loopback interface, an IPv4 table with On-link and gateway
+  routes, and an IPv6 table in which a host route's destination is too
+  long for its column and its gateway continues on the next line.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "route print 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings); `netstat
+  -r` run on the same machine printed the same bytes. The runner's own
+  values were replaced: the adapter's MAC address with 00 00 5e 00 53 01,
+  its private IPv4 network with 192.0.2.0 (one space of the padding
+  before each right-aligned address removed to keep the columns, the
+  netmask kept) and its link-local IPv6 address with a made-up one of
+  the same length.
+os: windows
+args: ["print"]

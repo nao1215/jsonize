@@ -1,0 +1,1676 @@
+[
+  {
+    "service_name": "AppHostSvc",
+    "display_name": "Application Host Helper Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "AppReadiness",
+    "display_name": "App Readiness",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_PRESHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "AppXSvc",
+    "display_name": "AppX Deployment Service (AppXSVC)",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "BFE",
+    "display_name": "Base Filtering Engine",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "BITS",
+    "display_name": "Background Intelligent Transfer Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_PRESHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "BrokerInfrastructure",
+    "display_name": "Background Tasks Infrastructure Service",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "camsvc",
+    "display_name": "Capability Access Manager Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "CertPropSvc",
+    "display_name": "Certificate Propagation",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "ClipSVC",
+    "display_name": "Client License Service (ClipSVC)",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "CoreMessagingRegistrar",
+    "display_name": "CoreMessaging",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "CryptSvc",
+    "display_name": "Cryptographic Services",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "DcomLaunch",
+    "display_name": "DCOM Server Process Launcher",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "DeviceInstall",
+    "display_name": "Device Install Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_PRESHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "Dhcp",
+    "display_name": "DHCP Client",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "DispBrokerDesktopSvc",
+    "display_name": "Display Policy Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "Dnscache",
+    "display_name": "DNS Client",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "docker",
+    "display_name": "Docker Engine",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "EventLog",
+    "display_name": "Windows Event Log",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "EventSystem",
+    "display_name": "COM+ Event System",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "FontCache",
+    "display_name": "Windows Font Cache Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "gpsvc",
+    "display_name": "Group Policy Client",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_PRESHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "hns",
+    "display_name": "Host Network Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_PRESHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "HvHost",
+    "display_name": "HV Host Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "iphlpsvc",
+    "display_name": "IP Helper",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "KeyIso",
+    "display_name": "CNG Key Isolation",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "LanmanServer",
+    "display_name": "Server",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "LanmanWorkstation",
+    "display_name": "Workstation",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "LicenseManager",
+    "display_name": "Windows License Manager Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "lmhosts",
+    "display_name": "TCP/IP NetBIOS Helper",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "LSM",
+    "display_name": "Local Session Manager",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "LxssManager",
+    "display_name": "LxssManager",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "MDCoreSvc",
+    "display_name": "Microsoft Defender Core Service",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "mpssvc",
+    "display_name": "Windows Defender Firewall",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "MSMQ",
+    "display_name": "Message Queuing",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "NcbService",
+    "display_name": "Network Connection Broker",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "NetMsmqActivator",
+    "display_name": "Net.Msmq Listener Adapter",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "NetPipeActivator",
+    "display_name": "Net.Pipe Listener Adapter",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "netprofm",
+    "display_name": "Network List Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "NetSetupSvc",
+    "display_name": "Network Setup Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "NetTcpActivator",
+    "display_name": "Net.Tcp Listener Adapter",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "NetTcpPortSharing",
+    "display_name": "Net.Tcp Port Sharing Service",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "NgcSvc",
+    "display_name": "Microsoft Passport",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "NlaSvc",
+    "display_name": "Network Location Awareness",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "nsi",
+    "display_name": "Network Store Interface Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "nvagent",
+    "display_name": "Network Virtualization Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "pla",
+    "display_name": "Performance Logs & Alerts",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "PlugPlay",
+    "display_name": "Plug and Play",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "Power",
+    "display_name": "Power",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "ProfSvc",
+    "display_name": "User Profile Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "RdAgent",
+    "display_name": "RdAgent",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "RemoteRegistry",
+    "display_name": "Remote Registry",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "RpcEptMapper",
+    "display_name": "RPC Endpoint Mapper",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "RpcSs",
+    "display_name": "Remote Procedure Call (RPC)",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "sacsvr",
+    "display_name": "Special Administration Console Helper",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "SamSs",
+    "display_name": "Security Accounts Manager",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "Schedule",
+    "display_name": "Task Scheduler",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "SENS",
+    "display_name": "System Event Notification Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "SessionEnv",
+    "display_name": "Remote Desktop Configuration",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "ShellHWDetection",
+    "display_name": "Shell Hardware Detection",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "Spooler",
+    "display_name": "Print Spooler",
+    "type_code": "110",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": true,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "sppsvc",
+    "display_name": "Software Protection",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "SQLWriter",
+    "display_name": "SQL Server VSS Writer",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "StateRepository",
+    "display_name": "State Repository Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "SystemEventsBroker",
+    "display_name": "System Events Broker",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "TabletInputService",
+    "display_name": "Touch Keyboard and Handwriting Panel Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "TermService",
+    "display_name": "Remote Desktop Services",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "Themes",
+    "display_name": "Themes",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "TimeBrokerSvc",
+    "display_name": "Time Broker",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "TokenBroker",
+    "display_name": "Web Account Manager",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "TrkWks",
+    "display_name": "Distributed Link Tracking Client",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "UmRdpService",
+    "display_name": "Remote Desktop Services UserMode Port Redirector",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "UserManager",
+    "display_name": "User Manager",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "VaultSvc",
+    "display_name": "Credential Manager",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "vds",
+    "display_name": "Virtual Disk",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "vmcompute",
+    "display_name": "Hyper-V Host Compute Service",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "vmicheartbeat",
+    "display_name": "Hyper-V Heartbeat Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "vmickvpexchange",
+    "display_name": "Hyper-V Data Exchange Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "vmicshutdown",
+    "display_name": "Hyper-V Guest Shutdown Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "vmictimesync",
+    "display_name": "Hyper-V Time Synchronization Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "vmms",
+    "display_name": "Hyper-V Virtual Machine Management",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_PRESHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "W32Time",
+    "display_name": "Windows Time",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "W3SVC",
+    "display_name": "World Wide Web Publishing Service",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "WAS",
+    "display_name": "Windows Process Activation Service",
+    "type_code": "20",
+    "type": "WIN32_SHARE_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "Wcmsvc",
+    "display_name": "Windows Connection Manager",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "WinDefend",
+    "display_name": "Microsoft Defender Antivirus Service",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "WindowsAzureGuestAgent",
+    "display_name": "Windows Azure Guest Agent",
+    "type_code": "10",
+    "type": "WIN32_OWN_PROCESS",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "WinHttpAutoProxySvc",
+    "display_name": "WinHTTP Web Proxy Auto-Discovery Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "NOT_STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "Winmgmt",
+    "display_name": "Windows Management Instrumentation",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "WinRM",
+    "display_name": "Windows Remote Management (WS-Management)",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "wlidsvc",
+    "display_name": "Microsoft Account Sign-in Assistant",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "WPDBusEnum",
+    "display_name": "Portable Device Enumerator Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "WpnService",
+    "display_name": "Windows Push Notifications System Service",
+    "type_code": "30",
+    "type": "WIN32",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "IGNORES_SHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  },
+  {
+    "service_name": "WpnUserService_969fe",
+    "display_name": "Windows Push Notifications User Service_969fe",
+    "type_code": "f0",
+    "type": "ERROR",
+    "interactive": false,
+    "state_code": 4,
+    "state": "RUNNING",
+    "controls": [
+      "STOPPABLE",
+      "NOT_PAUSABLE",
+      "ACCEPTS_PRESHUTDOWN"
+    ],
+    "win32_exit_code": 0,
+    "service_exit_code": 0,
+    "checkpoint": "0x0",
+    "wait_hint": "0x0"
+  }
+]

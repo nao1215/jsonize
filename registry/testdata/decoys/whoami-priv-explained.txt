@@ -1,0 +1,11 @@
+What whoami /priv tells you
+
+The table has three columns, Privilege Name, Description and State:
+
+Privilege Name                Description                          State
+============================= ==================================== ========
+SeShutdownPrivilege           Shut down the system                 Disabled
+
+Disabled does not mean the account lacks the privilege: it holds it and
+a program can enable it when it needs to. A privilege that is not in the
+list is one the account does not hold at all.

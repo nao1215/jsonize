@@ -1,0 +1,49 @@
+# `net share` without a share name lists the shared resources of the
+# machine: a header of three columns, a rule of hyphens, one row per
+# share, and the line saying the command completed. The rows are cut
+# where the header's words start; "Share name" is one column.
+#
+# The resource is the folder a disk share points at, a drive path such
+# as "C:\Windows", and is empty for IPC$, which shares no folder. The
+# remark is free text and may be empty. A share name holds none of the
+# characters Windows forbids in one, and a resource is a drive or UNC
+# path; the two are held to that, which is what refuses a row of
+# another table printed after the listing.
+#
+# net share wraps a row whose name or path is wider than its column onto
+# a second line, and lists a printer share with a device where the path
+# stands. Neither was in the captures this definition was written from,
+# and such a row is refused rather than read.
+format: 1
+command: net
+variant: share
+description: net share, the shared resources of the machine
+metadata:
+  tags: [windows, filesystem, network]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/hh750728(v=ws.11)
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    any: [share, SHARE]
+  signature:
+    all:
+      # The header, then the rule after a blank line.
+      - '\AShare name[ \t]+Resource[ \t]+Remark[ \t]*\n(?:[ \t]*\n)*-{20,}[ \t]*$'
+input:
+  ignore:
+    # The rule under the header and the completion line after the rows.
+    - '^-{20,}[ \t]*$'
+    - '^The command completed successfully\.[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [share_name, resource, remark]
+fields:
+  share_name: {required: true, regex: '(?P<share_name>[^\s"/\\\[\]:|<>+=;,?*]+(?: [^\s"/\\\[\]:|<>+=;,?*]+)*)'}
+  resource: {regex: '(?P<resource>[A-Za-z]:\\.*|\\\\\S.*)'}
+  remark: {}
