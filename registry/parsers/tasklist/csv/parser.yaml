@@ -29,7 +29,7 @@ detect:
     all:
       # The header line whole, and a first row of the same five quoted
       # values.
-      - '\A"Image Name","PID","Session Name","Session#","Mem Usage"[ \t]*\n"[^"\n]+","\d+","[^"\n]*","\d+","\d[\d,.]* K"[ \t]*$'
+      - '\A"Image Name","PID","Session Name","Session#","Mem Usage"[ \t]*\n"[^"\n]+","\d+","[^"\n]*","\d+","(?:\d[\d,.]* K|N/A)"[ \t]*$'
 parse:
   type: csv
   header:
@@ -39,4 +39,5 @@ fields:
   pid: {type: int, required: true}
   session_name: {null_if: [""]}
   session_number: {type: int, required: true}
-  mem_usage: {required: true, regex: '(?P<mem_usage>\d[\d,.]* K)'}
+  # Windows 11 prints N/A for the Memory Compression process.
+  mem_usage: {required: true, null_if: ["N/A"], regex: '(?P<mem_usage>\d[\d,.]* K|N/A)'}

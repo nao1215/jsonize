@@ -811,8 +811,8 @@ fields:
 |-----|-----------|---------|
 | `type` | all | `string` (default), `int`, `float`, `bool`, `time`, `duration`, `array`, `object` |
 | `trim_prefix`, `trim_suffix` | all | removed before conversion; without them a string value keeps its whitespace exactly as the parser produced it |
-| `null_if` | all | values (after trimming) that become `null` |
-| `required` | all | `null`/empty is an error |
+| `null_if` | all | values (after trimming) that become `null`; they are printed words for no value, so they become `null` in a `required` field too |
+| `required` | all | a value that is missing or empty is an error |
 | `when_missing` | all | `null` (default) or `omit` the key when the value is missing |
 | `layout` | time | the [Go reference layout](https://pkg.go.dev/time#pkg-constants) the timestamp is written in; required, and it has to state a year unless `year: assumed` says the format prints none |
 | `year` | time | `assumed` for a format that prints no year; the value stays a string until `--assume-year` says which year to read it in |

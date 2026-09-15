@@ -1,0 +1,11 @@
+description: >-
+  tasklist run for real on Windows 11 on Arm, where the Memory
+  Compression process reports N/A for its memory in use, which is read
+  as null.
+source: >-
+  captured on GitHub Actions windows-11-arm (Windows 11, build
+  26200.9168) on 2026-09-15 with `tasklist > tasklist.txt` in cmd, the
+  bytes as the command wrote them. Nothing was replaced: the listing
+  names no user, host or address.
+os: windows
+args: []

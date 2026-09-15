@@ -5,7 +5,7 @@
   "description": "kubectl get services, with -A and -o wide",
   "x-jsonize": {
     "definition": "kubectl/services",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -15,7 +15,10 @@
         "type": "string"
       },
       "cluster_ip": {
-        "type": "string"
+        "type": [
+          "string",
+          "null"
+        ]
       },
       "external_ip": {
         "type": [

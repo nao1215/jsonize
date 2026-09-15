@@ -35,7 +35,7 @@ fields:
   512_blocks: {type: int, required: true}
   used: {type: int, required: true}
   available: {type: int, required: true}
-  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  capacity_percent: {type: int, trim_suffix: "%", required: true}
   iused: {type: int, null_if: ["-"], when_missing: omit}
   ifree: {type: int, null_if: ["-"], when_missing: omit}
   iused_percent: {type: int, trim_suffix: "%", null_if: ["-"], when_missing: omit}

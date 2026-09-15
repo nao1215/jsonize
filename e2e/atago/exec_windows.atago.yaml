@@ -240,15 +240,18 @@ scenarios:
               - { path: "$", length: 1 }
               - { path: "$[0].image_name", equals: lsass.exe }
               - { path: "$[0].pid", equals: "${pid}" }
+      # Windows 11 runs lsass as a protected process whose modules
+      # tasklist cannot read, so the modules are those of tasklist itself.
       - run:
-          command: jz run --explain tasklist /m /fi "IMAGENAME eq lsass.exe"
+          command: jz run --explain tasklist /m /fi "IMAGENAME eq tasklist.exe"
       - assert:
           exit_code: 0
           stderr:
             contains: "chose tasklist/modules from embedded"
           stdout:
             json:
-              - { path: "$[0].pid", equals: "${pid}" }
+              - { path: "$", length: 1 }
+              - { path: "$[0].image_name", equals: tasklist.exe }
               # Every process maps ntdll first.
               - { path: "$[0].modules[0]", matches: '(?i)^ntdll\.dll$' }
       - run:
@@ -432,8 +435,10 @@ scenarios:
             contains: "chose net/share from embedded"
           stdout:
             json: { path: "$[?(@.share_name=='C$')].resource", equals: 'C:\' }
+      # The runners put Git's own whoami ahead of Windows' on PATH, and
+      # jz runs the one PATH names, so Windows' is named by its path.
       - run:
-          command: jz run --explain whoami /groups
+          command: jz run --explain ${env:SystemRoot}\System32\whoami.exe /groups
       - assert:
           exit_code: 0
           stderr:
@@ -441,7 +446,7 @@ scenarios:
           stdout:
             json: { path: "$[?(@.sid=='S-1-1-0')].group_name", equals: Everyone }
       - run:
-          command: jz run --explain whoami /priv
+          command: jz run --explain ${env:SystemRoot}\System32\whoami.exe /priv
       - assert:
           exit_code: 0
           stderr:

@@ -50,4 +50,5 @@ fields:
   pid: {type: int, required: true}
   session_name: {regex: '(?P<session_name>\S+)'}
   session_number: {type: int, required: true}
-  mem_usage: {required: true, regex: '(?P<mem_usage>\d[\d,.]* K)'}
+  # Windows 11 prints N/A for the Memory Compression process.
+  mem_usage: {required: true, null_if: ["N/A"], regex: '(?P<mem_usage>\d[\d,.]* K|N/A)'}
