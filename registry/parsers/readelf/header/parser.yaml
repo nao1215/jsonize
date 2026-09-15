@@ -29,6 +29,9 @@ input:
   # other are two headings, not a key named "ELF Header".
   ignore: ['^ELF Header:[ \t]*$']
 parse:
-  type: kv
-  separator: ":"
-  as: list
+  # Each line under the heading is one of the fields binutils prints for
+  # the ELF header, indented, its label, a colon and the value padded to
+  # a column. The labels are that fixed set, which is what refuses the
+  # labelled lines of another command printed after the header.
+  type: regex
+  pattern: '^[ \t]+(?P<name>Magic|Class|Data|Version|OS/ABI|ABI Version|Type|Machine|Entry point address|Start of program headers|Start of section headers|Flags|Size of this header|Size of program headers|Number of program headers|Size of section headers|Number of section headers|Section header string table index):[ \t]*(?P<value>.*?)[ \t]*$'

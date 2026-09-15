@@ -5,14 +5,34 @@
   "description": "readelf -h ELF header fields",
   "x-jsonize": {
     "definition": "readelf/header",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
     "type": "object",
     "properties": {
       "name": {
-        "type": "string"
+        "type": "string",
+        "enum": [
+          "ABI Version",
+          "Class",
+          "Data",
+          "Entry point address",
+          "Flags",
+          "Machine",
+          "Magic",
+          "Number of program headers",
+          "Number of section headers",
+          "OS/ABI",
+          "Section header string table index",
+          "Size of program headers",
+          "Size of section headers",
+          "Size of this header",
+          "Start of program headers",
+          "Start of section headers",
+          "Type",
+          "Version"
+        ]
       },
       "value": {
         "type": "string"

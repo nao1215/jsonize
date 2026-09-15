@@ -104,10 +104,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
-- `chage -l` is read only as the seven lines it prints, and `lscpu
-  --caches` holds each row to a cache name and type. Lines another
-  command printed after them were read as more fields of the account and
-  as more caches.
+- `chage -l`, `git count-objects -v` and `ethtool -i` are read only as
+  the lines they print, `readelf -h` only as the fields of an ELF header,
+  and `lscpu --caches` holds each row to a cache name and type. Lines
+  another command printed after them were read as more fields and as
+  more caches. The `readelf -h` schema names the fields it can hold, and
+  is version 2.
 - `systemctl list-sockets`, `list-paths`, `list-timers`,
   `list-automounts`, `list-machines`, `list-unit-files`, `list-jobs` and
   `list-units`, `networkctl list`, `loginctl list-sessions`,
