@@ -1,0 +1,4 @@
+description: shasum -a 256 on macOS prints the line sha256sum prints
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C shasum -a 256 /etc/hosts
+os: darwin
+args: [-a, "256", /etc/hosts]
