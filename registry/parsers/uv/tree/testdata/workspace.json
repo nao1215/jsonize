@@ -1,0 +1,177 @@
+[
+  {
+    "name": "proj",
+    "extras": null,
+    "version": "0.1.0",
+    "extra": null,
+    "group": null,
+    "latest": null,
+    "deduplicated": false,
+    "children": [
+      {
+        "name": "localpkg",
+        "extras": null,
+        "version": "0.1.0",
+        "extra": null,
+        "group": null,
+        "latest": null,
+        "deduplicated": false,
+        "children": []
+      },
+      {
+        "name": "requests",
+        "extras": null,
+        "version": "2.34.2",
+        "extra": null,
+        "group": null,
+        "latest": null,
+        "deduplicated": false,
+        "children": [
+          {
+            "name": "certifi",
+            "extras": null,
+            "version": "2026.7.22",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          },
+          {
+            "name": "charset-normalizer",
+            "extras": null,
+            "version": "3.5.1",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          },
+          {
+            "name": "idna",
+            "extras": null,
+            "version": "3.19",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          },
+          {
+            "name": "urllib3",
+            "extras": null,
+            "version": "2.7.0",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "rich",
+        "extras": null,
+        "version": "15.0.0",
+        "extra": null,
+        "group": null,
+        "latest": null,
+        "deduplicated": false,
+        "children": [
+          {
+            "name": "markdown-it-py",
+            "extras": null,
+            "version": "4.2.0",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": [
+              {
+                "name": "mdurl",
+                "extras": null,
+                "version": "0.1.2",
+                "extra": null,
+                "group": null,
+                "latest": null,
+                "deduplicated": false,
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "pygments",
+            "extras": null,
+            "version": "2.21.0",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "pytest",
+        "extras": null,
+        "version": "9.1.1",
+        "extra": null,
+        "group": "dev",
+        "latest": null,
+        "deduplicated": false,
+        "children": [
+          {
+            "name": "iniconfig",
+            "extras": null,
+            "version": "2.3.0",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          },
+          {
+            "name": "packaging",
+            "extras": null,
+            "version": "26.3",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          },
+          {
+            "name": "pluggy",
+            "extras": null,
+            "version": "1.6.0",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          },
+          {
+            "name": "pygments",
+            "extras": null,
+            "version": "2.21.0",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "localpkg",
+    "extras": null,
+    "version": "0.1.0",
+    "extra": null,
+    "group": null,
+    "latest": null,
+    "deduplicated": false,
+    "children": []
+  }
+]

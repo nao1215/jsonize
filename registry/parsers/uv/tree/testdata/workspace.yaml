@@ -1,0 +1,4 @@
+description: A project with a dev dependency group and a workspace member, which uv prints as a second tree at the top level.
+source: "captured with `uv tree` (uv 0.9.7) on Ubuntu 26.04 with LC_ALL=C, in a project made with `uv init proj`, `uv add requests rich`, `uv add --dev pytest` and a workspace member added with `uv init --lib localpkg` and `uv add ./localpkg`"
+os: linux
+args: [tree]

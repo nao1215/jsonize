@@ -1,0 +1,63 @@
+[
+  {
+    "name": "proj",
+    "extras": null,
+    "version": "0.1.0",
+    "extra": null,
+    "group": null,
+    "latest": null,
+    "deduplicated": false,
+    "children": [
+      {
+        "name": "localpkg",
+        "extras": null,
+        "version": "0.1.0",
+        "extra": null,
+        "group": null,
+        "latest": null,
+        "deduplicated": false,
+        "children": []
+      },
+      {
+        "name": "requests",
+        "extras": null,
+        "version": "2.34.2",
+        "extra": null,
+        "group": null,
+        "latest": null,
+        "deduplicated": false,
+        "children": []
+      },
+      {
+        "name": "rich",
+        "extras": null,
+        "version": "15.0.0",
+        "extra": null,
+        "group": null,
+        "latest": null,
+        "deduplicated": false,
+        "children": []
+      },
+      {
+        "name": "pytest",
+        "extras": null,
+        "version": "9.1.1",
+        "extra": null,
+        "group": "dev",
+        "latest": null,
+        "deduplicated": false,
+        "children": []
+      }
+    ]
+  },
+  {
+    "name": "localpkg",
+    "extras": null,
+    "version": "0.1.0",
+    "extra": null,
+    "group": null,
+    "latest": null,
+    "deduplicated": false,
+    "children": []
+  }
+]

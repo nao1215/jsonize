@@ -1,0 +1,107 @@
+[
+  {
+    "name": "proj2",
+    "extras": null,
+    "version": "0.1.0",
+    "extra": null,
+    "group": null,
+    "latest": null,
+    "deduplicated": false,
+    "children": [
+      {
+        "name": "requests",
+        "extras": [
+          "socks"
+        ],
+        "version": "2.34.2",
+        "extra": null,
+        "group": null,
+        "latest": null,
+        "deduplicated": false,
+        "children": [
+          {
+            "name": "certifi",
+            "extras": null,
+            "version": "2026.7.22",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          },
+          {
+            "name": "charset-normalizer",
+            "extras": null,
+            "version": "3.5.1",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          },
+          {
+            "name": "idna",
+            "extras": null,
+            "version": "3.19",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          },
+          {
+            "name": "urllib3",
+            "extras": null,
+            "version": "2.7.0",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          },
+          {
+            "name": "pysocks",
+            "extras": null,
+            "version": "1.7.1",
+            "extra": "socks",
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "rich",
+        "extras": null,
+        "version": "13.0.0",
+        "extra": null,
+        "group": null,
+        "latest": "15.0.0",
+        "deduplicated": false,
+        "children": [
+          {
+            "name": "commonmark",
+            "extras": null,
+            "version": "0.9.2",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          },
+          {
+            "name": "pygments",
+            "extras": null,
+            "version": "2.21.0",
+            "extra": null,
+            "group": null,
+            "latest": null,
+            "deduplicated": false,
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]
