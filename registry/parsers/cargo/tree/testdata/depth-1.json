@@ -1,0 +1,76 @@
+[
+  {
+    "name": "demo",
+    "version": "0.1.0",
+    "source": "/home/user/demo",
+    "proc_macro": false,
+    "deduplicated": false,
+    "dependency_kind": null,
+    "children": [
+      {
+        "name": "anyhow",
+        "version": "1.0.104",
+        "source": null,
+        "proc_macro": false,
+        "deduplicated": false,
+        "dependency_kind": null,
+        "children": []
+      },
+      {
+        "name": "local-util",
+        "version": "0.1.0",
+        "source": "/home/user/demo/local-util",
+        "proc_macro": false,
+        "deduplicated": false,
+        "dependency_kind": null,
+        "children": []
+      },
+      {
+        "name": "regex",
+        "version": "1.13.1",
+        "source": null,
+        "proc_macro": false,
+        "deduplicated": false,
+        "dependency_kind": null,
+        "children": []
+      },
+      {
+        "name": "serde",
+        "version": "1.0.229",
+        "source": null,
+        "proc_macro": false,
+        "deduplicated": false,
+        "dependency_kind": null,
+        "children": []
+      },
+      {
+        "name": "serde_derive",
+        "version": "1.0.229",
+        "source": null,
+        "proc_macro": true,
+        "deduplicated": false,
+        "dependency_kind": null,
+        "children": []
+      }
+    ]
+  },
+  {
+    "name": null,
+    "version": null,
+    "source": null,
+    "proc_macro": null,
+    "deduplicated": null,
+    "dependency_kind": "dev",
+    "children": [
+      {
+        "name": "tempfile",
+        "version": "3.27.0",
+        "source": null,
+        "proc_macro": false,
+        "deduplicated": false,
+        "dependency_kind": null,
+        "children": []
+      }
+    ]
+  }
+]

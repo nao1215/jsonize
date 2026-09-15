@@ -1,0 +1,8 @@
+demo v0.1.0 (/home/user/demo)
+├── anyhow v1.0.104
+├── local-util v0.1.0 (/home/user/demo/local-util)
+├── regex v1.13.1
+├── serde v1.0.229
+└── serde_derive v1.0.229 (proc-macro)
+[dev-dependencies]
+└── tempfile v3.27.0

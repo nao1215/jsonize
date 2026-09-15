@@ -1,0 +1,78 @@
+[
+  {
+    "name": "memchr",
+    "version": "2.8.3",
+    "source": null,
+    "proc_macro": false,
+    "deduplicated": false,
+    "dependency_kind": null,
+    "children": [
+      {
+        "name": "aho-corasick",
+        "version": "1.1.5",
+        "source": null,
+        "proc_macro": false,
+        "deduplicated": false,
+        "dependency_kind": null,
+        "children": [
+          {
+            "name": "regex",
+            "version": "1.13.1",
+            "source": null,
+            "proc_macro": false,
+            "deduplicated": false,
+            "dependency_kind": null,
+            "children": [
+              {
+                "name": "demo",
+                "version": "0.1.0",
+                "source": "/home/user/demo",
+                "proc_macro": false,
+                "deduplicated": false,
+                "dependency_kind": null,
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "regex-automata",
+            "version": "0.4.18",
+            "source": null,
+            "proc_macro": false,
+            "deduplicated": false,
+            "dependency_kind": null,
+            "children": [
+              {
+                "name": "regex",
+                "version": "1.13.1",
+                "source": null,
+                "proc_macro": false,
+                "deduplicated": true,
+                "dependency_kind": null,
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "regex",
+        "version": "1.13.1",
+        "source": null,
+        "proc_macro": false,
+        "deduplicated": true,
+        "dependency_kind": null,
+        "children": []
+      },
+      {
+        "name": "regex-automata",
+        "version": "0.4.18",
+        "source": null,
+        "proc_macro": false,
+        "deduplicated": true,
+        "dependency_kind": null,
+        "children": []
+      }
+    ]
+  }
+]
