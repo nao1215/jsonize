@@ -7,6 +7,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"sync"
 	"sync/atomic"
 
@@ -109,15 +110,16 @@ func Fixtures(reg *registry.Registry, sources []registry.Source) ([]Fixture, []R
 	return out, problems
 }
 
-// reader is one definition under one of the names it answers to. An alias
-// is a second way into the same definition, so it is a second way for a
-// signature to be bypassed and is checked as well.
+// reader is one definition with every name it answers to, its command
+// first. An alias is a second way into the same definition, so it is a
+// second way for a signature to be bypassed and is checked as well.
 type reader struct {
 	entry *registry.Entry
-	name  string
+	names []string
 }
 
-// readersOf lists every way a definition can be named.
+// readersOf lists every definition that makes a claim about its text,
+// with the names it can be reached by.
 func readersOf(reg *registry.Registry) []reader {
 	var out []reader
 	for _, e := range reg.Entries() {
@@ -128,12 +130,40 @@ func readersOf(reg *registry.Registry) []reader {
 			// registry against `table/whitespace`.
 			continue
 		}
-		out = append(out, reader{entry: e, name: e.Def.Command})
+		names := []string{e.Def.Command}
 		for _, alias := range e.Def.AliasNames() {
-			out = append(out, reader{entry: e, name: alias})
+			if alias != e.Def.Command {
+				names = append(names, alias)
+			}
 		}
+		out = append(out, reader{entry: e, names: names})
 	}
 	return out
+}
+
+// readingNames returns the names by which the definition accepts input,
+// skipping any name skip says cannot reach it, with the result the first
+// of them gave. Every name leads to the same definition and the same
+// parse, so one result stands for all of them.
+func readingNames(reg *registry.Registry, r reader, input []byte, opts Options, skip func(name string) bool) (Result, []string) {
+	var (
+		res   Result
+		names []string
+	)
+	for _, name := range r.names {
+		if skip != nil && skip(name) {
+			continue
+		}
+		got, ok := reads(reg, r.entry, name, input, opts)
+		if !ok {
+			continue
+		}
+		if names == nil {
+			res = got
+		}
+		names = append(names, name)
+	}
+	return res, names
 }
 
 // Exclusivity checks the whole registry against itself: every definition
@@ -195,18 +225,21 @@ func Decoys(reg *registry.Registry, decoys []Decoy, opts Options) []Result {
 			})
 		}
 		for _, r := range readers {
-			if res, ok := reads(reg, r, d.Input, opts); ok {
-				res.Case, res.Path = d.Name, d.Name
-				// Which half let it through decides what to sharpen: a
-				// signature that says too little, or a parser that takes
-				// any word where the format has a vocabulary.
-				if res.parsed {
-					res.Err = fmt.Errorf("%s read the decoy %s", namedAs(r), d.Name)
-				} else {
-					res.Err = fmt.Errorf("%s accepted the decoy %s and then failed to parse it", namedAs(r), d.Name)
-				}
-				out = append(out, res)
+			res, names := readingNames(reg, r, d.Input, opts, nil)
+			if names == nil {
+				continue
 			}
+			res.Case, res.Path = d.Name, d.Name
+			label := readersLabel(r.entry.Def.ID(), r.entry.Def.Command, names)
+			// Which half let it through decides what to sharpen: a
+			// signature that says too little, or a parser that takes
+			// any word where the format has a vocabulary.
+			if res.parsed {
+				res.Err = fmt.Errorf("%s read the decoy %s", label, d.Name)
+			} else {
+				res.Err = fmt.Errorf("%s accepted the decoy %s and then failed to parse it", label, d.Name)
+			}
+			out = append(out, res)
 		}
 		per[i] = out
 	})
@@ -228,18 +261,18 @@ func crossFixture(reg *registry.Registry, f Fixture, readers []reader, target fu
 		if !ownerUnderTest && !target(r.entry.Source) {
 			continue
 		}
-		if unreachableFor(reg, r, f) {
-			continue
-		}
-		res, ok := reads(reg, r, f.Case.Input, opts)
-		if !ok {
+		res, names := readingNames(reg, r, f.Case.Input, opts, func(name string) bool {
+			return unreachableFor(reg, r.entry, name, f)
+		})
+		if names == nil {
 			continue
 		}
 		res.Case, res.Path = f.Case.Name, f.Path()
+		label := readersLabel(r.entry.Def.ID(), r.entry.Def.Command, names)
 		if res.parsed {
-			res.Err = fmt.Errorf("%s read %s, a fixture of %s", namedAs(r), res.Path, owner)
+			res.Err = fmt.Errorf("%s read %s, a fixture of %s", label, res.Path, owner)
 		} else {
-			res.Err = fmt.Errorf("%s accepted %s, a fixture of %s, and then failed to parse it", namedAs(r), res.Path, owner)
+			res.Err = fmt.Errorf("%s accepted %s, a fixture of %s, and then failed to parse it", label, res.Path, owner)
 		}
 		out = append(out, res)
 	}
@@ -255,49 +288,53 @@ func crossFixture(reg *registry.Registry, f Fixture, readers []reader, target fu
 // is the owner or the group, and the arguments are the only thing that
 // says which; holding each against the other's output would be asking a
 // rule about the text for something the text does not carry.
-func unreachableFor(reg *registry.Registry, r reader, f Fixture) bool {
+func unreachableFor(reg *registry.Registry, e *registry.Entry, name string, f Fixture) bool {
 	// The arguments a fixture records are the ones its own command takes,
 	// so they say nothing about a definition for another command.
-	if r.entry.Def.Command != f.Entry.Def.Command {
+	if e.Def.Command != f.Entry.Def.Command {
 		return false
 	}
-	if f.Case.Meta.Args == nil || !selector.ExplicitOnly(r.entry.Def) {
+	if f.Case.Meta.Args == nil || !selector.ExplicitOnly(e.Def) {
 		return false
 	}
 	ctx := selector.Context{
-		Parser:  r.name,
-		Variant: r.entry.Def.Variant,
+		Parser:  name,
+		Variant: e.Def.Variant,
 		OS:      f.Case.Meta.OS,
 		Args:    f.Case.Meta.Args,
 		Input:   f.Case.Input,
 	}
 	sel, err := selector.Select(reg, ctx)
-	return err != nil || sel.Entry.Def.ID() != r.entry.Def.ID()
+	return err != nil || sel.Entry.Def.ID() != e.Def.ID()
 }
 
 // reads reports whether the definition, named explicitly, accepts the
 // text. The second result is false when the signature refused it, which
 // is the outcome every pair is supposed to have.
-func reads(reg *registry.Registry, r reader, input []byte, opts Options) (Result, bool) {
-	ctx := selector.Context{Parser: r.name, Variant: r.entry.Def.Variant, Input: input}
+func reads(reg *registry.Registry, e *registry.Entry, name string, input []byte, opts Options) (Result, bool) {
+	ctx := selector.Context{Parser: name, Variant: e.Def.Variant, Input: input}
 	sel, err := selector.Select(reg, ctx)
-	if err != nil || sel.Entry.Def.ID() != r.entry.Def.ID() {
+	if err != nil || sel.Entry.Def.ID() != e.Def.ID() {
 		return Result{}, false
 	}
-	res := Result{Definition: r.entry.Def.ID(), Source: r.entry.Source}
-	if _, err := engine.Parse(r.entry.Def, input, opts.Engine); err == nil {
+	res := Result{Definition: e.Def.ID(), Source: e.Source}
+	if _, err := engine.Parse(e.Def, input, opts.Engine); err == nil {
 		res.parsed = true
 	}
 	return res, true
 }
 
-// namedAs spells out which name reached the definition, so that an alias
-// letting text in is as visible as a command name doing it.
-func namedAs(r reader) string {
-	if r.name == r.entry.Def.Command {
-		return r.entry.Def.ID()
+// readersLabel spells out which names reached the definition, so that an
+// alias letting text in is as visible as the command name doing it, and a
+// definition with many names that reads one text is one report.
+func readersLabel(id, command string, names []string) string {
+	if len(names) > 0 && names[0] == command {
+		if len(names) == 1 {
+			return id
+		}
+		return fmt.Sprintf("%s (also named %s)", id, strings.Join(names[1:], ", "))
 	}
-	return fmt.Sprintf("%s (named %s)", r.entry.Def.ID(), r.name)
+	return fmt.Sprintf("%s (named %s)", id, strings.Join(names, ", "))
 }
 
 // each runs fn for every index below n, spreading the indexes over

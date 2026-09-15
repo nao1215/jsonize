@@ -60,10 +60,11 @@ func TestExclusivity(t *testing.T) {
 	all := func(string) bool { return true }
 	got := messages(Exclusivity(reg, fixtures, all, Options{Parallel: 2}))
 	want := []string{
-		// The tight fixture is the one loose has no business reading, and
-		// the alias is a second way in, so it is reported separately.
-		"loose/v read parsers/tight/v/testdata/a.txt, a fixture of tight/v",
-		"loose/v (named esool) read parsers/tight/v/testdata/a.txt, a fixture of tight/v",
+		// The tight fixture is the one loose has no business reading. The
+		// alias is a second way in, so the report names it, and on the
+		// same line: a definition with fourteen names that reads one
+		// fixture is one defect, not fourteen.
+		"loose/v (also named esool) read parsers/tight/v/testdata/a.txt, a fixture of tight/v",
 		// crash lets the same text past its signature and then fails,
 		// which is the same defect caught one step later.
 		"crash/v accepted parsers/tight/v/testdata/a.txt, a fixture of tight/v, and then failed to parse it",
@@ -110,8 +111,7 @@ func TestDecoys(t *testing.T) {
 	}, Options{}))
 	for _, w := range []string{
 		"automatic detection read the decoy colon.txt as tight/v",
-		"loose/v read the decoy colon.txt",
-		"loose/v (named esool) read the decoy colon.txt",
+		"loose/v (also named esool) read the decoy colon.txt",
 		// crash/v gets past its own signature and then fails to parse,
 		// which is a different repair from reading the text outright.
 		"crash/v accepted the decoy colon.txt and then failed to parse it",
@@ -124,6 +124,30 @@ func TestDecoys(t *testing.T) {
 		if strings.Contains(g, "quiet.txt") {
 			t.Errorf("quiet.txt was read: %s", g)
 		}
+	}
+	// colon.txt is tight's own shape, so tight/v reads it as well: four
+	// reports, automatic detection and one per definition, however many
+	// names each definition has.
+	if len(got) != 4 {
+		t.Errorf("got %d failures, want 4: %v", len(got), got)
+	}
+}
+
+// An alias whose own arguments are the only way to the definition is named
+// alone, so the report says which name let the text in.
+func TestExclusivityNamesTheAliasThatReads(t *testing.T) {
+	t.Parallel()
+	if got := readersLabel("loose/v", "loose", []string{"esool"}); got != "loose/v (named esool)" {
+		t.Errorf("alias alone: %q", got)
+	}
+	if got := readersLabel("loose/v", "loose", []string{"loose"}); got != "loose/v" {
+		t.Errorf("command alone: %q", got)
+	}
+	if got := readersLabel("loose/v", "loose", []string{"loose", "esool", "sool"}); got != "loose/v (also named esool, sool)" {
+		t.Errorf("command and aliases: %q", got)
+	}
+	if got := readersLabel("loose/v", "loose", []string{"esool", "sool"}); got != "loose/v (named esool, sool)" {
+		t.Errorf("aliases alone: %q", got)
 	}
 }
 
