@@ -1,0 +1,5 @@
+description: "`whoami /priv` prints a table of the same layout under the PRIVILEGES INFORMATION banner; it is the privileges variant's format and must not be read as this one."
+source: >-
+  the windows-server-2025 fixture of whoami/privileges, captured on
+  GitHub Actions windows-latest with `cmd /c "whoami /priv 2>&1"`.
+expect_error: 'does not describe this input'

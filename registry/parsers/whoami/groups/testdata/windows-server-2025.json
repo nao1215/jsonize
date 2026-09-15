@@ -1,0 +1,119 @@
+[
+  {
+    "group_name": "Everyone",
+    "type": "Well-known group",
+    "sid": "S-1-1-0",
+    "attributes": [
+      "Mandatory group",
+      "Enabled by default",
+      "Enabled group"
+    ]
+  },
+  {
+    "group_name": "NT AUTHORITY\\Local account and member of Administrators group",
+    "type": "Well-known group",
+    "sid": "S-1-5-114",
+    "attributes": [
+      "Mandatory group",
+      "Enabled by default",
+      "Enabled group"
+    ]
+  },
+  {
+    "group_name": "BUILTIN\\Administrators",
+    "type": "Alias",
+    "sid": "S-1-5-32-544",
+    "attributes": [
+      "Mandatory group",
+      "Enabled by default",
+      "Enabled group",
+      "Group owner"
+    ]
+  },
+  {
+    "group_name": "BUILTIN\\Users",
+    "type": "Alias",
+    "sid": "S-1-5-32-545",
+    "attributes": [
+      "Mandatory group",
+      "Enabled by default",
+      "Enabled group"
+    ]
+  },
+  {
+    "group_name": "NT AUTHORITY\\INTERACTIVE",
+    "type": "Well-known group",
+    "sid": "S-1-5-4",
+    "attributes": [
+      "Mandatory group",
+      "Enabled by default",
+      "Enabled group"
+    ]
+  },
+  {
+    "group_name": "CONSOLE LOGON",
+    "type": "Well-known group",
+    "sid": "S-1-2-1",
+    "attributes": [
+      "Mandatory group",
+      "Enabled by default",
+      "Enabled group"
+    ]
+  },
+  {
+    "group_name": "NT AUTHORITY\\Authenticated Users",
+    "type": "Well-known group",
+    "sid": "S-1-5-11",
+    "attributes": [
+      "Mandatory group",
+      "Enabled by default",
+      "Enabled group"
+    ]
+  },
+  {
+    "group_name": "NT AUTHORITY\\This Organization",
+    "type": "Well-known group",
+    "sid": "S-1-5-15",
+    "attributes": [
+      "Mandatory group",
+      "Enabled by default",
+      "Enabled group"
+    ]
+  },
+  {
+    "group_name": "NT AUTHORITY\\Local account",
+    "type": "Well-known group",
+    "sid": "S-1-5-113",
+    "attributes": [
+      "Mandatory group",
+      "Enabled by default",
+      "Enabled group"
+    ]
+  },
+  {
+    "group_name": "LOCAL",
+    "type": "Well-known group",
+    "sid": "S-1-2-0",
+    "attributes": [
+      "Mandatory group",
+      "Enabled by default",
+      "Enabled group"
+    ]
+  },
+  {
+    "group_name": "NT AUTHORITY\\NTLM Authentication",
+    "type": "Well-known group",
+    "sid": "S-1-5-64-10",
+    "attributes": [
+      "Mandatory group",
+      "Enabled by default",
+      "Enabled group"
+    ]
+  },
+  {
+    "group_name": "Mandatory Label\\High Mandatory Level",
+    "type": "Label",
+    "sid": "S-1-16-12288",
+    "attributes": null
+  }
+]
