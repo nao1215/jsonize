@@ -1,0 +1,9 @@
+To find the process a service runs in, use queryex rather than query.
+The block it prints ends with two extra lines:
+
+        WAIT_HINT          : 0x0
+        PID                : 1004
+        FLAGS              : RUNS_IN_SYSTEM_PROCESS
+
+Pass the PID to tasklist /fi "PID eq 1004" /svc to see which other
+services share that process.
