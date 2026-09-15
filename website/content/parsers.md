@@ -31,6 +31,7 @@ the same reading with settings of your own.
 | Command | Variants |
 |---------|----------|
 | `7z` | [`list`](../schemas/7z/list.json), [`list-technical`](../schemas/7z/list-technical.json) |
+| `actionlint` | [`default`](../schemas/actionlint/default.json) |
 | `amixer` | [`contents`](../schemas/amixer/contents.json), [`simple-controls`](../schemas/amixer/simple-controls.json) |
 | `aplay` | [`devices`](../schemas/aplay/devices.json) |
 | `apt` | [`list`](../schemas/apt/list.json), [`show`](../schemas/apt/show.json) |
@@ -73,7 +74,8 @@ the same reading with settings of your own.
 | `getfacl` | [`posix`](../schemas/getfacl/posix.json) |
 | `gh` | [`auth-status`](../schemas/gh/auth-status.json), [`issue-list`](../schemas/gh/issue-list.json), [`pr-list`](../schemas/gh/pr-list.json), [`release-list`](../schemas/gh/release-list.json), [`repo-list`](../schemas/gh/repo-list.json), [`run-list`](../schemas/gh/run-list.json), [`workflow-list`](../schemas/gh/workflow-list.json) |
 | `git` | [`branch-verbose`](../schemas/git/branch-verbose.json), [`config-list`](../schemas/git/config-list.json), [`count-objects`](../schemas/git/count-objects.json), [`diff-numstat`](../schemas/git/diff-numstat.json), [`diff-stat`](../schemas/git/diff-stat.json), [`for-each-ref`](../schemas/git/for-each-ref.json), [`log`](../schemas/git/log.json), [`log-oneline`](../schemas/git/log-oneline.json), [`ls-files-stage`](../schemas/git/ls-files-stage.json), [`ls-tree`](../schemas/git/ls-tree.json), [`remote-verbose`](../schemas/git/remote-verbose.json), [`shortlog-summary`](../schemas/git/shortlog-summary.json), [`show-ref`](../schemas/git/show-ref.json), [`stash-list`](../schemas/git/stash-list.json), [`status-porcelain`](../schemas/git/status-porcelain.json), [`worktree-list`](../schemas/git/worktree-list.json) |
-| `go` | [`bench`](../schemas/go/bench.json), [`dist-list`](../schemas/go/dist-list.json), [`env`](../schemas/go/env.json), [`list-modules`](../schemas/go/list-modules.json), [`mod-graph`](../schemas/go/mod-graph.json), [`test`](../schemas/go/test.json), [`version-modules`](../schemas/go/version-modules.json) |
+| `go` | [`bench`](../schemas/go/bench.json), [`dist-list`](../schemas/go/dist-list.json), [`env`](../schemas/go/env.json), [`list-modules`](../schemas/go/list-modules.json), [`mod-graph`](../schemas/go/mod-graph.json), [`test`](../schemas/go/test.json), [`version-modules`](../schemas/go/version-modules.json), [`vet`](../schemas/go/vet.json) |
+| `golangci-lint` | [`text`](../schemas/golangci-lint/text.json) |
 | `gpg` | [`colons`](../schemas/gpg/colons.json), [`version`](../schemas/gpg/version.json) |
 | `gzip` | [`list`](../schemas/gzip/list.json), [`list-verbose`](../schemas/gzip/list-verbose.json) |
 | `hciconfig` | [`linux`](../schemas/hciconfig/linux.json) |
@@ -122,6 +124,7 @@ the same reading with settings of your own.
 | `lspci` | [`kernel`](../schemas/lspci/kernel.json), [`linux`](../schemas/lspci/linux.json), [`machine`](../schemas/lspci/machine.json), [`numeric`](../schemas/lspci/numeric.json), [`numeric-names`](../schemas/lspci/numeric-names.json), [`verbose`](../schemas/lspci/verbose.json), [`verbose-machine`](../schemas/lspci/verbose-machine.json) |
 | `lsusb` | [`linux`](../schemas/lsusb/linux.json), [`tree`](../schemas/lsusb/tree.json), [`verbose`](../schemas/lsusb/verbose.json) |
 | `lz4` | [`list`](../schemas/lz4/list.json) |
+| `mc` | [`ls`](../schemas/mc/ls.json) |
 | `md5` | [`bsd`](../schemas/md5/bsd.json) |
 | `md5sum` | [`check`](../schemas/md5sum/check.json), [`posix`](../schemas/md5sum/posix.json) |
 | `mise` | [`ls`](../schemas/mise/ls.json), [`outdated`](../schemas/mise/outdated.json) |
@@ -173,6 +176,7 @@ the same reading with settings of your own.
 | `sha256sum` | [`posix`](../schemas/sha256sum/posix.json) |
 | `sha384sum` | [`posix`](../schemas/sha384sum/posix.json) |
 | `sha512sum` | [`posix`](../schemas/sha512sum/posix.json) |
+| `shellcheck` | [`gcc`](../schemas/shellcheck/gcc.json) |
 | `size` | [`gnu`](../schemas/size/gnu.json) |
 | `smartctl` | [`scan`](../schemas/smartctl/scan.json) |
 | `snap` | [`changes`](../schemas/snap/changes.json), [`connections`](../schemas/snap/connections.json), [`list`](../schemas/snap/list.json), [`services`](../schemas/snap/services.json) |
@@ -182,6 +186,7 @@ the same reading with settings of your own.
 | `ssh-keygen` | [`fingerprint`](../schemas/ssh-keygen/fingerprint.json) |
 | `ssh-keyscan` | [`known-hosts`](../schemas/ssh-keyscan/known-hosts.json) |
 | `stat` | [`bsd`](../schemas/stat/bsd.json), [`bsd-verbose`](../schemas/stat/bsd-verbose.json), [`gnu`](../schemas/stat/gnu.json), [`gnu-filesystem`](../schemas/stat/gnu-filesystem.json), [`gnu-terse`](../schemas/stat/gnu-terse.json) |
+| `staticcheck` | [`default`](../schemas/staticcheck/default.json) |
 | `swapinfo` | [`freebsd`](../schemas/swapinfo/freebsd.json), [`freebsd-human`](../schemas/swapinfo/freebsd-human.json) |
 | `swapon` | [`legacy`](../schemas/swapon/legacy.json), [`linux`](../schemas/swapon/linux.json) |
 | `sysctl` | [`freebsd`](../schemas/sysctl/freebsd.json), [`linux`](../schemas/sysctl/linux.json) |
@@ -196,6 +201,7 @@ the same reading with settings of your own.
 | `systeminfo` | [`windows`](../schemas/systeminfo/windows.json) |
 | `table` | [`aligned`](../schemas/table/aligned.json), [`box`](../schemas/table/box.json), [`whitespace`](../schemas/table/whitespace.json) |
 | `tar` | [`busybox`](../schemas/tar/busybox.json), [`gnu`](../schemas/tar/gnu.json) |
+| `task` | [`list`](../schemas/task/list.json) |
 | `taskset` | [`affinity-list`](../schemas/taskset/affinity-list.json) |
 | `tc` | [`qdisc`](../schemas/tc/qdisc.json), [`qdisc-stats`](../schemas/tc/qdisc-stats.json) |
 | `timedatectl` | [`linux`](../schemas/timedatectl/linux.json), [`show`](../schemas/timedatectl/show.json), [`timesync`](../schemas/timedatectl/timesync.json), [`timezones`](../schemas/timedatectl/timezones.json) |
@@ -235,7 +241,7 @@ which of them wrote it, so they share a definition rather than having one
 each, and the command they are listed under is the one the definition is
 named for. These are read as well:
 
-`7za` (as `7z`), `arecord` (as `aplay`), `b2sum` (as `md5`, `md5sum`, `sha512sum`), `batcat` (as `bat`), `cksum` (as `md5sum`), `gb2sum` (as `md5`, `sha512sum`), `gcksum` (as `cksum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gfactor` (as `factor`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5`, `md5sum`), `gpg2` (as `gpg`), `gsha1sum` (as `md5`, `sha1sum`), `gsha224sum` (as `md5`, `sha224sum`), `gsha256sum` (as `md5`, `sha256sum`), `gsha384sum` (as `md5`, `sha384sum`), `gsha512sum` (as `md5`, `sha512sum`), `gstat` (as `stat`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `hd` (as `hexdump`), `md5sum` (as `md5`), `nerdctl` (as `docker`), `netstat` (as `route`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `python` (as `pip`), `python3` (as `pip`), `rmd160` (as `md5`), `sha1` (as `md5`), `sha1sum` (as `md5`, `md5sum`), `sha224` (as `md5`), `sha224sum` (as `md5`, `md5sum`), `sha256` (as `md5`), `sha256sum` (as `md5`, `md5sum`), `sha384` (as `md5`), `sha384sum` (as `md5`, `md5sum`), `sha512` (as `md5`), `sha512sum` (as `md5`, `md5sum`), `sha512t224` (as `md5`), `sha512t256` (as `md5`), `skein1024` (as `md5`), `skein256` (as `md5`), `skein512` (as `md5`), `ssh-add` (as `ssh-keygen`), `systemd-resolve` (as `resolvectl`), `uv` (as `pip`), `vdir` (as `ls`)
+`7za` (as `7z`), `arecord` (as `aplay`), `b2sum` (as `md5`, `md5sum`, `sha512sum`), `batcat` (as `bat`), `cksum` (as `md5sum`), `gb2sum` (as `md5`, `sha512sum`), `gcksum` (as `cksum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gfactor` (as `factor`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5`, `md5sum`), `gpg2` (as `gpg`), `gsha1sum` (as `md5`, `sha1sum`), `gsha224sum` (as `md5`, `sha224sum`), `gsha256sum` (as `md5`, `sha256sum`), `gsha384sum` (as `md5`, `sha384sum`), `gsha512sum` (as `md5`, `sha512sum`), `gstat` (as `stat`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `hd` (as `hexdump`), `mcli` (as `mc`), `md5sum` (as `md5`), `nerdctl` (as `docker`), `netstat` (as `route`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `python` (as `pip`), `python3` (as `pip`), `rmd160` (as `md5`), `sha1` (as `md5`), `sha1sum` (as `md5`, `md5sum`), `sha224` (as `md5`), `sha224sum` (as `md5`, `md5sum`), `sha256` (as `md5`), `sha256sum` (as `md5`, `md5sum`), `sha384` (as `md5`), `sha384sum` (as `md5`, `md5sum`), `sha512` (as `md5`), `sha512sum` (as `md5`, `md5sum`), `sha512t224` (as `md5`), `sha512t256` (as `md5`), `skein1024` (as `md5`), `skein256` (as `md5`), `skein512` (as `md5`), `ssh-add` (as `ssh-keygen`), `systemd-resolve` (as `resolvectl`), `uv` (as `pip`), `vdir` (as `ls`)
 
 `jz run`, `--parser` and `jz list` all take the other name.
 

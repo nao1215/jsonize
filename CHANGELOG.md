@@ -51,6 +51,9 @@ project follows [Semantic Versioning](https://semver.org/).
 - Definitions for `eza -l` (with `--header`, `-a`, `-B`, and in its
   long-iso, full-iso, `-g` and `-H` column sets), `procs`, `tokei`,
   `bat --list-languages` and `hyperfine --style basic`.
+- Definitions for compiler-style diagnostics: `go vet` (and `go build`),
+  `staticcheck`, `golangci-lint`, `actionlint` and `shellcheck -f gcc`;
+  and for `mc ls` (the MinIO client) and `task --list`.
 - Definitions for `cargo tree`, `uv tree`, `npm ls --all`, `busctl tree`
   (one service or several), `docker buildx ls` and `xinput list`.
 - `md5sum --tag`, `sha1sum --tag`, `sha256sum --tag`, `b2sum --tag` and
