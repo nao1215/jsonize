@@ -1,0 +1,13 @@
+description: >-
+  schtasks /query /fo list for one task run for real on Windows Server
+  2025: the folder line and a single block for a disabled task with no
+  next run time.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with
+  `cmd /c "schtasks /query /fo list /tn \Microsoft\Windows\Defrag\ScheduledDefrag 2>&1"`
+  from PowerShell, written with WriteAllLines (CRLF line endings, the
+  blank line above the folder line as the command wrote it). The host
+  name was replaced with examplehost01.
+os: windows
+args: [/query, /fo, list, /tn, \Microsoft\Windows\Defrag\ScheduledDefrag]

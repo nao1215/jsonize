@@ -1,0 +1,13 @@
+
+Folder: \Microsoft\Windows\Defrag
+HostName:      examplehost02
+TaskName:      \Microsoft\Windows\Defrag\ScheduledDefrag
+Next Run Time: N/A
+Status:        Disabled
+Logon Mode:    Interactive/Background
+
+Image Name:   lsass.exe
+PID:          872
+Session Name: Services
+Session#:     0
+Mem Usage:    22,836 K

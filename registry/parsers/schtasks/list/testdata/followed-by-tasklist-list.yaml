@@ -1,0 +1,4 @@
+source: the windows-server-2022 fixture followed by the windows-server-2022 fixture of tasklist/list, joined for this case
+description: the labelled block tasklist /fo list prints after the task is refused rather than read as more of the task
+args: [/query, /fo, list, /tn, \Microsoft\Windows\Defrag\ScheduledDefrag]
+expect_error: does not match pattern

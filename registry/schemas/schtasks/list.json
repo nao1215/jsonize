@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/schtasks/list.json",
+  "title": "schtasks/list",
+  "description": "schtasks /query /fo list, a block of labelled lines per scheduled task",
+  "x-jsonize": {
+    "definition": "schtasks/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "hostname": {
+        "type": "string"
+      },
+      "task_name": {
+        "type": "string"
+      },
+      "next_run_time": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "Disabled",
+          "Queued",
+          "Ready",
+          "Running",
+          "Unknown"
+        ]
+      },
+      "logon_mode": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "hostname",
+      "task_name",
+      "next_run_time",
+      "status",
+      "logon_mode"
+    ]
+  }
+}
