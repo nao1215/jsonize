@@ -1,0 +1,53 @@
+# `mc ls` (the MinIO client) prints one line per entry: the modification
+# time in brackets with the zone mc's local time is in, the size as mc
+# rounds it to a binary unit and right-aligns in seven columns (`2.3KiB`,
+# `    0B`), the storage class of an object, and the name. A directory or
+# a prefix ends in `/` and has no storage class, and neither does an entry
+# of a local path, which mc lists the same way. For a prefix mc prints
+# the time of the listing, not a time of the prefix. The name is the rest
+# of the line and may hold spaces.
+#
+# The time is converted when its zone says its own offset (`UTC`), and
+# otherwise, as with `JST`, stays the string mc printed until
+# `--assume-zone` gives the abbreviation an offset. A zone with no
+# abbreviation is printed as its offset in hours (`-03`), which is not a
+# form the layout reads, so such a time stays a string too. The size is
+# rounded, so it stays a string.
+#
+# The storage class is one word and nothing marks where it ends and the
+# name begins, so it is read only as one of the classes S3 defines; a
+# local file whose name starts with such a word and a space is read with
+# that word as its class, and an object moved to a MinIO tier with a
+# name of its own is read with the tier's name in front of its key.
+#
+# `--versions` puts a version id, a version number and PUT or DEL in
+# front of the name, and `--summarize` adds a blank line and two totals;
+# neither is this format, and the signature refuses the totals. `mc` is
+# also the name of Midnight Commander, and the signature is what keeps
+# `jz run mc` from reading anything but this listing; distributions that
+# package the client under the name `mcli` are reached by the alias.
+format: 1
+command: mc
+variant: ls
+description: mc ls (MinIO client), one entry per line
+aliases:
+  - name: mcli
+metadata:
+  tags: [files, s3, object-storage]
+  compatible: [MinIO Client]
+  references:
+    - https://min.io/docs/minio/linux/reference/minio-mc/mc-ls.html
+detect:
+  args:
+    all: ["ls"]
+    none: ["--versions", "--summarize", "--json"]
+  signature:
+    all:
+      - '\A(?:^\[\d{4}-\d\d-\d\d \d\d:\d\d:\d\d (?:[A-Z]{2,5}|[+-]\d\d(?:\d\d)?)\] *(?:\d+B|\d+(?:\.\d)?[KMGTPE]iB) [^\n]+$\n?)+\z'
+parse:
+  type: regex
+  pattern: '^\[(?P<modified>\d{4}-\d\d-\d\d \d\d:\d\d:\d\d (?:[A-Z]{2,5}|[+-]\d\d(?:\d\d)?))\] *(?P<size>\d+B|\d+(?:\.\d)?[KMGTPE]iB)(?: (?P<storage_class>STANDARD|REDUCED_REDUNDANCY|STANDARD_IA|ONEZONE_IA|INTELLIGENT_TIERING|GLACIER|GLACIER_IR|DEEP_ARCHIVE|OUTPOSTS|SNOW|EXPRESS_ONEZONE))? (?P<name>.+)$'
+fields:
+  modified: {type: time, layout: "2006-01-02 15:04:05 MST", required: true}
+  size: {required: true}
+  name: {required: true}

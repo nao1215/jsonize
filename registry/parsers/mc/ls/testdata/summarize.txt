@@ -1,0 +1,9 @@
+[2026-09-15 11:46:45 JST] 2.3KiB STANDARD a.txt
+[2026-09-15 11:46:45 JST] 4.8MiB STANDARD big.bin
+[2026-09-15 11:46:45 JST]     0B STANDARD empty
+[2026-09-15 11:46:45 JST] 2.3KiB STANDARD link-to-a
+[2026-09-15 11:46:45 JST]     6B STANDARD my notes.md
+[2026-09-15 11:59:46 JST]     0B logs/
+
+Total Size: 4.8 MiB
+Total Objects: 6

@@ -1,0 +1,4 @@
+source: captured from the same mc on Linux with LC_ALL=C and TZ=America/Sao_Paulo, listing the same bucket
+description: A zone with no abbreviation is printed as -03 and the time stays a string.
+os: linux
+args: ["ls", "a8/photos"]
