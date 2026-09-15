@@ -1,0 +1,12 @@
+description: >-
+  net user run for real on Windows Server 2025: four accounts, three on
+  the first line and one on the second, each padded to its column.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "net user 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  lines around the listing as the command wrote them). The host name was
+  replaced with examplehost01 and the runner's account name
+  (runneradmin) with user, padded with spaces to the column's width.
+os: windows
+args: [user]
