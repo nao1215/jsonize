@@ -1,0 +1,5 @@
+description: the uname -a line joined after the three labels is refused rather than read
+source: the definition's own fixture followed by the uname/darwin fixture, joined for this case
+os: darwin
+args: []
+expect_error: does not describe this input
