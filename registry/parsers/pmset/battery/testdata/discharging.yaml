@@ -1,0 +1,4 @@
+description: a laptop on battery, with the internal battery's charge, state and time left
+source: written by hand in the layout pmset -g batt prints on a MacBook running on battery, with the tab it puts after the id; the runner that captured the other case has no battery
+os: darwin
+args: [-g, batt]
