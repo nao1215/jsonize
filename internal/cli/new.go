@@ -13,7 +13,6 @@ import (
 
 const modeNew = "new"
 
-//nolint:dupword // the usage block repeats "jz new" on purpose
 const newUsage = `Usage: jz new [options] [KEY=VALUE | KEY:=JSON | KEY=@FILE | KEY:=@FILE]...
        jz new --array [options] [VALUE | :=JSON | =@FILE | :=@FILE]...
 

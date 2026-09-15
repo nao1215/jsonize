@@ -74,6 +74,7 @@ type Sources struct {
 }
 
 type part struct {
+	arg    string // the argument as it was given
 	key    string
 	append bool
 	json   bool
@@ -94,7 +95,7 @@ func split(arg string) (part, error) {
 		}
 		return part{}, &UsageError{Arg: arg, Msg: msg}
 	}
-	p := part{key: arg[:i], value: arg[i+1:]}
+	p := part{arg: arg, key: arg[:i], value: arg[i+1:]}
 	if strings.HasSuffix(p.key, ":") {
 		p.json, p.key = true, strings.TrimSuffix(p.key, ":")
 	}
@@ -119,7 +120,7 @@ func splitElement(arg string) (part, error) {
 	if !utf8.ValidString(arg) {
 		return part{}, &UsageError{Arg: arg, Msg: "the argument is not valid UTF-8"}
 	}
-	p := part{value: arg}
+	p := part{arg: arg, value: arg}
 	switch {
 	case strings.HasPrefix(arg, ":="):
 		p.json, p.value = true, arg[2:]
@@ -143,16 +144,16 @@ type builder struct {
 
 // oneStdin refuses a second argument that reads standard input before
 // anything is read: the first would take all of it.
-func oneStdin(args []string, parts []part) error {
+func oneStdin(parts []part) error {
 	first := ""
-	for i, p := range parts {
+	for _, p := range parts {
 		if !p.file || p.value != "-" {
 			continue
 		}
 		if first != "" {
-			return &UsageError{Arg: args[i], Msg: fmt.Sprintf("standard input is already read by %q", first)}
+			return &UsageError{Arg: p.arg, Msg: fmt.Sprintf("standard input is already read by %q", first)}
 		}
-		first = args[i]
+		first = p.arg
 	}
 	return nil
 }
@@ -179,12 +180,12 @@ func Object(args []string, src Sources) (*jsonutil.Object, error) {
 		kinds[p.key] = p.append
 		parts = append(parts, p)
 	}
-	if err := oneStdin(args, parts); err != nil {
+	if err := oneStdin(parts); err != nil {
 		return nil, err
 	}
 	obj := jsonutil.NewObject()
-	for i, p := range parts {
-		v, err := b.value(args[i], p)
+	for _, p := range parts {
+		v, err := b.value(p.arg, p)
 		if err != nil {
 			return nil, err
 		}
@@ -213,12 +214,12 @@ func Array(args []string, src Sources) ([]any, error) {
 		}
 		parts = append(parts, p)
 	}
-	if err := oneStdin(args, parts); err != nil {
+	if err := oneStdin(parts); err != nil {
 		return nil, err
 	}
 	out := make([]any, 0, len(parts))
-	for i, p := range parts {
-		v, err := b.value(args[i], p)
+	for _, p := range parts {
+		v, err := b.value(p.arg, p)
 		if err != nil {
 			return nil, err
 		}
