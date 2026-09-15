@@ -58,6 +58,13 @@ project follows [Semantic Versioning](https://semver.org/).
   `brew outdated --verbose`, `memory_pressure`, `top -l`, `otool -L`,
   `lipo -info`, `csrutil status`, `spctl --status`, `fdesetup status`
   and `shasum -a 256`, from output captured on a macOS 26 runner.
+- Definitions for Windows: `tasklist` in its table, `/v`, `/svc`, `/m`,
+  `/fo list` and `/fo csv` forms, `netstat -an`, `-ano` and `-e`,
+  `route print`, `arp -a`, `getmac /v`, `driverquery` and `driverquery
+  /v`, `sc query` and `sc queryex`, `schtasks /query` as a table and as
+  a list, `net user`, `net localgroup`, `net share` and `net start`,
+  `whoami /groups` and `/priv`, `chcp` and `ver`, from output captured on
+  Windows Server 2022 and 2025 runners.
 - Definitions for compiler-style diagnostics: `go vet` (and `go build`),
   `staticcheck`, `golangci-lint`, `actionlint` and `shellcheck -f gcc`;
   and for `mc ls` (the MinIO client) and `task --list`.
