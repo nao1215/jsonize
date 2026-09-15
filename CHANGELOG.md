@@ -37,6 +37,15 @@ project follows [Semantic Versioning](https://semver.org/).
   all-namespaces forms, `kubectl config get-contexts`,
   `kubectl api-resources`, `kubectl version`, `rclone lsl`, `lsd` and
   `version`, `redis-cli info` and `client list`.
+- A definition for `systemd-cgls`: the control groups under the group,
+  unit or directory it starts from, the processes in each with their
+  ids, whether a group is delegated, and the group ids and extended
+  attributes systemd 252 prints to root. In a `tree`, a form of
+  indentation that ends in a branch character (`|-`, `└─`) ends the
+  indentation, so the blanks after it that pad a right-aligned number
+  belong to the node.
+- Definitions for `cargo tree`, `uv tree`, `npm ls --all`, `busctl tree`
+  (one service or several), `docker buildx ls` and `xinput list`.
 - `md5sum --tag`, `sha1sum --tag`, `sha256sum --tag`, `b2sum --tag` and
   the rest of the GNU and uutils family are read by the definition of
   the BSD digest line, which they print, together with FreeBSD and macOS

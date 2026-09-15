@@ -40,9 +40,9 @@ the same reading with settings of your own.
 | `blkid` | [`export`](../schemas/blkid/export.json), [`linux`](../schemas/blkid/linux.json) |
 | `bluetoothctl` | [`show`](../schemas/bluetoothctl/show.json) |
 | `bridge` | [`fdb`](../schemas/bridge/fdb.json), [`link`](../schemas/bridge/link.json) |
-| `busctl` | [`list`](../schemas/busctl/list.json) |
+| `busctl` | [`list`](../schemas/busctl/list.json), [`tree`](../schemas/busctl/tree.json), [`tree-services`](../schemas/busctl/tree-services.json) |
 | `capsh` | [`print`](../schemas/capsh/print.json) |
-| `cargo` | [`command-list`](../schemas/cargo/command-list.json), [`install-list`](../schemas/cargo/install-list.json), [`search`](../schemas/cargo/search.json) |
+| `cargo` | [`command-list`](../schemas/cargo/command-list.json), [`install-list`](../schemas/cargo/install-list.json), [`search`](../schemas/cargo/search.json), [`tree`](../schemas/cargo/tree.json) |
 | `chage` | [`linux`](../schemas/chage/linux.json) |
 | `chrt` | [`policy`](../schemas/chrt/policy.json) |
 | `cksum` | [`posix`](../schemas/cksum/posix.json) |
@@ -52,7 +52,7 @@ the same reading with settings of your own.
 | `debconf-show` | [`linux`](../schemas/debconf-show/linux.json) |
 | `df` | [`bsd`](../schemas/df/bsd.json), [`bsd-human`](../schemas/df/bsd-human.json), [`busybox-human`](../schemas/df/busybox-human.json), [`freebsd`](../schemas/df/freebsd.json), [`freebsd-blocks`](../schemas/df/freebsd-blocks.json), [`freebsd-blocks-type`](../schemas/df/freebsd-blocks-type.json), [`freebsd-human`](../schemas/df/freebsd-human.json), [`freebsd-inodes`](../schemas/df/freebsd-inodes.json), [`freebsd-type`](../schemas/df/freebsd-type.json), [`freebsd-type-human`](../schemas/df/freebsd-type-human.json), [`gnu`](../schemas/df/gnu.json), [`gnu-blocks`](../schemas/df/gnu-blocks.json), [`gnu-blocks-type`](../schemas/df/gnu-blocks-type.json), [`gnu-human`](../schemas/df/gnu-human.json), [`gnu-inodes`](../schemas/df/gnu-inodes.json), [`gnu-inodes-human`](../schemas/df/gnu-inodes-human.json), [`gnu-type`](../schemas/df/gnu-type.json), [`gnu-type-human`](../schemas/df/gnu-type-human.json), [`portable`](../schemas/df/portable.json), [`portable-type`](../schemas/df/portable-type.json) |
 | `dig` | [`answers`](../schemas/dig/answers.json), [`axfr`](../schemas/dig/axfr.json), [`bind`](../schemas/dig/bind.json) |
-| `docker` | [`compose-ls`](../schemas/docker/compose-ls.json), [`compose-ps`](../schemas/docker/compose-ps.json), [`context-ls`](../schemas/docker/context-ls.json), [`images-disk-usage`](../schemas/docker/images-disk-usage.json), [`images-repo-tag`](../schemas/docker/images-repo-tag.json), [`network-ls`](../schemas/docker/network-ls.json), [`ps`](../schemas/docker/ps.json), [`ps-size`](../schemas/docker/ps-size.json), [`stats`](../schemas/docker/stats.json), [`system-df`](../schemas/docker/system-df.json), [`system-df-verbose`](../schemas/docker/system-df-verbose.json), [`version`](../schemas/docker/version.json), [`volume-ls`](../schemas/docker/volume-ls.json) |
+| `docker` | [`buildx-ls`](../schemas/docker/buildx-ls.json), [`compose-ls`](../schemas/docker/compose-ls.json), [`compose-ps`](../schemas/docker/compose-ps.json), [`context-ls`](../schemas/docker/context-ls.json), [`images-disk-usage`](../schemas/docker/images-disk-usage.json), [`images-repo-tag`](../schemas/docker/images-repo-tag.json), [`network-ls`](../schemas/docker/network-ls.json), [`ps`](../schemas/docker/ps.json), [`ps-size`](../schemas/docker/ps-size.json), [`stats`](../schemas/docker/stats.json), [`system-df`](../schemas/docker/system-df.json), [`system-df-verbose`](../schemas/docker/system-df-verbose.json), [`version`](../schemas/docker/version.json), [`volume-ls`](../schemas/docker/volume-ls.json) |
 | `dpkg` | [`list`](../schemas/dpkg/list.json), [`selections`](../schemas/dpkg/selections.json), [`status`](../schemas/dpkg/status.json) |
 | `dpkg-query` | [`list`](../schemas/dpkg-query/list.json) |
 | `du` | [`gnu-human`](../schemas/du/gnu-human.json), [`posix`](../schemas/du/posix.json) |
@@ -132,7 +132,7 @@ the same reading with settings of your own.
 | `networkctl` | [`list`](../schemas/networkctl/list.json) |
 | `nm` | [`dynamic`](../schemas/nm/dynamic.json) |
 | `nmcli` | [`connection`](../schemas/nmcli/connection.json), [`device`](../schemas/nmcli/device.json), [`device-show`](../schemas/nmcli/device-show.json), [`general`](../schemas/nmcli/general.json), [`radio`](../schemas/nmcli/radio.json), [`wifi`](../schemas/nmcli/wifi.json) |
-| `npm` | [`ls`](../schemas/npm/ls.json), [`outdated`](../schemas/npm/outdated.json) |
+| `npm` | [`ls`](../schemas/npm/ls.json), [`ls-all`](../schemas/npm/ls-all.json), [`outdated`](../schemas/npm/outdated.json) |
 | `nslookup` | [`query`](../schemas/nslookup/query.json) |
 | `nstat` | [`counters`](../schemas/nstat/counters.json) |
 | `numactl` | [`hardware`](../schemas/numactl/hardware.json) |
@@ -184,6 +184,7 @@ the same reading with settings of your own.
 | `syslog` | [`rfc3164`](../schemas/syslog/rfc3164.json), [`rfc5424`](../schemas/syslog/rfc5424.json) |
 | `systemctl` | [`automounts`](../schemas/systemctl/automounts.json), [`dependencies`](../schemas/systemctl/dependencies.json), [`jobs`](../schemas/systemctl/jobs.json), [`machines`](../schemas/systemctl/machines.json), [`paths`](../schemas/systemctl/paths.json), [`show`](../schemas/systemctl/show.json), [`show-properties`](../schemas/systemctl/show-properties.json), [`sockets`](../schemas/systemctl/sockets.json), [`status`](../schemas/systemctl/status.json), [`timers`](../schemas/systemctl/timers.json), [`unit-files`](../schemas/systemctl/unit-files.json), [`units`](../schemas/systemctl/units.json), [`units-jobs`](../schemas/systemctl/units-jobs.json), [`units-jobs-plain`](../schemas/systemctl/units-jobs-plain.json) |
 | `systemd-analyze` | [`blame`](../schemas/systemd-analyze/blame.json), [`critical-chain`](../schemas/systemd-analyze/critical-chain.json), [`security`](../schemas/systemd-analyze/security.json), [`time`](../schemas/systemd-analyze/time.json) |
+| `systemd-cgls` | [`tree`](../schemas/systemd-cgls/tree.json) |
 | `systemd-cgtop` | [`batch`](../schemas/systemd-cgtop/batch.json) |
 | `systemd-id128` | [`show`](../schemas/systemd-id128/show.json) |
 | `systemd-inhibit` | [`list`](../schemas/systemd-inhibit/list.json) |
@@ -205,11 +206,12 @@ the same reading with settings of your own.
 | `upower` | [`device`](../schemas/upower/device.json), [`dump`](../schemas/upower/dump.json), [`enumerate`](../schemas/upower/enumerate.json) |
 | `uptime` | [`bsd`](../schemas/uptime/bsd.json), [`freebsd`](../schemas/uptime/freebsd.json), [`linux`](../schemas/uptime/linux.json), [`pretty`](../schemas/uptime/pretty.json), [`since`](../schemas/uptime/since.json) |
 | `uuidparse` | [`linux`](../schemas/uuidparse/linux.json), [`raw`](../schemas/uuidparse/raw.json) |
-| `uv` | [`pip-show`](../schemas/uv/pip-show.json), [`python-list`](../schemas/uv/python-list.json), [`tool-list`](../schemas/uv/tool-list.json) |
+| `uv` | [`pip-show`](../schemas/uv/pip-show.json), [`python-list`](../schemas/uv/python-list.json), [`tool-list`](../schemas/uv/tool-list.json), [`tree`](../schemas/uv/tree.json) |
 | `vmstat` | [`freebsd-interrupts`](../schemas/vmstat/freebsd-interrupts.json), [`linux`](../schemas/vmstat/linux.json), [`linux-active`](../schemas/vmstat/linux-active.json), [`linux-disk`](../schemas/vmstat/linux-disk.json), [`linux-disk-summary`](../schemas/vmstat/linux-disk-summary.json), [`linux-stats`](../schemas/vmstat/linux-stats.json) |
 | `w` | [`bsd`](../schemas/w/bsd.json), [`freebsd`](../schemas/w/freebsd.json), [`linux`](../schemas/w/linux.json), [`linux-short`](../schemas/w/linux-short.json) |
 | `wc` | [`posix`](../schemas/wc/posix.json) |
 | `who` | [`iso`](../schemas/who/iso.json), [`posix`](../schemas/who/posix.json) |
+| `xinput` | [`list`](../schemas/xinput/list.json) |
 | `xrandr` | [`linux`](../schemas/xrandr/linux.json), [`listmonitors`](../schemas/xrandr/listmonitors.json) |
 | `xxd` | [`default`](../schemas/xxd/default.json) |
 | `xz` | [`list`](../schemas/xz/list.json), [`list-robot`](../schemas/xz/list-robot.json) |
