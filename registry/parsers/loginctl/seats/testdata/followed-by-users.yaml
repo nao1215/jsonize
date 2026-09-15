@@ -1,5 +1,5 @@
 source: the systemd-259 fixture followed by loginctl list-users --no-legend, captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C; user names replaced
 description: >-
-  Two commands run one after the other. logind names every seat with the prefix seat, and a user row is not one.
+  Two commands run one after the other. The seat count closes the listing, so the user row after it is unread.
 os: linux
-expect_error: 'line 5: field "seat": value "1000 alice no     active" does not have the shape'
+expect_error: 'line 5: a line no part of the definition read: "1000 alice no     active"'

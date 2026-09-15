@@ -104,6 +104,13 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `systemctl list-sockets`, `list-paths`, `list-timers`,
+  `list-automounts`, `list-machines`, `list-unit-files`, `list-jobs` and
+  `list-units`, `networkctl list`, `loginctl list-sessions`,
+  `list-seats` and `list-users`, and `systemd-inhibit --list` read their
+  count line ("29 sockets listed.") as the end of the listing. Another
+  command's output after it is refused as unread (exit 3), where rows of
+  it that fit the columns were read as more entries.
 - `jz run sysctl` and `jz run lsof` on macOS found no definition: both are
   the programs FreeBSD and Linux have, printing the same lines, and their
   definitions now apply there. `ls -le` and `ls -lO` on macOS, which add

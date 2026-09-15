@@ -23,9 +23,13 @@ detect:
       # can leave the host out, and that output is refused.
       - '^[ \t]*(?:\S[ \t]+)?\S+ \(host\)[ \t]+[a-z][a-z-]*[ \t]+[0-9]+[ \t]+[0-9]+[ \t]*$'
 input:
+  # The count of what was listed closes the output and is read as its
+  # end, so a line after it that no rule names is unread rather than
+  # taken for one more row.
+  select:
+    until: '^[0-9]+ machines? listed\.$'
   ignore:
     - '\A[ \t]*NAME[ \t]+STATE[ \t]+FAILED[ \t]+JOBS[ \t]*$'
-    - '^[0-9]+ machines? listed\.$'
 parse:
   type: regex
   # The state is a lower-case word, which is what keeps a line of prose

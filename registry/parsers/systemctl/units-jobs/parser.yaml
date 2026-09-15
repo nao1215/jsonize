@@ -25,9 +25,13 @@ detect:
     all:
       - '\A[ \t]+UNIT\s+LOAD\s+ACTIVE\s+SUB\s+JOB\s+DESCRIPTION\s*$'
 input:
+  # The count of what was listed closes the output and is read as its
+  # end, so a line after it that no rule names is unread rather than
+  # taken for one more row.
+  select:
+    until: '^\d+ loaded units listed\.(?: Pass --all to see loaded but inactive units, too\.)?$'
   ignore:
     - '^\s*$'
-    - '^\d+ loaded units listed'
     - '^To show all installed unit files'
     - '^Legend:'
     # "->" in the C locale, an arrow character in a UTF-8 one.
