@@ -1,0 +1,131 @@
+[
+  {
+    "label": "Software",
+    "value": null,
+    "children": [
+      {
+        "label": "System Software Overview",
+        "value": null,
+        "children": [
+          {
+            "label": "System Version",
+            "value": "macOS 26.6.2 (25G83)",
+            "children": []
+          },
+          {
+            "label": "Kernel Version",
+            "value": "Darwin 25.6.0",
+            "children": []
+          },
+          {
+            "label": "Boot Volume",
+            "value": "Macintosh HD",
+            "children": []
+          },
+          {
+            "label": "Boot Mode",
+            "value": "Normal",
+            "children": []
+          },
+          {
+            "label": "Computer Name",
+            "value": "example-mac-00000000-0000-4000-8000-000000000000-020000000003",
+            "children": []
+          },
+          {
+            "label": "User Name",
+            "value": "Anka (user)",
+            "children": []
+          },
+          {
+            "label": "Secure Virtual Memory",
+            "value": "Enabled",
+            "children": []
+          },
+          {
+            "label": "System Integrity Protection",
+            "value": "Disabled",
+            "children": []
+          },
+          {
+            "label": "Time since boot",
+            "value": "4 minutes, 46 seconds",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "Hardware",
+    "value": null,
+    "children": [
+      {
+        "label": "Hardware Overview",
+        "value": null,
+        "children": [
+          {
+            "label": "Model Name",
+            "value": "Apple Virtual Machine 1",
+            "children": []
+          },
+          {
+            "label": "Model Identifier",
+            "value": "VirtualMac2,1",
+            "children": []
+          },
+          {
+            "label": "Model Number",
+            "value": "VM0001LL/A",
+            "children": []
+          },
+          {
+            "label": "Chip",
+            "value": "Apple M1 (Virtual)",
+            "children": []
+          },
+          {
+            "label": "Total Number of Cores",
+            "value": "3",
+            "children": []
+          },
+          {
+            "label": "Memory",
+            "value": "7 GB",
+            "children": []
+          },
+          {
+            "label": "System Firmware Version",
+            "value": "18000.161.10",
+            "children": []
+          },
+          {
+            "label": "OS Loader Version",
+            "value": "18000.161.10",
+            "children": []
+          },
+          {
+            "label": "Serial Number (system)",
+            "value": "XXXXXXXXXX",
+            "children": []
+          },
+          {
+            "label": "Hardware UUID",
+            "value": "00000000-0000-0000-0000-000000000000",
+            "children": []
+          },
+          {
+            "label": "Provisioning UDID",
+            "value": "0000000000000000000000000000000000000000",
+            "children": []
+          },
+          {
+            "label": "Activation Lock Status",
+            "value": "Disabled",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]

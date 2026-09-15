@@ -1,0 +1,45 @@
+# system_profiler SPSoftwareDataType and SPHardwareDataType print a
+# section per data type: the section's name and a colon at the left
+# edge, the overview's name indented by four spaces, and its labelled
+# values indented by six, with blank lines between the levels. The result
+# is that tree: the section is a root node, the overview its child, and
+# every "Label: value" line a child of the overview. A heading has a label
+# and a null value.
+#
+# Only the first level is four spaces and every level after it two, which
+# the tree indentation below states as the two forms tried in that order.
+# That holds for these two data types, which go no deeper than the
+# values; the data types that nest further (SPUSBDataType,
+# SPNetworkDataType) are not read, and the root expression names the two
+# sections so their output is refused. Values stay the text printed: the
+# memory is rounded ("7 GB") and the rest are names and versions.
+#
+# -json and -xml print other formats.
+format: 1
+command: system_profiler
+variant: data-type
+description: system_profiler SPSoftwareDataType and SPHardwareDataType overviews on macOS
+metadata:
+  tags: [darwin, system, hardware]
+  compatible: [macOS system_profiler]
+detect:
+  os: [darwin]
+  args:
+    any: ["SPSoftwareDataType", "SPHardwareDataType"]
+    none: ["-json", "-xml"]
+  signature:
+    all:
+      # A section heading, its overview, and then only headings, labelled
+      # values and blank lines to the end of the window.
+      - '\A(?:Software|Hardware):[ \t]*\n\n    (?:System Software|Hardware) Overview:[ \t]*\n\n      [A-Z][^:\n]*: \S[^\n]*(?:\n(?:(?:Software|Hardware):|    (?:System Software|Hardware) Overview:|      [A-Z][^:\n]*: \S[^\n]*|)[ \t]*)*\z'
+parse:
+  type: tree
+  indent: ["    ", "  "]
+  root: '^(?:Software|Hardware):[ \t]*$'
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^(?P<label>[A-Z][^:\n]*?):(?: (?P<value>[^\n]*?))?[ \t]*$'
+    fields:
+      label: {required: true}

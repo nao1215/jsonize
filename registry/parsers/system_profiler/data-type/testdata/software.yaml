@@ -1,0 +1,3 @@
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C system_profiler SPSoftwareDataType; the computer name replaced by example-mac-... of the same length, and the user's short name runner by user
+os: darwin
+args: [SPSoftwareDataType]

@@ -1,0 +1,5 @@
+description: the uptime line joined after the hardware section is refused rather than read as a section
+source: the both-types fixture followed by the uptime/bsd fixture, joined for this case
+os: darwin
+args: [SPSoftwareDataType, SPHardwareDataType]
+expect_error: does not match root

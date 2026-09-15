@@ -1,0 +1,4 @@
+description: two data types named on one command line print their sections one after the other, which are two root nodes
+source: the software and hardware fixtures joined in the order system_profiler SPSoftwareDataType SPHardwareDataType prints them; each captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C, with the replacements their own fixtures state
+os: darwin
+args: [SPSoftwareDataType, SPHardwareDataType]

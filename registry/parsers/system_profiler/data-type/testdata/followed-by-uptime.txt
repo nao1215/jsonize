@@ -1,0 +1,32 @@
+Software:
+
+    System Software Overview:
+
+      System Version: macOS 26.6.2 (25G83)
+      Kernel Version: Darwin 25.6.0
+      Boot Volume: Macintosh HD
+      Boot Mode: Normal
+      Computer Name: example-mac-00000000-0000-4000-8000-000000000000-020000000003
+      User Name: Anka (user)
+      Secure Virtual Memory: Enabled
+      System Integrity Protection: Disabled
+      Time since boot: 4 minutes, 46 seconds
+
+Hardware:
+
+    Hardware Overview:
+
+      Model Name: Apple Virtual Machine 1
+      Model Identifier: VirtualMac2,1
+      Model Number: VM0001LL/A
+      Chip: Apple M1 (Virtual)
+      Total Number of Cores: 3
+      Memory: 7 GB
+      System Firmware Version: 18000.161.10
+      OS Loader Version: 18000.161.10
+      Serial Number (system): XXXXXXXXXX
+      Hardware UUID: 00000000-0000-0000-0000-000000000000
+      Provisioning UDID: 0000000000000000000000000000000000000000
+      Activation Lock Status: Disabled
+
+14:02  up 3 days,  4:11, 2 users, load averages: 1.52 1.68 1.71
