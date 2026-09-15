@@ -16,6 +16,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/nao1215/jsonize/internal/datafile"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/registry"
@@ -148,11 +149,12 @@ func lookup(name string) *command {
 }
 
 func (a *app) usage(w io.Writer) {
-	fmt.Fprintln(w, "jsonize - Turn command output into JSON.")
+	fmt.Fprintln(w, "jsonize - Turn command output and data files into JSON.")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Usage:")
 	fmt.Fprintln(w, "  COMMAND | jz [options]")
 	fmt.Fprintln(w, "  jz [options] < FILE")
+	fmt.Fprintln(w, "  jz [options] --file DATA.csv|.tsv|.ltsv|.jsonl|.json|.yaml")
 	fmt.Fprintln(w, "  jz run [options] COMMAND [args...]")
 	fmt.Fprintln(w, "  jz list [COMMAND [VARIANT]]")
 	fmt.Fprintln(w, "  jz test [DIR...]")
@@ -173,6 +175,8 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "  vmstat 1 | jz --stream")
 	fmt.Fprintln(w, "  df -h | jz --yaml")
 	fmt.Fprintln(w, "  jz --file captured.txt")
+	fmt.Fprintln(w, "  jz --file users.csv")
+	fmt.Fprintln(w, "  cat events.log | jz --format ltsv --stream")
 	fmt.Fprintln(w, "  df -h | jz --parser df")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Exit codes: 0 ok, 1 error, 2 usage, 3 parse failure, 4 unidentified or")
@@ -244,6 +248,10 @@ func (a *app) exitFor(err error) int {
 	var vp *selector.VariantWithoutParserError
 	if errors.As(err, &vp) {
 		return ExitUsage
+	}
+	var ce *datafile.CompressionError
+	if errors.As(err, &ce) {
+		return ExitParse
 	}
 	var (
 		le *registry.LoadError

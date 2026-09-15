@@ -56,11 +56,13 @@ func (m *explainMode) IsBoolFlag() bool { return true }
 
 // Where the parser the selection was scoped to came from.
 const (
-	fromRegistry = ""         // nothing named it: every definition in the registry
-	fromFlag     = "--parser" // the caller named it
-	fromCommand  = "command"  // jz run took it from the name of the command it ran
-	fromPath     = "path"     // the file's directory named it
-	fromDefine   = "--define" // the definition was given on the command line
+	fromRegistry  = ""          // nothing named it: every definition in the registry
+	fromFlag      = "--parser"  // the caller named it
+	fromCommand   = "command"   // jz run took it from the name of the command it ran
+	fromPath      = "path"      // the file's directory named it
+	fromDefine    = "--define"  // the definition was given on the command line
+	fromFormat    = "--format"  // the caller named a data file format
+	fromExtension = "extension" // the extension of the file named its format
 )
 
 // explanation collects what --explain reports about one conversion: how
@@ -85,6 +87,11 @@ type explanation struct {
 	exit     int
 	account  *engine.Account
 	defined  string // the id of a --define definition
+	// format is a data file format read by its own reader rather than a
+	// definition, and records how many values its reading produced.
+	format  string
+	records int
+	counted bool
 
 	// A command that printed nothing leaves no text to choose by; the
 	// answer rests on the variants its name and arguments leave.
@@ -110,6 +117,25 @@ func (e *explanation) scope(ctx selector.Context, from string) {
 		return
 	}
 	e.ctx, e.from = ctx, from
+}
+
+// dataFile records that the input is read as a data file format, named
+// by --format or by the extension of path.
+func (e *explanation) dataFile(format, from, path string) {
+	if e == nil {
+		return
+	}
+	e.format, e.from = format, from
+	if from == fromExtension {
+		e.path = path
+	}
+}
+
+// readRecords records how many values a data file reading produced.
+func (e *explanation) readRecords(n int) {
+	if e != nil {
+		e.records, e.counted = n, true
+	}
 }
 
 // dropPath records that the definition a file path named did not fit, so
@@ -171,6 +197,8 @@ func (e *explanation) outcome() string {
 	switch {
 	case e.defined != "":
 		return "defined"
+	case e.format != "":
+		return "format"
 	case e.selected != nil:
 		return "chosen"
 	case e.empty:
@@ -276,6 +304,12 @@ func (e *explanation) lines() []string {
 	switch e.outcome() {
 	case "defined":
 		add("defined %s: the definition was given with --define, so nothing was chosen", e.defined)
+	case "format":
+		if e.from == fromExtension {
+			add("read as %s: the format the extension of %s names, so nothing was chosen", e.format, e.path)
+		} else {
+			add("read as %s: the format was given with --format, so nothing was chosen", e.format)
+		}
 	case "chosen":
 		add("chose %s from %s", e.selected.Entry.Def.ID(), e.selected.Entry.Source)
 	case "empty":
@@ -326,6 +360,9 @@ func (e *explanation) lines() []string {
 	if notConsidered > 0 {
 		add("not considered: %s only used when named", count(notConsidered, "definition", "definitions"))
 	}
+	if e.counted {
+		add("read: %s", count(e.records, "value", "values"))
+	}
 	if acct := e.account; acct != nil {
 		add("read: %s", describeAccount(acct))
 	}
@@ -355,6 +392,14 @@ func (e *explanation) scopeLines() []string {
 		out = append(out, fmt.Sprintf("scope: the variants of %s, from the name of the command jz ran", c.Parser))
 	case fromPath:
 		out = append(out, fmt.Sprintf("scope: %s/%s, from the file path %s", c.Parser, c.Variant, e.path))
+	case fromFormat:
+		if e.format == "" {
+			out = append(out, fmt.Sprintf("scope: %s/%s, the reading of the format given with --format", c.Parser, c.Variant))
+		}
+	case fromExtension:
+		if e.format == "" {
+			out = append(out, fmt.Sprintf("scope: %s/%s, the reading of the format the extension of %s names", c.Parser, c.Variant, e.path))
+		}
 	}
 	if e.from == fromCommand || (e.from == fromFlag && c.Args != nil) {
 		narrowed := "the system it ran on (" + c.OS + ")"
@@ -428,6 +473,14 @@ func (e *explanation) document() *jsonutil.Object {
 		c.Set("matched", stringsToAny(e.selected.Matched))
 		c.Set("settled_by", nullable(e.selected.Settled))
 		c.Set("outranked", rejectionList(e.selected.Outranked))
+		chosen = c
+	case e.format != "":
+		c := jsonutil.NewObject()
+		c.Set("definition", e.format)
+		c.Set("registry", e.from)
+		c.Set("matched", []any{})
+		c.Set("settled_by", nil)
+		c.Set("outranked", []any{})
 		chosen = c
 	case e.defined != "":
 		c := jsonutil.NewObject()

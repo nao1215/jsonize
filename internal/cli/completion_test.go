@@ -33,7 +33,7 @@ func TestComplete(t *testing.T) {
 	}{
 		{[]string{""}, completeWords, []string{"run", "list", "test", "completion", "version", "help"}, []string{completeCommand}},
 		{[]string{"l"}, completeWords, []string{"list"}, []string{"run"}},
-		{[]string{"-"}, completeWords, []string{"--parser", "--variant", "--file", "-f", "--yaml", "--stream", "--columns", "--explain", "--explain=json", "--help", "--version"}, []string{"--env", "--timeout"}},
+		{[]string{"-"}, completeWords, []string{"--parser", "--variant", "--file", "-f", "--format", "--yaml", "--stream", "--columns", "--explain", "--explain=json", "--help", "--version"}, []string{"--env", "--timeout"}},
 		{[]string{"--parser", "d"}, completeWords, []string{"df", "dig", "du"}, []string{"ls", "gdf", "--parser=df"}},
 		{[]string{"--parser=d"}, completeWords, []string{"--parser=df", "--parser=dig"}, []string{"df"}},
 		{[]string{"--parser", "=", "cu"}, completeWords, []string{"curl"}, []string{"--parser=curl"}},
@@ -43,6 +43,8 @@ func TestComplete(t *testing.T) {
 		{[]string{"-f", ""}, completeFiles, nil, nil},
 		{[]string{"--file=a"}, completeFiles, nil, nil},
 		{[]string{"--explain="}, completeWords, []string{"--explain=json"}, nil},
+		{[]string{"--format", "j"}, completeWords, []string{"jsonl", "json"}, []string{"csv", "yaml"}},
+		{[]string{"--format="}, completeWords, []string{"--format=csv", "--format=yaml"}, nil},
 		{[]string{"--define", ""}, completeNone, nil, nil},
 		{[]string{"--yaml", "--pa"}, completeWords, []string{"--parser"}, nil},
 		{[]string{"run", ""}, completeWords, []string{"df", "ls", "ping", "ping6", "curl"}, []string{"run"}},
