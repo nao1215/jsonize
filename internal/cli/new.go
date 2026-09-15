@@ -9,6 +9,7 @@ import (
 	"github.com/nao1215/jsonize/internal/datafile"
 	"github.com/nao1215/jsonize/internal/jsonbuild"
 	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
 const modeNew = "new"
@@ -28,6 +29,7 @@ is guessed: = makes a string and := reads JSON.
   jz new --string "message=$MESSAGE"            # the text as it is, even when it starts with @
   jz new --text-file body=NOTES.md              # a file's text, every line ending kept
   jz new --path /metadata/name=api --path /spec/replicas:=3
+  vmstat 1 | jz --stream | jz new --each host=web sample:=@-   # one document per record
 
 --string, --text-file and --path may be repeated, come before the plain
 arguments, and are placed in the order given. KEY is a key, or a JSON
@@ -35,12 +37,18 @@ Pointer when it starts with /: a pointer makes the objects on its way,
 - appends to an array, and an index names an element already given. A
 location is given once, and no location enters a value given whole.
 
+--each makes one document per line of standard input and writes each as a
+line of JSON as soon as its line has come: KEY:=@- is the line read as
+JSON, KEY=@- the line as a string. A line that cannot be read is reported
+and left out, and the status is 3; --stop-on-error ends there instead.
+
 Options:
 `
 
 type newCmdOptions struct {
 	output outputOptions
 	array  bool
+	each   bool
 	// placed are the --string, --text-file and --path arguments in the
 	// order they were given.
 	placed []jsonbuild.Arg
@@ -69,6 +77,8 @@ func (n *newCmdOptions) bind(o *optionSet) {
 	o.doc("", "text-file", "KEY=PATH", "put a file's text at KEY, line endings kept; - is stdin (repeatable)")
 	o.fs.Var(placedValue{jsonbuild.Path, &n.placed}, "path", "")
 	o.doc("", "path", "POINTER=VALUE", "put a value at a JSON Pointer, with =, :=, =@ or :=@ (repeatable)")
+	o.boolOpt(&n.each, "each", "", "make one document per line of standard input, which @- stands for")
+	o.boolOpt(&n.output.stopOnError, "stop-on-error", "", "with --each, end at the first line that cannot be read")
 	o.boolOpt(&n.output.pretty, "pretty", "p", "indent JSON output")
 	o.helpDoc()
 }
@@ -80,8 +90,12 @@ func (a *app) cmdNew(args []string) int {
 	if code, done := a.parse(o, args, newUsage); done {
 		return code
 	}
-	if err := no.output.check(); err != nil {
-		a.errorf("%v", err)
+	switch {
+	case no.each && no.output.pretty:
+		a.errorf("--pretty and --each cannot be used together: each document is one line, and indenting spreads it over several")
+		return ExitUsage
+	case no.output.stopOnError && !no.each:
+		a.errorf("--stop-on-error ends --each at a line it cannot read, and without --each standard input is one value")
 		return ExitUsage
 	}
 	all := no.placed
@@ -92,12 +106,62 @@ func (a *app) cmdNew(args []string) int {
 	if err != nil {
 		return a.newFailed(err)
 	}
-	v, err := plan.Build(jsonbuild.Sources{ReadFile: readLimited, Stdin: a.env.Stdin, MaxSize: MaxInputSize})
+	src := jsonbuild.Sources{ReadFile: readLimited, Stdin: a.env.Stdin, MaxSize: MaxInputSize}
+	if no.each {
+		return a.newEach(plan, src, no.output.stopOnError)
+	}
+	v, err := plan.Build(src)
 	if err != nil {
 		return a.newFailed(err)
 	}
 	if err := no.output.write(a.env.Stdout, v); err != nil {
 		return a.writeFailed(err)
+	}
+	return ExitOK
+}
+
+// newEach makes one document per record of standard input and writes each
+// as soon as its record has come. The files the arguments name are read
+// once, before the first record, and nothing of standard input is held
+// but the record being read. A record that cannot be read is left out and
+// reported, as a stream leaves one out; with stop, the documents end there.
+func (a *app) newEach(plan *jsonbuild.Plan, src jsonbuild.Sources, stop bool) int {
+	format, arg := plan.StdinFormat()
+	switch format {
+	case "":
+		a.errorf("new: --each makes one document per line of standard input, and no argument reads it: give KEY:=@- for each line as JSON or KEY=@- for each line as a string")
+		return ExitUsage
+	case datafile.TEXT:
+		a.errorf("new: %q reads standard input whole, and --each reads it a line at a time: give KEY=@- for each line as a string", arg)
+		return ExitUsage
+	}
+	fixed, err := plan.Fixed(src)
+	if err != nil {
+		return a.newFailed(err)
+	}
+	skipped := 0
+	err = datafile.Stream(format, a.env.Stdin, int(MaxInputSize), func(v any) error {
+		return jsonutil.Encode(a.env.Stdout, fixed.With(v), false)
+	}, func(pe *engine.ParseError) error {
+		if stop {
+			return pe
+		}
+		skipped++
+		a.errorf("new: %s: %v", arg, pe)
+		return nil
+	})
+	var pe *engine.ParseError
+	switch {
+	case outputClosed(err):
+		return ExitOutputClosed
+	case errors.As(err, &pe):
+		a.errorf("new: %s: %v", arg, pe)
+		return ExitParse
+	case err != nil:
+		a.errorf("new: %s: reading standard input: %v", arg, err)
+		return ExitError
+	case skipped > 0:
+		return ExitParse
 	}
 	return ExitOK
 }

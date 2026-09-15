@@ -87,3 +87,56 @@ func TestNewNamesTheArgument(t *testing.T) {
 		t.Errorf("%d %s", code, h.stderr.String())
 	}
 }
+
+// --each makes one document per line of standard input: the line read as
+// JSON for KEY:=@-, as a string for KEY=@-. The files the arguments name
+// are read once, a line that cannot be read is reported and left out
+// with the status 3, and --stop-on-error ends there.
+func TestNewEach(t *testing.T) {
+	h := newHarness(t)
+	version := h.writeFile("VERSION", []byte("1.4.0\n"))
+	for _, tt := range []struct {
+		name  string
+		stdin string
+		args  []string
+		code  int
+		want  string
+		err   string
+	}{
+		{"JSON records", "{\"used\":42}\n\n[1,2]\n7\n", []string{"new", "--each", "host=a", "sample:=@-", "v=@" + version}, ExitOK,
+			`{"host":"a","sample":{"used":42},"v":"1.4.0"}` + "\n" + `{"host":"a","sample":[1,2],"v":"1.4.0"}` + "\n" + `{"host":"a","sample":7,"v":"1.4.0"}` + "\n", ""},
+		{"line records keep empty lines", "a\r\n\n b ", []string{"new", "--each", "--path", "/log/line=@-", "--string", "tag=@x"}, ExitOK,
+			`{"log":{"line":"a"},"tag":"@x"}` + "\n" + `{"log":{"line":""},"tag":"@x"}` + "\n" + `{"log":{"line":" b "},"tag":"@x"}` + "\n", ""},
+		{"an array per record", "1\n2\n", []string{"new", "--each", "--array", ":=@-", "x"}, ExitOK, "[1,\"x\"]\n[2,\"x\"]\n", ""},
+		{"no records", "", []string{"new", "--each", "a:=@-"}, ExitOK, "", ""},
+		{"a later record that is not JSON", "1\nnope\n2\n", []string{"new", "--each", "n:=@-"}, ExitParse, "{\"n\":1}\n{\"n\":2}\n", "jz: new: n:=@-: jsonl: line 2: the line is not one JSON value"},
+		{"a line that is not UTF-8", "a\n\xff\nb\n", []string{"new", "--each", "s=@-"}, ExitParse, "{\"s\":\"a\"}\n{\"s\":\"b\"}\n", "lines: line 2: the text is not valid UTF-8"},
+		{"--stop-on-error", "1\nnope\n2\n", []string{"new", "--each", "--stop-on-error", "n:=@-"}, ExitParse, "{\"n\":1}\n", "jsonl: line 2"},
+	} {
+		code := h.pipe(tt.stdin, tt.args...)
+		if code != tt.code || h.stdout.String() != tt.want || !strings.Contains(h.stderr.String(), tt.err) {
+			t.Errorf("%s: exit %d, stdout %q, stderr %q", tt.name, code, h.stdout.String(), h.stderr.String())
+		}
+		if tt.code != ExitOK && strings.Count(h.stderr.String(), "\n") != 1 {
+			t.Errorf("%s: one line on stderr, got %q", tt.name, h.stderr.String())
+		}
+	}
+	for _, tt := range []struct {
+		name string
+		args []string
+		code int
+		want string
+	}{
+		{"no argument reads standard input", []string{"new", "--each", "a=1"}, ExitUsage, "no argument reads it"},
+		{"--text-file reads it whole", []string{"new", "--each", "--text-file", "b=-"}, ExitUsage, `"--text-file b=-" reads standard input whole`},
+		{"--pretty", []string{"new", "--each", "-p", "a:=@-"}, ExitUsage, "--pretty and --each cannot be used together"},
+		{"--stop-on-error alone", []string{"new", "--stop-on-error", "a=1"}, ExitUsage, "--stop-on-error ends --each"},
+		{"a missing file before any record", []string{"new", "--each", "a:=@-", "v=@" + version + ".missing"}, ExitError, "VERSION.missing"},
+	} {
+		h.env.Stdin = untouchedInput{t}
+		code := h.run(tt.args...)
+		if code != tt.code || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), tt.want) {
+			t.Errorf("%s: exit %d, stdout %q, stderr %q", tt.name, code, h.stdout.String(), h.stderr.String())
+		}
+	}
+}
