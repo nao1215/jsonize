@@ -10,6 +10,8 @@ toc: true
 COMMAND | jz                 # convert piped output
 jz < captured.txt            # or output captured earlier
 jz --file captured.txt
+jz --file users.csv          # a data file, read as the format its extension names
+COMMAND | jz --format yaml   # piped data, read as the format --format names
 jz run COMMAND [args...]     # let jz run the command and convert its stdout
 ```
 
@@ -33,6 +35,7 @@ pipe there is no such answer at all: nothing identifies an empty input.
 
 ```text
   -f, --file PATH               read input from PATH instead of stdin
+      --format NAME             read a data file of this format: csv, tsv, ltsv, jsonl, json, yaml
   -p, --pretty                  indent JSON output
       --yaml                    write YAML instead of JSON
       --stream                  write each record as soon as it is read
@@ -58,7 +61,8 @@ control the command rather than the conversion. `jz list` adds `--json`,
 Options that state two answers at once are refused before the input is
 opened or a command is started, with exit status 2: `--pretty` with
 `--stream` or `--yaml`, `--extract` with `--exclude`, `--define` with
-`--parser`, and `--columns` where there are no columns to name.
+`--parser`, `--format` with `--parser` or `--define`, and `--columns`
+where there are no columns to name.
 
 ## The shape of the output
 
@@ -351,6 +355,78 @@ now" is not stopped by one keypress. The same holds for `kill -INT` sent
 to jz alone while it runs in the foreground of a terminal; send it to
 the process group (`kill -INT -- -PGID`), or send SIGTERM, which is
 always passed on.
+
+## Data files
+
+A file that holds data rather than a command's output is read as the
+format its extension names, and data from a pipe as the format
+`--format` names. Nothing is detected for either: the name of the file,
+or the option, is the whole of the claim, and the reader holds the text
+to that format from the first line to the last.
+
+| Format | Extensions | What jz writes |
+|--------|------------|----------------|
+| `csv` | `.csv` | a list of objects, one per row, keyed by the header line |
+| `tsv` | `.tsv` | the same, with fields separated by tabs |
+| `ltsv` | `.ltsv` | a list of objects, one per line, keyed by the labels |
+| `jsonl` | `.jsonl`, `.ndjson` | a list of the values, one per line |
+| `json` | `.json` | the document |
+| `yaml` | `.yaml`, `.yml` | the document, as JSON |
+
+Any of them may also end in `.gz` or `.bz2`, and is read through the
+compression (`events.jsonl.gz`). An extension is read whatever its case,
+and a file whose extension names no format (`captured.txt`,
+`captured.txt.gz`) is read the way it always was: its format is detected
+from the text.
+
+```console
+$ jz --file users.csv
+[{"id":"1","name":"alice"},{"id":"2","name":"bob, jr"}]
+
+$ jz --file events.jsonl.gz --stream --extract msg
+{"msg":"started"}
+{"msg":"slow"}
+
+$ kubectl get deploy api -o yaml | jz --format yaml
+$ jz --format ltsv --file access.log
+```
+
+What the caller names wins over the extension: `--format` reads a file
+as the format it names, and `--parser` or `--define` read it as a
+command's output, with the file's name ignored. `--format` cannot be
+given with either of them.
+
+- A csv and a tsv are read by the csv shapes described below, so every
+  value is text, an empty field is `""`, a row with more fields than
+  the header is refused, and `--columns` names the columns of a file
+  without a header line: `jz --file rows.csv --columns id,name`.
+- An LTSV field is a label, a colon and the value, which is everything
+  after the first colon, spaces included. A label is letters, digits
+  and `_ . -`. A field with no label, an empty field between two tabs
+  and a label given twice on one line are refused.
+- JSON Lines is one JSON value per line; a blank line is skipped, and a
+  line that is not one whole value is refused.
+- JSON keeps the order of its keys and the digits of its numbers, so
+  `12345678901234567890` and `2.50` come out as they went in. A key given
+  twice in one object is refused, since JSON does not say which of the
+  two a reader keeps, and so is text after the document and nesting
+  deeper than 1000.
+- YAML is typed the way the YAML 1.2 core schema types a bare scalar:
+  `null` and `~`, `true` and `false`, integers (with `0x` and `0o`) and
+  decimals, and anything quoted is the string it spells. `.inf` and
+  `.nan` are refused, since JSON has no number for them, and so are
+  anchors, aliases, tags and a second document, which jz does not read.
+- Text that is not UTF-8 is refused in every format, and a byte order
+  mark at the start is not part of the text.
+
+A reading that stops is exit 3 and names the line: `jz: json: line 3:
+the key "a" is given twice in one object`. A compressed file that cannot
+be decompressed is exit 3 as well. `--stream` writes the records of
+`jsonl` and `ltsv` as their lines are read, and the ones before a line
+it cannot read stay written; a `json` or `yaml` document is one value,
+so `--stream` with one is a usage error. `--extract`, `--exclude`,
+`--yaml` and `--pretty` work the same as for a command's output, and
+`--explain` says which format was read and what named it.
 
 ## Output jz has no definition for
 

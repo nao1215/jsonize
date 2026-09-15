@@ -4,6 +4,19 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- Data files: `jz --file` reads a file as the format its extension
+  names, `.csv`, `.tsv`, `.ltsv`, `.jsonl` (or `.ndjson`), `.json` and
+  `.yaml` (or `.yml`), each also compressed as `.gz` or `.bz2`, and
+  `--format NAME` reads piped data as that format. JSON keeps its key
+  order and number literals, YAML is typed by the 1.2 core schema, and a
+  key given twice, text that is not UTF-8 or a value JSON cannot hold is
+  exit 3 with the line. `--stream` writes JSON Lines and LTSV records as
+  they are read.
+
 ## [0.2.0]
 
 145 definitions for 55 more commands, 224 commands and 596 definitions
