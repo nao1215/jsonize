@@ -38,6 +38,7 @@ fields:
   requested: {required: true}
   # A version opens with a digit, so two words of prose are not a
   # version pair.
-  current: {required: true, regex: '(?P<current>[0-9]\S*)'}
+  # [MISSING] is a tool the configuration names that nothing installs.
+  current: {null_if: ["[MISSING]"], regex: '(?P<current>[0-9]\S*|\[MISSING\])'}
   latest: {required: true, regex: '(?P<latest>[0-9]\S*)'}
   source: {required: true}
