@@ -29,7 +29,6 @@ project follows [Semantic Versioning](https://semver.org/).
   empty value is null and the other columns stay text. A value that is
   not the type is exit 3 with the line and the column, and a column the
   input does not have is exit 2.
-
 - `jz new --string KEY=TEXT` writes TEXT as a string exactly as it is, so
   a value from a variable is never read as a file name (`@...`) or JSON,
   whatever it holds: `jz new --string "message=$MESSAGE"`.
@@ -50,11 +49,6 @@ project follows [Semantic Versioning](https://semver.org/).
   and `nul`) leaves out a record it cannot read and goes on, as a stream
   of a command's output does, where it ended at the first. The status is
   still 3. Pass `--stop-on-error` to end at the first as before.
-
-- A csv field rule that names a column the header line, or the first
-  record of a csv that numbers its columns, does not have is refused
-  where the columns become known, where it was ignored. A stream ends
-  there instead of leaving the header out as a bad record.
 
 ### Removed
 

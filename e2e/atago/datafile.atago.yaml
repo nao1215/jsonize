@@ -533,6 +533,24 @@ scenarios:
           stderr:
             contains: '--type gives the column "units" twice'
       - run:
+          command: jz --format csv --type units=int --raw
+          stdin: "units\n1\n"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "--type and --raw cannot be used together"
+      # A definition's own field for a column the file lacks does nothing;
+      # only a column named on the command line is checked.
+      - run:
+          command: "jz --define 'parse: {type: csv}\nfields: {units: {type: int}}'"
+          stdin: "sku\n1\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"sku":"1"}]
+      - run:
           command: jz --format lines --type units=int
           stdin: "1\n"
       - assert:

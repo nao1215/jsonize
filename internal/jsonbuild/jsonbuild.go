@@ -370,15 +370,17 @@ func readJSON(text string) (any, error) {
 // location reads the KEY of --string and --text-file: a JSON Pointer when
 // it starts with "/", otherwise a key with an optional trailing [].
 func location(loc string, array bool, form Form) ([]token, error) {
-	if strings.HasPrefix(loc, "/") {
-		return pointer(loc)
-	}
+	// A key or a pointer that ends in : is a := typed where = was meant,
+	// or the other way round, and either way a guess would be wrong.
 	if strings.HasSuffix(loc, ":") {
 		name := "--string writes TEXT as it is"
 		if form == TextFile {
 			name = "--text-file writes a file's text as it is"
 		}
 		return nil, fmt.Errorf("%s, and a key ending in : looks like :=, which reads JSON; use --path for JSON", name)
+	}
+	if strings.HasPrefix(loc, "/") {
+		return pointer(loc)
 	}
 	if array {
 		if loc != "" {

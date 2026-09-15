@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"maps"
 	"slices"
 	"strconv"
 	"strings"
@@ -48,12 +47,12 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 			case cols != nil:
 			case p.Header.None:
 				cols = csvNumbered(len(row))
-				if err := r.checkColumns(fields, cols, rec.num); err != nil {
+				if err := r.checkColumns(p, cols, rec.num); err != nil {
 					return nil, err
 				}
 			default:
 				cols, header = csvColumns(p, row), row
-				if err := r.checkColumns(fields, cols, rec.num); err != nil {
+				if err := r.checkColumns(p, cols, rec.num); err != nil {
 					return nil, err
 				}
 				continue
@@ -194,11 +193,12 @@ func (e *MissingColumnError) Error() string {
 	return fmt.Sprintf("no column %q; the columns are %s", e.Column, strings.Join(quoted, ", "))
 }
 
-// checkColumns refuses a field rule for a column cols, read from the
-// input, does not have. Converting a column that is not there would
-// otherwise do nothing, and the caller who named it would not know.
-func (r *run) checkColumns(fields map[string]*definition.Field, cols []string, ln int) error {
-	for _, name := range slices.Sorted(maps.Keys(fields)) {
+// checkColumns refuses a column the caller named (Header.Expected) that
+// cols, read from the input, does not have. Converting a column that is
+// not there would otherwise do nothing, and the caller who named it would
+// not know.
+func (r *run) checkColumns(p *definition.Parse, cols []string, ln int) error {
+	for _, name := range p.Header.Expected {
 		if !slices.Contains(cols, name) {
 			return &ParseError{Definition: r.def.ID(), Line: ln, Cause: &MissingColumnError{Column: name, Columns: cols}}
 		}

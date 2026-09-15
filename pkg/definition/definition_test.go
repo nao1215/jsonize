@@ -657,6 +657,9 @@ func TestWithTypes(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	if strings.Join(typed.Parse.Header.Expected, ",") != "count,on,ratio" || len(d.Parse.Header.Expected) != 0 {
+		t.Errorf("expected columns %v, original %v", typed.Parse.Header.Expected, d.Parse.Header.Expected)
+	}
 	if len(d.Fields) != 0 || len(typed.Fields) != 3 || typed.Fields["count"].Type != FieldInt || strings.Join(typed.Fields["on"].NullIf, ",") != "" || len(typed.Fields["on"].NullIf) != 1 {
 		t.Errorf("typed %v, original %v", typed.Fields, d.Fields)
 	}
