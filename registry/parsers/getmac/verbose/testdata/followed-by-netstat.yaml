@@ -1,0 +1,3 @@
+source: the windows-server-2022 fixture followed by the windows-server-2022 fixture of netstat/windows, joined for this case
+description: the connection table netstat prints after the adapters is refused, since its lines hold no hardware address
+expect_error: 'field "physical_address": required value is missing'
