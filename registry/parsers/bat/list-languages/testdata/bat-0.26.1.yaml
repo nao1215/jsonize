@@ -1,0 +1,3 @@
+source: captured with bat 0.26.1 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, bat --list-languages through a pipe, with no syntaxes added
+description: the syntaxes bat ships with, entries holding spaces, globs and paths
+args: [--list-languages]

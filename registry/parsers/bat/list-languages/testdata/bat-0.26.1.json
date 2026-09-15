@@ -1,0 +1,1618 @@
+[
+  {
+    "name": "ActionScript",
+    "extensions": [
+      "as"
+    ]
+  },
+  {
+    "name": "Ada",
+    "extensions": [
+      "adb",
+      "ads",
+      "gpr"
+    ]
+  },
+  {
+    "name": "Apache Conf",
+    "extensions": [
+      "envvars",
+      "htaccess",
+      "HTACCESS",
+      "htgroups",
+      "HTGROUPS",
+      "htpasswd",
+      "HTPASSWD",
+      ".htaccess",
+      ".HTACCESS",
+      ".htgroups",
+      ".HTGROUPS",
+      ".htpasswd",
+      ".HTPASSWD",
+      "httpd.conf",
+      "/etc/apache2/**/*.conf",
+      "/etc/apache2/sites-*/**/*",
+      "/etc/httpd/conf/**/*.conf"
+    ]
+  },
+  {
+    "name": "AppleScript",
+    "extensions": [
+      "applescript",
+      "script editor"
+    ]
+  },
+  {
+    "name": "ARM Assembly",
+    "extensions": [
+      "s",
+      "S"
+    ]
+  },
+  {
+    "name": "AsciiDoc (Asciidoctor)",
+    "extensions": [
+      "adoc",
+      "ad",
+      "asciidoc"
+    ]
+  },
+  {
+    "name": "ASP",
+    "extensions": [
+      "asa"
+    ]
+  },
+  {
+    "name": "Authorized Keys",
+    "extensions": [
+      "authorized_keys",
+      "pub",
+      "authorized_keys2"
+    ]
+  },
+  {
+    "name": "AWK",
+    "extensions": [
+      "awk"
+    ]
+  },
+  {
+    "name": "Batch File",
+    "extensions": [
+      "bat",
+      "cmd"
+    ]
+  },
+  {
+    "name": "BibTeX",
+    "extensions": [
+      "bib"
+    ]
+  },
+  {
+    "name": "Bourne Again Shell (bash)",
+    "extensions": [
+      "sh",
+      "bash",
+      "zsh",
+      "ash",
+      ".bash_aliases",
+      ".bash_completions",
+      ".bash_functions",
+      ".bash_login",
+      ".bash_logout",
+      ".bash_profile",
+      ".bash_variables",
+      ".bashrc",
+      ".profile",
+      ".textmate_init",
+      ".zlogin",
+      ".zlogout",
+      ".zprofile",
+      ".zshenv",
+      ".zshrc",
+      "PKGBUILD",
+      "ebuild",
+      "eclass",
+      "**/bat/config",
+      "*.ksh",
+      "*.kshrc",
+      "/etc/os-release",
+      "/usr/lib/os-release",
+      "/etc/initrd-release",
+      "/usr/lib/extension-release.d/extension-release.*",
+      "/etc/profile",
+      "bashrc",
+      "*.bashrc",
+      "bash_profile",
+      "*.bash_profile",
+      "bash_login",
+      "*.bash_login",
+      "bash_logout",
+      "*.bash_logout",
+      "zshrc",
+      "*.zshrc",
+      "zprofile",
+      "*.zprofile",
+      "zlogin",
+      "*.zlogin",
+      "zlogout",
+      "*.zlogout",
+      "zshenv",
+      "*.zshenv"
+    ]
+  },
+  {
+    "name": "C",
+    "extensions": [
+      "c"
+    ]
+  },
+  {
+    "name": "C#",
+    "extensions": [
+      "cs",
+      "csx"
+    ]
+  },
+  {
+    "name": "C++",
+    "extensions": [
+      "cpp",
+      "cc",
+      "cp",
+      "cxx",
+      "c++",
+      "h",
+      "hh",
+      "hpp",
+      "hxx",
+      "h++",
+      "inl",
+      "ipp",
+      "*.h"
+    ]
+  },
+  {
+    "name": "Cabal",
+    "extensions": [
+      "cabal"
+    ]
+  },
+  {
+    "name": "CFML",
+    "extensions": [
+      "cfml",
+      "cfm",
+      "cfc"
+    ]
+  },
+  {
+    "name": "Clojure",
+    "extensions": [
+      "clj",
+      "cljc",
+      "cljs",
+      "edn"
+    ]
+  },
+  {
+    "name": "CMake",
+    "extensions": [
+      "CMakeLists.txt",
+      "cmake"
+    ]
+  },
+  {
+    "name": "CMake C Header",
+    "extensions": [
+      "h.in"
+    ]
+  },
+  {
+    "name": "CMake C++ Header",
+    "extensions": [
+      "hh.in",
+      "hpp.in",
+      "hxx.in",
+      "h++.in"
+    ]
+  },
+  {
+    "name": "CMakeCache",
+    "extensions": [
+      "CMakeCache.txt"
+    ]
+  },
+  {
+    "name": "CoffeeScript",
+    "extensions": [
+      "coffee",
+      "Cakefile",
+      "coffee.erb",
+      "cson"
+    ]
+  },
+  {
+    "name": "Command Help",
+    "extensions": [
+      "cmd-help",
+      "help"
+    ]
+  },
+  {
+    "name": "CpuInfo",
+    "extensions": [
+      "cpuinfo"
+    ]
+  },
+  {
+    "name": "Crontab",
+    "extensions": [
+      "tab",
+      "crontab",
+      "cron.d"
+    ]
+  },
+  {
+    "name": "Crystal",
+    "extensions": [
+      "cr"
+    ]
+  },
+  {
+    "name": "CSS",
+    "extensions": [
+      "css",
+      "css.erb",
+      "css.liquid"
+    ]
+  },
+  {
+    "name": "D",
+    "extensions": [
+      "d",
+      "di"
+    ]
+  },
+  {
+    "name": "Dart",
+    "extensions": [
+      "dart"
+    ]
+  },
+  {
+    "name": "debsources",
+    "extensions": [
+      "sources.list"
+    ]
+  },
+  {
+    "name": "Diff",
+    "extensions": [
+      "diff",
+      "patch",
+      "*.debdiff"
+    ]
+  },
+  {
+    "name": "Dockerfile",
+    "extensions": [
+      "Dockerfile",
+      "dockerfile",
+      ".Dockerfile",
+      "Containerfile"
+    ]
+  },
+  {
+    "name": "DotENV",
+    "extensions": [
+      ".env",
+      ".env.dist",
+      ".env.local",
+      ".env.sample",
+      ".env.example",
+      ".env.template",
+      ".env.test",
+      ".env.test.local",
+      ".env.testing",
+      ".env.dev",
+      ".env.development",
+      ".env.development.local",
+      ".env.prod",
+      ".env.production",
+      ".env.production.local",
+      ".env.dusk.local",
+      ".env.staging",
+      ".env.default",
+      ".env.defaults",
+      ".envrc",
+      ".flaskenv",
+      "env",
+      "env.example",
+      "env.sample",
+      "env.template"
+    ]
+  },
+  {
+    "name": "Elixir",
+    "extensions": [
+      "ex",
+      "exs"
+    ]
+  },
+  {
+    "name": "Elm",
+    "extensions": [
+      "elm"
+    ]
+  },
+  {
+    "name": "Email",
+    "extensions": [
+      "eml",
+      "msg",
+      "mbx",
+      "mboxz",
+      "/var/spool/mail/*",
+      "/var/mail/*"
+    ]
+  },
+  {
+    "name": "Erlang",
+    "extensions": [
+      "erl",
+      "hrl",
+      "Emakefile",
+      "emakefile",
+      "escript"
+    ]
+  },
+  {
+    "name": "F#",
+    "extensions": [
+      "fs",
+      "fsi",
+      "fsx",
+      "*.fs"
+    ]
+  },
+  {
+    "name": "Fish",
+    "extensions": [
+      "fish"
+    ]
+  },
+  {
+    "name": "Fortran (Fixed Form)",
+    "extensions": [
+      "f",
+      "F",
+      "f77",
+      "F77",
+      "for",
+      "FOR",
+      "fpp",
+      "FPP"
+    ]
+  },
+  {
+    "name": "Fortran (Modern)",
+    "extensions": [
+      "f90",
+      "F90",
+      "f95",
+      "F95",
+      "f03",
+      "F03",
+      "f08",
+      "F08"
+    ]
+  },
+  {
+    "name": "Fortran Namelist",
+    "extensions": [
+      "namelist"
+    ]
+  },
+  {
+    "name": "fstab",
+    "extensions": [
+      "fstab",
+      "crypttab",
+      "mtab"
+    ]
+  },
+  {
+    "name": "GDScript (Godot Engine)",
+    "extensions": [
+      "gd"
+    ]
+  },
+  {
+    "name": "Git Attributes",
+    "extensions": [
+      "attributes",
+      "gitattributes",
+      ".gitattributes",
+      "/home/nao/.config/git/attributes"
+    ]
+  },
+  {
+    "name": "Git Commit",
+    "extensions": [
+      "COMMIT_EDITMSG",
+      "MERGE_MSG",
+      "TAG_EDITMSG"
+    ]
+  },
+  {
+    "name": "Git Config",
+    "extensions": [
+      "gitconfig",
+      ".gitconfig",
+      ".gitmodules",
+      "/home/nao/.config/git/config"
+    ]
+  },
+  {
+    "name": "Git Ignore",
+    "extensions": [
+      "exclude",
+      "gitignore",
+      ".gitignore",
+      "/home/nao/.config/git/ignore"
+    ]
+  },
+  {
+    "name": "Git Link",
+    "extensions": [
+      ".git"
+    ]
+  },
+  {
+    "name": "Git Log",
+    "extensions": [
+      "gitlog"
+    ]
+  },
+  {
+    "name": "Git Mailmap",
+    "extensions": [
+      ".mailmap",
+      "mailmap"
+    ]
+  },
+  {
+    "name": "Git Rebase Todo",
+    "extensions": [
+      "git-rebase-todo"
+    ]
+  },
+  {
+    "name": "GLSL",
+    "extensions": [
+      "vs",
+      "gs",
+      "vsh",
+      "fsh",
+      "gsh",
+      "vshader",
+      "fshader",
+      "gshader",
+      "vert",
+      "frag",
+      "geom",
+      "tesc",
+      "tese",
+      "comp",
+      "glsl",
+      "mesh",
+      "task",
+      "rgen",
+      "rint",
+      "rahit",
+      "rchit",
+      "rmiss",
+      "rcall"
+    ]
+  },
+  {
+    "name": "gnuplot",
+    "extensions": [
+      "gp",
+      "gpl",
+      "gnuplot",
+      "gnu",
+      "plot",
+      "plt"
+    ]
+  },
+  {
+    "name": "Go",
+    "extensions": [
+      "go"
+    ]
+  },
+  {
+    "name": "Gomod",
+    "extensions": [
+      "go.mod",
+      "go.work"
+    ]
+  },
+  {
+    "name": "Gosum",
+    "extensions": [
+      "go.sum"
+    ]
+  },
+  {
+    "name": "GraphQL",
+    "extensions": [
+      "graphql",
+      "graphqls",
+      "gql"
+    ]
+  },
+  {
+    "name": "Graphviz (DOT)",
+    "extensions": [
+      "dot",
+      "DOT",
+      "gv"
+    ]
+  },
+  {
+    "name": "Groff/troff",
+    "extensions": [
+      "groff",
+      "troff",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ]
+  },
+  {
+    "name": "Groovy",
+    "extensions": [
+      "groovy",
+      "gvy",
+      "gradle",
+      "Jenkinsfile"
+    ]
+  },
+  {
+    "name": "group",
+    "extensions": [
+      "group"
+    ]
+  },
+  {
+    "name": "Haskell",
+    "extensions": [
+      "hs"
+    ]
+  },
+  {
+    "name": "Highlight non-printables",
+    "extensions": [
+      "show-nonprintable"
+    ]
+  },
+  {
+    "name": "Hosts File",
+    "extensions": [
+      "hosts"
+    ]
+  },
+  {
+    "name": "HTML",
+    "extensions": [
+      "html",
+      "htm",
+      "shtml",
+      "xhtml"
+    ]
+  },
+  {
+    "name": "HTML (ASP)",
+    "extensions": [
+      "asp"
+    ]
+  },
+  {
+    "name": "HTML (EEx)",
+    "extensions": [
+      "html.eex",
+      "html.leex"
+    ]
+  },
+  {
+    "name": "HTML (Erlang)",
+    "extensions": [
+      "yaws"
+    ]
+  },
+  {
+    "name": "HTML (Jinja2)",
+    "extensions": [
+      "htm.j2",
+      "html.j2",
+      "xhtml.j2",
+      "xml.j2"
+    ]
+  },
+  {
+    "name": "HTML (Rails)",
+    "extensions": [
+      "rails",
+      "rhtml",
+      "erb",
+      "html.erb"
+    ]
+  },
+  {
+    "name": "HTML (Tcl)",
+    "extensions": [
+      "adp"
+    ]
+  },
+  {
+    "name": "HTML (Twig)",
+    "extensions": [
+      "twig",
+      "html.twig"
+    ]
+  },
+  {
+    "name": "HTTP Request and Response",
+    "extensions": [
+      "http"
+    ]
+  },
+  {
+    "name": "Idris",
+    "extensions": [
+      "idr"
+    ]
+  },
+  {
+    "name": "INI",
+    "extensions": [
+      "ini",
+      "INI",
+      "inf",
+      "INF",
+      "reg",
+      "REG",
+      "lng",
+      "cfg",
+      "CFG",
+      "desktop",
+      "url",
+      "URL",
+      ".editorconfig",
+      ".coveragerc",
+      ".pylintrc",
+      ".gitlint",
+      ".hgrc",
+      "hgrc",
+      "**/.aws/credentials",
+      "**/.aws/config",
+      "/etc/letsencrypt/renewal/*.conf",
+      "*.flatpakref",
+      "*.flatpakrepo",
+      "/etc/pacman.conf",
+      "/usr/share/libalpm/hooks/*.hook",
+      "/etc/pacman.d/hooks/*.hook",
+      "paru.conf",
+      "**/containers/systemd/**/*.{container",
+      "volume",
+      "network",
+      "kube",
+      "image",
+      "build",
+      "pod",
+      "artifact}",
+      "**/systemd/**/*.conf",
+      "**/systemd/**/*.example",
+      "*.automount",
+      "*.device",
+      "*.dnssd",
+      "*.link",
+      "*.mount",
+      "*.netdev",
+      "*.network",
+      "*.nspawn",
+      "*.path",
+      "*.service",
+      "*.scope",
+      "*.slice",
+      "*.socket",
+      "*.swap",
+      "*.target",
+      "*.timer",
+      "/etc/wireguard/*.conf"
+    ]
+  },
+  {
+    "name": "Java",
+    "extensions": [
+      "java",
+      "bsh"
+    ]
+  },
+  {
+    "name": "Java Properties",
+    "extensions": [
+      "properties"
+    ]
+  },
+  {
+    "name": "Java Server Page (JSP)",
+    "extensions": [
+      "jsp"
+    ]
+  },
+  {
+    "name": "JavaScript",
+    "extensions": [
+      "htc"
+    ]
+  },
+  {
+    "name": "JavaScript (Babel)",
+    "extensions": [
+      "js",
+      "mjs",
+      "jsx",
+      "babel",
+      "es6",
+      "cjs",
+      "*.pac"
+    ]
+  },
+  {
+    "name": "JavaScript (Rails)",
+    "extensions": [
+      "js.erb"
+    ]
+  },
+  {
+    "name": "Jinja2",
+    "extensions": [
+      "j2",
+      "jinja2",
+      "jinja"
+    ]
+  },
+  {
+    "name": "JQ",
+    "extensions": [
+      "jq"
+    ]
+  },
+  {
+    "name": "JSON",
+    "extensions": [
+      "json",
+      "sublime-settings",
+      "sublime-menu",
+      "sublime-keymap",
+      "sublime-mousemap",
+      "sublime-theme",
+      "sublime-build",
+      "sublime-project",
+      "sublime-completions",
+      "sublime-commands",
+      "sublime-macro",
+      "sublime-color-scheme",
+      "ipynb",
+      "Pipfile.lock",
+      "*.jsonl",
+      "*.jsonc",
+      "*.jsonld",
+      "*.geojson",
+      "*.ndjson",
+      "flake.lock",
+      "*.sarif"
+    ]
+  },
+  {
+    "name": "jsonnet",
+    "extensions": [
+      "jsonnet",
+      "libsonnet",
+      "libjsonnet"
+    ]
+  },
+  {
+    "name": "Julia",
+    "extensions": [
+      "jl"
+    ]
+  },
+  {
+    "name": "Known Hosts",
+    "extensions": [
+      "known_hosts",
+      "known_hosts.old"
+    ]
+  },
+  {
+    "name": "Kotlin",
+    "extensions": [
+      "kt",
+      "kts"
+    ]
+  },
+  {
+    "name": "LaTeX",
+    "extensions": [
+      "tex",
+      "ltx"
+    ]
+  },
+  {
+    "name": "Lean 4",
+    "extensions": [
+      "lean"
+    ]
+  },
+  {
+    "name": "Less",
+    "extensions": [
+      "less",
+      "css.less"
+    ]
+  },
+  {
+    "name": "Lisp",
+    "extensions": [
+      "lisp",
+      "cl",
+      "clisp",
+      "l",
+      "mud",
+      "el",
+      "scm",
+      "ss",
+      "lsp",
+      "fasl",
+      "sld"
+    ]
+  },
+  {
+    "name": "Literate Haskell",
+    "extensions": [
+      "lhs"
+    ]
+  },
+  {
+    "name": "LiveScript",
+    "extensions": [
+      "ls",
+      "Slakefile",
+      "ls.erb"
+    ]
+  },
+  {
+    "name": "LLVM",
+    "extensions": [
+      "ll"
+    ]
+  },
+  {
+    "name": "log",
+    "extensions": [
+      "log"
+    ]
+  },
+  {
+    "name": "Lua",
+    "extensions": [
+      "lua",
+      "*.nse"
+    ]
+  },
+  {
+    "name": "Makefile",
+    "extensions": [
+      "make",
+      "GNUmakefile",
+      "makefile",
+      "Makefile",
+      "makefile.am",
+      "Makefile.am",
+      "makefile.in",
+      "Makefile.in",
+      "OCamlMakefile",
+      "mak",
+      "mk"
+    ]
+  },
+  {
+    "name": "Manpage",
+    "extensions": [
+      "man"
+    ]
+  },
+  {
+    "name": "Markdown",
+    "extensions": [
+      "md",
+      "mdown",
+      "markdown",
+      "markdn",
+      "*.mkd"
+    ]
+  },
+  {
+    "name": "MATLAB",
+    "extensions": [
+      "matlab"
+    ]
+  },
+  {
+    "name": "MediaWiki",
+    "extensions": [
+      "mediawiki",
+      "wikipedia",
+      "wiki"
+    ]
+  },
+  {
+    "name": "MemInfo",
+    "extensions": [
+      "meminfo"
+    ]
+  },
+  {
+    "name": "NAnt Build File",
+    "extensions": [
+      "build"
+    ]
+  },
+  {
+    "name": "nginx",
+    "extensions": [
+      "conf.erb",
+      "nginx.conf",
+      "mime.types",
+      "fastcgi_params",
+      "scgi_params",
+      "uwsgi_params",
+      "nginx.conf",
+      "mime.types",
+      "/etc/nginx/**/*.conf",
+      "/etc/nginx/sites-*/**/*"
+    ]
+  },
+  {
+    "name": "Nim",
+    "extensions": [
+      "nim",
+      "nims",
+      "nimble"
+    ]
+  },
+  {
+    "name": "Ninja",
+    "extensions": [
+      "ninja"
+    ]
+  },
+  {
+    "name": "Nix",
+    "extensions": [
+      "nix"
+    ]
+  },
+  {
+    "name": "NSIS",
+    "extensions": [
+      "nsi",
+      "nsh",
+      "bnsi",
+      "bnsh",
+      "nsdinc"
+    ]
+  },
+  {
+    "name": "Objective-C",
+    "extensions": [
+      "m"
+    ]
+  },
+  {
+    "name": "Objective-C++",
+    "extensions": [
+      "mm"
+    ]
+  },
+  {
+    "name": "OCaml",
+    "extensions": [
+      "ml",
+      "mli"
+    ]
+  },
+  {
+    "name": "OCamllex",
+    "extensions": [
+      "mll"
+    ]
+  },
+  {
+    "name": "OCamlyacc",
+    "extensions": [
+      "mly"
+    ]
+  },
+  {
+    "name": "Odin",
+    "extensions": [
+      "odin"
+    ]
+  },
+  {
+    "name": "orgmode",
+    "extensions": [
+      "org"
+    ]
+  },
+  {
+    "name": "Pascal",
+    "extensions": [
+      "pas",
+      "p",
+      "dpr"
+    ]
+  },
+  {
+    "name": "passwd",
+    "extensions": [
+      "passwd"
+    ]
+  },
+  {
+    "name": "Perl",
+    "extensions": [
+      "pl",
+      "pc",
+      "pm",
+      "pmc",
+      "pod",
+      "t"
+    ]
+  },
+  {
+    "name": "PHP",
+    "extensions": [
+      "php",
+      "php3",
+      "php4",
+      "php5",
+      "php7",
+      "phps",
+      "phpt",
+      "phtml"
+    ]
+  },
+  {
+    "name": "Plain Text",
+    "extensions": [
+      "txt"
+    ]
+  },
+  {
+    "name": "PowerShell",
+    "extensions": [
+      "ps1",
+      "psm1",
+      "psd1"
+    ]
+  },
+  {
+    "name": "Protocol Buffer",
+    "extensions": [
+      "proto",
+      "protobuf",
+      "protodevel"
+    ]
+  },
+  {
+    "name": "Protocol Buffer (TEXT)",
+    "extensions": [
+      "pb.txt",
+      "proto.text",
+      "textpb",
+      "pbtxt",
+      "prototxt",
+      "textproto"
+    ]
+  },
+  {
+    "name": "Puppet",
+    "extensions": [
+      "pp",
+      "epp"
+    ]
+  },
+  {
+    "name": "PureScript",
+    "extensions": [
+      "purs"
+    ]
+  },
+  {
+    "name": "Python",
+    "extensions": [
+      "py",
+      "py3",
+      "pyw",
+      "pyi",
+      "pyx",
+      "pyx.in",
+      "pxd",
+      "pxd.in",
+      "pxi",
+      "pxi.in",
+      "rpy",
+      "cpy",
+      "SConstruct",
+      "Sconstruct",
+      "sconstruct",
+      "SConscript",
+      "gyp",
+      "gypi",
+      "Snakefile",
+      "vpy",
+      "wscript",
+      "bazel",
+      "bzl",
+      "*.xsh",
+      "*.xonshrc"
+    ]
+  },
+  {
+    "name": "QML",
+    "extensions": [
+      "qml",
+      "qmlproject"
+    ]
+  },
+  {
+    "name": "R",
+    "extensions": [
+      "R",
+      "r",
+      "Rprofile"
+    ]
+  },
+  {
+    "name": "Racket",
+    "extensions": [
+      "rkt"
+    ]
+  },
+  {
+    "name": "Rd (R Documentation)",
+    "extensions": [
+      "rd"
+    ]
+  },
+  {
+    "name": "Rego",
+    "extensions": [
+      "rego"
+    ]
+  },
+  {
+    "name": "Regular Expression",
+    "extensions": [
+      "re"
+    ]
+  },
+  {
+    "name": "Requirements.txt",
+    "extensions": [
+      "requirements.txt",
+      "requirements.in",
+      "pip"
+    ]
+  },
+  {
+    "name": "resolv",
+    "extensions": [
+      "resolv.conf"
+    ]
+  },
+  {
+    "name": "reStructuredText",
+    "extensions": [
+      "rst",
+      "rest"
+    ]
+  },
+  {
+    "name": "Robot Framework",
+    "extensions": [
+      "robot",
+      "resource"
+    ]
+  },
+  {
+    "name": "Ruby",
+    "extensions": [
+      "rb",
+      "Appfile",
+      "Appraisals",
+      "Berksfile",
+      "Brewfile",
+      "capfile",
+      "cgi",
+      "Cheffile",
+      "config.ru",
+      "Deliverfile",
+      "Fastfile",
+      "fcgi",
+      "Gemfile",
+      "gemspec",
+      "Guardfile",
+      "irbrc",
+      "jbuilder",
+      "Podfile",
+      "podspec",
+      "prawn",
+      "rabl",
+      "rake",
+      "Rakefile",
+      "Rantfile",
+      "rbx",
+      "rjs",
+      "ruby.rail",
+      "Scanfile",
+      "simplecov",
+      "Snapfile",
+      "thor",
+      "Thorfile",
+      "Vagrantfile"
+    ]
+  },
+  {
+    "name": "Ruby Haml",
+    "extensions": [
+      "haml"
+    ]
+  },
+  {
+    "name": "Ruby on Rails",
+    "extensions": [
+      "rxml",
+      "builder"
+    ]
+  },
+  {
+    "name": "Ruby Slim",
+    "extensions": [
+      "slim",
+      "skim"
+    ]
+  },
+  {
+    "name": "Rust",
+    "extensions": [
+      "rs",
+      "*.ron"
+    ]
+  },
+  {
+    "name": "Salt State (SLS)",
+    "extensions": [
+      "sls"
+    ]
+  },
+  {
+    "name": "Sass",
+    "extensions": [
+      "sass"
+    ]
+  },
+  {
+    "name": "Scala",
+    "extensions": [
+      "scala",
+      "sbt",
+      "sc",
+      "*.mill"
+    ]
+  },
+  {
+    "name": "SCSS",
+    "extensions": [
+      "scss"
+    ]
+  },
+  {
+    "name": "Separated Values",
+    "extensions": [
+      "csv"
+    ]
+  },
+  {
+    "name": "SML",
+    "extensions": [
+      "sml",
+      "cm",
+      "sig"
+    ]
+  },
+  {
+    "name": "Solidity",
+    "extensions": [
+      "sol"
+    ]
+  },
+  {
+    "name": "SQL",
+    "extensions": [
+      "sql",
+      "ddl",
+      "dml"
+    ]
+  },
+  {
+    "name": "SQL (Rails)",
+    "extensions": [
+      "erbsql",
+      "sql.erb"
+    ]
+  },
+  {
+    "name": "SSH Config",
+    "extensions": [
+      "ssh_config",
+      "**/.ssh/config"
+    ]
+  },
+  {
+    "name": "SSHD Config",
+    "extensions": [
+      "sshd_config"
+    ]
+  },
+  {
+    "name": "Strace",
+    "extensions": [
+      "strace"
+    ]
+  },
+  {
+    "name": "Stylus",
+    "extensions": [
+      "styl",
+      "stylus"
+    ]
+  },
+  {
+    "name": "Svelte",
+    "extensions": [
+      "svlt",
+      "svelte"
+    ]
+  },
+  {
+    "name": "Swift",
+    "extensions": [
+      "swift"
+    ]
+  },
+  {
+    "name": "syslog",
+    "extensions": [
+      "syslog"
+    ]
+  },
+  {
+    "name": "SystemVerilog",
+    "extensions": [
+      "sv",
+      "svh",
+      "vh"
+    ]
+  },
+  {
+    "name": "Tab Separated Values",
+    "extensions": [
+      "tsv"
+    ]
+  },
+  {
+    "name": "Tcl",
+    "extensions": [
+      "tcl"
+    ]
+  },
+  {
+    "name": "Terraform",
+    "extensions": [
+      "tf",
+      "tfvars",
+      "hcl"
+    ]
+  },
+  {
+    "name": "TeX",
+    "extensions": [
+      "sty",
+      "cls"
+    ]
+  },
+  {
+    "name": "Textile",
+    "extensions": [
+      "textile"
+    ]
+  },
+  {
+    "name": "Todo.txt",
+    "extensions": [
+      "todo.txt",
+      "done.txt"
+    ]
+  },
+  {
+    "name": "TOML",
+    "extensions": [
+      "toml",
+      "tml",
+      "Cargo.lock",
+      "Gopkg.lock",
+      "Pipfile",
+      "pdm.lock",
+      "poetry.lock",
+      "uv.lock",
+      "/usr/share/containers/**/*.conf",
+      "/etc/containers/**/*.conf",
+      "/home/nao/.config/containers/**/*.conf"
+    ]
+  },
+  {
+    "name": "TypeScript",
+    "extensions": [
+      "ts",
+      "mts",
+      "cts"
+    ]
+  },
+  {
+    "name": "TypeScriptReact",
+    "extensions": [
+      "tsx"
+    ]
+  },
+  {
+    "name": "Typst",
+    "extensions": [
+      "typ"
+    ]
+  },
+  {
+    "name": "varlink",
+    "extensions": [
+      "varlink"
+    ]
+  },
+  {
+    "name": "Verilog",
+    "extensions": [
+      "v",
+      "V"
+    ]
+  },
+  {
+    "name": "VHDL",
+    "extensions": [
+      "vhd",
+      "vhdl",
+      "vho",
+      "vht"
+    ]
+  },
+  {
+    "name": "VimHelp",
+    "extensions": [
+      "vimhelp"
+    ]
+  },
+  {
+    "name": "VimL",
+    "extensions": [
+      "vim",
+      "vimrc",
+      "gvimrc",
+      ".vimrc",
+      ".gvimrc",
+      ".exrc",
+      ".nvimrc",
+      "_vimrc",
+      "_gvimrc",
+      "_exrc"
+    ]
+  },
+  {
+    "name": "Vue Component",
+    "extensions": [
+      "vue"
+    ]
+  },
+  {
+    "name": "Vyper",
+    "extensions": [
+      "vy"
+    ]
+  },
+  {
+    "name": "WGSL",
+    "extensions": [
+      "wgsl"
+    ]
+  },
+  {
+    "name": "x86_64 Assembly",
+    "extensions": [
+      "yasm",
+      "nasm",
+      "asm",
+      "inc",
+      "mac"
+    ]
+  },
+  {
+    "name": "XML",
+    "extensions": [
+      "xml",
+      "xsd",
+      "xslt",
+      "tld",
+      "dtml",
+      "rng",
+      "rss",
+      "opml",
+      "svg",
+      "xaml",
+      "*.csproj",
+      "*.vbproj",
+      "*.props",
+      "*.targets"
+    ]
+  },
+  {
+    "name": "YAML",
+    "extensions": [
+      "yaml",
+      "yml",
+      "sublime-syntax",
+      "CITATION.cff",
+      ".clang-format",
+      "fish_history",
+      "/etc/kubernetes/*.conf"
+    ]
+  },
+  {
+    "name": "Zig",
+    "extensions": [
+      "zig",
+      "zon"
+    ]
+  }
+]

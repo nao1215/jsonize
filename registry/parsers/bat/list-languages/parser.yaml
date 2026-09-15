@@ -1,0 +1,44 @@
+# `bat --list-languages` writes, when its output is not a terminal, one
+# line per syntax: the syntax name, a colon, and the file extensions and
+# names it is chosen for, separated by commas. An entry may be an
+# extension (rs), a file name (Makefile), a glob (*.h) or a path
+# (/etc/profile), and may hold a space (script editor). No name and no
+# entry holds a colon or a comma, so each line splits at its one colon and
+# the entries at the commas. On a terminal the same list is printed in
+# columns with colours, which this does not read.
+#
+# Lines of a name, a colon and a list are what many files hold, so the
+# signature also asks for two syntaxes bat ships with, C and C#. A
+# syntax added from the user's configuration is sorted in among the
+# others, which is why the window is wider than the default.
+format: 1
+command: bat
+variant: list-languages
+aliases:
+  # Debian and Ubuntu install bat under this name.
+  - name: batcat
+description: bat --list-languages, each syntax with the file names it is chosen for
+metadata:
+  tags: [linux, darwin, code]
+  compatible: [bat]
+  references:
+    - https://github.com/sharkdp/bat
+detect:
+  args:
+    any: ["--list-languages", "-L"]
+  signature:
+    all:
+      # Every line: a name, one colon, and entries separated by commas.
+      - '\A(?:[^:,\n]+:[^:,\n]+(?:,[^:,\n]+)*\n)*[^:,\n]+:[^:,\n]+(?:,[^:,\n]+)*\z'
+      - '^C:c(?:,[^\n]*)?$'
+      - '^C#:cs(?:,[^\n]*)?$'
+    window: 200
+exec:
+  env:
+    NO_COLOR: "1"
+parse:
+  type: regex
+  pattern: '^(?P<name>[^:,]+):(?P<extensions>[^:]+)$'
+fields:
+  name: {required: true}
+  extensions: {type: array, split: ","}
