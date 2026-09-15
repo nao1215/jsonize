@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/networksetup/hardware-ports.json",
+  "title": "networksetup/hardware-ports",
+  "description": "networksetup -listallhardwareports ports, devices and hardware addresses on macOS",
+  "x-jsonize": {
+    "definition": "networksetup/hardware-ports",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "hardware_port": {
+        "type": "string"
+      },
+      "device": {
+        "type": "string"
+      },
+      "ethernet_address": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "hardware_port",
+      "device",
+      "ethernet_address"
+    ]
+  }
+}
