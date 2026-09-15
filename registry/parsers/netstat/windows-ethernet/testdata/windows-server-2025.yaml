@@ -1,0 +1,10 @@
+description: >-
+  netstat -e run for real on Windows Server 2025: the six rows, the last
+  with a received count only.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "netstat -e 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings). Nothing
+  was replaced: the table names no host or address.
+os: windows
+args: ["-e"]

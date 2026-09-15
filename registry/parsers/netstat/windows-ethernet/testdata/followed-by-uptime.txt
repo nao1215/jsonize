@@ -1,0 +1,11 @@
+Interface Statistics
+
+                           Received            Sent
+
+Bytes                      88232282        19940817
+Unicast packets               56450           13216
+Non-unicast packets               0             847
+Discards                          0               0
+Errors                            0               0
+Unknown protocols                 0
+ 13:50:00 up 13 days,  4:30,  5 users,  load average: 0.74, 0.79, 0.83

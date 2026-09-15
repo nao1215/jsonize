@@ -1,0 +1,13 @@
+Notes on the Windows Ethernet counters
+
+netstat -e prints a banner and a two-column table:
+
+Interface Statistics
+
+                           Received            Sent
+
+Bytes                      1000                2000
+
+Errors and Discards should stay at 0. A growing Discards count on the
+Received side usually means the receive buffers are too small. The
+Unknown protocols row counts received frames only.
