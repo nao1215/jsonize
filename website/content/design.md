@@ -88,7 +88,15 @@ have to pass.
 
 A CSV, TSV, LTSV, JSON Lines, JSON or YAML file is read as the format
 its extension or `--format` names, by a reader of that format rather
-than by a definition, and nothing is guessed from the text. These are
+than by a definition, and nothing is guessed from the text. Text with no
+format of its own is read as strings with `--format text`, `lines` or
+`nul`, which have no extension: a `.txt` file is more often a command's
+output than a list of lines, and detection keeps reading it as one.
+
+A CSV value stays text unless `--type` names its column. Guessing that
+`007` is a number, or that `1` is true, is what a data file converter is
+usually wrong about, and the conversion `--type` asks for is the one a
+definition's field does, so there is one set of rules for both. These are
 the files a pipeline hands on, and turning them into JSON is the same
 job as turning a command's output into JSON. XML, TOML, plist, x509 and
 JWT stay out: each has a specification that makes reading it a project

@@ -29,8 +29,9 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 		return []any{}, nil
 	}
 	var (
-		cols   []string
-		header []string
+		cols    []string
+		header  []string
+		checked bool
 	)
 	if p.Header.None {
 		cols = p.Header.Columns
@@ -43,12 +44,24 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 			return nil, r.errorf(ln, "", "%s", msg)
 		}
 		for _, row := range rows {
+			isHeader := false
 			switch {
 			case cols != nil:
 			case p.Header.None:
 				cols = csvNumbered(len(row))
 			default:
-				cols, header = csvColumns(p, row), row
+				cols, header, isHeader = csvColumns(p, row), row, true
+			}
+			// The columns are checked once, where they are first known:
+			// at the header line, or at the first record of a csv whose
+			// columns are numbered or named by the definition.
+			if !checked {
+				checked = true
+				if err := r.checkColumns(p, cols, rec.num); err != nil {
+					return nil, err
+				}
+			}
+			if isHeader {
 				continue
 			}
 			// A csv file is data: a row that holds the header's values is
@@ -168,6 +181,36 @@ func (r *run) csvRow(p *definition.Parse, fields map[string]*definition.Field, c
 		}
 	}
 	return obj, nil
+}
+
+// MissingColumnError is a field rule for a column a csv does not have: a
+// name its header line does not hold, or a numbered column past the ones
+// its first record has. It is about the input as a whole rather than one
+// record, so a stream ends with it instead of leaving a record out.
+type MissingColumnError struct {
+	Column  string
+	Columns []string
+}
+
+func (e *MissingColumnError) Error() string {
+	quoted := make([]string, len(e.Columns))
+	for i, c := range e.Columns {
+		quoted[i] = strconv.Quote(c)
+	}
+	return fmt.Sprintf("no column %q; the columns are %s", e.Column, strings.Join(quoted, ", "))
+}
+
+// checkColumns refuses a column the caller named (Header.Expected) that
+// cols, read from the input, does not have. Converting a column that is
+// not there would otherwise do nothing, and the caller who named it would
+// not know.
+func (r *run) checkColumns(p *definition.Parse, cols []string, ln int) error {
+	for _, name := range p.Header.Expected {
+		if !slices.Contains(cols, name) {
+			return &ParseError{Definition: r.def.ID(), Line: ln, Cause: &MissingColumnError{Column: name, Columns: cols}}
+		}
+	}
+	return nil
 }
 
 // csvNumbered names the columns of a csv that has no header line and

@@ -30,7 +30,7 @@ input has no answer, since nothing identifies it.
 
 ```text
   -f, --file PATH               read input from PATH instead of stdin
-      --format NAME             read a data file of this format: csv, tsv, ltsv, jsonl, json, yaml
+      --format NAME             read the input as this format: csv, tsv, ltsv, jsonl, json, yaml, text, lines, nul
   -p, --pretty                  indent JSON output
       --stream                  write each record as soon as it is read
       --raw                     skip the field rules and report every value as text
@@ -42,6 +42,7 @@ input has no answer, since nothing identifies it.
       --variant NAME            use a variant of --parser
       --define YAML             read with a definition given here instead of a registered one
       --columns NAME,...        name the columns of a csv read without a header line
+      --type COLUMN=TYPE        convert a csv or tsv column to int, float or bool (repeatable)
       --explain[=json]          report the chosen definition and why, on stderr
   -h, --help                    show help
 ```
@@ -233,8 +234,13 @@ to that format from the first line to the last.
 | `jsonl` | `.jsonl`, `.ndjson` | a list of the values, one per line |
 | `json` | `.json` | the document |
 | `yaml` | `.yaml`, `.yml` | the document, as JSON |
+| `text` | none | the whole input as one string |
+| `lines` | none | a list of strings, one per line |
+| `nul` | none | a list of strings, one per NUL-terminated record |
 
-Any of them may end in `.gz` or `.bz2`. Extensions are matched in any
+`text`, `lines` and `nul` have no extension, since a `.txt` file is
+usually a command's output; name them with `--format`. The others may end
+in `.gz` or `.bz2`. Extensions are matched in any
 case. A file whose extension names no format (`captured.txt`) is detected
 from its text.
 
@@ -268,13 +274,69 @@ file as a command's output.
   is a string. `.inf`, `.nan`, anchors, aliases, tags and a second
   document are refused.
 - Text that is not UTF-8 is refused, and a leading byte order mark is not
-  part of the text.
+  part of the text, except in `nul`, which keeps every byte.
 
 A reading that stops is exit 3 and names the line (`jz: json: line 3: the
 key "a" is given twice in one object`), as is a file that cannot be
-decompressed. `--stream` writes `jsonl` and `ltsv` records as their lines
-are read, and is a usage error with `json` or `yaml`. `--explain` says
-which format was read and what named it.
+decompressed. `--stream` writes the records of `jsonl`, `ltsv`, `lines`
+and `nul` as they are read, and is a usage error with `json`, `yaml` and
+`text`. `--explain` says which format was read and what named it.
+
+### Text, lines and NUL-separated records
+
+For output that has no format of its own, jz reads the text as strings.
+Nothing is trimmed, spaces and empty lines included.
+
+```console
+$ printf 'first\r\n\n  spaced  \nno ending' | jz --format lines
+["first","","  spaced  ","no ending"]
+$ find . -name '*.log' -print0 | jz --format nul
+["./a.log","./b c.log"]
+$ git log -1 --format=%B | jz --format text
+"Fix the parser\n\nIt dropped the last line.\n\n"
+```
+
+- `text` is the input as it is, an empty input `""`.
+- A line ends with LF or CRLF, and the ending is not part of it; a lone
+  CR is. A line ending at the end of the input ends the last line rather
+  than starting an empty one, and a last line without one is still a
+  line. An empty input is `[]`, an empty line `""`.
+- A `nul` record ends with a NUL, the way `find -print0` and `xargs -0`
+  write them, and keeps every other byte, line breaks included. A NUL at
+  the end ends the last record, and two in a row make an empty record.
+- A record that is not UTF-8 is exit 3, with its line (`lines: line 2`)
+  or its number (`nul: record 2`).
+
+### Typing the columns of a CSV
+
+A csv or tsv keeps every value as the text it was. `--type COLUMN=TYPE`
+converts one column, and may be repeated:
+
+```console
+$ jz --file sales.csv --type units=int --type price=float --type in_stock=bool
+[{"sku":"007","units":12,"price":1.5,"in_stock":true},{"sku":"008","units":null,"price":null,"in_stock":false}]
+```
+
+- The types are `int`, `float` and `bool`, converted the way a
+  definition's field of that type is: an integer with an optional sign, a
+  decimal (not `NaN` or an infinity), and `true`, `yes`, `on`, `1`, `y` or
+  `false`, `no`, `off`, `0`, `n` in any case. Space around a value is
+  not part of it.
+- An empty value is `null`. A column not named keeps its text, so `007`
+  stays `"007"`.
+- A value that is not the type is exit 3 with the line and the column
+  (`csv/comma: line 3: field "units": cannot convert "four" to int`);
+  with `--stream` the rows around it are written and the status is 3.
+- A column is named as it appears in the output: the header normalised
+  (`In Stock` is `in_stock`), a `--columns` name, or `column_2`. A column
+  the header line (or the first record, for numbered columns) does not
+  have is exit 2 before any row is written, and so is a column named
+  twice or an unknown type. An empty input has no columns and is `[]`.
+- `--type` with `--raw` is refused: `--raw` leaves out every field rule,
+  and a type is one.
+- `--type` applies to a `.csv` or `.tsv` file, `--format csv` or `tsv`,
+  and `--parser csv --variant ...`, also with `jz run`. A `--define`
+  states its own fields.
 
 ## Making JSON from arguments
 

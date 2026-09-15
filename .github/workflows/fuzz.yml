@@ -37,6 +37,7 @@ jobs:
           - { pkg: ./internal/datafile, name: FuzzReadJSON }
           - { pkg: ./internal/datafile, name: FuzzReadYAML }
           - { pkg: ./internal/datafile, name: FuzzLineFormats }
+          - { pkg: ./internal/datafile, name: FuzzStringRecords }
           - { pkg: ./internal/jsonbuild, name: FuzzObject }
           - { pkg: ./internal/jsonbuild, name: FuzzPlan }
           - { pkg: ./pkg/selector, name: FuzzSelect }

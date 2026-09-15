@@ -8,6 +8,18 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `--format text`, `--format lines` and `--format nul` read input that
+  has no format of its own as strings: the whole input as one string, a
+  list with one string per line (LF or CRLF), or one per NUL-terminated
+  record as `find -print0` writes them. Nothing is trimmed, empty records
+  stay `""`, and a separator at the end does not add an empty record.
+  `--stream` writes `lines` and `nul` records as they arrive.
+- `--type COLUMN=TYPE` converts a csv or tsv column to `int`, `float` or
+  `bool` with the rules a definition's field of that type follows; an
+  empty value is null and the other columns stay text. A value that is
+  not the type is exit 3 with the line and the column, and a column the
+  input does not have is exit 2.
+
 - `jz new --string KEY=TEXT` writes TEXT as a string exactly as it is, so
   a value from a variable is never read as a file name (`@...`) or JSON,
   whatever it holds: `jz new --string "message=$MESSAGE"`.

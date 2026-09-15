@@ -5,6 +5,8 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"maps"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -327,6 +329,7 @@ type selectOptions struct {
 	variant string
 	define  string
 	columns string
+	types   stringList
 	explain explainMode
 }
 
@@ -335,6 +338,7 @@ func (f *selectOptions) bind(o *optionSet) {
 	o.stringOpt(&f.variant, "variant", "", "NAME", "", "use a variant of --parser")
 	o.stringOpt(&f.define, "define", "", "YAML", "", "read with a definition given here instead of a registered one")
 	o.stringOpt(&f.columns, "columns", "", "NAME,...", "", "name the columns of a csv read without a header line")
+	o.listOpt(&f.types, "type", "COLUMN=TYPE", "convert a csv or tsv column to int, float or bool (repeatable)")
 	o.switchOpt(&f.explain, "explain", "json", "report the chosen definition and why, on stderr")
 }
 
@@ -354,7 +358,47 @@ func (f *selectOptions) check() error {
 			return err
 		}
 	}
+	if len(f.types) > 0 {
+		switch {
+		case f.define != "":
+			return errors.New("--type converts the columns of a csv a registered definition reads, and --define states its own: give the column a field there")
+		case f.variant == "":
+			return errors.New("--type converts the columns of a csv or a tsv: read a .csv or .tsv file, give --format csv or tsv, or name --parser csv --variant")
+		}
+		if _, err := f.columnTypes(); err != nil {
+			return err
+		}
+	}
 	return nil
+}
+
+// checkReading reports the pairs of reading and selecting options that
+// state two answers: --raw leaves out every field rule, and a --type
+// column is one.
+func checkReading(out *outputOptions, sel *selectOptions) error {
+	if out.raw && len(sel.types) > 0 {
+		return errors.New("--type and --raw cannot be used together: --raw leaves out the field rules, and --type converts a column with one")
+	}
+	return nil
+}
+
+// columnTypes reads --type COLUMN=TYPE. A column typed twice states two
+// answers, even when they agree.
+func (f *selectOptions) columnTypes() (map[string]string, error) {
+	out := map[string]string{}
+	for _, e := range f.types {
+		column, typ, ok := strings.Cut(e, "=")
+		switch {
+		case !ok || column == "" || typ == "":
+			return nil, fmt.Errorf("--type expects COLUMN=TYPE with a type of %s, got %q", strings.Join(definition.ColumnTypes(), ", "), e)
+		case !slices.Contains(definition.ColumnTypes(), typ):
+			return nil, fmt.Errorf("--type %s: unknown type %q; the types are %s", e, typ, strings.Join(definition.ColumnTypes(), ", "))
+		case out[column] != "":
+			return nil, fmt.Errorf("--type gives the column %q twice", column)
+		}
+		out[column] = typ
+	}
+	return out, nil
 }
 
 // columnNames splits --columns at its commas. A space around a name is
@@ -454,19 +498,15 @@ func splitEnvFlag(entries []string) ([]string, error) {
 	return entries, nil
 }
 
-// nameColumns applies --columns before anything is read or run. The
-// definition it applies to is the one named: the inline one, which is
-// returned renamed, or the registered variant, which is read renamed from
-// then on (reading). A definition that has no columns to name is a usage
-// error here rather than a reading that ignores the names.
+// nameColumns applies --type and --columns before anything is read or
+// run. The definition they apply to is the one named: the inline one,
+// which is returned changed, or the registered variant, which is read
+// changed from then on (reading). A definition that has no columns to
+// name or convert is a usage error here rather than a reading that
+// ignores the options.
 func (a *app) nameColumns(reg *registry.Registry, sel *selectOptions, inline *definition.Definition) (*definition.Definition, int) {
-	if sel.columns == "" {
+	if sel.columns == "" && len(sel.types) == 0 {
 		return inline, ExitOK
-	}
-	names, err := sel.columnNames()
-	if err != nil {
-		a.errorf("%v", err)
-		return nil, ExitUsage
 	}
 	target := inline
 	if target == nil {
@@ -476,15 +516,38 @@ func (a *app) nameColumns(reg *registry.Registry, sel *selectOptions, inline *de
 		}
 		target = e.Def
 	}
-	renamed, err := target.WithColumns(names)
-	if err != nil {
-		a.errorf("--columns: %v", err)
-		return nil, ExitUsage
+	changed := target
+	if len(sel.types) > 0 {
+		types, err := sel.columnTypes()
+		if err == nil {
+			changed, err = changed.WithTypes(types)
+		}
+		if err != nil {
+			a.errorf("--type: %v", err)
+			return nil, ExitUsage
+		}
+		a.typed = types
+	}
+	if sel.columns != "" {
+		names, err := sel.columnNames()
+		for _, column := range slices.Sorted(maps.Keys(a.typed)) {
+			if err == nil && !slices.Contains(names, column) {
+				a.errorf("--type: no column %q; --columns names %s", column, strings.Join(names, ", "))
+				return nil, ExitUsage
+			}
+		}
+		if err == nil {
+			changed, err = changed.WithColumns(names)
+		}
+		if err != nil {
+			a.errorf("--columns: %v", err)
+			return nil, ExitUsage
+		}
 	}
 	if inline != nil {
-		return renamed, ExitOK
+		return changed, ExitOK
 	}
-	a.named, a.renamed = target, renamed
+	a.named, a.renamed = target, changed
 	return nil, ExitOK
 }
 

@@ -2,6 +2,14 @@ version: "1"
 
 suite:
   name: data files
+  # standin is a copy of e2ehelper under another name, which jz run starts
+  # and which relays its input, so the csv a command prints is the fixture.
+  setup:
+    - fixture:
+        file: bin/.keep
+        content: ""
+    - run:
+        command: e2ehelper as standin ${suitedir}/bin
 
 # A data file is read as the format its extension names, and input from a
 # pipe as the format --format names. Nothing is detected: the person who
@@ -242,7 +250,7 @@ scenarios:
       - assert:
           exit_code: 2
           stderr:
-            contains: "--stream writes the records of a line format (ltsv, jsonl), and a json document is one value"
+            contains: "--stream writes the records of a record format (ltsv, jsonl, lines, nul), and a json document is one value"
       - run:
           command: jz --format json --extract missing
           stdin: '{"present": 1}'
@@ -251,3 +259,290 @@ scenarios:
           stdout: {empty: true}
           stderr:
             contains: 'no key "missing" in the output'
+
+  # text, lines and nul read what a pipe carries as strings, for a command
+  # whose output has no format of its own: the whole of it, one string per
+  # line, or one per NUL-terminated record. Nothing is trimmed but the
+  # separator, an empty record stays "", and a separator at the end ends
+  # the last record rather than starting an empty one.
+  - name: text is one string and lines and nul are lists of strings, with nothing trimmed
+    steps:
+      - run:
+          command: jz --format text
+          stdin: "  indented\r\n\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "\"  indented\\r\\n\\n\"\n"
+      - run:
+          command: jz --format text
+          stdin: ""
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "\"\"\n"
+      - run:
+          command: jz --format lines
+          stdin: "first\r\n\n  spaced  \nno ending"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[\"first\",\"\",\"  spaced  \",\"no ending\"]\n"
+      - run:
+          command: jz --format lines
+          stdin: "one\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[\"one\"]\n"
+      - run:
+          command: jz --format lines
+          stdin: ""
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[]\n"
+      - fixture:
+          file: found.bin
+          base64: "Li9hIGIALi9jCmQAAA=="
+      - run:
+          command: jz --format nul --file ${workdir}/found.bin
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[\"./a b\",\"./c\\nd\",\"\"]\n"
+      - fixture:
+          file: last.bin
+          base64: "eABBAA=="
+      - run:
+          command: jz --format nul --stream --file ${workdir}/last.bin
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              "x"
+              "A"
+      - run:
+          command: jz --format text --stream
+          stdin: "x"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "--stream writes the records of a record format (ltsv, jsonl, lines, nul), and a text document is one value"
+
+  # With --stream a line or a NUL-terminated record is written when its
+  # separator arrives, while the input is still open.
+  - name: lines and nul records are written as their separators arrive
+    steps:
+      - fixture:
+          file: lines.feed
+          content: |
+            send first\r\n
+            expect 1
+            send \n
+            expect 1
+            send last
+            close
+            expect 1
+            wait
+      - run:
+          command: e2ehelper feed -deadline 10s -script lines.feed -- jz --format lines --stream
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              > expect 1
+              "first"
+              > expect 1
+              ""
+              > expect 1
+              "last"
+              status=0
+      - fixture:
+          file: zero-records.feed
+          content: |
+            send a b\x00
+            expect 1
+            send c\nd\x00
+            expect 1
+            close
+            wait
+      - run:
+          command: e2ehelper feed -deadline 10s -script zero-records.feed -- jz --format nul --stream
+          timeout: 60s
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              > expect 1
+              "a b"
+              > expect 1
+              "c\nd"
+              status=0
+
+  - name: text that is not UTF-8 is refused with its line or record, and a stream keeps what it wrote
+    steps:
+      - fixture:
+          file: latin1.txt
+          base64: "b2sKY2Fm6QoK"
+      - run:
+          command: jz --format lines --file ${workdir}/latin1.txt
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "jz: lines: line 2: the text is not valid UTF-8"
+      - run:
+          command: jz --format text --file ${workdir}/latin1.txt
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "jz: text: line 2: the text is not valid UTF-8"
+      - fixture:
+          file: latin1.bin
+          base64: "b2sAY2Fm6QA="
+      - run:
+          command: jz --format nul --stream --file ${workdir}/latin1.bin
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              "ok"
+          stderr:
+            contains: "jz: nul: record 2: the text is not valid UTF-8"
+
+  # --type converts the columns it names with the rules a definition's
+  # field of that type follows. The rest stay the strings they were, so
+  # 007 stays "007"; an empty value is null.
+  - name: --type converts the columns it names and leaves the rest as text
+    steps:
+      - fixture:
+          file: sales.csv
+          content: |
+            sku,units,price,in_stock
+            007,12,1.50,yes
+            008,,,false
+      - run:
+          command: jz --file ${workdir}/sales.csv --type units=int --type price=float --type in_stock=bool
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              [{"sku":"007","units":12,"price":1.5,"in_stock":true},{"sku":"008","units":null,"price":null,"in_stock":false}]
+      - run:
+          command: jz --file ${workdir}/sales.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"sku":"007","units":"12","price":"1.50","in_stock":"yes"},{"sku":"008","units":"","price":"","in_stock":"false"}]
+      - run:
+          command: jz --format tsv --type n=int --stream
+          stdin: "id\tn\na\t1\nb\t2\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"id":"a","n":1}
+              {"id":"b","n":2}
+      - run:
+          command: jz --format csv --columns id,n --type n=int
+          stdin: "a,1\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"id":"a","n":1}]
+      - run:
+          command: jz run --parser csv --variant comma --type n=int -- ${suitedir}/bin/standin
+          stdin: "id,n\na,5\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"id":"a","n":5}]
+
+  # A value that is not the type names the line and the column. Read whole,
+  # nothing is written; streamed, the rows before and after it are written
+  # and the status is still 3. A column the input does not have was named
+  # by the caller, so it is exit 2, before any row is written.
+  - name: --type refuses a value that is not the type, a column the input lacks and a type it does not know
+    steps:
+      - run:
+          command: jz --format csv --type units=int
+          stdin: "sku,units\n1,4\n2,four\n3,5\n"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: 'jz: csv/comma: line 3: field "units": cannot convert "four" to int'
+      - run:
+          command: jz --format csv --type units=int --stream
+          stdin: "sku,units\n1,4\n2,four\n3,5\n"
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"sku":"1","units":4}
+              {"sku":"3","units":5}
+          stderr:
+            contains: 'line 3: field "units": cannot convert "four" to int'
+      - run:
+          command: jz --format csv --type price=float
+          stdin: "sku,units\n1,4\n"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: 'jz: csv/comma: line 1: no column "price"; the columns are "sku", "units"'
+      - run:
+          command: jz --format csv --type price=float --stream
+          stdin: "sku,units\n1,4\n"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+      - run:
+          command: jz --format csv --type units=integer --file ${workdir}/missing.csv
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: '--type units=integer: unknown type "integer"; the types are int, float, bool'
+      - run:
+          command: jz --format csv --type units=int --type units=float
+          stdin: "units\n1\n"
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: '--type gives the column "units" twice'
+      - run:
+          command: jz --format csv --type units=int --raw
+          stdin: "units\n1\n"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "--type and --raw cannot be used together"
+      # A definition's own field for a column the file lacks does nothing;
+      # only a column named on the command line is checked.
+      - run:
+          command: "jz --define 'parse: {type: csv}\nfields: {units: {type: int}}'"
+          stdin: "sku\n1\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"sku":"1"}]
+      - run:
+          command: jz --format lines --type units=int
+          stdin: "1\n"
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "--type converts the columns of a csv or a tsv, and standard input is read as lines"

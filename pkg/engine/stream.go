@@ -261,6 +261,7 @@ type streamer struct {
 	csvQuote   csvQuote
 	csvCols    []string
 	csvHeader  []string
+	csvChecked bool
 	// boxRow holds the lines between two rules of a drawn table, and
 	// boxHeader the cells of the header row, read from boxHeaderLines;
 	// boxBody is set by the first group of lines after the header.
@@ -278,8 +279,11 @@ type streamer struct {
 // should carry on, and the error that must end it otherwise. Anything
 // that is not a record jz failed to read passes straight through.
 func (s *streamer) report(err error) error {
-	var done *reportedError
-	if err == nil || s.onError == nil || errors.As(err, &done) {
+	var (
+		done    *reportedError
+		missing *MissingColumnError
+	)
+	if err == nil || s.onError == nil || errors.As(err, &done) || errors.As(err, &missing) {
 		return err
 	}
 	var pe *ParseError
@@ -730,12 +734,21 @@ func (s *streamer) emitCSV(rec line) error {
 		return s.errorf(ln, "", "%s", msg)
 	}
 	for _, row := range rows {
+		isHeader := false
 		switch {
 		case s.csvCols != nil:
 		case s.p.Header.None:
 			s.csvCols = csvNumbered(len(row))
 		default:
-			s.csvCols, s.csvHeader = csvColumns(s.p, row), row
+			s.csvCols, s.csvHeader, isHeader = csvColumns(s.p, row), row, true
+		}
+		if !s.csvChecked {
+			s.csvChecked = true
+			if err := s.checkColumns(s.p, s.csvCols, rec.num); err != nil {
+				return err
+			}
+		}
+		if isHeader {
 			continue
 		}
 		// A csv file is data: a row that holds the header's values is a

@@ -16,7 +16,8 @@ so the output shown is what jz prints.
 | shape what comes out | [Keep only the keys you need](#keep-only-the-keys-you-need) |
 | read a command that never stops | [Follow a command that keeps printing](#follow-a-command-that-keeps-printing) |
 | understand or override detection | [See which parser jz chose](#see-which-parser-jz-chose), [Name the parser when detection refuses](#name-the-parser-when-detection-refuses), [Read output jz has no parser for](#read-output-jz-has-no-parser-for) |
-| convert a data file | [Convert a CSV file](#convert-a-csv-file), [Read a CSV without a header line](#read-a-csv-without-a-header-line), [Convert YAML to JSON](#convert-yaml-to-json), [Read compressed JSON Lines logs](#read-compressed-json-lines-logs), [Read LTSV access logs](#read-ltsv-access-logs) |
+| convert a data file | [Convert a CSV file](#convert-a-csv-file), [Type the columns of a CSV file](#type-the-columns-of-a-csv-file), [Read a CSV without a header line](#read-a-csv-without-a-header-line), [Convert YAML to JSON](#convert-yaml-to-json), [Read compressed JSON Lines logs](#read-compressed-json-lines-logs), [Read LTSV access logs](#read-ltsv-access-logs) |
+| turn plain text into JSON | [Turn lines into a JSON array](#turn-lines-into-a-json-array), [Read find -print0 output](#read-find--print0-output), [Wrap a whole text in a JSON string](#wrap-a-whole-text-in-a-json-string) |
 | make JSON in a script | [Build a JSON body for an API call](#build-a-json-body-for-an-api-call), [Pass a variable that may start with @](#pass-a-variable-that-may-start-with-), [Put a file's contents into JSON](#put-a-files-contents-into-json), [Keep a file's line endings](#keep-a-files-line-endings), [Build nested JSON](#build-nested-json), [Make a JSON array](#make-a-json-array) |
 | use jz in CI | [Fail a CI step when jz cannot read the output](#fail-a-ci-step-when-jz-cannot-read-the-output), [Get the JSON Schema of an output](#get-the-json-schema-of-an-output) |
 | read a format jz does not know | [Add a parser of your own](#add-a-parser-of-your-own) |
@@ -115,6 +116,16 @@ $ jz --file users.csv
 Every CSV value is a string. A row with more fields than the header is
 exit 3 with the line.
 
+## Type the columns of a CSV file
+
+Every value of a CSV is text until `--type` names its type. An empty
+value is null.
+
+```console
+$ jz --file sales.csv --type units=int --type price=float --type in_stock=bool
+[{"sku":"007","units":12,"price":1.5,"in_stock":true},{"sku":"008","units":null,"price":null,"in_stock":false}]
+```
+
 ## Read a CSV without a header line
 
 ```console
@@ -147,6 +158,32 @@ $ jz --file events.jsonl.gz --stream --extract msg
 ```console
 $ jz --file access.ltsv
 [{"time":"2026-09-15T07:00:01Z","host":"192.0.2.10","status":"200","req":"GET /api HTTP/1.1"},{"time":"2026-09-15T07:00:02Z","host":"192.0.2.11","status":"404","req":"GET /missing HTTP/1.1"}]
+```
+
+## Turn lines into a JSON array
+
+Each line is a string; empty lines and spaces stay.
+
+```console
+$ git branch --format='%(refname:short)' | jz --format lines
+["main","feature/login"," spaced "]
+```
+
+## Read find -print0 output
+
+A NUL ends each record, so a name with a space or a line break is one
+string.
+
+```console
+$ find . -name '*.log' -print0 | jz --format nul
+["./a.log","./b c.log","./line\nbreak.log"]
+```
+
+## Wrap a whole text in a JSON string
+
+```console
+$ git log -1 --format=%B | jz --format text
+"Fix the parser\n\nIt dropped the last line.\n\n"
 ```
 
 ## Build a JSON body for an API call
