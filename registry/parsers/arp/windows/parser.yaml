@@ -1,0 +1,49 @@
+# `arp -a` on Windows prints the ARP cache one interface at a time: a
+# line naming the interface by its address and its index in hexadecimal
+# ("Interface: 192.0.2.108 --- 0xe"), then a header indented by two
+# spaces and one entry per line under it. A machine with several
+# interfaces prints a block for each, with a blank line between them.
+#
+# An entry is an IPv4 address, the hardware address as six hexadecimal
+# bytes joined by hyphens, and the type of the entry, dynamic or static.
+# The three are held to those shapes, which is what refuses a line of
+# another command printed after the last block. The index stays the
+# hexadecimal string it was printed as.
+format: 1
+command: arp
+variant: windows
+description: arp -a on Windows, the ARP cache of each interface
+metadata:
+  tags: [windows, network]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/arp
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    any: ["-a", "-g", "/a", "/g"]
+  signature:
+    all:
+      # The first interface line and the header under it.
+      - '\AInterface: \d{1,3}(?:\.\d{1,3}){3} --- 0x[0-9a-f]+[ \t]*\n[ \t]+Internet Address[ \t]+Physical Address[ \t]+Type[ \t]*$'
+input:
+  ignore:
+    # The header of each block.
+    - '^[ \t]+Internet Address[ \t]+Physical Address[ \t]+Type[ \t]*$'
+parse:
+  type: records
+  start: '^Interface: '
+  parts:
+    - name: interface
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AInterface: (?P<address>\d{1,3}(?:\.\d{1,3}){3}) --- (?P<index>0x[0-9a-f]+)[ \t]*\z'
+    - name: entries
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^[ \t]+(?P<internet_address>\d{1,3}(?:\.\d{1,3}){3})[ \t]+(?P<physical_address>[0-9a-f]{2}(?:-[0-9a-f]{2}){5})[ \t]+(?P<type>dynamic|static)[ \t]*$'

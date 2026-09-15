@@ -1,0 +1,15 @@
+description: >-
+  arp -a run for real on Windows Server 2025: one interface with a
+  dynamic entry for the gateway and static broadcast and multicast
+  entries.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "arp -a 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  line above the block as the command wrote it). The runner's private
+  IPv4 addresses were replaced with 192.0.2.108, 192.0.2.1 and
+  192.0.2.255, one space of the padding after each removed to keep the
+  columns. The gateway's hardware address is the placeholder Azure
+  answers with and was kept.
+os: windows
+args: ["-a"]

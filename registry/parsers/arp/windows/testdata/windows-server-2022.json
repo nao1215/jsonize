@@ -1,0 +1,63 @@
+[
+  {
+    "interface": {
+      "address": "172.28.32.1",
+      "index": "0xc"
+    },
+    "entries": [
+      {
+        "internet_address": "172.28.47.255",
+        "physical_address": "ff-ff-ff-ff-ff-ff",
+        "type": "static"
+      },
+      {
+        "internet_address": "224.0.0.22",
+        "physical_address": "01-00-5e-00-00-16",
+        "type": "static"
+      },
+      {
+        "internet_address": "224.0.0.251",
+        "physical_address": "01-00-5e-00-00-fb",
+        "type": "static"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "address": "192.0.2.192",
+      "index": "0xf"
+    },
+    "entries": [
+      {
+        "internet_address": "192.0.2.1",
+        "physical_address": "12-34-56-78-9a-bc",
+        "type": "dynamic"
+      },
+      {
+        "internet_address": "192.0.2.255",
+        "physical_address": "ff-ff-ff-ff-ff-ff",
+        "type": "static"
+      },
+      {
+        "internet_address": "224.0.0.22",
+        "physical_address": "01-00-5e-00-00-16",
+        "type": "static"
+      },
+      {
+        "internet_address": "224.0.0.251",
+        "physical_address": "01-00-5e-00-00-fb",
+        "type": "static"
+      },
+      {
+        "internet_address": "224.0.0.252",
+        "physical_address": "01-00-5e-00-00-fc",
+        "type": "static"
+      },
+      {
+        "internet_address": "255.255.255.255",
+        "physical_address": "ff-ff-ff-ff-ff-ff",
+        "type": "static"
+      }
+    ]
+  }
+]
