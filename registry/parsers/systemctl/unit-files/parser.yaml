@@ -28,6 +28,6 @@ fields:
   # A unit file's name ends in its type and the state is one lower
   # case word, which is what tells a row from three words of another
   # command's output.
-  unit_file: {required: true, regex: '(?P<unit_file>\S+\.(?:service|socket|device|mount|automount|swap|target|path|timer|slice|scope))'}
+  unit_file: {required: true, regex: '(?P<unit_file>\S+\.(?:service|socket|device|mount|automount|swap|target|path|timer|slice|scope|busname))'}
   state: {required: true, regex: '(?P<state>[a-z][a-z-]*)'}
   preset: {null_if: ["-"]}

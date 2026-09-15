@@ -40,7 +40,7 @@ parse:
   # A top-level line is the unit the chain leads to, and a unit name
   # ends in its type; a line of any other shape at the top is not part
   # of the report.
-  root: '^\S+\.(?:service|socket|device|mount|automount|swap|target|path|timer|slice|scope)(?: @|[ \t]*$)'
+  root: '^\S+\.(?:service|socket|device|mount|automount|swap|target|path|timer|slice|scope|busname)(?: @|[ \t]*$)'
   node:
     parse:
       type: regex

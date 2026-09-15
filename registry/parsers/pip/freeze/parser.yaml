@@ -40,11 +40,19 @@ detect:
     all: ["freeze"]
   signature:
     all:
-      - '\A(?:(?:[A-Za-z0-9][A-Za-z0-9._-]*(?:==[0-9]\S*| @ \S+)|-e \S+)[ \t]*(?:\n|\z))+\z'
+      # Every line is a requirement, or a comment pip writes above an
+      # editable install it cannot describe by a URL.
+      - '\A(?:(?:[A-Za-z0-9][A-Za-z0-9._-]*(?:===?\S+| @ \S+)|-e \S+|# [^\n]*)[ \t]*(?:\n|\z))+\z'
+      - '^(?:[A-Za-z0-9][A-Za-z0-9._-]*(?:===?\S+| @ \S+)|-e \S+)[ \t]*$'
+input:
+  ignore:
+    - '^# (?:Editable |The following requirements were added by pip freeze:)'
 parse:
   type: regex
   patterns:
-    - pattern: '^(?P<name>[A-Za-z0-9][A-Za-z0-9._-]*)==(?P<version>[0-9]\S*)(?P<url>)??[ \t]*$'
+    # === pins a version pip could not parse as one (PEP 440 arbitrary
+    # equality), which is kept as printed.
+    - pattern: '^(?P<name>[A-Za-z0-9][A-Za-z0-9._-]*)===?(?P<version>\S+)(?P<url>)??[ \t]*$'
       values: {editable: "no"}
     - pattern: '^(?P<name>[A-Za-z0-9][A-Za-z0-9._-]*) @ (?P<url>\S+)(?P<version>)??[ \t]*$'
       values: {editable: "no"}

@@ -30,7 +30,7 @@ input:
     - '^NAME[ \t]+DESCRIPTION[ \t]+DOCKER ENDPOINT[ \t]'
 parse:
   type: regex
-  pattern: '^(?P<name>\S+)(?P<current>(?: \*)?) {2,}(?P<description>(?:\S.*?)?) {2,}(?P<docker_endpoint>\S+)(?: {2,}(?P<error>\S.*?))?[ \t]*$'
+  pattern: '^(?P<name>\S+)(?P<current>(?: \*)?) {2,}(?P<description>(?:\S.*?)?) {2,}(?P<docker_endpoint>[a-z][a-z0-9+.-]*://\S*)(?: {2,}(?P<error>\S.*?))?[ \t]*$'
 fields:
   name: {required: true}
   current: {type: bool, trim_prefix: " ", true_values: ["*"], false_values: [""]}

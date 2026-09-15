@@ -31,7 +31,7 @@ detect:
       - '\ANAME[ \t]+SHORTNAMES[ \t]+APIVERSION[ \t]+NAMESPACED[ \t]+KIND(?:[ \t]+VERBS[ \t]+CATEGORIES)?[ \t]*$'
       # Every line after it is a row: a resource name, its short names
       # or nothing, a version, true or false and a capitalised kind.
-      - '\A[^\n]*(?:\n[a-z0-9.-]+[ \t]+(?:[a-z0-9,-]+[ \t]+)?[A-Za-z0-9./-]+[ \t]+(?:true|false)[ \t]+[A-Z][A-Za-z0-9]*[^\n]*)*\z'
+      - '\A[^\n]*(?:\n[a-z0-9./-]+[ \t]+(?:[a-z0-9,-]+[ \t]+)?[A-Za-z0-9./-]+[ \t]+(?:true|false)[ \t]+[A-Z][A-Za-z0-9]*[^\n]*)*\z'
 parse:
   type: table
   split: aligned

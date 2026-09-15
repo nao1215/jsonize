@@ -1,0 +1,2 @@
+source: captured with LC_ALL=C mise outdated (mise 2026.8) in a directory whose mise.toml names shfmt 3.10.0, which is not installed, and node 22; the directory replaced
+description: a tool the configuration names and nothing installs has [MISSING] as its current version, which is null

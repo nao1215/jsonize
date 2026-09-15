@@ -18,7 +18,10 @@
         "type": "string"
       },
       "current": {
-        "type": "string"
+        "type": [
+          "string",
+          "null"
+        ]
       },
       "latest": {
         "type": "string"

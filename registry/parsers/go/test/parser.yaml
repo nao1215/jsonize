@@ -75,9 +75,9 @@ input:
 parse:
   type: regex
   patterns:
-    - pattern: '^(?P<status>ok)  \t(?P<package>\S+)\t(?P<elapsed>)??\(cached\)(?P<note>)??(?:\tcoverage: (?:(?P<coverage>\d+\.\d)%|\[no statements\]) of statements)?$'
+    - pattern: '^(?P<status>ok)  \t(?P<package>\S+)\t(?P<elapsed>)??\(cached\)(?P<note>)??(?:\tcoverage: (?:(?P<coverage>\d+\.\d)% of statements|\[no statements\]))?$'
       values: {cached: "true"}
-    - pattern: '^(?P<status>ok|FAIL) *\t(?P<package>\S+)\t(?P<elapsed>\d+\.\d{3}s)(?: \[(?P<note>no tests to run)\])?(?:\tcoverage: (?:(?P<coverage>\d+\.\d)%|\[no statements\]) of statements)?$'
+    - pattern: '^(?P<status>ok|FAIL) *\t(?P<package>\S+)\t(?P<elapsed>\d+\.\d{3}s)(?: \[(?P<note>no tests to run)\])?(?:\tcoverage: (?:(?P<coverage>\d+\.\d)% of statements|\[no statements\]))?$'
       values: {cached: "false"}
     - pattern: '^(?P<status>\?)   \t(?P<package>\S+)\t(?P<elapsed>)??\[(?P<note>no test files)\](?P<coverage>)??$'
       values: {cached: "false"}

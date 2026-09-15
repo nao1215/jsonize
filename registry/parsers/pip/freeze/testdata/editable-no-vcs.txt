@@ -1,0 +1,2 @@
+# Editable install with no version control (demo==0.1.0)
+-e /home/user/src/demo
