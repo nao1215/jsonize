@@ -290,7 +290,19 @@ func readFiles(src Source) ([]*file, error) {
 			files = append(files, &file{path: p, err: err})
 			return nil //nolint:nilerr // recorded so the rest of the registry still loads
 		}
-		if d.IsDir() || d.Name() != DefinitionFile {
+		if d.IsDir() {
+			// The fixtures beside a definition hold no definition of
+			// their own, and there are ten of them for every one: the
+			// official registry walks 5,600 files to find 596. The
+			// directory is skipped only where the layout puts it,
+			// parsers/<command>/<variant>/testdata, so a variant that
+			// happens to be named that is still walked.
+			if d.Name() == TestdataDir && strings.Count(p, "/") == 3 {
+				return fs.SkipDir
+			}
+			return nil
+		}
+		if d.Name() != DefinitionFile {
 			return nil
 		}
 		count++
@@ -480,9 +492,33 @@ func ReadBounded(fsys fs.FS, name string, limit int64) ([]byte, error) {
 		return nil, err
 	}
 	defer func() { _ = f.Close() }()
-	data, err := io.ReadAll(io.LimitReader(f, limit+1))
-	if err != nil {
-		return nil, fmt.Errorf("%s: %w", name, err)
+	// A file whose length is known is read into one buffer of that
+	// length rather than into one that grows by doubling, which is
+	// several allocations for a definition of a few kilobytes and is
+	// paid for every file of the registry every time jz starts. The
+	// length is only a starting size: a file that grew after it was
+	// asked for is still read to its end, and what was read is held to
+	// the limit either way.
+	size := int64(512)
+	if fi, serr := f.Stat(); serr == nil && fi.Mode().IsRegular() && fi.Size() >= 0 {
+		if fi.Size() > limit {
+			return nil, fmt.Errorf("%s exceeds %d bytes", name, limit)
+		}
+		size = fi.Size()
+	}
+	data := make([]byte, 0, size+1)
+	for int64(len(data)) <= limit {
+		if len(data) == cap(data) {
+			data = append(data, 0)[:len(data)]
+		}
+		n, rerr := f.Read(data[len(data):cap(data)])
+		data = data[:len(data)+n]
+		if rerr != nil {
+			if errors.Is(rerr, io.EOF) {
+				break
+			}
+			return nil, fmt.Errorf("%s: %w", name, rerr)
+		}
 	}
 	if int64(len(data)) > limit {
 		return nil, fmt.Errorf("%s exceeds %d bytes", name, limit)

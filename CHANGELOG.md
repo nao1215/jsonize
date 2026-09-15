@@ -6,6 +6,17 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Loading the registry costs about a tenth less time, a tenth fewer
+  bytes and a fifth fewer allocations. The walk that looks for
+  definitions no longer descends into the fixtures beside them (5,614
+  files were read through to find 596), a definition file is read into
+  one buffer of its own length, and the YAML reader takes its nodes from
+  blocks, leaves text with no CRLF in it where it lies and does not
+  build a scalar written on one line. Nothing about what is chosen, what
+  is reported or which registry wins changes.
+
 ### Fixed
 
 - `--stream` holds the lines it identifies the format by to the 1 MiB
