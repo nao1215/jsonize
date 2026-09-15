@@ -124,6 +124,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- A `required` field whose value is a word `null_if` names is `null`, where
+  it was an error: the command printed its word for no value, and
+  `required` refuses a value that is missing or empty. `kubectl get
+  services` reads a headless service's `None` cluster IP as null, which
+  was refused; its output schema is version 2.
 - `--assume-year now` dates a timestamp printed without a year in the
   latest year that does not put it after the moment jz started, rather
   than always in the current year. A `last` or `who` line of December 31

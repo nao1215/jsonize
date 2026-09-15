@@ -87,11 +87,11 @@ func (r *run) convertMatched(name string, v raw, f *definition.Field, ln int, pr
 		s = kept
 	}
 	trimmed := strings.TrimSpace(s)
+	// A value null_if names was printed: it is the command's own word for
+	// no value ("N/A", "None"), so a required field that holds one is
+	// null rather than missing.
 	for _, n := range f.NullIf {
 		if trimmed == n {
-			if f.Required {
-				return nil, false, r.errorf(ln, name, "required value is null")
-			}
 			return nil, f.WhenMissing == definition.MissingOmit, nil
 		}
 	}
