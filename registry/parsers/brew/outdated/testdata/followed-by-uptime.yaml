@@ -1,0 +1,5 @@
+description: the uptime line joined after the formula is refused rather than read as one
+source: the macos-26 fixture followed by the uptime/bsd fixture, joined for this case
+os: darwin
+args: [outdated, --verbose]
+expect_error: does not describe this input

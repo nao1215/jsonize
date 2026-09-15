@@ -1,0 +1,2 @@
+rustup (1.29.0) < 1.29.1 fixed the proxy bug we hit in CI
+node (24.1.0) < 24.2.0 is held back until the lockfile is regenerated

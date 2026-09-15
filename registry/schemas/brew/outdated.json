@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/brew/outdated.json",
+  "title": "brew/outdated",
+  "description": "brew outdated --verbose formulae and casks with installed and available versions",
+  "x-jsonize": {
+    "definition": "brew/outdated",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "installed": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "operator": {
+        "type": "string",
+        "enum": [
+          "!=",
+          "\u003c"
+        ]
+      },
+      "latest": {
+        "type": "string"
+      },
+      "pinned_at": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "installed",
+      "operator",
+      "latest",
+      "pinned_at"
+    ]
+  }
+}
