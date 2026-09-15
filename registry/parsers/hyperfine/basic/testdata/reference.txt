@@ -1,0 +1,16 @@
+Benchmark 1: sleep 0.02
+  Time (mean ± σ):      21.9 ms ±   0.4 ms    [User: 0.4 ms, System: 1.5 ms]
+  Range (min … max):    21.6 ms …  22.4 ms    5 runs
+ 
+Benchmark 2: sleep 0.01
+  Time (mean ± σ):      11.7 ms ±   0.3 ms    [User: 0.8 ms, System: 0.8 ms]
+  Range (min … max):    11.5 ms …  12.2 ms    5 runs
+ 
+Benchmark 3: sleep 0.03
+  Time (mean ± σ):      32.2 ms ±   0.4 ms    [User: 0.5 ms, System: 1.7 ms]
+  Range (min … max):    31.6 ms …  32.7 ms    5 runs
+ 
+Summary
+  sleep 0.02 ran
+    1.87 ± 0.06 times slower than sleep 0.01
+    1.47 ± 0.03 times faster than sleep 0.03

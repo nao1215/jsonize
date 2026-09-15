@@ -1,0 +1,3 @@
+source: captured with hyperfine 1.20.0 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, hyperfine --style full --runs 3 'sleep 0.01' through a pipe
+description: the full style colours the values, and once the escapes are removed the text is the basic one
+args: [--style, full, --runs, "3", sleep 0.01]

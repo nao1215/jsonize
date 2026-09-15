@@ -1,0 +1,76 @@
+{
+  "benchmarks": [
+    {
+      "number": 1,
+      "command": "sleep 0.3",
+      "mean": {
+        "value": 302.5,
+        "unit": "ms"
+      },
+      "stddev": {
+        "value": 0.4,
+        "unit": "ms"
+      },
+      "user": {
+        "value": 1,
+        "unit": "ms"
+      },
+      "system": {
+        "value": 1.3,
+        "unit": "ms"
+      },
+      "min": {
+        "value": 301.9,
+        "unit": "ms"
+      },
+      "max": {
+        "value": 303.1,
+        "unit": "ms"
+      },
+      "runs": 10
+    },
+    {
+      "number": 2,
+      "command": "true",
+      "mean": {
+        "value": 522.8,
+        "unit": "µs"
+      },
+      "stddev": {
+        "value": 349.3,
+        "unit": "µs"
+      },
+      "user": {
+        "value": 236.1,
+        "unit": "µs"
+      },
+      "system": {
+        "value": 206,
+        "unit": "µs"
+      },
+      "min": {
+        "value": 304.9,
+        "unit": "µs"
+      },
+      "max": {
+        "value": 1193.9,
+        "unit": "µs"
+      },
+      "runs": 10
+    }
+  ],
+  "summary": [
+    {
+      "relation": "reference",
+      "ratio": null,
+      "ratio_stddev": null,
+      "command": "true"
+    },
+    {
+      "ratio": 578.62,
+      "ratio_stddev": 386.61,
+      "relation": "faster",
+      "command": "sleep 0.3"
+    }
+  ]
+}

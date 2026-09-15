@@ -1,0 +1,25 @@
+{
+  "benchmarks": [
+    {
+      "number": 1,
+      "command": "sleep 0.01",
+      "mean": {
+        "value": 11.3,
+        "unit": "ms"
+      },
+      "stddev": null,
+      "user": {
+        "value": 0.8,
+        "unit": "ms"
+      },
+      "system": {
+        "value": 0.5,
+        "unit": "ms"
+      },
+      "min": null,
+      "max": null,
+      "runs": null
+    }
+  ],
+  "summary": []
+}

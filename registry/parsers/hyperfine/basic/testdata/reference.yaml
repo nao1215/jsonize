@@ -1,0 +1,3 @@
+source: captured with hyperfine 1.20.0 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, hyperfine --style basic --runs 5 --reference 'sleep 0.02' 'sleep 0.01' 'sleep 0.03'
+description: a reference that is slower than one command and faster than another
+args: [--style, basic, --runs, "5", --reference, sleep 0.02, sleep 0.01, sleep 0.03]

@@ -1,0 +1,83 @@
+# `hyperfine --style basic` prints a block per benchmarked command and,
+# when there are two or more, a summary comparing them.
+#
+# A block is the benchmark number and the command (or the name -n gave
+# it), the mean and standard deviation of the wall-clock time with the
+# mean user and system time beside them, and the fastest and slowest run
+# with the number of runs. Each value carries its unit, which hyperfine
+# chooses per command (s, ms or µs, or the one --time-unit names), so one
+# block may be in milliseconds and the next in microseconds. A value is
+# read as an object of the number as printed and its unit: scaling the
+# number to seconds would be exact in decimal, but done in binary floating
+# point it writes digits the command never printed (1.3 ms becomes
+# 0.0013000000000000002), and the unit is what the reader of the text
+# saw. A benchmark
+# of a single run prints "Time (abs ≡)" and its time alone, with no
+# deviation and no range line; mean then holds that time and stddev,
+# min, max and runs are null.
+#
+# The summary names the command the others are compared with (the
+# fastest, or the one --reference named) on a line of its own, relation
+# reference, then one line per other command saying how many times
+# faster or slower the reference ran than it.
+#
+# The warnings hyperfine prints (outliers, a slow first run, an ignored
+# exit code) go to standard error and are not part of this text. The
+# other styles print the same text with colours, which jz removes, and
+# with a progress bar on the terminal only, so their output piped here
+# reads the same. --export-json and the other exports write a file and
+# leave this text as it is.
+format: 1
+command: hyperfine
+variant: basic
+description: hyperfine benchmark results and the summary comparing the commands
+metadata:
+  tags: [benchmark]
+  compatible: [hyperfine]
+  references:
+    - https://github.com/sharkdp/hyperfine
+detect:
+  args:
+    # --show-output interleaves the command's own output with the blocks.
+    none: ["--show-output", "--style=none", "none"]
+  signature:
+    all:
+      # The text opens with the first benchmark and its time line.
+      - '\ABenchmark 1: [^\n]+\n  Time \((?:mean \x{00B1} \x{03C3}|abs \x{2261})\): +\d'
+      # Every line is one of the lines of a block or of the summary.
+      - '\A(?:(?:Benchmark \d+: [^\n]+|  Time \((?:mean \x{00B1} \x{03C3}|abs \x{2261})\): [^\n]+\]|  Range \(min \x{2026} max\): [^\n]+ runs| ?|Summary|  [^\n]+ ran| +\d+(?:\.\d+)? \x{00B1} \d+(?:\.\d+)? times (?:faster|slower) than [^\n]+)(?:\n|\z))*\z'
+parse:
+  type: composite
+  parts:
+    - name: benchmarks
+      select: {until: '^Summary$'}
+      parse:
+        type: records
+        start: '^Benchmark \d+: '
+        record:
+          parse:
+            type: regex
+            each: input
+            pattern: '\ABenchmark (?P<number>\d+): (?P<command>[^\n]+)\n  Time \((?:mean \x{00B1} \x{03C3}|abs \x{2261})\): +(?P<mean>\d+(?:\.\d+)? (?:\x{00B5}s|ms|s))(?: \x{00B1} +(?P<stddev>\d+(?:\.\d+)? (?:\x{00B5}s|ms|s)))? +\[User: (?P<user>\d+(?:\.\d+)? (?:\x{00B5}s|ms|s)), System: (?P<system>\d+(?:\.\d+)? (?:\x{00B5}s|ms|s))\](?:\n  Range \(min \x{2026} max\): +(?P<min>\d+(?:\.\d+)? (?:\x{00B5}s|ms|s)) \x{2026} +(?P<max>\d+(?:\.\d+)? (?:\x{00B5}s|ms|s)) +(?P<runs>\d+) runs)?\z'
+          fields:
+            number: {type: int, required: true}
+            command: {required: true}
+            mean: {type: object, regex: '(?P<value>\d+(?:\.\d+)?) (?P<unit>\x{00B5}s|ms|s)', fields: {value: {type: float}}, required: true}
+            stddev: {type: object, regex: '(?P<value>\d+(?:\.\d+)?) (?P<unit>\x{00B5}s|ms|s)', fields: {value: {type: float}}}
+            user: {type: object, regex: '(?P<value>\d+(?:\.\d+)?) (?P<unit>\x{00B5}s|ms|s)', fields: {value: {type: float}}, required: true}
+            system: {type: object, regex: '(?P<value>\d+(?:\.\d+)?) (?P<unit>\x{00B5}s|ms|s)', fields: {value: {type: float}}, required: true}
+            min: {type: object, regex: '(?P<value>\d+(?:\.\d+)?) (?P<unit>\x{00B5}s|ms|s)', fields: {value: {type: float}}}
+            max: {type: object, regex: '(?P<value>\d+(?:\.\d+)?) (?P<unit>\x{00B5}s|ms|s)', fields: {value: {type: float}}}
+            runs: {type: int}
+    - name: summary
+      select: {after: '^Summary$'}
+      parse:
+        type: regex
+        patterns:
+          - pattern: '^  (?P<ratio>)??(?P<ratio_stddev>)??(?P<command>.+) ran$'
+            values: {relation: reference}
+          - '^ +(?P<ratio>\d+(?:\.\d+)?) \x{00B1} (?P<ratio_stddev>\d+(?:\.\d+)?) times (?P<relation>faster|slower) than (?P<command>.+)$'
+      fields:
+        command: {required: true}
+        ratio: {type: float}
+        ratio_stddev: {type: float}
