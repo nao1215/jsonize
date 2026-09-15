@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"errors"
+	"fmt"
 	"io"
 	"strings"
 	"testing"
@@ -420,5 +421,59 @@ func TestRecordLengthLimit(t *testing.T) {
 				t.Errorf("%s %q with a limit of %d: %v", format, tt.input, len(exact), err)
 			}
 		}
+	}
+}
+
+// Every format bounds the values one reading retains, the way a
+// definition's reading is bounded: over the whole document when it is
+// read whole, and over each record when it is streamed. A value is every
+// JSON value the output holds, the lists and objects included.
+func TestValueLimit(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		format, input string
+		values        int // the values the whole reading yields
+	}{
+		{JSON, `[1,2,{"a":null}]`, 5},
+		{YAML, "- 1\n- 2\n- a: ~\n", 5},
+		{JSONL, "1\n[2,3]\n", 5},
+		{LTSV, "a:1\tb:2\nc:3\n", 6},
+		{LINES, "a\nb\nc\n", 4},
+		{NUL, "a\x00b\x00c\x00", 4},
+		{CSV, "a,b\n1,2\n3,4\n", 4},
+		{TSV, "a\n1\n2\n", 2},
+		{TEXT, "a\nb\n", 1},
+	} {
+		if _, err := read(tt.format, []byte(tt.input), tt.values); err != nil {
+			t.Errorf("%s at the limit of %d: %v", tt.format, tt.values, err)
+		}
+		_, err := read(tt.format, []byte(tt.input), tt.values-1)
+		var pe *engine.ParseError
+		if tt.values == 1 {
+			// A text is one value, and a limit below one is the default.
+			if err != nil {
+				t.Errorf("%s: %v", tt.format, err)
+			}
+			continue
+		}
+		if !errors.As(err, &pe) || !errors.Is(err, engine.ErrTooManyValues) || !strings.Contains(err.Error(), "more than one document holds") {
+			t.Errorf("%s past the limit of %d: %v", tt.format, tt.values-1, err)
+		}
+	}
+	// A stream bounds each record, so records under the limit go on
+	// however many there are, and the record over it is the one refused.
+	var got []any
+	err := stream(JSONL, strings.NewReader("[1,2]\n[3,4]\n[5,6,7]\n[8]\n"), 100, 3, func(v any) error {
+		got = append(got, v)
+		return nil
+	}, nil)
+	if !errors.Is(err, engine.ErrTooManyValues) || len(got) != 2 || !strings.Contains(err.Error(), "line 3") {
+		t.Errorf("a stream: %v after %d records", err, len(got))
+	}
+	if err := stream(LTSV, strings.NewReader("a:1\tb:2\n"), 100, 3, func(any) error { return nil }, nil); err != nil {
+		t.Errorf("an ltsv record at the limit: %v", err)
+	}
+	if _, err := read(JSON, []byte("[1,\n2,\n3]"), 3); !strings.Contains(fmt.Sprint(err), "json: line 3") {
+		t.Errorf("the line a json document passes the limit on: %v", err)
 	}
 }

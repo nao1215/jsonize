@@ -135,6 +135,13 @@ file as a command's output.
   document are refused.
 - Text that is not UTF-8 is refused, and a leading byte order mark is not
   part of the text, except in `nul`, which keeps every byte.
+- Every format, and `jz new` with the files it reads, holds at most 64 MiB
+  of input and 4,194,304 values in one document: every value of the JSON
+  counts, a list and an object included, and for csv and tsv every cell.
+  Past either limit a reading of the whole input is exit 3 with nothing
+  written. `--stream` and `jz new --each` count the values of each record
+  instead, and a record past the limit is one that cannot be read: the
+  records written before it stay written, and the status is 3.
 
 A reading that stops is exit 3 and names the line (`jz: json: line 3: the
 key "a" is given twice in one object`), as is a file that cannot be

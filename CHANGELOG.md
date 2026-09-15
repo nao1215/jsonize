@@ -4,6 +4,23 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- JSON, JSON Lines, YAML, LTSV, `lines` and `nul` input, read with
+  `--format`, a file's extension or `jz new key:=@file`, is held to the
+  4,194,304 values a csv and a definition's reading were already held to:
+  a JSON array of 4,194,305 numbers was read with exit 0. Past the limit
+  a whole reading is exit 3 with nothing written. A stream counts each
+  record, and a record past the limit is a record that cannot be read,
+  with the records before it kept.
+- `jz new` counts the values of the whole document it makes, so files each
+  under the limit cannot make one past it. `--each` counts each document
+  and treats one past the limit as a line that cannot be read.
+- `jz new` reports a file or standard input past the 64 MiB limit with
+  exit 3, as `--file` does, where it was exit 1.
+
 ## [0.4.0]
 
 jz is the step that makes JSON for the next command. `jz new` places

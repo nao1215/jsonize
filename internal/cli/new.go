@@ -142,7 +142,7 @@ func (a *app) newEach(plan *jsonbuild.Plan, src jsonbuild.Sources, stop bool) in
 	}
 	skipped := 0
 	err = datafile.Stream(format, a.env.Stdin, int(MaxInputSize), func(v any) error {
-		return jsonutil.Encode(a.env.Stdout, fixed.With(v), false)
+		return a.eachDocument(fixed, v, arg, stop, &skipped)
 	}, func(pe *engine.ParseError) error {
 		if stop {
 			return pe
@@ -167,6 +167,23 @@ func (a *app) newEach(plan *jsonbuild.Plan, src jsonbuild.Sources, stop bool) in
 	return ExitOK
 }
 
+// eachDocument writes the document fixed makes with a record's value v.
+// A document past the value limit is a record that cannot be made into
+// one, so it is treated as a record that cannot be read: reported and left
+// out, or with stop, the end of the documents.
+func (a *app) eachDocument(fixed *jsonbuild.Fixed, v any, arg string, stop bool, skipped *int) error {
+	doc, err := fixed.With(v)
+	if err != nil {
+		if stop {
+			return err
+		}
+		*skipped++
+		a.errorf("new: %s: %v", arg, err)
+		return nil
+	}
+	return jsonutil.Encode(a.env.Stdout, doc, false)
+}
+
 // newFailed reports why the arguments made no JSON: an argument that
 // says nothing JSON can be is a usage error, a file that is not the
 // format it was read as is a parse failure, and one that cannot be read
@@ -188,18 +205,22 @@ func (a *app) newFailed(err error) int {
 }
 
 // readLimited reads a file an argument names, up to the input limit.
-func readLimited(path string) ([]byte, error) {
+func readLimited(path string) ([]byte, error) { return readBounded(path, MaxInputSize) }
+
+// readBounded reads a file of at most maxSize bytes. A larger one is a
+// parse failure, as input past the limit is when jz reads it with --file.
+func readBounded(path string, maxSize int64) ([]byte, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
-	data, err := io.ReadAll(io.LimitReader(f, MaxInputSize+1))
+	data, err := io.ReadAll(io.LimitReader(f, maxSize+1))
 	if err != nil {
 		return nil, err
 	}
-	if int64(len(data)) > MaxInputSize {
-		return nil, fmt.Errorf("the file exceeds the %d byte limit", MaxInputSize)
+	if int64(len(data)) > maxSize {
+		return nil, &engine.ParseError{Msg: fmt.Sprintf("the file exceeds the %d byte limit", maxSize)}
 	}
 	return data, nil
 }

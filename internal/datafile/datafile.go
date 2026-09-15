@@ -167,20 +167,29 @@ func (d *decompressed) Read(p []byte) (int, error) {
 }
 
 // Read reads a whole document of format. The size of data is the
-// caller's to bound.
+// caller's to bound; the values the document yields are bounded here, by
+// the same limit a definition's reading has (engine.DefaultMaxValues).
 func Read(format string, data []byte) (any, error) {
+	return read(format, data, engine.DefaultMaxValues)
+}
+
+func read(format string, data []byte, maxValues int) (any, error) {
+	whole := newCounter(format, maxValues, true)
 	switch format {
 	case JSON:
-		return readJSON(data)
+		return readJSON(data, whole)
 	case YAML:
-		return readYAML(data)
+		return readYAML(data, whole)
 	case CSV, TSV:
-		return readTabular(format, data)
+		return readTabular(format, data, maxValues)
 	case TEXT:
 		return readText(data)
 	case JSONL, LTSV, LINES, NUL:
 		out := []any{}
-		err := Stream(format, bytes.NewReader(data), len(data)+1, func(v any) error {
+		if err := whole.add(0); err != nil {
+			return nil, err
+		}
+		err := streamCounted(format, bytes.NewReader(data), len(data)+1, whole, func(v any) error {
 			out = append(out, v)
 			return nil
 		}, nil)
@@ -190,6 +199,52 @@ func Read(format string, data []byte) (any, error) {
 		return out, nil
 	}
 	return nil, fmt.Errorf("datafile: %q is not read here", format)
+}
+
+// counter bounds the values a reading retains, the way
+// engine.Options.MaxValues bounds a definition's: over a whole document,
+// or over each record when the reading is a stream. A value is every JSON
+// value the output holds, a list or an object as much as a string.
+type counter struct {
+	format string
+	max, n int
+	whole  bool
+}
+
+// startRecord starts the count over for a record of a stream.
+func (c *counter) startRecord() {
+	if !c.whole {
+		c.n = 0
+	}
+}
+
+func newCounter(format string, maxValues int, whole bool) *counter {
+	if maxValues <= 0 {
+		maxValues = engine.DefaultMaxValues
+	}
+	return &counter{format: format, max: maxValues, whole: whole}
+}
+
+// add counts one more value, on line (or, for nul, record) num, and
+// refuses the one past the limit. A num of 0 leaves the place to the
+// caller, which knows it better.
+func (c *counter) add(num int) error {
+	c.n++
+	if c.n <= c.max {
+		return nil
+	}
+	msg := fmt.Sprintf("the record yields more than %d values, more than one record holds", c.max)
+	if c.whole {
+		msg = fmt.Sprintf("the input yields more than %d values, more than one document holds", c.max)
+		if Streams(c.format) {
+			msg += "; --stream reads it one record at a time"
+		}
+	}
+	pe := &engine.ParseError{Definition: c.format, Line: num, Msg: msg, Cause: engine.ErrTooManyValues}
+	if c.format == NUL && num > 0 {
+		pe.Line, pe.Msg = 0, fmt.Sprintf("record %d: %s", num, msg)
+	}
+	return pe
 }
 
 // TabularDefinition returns the definition a csv or a tsv is read with as
@@ -229,12 +284,12 @@ func TabularOptions(opts engine.Options) engine.Options {
 
 // readTabular reads a csv or a tsv with the engine, with the definition
 // the command line reads the same file with.
-func readTabular(format string, data []byte) (any, error) {
+func readTabular(format string, data []byte, maxValues int) (any, error) {
 	def, err := TabularDefinition(format, true)
 	if err != nil {
 		return nil, err
 	}
-	return engine.Parse(def, data, TabularOptions(engine.Options{MaxInputSize: int64(len(data)) + 1}))
+	return engine.Parse(def, data, TabularOptions(engine.Options{MaxInputSize: int64(len(data)) + 1, MaxValues: maxValues}))
 }
 
 // readText reads the whole input as one string. A byte order mark in
@@ -259,7 +314,20 @@ func readText(data []byte) (any, error) {
 // error from r and one from emit end the stream whatever onError says,
 // since the reader cannot tell where the next record starts, or there is
 // nobody to write to.
+//
+// Each record holds at most engine.DefaultMaxValues values; one that holds
+// more is a record that cannot be read.
 func Stream(format string, r io.Reader, maxLine int, emit func(any) error, onError func(*engine.ParseError) error) error {
+	return stream(format, r, maxLine, engine.DefaultMaxValues, emit, onError)
+}
+
+func stream(format string, r io.Reader, maxLine, maxValues int, emit func(any) error, onError func(*engine.ParseError) error) error {
+	return streamCounted(format, r, maxLine, newCounter(format, maxValues, false), emit, onError)
+}
+
+// streamCounted is Stream with the values counted by c: afresh for every
+// record, or over all of them when c counts a whole document.
+func streamCounted(format string, r io.Reader, maxLine int, c *counter, emit func(any) error, onError func(*engine.ParseError) error) error {
 	failed := func(err error) error {
 		var pe *engine.ParseError
 		if onError == nil || !errors.As(err, &pe) {
@@ -267,16 +335,16 @@ func Stream(format string, r io.Reader, maxLine int, emit func(any) error, onErr
 		}
 		return onError(pe)
 	}
-	var record func([]byte, int) (any, error)
+	var record func([]byte, int, *counter) (any, error)
 	switch format {
 	case JSONL:
 		record = jsonLine
 	case LTSV:
 		record = ltsvLine
 	case LINES:
-		return streamStrings(format, r, '\n', maxLine, emit, failed)
+		return streamStrings(format, r, '\n', maxLine, c, emit, failed)
 	case NUL:
-		return streamStrings(format, r, 0, maxLine, emit, failed)
+		return streamStrings(format, r, 0, maxLine, c, emit, failed)
 	default:
 		return fmt.Errorf("datafile: %q is not a record format", format)
 	}
@@ -296,7 +364,7 @@ func Stream(format string, r io.Reader, maxLine int, emit func(any) error, onErr
 			}
 			line = bytes.TrimSuffix(line, []byte("\r"))
 			if len(bytes.TrimSpace(line)) > 0 {
-				if ferr := readRecordLine(format, line, num, record, emit, failed); ferr != nil {
+				if ferr := readRecordLine(format, line, num, record, c, emit, failed); ferr != nil {
 					return ferr
 				}
 			}
@@ -309,11 +377,12 @@ func Stream(format string, r io.Reader, maxLine int, emit func(any) error, onErr
 
 // readRecordLine reads one line of JSON Lines or LTSV and hands its record
 // to emit, or its failure to failed.
-func readRecordLine(format string, line []byte, num int, record func([]byte, int) (any, error), emit func(any) error, failed func(error) error) error {
+func readRecordLine(format string, line []byte, num int, record func([]byte, int, *counter) (any, error), c *counter, emit func(any) error, failed func(error) error) error {
 	if !utf8.Valid(line) {
 		return failed(lineError(format, num, "the line is not valid UTF-8"))
 	}
-	v, err := record(line, num)
+	c.startRecord()
+	v, err := record(line, num, c)
 	if err != nil {
 		return failed(err)
 	}
@@ -329,7 +398,7 @@ func readRecordLine(format string, line []byte, num int, record func([]byte, int
 // the CR of CRLF being part of the ending, and a byte order mark in front
 // of the first line is not part of it. A NUL-separated record keeps every
 // byte, CR and LF included.
-func streamStrings(format string, r io.Reader, sep byte, maxLine int, emit func(any) error, failed func(error) error) error {
+func streamStrings(format string, r io.Reader, sep byte, maxLine int, c *counter, emit func(any) error, failed func(error) error) error {
 	br := bufio.NewReader(r)
 	for num := 1; ; num++ {
 		rec, err := readRecord(br, sep, maxLine)
@@ -350,7 +419,10 @@ func streamStrings(format string, r io.Reader, sep byte, maxLine int, emit func(
 			rec = bytes.TrimSuffix(rec, []byte("\r"))
 		}
 		var ferr error
-		if utf8.Valid(rec) {
+		c.startRecord()
+		if cerr := c.add(num); cerr != nil {
+			ferr = failed(cerr)
+		} else if utf8.Valid(rec) {
 			ferr = emit(string(rec))
 		} else {
 			ferr = failed(recordError(format, num, "the text is not valid UTF-8"))

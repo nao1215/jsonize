@@ -1,9 +1,13 @@
 package cli
 
 import (
+	"errors"
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/nao1215/jsonize/internal/jsonbuild"
+	"github.com/nao1215/jsonize/pkg/engine"
 )
 
 func TestNew(t *testing.T) {
@@ -138,5 +142,54 @@ func TestNewEach(t *testing.T) {
 		if code != tt.code || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), tt.want) {
 			t.Errorf("%s: exit %d, stdout %q, stderr %q", tt.name, code, h.stdout.String(), h.stderr.String())
 		}
+	}
+}
+
+// Input past a limit is a parse failure for jz new the way it is for the
+// default mode: a file past the byte limit, and a document past the value
+// limit, are exit 3 with nothing written.
+func TestNewLimitsAreParseFailures(t *testing.T) {
+	h := newHarness(t)
+	big := h.writeFile("big.json", []byte(`"0123456789"`))
+	if _, err := readBounded(big, 12); err != nil {
+		t.Errorf("a file at the byte limit: %v", err)
+	}
+	_, err := readBounded(big, 11)
+	a := &app{env: h.env}
+	if err == nil || !strings.Contains(err.Error(), "exceeds the 11 byte limit") {
+		t.Fatalf("a file past the byte limit: %v", err)
+	}
+	if code := a.newFailed(&jsonbuild.InputError{Arg: "a:=@" + big, Err: err}); code != ExitParse {
+		t.Errorf("a file past the byte limit: exit %d", code)
+	}
+	plan, err := jsonbuild.Parse([]jsonbuild.Arg{{Form: jsonbuild.Plain, Text: "a:=@" + big}, {Form: jsonbuild.Plain, Text: "b:=[1,2]"}}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = plan.Build(jsonbuild.Sources{ReadFile: readLimited, MaxValues: 4})
+	if code := a.newFailed(err); code != ExitParse || !strings.Contains(h.stderr.String(), "more than 4 values") || h.stdout.Len() != 0 {
+		t.Errorf("a document past the value limit: exit %d, %v, stderr %q", code, err, h.stderr.String())
+	}
+	// With --each a document past the limit is a record that cannot be made
+	// into one: left out and reported, or the end with --stop-on-error.
+	plan, err = jsonbuild.Parse([]jsonbuild.Arg{{Form: jsonbuild.Plain, Text: "a:=[1,2]"}, {Form: jsonbuild.Plain, Text: "r:=@-"}}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fixed, err := plan.Fixed(jsonbuild.Sources{MaxValues: 5})
+	if err != nil {
+		t.Fatal(err)
+	}
+	h.stdout.Reset()
+	h.stderr.Reset()
+	skipped := 0
+	if err := a.eachDocument(fixed, []any{int64(1)}, "r:=@-", false, &skipped); err != nil || skipped != 1 || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), "more than 5 values") {
+		t.Errorf("a document past the limit is left out: %v, skipped %d, stdout %q, stderr %q", err, skipped, h.stdout.String(), h.stderr.String())
+	}
+	if err := a.eachDocument(fixed, int64(1), "r:=@-", false, &skipped); err != nil || h.stdout.String() != `{"a":[1,2],"r":1}`+"\n" {
+		t.Errorf("a document at the limit: %v, stdout %q", err, h.stdout.String())
+	}
+	if err := a.eachDocument(fixed, []any{int64(1)}, "r:=@-", true, &skipped); !errors.Is(err, engine.ErrTooManyValues) || skipped != 1 {
+		t.Errorf("with --stop-on-error: %v, skipped %d", err, skipped)
 	}
 }

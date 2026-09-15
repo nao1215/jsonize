@@ -25,7 +25,7 @@ import (
 // jz reads the YAML its definitions are written in, which leaves out
 // anchors, aliases, tags and documents after the first. A file using one
 // of them is refused with the line, rather than read without it.
-func readYAML(data []byte) (any, error) {
+func readYAML(data []byte, c *counter) (any, error) {
 	data = bytes.TrimPrefix(data, []byte("\xEF\xBB\xBF"))
 	if !utf8.Valid(data) {
 		return nil, docError(YAML, data, invalidUTF8Offset(data), "the text is not valid UTF-8")
@@ -41,10 +41,17 @@ func readYAML(data []byte) (any, error) {
 	if node == nil {
 		return nil, lineError(YAML, 0, "there is no YAML value")
 	}
-	return yamlValue(node)
+	return yamlValue(node, c)
 }
 
-func yamlValue(n *yaml.Node) (any, error) {
+func yamlValue(n *yaml.Node, c *counter) (any, error) {
+	line := 0
+	if n != nil {
+		line = n.Line
+	}
+	if err := c.add(line); err != nil {
+		return nil, err
+	}
 	if n == nil {
 		// A key with nothing after it is null.
 		return nil, nil //nolint:nilnil // null is the value
@@ -53,7 +60,7 @@ func yamlValue(n *yaml.Node) (any, error) {
 	case yaml.MappingNode:
 		obj := jsonutil.NewObject()
 		for _, p := range n.Pairs {
-			v, err := yamlValue(p.Value)
+			v, err := yamlValue(p.Value, c)
 			if err != nil {
 				return nil, err
 			}
@@ -63,7 +70,7 @@ func yamlValue(n *yaml.Node) (any, error) {
 	case yaml.SequenceNode:
 		arr := make([]any, 0, len(n.Items))
 		for _, item := range n.Items {
-			v, err := yamlValue(item)
+			v, err := yamlValue(item, c)
 			if err != nil {
 				return nil, err
 			}
