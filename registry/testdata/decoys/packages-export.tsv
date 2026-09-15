@@ -1,0 +1,4 @@
+package	version
+jq	1.8.1-4ubuntu2
+curl	8.18.0-1ubuntu2.5
+libjq1:amd64	1.8.1-4ubuntu2

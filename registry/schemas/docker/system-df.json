@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/docker/system-df.json",
+  "title": "docker/system-df",
+  "description": "docker system df",
+  "x-jsonize": {
+    "definition": "docker/system-df",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string"
+      },
+      "total": {
+        "type": "integer"
+      },
+      "active": {
+        "type": "integer"
+      },
+      "size": {
+        "type": "string"
+      },
+      "reclaimable": {
+        "type": "string"
+      },
+      "reclaimable_percent": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "type",
+      "total",
+      "active",
+      "size",
+      "reclaimable",
+      "reclaimable_percent"
+    ]
+  }
+}

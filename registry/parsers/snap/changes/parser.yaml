@@ -1,0 +1,43 @@
+# `snap changes` prints the recent changes snapd has carried out or is
+# carrying out: an id, the state of the change, when it was spawned and
+# when it became ready, and a summary. The two times are written for a
+# reader ("today at 11:51 JST", "yesterday at 09:14 JST") and hold single
+# spaces, and the summary is a sentence, so the cells are cut at the
+# header offsets. A change that is still running has no ready time and
+# prints a dash, which becomes null. snapd ends the listing with a blank
+# line, which is not part of the text.
+#
+# The times stay strings: they name a day relative to when the command
+# ran and a zone by its abbreviation, and neither is a date jz can
+# state. `snap tasks ID` prints the tasks of one change under a header
+# without the ID column, which the signature refuses.
+format: 1
+command: snap
+variant: changes
+description: snap changes, the recent changes snapd has run
+metadata:
+  tags: [linux, package, snap]
+  compatible: [snapd]
+  references:
+    - https://snapcraft.io/docs/snap-command-reference
+detect:
+  os: [linux]
+  args:
+    all: ["changes"]
+  signature:
+    all:
+      # The header, then nothing but rows that open with the change id
+      # and one of the states snapd gives a change, and then the blank
+      # line snapd ends with. A document that quotes the header above a
+      # paragraph is not this format, and a state snapd adds later is
+      # refused rather than read under a guess.
+      - '\AID[ \t]+Status[ \t]+Spawn[ \t]+Ready[ \t]+Summary[ \t]*\n(?:[0-9]+[ \t]+(?:Do|Doing|Done|Abort|Undo|Undoing|Undone|Hold|Error|Wait)[ \t]+\S[^\n]*(?:\n|\z))+[ \t\n]*\z'
+parse:
+  type: table
+  split: aligned
+fields:
+  id: {type: int, required: true}
+  status: {required: true}
+  spawn: {required: true}
+  ready: {null_if: ["-"]}
+  summary: {required: true}

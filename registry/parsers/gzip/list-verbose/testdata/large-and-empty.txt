@@ -1,0 +1,4 @@
+method  crc     date  time           compressed        uncompressed  ratio uncompressed_name
+defla 4178e323 Sep 14 22:31              205329              270177  24.0% gz/big.txt
+defla 00000000 Sep 14 22:27                  30                   0   0.0% gz/empty.txt
+                                         205359              270177  24.0% (totals)

@@ -1,0 +1,3 @@
+description: recipes in no group, two with a variadic parameter, every one with a doc comment
+source: captured with LC_ALL=C just --list -f /path/to/truss/justfile (the justfile of nao1215/truss) on Linux (just 1.46.0), output to a file
+args: [--list, -f, justfile]

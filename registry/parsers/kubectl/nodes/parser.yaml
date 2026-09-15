@@ -1,0 +1,48 @@
+# The node table printed by `kubectl get nodes`, also spelled `node` and
+# `no`. The default columns are NAME, STATUS, ROLES, AGE and VERSION;
+# `-o wide` adds INTERNAL-IP, EXTERNAL-IP, OS-IMAGE, KERNEL-VERSION and
+# CONTAINER-RUNTIME, and `--show-labels` adds LABELS at the end. Nodes
+# are not namespaced, so `-A` changes nothing. The cells are cut at the
+# header words and the names come from the header.
+#
+# STATUS is "Ready", "NotReady" or "Unknown", with ",SchedulingDisabled"
+# appended for a cordoned node, and stays the string kubectl printed.
+# ROLES is a comma list of the node-role labels or <none>, so it is an
+# array, null for a node with no role. AGE is rounded ("53d") and stays a
+# string; VERSION is the kubelet version. OS-IMAGE holds single spaces
+# ("Debian GNU/Linux 12 (bookworm)") and is read whole because the cells
+# are cut where the header words start.
+format: 1
+command: kubectl
+variant: nodes
+description: kubectl get nodes, with -o wide and --show-labels
+metadata:
+  tags: [kubernetes, kubectl]
+  compatible: [kubectl]
+  references:
+    - https://kubernetes.io/docs/reference/kubectl/generated/kubectl_get/
+detect:
+  args:
+    all: [get]
+    any: [nodes, node, "no"]
+  signature:
+    all:
+      # The text opens with the header, with or without the wide columns
+      # and with or without LABELS.
+      - '\ANAME[ \t]+STATUS[ \t]+ROLES[ \t]+AGE[ \t]+VERSION(?:[ \t]+INTERNAL-IP[ \t]+EXTERNAL-IP[ \t]+OS-IMAGE[ \t]+KERNEL-VERSION[ \t]+CONTAINER-RUNTIME)?(?:[ \t]+LABELS)?[ \t]*$'
+      # Every line after it is a row: a name, a status, the roles, an
+      # age and a kubelet version.
+      - '\A[^\n]*(?:\n[a-z0-9][a-z0-9.-]*[ \t]+[A-Za-z]\S*[ \t]+\S+[ \t]+\d+[a-z0-9]*[ \t]+v\d+\.\d+\.\d+\S*[^\n]*)*\z'
+parse:
+  type: table
+  split: aligned
+fields:
+  name: {required: true}
+  status: {required: true}
+  roles: {type: array, split: ",", null_if: ["<none>"]}
+  age: {required: true}
+  version: {required: true}
+  external_ip: {null_if: ["<none>"]}
+  # Labels are key=value pairs joined with commas; a label value cannot
+  # hold a comma.
+  labels: {type: array, split: ","}

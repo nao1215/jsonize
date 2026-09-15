@@ -1,0 +1,3 @@
+ok  	github.com/nao1215/jsonize/pkg/convert	0.003s
+ok  	github.com/nao1215/jsonize/pkg/jsonutil	0.002s
+ok  	github.com/nao1215/jsonize/internal/buildinfo	0.002s

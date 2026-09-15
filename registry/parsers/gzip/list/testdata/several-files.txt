@@ -1,0 +1,7 @@
+         compressed        uncompressed  ratio uncompressed_name
+                 42                  12 -16.7% hello.txt
+                 59                 460  93.5% repeat.txt
+                 30                   0   0.0% empty.txt
+                 60                  19 -10.5% name with spaces.txt
+                121                   5 -40.0% a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt
+                312                 496  60.1% (totals)

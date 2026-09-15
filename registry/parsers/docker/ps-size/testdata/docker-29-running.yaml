@@ -1,0 +1,6 @@
+source: >-
+  captured from Docker 29.2.1 on Linux with LC_ALL=C; container names and IDs
+  replaced, keeping the printed width
+description: The running containers, one of them publishing three ports.
+os: linux
+args: ["ps", "-s"]

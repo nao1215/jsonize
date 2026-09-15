@@ -1,0 +1,10 @@
+646	chore: maintenance pass — dependency bumps, BSD lint legs, tape command test	chore/maintenance-20260912	MERGED	2026-09-12T12:22:28Z
+645	chore(release): cut v0.22.0	chore/release-v0.22.0	MERGED	2026-09-12T11:09:10Z
+644	ci: move misspell to v1.28.0, whose base image still has a package index	ci/misspell-bullseye	MERGED	2026-09-12T10:29:23Z
+643	feat(loader): gate scenarios on FreeBSD, OpenBSD and NetBSD by name	feat/bsd-os-gates	MERGED	2026-09-12T10:21:40Z
+642	chore(deps): bump golang.org/x/image from 0.45.0 to 0.46.0	dependabot/go_modules/golang.org/x/image-0.46.0	CLOSED	2026-09-11T20:07:21Z
+641	chore(deps): bump golang.org/x/term from 0.45.0 to 0.46.0	dependabot/go_modules/golang.org/x/term-0.46.0	CLOSED	2026-09-11T20:07:08Z
+640	chore(deps): bump golang.org/x/crypto from 0.55.0 to 0.57.0	dependabot/go_modules/golang.org/x/crypto-0.57.0	CLOSED	2026-09-11T20:07:02Z
+639	chore(deps): bump reviewdog/action-misspell from 1.27.0 to 1.28.0	dependabot/github_actions/reviewdog/action-misspell-1.28.0	CLOSED	2026-09-09T12:34:23Z
+638	chore(deps): bump golang.org/x/sys from 0.47.0 to 0.48.0	dependabot/go_modules/golang.org/x/sys-0.48.0	CLOSED	2026-09-08T20:05:08Z
+637	chore(deps): bump github.com/go-sql-driver/mysql from 1.10.0 to 1.10.1	dependabot/go_modules/github.com/go-sql-driver/mysql-1.10.1	CLOSED	2026-09-07T20:07:33Z

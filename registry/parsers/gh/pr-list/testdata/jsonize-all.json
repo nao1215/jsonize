@@ -1,0 +1,212 @@
+[
+  {
+    "number": 46,
+    "title": "refactor: drop every module dependency with a YAML reader of jz's own",
+    "branch": "refactor/zero-deps",
+    "state": "MERGED",
+    "created": "2026-09-14T12:56:36Z"
+  },
+  {
+    "number": 45,
+    "title": "perf: start faster and allocate less in detection, parsing and JSON output",
+    "branch": "refactor/hot-paths",
+    "state": "MERGED",
+    "created": "2026-09-14T11:57:04Z"
+  },
+  {
+    "number": 44,
+    "title": "feat(stream): commit as soon as the leading lines settle the choice, and report skipped records with --explain",
+    "branch": "feat/stream-early-choice",
+    "state": "MERGED",
+    "created": "2026-09-14T10:42:29Z"
+  },
+  {
+    "number": 43,
+    "title": "fix(registry): stop ip/link reading ip address output whose first address is past the window",
+    "branch": "fix/ip-link-late-addresses",
+    "state": "MERGED",
+    "created": "2026-09-14T08:29:26Z"
+  },
+  {
+    "number": 42,
+    "title": "parser: read FreeBSD kldstat -h, netstat -ib and -r, sockstat -s, last -y and iostat -x, and ldd output that names each program",
+    "branch": "parser/freebsd-option-variants",
+    "state": "MERGED",
+    "created": "2026-09-14T07:41:10Z"
+  },
+  {
+    "number": 41,
+    "title": "fix(registry): stop eleven definitions reading another command's output printed after their own",
+    "branch": "fix/foreign-lines-catch-alls",
+    "state": "MERGED",
+    "created": "2026-09-14T06:49:24Z"
+  },
+  {
+    "number": 40,
+    "title": "fix(registry): stop sysctl/freebsd reading the lines of a multi-line value as variables",
+    "branch": "fix/sysctl-freebsd-multiline-values",
+    "state": "MERGED",
+    "created": "2026-09-14T05:02:29Z"
+  },
+  {
+    "number": 39,
+    "title": "parser: FreeBSD md5, sysctl, vmstat -i, df -hT, arp -a and OpenZFS zfs/zpool list; read scc 4.1",
+    "branch": "parser/freebsd-sysctl-checksums-zfs",
+    "state": "MERGED",
+    "created": "2026-09-14T04:08:48Z"
+  },
+  {
+    "number": 38,
+    "title": "build(release): sign, SBOM and Homebrew cask, gated on the release smoke checks",
+    "branch": "chore/secure-release-and-homebrew",
+    "state": "MERGED",
+    "created": "2026-09-14T01:23:52Z"
+  },
+  {
+    "number": 37,
+    "title": "test(e2e): give the PowerShell probes of the ipconfig scenarios five minutes",
+    "branch": "ci/powershell-probe-timeout",
+    "state": "MERGED",
+    "created": "2026-09-13T23:24:23Z"
+  },
+  {
+    "number": 36,
+    "title": "feat: read multi-word headings in aligned tables, and add lshw -short and -businfo",
+    "branch": "feat/aligned-multiword-columns",
+    "state": "MERGED",
+    "created": "2026-09-13T22:21:09Z"
+  },
+  {
+    "number": 35,
+    "title": "chore(release): prepare v0.1.0",
+    "branch": "chore/release-v0.1.0",
+    "state": "MERGED",
+    "created": "2026-09-13T13:54:37Z"
+  },
+  {
+    "number": 34,
+    "title": "fix(registry): stop four short signatures reading dmesg, ls and prose",
+    "branch": "fix/signature-dmesg-ls-prose",
+    "state": "MERGED",
+    "created": "2026-09-13T12:18:59Z"
+  },
+  {
+    "number": 33,
+    "title": "parser: FreeBSD swapinfo, kldstat, sockstat, netstat -i, last, uptime, w and df forms; df -BK",
+    "branch": "parser/freebsd-admin-and-df-units",
+    "state": "MERGED",
+    "created": "2026-09-13T11:17:45Z"
+  },
+  {
+    "number": 32,
+    "title": "fix: read blank lsblk -m cells, make E2E host-independent, verify Windows output on real runners",
+    "branch": "fix/real-output-and-e2e-reproducibility",
+    "state": "MERGED",
+    "created": "2026-09-13T04:17:21Z"
+  },
+  {
+    "number": 31,
+    "title": "fix(registry): refuse column changes and text that recent signatures let through",
+    "branch": "fix/signature-decoys-and-column-flags",
+    "state": "MERGED",
+    "created": "2026-09-13T03:16:44Z"
+  },
+  {
+    "number": 30,
+    "title": "parser: read iostat --human, sensors -A, locale -a and df -BM",
+    "branch": "parser/argument-gaps",
+    "state": "MERGED",
+    "created": "2026-09-13T01:30:24Z"
+  },
+  {
+    "number": 29,
+    "title": "fix(selector): refuse an excluded option however it is spelled",
+    "branch": "fix/args-repeats-and-abbreviations",
+    "state": "MERGED",
+    "created": "2026-09-13T00:14:21Z"
+  },
+  {
+    "number": 28,
+    "title": "fix(engine): bound what a reading retains, not only what it is given",
+    "branch": "fix/bound-retained-values",
+    "state": "MERGED",
+    "created": "2026-09-12T16:19:24Z"
+  },
+  {
+    "number": 27,
+    "title": "perf: find a fractional count with a scan, not a second read",
+    "branch": "perf/whole-number-scan",
+    "state": "MERGED",
+    "created": "2026-09-12T15:07:38Z"
+  },
+  {
+    "number": 26,
+    "title": "fix: refuse a clock reading whose minutes or seconds are 60",
+    "branch": "fix/clock-parts-in-range",
+    "state": "MERGED",
+    "created": "2026-09-12T14:51:45Z"
+  },
+  {
+    "number": 25,
+    "title": "fix: refuse a count written with a fraction",
+    "branch": "fix/whole-number-counts",
+    "state": "MERGED",
+    "created": "2026-09-12T14:47:05Z"
+  },
+  {
+    "number": 23,
+    "title": "docs: tell the reader to look at what the registry already has",
+    "branch": "docs/check-what-exists",
+    "state": "MERGED",
+    "created": "2026-09-12T14:37:09Z"
+  },
+  {
+    "number": 22,
+    "title": "test: pin capsh --print inside a container, and say why numactl drops a node number",
+    "branch": "test/capsh-container-fixture",
+    "state": "MERGED",
+    "created": "2026-09-12T14:28:24Z"
+  },
+  {
+    "number": 21,
+    "title": "test(e2e): build the helper once, before any suite runs",
+    "branch": "test/helper-built-once",
+    "state": "MERGED",
+    "created": "2026-09-12T14:21:47Z"
+  },
+  {
+    "number": 20,
+    "title": "refactor: drop header.repeated, which no definition wrote",
+    "branch": "refactor/drop-header-repeated",
+    "state": "MERGED",
+    "created": "2026-09-12T14:13:06Z"
+  },
+  {
+    "number": 19,
+    "title": "docs: say what a fixture's yaml may carry, and pin two snap list claims",
+    "branch": "docs/fixture-metadata",
+    "state": "MERGED",
+    "created": "2026-09-12T14:06:01Z"
+  },
+  {
+    "number": 18,
+    "title": "parser: read the raw form of the other lsblk column sets",
+    "branch": "parser/lsblk-raw-columns",
+    "state": "MERGED",
+    "created": "2026-09-12T13:58:16Z"
+  },
+  {
+    "number": 17,
+    "title": "parser: read the four pidstat reports that were exit 4",
+    "branch": "parser/pidstat-reports",
+    "state": "MERGED",
+    "created": "2026-09-12T13:45:15Z"
+  },
+  {
+    "number": 16,
+    "title": "fix: refuse the table header keys that did nothing, and end a stream at a header it cannot read",
+    "branch": "fix/header-key-noops",
+    "state": "MERGED",
+    "created": "2026-09-12T13:26:59Z"
+  }
+]

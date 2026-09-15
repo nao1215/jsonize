@@ -1,0 +1,7 @@
+Available recipes:
+
+- build: compile the binary in release mode
+- test: run the unit tests, then the integration tests
+- deploy: push the image and restart the service
+
+Run `just <name>` to start one. The full list is in the justfile.

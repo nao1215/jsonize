@@ -1,0 +1,7 @@
+NAME                 STATUS   AGE
+argocd               Active   53d
+default              Active   53d
+kube-node-lease      Active   53d
+kube-public          Active   53d
+kube-system          Active   53d
+local-path-storage   Active   53d

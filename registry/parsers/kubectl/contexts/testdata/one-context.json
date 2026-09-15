@@ -1,0 +1,9 @@
+[
+  {
+    "current": true,
+    "name": "kind-example",
+    "cluster": "kind-example",
+    "authinfo": "kind-example",
+    "namespace": null
+  }
+]

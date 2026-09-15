@@ -1,0 +1,32 @@
+[
+  {
+    "name": "stable-x86_64-unknown-linux-gnu",
+    "status": "update available",
+    "current": "1.98.0",
+    "current_hash": "88d9e12ae",
+    "current_date": "2026-08-18",
+    "latest": "1.98.1",
+    "latest_hash": "48a229cea",
+    "latest_date": "2026-09-01"
+  },
+  {
+    "name": "1.92-x86_64-unknown-linux-gnu",
+    "status": "up to date",
+    "current": "1.92.0",
+    "current_hash": "ded5c06cf",
+    "current_date": "2025-12-08",
+    "latest": null,
+    "latest_hash": null,
+    "latest_date": null
+  },
+  {
+    "name": "rustup",
+    "status": "up to date",
+    "current": "1.29.1",
+    "current_hash": null,
+    "current_date": null,
+    "latest": null,
+    "latest_hash": null,
+    "latest_date": null
+  }
+]

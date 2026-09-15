@@ -1,0 +1,46 @@
+# `lz4 --list` prints one row per .lz4 file: the number of frames, the
+# frame type, the block descriptor (the block size id and whether the
+# blocks are independent, "B4I"), the compressed size, the uncompressed
+# size, the ratio and the name. The sizes are printed to two decimals in
+# bytes and with a unit letter once they are large ("263.86K"), and the
+# ratio is a percentage rounded to two decimals, so all three stay the
+# strings lz4 printed. A frame that does not state its content size has
+# "-" for the uncompressed size and the ratio, which become null; lz4
+# writes the content size only when asked to (--content-size), so most
+# rows have them.
+#
+# lz4 prints the header before reading any file, so a run over files
+# that are not in lz4 format prints the header and nothing under it
+# (the message goes to standard error); that is an empty list here, the
+# same as an empty run. lz4 ends some rows with a space, which is
+# dropped from the name.
+format: 1
+command: lz4
+variant: list
+description: lz4 --list frame, block and size summary
+metadata:
+  tags: [linux, darwin, archive, compression]
+  compatible: [lz4]
+  references:
+    - https://github.com/lz4/lz4/blob/dev/programs/lz4.1.md
+detect:
+  args:
+    any: ["--list"]
+  signature:
+    all:
+      # The header is the first line, and nothing but rows follows it.
+      - '\A[ \t]*Frames[ \t]+Type[ \t]+Block[ \t]+Compressed[ \t]+Uncompressed[ \t]+Ratio[ \t]+Filename[ \t]*(?:\n[ \t]*\d+[ \t]+\S+[ \t]+\S+[ \t]+\d+\.\d+[A-Z]?[ \t]+(?:\d+\.\d+[A-Z]?|-)[ \t]+(?:\d+\.\d+%|-)[ \t]+[^\n]+)*\z'
+input:
+  ignore:
+    - '^[ \t]*Frames[ \t]+Type[ \t]+Block[ \t]+Compressed[ \t]+Uncompressed[ \t]+Ratio[ \t]+Filename[ \t]*$'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<frames>\d+)[ \t]+(?P<type>\S+)[ \t]+(?P<block>\S+)[ \t]+(?P<compressed>\d+\.\d+[A-Z]?)[ \t]+(?P<uncompressed>\d+\.\d+[A-Z]?|-)[ \t]+(?P<ratio>\d+\.\d+%|-)[ \t]+(?P<filename>.+?)[ \t]*$'
+fields:
+  frames: {type: int, required: true}
+  type: {required: true}
+  block: {required: true}
+  compressed: {required: true}
+  uncompressed: {null_if: ["-"]}
+  ratio: {null_if: ["-"]}
+  filename: {required: true}

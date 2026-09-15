@@ -1,0 +1,4 @@
+description: one finished change, followed by the blank line snapd prints after the table
+source: captured on Ubuntu 26.04 (snapd 2.76.3) with LC_ALL=C
+os: linux
+args: [changes]

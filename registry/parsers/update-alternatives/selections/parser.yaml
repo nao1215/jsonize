@@ -32,5 +32,8 @@ parse:
     columns: [name, status, path]
 fields:
   name: {required: true}
-  status: {required: true}
-  path: {required: true}
+  # A foreign line of three words would otherwise be a selection. The
+  # status is one of two words and the path is absolute, which is what
+  # tells a selection from any other line.
+  status: {required: true, regex: '(?P<status>auto|manual)'}
+  path: {required: true, regex: '(?P<path>/.*)'}

@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/7z/list.json",
+  "title": "7z/list",
+  "description": "7z l archive properties, entry table and totals",
+  "x-jsonize": {
+    "definition": "7z/list",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "banner": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "copyright": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "environment": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "copyright",
+        "date",
+        "environment"
+      ]
+    },
+    "scan": {
+      "type": "object",
+      "properties": {
+        "files": {
+          "type": "integer"
+        },
+        "bytes": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "files",
+        "bytes",
+        "size"
+      ]
+    },
+    "archive": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "properties": {
+      "type": "object",
+      "properties": {
+        "Blocks": {
+          "type": "integer"
+        },
+        "Headers Size": {
+          "type": "integer"
+        },
+        "Physical Size": {
+          "type": "integer"
+        },
+        "Solid": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "time": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "attributes": {
+            "type": "string"
+          },
+          "size": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "compressed": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "time",
+          "attributes",
+          "size",
+          "compressed",
+          "name"
+        ]
+      }
+    },
+    "totals": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "time": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "size": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "compressed": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "files": {
+          "type": "integer"
+        },
+        "folders": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "date",
+        "time",
+        "size",
+        "compressed",
+        "files",
+        "folders"
+      ]
+    }
+  },
+  "required": [
+    "banner",
+    "scan",
+    "archive",
+    "properties",
+    "entries",
+    "totals"
+  ]
+}

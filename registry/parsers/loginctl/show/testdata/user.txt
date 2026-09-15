@@ -1,0 +1,15 @@
+UID=1000
+GID=1000
+Name=alice
+Timestamp=Sat 2026-09-12 22:48:40 JST
+TimestampMonotonic=15085275
+RuntimePath=/run/user/1000
+Service=user@1000.service
+Slice=user-1000.slice
+Display=2
+State=active
+Sessions=100 4 3 2
+IdleHint=no
+IdleSinceHint=0
+IdleSinceHintMonotonic=0
+Linger=no

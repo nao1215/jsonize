@@ -35,4 +35,7 @@ parse:
     - '^(?P<name>[^=\n]+)=(?P<value>.*)$'
     - '^(?P<name>[^=\n]+)$'
 fields:
-  name: {required: true}
+  # A configuration name is a section, a dot and a key, with a
+  # subsection between when there is one; a line whose name has no dot
+  # is not one of git's, however it is written.
+  name: {required: true, regex: '(?P<name>[A-Za-z0-9-]+\..+)'}

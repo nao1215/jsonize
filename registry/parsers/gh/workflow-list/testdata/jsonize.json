@@ -1,0 +1,97 @@
+[
+  {
+    "name": "Benchmark",
+    "state": "active",
+    "id": 351404491
+  },
+  {
+    "name": "capture (temporary)",
+    "state": "active",
+    "id": 355774767
+  },
+  {
+    "name": "Coverage",
+    "state": "active",
+    "id": 351404492
+  },
+  {
+    "name": "E2E",
+    "state": "active",
+    "id": 351404493
+  },
+  {
+    "name": "Fuzz",
+    "state": "active",
+    "id": 351404495
+  },
+  {
+    "name": "govulncheck",
+    "state": "active",
+    "id": 351404496
+  },
+  {
+    "name": "Lint",
+    "state": "active",
+    "id": 351404497
+  },
+  {
+    "name": "Probe",
+    "state": "active",
+    "id": 357030795
+  },
+  {
+    "name": "ProbeReleaseWindows",
+    "state": "active",
+    "id": 357216115
+  },
+  {
+    "name": "ProbeWindowsGC",
+    "state": "active",
+    "id": 357100869
+  },
+  {
+    "name": "ProbeWindowsGCSuite",
+    "state": "active",
+    "id": 357113779
+  },
+  {
+    "name": "ProbeWindowsRace",
+    "state": "active",
+    "id": 357124288
+  },
+  {
+    "name": "Release",
+    "state": "active",
+    "id": 351404499
+  },
+  {
+    "name": "ReleaseSmoke",
+    "state": "active",
+    "id": 351404501
+  },
+  {
+    "name": "Schema",
+    "state": "active",
+    "id": 354976257
+  },
+  {
+    "name": "UnitTest",
+    "state": "active",
+    "id": 351404503
+  },
+  {
+    "name": "Website",
+    "state": "active",
+    "id": 351404504
+  },
+  {
+    "name": "Windows probe",
+    "state": "active",
+    "id": 356891338
+  },
+  {
+    "name": "Dependency Graph",
+    "state": "active",
+    "id": 351404525
+  }
+]

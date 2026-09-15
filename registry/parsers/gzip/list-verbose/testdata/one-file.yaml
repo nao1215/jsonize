@@ -1,0 +1,4 @@
+description: One file, so no totals row.
+source: captured on Ubuntu 26.04 with GNU gzip 1.14, LC_ALL=C gzip -lv over a file made for the fixture
+os: linux
+args: [-lv, hello.txt.gz]

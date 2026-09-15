@@ -1,0 +1,29 @@
+argocd       3.4.2
+erlang       28.4.1
+erlang       28.5
+erlang       29.0
+gleam        1.14.0
+gleam        1.15.0
+gleam        1.15.2
+gleam        1.16.0
+gleam        1.18.1
+go           1.25.3
+go           1.26.3
+go           1.26.4   ~/.config/mise/config.toml  1.26.4
+helm         4.2.0
+hugo         0.162.1
+java         17.0.2   ~/.config/mise/config.toml  17
+kind         0.31.0
+kubeconform  0.7.0
+kubectl      1.35.0
+node         18.20.8
+node         22.21.1
+node         22.22.1  ~/.config/mise/config.toml  22
+node         24.3.0
+node         26.1.0
+rebar        3.25.0
+rebar        3.27.0
+shellcheck   0.11.0   ~/.config/mise/config.toml  0.11.0
+shfmt        3.13.1
+uv           0.11.12
+yarn         1.22.22

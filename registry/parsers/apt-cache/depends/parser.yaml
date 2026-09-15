@@ -21,6 +21,11 @@ detect:
 parse:
   type: tree
   indent: "  "
+  # A top-level line is a package name, one word in the characters a
+  # Debian package name may hold, with an architecture after a colon
+  # when the query named one; a line of any other shape at the top is
+  # not part of the report.
+  root: '^[a-z0-9][a-z0-9+.-]*(?::[a-z0-9-]+)?[ \t]*$'
   node:
     parse:
       type: regex

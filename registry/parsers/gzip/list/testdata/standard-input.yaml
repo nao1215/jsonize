@@ -1,0 +1,4 @@
+description: The file came in on standard input, which gzip names "stdout" in the name column.
+source: captured on Ubuntu 26.04 with GNU gzip 1.14, LC_ALL=C gzip -l with the file on standard input
+os: linux
+args: [-l]

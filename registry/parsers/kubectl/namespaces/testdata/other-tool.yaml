@@ -1,0 +1,3 @@
+description: The same three column names over rows whose STATUS is not a namespace phase, so the signature refuses it.
+source: written by hand as the job table a CI tool might print under the same three column names, padded the way kubectl pads
+expect_error: does not describe this input

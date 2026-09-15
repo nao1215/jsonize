@@ -1,0 +1,92 @@
+[
+  {
+    "name": "BrowserE2E",
+    "state": "active",
+    "id": 305920511
+  },
+  {
+    "name": "Build",
+    "state": "active",
+    "id": 305920512
+  },
+  {
+    "name": "Coverage",
+    "state": "active",
+    "id": 305920514
+  },
+  {
+    "name": "Dogfood",
+    "state": "active",
+    "id": 305920515
+  },
+  {
+    "name": "CrossPlatformE2E",
+    "state": "active",
+    "id": 305920516
+  },
+  {
+    "name": "SelfHostedE2E",
+    "state": "active",
+    "id": 305920517
+  },
+  {
+    "name": "Fuzz",
+    "state": "active",
+    "id": 307805028
+  },
+  {
+    "name": "gitleaks",
+    "state": "active",
+    "id": 305920518
+  },
+  {
+    "name": "golangci-lint",
+    "state": "active",
+    "id": 305920519
+  },
+  {
+    "name": "MigrationParity",
+    "state": "active",
+    "id": 333964071
+  },
+  {
+    "name": "ReleaseSmoke",
+    "state": "active",
+    "id": 305920520
+  },
+  {
+    "name": "Release",
+    "state": "active",
+    "id": 305920521
+  },
+  {
+    "name": "reviewdog",
+    "state": "active",
+    "id": 305920523
+  },
+  {
+    "name": "ThirdParty",
+    "state": "active",
+    "id": 305920524
+  },
+  {
+    "name": "MultiPlatformUnitTest",
+    "state": "active",
+    "id": 305920525
+  },
+  {
+    "name": "Website",
+    "state": "active",
+    "id": 309209851
+  },
+  {
+    "name": "Dependabot Updates",
+    "state": "active",
+    "id": 305920570
+  },
+  {
+    "name": "Dependency Graph",
+    "state": "active",
+    "id": 305920557
+  }
+]

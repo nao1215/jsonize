@@ -1,0 +1,162 @@
+[
+  {
+    "package": "jq",
+    "description": "lightweight and flexible command-line JSON processor"
+  },
+  {
+    "package": "libjq-dev",
+    "description": "lightweight and flexible command-line JSON processor - development files"
+  },
+  {
+    "package": "libjq1",
+    "description": "lightweight and flexible command-line JSON processor - shared library"
+  },
+  {
+    "package": "libjs-jquery",
+    "description": "JavaScript library for dynamic web applications"
+  },
+  {
+    "package": "libjs-underscore",
+    "description": "JavaScript's functional programming helper library"
+  },
+  {
+    "package": "dasel",
+    "description": "Query, update and convert data structures from the command line (program)"
+  },
+  {
+    "package": "dl-distro",
+    "description": "Bash script for downloading and verifying OS images"
+  },
+  {
+    "package": "fq",
+    "description": "jq for binary formats (program)"
+  },
+  {
+    "package": "gojq",
+    "description": "pure Go implementation of jq (program)"
+  },
+  {
+    "package": "golang-bugst-testifyjson-dev",
+    "description": "Utilities and helper function for unit testing JSON output in golang (library)"
+  },
+  {
+    "package": "golang-github-goji-param-dev",
+    "description": "Rack / jQuery style parameter parsing for Go"
+  },
+  {
+    "package": "golang-github-itchyny-go-flags-dev",
+    "description": "Go library for parsing command line arguments (itchyny's fork)"
+  },
+  {
+    "package": "golang-github-itchyny-gojq-dev",
+    "description": "pure Go implementation of jq (library)"
+  },
+  {
+    "package": "golang-github-puerkitobio-goquery-dev",
+    "description": "jQuery-style HTML manipulation in Go"
+  },
+  {
+    "package": "golang-github-tomwright-dasel-dev",
+    "description": "Query, update and convert data structures from the command line (library)"
+  },
+  {
+    "package": "golang-github-wader-gojq-dev",
+    "description": "fork of the gojq library for fq"
+  },
+  {
+    "package": "grimshot",
+    "description": "Easy to use screenshot tool for sway"
+  },
+  {
+    "package": "haskell-js-dgtable-utils",
+    "description": "obtain minified jquery.dgtable code"
+  },
+  {
+    "package": "jello",
+    "description": "Filter for JSON and JSON Lines data with Python syntax"
+  },
+  {
+    "package": "jid",
+    "description": "json incremental digger"
+  },
+  {
+    "package": "jqp",
+    "description": "TUI playground to experiment with jq (program)"
+  },
+  {
+    "package": "libbiblio-rfid-perl",
+    "description": "perl tools to use different RFID readers for library use"
+  },
+  {
+    "package": "libghc-js-dgtable-dev",
+    "description": "obtain minified jquery.dgtable code"
+  },
+  {
+    "package": "libghc-js-dgtable-doc",
+    "description": "obtain minified jquery.dgtable code; documentation"
+  },
+  {
+    "package": "libghc-js-dgtable-prof",
+    "description": "obtain minified jquery.dgtable code; profiling libraries"
+  },
+  {
+    "package": "libghc-js-flot-data",
+    "description": "bundles the jQuery Flot code into a Haskell package; runtime files"
+  },
+  {
+    "package": "libghc-js-flot-dev",
+    "description": "bundles the jQuery Flot code into a Haskell package"
+  },
+  {
+    "package": "libghc-js-flot-doc",
+    "description": "bundles the jQuery Flot code into a Haskell package; documentation"
+  },
+  {
+    "package": "libghc-js-flot-prof",
+    "description": "bundles the jQuery Flot code into a Haskell package; profiling libraries"
+  },
+  {
+    "package": "libghc-js-jquery-data",
+    "description": "bundles the minified jQuery code into a Haskell package"
+  },
+  {
+    "package": "libghc-js-jquery-dev",
+    "description": "bundles the minified jQuery code into a Haskell package"
+  },
+  {
+    "package": "libghc-js-jquery-doc",
+    "description": "bundles the minified jQuery code into a Haskell package; documentation"
+  },
+  {
+    "package": "libghc-js-jquery-prof",
+    "description": "bundles the minified jQuery code into a Haskell package; profiling libraries"
+  },
+  {
+    "package": "libhtml-query-perl",
+    "description": "HTML::Tree add-on to allow jQuery-like queries on HTML::Element trees"
+  },
+  {
+    "package": "libjs-autonumeric",
+    "description": "jQuery plugin that automatically formats currency and numbers"
+  },
+  {
+    "package": "libjs-autosize",
+    "description": "script to automatically adjust textarea height to fit text - NodeJS"
+  },
+  {
+    "package": "libjs-backbone",
+    "description": "some Backbone for JavaScript applications - browser library"
+  },
+  {
+    "package": "libjs-blazy",
+    "description": "lightweight script for lazy loading and multi-serving images"
+  },
+  {
+    "package": "libjs-bootsidemenu",
+    "description": "jQuery plugin to easily build a sliding menu (browser)"
+  },
+  {
+    "package": "libjs-chosen",
+    "description": "select box enhancer for jQuery and Prototype"
+  }
+]

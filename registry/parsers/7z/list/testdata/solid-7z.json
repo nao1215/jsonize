@@ -1,0 +1,75 @@
+{
+  "banner": {
+    "version": "26.00 (x64)",
+    "copyright": "1999-2026 Igor Pavlov",
+    "date": "2026-02-12",
+    "environment": "64-bit locale=C.UTF-8 Threads:32 OPEN_MAX:524288, ASM"
+  },
+  "scan": {
+    "files": 1,
+    "bytes": 380,
+    "size": "1 KiB"
+  },
+  "archive": {
+    "name": "many.7z"
+  },
+  "properties": {
+    "Path": "many.7z",
+    "Type": "7z",
+    "Physical Size": 380,
+    "Headers Size": 310,
+    "Method": "LZMA2:12",
+    "Solid": true,
+    "Blocks": 1
+  },
+  "entries": [
+    {
+      "date": "2026-09-14",
+      "time": "22:27:11",
+      "attributes": "....A",
+      "size": 0,
+      "compressed": 0,
+      "name": "empty.txt"
+    },
+    {
+      "date": "2026-09-14",
+      "time": "22:27:11",
+      "attributes": "....A",
+      "size": 5,
+      "compressed": 70,
+      "name": "a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt"
+    },
+    {
+      "date": "2026-09-14",
+      "time": "22:27:11",
+      "attributes": "....A",
+      "size": 12,
+      "compressed": null,
+      "name": "hello.txt"
+    },
+    {
+      "date": "2026-09-14",
+      "time": "22:27:11",
+      "attributes": "....A",
+      "size": 19,
+      "compressed": null,
+      "name": "name with spaces.txt"
+    },
+    {
+      "date": "2026-09-14",
+      "time": "22:27:11",
+      "attributes": "....A",
+      "size": 460,
+      "compressed": null,
+      "name": "repeat.txt"
+    }
+  ],
+  "totals": {
+    "date": "2026-09-14",
+    "time": "22:27:11",
+    "size": 496,
+    "compressed": 70,
+    "files": 5,
+    "folders": null
+  }
+}

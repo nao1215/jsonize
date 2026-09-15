@@ -1,0 +1,3 @@
+description: closed and merged pull requests, some from dependabot branches
+source: captured with LC_ALL=C gh pr list --repo nao1215/atago --state all --limit 10 on Linux (GitHub CLI 2.87.3), output to a file
+args: [pr, list, --repo, nao1215/atago, --state, all, --limit, "10"]

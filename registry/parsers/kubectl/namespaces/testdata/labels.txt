@@ -1,0 +1,7 @@
+NAME                 STATUS   AGE   LABELS
+argocd               Active   53d   kubernetes.io/metadata.name=argocd
+default              Active   53d   kubernetes.io/metadata.name=default
+kube-node-lease      Active   53d   kubernetes.io/metadata.name=kube-node-lease
+kube-public          Active   53d   kubernetes.io/metadata.name=kube-public
+kube-system          Active   53d   kubernetes.io/metadata.name=kube-system
+local-path-storage   Active   53d   kubernetes.io/metadata.name=local-path-storage

@@ -1,0 +1,19 @@
+=== RUN   TestAdd
+    calc_test.go:6: first line
+        second line
+=== RUN   TestAdd/ones
+=== RUN   TestAdd/wrong
+    calc_test.go:10: Add(2, 2) = 4, want 5
+--- FAIL: TestAdd (0.00s)
+    --- PASS: TestAdd/ones (0.00s)
+    --- FAIL: TestAdd/wrong (0.00s)
+=== RUN   TestSkipped
+    calc_test.go:16: not on this machine
+--- SKIP: TestSkipped (0.00s)
+FAIL
+FAIL	example.test/gotest/calc	0.002s
+=== RUN   TestSub
+--- PASS: TestSub (0.00s)
+PASS
+ok  	example.test/gotest/sub	0.002s
+FAIL

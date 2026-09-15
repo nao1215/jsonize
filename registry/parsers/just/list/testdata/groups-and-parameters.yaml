@@ -1,0 +1,3 @@
+description: ungrouped recipes then two groups; parameters with defaults, one holding a space; a recipe without a doc comment; an alias
+source: captured with LC_ALL=C just --list in a directory holding a justfile written for this fixture, on Linux (just 1.46.0), output to a file
+args: [--list]

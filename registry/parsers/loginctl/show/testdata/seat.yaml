@@ -1,0 +1,4 @@
+description: the first seat, whose Sessions line holds one id and whose Id opens the report
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, loginctl show-seat seat0
+os: linux
+args: [show-seat, seat0]

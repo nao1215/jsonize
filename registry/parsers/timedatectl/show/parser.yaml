@@ -1,0 +1,50 @@
+# `timedatectl show` prints the clock settings as Key=value, one per
+# line, the machine-readable form of the status timedatectl/linux
+# reads. The keys are the seven systemd defines for it, so each one is
+# converted: the four yes/no properties become booleans and the two
+# clock readings are timestamps. The local clock is stated in a zone
+# abbreviation, which names a different offset in different parts of
+# the world, so both stay the strings they were printed as until
+# --assume-zone gives that abbreviation an offset. The result is one
+# object because every key is printed once.
+#
+# The shape is an environment dump, so the signature asks for the
+# properties that only this report has, and for every line to be one.
+# `timedatectl show -p Timezone` prints one of them alone and
+# `--value` prints the values with no keys; both are refused.
+# `timedatectl show-timesync` prints the timesync properties instead,
+# under other keys, and is refused too.
+format: 1
+command: timedatectl
+variant: show
+description: timedatectl show, the clock settings as Key=value
+metadata:
+  tags: [linux, systemd, time]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/timedatectl.html
+detect:
+  os: [linux]
+  args:
+    any: ["show"]
+  signature:
+    all:
+      # The time zone opens the report.
+      - '\ATimezone=\S'
+      - '^LocalRTC=(?:yes|no)$'
+      - '^NTPSynchronized=(?:yes|no)$'
+      # Every line is a property.
+      - '\A(?:[A-Za-z]+=[^\n]*(?:\n|\z))+\z'
+parse:
+  type: kv
+  separator: "="
+  as: map
+fields:
+  Timezone: {required: true}
+  LocalRTC: {type: bool}
+  CanNTP: {type: bool}
+  NTP: {type: bool}
+  NTPSynchronized: {type: bool}
+  TimeUSec: {type: time, layout: "Mon 2006-01-02 15:04:05 MST"}
+  # The hardware clock, absent on a machine without one.
+  RTCTimeUSec: {type: time, layout: "Mon 2006-01-02 15:04:05 MST"}

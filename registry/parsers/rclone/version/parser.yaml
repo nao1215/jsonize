@@ -1,0 +1,39 @@
+# `rclone version` prints the version on its first line and then one
+# "- name: value" line per fact about the build: the operating system
+# and kernel, the Go version and how it was linked. Which lines follow
+# depends on the build, so they are kept as a list of name and value
+# under the names rclone used rather than as keys this definition would
+# have to keep in step with.
+#
+# The version is kept with its "v" as printed ("v1.75.1-DEV"); a
+# development build carries a suffix.
+format: 1
+command: rclone
+variant: version
+description: rclone version
+metadata:
+  tags: [files, transfer, sync, cloud, version]
+  compatible: [rclone]
+  references:
+    - https://rclone.org/commands/rclone_version/
+detect:
+  args:
+    all: ["version"]
+  signature:
+    all:
+      - '\Arclone v\d+\.\d+\.\d+\S*[ \t]*\n- os/version: '
+      - '^- go/version: go\d'
+parse:
+  type: composite
+  parts:
+    - name: version
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\Arclone (?P<version>v\S+)[ \t]*\z'
+    - name: build
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^- (?P<name>[^:]+): (?P<value>.*?)[ \t]*$'

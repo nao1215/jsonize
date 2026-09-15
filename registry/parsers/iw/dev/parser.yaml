@@ -27,6 +27,9 @@ detect:
 parse:
   type: tree
   indent: "\t"
+  # A top-level line is a wiphy; anything else at the top is not part
+  # of the report.
+  root: '^phy#[0-9]+[ \t]*$'
   node:
     parse:
       type: regex

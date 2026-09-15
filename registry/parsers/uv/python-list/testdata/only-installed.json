@@ -1,0 +1,68 @@
+[
+  {
+    "key": "cpython-3.14.4-linux-x86_64-gnu",
+    "implementation": "cpython",
+    "version": "3.14.4",
+    "variant": null,
+    "os": "linux",
+    "arch": "x86_64",
+    "libc": "gnu",
+    "path": "/usr/bin/python3.14",
+    "target": null
+  },
+  {
+    "key": "cpython-3.14.4-linux-x86_64-gnu",
+    "implementation": "cpython",
+    "version": "3.14.4",
+    "variant": null,
+    "os": "linux",
+    "arch": "x86_64",
+    "libc": "gnu",
+    "path": "/usr/bin/python3",
+    "target": "python3.14"
+  },
+  {
+    "key": "cpython-3.12.12-linux-x86_64-gnu",
+    "implementation": "cpython",
+    "version": "3.12.12",
+    "variant": null,
+    "os": "linux",
+    "arch": "x86_64",
+    "libc": "gnu",
+    "path": "/home/user/.local/bin/python3.12",
+    "target": "/home/user/.local/share/uv/python/cpython-3.12.12-linux-x86_64-gnu/bin/python3.12"
+  },
+  {
+    "key": "cpython-3.12.12-linux-x86_64-gnu",
+    "implementation": "cpython",
+    "version": "3.12.12",
+    "variant": null,
+    "os": "linux",
+    "arch": "x86_64",
+    "libc": "gnu",
+    "path": "/home/user/.local/share/uv/python/cpython-3.12.12-linux-x86_64-gnu/bin/python3.12",
+    "target": null
+  },
+  {
+    "key": "cpython-3.11.14-linux-x86_64-gnu",
+    "implementation": "cpython",
+    "version": "3.11.14",
+    "variant": null,
+    "os": "linux",
+    "arch": "x86_64",
+    "libc": "gnu",
+    "path": "/home/user/.local/bin/python3.11",
+    "target": "/home/user/.local/share/uv/python/cpython-3.11.14-linux-x86_64-gnu/bin/python3.11"
+  },
+  {
+    "key": "cpython-3.11.14-linux-x86_64-gnu",
+    "implementation": "cpython",
+    "version": "3.11.14",
+    "variant": null,
+    "os": "linux",
+    "arch": "x86_64",
+    "libc": "gnu",
+    "path": "/home/user/.local/share/uv/python/cpython-3.11.14-linux-x86_64-gnu/bin/python3.11",
+    "target": null
+  }
+]

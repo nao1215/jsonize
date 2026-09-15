@@ -1,0 +1,4 @@
+description: one empty queue, whose byte count is the rounded 0B and whose sender and receiver pids are 0
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C after ipcmk -Q created a queue; the owner was replaced keeping its width
+os: linux
+args: [-q]

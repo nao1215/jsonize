@@ -30,4 +30,6 @@ parse:
     columns: [driver, volume_name]
 fields:
   driver: {required: true}
-  volume_name: {required: true}
+  # A volume name holds no space, so a line whose rest is several
+  # words is not a volume.
+  volume_name: {required: true, regex: '(?P<volume_name>\S+)'}

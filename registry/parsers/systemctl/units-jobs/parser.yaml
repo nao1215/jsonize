@@ -5,6 +5,11 @@
 # The job ("start") is a word a description could begin with too, so the
 # rows are cut where the header's words start rather than matched word by
 # word. A unit without a job reads the same as it does in systemctl/units.
+#
+# The header is indented by the width of the marker column, and that
+# indentation is what this definition reads: with --plain there is no
+# marker column and the header starts at the left edge, which is
+# systemctl/units-jobs-plain.
 format: 1
 command: systemctl
 variant: units-jobs
@@ -18,7 +23,7 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\A\s*UNIT\s+LOAD\s+ACTIVE\s+SUB\s+JOB\s+DESCRIPTION\s*$'
+      - '\A[ \t]+UNIT\s+LOAD\s+ACTIVE\s+SUB\s+JOB\s+DESCRIPTION\s*$'
 input:
   ignore:
     - '^\s*$'

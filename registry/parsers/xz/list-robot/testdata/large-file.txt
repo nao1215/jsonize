@@ -1,0 +1,5 @@
+name	xz/big.txt.xz
+file	1	1	208092	270177	0.770	CRC64	0
+name	xz/empty.txt.xz
+file	1	0	32	0	---	CRC64	0
+totals	2	1	208124	270177	0.770	CRC64	0	2

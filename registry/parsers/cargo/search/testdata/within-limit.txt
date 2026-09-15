@@ -1,0 +1,1 @@
+truss-image = "0.25.0"    # Image toolkit with a shared Rust core across the CLI, HTTP server, and WASM demo.

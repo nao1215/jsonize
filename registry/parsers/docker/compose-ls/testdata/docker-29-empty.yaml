@@ -1,0 +1,4 @@
+source: captured from Docker Compose v5 (Docker 29.2.1) on Linux with LC_ALL=C
+description: No project running, so the header stands alone and the result is an empty list.
+os: linux
+args: ["compose", "ls"]

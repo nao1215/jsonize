@@ -1,0 +1,113 @@
+# `docker system df -v` prints four tables, each under a heading of its
+# own: the images, the containers, the local volumes and the build cache.
+# The headings are what the parts select on, so each table is read as a
+# table of its own and the result is one object with a list per kind.
+#
+# The image and container tables have two-word header cells ("IMAGE ID",
+# "SHARED SIZE", "LOCAL VOLUMES") and cells that hold a space (COMMAND,
+# CREATED, STATUS), so they are cut at the header's column positions with
+# the names declared here. The volume and cache tables hold no space in
+# any cell and are cut the same way for uniformity.
+#
+# The build cache heading carries the total on the same line ("Build
+# cache usage: 80.04GB"), which the parts around it would drop as a
+# heading, so a part of its own reads that line and names the volume
+# rows in its region as belonging to the volumes part.
+#
+# Every size is rounded for reading and stays the string docker printed;
+# the counts (CONTAINERS, LINKS, USAGE) are ints. An untagged image prints
+# "<none>" for its repository and tag, which is null.
+format: 1
+command: docker
+variant: system-df-verbose
+description: docker system df -v
+metadata:
+  tags: [container, docker, disk]
+  compatible: [Docker CLI]
+  references:
+    - https://docs.docker.com/reference/cli/docker/system/df/
+detect:
+  args:
+    all: ["system", "df"]
+    any: ["-v", "--verbose"]
+  signature:
+    all:
+      - '\AImages space usage:[ \t]*$'
+      - '^REPOSITORY[ \t]+TAG[ \t]+IMAGE ID[ \t]+CREATED[ \t]+SIZE[ \t]+SHARED SIZE[ \t]+UNIQUE SIZE[ \t]+CONTAINERS[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: images
+      select: {after: '^Images space usage:[ \t]*$', until: '^Containers space usage:[ \t]*$'}
+      parse:
+        type: table
+        split: aligned
+        header:
+          columns: [repository, tag, image_id, created, size, shared_size, unique_size, containers]
+      fields:
+        repository: {null_if: ["<none>"]}
+        tag: {null_if: ["<none>"]}
+        image_id: {required: true, regex: '(?P<image_id>[0-9a-f]{12})'}
+        created: {required: true}
+        size: {required: true}
+        shared_size: {required: true}
+        unique_size: {required: true}
+        containers: {type: int, required: true}
+    - name: containers
+      select: {after: '^Containers space usage:[ \t]*$', until: '^Local Volumes space usage:[ \t]*$'}
+      parse:
+        type: table
+        split: aligned
+        header:
+          columns: [container_id, image, command, local_volumes, size, created, status, names]
+      fields:
+        container_id: {required: true, regex: '(?P<container_id>[0-9a-f]{12})'}
+        image: {required: true}
+        # The command is printed quoted and truncated with an ellipsis,
+        # a display string docker made rather than the command itself;
+        # the quotes come off and the rest stays as printed.
+        command: {required: true, regex: '"(?P<command>.*)"'}
+        local_volumes: {type: int, required: true}
+        size: {required: true}
+        created: {required: true}
+        status: {required: true}
+        names: {type: array, split: ",", required: true}
+    - name: volumes
+      select: {after: '^Local Volumes space usage:[ \t]*$', until: '^Build cache usage: '}
+      parse:
+        type: table
+        split: aligned
+        header:
+          columns: [volume_name, links, size]
+      fields:
+        volume_name: {required: true}
+        links: {type: int, required: true}
+        size: {required: true}
+    # The total of the build cache, printed on the heading line above the
+    # cache table. Its region opens after the volumes heading, so the
+    # volume rows and their header are in it and are named here as the
+    # lines the volumes part reads.
+    - name: build_cache_usage
+      select: {after: '^Local Volumes space usage:[ \t]*$', until: '^CACHE ID[ \t]'}
+      ignore:
+        - '^VOLUME NAME[ \t]+LINKS[ \t]+SIZE[ \t]*$'
+        - '^\S+[ \t]+\d+[ \t]+\S+[ \t]*$'
+      parse:
+        type: regex
+        each: input
+        pattern: '\ABuild cache usage: (?P<size>\S+)[ \t]*\z'
+    - name: build_cache
+      select: {after: '^Build cache usage: '}
+      parse:
+        type: table
+        split: aligned
+        header:
+          columns: [cache_id, cache_type, size, created, last_used, usage, shared]
+      fields:
+        cache_id: {required: true}
+        cache_type: {required: true}
+        size: {required: true}
+        created: {required: true}
+        last_used: {required: true}
+        usage: {type: int, required: true}
+        shared: {type: bool, required: true}

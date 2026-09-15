@@ -1,0 +1,27 @@
+
+7-Zip 26.00 (x64) : Copyright (c) 1999-2026 Igor Pavlov : 2026-02-12
+ 64-bit locale=C.UTF-8 Threads:32 OPEN_MAX:524288, ASM
+
+Scanning the drive for archives:
+1 file, 380 bytes (1 KiB)
+
+Listing archive: many.7z
+
+--
+Path = many.7z
+Type = 7z
+Physical Size = 380
+Headers Size = 310
+Method = LZMA2:12
+Solid = +
+Blocks = 1
+
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+2026-09-14 22:27:11 ....A            0            0  empty.txt
+2026-09-14 22:27:11 ....A            5           70  a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt
+2026-09-14 22:27:11 ....A           12               hello.txt
+2026-09-14 22:27:11 ....A           19               name with spaces.txt
+2026-09-14 22:27:11 ....A          460               repeat.txt
+------------------- ----- ------------ ------------  ------------------------
+2026-09-14 22:27:11                496           70  5 files

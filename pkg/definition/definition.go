@@ -393,6 +393,13 @@ type Parse struct {
 	// Node says how one line of the tree is read. Every line is a node,
 	// so this applies at every depth.
 	Node *Node `yaml:"node,omitempty"`
+	// Root is what a line at depth zero has to match, when the format
+	// says what a top-level line looks like: a device line for lspci -v,
+	// a bus line for lsusb -v. The node patterns describe every depth,
+	// and the one that reads a flag list's continuation reads any text,
+	// so without Root a line printed after the report would be read as
+	// a root of its own.
+	Root string `yaml:"root,omitempty"`
 
 	// records: a line matching Start opens a record, and everything up
 	// to the next such line belongs to it. Each record is then read the
@@ -411,6 +418,7 @@ type Parse struct {
 	// same order.
 	values [][]Value
 	start  *regexp.Regexp
+	root   *regexp.Regexp
 	// groups are the named capture groups of every pattern, in order and
 	// without duplicates.
 	groups []string
@@ -440,6 +448,10 @@ func (p *Parse) Streams() bool {
 
 // CompiledStart returns the compiled expression that opens a record.
 func (p *Parse) CompiledStart() *regexp.Regexp { return p.start }
+
+// CompiledRoot returns the compiled expression a tree's top-level lines
+// have to match, or nil when the definition states none.
+func (p *Parse) CompiledRoot() *regexp.Regexp { return p.root }
 
 // CompiledPatterns returns the compiled expressions of a regex parser in
 // the order they are tried.

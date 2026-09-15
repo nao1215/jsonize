@@ -1,0 +1,9 @@
+Service                                              Startup   Current   Notes
+The Service column names the snap and the app that runs as a daemon.
+The Startup column says whether the service starts at boot, and the
+Current column says whether it is running now, which is not the same
+question: a service can be enabled and stopped by hand.
+The Notes column lists the things snapd knows about the service, such
+as user for a user session daemon and timer-activated for one a timer
+starts, separated by commas.
+snapd prints the four headings and then one line per service.

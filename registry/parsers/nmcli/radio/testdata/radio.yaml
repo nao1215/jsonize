@@ -1,0 +1,4 @@
+description: a laptop with Wi-Fi and no WWAN hardware, whose WWAN-HW cell is missing; the rows end with the padding nmcli prints
+source: captured on Ubuntu 26.04 (NetworkManager 1.54.3) with LC_ALL=C
+os: linux
+args: [radio]

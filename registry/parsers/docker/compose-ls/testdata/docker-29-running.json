@@ -1,0 +1,15 @@
+[
+  {
+    "name": "jzagent4",
+    "status": [
+      {
+        "state": "running",
+        "count": 2
+      }
+    ],
+    "config_files": [
+      "/home/user/projects/example-app/compose.yml",
+      "/home/user/projects/example-app/override.yml"
+    ]
+  }
+]

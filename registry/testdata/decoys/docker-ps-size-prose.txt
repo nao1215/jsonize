@@ -1,0 +1,8 @@
+The SIZE column shows the size of the writable layer, and in parentheses
+the virtual size, which includes the image the container was started from:
+
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES     SIZE
+7d6c5b4a3f2e   alpine    "sh"      1 h ago   Up 1 h              shell     0B (virtual 13MB)
+
+Run docker ps -s to see it; it is slower because docker has to walk the
+layer of every container listed.

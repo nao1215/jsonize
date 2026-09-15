@@ -1,0 +1,9 @@
+[
+  {
+    "number": 24,
+    "state": "CLOSED",
+    "title": "MaxInputSize bounds the input, but nothing bounds what a table parse retains",
+    "labels": [],
+    "updated": "2026-09-12T16:26:08Z"
+  }
+]

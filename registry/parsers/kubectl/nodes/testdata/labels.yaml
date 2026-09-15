@@ -1,0 +1,4 @@
+description: With --show-labels, so LABELS holds a comma list of key=value pairs as the last column.
+source: captured from kubectl v1.35.0 against a kind v1.35.0 cluster on Linux with LC_ALL=C; the cluster name was replaced by "example" in the node names, padded to the printed width, and inside the labels
+os: linux
+args: [get, nodes, --show-labels]

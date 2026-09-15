@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/snap/changes.json",
+  "title": "snap/changes",
+  "description": "snap changes, the recent changes snapd has run",
+  "x-jsonize": {
+    "definition": "snap/changes",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "ready": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "spawn": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      },
+      "summary": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,56 @@
+# `pip freeze` prints the installed packages as requirement lines, one
+# per package, in the three spellings pip documents: `name==version` for
+# a package from an index, `name @ url` for one installed from a direct
+# reference such as a local wheel or a file:// tree, and `-e url` for an
+# editable install, where pip writes the VCS URL with `#egg=name` and uv
+# writes the file:// URL of the tree. Every record carries the same four
+# keys: the name where the line states it, the version or the url where
+# the line has one, and whether it is editable.
+#
+# The text is a requirements file, and a requirements file written by
+# hand can hold comments, version ranges and environment markers that
+# pip freeze never prints. Those are refused: the signature wants every
+# line to be one of the three spellings, with a version that opens with
+# a digit.
+format: 1
+command: pip
+variant: freeze
+aliases:
+  - name: uv
+    args:
+      all: ["pip", "freeze"]
+  # The interpreter runs pip as a module, which is how a system without a
+  # pip on PATH installs and lists packages.
+  - name: python3
+    args:
+      all: ["-m", "pip", "freeze"]
+  - name: python
+    args:
+      all: ["-m", "pip", "freeze"]
+  - name: pip3
+description: pip freeze, the installed packages as requirement lines
+metadata:
+  tags: [python, package]
+  compatible: [pip, uv]
+  references:
+    - https://pip.pypa.io/en/stable/cli/pip_freeze/
+    - https://pip.pypa.io/en/stable/reference/requirements-file-format/
+detect:
+  args:
+    all: ["freeze"]
+  signature:
+    all:
+      - '\A(?:(?:[A-Za-z0-9][A-Za-z0-9._-]*(?:==[0-9]\S*| @ \S+)|-e \S+)[ \t]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  patterns:
+    - pattern: '^(?P<name>[A-Za-z0-9][A-Za-z0-9._-]*)==(?P<version>[0-9]\S*)(?P<url>)??[ \t]*$'
+      values: {editable: "no"}
+    - pattern: '^(?P<name>[A-Za-z0-9][A-Za-z0-9._-]*) @ (?P<url>\S+)(?P<version>)??[ \t]*$'
+      values: {editable: "no"}
+    # An editable VCS install names the project after #egg=; an editable
+    # local tree, as uv writes it, names nothing, and name is null.
+    - pattern: '^-e (?P<url>\S+?)(?:#egg=(?P<name>[A-Za-z0-9][A-Za-z0-9._-]*))?(?P<version>)??[ \t]*$'
+      values: {editable: "yes"}
+fields:
+  editable: {type: bool, required: true}

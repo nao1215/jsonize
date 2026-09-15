@@ -1,0 +1,5 @@
+description: the properties of the login manager, which the three verbs print when given no argument and which open with EnableWallMessages; the signature must refuse them
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, loginctl show-user
+os: linux
+args: [show-user]
+expect_error: 'does not describe this input'

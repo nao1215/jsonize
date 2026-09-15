@@ -1,0 +1,14 @@
+[
+  {
+    "name": "skippable.zst",
+    "frames": 1,
+    "skippable_frames": 1,
+    "dict_id": 0,
+    "window_size": 12,
+    "compressed_size": 37,
+    "decompressed_size": 12,
+    "ratio": "0.3243",
+    "check": "XXH64",
+    "check_value": "207d6d8c"
+  }
+]

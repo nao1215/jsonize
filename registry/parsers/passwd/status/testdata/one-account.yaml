@@ -1,0 +1,4 @@
+description: The account running the command, with a usable password and no inactivity period.
+source: captured on Ubuntu 26.04 with shadow-utils passwd, LC_ALL=C passwd -S; the user name replaced
+os: linux
+args: [-S]

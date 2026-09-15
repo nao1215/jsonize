@@ -1,0 +1,4 @@
+NAME                                   STATUS   ROLES           AGE   VERSION   LABELS
+example-control-plane                  Ready    control-plane   53d   v1.35.0   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,ingress-ready=true,kubernetes.io/arch=amd64,kubernetes.io/hostname=example-control-plane,kubernetes.io/os=linux,node-role.kubernetes.io/control-plane=,node.kubernetes.io/exclude-from-external-load-balancers=
+example-worker                         Ready    <none>          53d   v1.35.0   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=example-worker,kubernetes.io/os=linux
+example-worker2                        Ready    <none>          53d   v1.35.0   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=example-worker2,kubernetes.io/os=linux

@@ -1,0 +1,11 @@
+[
+  {
+    "user": "user",
+    "status": "P",
+    "last_change": "2025-11-03",
+    "min_days": 0,
+    "max_days": 99999,
+    "warn_days": 7,
+    "inactive_days": -1
+  }
+]

@@ -1,0 +1,3 @@
+description: every recipe in a group, so the first block has no recipes; aliases with and without a doc comment
+source: captured with LC_ALL=C just --list in a directory holding a justfile written for this fixture, on Linux (just 1.46.0), output to a file
+args: [--list]

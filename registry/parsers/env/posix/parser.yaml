@@ -38,6 +38,22 @@ detect:
       # than being a format this one has to know about and exclude. Two
       # lines because `id` opens with "uid=..." on a line of its own.
       - '\A(?:[A-Za-z_][A-Za-z0-9_]*=(?:[^"''\n][^\n]*)?\n)+[A-Za-z_][A-Za-z0-9_]*=(?:[^"''\n][^\n]*)?\z'
+      # At least one variable is named in capitals, the way PATH, HOME
+      # and everything a shell exports is. A listing whose names are all
+      # lower case and whose values all open with "=" is `pip freeze`
+      # (certifi==2026.7.22), which the line rule above cannot tell from
+      # a variable named certifi with the value "=2026.7.22".
+      - '^[A-Z_][A-Z0-9_]*='
+    none:
+      # The one exclusion this definition keeps, against the argument
+      # above: `timedatectl show` and `loginctl show-user` print
+      # Key=value with a capitalised key somewhere (NTP, UID) and never a
+      # quoted value, so nothing in the two rules above tells them from
+      # an environment, and no positive rule can: a mixed-case name
+      # (ImageOS on a CI runner) is a legal variable, and a shell run
+      # with -i may export no PATH. The two lines named here are the
+      # ones timedatectl/show and loginctl/show open with and read.
+      - '\A(?:Timezone=|UID=[0-9]+\n)'
 parse:
   type: kv
   separator: "="

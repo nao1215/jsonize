@@ -1,0 +1,130 @@
+[
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/cmd/jz",
+    "elapsed": 0.195,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/e2e/atago/e2ehelper",
+    "elapsed": 1.349,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/internal/buildinfo",
+    "elapsed": 0.002,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/internal/cli",
+    "elapsed": 12.313,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/internal/conformance",
+    "elapsed": 0.065,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/internal/runner",
+    "elapsed": 3.068,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/internal/schema",
+    "elapsed": 0.008,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/internal/yaml",
+    "elapsed": 0.003,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/internal/yamlout",
+    "elapsed": 0.003,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/convert",
+    "elapsed": 0.003,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/definition",
+    "elapsed": 0.007,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/engine",
+    "elapsed": 0.019,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/jsonutil",
+    "elapsed": 0.002,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/registry",
+    "elapsed": 0.003,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/selector",
+    "elapsed": 0.007,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/registry",
+    "elapsed": 0.959,
+    "note": null,
+    "coverage": null
+  }
+]

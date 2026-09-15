@@ -1,0 +1,23 @@
+[
+  {
+    "id": 315,
+    "status": "Done",
+    "spawn": "today at 11:51 JST",
+    "ready": "today at 11:51 JST",
+    "summary": "Auto-refresh snap \"scc\""
+  },
+  {
+    "id": 316,
+    "status": "Doing",
+    "spawn": "today at 12:03 JST",
+    "ready": null,
+    "summary": "Install \"hello-world\" snap"
+  },
+  {
+    "id": 317,
+    "status": "Error",
+    "spawn": "yesterday at 09:14 JST",
+    "ready": "yesterday at 09:15 JST",
+    "summary": "Refresh \"firefox\" snap from \"latest/stable\" channel"
+  }
+]

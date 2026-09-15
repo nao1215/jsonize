@@ -1,0 +1,45 @@
+# The resource table printed by `kubectl api-resources`: NAME,
+# SHORTNAMES, APIVERSION, NAMESPACED and KIND, with VERBS and CATEGORIES
+# after them under `-o wide`. `--namespaced=true` and the other filters
+# print the same columns over fewer rows. SHORTNAMES and CATEGORIES are
+# empty for most resources, so the cells are cut at the header words;
+# the names come from the header.
+#
+# SHORTNAMES, VERBS and CATEGORIES are comma lists and become arrays,
+# null where the cell is empty. NAMESPACED is "true" or "false" and
+# becomes a boolean. APIVERSION is the group and version ("apps/v1", or
+# "v1" for the core group) and KIND the resource kind; both stay strings.
+#
+# kubectl before 1.20 printed APIGROUP (the group alone) where APIVERSION
+# is now, and that older table is not read here.
+format: 1
+command: kubectl
+variant: api-resources
+description: kubectl api-resources, with -o wide
+metadata:
+  tags: [kubernetes, kubectl]
+  compatible: [kubectl]
+  references:
+    - https://kubernetes.io/docs/reference/kubectl/generated/kubectl_api-resources/
+detect:
+  args:
+    all: [api-resources]
+  signature:
+    all:
+      # The text opens with the header, with or without the wide
+      # columns.
+      - '\ANAME[ \t]+SHORTNAMES[ \t]+APIVERSION[ \t]+NAMESPACED[ \t]+KIND(?:[ \t]+VERBS[ \t]+CATEGORIES)?[ \t]*$'
+      # Every line after it is a row: a resource name, its short names
+      # or nothing, a version, true or false and a capitalised kind.
+      - '\A[^\n]*(?:\n[a-z0-9./-]+[ \t]+(?:[a-z0-9,-]+[ \t]+)?[A-Za-z0-9./-]+[ \t]+(?:true|false)[ \t]+[A-Z][A-Za-z0-9]*[^\n]*)*\z'
+parse:
+  type: table
+  split: aligned
+fields:
+  name: {required: true}
+  shortnames: {type: array, split: ","}
+  apiversion: {required: true}
+  namespaced: {type: bool, required: true}
+  kind: {required: true}
+  verbs: {type: array, split: ","}
+  categories: {type: array, split: ","}

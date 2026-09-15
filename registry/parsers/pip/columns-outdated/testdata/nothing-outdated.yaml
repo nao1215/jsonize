@@ -1,0 +1,5 @@
+description: nothing outdated prints nothing at all, not even the header, which jz run reports as an empty list and which is refused on a pipe as holding nothing to read
+source: "`uv pip list --outdated` with uv 0.9.7 on CPython 3.12 (Ubuntu 26.04) with LC_ALL=C, in a virtual environment holding only six at its latest release"
+os: linux
+args: [list, --outdated]
+expect_error: 'holds no text'

@@ -1,0 +1,22 @@
+[
+  {
+    "method": "defla",
+    "crc": "4178e323",
+    "date": "Sep 14",
+    "time": "22:31",
+    "compressed": 205329,
+    "uncompressed": 270177,
+    "ratio": "24.0%",
+    "uncompressed_name": "gz/big.txt"
+  },
+  {
+    "method": "defla",
+    "crc": "00000000",
+    "date": "Sep 14",
+    "time": "22:27",
+    "compressed": 30,
+    "uncompressed": 0,
+    "ratio": "0.0%",
+    "uncompressed_name": "gz/empty.txt"
+  }
+]

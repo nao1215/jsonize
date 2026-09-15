@@ -1,0 +1,4 @@
+description: -fingerprint with -sha256, whose label openssl spells in lower case.
+source: captured on Ubuntu 26.04 with OpenSSL 3.5.5, LC_ALL=C openssl x509 -noout -fingerprint -sha256 over a certificate made for the fixture
+os: linux
+args: [x509, -in, c.pem, -noout, -fingerprint, -sha256]

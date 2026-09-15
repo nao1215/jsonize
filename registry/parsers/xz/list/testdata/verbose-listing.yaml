@@ -1,0 +1,5 @@
+description: The output of xz -lv, a block per file rather than a row, which this definition does not read.
+source: captured on Ubuntu 26.04 with XZ Utils 5.8.3, LC_ALL=C xz -lv over a file made for the fixture
+os: linux
+args: [-lv, hello.txt.xz]
+expect_error: 'does not describe this input'

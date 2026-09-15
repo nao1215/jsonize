@@ -1,0 +1,38 @@
+Package: libjq1
+Source: jq
+Priority: optional
+Section: utils
+Installed-Size: 377
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Architecture: amd64
+Version: 1.8.1-4ubuntu2
+Depends: libc6 (>= 2.43), libonig5 (>= 6.8.1)
+Filename: pool/main/j/jq/libjq1_1.8.1-4ubuntu2_amd64.deb
+Size: 146208
+MD5sum: 9919b400c67731b622d996f942006075
+SHA1: 0df22bb56a1d0cea65930c5d602b18e0fd903c17
+SHA256: 3ced45ef4154cce59ce9fc74cc606b7361fa1b2f088b31a903d54fbcee75cb43
+SHA512: 3032c127ebbee1fd0efb288033c28a10041132176bcb97fa76bfea664be0482f1f96c29ae3924d381f483810e2c3b6145ecc58cc66950146deb2b87557c8ea9d
+Homepage: https://jqlang.github.io/jq
+Description-en: lightweight and flexible command-line JSON processor - shared library
+ jq is like sed for JSON data ?? you can use it to slice
+ and filter and map and transform structured data with
+ the same ease that sed, awk, grep and friends let you
+ play with text.
+ .
+ It is written in portable C, and it has minimal runtime
+ dependencies.
+ .
+ jq can mangle the data format that you have into the
+ one that you want with very little effort, and the
+ program to do so is often shorter and simpler than
+ you??d expect.
+ .
+ This package contains the shared library.
+Description-md5: 1b50448818fdb22f62b863763d79f7a1
+Multi-Arch: same
+Original-Maintainer: ChangZhuo Chen (陳昌倬) <czchen@debian.org>
+Origin: Ubuntu
+Bugs: https://bugs.launchpad.net/ubuntu/+filebug
+Task: ubuntu-desktop-minimal, ubuntu-desktop, cloud-image, cloud-image, server, ubuntu-server-raspi, ubuntu-desktop-raspi, kubuntu-desktop, xubuntu-minimal, xubuntu-desktop, lubuntu-desktop-minimal, lubuntu-desktop, lubuntu-desktop, ubuntustudio-desktop, ubuntustudio-desktop-core, ubuntukylin-desktop, ubuntukylin-desktop-minimal, ubuntu-mate-core, ubuntu-mate-desktop, ubuntu-budgie-desktop-minimal, ubuntu-budgie-desktop, ubuntu-budgie-desktop-raspi, ubuntu-unity-desktop, edubuntu-desktop-gnome-minimal, edubuntu-desktop-gnome-raspi, ubuntucinnamon-desktop-minimal, ubuntucinnamon-desktop-raspi
+

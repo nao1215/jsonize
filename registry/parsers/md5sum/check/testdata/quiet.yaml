@@ -1,0 +1,4 @@
+description: The same run with --quiet, which prints only the lines that are not OK.
+source: captured on Ubuntu 26.04 with GNU coreutils 9.7 (gnusha256sum), LC_ALL=C sha256sum -c --quiet over a checksum file made for the fixture
+os: linux
+args: [-c, --quiet, gnu.sha256]

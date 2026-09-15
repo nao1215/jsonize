@@ -1,0 +1,26 @@
+[
+  {
+    "editable": false,
+    "name": "certifi",
+    "version": "2026.7.22",
+    "url": null
+  },
+  {
+    "editable": true,
+    "url": "git+https://git.example.com/MyProject.git@da39a3ee5e6b4b0d3255bfef95601890afd80709",
+    "name": "MyProject",
+    "version": null
+  },
+  {
+    "editable": false,
+    "name": "MyOtherProject",
+    "url": "file:///home/alice/dist/MyOtherProject-1.0-py3-none-any.whl",
+    "version": null
+  },
+  {
+    "editable": false,
+    "name": "six",
+    "version": "1.17.0",
+    "url": null
+  }
+]

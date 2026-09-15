@@ -1,0 +1,49 @@
+# `openssl x509 -noout` with one or more of -subject, -issuer, -dates
+# (or -startdate and -enddate), -serial and -fingerprint prints one
+# "label=value" line per option, in the order the options were given.
+# Which lines appear depends on the options, so the result is an object
+# holding the labels that were printed and nothing for the rest, and no
+# key is required.
+#
+# The labels are kept as openssl spells them (subject, issuer,
+# notBefore, notAfter, serial), because the fingerprint's label names
+# the hash it was made with, "SHA1 Fingerprint" or "sha256 Fingerprint",
+# and a normalised name would either drop the hash or invent a second
+# key for it; a consumer that asks for a fingerprint knows which hash
+# it asked for. The two dates are converted, since openssl prints them
+# in GMT and says so; the subject and issuer stay the one string
+# openssl printed, because a name component may itself hold the ", "
+# that separates them.
+#
+# A label and an equals sign is what any configuration file has, so jz
+# does not claim this format on its own: `jz --parser openssl` or
+# `jz run openssl x509 ...` says what produced it, and the signature
+# then checks that every line is one of these labels. Options that
+# print something else (-hash and -email, a bare value; -modulus;
+# -pubkey and -text, several lines) fall outside it and are refused.
+format: 1
+command: openssl
+variant: x509-fields
+description: openssl x509 -noout subject, issuer, dates, serial and fingerprint
+metadata:
+  tags: [tls, crypto, x509]
+  compatible: [OpenSSL]
+  references:
+    - https://docs.openssl.org/master/man1/openssl-x509/
+detect:
+  auto_detect: false
+  args:
+    all: [x509]
+  signature:
+    all:
+      # Every line is one of the labels this definition reads, and the
+      # values have the shapes openssl gives them: a date in GMT, a hex
+      # serial, a fingerprint of colon separated hex pairs.
+      - '\A(?:(?:subject=[^\n]*|issuer=[^\n]*|notBefore=[A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2} \d{4} GMT|notAfter=[A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2} \d{4} GMT|serial=[0-9A-Fa-f]+|[A-Za-z0-9-]+ Fingerprint=[0-9A-F]{2}(?::[0-9A-F]{2})+)\n)*(?:subject=[^\n]*|issuer=[^\n]*|notBefore=[A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2} \d{4} GMT|notAfter=[A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2} \d{4} GMT|serial=[0-9A-Fa-f]+|[A-Za-z0-9-]+ Fingerprint=[0-9A-F]{2}(?::[0-9A-F]{2})+)\z'
+parse:
+  type: kv
+  separator: "="
+  as: map
+fields:
+  notBefore: {type: time, layout: "Jan _2 15:04:05 2006 MST"}
+  notAfter: {type: time, layout: "Jan _2 15:04:05 2006 MST"}

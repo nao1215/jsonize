@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/openssl/x509-fields.json",
+  "title": "openssl/x509-fields",
+  "description": "openssl x509 -noout subject, issuer, dates, serial and fingerprint",
+  "x-jsonize": {
+    "definition": "openssl/x509-fields",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "notAfter": {
+      "type": "string"
+    },
+    "notBefore": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": {
+    "type": "string"
+  }
+}

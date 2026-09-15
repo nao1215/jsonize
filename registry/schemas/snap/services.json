@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/snap/services.json",
+  "title": "snap/services",
+  "description": "snap services, the services of installed snaps",
+  "x-jsonize": {
+    "definition": "snap/services",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "service": {
+        "type": "string"
+      },
+      "startup": {
+        "type": "string",
+        "enum": [
+          "disabled",
+          "enabled"
+        ]
+      },
+      "current": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "notes": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "service",
+      "startup",
+      "current",
+      "notes"
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+description: the general status table, which carries the same four radio headings after STATE and CONNECTIVITY and which nmcli/general reads; the signature must refuse it
+source: captured on Ubuntu 26.04 (NetworkManager 1.54.3) with LC_ALL=C, nmcli general status
+os: linux
+expect_error: 'does not describe this input'

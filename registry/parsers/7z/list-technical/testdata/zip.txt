@@ -1,0 +1,69 @@
+
+7-Zip 26.00 (x64) : Copyright (c) 1999-2026 Igor Pavlov : 2026-02-12
+ 64-bit locale=C.UTF-8 Threads:32 OPEN_MAX:524288, ASM
+
+Scanning the drive for archives:
+1 file, 465 bytes (1 KiB)
+
+Listing archive: many.zip
+
+--
+Path = many.zip
+Type = zip
+Physical Size = 465
+
+----------
+Path = empty.txt
+Folder = -
+Size = 0
+Packed Size = 0
+Modified = 2026-09-14 22:27:11.3430821
+Created = 
+Accessed = 
+Attributes =  -rw-rw-r--
+Encrypted = -
+Comment = 
+CRC = 00000000
+Method = Store
+Characteristics = NTFS
+Host OS = Unix
+Version = 10
+Volume Index = 0
+Offset = 0
+
+Path = hello.txt
+Folder = -
+Size = 12
+Packed Size = 12
+Modified = 2026-09-14 22:27:11.3430821
+Created = 
+Accessed = 
+Attributes =  -rw-rw-r--
+Encrypted = -
+Comment = 
+CRC = AF083B2D
+Method = Store
+Characteristics = NTFS
+Host OS = Unix
+Version = 10
+Volume Index = 0
+Offset = 39
+
+Path = name with spaces.txt
+Folder = -
+Size = 19
+Packed Size = 19
+Modified = 2026-09-14 22:27:11.3430821
+Created = 
+Accessed = 
+Attributes =  -rw-rw-r--
+Encrypted = -
+Comment = 
+CRC = F064EAA2
+Method = Store
+Characteristics = NTFS
+Host OS = Unix
+Version = 10
+Volume Index = 0
+Offset = 90
+

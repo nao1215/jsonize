@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/kubectl/nodes.json",
+  "title": "kubectl/nodes",
+  "description": "kubectl get nodes, with -o wide and --show-labels",
+  "x-jsonize": {
+    "definition": "kubectl/nodes",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "age": {
+        "type": "string"
+      },
+      "external_ip": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "labels": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      },
+      "name": {
+        "type": "string"
+      },
+      "roles": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      },
+      "status": {
+        "type": "string"
+      },
+      "version": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

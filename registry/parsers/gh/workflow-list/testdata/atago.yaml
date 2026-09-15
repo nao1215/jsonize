@@ -1,0 +1,3 @@
+description: the workflows of a second repository
+source: captured with LC_ALL=C gh workflow list --repo nao1215/atago on Linux (GitHub CLI 2.87.3), output to a file
+args: [workflow, list, --repo, nao1215/atago]

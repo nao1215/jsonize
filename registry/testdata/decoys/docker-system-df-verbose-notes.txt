@@ -1,0 +1,9 @@
+Notes on the verbose report.
+
+Images space usage:
+
+REPOSITORY     TAG       IMAGE ID       CREATED        SIZE      SHARED SIZE   UNIQUE SIZE   CONTAINERS
+alpine         latest    28bd5fe8b56d   3 months ago   13MB      9.073MB       3.934MB       0
+
+The table lists every image with the part of its size it shares with
+other images and the part that is its own. Untagged images print <none>.

@@ -1,0 +1,9 @@
+source: >-
+  captured from Docker 29.2.1 on Linux with LC_ALL=C; container names, image
+  names and IDs of other projects replaced, keeping the printed width
+description: >-
+  Every container with its size. The stopped ones leave PORTS empty, one
+  was started from an untagged image and prints its ID under IMAGE, and the
+  virtual sizes range from megabytes to gigabytes.
+os: linux
+args: ["ps", "-a", "-s"]

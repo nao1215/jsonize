@@ -1,0 +1,56 @@
+# `redis-cli info` prints the server's statistics as sections: a line of
+# "# Name" opens one, "key:value" lines follow it, and a blank line ends
+# it. `info SECTION` prints one section the same way. The result is a
+# list of sections, each with its name and the map of its keys.
+#
+# The sections are records opened by their heading. This is not an ini
+# file: ini headings are bracketed and "#" opens a comment there, so an
+# ini parser would drop every heading. Which keys a section holds depends
+# on the server's version and on what it is doing, so they are kept under
+# the names redis printed rather than converted one by one: the values
+# are strings, a count ("connected_clients:1") and a size with its unit
+# ("used_memory_human:744.23K") alike, since converting some of them
+# would make a key's type depend on which of them this definition had
+# heard of. A section with no keys (Errorstats on a server that has
+# reported no error) has an empty map.
+#
+# redis-cli ends every line with CRLF, which comes off before the lines
+# are read. A key holds no space and no colon, and the value is the rest
+# of the line ("os:Linux 7.0.0-31-generic x86_64" keeps its spaces), so a
+# document of "key: value" lines with a space after the colon is not this
+# format and is refused.
+format: 1
+command: redis-cli
+variant: info
+description: redis-cli info, the server statistics by section
+metadata:
+  tags: [redis, database, server, statistics]
+  compatible: [Redis, Valkey]
+  references:
+    - https://redis.io/docs/latest/commands/info/
+detect:
+  args:
+    any: ["info", "INFO"]
+  signature:
+    all:
+      # The text opens with a section heading and a key under it.
+      - '\A# [A-Z][A-Za-z]*[ \t]*\n[a-z][A-Za-z0-9_|.-]*:'
+      # Every line in the window is a heading, a key and its value with
+      # nothing between the colon and the value, or blank.
+      - '\A(?:# [A-Z][A-Za-z]*[ \t]*|[a-z][A-Za-z0-9_|.-]*:(?:[^ \t\n][^\n]*)?|)(?:\n(?:# [A-Z][A-Za-z]*[ \t]*|[a-z][A-Za-z0-9_|.-]*:(?:[^ \t\n][^\n]*)?|))*\z'
+parse:
+  type: records
+  start: '^# '
+  parts:
+    - name: section
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A# (?P<name>[A-Za-z]+)[ \t]*\z'
+    - name: fields
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: map

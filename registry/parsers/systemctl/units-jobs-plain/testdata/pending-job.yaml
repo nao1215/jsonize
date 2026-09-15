@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C from the user manager while a Type=notify service started by systemd-run was activating, trimmed to ten of the 284 units; the count line is as printed
+description: with --plain the header and the rows start at the left edge, so there is no marker column before UNIT; the JOB column holds start for the unit whose job is pending
+os: linux
+args: ["--user", "list-units", "--plain", "--no-pager"]

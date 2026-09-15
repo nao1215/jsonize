@@ -1,0 +1,4 @@
+description: installed interpreters, symbolic links with their targets, downloads, a free-threaded variant and pypy and graalpy builds
+source: captured with LC_ALL=C uv python list on Linux (uv 0.9.7), output to a file; the user name in the home directory replaced
+os: linux
+args: [python, list]

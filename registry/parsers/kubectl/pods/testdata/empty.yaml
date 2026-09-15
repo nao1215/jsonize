@@ -1,0 +1,9 @@
+description: >-
+  A namespace with no pods. kubectl writes "No resources found in default
+  namespace." to standard error and nothing to standard output, so the
+  text holds nothing to identify; `jz run` answers it with an empty array
+  because every kubectl variant the arguments admit reads a list.
+source: captured from kubectl v1.35.0 against a kind v1.35.0 cluster on Linux with LC_ALL=C; standard output only
+os: linux
+args: [get, pods, -n, default]
+expect_error: holds no text

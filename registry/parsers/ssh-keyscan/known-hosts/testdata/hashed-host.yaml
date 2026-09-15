@@ -1,0 +1,4 @@
+description: The same key with -H, which hashes the host name into the "|1|salt|hash" form; the host field carries it as printed.
+source: captured on Ubuntu 26.04 with OpenSSH 10.2p1, LC_ALL=C ssh-keyscan -H -t ed25519 localhost
+os: linux
+args: [-H, -t, ed25519, localhost]

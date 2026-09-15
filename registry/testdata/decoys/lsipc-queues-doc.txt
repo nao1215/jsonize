@@ -1,0 +1,6 @@
+KEY        ID     PERMS OWNER USEDBYTES MSGS LSPID LRPID
+The KEY column is the key the queue was created with, in hexadecimal,
+and ID is the identifier msgget returned. PERMS and OWNER are the
+mode and the owning user. USEDBYTES is the bytes held by queued
+messages, rounded to a unit unless --bytes is given, and MSGS counts
+them. LSPID and LRPID are the last processes to send and to receive.

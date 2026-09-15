@@ -1,0 +1,45 @@
+[
+  {
+    "group": {
+      "name": null
+    },
+    "recipes": []
+  },
+  {
+    "group": {
+      "name": "check"
+    },
+    "recipes": [
+      {
+        "name": "lint",
+        "parameters": null,
+        "doc": null,
+        "aliases": [
+          "l"
+        ]
+      },
+      {
+        "name": "test",
+        "parameters": "+ARGS=''",
+        "doc": "Run the tests",
+        "aliases": null
+      }
+    ]
+  },
+  {
+    "group": {
+      "name": "release"
+    },
+    "recipes": [
+      {
+        "name": "publish",
+        "parameters": "version",
+        "doc": null,
+        "aliases": [
+          "p",
+          "pub"
+        ]
+      }
+    ]
+  }
+]

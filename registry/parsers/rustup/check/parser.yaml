@@ -1,0 +1,36 @@
+# `rustup check` prints one line per installed toolchain and a last line
+# for rustup itself: the name, a dash, whether an update is available or
+# the installation is up to date, a colon, and the installed version. A
+# toolchain's version is followed by the commit hash and date of the
+# release in parentheses, and an available update adds an arrow and the
+# newer version described the same way; rustup's own line has no hash
+# and, in rustup 1.29, a space before its colon where the toolchain
+# lines have none. Both spellings of the colon are read. rustup 1.29
+# prints the two states in lower case; the same words with a capital,
+# which earlier releases printed, are read too and kept as printed.
+#
+# The dates are kept as printed: a day with no time of its own is not a
+# timestamp. Every line has the dash, the state and the colon, and the
+# signature asks that of every line.
+format: 1
+command: rustup
+variant: check
+description: rustup check, whether each toolchain and rustup itself has an update
+metadata:
+  tags: [rust, toolchain]
+  compatible: [rustup]
+  references:
+    - https://rust-lang.github.io/rustup/basics.html
+detect:
+  args:
+    all: ["check"]
+  signature:
+    all:
+      - '\A(?:^\S+ - (?:[Uu]pdate available|[Uu]p to date) ?: \d[^\n]*$\n?)+\z'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+) - (?P<status>[Uu]pdate available|[Uu]p to date) ?: (?P<current>\d\S*)(?: \((?P<current_hash>[0-9a-f]+) (?P<current_date>\d{4}-\d\d-\d\d)\))?(?: -> (?P<latest>\d\S*)(?: \((?P<latest_hash>[0-9a-f]+) (?P<latest_date>\d{4}-\d\d-\d\d)\))?)?$'
+fields:
+  name: {required: true}
+  status: {required: true}
+  current: {required: true}

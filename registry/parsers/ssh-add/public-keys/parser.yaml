@@ -1,0 +1,41 @@
+# `ssh-add -L` prints one line per key the agent holds, in the format
+# of an authorized_keys file: the key type, the key in base64 and the
+# comment stored with the key, which is a user and host name for a key
+# ssh-keygen made or the file name for a key added without one. The
+# comment may hold spaces and runs to the end of the line.
+#
+# The key types are the ones OpenSSH names: ssh-rsa, ssh-ed25519,
+# ssh-dss, ecdsa-sha2-nistp256 and its two larger curves, and the sk-
+# forms for security keys, which end in "@openssh.com". A line that does
+# not open with one of them is not a public key line.
+#
+# An agent holding no keys prints "The agent has no identities." and
+# exits 1. That text answers the question with none, but it is a
+# sentence rather than a list, and a sentence read as an empty list
+# would hide that the run said something; it is refused, and the exit
+# status says what happened. The same lines with a host name in front
+# are the host keys of ssh-keyscan, read by ssh-keyscan/known-hosts;
+# `ssh-add -l` prints fingerprints and is read by ssh-keygen/fingerprint.
+format: 1
+command: ssh-add
+variant: public-keys
+description: ssh-add -L public keys held by the agent
+metadata:
+  tags: [linux, darwin, ssh, security]
+  compatible: [OpenSSH]
+  references:
+    - https://man.openbsd.org/ssh-add.1
+detect:
+  args:
+    any: ["-L"]
+  signature:
+    all:
+      # Every line is a key type, a key and a comment.
+      - '\A(?:(?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com|[a-z0-9-]+-cert-v01@openssh\.com) AAAA[A-Za-z0-9+/]+=* [^\n]*\n)*(?:ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com|[a-z0-9-]+-cert-v01@openssh\.com) AAAA[A-Za-z0-9+/]+=* [^\n]*\z'
+parse:
+  type: regex
+  pattern: '^(?P<type>ssh-rsa|ssh-ed25519|ssh-dss|ecdsa-sha2-nistp(?:256|384|521)|sk-[a-z0-9-]+@openssh\.com) (?P<key>AAAA[A-Za-z0-9+/]+=*) (?P<comment>.*)$'
+fields:
+  type: {required: true}
+  key: {required: true}
+  comment: {required: true}

@@ -1,0 +1,4 @@
+description: A run over a file that is not in lz4 format, which prints the header and nothing under it; the message went to standard error and lz4 exited 1. Read as an empty list.
+source: captured on Ubuntu 26.04 with lz4 1.10.0, LC_ALL=C lz4 --list over a plain text file
+os: linux
+args: [--list, hello.txt]

@@ -1,0 +1,3 @@
+description: a single release, which is the latest
+source: captured with LC_ALL=C gh release list --repo nao1215/jsonize on Linux (GitHub CLI 2.87.3), output to a file
+args: [release, list, --repo, nao1215/jsonize]

@@ -1,0 +1,6 @@
+Frames  Skips  Compressed  Uncompressed  Ratio  Check  Filename
+     1      0     199 KiB       264 KiB  1.326  XXH64  zst/big.txt.zst
+     1      0      25   B                       XXH64  zst/nosize.zst
+     1      0      21   B        12   B  0.571   None  zst/nocheck.zst
+----------------------------------------------------------------- 
+     3      0     199 KiB                              3 files

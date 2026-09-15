@@ -1,0 +1,8 @@
+What docker system df prints, column by column:
+
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          72        12        94.26GB   80.05GB (84%)
+
+TOTAL is how many there are and ACTIVE how many a container uses; SIZE is
+what they take up and RECLAIMABLE what a prune would free, with the share
+of the size in parentheses. The build cache row prints no share.

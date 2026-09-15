@@ -1,0 +1,11 @@
+goos: linux
+goarch: amd64
+pkg: example.com/scratch/passing
+cpu: AMD RYZEN AI MAX+ 395 w/ Radeon 8060S          
+BenchmarkAdd-32       	     100	         3.700 ns/op
+--- FAIL: BenchmarkBroken
+    bench_test.go:12: the benchmark cannot run
+FAIL
+exit status 1
+FAIL	example.com/scratch/passing	0.003s
+FAIL

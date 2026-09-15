@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lz4/list.json",
+  "title": "lz4/list",
+  "description": "lz4 --list frame, block and size summary",
+  "x-jsonize": {
+    "definition": "lz4/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "frames": {
+        "type": "integer"
+      },
+      "type": {
+        "type": "string"
+      },
+      "block": {
+        "type": "string"
+      },
+      "compressed": {
+        "type": "string"
+      },
+      "uncompressed": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "ratio": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "filename": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "frames",
+      "type",
+      "block",
+      "compressed",
+      "uncompressed",
+      "ratio",
+      "filename"
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+description: The output of xz -l without --robot, a table for people, which belongs to xz/list.
+source: captured on Ubuntu 26.04 with XZ Utils 5.8.3, LC_ALL=C xz -l over a file made for the fixture
+os: linux
+args: [-l, hello.txt.xz]
+expect_error: 'does not describe this input'

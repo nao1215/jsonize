@@ -1,0 +1,5 @@
+description: The struct literals kubectl before 1.28 printed under the same labels, which the signature refuses.
+source: quoted from the kubectl 1.27 documentation of kubectl version
+os: linux
+args: [version]
+expect_error: does not describe this input

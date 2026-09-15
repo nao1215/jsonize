@@ -1,0 +1,129 @@
+[
+  {
+    "namespace": "argocd",
+    "name": "argocd-applicationset-controller",
+    "type": "ClusterIP",
+    "cluster_ip": "10.96.253.184",
+    "external_ip": null,
+    "ports": [
+      "7000/TCP",
+      "8080/TCP"
+    ],
+    "age": "53d",
+    "selector": "app.kubernetes.io/name=argocd-applicationset-controller"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-dex-server",
+    "type": "ClusterIP",
+    "cluster_ip": "10.96.251.218",
+    "external_ip": null,
+    "ports": [
+      "5556/TCP",
+      "5557/TCP",
+      "5558/TCP"
+    ],
+    "age": "53d",
+    "selector": "app.kubernetes.io/name=argocd-dex-server"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-metrics",
+    "type": "ClusterIP",
+    "cluster_ip": "10.96.218.74",
+    "external_ip": null,
+    "ports": [
+      "8082/TCP"
+    ],
+    "age": "53d",
+    "selector": "app.kubernetes.io/name=argocd-application-controller"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-notifications-controller-metrics",
+    "type": "ClusterIP",
+    "cluster_ip": "10.96.159.235",
+    "external_ip": null,
+    "ports": [
+      "9001/TCP"
+    ],
+    "age": "53d",
+    "selector": "app.kubernetes.io/name=argocd-notifications-controller"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-redis",
+    "type": "ClusterIP",
+    "cluster_ip": "10.96.101.49",
+    "external_ip": null,
+    "ports": [
+      "6379/TCP"
+    ],
+    "age": "53d",
+    "selector": "app.kubernetes.io/name=argocd-redis"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-repo-server",
+    "type": "ClusterIP",
+    "cluster_ip": "10.96.40.10",
+    "external_ip": null,
+    "ports": [
+      "8081/TCP",
+      "8084/TCP"
+    ],
+    "age": "53d",
+    "selector": "app.kubernetes.io/name=argocd-repo-server"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-server",
+    "type": "ClusterIP",
+    "cluster_ip": "10.96.168.85",
+    "external_ip": null,
+    "ports": [
+      "80/TCP",
+      "443/TCP"
+    ],
+    "age": "53d",
+    "selector": "app.kubernetes.io/name=argocd-server"
+  },
+  {
+    "namespace": "argocd",
+    "name": "argocd-server-metrics",
+    "type": "ClusterIP",
+    "cluster_ip": "10.96.224.140",
+    "external_ip": null,
+    "ports": [
+      "8083/TCP"
+    ],
+    "age": "53d",
+    "selector": "app.kubernetes.io/name=argocd-server"
+  },
+  {
+    "namespace": "default",
+    "name": "kubernetes",
+    "type": "ClusterIP",
+    "cluster_ip": "10.96.0.1",
+    "external_ip": null,
+    "ports": [
+      "443/TCP"
+    ],
+    "age": "53d",
+    "selector": null
+  },
+  {
+    "namespace": "kube-system",
+    "name": "kube-dns",
+    "type": "ClusterIP",
+    "cluster_ip": "10.96.0.10",
+    "external_ip": null,
+    "ports": [
+      "53/UDP",
+      "53/TCP",
+      "9153/TCP"
+    ],
+    "age": "53d",
+    "selector": "k8s-app=kube-dns"
+  }
+]

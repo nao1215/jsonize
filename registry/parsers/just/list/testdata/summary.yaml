@@ -1,0 +1,3 @@
+description: just --summary prints the names on one line with no heading, and is refused
+source: captured with LC_ALL=C just --summary -f /path/to/truss/justfile (the justfile of nao1215/truss) on Linux (just 1.46.0), output to a file
+expect_error: does not describe this input

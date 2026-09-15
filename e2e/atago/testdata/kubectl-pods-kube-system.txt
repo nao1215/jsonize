@@ -1,0 +1,13 @@
+NAME                                                           READY   STATUS    RESTARTS        AGE
+coredns-7d764666f9-dbchh                                       1/1     Running   25 (2d7h ago)   53d
+coredns-7d764666f9-htjqm                                       1/1     Running   25 (2d7h ago)   53d
+etcd-example-cluster-control-plane                      1/1     Running   1 (2d7h ago)    4d6h
+kindnet-5hjp4                                                  1/1     Running   23 (2d7h ago)   53d
+kindnet-hpvqz                                                  1/1     Running   23 (2d7h ago)   53d
+kindnet-p7pm6                                                  1/1     Running   23 (2d7h ago)   53d
+kube-apiserver-example-cluster-control-plane            1/1     Running   1 (2d7h ago)    4d6h
+kube-controller-manager-example-cluster-control-plane   1/1     Running   27 (2d7h ago)   53d
+kube-proxy-k25tg                                               1/1     Running   23 (2d7h ago)   53d
+kube-proxy-qwxpb                                               1/1     Running   23 (2d7h ago)   53d
+kube-proxy-vc6gj                                               1/1     Running   23 (2d7h ago)   53d
+kube-scheduler-example-cluster-control-plane            1/1     Running   28 (2d7h ago)   53d

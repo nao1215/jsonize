@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/kubectl/pods.json",
+  "title": "kubectl/pods",
+  "description": "kubectl get pods, with -A and -o wide",
+  "x-jsonize": {
+    "definition": "kubectl/pods",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "namespace": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "ready": {
+        "type": "object",
+        "properties": {
+          "ready": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "ready",
+          "total"
+        ]
+      },
+      "status": {
+        "type": "string"
+      },
+      "restarts": {
+        "type": "integer"
+      },
+      "last_restart": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "age": {
+        "type": "string"
+      },
+      "ip": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "node": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "nominated_node": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "readiness_gates": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "ready",
+      "status",
+      "restarts",
+      "last_restart",
+      "age"
+    ]
+  }
+}

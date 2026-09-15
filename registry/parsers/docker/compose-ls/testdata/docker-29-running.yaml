@@ -1,0 +1,4 @@
+source: captured from Docker Compose v5 (Docker 29.2.1) on Linux with LC_ALL=C; paths replaced
+description: The running projects only, one project with both containers running.
+os: linux
+args: ["compose", "ls"]

@@ -1,0 +1,4 @@
+description: a change still running, whose Ready cell is a dash, beside a finished one and a failed one spawned the day before
+source: written by hand to exercise the null_if rule for Ready and the widths a longer relative day gives the two time columns; the column padding follows snapd (widest cell plus two spaces) and the trailing blank line is the one snapd prints
+os: linux
+args: [changes]

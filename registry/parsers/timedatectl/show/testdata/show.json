@@ -1,0 +1,9 @@
+{
+  "Timezone": "Asia/Tokyo",
+  "LocalRTC": false,
+  "CanNTP": true,
+  "NTP": true,
+  "NTPSynchronized": true,
+  "TimeUSec": "Mon 2026-09-14 22:27:42 JST",
+  "RTCTimeUSec": "Mon 2026-09-14 22:27:41 JST"
+}

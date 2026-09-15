@@ -1,0 +1,4 @@
+description: A file with a skippable frame in front of its data frame, which adds the "Skippable Frames" line to the block.
+source: captured on Ubuntu 26.04 with Zstandard CLI 1.5.7, LC_ALL=C zstd -lv over a file made for the fixture, the skippable frame written by hand in front of a compressed file; the banner went to standard error
+os: linux
+args: [-lv, skippable.zst]

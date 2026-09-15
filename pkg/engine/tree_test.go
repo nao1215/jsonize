@@ -99,6 +99,65 @@ func TestParseTreeRefuses(t *testing.T) {
 	}
 }
 
+const treeRootDef = `format: 1
+command: t
+variant: v
+parse:
+  type: tree
+  indent: "  "
+  root: '^[0-9a-f]{2}:[0-9a-f]{2}\.[0-9] '
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^(?P<name>\S+): (?P<value>.*)$'
+        - '^(?P<text>.+)$'
+`
+
+// A definition that states what a top-level line looks like has a line
+// of any other shape at depth zero refused, rather than read as a root
+// by the node pattern that reads any text. A line printed after the
+// report, or another command's output piped in behind it, is what such
+// a line is.
+func TestParseTreeRoot(t *testing.T) {
+	t.Parallel()
+	input := "00:1f.0 ISA bridge\n  Flags: bus master\n00:1f.3 Audio device\n  Flags: fast devsel\n"
+	v, err := Parse(load(t, treeRootDef), []byte(input), Options{})
+	if err != nil {
+		t.Fatalf("Parse: %v", err)
+	}
+	want := `[{"text":"00:1f.0 ISA bridge","children":[{"name":"Flags","value":"bus master","children":[]}]},` +
+		`{"text":"00:1f.3 Audio device","children":[{"name":"Flags","value":"fast devsel","children":[]}]}]`
+	if got := mustJSON(t, v); got != want {
+		t.Errorf("got  %s\nwant %s", got, want)
+	}
+	for _, in := range []string{
+		input + "done\n",
+		"done\n" + input,
+		input + "Flags: bus master\n",
+	} {
+		if v, err := Parse(load(t, treeRootDef), []byte(in), Options{}); err == nil {
+			t.Errorf("%q was read as %s", in, mustJSON(t, v))
+		} else if !strings.Contains(err.Error(), "does not match root") {
+			t.Errorf("%q: %v", in, err)
+		}
+	}
+	// A child line is not held to the root expression.
+	if _, err := Parse(load(t, treeRootDef), []byte("00:1f.0 ISA bridge\n  done\n"), Options{}); err != nil {
+		t.Errorf("a child of any shape was refused: %v", err)
+	}
+	// A stream refuses the same line, and what came before it is not
+	// written as if the report had ended there.
+	if _, err := streamAll(t, treeRootDef, input+"done\n"); err == nil {
+		t.Error("a stream accepted a top-level line that does not match root")
+	}
+	// Without root, the same line is a root of its own, which is what
+	// the node pattern says.
+	if _, err := Parse(load(t, treeDef), []byte("a: 1\ndone\n"), Options{}); err != nil {
+		t.Errorf("a tree without root refused a top-level line: %v", err)
+	}
+}
+
 // A producer cannot make jz build an unbounded stack of objects.
 func TestParseTreeBoundsDepth(t *testing.T) {
 	t.Parallel()

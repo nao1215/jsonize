@@ -1,0 +1,53 @@
+# `just --list` prints `Available recipes:` and then the recipes, each
+# indented by four spaces: the name, its parameters as they are written
+# in the justfile (`target='debug'`, `+ARGS`), and, padded to a common
+# column, a `#` and the recipe's doc comment. A recipe in a group is
+# listed under the group's name in square brackets, after the recipes
+# in no group and a blank line, so the output is one block per group
+# and the first block is the recipes that have none: the definition
+# reads the heading as the start of that block and a group heading as
+# the start of each other, and the group is null for the first. A
+# justfile with no recipes prints the heading alone, which is one block
+# with an empty list.
+#
+# just 1.46 lists a recipe's aliases in brackets at the end of its doc
+# comment, or in place of one; they are read into a list of their own,
+# null for a recipe without any. The parameters are kept as one string
+# because a default may hold a space (`greeting="Hello there"`) and the
+# text does not say where one parameter ends and the next begins.
+format: 1
+command: just
+variant: list
+description: just --list, the recipes of a justfile with their parameters and doc comments
+metadata:
+  tags: [build, task-runner]
+  compatible: [just]
+  references:
+    - https://just.systems/man/en/listing-available-recipes.html
+detect:
+  args:
+    any: ["--list", "-l"]
+  signature:
+    all:
+      # The heading, and under it nothing but recipe lines indented by
+      # four spaces, group headings indented the same, and blank lines.
+      - '\AAvailable recipes:[ \t]*$(?:\n(?:    \S[^\n]*|[ \t]*))*\z'
+parse:
+  type: records
+  start: '^(?:Available recipes:|    \[[^\]\n]+\])[ \t]*$'
+  parts:
+    - name: group
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?:Available recipes:|    \[(?P<name>[^\]]+)\])[ \t]*\z'
+    - name: recipes
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^    (?P<name>[^\s\[]\S*)(?: (?P<parameters>\S.*?))?[ \t]*(?:# ?(?P<doc>.*?))?[ \t]*(?: ?\[alias(?:es)?: (?P<aliases>[^\]]*)\])?[ \t]*$'
+      fields:
+        name: {required: true}
+        doc: {null_if: [""]}
+        aliases: {type: array, split: ","}

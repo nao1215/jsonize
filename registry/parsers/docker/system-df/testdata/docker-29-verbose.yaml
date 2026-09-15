@@ -1,0 +1,7 @@
+source: captured from Docker 29.2.1 on Linux with LC_ALL=C (docker system df -v); names and IDs replaced
+description: >-
+  The verbose report is a table per kind under a heading rather than the
+  summary, so the signature refuses it; docker/system-df-verbose reads it.
+os: linux
+args: ["system", "df", "-v"]
+expect_error: does not describe this input

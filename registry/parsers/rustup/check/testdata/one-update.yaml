@@ -1,0 +1,4 @@
+description: one toolchain with an update, one current, and rustup itself current
+source: captured with LC_ALL=C rustup check on Linux (rustup 1.29.1), output to a file
+os: linux
+args: [check]

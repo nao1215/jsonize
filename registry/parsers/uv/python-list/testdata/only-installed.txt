@@ -1,0 +1,6 @@
+cpython-3.14.4-linux-x86_64-gnu     /usr/bin/python3.14
+cpython-3.14.4-linux-x86_64-gnu     /usr/bin/python3 -> python3.14
+cpython-3.12.12-linux-x86_64-gnu    /home/user/.local/bin/python3.12 -> /home/user/.local/share/uv/python/cpython-3.12.12-linux-x86_64-gnu/bin/python3.12
+cpython-3.12.12-linux-x86_64-gnu    /home/user/.local/share/uv/python/cpython-3.12.12-linux-x86_64-gnu/bin/python3.12
+cpython-3.11.14-linux-x86_64-gnu    /home/user/.local/bin/python3.11 -> /home/user/.local/share/uv/python/cpython-3.11.14-linux-x86_64-gnu/bin/python3.11
+cpython-3.11.14-linux-x86_64-gnu    /home/user/.local/share/uv/python/cpython-3.11.14-linux-x86_64-gnu/bin/python3.11

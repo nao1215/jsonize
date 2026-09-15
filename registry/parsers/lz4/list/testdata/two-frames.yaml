@@ -1,0 +1,4 @@
+description: A file made of two lz4 files joined, which lz4 counts as two frames, beside a plain one.
+source: captured on Ubuntu 26.04 with lz4 1.10.0, LC_ALL=C lz4 --list over files made for the fixture
+os: linux
+args: [--list, two-frames.lz4, hello.txt.lz4]

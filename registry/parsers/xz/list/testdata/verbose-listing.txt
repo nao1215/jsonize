@@ -1,0 +1,14 @@
+hello.txt.xz (1/1)
+  Streams:           1
+  Blocks:            1
+  Compressed size:   76 B
+  Uncompressed size: 12 B
+  Ratio:             6.333
+  Check:             CRC64
+  Stream Padding:    0 B
+  Streams:
+    Stream    Blocks      CompOffset    UncompOffset        CompSize      UncompSize  Ratio  Check      Padding
+         1         1               0               0              76              12  6.333  CRC64            0
+  Blocks:
+    Stream     Block      CompOffset    UncompOffset       TotalSize      UncompSize  Ratio  Check
+         1         1              12               0              44              12  3.667  CRC64

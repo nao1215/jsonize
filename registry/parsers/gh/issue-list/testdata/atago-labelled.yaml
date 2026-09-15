@@ -1,0 +1,3 @@
+description: closed issues, most carrying the bug label
+source: captured with LC_ALL=C gh issue list --repo nao1215/atago --state all --limit 10 on Linux (GitHub CLI 2.87.3), output to a file
+args: [issue, list, --repo, nao1215/atago, --state, all, --limit, "10"]

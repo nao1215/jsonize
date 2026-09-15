@@ -1,0 +1,5 @@
+description: a listing printed with -f in a layout of three tab separated fields, which the signature must refuse
+source: captured on Ubuntu 26.04 (dpkg 1.23.7) with LC_ALL=C, dpkg-query -W -f '${Package}\t${Version}\t${Status}\n' jq
+os: linux
+args: [-W, -f, "${Package}\t${Version}\t${Status}\n", jq]
+expect_error: 'does not describe this input'

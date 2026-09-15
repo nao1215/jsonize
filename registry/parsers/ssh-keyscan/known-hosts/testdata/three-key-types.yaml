@@ -1,0 +1,4 @@
+description: The RSA, ECDSA and Ed25519 host keys of github.com, each behind the comment line ssh-keyscan prints for the connection. These are the public keys GitHub publishes, so nothing is replaced.
+source: captured on Ubuntu 26.04 with OpenSSH 10.2p1, LC_ALL=C ssh-keyscan -t rsa,ed25519,ecdsa github.com
+os: linux
+args: [-t, rsa,ed25519,ecdsa, github.com]

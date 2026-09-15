@@ -1,0 +1,18 @@
+[
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/jsonutil",
+    "elapsed": 0.002,
+    "note": "no tests to run",
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "github.com/nao1215/jsonize/pkg/convert",
+    "elapsed": 0.002,
+    "note": "no tests to run",
+    "coverage": null
+  }
+]

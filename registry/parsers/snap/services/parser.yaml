@@ -1,0 +1,43 @@
+# `snap services` prints one row per service a snap ships: the service
+# as snap.app, whether it starts at boot, whether it is running now, and
+# the notes snapd has about it. No cell holds a space, so the row is
+# read with one expression that also names the words the two state
+# columns are drawn from, which is what keeps a sentence of four words
+# from being read as a service.
+#
+# Startup is "enabled" or "disabled". Current is "active" or "inactive",
+# and a dash for a user service whose state snapd cannot query, which
+# becomes null. Notes is a comma separated list ("user,timer-activated")
+# or a dash when there is nothing to say; it is split into an array the
+# way snap/list splits its Notes column, so a consumer asks whether a
+# note is present rather than searching a string.
+format: 1
+command: snap
+variant: services
+description: snap services, the services of installed snaps
+metadata:
+  tags: [linux, package, snap, service]
+  compatible: [snapd]
+  references:
+    - https://snapcraft.io/docs/snap-command-reference
+detect:
+  os: [linux]
+  args:
+    all: ["services"]
+  signature:
+    all:
+      # The header, then nothing but rows: a name, one of the two startup
+      # words, one of the two states or a dash, and the notes. A document
+      # that quotes the header above a paragraph is not this format.
+      - '\AService[ \t]+Startup[ \t]+Current[ \t]+Notes[ \t]*\n(?:\S+[ \t]+(?:enabled|disabled)[ \t]+(?:active|inactive|-)[ \t]+\S+[ \t]*(?:\n|\z))+\z'
+input:
+  ignore:
+    - '^Service[ \t]+Startup[ \t]+Current[ \t]+Notes[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<service>\S+)[ \t]+(?P<startup>enabled|disabled)[ \t]+(?P<current>active|inactive|-)[ \t]+(?P<notes>\S+)[ \t]*$'
+fields:
+  service: {required: true}
+  startup: {required: true}
+  current: {null_if: ["-"]}
+  notes: {type: array, split: ",", null_if: ["-"]}

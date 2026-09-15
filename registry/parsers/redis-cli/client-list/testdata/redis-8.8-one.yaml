@@ -1,0 +1,6 @@
+source: captured from Redis 8.8.0 on Linux with LC_ALL=C from a server started for the capture on port 16379 (redis-cli -p 16379 client list); CRLF line endings as redis-cli wrote them
+description: >-
+  The one client, redis-cli itself, so cmd is "client|list" and name,
+  lib-name and lib-ver are empty.
+os: linux
+args: ["-p", "16379", "client", "list"]

@@ -1,0 +1,5 @@
+KEY        ID     PERMS OWNER NSEMS
+The KEY column is the key the set was created with, in hexadecimal,
+and ID is the identifier semget returned. PERMS and OWNER are the
+mode and the owning user, and NSEMS is how many semaphores the set
+holds. Use -i ID to print one set with its elements.

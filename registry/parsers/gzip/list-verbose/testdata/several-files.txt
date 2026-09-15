@@ -1,0 +1,7 @@
+method  crc     date  time           compressed        uncompressed  ratio uncompressed_name
+defla af083b2d Sep 14 22:27                  42                  12 -16.7% hello.txt
+defla a415a90e Sep 14 22:27                  59                 460  93.5% repeat.txt
+defla 00000000 Sep 14 22:27                  30                   0   0.0% empty.txt
+defla f064eaa2 Sep 14 22:27                  60                  19 -10.5% name with spaces.txt
+defla 71857850 Sep 14 22:27                 121                   5 -40.0% a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt
+                                            312                 496  60.1% (totals)

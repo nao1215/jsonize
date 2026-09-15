@@ -1,0 +1,51 @@
+{
+  "banner": {
+    "version": "26.00 (x64)",
+    "copyright": "1999-2026 Igor Pavlov",
+    "date": "2026-02-12",
+    "environment": "64-bit locale=C.UTF-8 Threads:32 OPEN_MAX:524288, ASM"
+  },
+  "scan": {
+    "files": 1,
+    "bytes": 164,
+    "size": "1 KiB"
+  },
+  "archive": {
+    "name": "notime.7z"
+  },
+  "properties": {
+    "Path": "notime.7z",
+    "Type": "7z",
+    "Physical Size": 164,
+    "Headers Size": 148,
+    "Method": "LZMA2:12",
+    "Solid": false,
+    "Blocks": 1
+  },
+  "entries": [
+    {
+      "date": null,
+      "time": null,
+      "attributes": "....A",
+      "size": 0,
+      "compressed": 0,
+      "name": "empty.txt"
+    },
+    {
+      "date": null,
+      "time": null,
+      "attributes": "....A",
+      "size": 12,
+      "compressed": 16,
+      "name": "hello.txt"
+    }
+  ],
+  "totals": {
+    "date": null,
+    "time": null,
+    "size": 12,
+    "compressed": 16,
+    "files": 2,
+    "folders": null
+  }
+}

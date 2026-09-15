@@ -1,0 +1,6 @@
+# ids the entrypoint runs as, read by docker compose
+UID=1000
+GID=1000
+Name=alice
+HOME="/home/alice"
+Linger=no

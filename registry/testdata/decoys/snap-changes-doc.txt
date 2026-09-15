@@ -1,0 +1,7 @@
+ID   Status  Spawn               Ready               Summary
+The ID column is the number of the change, which snap tasks takes.
+The Status column is one of Do, Doing, Done, Undo, Undone, Error, Hold.
+The Spawn column says when the change was created and the Ready column
+when it finished, both relative to the day the command ran.
+The Summary column is one sentence describing what the change does.
+

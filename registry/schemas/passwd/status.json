@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/passwd/status.json",
+  "title": "passwd/status",
+  "description": "passwd -S password status of an account",
+  "x-jsonize": {
+    "definition": "passwd/status",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "user": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "L",
+          "NP",
+          "P"
+        ]
+      },
+      "last_change": {
+        "type": "string"
+      },
+      "min_days": {
+        "type": "integer"
+      },
+      "max_days": {
+        "type": "integer"
+      },
+      "warn_days": {
+        "type": "integer"
+      },
+      "inactive_days": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "user",
+      "status",
+      "last_change",
+      "min_days",
+      "max_days",
+      "warn_days",
+      "inactive_days"
+    ]
+  }
+}

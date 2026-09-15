@@ -34,7 +34,10 @@ parse:
     leading_label: type
   min_fields: 4
 fields:
-  type: {trim_suffix: ":", required: true}
+  # The rows free prints are Mem, Swap, and Total with -t, Low and High
+  # with -l; a line that opens with any other word is not a row of
+  # free.
+  type: {trim_suffix: ":", required: true, regex: '(?P<type>Mem|Swap|Total|Low|High)'}
   total: {required: true}
   used: {required: true}
   free: {required: true}

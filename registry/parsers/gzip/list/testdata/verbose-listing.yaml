@@ -1,0 +1,5 @@
+description: The output of gzip -lv, whose header opens with "method"; it belongs to gzip/list-verbose.
+source: captured on Ubuntu 26.04 with GNU gzip 1.14, LC_ALL=C gzip -lv over a file made for the fixture
+os: linux
+args: [-lv, hello.txt.gz]
+expect_error: 'does not describe this input'

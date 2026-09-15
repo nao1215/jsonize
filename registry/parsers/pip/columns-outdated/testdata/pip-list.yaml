@@ -1,0 +1,4 @@
+description: the two column table pip list prints without --outdated, which the signature must refuse
+source: "`uv pip list` with uv 0.9.7 on CPython 3.12 (Ubuntu 26.04) with LC_ALL=C, in the same virtual environment"
+os: linux
+expect_error: 'does not describe this input'

@@ -1,0 +1,4 @@
+description: No session, which screen reports in one line and exit status 1; read as an empty list with the directory and a count of 0.
+source: captured on Ubuntu 26.04 with GNU screen 4.09.01, LC_ALL=C screen -ls with no session running; the user name in the socket directory replaced
+os: linux
+args: [-ls]

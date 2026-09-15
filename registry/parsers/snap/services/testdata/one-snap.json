@@ -1,0 +1,20 @@
+[
+  {
+    "service": "firmware-updater.firmware-notifier",
+    "startup": "enabled",
+    "current": "active",
+    "notes": [
+      "user",
+      "timer-activated"
+    ]
+  },
+  {
+    "service": "firmware-updater.firmware-updater-app",
+    "startup": "enabled",
+    "current": "inactive",
+    "notes": [
+      "user",
+      "dbus-activated"
+    ]
+  }
+]

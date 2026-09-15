@@ -1,0 +1,50 @@
+[
+  {
+    "name": "argocd",
+    "status": "Active",
+    "age": "53d",
+    "labels": [
+      "kubernetes.io/metadata.name=argocd"
+    ]
+  },
+  {
+    "name": "default",
+    "status": "Active",
+    "age": "53d",
+    "labels": [
+      "kubernetes.io/metadata.name=default"
+    ]
+  },
+  {
+    "name": "kube-node-lease",
+    "status": "Active",
+    "age": "53d",
+    "labels": [
+      "kubernetes.io/metadata.name=kube-node-lease"
+    ]
+  },
+  {
+    "name": "kube-public",
+    "status": "Active",
+    "age": "53d",
+    "labels": [
+      "kubernetes.io/metadata.name=kube-public"
+    ]
+  },
+  {
+    "name": "kube-system",
+    "status": "Active",
+    "age": "53d",
+    "labels": [
+      "kubernetes.io/metadata.name=kube-system"
+    ]
+  },
+  {
+    "name": "local-path-storage",
+    "status": "Active",
+    "age": "53d",
+    "labels": [
+      "kubernetes.io/metadata.name=local-path-storage"
+    ]
+  }
+]

@@ -25,7 +25,9 @@ parse:
 fields:
   package: {required: true}
   current: {null_if: ["MISSING"]}
-  wanted: {required: true}
-  latest: {required: true}
+  # The versions open with a digit, so six words of another command's
+  # output are not a package.
+  wanted: {required: true, regex: '(?P<wanted>[0-9]\S*)'}
+  latest: {required: true, regex: '(?P<latest>[0-9]\S*)'}
   location: {null_if: ["-"]}
   depended_by: {required: true}

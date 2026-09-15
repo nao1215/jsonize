@@ -1,0 +1,4 @@
+description: two matches on the name alone, the same line shape under --names-only
+source: captured on Ubuntu 26.04 (apt 3.2.0) with LC_ALL=C, apt-cache search --names-only libjq
+os: linux
+args: [search, --names-only, libjq]

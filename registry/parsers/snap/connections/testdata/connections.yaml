@@ -1,0 +1,4 @@
+description: the connected plugs of every snap, where every slot is present and no row carries a note
+source: captured on Ubuntu 26.04 (snapd 2.76.3) with LC_ALL=C, lines 1-40 of snap connections
+os: linux
+args: [connections]

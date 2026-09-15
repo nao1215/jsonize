@@ -1,0 +1,4 @@
+description: a build failure, a failed test with its report, a package with no test files, and the trailing FAIL
+source: captured with LC_ALL=C go test ./... in a throwaway module (example.com/scratch) written for this fixture, on Linux (go1.26.4); the compiler errors went to standard error and are not part of it
+os: linux
+args: [test, ./...]

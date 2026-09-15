@@ -1,0 +1,108 @@
+# `7z l -slt` prints the same banner, scan line, archive name and
+# archive property block as `7z l`, then a line of ten dashes and one
+# block of "Name = value" properties per entry, the blocks separated by
+# blank lines and each opening with its Path. Which properties an entry
+# has depends on the archive format (a .7z has Block, a .zip has Host OS
+# and Version), so each block is read as a map under the names 7-Zip
+# prints, and only the values whose shape is fixed are converted: the
+# sizes and the block number to integers, the "+" and "-" of Solid,
+# Encrypted and Folder to booleans. A property 7-Zip prints with nothing
+# after the "=" (the packed size of a member of a solid block after the
+# first, the CRC of an empty file, a modification time the archive did
+# not store) is null. The modification time carries fractions of a
+# second and no zone, so it stays a string.
+#
+# One archive is listed per run, as with `7z l`. The plain `7z l`
+# listing prints the entries as a table and is read by 7z/list.
+format: 1
+command: 7z
+variant: list-technical
+aliases:
+  # 7za, the build without plugins, prints the same text with "(a)" in
+  # its banner. 7zr opens its banner with "Public domain" in place of
+  # the copyright and is not read.
+  - name: 7za
+description: 7z l -slt archive and entry properties
+metadata:
+  tags: [linux, darwin, archive]
+  compatible: [7-Zip]
+  references:
+    - https://documentation.help/7-Zip/list.htm
+detect:
+  args:
+    all: [l, -slt]
+  signature:
+    # The property block of an archive can be long, and the line of ten
+    # dashes that opens the entries has to be in the window.
+    window: 60
+    all:
+      - '\A7-Zip [^\n]* : Copyright \(c\) '
+      - '^Listing archive: '
+      - '^--$'
+      - '^Path = '
+      - '^----------$'
+parse:
+  type: composite
+  parts:
+    - name: banner
+      select: {limit: 2}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A7-Zip (?P<version>[^\n]*?) : Copyright \(c\) (?P<copyright>[^\n]*?) : (?P<date>\S+)\n[ \t]*(?P<environment>[^\n]*?)[ \t]*\z'
+      fields:
+        version: {required: true}
+        copyright: {required: true}
+        date: {required: true}
+        environment: {required: true}
+    - name: scan
+      select: {after: '^Scanning the drive for archives:$', limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<files>\d+) files?, (?P<bytes>\d+) bytes \((?P<size>[^)\n]*)\)\z'
+      fields:
+        files: {type: int, required: true}
+        bytes: {type: int, required: true}
+        size: {required: true}
+    - name: archive
+      select: {after: '^\d+ files?, \d+ bytes \([^)\n]*\)$', limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AListing archive: (?P<name>.+)\z'
+      fields:
+        name: {required: true}
+    - name: properties
+      select: {after: '^--$', until: '^----------$'}
+      parse:
+        type: kv
+        separator: "="
+        as: map
+      fields:
+        Physical Size: {type: int}
+        Headers Size: {type: int}
+        Blocks: {type: int}
+        Solid: {type: bool, true_values: ["+"], false_values: ["-"]}
+    - name: entries
+      select: {after: '^----------$'}
+      parse:
+        type: records
+        start: '^Path = '
+        record:
+          parse:
+            type: kv
+            separator: "="
+            as: map
+          fields:
+            Size: {type: int, null_if: [""]}
+            Packed Size: {type: int, null_if: [""]}
+            Block: {type: int, null_if: [""]}
+            Modified: {null_if: [""]}
+            Created: {null_if: [""]}
+            Accessed: {null_if: [""]}
+            CRC: {null_if: [""]}
+            Method: {null_if: [""]}
+            Comment: {null_if: [""]}
+            Encrypted: {type: bool, true_values: ["+"], false_values: ["-"]}
+            Folder: {type: bool, true_values: ["+"], false_values: ["-"]}

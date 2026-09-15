@@ -1,0 +1,4 @@
+description: one segment nothing is attached to, whose STATUS and COMMAND cells are empty and whose CTIME is a clock time of the same day
+source: captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C after ipcmk -M 4096 created a segment; the owner was replaced keeping its width
+os: linux
+args: [-m]

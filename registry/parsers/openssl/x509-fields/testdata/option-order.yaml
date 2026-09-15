@@ -1,0 +1,4 @@
+description: The same five options given in the reverse order, which openssl prints in that order.
+source: captured on Ubuntu 26.04 with OpenSSL 3.5.5, LC_ALL=C openssl x509 -noout -fingerprint -serial -dates -issuer -subject over a certificate made for the fixture
+os: linux
+args: [x509, -in, c.pem, -noout, -fingerprint, -serial, -dates, -issuer, -subject]

@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/zstd/list.json",
+  "title": "zstd/list",
+  "description": "zstd -l frame, size and check summary",
+  "x-jsonize": {
+    "definition": "zstd/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "frames": {
+        "type": "integer"
+      },
+      "skips": {
+        "type": "integer"
+      },
+      "compressed": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "unit"
+        ]
+      },
+      "uncompressed": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "unit"
+        ]
+      },
+      "ratio": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "check": {
+        "type": "string"
+      },
+      "filename": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "frames",
+      "skips",
+      "compressed",
+      "uncompressed",
+      "ratio",
+      "check",
+      "filename"
+    ]
+  }
+}

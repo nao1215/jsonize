@@ -29,7 +29,10 @@ parse:
   header:
     columns: [network_id, name, driver, scope]
 fields:
-  network_id: {required: true}
+  # The identifier is hex, twelve digits or all sixty-four, and the
+  # scope is one of three words, which is what tells a row from four
+  # words of another command's output.
+  network_id: {required: true, regex: '(?P<network_id>[0-9a-f]{12}|[0-9a-f]{64})'}
   name: {required: true}
   driver: {required: true}
-  scope: {required: true}
+  scope: {required: true, regex: '(?P<scope>local|swarm|global)'}

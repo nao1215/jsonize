@@ -1,0 +1,3 @@
+description: the compiler errors go test writes to standard error are not result lines
+source: written by hand from the standard error of the go test ./... run of failing.txt (go1.26.4)
+expect_error: does not describe this input

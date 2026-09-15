@@ -1,0 +1,40 @@
+{
+  "files": [
+    {
+      "name": "xz/big.txt.xz",
+      "streams": 1,
+      "blocks": 1,
+      "compressed": 208092,
+      "uncompressed": 270177,
+      "ratio": "0.770",
+      "check": [
+        "CRC64"
+      ],
+      "padding": 0
+    },
+    {
+      "name": "xz/empty.txt.xz",
+      "streams": 1,
+      "blocks": 0,
+      "compressed": 32,
+      "uncompressed": 0,
+      "ratio": null,
+      "check": [
+        "CRC64"
+      ],
+      "padding": 0
+    }
+  ],
+  "totals": {
+    "streams": 2,
+    "blocks": 1,
+    "compressed": 208124,
+    "uncompressed": 270177,
+    "ratio": "0.770",
+    "check": [
+      "CRC64"
+    ],
+    "padding": 0,
+    "files": 2
+  }
+}

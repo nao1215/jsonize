@@ -1,0 +1,62 @@
+[
+  {
+    "name": "argocd-applicationset-controller",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d"
+  },
+  {
+    "name": "argocd-dex-server",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d"
+  },
+  {
+    "name": "argocd-notifications-controller",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d"
+  },
+  {
+    "name": "argocd-redis",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d"
+  },
+  {
+    "name": "argocd-repo-server",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d"
+  },
+  {
+    "name": "argocd-server",
+    "ready": {
+      "ready": 1,
+      "total": 1
+    },
+    "up_to_date": 1,
+    "available": 1,
+    "age": "53d"
+  }
+]

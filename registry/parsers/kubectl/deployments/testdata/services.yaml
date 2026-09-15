@@ -1,0 +1,5 @@
+description: The service table, which is kubectl/services to read.
+source: captured from kubectl v1.35.0 against a kind v1.35.0 cluster on Linux with LC_ALL=C
+os: linux
+args: [get, services, -A]
+expect_error: does not describe this input

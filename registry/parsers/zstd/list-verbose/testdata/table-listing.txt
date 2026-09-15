@@ -1,0 +1,2 @@
+Frames  Skips  Compressed  Uncompressed  Ratio  Check  Filename
+     1      0      25   B        12   B  0.480  XXH64  hello.txt.zst

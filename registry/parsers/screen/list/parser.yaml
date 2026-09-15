@@ -1,0 +1,65 @@
+# `screen -ls` prints the sessions of the user running it: a heading
+# ("There is a screen on:" or "There are screens on:"), one tab indented
+# line per session with its pid and name joined by a dot, the time it
+# was started in parentheses and its state in parentheses, and a closing
+# line counting the sockets and naming the directory they are in. With
+# no session it prints "No Sockets found in DIR." instead and exits 1.
+#
+# The result is an object of the sessions and the socket directory. The
+# no-session text is read as an empty list of sessions with the
+# directory and a count of 0: it answers the same question, which
+# sessions there are, and names the same directory, so a consumer that
+# lists sessions sees none rather than an error it has to tell from a
+# real one; the exit status still says that screen found nothing.
+#
+# A session name may hold dots (the default name is the tty and the
+# host), so it is everything after the first dot up to the tab. The
+# start time has a two digit year and no zone and stays a string. The
+# state is what screen printed inside the parentheses: Detached,
+# Attached, or a longer form such as "Multi, detached". The heading
+# says nothing the lines do not, and is dropped.
+format: 1
+command: screen
+variant: list
+description: screen -ls sessions and socket directory
+metadata:
+  tags: [linux, darwin, terminal]
+  compatible: [GNU screen]
+  references:
+    - https://www.gnu.org/software/screen/manual/screen.html#Invoking-Screen
+detect:
+  args:
+    any: ["-ls", "-list", "--list"]
+  signature:
+    all:
+      # The whole text: a heading, the session lines and the count, or
+      # the one line that says there are none.
+      - '\A(?:There (?:is a screen|are screens) on:\n(?:\t\d+\.[^\n]*\t\([^\n]*\)\n)+\d+ Sockets? in [^\n]+\.|No Sockets found in [^\n]+\.)\z'
+input:
+  ignore:
+    - '^There (?:is a screen|are screens) on:$'
+parse:
+  type: composite
+  parts:
+    - name: sessions
+      ignore: ['^\S']
+      parse:
+        type: regex
+        pattern: '^\t(?P<pid>\d+)\.(?P<name>[^\t]+)\t(?:\((?P<started>[^)]*)\)\t)?\((?P<state>[^)]*)\)$'
+      fields:
+        pid: {type: int, required: true}
+        name: {required: true}
+        started: {}
+        state: {required: true}
+    - name: sockets
+      ignore: ['^\t']
+      parse:
+        type: regex
+        each: input
+        patterns:
+          - '\A(?P<count>\d+) Sockets? in (?P<directory>.+)\.\z'
+          - pattern: '\ANo Sockets found in (?P<directory>.+)\.\z'
+            values: {count: "0"}
+      fields:
+        count: {type: int, required: true}
+        directory: {required: true}

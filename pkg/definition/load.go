@@ -392,8 +392,8 @@ func validateSelect(v *validator, path string, s *Select) {
 // needs; no other nesting is allowed, because anything deeper describes a
 // tree whose shape comes from the input rather than from the definition.
 func validateParse(v *validator, path string, p *Parse, fields map[string]*Field, fieldsPath, parent string) {
-	if p.Type != TypeTree && (len(p.Indent) > 0 || p.Node != nil) {
-		v.add(path, "indent/node are only valid for type tree")
+	if p.Type != TypeTree && (len(p.Indent) > 0 || p.Node != nil || p.Root != "") {
+		v.add(path, "indent/node/root are only valid for type tree")
 	}
 	// A parser that reads its values through parts or nodes has no
 	// values of its own to convert, so a fields map beside it would
@@ -514,6 +514,9 @@ func validateTree(v *validator, path string, p *Parse) {
 		if unit == "" {
 			v.add(fmt.Sprintf("%s.indent[%d]", path, i), "is empty, so it opens every line and no line ever ends")
 		}
+	}
+	if p.Root != "" {
+		p.root = v.regex(path+".root", p.Root)
 	}
 	if p.Node == nil {
 		v.add(path+".node", "is required for type tree: how one line of the tree is read")

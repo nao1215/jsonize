@@ -1,0 +1,3 @@
+description: one crate and no count line, so the list of more is empty
+source: captured with LC_ALL=C cargo search truss-image --limit 50 on Linux (cargo 1.98.0), standard output to a file
+args: [search, truss-image, --limit, "50"]

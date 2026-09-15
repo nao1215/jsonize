@@ -1,0 +1,4 @@
+description: Five files in one run, an empty one (ratio 0.000) and a name with spaces among them, then the rule (which ends in a space) and the totals row, both dropped.
+source: captured on Ubuntu 26.04 with Zstandard CLI 1.5.7, LC_ALL=C zstd -l over files made for the fixture; the banner went to standard error
+os: linux
+args: [-l, hello.txt.zst, repeat.txt.zst, empty.txt.zst, name with spaces.txt.zst, a-very-long-file-name-that-goes-on-and-on-to-check-how-the-listing-handles-width-0123456789.txt.zst]

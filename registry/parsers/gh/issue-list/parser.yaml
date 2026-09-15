@@ -1,0 +1,41 @@
+# `gh issue list` writes, when its output is not a terminal, one issue
+# per line as tab-separated cells with no header: the number, the state,
+# the title, the labels joined with a comma and a space, and when the
+# issue was last updated, as a UTC timestamp. The labels cell is empty
+# for an issue with none, which is an empty list rather than null. A
+# listing with no issues is no output at all, which jz refuses as text
+# it cannot read rather than reporting an empty list.
+#
+# The state is OPEN or CLOSED in the second cell of every line, beside
+# a timestamp of one fixed shape at the end, and the signature asks that
+# of every line. `gh pr list` puts its state fourth and its branch
+# where the labels are, so the two are not read for each other.
+format: 1
+command: gh
+variant: issue-list
+description: gh issue list, one issue per line when the output is not a terminal
+metadata:
+  tags: [git, github, issue]
+  compatible: [GitHub CLI]
+  references:
+    - https://cli.github.com/manual/gh_issue_list
+detect:
+  args:
+    all: ["issue"]
+    any: ["list", "ls"]
+  signature:
+    all:
+      - '\A(?:^\d+\t(?:OPEN|CLOSED)\t[^\t\n]*\t[^\t\n]*\t\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$\n?)+\z'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+  header:
+    none: true
+    columns: [number, state, title, labels, updated]
+fields:
+  number: {type: int, required: true}
+  state: {required: true}
+  title: {required: true}
+  labels: {type: array, split: ","}
+  updated: {type: time, layout: "2006-01-02T15:04:05Z07:00", required: true}

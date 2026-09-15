@@ -1,0 +1,6 @@
+{
+  "wifi_hw": "enabled",
+  "wifi": "enabled",
+  "wwan_hw": "missing",
+  "wwan": "enabled"
+}

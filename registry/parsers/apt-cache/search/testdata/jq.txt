@@ -1,0 +1,40 @@
+jq - lightweight and flexible command-line JSON processor
+libjq-dev - lightweight and flexible command-line JSON processor - development files
+libjq1 - lightweight and flexible command-line JSON processor - shared library
+libjs-jquery - JavaScript library for dynamic web applications
+libjs-underscore - JavaScript's functional programming helper library
+dasel - Query, update and convert data structures from the command line (program)
+dl-distro - Bash script for downloading and verifying OS images
+fq - jq for binary formats (program)
+gojq - pure Go implementation of jq (program)
+golang-bugst-testifyjson-dev - Utilities and helper function for unit testing JSON output in golang (library)
+golang-github-goji-param-dev - Rack / jQuery style parameter parsing for Go
+golang-github-itchyny-go-flags-dev - Go library for parsing command line arguments (itchyny's fork)
+golang-github-itchyny-gojq-dev - pure Go implementation of jq (library)
+golang-github-puerkitobio-goquery-dev - jQuery-style HTML manipulation in Go
+golang-github-tomwright-dasel-dev - Query, update and convert data structures from the command line (library)
+golang-github-wader-gojq-dev - fork of the gojq library for fq
+grimshot - Easy to use screenshot tool for sway
+haskell-js-dgtable-utils - obtain minified jquery.dgtable code
+jello - Filter for JSON and JSON Lines data with Python syntax
+jid - json incremental digger
+jqp - TUI playground to experiment with jq (program)
+libbiblio-rfid-perl - perl tools to use different RFID readers for library use
+libghc-js-dgtable-dev - obtain minified jquery.dgtable code
+libghc-js-dgtable-doc - obtain minified jquery.dgtable code; documentation
+libghc-js-dgtable-prof - obtain minified jquery.dgtable code; profiling libraries
+libghc-js-flot-data - bundles the jQuery Flot code into a Haskell package; runtime files
+libghc-js-flot-dev - bundles the jQuery Flot code into a Haskell package
+libghc-js-flot-doc - bundles the jQuery Flot code into a Haskell package; documentation
+libghc-js-flot-prof - bundles the jQuery Flot code into a Haskell package; profiling libraries
+libghc-js-jquery-data - bundles the minified jQuery code into a Haskell package
+libghc-js-jquery-dev - bundles the minified jQuery code into a Haskell package
+libghc-js-jquery-doc - bundles the minified jQuery code into a Haskell package; documentation
+libghc-js-jquery-prof - bundles the minified jQuery code into a Haskell package; profiling libraries
+libhtml-query-perl - HTML::Tree add-on to allow jQuery-like queries on HTML::Element trees
+libjs-autonumeric - jQuery plugin that automatically formats currency and numbers
+libjs-autosize - script to automatically adjust textarea height to fit text - NodeJS
+libjs-backbone - some Backbone for JavaScript applications - browser library
+libjs-blazy - lightweight script for lazy loading and multi-serving images
+libjs-bootsidemenu - jQuery plugin to easily build a sliding menu (browser)
+libjs-chosen - select box enhancer for jQuery and Prototype

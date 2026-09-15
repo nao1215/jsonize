@@ -1,0 +1,88 @@
+# `go test` writes one result line per package to standard output: a
+# verdict padded to four characters (`ok  `, `FAIL`, `?   `), a tab, the
+# package path, and then what happened. A package whose tests ran
+# prints how long they took as seconds with three decimals; a package
+# whose result came from the test cache prints `(cached)` instead; a
+# package with no test files prints `[no test files]`; a package that
+# could not be built prints ` [build failed]` after a space rather than
+# a tab. With `-cover` a further tab-separated cell carries the
+# statement coverage, or `[no statements]` for a package with nothing to
+# cover, and with `-run` matching no test the elapsed time is followed
+# by ` [no tests to run]`.
+#
+# A failed test prints its own report above its package's result line:
+# `--- FAIL:` with the test's name, the test's log lines indented by
+# four spaces, and a bare `FAIL`. With `-v` every test prints `=== RUN`
+# and `--- PASS` lines the same way, and `-cover` prints the coverage on
+# a line of its own as well as in the result line. The definition reads
+# the result lines and leaves all of those out by name: they are what
+# the result line summarises, and a definition that refused them would
+# refuse every run with a failure, which is the run whose result is
+# worth reading. What it does not leave out is anything else. Text a
+# test writes to standard output without going through the testing
+# package is unindented, and so is a panic and its goroutine trace, and
+# such a run is refused naming the line rather than read with the trace
+# dropped.
+#
+# The elapsed time is a duration in seconds; `cached` says whether the
+# result was taken from the cache, in which case there is no elapsed
+# time; `coverage` is the percentage as a number, null without `-cover`
+# and for a package with no statements; `note` is the bracketed reason a
+# package printed instead of, or beside, a time.
+format: 1
+command: go
+variant: test
+description: go test result lines, one per package
+metadata:
+  tags: [go, toolchain, test]
+  compatible: [gc]
+  references:
+    - https://pkg.go.dev/cmd/go#hdr-Test_packages
+detect:
+  args:
+    all: ["test"]
+    # -bench prints the benchmark report go/bench reads, and -json
+    # prints events rather than result lines.
+    none: ["-bench", "-json"]
+  signature:
+    all:
+      # Every line is a result line, one of the per-test lines named
+      # above, an indented log line, or blank.
+      - '\A(?:^(?:ok  \t\S+\t(?:\(cached\)|\d+\.\d{3}s(?: \[no tests to run\])?)(?:\tcoverage: (?:\d+\.\d% of statements|\[no statements\]))?|\?   \t\S+\t\[no test files\]|FAIL\t\S+(?:\t\d+\.\d{3}s| \[(?:build|setup) failed\])|--- (?:FAIL|PASS|SKIP|BENCH): [^\n]*|=== (?:RUN|PAUSE|CONT|NAME) [^\n]*|(?:    )+--- (?:FAIL|PASS|SKIP|BENCH): [^\n]*|(?:    )+[^ \t\n:]+\.go:[0-9]+: [^\n]*|(?:    ){2,}[^ \t\n][^\n]*|PASS|FAIL|coverage: (?:\d+\.\d% of statements|\[no statements\])|testing: warning: no tests to run|exit status [0-9]+|)$\n?)+\z'
+      # And at least one of them is a result line.
+      - '^(?:ok  \t\S+\t(?:\(cached\)|\d+\.\d{3}s)|\?   \t\S+\t\[no test files\]|FAIL\t\S+(?:\t\d+\.\d{3}s| \[(?:build|setup) failed\]))(?:[ \t]|$)'
+    window: 200
+input:
+  ignore:
+    - '^--- (?:FAIL|PASS|SKIP|BENCH): '
+    - '^=== (?:RUN|PAUSE|CONT|NAME) '
+    # What go test indents: a subtest's result under its parent, a log
+    # line under the test that wrote it (the file and line in front), and
+    # the rest of a log written over several lines, four spaces deeper.
+    # Each is a multiple of four spaces, and nothing else indented is
+    # left out: a report printed after go test's own, which gzip -l
+    # indents, is not read as log lines and dropped.
+    - '^(?:    )+--- (?:FAIL|PASS|SKIP|BENCH): '
+    - '^(?:    )+[^ \t:]+\.go:[0-9]+: '
+    - '^(?:    ){2,}[^ \t]'
+    - '^(?:PASS|FAIL)$'
+    - '^coverage: (?:\d+\.\d% of statements|\[no statements\])$'
+    - '^testing: warning: no tests to run$'
+    - '^exit status [0-9]+$'
+parse:
+  type: regex
+  patterns:
+    - pattern: '^(?P<status>ok)  \t(?P<package>\S+)\t(?P<elapsed>)??\(cached\)(?P<note>)??(?:\tcoverage: (?:(?P<coverage>\d+\.\d)% of statements|\[no statements\]))?$'
+      values: {cached: "true"}
+    - pattern: '^(?P<status>ok|FAIL) *\t(?P<package>\S+)\t(?P<elapsed>\d+\.\d{3}s)(?: \[(?P<note>no tests to run)\])?(?:\tcoverage: (?:(?P<coverage>\d+\.\d)% of statements|\[no statements\]))?$'
+      values: {cached: "false"}
+    - pattern: '^(?P<status>\?)   \t(?P<package>\S+)\t(?P<elapsed>)??\[(?P<note>no test files)\](?P<coverage>)??$'
+      values: {cached: "false"}
+    - pattern: '^(?P<status>FAIL)\t(?P<package>\S+) (?P<elapsed>)??\[(?P<note>build failed|setup failed)\](?P<coverage>)??$'
+      values: {cached: "false"}
+fields:
+  status: {required: true}
+  package: {required: true}
+  elapsed: {type: duration, layout: mm:ss}
+  cached: {type: bool}
+  coverage: {type: float}

@@ -1,0 +1,9 @@
+[
+  {
+    "name": "node",
+    "requested": "22",
+    "current": "22.22.1",
+    "latest": "22.23.2",
+    "source": "~/.config/mise/config.toml"
+  }
+]

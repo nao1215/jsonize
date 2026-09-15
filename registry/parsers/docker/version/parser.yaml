@@ -1,0 +1,47 @@
+# `docker version` prints the client and the server as two blocks, each
+# a heading and then "Key: value" lines indented by one space, and the
+# server block groups its components (Engine, containerd, runc,
+# docker-init) one level further down. That is a tree two or three deep,
+# and every line of it is a name with or without a value, so each line is
+# a node read as a key and a value.
+#
+# The heading itself is such a line: "Client: Docker Engine - Community"
+# is the name Client with the edition as its value, and a plain "Client:"
+# from a build that names no edition has an empty value. A top-level line
+# is one of those two headings and nothing else, so the end of another
+# command's output is refused rather than read as a component.
+#
+# When the daemon cannot be reached docker prints the client block, then
+# the error on standard error, so a client-only text is read as a tree of
+# one node. Experimental is the one value that is a boolean; the rest
+# (versions, dates, "1.53 (minimum version 1.44)") stay strings.
+format: 1
+command: docker
+variant: version
+aliases:
+  # podman prints the same two blocks under the same subcommand.
+  - name: podman
+description: docker version
+metadata:
+  tags: [container, docker, version]
+  compatible: [Docker CLI]
+  references:
+    - https://docs.docker.com/reference/cli/docker/version/
+detect:
+  args:
+    all: ["version"]
+  signature:
+    all:
+      - '\AClient:'
+      - '^ Version:[ \t]+\S'
+      - '^ API version:[ \t]+\S'
+parse:
+  type: tree
+  indent: " "
+  root: '^(?:Client|Server):'
+  node:
+    parse:
+      type: kv
+      separator: ":"
+    fields:
+      Experimental: {type: bool}

@@ -1,0 +1,5 @@
+description: The node table, which is kubectl/nodes to read.
+source: captured from kubectl v1.35.0 against a kind v1.35.0 cluster on Linux with LC_ALL=C; the cluster name in the node names was replaced by "example", padded to the printed width
+os: linux
+args: [get, nodes]
+expect_error: does not describe this input

@@ -1,0 +1,4 @@
+description: a multi-arch library named with its architecture, which dpkg prints twice for a pattern that matches it by both names
+source: captured on Ubuntu 26.04 (dpkg 1.23.7) with LC_ALL=C, dpkg-query -W 'libjq*'
+os: linux
+args: [-W, "libjq*"]

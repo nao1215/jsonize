@@ -1,0 +1,4 @@
+# web
+requests>=2.25,<3
+flask==2.0.3 ; python_version < "3.12"
+-r base.txt

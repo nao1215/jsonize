@@ -1,0 +1,4 @@
+description: four packages with a newer release, every one a wheel
+source: "`uv pip list --outdated` with uv 0.9.7 on CPython 3.12 (Ubuntu 26.04) with LC_ALL=C, in a virtual environment holding requests 2.25.0 and six"
+os: linux
+args: [list, --outdated]

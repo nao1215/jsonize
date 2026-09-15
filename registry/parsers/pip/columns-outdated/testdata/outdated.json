@@ -1,0 +1,30 @@
+[
+  {
+    "package": "chardet",
+    "version": "3.0.4",
+    "latest": "7.6.0",
+    "type": "wheel",
+    "editable_project_location": null
+  },
+  {
+    "package": "idna",
+    "version": "2.10",
+    "latest": "3.19",
+    "type": "wheel",
+    "editable_project_location": null
+  },
+  {
+    "package": "requests",
+    "version": "2.25.0",
+    "latest": "2.34.2",
+    "type": "wheel",
+    "editable_project_location": null
+  },
+  {
+    "package": "urllib3",
+    "version": "1.26.20",
+    "latest": "2.7.0",
+    "type": "wheel",
+    "editable_project_location": null
+  }
+]

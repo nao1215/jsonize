@@ -1,0 +1,9 @@
+hello.txt.zst 
+# Zstandard Frames: 1
+DictID: 0
+Window Size: 12 B (12 B)
+Compressed Size: 25 B (25 B)
+Decompressed Size: 12 B (12 B)
+Ratio: 0.4800
+Check: XXH64 207d6d8c
+

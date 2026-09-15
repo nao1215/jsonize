@@ -30,6 +30,11 @@ detect:
 parse:
   type: tree
   indent: "\t"
+  # A top-level line is a device, the slot in front of it. A line of
+  # any other shape at the top, the end of another command's output
+  # piped in behind this one, is refused rather than read as a device
+  # by the expression that takes any text.
+  root: '^(?:[0-9a-f]{4}:)?[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f] '
   node:
     parse:
       type: regex

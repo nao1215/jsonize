@@ -1,0 +1,4 @@
+description: One context, which is the current one, with no namespace set, so the last cell is empty.
+source: captured from kubectl v1.35.0 against a kind v1.35.0 cluster on Linux with LC_ALL=C; the context, cluster and user names were replaced by "kind-example", padded to the printed width
+os: linux
+args: [config, get-contexts]
