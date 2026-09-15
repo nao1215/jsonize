@@ -66,10 +66,11 @@ func (c *convertOptions) bind(o *optionSet) {
 // dataFormat settles which data file format the input is, and from what:
 // --format, or the extension of --file when neither --format nor a
 // parser or a definition was named. A csv or a tsv is then read with the
-// csv shape of the registry, which the options are pointed at here, so
-// that --columns, --stream and --explain treat it the way they treat that
-// shape named with --parser. compression is what the file name says the
-// file is compressed with, whatever its format.
+// engine and the fixed definition datafile gives it, which --columns and
+// --type apply to the way they apply to a named csv variant; it is never
+// a definition of the registry, which only --parser csv reads with.
+// compression is what the file name says the file is compressed with,
+// whatever its format.
 func (a *app) dataFormat(co *convertOptions) (format, from, compression string, code int) {
 	byName, compression := "", ""
 	if co.file != "-" {
@@ -104,14 +105,8 @@ func (a *app) dataFormat(co *convertOptions) (format, from, compression string, 
 		return "", "", "", ExitUsage
 	}
 	if datafile.Tabular(format) {
-		co.selects.parser = "csv"
-		co.selects.variant = "comma"
-		if format == datafile.TSV {
-			co.selects.variant = "tab"
-		}
-		if co.selects.columns != "" {
-			co.selects.variant += "-no-header"
-		}
+		co.selects.tabular = true
+		co.output.keepEscapes = true
 	}
 	return format, from, compression, ExitOK
 }
@@ -154,6 +149,15 @@ func (a *app) cmdConvert(args []string) int {
 		a.errorf("%v", err)
 		return ExitRegistry
 	}
+	if co.selects.tabular {
+		// A csv or a tsv read as data has its definition fixed, so it needs
+		// no registry either, and a user's csv cannot change it.
+		if inline, err = datafile.TabularDefinition(format, co.selects.columns == ""); err != nil {
+			a.errorf("%v", err)
+			return ExitError
+		}
+		hasInline = true
+	}
 	// A definition given on the command line is the whole of what is
 	// needed, so the registries are not read: a broken one cannot stand
 	// in the way of a definition that does not use it.
@@ -183,16 +187,15 @@ func (a *app) cmdConvert(args []string) int {
 		return code
 	}
 	defer closeInput()
+	if co.selects.tabular {
+		exp.dataFile(format, formatFrom, co.file)
+	}
 	if hasInline {
 		return a.convertWith(inline, r, &co.output, exp)
 	}
 	ctx := selector.Context{Parser: co.selects.parser, Variant: co.selects.variant}
 	from := fromRegistry
-	switch {
-	case formatFrom != "":
-		from = formatFrom
-		exp.path = co.file
-	case co.selects.parser != "":
+	if co.selects.parser != "" {
 		from = fromFlag
 	}
 	if co.selects.parser == "" && co.file != "-" {
@@ -307,11 +310,11 @@ func (a *app) readAll(r io.Reader) ([]byte, int) {
 }
 
 // convertWith reads the input with a definition given on the command
-// line. Nothing is selected, so nothing can be selected wrongly: the
-// caller stated the format and gets either the reading of it or the
-// reason it does not fit.
+// line, or the one a csv or a tsv read as data has. Nothing is selected,
+// so nothing can be selected wrongly: the caller stated the format and
+// gets either the reading of it or the reason it does not fit.
 func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOptions, exp *explanation) int {
-	if exp != nil {
+	if exp != nil && exp.format == "" {
 		exp.defined = def.ID()
 		exp.scope(selector.Context{}, fromDefine)
 	}

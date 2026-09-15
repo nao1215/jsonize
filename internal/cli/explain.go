@@ -392,14 +392,6 @@ func (e *explanation) scopeLines() []string {
 		out = append(out, fmt.Sprintf("scope: the variants of %s, from the name of the command jz ran", c.Parser))
 	case fromPath:
 		out = append(out, fmt.Sprintf("scope: %s/%s, from the file path %s", c.Parser, c.Variant, e.path))
-	case fromFormat:
-		if e.format == "" {
-			out = append(out, fmt.Sprintf("scope: %s/%s, the reading of the format given with --format", c.Parser, c.Variant))
-		}
-	case fromExtension:
-		if e.format == "" {
-			out = append(out, fmt.Sprintf("scope: %s/%s, the reading of the format the extension of %s names", c.Parser, c.Variant, e.path))
-		}
 	}
 	if e.from == fromCommand || (e.from == fromFlag && c.Args != nil) {
 		narrowed := "the system it ran on (" + c.OS + ")"

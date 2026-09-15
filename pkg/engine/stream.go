@@ -97,7 +97,7 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 			break
 		}
 		num++
-		if rerr := s.feedRecordText(def, prepareRecord(string(raw), sep, num), num); rerr != nil {
+		if rerr := s.feedRecordText(def, prepareRecord(string(raw), sep, num, opts.KeepEscapes), num); rerr != nil {
 			return unwrapStopped(rerr)
 		}
 		if err != nil {

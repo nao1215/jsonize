@@ -56,6 +56,11 @@ type Options struct {
 	// nothing is trimmed and null_if is not applied, so the output shows
 	// what the definition read rather than what it made of it.
 	Raw bool
+	// KeepEscapes leaves terminal escape sequences in the text. They come
+	// off by default, because in command output they are colour and not
+	// part of any value; in a data file such as a csv they are part of the
+	// value that holds them.
+	KeepEscapes bool
 }
 
 func (o Options) maxInput() int64 {
@@ -143,7 +148,7 @@ func ParseAccounted(def *definition.Definition, input []byte, opts Options) (any
 	if int64(len(input)) > opts.maxInput() {
 		return nil, acct, &ParseError{Definition: def.ID(), Msg: fmt.Sprintf("input exceeds %d bytes", opts.maxInput()), Cause: ErrInputTooLarge}
 	}
-	lines, err := splitRecords(input, def.Input.Separator(), opts.maxLine())
+	lines, err := splitRecords(input, def.Input.Separator(), opts)
 	if err != nil {
 		return nil, acct, &ParseError{Definition: def.ID(), Line: err.line, Msg: err.msg, Cause: err.cause}
 	}
@@ -203,10 +208,11 @@ const nulInLine = "a NUL byte in a format read line by line; a command run with 
 // parsers read by prepareRecord and checked by checkRecord, the same two
 // steps a stream applies to a record as it arrives, so the two readings
 // cannot disagree about a record.
-func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
+func splitRecords(input []byte, sep byte, opts Options) ([]line, *splitError) {
 	if len(input) == 0 {
 		return nil, nil
 	}
+	maxLen := opts.maxLine()
 	// The input is copied once, and every record is then a piece of that
 	// copy: a record is a string once it is read, and making each its
 	// own string would copy the input a record at a time.
@@ -224,7 +230,7 @@ func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
 		if len(rec) > maxLen {
 			return nil, &splitError{line: num, msg: fmt.Sprintf("record exceeds %d bytes", maxLen), cause: ErrLineTooLong}
 		}
-		rec = prepareRecord(rec, sep, num)
+		rec = prepareRecord(rec, sep, num, opts.KeepEscapes)
 		if err := checkRecord(rec, sep); err != nil {
 			return nil, &splitError{line: num, msg: err.msg}
 		}
@@ -236,15 +242,15 @@ func splitRecords(input []byte, sep byte, maxLen int) ([]line, *splitError) {
 }
 
 // prepareRecord brings one record to the form the parsers read: the
-// escape sequences come off first, then the carriage return of a CRLF
-// ending, then the byte order mark of the first record. Detection strips
-// the escapes too; doing it here as well keeps them out of the values
-// when a parser is named instead. The order is the same everywhere a
-// record is prepared, since a byte order mark behind a colour code and
-// a carriage return inside an escape sequence are only the same text
-// under one order.
-func prepareRecord(text string, sep byte, num int) string {
-	if strings.IndexByte(text, 0x1b) >= 0 {
+// escape sequences come off first, unless keepEscapes says they are part
+// of the text, then the carriage return of a CRLF ending, then the byte
+// order mark of the first record. Detection strips the escapes too;
+// doing it here as well keeps them out of the values when a parser is
+// named instead. The order is the same everywhere a record is prepared,
+// since a byte order mark behind a colour code and a carriage return
+// inside an escape sequence are only the same text under one order.
+func prepareRecord(text string, sep byte, num int, keepEscapes bool) string {
+	if !keepEscapes && strings.IndexByte(text, 0x1b) >= 0 {
 		text = string(convert.StripANSI([]byte(text)))
 	}
 	if sep == '\n' {

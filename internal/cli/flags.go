@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/nao1215/jsonize/internal/datafile"
+
 	"github.com/nao1215/jsonize/pkg/convert"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
@@ -245,6 +247,9 @@ type outputOptions struct {
 	// timestamp the format does not fully state.
 	year  string
 	zones stringList
+	// keepEscapes reads escape sequences as part of the text, which they
+	// are in a data file.
+	keepEscapes bool
 }
 
 // bindOutput registers the options about what is written.
@@ -281,7 +286,11 @@ func (f *outputOptions) recordWriter(w io.Writer) func(any) error {
 // parsed, so nothing here can fail.
 func (f *outputOptions) engineOptions() engine.Options {
 	a, _ := f.assumptions()
-	return engine.Options{MaxInputSize: MaxInputSize, Raw: f.raw, Assume: a}
+	opts := engine.Options{MaxInputSize: MaxInputSize, Raw: f.raw, Assume: a}
+	if f.keepEscapes {
+		opts = datafile.TabularOptions(opts)
+	}
+	return opts
 }
 
 // assumptions reads --assume-year and --assume-zone. An assumption that
@@ -363,6 +372,10 @@ type selectOptions struct {
 	columns string
 	types   stringList
 	explain explainMode
+	// tabular is set when the input is a csv or a tsv read as data, which
+	// is read with a fixed definition rather than a registered one and
+	// takes --columns and --type the way a named csv variant does.
+	tabular bool
 }
 
 // bindColumns registers the options about the columns of a csv.
@@ -389,7 +402,7 @@ func (f *selectOptions) check() error {
 		return &selector.VariantWithoutParserError{Variant: f.variant}
 	}
 	if f.columns != "" {
-		if f.define == "" && f.variant == "" {
+		if f.define == "" && f.variant == "" && !f.tabular {
 			return errors.New("--columns names the columns of a csv read without a header line, so it needs the variant that reads one: --parser csv --variant comma-no-header (or tab-no-header), or a --define")
 		}
 		if _, err := f.columnNames(); err != nil {
@@ -400,7 +413,7 @@ func (f *selectOptions) check() error {
 		switch {
 		case f.define != "":
 			return errors.New("--type converts the columns of a csv a registered definition reads, and --define states its own: give the column a field there")
-		case f.variant == "":
+		case f.variant == "" && !f.tabular:
 			return errors.New("--type converts the columns of a csv or a tsv: read a .csv or .tsv file, give --format csv or tsv, or name --parser csv --variant")
 		}
 		if _, err := f.columnTypes(); err != nil {

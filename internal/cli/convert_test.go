@@ -110,6 +110,73 @@ func TestDataFileFromPipe(t *testing.T) {
 	}
 }
 
+// A csv or a tsv is data, read the same way whichever path it comes by:
+// --format, the extension of --file, jz new's :=@FILE and --stream. None
+// of them takes the preparation command output gets (escape sequences
+// removed, lines of spaces dropped), and none of them reads a definition
+// a user registry puts under csv, which only --parser csv names.
+func TestTabularDataReadsTheSameEveryWay(t *testing.T) {
+	h := newHarness(t)
+	for _, variant := range []string{"comma", "tab"} {
+		delim := ""
+		if variant == "tab" {
+			delim = "\n  delimiter: \"\\t\""
+		}
+		h.writeFile(filepath.Join("config", "jsonize", "registry", "parsers", "csv", variant, "parser.yaml"), []byte("format: 1\ncommand: csv\nvariant: "+variant+"\ndescription: a user's csv\ndetect:\n  auto_detect: false\nparse:\n  type: csv"+delim+"\nfields:\n  b: {type: int}\n"))
+	}
+	tests := []struct {
+		name, ext, in, want string
+	}{
+		{"an escape sequence in a value", "csv", "a,b\n\x1b[31mred\x1b[0m,1\n", `[{"a":"\u001b[31mred\u001b[0m","b":"1"}]`},
+		{"a record of spaces in one column", "csv", "key\n   \nx\n", `[{"key":"   "},{"key":"x"}]`},
+		{"a value of spaces", "csv", "a,b\n  ,x\n", `[{"a":"  ","b":"x"}]`},
+		{"quotes", "csv", "a,b\n\"he said \"\"hi\"\"\",\"x,y\"\n", `[{"a":"he said \"hi\"","b":"x,y"}]`},
+		{"a value over lines with a blank one", "csv", "a,b\n\"one\n\nthree\",x\n", `[{"a":"one\n\nthree","b":"x"}]`},
+		{"crlf", "csv", "a,b\r\n1,2\r\n", `[{"a":"1","b":"2"}]`},
+		{"empty values", "csv", "a,b,c\n,,\n1,,3\n", `[{"a":"","b":"","c":""},{"a":"1","b":"","c":"3"}]`},
+		{"a leading zero", "csv", "a,b\nx,007\n", `[{"a":"x","b":"007"}]`},
+		{"a byte order mark", "csv", "\xEF\xBB\xBFa,b\n1,2\n", `[{"a":"1","b":"2"}]`},
+		{"a tsv escape sequence", "tsv", "a\tb\n\x1b[1mx\x1b[0m\t007\n", `[{"a":"\u001b[1mx\u001b[0m","b":"007"}]`},
+		{"a tsv record of spaces", "tsv", "a\n \n", `[{"a":" "}]`},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := map[string]string{}
+			if code := h.pipe(tt.in, "--format", tt.ext); code == ExitOK {
+				got["--format"] = strings.TrimSpace(h.stdout.String())
+			} else {
+				got["--format"] = h.stderr.String()
+			}
+			p := h.writeFile("data."+tt.ext, []byte(tt.in))
+			if code := h.run("--file", p); code == ExitOK {
+				got["--file"] = strings.TrimSpace(h.stdout.String())
+			} else {
+				got["--file"] = h.stderr.String()
+			}
+			if code := h.run("new", "d:=@"+p); code == ExitOK {
+				s := strings.TrimSpace(h.stdout.String())
+				got["new"] = strings.TrimSuffix(strings.TrimPrefix(s, `{"d":`), "}")
+			} else {
+				got["new"] = h.stderr.String()
+			}
+			if code := h.pipe(tt.in, "--format", tt.ext, "--stream"); code == ExitOK {
+				got["--stream"] = "[" + strings.ReplaceAll(strings.TrimSpace(h.stdout.String()), "\n", ",") + "]"
+			} else {
+				got["--stream"] = h.stderr.String()
+			}
+			for way, v := range got {
+				if v != tt.want {
+					t.Errorf("%s: got %s, want %s", way, v, tt.want)
+				}
+			}
+		})
+	}
+	// The registry's definition is still what --parser csv names.
+	if code := h.pipe("a,b\nx,007\n", "--parser", "csv", "--variant", "comma"); code != ExitOK || strings.TrimSpace(h.stdout.String()) != `[{"a":"x","b":7}]` {
+		t.Errorf("--parser csv: %d %s %s", code, h.stdout.String(), h.stderr.String())
+	}
+}
+
 func TestDataFileUsageErrors(t *testing.T) {
 	h := newHarness(t)
 	csv := h.writeFile("u.csv", []byte("a\n1\n"))
@@ -264,10 +331,12 @@ func TestDataFileExplain(t *testing.T) {
 		t.Errorf("a failure: %d %s", code, h.stderr.String())
 	}
 	csv := h.writeFile("u.csv", []byte("a\n1\n"))
-	if code := h.run("--file", csv, "--explain"); code != ExitOK || !strings.Contains(h.stderr.String(), "jz: explain: scope: csv/comma, the reading of the format the extension of "+csv+" names") {
+	// A csv is read as data too, with no definition chosen, and its lines
+	// are accounted for the way a definition's are.
+	if code := h.run("--file", csv, "--explain"); code != ExitOK || h.stderr.String() != "jz: explain: read as csv: the format the extension of "+csv+" names, so nothing was chosen\njz: explain: read: 2 lines: 2 read\n" {
 		t.Errorf("a csv: %d %s", code, h.stderr.String())
 	}
-	if code := h.pipe("a,b\n", "--format", "csv", "--explain"); code != ExitOK || !strings.Contains(h.stderr.String(), "scope: csv/comma, the reading of the format given with --format") {
+	if code := h.pipe("a,b\n", "--format", "csv", "--explain"); code != ExitOK || !strings.Contains(h.stderr.String(), "read as csv: the format was given with --format, so nothing was chosen") {
 		t.Errorf("a csv from a pipe: %d %s", code, h.stderr.String())
 	}
 	if code := h.pipe("a:1\n", "--format", "ltsv", "--stream", "--explain"); code != ExitOK || !strings.HasPrefix(h.stderr.String(), "jz: explain: read as ltsv") {
