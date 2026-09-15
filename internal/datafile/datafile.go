@@ -335,7 +335,11 @@ func readRecord(br *bufio.Reader, sep byte, maxLine int) ([]byte, error) {
 	var line []byte
 	for {
 		chunk, err := br.ReadSlice(sep)
-		if len(line)+len(chunk) > maxLine+1 {
+		size := len(line) + len(chunk)
+		if err == nil {
+			size-- // the separator that ends the record is not part of it
+		}
+		if size > maxLine {
 			return nil, errLineTooLong
 		}
 		line = append(line, chunk...)

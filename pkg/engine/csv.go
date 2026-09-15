@@ -29,8 +29,9 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 		return []any{}, nil
 	}
 	var (
-		cols   []string
-		header []string
+		cols    []string
+		header  []string
+		checked bool
 	)
 	if p.Header.None {
 		cols = p.Header.Columns
@@ -43,18 +44,24 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 			return nil, r.errorf(ln, "", "%s", msg)
 		}
 		for _, row := range rows {
+			isHeader := false
 			switch {
 			case cols != nil:
 			case p.Header.None:
 				cols = csvNumbered(len(row))
-				if err := r.checkColumns(p, cols, rec.num); err != nil {
-					return nil, err
-				}
 			default:
-				cols, header = csvColumns(p, row), row
+				cols, header, isHeader = csvColumns(p, row), row, true
+			}
+			// The columns are checked once, where they are first known:
+			// at the header line, or at the first record of a csv whose
+			// columns are numbered or named by the definition.
+			if !checked {
+				checked = true
 				if err := r.checkColumns(p, cols, rec.num); err != nil {
 					return nil, err
 				}
+			}
+			if isHeader {
 				continue
 			}
 			// A csv file is data: a row that holds the header's values is

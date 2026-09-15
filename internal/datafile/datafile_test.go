@@ -342,3 +342,31 @@ func FuzzStringRecords(f *testing.F) {
 		}
 	})
 }
+
+// maxLine counts what a record holds, not the separator that ends it: a
+// record of exactly maxLine bytes is read, with its separator or at the
+// end of the input without one, and a byte more is refused either way.
+func TestRecordLengthLimit(t *testing.T) {
+	t.Parallel()
+	for _, format := range []string{LINES, NUL, JSONL} {
+		sep := "\n"
+		if format == NUL {
+			sep = "\x00"
+		}
+		exact, over := "1234567890", "12345678901"
+		for _, tt := range []struct {
+			input string
+			ok    bool
+		}{
+			{exact + sep, true},
+			{exact, true},
+			{over + sep, false},
+			{over, false},
+		} {
+			err := Stream(format, strings.NewReader(tt.input), len(exact), func(any) error { return nil })
+			if (err == nil) != tt.ok {
+				t.Errorf("%s %q with a limit of %d: %v", format, tt.input, len(exact), err)
+			}
+		}
+	}
+}
