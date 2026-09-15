@@ -83,7 +83,7 @@ Options:
 
 ```text
   -f, --file PATH               read input from PATH instead of stdin
-      --format NAME             read a data file of this format: csv, tsv, ltsv, jsonl, json, yaml
+      --format NAME             read the input as this format: csv, tsv, ltsv, jsonl, json, yaml, text, lines, nul
   -p, --pretty                  indent JSON output
       --stream                  write each record as soon as it is read
       --raw                     skip the field rules and report every value as text
@@ -95,6 +95,7 @@ Options:
       --variant NAME            use a variant of --parser
       --define YAML             read with a definition given here instead of a registered one
       --columns NAME,...        name the columns of a csv read without a header line
+      --type COLUMN=TYPE        convert a csv or tsv column to int, float or bool (repeatable)
       --explain[=json]          report the chosen definition and why, on stderr
   -h, --help                    show help
 ```
@@ -104,7 +105,9 @@ A data file is read as the format its extension names (`.csv`, `.tsv`,
 `.gz` or `.bz2`), and piped data as the format `--format` names. Such a
 file is read as that format with no detection, and text the format does
 not allow is exit 3 with the line. A file whose extension names no data
-format is detected as before.
+format is detected as before. `--format text`, `lines` and `nul` read
+plain text as one string or a list of strings, and `--type units=int`
+converts a CSV column.
 
 ```console
 $ jz --file users.csv
