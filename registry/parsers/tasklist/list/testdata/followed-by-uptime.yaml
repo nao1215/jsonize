@@ -1,0 +1,3 @@
+source: the windows-server-2022 fixture followed by the procps-4.0.4 fixture of uptime/linux, joined for this case
+description: an uptime line after the last block is refused rather than read as part of it
+expect_error: does not match pattern
