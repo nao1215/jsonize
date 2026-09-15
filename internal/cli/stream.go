@@ -8,6 +8,7 @@ import (
 	"io"
 	"sync"
 
+	"github.com/nao1215/jsonize/internal/recordio"
 	"github.com/nao1215/jsonize/internal/runner"
 	"github.com/nao1215/jsonize/pkg/convert"
 	"github.com/nao1215/jsonize/pkg/definition"
@@ -31,18 +32,43 @@ import (
 // An explanation is written as soon as the choice is made, before the
 // first record: a stream may never end, and the choice is what there is
 // to explain up front. It says nothing about how the lines were read.
-func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, out *outputOptions, knownProducer bool, exp *explanation) int {
+//
+// retract, when it is not nil, is what the choice falls back to once the
+// definition a file path named turns out not to describe the text. A
+// path is a guess, and a guess never makes the answer worse, here as
+// much as when the whole document is read. It is taken back only while
+// nothing has been written yet, which is the case until the format is
+// chosen: a record already handed on cannot be taken back, so a reading
+// that fails after that stands as the failure it is.
+func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, retract *selector.Context, out *outputOptions, knownProducer bool, exp *explanation) int {
 	filter, err := out.filter()
 	if err != nil {
 		a.errorf("%v", err)
 		return ExitUsage
 	}
 	br := bufio.NewReaderSize(r, 64*1024)
-	n, sep := selector.Window(reg, ctx)
-	head, err := readHead(br, n, sep, selector.Watch(reg, ctx))
+	// The lines held back have to be enough for the wider of the two
+	// scopes, or the guess could not be taken back: the text is read
+	// once, and what was not held for the second choice is gone.
+	wide := ctx
+	if retract != nil {
+		wide = *retract
+	}
+	n, sep := selector.Window(reg, wide)
+	head, err := readHead(br, n, sep, MaxLineLength, selector.Watch(reg, wide))
 	if err != nil {
-		a.errorf("reading input: %v", err)
-		return ExitError
+		// A record refused for its length is the parse failure it would
+		// be after the format was known, and says so in the same words;
+		// anything else is the input failing to be read at all, reported
+		// the way the whole-document reader reports it.
+		var pe *engine.ParseError
+		if !errors.As(err, &pe) {
+			err = fmt.Errorf("reading input: %w", err)
+		}
+		code := a.exitFor(err)
+		exp.fail(err, code)
+		a.explainWrite(exp)
+		return code
 	}
 	if len(head) == 0 && knownProducer {
 		// jz started the command, so it knows what the format was meant
@@ -52,6 +78,13 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 	}
 	ctx.Input = head
 	chosen, err := selector.Select(reg, ctx)
+	if err != nil && retract != nil {
+		exp.dropPath(err)
+		ctx = *retract
+		ctx.Input = head
+		exp.scope(ctx, fromRegistry)
+		chosen, err = selector.Select(reg, ctx)
+	}
 	if err != nil {
 		code := a.exitFor(err)
 		exp.fail(err, code)
@@ -222,34 +255,50 @@ func (a *app) exitForStream(err error) int {
 // the reader, and the caller replays them, so the lines detection looked
 // at are read exactly once and by the same code as the rest.
 //
+// The records are cut by the reader the engine cuts them with, under the
+// same length limit, so a producer that never ends a record is refused
+// here at the byte the engine would refuse it at rather than waited for
+// until the format is known. The refusal is the parse failure it is
+// after detection, with no definition named because none was chosen.
+//
 // The blank lines before the text are not lines a signature sees (the
 // selector leaves them out), so they are not counted here either, and
 // settled is not asked about them: a report that opens with a few hundred
 // empty lines is still identified from its first lines of text. The input
 // limit bounds them the way it bounds everything read.
-func readHead(br *bufio.Reader, n int, sep byte, settled func([]byte) bool) ([]byte, error) {
+func readHead(br *bufio.Reader, n int, sep byte, maxLen int, settled func([]byte) bool) ([]byte, error) {
 	var out []byte
-	lines, text, start := 0, false, 0
+	lines, num, text := 0, 0, false
 	for lines < n {
-		chunk, err := br.ReadSlice(sep)
-		if int64(len(out))+int64(len(chunk)) > MaxInputSize {
-			return nil, errors.New("the lines jz needs to identify the format exceed the input limit")
+		rec, err := recordio.Read(br, sep, maxLen)
+		if errors.Is(err, recordio.ErrTooLong) {
+			return nil, &engine.ParseError{
+				Line:  num + 1,
+				Msg:   fmt.Sprintf("record exceeds %d bytes", maxLen),
+				Cause: engine.ErrLineTooLong,
+			}
 		}
-		out = append(out, chunk...)
-		if errors.Is(err, bufio.ErrBufferFull) {
-			continue
-		}
-		if err != nil {
+		ended := err == nil
+		if err != nil && !errors.Is(err, io.EOF) && !errors.Is(err, runner.ErrCut) {
 			// The reader of a command ended from outside says so again
 			// when the rest is read, which is where the cut is dealt with.
-			if errors.Is(err, io.EOF) || errors.Is(err, runner.ErrCut) {
-				break
-			}
 			return nil, err
 		}
-		line := out[start:]
-		start = len(out)
-		if sep == '\n' && !text && blankHead(line, start == len(line)) {
+		size := int64(len(out)) + int64(len(rec))
+		if ended {
+			size++
+		}
+		if size > MaxInputSize {
+			return nil, errors.New("the lines jz needs to identify the format exceed the input limit")
+		}
+		out = append(out, rec...)
+		if ended {
+			out = append(out, sep)
+		} else {
+			break
+		}
+		num++
+		if sep == '\n' && !text && blankHead(rec, num == 1) {
 			continue
 		}
 		text = true

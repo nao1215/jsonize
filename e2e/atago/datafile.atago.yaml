@@ -300,6 +300,26 @@ scenarios:
           stdout: {empty: true}
           stderr:
             contains: "the gzip data cannot be decompressed"
+      # Input that cannot be read at all ends a stream with the status
+      # the whole-document reading ends with. The checksum of this one
+      # does not match, and nothing has been written when it is found.
+      - fixture:
+          file: broken.txt.gz
+          base64: "H4sIAAAAAAAC/6vgAgAfCOpHAgAAAA=="
+      - run:
+          command: jz --file ${workdir}/broken.txt.gz
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "gzip: invalid checksum"
+      - run:
+          command: jz --stream --file ${workdir}/broken.txt.gz
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "gzip: invalid checksum"
       # A stream leaves out the line it cannot read and writes the rest;
       # --stop-on-error keeps only what came before it.
       - run:

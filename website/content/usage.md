@@ -807,7 +807,10 @@ $ jz --file /proc/meminfo    # proc/meminfo
 - The pair has to exist; `/etc` works because a parser named `etc` does.
   This reaches `auto_detect: false` formats such as fstab without naming.
 - The definition still has to fit and read the text. If not, the path is
-  dropped and the text is detected on its own.
+  dropped and the text is detected on its own. With `--stream` the path
+  is dropped at the choice, which is made before the first record; a
+  record already written cannot be taken back, so a failure after that
+  stands.
 - A name with a dot in it (`fstab.txt`) is ignored, and a path never
   names a shape definition.
 

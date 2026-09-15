@@ -9,6 +9,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/nao1215/jsonize/internal/recordio"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
@@ -83,7 +84,7 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 	// range: what follows the range still has to be accounted for, and a
 	// line nobody reads there is as much a failure as one inside it.
 	for {
-		raw, err := readRecord(br, sep, opts.maxLine())
+		raw, err := recordio.Read(br, sep, opts.maxLine())
 		if errors.Is(err, ErrLineTooLong) {
 			return &ParseError{Definition: def.ID(), Line: num + 1, Msg: fmt.Sprintf("record exceeds %d bytes", opts.maxLine()), Cause: ErrLineTooLong}
 		}
@@ -140,36 +141,6 @@ func (s *streamer) feedRecordText(def *definition.Definition, text string, num i
 		return s.report(perr)
 	}
 	return nil
-}
-
-// readRecord reads one record up to sep, refusing one longer than maxLen
-// rather than letting a producer with no separators in its output grow
-// the buffer without bound. The record comes back without the separator,
-// and io.EOF alongside the last one. The limit counts the bytes between
-// two separators as they were read, the way the whole-document reader
-// counts them, whether or not a separator follows the last of them.
-func readRecord(br *bufio.Reader, sep byte, maxLen int) ([]byte, error) {
-	var out []byte
-	for {
-		chunk, err := br.ReadSlice(sep)
-		if len(out)+len(chunk) > maxLen+1 {
-			return nil, ErrLineTooLong
-		}
-		out = append(out, chunk...)
-		if errors.Is(err, bufio.ErrBufferFull) {
-			continue
-		}
-		if len(out) > 0 && out[len(out)-1] == sep {
-			out = out[:len(out)-1]
-		}
-		if len(out) > maxLen {
-			return nil, ErrLineTooLong
-		}
-		// The carriage return of a CRLF line ending is trimmed by the
-		// caller rather than here, because the whole-document reader
-		// removes the escape sequences first and the two have to agree.
-		return out, err
-	}
 }
 
 // hold is what a stream is holding back while it waits for a record to

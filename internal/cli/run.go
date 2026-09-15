@@ -291,7 +291,7 @@ func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.
 	defer a.restoreStderr(childStderr)
 	code := ExitOK
 	res, err := runner.Stream(ctx, cmd, childStderr, func(r io.Reader) error {
-		if code = a.stream(reg, r, sctx, out, true, exp); code != ExitOK {
+		if code = a.stream(reg, r, sctx, nil, out, true, exp); code != ExitOK {
 			return errStreamFailed
 		}
 		return nil
