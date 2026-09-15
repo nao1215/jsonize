@@ -78,6 +78,12 @@ func (r *run) treeNodes(p *definition.Parse, lines []line, i, depth int) ([]any,
 // treeDepth counts how many levels of indentation open the line and
 // returns the rest of it. Where a definition states several forms one
 // level may take, the first that fits at each step is the one taken.
+//
+// A form that ends in a character other than a blank is a branch drawn to
+// the node ("|-", "└─"), and it ends the indentation: nothing deeper is
+// drawn after a branch on the same line, so what follows it is the node's
+// text, blanks included. systemd-cgls pads a process id to the width of
+// its siblings after the branch, and those spaces are not another level.
 func (r *run) treeDepth(p *definition.Parse, l line) (int, string, error) {
 	text, depth := l.text, 0
 	for {
@@ -89,6 +95,9 @@ func (r *run) treeDepth(p *definition.Parse, l line) (int, string, error) {
 		depth++
 		if depth > definition.MaxTreeDepth {
 			return 0, "", r.errorf(l.num, "", "nested deeper than %d levels", definition.MaxTreeDepth)
+		}
+		if last := unit[len(unit)-1]; last != ' ' && last != '\t' {
+			return depth, text, nil
 		}
 	}
 	// Leading whitespace that is not a whole number of levels means the

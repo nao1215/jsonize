@@ -503,6 +503,14 @@ characters in a UTF-8 locale, so it writes
 `["  ", "`-", "| ", "|-", "│ ", "└─", "├─"]`; the first form that fits
 at each step is the one taken, so the order is the order they are tried
 in.
+
+A form that ends in a character other than a blank, such as `|-` or
+`└─`, is a branch drawn to the node, and it ends the indentation:
+nothing deeper is drawn after a branch on the same line, so what follows
+it belongs to the node, blanks included. `systemd-cgls` pads a process
+id to the width of its siblings after the branch (`|-   7557`), and the
+node pattern reads those spaces. Before a branch, a blank that is not a
+whole number of levels is still an error.
 A node is the fields `node` reads from its line plus a `children` array,
 which is `[]` when nothing follows it — so a consumer walks every node
 the same way. A `node` pattern cannot name a group `children`.

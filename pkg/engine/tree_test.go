@@ -158,6 +158,66 @@ func TestParseTreeRoot(t *testing.T) {
 	}
 }
 
+const treeBranchDef = `format: 1
+command: t
+variant: v
+parse:
+  type: tree
+  indent: ["| ", "|-", "  ", "` + "`" + `-"]
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^ *(?P<pid>[0-9]+) (?P<command>.+)$'
+        - '^(?P<name>\S+)$'
+`
+
+// A branch drawn to a node ends the indentation: nothing deeper is drawn
+// after it on the same line, so the spaces a report pads a right-aligned
+// number with after the branch are the node's text, not a level. Units
+// that are only blank still count, and a blank that is not a whole level
+// before any branch is still refused.
+func TestParseTreeBranchEndsIndentation(t *testing.T) {
+	t.Parallel()
+	input := strings.Join([]string{
+		"-.slice",
+		"|-user.slice",
+		"| |-  987 /usr/bin/a",
+		"| `-12345 /usr/bin/b --flag",
+		"`-system.slice",
+		"  `-cron.service",
+		"    `-   42 /usr/sbin/cron -f",
+		"",
+	}, "\n")
+	v, err := Parse(load(t, treeBranchDef), []byte(input), Options{})
+	if err != nil {
+		t.Fatalf("Parse: %v", err)
+	}
+	want := `[{"name":"-.slice","children":[` +
+		`{"name":"user.slice","children":[` +
+		`{"pid":"987","command":"/usr/bin/a","children":[]},` +
+		`{"pid":"12345","command":"/usr/bin/b --flag","children":[]}]},` +
+		`{"name":"system.slice","children":[` +
+		`{"name":"cron.service","children":[` +
+		`{"pid":"42","command":"/usr/sbin/cron -f","children":[]}]}]}]}]`
+	if got := mustJSON(t, v); got != want {
+		t.Errorf("got  %s\nwant %s", got, want)
+	}
+	// Two spaces after a branch are not a second level: the node stays
+	// where the branch put it.
+	if _, err := Parse(load(t, treeBranchDef), []byte("a\n|-  b\n"), Options{}); err == nil {
+		t.Error("a node pattern that takes no leading blank read one")
+	}
+	// A blank that is not a whole number of levels, with no branch before
+	// it, is still refused.
+	if _, err := Parse(load(t, treeBranchDef), []byte("a\n   b\n"), Options{}); err == nil {
+		t.Error("three spaces were read as a level of two")
+	}
+	if _, err := streamAll(t, treeBranchDef, input); err != nil {
+		t.Errorf("stream: %v", err)
+	}
+}
+
 // A producer cannot make jz build an unbounded stack of objects.
 func TestParseTreeBoundsDepth(t *testing.T) {
 	t.Parallel()
