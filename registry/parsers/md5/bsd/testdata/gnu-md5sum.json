@@ -1,0 +1,24 @@
+[
+  {
+    "escaped": true,
+    "algorithm": "MD5",
+    "file": "back\\slash.txt",
+    "checksum": "009520053b00386d1173f3988c55d192"
+  },
+  {
+    "escaped": true,
+    "algorithm": "MD5",
+    "file": "new\nline.txt",
+    "checksum": "a8a78d0ff555c931f045b6f448129846"
+  },
+  {
+    "algorithm": "MD5",
+    "file": "plain.txt",
+    "checksum": "b1946ac92492d2347c6235b4d2611184"
+  },
+  {
+    "algorithm": "MD5",
+    "file": "with space.txt",
+    "checksum": "401b30e3b8b5d629635a5c613cdb7919"
+  }
+]

@@ -1,0 +1,8 @@
+description: >
+  An unmarked line and a marked one whose name holds a backslash, which
+  reads back as x\y. The text was a decoy while this definition refused
+  GNU's --tag output, and is kept here unchanged now that it reads it.
+source: >
+  not captured here; moved unchanged from registry/testdata/decoys/sha256sum-tag-escaped.txt,
+  which commit 1b56f15 describes as GNU sha256sum --tag output with an escaped name. The
+  second digest is the SHA-256 of an empty file; the first could not be reproduced.

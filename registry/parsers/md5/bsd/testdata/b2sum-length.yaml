@@ -1,0 +1,6 @@
+description: >
+  b2sum --tag -l 256 names the algorithm with its digest length,
+  BLAKE2b-256, and prints 64 digits.
+source: captured on Ubuntu 26.04 with GNU coreutils 9.7 (gnub2sum), LC_ALL=C b2sum --tag -l 256 over files made for the fixture
+os: linux
+args: [--tag, -l, "256", plain.txt, "with space.txt"]

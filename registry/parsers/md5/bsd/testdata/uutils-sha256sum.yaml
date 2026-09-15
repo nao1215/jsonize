@@ -1,0 +1,7 @@
+description: >
+  uutils prints the same lines as GNU, the escaped names marked the same
+  way; the files here were given in another order, and the lines follow
+  it.
+source: captured on Ubuntu 26.04 with uutils coreutils 0.8.0, LC_ALL=C sha256sum --tag over files made for the fixture
+os: linux
+args: [--tag, plain.txt, "with space.txt", "back\\slash.txt", "new\nline.txt"]
