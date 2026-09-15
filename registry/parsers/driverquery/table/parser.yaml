@@ -1,0 +1,46 @@
+# `driverquery` without options prints one row per installed driver
+# under a header and a rule of equals signs, one run per column: the
+# module name, the display name cut to 22 characters, the driver type
+# and the link date. The rows are cut where the header's words start;
+# "Module Name", "Display Name", "Driver Type" and "Link Date" are one
+# column each.
+#
+# The driver type is one of the two words Windows prints there, Kernel
+# or File System, which is also what tells a driver row from a row of
+# another table. The link date is written in the date and time format
+# of the user's locale and names no zone, so it stays the string it was
+# printed as; it is empty for most drivers and is then null.
+#
+# driverquery /v adds columns and is read by driverquery/verbose;
+# /fo list and /fo csv print other formats.
+format: 1
+command: driverquery
+variant: table
+description: driverquery, the installed drivers with their type and link date
+metadata:
+  tags: [windows, system]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/driverquery
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The four headings and the rule of four runs under them.
+      - '\AModule Name[ \t]+Display Name[ \t]+Driver Type[ \t]+Link Date[ \t]*\n=+ =+ =+ =+[ \t]*$'
+input:
+  ignore:
+    # The rule under the header.
+    - '^=+ =+ =+ =+[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [module_name, display_name, driver_type, link_date]
+fields:
+  module_name: {required: true, regex: '(?P<module_name>\S+)'}
+  display_name: {}
+  driver_type: {required: true, regex: '(?P<driver_type>Kernel|File System)'}
+  link_date: {}

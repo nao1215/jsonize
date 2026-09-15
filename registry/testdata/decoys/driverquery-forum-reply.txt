@@ -1,0 +1,10 @@
+> which driver is that?
+
+Run driverquery and search for it. Mine shows
+
+Module Name  Display Name           Driver Type   Link Date
+============ ====================== ============= ======================
+exampledrv   Example Storage Filter File System
+
+With /v you also get the start mode, whether it is running and the path
+of the .sys file, which tells you which package installed it.
