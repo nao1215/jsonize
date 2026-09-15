@@ -43,7 +43,10 @@ parse:
   header:
     columns: [group_name, type, sid, attributes]
 fields:
-  group_name: {required: true}
+  # A SID Windows cannot resolve is listed with no name and the type
+  # Unknown SID type; the name is then null. The type and the SID are
+  # always printed.
+  group_name: {}
   type: {required: true, regex: '(?P<type>Well-known group|Alias|Group|Label|User|Computer|Domain|Unknown SID type)'}
   sid: {required: true, regex: '(?P<sid>S-1-\d+(?:-\d+)*)'}
   attributes:
