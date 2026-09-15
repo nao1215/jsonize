@@ -37,6 +37,10 @@ project follows [Semantic Versioning](https://semver.org/).
   all-namespaces forms, `kubectl config get-contexts`,
   `kubectl api-resources`, `kubectl version`, `rclone lsl`, `lsd` and
   `version`, `redis-cli info` and `client list`.
+- `unescape` takes `octal: true`, which reads a backslash and three
+  octal digits as the byte they name, and `quote`, which decodes only a
+  value put between that character. git and getfacl write names that
+  way.
 - A definition for `systemd-cgls`: the control groups under the group,
   unit or directory it starts from, the processes in each with their
   ids, whether a group is delegated, and the group ids and extended
@@ -134,6 +138,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `git status --porcelain` paths are the names they stand for: a path git
+  quoted has its quotes removed and its escapes decoded, octal bytes to
+  UTF-8 (`"docs/\346\227\245..."` is `docs/日...`). `getfacl` decodes
+  the backslash and the octal escapes it writes in a file name.
 - `--assume-year now` dates a timestamp printed without a year in the
   latest year that does not put it after the moment jz started, rather
   than always in the current year. A `last` or `who` line of December 31

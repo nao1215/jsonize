@@ -4,9 +4,13 @@
 # first is the state of the index, the second the state of the work tree,
 # and a space in either column means "unchanged there", which becomes null.
 #
-# Paths keep the C quoting git applies to a name with a space or a byte
-# above 127 ("docs/\346\227\245..."); jz does not decode it. Run
-# `git -c core.quotePath=false status --porcelain` to get the raw name.
+# git puts a path in double quotes when it escaped something in it: a
+# space, a quote, a backslash, a control character, or a byte above 127,
+# which it writes as a backslash and three octal digits
+# ("docs/\346\227\245..."). The quotes are the mark, so a quoted path
+# is decoded to the name it stands for and an unquoted one is the name as
+# it is. A quoted path that decodes to bytes that are not UTF-8 is
+# refused rather than written as something else.
 #
 # The quoting is also what makes a rename line say one thing. A name with
 # a space in it is always quoted, so " -> " outside quotes is the
@@ -50,5 +54,5 @@ parse:
 fields:
   index: {null_if: [""]}
   worktree: {null_if: [""]}
-  path: {required: true}
-  renamed_to: {when_missing: omit}
+  path: {required: true, unescape: {quote: '"', octal: true, sequences: {'\\': '\', '\"': '"', '\a': "\a", '\b': "\b", '\t': "\t", '\n': "\n", '\v': "\v", '\f': "\f", '\r': "\r"}}}
+  renamed_to: {when_missing: omit, unescape: {quote: '"', octal: true, sequences: {'\\': '\', '\"': '"', '\a': "\a", '\b': "\b", '\t': "\t", '\n': "\n", '\v': "\v", '\f': "\f", '\r': "\r"}}}

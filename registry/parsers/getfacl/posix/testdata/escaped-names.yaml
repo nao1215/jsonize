@@ -1,0 +1,4 @@
+source: getfacl 2.3.2 on Ubuntu 26.04, LC_ALL=C getfacl on five files made for the fixture, named with a space, in Japanese, with a backslash, a tab and a newline; the owner and group replaced
+description: getfacl writes a backslash as two and a newline as a backslash and three octal digits, and prints the rest as it is; the names are decoded
+os: linux
+args: ["a b.txt", "日本.txt", "back\\slash.txt", "tab\there.txt", "new\nline.txt"]

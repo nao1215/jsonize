@@ -1,0 +1,167 @@
+[
+  {
+    "attributes": [
+      {
+        "name": "file",
+        "value": "a b.txt"
+      },
+      {
+        "name": "owner",
+        "value": "user"
+      },
+      {
+        "name": "group",
+        "value": "user"
+      }
+    ],
+    "entries": [
+      {
+        "type": "user",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "group",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "other",
+        "qualifier": null,
+        "permissions": "r--"
+      }
+    ]
+  },
+  {
+    "attributes": [
+      {
+        "name": "file",
+        "value": "日本.txt"
+      },
+      {
+        "name": "owner",
+        "value": "user"
+      },
+      {
+        "name": "group",
+        "value": "user"
+      }
+    ],
+    "entries": [
+      {
+        "type": "user",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "group",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "other",
+        "qualifier": null,
+        "permissions": "r--"
+      }
+    ]
+  },
+  {
+    "attributes": [
+      {
+        "name": "file",
+        "value": "back\\slash.txt"
+      },
+      {
+        "name": "owner",
+        "value": "user"
+      },
+      {
+        "name": "group",
+        "value": "user"
+      }
+    ],
+    "entries": [
+      {
+        "type": "user",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "group",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "other",
+        "qualifier": null,
+        "permissions": "r--"
+      }
+    ]
+  },
+  {
+    "attributes": [
+      {
+        "name": "file",
+        "value": "tab\there.txt"
+      },
+      {
+        "name": "owner",
+        "value": "user"
+      },
+      {
+        "name": "group",
+        "value": "user"
+      }
+    ],
+    "entries": [
+      {
+        "type": "user",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "group",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "other",
+        "qualifier": null,
+        "permissions": "r--"
+      }
+    ]
+  },
+  {
+    "attributes": [
+      {
+        "name": "file",
+        "value": "new\nline.txt"
+      },
+      {
+        "name": "owner",
+        "value": "user"
+      },
+      {
+        "name": "group",
+        "value": "user"
+      }
+    ],
+    "entries": [
+      {
+        "type": "user",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "group",
+        "qualifier": null,
+        "permissions": "rw-"
+      },
+      {
+        "type": "other",
+        "qualifier": null,
+        "permissions": "r--"
+      }
+    ]
+  }
+]
