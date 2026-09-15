@@ -352,7 +352,12 @@ the keys it has are "1k_blocks", "available", "filesystem", "mounted_on", "use_p
 A key is checked against what the definition lists in `jz list --schema`,
 not against one input, so a key some records leave out, or any key of an
 empty listing, narrows to nothing. Only a key taken from the input (a
-column named by a header) is looked for in the result.
+column named by a header) is looked for in the result. When the input
+has more than 64 such keys, the refusal names 64 of them and says the
+keys it has include those.
+
+These options only select keys. Filtering records, renaming keys and
+computing values is the next command's job, such as `jq`.
 
 ## The shape of the output
 
