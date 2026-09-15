@@ -1,0 +1,54 @@
+# `task --list` (go-task) prints a heading, `task: Available tasks for
+# this project:`, and one line per task that has a description: an
+# asterisk, the task's name and a colon, the description, and for a task
+# with aliases the aliases in parentheses after `aliases:`, separated by
+# commas. The columns are laid out with Go's tabwriter, which pads each
+# with six spaces past its widest cell, so seven spaces or more follow the
+# colon and six or more come before the aliases. A task from an included
+# Taskfile is named with its namespace in front (`docs:serve`), and so
+# are its aliases. `--list-all` adds the tasks without a description in
+# the same form, with nothing after the colon.
+#
+# A description written over several lines is printed on one, with a
+# space where each line break was, and the blanks at the end of the line
+# are not kept. An empty description is null, and so are the aliases of a
+# task that has none.
+#
+# A Taskfile with nothing to list prints one line instead of the heading,
+# `task: No tasks with description available. Try --list-all to list all
+# tasks` or, with `--list-all`, `task: No tasks available`, which is read
+# as a list with no tasks.
+#
+# The signature asks for the heading or one of those two lines first and
+# for every line in the window to be a heading or a task line. A name
+# is one word, so a line of another report after the list has neither
+# shape and is refused. `--json` prints a different document.
+format: 1
+command: task
+variant: list
+description: task --list (go-task), the tasks with their descriptions and aliases
+metadata:
+  tags: [build, task-runner]
+  compatible: [Task]
+  references:
+    - https://taskfile.dev/docs/reference/cli
+detect:
+  args:
+    any: ["--list", "-l", "--list-all", "-a"]
+    none: ["--json"]
+  signature:
+    all:
+      - '\A(?:task: Available tasks for this project:\n|task: No tasks with description available\. Try --list-all to list all tasks\n?\z|task: No tasks available\n?\z)'
+      - '\A(?:^(?:task: Available tasks for this project:|\* \S+: {7,}[^\n]*|task: No tasks with description available\. Try --list-all to list all tasks|task: No tasks available)$\n?)+\z'
+input:
+  ignore:
+    - '^task: Available tasks for this project:$'
+    - '^task: No tasks with description available\. Try --list-all to list all tasks$'
+    - '^task: No tasks available$'
+parse:
+  type: regex
+  pattern: '^\* (?P<name>\S+): {7,}(?P<description>.*?)(?: {6,}\(aliases: (?P<aliases>[^()]+)\))? *$'
+fields:
+  name: {required: true}
+  description: {null_if: [""]}
+  aliases: {type: array, split: ","}
