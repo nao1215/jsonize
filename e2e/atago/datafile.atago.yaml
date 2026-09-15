@@ -58,6 +58,92 @@ scenarios:
             equals: |
               [{"id":"1","name":"alice"},{"id":"2","name":"bob"}]
 
+  # A csv is data, not command output: nothing in it is taken for colour
+  # or for a blank line, and it reads the same through --format, its
+  # extension and jz new.
+  - name: a csv keeps an escape sequence and a record of spaces in its values, whichever way it is read
+    steps:
+      - fixture:
+          file: colours.csv
+          content: "name,code\n\x1b[31mred\x1b[0m,007\n   ,1\n"
+      - run:
+          command: jz --file ${workdir}/colours.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].name", equals: "\x1b[31mred\x1b[0m" }
+              - { path: "$[0].code", equals: "007" }
+              - { path: "$[1].name", equals: "   " }
+      - run:
+          command: jz --format csv
+          stdin: "key\n   \nx\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"key":"   "},{"key":"x"}]
+      - run:
+          command: jz new rows:=@${workdir}/colours.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.rows[0].name", equals: "\x1b[31mred\x1b[0m" }
+              - { path: "$.rows[1].name", equals: "   " }
+
+  - name: a csv definition in the user registry changes --parser csv and never a csv read as data
+    # The user registry lives under os.UserConfigDir, which XDG_CONFIG_HOME
+    # controls on Linux.
+    only: {os: linux}
+    env:
+      XDG_CONFIG_HOME: "${workdir}/xdg"
+    steps:
+      - fixture:
+          file: xdg/jsonize/registry/parsers/csv/comma/parser.yaml
+          content: |
+            format: 1
+            command: csv
+            variant: comma
+            description: a user's csv that types a column
+            detect: {auto_detect: false}
+            parse: {type: csv}
+            fields:
+              code: {type: int}
+      - fixture:
+          file: codes.csv
+          content: "name,code\nx,007\n"
+      - run:
+          command: jz --file ${workdir}/codes.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"x","code":"007"}]
+      - run:
+          command: jz --format csv --stream
+          stdin: "name,code\nx,007\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"x","code":"007"}
+      - run:
+          command: jz new rows:=@${workdir}/codes.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"rows":[{"name":"x","code":"007"}]}
+      - run:
+          command: jz --parser csv --variant comma
+          stdin: "name,code\nx,007\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"x","code":7}]
+
   - name: json keeps its key order and its number literals, and yaml is typed by the core schema
     steps:
       - fixture:
@@ -144,7 +230,7 @@ scenarios:
             equals: |
               [{"k":"a","v":"1"}]
           stderr:
-            contains: "scope: csv/comma, the reading of the format given with --format"
+            contains: "read as csv: the format was given with --format, so nothing was chosen"
       - run:
           command: jz --format ltsv --stream
           stdin: "a:1\n\na:2\n"

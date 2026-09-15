@@ -169,6 +169,12 @@ func TestStream(t *testing.T) {
 	if _, err := Read(CSV, []byte("a,b\n1,2,3\n")); err == nil {
 		t.Error("a ragged csv was read")
 	}
+	// A csv is data: an escape sequence is part of a value, and a record
+	// of spaces is a record. An empty line holds no record, as in the
+	// csv readers of other languages.
+	if v, err := Read(CSV, []byte("k\n\x1b[31mred\x1b[0m\n   \n\nx\n")); err != nil || encode(t, v) != `[{"k":"\u001b[31mred\u001b[0m"},{"k":"   "},{"k":"x"}]` {
+		t.Errorf("a csv read as data: %s %v", encode(t, v), err)
+	}
 	if _, err := Read("xml", []byte("<a/>")); err == nil {
 		t.Error("an unknown format was read")
 	}

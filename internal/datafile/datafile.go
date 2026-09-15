@@ -1,8 +1,9 @@
 // Package datafile reads the data file formats jz converts to JSON as
 // they are, rather than as the output of a command: JSON, JSON Lines,
 // LTSV, YAML, and text as one string or as a list of lines or of
-// NUL-separated records. CSV and TSV are read by the csv shapes of the
-// registry, so this package only names them.
+// NUL-separated records. CSV and TSV are read by the engine's csv parse
+// with a definition fixed here (TabularDefinition), so that the command
+// line and jz new read a csv file the same way.
 //
 // A format is chosen by the caller, with --format, or by the extension of
 // the file (data.csv, events.jsonl.gz). Nothing is guessed from the text:
@@ -65,9 +66,8 @@ func Known(name string) bool {
 	return slices.Contains(Names(), name)
 }
 
-// Tabular reports a format the csv shapes of the registry read, which
-// the command line reads through the registry and Read reads with the
-// same definition.
+// Tabular reports a format read with TabularDefinition, which the command
+// line reads with the engine and Read reads the same way.
 func Tabular(name string) bool {
 	return name == CSV || name == TSV
 }
@@ -192,21 +192,49 @@ func Read(format string, data []byte) (any, error) {
 	return nil, fmt.Errorf("datafile: %q is not read here", format)
 }
 
-// tabular are the definitions a csv and a tsv are read with, the same
-// bodies as the csv shapes of the registry.
-var tabular = map[string]string{
-	CSV: `parse: {type: csv}`,
-	TSV: `parse: {type: csv, delimiter: "\t"}`,
-}
-
-// readTabular reads a csv or a tsv with the engine, so that a file named
-// .csv reads the same here as with --parser csv.
-func readTabular(format string, data []byte) (any, error) {
-	def, err := definition.LoadInline([]byte(tabular[format]), format)
+// TabularDefinition returns the definition a csv or a tsv is read with as
+// data, with a header line or, when header is false, without one. It is
+// fixed here rather than taken from a registry, so that a definition a
+// user registers under csv changes what --parser csv reads and never what
+// a data file holds. It is named after the registry shape it matches
+// (csv/comma, csv/tab-no-header), so a failure reads the same either way.
+//
+// A line of spaces is a record, since in a csv it holds a value; an empty
+// line holds none. The definition is read with TabularOptions.
+func TabularDefinition(format string, header bool) (*definition.Definition, error) {
+	body := `{input: {skip_blank: false}, parse: {type: csv}}`
+	variant := "comma"
+	if format == TSV {
+		body = `{input: {skip_blank: false}, parse: {type: csv, delimiter: "\t"}}`
+		variant = "tab"
+	}
+	if !header {
+		body = strings.Replace(body, "type: csv", "type: csv, header: {none: true}", 1)
+		variant += "-no-header"
+	}
+	def, err := definition.LoadInline([]byte(body), format)
 	if err != nil {
 		return nil, err
 	}
-	return engine.Parse(def, data, engine.Options{MaxInputSize: int64(len(data)) + 1})
+	def.Command, def.Variant = "csv", variant
+	return def, nil
+}
+
+// TabularOptions sets how a csv or a tsv is read as data: an escape
+// sequence is part of the value that holds it, not colour to take off.
+func TabularOptions(opts engine.Options) engine.Options {
+	opts.KeepEscapes = true
+	return opts
+}
+
+// readTabular reads a csv or a tsv with the engine, with the definition
+// the command line reads the same file with.
+func readTabular(format string, data []byte) (any, error) {
+	def, err := TabularDefinition(format, true)
+	if err != nil {
+		return nil, err
+	}
+	return engine.Parse(def, data, TabularOptions(engine.Options{MaxInputSize: int64(len(data)) + 1}))
 }
 
 // readText reads the whole input as one string. A byte order mark in
