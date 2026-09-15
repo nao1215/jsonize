@@ -48,7 +48,7 @@ detect:
     all:
       # Every line is a result line, one of the per-test lines named
       # above, an indented log line, or blank.
-      - '\A(?:^(?:ok  \t\S+\t(?:\(cached\)|\d+\.\d{3}s(?: \[no tests to run\])?)(?:\tcoverage: (?:\d+\.\d% of statements|\[no statements\]))?|\?   \t\S+\t\[no test files\]|FAIL\t\S+(?:\t\d+\.\d{3}s| \[(?:build|setup) failed\])|--- (?:FAIL|PASS|SKIP|BENCH): [^\n]*|=== (?:RUN|PAUSE|CONT|NAME) [^\n]*|    [^\n]*|PASS|FAIL|coverage: (?:\d+\.\d% of statements|\[no statements\])|testing: warning: no tests to run|exit status [0-9]+|)$\n?)+\z'
+      - '\A(?:^(?:ok  \t\S+\t(?:\(cached\)|\d+\.\d{3}s(?: \[no tests to run\])?)(?:\tcoverage: (?:\d+\.\d% of statements|\[no statements\]))?|\?   \t\S+\t\[no test files\]|FAIL\t\S+(?:\t\d+\.\d{3}s| \[(?:build|setup) failed\])|--- (?:FAIL|PASS|SKIP|BENCH): [^\n]*|=== (?:RUN|PAUSE|CONT|NAME) [^\n]*|(?:    )+--- (?:FAIL|PASS|SKIP|BENCH): [^\n]*|(?:    )+[^ \t\n:]+\.go:[0-9]+: [^\n]*|(?:    ){2,}[^ \t\n][^\n]*|PASS|FAIL|coverage: (?:\d+\.\d% of statements|\[no statements\])|testing: warning: no tests to run|exit status [0-9]+|)$\n?)+\z'
       # And at least one of them is a result line.
       - '^(?:ok  \t\S+\t(?:\(cached\)|\d+\.\d{3}s)|\?   \t\S+\t\[no test files\]|FAIL\t\S+(?:\t\d+\.\d{3}s| \[(?:build|setup) failed\]))(?:[ \t]|$)'
     window: 200
@@ -56,7 +56,15 @@ input:
   ignore:
     - '^--- (?:FAIL|PASS|SKIP|BENCH): '
     - '^=== (?:RUN|PAUSE|CONT|NAME) '
-    - '^    '
+    # What go test indents: a subtest's result under its parent, a log
+    # line under the test that wrote it (the file and line in front), and
+    # the rest of a log written over several lines, four spaces deeper.
+    # Each is a multiple of four spaces, and nothing else indented is
+    # left out: a report printed after go test's own, which gzip -l
+    # indents, is not read as log lines and dropped.
+    - '^(?:    )+--- (?:FAIL|PASS|SKIP|BENCH): '
+    - '^(?:    )+[^ \t:]+\.go:[0-9]+: '
+    - '^(?:    ){2,}[^ \t]'
     - '^(?:PASS|FAIL)$'
     - '^coverage: (?:\d+\.\d% of statements|\[no statements\])$'
     - '^testing: warning: no tests to run$'

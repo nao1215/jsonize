@@ -1,0 +1,4 @@
+source: captured with LC_ALL=C go test -v ./... (go1.26.6) on a module made for the fixture, one package with a failing subtest, a log written over two lines and a skip, the other passing
+description: the result lines are read; the per-test lines, the log lines indented under a test, the continuation of a log written over two lines and a nested subtest result are left out
+os: linux
+args: ["test", "-v", "./..."]

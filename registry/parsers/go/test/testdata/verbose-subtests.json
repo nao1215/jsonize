@@ -1,0 +1,18 @@
+[
+  {
+    "cached": false,
+    "status": "FAIL",
+    "package": "example.test/gotest/calc",
+    "elapsed": 0.002,
+    "note": null,
+    "coverage": null
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "example.test/gotest/sub",
+    "elapsed": 0.002,
+    "note": null,
+    "coverage": null
+  }
+]

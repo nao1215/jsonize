@@ -1,0 +1,3 @@
+ok  	example.test/gotest/sub	0.002s
+         compressed        uncompressed  ratio uncompressed_name
+                 42                  12 -16.7% hello.txt
