@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/tokei/default.json",
+  "title": "tokei/default",
+  "description": "tokei lines of code per language, with the embedded languages and the total",
+  "x-jsonize": {
+    "definition": "tokei/default",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "embedded": {
+            "type": "boolean"
+          },
+          "language": {
+            "type": "string"
+          },
+          "files": {
+            "type": "integer"
+          },
+          "lines": {
+            "type": "integer"
+          },
+          "code": {
+            "type": "integer"
+          },
+          "comments": {
+            "type": "integer"
+          },
+          "blanks": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "embedded",
+          "language",
+          "files",
+          "lines",
+          "code",
+          "comments",
+          "blanks"
+        ]
+      }
+    },
+    "total": {
+      "type": "object",
+      "properties": {
+        "files": {
+          "type": "integer"
+        },
+        "lines": {
+          "type": "integer"
+        },
+        "code": {
+          "type": "integer"
+        },
+        "comments": {
+          "type": "integer"
+        },
+        "blanks": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "files",
+        "lines",
+        "code",
+        "comments",
+        "blanks"
+      ]
+    }
+  },
+  "required": [
+    "languages",
+    "total"
+  ]
+}

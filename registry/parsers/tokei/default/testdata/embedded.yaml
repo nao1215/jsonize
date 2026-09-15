@@ -1,0 +1,3 @@
+source: captured with tokei 15.0.0 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, tokei website in the jsonize repository; the counts agree with tokei -o json
+description: Markdown holding YAML, printed below a light rule with its embedded row and (Total)
+args: [website]
