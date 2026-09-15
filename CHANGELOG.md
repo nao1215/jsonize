@@ -34,13 +34,6 @@ project follows [Semantic Versioning](https://semver.org/).
   whole, a key in an array and an index past the end are exit 2 before
   anything is read. `spec.replicas:=3` is still the key `spec.replicas`.
 
-### Changed
-
-- A csv field rule that names a column the header line, or the first
-  record of a csv that numbers its columns, does not have is refused
-  where the columns become known, where it was ignored. A stream ends
-  there instead of leaving the header out as a bad record.
-
 ### Removed
 
 - Breaking: `--yaml`, which wrote the output as YAML, is gone from the

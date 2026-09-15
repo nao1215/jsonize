@@ -329,8 +329,11 @@ $ jz --file sales.csv --type units=int --type price=float --type in_stock=bool
   with `--stream` the rows around it are written and the status is 3.
 - A column is named as it appears in the output: the header normalised
   (`In Stock` is `in_stock`), a `--columns` name, or `column_2`. A column
-  the input does not have is exit 2 before any row is written, and so is
-  a column named twice or an unknown type.
+  the header line (or the first record, for numbered columns) does not
+  have is exit 2 before any row is written, and so is a column named
+  twice or an unknown type. An empty input has no columns and is `[]`.
+- `--type` with `--raw` is refused: `--raw` leaves out every field rule,
+  and a type is one.
 - `--type` applies to a `.csv` or `.tsv` file, `--format csv` or `tsv`,
   and `--parser csv --variant ...`, also with `jz run`. A `--define`
   states its own fields.

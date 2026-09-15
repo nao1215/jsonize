@@ -140,6 +140,7 @@ func TestDataFileUsageErrors(t *testing.T) {
 		{"--type on a column --columns does not name", "1\n", []string{"--format", "csv", "--columns", "a", "--type", "b=int"}, `--type: no column "b"; --columns names a`},
 		{"--type on a column the header lacks", "a\n1\n", []string{"--format", "csv", "--type", "b=int"}, `jz: csv/comma: line 1: no column "b"; the columns are "a"`},
 		{"--type on a column the header lacks, streamed", "a\n1\n", []string{"--format", "csv", "--stream", "--type", "b=int"}, `no column "b"`},
+		{"--type with --raw", "a\n1\n", []string{"--format", "csv", "--raw", "--type", "a=int"}, "--type and --raw cannot be used together"},
 	} {
 		if code := h.pipe(tt.input, tt.args...); code != ExitUsage || !strings.Contains(h.stderr.String(), tt.want) {
 			t.Errorf("%s: exit %d, stderr %q, want %q", tt.name, code, h.stderr.String(), tt.want)
@@ -338,9 +339,9 @@ func TestColumnTypes(t *testing.T) {
 	if code := h.pipe("id\n1\n", "--format", "csv", "--stream", "--type", "count=int"); code != ExitUsage || h.stdout.Len() != 0 {
 		t.Errorf("a missing column ends a stream before a record: %d %q %s", code, h.stdout.String(), h.stderr.String())
 	}
-	// A definition's own field naming a column the header lacks is the
-	// input failing its definition, which stays exit 3.
-	if code := h.pipe("id\n1\n", "--define", "parse: {type: csv}\nfields: {count: {type: int}}"); code != ExitParse || !strings.Contains(h.stderr.String(), `no column "count"`) {
-		t.Errorf("a definition's field for a missing column: %d %s", code, h.stderr.String())
+	// A definition's own field naming a column the header lacks does
+	// nothing, as it always has; only a column the caller named is checked.
+	if code := h.pipe("id\n1\n", "--define", "parse: {type: csv}\nfields: {count: {type: int}}"); code != ExitOK || h.stdout.String() != `[{"id":"1"}]`+"\n" {
+		t.Errorf("a definition's field for a missing column: %d %q %s", code, h.stdout.String(), h.stderr.String())
 	}
 }

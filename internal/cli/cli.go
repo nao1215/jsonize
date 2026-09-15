@@ -79,9 +79,8 @@ type app struct {
 	// with the columns --columns named and --type converted, which is read
 	// in its place.
 	named, renamed *definition.Definition
-	// typed are the columns --type converts. A column the input turns out
-	// not to have was named by the caller, which is a usage error rather
-	// than input that failed its definition.
+	// typed are the columns --type converts, checked against the names
+	// --columns gives.
 	typed map[string]string
 }
 
@@ -237,7 +236,9 @@ func (a *app) exitFor(err error) int {
 	}
 	a.errorf("%v", err)
 	var mc *engine.MissingColumnError
-	if errors.As(err, &mc) && a.typed[mc.Column] != "" {
+	if errors.As(err, &mc) {
+		// Only a column the caller named is checked, so the caller was
+		// wrong about the input rather than the input about its format.
 		return ExitUsage
 	}
 	var pe *engine.ParseError
