@@ -13,6 +13,7 @@ jz --file captured.txt
 jz --file users.csv          # a data file, read as the format its extension names
 COMMAND | jz --format yaml   # piped data, read as the format --format names
 jz run COMMAND [args...]     # let jz run the command and convert its stdout
+jz new KEY=VALUE KEY:=JSON   # make JSON from arguments
 ```
 
 The mode is always explicit, so a pipeline behaves the same in a shell
@@ -427,6 +428,54 @@ it cannot read stay written; a `json` or `yaml` document is one value,
 so `--stream` with one is a usage error. `--extract`, `--exclude`,
 `--yaml` and `--pretty` work the same as for a command's output, and
 `--explain` says which format was read and what named it.
+
+## Making JSON from arguments
+
+`jz new` prints a JSON object made of its arguments, or an array with
+`--array`. It is for the JSON a script or a CI job has to hand to
+something else, without a template or a string of escaped quotes.
+
+```console
+$ jz new name=api replicas:=3 debug:=false tags[]=web tags[]=prod
+{"name":"api","replicas":3,"debug":false,"tags":["web","prod"]}
+
+$ jz new version=@VERSION spec:=@deploy.yaml
+{"version":"1.4.0","spec":{"replicas":3,"image":"1.2"}}
+
+$ kubectl get pod web -o json | jz new pod:=@- checked_by=ci
+$ jz new --array web :=1 :=null
+["web",1,null]
+```
+
+| Argument | Value |
+|----------|-------|
+| `key=text` | the string `text` |
+| `key:=json` | the JSON `json`: a number, `true`, `false`, `null`, `"a string"`, `[...]`, `{...}` |
+| `key=@path` | the text of the file, less its last line ending, as a string |
+| `key:=@path` | the value the file holds, read as the format its extension names; JSON when it names none |
+| `key[]=...` | one more element of the array `key`, with any of the forms above |
+
+A path of `-` is standard input, which one argument may read. With
+`--array` the arguments are the values: a word is a string, and `=`,
+`:=`, `=@` and `:=@` in front of a value mean what they mean after a key.
+
+- Nothing is guessed. `version=007` is the string `"007"` and
+  `enabled=true` the string `"true"`; the number and the boolean are
+  written with `:=`.
+- A key given twice is refused unless it ends in `[]`, since the
+  arguments do not say which value is meant, and so is a key given both
+  with and without `[]`.
+- The key is everything before the first `=`. A string that starts with
+  `@` is written as JSON: `note:='"@here"'`.
+- Options come before the arguments; `--` ends them, so `jz new -- -x=1`
+  has the key `-x`.
+- `-p` and `--yaml` shape the output as they do elsewhere.
+
+An argument that says nothing JSON can be (no `=`, an empty key, a key
+given twice, `:=` followed by something that is not JSON, two arguments
+reading standard input) is exit 2, and nothing is read. A file that
+cannot be read is exit 1, and one that is not the format it is read as,
+or not UTF-8 where text is read, is exit 3 with the line.
 
 ## Output jz has no definition for
 
