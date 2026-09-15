@@ -18,6 +18,7 @@ Linux one.
 | `registry` | all | `jz list` (with `--schema`), `jz test`, user and `JSONIZE_REGISTRY_PATH` registries, layering, broken definitions |
 | `report` | all | sysstat reports read as an array of samples, from captured output |
 | `adhoc` | all | `--define`, and the shape definitions (csv, ini, drawn table) |
+| `cookbook` | all, `jz run` not on Windows | every recipe of the site's cookbook, one scenario named after each section; `TestCookbookRecipesAreRun` fails when a recipe has no scenario |
 | `new` | all | `jz new`: strings, JSON values, arrays with `[]`, files and standard input as values, a data file read by its extension, and the arguments refused before anything is read |
 | `datafile` | all | data files read as the format their extension names (csv, tsv, ltsv, JSON Lines, JSON, YAML, gzip and bzip2), piped data read as `--format` names, the line a reading stops at, and the option pairs that are refused |
 | `stream` | all | `--stream` writes one document per record and keeps what was written when a later record fails; a composite part by part; `--yaml` alone and with `--stream` |
