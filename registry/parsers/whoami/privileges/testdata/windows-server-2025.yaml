@@ -1,0 +1,13 @@
+description: >-
+  whoami /priv run for real on Windows Server 2025 by the elevated
+  runner account: twenty-four privileges, most disabled and four
+  enabled, with the description column as wide as its longest sentence.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "whoami /priv 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  lines as the command wrote them). Nothing was replaced. The same
+  command on the windows-2022 runner (Windows Server 2022, build
+  20348.5499) printed the same bytes.
+os: windows
+args: ["/priv"]

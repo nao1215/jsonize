@@ -1,0 +1,137 @@
+
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                            Description                                                        State   
+========================================= ================================================================== ========
+SeIncreaseQuotaPrivilege                  Adjust memory quotas for a process                                 Disabled
+SeSecurityPrivilege                       Manage auditing and security log                                   Disabled
+SeTakeOwnershipPrivilege                  Take ownership of files or other objects                           Disabled
+SeLoadDriverPrivilege                     Load and unload device drivers                                     Disabled
+SeSystemProfilePrivilege                  Profile system performance                                         Disabled
+SeSystemtimePrivilege                     Change the system time                                             Disabled
+SeProfileSingleProcessPrivilege           Profile single process                                             Disabled
+SeIncreaseBasePriorityPrivilege           Increase scheduling priority                                       Disabled
+SeCreatePagefilePrivilege                 Create a pagefile                                                  Disabled
+SeBackupPrivilege                         Back up files and directories                                      Disabled
+SeRestorePrivilege                        Restore files and directories                                      Disabled
+SeShutdownPrivilege                       Shut down the system                                               Disabled
+SeDebugPrivilege                          Debug programs                                                     Enabled 
+SeSystemEnvironmentPrivilege              Modify firmware environment values                                 Disabled
+SeChangeNotifyPrivilege                   Bypass traverse checking                                           Enabled 
+SeRemoteShutdownPrivilege                 Force shutdown from a remote system                                Disabled
+SeUndockPrivilege                         Remove computer from docking station                               Disabled
+SeManageVolumePrivilege                   Perform volume maintenance tasks                                   Disabled
+SeImpersonatePrivilege                    Impersonate a client after authentication                          Enabled 
+SeCreateGlobalPrivilege                   Create global objects                                              Enabled 
+SeIncreaseWorkingSetPrivilege             Increase a process working set                                     Disabled
+SeTimeZonePrivilege                       Change the time zone                                               Disabled
+SeCreateSymbolicLinkPrivilege             Create symbolic links                                              Disabled
+SeDelegateSessionUserImpersonatePrivilege Obtain an impersonation token for another user in the same session Disabled
+
+Active Connections
+
+  Proto  Local Address          Foreign Address        State
+  TCP    0.0.0.0:22             0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:80             0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:1801           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:2103           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:2105           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:2107           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:2179           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:3389           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:5985           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:5986           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:47001          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49670          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49671          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49690          0.0.0.0:0              LISTENING
+  TCP    192.0.2.108:139        0.0.0.0:0              LISTENING
+  TCP    192.0.2.108:49673      23.11.32.159:80        TIME_WAIT
+  TCP    192.0.2.108:49684      168.63.129.16:32526    ESTABLISHED
+  TCP    192.0.2.108:49693      168.63.129.16:80       ESTABLISHED
+  TCP    192.0.2.108:49694      168.63.129.16:80       ESTABLISHED
+  TCP    192.0.2.108:49702      135.233.95.144:443     TIME_WAIT
+  TCP    192.0.2.108:49703      135.233.95.144:443     TIME_WAIT
+  TCP    192.0.2.108:49704      128.85.113.135:443     TIME_WAIT
+  TCP    192.0.2.108:49706      23.15.3.198:80         TIME_WAIT
+  TCP    192.0.2.108:49715      168.63.129.16:32526    ESTABLISHED
+  TCP    192.0.2.108:49720      168.63.129.16:80       TIME_WAIT
+  TCP    192.0.2.108:49723      72.154.7.113:443       TIME_WAIT
+  TCP    192.0.2.108:49727      23.15.3.198:80         TIME_WAIT
+  TCP    192.0.2.108:49728      23.15.3.131:80         TIME_WAIT
+  TCP    192.0.2.108:49729      23.15.3.221:80         TIME_WAIT
+  TCP    192.0.2.108:49736      20.190.151.132:443     ESTABLISHED
+  TCP    192.0.2.108:49739      23.34.126.68:80        TIME_WAIT
+  TCP    192.0.2.108:49749      20.190.151.132:443     ESTABLISHED
+  TCP    192.0.2.108:49757      104.18.38.233:80       ESTABLISHED
+  TCP    192.0.2.108:49758      52.110.2.183:443       ESTABLISHED
+  TCP    192.0.2.108:49759      23.210.73.42:80        TIME_WAIT
+  TCP    192.0.2.108:49760      23.11.32.159:80        ESTABLISHED
+  TCP    192.0.2.108:49762      52.110.2.169:443       ESTABLISHED
+  TCP    192.0.2.108:49763      20.80.35.105:443       ESTABLISHED
+  TCP    192.0.2.108:49764      4.247.188.224:443      TIME_WAIT
+  TCP    192.0.2.108:49765      104.208.203.88:443     ESTABLISHED
+  TCP    192.0.2.108:49788      169.254.169.254:80     ESTABLISHED
+  TCP    192.0.2.108:49794      20.75.202.224:443      ESTABLISHED
+  TCP    192.0.2.108:49795      20.75.202.224:443      ESTABLISHED
+  TCP    192.0.2.108:49802      104.208.203.90:443     ESTABLISHED
+  TCP    192.0.2.108:49804      20.85.130.105:443      ESTABLISHED
+  TCP    192.0.2.108:49805      20.85.130.105:443      ESTABLISHED
+  TCP    192.0.2.108:49806      20.85.130.105:443      ESTABLISHED
+  TCP    192.0.2.108:49807      140.82.112.22:443      ESTABLISHED
+  TCP    192.0.2.108:49808      140.82.113.21:443      ESTABLISHED
+  TCP    192.0.2.108:49809      140.82.112.22:443      ESTABLISHED
+  TCP    192.0.2.108:49810      20.150.82.228:443      ESTABLISHED
+  TCP    [::]:22                [::]:0                 LISTENING
+  TCP    [::]:80                [::]:0                 LISTENING
+  TCP    [::]:135               [::]:0                 LISTENING
+  TCP    [::]:445               [::]:0                 LISTENING
+  TCP    [::]:1801              [::]:0                 LISTENING
+  TCP    [::]:2103              [::]:0                 LISTENING
+  TCP    [::]:2105              [::]:0                 LISTENING
+  TCP    [::]:2107              [::]:0                 LISTENING
+  TCP    [::]:2179              [::]:0                 LISTENING
+  TCP    [::]:3389              [::]:0                 LISTENING
+  TCP    [::]:5985              [::]:0                 LISTENING
+  TCP    [::]:5986              [::]:0                 LISTENING
+  TCP    [::]:47001             [::]:0                 LISTENING
+  TCP    [::]:49664             [::]:0                 LISTENING
+  TCP    [::]:49665             [::]:0                 LISTENING
+  TCP    [::]:49666             [::]:0                 LISTENING
+  TCP    [::]:49667             [::]:0                 LISTENING
+  TCP    [::]:49668             [::]:0                 LISTENING
+  TCP    [::]:49670             [::]:0                 LISTENING
+  TCP    [::]:49671             [::]:0                 LISTENING
+  TCP    [::]:49690             [::]:0                 LISTENING
+  TCP    [::1]:49713            [::1]:5985             TIME_WAIT
+  TCP    [::1]:49714            [::1]:5985             TIME_WAIT
+  TCP    [::1]:49748            [::1]:47001            TIME_WAIT
+  TCP    [fe80::1a2b:3c4d:5e6f:7081%14]:49783  [fe80::1a2b:3c4d:5e6f:7081%14]:5985  TIME_WAIT
+  TCP    [fe80::1a2b:3c4d:5e6f:7081%14]:49784  [fe80::1a2b:3c4d:5e6f:7081%14]:5985  TIME_WAIT
+  TCP    [fe80::1a2b:3c4d:5e6f:7081%14]:49785  [fe80::1a2b:3c4d:5e6f:7081%14]:5985  TIME_WAIT
+  TCP    [fe80::1a2b:3c4d:5e6f:7081%14]:49786  [fe80::1a2b:3c4d:5e6f:7081%14]:5985  TIME_WAIT
+  UDP    0.0.0.0:123            *:*                    
+  UDP    0.0.0.0:3389           *:*                    
+  UDP    0.0.0.0:5353           *:*                    
+  UDP    0.0.0.0:5355           *:*                    
+  UDP    0.0.0.0:51898          *:*                    
+  UDP    0.0.0.0:65482          *:*                    
+  UDP    0.0.0.0:65497          *:*                    
+  UDP    192.0.2.108:137        *:*                    
+  UDP    192.0.2.108:138        *:*                    
+  UDP    127.0.0.1:57066        127.0.0.1:57066        
+  UDP    [::]:123               *:*                    
+  UDP    [::]:3389              *:*                    
+  UDP    [::]:5353              *:*                    
+  UDP    [::]:5355              *:*                    
+  UDP    [::]:51898             *:*                    
+  UDP    [::]:65482             *:*                    
+  UDP    [::]:65497             *:*                    
