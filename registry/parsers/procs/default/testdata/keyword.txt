@@ -1,0 +1,7 @@
+ PID:▲   User │ TTY     CPU MEM CPU Time │ Command
+              │         [%] [%]          │
+ 1556589 user │         0.0 0.0 00:00:00 │ ./jzfixture-sleep 1001
+ 1556590 user │         0.0 0.0 00:00:00 │ ./jzfixture-sleep 1002
+ 1556591 user │         0.0 0.0 00:00:00 │ script -qc ./jzfixture-sleep 1003 /dev/null
+ 1556592 user │       100.0 0.0 00:00:03 │ ./jzfixture-yes
+ 1556594 user │ pts/4   0.0 0.0 00:00:00 │ ./jzfixture-sleep 1003

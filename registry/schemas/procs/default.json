@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/procs/default.json",
+  "title": "procs/default",
+  "description": "procs default columns (PID, User, TTY, CPU, MEM, CPU Time, Command)",
+  "x-jsonize": {
+    "definition": "procs/default",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "pid": {
+        "type": "integer"
+      },
+      "user": {
+        "type": "string"
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "cpu_percent": {
+        "type": "number"
+      },
+      "mem_percent": {
+        "type": "number"
+      },
+      "cpu_time": {
+        "type": "number"
+      },
+      "command": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "pid",
+      "user",
+      "tty",
+      "cpu_percent",
+      "mem_percent",
+      "cpu_time",
+      "command"
+    ]
+  }
+}

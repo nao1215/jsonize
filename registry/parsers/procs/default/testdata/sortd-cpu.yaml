@@ -1,0 +1,4 @@
+source: captured with procs 0.14.12 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, procs --color=disable --sortd cpu jzfixture over the same processes; the user name replaced
+description: --sortd inserts a second CPU Time column, which is another listing and is refused
+os: linux
+expect_error: 'does not describe this input'

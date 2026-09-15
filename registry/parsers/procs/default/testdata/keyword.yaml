@@ -1,0 +1,4 @@
+source: captured with procs 0.14.12 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, procs --color=disable jzfixture while copies of sleep and yes renamed jzfixture-* ran, one under script for a terminal; the user name replaced
+description: rows with and without a terminal and a process above 100 percent CPU
+os: linux
+args: [--color=disable, jzfixture]
