@@ -1,0 +1,4 @@
+source: the definition's own fixture followed by another definition's fixture, joined for this case
+description: du lines after the builders are refused, since a path is not a driver
+args: ["buildx", "ls"]
+expect_error: does not have the shape

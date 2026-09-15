@@ -1,0 +1,32 @@
+[
+  {
+    "path": "broken/broken.go",
+    "line": 4,
+    "column": 9,
+    "message": "cannot use \"not an int\" (untyped string constant) as int value in return statement"
+  },
+  {
+    "path": "pkg/sub/fmt.go",
+    "line": 6,
+    "column": 14,
+    "message": "fmt.Printf format %s has arg n of wrong type int"
+  },
+  {
+    "path": "pkg/sub/fmt.go",
+    "line": 7,
+    "column": 2,
+    "message": "fmt.Println arg list ends with redundant newline"
+  },
+  {
+    "path": "./main.go",
+    "line": 12,
+    "column": 2,
+    "message": "self-assignment of x to x"
+  },
+  {
+    "path": "./main.go",
+    "line": 10,
+    "column": 20,
+    "message": "fmt.Printf format %d has arg name of wrong type string"
+  }
+]

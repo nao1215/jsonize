@@ -1,0 +1,4 @@
+source: the definition's own default-linters.txt followed by df/gnu's coreutils-9.7.txt, joined for this case
+description: a df table after the summary is refused, since nothing but the counts may follow the heading
+args: ["run", "./..."]
+expect_error: does not match any of the 2 patterns

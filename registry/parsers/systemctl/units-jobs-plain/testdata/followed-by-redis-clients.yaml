@@ -1,0 +1,4 @@
+source: the definition's own fixture followed by another definition's fixture, joined for this case
+description: a line of redis-cli client list after the count of units is refused as unread, since the count closes the listing
+args: ["list-units", "--plain"]
+expect_error: a line no part of the definition read

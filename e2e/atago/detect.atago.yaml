@@ -1286,3 +1286,41 @@ scenarios:
               - { path: "$[0].children[6].pid", equals: 693857 }
               - { path: "$[0].children[10].children", length: 0 }
 
+  # Output captured on another system is read wherever jz runs: a
+  # definition limited to Windows or macOS is chosen through a pipe by its
+  # signature, since nothing there says which system printed the text.
+  # The Windows text keeps the CRLF line endings the runner wrote.
+  - name: whoami /groups from Windows and vm_stat from macOS are read on any system
+    steps:
+      - fixture:
+          file: groups.txt
+          from: "${specdir}/testdata/whoami-groups-windows-server-2025.txt"
+      - run:
+          command: jz --explain --file groups.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose whoami/groups from embedded"
+          stdout:
+            json:
+              - { path: "$[?(@.sid=='S-1-1-0')].group_name", equals: Everyone }
+              - { path: "$[?(@.sid=='S-1-16-12288')].type", equals: Label }
+              - { path: "$[?(@.sid=='S-1-16-12288')].attributes", equals: null }
+      - run:
+          command: jz --parser whoami --variant privileges --file groups.txt
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - fixture:
+          file: vm_stat.txt
+          from: "${specdir}/testdata/vm-stat-macos-26.txt"
+      - run:
+          command: jz --explain --file vm_stat.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose vm_stat/darwin from embedded"
+          stdout:
+            json:
+              - { path: "$.page_size", equals: 16384 }
+              - { path: "$.pages_free", equals: 7144 }

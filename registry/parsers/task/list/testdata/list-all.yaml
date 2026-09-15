@@ -1,0 +1,4 @@
+source: captured from Task 3.51.1 on Linux with LC_ALL=C, task --list-all on the same Taskfile
+description: The task without a description is listed with nothing after the colon and becomes null.
+os: linux
+args: ["--list-all"]

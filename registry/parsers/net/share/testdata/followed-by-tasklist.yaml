@@ -1,4 +1,4 @@
 source: the windows-server-2025 fixture followed by the windows-server-2022 fixture of tasklist/table, joined for this case
-description: a tasklist table after the completion line is refused, since its words in the resource column are no path
+description: a tasklist table after the completion line is refused as unread, since the completion line closes the listing
 args: [share]
-expect_error: does not have the shape
+expect_error: 'no part of the definition read'

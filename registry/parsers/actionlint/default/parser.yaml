@@ -1,0 +1,58 @@
+# `actionlint` prints one error per block on standard output: a line
+# with the file, the line and the column, the message and the rule in
+# brackets (`[syntax-check]`, `[expression]`, `[shellcheck]`), and below
+# it an excerpt of the workflow: an empty gutter line, the source line
+# behind its number and a bar, and a caret with tildes under the part
+# the error is about. With `-oneline` the excerpt is left out and each
+# error is its first line alone. The first line is the same in both, and
+# an error whose line is not in the file, or whose column lies past the
+# end of that line, prints no excerpt without `-oneline` either, so one
+# definition reads both and the excerpt is read but not kept: it is the
+# workflow's own text. An error with no column prints the caret line
+# with nothing after the bar.
+#
+# The file is everything before the first `:line:column: `, so a name
+# with a space in it is read whole and a Windows drive letter's colon
+# stays in the path. The message runs to the last bracketed rule on the
+# line; rule names are lower-case words joined by hyphens, which is what
+# tells this from `shellcheck -f gcc`, whose code is SC and digits.
+#
+# The signature asks that the text open with an error line and that
+# every line in the window be an error line or one of the three excerpt
+# lines. A line of another report after the output has neither shape
+# and is refused. A clean run prints nothing, which jz refuses as text it
+# cannot read, and `-format` writes a template of the user's choosing,
+# which is not this format. actionlint writes to standard output, so
+# `jz run actionlint` reads it.
+format: 1
+command: actionlint
+variant: default
+description: actionlint errors, with or without the source excerpt
+metadata:
+  tags: [github-actions, ci, lint]
+  compatible: [actionlint]
+  references:
+    - https://github.com/rhysd/actionlint/blob/main/docs/usage.md
+detect:
+  args:
+    none: ["-format", "--format"]
+  signature:
+    all:
+      - '\A[^\n]+:\d+:\d+: [^\n]+ \[[a-z][a-z0-9-]*\]$'
+      - '\A(?:^(?:[^\n]+:\d+:\d+: [^\n]+ \[[a-z][a-z0-9-]*\]| +\|(?: +\^~*| )?|\d+ \| [^\n]*)$\n?)+\z'
+parse:
+  type: records
+  start: '^\S[^\n]*:\d+:\d+: [^\n]* \[[a-z][a-z0-9-]*\]$'
+  record:
+    parse:
+      type: regex
+      each: input
+      # The excerpt is the gutter, the numbered source line and the caret
+      # line, all three or none.
+      pattern: '\A(?P<path>[^\n]+?):(?P<line>\d+):(?P<column>\d+): (?P<message>[^\n]+) \[(?P<rule>[a-z][a-z0-9-]*)\](?:\n +\|\n\d+ \| [^\n]*\n +\|(?: +\^~*| )?)?\z'
+    fields:
+      path: {required: true}
+      line: {type: int, required: true}
+      column: {type: int, required: true}
+      message: {required: true}
+      rule: {required: true}

@@ -1,0 +1,8 @@
+### actionlint reports a false positive for a reusable workflow
+
+Running actionlint on the repository prints:
+
+.github/workflows/call.yml:9:15: input "env" is not defined in "./.github/workflows/build.yml" reusable workflow [workflow-call]
+
+The input is declared under `on.workflow_call.inputs` in build.yml, so
+the error looks wrong. Version: 1.7.12, installed with go install.

@@ -1,0 +1,4 @@
+source: the definition's own fixture followed by another definition's fixture, joined for this case
+description: the uptime line after the report is refused rather than read as a label that opens with a digit
+args: ["version"]
+expect_error: line does not match pattern

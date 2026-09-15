@@ -1,0 +1,6 @@
+source: >-
+  moved from registry/testdata/decoys/go-build-errors.txt, where 120dc3f put
+  it as compiler output that go/test must refuse; the Go version and the
+  command it came from are not recorded
+description: Compile errors under headings, one naming the package test variant in brackets.
+args: ["build", "./..."]

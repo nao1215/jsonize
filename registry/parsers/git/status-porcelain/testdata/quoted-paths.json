@@ -1,0 +1,28 @@
+[
+  {
+    "index": null,
+    "worktree": "M",
+    "path": "old name.txt"
+  },
+  {
+    "index": "R",
+    "worktree": null,
+    "path": "日本.txt",
+    "renamed_to": "資料.txt"
+  },
+  {
+    "index": "?",
+    "worktree": "?",
+    "path": "a\"quote.txt"
+  },
+  {
+    "index": "?",
+    "worktree": "?",
+    "path": "back\\slash.txt"
+  },
+  {
+    "index": "?",
+    "worktree": "?",
+    "path": "tab\there.txt"
+  }
+]

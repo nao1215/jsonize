@@ -1,0 +1,4 @@
+source: captured from the same mc on Linux with LC_ALL=C and TZ=UTC, listing the buckets of the same server
+description: Buckets are prefixes; a time in UTC states its offset and converts.
+os: linux
+args: ["ls", "a8"]

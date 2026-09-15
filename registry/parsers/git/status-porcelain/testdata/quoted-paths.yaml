@@ -1,0 +1,3 @@
+source: git 2.53 on Ubuntu 26.04, LC_ALL=C git status --porcelain in a repository made for the fixture, with a renamed file named in Japanese, names holding a space, a quote, a backslash and a tab
+description: every quoted path is decoded, the octal bytes to UTF-8 and the C escapes to the characters they stand for
+args: ["status", "--porcelain"]

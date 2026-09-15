@@ -1,0 +1,9 @@
+Id=seat0
+ActiveSession=2
+CanTTY=yes
+CanGraphical=yes
+Sessions=2
+IdleHint=no
+IdleSinceHint=0
+IdleSinceHintMonotonic=0
+uid=1000(alice) gid=1000(alice) groups=4(adm),27(sudo),1000(alice)

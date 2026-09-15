@@ -1,0 +1,3 @@
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C system_profiler SPHardwareDataType; the serial number, hardware UUID and provisioning UDID replaced by placeholders of the same length
+os: darwin
+args: [SPHardwareDataType]

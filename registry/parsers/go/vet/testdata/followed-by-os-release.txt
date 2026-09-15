@@ -1,0 +1,10 @@
+main.go:10:20: fmt.Printf format %d has arg name of wrong type string
+main.go:12:2: self-assignment of x
+pkg/sub/fmt.go:6:14: fmt.Printf format %s has arg n of wrong type int
+pkg/sub/fmt.go:7:2: fmt.Println arg list ends with redundant newline
+PRETTY_NAME="Ubuntu 26.04 LTS"
+NAME="Ubuntu"
+VERSION_ID="26.04"
+VERSION="26.04 LTS (Resolute Raccoon)"
+VERSION_CODENAME=resolute
+ID=ubuntu

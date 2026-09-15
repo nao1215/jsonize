@@ -22,9 +22,11 @@ detect:
     all:
       - '\AIDX[ \t]+LINK[ \t]+TYPE[ \t]+OPERATIONAL[ \t]+SETUP[ \t]*$'
 input:
-  # The table ends with a count of the rows above it.
-  ignore:
-    - '^\d+ links listed\.$'
+  # The count of what was listed closes the output and is read as its
+  # end, so a line after it that no rule names is unread rather than
+  # taken for one more row.
+  select:
+    until: '^\d+ links listed\.$'
 parse:
   type: table
   split: whitespace

@@ -1,0 +1,6 @@
+source: captured from go1.26.4 on Linux with LC_ALL=C, go build ./... in the same module, standard error saved to the file
+description: >-
+  Compile errors under a heading, one of them continued on two
+  tab-indented lines that are joined onto its message.
+os: linux
+args: ["build", "./..."]

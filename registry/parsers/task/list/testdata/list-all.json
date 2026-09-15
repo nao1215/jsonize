@@ -1,0 +1,25 @@
+[
+  {
+    "name": "build",
+    "description": "Build the binary into bin/",
+    "aliases": null
+  },
+  {
+    "name": "internal-helper",
+    "description": null,
+    "aliases": null
+  },
+  {
+    "name": "test",
+    "description": "Run unit tests with the race detector",
+    "aliases": [
+      "t",
+      "check"
+    ]
+  },
+  {
+    "name": "release:snapshot",
+    "description": "Make a snapshot release: no publish",
+    "aliases": null
+  }
+]

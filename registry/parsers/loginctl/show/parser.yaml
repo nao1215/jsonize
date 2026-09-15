@@ -36,7 +36,8 @@ detect:
       - '^IdleHint=(?:yes|no)$'
       - '^IdleSinceHintMonotonic=[0-9]+$'
       # Every line is a property.
-      - '\A(?:[A-Za-z]+=[^\n]*(?:\n|\z))+\z'
+      # Every property is a word that opens with a capital.
+      - '\A(?:[A-Z][A-Za-z]*=[^\n]*(?:\n|\z))+\z'
 parse:
   type: kv
   separator: "="

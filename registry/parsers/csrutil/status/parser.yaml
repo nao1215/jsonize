@@ -1,0 +1,28 @@
+# csrutil status prints one sentence saying whether System Integrity
+# Protection is on. enabled is true for "enabled" and false for
+# "disabled".
+#
+# A machine whose protections were changed one by one prints "unknown
+# (Custom Configuration)" and a list of the protections under it, which
+# is not read here, so that output is refused rather than reported as
+# either state.
+format: 1
+command: csrutil
+variant: status
+description: csrutil status System Integrity Protection state on macOS
+metadata:
+  tags: [darwin, security]
+  compatible: [macOS csrutil]
+detect:
+  os: [darwin]
+  args:
+    all: ["status"]
+  signature:
+    all:
+      - '\ASystem Integrity Protection status: (?:enabled|disabled)\.[ \t]*\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\ASystem Integrity Protection status: (?P<enabled>enabled|disabled)\.[ \t]*\z'
+fields:
+  enabled: {type: bool, true_values: [enabled], false_values: [disabled]}

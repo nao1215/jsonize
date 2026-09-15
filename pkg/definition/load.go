@@ -246,12 +246,14 @@ func (v *validator) add(path, format string, args ...any) {
 	v.errs = append(v.errs, &ValidationError{Source: v.source, Path: path, Msg: fmt.Sprintf(format, args...)})
 }
 
-func (v *validator) regex(path, expr string) *regexp.Regexp {
+func (v *validator) regex(path, expr string) *pattern {
 	if len(expr) > MaxRegexLength {
 		v.add(path, "regular expression longer than %d characters", MaxRegexLength)
 		return nil
 	}
-	re, err := regexp.Compile(expr)
+	// The flags regexp.Compile parses with, so that what passes here is
+	// what compiles when the pattern is first matched.
+	parsed, err := syntax.Parse(expr, syntax.Perl)
 	if err != nil {
 		var se *syntax.Error
 		if errors.As(err, &se) {
@@ -261,7 +263,7 @@ func (v *validator) regex(path, expr string) *regexp.Regexp {
 		}
 		return nil
 	}
-	return re
+	return &pattern{expr: expr, names: parsed.CapNames()[1:]}
 }
 
 // validate checks the definition and compiles its regular expressions.
@@ -273,23 +275,40 @@ func (d *Definition) validate() error {
 	if d.Format != CurrentFormat {
 		v.add("format", "must be %d", CurrentFormat)
 	}
-	switch {
-	case d.Command == "":
-		v.add("command", "is required")
-	case !nameRe.MatchString(d.Command):
-		v.add("command", "%q must match %s", d.Command, nameRe)
-	case reservedNames[d.Command]:
-		v.add("command", "%q is a reserved file name on Windows and cannot be used", d.Command)
+	validateName(v, "command", d.Command, nameRe)
+	validateName(v, "variant", d.Variant, variantRe)
+	validateAliases(v, d)
+	validateDetect(v, &d.Detect)
+	for k := range d.Exec.Env {
+		if k == "" || strings.ContainsAny(k, "= \t\n") {
+			v.add("exec.env", "invalid variable name %q", k)
+		}
 	}
-	switch {
-	case d.Variant == "":
-		v.add("variant", "is required")
-	case !variantRe.MatchString(d.Variant):
-		v.add("variant", "%q must match %s", d.Variant, variantRe)
-	case reservedNames[d.Variant]:
-		v.add("variant", "%q is a reserved file name on Windows and cannot be used", d.Variant)
+	validateInput(v, &d.Input)
+	validateParse(v, "parse", &d.Parse, d.Fields, "fields", "")
+	validateFields(v, "fields", d.Fields, 0, d.Parse.Type == TypeKV || d.Parse.Type == TypeINI)
+	if len(v.errs) == 0 {
+		return nil
 	}
-	seenAlias := map[string]bool{}
+	return errors.Join(v.errs...)
+}
+
+// validateName checks the command or the variant a definition is filed
+// under, which is also a directory name on every system jz runs on.
+func validateName(v *validator, key, name string, re *regexp.Regexp) {
+	switch {
+	case name == "":
+		v.add(key, "is required")
+	case !re.MatchString(name):
+		v.add(key, "%q must match %s", name, re)
+	case reservedNames[name]:
+		v.add(key, "%q is a reserved file name on Windows and cannot be used", name)
+	}
+}
+
+// validateAliases checks the other names a definition answers to.
+func validateAliases(v *validator, d *Definition) {
+	seen := map[string]bool{}
 	for i := range d.Aliases {
 		ap := fmt.Sprintf("aliases[%d]", i)
 		name := d.Aliases[i].Name
@@ -300,29 +319,35 @@ func (d *Definition) validate() error {
 			v.add(ap+".name", "%q must match %s", name, nameRe)
 		case name == d.Command:
 			v.add(ap+".name", "%q is the command itself", name)
-		case seenAlias[name]:
+		case seen[name]:
 			v.add(ap+".name", "duplicate alias %q", name)
 		}
-		seenAlias[name] = true
+		seen[name] = true
 		if am := d.Aliases[i].Args; am != nil {
-			for j, a := range append(append(append([]string{}, am.Any...), am.All...), am.None...) {
-				if strings.TrimSpace(a) == "" {
-					v.add(fmt.Sprintf("%s.args[%d]", ap, j), "empty argument")
-				}
-			}
+			validateArgs(v, ap+".args", am)
 		}
 	}
-	for i, os := range d.Detect.OS {
+}
+
+// validateArgs refuses an empty word in an argument filter, which no
+// command line holds and which would match nothing or everything.
+func validateArgs(v *validator, path string, am *ArgsMatch) {
+	for i, a := range append(append(append([]string{}, am.Any...), am.All...), am.None...) {
+		if strings.TrimSpace(a) == "" {
+			v.add(fmt.Sprintf("%s[%d]", path, i), "empty argument")
+		}
+	}
+}
+
+// validateDetect checks the systems, the arguments and the signature.
+func validateDetect(v *validator, d *Detect) {
+	for i, os := range d.OS {
 		if !knownOS[os] {
 			v.add(fmt.Sprintf("detect.os[%d]", i), "unknown operating system %q", os)
 		}
 	}
-	for i, a := range append(append(append([]string{}, d.Detect.Args.Any...), d.Detect.Args.All...), d.Detect.Args.None...) {
-		if strings.TrimSpace(a) == "" {
-			v.add(fmt.Sprintf("detect.args[%d]", i), "empty argument")
-		}
-	}
-	sig := &d.Detect.Signature
+	validateArgs(v, "detect.args", &d.Args)
+	sig := &d.Signature
 	if sig.Window < 0 || sig.Window > MaxSignatureWindow {
 		v.add("detect.signature.window", "must be between 0 and %d", MaxSignatureWindow)
 	}
@@ -331,35 +356,28 @@ func (d *Definition) validate() error {
 	sig.all = compileList(v, "detect.signature.all", sig.All, "(?m)")
 	sig.any = compileList(v, "detect.signature.any", sig.Any, "(?m)")
 	sig.none = compileList(v, "detect.signature.none", sig.None, "(?m)")
-	for k := range d.Exec.Env {
-		if k == "" || strings.ContainsAny(k, "= \t\n") {
-			v.add("exec.env", "invalid variable name %q", k)
-		}
-	}
-	switch d.Input.RecordSeparator {
+}
+
+// validateInput checks what happens to the lines before they are parsed.
+func validateInput(v *validator, in *Input) {
+	switch in.RecordSeparator {
 	case "", RecordNewline, RecordNUL:
 	default:
 		v.add("input.record_separator", "must be newline or nul")
 	}
-	d.Input.ignore = compileList(v, "input.ignore", d.Input.Ignore, "")
-	if d.Input.Fold != "" {
-		d.Input.fold = v.regex("input.fold", d.Input.Fold)
+	in.ignore = compileList(v, "input.ignore", in.Ignore, "")
+	if in.Fold != "" {
+		in.fold = v.regex("input.fold", in.Fold)
 	}
-	validateSelect(v, "input.select", &d.Input.Select)
-	validateParse(v, "parse", &d.Parse, d.Fields, "fields", "")
-	validateFields(v, "fields", d.Fields, 0, d.Parse.Type == TypeKV || d.Parse.Type == TypeINI)
-	if len(v.errs) == 0 {
-		return nil
-	}
-	return errors.Join(v.errs...)
+	validateSelect(v, "input.select", &in.Select)
 }
 
 // compileList compiles each expression with flags prepended.
-func compileList(v *validator, path string, exprs []string, flags string) []*regexp.Regexp {
-	out := make([]*regexp.Regexp, 0, len(exprs))
+func compileList(v *validator, path string, exprs []string, flags string) *patternList {
+	out := &patternList{items: make([]*pattern, 0, len(exprs))}
 	for i, e := range exprs {
 		if re := v.regex(fmt.Sprintf("%s[%d]", path, i), flags+e); re != nil {
-			out = append(out, re)
+			out.items = append(out.items, re)
 		}
 	}
 	return out
@@ -371,11 +389,14 @@ func validateSelect(v *validator, path string, s *Select) {
 		if s.after != nil {
 			// The expression compiled on its own, so it compiles inside a
 			// group too; the flags it may open with stay scoped to it.
-			s.heading = regexp.MustCompile(`\A[ \t]*(?:` + s.After + `)[ \t]*\z`)
+			s.heading = &pattern{expr: `\A[ \t]*(?:` + s.After + `)[ \t]*\z`}
 		}
 	}
 	if s.Until != "" {
 		s.until = v.regex(path+".until", s.Until)
+		if s.until != nil {
+			s.end = &pattern{expr: `\A[ \t]*(?:` + s.Until + `)[ \t]*\z`}
+		}
 	}
 	if s.Skip < 0 {
 		v.add(path+".skip", "must not be negative")
@@ -725,6 +746,7 @@ func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*
 	}
 	groupSet := map[string]bool{}
 	valueSet := map[string]bool{}
+	p.compiled = &patternList{items: make([]*pattern, 0, len(alts))}
 	for i, alt := range alts {
 		ep := key
 		if len(alts) > 1 {
@@ -740,7 +762,7 @@ func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*
 		}
 		groups := namedGroups(re)
 		vals := alternativeValues(v, ep, alt, groups)
-		p.compiled = append(p.compiled, re)
+		p.compiled.items = append(p.compiled.items, re)
 		p.values = append(p.values, vals)
 		if len(groups) == 0 && len(vals) == 0 {
 			v.add(ep, "must contain at least one named group (?P<name>...)")
@@ -946,6 +968,12 @@ func validateStringField(v *validator, path string, f *Field) {
 		if len(u.Sequences) == 0 {
 			v.add(path+".unescape.sequences", "is required: the escapes the format writes and what each stands for")
 		}
+		if u.Quote != "" && utf8.RuneCountInString(u.Quote) != 1 {
+			v.add(path+".unescape.quote", "is one character, the one the format puts around a value it escaped")
+		}
+		if u.Quote != "" && u.When != "" {
+			v.add(path+".unescape", "quote and when both say when a value is decoded; write one of them")
+		}
 		var esc byte
 		for k := range u.Sequences {
 			if len(k) < 2 {
@@ -1020,7 +1048,7 @@ func validateArrayField(v *validator, path string, f *Field, depth int) {
 		f.splitRegex = v.regex(path+".split_regex", f.SplitRegex)
 		// A separator that can be nothing splits between every character,
 		// so "abc def" would read as a list of its letters.
-		if f.splitRegex != nil && f.splitRegex.MatchString("") {
+		if f.splitRegex != nil && f.splitRegex.regexp().MatchString("") {
 			v.add(path+".split_regex", "matches the empty string, which splits a value between every character; write a separator that is at least one character (`[ \\t]+`, not `[ \\t]*`)")
 		}
 	}
@@ -1111,9 +1139,9 @@ func validateFieldKeys(v *validator, path string, f *Field) {
 	}
 }
 
-func namedGroups(re *regexp.Regexp) []string {
+func namedGroups(re *pattern) []string {
 	var out []string
-	for _, n := range re.SubexpNames() {
+	for _, n := range re.names {
 		if n != "" {
 			out = append(out, n)
 		}

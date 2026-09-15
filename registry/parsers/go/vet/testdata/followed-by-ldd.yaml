@@ -1,0 +1,4 @@
+source: the definition's own type-error-go1.26.txt followed by ldd/posix's coreutils-ls.txt, joined for this case
+description: the libraries ldd lists after the problems are indented by a tab like a continued message, and are refused by their load addresses rather than joined onto the last problem
+args: ["vet", "./..."]
+expect_error: does not describe this input

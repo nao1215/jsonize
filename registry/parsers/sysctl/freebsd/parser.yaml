@@ -1,5 +1,6 @@
 # FreeBSD sysctl prints "name: value", one variable a line, where Linux
-# prints "name = value". Values keep their text: many are structures the
+# prints "name = value". macOS keeps the BSD command and prints the same
+# lines, so this definition reads both. Values keep their text: many are structures the
 # kernel formats for reading (vm.loadavg is "{ 0.07 0.02 0.01 }"), and a
 # number here is not more useful than the string that was printed.
 #
@@ -16,14 +17,14 @@
 format: 1
 command: sysctl
 variant: freebsd
-description: 'FreeBSD sysctl KEY..., "name: value" lines'
+description: 'FreeBSD and macOS sysctl KEY..., "name: value" lines'
 metadata:
-  tags: [freebsd, bsd, kernel]
-  compatible: [FreeBSD sysctl]
+  tags: [freebsd, darwin, bsd, kernel]
+  compatible: [FreeBSD sysctl, macOS sysctl]
   references:
     - https://man.freebsd.org/cgi/man.cgi?query=sysctl&sektion=8
 detect:
-  os: [freebsd]
+  os: [freebsd, darwin]
   args:
     none: ["-d", "-n", "-N", "-e", "-o", "-x", "-h", "-b", "-t"]
   signature:

@@ -336,3 +336,285 @@ scenarios:
           exit_code: 0
           stdout:
             equals: '[{"name":"a b.txt"},{"name":"日本語.txt"}]'
+
+  - name: sw_vers, vm_stat, memory_pressure and system_profiler agree with sysctl and uname
+    only: {os: darwin}
+    steps:
+      - run:
+          command: sw_vers -productVersion
+      - store:
+          name: version
+          from:
+            stdout: {trim: true}
+      - run:
+          command: sw_vers -buildVersion
+      - store:
+          name: build
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run --explain sw_vers
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sw_vers/darwin from embedded"
+          stdout:
+            json:
+              - { path: "$.product_version", equals: "${version}" }
+              - { path: "$.build_version", equals: "${build}" }
+      # sw_vers with one option prints the value alone, which is not the
+      # three labelled lines.
+      - run:
+          command: jz run --parser sw_vers -- sw_vers -productVersion
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          command: sysctl -n vm.pagesize
+      - store:
+          name: pagesize
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run --explain vm_stat
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose vm_stat/darwin from embedded"
+          stdout:
+            json:
+              - { path: "$.page_size", equals: "${pagesize}" }
+              - { path: "$.pages_free", gt: 0 }
+      - run:
+          command: sysctl -n hw.memsize
+      - store:
+          name: memsize
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run --explain memory_pressure
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose memory_pressure/darwin from embedded"
+          stdout:
+            json:
+              - { path: "$.memory", equals: "${memsize}" }
+              - { path: "$.page_size", equals: "${pagesize}" }
+      - run:
+          command: uname -r
+      - store:
+          name: release
+          from:
+            stdout: {trim: true}
+      - run:
+          command: sysctl -n hw.model
+      - store:
+          name: model
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run --explain system_profiler SPSoftwareDataType SPHardwareDataType
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose system_profiler/data-type from embedded"
+          stdout:
+            json:
+              - { path: "$[0].label", equals: Software }
+              - { path: "$[0].children[0].children[?(@.label=='Kernel Version')].value", equals: "Darwin ${release}" }
+              - { path: "$[1].label", equals: Hardware }
+              - { path: "$[1].children[0].children[?(@.label=='Model Identifier')].value", equals: "${model}" }
+      # -json is the machine's own format and is not this definition's.
+      - run:
+          command: jz run --parser system_profiler -- system_profiler -json SPSoftwareDataType
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: netstat, networksetup, scutil, diskutil, launchctl and pmset land on their macOS definitions
+    only: {os: darwin}
+    steps:
+      - run:
+          command: jz run --explain netstat -i
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose netstat/darwin-interface from embedded"
+          stdout:
+            json:
+              - { path: "$[?(@.name=='lo0' && @.network=='127')].address", equals: localhost }
+              - { path: "$[?(@.name=='lo0' && @.network=='127')].mtu", equals: 16384 }
+      - run:
+          command: jz run --explain netstat -rn
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose netstat/freebsd-routing from embedded"
+          stdout:
+            json: { path: "$[?(@.family.name=='Internet')].routes[?(@.destination=='127.0.0.1')].netif", equals: lo0 }
+      - run:
+          shell: true
+          command: ifconfig en0 ether
+      - store:
+          name: mac
+          from:
+            stdout: {matches: 'ether ([0-9a-f:]{17})'}
+      - run:
+          command: jz run --explain networksetup -listallhardwareports
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose networksetup/hardware-ports from embedded"
+          stdout:
+            json: { path: "$[?(@.device=='en0')].ethernet_address", equals: "${mac}" }
+      - run:
+          command: jz run --explain scutil --dns
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose scutil/dns from embedded"
+          stdout:
+            json: { path: "$.resolvers[0].number", equals: 1 }
+      - run:
+          command: jz run --explain diskutil list
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose diskutil/list from embedded"
+          stdout:
+            json:
+              - { path: "$[0].disk.device", equals: /dev/disk0 }
+              - { path: "$[0].partitions[0].identifier", equals: disk0 }
+      - run:
+          command: jz run --explain launchctl list
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose launchctl/list from embedded"
+          stdout:
+            json: { path: "$[0].label", matches: '^\S+$' }
+      - run:
+          command: jz run --explain pmset -g
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose pmset/settings from embedded"
+          stdout:
+            json: { path: "$.currently_in_use[?(@.name=='sleep')].value", matches: '^[0-9]+$' }
+      # pmset -g batt prints the power source, another format.
+      - run:
+          command: jz run pmset -g batt
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: top, otool, lipo, shasum and the security status commands land on their macOS definitions
+    only: {os: darwin}
+    steps:
+      - run:
+          command: jz run --explain top -l 1 -n 5
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose top/darwin from embedded"
+          stdout:
+            json:
+              - { path: "$.summary.processes", gt: 0 }
+              - { path: "$.processes", length: 5 }
+      - run:
+          command: jz run --explain otool -L /bin/ls
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose otool/libraries from embedded"
+          stdout:
+            json:
+              - { path: "$[0].file.name", equals: /bin/ls }
+              - { path: "$[0].libraries[?(@.path=='/usr/lib/libSystem.B.dylib')].compatibility_version", equals: 1.0.0 }
+      # /bin/ls ships as a universal file, which is what lipo -info reads.
+      - run:
+          command: jz run --explain lipo -info /bin/ls
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose lipo/info from embedded"
+          stdout:
+            json: { path: "$[0].file", equals: /bin/ls }
+      - fixture:
+          file: hello.txt
+          content: "hello\n"
+      - run:
+          command: jz run --explain shasum -a 256 ${workdir}/hello.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sha256sum/posix from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].checksum", equals: 5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03 }
+      - run:
+          command: jz run --explain csrutil status
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose csrutil/status from embedded"
+      - run:
+          command: jz run --explain spctl --status
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose spctl/status from embedded"
+      - run:
+          command: jz run --explain fdesetup status
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose fdesetup/status from embedded"
+
+  - name: sysctl and lsof land on the definitions they share with FreeBSD and Linux, and ls -le is refused
+    only: {os: darwin}
+    steps:
+      - run:
+          command: sysctl -n hw.ncpu
+      - store:
+          name: ncpu
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run --explain sysctl kern.ostype hw.ncpu
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sysctl/freebsd from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[?(@.name=='kern.ostype')].value", equals: Darwin }
+              - { path: "$[?(@.name=='hw.ncpu')].value", equals: "${ncpu}" }
+      # -n prints the values alone, which no name can be told from.
+      - run:
+          command: jz run sysctl -n hw.ncpu
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      # The runner keeps connections open to GitHub while a job runs.
+      - run:
+          command: jz run --explain lsof -i -n -P
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose lsof/linux from embedded"
+          stdout:
+            json:
+              - { path: "$[0].pid", gt: 0 }
+              - { path: "$[0].type", matches: '^IPv[46]$' }
+      # -e prints each access control list under its entry.
+      - run:
+          command: jz run ls -le /Users
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: "excluded by the argument -e"

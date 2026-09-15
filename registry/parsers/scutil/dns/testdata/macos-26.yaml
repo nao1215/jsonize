@@ -1,0 +1,4 @@
+description: a resolver on the interface, the mDNS resolvers for local domains, and the scoped copy of the first
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C scutil --dns; the runner's network 192.168.64 replaced by 192.0.2
+os: darwin
+args: [--dns]

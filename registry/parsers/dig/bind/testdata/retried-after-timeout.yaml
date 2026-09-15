@@ -1,0 +1,4 @@
+source: BIND dig 9.20.24 on Ubuntu 26.04, LC_ALL=C dig @127.0.0.1 -p 55353 +timeout=1 +tries=2 example.com A, through a local UDP relay that dropped the first query and passed the second to a public resolver
+description: the first try timed out and the second was answered; dig reports the timeout above the banner, which is read into transport, and the reply is read whole
+os: linux
+args: ["@127.0.0.1", "-p", "55353", "+timeout=1", "+tries=2", "example.com", "A"]

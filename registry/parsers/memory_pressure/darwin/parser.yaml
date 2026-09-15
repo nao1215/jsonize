@@ -1,0 +1,53 @@
+# memory_pressure with no option prints how much memory the machine has,
+# then the page counters in five groups (Stats, Swap I/O, Page Q counts,
+# Compressor Stats, File I/O), and last the share of memory that is free.
+# Every line of it is a fixed label printed in a fixed order, so the
+# whole output is read as one object with a key per counter; the group
+# headings name no value and are not keys. A line that is not one of
+# those labels, such as another command's output joined after it, is
+# refused rather than read.
+#
+# memory is in bytes and pages is the same amount in pages. The counters
+# are numbers of pages, or of events for the swap, compression and paging
+# counters, and free_percentage is the whole percentage printed.
+#
+# -l simulates a pressure level and prints a running account instead,
+# which the signature does not describe.
+format: 1
+command: memory_pressure
+variant: darwin
+description: memory_pressure page counters and free memory percentage on macOS
+metadata:
+  tags: [darwin, memory, system]
+  compatible: [macOS memory_pressure]
+detect:
+  os: [darwin]
+  args:
+    none: ["-l"]
+  signature:
+    all:
+      - '\AThe system has \d+ \(\d+ pages with a page size of \d+\)\.[ \t]*\n(?:[ \t]*\n)*Stats:[ \t]*\nPages free: \d+[ \t]*\nPages purgeable: \d+[ \t]*$'
+parse:
+  type: regex
+  each: input
+  pattern: '\AThe system has (?P<memory>\d+) \((?P<pages>\d+) pages with a page size of (?P<page_size>\d+)\)\.[ \t]*\nStats:[ \t]*\nPages free: (?P<pages_free>\d+)[ \t]*\nPages purgeable: (?P<pages_purgeable>\d+)[ \t]*\nPages purged: (?P<pages_purged>\d+)[ \t]*\nSwap I/O:[ \t]*\nSwapins: (?P<swapins>\d+)[ \t]*\nSwapouts: (?P<swapouts>\d+)[ \t]*\nPage Q counts:[ \t]*\nPages active: (?P<pages_active>\d+)[ \t]*\nPages inactive: (?P<pages_inactive>\d+)[ \t]*\nPages speculative: (?P<pages_speculative>\d+)[ \t]*\nPages throttled: (?P<pages_throttled>\d+)[ \t]*\nPages wired down: (?P<pages_wired_down>\d+)[ \t]*\nCompressor Stats:[ \t]*\nPages used by compressor: (?P<pages_used_by_compressor>\d+)[ \t]*\nPages decompressed: (?P<pages_decompressed>\d+)[ \t]*\nPages compressed: (?P<pages_compressed>\d+)[ \t]*\nFile I/O:[ \t]*\nPageins: (?P<pageins>\d+)[ \t]*\nPageouts: (?P<pageouts>\d+)[ \t]*\nSystem-wide memory free percentage: (?P<free_percentage>\d+)%[ \t]*\z'
+fields:
+  memory: {type: int, required: true}
+  pages: {type: int, required: true}
+  page_size: {type: int, required: true}
+  pages_free: {type: int, required: true}
+  pages_purgeable: {type: int, required: true}
+  pages_purged: {type: int, required: true}
+  swapins: {type: int, required: true}
+  swapouts: {type: int, required: true}
+  pages_active: {type: int, required: true}
+  pages_inactive: {type: int, required: true}
+  pages_speculative: {type: int, required: true}
+  pages_throttled: {type: int, required: true}
+  pages_wired_down: {type: int, required: true}
+  pages_used_by_compressor: {type: int, required: true}
+  pages_decompressed: {type: int, required: true}
+  pages_compressed: {type: int, required: true}
+  pageins: {type: int, required: true}
+  pageouts: {type: int, required: true}
+  free_percentage: {type: int, required: true}

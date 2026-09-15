@@ -1,0 +1,4 @@
+source: captured from actionlint 1.7.12 on Linux with LC_ALL=C on two workflows written for the capture
+description: A file whose name holds a space, and a file actionlint cannot parse as YAML.
+os: linux
+args: [".github/workflows/release draft.yaml", ".github/workflows/yamlerr.yml"]

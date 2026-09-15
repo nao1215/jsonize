@@ -1,0 +1,11 @@
+System-wide power settings:
+Currently in use:
+ powernap             1
+ sleep                0 (sleep prevented by addonsd, powerd)
+ Sleep On Power Button 1
+ ttyskeepawake        1
+ tcpkeepalive         1
+ disksleep            0
+ standby              0
+ displaysleep         0 (display sleep prevented by addonsd)
+14:02  up 3 days,  4:11, 2 users, load averages: 1.52 1.68 1.71

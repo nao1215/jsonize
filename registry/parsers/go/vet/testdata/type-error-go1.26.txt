@@ -1,0 +1,6 @@
+# example.com/lintdemo/broken
+vet: broken/broken.go:4:9: cannot use "not an int" (untyped string constant) as int value in return statement
+pkg/sub/fmt.go:6:14: fmt.Printf format %s has arg n of wrong type int
+pkg/sub/fmt.go:7:2: fmt.Println arg list ends with redundant newline
+main.go:12:2: self-assignment of x
+main.go:10:20: fmt.Printf format %d has arg name of wrong type string

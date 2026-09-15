@@ -1,0 +1,6 @@
+source: captured from golangci-lint 2.13.2 on Linux with LC_ALL=C, golangci-lint run --enable-only revive,dupword,unused,godot ./... in the same module
+description: >-
+  Source lines with no indentation, so the caret stands at the left
+  edge, and an issue about two source lines, which has no caret.
+os: linux
+args: ["run", "--enable-only", "revive,dupword,unused,godot", "./..."]

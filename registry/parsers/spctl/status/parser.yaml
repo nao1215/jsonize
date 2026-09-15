@@ -1,0 +1,23 @@
+# spctl --status prints whether Gatekeeper assesses what is opened:
+# "assessments enabled" or "assessments disabled". enabled is true for
+# the first and false for the second.
+format: 1
+command: spctl
+variant: status
+description: spctl --status Gatekeeper assessment state on macOS
+metadata:
+  tags: [darwin, security]
+  compatible: [macOS spctl]
+detect:
+  os: [darwin]
+  args:
+    any: ["--status"]
+  signature:
+    all:
+      - '\Aassessments (?:enabled|disabled)[ \t]*\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\Aassessments (?P<enabled>enabled|disabled)[ \t]*\z'
+fields:
+  enabled: {type: bool, true_values: [enabled], false_values: [disabled]}

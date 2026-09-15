@@ -1,0 +1,20 @@
+{
+  "uptime": {
+    "time": "2:37",
+    "uptime": 240,
+    "users": 1,
+    "load_1m": 9.28,
+    "load_5m": 18.3,
+    "load_15m": 10.19
+  },
+  "users": [
+    {
+      "user": "user",
+      "tty": "console",
+      "from": null,
+      "login_at": "2:33",
+      "idle": "4",
+      "what": null
+    }
+  ]
+}

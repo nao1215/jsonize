@@ -1,0 +1,11 @@
+broken.sh:3:3: note: The mentioned syntax error was in this simple command. [SC1009]
+broken.sh:3:8: error: Couldn't parse this double quoted string. Fix to allow more checks. [SC1073]
+broken.sh:4:1: error: Expected end of double quoted string. Fix any mentioned problems and try again. [SC1072]
+Filesystem      1K-blocks       Used Available Use% Mounted on
+tmpfs            12882672       5928  12876744   1% /run
+/dev/nvme1n1p2 1920641288 1671343408 151660916  92% /
+tmpfs            32206676     976032  31230644   4% /dev/shm
+efivarfs              128         48        76  39% /sys/firmware/efi/efivars
+none                 1024          0      1024   0% /run/credentials/systemd-journald.service
+none                 1024          0      1024   0% /run/credentials/systemd-resolved.service
+/dev/nvme0n1p1 1967874000 1029562020 838275732  56% /media/alice/2nd

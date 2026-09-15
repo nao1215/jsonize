@@ -29,8 +29,11 @@ detect:
       - '\AWHO[ \t]'
       - '^WHO[ \t]+UID[ \t]+USER[ \t]+PID[ \t]+COMM[ \t]+WHAT[ \t]+WHY[ \t]+MODE[ \t]*$'
 input:
-  ignore:
-    - '^[0-9]+ inhibitors listed\.$'
+  # The count of what was listed closes the output and is read as its
+  # end, so a line after it that no rule names is unread rather than
+  # taken for one more row.
+  select:
+    until: '^[0-9]+ inhibitors listed\.$'
 parse:
   type: table
   split: aligned

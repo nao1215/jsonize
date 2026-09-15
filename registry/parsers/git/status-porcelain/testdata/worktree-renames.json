@@ -2,8 +2,8 @@
   {
     "index": null,
     "worktree": "R",
-    "path": "\"a -> b\"",
-    "renamed_to": "\"c -> d\""
+    "path": "a -> b",
+    "renamed_to": "c -> d"
   },
   {
     "index": null,

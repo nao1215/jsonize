@@ -12,7 +12,7 @@ Linux one.
 
 | Spec | Runs on | What it pins |
 |------|---------|--------------|
-| `detect` | all | identification from a pipe or a file, `--extract`, `--raw`, `--explain` and `--explain=json`, the path of a file naming its definition; ping and stat saved on macOS and FreeBSD, HTTP/2 and HTTP/3 headers, `ls/names` read only when named, a csv without a header line |
+| `detect` | all | identification from a pipe or a file, `--extract`, `--raw`, `--explain` and `--explain=json`, the path of a file naming its definition; ping and stat saved on macOS and FreeBSD, HTTP/2 and HTTP/3 headers, `ls/names` read only when named, a csv without a header line; `kubectl get pods`, `go test`, `gzip -l`, `eza -l`, `cargo tree` and `systemd-cgls` with padded process ids |
 | `errors` | all | every refusal: unidentified, ambiguous, mismatched, oversized input, text the definition did not read, removed options, another command's output |
 | `misdetect` | all | real output of one command is not read by another definition, with or without `--parser` |
 | `registry` | all | `jz list` (with `--schema`), `jz test`, user and `JSONIZE_REGISTRY_PATH` registries, layering, broken definitions |
@@ -21,8 +21,8 @@ Linux one.
 | `stream` | all | `--stream` writes one document per record and keeps what was written when a later record fails; a composite part by part; `--yaml` alone and with `--stream` |
 | `http` | all, HTTP/2 not on Windows | `jz run curl -I` and `-D -` against `e2ehelper serve` on 127.0.0.1: redirects, interim responses, a proxy's CONNECT, repeated headers |
 | `completion` | all, zsh not on Windows | the bash and zsh scripts loaded into the real shell: subcommands, options, parsers of every registry, variants, paths, nothing run |
-| `process` | all, part POSIX | what `jz run` does when the reader leaves, when it is interrupted, when `--timeout` passes: no hang, no process left behind, the status the shell sees |
-| `exec` | POSIX | `jz run` with a shell script standing in for the command: status mirroring, signals, `--timeout`, argument boundary |
+| `process` | all, part POSIX | what `jz run` does when the reader leaves, when it is interrupted, when `--timeout` passes: no hang, no process left behind, the status the shell sees; Ctrl-C typed at a terminal (a pty) reaching the command once |
+| `exec` | POSIX, git on all | `jz run` with a shell script standing in for the command: status mirroring, signals, `--timeout`, argument boundary; and `jz run git log --oneline` in a repository whose configuration decorates the log, on every system |
 | `exec_linux` | Linux | the host's real coreutils, procps, util-linux, iproute2, sysstat, systemd and BusyBox, on files, processes and sockets the scenarios make themselves; hardware listings on captured output |
 | `exec_darwin` | macOS | the real BSD commands land on the `bsd` definitions and the GNU shape is refused, ping, ping6 and stat included |
 | `exec_freebsd` | FreeBSD | the real commands land where a FreeBSD machine showed they do: `ps aux` and `mount` on the `bsd` definitions, `id`, `du` and `wc` on the POSIX ones, and the summary line macOS shares with no other BSD refused rather than cut |
@@ -59,7 +59,8 @@ lacks:
 | `busybox` | `busybox` | `exec_linux` |
 | `zsh` | `zsh` | `completion` (macOS ships it; Windows has none, and those scenarios say so) |
 | `bash`, `curl` | on every runner, Windows through Git | `completion`, `http`, and bash for the connected socket in `exec_linux` |
-| `df`, `free`, `ps`, `uptime`, `id`, `env`, `mount`, `du`, `stat`, `lscpu`, `lsmod`, `prlimit`, `who`, `wc`, `ls`, `ln`, `md5sum`, `sha256sum`, `tar`, `git` | on every runner | `exec_linux` |
+| `git` | on every runner; the FreeBSD machine installs it | `exec`, `exec_linux` |
+| `df`, `free`, `ps`, `uptime`, `id`, `env`, `mount`, `du`, `stat`, `lscpu`, `lsmod`, `prlimit`, `who`, `wc`, `ls`, `ln`, `md5sum`, `sha256sum`, `tar`, `gzip` | on every runner | `exec_linux` |
 | `ip`, `ss`, `dpkg`, `apt-cache` | on every runner | `exec_linux` |
 | a running systemd | the runner boots with it; a container usually does not | `exec_linux` (`systemctl`) |
 | `ipconfig`, `systeminfo`, `hostname`, `powershell` | part of Windows | `exec_windows` |

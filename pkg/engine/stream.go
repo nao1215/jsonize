@@ -401,7 +401,8 @@ func (s *streamer) feedFolded(l line) error {
 // feedSelected applies input.select in the order after, until, skip,
 // limit, which is the order applySelect walks a slice in. A line the
 // selection leaves out is unread, the way it is in a whole document,
-// except for the heading select.after states in full.
+// except for the heading select.after states in full and the closing line
+// select.until states in full.
 func (s *streamer) feedSelected(l line) error {
 	if s.done {
 		return s.leftOut(l)
@@ -417,14 +418,19 @@ func (s *streamer) feedSelected(l line) error {
 	}
 	if re := s.sel.CompiledUntil(); re != nil && re.MatchString(l.text) {
 		s.done = true
+		if s.sel.End(l.text) {
+			return nil
+		}
 		return s.leftOut(l)
 	}
 	if s.skipped < s.sel.Skip {
 		s.skipped++
 		return s.leftOut(l)
 	}
+	// Past the limit the selection stays open for until: the whole
+	// document looks for the closing line before it counts the limit, so
+	// a closing line after the last line taken is still read.
 	if s.sel.Limit > 0 && s.taken >= s.sel.Limit {
-		s.done = true
 		return s.leftOut(l)
 	}
 	s.taken++

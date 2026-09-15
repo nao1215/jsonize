@@ -17,6 +17,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"sync"
+	"unicode/utf8"
 
 	"github.com/nao1215/jsonize/internal/yaml"
 )
@@ -231,7 +233,7 @@ type Signature struct {
 	None   []string `yaml:"none,omitempty"`
 	Window int      `yaml:"window,omitempty"`
 
-	all, any, none []*regexp.Regexp
+	all, any, none *patternList
 }
 
 // DefaultSignatureWindow is the number of leading lines a signature sees.
@@ -248,7 +250,7 @@ func (s Signature) IsZero() bool {
 
 // Compiled returns the compiled expressions.
 func (s *Signature) Compiled() (all, anyOf, none []*regexp.Regexp) {
-	return s.all, s.any, s.none
+	return s.all.regexps(), s.any.regexps(), s.none.regexps()
 }
 
 // Exec configures how jsonize runs the command in exec mode.
@@ -282,8 +284,8 @@ type Input struct {
 	// Select narrows the lines handed to the parser.
 	Select Select `yaml:"select,omitempty"`
 
-	ignore []*regexp.Regexp
-	fold   *regexp.Regexp
+	ignore *patternList
+	fold   *pattern
 }
 
 // Separator returns the effective record separator byte.
@@ -300,11 +302,11 @@ func (in *Input) SkipBlankLines() bool {
 }
 
 // IgnorePatterns returns the compiled ignore expressions.
-func (in *Input) IgnorePatterns() []*regexp.Regexp { return in.ignore }
+func (in *Input) IgnorePatterns() []*regexp.Regexp { return in.ignore.regexps() }
 
 // FoldPattern reports the continuation expression, nil when the format
 // has no wrapped lines.
-func (in *Input) FoldPattern() *regexp.Regexp { return in.fold }
+func (in *Input) FoldPattern() *regexp.Regexp { return in.fold.regexp() }
 
 // Select picks a contiguous range of lines. The steps are applied in the
 // order after, until, skip, limit.
@@ -318,12 +320,16 @@ type Select struct {
 	// Limit keeps at most this many lines (0 = unlimited).
 	Limit int `yaml:"limit,omitempty"`
 
-	after, until *regexp.Regexp
+	after, until *pattern
 	// heading is after, required to cover the whole of the line it
 	// matches. A heading the expression describes completely is a line the
 	// definition has read; one it only opens with leaves the rest of the
 	// line unaccounted for.
-	heading *regexp.Regexp
+	heading *pattern
+	// end is until, required to cover the whole of the line it matches,
+	// for the same reason: at the top level the line that closes the
+	// selection is one nothing else is given.
+	end *pattern
 }
 
 // IsZero reports whether the selection keeps every line.
@@ -332,18 +338,26 @@ func (s Select) IsZero() bool {
 }
 
 // CompiledAfter returns the compiled after expression (may be nil).
-func (s *Select) CompiledAfter() *regexp.Regexp { return s.after }
+func (s *Select) CompiledAfter() *regexp.Regexp { return s.after.regexp() }
 
 // Heading reports whether text is a line that select.after describes
 // from end to end, surrounding whitespace aside. Such a line is the
 // heading of the region the selection opens, and it counts as read by the
 // parser that reads the region.
 func (s *Select) Heading(text string) bool {
-	return s.heading != nil && s.heading.MatchString(text)
+	return s.heading != nil && s.heading.regexp().MatchString(text)
 }
 
 // CompiledUntil returns the compiled until expression (may be nil).
-func (s *Select) CompiledUntil() *regexp.Regexp { return s.until }
+func (s *Select) CompiledUntil() *regexp.Regexp { return s.until.regexp() }
+
+// End reports whether text is a line that select.until describes from end
+// to end, surrounding whitespace aside. At the top level such a line
+// closes the input the parser reads, and it counts as read; a part's
+// until line is left for its siblings.
+func (s *Select) End(text string) bool {
+	return s.end != nil && s.end.regexp().MatchString(text)
+}
 
 // Parse describes the extraction algorithm. Only the keys relevant to Type
 // may be set.
@@ -413,12 +427,12 @@ type Parse struct {
 	// yields rather than an object holding it under a part's name.
 	Record *Record `yaml:"record,omitempty"`
 
-	compiled []*regexp.Regexp
+	compiled *patternList
 	// values are the fixed values each compiled pattern adds, in the
 	// same order.
 	values [][]Value
-	start  *regexp.Regexp
-	root   *regexp.Regexp
+	start  *pattern
+	root   *pattern
 	// groups are the named capture groups of every pattern, in order and
 	// without duplicates.
 	groups []string
@@ -447,15 +461,15 @@ func (p *Parse) Streams() bool {
 }
 
 // CompiledStart returns the compiled expression that opens a record.
-func (p *Parse) CompiledStart() *regexp.Regexp { return p.start }
+func (p *Parse) CompiledStart() *regexp.Regexp { return p.start.regexp() }
 
 // CompiledRoot returns the compiled expression a tree's top-level lines
 // have to match, or nil when the definition states none.
-func (p *Parse) CompiledRoot() *regexp.Regexp { return p.root }
+func (p *Parse) CompiledRoot() *regexp.Regexp { return p.root.regexp() }
 
 // CompiledPatterns returns the compiled expressions of a regex parser in
 // the order they are tried.
-func (p *Parse) CompiledPatterns() []*regexp.Regexp { return p.compiled }
+func (p *Parse) CompiledPatterns() []*regexp.Regexp { return p.compiled.regexps() }
 
 // PatternValues returns the fixed values the i-th compiled pattern adds
 // to what it reads.
@@ -611,11 +625,11 @@ type Part struct {
 	Parse  Parse             `yaml:"parse"`
 	Fields map[string]*Field `yaml:"fields,omitempty"`
 
-	ignore []*regexp.Regexp
+	ignore *patternList
 }
 
 // IgnorePatterns returns the compiled expressions of a part's ignore list.
-func (p *Part) IgnorePatterns() []*regexp.Regexp { return p.ignore }
+func (p *Part) IgnorePatterns() []*regexp.Regexp { return p.ignore.regexps() }
 
 // Field describes how one extracted value is converted.
 type Field struct {
@@ -670,8 +684,8 @@ type Field struct {
 	// lists.
 	Unescape *Unescape `yaml:"unescape,omitempty"`
 
-	splitRegex *regexp.Regexp
-	regex      *regexp.Regexp
+	splitRegex *pattern
+	regex      *pattern
 	groups     []string
 }
 
@@ -685,14 +699,31 @@ type Unescape struct {
 	// whose name it escaped with a backslash in front of the checksum,
 	// and a line without it holds the name as it is.
 	When string `yaml:"when,omitempty"`
+	// Quote is the character a format puts around a value it escaped:
+	// git writes a path holding a byte it will not print in double
+	// quotes. A value between two of them has the quotes removed and is
+	// decoded; any other value is kept as it is. It is the other way to
+	// say that the text declares the escaping, beside When.
+	Quote string `yaml:"quote,omitempty"`
+	// Octal reads the escape character and three octal digits as the byte
+	// they name ("\346"), which is how git and getfacl write a byte they
+	// will not print. The bytes a value decodes to have to be UTF-8 text.
+	Octal bool `yaml:"octal,omitempty"`
 	// Sequences maps each escape, as it is written, to the text it
 	// stands for.
 	Sequences map[string]string `yaml:"sequences"`
 }
 
 // Decode replaces each escape in s. It reports false when s holds the
-// escape character where no listed escape begins.
+// escape character where no listed escape begins, or decodes to bytes
+// that are not UTF-8.
 func (u *Unescape) Decode(s string) (string, bool) {
+	if u.Quote != "" {
+		if len(s) < 2*len(u.Quote) || !strings.HasPrefix(s, u.Quote) || !strings.HasSuffix(s, u.Quote) {
+			return s, true
+		}
+		s = s[len(u.Quote) : len(s)-len(u.Quote)]
+	}
 	var esc byte
 	for k := range u.Sequences {
 		esc = k[0]
@@ -714,14 +745,26 @@ func (u *Unescape) Decode(s string) (string, bool) {
 				best = k
 			}
 		}
-		if best == "" {
-			return "", false
+		if best != "" {
+			b.WriteString(u.Sequences[best])
+			i += len(best)
+			continue
 		}
-		b.WriteString(u.Sequences[best])
-		i += len(best)
+		if u.Octal && i+3 < len(s) && isOctal(s[i+1]) && isOctal(s[i+2]) && isOctal(s[i+3]) && s[i+1] <= '3' {
+			b.WriteByte((s[i+1]-'0')<<6 | (s[i+2]-'0')<<3 | (s[i+3] - '0'))
+			i += 4
+			continue
+		}
+		return "", false
 	}
-	return b.String(), true
+	out := b.String()
+	if u.Octal && !utf8.ValidString(out) {
+		return "", false
+	}
+	return out, true
 }
+
+func isOctal(c byte) bool { return c >= '0' && c <= '7' }
 
 // EffectiveType returns the type, defaulting to string.
 func (f *Field) EffectiveType() string {
@@ -732,10 +775,10 @@ func (f *Field) EffectiveType() string {
 }
 
 // CompiledSplit returns the compiled split_regex (may be nil).
-func (f *Field) CompiledSplit() *regexp.Regexp { return f.splitRegex }
+func (f *Field) CompiledSplit() *regexp.Regexp { return f.splitRegex.regexp() }
 
 // CompiledRegex returns the compiled object regex (may be nil).
-func (f *Field) CompiledRegex() *regexp.Regexp { return f.regex }
+func (f *Field) CompiledRegex() *regexp.Regexp { return f.regex.regexp() }
 
 // Group returns the named group of a string field's regex, the part of
 // the value that is kept.
@@ -786,4 +829,51 @@ func NormalizeName(s string) string {
 		out += "_percent"
 	}
 	return out
+}
+
+// pattern is a regular expression whose syntax was checked when the
+// definition was loaded, and whose program is built the first time it is
+// matched. A registry holds hundreds of definitions and a run reads with
+// one, so building the programs of the rest when they are loaded is most
+// of what loading costs and work that nothing uses. The check at load is
+// the whole of what can fail: Go's regexp does not fail to build a
+// program for an expression it has parsed.
+type pattern struct {
+	expr string
+	// names are the names of the capture groups in order, "" for a group
+	// that has none, as SubexpNames returns them without the whole match.
+	names []string
+	once  sync.Once
+	re    *regexp.Regexp
+}
+
+// regexp returns the compiled expression, building it on the first call.
+// A nil pattern, an expression the definition does not state, is nil.
+func (p *pattern) regexp() *regexp.Regexp {
+	if p == nil {
+		return nil
+	}
+	p.once.Do(func() { p.re = regexp.MustCompile(p.expr) })
+	return p.re
+}
+
+// patternList is a list of patterns handed out as compiled expressions,
+// built together the first time the list is asked for.
+type patternList struct {
+	items []*pattern
+	once  sync.Once
+	res   []*regexp.Regexp
+}
+
+func (l *patternList) regexps() []*regexp.Regexp {
+	if l == nil {
+		return nil
+	}
+	l.once.Do(func() {
+		l.res = make([]*regexp.Regexp, len(l.items))
+		for i, p := range l.items {
+			l.res[i] = p.regexp()
+		}
+	})
+	return l.res
 }

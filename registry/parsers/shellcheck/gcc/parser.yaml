@@ -1,0 +1,41 @@
+# `shellcheck -f gcc` prints one line per finding in the form gcc prints
+# a diagnostic: the file, the line and the column, the severity, the
+# message, and the check's code in brackets. shellcheck has four levels
+# of its own and this format writes them as gcc's three words: error and
+# warning as they are, info and style both as note, so the severity is
+# one of those three words and the finer level is not in the text.
+#
+# The file is everything before the first `:line:column: ` that is
+# followed by a severity, so a name with a space in it is read whole and
+# a Windows drive letter's colon (`C:\x.sh:3:1:`) stays in the path.
+#
+# A severity word and a message are what gcc and clang print too, and
+# what sets this one apart is the SC code closing every line, which the
+# signature asks of every line in the window; gcc closes a warning with
+# the option that enables it (`[-Wformat=]`), which is not this. A run
+# with nothing to report prints nothing, which jz refuses as text it
+# cannot read. The default tty format, with source excerpts, and the
+# other formats are not this definition's.
+format: 1
+command: shellcheck
+variant: gcc
+description: shellcheck -f gcc, one finding per line
+metadata:
+  tags: [shell, lint]
+  compatible: [ShellCheck]
+  references:
+    - https://github.com/koalaman/shellcheck/blob/master/shellcheck.1.md
+detect:
+  signature:
+    all:
+      - '\A(?:^[^\n]+:\d+:\d+: (?:error|warning|note): [^\n]+ \[SC\d{4}\]$\n?)+\z'
+parse:
+  type: regex
+  pattern: '^(?P<path>.+?):(?P<line>\d+):(?P<column>\d+): (?P<severity>error|warning|note): (?P<message>.+) \[(?P<rule>SC\d{4})\]$'
+fields:
+  path: {required: true}
+  line: {type: int, required: true}
+  column: {type: int, required: true}
+  severity: {required: true}
+  message: {required: true}
+  rule: {required: true}

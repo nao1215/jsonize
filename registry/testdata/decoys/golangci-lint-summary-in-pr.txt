@@ -1,0 +1,9 @@
+The lint job is red after the rebase. Locally I get:
+
+main.go:14:9: Error return value of `f.Close` is not checked (errcheck)
+	f.Close()
+	       ^
+1 issues:
+* errcheck: 1
+
+I will add the check in a follow-up commit rather than excluding errcheck.

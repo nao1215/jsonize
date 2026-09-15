@@ -333,7 +333,8 @@ func forwarded() *relay {
 	return r
 }
 
-// forwardTo relays every signal received to p until stop is called.
+// forwardTo relays every signal received to p until stop is called,
+// except an interrupt the terminal has already delivered to p.
 func (r *relay) forwardTo(p *os.Process) {
 	if r == nil {
 		return
@@ -342,12 +343,26 @@ func (r *relay) forwardTo(p *os.Process) {
 		for {
 			select {
 			case s := <-r.ch:
+				if s == os.Interrupt && interruptReached(p) {
+					continue
+				}
 				_ = forward(p, s)
 			case <-r.done:
 				return
 			}
 		}
 	}()
+}
+
+// terminalDelivered reports that an interrupt jz received came from the
+// terminal and reached the command too. A terminal sends the interrupt
+// its user types to every process of its foreground group, so when jz's
+// own group is the foreground group and the command is in it, the
+// command has the interrupt already. A group that could not be read is
+// 0, and then the interrupt is passed on: sent twice is better than not
+// at all.
+func terminalDelivered(foreground, own, command int) bool {
+	return foreground > 0 && foreground == own && command == own
 }
 
 func (r *relay) stop() {

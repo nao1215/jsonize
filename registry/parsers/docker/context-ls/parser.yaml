@@ -35,5 +35,8 @@ fields:
   name: {required: true}
   current: {type: bool, trim_prefix: " ", true_values: ["*"], false_values: [""]}
   description: {null_if: [""]}
+  # The pattern holds the endpoint to a URL (unix://, tcp://, ssh://,
+  # npipe://), which is what tells a context from a row of another table
+  # of four columns, and lets a description hold two spaces.
   docker_endpoint: {required: true}
   error: {}

@@ -1,0 +1,4 @@
+description: link rows with and without a hardware address, address rows with names and cut IPv6 addresses, and interfaces that are down
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C netstat -i; the runner's host name replaced by example-mac-..., its network 192.168.64 by 192.0.2, its MAC addresses by 02:00:00:00:00:0x and its en0 link-local address by fe80::200:ff:fe00:3, each cut where netstat cut the original and with the columns padded to where they started
+os: darwin
+args: ["-i"]

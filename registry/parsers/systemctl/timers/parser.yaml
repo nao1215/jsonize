@@ -21,9 +21,13 @@ detect:
     all:
       - '\A[ \t]*NEXT[ \t]+LEFT[ \t]+LAST[ \t]+PASSED[ \t]+UNIT[ \t]+ACTIVATES[ \t]*$'
 input:
+  # The count of what was listed closes the output and is read as its
+  # end, so a line after it that no rule names is unread rather than
+  # taken for one more row.
+  select:
+    until: '^[0-9]+ timers listed\.$'
   ignore:
     - '\A[ \t]*NEXT[ \t]+LEFT[ \t]+LAST'
-    - '^[0-9]+ timers listed\.$'
     - '^Pass --all to see loaded but inactive timers, too\.$'
 parse:
   type: regex

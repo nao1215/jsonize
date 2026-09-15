@@ -1,0 +1,70 @@
+# `go vet` reports a problem as a line of the Go file, the line and the
+# column, and the message, the position form every Go tool prints. A
+# package that does not type-check is reported with the compiler's
+# message behind `vet: `, under a heading `# ` and the package path. Go
+# 1.25 also put a heading above the problems of every package, with a
+# second heading `# [path]` for the package's test variant, and wrote
+# the files of the current directory as `./main.go`; Go 1.26 prints the
+# headings only above type errors, and the problems of the other packages
+# may follow such a heading, so a heading does not say which package the
+# lines under it belong to. The headings are read and left out: the file
+# says where a problem is. `go build` and `go install` print their
+# compile errors in the same form, headed the same way and without
+# `vet: `, so this one definition reads them too.
+#
+# A message the compiler writes over several lines continues on lines
+# indented by a tab (`have (number)` and `want ()` under a call with too
+# many arguments), which are joined onto the message with a space. A
+# tab-indented line of nothing but blanks and a caret is not one: that is
+# how golangci-lint points at a column under a quoted source line.
+# Nor is a line with a load address in parentheses, `(0x7ffd...)`, which
+# no Go message holds and ldd prints on every line: the libraries of a
+# binary listed after a build are not read as part of its last problem.
+#
+# The file is everything before the first `:line:column: `, so a Windows
+# drive letter's colon (`C:\x.go:3:4:`) stays in the path, and it ends in
+# `.go`: the lines of the C compiler for cgo, of the linker and of a
+# broken go.mod are not this format and are refused.
+#
+# All of this is written to standard error, and `jz run` reads standard
+# output, where go vet and go build print nothing, so `jz run go vet`
+# does not reach this definition. It is read from a pipe with the
+# streams joined: `go vet ./... 2>&1 | jz`.
+#
+# The signature asks that every line in the window be a heading, a
+# problem or a continuation, and that one of them be a problem. A Go
+# message does not end with a bare code of capitals and digits in
+# parentheses, which is how staticcheck closes each of its lines, and
+# the expression holds the message to that so staticcheck's output is
+# not read as problems whose messages end in their check codes.
+format: 1
+command: go
+variant: vet
+description: go vet and go build diagnostics, one per problem
+metadata:
+  tags: [go, toolchain, lint]
+  compatible: [gc]
+  references:
+    - https://pkg.go.dev/cmd/vet
+    - https://pkg.go.dev/cmd/go#hdr-Report_likely_mistakes_in_packages
+detect:
+  args:
+    any: ["vet", "build", "install"]
+  signature:
+    all:
+      - '\A(?:# \S+(?: \[\S+\])?|# \[\S+\]|(?:vet: )?[^\n]+\.go:\d+:\d+: [^\n]*(?:[^)\n]|\)\)|[^ \n]\([^()\n]*\)|\([^()\n]*[^A-Z0-9()\n][^()\n]*\)|\(\)))$'
+      - '\A(?:^(?:# \S+(?: \[\S+\])?|# \[\S+\]|(?:vet: )?[^\n]+\.go:\d+:\d+: [^\n]*(?:[^)\n]|\)\)|[^ \n]\([^()\n]*\)|\([^()\n]*[^A-Z0-9()\n][^()\n]*\)|\(\))|\t(?:[^(\n]|\(+(?:0\(+)*(?:[^(0\n]|0[^(x\n]))*(?:[^( \t^\n]|\(+(?:0\(+)*(?:[^(0 \t^\n]|0[^(x \t^\n])|\(+(?:0\(+)*0?)[ \t^]*)$\n?)+\z'
+      - '^(?:vet: )?[^\n]+\.go:\d+:\d+: '
+input:
+  fold: '^\t(?:[^(]|\(+(?:0\(+)*(?:[^(0]|0[^(x]))*(?:[^( \t^]|\(+(?:0\(+)*(?:[^(0 \t^]|0[^(x \t^])|\(+(?:0\(+)*0?)[ \t^]*$'
+  ignore:
+    - '^# \S+(?: \[\S+\])?$'
+    - '^# \[\S+\]$'
+parse:
+  type: regex
+  pattern: '^(?:vet: )?(?P<path>.+?\.go):(?P<line>\d+):(?P<column>\d+): (?P<message>.*(?:[^)]|\)\)|[^ ]\([^()]*\)|\([^()]*[^A-Z0-9()][^()]*\)|\(\)))$'
+fields:
+  path: {required: true}
+  line: {type: int, required: true}
+  column: {type: int, required: true}
+  message: {required: true}

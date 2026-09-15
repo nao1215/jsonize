@@ -1,0 +1,133 @@
+[
+  {
+    "filesystem": "/dev/disk2s1s1",
+    "size": "320Gi",
+    "used": "12Gi",
+    "available": "96Gi",
+    "capacity_percent": 11,
+    "iused": "459k",
+    "ifree": "1.0G",
+    "iused_percent": 0,
+    "mounted_on": "/"
+  },
+  {
+    "filesystem": "devfs",
+    "size": "198Ki",
+    "used": "198Ki",
+    "available": "0Bi",
+    "capacity_percent": 100,
+    "iused": "684",
+    "ifree": "0",
+    "iused_percent": 100,
+    "mounted_on": "/dev"
+  },
+  {
+    "filesystem": "/dev/disk2s6",
+    "size": "320Gi",
+    "used": "20Ki",
+    "available": "96Gi",
+    "capacity_percent": 1,
+    "iused": "0",
+    "ifree": "1.0G",
+    "iused_percent": 0,
+    "mounted_on": "/System/Volumes/VM"
+  },
+  {
+    "filesystem": "/dev/disk2s2",
+    "size": "320Gi",
+    "used": "6.7Gi",
+    "available": "96Gi",
+    "capacity_percent": 7,
+    "iused": "148",
+    "ifree": "1.0G",
+    "iused_percent": 0,
+    "mounted_on": "/System/Volumes/Preboot"
+  },
+  {
+    "filesystem": "/dev/disk2s4",
+    "size": "320Gi",
+    "used": "316Ki",
+    "available": "96Gi",
+    "capacity_percent": 1,
+    "iused": "21",
+    "ifree": "1.0G",
+    "iused_percent": 0,
+    "mounted_on": "/System/Volumes/Update"
+  },
+  {
+    "filesystem": "/dev/disk1s2",
+    "size": "500Mi",
+    "used": "20Ki",
+    "available": "495Mi",
+    "capacity_percent": 1,
+    "iused": "0",
+    "ifree": "5.1M",
+    "iused_percent": 0,
+    "mounted_on": "/System/Volumes/xarts"
+  },
+  {
+    "filesystem": "/dev/disk1s1",
+    "size": "500Mi",
+    "used": "104Ki",
+    "available": "495Mi",
+    "capacity_percent": 1,
+    "iused": "21",
+    "ifree": "5.1M",
+    "iused_percent": 0,
+    "mounted_on": "/System/Volumes/iSCPreboot"
+  },
+  {
+    "filesystem": "/dev/disk1s3",
+    "size": "500Mi",
+    "used": "232Ki",
+    "available": "495Mi",
+    "capacity_percent": 1,
+    "iused": "17",
+    "ifree": "5.1M",
+    "iused_percent": 0,
+    "mounted_on": "/System/Volumes/Hardware"
+  },
+  {
+    "filesystem": "/dev/disk2s5",
+    "size": "320Gi",
+    "used": "204Gi",
+    "available": "96Gi",
+    "capacity_percent": 69,
+    "iused": "1.9M",
+    "ifree": "1.0G",
+    "iused_percent": 0,
+    "mounted_on": "/System/Volumes/Data"
+  },
+  {
+    "filesystem": "/dev/disk4s1",
+    "size": "520Mi",
+    "used": "496Mi",
+    "available": "21Mi",
+    "capacity_percent": 96,
+    "iused": "426",
+    "ifree": "217k",
+    "iused_percent": 0,
+    "mounted_on": "/System/Library/AssetsV2/com_apple_MobileAsset_UAF_Siri_Understanding/purpose_auto/c10eb90af2d4996616c3cd0f6bac0833eb4925fa.asset/.AssetData"
+  },
+  {
+    "filesystem": "/dev/disk6s1",
+    "size": "4.0Mi",
+    "used": "676Ki",
+    "available": "3.0Mi",
+    "capacity_percent": 19,
+    "iused": "18",
+    "ifree": "31k",
+    "iused_percent": 0,
+    "mounted_on": "/System/Library/AssetsV2/com_apple_MobileAsset_PKITrustStore/purpose_auto/6dd55b0d06633a00de6f57ccb910a66a5ba2409a.asset/.AssetData"
+  },
+  {
+    "filesystem": "map auto_home",
+    "size": "0Bi",
+    "used": "0Bi",
+    "available": "0Bi",
+    "capacity_percent": 100,
+    "iused": "0",
+    "ifree": "0",
+    "mounted_on": "/System/Volumes/Data/home"
+  }
+]

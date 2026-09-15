@@ -22,12 +22,22 @@ detect:
     any: ["--full-time", "--time-style=full-iso", "full-iso"]
     # -Z and --author paired with -g, -o or -G print two names under other
     # meanings (see ls/long).
-    none: ["-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify", "-Z", "--context", "--author"]
+    # Quoting and escaping change the names this reads: a name comes
+    # back with the quotes or the escapes in it.
+    # macOS ls -e prints an entry's access control list on the lines
+    # under it and -O adds its file flags as a column; neither is read.
+    none: ["-e", "-O", "-F", "-p", "--classify", "--classify=always", "--file-type", "--indicator-style=slash", "--indicator-style=file-type", "--indicator-style=classify", "-Z", "--context", "--author", "-Q", "--quote-name", "--quoting-style", "--quoting-style=shell", "--quoting-style=shell-always", "--quoting-style=shell-escape", "--quoting-style=shell-escape-always", "--quoting-style=c", "--quoting-style=escape", "--quoting-style=locale", "--quoting-style=clocale", "-b", "--escape", "-q", "--hide-control-chars"]
   signature:
     all:
       # The text opens with the total, or with an entry where there is none.
       - '\A(?:total [^\n]*$|[-dlcbps][-rwxsStT]{9})'
       - '^(?:[-dlps][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+[^\s:?][^\s:]*\s+[\d.]+[kKMGTPEZYRQBi]*|[cb][-rwxsStT]{9}[.+@]?\s+\d+\s+\S+\s+[^\s:?][^\s:]*\s+\d+,\s*\d+)\s+\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(?:\.\d+)? [+-]\d{4} '
+exec:
+  env:
+    # GNU ls quotes names in the style QUOTING_STYLE names, which a
+    # user's shell profile may set; literal is what it prints to a pipe
+    # without it. BSD ls does not read the variable.
+    QUOTING_STYLE: literal
 input:
   ignore:
     - '^total\s'

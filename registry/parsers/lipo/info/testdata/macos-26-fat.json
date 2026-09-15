@@ -1,0 +1,9 @@
+[
+  {
+    "file": "/bin/ls",
+    "architectures": [
+      "x86_64",
+      "arm64e"
+    ]
+  }
+]

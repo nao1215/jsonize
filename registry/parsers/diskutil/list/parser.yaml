@@ -1,0 +1,63 @@
+# diskutil list prints a block per disk: the device node with what the
+# disk is in parentheses ("internal, physical", "synthesized", "disk
+# image"), a heading, and a row per partition or volume. The rows are
+# fixed columns: the index and a colon, the type right-aligned in 27
+# characters, the name in 23 (a longer name is cut to 20 and "..."), a
+# mark, the size in 10 and the identifier. The type and the name may hold
+# spaces, which is why the columns are read by width rather than split.
+#
+# The mark in front of a size is "*" for the size of the whole disk on
+# its partition scheme row and "+" for the size of an APFS container; it
+# is kept with the size, which is rounded and stays the text diskutil
+# printed. A scheme row has no name, and an APFS container scheme prints
+# "-" there, which is kept as printed. The container row of a synthesized
+# disk continues on the next line with the partitions it is stored on
+# ("Physical Store disk0s2"); that line is joined onto the row and read
+# into physical_stores.
+#
+# -plist prints XML, and diskutil list with a disk named prints the block
+# of that disk alone, which is read here as well.
+format: 1
+command: diskutil
+variant: list
+description: diskutil list disks with their partitions and volumes on macOS
+metadata:
+  tags: [darwin, disk, filesystem]
+  compatible: [macOS diskutil]
+detect:
+  os: [darwin]
+  args:
+    all: ["list"]
+    none: ["-plist"]
+  signature:
+    all:
+      - '\A/dev/disk\d+ \([^)\n]*\):[ \t]*\n[ \t]+#:[ \t]+TYPE NAME[ \t]+SIZE[ \t]+IDENTIFIER[ \t]*\n[ ]*\d+:[^\n]{27} [^\n]{23}[ *+][^\n]{10} disk\d+'
+input:
+  fold: '^[ \t]+Physical Stores? \S'
+  ignore:
+    - '^[ \t]+#:[ \t]+TYPE NAME[ \t]+SIZE[ \t]+IDENTIFIER[ \t]*$'
+parse:
+  type: records
+  start: '^/dev/disk\d+ \('
+  parts:
+    - name: disk
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<device>/dev/disk\d+) \((?P<attributes>[^)\n]*)\):[ \t]*\z'
+      fields:
+        device: {required: true}
+        attributes: {type: array, split: ","}
+    - name: partitions
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^[ ]*(?P<index>\d+):(?P<type>[^\n]{27}) (?P<name>[^\n]{23})(?P<size>[ *+][^\n]{10}) (?P<identifier>disk\d+(?:s\d+)*)(?: Physical Stores? (?P<physical_stores>\S[^\n]*?))??[ \t]*$'
+      fields:
+        index: {type: int, required: true}
+        type: {required: true, regex: '[ ]*(?P<type>\S(?:[^\n]*\S)?)'}
+        name: {regex: '(?:(?P<name>\S(?:[^\n]*\S)?))?[ ]*'}
+        size: {required: true, regex: '[ ]*(?P<size>[*+]?(?:[0-9.]+|Zero) [KMGTPEZ]?B)[ ]*'}
+        identifier: {required: true}
+        physical_stores: {type: array, split: ","}

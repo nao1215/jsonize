@@ -24,9 +24,13 @@ detect:
       - '\A[ \t]*JOB[ \t]+UNIT[ \t]+TYPE[ \t]+STATE[ \t]*$'
       - '\ANo jobs running\.[ \t]*\z'
 input:
+  # The count of what was listed closes the output and is read as its
+  # end, so a line after it that no rule names is unread rather than
+  # taken for one more row.
+  select:
+    until: '^[0-9]+ jobs? listed\.$'
   ignore:
     - '^[ \t]*JOB[ \t]+UNIT[ \t]+TYPE[ \t]+STATE[ \t]*$'
-    - '^[0-9]+ jobs? listed\.'
     - '^No jobs running\.'
 parse:
   type: table

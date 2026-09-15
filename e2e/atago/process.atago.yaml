@@ -218,6 +218,32 @@ scenarios:
             path: err.txt
             contains: "terminated by SIGINT"
 
+  # Ctrl-C typed at a terminal goes to the whole foreground group, the
+  # command included. jz passes on an interrupt only when the terminal has
+  # not delivered it already, so the command counts one: a command that
+  # takes a second interrupt as "stop now" is not stopped by one keypress.
+  - name: Ctrl-C typed at a terminal reaches the command once
+    skip: {os: windows}
+    steps:
+      # e2ehelper counts every interrupt it receives, where a shell's trap
+      # merges two that arrive close together.
+      - pty:
+          command: jz run --parser kv --variant equals -- e2ehelper interrupts -for 3s
+          cols: 100
+          rows: 24
+          timeout: 30s
+          session:
+            - expect: "ready"
+            - send: {key: ctrl-c}
+            - expect: "count"
+      - assert:
+          screen:
+            contains:
+              - "interrupt 1"
+              - '"value":"1"'
+            not_contains:
+              - "interrupt 2"
+
   # --timeout on a stream: the records read before the deadline stay
   # written, the command is stopped, and both facts are reported.
   - name: --timeout on a stream keeps the records written and stops the command

@@ -1,0 +1,31 @@
+# lipo -info prints a line per file naming the architectures in it. A
+# universal file prints "Architectures in the fat file: NAME are:" and
+# the architectures separated by spaces, with a space after the last,
+# read as an array.
+#
+# -archs prints the architectures alone and -detailed_info prints a block
+# per architecture; neither is read here.
+format: 1
+command: lipo
+variant: info
+description: lipo -info architectures of universal files
+metadata:
+  tags: [darwin, development]
+  compatible: [Xcode lipo, cctools lipo]
+detect:
+  os: [darwin]
+  args:
+    any: ["-info"]
+  signature:
+    all:
+      # Every line is the sentence lipo prints for a universal file. The
+      # sentence for a file of one architecture is not in any capture
+      # here, and a text with it is refused rather than read after a guess.
+      - '\A(?:Architectures in the fat file: [^\n]+ are:(?: [a-z0-9_]+)+[ \t]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  patterns:
+    - pattern: '^Architectures in the fat file: (?P<file>[^\n]+) are: (?P<architectures>[a-z0-9_]+(?: [a-z0-9_]+)*)[ \t]*$'
+fields:
+  file: {required: true}
+  architectures: {type: array, split: " "}

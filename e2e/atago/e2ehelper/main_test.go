@@ -61,6 +61,18 @@ func TestPipeTakesLinesAndWaits(t *testing.T) {
 	}
 }
 
+// interrupts ends after the time it was given and reports what it
+// counted, none here.
+func TestInterruptsCountsForAWhile(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"interrupts", "-for", "20ms"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("code = %d, stderr = %s", code, stderr.String())
+	}
+	if stdout.String() != "count=0\n" || stderr.String() != "ready\n" {
+		t.Errorf("stdout = %q, stderr = %q", stdout.String(), stderr.String())
+	}
+}
+
 func TestUsageErrors(t *testing.T) {
 	var stderr bytes.Buffer
 	if code := run(nil, os.Stdout, &stderr); code != 2 {

@@ -1,0 +1,5 @@
+source: the definition's own windows-server-2025.txt followed by uv/tool-list's single-tool.txt, joined for this case
+description: the lines after the completion line are not shares, and are refused as unread rather than read as rows with only a name
+os: windows
+args: [share]
+expect_error: 'no part of the definition read'

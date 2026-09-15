@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/memory_pressure/darwin.json",
+  "title": "memory_pressure/darwin",
+  "description": "memory_pressure page counters and free memory percentage on macOS",
+  "x-jsonize": {
+    "definition": "memory_pressure/darwin",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "memory": {
+      "type": "integer"
+    },
+    "pages": {
+      "type": "integer"
+    },
+    "page_size": {
+      "type": "integer"
+    },
+    "pages_free": {
+      "type": "integer"
+    },
+    "pages_purgeable": {
+      "type": "integer"
+    },
+    "pages_purged": {
+      "type": "integer"
+    },
+    "swapins": {
+      "type": "integer"
+    },
+    "swapouts": {
+      "type": "integer"
+    },
+    "pages_active": {
+      "type": "integer"
+    },
+    "pages_inactive": {
+      "type": "integer"
+    },
+    "pages_speculative": {
+      "type": "integer"
+    },
+    "pages_throttled": {
+      "type": "integer"
+    },
+    "pages_wired_down": {
+      "type": "integer"
+    },
+    "pages_used_by_compressor": {
+      "type": "integer"
+    },
+    "pages_decompressed": {
+      "type": "integer"
+    },
+    "pages_compressed": {
+      "type": "integer"
+    },
+    "pageins": {
+      "type": "integer"
+    },
+    "pageouts": {
+      "type": "integer"
+    },
+    "free_percentage": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "memory",
+    "pages",
+    "page_size",
+    "pages_free",
+    "pages_purgeable",
+    "pages_purged",
+    "swapins",
+    "swapouts",
+    "pages_active",
+    "pages_inactive",
+    "pages_speculative",
+    "pages_throttled",
+    "pages_wired_down",
+    "pages_used_by_compressor",
+    "pages_decompressed",
+    "pages_compressed",
+    "pageins",
+    "pageouts",
+    "free_percentage"
+  ]
+}

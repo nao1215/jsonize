@@ -1,0 +1,3 @@
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C csrutil status
+os: darwin
+args: [status]

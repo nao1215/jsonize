@@ -2,4 +2,4 @@ source: git 2.53 in the jsonize repository, `git log --oneline --decorate=short 
 description: --decorate puts the names that point at a commit in parentheses before its subject, which is not part of the subject and cannot be told from a subject that opens with a parenthesis
 os: linux
 args: ["log", "--oneline", "--decorate=short", "-2", "0cb0578"]
-expect_error: excluded by the argument --decorate=short
+expect_error: does not describe this input

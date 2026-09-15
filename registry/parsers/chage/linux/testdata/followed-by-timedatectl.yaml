@@ -1,0 +1,4 @@
+source: the definition's own all-dates.txt followed by timedatectl/timesync's systemd-259.txt, joined for this case
+description: timedatectl's labelled lines after chage's seven are refused; they were read as more fields of the account
+os: linux
+expect_error: does not describe this input

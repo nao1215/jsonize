@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/nao1215/jsonize/pkg/registry"
+	"github.com/nao1215/jsonize/pkg/selector"
 	official "github.com/nao1215/jsonize/registry"
 )
 
@@ -1251,13 +1252,46 @@ func TestMergedExecEnv(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got := strings.Join(execEnv(reg, "c", ""), ","); got != "TZ=UTC" {
+	if got := strings.Join(execEnv(reg, selector.Context{Parser: "c"}), ","); got != "TZ=UTC" {
 		t.Errorf("execEnv = %q", got)
 	}
 	// A variant named on the command line is the definition that reads
 	// the output, so its entries apply as they stand.
-	if got := strings.Join(execEnv(reg, "c", "b"), ","); got != "TZ=UTC,X=2" {
+	if got := strings.Join(execEnv(reg, selector.Context{Parser: "c", Variant: "b"}), ","); got != "TZ=UTC,X=2" {
 		t.Errorf("execEnv for the variant = %q", got)
+	}
+}
+
+// The environment comes from the variants the arguments and the system
+// leave, since those are the definitions that can read the output. A
+// setting one subcommand's output needs is not given to another's: git
+// log asked to leave its decorations out would otherwise put that
+// setting into what git config --list prints.
+func TestExecEnvFollowsTheArguments(t *testing.T) {
+	t.Parallel()
+	dir := t.TempDir()
+	writeRegistry(t, dir, map[string]string{
+		"parsers/g/log/parser.yaml":    "format: 1\ncommand: g\nvariant: log\ndetect: {args: {any: [log]}}\nexec: {env: {G_DECORATE: 'no'}}\nparse: {type: kv}\n",
+		"parsers/g/config/parser.yaml": "format: 1\ncommand: g\nvariant: config\ndetect: {args: {any: [config]}}\nparse: {type: kv}\n",
+		"parsers/g/mac/parser.yaml":    "format: 1\ncommand: g\nvariant: mac\ndetect: {os: [darwin], args: {any: [config]}}\nexec: {env: {G_MAC: '1'}}\nparse: {type: kv}\n",
+	})
+	reg, err := registry.Load(registry.Source{Name: "t", FS: os.DirFS(dir)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tt := range []struct {
+		args []string
+		os   string
+		want string
+	}{
+		{[]string{"log", "--oneline"}, "linux", "G_DECORATE=no"},
+		{[]string{"config", "--list"}, "linux", ""},
+		{[]string{"config", "--list"}, "darwin", "G_MAC=1"},
+	} {
+		got := strings.Join(execEnv(reg, selector.Context{Parser: "g", OS: tt.os, Args: tt.args}), ",")
+		if got != tt.want {
+			t.Errorf("%v on %s: %q, want %q", tt.args, tt.os, got, tt.want)
+		}
 	}
 }
 

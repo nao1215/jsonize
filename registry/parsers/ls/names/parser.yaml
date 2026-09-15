@@ -47,6 +47,12 @@ detect:
            "-b", "--escape", "-B", "-q", "--hide-control-chars", "-C", "-x", "-m", "--format", "--format=long", "--format=verbose",
            "--format=commas", "--format=horizontal", "--format=across", "--format=vertical", "-R", "--recursive", "-Z", "--context",
            "-D", "--dired", "--zero", "--hyperlink", "--hyperlink=always", "--full-time"]
+exec:
+  env:
+    # GNU ls quotes names in the style QUOTING_STYLE names, which a
+    # user's shell profile may set; literal is what it prints to a pipe
+    # without it. BSD ls does not read the variable.
+    QUOTING_STYLE: literal
 input:
   skip_blank: false
 parse:

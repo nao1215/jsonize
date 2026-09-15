@@ -1,0 +1,31 @@
+pkg/sub/doc.go:3:1: Duplicate words (the) found (dupword)
+// Exported does the the thing
+^
+main.go:1:1: package-comments: should have a package comment (revive)
+package main
+^
+pkg/sub/doc.go:1:1: package-comments: should have a package comment (revive)
+package sub
+^
+pkg/sub/doc.go:8:5: exported: exported var X should have comment or be unexported (revive)
+var X=1
+    ^
+pkg/sub/fmt.go:5:1: exported: exported function Show should have comment or be unexported (revive)
+func Show(n int) {
+^
+pkg/sub/sub.go:5:1: exported: exported function Lower should have comment or be unexported (revive)
+func Lower(s string) bool {
+^
+pkg/sub/sub.go:9:1: exported: exported function Loop should have comment or be unexported (revive)
+func Loop() {
+^
+pkg/sub/sub.go:13:24: empty-block: this block is empty, you can remove it (revive)
+	if Lower("a") == true {
+	}
+pkg/sub/doc.go:6:6: func unusedHelper is unused (unused)
+func unusedHelper() {}
+     ^
+9 issues:
+* dupword: 1
+* revive: 7
+* unused: 1

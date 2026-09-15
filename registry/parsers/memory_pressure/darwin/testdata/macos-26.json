@@ -1,0 +1,21 @@
+{
+  "memory": 7516192768,
+  "pages": 458752,
+  "page_size": 16384,
+  "pages_free": 6432,
+  "pages_purgeable": 707,
+  "pages_purged": 6131,
+  "swapins": 0,
+  "swapouts": 0,
+  "pages_active": 186075,
+  "pages_inactive": 183098,
+  "pages_speculative": 2712,
+  "pages_throttled": 0,
+  "pages_wired_down": 56003,
+  "pages_used_by_compressor": 23349,
+  "pages_decompressed": 22733,
+  "pages_compressed": 113850,
+  "pageins": 386064,
+  "pageouts": 3999,
+  "free_percentage": 82
+}

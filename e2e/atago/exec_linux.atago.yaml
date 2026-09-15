@@ -1529,7 +1529,8 @@ scenarios:
           stdout: {empty: true}
 
   # git quotes a name with a space, so the " -> " outside the quotes is
-  # the one that separates the two paths of a rename.
+  # the one that separates the two paths of a rename, and the names are
+  # the ones the quotes hold.
   - name: git status splits a rename at the arrow outside the quotes
     only: {os: linux}
     steps:
@@ -1549,8 +1550,8 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].index", equals: R }
-              - { path: "$[0].path", equals: '"a -> b"' }
-              - { path: "$[0].renamed_to", equals: '"c -> d"' }
+              - { path: "$[0].path", equals: "a -> b" }
+              - { path: "$[0].renamed_to", equals: "c -> d" }
 
   # GNU md5sum marks a line whose name it escaped with a backslash in
   # front of the digest; such a name is decoded. wc quotes a name with a
@@ -2231,4 +2232,32 @@ scenarios:
               - { path: "$[0].method", equals: defla }
               - { path: "$[0].crc", matches: "^[0-9a-f]{8}$" }
               - { path: "$[0].uncompressed", equals: 36 }
+
+  # GNU ls quotes names in the style QUOTING_STYLE names, which a shell
+  # profile may export. jz runs ls with the literal style, which is what
+  # ls prints to a pipe without the variable, and refuses an option that
+  # quotes or escapes names in a long listing.
+  - name: jz run ls -l reads names unquoted whatever QUOTING_STYLE says, and refuses -Q
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: listing/a b
+          content: "x\n"
+      - run:
+          command: jz run ls -l ${workdir}/listing
+          env:
+            QUOTING_STYLE: c
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].filename", equals: "a b" }
+      - run:
+          command: jz run ls -l -Q ${workdir}/listing
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: "does not read the output of -Q"
 

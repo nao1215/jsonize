@@ -1,0 +1,8 @@
+source: >-
+  captured from go1.25.3 on Linux with LC_ALL=C, GOTOOLCHAIN=local, go vet
+  ./... in the same module, standard error saved to the file
+description: >-
+  Go 1.25 heads every package, adds a test-variant heading and writes the
+  files of the current directory as ./main.go.
+os: linux
+args: ["vet", "./..."]

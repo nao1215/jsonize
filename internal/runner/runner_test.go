@@ -28,6 +28,30 @@ func TestBuildEnv(t *testing.T) {
 	}
 }
 
+// An interrupt typed at a terminal goes to every process in the
+// terminal's foreground group. When jz and the command are both in that
+// group, the command has it already, and passing it on would deliver it
+// twice, which a command that takes a second interrupt as "stop now"
+// acts on. Anything else still reaches the command through jz.
+func TestTerminalDeliveredTheInterrupt(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name                     string
+		foreground, own, command int
+		want                     bool
+	}{
+		{"jz and the command in the foreground group", 100, 100, 100, true},
+		{"jz in the background, sent the signal alone", 200, 100, 100, false},
+		{"the command moved to a group of its own", 100, 100, 300, false},
+		{"no controlling terminal", 0, 100, 100, false},
+		{"the command's group could not be read", 100, 100, 0, false},
+	} {
+		if got := terminalDelivered(tt.foreground, tt.own, tt.command); got != tt.want {
+			t.Errorf("%s: %v, want %v", tt.name, got, tt.want)
+		}
+	}
+}
+
 func TestRunCapturesStdoutAndStderr(t *testing.T) {
 	t.Parallel()
 	if _, err := exec.LookPath("go"); err != nil {

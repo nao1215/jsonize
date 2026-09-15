@@ -1,0 +1,11 @@
+[
+  {
+    "name": "rustup",
+    "installed": [
+      "1.29.0"
+    ],
+    "operator": "<",
+    "latest": "1.29.1",
+    "pinned_at": null
+  }
+]

@@ -1,0 +1,5 @@
+description: group entries with no members end in a colon like a file line, and are refused rather than read as files with no libraries
+source: the macos-26 fixture followed by the shadow-utils fixture of etc/group, joined for this case
+os: darwin
+args: [-L, /bin/ls]
+expect_error: does not describe this input

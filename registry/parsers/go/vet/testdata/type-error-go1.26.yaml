@@ -1,0 +1,6 @@
+source: captured from go1.26.4 on Linux with LC_ALL=C, go vet ./... in the same module with a package that does not type-check, standard error saved to the file
+description: >-
+  One heading above the type error behind vet:, followed by problems of
+  other packages that the heading does not name.
+os: linux
+args: ["vet", "./..."]

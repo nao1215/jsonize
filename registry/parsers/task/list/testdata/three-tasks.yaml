@@ -1,0 +1,6 @@
+source: captured from Task 3.51.1 on Linux with LC_ALL=C, task --list in a directory with a Taskfile written for the capture
+description: >-
+  Three described tasks, one with two aliases and one whose name and
+  description both hold a colon; the task without a description is not listed.
+os: linux
+args: ["--list"]

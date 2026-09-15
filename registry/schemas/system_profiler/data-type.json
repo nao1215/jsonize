@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/system_profiler/data-type.json",
+  "title": "system_profiler/data-type",
+  "description": "system_profiler SPSoftwareDataType and SPHardwareDataType overviews on macOS",
+  "x-jsonize": {
+    "definition": "system_profiler/data-type",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/node"
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "required": [
+        "label",
+        "value",
+        "children"
+      ]
+    }
+  }
+}

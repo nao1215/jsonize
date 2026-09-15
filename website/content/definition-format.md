@@ -100,7 +100,9 @@ detect:
   definition that means both spellings lists both. The same holds for a
   long option cut short, which GNU tools accept while it is unambiguous:
   `--ta` is not `--tag` to jz, and a definition that means both lists
-  both. Bundled short flags
+  both. An entry that ends in `=` is the long option with any value:
+  `none: ["--config-env="]` refuses `--config-env=log.decorate=X`.
+  Bundled short flags
   are expanded, so `-hT` satisfies `any: ["-h"]`, and a short flag given
   n times holds every bundle of it up to n letters, so `-v -v` and `-vvv`
   are both refused by `none: ["-vv"]`. A long option given twice is the
@@ -190,9 +192,11 @@ exec:
 ```
 
 Extra environment for `jz run`. jz already sets `LC_ALL=C` and `LANG=C`.
-When several variants of a command set the same variable to different
-values the variable is not set at all (the variant is unknown before the
-command runs).
+The variables come from the variants the system and the arguments leave,
+since those are the definitions that can read the output: a setting
+`git log --oneline` needs is not given to `git config --list`. When
+several of them set the same variable to different values the variable
+is not set at all (the variant is unknown before the command runs).
 
 ## input
 
@@ -262,7 +266,9 @@ in one of these places, and a line in none of them is an error naming it
 - left out because it is blank, or because an `ignore` expression names
   it;
 - the heading of a region: the line `select.after` matched, when the
-  expression describes the whole of it.
+  expression describes the whole of it;
+- the end of the input: the line the top-level `input.select.until`
+  matched, when the expression describes the whole of it.
 
 `ignore` is the one way to leave text out on purpose, so what it names is
 what the definition declares worthless: a legend, a column header the
@@ -276,6 +282,11 @@ by its siblings or is unread. The heading `after` matches counts as read
 only when the expression states the line from end to end (surrounding
 whitespace aside): `after: '^Features for \S+:$'` does, `after: '^Features
 for '` leaves the rest of the line, and with it the interface name, unread.
+The same holds for the line top-level `until` matches, which closes the
+output: `until: '^The command completed successfully\.$'` reads that line,
+and every line after it is left out and so unread, which is how a
+listing refuses another command's output behind its closing line. A
+part's `until` line is left to its siblings to read.
 
 ## parse
 
@@ -813,7 +824,7 @@ fields:
 | `split`, `split_regex` | array | how to split; items are trimmed. A `split_regex` that matches the empty string is an error, since it would split between every character |
 | `items` | array | conversion applied to each element (arrays of arrays are not allowed) |
 | `regex` | string | the part of the value to keep: the one named group of the expression, which has to match the whole value. A value outside it is an error, and a group that takes no part leaves the value missing |
-| `unescape` | string | escapes to undo after `regex`: `sequences` maps each escape as printed to the text it stands for, and every escape begins with the same character; any other escape is an error. `when` names a group of the pattern, and the escapes are undone only on a line where that group matched some text |
+| `unescape` | string | escapes to undo after `regex`: `sequences` maps each escape as printed to the text it stands for, and every escape begins with the same character; any other escape is an error. `octal: true` also reads the escape character and three octal digits as the byte they name, and the decoded value has to be UTF-8. `when` names a group of the pattern, and the escapes are undone only on a line where that group matched some text; `quote` names the character a value is put between when it was escaped, and only such a value is decoded, without its quotes |
 | `regex`, `fields` | object | named groups become keys; `fields` converts them; the match has to cover the whole value |
 
 `regex` on a string field takes off what a command prints around a
@@ -842,9 +853,21 @@ fields:
   file: {unescape: {when: escaped, sequences: {'\\': '\', '\n': "\n", '\r': "\r"}}}
 ```
 
+git declares its escaping with quotes: a path it put in double quotes
+holds C escapes and bytes written as three octal digits, and a path
+without them is the name as it is:
+
+```yaml
+fields:
+  path: {unescape: {quote: '"', octal: true, sequences: {'\\': '\', '\"': '"', '\t': "\t", '\n': "\n"}}}
+```
+
 An escaping the text does not declare, such as a quoting style an
 option or a version chooses, is not one to decode: the same text then
-names two different files. Such a value is refused with a `regex`.
+names two different files. Such a value is refused with a `regex`. tree
+is one: tree 2 writes a space in a name as `\ ` and tree 1 prints it as
+it is, and the text does not say which printed it, so its names are kept
+as printed.
 
 There is no type that turns `955M` or `1.8T` into bytes. A size printed
 with a unit is rounded to fit the column (`df -h`, `ls -lh`, `free -h`),

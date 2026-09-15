@@ -17,8 +17,11 @@ detect:
     all:
       - '\A[ \t]*UNIT FILE[ \t]+STATE[ \t]+PRESET[ \t]*$'
 input:
-  ignore:
-    - '^[0-9]+ unit files listed\.$'
+  # The count of what was listed closes the output and is read as its
+  # end, so a line after it that no rule names is unread rather than
+  # taken for one more row.
+  select:
+    until: '^[0-9]+ unit files listed\.$'
 parse:
   type: table
   split: whitespace

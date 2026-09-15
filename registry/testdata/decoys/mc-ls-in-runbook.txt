@@ -1,0 +1,7 @@
+Backup runbook, step 3: check that last night's dump arrived
+
+    $ mc ls backup/db-dumps
+    [2026-09-14 03:10:02 UTC] 1.2GiB STANDARD dump-2026-09-14.sql.gz
+
+If the newest object is older than a day, page the on-call engineer and
+do not rotate the old dumps.

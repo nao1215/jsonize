@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lipo/info.json",
+  "title": "lipo/info",
+  "description": "lipo -info architectures of universal files",
+  "x-jsonize": {
+    "definition": "lipo/info",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "string"
+      },
+      "architectures": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "file",
+      "architectures"
+    ]
+  }
+}

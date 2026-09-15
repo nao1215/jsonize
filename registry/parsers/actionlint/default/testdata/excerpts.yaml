@@ -1,0 +1,6 @@
+source: captured from actionlint 1.7.12 on Linux with LC_ALL=C, with shellcheck 0.11.0 on PATH, on a workflow written for the capture
+description: >-
+  Four errors of three rules, each with its excerpt; a two-digit line
+  number widens the gutter.
+os: linux
+args: [".github/workflows/ci.yml"]

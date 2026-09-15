@@ -1,0 +1,12 @@
+
+Hardware Port: Ethernet
+Device: en0
+Ethernet Address: 02:00:00:00:00:03
+
+Hardware Port: Ethernet Adapter (en1)
+Device: en1
+Ethernet Address: 02:00:00:00:00:05
+
+VLAN Configurations
+===================
+14:02  up 3 days,  4:11, 2 users, load averages: 1.52 1.68 1.71

@@ -1,0 +1,3 @@
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C top -l 1 -n 10; the user name runner replaced by user, padded to its column
+os: darwin
+args: [-l, "1", -n, "10"]

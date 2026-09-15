@@ -1,0 +1,4 @@
+.github/workflows/ci.yml:4:5: unexpected key "branchs" for "push" section. expected one of "branches", "branches-ignore", "paths", "paths-ignore", "tags", "tags-ignore", "types", "workflows" [syntax-check]
+.github/workflows/ci.yml:11:24: "github.event.pull_request.title" is potentially untrusted. avoid using it directly in inline scripts. instead, pass it through an environment variable. see https://docs.github.com/en/actions/reference/security/secure-use#good-practices-for-mitigating-script-injection-attacks for more details [expression]
+.github/workflows/ci.yml:13:17: property "os" is not defined in object type {} [expression]
+.github/workflows/ci.yml:14:9: shellcheck reported issue in this script: SC2086:info:1:6: Double quote to prevent globbing and word splitting [shellcheck]

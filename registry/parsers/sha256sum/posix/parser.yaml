@@ -27,10 +27,15 @@ aliases:
   # macOS installs GNU coreutils under a g prefix, and the g name prints
   # what the command prints.
   - name: gsha256sum
+  # shasum, the Perl script macOS ships, prints the same line for -a 256.
+  # Its default algorithm is SHA-1, so only that argument reaches here;
+  # -U prints "^" where the mode goes and is refused by the pattern.
+  - name: shasum
+    args: {any: ["256", "--algorithm=256"]}
 description: sha256sum checksum lines
 metadata:
   tags: [linux, darwin, checksum]
-  compatible: [GNU coreutils, uutils coreutils, BusyBox]
+  compatible: [GNU coreutils, uutils coreutils, BusyBox, macOS shasum]
   references:
     - https://man7.org/linux/man-pages/man1/sha256sum.1.html
 detect:

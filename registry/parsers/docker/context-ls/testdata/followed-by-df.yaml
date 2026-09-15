@@ -1,0 +1,4 @@
+source: the definition's own fixture followed by another definition's fixture, joined for this case
+description: a df table after the contexts is refused, since no column of it is an endpoint
+args: ["context", "ls"]
+expect_error: line does not match pattern

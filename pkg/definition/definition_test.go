@@ -2,7 +2,9 @@ package definition
 
 import (
 	"errors"
+	"regexp"
 	"strings"
+	"sync"
 	"testing"
 )
 
@@ -410,6 +412,8 @@ func TestLoadErrors(t *testing.T) {
 		{"unescape of two escape characters", base + "fields: {a: {unescape: {sequences: {'\\n': 'x', '%n': 'y'}}}}\n", "every escape begins with the same character"},
 		{"unescape on an int", base + "fields: {a: {type: int, unescape: {sequences: {'\\n': 'x'}}}}\n", "only valid for type string"},
 		{"unescape when outside a regex", base + "fields: {a: {unescape: {when: b, sequences: {'\\n': 'x'}}}}\n", "only a regex parser has groups"},
+		{"unescape quote of two characters", base + "fields: {a: {unescape: {quote: '<>', sequences: {'\\\\': '\\'}}}}\n", "unescape.quote: is one character"},
+		{"unescape quote beside when", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<m>x)?(?P<a>.*)'}\nfields: {a: {unescape: {when: m, quote: '\"', sequences: {'\\n': 'x'}}}}\n", "quote and when"},
 		{"unescape when not a group", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>.*)'}\nfields: {a: {unescape: {when: nope, sequences: {'\\n': 'x'}}}}\n", `"nope" is not a named group`},
 		{"pattern without its expression", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: [{values: {kind: x}}]}\n", "pattern: is required"},
 		{"pattern value named like a group", "format: 1\ncommand: c\nvariant: v\nparse: {type: regex, patterns: [{pattern: '(?P<kind>.)', values: {kind: x}}]}\n", "is also a named group of the pattern"},
@@ -544,6 +548,44 @@ func TestUnescapeDecode(t *testing.T) {
 		if ok != tc.ok || (ok && got != tc.want) {
 			t.Errorf("Decode(%q) = %q, %v; want %q, %v", tc.in, got, ok, tc.want, tc.ok)
 		}
+	}
+}
+
+// octal reads a backslash and three octal digits as the byte they name,
+// which is how git and getfacl write a byte they will not print, and the
+// bytes decoded have to be UTF-8 text. quote decodes only a value the
+// format put in quotes, which is how git marks a path it escaped.
+func TestUnescapeOctalAndQuote(t *testing.T) {
+	t.Parallel()
+	c := &Unescape{Quote: `"`, Octal: true, Sequences: map[string]string{`\\`: `\`, `\"`: `"`, `\t`: "\t", `\n`: "\n"}}
+	for _, tc := range []struct {
+		in, want string
+		ok       bool
+	}{
+		// Unquoted, the value is the name as it is, backslashes and all.
+		{`plain\name`, `plain\name`, true},
+		{`"docs/\346\227\245\346\234\254.md"`, "docs/日本.md", true},
+		{`"a \"quoted\" \\ name"`, `a "quoted" \ name`, true},
+		{`"tab\there"`, "tab\there", true},
+		// Three digits, no fewer, and the escape character alone is an
+		// error, as for any escape not listed.
+		{`"\34"`, "", false},
+		{`"\x41"`, "", false},
+		// A byte above 127 that does not make UTF-8 is not a name jz can
+		// write as a JSON string.
+		{`"\377"`, "", false},
+		// A quote at one end only is not quoted.
+		{`"half`, `"half`, true},
+	} {
+		got, ok := c.Decode(tc.in)
+		if ok != tc.ok || (ok && got != tc.want) {
+			t.Errorf("Decode(%q) = %q, %v; want %q, %v", tc.in, got, ok, tc.want, tc.ok)
+		}
+	}
+	// getfacl escapes every name the same way, without quotes.
+	acl := &Unescape{Octal: true, Sequences: map[string]string{`\\`: `\`}}
+	if got, ok := acl.Decode(`/tmp/a\040b/\346\227\245`); !ok || got != "/tmp/a b/日" {
+		t.Errorf("getfacl name: %q %v", got, ok)
 	}
 }
 
@@ -724,5 +766,46 @@ func TestRecordsRecordForm(t *testing.T) {
 	}
 	if d.Parse.Record == nil || d.Parse.Record.Fields["n"].Type != "int" {
 		t.Errorf("record not loaded: %+v", d.Parse.Record)
+	}
+}
+
+// A pattern's program is built the first time it is used, once, however
+// many readers ask for it at the same moment, and an expression that does
+// not parse is still refused when the definition is loaded.
+func TestPatternsBuildOnceWhenFirstUsed(t *testing.T) {
+	t.Parallel()
+	d, err := Load([]byte("format: 1\ncommand: c\nvariant: v\ndetect: {signature: {all: ['^a']}}\ninput: {ignore: ['^#']}\nparse: {type: regex, patterns: ['^(?P<a>x)$', '^(?P<a>y)$']}\nfields: {a: {regex: '(?P<a>[xy])'}}\n"), "t")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if d.Parse.compiled.items[0].re != nil {
+		t.Error("a pattern was built when the definition was loaded")
+	}
+	const readers = 16
+	got := make([][]*regexp.Regexp, readers)
+	var wg sync.WaitGroup
+	for i := range readers {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			all, _, _ := d.Detect.Signature.Compiled()
+			got[i] = append(append(append([]*regexp.Regexp{}, d.Parse.CompiledPatterns()...), all...), d.Input.IgnorePatterns()...)
+			got[i] = append(got[i], d.Fields["a"].CompiledRegex())
+		}()
+	}
+	wg.Wait()
+	for i := 1; i < readers; i++ {
+		for j := range got[0] {
+			if got[i][j] != got[0][j] {
+				t.Fatalf("reader %d got a different program for expression %d", i, j)
+			}
+		}
+	}
+	if got[0][0].String() != "^(?P<a>x)$" || got[0][2].String() != "(?m)^a" {
+		t.Errorf("programs: %v", got[0])
+	}
+	if _, err := Load([]byte("format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>'}\n"), "t"); err == nil ||
+		!strings.Contains(err.Error(), "invalid regular expression") {
+		t.Errorf("an expression that does not parse: %v", err)
 	}
 }

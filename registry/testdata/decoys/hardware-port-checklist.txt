@@ -1,0 +1,4 @@
+Hardware Port: Wi-Fi
+Device: en0
+Ethernet Address: ask the user to read it from System Settings, Network, Details
+Then confirm the port is first in the service order before closing the ticket.

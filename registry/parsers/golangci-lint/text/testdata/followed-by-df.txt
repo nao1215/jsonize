@@ -1,0 +1,34 @@
+main.go:14:9: Error return value of `f.Close` is not checked (errcheck)
+	f.Close()
+	       ^
+main.go:10:20: printf: fmt.Printf format %d has arg name of wrong type string (govet)
+	fmt.Printf("hello %d\n", name)
+	                  ^
+main.go:12:2: assign: self-assignment of x (govet)
+	x = x
+	^
+pkg/sub/fmt.go:6:14: printf: fmt.Printf format %s has arg n of wrong type int (govet)
+	fmt.Printf("%s items\n", n)
+	            ^
+main.go:16:2: ineffectual assignment to err (ineffassign)
+	err = fmt.Errorf("a")
+	^
+pkg/sub/sub.go:6:9: SA6005: should use strings.EqualFold instead (staticcheck)
+	return strings.ToLower(s) == strings.ToLower("ABC")
+	       ^
+pkg/sub/sub.go:13:2: SA9003: empty branch (staticcheck)
+	if Lower("a") == true {
+	^
+7 issues:
+* errcheck: 1
+* govet: 3
+* ineffassign: 1
+* staticcheck: 2
+Filesystem      1K-blocks       Used Available Use% Mounted on
+tmpfs            12882672       5928  12876744   1% /run
+/dev/nvme1n1p2 1920641288 1671343408 151660916  92% /
+tmpfs            32206676     976032  31230644   4% /dev/shm
+efivarfs              128         48        76  39% /sys/firmware/efi/efivars
+none                 1024          0      1024   0% /run/credentials/systemd-journald.service
+none                 1024          0      1024   0% /run/credentials/systemd-resolved.service
+/dev/nvme0n1p1 1967874000 1029562020 838275732  56% /media/alice/2nd

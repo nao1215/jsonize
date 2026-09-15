@@ -1,0 +1,38 @@
+[
+  {
+    "modified": "2026-09-14 23:46:45 -03",
+    "size": "2.3KiB",
+    "storage_class": "STANDARD",
+    "name": "a.txt"
+  },
+  {
+    "modified": "2026-09-14 23:46:45 -03",
+    "size": "4.8MiB",
+    "storage_class": "STANDARD",
+    "name": "big.bin"
+  },
+  {
+    "modified": "2026-09-14 23:46:45 -03",
+    "size": "0B",
+    "storage_class": "STANDARD",
+    "name": "empty"
+  },
+  {
+    "modified": "2026-09-14 23:46:45 -03",
+    "size": "2.3KiB",
+    "storage_class": "STANDARD",
+    "name": "link-to-a"
+  },
+  {
+    "modified": "2026-09-14 23:46:45 -03",
+    "size": "6B",
+    "storage_class": "STANDARD",
+    "name": "my notes.md"
+  },
+  {
+    "modified": "2026-09-14 23:59:46 -03",
+    "size": "0B",
+    "storage_class": null,
+    "name": "logs/"
+  }
+]

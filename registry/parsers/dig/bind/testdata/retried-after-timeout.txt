@@ -1,0 +1,23 @@
+;; communications error to 127.0.0.1#55353: timed out
+
+; <<>> DiG 9.20.24-1ubuntu0.3-Ubuntu <<>> @127.0.0.1 -p 55353 +timeout=1 +tries=2 example.com A
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 20353
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;example.com.			IN	A
+
+;; ANSWER SECTION:
+example.com.		174	IN	A	104.20.23.154
+example.com.		174	IN	A	172.66.147.243
+
+;; Query time: 13 msec
+;; SERVER: 127.0.0.1#55353(127.0.0.1) (UDP)
+;; WHEN: Tue Sep 15 11:24:10 JST 2026
+;; MSG SIZE  rcvd: 72
+

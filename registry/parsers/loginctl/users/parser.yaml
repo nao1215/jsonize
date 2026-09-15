@@ -20,8 +20,11 @@ detect:
       - '\A[ \t]*UID[ \t]+USER[ \t]'
       - '^[ \t]*UID[ \t]+USER[ \t]+LINGER[ \t]+STATE[ \t]*$'
 input:
-  ignore:
-    - '^[0-9]+ users listed\.$'
+  # The count of what was listed closes the output and is read as its
+  # end, so a line after it that no rule names is unread rather than
+  # taken for one more row.
+  select:
+    until: '^[0-9]+ users listed\.$'
 parse:
   type: table
   split: whitespace

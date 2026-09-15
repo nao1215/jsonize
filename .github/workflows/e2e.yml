@@ -79,7 +79,7 @@ jobs:
           # bash for the runner script, go for the jz and the helper the
           # scenarios build, and the two commands the required scenarios
           # run that FreeBSD does not ship.
-          prepare: pkg install -y bash go curl zsh
+          prepare: pkg install -y bash go curl zsh git
           # The machine logs in as root, and root reads a directory
           # whatever its mode says, so the scenarios for a registry that
           # cannot be read would pass for the wrong reason. The suite runs

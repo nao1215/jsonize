@@ -1,0 +1,5 @@
+description: the uptime line joined after the architectures is refused rather than read
+source: the macos-26-fat fixture followed by the uptime/bsd fixture, joined for this case
+os: darwin
+args: [-info, /bin/ls]
+expect_error: does not describe this input

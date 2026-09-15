@@ -1,0 +1,5 @@
+Mach Virtual Memory Statistics: (page size of 16384 bytes)
+Pages free: 7144. That was the first reading, taken right after boot.
+The second reading, a minute later, showed fewer free pages because the
+indexer had started. Pages active went up by about ten thousand, and
+"Translation faults" roughly doubled before the build finished.

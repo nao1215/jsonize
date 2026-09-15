@@ -1,0 +1,81 @@
+{
+  "issues": [
+    {
+      "path": "main.go",
+      "line": 14,
+      "column": 9,
+      "message": "Error return value of `f.Close` is not checked",
+      "linter": "errcheck",
+      "source": "\tf.Close()"
+    },
+    {
+      "path": "main.go",
+      "line": 10,
+      "column": 20,
+      "message": "printf: fmt.Printf format %d has arg name of wrong type string",
+      "linter": "govet",
+      "source": "\tfmt.Printf(\"hello %d\\n\", name)"
+    },
+    {
+      "path": "main.go",
+      "line": 12,
+      "column": 2,
+      "message": "assign: self-assignment of x",
+      "linter": "govet",
+      "source": "\tx = x"
+    },
+    {
+      "path": "pkg/sub/fmt.go",
+      "line": 6,
+      "column": 14,
+      "message": "printf: fmt.Printf format %s has arg n of wrong type int",
+      "linter": "govet",
+      "source": "\tfmt.Printf(\"%s items\\n\", n)"
+    },
+    {
+      "path": "main.go",
+      "line": 16,
+      "column": 2,
+      "message": "ineffectual assignment to err",
+      "linter": "ineffassign",
+      "source": "\terr = fmt.Errorf(\"a\")"
+    },
+    {
+      "path": "pkg/sub/sub.go",
+      "line": 6,
+      "column": 9,
+      "message": "SA6005: should use strings.EqualFold instead",
+      "linter": "staticcheck",
+      "source": "\treturn strings.ToLower(s) == strings.ToLower(\"ABC\")"
+    },
+    {
+      "path": "pkg/sub/sub.go",
+      "line": 13,
+      "column": 2,
+      "message": "SA9003: empty branch",
+      "linter": "staticcheck",
+      "source": "\tif Lower(\"a\") == true {"
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "linters": [
+      {
+        "linter": "errcheck",
+        "count": 1
+      },
+      {
+        "linter": "govet",
+        "count": 3
+      },
+      {
+        "linter": "ineffassign",
+        "count": 1
+      },
+      {
+        "linter": "staticcheck",
+        "count": 2
+      }
+    ]
+  }
+}

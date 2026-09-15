@@ -1,0 +1,35 @@
+# launchctl list with no label prints the jobs loaded in the caller's
+# domain, one per line, as three tab-separated columns under a heading:
+# the process id, the last exit status and the label. A job that is
+# loaded but not running has "-" for the process id, which is null. The
+# status is the exit code of the job's last run, or the negative number
+# of the signal that ended it, so it is a signed int.
+#
+# launchctl list LABEL prints the one job as a property list, which the
+# signature does not describe.
+format: 1
+command: launchctl
+variant: list
+description: launchctl list loaded jobs with their process id, last exit status and label
+metadata:
+  tags: [darwin, service, process]
+  compatible: [macOS launchctl]
+detect:
+  os: [darwin]
+  args:
+    all: ["list"]
+  signature:
+    all:
+      # The heading, then rows of the three columns to the end of the
+      # window.
+      - '\APID\tStatus\tLabel[ \t]*\n(?:(?:-|\d+)\t-?\d+\t[^\t\n]+(?:\n|\z))+\z'
+input:
+  ignore:
+    - '\APID\tStatus\tLabel[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<pid>-|\d+)\t(?P<status>-?\d+)\t(?P<label>[^\t\n]*[^\t\n ])[ ]*$'
+fields:
+  pid: {type: int, null_if: ["-"]}
+  status: {type: int, required: true}
+  label: {required: true}

@@ -1,35 +1,43 @@
-# netstat -r on FreeBSD prints a "Routing tables" banner and then a block
-# for each address family: a blank line, the family's name and a colon
-# ("Internet:", "Internet6:"), and a table of its routes under its own
-# heading. Each block is a record: the family, and the routes.
+# netstat -r on FreeBSD and macOS prints a "Routing tables" banner and
+# then a block for each address family: a blank line, the family's name
+# and a colon ("Internet:", "Internet6:"), and a table of its routes under
+# its own heading. Each block is a record: the family, and the routes.
+# The two systems print the same columns and differ only in how wide they
+# pad them, so one definition reads both.
 #
 # Without -n the destination and the gateway are names where a name is
 # known ("localhost", a network named in /etc/networks), and "default"
 # is the default route either way. A route with no gateway address, such
 # as one to an attached network or a local address, shows the interface's
-# link ("link#1"). The flags are a set of letters (U up, G gateway, H
-# host, S static and so on) and stay a word. Expire is the number of
-# seconds a route has left, and is printed only for a route that expires.
+# link ("link#1"), and on macOS a route learned from ARP or neighbour
+# discovery shows the hardware address. The flags are a set of letters (U
+# up, G gateway, H host, S static and so on) and stay a word. Expire is
+# the number of seconds a route has left, and is printed only for a route
+# that expires. macOS prints "!" there for a route that has an expiry
+# time and no seconds left, and expire is null for it as well: the
+# contract published for this definition has no key to carry the mark.
 #
-# -W adds Nhop#, Mtu and Metric; the heading is pinned whole so that table
-# is not read.
+# -W adds Nhop#, Mtu and Metric on FreeBSD, and -l adds Refs, Use and Mtu
+# on macOS; the heading is pinned whole so neither table is read.
 format: 1
 command: netstat
 variant: freebsd-routing
-description: FreeBSD netstat -r routing tables by address family
+description: FreeBSD and macOS netstat -r routing tables by address family
 metadata:
-  tags: [freebsd, bsd, network]
-  compatible: [FreeBSD netstat]
+  tags: [freebsd, bsd, darwin, network]
+  compatible: [FreeBSD netstat, macOS netstat]
   references:
     - https://man.freebsd.org/cgi/man.cgi?netstat(1)
     # routepr, pr_family and pr_rthdr.
     - https://github.com/freebsd/freebsd-src/blob/main/usr.bin/netstat/route.c
+    - https://github.com/apple-oss-distributions/network_cmds
 detect:
-  os: [freebsd]
+  os: [freebsd, darwin]
   signature:
     all:
       - '\ARouting tables(?: \(fib: \d+\))?[ \t]*$'
-      - '^Destination[ \t]+Gateway[ \t]+Flags[ \t]+Netif[ \t]+Expire[ \t]*$'
+      # The heading of a family's table and the first route under it.
+      - '^Destination[ \t]+Gateway[ \t]+Flags[ \t]+Netif[ \t]+Expire[ \t]*\n\S+[ \t]+\S+[ \t]+[A-Za-z0-9]+[ \t]+\S+(?:[ \t]+(?:\d+|!))?[ \t]*$'
 input:
   select:
     # A table other than fib 0 prints its number in the banner
@@ -59,4 +67,4 @@ parse:
         gateway: {required: true}
         flags: {required: true}
         netif: {required: true}
-        expire: {type: int}
+        expire: {type: int, null_if: ["!"]}

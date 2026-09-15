@@ -1,0 +1,4 @@
+total 0
+drwxrwxrwt   4 root    wheel   128 Sep  7 04:07 Shared
+drwxr-x---+ 40 runner  staff  1280 Sep 15 02:37 runner
+ 0: group:everyone deny delete

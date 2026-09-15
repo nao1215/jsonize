@@ -1,0 +1,93 @@
+{
+  "issues": [
+    {
+      "path": "pkg/sub/doc.go",
+      "line": 3,
+      "column": 1,
+      "message": "Duplicate words (the) found",
+      "linter": "dupword",
+      "source": "// Exported does the the thing"
+    },
+    {
+      "path": "main.go",
+      "line": 1,
+      "column": 1,
+      "message": "package-comments: should have a package comment",
+      "linter": "revive",
+      "source": "package main"
+    },
+    {
+      "path": "pkg/sub/doc.go",
+      "line": 1,
+      "column": 1,
+      "message": "package-comments: should have a package comment",
+      "linter": "revive",
+      "source": "package sub"
+    },
+    {
+      "path": "pkg/sub/doc.go",
+      "line": 8,
+      "column": 5,
+      "message": "exported: exported var X should have comment or be unexported",
+      "linter": "revive",
+      "source": "var X=1"
+    },
+    {
+      "path": "pkg/sub/fmt.go",
+      "line": 5,
+      "column": 1,
+      "message": "exported: exported function Show should have comment or be unexported",
+      "linter": "revive",
+      "source": "func Show(n int) {"
+    },
+    {
+      "path": "pkg/sub/sub.go",
+      "line": 5,
+      "column": 1,
+      "message": "exported: exported function Lower should have comment or be unexported",
+      "linter": "revive",
+      "source": "func Lower(s string) bool {"
+    },
+    {
+      "path": "pkg/sub/sub.go",
+      "line": 9,
+      "column": 1,
+      "message": "exported: exported function Loop should have comment or be unexported",
+      "linter": "revive",
+      "source": "func Loop() {"
+    },
+    {
+      "path": "pkg/sub/sub.go",
+      "line": 13,
+      "column": 24,
+      "message": "empty-block: this block is empty, you can remove it",
+      "linter": "revive",
+      "source": "\tif Lower(\"a\") == true {\n\t}"
+    },
+    {
+      "path": "pkg/sub/doc.go",
+      "line": 6,
+      "column": 6,
+      "message": "func unusedHelper is unused",
+      "linter": "unused",
+      "source": "func unusedHelper() {}"
+    }
+  ],
+  "summary": {
+    "total": 9,
+    "linters": [
+      {
+        "linter": "dupword",
+        "count": 1
+      },
+      {
+        "linter": "revive",
+        "count": 7
+      },
+      {
+        "linter": "unused",
+        "count": 1
+      }
+    ]
+  }
+}

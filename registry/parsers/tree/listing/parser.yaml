@@ -39,8 +39,11 @@ detect:
       - '\A\S[^\n]*(?:\n(?:\|   |    |│\x{a0}\x{a0} )*(?:\|-- |`-- |├── |└── )[^\n]*){18,}\n?\z'
 input:
   # The count at the end is the same facts the tree already carries: it
-  # counts the nodes above it, the top directory included.
-  ignore: ['^[0-9]+ director(?:y|ies)(?:, [0-9]+ files?)?[ \t]*$']
+  # counts the nodes above it, the top directory included. It closes the
+  # output and is read as its end, so a line after it is unread rather
+  # than taken for one more top directory.
+  select:
+    until: '^[0-9]+ director(?:y|ies)(?:, [0-9]+ files?)?[ \t]*$'
 parse:
   type: tree
   indent: ["|   ", "    ", "|-- ", "`-- ", "│   ", "├── ", "└── "]

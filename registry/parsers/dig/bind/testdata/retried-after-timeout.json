@@ -1,0 +1,73 @@
+{
+  "query": {
+    "version": "9.20.24-1ubuntu0.3-Ubuntu",
+    "arguments": "@127.0.0.1 -p 55353 +timeout=1 +tries=2 example.com A",
+    "servers_found": 1,
+    "global_options": [
+      "+cmd"
+    ]
+  },
+  "transport": [
+    {
+      "text": "communications error to 127.0.0.1#55353: timed out"
+    }
+  ],
+  "replies": [
+    {
+      "header": {
+        "opcode": "QUERY",
+        "status": "NOERROR",
+        "id": 20353,
+        "flags": [
+          "qr",
+          "rd",
+          "ra"
+        ],
+        "question_count": 1,
+        "answer_count": 2,
+        "authority_count": 0,
+        "additional_count": 1
+      },
+      "messages": [],
+      "edns": [
+        {
+          "name": "EDNS",
+          "value": "version: 0, flags:; udp: 1232"
+        }
+      ],
+      "question": [
+        {
+          "name": "example.com.",
+          "class": "IN",
+          "type": "A"
+        }
+      ],
+      "answers": [
+        {
+          "name": "example.com.",
+          "ttl": 174,
+          "class": "IN",
+          "type": "A",
+          "data": "104.20.23.154"
+        },
+        {
+          "name": "example.com.",
+          "ttl": 174,
+          "class": "IN",
+          "type": "A",
+          "data": "172.66.147.243"
+        }
+      ],
+      "authority": [],
+      "additional": [],
+      "statistics": {
+        "query_time_ms": 13,
+        "server": "127.0.0.1#55353",
+        "server_name": "127.0.0.1",
+        "protocol": "UDP",
+        "when": "Tue Sep 15 11:24:10 JST 2026",
+        "message_size": 72
+      }
+    }
+  ]
+}

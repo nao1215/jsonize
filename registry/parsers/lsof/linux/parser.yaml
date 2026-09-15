@@ -2,17 +2,21 @@
 # text that contains spaces (a socket prints "type=STREAM (CONNECTED)"
 # after its path), so cells are cut at the header offsets rather than on
 # whitespace.
+#
+# lsof on macOS is the same program and prints the same columns, so
+# jz run reads it there too; the variant keeps the name it was added
+# under.
 format: 1
 command: lsof
 variant: linux
 description: lsof default listing of open files
 metadata:
-  tags: [linux, process, file, network]
+  tags: [linux, darwin, process, file, network]
   compatible: [lsof]
   references:
     - https://man7.org/linux/man-pages/man8/lsof.8.html
 detect:
-  os: [linux]
+  os: [linux, darwin]
   signature:
     all:
       # The text opens with the header.

@@ -39,6 +39,10 @@ parse:
         pattern: '^# (?P<name>[^:]+): (?P<value>.*?)[ \t]*$'
       fields:
         name: {required: true}
+        # getfacl writes a backslash in a name as two, and a character it
+        # will not print, such as a newline, as a backslash and three
+        # octal digits; a space, a tab and UTF-8 it prints as they are.
+        value: {unescape: {octal: true, sequences: {'\\': '\'}}}
     - name: entries
       ignore:
         - '^#'

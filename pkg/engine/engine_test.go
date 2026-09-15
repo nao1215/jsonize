@@ -752,7 +752,9 @@ parse:
 		name, input  string
 		first, total int
 	}{
-		{"before, skipped, past the limit and after the end", "junk\nBEGIN\nskipme\na\nb\nc\nEND\nafter\n", 1, 5},
+		// END is the whole of what until states, so it is read; "after"
+		// past it is not.
+		{"before, skipped, past the limit and after the end", "junk\nBEGIN\nskipme\na\nb\nc\nEND\nafter\n", 1, 4},
 		{"no heading at all", "no begin marker\n", 1, 1},
 		{"skip beyond the end", "BEGIN\nonly\n", 2, 1},
 	}

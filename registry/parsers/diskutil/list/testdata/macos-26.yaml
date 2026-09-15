@@ -1,0 +1,4 @@
+description: a physical disk with its GUID scheme and an APFS container disk synthesized on one of its partitions
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C diskutil list
+os: darwin
+args: [list]

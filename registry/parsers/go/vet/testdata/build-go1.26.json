@@ -1,0 +1,20 @@
+[
+  {
+    "path": "broken/broken.go",
+    "line": 4,
+    "column": 9,
+    "message": "cannot use \"not an int\" (untyped string constant) as int value in return statement"
+  },
+  {
+    "path": "broken/more.go",
+    "line": 6,
+    "column": 12,
+    "message": "too many arguments in call to takesNone have (number) want ()"
+  },
+  {
+    "path": "broken/more.go",
+    "line": 7,
+    "column": 6,
+    "message": "declared and not used: unused"
+  }
+]

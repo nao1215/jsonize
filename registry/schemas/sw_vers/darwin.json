@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sw_vers/darwin.json",
+  "title": "sw_vers/darwin",
+  "description": "sw_vers macOS product name, version and build",
+  "x-jsonize": {
+    "definition": "sw_vers/darwin",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "product_name": {
+      "type": "string"
+    },
+    "product_version": {
+      "type": "string"
+    },
+    "build_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "product_name",
+    "product_version",
+    "build_version"
+  ]
+}

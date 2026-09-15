@@ -1,0 +1,4 @@
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with sysctl vm.swapusage
+description: macOS prints a variable in the FreeBSD shape, here one whose value is a structure formatted for reading
+os: darwin
+args: [vm.swapusage]

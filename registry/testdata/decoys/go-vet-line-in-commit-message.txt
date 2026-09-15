@@ -1,0 +1,8 @@
+fix(cache): pass the key as a string to Printf
+
+go vet reported:
+
+    cache/cache.go:41:14: fmt.Printf format %s has arg key of wrong type int
+
+# Testing
+go vet ./... and go test ./... pass on go1.26.4.

@@ -1,0 +1,53 @@
+# netstat -i on macOS prints a row for each interface's link level and a
+# row for each address on it. The link row carries the hardware address,
+# which an interface without one (lo0, a tunnel) leaves blank, and the
+# error and collision counters. An address row repeats the interface
+# name and the MTU, has the network and the address in place of <Link#n>
+# and the hardware address, and prints "-" for the counters the kernel
+# keeps only per interface.
+#
+# Without -n the network and the address are names where a name is known
+# ("localhost", the host's own name), and netstat cuts both to the width
+# of their columns, so an IPv6 address may end in the middle of a group
+# ("fe80:7::200:ff:fe"). They stay as printed.
+#
+# A name followed by "*" is an interface that is not up. The star is not
+# part of the name, so it is read into up.
+#
+# FreeBSD prints an Idrop column that macOS does not, which is
+# netstat/freebsd-interface. -b adds byte counters and -d a Drop column
+# here, which change the heading; the heading is pinned whole.
+format: 1
+command: netstat
+variant: darwin-interface
+description: macOS netstat -i interface and address counters
+metadata:
+  tags: [darwin, network]
+  compatible: [macOS netstat]
+  references:
+    - https://github.com/apple-oss-distributions/network_cmds
+detect:
+  os: [darwin]
+  signature:
+    all:
+      - '\AName[ \t]+Mtu[ \t]+Network[ \t]+Address[ \t]+Ipkts[ \t]+Ierrs[ \t]+Opkts[ \t]+Oerrs[ \t]+Coll[ \t]*$'
+      # A link row: an exact MTU and exact counters.
+      - '^[^\s*]+\*?[ \t]+\d+[ \t]+<Link#\d+>(?:[ \t]+\S+)?[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]*$'
+input:
+  ignore:
+    - '\AName[ \t]+Mtu[ \t]+Network[ \t]+Address[ \t]+Ipkts[ \t]+Ierrs[ \t]+Opkts[ \t]+Oerrs[ \t]+Coll[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<name>[^\s*]+)(?P<up>\*?)[ \t]+(?P<mtu>\d+)[ \t]+(?P<network>\S+)(?:[ \t]+(?P<address>\S+))??[ \t]+(?P<ipkts>\d+)[ \t]+(?P<ierrs>\d+|-)[ \t]+(?P<opkts>\d+)[ \t]+(?P<oerrs>\d+|-)[ \t]+(?P<coll>\d+|-)[ \t]*$'
+fields:
+  name: {required: true}
+  up: {type: bool, true_values: [""], false_values: ["*"]}
+  mtu: {type: int, required: true}
+  network: {required: true}
+  ipkts: {type: int, required: true}
+  # The dashes on an address row are counters kept for the interface and
+  # not for the address: null, not zero.
+  ierrs: {type: int, null_if: ["-"]}
+  opkts: {type: int, required: true}
+  oerrs: {type: int, null_if: ["-"]}
+  coll: {type: int, null_if: ["-"]}

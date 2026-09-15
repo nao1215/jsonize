@@ -39,7 +39,9 @@ input:
     - '^TYPE[ \t]+TOTAL[ \t]+ACTIVE[ \t]'
 parse:
   type: regex
-  pattern: '^(?P<type>\S.*?) {2,}(?P<total>\d+) {2,}(?P<active>\d+) {2,}(?P<size>\S+) {2,}(?P<reclaimable>\S+)(?: \((?P<reclaimable_percent>\d+)%\))?[ \t]*$'
+  # The four kinds of object docker reports, which is what tells a row
+  # from five columns of another report.
+  pattern: '^(?P<type>Images|Containers|Local Volumes|Build Cache) {2,}(?P<total>\d+) {2,}(?P<active>\d+) {2,}(?P<size>\S+) {2,}(?P<reclaimable>\S+)(?: \((?P<reclaimable_percent>\d+)%\))?[ \t]*$'
 fields:
   type: {required: true}
   total: {type: int, required: true}

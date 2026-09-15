@@ -37,6 +37,15 @@ project follows [Semantic Versioning](https://semver.org/).
   all-namespaces forms, `kubectl config get-contexts`,
   `kubectl api-resources`, `kubectl version`, `rclone lsl`, `lsd` and
   `version`, `redis-cli info` and `client list`.
+- A top-level `input.select.until` that states its whole line reads that
+  line as the end of the output, the way `after` reads a heading, and a
+  line after it is unread (exit 3). `net share` closes on its completion
+  line with it, so another command's output behind the listing is
+  refused rather than read as shares.
+- `unescape` takes `octal: true`, which reads a backslash and three
+  octal digits as the byte they name, and `quote`, which decodes only a
+  value put between that character. git and getfacl write names that
+  way.
 - A definition for `systemd-cgls`: the control groups under the group,
   unit or directory it starts from, the processes in each with their
   ids, whether a group is delegated, and the group ids and extended
@@ -47,6 +56,13 @@ project follows [Semantic Versioning](https://semver.org/).
 - Definitions for `eza -l` (with `--header`, `-a`, `-B`, and in its
   long-iso, full-iso, `-g` and `-H` column sets), `procs`, `tokei`,
   `bat --list-languages` and `hyperfine --style basic`.
+- Definitions for macOS: `vm_stat`, `sw_vers`, `diskutil list`,
+  `launchctl list`, `pmset -g`, `netstat -i` and `netstat -rn`,
+  `system_profiler SPSoftwareDataType` and `SPHardwareDataType`,
+  `scutil --dns`, `networksetup -listallhardwareports`,
+  `brew outdated --verbose`, `memory_pressure`, `top -l`, `otool -L`,
+  `lipo -info`, `csrutil status`, `spctl --status`, `fdesetup status`
+  and `shasum -a 256`, from output captured on a macOS 26 runner.
 - Definitions for Windows: `tasklist` in its table, `/v`, `/svc`, `/m`,
   `/fo list` and `/fo csv` forms, `netstat -an`, `-ano` and `-e`,
   `route print`, `arp -a`, `getmac /v`, `driverquery` and `driverquery
@@ -54,6 +70,9 @@ project follows [Semantic Versioning](https://semver.org/).
   a list, `net user`, `net localgroup`, `net share` and `net start`,
   `whoami /groups` and `/priv`, `chcp` and `ver`, from output captured on
   Windows Server 2022 and 2025 runners.
+- Definitions for compiler-style diagnostics: `go vet` (and `go build`),
+  `staticcheck`, `golangci-lint`, `actionlint` and `shellcheck -f gcc`;
+  and for `mc ls` (the MinIO client) and `task --list`.
 - Definitions for `cargo tree`, `uv tree`, `npm ls --all`, `busctl tree`
   (one service or several), `docker buildx ls` and `xinput list`.
 - `md5sum --tag`, `sha1sum --tag`, `sha256sum --tag`, `b2sum --tag` and
@@ -85,6 +104,42 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `chage -l` is read only as the seven lines it prints, and `lscpu
+  --caches` holds each row to a cache name and type. Lines another
+  command printed after them were read as more fields of the account and
+  as more caches.
+- `systemctl list-sockets`, `list-paths`, `list-timers`,
+  `list-automounts`, `list-machines`, `list-unit-files`, `list-jobs` and
+  `list-units`, `networkctl list`, `loginctl list-sessions`,
+  `list-seats` and `list-users`, `systemd-inhibit --list` and `tree`
+  read their count line ("29 sockets listed.", "3 directories, 5
+  files") as the end of the listing. Another
+  command's output after it is refused as unread (exit 3), where rows of
+  it that fit the columns were read as more entries.
+- `jz run sysctl` and `jz run lsof` on macOS found no definition: both are
+  the programs FreeBSD and Linux have, printing the same lines, and their
+  definitions now apply there. `ls -le` and `ls -lO` on macOS, which add
+  access control lists and file flags to a long listing, are refused by
+  the argument rather than failing on the first list.
+- Ctrl-C typed at a terminal reached the command `jz run` started twice:
+  once from the terminal, which sends it to the whole foreground group,
+  and once passed on by jz. A command that stops at once on a second
+  interrupt was stopped by one keypress. jz no longer passes on an
+  interrupt when the terminal's foreground group is its own and the
+  command is in it.
+- `jz run ls -l` for a user whose environment sets `QUOTING_STYLE`
+  returned names with the quotes in them. jz runs ls with the literal
+  style, and the long listings refuse `-Q`, `--quoting-style`, `-b` and
+  `-q`, which change the names they print.
+- `jz run git log --oneline` in a repository or for a user whose
+  configuration sets `log.decorate` returned the branch names as part of
+  the first subject. jz runs git with decorations and signatures off for
+  this format, refuses `-c` and `--config-env` among its arguments, and
+  on a pipe refuses a line whose parenthesis opens with `HEAD`, a tag or
+  a remote branch. An `args` entry that ends in `=` matches the long
+  option with any value.
+  `exec.env` now comes from the variants the arguments leave, so the
+  setting does not reach `git config --list`.
 - A duration with a fraction of a unit under a second is the number the
   text names: `1.3 ms` is `0.0013` where it was `0.0013000000000000002`,
   and `systemd-analyze critical-chain` reports `+87ms` as `0.087`. The
@@ -124,6 +179,19 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `docker system df` names the four kinds of usage it reports, and
+  `docker version` keeps every value as the string docker printed,
+  `Experimental`'s `false` included. Their output schemas are version 2.
+- A definition's regular expressions are checked when it is loaded and
+  built into programs the first time they are matched, so a run no
+  longer builds the programs of the hundreds of definitions it does not
+  read with. Loading the official registry allocates half of what it
+  did, `df -h | jz` on one core takes 42 ms where it took 53 ms, and a
+  broken expression is still reported when the definition is loaded.
+- `git status --porcelain` paths are the names they stand for: a path git
+  quoted has its quotes removed and its escapes decoded, octal bytes to
+  UTF-8 (`"docs/\346\227\245..."` is `docs/日...`). `getfacl` decodes
+  the backslash and the octal escapes it writes in a file name.
 - A `required` field whose value is a word `null_if` names is `null`, where
   it was an error: the command printed its word for no value, and
   `required` refuses a value that is missing or empty. `kubectl get

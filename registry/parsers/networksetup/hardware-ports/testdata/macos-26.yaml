@@ -1,0 +1,4 @@
+description: two Ethernet ports and an empty list of VLAN configurations
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C networksetup -listallhardwareports; the MAC addresses replaced by 02:00:00:00:00:0x
+os: darwin
+args: [-listallhardwareports]

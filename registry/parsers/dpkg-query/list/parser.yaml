@@ -35,5 +35,8 @@ parse:
     none: true
     columns: [package, version]
 fields:
-  package: {required: true}
-  version: {required: true}
+  # The signature holds every line to these shapes only as far as its
+  # window reaches, so the columns hold the rest to them: a package name
+  # in the characters Debian allows, and a version opening with a digit.
+  package: {required: true, regex: '(?P<package>[a-z0-9][a-z0-9.+-]+(?::[a-z0-9-]+)?)'}
+  version: {required: true, regex: '(?P<version>[0-9][A-Za-z0-9.+~:-]*)'}

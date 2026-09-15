@@ -1,0 +1,5 @@
+source: the definition's own active.txt followed by apt-cache/madison's bash-coreutils.txt, joined for this case
+description: the madison rows after the count of sockets are refused as unread, since the count closes the listing; they were read as sockets before
+os: linux
+args: ["list-sockets"]
+expect_error: no part of the definition read

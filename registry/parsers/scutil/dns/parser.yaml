@@ -1,0 +1,84 @@
+# scutil --dns prints the resolver configuration in two lists: the
+# resolvers used for ordinary queries under "DNS configuration", and the
+# resolvers bound to an interface under "DNS configuration (for scoped
+# queries)". Each resolver is a block that opens with "resolver #N" and
+# holds one indented "label : value" line per setting the resolver has.
+#
+# The settings are printed in a fixed order and only where they are set,
+# so a block is read as one expression with each setting optional, in
+# that order: the domain, the search domains, the name servers, the port,
+# the sort addresses, the options, the timeout, the interface, the
+# service identifier, the cid, the flags, the reachability and the
+# search order. A label outside that list, or one out of that order, is
+# refused rather than dropped. The numbered lines (nameserver[0],
+# nameserver[1]) become arrays in the order printed.
+#
+# if_index is the interface index, and interface the name scutil prints
+# beside it. flags and reach_flags are the words scutil prints, split at
+# the commas; reach is the reachability as the hexadecimal value it
+# prints. A setting the resolver does not have is null.
+format: 1
+command: scutil
+variant: dns
+description: scutil --dns resolver configuration on macOS
+metadata:
+  tags: [darwin, network, dns]
+  compatible: [macOS scutil]
+  references:
+    - https://github.com/apple-oss-distributions/configd
+detect:
+  os: [darwin]
+  args:
+    all: ["--dns"]
+  signature:
+    all:
+      # The heading and the first resolver, then only headings, resolver
+      # lines, settings and blank lines to the end of the window.
+      - '\ADNS configuration[ \t]*\n\nresolver #\d+[ \t]*(?:\n(?:DNS configuration(?: \(for scoped queries\))?|resolver #\d+|  (?:domain|search domain\[\d+\]|nameserver\[\d+\]|port|sortaddr\[\d+\]|options|timeout|if_index|service_identifier|cid|flags|reach|order)[ \t]*: \S[^\n]*|)[ \t]*)*\z'
+parse:
+  type: composite
+  parts:
+    - name: resolvers
+      select: {after: '\ADNS configuration[ \t]*$', until: '^DNS configuration \(for scoped queries\)[ \t]*$'}
+      parse:
+        type: records
+        start: '^resolver #\d+[ \t]*$'
+        record:
+          parse:
+            type: regex
+            each: input
+            pattern: '\Aresolver #(?P<number>\d+)[ \t]*(?:\n  domain[ \t]*: (?P<domain>[^\n]*?)[ \t]*)?(?:\n  search domain\[\d+\] : (?P<search_domains>[^\n]*?(?:\n  search domain\[\d+\] : [^\n]*?)*)[ \t]*)?(?:\n  nameserver\[\d+\] : (?P<nameservers>[^\n]*?(?:\n  nameserver\[\d+\] : [^\n]*?)*)[ \t]*)?(?:\n  port[ \t]*: (?P<port>\d+)[ \t]*)?(?:\n  sortaddr\[\d+\] : (?P<sort_addresses>[^\n]*?(?:\n  sortaddr\[\d+\] : [^\n]*?)*)[ \t]*)?(?:\n  options[ \t]*: (?P<options>[^\n]*?)[ \t]*)?(?:\n  timeout[ \t]*: (?P<timeout>\d+)[ \t]*)?(?:\n  if_index[ \t]*: (?P<if_index>\d+) \((?P<interface>[^)\n]*)\)[ \t]*)?(?:\n  service_identifier[ \t]*: (?P<service_identifier>\d+)[ \t]*)?(?:\n  cid[ \t]*: (?P<cid>[^\n]*?)[ \t]*)?(?:\n  flags[ \t]*: (?P<flags>[^\n]*?)[ \t]*)?(?:\n  reach[ \t]*: (?P<reach>0x[0-9a-f]{8}) \((?P<reach_flags>[^)\n]*)\)[ \t]*)?(?:\n  order[ \t]*: (?P<order>\d+)[ \t]*)?\z'
+          fields:
+            number: {type: int, required: true}
+            search_domains: {type: array, split_regex: '\n  search domain\[\d+\] : '}
+            nameservers: {type: array, split_regex: '\n  nameserver\[\d+\] : '}
+            port: {type: int}
+            sort_addresses: {type: array, split_regex: '\n  sortaddr\[\d+\] : '}
+            timeout: {type: int}
+            if_index: {type: int}
+            service_identifier: {type: int}
+            flags: {type: array, split: ","}
+            reach_flags: {type: array, split: ","}
+            order: {type: int}
+    - name: scoped_resolvers
+      select: {after: '^DNS configuration \(for scoped queries\)[ \t]*$'}
+      parse:
+        type: records
+        start: '^resolver #\d+[ \t]*$'
+        record:
+          parse:
+            type: regex
+            each: input
+            pattern: '\Aresolver #(?P<number>\d+)[ \t]*(?:\n  domain[ \t]*: (?P<domain>[^\n]*?)[ \t]*)?(?:\n  search domain\[\d+\] : (?P<search_domains>[^\n]*?(?:\n  search domain\[\d+\] : [^\n]*?)*)[ \t]*)?(?:\n  nameserver\[\d+\] : (?P<nameservers>[^\n]*?(?:\n  nameserver\[\d+\] : [^\n]*?)*)[ \t]*)?(?:\n  port[ \t]*: (?P<port>\d+)[ \t]*)?(?:\n  sortaddr\[\d+\] : (?P<sort_addresses>[^\n]*?(?:\n  sortaddr\[\d+\] : [^\n]*?)*)[ \t]*)?(?:\n  options[ \t]*: (?P<options>[^\n]*?)[ \t]*)?(?:\n  timeout[ \t]*: (?P<timeout>\d+)[ \t]*)?(?:\n  if_index[ \t]*: (?P<if_index>\d+) \((?P<interface>[^)\n]*)\)[ \t]*)?(?:\n  service_identifier[ \t]*: (?P<service_identifier>\d+)[ \t]*)?(?:\n  cid[ \t]*: (?P<cid>[^\n]*?)[ \t]*)?(?:\n  flags[ \t]*: (?P<flags>[^\n]*?)[ \t]*)?(?:\n  reach[ \t]*: (?P<reach>0x[0-9a-f]{8}) \((?P<reach_flags>[^)\n]*)\)[ \t]*)?(?:\n  order[ \t]*: (?P<order>\d+)[ \t]*)?\z'
+          fields:
+            number: {type: int, required: true}
+            search_domains: {type: array, split_regex: '\n  search domain\[\d+\] : '}
+            nameservers: {type: array, split_regex: '\n  nameserver\[\d+\] : '}
+            port: {type: int}
+            sort_addresses: {type: array, split_regex: '\n  sortaddr\[\d+\] : '}
+            timeout: {type: int}
+            if_index: {type: int}
+            service_identifier: {type: int}
+            flags: {type: array, split: ","}
+            reach_flags: {type: array, split: ","}
+            order: {type: int}

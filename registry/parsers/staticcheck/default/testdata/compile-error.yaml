@@ -1,0 +1,7 @@
+source: captured from staticcheck 2026.1 (v0.7.0) on Linux with LC_ALL=C, staticcheck ./... in the same module with a package that does not compile
+description: >-
+  A compile error is one problem at position - whose message is the
+  compiler output over several lines, closed by (compile); it is refused.
+os: linux
+args: ["./..."]
+expect_error: does not describe this input

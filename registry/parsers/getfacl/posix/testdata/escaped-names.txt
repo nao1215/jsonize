@@ -1,0 +1,35 @@
+# file: a b.txt
+# owner: user
+# group: user
+user::rw-
+group::rw-
+other::r--
+
+# file: 日本.txt
+# owner: user
+# group: user
+user::rw-
+group::rw-
+other::r--
+
+# file: back\\slash.txt
+# owner: user
+# group: user
+user::rw-
+group::rw-
+other::r--
+
+# file: tab	here.txt
+# owner: user
+# group: user
+user::rw-
+group::rw-
+other::r--
+
+# file: new\012line.txt
+# owner: user
+# group: user
+user::rw-
+group::rw-
+other::r--
+
