@@ -1527,7 +1527,8 @@ scenarios:
           stdout: {empty: true}
 
   # git quotes a name with a space, so the " -> " outside the quotes is
-  # the one that separates the two paths of a rename.
+  # the one that separates the two paths of a rename, and the names are
+  # the ones the quotes hold.
   - name: git status splits a rename at the arrow outside the quotes
     only: {os: linux}
     steps:
@@ -1547,8 +1548,8 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].index", equals: R }
-              - { path: "$[0].path", equals: '"a -> b"' }
-              - { path: "$[0].renamed_to", equals: '"c -> d"' }
+              - { path: "$[0].path", equals: "a -> b" }
+              - { path: "$[0].renamed_to", equals: "c -> d" }
 
   # GNU md5sum marks a line whose name it escaped with a backslash in
   # front of the digest; such a name is decoded. wc quotes a name with a
