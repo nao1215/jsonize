@@ -252,7 +252,7 @@ CGroup /system.slice:
 | `-getty@tty1.service
 |   `-2425 /usr/sbin/agetty --noreset --noclear --issue-file=/etc/issue:/etc/...
 |-avahi-daemon.service
-| |-2022 avahi-daemon: running [EVO-X2.local]
+| |-2022 avahi-daemon: running [examplehost.local]
 | `-2107 avahi-daemon: chroot helper
 `-systemd-logind.service
   `-2065 /usr/lib/systemd/systemd-logind
