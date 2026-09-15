@@ -278,6 +278,16 @@ parse: {type: regex, pattern: '^(?P<k>\w+): (?P<v>\w+)$'}
 	if _, err := streamAll(t, whole, after); err == nil || !strings.Contains(err.Error(), "line 3") {
 		t.Errorf("a line after the closing line, streamed: %v", err)
 	}
+	// A limit reached before the closing line leaves it to until, in a
+	// stream as in a whole document.
+	limited := strings.Replace(whole, "select: {until:", "select: {limit: 1, until:", 1)
+	const pastLimit = "a: on\n\nThe command completed successfully.\n"
+	if got, err := Parse(load(t, limited), []byte(pastLimit), Options{}); err != nil || mustJSON(t, got) != `[{"k":"a","v":"on"}]` {
+		t.Errorf("a closing line past the limit: %v %v", mustJSON(t, got), err)
+	}
+	if got, err := streamAll(t, limited, pastLimit); err != nil || got != `{"k":"a","v":"on"}`+"\n" {
+		t.Errorf("a closing line past the limit, streamed: %q %v", got, err)
+	}
 	opening := strings.Replace(tmpl, "UNTIL", `^The command`, 1)
 	ue, pe = unread(t, opening, done)
 	if pe.Line != 2 || ue.Spans[0].Text != "The command completed successfully." {
