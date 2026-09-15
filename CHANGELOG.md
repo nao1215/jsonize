@@ -8,6 +8,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `jz new` makes a JSON object from its arguments, or an array with
+  `--array`: `key=text` is a string, `key:=json` a JSON value,
+  `key=@path` a file's text, `key:=@path` the value a data file holds and
+  `key[]=` one more element of an array. Nothing is guessed from a value,
+  and a key given twice without `[]` is exit 2.
 - Data files: `jz --file` reads a file as the format its extension
   names, `.csv`, `.tsv`, `.ltsv`, `.jsonl` (or `.ndjson`), `.json` and
   `.yaml` (or `.yml`), each also compressed as `.gz` or `.bz2`, and

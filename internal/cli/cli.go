@@ -89,6 +89,7 @@ type command struct {
 func commands() []command {
 	return []command{
 		{modeRun, "run a command and convert its stdout to JSON", (*app).cmdRun},
+		{modeNew, "make a JSON object or array from arguments", (*app).cmdNew},
 		{modeList, "list supported parsers, or inspect one", (*app).cmdList},
 		{modeTest, "check parser definitions and their fixtures", (*app).cmdTest},
 		{"completion", "print a shell completion script (bash, zsh)", (*app).cmdCompletion},
@@ -156,6 +157,7 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "  jz [options] < FILE")
 	fmt.Fprintln(w, "  jz [options] --file DATA.csv|.tsv|.ltsv|.jsonl|.json|.yaml")
 	fmt.Fprintln(w, "  jz run [options] COMMAND [args...]")
+	fmt.Fprintln(w, "  jz new [options] KEY=VALUE KEY:=JSON ...")
 	fmt.Fprintln(w, "  jz list [COMMAND [VARIANT]]")
 	fmt.Fprintln(w, "  jz test [DIR...]")
 	fmt.Fprintln(w, "  jz completion bash|zsh")
@@ -177,12 +179,14 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "  jz --file captured.txt")
 	fmt.Fprintln(w, "  jz --file users.csv")
 	fmt.Fprintln(w, "  cat events.log | jz --format ltsv --stream")
+	fmt.Fprintln(w, "  jz new name=api replicas:=3 tags[]=web")
 	fmt.Fprintln(w, "  df -h | jz --parser df")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Exit codes: 0 ok, 1 error, 2 usage, 3 parse failure, 4 unidentified or")
 	fmt.Fprintln(w, "ambiguous input, 5 registry problem; `jz run` mirrors the command's own status.")
 	fmt.Fprintln(w)
-	fmt.Fprintln(w, "Run `jz run --help`, `jz list --help`, `jz test --help` or `jz completion --help`")
+	fmt.Fprintln(w, "Run `jz run --help`, `jz new --help`, `jz list --help`, `jz test --help` or")
+	fmt.Fprintln(w, "`jz completion --help`")
 	fmt.Fprintln(w, "for a subcommand's own options.")
 	fmt.Fprintln(w)
 	printLinks(w)

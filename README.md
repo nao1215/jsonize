@@ -8,7 +8,8 @@
 
 jsonize turns command output into JSON. Pipe a command to `jz` to detect
 its format and convert it. It also reads CSV, TSV, LTSV, JSON Lines, JSON
-and YAML files, and supports YAML output and streaming.
+and YAML files, makes JSON from arguments with `jz new`, and supports
+YAML output and streaming.
 
 ```console
 $ df -h | jz
@@ -71,6 +72,7 @@ jz --file captured.txt
 jz --file users.csv          # a data file, read as the format its extension names
 COMMAND | jz --format yaml   # piped data, read as the format --format names
 jz run COMMAND [args...]     # let jz run the command and convert its stdout
+jz new KEY=VALUE KEY:=JSON   # make JSON from arguments
 jz list                      # what jz can read
 jz list --schema df gnu      # the JSON Schema of what one definition produces
 jz test [DIR...]             # check parser definitions of your own
@@ -111,6 +113,14 @@ $ jz --file users.csv
 
 $ kubectl get deploy api -o yaml | jz --format yaml --extract spec
 {"spec":{"replicas":3, ...}}
+```
+
+`jz new` makes JSON from arguments. `=` makes a string, `:=` reads JSON,
+`@path` reads a file and `[]` appends to an array. Nothing is guessed.
+
+```console
+$ jz new name=api replicas:=3 tags[]=web spec:=@deploy.yaml
+{"name":"api","replicas":3,"tags":["web"],"spec":{"replicas":3}}
 ```
 
 `--extract` and `--exclude` name keys of the objects jz prints, and

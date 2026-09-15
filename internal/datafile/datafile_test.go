@@ -159,8 +159,17 @@ func TestStream(t *testing.T) {
 	if err := Stream(JSON, strings.NewReader("1"), 10, func(any) error { return nil }); err == nil {
 		t.Error("a document format was streamed")
 	}
-	if _, err := Read(CSV, []byte("a\n")); err == nil {
-		t.Error("a csv was read here")
+	if v, err := Read(CSV, []byte("a,b\n1,\"x,y\"\n")); err != nil || encode(t, v) != `[{"a":"1","b":"x,y"}]` {
+		t.Errorf("a csv: %v %v", v, err)
+	}
+	if v, err := Read(TSV, []byte("a\tb\n1\t2\n")); err != nil || encode(t, v) != `[{"a":"1","b":"2"}]` {
+		t.Errorf("a tsv: %v %v", v, err)
+	}
+	if _, err := Read(CSV, []byte("a,b\n1,2,3\n")); err == nil {
+		t.Error("a ragged csv was read")
+	}
+	if _, err := Read("xml", []byte("<a/>")); err == nil {
+		t.Error("an unknown format was read")
 	}
 }
 

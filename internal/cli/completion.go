@@ -192,6 +192,9 @@ func modeOptions(mode string) optionInfo {
 	case modeTest:
 		var t testOptions
 		t.bind(o)
+	case modeNew:
+		var n newCmdOptions
+		n.bind(o)
 	default:
 		var co convertOptions
 		co.bind(o)
