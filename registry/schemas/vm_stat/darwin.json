@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/vm_stat/darwin.json",
+  "title": "vm_stat/darwin",
+  "description": "vm_stat virtual memory counters on macOS",
+  "x-jsonize": {
+    "definition": "vm_stat/darwin",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "page_size": {
+      "type": "integer"
+    },
+    "pages_free": {
+      "type": "integer"
+    },
+    "pages_active": {
+      "type": "integer"
+    },
+    "pages_inactive": {
+      "type": "integer"
+    },
+    "pages_speculative": {
+      "type": "integer"
+    },
+    "pages_throttled": {
+      "type": "integer"
+    },
+    "pages_wired_down": {
+      "type": "integer"
+    },
+    "pages_purgeable": {
+      "type": "integer"
+    },
+    "translation_faults": {
+      "type": "integer"
+    },
+    "pages_copy_on_write": {
+      "type": "integer"
+    },
+    "pages_zero_filled": {
+      "type": "integer"
+    },
+    "pages_reactivated": {
+      "type": "integer"
+    },
+    "pages_purged": {
+      "type": "integer"
+    },
+    "file_backed_pages": {
+      "type": "integer"
+    },
+    "anonymous_pages": {
+      "type": "integer"
+    },
+    "pages_stored_in_compressor": {
+      "type": "integer"
+    },
+    "pages_occupied_by_compressor": {
+      "type": "integer"
+    },
+    "decompressions": {
+      "type": "integer"
+    },
+    "compressions": {
+      "type": "integer"
+    },
+    "pageins": {
+      "type": "integer"
+    },
+    "pageouts": {
+      "type": "integer"
+    },
+    "swapins": {
+      "type": "integer"
+    },
+    "swapouts": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "page_size",
+    "pages_free",
+    "pages_active",
+    "pages_inactive",
+    "pages_speculative",
+    "pages_throttled",
+    "pages_wired_down",
+    "pages_purgeable",
+    "translation_faults",
+    "pages_copy_on_write",
+    "pages_zero_filled",
+    "pages_reactivated",
+    "pages_purged",
+    "file_backed_pages",
+    "anonymous_pages",
+    "pages_stored_in_compressor",
+    "pages_occupied_by_compressor",
+    "decompressions",
+    "compressions",
+    "pageins",
+    "pageouts",
+    "swapins",
+    "swapouts"
+  ]
+}

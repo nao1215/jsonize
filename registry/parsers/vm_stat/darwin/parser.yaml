@@ -1,0 +1,61 @@
+# vm_stat with no interval prints a banner that states the page size and
+# then one line per counter: the label, a colon, the count padded to a
+# column and a full stop. Every count is a number of pages, or of events
+# for the fault, compression and paging counters, so each is an int.
+#
+# The labels are a fixed list in the source of vm_stat, printed in the
+# same order on every run, so the whole output is read as one object
+# with a key per label: the label in lower case with its spaces and
+# hyphens turned into underscores. vm_stat prints the quotes around
+# "Translation faults" itself, and they are left out of the key. A line
+# that is not one of those labels, such as another command's output
+# joined after it, is refused rather than read.
+#
+# With an interval (vm_stat 1) the counters are printed as a table under
+# a heading of abbreviated column names, which the second expression of
+# the signature does not describe.
+format: 1
+command: vm_stat
+variant: darwin
+description: vm_stat virtual memory counters on macOS
+metadata:
+  tags: [darwin, memory, system]
+  compatible: [macOS vm_stat]
+  references:
+    - https://github.com/apple-oss-distributions/system_cmds
+detect:
+  os: [darwin]
+  args:
+    # An interval, or -c with a count, prints the table form.
+    none: ["-c"]
+  signature:
+    all:
+      - '\AMach Virtual Memory Statistics: \(page size of \d+ bytes\)[ \t]*\nPages free:[ \t]+\d+\.[ \t]*$'
+parse:
+  type: regex
+  each: input
+  pattern: '\AMach Virtual Memory Statistics: \(page size of (?P<page_size>\d+) bytes\)[ \t]*\nPages free:[ \t]+(?P<pages_free>\d+)\.[ \t]*\nPages active:[ \t]+(?P<pages_active>\d+)\.[ \t]*\nPages inactive:[ \t]+(?P<pages_inactive>\d+)\.[ \t]*\nPages speculative:[ \t]+(?P<pages_speculative>\d+)\.[ \t]*\nPages throttled:[ \t]+(?P<pages_throttled>\d+)\.[ \t]*\nPages wired down:[ \t]+(?P<pages_wired_down>\d+)\.[ \t]*\nPages purgeable:[ \t]+(?P<pages_purgeable>\d+)\.[ \t]*\n"Translation faults":[ \t]+(?P<translation_faults>\d+)\.[ \t]*\nPages copy-on-write:[ \t]+(?P<pages_copy_on_write>\d+)\.[ \t]*\nPages zero filled:[ \t]+(?P<pages_zero_filled>\d+)\.[ \t]*\nPages reactivated:[ \t]+(?P<pages_reactivated>\d+)\.[ \t]*\nPages purged:[ \t]+(?P<pages_purged>\d+)\.[ \t]*\nFile-backed pages:[ \t]+(?P<file_backed_pages>\d+)\.[ \t]*\nAnonymous pages:[ \t]+(?P<anonymous_pages>\d+)\.[ \t]*\nPages stored in compressor:[ \t]+(?P<pages_stored_in_compressor>\d+)\.[ \t]*\nPages occupied by compressor:[ \t]+(?P<pages_occupied_by_compressor>\d+)\.[ \t]*\nDecompressions:[ \t]+(?P<decompressions>\d+)\.[ \t]*\nCompressions:[ \t]+(?P<compressions>\d+)\.[ \t]*\nPageins:[ \t]+(?P<pageins>\d+)\.[ \t]*\nPageouts:[ \t]+(?P<pageouts>\d+)\.[ \t]*\nSwapins:[ \t]+(?P<swapins>\d+)\.[ \t]*\nSwapouts:[ \t]+(?P<swapouts>\d+)\.[ \t]*\z'
+fields:
+  page_size: {type: int, required: true}
+  pages_free: {type: int, required: true}
+  pages_active: {type: int, required: true}
+  pages_inactive: {type: int, required: true}
+  pages_speculative: {type: int, required: true}
+  pages_throttled: {type: int, required: true}
+  pages_wired_down: {type: int, required: true}
+  pages_purgeable: {type: int, required: true}
+  translation_faults: {type: int, required: true}
+  pages_copy_on_write: {type: int, required: true}
+  pages_zero_filled: {type: int, required: true}
+  pages_reactivated: {type: int, required: true}
+  pages_purged: {type: int, required: true}
+  file_backed_pages: {type: int, required: true}
+  anonymous_pages: {type: int, required: true}
+  pages_stored_in_compressor: {type: int, required: true}
+  pages_occupied_by_compressor: {type: int, required: true}
+  decompressions: {type: int, required: true}
+  compressions: {type: int, required: true}
+  pageins: {type: int, required: true}
+  pageouts: {type: int, required: true}
+  swapins: {type: int, required: true}
+  swapouts: {type: int, required: true}
