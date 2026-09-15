@@ -47,13 +47,15 @@ func documents(t *testing.T) []string {
 	return append([]string{filepath.Join(root, "README.md")}, pages...)
 }
 
+// readText returns a file with LF line endings, since a Windows checkout
+// may give the documentation CRLF ones.
 func readText(t *testing.T, path string) string {
 	t.Helper()
 	b, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}
-	return string(b)
+	return strings.ReplaceAll(string(b), "\r\n", "\n")
 }
 
 // shellWords splits a command line the way a POSIX shell splits words,
