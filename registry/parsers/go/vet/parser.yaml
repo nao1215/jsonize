@@ -17,6 +17,9 @@
 # many arguments), which are joined onto the message with a space. A
 # tab-indented line of nothing but blanks and a caret is not one: that is
 # how golangci-lint points at a column under a quoted source line.
+# Nor is a line with a load address in parentheses, `(0x7ffd...)`, which
+# no Go message holds and ldd prints on every line: the libraries of a
+# binary listed after a build are not read as part of its last problem.
 #
 # The file is everything before the first `:line:column: `, so a Windows
 # drive letter's colon (`C:\x.go:3:4:`) stays in the path, and it ends in
@@ -50,10 +53,10 @@ detect:
   signature:
     all:
       - '\A(?:# \S+(?: \[\S+\])?|# \[\S+\]|(?:vet: )?[^\n]+\.go:\d+:\d+: [^\n]*(?:[^)\n]|\)\)|[^ \n]\([^()\n]*\)|\([^()\n]*[^A-Z0-9()\n][^()\n]*\)|\(\)))$'
-      - '\A(?:^(?:# \S+(?: \[\S+\])?|# \[\S+\]|(?:vet: )?[^\n]+\.go:\d+:\d+: [^\n]*(?:[^)\n]|\)\)|[^ \n]\([^()\n]*\)|\([^()\n]*[^A-Z0-9()\n][^()\n]*\)|\(\))|\t[^\n]*[^ \t^\n][^\n]*)$\n?)+\z'
+      - '\A(?:^(?:# \S+(?: \[\S+\])?|# \[\S+\]|(?:vet: )?[^\n]+\.go:\d+:\d+: [^\n]*(?:[^)\n]|\)\)|[^ \n]\([^()\n]*\)|\([^()\n]*[^A-Z0-9()\n][^()\n]*\)|\(\))|\t(?:[^(\n]|\(+(?:0\(+)*(?:[^(0\n]|0[^(x\n]))*(?:[^( \t^\n]|\(+(?:0\(+)*(?:[^(0 \t^\n]|0[^(x \t^\n])|\(+(?:0\(+)*0?)[ \t^]*)$\n?)+\z'
       - '^(?:vet: )?[^\n]+\.go:\d+:\d+: '
 input:
-  fold: '^\t.*[^ \t^]'
+  fold: '^\t(?:[^(]|\(+(?:0\(+)*(?:[^(0]|0[^(x]))*(?:[^( \t^]|\(+(?:0\(+)*(?:[^(0 \t^]|0[^(x \t^])|\(+(?:0\(+)*0?)[ \t^]*$'
   ignore:
     - '^# \S+(?: \[\S+\])?$'
     - '^# \[\S+\]$'

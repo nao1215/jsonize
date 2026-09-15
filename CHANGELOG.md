@@ -99,6 +99,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A top-level `input.select.until` that states its whole line reads that
+  line as the end of the output, and a line after it is unread (exit 3).
+  `net share` closes on its completion line with it, so a listing
+  followed by another command's output is refused rather than read with
+  the other lines as shares. A `go vet` problem no longer takes the
+  tab-indented libraries `ldd` lists after it as the rest of its message.
 - `jz run sysctl` and `jz run lsof` on macOS found no definition: both are
   the programs FreeBSD and Linux have, printing the same lines, and their
   definitions now apply there. `ls -le` and `ls -lO` on macOS, which add
