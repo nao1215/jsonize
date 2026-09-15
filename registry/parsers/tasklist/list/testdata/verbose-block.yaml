@@ -1,0 +1,6 @@
+description: a block with the four labels /v adds is refused rather than read as the five labels this definition names
+source: >-
+  written by hand from the windows-server-2022 fixture, with the Status,
+  User Name, CPU Time and Window Title labels tasklist /v /fo list adds
+  appended in the order the verbose table prints its columns
+expect_error: does not match pattern

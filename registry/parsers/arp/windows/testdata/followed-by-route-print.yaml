@@ -1,0 +1,4 @@
+source: the windows-server-2022 fixture followed by the windows-server-2022 fixture of route/windows, joined for this case
+description: the route tables printed after the last block are refused rather than read as entries of its interface
+args: ["-a"]
+expect_error: 'part "entries": line does not match pattern'

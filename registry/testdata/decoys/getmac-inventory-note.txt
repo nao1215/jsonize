@@ -1,0 +1,9 @@
+Asset inventory: record the MAC address of every server NIC.
+
+getmac /v gives the connection name next to the address, for example
+
+Connection Name Network Adapter Physical Address    Transport Name
+=============== =============== =================== ==========================================================
+Ethernet        Intel(R) Ethern 00-00-5E-00-53-10   \Device\Tcpip_{00000000-0000-0000-0000-000000000010}
+
+Copy the Physical Address column into the inventory sheet.

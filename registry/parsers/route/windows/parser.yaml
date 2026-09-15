@@ -1,0 +1,92 @@
+# `route print` on Windows prints three sections, each under a rule of
+# equals signs: the interface list, the IPv4 route table and the IPv6
+# route table. `netstat -r` prints the same text byte for byte, which is
+# what the alias says.
+#
+# The interface list gives each interface its index, its hardware
+# address as six bytes separated by spaces (none for the loopback
+# interface) and its description, the three run together with dots as
+# padding.
+#
+# The IPv4 table has a destination, a netmask, a gateway, the address of
+# the interface the route leaves by and a metric. A route to a directly
+# attached network has "On-link" for its gateway. The IPv6 table has the
+# index of the interface, the metric, the destination with its prefix
+# length and the gateway; a destination too long for its column pushes
+# the gateway onto a line of its own, indented to the gateway column,
+# which input.fold joins back onto the route.
+#
+# Each table is followed by a "Persistent Routes:" heading. This
+# definition reads the "None" Windows prints there when no route was
+# added with route -p; the table of persistent routes a machine with
+# such a route prints is not read, and its rows are refused rather than
+# taken for active routes.
+format: 1
+command: route
+variant: windows
+aliases:
+  - name: netstat
+    args: {all: ["-r"]}
+description: Windows route print and netstat -r, the interface list and the IPv4 and IPv6 route tables
+metadata:
+  tags: [windows, network]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/route_ws2008
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netstat
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # A rule, then the heading of the interface list.
+      - '\A=+[ \t]*\nInterface List[ \t]*$'
+      - '^IPv4 Route Table[ \t]*$'
+      - '^Network Destination[ \t]+Netmask[ \t]+Gateway[ \t]+Interface[ \t]+Metric[ \t]*$'
+input:
+  # A gateway pushed onto a line of its own is indented far past where a
+  # route's first column ends.
+  fold: '^[ \t]{30,}\S'
+  ignore:
+    # The rules between the sections, the headings of the two tables and
+    # of their active and persistent routes, and the None under an empty
+    # list of persistent routes. The sections are told apart by the
+    # header rows of the tables, which the parts below start after.
+    - '^=+[ \t]*$'
+    - '^IPv[46] Route Table[ \t]*$'
+    - '^Active Routes:[ \t]*$'
+    - '^Persistent Routes:[ \t]*$'
+    - '^[ \t]+None[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: interfaces
+      select:
+        after: '^Interface List[ \t]*$'
+        until: '^Network Destination[ \t]+Netmask[ \t]+Gateway[ \t]+Interface[ \t]+Metric[ \t]*$'
+      parse:
+        type: regex
+        pattern: '^[ \t]*(?P<index>\d+)\.\.\.(?:(?P<mac_address>[0-9a-fA-F]{2}(?: [0-9a-fA-F]{2}){5}) )?\.+(?P<description>\S.*?)[ \t]*$'
+      fields:
+        index: {type: int, required: true}
+        mac_address: {}
+        description: {required: true}
+    - name: ipv4_routes
+      select:
+        after: '^Network Destination[ \t]+Netmask[ \t]+Gateway[ \t]+Interface[ \t]+Metric[ \t]*$'
+        until: '^[ \t]*If Metric Network Destination[ \t]+Gateway[ \t]*$'
+      parse:
+        type: regex
+        pattern: '^[ \t]*(?P<network_destination>\d{1,3}(?:\.\d{1,3}){3})[ \t]+(?P<netmask>\d{1,3}(?:\.\d{1,3}){3})[ \t]+(?P<gateway>\d{1,3}(?:\.\d{1,3}){3}|On-link)[ \t]+(?P<interface>\d{1,3}(?:\.\d{1,3}){3})[ \t]+(?P<metric>\d+)[ \t]*$'
+      fields:
+        metric: {type: int, required: true}
+    - name: ipv6_routes
+      select:
+        after: '^[ \t]*If Metric Network Destination[ \t]+Gateway[ \t]*$'
+      parse:
+        type: regex
+        pattern: '^[ \t]*(?P<interface_index>\d+)[ \t]+(?P<metric>\d+)[ \t]+(?P<network_destination>[0-9a-fA-F:.]+(?:%\d+)?/\d+)[ \t]+(?P<gateway>On-link|[0-9a-fA-F:.]+(?:%\d+)?)[ \t]*$'
+      fields:
+        interface_index: {type: int, required: true}
+        metric: {type: int, required: true}

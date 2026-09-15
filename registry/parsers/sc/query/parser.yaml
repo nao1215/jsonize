@@ -1,0 +1,62 @@
+# `sc query` prints a block per service: its name and display name at
+# the left margin, then indented labels padded to a colon. Without
+# arguments it lists the running services; with a service name, or with
+# type= and state= filters, it prints the same block for each service
+# they select. sc/queryex reads the block `sc queryex` prints, which
+# ends with two more labels.
+#
+# The labels and their order are fixed, so a block is read with one
+# expression that names each of them. TYPE is a hexadecimal code and its
+# name ("10  WIN32_OWN_PROCESS"), with "(interactive)" after the name of
+# a service allowed to interact with the desktop. STATE is a number and
+# its name, and for a service that is not stopped the controls it
+# accepts follow on a line of their own in brackets
+# ("(STOPPABLE, NOT_PAUSABLE, ACCEPTS_SHUTDOWN)"); they become a list,
+# and null for a stopped service, which prints no such line.
+#
+# The exit codes are printed in decimal and again in hexadecimal in
+# brackets; the decimal is read as an integer and the restatement is
+# left out. The checkpoint and the wait hint are printed in hexadecimal
+# only and stay the strings they were printed as.
+format: 1
+command: sc
+variant: query
+description: sc query, the type, state and exit codes of each service
+metadata:
+  tags: [windows, service]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/sc-query
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    any: [query, QUERY]
+  signature:
+    all:
+      # The first block, from its name to its wait hint, and then the
+      # next block or the end: the block queryex prints goes on to a PID
+      # label there.
+      - '\ASERVICE_NAME: \S[^\n]*\nDISPLAY_NAME: [^\n]*\n[ \t]+TYPE[ \t]+: [0-9a-f]+ (?:[^\n]*\n)*?[ \t]+WAIT_HINT[ \t]+: 0x[0-9a-f]+[ \t]*(?:\n[ \t]*)*(?:\nSERVICE_NAME: |\z)'
+parse:
+  type: records
+  start: '^SERVICE_NAME: '
+  record:
+    parse:
+      type: regex
+      each: input
+      pattern: '\ASERVICE_NAME: (?P<service_name>\S.*?)[ \t]*\nDISPLAY_NAME: (?P<display_name>.*?)[ \t]*\n[ \t]+TYPE[ \t]+: (?P<type_code>[0-9a-f]+)[ \t]+(?P<type>[A-Z0-9_]+(?: [A-Z0-9_]+)*)(?P<interactive>(?:[ \t]+\(interactive\))?)[ \t]*\n[ \t]+STATE[ \t]+: (?P<state_code>\d+)[ \t]+(?P<state>STOPPED|START_PENDING|STOP_PENDING|RUNNING|CONTINUE_PENDING|PAUSE_PENDING|PAUSED)[ \t]*\n(?:[ \t]+\((?P<controls>[A-Z_]+(?:, [A-Z_]+)*)\)[ \t]*\n)?[ \t]+WIN32_EXIT_CODE[ \t]+: (?P<win32_exit_code>\d+)[ \t]+\(0x[0-9a-f]+\)[ \t]*\n[ \t]+SERVICE_EXIT_CODE[ \t]+: (?P<service_exit_code>\d+)[ \t]+\(0x[0-9a-f]+\)[ \t]*\n[ \t]+CHECKPOINT[ \t]+: (?P<checkpoint>0x[0-9a-f]+)[ \t]*\n[ \t]+WAIT_HINT[ \t]+: (?P<wait_hint>0x[0-9a-f]+)[ \t]*\z'
+    fields:
+      service_name: {required: true}
+      display_name: {}
+      type_code: {required: true}
+      type: {required: true}
+      interactive: {type: bool, true_values: ["(interactive)"], false_values: [""]}
+      state_code: {type: int, required: true}
+      state: {required: true}
+      controls: {type: array, split: ","}
+      win32_exit_code: {type: int, required: true}
+      service_exit_code: {type: int, required: true}
+      checkpoint: {required: true}
+      wait_hint: {required: true}

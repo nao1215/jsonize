@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/tasklist/services.json",
+  "title": "tasklist/services",
+  "description": "tasklist /svc, the services each process hosts",
+  "x-jsonize": {
+    "definition": "tasklist/services",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "image_name": {
+        "type": "string"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "services": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "image_name",
+      "pid",
+      "services"
+    ]
+  }
+}

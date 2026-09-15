@@ -1,0 +1,3 @@
+source: the windows-server-2022 fixture followed by the windows-server-2022 fixture of tasklist/table, joined for this case
+description: the plain listing printed after the services listing is refused, since its header is not a row and its PID heading is no process id
+expect_error: 'cannot convert "PID" to int'

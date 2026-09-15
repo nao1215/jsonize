@@ -1,0 +1,7 @@
+
+Folder: \Microsoft\Windows\Defrag
+HostName:      examplehost01
+TaskName:      \Microsoft\Windows\Defrag\ScheduledDefrag
+Next Run Time: N/A
+Status:        Disabled
+Logon Mode:    Interactive/Background

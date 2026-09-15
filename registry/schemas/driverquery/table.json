@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/driverquery/table.json",
+  "title": "driverquery/table",
+  "description": "driverquery, the installed drivers with their type and link date",
+  "x-jsonize": {
+    "definition": "driverquery/table",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "module_name": {
+        "type": "string"
+      },
+      "display_name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "driver_type": {
+        "type": "string"
+      },
+      "link_date": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "module_name",
+      "display_name",
+      "driver_type",
+      "link_date"
+    ]
+  }
+}

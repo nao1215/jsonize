@@ -1,0 +1,4 @@
+source: the windows-server-2025 fixture followed by the windows-server-2022 fixture of tasklist/table, joined for this case
+description: a tasklist table after the completion line is refused, since its words in the resource column are no path
+args: [share]
+expect_error: does not have the shape

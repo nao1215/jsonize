@@ -1,0 +1,11 @@
+description: >-
+  tasklist /m for lsass on Windows 11 on Arm, where lsass runs as a
+  protected process whose modules cannot be read and tasklist prints N/A,
+  read as null.
+source: >-
+  captured on GitHub Actions windows-11-arm (Windows 11, build
+  26200.9168) on 2026-09-15 with `tasklist /m /fi "IMAGENAME eq
+  lsass.exe" > tasklist-m-lsass.txt` in cmd, the bytes as the command
+  wrote them. Nothing was replaced.
+os: windows
+args: [/m, /fi, "IMAGENAME eq lsass.exe"]

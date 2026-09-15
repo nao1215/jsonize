@@ -1,0 +1,4 @@
+source: the windows-server-2022 fixture followed by the windows-server-2022 fixture of sc/query, joined for this case
+description: blocks of sc query after the blocks of sc queryex are refused, since they end without the PID and FLAGS labels
+args: [queryex, type=, service, state=, all]
+expect_error: does not match pattern

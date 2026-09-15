@@ -1,0 +1,46 @@
+# `whoami /priv` on Windows prints the privileges in the access token of
+# the current user: a "PRIVILEGES INFORMATION" banner underlined with
+# hyphens, then a table with a header and a rule of equals signs. The
+# columns are as wide as their longest value, so the rows are cut where
+# the header's words start; "Privilege Name" is one column.
+#
+# A privilege is named by its constant ("SeDebugPrivilege"), described
+# in a sentence, and is Enabled or Disabled in the token. The name and
+# the state are held to those shapes, which is what refuses a row of
+# another table printed after the listing.
+#
+# whoami /groups prints a table of the same layout under another banner
+# and is read by whoami/groups.
+format: 1
+command: whoami
+variant: privileges
+description: whoami /priv on Windows, the privileges in the current user's access token
+metadata:
+  tags: [windows, user]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/whoami
+    - https://learn.microsoft.com/en-us/windows/win32/secauthz/privilege-constants
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The banner, its underline and the header of the table.
+      - '\APRIVILEGES INFORMATION[ \t]*\n-+[ \t]*\n(?:[ \t]*\n)*Privilege Name[ \t]+Description[ \t]+State[ \t]*\n=+ =+ =+[ \t]*$'
+input:
+  ignore:
+    # The banner, its underline and the rule under the header.
+    - '^PRIVILEGES INFORMATION[ \t]*$'
+    - '^-+[ \t]*$'
+    - '^=+ =+ =+[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [privilege_name, description, state]
+fields:
+  privilege_name: {required: true, regex: '(?P<privilege_name>Se[A-Za-z]+Privilege)'}
+  description: {required: true}
+  state: {required: true, regex: '(?P<state>Enabled|Disabled)'}

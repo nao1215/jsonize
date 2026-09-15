@@ -1,0 +1,5 @@
+
+Connection Name Network Adapter Physical Address    Transport Name                                            
+=============== =============== =================== ==========================================================
+Ethernet 5      Mellanox Connec 00-00-5E-00-53-03   N/A                                                       
+Ethernet 4      Microsoft Hyper 00-00-5E-00-53-03   \Device\Tcpip_{00000000-0000-0000-0000-000000000002}      

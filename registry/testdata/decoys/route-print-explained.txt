@@ -1,0 +1,14 @@
+Reading the Windows routing table
+
+route print starts with the interface list, then prints the IPv4 Route
+Table section. Its rows have five columns:
+
+IPv4 Route Table
+===========================================================================
+Active Routes:
+Network Destination        Netmask          Gateway       Interface  Metric
+          0.0.0.0          0.0.0.0      192.0.2.1      192.0.2.10     25
+
+The default route is the one with 0.0.0.0 in both of the first two
+columns. On-link in the Gateway column means the network is attached
+directly. The lower the metric, the more a route is preferred.

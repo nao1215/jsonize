@@ -1,0 +1,53 @@
+# `tasklist /m` prints one row per process with the modules loaded into
+# it, under a header and a rule of equals signs. The layout is the one
+# tasklist /svc prints: the image name cut to 25 characters, the process
+# id right-aligned, and a list column of file names separated by a comma
+# and a space. A process whose modules cannot be read shows N/A there.
+#
+# The list column is 44 characters wide, and a process loads far more
+# modules than fit, so the list breaks after a comma and continues on
+# lines of their own, indented to where the column starts. input.fold
+# joins them onto the row they belong to.
+#
+# Each entry is held to a file name with an extension and no space or
+# comma in it, which is what a loaded module is named and what a line of
+# another command is not.
+format: 1
+command: tasklist
+variant: modules
+description: tasklist /m, the modules loaded into each process
+metadata:
+  tags: [windows, process]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tasklist
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The header naming the Modules column, and the rule of three runs
+      # under it. /svc prints the same layout with Services there.
+      - '\AImage Name[ \t]+PID Modules[ \t]*\n=+ =+ =+[ \t]*$'
+input:
+  # The image name and the process id take the first 35 characters, so a
+  # line that is blank that far and then has text is the rest of the
+  # list on the line above.
+  fold: '^ {35}\S'
+  ignore:
+    # The rule under the header.
+    - '^=+ =+ =+[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [image_name, pid, modules]
+fields:
+  image_name: {required: true}
+  pid: {type: int, required: true}
+  modules:
+    type: array
+    split: ","
+    null_if: ["N/A"]
+    items: {regex: '(?P<modules>[^\s,]+\.[A-Za-z0-9]+)'}

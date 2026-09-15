@@ -1,0 +1,49 @@
+# `getmac /v` prints one row per network adapter under a header and a
+# rule of equals signs, one run per column: the name of the connection,
+# the adapter, its hardware address and the transport it is bound to.
+# The connection and adapter names are cut to the width of their column
+# ("Microsoft Hyper" for Microsoft Hyper-V Network Adapter), and the
+# header words of every column are one space apart, so the column names
+# below say which words belong together.
+#
+# The hardware address is six hexadecimal bytes joined by hyphens. The
+# transport is the device path of the bound protocol, or N/A for an
+# adapter with none, such as a virtual function whose traffic another
+# adapter carries; N/A becomes null. Holding the address to its shape is
+# what refuses a row of another table printed after the listing, and an
+# adapter that reports no address, which the captures this definition
+# was written from did not hold, is refused with it.
+#
+# getmac without /v leaves out the first two columns and is not this
+# format; /fo list and /fo csv print other formats.
+format: 1
+command: getmac
+variant: verbose
+description: getmac /v, the connection, adapter, hardware address and transport of each network adapter
+metadata:
+  tags: [windows, network]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/getmac
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The four headings and the rule of four runs under them.
+      - '\AConnection Name Network Adapter Physical Address[ \t]+Transport Name[ \t]*\n=+ =+ =+ =+[ \t]*$'
+input:
+  ignore:
+    # The rule under the header.
+    - '^=+ =+ =+ =+[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [connection_name, network_adapter, physical_address, transport_name]
+fields:
+  connection_name: {required: true}
+  network_adapter: {required: true}
+  physical_address: {required: true, regex: '(?P<physical_address>[0-9A-F]{2}(?:-[0-9A-F]{2}){5})'}
+  transport_name: {null_if: ["N/A"]}

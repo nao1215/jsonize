@@ -1,0 +1,3 @@
+source: the windows-server-2022 fixture followed by the coreutils-9.7 fixture of df/gnu, joined for this case
+description: a df table after the connections is refused, since its lines name no protocol and no address and port
+expect_error: does not match any of the 2 patterns

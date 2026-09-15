@@ -35,7 +35,7 @@ fields:
   size: {required: true}
   used: {required: true}
   available: {required: true}
-  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  capacity_percent: {type: int, trim_suffix: "%", required: true}
   # -h rounds the inode counts too, not only the capacity columns: a
   # real macOS df -h prints "459k" where the fixture below happens to
   # show a plain number. A rounded count stays the text that was

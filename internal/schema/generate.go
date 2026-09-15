@@ -312,7 +312,10 @@ func value(f *definition.Field, missing bool) (*Schema, bool) {
 	empty := missing || len(f.NullIf) > 0 || optionalGroup(f)
 	omit := f.WhenMissing == definition.MissingOmit
 	s := converted(f)
-	if empty && !f.Required && !omit {
+	// required refuses a value that is not there; a value null_if names
+	// is there, and is null whether the field is required or not.
+	nullable := ((missing || optionalGroup(f)) && !f.Required) || len(f.NullIf) > 0
+	if nullable && !omit {
 		s.Type = normalizeTypes(append(s.Type, TypeNull))
 	}
 	return s, empty && omit
@@ -334,7 +337,7 @@ func converted(f *definition.Field) *Schema {
 			items = converted(f.Items)
 			// An item null_if names becomes null, unless the item is
 			// omitted, in which case it is left out of the array.
-			if len(f.Items.NullIf) > 0 && !f.Items.Required && f.Items.WhenMissing != definition.MissingOmit {
+			if len(f.Items.NullIf) > 0 && f.Items.WhenMissing != definition.MissingOmit {
 				items.Type = normalizeTypes(append(items.Type, TypeNull))
 			}
 		}

@@ -1,0 +1,13 @@
+{
+  "bytes_received": 88232282,
+  "bytes_sent": 19940817,
+  "unicast_packets_received": 56450,
+  "unicast_packets_sent": 13216,
+  "non_unicast_packets_received": 0,
+  "non_unicast_packets_sent": 847,
+  "discards_received": 0,
+  "discards_sent": 0,
+  "errors_received": 0,
+  "errors_sent": 0,
+  "unknown_protocols_received": 0
+}

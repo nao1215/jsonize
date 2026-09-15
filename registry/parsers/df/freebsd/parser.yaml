@@ -35,5 +35,5 @@ fields:
   # The heading says Avail; the key is the one every other df definition
   # uses for the same number.
   available: {type: int, required: true}
-  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  capacity_percent: {type: int, trim_suffix: "%", required: true}
   mounted_on: {required: true}

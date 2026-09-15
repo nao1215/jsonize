@@ -1,0 +1,10 @@
+The verbose listing adds four columns to the right of Mem Usage. A
+header of it looks like this, with the rule under it:
+
+Image Name                     PID Session Name        Session#    Mem Usage Status          User Name                                              CPU Time Window Title
+========================= ======== ================ =========== ============ =============== ================================================== ============ ============
+notepad.exe                   4242 Console                    1     12,345 K Running         EXAMPLE\user                                            0:00:01 Untitled - Notepad
+
+Status is Running, Suspended, Not Responding or Unknown. CPU Time is the
+processor time the process has used since it started, and Window Title
+is N/A for a process without a window.

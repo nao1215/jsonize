@@ -1,0 +1,12 @@
+description: >-
+  tasklist /svc run for real on Windows Server 2025: most processes host
+  no service and show N/A, lsass.exe hosts three, and two service lists
+  are too long for the column and continue on a line of their own.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "tasklist /svc 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  line above the header as the command wrote it). Nothing was replaced:
+  the listing names no user, host or address.
+os: windows
+args: ["/svc"]

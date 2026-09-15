@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/netstat/windows-ethernet.json",
+  "title": "netstat/windows-ethernet",
+  "description": "Windows netstat -e, the Ethernet byte, packet, discard and error counts",
+  "x-jsonize": {
+    "definition": "netstat/windows-ethernet",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "bytes_received": {
+      "type": "integer"
+    },
+    "bytes_sent": {
+      "type": "integer"
+    },
+    "unicast_packets_received": {
+      "type": "integer"
+    },
+    "unicast_packets_sent": {
+      "type": "integer"
+    },
+    "non_unicast_packets_received": {
+      "type": "integer"
+    },
+    "non_unicast_packets_sent": {
+      "type": "integer"
+    },
+    "discards_received": {
+      "type": "integer"
+    },
+    "discards_sent": {
+      "type": "integer"
+    },
+    "errors_received": {
+      "type": "integer"
+    },
+    "errors_sent": {
+      "type": "integer"
+    },
+    "unknown_protocols_received": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "bytes_received",
+    "bytes_sent",
+    "unicast_packets_received",
+    "unicast_packets_sent",
+    "non_unicast_packets_received",
+    "non_unicast_packets_sent",
+    "discards_received",
+    "discards_sent",
+    "errors_received",
+    "errors_sent",
+    "unknown_protocols_received"
+  ]
+}

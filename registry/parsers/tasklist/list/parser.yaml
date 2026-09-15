@@ -1,0 +1,46 @@
+# `tasklist /fo list` prints the columns of the plain listing as a block
+# of labelled lines per process, the labels padded with spaces after the
+# colon so the values line up, and a blank line between two blocks.
+#
+# Every block has the same five labels in the same order, so a block is
+# read with one expression that names each of them: an image name, a
+# process id, a session name, a session number and the memory in use.
+# The memory keeps the thousands separator of the user's locale and its
+# "K", and stays the string it was printed as, as in tasklist/table.
+#
+# /fo list together with /v or /svc adds labels to the block; this
+# definition does not undertake to read those, and a block that carries
+# them is refused rather than read without them.
+format: 1
+command: tasklist
+variant: list
+description: tasklist /fo list, a block of labelled lines per process
+metadata:
+  tags: [windows, process]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tasklist
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The first block's first two labels open the text.
+      - '\AImage Name:[ \t]+\S[^\n]*\nPID:[ \t]+\d+[ \t]*$'
+      - '^Mem Usage:[ \t]+(?:\d[\d,.]* K|N/A)[ \t]*$'
+parse:
+  type: records
+  start: '^Image Name:'
+  record:
+    parse:
+      type: regex
+      each: input
+      pattern: '\AImage Name:[ \t]+(?P<image_name>\S.*?)[ \t]*\nPID:[ \t]+(?P<pid>\d+)[ \t]*\nSession Name:[ \t]*(?P<session_name>.*?)[ \t]*\nSession#:[ \t]+(?P<session_number>\d+)[ \t]*\nMem Usage:[ \t]+(?P<mem_usage>\d[\d,.]* K|N/A)[ \t]*\z'
+    fields:
+      image_name: {required: true}
+      pid: {type: int, required: true}
+      session_name: {null_if: [""]}
+      session_number: {type: int, required: true}
+      # Windows 11 prints N/A for the Memory Compression process.
+      mem_usage: {required: true, null_if: ["N/A"]}

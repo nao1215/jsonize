@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ver/windows.json",
+  "title": "ver/windows",
+  "description": "ver, the Windows name and version line of cmd.exe",
+  "x-jsonize": {
+    "definition": "ver/windows",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "product": {
+      "type": "string",
+      "enum": [
+        "Microsoft Windows"
+      ]
+    },
+    "version": {
+      "type": "string"
+    },
+    "major": {
+      "type": "integer"
+    },
+    "minor": {
+      "type": "integer"
+    },
+    "build": {
+      "type": "integer"
+    },
+    "revision": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "product",
+    "version",
+    "major",
+    "minor",
+    "build",
+    "revision"
+  ]
+}

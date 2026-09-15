@@ -1,0 +1,54 @@
+# `tasklist` without options prints one row per process under a header
+# and a rule of equals signs, one run per column. The rule gives each
+# column a fixed width: the image name is cut to 25 characters, the
+# process id and the session number are right-aligned, and the memory
+# figure closes the line.
+#
+# The rows are cut where the header's words start. "Image Name" and
+# "Session Name" are one column each, which the column names below say.
+#
+# The memory in use is printed as a count of kilobytes with the
+# thousands separator of the user's locale and a "K" after it
+# ("29,572 K"). It stays the string it was printed as: the separator is
+# a property of the locale, not of the text, and an int conversion does
+# not read one. The field is held to that shape, a number and the unit,
+# which is also what tells a process row from a row of another table.
+#
+# A session name is blank for a process in a disconnected session, so
+# the column may be null. /fo list and /fo csv print other formats;
+# tasklist/list reads the first, and /svc, /v and /m change the columns
+# and are read by the variants of those names.
+format: 1
+command: tasklist
+variant: table
+description: tasklist, one row per process with its session and memory in use
+metadata:
+  tags: [windows, process]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tasklist
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The header with nothing after Mem Usage, and the rule of five
+      # runs under it. /v continues the header with Status and more.
+      - '\AImage Name[ \t]+PID Session Name[ \t]+Session#[ \t]+Mem Usage[ \t]*\n=+ =+ =+ =+ =+[ \t]*$'
+input:
+  ignore:
+    # The rule under the header.
+    - '^=+ =+ =+ =+ =+[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [image_name, pid, session_name, session_number, mem_usage]
+fields:
+  image_name: {required: true}
+  pid: {type: int, required: true}
+  session_name: {regex: '(?P<session_name>\S+)'}
+  session_number: {type: int, required: true}
+  # Windows 11 prints N/A for the Memory Compression process.
+  mem_usage: {required: true, null_if: ["N/A"], regex: '(?P<mem_usage>\d[\d,.]* K|N/A)'}

@@ -1,0 +1,10 @@
+Security review, finding 3: the build account runs elevated.
+
+Evidence (whoami /groups on the agent):
+
+GROUP INFORMATION
+-----------------
+BUILTIN\Administrators  Alias  S-1-5-32-544  Mandatory group, Enabled by default, Enabled group, Group owner
+
+Recommendation: run the agent as a standard user and grant only the
+privileges listed under PRIVILEGES INFORMATION that the build needs.

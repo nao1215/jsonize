@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/netstat/windows-pid.json",
+  "title": "netstat/windows-pid",
+  "description": "Windows netstat -ano, the active TCP connections and UDP endpoints with the owning process",
+  "x-jsonize": {
+    "definition": "netstat/windows-pid",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "proto": {
+        "type": "string",
+        "enum": [
+          "TCP",
+          "UDP"
+        ]
+      },
+      "local_address": {
+        "type": "string"
+      },
+      "local_port": {
+        "type": "string"
+      },
+      "foreign_address": {
+        "type": "string"
+      },
+      "foreign_port": {
+        "type": "string"
+      },
+      "state": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "pid": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "proto",
+      "local_address",
+      "local_port",
+      "foreign_address",
+      "foreign_port",
+      "state",
+      "pid"
+    ]
+  }
+}

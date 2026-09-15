@@ -1,0 +1,17 @@
+description: >-
+  route print run for real on Windows Server 2022: a second adapter, the
+  Hyper-V switch, adds its routes with a four-digit metric to both
+  tables, and two IPv6 host routes continue on the next line.
+source: >-
+  captured on GitHub Actions windows-2022 (Windows Server 2022, build
+  20348.5499) on 2026-09-15 with `cmd /c "route print 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings); `netstat
+  -r` run on the same machine printed the same bytes. The runner's own
+  values were replaced: the adapters' MAC addresses with 00 00 5e 00 53
+  03 and 00 00 5e 00 53 02, the private IPv4 network with 192.0.2.0 (one
+  space of the padding before each right-aligned address removed to
+  keep the columns, the netmask kept) and the link-local IPv6 addresses
+  with made-up ones of the same length. The Hyper-V switch network
+  (172.28.32.0) was kept.
+os: windows
+args: ["print"]

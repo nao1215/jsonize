@@ -1,0 +1,11 @@
+Ticket 4411: service host keeps growing
+
+Reported memory on the affected server, from tasklist /fo list:
+
+Image Name:   svchost.exe
+PID:          1100
+Session Name: Services
+Session#:     0
+Mem Usage:    1,204,332 K
+
+Expected under 50,000 K. Assigned to the platform team.

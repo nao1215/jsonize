@@ -1,0 +1,15 @@
+
+Interface: 172.28.32.1 --- 0xc
+  Internet Address      Physical Address      Type
+  172.28.47.255         ff-ff-ff-ff-ff-ff     static    
+  224.0.0.22            01-00-5e-00-00-16     static    
+  224.0.0.251           01-00-5e-00-00-fb     static    
+
+Interface: 192.0.2.192 --- 0xf
+  Internet Address      Physical Address      Type
+  192.0.2.1             12-34-56-78-9a-bc     dynamic   
+  192.0.2.255           ff-ff-ff-ff-ff-ff     static    
+  224.0.0.22            01-00-5e-00-00-16     static    
+  224.0.0.251           01-00-5e-00-00-fb     static    
+  224.0.0.252           01-00-5e-00-00-fc     static    
+  255.255.255.255       ff-ff-ff-ff-ff-ff     static    

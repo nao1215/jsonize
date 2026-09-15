@@ -1,0 +1,56 @@
+# The connection table Windows netstat prints with -o, as in netstat
+# -ano: the table netstat/windows reads, with the id of the process that
+# owns the connection or endpoint in a last column headed PID.
+#
+# The address and the port share one column and are separated by the
+# last colon. An IPv6 address is written in brackets, which come off the
+# address. A long IPv6 address pushes the rest of the row right, so the
+# row is read by its words rather than by position.
+#
+# A TCP row has the state of the connection before the process id, one
+# of the states Windows names; a UDP row has none, and its state is
+# null. Holding the protocol, the state and the process id to those
+# shapes is what refuses a line of another command printed after the
+# table.
+#
+# A port stays a string: with -n it is a number, but without -n netstat
+# writes a service name where it knows one. The process id is a number
+# in both.
+format: 1
+command: netstat
+variant: windows-pid
+description: Windows netstat -ano, the active TCP connections and UDP endpoints with the owning process
+metadata:
+  tags: [windows, network]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netstat
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    all: ["-o"]
+  signature:
+    all:
+      # The banner, then the header ending in PID.
+      - '\AActive Connections[ \t]*\n(?:[ \t]*\n)*[ \t]+Proto[ \t]+Local Address[ \t]+Foreign Address[ \t]+State[ \t]+PID[ \t]*$'
+input:
+  ignore:
+    # The banner and the header name the table, and a second capture
+    # joined to the first repeats them.
+    - '^Active Connections[ \t]*$'
+    - '^[ \t]+Proto[ \t]+Local Address[ \t]+Foreign Address[ \t]+State[ \t]+PID[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    - '^[ \t]+(?P<proto>TCP)[ \t]+(?P<local_address>\[[^\]\s]+\]|[^\s\[\]]+):(?P<local_port>[^\s:\[\]]+)[ \t]+(?P<foreign_address>\[[^\]\s]+\]|[^\s\[\]]+):(?P<foreign_port>[^\s:\[\]]+)[ \t]+(?P<state>LISTENING|ESTABLISHED|TIME_WAIT|CLOSE_WAIT|CLOSED|CLOSING|FIN_WAIT_1|FIN_WAIT_2|LAST_ACK|SYN_SENT|SYN_RECEIVED|BOUND|DELETE_TCB)[ \t]+(?P<pid>\d+)[ \t]*$'
+    - '^[ \t]+(?P<proto>UDP)[ \t]+(?P<local_address>\[[^\]\s]+\]|[^\s\[\]]+):(?P<local_port>[^\s:\[\]]+)[ \t]+(?P<foreign_address>\[[^\]\s]+\]|[^\s\[\]]+):(?P<foreign_port>[^\s:\[\]]+)(?P<state>)??[ \t]+(?P<pid>\d+)[ \t]*$'
+fields:
+  proto: {required: true}
+  local_address: {required: true, regex: '\[?(?P<local_address>[^\[\]]+)\]?'}
+  local_port: {required: true}
+  foreign_address: {required: true, regex: '\[?(?P<foreign_address>[^\[\]]+)\]?'}
+  foreign_port: {required: true}
+  state: {}
+  pid: {type: int, required: true}

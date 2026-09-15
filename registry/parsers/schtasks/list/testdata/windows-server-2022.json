@@ -1,0 +1,9 @@
+[
+  {
+    "hostname": "examplehost02",
+    "task_name": "\\Microsoft\\Windows\\Defrag\\ScheduledDefrag",
+    "next_run_time": null,
+    "status": "Disabled",
+    "logon_mode": "Interactive/Background"
+  }
+]

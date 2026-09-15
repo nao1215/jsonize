@@ -1,0 +1,11 @@
+Ticket 5120: nightly defrag did not run
+
+The task is disabled on the file server:
+
+HostName:      FS01
+TaskName:      \Microsoft\Windows\Defrag\ScheduledDefrag
+Next Run Time: N/A
+Status:        Disabled
+Logon Mode:    Interactive/Background
+
+Enable it with schtasks /change /enable and confirm the next run time.

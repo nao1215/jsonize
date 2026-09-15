@@ -1,0 +1,6 @@
+description: "`netstat -ano` adds a PID column to the header and to every row; it is the windows-pid variant's format and must not be read as this one."
+source: >-
+  the windows-server-2022 fixture of netstat/windows-pid, captured on
+  GitHub Actions windows-2022 with `cmd /c "netstat -ano 2>&1"` and
+  prepared the way that fixture was.
+expect_error: 'does not describe this input'

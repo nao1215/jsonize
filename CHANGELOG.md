@@ -47,6 +47,13 @@ project follows [Semantic Versioning](https://semver.org/).
 - Definitions for `eza -l` (with `--header`, `-a`, `-B`, and in its
   long-iso, full-iso, `-g` and `-H` column sets), `procs`, `tokei`,
   `bat --list-languages` and `hyperfine --style basic`.
+- Definitions for Windows: `tasklist` in its table, `/v`, `/svc`, `/m`,
+  `/fo list` and `/fo csv` forms, `netstat -an`, `-ano` and `-e`,
+  `route print`, `arp -a`, `getmac /v`, `driverquery` and `driverquery
+  /v`, `sc query` and `sc queryex`, `schtasks /query` as a table and as
+  a list, `net user`, `net localgroup`, `net share` and `net start`,
+  `whoami /groups` and `/priv`, `chcp` and `ver`, from output captured on
+  Windows Server 2022 and 2025 runners.
 - Definitions for `cargo tree`, `uv tree`, `npm ls --all`, `busctl tree`
   (one service or several), `docker buildx ls` and `xinput list`.
 - `md5sum --tag`, `sha1sum --tag`, `sha256sum --tag`, `b2sum --tag` and
@@ -117,6 +124,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- A `required` field whose value is a word `null_if` names is `null`, where
+  it was an error: the command printed its word for no value, and
+  `required` refuses a value that is missing or empty. `kubectl get
+  services` reads a headless service's `None` cluster IP as null, which
+  was refused; its output schema is version 2.
 - `--assume-year now` dates a timestamp printed without a year in the
   latest year that does not put it after the moment jz started, rather
   than always in the current year. A `last` or `who` line of December 31

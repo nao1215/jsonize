@@ -1,0 +1,43 @@
+# `tasklist /fo csv` prints the columns of the plain listing as comma
+# separated values, every value in double quotes and the first line
+# naming the columns. Unlike the table, nothing is cut to a column's
+# width, so an image name is printed whole.
+#
+# The memory in use keeps the thousands separator of the user's locale
+# and its "K", and stays the string it was printed as, as in
+# tasklist/table; a separator that is a comma sits inside the quotes.
+# The process id and the session number are integers, and the memory
+# figure is held to its shape, which is what refuses a row of another
+# csv printed after the listing.
+#
+# /fo csv together with /v or /svc adds or changes columns; this
+# definition reads the five columns of the plain listing only.
+format: 1
+command: tasklist
+variant: csv
+description: tasklist /fo csv, one quoted row per process
+metadata:
+  tags: [windows, process]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/tasklist
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The header line whole, and a first row of the same five quoted
+      # values.
+      - '\A"Image Name","PID","Session Name","Session#","Mem Usage"[ \t]*\n"[^"\n]+","\d+","[^"\n]*","\d+","(?:\d[\d,.]* K|N/A)"[ \t]*$'
+parse:
+  type: csv
+  header:
+    columns: [image_name, pid, session_name, session_number, mem_usage]
+fields:
+  image_name: {required: true}
+  pid: {type: int, required: true}
+  session_name: {null_if: [""]}
+  session_number: {type: int, required: true}
+  # Windows 11 prints N/A for the Memory Compression process.
+  mem_usage: {required: true, null_if: ["N/A"], regex: '(?P<mem_usage>\d[\d,.]* K|N/A)'}

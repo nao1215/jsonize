@@ -1,0 +1,48 @@
+# `netstat -e` on Windows prints the Ethernet statistics of the machine
+# as a small table: an "Interface Statistics" banner, a header naming
+# the Received and Sent columns, and six labelled rows. The labels and
+# their order are fixed, and the last row, the frames of protocols the
+# stack does not know, is counted on receipt only and has no Sent value.
+#
+# Because the rows are always the same six, the output is one object
+# with a key per row and direction ("bytes_received", "bytes_sent")
+# rather than a list of rows a consumer would have to search by label.
+# Every count is a plain integer.
+#
+# netstat -e -s prints the per-protocol statistics after this table;
+# this definition does not undertake to read them, and the text that
+# follows the six rows is refused.
+format: 1
+command: netstat
+variant: windows-ethernet
+description: Windows netstat -e, the Ethernet byte, packet, discard and error counts
+metadata:
+  tags: [windows, network]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netstat
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The banner, then the header of the two columns.
+      - '\AInterface Statistics[ \t]*\n(?:[ \t]*\n)*[ \t]+Received[ \t]+Sent[ \t]*$'
+      - '^Bytes[ \t]+\d+[ \t]+\d+[ \t]*$'
+parse:
+  type: regex
+  each: input
+  pattern: '\AInterface Statistics[ \t]*\n(?:[ \t]*\n)*[ \t]+Received[ \t]+Sent[ \t]*\n(?:[ \t]*\n)*Bytes[ \t]+(?P<bytes_received>\d+)[ \t]+(?P<bytes_sent>\d+)[ \t]*\nUnicast packets[ \t]+(?P<unicast_packets_received>\d+)[ \t]+(?P<unicast_packets_sent>\d+)[ \t]*\nNon-unicast packets[ \t]+(?P<non_unicast_packets_received>\d+)[ \t]+(?P<non_unicast_packets_sent>\d+)[ \t]*\nDiscards[ \t]+(?P<discards_received>\d+)[ \t]+(?P<discards_sent>\d+)[ \t]*\nErrors[ \t]+(?P<errors_received>\d+)[ \t]+(?P<errors_sent>\d+)[ \t]*\nUnknown protocols[ \t]+(?P<unknown_protocols_received>\d+)[ \t]*\z'
+fields:
+  bytes_received: {type: int, required: true}
+  bytes_sent: {type: int, required: true}
+  unicast_packets_received: {type: int, required: true}
+  unicast_packets_sent: {type: int, required: true}
+  non_unicast_packets_received: {type: int, required: true}
+  non_unicast_packets_sent: {type: int, required: true}
+  discards_received: {type: int, required: true}
+  discards_sent: {type: int, required: true}
+  errors_received: {type: int, required: true}
+  errors_sent: {type: int, required: true}
+  unknown_protocols_received: {type: int, required: true}

@@ -3,14 +3,16 @@ version: "1"
 suite:
   name: real commands on Windows
 
-# ipconfig, ipconfig /all and systeminfo as Windows ships them, run on the
-# CI runners (Windows Server 2022 and 2025, English, console code page
-# 65001). Nothing here is gated on a command being present: all three are
-# part of Windows. What is pinned is which definition the real output
-# lands on, that the neighbouring format is refused, and values checked
-# against a second source on the same machine rather than against a
-# machine's constants: hostname for the host name, ver for the build
-# number, and PowerShell's own view of the adapter jz reported.
+# Commands Windows ships with, run on the CI runners (Windows Server 2022
+# and 2025, English, console code page 65001). Nothing here is gated on a
+# command being present: every one is part of Windows. What is pinned is
+# which definition the real output lands on, that the neighbouring format
+# is refused, and values checked against a second source on the same
+# machine rather than against a machine's constants: hostname for the host
+# name, ver for the build number, PowerShell's own view of an adapter or a
+# process, and one Windows command's answer against another's. The few
+# constants used are Windows' own: the System process is 4, the Everyone
+# group is S-1-1-0, and the RPC endpoint mapper listens on port 135.
 #
 # A Windows set to another display language prints these labels in that
 # language, which the signatures do not describe; that is exit 4, and it
@@ -198,3 +200,310 @@ scenarios:
               - { path: "$", length: 1 }
               - { path: "$[0].host_name", matches: "(?i)^${host}$" }
               - { path: "$[0].os_version", matches: 'Build ${build}$' }
+
+  - name: tasklist lands on each of its six forms and they agree about lsass
+    only: {os: windows}
+    steps:
+      - run:
+          command: jz run --explain tasklist
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose tasklist/table from embedded"
+          stdout:
+            json: { path: "$[?(@.image_name=='System')].pid", equals: 4 }
+      - run:
+          command: jz run --explain tasklist /fo csv
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose tasklist/csv from embedded"
+          stdout:
+            json: { path: "$[?(@.image_name=='System')].pid", equals: 4 }
+      - run:
+          command: powershell -NoProfile -NonInteractive -Command "(Get-Process -Name lsass).Id"
+          timeout: 5m
+      - assert:
+          exit_code: 0
+      - store:
+          name: pid
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run --explain tasklist /fo list /fi "IMAGENAME eq lsass.exe"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose tasklist/list from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].image_name", equals: lsass.exe }
+              - { path: "$[0].pid", equals: "${pid}" }
+      # Windows 11 runs lsass as a protected process whose modules
+      # tasklist cannot read, so the modules are those of tasklist itself.
+      - run:
+          command: jz run --explain tasklist /m /fi "IMAGENAME eq tasklist.exe"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose tasklist/modules from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].image_name", equals: tasklist.exe }
+              # Every process maps ntdll first.
+              - { path: "$[0].modules[0]", matches: '(?i)^ntdll\.dll$' }
+      - run:
+          command: jz run --explain tasklist /v /fi "IMAGENAME eq lsass.exe"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose tasklist/verbose from embedded"
+          stdout:
+            json:
+              - { path: "$[0].pid", equals: "${pid}" }
+              - { path: "$[0].session_name", equals: Services }
+      # /fo table is what tasklist prints with no /fo, and a table
+      # definition does not read the list form.
+      - run:
+          command: jz run --parser tasklist --variant table -- tasklist /fo list
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: sc queryex, tasklist /svc and net start agree about the Event Log service
+    only: {os: windows}
+    steps:
+      - run:
+          command: jz run --explain sc query
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sc/query from embedded"
+          stdout:
+            json: { path: "$[?(@.service_name=='EventLog')].state", equals: RUNNING }
+      - run:
+          command: jz run --explain sc queryex type= service state= all
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sc/queryex from embedded"
+          stdout:
+            json: { path: "$[?(@.service_name=='EventLog')].pid", gt: 0 }
+      - store:
+          name: pid
+          from:
+            stdout:
+              json: {path: "$[?(@.service_name=='EventLog')].pid"}
+      - run:
+          command: jz run --explain tasklist /svc /fi "PID eq ${pid}"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose tasklist/services from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].services[?(@=='EventLog')]", equals: EventLog }
+      - run:
+          command: jz run --explain net start
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose net/start from embedded"
+          stdout:
+            json: { path: "$.services[?(@=='Windows Event Log')]", equals: Windows Event Log }
+
+  - name: netstat, route, arp, getmac and driverquery land on their Windows definitions
+    only: {os: windows}
+    steps:
+      - run:
+          command: jz run --explain netstat -an
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose netstat/windows from embedded"
+          stdout:
+            json: { path: "$[?(@.local_address=='0.0.0.0' && @.local_port=='135' && @.state=='LISTENING')].proto", equals: TCP }
+      - run:
+          command: jz run --explain netstat -ano
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose netstat/windows-pid from embedded"
+          stdout:
+            json: { path: "$[?(@.local_address=='0.0.0.0' && @.local_port=='135' && @.state=='LISTENING')].pid", gt: 0 }
+      - store:
+          name: pid
+          from:
+            stdout:
+              json: {path: "$[?(@.local_address=='0.0.0.0' && @.local_port=='135' && @.state=='LISTENING')].pid"}
+      # The process netstat names for port 135 is the one tasklist says
+      # hosts the endpoint mapper.
+      - run:
+          command: jz run tasklist /svc /fi "PID eq ${pid}"
+      - assert:
+          exit_code: 0
+          stdout:
+            json: { path: "$[0].services[?(@=='RpcEptMapper')]", equals: RpcEptMapper }
+      - run:
+          command: jz run --explain netstat -e
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose netstat/windows-ethernet from embedded"
+          stdout:
+            json: { path: "$.bytes_received", gt: 0 }
+      - run:
+          command: jz run --explain route print
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose route/windows from embedded"
+          stdout:
+            json:
+              - { path: "$.ipv4_routes[?(@.network_destination=='127.0.0.0')].netmask", equals: 255.0.0.0 }
+              - { path: "$.interfaces[?(@.description=='Software Loopback Interface 1')].index", equals: 1 }
+      - run:
+          command: jz run --explain arp -a
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose arp/windows from embedded"
+          stdout:
+            json: { path: "$[0].entries[?(@.internet_address=='224.0.0.22')].type", equals: static }
+      - run:
+          command: jz run --explain getmac /v
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose getmac/verbose from embedded"
+          stdout:
+            json: { path: "$[0].physical_address", matches: '^([0-9A-F]{2}-){5}[0-9A-F]{2}$' }
+      - run:
+          command: jz run --explain driverquery
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose driverquery/table from embedded"
+          stdout:
+            json: { path: "$[?(@.module_name=='ACPI')].driver_type", equals: Kernel }
+      - run:
+          command: jz run --explain driverquery /v
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose driverquery/verbose from embedded"
+          stdout:
+            json: { path: "$[?(@.module_name=='ACPI')].path", matches: '(?i)\\drivers\\acpi\.sys$' }
+
+  - name: net, whoami, schtasks, chcp and ver read the machine they run on
+    only: {os: windows}
+    steps:
+      - run:
+          command: hostname
+      - store:
+          name: host
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run --explain net user
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose net/user from embedded"
+          stdout:
+            json:
+              - { path: "$.computer", matches: "(?i)^${host}$" }
+              - { path: "$.accounts[?(@=='Guest')]", equals: Guest }
+      - run:
+          command: jz run --explain net localgroup
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose net/localgroup from embedded"
+          stdout:
+            json:
+              - { path: "$.computer", matches: "(?i)^${host}$" }
+              - { path: "$.groups[?(@=='Administrators')]", equals: Administrators }
+      - run:
+          command: jz run --explain net share
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose net/share from embedded"
+          stdout:
+            json: { path: "$[?(@.share_name=='C$')].resource", equals: 'C:\' }
+      # The runners put Git's own whoami ahead of Windows' on PATH, and
+      # jz runs the one PATH names, so Windows' is named by its path.
+      - run:
+          command: jz run --explain ${env:SystemRoot}\System32\whoami.exe /groups
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose whoami/groups from embedded"
+          stdout:
+            json: { path: "$[?(@.sid=='S-1-1-0')].group_name", equals: Everyone }
+      - run:
+          command: jz run --explain ${env:SystemRoot}\System32\whoami.exe /priv
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose whoami/privileges from embedded"
+          stdout:
+            json: { path: "$[?(@.privilege_name=='SeChangeNotifyPrivilege')].state", equals: Enabled }
+      - run:
+          command: jz run --explain schtasks /query /fo list /tn \Microsoft\Windows\Defrag\ScheduledDefrag
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose schtasks/list from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].task_name", equals: '\Microsoft\Windows\Defrag\ScheduledDefrag' }
+              - { path: "$[0].hostname", matches: "(?i)^${host}$" }
+      - run:
+          command: jz run --explain schtasks /query /fo table
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose schtasks/table from embedded"
+          stdout:
+            json: { path: "$[?(@.folder.name=='\\\\Microsoft\\\\Windows\\\\Defrag')].tasks[0].task_name", equals: ScheduledDefrag }
+      - run:
+          shell: true
+          command: chcp
+      - store:
+          name: codepage
+          from:
+            stdout: {matches: ': *([0-9]+)'}
+      - run:
+          command: jz run --explain chcp
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose chcp/windows from embedded"
+          stdout:
+            json: { path: "$.code_page", equals: "${codepage}" }
+      # ver is built into cmd.exe, so there is no program for jz run to
+      # start; its line comes through a pipe.
+      - run:
+          shell: true
+          command: ver
+      - store:
+          name: build
+          from:
+            stdout: {matches: 'Version 10\.0\.([0-9]+)\.'}
+      - run:
+          shell: true
+          command: ver | jz --explain
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ver/windows from embedded"
+          stdout:
+            json:
+              - { path: "$.major", equals: 10 }
+              - { path: "$.build", equals: "${build}" }

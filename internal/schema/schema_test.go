@@ -62,6 +62,13 @@ func TestGenerate(t *testing.T) {
 			want: `{"type":"array","items":{"type":"object","properties":{"a":{"type":"string"},"b":{"type":["string","null"]}},"required":["a","b"]}}`,
 		},
 		{
+			// required refuses a cell with nothing in it, and a word
+			// null_if names is printed, so that one is still null.
+			name: "a required cell with a word for no value",
+			def:  "parse: {type: table, split: aligned, header: {columns: [a, b]}}\nfields: {a: {required: true, null_if: ['N/A']}, b: {required: true}}\n",
+			want: `{"type":"array","items":{"type":"object","properties":{"a":{"type":["string","null"]},"b":{"type":"string"}},"required":["a","b"]}}`,
+		},
+		{
 			// The names come from the input, so only the converted ones
 			// are named and the rest are text or null.
 			name: "a header that names the columns",

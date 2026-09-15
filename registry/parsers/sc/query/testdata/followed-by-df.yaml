@@ -1,0 +1,4 @@
+source: the windows-server-2022 fixture followed by the coreutils-9.7 fixture of df/gnu, joined for this case
+description: a df table after the last block is refused rather than read as part of that block
+args: [query]
+expect_error: does not match pattern

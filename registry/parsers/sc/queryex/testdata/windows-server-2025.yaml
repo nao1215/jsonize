@@ -1,0 +1,15 @@
+description: >-
+  sc queryex type= service state= all run for real on Windows Server
+  2025: every service, stopped ones with no controls line and an exit
+  code of 1077, running ones with their process id, services hosted by
+  the system process flagged RUNS_IN_SYSTEM_PROCESS, and the per-user
+  service templates of type d0, e0 and f0.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with
+  `cmd /c "sc queryex type= service state= all 2>&1"` from PowerShell,
+  written with WriteAllLines (CRLF line endings, the blank lines between
+  the blocks as the command wrote them). Nothing was replaced: the
+  blocks name no user, host or address.
+os: windows
+args: [queryex, type=, service, state=, all]

@@ -1,0 +1,12 @@
+description: >-
+  schtasks /query /fo list for one task run for real on Windows Server
+  2022, the same labels and padding as on 2025.
+source: >-
+  captured on GitHub Actions windows-2022 (Windows Server 2022, build
+  20348.5499) on 2026-09-15 with
+  `cmd /c "schtasks /query /fo list /tn \Microsoft\Windows\Defrag\ScheduledDefrag 2>&1"`
+  from PowerShell, written with WriteAllLines (CRLF line endings, the
+  blank line above the folder line as the command wrote it). The host
+  name was replaced with examplehost02.
+os: windows
+args: [/query, /fo, list, /tn, \Microsoft\Windows\Defrag\ScheduledDefrag]

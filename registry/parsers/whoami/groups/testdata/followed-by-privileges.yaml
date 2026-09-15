@@ -1,0 +1,3 @@
+source: the windows-server-2025 fixture followed by the windows-server-2025 fixture of whoami/privileges, joined for this case
+description: the privileges table printed after the groups is refused rather than read as more groups
+expect_error: 'field "type": required value is missing'

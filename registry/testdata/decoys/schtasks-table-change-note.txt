@@ -1,0 +1,10 @@
+Change note: new backup task
+
+After the change, schtasks /query shows the task in the root folder:
+
+Folder: \
+TaskName                                 Next Run Time          Status
+======================================== ====================== ===============
+NightlyBackup                            1/1/2030 2:00:00 AM    Ready
+
+Rollback: schtasks /delete /tn NightlyBackup /f

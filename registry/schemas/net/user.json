@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/net/user.json",
+  "title": "net/user",
+  "description": "net user, the user accounts of the machine",
+  "x-jsonize": {
+    "definition": "net/user",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "computer": {
+      "type": "string"
+    },
+    "accounts": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "computer",
+    "accounts"
+  ]
+}

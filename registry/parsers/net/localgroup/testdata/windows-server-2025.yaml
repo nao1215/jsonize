@@ -1,0 +1,12 @@
+description: >-
+  net localgroup run for real on Windows Server 2025: twenty-nine groups,
+  more than the signature window holds, several with spaces in their
+  names.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "net localgroup 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  lines around the listing as the command wrote them). The host name was
+  replaced with examplehost01.
+os: windows
+args: [localgroup]

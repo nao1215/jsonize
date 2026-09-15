@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/netstat/windows.json",
+  "title": "netstat/windows",
+  "description": "Windows netstat -an, the active TCP connections and UDP endpoints",
+  "x-jsonize": {
+    "definition": "netstat/windows",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "proto": {
+        "type": "string",
+        "enum": [
+          "TCP",
+          "UDP"
+        ]
+      },
+      "local_address": {
+        "type": "string"
+      },
+      "local_port": {
+        "type": "string"
+      },
+      "foreign_address": {
+        "type": "string"
+      },
+      "foreign_port": {
+        "type": "string"
+      },
+      "state": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "proto",
+      "local_address",
+      "local_port",
+      "foreign_address",
+      "foreign_port",
+      "state"
+    ]
+  }
+}

@@ -1,0 +1,98 @@
+
+Connection Name Network Adapter Physical Address    Transport Name                                            
+=============== =============== =================== ==========================================================
+Ethernet 5      Mellanox Connec 00-00-5E-00-53-03   N/A                                                       
+Ethernet 4      Microsoft Hyper 00-00-5E-00-53-03   \Device\Tcpip_{00000000-0000-0000-0000-000000000002}      
+
+Active Connections
+
+  Proto  Local Address          Foreign Address        State
+  TCP    0.0.0.0:80             0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:1801           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:2103           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:2105           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:2107           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:2179           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:3389           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:5985           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:5986           0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:47001          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49404          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:49670          0.0.0.0:0              LISTENING
+  TCP    0.0.0.0:63615          0.0.0.0:0              LISTENING
+  TCP    192.0.2.192:139        0.0.0.0:0              LISTENING
+  TCP    192.0.2.192:49391      198.51.100.2:80        TIME_WAIT
+  TCP    192.0.2.192:49643      203.0.113.1:443        ESTABLISHED
+  TCP    192.0.2.192:49652      198.51.100.106:443     ESTABLISHED
+  TCP    192.0.2.192:49653      192.0.2.11:80          ESTABLISHED
+  TCP    192.0.2.192:49654      198.51.100.106:443     ESTABLISHED
+  TCP    192.0.2.192:49655      203.0.113.7:443        ESTABLISHED
+  TCP    192.0.2.192:49656      192.0.2.11:80          ESTABLISHED
+  TCP    192.0.2.192:49658      203.0.113.7:443        ESTABLISHED
+  TCP    192.0.2.192:49682      168.63.129.16:32526    ESTABLISHED
+  TCP    192.0.2.192:49693      168.63.129.16:80       ESTABLISHED
+  TCP    192.0.2.192:49699      168.63.129.16:32526    ESTABLISHED
+  TCP    192.0.2.192:49707      168.63.129.16:80       ESTABLISHED
+  TCP    192.0.2.192:49713      169.254.169.254:80     ESTABLISHED
+  TCP    192.0.2.192:49714      198.51.100.15:443      ESTABLISHED
+  TCP    192.0.2.192:49716      198.51.100.15:443      ESTABLISHED
+  TCP    192.0.2.192:49722      198.51.100.18:443      ESTABLISHED
+  TCP    192.0.2.192:49723      198.51.100.18:443      ESTABLISHED
+  TCP    192.0.2.192:49724      198.51.100.18:443      ESTABLISHED
+  TCP    192.0.2.192:49725      198.51.100.13:443      ESTABLISHED
+  TCP    192.0.2.192:49726      198.51.100.14:443      ESTABLISHED
+  TCP    192.0.2.192:49727      198.51.100.13:443      ESTABLISHED
+  TCP    192.0.2.192:49728      198.51.100.20:443      ESTABLISHED
+  TCP    192.0.2.192:49729      198.51.100.13:443      ESTABLISHED
+  TCP    172.28.32.1:53         0.0.0.0:0              LISTENING
+  TCP    172.28.32.1:139        0.0.0.0:0              LISTENING
+  TCP    [::]:80                [::]:0                 LISTENING
+  TCP    [::]:135               [::]:0                 LISTENING
+  TCP    [::]:445               [::]:0                 LISTENING
+  TCP    [::]:1801              [::]:0                 LISTENING
+  TCP    [::]:2103              [::]:0                 LISTENING
+  TCP    [::]:2105              [::]:0                 LISTENING
+  TCP    [::]:2107              [::]:0                 LISTENING
+  TCP    [::]:2179              [::]:0                 LISTENING
+  TCP    [::]:3389              [::]:0                 LISTENING
+  TCP    [::]:5985              [::]:0                 LISTENING
+  TCP    [::]:5986              [::]:0                 LISTENING
+  TCP    [::]:47001             [::]:0                 LISTENING
+  TCP    [::]:49404             [::]:0                 LISTENING
+  TCP    [::]:49664             [::]:0                 LISTENING
+  TCP    [::]:49665             [::]:0                 LISTENING
+  TCP    [::]:49666             [::]:0                 LISTENING
+  TCP    [::]:49667             [::]:0                 LISTENING
+  TCP    [::]:49668             [::]:0                 LISTENING
+  TCP    [::]:49670             [::]:0                 LISTENING
+  TCP    [::]:63615             [::]:0                 LISTENING
+  TCP    [fe80::1a2b:3c4d:5e6f:7082%15]:49708  [fe80::1a2b:3c4d:5e6f:7082%15]:5985  TIME_WAIT
+  TCP    [fe80::1a2b:3c4d:5e6f:7082%15]:49709  [fe80::1a2b:3c4d:5e6f:7082%15]:5985  TIME_WAIT
+  TCP    [fe80::1a2b:3c4d:5e6f:7082%15]:49710  [fe80::1a2b:3c4d:5e6f:7082%15]:5985  TIME_WAIT
+  TCP    [fe80::1a2b:3c4d:5e6f:7082%15]:49711  [fe80::1a2b:3c4d:5e6f:7082%15]:5985  TIME_WAIT
+  TCP    [fe80::1a2b:3c4d:5e6f:7082%15]:49712  [fe80::1a2b:3c4d:5e6f:7082%15]:5985  TIME_WAIT
+  UDP    0.0.0.0:123            *:*                    
+  UDP    0.0.0.0:3389           *:*                    
+  UDP    0.0.0.0:5353           *:*                    
+  UDP    0.0.0.0:5355           *:*                    
+  UDP    0.0.0.0:65014          *:*                    
+  UDP    192.0.2.192:137        *:*                    
+  UDP    192.0.2.192:138        *:*                    
+  UDP    127.0.0.1:56670        127.0.0.1:56670        
+  UDP    172.28.32.1:53         *:*                    
+  UDP    172.28.32.1:137        *:*                    
+  UDP    172.28.32.1:138        *:*                    
+  UDP    [::]:123               *:*                    
+  UDP    [::]:3389              *:*                    
+  UDP    [::]:5353              *:*                    
+  UDP    [::]:5355              *:*                    
+  UDP    [::]:65014             *:*                    
+  UDP    [fe80::1a2b:3c4d:5e6f:7083%12]:546  *:*                    
+  UDP    [fe80::1a2b:3c4d:5e6f:7082%15]:546  *:*                    

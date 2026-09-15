@@ -1,0 +1,9 @@
+{
+  "computer": "examplehost01",
+  "accounts": [
+    "DefaultAccount",
+    "Guest",
+    "user",
+    "WDAGUtilityAccount"
+  ]
+}

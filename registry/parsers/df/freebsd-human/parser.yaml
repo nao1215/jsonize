@@ -30,5 +30,5 @@ fields:
   size: {required: true}
   used: {required: true}
   available: {required: true}
-  capacity_percent: {type: int, trim_suffix: "%", null_if: ["-"], required: true}
+  capacity_percent: {type: int, trim_suffix: "%", required: true}
   mounted_on: {required: true}

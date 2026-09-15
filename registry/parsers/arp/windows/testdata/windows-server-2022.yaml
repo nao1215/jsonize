@@ -1,0 +1,15 @@
+description: >-
+  arp -a run for real on Windows Server 2022: two interfaces, the
+  Hyper-V switch with static entries only and the network adapter, with
+  a blank line between the two blocks.
+source: >-
+  captured on GitHub Actions windows-2022 (Windows Server 2022, build
+  20348.5499) on 2026-09-15 with `cmd /c "arp -a 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  lines as the command wrote them). The runner's private IPv4 addresses
+  were replaced with 192.0.2.192, 192.0.2.1 and 192.0.2.255, one space
+  of the padding after each removed to keep the columns. The Hyper-V
+  switch addresses (172.28.x.x) and the gateway's placeholder hardware
+  address were kept.
+os: windows
+args: ["-a"]

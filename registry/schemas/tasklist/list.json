@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/tasklist/list.json",
+  "title": "tasklist/list",
+  "description": "tasklist /fo list, a block of labelled lines per process",
+  "x-jsonize": {
+    "definition": "tasklist/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "image_name": {
+        "type": "string"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "session_name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "session_number": {
+        "type": "integer"
+      },
+      "mem_usage": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "image_name",
+      "pid",
+      "session_name",
+      "session_number",
+      "mem_usage"
+    ]
+  }
+}

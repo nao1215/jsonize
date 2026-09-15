@@ -814,13 +814,18 @@ fields:
 		"1 2.5 maybe 4:50 x": `field "b"`,
 		"1 2.5 up 4:5x x y":  `field "s"`,
 		"1 2.5 up 4:50":      `field "r": required value is missing`,
-		"1 2.5 up 4:50 x -":  `field "n": required value is null`,
 	}
 	for in, want := range cases {
 		_, err := Parse(def, []byte(in+"\n"), Options{})
 		if err == nil || !strings.Contains(err.Error(), want) {
 			t.Errorf("%q: got %v, want %q", in, err, want)
 		}
+	}
+	// The word null_if names is a printed value, so a required field
+	// holding it is null; a field with nothing printed is still refused.
+	got, err = Parse(def, []byte("1 2.5 up 4:50 x -\n"), Options{})
+	if err != nil || mustJSON(t, got) != `[{"i":1,"f":2.5,"b":true,"s":290,"r":"x","n":null}]` {
+		t.Errorf("a required value null_if names: %v %v", mustJSON(t, got), err)
 	}
 	empty := load(t, `
 format: 1

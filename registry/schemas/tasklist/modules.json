@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/tasklist/modules.json",
+  "title": "tasklist/modules",
+  "description": "tasklist /m, the modules loaded into each process",
+  "x-jsonize": {
+    "definition": "tasklist/modules",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "image_name": {
+        "type": "string"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "modules": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "image_name",
+      "pid",
+      "modules"
+    ]
+  }
+}

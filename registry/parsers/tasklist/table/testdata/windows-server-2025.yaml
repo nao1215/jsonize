@@ -1,0 +1,12 @@
+description: >-
+  tasklist run for real on Windows Server 2025: services in session 0
+  and the runner's console processes in session 2, and memory figures
+  from 8 K to six digits with a thousands separator.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "tasklist 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  line above the header as the command wrote it). Nothing was replaced:
+  the listing names no user, host or address.
+os: windows
+args: []

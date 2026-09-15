@@ -1,0 +1,1045 @@
+[
+  {
+    "image_name": "System Idle Process",
+    "pid": 0,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "8 K"
+  },
+  {
+    "image_name": "System",
+    "pid": 4,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "176 K"
+  },
+  {
+    "image_name": "Secure System",
+    "pid": 92,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "53,696 K"
+  },
+  {
+    "image_name": "Registry",
+    "pid": 132,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "29,640 K"
+  },
+  {
+    "image_name": "smss.exe",
+    "pid": 524,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "1,672 K"
+  },
+  {
+    "image_name": "csrss.exe",
+    "pid": 756,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "6,164 K"
+  },
+  {
+    "image_name": "wininit.exe",
+    "pid": 880,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "8,720 K"
+  },
+  {
+    "image_name": "services.exe",
+    "pid": 976,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "11,356 K"
+  },
+  {
+    "image_name": "LsaIso.exe",
+    "pid": 996,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "3,496 K"
+  },
+  {
+    "image_name": "lsass.exe",
+    "pid": 1004,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "29,584 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 696,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "33,408 K"
+  },
+  {
+    "image_name": "fontdrvhost.exe",
+    "pid": 504,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "4,752 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1100,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "16,420 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1152,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "12,948 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1316,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "5,592 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1324,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,516 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1344,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "16,792 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1368,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "7,004 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1492,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "13,136 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1544,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "7,096 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1588,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,928 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1596,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "8,256 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1612,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "7,792 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1676,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "10,044 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1696,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "7,936 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1704,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,884 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1788,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "20,536 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1960,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "27,744 K"
+  },
+  {
+    "image_name": "vmms.exe",
+    "pid": 2004,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "33,888 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1464,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "12,228 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2104,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "8,608 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2176,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "10,596 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2320,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,252 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2356,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "13,196 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2364,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "17,192 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2440,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "10,108 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2512,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "10,584 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2520,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "30,328 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2584,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "14,600 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2592,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "10,740 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2608,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "7,552 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2696,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "11,760 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2712,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "16,696 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2812,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "11,256 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2872,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,384 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2884,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "10,280 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2904,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,768 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3032,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "23,816 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2156,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "8,044 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3080,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "11,984 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3100,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "15,340 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3132,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "8,640 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3220,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "13,136 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3256,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "17,896 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3300,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "8,924 K"
+  },
+  {
+    "image_name": "spoolsv.exe",
+    "pid": 3376,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "22,336 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3452,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "12,928 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3516,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "14,096 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3524,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "22,056 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3536,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "16,244 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3544,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,240 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3560,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "15,492 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3728,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "14,772 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3744,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "7,028 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3752,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "7,300 K"
+  },
+  {
+    "image_name": "SMSvcHost.exe",
+    "pid": 3792,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "30,780 K"
+  },
+  {
+    "image_name": "WaAppAgent.exe",
+    "pid": 3808,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "84,820 K"
+  },
+  {
+    "image_name": "MpDefenderCoreService.exe",
+    "pid": 3816,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "30,724 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3860,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "7,468 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3892,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "10,652 K"
+  },
+  {
+    "image_name": "sqlwriter.exe",
+    "pid": 3900,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "10,848 K"
+  },
+  {
+    "image_name": "sshd.exe",
+    "pid": 3916,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,488 K"
+  },
+  {
+    "image_name": "MsMpEng.exe",
+    "pid": 3956,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "201,392 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3992,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "20,800 K"
+  },
+  {
+    "image_name": "WindowsAzureGuestAgent.exe",
+    "pid": 4012,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "66,624 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 4024,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "23,736 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 4036,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,924 K"
+  },
+  {
+    "image_name": "mqsvc.exe",
+    "pid": 4064,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "19,588 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 4084,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "11,508 K"
+  },
+  {
+    "image_name": "wslservice.exe",
+    "pid": 3144,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "29,320 K"
+  },
+  {
+    "image_name": "WmiPrvSE.exe",
+    "pid": 5020,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "26,928 K"
+  },
+  {
+    "image_name": "SMSvcHost.exe",
+    "pid": 2148,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "20,284 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 4620,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "14,872 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 4904,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "60,312 K"
+  },
+  {
+    "image_name": "vmcompute.exe",
+    "pid": 5140,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "10,804 K"
+  },
+  {
+    "image_name": "taskhostw.exe",
+    "pid": 4632,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "21,320 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2820,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "10,336 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 6296,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "8,944 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 6304,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "45,480 K"
+  },
+  {
+    "image_name": "WmiPrvSE.exe",
+    "pid": 6536,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "13,668 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 6868,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "28,480 K"
+  },
+  {
+    "image_name": "WaSecAgentProv.exe",
+    "pid": 1936,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "5,252 K"
+  },
+  {
+    "image_name": "conhost.exe",
+    "pid": 6124,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "6,144 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 6628,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "26,920 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 6668,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "13,420 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 6584,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "11,504 K"
+  },
+  {
+    "image_name": "WmiPrvSE.exe",
+    "pid": 7148,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "15,188 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 7460,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "36,280 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 7660,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,148 K"
+  },
+  {
+    "image_name": "csrss.exe",
+    "pid": 8028,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "8,084 K"
+  },
+  {
+    "image_name": "winlogon.exe",
+    "pid": 8096,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "13,416 K"
+  },
+  {
+    "image_name": "fontdrvhost.exe",
+    "pid": 8172,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "5,988 K"
+  },
+  {
+    "image_name": "dwm.exe",
+    "pid": 7284,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "73,140 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1396,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "11,220 K"
+  },
+  {
+    "image_name": "DefenderSessionHelper.exe",
+    "pid": 7828,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "6,368 K"
+  },
+  {
+    "image_name": "taskhostw.exe",
+    "pid": 7768,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "21,092 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 7800,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "40,916 K"
+  },
+  {
+    "image_name": "sihost.exe",
+    "pid": 6840,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "40,628 K"
+  },
+  {
+    "image_name": "taskhostw.exe",
+    "pid": 7184,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "18,032 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 6212,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "10,148 K"
+  },
+  {
+    "image_name": "explorer.exe",
+    "pid": 556,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "163,476 K"
+  },
+  {
+    "image_name": "ShellHost.exe",
+    "pid": 6056,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "43,036 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 5284,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "26,228 K"
+  },
+  {
+    "image_name": "smartscreen.exe",
+    "pid": 836,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "12,832 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1772,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "8,688 K"
+  },
+  {
+    "image_name": "StartMenuExperienceHost.exe",
+    "pid": 2688,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "136,868 K"
+  },
+  {
+    "image_name": "SearchHost.exe",
+    "pid": 900,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "116,456 K"
+  },
+  {
+    "image_name": "RuntimeBroker.exe",
+    "pid": 1056,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "54,372 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 5788,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "30,588 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 8188,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "27,084 K"
+  },
+  {
+    "image_name": "ctfmon.exe",
+    "pid": 8668,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "26,124 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 9128,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "16,912 K"
+  },
+  {
+    "image_name": "UserOOBEBroker.exe",
+    "pid": 9204,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "11,492 K"
+  },
+  {
+    "image_name": "AzureArcSysTray.exe",
+    "pid": 9100,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "20,008 K"
+  },
+  {
+    "image_name": "WmiPrvSE.exe",
+    "pid": 7272,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "12,948 K"
+  },
+  {
+    "image_name": "hosted-compute-agent",
+    "pid": 608,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "20,480 K"
+  },
+  {
+    "image_name": "conhost.exe",
+    "pid": 7836,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "10,008 K"
+  },
+  {
+    "image_name": "OpenConsole.exe",
+    "pid": 9076,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "14,504 K"
+  },
+  {
+    "image_name": "WindowsTerminal.exe",
+    "pid": 6880,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "86,888 K"
+  },
+  {
+    "image_name": "provjobd.exe3010926735",
+    "pid": 912,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "25,396 K"
+  },
+  {
+    "image_name": "SecurityHealthService.exe",
+    "pid": 8656,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "11,868 K"
+  },
+  {
+    "image_name": "ServiceFabricLocalClusterManager.exe",
+    "pid": 1032,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "36,624 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 2128,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "20,560 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 6724,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,304 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 3396,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "14,648 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 7300,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "9,040 K"
+  },
+  {
+    "image_name": "msdtc.exe",
+    "pid": 5516,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "14,292 K"
+  },
+  {
+    "image_name": "sppsvc.exe",
+    "pid": 7440,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "14,964 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 968,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "18,116 K"
+  },
+  {
+    "image_name": "Runner.Listener.exe",
+    "pid": 7076,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "72,508 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 1968,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "14,848 K"
+  },
+  {
+    "image_name": "Runner.Worker.exe",
+    "pid": 2552,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "92,580 K"
+  },
+  {
+    "image_name": "conhost.exe",
+    "pid": 7900,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "6,876 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 5724,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "26,392 K"
+  },
+  {
+    "image_name": "svchost.exe",
+    "pid": 7968,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "18,892 K"
+  },
+  {
+    "image_name": "MoUsoCoreWorker.exe",
+    "pid": 6060,
+    "session_name": "Services",
+    "session_number": 0,
+    "mem_usage": "24,116 K"
+  },
+  {
+    "image_name": "pwsh.exe",
+    "pid": 8428,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "86,440 K"
+  },
+  {
+    "image_name": "cmd.exe",
+    "pid": 4684,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "4,640 K"
+  },
+  {
+    "image_name": "tasklist.exe",
+    "pid": 7364,
+    "session_name": "Console",
+    "session_number": 2,
+    "mem_usage": "11,656 K"
+  }
+]

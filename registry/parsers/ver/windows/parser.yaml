@@ -1,0 +1,39 @@
+# `ver` is the cmd.exe built-in that prints the name of the system and
+# its version on one line: "Microsoft Windows [Version 10.0.26100.33296]".
+# The version is four numbers separated by dots: the major and minor
+# version, the build and the revision the installed updates bring it
+# to. It is kept whole as printed and its parts are given as integers
+# too, since a consumer compares builds rather than strings.
+#
+# A system that predates the revision in this line (Windows 7 prints
+# "[Version 6.1.7601]") has no fourth number, and the revision is null
+# there. A cmd.exe that speaks another language spells the word Version
+# in it; this definition reads the English line.
+format: 1
+command: ver
+variant: windows
+description: ver, the Windows name and version line of cmd.exe
+metadata:
+  tags: [windows, system]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/ver
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The whole output is this one line.
+      - '\AMicrosoft Windows \[Version \d+\.\d+\.\d+(?:\.\d+)?\][ \t]*\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\A(?P<product>Microsoft Windows) \[Version (?P<version>(?P<major>\d+)\.(?P<minor>\d+)\.(?P<build>\d+)(?:\.(?P<revision>\d+))?)\][ \t]*\z'
+fields:
+  product: {required: true}
+  version: {required: true}
+  major: {type: int, required: true}
+  minor: {type: int, required: true}
+  build: {type: int, required: true}
+  revision: {type: int}
