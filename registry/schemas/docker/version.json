@@ -5,7 +5,7 @@
   "description": "docker version",
   "x-jsonize": {
     "definition": "docker/version",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {

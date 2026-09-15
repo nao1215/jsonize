@@ -5,7 +5,7 @@
   "description": "docker system df",
   "x-jsonize": {
     "definition": "docker/system-df",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
