@@ -9,6 +9,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
@@ -20,7 +21,7 @@ const MaxDepth = 1000
 // readJSON reads one JSON document. The keys keep the order they were
 // written in, a number keeps the digits it was written with, and the
 // document has to be the whole of the text.
-func readJSON(data []byte) (any, error) {
+func readJSON(data []byte, c *counter) (any, error) {
 	data = bytes.TrimPrefix(data, []byte("\xEF\xBB\xBF"))
 	if !utf8.Valid(data) {
 		return nil, docError(JSON, data, invalidUTF8Offset(data), "the text is not valid UTF-8")
@@ -30,7 +31,7 @@ func readJSON(data []byte) (any, error) {
 	}
 	dec := json.NewDecoder(bytes.NewReader(data))
 	dec.UseNumber()
-	v, err := decodeValue(dec, 0)
+	v, err := decodeValue(dec, 0, c)
 	if err != nil {
 		return nil, jsonError(JSON, data, dec, err)
 	}
@@ -41,12 +42,19 @@ func readJSON(data []byte) (any, error) {
 }
 
 // jsonLine reads the JSON value one line of JSON Lines holds.
-func jsonLine(line []byte, num int) (any, error) {
+func jsonLine(line []byte, num int, c *counter) (any, error) {
 	dec := json.NewDecoder(bytes.NewReader(line))
 	dec.UseNumber()
-	v, err := decodeValue(dec, 0)
+	v, err := decodeValue(dec, 0, c)
 	if err != nil {
-		var se *json.SyntaxError
+		var (
+			se *json.SyntaxError
+			pe *engine.ParseError
+		)
+		if errors.As(err, &pe) {
+			pe.Line = num
+			return nil, pe
+		}
 		if errors.As(err, &se) || errors.Is(err, io.ErrUnexpectedEOF) || errors.Is(err, io.EOF) {
 			return nil, lineError(JSONL, num, "the line is not one JSON value")
 		}
@@ -72,10 +80,14 @@ var errTooDeep = fmt.Errorf("arrays and objects nest deeper than %d", MaxDepth)
 // decodeValue reads the next value from dec. An object becomes a
 // jsonutil.Object, so its keys stay in order, and a key given twice is
 // refused: which of the two values a reader keeps is not something JSON
-// says.
-func decodeValue(dec *json.Decoder, depth int) (any, error) {
+// says. Every value is counted by c, and the one past its limit is
+// refused without a line, which the caller gives it.
+func decodeValue(dec *json.Decoder, depth int, c *counter) (any, error) {
 	tok, err := dec.Token()
 	if err != nil {
+		return nil, err
+	}
+	if err := c.add(0); err != nil {
 		return nil, err
 	}
 	d, ok := tok.(json.Delim)
@@ -99,7 +111,7 @@ func decodeValue(dec *json.Decoder, depth int) (any, error) {
 			if _, dup := obj.Get(key); dup {
 				return nil, &duplicateKeyError{key: key, offset: at}
 			}
-			v, err := decodeValue(dec, depth+1)
+			v, err := decodeValue(dec, depth+1, c)
 			if err != nil {
 				return nil, err
 			}
@@ -112,7 +124,7 @@ func decodeValue(dec *json.Decoder, depth int) (any, error) {
 	case '[':
 		arr := []any{}
 		for dec.More() {
-			v, err := decodeValue(dec, depth+1)
+			v, err := decodeValue(dec, depth+1, c)
 			if err != nil {
 				return nil, err
 			}
@@ -132,8 +144,13 @@ func jsonError(format string, data []byte, dec *json.Decoder, err error) error {
 	var (
 		se  *json.SyntaxError
 		dup *duplicateKeyError
+		pe  *engine.ParseError
 	)
 	switch {
+	case errors.As(err, &pe):
+		// A value past the limit, placed by where the decoder stopped.
+		pe.Line = 1 + bytes.Count(data[:min(dec.InputOffset(), int64(len(data)))], []byte("\n"))
+		return pe
 	case errors.As(err, &dup):
 		return docError(format, data, dup.offset, dup.Error())
 	case errors.As(err, &se):

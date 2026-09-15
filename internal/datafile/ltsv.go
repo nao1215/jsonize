@@ -17,7 +17,10 @@ import (
 // label outside that set, an empty field between two tabs and a label
 // given twice in one record are refused: each is a line that is not LTSV,
 // and reading it would mean inventing the part the line does not say.
-func ltsvLine(line []byte, num int) (any, error) {
+func ltsvLine(line []byte, num int, c *counter) (any, error) {
+	if err := c.add(num); err != nil {
+		return nil, err
+	}
 	obj := jsonutil.NewObject()
 	for i, field := range bytes.Split(line, []byte("\t")) {
 		label, value, ok := bytes.Cut(field, []byte(":"))
@@ -30,6 +33,9 @@ func ltsvLine(line []byte, num int) (any, error) {
 		key := string(label)
 		if _, dup := obj.Get(key); dup {
 			return nil, lineError(LTSV, num, fmt.Sprintf("the label %q is given twice", key))
+		}
+		if err := c.add(num); err != nil {
+			return nil, err
 		}
 		obj.Set(key, string(value))
 	}
