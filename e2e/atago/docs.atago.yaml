@@ -1,0 +1,268 @@
+version: "1"
+
+suite:
+  name: documented examples
+  # ls and ping are stand-ins: copies of e2ehelper that print what they
+  # are given, so jz run lands on the command by its name and reads the
+  # output a page shows without depending on this machine.
+  setup:
+    - fixture:
+        file: bin/.keep
+        content: ""
+    - run:
+        command: e2ehelper as ls ${suitedir}/bin
+    - run:
+        command: e2ehelper as ping ${suitedir}/bin
+
+# Every jz command the README, the landing page and the usage guide show
+# with its output is run here with the input that prints that output, and
+# TestDocumentedExamplesAreRun fails when a page shows one no scenario
+# runs. The cookbook's recipes have a spec of their own. Where a page cuts
+# the output short with "...", the scenario holds what it does show.
+scenarios:
+  - name: "README: the examples at the top"
+    steps:
+      - fixture:
+          file: sales.csv
+          content: |
+            sku,units
+            007,12
+            008,
+      - run:
+          command: jz --file ${workdir}/sales.csv --type units=int
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"sku":"007","units":12},{"sku":"008","units":null}]
+      - run:
+          command: "jz new --string 'message=@here: deploy := done' --path /metadata/labels/app=api replicas:=3"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"message":"@here: deploy := done","metadata":{"labels":{"app":"api"}},"replicas":3}
+
+  - name: "README and usage: --extract keeps the keys it names"
+    steps:
+      - run:
+          command: jz --extract filesystem --extract mounted_on
+          stdin: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+            tmpfs           7.8G  4.0K  7.8G   1% /tmp
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"filesystem":"/dev/nvme0n1p2","mounted_on":"/"},{"filesystem":"tmpfs","mounted_on":"/tmp"}]
+
+  - name: "README: piped YAML with one key kept"
+    steps:
+      - run:
+          command: jz --format yaml --extract spec
+          stdin: |
+            apiVersion: apps/v1
+            kind: Deployment
+            spec:
+              replicas: 3
+              template: {}
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"spec":{"replicas":3,"template":{}}}
+
+  - name: "README: jz new with a data file, and --each around a stream"
+    steps:
+      - fixture:
+          file: deploy.yaml
+          content: |
+            replicas: 3
+      - run:
+          command: jz new name=api replicas:=3 tags[]=web spec:=@${workdir}/deploy.yaml
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"api","replicas":3,"tags":["web"],"spec":{"replicas":3}}
+      - run:
+          command: jz new --each --string host=web sample:=@-
+          stdin: |
+            {"r":1,"b":0,"swpd":0,"free":5123456}
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"host":"web","sample":{"r":1,"b":0,"swpd":0,"free":5123456}}
+
+  - name: "usage: Making JSON from arguments"
+    steps:
+      - fixture:
+          file: VERSION
+          content: |
+            1.4.0
+      - run:
+          command: jz new name=api replicas:=3 debug:=false tags[]=web tags[]=prod
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"api","replicas":3,"debug":false,"tags":["web","prod"]}
+      - run:
+          command: "jz new --string note=@here --string 'rule=a := b' --string flag=--pretty"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"note":"@here","rule":"a := b","flag":"--pretty"}
+      - run:
+          command: jz new --text-file notes=- version=@${workdir}/VERSION
+          stdin: "Fixed a crash.\r\n\r\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "{\"notes\":\"Fixed a crash.\\r\\n\\r\\n\",\"version\":\"1.4.0\"}\n"
+      - run:
+          command: jz new --path /metadata/name=api --path /spec/replicas:=3 --path /spec/ports/-:=80 kind=Deployment
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"metadata":{"name":"api"},"spec":{"replicas":3,"ports":[80]},"kind":"Deployment"}
+
+  # The page shows ping on macOS, and on another system jz run narrows ping
+  # to that system's variants, which do not read macOS output.
+  - name: "usage: A composite as a stream"
+    only: {os: darwin}
+    steps:
+      - fixture:
+          file: ping.txt
+          from: "${specdir}/testdata/ping-macos-26-timeout.txt"
+      - run:
+          command: jz run --stream ${suitedir}/bin/ping -c 2 192.0.2.1
+          stdin: {file: ping.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            matches: '\A\{"part":"destination","value":\{"name":"192\.0\.2\.1","address":"192\.0\.2\.1",[^\n]*\}\}\n\{"part":"replies","value":\{"kind":"no_answer","error":"Request timeout","icmp_seq":0\}\}\n\{"part":"statistics","value":\{"name":"192\.0\.2\.1","packets_transmitted":2,"packets_received":0,[^\n]*\}\}\n\z'
+
+  - name: "usage: Watching a stream for the records it left out"
+    steps:
+      - run:
+          command: jz --stream --explain=json --parser etc --variant passwd
+          stdin: |
+            root:x:0:0:root:/root:/bin/bash
+            broken
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              {"username":"root","password":"x","uid":0,"gid":0,"gecos":"root","home":"/root","shell":"/bin/bash"}
+          stderr:
+            matches: '(?m)^jz: explain: \{"outcome":"chosen","scope":\{"from":"--parser","parser":"etc","variant":"passwd",'
+      - assert:
+          stderr:
+            contains: 'jz: explain: {"event":"skipped","definition":"etc/passwd","line":2,"reason":"expected at least 7 fields but found 1: \"broken\"","skipped":1}'
+
+  - name: "usage: Naming a parser"
+    steps:
+      - run:
+          command: jz --parser ls --variant names
+          stdin: |
+            a b.txt
+            notes
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"a b.txt"},{"name":"notes"}]
+      - run:
+          command: jz run ${suitedir}/bin/ls /tmp/empty
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              []
+
+  # Nothing is started: jz refuses before it would run nice, so the
+  # command does not have to exist.
+  - name: "usage: Wrappers"
+    steps:
+      - run:
+          command: jz run nice -n 5 df -h
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            equals: |
+              jz: no parser for "nice"
+              run `jz list` to see the supported parsers
+              If nice runs df, name that parser: jz run --parser df -- nice -n 5 df -h
+
+  - name: "usage: A csv without a header line"
+    steps:
+      - run:
+          command: jz --parser csv --variant comma-no-header --columns id,name
+          stdin: |
+            1,alice
+            2,bob
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"id":"1","name":"alice"},{"id":"2","name":"bob"}]
+
+  - name: "usage: Seeing which parser was chosen"
+    steps:
+      - fixture:
+          file: df-gnu.txt
+          from: "${specdir}/testdata/df-gnu.txt"
+      - run:
+          command: jz --explain=json --file ${workdir}/df-gnu.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            matches: '\Ajz: explain: \{"outcome":"chosen",[^\n]*"chosen":\{"definition":"df/gnu",[^\n]*"read":\{"lines":8,"read":7,'
+
+  - name: "usage: Seeing what a definition extracted"
+    steps:
+      - run:
+          command: jz --extract use_percent
+          stdin: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"use_percent":92}]
+      - run:
+          command: jz --raw --extract use_percent
+          stdin: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"use_percent":"92%"}]
+
+  - name: "usage: Timestamps a format does not fully state"
+    steps:
+      - run:
+          command: jz --extract time
+          stdin: "alice    seat0        Nov  4 13:17 (login screen)\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"time":"Nov  4 13:17"}]
+      - run:
+          command: jz --assume-year 2025 --extract time
+          stdin: "alice    seat0        Nov  4 13:17 (login screen)\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"time":"2025-11-04T13:17:00Z"}]
