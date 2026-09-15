@@ -53,6 +53,7 @@ func TestCSVColumnNamedByTheCallerIsMissing(t *testing.T) {
 	}{
 		{"a header without the column", "parse: {type: csv}\n", "name,size\nweb,3\n", `t/v: line 1: no column "count"; the columns are "name", "size"`, map[string]string{"count": "int"}},
 		{"a numbered column past the first record", "parse: {type: csv, header: {none: true}}\n", "a,1\nb,2\n", `t/v: line 1: no column "column_3"; the columns are "column_1", "column_2"`, map[string]string{"column_3": "int"}},
+		{"a column the definition does not name", "parse: {type: csv, header: {none: true, columns: [id]}}\n", "1\n2\n", `t/v: line 1: no column "count"; the columns are "id"`, map[string]string{"count": "int"}},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
