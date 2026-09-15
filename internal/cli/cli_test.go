@@ -1137,8 +1137,9 @@ func TestRunNamesTheParserAWrapperRuns(t *testing.T) {
 			t.Errorf("%v: %d %s", tt.args, code, h.stderr.String())
 		}
 	}
-	// Nothing jz knows among the arguments: the refusal is what it was.
-	if code := h.run("run", "nice", "./script"); code != ExitSelect || strings.Contains(h.stderr.String(), "--parser") {
+	// Nothing jz knows among the arguments: no parser is named, and the
+	// refusal says only how to name one.
+	if code := h.run("run", "nice", "./script"); code != ExitSelect || strings.Contains(h.stderr.String(), " runs ") {
 		t.Errorf("no known command: %d %s", code, h.stderr.String())
 	}
 	// A directory is something a command reads, not a command it runs,
@@ -1147,7 +1148,7 @@ func TestRunNamesTheParserAWrapperRuns(t *testing.T) {
 	if err := os.Mkdir(dir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if code := h.run("run", "nice", "-n", "5", dir); code != ExitSelect || strings.Contains(h.stderr.String(), "--parser") {
+	if code := h.run("run", "nice", "-n", "5", dir); code != ExitSelect || strings.Contains(h.stderr.String(), "--parser apt") {
 		t.Errorf("a directory named like a parser: %d %s", code, h.stderr.String())
 	}
 	// A file that is not a program is read, not run: `stat /proc/uptime`.
@@ -1155,8 +1156,22 @@ func TestRunNamesTheParserAWrapperRuns(t *testing.T) {
 	if err := os.WriteFile(file, []byte("1 2\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if code := h.run("run", "nice", file); runtime.GOOS != "windows" && (code != ExitSelect || strings.Contains(h.stderr.String(), "--parser")) {
+	if code := h.run("run", "nice", file); runtime.GOOS != "windows" && (code != ExitSelect || strings.Contains(h.stderr.String(), "--parser uptime")) {
 		t.Errorf("a data file named like a parser: %d %s", code, h.stderr.String())
+	}
+	// A command jz has no parser for may still print a format jz reads
+	// under another name, and the refusal says how to name that parser
+	// rather than only where the list of them is.
+	if code := h.run("run", "nosuchtool-jz", "--tag", "f"); code != ExitSelect ||
+		!strings.Contains(h.stderr.String(), "If nosuchtool-jz prints a format jz reads under another name, name its parser: jz run --parser PARSER -- nosuchtool-jz --tag f") {
+		t.Errorf("unknown command: %d %s", code, h.stderr.String())
+	}
+	// A value that happens to be the name of a shape (csv, table) is an
+	// option's value, not a command the first one runs: systeminfo /fo csv
+	// is not systeminfo running csv, and naming csv would be ambiguous
+	// between its variants anyway.
+	if code := h.run("run", "nosuchtool-jz", "/fo", "csv"); code != ExitSelect || strings.Contains(h.stderr.String(), "runs csv") {
+		t.Errorf("a shape named as an option's value: %d %s", code, h.stderr.String())
 	}
 	if runtime.GOOS == "windows" {
 		return
