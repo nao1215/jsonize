@@ -103,7 +103,7 @@ scenarios:
       - assert:
           stdout:
             contains: |
-              [] [completion|help|list|run|test|version]
+              [] [completion|help|list|new|run|test|version]
               [--par] [--parser]
               [--parser cur] [curl]
               [--parser = cur] [curl]
@@ -159,7 +159,7 @@ scenarios:
           stdout:
             equals: |
               registered: _jz
-              [] [run|list|test|completion|version|help]
+              [] [run|new|list|test|completion|version|help]
               [--par] [--parser]
               [--parser cur] [curl]
               [--parser=cur] [--parser=curl]
