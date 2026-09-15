@@ -1,0 +1,3 @@
+source: the definition's own excerpts.txt followed by ps/unix's procps-4.0.4.txt, joined for this case
+description: a ps table after the errors is refused, since its lines are neither error lines nor excerpt lines
+expect_error: does not describe this input

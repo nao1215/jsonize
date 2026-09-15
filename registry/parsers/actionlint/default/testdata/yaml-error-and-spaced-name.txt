@@ -1,0 +1,8 @@
+.github/workflows/release draft.yaml:5:22: expecting a single ${{...}} expression or float number literal, but found plain text node [syntax-check]
+  |
+5 |     timeout-minutes: abc
+  |                      ^~~
+.github/workflows/yamlerr.yml:2:2: could not parse as YAML: did not find expected key [syntax-check]
+  |
+2 | jobs:
+  |  ^~~~
