@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/otool/libraries.json",
+  "title": "otool/libraries",
+  "description": "otool -L shared libraries a Mach-O file links against, with their versions",
+  "x-jsonize": {
+    "definition": "otool/libraries",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "architecture": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "architecture"
+        ]
+      },
+      "libraries": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "compatibility_version": {
+              "type": "string"
+            },
+            "current_version": {
+              "type": "string"
+            },
+            "attributes": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "path",
+            "compatibility_version",
+            "current_version",
+            "attributes"
+          ]
+        }
+      }
+    },
+    "required": [
+      "file",
+      "libraries"
+    ]
+  }
+}

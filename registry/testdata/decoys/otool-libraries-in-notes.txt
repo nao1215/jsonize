@@ -1,0 +1,4 @@
+Build/Products/Release/tool:
+	/usr/local/opt/openssl@3/lib/libssl.3.dylib (compatibility version 3.0.0, current version 3.0.0)
+That path is why the binary fails on machines without Homebrew; link
+OpenSSL statically or ship the dylib inside the bundle.

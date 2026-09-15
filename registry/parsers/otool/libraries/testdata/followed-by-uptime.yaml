@@ -1,0 +1,5 @@
+description: the uptime line joined after the libraries is refused rather than read as a file or a library
+source: the macos-26 fixture followed by the uptime/bsd fixture, joined for this case
+os: darwin
+args: [-L, /bin/ls]
+expect_error: does not describe this input
