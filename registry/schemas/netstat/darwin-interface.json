@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/netstat/darwin-interface.json",
+  "title": "netstat/darwin-interface",
+  "description": "macOS netstat -i interface and address counters",
+  "x-jsonize": {
+    "definition": "netstat/darwin-interface",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "up": {
+        "type": "boolean"
+      },
+      "mtu": {
+        "type": "integer"
+      },
+      "network": {
+        "type": "string"
+      },
+      "address": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "ipkts": {
+        "type": "integer"
+      },
+      "ierrs": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "opkts": {
+        "type": "integer"
+      },
+      "oerrs": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "coll": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "up",
+      "mtu",
+      "network",
+      "address",
+      "ipkts",
+      "ierrs",
+      "opkts",
+      "oerrs",
+      "coll"
+    ]
+  }
+}

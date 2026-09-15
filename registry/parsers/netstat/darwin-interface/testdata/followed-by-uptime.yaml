@@ -1,0 +1,5 @@
+description: the uptime line joined after the interfaces is refused rather than read as an interface
+source: the macos-26 fixture followed by the uptime/bsd fixture, joined for this case
+os: darwin
+args: ["-i"]
+expect_error: line does not match pattern
