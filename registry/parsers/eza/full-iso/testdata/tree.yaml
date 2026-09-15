@@ -1,0 +1,4 @@
+source: captured with eza 0.23.5 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1 in the system zone (+0900), eza -l --time-style=full-iso --color=never over a directory made for the fixture; the user name replaced
+description: a listing with a +0900 offset
+os: linux
+args: [-l, --time-style=full-iso, --color=never, tree]

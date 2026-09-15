@@ -1,0 +1,8 @@
+Permissions    Size User Group Date Modified Name
+.rw-rw-r--  3145728 user  user   15 Sep 06:05  big.bin
+lrwxrwxrwx        - user  user   15 Sep 06:05  dangling -> missing
+lrwxrwxrwx        - user  user   15 Sep 06:05  link -> plain.txt
+.rw-rw-r--        6 user  user   15 Sep 06:05  plain.txt
+.rwxrwxr-x       18 user  user   15 Sep 06:05  run.sh
+drwxrwxr-x        - user  user   15 Sep 06:05  subdir
+.rw-rw-r--        2 user  user   15 Sep 06:05  'with space.txt'

@@ -1,0 +1,183 @@
+[
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "\"x\""
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "#hash"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "-dash"
+  },
+  {
+    "permissions": ".rw-rw-r--@",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "a\"b"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "a -> b"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "date": "2026-09-15T01:43:57.556510129Z",
+    "name": "arrow link",
+    "link_to": "x' -> y"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "3.1M",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.549510736Z",
+    "name": "big.bin"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "both ' and \".txt"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "date": "2026-09-15T01:43:57.561509696Z",
+    "name": "dangling",
+    "link_to": "missing"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "dollar$name"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "it's.txt"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "date": "2026-09-15T01:43:57.558509956Z",
+    "name": "l'ink",
+    "link_to": "it's.txt"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "0",
+    "user": "user",
+    "date": "2024-03-05T10:11:12Z",
+    "name": "old.txt"
+  },
+  {
+    "permissions": "|rw-rw-r--",
+    "size": null,
+    "user": "user",
+    "date": "2026-09-15T01:43:57.552510476Z",
+    "name": "pipe"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "plain.txt"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "date": "2026-09-15T01:43:57.559509869Z",
+    "name": "plainlink",
+    "link_to": "say \"hi\".txt"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "date": "2026-09-15T01:43:57.555510216Z",
+    "name": "qlink",
+    "link_to": "\"x\""
+  },
+  {
+    "permissions": ".rwxrwxr-x",
+    "size": "10",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "run.sh"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "say \"hi\".txt"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "date": "2026-09-15T01:43:57.554510303Z",
+    "name": "sp link",
+    "link_to": "with space.txt"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "star*"
+  },
+  {
+    "permissions": "drwxrwxr-x",
+    "size": null,
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546510996Z",
+    "name": "subdir"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "trail "
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "4",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "with space.txt"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15T01:43:57.546880904Z",
+    "name": "x' -> y"
+  }
+]

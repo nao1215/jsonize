@@ -1,0 +1,4 @@
+source: captured with eza 0.23.5 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, eza -lgH --header --color=never over a directory made for the fixture; the user and group names replaced
+description: six columns, the link count as well as the group, which is refused
+os: linux
+expect_error: 'does not describe this input'

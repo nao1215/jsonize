@@ -1,0 +1,4 @@
+source: captured with eza 0.23.5 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, eza -l --header --color=never over a directory made for the fixture; the user name replaced
+description: the headings above the rows, which pad the date column wider
+os: linux
+args: [-l, --header, --color=never, tree]

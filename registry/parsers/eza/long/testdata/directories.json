@@ -1,0 +1,23 @@
+[
+  {
+    "permissions": "drwxrwxr-x",
+    "size": null,
+    "user": "user",
+    "date": "15 Sep 10:48",
+    "name": "alpha"
+  },
+  {
+    "permissions": "drwxrwxr-x",
+    "size": null,
+    "user": "user",
+    "date": "16 Apr  2025",
+    "name": "beta"
+  },
+  {
+    "permissions": "drwxrwxr-x",
+    "size": null,
+    "user": "user",
+    "date": "15 Sep 10:48",
+    "name": "gamma"
+  }
+]

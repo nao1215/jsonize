@@ -1,0 +1,4 @@
+source: captured with eza 0.23.5 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, eza -lgB --header --color=never over a directory made for the fixture; the user and group names replaced
+description: the headings and sizes in bytes
+os: linux
+args: [-lgB, --header, --color=never, tree]

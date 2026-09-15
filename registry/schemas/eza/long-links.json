@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/eza/long-links.json",
+  "title": "eza/long-links",
+  "description": "eza -lH long listing with the hard link count",
+  "x-jsonize": {
+    "definition": "eza/long-links",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "permissions": {
+        "type": "string"
+      },
+      "links": {
+        "type": "integer"
+      },
+      "size": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "major": {
+        "type": "integer"
+      },
+      "minor": {
+        "type": "integer"
+      },
+      "user": {
+        "type": "string"
+      },
+      "date": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "link_to": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "permissions",
+      "links",
+      "size",
+      "user",
+      "date",
+      "name"
+    ]
+  }
+}

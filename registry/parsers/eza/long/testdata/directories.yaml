@@ -1,0 +1,4 @@
+source: captured with eza 0.23.5 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, eza -l --color=never over a directory holding three directories made for the fixture; the user name replaced
+description: a listing of directories only, where every size is - and no row has the regular file mark that ls never prints
+os: linux
+args: [-l, --color=never, dirsonly]

@@ -1,0 +1,57 @@
+# `eza -l --time-style=long-iso` prints the columns of eza/long with
+# the date as 2026-09-15 06:05, the year and the clock always there.
+# It states no zone, so it stays as printed; full-iso, which adds the
+# seconds and the offset, is read by eza/full-iso. The columns, the
+# names and the size are what eza/long explains.
+format: 1
+command: eza
+variant: long-iso
+description: eza -l --time-style=long-iso, the date with its year and clock
+metadata:
+  tags: [linux, darwin, filesystem]
+  compatible: [eza]
+  references:
+    - https://github.com/eza-community/eza
+detect:
+  args:
+    any: ["--time-style=long-iso", "long-iso"]
+    # Each of these adds or removes a column, or appends a mark to the
+    # name that is not part of it; see eza/long.
+    none: ["-H", "--links", "-g", "--group", "-i", "--inode", "-S", "--blocksize", "-o", "--octal-permissions", "-Z", "--context", "--git", "-@", "--extended", "-T", "--tree", "--no-filesize", "--no-user", "--no-permissions", "--no-time", "-F=always", "--classify=always"]
+  signature:
+    all:
+      # Every line is a row of these columns, below the headings where
+      # --header printed them. A second timestamp column (-m with -u), the
+      # attribute lines -@ prints under a row, the tree -T draws before a
+      # name and the directory headings -R prints are all refused here.
+      - '\A(?:Permissions +Size +User +Date (?:Modified|Accessed|Created|Changed) +Name\n)?(?:(?:[.dcbps|][-rwxsStT]{9}@?|l[-rwxsStT]{9}@?) +(?:(?:[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?:\d+),(?:\d+)) +(?:\S+) +(?:\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +\S[^\n]*\n)*(?:[.dcbps|][-rwxsStT]{9}@?|l[-rwxsStT]{9}@?) +(?:(?:[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?:\d+),(?:\d+)) +(?:\S+) +(?:\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +\S[^\n]*\z'
+exec:
+  env:
+    NO_COLOR: "1"
+input:
+  ignore:
+    # The column headings --header (-h) prints above the rows.
+    - '^Permissions +Size +User +Date (?:Modified|Accessed|Created|Changed) +Name$'
+parse:
+  type: regex
+  # A link line first, for each of the three ways its name and its
+  # target may be written, then every other line.
+  patterns:
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +''(?P<name>[^''\\]* [^''\\]*)'' -> ''(?P<link_to>[^''\\]* [^''\\]*)''$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +''(?P<name>[^''\\]* [^''\\]*)'' -> "(?P<link_to>[^\\]*''[^\\]*)"$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +''(?P<name>[^''\\]* [^''\\]*)'' -> (?P<link_to>[^\s''\\]+)$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +"(?P<name>[^"\\]*''[^"\\]*)" -> ''(?P<link_to>[^''\\]* [^''\\]*)''$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +"(?P<name>[^"\\]*''[^"\\]*)" -> "(?P<link_to>[^\\]*''[^\\]*)"$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +"(?P<name>[^"\\]*''[^"\\]*)" -> (?P<link_to>[^\s''\\]+)$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +(?P<name>[^\s''\\]+) -> ''(?P<link_to>[^''\\]* [^''\\]*)''$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +(?P<name>[^\s''\\]+) -> "(?P<link_to>[^\\]*''[^\\]*)"$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +(?P<name>[^\s''\\]+) -> (?P<link_to>[^\s''\\]+)$'
+    - '^(?P<permissions>[.dcbps|][-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +''(?P<name>[^''\\]* [^''\\]*)''$'
+    - '^(?P<permissions>[.dcbps|][-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +"(?P<name>[^\\]*''[^\\]*)"$'
+    - '^(?P<permissions>[.dcbps|][-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) +(?P<name>[^\s''\\]+)$'
+fields:
+  size: {null_if: ["-"]}
+  major: {type: int, when_missing: omit}
+  minor: {type: int, when_missing: omit}
+  name: {required: true}
+  link_to: {when_missing: omit}

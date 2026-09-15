@@ -1,0 +1,4 @@
+source: captured with eza 0.23.5 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, eza -laB --color=never over a directory made for the fixture; the user name replaced
+description: a dotfile, and the sizes in bytes, which stay strings like the rounded ones
+os: linux
+args: [-laB, --color=never, tree]

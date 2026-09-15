@@ -1,0 +1,4 @@
+source: captured with eza 0.23.5 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, eza -lH --color=never over a directory made for the fixture; the user name replaced
+description: names in the three forms eza writes them and links between them
+os: linux
+args: [-lH, --color=never, names]
