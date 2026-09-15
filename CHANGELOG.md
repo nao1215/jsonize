@@ -44,6 +44,9 @@ project follows [Semantic Versioning](https://semver.org/).
   indentation that ends in a branch character (`|-`, `└─`) ends the
   indentation, so the blanks after it that pad a right-aligned number
   belong to the node.
+- Definitions for `eza -l` (with `--header`, `-a`, `-B`, and in its
+  long-iso, full-iso, `-g` and `-H` column sets), `procs`, `tokei`,
+  `bat --list-languages` and `hyperfine --style basic`.
 - Definitions for `cargo tree`, `uv tree`, `npm ls --all`, `busctl tree`
   (one service or several), `docker buildx ls` and `xinput list`.
 - `md5sum --tag`, `sha1sum --tag`, `sha256sum --tag`, `b2sum --tag` and
