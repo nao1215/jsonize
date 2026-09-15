@@ -1317,7 +1317,7 @@
         "children": [
           {
             "pid": 2022,
-            "command": "avahi-daemon: running [EVO-X2.local]",
+            "command": "avahi-daemon: running [examplehost.local]",
             "children": []
           },
           {

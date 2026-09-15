@@ -236,6 +236,9 @@ project follows [Semantic Versioning](https://semver.org/).
 - `scc/default` reports the byte count as the string scc printed, as it
   does every other count: scc 4.1 prints it with thousands separators,
   which was refused. Its output schema is version 2.
+- `mise/outdated` reads a tool the configuration names and nothing
+  installs, which mise prints as `[MISSING]`, with `current` as null. The
+  row was refused before. Its output schema is version 2.
 
 ## [0.1.0]
 

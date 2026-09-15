@@ -43,10 +43,10 @@ Fortran (Modern):f90,F90,f95,F95,f03,F03,f08,F08
 Fortran Namelist:namelist
 fstab:fstab,crypttab,mtab
 GDScript (Godot Engine):gd
-Git Attributes:attributes,gitattributes,.gitattributes,/home/nao/.config/git/attributes
+Git Attributes:attributes,gitattributes,.gitattributes,/home/user/.config/git/attributes
 Git Commit:COMMIT_EDITMSG,MERGE_MSG,TAG_EDITMSG
-Git Config:gitconfig,.gitconfig,.gitmodules,/home/nao/.config/git/config
-Git Ignore:exclude,gitignore,.gitignore,/home/nao/.config/git/ignore
+Git Config:gitconfig,.gitconfig,.gitmodules,/home/user/.config/git/config
+Git Ignore:exclude,gitignore,.gitignore,/home/user/.config/git/ignore
 Git Link:.git
 Git Log:gitlog
 Git Mailmap:.mailmap,mailmap
@@ -165,7 +165,7 @@ Terraform:tf,tfvars,hcl
 TeX:sty,cls
 Textile:textile
 Todo.txt:todo.txt,done.txt
-TOML:toml,tml,Cargo.lock,Gopkg.lock,Pipfile,pdm.lock,poetry.lock,uv.lock,/usr/share/containers/**/*.conf,/etc/containers/**/*.conf,/home/nao/.config/containers/**/*.conf
+TOML:toml,tml,Cargo.lock,Gopkg.lock,Pipfile,pdm.lock,poetry.lock,uv.lock,/usr/share/containers/**/*.conf,/etc/containers/**/*.conf,/home/user/.config/containers/**/*.conf
 TypeScript:ts,mts,cts
 TypeScriptReact:tsx
 Typst:typ

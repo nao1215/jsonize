@@ -436,7 +436,7 @@
       "attributes",
       "gitattributes",
       ".gitattributes",
-      "/home/nao/.config/git/attributes"
+      "/home/user/.config/git/attributes"
     ]
   },
   {
@@ -453,7 +453,7 @@
       "gitconfig",
       ".gitconfig",
       ".gitmodules",
-      "/home/nao/.config/git/config"
+      "/home/user/.config/git/config"
     ]
   },
   {
@@ -462,7 +462,7 @@
       "exclude",
       "gitignore",
       ".gitignore",
-      "/home/nao/.config/git/ignore"
+      "/home/user/.config/git/ignore"
     ]
   },
   {
@@ -1483,7 +1483,7 @@
       "uv.lock",
       "/usr/share/containers/**/*.conf",
       "/etc/containers/**/*.conf",
-      "/home/nao/.config/containers/**/*.conf"
+      "/home/user/.config/containers/**/*.conf"
     ]
   },
   {
