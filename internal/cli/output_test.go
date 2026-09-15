@@ -39,6 +39,15 @@ func TestClosedOutputIsSilent(t *testing.T) {
 			t.Errorf("stderr = %q, want nothing", h.stderr.String())
 		}
 	})
+	t.Run("a data file stream and jz new --each", func(t *testing.T) {
+		for _, args := range [][]string{{"--format", "lines", "--stream"}, {"new", "--each", "line=@-"}} {
+			h := newHarness(t)
+			h.env.Stdout = closedOutput{}
+			if code := h.pipe("a\nb\n", args...); code != ExitOutputClosed || h.stderr.Len() != 0 {
+				t.Errorf("%v: code = %d, stderr = %q", args, code, h.stderr.String())
+			}
+		}
+	})
 	t.Run("list", func(t *testing.T) {
 		h := newHarness(t)
 		h.env.Stdout = closedOutput{}

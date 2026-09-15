@@ -3,6 +3,7 @@ package jsonbuild
 import (
 	"bytes"
 	"compress/gzip"
+	"encoding/json"
 	"errors"
 	"io/fs"
 	"strings"
@@ -501,4 +502,81 @@ func FuzzPlan(f *testing.F) {
 			t.Fatalf("a second reading differs:\n%s\n%s", out, encode(t, again))
 		}
 	})
+}
+
+// A plan made once per record reads its files once, and each document
+// holds the record it was made with where standard input is named.
+func TestFixedWithARecordPerDocument(t *testing.T) {
+	t.Parallel()
+	reads := 0
+	src := files(t, "")
+	readFile := src.ReadFile
+	src.ReadFile = func(path string) ([]byte, error) {
+		reads++
+		return readFile(path)
+	}
+	for _, tt := range []struct {
+		args   []Arg
+		array  bool
+		format string
+		want   string
+	}{
+		{[]Arg{arg("host=a"), arg("sample:=@-"), arg("v=@VERSION")}, false, datafile.JSONL, `{"host":"a","sample":[1,{"k":null}],"v":"1.2.3"}`},
+		{[]Arg{ptr("/meta/line=@-"), str("tag=@x")}, false, datafile.LINES, `{"meta":{"line":[1,{"k":null}]},"tag":"@x"}`},
+		{[]Arg{arg(":=@-"), arg("end")}, true, datafile.JSONL, `[[1,{"k":null}],"end"]`},
+	} {
+		p, err := Parse(tt.args, tt.array)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if format, _ := p.StdinFormat(); format != tt.format {
+			t.Errorf("%v: format %q, want %q", tt.args, format, tt.format)
+		}
+		f, err := p.Fixed(src)
+		if err != nil {
+			t.Fatal(err)
+		}
+		before := reads
+		for range 3 {
+			if got := encode(t, f.With([]any{int64(1), jsonutil.NewObject()})); got == "" {
+				t.Fatal("nothing made")
+			}
+		}
+		obj := jsonutil.NewObject()
+		obj.Set("k", nil)
+		if got := encode(t, f.With([]any{json.Number("1"), obj})); got != tt.want {
+			t.Errorf("got %s, want %s", got, tt.want)
+		}
+		if reads != before {
+			t.Errorf("files read again per record: %d", reads-before)
+		}
+	}
+	p, err := Parse([]Arg{text("body=-"), arg("a=1")}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if format, which := p.StdinFormat(); format != datafile.TEXT || which != "--text-file body=-" {
+		t.Errorf("--text-file: %q %q", format, which)
+	}
+	p, err = Parse([]Arg{arg("a=1")}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if format, _ := p.StdinFormat(); format != "" {
+		t.Errorf("no standard input: %q", format)
+	}
+	f, err := p.Fixed(src)
+	if err != nil || encode(t, f.With("ignored")) != `{"a":"1"}` {
+		t.Errorf("no slot: %v", err)
+	}
+	if _, err := p.Fixed(Sources{ReadFile: func(string) ([]byte, error) { return nil, fs.ErrNotExist }}); err != nil {
+		t.Errorf("nothing to read: %v", err)
+	}
+	p, err = Parse([]Arg{arg("a=@missing"), arg("b:=@-")}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := p.Fixed(src); err == nil {
+		t.Error("a missing file was not reported")
+	}
 }

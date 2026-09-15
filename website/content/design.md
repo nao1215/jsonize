@@ -400,6 +400,24 @@ Each takes KEY=VALUE as one argument, like the plain forms, so the
 options keep the flag syntax every other option has and a value that
 looks like an option cannot be taken for one.
 
+### A record at a time, and what a bad one means
+
+`jz new --each` is the one place `jz new` reads standard input as
+records rather than as one value: it is what lets a stream be wrapped
+while it runs, with the fixed fields a consumer needs (a host, a source)
+around each record. It stops at wrapping. A record is placed whole, and
+choosing which records to keep or computing a field from one is a job
+for a language jz does not have.
+
+Every stream answers a record it cannot read the same way, whether it
+reads a command's output, a data file or plain lines: the record is
+reported and left out, and the status is 3 at the end. A command that
+prints for hours should not lose everything after one odd line.
+`--stop-on-error` is for the caller who would rather have no more records
+than a stream with a gap. A failure after which the next record cannot be
+found (a line over the limit, a read error, a missing `--type` column)
+ends a stream either way.
+
 ### JSON is the only output
 
 jz is the step of a pipeline that makes JSON for the next one, so the

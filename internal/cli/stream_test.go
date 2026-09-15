@@ -122,6 +122,36 @@ func TestStreamSkipsTheRecordsItCannotRead(t *testing.T) {
 	}
 }
 
+// --stop-on-error ends the stream at the record it cannot read: the ones
+// before it stand, the failure is reported once, and the status is 3. It
+// is refused without --stream, before anything is read or run.
+func TestStreamStopsOnError(t *testing.T) {
+	h := newHarness(t)
+	lines := strings.SplitAfter(gnuDF, "\n")
+	broken := lines[0] + lines[1] + "garbage\n" + strings.Join(lines[2:], "")
+	if code := h.pipe(broken, "--stream", "--stop-on-error"); code != ExitParse {
+		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
+	}
+	if recs := h.records(); len(recs) != 1 || recs[0]["filesystem"] != "tmpfs" {
+		t.Errorf("records = %v", recs)
+	}
+	if strings.Count(h.stderr.String(), "line 3") != 1 {
+		t.Errorf("stderr = %s", h.stderr.String())
+	}
+	if code := h.pipe(broken, "--stream", "--stop-on-error", "--explain=json"); code != ExitParse || strings.Contains(h.stderr.String(), `"event":"skipped"`) {
+		t.Errorf("a stop is not a skip: %d %s", code, h.stderr.String())
+	}
+	for _, args := range [][]string{
+		{"--stop-on-error"},
+		{"run", "--stop-on-error", "jz-no-such-command"},
+	} {
+		h.env.Stdin = untouchedInput{t}
+		if code := h.run(args...); code != ExitUsage || !strings.Contains(h.stderr.String(), "--stop-on-error ends a stream") {
+			t.Errorf("%v: %d %s", args, code, h.stderr.String())
+		}
+	}
+}
+
 // The one place the output contract differs: a failure part way through
 // leaves the records that were already written where they are.
 func TestStreamKeepsTheRecordsAlreadyWritten(t *testing.T) {
@@ -162,6 +192,14 @@ func TestRunStream(t *testing.T) {
 	}
 	if got := len(h.records()); got != 1 {
 		t.Errorf("records before the failure = %d", got)
+	}
+	// --stop-on-error stops the command at the first record it cannot
+	// read and returns 3, since the command did not fail.
+	if code := h.run("run", "--stream", "--stop-on-error", "sh", "-c", "echo a=1; echo nonsense; echo b=2"); code != ExitParse {
+		t.Errorf("stop on error: %d %s", code, h.stderr.String())
+	}
+	if recs := h.records(); len(recs) != 1 || recs[0]["name"] != "a" {
+		t.Errorf("records before the stop = %v", recs)
 	}
 	// A format with no streaming form is refused, naming the definition.
 	writeRegistry(t, filepath.Join(h.home, "reg"), map[string]string{

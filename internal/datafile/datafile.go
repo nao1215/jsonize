@@ -183,7 +183,7 @@ func Read(format string, data []byte) (any, error) {
 		err := Stream(format, bytes.NewReader(data), len(data)+1, func(v any) error {
 			out = append(out, v)
 			return nil
-		})
+		}, nil)
 		if err != nil {
 			return nil, err
 		}
@@ -220,10 +220,25 @@ func readText(data []byte) (any, error) {
 }
 
 // Stream reads the records of a record format from r and hands each to
-// emit as soon as it has ended. A record longer than maxLine bytes is
-// refused, which bounds what is held while a record waits for its end.
-// The first error, the reader's, a record's or emit's, ends the stream.
-func Stream(format string, r io.Reader, maxLine int, emit func(any) error) error {
+// emit as soon as it has ended.
+//
+// onError decides what a record that cannot be read means, as it does for
+// engine.Stream: returning nil leaves the record out and goes on, and
+// returning an error ends the stream with it; a nil onError ends the
+// stream at the first. Only a record's own content reaches it: a line
+// that is not JSON, not UTF-8, or not LTSV. A record longer than maxLine
+// bytes, which bounds what is held while a record waits for its end, an
+// error from r and one from emit end the stream whatever onError says,
+// since the reader cannot tell where the next record starts, or there is
+// nobody to write to.
+func Stream(format string, r io.Reader, maxLine int, emit func(any) error, onError func(*engine.ParseError) error) error {
+	failed := func(err error) error {
+		var pe *engine.ParseError
+		if onError == nil || !errors.As(err, &pe) {
+			return err
+		}
+		return onError(pe)
+	}
 	var record func([]byte, int) (any, error)
 	switch format {
 	case JSONL:
@@ -231,9 +246,9 @@ func Stream(format string, r io.Reader, maxLine int, emit func(any) error) error
 	case LTSV:
 		record = ltsvLine
 	case LINES:
-		return streamStrings(format, r, '\n', maxLine, emit)
+		return streamStrings(format, r, '\n', maxLine, emit, failed)
 	case NUL:
-		return streamStrings(format, r, 0, maxLine, emit)
+		return streamStrings(format, r, 0, maxLine, emit, failed)
 	default:
 		return fmt.Errorf("datafile: %q is not a record format", format)
 	}
@@ -253,15 +268,8 @@ func Stream(format string, r io.Reader, maxLine int, emit func(any) error) error
 			}
 			line = bytes.TrimSuffix(line, []byte("\r"))
 			if len(bytes.TrimSpace(line)) > 0 {
-				if !utf8.Valid(line) {
-					return lineError(format, num, "the line is not valid UTF-8")
-				}
-				v, rerr := record(line, num)
-				if rerr != nil {
-					return rerr
-				}
-				if eerr := emit(v); eerr != nil {
-					return eerr
+				if ferr := readRecordLine(format, line, num, record, emit, failed); ferr != nil {
+					return ferr
 				}
 			}
 		}
@@ -269,6 +277,19 @@ func Stream(format string, r io.Reader, maxLine int, emit func(any) error) error
 			return nil
 		}
 	}
+}
+
+// readRecordLine reads one line of JSON Lines or LTSV and hands its record
+// to emit, or its failure to failed.
+func readRecordLine(format string, line []byte, num int, record func([]byte, int) (any, error), emit func(any) error, failed func(error) error) error {
+	if !utf8.Valid(line) {
+		return failed(lineError(format, num, "the line is not valid UTF-8"))
+	}
+	v, err := record(line, num)
+	if err != nil {
+		return failed(err)
+	}
+	return emit(v)
 }
 
 // streamStrings hands each record ended by sep to emit as a string.
@@ -280,7 +301,7 @@ func Stream(format string, r io.Reader, maxLine int, emit func(any) error) error
 // the CR of CRLF being part of the ending, and a byte order mark in front
 // of the first line is not part of it. A NUL-separated record keeps every
 // byte, CR and LF included.
-func streamStrings(format string, r io.Reader, sep byte, maxLine int, emit func(any) error) error {
+func streamStrings(format string, r io.Reader, sep byte, maxLine int, emit func(any) error, failed func(error) error) error {
 	br := bufio.NewReader(r)
 	for num := 1; ; num++ {
 		rec, err := readRecord(br, sep, maxLine)
@@ -300,11 +321,14 @@ func streamStrings(format string, r io.Reader, sep byte, maxLine int, emit func(
 		if sep == '\n' && ended {
 			rec = bytes.TrimSuffix(rec, []byte("\r"))
 		}
-		if !utf8.Valid(rec) {
-			return recordError(format, num, "the text is not valid UTF-8")
+		var ferr error
+		if utf8.Valid(rec) {
+			ferr = emit(string(rec))
+		} else {
+			ferr = failed(recordError(format, num, "the text is not valid UTF-8"))
 		}
-		if eerr := emit(string(rec)); eerr != nil {
-			return eerr
+		if ferr != nil {
+			return ferr
 		}
 		if !ended {
 			return nil

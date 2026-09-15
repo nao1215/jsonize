@@ -14,7 +14,7 @@ so the output shown is what jz prints.
 |-----------|-------|
 | turn a command's output into JSON | [Convert what a command printed](#convert-what-a-command-printed), [Let jz run the command](#let-jz-run-the-command) |
 | shape what comes out | [Keep only the keys you need](#keep-only-the-keys-you-need) |
-| read a command that never stops | [Follow a command that keeps printing](#follow-a-command-that-keeps-printing) |
+| read a command that never stops | [Follow a command that keeps printing](#follow-a-command-that-keeps-printing), [Add fields to every record of a stream](#add-fields-to-every-record-of-a-stream), [Stop a stream at the first bad record](#stop-a-stream-at-the-first-bad-record) |
 | understand or override detection | [See which parser jz chose](#see-which-parser-jz-chose), [Name the parser when detection refuses](#name-the-parser-when-detection-refuses), [Read output jz has no parser for](#read-output-jz-has-no-parser-for) |
 | convert a data file | [Convert a CSV file](#convert-a-csv-file), [Type the columns of a CSV file](#type-the-columns-of-a-csv-file), [Read a CSV without a header line](#read-a-csv-without-a-header-line), [Convert YAML to JSON](#convert-yaml-to-json), [Read compressed JSON Lines logs](#read-compressed-json-lines-logs), [Read LTSV access logs](#read-ltsv-access-logs) |
 | turn plain text into JSON | [Turn lines into a JSON array](#turn-lines-into-a-json-array), [Read find -print0 output](#read-find--print0-output), [Wrap a whole text in a JSON string](#wrap-a-whole-text-in-a-json-string) |
@@ -64,6 +64,27 @@ read, which suits `vmstat 1`, `iostat 1` or `ping`.
 $ vmstat 1 | jz --stream
 {"r":1,"b":0,"swpd":1950392,"free":7552816,"buff":2853928,"cache":39453912,"si":4,"so":16,"bi":511,"bo":1601,"in":20347,"cs":9,"us":3,"sy":1,"id":96,"wa":0,"st":0,"gu":0}
 {"r":0,"b":0,"swpd":1950392,"free":7560728,"buff":2853928,"cache":39453924,"si":0,"so":0,"bi":0,"bo":60,"in":9188,"cs":12769,"us":1,"sy":0,"id":99,"wa":0,"st":0,"gu":0}
+```
+
+## Add fields to every record of a stream
+
+`jz new --each` wraps each JSON Lines record as it arrives. `:=@-` is the
+record.
+
+```console
+$ vmstat 1 | jz --stream | jz new --each --string host=server-a sample:=@-
+{"host":"server-a","sample":{"r":1,"b":0}}
+{"host":"server-a","sample":{"r":0,"b":0}}
+```
+
+## Stop a stream at the first bad record
+
+A stream leaves out a record it cannot read and exits 3 at the end.
+`--stop-on-error` ends it at that record.
+
+```console
+$ printf '{"n":1}\nnot json\n{"n":2}\n' | jz --format jsonl --stream --stop-on-error
+{"n":1}
 ```
 
 ## See which parser jz chose

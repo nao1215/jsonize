@@ -40,6 +40,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -617,6 +618,65 @@ func (p *Plan) Build(src Sources) (any, error) {
 		values[i] = v
 	}
 	return p.root.make(values), nil
+}
+
+// StdinFormat says how the argument that reads standard input reads it,
+// as the name of the data file format a record of it is: "lines" for
+// KEY=@-, a string per line, "jsonl" for KEY:=@-, a JSON value per line,
+// and "text" for --text-file KEY=-, which reads it whole. It is "" when no
+// argument reads standard input. arg is that argument as it was written.
+func (p *Plan) StdinFormat() (format, arg string) {
+	for _, pl := range p.places {
+		if pl.kind < fileText || pl.text != "-" {
+			continue
+		}
+		switch pl.kind {
+		case fileText:
+			return datafile.LINES, pl.arg.String()
+		case fileData:
+			return datafile.JSONL, pl.arg.String()
+		case literal, inlineJSON, fileWhole:
+		}
+		return datafile.TEXT, pl.arg.String()
+	}
+	return "", ""
+}
+
+// Fixed is a plan with every value read but the one standard input gives,
+// made once per record of standard input with With.
+type Fixed struct {
+	plan   *Plan
+	values []any
+	slot   int
+}
+
+// Fixed reads the files the plan names, in the order the arguments gave
+// them, and leaves standard input unread.
+func (p *Plan) Fixed(src Sources) (*Fixed, error) {
+	f := &Fixed{plan: p, values: make([]any, len(p.places)), slot: -1}
+	for i, pl := range p.places {
+		if pl.kind >= fileText && pl.text == "-" {
+			f.slot = i
+			continue
+		}
+		v, err := value(pl, src)
+		if err != nil {
+			return nil, err
+		}
+		f.values[i] = v
+	}
+	return f, nil
+}
+
+// With makes the document with v as the value of the argument that reads
+// standard input. The values read once are shared by every document.
+func (f *Fixed) With(v any) any {
+	values := f.values
+	if f.slot >= 0 {
+		values = slices.Clone(f.values)
+		values[f.slot] = v
+	}
+	return f.plan.root.make(values)
 }
 
 func (n *node) make(values []any) any {

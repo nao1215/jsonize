@@ -214,11 +214,14 @@ func (o *optionSet) print(w io.Writer) {
 
 // outputOptions control how the JSON is written.
 type outputOptions struct {
-	pretty  bool
-	stream  bool
-	raw     bool
-	extract stringList
-	exclude stringList
+	pretty bool
+	stream bool
+	// stopOnError ends a stream at the first record it cannot read, which
+	// is otherwise reported and left out.
+	stopOnError bool
+	raw         bool
+	extract     stringList
+	exclude     stringList
 	// year and zones are the assumptions the caller allows about a
 	// timestamp the format does not fully state.
 	year  string
@@ -228,6 +231,7 @@ type outputOptions struct {
 func (f *outputOptions) bind(o *optionSet) {
 	o.boolOpt(&f.pretty, "pretty", "p", "indent JSON output")
 	o.boolOpt(&f.stream, "stream", "", "write each record as soon as it is read")
+	o.boolOpt(&f.stopOnError, "stop-on-error", "", "end a stream at the first record that cannot be read")
 	o.boolOpt(&f.raw, "raw", "", "skip the field rules and report every value as text")
 	o.listOpt(&f.extract, "extract", "KEY", "keep only this key (repeatable)")
 	o.listOpt(&f.exclude, "exclude", "KEY", "drop this key (repeatable)")
@@ -299,6 +303,9 @@ func (f *outputOptions) assumptions() (convert.Assumptions, error) {
 func (f *outputOptions) check() error {
 	if f.pretty && f.stream {
 		return errors.New("--pretty and --stream cannot be used together: a stream is one record per line, and indenting spreads a record over several")
+	}
+	if f.stopOnError && !f.stream {
+		return errors.New("--stop-on-error ends a stream at a record it cannot read, and without --stream nothing is written when any record cannot be read")
 	}
 	if _, err := f.assumptions(); err != nil {
 		return err

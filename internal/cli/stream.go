@@ -70,7 +70,7 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		return ExitUsage
 	}
 	emit := filter.streamEmit(out.recordWriter(a.env.Stdout), def)
-	skipped, onError := a.skipping(exp, def.ID())
+	skipped, onError := a.skipping(exp, def.ID(), out.stopOnError)
 	// A stream has no total size to bound; the line limit bounds a
 	// record that never ends, and the input limit bounds what is held
 	// while a record waits for its end.
@@ -83,8 +83,13 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 // skipping returns the count of records left out so far and what a
 // stream does with a record it cannot read.
 //
-// The record is reported and left out, and the ones after it are still
-// written. A command that keeps printing (ping, rsync) puts a line jz has
+// With stop, the stream ends there: the records before it stand, the
+// failure is reported once as the stream's end, and the status is 3. A
+// caller that would rather have no more records than a stream with a gap
+// in it asks for that.
+//
+// Otherwise the record is reported and left out, and the ones after it
+// are still written. A command that keeps printing (ping, rsync) puts a line jz has
 // no reading for among thousands it has, and ending the stream there
 // would throw away everything still to come. Reading a whole document is
 // the other answer and keeps it: there, one unreadable line means the
@@ -92,9 +97,12 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 // all. With --explain the record left out is also reported as a fact of
 // its own, when it happens, so a stream that never ends can be watched
 // for what it drops.
-func (a *app) skipping(exp *explanation, def string) (*int, func(*engine.ParseError) error) {
+func (a *app) skipping(exp *explanation, def string, stop bool) (*int, func(*engine.ParseError) error) {
 	skipped := new(int)
 	return skipped, func(pe *engine.ParseError) error {
+		if stop {
+			return pe
+		}
 		*skipped++
 		a.errorf("%v", pe)
 		a.explainSkip(exp, def, pe, *skipped)
@@ -134,7 +142,7 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 		return ExitUsage
 	}
 	emit := filter.streamEmit(out.recordWriter(a.env.Stdout), def)
-	skipped, onError := a.skipping(exp, def.ID())
+	skipped, onError := a.skipping(exp, def.ID(), out.stopOnError)
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
 	err = engine.Stream(def, r, eopts, emit, onError)

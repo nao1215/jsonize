@@ -86,6 +86,7 @@ Options:
       --format NAME             read the input as this format: csv, tsv, ltsv, jsonl, json, yaml, text, lines, nul
   -p, --pretty                  indent JSON output
       --stream                  write each record as soon as it is read
+      --stop-on-error           end a stream at the first record that cannot be read
       --raw                     skip the field rules and report every value as text
       --extract KEY             keep only this key (repeatable)
       --exclude KEY             drop this key (repeatable)
@@ -120,7 +121,8 @@ $ kubectl get deploy api -o yaml | jz --format yaml --extract spec
 `jz new` makes JSON from arguments. `=` makes a string, `:=` reads JSON,
 `@path` reads a file and `[]` appends to an array. Nothing is guessed.
 `--string` writes text as it is, `--text-file` keeps a file's line
-endings, and `--path` places a value at a JSON Pointer.
+endings, `--path` places a value at a JSON Pointer, and `--each` makes one
+document per line of standard input.
 
 ```console
 $ jz new name=api replicas:=3 tags[]=web spec:=@deploy.yaml
