@@ -53,7 +53,7 @@ type convertOptions struct {
 
 func (c *convertOptions) bind(o *optionSet) {
 	o.stringOpt(&c.file, "file", "f", "PATH", "-", "read input from PATH instead of stdin")
-	o.stringOpt(&c.format, "format", "", "NAME", "", "read a data file of this format: "+strings.Join(datafile.Names(), ", "))
+	o.stringOpt(&c.format, "format", "", "NAME", "", "read the input as this format: "+strings.Join(datafile.Names(), ", "))
 	c.output.bind(o)
 	c.selects.bind(o)
 	o.helpDoc()
@@ -88,11 +88,15 @@ func (a *app) dataFormat(co *convertOptions) (format, from, compression string, 
 		return "", "", compression, ExitOK
 	}
 	if co.output.stream && !datafile.Tabular(format) && !datafile.Streams(format) {
-		a.errorf("--stream writes the records of a line format (%s), and a %s document is one value", strings.Join(lineFormats(), ", "), format)
+		a.errorf("--stream writes the records of a record format (%s), and a %s document is one value", strings.Join(recordFormats(), ", "), format)
 		return "", "", "", ExitUsage
 	}
 	if co.selects.columns != "" && !datafile.Tabular(format) {
 		a.errorf("--columns names the columns of a csv or a tsv, and %s is read as %s", describeInput(co.file), format)
+		return "", "", "", ExitUsage
+	}
+	if len(co.selects.types) > 0 && !datafile.Tabular(format) {
+		a.errorf("--type converts the columns of a csv or a tsv, and %s is read as %s", describeInput(co.file), format)
 		return "", "", "", ExitUsage
 	}
 	if datafile.Tabular(format) {
@@ -385,8 +389,8 @@ func (a *app) convertData(format string, r io.Reader, out *outputOptions, exp *e
 		a.explainWrite(exp)
 		return code
 	}
-	// A line format is a list of the records its lines hold; a JSON or
-	// YAML document is one value, whatever it holds.
+	// A record format is a list of the records it holds; a JSON or YAML
+	// document and a text are one value, whatever they hold.
 	if list, ok := v.([]any); ok && datafile.Streams(format) {
 		exp.readRecords(len(list))
 	} else {
@@ -404,7 +408,7 @@ func (a *app) convertData(format string, r io.Reader, out *outputOptions, exp *e
 	return ExitOK
 }
 
-func lineFormats() []string {
+func recordFormats() []string {
 	var out []string
 	for _, n := range datafile.Names() {
 		if datafile.Streams(n) {

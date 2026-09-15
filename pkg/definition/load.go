@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"maps"
 	"regexp"
 	"regexp/syntax"
+	"slices"
 	"sort"
 	"strings"
 	"unicode/utf8"
@@ -1147,6 +1149,40 @@ func namedGroups(re *pattern) []string {
 		}
 	}
 	return out
+}
+
+// ColumnTypes are the types WithTypes converts a column to.
+func ColumnTypes() []string { return []string{FieldInt, FieldFloat, FieldBool} }
+
+// WithTypes returns a copy of a csv definition that converts the columns
+// types names, each to int, float or bool, an empty value to null and a
+// value that is not one to an error naming the line and the column. It
+// is how a caller types the columns of a data file without writing a
+// definition out, and the conversion is the one a definition's field of
+// that type does. A column the definition converts already is refused
+// rather than converted twice; a column the input does not have is
+// refused when it is read (engine.MissingColumnError).
+func (d *Definition) WithTypes(types map[string]string) (*Definition, error) {
+	if d.Parse.Type != TypeCSV {
+		return nil, fmt.Errorf("%s does not read a csv, so there are no columns to convert", d.ID())
+	}
+	fields := make(map[string]*Field, len(d.Fields)+len(types))
+	maps.Copy(fields, d.Fields)
+	for _, name := range slices.Sorted(maps.Keys(types)) {
+		typ := types[name]
+		switch {
+		case !fieldRe.MatchString(name):
+			return nil, fmt.Errorf("invalid column name %q: a name is letters, digits and _ . : @ -, and starts with a letter, a digit or _", name)
+		case !slices.Contains(ColumnTypes(), typ):
+			return nil, fmt.Errorf("column %q: unknown type %q; the types are %s", name, typ, strings.Join(ColumnTypes(), ", "))
+		case d.Fields[name] != nil:
+			return nil, fmt.Errorf("%s converts the column %q already", d.ID(), name)
+		}
+		fields[name] = &Field{Type: typ, NullIf: []string{""}}
+	}
+	c := *d
+	c.Fields = fields
+	return &c, nil
 }
 
 // WithColumns returns a copy of a csv definition with no header line and

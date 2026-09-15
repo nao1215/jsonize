@@ -644,6 +644,43 @@ func TestWithColumns(t *testing.T) {
 	}
 }
 
+// WithTypes converts columns of a csv: a copy is returned with a field of
+// each type, an empty value null, and the original is left as it was.
+func TestWithTypes(t *testing.T) {
+	t.Parallel()
+	const header = "format: 1\ncommand: csv\nvariant: v\ndetect: {auto_detect: false}\nparse: {type: csv}\n"
+	d, err := Load([]byte(header), "v.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	typed, err := d.WithTypes(map[string]string{"count": FieldInt, "ratio": FieldFloat, "on": FieldBool})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(d.Fields) != 0 || len(typed.Fields) != 3 || typed.Fields["count"].Type != FieldInt || strings.Join(typed.Fields["on"].NullIf, ",") != "" || len(typed.Fields["on"].NullIf) != 1 {
+		t.Errorf("typed %v, original %v", typed.Fields, d.Fields)
+	}
+	for _, tt := range []struct {
+		src   string
+		types map[string]string
+		want  string
+	}{
+		{header, map[string]string{"n": "integer"}, `column "n": unknown type "integer"; the types are int, float, bool`},
+		{header, map[string]string{"n": FieldString}, `unknown type "string"`},
+		{header, map[string]string{"a b": FieldInt}, `invalid column name "a b"`},
+		{header + "fields: {n: {type: float}}\n", map[string]string{"n": FieldInt}, `csv/v converts the column "n" already`},
+		{"format: 1\ncommand: t\nvariant: v\nparse: {type: table}\n", map[string]string{"n": FieldInt}, "t/v does not read a csv"},
+	} {
+		d, err := Load([]byte(tt.src), "v.yaml")
+		if err != nil {
+			t.Fatalf("%s: %v", tt.src, err)
+		}
+		if _, err := d.WithTypes(tt.types); err == nil || !strings.Contains(err.Error(), tt.want) {
+			t.Errorf("%v on %s: %v, want %q", tt.types, tt.src, err, tt.want)
+		}
+	}
+}
+
 // A definition given on the command line is the schema of a file without
 // the keys that place a definition in a registry, in block style or as
 // one flow mapping, and it is bounded and checked the way a file is.

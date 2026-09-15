@@ -278,8 +278,11 @@ type streamer struct {
 // should carry on, and the error that must end it otherwise. Anything
 // that is not a record jz failed to read passes straight through.
 func (s *streamer) report(err error) error {
-	var done *reportedError
-	if err == nil || s.onError == nil || errors.As(err, &done) {
+	var (
+		done    *reportedError
+		missing *MissingColumnError
+	)
+	if err == nil || s.onError == nil || errors.As(err, &done) || errors.As(err, &missing) {
 		return err
 	}
 	var pe *ParseError
@@ -734,8 +737,14 @@ func (s *streamer) emitCSV(rec line) error {
 		case s.csvCols != nil:
 		case s.p.Header.None:
 			s.csvCols = csvNumbered(len(row))
+			if err := s.checkColumns(s.fields, s.csvCols, rec.num); err != nil {
+				return err
+			}
 		default:
 			s.csvCols, s.csvHeader = csvColumns(s.p, row), row
+			if err := s.checkColumns(s.fields, s.csvCols, rec.num); err != nil {
+				return err
+			}
 			continue
 		}
 		// A csv file is data: a row that holds the header's values is a

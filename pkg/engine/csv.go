@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"maps"
 	"slices"
 	"strconv"
 	"strings"
@@ -47,8 +48,14 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 			case cols != nil:
 			case p.Header.None:
 				cols = csvNumbered(len(row))
+				if err := r.checkColumns(fields, cols, rec.num); err != nil {
+					return nil, err
+				}
 			default:
 				cols, header = csvColumns(p, row), row
+				if err := r.checkColumns(fields, cols, rec.num); err != nil {
+					return nil, err
+				}
 				continue
 			}
 			// A csv file is data: a row that holds the header's values is
@@ -168,6 +175,35 @@ func (r *run) csvRow(p *definition.Parse, fields map[string]*definition.Field, c
 		}
 	}
 	return obj, nil
+}
+
+// MissingColumnError is a field rule for a column a csv does not have: a
+// name its header line does not hold, or a numbered column past the ones
+// its first record has. It is about the input as a whole rather than one
+// record, so a stream ends with it instead of leaving a record out.
+type MissingColumnError struct {
+	Column  string
+	Columns []string
+}
+
+func (e *MissingColumnError) Error() string {
+	quoted := make([]string, len(e.Columns))
+	for i, c := range e.Columns {
+		quoted[i] = strconv.Quote(c)
+	}
+	return fmt.Sprintf("no column %q; the columns are %s", e.Column, strings.Join(quoted, ", "))
+}
+
+// checkColumns refuses a field rule for a column cols, read from the
+// input, does not have. Converting a column that is not there would
+// otherwise do nothing, and the caller who named it would not know.
+func (r *run) checkColumns(fields map[string]*definition.Field, cols []string, ln int) error {
+	for _, name := range slices.Sorted(maps.Keys(fields)) {
+		if !slices.Contains(cols, name) {
+			return &ParseError{Definition: r.def.ID(), Line: ln, Cause: &MissingColumnError{Column: name, Columns: cols}}
+		}
+	}
+	return nil
 }
 
 // csvNumbered names the columns of a csv that has no header line and

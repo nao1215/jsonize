@@ -2,6 +2,7 @@ package engine
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"strings"
 	"testing"
@@ -35,6 +36,48 @@ fields: {count: {type: int}}
 		`{"name":"log","note":"first\nsecond","count":5}]`
 	if got := mustJSON(t, v); got != want {
 		t.Errorf("got  %s\nwant %s", got, want)
+	}
+}
+
+// A field rule for a column the csv does not have is refused where the
+// columns become known: at the header line, or at the first record of a
+// csv that numbers its columns. A stream ends there rather than leaving
+// the header out as a bad record and writing rows the rule never touched.
+func TestCSVFieldForAMissingColumn(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name, def, input, want string
+	}{
+		{"a header without the column", "parse: {type: csv}\nfields: {count: {type: int}}\n", "name,size\nweb,3\n", `t/v: line 1: no column "count"; the columns are "name", "size"`},
+		{"a numbered column past the first record", "parse: {type: csv, header: {none: true}}\nfields: {column_3: {type: int}}\n", "a,1\nb,2\n", `t/v: line 1: no column "column_3"; the columns are "column_1", "column_2"`},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			def := load(t, "format: 1\ncommand: t\nvariant: v\n"+tt.def)
+			var mc *MissingColumnError
+			if _, err := Parse(def, []byte(tt.input), Options{}); !errors.As(err, &mc) || err.Error() != tt.want {
+				t.Errorf("Parse: %v, want %s", err, tt.want)
+			}
+			wrote, skipped := 0, 0
+			err := Stream(def, strings.NewReader(tt.input), Options{}, func(any) error {
+				wrote++
+				return nil
+			}, func(*ParseError) error {
+				skipped++
+				return nil
+			})
+			if !errors.As(err, &mc) || err.Error() != tt.want || wrote != 0 || skipped != 0 {
+				t.Errorf("Stream: %v, %d written, %d skipped", err, wrote, skipped)
+			}
+		})
+	}
+	// A header that has the column, and a file with no header line at all,
+	// are not refused.
+	def := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: csv}\nfields: {count: {type: int}}\n")
+	for _, input := range []string{"count\n7\n", ""} {
+		if _, err := Parse(def, []byte(input), Options{}); err != nil {
+			t.Errorf("%q: %v", input, err)
+		}
 	}
 }
 
