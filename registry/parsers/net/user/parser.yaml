@@ -32,8 +32,11 @@ detect:
     any: [user, users, USER, USERS]
   signature:
     all:
-      - '\AUser accounts for \\\\[^\s\\]+[ \t]*\n(?:[ \t]*\n)*-{20,}[ \t]*$'
-      - '^The command completed successfully\.[ \t]*$'
+      # The computer, the rule, and a name starting the line under it.
+      # The completion line comes after every name and is past the
+      # window on a machine with many accounts, so it is the pattern
+      # below that holds the text to it.
+      - '\AUser accounts for \\\\[^\s\\]+[ \t]*\n(?:[ \t]*\n)*-{20,}[ \t]*\n[^\s"/\\\[\]:;|=,+*?<>-]'
 parse:
   type: regex
   each: input
