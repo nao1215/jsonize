@@ -1,0 +1,5 @@
+description: --long prints the classes of every device on tab-indented lines under it, which this definition does not read.
+source: "captured with `xinput list --long` (xinput 1.6.4, XI 2.4 on the server) under Xwayland on Ubuntu 26.04 with LC_ALL=C"
+os: linux
+args: [list, --long]
+expect_error: 'does not describe this input'

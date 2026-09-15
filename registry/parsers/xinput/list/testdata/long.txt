@@ -1,0 +1,178 @@
+⎡ Virtual core pointer                    	id=2	[master pointer  (3)]
+	Reporting 7 classes:
+		Class originated from: 7. Type: XIButtonClass
+		Buttons supported: 10
+		Button labels: "Button Left" "Button Middle" "Button Right" "Button Wheel Up" "Button Wheel Down" "Button Horiz Wheel Left" "Button Horiz Wheel Right" None None None
+		Button state:
+		Class originated from: 7. Type: XIValuatorClass
+		Detail for Valuator 0:
+		  Label: Rel X
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 7. Type: XIValuatorClass
+		Detail for Valuator 1:
+		  Label: Rel Y
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 7. Type: XIValuatorClass
+		Detail for Valuator 2:
+		  Label: Rel Horiz Wheel
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 7. Type: XIValuatorClass
+		Detail for Valuator 3:
+		  Label: Rel Vert Wheel
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 7. Type: XIScrollClass
+		Scroll info for Valuator 2
+		  type: 2 (horizontal)
+		  increment: 1.000000
+		  flags: 0x0
+		Class originated from: 7. Type: XIScrollClass
+		Scroll info for Valuator 3
+		  type: 1 (vertical)
+		  increment: 1.000000
+		  flags: 0x2 ( preferred )
+
+⎜   ↳ Virtual core XTEST pointer              	id=4	[slave  pointer  (2)]
+	Reporting 3 classes:
+		Class originated from: 4. Type: XIButtonClass
+		Buttons supported: 10
+		Button labels: "Button Left" "Button Middle" "Button Right" "Button Wheel Up" "Button Wheel Down" "Button Horiz Wheel Left" "Button Horiz Wheel Right" None None None
+		Button state:
+		Class originated from: 4. Type: XIValuatorClass
+		Detail for Valuator 0:
+		  Label: Rel X
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 4. Type: XIValuatorClass
+		Detail for Valuator 1:
+		  Label: Rel Y
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+
+⎜   ↳ xwayland-pointer:10                     	id=6	[slave  pointer  (2)]
+	Reporting 7 classes:
+		Class originated from: 6. Type: XIButtonClass
+		Buttons supported: 10
+		Button labels: "Button Left" "Button Middle" "Button Right" "Button Wheel Up" "Button Wheel Down" "Button Horiz Wheel Left" "Button Horiz Wheel Right" None None None
+		Button state:
+		Class originated from: 6. Type: XIValuatorClass
+		Detail for Valuator 0:
+		  Label: Abs X
+		  Range: 0.000000 - 65535.000000
+		  Resolution: 10000 units/m
+		  Mode: absolute
+		  Current value: 3814.400000
+		Class originated from: 6. Type: XIValuatorClass
+		Detail for Valuator 1:
+		  Label: Abs Y
+		  Range: 0.000000 - 65535.000000
+		  Resolution: 10000 units/m
+		  Mode: absolute
+		  Current value: 29430.518519
+		Class originated from: 6. Type: XIValuatorClass
+		Detail for Valuator 2:
+		  Label: Rel Horiz Wheel
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 6. Type: XIValuatorClass
+		Detail for Valuator 3:
+		  Label: Rel Vert Wheel
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 6. Type: XIScrollClass
+		Scroll info for Valuator 2
+		  type: 2 (horizontal)
+		  increment: 1.000000
+		  flags: 0x0
+		Class originated from: 6. Type: XIScrollClass
+		Scroll info for Valuator 3
+		  type: 1 (vertical)
+		  increment: 1.000000
+		  flags: 0x2 ( preferred )
+
+⎜   ↳ xwayland-relative-pointer:10            	id=7	[slave  pointer  (2)]
+	Reporting 7 classes:
+		Class originated from: 7. Type: XIButtonClass
+		Buttons supported: 10
+		Button labels: "Button Left" "Button Middle" "Button Right" "Button Wheel Up" "Button Wheel Down" "Button Horiz Wheel Left" "Button Horiz Wheel Right" None None None
+		Button state:
+		Class originated from: 7. Type: XIValuatorClass
+		Detail for Valuator 0:
+		  Label: Rel X
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 7. Type: XIValuatorClass
+		Detail for Valuator 1:
+		  Label: Rel Y
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 7. Type: XIValuatorClass
+		Detail for Valuator 2:
+		  Label: Rel Horiz Wheel
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 7. Type: XIValuatorClass
+		Detail for Valuator 3:
+		  Label: Rel Vert Wheel
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 7. Type: XIScrollClass
+		Scroll info for Valuator 2
+		  type: 2 (horizontal)
+		  increment: 1.000000
+		  flags: 0x0
+		Class originated from: 7. Type: XIScrollClass
+		Scroll info for Valuator 3
+		  type: 1 (vertical)
+		  increment: 1.000000
+		  flags: 0x2 ( preferred )
+
+⎜   ↳ xwayland-pointer-gestures:10            	id=8	[slave  pointer  (2)]
+	Reporting 3 classes:
+		Class originated from: 8. Type: XIButtonClass
+		Buttons supported: 10
+		Button labels: "Button Left" "Button Middle" "Button Right" "Button Wheel Up" "Button Wheel Down" "Button Horiz Wheel Left" "Button Horiz Wheel Right" None None None
+		Button state:
+		Class originated from: 8. Type: XIValuatorClass
+		Detail for Valuator 0:
+		  Label: Rel X
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+		Class originated from: 8. Type: XIValuatorClass
+		Detail for Valuator 1:
+		  Label: Rel Y
+		  Range: -1.000000 - -1.000000
+		  Resolution: 0 units/m
+		  Mode: relative
+
+⎣ Virtual core keyboard                   	id=3	[master keyboard (2)]
+	Reporting 1 classes:
+		Class originated from: 9. Type: XIKeyClass
+		Keycodes supported: 248
+
+    ↳ Virtual core XTEST keyboard             	id=5	[slave  keyboard (3)]
+	Reporting 1 classes:
+		Class originated from: 5. Type: XIKeyClass
+		Keycodes supported: 248
+
+    ↳ xwayland-keyboard:10                    	id=9	[slave  keyboard (3)]
+	Reporting 1 classes:
+		Class originated from: 9. Type: XIKeyClass
+		Keycodes supported: 248
+

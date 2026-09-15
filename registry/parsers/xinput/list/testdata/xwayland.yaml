@@ -1,0 +1,4 @@
+description: The two master devices of an Xwayland server and the slave devices attached to each.
+source: "captured with `xinput list` (xinput 1.6.4, XI 2.4 on the server) under Xwayland on Ubuntu 26.04 with LC_ALL=C; `xinput list --short` printed the same bytes"
+os: linux
+args: [list]
