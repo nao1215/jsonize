@@ -275,23 +275,40 @@ func (d *Definition) validate() error {
 	if d.Format != CurrentFormat {
 		v.add("format", "must be %d", CurrentFormat)
 	}
-	switch {
-	case d.Command == "":
-		v.add("command", "is required")
-	case !nameRe.MatchString(d.Command):
-		v.add("command", "%q must match %s", d.Command, nameRe)
-	case reservedNames[d.Command]:
-		v.add("command", "%q is a reserved file name on Windows and cannot be used", d.Command)
+	validateName(v, "command", d.Command, nameRe)
+	validateName(v, "variant", d.Variant, variantRe)
+	validateAliases(v, d)
+	validateDetect(v, &d.Detect)
+	for k := range d.Exec.Env {
+		if k == "" || strings.ContainsAny(k, "= \t\n") {
+			v.add("exec.env", "invalid variable name %q", k)
+		}
 	}
-	switch {
-	case d.Variant == "":
-		v.add("variant", "is required")
-	case !variantRe.MatchString(d.Variant):
-		v.add("variant", "%q must match %s", d.Variant, variantRe)
-	case reservedNames[d.Variant]:
-		v.add("variant", "%q is a reserved file name on Windows and cannot be used", d.Variant)
+	validateInput(v, &d.Input)
+	validateParse(v, "parse", &d.Parse, d.Fields, "fields", "")
+	validateFields(v, "fields", d.Fields, 0, d.Parse.Type == TypeKV || d.Parse.Type == TypeINI)
+	if len(v.errs) == 0 {
+		return nil
 	}
-	seenAlias := map[string]bool{}
+	return errors.Join(v.errs...)
+}
+
+// validateName checks the command or the variant a definition is filed
+// under, which is also a directory name on every system jz runs on.
+func validateName(v *validator, key, name string, re *regexp.Regexp) {
+	switch {
+	case name == "":
+		v.add(key, "is required")
+	case !re.MatchString(name):
+		v.add(key, "%q must match %s", name, re)
+	case reservedNames[name]:
+		v.add(key, "%q is a reserved file name on Windows and cannot be used", name)
+	}
+}
+
+// validateAliases checks the other names a definition answers to.
+func validateAliases(v *validator, d *Definition) {
+	seen := map[string]bool{}
 	for i := range d.Aliases {
 		ap := fmt.Sprintf("aliases[%d]", i)
 		name := d.Aliases[i].Name
@@ -302,29 +319,35 @@ func (d *Definition) validate() error {
 			v.add(ap+".name", "%q must match %s", name, nameRe)
 		case name == d.Command:
 			v.add(ap+".name", "%q is the command itself", name)
-		case seenAlias[name]:
+		case seen[name]:
 			v.add(ap+".name", "duplicate alias %q", name)
 		}
-		seenAlias[name] = true
+		seen[name] = true
 		if am := d.Aliases[i].Args; am != nil {
-			for j, a := range append(append(append([]string{}, am.Any...), am.All...), am.None...) {
-				if strings.TrimSpace(a) == "" {
-					v.add(fmt.Sprintf("%s.args[%d]", ap, j), "empty argument")
-				}
-			}
+			validateArgs(v, ap+".args", am)
 		}
 	}
-	for i, os := range d.Detect.OS {
+}
+
+// validateArgs refuses an empty word in an argument filter, which no
+// command line holds and which would match nothing or everything.
+func validateArgs(v *validator, path string, am *ArgsMatch) {
+	for i, a := range append(append(append([]string{}, am.Any...), am.All...), am.None...) {
+		if strings.TrimSpace(a) == "" {
+			v.add(fmt.Sprintf("%s[%d]", path, i), "empty argument")
+		}
+	}
+}
+
+// validateDetect checks the systems, the arguments and the signature.
+func validateDetect(v *validator, d *Detect) {
+	for i, os := range d.OS {
 		if !knownOS[os] {
 			v.add(fmt.Sprintf("detect.os[%d]", i), "unknown operating system %q", os)
 		}
 	}
-	for i, a := range append(append(append([]string{}, d.Detect.Args.Any...), d.Detect.Args.All...), d.Detect.Args.None...) {
-		if strings.TrimSpace(a) == "" {
-			v.add(fmt.Sprintf("detect.args[%d]", i), "empty argument")
-		}
-	}
-	sig := &d.Detect.Signature
+	validateArgs(v, "detect.args", &d.Args)
+	sig := &d.Signature
 	if sig.Window < 0 || sig.Window > MaxSignatureWindow {
 		v.add("detect.signature.window", "must be between 0 and %d", MaxSignatureWindow)
 	}
@@ -333,27 +356,20 @@ func (d *Definition) validate() error {
 	sig.all = compileList(v, "detect.signature.all", sig.All, "(?m)")
 	sig.any = compileList(v, "detect.signature.any", sig.Any, "(?m)")
 	sig.none = compileList(v, "detect.signature.none", sig.None, "(?m)")
-	for k := range d.Exec.Env {
-		if k == "" || strings.ContainsAny(k, "= \t\n") {
-			v.add("exec.env", "invalid variable name %q", k)
-		}
-	}
-	switch d.Input.RecordSeparator {
+}
+
+// validateInput checks what happens to the lines before they are parsed.
+func validateInput(v *validator, in *Input) {
+	switch in.RecordSeparator {
 	case "", RecordNewline, RecordNUL:
 	default:
 		v.add("input.record_separator", "must be newline or nul")
 	}
-	d.Input.ignore = compileList(v, "input.ignore", d.Input.Ignore, "")
-	if d.Input.Fold != "" {
-		d.Input.fold = v.regex("input.fold", d.Input.Fold)
+	in.ignore = compileList(v, "input.ignore", in.Ignore, "")
+	if in.Fold != "" {
+		in.fold = v.regex("input.fold", in.Fold)
 	}
-	validateSelect(v, "input.select", &d.Input.Select)
-	validateParse(v, "parse", &d.Parse, d.Fields, "fields", "")
-	validateFields(v, "fields", d.Fields, 0, d.Parse.Type == TypeKV || d.Parse.Type == TypeINI)
-	if len(v.errs) == 0 {
-		return nil
-	}
-	return errors.Join(v.errs...)
+	validateSelect(v, "input.select", &in.Select)
 }
 
 // compileList compiles each expression with flags prepended.

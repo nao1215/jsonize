@@ -181,6 +181,15 @@ func (a *app) cmdRun(args []string) int {
 		}
 		return ExitError
 	}
+	return a.readRun(ctx, reg, sctx, &out, exp, command, res, timeout)
+}
+
+// readRun turns what a command that has ended printed into the answer:
+// it reports how the command ended, answers an empty listing, chooses the
+// definition with the command's name, arguments and system in hand, and
+// writes the JSON. The status is the command's own unless reading failed.
+func (a *app) readRun(ctx context.Context, reg *registry.Registry, sctx selector.Context, out *outputOptions, exp *explanation, cmd runner.Command, res *runner.Result, timeout time.Duration) int {
+	name, cmdArgs := cmd.Name, cmd.Args
 	a.reportChild(ctx, name, res, timeout)
 	exp.ran(name, cmdArgs, res.ExitCode)
 	if res.Cut {
@@ -197,7 +206,7 @@ func (a *app) cmdRun(args []string) int {
 		// command that lists things does when there is nothing to list.
 		// Here, unlike on a pipe, jz knows which format was meant, so it
 		// can say the list is empty instead of that it could not tell.
-		return a.emptyResult(reg, sctx, out, exp)
+		return a.emptyResult(reg, sctx, *out, exp)
 	}
 
 	// jz ran the command, so it knows the arguments and the system it ran
@@ -220,12 +229,11 @@ func (a *app) cmdRun(args []string) int {
 	}
 	exp.read(acct)
 	a.explainWrite(exp)
-	narrowed, code := a.narrow(data, &out, a.reading(chosen.Entry.Def))
+	narrowed, code := a.narrow(data, out, a.reading(chosen.Entry.Def))
 	if code != ExitOK {
 		return code
 	}
-	data = narrowed
-	if err := out.write(a.env.Stdout, data); err != nil {
+	if err := out.write(a.env.Stdout, narrowed); err != nil {
 		return a.writeFailed(err)
 	}
 	return res.ExitCode
