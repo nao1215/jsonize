@@ -4,7 +4,12 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.3.0]
+
+jz makes JSON from more than command output: from data files (CSV, TSV,
+LTSV, JSON Lines, JSON and YAML, also gzip or bzip2 compressed) and from
+arguments given to `jz new`. The registry is unchanged at 224 commands
+and 596 definitions.
 
 ### Added
 
@@ -20,7 +25,19 @@ project follows [Semantic Versioning](https://semver.org/).
   order and number literals, YAML is typed by the 1.2 core schema, and a
   key given twice, text that is not UTF-8 or a value JSON cannot hold is
   exit 3 with the line. `--stream` writes JSON Lines and LTSV records as
-  they are read.
+  they are read. `--explain` says which format was read and what named
+  it, and `--explain=json` counts the values in `read.values`.
+- The site has a [Cookbook](https://nao1215.github.io/jsonize/cookbook/)
+  of 20 tasks, each run by the end-to-end suite, and a test fails when a
+  documented command, the options block, the exit-code table or a demo
+  tape no longer matches the command line.
+
+### Changed
+
+- A file given with `--file` whose extension names a data format is read
+  as that format, where its text was detected as command output. Name
+  `--parser` or `--define` to read such a file as a command's output;
+  a file with any other extension (`captured.txt`) is detected as before.
 
 ## [0.2.0]
 
