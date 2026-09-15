@@ -25,7 +25,7 @@ Parsers are YAML definitions. Add a definition and captured output to a
 local registry to support another format without rebuilding jz. jz is
 one binary with no dependencies outside the Go standard library.
 
-Documentation: https://nao1215.github.io/jsonize/
+Documentation: https://nao1215.github.io/jsonize/ ([Cookbook](https://nao1215.github.io/jsonize/cookbook/))
 
 ## Install
 

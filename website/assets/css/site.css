@@ -424,3 +424,61 @@ main h3 {
 .search-ui * {
   font-weight: 400 !important;
 }
+
+/* --- landing hero: the tagline as the first heading --- */
+
+.hero {
+  text-align: center;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.hero h1 {
+  margin: 0.75rem 0 0;
+  font-size: 1.6rem;
+  line-height: 1.25;
+}
+
+/* --- subtle zebra striping for wide tables --- */
+
+tbody tr:nth-child(even) {
+  background: var(--code-bg);
+}
+
+/* --- landing: "Where to go" as a card grid --- */
+
+#where-to-go + ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr));
+  gap: 0.75rem;
+}
+
+#where-to-go + ul li {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin: 0;
+}
+
+/* --- skip layout of off-screen code blocks and tables on long pages --- */
+
+main pre,
+main .table-wrap {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 6rem;
+}
+
+/* --- cookbook filter --- */
+
+.toc-filter {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.6rem;
+  font: inherit;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}

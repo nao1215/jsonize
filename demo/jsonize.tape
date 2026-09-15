@@ -10,7 +10,7 @@ Set Width 1200
 Set Height 620
 Set Padding 20
 Set TypingSpeed 45ms
-Set Theme "GitHub Dark"
+Set Theme "Dracula"
 
 Hide
 Type "export PS1='$ ' PATH=$PWD/dist:$PATH LC_ALL=C" Enter

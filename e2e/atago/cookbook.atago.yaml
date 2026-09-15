@@ -1,0 +1,370 @@
+version: "1"
+
+suite:
+  name: cookbook
+
+# Every recipe of website/content/cookbook.md, run the way the page shows
+# it. A scenario is named after its section ("<section>: ..."), and a test
+# in internal/cli checks that every section has one, so the page cannot
+# show a command this suite does not run. A pipe on the page is stdin
+# here, so the same words run under cmd.exe.
+scenarios:
+  - name: "Convert what a command printed: df -h output becomes one object per file system"
+    steps:
+      - run:
+          command: jz
+          stdin: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+            tmpfs           7.8G  4.0K  7.8G   1% /tmp
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"filesystem":"/dev/nvme0n1p2","size":"1.8T","used":"1.6T","available":"145G","use_percent":92,"mounted_on":"/"},{"filesystem":"tmpfs","size":"7.8G","used":"4.0K","available":"7.8G","use_percent":1,"mounted_on":"/tmp"}]
+
+  - name: "Let jz run the command: jz run df -h reads the host's file systems"
+    skip: {os: windows}
+    steps:
+      - run:
+          command: jz run df -h
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].filesystem", matches: '.' }
+
+  - name: "Keep only the keys you need: --extract keeps the named keys"
+    steps:
+      - run:
+          command: jz --extract mounted_on --extract use_percent
+          stdin: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+            tmpfs           7.8G  4.0K  7.8G   1% /tmp
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"use_percent":92,"mounted_on":"/"},{"use_percent":1,"mounted_on":"/tmp"}]
+      - run:
+          command: jz --extract mountpoint
+          stdin: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+            tmpfs           7.8G  4.0K  7.8G   1% /tmp
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+
+  - name: "Write YAML instead of JSON: --yaml writes the same values"
+    steps:
+      - run:
+          command: jz --yaml
+          stdin: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+            tmpfs           7.8G  4.0K  7.8G   1% /tmp
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              - filesystem: /dev/nvme0n1p2
+                size: "1.8T"
+                used: "1.6T"
+                available: "145G"
+                use_percent: 92
+                mounted_on: /
+              - filesystem: tmpfs
+                size: "7.8G"
+                used: "4.0K"
+                available: "7.8G"
+                use_percent: 1
+                mounted_on: /tmp
+
+  - name: "Follow a command that keeps printing: --stream writes a line per sample"
+    steps:
+      - fixture:
+          file: vmstat.txt
+          from: "${specdir}/testdata/vmstat-repeated.txt"
+      - run:
+          command: jz --stream
+          stdin: {file: vmstat.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: |
+              {"r":1,"b":0,"swpd":1950392,"free":7552816,"buff":2853928,"cache":39453912,"si":4,"so":16,"bi":511,"bo":1601,"in":20347,"cs":9,"us":3,"sy":1,"id":96,"wa":0,"st":0,"gu":0}
+              {"r":0,"b":0,"swpd":1950392,"free":7560728,"buff":2853928,"cache":39453924,"si":0,"so":0,"bi":0,"bo":60,"in":9188,"cs":12769,"us":1,"sy":0,"id":99,"wa":0,"st":0,"gu":0}
+
+  - name: "See which parser jz chose: --explain names the definition on standard error"
+    steps:
+      - run:
+          command: jz --explain
+          stdin: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+            tmpfs           7.8G  4.0K  7.8G   1% /tmp
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: |
+              jz: explain: chose df/gnu-human from embedded
+              jz: explain: scope: every definition in the registry, by its signature alone
+
+  - name: "Name the parser when detection refuses: git numstat needs --parser git"
+    steps:
+      - run:
+          command: jz
+          stdin: "10\t2\tmain.go\n3\t0\tREADME.md\n"
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: |
+              jz: unable to identify the input format
+              it could be `git` output, but that format is too generic for jz to claim on its own
+      - run:
+          command: jz --parser git
+          stdin: "10\t2\tmain.go\n3\t0\tREADME.md\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"added":10,"deleted":2,"path":"main.go"},{"added":3,"deleted":0,"path":"README.md"}]
+
+  - name: "Read output jz has no parser for: --define reads a table"
+    steps:
+      - run:
+          command: "jz --define 'parse: {type: table}'"
+          stdin: |
+            NAME    STATUS  AGE
+            api     Running 3d
+            worker  Pending 5m
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"api","status":"Running","age":"3d"},{"name":"worker","status":"Pending","age":"5m"}]
+
+  - name: "Convert a CSV file: users.csv becomes one object per row"
+    steps:
+      - fixture:
+          file: users.csv
+          content: |
+            id,name,email
+            1,alice,alice@example.com
+            2,bob,bob@example.com
+      - run:
+          command: jz --file ${workdir}/users.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"id":"1","name":"alice","email":"alice@example.com"},{"id":"2","name":"bob","email":"bob@example.com"}]
+
+  - name: "Read a CSV without a header line: --columns names the columns"
+    steps:
+      - fixture:
+          file: rows.csv
+          content: |
+            1,alice
+            2,bob
+      - run:
+          command: jz --file ${workdir}/rows.csv --columns id,name
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"id":"1","name":"alice"},{"id":"2","name":"bob"}]
+
+  - name: "Convert YAML to JSON: a file by its extension and a pipe with --format"
+    steps:
+      - fixture:
+          file: deploy.yaml
+          content: |
+            name: api
+            replicas: 3
+            image:
+              repository: example/api
+              tag: "1.4"
+      - run:
+          command: jz --file ${workdir}/deploy.yaml
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"api","replicas":3,"image":{"repository":"example/api","tag":"1.4"}}
+      - run:
+          command: jz --format yaml
+          stdin: |
+            name: api
+            replicas: 3
+            image:
+              repository: example/api
+              tag: "1.4"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"api","replicas":3,"image":{"repository":"example/api","tag":"1.4"}}
+
+  - name: "Convert JSON to YAML: key order and numbers are kept"
+    steps:
+      - fixture:
+          file: release.json
+          content: |
+            {"tag_name":"v0.2.0","draft":false,"assets":[{"name":"jz_linux_amd64.tar.gz","size":4812345}]}
+      - run:
+          command: jz --file ${workdir}/release.json --yaml
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              tag_name: v0.2.0
+              draft: false
+              assets:
+                - name: jz_linux_amd64.tar.gz
+                  size: 4812345
+
+  - name: "Read compressed JSON Lines logs: a gzip file streamed with one key"
+    steps:
+      - fixture:
+          file: events.jsonl.gz
+          from: "${specdir}/testdata/events.jsonl.gz"
+      - run:
+          command: jz --file ${workdir}/events.jsonl.gz --stream --extract msg
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"msg":"started"}
+              {"msg":"slow"}
+
+  - name: "Read LTSV access logs: one object per line"
+    steps:
+      - fixture:
+          file: access.ltsv
+          content: "time:2026-09-15T07:00:01Z\thost:192.0.2.10\tstatus:200\treq:GET /api HTTP/1.1\ntime:2026-09-15T07:00:02Z\thost:192.0.2.11\tstatus:404\treq:GET /missing HTTP/1.1\n"
+      - run:
+          command: jz --file ${workdir}/access.ltsv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"time":"2026-09-15T07:00:01Z","host":"192.0.2.10","status":"200","req":"GET /api HTTP/1.1"},{"time":"2026-09-15T07:00:02Z","host":"192.0.2.11","status":"404","req":"GET /missing HTTP/1.1"}]
+
+  - name: "Build a JSON body for an API call: jz new makes the object"
+    steps:
+      - run:
+          command: jz new name=api version=1.4.0 replicas:=3 tags[]=web tags[]=prod
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"api","version":"1.4.0","replicas":3,"tags":["web","prod"]}
+      - run:
+          command: jz new version=007
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"version":"007"}
+
+  - name: "Put a file's contents into JSON: a text file and a YAML file as values"
+    steps:
+      - fixture:
+          file: VERSION
+          content: |
+            1.4.0
+      - fixture:
+          file: deploy.yaml
+          content: |
+            name: api
+            replicas: 3
+            image:
+              repository: example/api
+              tag: "1.4"
+      - run:
+          command: jz new version=@${workdir}/VERSION spec:=@${workdir}/deploy.yaml
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"version":"1.4.0","spec":{"name":"api","replicas":3,"image":{"repository":"example/api","tag":"1.4"}}}
+
+  - name: "Make a JSON array: jz new --array"
+    steps:
+      - run:
+          command: jz new --array web :=8080 :=true
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              ["web",8080,true]
+
+  - name: "Fail a CI step when jz cannot read the output: unidentified text is exit 4 and no JSON"
+    steps:
+      - run:
+          command: jz
+          stdin: "no format here\n"
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: "jz: unable to identify the input format"
+
+  - name: "Get the JSON Schema of an output: jz list --schema"
+    steps:
+      - run:
+          command: jz list --schema df gnu-human
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: |
+              {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "$id": "https://nao1215.github.io/jsonize/schemas/df/gnu-human.json",
+
+  - name: "Add a parser of your own: a personal registry is tested and then read"
+    steps:
+      - fixture:
+          file: my-registry/parsers/mytool/status/parser.yaml
+          content: |
+            format: 1
+            command: mytool
+            variant: status
+            description: mytool status, one service per line
+            detect:
+              signature:
+                all:
+                  - '\ASERVICE[ \t]+STATE[ \t]*$'
+            parse:
+              type: table
+            fields:
+              service: {required: true}
+      - fixture:
+          file: my-registry/parsers/mytool/status/testdata/basic.txt
+          content: |
+            SERVICE  STATE
+            api      running
+            worker   stopped
+      - run:
+          command: jz test --update ${workdir}/my-registry
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "1 passed, 0 failed"
+      - run:
+          command: jz
+          stdin: |
+            SERVICE  STATE
+            api      running
+            worker   stopped
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/my-registry"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"service":"api","state":"running"},{"service":"worker","state":"stopped"}]
