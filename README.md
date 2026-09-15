@@ -100,9 +100,10 @@ Options:
 
 A data file is read as the format its extension names (`.csv`, `.tsv`,
 `.ltsv`, `.jsonl` or `.ndjson`, `.json`, `.yaml` or `.yml`, each also as
-`.gz` or `.bz2`), and piped data as the format `--format` names. Nothing
-is detected for a data file, and text the format does not allow is exit
-3 with the line.
+`.gz` or `.bz2`), and piped data as the format `--format` names. Such a
+file is read as that format with no detection, and text the format does
+not allow is exit 3 with the line. A file whose extension names no data
+format is detected as before.
 
 ```console
 $ jz --file users.csv

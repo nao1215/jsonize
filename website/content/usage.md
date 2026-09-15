@@ -360,9 +360,10 @@ always passed on.
 
 A file that holds data rather than a command's output is read as the
 format its extension names, and data from a pipe as the format
-`--format` names. Nothing is detected for either: the name of the file,
-or the option, is the whole of the claim, and the reader holds the text
-to that format from the first line to the last.
+`--format` names. When the extension or `--format` names a data format,
+nothing is detected: the name of the file, or the option, is the whole
+of the claim, and the reader holds the text to that format from the
+first line to the last.
 
 | Format | Extensions | What jz writes |
 |--------|------------|----------------|
@@ -690,8 +691,10 @@ not apply: `outcome`, `scope` (`from`, `parser`, `variant`, `os`, `args`,
 `path`, `path_dropped`), `chosen` (`definition`, `registry`, `matched`,
 `settled_by`, `outranked`), `candidates` (the definitions an ambiguous
 input fits, or the ones an empty output was judged against), `rejected`, `held_back`, `not_considered`, `read` (`lines`,
-`read`, `folded`, `blank`, `ignored`), `command` and `error` (`message`,
-`exit`). The failure is still reported the ordinary way as well. In
+`read`, `folded`, `blank`, `ignored`, and `values`, the values a data file
+held), `command` and `error` (`message`, `exit`). For a data file
+`outcome` is `format`, `chosen.definition` names the format and
+`chosen.registry` what named it (`--format` or `extension`). The failure is still reported the ordinary way as well. In
 `jz run` the command's own standard error shares the stream, which is
 why the line opens with `jz: explain: ` rather than relying on being the
 only thing there.

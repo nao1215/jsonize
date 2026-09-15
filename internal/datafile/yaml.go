@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"math"
 	"math/big"
 	"regexp"
 	"strconv"
@@ -104,15 +103,45 @@ func yamlScalar(n *yaml.Node) (any, error) {
 	case yamlHexInt.MatchString(s):
 		return yamlInt(n.Line, s, 16, s[2:])
 	case yamlFloat.MatchString(s):
-		f, err := strconv.ParseFloat(s, 64)
-		if err != nil || math.IsInf(f, 0) {
-			return nil, lineError(YAML, n.Line, s+" is out of the range of a JSON number")
-		}
-		return f, nil
+		return json.Number(jsonDecimal(s)), nil
 	case yamlNonFinite.MatchString(s):
 		return nil, lineError(YAML, n.Line, s+" is not a number JSON can hold")
 	}
 	return s, nil
+}
+
+// jsonDecimal writes a YAML decimal in JSON's spelling with the digits it
+// was written with, so nothing is rounded: the plus sign and leading zeros
+// go, and a decimal point gets a digit on each side (".5" is 0.5, "1." is
+// 1.0).
+func jsonDecimal(s string) string {
+	var b strings.Builder
+	switch s[0] {
+	case '-':
+		b.WriteByte('-')
+		s = s[1:]
+	case '+':
+		s = s[1:]
+	}
+	mantissa, exponent := s, ""
+	if i := strings.IndexAny(s, "eE"); i >= 0 {
+		mantissa, exponent = s[:i], s[i:]
+	}
+	whole, frac, dotted := strings.Cut(mantissa, ".")
+	whole = strings.TrimLeft(whole, "0")
+	if whole == "" {
+		whole = "0"
+	}
+	b.WriteString(whole)
+	if dotted {
+		if frac == "" {
+			frac = "0"
+		}
+		b.WriteByte('.')
+		b.WriteString(frac)
+	}
+	b.WriteString(exponent)
+	return b.String()
 }
 
 // yamlInt reads an integer. One too large for 64 bits keeps its decimal

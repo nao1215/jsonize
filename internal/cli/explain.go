@@ -531,6 +531,19 @@ func (e *explanation) document() *jsonutil.Object {
 			ignored = append(ignored, o)
 		}
 		r.Set("ignored", ignored)
+		r.Set("values", nil)
+		read = r
+	}
+	if e.counted {
+		// A data file is read by its format's own reader, which counts
+		// the values it made rather than lines of a definition.
+		r := jsonutil.NewObject()
+		r.Set("lines", nil)
+		r.Set("read", nil)
+		r.Set("folded", nil)
+		r.Set("blank", nil)
+		r.Set("ignored", []any{})
+		r.Set("values", int64(e.records))
 		read = r
 	}
 	doc.Set("read", read)
