@@ -1,0 +1,4 @@
+source: the definition's own curl-8.txt followed by timedatectl/timesync's systemd-259.txt, joined for this case
+description: timedatectl's labelled lines after curl's four are refused; they were read as more details of the build
+args: ["--version"]
+expect_error: does not describe this input

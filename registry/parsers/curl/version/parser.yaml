@@ -15,8 +15,11 @@ detect:
     any: ["--version", "-V"]
   signature:
     all:
-      - '\Acurl [0-9]+\.[0-9]+\.[0-9]+ \([^)]*\) '
-      - '^Protocols: '
+      # curl --version prints the build line, the release date (since
+      # 7.58), the protocols and the features, and nothing else, so the
+      # text is those lines: another command's lines after them are
+      # refused rather than read as more details.
+      - '\Acurl [0-9]+\.[0-9]+\.[0-9]+ \([^)]*\) [^\n]*\n(?:Release-Date: [^\n]*\n)?Protocols: [^\n]*\nFeatures: [^\n]*\n?\z'
 parse:
   type: composite
   parts:
