@@ -40,12 +40,11 @@ func repoRoot(t *testing.T) string {
 func documents(t *testing.T) []string {
 	t.Helper()
 	root := repoRoot(t)
-	docs := []string{filepath.Join(root, "README.md")}
 	pages, err := filepath.Glob(filepath.Join(root, "website", "content", "*.md"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	return append(docs, pages...)
+	return append([]string{filepath.Join(root, "README.md")}, pages...)
 }
 
 func readText(t *testing.T, path string) string {
