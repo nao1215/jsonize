@@ -1,0 +1,227 @@
+
+Active Connections
+
+  Proto  Local Address          Foreign Address        State           PID
+  TCP    0.0.0.0:80             0.0.0.0:0              LISTENING       4
+  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING       632
+  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING       4
+  TCP    0.0.0.0:1801           0.0.0.0:0              LISTENING       3616
+  TCP    0.0.0.0:2103           0.0.0.0:0              LISTENING       3616
+  TCP    0.0.0.0:2105           0.0.0.0:0              LISTENING       3616
+  TCP    0.0.0.0:2107           0.0.0.0:0              LISTENING       3616
+  TCP    0.0.0.0:2179           0.0.0.0:0              LISTENING       1796
+  TCP    0.0.0.0:3389           0.0.0.0:0              LISTENING       1132
+  TCP    0.0.0.0:5985           0.0.0.0:0              LISTENING       4
+  TCP    0.0.0.0:5986           0.0.0.0:0              LISTENING       4
+  TCP    0.0.0.0:47001          0.0.0.0:0              LISTENING       4
+  TCP    0.0.0.0:49404          0.0.0.0:0              LISTENING       844
+  TCP    0.0.0.0:49664          0.0.0.0:0              LISTENING       872
+  TCP    0.0.0.0:49665          0.0.0.0:0              LISTENING       752
+  TCP    0.0.0.0:49666          0.0.0.0:0              LISTENING       1500
+  TCP    0.0.0.0:49667          0.0.0.0:0              LISTENING       1884
+  TCP    0.0.0.0:49668          0.0.0.0:0              LISTENING       2480
+  TCP    0.0.0.0:49670          0.0.0.0:0              LISTENING       3084
+  TCP    0.0.0.0:63615          0.0.0.0:0              LISTENING       3616
+  TCP    192.0.2.192:139        0.0.0.0:0              LISTENING       4
+  TCP    192.0.2.192:49391      23.11.32.159:80        TIME_WAIT       0
+  TCP    192.0.2.192:49643      20.42.65.84:443        ESTABLISHED     3560
+  TCP    192.0.2.192:49652      20.190.190.193:443     ESTABLISHED     5412
+  TCP    192.0.2.192:49653      172.66.2.5:80          ESTABLISHED     5412
+  TCP    192.0.2.192:49654      20.190.190.193:443     ESTABLISHED     5412
+  TCP    192.0.2.192:49655      4.153.29.52:443        ESTABLISHED     5964
+  TCP    192.0.2.192:49656      172.66.2.5:80          ESTABLISHED     5964
+  TCP    192.0.2.192:49658      4.153.29.52:443        ESTABLISHED     5964
+  TCP    192.0.2.192:49682      168.63.129.16:32526    ESTABLISHED     6424
+  TCP    192.0.2.192:49693      168.63.129.16:80       ESTABLISHED     6424
+  TCP    192.0.2.192:49699      168.63.129.16:32526    ESTABLISHED     3568
+  TCP    192.0.2.192:49707      168.63.129.16:80       ESTABLISHED     3568
+  TCP    192.0.2.192:49713      169.254.169.254:80     ESTABLISHED     6872
+  TCP    192.0.2.192:49714      140.82.114.24:443      ESTABLISHED     6872
+  TCP    192.0.2.192:49716      140.82.114.24:443      ESTABLISHED     6872
+  TCP    192.0.2.192:49722      20.85.130.105:443      ESTABLISHED     7584
+  TCP    192.0.2.192:49723      20.85.130.105:443      ESTABLISHED     7584
+  TCP    192.0.2.192:49724      20.85.130.105:443      ESTABLISHED     7584
+  TCP    192.0.2.192:49725      140.82.113.21:443      ESTABLISHED     7548
+  TCP    192.0.2.192:49726      140.82.114.21:443      ESTABLISHED     7548
+  TCP    192.0.2.192:49727      140.82.113.21:443      ESTABLISHED     7548
+  TCP    192.0.2.192:49728      52.239.172.36:443      ESTABLISHED     7548
+  TCP    192.0.2.192:49729      140.82.113.21:443      ESTABLISHED     7548
+  TCP    172.28.32.1:53         0.0.0.0:0              LISTENING       3672
+  TCP    172.28.32.1:139        0.0.0.0:0              LISTENING       4
+  TCP    [::]:80                [::]:0                 LISTENING       4
+  TCP    [::]:135               [::]:0                 LISTENING       632
+  TCP    [::]:445               [::]:0                 LISTENING       4
+  TCP    [::]:1801              [::]:0                 LISTENING       3616
+  TCP    [::]:2103              [::]:0                 LISTENING       3616
+  TCP    [::]:2105              [::]:0                 LISTENING       3616
+  TCP    [::]:2107              [::]:0                 LISTENING       3616
+  TCP    [::]:2179              [::]:0                 LISTENING       1796
+  TCP    [::]:3389              [::]:0                 LISTENING       1132
+  TCP    [::]:5985              [::]:0                 LISTENING       4
+  TCP    [::]:5986              [::]:0                 LISTENING       4
+  TCP    [::]:47001             [::]:0                 LISTENING       4
+  TCP    [::]:49404             [::]:0                 LISTENING       844
+  TCP    [::]:49664             [::]:0                 LISTENING       872
+  TCP    [::]:49665             [::]:0                 LISTENING       752
+  TCP    [::]:49666             [::]:0                 LISTENING       1500
+  TCP    [::]:49667             [::]:0                 LISTENING       1884
+  TCP    [::]:49668             [::]:0                 LISTENING       2480
+  TCP    [::]:49670             [::]:0                 LISTENING       3084
+  TCP    [::]:63615             [::]:0                 LISTENING       3616
+  TCP    [fe80::1a2b:3c4d:5e6f:7082%15]:49708  [fe80::1a2b:3c4d:5e6f:7082%15]:5985  TIME_WAIT       0
+  TCP    [fe80::1a2b:3c4d:5e6f:7082%15]:49709  [fe80::1a2b:3c4d:5e6f:7082%15]:5985  TIME_WAIT       0
+  TCP    [fe80::1a2b:3c4d:5e6f:7082%15]:49710  [fe80::1a2b:3c4d:5e6f:7082%15]:5985  TIME_WAIT       0
+  TCP    [fe80::1a2b:3c4d:5e6f:7082%15]:49711  [fe80::1a2b:3c4d:5e6f:7082%15]:5985  TIME_WAIT       0
+  TCP    [fe80::1a2b:3c4d:5e6f:7082%15]:49712  [fe80::1a2b:3c4d:5e6f:7082%15]:5985  TIME_WAIT       0
+  UDP    0.0.0.0:123            *:*                                    3272
+  UDP    0.0.0.0:3389           *:*                                    1132
+  UDP    0.0.0.0:5353           *:*                                    1860
+  UDP    0.0.0.0:5355           *:*                                    1860
+  UDP    0.0.0.0:65014          *:*                                    1860
+  UDP    192.0.2.192:137        *:*                                    4
+  UDP    192.0.2.192:138        *:*                                    4
+  UDP    127.0.0.1:56670        127.0.0.1:56670                        3216
+  UDP    172.28.32.1:53         *:*                                    3672
+  UDP    172.28.32.1:137        *:*                                    4
+  UDP    172.28.32.1:138        *:*                                    4
+  UDP    [::]:123               *:*                                    3272
+  UDP    [::]:3389              *:*                                    1132
+  UDP    [::]:5353              *:*                                    1860
+  UDP    [::]:5355              *:*                                    1860
+  UDP    [::]:65014             *:*                                    1860
+  UDP    [fe80::1a2b:3c4d:5e6f:7083%12]:546  *:*                                    1708
+  UDP    [fe80::1a2b:3c4d:5e6f:7082%15]:546  *:*                                    1708
+
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+System Idle Process              0 Services                   0          8 K
+System                           4 Services                   0        148 K
+Secure System                   72 Services                   0     79,584 K
+Registry                       124 Services                   0     23,744 K
+smss.exe                       492 Services                   0      1,312 K
+csrss.exe                      628 Services                   0      5,460 K
+wininit.exe                    752 Services                   0      6,680 K
+services.exe                   844 Services                   0      9,736 K
+LsaIso.exe                     864 Services                   0      3,284 K
+lsass.exe                      872 Services                   0     22,864 K
+svchost.exe                    996 Services                   0     23,648 K
+fontdrvhost.exe                552 Services                   0      3,572 K
+svchost.exe                    632 Services                   0     11,952 K
+svchost.exe                    576 Services                   0      9,564 K
+svchost.exe                   1116 Services                   0      4,564 K
+svchost.exe                   1124 Services                   0      7,336 K
+svchost.exe                   1132 Services                   0     13,200 K
+svchost.exe                   1204 Services                   0      5,524 K
+svchost.exe                   1260 Services                   0     10,736 K
+svchost.exe                   1292 Services                   0      5,548 K
+svchost.exe                   1356 Services                   0      7,676 K
+svchost.exe                   1364 Services                   0      6,204 K
+svchost.exe                   1372 Services                   0      5,984 K
+svchost.exe                   1400 Services                   0      7,896 K
+svchost.exe                   1436 Services                   0      6,084 K
+svchost.exe                   1500 Services                   0     26,552 K
+svchost.exe                   1644 Services                   0     26,508 K
+svchost.exe                   1676 Services                   0      7,636 K
+svchost.exe                   1708 Services                   0      8,204 K
+svchost.exe                   1736 Services                   0     10,684 K
+vmms.exe                      1796 Services                   0     28,452 K
+svchost.exe                   1816 Services                   0     12,916 K
+svchost.exe                   1860 Services                   0      8,980 K
+svchost.exe                   1884 Services                   0     16,168 K
+svchost.exe                   2008 Services                   0     11,060 K
+svchost.exe                   1980 Services                   0      6,704 K
+svchost.exe                   2164 Services                   0     12,300 K
+svchost.exe                   2248 Services                   0      6,880 K
+svchost.exe                   2272 Services                   0     13,756 K
+svchost.exe                   2316 Services                   0      8,364 K
+svchost.exe                   2364 Services                   0     11,636 K
+svchost.exe                   2372 Services                   0      5,900 K
+svchost.exe                   2388 Services                   0      8,276 K
+svchost.exe                   2460 Services                   0      7,716 K
+svchost.exe                   2480 Services                   0      8,880 K
+svchost.exe                   2648 Services                   0      8,364 K
+svchost.exe                   2656 Services                   0      9,444 K
+svchost.exe                   2768 Services                   0      7,228 K
+svchost.exe                   2792 Services                   0      9,640 K
+svchost.exe                   2836 Services                   0     13,944 K
+svchost.exe                   2876 Services                   0      7,620 K
+svchost.exe                   2916 Services                   0     20,196 K
+svchost.exe                   1832 Services                   0      6,244 K
+spoolsv.exe                   3084 Services                   0     16,644 K
+svchost.exe                   3208 Services                   0     10,736 K
+svchost.exe                   3216 Services                   0     11,528 K
+svchost.exe                   3224 Services                   0      5,484 K
+svchost.exe                   3236 Services                   0     20,060 K
+svchost.exe                   3244 Services                   0      5,680 K
+svchost.exe                   3252 Services                   0     11,396 K
+svchost.exe                   3264 Services                   0      5,856 K
+svchost.exe                   3272 Services                   0      7,820 K
+svchost.exe                   3280 Services                   0     12,000 K
+svchost.exe                   3344 Services                   0     17,420 K
+svchost.exe                   3388 Services                   0     11,748 K
+sqlwriter.exe                 3448 Services                   0      8,272 K
+MsMpEng.exe                   3508 Services                   0    196,772 K
+SMSvcHost.exe                 3528 Services                   0     28,192 K
+MpDefenderCoreService.exe     3560 Services                   0     24,880 K
+mqsvc.exe                     3616 Services                   0     14,948 K
+dockerd.exe                   3672 Services                   0     45,656 K
+svchost.exe                   3840 Services                   0      9,168 K
+SMSvcHost.exe                 4320 Services                   0     17,660 K
+svchost.exe                   4352 Services                   0      7,272 K
+vmcompute.exe                 4772 Services                   0      8,408 K
+dllhost.exe                   4900 Services                   0     12,296 K
+WmiPrvSE.exe                  4560 Services                   0     20,316 K
+taskhostw.exe                 6048 Services                   0     18,528 K
+svchost.exe                   5304 Services                   0      7,140 K
+svchost.exe                   5792 Services                   0     22,536 K
+WmiPrvSE.exe                  5208 Services                   0      9,268 K
+csrss.exe                     6676 Console                    2      7,060 K
+winlogon.exe                  6724 Console                    2     10,152 K
+fontdrvhost.exe               6772 Console                    2      4,788 K
+dwm.exe                       6808 Console                    2     56,136 K
+svchost.exe                   7076 Services                   0      7,164 K
+vds.exe                       7148 Services                   0     12,648 K
+DefenderSessionHelper.exe     1612 Console                    2      4,988 K
+svchost.exe                   1484 Console                    2     35,388 K
+sihost.exe                    2192 Console                    2     28,044 K
+svchost.exe                   3376 Services                   0      6,764 K
+ctfmon.exe                    5728 Console                    2     15,216 K
+taskhostw.exe                 4456 Console                    2     16,212 K
+taskhostw.exe                 6472 Console                    2     14,004 K
+svchost.exe                   5948 Services                   0     12,280 K
+explorer.exe                  1152 Console                    2    103,132 K
+svchost.exe                   3304 Services                   0     90,040 K
+svchost.exe                    900 Services                   0     19,684 K
+svchost.exe                   2452 Services                   0      8,924 K
+smartscreen.exe               5964 Console                    2     27,276 K
+svchost.exe                   5412 Services                   0     17,936 K
+svchost.exe                   5036 Services                   0     21,896 K
+OpenWith.exe                   712 Services                   0     29,084 K
+svchost.exe                   6148 Services                   0      7,224 K
+StartMenuExperienceHost.e     7284 Console                    2     63,156 K
+TextInputHost.exe             7344 Console                    2     44,676 K
+RuntimeBroker.exe             7412 Console                    2     26,740 K
+SearchApp.exe                 7564 Console                    2     68,044 K
+RuntimeBroker.exe             7628 Console                    2     61,632 K
+AzureArcSysTray.exe           6992 Console                    2     12,592 K
+RuntimeBroker.exe              640 Console                    2     16,032 K
+ServiceFabricLocalCluster     5068 Console                    2     31,992 K
+ShellExperienceHost.exe       7396 Console                    2     48,160 K
+RuntimeBroker.exe             7916 Console                    2     19,968 K
+taskhostw.exe                 1544 Console                    2     10,656 K
+WaAppAgent.exe                3568 Services                   0     81,708 K
+WindowsAzureGuestAgent.ex     6424 Services                   0     66,044 K
+WaSecAgentProv.exe            5004 Services                   0      4,240 K
+conhost.exe                   5236 Services                   0     10,248 K
+WmiPrvSE.exe                  6316 Services                   0      9,940 K
+hosted-compute-agent          6872 Console                    2     18,244 K
+conhost.exe                   7176 Console                    2     17,948 K
+provjobd.exe770167439         8048 Console                    2     24,328 K
+sppsvc.exe                    1964 Services                   0     14,912 K
+svchost.exe                   6768 Services                   0     11,516 K
+Runner.Listener.exe           7584 Console                    2     68,820 K
+Runner.Worker.exe             7548 Console                    2     88,628 K
+conhost.exe                    776 Console                    2     10,816 K
+pwsh.exe                      7180 Console                    2     75,956 K
+cmd.exe                       6460 Console                    2      4,288 K
+tasklist.exe                  5524 Console                    2      9,268 K
