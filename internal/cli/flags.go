@@ -359,8 +359,12 @@ func (f *outputOptions) filter() (*keyFilter, error) {
 		return nil, errors.New("--extract and --exclude cannot be used together")
 	case len(f.extract) > 0:
 		return newKeyFilter(f.extract, true), nil
+	case len(f.exclude) > 0:
+		return newKeyFilter(f.exclude, false), nil
 	}
-	return newKeyFilter(f.exclude, false), nil
+	// No key named, no filter: a nil *keyFilter hands every value on as
+	// it is.
+	return nil, nil //nolint:nilnil // a nil filter is the filter that keeps everything
 }
 
 // selectOptions narrow or pin the automatic detection, and ask for the

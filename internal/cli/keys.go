@@ -11,6 +11,11 @@ import (
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
+// maxShownKeys bounds the keys a filter remembers to name in a refusal.
+// Whether a named key turned up does not depend on it, only how many of
+// the other keys the refusal lists.
+const maxShownKeys = 64
+
 // keyFilter narrows the objects of a result to the keys the caller named.
 //
 // Naming a key that the format never produces is an error rather than an
@@ -29,10 +34,13 @@ type keyFilter struct {
 	// open says it may have others that come from the input.
 	known map[string]bool
 	open  bool
-	// seen and present collect, over every record narrowed, the named
-	// keys that appeared and every key there was.
+	// seen collects, over every record narrowed, the named keys that
+	// appeared, which decides whether one is unknown. present collects
+	// the other keys there were, up to maxShownKeys, only to name them in
+	// the refusal; cut says there were more.
 	seen    map[string]bool
 	present map[string]bool
+	cut     bool
 }
 
 func newKeyFilter(keys []string, keep bool) *keyFilter {
@@ -46,7 +54,7 @@ func newKeyFilter(keys []string, keep bool) *keyFilter {
 // know takes the keys a record can have from the definition's schema and
 // refuses, before anything is read, a named key it cannot produce.
 func (f *keyFilter) know(def *definition.Definition) error {
-	if len(f.keys) == 0 {
+	if f == nil || len(f.keys) == 0 {
 		return nil
 	}
 	f.known, f.open = recordKeys(def)
@@ -88,6 +96,9 @@ func recordKeys(def *definition.Definition) (map[string]bool, bool) {
 
 // apply narrows v, and for a whole document reports a key it cannot have.
 func (f *keyFilter) apply(v any) (any, error) {
+	if f == nil {
+		return v, nil
+	}
 	out := f.walk(v)
 	return out, f.unseen()
 }
@@ -96,6 +107,9 @@ func (f *keyFilter) apply(v any) (any, error) {
 // may turn up in a later record, so it is only judged once the stream
 // has ended (unseen).
 func (f *keyFilter) narrowRecord(v any) any {
+	if f == nil {
+		return v
+	}
 	return f.walk(v)
 }
 
@@ -105,6 +119,9 @@ func (f *keyFilter) narrowRecord(v any) any {
 // document would have been: a document for a part left out is not written
 // at all, and one for a part kept is written whole.
 func (f *keyFilter) streamEmit(write func(any) error, def *definition.Definition) func(any) error {
+	if f == nil {
+		return write
+	}
 	if def.Parse.Type != definition.TypeComposite {
 		return func(v any) error {
 			return write(f.narrowRecord(v))
@@ -114,11 +131,8 @@ func (f *keyFilter) streamEmit(write func(any) error, def *definition.Definition
 		if doc, ok := v.(*jsonutil.Object); ok && len(f.keys) > 0 {
 			name, _ := doc.Get("part")
 			part, _ := name.(string)
-			f.present[part] = true
 			named := f.keys[part]
-			if named {
-				f.seen[part] = true
-			}
+			f.saw(part, named)
 			if named != f.keep {
 				return nil
 			}
@@ -130,6 +144,9 @@ func (f *keyFilter) streamEmit(write func(any) error, def *definition.Definition
 // unseen reports a named key the definition does not declare and that no
 // record narrowed so far had.
 func (f *keyFilter) unseen() error {
+	if f == nil {
+		return nil
+	}
 	var missing []string
 	for k := range f.keys {
 		if !f.seen[k] && !f.known[k] {
@@ -146,7 +163,23 @@ func (f *keyFilter) unseen() error {
 	for k := range f.present {
 		present[k] = true
 	}
-	return &unknownKeyError{keys: sortStrings(missing), present: slices.Sorted(maps.Keys(present))}
+	return &unknownKeyError{keys: sortStrings(missing), present: slices.Sorted(maps.Keys(present)), cut: f.cut}
+}
+
+// saw records a key a record had: in seen when it is named, and in
+// present while there is room.
+func (f *keyFilter) saw(key string, named bool) {
+	if named {
+		f.seen[key] = true
+	}
+	if f.present[key] {
+		return
+	}
+	if len(f.present) >= maxShownKeys {
+		f.cut = true
+		return
+	}
+	f.present[key] = true
 }
 
 // walk narrows the objects it finds at the top level of the result. A
@@ -170,11 +203,8 @@ func (f *keyFilter) walk(v any) any {
 func (f *keyFilter) narrow(o *jsonutil.Object) *jsonutil.Object {
 	out := jsonutil.NewObject()
 	for _, m := range o.Members() {
-		f.present[m.Key] = true
 		named := f.keys[m.Key]
-		if named {
-			f.seen[m.Key] = true
-		}
+		f.saw(m.Key, named)
 		if named == f.keep {
 			out.Set(m.Key, m.Value)
 		}
@@ -190,6 +220,8 @@ func sortStrings(s []string) []string {
 type unknownKeyError struct {
 	keys    []string
 	present []string
+	// cut says present is some of the keys, not all of them.
+	cut bool
 }
 
 func (e *unknownKeyError) Error() string {
@@ -199,7 +231,10 @@ func (e *unknownKeyError) Error() string {
 	} else {
 		fmt.Fprintf(&b, "no keys %s in the output", quoteList(e.keys))
 	}
-	if len(e.present) > 0 {
+	switch {
+	case len(e.present) > 0 && e.cut:
+		fmt.Fprintf(&b, "\nthe keys it has include %s", quoteList(e.present))
+	case len(e.present) > 0:
 		fmt.Fprintf(&b, "\nthe keys it has are %s", quoteList(e.present))
 	}
 	return b.String()

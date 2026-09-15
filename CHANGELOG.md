@@ -20,6 +20,12 @@ project follows [Semantic Versioning](https://semver.org/).
   and treats one past the limit as a line that cannot be read.
 - `jz new` reports a file or standard input past the 64 MiB limit with
   exit 3, as `--file` does, where it was exit 1.
+- Without `--extract` or `--exclude`, output is no longer copied object by
+  object, and no option remembers every key it has seen: a stream of JSON
+  Lines whose records each have keys of their own grew from 23 MiB to
+  162 MiB of memory between 100,000 and 1,000,000 records, and now stays
+  at 12 MiB with or without the options. A refusal of an unknown key
+  names at most 64 of the keys the input had.
 
 ## [0.4.0]
 
