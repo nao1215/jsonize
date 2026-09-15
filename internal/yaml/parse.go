@@ -93,14 +93,34 @@ type parser struct {
 	src   []byte
 	lines []int // offset of every line start
 	depth int
+	// nodes is a block of nodes to hand out from. A document is a few
+	// hundred of them and none outlives the rest, so they are taken from
+	// blocks rather than allocated one at a time.
+	nodes []Node
+}
+
+// node hands out one node holding n.
+func (p *parser) node(n Node) *Node {
+	if len(p.nodes) == 0 {
+		p.nodes = make([]Node, 32)
+	}
+	out := &p.nodes[0]
+	p.nodes = p.nodes[1:]
+	*out = n
+	return out
 }
 
 // Parse reads one document. An empty document, or one holding only
 // comments, is a nil node.
 func Parse(data []byte) (*Node, error) {
 	data = bytes.TrimPrefix(data, []byte("\xEF\xBB\xBF"))
-	data = bytes.ReplaceAll(data, []byte("\r\n"), []byte("\n"))
-	p := &parser{src: data, lines: []int{0}}
+	// Text with no CRLF in it is read where it lies; bytes.ReplaceAll
+	// copies whether or not it finds anything, and most of what jz reads
+	// has nothing to replace.
+	if bytes.Contains(data, []byte("\r\n")) {
+		data = bytes.ReplaceAll(data, []byte("\r\n"), []byte("\n"))
+	}
+	p := &parser{src: data, lines: make([]int, 1, 1+bytes.Count(data, []byte("\n")))}
 	for i, b := range data {
 		if b == '\n' {
 			p.lines = append(p.lines, i+1)
@@ -414,7 +434,7 @@ func (p *parser) mapping(off, c int) (*Node, int, error) {
 	}
 	defer p.leave()
 	line, col := p.lineCol(off)
-	n := &Node{Kind: MappingNode, Line: line, Col: col}
+	n := p.node(Node{Kind: MappingNode, Line: line, Col: col})
 	seen := map[string]bool{}
 	for {
 		key, after, err := p.key(off)
@@ -474,17 +494,17 @@ func (p *parser) key(off int) (*Node, int, error) {
 		if p.at(end) != ':' || !p.separates(end+1) {
 			return nil, 0, p.errorf(end, "expected \":\" after the key")
 		}
-		return &Node{Kind: ScalarNode, Value: text, Line: line, Col: col}, end + 1, nil
+		return p.node(Node{Kind: ScalarNode, Value: text, Line: line, Col: col}), end + 1, nil
 	}
 	end, ok := p.plainKeyEnd(off)
 	if !ok {
 		return nil, 0, p.errorf(off, "expected a key")
 	}
-	text := strings.TrimRight(string(p.src[off:end]), " \t")
+	text := string(bytes.TrimRight(p.src[off:end], " \t"))
 	if text == "" {
 		return nil, 0, p.errorf(off, "empty key")
 	}
-	return &Node{Kind: ScalarNode, Value: text, Plain: true, Line: line, Col: col}, end + 1, nil
+	return p.node(Node{Kind: ScalarNode, Value: text, Plain: true, Line: line, Col: col}), end + 1, nil
 }
 
 // explicitKey reads a key written after "? " on a line of its own, with
@@ -520,7 +540,7 @@ func (p *parser) explicitKey(off int) (*Node, int, error) {
 	if p.eof(next) || p.col(next) != c || p.at(next) != ':' || !p.separates(next+1) {
 		return nil, 0, p.errorf(end, "a key written after \"? \" needs its \":\" at the start of the next line")
 	}
-	return &Node{Kind: ScalarNode, Value: text, Plain: p.at(start) != '"' && p.at(start) != '\'', Line: line, Col: col}, next + 1, nil
+	return p.node(Node{Kind: ScalarNode, Value: text, Plain: p.at(start) != '"' && p.at(start) != '\'', Line: line, Col: col}), next + 1, nil
 }
 
 // nested reads the value of a key or an item whose line ends after the
@@ -550,7 +570,7 @@ func (p *parser) sequence(off, c int) (*Node, int, error) {
 	}
 	defer p.leave()
 	line, col := p.lineCol(off)
-	n := &Node{Kind: SequenceNode, Line: line, Col: col}
+	n := p.node(Node{Kind: SequenceNode, Line: line, Col: col})
 	for {
 		var (
 			item *Node
@@ -587,7 +607,7 @@ func (p *parser) sequence(off, c int) (*Node, int, error) {
 // to be indented deeper than parent.
 func (p *parser) value(off, parent int) (*Node, int, error) {
 	line, col := p.lineCol(off)
-	n := &Node{Kind: ScalarNode, Line: line, Col: col}
+	n := p.node(Node{Kind: ScalarNode, Line: line, Col: col})
 	switch p.at(off) {
 	case '|', '>':
 		text, next, err := p.blockScalar(off, parent)
@@ -631,7 +651,7 @@ func (p *parser) plainLine(off int) (string, int) {
 		}
 		end++
 	}
-	return strings.TrimRight(string(p.src[off:end]), " \t"), end
+	return string(bytes.TrimRight(p.src[off:end], " \t")), end
 }
 
 // plain reads a plain scalar in block context. A line indented deeper
@@ -642,16 +662,19 @@ func (p *parser) plain(off, parent int) (string, int, error) {
 	if strings.Contains(first, ": ") || strings.HasSuffix(first, ":") {
 		return "", 0, p.errorf(off, "a mapping value is not allowed here")
 	}
+	// A scalar written on one line is that line, which is nearly every
+	// scalar of a definition: the text is joined only once a second line
+	// continues it.
+	c, empty, err := p.continuation(next, parent)
+	if err != nil {
+		return "", 0, err
+	}
+	if c < 0 {
+		return first, next, nil
+	}
 	var b strings.Builder
 	b.WriteString(first)
 	for {
-		c, empty, err := p.continuation(next, parent)
-		if err != nil {
-			return "", 0, err
-		}
-		if c < 0 {
-			return b.String(), next, nil
-		}
 		text, end := p.plainLine(c)
 		if strings.Contains(text, ": ") || strings.HasSuffix(text, ":") {
 			return "", 0, p.errorf(c, "a mapping value is not allowed here")
@@ -659,6 +682,12 @@ func (p *parser) plain(off, parent int) (string, int, error) {
 		fold(&b, empty)
 		b.WriteString(text)
 		next = end
+		if c, empty, err = p.continuation(next, parent); err != nil {
+			return "", 0, err
+		}
+		if c < 0 {
+			return b.String(), next, nil
+		}
 	}
 }
 
@@ -935,7 +964,7 @@ func (p *parser) flow(off int) (*Node, int, error) {
 // flowSequence reads "[a, b]".
 func (p *parser) flowSequence(off int) (*Node, int, error) {
 	line, col := p.lineCol(off)
-	n := &Node{Kind: SequenceNode, Line: line, Col: col}
+	n := p.node(Node{Kind: SequenceNode, Line: line, Col: col})
 	i := off + 1
 	for {
 		var err error
@@ -967,7 +996,7 @@ func (p *parser) flowSequence(off int) (*Node, int, error) {
 // flowMapping reads "{a: 1, b: 2}". A key with no ":" holds null.
 func (p *parser) flowMapping(off int) (*Node, int, error) {
 	line, col := p.lineCol(off)
-	n := &Node{Kind: MappingNode, Line: line, Col: col}
+	n := p.node(Node{Kind: MappingNode, Line: line, Col: col})
 	seen := map[string]bool{}
 	i := off + 1
 	for {
@@ -1064,7 +1093,7 @@ func (p *parser) flowValue(off int) (*Node, int, error) {
 // where "," "]" "}" and ": " end a plain one.
 func (p *parser) flowScalar(off int) (*Node, int, error) {
 	line, col := p.lineCol(off)
-	n := &Node{Kind: ScalarNode, Line: line, Col: col}
+	n := p.node(Node{Kind: ScalarNode, Line: line, Col: col})
 	if p.src[off] == '"' || p.src[off] == '\'' {
 		text, next, err := p.quoted(off)
 		if err != nil {
