@@ -1,6 +1,10 @@
 {{ define "main" }}
 <article>
 <div class="hero">
+{{- with resources.Get "imgsrc/jsonize-logo.jpg" }}
+{{- $logo := .Resize "840x jpg" }}
+<img class="logo" src="{{ $logo.RelPermalink }}" alt="jsonize" width="420" height="140">
+{{- end }}
 <h1>{{ site.Params.tagline }}</h1>
 </div>
 {{ .Content }}

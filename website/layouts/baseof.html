@@ -17,6 +17,13 @@
 <meta property="og:url" content="{{ .Permalink }}">
 <meta name="twitter:title" content="{{ $title }}">
 <meta name="twitter:description" content="{{ $desc }}">
+{{- with resources.Get "imgsrc/jsonize-logo.jpg" }}
+{{- $card := .Resize "1200x jpg" }}
+<meta property="og:image" content="{{ $card.Permalink }}">
+<meta property="og:image:width" content="{{ $card.Width }}">
+<meta property="og:image:height" content="{{ $card.Height }}">
+<meta name="twitter:card" content="summary_large_image">
+{{- end }}
 {{- $css := slice (resources.Get "css/site.css") (resources.Get "css/chroma.css") | resources.Concat "css/bundle.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 {{- /* Build metadata, so a deployed page can be told apart from a stale cached
@@ -33,7 +40,9 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <header>
 <nav>
-<a class="brand" href="{{ site.Home.RelPermalink }}">jsonize</a>
+<a class="brand" href="{{ site.Home.RelPermalink }}">
+{{- with resources.Get "imgsrc/jsonize-logo.jpg" }}{{ $mark := .Resize "132x jpg" }}<img src="{{ $mark.RelPermalink }}" alt="jsonize" width="66" height="22">{{ else }}jsonize{{ end -}}
+</a>
 {{- range site.Menus.main }}
 <a{{ if or ($.IsMenuCurrent "main" .) ($.HasMenuCurrent "main" .) }} class="active"{{ end }} href="{{ .URL }}">{{ .Name }}</a>
 {{- end }}
