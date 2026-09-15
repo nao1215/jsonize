@@ -1,0 +1,9 @@
+description: >-
+  tasklist /fo csv run for real on Windows 11 on Arm, with the N/A the
+  Memory Compression process prints for its memory in use read as null.
+source: >-
+  captured on GitHub Actions windows-11-arm (Windows 11, build
+  26200.9168) on 2026-09-15 with `tasklist /fo csv > tasklist-csv.txt`
+  in cmd, the bytes as the command wrote them. Nothing was replaced.
+os: windows
+args: [/fo, csv]

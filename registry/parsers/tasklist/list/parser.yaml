@@ -28,7 +28,7 @@ detect:
     all:
       # The first block's first two labels open the text.
       - '\AImage Name:[ \t]+\S[^\n]*\nPID:[ \t]+\d+[ \t]*$'
-      - '^Mem Usage:[ \t]+\d[\d,.]* K[ \t]*$'
+      - '^Mem Usage:[ \t]+(?:\d[\d,.]* K|N/A)[ \t]*$'
 parse:
   type: records
   start: '^Image Name:'
@@ -36,10 +36,11 @@ parse:
     parse:
       type: regex
       each: input
-      pattern: '\AImage Name:[ \t]+(?P<image_name>\S.*?)[ \t]*\nPID:[ \t]+(?P<pid>\d+)[ \t]*\nSession Name:[ \t]*(?P<session_name>.*?)[ \t]*\nSession#:[ \t]+(?P<session_number>\d+)[ \t]*\nMem Usage:[ \t]+(?P<mem_usage>\d[\d,.]* K)[ \t]*\z'
+      pattern: '\AImage Name:[ \t]+(?P<image_name>\S.*?)[ \t]*\nPID:[ \t]+(?P<pid>\d+)[ \t]*\nSession Name:[ \t]*(?P<session_name>.*?)[ \t]*\nSession#:[ \t]+(?P<session_number>\d+)[ \t]*\nMem Usage:[ \t]+(?P<mem_usage>\d[\d,.]* K|N/A)[ \t]*\z'
     fields:
       image_name: {required: true}
       pid: {type: int, required: true}
       session_name: {null_if: [""]}
       session_number: {type: int, required: true}
-      mem_usage: {required: true}
+      # Windows 11 prints N/A for the Memory Compression process.
+      mem_usage: {required: true, null_if: ["N/A"]}

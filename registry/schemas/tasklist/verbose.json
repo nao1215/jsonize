@@ -27,7 +27,10 @@
         "type": "integer"
       },
       "mem_usage": {
-        "type": "string"
+        "type": [
+          "string",
+          "null"
+        ]
       },
       "status": {
         "type": "string"
