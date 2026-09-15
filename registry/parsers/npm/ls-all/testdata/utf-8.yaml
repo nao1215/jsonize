@@ -1,0 +1,4 @@
+description: The same tree drawn with box-drawing characters, where a package with children is marked with a tee.
+source: "captured with `npm ls --all` (npm 10.9.4, node 22.22.1) on Ubuntu 26.04 with LC_ALL=C.UTF-8, in the same project as deduped.txt; the project directory replaced with /home/user/webapp"
+os: linux
+args: [ls, --all]

@@ -1,0 +1,5 @@
+description: --long puts the directory and the description on lines of their own under each package, which this definition does not read.
+source: "captured with `npm ls --all --long` (npm 10.9.4, node 22.22.1) on Ubuntu 26.04 with LC_ALL=C, in the same project as deduped.txt; the project directory replaced with /home/user/webapp"
+os: linux
+args: [ls, --all, --long]
+expect_error: 'does not describe this input'

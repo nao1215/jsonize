@@ -1,0 +1,4 @@
+description: A service that has no object below the root, where busctl prints a sentence in place of the tree.
+source: "captured with `busctl tree org.freedesktop.Avahi` (systemd 259) on Ubuntu 26.04 with LC_ALL=C"
+os: linux
+args: [tree, org.freedesktop.Avahi]

@@ -1,0 +1,5 @@
+description: A service the caller may not introspect; busctl exits 1 with an error on standard output and there is no tree to read.
+source: "captured with `busctl tree fi.w1.wpa_supplicant1` (systemd 259) on Ubuntu 26.04 with LC_ALL=C, exit status 1"
+os: linux
+args: [tree, fi.w1.wpa_supplicant1]
+expect_error: 'does not describe this input'

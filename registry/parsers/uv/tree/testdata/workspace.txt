@@ -1,0 +1,17 @@
+proj v0.1.0
+├── localpkg v0.1.0
+├── requests v2.34.2
+│   ├── certifi v2026.7.22
+│   ├── charset-normalizer v3.5.1
+│   ├── idna v3.19
+│   └── urllib3 v2.7.0
+├── rich v15.0.0
+│   ├── markdown-it-py v4.2.0
+│   │   └── mdurl v0.1.2
+│   └── pygments v2.21.0
+└── pytest v9.1.1 (group: dev)
+    ├── iniconfig v2.3.0
+    ├── packaging v26.3
+    ├── pluggy v1.6.0
+    └── pygments v2.21.0
+localpkg v0.1.0

@@ -1,0 +1,51 @@
+# `xinput list` prints the X input devices: each master device, and under
+# it the slave devices attached to it. That is a master with its slaves as
+# children, so it is read as a tree.
+#
+# xinput draws the grouping with the same characters in every locale. A
+# master line opens with "⎡ " for the first master and "⎣ " for the last,
+# and a slave line with "↳ ", in front of which stands one level: "⎜   "
+# while another master follows and four spaces under the last one. The
+# master and slave marks are read as part of the node rather than as a
+# level.
+#
+# After the name, padded with spaces, come a tab, "id=N", a tab and the
+# device's use in brackets: "[master pointer  (3)]" names the keyboard
+# paired with a master pointer, and "[slave  pointer  (2)]" the master a
+# slave is attached to. Both numbers are device ids.
+#
+# A floating slave, one detached from every master, is printed with a
+# different mark at the top level. It was not seen in the captures, and a
+# top-level line other than a master is refused rather than guessed at.
+format: 1
+command: xinput
+variant: list
+description: xinput list, master input devices and the slave devices attached to them
+metadata:
+  tags: [linux, x11, input, hardware]
+  compatible: [xinput]
+  references:
+    - https://man.archlinux.org/man/xinput.1
+detect:
+  args:
+    any: [list, --list]
+  signature:
+    all:
+      # X always has a master pointer first, and every line is a master or
+      # a slave line.
+      - '\A⎡ [^\n\t]*\tid=[0-9]+\t\[master pointer +\([0-9]+\)\][ \t]*(?:\n(?:(?:⎡|⎣) |(?:⎜   |    )↳ )[^\n\t]*\tid=[0-9]+\t\[(?:master|slave) +(?:pointer|keyboard) +\([0-9]+\)\][ \t]*)*\z'
+parse:
+  type: tree
+  indent: ["⎜   ", "    "]
+  root: '^(?:⎡|⎣) '
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^(?:⎡|⎣) (?P<name>.*?)[ ]*\tid=(?P<id>[0-9]+)\t\[(?P<role>master) +(?P<type>pointer|keyboard) +\((?P<paired_id>[0-9]+)\)\](?P<master_id>)??[ \t]*$'
+        - '^↳ (?P<name>.*?)[ ]*\tid=(?P<id>[0-9]+)\t\[(?P<role>slave) +(?P<type>pointer|keyboard) +(?P<paired_id>)??\((?P<master_id>[0-9]+)\)\][ \t]*$'
+    fields:
+      name: {required: true}
+      id: {type: int}
+      paired_id: {type: int}
+      master_id: {type: int}

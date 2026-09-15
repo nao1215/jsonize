@@ -1,0 +1,4 @@
+`- /api
+  |- /api/users (GET, POST)
+  | `- /api/users/:id (GET, PUT, DELETE)
+  `- /api/health (GET)

@@ -1,0 +1,4 @@
+description: The same service drawn with box-drawing characters in a UTF-8 locale.
+source: "captured with `busctl tree org.freedesktop.login1` (systemd 259) on Ubuntu 26.04 with LC_ALL=C.UTF-8"
+os: linux
+args: [tree, org.freedesktop.login1]

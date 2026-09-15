@@ -1,0 +1,7 @@
+Service web:
+  image: nginx:1.29
+  ports: 8080->80
+
+Service db:
+`- /var/lib/postgresql/data is mounted from the volume pgdata
+No objects discovered.

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/npm/ls-all.json",
+  "title": "npm/ls-all",
+  "description": "npm ls --all, the whole dependency tree",
+  "x-jsonize": {
+    "definition": "npm/ls-all",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/node"
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "state": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "path",
+        "state",
+        "children"
+      ]
+    }
+  }
+}

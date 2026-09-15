@@ -23,7 +23,9 @@ detect:
       # The root line is "name@version /path". Outside a package npm
       # still prints the line with the version left empty.
       - '\A[^ \t]+@[^ \t]*[ \t]+\S'
-      - '(?m)^(?:\+--|`--|├──|└──)[ \t]'
+      # Every line after it is a direct dependency. A line drawn deeper,
+      # which `npm ls --all` prints, is npm/ls-all's to read.
+      - '\A[^\n]*(?:\n(?:\+--|`--|├──|└──)[ \t][^\n]*)+\z'
 input:
   # A project with no dependencies prints one placeholder row.
   ignore:

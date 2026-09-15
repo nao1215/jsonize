@@ -1,0 +1,26 @@
+certifi v2026.7.22
+└── requests v2.34.2
+    └── proj v0.1.0
+charset-normalizer v3.5.1
+└── requests v2.34.2 (*)
+idna v3.19
+└── requests v2.34.2 (*)
+iniconfig v2.3.0
+└── pytest v9.1.1
+    └── proj v0.1.0 (group: dev)
+localpkg v0.1.0
+└── proj v0.1.0
+mdurl v0.1.2
+└── markdown-it-py v4.2.0
+    └── rich v15.0.0
+        └── proj v0.1.0
+packaging v26.3
+└── pytest v9.1.1 (*)
+pluggy v1.6.0
+└── pytest v9.1.1 (*)
+pygments v2.21.0
+├── pytest v9.1.1 (*)
+└── rich v15.0.0 (*)
+urllib3 v2.7.0
+└── requests v2.34.2 (*)
+(*) Package tree already displayed

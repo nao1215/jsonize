@@ -1,0 +1,44 @@
+[
+  {
+    "name": "example-builder",
+    "current": true,
+    "driver": "docker-container",
+    "endpoint": null,
+    "status": null,
+    "buildkit": null,
+    "platforms": null,
+    "children": [
+      {
+        "name": "example-builder0",
+        "current": null,
+        "driver": null,
+        "endpoint": "unix:///var/run/docker.sock",
+        "status": "running",
+        "buildkit": "v0.30.0",
+        "platforms": "linux/amd64 (+4), linux/386",
+        "children": []
+      }
+    ]
+  },
+  {
+    "name": "default",
+    "current": false,
+    "driver": "docker",
+    "endpoint": null,
+    "status": null,
+    "buildkit": null,
+    "platforms": null,
+    "children": [
+      {
+        "name": "default",
+        "current": null,
+        "driver": null,
+        "endpoint": "default",
+        "status": "running",
+        "buildkit": "v0.27.1",
+        "platforms": "linux/amd64 (+4)",
+        "children": []
+      }
+    ]
+  }
+]

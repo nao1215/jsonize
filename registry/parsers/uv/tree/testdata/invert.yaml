@@ -1,0 +1,4 @@
+description: The inverted tree, with subtrees marked (*) and the line uv prints below it to explain the mark.
+source: "captured with `uv tree --invert` (uv 0.9.7) on Ubuntu 26.04 with LC_ALL=C, in the same project as workspace.txt"
+os: linux
+args: [tree, --invert]

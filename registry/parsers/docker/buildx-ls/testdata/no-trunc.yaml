@@ -1,0 +1,4 @@
+description: With --no-trunc every platform is listed instead of the first one and a count.
+source: "captured with `docker buildx ls --no-trunc` (buildx v0.31.1) on Ubuntu 26.04 with LC_ALL=C, with the same builders as inactive-node.txt; the builder atago-local-smoke renamed example-builder, padded to keep the columns"
+os: linux
+args: [buildx, ls, --no-trunc]

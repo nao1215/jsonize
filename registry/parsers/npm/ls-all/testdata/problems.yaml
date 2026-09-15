@@ -1,0 +1,4 @@
+description: A dependency deleted from node_modules two levels down (UNMET DEPENDENCY) and a package present without being declared (extraneous).
+source: "captured with `npm ls --all` (npm 10.9.4, node 22.22.1) on Ubuntu 26.04 with LC_ALL=C, exit status 1, after `npm install chalk@4 semver`, removing node_modules/has-flag and adding node_modules/extra-pkg; the project directory replaced with /home/user/npmproj"
+os: linux
+args: [ls, --all]

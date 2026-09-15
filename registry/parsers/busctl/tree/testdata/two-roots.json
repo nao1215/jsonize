@@ -1,0 +1,35 @@
+[
+  {
+    "path": "/net",
+    "children": [
+      {
+        "path": "/net/hadess",
+        "children": [
+          {
+            "path": "/net/hadess/PowerProfiles",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "path": "/org",
+    "children": [
+      {
+        "path": "/org/freedesktop",
+        "children": [
+          {
+            "path": "/org/freedesktop/UPower",
+            "children": [
+              {
+                "path": "/org/freedesktop/UPower/PowerProfiles",
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,10 @@
+proj2 v0.1.0
+├── requests[socks] v2.34.2
+│   ├── certifi v2026.7.22
+│   ├── charset-normalizer v3.5.1
+│   ├── idna v3.19
+│   ├── urllib3 v2.7.0
+│   └── pysocks v1.7.1 (extra: socks)
+└── rich v13.0.0 (latest: v15.0.0)
+    ├── commonmark v0.9.2
+    └── pygments v2.21.0

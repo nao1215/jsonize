@@ -1,0 +1,4 @@
+description: A builder created and never started, whose node has no BuildKit version and no platforms.
+source: "captured with `docker buildx ls` (buildx v0.31.1) on Ubuntu 26.04 with LC_ALL=C after `docker buildx create --name jz-probe --driver docker-container`; the builder atago-local-smoke renamed example-builder, padded to keep the columns"
+os: linux
+args: [buildx, ls]
