@@ -1,0 +1,3 @@
+source: the windows-server-2022 fixture followed by the windows-server-2022 fixture of sc/query, joined for this case
+description: the service blocks sc query prints after the drivers are refused, since their lines name no driver type
+expect_error: 'field "driver_type": required value is missing'

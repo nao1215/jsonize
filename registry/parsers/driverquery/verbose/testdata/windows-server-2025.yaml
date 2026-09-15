@@ -1,0 +1,12 @@
+description: >-
+  driverquery /v run for real on Windows Server 2025: every start mode
+  from Boot to Manual, running and stopped drivers, section sizes with a
+  thousands separator, and paths under the system32 drivers folder.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "driverquery /v 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  line above the header as the command wrote it). Nothing was replaced:
+  the listing names no user, host or address.
+os: windows
+args: ["/v"]
