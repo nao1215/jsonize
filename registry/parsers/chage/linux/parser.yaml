@@ -24,8 +24,10 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\ALast password change[ \t]+: '
-      - '^Number of days of warning before password expires[ \t]+: '
+      # chage -l prints these seven lines and nothing else, in this
+      # order, so the text is all of them: whatever follows the last is
+      # not chage's, and is refused rather than read as one more field.
+      - '\ALast password change[ \t]+: [^\n]*\nPassword expires[ \t]+: [^\n]*\nPassword inactive[ \t]+: [^\n]*\nAccount expires[ \t]+: [^\n]*\nMinimum number of days between password change[ \t]+: [^\n]*\nMaximum number of days between password change[ \t]+: [^\n]*\nNumber of days of warning before password expires[ \t]+: [^\n]*\n?\z'
 parse:
   type: kv
   separator: ":"
