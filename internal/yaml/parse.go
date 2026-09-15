@@ -20,6 +20,8 @@ import (
 	"strconv"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/nao1215/jsonize/internal/limits"
 )
 
 // Kind is what a node holds.
@@ -80,8 +82,10 @@ func (e *SyntaxError) Error() string {
 	return fmt.Sprintf("line %d: %s", e.Line, e.Msg)
 }
 
-// MaxDepth bounds how deeply collections may nest.
-const MaxDepth = 100
+// MaxDepth bounds how deeply collections may nest. It is the depth a
+// JSON document is held to as well, so the same nesting is read or
+// refused whichever of the two it is written in.
+const MaxDepth = limits.MaxDepth
 
 // parser walks the text by byte offset. Every position it takes has a
 // line and a column, which is what errors are reported with.
@@ -102,7 +106,41 @@ func Parse(data []byte) (*Node, error) {
 			p.lines = append(p.lines, i+1)
 		}
 	}
+	if off, r, ok := forbidden(data); !ok {
+		return nil, p.errorf(off, "the character U+%04X is not allowed in YAML text", r)
+	}
 	return p.document()
+}
+
+// forbidden finds the first character YAML does not allow in text, which
+// is every control character but tab, line feed and carriage return, and
+// the two non-characters at the end of the basic plane. A character
+// written as an escape (\0 in a double quoted scalar) is not one of
+// these: what is refused is the byte itself standing in the text, where
+// it would be read as part of a value and handed on without ever being
+// seen.
+//
+// Bytes that are not valid UTF-8 are left to the caller, which says so
+// in its own words: they decode as U+FFFD, which is allowed.
+func forbidden(data []byte) (off int, r rune, ok bool) {
+	for i := 0; i < len(data); {
+		b := data[i]
+		if b >= 0x20 && b < 0x7F || b == '\t' || b == '\n' || b == '\r' {
+			i++
+			continue
+		}
+		if b < 0x80 {
+			return i, rune(b), false
+		}
+		c, size := utf8.DecodeRune(data[i:])
+		switch {
+		case c == 0x85, c >= 0xA0 && c <= 0xD7FF, c >= 0xE000 && c <= 0xFFFD, c >= 0x10000:
+		default:
+			return i, c, false
+		}
+		i += size
+	}
+	return 0, 0, true
 }
 
 // lineCol returns the 1-based line and column of an offset.
@@ -277,6 +315,11 @@ func (p *parser) dash(off int) bool {
 	return p.at(off) == '-' && p.separates(off+1)
 }
 
+// enter counts one collection the reading is inside of. Only a
+// sequence, a mapping and a flow collection count, so the depth is the
+// nesting a JSON document of the same shape would be held to, and the
+// same document is refused whichever of the two it is written in. Every
+// way the parser recurses goes through one of them.
 func (p *parser) enter(off int) error {
 	p.depth++
 	if p.depth > MaxDepth {
@@ -291,10 +334,6 @@ func (p *parser) leave() { p.depth-- }
 // line indented deeper than parent, and returns it with the offset
 // where it ended.
 func (p *parser) block(off, parent int) (*Node, int, error) {
-	if err := p.enter(off); err != nil {
-		return nil, 0, err
-	}
-	defer p.leave()
 	c := p.col(off)
 	if p.dash(off) {
 		return p.sequence(off, c)
@@ -370,6 +409,10 @@ func (p *parser) quotedEnd(off int) (int, error) {
 
 // mapping reads a block mapping whose keys stand at column c.
 func (p *parser) mapping(off, c int) (*Node, int, error) {
+	if err := p.enter(off); err != nil {
+		return nil, 0, err
+	}
+	defer p.leave()
 	line, col := p.lineCol(off)
 	n := &Node{Kind: MappingNode, Line: line, Col: col}
 	seen := map[string]bool{}
@@ -502,6 +545,10 @@ func (p *parser) nested(off, c int) (*Node, int, error) {
 
 // sequence reads a block sequence whose dashes stand at column c.
 func (p *parser) sequence(off, c int) (*Node, int, error) {
+	if err := p.enter(off); err != nil {
+		return nil, 0, err
+	}
+	defer p.leave()
 	line, col := p.lineCol(off)
 	n := &Node{Kind: SequenceNode, Line: line, Col: col}
 	for {

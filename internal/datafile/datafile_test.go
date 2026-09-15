@@ -477,3 +477,76 @@ func TestValueLimit(t *testing.T) {
 		t.Errorf("the line a json document passes the limit on: %v", err)
 	}
 }
+
+// A conversion does not change what it is given. Go's decoder puts
+// U+FFFD in the place of an escape naming half a surrogate pair, which
+// is a character the input may hold for itself, so such an escape is
+// refused with the place it is in instead of read as something else.
+func TestJSONRefusesHalfOfASurrogatePair(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name, format, input, want string
+	}{
+		{"a high surrogate alone", JSON, `{"name":"\ud800"}`, `json: line 1: the escape \ud800 is half of a surrogate pair and names no character`},
+		{"a low surrogate alone", JSON, `{"name":"\udc00"}`, `json: line 1: the escape \udc00 is half of a surrogate pair and names no character`},
+		{"a high surrogate followed by another escape", JSON, `["\ud83d\u0041"]`, `json: line 1: the escape \ud83d is half of a surrogate pair and names no character`},
+		{"a key", JSON, `{"\ud800":1}`, `json: line 1: the escape \ud800 is half of a surrogate pair and names no character`},
+		{"the line it is on", JSON, "[\n1,\n\"\\udfff\"\n]", `json: line 3: the escape \udfff is half of a surrogate pair and names no character`},
+		{"a line of JSON Lines", JSONL, "{\"a\":1}\n{\"a\":\"\\ud800\"}\n", `jsonl: line 2: the escape \ud800 is half of a surrogate pair and names no character`},
+	} {
+		_, err := Read(tt.format, []byte(tt.input))
+		var pe *engine.ParseError
+		if !errors.As(err, &pe) || err.Error() != tt.want {
+			t.Errorf("%s: got %v, want %q", tt.name, err, tt.want)
+		}
+	}
+	// What is refused is an escape that names no character, not the
+	// replacement character itself, a pair written in full, or text that
+	// only looks like an escape.
+	for _, tt := range []struct {
+		name, input, want string
+	}{
+		{"a pair written in full", `{"name":"\ud83d\ude00"}`, `{"name":"😀"}`},
+		{"the replacement character the input holds", `{"name":"\ufffd"}`, "{\"name\":\"\uFFFD\"}"},
+		{"a backslash before an escape that is text", `{"name":"\\ud800"}`, `{"name":"\\ud800"}`},
+		{"a quote before it", `{"name":"\"\ud83d\ude00"}`, `{"name":"\"😀"}`},
+		{"outside a string", `{"a":1234}`, `{"a":1234}`},
+	} {
+		v, err := Read(JSON, []byte(tt.input))
+		if err != nil {
+			t.Errorf("%s: %v", tt.name, err)
+			continue
+		}
+		if got := encode(t, v); got != tt.want {
+			t.Errorf("%s: got %s, want %s", tt.name, got, tt.want)
+		}
+	}
+}
+
+// The same nesting is read or refused whether it is written as JSON or
+// as YAML: the two readings are held to one number.
+func TestJSONAndYAMLNestToTheSameDepth(t *testing.T) {
+	t.Parallel()
+	for _, n := range []int{MaxDepth, MaxDepth + 1} {
+		flow := strings.Repeat("[", n) + strings.Repeat("]", n)
+		_, jerr := Read(JSON, []byte(flow))
+		_, yerr := Read(YAML, []byte(flow+"\n"))
+		if (jerr == nil) != (yerr == nil) {
+			t.Errorf("%d deep: json %v, yaml %v", n, jerr, yerr)
+		}
+		if n <= MaxDepth && jerr != nil {
+			t.Errorf("%d deep is refused: json %v, yaml %v", n, jerr, yerr)
+		}
+		if n > MaxDepth && jerr == nil {
+			t.Errorf("%d deep is read", n)
+		}
+	}
+	// A block sequence nests the same way a flow one does.
+	var b strings.Builder
+	for i := range MaxDepth {
+		b.WriteString(strings.Repeat("  ", i) + "- \n")
+	}
+	if _, err := Read(YAML, []byte(b.String()+strings.Repeat("  ", MaxDepth)+"x\n")); err != nil {
+		t.Errorf("a block sequence %d deep: %v", MaxDepth, err)
+	}
+}

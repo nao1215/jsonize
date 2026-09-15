@@ -38,6 +38,8 @@ func TestParseValues(t *testing.T) {
 		{"single quoted", "a: 'it''s'\n", map[string]any{"a": "it's"}},
 		{"double quoted escapes", `a: "t\tn\nq\"s\\x\x41u\u00e9U\U0001F600z\0"`, map[string]any{"a": "t\tn\nq\"s\\xAu\xc3\xa9U\xf0\x9f\x98\x80z\x00"}},
 		{"quoted over lines", "a: \"one\n  two\n\n  three\"\n", map[string]any{"a": "one two\nthree"}},
+		{"a tab inside a scalar", "a: \"one\ttwo\"\n", map[string]any{"a": "one\ttwo"}},
+		{"characters the text may hold", "a: \"\u0085\u00a0\ufffd\U0001F600\"\n", map[string]any{"a": "\u0085\u00a0\ufffd\U0001F600"}},
 		{"escaped break", "a: \"one\\\n  two\"\n", map[string]any{"a": "onetwo"}},
 		{"quoted keys", "\"a b\": 1\n'c': 2\n", map[string]any{"a b": int64(1), "c": int64(2)}},
 		{"explicit keys", "? a b\n: 1\n? 'c'\n:\n  d: 2\ne: 3\n", map[string]any{"a b": int64(1), "c": map[string]any{"d": int64(2)}, "e": int64(3)}},
@@ -99,6 +101,13 @@ func TestParseErrors(t *testing.T) {
 		msg  string
 	}{
 		{"tab indentation", "a:\n\tb: 1\n", 2, "tab is not indentation"},
+		{"a NUL in a plain scalar", "key: ab\x00cd\n", 1, "the character U+0000 is not allowed in YAML text"},
+		{"a control character in a quoted scalar", "key: \"ab\x01cd\"\n", 1, "the character U+0001 is not allowed in YAML text"},
+		{"a control character on a later line", "a: 1\nb: 2\nc: \x1f\n", 3, "the character U+001F is not allowed in YAML text"},
+		{"delete", "a: \x7f\n", 1, "the character U+007F is not allowed in YAML text"},
+		{"a C1 control character", "a: \u0091\n", 1, "the character U+0091 is not allowed in YAML text"},
+		{"a non-character at the end of the plane", "a: \ufffe\n", 1, "the character U+FFFE is not allowed in YAML text"},
+		{"a control character in a comment", "a: 1 # \x02\n", 1, "the character U+0002 is not allowed in YAML text"},
 		{"tab indentation first line", "\ta: 1\n", 1, "tab is not indentation"},
 		{"anchor", "a: &x 1\n", 1, "anchors, aliases and tags"},
 		{"alias", "a: *x\n", 1, "anchors, aliases and tags"},

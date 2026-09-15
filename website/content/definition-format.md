@@ -1029,3 +1029,4 @@ dig/bind: line 21: 11 lines no part of the definition read: line 21 "; <<>> DiG 
 | input, and a command's stdout | 64 MiB (internal) |
 | what `--stream` holds while a record waits for its end | 64 MiB |
 | line | 1 MiB |
+| arrays and objects, sequences and mappings, of a data file | 1000 levels |

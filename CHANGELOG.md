@@ -21,6 +21,18 @@ project follows [Semantic Versioning](https://semver.org/).
 - Input that cannot be read at all, such as a gzip file whose checksum
   does not match, ends `--stream` with the status the whole-document
   reading ends with: exit 3 rather than exit 1.
+- A `\u` escape naming half of a surrogate pair in JSON or JSON Lines is
+  refused with the line it is on, where it was read as U+FFFD and
+  written out with exit 0: `{"name":"\ud800"}` became `{"name":"\ufffd"}`.
+  A pair written in full and a replacement character the text holds for
+  itself are unchanged.
+- A control character standing in YAML text is refused, as YAML 1.2.2
+  does not allow it there. `key: ab<NUL>cd` was read as a value holding
+  it. One written as an escape (`"a\0b"`) is still a character of the
+  value.
+- YAML nests as deeply as JSON: both are held to 1000 levels of arrays
+  and objects, where YAML stopped at 100 and counted a scalar as a
+  level.
 - JSON, JSON Lines, YAML, LTSV, `lines` and `nul` input, read with
   `--format`, a file's extension or `jz new key:=@file`, is held to the
   4,194,304 values a csv and a definition's reading were already held to:
