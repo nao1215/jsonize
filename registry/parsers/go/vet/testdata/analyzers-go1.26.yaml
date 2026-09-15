@@ -1,0 +1,4 @@
+source: captured from go1.26.4 on Linux with LC_ALL=C, go vet ./... in a module written for the capture, standard error saved to the file
+description: Problems the analyzers found in two packages, with no headings.
+os: linux
+args: ["vet", "./..."]

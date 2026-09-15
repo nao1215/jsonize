@@ -1,0 +1,26 @@
+[
+  {
+    "path": "main.go",
+    "line": 10,
+    "column": 20,
+    "message": "fmt.Printf format %d has arg name of wrong type string"
+  },
+  {
+    "path": "main.go",
+    "line": 12,
+    "column": 2,
+    "message": "self-assignment of x"
+  },
+  {
+    "path": "pkg/sub/fmt.go",
+    "line": 6,
+    "column": 14,
+    "message": "fmt.Printf format %s has arg n of wrong type int"
+  },
+  {
+    "path": "pkg/sub/fmt.go",
+    "line": 7,
+    "column": 2,
+    "message": "fmt.Println arg list ends with redundant newline"
+  }
+]

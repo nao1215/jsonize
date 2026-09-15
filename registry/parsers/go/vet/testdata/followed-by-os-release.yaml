@@ -1,0 +1,4 @@
+source: the definition's own analyzers-go1.26.txt followed by etc/os-release's ubuntu-26.04.txt, joined for this case
+description: os-release lines after the problems are refused, since they are neither problems nor headings
+args: ["vet", "./..."]
+expect_error: does not describe this input
