@@ -138,6 +138,22 @@ scenarios:
             equals: |
               [{"id":"1","name":"alice","email":"alice@example.com"},{"id":"2","name":"bob","email":"bob@example.com"}]
 
+  - name: "Type the columns of a CSV file: --type converts the columns it names"
+    steps:
+      - fixture:
+          file: sales.csv
+          content: |
+            sku,units,price,in_stock
+            007,12,1.50,yes
+            008,,,false
+      - run:
+          command: jz --file ${workdir}/sales.csv --type units=int --type price=float --type in_stock=bool
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"sku":"007","units":12,"price":1.5,"in_stock":true},{"sku":"008","units":null,"price":null,"in_stock":false}]
+
   - name: "Read a CSV without a header line: --columns names the columns"
     steps:
       - fixture:
@@ -210,6 +226,37 @@ scenarios:
           stdout:
             equals: |
               [{"time":"2026-09-15T07:00:01Z","host":"192.0.2.10","status":"200","req":"GET /api HTTP/1.1"},{"time":"2026-09-15T07:00:02Z","host":"192.0.2.11","status":"404","req":"GET /missing HTTP/1.1"}]
+
+  - name: "Turn lines into a JSON array: one string per line, spaces kept"
+    steps:
+      - run:
+          command: jz --format lines
+          stdin: "main\nfeature/login\n spaced \n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              ["main","feature/login"," spaced "]
+
+  - name: "Read find -print0 output: a NUL ends each name"
+    steps:
+      - run:
+          command: jz --format nul
+          stdin: "./a.log\0./b c.log\0./line\nbreak.log\0"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "[\"./a.log\",\"./b c.log\",\"./line\\nbreak.log\"]\n"
+
+  - name: "Wrap a whole text in a JSON string: every line break kept"
+    steps:
+      - run:
+          command: jz --format text
+          stdin: "Fix the parser\n\nIt dropped the last line.\n\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "\"Fix the parser\\n\\nIt dropped the last line.\\n\\n\"\n"
 
   - name: "Build a JSON body for an API call: jz new makes the object"
     steps:
