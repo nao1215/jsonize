@@ -128,11 +128,18 @@ file as a command's output.
 - JSON Lines is one JSON value per line; blank lines are skipped.
 - JSON keeps key order and the digits of numbers (`2.50` stays `2.50`). A
   key given twice in one object, text after the document and nesting
-  deeper than 1000 are refused.
+  deeper than 1000 are refused. A `\u` escape naming half of a surrogate
+  pair is refused too, rather than read as U+FFFD: the replacement
+  character is one the text may hold for itself, and a conversion does
+  not change what it was given. A pair written in full is the character
+  it names.
 - YAML is typed by the YAML 1.2 core schema: `null` and `~`, `true` and
   `false`, integers (with `0x` and `0o`) and decimals; anything quoted
   is a string. `.inf`, `.nan`, anchors, aliases, tags and a second
-  document are refused.
+  document are refused. So is a control character standing in the text,
+  which YAML does not allow there; written as an escape (`"a\0b"`) it is
+  a character of the value. Sequences and mappings nest as deeply as
+  JSON arrays and objects do, and no deeper.
 - Text that is not UTF-8 is refused, and a leading byte order mark is not
   part of the text, except in `nul`, which keeps every byte.
 - Every format, and `jz new` with the files it reads, holds at most 64 MiB

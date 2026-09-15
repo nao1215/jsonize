@@ -533,6 +533,56 @@ scenarios:
           stderr:
             contains: "jz: nul: record 2: the text is not valid UTF-8"
 
+  # A conversion hands on what it was given. An escape that names half of
+  # a surrogate pair names no character, and reading it as U+FFFD would
+  # put a character in the output that the input may also hold for
+  # itself, with nothing said about which it was. A control character
+  # standing in YAML text is not text YAML allows.
+  - name: text that names no character is refused rather than replaced
+    steps:
+      - fixture:
+          file: half.json
+          content: '{"name":"\ud800"}'
+      - run:
+          command: jz --file ${workdir}/half.json
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: 'jz: json: line 1: the escape \ud800 is half of a surrogate pair and names no character'
+      - fixture:
+          file: pair.json
+          content: '{"name":"\ud83d\ude00","kept":"\ufffd"}'
+      - run:
+          command: jz --file ${workdir}/pair.json
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.name", equals: "\U0001F600" }
+              - { path: "$.kept", equals: "\uFFFD" }
+      - fixture:
+          file: control.yaml
+          base64: "a2V5OiBhYgBjZAo="
+      - run:
+          command: jz --file ${workdir}/control.yaml
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "jz: yaml: line 1: the character U+0000 is not allowed in YAML text"
+      - fixture:
+          file: escaped.yaml
+          content: |
+            key: "ab\0cd"
+      - run:
+          command: jz --file ${workdir}/escaped.yaml
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.key", equals: "ab\u0000cd" }
+
   # --type converts the columns it names with the rules a definition's
   # field of that type follows. The rest stay the strings they were, so
   # 007 stays "007"; an empty value is null.

@@ -9,14 +9,15 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/nao1215/jsonize/internal/limits"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
 // MaxDepth bounds how deeply arrays and objects may nest in a JSON value.
 // A document nested deeper is refused rather than read, so no input can
-// exhaust the stack.
-const MaxDepth = 1000
+// exhaust the stack. It is the depth YAML is held to as well.
+const MaxDepth = limits.MaxDepth
 
 // readJSON reads one JSON document. The keys keep the order they were
 // written in, a number keeps the digits it was written with, and the
@@ -37,6 +38,9 @@ func readJSON(data []byte, c *counter) (any, error) {
 	}
 	if _, err := dec.Token(); !errors.Is(err, io.EOF) {
 		return nil, docError(JSON, data, dec.InputOffset(), "text after the JSON value")
+	}
+	if off, ok := loneSurrogate(data); !ok {
+		return nil, docError(JSON, data, off, surrogateMsg(data, off))
 	}
 	return v, nil
 }
@@ -63,7 +67,84 @@ func jsonLine(line []byte, num int, c *counter) (any, error) {
 	if _, err := dec.Token(); !errors.Is(err, io.EOF) {
 		return nil, lineError(JSONL, num, "text after the JSON value on the line")
 	}
+	if off, ok := loneSurrogate(line); !ok {
+		return nil, lineError(JSONL, num, surrogateMsg(line, off))
+	}
 	return v, nil
+}
+
+// loneSurrogate finds a \u escape naming half of a surrogate pair that
+// the other half does not follow or precede. Go's decoder puts U+FFFD in
+// its place, which is a character the input may also hold for itself, so
+// a reading that kept it would hand on text jz was not given and say
+// nothing about it. The escape is refused instead, with the place it is
+// in.
+//
+// The text is walked for string literals rather than decoded again: in
+// JSON a quote outside a string is nothing but the start of one, and
+// inside a string a backslash takes the byte after it. The document has
+// already been decoded when this runs, so its quotes balance.
+func loneSurrogate(data []byte) (int64, bool) {
+	for i := 0; i < len(data); i++ {
+		if data[i] != '"' {
+			continue
+		}
+		for i++; i < len(data) && data[i] != '"'; {
+			if data[i] != '\\' {
+				i++
+				continue
+			}
+			r, ok := unicodeEscape(data[i:])
+			if !ok {
+				// An escape of one character, which may be a quote or a
+				// backslash and is stepped over whole.
+				i += 2
+				continue
+			}
+			switch {
+			case r >= 0xDC00 && r <= 0xDFFF:
+				return int64(i), false
+			case r >= 0xD800 && r <= 0xDBFF:
+				lo, ok := unicodeEscape(data[i+6:])
+				if !ok || lo < 0xDC00 || lo > 0xDFFF {
+					return int64(i), false
+				}
+				i += 12
+			default:
+				i += 6
+			}
+		}
+	}
+	return 0, true
+}
+
+// unicodeEscape reads a \uXXXX at the start of b.
+func unicodeEscape(b []byte) (rune, bool) {
+	if len(b) < 6 || b[0] != '\\' || b[1] != 'u' {
+		return 0, false
+	}
+	var r rune
+	for _, c := range b[2:6] {
+		var d rune
+		switch {
+		case c >= '0' && c <= '9':
+			d = rune(c - '0')
+		case c >= 'a' && c <= 'f':
+			d = rune(c-'a') + 10
+		case c >= 'A' && c <= 'F':
+			d = rune(c-'A') + 10
+		default:
+			return 0, false
+		}
+		r = r<<4 | d
+	}
+	return r, true
+}
+
+// surrogateMsg names the escape that was refused.
+func surrogateMsg(data []byte, off int64) string {
+	end := min(off+6, int64(len(data)))
+	return fmt.Sprintf("the escape %s is half of a surrogate pair and names no character", data[off:end])
 }
 
 type duplicateKeyError struct {
