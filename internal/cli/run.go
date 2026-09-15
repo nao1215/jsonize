@@ -135,13 +135,14 @@ func (a *app) cmdRun(args []string) int {
 	}
 	// The environment a definition asks for is the one the definition
 	// that will read the output asks for: the one given on the command
-	// line, the variant named, or what every variant of the command
-	// agrees on.
+	// line, the variant named, or what the variants the system and the
+	// arguments leave agree on.
+	sctx := selector.Context{Parser: parser, Variant: sel.variant, OS: a.env.GOOS, Args: cmdArgs}
 	var env []string
 	if hasInline {
 		env = append(envList(inline.Exec.Env), extraEnv...)
 	} else {
-		env = append(execEnv(reg, parser, sel.variant), extraEnv...)
+		env = append(execEnv(reg, sctx), extraEnv...)
 	}
 
 	ctx := a.env.Context
@@ -164,7 +165,6 @@ func (a *app) cmdRun(args []string) int {
 	if hasInline {
 		return a.runWith(ctx, inline, command, &out, timeout, exp)
 	}
-	sctx := selector.Context{Parser: parser, Variant: sel.variant, OS: a.env.GOOS, Args: cmdArgs}
 	if sel.parser != "" {
 		exp.scope(sctx, fromFlag)
 	} else {
@@ -446,19 +446,14 @@ func shellLine(words []string) string {
 // execEnv is the exec.env the command runs with. A variant named on the
 // command line is the definition that will read the output, so its
 // entries apply as they stand. With the variant still unknown, the
-// entries of every variant of the command are collected, and a variable
-// two of them set differently is not set at all, so that no variant is
-// favoured before the command has even run.
-func execEnv(reg *registry.Registry, parser, variant string) []string {
-	if variant != "" {
-		if e, ok := reg.Lookup(parser, variant); ok {
-			return envList(e.Def.Exec.Env)
-		}
-		return nil
-	}
+// entries of the variants the system and the arguments leave are
+// collected, since those are the ones that can read the output, and a
+// variable two of them set differently is not set at all, so that no
+// variant is favoured before the command has even run.
+func execEnv(reg *registry.Registry, ctx selector.Context) []string {
 	values := map[string]string{}
 	conflict := map[string]bool{}
-	for _, e := range reg.Variants(parser) {
+	for _, e := range selector.Candidates(reg, ctx) {
 		for k, v := range e.Def.Exec.Env {
 			if old, ok := values[k]; ok && old != v {
 				conflict[k] = true
