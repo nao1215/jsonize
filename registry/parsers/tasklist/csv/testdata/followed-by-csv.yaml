@@ -1,0 +1,3 @@
+source: the windows-server-2022 fixture followed by the quoted fixture of csv/comma, joined for this case
+description: another csv of three columns after the process rows is refused rather than read as processes
+expect_error: 'field "pid": cannot convert "note" to int'
