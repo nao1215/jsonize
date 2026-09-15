@@ -2,7 +2,9 @@ package definition
 
 import (
 	"errors"
+	"regexp"
 	"strings"
+	"sync"
 	"testing"
 )
 
@@ -764,5 +766,46 @@ func TestRecordsRecordForm(t *testing.T) {
 	}
 	if d.Parse.Record == nil || d.Parse.Record.Fields["n"].Type != "int" {
 		t.Errorf("record not loaded: %+v", d.Parse.Record)
+	}
+}
+
+// A pattern's program is built the first time it is used, once, however
+// many readers ask for it at the same moment, and an expression that does
+// not parse is still refused when the definition is loaded.
+func TestPatternsBuildOnceWhenFirstUsed(t *testing.T) {
+	t.Parallel()
+	d, err := Load([]byte("format: 1\ncommand: c\nvariant: v\ndetect: {signature: {all: ['^a']}}\ninput: {ignore: ['^#']}\nparse: {type: regex, patterns: ['^(?P<a>x)$', '^(?P<a>y)$']}\nfields: {a: {regex: '(?P<a>[xy])'}}\n"), "t")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if d.Parse.compiled.items[0].re != nil {
+		t.Error("a pattern was built when the definition was loaded")
+	}
+	const readers = 16
+	got := make([][]*regexp.Regexp, readers)
+	var wg sync.WaitGroup
+	for i := range readers {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			all, _, _ := d.Detect.Signature.Compiled()
+			got[i] = append(append(append([]*regexp.Regexp{}, d.Parse.CompiledPatterns()...), all...), d.Input.IgnorePatterns()...)
+			got[i] = append(got[i], d.Fields["a"].CompiledRegex())
+		}()
+	}
+	wg.Wait()
+	for i := 1; i < readers; i++ {
+		for j := range got[0] {
+			if got[i][j] != got[0][j] {
+				t.Fatalf("reader %d got a different program for expression %d", i, j)
+			}
+		}
+	}
+	if got[0][0].String() != "^(?P<a>x)$" || got[0][2].String() != "(?m)^a" {
+		t.Errorf("programs: %v", got[0])
+	}
+	if _, err := Load([]byte("format: 1\ncommand: c\nvariant: v\nparse: {type: regex, pattern: '(?P<a>'}\n"), "t"); err == nil ||
+		!strings.Contains(err.Error(), "invalid regular expression") {
+		t.Errorf("an expression that does not parse: %v", err)
 	}
 }

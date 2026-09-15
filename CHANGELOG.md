@@ -138,6 +138,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- A definition's regular expressions are checked when it is loaded and
+  built into programs the first time they are matched, so a run no
+  longer builds the programs of the hundreds of definitions it does not
+  read with. Loading the official registry allocates half of what it
+  did, `df -h | jz` on one core takes 42 ms where it took 53 ms, and a
+  broken expression is still reported when the definition is loaded.
 - `git status --porcelain` paths are the names they stand for: a path git
   quoted has its quotes removed and its escapes decoded, octal bytes to
   UTF-8 (`"docs/\346\227\245..."` is `docs/日...`). `getfacl` decodes

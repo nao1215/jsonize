@@ -246,12 +246,14 @@ func (v *validator) add(path, format string, args ...any) {
 	v.errs = append(v.errs, &ValidationError{Source: v.source, Path: path, Msg: fmt.Sprintf(format, args...)})
 }
 
-func (v *validator) regex(path, expr string) *regexp.Regexp {
+func (v *validator) regex(path, expr string) *pattern {
 	if len(expr) > MaxRegexLength {
 		v.add(path, "regular expression longer than %d characters", MaxRegexLength)
 		return nil
 	}
-	re, err := regexp.Compile(expr)
+	// The flags regexp.Compile parses with, so that what passes here is
+	// what compiles when the pattern is first matched.
+	parsed, err := syntax.Parse(expr, syntax.Perl)
 	if err != nil {
 		var se *syntax.Error
 		if errors.As(err, &se) {
@@ -261,7 +263,7 @@ func (v *validator) regex(path, expr string) *regexp.Regexp {
 		}
 		return nil
 	}
-	return re
+	return &pattern{expr: expr, names: parsed.CapNames()[1:]}
 }
 
 // validate checks the definition and compiles its regular expressions.
@@ -355,11 +357,11 @@ func (d *Definition) validate() error {
 }
 
 // compileList compiles each expression with flags prepended.
-func compileList(v *validator, path string, exprs []string, flags string) []*regexp.Regexp {
-	out := make([]*regexp.Regexp, 0, len(exprs))
+func compileList(v *validator, path string, exprs []string, flags string) *patternList {
+	out := &patternList{items: make([]*pattern, 0, len(exprs))}
 	for i, e := range exprs {
 		if re := v.regex(fmt.Sprintf("%s[%d]", path, i), flags+e); re != nil {
-			out = append(out, re)
+			out.items = append(out.items, re)
 		}
 	}
 	return out
@@ -371,7 +373,7 @@ func validateSelect(v *validator, path string, s *Select) {
 		if s.after != nil {
 			// The expression compiled on its own, so it compiles inside a
 			// group too; the flags it may open with stay scoped to it.
-			s.heading = regexp.MustCompile(`\A[ \t]*(?:` + s.After + `)[ \t]*\z`)
+			s.heading = &pattern{expr: `\A[ \t]*(?:` + s.After + `)[ \t]*\z`}
 		}
 	}
 	if s.Until != "" {
@@ -725,6 +727,7 @@ func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*
 	}
 	groupSet := map[string]bool{}
 	valueSet := map[string]bool{}
+	p.compiled = &patternList{items: make([]*pattern, 0, len(alts))}
 	for i, alt := range alts {
 		ep := key
 		if len(alts) > 1 {
@@ -740,7 +743,7 @@ func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*
 		}
 		groups := namedGroups(re)
 		vals := alternativeValues(v, ep, alt, groups)
-		p.compiled = append(p.compiled, re)
+		p.compiled.items = append(p.compiled.items, re)
 		p.values = append(p.values, vals)
 		if len(groups) == 0 && len(vals) == 0 {
 			v.add(ep, "must contain at least one named group (?P<name>...)")
@@ -1026,7 +1029,7 @@ func validateArrayField(v *validator, path string, f *Field, depth int) {
 		f.splitRegex = v.regex(path+".split_regex", f.SplitRegex)
 		// A separator that can be nothing splits between every character,
 		// so "abc def" would read as a list of its letters.
-		if f.splitRegex != nil && f.splitRegex.MatchString("") {
+		if f.splitRegex != nil && f.splitRegex.regexp().MatchString("") {
 			v.add(path+".split_regex", "matches the empty string, which splits a value between every character; write a separator that is at least one character (`[ \\t]+`, not `[ \\t]*`)")
 		}
 	}
@@ -1117,9 +1120,9 @@ func validateFieldKeys(v *validator, path string, f *Field) {
 	}
 }
 
-func namedGroups(re *regexp.Regexp) []string {
+func namedGroups(re *pattern) []string {
 	var out []string
-	for _, n := range re.SubexpNames() {
+	for _, n := range re.names {
 		if n != "" {
 			out = append(out, n)
 		}
