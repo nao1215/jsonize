@@ -110,6 +110,12 @@ scenarios:
           stderr:
             contains: "the value after := is not JSON"
       - run:
+          command: jz new 'labels:={"app":"api","app":"web"}'
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: 'the value after := cannot be written: the key "app" is given twice in one object'
+      - run:
           command: jz new a=@- b:=@-
           stdin: "x"
       - assert:

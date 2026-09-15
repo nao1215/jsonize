@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 	"testing/iotest"
+	"unicode/utf8"
 
 	"github.com/nao1215/jsonize/internal/datafile"
 	"github.com/nao1215/jsonize/pkg/engine"
@@ -141,6 +142,8 @@ func TestUsageErrors(t *testing.T) {
 		{"an array key then a value", false, []string{"a=1", "a[]=2"}, "both as a value and as an array"},
 		{"json that is not json", false, []string{"a:=nope"}, "the value after := is not JSON"},
 		{"two json values", false, []string{"a:=1 2"}, "the value after := is not JSON"},
+		{"json with a key given twice", false, []string{`a:={"k":1,"k":2}`}, `the value after := cannot be written: the key "k" is given twice in one object`},
+		{"json nested too deeply", true, []string{":=" + strings.Repeat("[", 1001) + strings.Repeat("]", 1001)}, "the value after := cannot be written: arrays and objects nest deeper than 1000"},
 		{"@ with no path", false, []string{"a=@"}, "@ names no file"},
 		{"standard input twice", false, []string{"a=@-", "b:=@-"}, `standard input is already read by "a=@-"`},
 		{"an array element that is not json", true, []string{":=nope"}, "not JSON"},
@@ -163,6 +166,20 @@ func TestUsageErrors(t *testing.T) {
 				t.Errorf("got %v, want a usage error holding %q", err, tt.want)
 			}
 		})
+	}
+}
+
+// A long argument is cut short where an error quotes it.
+func TestUsageErrorQuotesALongArgumentShort(t *testing.T) {
+	t.Parallel()
+	arg := "a:=" + strings.Repeat("[", 500) + "é"
+	_, err := Object([]string{arg}, files(t, ""))
+	if err == nil {
+		t.Fatal("accepted")
+	}
+	msg := err.Error()
+	if len(msg) > 200 || !strings.Contains(msg, `"a:=[[[`) || !strings.Contains(msg, `..."`) || !utf8.ValidString(msg) {
+		t.Errorf("message: %s", msg)
 	}
 }
 

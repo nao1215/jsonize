@@ -25,6 +25,7 @@ package jsonbuild
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -32,6 +33,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/nao1215/jsonize/internal/datafile"
+	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
 
@@ -42,8 +44,20 @@ type UsageError struct {
 	Msg string
 }
 
+// quotedArgBytes is how much of an argument an error quotes; a longer
+// one is cut and ended with "...".
+const quotedArgBytes = 64
+
 func (e *UsageError) Error() string {
-	return fmt.Sprintf("%q: %s", e.Arg, e.Msg)
+	arg := e.Arg
+	if len(arg) > quotedArgBytes {
+		cut := quotedArgBytes
+		for cut > 0 && !utf8.RuneStart(arg[cut]) {
+			cut--
+		}
+		arg = arg[:cut] + "..."
+	}
+	return fmt.Sprintf("%q: %s", arg, e.Msg)
 }
 
 // InputError is a file an argument named that cannot be read, or whose
@@ -235,6 +249,13 @@ func (b *builder) value(arg string, p part) (any, error) {
 		}
 		v, err := datafile.Read(datafile.JSON, []byte(p.value))
 		if err != nil {
+			// JSON jz refuses to write (a key given twice, nesting too
+			// deep) is not a string written by mistake, so it gets the
+			// reason rather than the hint.
+			var pe *engine.ParseError
+			if json.Valid([]byte(p.value)) && errors.As(err, &pe) {
+				return nil, &UsageError{Arg: arg, Msg: "the value after := cannot be written: " + pe.Msg}
+			}
 			return nil, &UsageError{Arg: arg, Msg: "the value after := is not JSON; a string is written with = or quoted"}
 		}
 		return v, nil
