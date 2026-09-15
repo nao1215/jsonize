@@ -138,8 +138,10 @@ file as a command's output.
 - Every format, and `jz new` with the files it reads, holds at most 64 MiB
   of input and 4,194,304 values in one document: every value of the JSON
   counts, a list and an object included, and for csv and tsv every cell.
-  Past either limit the reading is exit 3 with nothing written. With
-  `--stream` and `jz new --each` the values are counted for each record.
+  Past either limit a reading of the whole input is exit 3 with nothing
+  written. `--stream` and `jz new --each` count the values of each record
+  instead, and a record past the limit is one that cannot be read: the
+  records written before it stay written, and the status is 3.
 
 A reading that stops is exit 3 and names the line (`jz: json: line 3: the
 key "a" is given twice in one object`), as is a file that cannot be
