@@ -78,6 +78,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run ls -l` for a user whose environment sets `QUOTING_STYLE`
+  returned names with the quotes in them. jz runs ls with the literal
+  style, and the long listings refuse `-Q`, `--quoting-style`, `-b` and
+  `-q`, which change the names they print.
 - `jz run git log --oneline` in a repository or for a user whose
   configuration sets `log.decorate` returned the branch names as part of
   the first subject. jz runs git with decorations and signatures off for
