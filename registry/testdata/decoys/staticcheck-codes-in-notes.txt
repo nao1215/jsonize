@@ -1,0 +1,9 @@
+Lint notes for the release branch
+
+Most of the staticcheck findings were simple, for example:
+
+  store/cache.go:88:2: this value of err is never used (SA4006)
+
+Checks we switched off in staticcheck.conf, with the reason:
+- ST1000 (package comments): internal packages only.
+- S1002 (omit comparison to bool constant): generated code.
