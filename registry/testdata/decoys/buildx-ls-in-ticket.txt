@@ -1,0 +1,8 @@
+Builder on the CI runner stopped picking up jobs after the upgrade. Output of
+docker buildx ls from the runner:
+
+NAME/NODE                DRIVER/ENDPOINT                   STATUS    BUILDKIT   PLATFORMS
+ci-builder*              docker-container
+ \_ ci-builder0           \_ unix:///var/run/docker.sock   running   v0.30.0    linux/amd64
+
+Recreating the builder with --bootstrap fixed it.

@@ -1,0 +1,47 @@
+# `docker buildx ls` prints each builder on a row of its own and, under
+# it, a row for each node the builder runs on, opened with " \_ ". That is
+# a builder with its nodes as children, so it is read as a tree whose
+# level is " \_ ".
+#
+# A builder row is the name, an asterisk after it for the builder in use,
+# and the driver. A node row is the node name, the endpoint behind a
+# second "\_ ", the status, and for a node that is running the BuildKit
+# version and the platforms. Names, drivers, endpoints and statuses are
+# single words, so the rows are read by whitespace rather than by the
+# header's columns, which a long builder name pushes out of line.
+#
+# PLATFORMS is kept as printed. Without --no-trunc buildx shows the first
+# platforms and a count of the rest ("linux/amd64 (+4), linux/386"), so a
+# list made from it would leave out platforms the node has.
+format: 1
+command: docker
+variant: buildx-ls
+description: docker buildx ls, builders and their nodes
+metadata:
+  tags: [container, docker, build]
+  compatible: [Docker Buildx]
+  references:
+    - https://docs.docker.com/reference/cli/docker/buildx/ls/
+detect:
+  args:
+    all: [buildx, ls]
+  signature:
+    all:
+      - '\ANAME/NODE[ \t]+DRIVER/ENDPOINT[ \t]+STATUS[ \t]+BUILDKIT[ \t]+PLATFORMS[ \t]*$'
+input:
+  # The header names what the node expressions read.
+  ignore: ['^NAME/NODE[ \t]+DRIVER/ENDPOINT[ \t]+STATUS[ \t]+BUILDKIT[ \t]+PLATFORMS[ \t]*$']
+parse:
+  type: tree
+  indent: [" \\_ "]
+  # A top-level line is a builder: a name and a driver and nothing else.
+  root: '^[^\s\\]\S*[ \t]+\S+[ \t]*$'
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^(?P<name>[^\s*]+)(?P<current>\*?)[ \t]+(?P<driver>\S+)(?P<endpoint>)??(?P<status>)??(?P<buildkit>)??(?P<platforms>)??[ \t]*$'
+        - '^(?P<name>\S+)(?P<current>)??(?P<driver>)??[ \t]+\\_ (?P<endpoint>\S+)[ \t]+(?P<status>\S+)(?:[ \t]+(?P<buildkit>\S+)(?:[ \t]+(?P<platforms>\S.*?))?)?[ \t]*$'
+    fields:
+      name: {required: true}
+      current: {type: bool, true_values: ["*"], false_values: [""]}
