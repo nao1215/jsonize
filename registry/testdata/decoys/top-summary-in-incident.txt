@@ -1,0 +1,5 @@
+Processes: 542 total, 16 running, 6 stuck, 520 sleeping, 1789 threads
+2026/09/15 02:37:52
+Load Avg: went past 18 while the simulator tests ran, then settled.
+PID   COMMAND         %CPU TIME     #TH  #WQ #PORTS MEM   PURG CMPRS PGRP PPID STATE    BOOSTS %CPU_ME %CPU_OTHRS UID FAULTS COW MSGSENT MSGRECV SYSBSD SYSMACH CSW  PAGEINS IDLEW POWER INSTRS CYCLES JETPRI USER   #MREGS RPRVT VPRVT VSIZE KPRVT KSHRD
+The rows under that heading were cut from the paste, ask Sam for the full log.

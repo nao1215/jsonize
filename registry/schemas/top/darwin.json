@@ -1,0 +1,337 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/top/darwin.json",
+  "title": "top/darwin",
+  "description": "top -l 1 summary and process table on macOS",
+  "x-jsonize": {
+    "definition": "top/darwin",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "object",
+      "properties": {
+        "processes": {
+          "type": "integer"
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "count": {
+                "type": "integer"
+              },
+              "state": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "count",
+              "state"
+            ]
+          }
+        },
+        "threads": {
+          "type": "integer"
+        },
+        "time": {
+          "type": "string"
+        },
+        "load_1m": {
+          "type": "number"
+        },
+        "load_5m": {
+          "type": "number"
+        },
+        "load_15m": {
+          "type": "number"
+        },
+        "cpu_user_percent": {
+          "type": "number"
+        },
+        "cpu_sys_percent": {
+          "type": "number"
+        },
+        "cpu_idle_percent": {
+          "type": "number"
+        },
+        "shared_libs_resident": {
+          "type": "string"
+        },
+        "shared_libs_data": {
+          "type": "string"
+        },
+        "shared_libs_linkedit": {
+          "type": "string"
+        },
+        "mem_regions": {
+          "type": "integer"
+        },
+        "mem_regions_resident": {
+          "type": "string"
+        },
+        "mem_regions_private": {
+          "type": "string"
+        },
+        "mem_regions_shared": {
+          "type": "string"
+        },
+        "phys_mem_used": {
+          "type": "string"
+        },
+        "phys_mem_wired": {
+          "type": "string"
+        },
+        "phys_mem_compressor": {
+          "type": "string"
+        },
+        "phys_mem_unused": {
+          "type": "string"
+        },
+        "vm_vsize": {
+          "type": "string"
+        },
+        "vm_framework_vsize": {
+          "type": "string"
+        },
+        "swapins": {
+          "type": "integer"
+        },
+        "swapins_since_last_sample": {
+          "type": "integer"
+        },
+        "swapouts": {
+          "type": "integer"
+        },
+        "swapouts_since_last_sample": {
+          "type": "integer"
+        },
+        "network_packets_in": {
+          "type": "integer"
+        },
+        "network_bytes_in": {
+          "type": "string"
+        },
+        "network_packets_out": {
+          "type": "integer"
+        },
+        "network_bytes_out": {
+          "type": "string"
+        },
+        "disk_reads": {
+          "type": "integer"
+        },
+        "disk_bytes_read": {
+          "type": "string"
+        },
+        "disk_writes": {
+          "type": "integer"
+        },
+        "disk_bytes_written": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "processes",
+        "states",
+        "threads",
+        "time",
+        "load_1m",
+        "load_5m",
+        "load_15m",
+        "cpu_user_percent",
+        "cpu_sys_percent",
+        "cpu_idle_percent",
+        "shared_libs_resident",
+        "shared_libs_data",
+        "shared_libs_linkedit",
+        "mem_regions",
+        "mem_regions_resident",
+        "mem_regions_private",
+        "mem_regions_shared",
+        "phys_mem_used",
+        "phys_mem_wired",
+        "phys_mem_compressor",
+        "phys_mem_unused",
+        "vm_vsize",
+        "vm_framework_vsize",
+        "swapins",
+        "swapins_since_last_sample",
+        "swapouts",
+        "swapouts_since_last_sample",
+        "network_packets_in",
+        "network_bytes_in",
+        "network_packets_out",
+        "network_bytes_out",
+        "disk_reads",
+        "disk_bytes_read",
+        "disk_writes",
+        "disk_bytes_written"
+      ]
+    },
+    "processes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer"
+          },
+          "command": {
+            "type": "string"
+          },
+          "cpu_percent": {
+            "type": "number"
+          },
+          "time": {
+            "type": "string"
+          },
+          "threads": {
+            "type": "string"
+          },
+          "workqueues": {
+            "type": "string"
+          },
+          "ports": {
+            "type": "integer"
+          },
+          "mem": {
+            "type": "string"
+          },
+          "purgeable": {
+            "type": "string"
+          },
+          "compressed": {
+            "type": "string"
+          },
+          "pgrp": {
+            "type": "integer"
+          },
+          "ppid": {
+            "type": "integer"
+          },
+          "state": {
+            "type": "string"
+          },
+          "boosts": {
+            "type": "string"
+          },
+          "cpu_me_percent": {
+            "type": "number"
+          },
+          "cpu_others_percent": {
+            "type": "number"
+          },
+          "uid": {
+            "type": "integer"
+          },
+          "faults": {
+            "type": "integer"
+          },
+          "cow": {
+            "type": "integer"
+          },
+          "msgsent": {
+            "type": "integer"
+          },
+          "msgrecv": {
+            "type": "integer"
+          },
+          "sysbsd": {
+            "type": "integer"
+          },
+          "sysmach": {
+            "type": "integer"
+          },
+          "csw": {
+            "type": "integer"
+          },
+          "pageins": {
+            "type": "integer"
+          },
+          "idlew": {
+            "type": "integer"
+          },
+          "power": {
+            "type": "number"
+          },
+          "instrs": {
+            "type": "integer"
+          },
+          "cycles": {
+            "type": "integer"
+          },
+          "jetpri": {
+            "type": "integer"
+          },
+          "user": {
+            "type": "string"
+          },
+          "mregs": {
+            "type": "string"
+          },
+          "rprvt": {
+            "type": "string"
+          },
+          "vprvt": {
+            "type": "string"
+          },
+          "vsize": {
+            "type": "string"
+          },
+          "kprvt": {
+            "type": "string"
+          },
+          "kshrd": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pid",
+          "command",
+          "cpu_percent",
+          "time",
+          "threads",
+          "workqueues",
+          "ports",
+          "mem",
+          "purgeable",
+          "compressed",
+          "pgrp",
+          "ppid",
+          "state",
+          "boosts",
+          "cpu_me_percent",
+          "cpu_others_percent",
+          "uid",
+          "faults",
+          "cow",
+          "msgsent",
+          "msgrecv",
+          "sysbsd",
+          "sysmach",
+          "csw",
+          "pageins",
+          "idlew",
+          "power",
+          "instrs",
+          "cycles",
+          "jetpri",
+          "user",
+          "mregs",
+          "rprvt",
+          "vprvt",
+          "vsize",
+          "kprvt",
+          "kshrd"
+        ]
+      }
+    }
+  },
+  "required": [
+    "summary",
+    "processes"
+  ]
+}

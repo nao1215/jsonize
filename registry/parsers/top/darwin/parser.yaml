@@ -1,0 +1,124 @@
+# top -l 1 on macOS takes one sample in logging mode and prints it as
+# text: a summary of ten labelled lines, a blank line, and a table of
+# processes with every column logging mode has. -n limits the number of
+# rows, and -o and -O change their order without changing the columns.
+#
+# The summary is read into one object. The process counts by state vary
+# with what the machine is doing ("16 running, 6 stuck, 520 sleeping"),
+# so they are an array of counts and states in the order printed. The
+# memory and byte amounts ("724M", "1492K") are rounded and stay the text
+# printed; the counts of regions, packets, disk operations and swaps are
+# exact and are ints. The time is the local time of the machine, with no
+# zone, and stays text. The swap counts print the total and, in
+# parentheses, the change since the previous sample.
+#
+# A process row is read by an expression, since the command name is cut
+# to its column and may hold a space. TIME is minutes, seconds and
+# hundredths for a short-lived process and hours, minutes and seconds
+# for a long one, two precisions in one column, so it stays text. #TH and
+# #WQ print a count and the number running as "5/1". The columns macOS no
+# longer fills (#MREGS, RPRVT, VPRVT, VSIZE, KPRVT, KSHRD) print "N/A" and
+# stay as printed.
+#
+# -stats chooses other columns and -l with more than one sample prints
+# a second report with changes marked on the counters; the heading is
+# pinned whole and a second summary is refused.
+format: 1
+command: top
+variant: darwin
+description: top -l 1 summary and process table on macOS
+metadata:
+  tags: [darwin, process, system]
+  compatible: [macOS top]
+  references:
+    - https://github.com/apple-oss-distributions/top
+detect:
+  os: [darwin]
+  args:
+    all: ["-l"]
+    none: ["-stats"]
+  signature:
+    all:
+      # The ten summary lines by their labels, then the heading.
+      - '\AProcesses: \d+ total, \d+ [a-z]+(?:, \d+ [a-z]+)*, \d+ threads[ \t]*\n\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}[ \t]*\nLoad Avg: \d+\.\d+, \d+\.\d+, \d+\.\d+[ \t]*\nCPU usage: [^\n]*\nSharedLibs: [^\n]*\nMemRegions: [^\n]*\nPhysMem: [^\n]*\nVM: [^\n]*\nNetworks: [^\n]*\nDisks: [^\n]*\n(?:[ \t]*\n)*PID[ \t]+COMMAND[ \t]'
+      # The whole heading, and a first row that opens with a process id, a
+      # name, the CPU share and the time.
+      - '^PID[ \t]+COMMAND[ \t]+%CPU[ \t]+TIME[ \t]+#TH[ \t]+#WQ[ \t]+#PORTS[ \t]+MEM[ \t]+PURG[ \t]+CMPRS[ \t]+PGRP[ \t]+PPID[ \t]+STATE[ \t]+BOOSTS[ \t]+%CPU_ME[ \t]+%CPU_OTHRS[ \t]+UID[ \t]+FAULTS[ \t]+COW[ \t]+MSGSENT[ \t]+MSGRECV[ \t]+SYSBSD[ \t]+SYSMACH[ \t]+CSW[ \t]+PAGEINS[ \t]+IDLEW[ \t]+POWER[ \t]+INSTRS[ \t]+CYCLES[ \t]+JETPRI[ \t]+USER[ \t]+#MREGS[ \t]+RPRVT[ \t]+VPRVT[ \t]+VSIZE[ \t]+KPRVT[ \t]+KSHRD[ \t]*\n[ \t]*\d+[ \t]+\S[^\n]*?[ \t]\d+\.\d+[ \t]+\d+:\d{2}'
+parse:
+  type: composite
+  parts:
+    - name: summary
+      select: {until: '^PID[ \t]+COMMAND[ \t]'}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AProcesses: (?P<processes>\d+) total, (?P<states>\d+ [a-z]+(?:, \d+ [a-z]+)*), (?P<threads>\d+) threads[ \t]*\n(?P<time>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2})[ \t]*\nLoad Avg: (?P<load_1m>\d+\.\d+), (?P<load_5m>\d+\.\d+), (?P<load_15m>\d+\.\d+)[ \t]*\nCPU usage: (?P<cpu_user_percent>\d+\.\d+)% user, (?P<cpu_sys_percent>\d+\.\d+)% sys, (?P<cpu_idle_percent>\d+\.\d+)% idle[ \t]*\nSharedLibs: (?P<shared_libs_resident>\S+) resident, (?P<shared_libs_data>\S+) data, (?P<shared_libs_linkedit>\S+) linkedit\.[ \t]*\nMemRegions: (?P<mem_regions>\d+) total, (?P<mem_regions_resident>\S+) resident, (?P<mem_regions_private>\S+) private, (?P<mem_regions_shared>\S+) shared\.[ \t]*\nPhysMem: (?P<phys_mem_used>\S+) used \((?P<phys_mem_wired>\S+) wired, (?P<phys_mem_compressor>\S+) compressor\), (?P<phys_mem_unused>\S+) unused\.[ \t]*\nVM: (?P<vm_vsize>\S+) vsize, (?P<vm_framework_vsize>\S+) framework vsize, (?P<swapins>\d+)\((?P<swapins_since_last_sample>\d+)\) swapins, (?P<swapouts>\d+)\((?P<swapouts_since_last_sample>\d+)\) swapouts\.[ \t]*\nNetworks: packets: (?P<network_packets_in>\d+)/(?P<network_bytes_in>\S+) in, (?P<network_packets_out>\d+)/(?P<network_bytes_out>\S+) out\.[ \t]*\nDisks: (?P<disk_reads>\d+)/(?P<disk_bytes_read>\S+) read, (?P<disk_writes>\d+)/(?P<disk_bytes_written>\S+) written\.[ \t]*\z'
+      fields:
+        processes: {type: int, required: true}
+        states:
+          type: array
+          split: ","
+          items:
+            type: object
+            regex: '^(?P<count>\d+) (?P<state>[a-z]+)$'
+            fields:
+              count: {type: int}
+        threads: {type: int, required: true}
+        load_1m: {type: float}
+        load_5m: {type: float}
+        load_15m: {type: float}
+        cpu_user_percent: {type: float}
+        cpu_sys_percent: {type: float}
+        cpu_idle_percent: {type: float}
+        mem_regions: {type: int}
+        swapins: {type: int}
+        swapins_since_last_sample: {type: int}
+        swapouts: {type: int}
+        swapouts_since_last_sample: {type: int}
+        network_packets_in: {type: int}
+        network_packets_out: {type: int}
+        disk_reads: {type: int}
+        disk_writes: {type: int}
+    - name: processes
+      select: {after: '^PID[ \t]+COMMAND[ \t]+%CPU[ \t]+TIME[ \t]+#TH[ \t]+#WQ[ \t]+#PORTS[ \t]+MEM[ \t]+PURG[ \t]+CMPRS[ \t]+PGRP[ \t]+PPID[ \t]+STATE[ \t]+BOOSTS[ \t]+%CPU_ME[ \t]+%CPU_OTHRS[ \t]+UID[ \t]+FAULTS[ \t]+COW[ \t]+MSGSENT[ \t]+MSGRECV[ \t]+SYSBSD[ \t]+SYSMACH[ \t]+CSW[ \t]+PAGEINS[ \t]+IDLEW[ \t]+POWER[ \t]+INSTRS[ \t]+CYCLES[ \t]+JETPRI[ \t]+USER[ \t]+#MREGS[ \t]+RPRVT[ \t]+VPRVT[ \t]+VSIZE[ \t]+KPRVT[ \t]+KSHRD[ \t]*$'}
+      parse:
+        type: regex
+        pattern: '^[ \t]*(?P<pid>\d+)[ \t]+(?P<command>\S(?:[^\n]*?\S)?)[ \t]+(?P<cpu_percent>\d+\.\d+)[ \t]+(?P<time>\d+:\d{2}(?:[:.]\d{2})?)[ \t]+(?P<threads>\d+(?:/\d+)?)[ \t]+(?P<workqueues>\d+(?:/\d+)?)[ \t]+(?P<ports>\d+)[ \t]+(?P<mem>\d+(?:\.\d+)?[BKMGTP])[ \t]+(?P<purgeable>\d+(?:\.\d+)?[BKMGTP])[ \t]+(?P<compressed>\d+(?:\.\d+)?[BKMGTP])[ \t]+(?P<pgrp>\d+)[ \t]+(?P<ppid>\d+)[ \t]+(?P<state>[a-z]+)[ \t]+(?P<boosts>\S+)[ \t]+(?P<cpu_me_percent>\d+\.\d+)[ \t]+(?P<cpu_others_percent>\d+\.\d+)[ \t]+(?P<uid>\d+)[ \t]+(?P<faults>\d+)[ \t]+(?P<cow>\d+)[ \t]+(?P<msgsent>\d+)[ \t]+(?P<msgrecv>\d+)[ \t]+(?P<sysbsd>\d+)[ \t]+(?P<sysmach>\d+)[ \t]+(?P<csw>\d+)[ \t]+(?P<pageins>\d+)[ \t]+(?P<idlew>\d+)[ \t]+(?P<power>\d+\.\d+)[ \t]+(?P<instrs>\d+)[ \t]+(?P<cycles>\d+)[ \t]+(?P<jetpri>\d+)[ \t]+(?P<user>\S+)[ \t]+(?P<mregs>\S+)[ \t]+(?P<rprvt>\S+)[ \t]+(?P<vprvt>\S+)[ \t]+(?P<vsize>\S+)[ \t]+(?P<kprvt>\S+)[ \t]+(?P<kshrd>\S+)[ \t]*$'
+      fields:
+        pid: {type: int, required: true}
+        command: {required: true}
+        cpu_percent: {type: float, required: true}
+        time: {required: true}
+        threads: {required: true}
+        workqueues: {required: true}
+        ports: {type: int, required: true}
+        mem: {required: true}
+        purgeable: {required: true}
+        compressed: {required: true}
+        pgrp: {type: int, required: true}
+        ppid: {type: int, required: true}
+        state: {required: true}
+        boosts: {required: true}
+        cpu_me_percent: {type: float, required: true}
+        cpu_others_percent: {type: float, required: true}
+        uid: {type: int, required: true}
+        faults: {type: int, required: true}
+        cow: {type: int, required: true}
+        msgsent: {type: int, required: true}
+        msgrecv: {type: int, required: true}
+        sysbsd: {type: int, required: true}
+        sysmach: {type: int, required: true}
+        csw: {type: int, required: true}
+        pageins: {type: int, required: true}
+        idlew: {type: int, required: true}
+        power: {type: float, required: true}
+        instrs: {type: int, required: true}
+        cycles: {type: int, required: true}
+        jetpri: {type: int, required: true}
+        user: {required: true}
+        mregs: {required: true}
+        rprvt: {required: true}
+        vprvt: {required: true}
+        vsize: {required: true}
+        kprvt: {required: true}
+        kshrd: {required: true}

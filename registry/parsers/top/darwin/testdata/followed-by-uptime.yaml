@@ -1,0 +1,5 @@
+description: the uptime line joined after the process rows is refused rather than read as a process
+source: the macos-26 fixture followed by the uptime/bsd fixture, joined for this case
+os: darwin
+args: [-l, "1", -n, "10"]
+expect_error: line does not match pattern
