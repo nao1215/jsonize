@@ -17,6 +17,10 @@ func terminate(p *os.Process) error {
 
 // forward relays an interrupt by killing the child, which is the only
 // portable way to stop a console process on Windows.
+// interruptReached is false: Windows has no process groups to share an
+// interrupt, and jz ends the child itself.
+func interruptReached(*os.Process) bool { return false }
+
 func forward(p *os.Process, _ os.Signal) error {
 	if p == nil {
 		return nil

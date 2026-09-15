@@ -78,6 +78,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Ctrl-C typed at a terminal reached the command `jz run` started twice:
+  once from the terminal, which sends it to the whole foreground group,
+  and once passed on by jz. A command that stops at once on a second
+  interrupt was stopped by one keypress. jz no longer passes on an
+  interrupt when the terminal's foreground group is its own and the
+  command is in it.
 - `jz run ls -l` for a user whose environment sets `QUOTING_STYLE`
   returned names with the quotes in them. jz runs ls with the literal
   style, and the long listings refuse `-Q`, `--quoting-style`, `-b` and

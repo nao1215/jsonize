@@ -38,8 +38,8 @@
 // is the local HTTP server the curl scenarios read headers from (see
 // serve.go).
 //
-// feed and relay are described in feed.go, and as and the stand-ins it
-// makes in standin.go.
+// feed and relay are described in feed.go, as and the stand-ins it makes
+// in standin.go, and interrupts in interrupts.go.
 package main
 
 import (
@@ -68,7 +68,7 @@ func main() {
 
 func run(args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 {
-		fmt.Fprintln(stderr, "usage: e2ehelper emit|pipe|gone|serve|feed|relay|as [options]")
+		fmt.Fprintln(stderr, "usage: e2ehelper emit|pipe|gone|serve|feed|relay|as|interrupts [options]")
 		return 2
 	}
 	var err error
@@ -87,6 +87,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return relay(os.Stdin, stdout, stderr)
 	case "as":
 		err = as(args[1:], stdout)
+	case "interrupts":
+		err = interrupts(args[1:], stdout, stderr)
 	default:
 		err = fmt.Errorf("unknown mode %q", args[0])
 	}

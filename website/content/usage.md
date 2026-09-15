@@ -343,6 +343,15 @@ the one the cut fell in is left out. Without it nothing is written,
 because the output is not the whole of what the command prints. The
 status is 128 plus the signal either way.
 
+An interrupt or SIGTERM that jz receives is passed on to the command.
+Ctrl-C typed at a terminal is the exception: the terminal sends it to
+every process in its foreground group, the command included, so jz does
+not send it again, and a command that takes a second interrupt as "stop
+now" is not stopped by one keypress. The same holds for `kill -INT` sent
+to jz alone while it runs in the foreground of a terminal; send it to
+the process group (`kill -INT -- -PGID`), or send SIGTERM, which is
+always passed on.
+
 ## Output jz has no definition for
 
 `--define` takes the definition itself instead of the name of one. It is
