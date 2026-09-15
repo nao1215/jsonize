@@ -100,7 +100,9 @@ detect:
   definition that means both spellings lists both. The same holds for a
   long option cut short, which GNU tools accept while it is unambiguous:
   `--ta` is not `--tag` to jz, and a definition that means both lists
-  both. Bundled short flags
+  both. An entry that ends in `=` is the long option with any value:
+  `none: ["--config-env="]` refuses `--config-env=log.decorate=X`.
+  Bundled short flags
   are expanded, so `-hT` satisfies `any: ["-h"]`, and a short flag given
   n times holds every bundle of it up to n letters, so `-v -v` and `-vvv`
   are both refused by `none: ["-vv"]`. A long option given twice is the

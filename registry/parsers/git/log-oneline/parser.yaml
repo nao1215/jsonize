@@ -10,8 +10,9 @@
 # parenthesis in every case, so it is kept out three ways. `jz run`
 # refuses --decorate among the arguments, and runs git with log.decorate
 # set to no and log.showSignature to false, which a user's configuration
-# would otherwise turn on without an argument; git -c, which is stronger
-# than the environment, is refused as an argument. On a pipe, a line is
+# would otherwise turn on without an argument; git -c and
+# --config-env, which are stronger than the environment, are refused as
+# arguments. On a pipe, a line is
 # refused whose parenthesis opens with what only a decoration opens
 # with: HEAD, "tag: ", or a remote branch holding a slash. A decoration
 # of a local branch alone, "(main)", is the one left, and it is the
@@ -33,7 +34,7 @@ detect:
     any: ["--oneline", "--pretty=oneline", "--format=oneline"]
     # These put names or hashes before the subject, which cannot be told
     # from a subject that opens the same way.
-    none: ["--decorate", "--decorate=short", "--decorate=full", "--parents", "--children", "-c"]
+    none: ["--decorate", "--decorate=short", "--decorate=full", "--parents", "--children", "-c", "--config-env="]
   # A hexadecimal word and a line of text is the shape of far too many
   # reports to claim on sight, so jz reads it only when the parser is
   # named (`jz run git log --oneline`, `--parser git`).

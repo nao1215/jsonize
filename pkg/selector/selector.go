@@ -933,7 +933,8 @@ func short(re *regexp.Regexp) string {
 // matchArgs applies any/all/none. Bundled short flags such as -hT count
 // as containing -h and -T, and a short flag given n times, however it
 // was split, counts as containing each bundle of it from two to n
-// letters: `-v -v` and `-vvv` both hold -vv. A "--" ends the options:
+// letters: `-v -v` and `-vvv` both hold -vv. A long option written with
+// a value holds its name and "=" as well. A "--" ends the options:
 // what follows it is an operand whatever it looks like, and says nothing
 // about the format, so `ls -- -l` lists a file named -l rather than the
 // long listing.
@@ -947,6 +948,13 @@ func matchArgs(a *definition.ArgsMatch, args []string) (reason, excluded string,
 			break
 		}
 		set[arg] = true
+		// A long option with a value also holds the option with its
+		// "=", so `none: ["--config-env="]` refuses it whatever the value.
+		if strings.HasPrefix(arg, "--") {
+			if i := strings.IndexByte(arg, '='); i > 2 {
+				set[arg[:i+1]] = true
+			}
+		}
 		if len(arg) > 1 && arg[0] == '-' && arg[1] != '-' {
 			for _, r := range arg[1:] {
 				set["-"+string(r)] = true

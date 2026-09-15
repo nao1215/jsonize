@@ -7,6 +7,7 @@ import (
 	"testing"
 	"testing/fstest"
 
+	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/registry"
 )
 
@@ -439,6 +440,34 @@ func TestSelectErrorsForUnknownNames(t *testing.T) {
 	_, err = Select(reg, Context{Variant: "gnu", Input: []byte(gnuDF)})
 	if !errors.As(err, &vp) || !strings.Contains(err.Error(), "needs --parser") {
 		t.Errorf("variant without parser: %v", err)
+	}
+}
+
+// An entry that ends in "=" is the long option with any value; the word
+// as typed still matches itself, and a short flag or an operand holding
+// "=" is not an option with a value.
+func TestArgsEntryEndingInEquals(t *testing.T) {
+	t.Parallel()
+	a := &definition.ArgsMatch{None: []string{"--config-env="}}
+	cases := []struct {
+		args []string
+		ok   bool
+	}{
+		{[]string{"--config-env=log.decorate=X", "log"}, false},
+		{[]string{"--config-env=", "log"}, false},
+		{[]string{"--config-env", "log"}, true},
+		{[]string{"log", "a=b"}, true},
+		{[]string{"-c=x"}, true},
+		{[]string{"--", "--config-env=x"}, true},
+	}
+	for _, c := range cases {
+		if _, _, ok := matchArgs(a, c.args); ok != c.ok {
+			t.Errorf("%q: ok = %v, want %v", c.args, ok, c.ok)
+		}
+	}
+	anyOf := &definition.ArgsMatch{Any: []string{"--format=oneline"}}
+	if _, _, ok := matchArgs(anyOf, []string{"--format=oneline"}); !ok {
+		t.Error("the whole word no longer matches itself")
 	}
 }
 

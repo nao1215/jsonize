@@ -134,8 +134,10 @@ project follows [Semantic Versioning](https://semver.org/).
 - `jz run git log --oneline` in a repository or for a user whose
   configuration sets `log.decorate` returned the branch names as part of
   the first subject. jz runs git with decorations and signatures off for
-  this format, refuses `-c` among its arguments, and on a pipe refuses a
-  line whose parenthesis opens with `HEAD`, a tag or a remote branch.
+  this format, refuses `-c` and `--config-env` among its arguments, and
+  on a pipe refuses a line whose parenthesis opens with `HEAD`, a tag or
+  a remote branch. An `args` entry that ends in `=` matches the long
+  option with any value.
   `exec.env` now comes from the variants the arguments leave, so the
   setting does not reach `git config --list`.
 - A duration with a fraction of a unit under a second is the number the

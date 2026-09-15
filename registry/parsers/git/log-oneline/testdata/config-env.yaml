@@ -1,0 +1,5 @@
+source: the definition's own history.txt, run with a configuration override in the arguments
+description: --config-env can turn decorations back on over the setting jz passes in the environment, so the run is refused by the argument whatever it names
+os: linux
+args: ["--config-env=log.decorate=JZ_DECORATE", "log", "--oneline"]
+expect_error: 'excluded by the argument --config-env='
