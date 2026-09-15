@@ -4,6 +4,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/nao1215/jsonize/internal/jsonbuild"
 )
 
 func TestNew(t *testing.T) {
@@ -138,5 +140,32 @@ func TestNewEach(t *testing.T) {
 		if code != tt.code || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), tt.want) {
 			t.Errorf("%s: exit %d, stdout %q, stderr %q", tt.name, code, h.stdout.String(), h.stderr.String())
 		}
+	}
+}
+
+// Input past a limit is a parse failure for jz new the way it is for the
+// default mode: a file past the byte limit, and a document past the value
+// limit, are exit 3 with nothing written.
+func TestNewLimitsAreParseFailures(t *testing.T) {
+	h := newHarness(t)
+	big := h.writeFile("big.json", []byte(`"0123456789"`))
+	if _, err := readBounded(big, 12); err != nil {
+		t.Errorf("a file at the byte limit: %v", err)
+	}
+	_, err := readBounded(big, 11)
+	a := &app{env: h.env}
+	if err == nil || !strings.Contains(err.Error(), "exceeds the 11 byte limit") {
+		t.Fatalf("a file past the byte limit: %v", err)
+	}
+	if code := a.newFailed(&jsonbuild.InputError{Arg: "a:=@" + big, Err: err}); code != ExitParse {
+		t.Errorf("a file past the byte limit: exit %d", code)
+	}
+	plan, err := jsonbuild.Parse([]jsonbuild.Arg{{Form: jsonbuild.Plain, Text: "a:=@" + big}, {Form: jsonbuild.Plain, Text: "b:=[1,2]"}}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = plan.Build(jsonbuild.Sources{ReadFile: readLimited, MaxValues: 4})
+	if code := a.newFailed(err); code != ExitParse || !strings.Contains(h.stderr.String(), "more than 4 values") || h.stdout.Len() != 0 {
+		t.Errorf("a document past the value limit: exit %d, %v, stderr %q", code, err, h.stderr.String())
 	}
 }

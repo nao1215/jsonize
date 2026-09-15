@@ -134,6 +134,16 @@ type Sources struct {
 	Stdin io.Reader
 	// MaxSize bounds what is read from Stdin.
 	MaxSize int64
+	// MaxValues bounds the values one document holds, the files it is made
+	// of together (0 = engine.DefaultMaxValues).
+	MaxValues int
+}
+
+func (s Sources) maxValues() int {
+	if s.MaxValues <= 0 {
+		return engine.DefaultMaxValues
+	}
+	return s.MaxValues
 }
 
 // kind is what an argument's value is made from.
@@ -610,12 +620,16 @@ func oneStdin(places []*placement) error {
 // the arguments gave them, and makes the document.
 func (p *Plan) Build(src Sources) (any, error) {
 	values := make([]any, len(p.places))
+	n := p.root.containers()
 	for i, pl := range p.places {
 		v, err := value(pl, src)
 		if err != nil {
 			return nil, err
 		}
 		values[i] = v
+		if n += countValues(v, src.maxValues()); n > src.maxValues() {
+			return nil, tooManyValues(src.maxValues())
+		}
 	}
 	return p.root.make(values), nil
 }
@@ -648,12 +662,15 @@ type Fixed struct {
 	plan   *Plan
 	values []any
 	slot   int
+	// counted is the values every document holds before its record's, and
+	// max the most a document may hold.
+	counted, max int
 }
 
 // Fixed reads the files the plan names, in the order the arguments gave
 // them, and leaves standard input unread.
 func (p *Plan) Fixed(src Sources) (*Fixed, error) {
-	f := &Fixed{plan: p, values: make([]any, len(p.places)), slot: -1}
+	f := &Fixed{plan: p, values: make([]any, len(p.places)), slot: -1, counted: p.root.containers(), max: src.maxValues()}
 	for i, pl := range p.places {
 		if pl.kind >= fileText && pl.text == "-" {
 			f.slot = i
@@ -664,19 +681,77 @@ func (p *Plan) Fixed(src Sources) (*Fixed, error) {
 			return nil, err
 		}
 		f.values[i] = v
+		if f.counted += countValues(v, f.max); f.counted > f.max {
+			return nil, tooManyValues(f.max)
+		}
 	}
 	return f, nil
 }
 
 // With makes the document with v as the value of the argument that reads
-// standard input. The values read once are shared by every document.
-func (f *Fixed) With(v any) any {
+// standard input. The values read once are shared by every document, and
+// a document they and v make past the limit is refused.
+func (f *Fixed) With(v any) (any, error) {
 	values := f.values
 	if f.slot >= 0 {
+		if f.counted+countValues(v, f.max) > f.max {
+			return nil, tooManyValues(f.max)
+		}
 		values = slices.Clone(f.values)
 		values[f.slot] = v
 	}
-	return f.plan.root.make(values)
+	return f.plan.root.make(values), nil
+}
+
+// containers counts the objects and arrays the arguments' locations make
+// around the values placed in them.
+func (n *node) containers() int {
+	switch n.kind {
+	case valueNode:
+		return 0
+	case objectNode:
+		c := 1
+		for _, m := range n.members {
+			c += m.containers()
+		}
+		return c
+	case arrayNode:
+		c := 1
+		for _, e := range n.elems {
+			c += e.containers()
+		}
+		return c
+	}
+	return 0
+}
+
+// countValues counts the JSON values v holds, itself included, and stops
+// once the count is past max.
+func countValues(v any, limit int) int {
+	n := 1
+	switch t := v.(type) {
+	case []any:
+		for _, e := range t {
+			if n > limit {
+				break
+			}
+			n += countValues(e, limit-n)
+		}
+	case *jsonutil.Object:
+		for _, m := range t.Members() {
+			if n > limit {
+				break
+			}
+			n += countValues(m.Value, limit-n)
+		}
+	}
+	return n
+}
+
+// tooManyValues refuses a document past the limit on the values it holds,
+// which is a parse failure the way a data file past it is.
+func tooManyValues(limit int) error {
+	return &engine.ParseError{Msg: fmt.Sprintf("the document yields more than %d values, more than one document holds", limit), Cause: engine.ErrTooManyValues}
 }
 
 func (n *node) make(values []any) any {
@@ -775,7 +850,7 @@ func read(arg, path string, src Sources) ([]byte, error) {
 		return nil, &InputError{Arg: arg, Err: err}
 	}
 	if int64(len(data)) > src.MaxSize {
-		return nil, &InputError{Arg: arg, Err: fmt.Errorf("standard input exceeds the %d byte limit", src.MaxSize)}
+		return nil, &InputError{Arg: arg, Err: &engine.ParseError{Msg: fmt.Sprintf("standard input exceeds the %d byte limit", src.MaxSize)}}
 	}
 	return data, nil
 }
@@ -792,7 +867,7 @@ func decompress(data []byte, compression string, maxSize int64) ([]byte, error) 
 		return nil, err
 	}
 	if int64(len(out)) > maxSize {
-		return nil, fmt.Errorf("the decompressed text exceeds the %d byte limit", maxSize)
+		return nil, &engine.ParseError{Msg: fmt.Sprintf("the decompressed text exceeds the %d byte limit", maxSize)}
 	}
 	return out, nil
 }

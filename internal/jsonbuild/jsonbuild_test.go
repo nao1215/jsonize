@@ -82,6 +82,15 @@ func buildObject(args []string, src Sources) (any, error) { return build(plain(a
 
 func buildArray(args []string, src Sources) (any, error) { return build(plain(args), true, src) }
 
+func with(t *testing.T, f *Fixed, v any) any {
+	t.Helper()
+	doc, err := f.With(v)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return doc
+}
+
 func encode(t *testing.T, v any) string {
 	t.Helper()
 	b, err := jsonutil.Marshal(v)
@@ -538,13 +547,13 @@ func TestFixedWithARecordPerDocument(t *testing.T) {
 		}
 		before := reads
 		for range 3 {
-			if got := encode(t, f.With([]any{int64(1), jsonutil.NewObject()})); got == "" {
+			if got := encode(t, with(t, f, []any{int64(1), jsonutil.NewObject()})); got == "" {
 				t.Fatal("nothing made")
 			}
 		}
 		obj := jsonutil.NewObject()
 		obj.Set("k", nil)
-		if got := encode(t, f.With([]any{json.Number("1"), obj})); got != tt.want {
+		if got := encode(t, with(t, f, []any{json.Number("1"), obj})); got != tt.want {
 			t.Errorf("got %s, want %s", got, tt.want)
 		}
 		if reads != before {
@@ -566,7 +575,7 @@ func TestFixedWithARecordPerDocument(t *testing.T) {
 		t.Errorf("no standard input: %q", format)
 	}
 	f, err := p.Fixed(src)
-	if err != nil || encode(t, f.With("ignored")) != `{"a":"1"}` {
+	if err != nil || encode(t, with(t, f, "ignored")) != `{"a":"1"}` {
 		t.Errorf("no slot: %v", err)
 	}
 	if _, err := p.Fixed(Sources{ReadFile: func(string) ([]byte, error) { return nil, fs.ErrNotExist }}); err != nil {
@@ -578,5 +587,55 @@ func TestFixedWithARecordPerDocument(t *testing.T) {
 	}
 	if _, err := p.Fixed(src); err == nil {
 		t.Error("a missing file was not reported")
+	}
+}
+
+// A document is bounded as a whole, the way a data file is: values read
+// from several files, each under the limit, can still make a document
+// over it, and --each bounds each document it makes.
+func TestDocumentValueLimit(t *testing.T) {
+	t.Parallel()
+	src := files(t, "")
+	// {"a":{"b":1,"a":2},"c":{"b":1,"a":2}} holds seven values.
+	args := []string{"a:=@doc.json", "c:=@doc.json"}
+	src.MaxValues = 7
+	if v, err := buildObject(args, src); err != nil || encode(t, v) != `{"a":{"b":1,"a":2},"c":{"b":1,"a":2}}` {
+		t.Errorf("at the limit: %v %v", v, err)
+	}
+	src.MaxValues = 6
+	_, err := buildObject(args, src)
+	var pe *engine.ParseError
+	if !errors.As(err, &pe) || !errors.Is(err, engine.ErrTooManyValues) || !strings.Contains(err.Error(), "more than 6 values") {
+		t.Errorf("past the limit: %v", err)
+	}
+	// With --each the fixed values count in every document, and the record
+	// that takes one past the limit is refused.
+	p, err := Parse([]Arg{arg("a:=@doc.json"), arg("r:=@-")}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	src.MaxValues = 6
+	f, err := p.Fixed(src)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := f.With([]any{int64(1)}); err != nil {
+		t.Errorf("a record at the limit: %v", err)
+	}
+	if _, err := f.With([]any{int64(1), int64(2)}); !errors.Is(err, engine.ErrTooManyValues) {
+		t.Errorf("a record past the limit: %v", err)
+	}
+}
+
+// Input past the byte limit is a parse failure on every path, the way it
+// is when jz reads its standard input or a file with --file.
+func TestByteLimitIsAParseFailure(t *testing.T) {
+	t.Parallel()
+	for _, args := range [][]string{{"a=@-"}, {"a:=@big.json.gz"}} {
+		_, err := buildObject(args, files(t, strings.Repeat("x", 101)))
+		var pe *engine.ParseError
+		if !errors.As(err, &pe) {
+			t.Errorf("%v: %v is not a parse failure", args, err)
+		}
 	}
 }
