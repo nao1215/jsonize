@@ -334,3 +334,42 @@ scenarios:
             empty: true
           stderr:
             contains: no command given
+
+  # A setting in the repository's or the user's configuration changes what
+  # git log --oneline prints without an argument jz could see: with
+  # log.decorate the first subject would carry the branch names. jz runs
+  # git with that setting off for this format, and only for this format,
+  # so git config --list still prints what the configuration holds.
+  - name: jz run git log --oneline reads subjects a decorating configuration would change
+    steps:
+      - run:
+          command: git init -q ${workdir}/repo
+      - assert:
+          exit_code: 0
+      - run:
+          command: git -C ${workdir}/repo -c user.name=jz -c user.email=jz@example.test commit --allow-empty -q -m "first subject"
+      - assert:
+          exit_code: 0
+      - run:
+          command: git -C ${workdir}/repo config log.decorate short
+      - assert:
+          exit_code: 0
+      - run:
+          command: jz run --explain git -C ${workdir}/repo log --oneline
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose git/log-oneline from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].subject", equals: "first subject" }
+              - { path: "$[0].commit", matches: "^[0-9a-f]{7,15}$" }
+      - run:
+          command: jz run git -C ${workdir}/repo config --list --local
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[?(@.name == 'log.decorate')].value", equals: short }
+

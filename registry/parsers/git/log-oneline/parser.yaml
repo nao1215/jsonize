@@ -3,8 +3,19 @@
 # the space and nothing after it, so the subject is an empty string there.
 #
 # `--graph` draws the history with |, / and \ in front of the commit, and
-# `--decorate` inserts "(HEAD -> main)" between the object name and the
-# subject; neither is this format and the signature refuses both.
+# decorations put "(HEAD -> main, origin/main)" between the object name
+# and the subject. Neither is this format.
+#
+# A decoration cannot be told from a subject that opens with a
+# parenthesis in every case, so it is kept out three ways. `jz run`
+# refuses --decorate among the arguments, and runs git with log.decorate
+# set to no and log.showSignature to false, which a user's configuration
+# would otherwise turn on without an argument; git -c, which is stronger
+# than the environment, is refused as an argument. On a pipe, a line is
+# refused whose parenthesis opens with what only a decoration opens
+# with: HEAD, "tag: ", or a remote branch holding a slash. A decoration
+# of a local branch alone, "(main)", is the one left, and it is the
+# shape of a subject too.
 format: 1
 command: git
 variant: log-oneline
@@ -16,11 +27,13 @@ metadata:
     - https://git-scm.com/docs/git-log#Documentation/git-log.txt---oneline
 detect:
   args:
-    any: ["log"]
+    all: ["log"]
+    # The spellings that print this format. Without one of them git log
+    # prints its default blocks, which git/log reads.
+    any: ["--oneline", "--pretty=oneline", "--format=oneline"]
     # These put names or hashes before the subject, which cannot be told
-    # from a subject that opens the same way. log.decorate in a user's
-    # configuration does the same without an argument and is not seen.
-    none: ["--decorate", "--decorate=short", "--decorate=full", "--parents", "--children"]
+    # from a subject that opens the same way.
+    none: ["--decorate", "--decorate=short", "--decorate=full", "--parents", "--children", "-c"]
   # A hexadecimal word and a line of text is the shape of far too many
   # reports to claim on sight, so jz reads it only when the parser is
   # named (`jz run git log --oneline`, `--parser git`).
@@ -49,6 +62,17 @@ detect:
       # writes a checksum, a size and a name.
       - '\A[0-9a-f]{7,15}[ \t]*$'
       - '\A[0-9a-f]{7,15} \S*[^\s\d]'
+    none:
+      # A decoration: a parenthesis opening with HEAD, a tag, or a remote
+      # branch, which holds a slash.
+      - '^[0-9a-f]{7,15} \((?:HEAD(?: -> [^,)]+)?|tag: [^,)]+|[^,() ]+/[^,() ]+)(?:, [^,)]+)*\) '
+exec:
+  env:
+    GIT_CONFIG_COUNT: "2"
+    GIT_CONFIG_KEY_0: log.decorate
+    GIT_CONFIG_VALUE_0: "no"
+    GIT_CONFIG_KEY_1: log.showSignature
+    GIT_CONFIG_VALUE_1: "false"
 parse:
   type: regex
   pattern: '^(?P<commit>[0-9a-f]{4,40}) (?P<subject>.*)$'

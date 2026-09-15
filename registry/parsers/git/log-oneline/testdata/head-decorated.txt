@@ -1,0 +1,3 @@
+ee67def (HEAD -> feat/loop2-accuracy, origin/feat/loop1-followups, feat/loop1-followups) refactor(convert): drop an unused parameter of recentTime and keep going only on a later year
+acfb7c0 fix(registry): stop procs/default reading empty input as an empty process list
+b0cb863 test(e2e): pin eza -l, cargo tree and systemd-cgls with padded ids on every system

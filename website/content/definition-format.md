@@ -190,9 +190,11 @@ exec:
 ```
 
 Extra environment for `jz run`. jz already sets `LC_ALL=C` and `LANG=C`.
-When several variants of a command set the same variable to different
-values the variable is not set at all (the variant is unknown before the
-command runs).
+The variables come from the variants the system and the arguments leave,
+since those are the definitions that can read the output: a setting
+`git log --oneline` needs is not given to `git config --list`. When
+several of them set the same variable to different values the variable
+is not set at all (the variant is unknown before the command runs).
 
 ## input
 
