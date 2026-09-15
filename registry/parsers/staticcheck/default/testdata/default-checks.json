@@ -1,0 +1,51 @@
+[
+  {
+    "path": "main.go",
+    "line": 10,
+    "column": 13,
+    "message": "Printf format %d has arg #1 of wrong type string",
+    "rule": "SA5009"
+  },
+  {
+    "path": "main.go",
+    "line": 12,
+    "column": 2,
+    "message": "self-assignment of x to x",
+    "rule": "SA4018"
+  },
+  {
+    "path": "main.go",
+    "line": 16,
+    "column": 2,
+    "message": "this value of err is never used",
+    "rule": "SA4006"
+  },
+  {
+    "path": "main.go",
+    "line": 16,
+    "column": 8,
+    "message": "Errorf doesn't have side effects and its return value is ignored",
+    "rule": "SA4017"
+  },
+  {
+    "path": "pkg/sub/fmt.go",
+    "line": 6,
+    "column": 13,
+    "message": "Printf format %s has arg #1 of wrong type int",
+    "rule": "SA5009"
+  },
+  {
+    "path": "pkg/sub/sub.go",
+    "line": 6,
+    "column": 9,
+    "message": "should use strings.EqualFold instead",
+    "rule": "SA6005"
+  },
+  {
+    "path": "pkg/sub/sub.go",
+    "line": 13,
+    "column": 5,
+    "message": "should omit comparison to bool constant, can be simplified to Lower(\"a\")",
+    "rule": "S1002"
+  }
+]

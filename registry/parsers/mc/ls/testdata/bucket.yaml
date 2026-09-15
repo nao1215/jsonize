@@ -1,0 +1,6 @@
+source: captured from mc (MinIO client, built from source as DEVELOPMENT.GOGET with go1.26.4) on Linux with LC_ALL=C and TZ Asia/Tokyo, listing a bucket of a local MinIO server made for the capture
+description: >-
+  Objects with the STANDARD class, one named with a space, and a prefix
+  ending in / with no class.
+os: linux
+args: ["ls", "a8/photos"]

@@ -1,0 +1,7 @@
+source: >-
+  moved from registry/testdata/decoys/go-vet.txt, where 120dc3f put it as
+  go vet output that go/test must refuse; the Go version it came from is
+  not recorded, and its headings above every package and its "of got to
+  got" message are what go 1.25 prints
+description: A heading above each package, a test-variant heading and a type error behind vet:.
+args: ["vet", "./..."]

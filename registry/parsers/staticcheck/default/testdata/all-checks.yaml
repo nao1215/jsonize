@@ -1,0 +1,4 @@
+source: captured from staticcheck 2026.1 (v0.7.0) on Linux with LC_ALL=C, staticcheck -checks all ./... in the same module
+description: With every check enabled, ST1000 problems at line 1 column 1 appear beside the default ones.
+os: linux
+args: ["-checks", "all", "./..."]

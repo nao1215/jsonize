@@ -1,0 +1,6 @@
+source: captured from golangci-lint 2.13.2 (built with go1.26.4) on Linux with LC_ALL=C, golangci-lint run ./... with the default linters in a module written for the capture
+description: >-
+  Seven issues from four linters, each with its source line and caret,
+  and the summary with a count per linter.
+os: linux
+args: ["run", "./..."]

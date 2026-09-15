@@ -1,0 +1,30 @@
+[
+  {
+    "path": ".github/workflows/ci.yml",
+    "line": 4,
+    "column": 5,
+    "message": "unexpected key \"branchs\" for \"push\" section. expected one of \"branches\", \"branches-ignore\", \"paths\", \"paths-ignore\", \"tags\", \"tags-ignore\", \"types\", \"workflows\"",
+    "rule": "syntax-check"
+  },
+  {
+    "path": ".github/workflows/ci.yml",
+    "line": 11,
+    "column": 24,
+    "message": "\"github.event.pull_request.title\" is potentially untrusted. avoid using it directly in inline scripts. instead, pass it through an environment variable. see https://docs.github.com/en/actions/reference/security/secure-use#good-practices-for-mitigating-script-injection-attacks for more details",
+    "rule": "expression"
+  },
+  {
+    "path": ".github/workflows/ci.yml",
+    "line": 13,
+    "column": 17,
+    "message": "property \"os\" is not defined in object type {}",
+    "rule": "expression"
+  },
+  {
+    "path": ".github/workflows/ci.yml",
+    "line": 14,
+    "column": 9,
+    "message": "shellcheck reported issue in this script: SC2086:info:1:6: Double quote to prevent globbing and word splitting",
+    "rule": "shellcheck"
+  }
+]

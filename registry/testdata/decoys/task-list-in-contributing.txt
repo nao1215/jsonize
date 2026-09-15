@@ -1,0 +1,8 @@
+## Development tasks
+
+We use Task instead of make. Run task --list to see what is available;
+the one you need most is:
+
+* test:       Run unit tests with the race detector      (aliases: t)
+
+Tasks without a description are internal and may change without notice.

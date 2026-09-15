@@ -1,0 +1,6 @@
+source: captured from the same mc on Linux with LC_ALL=C and TZ Asia/Tokyo, listing a local directory made for the capture; the directory path in args shortened
+description: >-
+  A local path has no storage class; directories carry their size, one
+  of them named with a space, and a size of 0B is padded to seven columns.
+os: linux
+args: ["ls", "/tmp/mcdir"]

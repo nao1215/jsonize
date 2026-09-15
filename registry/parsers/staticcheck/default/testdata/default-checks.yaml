@@ -1,0 +1,4 @@
+source: captured from staticcheck 2026.1 (v0.7.0) on Linux with LC_ALL=C, staticcheck ./... in a module written for the capture
+description: Seven problems from the default checks, SA and S codes, in three files of two packages.
+os: linux
+args: ["./..."]

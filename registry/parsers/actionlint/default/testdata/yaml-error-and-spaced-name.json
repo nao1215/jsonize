@@ -1,0 +1,16 @@
+[
+  {
+    "path": ".github/workflows/release draft.yaml",
+    "line": 5,
+    "column": 22,
+    "message": "expecting a single ${{...}} expression or float number literal, but found plain text node",
+    "rule": "syntax-check"
+  },
+  {
+    "path": ".github/workflows/yamlerr.yml",
+    "line": 2,
+    "column": 2,
+    "message": "could not parse as YAML: did not find expected key",
+    "rule": "syntax-check"
+  }
+]

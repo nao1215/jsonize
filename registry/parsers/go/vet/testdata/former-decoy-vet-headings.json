@@ -1,0 +1,20 @@
+[
+  {
+    "path": "broken/broken.go",
+    "line": 3,
+    "column": 28,
+    "message": "cannot use \"not an int\" (untyped string constant) as int value in return statement"
+  },
+  {
+    "path": "passing/passing.go",
+    "line": 9,
+    "column": 2,
+    "message": "fmt.Printf format %d has arg name of wrong type string"
+  },
+  {
+    "path": "passing/passing_test.go",
+    "line": 14,
+    "column": 2,
+    "message": "self-assignment of got to got"
+  }
+]

@@ -1,0 +1,6 @@
+source: captured from Task 3.51.1 on Linux with LC_ALL=C, task --list on a Taskfile including another under the namespace docs
+description: >-
+  Included tasks and their aliases carry the namespace, and a description
+  written over two lines is printed on one with a blank at its end.
+os: linux
+args: ["--list"]

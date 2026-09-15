@@ -1,0 +1,4 @@
+source: captured from actionlint 1.7.12 on Linux with LC_ALL=C, actionlint -oneline on the same workflow
+description: The same four errors with -oneline, one line each and no excerpt.
+os: linux
+args: ["-oneline", ".github/workflows/ci.yml"]

@@ -1,0 +1,4 @@
+task: Available tasks for this project:
+* build:                  Build the binary into bin/
+* test:                   Run unit tests with the race detector      (aliases: t, check)
+* release:snapshot:       Make a snapshot release: no publish

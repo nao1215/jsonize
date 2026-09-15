@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/golangci-lint/text.json",
+  "title": "golangci-lint/text",
+  "description": "golangci-lint run default text output, issues and the per-linter summary",
+  "x-jsonize": {
+    "definition": "golangci-lint/text",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer"
+          },
+          "column": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "linter": {
+            "type": "string"
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "path",
+          "line",
+          "column",
+          "message",
+          "linter",
+          "source"
+        ]
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer"
+        },
+        "linters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "linter": {
+                "type": "string"
+              },
+              "count": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "linter",
+              "count"
+            ]
+          }
+        }
+      },
+      "required": [
+        "total",
+        "linters"
+      ]
+    }
+  },
+  "required": [
+    "issues",
+    "summary"
+  ]
+}

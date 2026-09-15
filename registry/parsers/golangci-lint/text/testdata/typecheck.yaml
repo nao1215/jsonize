@@ -1,0 +1,7 @@
+source: captured from golangci-lint 2.13.2 on Linux with LC_ALL=C, golangci-lint run ./... in a module with a package that does not compile
+description: >-
+  A typecheck issue whose message is the compiler output over several
+  lines is refused rather than cut into issues.
+os: linux
+args: ["run", "./..."]
+expect_error: does not describe this input

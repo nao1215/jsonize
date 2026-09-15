@@ -1,0 +1,4 @@
+source: captured from Task 3.51.1 on Linux with LC_ALL=C, task --list on a Taskfile whose one task has no description (exit status 1)
+description: The line printed in place of the list is read as a list with no tasks.
+os: linux
+args: ["--list"]

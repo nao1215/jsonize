@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/staticcheck/default.json",
+  "title": "staticcheck/default",
+  "description": "staticcheck text output, one problem per line",
+  "x-jsonize": {
+    "definition": "staticcheck/default",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string"
+      },
+      "line": {
+        "type": "integer"
+      },
+      "column": {
+        "type": "integer"
+      },
+      "message": {
+        "type": "string"
+      },
+      "rule": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "path",
+      "line",
+      "column",
+      "message",
+      "rule"
+    ]
+  }
+}

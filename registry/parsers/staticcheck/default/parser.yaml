@@ -1,0 +1,45 @@
+# `staticcheck` prints, in its default text format, one line per
+# problem on standard output: the file, the line and the column, the
+# message, and the check that found it in parentheses (`SA4006`,
+# `S1002`, `ST1000`, `QF1001`, `U1000`). The format prints no severity.
+# It writes to standard output, so `jz run staticcheck ./...` reads it.
+#
+# The file is everything before the first `:line:column: `, so a Windows
+# drive letter's colon (`C:\x.go:3:4:`) stays in the path. The message is
+# everything up to the last parenthesised check code on the line.
+#
+# A package that does not compile is reported differently: one problem
+# at the position `-`, whose message is the compiler's output over
+# several lines, the package's `# path` heading first, and the code
+# `(compile)` closing the last of those lines. The lines between are the
+# compiler's own and carry no code, so they cannot be told from problems
+# of their own, and such a run is refused rather than read as several
+# problems with the compile error cut apart.
+#
+# The signature asks that every line in the window close with a check
+# code of those five families, which is what sets this format apart
+# from go vet and from compilers printing the same position. A run with
+# nothing to report prints nothing, which jz refuses as text it cannot
+# read. `-f stylish`, `-f json` and `-f sarif` are other formats.
+format: 1
+command: staticcheck
+variant: default
+description: staticcheck text output, one problem per line
+metadata:
+  tags: [go, lint]
+  compatible: [staticcheck]
+  references:
+    - https://staticcheck.dev/docs/running-staticcheck/cli/formatters/
+detect:
+  signature:
+    all:
+      - '\A(?:^[^\n]+:\d+:\d+: [^\n]+ \((?:SA|S|ST|QF|U)\d{4}\)$\n?)+\z'
+parse:
+  type: regex
+  pattern: '^(?P<path>.+?):(?P<line>\d+):(?P<column>\d+): (?P<message>.+) \((?P<rule>(?:SA|S|ST|QF|U)\d{4})\)$'
+fields:
+  path: {required: true}
+  line: {type: int, required: true}
+  column: {type: int, required: true}
+  message: {required: true}
+  rule: {required: true}

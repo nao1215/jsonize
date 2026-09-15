@@ -1,0 +1,26 @@
+[
+  {
+    "name": "default",
+    "description": "Show the task list",
+    "aliases": [
+      "ls"
+    ]
+  },
+  {
+    "name": "fmt",
+    "description": "Format the code and tidy go.mod",
+    "aliases": null
+  },
+  {
+    "name": "docs:build",
+    "description": "Build the site",
+    "aliases": null
+  },
+  {
+    "name": "docs:serve",
+    "description": "Serve the documentation site on localhost:1313",
+    "aliases": [
+      "docs:s"
+    ]
+  }
+]
