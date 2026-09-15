@@ -1,0 +1,41 @@
+
+Aliases for \\examplehost02
+
+-------------------------------------------------------------------------------
+*Access Control Assistance Operators
+*Administrators
+*Backup Operators
+*Certificate Service DCOM Access
+*Cryptographic Operators
+*Device Owners
+*Distributed COM Users
+*Event Log Readers
+*Guests
+*Hyper-V Administrators
+*IIS_IUSRS
+*Network Configuration Operators
+*Performance Log Users
+*Performance Monitor Users
+*Power Users
+*Print Operators
+*RDS Endpoint Servers
+*RDS Management Servers
+*RDS Remote Access Servers
+*Remote Desktop Users
+*Remote Management Users
+*Replicator
+*ServiceFabricAdministrators
+*ServiceFabricAllowedUsers
+*Storage Replica Administrators
+*System Managed Accounts Group
+*Users
+The command completed successfully.
+
+
+User accounts for \\examplehost02
+
+-------------------------------------------------------------------------------
+DefaultAccount           Guest                    installer                
+user                     WDAGUtilityAccount       
+The command completed successfully.
+
