@@ -946,6 +946,12 @@ func validateStringField(v *validator, path string, f *Field) {
 		if len(u.Sequences) == 0 {
 			v.add(path+".unescape.sequences", "is required: the escapes the format writes and what each stands for")
 		}
+		if u.Quote != "" && utf8.RuneCountInString(u.Quote) != 1 {
+			v.add(path+".unescape.quote", "is one character, the one the format puts around a value it escaped")
+		}
+		if u.Quote != "" && u.When != "" {
+			v.add(path+".unescape", "quote and when both say when a value is decoded; write one of them")
+		}
 		var esc byte
 		for k := range u.Sequences {
 			if len(k) < 2 {

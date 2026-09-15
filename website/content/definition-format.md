@@ -815,7 +815,7 @@ fields:
 | `split`, `split_regex` | array | how to split; items are trimmed. A `split_regex` that matches the empty string is an error, since it would split between every character |
 | `items` | array | conversion applied to each element (arrays of arrays are not allowed) |
 | `regex` | string | the part of the value to keep: the one named group of the expression, which has to match the whole value. A value outside it is an error, and a group that takes no part leaves the value missing |
-| `unescape` | string | escapes to undo after `regex`: `sequences` maps each escape as printed to the text it stands for, and every escape begins with the same character; any other escape is an error. `when` names a group of the pattern, and the escapes are undone only on a line where that group matched some text |
+| `unescape` | string | escapes to undo after `regex`: `sequences` maps each escape as printed to the text it stands for, and every escape begins with the same character; any other escape is an error. `octal: true` also reads the escape character and three octal digits as the byte they name, and the decoded value has to be UTF-8. `when` names a group of the pattern, and the escapes are undone only on a line where that group matched some text; `quote` names the character a value is put between when it was escaped, and only such a value is decoded, without its quotes |
 | `regex`, `fields` | object | named groups become keys; `fields` converts them; the match has to cover the whole value |
 
 `regex` on a string field takes off what a command prints around a
@@ -844,9 +844,21 @@ fields:
   file: {unescape: {when: escaped, sequences: {'\\': '\', '\n': "\n", '\r': "\r"}}}
 ```
 
+git declares its escaping with quotes: a path it put in double quotes
+holds C escapes and bytes written as three octal digits, and a path
+without them is the name as it is:
+
+```yaml
+fields:
+  path: {unescape: {quote: '"', octal: true, sequences: {'\\': '\', '\"': '"', '\t': "\t", '\n': "\n"}}}
+```
+
 An escaping the text does not declare, such as a quoting style an
 option or a version chooses, is not one to decode: the same text then
-names two different files. Such a value is refused with a `regex`.
+names two different files. Such a value is refused with a `regex`. tree
+is one: tree 2 writes a space in a name as `\ ` and tree 1 prints it as
+it is, and the text does not say which printed it, so its names are kept
+as printed.
 
 There is no type that turns `955M` or `1.8T` into bytes. A size printed
 with a unit is rounded to fit the column (`df -h`, `ls -lh`, `free -h`),

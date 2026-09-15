@@ -17,6 +17,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/nao1215/jsonize/internal/yaml"
 )
@@ -685,14 +686,31 @@ type Unescape struct {
 	// whose name it escaped with a backslash in front of the checksum,
 	// and a line without it holds the name as it is.
 	When string `yaml:"when,omitempty"`
+	// Quote is the character a format puts around a value it escaped:
+	// git writes a path holding a byte it will not print in double
+	// quotes. A value between two of them has the quotes removed and is
+	// decoded; any other value is kept as it is. It is the other way to
+	// say that the text declares the escaping, beside When.
+	Quote string `yaml:"quote,omitempty"`
+	// Octal reads the escape character and three octal digits as the byte
+	// they name ("\346"), which is how git and getfacl write a byte they
+	// will not print. The bytes a value decodes to have to be UTF-8 text.
+	Octal bool `yaml:"octal,omitempty"`
 	// Sequences maps each escape, as it is written, to the text it
 	// stands for.
 	Sequences map[string]string `yaml:"sequences"`
 }
 
 // Decode replaces each escape in s. It reports false when s holds the
-// escape character where no listed escape begins.
+// escape character where no listed escape begins, or decodes to bytes
+// that are not UTF-8.
 func (u *Unescape) Decode(s string) (string, bool) {
+	if u.Quote != "" {
+		if len(s) < 2*len(u.Quote) || !strings.HasPrefix(s, u.Quote) || !strings.HasSuffix(s, u.Quote) {
+			return s, true
+		}
+		s = s[len(u.Quote) : len(s)-len(u.Quote)]
+	}
 	var esc byte
 	for k := range u.Sequences {
 		esc = k[0]
@@ -714,14 +732,26 @@ func (u *Unescape) Decode(s string) (string, bool) {
 				best = k
 			}
 		}
-		if best == "" {
-			return "", false
+		if best != "" {
+			b.WriteString(u.Sequences[best])
+			i += len(best)
+			continue
 		}
-		b.WriteString(u.Sequences[best])
-		i += len(best)
+		if u.Octal && i+3 < len(s) && isOctal(s[i+1]) && isOctal(s[i+2]) && isOctal(s[i+3]) && s[i+1] <= '3' {
+			b.WriteByte((s[i+1]-'0')<<6 | (s[i+2]-'0')<<3 | (s[i+3] - '0'))
+			i += 4
+			continue
+		}
+		return "", false
 	}
-	return b.String(), true
+	out := b.String()
+	if u.Octal && !utf8.ValidString(out) {
+		return "", false
+	}
+	return out, true
 }
+
+func isOctal(c byte) bool { return c >= '0' && c <= '7' }
 
 // EffectiveType returns the type, defaulting to string.
 func (f *Field) EffectiveType() string {
