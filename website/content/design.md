@@ -9,7 +9,10 @@ were considered and what the MVP deliberately leaves out.
 
 ## Goals
 
-- Turn command output into JSON without writing Go per command.
+- Make JSON for the next command from what a command printed, a data or
+  text file, or command-line arguments, and stop there: selecting and
+  reshaping JSON is jq's job.
+- Read a command's output without writing Go per command.
 - Make the chosen parser and the reason for choosing it visible; never
   produce plausible-looking JSON from the wrong parser.
 - Keep definitions safe to accept from third parties.
@@ -23,6 +26,9 @@ internal/cli              subcommands, flag parsing, registry layering, exit-cod
 internal/runner           exec mode: child process, LC_ALL=C, stderr passthrough, output cap, signals
 internal/conformance      golden cases, tampered fixtures and the definition/fixture cross product, shared by `go test` and `jz test`
 internal/schema           the JSON Schema of a definition's output, its validation and the compatibility rules
+internal/datafile         data and text formats read by extension or --format (JSON, JSON Lines, LTSV, YAML, text, lines, nul)
+internal/jsonbuild        jz new: the arguments planned into a document, locations checked before anything is read
+internal/yaml             the YAML reader behind definitions and YAML data files
 internal/buildinfo        the version string stamped at build time
 pkg/registry              load registry directories/FS, merge with precedence, testdata cases
 pkg/definition            YAML schema, validation, regex compilation, format checks

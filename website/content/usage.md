@@ -1,23 +1,25 @@
 ---
 title: Usage
-description: The two ways to give jz input, the options it takes, and what its exit codes mean.
+description: Where jz takes JSON from, the options it takes, and what its exit codes mean.
 toc: true
 ---
 
-## Two ways in
+## Where JSON comes from
 
 ```console
-COMMAND | jz                 # convert piped output
-jz < captured.txt            # or output captured earlier
-jz --file captured.txt
-jz --file users.csv          # a data file, read as the format its extension names
-COMMAND | jz --format yaml   # piped data, read as the format --format names
-jz run COMMAND [args...]     # let jz run the command and convert its stdout
-jz new KEY=VALUE KEY:=JSON   # make JSON from arguments
+COMMAND | jz                   # what a command printed, its format detected from the text
+jz --file captured.txt         # the same, read from a file
+jz --file users.csv            # a data file, read as the format its extension names
+COMMAND | jz --format lines    # piped data or text, read as the format --format names
+jz new KEY=VALUE KEY:=JSON     # JSON from arguments, files and standard input
+jz run COMMAND [args...]       # run a command and convert what it prints
 ```
 
-The mode is always explicit, so a pipeline behaves the same in a shell
-and in CI; only `jz` with no arguments at a terminal prints help.
+jz makes JSON for the next command and nothing else. What it reads is
+always stated by the command line, so a pipeline behaves the same in a
+shell and in CI: detection runs only on command output, a data format is
+named by an extension or `--format`, and only `jz` with no arguments at a
+terminal prints help.
 
 `jz run` hands the command your standard input, passes its standard error
 through, mirrors its exit status, and runs it with `LC_ALL=C` so the
@@ -29,24 +31,36 @@ input has no answer, since nothing identifies it.
 ## Options
 
 ```text
+Input:
   -f, --file PATH               read input from PATH instead of stdin
       --format NAME             read the input as this format: csv, tsv, ltsv, jsonl, json, yaml, text, lines, nul
+      --columns NAME,...        name the columns of a csv read without a header line
+      --type COLUMN=TYPE        convert a csv or tsv column to int, float or bool (repeatable)
+
+Output:
   -p, --pretty                  indent JSON output
-      --stream                  write each record as soon as it is read
+      --stream                  write each record as a line of JSON as soon as it is read
       --stop-on-error           end a stream at the first record that cannot be read
-      --raw                     skip the field rules and report every value as text
-      --extract KEY             keep only this key (repeatable)
-      --exclude KEY             drop this key (repeatable)
-      --assume-year YEAR        date the timestamps a format prints without a year (or "now")
-      --assume-zone ABBR=+HHMM  give a zone abbreviation an offset (repeatable)
+      --extract KEY             keep only this key of each object (repeatable)
+      --exclude KEY             drop this key from each object (repeatable)
+
+Choosing and checking the parser of command output:
       --parser NAME             restrict detection to one parser
       --variant NAME            use a variant of --parser
       --define YAML             read with a definition given here instead of a registered one
-      --columns NAME,...        name the columns of a csv read without a header line
-      --type COLUMN=TYPE        convert a csv or tsv column to int, float or bool (repeatable)
       --explain[=json]          report the chosen definition and why, on stderr
+      --raw                     show the text a definition cut, without its field rules (types, trims, null words)
+      --assume-year YEAR        date the timestamps a format prints without a year (or "now")
+      --assume-zone ABBR=+HHMM  give a zone abbreviation an offset (repeatable)
+
+Help:
   -h, --help                    show help
 ```
+
+`--format` says how the input is read; it is never about the output,
+which is JSON. `--extract` and `--exclude` keep or drop keys. The options
+under the last heading are about the parsers of command output, and a
+pipeline that reads data or makes JSON from arguments needs none of them.
 
 `jz run` adds `--env NAME=VALUE`, `--keep-locale` and `--timeout`, which
 control the command rather than the conversion. `jz list` adds `--json`,
@@ -60,180 +74,6 @@ before the input is opened or a command is started: `--pretty` with
 `--parser`, `--format` with `--parser` or `--define`, `--columns` and
 `--type` where there are no columns, and `--stop-on-error` without
 `--stream`.
-
-## The shape of the output
-
-`jz list --schema` prints what a definition produces as a JSON Schema:
-the keys, their types, which are always there, which may be null, and
-the values a key can take when the definition names them.
-
-```console
-$ jz list --schema df gnu | jq -c '.items.properties.use_percent'
-{"type":["integer","null"]}
-```
-
-The official schemas are at
-`https://nao1215.github.io/jsonize/schemas/COMMAND/VARIANT.json`, with a
-contract version in `x-jsonize.version` that goes up only for a
-[breaking change](../parsers/#what-each-definition-produces).
-
-## JSON is the only output
-
-jz writes JSON, and with `--stream` one JSON document per line. YAML is
-still read (a `.yaml` file, `--format yaml`, a definition), but `--yaml`
-as an output option was removed and is refused with exit status 2. To get
-YAML, hand the JSON to a YAML tool:
-
-```console
-$ df -h | jz | yq -P
-```
-
-## Choosing the keys
-
-`--extract` keeps the keys it names and `--exclude` drops them. Both may
-be repeated and apply to the top-level keys of every object jz prints; a
-nested value keeps whatever it holds. They cannot be combined.
-
-```console
-$ df -h | jz --extract filesystem --extract mounted_on
-[{"filesystem":"/dev/nvme0n1p2","mounted_on":"/"}, ...]
-
-$ df | jz --extract mountpoint
-jz: no key "mountpoint" in the output
-the keys it has are "1k_blocks", "available", "filesystem", "mounted_on", "use_percent", "used"
-```
-
-A key is checked against what the definition lists in `jz list --schema`,
-not against one input, so a key some records leave out, or any key of an
-empty listing, narrows to nothing. Only a key taken from the input (a
-column named by a header) is looked for in the result.
-
-## Reading a command that keeps printing
-
-`vmstat 1`, `iostat 5` and `tail -f` do not end. `--stream` writes one
-JSON document per line, each as soon as its record is complete:
-
-```console
-$ jz run --stream vmstat 1 | jq -c 'select(.id < 50)'
-$ iostat -x 5 | jz --stream
-```
-
-A table, csv, a regex matched per line, a key/value list, `records` and a
-tree stream one record at a time; a composite streams one document per
-part. A format read into one object (`each: input`, a kv map, an ini
-file) is refused with `format <id> has no streaming form` and exit
-status 2, and so is `--pretty`, which would spread a record over lines.
-
-jz chooses a definition as soon as no line still to come could change
-the choice. `vmstat 1` is decided by its two header lines, so `jz run
---stream vmstat 1` and `vmstat 1 | jz --stream` write the first sample as
-soon as it is printed. The choice waits while a later line could still
-decide it: an unanchored signature expression (`^Filesystem`, not
-`\AFilesystem`) or a `none` expression that has not matched, an
-expression on the end of the text (`\z`), or a rival that would win or
-tie if it came to fit. The wait is at most the widest signature window in
-scope (twenty lines by default, up to 200) or the end of the input, so
-piped input can wait longer than `--parser` or `jz run`. A variant with
-no signature (`--parser ls --variant names-zero`) waits for one record.
-Blank lines before the text are not counted.
-
-A table row or a regex line is complete at its line break. A `records`
-block (`iostat`, the sysstat reports) is complete when the next block
-starts or the input ends, so `iostat 1` writes a sample a second later.
-
-`--extract` and `--exclude` apply to each record. A finished record is
-not kept, so the limits bound one record, not the stream: 64 MiB for what
-is held while a record waits for its end (a fold, a block, a quoted csv
-value), 1 MiB for a single line, and 4,194,304 values.
-
-### A composite as a stream
-
-ping's header, replies and summary are one object read whole, and are
-written part by part when streamed:
-
-```console
-$ jz run --stream ping -c 2 192.0.2.1          # macOS
-{"part":"destination","value":{"name":"192.0.2.1","address":"192.0.2.1",...}}
-{"part":"replies","value":{"kind":"no_answer","error":"Request timeout","icmp_seq":0}}
-{"part":"statistics","value":{"name":"192.0.2.1","packets_transmitted":2,"packets_received":0,...}}
-```
-
-A list part (the replies) is one document per element, written when its
-line is read. A single-value part is one document, written when all its
-lines have come. `--extract` and `--exclude` name the parts:
-`--extract replies` writes the reply documents only.
-
-### A record that cannot be read
-
-Without `--stream`, a record that does not fit means nothing is written
-and the status is 3. In a stream, the record is reported on standard
-error and the ones after it are still written, for a command's output,
-a data file and `lines` or `nul` alike:
-
-```text
-jz: du/posix: line 2: expected at least 2 fields but found 1: "garbage"
-```
-
-The status is 3 at the end if anything was skipped. `--stop-on-error`
-ends the stream at that record instead: the records before it stay
-written, the failure is reported once, the status is 3, and a command
-`jz run` started is stopped.
-
-```console
-$ printf '1\nnope\n2\n' | jz --format jsonl --stream --stop-on-error
-1
-jz: jsonl: line 2: the line is not one JSON value
-```
-
-Some failures end a stream whatever the option: text whose format cannot
-be identified (exit 4, settled on the leading lines before any record is
-written), a format with no streaming form (exit 2), a record longer than
-the line limit, a `--type` column the input does not have (exit 2), a
-read error and a reader that has gone (141). After those there is no
-next record to find.
-
-When `jz run` has a failing command and a skipped record, it returns the
-command's status. The skipped records are on standard error either way.
-
-### Watching a stream for the records it left out
-
-`--explain=json` reports each record the stream leaves out as it happens,
-on its own line:
-
-```console
-$ printf 'root:x:0:0:root:/root:/bin/bash\nbroken\n' | jz --stream --explain=json --parser etc --variant passwd 2>&1 >/dev/null | sed -n 's/^jz: explain: //p'
-{"outcome":"chosen","scope":{"from":"--parser","parser":"etc","variant":"passwd",...},...}
-{"event":"skipped","definition":"etc/passwd","line":2,"reason":"expected at least 7 fields but found 1: \"broken\"","skipped":1}
-```
-
-The explanation has an `outcome` key; an event has `event`, which is
-`skipped`. `definition` is the definition the stream reads with, `line`
-the input line of the failure (`null` when it is not about one line),
-`reason` the error without the definition and line in front, cut at
-1,024 bytes and ended with `...` when cut, and `skipped` the records left
-out so far, this one included. `--explain` writes the same fact as text,
-after the ordinary diagnostic:
-
-```text
-jz: explain: skipped: a record of etc/passwd at line 2 (1 record so far): expected at least 7 fields but found 1: "broken"
-```
-
-Each explain line is a single write. In `jz run` a command that leaves a
-line unended can put its text in front of it; `sed -n 's/.*jz: explain:
-//p'` still finds the document.
-
-### A command ended before it finished
-
-With `--stream`, a command stopped by `--timeout` or a signal keeps the
-records written before the cut and loses the one it fell in. Without it
-nothing is written. The status is 128 plus the signal.
-
-An interrupt or SIGTERM that jz receives is passed on to the command,
-except Ctrl-C at a terminal: the terminal sends it to the whole
-foreground process group, so jz does not send it again. The same holds
-for `kill -INT` sent to jz alone in the foreground of a terminal; send it
-to the process group (`kill -INT -- -PGID`), or send SIGTERM, which is
-always passed on.
 
 ## Data files
 
@@ -476,208 +316,186 @@ input) is exit 2 before anything is read. An unreadable file is exit 1,
 and one that is not the format it is read as, or not UTF-8, is exit 3
 with the line.
 
-## Output jz has no definition for
+## Choosing the keys
 
-`--define` takes a definition instead of the name of one: a `parser.yaml`
-without `format`, `command`, `variant` and `detect`, so `parse` and,
-optionally, `input` and `fields`.
-
-```console
-$ sqlite3 -box app.db 'select * from users' | jz --define 'parse: {type: table, split: box}'
-$ jz --define 'parse: {type: csv, delimiter: "|"}' --file export.txt
-$ mytool --list | jz --define '
-    input: {select: {after: "^---"}}
-    parse: {type: kv, separator: ": "}'
-```
-
-Nothing is detected, and it cannot be combined with `--parser` or
-`--variant`. A body that cannot be read is exit 5 and the message names
-the key (`--define: parse.type: unknown parse type "tabel"`).
-
-The shape definitions do the same job under a name: `table`
-(`whitespace`, `aligned`, `box`), `csv` (`comma`, `tab`,
-`comma-no-header`, `tab-no-header`), `kv` (`colon`, `equals`) and `ini`
-(`default`), as in `kubectl get nodes | jz --parser table --variant
-whitespace`. Automatic detection never reaches them, and every value is
-text.
-
-### A csv without a header line
-
-`csv/comma` and `csv/tab` take the first line for the column names. A
-file with no such line (`sqlite3 -csv`, `mysql -B -N`) is read with the
-`-no-header` variants:
+`--extract` keeps the keys it names and `--exclude` drops them. Both may
+be repeated and apply to the top-level keys of every object jz prints; a
+nested value keeps whatever it holds. They cannot be combined.
 
 ```console
-$ sqlite3 -csv app.db 'select id, name from users' | jz --parser csv --variant comma-no-header --columns id,name
-[{"id":"1","name":"alice"},{"id":"2","name":"bob"}]
+$ df -h | jz --extract filesystem --extract mounted_on
+[{"filesystem":"/dev/nvme0n1p2","mounted_on":"/"}, ...]
+
+$ df | jz --extract mountpoint
+jz: no key "mountpoint" in the output
+the keys it has are "1k_blocks", "available", "filesystem", "mounted_on", "use_percent", "used"
 ```
 
-- Without `--columns` the columns are `column_1`, `column_2` and so on,
-  as many as the first record has. A `--columns` name is letters, digits
-  and `_ . : @ -`, and a name given twice is refused.
-- A record with fewer fields than columns leaves the rest `null`; one
-  with more is refused (exit 3).
-- An empty field is `""`, quoted or not. A quoted value may hold the
-  delimiter, a doubled quote or a line break.
-- `--columns` works with a variant or a `--define` that reads a csv with
-  no header line and no names of its own; anywhere else it is a usage
-  error, reported before the input is opened.
+A key is checked against what the definition lists in `jz list --schema`,
+not against one input, so a key some records leave out, or any key of an
+empty listing, narrows to nothing. Only a key taken from the input (a
+column named by a header) is looked for in the result.
 
-## HTTP headers
+## The shape of the output
 
-`curl/headers` reads each header block `curl -I` or `curl -D -` prints as
-a record:
+`jz list --schema` prints what a definition produces as a JSON Schema:
+the keys, their types, which are always there, which may be null, and
+the values a key can take when the definition names them.
 
 ```console
-$ curl -sIL https://example.com/old | jz
-[{"status":{"version":"1.1","code":301,"reason":"Moved Permanently"},"headers":[{"name":"Location","value":"https://example.com/new"}]},
- {"status":{"version":"2","code":200,"reason":null},"headers":[{"name":"set-cookie","value":"a=1"},{"name":"set-cookie","value":"b=2"}]}]
+$ jz list --schema df gnu | jq -c '.items.properties.use_percent'
+{"type":["integer","null"]}
 ```
 
-- A redirect followed with `-L`, a 1xx response and a proxy's reply to
-  CONNECT are records of their own; the last one is the final response.
-- `code` is an integer; `reason` is `null` when absent, as in HTTP/2.
-- Headers are a list in the order they came, so a repeated header is two
-  entries. Names keep their case, and values are text.
-- `-v` writes to standard error, so `curl -sIv` reads as `curl -sI`. Its
-  lines merged into the output (`--stderr -`) are refused, and so is a
-  body after the headers (`curl -i`).
+The official schemas are at
+`https://nao1215.github.io/jsonize/schemas/COMMAND/VARIANT.json`, with a
+contract version in `x-jsonize.version` that goes up only for a
+[breaking change](../parsers/#what-each-definition-produces).
 
-## Timestamps a format does not fully state
+## JSON is the only output
 
-`who`, `last` and `journalctl -o short` print `Nov  4 13:17` with no
-year, and `date`, `timedatectl` and `systemctl list-timers` name a zone
-by an abbreviation. Both stay text unless you supply the missing half:
+jz writes JSON, and with `--stream` one JSON document per line. YAML is
+still read (a `.yaml` file, `--format yaml`, a definition), but `--yaml`
+as an output option was removed and is refused with exit status 2. To get
+YAML, hand the JSON to a YAML tool:
 
 ```console
-$ who | jz --extract time
-[{"time":"Nov  4 13:17"}]
-
-$ who | jz --assume-year 2025 --extract time
-[{"time":"2025-11-04T13:17:00Z"}]
-
-$ jz run --assume-year now who
-$ jz run --assume-zone JST=+0900 --assume-zone CET=+0100 date
+$ df -h | jz | yq -P
 ```
 
-- `--assume-year` takes a four-digit year or `now`. `now` is resolved
-  once, when the command line is read, and dates each timestamp in the
-  latest year that does not put it after that moment, with a day of
-  allowance: `Dec 31` read on January 2 is last year, and `Feb 29` goes
-  back to the last year that had one.
-- `--assume-zone` takes `ABBR=+HHMM` and may be repeated.
-- An assumption no field in the chosen format asks for changes nothing
-  and is not an error.
+## Reading a command that keeps printing
 
-## Seeing what a definition extracted
-
-`--raw` skips the field rules, so each value is the text it was cut from.
+`vmstat 1`, `iostat 5` and `tail -f` do not end. `--stream` writes one
+JSON document per line, each as soon as its record is complete:
 
 ```console
-$ df -h | jz --extract use_percent
-[{"use_percent":92}]
-
-$ df -h | jz --raw --extract use_percent
-[{"use_percent":"92%"}]
+$ jz run --stream vmstat 1 | jq -c 'select(.id < 50)'
+$ iostat -x 5 | jz --stream
 ```
 
-Nothing is converted, and `trim_prefix`, `null_if`, `required` and
-`when_missing` are not applied. Every value is a string, except an empty
-aligned cell and a regex group that did not take part in the match, which
-stay null. It works with `--pretty`, `--stream`, `--extract` and
-`--exclude`, and `jz test` does not take it.
+A table, csv, a regex matched per line, a key/value list, `records` and a
+tree stream one record at a time; a composite streams one document per
+part. A format read into one object (`each: input`, a kv map, an ini
+file) is refused with `format <id> has no streaming form` and exit
+status 2, and so is `--pretty`, which would spread a record over lines.
 
-## Seeing which parser was chosen
+jz chooses a definition as soon as no line still to come could change
+the choice. `vmstat 1` is decided by its two header lines, so `jz run
+--stream vmstat 1` and `vmstat 1 | jz --stream` write the first sample as
+soon as it is printed. The choice waits while a later line could still
+decide it: an unanchored signature expression (`^Filesystem`, not
+`\AFilesystem`) or a `none` expression that has not matched, an
+expression on the end of the text (`\z`), or a rival that would win or
+tie if it came to fit. The wait is at most the widest signature window in
+scope (twenty lines by default, up to 200) or the end of the input, so
+piped input can wait longer than `--parser` or `jz run`. A variant with
+no signature (`--parser ls --variant names-zero`) waits for one record.
+Blank lines before the text are not counted.
 
-`--explain` writes on standard error which definition was chosen and why,
-one fact per line, each line opening with `jz: explain: `.
+A table row or a regex line is complete at its line break. A `records`
+block (`iostat`, the sysstat reports) is complete when the next block
+starts or the input ends, so `iostat 1` writes a sample a second later.
+
+`--extract` and `--exclude` apply to each record. A finished record is
+not kept, so the limits bound one record, not the stream: 64 MiB for what
+is held while a record waits for its end (a fold, a block, a quoted csv
+value), 1 MiB for a single line, and 4,194,304 values.
+
+### A composite as a stream
+
+ping's header, replies and summary are one object read whole, and are
+written part by part when streamed:
 
 ```console
-$ jz --explain --file df-gnu.txt
-jz: explain: chose df/gnu from embedded
-jz: explain: scope: every definition in the registry, by its signature alone
-jz: explain: matched: signature.all[0] /\A(?:df: [^\n]*\n)*Filesystem[ \t]/
-jz: explain: matched: signature.all[1] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\.../
-jz: explain: rejected: df/bsd: signature.all[1] /^Filesystem\s+512-blocks\s+Used\s+Available\s+Capa.../ did not match
-...
-jz: explain: not considered: <N> definitions only used when named
-jz: explain: read: 8 lines: 7 read, 1 left out by input.ignore[1] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$/
+$ jz run --stream ping -c 2 192.0.2.1          # macOS
+{"part":"destination","value":{"name":"192.0.2.1","address":"192.0.2.1",...}}
+{"part":"replies","value":{"kind":"no_answer","error":"Request timeout","icmp_seq":0}}
+{"part":"statistics","value":{"name":"192.0.2.1","packets_transmitted":2,"packets_received":0,...}}
 ```
 
-The first line is the outcome: `chose`, `unidentified` when no definition
-fits, `ambiguous` when several do and nothing settles it, `mismatch` when
-a named variant does not fit, `defined` for `--define`, or `empty` when
-the command `jz run` started printed nothing. Then:
+A list part (the replies) is one document per element, written when its
+line is read. A single-value part is one document, written when all its
+lines have come. `--extract` and `--exclude` name the parts:
+`--extract replies` writes the reply documents only.
 
-| Line | What it says |
-|------|--------------|
-| `scope` | which definitions were candidates, and what named them: nothing (the whole registry), `--parser`, the name of the command `jz run` started, or the path of `--file` |
-| `candidates` | when the command printed nothing, the variants its system and arguments leave; the answer is `[]` when each of them reads a list |
-| `matched` | each condition the chosen definition states and the input met |
-| `settled by` / `outranked` | when several definitions fit, the rule that chose one (the registry layering, or `detect.priority` between variants of one command) and each one it chose over |
-| `rejected` | a definition that came close and why it was ruled out |
-| `held back` | a definition whose signature fits but which is only used when named |
-| `not considered` | how many definitions are only used when named, and so took no part (`<N>` in the examples here, since it follows the registry) |
-| `read` | where the lines of the input went: read, joined by `fold`, blank, or left out by each `input.ignore` expression |
-| `command` | for `jz run`, the command and the status it gave |
+### A record that cannot be read
 
-`jz run` also says what the system and the arguments narrowed:
+Without `--stream`, a record that does not fit means nothing is written
+and the status is 3. In a stream, the record is reported on standard
+error and the ones after it are still written, for a command's output,
+a data file and `lines` or `nul` alike:
+
+```text
+jz: du/posix: line 2: expected at least 2 fields but found 1: "garbage"
+```
+
+The status is 3 at the end if anything was skipped. `--stop-on-error`
+ends the stream at that record instead: the records before it stay
+written, the failure is reported once, the status is 3, and a command
+`jz run` started is stopped.
 
 ```console
-$ jz run --explain df -h
-jz: explain: chose df/gnu-human from embedded
-jz: explain: scope: the variants of df, from the name of the command jz ran
-jz: explain: scope: narrowed by the system it ran on (linux) and its arguments (-h)
-...
-jz: explain: command: df -h (exit 0)
+$ printf '1\nnope\n2\n' | jz --format jsonl --stream --stop-on-error
+1
+jz: jsonl: line 2: the line is not one JSON value
 ```
 
-A search over the whole registry lists as `rejected` only definitions that
-got past the first expression of their signature; one scoped to a parser
-lists every variant it left out. When nothing is identified, the ordinary
-message comes first.
+Some failures end a stream whatever the option: text whose format cannot
+be identified (exit 4, settled on the leading lines before any record is
+written), a format with no streaming form (exit 2), a record longer than
+the line limit, a `--type` column the input does not have (exit 2), a
+read error and a reader that has gone (141). After those there is no
+next record to find.
 
-`--explain=json` writes the same facts as one JSON document on a single
-line that opens the same way:
+When `jz run` has a failing command and a skipped record, it returns the
+command's status. The skipped records are on standard error either way.
+
+### Watching a stream for the records it left out
+
+`--explain=json` reports each record the stream leaves out as it happens,
+on its own line:
 
 ```console
-$ jz --explain=json --file df-gnu.txt 2>&1 >/dev/null | sed -n 's/^jz: explain: //p' | jq -c '{outcome, chosen: .chosen.definition, read: .read.read}'
-{"outcome":"chosen","chosen":"df/gnu","read":8}
+$ printf 'root:x:0:0:root:/root:/bin/bash\nbroken\n' | jz --stream --explain=json --parser etc --variant passwd 2>&1 >/dev/null | sed -n 's/^jz: explain: //p'
+{"outcome":"chosen","scope":{"from":"--parser","parser":"etc","variant":"passwd",...},...}
+{"event":"skipped","definition":"etc/passwd","line":2,"reason":"expected at least 7 fields but found 1: \"broken\"","skipped":1}
 ```
 
-Every key is there whatever the outcome, `null` or empty where it does
-not apply: `outcome`, `scope` (`from`, `parser`, `variant`, `os`, `args`,
-`path`, `path_dropped`), `chosen` (`definition`, `registry`, `matched`,
-`settled_by`, `outranked`), `candidates` (the definitions an ambiguous
-input fits, or the ones an empty output was judged against), `rejected`,
-`held_back`, `not_considered`, `read` (`lines`, `read`, `folded`,
-`blank`, `ignored`, and `values`, the values a data file held), `command`
-and `error` (`message`, `exit`). For a data file `outcome` is `format`,
-`chosen.definition` names the format and `chosen.registry` what named it
-(`--format` or `extension`).
+The explanation has an `outcome` key; an event has `event`, which is
+`skipped`. `definition` is the definition the stream reads with, `line`
+the input line of the failure (`null` when it is not about one line),
+`reason` the error without the definition and line in front, cut at
+1,024 bytes and ended with `...` when cut, and `skipped` the records left
+out so far, this one included. `--explain` writes the same fact as text,
+after the ordinary diagnostic:
 
-With `--stream` the explanation is written before the first record and
-has no `read` counts; records left out later get [lines of their
-own](#watching-a-stream-for-the-records-it-left-out). `--explain`
-changes neither standard output nor the exit status, and writes no clock
-reading, so two runs over the same input explain themselves identically.
-
-## What a file path says
-
-A file has no argv, so its path is the only evidence besides the text:
-the directory names the parser and the file name the variant.
-
-```console
-$ jz --file /etc/fstab       # etc/fstab
-$ jz --file /proc/meminfo    # proc/meminfo
+```text
+jz: explain: skipped: a record of etc/passwd at line 2 (1 record so far): expected at least 7 fields but found 1: "broken"
 ```
 
-- The pair has to exist; `/etc` works because a parser named `etc` does.
-  This reaches `auto_detect: false` formats such as fstab without naming.
-- The definition still has to fit and read the text. If not, the path is
-  dropped and the text is detected on its own.
-- A name with a dot in it (`fstab.txt`) is ignored, and a path never
-  names a shape definition.
+Each explain line is a single write. In `jz run` a command that leaves a
+line unended can put its text in front of it; `sed -n 's/.*jz: explain:
+//p'` still finds the document.
+
+### A command ended before it finished
+
+With `--stream`, a command stopped by `--timeout` or a signal keeps the
+records written before the cut and loses the one it fell in. Without it
+nothing is written. The status is 128 plus the signal.
+
+An interrupt or SIGTERM that jz receives is passed on to the command,
+except Ctrl-C at a terminal: the terminal sends it to the whole
+foreground process group, so jz does not send it again. The same holds
+for `kill -INT` sent to jz alone in the foreground of a terminal; send it
+to the process group (`kill -INT -- -PGID`), or send SIGTERM, which is
+always passed on.
+
+## Parsers of command output
+
+The rest of this page is about how jz reads what a command printed: how
+a definition is chosen, how to name one, how to read output no definition
+describes, and how to check a definition of your own. Reading data files
+and making JSON from arguments needs none of it.
 
 ## Naming a parser
 
@@ -762,6 +580,214 @@ $ cat /proc/meminfo | jz
 - `/proc/uptime` fits any pair of numbers, so it has to be named:
   `jz --parser proc --variant uptime < /proc/uptime`.
 
+## Output jz has no definition for
+
+`--define` takes a definition instead of the name of one: a `parser.yaml`
+without `format`, `command`, `variant` and `detect`, so `parse` and,
+optionally, `input` and `fields`.
+
+```console
+$ sqlite3 -box app.db 'select * from users' | jz --define 'parse: {type: table, split: box}'
+$ jz --define 'parse: {type: csv, delimiter: "|"}' --file export.txt
+$ mytool --list | jz --define '
+    input: {select: {after: "^---"}}
+    parse: {type: kv, separator: ": "}'
+```
+
+Nothing is detected, and it cannot be combined with `--parser` or
+`--variant`. A body that cannot be read is exit 5 and the message names
+the key (`--define: parse.type: unknown parse type "tabel"`).
+
+The shape definitions do the same job under a name: `table`
+(`whitespace`, `aligned`, `box`), `csv` (`comma`, `tab`,
+`comma-no-header`, `tab-no-header`), `kv` (`colon`, `equals`) and `ini`
+(`default`), as in `kubectl get nodes | jz --parser table --variant
+whitespace`. Automatic detection never reaches them, and every value is
+text.
+
+### A csv without a header line
+
+`csv/comma` and `csv/tab` take the first line for the column names. A
+file with no such line (`sqlite3 -csv`, `mysql -B -N`) is read with the
+`-no-header` variants:
+
+```console
+$ sqlite3 -csv app.db 'select id, name from users' | jz --parser csv --variant comma-no-header --columns id,name
+[{"id":"1","name":"alice"},{"id":"2","name":"bob"}]
+```
+
+- Without `--columns` the columns are `column_1`, `column_2` and so on,
+  as many as the first record has. A `--columns` name is letters, digits
+  and `_ . : @ -`, and a name given twice is refused.
+- A record with fewer fields than columns leaves the rest `null`; one
+  with more is refused (exit 3).
+- An empty field is `""`, quoted or not. A quoted value may hold the
+  delimiter, a doubled quote or a line break.
+- `--columns` works with a variant or a `--define` that reads a csv with
+  no header line and no names of its own; anywhere else it is a usage
+  error, reported before the input is opened.
+
+## Seeing which parser was chosen
+
+`--explain` writes on standard error which definition was chosen and why,
+one fact per line, each line opening with `jz: explain: `.
+
+```console
+$ jz --explain --file df-gnu.txt
+jz: explain: chose df/gnu from embedded
+jz: explain: scope: every definition in the registry, by its signature alone
+jz: explain: matched: signature.all[0] /\A(?:df: [^\n]*\n)*Filesystem[ \t]/
+jz: explain: matched: signature.all[1] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\.../
+jz: explain: rejected: df/bsd: signature.all[1] /^Filesystem\s+512-blocks\s+Used\s+Available\s+Capa.../ did not match
+...
+jz: explain: not considered: <N> definitions only used when named
+jz: explain: read: 8 lines: 7 read, 1 left out by input.ignore[1] /^Filesystem\s+1K-blocks\s+Used\s+Available\s+Use%\s+Mounted on\s*$/
+```
+
+The first line is the outcome: `chose`, `unidentified` when no definition
+fits, `ambiguous` when several do and nothing settles it, `mismatch` when
+a named variant does not fit, `defined` for `--define`, or `empty` when
+the command `jz run` started printed nothing. Then:
+
+| Line | What it says |
+|------|--------------|
+| `scope` | which definitions were candidates, and what named them: nothing (the whole registry), `--parser`, the name of the command `jz run` started, or the path of `--file` |
+| `candidates` | when the command printed nothing, the variants its system and arguments leave; the answer is `[]` when each of them reads a list |
+| `matched` | each condition the chosen definition states and the input met |
+| `settled by` / `outranked` | when several definitions fit, the rule that chose one (the registry layering, or `detect.priority` between variants of one command) and each one it chose over |
+| `rejected` | a definition that came close and why it was ruled out |
+| `held back` | a definition whose signature fits but which is only used when named |
+| `not considered` | how many definitions are only used when named, and so took no part (`<N>` in the examples here, since it follows the registry) |
+| `read` | where the lines of the input went: read, joined by `fold`, blank, or left out by each `input.ignore` expression |
+| `command` | for `jz run`, the command and the status it gave |
+
+`jz run` also says what the system and the arguments narrowed:
+
+```console
+$ jz run --explain df -h
+jz: explain: chose df/gnu-human from embedded
+jz: explain: scope: the variants of df, from the name of the command jz ran
+jz: explain: scope: narrowed by the system it ran on (linux) and its arguments (-h)
+...
+jz: explain: command: df -h (exit 0)
+```
+
+A search over the whole registry lists as `rejected` only definitions that
+got past the first expression of their signature; one scoped to a parser
+lists every variant it left out. When nothing is identified, the ordinary
+message comes first.
+
+`--explain=json` writes the same facts as one JSON document on a single
+line that opens the same way:
+
+```console
+$ jz --explain=json --file df-gnu.txt 2>&1 >/dev/null | sed -n 's/^jz: explain: //p' | jq -c '{outcome, chosen: .chosen.definition, read: .read.read}'
+{"outcome":"chosen","chosen":"df/gnu","read":7}
+```
+
+Every key is there whatever the outcome, `null` or empty where it does
+not apply: `outcome`, `scope` (`from`, `parser`, `variant`, `os`, `args`,
+`path`, `path_dropped`), `chosen` (`definition`, `registry`, `matched`,
+`settled_by`, `outranked`), `candidates` (the definitions an ambiguous
+input fits, or the ones an empty output was judged against), `rejected`,
+`held_back`, `not_considered`, `read` (`lines`, `read`, `folded`,
+`blank`, `ignored`, and `values`, the values a data file held), `command`
+and `error` (`message`, `exit`). For a data file `outcome` is `format`,
+`chosen.definition` names the format and `chosen.registry` what named it
+(`--format` or `extension`).
+
+With `--stream` the explanation is written before the first record and
+has no `read` counts; records left out later get [lines of their
+own](#watching-a-stream-for-the-records-it-left-out). `--explain`
+changes neither standard output nor the exit status, and writes no clock
+reading, so two runs over the same input explain themselves identically.
+
+## Seeing what a definition extracted
+
+`--raw` is for writing or checking a definition. It reads the input with
+the chosen definition but leaves out every field rule, so each value is
+the text the definition cut, before it was typed, trimmed, turned into
+null or required. It is not a way to get strings instead of numbers in a
+pipeline: the shape of a raw record is not the published schema.
+
+```console
+$ df -h | jz --extract use_percent
+[{"use_percent":92}]
+
+$ df -h | jz --raw --extract use_percent
+[{"use_percent":"92%"}]
+```
+
+The rules left out are all of a field's: `type` and its layouts,
+`trim_prefix` and `trim_suffix`, `null_if`, `required`, `when_missing`,
+a string field's `regex` and `unescape`. Every value is a string, except an empty
+aligned cell and a regex group that did not take part in the match, which
+stay null. It works with `--pretty`, `--stream`, `--extract` and
+`--exclude`, and `jz test` does not take it.
+
+## HTTP headers
+
+`curl/headers` reads each header block `curl -I` or `curl -D -` prints as
+a record:
+
+```console
+$ curl -sIL https://example.com/old | jz
+[{"status":{"version":"1.1","code":301,"reason":"Moved Permanently"},"headers":[{"name":"Location","value":"https://example.com/new"}]},
+ {"status":{"version":"2","code":200,"reason":null},"headers":[{"name":"set-cookie","value":"a=1"},{"name":"set-cookie","value":"b=2"}]}]
+```
+
+- A redirect followed with `-L`, a 1xx response and a proxy's reply to
+  CONNECT are records of their own; the last one is the final response.
+- `code` is an integer; `reason` is `null` when absent, as in HTTP/2.
+- Headers are a list in the order they came, so a repeated header is two
+  entries. Names keep their case, and values are text.
+- `-v` writes to standard error, so `curl -sIv` reads as `curl -sI`. Its
+  lines merged into the output (`--stderr -`) are refused, and so is a
+  body after the headers (`curl -i`).
+
+## Timestamps a format does not fully state
+
+`who`, `last` and `journalctl -o short` print `Nov  4 13:17` with no
+year, and `date`, `timedatectl` and `systemctl list-timers` name a zone
+by an abbreviation. Both stay text unless you supply the missing half:
+
+```console
+$ who | jz --extract time
+[{"time":"Nov  4 13:17"}]
+
+$ who | jz --assume-year 2025 --extract time
+[{"time":"2025-11-04T13:17:00Z"}]
+
+$ jz run --assume-year now who
+$ jz run --assume-zone JST=+0900 --assume-zone CET=+0100 date
+```
+
+- `--assume-year` takes a four-digit year or `now`. `now` is resolved
+  once, when the command line is read, and dates each timestamp in the
+  latest year that does not put it after that moment, with a day of
+  allowance: `Dec 31` read on January 2 is last year, and `Feb 29` goes
+  back to the last year that had one.
+- `--assume-zone` takes `ABBR=+HHMM` and may be repeated.
+- An assumption no field in the chosen format asks for changes nothing
+  and is not an error.
+
+## What a file path says
+
+A file has no argv, so its path is the only evidence besides the text:
+the directory names the parser and the file name the variant.
+
+```console
+$ jz --file /etc/fstab       # etc/fstab
+$ jz --file /proc/meminfo    # proc/meminfo
+```
+
+- The pair has to exist; `/etc` works because a parser named `etc` does.
+  This reaches `auto_detect: false` formats such as fstab without naming.
+- The definition still has to fit and read the text. If not, the path is
+  dropped and the text is detected on its own.
+- A name with a dot in it (`fstab.txt`) is ignored, and a path never
+  names a shape definition.
+
 ## Where jz stops and the command begins
 
 Everything from the command name onwards belongs to the command, so its
@@ -797,23 +823,6 @@ it writes to the user registry and says where. Failures go to standard
 error, followed by `N passed, M failed`. The exit status is 0 when
 everything passed, 1 when something failed, 2 for a usage error and 5
 when a registry could not be read.
-
-## Exit codes
-
-| Code | Meaning |
-|------|---------|
-| 0 | success |
-| 1 | unexpected failure (I/O, internal) |
-| 2 | usage error |
-| 3 | the input did not match the chosen definition, held text the definition did not read, or yields more than 4,194,304 values, which is more than one document holds |
-| 4 | the format could not be identified, several matched, or a named one did not fit |
-| 5 | a registry could not be loaded |
-| 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |
-| *n* | `jz run` mirrors the command's own non-zero status, or 128+signal when it was killed |
-
-Diagnostics go to standard error with a `jz:` prefix. Without `--stream`
-a parse error leaves standard output empty. An output error, such as a
-full disk, can interrupt a write in either mode.
 
 ## Registries
 
@@ -854,3 +863,19 @@ that all fit, the one from the earlier registry wins, so a definition of
 your own can take over a format jz already reads. Two definitions of the
 same registry that both fit stay an error naming them; `jz test` reports
 those. The reasoning behind these rules is in [Design](../design/).
+## Exit codes
+
+| Code | Meaning |
+|------|---------|
+| 0 | success |
+| 1 | unexpected failure (I/O, internal) |
+| 2 | usage error |
+| 3 | the input did not match the chosen definition, held text the definition did not read, or yields more than 4,194,304 values, which is more than one document holds |
+| 4 | the format could not be identified, several matched, or a named one did not fit |
+| 5 | a registry could not be loaded |
+| 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |
+| *n* | `jz run` mirrors the command's own non-zero status, or 128+signal when it was killed |
+
+Diagnostics go to standard error with a `jz:` prefix. Without `--stream`
+a parse error leaves standard output empty. An output error, such as a
+full disk, can interrupt a write in either mode.
