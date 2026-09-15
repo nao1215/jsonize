@@ -1,0 +1,7 @@
+description: >
+  --tag --zero ends each line with NUL instead of a newline and escapes
+  no name. Text with NUL in it is refused rather than read as one line.
+source: captured on Ubuntu 26.04 with GNU coreutils 9.7 (gnusha256sum), LC_ALL=C sha256sum --tag --zero over files made for the fixture
+os: linux
+args: [--tag, --zero, plain.txt, "back\\slash.txt"]
+expect_error: NUL

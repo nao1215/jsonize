@@ -1,0 +1,24 @@
+[
+  {
+    "algorithm": "SHA256",
+    "file": "plain.txt",
+    "checksum": "5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+  },
+  {
+    "algorithm": "SHA256",
+    "file": "with space.txt",
+    "checksum": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac"
+  },
+  {
+    "escaped": true,
+    "algorithm": "SHA256",
+    "file": "back\\slash.txt",
+    "checksum": "3bb2abb69ebb27fbfe63c7639624c6ec5e331b841a5bc8c3ebc10b9285e90877"
+  },
+  {
+    "escaped": true,
+    "algorithm": "SHA256",
+    "file": "new\nline.txt",
+    "checksum": "c865f6c5ab8d1b0bcd383a5e1e3879d22681c96bf462c269b7581d523fbe70ab"
+  }
+]

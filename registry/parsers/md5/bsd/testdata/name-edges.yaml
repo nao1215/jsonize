@@ -1,0 +1,9 @@
+description: >
+  Six names printed as they are or escaped: one beginning with a space,
+  one holding ") = " (the name runs to the last one), one with a double
+  quote, one with a backslash and an n (not a newline; marked and
+  doubled), one with a tab (printed as it is, unmarked) and one with a
+  carriage return (marked and escaped).
+source: captured on Ubuntu 26.04 with GNU coreutils 9.7 (gnusha256sum), LC_ALL=C sha256sum --tag over files made for the fixture
+os: linux
+args: [--tag, " lead", "paren) = x", 'quo"te', 'lit\nname', "ta\tb.txt", "c\rr.txt"]

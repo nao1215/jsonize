@@ -1,0 +1,6 @@
+description: >
+  Standard input is named "-", here in one run with a file whose name
+  is escaped.
+source: captured on Ubuntu 26.04 with GNU coreutils 9.7 (gnusha256sum), printf 'hello\n' | LC_ALL=C sha256sum --tag - over a file made for the fixture
+os: linux
+args: [--tag, "-", "back\\slash.txt"]
