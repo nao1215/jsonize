@@ -175,7 +175,6 @@ func (a *app) usage(w io.Writer) {
 	fmt.Fprintln(w, "  df -h | jz")
 	fmt.Fprintln(w, "  jz run df -h")
 	fmt.Fprintln(w, "  vmstat 1 | jz --stream")
-	fmt.Fprintln(w, "  df -h | jz --yaml")
 	fmt.Fprintln(w, "  jz --file captured.txt")
 	fmt.Fprintln(w, "  jz --file users.csv")
 	fmt.Fprintln(w, "  cat events.log | jz --format ltsv --stream")

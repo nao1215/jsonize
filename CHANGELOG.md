@@ -4,6 +4,19 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Removed
+
+- Breaking: `--yaml`, which wrote the output as YAML, is gone from the
+  default mode, `jz run` and `jz new`. jz writes JSON only, and a command
+  line that still passes `--yaml` is refused with exit status 2 and a
+  message saying so, before anything is read or run. To keep getting
+  YAML, pipe the JSON to a YAML tool: `df -h | jz | yq -P`. With
+  `--stream`, read the JSON Lines one document at a time. Reading YAML is
+  unchanged: a `.yaml` or `.yml` file, `--format yaml`, `jz new
+  key:=@file.yaml` and definitions written in YAML all work as before.
+
 ## [0.3.0]
 
 jz makes JSON from more than command output: from data files (CSV, TSV,

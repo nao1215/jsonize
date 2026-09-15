@@ -208,13 +208,6 @@ func TestStreamComposite(t *testing.T) {
 	if got := strings.Join(parts, ","); got != "destination,replies,replies,statistics" {
 		t.Errorf("parts = %s", got)
 	}
-	// The same documents with --yaml, one per record.
-	if code := h.pipe(ping, "--stream", "--yaml"); code != ExitOK {
-		t.Fatalf("--yaml: code=%d stderr=%s", code, h.stderr.String())
-	}
-	if n := strings.Count(h.stdout.String(), "---\npart: "); n != 4 {
-		t.Errorf("%d YAML documents:\n%s", n, h.stdout.String())
-	}
 	if code := h.pipe(ping, "--stream", "--extract", "replies"); code != ExitOK {
 		t.Fatalf("extract: code=%d stderr=%s", code, h.stderr.String())
 	}

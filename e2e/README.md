@@ -21,7 +21,7 @@ Linux one.
 | `cookbook` | all, `jz run` not on Windows | every recipe of the site's cookbook, one scenario named after each section; `TestCookbookRecipesAreRun` fails when a recipe has no scenario |
 | `new` | all | `jz new`: strings, JSON values, arrays with `[]`, files and standard input as values, a data file read by its extension, and the arguments refused before anything is read |
 | `datafile` | all | data files read as the format their extension names (csv, tsv, ltsv, JSON Lines, JSON, YAML, gzip and bzip2), piped data read as `--format` names, the line a reading stops at, and the option pairs that are refused |
-| `stream` | all | `--stream` writes one document per record and keeps what was written when a later record fails; a composite part by part; `--yaml` alone and with `--stream` |
+| `stream` | all | `--stream` writes one document per record and keeps what was written when a later record fails; a composite part by part |
 | `http` | all, HTTP/2 not on Windows | `jz run curl -I` and `-D -` against `e2ehelper serve` on 127.0.0.1: redirects, interim responses, a proxy's CONNECT, repeated headers |
 | `completion` | all, zsh not on Windows | the bash and zsh scripts loaded into the real shell: subcommands, options, parsers of every registry, variants, paths, nothing run |
 | `process` | all, part POSIX | what `jz run` does when the reader leaves, when it is interrupted, when `--timeout` passes: no hang, no process left behind, the status the shell sees; Ctrl-C typed at a terminal (a pty) reaching the command once |

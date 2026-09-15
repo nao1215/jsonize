@@ -13,10 +13,10 @@ so the output shown is what jz prints.
 | I want to | Go to |
 |-----------|-------|
 | turn a command's output into JSON | [Convert what a command printed](#convert-what-a-command-printed), [Let jz run the command](#let-jz-run-the-command) |
-| shape what comes out | [Keep only the keys you need](#keep-only-the-keys-you-need), [Write YAML instead of JSON](#write-yaml-instead-of-json) |
+| shape what comes out | [Keep only the keys you need](#keep-only-the-keys-you-need) |
 | read a command that never stops | [Follow a command that keeps printing](#follow-a-command-that-keeps-printing) |
 | understand or override detection | [See which parser jz chose](#see-which-parser-jz-chose), [Name the parser when detection refuses](#name-the-parser-when-detection-refuses), [Read output jz has no parser for](#read-output-jz-has-no-parser-for) |
-| convert a data file | [Convert a CSV file](#convert-a-csv-file), [Read a CSV without a header line](#read-a-csv-without-a-header-line), [Convert YAML to JSON](#convert-yaml-to-json), [Convert JSON to YAML](#convert-json-to-yaml), [Read compressed JSON Lines logs](#read-compressed-json-lines-logs), [Read LTSV access logs](#read-ltsv-access-logs) |
+| convert a data file | [Convert a CSV file](#convert-a-csv-file), [Read a CSV without a header line](#read-a-csv-without-a-header-line), [Convert YAML to JSON](#convert-yaml-to-json), [Read compressed JSON Lines logs](#read-compressed-json-lines-logs), [Read LTSV access logs](#read-ltsv-access-logs) |
 | make JSON in a script | [Build a JSON body for an API call](#build-a-json-body-for-an-api-call), [Put a file's contents into JSON](#put-a-files-contents-into-json), [Make a JSON array](#make-a-json-array) |
 | use jz in CI | [Fail a CI step when jz cannot read the output](#fail-a-ci-step-when-jz-cannot-read-the-output), [Get the JSON Schema of an output](#get-the-json-schema-of-an-output) |
 | read a format jz does not know | [Add a parser of your own](#add-a-parser-of-your-own) |
@@ -52,24 +52,6 @@ output does not have is exit 2, so a typo cannot pass as an empty result.
 ```console
 $ df -h | jz --extract mounted_on --extract use_percent
 [{"use_percent":92,"mounted_on":"/"},{"use_percent":1,"mounted_on":"/tmp"}]
-```
-
-## Write YAML instead of JSON
-
-```console
-$ df -h | jz --yaml
-- filesystem: /dev/nvme0n1p2
-  size: "1.8T"
-  used: "1.6T"
-  available: "145G"
-  use_percent: 92
-  mounted_on: /
-- filesystem: tmpfs
-  size: "7.8G"
-  used: "4.0K"
-  available: "7.8G"
-  use_percent: 1
-  mounted_on: /tmp
 ```
 
 ## Follow a command that keeps printing
@@ -151,19 +133,6 @@ $ cat deploy.yaml | jz --format yaml
 
 A bare `3` is a number and a quoted `"1.4"` a string, as YAML 1.2 types
 them. Input from a pipe needs `--format`.
-
-## Convert JSON to YAML
-
-Key order and number literals are kept.
-
-```console
-$ jz --file release.json --yaml
-tag_name: v0.2.0
-draft: false
-assets:
-  - name: jz_linux_amd64.tar.gz
-    size: 4812345
-```
 
 ## Read compressed JSON Lines logs
 

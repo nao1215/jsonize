@@ -85,7 +85,6 @@ Options:
   -f, --file PATH               read input from PATH instead of stdin
       --format NAME             read a data file of this format: csv, tsv, ltsv, jsonl, json, yaml
   -p, --pretty                  indent JSON output
-      --yaml                    write YAML instead of JSON
       --stream                  write each record as soon as it is read
       --raw                     skip the field rules and report every value as text
       --extract KEY             keep only this key (repeatable)
@@ -219,8 +218,8 @@ to parse it. The embedded registry is available from
 | *n* | `jz run` mirrors the command's own status, or 128+signal |
 
 Diagnostics go to standard error. By default, parsing finishes before
-JSON is written, so a parse error leaves standard output empty. `--yaml`
-writes YAML instead. With `--stream`, records already written remain
+JSON is written, so a parse error leaves standard output empty. jz writes
+JSON only. With `--stream`, records already written remain
 when a later record fails; check the exit status for skipped records.
 
 ## Development

@@ -84,14 +84,15 @@ may contain a line break, an ini file is sections rather than lines, and
 a drawn table marks its rows with rules. That is the test a ninth would
 have to pass.
 
-### The document formats stay out
+### Data files are read by extension, not detected
 
-XML, YAML, TOML, plist, x509 and JWT are not what commands print, and
-each already has a tool whose whole job is that format: `yq`,
-`openssl x509 -text`, `plutil`. A converter for command output that also
-half-read six document formats would be worse at both jobs, and the
-half-reading is what it would be: those formats have specifications, and
-matching one is a project rather than a parse type.
+A CSV, TSV, LTSV, JSON Lines, JSON or YAML file is read as the format
+its extension or `--format` names, by a reader of that format rather
+than by a definition, and nothing is guessed from the text. These are
+the files a pipeline hands on, and turning them into JSON is the same
+job as turning a command's output into JSON. XML, TOML, plist, x509 and
+JWT stay out: each has a specification that makes reading it a project
+of its own, and a tool whose whole job is that format.
 
 ### Table splitting
 
@@ -369,20 +370,16 @@ name and return it with status 0. So such a variant is reached only by
 naming it (`--variant names`), or by `jz run`, where the arguments have
 already ruled out the options that put more than a name on a line.
 
-### YAML is a second spelling, not a second contract
+### JSON is the only output
 
-`--yaml` writes the values the JSON carries and nothing else, so the
-schemas describe it too and no definition knows it exists. What YAML adds
-is ambiguity: an unquoted scalar is typed by how it looks, and YAML 1.1
-and 1.2 readers disagree about `yes`, `on`, `1:20`, `2026-09-11` and
-`0o17`. A string is therefore written plain only when it begins with a
-letter, `_` or `/` and holds nothing a reader of either version could
-take for another type, and is double-quoted otherwise; a decimal always
-carries a decimal point. That quotes more than YAML strictly needs
-(`"1.8T"`, `"1k_blocks"`), which is the price of a document that means
-the same thing to every reader. The encoder is a small one in
-`internal/yamlout` rather than a YAML library's marshaller, because the
-quoting rule is the whole point and a library's rule is its own.
+jz is the step of a pipeline that makes JSON for the next one, so the
+output has one form and one contract, the schemas under `registry/schemas`.
+An earlier `--yaml` wrote the same values as YAML, and most of what it
+needed was a quoting rule, because YAML 1.1 and 1.2 readers type `yes`,
+`1:20` and `2026-09-11` differently. It was removed: a second output
+format doubled what every output option had to be tested against, and a
+YAML tool reading jz's JSON gets the same values without jz choosing how
+to quote them. `--yaml` is refused with a message that says so.
 
 ### Signatures say what a format is
 
@@ -886,8 +883,8 @@ reads block and flow mappings and sequences, plain, quoted and block
 scalars, comments and one document per file, and refuses anchors,
 aliases, tags and keys that are not one scalar with a message that names
 them. Before the YAML library was dropped, the reader was held to the
-same values over every file in the registry, and the round-trip tests
-hold it to the YAML jz writes. A golden failure shows the two texts.
+same values over every file in the registry. A golden failure shows the
+two texts.
 
 No JSON Schema library: the generator emits a small subset of draft
 2020-12, and a validator for exactly that subset is shorter than the

@@ -128,7 +128,7 @@ func shellWords(line string) ([]string, error) {
 }
 
 // jzInvocations returns the argument lists of every jz command in a shell
-// line: `df -h | jz --yaml` holds one, `jz new a=1 | curl -d @-` holds one.
+// line: `df -h | jz --pretty` holds one, `jz new a=1 | curl -d @-` holds one.
 // A redirection's target after > or < is not a command.
 func jzInvocations(line string) ([][]string, error) {
 	words, err := shellWords(line)

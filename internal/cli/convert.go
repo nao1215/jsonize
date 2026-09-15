@@ -35,7 +35,6 @@ compressed as .gz or .bz2. Input from a pipe is read as a data file when
   df -h | jz --parser df --variant gnu-human
   vmstat 1 | jz --stream               # one JSON document per line
   curl -sIL https://example.com | jz   # one record per response
-  df -h | jz --yaml                    # the same values as YAML
   jz --parser csv --variant comma-no-header --columns id,name --file rows.csv
   jz --file users.csv                  # one object per row, keys from the header
   jz --file events.jsonl.gz --stream   # a data file, decompressed, record by record

@@ -79,14 +79,6 @@ scenarios:
           stdout:
             equals: |
               [{"replicas":3,"image":"1.2"},"1.4.0","plain"]
-      - run:
-          command: jz new --yaml name=api replicas:=3
-      - assert:
-          exit_code: 0
-          stdout:
-            equals: |
-              name: api
-              replicas: 3
 
   - name: arguments that do not say what JSON to make are refused before anything is read
     steps:

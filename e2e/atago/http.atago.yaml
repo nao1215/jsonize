@@ -153,7 +153,7 @@ scenarios:
               - { path: "$[1].headers[2].name", equals: set-cookie }
               - { path: "$[1].headers[3].name", equals: set-cookie }
 
-  - name: headers saved by curl are read from the file on any system, and as YAML
+  - name: headers saved by curl are read from the file on any system
     services:
       - name: server
         command: e2ehelper serve -addr ${workdir}/addr.txt
@@ -173,12 +173,9 @@ scenarios:
             json:
               - { path: "$", length: 2 }
               - { path: "$[1].status.code", equals: 200 }
-      - run:
-          command: jz --yaml --file ${workdir}/headers.txt
       - assert:
-          exit_code: 0
           stdout:
-            yaml:
+            json:
               - { path: "$[0].status.code", equals: 301 }
               - { path: "$[1].headers[3].value", equals: "session=abc123; Path=/; HttpOnly" }
       # -D - writes the headers of a GET the same way.

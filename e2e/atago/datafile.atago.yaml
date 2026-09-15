@@ -81,16 +81,6 @@ scenarios:
           stdout:
             equals: |
               {"name":"api","replicas":3,"debug":false,"image":"1.2","ports":[80,443],"limits":{"memory":"512Mi"},"owner":null}
-      - run:
-          command: jz --file ${workdir}/release.json --yaml
-      - assert:
-          exit_code: 0
-          stdout:
-            equals: |
-              version: "0.2.0"
-              id: 12345678901234567890
-              ratio: 2.50
-              assets: []
 
   - name: json lines and ltsv are lists of records, streamed with --stream, and a compressed file is read through its compression
     steps:
