@@ -297,14 +297,14 @@ Where both read a text, the differences worth knowing are these.
 Formats jc reads that jz does not, and which stay out of scope for now:
 shell and string values (`jwt`, `url`, `semver`, `path`, `timestamp`,
 `email_address`), structured file formats that already have readers
-everywhere (`xml`, `yaml`, `toml`, `plist`, `x509_*`), and a set of
+everywhere (`xml`, `toml`, `plist`, `x509_*`; jz reads `yaml`, `json`,
+`csv` and `jsonl` files as data, by extension), and a set of
 commands with no definition here yet (`traceroute`, `iptables`,
 `iwconfig`, `dmidecode`, `mdadm`, `ntpq`, `find`, `finger`, `rpm -qi`,
 `tune2fs`, `ufw`, `zpool status`, `zpool iostat`, `net user`, `net localgroup`, `dir`). The
 string and file formats are a different job from reading what a command
-printed: a JWT or a URL is not a command's output, and `jq`, a YAML
-reader or an XML reader is the tool for a file that already has a
-grammar. Adding them would make the count of formats larger without
+printed: a JWT or a URL is not a command's output, and an XML or TOML
+reader is the tool for a file that already has a grammar. Adding them would make the count of formats larger without
 making the thing jz is for any better, which is why they are listed here
 rather than written.
 

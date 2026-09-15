@@ -32,7 +32,6 @@ input has no answer, since nothing identifies it.
   -f, --file PATH               read input from PATH instead of stdin
       --format NAME             read a data file of this format: csv, tsv, ltsv, jsonl, json, yaml
   -p, --pretty                  indent JSON output
-      --yaml                    write YAML instead of JSON
       --stream                  write each record as soon as it is read
       --raw                     skip the field rules and report every value as text
       --extract KEY             keep only this key (repeatable)
@@ -55,7 +54,7 @@ control the command rather than the conversion. `jz list` adds `--json`,
 
 Options that state two answers at once are refused with exit status 2
 before the input is opened or a command is started: `--pretty` with
-`--stream` or `--yaml`, `--extract` with `--exclude`, `--define` with
+`--stream`, `--extract` with `--exclude`, `--define` with
 `--parser`, `--format` with `--parser` or `--define`, and `--columns`
 where there are no columns to name.
 
@@ -75,43 +74,15 @@ The official schemas are at
 contract version in `x-jsonize.version` that goes up only for a
 [breaking change](../parsers/#what-each-definition-produces).
 
-## YAML instead of JSON
+## JSON is the only output
 
-`--yaml` writes the same values as YAML, and the same schema describes
-both.
-
-```console
-$ df -h | jz --yaml
-- filesystem: /dev/nvme0n1p2
-  size: "1.8T"
-  used: "1.6T"
-  available: "145G"
-  use_percent: 92
-  mounted_on: /
-```
-
-- Keys keep the JSON order; empty objects and lists are `{}` and `[]`.
-- A decimal always has a decimal point (`100.0`, `1.0e+21`), and a value
-  that is not a finite number is refused.
-- A string or key is unquoted only when no YAML 1.1 or 1.2 reader could
-  take it for anything else. Anything that could be a number, date,
-  time, boolean (`yes`, `no`, `on`, `off`), null (`~`), indicator or
-  comment, or that has a line break or a space at either end, is
-  double-quoted: `"1.8T"`, `"007"`, `"yes"`, `"12:30:45"`, `" leading"`.
-- `--yaml --pretty` is refused with exit status 2. `--explain=json` still
-  writes JSON on standard error.
-- With `--stream`, each record is a document that opens with `---` and
-  closes with `...`, written with the record, so a reader knows the
-  record is whole without waiting for the next one:
+jz writes JSON, and with `--stream` one JSON document per line. YAML is
+still read (a `.yaml` file, `--format yaml`, a definition), but `--yaml`
+as an output option was removed and is refused with exit status 2. To get
+YAML, hand the JSON to a YAML tool:
 
 ```console
-$ jz run --stream --yaml ls -1
----
-name: a b.txt
-...
----
-name: notes
-...
+$ df -h | jz | yq -P
 ```
 
 ## Choosing the keys
@@ -338,7 +309,7 @@ $ jz new --array web :=1 :=null
 - The key is everything before the first `=`. A string that starts with
   `@` is written as JSON: `note:='"@here"'`.
 - Options come before the arguments; `--` ends them, so `jz new -- -x=1`
-  has the key `-x`. `-p` and `--yaml` work as elsewhere.
+  has the key `-x`. `-p` works as elsewhere.
 
 A malformed argument (no `=`, an empty key, a repeated key, `:=` with
 invalid JSON, two arguments reading standard input) is exit 2 before
