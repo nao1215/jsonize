@@ -177,6 +177,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `docker system df` names the four kinds of usage it reports, and
+  `docker version` keeps every value as the string docker printed,
+  `Experimental`'s `false` included. Their output schemas are version 2.
 - A definition's regular expressions are checked when it is loaded and
   built into programs the first time they are matched, so a run no
   longer builds the programs of the hundreds of definitions it does not
