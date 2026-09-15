@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/shellcheck/gcc.json",
+  "title": "shellcheck/gcc",
+  "description": "shellcheck -f gcc, one finding per line",
+  "x-jsonize": {
+    "definition": "shellcheck/gcc",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string"
+      },
+      "line": {
+        "type": "integer"
+      },
+      "column": {
+        "type": "integer"
+      },
+      "severity": {
+        "type": "string",
+        "enum": [
+          "error",
+          "note",
+          "warning"
+        ]
+      },
+      "message": {
+        "type": "string"
+      },
+      "rule": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "path",
+      "line",
+      "column",
+      "severity",
+      "message",
+      "rule"
+    ]
+  }
+}

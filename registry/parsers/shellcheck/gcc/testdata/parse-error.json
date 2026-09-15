@@ -1,0 +1,26 @@
+[
+  {
+    "path": "broken.sh",
+    "line": 3,
+    "column": 3,
+    "severity": "note",
+    "message": "The mentioned syntax error was in this simple command.",
+    "rule": "SC1009"
+  },
+  {
+    "path": "broken.sh",
+    "line": 3,
+    "column": 8,
+    "severity": "error",
+    "message": "Couldn't parse this double quoted string. Fix to allow more checks.",
+    "rule": "SC1073"
+  },
+  {
+    "path": "broken.sh",
+    "line": 4,
+    "column": 1,
+    "severity": "error",
+    "message": "Expected end of double quoted string. Fix any mentioned problems and try again.",
+    "rule": "SC1072"
+  }
+]

@@ -1,0 +1,146 @@
+[
+  {
+    "path": "script.sh",
+    "line": 3,
+    "column": 1,
+    "severity": "warning",
+    "message": "Use 'cd ... || exit' or 'cd ... || return' in case cd fails.",
+    "rule": "SC2164"
+  },
+  {
+    "path": "script.sh",
+    "line": 3,
+    "column": 4,
+    "severity": "note",
+    "message": "Double quote to prevent globbing and word splitting.",
+    "rule": "SC2086"
+  },
+  {
+    "path": "script.sh",
+    "line": 4,
+    "column": 10,
+    "severity": "error",
+    "message": "Iterating over ls output is fragile. Use globs.",
+    "rule": "SC2045"
+  },
+  {
+    "path": "script.sh",
+    "line": 4,
+    "column": 15,
+    "severity": "note",
+    "message": "Use ./*glob* or -- *glob* so names with dashes won't become options.",
+    "rule": "SC2035"
+  },
+  {
+    "path": "script.sh",
+    "line": 7,
+    "column": 6,
+    "severity": "warning",
+    "message": "count is referenced but not assigned.",
+    "rule": "SC2154"
+  },
+  {
+    "path": "script.sh",
+    "line": 7,
+    "column": 6,
+    "severity": "note",
+    "message": "Double quote to prevent globbing and word splitting.",
+    "rule": "SC2086"
+  },
+  {
+    "path": "script.sh",
+    "line": 7,
+    "column": 13,
+    "severity": "warning",
+    "message": "In POSIX sh, == in place of = is undefined.",
+    "rule": "SC3014"
+  },
+  {
+    "path": "script.sh",
+    "line": 8,
+    "column": 8,
+    "severity": "warning",
+    "message": "Quote this to prevent word splitting.",
+    "rule": "SC2046"
+  },
+  {
+    "path": "script.sh",
+    "line": 8,
+    "column": 8,
+    "severity": "note",
+    "message": "Useless echo? Instead of 'echo $(cmd)', just use 'cmd'.",
+    "rule": "SC2005"
+  },
+  {
+    "path": "script.sh",
+    "line": 8,
+    "column": 8,
+    "severity": "note",
+    "message": "Use $(...) notation instead of legacy backticks `...`.",
+    "rule": "SC2006"
+  },
+  {
+    "path": "script.sh",
+    "line": 10,
+    "column": 1,
+    "severity": "warning",
+    "message": "In POSIX sh, 'local' is undefined.",
+    "rule": "SC3043"
+  },
+  {
+    "path": "script.sh",
+    "line": 10,
+    "column": 7,
+    "severity": "warning",
+    "message": "x appears unused. Verify use (or export if used externally).",
+    "rule": "SC2034"
+  },
+  {
+    "path": "script.sh",
+    "line": 11,
+    "column": 1,
+    "severity": "note",
+    "message": "read without -r will mangle backslashes.",
+    "rule": "SC2162"
+  },
+  {
+    "path": "script.sh",
+    "line": 11,
+    "column": 6,
+    "severity": "warning",
+    "message": "name appears unused. Verify use (or export if used externally).",
+    "rule": "SC2034"
+  },
+  {
+    "path": "my tools/deploy.bash",
+    "line": 3,
+    "column": 6,
+    "severity": "warning",
+    "message": "Expanding an array without an index only gives the first element.",
+    "rule": "SC2128"
+  },
+  {
+    "path": "my tools/deploy.bash",
+    "line": 3,
+    "column": 6,
+    "severity": "note",
+    "message": "Double quote to prevent globbing and word splitting.",
+    "rule": "SC2086"
+  },
+  {
+    "path": "my tools/deploy.bash",
+    "line": 4,
+    "column": 8,
+    "severity": "warning",
+    "message": "Use \"${var:?}\" to ensure this never expands to /* .",
+    "rule": "SC2115"
+  },
+  {
+    "path": "my tools/deploy.bash",
+    "line": 5,
+    "column": 4,
+    "severity": "warning",
+    "message": "x is referenced but not assigned.",
+    "rule": "SC2154"
+  }
+]

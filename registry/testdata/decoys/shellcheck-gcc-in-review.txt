@@ -1,0 +1,8 @@
+Review of the install script
+
+CI failed on the lint step with this line:
+
+install.sh:12:6: note: Double quote to prevent globbing and word splitting. [SC2086]
+
+Quoting "$PREFIX" fixes it. We run shellcheck -f gcc so the editor can
+jump to the line; the tty format is easier to read by hand.
