@@ -1,0 +1,13 @@
+Filesystem        Size    Used   Avail Capacity iused ifree %iused  Mounted on
+/dev/disk2s1s1   320Gi    12Gi    96Gi    11%    459k  1.0G    0%   /
+devfs            198Ki   198Ki     0Bi   100%     684     0  100%   /dev
+/dev/disk2s6     320Gi    20Ki    96Gi     1%       0  1.0G    0%   /System/Volumes/VM
+/dev/disk2s2     320Gi   6.7Gi    96Gi     7%     148  1.0G    0%   /System/Volumes/Preboot
+/dev/disk2s4     320Gi   316Ki    96Gi     1%      21  1.0G    0%   /System/Volumes/Update
+/dev/disk1s2     500Mi    20Ki   495Mi     1%       0  5.1M    0%   /System/Volumes/xarts
+/dev/disk1s1     500Mi   104Ki   495Mi     1%      21  5.1M    0%   /System/Volumes/iSCPreboot
+/dev/disk1s3     500Mi   232Ki   495Mi     1%      17  5.1M    0%   /System/Volumes/Hardware
+/dev/disk2s5     320Gi   204Gi    96Gi    69%    1.9M  1.0G    0%   /System/Volumes/Data
+/dev/disk4s1     520Mi   496Mi    21Mi    96%     426  217k    0%   /System/Library/AssetsV2/com_apple_MobileAsset_UAF_Siri_Understanding/purpose_auto/c10eb90af2d4996616c3cd0f6bac0833eb4925fa.asset/.AssetData
+/dev/disk6s1     4.0Mi   676Ki   3.0Mi    19%      18   31k    0%   /System/Library/AssetsV2/com_apple_MobileAsset_PKITrustStore/purpose_auto/6dd55b0d06633a00de6f57ccb910a66a5ba2409a.asset/.AssetData
+map auto_home      0Bi     0Bi     0Bi   100%       0     0     -   /System/Volumes/Data/home

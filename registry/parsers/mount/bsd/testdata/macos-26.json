@@ -1,0 +1,130 @@
+[
+  {
+    "filesystem": "/dev/disk2s1s1",
+    "mount_point": "/",
+    "type": "apfs",
+    "options": [
+      "sealed",
+      "local",
+      "read-only",
+      "journaled"
+    ]
+  },
+  {
+    "filesystem": "devfs",
+    "mount_point": "/dev",
+    "type": "devfs",
+    "options": [
+      "local",
+      "nobrowse"
+    ]
+  },
+  {
+    "filesystem": "/dev/disk2s6",
+    "mount_point": "/System/Volumes/VM",
+    "type": "apfs",
+    "options": [
+      "local",
+      "noexec",
+      "journaled",
+      "noatime",
+      "nobrowse"
+    ]
+  },
+  {
+    "filesystem": "/dev/disk2s2",
+    "mount_point": "/System/Volumes/Preboot",
+    "type": "apfs",
+    "options": [
+      "local",
+      "journaled",
+      "nobrowse"
+    ]
+  },
+  {
+    "filesystem": "/dev/disk2s4",
+    "mount_point": "/System/Volumes/Update",
+    "type": "apfs",
+    "options": [
+      "local",
+      "journaled",
+      "nobrowse"
+    ]
+  },
+  {
+    "filesystem": "/dev/disk1s2",
+    "mount_point": "/System/Volumes/xarts",
+    "type": "apfs",
+    "options": [
+      "local",
+      "noexec",
+      "journaled",
+      "noatime",
+      "nobrowse"
+    ]
+  },
+  {
+    "filesystem": "/dev/disk1s1",
+    "mount_point": "/System/Volumes/iSCPreboot",
+    "type": "apfs",
+    "options": [
+      "local",
+      "journaled",
+      "nobrowse"
+    ]
+  },
+  {
+    "filesystem": "/dev/disk1s3",
+    "mount_point": "/System/Volumes/Hardware",
+    "type": "apfs",
+    "options": [
+      "local",
+      "journaled",
+      "nobrowse"
+    ]
+  },
+  {
+    "filesystem": "/dev/disk2s5",
+    "mount_point": "/System/Volumes/Data",
+    "type": "apfs",
+    "options": [
+      "local",
+      "journaled",
+      "nobrowse",
+      "root data"
+    ]
+  },
+  {
+    "filesystem": "/dev/disk4s1",
+    "mount_point": "/System/Library/AssetsV2/com_apple_MobileAsset_UAF_Siri_Understanding/purpose_auto/c10eb90af2d4996616c3cd0f6bac0833eb4925fa.asset/.AssetData",
+    "type": "apfs",
+    "options": [
+      "sealed",
+      "local",
+      "read-only",
+      "journaled",
+      "nobrowse"
+    ]
+  },
+  {
+    "filesystem": "/dev/disk6s1",
+    "mount_point": "/System/Library/AssetsV2/com_apple_MobileAsset_PKITrustStore/purpose_auto/6dd55b0d06633a00de6f57ccb910a66a5ba2409a.asset/.AssetData",
+    "type": "apfs",
+    "options": [
+      "sealed",
+      "local",
+      "read-only",
+      "journaled",
+      "nobrowse"
+    ]
+  },
+  {
+    "filesystem": "map auto_home",
+    "mount_point": "/System/Volumes/Data/home",
+    "type": "autofs",
+    "options": [
+      "automounted",
+      "nobrowse"
+    ]
+  }
+]

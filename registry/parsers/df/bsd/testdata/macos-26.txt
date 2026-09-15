@@ -1,0 +1,13 @@
+Filesystem     512-blocks      Used Available Capacity iused      ifree %iused  Mounted on
+/dev/disk2s1s1  670064640  24685640 200560040    11%  458732 1002800200    0%   /
+devfs                 395       395         0   100%     684          0  100%   /dev
+/dev/disk2s6    670064640        40 200560040     1%       0 1002800200    0%   /System/Volumes/VM
+/dev/disk2s2    670064640  14131120 200560040     7%     148 1002800200    0%   /System/Volumes/Preboot
+/dev/disk2s4    670064640       632 200560040     1%      21 1002800200    0%   /System/Volumes/Update
+/dev/disk1s2      1024000        40   1013568     1%       0    5067840    0%   /System/Volumes/xarts
+/dev/disk1s1      1024000       208   1013568     1%      21    5067840    0%   /System/Volumes/iSCPreboot
+/dev/disk1s3      1024000       464   1013568     1%      17    5067840    0%   /System/Volumes/Hardware
+/dev/disk2s5    670064640 427945184 200560040    69% 1874511 1002800200    0%   /System/Volumes/Data
+/dev/disk4s1      1064960   1015960     43416    96%     426     217080    0%   /System/Library/AssetsV2/com_apple_MobileAsset_UAF_Siri_Understanding/purpose_auto/c10eb90af2d4996616c3cd0f6bac0833eb4925fa.asset/.AssetData
+/dev/disk6s1         8192      1352      6152    19%      18      30760    0%   /System/Library/AssetsV2/com_apple_MobileAsset_PKITrustStore/purpose_auto/6dd55b0d06633a00de6f57ccb910a66a5ba2409a.asset/.AssetData
+map auto_home           0         0         0   100%       0          0     -   /System/Volumes/Data/home

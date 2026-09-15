@@ -1,0 +1,3 @@
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C id; the user name runner replaced by user, padded to its column
+os: darwin
+args: []
