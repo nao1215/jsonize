@@ -2182,16 +2182,17 @@ scenarios:
             json:
               - { path: "$[0].name", equals: "Version" }
       # systemd adds a JOB column to this table only while a job is
-      # queued, and which of the two definitions reads the text depends
-      # on whether anything was starting at that second. Both are the
-      # right answer, so the assertion names the pair rather than the
-      # state the machine happened to be in.
+      # queued, and which definition reads the text depends on whether
+      # anything was starting at that second. With --plain the table has
+      # no marker column, so a pending job is units-jobs-plain rather than
+      # units-jobs. Each is the right answer, so the assertion names them
+      # rather than the state the machine happened to be in.
       - run:
           command: jz run --explain systemctl list-units --plain --no-pager
       - assert:
           exit_code: 0
           stderr:
-            matches: "chose systemctl/units(-jobs)? from embedded"
+            matches: "chose systemctl/units(-jobs-plain)? from embedded"
 
   # gzip is on every Linux runner. The listing of an archive made here
   # lands on gzip/list, and -v on gzip/list-verbose, whose extra columns

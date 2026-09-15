@@ -1,0 +1,18 @@
+  UNIT                                                                                                   LOAD   ACTIVE     SUB       JOB   DESCRIPTION
+  sys-devices-LNXSYSTM:00-LNXSYBUS:00-MSFT0101:00-tpm-tpm0.device                                        loaded active     plugged         /sys/devices/LNXSYSTM:00/LNXSYBUS:00/MSFT0101:00/tpm/tpm0
+  sys-devices-LNXSYSTM:00-LNXSYBUS:00-MSFT0101:00-tpmrm-tpmrm0.device                                    loaded active     plugged         /sys/devices/LNXSYSTM:00/LNXSYBUS:00/MSFT0101:00/tpmrm/tpmrm0
+  sys-devices-pci0000:00-0000:00:02.1-0000:c1:00.0-net-eno1.device                                       loaded active     plugged         RTL8125 2.5GbE Controller
+  sys-devices-pci0000:00-0000:00:02.3-0000:c3:00.0-net-wlp195s0.device                                   loaded active     plugged         MT7925 (RZ717) Wi-Fi 7 160MHz
+  sys-devices-pci0000:00-0000:00:02.5-0000:c4:00.0-nvme-nvme0-nvme0n1-nvme0n1p1.device                   loaded active     plugged         Lexar SSD ARES 2TB 2nd
+  sys-devices-pci0000:00-0000:00:02.5-0000:c4:00.0-nvme-nvme0-nvme0n1.device                             loaded active     plugged         Lexar SSD ARES 2TB
+  sys-devices-pci0000:00-0000:00:03.1-0000:c5:00.0-nvme-nvme1-nvme1n1-nvme1n1p1.device                   loaded active     plugged         KIOXIA-EXCERIA PLUS G4 SSD 1
+  sys-devices-pci0000:00-0000:00:03.1-0000:c5:00.0-nvme-nvme1-nvme1n1-nvme1n1p2.device                   loaded active     plugged         KIOXIA-EXCERIA PLUS G4 SSD 2
+* jz-probe-notify2.service                                                                               loaded activating start     start [systemd-run] /usr/bin/sleep 120
+
+Legend: LOAD   -> Reflects whether the unit definition was properly loaded.
+        ACTIVE -> The high-level unit activation state, i.e. generalization of SUB.
+        SUB    -> The low-level unit activation state, values depend on unit type.
+        JOB    -> Pending job for the unit.
+
+11 loaded units listed. Pass --all to see loaded but inactive units, too.
+To show all installed unit files use 'systemctl list-unit-files'.

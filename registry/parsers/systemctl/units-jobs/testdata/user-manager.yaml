@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C from the user manager while a Type=notify service started by systemd-run was activating, trimmed to ten of the 284 units; the count line is as printed
+description: the user manager's table with a marker column, the JOB column holding start for the activating unit and blank for the others
+os: linux
+args: ["--user", "list-units", "--no-pager"]

@@ -1,0 +1,67 @@
+[
+  {
+    "unit": "sys-devices-LNXSYSTM:00-LNXSYBUS:00-MSFT0101:00-tpm-tpm0.device",
+    "load": "loaded",
+    "active": "active",
+    "sub": "plugged",
+    "description": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/MSFT0101:00/tpm/tpm0"
+  },
+  {
+    "unit": "sys-devices-LNXSYSTM:00-LNXSYBUS:00-MSFT0101:00-tpmrm-tpmrm0.device",
+    "load": "loaded",
+    "active": "active",
+    "sub": "plugged",
+    "description": "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/MSFT0101:00/tpmrm/tpmrm0"
+  },
+  {
+    "unit": "sys-devices-pci0000:00-0000:00:02.1-0000:c1:00.0-net-eno1.device",
+    "load": "loaded",
+    "active": "active",
+    "sub": "plugged",
+    "description": "RTL8125 2.5GbE Controller"
+  },
+  {
+    "unit": "sys-devices-pci0000:00-0000:00:02.3-0000:c3:00.0-net-wlp195s0.device",
+    "load": "loaded",
+    "active": "active",
+    "sub": "plugged",
+    "description": "MT7925 (RZ717) Wi-Fi 7 160MHz"
+  },
+  {
+    "unit": "sys-devices-pci0000:00-0000:00:02.5-0000:c4:00.0-nvme-nvme0-nvme0n1-nvme0n1p1.device",
+    "load": "loaded",
+    "active": "active",
+    "sub": "plugged",
+    "description": "Lexar SSD ARES 2TB 2nd"
+  },
+  {
+    "unit": "sys-devices-pci0000:00-0000:00:02.5-0000:c4:00.0-nvme-nvme0-nvme0n1.device",
+    "load": "loaded",
+    "active": "active",
+    "sub": "plugged",
+    "description": "Lexar SSD ARES 2TB"
+  },
+  {
+    "unit": "sys-devices-pci0000:00-0000:00:03.1-0000:c5:00.0-nvme-nvme1-nvme1n1-nvme1n1p1.device",
+    "load": "loaded",
+    "active": "active",
+    "sub": "plugged",
+    "description": "KIOXIA-EXCERIA PLUS G4 SSD 1"
+  },
+  {
+    "unit": "sys-devices-pci0000:00-0000:00:03.1-0000:c5:00.0-nvme-nvme1-nvme1n1-nvme1n1p2.device",
+    "load": "loaded",
+    "active": "active",
+    "sub": "plugged",
+    "description": "KIOXIA-EXCERIA PLUS G4 SSD 2"
+  },
+  {
+    "marker": "*",
+    "unit": "jz-probe-notify2.service",
+    "load": "loaded",
+    "active": "activating",
+    "sub": "start",
+    "job": "start",
+    "description": "[systemd-run] /usr/bin/sleep 120"
+  }
+]

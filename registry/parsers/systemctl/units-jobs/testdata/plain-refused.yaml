@@ -1,0 +1,5 @@
+source: the same capture with --plain, whose header starts at the left edge
+description: refused, since without a marker column the table belongs to systemctl/units-jobs-plain
+os: linux
+args: ["--user", "list-units", "--plain", "--no-pager"]
+expect_error: does not describe this input

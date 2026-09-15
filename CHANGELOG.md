@@ -59,6 +59,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run systemctl list-units --plain` failed with exit 3 while a unit
+  had a job pending. `--plain` drops the marker column, and the
+  definition for the table with a JOB column expected the header to be
+  indented for it. That table now has its own definition,
+  `systemctl/units-jobs-plain`, and `systemctl/units-jobs` reads only
+  the indented header.
 - `ip address` output whose first `inet` line is past the first twenty
   lines, as when nine or more interfaces without an address come first,
   was read as `ip link` with each address and lifetime as a setting.
