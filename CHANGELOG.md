@@ -99,6 +99,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run sysctl` and `jz run lsof` on macOS found no definition: both are
+  the programs FreeBSD and Linux have, printing the same lines, and their
+  definitions now apply there. `ls -le` and `ls -lO` on macOS, which add
+  access control lists and file flags to a long listing, are refused by
+  the argument rather than failing on the first list.
 - Ctrl-C typed at a terminal reached the command `jz run` started twice:
   once from the terminal, which sends it to the whole foreground group,
   and once passed on by jz. A command that stops at once on a second

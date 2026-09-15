@@ -1,0 +1,5 @@
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with ls -le /Users; the account names are the ones the runner image creates
+description: -e prints the access control list of the home directory under its entry, which this listing does not read, so the argument is refused
+os: darwin
+args: [-le, /Users]
+expect_error: 'excluded by the argument -e'

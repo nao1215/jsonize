@@ -572,3 +572,49 @@ scenarios:
           exit_code: 0
           stderr:
             contains: "chose fdesetup/status from embedded"
+
+  - name: sysctl and lsof land on the definitions they share with FreeBSD and Linux, and ls -le is refused
+    only: {os: darwin}
+    steps:
+      - run:
+          command: sysctl -n hw.ncpu
+      - store:
+          name: ncpu
+          from:
+            stdout: {trim: true}
+      - run:
+          command: jz run --explain sysctl kern.ostype hw.ncpu
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sysctl/freebsd from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[?(@.name=='kern.ostype')].value", equals: Darwin }
+              - { path: "$[?(@.name=='hw.ncpu')].value", equals: "${ncpu}" }
+      # -n prints the values alone, which no name can be told from.
+      - run:
+          command: jz run sysctl -n hw.ncpu
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      # The runner keeps connections open to GitHub while a job runs.
+      - run:
+          command: jz run --explain lsof -i -n -P
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose lsof/linux from embedded"
+          stdout:
+            json:
+              - { path: "$[0].pid", gt: 0 }
+              - { path: "$[0].type", matches: '^IPv[46]$' }
+      # -e prints each access control list under its entry.
+      - run:
+          command: jz run ls -le /Users
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: "excluded by the argument -e"
