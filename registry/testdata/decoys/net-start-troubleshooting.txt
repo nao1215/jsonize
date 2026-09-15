@@ -1,0 +1,11 @@
+If the print queue does not come back after a reboot, check whether
+the spooler is running. net start prints
+
+These Windows services are started:
+
+   Print Spooler
+   Windows Event Log
+
+and if Print Spooler is missing from that list, start it with
+net start spooler and look in the System event log for the reason it
+stopped.
