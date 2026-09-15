@@ -175,7 +175,7 @@ func TimeAssuming(s, layout string, loc *time.Location, a Assumptions) (string, 
 		case a.Year != 0:
 			year = a.Year
 		case !a.Recent.IsZero():
-			return recentTime(s, t, layout, loc, a)
+			return recentTime(s, layout, loc, a)
 		default:
 			return s, false, nil
 		}
@@ -220,7 +220,7 @@ func (e notInYearError) Error() string {
 // year a day after that moment, it takes the first year in which the
 // text is a date no later than that. Eight years reach a February 29
 // from any moment.
-func recentTime(s, t, layout string, loc *time.Location, a Assumptions) (string, bool, error) {
+func recentTime(s, layout string, loc *time.Location, a Assumptions) (string, bool, error) {
 	limit := a.Recent.Add(24 * time.Hour)
 	for year := limit.Year(); year > limit.Year()-8; year-- {
 		dated := a
@@ -235,10 +235,11 @@ func recentTime(s, t, layout string, loc *time.Location, a Assumptions) (string,
 		if !ok {
 			return got, ok, nil
 		}
-		parsed, perr := time.Parse(time.RFC3339Nano, got)
-		if perr != nil || !parsed.After(limit) {
-			return got, ok, nil
+		// The answer is RFC 3339, which TimeAssuming just wrote.
+		if parsed, perr := time.Parse(time.RFC3339Nano, got); perr == nil && parsed.After(limit) {
+			continue
 		}
+		return got, ok, nil
 	}
 	return "", false, &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("is not a date in any of the eight years up to %d", limit.Year())}
 }
