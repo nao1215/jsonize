@@ -104,9 +104,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
-- `chage -l` is read only as the seven lines it prints. Labelled lines
-  another command printed after them were read as more fields of the
-  account.
+- `chage -l` is read only as the seven lines it prints, and `lscpu
+  --caches` holds each row to a cache name and type. Lines another
+  command printed after them were read as more fields of the account and
+  as more caches.
 - `systemctl list-sockets`, `list-paths`, `list-timers`,
   `list-automounts`, `list-machines`, `list-unit-files`, `list-jobs` and
   `list-units`, `networkctl list`, `loginctl list-sessions`,

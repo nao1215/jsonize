@@ -22,7 +22,12 @@ parse:
   type: table
   split: whitespace
 fields:
-  name: {required: true}
+  # util-linux names a cache by its level and, for a split cache, d or i
+  # for its data and instruction halves ("L1d", "L2"), and its type is
+  # one of the three the kernel reports. Holding both to that is what
+  # refuses the rows of another table printed after the listing.
+  name: {required: true, regex: '(?P<name>L\d+[di]?)'}
+  type: {regex: '(?P<type>Data|Instruction|Unified)'}
   ways: {type: int}
   level: {type: int}
   sets: {type: int}

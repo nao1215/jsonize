@@ -1,0 +1,5 @@
+source: the definition's own three-columns.txt followed by apt-cache/madison's bash-coreutils.txt, joined for this case
+description: madison's rows after the caches are refused, since their first word is not a cache name; they were read as caches
+os: linux
+args: ["-C=NAME,ONE-SIZE,TYPE"]
+expect_error: does not have the shape

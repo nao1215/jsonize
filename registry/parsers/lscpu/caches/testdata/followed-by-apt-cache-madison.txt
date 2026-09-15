@@ -1,0 +1,8 @@
+NAME ONE-SIZE TYPE
+L1d       48K Data
+L1i       32K Instruction
+L2         1M Unified
+L3        32M Unified
+      bash | 5.3-2ubuntu1 | http://archive.ubuntu.com/ubuntu resolute/main amd64 Packages
+ coreutils | 9.5-1ubuntu2+0.0.0~ubuntu25 | http://archive.ubuntu.com/ubuntu resolute/main amd64 Packages
+ coreutils | 9.5-1ubuntu2+0.0.0~ubuntu25 | http://archive.ubuntu.com/ubuntu resolute/main i386 Packages

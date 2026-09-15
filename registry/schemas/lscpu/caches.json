@@ -38,6 +38,12 @@
           "null"
         ]
       },
+      "type": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
       "ways": {
         "type": [
           "integer",
