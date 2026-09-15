@@ -737,12 +737,12 @@ func (s *streamer) emitCSV(rec line) error {
 		case s.csvCols != nil:
 		case s.p.Header.None:
 			s.csvCols = csvNumbered(len(row))
-			if err := s.checkColumns(s.fields, s.csvCols, rec.num); err != nil {
+			if err := s.checkColumns(s.p, s.csvCols, rec.num); err != nil {
 				return err
 			}
 		default:
 			s.csvCols, s.csvHeader = csvColumns(s.p, row), row
-			if err := s.checkColumns(s.fields, s.csvCols, rec.num); err != nil {
+			if err := s.checkColumns(s.p, s.csvCols, rec.num); err != nil {
 				return err
 			}
 			continue

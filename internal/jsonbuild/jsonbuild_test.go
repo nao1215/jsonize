@@ -340,6 +340,8 @@ func TestLocationErrors(t *testing.T) {
 		{"--string with an empty key", false, []Arg{str("=x")}, "the key is empty"},
 		{"--string with []  and no key", false, []Arg{str("[]=x")}, "the key is empty"},
 		{"--string that looks like :=", false, []Arg{str("n:=3")}, "a key ending in : looks like :=, which reads JSON; use --path for JSON"},
+		{"--string with a pointer that looks like :=", false, []Arg{str("/spec/replicas:=3")}, "a key ending in : looks like :="},
+		{"--text-file with a pointer that looks like :=", false, []Arg{text("/body:=notes.txt")}, "--text-file writes a file's text as it is"},
 		{"--string with a key in an array", true, []Arg{str("k=x")}, "an array has no keys"},
 		{"--text-file without =", false, []Arg{text("body")}, "--text-file takes KEY=PATH or POINTER=PATH"},
 		{"--text-file with no path", false, []Arg{text("body=")}, "the path is empty; - is standard input"},

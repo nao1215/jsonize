@@ -145,6 +145,10 @@ func (a *app) cmdConvert(args []string) int {
 		a.errorf("%v", err)
 		return ExitUsage
 	}
+	if err := checkReading(&co.output, &co.selects); err != nil {
+		a.errorf("%v", err)
+		return ExitUsage
+	}
 	inline, hasInline, err := co.selects.definition()
 	if err != nil {
 		a.errorf("%v", err)

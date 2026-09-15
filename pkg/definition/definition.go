@@ -547,6 +547,11 @@ type Header struct {
 	LeadingLabel string `yaml:"leading_label,omitempty"`
 	// Rename maps normalised header names to field names.
 	Rename map[string]string `yaml:"rename,omitempty"`
+	// Expected are the columns a caller named, which a csv's header line
+	// or first record has to have. A definition cannot write it: a field
+	// rule for a column a file lacks does nothing, while a column named
+	// on the command line was meant to be there (see WithTypes).
+	Expected []string `yaml:"-"`
 }
 
 // RepeatedHeader reports whether a body line holding the same cells as

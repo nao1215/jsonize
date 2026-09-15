@@ -410,6 +410,16 @@ func (f *selectOptions) check() error {
 	return nil
 }
 
+// checkReading reports the pairs of reading and selecting options that
+// state two answers: --raw leaves out every field rule, and a --type
+// column is one.
+func checkReading(out *outputOptions, sel *selectOptions) error {
+	if out.raw && len(sel.types) > 0 {
+		return errors.New("--type and --raw cannot be used together: --raw leaves out the field rules, and --type converts a column with one")
+	}
+	return nil
+}
+
 // columnTypes reads --type COLUMN=TYPE. A column typed twice states two
 // answers, even when they agree.
 func (f *selectOptions) columnTypes() (map[string]string, error) {

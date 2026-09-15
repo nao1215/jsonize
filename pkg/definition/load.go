@@ -1161,7 +1161,7 @@ func ColumnTypes() []string { return []string{FieldInt, FieldFloat, FieldBool} }
 // definition out, and the conversion is the one a definition's field of
 // that type does. A column the definition converts already is refused
 // rather than converted twice; a column the input does not have is
-// refused when it is read (engine.MissingColumnError).
+// refused when it is read (Header.Expected, engine.MissingColumnError).
 func (d *Definition) WithTypes(types map[string]string) (*Definition, error) {
 	if d.Parse.Type != TypeCSV {
 		return nil, fmt.Errorf("%s does not read a csv, so there are no columns to convert", d.ID())
@@ -1182,6 +1182,7 @@ func (d *Definition) WithTypes(types map[string]string) (*Definition, error) {
 	}
 	c := *d
 	c.Fields = fields
+	c.Parse.Header.Expected = append(slices.Clone(d.Parse.Header.Expected), slices.Sorted(maps.Keys(types))...)
 	return &c, nil
 }
 

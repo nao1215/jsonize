@@ -329,6 +329,13 @@ scenarios:
           stderr:
             contains: '~ in a pointer is ~0 (a ~) or ~1 (a /), and "a~2b" holds another'
       - run:
+          command: jz new --string /spec/replicas:=3
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "a key ending in : looks like :=, which reads JSON; use --path for JSON"
+      - run:
           command: jz new --path /tags[]=x
       - assert:
           exit_code: 2

@@ -185,8 +185,11 @@ $ jz --file sales.csv --type units=int --type price=float --type in_stock=bool
   with `--stream` the rows around it are written and the status is 3.
 - A column is named as it appears in the output: the header normalised
   (`In Stock` is `in_stock`), a `--columns` name, or `column_2`. A column
-  the input does not have is exit 2 before any row is written, and so is
-  a column named twice or an unknown type.
+  the header line (or the first record, for numbered columns) does not
+  have is exit 2 before any row is written, and so is a column named
+  twice or an unknown type. An empty input has no columns and is `[]`.
+- `--type` with `--raw` is refused: `--raw` leaves out every field rule,
+  and a type is one.
 - `--type` applies to a `.csv` or `.tsv` file, `--format csv` or `tsv`,
   and `--parser csv --variant ...`, also with `jz run`. A `--define`
   states its own fields.
@@ -276,7 +279,8 @@ $ jz new --path /metadata/name=api --path /spec/replicas:=3 --path /spec/ports/-
   where nothing exists yet is refused rather than read as a key or as a
   position to pad up to.
 - `~1` is `/` and `~0` is `~` inside a token. A pointer cannot name a key
-  that holds `=`; write that key inside a `:=` value.
+  that holds `=` or ends in `[]`, and neither can a plain argument; write
+  such a key inside a `:=` value.
 - A location is given once. A second value for it, a pointer into a value
   an argument gave whole (`spec:={...}`, `--string name=x`), a key in an
   array and `-` in an object are all refused, naming the argument in the
@@ -301,7 +305,10 @@ $ vmstat 1 | jz --stream | jz new --each --string host=server-a sample:=@-
 ```
 
 - With `:=@-` a line is a JSON Lines record: blank lines are skipped. With
-  `=@-` every line is a record, an empty one `""`.
+  `=@-` every line is a record, an empty one `""`, read as `--format
+  lines` reads it: the line ending and a byte order mark before the first
+  line are not part of it. Without `--each`, `=@-` keeps a byte order mark
+  as it keeps the rest of the text.
 - A line that is not JSON, or not UTF-8, is reported
   (`jz: new: sample:=@-: jsonl: line 3: ...`) and left out, and the status
   is 3 once the input ends. `--stop-on-error` ends there instead, keeping

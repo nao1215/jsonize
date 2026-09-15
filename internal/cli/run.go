@@ -107,6 +107,10 @@ func (a *app) cmdRun(args []string) int {
 		a.errorf("%v", err)
 		return ExitUsage
 	}
+	if err := checkReading(&out, &sel); err != nil {
+		a.errorf("%v", err)
+		return ExitUsage
+	}
 	inline, hasInline, err := sel.definition()
 	if err != nil {
 		a.errorf("%v", err)
