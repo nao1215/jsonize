@@ -1,0 +1,146 @@
+version: "1"
+
+suite:
+  name: jz new
+
+# `jz new` makes JSON from its arguments: = a string, := JSON, @ a file,
+# [] one more element of an array. Nothing is guessed from the text of a
+# value, and an argument that does not say what to make is exit 2 before
+# anything is read. Every command here runs without a shell, so the same
+# words reach jz on every system.
+scenarios:
+  - name: arguments make an object whose strings stay strings and whose := values are JSON
+    steps:
+      - run:
+          command: jz new name=api version=007 enabled=true replicas:=3 debug:=false owner:=null
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              {"name":"api","version":"007","enabled":"true","replicas":3,"debug":false,"owner":null}
+      - run:
+          command: jz new tags[]=web tags[]=prod ports[]:=80 ports[]:=443 'limits:={"memory":"512Mi"}' 'note:="@here"'
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"tags":["web","prod"],"ports":[80,443],"limits":{"memory":"512Mi"},"note":"@here"}
+      - run:
+          command: jz new
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {}
+      - run:
+          command: jz new --array web :=1 :=null
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              ["web",1,null]
+
+  - name: files and standard input become values, a data file as the format its extension names
+    steps:
+      - fixture:
+          file: VERSION
+          content: |
+            1.4.0
+      - fixture:
+          file: deploy.yaml
+          content: |
+            replicas: 3
+            image: "1.2"
+      - fixture:
+          file: users.csv
+          content: |
+            id,name
+            1,alice
+      - run:
+          command: jz new version=@${workdir}/VERSION spec:=@${workdir}/deploy.yaml users:=@${workdir}/users.csv
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"version":"1.4.0","spec":{"replicas":3,"image":"1.2"},"users":[{"id":"1","name":"alice"}]}
+      - run:
+          command: jz new pod:=@- source=ci
+          stdin: '{"kind":"Pod","items":[1,2]}'
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"pod":{"kind":"Pod","items":[1,2]},"source":"ci"}
+      - run:
+          command: jz new --array :=@${workdir}/deploy.yaml =@${workdir}/VERSION plain
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"replicas":3,"image":"1.2"},"1.4.0","plain"]
+      - run:
+          command: jz new --yaml name=api replicas:=3
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              name: api
+              replicas: 3
+
+  - name: arguments that do not say what JSON to make are refused before anything is read
+    steps:
+      - run:
+          command: jz new name
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: 'jz: new: "name": an argument is KEY=VALUE, KEY:=JSON, KEY=@FILE or KEY:=@FILE'
+      - run:
+          command: jz new a=1 a=2
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: 'the key "a" is given twice; add [] to make an array of the values'
+      - run:
+          command: jz new replicas:=three
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "the value after := is not JSON"
+      - run:
+          command: jz new a=@- b:=@-
+          stdin: "x"
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: 'standard input is already read by "a=@-"'
+      - run:
+          command: jz new name=api --pretty
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "options come before the arguments"
+
+  - name: a file that is not what the argument says is refused with its line
+    steps:
+      - fixture:
+          file: broken.yaml
+          content: |
+            ok: 1
+            bad: .nan
+      - run:
+          command: jz new spec:=@${workdir}/broken.yaml
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "broken.yaml: yaml: line 2: .nan is not a number JSON can hold"
+      - run:
+          command: jz new spec:=@${workdir}/missing.json
+      - assert:
+          exit_code: 1
+          stdout: {empty: true}
+          stderr:
+            contains: "missing.json: "
