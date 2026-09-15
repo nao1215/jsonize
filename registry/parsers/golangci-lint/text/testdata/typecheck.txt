@@ -1,0 +1,9 @@
+broken/broken.go:1: : # example.com/lintdemo/broken
+broken/broken.go:4:9: cannot use "not an int" (untyped string constant) as int value in return statement
+broken/more.go:6:12: too many arguments in call to takesNone
+	have (number)
+	want ()
+broken/more.go:7:6: declared and not used: unused (typecheck)
+package broken
+1 issues:
+* typecheck: 1

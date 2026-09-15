@@ -1,0 +1,4 @@
+source: captured from golangci-lint 2.13.2 on Linux with LC_ALL=C, golangci-lint run ./... in a module with nothing to report
+description: A clean run prints the summary 0 issues. alone, read as no issues and a total of zero.
+os: linux
+args: ["run", "./..."]

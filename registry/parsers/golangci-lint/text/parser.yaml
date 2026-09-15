@@ -1,0 +1,95 @@
+# `golangci-lint run` in version 2 prints, in its default text format,
+# one block per issue and then a summary. An issue opens with a line of
+# the file, the line, the column (left out when the linter gives none),
+# the message and the linter's name in parentheses. The source lines the
+# issue is about follow as they are in the file, tabs included, and when
+# there is one source line and a column, a line of blanks ending in a
+# caret points at the column; the blanks copy the tabs of the source line
+# so the caret lines up. The summary is `N issues:` and one `* linter:
+# count` line per linter in name order, or `0 issues.` alone for a clean
+# run.
+#
+# The file is everything before the first `:line:` or `:line:column: `,
+# so a Windows drive letter's colon stays in the path. The source lines
+# are kept as they are printed, tabs included and joined with line
+# breaks, and null when the issue has none; the caret line is left out,
+# since it says the column again. A source line is any text at all, which
+# is why the summary is what this definition holds the output to. Nothing but the summary's own lines may follow its
+# heading, so a line of another report printed after the output is
+# refused; and without the summary (`--show-stats=false`) the output is
+# refused as well, since a foreign line could then pass for a source
+# line. The summary becomes the total and the count of each linter.
+#
+# A package that does not type-check is reported by the linter
+# `typecheck` as one issue whose message is the compiler's output over
+# several lines, the package heading first and the linter's name after
+# the last of them; the lines in between are the compiler's own
+# positions and cannot be told from issues of their own, so such a run is
+# refused rather than read with the compile error cut apart.
+#
+# The first line of the text is an issue line or `0 issues.`, and the
+# signature asks for one of them there. Version 1 printed the same issue
+# blocks with a summary only when asked; `--output.text.path` and the
+# other formats (json, tab, checkstyle) are not this format.
+format: 1
+command: golangci-lint
+variant: text
+description: golangci-lint run default text output, issues and the per-linter summary
+metadata:
+  tags: [go, lint]
+  compatible: [golangci-lint v2]
+  references:
+    - https://golangci-lint.run/docs/configuration/file/
+detect:
+  args:
+    all: ["run"]
+  signature:
+    all:
+      - '\A(?:[^\n]+:\d+(?::\d+)?: [^\n]* \([a-z0-9]+\)|0 issues\.)$'
+parse:
+  type: composite
+  parts:
+    - name: issues
+      select: {until: '^(?:\d+ issues:|0 issues\.)$'}
+      parse:
+        type: records
+        start: '^\S[^\n]*:\d+(?::\d+)?: [^\n]* \([a-z0-9]+\)$'
+        record:
+          parse:
+            type: regex
+            each: input
+            patterns:
+              # One source line and a column: the caret line closes the block.
+              - '\A(?P<path>[^\n]+?):(?P<line>\d+):(?P<column>\d+): (?P<message>[^\n]*) \((?P<linter>[a-z0-9]+)\)\n(?P<source>[^\n]*)\n[ \t]*\^\z'
+              # Otherwise no caret: no source, or source lines none of which
+              # is a caret line.
+              - '\A(?P<path>[^\n]+?):(?P<line>\d+)(?::(?P<column>\d+))?: (?P<message>[^\n]*) \((?P<linter>[a-z0-9]+)\)(?:\n(?P<source>(?:[ \t]*[^ \t\n^][^\n]*|[ \t]*\^[^\n]+)(?:\n(?:[ \t]*[^ \t\n^][^\n]*|[ \t]*\^[^\n]+))*))?\z'
+          fields:
+            path: {required: true}
+            line: {type: int, required: true}
+            column: {type: int}
+            message: {required: true}
+            linter: {required: true}
+            source: {}
+    - name: summary
+      # The summary closes the output, so the expression passes over the
+      # issues above it, which the part before reads, and holds the text
+      # to ending with the heading and its counts. The lines it passes
+      # over may not be a count line, so the output printed twice is
+      # refused rather than read up to the second summary.
+      parse:
+        type: regex
+        each: input
+        patterns:
+          - '\A(?:(?:[^*\n][^\n]*|\*|\*[^ \n][^\n]*|\* [^\n]*[^0-9\n])\n)*?(?P<total>[1-9]\d*) issues:\n(?P<linters>\* [a-z0-9]+: \d+(?:\n\* [a-z0-9]+: \d+)*)\z'
+          - '\A(?P<total>0) issues\.(?P<linters>)\z'
+      fields:
+        total: {type: int, required: true}
+        linters:
+          type: array
+          split: "\n"
+          items:
+            type: object
+            regex: '^\* (?P<linter>[a-z0-9]+): (?P<count>\d+)$'
+            fields:
+              count: {type: int}
