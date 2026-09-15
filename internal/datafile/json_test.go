@@ -72,7 +72,7 @@ func TestReadJSONRefuses(t *testing.T) {
 		{"a key given twice", "{\n\"a\":1,\n\"a\":2}", 3, `the key "a" is given twice`},
 		{"a key given twice deeper", `[{"b":{"c":1,"c":1}}]`, 1, `the key "c" is given twice`},
 		{"text after the value", "{\"a\":1}\n{\"a\":2}", 2, "text after the JSON value"},
-		{"a syntax error", "{\n\"a\":,\n}", 2, "not valid JSON"},
+		{"a syntax error", "{\n\"a\":,\n\"b\":1}", 2, "not valid JSON"},
 		{"a document cut short", "{\"a\":[1,", 1, "ends before it is complete"},
 		{"a closing bracket first", "]", 1, "not valid JSON"},
 		{"not UTF-8", "{\"a\":\n\"\xff\"}", 2, "not valid UTF-8"},

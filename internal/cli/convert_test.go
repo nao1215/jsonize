@@ -147,7 +147,7 @@ func TestDataFileParseFailures(t *testing.T) {
 		want string
 		code int
 	}{
-		{"broken.json", []byte("{\n\"a\": 1,\n}"), "jz: json: line 3: not valid JSON", ExitParse},
+		{"broken.json", []byte("{\n\"a\": 1\n\"b\": 2\n}"), "jz: json: line 3: not valid JSON", ExitParse},
 		{"twice.json", []byte(`{"a":1,"a":2}`), `the key "a" is given twice`, ExitParse},
 		{"bad.jsonl", []byte("1\n{\n"), "jz: jsonl: line 2: the line is not one JSON value", ExitParse},
 		{"bad.ltsv", []byte("a:1\nno label\n"), "jz: ltsv: line 2: field 1 has no label", ExitParse},
