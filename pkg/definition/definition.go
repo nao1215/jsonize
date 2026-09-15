@@ -326,6 +326,10 @@ type Select struct {
 	// definition has read; one it only opens with leaves the rest of the
 	// line unaccounted for.
 	heading *pattern
+	// end is until, required to cover the whole of the line it matches,
+	// for the same reason: at the top level the line that closes the
+	// selection is one nothing else is given.
+	end *pattern
 }
 
 // IsZero reports whether the selection keeps every line.
@@ -346,6 +350,14 @@ func (s *Select) Heading(text string) bool {
 
 // CompiledUntil returns the compiled until expression (may be nil).
 func (s *Select) CompiledUntil() *regexp.Regexp { return s.until.regexp() }
+
+// End reports whether text is a line that select.until describes from end
+// to end, surrounding whitespace aside. At the top level such a line
+// closes the input the parser reads, and it counts as read; a part's
+// until line is left for its siblings.
+func (s *Select) End(text string) bool {
+	return s.end != nil && s.end.regexp().MatchString(text)
+}
 
 // Parse describes the extraction algorithm. Only the keys relevant to Type
 // may be set.

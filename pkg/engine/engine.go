@@ -163,10 +163,11 @@ func ParseAccounted(def *definition.Definition, input []byte, opts Options) (any
 	acct.Folded = acct.Lines - len(lines)
 	prepared := prepare(&def.Input, lines, &acct)
 	r := &run{def: def, opts: opts, ledger: newLedger(prepared)}
-	selected, heading := applySelect(&def.Input.Select, prepared)
+	selected, heading, end := applySelect(&def.Input.Select, prepared)
 	v, perr := r.parse(&def.Parse, def.Fields, selected)
 	if perr == nil {
 		r.markHeading(&def.Input.Select, heading)
+		r.markEnd(&def.Input.Select, end)
 	}
 	r.ledger.count(prepared, &acct)
 	if perr != nil {
@@ -401,12 +402,12 @@ func matchesAny(res []*regexp.Regexp, s string) bool {
 
 // applySelect narrows lines with after/until/skip/limit. It also returns
 // the line select.after matched, which is the heading of the region and
-// not part of it, or nil when there is none.
-func applySelect(sel *definition.Select, lines []line) ([]line, *line) {
+// not part of it, and the line select.until matched, which ends the
+// region and is not part of it either; each is nil when there is none.
+func applySelect(sel *definition.Select, lines []line) (region []line, heading, end *line) {
 	if sel.IsZero() {
-		return lines, nil
+		return lines, nil, nil
 	}
-	var heading *line
 	if re := sel.CompiledAfter(); re != nil {
 		found := false
 		for i, l := range lines {
@@ -418,12 +419,13 @@ func applySelect(sel *definition.Select, lines []line) ([]line, *line) {
 			}
 		}
 		if !found {
-			return nil, nil
+			return nil, nil, nil
 		}
 	}
 	if re := sel.CompiledUntil(); re != nil {
 		for i, l := range lines {
 			if re.MatchString(l.text) {
+				end = &lines[i]
 				lines = lines[:i]
 				break
 			}
@@ -431,14 +433,14 @@ func applySelect(sel *definition.Select, lines []line) ([]line, *line) {
 	}
 	if sel.Skip > 0 {
 		if sel.Skip >= len(lines) {
-			return nil, heading
+			return nil, heading, end
 		}
 		lines = lines[sel.Skip:]
 	}
 	if sel.Limit > 0 && sel.Limit < len(lines) {
 		lines = lines[:sel.Limit]
 	}
-	return lines, heading
+	return lines, heading, end
 }
 
 // markHeading records the line select.after matched as read, when the
@@ -449,6 +451,17 @@ func applySelect(sel *definition.Select, lines []line) ([]line, *line) {
 func (r *run) markHeading(sel *definition.Select, heading *line) {
 	if heading != nil && sel.Heading(heading.text) {
 		r.ledger.markOne(*heading)
+	}
+}
+
+// markEnd records the line select.until matched at the top level as
+// read, when the expression describes all of it: the line that closes the
+// output ("The command completed successfully.") has been said everything
+// about, and nothing else is given it. Every line after it is left out
+// and unread, which is what refuses another command's output behind it.
+func (r *run) markEnd(sel *definition.Select, end *line) {
+	if end != nil && sel.End(end.text) {
+		r.ledger.markOne(*end)
 	}
 }
 
@@ -526,7 +539,8 @@ func (r *run) parseComposite(p *definition.Parse, lines []line) (any, error) {
 		// The region comes first and the ignore list narrows it, so that
 		// select.skip and select.limit count the lines as they stand in
 		// the output rather than the ones left after dropping.
-		region, heading := applySelect(&part.Select, lines)
+		// The line a part's until matches is left to its siblings.
+		region, heading, _ := applySelect(&part.Select, lines)
 		sub := dropIgnored(part.IgnorePatterns(), region)
 		v, err := r.parse(&part.Parse, part.Fields, sub)
 		if err != nil {

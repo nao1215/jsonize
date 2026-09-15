@@ -264,7 +264,9 @@ in one of these places, and a line in none of them is an error naming it
 - left out because it is blank, or because an `ignore` expression names
   it;
 - the heading of a region: the line `select.after` matched, when the
-  expression describes the whole of it.
+  expression describes the whole of it;
+- the end of the input: the line the top-level `input.select.until`
+  matched, when the expression describes the whole of it.
 
 `ignore` is the one way to leave text out on purpose, so what it names is
 what the definition declares worthless: a legend, a column header the
@@ -278,6 +280,11 @@ by its siblings or is unread. The heading `after` matches counts as read
 only when the expression states the line from end to end (surrounding
 whitespace aside): `after: '^Features for \S+:$'` does, `after: '^Features
 for '` leaves the rest of the line, and with it the interface name, unread.
+The same holds for the line top-level `until` matches, which closes the
+output: `until: '^The command completed successfully\.$'` reads that line,
+and every line after it is left out and so unread, which is how a
+listing refuses another command's output behind its closing line. A
+part's `until` line is left to its siblings to read.
 
 ## parse
 

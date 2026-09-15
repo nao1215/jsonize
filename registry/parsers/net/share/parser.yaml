@@ -34,10 +34,13 @@ detect:
       # The header, then the rule after a blank line.
       - '\AShare name[ \t]+Resource[ \t]+Remark[ \t]*\n(?:[ \t]*\n)*-{20,}[ \t]*$'
 input:
+  # The completion line closes the listing and is read as its end; a line
+  # after it is not a share, and is unread rather than taken for a row.
+  select:
+    until: '^The command completed successfully\.[ \t]*$'
   ignore:
-    # The rule under the header and the completion line after the rows.
+    # The rule under the header.
     - '^-{20,}[ \t]*$'
-    - '^The command completed successfully\.[ \t]*$'
 parse:
   type: table
   split: aligned

@@ -394,6 +394,9 @@ func validateSelect(v *validator, path string, s *Select) {
 	}
 	if s.Until != "" {
 		s.until = v.regex(path+".until", s.Until)
+		if s.until != nil {
+			s.end = &pattern{expr: `\A[ \t]*(?:` + s.Until + `)[ \t]*\z`}
+		}
 	}
 	if s.Skip < 0 {
 		v.add(path+".skip", "must not be negative")

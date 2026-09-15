@@ -248,6 +248,43 @@ parse: {type: regex, pattern: '^(?P<k>\w+): (?P<v>\w+)$'}
 	}
 }
 
+// The line top-level select.until matches closes the input, and counts
+// as read when the expression states the whole of it, as a heading does.
+// A line after it is another command's and is unread, in a whole
+// document and in a stream alike.
+func TestEndIsReadOnlyWhenStatedWhole(t *testing.T) {
+	t.Parallel()
+	const tmpl = `format: 1
+command: t
+variant: v
+input:
+  select: {until: 'UNTIL'}
+parse: {type: regex, pattern: '^(?P<k>\w+): (?P<v>\w+)$'}
+`
+	whole := strings.Replace(tmpl, "UNTIL", `^The command completed successfully\.$`, 1)
+	const done = "a: on\nThe command completed successfully.\n\n"
+	got, err := Parse(load(t, whole), []byte(done), Options{})
+	if err != nil || mustJSON(t, got) != `[{"k":"a","v":"on"}]` {
+		t.Errorf("a closing line stated whole: %v %v", mustJSON(t, got), err)
+	}
+	if got, err := streamAll(t, whole, done); err != nil || got != `{"k":"a","v":"on"}`+"\n" {
+		t.Errorf("a closing line stated whole, streamed: %q %v", got, err)
+	}
+	const after = "a: on\nThe command completed successfully.\nb: off\n"
+	ue, pe := unread(t, whole, after)
+	if pe.Line != 3 || ue.Spans[0].Text != "b: off" {
+		t.Errorf("a line after the closing line: %v", pe)
+	}
+	if _, err := streamAll(t, whole, after); err == nil || !strings.Contains(err.Error(), "line 3") {
+		t.Errorf("a line after the closing line, streamed: %v", err)
+	}
+	opening := strings.Replace(tmpl, "UNTIL", `^The command`, 1)
+	ue, pe = unread(t, opening, done)
+	if pe.Line != 2 || ue.Spans[0].Text != "The command completed successfully." {
+		t.Errorf("a closing line stated by how it opens: %v", pe)
+	}
+}
+
 // A pattern matched against one line has to reach both ends of it.
 func TestPatternReadsTheWholeLine(t *testing.T) {
 	t.Parallel()
@@ -431,7 +468,9 @@ parse:
 	}
 
 	// A selection that closes before the end: the stream reads on and
-	// reports what it left out, the way the whole document does.
+	// reports what it left out, the way the whole document does. The
+	// closing line the expression states whole is read, and the first
+	// line left out is the one after it.
 	sel := `format: 1
 command: t
 variant: v
@@ -441,11 +480,11 @@ parse: {type: regex, pattern: '^(?P<v>\S+)$'}
 `
 	_, err = streamAll(t, sel, "a\nb\nEND\nlater\n")
 	var pe *ParseError
-	if !errors.As(err, &pe) || !errors.Is(err, ErrUnread) || pe.Line != 3 {
+	if !errors.As(err, &pe) || !errors.Is(err, ErrUnread) || pe.Line != 4 {
 		t.Errorf("stream past the selection: %v", err)
 	}
 	_, pe = unread(t, sel, "a\nb\nEND\nlater\n")
-	if pe.Line != 3 {
+	if pe.Line != 4 {
 		t.Errorf("whole document past the selection: %v", pe)
 	}
 	// A blank line past it is nothing.
