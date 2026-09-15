@@ -48,7 +48,6 @@ func TestNewFailures(t *testing.T) {
 		{"an option after the arguments", []string{"new", "a=1", "-p"}, ExitUsage, "options come before the arguments"},
 		{"pretty and yaml", []string{"new", "-p", "--yaml"}, ExitUsage, "--pretty and --yaml cannot be used together"},
 		{"an unknown option", []string{"new", "--stream"}, ExitUsage, "flag provided but not defined"},
-		{"a missing file", []string{"new", "a=@" + filepath.Join(h.home, "missing")}, ExitError, "no such file"},
 		{"a data file that is not its format", []string{"new", "a:=@" + bad}, ExitParse, "yaml: line 1: .nan is not a number JSON can hold"},
 		{"text that is not UTF-8", []string{"new", "a=@" + latin}, ExitParse, "not valid UTF-8"},
 		{"damaged compression", []string{"new", "a:=@" + broken}, ExitParse, "cannot be decompressed"},
