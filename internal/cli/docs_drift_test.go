@@ -159,8 +159,8 @@ func jzInvocations(line string) ([][]string, error) {
 			continue
 		}
 		var args []string
-		for i+1 < len(words) && !strings.ContainsAny(words[i+1][:1], "|;&<>") {
-			if i+2 < len(words) && strings.HasPrefix(words[i+2], ">") && strings.Trim(words[i+1], "0123456789") == "" {
+		for i+1 < len(words) && (words[i+1] == "" || !strings.ContainsAny(words[i+1][:1], "|;&<>")) {
+			if i+2 < len(words) && strings.HasPrefix(words[i+2], ">") && words[i+1] != "" && strings.Trim(words[i+1], "0123456789") == "" {
 				break
 			}
 			i++
@@ -344,6 +344,10 @@ func TestParseCommandLineRefuses(t *testing.T) {
 	inv, err := jzInvocations(`df -h | jz --define 'parse: {type: table}' > out.json && jz new x=1 | curl -d @- https://example.com`)
 	if err != nil || len(inv) != 2 || inv[0][1] != "parse: {type: table}" || inv[1][0] != "new" {
 		t.Errorf("invocations: %q %v", inv, err)
+	}
+	inv, err = jzInvocations(`jz new --array '' "" x > out.json`)
+	if err != nil || len(inv) != 1 || len(inv[0]) != 5 || inv[0][2] != "" || inv[0][4] != "x" {
+		t.Errorf("empty words: %q %v", inv, err)
 	}
 }
 

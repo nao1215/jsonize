@@ -45,9 +45,10 @@ output beside it; no Go code is needed to add one.
 
 ## Data files
 
-A file is read as the format its extension names, and a pipe as the
-format `--format` names. Nothing is detected for a data file, and text the
-format does not allow is exit 3 with the line.
+A file is read as the format its extension names. Piped text is detected
+as command output unless `--format` names a data format. Nothing is
+detected for a data file, and text the format does not allow is exit 3
+with the line.
 
 ![jz reading a CSV file and a YAML file](demo/datafile.gif)
 

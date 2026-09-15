@@ -250,8 +250,9 @@ always passed on.
 ## Data files
 
 A file is read as the format its extension names, and data from a pipe as
-the format `--format` names. Nothing is detected, and the text is held to
-that format from the first line to the last.
+the format `--format` names; without `--format`, piped text is detected as
+command output. Nothing is detected for a data file, and the text is held
+to that format from the first line to the last.
 
 | Format | Extensions | What jz writes |
 |--------|------------|----------------|
