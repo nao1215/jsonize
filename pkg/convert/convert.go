@@ -133,6 +133,12 @@ type Assumptions struct {
 	// Year dates a timestamp whose layout carries none. Zero means none
 	// was given.
 	Year int
+	// Recent dates such a timestamp when Year is zero: the latest year
+	// that does not put it more than a day after this moment, which is
+	// when jz started. A record of something that happened cannot be in
+	// the future, and the day allows for a zone ahead of the one the
+	// stamp is read in. The zero time means none was given.
+	Recent time.Time
 	// Zones maps a zone abbreviation to its offset east of UTC in
 	// seconds. An abbreviation names a different offset in different
 	// parts of the world, so there is no table jz could ship.
@@ -159,20 +165,24 @@ func TimeAssuming(s, layout string, loc *time.Location, a Assumptions) (string, 
 	if t == "" {
 		return "", false, &Error{Type: typeTime, Input: s, Cause: errors.New("empty value")}
 	}
-	written, assumed := layout, false
+	if loc == nil {
+		loc = time.UTC
+	}
+	written, year := layout, 0
 	if !strings.Contains(layout, "06") {
-		if a.Year == 0 {
+		switch {
+		case a.Year != 0:
+			year = a.Year
+		case !a.Recent.IsZero():
+			return recentTime(s, t, layout, loc, a)
+		default:
 			return s, false, nil
 		}
 		// Prepending is the one place a year can go that no layout can
 		// already be using, so the reference year cannot collide with
 		// the rest of the layout.
 		layout = "2006 " + layout
-		t = strconv.Itoa(a.Year) + " " + t
-		assumed = true
-	}
-	if loc == nil {
-		loc = time.UTC
+		t = strconv.Itoa(year) + " " + t
 	}
 	parsed, err := time.ParseInLocation(layout, t, loc)
 	if err != nil {
@@ -180,8 +190,8 @@ func TimeAssuming(s, layout string, loc *time.Location, a Assumptions) (string, 
 		// not have (February 29), which is a different thing to say.
 		var pe *time.ParseError
 		if errors.As(err, &pe) && strings.Contains(pe.Message, "out of range") {
-			if assumed {
-				return "", false, &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("is not a date in %d, the year it was assumed to be in", a.Year)}
+			if year != 0 {
+				return "", false, &Error{Type: typeTime, Input: s, Cause: notInYearError{year: year}}
 			}
 			return "", false, &Error{Type: typeTime, Input: s, Cause: errors.New("is not a date: " + strings.TrimPrefix(pe.Message, ": "))}
 		}
@@ -195,6 +205,41 @@ func TimeAssuming(s, layout string, loc *time.Location, a Assumptions) (string, 
 		parsed = resolved
 	}
 	return parsed.Format(time.RFC3339Nano), true, nil
+}
+
+// notInYearError is a day the year assumed for it does not have, such as
+// February 29 in 2025.
+type notInYearError struct{ year int }
+
+func (e notInYearError) Error() string {
+	return fmt.Sprintf("is not a date in %d, the year it was assumed to be in", e.year)
+}
+
+// recentTime dates a yearless timestamp by a.Recent: starting from the
+// year a day after that moment, it takes the first year in which the
+// text is a date no later than that. Eight years reach a February 29
+// from any moment.
+func recentTime(s, t, layout string, loc *time.Location, a Assumptions) (string, bool, error) {
+	limit := a.Recent.Add(24 * time.Hour)
+	for year := limit.Year(); year > limit.Year()-8; year-- {
+		dated := a
+		dated.Year, dated.Recent = year, time.Time{}
+		got, ok, err := TimeAssuming(s, layout, loc, dated)
+		if err != nil {
+			if errors.As(err, new(notInYearError)) {
+				continue
+			}
+			return got, ok, err
+		}
+		if !ok {
+			return got, ok, nil
+		}
+		parsed, perr := time.Parse(time.RFC3339Nano, got)
+		if perr != nil || !parsed.After(limit) {
+			return got, ok, nil
+		}
+	}
+	return "", false, &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("is not a date in any of the eight years up to %d", limit.Year())}
 }
 
 // resolveZone replaces the abbreviation a layout read with the offset the

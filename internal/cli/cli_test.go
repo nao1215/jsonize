@@ -9,7 +9,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -1667,12 +1666,17 @@ func TestAssumptionsAboutTimestamps(t *testing.T) {
 		t.Errorf("with a year: %#v", got)
 	}
 	// "now" is resolved once, on the command line, so nothing further
-	// down reads a clock.
+	// down reads a clock. It dates the login in the latest year that does
+	// not put it after that moment, since a login that was recorded has
+	// happened: within the year before, and not later than a day ahead.
+	started := time.Now()
 	if code := h.pipe(who, "--parser", "who", "--assume-year", "now"); code != ExitOK {
 		t.Fatalf("now: %d %s", code, h.stderr.String())
 	}
-	if got, ok := h.rows()[0]["time"].(string); !ok || !strings.HasPrefix(got, strconv.Itoa(time.Now().Year())+"-") {
-		t.Errorf("now: %#v", h.rows()[0]["time"])
+	got, ok := h.rows()[0]["time"].(string)
+	when, err := time.Parse(time.RFC3339, got)
+	if !ok || err != nil || when.After(started.Add(24*time.Hour)) || !when.After(started.AddDate(-1, 0, -1)) {
+		t.Errorf("now: %#v read at %s", h.rows()[0]["time"], started.Format(time.RFC3339))
 	}
 
 	const date = "Mon Sep  7 10:02:02 JST 2026\n"

@@ -469,8 +469,13 @@ $ jz run --assume-year now who
 $ jz run --assume-zone JST=+0900 --assume-zone CET=+0100 date
 ```
 
-`--assume-year` takes a four-digit year or `now`, which is resolved once
-when the command line is read. `--assume-zone` takes `ABBR=+HHMM` and may
+`--assume-year` takes a four-digit year or `now`. `now` is resolved once,
+when the command line is read, and dates each timestamp in the latest
+year that does not put it after that moment: a login printed as `Dec 31`
+and read on January 2 happened last year, and a record of something that
+happened is not in the future. A day of allowance covers a machine whose
+zone is ahead of the one the timestamp is read in, and `Feb 29` goes back
+to the last year that had one. `--assume-zone` takes `ABBR=+HHMM` and may
 be repeated.
 
 They are assumptions and jz reports them as such: nothing is dated unless
@@ -872,7 +877,7 @@ a command and variant wins:
 `jz list --sources` prints them with what exists on your machine. jz
 uses local definitions without network access. Conversion depends on the
 input, the selected definition and explicit assumptions such as
-`--assume-year now`, which uses the current year.
+`--assume-year now`, which dates by the moment jz started.
 
 A registry's optional `registry.yaml` can also switch definitions of the
 registries below it off:

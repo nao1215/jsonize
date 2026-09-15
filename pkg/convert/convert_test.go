@@ -412,6 +412,52 @@ func TestTimeAssuming(t *testing.T) {
 		!strings.Contains(err.Error(), `does not match the layout "Jan _2 15:04"`) {
 		t.Errorf("text the layout does not describe: %v", err)
 	}
+}
+
+// Recent dates a timestamp without a year by the moment jz started: the
+// latest year that does not put it after that moment. A login printed as
+// Dec 31 and read on January 2 happened last year, and dating it this
+// year would put it in the future, which a record of what happened cannot
+// be. A day of allowance covers a machine whose zone is ahead of the one
+// the stamp is read in.
+func TestTimeAssumingRecent(t *testing.T) {
+	t.Parallel()
+	const noYear = "Jan _2 15:04"
+	at := func(s string) Assumptions {
+		now, err := time.Parse(time.RFC3339, s)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return Assumptions{Recent: now}
+	}
+	for _, tt := range []struct {
+		in, now, want string
+	}{
+		{"Nov  4 13:17", "2026-09-15T10:00:00Z", "2025-11-04T13:17:00Z"},
+		{"Sep 15 09:00", "2026-09-15T10:00:00Z", "2026-09-15T09:00:00Z"},
+		{"Dec 31 23:59", "2026-01-02T08:00:00Z", "2025-12-31T23:59:00Z"},
+		{"Jan  2 07:00", "2026-01-02T08:00:00Z", "2026-01-02T07:00:00Z"},
+		// Printed on a machine nine hours ahead: its January 1 is still
+		// December 31 by the clock the stamp is read against.
+		{"Jan  1 04:00", "2025-12-31T20:00:00Z", "2026-01-01T04:00:00Z"},
+		// The nearest February 29 that has passed.
+		{"Feb 29 10:00", "2027-03-01T00:00:00Z", "2024-02-29T10:00:00Z"},
+	} {
+		got, ok, err := TimeAssuming(tt.in, noYear, nil, at(tt.now))
+		if err != nil || !ok || got != tt.want {
+			t.Errorf("%s read at %s: %q %v %v, want %s", tt.in, tt.now, got, ok, err, tt.want)
+		}
+	}
+	// A year stated on the command line is taken as it is.
+	both := at("2026-01-02T08:00:00Z")
+	both.Year = 2026
+	if got, _, err := TimeAssuming("Dec 31 23:59", noYear, nil, both); err != nil || got != "2026-12-31T23:59:00Z" {
+		t.Errorf("a stated year: %q %v", got, err)
+	}
+	// A layout that carries its own year needs no assumption.
+	if got, _, err := TimeAssuming("2030-01-01 00:00", "2006-01-02 15:04", nil, at("2026-01-02T08:00:00Z")); err != nil || got != "2030-01-01T00:00:00Z" {
+		t.Errorf("a printed year: %q %v", got, err)
+	}
 
 	const zoned = "Mon Jan _2 15:04:05 MST 2006"
 	if got, ok, err := TimeAssuming("Mon Sep  7 10:02:02 JST 2026", zoned, nil, Assumptions{}); err != nil || ok || got != "Mon Sep  7 10:02:02 JST 2026" {

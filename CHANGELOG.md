@@ -100,6 +100,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `--assume-year now` dates a timestamp printed without a year in the
+  latest year that does not put it after the moment jz started, rather
+  than always in the current year. A `last` or `who` line of December 31
+  read in January used to come out in the future.
 - `jz test` and `make registry-test` report a definition that reads a
   fixture or a decoy once, naming every name that reached it
   (`md5/bsd (also named sha256sum, b2sum)`), where a definition with

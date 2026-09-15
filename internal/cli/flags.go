@@ -273,7 +273,7 @@ func (f *outputOptions) assumptions() (convert.Assumptions, error) {
 	switch f.year {
 	case "":
 	case "now":
-		a.Year = time.Now().Year()
+		a.Recent = time.Now()
 	default:
 		n, err := strconv.Atoi(f.year)
 		if err != nil || len(f.year) != 4 || n < 1000 {
