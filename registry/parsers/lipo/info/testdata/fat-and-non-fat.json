@@ -1,0 +1,17 @@
+[
+  {
+    "fat": true,
+    "file": "/bin/ls",
+    "architectures": [
+      "x86_64",
+      "arm64e"
+    ]
+  },
+  {
+    "fat": false,
+    "file": "/usr/lib/dyld",
+    "architectures": [
+      "arm64e"
+    ]
+  }
+]

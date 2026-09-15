@@ -1,0 +1,59 @@
+[
+  {
+    "label": "Software",
+    "value": null,
+    "children": [
+      {
+        "label": "System Software Overview",
+        "value": null,
+        "children": [
+          {
+            "label": "System Version",
+            "value": "macOS 26.6.2 (25G83)",
+            "children": []
+          },
+          {
+            "label": "Kernel Version",
+            "value": "Darwin 25.6.0",
+            "children": []
+          },
+          {
+            "label": "Boot Volume",
+            "value": "Macintosh HD",
+            "children": []
+          },
+          {
+            "label": "Boot Mode",
+            "value": "Normal",
+            "children": []
+          },
+          {
+            "label": "Computer Name",
+            "value": "example-mac-00000000-0000-4000-8000-000000000000-020000000003",
+            "children": []
+          },
+          {
+            "label": "User Name",
+            "value": "Anka (user)",
+            "children": []
+          },
+          {
+            "label": "Secure Virtual Memory",
+            "value": "Enabled",
+            "children": []
+          },
+          {
+            "label": "System Integrity Protection",
+            "value": "Disabled",
+            "children": []
+          },
+          {
+            "label": "Time since boot",
+            "value": "4 minutes, 46 seconds",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,21 @@
+Name       Mtu   Network       Address            Ipkts Ierrs    Opkts Oerrs  Coll
+lo0        16384 <Link#1>                           461     0      461     0     0
+lo0        16384 127           localhost            461     -      461     -     -
+lo0        16384 localhost   ::1                    461     -      461     -     -
+lo0        16384 example-mac fe80:1::1              461     -      461     -     -
+gif0*      1280  <Link#2>                             0     0        0     0     0
+stf0*      1280  <Link#3>                             0     0        0     0     0
+anpi0      1500  <Link#4>    02:00:00:00:00:04        0     0        0     0     0
+XHC12*     0     <Link#5>                             0     0        0     0     0
+en1        1500  <Link#6>    02:00:00:00:00:05        0     0        0     0     0
+en0        1500  <Link#7>    02:00:00:00:00:03    21202     0     6866     0     0
+en0        1500  example-mac fe80:7::200:ff:fe    21202     -     6866     -     -
+en0        1500  192.0.2       example-mac-000    21202     -     6866     -     -
+utun0      1380  <Link#8>                             0     0        2     0     0
+utun0      1380  example-mac fe80:8::1379:72af        0     -        2     -     -
+utun1      1500  <Link#9>                             0     0        1     0     0
+utun1      1500  example-mac fe80:9::e95b:3ab2        0     -        1     -     -
+utun2      2000  <Link#10>                            0     0        4     0     0
+utun2      2000  example-mac fe80:a::eeae:c307        0     -        4     -     -
+utun3      1000  <Link#11>                            0     0        4     0     0
+utun3      1000  example-mac fe80:b::ce81:b1c:        0     -        4     -     -

@@ -1,0 +1,5 @@
+description: the uptime line joined after the IPv6 routes is refused rather than read as a route
+source: the macos-26 fixture followed by the uptime/bsd fixture, joined for this case
+os: darwin
+args: ["-rn"]
+expect_error: cannot convert

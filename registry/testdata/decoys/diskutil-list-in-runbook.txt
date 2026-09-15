@@ -1,0 +1,5 @@
+/dev/disk4 (external, physical):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+Stop here and compare the heading above with the one the new drive
+prints. If the drive shows up as a disk image instead, eject it, unplug
+the dock and run diskutil list again before erasing anything.

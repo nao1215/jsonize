@@ -1,0 +1,5 @@
+The system has 7516192768 (458752 pages with a page size of 16384).
+
+Stats:
+Pages free dropped below two thousand at 02:37, and the build agent was
+killed by jetsam a minute later.

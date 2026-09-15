@@ -1,0 +1,12 @@
+[
+  {
+    "hardware_port": "Ethernet",
+    "device": "en0",
+    "ethernet_address": "02:00:00:00:00:03"
+  },
+  {
+    "hardware_port": "Ethernet Adapter (en1)",
+    "device": "en1",
+    "ethernet_address": "02:00:00:00:00:05"
+  }
+]

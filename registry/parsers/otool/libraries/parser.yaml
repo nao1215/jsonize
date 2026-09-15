@@ -1,0 +1,50 @@
+# otool -L prints a block per file: the file's name and a colon, then a
+# line per shared library it links against, indented by a tab, with the
+# compatibility and current versions the binary was built with. A fat
+# file examined with -arch prints a block per architecture, the name
+# followed by "(architecture arm64e)"; architecture is null for a block
+# without it. A library loaded weakly, re-exported or loaded lazily
+# carries the word after the versions ("weak", "reexport"), read into
+# attributes, which is null for the rest.
+#
+# The versions stay text: "1356.0.0" is not a number. The first library
+# line of a dynamic library is its own install name, which otool prints
+# the same way.
+format: 1
+command: otool
+variant: libraries
+description: otool -L shared libraries a Mach-O file links against, with their versions
+metadata:
+  tags: [darwin, development, linker]
+  compatible: [Xcode otool, cctools otool]
+detect:
+  os: [darwin]
+  args:
+    any: ["-L"]
+  signature:
+    all:
+      # A file line and a library line, then only lines of those two
+      # shapes to the end of the window.
+      - '\A\S[^\n]*:[ \t]*\n\t\S[^\n]* \(compatibility version [0-9.]+, current version [0-9.]+(?:, [a-z]+)*\)[ \t]*(?:\n(?:\S[^\n]*:|\t\S[^\n]* \(compatibility version [0-9.]+, current version [0-9.]+(?:, [a-z]+)*\))[ \t]*)*\z'
+parse:
+  type: records
+  start: '^\S[^\n]*:[ \t]*$'
+  parts:
+    - name: file
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>\S[^\n]*?)(?: \(architecture (?P<architecture>[A-Za-z0-9_]+)\))?:[ \t]*\z'
+      fields:
+        name: {required: true}
+    - name: libraries
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^\t(?P<path>\S[^\n]*?) \(compatibility version (?P<compatibility_version>[0-9.]+), current version (?P<current_version>[0-9.]+)(?:, (?P<attributes>[a-z]+(?:, [a-z]+)*))?\)[ \t]*$'
+      fields:
+        path: {required: true}
+        compatibility_version: {required: true}
+        current_version: {required: true}
+        attributes: {type: array, split: ","}

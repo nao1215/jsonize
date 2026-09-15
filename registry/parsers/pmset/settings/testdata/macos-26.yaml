@@ -1,0 +1,4 @@
+description: an empty system-wide list, and settings with names holding spaces and notes on what overrides them
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C pmset -g
+os: darwin
+args: [-g]

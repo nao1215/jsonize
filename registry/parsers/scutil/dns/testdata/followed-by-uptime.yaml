@@ -1,0 +1,5 @@
+description: the uptime line joined after the last scoped resolver is refused rather than read into it
+source: the macos-26 fixture followed by the uptime/bsd fixture, joined for this case
+os: darwin
+args: [--dns]
+expect_error: does not match pattern

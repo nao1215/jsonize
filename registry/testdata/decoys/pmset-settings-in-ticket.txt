@@ -1,0 +1,4 @@
+System-wide power settings:
+Currently in use:
+ the machine still sleeps after ten minutes even though displaysleep is 0
+ and caffeinate was running, see the attached log for the times

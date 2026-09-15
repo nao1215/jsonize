@@ -1,0 +1,41 @@
+# networksetup -listallhardwareports prints a block per hardware port,
+# three labelled lines each: the port's name, the device name and the
+# hardware address. A port without one, such as Thunderbolt Bridge,
+# prints "N/A" there, which is null. After the ports it prints a
+# "VLAN Configurations" heading and a rule, which are left out.
+#
+# A VLAN that has been configured is printed under that heading, in lines
+# this definition does not read, so such output is refused rather than
+# read with the VLAN in the last port.
+format: 1
+command: networksetup
+variant: hardware-ports
+description: networksetup -listallhardwareports ports, devices and hardware addresses on macOS
+metadata:
+  tags: [darwin, network]
+  compatible: [macOS networksetup]
+detect:
+  os: [darwin]
+  args:
+    all: ["-listallhardwareports"]
+  signature:
+    all:
+      # The first port, then only port lines, the VLAN heading, its rule
+      # and blank lines to the end of the window.
+      - '\AHardware Port: [^\n]*\nDevice: \S+[ \t]*\nEthernet Address: (?:N/A|[0-9a-fA-F:]+)[ \t]*(?:\n(?:Hardware Port: [^\n]*|Device: \S+|Ethernet Address: (?:N/A|[0-9a-fA-F:]+)|VLAN Configurations|=+|)[ \t]*)*\z'
+input:
+  ignore:
+    - '^VLAN Configurations[ \t]*$'
+    - '^=+[ \t]*$'
+parse:
+  type: records
+  start: '^Hardware Port: '
+  record:
+    parse:
+      type: regex
+      each: input
+      pattern: '\AHardware Port: (?P<hardware_port>[^\n]*?)[ \t]*\nDevice: (?P<device>\S+)[ \t]*\nEthernet Address: (?P<ethernet_address>N/A|[0-9a-fA-F]{1,2}(?::[0-9a-fA-F]{1,2}){5})[ \t]*\z'
+    fields:
+      hardware_port: {required: true}
+      device: {required: true}
+      ethernet_address: {null_if: ["N/A"]}

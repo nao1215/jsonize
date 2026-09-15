@@ -1,0 +1,5 @@
+description: the uptime line joined after the free percentage is refused rather than read
+source: the macos-26 fixture followed by the uptime/bsd fixture, joined for this case
+os: darwin
+args: []
+expect_error: does not match pattern

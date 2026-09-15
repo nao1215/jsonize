@@ -1,0 +1,4 @@
+description: the ProductVersionExtra line a Rapid Security Response adds between the version and the build
+source: written by hand in the layout sw_vers prints on macOS 13.4.1 with Rapid Security Response (c) installed, with the tabs the captured output uses
+os: darwin
+args: []

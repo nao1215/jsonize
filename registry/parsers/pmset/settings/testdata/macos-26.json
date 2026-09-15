@@ -1,0 +1,45 @@
+{
+  "system_wide": [],
+  "currently_in_use": [
+    {
+      "name": "powernap",
+      "value": "1",
+      "note": null
+    },
+    {
+      "name": "sleep",
+      "value": "0",
+      "note": "sleep prevented by addonsd, powerd"
+    },
+    {
+      "name": "Sleep On Power Button",
+      "value": "1",
+      "note": null
+    },
+    {
+      "name": "ttyskeepawake",
+      "value": "1",
+      "note": null
+    },
+    {
+      "name": "tcpkeepalive",
+      "value": "1",
+      "note": null
+    },
+    {
+      "name": "disksleep",
+      "value": "0",
+      "note": null
+    },
+    {
+      "name": "standby",
+      "value": "0",
+      "note": null
+    },
+    {
+      "name": "displaysleep",
+      "value": "0",
+      "note": "display sleep prevented by addonsd"
+    }
+  ]
+}

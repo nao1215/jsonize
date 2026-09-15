@@ -1,0 +1,35 @@
+# sw_vers with no option prints the name of the system, its version and
+# its build, one label per line with the value aligned by tabs. A
+# Rapid Security Response adds a ProductVersionExtra line between the
+# version and the build ("(a)", "(c)"); product_version_extra is null on
+# a system without one. Older releases name the system "Mac OS X", so a
+# value may hold spaces.
+#
+# The version stays text: "26.6.2" is not a number, and the build is an
+# identifier.
+#
+# -productName, -productVersion, -productVersionExtra and -buildVersion
+# print the one value alone, which the signature does not describe.
+format: 1
+command: sw_vers
+variant: darwin
+description: sw_vers macOS product name, version and build
+metadata:
+  tags: [darwin, system]
+  compatible: [macOS sw_vers]
+detect:
+  os: [darwin]
+  args:
+    none: ["-productName", "-productVersion", "-productVersionExtra", "-buildVersion"]
+  signature:
+    all:
+      # The whole output is these three or four lines.
+      - '\AProductName:[ \t]+\S[^\n]*\nProductVersion:[ \t]+\S[^\n]*\n(?:ProductVersionExtra:[ \t]+\S[^\n]*\n)?BuildVersion:[ \t]+\S+[ \t]*\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\AProductName:[ \t]+(?P<product_name>\S[^\n]*?)[ \t]*\nProductVersion:[ \t]+(?P<product_version>\S[^\n]*?)[ \t]*\n(?:ProductVersionExtra:[ \t]+(?P<product_version_extra>\S[^\n]*?)[ \t]*\n)?BuildVersion:[ \t]+(?P<build_version>\S+)[ \t]*\z'
+fields:
+  product_name: {required: true}
+  product_version: {required: true}
+  build_version: {required: true}

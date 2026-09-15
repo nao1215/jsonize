@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/diskutil/list.json",
+  "title": "diskutil/list",
+  "description": "diskutil list disks with their partitions and volumes on macOS",
+  "x-jsonize": {
+    "definition": "diskutil/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "disk": {
+        "type": "object",
+        "properties": {
+          "device": {
+            "type": "string"
+          },
+          "attributes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "device",
+          "attributes"
+        ]
+      },
+      "partitions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "index": {
+              "type": "integer"
+            },
+            "type": {
+              "type": "string"
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "size": {
+              "type": "string"
+            },
+            "identifier": {
+              "type": "string"
+            },
+            "physical_stores": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "index",
+            "type",
+            "name",
+            "size",
+            "identifier",
+            "physical_stores"
+          ]
+        }
+      }
+    },
+    "required": [
+      "disk",
+      "partitions"
+    ]
+  }
+}

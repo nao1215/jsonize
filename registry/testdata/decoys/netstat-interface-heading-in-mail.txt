@@ -1,0 +1,3 @@
+Name       Mtu   Network       Address            Ipkts Ierrs    Opkts Oerrs  Coll
+en0        1500  <Link#7>      the counters were reset when the dock was replugged
+en0 went from 21202 packets in to zero, so the graph for last night has a gap.

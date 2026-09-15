@@ -1,0 +1,28 @@
+[
+  {
+    "file": {
+      "name": "/bin/ls",
+      "architecture": null
+    },
+    "libraries": [
+      {
+        "path": "/usr/lib/libutil.dylib",
+        "compatibility_version": "1.0.0",
+        "current_version": "1.0.0",
+        "attributes": null
+      },
+      {
+        "path": "/usr/lib/libncurses.5.4.dylib",
+        "compatibility_version": "5.4.0",
+        "current_version": "5.4.0",
+        "attributes": null
+      },
+      {
+        "path": "/usr/lib/libSystem.B.dylib",
+        "compatibility_version": "1.0.0",
+        "current_version": "1356.0.0",
+        "attributes": null
+      }
+    ]
+  }
+]

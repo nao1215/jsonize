@@ -1,0 +1,28 @@
+# fdesetup status prints whether FileVault encrypts the startup disk:
+# "FileVault is On." or "FileVault is Off.". enabled is true for the
+# first and false for the second.
+#
+# While the disk is being encrypted or decrypted fdesetup prints a second
+# line with the progress, and a machine where FileVault waits for a
+# restart says so in the sentence; neither is read here, so that output
+# is refused rather than reported as one of the two states.
+format: 1
+command: fdesetup
+variant: status
+description: fdesetup status FileVault state on macOS
+metadata:
+  tags: [darwin, security, disk]
+  compatible: [macOS fdesetup]
+detect:
+  os: [darwin]
+  args:
+    all: ["status"]
+  signature:
+    all:
+      - '\AFileVault is (?:On|Off)\.[ \t]*\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\AFileVault is (?P<enabled>On|Off)\.[ \t]*\z'
+fields:
+  enabled: {type: bool, true_values: ["On"], false_values: ["Off"]}

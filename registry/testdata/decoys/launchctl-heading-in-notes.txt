@@ -1,0 +1,4 @@
+PID	Status	Label
+The three columns above are what launchctl list prints. A dash under
+PID means the job is loaded but not running, and a nonzero status is
+the exit code of its last run.

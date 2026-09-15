@@ -1,0 +1,35 @@
+# lipo -info prints a line per file naming the architectures in it. A
+# universal file prints "Architectures in the fat file: NAME are:" and
+# the architectures separated by spaces, with a space after the last; a
+# file of one architecture prints "Non-fat file: NAME is architecture:"
+# and that one. fat says which of the two lines it was, and architectures
+# is an array either way.
+#
+# -archs prints the architectures alone and -detailed_info prints a block
+# per architecture; neither is read here.
+format: 1
+command: lipo
+variant: info
+description: lipo -info architectures of universal and single-architecture files
+metadata:
+  tags: [darwin, development]
+  compatible: [Xcode lipo, cctools lipo]
+detect:
+  os: [darwin]
+  args:
+    any: ["-info"]
+  signature:
+    all:
+      # Every line is one of the two sentences.
+      - '\A(?:(?:Architectures in the fat file: [^\n]+ are:(?: [a-z0-9_]+)+|Non-fat file: [^\n]+ is architecture: [a-z0-9_]+)[ \t]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  patterns:
+    - pattern: '^Architectures in the fat file: (?P<file>[^\n]+) are: (?P<architectures>[a-z0-9_]+(?: [a-z0-9_]+)*)[ \t]*$'
+      values: {fat: "true"}
+    - pattern: '^Non-fat file: (?P<file>[^\n]+) is architecture: (?P<architectures>[a-z0-9_]+)[ \t]*$'
+      values: {fat: "false"}
+fields:
+  fat: {type: bool, true_values: ["true"], false_values: ["false"]}
+  file: {required: true}
+  architectures: {type: array, split: " "}

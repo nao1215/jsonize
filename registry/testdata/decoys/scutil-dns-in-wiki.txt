@@ -1,0 +1,6 @@
+DNS configuration
+
+resolver #1
+  nameserver[0] : 10.8.0.1
+  this is the VPN resolver; if it is missing, reconnect before filing a ticket
+resolver #2 should be the office DNS, and resolver #3 the local mDNS one.

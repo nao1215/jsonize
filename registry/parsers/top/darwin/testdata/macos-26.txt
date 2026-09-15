@@ -1,0 +1,22 @@
+Processes: 542 total, 16 running, 6 stuck, 520 sleeping, 1789 threads 
+2026/09/15 02:37:52
+Load Avg: 9.28, 18.30, 10.19 
+CPU usage: 34.21% user, 36.84% sys, 28.94% idle 
+SharedLibs: 724M resident, 179M data, 129M linkedit.
+MemRegions: 44219 total, 1429M resident, 351M private, 485M shared.
+PhysMem: 6981M used (825M wired, 293M compressor), 171M unused.
+VM: 220T vsize, 6144M framework vsize, 0(0) swapins, 0(0) swapouts.
+Networks: packets: 21688/27M in, 7365/1492K out.
+Disks: 220175/4546M read, 81854/3527M written.
+
+PID   COMMAND         %CPU TIME     #TH  #WQ #PORTS MEM   PURG CMPRS PGRP PPID STATE    BOOSTS %CPU_ME %CPU_OTHRS UID FAULTS COW MSGSENT MSGRECV SYSBSD SYSMACH CSW  PAGEINS IDLEW POWER INSTRS CYCLES JETPRI USER   #MREGS RPRVT VPRVT VSIZE KPRVT KSHRD
+3801  top             0.0  00:00.13 1/1  0   16     3057K 0B   0B    938  3785 running  *0[1]  0.00000 0.00000    0   1215   77  136083  68041   2878   71567   46   6       0     0.0   0      0      180    root   N/A    N/A   N/A   N/A   N/A   N/A  
+3792  tipsd           0.0  00:00.13 5/1  4/1 78     2865K 0B   0B    3792 1    running  *0[1]  0.00000 0.00000    501 2213   118 239     81      1043   544     192  80      0     0.0   0      0      40     user   N/A    N/A   N/A   N/A   N/A   N/A  
+3785  bash            0.0  00:00.01 1    0   11     1313K 0B   0B    938  3778 sleeping *0[1]  0.00000 0.00000    501 876    245 74      37      775    139     58   6       4     0.0   0      0      180    user   N/A    N/A   N/A   N/A   N/A   N/A  
+3784  mdworker_shared 0.0  00:00.06 5/1  2   51     2833K 0B   0B    3784 1    running  *0[1]  0.00000 0.00000    501 2519   122 473     206     1389   591     97   6       0     0.0   0      0      40     user   N/A    N/A   N/A   N/A   N/A   N/A  
+3783  mdworker_shared 0.0  00:00.05 6/1  3   52     2769K 0B   0B    3783 1    running  *0[1]  0.00000 0.00000    501 2233   122 480     210     1061   591     137  6       0     0.0   0      0      40     user   N/A    N/A   N/A   N/A   N/A   N/A  
+3782  mdworker_shared 0.0  00:00.06 5/1  2   52     2817K 0B   0B    3782 1    running  *0[1]  0.00000 0.00000    501 2537   122 490     212     1772   619     105  6       1     0.0   0      0      40     user   N/A    N/A   N/A   N/A   N/A   N/A  
+3781  mdworker_shared 0.0  00:00.08 6/1  3   51     2769K 0B   0B    3781 1    running  *0[1]  0.00000 0.00000    501 2556   122 497     216     1826   618     115  13      0     0.0   0      0      40     user   N/A    N/A   N/A   N/A   N/A   N/A  
+3778  Runner.Worker   0.0  00:01.23 19/1 2   79     86M   0B   0B    938  3763 running  *0[1]  0.00000 0.00000    501 12659  356 509     228     12246  17925   9727 3       4     0.0   0      0      180    user   N/A    N/A   N/A   N/A   N/A   N/A  
+3777  mdworker_shared 0.0  00:00.27 5/1  2   54     2849K 0B   0B    3777 1    running  *0[1]  0.00000 0.00000    501 2865   122 1060    418     14776  1346    607  6       1     0.0   0      0      40     user   N/A    N/A   N/A   N/A   N/A   N/A  
+3774  mdworker_shared 0.0  00:00.04 4/2  2   50     2641K 0B   0B    3774 1    running  *0[1]  0.00000 0.00000    501 1874   119 516     220     1234   658     115  6       0     0.0   0      0      0      user   N/A    N/A   N/A   N/A   N/A   N/A  

@@ -1,0 +1,54 @@
+# pmset -g prints the power management settings in two lists: the
+# system-wide settings, which is often empty, and the settings of the
+# power source in use. Each setting is a line indented by one space: the
+# name padded to a column, the value, and on some settings a note in
+# parentheses saying what overrides it ("sleep prevented by powerd").
+#
+# A name may hold spaces ("Sleep On Power Button") and pushes the value
+# past the column when it is longer than it. Most values are numbers of
+# minutes or flags, but hibernatefile is a path, so every value stays the
+# text pmset printed.
+#
+# pmset -g custom prints one such list per power source under the
+# source's name, and -g batt, -g ps, -g assertions, -g log and the other
+# words after -g print other reports; the signature describes the two
+# headings this output opens with.
+format: 1
+command: pmset
+variant: settings
+description: pmset -g power management settings on macOS
+metadata:
+  tags: [darwin, power, system]
+  compatible: [macOS pmset]
+detect:
+  os: [darwin]
+  args:
+    all: ["-g"]
+    none: ["batt", "ps", "custom", "cap", "sched", "ups", "assertions", "log", "therm", "sysload", "stats", "everything", "live", "rawlog", "uuid", "history", "powerstate"]
+  signature:
+    all:
+      # The two headings and setting lines under them, to the end of the
+      # window.
+      - '\ASystem-wide power settings:[ \t]*\n(?: [A-Za-z][A-Za-z0-9_]*(?: [A-Z][A-Za-z0-9_]*){0,4}[ \t]+[^\s(]\S*(?:[ \t]+\([^\n]*\))?[ \t]*\n)*Currently in use:[ \t]*(?:\n [A-Za-z][A-Za-z0-9_]*(?: [A-Z][A-Za-z0-9_]*){0,4}[ \t]+[^\s(]\S*(?:[ \t]+\([^\n]*\))?[ \t]*)+\z'
+input:
+  select:
+    after: '\ASystem-wide power settings:[ \t]*$'
+parse:
+  type: composite
+  parts:
+    - name: system_wide
+      select: {until: '^Currently in use:[ \t]*$'}
+      parse:
+        type: regex
+        pattern: '^ (?P<name>[A-Za-z][A-Za-z0-9_]*(?: [A-Z][A-Za-z0-9_]*){0,4})[ \t]+(?P<value>[^\s(]\S*)(?:[ \t]+\((?P<note>[^\n]*)\))?[ \t]*$'
+      fields:
+        name: {required: true}
+        value: {required: true}
+    - name: currently_in_use
+      select: {after: '^Currently in use:[ \t]*$'}
+      parse:
+        type: regex
+        pattern: '^ (?P<name>[A-Za-z][A-Za-z0-9_]*(?: [A-Z][A-Za-z0-9_]*){0,4})[ \t]+(?P<value>[^\s(]\S*)(?:[ \t]+\((?P<note>[^\n]*)\))?[ \t]*$'
+      fields:
+        name: {required: true}
+        value: {required: true}

@@ -1,0 +1,34 @@
+# brew outdated --verbose prints a line per outdated formula or cask: the
+# name, the installed versions in parentheses separated by commas, an
+# operator and the version available. Homebrew writes "<" for a formula
+# and "!=" for a cask, whose versions it does not order; operator keeps
+# which it was. A pinned formula ends with "[pinned at VERSION]", read
+# into pinned_at, which is null for the rest. Versions stay text.
+#
+# Without --verbose, and with its output not a terminal, brew outdated
+# prints the names alone; --json prints JSON.
+format: 1
+command: brew
+variant: outdated
+description: brew outdated --verbose formulae and casks with installed and available versions
+metadata:
+  tags: [darwin, linux, packaging, homebrew]
+  compatible: [Homebrew]
+  references:
+    - https://docs.brew.sh/Manpage
+detect:
+  args:
+    all: ["outdated"]
+    any: ["--verbose", "-v"]
+    none: ["--json", "--quiet", "-q"]
+  signature:
+    all:
+      - '\A(?:[a-z0-9][a-z0-9@+._/-]* \([^()\n]+\) (?:<|!=) \S+(?: \[pinned at [^\]\n]+\])?[ \t]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<name>[a-z0-9][a-z0-9@+._/-]*) \((?P<installed>[^()\n]+)\) (?P<operator><|!=) (?P<latest>\S+)(?: \[pinned at (?P<pinned_at>[^\]\n]+)\])?[ \t]*$'
+fields:
+  name: {required: true}
+  installed: {type: array, split: ","}
+  operator: {required: true}
+  latest: {required: true}
