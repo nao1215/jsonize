@@ -4,7 +4,14 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.4.0]
+
+jz is the step that makes JSON for the next command. `jz new` places
+strings, file text and JSON values at keys or JSON Pointers, and makes one
+document per line of standard input with `--each`; plain text reads as
+strings with `--format text`, `lines` and `nul`; a csv or tsv column
+takes a type with `--type`. `--yaml` output is removed. The registry is
+unchanged at 224 commands and 596 definitions.
 
 ### Added
 
@@ -17,7 +24,6 @@ project follows [Semantic Versioning](https://semver.org/).
 - `--stop-on-error` ends a stream (`--stream`, `jz run --stream`, `jz new
   --each`) at the first record it cannot read, keeping the records written
   before it, with the status 3; a command `jz run` started is stopped.
-
 - `--format text`, `--format lines` and `--format nul` read input that
   has no format of its own as strings: the whole input as one string, a
   list with one string per line (LF or CRLF), or one per NUL-terminated
@@ -57,7 +63,6 @@ project follows [Semantic Versioning](https://semver.org/).
   (`e2e/atago/docs.atago.yaml`); a test fails when a page shows one that
   no scenario runs. The `--explain=json` example said the df capture had
   8 lines read, where 7 are read and one is left out.
-
 - A data file read with `--stream` (`jsonl`, `ltsv`, and the new `lines`
   and `nul`) leaves out a record it cannot read and goes on, as a stream
   of a command's output does, where it ended at the first. The status is
