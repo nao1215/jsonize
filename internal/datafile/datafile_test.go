@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 	"testing/iotest"
+	"unicode/utf8"
 
 	"github.com/nao1215/jsonize/pkg/engine"
 )
@@ -206,6 +207,138 @@ func FuzzLineFormats(f *testing.F) {
 		}
 		if encode(t, whole) != encode(t, streamed) {
 			t.Fatalf("whole %s, streamed %s", encode(t, whole), encode(t, streamed))
+		}
+	})
+}
+
+// text is the input as one string, and lines and nul are lists of the
+// strings their records hold, with nothing trimmed but the separators.
+func TestTextFormats(t *testing.T) {
+	t.Parallel()
+	const bom = "\xef\xbb\xbf"
+	for _, tt := range []struct {
+		format, input, want string
+	}{
+		{TEXT, "", `""`},
+		{TEXT, "  two words \r\n\n", `"  two words \r\n\n"`},
+		{TEXT, bom + "bom", `"bom"`},
+		{TEXT, "日本語\x00κ", `"日本語\u0000κ"`},
+		{LINES, "", `[]`},
+		{LINES, "\n", `[""]`},
+		{LINES, "a\nb\n", `["a","b"]`},
+		{LINES, "a\nb", `["a","b"]`},
+		{LINES, "a\n\n b \n\n", `["a",""," b ",""]`},
+		{LINES, "crlf\r\nlf\ncr\rin\r\n", `["crlf","lf","cr\rin"]`},
+		{LINES, "last\r", `["last\r"]`},
+		{LINES, bom + "first\n" + bom + "second\n", `["first","` + bom + `second"]`},
+		{LINES, bom, `[]`},
+		{LINES, bom + "\n", `[""]`},
+		{NUL, "", `[]`},
+		{NUL, "\x00", `[""]`},
+		{NUL, "a\x00b\x00", `["a","b"]`},
+		{NUL, "a\x00b", `["a","b"]`},
+		{NUL, "a\x00\x00b c\n\r\n\x00", `["a","","b c\n\r\n"]`},
+		{NUL, bom + "kept\x00", `["` + bom + `kept"]`},
+	} {
+		v, err := Read(tt.format, []byte(tt.input))
+		if err != nil {
+			t.Errorf("%s %q: %v", tt.format, tt.input, err)
+			continue
+		}
+		if got := encode(t, v); got != tt.want {
+			t.Errorf("%s %q: got %s, want %s", tt.format, tt.input, got, tt.want)
+		}
+		if !Streams(tt.format) {
+			continue
+		}
+		var streamed []any
+		if err := Stream(tt.format, iotest.OneByteReader(strings.NewReader(tt.input)), len(tt.input)+1, func(v any) error {
+			streamed = append(streamed, v)
+			return nil
+		}); err != nil {
+			t.Errorf("%s %q streamed: %v", tt.format, tt.input, err)
+		}
+		if streamed == nil {
+			streamed = []any{}
+		}
+		if got := encode(t, streamed); got != tt.want {
+			t.Errorf("%s %q streamed: got %s, want %s", tt.format, tt.input, got, tt.want)
+		}
+	}
+}
+
+func TestTextFormatsRefuse(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		format, input, want string
+	}{
+		{TEXT, "ok\ncaf\xe9\n", "text: line 2: the text is not valid UTF-8"},
+		{LINES, "ok\ncaf\xe9\n", "lines: line 2: the text is not valid UTF-8"},
+		{NUL, "ok\x00caf\xe9\x00", "nul: record 2: the text is not valid UTF-8"},
+	} {
+		_, err := Read(tt.format, []byte(tt.input))
+		var pe *engine.ParseError
+		if !errors.As(err, &pe) || err.Error() != tt.want {
+			t.Errorf("%s: got %v, want %q", tt.format, err, tt.want)
+		}
+	}
+	for _, tt := range []struct {
+		format, input, want string
+	}{
+		{LINES, "short\n" + strings.Repeat("x", 20) + "\n", "lines: line 2: the record is longer than 10 bytes"},
+		{NUL, "short\x00" + strings.Repeat("x", 20), "nul: record 2: the record is longer than 10 bytes"},
+	} {
+		var got []any
+		err := Stream(tt.format, strings.NewReader(tt.input), 10, func(v any) error {
+			got = append(got, v)
+			return nil
+		})
+		if err == nil || err.Error() != tt.want || len(got) != 1 {
+			t.Errorf("%s: got %v %v, want %q after one record", tt.format, got, err, tt.want)
+		}
+	}
+	if err := Stream(TEXT, strings.NewReader("x"), 10, func(any) error { return nil }); err == nil {
+		t.Error("text streamed")
+	}
+}
+
+// Joining the records of lines or nul with their separator gives back the
+// input: nothing but the separators, the CR of a CRLF and a leading byte
+// order mark is lost, and no record is made up.
+func FuzzStringRecords(f *testing.F) {
+	for _, s := range []string{"", "\n", "a\nb", "a\r\n\r\n", "\x00", "a\x00\x00b", "\xef\xbb\xbfx\n", "x\r"} {
+		f.Add(s, true)
+		f.Add(s, false)
+	}
+	f.Fuzz(func(t *testing.T, data string, lines bool) {
+		format, sep := NUL, "\x00"
+		if lines {
+			format, sep = LINES, "\n"
+		}
+		v, err := Read(format, []byte(data))
+		if err != nil {
+			var pe *engine.ParseError
+			if !errors.As(err, &pe) || utf8.ValidString(data) {
+				t.Fatalf("%q: %v", data, err)
+			}
+			return
+		}
+		records := v.([]any)
+		parts := make([]string, len(records))
+		for i, r := range records {
+			parts[i] = r.(string)
+		}
+		want := data
+		if lines {
+			// The CR in front of each LF is part of that line ending.
+			want = strings.ReplaceAll(strings.TrimPrefix(want, "\xef\xbb\xbf"), "\r\n", "\n")
+		}
+		got := strings.Join(parts, sep)
+		if strings.HasSuffix(want, sep) {
+			got += sep
+		}
+		if got != want {
+			t.Fatalf("%q: records %q join to %q", data, parts, got)
 		}
 	})
 }

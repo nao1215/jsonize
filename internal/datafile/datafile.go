@@ -1,7 +1,8 @@
 // Package datafile reads the data file formats jz converts to JSON as
 // they are, rather than as the output of a command: JSON, JSON Lines,
-// LTSV and YAML. CSV and TSV are read by the csv shapes of the registry,
-// so this package only names them.
+// LTSV, YAML, and text as one string or as a list of lines or of
+// NUL-separated records. CSV and TSV are read by the csv shapes of the
+// registry, so this package only names them.
 //
 // A format is chosen by the caller, with --format, or by the extension of
 // the file (data.csv, events.jsonl.gz). Nothing is guessed from the text:
@@ -39,6 +40,13 @@ const (
 	JSONL = "jsonl"
 	JSON  = "json"
 	YAML  = "yaml"
+	// TEXT is the whole input as one string.
+	TEXT = "text"
+	// LINES is a list of strings, one per line.
+	LINES = "lines"
+	// NUL is a list of strings, one per NUL-terminated record, as
+	// find -print0 and xargs -0 write them.
+	NUL = "nul"
 )
 
 // The compressions a file name may end in.
@@ -49,7 +57,7 @@ const (
 
 // Names lists the formats in the order help shows them.
 func Names() []string {
-	return []string{CSV, TSV, LTSV, JSONL, JSON, YAML}
+	return []string{CSV, TSV, LTSV, JSONL, JSON, YAML, TEXT, LINES, NUL}
 }
 
 // Known reports whether name is a format --format takes.
@@ -64,11 +72,11 @@ func Tabular(name string) bool {
 	return name == CSV || name == TSV
 }
 
-// Streams reports a format made of records, one per line, which --stream
-// can write as they are read. A JSON or YAML document is one value, and
-// there is nothing to write before its end.
+// Streams reports a format made of records, which --stream can write as
+// they are read. A JSON or YAML document and a text are one value, and
+// there is nothing to write before their end.
 func Streams(name string) bool {
-	return name == LTSV || name == JSONL
+	return name == LTSV || name == JSONL || name == LINES || name == NUL
 }
 
 var extensions = map[string]string{
@@ -168,7 +176,9 @@ func Read(format string, data []byte) (any, error) {
 		return readYAML(data)
 	case CSV, TSV:
 		return readTabular(format, data)
-	case JSONL, LTSV:
+	case TEXT:
+		return readText(data)
+	case JSONL, LTSV, LINES, NUL:
 		out := []any{}
 		err := Stream(format, bytes.NewReader(data), len(data)+1, func(v any) error {
 			out = append(out, v)
@@ -199,10 +209,20 @@ func readTabular(format string, data []byte) (any, error) {
 	return engine.Parse(def, data, engine.Options{MaxInputSize: int64(len(data)) + 1})
 }
 
-// Stream reads the records of a line format from r and hands each to
-// emit as soon as its line has ended. A line longer than maxLine bytes is
-// refused, which bounds what is held while a line waits for its end. The
-// first error, the reader's, a record's or emit's, ends the stream.
+// readText reads the whole input as one string. A byte order mark in
+// front is not part of the text; nothing else is trimmed.
+func readText(data []byte) (any, error) {
+	data = bytes.TrimPrefix(data, []byte("\xEF\xBB\xBF"))
+	if !utf8.Valid(data) {
+		return nil, docError(TEXT, data, invalidUTF8Offset(data), "the text is not valid UTF-8")
+	}
+	return string(data), nil
+}
+
+// Stream reads the records of a record format from r and hands each to
+// emit as soon as it has ended. A record longer than maxLine bytes is
+// refused, which bounds what is held while a record waits for its end.
+// The first error, the reader's, a record's or emit's, ends the stream.
 func Stream(format string, r io.Reader, maxLine int, emit func(any) error) error {
 	var record func([]byte, int) (any, error)
 	switch format {
@@ -210,8 +230,12 @@ func Stream(format string, r io.Reader, maxLine int, emit func(any) error) error
 		record = jsonLine
 	case LTSV:
 		record = ltsvLine
+	case LINES:
+		return streamStrings(format, r, '\n', maxLine, emit)
+	case NUL:
+		return streamStrings(format, r, 0, maxLine, emit)
 	default:
-		return fmt.Errorf("datafile: %q is not a line format", format)
+		return fmt.Errorf("datafile: %q is not a record format", format)
 	}
 	br := bufio.NewReader(r)
 	for num := 1; ; num++ {
@@ -247,14 +271,70 @@ func Stream(format string, r io.Reader, maxLine int, emit func(any) error) error
 	}
 }
 
+// streamStrings hands each record ended by sep to emit as a string.
+//
+// A record is everything up to its separator, empty records included, and
+// nothing is trimmed. The separator ends a record rather than starting
+// one, so input that ends with it has no empty record after it, and a
+// last record without one is still a record. Lines end with LF or CRLF,
+// the CR of CRLF being part of the ending, and a byte order mark in front
+// of the first line is not part of it. A NUL-separated record keeps every
+// byte, CR and LF included.
+func streamStrings(format string, r io.Reader, sep byte, maxLine int, emit func(any) error) error {
+	br := bufio.NewReader(r)
+	for num := 1; ; num++ {
+		rec, err := readRecord(br, sep, maxLine)
+		switch {
+		case errors.Is(err, errLineTooLong):
+			return recordError(format, num, fmt.Sprintf("the record is longer than %d bytes", maxLine))
+		case err != nil && !errors.Is(err, io.EOF):
+			return err
+		}
+		ended := err == nil
+		if sep == '\n' && num == 1 {
+			rec = bytes.TrimPrefix(rec, []byte("\xEF\xBB\xBF"))
+		}
+		if !ended && len(rec) == 0 {
+			return nil
+		}
+		if sep == '\n' && ended {
+			rec = bytes.TrimSuffix(rec, []byte("\r"))
+		}
+		if !utf8.Valid(rec) {
+			return recordError(format, num, "the text is not valid UTF-8")
+		}
+		if eerr := emit(string(rec)); eerr != nil {
+			return eerr
+		}
+		if !ended {
+			return nil
+		}
+	}
+}
+
+// recordError is a failure in one record: on a line for lines, and by its
+// number for NUL-separated records, which have no lines to count.
+func recordError(format string, num int, msg string) error {
+	if format == NUL {
+		return &engine.ParseError{Definition: format, Msg: fmt.Sprintf("record %d: %s", num, msg)}
+	}
+	return lineError(format, num, msg)
+}
+
 var errLineTooLong = errors.New("line too long")
 
 // readLine returns the next line without its newline. At the end of the
 // input it returns what is left with io.EOF.
 func readLine(br *bufio.Reader, maxLine int) ([]byte, error) {
+	return readRecord(br, '\n', maxLine)
+}
+
+// readRecord returns the next record without the sep that ends it. At the
+// end of the input it returns what is left with io.EOF.
+func readRecord(br *bufio.Reader, sep byte, maxLine int) ([]byte, error) {
 	var line []byte
 	for {
-		chunk, err := br.ReadSlice('\n')
+		chunk, err := br.ReadSlice(sep)
 		if len(line)+len(chunk) > maxLine+1 {
 			return nil, errLineTooLong
 		}
