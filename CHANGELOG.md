@@ -8,6 +8,16 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `jz new --each` makes one document per line of standard input and
+  writes each as a line of JSON when its line has come, holding nothing
+  else of the input: `vmstat 1 | jz --stream | jz new --each host=a
+  sample:=@-`. `KEY:=@-` is the line read as JSON, `KEY=@-` the line as a
+  string, and the files the other arguments name are read once. A line
+  that cannot be read is reported and left out, with the status 3.
+- `--stop-on-error` ends a stream (`--stream`, `jz run --stream`, `jz new
+  --each`) at the first record it cannot read, keeping the records written
+  before it, with the status 3; a command `jz run` started is stopped.
+
 - `--format text`, `--format lines` and `--format nul` read input that
   has no format of its own as strings: the whole input as one string, a
   list with one string per line (LF or CRLF), or one per NUL-terminated
@@ -35,6 +45,11 @@ project follows [Semantic Versioning](https://semver.org/).
   anything is read. `spec.replicas:=3` is still the key `spec.replicas`.
 
 ### Changed
+
+- A data file read with `--stream` (`jsonl`, `ltsv`, and the new `lines`
+  and `nul`) leaves out a record it cannot read and goes on, as a stream
+  of a command's output does, where it ended at the first. The status is
+  still 3. Pass `--stop-on-error` to end at the first as before.
 
 - A csv field rule that names a column the header line, or the first
   record of a csv that numbers its columns, does not have is refused

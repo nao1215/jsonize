@@ -33,6 +33,7 @@ input has no answer, since nothing identifies it.
       --format NAME             read the input as this format: csv, tsv, ltsv, jsonl, json, yaml, text, lines, nul
   -p, --pretty                  indent JSON output
       --stream                  write each record as soon as it is read
+      --stop-on-error           end a stream at the first record that cannot be read
       --raw                     skip the field rules and report every value as text
       --extract KEY             keep only this key (repeatable)
       --exclude KEY             drop this key (repeatable)
@@ -56,8 +57,9 @@ control the command rather than the conversion. `jz list` adds `--json`,
 Options that state two answers at once are refused with exit status 2
 before the input is opened or a command is started: `--pretty` with
 `--stream`, `--extract` with `--exclude`, `--define` with
-`--parser`, `--format` with `--parser` or `--define`, and `--columns`
-where there are no columns to name.
+`--parser`, `--format` with `--parser` or `--define`, `--columns` and
+`--type` where there are no columns, and `--stop-on-error` without
+`--stream`.
 
 ## The shape of the output
 
@@ -165,16 +167,30 @@ lines have come. `--extract` and `--exclude` name the parts:
 
 Without `--stream`, a record that does not fit means nothing is written
 and the status is 3. In a stream, the record is reported on standard
-error and the ones after it are still written:
+error and the ones after it are still written, for a command's output,
+a data file and `lines` or `nul` alike:
 
 ```text
 jz: du/posix: line 2: expected at least 2 fields but found 1: "garbage"
 ```
 
-The status is 3 at the end if anything was skipped. Two failures still
-end a stream at once: text whose format cannot be identified (exit 4,
-settled on the leading lines before any record is written) and a format
-with no streaming form (exit 2).
+The status is 3 at the end if anything was skipped. `--stop-on-error`
+ends the stream at that record instead: the records before it stay
+written, the failure is reported once, the status is 3, and a command
+`jz run` started is stopped.
+
+```console
+$ printf '1\nnope\n2\n' | jz --format jsonl --stream --stop-on-error
+1
+jz: jsonl: line 2: the line is not one JSON value
+```
+
+Some failures end a stream whatever the option: text whose format cannot
+be identified (exit 4, settled on the leading lines before any record is
+written), a format with no streaming form (exit 2), a record longer than
+the line limit, a `--type` column the input does not have (exit 2), a
+read error and a reader that has gone (141). After those there is no
+next record to find.
 
 When `jz run` has a failing command and a skipped record, it returns the
 command's status. The skipped records are on standard error either way.
@@ -429,6 +445,30 @@ $ jz new --path /metadata/name=api --path /spec/replicas:=3 --path /spec/ports/-
   in the order given, before the plain arguments.
 - With `--array`, a pointer starts with `/-` or the index of an element
   already given.
+
+### One document per record
+
+`--each` makes a document for every line of standard input and writes it
+as a line of JSON as soon as the line has come, without holding the rest
+of the input. `KEY:=@-` is the line read as JSON, of any type, and
+`KEY=@-` the line as a string. The other arguments are placed around it,
+and the files they name are read once.
+
+```console
+$ vmstat 1 | jz --stream | jz new --each --string host=server-a sample:=@-
+{"host":"server-a","sample":{"r":1,"b":0,"swpd":0,...}}
+{"host":"server-a","sample":{"r":0,"b":0,"swpd":0,...}}
+```
+
+- With `:=@-` a line is a JSON Lines record: blank lines are skipped. With
+  `=@-` every line is a record, an empty one `""`.
+- A line that is not JSON, or not UTF-8, is reported
+  (`jz: new: sample:=@-: jsonl: line 3: ...`) and left out, and the status
+  is 3 once the input ends. `--stop-on-error` ends there instead, keeping
+  the documents written before it.
+- `--each` needs one argument that reads standard input, and refuses
+  `--text-file KEY=-`, which reads it whole, and `--pretty`.
+- Without `--each`, `jz new sample:=@-` reads standard input once, whole.
 
 A malformed argument (no `=`, an empty key, a location given twice, `:=`
 with invalid JSON, a malformed pointer, two arguments reading standard
