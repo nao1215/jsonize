@@ -6,6 +6,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/nao1215/jsonize/internal/datafile"
 	"github.com/nao1215/jsonize/pkg/registry"
 )
 
@@ -14,7 +15,8 @@ const completionUsage = `Usage: jz completion bash|zsh
 Prints a completion script for the shell. It completes the subcommands,
 the options, the parsers of every registry jz reads (the built-in one,
 your own and those JSONIZE_REGISTRY_PATH names), the variants of the
-parser named on the line, and file paths where a path is expected.
+parser named on the line, the formats --format takes, and file paths
+where a path is expected.
 Completing reads the registries and nothing else: it runs no command and
 touches no network.
 
@@ -349,6 +351,8 @@ func (c *completer) value(mode, name string, st wordState, cur string) (string, 
 		return completeDirs, nil
 	case "--explain":
 		return completeWords, filter([]string{"json"}, cur)
+	case "--format":
+		return completeWords, filter(datafile.Names(), cur)
 	}
 	return completeNone, nil
 }

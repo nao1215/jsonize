@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"regexp"
 	"strconv"
 	"strings"
 	"unicode"
@@ -163,6 +164,9 @@ func scalar(v any) (string, bool, error) {
 	case float64:
 		s, err := decimal(t)
 		return s, true, err
+	case json.Number:
+		s, err := number(t)
+		return s, true, err
 	case string:
 		return str(t), true, nil
 	case *jsonutil.Object:
@@ -181,6 +185,26 @@ func scalar(v any) (string, bool, error) {
 	}
 	return "", false, nil
 }
+
+// number writes a JSON number read from a document with the digits it
+// was written with, which is what keeps an integer longer than 64 bits
+// whole. A literal with an exponent and no decimal point gets one, so a
+// YAML reader takes it for the decimal it is: 1e3 is written 1.0e3.
+func number(n json.Number) (string, error) {
+	s := string(n)
+	if !jsonNumber.MatchString(s) {
+		return "", fmt.Errorf("%q is not a JSON number", s)
+	}
+	if strings.ContainsRune(s, '.') {
+		return s, nil
+	}
+	if i := strings.IndexAny(s, "eE"); i >= 0 {
+		return s[:i] + ".0" + s[i:], nil
+	}
+	return s, nil
+}
+
+var jsonNumber = regexp.MustCompile(`^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][-+]?[0-9]+)?$`)
 
 // decimal writes a float the way the JSON output does, with a decimal
 // point added where that spelling has none: 3 and 1e+21 are integers to

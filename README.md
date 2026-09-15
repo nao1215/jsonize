@@ -7,7 +7,8 @@
 # jsonize
 
 jsonize turns command output into JSON. Pipe a command to `jz` to detect
-its format and convert it. It also supports YAML output and streaming.
+its format and convert it. It also reads CSV, TSV, LTSV, JSON Lines, JSON
+and YAML files, and supports YAML output and streaming.
 
 ```console
 $ df -h | jz
@@ -67,6 +68,8 @@ OpenBSD and NetBSD are built and linted, not run.
 COMMAND | jz                 # convert piped output
 jz < captured.txt            # or output captured earlier
 jz --file captured.txt
+jz --file users.csv          # a data file, read as the format its extension names
+COMMAND | jz --format yaml   # piped data, read as the format --format names
 jz run COMMAND [args...]     # let jz run the command and convert its stdout
 jz list                      # what jz can read
 jz list --schema df gnu      # the JSON Schema of what one definition produces
@@ -78,6 +81,7 @@ Options:
 
 ```text
   -f, --file PATH               read input from PATH instead of stdin
+      --format NAME             read a data file of this format: csv, tsv, ltsv, jsonl, json, yaml
   -p, --pretty                  indent JSON output
       --yaml                    write YAML instead of JSON
       --stream                  write each record as soon as it is read
@@ -92,6 +96,21 @@ Options:
       --columns NAME,...        name the columns of a csv read without a header line
       --explain[=json]          report the chosen definition and why, on stderr
   -h, --help                    show help
+```
+
+A data file is read as the format its extension names (`.csv`, `.tsv`,
+`.ltsv`, `.jsonl` or `.ndjson`, `.json`, `.yaml` or `.yml`, each also as
+`.gz` or `.bz2`), and piped data as the format `--format` names. Such a
+file is read as that format with no detection, and text the format does
+not allow is exit 3 with the line. A file whose extension names no data
+format is detected as before.
+
+```console
+$ jz --file users.csv
+[{"id":"1","name":"alice"},{"id":"2","name":"bob"}]
+
+$ kubectl get deploy api -o yaml | jz --format yaml --extract spec
+{"spec":{"replicas":3, ...}}
 ```
 
 `--extract` and `--exclude` name keys of the objects jz prints, and

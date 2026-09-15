@@ -1,0 +1,263 @@
+version: "1"
+
+suite:
+  name: data files
+
+# A data file is read as the format its extension names, and input from a
+# pipe as the format --format names. Nothing is detected: the person who
+# named the file, or the caller, stated the format, and a reader that
+# finds text the format does not allow says where and prints no JSON.
+# Every scenario runs on every system; the input is a fixture or stdin,
+# never a shell pipeline, so the same command line runs under cmd.exe.
+scenarios:
+  - name: a csv or a tsv file is read as one object per row with keys from its header
+    steps:
+      - fixture:
+          file: users.csv
+          content: |
+            id,name,note
+            1,alice,
+            2,"bob, jr","said ""hi"""
+      - run:
+          command: jz --file ${workdir}/users.csv
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              [{"id":"1","name":"alice","note":""},{"id":"2","name":"bob, jr","note":"said \"hi\""}]
+      - fixture:
+          file: SCORES.TSV
+          content: "name\tscore\ncarol\t9\n"
+      - run:
+          command: jz --file ${workdir}/SCORES.TSV
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"carol","score":"9"}]
+      # A file without a header line takes its names from --columns.
+      - fixture:
+          file: rows.csv
+          content: |
+            1,alice
+            2,bob
+      - run:
+          command: jz --file ${workdir}/rows.csv --columns id,name
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"id":"1","name":"alice"},{"id":"2","name":"bob"}]
+
+  - name: json keeps its key order and its number literals, and yaml is typed by the core schema
+    steps:
+      - fixture:
+          file: release.json
+          content: |
+            {"version": "0.2.0", "id": 12345678901234567890, "ratio": 2.50, "assets": []}
+      - run:
+          command: jz --file ${workdir}/release.json
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"version":"0.2.0","id":12345678901234567890,"ratio":2.50,"assets":[]}
+      - fixture:
+          file: deploy.yml
+          content: |
+            name: api
+            replicas: 3
+            debug: false
+            image: "1.2"
+            ports: [80, 443]
+            limits:
+              memory: 512Mi
+            owner:
+      - run:
+          command: jz --file ${workdir}/deploy.yml
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"api","replicas":3,"debug":false,"image":"1.2","ports":[80,443],"limits":{"memory":"512Mi"},"owner":null}
+      - run:
+          command: jz --file ${workdir}/release.json --yaml
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              version: "0.2.0"
+              id: 12345678901234567890
+              ratio: 2.50
+              assets: []
+
+  - name: json lines and ltsv are lists of records, streamed with --stream, and a compressed file is read through its compression
+    steps:
+      - fixture:
+          file: events.jsonl.gz
+          from: "${specdir}/testdata/events.jsonl.gz"
+      - run:
+          command: jz --file ${workdir}/events.jsonl.gz
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"level":"info","msg":"started"},{"level":"warn","msg":"slow","ms":1200}]
+      - run:
+          command: jz --file ${workdir}/events.jsonl.gz --stream --extract msg
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"msg":"started"}
+              {"msg":"slow"}
+      - fixture:
+          file: access.ltsv.bz2
+          from: "${specdir}/testdata/access.ltsv.bz2"
+      - run:
+          command: jz --file ${workdir}/access.ltsv.bz2
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"host":"192.0.2.1","status":"200","req":"GET / HTTP/1.1"}]
+
+  - name: input from a pipe is read as the format --format names
+    steps:
+      - run:
+          command: jz --format yaml
+          stdin: |
+            a: 1
+            b: [x, y]
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"a":1,"b":["x","y"]}
+      - run:
+          command: jz --format csv --explain
+          stdin: |
+            k,v
+            a,1
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"k":"a","v":"1"}]
+          stderr:
+            contains: "scope: csv/comma, the reading of the format given with --format"
+      - run:
+          command: jz --format ltsv --stream
+          stdin: "a:1\n\na:2\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"a":"1"}
+              {"a":"2"}
+      # The extension gives way to the format the caller names.
+      - fixture:
+          file: export.json
+          content: "k:v\n"
+      - run:
+          command: jz --file ${workdir}/export.json --format ltsv --explain=json
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"k":"v"}]
+          stderr:
+            contains: '"outcome":"format"'
+
+  - name: a data file the format does not allow is refused with the line, and no JSON
+    steps:
+      - fixture:
+          file: broken.json
+          content: |
+            {
+              "a": 1,
+              "a": 2
+            }
+      - run:
+          command: jz --file ${workdir}/broken.json
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: 'jz: json: line 3: the key "a" is given twice in one object'
+      - fixture:
+          file: bad.ltsv
+          content: "host:a\tno label here\n"
+      - run:
+          command: jz --file ${workdir}/bad.ltsv
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "jz: ltsv: line 1: field 2 has no label"
+      - fixture:
+          file: numbers.yaml
+          content: "ok: 1\nbad: .inf\n"
+      - run:
+          command: jz --file ${workdir}/numbers.yaml
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "jz: yaml: line 2: .inf is not a number JSON can hold"
+      - fixture:
+          file: not-gzip.json.gz
+          from: "${specdir}/testdata/not-gzip.json.gz"
+      - run:
+          command: jz --file ${workdir}/not-gzip.json.gz
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "the gzip data cannot be decompressed"
+      # A stream keeps what it wrote before the line it cannot read.
+      - run:
+          command: jz --format jsonl --stream
+          stdin: "1\n2\nnot json\n3\n"
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: |
+              1
+              2
+          stderr:
+            contains: "jz: jsonl: line 3: the line is not one JSON value"
+
+  - name: the options that state two answers, or none that fits, are usage errors
+    steps:
+      - run:
+          command: jz --format xml
+          stdin: "<a/>"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: 'unknown format "xml"; the formats are csv, tsv, ltsv, jsonl, json, yaml'
+      - run:
+          command: jz --format csv --parser df
+          stdin: "a\n"
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "--format and --parser/--variant/--define cannot be used together"
+      - run:
+          command: jz --format json --stream
+          stdin: "{}"
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "--stream writes the records of a line format (ltsv, jsonl), and a json document is one value"
+      - run:
+          command: jz --format json --extract missing
+          stdin: '{"present": 1}'
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: 'no key "missing" in the output'
