@@ -27,6 +27,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 )
 
@@ -56,7 +57,9 @@ func Known(name string) bool {
 	return slices.Contains(Names(), name)
 }
 
-// Tabular reports a format the csv shapes of the registry read.
+// Tabular reports a format the csv shapes of the registry read, which
+// the command line reads through the registry and Read reads with the
+// same definition.
 func Tabular(name string) bool {
 	return name == CSV || name == TSV
 }
@@ -163,6 +166,8 @@ func Read(format string, data []byte) (any, error) {
 		return readJSON(data)
 	case YAML:
 		return readYAML(data)
+	case CSV, TSV:
+		return readTabular(format, data)
 	case JSONL, LTSV:
 		out := []any{}
 		err := Stream(format, bytes.NewReader(data), len(data)+1, func(v any) error {
@@ -175,6 +180,23 @@ func Read(format string, data []byte) (any, error) {
 		return out, nil
 	}
 	return nil, fmt.Errorf("datafile: %q is not read here", format)
+}
+
+// tabular are the definitions a csv and a tsv are read with, the same
+// bodies as the csv shapes of the registry.
+var tabular = map[string]string{
+	CSV: `parse: {type: csv}`,
+	TSV: `parse: {type: csv, delimiter: "\t"}`,
+}
+
+// readTabular reads a csv or a tsv with the engine, so that a file named
+// .csv reads the same here as with --parser csv.
+func readTabular(format string, data []byte) (any, error) {
+	def, err := definition.LoadInline([]byte(tabular[format]), format)
+	if err != nil {
+		return nil, err
+	}
+	return engine.Parse(def, data, engine.Options{MaxInputSize: int64(len(data)) + 1})
 }
 
 // Stream reads the records of a line format from r and hands each to
