@@ -1,0 +1,4 @@
+description: two files named on one command line, a universal one and one of a single architecture
+source: the first line captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C lipo -info /bin/ls; the second written by hand in the sentence lipo prints for a file of one architecture
+os: darwin
+args: [-info, /bin/ls, /usr/lib/dyld]

@@ -1,0 +1,4 @@
+Architectures in the fat file: build/tool are: x86_64 arm64
+Non-fat file: build/tool-helper is architecture: arm64
+Both lines above must list arm64 before the release is tagged, and the
+helper must be rebuilt as universal before the notarization step.
