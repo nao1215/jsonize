@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 	"unicode/utf8"
 
 	"github.com/nao1215/jsonize/pkg/jsonutil"
@@ -136,6 +137,12 @@ func jsonError(format string, data []byte, dec *json.Decoder, err error) error {
 	case errors.As(err, &dup):
 		return docError(format, data, dup.offset, dup.Error())
 	case errors.As(err, &se):
+		// Newer Go releases report a document that ends too soon as a
+		// syntax error rather than io.ErrUnexpectedEOF; either way it is
+		// said in the same words.
+		if strings.Contains(se.Error(), "end of JSON input") {
+			return docError(format, data, int64(len(data)), "the JSON value ends before it is complete")
+		}
 		return docError(format, data, se.Offset, "not valid JSON")
 	case errors.Is(err, io.ErrUnexpectedEOF), errors.Is(err, io.EOF):
 		return docError(format, data, int64(len(data)), "the JSON value ends before it is complete")
