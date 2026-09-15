@@ -1,0 +1,208 @@
+[
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "\"x\""
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "#hash"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "-dash"
+  },
+  {
+    "permissions": ".rw-rw-r--@",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "a\"b"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "a -> b"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "arrow link",
+    "link_to": "x' -> y"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "3.1M",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "big.bin"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "both ' and \".txt"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "dangling",
+    "link_to": "missing"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "dollar$name"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "it's.txt"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "l'ink",
+    "link_to": "it's.txt"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "0",
+    "user": "user",
+    "group": "user",
+    "date": "5 Mar  2024",
+    "name": "old.txt"
+  },
+  {
+    "permissions": "|rw-rw-r--",
+    "size": null,
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "pipe"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "plain.txt"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "plainlink",
+    "link_to": "say \"hi\".txt"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "qlink",
+    "link_to": "\"x\""
+  },
+  {
+    "permissions": ".rwxrwxr-x",
+    "size": "10",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "run.sh"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "say \"hi\".txt"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "sp link",
+    "link_to": "with space.txt"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "star*"
+  },
+  {
+    "permissions": "drwxrwxr-x",
+    "size": null,
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "subdir"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "trail "
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "4",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "with space.txt"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "group": "user",
+    "date": "15 Sep 10:43",
+    "name": "x' -> y"
+  }
+]

@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/hyperfine/basic.json",
+  "title": "hyperfine/basic",
+  "description": "hyperfine benchmark results and the summary comparing the commands",
+  "x-jsonize": {
+    "definition": "hyperfine/basic",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "benchmarks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer"
+          },
+          "command": {
+            "type": "string"
+          },
+          "mean": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "ms",
+                  "s",
+                  "µs"
+                ]
+              }
+            },
+            "required": [
+              "value",
+              "unit"
+            ]
+          },
+          "stddev": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "ms",
+                  "s",
+                  "µs"
+                ]
+              }
+            },
+            "required": [
+              "value",
+              "unit"
+            ]
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "ms",
+                  "s",
+                  "µs"
+                ]
+              }
+            },
+            "required": [
+              "value",
+              "unit"
+            ]
+          },
+          "system": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "ms",
+                  "s",
+                  "µs"
+                ]
+              }
+            },
+            "required": [
+              "value",
+              "unit"
+            ]
+          },
+          "min": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "ms",
+                  "s",
+                  "µs"
+                ]
+              }
+            },
+            "required": [
+              "value",
+              "unit"
+            ]
+          },
+          "max": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string",
+                "enum": [
+                  "ms",
+                  "s",
+                  "µs"
+                ]
+              }
+            },
+            "required": [
+              "value",
+              "unit"
+            ]
+          },
+          "runs": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "number",
+          "command",
+          "mean",
+          "stddev",
+          "user",
+          "system",
+          "min",
+          "max",
+          "runs"
+        ]
+      }
+    },
+    "summary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "relation": {
+            "type": "string",
+            "enum": [
+              "faster",
+              "reference",
+              "slower"
+            ]
+          },
+          "ratio": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "ratio_stddev": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "command": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "relation",
+          "ratio",
+          "ratio_stddev",
+          "command"
+        ]
+      }
+    }
+  },
+  "required": [
+    "benchmarks",
+    "summary"
+  ]
+}

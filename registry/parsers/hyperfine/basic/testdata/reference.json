@@ -1,0 +1,111 @@
+{
+  "benchmarks": [
+    {
+      "number": 1,
+      "command": "sleep 0.02",
+      "mean": {
+        "value": 21.9,
+        "unit": "ms"
+      },
+      "stddev": {
+        "value": 0.4,
+        "unit": "ms"
+      },
+      "user": {
+        "value": 0.4,
+        "unit": "ms"
+      },
+      "system": {
+        "value": 1.5,
+        "unit": "ms"
+      },
+      "min": {
+        "value": 21.6,
+        "unit": "ms"
+      },
+      "max": {
+        "value": 22.4,
+        "unit": "ms"
+      },
+      "runs": 5
+    },
+    {
+      "number": 2,
+      "command": "sleep 0.01",
+      "mean": {
+        "value": 11.7,
+        "unit": "ms"
+      },
+      "stddev": {
+        "value": 0.3,
+        "unit": "ms"
+      },
+      "user": {
+        "value": 0.8,
+        "unit": "ms"
+      },
+      "system": {
+        "value": 0.8,
+        "unit": "ms"
+      },
+      "min": {
+        "value": 11.5,
+        "unit": "ms"
+      },
+      "max": {
+        "value": 12.2,
+        "unit": "ms"
+      },
+      "runs": 5
+    },
+    {
+      "number": 3,
+      "command": "sleep 0.03",
+      "mean": {
+        "value": 32.2,
+        "unit": "ms"
+      },
+      "stddev": {
+        "value": 0.4,
+        "unit": "ms"
+      },
+      "user": {
+        "value": 0.5,
+        "unit": "ms"
+      },
+      "system": {
+        "value": 1.7,
+        "unit": "ms"
+      },
+      "min": {
+        "value": 31.6,
+        "unit": "ms"
+      },
+      "max": {
+        "value": 32.7,
+        "unit": "ms"
+      },
+      "runs": 5
+    }
+  ],
+  "summary": [
+    {
+      "relation": "reference",
+      "ratio": null,
+      "ratio_stddev": null,
+      "command": "sleep 0.02"
+    },
+    {
+      "ratio": 1.87,
+      "ratio_stddev": 0.06,
+      "relation": "slower",
+      "command": "sleep 0.01"
+    },
+    {
+      "ratio": 1.47,
+      "ratio_stddev": 0.03,
+      "relation": "faster",
+      "command": "sleep 0.03"
+    }
+  ]
+}

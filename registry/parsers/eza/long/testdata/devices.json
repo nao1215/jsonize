@@ -1,0 +1,29 @@
+[
+  {
+    "permissions": "brw-rw----",
+    "size": null,
+    "major": 7,
+    "minor": 0,
+    "user": "root",
+    "date": "12 Sep 22:48",
+    "name": "/dev/loop0"
+  },
+  {
+    "permissions": "crw-rw-rw-",
+    "size": null,
+    "major": 1,
+    "minor": 3,
+    "user": "root",
+    "date": "12 Sep 22:48",
+    "name": "/dev/null"
+  },
+  {
+    "permissions": "crw-rw-rw-",
+    "size": null,
+    "major": 5,
+    "minor": 0,
+    "user": "root",
+    "date": "14 Sep 23:58",
+    "name": "/dev/tty"
+  }
+]

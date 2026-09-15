@@ -1,0 +1,8 @@
+Switching from ls to eza
+
+The long view looks like this on my machine:
+
+.rw-r--r--  1.2k user 14 Sep 22:21 notes.md
+drwxr-xr-x     - user 14 Sep 22:21 src
+
+Note that the size of a directory is a dash, not 4096.

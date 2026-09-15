@@ -1,0 +1,26 @@
+Permissions Size User Date Modified                       Name
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 "x"
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 #hash
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 -dash
+.rw-rw-r--@    2 user  2026-09-15 01:43:57.546880904 +0000 a"b
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 'a -> b'
+lrwxrwxrwx     - user  2026-09-15 01:43:57.556510129 +0000 'arrow link' -> "x' -> y"
+.rw-rw-r--  3.1M user  2026-09-15 01:43:57.549510736 +0000 big.bin
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 "both ' and ".txt"
+lrwxrwxrwx     - user  2026-09-15 01:43:57.561509696 +0000 dangling -> missing
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 dollar$name
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 "it's.txt"
+lrwxrwxrwx     - user  2026-09-15 01:43:57.558509956 +0000 "l'ink" -> "it's.txt"
+.rw-rw-r--     0 user  2024-03-05 10:11:12.000000000 +0000 old.txt
+|rw-rw-r--     - user  2026-09-15 01:43:57.552510476 +0000 pipe
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 plain.txt
+lrwxrwxrwx     - user  2026-09-15 01:43:57.559509869 +0000 plainlink -> 'say "hi".txt'
+lrwxrwxrwx     - user  2026-09-15 01:43:57.555510216 +0000 qlink -> "x"
+.rwxrwxr-x    10 user  2026-09-15 01:43:57.546880904 +0000 run.sh
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 'say "hi".txt'
+lrwxrwxrwx     - user  2026-09-15 01:43:57.554510303 +0000 'sp link' -> 'with space.txt'
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 star*
+drwxrwxr-x     - user  2026-09-15 01:43:57.546510996 +0000 subdir
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 'trail '
+.rw-rw-r--     4 user  2026-09-15 01:43:57.546880904 +0000 'with space.txt'
+.rw-rw-r--     2 user  2026-09-15 01:43:57.546880904 +0000 "x' -> y"

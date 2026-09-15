@@ -1,0 +1,53 @@
+[
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "3.1M",
+    "user": "user",
+    "date": "2026-09-15 06:05",
+    "name": "big.bin"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "date": "2026-09-15 06:05",
+    "name": "dangling",
+    "link_to": "missing"
+  },
+  {
+    "permissions": "lrwxrwxrwx",
+    "size": null,
+    "user": "user",
+    "date": "2026-09-15 06:05",
+    "name": "link",
+    "link_to": "plain.txt"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "6",
+    "user": "user",
+    "date": "2026-09-15 06:05",
+    "name": "plain.txt"
+  },
+  {
+    "permissions": ".rwxrwxr-x",
+    "size": "18",
+    "user": "user",
+    "date": "2026-09-15 06:05",
+    "name": "run.sh"
+  },
+  {
+    "permissions": "drwxrwxr-x",
+    "size": null,
+    "user": "user",
+    "date": "2026-09-15 06:05",
+    "name": "subdir"
+  },
+  {
+    "permissions": ".rw-rw-r--",
+    "size": "2",
+    "user": "user",
+    "date": "2026-09-15 06:05",
+    "name": "with space.txt"
+  }
+]

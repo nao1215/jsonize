@@ -1,0 +1,4 @@
+source: captured with eza 0.23.5 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, eza -l --color=never /dev/null /dev/tty /dev/loop0
+description: device files, whose size column holds the major and minor numbers
+os: linux
+args: [-l, --color=never, /dev/null, /dev/tty, /dev/loop0]

@@ -1,0 +1,34 @@
+{
+  "benchmarks": [
+    {
+      "number": 1,
+      "command": "sleep 0.01",
+      "mean": {
+        "value": 12.2,
+        "unit": "ms"
+      },
+      "stddev": {
+        "value": 0.5,
+        "unit": "ms"
+      },
+      "user": {
+        "value": 0.1,
+        "unit": "ms"
+      },
+      "system": {
+        "value": 2,
+        "unit": "ms"
+      },
+      "min": {
+        "value": 11.8,
+        "unit": "ms"
+      },
+      "max": {
+        "value": 12.8,
+        "unit": "ms"
+      },
+      "runs": 3
+    }
+  ],
+  "summary": []
+}

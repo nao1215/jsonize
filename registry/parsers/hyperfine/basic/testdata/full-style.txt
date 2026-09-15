@@ -1,0 +1,4 @@
+[1mBenchmark [0m[1m1[0m: sleep 0.01
+  Time ([1;32mmean[0m ± [32mσ[0m):     [1;32m 12.2 ms[0m ± [32m  0.5 ms[0m    [User: [34m0.1 ms[0m, System: [34m2.0 ms[0m]
+  Range ([36mmin[0m … [35mmax[0m):   [36m 11.8 ms[0m … [35m 12.8 ms[0m    [2m3 runs[0m
+ 

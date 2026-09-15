@@ -1,0 +1,3 @@
+Benchmark 1: sleep 0.01
+  Time (abs ≡):         11.3 ms               [User: 0.8 ms, System: 0.5 ms]
+ 

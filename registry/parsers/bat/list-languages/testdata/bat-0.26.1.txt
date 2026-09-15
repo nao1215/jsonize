@@ -1,0 +1,183 @@
+ActionScript:as
+Ada:adb,ads,gpr
+Apache Conf:envvars,htaccess,HTACCESS,htgroups,HTGROUPS,htpasswd,HTPASSWD,.htaccess,.HTACCESS,.htgroups,.HTGROUPS,.htpasswd,.HTPASSWD,httpd.conf,/etc/apache2/**/*.conf,/etc/apache2/sites-*/**/*,/etc/httpd/conf/**/*.conf
+AppleScript:applescript,script editor
+ARM Assembly:s,S
+AsciiDoc (Asciidoctor):adoc,ad,asciidoc
+ASP:asa
+Authorized Keys:authorized_keys,pub,authorized_keys2
+AWK:awk
+Batch File:bat,cmd
+BibTeX:bib
+Bourne Again Shell (bash):sh,bash,zsh,ash,.bash_aliases,.bash_completions,.bash_functions,.bash_login,.bash_logout,.bash_profile,.bash_variables,.bashrc,.profile,.textmate_init,.zlogin,.zlogout,.zprofile,.zshenv,.zshrc,PKGBUILD,ebuild,eclass,**/bat/config,*.ksh,*.kshrc,/etc/os-release,/usr/lib/os-release,/etc/initrd-release,/usr/lib/extension-release.d/extension-release.*,/etc/profile,bashrc,*.bashrc,bash_profile,*.bash_profile,bash_login,*.bash_login,bash_logout,*.bash_logout,zshrc,*.zshrc,zprofile,*.zprofile,zlogin,*.zlogin,zlogout,*.zlogout,zshenv,*.zshenv
+C:c
+C#:cs,csx
+C++:cpp,cc,cp,cxx,c++,h,hh,hpp,hxx,h++,inl,ipp,*.h
+Cabal:cabal
+CFML:cfml,cfm,cfc
+Clojure:clj,cljc,cljs,edn
+CMake:CMakeLists.txt,cmake
+CMake C Header:h.in
+CMake C++ Header:hh.in,hpp.in,hxx.in,h++.in
+CMakeCache:CMakeCache.txt
+CoffeeScript:coffee,Cakefile,coffee.erb,cson
+Command Help:cmd-help,help
+CpuInfo:cpuinfo
+Crontab:tab,crontab,cron.d
+Crystal:cr
+CSS:css,css.erb,css.liquid
+D:d,di
+Dart:dart
+debsources:sources.list
+Diff:diff,patch,*.debdiff
+Dockerfile:Dockerfile,dockerfile,.Dockerfile,Containerfile
+DotENV:.env,.env.dist,.env.local,.env.sample,.env.example,.env.template,.env.test,.env.test.local,.env.testing,.env.dev,.env.development,.env.development.local,.env.prod,.env.production,.env.production.local,.env.dusk.local,.env.staging,.env.default,.env.defaults,.envrc,.flaskenv,env,env.example,env.sample,env.template
+Elixir:ex,exs
+Elm:elm
+Email:eml,msg,mbx,mboxz,/var/spool/mail/*,/var/mail/*
+Erlang:erl,hrl,Emakefile,emakefile,escript
+F#:fs,fsi,fsx,*.fs
+Fish:fish
+Fortran (Fixed Form):f,F,f77,F77,for,FOR,fpp,FPP
+Fortran (Modern):f90,F90,f95,F95,f03,F03,f08,F08
+Fortran Namelist:namelist
+fstab:fstab,crypttab,mtab
+GDScript (Godot Engine):gd
+Git Attributes:attributes,gitattributes,.gitattributes,/home/nao/.config/git/attributes
+Git Commit:COMMIT_EDITMSG,MERGE_MSG,TAG_EDITMSG
+Git Config:gitconfig,.gitconfig,.gitmodules,/home/nao/.config/git/config
+Git Ignore:exclude,gitignore,.gitignore,/home/nao/.config/git/ignore
+Git Link:.git
+Git Log:gitlog
+Git Mailmap:.mailmap,mailmap
+Git Rebase Todo:git-rebase-todo
+GLSL:vs,gs,vsh,fsh,gsh,vshader,fshader,gshader,vert,frag,geom,tesc,tese,comp,glsl,mesh,task,rgen,rint,rahit,rchit,rmiss,rcall
+gnuplot:gp,gpl,gnuplot,gnu,plot,plt
+Go:go
+Gomod:go.mod,go.work
+Gosum:go.sum
+GraphQL:graphql,graphqls,gql
+Graphviz (DOT):dot,DOT,gv
+Groff/troff:groff,troff,1,2,3,4,5,6,7,8,9
+Groovy:groovy,gvy,gradle,Jenkinsfile
+group:group
+Haskell:hs
+Highlight non-printables:show-nonprintable
+Hosts File:hosts
+HTML:html,htm,shtml,xhtml
+HTML (ASP):asp
+HTML (EEx):html.eex,html.leex
+HTML (Erlang):yaws
+HTML (Jinja2):htm.j2,html.j2,xhtml.j2,xml.j2
+HTML (Rails):rails,rhtml,erb,html.erb
+HTML (Tcl):adp
+HTML (Twig):twig,html.twig
+HTTP Request and Response:http
+Idris:idr
+INI:ini,INI,inf,INF,reg,REG,lng,cfg,CFG,desktop,url,URL,.editorconfig,.coveragerc,.pylintrc,.gitlint,.hgrc,hgrc,**/.aws/credentials,**/.aws/config,/etc/letsencrypt/renewal/*.conf,*.flatpakref,*.flatpakrepo,/etc/pacman.conf,/usr/share/libalpm/hooks/*.hook,/etc/pacman.d/hooks/*.hook,paru.conf,**/containers/systemd/**/*.{container,volume,network,kube,image,build,pod,artifact},**/systemd/**/*.conf,**/systemd/**/*.example,*.automount,*.device,*.dnssd,*.link,*.mount,*.netdev,*.network,*.nspawn,*.path,*.service,*.scope,*.slice,*.socket,*.swap,*.target,*.timer,/etc/wireguard/*.conf
+Java:java,bsh
+Java Properties:properties
+Java Server Page (JSP):jsp
+JavaScript:htc
+JavaScript (Babel):js,mjs,jsx,babel,es6,cjs,*.pac
+JavaScript (Rails):js.erb
+Jinja2:j2,jinja2,jinja
+JQ:jq
+JSON:json,sublime-settings,sublime-menu,sublime-keymap,sublime-mousemap,sublime-theme,sublime-build,sublime-project,sublime-completions,sublime-commands,sublime-macro,sublime-color-scheme,ipynb,Pipfile.lock,*.jsonl,*.jsonc,*.jsonld,*.geojson,*.ndjson,flake.lock,*.sarif
+jsonnet:jsonnet,libsonnet,libjsonnet
+Julia:jl
+Known Hosts:known_hosts,known_hosts.old
+Kotlin:kt,kts
+LaTeX:tex,ltx
+Lean 4:lean
+Less:less,css.less
+Lisp:lisp,cl,clisp,l,mud,el,scm,ss,lsp,fasl,sld
+Literate Haskell:lhs
+LiveScript:ls,Slakefile,ls.erb
+LLVM:ll
+log:log
+Lua:lua,*.nse
+Makefile:make,GNUmakefile,makefile,Makefile,makefile.am,Makefile.am,makefile.in,Makefile.in,OCamlMakefile,mak,mk
+Manpage:man
+Markdown:md,mdown,markdown,markdn,*.mkd
+MATLAB:matlab
+MediaWiki:mediawiki,wikipedia,wiki
+MemInfo:meminfo
+NAnt Build File:build
+nginx:conf.erb,nginx.conf,mime.types,fastcgi_params,scgi_params,uwsgi_params,nginx.conf,mime.types,/etc/nginx/**/*.conf,/etc/nginx/sites-*/**/*
+Nim:nim,nims,nimble
+Ninja:ninja
+Nix:nix
+NSIS:nsi,nsh,bnsi,bnsh,nsdinc
+Objective-C:m
+Objective-C++:mm
+OCaml:ml,mli
+OCamllex:mll
+OCamlyacc:mly
+Odin:odin
+orgmode:org
+Pascal:pas,p,dpr
+passwd:passwd
+Perl:pl,pc,pm,pmc,pod,t
+PHP:php,php3,php4,php5,php7,phps,phpt,phtml
+Plain Text:txt
+PowerShell:ps1,psm1,psd1
+Protocol Buffer:proto,protobuf,protodevel
+Protocol Buffer (TEXT):pb.txt,proto.text,textpb,pbtxt,prototxt,textproto
+Puppet:pp,epp
+PureScript:purs
+Python:py,py3,pyw,pyi,pyx,pyx.in,pxd,pxd.in,pxi,pxi.in,rpy,cpy,SConstruct,Sconstruct,sconstruct,SConscript,gyp,gypi,Snakefile,vpy,wscript,bazel,bzl,*.xsh,*.xonshrc
+QML:qml,qmlproject
+R:R,r,Rprofile
+Racket:rkt
+Rd (R Documentation):rd
+Rego:rego
+Regular Expression:re
+Requirements.txt:requirements.txt,requirements.in,pip
+resolv:resolv.conf
+reStructuredText:rst,rest
+Robot Framework:robot,resource
+Ruby:rb,Appfile,Appraisals,Berksfile,Brewfile,capfile,cgi,Cheffile,config.ru,Deliverfile,Fastfile,fcgi,Gemfile,gemspec,Guardfile,irbrc,jbuilder,Podfile,podspec,prawn,rabl,rake,Rakefile,Rantfile,rbx,rjs,ruby.rail,Scanfile,simplecov,Snapfile,thor,Thorfile,Vagrantfile
+Ruby Haml:haml
+Ruby on Rails:rxml,builder
+Ruby Slim:slim,skim
+Rust:rs,*.ron
+Salt State (SLS):sls
+Sass:sass
+Scala:scala,sbt,sc,*.mill
+SCSS:scss
+Separated Values:csv
+SML:sml,cm,sig
+Solidity:sol
+SQL:sql,ddl,dml
+SQL (Rails):erbsql,sql.erb
+SSH Config:ssh_config,**/.ssh/config
+SSHD Config:sshd_config
+Strace:strace
+Stylus:styl,stylus
+Svelte:svlt,svelte
+Swift:swift
+syslog:syslog
+SystemVerilog:sv,svh,vh
+Tab Separated Values:tsv
+Tcl:tcl
+Terraform:tf,tfvars,hcl
+TeX:sty,cls
+Textile:textile
+Todo.txt:todo.txt,done.txt
+TOML:toml,tml,Cargo.lock,Gopkg.lock,Pipfile,pdm.lock,poetry.lock,uv.lock,/usr/share/containers/**/*.conf,/etc/containers/**/*.conf,/home/nao/.config/containers/**/*.conf
+TypeScript:ts,mts,cts
+TypeScriptReact:tsx
+Typst:typ
+varlink:varlink
+Verilog:v,V
+VHDL:vhd,vhdl,vho,vht
+VimHelp:vimhelp
+VimL:vim,vimrc,gvimrc,.vimrc,.gvimrc,.exrc,.nvimrc,_vimrc,_gvimrc,_exrc
+Vue Component:vue
+Vyper:vy
+WGSL:wgsl
+x86_64 Assembly:yasm,nasm,asm,inc,mac
+XML:xml,xsd,xslt,tld,dtml,rng,rss,opml,svg,xaml,*.csproj,*.vbproj,*.props,*.targets
+YAML:yaml,yml,sublime-syntax,CITATION.cff,.clang-format,fish_history,/etc/kubernetes/*.conf
+Zig:zig,zon

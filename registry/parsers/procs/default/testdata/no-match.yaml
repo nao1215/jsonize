@@ -1,0 +1,4 @@
+source: captured with procs 0.14.12 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, procs --color=disable nosuchprocessname
+description: a keyword no process matches prints the header and no rows, an empty list
+os: linux
+args: [--color=disable, nosuchprocessname]

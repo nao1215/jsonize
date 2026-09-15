@@ -1,0 +1,20 @@
+{
+  "languages": [
+    {
+      "embedded": false,
+      "language": "Go",
+      "files": 34,
+      "lines": 15759,
+      "code": 12553,
+      "comments": 2439,
+      "blanks": 767
+    }
+  ],
+  "total": {
+    "files": 34,
+    "lines": 15759,
+    "code": 12553,
+    "comments": 2439,
+    "blanks": 767
+  }
+}

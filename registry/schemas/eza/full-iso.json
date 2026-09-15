@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/eza/full-iso.json",
+  "title": "eza/full-iso",
+  "description": "eza -l --time-style=full-iso, the date with nanoseconds and offset",
+  "x-jsonize": {
+    "definition": "eza/full-iso",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "permissions": {
+        "type": "string"
+      },
+      "size": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "major": {
+        "type": "integer"
+      },
+      "minor": {
+        "type": "integer"
+      },
+      "user": {
+        "type": "string"
+      },
+      "date": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "link_to": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "permissions",
+      "size",
+      "user",
+      "date",
+      "name"
+    ]
+  }
+}
