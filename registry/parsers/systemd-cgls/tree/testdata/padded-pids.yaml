@@ -1,0 +1,3 @@
+source: captured with LC_ALL=C systemd-cgls --no-pager on the control group of the gvfs-daemon user service, on Ubuntu 26.04 (systemd 259); process ids are padded to the widest sibling
+os: linux
+args: ["--no-pager", "/user.slice/user-1000.slice/user@1000.service/session.slice/gvfs-daemon.service"]

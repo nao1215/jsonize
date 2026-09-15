@@ -1,0 +1,74 @@
+# `systemd-cgls` prints the control group hierarchy: a heading naming the
+# group or unit it starts from, and under it the groups and the processes
+# in each, drawn as a tree. The heading is the root of each tree here, so
+# `systemd-cgls -u a.service -u b.service` is two roots.
+#
+# Asked for the whole hierarchy, systemd-cgls prints "CGroup /:" and then
+# the root slice, "-.slice", at the left edge with everything under it.
+# That heading says nothing the root slice does not, so it is left out
+# and "-.slice" is the root. A heading for any other group, a unit or a
+# directory in the cgroup file system is kept, and its groups are its
+# children.
+#
+# A node is one of four things:
+#
+# - the heading: {cgroup}, {unit, cgroup} or {directory};
+# - a group: {name}, with delegated true when the unit hands the group to
+#   its own manager (Delegate=yes, printed as "..." or "…" after the
+#   name), and id when systemd prints the group's number ("(#15422)");
+# - a process: {pid, command}. systemd-cgls pads a process id to the width
+#   of its siblings after the branch, and cuts a long command line to the
+#   width of the terminal it assumes, ending it with "..." or "…"; the
+#   command is kept as printed, and -l (--full) prints it whole;
+# - an extended attribute of a group, which systemd 252 prints to root
+#   one level under the group as "-> name: value": {attribute, value}.
+#
+# A line at the top of any other shape is not part of the report and is
+# refused, naming the line.
+format: 1
+command: systemd-cgls
+variant: tree
+description: systemd-cgls control groups, the processes in them and their attributes, as a tree
+metadata:
+  tags: [linux, systemd, process]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/systemd-cgls.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # A heading, and under it either the root slice or a branch.
+      - '\A(?:(?:CGroup|Control group) /\S*|Directory /\S*|Unit \S+ \([^)\n]*\)):\n(?:-\.slice(?: \(#[0-9]+\))?$|(?:\|-|`-|├─|└─))'
+input:
+  ignore:
+    # The heading of the whole hierarchy, which the root slice under it
+    # stands for.
+    - '^(?:CGroup|Control group) /:$'
+parse:
+  type: tree
+  # "-> " stands where a branch stands: an attribute is drawn one level
+  # below its group, in the column its processes are drawn in.
+  indent: ["| ", "|-", "`-", "  ", "│ ", "├─", "└─", "-> "]
+  root: '^(?:(?:CGroup|Control group) /\S*:|Directory /\S*:|Unit \S+ \([^)]*\):|-\.slice(?: \(#[0-9]+\))?)$'
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^(?:CGroup|Control group) (?P<cgroup>/\S*):$'
+        - '^Unit (?P<unit>\S+) \((?P<cgroup>[^)]*)\):$'
+        - '^Directory (?P<directory>/\S*):$'
+        - '^ *(?P<pid>[0-9]+) (?P<command>.+)$'
+        - '^(?P<attribute>[^: ]+): (?P<value>.*)$'
+        - '^(?P<name>[^ ]+?)(?: (?P<delegated>\.\.\.|…))?(?: \(#(?P<id>[0-9]+)\))?$'
+    fields:
+      cgroup: {when_missing: omit}
+      unit: {when_missing: omit}
+      directory: {when_missing: omit}
+      attribute: {when_missing: omit}
+      value: {when_missing: omit}
+      pid: {type: int, when_missing: omit}
+      command: {when_missing: omit}
+      name: {when_missing: omit}
+      delegated: {type: bool, true_values: ["...", "…"], when_missing: omit}
+      id: {type: int, when_missing: omit}

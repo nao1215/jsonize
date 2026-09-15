@@ -1,0 +1,3 @@
+source: captured with LC_ALL=C systemd-cgls --no-pager run as root inside a kind v1.35 node container (Debian 12, systemd 252), which prints group ids and extended attributes
+os: linux
+args: ["--no-pager"]

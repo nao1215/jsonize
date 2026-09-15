@@ -1,0 +1,129 @@
+Control group /:
+-.slice
+|-init.scope (#15422)
+| |-    1 /sbin/init
+| `-41363 systemd-cgls --no-pager
+|-system.slice (#15949)
+| |-containerd.service ... (#19639)
+| | -> user.invocation_id: 26bc813610554051bdf42ef746842979
+| | -> user.delegate: 1
+| | -> trusted.invocation_id: 26bc813610554051bdf42ef746842979
+| | -> trusted.delegate: 1
+| | |-116 /usr/local/bin/containerd
+| | |-570 /usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 235a14...
+| | |-718 /usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 8be47b...
+| | |-799 /usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 97c2b2...
+| | |-816 /usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 0bf5c3...
+| | |-847 /usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id e92b95...
+| | `-878 /usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id ca73c7...
+| `-systemd-journald.service (#17461)
+|   -> user.invocation_id: 8714553f72db422db2066fa3c7ac2894
+|   -> trusted.invocation_id: 8714553f72db422db2066fa3c7ac2894
+|   `-99 /lib/systemd/systemd-journald
+`-kubelet.slice (#15763)
+  -> user.invocation_id: a7899b8e4dfb4b6bb3f5f57435e90428
+  -> trusted.invocation_id: a7899b8e4dfb4b6bb3f5f57435e90428
+  |-kubelet.service (#21264)
+  | -> user.invocation_id: 854487f30c904557b5acbc0f9f280fb6
+  | -> trusted.invocation_id: 854487f30c904557b5acbc0f9f280fb6
+  | `-220 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-k...
+  `-kubelet-kubepods.slice (#21539)
+    -> user.invocation_id: 7c49831d3b95412c863da0db1bd265c9
+    -> trusted.invocation_id: 7c49831d3b95412c863da0db1bd265c9
+    |-kubelet-kubepods-podf94c220b_bcaa_41c2_b2f7_099d2e58bc0e.slice (#24723)
+    | -> user.invocation_id: 3e520761c2ef46ca91c7d7fca14521aa
+    | -> trusted.invocation_id: 3e520761c2ef46ca91c7d7fca14521aa
+    | |-cri-containerd-235a148b766083c499d57433f04400c33e168462db63ada0b8ab8c1092c39e43.scope ... (#26237)
+    | | -> user.invocation_id: 48709456eca7437d83965a1dbfea0e5a
+    | | -> user.delegate: 1
+    | | -> trusted.invocation_id: 48709456eca7437d83965a1dbfea0e5a
+    | | -> trusted.delegate: 1
+    | | `-619 /pause
+    | `-cri-containerd-79fe290c39e9b8edf04c3b93c12dbe4729b0cc4ef35ba2d825fd4d9bbfd1b07b.scope ... (#27306)
+    |   -> user.invocation_id: d741c52205f2455784c0520043f30d06
+    |   -> user.delegate: 1
+    |   -> trusted.invocation_id: d741c52205f2455784c0520043f30d06
+    |   -> trusted.delegate: 1
+    |   `-1064 /bin/kindnetd
+    `-kubelet-kubepods-besteffort.slice (#21974)
+      -> user.invocation_id: 15a5f04bb60e4c9db65bb18e8dae475f
+      -> trusted.invocation_id: 15a5f04bb60e4c9db65bb18e8dae475f
+      |-kubelet-kubepods-besteffort-podd448655c_ae7d_4df4_a4b8_c5eb334b7efc.slice (#25207)
+      | -> user.invocation_id: b685ba07e0844b81949537371dcd0a20
+      | -> trusted.invocation_id: b685ba07e0844b81949537371dcd0a20
+      | |-cri-containerd-2f44c1d268cdd124c3ea68bc5f7c55eaca48df11fe714c46b01dc190f32b173d.scope ... (#33717)
+      | | -> user.invocation_id: db5b897ccc144062b6fa170c17741924
+      | | -> user.delegate: 1
+      | | -> trusted.invocation_id: db5b897ccc144062b6fa170c17741924
+      | | -> trusted.delegate: 1
+      | | |-1367 /usr/bin/tini -- /usr/local/bin/argocd-repo-server
+      | | |-1386 /usr/local/bin/argocd-repo-server
+      | | `-1408 gpg-agent --homedir /app/config/gpg/keys --use-standard-sock...
+      | `-cri-containerd-ca73c7f06a045c721e43a476b35ba0cc6e93a925fdc94740d207ff86bdb9aec7.scope ... (#27045)
+      |   -> user.invocation_id: 2b8f869633f748abb0f1d8681a74e4c3
+      |   -> user.delegate: 1
+      |   -> trusted.invocation_id: 2b8f869633f748abb0f1d8681a74e4c3
+      |   -> trusted.delegate: 1
+      |   `-939 /pause
+      |-kubelet-kubepods-besteffort-pod3bd8d06b_3044_4d43_9610_9ebaafe632f6.slice (#25461)
+      | -> user.invocation_id: 2246847f2f8d49bda4d82610aec64694
+      | -> trusted.invocation_id: 2246847f2f8d49bda4d82610aec64694
+      | |-cri-containerd-b3687b6dde895dde1703049530271981ebe8fd352a6dbad1f84db63981c1b7c2.scope ... (#33804)
+      | | -> user.invocation_id: 3feac4dadb0b4d42a38248791184110c
+      | | -> user.delegate: 1
+      | | -> trusted.invocation_id: 3feac4dadb0b4d42a38248791184110c
+      | | -> trusted.delegate: 1
+      | | |-1433 /usr/bin/tini -- /usr/local/bin/argocd-applicationset-contro...
+      | | `-1452 /usr/local/bin/argocd-applicationset-controller
+      | `-cri-containerd-e92b9590a440fd27b26b6e933078fc5eb64380ff4b89381a017dd35e8982338c.scope ... (#27132)
+      |   -> user.invocation_id: c25604456b87433397f148aa99d3288a
+      |   -> user.delegate: 1
+      |   -> trusted.invocation_id: c25604456b87433397f148aa99d3288a
+      |   -> trusted.delegate: 1
+      |   `-951 /pause
+      |-kubelet-kubepods-besteffort-pod237abe0d_856c_437f_832a_64625d0fdd3c.slice (#24932)
+      | -> user.invocation_id: a265885f11ca4e0ea07fa03afc2e5096
+      | -> trusted.invocation_id: a265885f11ca4e0ea07fa03afc2e5096
+      | |-cri-containerd-79b2675a65de6c8d5ac3de8df1314119fcfc31734b636d41fbf1b69f86d802b8.scope ... (#27219)
+      | | -> user.invocation_id: 9d348bed0f774f4c99c484e2957cdab9
+      | | -> user.delegate: 1
+      | | -> trusted.invocation_id: 9d348bed0f774f4c99c484e2957cdab9
+      | | -> trusted.delegate: 1
+      | | `-960 /usr/local/bin/kube-proxy --config=/var/lib/kube-proxy/config...
+      | `-cri-containerd-8be47b0bc4b7b97e3fe3a18a61015ddc92a297404f173ba61321fcac4275f12c.scope ... (#26349)
+      |   -> user.invocation_id: 476c912b18694d519c4ae26e72e5bd6d
+      |   -> user.delegate: 1
+      |   -> trusted.invocation_id: 476c912b18694d519c4ae26e72e5bd6d
+      |   -> trusted.delegate: 1
+      |   `-776 /pause
+      |-kubelet-kubepods-besteffort-pod4e0c12a5_8790_4c45_9f18_2f1a6cfb51ee.slice (#25597)
+      | -> user.invocation_id: d5026c324f934e9688ab0905bf6bcfba
+      | -> trusted.invocation_id: d5026c324f934e9688ab0905bf6bcfba
+      | |-cri-containerd-0bf5c3b9a94b6829d7a926d490fdeae6a23da6fb56dbab78405e365b072365ff.scope ... (#26871)
+      | | -> user.invocation_id: cd58ff0a8a434ae6868bf55bb33a4a22
+      | | -> user.delegate: 1
+      | | -> trusted.invocation_id: cd58ff0a8a434ae6868bf55bb33a4a22
+      | | -> trusted.delegate: 1
+      | | `-936 /pause
+      | `-cri-containerd-3166653c3b8c61934e7a609dd91366868401807bb908e93abb645564c7d752e3.scope ... (#33891)
+      |   -> user.invocation_id: e1e60843de4f415587979fcf66312542
+      |   -> user.delegate: 1
+      |   -> trusted.invocation_id: e1e60843de4f415587979fcf66312542
+      |   -> trusted.delegate: 1
+      |   |-1488 /usr/bin/tini -- /usr/local/bin/argocd-notifications
+      |   `-1507 /usr/local/bin/argocd-notifications
+      `-kubelet-kubepods-besteffort-pod54455d8d_b195_496f_b3cb_8dae83488a5e.slice (#25019)
+        -> user.invocation_id: 24f224454ac34af79514e95ebaab62b0
+        -> trusted.invocation_id: 24f224454ac34af79514e95ebaab62b0
+        |-cri-containerd-97c2b246cf3b0f2a99202e98ed77f75176354c3cd84e7d86c4d3df953a5cebd5.scope ... (#26784)
+        | -> user.invocation_id: 775d19a4bfe3470d8047004ff90f5d56
+        | -> user.delegate: 1
+        | -> trusted.invocation_id: 775d19a4bfe3470d8047004ff90f5d56
+        | -> trusted.delegate: 1
+        | `-916 /pause
+        `-cri-containerd-5b1946ea2cdb5141a92dcb4b111f5e1d7042f8a6536d3c4efd1b10dea64841b1.scope ... (#34413)
+          -> user.invocation_id: 59b0690bc66246e0b7140377a9741ce3
+          -> user.delegate: 1
+          -> trusted.invocation_id: 59b0690bc66246e0b7140377a9741ce3
+          -> trusted.delegate: 1
+          `-1630 redis-server *:6379...

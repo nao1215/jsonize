@@ -1,0 +1,8 @@
+CGroup /user.slice/user-1000.slice/user@1000.service/session.slice/gvfs-daemon.service:
+|-   7557 /usr/libexec/gvfsd
+|-   7567 /usr/libexec/gvfsd-fuse /run/user/1000/gvfs -f
+|-2718416 /usr/libexec/gvfsd-trash --spawner :1.22 /org/gtk/gvfs/exec_spaw/0
+|-2718446 /usr/libexec/gvfsd-recent --spawner :1.22 /org/gtk/gvfs/exec_spaw/1
+|-2718447 /usr/libexec/gvfsd-network --spawner :1.22 /org/gtk/gvfs/exec_spaw/2
+|-2718458 /usr/libexec/gvfsd-dnssd --spawner :1.22 /org/gtk/gvfs/exec_spaw/3
+`-2718469 python3 /usr/bin/wsdd --no-host --discovery --listen /run/user/1000...

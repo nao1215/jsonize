@@ -1,0 +1,3 @@
+source: captured with LC_ALL=C.UTF-8 systemd-cgls --no-pager /system.slice on Ubuntu 26.04 (systemd 259), the tree drawn with box-drawing characters
+os: linux
+args: ["--no-pager", "/system.slice"]
