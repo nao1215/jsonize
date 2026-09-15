@@ -1,19 +1,17 @@
-# `systemctl list-units` while a listed unit has a job pending: a JOB
-# column appears between SUB and DESCRIPTION, filled on that unit and
-# blank on the others. systemctl/units reads the table without it.
+# `systemctl list-units --plain` while a listed unit has a job pending: the
+# JOB column appears between SUB and DESCRIPTION, filled on that unit and
+# blank on the others, and --plain leaves out the marker column, so the
+# header and every row start at the left edge. systemctl/units-jobs reads
+# the same table with the marker column, and systemctl/units the table
+# without a JOB column in either form.
 #
 # The job ("start") is a word a description could begin with too, so the
 # rows are cut where the header's words start rather than matched word by
-# word. A unit without a job reads the same as it does in systemctl/units.
-#
-# The header is indented by the width of the marker column, and that
-# indentation is what this definition reads: with --plain there is no
-# marker column and the header starts at the left edge, which is
-# systemctl/units-jobs-plain.
+# word.
 format: 1
 command: systemctl
-variant: units-jobs
-description: systemctl list-units table while a job is pending
+variant: units-jobs-plain
+description: systemctl list-units --plain table while a job is pending
 metadata:
   tags: [linux, systemd, service]
   compatible: [systemd]
@@ -23,7 +21,7 @@ detect:
   os: [linux]
   signature:
     all:
-      - '\A[ \t]+UNIT\s+LOAD\s+ACTIVE\s+SUB\s+JOB\s+DESCRIPTION\s*$'
+      - '\AUNIT\s+LOAD\s+ACTIVE\s+SUB\s+JOB\s+DESCRIPTION\s*$'
 input:
   ignore:
     - '^\s*$'
@@ -36,10 +34,8 @@ parse:
   type: table
   split: aligned
   header:
-    leading_label: marker
-    columns: [marker, unit, load, active, sub, job, description]
+    columns: [unit, load, active, sub, job, description]
 fields:
-  marker: {when_missing: omit}
   unit: {required: true}
   load: {required: true}
   active: {required: true}

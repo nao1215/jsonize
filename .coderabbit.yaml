@@ -1,0 +1,10 @@
+# Fixtures are captured command output, golden JSON is written by
+# `make registry-update-golden`, schemas by `make registry-update-schema`
+# and the parsers page by scripts/gen_parsers_table.sh. None of them is
+# written by hand, so a review of the definitions and the code that reads
+# them covers what a person decided.
+reviews:
+  path_filters:
+    - "!**/testdata/**"
+    - "!registry/schemas/**"
+    - "!website/content/parsers.md"

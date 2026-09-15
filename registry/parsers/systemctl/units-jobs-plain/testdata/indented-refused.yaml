@@ -1,0 +1,5 @@
+source: the same capture without --plain, which indents the header for the marker column
+description: refused, since an indented header belongs to systemctl/units-jobs
+os: linux
+args: ["--user", "list-units", "--no-pager"]
+expect_error: does not describe this input
