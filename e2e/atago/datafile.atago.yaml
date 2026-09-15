@@ -373,7 +373,7 @@ scenarios:
               "last"
               status=0
       - fixture:
-          file: nul.feed
+          file: zero-records.feed
           content: |
             send a b\x00
             expect 1
@@ -382,7 +382,7 @@ scenarios:
             close
             wait
       - run:
-          command: e2ehelper feed -deadline 10s -script nul.feed -- jz --format nul --stream
+          command: e2ehelper feed -deadline 10s -script zero-records.feed -- jz --format nul --stream
           timeout: 60s
       - assert:
           exit_code: 0
