@@ -82,15 +82,17 @@ e2e: build ## Run the atago end-to-end suite (requires atago on PATH)
 
 .PHONY: website
 website: ## Build the documentation site into website/public
-	cd website && hugo --minify
+	cd website && hugo --gc --minify --cleanDestinationDir
 
 .PHONY: website-serve
 website-serve: ## Serve the documentation site locally
 	cd website && hugo server --buildDrafts
 
 .PHONY: demo
-demo: build ## Re-record demo/jsonize.gif with vhs
-	vhs demo/jsonize.tape
+# vhs v0.12.0 ends ffmpeg before the GIF is written (the frames are made and
+# no GIF appears); v0.11.0 records them: go install github.com/charmbracelet/vhs@v0.11.0
+demo: build ## Re-record the demo GIFs from demo/*.tape with vhs
+	@for t in demo/*.tape; do echo "== $$t"; vhs $$t || exit 1; done
 
 .PHONY: check
 check: fmt vet lint test test-race ## Run everything CI runs locally except E2E

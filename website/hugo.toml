@@ -9,8 +9,8 @@ enableRobotsTXT = true
 timeZone = "UTC"
 
 [params]
-tagline = "Turn command output into JSON"
-description = "jsonize (jz) detects command output formats and converts them to JSON or YAML, with streaming and parsers defined in YAML."
+tagline = "Turn command output, data files and arguments into JSON"
+description = "jsonize (jz) turns command output, data files and command-line arguments into JSON or YAML, refusing what it cannot identify."
 
 [markup.highlight]
 noClasses = false
@@ -23,6 +23,11 @@ endLevel = 3
 name = "Install"
 pageRef = "/install"
 weight = 10
+
+[[menus.main]]
+name = "Cookbook"
+pageRef = "/cookbook"
+weight = 15
 
 [[menus.main]]
 name = "Usage"

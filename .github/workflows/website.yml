@@ -6,12 +6,14 @@ on:
     paths:
       - "website/**"
       - "demo/**"
+      - "doc/**"
       - "registry/schemas/**"
       - ".github/workflows/website.yml"
   pull_request:
     paths:
       - "website/**"
       - "demo/**"
+      - "doc/**"
       - "registry/schemas/**"
       - ".github/workflows/website.yml"
   workflow_dispatch:
@@ -30,6 +32,7 @@ jobs:
       contents: read
     env:
       HUGO_VERSION: 0.165.0
+      HUGO_SHA256: 5c3a37a5450b3e386e5b75a87a790fea2d04a796d75e171216c80ef48a32b432
       PAGEFIND_VERSION: 1.5.2
       PAGEFIND_SHA256: afb824a9e7f64905a934900481cea5be679c03975e527329e0e5e6cc70f5feda
     steps:
@@ -43,8 +46,9 @@ jobs:
         run: |
           curl -fsSL -o "${RUNNER_TEMP}/hugo.tar.gz" \
             "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_linux-amd64.tar.gz"
+          echo "${HUGO_SHA256}  ${RUNNER_TEMP}/hugo.tar.gz" | sha256sum --check -
           tar -C "${RUNNER_TEMP}" -xzf "${RUNNER_TEMP}/hugo.tar.gz" hugo
-          sudo mv "${RUNNER_TEMP}/hugo" /usr/local/bin/hugo
+          sudo install -m 0755 "${RUNNER_TEMP}/hugo" /usr/local/bin/hugo
           hugo version
 
       - name: Build the site
