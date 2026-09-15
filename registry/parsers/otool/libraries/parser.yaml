@@ -24,18 +24,21 @@ detect:
   signature:
     all:
       # A file line and a library line, then only lines of those two
-      # shapes to the end of the window.
-      - '\A\S[^\n]*:[ \t]*\n\t\S[^\n]* \(compatibility version [0-9.]+, current version [0-9.]+(?:, [a-z]+)*\)[ \t]*(?:\n(?:\S[^\n]*:|\t\S[^\n]* \(compatibility version [0-9.]+, current version [0-9.]+(?:, [a-z]+)*\))[ \t]*)*\z'
+      # shapes to the end of the window. A file line holds no colon but
+      # the one that ends it, so a line of colon-separated fields that
+      # ends in an empty one (an /etc/group entry with no members) is not
+      # taken for a file with no libraries.
+      - '\A[^\s:][^:\n]*:[ \t]*\n\t\S[^\n]* \(compatibility version [0-9.]+, current version [0-9.]+(?:, [a-z]+)*\)[ \t]*(?:\n(?:[^\s:][^:\n]*:|\t\S[^\n]* \(compatibility version [0-9.]+, current version [0-9.]+(?:, [a-z]+)*\))[ \t]*)*\z'
 parse:
   type: records
-  start: '^\S[^\n]*:[ \t]*$'
+  start: '^[^\s:][^:\n]*:[ \t]*$'
   parts:
     - name: file
       select: {limit: 1}
       parse:
         type: regex
         each: input
-        pattern: '\A(?P<name>\S[^\n]*?)(?: \(architecture (?P<architecture>[A-Za-z0-9_]+)\))?:[ \t]*\z'
+        pattern: '\A(?P<name>[^\s:][^:\n]*?)(?: \(architecture (?P<architecture>[A-Za-z0-9_]+)\))?:[ \t]*\z'
       fields:
         name: {required: true}
     - name: libraries
