@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/getmac/verbose.json",
+  "title": "getmac/verbose",
+  "description": "getmac /v, the connection, adapter, hardware address and transport of each network adapter",
+  "x-jsonize": {
+    "definition": "getmac/verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "connection_name": {
+        "type": "string"
+      },
+      "network_adapter": {
+        "type": "string"
+      },
+      "physical_address": {
+        "type": "string"
+      },
+      "transport_name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "connection_name",
+      "network_adapter",
+      "physical_address",
+      "transport_name"
+    ]
+  }
+}

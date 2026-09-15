@@ -1,0 +1,62 @@
+# `schtasks /query` prints the scheduled tasks folder by folder: a
+# "Folder:" line naming the folder, then a table of the tasks in it with
+# a header and a rule of equals signs. A folder that holds no task the
+# user may see prints an INFO line under its rule instead of rows; that
+# line says the table is empty and is left out, so the folder's task
+# list is empty.
+#
+# The table has the task name, cut to the 40 characters of its column,
+# the next run time and the status. The rows are cut where the header's
+# words start; "Next Run Time" is one column. The next run time is
+# written in the date and time format of the user's locale and names no
+# zone, so it stays the string it was printed as; it is N/A for a task
+# with no trigger due or a disabled one, which becomes null. The status
+# is one of the words the Task Scheduler reports, which is also what
+# tells a task row from a row of another table.
+#
+# /fo list prints the same tasks as blocks of labelled lines and is read
+# by schtasks/list; /v and /fo csv print other formats.
+format: 1
+command: schtasks
+variant: table
+description: schtasks /query, the scheduled tasks of each folder with next run time and status
+metadata:
+  tags: [windows, scheduler]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/schtasks-query
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The first folder line, the header and the rule of three runs.
+      - '\AFolder: \\[^\n]*\nTaskName[ \t]+Next Run Time[ \t]+Status[ \t]*\n=+ =+ =+[ \t]*$'
+input:
+  ignore:
+    # The rule under each header, and the line a folder without visible
+    # tasks prints in place of rows.
+    - '^=+ =+ =+[ \t]*$'
+    - '^INFO: There are no scheduled tasks presently available at your access level\.[ \t]*$'
+parse:
+  type: records
+  start: '^Folder: \\'
+  parts:
+    - name: folder
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AFolder: (?P<name>\\.*?)[ \t]*\z'
+    - name: tasks
+      select: {skip: 1}
+      parse:
+        type: table
+        split: aligned
+        header:
+          columns: [task_name, next_run_time, status]
+      fields:
+        task_name: {required: true}
+        next_run_time: {null_if: ["N/A"]}
+        status: {required: true, regex: '(?P<status>Ready|Running|Disabled|Queued|Unknown)'}

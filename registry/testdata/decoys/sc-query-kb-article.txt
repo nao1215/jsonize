@@ -1,0 +1,16 @@
+Symptom: the update service does not start
+
+Run sc query wuauserv. A healthy service reports:
+
+SERVICE_NAME: wuauserv
+DISPLAY_NAME: Windows Update
+        TYPE               : 20  WIN32_SHARE_PROCESS
+        STATE              : 4  RUNNING
+                                (STOPPABLE, NOT_PAUSABLE, ACCEPTS_PRESHUTDOWN)
+        WIN32_EXIT_CODE    : 0  (0x0)
+        SERVICE_EXIT_CODE  : 0  (0x0)
+        CHECKPOINT         : 0x0
+        WAIT_HINT          : 0x0
+
+If STATE shows 1 STOPPED and WIN32_EXIT_CODE is not 0, look the code up
+with net helpmsg. Use sc queryex to see the PID as well.

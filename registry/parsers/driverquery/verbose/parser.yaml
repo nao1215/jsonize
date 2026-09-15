@@ -1,0 +1,61 @@
+# `driverquery /v` prints one row per installed driver with fifteen
+# columns under a header and a rule of equals signs: the columns of
+# driverquery without options, the description, how and whether the
+# driver is started, whether it accepts being stopped and paused, the
+# sizes of its paged pool, code, BSS and initialisation sections, and
+# the path of its file. The rows are cut where the header's words start,
+# and the column names below say which heading words belong together.
+#
+# The display name and the description are cut to 22 characters. The
+# start mode, the state, the status and the two acceptance columns take
+# the words Windows prints there, and the driver type is Kernel or File
+# System; those vocabularies are what tells a driver row from a row of
+# another table. TRUE and FALSE become booleans.
+#
+# The section sizes are counts of bytes with the thousands separator of
+# the user's locale ("229,376") and stay the strings they were printed
+# as: the separator is a property of the locale, not of the text. The
+# link date is written in the locale's date format, names no zone, and
+# stays a string too; it is null where the driver has none.
+format: 1
+command: driverquery
+variant: verbose
+description: driverquery /v, the installed drivers with start mode, state, section sizes and path
+metadata:
+  tags: [windows, system]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/driverquery
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  signature:
+    all:
+      # The fifteen headings and the rule of fifteen runs under them.
+      - '\AModule Name[ \t]+Display Name[ \t]+Description[ \t]+Driver Type[ \t]+Start Mode State[ \t]+Status[ \t]+Accept Stop Accept Pause Paged Pool\(bytes\) Code\(bytes\) BSS\(bytes\) Link Date[ \t]+Path[ \t]+Init\(bytes\)[ \t]*\n=+(?: =+){14}[ \t]*$'
+input:
+  ignore:
+    # The rule under the header.
+    - '^=+(?: =+){14}[ \t]*$'
+parse:
+  type: table
+  split: aligned
+  header:
+    columns: [module_name, display_name, description, driver_type, start_mode, state, status, accept_stop, accept_pause, paged_pool_bytes, code_bytes, bss_bytes, link_date, path, init_bytes]
+fields:
+  module_name: {required: true, regex: '(?P<module_name>\S+)'}
+  display_name: {}
+  description: {}
+  driver_type: {required: true, regex: '(?P<driver_type>Kernel|File System)'}
+  start_mode: {required: true, regex: '(?P<start_mode>Boot|System|Auto|Manual|Disabled)'}
+  state: {required: true, regex: '(?P<state>Running|Stopped|Paused|Start Pending|Stop Pending|Continue Pending|Pause Pending|Unknown)'}
+  status: {required: true, regex: '(?P<status>OK|Degraded|Error|Pred Fail|Starting|Stopping|Service|Stressed|NonRecover|No Contact|Lost Comm|Unknown)'}
+  accept_stop: {type: bool, required: true, true_values: ["TRUE"], false_values: ["FALSE"]}
+  accept_pause: {type: bool, required: true, true_values: ["TRUE"], false_values: ["FALSE"]}
+  paged_pool_bytes: {required: true, regex: '(?P<paged_pool_bytes>\d[\d,.]*)'}
+  code_bytes: {required: true, regex: '(?P<code_bytes>\d[\d,.]*)'}
+  bss_bytes: {required: true, regex: '(?P<bss_bytes>\d[\d,.]*)'}
+  link_date: {}
+  path: {}
+  init_bytes: {required: true, regex: '(?P<init_bytes>\d[\d,.]*)'}

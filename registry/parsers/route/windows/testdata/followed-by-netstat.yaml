@@ -1,0 +1,3 @@
+source: the windows-server-2022 fixture followed by the windows-server-2022 fixture of netstat/windows, joined for this case
+description: the connection table netstat -an prints after the route tables is refused rather than read as IPv6 routes
+expect_error: 'part "ipv6_routes": line does not match pattern'

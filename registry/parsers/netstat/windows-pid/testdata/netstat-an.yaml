@@ -1,0 +1,6 @@
+description: "`netstat -an` prints the header and the rows without the PID column; it is the windows variant's format and must not be read as this one."
+source: >-
+  the windows-server-2022 fixture of netstat/windows, captured on GitHub
+  Actions windows-2022 with `cmd /c "netstat -an 2>&1"` and prepared the
+  way that fixture was.
+expect_error: 'does not describe this input'

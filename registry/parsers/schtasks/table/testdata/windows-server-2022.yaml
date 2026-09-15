@@ -1,0 +1,12 @@
+description: >-
+  schtasks /query run for real on Windows Server 2022, the same folder
+  sections and column widths as on 2025 with fewer folders.
+source: >-
+  captured on GitHub Actions windows-2022 (Windows Server 2022, build
+  20348.5499) on 2026-09-15 with `cmd /c "schtasks /query /fo table 2>&1"`
+  from PowerShell, written with WriteAllLines (CRLF line endings, the
+  blank lines between the folders as the command wrote them). The start
+  of a machine SID in two task names, cut by the column, was replaced
+  with S-1-5-21-1000000000-.
+os: windows
+args: [/query, /fo, table]

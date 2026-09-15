@@ -1,0 +1,15 @@
+description: >-
+  netstat -ano run for real on Windows Server 2022, the same layout as
+  on 2025 with a second adapter's addresses.
+source: >-
+  captured on GitHub Actions windows-2022 (Windows Server 2022, build
+  20348.5499) on 2026-09-15 with `cmd /c "netstat -ano 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  line above the banner as the command wrote it). The runner's own
+  addresses were replaced: its private IPv4 address with 192.0.2.192,
+  one space of the padding after it removed to keep the columns, and its
+  link-local IPv6 addresses with made-up ones of the same length. The
+  Hyper-V switch address (172.28.32.1) and the remote addresses were
+  kept.
+os: windows
+args: ["-ano"]

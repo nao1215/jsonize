@@ -1,0 +1,6 @@
+REM Collect the process list for the nightly report.
+REM tasklist /fo csv writes a header line first:
+REM "Image Name","PID","Session Name","Session#","Mem Usage"
+REM and one quoted row per process after it, such as
+REM "notepad.exe","4242","Console","1","12,345 K"
+tasklist /fo csv > "%TEMP%\processes.csv"

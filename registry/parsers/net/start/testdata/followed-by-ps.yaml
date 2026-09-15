@@ -1,0 +1,4 @@
+source: the windows-server-2022 fixture followed by the procps-4.0.4 fixture of ps/unix, joined for this case
+description: a ps listing after the completion line is refused, since that line closes the list of services
+args: [start]
+expect_error: does not match pattern

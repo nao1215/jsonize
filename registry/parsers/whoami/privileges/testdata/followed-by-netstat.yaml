@@ -1,0 +1,3 @@
+source: the windows-server-2025 fixture followed by the windows-server-2025 fixture of netstat/windows, joined for this case
+description: the connection table netstat prints after the privileges is refused, since its lines name no privilege
+expect_error: 'field "privilege_name": value "Active Connections" does not have the shape'

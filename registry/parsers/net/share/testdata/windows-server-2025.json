@@ -1,0 +1,22 @@
+[
+  {
+    "share_name": "C$",
+    "resource": "C:\\",
+    "remark": "Default share"
+  },
+  {
+    "share_name": "D$",
+    "resource": "D:\\",
+    "remark": "Default share"
+  },
+  {
+    "share_name": "IPC$",
+    "resource": null,
+    "remark": "Remote IPC"
+  },
+  {
+    "share_name": "ADMIN$",
+    "resource": "C:\\Windows",
+    "remark": "Remote Admin"
+  }
+]

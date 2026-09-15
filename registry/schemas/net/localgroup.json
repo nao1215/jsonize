@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/net/localgroup.json",
+  "title": "net/localgroup",
+  "description": "net localgroup, the local groups of the machine",
+  "x-jsonize": {
+    "definition": "net/localgroup",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "computer": {
+      "type": "string"
+    },
+    "groups": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "computer",
+    "groups"
+  ]
+}

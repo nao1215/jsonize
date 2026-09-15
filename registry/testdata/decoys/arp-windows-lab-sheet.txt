@@ -1,0 +1,9 @@
+Lab 2: the ARP cache
+
+Ping the gateway, then run arp -a. Copy the block for your adapter:
+
+  Interface: ____________ --- 0x__
+  Internet Address      Physical Address      Type
+  ____________          __-__-__-__-__-__     dynamic
+
+Question: why is the broadcast address listed as static?

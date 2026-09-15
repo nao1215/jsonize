@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sc/queryex.json",
+  "title": "sc/queryex",
+  "description": "sc queryex, the type, state, exit codes and process of each service",
+  "x-jsonize": {
+    "definition": "sc/queryex",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "service_name": {
+        "type": "string"
+      },
+      "display_name": {
+        "type": "string"
+      },
+      "type_code": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "interactive": {
+        "type": "boolean"
+      },
+      "state_code": {
+        "type": "integer"
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "CONTINUE_PENDING",
+          "PAUSED",
+          "PAUSE_PENDING",
+          "RUNNING",
+          "START_PENDING",
+          "STOPPED",
+          "STOP_PENDING"
+        ]
+      },
+      "controls": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      },
+      "win32_exit_code": {
+        "type": "integer"
+      },
+      "service_exit_code": {
+        "type": "integer"
+      },
+      "checkpoint": {
+        "type": "string"
+      },
+      "wait_hint": {
+        "type": "string"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "flags": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "service_name",
+      "display_name",
+      "type_code",
+      "type",
+      "interactive",
+      "state_code",
+      "state",
+      "controls",
+      "win32_exit_code",
+      "service_exit_code",
+      "checkpoint",
+      "wait_hint",
+      "pid",
+      "flags"
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+Runbook: restart a single service hosted in a shared svchost
+
+1. Find the process that hosts the service:
+
+   tasklist /svc /fi "SERVICES eq Spooler"
+
+   The Services column lists every service in that process, for
+   example "RpcEptMapper, RpcSs". Continued lists wrap under the
+   column.
+
+2. If the process hosts only that service, end it with taskkill /PID.
+   Otherwise restart the service with sc stop and sc start.

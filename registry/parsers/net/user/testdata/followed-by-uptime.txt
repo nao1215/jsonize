@@ -1,0 +1,9 @@
+
+User accounts for \\examplehost02
+
+-------------------------------------------------------------------------------
+DefaultAccount           Guest                    installer                
+user                     WDAGUtilityAccount       
+The command completed successfully.
+
+ 13:50:00 up 13 days,  4:30,  5 users,  load average: 0.74, 0.79, 0.83

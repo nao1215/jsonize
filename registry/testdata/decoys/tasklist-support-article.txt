@@ -1,0 +1,17 @@
+How to find the process that holds a file open
+
+Open a command prompt and run tasklist. It prints a table like this one:
+
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+notepad.exe                   4242 Console                    1     12,345 K
+
+Look for the program by its image name and note the PID in the second
+column. Pass that number to taskkill /PID to end it, or run tasklist /svc
+to see which services a svchost.exe process hosts:
+
+Image Name                     PID Services
+========================= ======== ============================================
+svchost.exe                   1100 RpcEptMapper, RpcSs
+
+The Mem Usage column is the working set in kilobytes.

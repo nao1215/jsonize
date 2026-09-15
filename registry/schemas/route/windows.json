@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/route/windows.json",
+  "title": "route/windows",
+  "description": "Windows route print and netstat -r, the interface list and the IPv4 and IPv6 route tables",
+  "x-jsonize": {
+    "definition": "route/windows",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "interfaces": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer"
+          },
+          "mac_address": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "index",
+          "mac_address",
+          "description"
+        ]
+      }
+    },
+    "ipv4_routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "network_destination": {
+            "type": "string"
+          },
+          "netmask": {
+            "type": "string"
+          },
+          "gateway": {
+            "type": "string"
+          },
+          "interface": {
+            "type": "string"
+          },
+          "metric": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "network_destination",
+          "netmask",
+          "gateway",
+          "interface",
+          "metric"
+        ]
+      }
+    },
+    "ipv6_routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "interface_index": {
+            "type": "integer"
+          },
+          "metric": {
+            "type": "integer"
+          },
+          "network_destination": {
+            "type": "string"
+          },
+          "gateway": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "interface_index",
+          "metric",
+          "network_destination",
+          "gateway"
+        ]
+      }
+    }
+  },
+  "required": [
+    "interfaces",
+    "ipv4_routes",
+    "ipv6_routes"
+  ]
+}

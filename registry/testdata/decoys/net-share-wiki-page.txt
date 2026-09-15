@@ -1,0 +1,11 @@
+== File server shares ==
+
+The shares below are published from FS01. The admin shares (C$, ADMIN$,
+IPC$) are created by Windows and are not listed here.
+
+ Share name   Resource                        Remark
+ Projects     D:\Projects                     Team projects
+ Scans        D:\Scans                        Scanner drop folder
+
+Request access through the service desk. Do not map drives to the
+admin shares.

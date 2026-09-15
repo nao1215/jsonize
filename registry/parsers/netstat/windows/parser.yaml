@@ -1,0 +1,59 @@
+# The connection table Windows netstat prints with -a or -n and without
+# -o: an "Active Connections" banner, a header indented by two spaces,
+# and one row per TCP connection or UDP endpoint. netstat/windows-pid
+# reads the same table with the owning process id -o adds.
+#
+# The address and the port share one column and are separated by the
+# last colon. An IPv6 address is written in brackets ("[::]:135",
+# "[fe80::1%14]:5985"); the brackets are syntax that keeps the address's
+# own colons apart from the port, so they come off the address. A long
+# IPv6 address runs past the column's width and pushes the rest of the
+# row right, so the row is read by its words rather than by position.
+#
+# A TCP row ends with the state of the connection, one of the states
+# Windows names. A UDP endpoint has no state, and its state is null; its
+# foreign address is "*:*", or the peer of a connected socket. Holding the protocol and the state to those
+# words is what refuses a line of another command printed after the
+# table.
+#
+# A port stays a string: with -n it is a number, but without -n netstat
+# writes a service name where it knows one, and one definition reads
+# both.
+format: 1
+command: netstat
+variant: windows
+description: Windows netstat -an, the active TCP connections and UDP endpoints
+metadata:
+  tags: [windows, network]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netstat
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    none: ["-o"]
+  signature:
+    all:
+      # The banner, then the header with nothing after State: -o adds a
+      # PID heading there.
+      - '\AActive Connections[ \t]*\n(?:[ \t]*\n)*[ \t]+Proto[ \t]+Local Address[ \t]+Foreign Address[ \t]+State[ \t]*$'
+input:
+  ignore:
+    # The banner and the header name the table, and a second capture
+    # joined to the first repeats them.
+    - '^Active Connections[ \t]*$'
+    - '^[ \t]+Proto[ \t]+Local Address[ \t]+Foreign Address[ \t]+State[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    - '^[ \t]+(?P<proto>TCP)[ \t]+(?P<local_address>\[[^\]\s]+\]|[^\s\[\]]+):(?P<local_port>[^\s:\[\]]+)[ \t]+(?P<foreign_address>\[[^\]\s]+\]|[^\s\[\]]+):(?P<foreign_port>[^\s:\[\]]+)[ \t]+(?P<state>LISTENING|ESTABLISHED|TIME_WAIT|CLOSE_WAIT|CLOSED|CLOSING|FIN_WAIT_1|FIN_WAIT_2|LAST_ACK|SYN_SENT|SYN_RECEIVED|BOUND|DELETE_TCB)[ \t]*$'
+    - '^[ \t]+(?P<proto>UDP)[ \t]+(?P<local_address>\[[^\]\s]+\]|[^\s\[\]]+):(?P<local_port>[^\s:\[\]]+)[ \t]+(?P<foreign_address>\[[^\]\s]+\]|[^\s\[\]]+):(?P<foreign_port>[^\s:\[\]]+)(?P<state>)??[ \t]*$'
+fields:
+  proto: {required: true}
+  local_address: {required: true, regex: '\[?(?P<local_address>[^\[\]]+)\]?'}
+  local_port: {required: true}
+  foreign_address: {required: true, regex: '\[?(?P<foreign_address>[^\[\]]+)\]?'}
+  foreign_port: {required: true}
+  state: {}

@@ -1,0 +1,826 @@
+[
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "22",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "80",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "135",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "445",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "1801",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "2103",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "2105",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "2107",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "2179",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "3389",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "5985",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "5986",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "47001",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "49664",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "49665",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "49666",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "49667",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "49668",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "49670",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "49671",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "0.0.0.0",
+    "local_port": "49690",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "139",
+    "foreign_address": "0.0.0.0",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49673",
+    "foreign_address": "23.11.32.159",
+    "foreign_port": "80",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49684",
+    "foreign_address": "168.63.129.16",
+    "foreign_port": "32526",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49693",
+    "foreign_address": "168.63.129.16",
+    "foreign_port": "80",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49694",
+    "foreign_address": "168.63.129.16",
+    "foreign_port": "80",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49702",
+    "foreign_address": "135.233.95.144",
+    "foreign_port": "443",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49703",
+    "foreign_address": "135.233.95.144",
+    "foreign_port": "443",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49704",
+    "foreign_address": "128.85.113.135",
+    "foreign_port": "443",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49706",
+    "foreign_address": "23.15.3.198",
+    "foreign_port": "80",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49715",
+    "foreign_address": "168.63.129.16",
+    "foreign_port": "32526",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49720",
+    "foreign_address": "168.63.129.16",
+    "foreign_port": "80",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49723",
+    "foreign_address": "72.154.7.113",
+    "foreign_port": "443",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49727",
+    "foreign_address": "23.15.3.198",
+    "foreign_port": "80",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49728",
+    "foreign_address": "23.15.3.131",
+    "foreign_port": "80",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49729",
+    "foreign_address": "23.15.3.221",
+    "foreign_port": "80",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49736",
+    "foreign_address": "20.190.151.132",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49739",
+    "foreign_address": "23.34.126.68",
+    "foreign_port": "80",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49749",
+    "foreign_address": "20.190.151.132",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49757",
+    "foreign_address": "104.18.38.233",
+    "foreign_port": "80",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49758",
+    "foreign_address": "52.110.2.183",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49759",
+    "foreign_address": "23.210.73.42",
+    "foreign_port": "80",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49760",
+    "foreign_address": "23.11.32.159",
+    "foreign_port": "80",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49762",
+    "foreign_address": "52.110.2.169",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49763",
+    "foreign_address": "20.80.35.105",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49764",
+    "foreign_address": "4.247.188.224",
+    "foreign_port": "443",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49765",
+    "foreign_address": "104.208.203.88",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49788",
+    "foreign_address": "169.254.169.254",
+    "foreign_port": "80",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49794",
+    "foreign_address": "20.75.202.224",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49795",
+    "foreign_address": "20.75.202.224",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49802",
+    "foreign_address": "104.208.203.90",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49804",
+    "foreign_address": "20.85.130.105",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49805",
+    "foreign_address": "20.85.130.105",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49806",
+    "foreign_address": "20.85.130.105",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49807",
+    "foreign_address": "140.82.112.22",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49808",
+    "foreign_address": "140.82.113.21",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49809",
+    "foreign_address": "140.82.112.22",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "192.0.2.108",
+    "local_port": "49810",
+    "foreign_address": "20.150.82.228",
+    "foreign_port": "443",
+    "state": "ESTABLISHED"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "22",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "80",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "135",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "445",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "1801",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "2103",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "2105",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "2107",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "2179",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "3389",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "5985",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "5986",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "47001",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "49664",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "49665",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "49666",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "49667",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "49668",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "49670",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "49671",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::",
+    "local_port": "49690",
+    "foreign_address": "::",
+    "foreign_port": "0",
+    "state": "LISTENING"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::1",
+    "local_port": "49713",
+    "foreign_address": "::1",
+    "foreign_port": "5985",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::1",
+    "local_port": "49714",
+    "foreign_address": "::1",
+    "foreign_port": "5985",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "::1",
+    "local_port": "49748",
+    "foreign_address": "::1",
+    "foreign_port": "47001",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "fe80::1a2b:3c4d:5e6f:7081%14",
+    "local_port": "49783",
+    "foreign_address": "fe80::1a2b:3c4d:5e6f:7081%14",
+    "foreign_port": "5985",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "fe80::1a2b:3c4d:5e6f:7081%14",
+    "local_port": "49784",
+    "foreign_address": "fe80::1a2b:3c4d:5e6f:7081%14",
+    "foreign_port": "5985",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "fe80::1a2b:3c4d:5e6f:7081%14",
+    "local_port": "49785",
+    "foreign_address": "fe80::1a2b:3c4d:5e6f:7081%14",
+    "foreign_port": "5985",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "TCP",
+    "local_address": "fe80::1a2b:3c4d:5e6f:7081%14",
+    "local_port": "49786",
+    "foreign_address": "fe80::1a2b:3c4d:5e6f:7081%14",
+    "foreign_port": "5985",
+    "state": "TIME_WAIT"
+  },
+  {
+    "proto": "UDP",
+    "local_address": "0.0.0.0",
+    "local_port": "123",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "0.0.0.0",
+    "local_port": "3389",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "0.0.0.0",
+    "local_port": "5353",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "0.0.0.0",
+    "local_port": "5355",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "0.0.0.0",
+    "local_port": "51898",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "0.0.0.0",
+    "local_port": "65482",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "0.0.0.0",
+    "local_port": "65497",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "192.0.2.108",
+    "local_port": "137",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "192.0.2.108",
+    "local_port": "138",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "127.0.0.1",
+    "local_port": "57066",
+    "foreign_address": "127.0.0.1",
+    "foreign_port": "57066",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "::",
+    "local_port": "123",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "::",
+    "local_port": "3389",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "::",
+    "local_port": "5353",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "::",
+    "local_port": "5355",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "::",
+    "local_port": "51898",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "::",
+    "local_port": "65482",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  },
+  {
+    "proto": "UDP",
+    "local_address": "::",
+    "local_port": "65497",
+    "foreign_address": "*",
+    "foreign_port": "*",
+    "state": null
+  }
+]

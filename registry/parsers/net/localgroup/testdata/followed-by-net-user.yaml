@@ -1,0 +1,4 @@
+source: the windows-server-2022 fixture followed by the windows-server-2022 fixture of net/user, joined for this case
+description: the account listing of net user printed after the groups is refused rather than read as more groups
+args: [localgroup]
+expect_error: does not match pattern

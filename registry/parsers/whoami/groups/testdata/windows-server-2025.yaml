@@ -1,0 +1,15 @@
+description: >-
+  whoami /groups run for real on Windows Server 2025 by the elevated
+  runner account: well-known groups, aliases with the Group owner
+  attribute, and the integrity label with no attributes. Group names
+  with spaces make the first column as wide as the longest of them.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "whoami /groups 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  lines as the command wrote them). Nothing was replaced: the token
+  holds only built-in groups with well-known SIDs. The same command on
+  the windows-2022 runner (Windows Server 2022, build 20348.5499)
+  printed the same bytes.
+os: windows
+args: ["/groups"]

@@ -1,0 +1,14 @@
+[
+  {
+    "connection_name": "Ethernet 5",
+    "network_adapter": "Mellanox Connec",
+    "physical_address": "00-00-5E-00-53-03",
+    "transport_name": null
+  },
+  {
+    "connection_name": "Ethernet 4",
+    "network_adapter": "Microsoft Hyper",
+    "physical_address": "00-00-5E-00-53-03",
+    "transport_name": "\\Device\\Tcpip_{00000000-0000-0000-0000-000000000002}"
+  }
+]

@@ -1,0 +1,55 @@
+# `schtasks /query /fo list` prints the scheduled tasks as blocks of
+# labelled lines, the values padded into a column: the computer, the
+# full name of the task, when it runs next, its status and its logon
+# mode. The blocks of one folder follow a "Folder:" line naming it.
+#
+# The folder line is left out: the task name is the full path of the
+# task, folder included, so it restates what the task name already
+# says, and leaving it out lets every block be one task.
+#
+# Every block has the same five labels in the same order, so a block is
+# read with one expression that names each of them. The next run time is
+# written in the date and time format of the user's locale and names no
+# zone, so it stays the string it was printed as; it is N/A for a task
+# with no trigger due or a disabled one, which becomes null. The status
+# is one of the words the Task Scheduler reports.
+#
+# /v adds many more labels to the block; this definition does not
+# undertake to read those, and a block that carries them is refused.
+format: 1
+command: schtasks
+variant: list
+description: schtasks /query /fo list, a block of labelled lines per scheduled task
+metadata:
+  tags: [windows, scheduler]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/schtasks-query
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    any: [/query, /QUERY]
+  signature:
+    all:
+      # The folder line and the first two labels of the first block.
+      - '\AFolder: \\[^\n]*\nHostName:[ \t]+\S+[ \t]*\nTaskName:[ \t]+\\'
+input:
+  ignore:
+    # The folder a group of blocks is in; the task name repeats it.
+    - '^Folder: \\.*$'
+parse:
+  type: records
+  start: '^HostName:'
+  record:
+    parse:
+      type: regex
+      each: input
+      pattern: '\AHostName:[ \t]+(?P<hostname>\S+)[ \t]*\nTaskName:[ \t]+(?P<task_name>\\\S.*?)[ \t]*\nNext Run Time:[ \t]+(?P<next_run_time>\S.*?)[ \t]*\nStatus:[ \t]+(?P<status>Ready|Running|Disabled|Queued|Unknown)[ \t]*\nLogon Mode:[ \t]+(?P<logon_mode>\S.*?)[ \t]*\z'
+    fields:
+      hostname: {required: true}
+      task_name: {required: true}
+      next_run_time: {null_if: ["N/A"]}
+      status: {required: true}
+      logon_mode: {required: true}

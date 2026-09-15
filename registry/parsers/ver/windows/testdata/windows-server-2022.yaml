@@ -1,0 +1,10 @@
+description: >-
+  ver run for real on Windows Server 2022, the version line with a
+  four-digit revision.
+source: >-
+  captured on GitHub Actions windows-2022 (Windows Server 2022, build
+  20348.5499) on 2026-09-15 with `cmd /c "ver 2>&1"` from PowerShell,
+  written with WriteAllLines (CRLF line endings, the blank line above
+  the version line as the command wrote it). Nothing was replaced.
+os: windows
+args: []

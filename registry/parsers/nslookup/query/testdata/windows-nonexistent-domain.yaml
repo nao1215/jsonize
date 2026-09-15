@@ -1,0 +1,13 @@
+description: >-
+  Windows nslookup asked for a name its resolver has no record of writes
+  the error above the server lines and names the server without a port;
+  it is not the bind9 answer this definition reads and must be refused.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "nslookup localhost 2>&1"`
+  from PowerShell, written with WriteAllLines (CRLF line endings). The
+  server is the Azure resolver address every hosted runner is given and
+  was kept. The windows-2022 runner printed the same bytes.
+os: windows
+args: [localhost]
+expect_error: does not describe this input

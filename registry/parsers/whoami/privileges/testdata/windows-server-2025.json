@@ -1,0 +1,122 @@
+[
+  {
+    "privilege_name": "SeIncreaseQuotaPrivilege",
+    "description": "Adjust memory quotas for a process",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeSecurityPrivilege",
+    "description": "Manage auditing and security log",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeTakeOwnershipPrivilege",
+    "description": "Take ownership of files or other objects",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeLoadDriverPrivilege",
+    "description": "Load and unload device drivers",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeSystemProfilePrivilege",
+    "description": "Profile system performance",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeSystemtimePrivilege",
+    "description": "Change the system time",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeProfileSingleProcessPrivilege",
+    "description": "Profile single process",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeIncreaseBasePriorityPrivilege",
+    "description": "Increase scheduling priority",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeCreatePagefilePrivilege",
+    "description": "Create a pagefile",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeBackupPrivilege",
+    "description": "Back up files and directories",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeRestorePrivilege",
+    "description": "Restore files and directories",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeShutdownPrivilege",
+    "description": "Shut down the system",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeDebugPrivilege",
+    "description": "Debug programs",
+    "state": "Enabled"
+  },
+  {
+    "privilege_name": "SeSystemEnvironmentPrivilege",
+    "description": "Modify firmware environment values",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeChangeNotifyPrivilege",
+    "description": "Bypass traverse checking",
+    "state": "Enabled"
+  },
+  {
+    "privilege_name": "SeRemoteShutdownPrivilege",
+    "description": "Force shutdown from a remote system",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeUndockPrivilege",
+    "description": "Remove computer from docking station",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeManageVolumePrivilege",
+    "description": "Perform volume maintenance tasks",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeImpersonatePrivilege",
+    "description": "Impersonate a client after authentication",
+    "state": "Enabled"
+  },
+  {
+    "privilege_name": "SeCreateGlobalPrivilege",
+    "description": "Create global objects",
+    "state": "Enabled"
+  },
+  {
+    "privilege_name": "SeIncreaseWorkingSetPrivilege",
+    "description": "Increase a process working set",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeTimeZonePrivilege",
+    "description": "Change the time zone",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeCreateSymbolicLinkPrivilege",
+    "description": "Create symbolic links",
+    "state": "Disabled"
+  },
+  {
+    "privilege_name": "SeDelegateSessionUserImpersonatePrivilege",
+    "description": "Obtain an impersonation token for another user in the same session",
+    "state": "Disabled"
+  }
+]

@@ -1,0 +1,49 @@
+# `net user` without a name lists the user accounts of the machine: a
+# line naming the computer ("User accounts for \\HOST"), a rule of
+# hyphens, the account names three to a line, and the line saying the
+# command completed.
+#
+# Each name is padded to a column 25 characters wide, and a local
+# account name is at most 20 characters long, so two names on one line
+# are always at least five spaces apart. A name may hold a single space,
+# which is why the names are split at a run of two or more spaces and at
+# the end of a line rather than at every space. A name holds none of the
+# characters Windows forbids in one ("/\[]:;|=,+*?<> and the double
+# quote), which is what each entry is held to.
+#
+# The whole output is one object: the computer and the list of names.
+# The completion line closes it, so a line printed after it is refused.
+# `net user NAME` prints the properties of one account instead and is
+# not this format.
+format: 1
+command: net
+variant: user
+description: net user, the user accounts of the machine
+metadata:
+  tags: [windows, user]
+  compatible: [Windows]
+  references:
+    - https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/cc771865(v=ws.11)
+detect:
+  # In pipe mode the producing OS is unknown and this is skipped, so the
+  # signature below has to say what the format is on its own.
+  os: [windows]
+  args:
+    any: [user, users, USER, USERS]
+  signature:
+    all:
+      # The computer, the rule, and a name starting the line under it.
+      # The completion line comes after every name and is past the
+      # window on a machine with many accounts, so it is the pattern
+      # below that holds the text to it.
+      - '\AUser accounts for \\\\[^\s\\]+[ \t]*\n(?:[ \t]*\n)*-{20,}[ \t]*\n[^\s"/\\\[\]:;|=,+*?<>-]'
+parse:
+  type: regex
+  each: input
+  pattern: '\AUser accounts for \\\\(?P<computer>[^\s\\]+)[ \t]*\n(?:[ \t]*\n)*-{20,}[ \t]*\n(?:(?P<accounts>\S[^\n]*?(?:[ \t]*\n[^\n]*?)*?)[ \t]*\n)?The command completed successfully\.[ \t]*\z'
+fields:
+  computer: {required: true}
+  accounts:
+    type: array
+    split_regex: '[ \t]*\n[ \t]*|[ \t]{2,}'
+    items: {regex: '(?P<accounts>[^"/\\\[\]:;|=,+*?<>\s](?:[^"/\\\[\]:;|=,+*?<>\n]{0,18}[^"/\\\[\]:;|=,+*?<>\s])?)'}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/whoami/groups.json",
+  "title": "whoami/groups",
+  "description": "whoami /groups on Windows, the groups in the current user's access token",
+  "x-jsonize": {
+    "definition": "whoami/groups",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "group_name": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "sid": {
+        "type": "string"
+      },
+      "attributes": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "group_name",
+      "type",
+      "sid",
+      "attributes"
+    ]
+  }
+}

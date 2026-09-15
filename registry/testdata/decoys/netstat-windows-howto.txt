@@ -1,0 +1,17 @@
+Checking which process listens on a port
+
+On Windows, netstat -ano lists every connection with the process that
+owns it. The top of its output reads
+
+Active Connections
+
+  Proto  Local Address          Foreign Address        State           PID
+  TCP    0.0.0.0:3389           0.0.0.0:0              LISTENING       1344
+
+and without -o the PID column is left out:
+
+  Proto  Local Address          Foreign Address        State
+  TCP    0.0.0.0:3389           0.0.0.0:0              LISTENING
+
+Find the port in the Local Address column and look the PID up in
+tasklist. UDP rows have no state.

@@ -1,0 +1,15 @@
+description: >-
+  tasklist /v for the svchost.exe processes run for real on Windows
+  Server 2025: service accounts and the runner's own account, the
+  Unknown and Running statuses, processor times of a few seconds, and
+  one process with a window title.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with
+  `cmd /c "tasklist /v /fi "IMAGENAME eq svchost.exe" 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  line above the header as the command wrote it). The host name and the
+  account name in the User Name column were replaced with examplehost01
+  and user, padded with spaces to the column's width.
+os: windows
+args: ["/v", "/fi", "IMAGENAME eq svchost.exe"]

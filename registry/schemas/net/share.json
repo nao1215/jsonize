@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/net/share.json",
+  "title": "net/share",
+  "description": "net share, the shared resources of the machine",
+  "x-jsonize": {
+    "definition": "net/share",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "share_name": {
+        "type": "string"
+      },
+      "resource": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "remark": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "share_name",
+      "resource",
+      "remark"
+    ]
+  }
+}

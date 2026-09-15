@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/tasklist/verbose.json",
+  "title": "tasklist/verbose",
+  "description": "tasklist /v, processes with status, account, processor time and window title",
+  "x-jsonize": {
+    "definition": "tasklist/verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "image_name": {
+        "type": "string"
+      },
+      "pid": {
+        "type": "integer"
+      },
+      "session_name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "session_number": {
+        "type": "integer"
+      },
+      "mem_usage": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      },
+      "user_name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "cpu_time": {
+        "type": "number"
+      },
+      "window_title": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "image_name",
+      "pid",
+      "session_name",
+      "session_number",
+      "mem_usage",
+      "status",
+      "user_name",
+      "cpu_time",
+      "window_title"
+    ]
+  }
+}

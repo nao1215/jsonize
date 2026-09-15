@@ -1,0 +1,12 @@
+description: >-
+  driverquery run for real on Windows Server 2025: over four hundred
+  kernel and file system drivers, display names cut to the column's
+  width, and a link date on the few drivers that carry one.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "driverquery 2>&1"` from
+  PowerShell, written with WriteAllLines (CRLF line endings, the blank
+  line above the header as the command wrote it). Nothing was replaced:
+  the listing names no user, host or address.
+os: windows
+args: []

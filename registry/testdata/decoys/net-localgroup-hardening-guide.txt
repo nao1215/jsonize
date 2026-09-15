@@ -1,0 +1,13 @@
+Hardening guide, section 4: local groups
+
+List the groups with net localgroup. On a fresh server the output
+starts like this:
+
+Aliases for \\SERVER01
+
+-------------------------------------------------------------------------------
+*Administrators
+*Guests
+
+Remove every account from Guests, and keep Administrators to the
+accounts named in the build record.
