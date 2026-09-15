@@ -217,9 +217,14 @@ func TestDataFileOutputOptions(t *testing.T) {
 	if code := h.pipe("a:1\tb:2\na:3\tb:4\n", "--format", "ltsv", "--stream", "--extract", "a"); code != ExitOK || h.stdout.String() != "{\"a\":\"1\"}\n{\"a\":\"3\"}\n" {
 		t.Errorf("--stream --extract: %d %q %s", code, h.stdout.String(), h.stderr.String())
 	}
-	// A stream writes the records before the line that fails, then stops.
-	if code := h.pipe("1\n2\nx\n3\n", "--format", "jsonl", "--stream"); code != ExitParse || h.stdout.String() != "1\n2\n" || !strings.Contains(h.stderr.String(), "line 3") {
-		t.Errorf("a stream that fails: %d %q %s", code, h.stdout.String(), h.stderr.String())
+	// A stream leaves out the line it cannot read and writes the rest, as
+	// a stream of a command's output does; the status is still 3.
+	if code := h.pipe("1\n2\nx\n3\n", "--format", "jsonl", "--stream"); code != ExitParse || h.stdout.String() != "1\n2\n3\n" || !strings.Contains(h.stderr.String(), "jz: jsonl: line 3: the line is not one JSON value") {
+		t.Errorf("a stream that skips: %d %q %s", code, h.stdout.String(), h.stderr.String())
+	}
+	// --stop-on-error ends it there, keeping what was written.
+	if code := h.pipe("1\n2\nx\n3\n", "--format", "jsonl", "--stream", "--stop-on-error"); code != ExitParse || h.stdout.String() != "1\n2\n" || strings.Count(h.stderr.String(), "line 3") != 1 {
+		t.Errorf("a stream that stops: %d %q %s", code, h.stdout.String(), h.stderr.String())
 	}
 	// The options about a format's fields change nothing for a document.
 	if code := h.pipe("a: 1\n", "--format", "yaml", "--raw", "--assume-year", "2024"); code != ExitOK || strings.TrimSpace(h.stdout.String()) != `{"a":1}` {

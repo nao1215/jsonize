@@ -364,19 +364,13 @@ func (a *app) convertData(format string, r io.Reader, out *outputOptions, exp *e
 	if out.stream {
 		a.explainWrite(exp)
 		write := out.recordWriter(a.env.Stdout)
+		skipped, onError := a.skipping(exp, format, out.stopOnError)
 		// A stream has no total to bound; the line limit bounds what is
-		// held while one line waits for its end.
+		// held while one record waits for its end.
 		err := datafile.Stream(format, r, int(MaxInputSize), func(v any) error {
 			return write(filter.narrowRecord(v))
-		})
-		if err != nil {
-			return a.exitFor(err)
-		}
-		if err := filter.unseen(); err != nil {
-			a.errorf("%v", err)
-			return ExitUsage
-		}
-		return ExitOK
+		}, onError)
+		return a.streamEnd(err, filter, *skipped)
 	}
 	data, code := a.readAll(r)
 	if code != ExitOK {

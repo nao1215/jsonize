@@ -126,7 +126,7 @@ func TestStream(t *testing.T) {
 	err := Stream(JSONL, strings.NewReader("1\n2\n3"), 10, func(v any) error {
 		got = append(got, encode(t, v))
 		return nil
-	})
+	}, nil)
 	if err != nil || strings.Join(got, ",") != "1,2,3" {
 		t.Errorf("records: %v %v", got, err)
 	}
@@ -136,28 +136,28 @@ func TestStream(t *testing.T) {
 	err = Stream(JSONL, strings.NewReader("1\n"+strings.Repeat("2", 5000)+"\n3\n"), 4096, func(v any) error {
 		got = append(got, encode(t, v))
 		return nil
-	})
+	}, nil)
 	parseError(t, err, 2, "longer than 4096 bytes")
 	if len(got) != 1 {
 		t.Errorf("the records before the long line: %v", got)
 	}
 	// A line exactly at the limit is read.
-	if err := Stream(LTSV, strings.NewReader("k:"+strings.Repeat("v", 98)+"\n"), 100, func(any) error { return nil }); err != nil {
+	if err := Stream(LTSV, strings.NewReader("k:"+strings.Repeat("v", 98)+"\n"), 100, func(any) error { return nil }, nil); err != nil {
 		t.Errorf("a line at the limit: %v", err)
 	}
 	stop := errors.New("stop")
-	if err := Stream(JSONL, strings.NewReader("1\n2\n"), 10, func(any) error { return stop }); !errors.Is(err, stop) {
+	if err := Stream(JSONL, strings.NewReader("1\n2\n"), 10, func(any) error { return stop }, nil); !errors.Is(err, stop) {
 		t.Errorf("emit's error: %v", err)
 	}
 	calls := 0
 	err = Stream(JSONL, io.MultiReader(strings.NewReader("1\n"), iotest.ErrReader(iotest.ErrTimeout)), 10, func(any) error {
 		calls++
 		return nil
-	})
+	}, nil)
 	if !errors.Is(err, iotest.ErrTimeout) || calls != 1 {
 		t.Errorf("a reader that fails: %v after %d records", err, calls)
 	}
-	if err := Stream(JSON, strings.NewReader("1"), 10, func(any) error { return nil }); err == nil {
+	if err := Stream(JSON, strings.NewReader("1"), 10, func(any) error { return nil }, nil); err == nil {
 		t.Error("a document format was streamed")
 	}
 	if v, err := Read(CSV, []byte("a,b\n1,\"x,y\"\n")); err != nil || encode(t, v) != `[{"a":"1","b":"x,y"}]` {
@@ -191,7 +191,7 @@ func FuzzLineFormats(f *testing.F) {
 		serr := Stream(format, iotest.OneByteReader(strings.NewReader(data)), len(data)+1, func(v any) error {
 			streamed = append(streamed, v)
 			return nil
-		})
+		}, nil)
 		if (werr == nil) != (serr == nil) {
 			t.Fatalf("whole %v, streamed %v", werr, serr)
 		}
@@ -255,7 +255,7 @@ func TestTextFormats(t *testing.T) {
 		if err := Stream(tt.format, iotest.OneByteReader(strings.NewReader(tt.input)), len(tt.input)+1, func(v any) error {
 			streamed = append(streamed, v)
 			return nil
-		}); err != nil {
+		}, nil); err != nil {
 			t.Errorf("%s %q streamed: %v", tt.format, tt.input, err)
 		}
 		if streamed == nil {
@@ -292,12 +292,12 @@ func TestTextFormatsRefuse(t *testing.T) {
 		err := Stream(tt.format, strings.NewReader(tt.input), 10, func(v any) error {
 			got = append(got, v)
 			return nil
-		})
+		}, nil)
 		if err == nil || err.Error() != tt.want || len(got) != 1 {
 			t.Errorf("%s: got %v %v, want %q after one record", tt.format, got, err, tt.want)
 		}
 	}
-	if err := Stream(TEXT, strings.NewReader("x"), 10, func(any) error { return nil }); err == nil {
+	if err := Stream(TEXT, strings.NewReader("x"), 10, func(any) error { return nil }, nil); err == nil {
 		t.Error("text streamed")
 	}
 }
@@ -341,4 +341,50 @@ func FuzzStringRecords(f *testing.F) {
 			t.Fatalf("%q: records %q join to %q", data, parts, got)
 		}
 	})
+}
+
+// A record whose content cannot be read goes to onError, which leaves it
+// out when it returns nil and ends the stream when it returns an error.
+// A record too long to hold ends the stream either way.
+func TestStreamOnError(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		format, input, want, bad string
+	}{
+		{JSONL, "1\nnot json\n3\n", "1,3", "jsonl: line 2: the line is not one JSON value"},
+		{LTSV, "a:1\nno label\na:3\n", `{"a":"1"},{"a":"3"}`, "ltsv: line 2"},
+		{JSONL, "1\n\xff\n3\n", "1,3", "jsonl: line 2: the line is not valid UTF-8"},
+		{LINES, "a\n\xff\nc\n", `"a","c"`, "lines: line 2: the text is not valid UTF-8"},
+		{NUL, "a\x00\xff\x00c\x00", `"a","c"`, "nul: record 2: the text is not valid UTF-8"},
+	} {
+		var got []string
+		var seen []string
+		err := Stream(tt.format, strings.NewReader(tt.input), 100, func(v any) error {
+			got = append(got, encode(t, v))
+			return nil
+		}, func(pe *engine.ParseError) error {
+			seen = append(seen, pe.Error())
+			return nil
+		})
+		if err != nil || strings.Join(got, ",") != tt.want || len(seen) != 1 || !strings.Contains(seen[0], tt.bad) {
+			t.Errorf("%s skipping: %v %v %v", tt.format, err, got, seen)
+		}
+		got = nil
+		stop := errors.New("stop")
+		err = Stream(tt.format, strings.NewReader(tt.input), 100, func(v any) error {
+			got = append(got, encode(t, v))
+			return nil
+		}, func(*engine.ParseError) error { return stop })
+		if !errors.Is(err, stop) || len(got) != 1 {
+			t.Errorf("%s stopping: %v %v", tt.format, err, got)
+		}
+	}
+	skipped := 0
+	err := Stream(JSONL, strings.NewReader("1\n"+strings.Repeat("2", 50)+"\n3\n"), 10, func(any) error { return nil }, func(*engine.ParseError) error {
+		skipped++
+		return nil
+	})
+	if err == nil || !strings.Contains(err.Error(), "longer than 10 bytes") || skipped != 0 {
+		t.Errorf("a line too long was skipped: %v, %d skipped", err, skipped)
+	}
 }
