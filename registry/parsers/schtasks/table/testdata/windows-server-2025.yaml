@@ -1,0 +1,14 @@
+description: >-
+  schtasks /query run for real on Windows Server 2025: about a hundred
+  folders, task names cut to 40 characters, next run times in the en-US
+  date format, the Ready, Running and Disabled statuses, and folders
+  with no visible task that print the INFO line instead of rows.
+source: >-
+  captured on GitHub Actions windows-latest (Windows Server 2025, build
+  26100.33296) on 2026-09-15 with `cmd /c "schtasks /query /fo table 2>&1"`
+  from PowerShell, written with WriteAllLines (CRLF line endings, the
+  blank lines between the folders as the command wrote them). The start
+  of a machine SID in two task names, cut by the column, was replaced
+  with S-1-5-21-1000000000-.
+os: windows
+args: [/query, /fo, table]
