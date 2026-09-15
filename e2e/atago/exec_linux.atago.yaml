@@ -646,6 +646,8 @@ scenarios:
 
   # The host's own procps, so what is pinned is the shape of the answer
   # rather than any particular machine's numbers.
+  # A runner can be less than a minute old, and uptime then prints
+  # "up 0 min", which is 0 seconds; the duration is a number either way.
   - name: real uptime and ps report their durations in seconds
     only: {os: linux}
     steps:
@@ -655,7 +657,7 @@ scenarios:
           exit_code: 0
           stdout:
             json:
-              - { path: "$.uptime", gt: 0 }
+              - { path: "$.uptime", gte: 0 }
       - run:
           command: jz run ps
       - assert:
