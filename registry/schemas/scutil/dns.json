@@ -1,0 +1,285 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/scutil/dns.json",
+  "title": "scutil/dns",
+  "description": "scutil --dns resolver configuration on macOS",
+  "x-jsonize": {
+    "definition": "scutil/dns",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "resolvers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer"
+          },
+          "domain": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "search_domains": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "nameservers": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "port": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "sort_addresses": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "options": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timeout": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "if_index": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "interface": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "service_identifier": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "cid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "flags": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "reach": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reach_flags": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "order": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "number",
+          "domain",
+          "search_domains",
+          "nameservers",
+          "port",
+          "sort_addresses",
+          "options",
+          "timeout",
+          "if_index",
+          "interface",
+          "service_identifier",
+          "cid",
+          "flags",
+          "reach",
+          "reach_flags",
+          "order"
+        ]
+      }
+    },
+    "scoped_resolvers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer"
+          },
+          "domain": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "search_domains": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "nameservers": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "port": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "sort_addresses": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "options": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timeout": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "if_index": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "interface": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "service_identifier": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "cid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "flags": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "reach": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reach_flags": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "order": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "number",
+          "domain",
+          "search_domains",
+          "nameservers",
+          "port",
+          "sort_addresses",
+          "options",
+          "timeout",
+          "if_index",
+          "interface",
+          "service_identifier",
+          "cid",
+          "flags",
+          "reach",
+          "reach_flags",
+          "order"
+        ]
+      }
+    }
+  },
+  "required": [
+    "resolvers",
+    "scoped_resolvers"
+  ]
+}
