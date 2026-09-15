@@ -1,0 +1,31 @@
+project
+|-- Makefile
+|-- README.md
+|-- cmd
+|   `-- jz
+|       |-- main.go
+|       `-- main_test.go
+|-- docs
+|   |-- design.md
+|   |-- format.md
+|   |-- index.md -> README.md
+|   `-- usage.md
+|-- go.mod
+|-- go.sum
+|-- internal
+|   `-- cli
+|       |-- cli.go
+|       |-- run.go
+|       `-- stream.go
+`-- testdata
+    |-- a.txt
+    |-- b.txt
+    |-- c.txt
+    |-- d.txt
+    |-- e.txt
+    `-- f.txt
+
+7 directories, 19 files
+ 03:41:07 up 13 days, 18:21,  5 users,  load average: 0.72, 0.76, 0.55
+USER     TTY      FROM               IDLE WHAT
+alice             -                       lightdm --session-child 13 20

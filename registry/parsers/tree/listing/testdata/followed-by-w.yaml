@@ -1,0 +1,4 @@
+source: the definition's own past-the-window.txt followed by w/linux-short's procps-4.0.4.txt, joined for this case
+description: w's lines after the closing count are refused as unread; they are past the lines detection looks at, and were read as more top directories
+args: ["project"]
+expect_error: no part of the definition read
