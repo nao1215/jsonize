@@ -244,8 +244,13 @@ func TestDataFileExplain(t *testing.T) {
 	}
 	chosen, _ := doc["chosen"].(map[string]any)
 	scope, _ := doc["scope"].(map[string]any)
-	if doc["outcome"] != "format" || chosen["definition"] != "json" || chosen["registry"] != "--format" || scope["from"] != "--format" {
+	read, _ := doc["read"].(map[string]any)
+	if doc["outcome"] != "format" || chosen["definition"] != "json" || chosen["registry"] != "--format" || scope["from"] != "--format" || read["values"] != float64(1) || read["lines"] != nil {
 		t.Errorf("json: %v", doc)
+	}
+	// A JSON document that is an array is still one value.
+	if code := h.pipe("[1,2,3]", "--format", "json", "--explain"); code != ExitOK || !strings.Contains(h.stderr.String(), "read: 1 value\n") {
+		t.Errorf("a json array: %d %s", code, h.stderr.String())
 	}
 	if code := h.pipe("x\n", "--format", "jsonl", "--explain"); code != ExitParse || !strings.Contains(h.stderr.String(), "jz: explain: read as jsonl: the format was given with --format") || strings.Contains(h.stderr.String(), "read: ") {
 		t.Errorf("a failure: %d %s", code, h.stderr.String())

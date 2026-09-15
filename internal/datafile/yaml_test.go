@@ -15,7 +15,9 @@ func TestReadYAML(t *testing.T) {
 	}{
 		{"a mapping keeps its order", "z: 1\na: 2\n", `{"z":1,"a":2}`},
 		{"the core schema's scalars", "n1: null\nn2: ~\nn3:\nt: True\nf: FALSE\ni: -12\no: 0o17\nx: 0xFF\nd: 1.5\ne: 2e3\ndot: .5\n",
-			`{"n1":null,"n2":null,"n3":null,"t":true,"f":false,"i":-12,"o":15,"x":255,"d":1.5,"e":2000,"dot":0.5}`},
+			`{"n1":null,"n2":null,"n3":null,"t":true,"f":false,"i":-12,"o":15,"x":255,"d":1.5,"e":2e3,"dot":0.5}`},
+		{"decimals keep their digits", "a: 3.141592653589793238462643383279\nb: +007.50\nc: 1.\nd: -.5E-3\ne: 1e999\n",
+			`{"a":3.141592653589793238462643383279,"b":7.50,"c":1.0,"d":-0.5E-3,"e":1e999}`},
 		{"quoted scalars are strings", "a: \"1\"\nb: 'true'\nc: \"null\"\n", `{"a":"1","b":"true","c":"null"}`},
 		{"a block scalar is a string", "a: |\n  12\n", `{"a":"12\n"}`},
 		{"words are strings", "a: yes\nb: 1.2.3\nc: 0x\nd: +\n", `{"a":"yes","b":"1.2.3","c":"0x","d":"+"}`},
@@ -49,7 +51,6 @@ func TestReadYAMLRefuses(t *testing.T) {
 	}{
 		{"infinity", "a: 1\nb: .inf\n", 2, "not a number JSON can hold"},
 		{"not a number", "- -.Inf\n- .NaN\n", 1, "not a number JSON can hold"},
-		{"a float out of range", "a: 1e999\n", 1, "out of the range"},
 		{"a hexadecimal integer past 64 bits", "a: 0x1FFFFFFFFFFFFFFFF\n", 1, "does not fit in 64 bits"},
 		{"a key given twice", "a: 1\na: 2\n", 2, "duplicate key"},
 		{"an anchor", "a: &x 1\nb: *x\n", 1, ""},

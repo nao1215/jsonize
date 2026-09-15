@@ -386,7 +386,9 @@ func (a *app) convertData(format string, r io.Reader, out *outputOptions, exp *e
 		a.explainWrite(exp)
 		return code
 	}
-	if list, ok := v.([]any); ok {
+	// A line format is a list of the records its lines hold; a JSON or
+	// YAML document is one value, whatever it holds.
+	if list, ok := v.([]any); ok && datafile.Streams(format) {
 		exp.readRecords(len(list))
 	} else {
 		exp.readRecords(1)
