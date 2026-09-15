@@ -38,6 +38,9 @@ detect:
       # Every line: the two header lines, where they are printed, then the
       # rows.
       - '\A(?: PID(?::[\x{25B2}\x{25BC}])? +User(?::[\x{25B2}\x{25BC}])? +\x{2502} TTY(?::[\x{25B2}\x{25BC}])? +CPU(?::[\x{25B2}\x{25BC}])? +MEM(?::[\x{25B2}\x{25BC}])? +CPU Time(?::[\x{25B2}\x{25BC}])? +\x{2502} Command(?::[\x{25B2}\x{25BC}])?\n +\x{2502} +\[%\] +\[%\] +\x{2502}(?:\n|\z))?(?: \d+ +\S+ +\x{2502} +(?:\S+ +)?\d+\.\d +\d+\.\d +\d+:\d{2}:\d{2} \x{2502} [^\n]+(?:\n|\z))*\z'
+      # And there is a header or a row: both are optional above, and
+      # without this an empty text, or one of blank lines, matched.
+      - '^ (?:PID|[0-9]+ )'
 input:
   ignore:
     # The two header lines.
