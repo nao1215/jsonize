@@ -708,15 +708,27 @@ jz does not keep a list of which commands are wrappers. The list would
 never be complete, and a wrong entry would read some other command's
 output with the wrong definition. What it does, when it refuses a
 command whose arguments name a program it has a parser for, is print the
-command line that names that parser (a directory or a file that is not a
-program is something the command reads, whatever its name, and is not
-offered):
+command line that names that parser. A directory or a file that is not a
+program is something the command reads, whatever its name, and a shape
+such as `csv` is an option's value (`systeminfo /fo csv`), so neither is
+offered:
 
 ```console
 $ jz run nice -n 5 df -h
 jz: no parser for "nice"
 run `jz list` to see the supported parsers
 If nice runs df, name that parser: jz run --parser df -- nice -n 5 df -h
+```
+
+When nothing in the arguments names one, the refusal says how to name a
+parser for a command that prints a format jz reads under another name,
+as `gmd5sum --tag` prints what `md5` does:
+
+```console
+$ jz run mysum --tag notes.txt
+jz: no parser for "mysum" (did you mean cksum, md5sum?)
+run `jz list` to see the supported parsers
+If mysum prints a format jz reads under another name, name its parser: jz run --parser PARSER -- mysum --tag notes.txt
 ```
 
 A file is the other case. `/etc/fstab`, `/etc/passwd` and their

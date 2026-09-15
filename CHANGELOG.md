@@ -37,6 +37,13 @@ project follows [Semantic Versioning](https://semver.org/).
   all-namespaces forms, `kubectl config get-contexts`,
   `kubectl api-resources`, `kubectl version`, `rclone lsl`, `lsd` and
   `version`, `redis-cli info` and `client list`.
+- `md5sum --tag`, `sha1sum --tag`, `sha256sum --tag`, `b2sum --tag` and
+  the rest of the GNU and uutils family are read by the definition of
+  the BSD digest line, which they print, together with FreeBSD and macOS
+  `md5`. A name the tools escape is decoded and marked `escaped`.
+- When `jz run` has no parser for a command and nothing in its arguments
+  names one, the refusal shows how to name one:
+  `jz run --parser PARSER -- COMMAND ...`.
 - `split: aligned` reads a heading of several words, such as
   `CONTAINER ID` or `Soft Limit`, as one column when `header.columns`
   gives it the name those words derive together.
@@ -59,6 +66,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run systeminfo /fo csv` no longer suggests that systeminfo runs
+  csv. A name whose definitions only describe a shape (`csv`, `table`)
+  is an option's value when it appears among a command's arguments.
 - `jz run systemctl list-units --plain` failed with exit 3 while a unit
   had a job pending. `--plain` drops the marker column, and the
   definition for the table with a JOB column expected the header to be
@@ -90,6 +100,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `jz test` and `make registry-test` report a definition that reads a
+  fixture or a decoy once, naming every name that reached it
+  (`md5/bsd (also named sha256sum, b2sum)`), where a definition with
+  fourteen names used to be reported fourteen times.
 - Fourteen table definitions state the shape of the cells that tell a
   row from prose: a version opens with a digit (`pip list`, `mise ls`,
   `npm outdated`), an address is one (`/etc/hosts`), a unit file ends
