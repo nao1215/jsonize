@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pmset/settings.json",
+  "title": "pmset/settings",
+  "description": "pmset -g power management settings on macOS",
+  "x-jsonize": {
+    "definition": "pmset/settings",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "system_wide": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "note"
+        ]
+      }
+    },
+    "currently_in_use": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "note"
+        ]
+      }
+    }
+  },
+  "required": [
+    "system_wide",
+    "currently_in_use"
+  ]
+}
