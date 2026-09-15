@@ -1,9 +1,11 @@
 // Package cli implements the jz command line.
 //
 // The default behaviour, with no subcommand, is to read text from
-// standard input, identify which command produced it and write JSON.
-// Everything else (running the command for you, listing parsers,
-// checking a registry of definitions, the version) is a subcommand. Data goes to stdout and only ever as JSON;
+// standard input or a file and write JSON: a command's output identified
+// from its text, or data read as the format an extension or --format
+// names. jz new makes JSON from arguments, and everything else (running
+// the command for you, listing parsers, checking a registry of
+// definitions, the version) is a subcommand too. Data goes to stdout and only ever as JSON;
 // diagnostics go to stderr with a "jz:" prefix, so a consumer reading
 // stdout sees valid JSON or nothing at all.
 package cli
@@ -154,43 +156,35 @@ func lookup(name string) *command {
 }
 
 func (a *app) usage(w io.Writer) {
-	fmt.Fprintln(w, "jsonize - Turn command output and data files into JSON.")
+	fmt.Fprintln(w, "jsonize - Make JSON from command output, files and arguments, for the next command.")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Usage:")
-	fmt.Fprintln(w, "  COMMAND | jz [options]")
-	fmt.Fprintln(w, "  jz [options] < FILE")
-	fmt.Fprintln(w, "  jz [options] --file DATA.csv|.tsv|.ltsv|.jsonl|.json|.yaml")
-	fmt.Fprintln(w, "  jz run [options] COMMAND [args...]")
-	fmt.Fprintln(w, "  jz new [options] KEY=VALUE KEY:=JSON ...")
-	fmt.Fprintln(w, "  jz list [COMMAND [VARIANT]]")
-	fmt.Fprintln(w, "  jz test [DIR...]")
-	fmt.Fprintln(w, "  jz completion bash|zsh")
-	fmt.Fprintln(w, "  jz version")
+	fmt.Fprintln(w, "  COMMAND | jz [options]           convert what a command printed")
+	fmt.Fprintln(w, "  jz [options] --file FILE         convert a file: a capture, or csv, json, yaml, ...")
+	fmt.Fprintln(w, "  COMMAND | jz --format NAME       read piped data or text as a format")
+	fmt.Fprintln(w, "  jz new [options] KEY=VALUE ...   make JSON from arguments, files and stdin")
+	fmt.Fprintln(w, "  jz run [options] COMMAND ...     run a command and convert what it prints")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Commands:")
 	for _, c := range commands() {
-		fmt.Fprintf(w, "  %-9s %s\n", c.name, c.summary)
+		fmt.Fprintf(w, "  %-10s %s\n", c.name, c.summary)
 	}
 	fmt.Fprintln(w)
-	fmt.Fprintln(w, "Options:")
 	a.printOptions(w)
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Examples:")
 	fmt.Fprintln(w, "  df -h | jz")
+	fmt.Fprintln(w, "  jz --file users.csv --type age=int")
+	fmt.Fprintln(w, "  find . -name '*.log' -print0 | jz --format nul")
+	fmt.Fprintln(w, `  jz new --string "message=$MESSAGE" --path /meta/host=web replicas:=3`)
+	fmt.Fprintln(w, "  vmstat 1 | jz --stream | jz new --each host=web sample:=@-")
 	fmt.Fprintln(w, "  jz run df -h")
-	fmt.Fprintln(w, "  vmstat 1 | jz --stream")
-	fmt.Fprintln(w, "  jz --file captured.txt")
-	fmt.Fprintln(w, "  jz --file users.csv")
-	fmt.Fprintln(w, "  cat events.log | jz --format ltsv --stream")
-	fmt.Fprintln(w, "  jz new name=api replicas:=3 tags[]=web")
-	fmt.Fprintln(w, "  df -h | jz --parser df")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Exit codes: 0 ok, 1 error, 2 usage, 3 parse failure, 4 unidentified or")
 	fmt.Fprintln(w, "ambiguous input, 5 registry problem; `jz run` mirrors the command's own status.")
 	fmt.Fprintln(w)
-	fmt.Fprintln(w, "Run `jz run --help`, `jz new --help`, `jz list --help`, `jz test --help` or")
-	fmt.Fprintln(w, "`jz completion --help`")
-	fmt.Fprintln(w, "for a subcommand's own options.")
+	fmt.Fprintln(w, "Every command has --help. `jz list` shows the command output jz reads, and")
+	fmt.Fprintln(w, "`jz test` checks a parser of your own, written as a YAML definition.")
 	fmt.Fprintln(w)
 	printLinks(w)
 }

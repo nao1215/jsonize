@@ -6,24 +6,28 @@
 
 # jsonize
 
-jsonize turns command output into JSON. Pipe a command to `jz` to detect
-its format and convert it. It also reads CSV, TSV, LTSV, JSON Lines, JSON
-and YAML files, makes JSON from arguments with `jz new`, and supports
-YAML output and streaming.
+jsonize makes JSON for the next command in a pipeline. `jz` turns what a
+command printed, a data or text file, or the arguments it is given into
+JSON, and stops there: choosing records and reshaping them stays with
+`jq`.
 
 ```console
 $ df -h | jz
 [{"filesystem":"/dev/nvme0n1p2","size":"1.8T","used":"1.6T","available":"145G","use_percent":92,"mounted_on":"/"}, ...]
 
-$ ps aux | jz | jq '.[] | select(.cpu_percent > 10) | .command'
-"/usr/lib/firefox/firefox"
+$ jz --file sales.csv --type units=int
+[{"sku":"007","units":12},{"sku":"008","units":null}]
+
+$ jz new --string "message=$MESSAGE" --path /metadata/labels/app=api replicas:=3
+{"message":"@here: deploy := done","metadata":{"labels":{"app":"api"}},"replicas":3}
 ```
 
 ![jz reading df, uptime and free, and refusing input it cannot identify](demo/jsonize.gif)
 
-Parsers are YAML definitions. Add a definition and captured output to a
-local registry to support another format without rebuilding jz. jz is
-one binary with no dependencies outside the Go standard library.
+The output of more than two hundred commands is identified from its
+text. Each format is a YAML definition, so reading another one needs no
+Go and no rebuild. jz is one binary with no dependencies outside the Go
+standard library.
 
 Documentation: https://nao1215.github.io/jsonize/ ([Cookbook](https://nao1215.github.io/jsonize/cookbook/))
 
@@ -66,100 +70,104 @@ OpenBSD and NetBSD are built and linted, not run.
 ## Using it
 
 ```console
-COMMAND | jz                 # convert piped output
-jz < captured.txt            # or output captured earlier
-jz --file captured.txt
-jz --file users.csv          # a data file, read as the format its extension names
-COMMAND | jz --format yaml   # piped data, read as the format --format names
-jz run COMMAND [args...]     # let jz run the command and convert its stdout
-jz new KEY=VALUE KEY:=JSON   # make JSON from arguments
-jz list                      # what jz can read
-jz list --schema df gnu      # the JSON Schema of what one definition produces
-jz test [DIR...]             # check parser definitions of your own
-jz completion bash|zsh       # a shell completion script
+COMMAND | jz                   # command output, its format detected from the text
+jz --file captured.txt         # the same, read from a file
+jz --file users.csv            # a data file, read as the format its extension names
+COMMAND | jz --format lines    # piped data or text, read as the format --format names
+jz new KEY=VALUE KEY:=JSON     # JSON from arguments, files and standard input
+jz run COMMAND [args...]       # run a command and convert what it prints
+jz list                        # the command output jz reads
+jz test [DIR...]               # check parser definitions of your own
 ```
 
-Options:
-
 ```text
+Input:
   -f, --file PATH               read input from PATH instead of stdin
       --format NAME             read the input as this format: csv, tsv, ltsv, jsonl, json, yaml, text, lines, nul
+      --columns NAME,...        name the columns of a csv read without a header line
+      --type COLUMN=TYPE        convert a csv or tsv column to int, float or bool (repeatable)
+
+Output:
   -p, --pretty                  indent JSON output
-      --stream                  write each record as soon as it is read
+      --stream                  write each record as a line of JSON as soon as it is read
       --stop-on-error           end a stream at the first record that cannot be read
-      --raw                     skip the field rules and report every value as text
-      --extract KEY             keep only this key (repeatable)
-      --exclude KEY             drop this key (repeatable)
-      --assume-year YEAR        date the timestamps a format prints without a year (or "now")
-      --assume-zone ABBR=+HHMM  give a zone abbreviation an offset (repeatable)
+      --extract KEY             keep only this key of each object (repeatable)
+      --exclude KEY             drop this key from each object (repeatable)
+
+Choosing and checking the parser of command output:
       --parser NAME             restrict detection to one parser
       --variant NAME            use a variant of --parser
       --define YAML             read with a definition given here instead of a registered one
-      --columns NAME,...        name the columns of a csv read without a header line
-      --type COLUMN=TYPE        convert a csv or tsv column to int, float or bool (repeatable)
       --explain[=json]          report the chosen definition and why, on stderr
+      --raw                     show the text a definition cut, without its field rules (types, trims, null words)
+      --assume-year YEAR        date the timestamps a format prints without a year (or "now")
+      --assume-zone ABBR=+HHMM  give a zone abbreviation an offset (repeatable)
+
+Help:
   -h, --help                    show help
 ```
 
-A data file is read as the format its extension names (`.csv`, `.tsv`,
-`.ltsv`, `.jsonl` or `.ndjson`, `.json`, `.yaml` or `.yml`, each also as
-`.gz` or `.bz2`), and piped data as the format `--format` names. Such a
-file is read as that format with no detection, and text the format does
-not allow is exit 3 with the line. A file whose extension names no data
-format is detected as before. `--format text`, `lines` and `nul` read
-plain text as one string or a list of strings, and `--type units=int`
-converts a CSV column.
+### Command output
 
-```console
-$ jz --file users.csv
-[{"id":"1","name":"alice"},{"id":"2","name":"bob"}]
-
-$ kubectl get deploy api -o yaml | jz --format yaml --extract spec
-{"spec":{"replicas":3, ...}}
-```
-
-`jz new` makes JSON from arguments. `=` makes a string, `:=` reads JSON,
-`@path` reads a file and `[]` appends to an array. Nothing is guessed.
-`--string` writes text as it is, `--text-file` keeps a file's line
-endings, `--path` places a value at a JSON Pointer, and `--each` makes one
-document per line of standard input.
-
-```console
-$ jz new name=api replicas:=3 tags[]=web spec:=@deploy.yaml
-{"name":"api","replicas":3,"tags":["web"],"spec":{"replicas":3}}
-
-$ jz new --string "message=$MESSAGE" --path /metadata/labels/app=api
-{"message":"@here","metadata":{"labels":{"app":"api"}}}
-```
-
-`--extract` and `--exclude` name keys of the objects jz prints, and
-either may be repeated. An unknown key is an error that lists the
-available keys.
+Piped output is identified from its text, and a format too generic to
+claim is refused with the parser name to pass. `--extract` and
+`--exclude` keep or drop keys of the objects jz prints; a key the output
+cannot have is an error that lists the keys it has.
 
 ```console
 $ df -h | jz --extract filesystem --extract mounted_on
 [{"filesystem":"/dev/nvme0n1p2","mounted_on":"/"}, ...]
 ```
 
-`jz run` hands the command your standard input, passes its standard error
-through, mirrors its exit status and runs it with `LC_ALL=C`. Everything
-after the command name belongs to the command, and a bare `--` states
-that boundary explicitly. An interrupt reaches the command, and a
-command that keeps printing after its reader has gone, or past
-`--timeout`, is stopped rather than left running.
+`jz run` hands the command your standard input, passes its standard
+error through, mirrors its exit status and runs it with `LC_ALL=C`.
+Everything after the command name belongs to the command, and a bare
+`--` states that boundary explicitly.
 
-`--stream` answers a command that keeps printing, one JSON document per
-line as each record is read:
+### Files and text
+
+A data file is read as the format its extension names (`.csv`, `.tsv`,
+`.ltsv`, `.jsonl` or `.ndjson`, `.json`, `.yaml` or `.yml`, each also as
+`.gz` or `.bz2`), and piped data as the format `--format` names, with no
+detection; text the format does not allow is exit 3 with the line.
+`--format text`, `lines` and `nul` read plain text as one string or a
+list of strings, and `--type COLUMN=int` converts a CSV column.
 
 ```console
-$ jz run --stream vmstat 1 | jq -c 'select(.id < 50)'
+$ git branch --format='%(refname:short)' | jz --format lines
+["main","feature/login"]
+
+$ kubectl get deploy api -o yaml | jz --format yaml --extract spec
+{"spec":{"replicas":3, ...}}
 ```
 
-The first record is written as soon as the leading lines decide the
-format (vmstat's two header lines). With `--explain=json`, each record
-the stream leaves out is reported on standard error as it happens. The
-[usage guide](https://nao1215.github.io/jsonize/usage/#reading-a-command-that-keeps-printing)
-has the details.
+### JSON from arguments
+
+`jz new` makes JSON from arguments. `=` makes a string, `:=` reads JSON,
+`@path` reads a file and `[]` appends to an array. Nothing is guessed.
+`--string` writes text as it is, `--text-file` keeps a file's line
+endings, and `--path` places a value at a JSON Pointer.
+
+```console
+$ jz new name=api replicas:=3 tags[]=web spec:=@deploy.yaml
+{"name":"api","replicas":3,"tags":["web"],"spec":{"replicas":3}}
+```
+
+### Streams
+
+`--stream` answers a command that keeps printing with one JSON document
+per line as each record is read, and `jz new --each` wraps each one as it
+comes. A record that cannot be read is reported and left out, with exit
+status 3; `--stop-on-error` ends the stream there instead.
+
+```console
+$ vmstat 1 | jz --stream | jz new --each --string host=web sample:=@-
+{"host":"web","sample":{"r":1,"b":0,"swpd":0,"free":5123456,...}}
+```
+
+The [usage guide](https://nao1215.github.io/jsonize/usage/#reading-a-command-that-keeps-printing)
+has the details, and `--raw`, `--explain` and `--parser` for looking at
+how a definition reads a command's output.
 
 ## Detection and limits
 
@@ -227,10 +235,11 @@ to parse it. The embedded registry is available from
 | 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |
 | *n* | `jz run` mirrors the command's own status, or 128+signal |
 
-Diagnostics go to standard error. By default, parsing finishes before
-JSON is written, so a parse error leaves standard output empty. jz writes
-JSON only. With `--stream`, records already written remain
-when a later record fails; check the exit status for skipped records.
+Diagnostics go to standard error. By default, reading finishes before
+JSON is written, so a failure leaves standard output empty. jz writes
+JSON only. With `--stream` and `jz new --each`, records already written
+remain when a later record fails; check the exit status for skipped
+records.
 
 ## Development
 

@@ -255,7 +255,11 @@ func TestHelpListsEveryOptionOnce(t *testing.T) {
 	help := h.stdout.String()
 	for _, want := range []string{
 		"COMMAND | jz [options]",
-		"jz run [options] COMMAND [args...]",
+		"jz run [options] COMMAND ...",
+		"jz new [options] KEY=VALUE ...",
+		"Input:",
+		"Output:",
+		"Choosing and checking the parser of command output:",
 		"-f, --file PATH",
 		"-p, --pretty",
 		"    --parser NAME",
@@ -274,8 +278,8 @@ func TestHelpListsEveryOptionOnce(t *testing.T) {
 	// A short and a long form are one option, not two lines. The count is
 	// taken over the options block alone, since an example may name an
 	// option too.
-	options := help[strings.Index(help, "Options:"):strings.Index(help, "Examples:")]
-	for _, opt := range []string{"--file", "--pretty", "--parser", "--variant", "--help"} {
+	options := help[strings.Index(help, "Input:"):strings.Index(help, "Examples:")]
+	for _, opt := range []string{"--file", "--pretty", "--parser", "--variant", "--help", "--raw", "--type"} {
 		lines := 0
 		for _, line := range strings.Split(options, "\n") {
 			// The option column ends before the two spaces that separate
@@ -297,6 +301,9 @@ func TestHelpListsEveryOptionOnce(t *testing.T) {
 	o.fs.VisitAll(func(f *flag.Flag) { registered[f.Name] = true })
 	documented := map[string]bool{}
 	for _, d := range o.docs {
+		if d.heading != "" {
+			continue
+		}
 		documented[d.long] = true
 		if d.short != "" {
 			documented[d.short] = true

@@ -52,9 +52,12 @@ func (o once) Set(s string) error {
 }
 
 type optionDoc struct {
-	short string // without the dash, empty when there is none
-	long  string // without the dashes
-	arg   string // placeholder for the value, empty for a switch
+	// heading is the title of the group the options after it belong to;
+	// a doc with a heading is no option.
+	heading string
+	short   string // without the dash, empty when there is none
+	long    string // without the dashes
+	arg     string // placeholder for the value, empty for a switch
 	// optional is the value a switch may be given with "=", shown as
 	// --long[=optional]; empty when it takes none.
 	optional string
@@ -87,6 +90,11 @@ func (o *optionSet) repeated() string {
 		}
 	}
 	return ""
+}
+
+// group starts a group of options under title in the help.
+func (o *optionSet) group(title string) {
+	o.docs = append(o.docs, optionDoc{heading: title})
 }
 
 func (o *optionSet) doc(short, long, arg, help string) {
@@ -181,7 +189,8 @@ func (o *optionSet) listOpt(p *stringList, long, arg, help string) {
 	o.doc("", long, arg, help)
 }
 
-// print writes the options as one aligned line each.
+// print writes the options as one aligned line each, under the headings
+// of their groups.
 func (o *optionSet) print(w io.Writer) {
 	if len(o.docs) == 0 {
 		return
@@ -189,6 +198,9 @@ func (o *optionSet) print(w io.Writer) {
 	names := make([]string, len(o.docs))
 	width := 0
 	for i, d := range o.docs {
+		if d.heading != "" {
+			continue
+		}
 		var b strings.Builder
 		if d.short != "" {
 			fmt.Fprintf(&b, "-%s, ", d.short)
@@ -208,6 +220,13 @@ func (o *optionSet) print(w io.Writer) {
 		}
 	}
 	for i, d := range o.docs {
+		if d.heading != "" {
+			if i > 0 {
+				fmt.Fprintln(w)
+			}
+			fmt.Fprintln(w, d.heading)
+			continue
+		}
 		fmt.Fprintf(w, "  %-*s  %s\n", width, names[i], d.help)
 	}
 }
@@ -228,13 +247,19 @@ type outputOptions struct {
 	zones stringList
 }
 
-func (f *outputOptions) bind(o *optionSet) {
+// bindOutput registers the options about what is written.
+func (f *outputOptions) bindOutput(o *optionSet) {
 	o.boolOpt(&f.pretty, "pretty", "p", "indent JSON output")
-	o.boolOpt(&f.stream, "stream", "", "write each record as soon as it is read")
+	o.boolOpt(&f.stream, "stream", "", "write each record as a line of JSON as soon as it is read")
 	o.boolOpt(&f.stopOnError, "stop-on-error", "", "end a stream at the first record that cannot be read")
-	o.boolOpt(&f.raw, "raw", "", "skip the field rules and report every value as text")
-	o.listOpt(&f.extract, "extract", "KEY", "keep only this key (repeatable)")
-	o.listOpt(&f.exclude, "exclude", "KEY", "drop this key (repeatable)")
+	o.listOpt(&f.extract, "extract", "KEY", "keep only this key of each object (repeatable)")
+	o.listOpt(&f.exclude, "exclude", "KEY", "drop this key from each object (repeatable)")
+}
+
+// bindReading registers the options about how a definition reads the
+// text: its field rules left out, and what a timestamp does not say.
+func (f *outputOptions) bindReading(o *optionSet) {
+	o.boolOpt(&f.raw, "raw", "", "show the text a definition cut, without its field rules (types, trims, null words)")
 	o.stringOpt(&f.year, "assume-year", "", "YEAR", "", "date the timestamps a format prints without a year (or \"now\")")
 	o.listOpt(&f.zones, "assume-zone", "ABBR=+HHMM", "give a zone abbreviation an offset (repeatable)")
 }
@@ -340,12 +365,18 @@ type selectOptions struct {
 	explain explainMode
 }
 
-func (f *selectOptions) bind(o *optionSet) {
+// bindColumns registers the options about the columns of a csv.
+func (f *selectOptions) bindColumns(o *optionSet) {
+	o.stringOpt(&f.columns, "columns", "", "NAME,...", "", "name the columns of a csv read without a header line")
+	o.listOpt(&f.types, "type", "COLUMN=TYPE", "convert a csv or tsv column to int, float or bool (repeatable)")
+}
+
+// bindParser registers the options that name or show the definition the
+// text is read with.
+func (f *selectOptions) bindParser(o *optionSet) {
 	o.stringOpt(&f.parser, "parser", "", "NAME", "", "restrict detection to one parser")
 	o.stringOpt(&f.variant, "variant", "", "NAME", "", "use a variant of --parser")
 	o.stringOpt(&f.define, "define", "", "YAML", "", "read with a definition given here instead of a registered one")
-	o.stringOpt(&f.columns, "columns", "", "NAME,...", "", "name the columns of a csv read without a header line")
-	o.listOpt(&f.types, "type", "COLUMN=TYPE", "convert a csv or tsv column to int, float or bool (repeatable)")
 	o.switchOpt(&f.explain, "explain", "json", "report the chosen definition and why, on stderr")
 }
 
@@ -436,8 +467,12 @@ func (f *selectOptions) definition() (*definition.Definition, bool, error) {
 }
 
 // helpDoc is the line for -h/--help. The flag package answers those names
-// itself, so there is nothing to register.
+// itself, so there is nothing to register. In a help whose options are
+// grouped, it is a group of its own.
 func (o *optionSet) helpDoc() {
+	if len(o.docs) > 0 && o.docs[0].heading != "" {
+		o.group("Help:")
+	}
 	o.doc("h", "help", "", "show help")
 }
 

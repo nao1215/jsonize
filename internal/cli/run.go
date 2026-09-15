@@ -54,7 +54,6 @@ If the command exits non-zero, jz still parses whatever it printed,
 reports the status on stderr and exits with that same status. A command
 terminated by a signal yields 128+signal.
 
-Options:
 `
 
 // runOptions are the options of jz run.
@@ -67,11 +66,16 @@ type runOptions struct {
 }
 
 func (r *runOptions) bind(o *optionSet) {
-	r.out.bind(o)
-	r.sel.bind(o)
+	o.group("The command:")
 	o.listOpt(&r.envs, "env", "NAME=VALUE", "set a variable in the command's environment (repeatable)")
 	o.boolOpt(&r.keepLocale, "keep-locale", "", "do not force LC_ALL=C for the command")
 	o.durationOpt(&r.timeout, "timeout", "DURATION", 0, "kill the command after this long (0 = no limit)")
+	o.group("Output:")
+	r.out.bindOutput(o)
+	o.group("Choosing and checking the parser:")
+	r.sel.bindParser(o)
+	r.sel.bindColumns(o)
+	r.out.bindReading(o)
 	o.helpDoc()
 }
 

@@ -45,6 +45,19 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `jz --help` groups the options under Input, Output and the parser of
+  command output, says what jz is for in one line, and shows examples of
+  every source of JSON; `jz run --help` and `jz new --help` group theirs
+  the same way. `--raw` is described as what it is, the text a definition
+  cut without its field rules, and `--extract` and `--exclude` as keeping
+  and dropping keys of each object.
+- The README, the landing page and the usage guide describe jz as the
+  step that makes JSON for the next command, and every jz command they
+  show with its output is run by the end-to-end suite
+  (`e2e/atago/docs.atago.yaml`); a test fails when a page shows one that
+  no scenario runs. The `--explain=json` example said the df capture had
+  8 lines read, where 7 are read and one is left out.
+
 - A data file read with `--stream` (`jsonl`, `ltsv`, and the new `lines`
   and `nul`) leaves out a record it cannot read and goes on, as a stream
   of a command's output does, where it ended at the first. The status is

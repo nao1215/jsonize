@@ -9,8 +9,8 @@ enableRobotsTXT = true
 timeZone = "UTC"
 
 [params]
-tagline = "Turn command output, data files and arguments into JSON"
-description = "jsonize (jz) turns command output, data files and command-line arguments into JSON or YAML, refusing what it cannot identify."
+tagline = "JSON from command output, files and arguments, for the next command"
+description = "jsonize (jz) makes JSON for the next command in a pipeline from command output, data and text files, and command-line arguments, refusing what it cannot identify."
 
 [markup.highlight]
 noClasses = false
