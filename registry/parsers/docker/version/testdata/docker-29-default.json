@@ -80,7 +80,7 @@
           },
           {
             "name": "Experimental",
-            "value": false,
+            "value": "false",
             "children": []
           }
         ]

@@ -13,8 +13,8 @@
 #
 # When the daemon cannot be reached docker prints the client block, then
 # the error on standard error, so a client-only text is read as a tree of
-# one node. Experimental is the one value that is a boolean; the rest
-# (versions, dates, "1.53 (minimum version 1.44)") stay strings.
+# one node. Every value stays the string docker printed, Experimental's
+# "false" among them, versions, dates and "1.53 (minimum version 1.44)".
 format: 1
 command: docker
 variant: version
@@ -41,7 +41,10 @@ parse:
   root: '^(?:Client|Server):'
   node:
     parse:
-      type: kv
-      separator: ":"
-    fields:
-      Experimental: {type: bool}
+      type: regex
+      # A label is words that open with a letter ("Go version", "OS/Arch",
+      # "docker-init") and a value after the colon, which may be empty on
+      # a section line ("Engine:"). A label that opens with a digit is
+      # not docker's: the clock uptime prints after a report would
+      # otherwise be read as a label "21".
+      pattern: '^(?P<name>[A-Za-z][A-Za-z0-9/-]*(?: [A-Za-z][A-Za-z0-9/-]*)*):[ \t]*(?P<value>.*?)[ \t]*$'

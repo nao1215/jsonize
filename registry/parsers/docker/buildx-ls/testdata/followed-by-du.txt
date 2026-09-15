@@ -1,0 +1,7 @@
+NAME/NODE                DRIVER/ENDPOINT                   STATUS    BUILDKIT   PLATFORMS
+example-builder*         docker-container                                       
+ \_ example-builder0      \_ unix:///var/run/docker.sock   running   v0.30.0    linux/amd64 (+4), linux/386
+default                  docker                                                 
+ \_ default               \_ default                       running   v0.27.1    linux/amd64 (+4)
+24	/etc/skel
+128	/etc/default

@@ -1,0 +1,37 @@
+3cpio	0.14.0-1ubuntu1
+7zip	26.00+dfsg-1
+accountsservice	23.13.9-8ubuntu5.2
+acl	2.3.2-2
+adduser	3.153ubuntu1
+adwaita-icon-theme	50.0-1
+aha	0.5.1-3build2
+aisleriot	1:3.22.35-5
+alsa-base	1.0.25+dfsg-0ubuntu9
+alsa-topology-conf	1.2.5.1-3build1
+alsa-ucm-conf	1.2.15.3-1ubuntu1.5
+alsa-utils	1.2.15.2-1ubuntu1
+amd64-microcode	3.20251202.1ubuntu2
+amdgpu-core	1:6.3.60300-2084815.24.04
+amdgpu-install	6.3.60300-2084815.24.04
+anacron	2.3-45ubuntu1
+apache2-bin	2.4.66-2ubuntu2.4
+apparmor	5.0.2-0ubuntu1~26.04.1
+appmenu-gtk-module-common	25.04-1build1
+apport	2.34.1-0ubuntu0.1
+apport-core-dump-handler	2.34.1-0ubuntu0.1
+apport-gtk	2.34.1-0ubuntu0.1
+apport-symptoms	0.25build1
+appstream	1.1.2-1
+apt	3.2.0
+apt-config-icons	1.1.2-1
+apt-config-icons-hidpi	1.1.2-1
+apt-config-icons-large	1.1.2-1
+apt-config-icons-large-hidpi	1.1.2-1
+apt-transport-https	3.2.0
+Last password change					: Oct 04, 2024
+Password expires					: Jan 02, 2025
+Password inactive					: Jan 16, 2025
+Account expires						: Feb 16, 2026
+Minimum number of days between password change		: 0
+Maximum number of days between password change		: 90
+Number of days of warning before password expires	: 7

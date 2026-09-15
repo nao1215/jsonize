@@ -1,0 +1,3 @@
+source: the definition's own fixture followed by another definition's fixture, joined for this case
+description: chage lines past the window the signature reads are refused by the shape of a package name
+expect_error: does not have the shape

@@ -77,7 +77,9 @@ parse:
       select: {after: '^--$', until: '^----------$'}
       parse:
         type: kv
-        separator: "="
+        # 7z writes " = " on every line, an empty value included, so a
+        # line of another format with a bare "=" is not a property.
+        separator: " = "
         as: map
       fields:
         Physical Size: {type: int}
@@ -92,7 +94,7 @@ parse:
         record:
           parse:
             type: kv
-            separator: "="
+            separator: " = "
             as: map
           fields:
             Size: {type: int, null_if: [""]}

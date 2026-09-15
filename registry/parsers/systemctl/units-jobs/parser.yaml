@@ -41,8 +41,10 @@ parse:
 fields:
   marker: {when_missing: omit}
   unit: {required: true}
-  load: {required: true}
-  active: {required: true}
+  # The states systemd documents for the two columns, which is what tells
+  # a unit's row from six columns of another table.
+  load: {required: true, regex: '(?P<load>loaded|not-found|bad-setting|error|masked|merged|stub)'}
+  active: {required: true, regex: '(?P<active>active|reloading|inactive|failed|activating|deactivating|maintenance|refreshing)'}
   sub: {required: true}
   job: {when_missing: omit}
   description: {required: true}

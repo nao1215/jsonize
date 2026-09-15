@@ -35,5 +35,7 @@ fields:
   name: {required: true}
   current: {type: bool, trim_prefix: " ", true_values: ["*"], false_values: [""]}
   description: {null_if: [""]}
-  docker_endpoint: {required: true}
+  # An endpoint is a URL (unix://, tcp://, ssh://, npipe://), which is
+  # what tells a context from a row of another table of four columns.
+  docker_endpoint: {required: true, regex: '(?P<docker_endpoint>[a-z][a-z0-9+.-]*://\S*)'}
   error: {}

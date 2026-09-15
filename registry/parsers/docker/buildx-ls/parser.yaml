@@ -45,3 +45,6 @@ parse:
     fields:
       name: {required: true}
       current: {type: bool, true_values: ["*"], false_values: [""]}
+      # A builder names one of the drivers buildx has, which is what tells
+      # its row from two words of another command's output.
+      driver: {regex: '(?P<driver>docker|docker-container|kubernetes|remote|cloud)'}

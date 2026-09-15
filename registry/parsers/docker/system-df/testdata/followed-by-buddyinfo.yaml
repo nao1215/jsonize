@@ -1,0 +1,4 @@
+source: the definition's own fixture followed by another definition's fixture, joined for this case
+description: a line of /proc/buddyinfo after the table is refused, since Node is not a kind of object docker reports
+args: ["system", "df"]
+expect_error: line does not match pattern

@@ -1,0 +1,8 @@
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          72        12        94.26GB   80.05GB (84%)
+Containers      15        4         4.219MB   135.2kB (3%)
+Local Volumes   85        12        17.43GB   4.107GB (23%)
+Build Cache     429       0         80.04GB   78.3GB
+Node 0, zone      DMA      0      0      0      0      0      0      0      0      1      1      2 
+Node 0, zone    DMA32    703    424    334    947    639    331    138     46     21     27     28 
+Node 0, zone   Normal 328818 168390  31725  19069  10918   7767   3367   2382   1050    355     20 

@@ -38,7 +38,10 @@ exec:
     NO_COLOR: "1"
 parse:
   type: regex
-  pattern: '^(?P<name>[^:,]+):(?P<extensions>[^:]+)$'
+  # bat writes a name from the left edge and its extensions straight
+  # after the colon, with no space: a line indented or with a space after
+  # its colon is a label and a value of another report.
+  pattern: '^(?P<name>[^:,\s][^:,]*):(?P<extensions>[^:\s][^:]*)$'
 fields:
   name: {required: true}
   extensions: {type: array, split: ","}

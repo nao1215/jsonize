@@ -61,7 +61,10 @@ input:
     # the rest of a log written over several lines, four spaces deeper.
     # Each is a multiple of four spaces, and nothing else indented is
     # left out: a report printed after go test's own, which gzip -l
-    # indents, is not read as log lines and dropped.
+    # indents, is not read as log lines and dropped. A line of another
+    # report that happens to open with eight spaces and a word, as
+    # rclone lsl prints a size under ten bytes, has the shape of the rest
+    # of a log line, and nothing in the text says it is not one.
     - '^(?:    )+--- (?:FAIL|PASS|SKIP|BENCH): '
     - '^(?:    )+[^ \t:]+\.go:[0-9]+: '
     - '^(?:    ){2,}[^ \t]'
