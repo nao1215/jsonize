@@ -17,7 +17,7 @@ so the output shown is what jz prints.
 | read a command that never stops | [Follow a command that keeps printing](#follow-a-command-that-keeps-printing) |
 | understand or override detection | [See which parser jz chose](#see-which-parser-jz-chose), [Name the parser when detection refuses](#name-the-parser-when-detection-refuses), [Read output jz has no parser for](#read-output-jz-has-no-parser-for) |
 | convert a data file | [Convert a CSV file](#convert-a-csv-file), [Read a CSV without a header line](#read-a-csv-without-a-header-line), [Convert YAML to JSON](#convert-yaml-to-json), [Read compressed JSON Lines logs](#read-compressed-json-lines-logs), [Read LTSV access logs](#read-ltsv-access-logs) |
-| make JSON in a script | [Build a JSON body for an API call](#build-a-json-body-for-an-api-call), [Put a file's contents into JSON](#put-a-files-contents-into-json), [Make a JSON array](#make-a-json-array) |
+| make JSON in a script | [Build a JSON body for an API call](#build-a-json-body-for-an-api-call), [Pass a variable that may start with @](#pass-a-variable-that-may-start-with-), [Put a file's contents into JSON](#put-a-files-contents-into-json), [Keep a file's line endings](#keep-a-files-line-endings), [Build nested JSON](#build-nested-json), [Make a JSON array](#make-a-json-array) |
 | use jz in CI | [Fail a CI step when jz cannot read the output](#fail-a-ci-step-when-jz-cannot-read-the-output), [Get the JSON Schema of an output](#get-the-json-schema-of-an-output) |
 | read a format jz does not know | [Add a parser of your own](#add-a-parser-of-your-own) |
 
@@ -162,6 +162,17 @@ $ jz new name=api replicas:=3 | curl -sS -H 'Content-Type: application/json' -d 
 
 Nothing is guessed: `version=007` stays the string `"007"`.
 
+## Pass a variable that may start with @
+
+A plain `key=@x` reads the file `x`. `--string` writes the text as it
+is. Quote the whole argument in the shell (sh, bash, zsh shown).
+
+```console
+$ MESSAGE='@here: deploy := done'
+$ jz new --string "message=$MESSAGE" status=ok
+{"message":"@here: deploy := done","status":"ok"}
+```
+
 ## Put a file's contents into JSON
 
 `=@path` reads a file's text, without its last newline. `:=@path` reads a
@@ -171,6 +182,26 @@ data file as the format its extension names. `@-` is standard input.
 $ jz new version=@VERSION spec:=@deploy.yaml
 {"version":"1.4.0","spec":{"name":"api","replicas":3,"image":{"repository":"example/api","tag":"1.4"}}}
 ```
+
+## Keep a file's line endings
+
+`=@path` drops the last line ending; `--text-file` keeps the text whole.
+
+```console
+$ jz new --text-file body=NOTES.txt title=@TITLE
+{"body":"Fixed a crash.\n\nThanks to everyone.\n","title":"Release 1.4"}
+```
+
+## Build nested JSON
+
+`--path` takes a JSON Pointer. `-` appends to an array.
+
+```console
+$ jz new --path /metadata/name=api --path /spec/replicas:=3 --path /spec/containers/-/image=example/api:1.4 kind=Deployment
+{"metadata":{"name":"api"},"spec":{"replicas":3,"containers":[{"image":"example/api:1.4"}]},"kind":"Deployment"}
+```
+
+A location given twice is refused instead of overwritten.
 
 ## Make a JSON array
 

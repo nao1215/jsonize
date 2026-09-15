@@ -370,6 +370,28 @@ name and return it with status 0. So such a variant is reached only by
 naming it (`--variant names`), or by `jz run`, where the arguments have
 already ruled out the options that put more than a name on a line.
 
+### Arguments say where a value goes and what it is made from
+
+`jz new` has one grammar for what a value is (`=` text, `:=` JSON, `=@` a
+file's text, `:=@` a data file) and two for where it goes: a key, or a
+JSON Pointer with `--path`. A dotted key was the other candidate, and it
+was not taken because `app.kubernetes.io/name` is an ordinary key: a dot
+that sometimes means nesting changes what existing arguments build. RFC
+6901 already escapes the two characters a pointer needs (`~1`, `~0`).
+
+The pointer is a location, not an update. It creates the containers on
+its way and adds members and elements, and it stops there: a location
+given twice, a pointer into a value given whole, and an index past the
+end are refused, because each asks jz to pick a winner, change a type or
+invent the elements in between. Once a document has to be edited, it is
+jq's job.
+
+`--string` and `--text-file` exist because a plain argument reads its
+value: `key=$VAR` becomes a file name when the variable starts with `@`.
+Each takes KEY=VALUE as one argument, like the plain forms, so the
+options keep the flag syntax every other option has and a value that
+looks like an option cannot be taken for one.
+
 ### JSON is the only output
 
 jz is the step of a pipeline that makes JSON for the next one, so the

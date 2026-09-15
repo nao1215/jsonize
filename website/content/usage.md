@@ -306,15 +306,76 @@ $ jz new --array web :=1 :=null
 - Nothing is guessed: `version=007` is `"007"`; use `:=` for numbers.
 - A key given twice is refused unless it ends in `[]`, and so is a key
   given both with and without `[]`.
-- The key is everything before the first `=`. A string that starts with
-  `@` is written as JSON: `note:='"@here"'`.
+- The key is everything before the first `=`, so `spec.replicas:=3` is
+  the key `spec.replicas`; nesting is `--path`.
 - Options come before the arguments; `--` ends them, so `jz new -- -x=1`
   has the key `-x`. `-p` works as elsewhere.
 
-A malformed argument (no `=`, an empty key, a repeated key, `:=` with
-invalid JSON, two arguments reading standard input) is exit 2 before
-anything is read. An unreadable file is exit 1, and one that is not the
-format it is read as, or not UTF-8, is exit 3 with the line.
+### Text that has to stay text
+
+A plain argument reads its value: `note=@here` names the file `here`.
+`--string KEY=TEXT` writes TEXT as it is, so a value from a variable
+cannot become a file name or JSON, whatever it starts with. The text is
+everything after the first `=`, spaces, quotes, line breaks and `--`
+included.
+
+```console
+$ jz new --string note=@here --string 'rule=a := b' --string flag=--pretty
+{"note":"@here","rule":"a := b","flag":"--pretty"}
+```
+
+In a POSIX shell (sh, bash, zsh) quote the whole argument:
+`jz new --string "message=$MESSAGE"`; in PowerShell,
+`jz new --string "message=$env:MESSAGE"`. With `--array`, leave the key
+empty: `--string =@here`.
+
+### A file's text with its line endings
+
+`KEY=@FILE` drops the one line ending a text file ends with.
+`--text-file KEY=PATH` keeps the text whole: every line ending, CRLF or
+LF, an empty file as `""`. `-` is standard input. Text that is not UTF-8
+is refused with exit 3, not replaced.
+
+```console
+$ printf 'Fixed a crash.\r\n\r\n' | jz new --text-file notes=- version=@VERSION
+{"notes":"Fixed a crash.\r\n\r\n","version":"1.4.0"}
+```
+
+### Nested values
+
+`--path POINTER=VALUE` places a value at a JSON Pointer (RFC 6901), with
+the same operators as a plain argument: `=`, `:=`, `=@` and `:=@`.
+`--string` and `--text-file` take a pointer in place of a key when it
+starts with `/`.
+
+```console
+$ jz new --path /metadata/name=api --path /spec/replicas:=3 --path /spec/ports/-:=80 kind=Deployment
+{"metadata":{"name":"api"},"spec":{"replicas":3,"ports":[80]},"kind":"Deployment"}
+```
+
+- The objects on the way are made as needed, in the order they are first
+  named. A token is a key; `-` appends to an array; a number is the index
+  of an element an earlier argument gave (`/items/-/name=a
+  /items/0/port:=80`), and a key when the value there is an object.
+- A new container is an array only when the next token is `-`. A number
+  where nothing exists yet is refused rather than read as a key or as a
+  position to pad up to.
+- `~1` is `/` and `~0` is `~` inside a token. A pointer cannot name a key
+  that holds `=`; write that key inside a `:=` value.
+- A location is given once. A second value for it, a pointer into a value
+  an argument gave whole (`spec:={...}`, `--string name=x`), a key in an
+  array and `-` in an object are all refused, naming the argument in the
+  way. Nothing is overwritten, retyped or padded.
+- `--string`, `--text-file` and `--path` may be repeated and are placed
+  in the order given, before the plain arguments.
+- With `--array`, a pointer starts with `/-` or the index of an element
+  already given.
+
+A malformed argument (no `=`, an empty key, a location given twice, `:=`
+with invalid JSON, a malformed pointer, two arguments reading standard
+input) is exit 2 before anything is read. An unreadable file is exit 1,
+and one that is not the format it is read as, or not UTF-8, is exit 3
+with the line.
 
 ## Output jz has no definition for
 
