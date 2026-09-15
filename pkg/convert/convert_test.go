@@ -331,6 +331,16 @@ func TestDuration(t *testing.T) {
 		// systemd writes a long startup this way.
 		{"1w 6d 18h 15min 19.086s", LayoutMinuteSecond, 1188919.086},
 		{"2min 44.575s", LayoutMinuteSecond, 164.575},
+		// A fraction of a unit smaller than a second is the number the
+		// text names, not the product of two binary fractions: 1.3 ms is
+		// 0.0013, where 1.3 * 0.001 is 0.0013000000000000002.
+		{"1.3 ms", LayoutMinuteSecond, 0.0013},
+		{"1.1ms", LayoutMinuteSecond, 0.0011},
+		{"999.9ms", LayoutMinuteSecond, 0.9999},
+		{"2.3µs", LayoutMinuteSecond, 0.0000023},
+		{"7.7ns", LayoutMinuteSecond, 0.0000000077},
+		{"1min 0.7s 1.3ms", LayoutMinuteSecond, 60.7013},
+		{"00:00:00.3", LayoutMinuteSecond, 0.3},
 	}
 	for _, tt := range tests {
 		got, err := Duration(tt.in, tt.layout)

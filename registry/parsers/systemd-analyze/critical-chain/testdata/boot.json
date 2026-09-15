@@ -37,7 +37,7 @@
                               {
                                 "unit": "dbus.service",
                                 "activated": 2.285,
-                                "startup": 0.08700000000000001,
+                                "startup": 0.087,
                                 "children": [
                                   {
                                     "unit": "basic.target",

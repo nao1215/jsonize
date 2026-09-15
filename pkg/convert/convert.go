@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"math/big"
 	"strconv"
 	"strings"
 	"time"
@@ -433,39 +434,65 @@ func Duration(s, layout string) (any, error) {
 	// Past this a float64 no longer counts seconds one by one, so a
 	// number beyond it would be reported more precisely than it is
 	// known. It is some nine billion years, which no command prints.
-	const maxSeconds = 1 << 53
-	if math.IsNaN(secs) || secs < 0 || secs > maxSeconds {
+	if secs.Sign() < 0 || secs.Cmp(maxDurationSeconds) > 0 {
 		return nil, &Error{Type: typeDuration, Input: s, Cause: errors.New("out of range")}
 	}
-	if secs != math.Trunc(secs) {
-		return secs, nil
+	if secs.IsInt() {
+		return secs.Num().Int64(), nil
 	}
-	return int64(secs), nil
+	f, _ := secs.Float64()
+	return f, nil
 }
+
+// maxDurationSeconds is the longest length Duration reports, 2^53 seconds.
+var maxDurationSeconds = new(big.Rat).SetInt64(1 << 53)
 
 // errDurationShape is the message every unreadable spelling gets. Listing
 // the forms is more use than naming which of them the text came closest
 // to, since a value that fits none of them is usually not a duration.
 var errDurationShape = errors.New(`not one of the known forms (3-04:05:06, 04:05:06, 04:05, 13 days, 4:30, 45 min, 1h2m3s)`)
 
+// addDecimal adds num, a run of digits with at most one dot, times unit
+// seconds to total. The sum is kept exact and turned into a float64 once,
+// at the end: added up as float64 products, 1.3 ms would come out as
+// 0.0013000000000000002, a number the text never printed.
+func addDecimal(total *big.Rat, num string, unit *big.Rat) bool {
+	if !allDigits(num) && !isDecimal(num) {
+		return false
+	}
+	var n big.Rat
+	if _, ok := n.SetString(num); !ok {
+		return false
+	}
+	total.Add(total, n.Mul(&n, unit))
+	return true
+}
+
+// secondsIn returns a unit of n seconds as an exact number.
+func secondsIn(n int64) *big.Rat { return big.NewRat(n, 1) }
+
 // parseDuration returns the length in seconds.
-func parseDuration(t, layout string) (float64, error) {
+func parseDuration(t, layout string) (*big.Rat, error) {
 	if days, rest, ok := splitLeadingDays(t); ok {
+		total := new(big.Rat)
+		if !addDecimal(total, days, secondsIn(86400)) {
+			return nil, errDurationShape
+		}
 		if rest == "" {
-			return days * 86400, nil
+			return total, nil
 		}
 		// After the days the BSD w writes whole hours ("4 days, 3 hrs")
 		// or, under an hour, a count of minutes or seconds. The days and
 		// that count are read as one run of units, so a day or a larger
 		// unit after the days is refused as out of order.
 		if !strings.Contains(rest, ":") {
-			return parseUnits(strconv.FormatFloat(days, 'f', -1, 64) + " days " + rest)
+			return parseUnits(days + " days " + rest)
 		}
 		secs, err := parseClock(rest, LayoutHourMinute)
 		if err != nil {
-			return 0, err
+			return nil, err
 		}
-		return days*86400 + secs, nil
+		return total.Add(total, secs), nil
 	}
 	if strings.Contains(t, ":") {
 		return parseClock(t, layout)
@@ -477,32 +504,28 @@ func parseDuration(t, layout string) (float64, error) {
 // front of the rest of its reading. A clock reading after it is hours and
 // minutes whatever the field's layout says, because a reading that
 // already carries its days cannot be minutes and seconds.
-func splitLeadingDays(t string) (days float64, rest string, ok bool) {
+func splitLeadingDays(t string) (days, rest string, ok bool) {
 	i := strings.Index(t, ",")
 	if i < 0 {
-		return 0, "", false
+		return "", "", false
 	}
 	head, tail := strings.TrimSpace(t[:i]), strings.TrimSpace(t[i+1:])
 	n, unit, found := splitNumberAndUnit(head)
 	if !found || (unit != "day" && unit != "days") {
-		return 0, "", false
+		return "", "", false
 	}
 	return n, tail, true
 }
 
 // parseClock reads a colon-separated reading, with an optional leading
 // "D-" and an optional trailing unit letter.
-func parseClock(t, layout string) (float64, error) {
-	var days float64
+func parseClock(t, layout string) (*big.Rat, error) {
+	total := new(big.Rat)
 	if i := strings.Index(t, "-"); i > 0 {
-		if !allDigits(t[:i]) {
-			return 0, errDurationShape
+		if !allDigits(t[:i]) || !addDecimal(total, t[:i], secondsIn(86400)) {
+			return nil, errDurationShape
 		}
-		n, err := strconv.ParseFloat(t[:i], 64)
-		if err != nil {
-			return 0, errDurationShape
-		}
-		days, t = n, t[i+1:]
+		t = t[i+1:]
 	}
 	// A trailing unit names the unit of the last part, which is how w
 	// tells "13:42m" (thirteen hours) from "13:42" (thirteen minutes).
@@ -516,43 +539,38 @@ func parseClock(t, layout string) (float64, error) {
 		case 'h':
 			last, t = "h", t[:n-1]
 		default:
-			return 0, errDurationShape
+			return nil, errDurationShape
 		}
 	}
 	parts := strings.Split(t, ":")
 	if len(parts) > 3 {
-		return 0, errDurationShape
+		return nil, errDurationShape
 	}
 	// The units of the parts, smallest last. Three parts are always
 	// hours, minutes and seconds; two are settled by the trailing unit,
 	// then by the layout.
-	units := []float64{3600, 60, 1}
+	units := []int64{3600, 60, 1}
 	if len(parts) == 2 {
 		switch {
 		case last == "m", layout == LayoutHourMinute && last == "":
-			units = []float64{3600, 60}
+			units = []int64{3600, 60}
 		case last == "s", last == "h", layout == LayoutMinuteSecond, layout == "":
-			units = []float64{60, 1}
+			units = []int64{60, 1}
 		}
 	}
 	if len(parts) == 1 {
-		units = []float64{1}
+		units = []int64{1}
 		if last == "m" {
-			units = []float64{60}
+			units = []int64{60}
 		}
 		if last == "h" {
-			units = []float64{3600}
+			units = []int64{3600}
 		}
 	}
 	units = units[len(units)-len(parts):]
-	var total float64
 	for i, p := range parts {
 		if p == "" || (!allDigits(p) && !isDecimal(p)) {
-			return 0, errDurationShape
-		}
-		n, err := strconv.ParseFloat(p, 64)
-		if err != nil || n < 0 {
-			return 0, errDurationShape
+			return nil, errDurationShape
 		}
 		// Every part after the first is a minute or a second of the
 		// clock, so it is under 60; the first part carries the length
@@ -560,17 +578,22 @@ func parseClock(t, layout string) (float64, error) {
 		// breaks that is not a length written oddly but text that is
 		// not a clock reading, and adding it up would report a number
 		// nothing printed. The time type refuses the same way.
-		if i > 0 && n >= 60 {
-			return 0, fmt.Errorf("%s is not a %s of a clock reading, which is 0 to 59", p, clockUnitName(units[i]))
+		if n, err := strconv.ParseFloat(p, 64); err != nil || (i > 0 && n >= 60) {
+			if err != nil {
+				return nil, errDurationShape
+			}
+			return nil, fmt.Errorf("%s is not a %s of a clock reading, which is 0 to 59", p, clockUnitName(units[i]))
 		}
-		total += n * units[i]
+		if !addDecimal(total, p, secondsIn(units[i])) {
+			return nil, errDurationShape
+		}
 	}
-	return total + days*86400, nil
+	return total, nil
 }
 
 // clockUnitName names a part of a clock reading by its length in
 // seconds, for the message a part out of range gets.
-func clockUnitName(seconds float64) string {
+func clockUnitName(seconds int64) string {
 	if seconds == 60 {
 		return "minute"
 	}
@@ -584,29 +607,40 @@ func isDecimal(s string) bool {
 	return ok && allDigits(whole) && allDigits(frac)
 }
 
-// durationUnits maps every spelling of a unit to its length in seconds.
-// The plural and the abbreviation are separate entries rather than a
-// rule, because a rule that strips an "s" would also strip the "s" that
-// means seconds.
-var durationUnits = map[string]float64{
-	"ns": 1e-9, "us": 1e-6, "µs": 1e-6, "ms": 1e-3,
-	"s": 1, "sec": 1, "secs": 1, "second": 1, "seconds": 1,
-	"m": 60, "min": 60, "mins": 60, "minute": 60, "minutes": 60,
-	"h": 3600, "hr": 3600, "hrs": 3600, "hour": 3600, "hours": 3600,
-	"d": 86400, "day": 86400, "days": 86400,
-	"w": 604800, "wk": 604800, "week": 604800, "weeks": 604800,
-}
+// durationUnits maps every spelling of a unit to its length in seconds,
+// written as a decimal so that it is exact. The plural and the
+// abbreviation are separate entries rather than a rule, because a rule
+// that strips an "s" would also strip the "s" that means seconds.
+var durationUnits = func() map[string]*big.Rat {
+	lengths := map[string]string{
+		"ns": "1e-9", "us": "1e-6", "µs": "1e-6", "ms": "1e-3",
+		"s": "1", "sec": "1", "secs": "1", "second": "1", "seconds": "1",
+		"m": "60", "min": "60", "mins": "60", "minute": "60", "minutes": "60",
+		"h": "3600", "hr": "3600", "hrs": "3600", "hour": "3600", "hours": "3600",
+		"d": "86400", "day": "86400", "days": "86400",
+		"w": "604800", "wk": "604800", "week": "604800", "weeks": "604800",
+	}
+	out := make(map[string]*big.Rat, len(lengths))
+	for name, length := range lengths {
+		r, ok := new(big.Rat).SetString(length)
+		if !ok {
+			panic("convert: unit length " + length + " is not a number")
+		}
+		out[name] = r
+	}
+	return out
+}()
 
 // durationUnit looks a unit up. An abbreviation of one or two letters is
 // matched as written, because its case is part of it: systemd writes a
 // month as "M" where "m" is a minute, and "M" after a number is as often
 // a megabyte. A unit spelled as a word is matched whatever its case.
-func durationUnit(u string) (float64, bool) {
+func durationUnit(u string) (*big.Rat, bool) {
 	if mult, ok := durationUnits[u]; ok {
 		return mult, true
 	}
 	if len(u) <= 2 {
-		return 0, false
+		return nil, false
 	}
 	mult, ok := durationUnits[strings.ToLower(u)]
 	return mult, ok
@@ -616,9 +650,9 @@ func durationUnit(u string) (float64, bool) {
 // "1h2m3s", "3days". A space between the number and the unit is
 // optional, and the parts must run from the largest unit to the
 // smallest, so that "1m2h" is refused rather than silently added up.
-func parseUnits(t string) (float64, error) {
-	var total float64
-	prev := math.Inf(1)
+func parseUnits(t string) (*big.Rat, error) {
+	total := new(big.Rat)
+	var prev *big.Rat
 	for t != "" {
 		t = strings.TrimLeft(t, " \t")
 		j := 0
@@ -626,12 +660,8 @@ func parseUnits(t string) (float64, error) {
 			j++
 		}
 		num := t[:j]
-		if j == 0 || (!allDigits(num) && !isDecimal(num)) {
-			return 0, errDurationShape
-		}
-		n, err := strconv.ParseFloat(num, 64)
-		if err != nil {
-			return 0, errDurationShape
+		if j == 0 {
+			return nil, errDurationShape
 		}
 		t = strings.TrimLeft(t[j:], " \t")
 		k := 0
@@ -639,33 +669,31 @@ func parseUnits(t string) (float64, error) {
 			k++
 		}
 		if k == 0 {
-			return 0, errDurationShape
+			return nil, errDurationShape
 		}
 		mult, ok := durationUnit(t[:k])
-		if !ok || mult >= prev {
-			return 0, errDurationShape
+		if !ok || (prev != nil && mult.Cmp(prev) >= 0) {
+			return nil, errDurationShape
+		}
+		if !addDecimal(total, num, mult) {
+			return nil, errDurationShape
 		}
 		prev = mult
-		total += n * mult
 		t = t[k:]
 	}
 	return total, nil
 }
 
-// splitNumberAndUnit reads "13 days" as 13 and "days".
-func splitNumberAndUnit(s string) (float64, string, bool) {
+// splitNumberAndUnit reads "13 days" as "13" and "days".
+func splitNumberAndUnit(s string) (string, string, bool) {
 	i := 0
 	for i < len(s) && (isDigit(s[i]) || s[i] == '.') {
 		i++
 	}
-	if i == 0 {
-		return 0, "", false
+	if i == 0 || (!allDigits(s[:i]) && !isDecimal(s[:i])) {
+		return "", "", false
 	}
-	n, err := strconv.ParseFloat(s[:i], 64)
-	if err != nil {
-		return 0, "", false
-	}
-	return n, strings.ToLower(strings.TrimSpace(s[i:])), true
+	return s[:i], strings.ToLower(strings.TrimSpace(s[i:])), true
 }
 
 func isDigit(b byte) bool { return b >= '0' && b <= '9' }

@@ -75,6 +75,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A duration with a fraction of a unit under a second is the number the
+  text names: `1.3 ms` is `0.0013` where it was `0.0013000000000000002`,
+  and `systemd-analyze critical-chain` reports `+87ms` as `0.087`. The
+  parts of a duration are added up exactly and turned into a number
+  once.
 - `jz run systeminfo /fo csv` no longer suggests that systeminfo runs
   csv. A name whose definitions only describe a shape (`csv`, `table`)
   is an option's value when it appears among a command's arguments.
