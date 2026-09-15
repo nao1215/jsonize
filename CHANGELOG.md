@@ -6,6 +6,22 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- `jz new --string KEY=TEXT` writes TEXT as a string exactly as it is, so
+  a value from a variable is never read as a file name (`@...`) or JSON,
+  whatever it holds: `jz new --string "message=$MESSAGE"`.
+- `jz new --text-file KEY=PATH` puts a file's text, or standard input's
+  with `-`, into the JSON with every line ending kept. `KEY=@PATH` still
+  drops the last one. Text that is not UTF-8 is exit 3.
+- `jz new --path POINTER=VALUE` places a value at a JSON Pointer with
+  the operators a plain argument has (`=`, `:=`, `=@`, `:=@`), making the
+  objects and arrays on the way; `-` appends and an index names an
+  element already given. `--string` and `--text-file` take a pointer in
+  place of a key. A location given twice, a pointer into a value given
+  whole, a key in an array and an index past the end are exit 2 before
+  anything is read. `spec.replicas:=3` is still the key `spec.replicas`.
+
 ### Removed
 
 - Breaking: `--yaml`, which wrote the output as YAML, is gone from the

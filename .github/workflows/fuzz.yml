@@ -38,6 +38,7 @@ jobs:
           - { pkg: ./internal/datafile, name: FuzzReadYAML }
           - { pkg: ./internal/datafile, name: FuzzLineFormats }
           - { pkg: ./internal/jsonbuild, name: FuzzObject }
+          - { pkg: ./internal/jsonbuild, name: FuzzPlan }
           - { pkg: ./pkg/selector, name: FuzzSelect }
     runs-on: ubuntu-latest
     steps:

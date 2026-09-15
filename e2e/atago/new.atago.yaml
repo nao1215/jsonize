@@ -142,3 +142,209 @@ scenarios:
           stdout: {empty: true}
           stderr:
             contains: "missing.json: "
+
+  # --string is the literal form: the text after the first = is the
+  # string, whatever it holds, so a value taken from a variable cannot turn
+  # into a file name or JSON. A plain argument whose value starts with @
+  # names a file; the same text through --string does not.
+  - name: --string writes its text as it is, where a plain argument reads a file
+    steps:
+      - fixture:
+          file: VERSION
+          content: |
+            1.4.0
+      - run:
+          command: "jz new --string note=@VERSION --string 'eq=a=b:=c' --string 'q=\"quoted\"' --string \"a=it's\" --string 'space= two  spaces ' --string empty= --string flag=--pretty --string 'lines=one\ntwo\r\n' --string 'unicode=日本語 κ' version=@${workdir}/VERSION"
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: "{\"note\":\"@VERSION\",\"eq\":\"a=b:=c\",\"q\":\"\\\"quoted\\\"\",\"a\":\"it's\",\"space\":\" two  spaces \",\"empty\":\"\",\"flag\":\"--pretty\",\"lines\":\"one\\ntwo\\r\\n\",\"unicode\":\"日本語 κ\",\"version\":\"1.4.0\"}\n"
+      - run:
+          command: jz new --array --string =@VERSION --string =:=1 plain :=1
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              ["@VERSION",":=1","plain",1]
+      # The value is one argument with the key: two words are two things.
+      - run:
+          command: jz new --string message hello
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: 'jz: new: "--string message": --string takes KEY=TEXT or POINTER=TEXT as one argument'
+
+  # --text-file keeps the text whole. KEY=@FILE keeps its old meaning and
+  # drops the one line ending a text file ends with.
+  - name: --text-file keeps every line ending of a file or of standard input, and refuses text that is not UTF-8
+    steps:
+      - fixture:
+          file: crlf.txt
+          content: "first\r\nsecond\r\n\r\n"
+      - fixture:
+          file: lf.txt
+          content: "only\n\n"
+      - fixture:
+          file: empty.txt
+          content: ""
+      - fixture:
+          file: bare.txt
+          content: "no ending"
+      - run:
+          command: jz new --text-file crlf=${workdir}/crlf.txt --text-file lf=${workdir}/lf.txt --text-file empty=${workdir}/empty.txt --text-file bare=${workdir}/bare.txt lf_less=@${workdir}/lf.txt crlf_less=@${workdir}/crlf.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "{\"crlf\":\"first\\r\\nsecond\\r\\n\\r\\n\",\"lf\":\"only\\n\\n\",\"empty\":\"\",\"bare\":\"no ending\",\"lf_less\":\"only\\n\",\"crlf_less\":\"first\\r\\nsecond\\r\\n\"}\n"
+      - run:
+          command: jz new --text-file body=- source=ci
+          stdin: "line 1\r\nline 2\n\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "{\"body\":\"line 1\\r\\nline 2\\n\\n\",\"source\":\"ci\"}\n"
+      - fixture:
+          file: latin1.txt
+          base64: "Y2Fm6Qo="
+      - run:
+          command: jz new --text-file body=${workdir}/latin1.txt
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "the text is not valid UTF-8"
+      - run:
+          command: jz new --text-file a=- b=@-
+          stdin: "x"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: 'standard input is already read by "--text-file a=-"'
+
+  # --path puts a value at a JSON Pointer. It makes the objects on the way,
+  # - appends to an array, and an index names an element an earlier
+  # argument gave. A dot stays part of a key.
+  - name: --path builds nested objects and arrays from arguments, files and standard input
+    steps:
+      - fixture:
+          file: VERSION
+          content: |
+            1.4.0
+      - fixture:
+          file: deploy.yaml
+          content: |
+            replicas: 3
+      - run:
+          command: jz new --path /metadata/name=api --path /metadata/labels/app.kubernetes.io~1name=api --path /spec:=@${workdir}/deploy.yaml --path /containers/-/image=@${workdir}/VERSION --path /containers/0/ports/-:=80 --path /containers/-/image=sidecar --string /notes/raw=@here --text-file /notes/body=- kind=Deployment spec.replicas:=3
+          stdin: "hello\n"
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            equals: |
+              {"metadata":{"name":"api","labels":{"app.kubernetes.io/name":"api"}},"spec":{"replicas":3},"containers":[{"image":"1.4.0","ports":[80]},{"image":"sidecar"}],"notes":{"raw":"@here","body":"hello\n"},"kind":"Deployment","spec.replicas":3}
+      - run:
+          command: jz new --array --path /-/name=a --path /0/port:=80 --path /-/name=b
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"name":"a","port":80},{"name":"b"}]
+
+  # Two arguments that disagree about a location are refused before any
+  # file is read: the file named here does not exist, and that would be
+  # exit 1. Nothing is overwritten, retyped or padded.
+  - name: a location given twice, a pointer into a value or across types, and a malformed pointer are refused
+    steps:
+      - run:
+          command: jz new --path /a/b=1 --path /a/b=2 missing=@${workdir}/missing.txt
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: 'jz: new: "--path /a/b=2": /a/b is given twice, first by "--path /a/b=1"'
+      - run:
+          command: "jz new --path /spec/replicas:=3 'spec:={\"replicas\":1}'"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: '/spec is given twice, first by "--path /spec/replicas:=3"'
+      - run:
+          command: "jz new --path /spec/x=1 --string spec=y"
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: '/spec is given twice'
+      - run:
+          command: "jz new --string name=api --path /name/first=a"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: '/name is a value given whole by "--string name=api", and jz does not add to a value it was given'
+      - run:
+          command: jz new --string tags[]=web --path /tags/name=x
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: '/tags is an array, made by "--string tags[]=web", and "name" is not an index in it; append with /tags/-'
+      - run:
+          command: jz new --path /labels/app=web --path /labels/-=x
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: '/labels is an object, made by "--path /labels/app=web", and - appends to an array'
+      - run:
+          command: jz new --path /items/-=a --path /items/2=c
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "/items has 1 elements, so 2 names none; append with /items/-"
+      - run:
+          command: jz new --path /items/0/name=a
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "/items does not exist yet, so 0 cannot be an index in it; append with /items/-"
+      - run:
+          command: jz new --path metadata/name=api
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "a JSON Pointer starts with /, as in /metadata/name=api"
+      - run:
+          command: jz new --path /a//b=1
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "the pointer /a//b holds an empty key"
+      - run:
+          command: jz new --path /a~2b=1
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: '~ in a pointer is ~0 (a ~) or ~1 (a /), and "a~2b" holds another'
+      - run:
+          command: jz new --path /tags[]=x
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: "[] appends after a plain key; in the pointer /tags[] append with /-"
+
+  # jz new reads what an earlier jz wrote, so a pipeline of two builds one
+  # document around another. The command has no quotes, so the same line
+  # runs under /bin/sh and cmd.exe.
+  - name: a pipeline of jz commands wraps one document in another
+    steps:
+      - run:
+          shell: true
+          command: jz new name=api replicas:=3 | jz new --string source=@ci --path /payload:=@- kind=Deployment
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"source":"@ci","payload":{"name":"api","replicas":3},"kind":"Deployment"}

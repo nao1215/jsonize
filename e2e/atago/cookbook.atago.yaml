@@ -228,6 +228,49 @@ scenarios:
             equals: |
               {"version":"007"}
 
+  - name: "Pass a variable that may start with @: --string writes the text as it is"
+    steps:
+      - run:
+          command: "jz new --string 'message=@here: deploy := done' status=ok"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"message":"@here: deploy := done","status":"ok"}
+
+  - name: "Keep a file's line endings: --text-file keeps them and =@ drops the last"
+    steps:
+      - fixture:
+          file: NOTES.txt
+          content: "Fixed a crash.\n\nThanks to everyone.\n"
+      - fixture:
+          file: TITLE
+          content: "Release 1.4\n"
+      - run:
+          command: jz new --text-file body=${workdir}/NOTES.txt title=@${workdir}/TITLE
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"body":"Fixed a crash.\n\nThanks to everyone.\n","title":"Release 1.4"}
+
+  - name: "Build nested JSON: --path places values at JSON Pointers"
+    steps:
+      - run:
+          command: jz new --path /metadata/name=api --path /spec/replicas:=3 --path /spec/containers/-/image=example/api:1.4 kind=Deployment
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"metadata":{"name":"api"},"spec":{"replicas":3,"containers":[{"image":"example/api:1.4"}]},"kind":"Deployment"}
+      - run:
+          command: jz new --path /spec/replicas:=3 --path /spec/replicas:=4
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "/spec/replicas is given twice"
+
   - name: "Put a file's contents into JSON: a text file and a YAML file as values"
     steps:
       - fixture:

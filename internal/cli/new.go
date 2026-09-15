@@ -25,9 +25,15 @@ is guessed: = makes a string and := reads JSON.
   jz new spec:=@deploy.yaml                     # a data file, read as its extension names
   kubectl get pod web -o json | jz new pod:=@-  # standard input
   jz new --array a :=1 :=null                   # ["a",1,null]
+  jz new --string "message=$MESSAGE"            # the text as it is, even when it starts with @
+  jz new --text-file body=NOTES.md              # a file's text, every line ending kept
+  jz new --path /metadata/name=api --path /spec/replicas:=3
 
-A key given twice needs [] to be an array. A string that opens with @ is
-written as JSON: note:='"@here"'.
+--string, --text-file and --path may be repeated, come before the plain
+arguments, and are placed in the order given. KEY is a key, or a JSON
+Pointer when it starts with /: a pointer makes the objects on its way,
+- appends to an array, and an index names an element already given. A
+location is given once, and no location enters a value given whole.
 
 Options:
 `
@@ -35,10 +41,34 @@ Options:
 type newCmdOptions struct {
 	output outputOptions
 	array  bool
+	// placed are the --string, --text-file and --path arguments in the
+	// order they were given.
+	placed []jsonbuild.Arg
+}
+
+// placedValue is one of the options that place a value; each value it is
+// given joins the one list the three share, so their order survives.
+type placedValue struct {
+	form jsonbuild.Form
+	list *[]jsonbuild.Arg
+}
+
+func (p placedValue) String() string { return "" }
+
+// Set records the argument.
+func (p placedValue) Set(v string) error {
+	*p.list = append(*p.list, jsonbuild.Arg{Form: p.form, Text: v})
+	return nil
 }
 
 func (n *newCmdOptions) bind(o *optionSet) {
 	o.boolOpt(&n.array, "array", "", "make an array of the values instead of an object")
+	o.fs.Var(placedValue{jsonbuild.String, &n.placed}, "string", "")
+	o.doc("", "string", "KEY=TEXT", "put TEXT at KEY as a string, as it is (repeatable)")
+	o.fs.Var(placedValue{jsonbuild.TextFile, &n.placed}, "text-file", "")
+	o.doc("", "text-file", "KEY=PATH", "put a file's text at KEY, line endings kept; - is stdin (repeatable)")
+	o.fs.Var(placedValue{jsonbuild.Path, &n.placed}, "path", "")
+	o.doc("", "path", "POINTER=VALUE", "put a value at a JSON Pointer, with =, :=, =@ or :=@ (repeatable)")
 	o.boolOpt(&n.output.pretty, "pretty", "p", "indent JSON output")
 	o.helpDoc()
 }
@@ -54,16 +84,15 @@ func (a *app) cmdNew(args []string) int {
 		a.errorf("%v", err)
 		return ExitUsage
 	}
-	src := jsonbuild.Sources{ReadFile: readLimited, Stdin: a.env.Stdin, MaxSize: MaxInputSize}
-	var (
-		v   any
-		err error
-	)
-	if no.array {
-		v, err = jsonbuild.Array(o.fs.Args(), src)
-	} else {
-		v, err = jsonbuild.Object(o.fs.Args(), src)
+	all := no.placed
+	for _, text := range o.fs.Args() {
+		all = append(all, jsonbuild.Arg{Form: jsonbuild.Plain, Text: text})
 	}
+	plan, err := jsonbuild.Parse(all, no.array)
+	if err != nil {
+		return a.newFailed(err)
+	}
+	v, err := plan.Build(jsonbuild.Sources{ReadFile: readLimited, Stdin: a.env.Stdin, MaxSize: MaxInputSize})
 	if err != nil {
 		return a.newFailed(err)
 	}

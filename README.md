@@ -116,10 +116,15 @@ $ kubectl get deploy api -o yaml | jz --format yaml --extract spec
 
 `jz new` makes JSON from arguments. `=` makes a string, `:=` reads JSON,
 `@path` reads a file and `[]` appends to an array. Nothing is guessed.
+`--string` writes text as it is, `--text-file` keeps a file's line
+endings, and `--path` places a value at a JSON Pointer.
 
 ```console
 $ jz new name=api replicas:=3 tags[]=web spec:=@deploy.yaml
 {"name":"api","replicas":3,"tags":["web"],"spec":{"replicas":3}}
+
+$ jz new --string "message=$MESSAGE" --path /metadata/labels/app=api
+{"message":"@here","metadata":{"labels":{"app":"api"}}}
 ```
 
 `--extract` and `--exclude` name keys of the objects jz prints, and
