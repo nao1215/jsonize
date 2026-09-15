@@ -1,0 +1,3 @@
+assessments enabled
+on every lab machine except the two used for unsigned driver testing,
+which are listed in the inventory sheet.

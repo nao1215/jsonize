@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/spctl/status.json",
+  "title": "spctl/status",
+  "description": "spctl --status Gatekeeper assessment state on macOS",
+  "x-jsonize": {
+    "definition": "spctl/status",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "enabled"
+  ]
+}
