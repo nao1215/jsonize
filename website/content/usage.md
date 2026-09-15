@@ -469,8 +469,13 @@ $ jz run --assume-year now who
 $ jz run --assume-zone JST=+0900 --assume-zone CET=+0100 date
 ```
 
-`--assume-year` takes a four-digit year or `now`, which is resolved once
-when the command line is read. `--assume-zone` takes `ABBR=+HHMM` and may
+`--assume-year` takes a four-digit year or `now`. `now` is resolved once,
+when the command line is read, and dates each timestamp in the latest
+year that does not put it after that moment: a login printed as `Dec 31`
+and read on January 2 happened last year, and a record of something that
+happened is not in the future. A day of allowance covers a machine whose
+zone is ahead of the one the timestamp is read in, and `Feb 29` goes back
+to the last year that had one. `--assume-zone` takes `ABBR=+HHMM` and may
 be repeated.
 
 They are assumptions and jz reports them as such: nothing is dated unless
@@ -708,15 +713,27 @@ jz does not keep a list of which commands are wrappers. The list would
 never be complete, and a wrong entry would read some other command's
 output with the wrong definition. What it does, when it refuses a
 command whose arguments name a program it has a parser for, is print the
-command line that names that parser (a directory or a file that is not a
-program is something the command reads, whatever its name, and is not
-offered):
+command line that names that parser. A directory or a file that is not a
+program is something the command reads, whatever its name, and a shape
+such as `csv` is an option's value (`systeminfo /fo csv`), so neither is
+offered:
 
 ```console
 $ jz run nice -n 5 df -h
 jz: no parser for "nice"
 run `jz list` to see the supported parsers
 If nice runs df, name that parser: jz run --parser df -- nice -n 5 df -h
+```
+
+When nothing in the arguments names one, the refusal says how to name a
+parser for a command that prints a format jz reads under another name,
+as `gmd5sum --tag` prints what `md5` does:
+
+```console
+$ jz run mysum --tag notes.txt
+jz: no parser for "mysum" (did you mean cksum, md5sum?)
+run `jz list` to see the supported parsers
+If mysum prints a format jz reads under another name, name its parser: jz run --parser PARSER -- mysum --tag notes.txt
 ```
 
 A file is the other case. `/etc/fstab`, `/etc/passwd` and their
@@ -860,7 +877,7 @@ a command and variant wins:
 `jz list --sources` prints them with what exists on your machine. jz
 uses local definitions without network access. Conversion depends on the
 input, the selected definition and explicit assumptions such as
-`--assume-year now`, which uses the current year.
+`--assume-year now`, which dates by the moment jz started.
 
 A registry's optional `registry.yaml` can also switch definitions of the
 registries below it off:

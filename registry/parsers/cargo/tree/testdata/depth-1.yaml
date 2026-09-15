@@ -1,0 +1,4 @@
+description: Direct dependencies only, with the dev-dependencies heading at the top level after the project.
+source: "captured with `cargo tree --depth 1` (cargo 1.98.0) on Ubuntu 26.04 with LC_ALL=C; the project directory replaced with /home/user/demo"
+os: linux
+args: [tree, --depth, "1"]

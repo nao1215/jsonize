@@ -1,0 +1,6 @@
+CGroup /system.slice:
+The slice holds the services the system manager starts. Under it:
+|-cron.service runs the scheduled jobs
+|-polkit.service answers authorization questions
+`-ssh.service accepts logins
+Keep this list in sync with the unit files in /etc/systemd/system.

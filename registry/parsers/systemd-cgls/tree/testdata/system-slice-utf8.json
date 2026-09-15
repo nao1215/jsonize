@@ -1,0 +1,1342 @@
+[
+  {
+    "cgroup": "/system.slice",
+    "children": [
+      {
+        "name": "bolt.service",
+        "children": [
+          {
+            "pid": 2266,
+            "command": "/usr/libexec/boltd",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "containerd.service",
+        "delegated": true,
+        "children": [
+          {
+            "pid": 2367,
+            "command": "/usr/bin/containerd",
+            "children": []
+          },
+          {
+            "pid": 4657,
+            "command": "/usr/bin/containerd-shim-runc-v2 -namespace moby -id 43d84ed8db55a6825…",
+            "children": []
+          },
+          {
+            "pid": 4659,
+            "command": "/usr/bin/containerd-shim-runc-v2 -namespace moby -id 01507c1fee51a4d7a…",
+            "children": []
+          },
+          {
+            "pid": 4663,
+            "command": "/usr/bin/containerd-shim-runc-v2 -namespace moby -id 3d904b922196c993f…",
+            "children": []
+          },
+          {
+            "pid": 4664,
+            "command": "/usr/bin/containerd-shim-runc-v2 -namespace moby -id 2bc831ab3744b99e8…",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "systemd-udevd.service",
+        "delegated": true,
+        "children": [
+          {
+            "name": "udev",
+            "children": [
+              {
+                "pid": 752,
+                "command": "/usr/lib/systemd/systemd-udevd",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "cron.service",
+        "children": [
+          {
+            "pid": 2055,
+            "command": "/usr/sbin/cron -f -P",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "docker.service",
+        "delegated": true,
+        "children": [
+          {
+            "pid": 3621,
+            "command": "/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock",
+            "children": []
+          },
+          {
+            "pid": 4931,
+            "command": "/usr/bin/docker-proxy -proto tcp -host-ip 127.0.0.1 -host-port 8080 -c…",
+            "children": []
+          },
+          {
+            "pid": 4948,
+            "command": "/usr/bin/docker-proxy -proto tcp -host-ip 127.0.0.1 -host-port 8443 -c…",
+            "children": []
+          },
+          {
+            "pid": 4968,
+            "command": "/usr/bin/docker-proxy -proto tcp -host-ip 127.0.0.1 -host-port 42765 -…",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "polkit.service",
+        "children": [
+          {
+            "pid": 2035,
+            "command": "/usr/lib/polkit-1/polkitd --no-debug --log-level=notice",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "rtkit-daemon.service",
+        "children": [
+          {
+            "pid": 3381,
+            "command": "/usr/libexec/rtkit-daemon",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "docker-01507c1fee51a4d7afc81732ee60afe4fe7b5f1e72e8fa94311e31513059cbec.scope",
+        "delegated": true,
+        "children": [
+          {
+            "name": "init.scope",
+            "children": [
+              {
+                "pid": 4762,
+                "command": "/sbin/init",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "system.slice",
+            "children": [
+              {
+                "name": "containerd.service",
+                "delegated": true,
+                "children": [
+                  {
+                    "pid": 5368,
+                    "command": "/usr/local/bin/containerd",
+                    "children": []
+                  },
+                  {
+                    "pid": 7733,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id f2a48…",
+                    "children": []
+                  },
+                  {
+                    "pid": 8117,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 9ef65…",
+                    "children": []
+                  },
+                  {
+                    "pid": 8150,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 0b941…",
+                    "children": []
+                  },
+                  {
+                    "pid": 8166,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 265be…",
+                    "children": []
+                  },
+                  {
+                    "pid": 8230,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id aebdb…",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "systemd-journald.service",
+                "children": [
+                  {
+                    "pid": 5309,
+                    "command": "/lib/systemd/systemd-journald",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "kubelet.slice",
+            "children": [
+              {
+                "name": "kubelet.service",
+                "children": [
+                  {
+                    "pid": 5740,
+                    "command": "/usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-…",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "kubelet-kubepods.slice",
+                "children": [
+                  {
+                    "name": "kubelet-kubepods-pode2e081ee_1e71_40e5_a82f_362d327a8d8a.slice",
+                    "children": [
+                      {
+                        "name": "cri-containerd-f2a4888962c90b759dbb9add731afd96df5daad50cb3907e27766f54adb21876.scope",
+                        "delegated": true,
+                        "children": [
+                          {
+                            "pid": 7873,
+                            "command": "/pause",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "name": "cri-containerd-b3e9025e048464928a95627bda1fde21fb9d8214fa6d9bf17480f9c2a16a4a96.scope",
+                        "delegated": true,
+                        "children": [
+                          {
+                            "pid": 8789,
+                            "command": "/bin/kindnetd",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "kubelet-kubepods-besteffort.slice",
+                    "children": [
+                      {
+                        "name": "kubelet-kubepods-besteffort-pod23c7cb15_4bb4_49e1_b5d6_7fe9191755de.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-aebdbc6f731e6b5ad0bb73ff8d3bc8b17c5839cfe0e55418499850afc1f5217d.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 8287,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-7dc4cb0bbba9a89b095fe25b5904252403a25ac4c6067e2fc2a005a441719b83.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 16088,
+                                "command": "/shared/argocd-dex rundex",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-besteffort-podf721e61d_794a_4984_a97e_fa3699297ac6.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-f12a9fc5a1f04c5e4eabb71c4b81b02bfa6da05f814f3f4632ace5df0059f351.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 15856,
+                                "command": "/usr/bin/tini -- /usr/local/bin/argocd-server",
+                                "children": []
+                              },
+                              {
+                                "pid": 15876,
+                                "command": "/usr/local/bin/argocd-server",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-265be48ce8e4b4650d41c0e76a691e152edf0c43a84d5984d9dccdbb1cc19198.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 8267,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-besteffort-podf4f9bffa_b8ed_4fde_84b6_a70e0c7f46d4.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-9ef65f220b398eb9289360a8334d8e044e87bad36687828b215bea646bd17eb9.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 8192,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-839637ff2b887977db71da0f627c292a689750247fb5955425105b0e6c77211b.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 8476,
+                                "command": "/usr/local/bin/kube-proxy --config=/var/lib/kube-proxy/confi…",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-besteffort-pod11bc5718_f72d_4365_8e18_e5415fa31e85.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-893336da960c55a865e85588298abd2fef208ea78495ba81053ff5bae5cd8cbe.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 16427,
+                                "command": "/usr/bin/tini -- /usr/local/bin/argocd-application-controll…",
+                                "children": []
+                              },
+                              {
+                                "pid": 16464,
+                                "command": "/usr/local/bin/argocd-application-controller",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-0b941c331cc869164de2754a61a54e859433f0a48b159d36b961c9ae2a62531b.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 8235,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "bluetooth.service",
+        "children": [
+          {
+            "pid": 2024,
+            "command": "/usr/libexec/bluetooth/bluetoothd",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "docker-43d84ed8db55a6825ec3b00cbbd2e3f088df13e0f8c2f7368271ab0c001622c7.scope",
+        "delegated": true,
+        "children": [
+          {
+            "name": "init.scope",
+            "children": [
+              {
+                "pid": 4771,
+                "command": "/sbin/init",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "system.slice",
+            "children": [
+              {
+                "name": "containerd.service",
+                "delegated": true,
+                "children": [
+                  {
+                    "pid": 5366,
+                    "command": "/usr/local/bin/containerd",
+                    "children": []
+                  },
+                  {
+                    "pid": 7793,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 235a1…",
+                    "children": []
+                  },
+                  {
+                    "pid": 8045,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 8be47…",
+                    "children": []
+                  },
+                  {
+                    "pid": 8300,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 97c2b…",
+                    "children": []
+                  },
+                  {
+                    "pid": 8318,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 0bf5c…",
+                    "children": []
+                  },
+                  {
+                    "pid": 8360,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id e92b9…",
+                    "children": []
+                  },
+                  {
+                    "pid": 8391,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id ca73c…",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "systemd-journald.service",
+                "children": [
+                  {
+                    "pid": 5302,
+                    "command": "/lib/systemd/systemd-journald",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "kubelet.slice",
+            "children": [
+              {
+                "name": "kubelet.service",
+                "children": [
+                  {
+                    "pid": 5741,
+                    "command": "/usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-…",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "kubelet-kubepods.slice",
+                "children": [
+                  {
+                    "name": "kubelet-kubepods-podf94c220b_bcaa_41c2_b2f7_099d2e58bc0e.slice",
+                    "children": [
+                      {
+                        "name": "cri-containerd-235a148b766083c499d57433f04400c33e168462db63ada0b8ab8c1092c39e43.scope",
+                        "delegated": true,
+                        "children": [
+                          {
+                            "pid": 7875,
+                            "command": "/pause",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "name": "cri-containerd-79fe290c39e9b8edf04c3b93c12dbe4729b0cc4ef35ba2d825fd4d9bbfd1b07b.scope",
+                        "delegated": true,
+                        "children": [
+                          {
+                            "pid": 8640,
+                            "command": "/bin/kindnetd",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "kubelet-kubepods-besteffort.slice",
+                    "children": [
+                      {
+                        "name": "kubelet-kubepods-besteffort-podd448655c_ae7d_4df4_a4b8_c5eb334b7efc.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-2f44c1d268cdd124c3ea68bc5f7c55eaca48df11fe714c46b01dc190f32b173d.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 16175,
+                                "command": "/usr/bin/tini -- /usr/local/bin/argocd-repo-server",
+                                "children": []
+                              },
+                              {
+                                "pid": 16194,
+                                "command": "/usr/local/bin/argocd-repo-server",
+                                "children": []
+                              },
+                              {
+                                "pid": 16239,
+                                "command": "gpg-agent --homedir /app/config/gpg/keys --use-standard-soc…",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-ca73c7f06a045c721e43a476b35ba0cc6e93a925fdc94740d207ff86bdb9aec7.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 8479,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-besteffort-pod3bd8d06b_3044_4d43_9610_9ebaafe632f6.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-b3687b6dde895dde1703049530271981ebe8fd352a6dbad1f84db63981c1b7c2.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 16315,
+                                "command": "/usr/bin/tini -- /usr/local/bin/argocd-applicationset-contr…",
+                                "children": []
+                              },
+                              {
+                                "pid": 16334,
+                                "command": "/usr/local/bin/argocd-applicationset-controller",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-e92b9590a440fd27b26b6e933078fc5eb64380ff4b89381a017dd35e8982338c.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 8496,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-besteffort-pod237abe0d_856c_437f_832a_64625d0fdd3c.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-79b2675a65de6c8d5ac3de8df1314119fcfc31734b636d41fbf1b69f86d802b8.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 8505,
+                                "command": "/usr/local/bin/kube-proxy --config=/var/lib/kube-proxy/confi…",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-8be47b0bc4b7b97e3fe3a18a61015ddc92a297404f173ba61321fcac4275f12c.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 8175,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-besteffort-pod4e0c12a5_8790_4c45_9f18_2f1a6cfb51ee.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-0bf5c3b9a94b6829d7a926d490fdeae6a23da6fb56dbab78405e365b072365ff.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 8474,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-3166653c3b8c61934e7a609dd91366868401807bb908e93abb645564c7d752e3.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 16418,
+                                "command": "/usr/bin/tini -- /usr/local/bin/argocd-notifications",
+                                "children": []
+                              },
+                              {
+                                "pid": 16454,
+                                "command": "/usr/local/bin/argocd-notifications",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-besteffort-pod54455d8d_b195_496f_b3cb_8dae83488a5e.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-97c2b246cf3b0f2a99202e98ed77f75176354c3cd84e7d86c4d3df953a5cebd5.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 8437,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-5b1946ea2cdb5141a92dcb4b111f5e1d7042f8a6536d3c4efd1b10dea64841b1.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 17377,
+                                "command": "redis-server *:6379…",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "accounts-daemon.service",
+        "children": [
+          {
+            "pid": 2052,
+            "command": "/usr/libexec/accounts-daemon",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "wpa_supplicant.service",
+        "children": [
+          {
+            "pid": 2225,
+            "command": "/usr/sbin/wpa_supplicant -u -s -O DIR=/run/wpa_supplicant GROUP=netdev",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "lightdm.service",
+        "children": [
+          {
+            "pid": 3147,
+            "command": "/usr/sbin/lightdm",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "earlyoom.service",
+        "children": [
+          {
+            "pid": 207795,
+            "command": "/usr/bin/earlyoom -r 3600",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "ModemManager.service",
+        "children": [
+          {
+            "pid": 2264,
+            "command": "/usr/sbin/ModemManager",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "systemd-journald.service",
+        "children": [
+          {
+            "pid": 702,
+            "command": "/usr/lib/systemd/systemd-journald",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "power-profiles-daemon.service",
+        "children": [
+          {
+            "pid": 5229,
+            "command": "/usr/libexec/power-profiles-daemon",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "unattended-upgrades.service",
+        "children": [
+          {
+            "pid": 2358,
+            "command": "/usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shu…",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "ssh.service",
+        "children": [
+          {
+            "pid": 2371,
+            "command": "sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "fwupd.service",
+        "children": [
+          {
+            "pid": 338379,
+            "command": "/usr/libexec/fwupd/fwupd",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "ollama.service",
+        "children": [
+          {
+            "pid": 3622,
+            "command": "/usr/local/bin/ollama serve",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "NetworkManager.service",
+        "children": [
+          {
+            "pid": 2218,
+            "command": "/usr/sbin/NetworkManager --no-daemon",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "snapd.service",
+        "children": [
+          {
+            "pid": 25203,
+            "command": "/snap/snapd/current/usr/lib/snapd/snapd",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "switcheroo-control.service",
+        "children": [
+          {
+            "pid": 2059,
+            "command": "/usr/libexec/switcheroo-control",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "system-cups.slice",
+        "children": [
+          {
+            "name": "cups-browsed.service",
+            "children": [
+              {
+                "pid": 794730,
+                "command": "/usr/sbin/cups-browsed",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "cups.service",
+            "children": [
+              {
+                "pid": 794727,
+                "command": "/usr/sbin/cupsd -l",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "uuidd.service",
+        "children": [
+          {
+            "pid": 2718767,
+            "command": "/usr/sbin/uuidd --socket-activation --cont-clock",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "rsyslog.service",
+        "children": [
+          {
+            "pid": 2176,
+            "command": "/usr/sbin/rsyslogd -n -iNONE",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "docker-2bc831ab3744b99e8a0dd5f208a5234dd64dd738071ad6fc45d5b1ba411eee54.scope",
+        "delegated": true,
+        "children": [
+          {
+            "name": "init",
+            "children": [
+              {
+                "pid": 4761,
+                "command": "/sbin/docker-init -- /usr/bin/buildkitd-entrypoint --allow-insecure-…",
+                "children": []
+              },
+              {
+                "pid": 4916,
+                "command": "/usr/bin/buildkitd --allow-insecure-entitlement=network.host",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "docker-3d904b922196c993f87523a89b1b56ddcb868b73fcc245580e905cbea1566a2c.scope",
+        "delegated": true,
+        "children": [
+          {
+            "name": "init.scope",
+            "children": [
+              {
+                "pid": 4765,
+                "command": "/sbin/init",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "system.slice",
+            "children": [
+              {
+                "name": "containerd.service",
+                "delegated": true,
+                "children": [
+                  {
+                    "pid": 5367,
+                    "command": "/usr/local/bin/containerd",
+                    "children": []
+                  },
+                  {
+                    "pid": 6364,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id aa37…",
+                    "children": []
+                  },
+                  {
+                    "pid": 6380,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 2752…",
+                    "children": []
+                  },
+                  {
+                    "pid": 6405,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 5842…",
+                    "children": []
+                  },
+                  {
+                    "pid": 6424,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id c3ad…",
+                    "children": []
+                  },
+                  {
+                    "pid": 9815,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 118a…",
+                    "children": []
+                  },
+                  {
+                    "pid": 9963,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id e554…",
+                    "children": []
+                  },
+                  {
+                    "pid": 10155,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 21eb…",
+                    "children": []
+                  },
+                  {
+                    "pid": 10160,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 6892…",
+                    "children": []
+                  },
+                  {
+                    "pid": 10219,
+                    "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 2c96…",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "systemd-journald.service",
+                "children": [
+                  {
+                    "pid": 5305,
+                    "command": "/lib/systemd/systemd-journald",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "kubelet.slice",
+            "children": [
+              {
+                "name": "kubelet.service",
+                "children": [
+                  {
+                    "pid": 5742,
+                    "command": "/usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-…",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "kubelet-kubepods.slice",
+                "children": [
+                  {
+                    "name": "kubelet-kubepods-pod0b06c3b0_a105_4b31_965b_aa97bf91ada0.slice",
+                    "children": [
+                      {
+                        "name": "cri-containerd-bfc674bdae5df60bd78cc1c7a068f35bf5029865f91074430ddb075d225259a4.scope",
+                        "delegated": true,
+                        "children": [
+                          {
+                            "pid": 10616,
+                            "command": "/bin/kindnetd",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "name": "cri-containerd-118a12fc21d588f8da1640b53b1a4ac1c6e84a5c76eab50d79d93185da794856.scope",
+                        "delegated": true,
+                        "children": [
+                          {
+                            "pid": 9942,
+                            "command": "/pause",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "kubelet-kubepods-besteffort.slice",
+                    "children": [
+                      {
+                        "name": "kubelet-kubepods-besteffort-pod9285ecab_1f46_4bed_9e3e_547440fcdbed.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-e5542ef159f2d3ded2e6f321c639d64092498795ef0b77f1cae2034464b82eac.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 10067,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-48277cbe9b9c8d75e3a9549d0be56299c12987b3dfcf39bb723cb906ebb398a4.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 10306,
+                                "command": "/usr/local/bin/kube-proxy --config=/var/lib/kube-proxy/conf…",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-besteffort-pod07ec9bfb_c84d_47e5_a70f_9cb44b164116.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-c5411ac3c3a85898679b296682ae0adf0f9a46b32269f59e4882406f320938da.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 17245,
+                                "command": "local-path-provisioner --debug start --helper-image docker.…",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-21ebd7316392849affe628aa39055dd4c2011e8b77a6cfb031f33528d31d9068.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 10277,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "kubelet-kubepods-burstable.slice",
+                    "children": [
+                      {
+                        "name": "kubelet-kubepods-burstable-poda104548aa583eabc7310c6e04f349c6d.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-aa372769a3c881bc57d063880ba9bc2137ff3f114a85c3bd9fca3cce3ad82d02.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 6489,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-fa34016307fd842d18f07175a186e50fec6fe6aa6ff03b219f309dd8fa442b7b.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 6602,
+                                "command": "etcd --advertise-client-urls=https://172.19.0.3:2379 --cert-…",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-burstable-pod00cd368f_e87c_4b1d_8c88_20fa729fa02a.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-86159831e42ef8d72344e7cf6d72d3d45a84b5d7f4c01f140b53d89455ef0489.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 10462,
+                                "command": "/coredns -conf /etc/coredns/Corefile",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-6892927205a2039116d868d4cb207b2a6ff2e0669bdfe3694ac2bc93fee3723c.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 10278,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-burstable-pod4af05974_9fa4_4c98_b294_5e9a4fc718f3.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-2c96fa8d6ea0a841a3fae675f8703c64a050f27834d1e10b0e13f4c386332084.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 10321,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-84e3d16497d9e4dbcf3bdd25615be9411d5e456628fd8e01a86edafad6037f5d.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 10477,
+                                "command": "/coredns -conf /etc/coredns/Corefile",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-burstable-pod9722cb0e5e7ce1d29875a1bf9b276d1b.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-584259ca3683492257450af0e602d39ac03d139d5ef9155d3501b2a96be692ca.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 6486,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-bd9002ef907283ccf2b5c3d1f00a8e73aa00e673fe6c90fe791fc5cdbffdecd9.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 6590,
+                                "command": "kube-scheduler --authentication-kubeconfig=/etc/kubernetes/s…",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-burstable-pod37bfded34f0335483dbb9cdedf167b9e.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-a23308ebebd526ea476ff498e6ba660357db05ec8f2a224a279c3a4537cac682.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 6610,
+                                "command": "kube-controller-manager --allocate-node-cidrs=true --authent…",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-c3ad9c8a0d8aebba74e48fd5e38f64df116a3ee5bfce1469c4942dd636a90150.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 6503,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "name": "kubelet-kubepods-burstable-pod3ec22e8a46bd182e7b016aaa7eb2c6c2.slice",
+                        "children": [
+                          {
+                            "name": "cri-containerd-275237d6cf937dc0208c0e39897834c3e74d461d8f80691430e2f88cca72ce39.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 6478,
+                                "command": "/pause",
+                                "children": []
+                              }
+                            ]
+                          },
+                          {
+                            "name": "cri-containerd-15d76755d05049875da887008a5c8c581c08b1faae82fce7301f4930db7b1bad.scope",
+                            "delegated": true,
+                            "children": [
+                              {
+                                "pid": 6588,
+                                "command": "kube-apiserver --advertise-address=172.19.0.3 --allow-privil…",
+                                "children": []
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "seatd.service",
+        "children": [
+          {
+            "pid": 2041,
+            "command": "seatd -g video",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "smartmontools.service",
+        "children": [
+          {
+            "pid": 2045,
+            "command": "/usr/sbin/smartd -n",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "geoclue.service",
+        "children": [
+          {
+            "pid": 9326,
+            "command": "/usr/libexec/geoclue",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "upower.service",
+        "children": [
+          {
+            "pid": 9396,
+            "command": "/usr/libexec/upowerd",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "systemd-oomd.service",
+        "children": [
+          {
+            "pid": 744,
+            "command": "/usr/lib/systemd/systemd-oomd",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "systemd-resolved.service",
+        "children": [
+          {
+            "pid": 739,
+            "command": "/usr/lib/systemd/systemd-resolved",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "udisks2.service",
+        "children": [
+          {
+            "pid": 2068,
+            "command": "/usr/libexec/udisks2/udisksd",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "dbus.service",
+        "children": [
+          {
+            "pid": 2025,
+            "command": "@dbus-daemon --system --address=systemd: --nofork --nopidfile --system…",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "systemd-timesyncd.service",
+        "children": [
+          {
+            "pid": 740,
+            "command": "/usr/lib/systemd/systemd-timesyncd",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "system-getty.slice",
+        "children": [
+          {
+            "name": "getty@tty1.service",
+            "children": [
+              {
+                "pid": 2425,
+                "command": "/usr/sbin/agetty --noreset --noclear --issue-file=/etc/issue:/etc/is…",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "avahi-daemon.service",
+        "children": [
+          {
+            "pid": 2022,
+            "command": "avahi-daemon: running [examplehost.local]",
+            "children": []
+          },
+          {
+            "pid": 2107,
+            "command": "avahi-daemon: chroot helper",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "systemd-logind.service",
+        "children": [
+          {
+            "pid": 2065,
+            "command": "/usr/lib/systemd/systemd-logind",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]

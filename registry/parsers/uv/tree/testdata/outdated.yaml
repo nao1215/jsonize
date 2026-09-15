@@ -1,0 +1,4 @@
+description: A dependency requested with an extra, the package that extra pulls in, and a pinned package with a newer release.
+source: "captured with `uv tree --outdated` (uv 0.9.7) on Ubuntu 26.04 with LC_ALL=C, in a project made with `uv init proj2` and `uv add 'requests[socks]' 'rich==13.0.0'`"
+os: linux
+args: [tree, --outdated]

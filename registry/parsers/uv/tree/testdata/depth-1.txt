@@ -1,0 +1,6 @@
+proj v0.1.0
+├── localpkg v0.1.0
+├── requests v2.34.2
+├── rich v15.0.0
+└── pytest v9.1.1 (group: dev)
+localpkg v0.1.0

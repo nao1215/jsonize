@@ -1,0 +1,8 @@
+Permissions Links  Size User Date Modified Name
+.rw-rw-r--      1 3.0Mi user  15 Sep 06:05  big.bin
+lrwxrwxrwx      1     - user  15 Sep 06:05  dangling -> missing
+lrwxrwxrwx      1     - user  15 Sep 06:05  link -> plain.txt
+.rw-rw-r--      1     6 user  15 Sep 06:05  plain.txt
+.rwxrwxr-x      1    18 user  15 Sep 06:05  run.sh
+drwxrwxr-x      2     - user  15 Sep 06:05  subdir
+.rw-rw-r--      1     2 user  15 Sep 06:05  'with space.txt'

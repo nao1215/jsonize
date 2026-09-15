@@ -1,0 +1,16 @@
+└─ /org
+  └─ /org/freedesktop
+    ├─ /org/freedesktop/LogControl1
+    └─ /org/freedesktop/login1
+      ├─ /org/freedesktop/login1/seat
+      │ ├─ /org/freedesktop/login1/seat/auto
+      │ └─ /org/freedesktop/login1/seat/seat0
+      ├─ /org/freedesktop/login1/session
+      │ ├─ /org/freedesktop/login1/session/_3100
+      │ ├─ /org/freedesktop/login1/session/_32
+      │ ├─ /org/freedesktop/login1/session/_33
+      │ ├─ /org/freedesktop/login1/session/_34
+      │ └─ /org/freedesktop/login1/session/auto
+      └─ /org/freedesktop/login1/user
+        ├─ /org/freedesktop/login1/user/_1000
+        └─ /org/freedesktop/login1/user/self

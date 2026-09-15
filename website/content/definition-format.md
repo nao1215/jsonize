@@ -62,6 +62,11 @@ arguments states them, which is what `getent passwd` wants. An alias that
 states an empty filter accepts any arguments, which is what `vdir` wants:
 it prints the long listing that `ls` prints only with `-l`.
 
+`args` is all an alias states. `detect.os`, `auto_detect` and the
+signature belong to the definition and apply under every name it answers
+to, so a definition whose names run on different systems states every
+one of those systems in `os`, or none.
+
 ## metadata
 
 | Key | Meaning |
@@ -92,7 +97,10 @@ detect:
   producing OS is unknown and the criterion is skipped.
 - `args` applies only in exec mode. Each entry is one whole word as it
   was typed, so `--format=long` is the word `--format=long` and a
-  definition that means both spellings lists both. Bundled short flags
+  definition that means both spellings lists both. The same holds for a
+  long option cut short, which GNU tools accept while it is unambiguous:
+  `--ta` is not `--tag` to jz, and a definition that means both lists
+  both. Bundled short flags
   are expanded, so `-hT` satisfies `any: ["-h"]`, and a short flag given
   n times holds every bundle of it up to n letters, so `-v -v` and `-vvv`
   are both refused by `none: ["-vv"]`. A long option given twice is the
@@ -495,6 +503,14 @@ characters in a UTF-8 locale, so it writes
 `["  ", "`-", "| ", "|-", "│ ", "└─", "├─"]`; the first form that fits
 at each step is the one taken, so the order is the order they are tried
 in.
+
+A form that ends in a character other than a blank, such as `|-` or
+`└─`, is a branch drawn to the node, and it ends the indentation:
+nothing deeper is drawn after a branch on the same line, so what follows
+it belongs to the node, blanks included. `systemd-cgls` pads a process
+id to the width of its siblings after the branch (`|-   7557`), and the
+node pattern reads those spaces. Before a branch, a blank that is not a
+whole number of levels is still an error.
 A node is the fields `node` reads from its line plus a `children` array,
 which is `[]` when nothing follows it — so a consumer walks every node
 the same way. A `node` pattern cannot name a group `children`.

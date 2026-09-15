@@ -9,7 +9,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
-	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -1137,8 +1136,9 @@ func TestRunNamesTheParserAWrapperRuns(t *testing.T) {
 			t.Errorf("%v: %d %s", tt.args, code, h.stderr.String())
 		}
 	}
-	// Nothing jz knows among the arguments: the refusal is what it was.
-	if code := h.run("run", "nice", "./script"); code != ExitSelect || strings.Contains(h.stderr.String(), "--parser") {
+	// Nothing jz knows among the arguments: no parser is named, and the
+	// refusal says only how to name one.
+	if code := h.run("run", "nice", "./script"); code != ExitSelect || strings.Contains(h.stderr.String(), " runs ") {
 		t.Errorf("no known command: %d %s", code, h.stderr.String())
 	}
 	// A directory is something a command reads, not a command it runs,
@@ -1147,7 +1147,7 @@ func TestRunNamesTheParserAWrapperRuns(t *testing.T) {
 	if err := os.Mkdir(dir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if code := h.run("run", "nice", "-n", "5", dir); code != ExitSelect || strings.Contains(h.stderr.String(), "--parser") {
+	if code := h.run("run", "nice", "-n", "5", dir); code != ExitSelect || strings.Contains(h.stderr.String(), "--parser apt") {
 		t.Errorf("a directory named like a parser: %d %s", code, h.stderr.String())
 	}
 	// A file that is not a program is read, not run: `stat /proc/uptime`.
@@ -1155,8 +1155,22 @@ func TestRunNamesTheParserAWrapperRuns(t *testing.T) {
 	if err := os.WriteFile(file, []byte("1 2\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if code := h.run("run", "nice", file); runtime.GOOS != "windows" && (code != ExitSelect || strings.Contains(h.stderr.String(), "--parser")) {
+	if code := h.run("run", "nice", file); runtime.GOOS != "windows" && (code != ExitSelect || strings.Contains(h.stderr.String(), "--parser uptime")) {
 		t.Errorf("a data file named like a parser: %d %s", code, h.stderr.String())
+	}
+	// A command jz has no parser for may still print a format jz reads
+	// under another name, and the refusal says how to name that parser
+	// rather than only where the list of them is.
+	if code := h.run("run", "nosuchtool-jz", "--tag", "f"); code != ExitSelect ||
+		!strings.Contains(h.stderr.String(), "If nosuchtool-jz prints a format jz reads under another name, name its parser: jz run --parser PARSER -- nosuchtool-jz --tag f") {
+		t.Errorf("unknown command: %d %s", code, h.stderr.String())
+	}
+	// A value that happens to be the name of a shape (csv, table) is an
+	// option's value, not a command the first one runs: systeminfo /fo csv
+	// is not systeminfo running csv, and naming csv would be ambiguous
+	// between its variants anyway.
+	if code := h.run("run", "nosuchtool-jz", "/fo", "csv"); code != ExitSelect || strings.Contains(h.stderr.String(), "runs csv") {
+		t.Errorf("a shape named as an option's value: %d %s", code, h.stderr.String())
 	}
 	if runtime.GOOS == "windows" {
 		return
@@ -1652,12 +1666,17 @@ func TestAssumptionsAboutTimestamps(t *testing.T) {
 		t.Errorf("with a year: %#v", got)
 	}
 	// "now" is resolved once, on the command line, so nothing further
-	// down reads a clock.
+	// down reads a clock. It dates the login in the latest year that does
+	// not put it after that moment, since a login that was recorded has
+	// happened: within the year before, and not later than a day ahead.
+	started := time.Now()
 	if code := h.pipe(who, "--parser", "who", "--assume-year", "now"); code != ExitOK {
 		t.Fatalf("now: %d %s", code, h.stderr.String())
 	}
-	if got, ok := h.rows()[0]["time"].(string); !ok || !strings.HasPrefix(got, strconv.Itoa(time.Now().Year())+"-") {
-		t.Errorf("now: %#v", h.rows()[0]["time"])
+	got, ok := h.rows()[0]["time"].(string)
+	when, err := time.Parse(time.RFC3339, got)
+	if !ok || err != nil || when.After(started.Add(24*time.Hour)) || !when.After(started.AddDate(-1, 0, -1)) {
+		t.Errorf("now: %#v read at %s", h.rows()[0]["time"], started.Format(time.RFC3339))
 	}
 
 	const date = "Mon Sep  7 10:02:02 JST 2026\n"

@@ -1,0 +1,7 @@
+.rw-rw-r-- 2 user 15 Sep 06:09 "'quoted'"
+.rw-rw-r-- 2 user 15 Sep 06:09 back\slash
+lrwxrwxrwx - user 15 Sep 06:09 c"d -> 'a b'
+.rw-rw-r-- 2 user 15 Sep 06:09 esc\u{1b}x
+lrwxrwxrwx - user 15 Sep 06:09 "l'ink" -> "it's"
+.rw-rw-r-- 2 user 15 Sep 06:09 nl\nname
+.rw-rw-r-- 2 user 15 Sep 06:09 utf-ü-名前

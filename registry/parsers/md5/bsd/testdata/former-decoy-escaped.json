@@ -1,0 +1,13 @@
+[
+  {
+    "algorithm": "SHA256",
+    "file": "odd",
+    "checksum": "b5b65540b7c88230a6d62d928cd450d3be458c25e870d4750f754404324797b4"
+  },
+  {
+    "escaped": true,
+    "algorithm": "SHA256",
+    "file": "x\\y",
+    "checksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

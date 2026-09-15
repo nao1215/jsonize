@@ -1,0 +1,4 @@
+source: captured with procs 0.14.12 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, procs --color=disable 1
+description: one row, with the columns as narrow as their headings allow
+os: linux
+args: [--color=disable, "1"]

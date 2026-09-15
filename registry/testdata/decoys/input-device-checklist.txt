@@ -1,0 +1,6 @@
+⎡ Pointer devices to check after the dock firmware update
+⎜   ↳ Logitech MX Master 3 (Bluetooth), id 11 on the old kernel
+⎜   ↳ Synaptics touchpad, disabled while typing
+⎣ Keyboard devices
+    ↳ HHKB Professional, attached to the dock
+    ↳ Power Button, ignore

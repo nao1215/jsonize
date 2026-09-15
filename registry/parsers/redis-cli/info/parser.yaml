@@ -33,8 +33,10 @@ detect:
     any: ["info", "INFO"]
   signature:
     all:
-      # The text opens with a section heading and a key under it.
-      - '\A# [A-Z][A-Za-z]*[ \t]*\n[a-z][A-Za-z0-9_|.-]*:'
+      # The text opens with a section heading and a key under it, or with
+      # the heading of a section Redis names and nothing under it, which
+      # is what `info errorstats` prints before any error has happened.
+      - '\A# (?:[A-Z][A-Za-z]*[ \t]*\n[a-z][A-Za-z0-9_|.-]*:|(?:Server|Clients|Memory|Persistence|Stats|Replication|CPU|Modules|Errorstats|Cluster|Keyspace|Keysizes|Commandstats|Latencystats|Threads|Sentinel)[ \t]*(?:\n|\z))'
       # Every line in the window is a heading, a key and its value with
       # nothing between the colon and the value, or blank.
       - '\A(?:# [A-Z][A-Za-z]*[ \t]*|[a-z][A-Za-z0-9_|.-]*:(?:[^ \t\n][^\n]*)?|)(?:\n(?:# [A-Z][A-Za-z]*[ \t]*|[a-z][A-Za-z0-9_|.-]*:(?:[^ \t\n][^\n]*)?|))*\z'

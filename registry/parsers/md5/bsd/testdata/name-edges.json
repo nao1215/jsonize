@@ -1,0 +1,34 @@
+[
+  {
+    "algorithm": "SHA256",
+    "file": " lead",
+    "checksum": "4adc33bd9fe74303c344be46e5916d65182fb218e248fe80452ab3f025b06c64"
+  },
+  {
+    "algorithm": "SHA256",
+    "file": "paren) = x",
+    "checksum": "4adc33bd9fe74303c344be46e5916d65182fb218e248fe80452ab3f025b06c64"
+  },
+  {
+    "algorithm": "SHA256",
+    "file": "quo\"te",
+    "checksum": "4adc33bd9fe74303c344be46e5916d65182fb218e248fe80452ab3f025b06c64"
+  },
+  {
+    "escaped": true,
+    "algorithm": "SHA256",
+    "file": "lit\\nname",
+    "checksum": "4adc33bd9fe74303c344be46e5916d65182fb218e248fe80452ab3f025b06c64"
+  },
+  {
+    "algorithm": "SHA256",
+    "file": "ta\tb.txt",
+    "checksum": "4adc33bd9fe74303c344be46e5916d65182fb218e248fe80452ab3f025b06c64"
+  },
+  {
+    "escaped": true,
+    "algorithm": "SHA256",
+    "file": "c\rr.txt",
+    "checksum": "4adc33bd9fe74303c344be46e5916d65182fb218e248fe80452ab3f025b06c64"
+  }
+]

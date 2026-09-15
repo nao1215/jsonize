@@ -1,0 +1,56 @@
+# `uv tree` prints the project and, under it, the packages it depends
+# on, each drawn with a branch in front. How deep that goes is a property
+# of the dependency graph, so it is read as a tree. The branches are
+# box-drawing characters whatever the locale: a level is "├── " or the
+# last one "└── ", and a level that only passes through is "│   " or four
+# spaces.
+#
+# A package line is the name, the extras it was requested with in
+# brackets, the version with a "v" in front, and then what uv notes about
+# it: "(extra: NAME)" when an extra pulled it in, "(group: NAME)" when a
+# dependency group did, "(latest: vX)" with --outdated when a newer
+# release exists, and "(*)" where the subtree was printed above and is
+# left out. The version is a Python version and stays a string.
+#
+# Each workspace member is a tree of its own at the top level, and
+# --invert prints one tree per package with the project at the leaves.
+format: 1
+command: uv
+variant: tree
+description: uv tree, the dependency graph of a project
+metadata:
+  tags: [python, package, dependencies]
+  compatible: [uv]
+  references:
+    - https://docs.astral.sh/uv/reference/cli/#uv-tree
+detect:
+  args:
+    all: [tree]
+  signature:
+    all:
+      # Every line looked at is a package, drawn under a branch below the
+      # first one, or the note --invert prints under the trees. `cargo
+      # tree` draws the same branches under the same "name vX.Y.Z" lines,
+      # and its project line carries its directory, which uv never prints;
+      # an inverted cargo tree whose project is past the twenty lines
+      # looked at is the one text both commands could have written.
+      - '\A[A-Za-z0-9][A-Za-z0-9._-]*(?:\[[^\]\n]*\])? v[0-9][0-9A-Za-z.!+_-]*(?: \((?:extra|group|latest): [^()\n]*\))*(?: \(\*\))?[ \t]*(?:\n(?:(?:│   |    )*(?:├── |└── ))?[A-Za-z0-9][A-Za-z0-9._-]*(?:\[[^\]\n]*\])? v[0-9][0-9A-Za-z.!+_-]*(?: \((?:extra|group|latest): [^()\n]*\))*(?: \(\*\))?[ \t]*)*(?:\n\(\*\) Package tree already displayed[ \t]*)?\z'
+input:
+  # Printed under an inverted tree to say what "(*)" means; the nodes
+  # already carry the mark as deduplicated.
+  ignore: ['^\(\*\) Package tree already displayed[ \t]*$']
+parse:
+  type: tree
+  indent: ["│   ", "    ", "├── ", "└── "]
+  # A top-level line is a package; a line of any other shape at the top
+  # is not part of the report.
+  root: '^[A-Za-z0-9][A-Za-z0-9._-]*(?:\[[^\]]*\])? v[0-9]'
+  node:
+    parse:
+      type: regex
+      pattern: '^(?P<name>[A-Za-z0-9][A-Za-z0-9._-]*)(?:\[(?P<extras>[^\]]*)\])? v(?P<version>[0-9][0-9A-Za-z.!+_-]*)(?: \(extra: (?P<extra>[^()]+)\))?(?: \(group: (?P<group>[^()]+)\))?(?: \(latest: v(?P<latest>[^()]+)\))?(?P<deduplicated> \(\*\)|)[ \t]*$'
+    fields:
+      name: {required: true}
+      version: {required: true}
+      extras: {type: array, split: ","}
+      deduplicated: {type: bool, true_values: ["(*)"], false_values: [""]}

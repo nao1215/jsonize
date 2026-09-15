@@ -1,0 +1,4 @@
+description: A path dependency with build dependencies of its own, a proc-macro crate, subtrees marked (*) and the dev-dependencies of the root.
+source: "captured with `cargo tree` (cargo 1.98.0) on Ubuntu 26.04 with LC_ALL=C, in a project depending on anyhow, regex, serde, serde_derive and a path crate that depends on libz-sys, with tempfile as a dev-dependency; the project directory replaced with /home/user/demo"
+os: linux
+args: [tree]

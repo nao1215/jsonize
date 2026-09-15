@@ -1,0 +1,681 @@
+[
+  {
+    "name": "-.slice",
+    "children": [
+      {
+        "name": "init.scope",
+        "id": 15422,
+        "children": [
+          {
+            "pid": 1,
+            "command": "/sbin/init",
+            "children": []
+          },
+          {
+            "pid": 41363,
+            "command": "systemd-cgls --no-pager",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "system.slice",
+        "id": 15949,
+        "children": [
+          {
+            "name": "containerd.service",
+            "delegated": true,
+            "id": 19639,
+            "children": [
+              {
+                "attribute": "user.invocation_id",
+                "value": "26bc813610554051bdf42ef746842979",
+                "children": []
+              },
+              {
+                "attribute": "user.delegate",
+                "value": "1",
+                "children": []
+              },
+              {
+                "attribute": "trusted.invocation_id",
+                "value": "26bc813610554051bdf42ef746842979",
+                "children": []
+              },
+              {
+                "attribute": "trusted.delegate",
+                "value": "1",
+                "children": []
+              },
+              {
+                "pid": 116,
+                "command": "/usr/local/bin/containerd",
+                "children": []
+              },
+              {
+                "pid": 570,
+                "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 235a14...",
+                "children": []
+              },
+              {
+                "pid": 718,
+                "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 8be47b...",
+                "children": []
+              },
+              {
+                "pid": 799,
+                "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 97c2b2...",
+                "children": []
+              },
+              {
+                "pid": 816,
+                "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id 0bf5c3...",
+                "children": []
+              },
+              {
+                "pid": 847,
+                "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id e92b95...",
+                "children": []
+              },
+              {
+                "pid": 878,
+                "command": "/usr/local/bin/containerd-shim-runc-v2 -namespace k8s.io -id ca73c7...",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "systemd-journald.service",
+            "id": 17461,
+            "children": [
+              {
+                "attribute": "user.invocation_id",
+                "value": "8714553f72db422db2066fa3c7ac2894",
+                "children": []
+              },
+              {
+                "attribute": "trusted.invocation_id",
+                "value": "8714553f72db422db2066fa3c7ac2894",
+                "children": []
+              },
+              {
+                "pid": 99,
+                "command": "/lib/systemd/systemd-journald",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "kubelet.slice",
+        "id": 15763,
+        "children": [
+          {
+            "attribute": "user.invocation_id",
+            "value": "a7899b8e4dfb4b6bb3f5f57435e90428",
+            "children": []
+          },
+          {
+            "attribute": "trusted.invocation_id",
+            "value": "a7899b8e4dfb4b6bb3f5f57435e90428",
+            "children": []
+          },
+          {
+            "name": "kubelet.service",
+            "id": 21264,
+            "children": [
+              {
+                "attribute": "user.invocation_id",
+                "value": "854487f30c904557b5acbc0f9f280fb6",
+                "children": []
+              },
+              {
+                "attribute": "trusted.invocation_id",
+                "value": "854487f30c904557b5acbc0f9f280fb6",
+                "children": []
+              },
+              {
+                "pid": 220,
+                "command": "/usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-k...",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "kubelet-kubepods.slice",
+            "id": 21539,
+            "children": [
+              {
+                "attribute": "user.invocation_id",
+                "value": "7c49831d3b95412c863da0db1bd265c9",
+                "children": []
+              },
+              {
+                "attribute": "trusted.invocation_id",
+                "value": "7c49831d3b95412c863da0db1bd265c9",
+                "children": []
+              },
+              {
+                "name": "kubelet-kubepods-podf94c220b_bcaa_41c2_b2f7_099d2e58bc0e.slice",
+                "id": 24723,
+                "children": [
+                  {
+                    "attribute": "user.invocation_id",
+                    "value": "3e520761c2ef46ca91c7d7fca14521aa",
+                    "children": []
+                  },
+                  {
+                    "attribute": "trusted.invocation_id",
+                    "value": "3e520761c2ef46ca91c7d7fca14521aa",
+                    "children": []
+                  },
+                  {
+                    "name": "cri-containerd-235a148b766083c499d57433f04400c33e168462db63ada0b8ab8c1092c39e43.scope",
+                    "delegated": true,
+                    "id": 26237,
+                    "children": [
+                      {
+                        "attribute": "user.invocation_id",
+                        "value": "48709456eca7437d83965a1dbfea0e5a",
+                        "children": []
+                      },
+                      {
+                        "attribute": "user.delegate",
+                        "value": "1",
+                        "children": []
+                      },
+                      {
+                        "attribute": "trusted.invocation_id",
+                        "value": "48709456eca7437d83965a1dbfea0e5a",
+                        "children": []
+                      },
+                      {
+                        "attribute": "trusted.delegate",
+                        "value": "1",
+                        "children": []
+                      },
+                      {
+                        "pid": 619,
+                        "command": "/pause",
+                        "children": []
+                      }
+                    ]
+                  },
+                  {
+                    "name": "cri-containerd-79fe290c39e9b8edf04c3b93c12dbe4729b0cc4ef35ba2d825fd4d9bbfd1b07b.scope",
+                    "delegated": true,
+                    "id": 27306,
+                    "children": [
+                      {
+                        "attribute": "user.invocation_id",
+                        "value": "d741c52205f2455784c0520043f30d06",
+                        "children": []
+                      },
+                      {
+                        "attribute": "user.delegate",
+                        "value": "1",
+                        "children": []
+                      },
+                      {
+                        "attribute": "trusted.invocation_id",
+                        "value": "d741c52205f2455784c0520043f30d06",
+                        "children": []
+                      },
+                      {
+                        "attribute": "trusted.delegate",
+                        "value": "1",
+                        "children": []
+                      },
+                      {
+                        "pid": 1064,
+                        "command": "/bin/kindnetd",
+                        "children": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "kubelet-kubepods-besteffort.slice",
+                "id": 21974,
+                "children": [
+                  {
+                    "attribute": "user.invocation_id",
+                    "value": "15a5f04bb60e4c9db65bb18e8dae475f",
+                    "children": []
+                  },
+                  {
+                    "attribute": "trusted.invocation_id",
+                    "value": "15a5f04bb60e4c9db65bb18e8dae475f",
+                    "children": []
+                  },
+                  {
+                    "name": "kubelet-kubepods-besteffort-podd448655c_ae7d_4df4_a4b8_c5eb334b7efc.slice",
+                    "id": 25207,
+                    "children": [
+                      {
+                        "attribute": "user.invocation_id",
+                        "value": "b685ba07e0844b81949537371dcd0a20",
+                        "children": []
+                      },
+                      {
+                        "attribute": "trusted.invocation_id",
+                        "value": "b685ba07e0844b81949537371dcd0a20",
+                        "children": []
+                      },
+                      {
+                        "name": "cri-containerd-2f44c1d268cdd124c3ea68bc5f7c55eaca48df11fe714c46b01dc190f32b173d.scope",
+                        "delegated": true,
+                        "id": 33717,
+                        "children": [
+                          {
+                            "attribute": "user.invocation_id",
+                            "value": "db5b897ccc144062b6fa170c17741924",
+                            "children": []
+                          },
+                          {
+                            "attribute": "user.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.invocation_id",
+                            "value": "db5b897ccc144062b6fa170c17741924",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "pid": 1367,
+                            "command": "/usr/bin/tini -- /usr/local/bin/argocd-repo-server",
+                            "children": []
+                          },
+                          {
+                            "pid": 1386,
+                            "command": "/usr/local/bin/argocd-repo-server",
+                            "children": []
+                          },
+                          {
+                            "pid": 1408,
+                            "command": "gpg-agent --homedir /app/config/gpg/keys --use-standard-sock...",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "name": "cri-containerd-ca73c7f06a045c721e43a476b35ba0cc6e93a925fdc94740d207ff86bdb9aec7.scope",
+                        "delegated": true,
+                        "id": 27045,
+                        "children": [
+                          {
+                            "attribute": "user.invocation_id",
+                            "value": "2b8f869633f748abb0f1d8681a74e4c3",
+                            "children": []
+                          },
+                          {
+                            "attribute": "user.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.invocation_id",
+                            "value": "2b8f869633f748abb0f1d8681a74e4c3",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "pid": 939,
+                            "command": "/pause",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "kubelet-kubepods-besteffort-pod3bd8d06b_3044_4d43_9610_9ebaafe632f6.slice",
+                    "id": 25461,
+                    "children": [
+                      {
+                        "attribute": "user.invocation_id",
+                        "value": "2246847f2f8d49bda4d82610aec64694",
+                        "children": []
+                      },
+                      {
+                        "attribute": "trusted.invocation_id",
+                        "value": "2246847f2f8d49bda4d82610aec64694",
+                        "children": []
+                      },
+                      {
+                        "name": "cri-containerd-b3687b6dde895dde1703049530271981ebe8fd352a6dbad1f84db63981c1b7c2.scope",
+                        "delegated": true,
+                        "id": 33804,
+                        "children": [
+                          {
+                            "attribute": "user.invocation_id",
+                            "value": "3feac4dadb0b4d42a38248791184110c",
+                            "children": []
+                          },
+                          {
+                            "attribute": "user.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.invocation_id",
+                            "value": "3feac4dadb0b4d42a38248791184110c",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "pid": 1433,
+                            "command": "/usr/bin/tini -- /usr/local/bin/argocd-applicationset-contro...",
+                            "children": []
+                          },
+                          {
+                            "pid": 1452,
+                            "command": "/usr/local/bin/argocd-applicationset-controller",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "name": "cri-containerd-e92b9590a440fd27b26b6e933078fc5eb64380ff4b89381a017dd35e8982338c.scope",
+                        "delegated": true,
+                        "id": 27132,
+                        "children": [
+                          {
+                            "attribute": "user.invocation_id",
+                            "value": "c25604456b87433397f148aa99d3288a",
+                            "children": []
+                          },
+                          {
+                            "attribute": "user.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.invocation_id",
+                            "value": "c25604456b87433397f148aa99d3288a",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "pid": 951,
+                            "command": "/pause",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "kubelet-kubepods-besteffort-pod237abe0d_856c_437f_832a_64625d0fdd3c.slice",
+                    "id": 24932,
+                    "children": [
+                      {
+                        "attribute": "user.invocation_id",
+                        "value": "a265885f11ca4e0ea07fa03afc2e5096",
+                        "children": []
+                      },
+                      {
+                        "attribute": "trusted.invocation_id",
+                        "value": "a265885f11ca4e0ea07fa03afc2e5096",
+                        "children": []
+                      },
+                      {
+                        "name": "cri-containerd-79b2675a65de6c8d5ac3de8df1314119fcfc31734b636d41fbf1b69f86d802b8.scope",
+                        "delegated": true,
+                        "id": 27219,
+                        "children": [
+                          {
+                            "attribute": "user.invocation_id",
+                            "value": "9d348bed0f774f4c99c484e2957cdab9",
+                            "children": []
+                          },
+                          {
+                            "attribute": "user.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.invocation_id",
+                            "value": "9d348bed0f774f4c99c484e2957cdab9",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "pid": 960,
+                            "command": "/usr/local/bin/kube-proxy --config=/var/lib/kube-proxy/config...",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "name": "cri-containerd-8be47b0bc4b7b97e3fe3a18a61015ddc92a297404f173ba61321fcac4275f12c.scope",
+                        "delegated": true,
+                        "id": 26349,
+                        "children": [
+                          {
+                            "attribute": "user.invocation_id",
+                            "value": "476c912b18694d519c4ae26e72e5bd6d",
+                            "children": []
+                          },
+                          {
+                            "attribute": "user.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.invocation_id",
+                            "value": "476c912b18694d519c4ae26e72e5bd6d",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "pid": 776,
+                            "command": "/pause",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "kubelet-kubepods-besteffort-pod4e0c12a5_8790_4c45_9f18_2f1a6cfb51ee.slice",
+                    "id": 25597,
+                    "children": [
+                      {
+                        "attribute": "user.invocation_id",
+                        "value": "d5026c324f934e9688ab0905bf6bcfba",
+                        "children": []
+                      },
+                      {
+                        "attribute": "trusted.invocation_id",
+                        "value": "d5026c324f934e9688ab0905bf6bcfba",
+                        "children": []
+                      },
+                      {
+                        "name": "cri-containerd-0bf5c3b9a94b6829d7a926d490fdeae6a23da6fb56dbab78405e365b072365ff.scope",
+                        "delegated": true,
+                        "id": 26871,
+                        "children": [
+                          {
+                            "attribute": "user.invocation_id",
+                            "value": "cd58ff0a8a434ae6868bf55bb33a4a22",
+                            "children": []
+                          },
+                          {
+                            "attribute": "user.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.invocation_id",
+                            "value": "cd58ff0a8a434ae6868bf55bb33a4a22",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "pid": 936,
+                            "command": "/pause",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "name": "cri-containerd-3166653c3b8c61934e7a609dd91366868401807bb908e93abb645564c7d752e3.scope",
+                        "delegated": true,
+                        "id": 33891,
+                        "children": [
+                          {
+                            "attribute": "user.invocation_id",
+                            "value": "e1e60843de4f415587979fcf66312542",
+                            "children": []
+                          },
+                          {
+                            "attribute": "user.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.invocation_id",
+                            "value": "e1e60843de4f415587979fcf66312542",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "pid": 1488,
+                            "command": "/usr/bin/tini -- /usr/local/bin/argocd-notifications",
+                            "children": []
+                          },
+                          {
+                            "pid": 1507,
+                            "command": "/usr/local/bin/argocd-notifications",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "kubelet-kubepods-besteffort-pod54455d8d_b195_496f_b3cb_8dae83488a5e.slice",
+                    "id": 25019,
+                    "children": [
+                      {
+                        "attribute": "user.invocation_id",
+                        "value": "24f224454ac34af79514e95ebaab62b0",
+                        "children": []
+                      },
+                      {
+                        "attribute": "trusted.invocation_id",
+                        "value": "24f224454ac34af79514e95ebaab62b0",
+                        "children": []
+                      },
+                      {
+                        "name": "cri-containerd-97c2b246cf3b0f2a99202e98ed77f75176354c3cd84e7d86c4d3df953a5cebd5.scope",
+                        "delegated": true,
+                        "id": 26784,
+                        "children": [
+                          {
+                            "attribute": "user.invocation_id",
+                            "value": "775d19a4bfe3470d8047004ff90f5d56",
+                            "children": []
+                          },
+                          {
+                            "attribute": "user.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.invocation_id",
+                            "value": "775d19a4bfe3470d8047004ff90f5d56",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "pid": 916,
+                            "command": "/pause",
+                            "children": []
+                          }
+                        ]
+                      },
+                      {
+                        "name": "cri-containerd-5b1946ea2cdb5141a92dcb4b111f5e1d7042f8a6536d3c4efd1b10dea64841b1.scope",
+                        "delegated": true,
+                        "id": 34413,
+                        "children": [
+                          {
+                            "attribute": "user.invocation_id",
+                            "value": "59b0690bc66246e0b7140377a9741ce3",
+                            "children": []
+                          },
+                          {
+                            "attribute": "user.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.invocation_id",
+                            "value": "59b0690bc66246e0b7140377a9741ce3",
+                            "children": []
+                          },
+                          {
+                            "attribute": "trusted.delegate",
+                            "value": "1",
+                            "children": []
+                          },
+                          {
+                            "pid": 1630,
+                            "command": "redis-server *:6379...",
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

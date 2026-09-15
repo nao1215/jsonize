@@ -37,6 +37,25 @@ project follows [Semantic Versioning](https://semver.org/).
   all-namespaces forms, `kubectl config get-contexts`,
   `kubectl api-resources`, `kubectl version`, `rclone lsl`, `lsd` and
   `version`, `redis-cli info` and `client list`.
+- A definition for `systemd-cgls`: the control groups under the group,
+  unit or directory it starts from, the processes in each with their
+  ids, whether a group is delegated, and the group ids and extended
+  attributes systemd 252 prints to root. In a `tree`, a form of
+  indentation that ends in a branch character (`|-`, `└─`) ends the
+  indentation, so the blanks after it that pad a right-aligned number
+  belong to the node.
+- Definitions for `eza -l` (with `--header`, `-a`, `-B`, and in its
+  long-iso, full-iso, `-g` and `-H` column sets), `procs`, `tokei`,
+  `bat --list-languages` and `hyperfine --style basic`.
+- Definitions for `cargo tree`, `uv tree`, `npm ls --all`, `busctl tree`
+  (one service or several), `docker buildx ls` and `xinput list`.
+- `md5sum --tag`, `sha1sum --tag`, `sha256sum --tag`, `b2sum --tag` and
+  the rest of the GNU and uutils family are read by the definition of
+  the BSD digest line, which they print, together with FreeBSD and macOS
+  `md5`. A name the tools escape is decoded and marked `escaped`.
+- When `jz run` has no parser for a command and nothing in its arguments
+  names one, the refusal shows how to name one:
+  `jz run --parser PARSER -- COMMAND ...`.
 - `split: aligned` reads a heading of several words, such as
   `CONTAINER ID` or `Soft Limit`, as one column when `header.columns`
   gives it the name those words derive together.
@@ -59,6 +78,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A duration with a fraction of a unit under a second is the number the
+  text names: `1.3 ms` is `0.0013` where it was `0.0013000000000000002`,
+  and `systemd-analyze critical-chain` reports `+87ms` as `0.087`. The
+  parts of a duration are added up exactly and turned into a number
+  once.
+- `jz run systeminfo /fo csv` no longer suggests that systeminfo runs
+  csv. A name whose definitions only describe a shape (`csv`, `table`)
+  is an option's value when it appears among a command's arguments.
 - `jz run systemctl list-units --plain` failed with exit 3 while a unit
   had a job pending. `--plain` drops the marker column, and the
   definition for the table with a JOB column expected the header to be
@@ -90,6 +117,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `--assume-year now` dates a timestamp printed without a year in the
+  latest year that does not put it after the moment jz started, rather
+  than always in the current year. A `last` or `who` line of December 31
+  read in January used to come out in the future.
+- `jz test` and `make registry-test` report a definition that reads a
+  fixture or a decoy once, naming every name that reached it
+  (`md5/bsd (also named sha256sum, b2sum)`), where a definition with
+  fourteen names used to be reported fourteen times.
 - Fourteen table definitions state the shape of the cells that tell a
   row from prose: a version opens with a digit (`pip list`, `mise ls`,
   `npm outdated`), an address is one (`/etc/hosts`), a unit file ends
@@ -153,6 +188,9 @@ project follows [Semantic Versioning](https://semver.org/).
 - `scc/default` reports the byte count as the string scc printed, as it
   does every other count: scc 4.1 prints it with thousands separators,
   which was refused. Its output schema is version 2.
+- `mise/outdated` reads a tool the configuration names and nothing
+  installs, which mise prints as `[MISSING]`, with `current` as null. The
+  row was refused before. Its output schema is version 2.
 
 ## [0.1.0]
 

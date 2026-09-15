@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemd-cgls/tree.json",
+  "title": "systemd-cgls/tree",
+  "description": "systemd-cgls control groups, the processes in them and their attributes, as a tree",
+  "x-jsonize": {
+    "definition": "systemd-cgls/tree",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/node"
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "properties": {
+        "cgroup": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "directory": {
+          "type": "string"
+        },
+        "pid": {
+          "type": "integer"
+        },
+        "command": {
+          "type": "string"
+        },
+        "attribute": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "delegated": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "required": [
+        "children"
+      ]
+    }
+  }
+}

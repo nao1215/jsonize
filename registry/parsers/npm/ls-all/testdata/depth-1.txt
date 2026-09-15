@@ -1,0 +1,10 @@
+webapp@1.0.0 /home/user/webapp
++-- chalk@4.1.2
+| +-- ansi-styles@4.3.0
+| `-- supports-color@7.2.0 deduped
++-- debug@4.4.3
+| `-- ms@2.1.3
++-- semver@7.8.5
+`-- supports-color@7.2.0
+  `-- has-flag@4.0.0
+

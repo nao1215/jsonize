@@ -1,0 +1,3 @@
+source: captured with LC_ALL=C systemd-cgls --no-pager --full --user-unit gvfs-daemon.service on Ubuntu 26.04 (systemd 259)
+os: linux
+args: ["--no-pager", "--full", "--user-unit", "gvfs-daemon.service"]

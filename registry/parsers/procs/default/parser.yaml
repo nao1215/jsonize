@@ -1,0 +1,57 @@
+# `procs` prints its default columns in three groups divided by a
+# vertical bar (U+2502): the process id and the user, then the terminal,
+# the CPU and memory usage and the CPU time, then the command line. The
+# header is two lines, the column names and under them the unit of the
+# two usage columns, and the column the list is sorted by carries a mark
+# after its name (PID:U+25B2 by default, U+25BC when descending).
+# --no-header leaves the rows alone.
+#
+# The columns are what procs is configured to print, so this definition
+# reads the built-in default set and nothing else. --sorta and --sortd
+# insert the column they sort by next to the CPU time even when it is
+# already there, --insert adds one and --only keeps one, and a
+# configuration file can change all of them; each of those is a
+# different listing, which the header in the signature and the column
+# count in the pattern refuse. --tree draws the tree in front of the
+# process id and --watch redraws the screen with escape sequences, and
+# both are refused the same way.
+#
+# The terminal is empty for a process that has none (null). The two
+# usages are percentages printed with one decimal, and a process using
+# more than one CPU prints more than 100. The CPU time is hours, minutes
+# and seconds. The command line is the last column and is read to the
+# end of the line, a bar in it included.
+format: 1
+command: procs
+variant: default
+description: procs default columns (PID, User, TTY, CPU, MEM, CPU Time, Command)
+metadata:
+  tags: [linux, process]
+  compatible: [procs]
+  references:
+    - https://github.com/dalance/procs
+detect:
+  args:
+    none: ["--sorta", "--sortd", "-i", "--insert", "--only", "-t", "--tree", "-w", "--watch", "-W", "--watch-interval", "--json", "-l", "--list", "--load-config", "--use-config=large", "large", "--gen-config"]
+  signature:
+    all:
+      # Every line: the two header lines, where they are printed, then the
+      # rows.
+      - '\A(?: PID(?::[\x{25B2}\x{25BC}])? +User(?::[\x{25B2}\x{25BC}])? +\x{2502} TTY(?::[\x{25B2}\x{25BC}])? +CPU(?::[\x{25B2}\x{25BC}])? +MEM(?::[\x{25B2}\x{25BC}])? +CPU Time(?::[\x{25B2}\x{25BC}])? +\x{2502} Command(?::[\x{25B2}\x{25BC}])?\n +\x{2502} +\[%\] +\[%\] +\x{2502}(?:\n|\z))?(?: \d+ +\S+ +\x{2502} +(?:\S+ +)?\d+\.\d +\d+\.\d +\d+:\d{2}:\d{2} \x{2502} [^\n]+(?:\n|\z))*\z'
+      # And there is a header or a row: both are optional above, and
+      # without this an empty text, or one of blank lines, matched.
+      - '^ (?:PID|[0-9]+ )'
+input:
+  ignore:
+    # The two header lines.
+    - '^ PID(?::[\x{25B2}\x{25BC}])? +User(?::[\x{25B2}\x{25BC}])? +\x{2502} TTY(?::[\x{25B2}\x{25BC}])? +CPU(?::[\x{25B2}\x{25BC}])? +MEM(?::[\x{25B2}\x{25BC}])? +CPU Time(?::[\x{25B2}\x{25BC}])? +\x{2502} Command(?::[\x{25B2}\x{25BC}])?$'
+    - '^ +\x{2502} +\[%\] +\[%\] +\x{2502}$'
+parse:
+  type: regex
+  pattern: '^ (?P<pid>\d+) +(?P<user>\S+) +\x{2502} +(?:(?P<tty>\S+) +)?(?P<cpu_percent>\d+\.\d) +(?P<mem_percent>\d+\.\d) +(?P<cpu_time>\d+:\d{2}:\d{2}) \x{2502} (?P<command>.+)$'
+fields:
+  pid: {type: int, required: true}
+  cpu_percent: {type: float}
+  mem_percent: {type: float}
+  cpu_time: {type: duration, layout: "mm:ss"}
+  command: {required: true}

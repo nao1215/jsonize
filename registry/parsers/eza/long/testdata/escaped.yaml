@@ -1,0 +1,4 @@
+source: captured with eza 0.23.5 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1, eza -l --color=never over a directory made for the fixture; the user name replaced
+description: a name holding a backslash, which eza does not escape while it escapes a tab as \t, so the line is refused
+os: linux
+expect_error: 'line does not match any of the 12 patterns'

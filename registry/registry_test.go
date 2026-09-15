@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 	"testing"
@@ -283,6 +284,13 @@ const parsersPage = "../website/content/parsers.md"
 var parsersRow = regexp.MustCompile("^\\| `([^`]+)` \\| (.*) \\|$")
 var parsersCell = regexp.MustCompile("^\\[`([^`]+)`\\]\\(\\.\\./schemas/([^)]+)\\.json\\)$")
 
+// parsersAlias is one entry of the list of other names, "`b2sum` (as
+// `md5`, `sha512sum`)", and parsersName one command inside it.
+var (
+	parsersAlias = regexp.MustCompile("`([a-z0-9][a-z0-9._+-]*)` \\(as ((?:`[^`]+`(?:, )?)+)\\)")
+	parsersName  = regexp.MustCompile("`([^`]+)`")
+)
+
 // TestParsersPageListsEveryDefinition keeps the page that documents the
 // registry in step with it: every command with the variants it carries,
 // each linked to the schema published for it, and nothing else.
@@ -331,6 +339,45 @@ func TestParsersPageListsEveryDefinition(t *testing.T) {
 	for command := range got {
 		if _, ok := want[command]; !ok {
 			t.Errorf("%s lists %s, which the registry does not have", parsersPage, command)
+		}
+	}
+}
+
+// The page names every other command a definition answers to, with the
+// commands whose definitions it reaches, so that a name added to aliases
+// is as visible as a variant added to the table.
+func TestParsersPageListsEveryAlias(t *testing.T) {
+	reg, err := registry.Load(registry.Source{Name: "embedded", FS: FS()})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := map[string][]string{}
+	for _, e := range reg.Entries() {
+		for _, alias := range e.Def.AliasNames() {
+			if alias != e.Def.Command && !slices.Contains(want[alias], e.Def.Command) {
+				want[alias] = append(want[alias], e.Def.Command)
+			}
+		}
+	}
+	data, err := os.ReadFile(parsersPage)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := map[string][]string{}
+	for _, m := range parsersAlias.FindAllStringSubmatch(string(data), -1) {
+		for _, c := range parsersName.FindAllStringSubmatch(m[2], -1) {
+			got[m[1]] = append(got[m[1]], c[1])
+		}
+	}
+	for alias, commands := range want {
+		sort.Strings(commands)
+		if strings.Join(got[alias], ",") != strings.Join(commands, ",") {
+			t.Errorf("%s lists %s as %v, the registry has it as %v", parsersPage, alias, got[alias], commands)
+		}
+	}
+	for alias := range got {
+		if _, ok := want[alias]; !ok {
+			t.Errorf("%s lists %s as another name, which the registry does not have", parsersPage, alias)
 		}
 	}
 }

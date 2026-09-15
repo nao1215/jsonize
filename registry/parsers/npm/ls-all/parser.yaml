@@ -1,0 +1,65 @@
+# `npm ls --all` prints the project and every package under it, each
+# indented under the package that required it. How deep that goes is a
+# property of the dependency graph, so it is read as a tree.
+#
+# This is a variant beside npm/ls rather than a wider npm/ls. The deeper
+# levels need a different indentation list, and they need the tree parser
+# at all: npm/ls reads one level into an object of the project and a
+# list, and giving it the tree's shape would change what every consumer
+# of npm/ls receives.
+#
+# A level is drawn in two widths. A branch is four characters, "+-- " or
+# the last one "`-- " in the C locale, and "├── ", "└── ", or "├─┬ " and
+# "└─┬ " for a package whose children follow, in a UTF-8 one. A level that
+# only passes through is two, "| " or "│ " or two spaces. Naming all of
+# them is what lets the depth be counted.
+#
+# The first line is the project with its directory. A package is
+# name@version, followed by what npm notes about the installed copy
+# (deduped where it is printed in full elsewhere, extraneous, invalid,
+# overridden), or "UNMET DEPENDENCY" in front and the requested range in
+# place of a version when it is not installed.
+format: 1
+command: npm
+variant: ls-all
+description: npm ls --all, the whole dependency tree
+metadata:
+  tags: [node, package, javascript]
+  compatible: [npm]
+  references:
+    - https://docs.npmjs.com/cli/commands/npm-ls
+detect:
+  args:
+    any: ["ls", "list"]
+  # Output with one level is also read by npm/ls, whose signature refuses
+  # a deeper line; the second expression below is what keeps the two
+  # apart.
+  signature:
+    all:
+      # The project with its directory, then nothing but drawn lines.
+      # --long puts the directory on a line of its own, and is refused.
+      - '\A@?[^@\s]+@\S*[ \t]+\S[^\n]*(?:\n(?:\| |  |│ )*(?:\+-- |`-- |├── |└── |├─┬ |└─┬ )[^\n]*)+\z'
+      # A package drawn at the second level or deeper.
+      - '^(?:\| |  |│ )+(?:\+-- |`-- |├── |└── |├─┬ |└─┬ )\S'
+input:
+  # A project with no dependencies prints one placeholder row.
+  ignore:
+    - '^(?:\+-- |`-- |├── |└── )\(empty\)[ \t]*$'
+parse:
+  type: tree
+  indent: ["+-- ", "`-- ", "├── ", "└── ", "├─┬ ", "└─┬ ", "| ", "│ ", "  "]
+  # A top-level line is the project with its directory; a line of any
+  # other shape at the top is not part of the report.
+  root: '^@?[^@\s]+@\S*[ \t]+(?:/|[A-Za-z]:\\)'
+  node:
+    parse:
+      type: regex
+      patterns:
+        # The project. Outside a package npm prints no version.
+        - '^(?P<name>@?[^@ \t]+)@(?P<version>\S*)[ \t]+(?P<path>(?:/|[A-Za-z]:\\).*?)(?P<state>)??[ \t]*$'
+        - '^(?P<state>UNMET (?:OPTIONAL )?DEPENDENCY)[ \t]+(?P<name>@?[^@ \t]+)@(?P<version>\S+)(?P<path>)??[ \t]*$'
+        - '^(?P<name>@?[^@ \t]+)@(?P<version>\S+)(?P<path>)??(?:[ \t]+(?P<state>.+?))?[ \t]*$'
+    fields:
+      name: {required: true}
+      # Empty on the project line outside a package.
+      version: {null_if: [""]}

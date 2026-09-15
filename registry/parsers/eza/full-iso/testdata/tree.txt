@@ -1,0 +1,7 @@
+.rw-rw-r-- 3.1M user 2026-09-15 06:05:51.541355788 +0900 big.bin
+lrwxrwxrwx    - user 2026-09-15 06:05:51.542355757 +0900 dangling -> missing
+lrwxrwxrwx    - user 2026-09-15 06:05:51.539355852 +0900 link -> plain.txt
+.rw-rw-r--    6 user 2026-09-15 06:05:51.537913372 +0900 plain.txt
+.rwxrwxr-x   18 user 2026-09-15 06:05:51.537913372 +0900 run.sh
+drwxrwxr-x    - user 2026-09-15 06:05:51.541355788 +0900 subdir
+.rw-rw-r--    2 user 2026-09-15 06:05:51.538355884 +0900 'with space.txt'

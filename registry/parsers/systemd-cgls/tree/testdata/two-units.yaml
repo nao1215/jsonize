@@ -1,0 +1,3 @@
+source: captured with LC_ALL=C systemd-cgls --no-pager -u cron.service -u polkit.service on Ubuntu 26.04 (systemd 259)
+os: linux
+args: ["--no-pager", "-u", "cron.service", "-u", "polkit.service"]

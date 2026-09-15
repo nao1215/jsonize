@@ -1,0 +1,24 @@
+[
+  {
+    "escaped": true,
+    "algorithm": "SHA1",
+    "file": "back\\slash.txt",
+    "checksum": "9063a9f0e032b6239403b719cbbba56ac4e4e45f"
+  },
+  {
+    "escaped": true,
+    "algorithm": "SHA1",
+    "file": "new\nline.txt",
+    "checksum": "3a710d2a84f856bc4e1c0bbb93ca517893c48691"
+  },
+  {
+    "algorithm": "SHA1",
+    "file": "plain.txt",
+    "checksum": "f572d396fae9206628714fb2ce00f72e94f2258f"
+  },
+  {
+    "algorithm": "SHA1",
+    "file": "with space.txt",
+    "checksum": "6fcf9dfbd479ed82697fee719b9f8c610a11ff2a"
+  }
+]

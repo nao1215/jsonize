@@ -1,0 +1,6 @@
+# extension map read by the build script, one language per line
+C:c,h
+C#:cs
+Go:go
+Rust:rs
+Python:py,pyw

@@ -1,0 +1,42 @@
+[
+  {
+    "cgroup": "/user.slice/user-1000.slice/user@1000.service/session.slice/gvfs-daemon.service",
+    "children": [
+      {
+        "pid": 7557,
+        "command": "/usr/libexec/gvfsd",
+        "children": []
+      },
+      {
+        "pid": 7567,
+        "command": "/usr/libexec/gvfsd-fuse /run/user/1000/gvfs -f",
+        "children": []
+      },
+      {
+        "pid": 2718416,
+        "command": "/usr/libexec/gvfsd-trash --spawner :1.22 /org/gtk/gvfs/exec_spaw/0",
+        "children": []
+      },
+      {
+        "pid": 2718446,
+        "command": "/usr/libexec/gvfsd-recent --spawner :1.22 /org/gtk/gvfs/exec_spaw/1",
+        "children": []
+      },
+      {
+        "pid": 2718447,
+        "command": "/usr/libexec/gvfsd-network --spawner :1.22 /org/gtk/gvfs/exec_spaw/2",
+        "children": []
+      },
+      {
+        "pid": 2718458,
+        "command": "/usr/libexec/gvfsd-dnssd --spawner :1.22 /org/gtk/gvfs/exec_spaw/3",
+        "children": []
+      },
+      {
+        "pid": 2718469,
+        "command": "python3 /usr/bin/wsdd --no-host --discovery --listen /run/user/1000...",
+        "children": []
+      }
+    ]
+  }
+]

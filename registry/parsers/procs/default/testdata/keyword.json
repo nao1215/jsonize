@@ -1,0 +1,47 @@
+[
+  {
+    "pid": 1556589,
+    "user": "user",
+    "tty": null,
+    "cpu_percent": 0,
+    "mem_percent": 0,
+    "cpu_time": 0,
+    "command": "./jzfixture-sleep 1001"
+  },
+  {
+    "pid": 1556590,
+    "user": "user",
+    "tty": null,
+    "cpu_percent": 0,
+    "mem_percent": 0,
+    "cpu_time": 0,
+    "command": "./jzfixture-sleep 1002"
+  },
+  {
+    "pid": 1556591,
+    "user": "user",
+    "tty": null,
+    "cpu_percent": 0,
+    "mem_percent": 0,
+    "cpu_time": 0,
+    "command": "script -qc ./jzfixture-sleep 1003 /dev/null"
+  },
+  {
+    "pid": 1556592,
+    "user": "user",
+    "tty": null,
+    "cpu_percent": 100,
+    "mem_percent": 0,
+    "cpu_time": 3,
+    "command": "./jzfixture-yes"
+  },
+  {
+    "pid": 1556594,
+    "user": "user",
+    "tty": "pts/4",
+    "cpu_percent": 0,
+    "mem_percent": 0,
+    "cpu_time": 0,
+    "command": "./jzfixture-sleep 1003"
+  }
+]

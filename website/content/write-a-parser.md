@@ -24,6 +24,20 @@ variants. For a contribution, choose a format that is not already
 covered. To try this example without editing the official definition,
 use the personal registry described at the end of this guide.
 
+The format may already be read under another command's name: GNU
+`sha256sum --tag` prints the line FreeBSD's `md5` prints, and `podman ps`
+prints what `docker ps` does. Give jz a capture before writing anything:
+
+```console
+$ jz --explain --file capture.txt
+```
+
+If a definition chooses it, or is listed as close, and reads the same
+lines, the command belongs in that definition's `aliases` rather than in
+a definition of its own (definition-format.md, aliases). Two definitions
+that read the same text fail the checks in step 5, because nothing in
+the text says which of them is right.
+
 ## 1. Capture output
 
 ```console
@@ -268,6 +282,12 @@ how those two mistakes stay fixed.
 
 If your format resembles something ordinary, add a file. There is nothing
 to register: the check reads the directory.
+
+A definition can come to read a decoy rightly, when the decoy is output of
+the format the definition was widened to cover. Move the file into that
+definition's `testdata/` with a `.yaml` saying where it came from and
+generate its golden file, rather than deleting it: the text stays pinned,
+now as what must be read.
 
 ```console
 $ cat > registry/testdata/decoys/my-lookalike.txt

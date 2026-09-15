@@ -246,6 +246,8 @@ func (a *app) runRegistry(sel *selectOptions, parser string, opts, command []str
 		known := reg.Commands()
 		if a.wrapperHint != "" {
 			known = nil
+		} else if sel.parser == "" {
+			a.wrapperHint = namingHint(opts, command)
 		}
 		return nil, a.exitFor(&selector.UnknownParserError{Parser: parser, Known: known})
 	}
@@ -373,16 +375,42 @@ func wrapperHint(reg *registry.Registry, opts, command []string) string {
 	name := command[0]
 	for _, arg := range command[1:] {
 		key := parserKey(arg)
-		if strings.HasPrefix(arg, "-") || key == parserKey(name) || len(reg.Variants(key)) == 0 || notRunnable(arg) {
+		if strings.HasPrefix(arg, "-") || key == parserKey(name) || !runsAsCommand(reg, key) || notRunnable(arg) {
 			continue
 		}
-		if n := len(opts); n > 0 && opts[n-1] == "--" {
-			opts = opts[:n-1]
-		}
-		line := append(append(append([]string{"jz", modeRun}, opts...), "--parser", key, "--"), command...)
-		return fmt.Sprintf("If %s runs %s, name that parser: %s", name, key, shellLine(line))
+		return fmt.Sprintf("If %s runs %s, name that parser: %s", name, key, shellLine(namedRun(opts, key, command)))
 	}
 	return ""
+}
+
+// runsAsCommand reports a name whose definitions describe a command's
+// output. A name whose definitions all describe a shape (csv, table) is
+// a format rather than a program, and as an argument it is an option's
+// value: `systeminfo /fo csv` does not run csv.
+func runsAsCommand(reg *registry.Registry, key string) bool {
+	for _, e := range reg.Variants(key) {
+		if !selector.ShapeOnly(e.Def) {
+			return true
+		}
+	}
+	return false
+}
+
+// namingHint is the line a refusal adds when jz has no parser for the
+// command's name and nothing in its arguments names one: the command may
+// print a format jz reads under another name, as `gmd5sum --tag` prints
+// what md5 does, and --parser is how to say so.
+func namingHint(opts, command []string) string {
+	return fmt.Sprintf("If %s prints a format jz reads under another name, name its parser: %s", command[0], shellLine(namedRun(opts, "PARSER", command)))
+}
+
+// namedRun is the jz run command line with jz's own options, --parser
+// and the command after "--".
+func namedRun(opts []string, parser string, command []string) []string {
+	if n := len(opts); n > 0 && opts[n-1] == "--" {
+		opts = opts[:n-1]
+	}
+	return append(append(append([]string{"jz", modeRun}, opts...), "--parser", parser, "--"), command...)
 }
 
 // notRunnable reports whether path names something that exists and is

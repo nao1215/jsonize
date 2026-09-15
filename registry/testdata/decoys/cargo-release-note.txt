@@ -1,0 +1,7 @@
+demo v0.1.0 (/home/user/demo)
+Released on 2026-09-12. What changed among the dependencies since v0.0.9:
+├── regex v1.13.1 (was 1.12.0, the new version drops a transitive crate)
+└── serde v1.0.229 (serde_core is now split out)
+
+Run cargo update before building, and read the migration notes in
+docs/upgrading.md if a build fails on the derive macros.

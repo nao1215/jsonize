@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/xinput/list.json",
+  "title": "xinput/list",
+  "description": "xinput list, master input devices and the slave devices attached to them",
+  "x-jsonize": {
+    "definition": "xinput/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/node"
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "master",
+            "slave"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "keyboard",
+            "pointer"
+          ]
+        },
+        "paired_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "master_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "id",
+        "role",
+        "type",
+        "paired_id",
+        "master_id",
+        "children"
+      ]
+    }
+  }
+}

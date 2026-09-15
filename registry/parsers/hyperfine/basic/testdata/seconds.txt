@@ -1,0 +1,4 @@
+Benchmark 1: sleep 1.2
+  Time (mean ± σ):      1.203 s ±  0.000 s    [User: 0.000 s, System: 0.002 s]
+  Range (min … max):    1.202 s …  1.203 s    3 runs
+ 

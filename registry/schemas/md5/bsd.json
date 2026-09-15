@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://nao1215.github.io/jsonize/schemas/md5/bsd.json",
   "title": "md5/bsd",
-  "description": "md5, sha256 and the other BSD digest commands, \"ALGORITHM (file) = digest\"",
+  "description": "md5, sha256 and the other BSD digest commands, and md5sum --tag and its family, \"ALGORITHM (file) = digest\"",
   "x-jsonize": {
     "definition": "md5/bsd",
     "version": 1
@@ -11,6 +11,9 @@
   "items": {
     "type": "object",
     "properties": {
+      "escaped": {
+        "type": "boolean"
+      },
       "algorithm": {
         "type": "string"
       },

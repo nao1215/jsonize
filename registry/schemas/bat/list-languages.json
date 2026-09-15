@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/bat/list-languages.json",
+  "title": "bat/list-languages",
+  "description": "bat --list-languages, each syntax with the file names it is chosen for",
+  "x-jsonize": {
+    "definition": "bat/list-languages",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "extensions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "name",
+      "extensions"
+    ]
+  }
+}

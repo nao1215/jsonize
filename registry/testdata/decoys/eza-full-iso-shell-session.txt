@@ -1,0 +1,4 @@
+$ eza -l --time-style=full-iso
+.rw-r--r-- 1.2k user 2026-09-14 22:21:07.123456789 +0900 notes.md
+drwxr-xr-x    - user 2026-09-14 22:21:07.123456789 +0900 src
+$ 

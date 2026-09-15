@@ -1,0 +1,12 @@
+CGroup /user.slice/user-1000.slice/user@1000.service/session.slice/dbus.service:
+|-   6916 /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidf...
+|-   8990 /usr/libexec/ibus-portal
+|-  10186 /usr/libexec/goa-daemon
+|-  10313 /usr/libexec/goa-identity-service
+|-  10501 /usr/bin/ksecretd
+|-  12178 /usr/bin/kwalletd6
+|- 693857 /snap/snapd/current/usr/bin/snap userd
+|-2735592 /usr/bin/gnome-text-editor --gapplication-service
+|-3246488 /usr/bin/flameshot
+|-3263517 /usr/bin/ptyxis --gapplication-service
+`-3263527 /usr/libexec/ptyxis-agent --socket-fd=3 --rlimit-nofile=1024

@@ -1,0 +1,67 @@
+# `cargo tree` prints a package and, under it, the packages it depends
+# on, each drawn with a branch in front. How deep that goes is a property
+# of the dependency graph, so it is read as a tree.
+#
+# A level is four characters. A branch is "├── " and the last one "└── ",
+# a level that only passes through is "│   " or four spaces, and with
+# --charset ascii the same three are "|-- ", "`-- " and "|   ".
+#
+# A package line is the name, the version with a "v" in front, the source
+# in parentheses where it is not crates.io (a path dependency shows its
+# directory), "(proc-macro)" for a procedural macro crate, and "(*)" where
+# the subtree was already printed above and is left out. The source is
+# kept as printed rather than read as a path, since a git or registry
+# source is written in the same parentheses.
+#
+# Build and dev dependencies are printed under a "[build-dependencies]" or
+# "[dev-dependencies]" heading, at the level of the package they belong
+# to and after that package's normal dependencies. The heading is
+# therefore a node of its own, the sibling that follows its package, with
+# those dependencies as its children; a consumer finds a package's build
+# dependencies in the heading node right after it. A heading node carries
+# dependency_kind and nulls for the package keys, and a package node the
+# other way round.
+#
+# `cargo tree -e features` puts a feature ("anyhow feature "default"")
+# where a package would be, and --prefix and --format change the line;
+# none of these is read.
+format: 1
+command: cargo
+variant: tree
+description: cargo tree, the dependency graph of a package
+metadata:
+  tags: [rust, package, dependencies]
+  compatible: [cargo]
+  references:
+    - https://doc.rust-lang.org/cargo/commands/cargo-tree.html
+detect:
+  args:
+    all: [tree]
+  signature:
+    all:
+      # The first line is a package, the project or with --invert the
+      # package asked about, and every line after it is a package drawn
+      # under a branch, a dependency kind heading, or the blank line
+      # between the members of a workspace.
+      - '\A[A-Za-z0-9_-]+ v[0-9]+\.[0-9]+\.[0-9]+[0-9A-Za-z.+-]*(?: \([^\n]*\))?[ \t]*(?:\n(?:│   |\|   |    )*(?:├── |└── |\|-- |`-- )?(?:[A-Za-z0-9_-]+ v[0-9]+\.[0-9]+\.[0-9]+[0-9A-Za-z.+-]*(?: \([^\n]*\))?|\[(?:build|dev)-dependencies\])?[ \t]*)*\z'
+      # Somewhere a package carries a local directory as its source, which
+      # the project always does: at the top by default, as a leaf with
+      # --invert. `uv tree` draws the same branches under the same
+      # "name vX.Y.Z" lines and never prints a directory. An inverted tree
+      # whose project is past the twenty lines looked at is refused.
+      - '^(?:(?:│   |\|   |    )*(?:├── |└── |\|-- |`-- ))?[A-Za-z0-9_-]+ v[0-9]+\.[0-9]+\.[0-9]+[0-9A-Za-z.+-]* \((?:/|[A-Za-z]:\\)[^\n]*\)'
+parse:
+  type: tree
+  indent: ["│   ", "    ", "├── ", "└── ", "|   ", "|-- ", "`-- "]
+  # A top-level line is a package or a dependency kind heading; a line of
+  # any other shape at the top is not part of the report.
+  root: '^(?:[A-Za-z0-9_-]+ v[0-9]|\[(?:build|dev)-dependencies\][ \t]*$)'
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^(?P<name>)??(?P<version>)??(?P<source>)??(?P<proc_macro>)??(?P<deduplicated>)??\[(?P<dependency_kind>build|dev)-dependencies\][ \t]*$'
+        - '^(?P<name>[A-Za-z0-9_-]+) v(?P<version>[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?)(?: \((?P<source>[^\n]+?)\))??(?P<proc_macro> \(proc-macro\)|)(?P<deduplicated> \(\*\)|)(?P<dependency_kind>)??[ \t]*$'
+    fields:
+      proc_macro: {type: bool, true_values: ["(proc-macro)"], false_values: [""]}
+      deduplicated: {type: bool, true_values: ["(*)"], false_values: [""]}

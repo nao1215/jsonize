@@ -31,6 +31,13 @@ detect:
       # Every line is a Debian package name, which is lower case and at
       # least two characters, then " - " and the description.
       - '\A(?:[a-z0-9][a-z0-9.+-]+ - [^\n]*(?:\n|\z))+\z'
+    none:
+      # A name shaped as a file mode, three groups of rwx after the type
+      # letter, opens a line of a long listing: eza prints a directory as
+      # "drwxrwxr-x - user 15 Sep 10:48 alpha", the dash standing for its
+      # size. None of the 78,141 package names Ubuntu 26.04 knows has
+      # that shape.
+      - '^[dlcbps](?:[-r][-w][-xsS]){2}[-r][-w][-xtT][@+.]? - '
 parse:
   type: regex
   pattern: '^(?P<package>[a-z0-9][a-z0-9.+-]+) - (?P<description>.*)$'

@@ -1,0 +1,4 @@
+.rw-rw-r-- 2.0k user 15 Sep 11:05 data.bin
+lrwxrwxrwx    - user 15 Sep 11:05 latest -> 'read me.txt'
+.rw-rw-r--    6 user 15 Sep 11:05 'read me.txt'
+drwxrwxr-x    - user 15 Sep 11:05 sub

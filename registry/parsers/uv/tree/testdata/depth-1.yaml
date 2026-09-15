@@ -1,0 +1,4 @@
+description: Direct dependencies only, where every node but the roots has no children.
+source: "captured with `uv tree --depth 1` (uv 0.9.7) on Ubuntu 26.04 with LC_ALL=C, in the same project as workspace.txt"
+os: linux
+args: [tree, --depth, "1"]

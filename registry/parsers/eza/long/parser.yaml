@@ -1,0 +1,104 @@
+# `eza -l` prints four columns before the name: the permissions, the
+# size, the user and the date. The permission string opens with a
+# type character that is . for a regular file, where ls prints -,
+# and the date puts the day before the month, so an ls listing is
+# never this one.
+#
+# -g, -H, -i, -S, -o, -Z and --git each add a column and --no-* takes
+# one away, so what those print is another listing; the patterns
+# count the columns and refuse it. Two of those changes can cancel
+# out: -H with --no-filesize prints a link count where the size was,
+# and -g with --no-user a group where the user was, which reads as
+# this listing. jz run refuses them by their arguments; the same text
+# piped in cannot be told apart. -lg is read by eza/long-group and
+# -lH by eza/long-links.
+#
+# The date is the default style: the day, the month and either the
+# time or, for a file older than a year, the year. It states no year
+# for a recent file and no zone, so it stays as printed;
+# --time-style=long-iso is read by eza/long-iso and full-iso by
+# eza/full-iso.
+#
+# --header (-h) prints the headings above the rows; the rows are the
+# same with or without them, only padded to the headings' width, so
+# one definition reads both and drops the headings.
+#
+# eza writes a name as it is when it holds no space and no single quote.
+# A name with a space is put in single quotes, and a name with a single
+# quote in double quotes, with nothing inside escaped: "both ' and ".txt"
+# is the file both ' and ".txt. So a token in single quotes always has
+# a space in it, a token in double quotes always has a single quote in
+# it, and a bare token has neither, and the three can be told apart. A
+# bare name may still begin and end with a double quote ("x" is the
+# file named with those quotes). The quotes are taken off.
+#
+# Control characters are escaped (\t, \n, \u{1b}) and a backslash is
+# not, so back\tslash names two different files; a name or a target
+# holding a backslash is refused rather than read either way.
+#
+# Only a line whose permissions start with l is a symbolic link, and
+# there the name and the target are each one of the three forms, so the
+# " -> " between them is found without guessing. A double-quoted link
+# name that holds a double quote as well is refused.
+#
+# The size is kept as printed. By default it is rounded with a decimal
+# prefix (3.1M), -b rounds it with a binary one (3.0Mi) and -B prints
+# bytes; a listing of small files looks the same under all three, so
+# the text cannot say which was asked for, and one rule is used for
+# every row. A directory and a link print - (null); a device prints its
+# major and minor numbers (1,3) there instead.
+#
+# The permission string keeps the @ eza appends for a file with
+# extended attributes.
+format: 1
+command: eza
+variant: long
+description: eza -l long listing (permissions, size, user, date, name)
+metadata:
+  tags: [linux, darwin, filesystem]
+  compatible: [eza]
+  references:
+    - https://github.com/eza-community/eza
+detect:
+  args:
+    any: ["-l", "--long"]
+    # Each of these adds or removes a column, or appends a mark to the
+    # name that is not part of it; see the top of this file.
+    none: ["-H", "--links", "-g", "--group", "-i", "--inode", "-S", "--blocksize", "-o", "--octal-permissions", "-Z", "--context", "--git", "-@", "--extended", "-T", "--tree", "--no-filesize", "--no-user", "--no-permissions", "--no-time", "-F=always", "--classify=always"]
+  signature:
+    all:
+      # Every line is a row of these columns, below the headings where
+      # --header printed them. A second timestamp column (-m with -u), the
+      # attribute lines -@ prints under a row, the tree -T draws before a
+      # name and the directory headings -R prints are all refused here.
+      - '\A(?:Permissions +Size +User +Date (?:Modified|Accessed|Created|Changed) +Name\n)?(?:(?:[.dcbps|][-rwxsStT]{9}@?|l[-rwxsStT]{9}@?) +(?:(?:[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?:\d+),(?:\d+)) +(?:\S+) +(?:\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +\S[^\n]*\n)*(?:[.dcbps|][-rwxsStT]{9}@?|l[-rwxsStT]{9}@?) +(?:(?:[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?:\d+),(?:\d+)) +(?:\S+) +(?:\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +\S[^\n]*\z'
+exec:
+  env:
+    NO_COLOR: "1"
+input:
+  ignore:
+    # The column headings --header (-h) prints above the rows.
+    - '^Permissions +Size +User +Date (?:Modified|Accessed|Created|Changed) +Name$'
+parse:
+  type: regex
+  # A link line first, for each of the three ways its name and its
+  # target may be written, then every other line.
+  patterns:
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +''(?P<name>[^''\\]* [^''\\]*)'' -> ''(?P<link_to>[^''\\]* [^''\\]*)''$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +''(?P<name>[^''\\]* [^''\\]*)'' -> "(?P<link_to>[^\\]*''[^\\]*)"$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +''(?P<name>[^''\\]* [^''\\]*)'' -> (?P<link_to>[^\s''\\]+)$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +"(?P<name>[^"\\]*''[^"\\]*)" -> ''(?P<link_to>[^''\\]* [^''\\]*)''$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +"(?P<name>[^"\\]*''[^"\\]*)" -> "(?P<link_to>[^\\]*''[^\\]*)"$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +"(?P<name>[^"\\]*''[^"\\]*)" -> (?P<link_to>[^\s''\\]+)$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +(?P<name>[^\s''\\]+) -> ''(?P<link_to>[^''\\]* [^''\\]*)''$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +(?P<name>[^\s''\\]+) -> "(?P<link_to>[^\\]*''[^\\]*)"$'
+    - '^(?P<permissions>l[-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +(?P<name>[^\s''\\]+) -> (?P<link_to>[^\s''\\]+)$'
+    - '^(?P<permissions>[.dcbps|][-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +''(?P<name>[^''\\]* [^''\\]*)''$'
+    - '^(?P<permissions>[.dcbps|][-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +"(?P<name>[^\\]*''[^\\]*)"$'
+    - '^(?P<permissions>[.dcbps|][-rwxsStT]{9}@?) +(?:(?P<size>[\d.]+(?:[KkMGTPEZYRQ]i?)?|-)|(?P<major>\d+),(?P<minor>\d+)) +(?P<user>\S+) +(?P<date>\d{1,2} [A-Z][a-z]{2} (?:\d{2}:\d{2}| \d{4})) +(?P<name>[^\s''\\]+)$'
+fields:
+  size: {null_if: ["-"]}
+  major: {type: int, when_missing: omit}
+  minor: {type: int, when_missing: omit}
+  name: {required: true}
+  link_to: {when_missing: omit}

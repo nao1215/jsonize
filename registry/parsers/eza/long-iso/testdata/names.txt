@@ -1,0 +1,25 @@
+.rw-rw-r--     2 user 2026-09-15 10:43 "x"
+.rw-rw-r--     2 user 2026-09-15 10:43 #hash
+.rw-rw-r--     2 user 2026-09-15 10:43 -dash
+.rw-rw-r--@    2 user 2026-09-15 10:43 a"b
+.rw-rw-r--     2 user 2026-09-15 10:43 'a -> b'
+lrwxrwxrwx     - user 2026-09-15 10:43 'arrow link' -> "x' -> y"
+.rw-rw-r--  3.1M user 2026-09-15 10:43 big.bin
+.rw-rw-r--     2 user 2026-09-15 10:43 "both ' and ".txt"
+lrwxrwxrwx     - user 2026-09-15 10:43 dangling -> missing
+.rw-rw-r--     2 user 2026-09-15 10:43 dollar$name
+.rw-rw-r--     2 user 2026-09-15 10:43 "it's.txt"
+lrwxrwxrwx     - user 2026-09-15 10:43 "l'ink" -> "it's.txt"
+.rw-rw-r--     0 user 2024-03-05 19:11 old.txt
+|rw-rw-r--     - user 2026-09-15 10:43 pipe
+.rw-rw-r--     2 user 2026-09-15 10:43 plain.txt
+lrwxrwxrwx     - user 2026-09-15 10:43 plainlink -> 'say "hi".txt'
+lrwxrwxrwx     - user 2026-09-15 10:43 qlink -> "x"
+.rwxrwxr-x    10 user 2026-09-15 10:43 run.sh
+.rw-rw-r--     2 user 2026-09-15 10:43 'say "hi".txt'
+lrwxrwxrwx     - user 2026-09-15 10:43 'sp link' -> 'with space.txt'
+.rw-rw-r--     2 user 2026-09-15 10:43 star*
+drwxrwxr-x     - user 2026-09-15 10:43 subdir
+.rw-rw-r--     2 user 2026-09-15 10:43 'trail '
+.rw-rw-r--     4 user 2026-09-15 10:43 'with space.txt'
+.rw-rw-r--     2 user 2026-09-15 10:43 "x' -> y"

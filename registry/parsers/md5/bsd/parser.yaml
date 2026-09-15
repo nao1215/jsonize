@@ -1,23 +1,45 @@
-# The checksum lines the BSD digest commands print by default: the
-# algorithm, the file name in parentheses and the digest after " = ".
-# FreeBSD ships one program under a name per algorithm, and each name
-# prints its own algorithm in front, so the definition covers them all
-# and algorithm says which one it was.
+# The BSD-style checksum line: the algorithm, the file name in
+# parentheses and the digest after " = ". Two families print it and
+# nothing in an unescaped line says which. FreeBSD ships one program
+# under a name per algorithm (md5, sha256, skein512 ...), and each name
+# prints its own algorithm in front. GNU and uutils coreutils print the
+# same line from md5sum, sha1sum, sha256sum, b2sum and the rest of that
+# family with --tag, again naming the algorithm in front (MD5, SHA256,
+# BLAKE2b, and BLAKE2b-256 for `b2sum -l 256`). One definition answers
+# for all of them: the FreeBSD names inherit the argument filter below,
+# and the GNU names are reached by their --tag argument. The digest
+# length is not pinned, and algorithm says which one it was.
 #
-# -r prints the digest and the name the other way round, -q the digest
-# alone, and -s a quoted string where the name goes, so none of them is
-# read here. The names that end in "sum" print the GNU format, which is
-# the md5sum and sha256sum definitions.
+# No operating system is stated: the FreeBSD programs print this on
+# FreeBSD, the GNU family on any system it is installed on, and the
+# arguments and the signature are what choose the definition.
 #
-# The manual says nothing about names holding a backslash or a newline,
-# and GNU's --tag output of the same shape escapes them and marks the
-# line with a leading backslash. A name with a backslash, and one that
-# begins with a quote as -s prints its string, is refused rather than
-# guessed at.
+# GNU and uutils print a name holding a backslash, a newline or a
+# carriage return escaped, as "\\", "\n" and "\r", and put a backslash
+# in front of the algorithm to say so. Such a name is decoded; escaped
+# is true on its line and absent everywhere else. A line without the
+# mark carries the name as it is: FreeBSD md5 escapes nothing and marks
+# no line, and a tab, a quote, a leading space and even ") = " are
+# printed unescaped by every one of them, so the name runs to the last
+# ") = " (the digest never holds it). A newline that FreeBSD prints as it
+# is splits the line, and the second half is not a checksum line, so the
+# text is refused. GNU names standard input "-".
+#
+# FreeBSD's -r prints the digest and the name the other way round, -q
+# the digest alone, and -s a quoted string where the name goes, so none
+# of them is read here; a name that begins with a quote, as -s prints
+# its string, is refused rather than guessed at. GNU's --tag is refused
+# by the tools together with -c and with --text, `--tag --zero` ends a
+# line with NUL, which jz refuses, and `cksum -a sha256` prints this
+# line without --tag and is not read here: which of its algorithms print
+# it depends on the value after -a. The FreeBSD names that end in "sum"
+# print the GNU default format, which is the md5sum and sha256sum
+# definitions.
 format: 1
 command: md5
 variant: bsd
 aliases:
+  # The FreeBSD digest programs, one name per algorithm.
   - name: sha1
   - name: sha224
   - name: sha256
@@ -29,25 +51,62 @@ aliases:
   - name: skein256
   - name: skein512
   - name: skein1024
-description: md5, sha256 and the other BSD digest commands, "ALGORITHM (file) = digest"
+  # The GNU coreutils family with --tag. No other long option of these
+  # tools begins with "ta", so --tag may be cut to --ta; --t is ambiguous
+  # with --text and refused by the tools.
+  - name: md5sum
+    args: {any: ["--tag", "--ta"]}
+  - name: sha1sum
+    args: {any: ["--tag", "--ta"]}
+  - name: sha224sum
+    args: {any: ["--tag", "--ta"]}
+  - name: sha256sum
+    args: {any: ["--tag", "--ta"]}
+  - name: sha384sum
+    args: {any: ["--tag", "--ta"]}
+  - name: sha512sum
+    args: {any: ["--tag", "--ta"]}
+  - name: b2sum
+    args: {any: ["--tag", "--ta"]}
+  # macOS installs GNU coreutils under a g prefix, and the g name prints
+  # what the command prints.
+  - name: gmd5sum
+    args: {any: ["--tag", "--ta"]}
+  - name: gsha1sum
+    args: {any: ["--tag", "--ta"]}
+  - name: gsha224sum
+    args: {any: ["--tag", "--ta"]}
+  - name: gsha256sum
+    args: {any: ["--tag", "--ta"]}
+  - name: gsha384sum
+    args: {any: ["--tag", "--ta"]}
+  - name: gsha512sum
+    args: {any: ["--tag", "--ta"]}
+  - name: gb2sum
+    args: {any: ["--tag", "--ta"]}
+description: md5, sha256 and the other BSD digest commands, and md5sum --tag and its family, "ALGORITHM (file) = digest"
 metadata:
-  tags: [freebsd, bsd, checksum]
-  compatible: [FreeBSD md5]
+  tags: [freebsd, bsd, linux, darwin, checksum]
+  compatible: [FreeBSD md5, GNU coreutils, uutils coreutils]
   references:
     - https://man.freebsd.org/cgi/man.cgi?query=md5&sektion=1
+    - https://www.gnu.org/software/coreutils/manual/html_node/md5sum-invocation.html
 detect:
-  os: [freebsd]
   args:
     none: ["-r", "--reverse", "-q", "--quiet", "-s", "--string", "-c", "--check", "-p", "--passthrough", "-t", "--time-trial", "-x", "--self-test"]
   signature:
     all:
-      # Every line is one checksum line, the digest lower-case hex.
-      - '\A(?:[A-Z][A-Z0-9-]* \([^\n]*\) = [0-9a-f]+[ \t]*(?:\n|\z))+\z'
+      # Every line is one checksum line, the digest lower-case hex, and
+      # a line whose name was escaped opens with a backslash.
+      - '\A(?:\\?[A-Z][A-Za-z0-9-]* \([^\n]*\) = [0-9a-f]+[ \t]*(?:\n|\z))+\z'
 parse:
   type: regex
   # The digest never holds ") = ", so the name runs to the last one.
-  pattern: '^(?P<algorithm>[A-Z][A-Z0-9-]*) \((?P<file>.*)\) = (?P<checksum>[0-9a-f]+)[ \t]*$'
+  pattern: '^(?P<escaped>\\)?(?P<algorithm>[A-Z][A-Za-z0-9-]*) \((?P<file>.*)\) = (?P<checksum>[0-9a-f]+)[ \t]*$'
 fields:
+  escaped: {type: bool, true_values: ["\\"], when_missing: omit}
   algorithm: {required: true}
-  file: {required: true, regex: '(?P<file>[^"\\][^\\]*)'}
+  # The three escapes are all the format writes, so another one on a
+  # marked line is refused rather than guessed at.
+  file: {required: true, regex: '(?P<file>[^"].*)', unescape: {when: escaped, sequences: {'\\': '\', '\n': "\n", '\r': "\r"}}}
   checksum: {required: true}

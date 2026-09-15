@@ -1,0 +1,4 @@
+source: captured with eza 0.23.5 on Ubuntu 26.04 with LC_ALL=C NO_COLOR=1 and TZ=UTC, eza -l --time-style=full-iso --header --color=never over a directory made for the fixture; the user name replaced
+description: the headings, the three name forms and a whole second of zero nanoseconds
+os: linux
+args: [-l, --time-style=full-iso, --header, --color=never, names]

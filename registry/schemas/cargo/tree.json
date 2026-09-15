@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/cargo/tree.json",
+  "title": "cargo/tree",
+  "description": "cargo tree, the dependency graph of a package",
+  "x-jsonize": {
+    "definition": "cargo/tree",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/node"
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "proc_macro": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "deduplicated": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "dependency_kind": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "source",
+        "proc_macro",
+        "deduplicated",
+        "dependency_kind",
+        "children"
+      ]
+    }
+  }
+}

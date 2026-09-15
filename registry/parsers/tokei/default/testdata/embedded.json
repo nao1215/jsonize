@@ -1,0 +1,74 @@
+{
+  "languages": [
+    {
+      "embedded": false,
+      "language": "CSS",
+      "files": 2,
+      "lines": 586,
+      "code": 489,
+      "comments": 28,
+      "blanks": 69
+    },
+    {
+      "embedded": false,
+      "language": "HTML",
+      "files": 9,
+      "lines": 253,
+      "code": 253,
+      "comments": 0,
+      "blanks": 0
+    },
+    {
+      "embedded": false,
+      "language": "Plain Text",
+      "files": 1,
+      "lines": 3,
+      "code": 0,
+      "comments": 3,
+      "blanks": 0
+    },
+    {
+      "embedded": false,
+      "language": "TOML",
+      "files": 1,
+      "lines": 83,
+      "code": 58,
+      "comments": 10,
+      "blanks": 15
+    },
+    {
+      "embedded": false,
+      "language": "XML",
+      "files": 1,
+      "lines": 15,
+      "code": 15,
+      "comments": 0,
+      "blanks": 0
+    },
+    {
+      "embedded": false,
+      "language": "Markdown",
+      "files": 8,
+      "lines": 3865,
+      "code": 0,
+      "comments": 3230,
+      "blanks": 635
+    },
+    {
+      "embedded": true,
+      "language": "YAML",
+      "files": 4,
+      "lines": 208,
+      "code": 204,
+      "comments": 4,
+      "blanks": 0
+    }
+  ],
+  "total": {
+    "files": 22,
+    "lines": 5013,
+    "code": 1019,
+    "comments": 3275,
+    "blanks": 719
+  }
+}

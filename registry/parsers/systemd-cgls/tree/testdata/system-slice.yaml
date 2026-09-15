@@ -1,0 +1,3 @@
+source: captured with LC_ALL=C systemd-cgls --no-pager /system.slice on Ubuntu 26.04 (systemd 259), with the host name replaced by examplehost
+os: linux
+args: ["--no-pager", "/system.slice"]

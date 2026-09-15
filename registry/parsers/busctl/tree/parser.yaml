@@ -1,0 +1,53 @@
+# `busctl tree SERVICE` prints the object paths a service exports, each
+# drawn under the path it extends. How deep that goes is a property of
+# the service, so it is read as a tree.
+#
+# Every line ends in a branch and a path: "|- " or the last one "`- " in
+# the C locale, "├─ " and "└─ " in a UTF-8 one. What stands before the
+# branch is two characters per level, "| " or "│ " where a sibling
+# follows further down and two spaces where none does. The root object
+# "/" is not printed, so its children are the lines drawn with no level in
+# front of the branch, and the branch is read as part of the node rather
+# than as a level.
+#
+# A service with nothing below the root prints "Only root object
+# discovered." in place of the tree, which reads as no nodes. A service
+# that refuses introspection prints an error and exits 1, and is refused.
+#
+# Naming more than one service, or none, puts a "Service NAME:" heading
+# above each tree; busctl/tree-services reads that form.
+format: 1
+command: busctl
+variant: tree
+description: busctl tree SERVICE, the object paths of one service
+metadata:
+  tags: [linux, dbus, systemd]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/busctl.html
+detect:
+  os: [linux]
+  args:
+    all: [tree]
+  signature:
+    any:
+      # Every line is an object path drawn under a branch, starting with
+      # one at the top.
+      - '\A(?:`-|\|-|└─|├─) /\S*[ \t]*(?:\n(?:  |\| |│ )*(?:`-|\|-|└─|├─) /\S*[ \t]*)*\z'
+      - '\AOnly root object discovered\.[ \t]*\z'
+input:
+  # Printed in place of the tree when the service exports nothing but
+  # "/", which busctl does not draw.
+  ignore: ['^Only root object discovered\.[ \t]*$']
+parse:
+  type: tree
+  indent: ["  ", "| ", "│ "]
+  # A top-level line is a path directly under "/"; a line of any other
+  # shape at the top is not part of the report.
+  root: '^(?:`-|\|-|└─|├─) /'
+  node:
+    parse:
+      type: regex
+      pattern: '^(?:`-|\|-|└─|├─) (?P<path>/\S*)[ \t]*$'
+    fields:
+      path: {required: true}

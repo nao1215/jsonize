@@ -1,0 +1,71 @@
+# `tokei` prints a table of languages between heavy rules (U+2501): a
+# header, one row per language with its file, line, code, comment and
+# blank counts, and a Total row under its own rule. Every count is a
+# plain integer.
+#
+# A language whose files hold another language (YAML front matter and
+# code blocks inside Markdown) is printed after the others, below a light
+# rule (U+2500), with one row per embedded language marked "|- " and then
+# a "(Total)" row. The embedded rows are read with embedded set to true;
+# each belongs to the nearest row above it whose embedded is false. The
+# "(Total)" row is the sum of that language's row and its embedded rows,
+# which the rows already say, so it is left out.
+#
+# --compact prints no embedded rows and is read the same way. --files
+# adds a row per file with four counts and a heading per file holding
+# more than one language, which this definition does not read and the
+# signature refuses. -o json prints JSON and needs no conversion.
+format: 1
+command: tokei
+variant: default
+description: tokei lines of code per language, with the embedded languages and the total
+metadata:
+  tags: [code, metrics]
+  compatible: [tokei]
+  references:
+    - https://github.com/XAMPPRocky/tokei
+detect:
+  args:
+    none: ["-f", "--files", "-o", "--output"]
+  signature:
+    all:
+      # The header between two rules, then every line a row, a rule or
+      # the "(Total)" of an embedding language.
+      - '\A\x{2501}{10,}\n Language +Files +Lines +Code +Comments +Blanks\n\x{2501}{10,}(?:\n|\z)(?:(?: [^\n]*?(?: +\d+){5}| \(Total\)(?: +\d+){4}|\x{2501}+|\x{2500}+)(?:\n|\z))*\z'
+input:
+  ignore:
+    - '^\x{2501}+$'
+    - '^\x{2500}+$'
+    - '^ Language +Files +Lines +Code +Comments +Blanks$'
+    # The sum of the row above the embedded rows and the embedded rows.
+    - '^ \(Total\) +\d+ +\d+ +\d+ +\d+$'
+parse:
+  type: composite
+  parts:
+    - name: languages
+      select: {until: '^ Total +\d'}
+      parse:
+        type: regex
+        patterns:
+          - pattern: '^ \|- (?P<language>.+?) +(?P<files>\d+) +(?P<lines>\d+) +(?P<code>\d+) +(?P<comments>\d+) +(?P<blanks>\d+)$'
+            values: {embedded: "true"}
+          - pattern: '^ (?P<language>[^ |].*?) +(?P<files>\d+) +(?P<lines>\d+) +(?P<code>\d+) +(?P<comments>\d+) +(?P<blanks>\d+)$'
+            values: {embedded: "false"}
+      fields:
+        embedded: {type: bool}
+        files: {type: int}
+        lines: {type: int}
+        code: {type: int}
+        comments: {type: int}
+        blanks: {type: int}
+    - name: total
+      parse:
+        type: regex
+        each: input
+        pattern: '(?m)^ Total +(?P<files>\d+) +(?P<lines>\d+) +(?P<code>\d+) +(?P<comments>\d+) +(?P<blanks>\d+)$'
+      fields:
+        files: {type: int, required: true}
+        lines: {type: int, required: true}
+        code: {type: int, required: true}
+        comments: {type: int, required: true}
+        blanks: {type: int, required: true}

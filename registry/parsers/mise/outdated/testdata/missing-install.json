@@ -1,0 +1,16 @@
+[
+  {
+    "name": "shfmt",
+    "requested": "3.10.0",
+    "current": null,
+    "latest": "3.10.0",
+    "source": "/home/user/project/mise.toml"
+  },
+  {
+    "name": "node",
+    "requested": "22",
+    "current": "22.22.1",
+    "latest": "22.23.2",
+    "source": "/home/user/project/mise.toml"
+  }
+]

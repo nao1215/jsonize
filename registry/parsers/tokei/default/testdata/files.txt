@@ -1,0 +1,30 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Language              Files        Lines         Code     Comments       Blanks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Markdown                  8         3865            0         3230          635
+ |- YAML                   4          208          204            4            0
+ (Total)                             4073          204         3234          635
+─────────────────────────────────────────────────────────────────────────────────
+ website/content/_index.md             55            0           39           16
+ website/content/coverage.md          318            0          283           35
+ website/content/design.md           1056            0          881          175
+ website/content/install.md           122            0           91           31
+-- website/content/definition-format.md -----------------------------------------
+ |- Markdown                          815            0          678          137
+ |- YAML                              174          170            4            0
+ website/content/definition-format.md            815            0          678          137
+-- website/content/parsers.md ---------------------------------------------------
+ |- Markdown                          308            0          283           25
+ |- YAML                                5            5            0            0
+ website/content/parsers.md            308            0          283           25
+-- website/content/usage.md -----------------------------------------------------
+ |- Markdown                          892            0          733          159
+ |- YAML                                5            5            0            0
+ website/content/usage.md             892            0          733          159
+-- website/content/write-a-parser.md --------------------------------------------
+ |- Markdown                          299            0          242           57
+ |- YAML                               24           24            0            0
+ website/content/write-a-parser.md            299            0          242           57
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Total                     8         4073          204         3234          635
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

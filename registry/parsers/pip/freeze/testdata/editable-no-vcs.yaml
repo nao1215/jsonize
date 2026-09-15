@@ -1,0 +1,3 @@
+source: captured with LC_ALL=C python -m pip freeze (pip in a uv venv with Python 3.12) after pip install -e of a local project that is not under version control; the path replaced
+description: pip writes a comment line naming the project above an editable install it cannot describe by a URL; the comment is left out and the install is read with its path
+args: ["freeze"]
