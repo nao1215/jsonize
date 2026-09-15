@@ -1,55 +1,78 @@
-jsonize turns command output into JSON. Pipe a command to `jz` to detect
-its format and convert it. It also supports YAML output and streaming.
+---
+description: jsonize (jz) turns command output, data files and command-line arguments into JSON. It detects the format from the text, refuses what it cannot identify, and needs no dependencies.
+---
 
-```console
-$ df -h | jz
-[{"filesystem":"/dev/nvme0n1p2","size":"1.8T","used":"1.6T","available":"145G","use_percent":92,"mounted_on":"/"}, ...]
-
-$ ps aux | jz | jq '.[] | select(.cpu_percent > 10) | .command'
-"/usr/lib/firefox/firefox"
-```
+jsonize turns what a terminal prints into JSON. Pipe a command to `jz`
+and the format is identified from the text; read a CSV, YAML or JSON
+Lines file by its extension; or build a JSON document from arguments.
+When the input is not a format jz knows, it says so and prints nothing,
+so a script never reads a guess.
 
 ![jz reading df, uptime and free, and refusing input it cannot identify](demo/jsonize.gif)
 
-Parsers are YAML definitions, and jz is one binary with no dependencies
-outside the Go standard library.
+## Try it in 30 seconds
+
+```console
+$ df -h | go run github.com/nao1215/jsonize/cmd/jz@latest
+[{"filesystem":"/dev/nvme0n1p2","size":"1.8T","used":"1.6T","available":"145G","use_percent":92,"mounted_on":"/"}, ...]
+```
+
+A size rounded by `-h` stays the string `df` printed, and `use_percent`
+is a number.
+
+## Three things to try next
+
+```console
+$ jz run --pretty free
+$ jz --file users.csv
+$ jz new name=api replicas:=3 tags[]=web
+```
+
+## Why jsonize?
+
+| You want | Use |
+|----------|-----|
+| JSON from a command that has no `--json` option | `COMMAND \| jz` or `jz run COMMAND` |
+| to query or reshape JSON you already have | [jq](https://jqlang.org/) |
+| a CSV, TSV, LTSV, JSON Lines or YAML file as JSON | `jz --file FILE` |
+| a JSON body built in a shell script | `jz new key=value key:=json` |
+| a parser for a command jz does not know yet | a YAML definition in your own registry |
+
+jz reads 224 commands through 596 definitions, from `df`, `ps` and `ip`
+to `kubectl get`, `docker ps`, `tasklist` and `diskutil list`, on Linux,
+macOS, Windows and FreeBSD. A definition is a YAML file with captured
+output beside it; no Go code is needed to add one.
+
+## Data files
+
+A file is read as the format its extension names, and a pipe as the
+format `--format` names. Nothing is detected for a data file, and text the
+format does not allow is exit 3 with the line.
+
+![jz reading a CSV file and a YAML file](demo/datafile.gif)
+
+## JSON from arguments
+
+`jz new` builds an object from `key=value` (a string), `key:=json` (any
+JSON value), `key=@file` (a file's text) and `key[]=value` (an array).
+Nothing is guessed from a value.
+
+![jz new building objects and an array](demo/new.gif)
 
 ## Install
-
-With Go 1.26 or later:
 
 ```sh
 go install github.com/nao1215/jsonize/cmd/jz@latest
 ```
 
-See the [install guide](install/) for release archives and shell completion.
+Homebrew, release archives, Linux packages and shell completion are on
+the [install page](install/).
 
-## Detection and limits
+## Where to go
 
-Some formats need a parser name because their text is too generic to
-identify automatically:
-
-```console
-$ git diff --numstat | jz
-jz: unable to identify the input format
-it could be `git` output, but that format is too generic for jz to claim on its own
-
-Confirm it:
-  COMMAND | jz --parser git
-```
-
-A rounded size such as `"1.8T"` stays a string. Use `df`, `free` or
-`lsblk -b` for exact numbers.
-
-Parsers are YAML definitions. Add a definition and captured output to a
-local registry to support another format without rebuilding jz.
-
-## Where to go next
-
-- [Install](install/) the binary.
-- [Usage](usage/) covers the two ways in and the exit codes.
-- [Parsers](parsers/) lists what jz reads today.
-- [Coverage](coverage/) lists supported options and known limitations.
-- [Write a parser](write-a-parser/) is the guide for adding one.
-- [Definition format](definition-format/) is the reference for the YAML.
-- [Design](design/) records why the tool is shaped this way.
+- [Cookbook](cookbook/): copyable recipes by task, each run by the test suite.
+- [Usage](usage/): every option, `--stream`, `--explain` and the exit codes.
+- [Parsers](parsers/): the commands and variants jz reads, with their JSON Schemas.
+- [Write a parser](write-a-parser/): add a definition for a command jz does not know.
+- [Definition format](definition-format/): the reference for the YAML.
+- [Design](design/): why jz refuses rather than guesses.
