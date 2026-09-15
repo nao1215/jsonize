@@ -1,5 +1,10 @@
 <p align="center">
-  <a href="https://nao1215.github.io/jsonize/"><img src="doc/images/jsonize-logo.jpg" alt="jsonize" width="420"></a>
+  <a href="https://nao1215.github.io/jsonize/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="doc/images/jsonize-logo-dark.png">
+      <img src="doc/images/jsonize-logo.png" alt="jsonize" width="420">
+    </picture>
+  </a>
 </p>
 
 ![Coverage](https://raw.githubusercontent.com/nao1215/octocovs-central-repo/main/badges/nao1215/jsonize/coverage.svg)

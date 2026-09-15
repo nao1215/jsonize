@@ -1,9 +1,13 @@
 {{ define "main" }}
 <article>
 <div class="hero">
-{{- with resources.Get "imgsrc/jsonize-logo.jpg" }}
-{{- $logo := .Resize "840x jpg" }}
-<img class="logo" src="{{ $logo.RelPermalink }}" alt="jsonize" width="420" height="140">
+{{- $logo := resources.Get "imgsrc/jsonize-logo.png" }}
+{{- $logoDark := resources.Get "imgsrc/jsonize-logo-dark.png" }}
+{{- with $logo }}
+<picture>
+{{- with $logoDark }}<source srcset="{{ (.Resize "840x png").RelPermalink }}" media="(prefers-color-scheme: dark)">{{ end -}}
+<img class="logo" src="{{ (.Resize "840x png").RelPermalink }}" alt="jsonize" width="420" height="140">
+</picture>
 {{- end }}
 <h1>{{ site.Params.tagline }}</h1>
 </div>

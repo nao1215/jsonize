@@ -61,19 +61,8 @@ header nav .brand {
   align-self: center;
 }
 
-/* The wordmark is drawn on white. It is given that white as a chip of its
-   own so that the dark half of it stays legible in the dark theme, where
-   the page behind it is nearly black; in the light theme the chip is the
-   page colour and nothing shows. */
-header nav .brand img,
-.hero .logo {
-  background: #ffffff;
-  border-radius: 6px;
-}
-
 header nav .brand img {
   display: block;
-  padding: 2px 6px;
 }
 
 /* Embedded doc images (demo/snapshot GIFs) keep their intrinsic ratio while
@@ -454,7 +443,6 @@ main h3 {
   width: min(100%, 26rem);
   height: auto;
   margin: 0 auto;
-  padding: 0.5rem 0.75rem;
 }
 
 .hero h1 {

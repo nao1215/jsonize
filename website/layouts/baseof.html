@@ -17,7 +17,10 @@
 <meta property="og:url" content="{{ .Permalink }}">
 <meta name="twitter:title" content="{{ $title }}">
 <meta name="twitter:description" content="{{ $desc }}">
-{{- with resources.Get "imgsrc/jsonize-logo.jpg" }}
+{{- /* The card is flattened onto Hugo's white imaging background: a
+       transparent image is shown on black by some of the places a link is
+       pasted, and the dark half of the wordmark would disappear there. */ -}}
+{{- with resources.Get "imgsrc/jsonize-logo.png" }}
 {{- $card := .Resize "1200x jpg" }}
 <meta property="og:image" content="{{ $card.Permalink }}">
 <meta property="og:image:width" content="{{ $card.Width }}">
@@ -41,7 +44,14 @@
 <header>
 <nav>
 <a class="brand" href="{{ site.Home.RelPermalink }}">
-{{- with resources.Get "imgsrc/jsonize-logo.jpg" }}{{ $mark := .Resize "132x jpg" }}<img src="{{ $mark.RelPermalink }}" alt="jsonize" width="66" height="22">{{ else }}jsonize{{ end -}}
+{{- $mark := resources.Get "imgsrc/jsonize-logo.png" }}
+{{- $markDark := resources.Get "imgsrc/jsonize-logo-dark.png" }}
+{{- if $mark -}}
+<picture>
+{{- with $markDark }}<source srcset="{{ (.Resize "132x png").RelPermalink }}" media="(prefers-color-scheme: dark)">{{ end -}}
+<img src="{{ ($mark.Resize "132x png").RelPermalink }}" alt="jsonize" width="66" height="22">
+</picture>
+{{- else }}jsonize{{ end -}}
 </a>
 {{- range site.Menus.main }}
 <a{{ if or ($.IsMenuCurrent "main" .) ($.HasMenuCurrent "main" .) }} class="active"{{ end }} href="{{ .URL }}">{{ .Name }}</a>
