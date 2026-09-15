@@ -1,0 +1,13 @@
+Re: which program has my DLL loaded?
+
+Run this from an elevated prompt and it will tell you:
+
+    tasklist /m example.dll
+
+On my machine it printed
+
+Image Name                     PID Modules
+========================= ======== ============================================
+explorer.exe                  5120 example.dll
+
+so it was Explorer all along. Restarting it released the file.

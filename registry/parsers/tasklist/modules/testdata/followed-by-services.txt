@@ -1,0 +1,169 @@
+
+Image Name                     PID Modules                                     
+========================= ======== ============================================
+lsass.exe                      872 ntdll.dll, KERNEL32.DLL, KERNELBASE.dll,    
+                                   RPCRT4.dll, lsasrv.dll, ucrtbase.dll,       
+                                   WS2_32.dll, sechost.dll, bcrypt.dll,        
+                                   WLDAP32.dll, LSAADT.dll, MSASN1.dll,        
+                                   SspiCli.dll, samsrv.dll, CRYPT32.dll,       
+                                   ncrypt.dll, NTASN1.dll, Wldp.dll,           
+                                   msvcrt.dll, bcryptprimitives.dll,           
+                                   msprivs.DLL, netprovfw.dll, JOINUTIL.DLL,   
+                                   negoexts.DLL, CRYPTSP.dll, CRYPTBASE.dll,   
+                                   kerberos.DLL, msvcp_win.dll, DSPARSE.dll,   
+                                   USERENV.dll, KerbClientShared.dll,          
+                                   gpapi.dll, shcore.dll, cryptdll.dll,        
+                                   mswsock.dll, msv1_0.DLL, NtlmShared.dll,    
+                                   netlogon.DLL, gmsaclient.dll, netutils.dll, 
+                                   logoncli.dll, DNSAPI.dll, IPHLPAPI.DLL,     
+                                   NSI.dll, tspkg.DLL, advapi32.dll,           
+                                   pku2u.DLL, cloudAP.DLL, ntmarta.dll,        
+                                   profapi.dll, MicrosoftAccountCloudAP.dll,   
+                                   combase.dll, DPAPI.DLL, rsaenh.dll,         
+                                   wdigest.DLL, schannel.DLL, efslsaext.dll,   
+                                   dpapisrv.dll, SspiSrv.dll, KDCPW.DLL,       
+                                   rassfm.DLL, scecli.DLL, winsta.dll,         
+                                   ncryptsslp.dll, ncryptprov.dll, dssenh.dll, 
+                                   mskeyprotect.dll, wevtapi.dll, keyiso.dll,  
+                                   SecureTimeAggregator.dll, cryptnet.dll,     
+                                   kernel.appcore.dll, vaultsvc.dll,           
+                                   ktmw32.dll, ngcpopkeysrv.dll, PCPKsp.dll,   
+                                   SHELL32.dll, USER32.dll, win32u.dll,        
+                                   GDI32.dll, gdi32full.dll, tbs.dll,          
+                                   AUTHZ.dll, clbcatq.dll                      
+
+Image Name                     PID Services                                    
+========================= ======== ============================================
+System Idle Process              0 N/A                                         
+System                           4 N/A                                         
+Secure System                   72 N/A                                         
+Registry                       124 N/A                                         
+smss.exe                       492 N/A                                         
+csrss.exe                      628 N/A                                         
+wininit.exe                    752 N/A                                         
+services.exe                   844 N/A                                         
+LsaIso.exe                     864 N/A                                         
+lsass.exe                      872 KeyIso, SamSs, VaultSvc                     
+svchost.exe                    996 BrokerInfrastructure, DcomLaunch, PlugPlay, 
+                                   Power, SystemEventsBroker                   
+fontdrvhost.exe                552 N/A                                         
+svchost.exe                    632 RpcEptMapper, RpcSs                         
+svchost.exe                    576 LSM                                         
+svchost.exe                   1116 DeviceInstall                               
+svchost.exe                   1124 NetSetupSvc                                 
+svchost.exe                   1132 TermService                                 
+svchost.exe                   1204 HvHost                                      
+svchost.exe                   1260 NcbService                                  
+svchost.exe                   1292 lmhosts                                     
+svchost.exe                   1356 vmicheartbeat                               
+svchost.exe                   1364 vmickvpexchange                             
+svchost.exe                   1372 vmicshutdown                                
+svchost.exe                   1400 WPDBusEnum                                  
+svchost.exe                   1436 vmictimesync                                
+svchost.exe                   1500 EventLog                                    
+svchost.exe                   1644 Winmgmt                                     
+svchost.exe                   1676 nsi                                         
+svchost.exe                   1708 Dhcp                                        
+svchost.exe                   1736 gpsvc                                       
+vmms.exe                      1796 vmms                                        
+svchost.exe                   1816 NlaSvc                                      
+svchost.exe                   1860 Dnscache                                    
+svchost.exe                   1884 Schedule                                    
+svchost.exe                   2008 netprofm                                    
+svchost.exe                   1980 UmRdpService                                
+svchost.exe                   2164 TimeBrokerSvc                               
+svchost.exe                   2248 CertPropSvc                                 
+svchost.exe                   2272 hns                                         
+svchost.exe                   2316 LanmanWorkstation                           
+svchost.exe                   2364 ProfSvc                                     
+svchost.exe                   2372 Themes                                      
+svchost.exe                   2388 EventSystem                                 
+svchost.exe                   2460 WinHttpAutoProxySvc                         
+svchost.exe                   2480 SessionEnv                                  
+svchost.exe                   2648 SENS                                        
+svchost.exe                   2656 UserManager                                 
+svchost.exe                   2768 nvagent                                     
+svchost.exe                   2792 Wcmsvc                                      
+svchost.exe                   2836 ShellHWDetection                            
+svchost.exe                   2876 FontCache                                   
+svchost.exe                   2916 BFE, mpssvc                                 
+svchost.exe                   1832 CoreMessagingRegistrar                      
+spoolsv.exe                   3084 Spooler                                     
+svchost.exe                   3208 CryptSvc                                    
+svchost.exe                   3216 iphlpsvc                                    
+svchost.exe                   3224 sacsvr                                      
+svchost.exe                   3236 StateRepository                             
+svchost.exe                   3244 RemoteRegistry                              
+svchost.exe                   3252 AppHostSvc                                  
+svchost.exe                   3264 TrkWks                                      
+svchost.exe                   3272 W32Time                                     
+svchost.exe                   3280 W3SVC, WAS                                  
+svchost.exe                   3344 WinRM                                       
+svchost.exe                   3388 WpnService                                  
+sqlwriter.exe                 3448 SQLWriter                                   
+MsMpEng.exe                   3508 WinDefend                                   
+SMSvcHost.exe                 3528 NetPipeActivator, NetTcpActivator,          
+                                   NetTcpPortSharing                           
+MpDefenderCoreService.exe     3560 MDCoreSvc                                   
+mqsvc.exe                     3616 MSMQ                                        
+dockerd.exe                   3672 docker                                      
+svchost.exe                   3840 LanmanServer                                
+SMSvcHost.exe                 4320 NetMsmqActivator                            
+svchost.exe                   4352 DispBrokerDesktopSvc                        
+vmcompute.exe                 4772 vmcompute                                   
+dllhost.exe                   4900 N/A                                         
+WmiPrvSE.exe                  4560 N/A                                         
+taskhostw.exe                 6048 N/A                                         
+svchost.exe                   5304 pla                                         
+svchost.exe                   5792 BITS                                        
+WmiPrvSE.exe                  5208 N/A                                         
+csrss.exe                     6676 N/A                                         
+winlogon.exe                  6724 N/A                                         
+fontdrvhost.exe               6772 N/A                                         
+dwm.exe                       6808 N/A                                         
+svchost.exe                   7076 NgcSvc                                      
+vds.exe                       7148 vds                                         
+DefenderSessionHelper.exe     1612 N/A                                         
+svchost.exe                   1484 WpnUserService_969fe                        
+sihost.exe                    2192 N/A                                         
+svchost.exe                   3376 TabletInputService                          
+ctfmon.exe                    5728 N/A                                         
+taskhostw.exe                 4456 N/A                                         
+taskhostw.exe                 6472 N/A                                         
+svchost.exe                   5948 camsvc                                      
+explorer.exe                  1152 N/A                                         
+svchost.exe                   3304 AppXSvc                                     
+svchost.exe                    900 AppReadiness                                
+svchost.exe                   2452 ClipSVC                                     
+smartscreen.exe               5964 N/A                                         
+svchost.exe                   5412 wlidsvc                                     
+svchost.exe                   5036 TokenBroker                                 
+OpenWith.exe                   712 N/A                                         
+svchost.exe                   6148 LicenseManager                              
+StartMenuExperienceHost.e     7284 N/A                                         
+TextInputHost.exe             7344 N/A                                         
+RuntimeBroker.exe             7412 N/A                                         
+SearchApp.exe                 7564 N/A                                         
+RuntimeBroker.exe             7628 N/A                                         
+AzureArcSysTray.exe           6992 N/A                                         
+RuntimeBroker.exe              640 N/A                                         
+ServiceFabricLocalCluster     5068 N/A                                         
+ShellExperienceHost.exe       7396 N/A                                         
+RuntimeBroker.exe             7916 N/A                                         
+taskhostw.exe                 1544 N/A                                         
+WaAppAgent.exe                3568 RdAgent                                     
+WindowsAzureGuestAgent.ex     6424 WindowsAzureGuestAgent                      
+WaSecAgentProv.exe            5004 N/A                                         
+conhost.exe                   5236 N/A                                         
+WmiPrvSE.exe                  6316 N/A                                         
+hosted-compute-agent          6872 N/A                                         
+conhost.exe                   7176 N/A                                         
+provjobd.exe770167439         8048 N/A                                         
+sppsvc.exe                    1964 sppsvc                                      
+svchost.exe                   6768 LxssManager                                 
+Runner.Listener.exe           7584 N/A                                         
+Runner.Worker.exe             7548 N/A                                         
+conhost.exe                    776 N/A                                         
+pwsh.exe                      7180 N/A                                         
+cmd.exe                       5024 N/A                                         
+tasklist.exe                  4468 N/A                                         
