@@ -1,4 +1,0 @@
-description: a virtual machine with no battery prints the power source alone
-source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C pmset -g batt
-os: darwin
-args: [-g, batt]

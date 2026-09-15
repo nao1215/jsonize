@@ -11,9 +11,6 @@
   "items": {
     "type": "object",
     "properties": {
-      "fat": {
-        "type": "boolean"
-      },
       "file": {
         "type": "string"
       },
@@ -25,7 +22,6 @@
       }
     },
     "required": [
-      "fat",
       "file",
       "architectures"
     ]

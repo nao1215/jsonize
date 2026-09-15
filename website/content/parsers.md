@@ -41,6 +41,7 @@ the same reading with settings of your own.
 | `bat` | [`list-languages`](../schemas/bat/list-languages.json) |
 | `blkid` | [`export`](../schemas/blkid/export.json), [`linux`](../schemas/blkid/linux.json) |
 | `bluetoothctl` | [`show`](../schemas/bluetoothctl/show.json) |
+| `brew` | [`outdated`](../schemas/brew/outdated.json) |
 | `bridge` | [`fdb`](../schemas/bridge/fdb.json), [`link`](../schemas/bridge/link.json) |
 | `busctl` | [`list`](../schemas/busctl/list.json), [`tree`](../schemas/busctl/tree.json), [`tree-services`](../schemas/busctl/tree-services.json) |
 | `capsh` | [`print`](../schemas/capsh/print.json) |
@@ -48,12 +49,14 @@ the same reading with settings of your own.
 | `chage` | [`linux`](../schemas/chage/linux.json) |
 | `chrt` | [`policy`](../schemas/chrt/policy.json) |
 | `cksum` | [`posix`](../schemas/cksum/posix.json) |
+| `csrutil` | [`status`](../schemas/csrutil/status.json) |
 | `csv` | [`comma`](../schemas/csv/comma.json), [`comma-no-header`](../schemas/csv/comma-no-header.json), [`tab`](../schemas/csv/tab.json), [`tab-no-header`](../schemas/csv/tab-no-header.json) |
 | `curl` | [`headers`](../schemas/curl/headers.json), [`version`](../schemas/curl/version.json) |
 | `date` | [`posix`](../schemas/date/posix.json), [`rfc-email`](../schemas/date/rfc-email.json) |
 | `debconf-show` | [`linux`](../schemas/debconf-show/linux.json) |
 | `df` | [`bsd`](../schemas/df/bsd.json), [`bsd-human`](../schemas/df/bsd-human.json), [`busybox-human`](../schemas/df/busybox-human.json), [`freebsd`](../schemas/df/freebsd.json), [`freebsd-blocks`](../schemas/df/freebsd-blocks.json), [`freebsd-blocks-type`](../schemas/df/freebsd-blocks-type.json), [`freebsd-human`](../schemas/df/freebsd-human.json), [`freebsd-inodes`](../schemas/df/freebsd-inodes.json), [`freebsd-type`](../schemas/df/freebsd-type.json), [`freebsd-type-human`](../schemas/df/freebsd-type-human.json), [`gnu`](../schemas/df/gnu.json), [`gnu-blocks`](../schemas/df/gnu-blocks.json), [`gnu-blocks-type`](../schemas/df/gnu-blocks-type.json), [`gnu-human`](../schemas/df/gnu-human.json), [`gnu-inodes`](../schemas/df/gnu-inodes.json), [`gnu-inodes-human`](../schemas/df/gnu-inodes-human.json), [`gnu-type`](../schemas/df/gnu-type.json), [`gnu-type-human`](../schemas/df/gnu-type-human.json), [`portable`](../schemas/df/portable.json), [`portable-type`](../schemas/df/portable-type.json) |
 | `dig` | [`answers`](../schemas/dig/answers.json), [`axfr`](../schemas/dig/axfr.json), [`bind`](../schemas/dig/bind.json) |
+| `diskutil` | [`list`](../schemas/diskutil/list.json) |
 | `docker` | [`buildx-ls`](../schemas/docker/buildx-ls.json), [`compose-ls`](../schemas/docker/compose-ls.json), [`compose-ps`](../schemas/docker/compose-ps.json), [`context-ls`](../schemas/docker/context-ls.json), [`images-disk-usage`](../schemas/docker/images-disk-usage.json), [`images-repo-tag`](../schemas/docker/images-repo-tag.json), [`network-ls`](../schemas/docker/network-ls.json), [`ps`](../schemas/docker/ps.json), [`ps-size`](../schemas/docker/ps-size.json), [`stats`](../schemas/docker/stats.json), [`system-df`](../schemas/docker/system-df.json), [`system-df-verbose`](../schemas/docker/system-df-verbose.json), [`version`](../schemas/docker/version.json), [`volume-ls`](../schemas/docker/volume-ls.json) |
 | `dpkg` | [`list`](../schemas/dpkg/list.json), [`selections`](../schemas/dpkg/selections.json), [`status`](../schemas/dpkg/status.json) |
 | `dpkg-query` | [`list`](../schemas/dpkg-query/list.json) |
@@ -65,6 +68,7 @@ the same reading with settings of your own.
 | `eza` | [`full-iso`](../schemas/eza/full-iso.json), [`long`](../schemas/eza/long.json), [`long-group`](../schemas/eza/long-group.json), [`long-iso`](../schemas/eza/long-iso.json), [`long-links`](../schemas/eza/long-links.json) |
 | `factor` | [`default`](../schemas/factor/default.json) |
 | `fc-list` | [`posix`](../schemas/fc-list/posix.json) |
+| `fdesetup` | [`status`](../schemas/fdesetup/status.json) |
 | `fdisk` | [`linux`](../schemas/fdisk/linux.json) |
 | `file` | [`mime`](../schemas/file/mime.json), [`posix`](../schemas/file/posix.json) |
 | `findmnt` | [`df`](../schemas/findmnt/df.json), [`linux`](../schemas/findmnt/linux.json), [`source-first`](../schemas/findmnt/source-first.json) |
@@ -99,8 +103,10 @@ the same reading with settings of your own.
 | `kubectl` | [`api-resources`](../schemas/kubectl/api-resources.json), [`contexts`](../schemas/kubectl/contexts.json), [`deployments`](../schemas/kubectl/deployments.json), [`namespaces`](../schemas/kubectl/namespaces.json), [`nodes`](../schemas/kubectl/nodes.json), [`pods`](../schemas/kubectl/pods.json), [`services`](../schemas/kubectl/services.json), [`version`](../schemas/kubectl/version.json) |
 | `kv` | [`colon`](../schemas/kv/colon.json), [`equals`](../schemas/kv/equals.json) |
 | `last` | [`busybox`](../schemas/last/busybox.json), [`freebsd`](../schemas/last/freebsd.json), [`freebsd-year`](../schemas/last/freebsd-year.json) |
+| `launchctl` | [`list`](../schemas/launchctl/list.json) |
 | `ldconfig` | [`cache`](../schemas/ldconfig/cache.json) |
 | `ldd` | [`files`](../schemas/ldd/files.json), [`posix`](../schemas/ldd/posix.json) |
+| `lipo` | [`info`](../schemas/lipo/info.json) |
 | `locale` | [`keywords`](../schemas/locale/keywords.json), [`locales`](../schemas/locale/locales.json), [`posix`](../schemas/locale/posix.json) |
 | `localectl` | [`linux`](../schemas/localectl/linux.json) |
 | `loginctl` | [`seats`](../schemas/loginctl/seats.json), [`sessions`](../schemas/loginctl/sessions.json), [`show`](../schemas/loginctl/show.json), [`users`](../schemas/loginctl/users.json) |
@@ -127,6 +133,7 @@ the same reading with settings of your own.
 | `mc` | [`ls`](../schemas/mc/ls.json) |
 | `md5` | [`bsd`](../schemas/md5/bsd.json) |
 | `md5sum` | [`check`](../schemas/md5sum/check.json), [`posix`](../schemas/md5sum/posix.json) |
+| `memory_pressure` | [`darwin`](../schemas/memory_pressure/darwin.json) |
 | `mise` | [`ls`](../schemas/mise/ls.json), [`outdated`](../schemas/mise/outdated.json) |
 | `modinfo` | [`linux`](../schemas/modinfo/linux.json) |
 | `mokutil` | [`sbat`](../schemas/mokutil/sbat.json) |
@@ -134,8 +141,9 @@ the same reading with settings of your own.
 | `mpstat` | [`interrupts`](../schemas/mpstat/interrupts.json), [`linux`](../schemas/mpstat/linux.json) |
 | `mtr` | [`report`](../schemas/mtr/report.json) |
 | `namei` | [`long`](../schemas/namei/long.json) |
-| `netstat` | [`all-sockets`](../schemas/netstat/all-sockets.json), [`freebsd-interface`](../schemas/netstat/freebsd-interface.json), [`freebsd-interface-bytes`](../schemas/netstat/freebsd-interface-bytes.json), [`freebsd-routing`](../schemas/netstat/freebsd-routing.json), [`interface`](../schemas/netstat/interface.json), [`internet`](../schemas/netstat/internet.json), [`routing`](../schemas/netstat/routing.json), [`unix`](../schemas/netstat/unix.json) |
+| `netstat` | [`all-sockets`](../schemas/netstat/all-sockets.json), [`darwin-interface`](../schemas/netstat/darwin-interface.json), [`freebsd-interface`](../schemas/netstat/freebsd-interface.json), [`freebsd-interface-bytes`](../schemas/netstat/freebsd-interface-bytes.json), [`freebsd-routing`](../schemas/netstat/freebsd-routing.json), [`interface`](../schemas/netstat/interface.json), [`internet`](../schemas/netstat/internet.json), [`routing`](../schemas/netstat/routing.json), [`unix`](../schemas/netstat/unix.json) |
 | `networkctl` | [`list`](../schemas/networkctl/list.json) |
+| `networksetup` | [`hardware-ports`](../schemas/networksetup/hardware-ports.json) |
 | `nm` | [`dynamic`](../schemas/nm/dynamic.json) |
 | `nmcli` | [`connection`](../schemas/nmcli/connection.json), [`device`](../schemas/nmcli/device.json), [`device-show`](../schemas/nmcli/device-show.json), [`general`](../schemas/nmcli/general.json), [`radio`](../schemas/nmcli/radio.json), [`wifi`](../schemas/nmcli/wifi.json) |
 | `npm` | [`ls`](../schemas/npm/ls.json), [`ls-all`](../schemas/npm/ls-all.json), [`outdated`](../schemas/npm/outdated.json) |
@@ -145,6 +153,7 @@ the same reading with settings of your own.
 | `objdump` | [`section-headers`](../schemas/objdump/section-headers.json) |
 | `od` | [`hex-bytes`](../schemas/od/hex-bytes.json) |
 | `openssl` | [`ciphers`](../schemas/openssl/ciphers.json), [`ciphers-codes`](../schemas/openssl/ciphers-codes.json), [`version-all`](../schemas/openssl/version-all.json), [`x509-fields`](../schemas/openssl/x509-fields.json) |
+| `otool` | [`libraries`](../schemas/otool/libraries.json) |
 | `pactl` | [`info`](../schemas/pactl/info.json), [`short-cards`](../schemas/pactl/short-cards.json), [`short-clients`](../schemas/pactl/short-clients.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
 | `parted` | [`machine`](../schemas/parted/machine.json) |
 | `passwd` | [`status`](../schemas/passwd/status.json) |
@@ -152,6 +161,7 @@ the same reading with settings of your own.
 | `ping` | [`bsd`](../schemas/ping/bsd.json), [`linux`](../schemas/ping/linux.json) |
 | `pip` | [`columns`](../schemas/pip/columns.json), [`columns-outdated`](../schemas/pip/columns-outdated.json), [`freeze`](../schemas/pip/freeze.json) |
 | `pmap` | [`linux`](../schemas/pmap/linux.json) |
+| `pmset` | [`settings`](../schemas/pmset/settings.json) |
 | `powerprofilesctl` | [`list`](../schemas/powerprofilesctl/list.json) |
 | `prlimit` | [`linux`](../schemas/prlimit/linux.json) |
 | `proc` | [`buddyinfo`](../schemas/proc/buddyinfo.json), [`consoles`](../schemas/proc/consoles.json), [`cpuinfo-x86`](../schemas/proc/cpuinfo-x86.json), [`crypto`](../schemas/proc/crypto.json), [`devices`](../schemas/proc/devices.json), [`diskstats`](../schemas/proc/diskstats.json), [`filesystems`](../schemas/proc/filesystems.json), [`interrupts`](../schemas/proc/interrupts.json), [`loadavg`](../schemas/proc/loadavg.json), [`meminfo`](../schemas/proc/meminfo.json), [`modules`](../schemas/proc/modules.json), [`mountinfo`](../schemas/proc/mountinfo.json), [`net-arp`](../schemas/proc/net-arp.json), [`net-dev`](../schemas/proc/net-dev.json), [`net-route`](../schemas/proc/net-route.json), [`net-unix`](../schemas/proc/net-unix.json), [`partitions`](../schemas/proc/partitions.json), [`schedstat`](../schemas/proc/schedstat.json), [`self-limits`](../schemas/proc/self-limits.json), [`self-status`](../schemas/proc/self-status.json), [`softirqs`](../schemas/proc/softirqs.json), [`stat`](../schemas/proc/stat.json), [`uptime`](../schemas/proc/uptime.json), [`vmstat`](../schemas/proc/vmstat.json) |
@@ -168,6 +178,7 @@ the same reading with settings of your own.
 | `sar` | [`cpu`](../schemas/sar/cpu.json), [`filesystem`](../schemas/sar/filesystem.json), [`io`](../schemas/sar/io.json), [`memory`](../schemas/sar/memory.json), [`network-device`](../schemas/sar/network-device.json), [`paging`](../schemas/sar/paging.json), [`queue`](../schemas/sar/queue.json), [`swap`](../schemas/sar/swap.json), [`task`](../schemas/sar/task.json) |
 | `scc` | [`default`](../schemas/scc/default.json) |
 | `screen` | [`list`](../schemas/screen/list.json) |
+| `scutil` | [`dns`](../schemas/scutil/dns.json) |
 | `sensors` | [`linux`](../schemas/sensors/linux.json), [`no-adapter`](../schemas/sensors/no-adapter.json), [`raw`](../schemas/sensors/raw.json) |
 | `service` | [`status-all`](../schemas/service/status-all.json) |
 | `sfdisk` | [`dump`](../schemas/sfdisk/dump.json) |
@@ -181,16 +192,19 @@ the same reading with settings of your own.
 | `smartctl` | [`scan`](../schemas/smartctl/scan.json) |
 | `snap` | [`changes`](../schemas/snap/changes.json), [`connections`](../schemas/snap/connections.json), [`list`](../schemas/snap/list.json), [`services`](../schemas/snap/services.json) |
 | `sockstat` | [`freebsd`](../schemas/sockstat/freebsd.json), [`freebsd-state`](../schemas/sockstat/freebsd-state.json) |
+| `spctl` | [`status`](../schemas/spctl/status.json) |
 | `ss` | [`connected`](../schemas/ss/connected.json), [`linux`](../schemas/ss/linux.json), [`single-protocol`](../schemas/ss/single-protocol.json), [`summary`](../schemas/ss/summary.json) |
 | `ssh-add` | [`public-keys`](../schemas/ssh-add/public-keys.json) |
 | `ssh-keygen` | [`fingerprint`](../schemas/ssh-keygen/fingerprint.json) |
 | `ssh-keyscan` | [`known-hosts`](../schemas/ssh-keyscan/known-hosts.json) |
 | `stat` | [`bsd`](../schemas/stat/bsd.json), [`bsd-verbose`](../schemas/stat/bsd-verbose.json), [`gnu`](../schemas/stat/gnu.json), [`gnu-filesystem`](../schemas/stat/gnu-filesystem.json), [`gnu-terse`](../schemas/stat/gnu-terse.json) |
 | `staticcheck` | [`default`](../schemas/staticcheck/default.json) |
+| `sw_vers` | [`darwin`](../schemas/sw_vers/darwin.json) |
 | `swapinfo` | [`freebsd`](../schemas/swapinfo/freebsd.json), [`freebsd-human`](../schemas/swapinfo/freebsd-human.json) |
 | `swapon` | [`legacy`](../schemas/swapon/legacy.json), [`linux`](../schemas/swapon/linux.json) |
 | `sysctl` | [`freebsd`](../schemas/sysctl/freebsd.json), [`linux`](../schemas/sysctl/linux.json) |
 | `syslog` | [`rfc3164`](../schemas/syslog/rfc3164.json), [`rfc5424`](../schemas/syslog/rfc5424.json) |
+| `system_profiler` | [`data-type`](../schemas/system_profiler/data-type.json) |
 | `systemctl` | [`automounts`](../schemas/systemctl/automounts.json), [`dependencies`](../schemas/systemctl/dependencies.json), [`jobs`](../schemas/systemctl/jobs.json), [`machines`](../schemas/systemctl/machines.json), [`paths`](../schemas/systemctl/paths.json), [`show`](../schemas/systemctl/show.json), [`show-properties`](../schemas/systemctl/show-properties.json), [`sockets`](../schemas/systemctl/sockets.json), [`status`](../schemas/systemctl/status.json), [`timers`](../schemas/systemctl/timers.json), [`unit-files`](../schemas/systemctl/unit-files.json), [`units`](../schemas/systemctl/units.json), [`units-jobs`](../schemas/systemctl/units-jobs.json), [`units-jobs-plain`](../schemas/systemctl/units-jobs-plain.json) |
 | `systemd-analyze` | [`blame`](../schemas/systemd-analyze/blame.json), [`critical-chain`](../schemas/systemd-analyze/critical-chain.json), [`security`](../schemas/systemd-analyze/security.json), [`time`](../schemas/systemd-analyze/time.json) |
 | `systemd-cgls` | [`tree`](../schemas/systemd-cgls/tree.json) |
@@ -206,7 +220,7 @@ the same reading with settings of your own.
 | `tc` | [`qdisc`](../schemas/tc/qdisc.json), [`qdisc-stats`](../schemas/tc/qdisc-stats.json) |
 | `timedatectl` | [`linux`](../schemas/timedatectl/linux.json), [`show`](../schemas/timedatectl/show.json), [`timesync`](../schemas/timedatectl/timesync.json), [`timezones`](../schemas/timedatectl/timezones.json) |
 | `tokei` | [`default`](../schemas/tokei/default.json) |
-| `top` | [`linux`](../schemas/top/linux.json) |
+| `top` | [`darwin`](../schemas/top/darwin.json), [`linux`](../schemas/top/linux.json) |
 | `tracepath` | [`linux`](../schemas/tracepath/linux.json) |
 | `tree` | [`listing`](../schemas/tree/listing.json) |
 | `udevadm` | [`info`](../schemas/udevadm/info.json) |
@@ -218,6 +232,7 @@ the same reading with settings of your own.
 | `uptime` | [`bsd`](../schemas/uptime/bsd.json), [`freebsd`](../schemas/uptime/freebsd.json), [`linux`](../schemas/uptime/linux.json), [`pretty`](../schemas/uptime/pretty.json), [`since`](../schemas/uptime/since.json) |
 | `uuidparse` | [`linux`](../schemas/uuidparse/linux.json), [`raw`](../schemas/uuidparse/raw.json) |
 | `uv` | [`pip-show`](../schemas/uv/pip-show.json), [`python-list`](../schemas/uv/python-list.json), [`tool-list`](../schemas/uv/tool-list.json), [`tree`](../schemas/uv/tree.json) |
+| `vm_stat` | [`darwin`](../schemas/vm_stat/darwin.json) |
 | `vmstat` | [`freebsd-interrupts`](../schemas/vmstat/freebsd-interrupts.json), [`linux`](../schemas/vmstat/linux.json), [`linux-active`](../schemas/vmstat/linux-active.json), [`linux-disk`](../schemas/vmstat/linux-disk.json), [`linux-disk-summary`](../schemas/vmstat/linux-disk-summary.json), [`linux-stats`](../schemas/vmstat/linux-stats.json) |
 | `w` | [`bsd`](../schemas/w/bsd.json), [`freebsd`](../schemas/w/freebsd.json), [`linux`](../schemas/w/linux.json), [`linux-short`](../schemas/w/linux-short.json) |
 | `wc` | [`posix`](../schemas/wc/posix.json) |
@@ -241,7 +256,7 @@ which of them wrote it, so they share a definition rather than having one
 each, and the command they are listed under is the one the definition is
 named for. These are read as well:
 
-`7za` (as `7z`), `arecord` (as `aplay`), `b2sum` (as `md5`, `md5sum`, `sha512sum`), `batcat` (as `bat`), `cksum` (as `md5sum`), `gb2sum` (as `md5`, `sha512sum`), `gcksum` (as `cksum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gfactor` (as `factor`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5`, `md5sum`), `gpg2` (as `gpg`), `gsha1sum` (as `md5`, `sha1sum`), `gsha224sum` (as `md5`, `sha224sum`), `gsha256sum` (as `md5`, `sha256sum`), `gsha384sum` (as `md5`, `sha384sum`), `gsha512sum` (as `md5`, `sha512sum`), `gstat` (as `stat`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `hd` (as `hexdump`), `mcli` (as `mc`), `md5sum` (as `md5`), `nerdctl` (as `docker`), `netstat` (as `route`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `python` (as `pip`), `python3` (as `pip`), `rmd160` (as `md5`), `sha1` (as `md5`), `sha1sum` (as `md5`, `md5sum`), `sha224` (as `md5`), `sha224sum` (as `md5`, `md5sum`), `sha256` (as `md5`), `sha256sum` (as `md5`, `md5sum`), `sha384` (as `md5`), `sha384sum` (as `md5`, `md5sum`), `sha512` (as `md5`), `sha512sum` (as `md5`, `md5sum`), `sha512t224` (as `md5`), `sha512t256` (as `md5`), `skein1024` (as `md5`), `skein256` (as `md5`), `skein512` (as `md5`), `ssh-add` (as `ssh-keygen`), `systemd-resolve` (as `resolvectl`), `uv` (as `pip`), `vdir` (as `ls`)
+`7za` (as `7z`), `arecord` (as `aplay`), `b2sum` (as `md5`, `md5sum`, `sha512sum`), `batcat` (as `bat`), `cksum` (as `md5sum`), `gb2sum` (as `md5`, `sha512sum`), `gcksum` (as `cksum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gfactor` (as `factor`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5`, `md5sum`), `gpg2` (as `gpg`), `gsha1sum` (as `md5`, `sha1sum`), `gsha224sum` (as `md5`, `sha224sum`), `gsha256sum` (as `md5`, `sha256sum`), `gsha384sum` (as `md5`, `sha384sum`), `gsha512sum` (as `md5`, `sha512sum`), `gstat` (as `stat`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `hd` (as `hexdump`), `mcli` (as `mc`), `md5sum` (as `md5`), `nerdctl` (as `docker`), `netstat` (as `route`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `python` (as `pip`), `python3` (as `pip`), `rmd160` (as `md5`), `sha1` (as `md5`), `sha1sum` (as `md5`, `md5sum`), `sha224` (as `md5`), `sha224sum` (as `md5`, `md5sum`), `sha256` (as `md5`), `sha256sum` (as `md5`, `md5sum`), `sha384` (as `md5`), `sha384sum` (as `md5`, `md5sum`), `sha512` (as `md5`), `sha512sum` (as `md5`, `md5sum`), `sha512t224` (as `md5`), `sha512t256` (as `md5`), `shasum` (as `sha256sum`), `skein1024` (as `md5`), `skein256` (as `md5`), `skein512` (as `md5`), `ssh-add` (as `ssh-keygen`), `systemd-resolve` (as `resolvectl`), `uv` (as `pip`), `vdir` (as `ls`)
 
 `jz run`, `--parser` and `jz list` all take the other name.
 

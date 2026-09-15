@@ -1,2 +1,0 @@
-Architectures in the fat file: /bin/ls are: x86_64 arm64e 
-Non-fat file: /usr/lib/dyld is architecture: arm64e

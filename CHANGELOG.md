@@ -51,6 +51,13 @@ project follows [Semantic Versioning](https://semver.org/).
 - Definitions for `eza -l` (with `--header`, `-a`, `-B`, and in its
   long-iso, full-iso, `-g` and `-H` column sets), `procs`, `tokei`,
   `bat --list-languages` and `hyperfine --style basic`.
+- Definitions for macOS: `vm_stat`, `sw_vers`, `diskutil list`,
+  `launchctl list`, `pmset -g`, `netstat -i` and `netstat -rn`,
+  `system_profiler SPSoftwareDataType` and `SPHardwareDataType`,
+  `scutil --dns`, `networksetup -listallhardwareports`,
+  `brew outdated --verbose`, `memory_pressure`, `top -l`, `otool -L`,
+  `lipo -info`, `csrutil status`, `spctl --status`, `fdesetup status`
+  and `shasum -a 256`, from output captured on a macOS 26 runner.
 - Definitions for compiler-style diagnostics: `go vet` (and `go build`),
   `staticcheck`, `golangci-lint`, `actionlint` and `shellcheck -f gcc`;
   and for `mc ls` (the MinIO client) and `task --list`.

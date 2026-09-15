@@ -1,5 +1,0 @@
-description: the uptime line joined after the power source is refused rather than read
-source: the definition's own fixture followed by the uptime/bsd fixture, joined for this case
-os: darwin
-args: [-g, batt]
-expect_error: does not describe this input

@@ -15,12 +15,6 @@
     "product_version": {
       "type": "string"
     },
-    "product_version_extra": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "build_version": {
       "type": "string"
     }
@@ -28,7 +22,6 @@
   "required": [
     "product_name",
     "product_version",
-    "product_version_extra",
     "build_version"
   ]
 }
