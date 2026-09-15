@@ -1,0 +1,18 @@
+[
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "example.test/nostmt/calc",
+    "elapsed": 0.002,
+    "note": null,
+    "coverage": 100
+  },
+  {
+    "cached": false,
+    "status": "ok",
+    "package": "example.test/nostmt/empty",
+    "elapsed": 0.002,
+    "note": null,
+    "coverage": null
+  }
+]

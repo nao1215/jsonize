@@ -56,5 +56,5 @@ fields:
   # which is what tells a row from four words of another command's
   # output.
   id: {required: true, regex: '(?P<id>[0-9a-f]{12})'}
-  disk_usage: {regex: '(?P<disk_usage>[0-9.]+[kMGT]?B)'}
+  disk_usage: {regex: '(?P<disk_usage>[0-9]+(?:\.[0-9]+)?[kMGT]?B)'}
   extra: {null_if: [""]}

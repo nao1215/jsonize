@@ -1,0 +1,3 @@
+source: captured with LC_ALL=C go test -cover ./... (go1.26.6) on a module made for the fixture, one package with a function and one holding only a constant
+description: a package with no statements prints coverage [no statements], which is read as a null coverage
+args: ["test", "-cover", "./..."]
