@@ -40,7 +40,6 @@ type newCmdOptions struct {
 func (n *newCmdOptions) bind(o *optionSet) {
 	o.boolOpt(&n.array, "array", "", "make an array of the values instead of an object")
 	o.boolOpt(&n.output.pretty, "pretty", "p", "indent JSON output")
-	o.boolOpt(&n.output.yaml, "yaml", "", "write YAML instead of JSON")
 	o.helpDoc()
 }
 

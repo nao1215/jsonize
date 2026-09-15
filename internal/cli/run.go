@@ -48,8 +48,7 @@ state that boundary explicitly:
 --stream answers a command that does not end: each record is written as
 soon as it can be read, instead of one array once the command has
 finished; a composite (ping) is written part by part. A format read into
-one object is a usage error. --yaml writes YAML instead of JSON, one
-document per record with --stream.
+one object is a usage error.
 
 If the command exits non-zero, jz still parses whatever it printed,
 reports the status on stderr and exits with that same status. A command

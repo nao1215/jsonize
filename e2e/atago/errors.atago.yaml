@@ -702,26 +702,45 @@ scenarios:
           stderr:
             contains: "line 1"
 
-  # --pretty indents JSON, and YAML is always one value per line, so the
-  # pair says two things about the output. It is refused before the file
-  # is opened and before a command is run: the file here does not exist
-  # and the command is not one, and both would be other errors.
-  - name: --yaml with --pretty is refused before anything is read or run
+  # jz writes JSON only. --yaml, which used to write YAML, is refused with
+  # what to do instead, before the file is opened and before a command is
+  # run: the file here does not exist and the command is not one, and both
+  # would be other errors. YAML input is untouched by this.
+  - name: --yaml, which was removed, is refused in every mode before anything is read or run
     steps:
       - run:
-          command: jz --yaml --pretty --file ${workdir}/missing.txt
+          command: jz --yaml --file ${workdir}/missing.txt
       - assert:
           exit_code: 2
           stdout: {empty: true}
           stderr:
-            contains: "--pretty and --yaml cannot be used together"
+            contains: "jz: --yaml was removed: jz writes JSON only; pipe the JSON to a YAML tool to get YAML"
       - run:
-          command: jz run --yaml -p jz-no-such-command
+          command: jz run --yaml jz-no-such-command
       - assert:
           exit_code: 2
           stdout: {empty: true}
           stderr:
-            contains: "--pretty and --yaml cannot be used together"
+            contains: "jz: --yaml was removed"
+      - run:
+          command: jz new --yaml name=api
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "jz: --yaml was removed"
+      - fixture:
+          file: deploy.yaml
+          content: |
+            name: api
+            replicas: 3
+      - run:
+          command: jz --file ${workdir}/deploy.yaml
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"api","replicas":3}
 
   - name: --columns is refused where there are no columns to name, before anything is read
     steps:

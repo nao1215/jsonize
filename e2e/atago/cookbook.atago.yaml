@@ -57,31 +57,6 @@ scenarios:
           exit_code: 2
           stdout: {empty: true}
 
-  - name: "Write YAML instead of JSON: --yaml writes the same values"
-    steps:
-      - run:
-          command: jz --yaml
-          stdin: |
-            Filesystem      Size  Used Avail Use% Mounted on
-            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
-            tmpfs           7.8G  4.0K  7.8G   1% /tmp
-      - assert:
-          exit_code: 0
-          stdout:
-            equals: |
-              - filesystem: /dev/nvme0n1p2
-                size: "1.8T"
-                used: "1.6T"
-                available: "145G"
-                use_percent: 92
-                mounted_on: /
-              - filesystem: tmpfs
-                size: "7.8G"
-                used: "4.0K"
-                available: "7.8G"
-                use_percent: 1
-                mounted_on: /tmp
-
   - name: "Follow a command that keeps printing: --stream writes a line per sample"
     steps:
       - fixture:
@@ -208,24 +183,6 @@ scenarios:
           stdout:
             equals: |
               {"name":"api","replicas":3,"image":{"repository":"example/api","tag":"1.4"}}
-
-  - name: "Convert JSON to YAML: key order and numbers are kept"
-    steps:
-      - fixture:
-          file: release.json
-          content: |
-            {"tag_name":"v0.2.0","draft":false,"assets":[{"name":"jz_linux_amd64.tar.gz","size":4812345}]}
-      - run:
-          command: jz --file ${workdir}/release.json --yaml
-      - assert:
-          exit_code: 0
-          stdout:
-            equals: |
-              tag_name: v0.2.0
-              draft: false
-              assets:
-                - name: jz_linux_amd64.tar.gz
-                  size: 4812345
 
   - name: "Read compressed JSON Lines logs: a gzip file streamed with one key"
     steps:

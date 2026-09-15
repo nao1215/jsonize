@@ -33,25 +33,6 @@ jobs:
       - name: Validate every fixture against its published schema
         run: '"${RUNNER_TEMP}/venv/bin/python" scripts/check_schemas.py'
 
-  yaml-output:
-    name: YAML output against an independent reader
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version: stable
-      - name: Build jz
-        run: go build -o "${RUNNER_TEMP}/jz" ./cmd/jz
-      - name: Install PyYAML
-        run: |
-          python3 -m venv "${RUNNER_TEMP}/venv"
-          "${RUNNER_TEMP}/venv/bin/pip" install --quiet pyyaml==6.0.3
-      - name: Read every fixture's YAML output back with PyYAML
-        run: '"${RUNNER_TEMP}/venv/bin/python" scripts/check_yaml_output.py "${RUNNER_TEMP}/jz"'
-
   against-base:
     name: compatible with the base branch
     if: github.event_name == 'pull_request'

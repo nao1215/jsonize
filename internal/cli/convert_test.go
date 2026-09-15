@@ -197,12 +197,6 @@ func TestDataFileExtensionGivesWay(t *testing.T) {
 func TestDataFileOutputOptions(t *testing.T) {
 	h := newHarness(t)
 	doc := `{"id":12345678901234567890,"ratio":1e3,"name":"app","nested":{"k":[1,2]}}`
-	if code := h.pipe(doc, "--format", "json", "--yaml"); code != ExitOK {
-		t.Fatalf("--yaml: %d %s", code, h.stderr.String())
-	}
-	if want := "id: 12345678901234567890\nratio: 1.0e3\nname: app\nnested:\n  k:\n    - 1\n    - 2\n"; h.stdout.String() != want {
-		t.Errorf("--yaml:\n%s\nwant\n%s", h.stdout.String(), want)
-	}
 	if code := h.pipe(doc, "--format", "json", "--pretty"); code != ExitOK || !strings.Contains(h.stdout.String(), "\n  \"id\": 12345678901234567890") {
 		t.Errorf("--pretty: %d %s", code, h.stdout.String())
 	}
@@ -211,9 +205,6 @@ func TestDataFileOutputOptions(t *testing.T) {
 	}
 	if code := h.pipe("a:1\tb:2\na:3\tb:4\n", "--format", "ltsv", "--stream", "--extract", "a"); code != ExitOK || h.stdout.String() != "{\"a\":\"1\"}\n{\"a\":\"3\"}\n" {
 		t.Errorf("--stream --extract: %d %q %s", code, h.stdout.String(), h.stderr.String())
-	}
-	if code := h.pipe("{\"a\":1}\n{\"b\":2}\n", "--format", "jsonl", "--stream", "--yaml"); code != ExitOK || h.stdout.String() != "---\na: 1\n...\n---\nb: 2\n...\n" {
-		t.Errorf("--stream --yaml: %d %q %s", code, h.stdout.String(), h.stderr.String())
 	}
 	// A stream writes the records before the line that fails, then stops.
 	if code := h.pipe("1\n2\nx\n3\n", "--format", "jsonl", "--stream"); code != ExitParse || h.stdout.String() != "1\n2\n" || !strings.Contains(h.stderr.String(), "line 3") {

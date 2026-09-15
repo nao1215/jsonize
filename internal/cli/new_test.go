@@ -22,7 +22,6 @@ func TestNew(t *testing.T) {
 		{"files", "", []string{"new", "version=@" + version, "spec:=@" + deploy}, `{"version":"1.4.0","spec":{"replicas":3}}` + "\n"},
 		{"standard input", `{"a":[1]}`, []string{"new", "pod:=@-"}, `{"pod":{"a":[1]}}` + "\n"},
 		{"pretty", "", []string{"new", "-p", "a:=[1]"}, "{\n  \"a\": [\n    1\n  ]\n}\n"},
-		{"yaml", "", []string{"new", "--yaml", "a=1", "b:=1"}, "a: \"1\"\nb: 1\n"},
 		{"after --", "", []string{"new", "--", "-x=1"}, `{"-x":"1"}` + "\n"},
 	} {
 		if code := h.pipe(tt.stdin, tt.args...); code != ExitOK || h.stdout.String() != tt.want {
@@ -46,7 +45,7 @@ func TestNewFailures(t *testing.T) {
 		{"a key given twice", []string{"new", "a=1", "a=2"}, ExitUsage, `the key "a" is given twice`},
 		{"not JSON", []string{"new", "a:=yes"}, ExitUsage, "the value after := is not JSON"},
 		{"an option after the arguments", []string{"new", "a=1", "-p"}, ExitUsage, "options come before the arguments"},
-		{"pretty and yaml", []string{"new", "-p", "--yaml"}, ExitUsage, "--pretty and --yaml cannot be used together"},
+		{"yaml output", []string{"new", "-p", "--yaml"}, ExitUsage, "--yaml was removed"},
 		{"an unknown option", []string{"new", "--stream"}, ExitUsage, "flag provided but not defined"},
 		{"a data file that is not its format", []string{"new", "a:=@" + bad}, ExitParse, "yaml: line 1: .nan is not a number JSON can hold"},
 		{"text that is not UTF-8", []string{"new", "a=@" + latin}, ExitParse, "not valid UTF-8"},

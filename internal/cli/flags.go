@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nao1215/jsonize/internal/yamlout"
 	"github.com/nao1215/jsonize/pkg/convert"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
@@ -214,7 +213,6 @@ func (o *optionSet) print(w io.Writer) {
 // outputOptions control how the JSON is written.
 type outputOptions struct {
 	pretty  bool
-	yaml    bool
 	stream  bool
 	raw     bool
 	extract stringList
@@ -227,7 +225,6 @@ type outputOptions struct {
 
 func (f *outputOptions) bind(o *optionSet) {
 	o.boolOpt(&f.pretty, "pretty", "p", "indent JSON output")
-	o.boolOpt(&f.yaml, "yaml", "", "write YAML instead of JSON")
 	o.boolOpt(&f.stream, "stream", "", "write each record as soon as it is read")
 	o.boolOpt(&f.raw, "raw", "", "skip the field rules and report every value as text")
 	o.listOpt(&f.extract, "extract", "KEY", "keep only this key (repeatable)")
@@ -236,21 +233,15 @@ func (f *outputOptions) bind(o *optionSet) {
 	o.listOpt(&f.zones, "assume-zone", "ABBR=+HHMM", "give a zone abbreviation an offset (repeatable)")
 }
 
-// write writes one whole document in the format the options ask for.
+// write writes one whole document, indented when --pretty asks for it.
 // Nothing is written when the value cannot be written.
 func (f *outputOptions) write(w io.Writer, v any) error {
-	if f.yaml {
-		return yamlout.Encode(w, v)
-	}
 	return jsonutil.Encode(w, v, f.pretty)
 }
 
-// recordWriter returns what writes one record of a stream: a line of
-// JSON, or a YAML document between "---" and "..." lines.
+// recordWriter returns what writes one record of a stream: one line of
+// JSON.
 func (f *outputOptions) recordWriter(w io.Writer) func(any) error {
-	if f.yaml {
-		return func(v any) error { return yamlout.EncodeDocument(w, v) }
-	}
 	return func(v any) error { return jsonutil.Encode(w, v, false) }
 }
 
@@ -304,9 +295,6 @@ func (f *outputOptions) assumptions() (convert.Assumptions, error) {
 // check reports the option pairs that state two answers at once. It is
 // called before anything is read or executed.
 func (f *outputOptions) check() error {
-	if f.pretty && f.yaml {
-		return errors.New("--pretty and --yaml cannot be used together: --pretty indents JSON, and YAML is always written one value per line")
-	}
 	if f.pretty && f.stream {
 		return errors.New("--pretty and --stream cannot be used together: a stream is one record per line, and indenting spreads a record over several")
 	}
@@ -406,6 +394,9 @@ func (o *optionSet) helpDoc() {
 // result is true when the caller should return the given exit code.
 func (a *app) parse(o *optionSet, args []string, usage string) (int, bool) {
 	err := o.fs.Parse(args)
+	if removed := removedOption(err); removed != nil {
+		err = removed
+	}
 	if errors.Is(err, flag.ErrHelp) {
 		fmt.Fprint(a.env.Stdout, usage)
 		o.print(a.env.Stdout)
@@ -427,6 +418,29 @@ func (a *app) parse(o *optionSet, args []string, usage string) (int, bool) {
 		return ExitUsage, true
 	}
 	return 0, false
+}
+
+// removedOptions are options jz no longer has, with what to do instead.
+// A name that is simply unknown gets the flag package's own message; one
+// that used to work gets told where the job went, since a script written
+// for an older jz is the likeliest place it comes from.
+var removedOptions = map[string]string{
+	"yaml": "--yaml was removed: jz writes JSON only; pipe the JSON to a YAML tool to get YAML (for example: jz ... | yq -P)",
+}
+
+// removedOption turns the flag package's refusal of an option jz used
+// to have into the message that says what replaced it, or returns nil.
+func removedOption(err error) error {
+	const undefined = "flag provided but not defined: -"
+	if err == nil || !strings.HasPrefix(err.Error(), undefined) {
+		return nil
+	}
+	name := strings.TrimPrefix(err.Error(), undefined)
+	name, _, _ = strings.Cut(strings.TrimPrefix(name, "-"), "=")
+	if msg, ok := removedOptions[name]; ok {
+		return errors.New(msg)
+	}
+	return nil
 }
 
 // splitEnvFlag validates NAME=value entries.
