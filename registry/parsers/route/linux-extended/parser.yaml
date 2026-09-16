@@ -1,0 +1,40 @@
+# `route -ee` prints every column net-tools keeps for an IPv4 route: the
+# eight of `route` followed by the MSS, window and irtt of `route -e`. The
+# banner is the one route and netstat -r print, and the header row, pinned
+# whole, is what says which of the three tables this is.
+#
+# A rejecting route prints "-" in the cells it has no value for. As in
+# route/linux, a number is null there and a word keeps the "-".
+format: 1
+command: route
+variant: linux-extended
+description: route -ee kernel IP routing table with every column
+metadata:
+  tags: [linux, network, net-tools]
+  compatible: [net-tools 2.10]
+  references:
+    - https://manpages.debian.org/stable/net-tools/route.8.en.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AKernel IP routing table[ \t]*$'
+      - '^Destination[ \t]+Gateway[ \t]+Genmask[ \t]+Flags[ \t]+Metric[ \t]+Ref[ \t]+Use[ \t]+Iface[ \t]+MSS[ \t]+Window[ \t]+irtt[ \t]*$'
+input:
+  ignore:
+    - '^Kernel IP routing table[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+fields:
+  destination: {required: true}
+  gateway: {required: true}
+  genmask: {required: true}
+  flags: {required: true}
+  metric: {type: int, null_if: ["-"]}
+  ref: {type: int, null_if: ["-"]}
+  use: {type: int, null_if: ["-"]}
+  iface: {required: true}
+  mss: {type: int, null_if: ["-"]}
+  window: {type: int, null_if: ["-"]}
+  irtt: {type: int, null_if: ["-"]}

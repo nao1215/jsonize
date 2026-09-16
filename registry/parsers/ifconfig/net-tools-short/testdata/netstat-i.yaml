@@ -1,0 +1,3 @@
+description: netstat -i prints the same table under a banner, which netstat/interface reads and this definition does not.
+source: captured with LC_ALL=C and `netstat -i` from net-tools 2.10 in a debian:stable-slim container with a dummy interface that is up, a second one that is down with MTU 9000, eth0 and lo
+expect_error: 'does not describe this input'

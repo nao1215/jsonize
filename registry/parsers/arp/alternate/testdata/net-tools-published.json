@@ -1,0 +1,50 @@
+[
+  {
+    "name": "?",
+    "address": "198.51.100.30",
+    "hwaddress": null,
+    "hwtype": null,
+    "flags": [],
+    "device": "dummy0"
+  },
+  {
+    "name": "?",
+    "address": "198.51.100.20",
+    "hwaddress": "02:00:00:00:00:20",
+    "hwtype": "ether",
+    "flags": [
+      "PERM"
+    ],
+    "device": "dummy0"
+  },
+  {
+    "name": "?",
+    "address": "172.17.0.1",
+    "hwaddress": "02:00:00:00:00:01",
+    "hwtype": "ether",
+    "flags": [],
+    "device": "eth0"
+  },
+  {
+    "name": "?",
+    "address": "198.51.100.21",
+    "hwaddress": "<from_interface>",
+    "hwtype": null,
+    "flags": [
+      "PERM",
+      "PUB"
+    ],
+    "device": "dummy0"
+  },
+  {
+    "name": "?",
+    "address": "198.51.100.22",
+    "hwaddress": "<from_interface>",
+    "hwtype": null,
+    "flags": [
+      "PERM",
+      "PUB"
+    ],
+    "device": "dummy0"
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "destination": "2001:db8::/64",
+    "next_hop": "::",
+    "flags": "U",
+    "metric": 256,
+    "ref": 1,
+    "use": 0,
+    "iface": "dummy0"
+  },
+  {
+    "destination": "fe80::/64",
+    "next_hop": "::",
+    "flags": "U",
+    "metric": 256,
+    "ref": 1,
+    "use": 0,
+    "iface": "dummy0"
+  },
+  {
+    "destination": "::/0",
+    "next_hop": "::",
+    "flags": "!n",
+    "metric": -1,
+    "ref": 1,
+    "use": 0,
+    "iface": "lo"
+  },
+  {
+    "destination": "::1/128",
+    "next_hop": "::",
+    "flags": "Un",
+    "metric": 0,
+    "ref": 3,
+    "use": 0,
+    "iface": "lo"
+  },
+  {
+    "destination": "2001:db8::7/128",
+    "next_hop": "::",
+    "flags": "Un",
+    "metric": 0,
+    "ref": 2,
+    "use": 0,
+    "iface": "dummy0"
+  },
+  {
+    "destination": "fe80::8c90:68ff:fe5a:b666/128",
+    "next_hop": "::",
+    "flags": "Un",
+    "metric": 0,
+    "ref": 2,
+    "use": 0,
+    "iface": "dummy0"
+  },
+  {
+    "destination": "ff00::/8",
+    "next_hop": "::",
+    "flags": "U",
+    "metric": 256,
+    "ref": 2,
+    "use": 0,
+    "iface": "dummy0"
+  },
+  {
+    "destination": "::/0",
+    "next_hop": "::",
+    "flags": "!n",
+    "metric": -1,
+    "ref": 1,
+    "use": 0,
+    "iface": "lo"
+  }
+]

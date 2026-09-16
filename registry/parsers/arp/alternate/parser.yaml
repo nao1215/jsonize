@@ -27,10 +27,16 @@ detect:
       - '^\S+ \([0-9a-fA-F.:%]+\) at (?:[0-9a-fA-F]{2}(?::[0-9a-fA-F]{2})+ \[[a-z]+\]|<incomplete>)[ \t]+(?:[A-Z]+ )*on \S+[ \t]*$'
 parse:
   type: regex
-  # An unresolved entry prints "<incomplete>" where the hardware address
-  # and its type go, so those two groups sit in an alternation and are
-  # null on such a row.
-  pattern: '^(?P<name>\S+) \((?P<address>[^)]+)\) at (?:(?P<hwaddress>[0-9a-fA-F:]+) \[(?P<hwtype>[^\]]*)\]|<incomplete>)[ \t]*(?P<flags>.*?)[ \t]*on[ \t]+(?P<device>\S+)[ \t]*$'
+  patterns:
+    # An unresolved entry prints "<incomplete>" where the hardware address
+    # and its type go, so those two groups sit in an alternation and are
+    # null on such a row.
+    - '^(?P<name>\S+) \((?P<address>[^)]+)\) at (?:(?P<hwaddress>[0-9a-fA-F:]+) \[(?P<hwtype>[^\]]*)\]|<incomplete>)[ \t]*(?P<flags>.*?)[ \t]*on[ \t]+(?P<device>\S+)[ \t]*$'
+    # An entry published for a proxy with `arp -Ds ADDRESS IFACE pub`
+    # answers with the interface's own address, and net-tools prints
+    # "<from_interface>" in its place and no type. The word is kept as the
+    # hardware address it stands for.
+    - '^(?P<name>\S+) \((?P<address>[^)]+)\) at (?P<hwaddress><from_interface>)(?P<hwtype>)??[ \t]*(?P<flags>.*?)[ \t]*on[ \t]+(?P<device>\S+)[ \t]*$'
 fields:
   # The name is "?" when the address does not resolve or -n was given.
   name: {required: true}

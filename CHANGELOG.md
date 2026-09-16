@@ -8,6 +8,16 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- net-tools `arp`, `arp -n` and `arp -i IFACE` (`arp/net-tools`), the
+  cache as a table, and `ifconfig -s` (`ifconfig/net-tools-short`).
+  `arp -a` reads an entry published for a proxy, which net-tools prints
+  with `<from_interface>` for its hardware address and was refused.
+  net-tools `route -ee` (`route/linux-extended`) and `route -A inet6`
+  (`route/linux-inet6`), and `route -e` through `netstat/routing`. A
+  rejecting route, whose counts net-tools prints as `-`, was refused by
+  `route/linux` and `netstat/routing`; the counts are null now, and the
+  published schemas are unchanged, since they already allowed it. The
+  registry holds 247 commands through 704 definitions.
 - `gpg -k` and `gpg -K`, each key with its algorithm, dates,
   capabilities and fingerprint, its user IDs with their validity, and its
   subkeys. The registry holds 247 commands through 700 definitions.

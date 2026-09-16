@@ -1,0 +1,4 @@
+description: ifconfig -s -a, which adds the interface that is down and has flags B and O only.
+source: captured with LC_ALL=C and `ifconfig -s -a` from net-tools 2.10 in a debian:stable-slim container with a dummy interface that is up, a second one that is down with MTU 9000, eth0 and lo
+os: linux
+args: ["-s", "-a"]

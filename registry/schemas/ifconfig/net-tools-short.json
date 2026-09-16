@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ifconfig/net-tools-short.json",
+  "title": "ifconfig/net-tools-short",
+  "description": "net-tools ifconfig -s interface table",
+  "x-jsonize": {
+    "definition": "ifconfig/net-tools-short",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "iface": {
+        "type": "string"
+      },
+      "mtu": {
+        "type": "integer"
+      },
+      "rx_ok": {
+        "type": "integer"
+      },
+      "rx_err": {
+        "type": "integer"
+      },
+      "rx_drp": {
+        "type": "integer"
+      },
+      "rx_ovr": {
+        "type": "integer"
+      },
+      "tx_ok": {
+        "type": "integer"
+      },
+      "tx_err": {
+        "type": "integer"
+      },
+      "tx_drp": {
+        "type": "integer"
+      },
+      "tx_ovr": {
+        "type": "integer"
+      },
+      "flags": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "iface",
+      "mtu",
+      "rx_ok",
+      "rx_err",
+      "rx_drp",
+      "rx_ovr",
+      "tx_ok",
+      "tx_err",
+      "tx_drp",
+      "tx_ovr",
+      "flags"
+    ]
+  }
+}

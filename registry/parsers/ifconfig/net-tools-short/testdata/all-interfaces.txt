@@ -1,0 +1,5 @@
+Iface      MTU    RX-OK RX-ERR RX-DRP RX-OVR    TX-OK TX-ERR TX-DRP TX-OVR Flg
+dummy0           1500        0      0      0 0             2      0      0      0 BORU
+dummy1           9000        0      0      0 0             0      0      0      0 BO
+eth0             1500     4730      0      0 0          2364      0      0      0 BMRU
+lo              65536        0      0      0 0             0      0      0      0 LRU

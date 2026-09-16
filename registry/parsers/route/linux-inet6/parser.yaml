@@ -1,0 +1,39 @@
+# `route -A inet6` prints the IPv6 routing table under a
+# banner of its own. The destination carries its prefix length, the next
+# hop is an address (`::` for a route with none), the flags are letters
+# (U up, G gateway, n not cached, ! rejecting) kept as the word they are,
+# and a metric of -1 is the kernel's value for a rejecting default route.
+#
+# The header names the next hop in two words ("Next Hop"), so the columns
+# are named here rather than taken from the header row.
+format: 1
+command: route
+variant: linux-inet6
+description: route -A inet6 kernel IPv6 routing table
+metadata:
+  tags: [linux, network, net-tools]
+  compatible: [net-tools 2.10]
+  references:
+    - https://manpages.debian.org/stable/net-tools/route.8.en.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AKernel IPv6 routing table[ \t]*$'
+      - '^Destination[ \t]+Next Hop[ \t]+Flag[ \t]+Met[ \t]+Ref[ \t]+Use[ \t]+If[ \t]*$'
+input:
+  ignore:
+    - '^Kernel IPv6 routing table[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    columns: [destination, next_hop, flags, metric, ref, use, iface]
+fields:
+  destination: {required: true}
+  next_hop: {required: true}
+  flags: {required: true}
+  metric: {type: int}
+  ref: {type: int}
+  use: {type: int}
+  iface: {required: true}

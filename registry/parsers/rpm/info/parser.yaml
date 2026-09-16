@@ -31,6 +31,9 @@
 # installed` line rpm prints on standard output for a name it does not
 # know: it is not a description line.
 #
+# A package file queried with -p prints `(not installed)` as its install
+# date, and that stays the text it was printed as.
+#
 # The dates are kept as printed. rpm writes them in the local time of the
 # machine it ran on and names no zone, so no offset can be read from the
 # text.
