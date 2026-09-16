@@ -65,19 +65,30 @@ func (r *run) parseTable(p *definition.Parse, fields map[string]*definition.Fiel
 		if err != nil {
 			return nil, err
 		}
-		obj := jsonutil.NewObject()
-		for i, c := range cols {
-			var v raw
-			if i < len(cells) {
-				v = cells[i]
-			}
-			if err := r.setField(obj, c.name, v, fields[c.name], l.num); err != nil {
-				return nil, err
-			}
+		obj, err := r.rowObject(cols, cells, fields, l.num)
+		if err != nil {
+			return nil, err
 		}
 		out = append(out, obj)
 	}
 	return out, nil
+}
+
+// rowObject makes one record out of the cells of a row. A column the row
+// has no cell for takes the value a missing field takes, which is what
+// lets a short row stand where the definition allows one.
+func (r *run) rowObject(cols []column, cells []raw, fields map[string]*definition.Field, ln int) (*jsonutil.Object, error) {
+	obj := jsonutil.NewObject()
+	for i, c := range cols {
+		var v raw
+		if i < len(cells) {
+			v = cells[i]
+		}
+		if err := r.setField(obj, c.name, v, fields[c.name], ln); err != nil {
+			return nil, err
+		}
+	}
+	return obj, nil
 }
 
 // rowCells cuts one row of a table the way its split mode says, into

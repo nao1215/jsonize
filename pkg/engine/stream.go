@@ -465,17 +465,7 @@ func (s *streamer) row(l line) (*jsonutil.Object, error) {
 	if err != nil {
 		return nil, err
 	}
-	obj := jsonutil.NewObject()
-	for i, c := range s.cols {
-		var v raw
-		if i < len(cells) {
-			v = cells[i]
-		}
-		if err := s.setField(obj, c.name, v, s.fields[c.name], l.num); err != nil {
-			return nil, err
-		}
-	}
-	return obj, nil
+	return s.rowObject(s.cols, cells, s.fields, l.num)
 }
 
 func (s *streamer) regexObject(l line) (any, error) {
@@ -730,24 +720,32 @@ func (s *streamer) feedBox(l line) error {
 	return nil
 }
 
-// closeBoxHeader names the columns from the lines above the first rule.
-func (s *streamer) closeBoxHeader() error {
+// takeBoxRow hands over the lines held between two rules and gives back
+// what they were holding, or reports that there were none.
+func (s *streamer) takeBoxRow() ([]line, bool) {
 	if len(s.boxRow) == 0 {
-		return nil
+		return nil, false
 	}
 	group := s.boxRow
 	s.boxRow = nil
 	s.held.give(linesBytes(group))
+	return group, true
+}
+
+// closeBoxHeader names the columns from the lines above the first rule.
+func (s *streamer) closeBoxHeader() error {
+	group, ok := s.takeBoxRow()
+	if !ok {
+		return nil
+	}
 	return s.closeBoxHeaderFrom(group)
 }
 
 func (s *streamer) flushBox() error {
-	if len(s.boxRow) == 0 {
+	group, ok := s.takeBoxRow()
+	if !ok {
 		return nil
 	}
-	group := s.boxRow
-	s.boxRow = nil
-	s.held.give(linesBytes(group))
 	if !s.header {
 		return s.closeBoxHeaderFrom(group)
 	}
