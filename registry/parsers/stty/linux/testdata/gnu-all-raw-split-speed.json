@@ -1,0 +1,292 @@
+{
+  "speed": null,
+  "ispeed": 9600,
+  "ospeed": 115200,
+  "rows": 50,
+  "columns": 132,
+  "line": 0,
+  "control_characters": [
+    {
+      "name": "intr",
+      "value": "^K"
+    },
+    {
+      "name": "quit",
+      "value": "^\\"
+    },
+    {
+      "name": "erase",
+      "value": "^?"
+    },
+    {
+      "name": "kill",
+      "value": "^U"
+    },
+    {
+      "name": "eof",
+      "value": "^D"
+    },
+    {
+      "name": "eol",
+      "value": ";"
+    },
+    {
+      "name": "eol2",
+      "value": "<undef>"
+    },
+    {
+      "name": "swtch",
+      "value": "<undef>"
+    },
+    {
+      "name": "start",
+      "value": "^Q"
+    },
+    {
+      "name": "stop",
+      "value": "^S"
+    },
+    {
+      "name": "susp",
+      "value": "^Z"
+    },
+    {
+      "name": "rprnt",
+      "value": "^R"
+    },
+    {
+      "name": "werase",
+      "value": "^W"
+    },
+    {
+      "name": "lnext",
+      "value": "^V"
+    },
+    {
+      "name": "discard",
+      "value": "^O"
+    },
+    {
+      "name": "min",
+      "value": "1"
+    },
+    {
+      "name": "time",
+      "value": "0"
+    }
+  ],
+  "flags": [
+    {
+      "enabled": false,
+      "name": "parenb"
+    },
+    {
+      "enabled": false,
+      "name": "parodd"
+    },
+    {
+      "enabled": false,
+      "name": "cmspar"
+    },
+    {
+      "enabled": true,
+      "name": "cs8"
+    },
+    {
+      "enabled": false,
+      "name": "hupcl"
+    },
+    {
+      "enabled": false,
+      "name": "cstopb"
+    },
+    {
+      "enabled": true,
+      "name": "cread"
+    },
+    {
+      "enabled": false,
+      "name": "clocal"
+    },
+    {
+      "enabled": false,
+      "name": "crtscts"
+    },
+    {
+      "enabled": false,
+      "name": "ignbrk"
+    },
+    {
+      "enabled": false,
+      "name": "brkint"
+    },
+    {
+      "enabled": false,
+      "name": "ignpar"
+    },
+    {
+      "enabled": false,
+      "name": "parmrk"
+    },
+    {
+      "enabled": false,
+      "name": "inpck"
+    },
+    {
+      "enabled": false,
+      "name": "istrip"
+    },
+    {
+      "enabled": false,
+      "name": "inlcr"
+    },
+    {
+      "enabled": false,
+      "name": "igncr"
+    },
+    {
+      "enabled": false,
+      "name": "icrnl"
+    },
+    {
+      "enabled": false,
+      "name": "ixon"
+    },
+    {
+      "enabled": false,
+      "name": "ixoff"
+    },
+    {
+      "enabled": false,
+      "name": "iuclc"
+    },
+    {
+      "enabled": false,
+      "name": "ixany"
+    },
+    {
+      "enabled": false,
+      "name": "imaxbel"
+    },
+    {
+      "enabled": false,
+      "name": "iutf8"
+    },
+    {
+      "enabled": false,
+      "name": "opost"
+    },
+    {
+      "enabled": false,
+      "name": "olcuc"
+    },
+    {
+      "enabled": false,
+      "name": "ocrnl"
+    },
+    {
+      "enabled": true,
+      "name": "onlcr"
+    },
+    {
+      "enabled": false,
+      "name": "onocr"
+    },
+    {
+      "enabled": false,
+      "name": "onlret"
+    },
+    {
+      "enabled": false,
+      "name": "ofill"
+    },
+    {
+      "enabled": false,
+      "name": "ofdel"
+    },
+    {
+      "enabled": true,
+      "name": "nl0"
+    },
+    {
+      "enabled": true,
+      "name": "cr0"
+    },
+    {
+      "enabled": true,
+      "name": "tab0"
+    },
+    {
+      "enabled": true,
+      "name": "bs0"
+    },
+    {
+      "enabled": true,
+      "name": "vt0"
+    },
+    {
+      "enabled": true,
+      "name": "ff0"
+    },
+    {
+      "enabled": false,
+      "name": "isig"
+    },
+    {
+      "enabled": false,
+      "name": "icanon"
+    },
+    {
+      "enabled": true,
+      "name": "iexten"
+    },
+    {
+      "enabled": false,
+      "name": "echo"
+    },
+    {
+      "enabled": true,
+      "name": "echoe"
+    },
+    {
+      "enabled": true,
+      "name": "echok"
+    },
+    {
+      "enabled": false,
+      "name": "echonl"
+    },
+    {
+      "enabled": false,
+      "name": "noflsh"
+    },
+    {
+      "enabled": false,
+      "name": "xcase"
+    },
+    {
+      "enabled": false,
+      "name": "tostop"
+    },
+    {
+      "enabled": false,
+      "name": "echoprt"
+    },
+    {
+      "enabled": true,
+      "name": "echoctl"
+    },
+    {
+      "enabled": true,
+      "name": "echoke"
+    },
+    {
+      "enabled": false,
+      "name": "flusho"
+    },
+    {
+      "enabled": false,
+      "name": "extproc"
+    }
+  ]
+}

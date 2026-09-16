@@ -1,0 +1,48 @@
+{
+  "speed": 115200,
+  "ispeed": null,
+  "ospeed": null,
+  "rows": null,
+  "columns": null,
+  "line": 0,
+  "control_characters": [
+    {
+      "name": "intr",
+      "value": "^K"
+    },
+    {
+      "name": "eol",
+      "value": ";"
+    }
+  ],
+  "flags": [
+    {
+      "enabled": false,
+      "name": "brkint"
+    },
+    {
+      "enabled": false,
+      "name": "icrnl"
+    },
+    {
+      "enabled": false,
+      "name": "imaxbel"
+    },
+    {
+      "enabled": false,
+      "name": "opost"
+    },
+    {
+      "enabled": false,
+      "name": "isig"
+    },
+    {
+      "enabled": false,
+      "name": "icanon"
+    },
+    {
+      "enabled": false,
+      "name": "echo"
+    }
+  ]
+}

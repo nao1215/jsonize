@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/stty/linux.json",
+  "title": "stty/linux",
+  "description": "stty and stty -a terminal settings on Linux",
+  "x-jsonize": {
+    "definition": "stty/linux",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "speed": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ispeed": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ospeed": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "rows": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "columns": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "line": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "control_characters": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      }
+    },
+    "flags": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled",
+          "name"
+        ]
+      }
+    }
+  },
+  "required": [
+    "speed",
+    "ispeed",
+    "ospeed",
+    "rows",
+    "columns",
+    "line",
+    "control_characters",
+    "flags"
+  ]
+}
