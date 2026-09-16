@@ -1,0 +1,33 @@
+[
+  {
+    "path": "/home/alice/src/repo",
+    "head": "379c562e5b8d48668e0f319273a3cafa7fc4b80f",
+    "branch": "refs/heads/main",
+    "locked_reason": null,
+    "prunable_reason": null
+  },
+  {
+    "path": "/home/alice/src/wt-detached",
+    "head": "24f6c0d0c0d53cf3cf354c8862fa343e7b85d5fe",
+    "branch": null,
+    "detached": true,
+    "locked_reason": null,
+    "prunable_reason": null
+  },
+  {
+    "path": "/home/alice/src/wt-feature",
+    "head": "24f6c0d0c0d53cf3cf354c8862fa343e7b85d5fe",
+    "branch": "refs/heads/feature",
+    "locked_reason": null,
+    "prunable": true,
+    "prunable_reason": "gitdir file points to non-existent location"
+  },
+  {
+    "path": "/home/alice/src/wt-locked",
+    "head": "24f6c0d0c0d53cf3cf354c8862fa343e7b85d5fe",
+    "branch": "refs/heads/locked-branch",
+    "locked": true,
+    "locked_reason": "on a removable disk",
+    "prunable_reason": null
+  }
+]

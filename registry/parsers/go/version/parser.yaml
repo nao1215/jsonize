@@ -1,0 +1,27 @@
+# `go version` prints the version of the go command and the system it was
+# built for: "go version", the version (go1.26.6, or devel and a
+# revision for a build from source), any experiments it was built with
+# (X:name,name), and GOOS/GOARCH. It is one object.
+format: 1
+command: go
+variant: version
+description: go version, the Go release and the system it was built for
+metadata:
+  tags: [go, toolchain]
+  compatible: [gc]
+  references:
+    - https://pkg.go.dev/cmd/go#hdr-Print_Go_version
+detect:
+  args:
+    all: [version]
+    none: ["-m"]
+  signature:
+    all:
+      - '\Ago version (?:go[0-9]\S*|devel \S+)'
+parse:
+  type: regex
+  each: input
+  pattern: '\Ago version (?P<version>go[0-9]\S*|devel [^\n]+?)(?: (?P<experiments>X:\S+))? (?P<os>[a-z0-9]+)/(?P<arch>[a-z0-9]+)\n?\z'
+fields:
+  version: {required: true}
+  experiments: {type: array, split: ",", trim_prefix: "X:"}

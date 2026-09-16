@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/worktree-porcelain.json",
+  "title": "git/worktree-porcelain",
+  "description": "git worktree list --porcelain, the worktrees and their state",
+  "x-jsonize": {
+    "definition": "git/worktree-porcelain",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string"
+      },
+      "bare": {
+        "type": "boolean"
+      },
+      "head": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "branch": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "detached": {
+        "type": "boolean"
+      },
+      "locked": {
+        "type": "boolean"
+      },
+      "locked_reason": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "prunable": {
+        "type": "boolean"
+      },
+      "prunable_reason": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "path",
+      "head",
+      "branch",
+      "locked_reason",
+      "prunable_reason"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+worktree /home/alice/src/repo
+HEAD 379c562e5b8d48668e0f319273a3cafa7fc4b80f
+branch refs/heads/main
+
+worktree /home/alice/src/wt-detached
+HEAD 24f6c0d0c0d53cf3cf354c8862fa343e7b85d5fe
+detached
+
+worktree /home/alice/src/wt-feature
+HEAD 24f6c0d0c0d53cf3cf354c8862fa343e7b85d5fe
+branch refs/heads/feature
+
+worktree /home/alice/src/wt-locked
+HEAD 24f6c0d0c0d53cf3cf354c8862fa343e7b85d5fe
+branch refs/heads/locked-branch
+locked on a removable disk
+

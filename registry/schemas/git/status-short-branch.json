@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/status-short-branch.json",
+  "title": "git/status-short-branch",
+  "description": "git status -sb, the branch and its upstream, then the changed paths",
+  "x-jsonize": {
+    "definition": "git/status-short-branch",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "branch": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "upstream": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ahead": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "behind": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "upstream",
+        "ahead",
+        "behind"
+      ]
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "worktree": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "path": {
+            "type": "string"
+          },
+          "renamed_to": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "index",
+          "worktree",
+          "path"
+        ]
+      }
+    }
+  },
+  "required": [
+    "branch",
+    "entries"
+  ]
+}

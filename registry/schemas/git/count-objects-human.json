@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/count-objects-human.json",
+  "title": "git/count-objects-human",
+  "description": "git count-objects -vH, the object counts with sizes for people",
+  "x-jsonize": {
+    "definition": "git/count-objects-human",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "count": {
+      "type": "integer"
+    },
+    "garbage": {
+      "type": "integer"
+    },
+    "in-pack": {
+      "type": "integer"
+    },
+    "packs": {
+      "type": "integer"
+    },
+    "prune-packable": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": {
+    "type": "string"
+  }
+}

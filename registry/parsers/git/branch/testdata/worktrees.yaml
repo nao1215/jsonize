@@ -1,0 +1,3 @@
+source: git 2.53 in repositories built for this fixture on Ubuntu, LC_ALL=C
+description: the current branch and two checked out in other worktrees
+args: [branch]

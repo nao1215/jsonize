@@ -1,0 +1,3 @@
+source: git 2.53 in repositories built for this fixture on Ubuntu, LC_ALL=C
+description: a branch ahead of its upstream, a file changed in the index and the work tree, and an untracked file
+args: [status, -sb]

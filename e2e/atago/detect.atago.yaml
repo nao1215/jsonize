@@ -2046,3 +2046,44 @@ scenarios:
             json:
               - { path: "$.snapd", equals: 2.76.3 }
               - { path: "$.architecture", equals: amd64 }
+
+  - name: git branch, status -sb and worktree list --porcelain are read when git is named
+    steps:
+      - fixture:
+          file: branch.txt
+          from: "${specdir}/../../registry/parsers/git/branch/testdata/worktrees.txt"
+      - run:
+          command: jz --parser git
+          stdin: {file: branch.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].elsewhere", equals: true }
+              - { path: "$[2].current", equals: true }
+              - { path: "$[2].name", equals: main }
+      - fixture:
+          file: status-sb.txt
+          from: "${specdir}/../../registry/parsers/git/status-short-branch/testdata/ahead.txt"
+      - run:
+          command: jz --parser git
+          stdin: {file: status-sb.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.branch.upstream", equals: origin/main }
+              - { path: "$.branch.ahead", equals: 1 }
+              - { path: "$.entries[1].path", equals: new.txt }
+      - fixture:
+          file: worktrees.txt
+          from: "${specdir}/../../registry/parsers/git/worktree-porcelain/testdata/locked-detached.txt"
+      - run:
+          command: jz --parser git
+          stdin: {file: worktrees.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].detached", equals: true }
+              - { path: "$[3].locked_reason", equals: on a removable disk }

@@ -1,0 +1,45 @@
+# `git branch` prints one branch per line after a two-character marker:
+# "* " for the branch checked out here (current), "+ " for one checked out
+# in another worktree (elsewhere), and two spaces for the rest. A detached HEAD is listed as
+# "* (HEAD detached at abc1234)" or "* (no branch)", which is kept as the
+# name. With -a the remote-tracking branches follow as remotes/NAME, and
+# a symbolic one as "remotes/origin/HEAD -> origin/main".
+#
+# A marker and a word is what many lists look like, so the definition is
+# used only when it is named or reached by `jz run git branch`.
+format: 1
+command: git
+variant: branch
+description: git branch, the branches and which one is checked out
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-branch
+detect:
+  auto_detect: false
+  args:
+    all: [branch]
+    none: ["-v", "-vv", "--verbose"]
+  signature:
+    all:
+      # Every line is a marker and a name git allows (no space, colon,
+      # tilde, caret, question mark, asterisk or bracket), or a detached
+      # HEAD in brackets, or a symbolic ref with its target. A marker
+      # followed by more words (a systemd unit table, a debconf question)
+      # is not a branch.
+      - '\A(?:[*+ ] (?:\([^)\n]*\)|[^\s:~^?*\[\\]+(?: -> [^\s:~^?*\[\\]+)?)(?:\n|\z))+\z'
+      - '(?m)^\* \S'
+parse:
+  type: regex
+  patterns:
+    - pattern: '^\* (?P<name>\(.*\)|\S+)(?: -> (?P<points_to>\S+))?$'
+      values: {current: "true", elsewhere: "false"}
+    - pattern: '^\+ (?P<name>\S+)(?: -> (?P<points_to>\S+))?$'
+      values: {current: "false", elsewhere: "true"}
+    - pattern: '^  (?P<name>\S+)(?: -> (?P<points_to>\S+))?$'
+      values: {current: "false", elsewhere: "false"}
+fields:
+  current: {type: bool}
+  elsewhere: {type: bool}
+  name: {required: true}
