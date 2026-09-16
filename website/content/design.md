@@ -966,6 +966,32 @@ its command line differs. See [aliases](../definition-format/#aliases).
 - A JSON Schema for editor completion of `parser.yaml`; validation is
   done in Go with path-qualified messages instead.
 
+### A table that counts its fields
+
+A `table` with `split: whitespace` gives its last column whatever is left
+on the line. That is what `ps aux` needs, where the command and its
+arguments are one cell with spaces in it, and it is the default.
+
+It also meant a table could not say "this row has exactly N fields": a
+row with N+1 of them produced N cells with two values in the last one.
+`max_fields` may now be one more than the number of columns, and that is
+how a definition asks for the count. The split then yields a cell the
+columns have no name for, and the row is refused as too wide, on every
+row rather than only on the ones a signature reached, and whatever the
+type of the last column is.
+
+No key was added for it. `max_fields` already meant the number of fields
+the split produces at most, and one past the columns is the number that
+makes a row too wide; anything beyond that says nothing further, since
+such a row is refused either way.
+
+`proc/diskstats` is the definition this was written for. It used to get
+its count from two places that were never designed to work together:
+inside the signature window the expression counted the fields, and past
+the window what refused a twenty-first field was that it landed in
+`flush_ms` and failed to convert to an integer. A table whose last column
+were text would have taken it silently. It now sets `max_fields: 21`.
+
 ### The library under pkg/
 
 The six packages that read text are under `pkg/`, so another program can
@@ -1028,32 +1054,17 @@ What would close it is a way for a definition to say that some fields
 belong to every record of a stream. Nothing in the format says that
 today, and inventing it for one report would be the wrong order.
 
-### Exact field counts in a table
+### Discrete field counts in a table
 
-Settled. A `table` with `split: whitespace` gives its last column
-whatever is left on the line, which is what `ps aux` needs, where the
-command and its arguments are one cell with spaces in it. It meant a
-table could not say "this row has exactly N fields": a row with N+1 of
-them produced N cells with two values in the last one.
+A table states one number of columns, and `max_fields` states whether a
+row wider than that is refused, which is written up under "A table that
+counts its fields" above. Neither states a set of widths.
 
-`max_fields` may now be one more than the number of columns, and that is
-the way a definition asks for the count. The split then yields a cell the
-columns have no name for, and the row is refused as too wide, whatever
-the type of the last column is. No key was added: the two uses are a
-number of fields to split into, which is what `max_fields` already was.
-
-`proc/diskstats` used to get its count from two places that were never
-designed to work together: inside the signature window the expression
-counted the fields, and past the window what refused a twenty-first field
-was that it landed in `flush_ms` and failed to convert to an integer. It
-now sets `max_fields: 21` and the parser counts every row.
-
-What is still open is the case the number does not state. The widths a
-format allows are not always a range: `/proc/diskstats` has fourteen,
-eighteen and twenty fields across kernel versions, and a row of fifteen,
-sixteen, seventeen or nineteen is not any of them. A count written as a
-range would accept rows no kernel ever wrote, and a list of allowed
-widths is a key that has one caller.
+The widths a format allows are not always a range. `/proc/diskstats` has
+fourteen, eighteen and twenty fields across kernel versions, and a row of
+fifteen, sixteen, seventeen or nineteen is not any of them. A count
+written as a range would accept rows no kernel ever wrote, and a list of
+allowed widths would be a definition key with one caller.
 
 Field counts also cannot resolve every ambiguity. A twenty-field row
 truncated to eighteen is indistinguishable from a row an older kernel
