@@ -425,8 +425,11 @@ func TestOtherInvocationsOfAKnownCommand(t *testing.T) {
 		{
 			// `git log --stat` puts the diffstat inside the commit block,
 			// where the message would be. It used to be read as git/log
-			// with the file list reported as lines of the commit message.
-			name: "git log --stat",
+			// with the file list reported as lines of the commit message;
+			// git/log-stat reads it now, and git/log named on its own
+			// still does not.
+			name: "git log --stat named as git/log",
+			args: []string{"--parser", "git", "--variant", "log"},
 			input: "commit 1a348149ff7078757f307580d7846bb788b17484\n" +
 				"Author: Ada Lovelace <ada@example.com>\n" +
 				"Date:   Mon Sep 7 09:06:35 2026 +0900\n" +
@@ -435,6 +438,20 @@ func TestOtherInvocationsOfAKnownCommand(t *testing.T) {
 				"\n" +
 				" notes/second.txt | 3 +++\n" +
 				" 1 file changed, 3 insertions(+)\n",
+		},
+		{
+			// --summary adds a mode line under the diffstat, which
+			// git/log-stat does not read.
+			name: "git log --stat --summary",
+			input: "commit 1a348149ff7078757f307580d7846bb788b17484\n" +
+				"Author: Ada Lovelace <ada@example.com>\n" +
+				"Date:   Mon Sep 7 09:06:35 2026 +0900\n" +
+				"\n" +
+				"    make the note executable\n" +
+				"\n" +
+				" notes/second.txt | 0\n" +
+				" 1 file changed, 0 insertions(+), 0 deletions(-)\n" +
+				" mode change 100644 => 100755 notes/second.txt\n",
 		},
 		{
 			name: "git log --numstat",
