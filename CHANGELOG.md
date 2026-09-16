@@ -131,10 +131,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
-- `jz run mpstat -A`, `mpstat -I CPU`, `mpstat -u -I SUM`, `sar -A`,
-  `readelf -a` and any two readelf reports together (`readelf -h -S`)
-  exit 4 instead of reaching a definition that reads the first report
-  and failing on the next with exit 3.
+- Output that adds what a definition does not read is refused with exit
+  4 instead of reaching it and failing with exit 3: `mpstat -A`,
+  `mpstat -I CPU`, `sar -A`, two sar or pidstat reports in one run
+  (`sar -u -r`, `pidstat -u -d`), `sar -h`, `readelf -a` and two readelf
+  reports together (`readelf -h -S`), `ip -s address`, `ip -d address`,
+  and `ip -s -h link` and `ip -s -d link`.
 - `jz new 'a[][]=1'` wrote `{"a[]":["1"]}`, a key the documentation says
   a plain argument cannot name. A key that still ends in `[]` once the
   `[]` that appends is taken off is refused with exit 2, in a plain

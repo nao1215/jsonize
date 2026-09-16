@@ -18,8 +18,9 @@ metadata:
 detect:
   os: [linux]
   args:
-    # -A prints every report sar has after this one.
-    none: ["-A"]
+    # Another report after this one, and `-h` values with units,
+    # neither of which this reads.
+    none: ["-B", "-b", "-d", "-F", "-H", "-I", "-m", "-n", "-q", "-r", "-S", "-v", "-W", "-w", "-y", "-A", "-h"]
   signature:
     all:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+CPU[ \t]+%usr[ \t]+%nice[ \t]+%sys[ \t]+%iowait[ \t]+%steal[ \t]+%irq[ \t]+%soft[ \t]+%guest[ \t]+%gnice[ \t]+%idle[ \t]*$'

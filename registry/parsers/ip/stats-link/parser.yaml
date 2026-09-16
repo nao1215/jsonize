@@ -32,6 +32,10 @@ detect:
       # two, which this definition has no place for. It is a statement
       # about what one -s prints, not a list of neighbours to avoid.
       - '^[ \t]+RX errors:[ \t]+length'
+      # -h prints the counters rounded with a unit (245M, 35.0k), and -d
+      # the link details after the link address.
+      - '^[ \t]+(?:[0-9.]+[ \t]+)*[0-9][0-9.]*[kMGTPE][ \t]'
+      - '^[ \t]+link/\S+ [^\n]* promiscuity [0-9]+'
 parse:
   type: records
   start: '^\d+: '

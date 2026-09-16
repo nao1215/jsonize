@@ -15,6 +15,10 @@ metadata:
     - https://man7.org/linux/man-pages/man1/sar.1.html
 detect:
   os: [linux]
+  args:
+    # Another report after this one, `-h` values with units, and
+    # with -n a second keyword, none of which this reads.
+    none: ["-B", "-b", "-d", "-F", "-H", "-I", "-m", "-q", "-r", "-S", "-u", "-v", "-W", "-w", "-y", "-A", "-h", "DEV", "EDEV", "NFS", "NFSD", "SOCK", "IP", "EIP", "ICMP", "EICMP", "TCP", "ETCP", "UDP", "SOCK6", "IP6", "EIP6", "ICMP6", "UDP6", "SOFT", "FC", "ALL"]
   signature:
     all:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+ierr6/s[ \t]+idtunr6/s[ \t]+odtunr6/s[ \t]+itmex6/s[ \t]+otmex6/s[ \t]+iprmpb6/s[ \t]+oprmpb6/s[ \t]+iredir6/s[ \t]+oredir6/s[ \t]+ipck2b6/s[ \t]+opck2b6/s[ \t]*$'

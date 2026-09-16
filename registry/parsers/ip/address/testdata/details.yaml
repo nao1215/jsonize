@@ -1,0 +1,4 @@
+description: ip -d address adds the link details after the link address, which this does not read, so the text is refused.
+source: ip -d address show lo, captured with LC_ALL=C on Ubuntu 26.04 (iproute2 6.19.0)
+os: linux
+expect_error: 'does not describe this input'

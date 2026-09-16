@@ -28,6 +28,10 @@ metadata:
     - https://man7.org/linux/man-pages/man1/sar.1.html
 detect:
   os: [linux]
+  args:
+    # Another report after this one, and `-h` values with units,
+    # neither of which this reads.
+    none: ["-B", "-b", "-d", "-F", "-H", "-I", "-m", "-n", "-q", "-r", "-u", "-v", "-W", "-w", "-y", "-A", "-h"]
   signature:
     all:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+kbswpfree[ \t]+kbswpused[ \t]+%swpused[ \t]+kbswpcad[ \t]+%swpcad[ \t]*$'
