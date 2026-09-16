@@ -305,7 +305,8 @@ parse:
     none: true                               # no header line (columns required)
     leading_label: type                      # name for an unlabelled first column
     rename: {login: login_at}                # rename derived names
-  max_fields: 6                              # whitespace/delimiter: last cell absorbs the rest
+  max_fields: 6                              # whitespace/delimiter: last cell absorbs the rest,
+                                             # or columns+1 to count the fields instead
   min_fields: 3                              # rows with fewer cells are errors (default: column count)
 ```
 
@@ -350,6 +351,17 @@ to repeat. A `csv` is read the other way (below).
   last one is the rest of the line, without the whitespace at its two
   ends and with every run inside it kept. A value with whitespace in it
   can therefore be read in the last cell and in no other.
+
+  `max_fields` may be one more than the number of columns, and that is
+  how a table asks for a row to be counted rather than absorbed: the
+  split then yields a cell the columns have no name for, and the row is
+  refused as too wide. `ps aux` wants the default, where the command and
+  its arguments are the last cell; `/proc/diskstats` wants the count, and
+  gets it on every row rather than only on the rows a signature reached.
+  The two are different questions, and this is the one setting that
+  answers both. Discrete widths (`/proc/diskstats` has rows of fourteen,
+  eighteen and twenty fields across kernel versions) are not something a
+  single number states.
 - `aligned`: cells are cut where the header words start. A value that
   crosses a boundary from the right (a wide, right-aligned number) moves
   the cut to the previous space; a value that overflows to the right is

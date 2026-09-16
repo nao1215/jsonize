@@ -307,7 +307,7 @@ func TestLoadErrors(t *testing.T) {
 		{"rename beside explicit columns", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {columns: [a, b], rename: {a: z}}}\n", "header.rename: cannot be combined with header.columns"},
 		{"rename beside explicit columns in a csv", "format: 1\ncommand: c\nvariant: v\nparse: {type: csv, header: {columns: [a], rename: {a: z}}}\n", "header.rename: cannot be combined with header.columns"},
 		{"leading label on a box table", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, split: box, header: {leading_label: x}}\n", "cannot be combined with split: box"},
-		{"max > columns", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {columns: [a]}, max_fields: 2}\n", "exceeds the number of columns"},
+		{"max more than one past the columns", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {columns: [a, b]}, max_fields: 4}\n", "exceeds the number of columns"},
 		{"field not column", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, header: {columns: [a]}}\nfields: {b: {type: int}}\n", "not one of the declared columns"},
 		{"table with regex keys", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, pattern: x}\n", "only valid for type regex"},
 		{"table with kv keys", "format: 1\ncommand: c\nvariant: v\nparse: {type: table, separator: x}\n", "only valid for type kv"},

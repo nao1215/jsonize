@@ -1,15 +1,14 @@
 description: |
   A twenty-first field on a row past the signature window, which the
-  signature never sees. The parser reads it, and a table's last column
-  takes whatever is left on the line, so the extra field lands in
-  flush_ms and fails to convert to an integer.
+  signature never sees. The parser counts the fields of every row, so the
+  row is refused for being wider than the format's columns rather than
+  read with the extra field folded into the last counter.
 
-  What this pins is that the row is refused rather than read with the
-  extra field folded into the last counter. It also pins where the
-  refusal comes from: the type of the last column, not a field count.
-  The table parser makes no promise about the number of fields past the
-  window, which is recorded as an open question in design.md.
-expect_error: 'field "flush_ms": cannot convert "0 99" to int'
+  Before max_fields was set, the refusal came from the type of the last
+  column: the extra field landed in flush_ms and failed to convert to an
+  integer. A table whose last column were text would have taken it
+  silently.
+expect_error: 'expected at most 20 fields but found 21'
 os: linux
 source: |
   synthetic; 204 rows of padding to run past the 200-line window, then

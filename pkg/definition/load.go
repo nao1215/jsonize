@@ -712,8 +712,13 @@ func validateHeader(v *validator, path string, p *Parse, fields map[string]*Fiel
 			v.add(path+".header.rename."+from, "invalid name %q", to)
 		}
 	}
-	if p.MaxFields != 0 && len(h.Columns) > 0 && p.MaxFields > len(h.Columns) {
-		v.add(path+".max_fields", "exceeds the number of columns (%d)", len(h.Columns))
+	// One more than the number of columns is how a definition asks for
+	// the row to be counted rather than absorbed: the split then yields a
+	// cell the columns have no name for, and the row is refused for
+	// having more fields than the format has columns. Anything beyond
+	// that says nothing further, since such a row is refused either way.
+	if p.MaxFields != 0 && len(h.Columns) > 0 && p.MaxFields > len(h.Columns)+1 {
+		v.add(path+".max_fields", "exceeds the number of columns (%d) by more than the one field that makes a row too wide", len(h.Columns))
 	}
 	if len(h.Columns) > 0 {
 		known := seen
