@@ -1,0 +1,32 @@
+# `partx --show --bytes` prints the table partx/show reads with SIZE as
+# a count of bytes instead of a rounded size, so SIZE is an integer here.
+# A byte count never ends in a unit letter, so the first row says which
+# of the two the table is.
+format: 1
+command: partx
+variant: bytes
+description: partx --show --bytes, the partitions on a disk or image with sizes in bytes
+metadata:
+  tags: [linux, block-device, partition, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/partx.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ANR[ \t]+START[ \t]+END[ \t]+SECTORS[ \t]+SIZE[ \t]+NAME[ \t]+UUID[ \t]*$'
+      - '\A[^\n]*\n[ \t]*\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+(?:[ \t]|$)'
+    # The table is lined up; see partx/show for why --raw is refused.
+    any:
+      - '\ANR(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
+      - '\A[^\n]*\n[ \t]\d[ \t]'
+parse:
+  type: table
+  split: aligned
+fields:
+  nr: {type: int, required: true}
+  start: {type: int, required: true}
+  end: {type: int, required: true}
+  sectors: {type: int, required: true}
+  size: {type: int, required: true}

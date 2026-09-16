@@ -1,0 +1,4 @@
+description: A GPT image with a name holding a space and a partition with no name, sizes in bytes.
+source: partx --show -b gpt.img on a 64 MiB image partitioned with sgdisk -n -t -c, util-linux 2.41.3 on Ubuntu 26.04 with LC_ALL=C; partition UUIDs replaced
+os: linux
+args: [--show, -b, gpt.img]

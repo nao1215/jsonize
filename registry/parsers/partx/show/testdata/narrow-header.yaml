@@ -1,0 +1,4 @@
+description: Values no wider than the header leave it one space apart, and the row still starts with the right-aligned partition number.
+source: partx --show tiny.img on a 2 MiB image with one 100-sector GPT partition made by sfdisk, util-linux 2.41.3 on Ubuntu 26.04 with LC_ALL=C; partition UUID replaced
+os: linux
+args: [--show, tiny.img]

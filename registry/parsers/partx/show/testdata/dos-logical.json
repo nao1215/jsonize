@@ -1,0 +1,47 @@
+[
+  {
+    "nr": 1,
+    "start": 2048,
+    "end": 43007,
+    "sectors": 40960,
+    "size": "20M",
+    "name": null,
+    "uuid": "0a0b0c0d-01"
+  },
+  {
+    "nr": 2,
+    "start": 43008,
+    "end": 63487,
+    "sectors": 20480,
+    "size": "10M",
+    "name": null,
+    "uuid": "0a0b0c0d-02"
+  },
+  {
+    "nr": 3,
+    "start": 63488,
+    "end": 131071,
+    "sectors": 67584,
+    "size": "33M",
+    "name": null,
+    "uuid": "0a0b0c0d-03"
+  },
+  {
+    "nr": 5,
+    "start": 65536,
+    "end": 81919,
+    "sectors": 16384,
+    "size": "8M",
+    "name": null,
+    "uuid": "0a0b0c0d-05"
+  },
+  {
+    "nr": 6,
+    "start": 83968,
+    "end": 131071,
+    "sectors": 47104,
+    "size": "23M",
+    "name": null,
+    "uuid": "0a0b0c0d-06"
+  }
+]
