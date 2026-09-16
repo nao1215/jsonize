@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ipcs/limits.json",
+  "title": "ipcs/limits",
+  "description": "ipcs -l, the System V IPC limits by resource",
+  "x-jsonize": {
+    "definition": "ipcs/limits",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "resource": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "Messages",
+              "Semaphore",
+              "Shared Memory"
+            ]
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "limits": {
+        "type": "object",
+        "properties": {
+          "default max size of queue (bytes)": {
+            "type": "integer"
+          },
+          "max number of arrays": {
+            "type": "integer"
+          },
+          "max number of segments": {
+            "type": "integer"
+          },
+          "max ops per semop call": {
+            "type": "integer"
+          },
+          "max queues system wide": {
+            "type": "integer"
+          },
+          "max seg size (kbytes)": {
+            "type": "integer"
+          },
+          "max semaphores per array": {
+            "type": "integer"
+          },
+          "max semaphores system wide": {
+            "type": "integer"
+          },
+          "max size of message (bytes)": {
+            "type": "integer"
+          },
+          "max total shared memory (kbytes)": {
+            "type": "integer"
+          },
+          "min seg size (bytes)": {
+            "type": "integer"
+          },
+          "semaphore max value": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "resource",
+      "limits"
+    ]
+  }
+}

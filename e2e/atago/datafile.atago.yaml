@@ -608,6 +608,15 @@ scenarios:
             equals: |
               {"id":"a","n":1}
               {"id":"b","n":2}
+      # An integer past 64 bits keeps every digit.
+      - run:
+          command: jz --format csv --type n=int
+          stdin: "n\n18446744073709551616\n-0042\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"n":18446744073709551616},{"n":-42}]
       - run:
           command: jz --format csv --columns id,n --type n=int
           stdin: "a,1\n"
@@ -626,8 +635,8 @@ scenarios:
               [{"id":"a","n":5}]
 
   # A value that is not the type names the line and the column. Read whole,
-  # nothing is written; streamed, the rows before and after it are written
-  # and the status is still 3. A column the input does not have was named
+  # nothing is written; streamed, the rows before it are written, the
+  # stream ends there and the status is still 3. A column the input does not have was named
   # by the caller, so it is exit 2, before any row is written.
   - name: --type refuses a value that is not the type, a column the input lacks and a type it does not know
     steps:

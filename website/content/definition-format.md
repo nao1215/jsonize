@@ -826,7 +826,7 @@ fields:
 
 | Key | Applies to | Meaning |
 |-----|-----------|---------|
-| `type` | all | `string` (default), `int`, `float`, `bool`, `time`, `duration`, `array`, `object` |
+| `type` | all | `string` (default), `int`, `float`, `bool`, `time`, `duration`, `array`, `object`. An `int` is written with every digit it was printed with, past 64 bits too (`18446744073709551612`), less a `+` and the zeros in front |
 | `trim_prefix`, `trim_suffix` | all | removed before conversion; without them a string value keeps its whitespace exactly as the parser produced it |
 | `null_if` | all | values (after trimming) that become `null`; they are printed words for no value, so they become `null` in a `required` field too |
 | `required` | all | a value that is missing or empty is an error |

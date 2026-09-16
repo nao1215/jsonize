@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sum/bsd.json",
+  "title": "sum/bsd",
+  "description": "sum, the BSD checksum and block count of each file",
+  "x-jsonize": {
+    "definition": "sum/bsd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "checksum": {
+        "type": "integer"
+      },
+      "blocks": {
+        "type": "integer"
+      },
+      "file": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "checksum",
+      "blocks",
+      "file"
+    ]
+  }
+}

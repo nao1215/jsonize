@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/df/portable-blocks.json",
+  "title": "df/portable-blocks",
+  "description": "GNU coreutils df -P with -B, -m or --block-size (counts in the unit the heading names)",
+  "x-jsonize": {
+    "definition": "df/portable-blocks",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "header": {
+      "type": "object",
+      "properties": {
+        "block_size": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "block_size"
+      ]
+    },
+    "filesystems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "filesystem": {
+            "type": "string"
+          },
+          "blocks": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "used": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "available": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "capacity_percent": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "mounted_on": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "filesystem",
+          "blocks",
+          "used",
+          "available",
+          "capacity_percent",
+          "mounted_on"
+        ]
+      }
+    }
+  },
+  "required": [
+    "header",
+    "filesystems"
+  ]
+}

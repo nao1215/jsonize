@@ -1,0 +1,54 @@
+# `ipcs -l` prints the System V IPC limits of the kernel in up to three
+# sections, one per kind of resource (-q, -m and -s pick them), each
+# under a dashed heading naming it and as "description = value" lines.
+# A record is a section: its name, and the limits keyed by the
+# descriptions ipcs printed, the unit in brackets included. Every limit
+# is an exact integer; the shared memory maximum is often printed as
+# 2^64 - 4 and keeps all its digits.
+format: 1
+command: ipcs
+variant: limits
+description: ipcs -l, the System V IPC limits by resource
+metadata:
+  tags: [linux, ipc, kernel]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/ipcs.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-l", "--limits"]
+  signature:
+    all:
+      - '\A-{6} (?:Messages|Shared Memory|Semaphore) Limits -{8}\n[a-z]'
+parse:
+  type: records
+  start: '^-{6} .+ Limits -{8}$'
+  parts:
+    - name: resource
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A-{6} (?P<name>Messages|Shared Memory|Semaphore) Limits -{8}\z'
+      fields:
+        name: {required: true}
+    - name: limits
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: " = "
+        as: map
+      fields:
+        max queues system wide: {type: int}
+        max size of message (bytes): {type: int}
+        default max size of queue (bytes): {type: int}
+        max number of segments: {type: int}
+        max seg size (kbytes): {type: int}
+        max total shared memory (kbytes): {type: int}
+        min seg size (bytes): {type: int}
+        max number of arrays: {type: int}
+        max semaphores per array: {type: int}
+        max semaphores system wide: {type: int}
+        max ops per semop call: {type: int}
+        semaphore max value: {type: int}

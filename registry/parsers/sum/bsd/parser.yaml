@@ -1,0 +1,35 @@
+# `sum` prints the BSD checksum of each file: the checksum as five digits
+# with zeros in front, the size in 1024-byte blocks right-aligned in five
+# columns, and the file name, which is left out when it reads standard
+# input. The zeros and the padding are what tell it from cksum, which
+# separates its cells with one space.
+#
+# `sum -s` prints the System V checksum as "checksum blocks name" with
+# single spaces, which is the text cksum/posix reads, and a line of it
+# says nothing that tells the two apart, so it is not read here.
+format: 1
+command: sum
+variant: bsd
+aliases:
+  - name: gsum
+description: sum, the BSD checksum and block count of each file
+metadata:
+  tags: [linux, checksum]
+  compatible: [GNU coreutils, uutils coreutils]
+  references:
+    - https://man7.org/linux/man-pages/man1/sum.1.html
+detect:
+  args:
+    none: ["-s", "--sysv"]
+  signature:
+    all:
+      - '\A(?:[0-9]{5} +[0-9]+(?: [^\n]+)?(?:\n|\z))+\z'
+      - '\A[0-9]{5} {1,5}[0-9]{1,5}(?:\n| |\z)'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<checksum>[0-9]{5}) +(?P<blocks>[0-9]+) (?P<file>.+)$'
+    - '^(?P<checksum>[0-9]{5}) +(?P<blocks>[0-9]+)(?P<file>)??$'
+fields:
+  checksum: {type: int, required: true}
+  blocks: {type: int, required: true}

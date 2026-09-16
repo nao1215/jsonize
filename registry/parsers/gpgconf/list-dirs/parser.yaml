@@ -17,8 +17,8 @@ detect:
     any: ["--list-dirs"]
   signature:
     all:
-      - '\Asysconfdir:'
-      - '(?m)^homedir:'
+      # The list opens with these two, whatever the version adds below.
+      - '\Asysconfdir:[^\n]*\nbindir:'
       - '\A(?:[a-z][a-z-]*:[^\n]*(?:\n|\z))+\z'
 parse:
   type: kv

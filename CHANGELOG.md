@@ -17,8 +17,11 @@ project follows [Semantic Versioning](https://semver.org/).
   `systemd-delta --diff=false`. More of three it did: `git diff
   --name-status` (a quoted path decoded), `git reflog`, `git ls-remote`,
   `git cherry`, `systemd-analyze timespan`, `timestamp` and `calendar`,
-  and `resolvectl dns` and `domain`. The registry holds 235 commands
-  through 617 definitions.
+  and `resolvectl dns` and `domain`.
+- Three more: `sum` (the BSD checksum, told from cksum by its padding),
+  `ipcs -l` (a record per resource) and `df -P` with `-B`, `-m` or
+  `--block-size` (the unit the heading names in bytes). The registry
+  holds 236 commands through 620 definitions.
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the
@@ -33,6 +36,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- An `int` field, and `--type COLUMN=int`, keeps an integer past 64 bits
+  with every digit instead of refusing it with exit 3: `ipcs -l` prints
+  a shared memory limit of 2^64 - 4. A `+` and zeros in front are left
+  out as they are for a smaller integer.
 - `jz run` refuses, before it starts the command, `--stream` when no
   variant it could read the output with has a streaming form, and a key
   to `--extract` or `--exclude` that none of them can have. It used to

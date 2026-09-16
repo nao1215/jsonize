@@ -1,0 +1,31 @@
+{
+  "header": {
+    "block_size": 512
+  },
+  "filesystems": [
+    {
+      "filesystem": "/dev/nvme1n1p2",
+      "blocks": 3841282576,
+      "used": 3484366464,
+      "available": 161642184,
+      "capacity_percent": 96,
+      "mounted_on": "/"
+    },
+    {
+      "filesystem": "/dev/nvme0n1p1",
+      "blocks": 3935748000,
+      "used": 2059124040,
+      "available": 1676551464,
+      "capacity_percent": 56,
+      "mounted_on": "/media/alice/2nd"
+    },
+    {
+      "filesystem": "/dev/nvme1n1p1",
+      "blocks": 2197264,
+      "used": 12912,
+      "available": 2184352,
+      "capacity_percent": 1,
+      "mounted_on": "/boot/efi"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+Filesystem     1048576-blocks     Used Available Capacity Mounted on
+/dev/nvme1n1p2       1875627M 1701351M    78927M      96% /
+/dev/nvme0n1p1       1921752M 1005432M   818629M      56% /media/alice/2nd
+/dev/nvme1n1p1          1073M       7M     1067M       1% /boot/efi
+total                3798452M 2706789M   898623M      76% -

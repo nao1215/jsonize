@@ -1804,3 +1804,34 @@ parse:
 		t.Errorf("streamed: %v", err)
 	}
 }
+
+// An int field holds the integer a command printed, however many digits
+// it has. One past what 64 bits hold (a limit printed as 2^64 - 4) is
+// written with its digits rather than refused, and what is not an
+// integer is still refused.
+func TestIntFieldKeepsAnIntegerPast64Bits(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: v
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+) (?P<value>\S+)$'
+fields:
+  value: {type: int}
+`)
+	got, err := Parse(def, []byte("a 9223372036854775807\nb 18446744073709551612\nc -9223372036854775809\nd +00018446744073709551616\ne -000\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `[{"name":"a","value":9223372036854775807},{"name":"b","value":18446744073709551612},{"name":"c","value":-9223372036854775809},{"name":"d","value":18446744073709551616},{"name":"e","value":0}]`
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	for _, bad := range []string{"1.5", "1e30", "0x10", "1_000", "--1", "99999999999999999999x"} {
+		if _, err := Parse(def, []byte("a "+bad+"\n"), Options{}); err == nil {
+			t.Errorf("%q was read as an int", bad)
+		}
+	}
+}

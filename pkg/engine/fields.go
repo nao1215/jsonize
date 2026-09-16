@@ -1,7 +1,10 @@
 package engine
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/nao1215/jsonize/pkg/convert"
@@ -140,6 +143,11 @@ func (r *run) convertScalar(name, s string, f *definition.Field, ln int) (any, e
 		return s, nil
 	case definition.FieldInt:
 		v, err := convert.Int(s)
+		if errors.Is(err, strconv.ErrRange) {
+			if n, ok := wideInt(s); ok {
+				return n, nil
+			}
+		}
 		if err != nil {
 			return nil, wrap(err)
 		}
@@ -234,4 +242,31 @@ func (r *run) convertObject(name, s string, f *definition.Field, ln int) (any, e
 		}
 	}
 	return obj, nil
+}
+
+// wideInt reads an integer too large for 64 bits as the JSON number its
+// digits write: an exact figure a command printed (a limit of 2^64 - 4)
+// is still that figure, and JSON puts no bound on the digits of one. The
+// sign and the zeros in front, which JSON does not allow, are left out
+// the way reading it as an int64 leaves them out.
+func wideInt(s string) (json.Number, bool) {
+	t := strings.TrimSpace(s)
+	neg := false
+	switch {
+	case strings.HasPrefix(t, "-"):
+		neg, t = true, t[1:]
+	case strings.HasPrefix(t, "+"):
+		t = t[1:]
+	}
+	if t == "" || strings.Trim(t, "0123456789") != "" {
+		return "", false
+	}
+	t = strings.TrimLeft(t, "0")
+	if t == "" {
+		return "0", true
+	}
+	if neg {
+		t = "-" + t
+	}
+	return json.Number(t), true
 }
