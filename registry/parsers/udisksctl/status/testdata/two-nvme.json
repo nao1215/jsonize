@@ -1,0 +1,14 @@
+[
+  {
+    "model": "Lexar SSD ARES 2TB",
+    "revision": "fecc6d",
+    "serial": "SERIAL000000000001",
+    "device": "nvme0n1"
+  },
+  {
+    "model": "KIOXIA-EXCERIA PLUS G4 SSD",
+    "revision": "EVFAJ1.0",
+    "serial": "SERIAL000002",
+    "device": "nvme1n1"
+  }
+]
