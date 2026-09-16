@@ -4,7 +4,18 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.5.0]
+
+jz holds every reading of an input to the same rules. A stream is
+identified under the record limit it is read under and drops a file path
+that does not fit, the way a whole document does; a JSON escape that
+names no character and a control character standing in YAML text are
+refused rather than replaced; YAML nests as deeply as JSON. A table can
+ask for its rows to be counted instead of letting the last column take
+the rest of the line, `jz test --json` writes what failed as one object,
+and loading the registry costs a tenth less time and a fifth fewer
+allocations. The registry is unchanged at 224 commands and 596
+definitions.
 
 ### Added
 
