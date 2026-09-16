@@ -192,7 +192,7 @@ func read(format string, data []byte, maxValues int) (any, error) {
 		err := streamCounted(format, bytes.NewReader(data), len(data)+1, whole, func(v any) error {
 			out = append(out, v)
 			return nil
-		}, nil)
+		})
 		if err != nil {
 			return nil, err
 		}
@@ -305,36 +305,23 @@ func readText(data []byte) (any, error) {
 // Stream reads the records of a record format from r and hands each to
 // emit as soon as it has ended.
 //
-// onError decides what a record that cannot be read means, as it does for
-// engine.Stream: returning nil leaves the record out and goes on, and
-// returning an error ends the stream with it; a nil onError ends the
-// stream at the first. Only a record's own content reaches it: a line
-// that is not JSON, not UTF-8, or not LTSV. A record longer than maxLine
-// bytes, which bounds what is held while a record waits for its end, an
-// error from r and one from emit end the stream whatever onError says,
-// since the reader cannot tell where the next record starts, or there is
-// nobody to write to.
+// The first record that cannot be read ends the stream, as it does for
+// engine.Stream: the records before it stand, and the failure is the
+// stream's. maxLine bounds what is held while a record waits for its end.
 //
 // Each record holds at most engine.DefaultMaxValues values; one that holds
 // more is a record that cannot be read.
-func Stream(format string, r io.Reader, maxLine int, emit func(any) error, onError func(*engine.ParseError) error) error {
-	return stream(format, r, maxLine, engine.DefaultMaxValues, emit, onError)
+func Stream(format string, r io.Reader, maxLine int, emit func(any) error) error {
+	return stream(format, r, maxLine, engine.DefaultMaxValues, emit)
 }
 
-func stream(format string, r io.Reader, maxLine, maxValues int, emit func(any) error, onError func(*engine.ParseError) error) error {
-	return streamCounted(format, r, maxLine, newCounter(format, maxValues, false), emit, onError)
+func stream(format string, r io.Reader, maxLine, maxValues int, emit func(any) error) error {
+	return streamCounted(format, r, maxLine, newCounter(format, maxValues, false), emit)
 }
 
 // streamCounted is Stream with the values counted by c: afresh for every
 // record, or over all of them when c counts a whole document.
-func streamCounted(format string, r io.Reader, maxLine int, c *counter, emit func(any) error, onError func(*engine.ParseError) error) error {
-	failed := func(err error) error {
-		var pe *engine.ParseError
-		if onError == nil || !errors.As(err, &pe) {
-			return err
-		}
-		return onError(pe)
-	}
+func streamCounted(format string, r io.Reader, maxLine int, c *counter, emit func(any) error) error {
 	var record func([]byte, int, *counter) (any, error)
 	switch format {
 	case JSONL:
@@ -342,9 +329,9 @@ func streamCounted(format string, r io.Reader, maxLine int, c *counter, emit fun
 	case LTSV:
 		record = ltsvLine
 	case LINES:
-		return streamStrings(format, r, '\n', maxLine, c, emit, failed)
+		return streamStrings(format, r, '\n', maxLine, c, emit)
 	case NUL:
-		return streamStrings(format, r, 0, maxLine, c, emit, failed)
+		return streamStrings(format, r, 0, maxLine, c, emit)
 	default:
 		return fmt.Errorf("datafile: %q is not a record format", format)
 	}
@@ -364,7 +351,7 @@ func streamCounted(format string, r io.Reader, maxLine int, c *counter, emit fun
 			}
 			line = bytes.TrimSuffix(line, []byte("\r"))
 			if len(bytes.TrimSpace(line)) > 0 {
-				if ferr := readRecordLine(format, line, num, record, c, emit, failed); ferr != nil {
+				if ferr := readRecordLine(format, line, num, record, c, emit); ferr != nil {
 					return ferr
 				}
 			}
@@ -376,15 +363,15 @@ func streamCounted(format string, r io.Reader, maxLine int, c *counter, emit fun
 }
 
 // readRecordLine reads one line of JSON Lines or LTSV and hands its record
-// to emit, or its failure to failed.
-func readRecordLine(format string, line []byte, num int, record func([]byte, int, *counter) (any, error), c *counter, emit func(any) error, failed func(error) error) error {
+// to emit, or returns the failure that ends the stream.
+func readRecordLine(format string, line []byte, num int, record func([]byte, int, *counter) (any, error), c *counter, emit func(any) error) error {
 	if !utf8.Valid(line) {
-		return failed(lineError(format, num, "the line is not valid UTF-8"))
+		return lineError(format, num, "the line is not valid UTF-8")
 	}
 	c.startRecord()
 	v, err := record(line, num, c)
 	if err != nil {
-		return failed(err)
+		return err
 	}
 	return emit(v)
 }
@@ -398,7 +385,7 @@ func readRecordLine(format string, line []byte, num int, record func([]byte, int
 // the CR of CRLF being part of the ending, and a byte order mark in front
 // of the first line is not part of it. A NUL-separated record keeps every
 // byte, CR and LF included.
-func streamStrings(format string, r io.Reader, sep byte, maxLine int, c *counter, emit func(any) error, failed func(error) error) error {
+func streamStrings(format string, r io.Reader, sep byte, maxLine int, c *counter, emit func(any) error) error {
 	br := bufio.NewReader(r)
 	for num := 1; ; num++ {
 		rec, err := readRecord(br, sep, maxLine)
@@ -421,11 +408,11 @@ func streamStrings(format string, r io.Reader, sep byte, maxLine int, c *counter
 		var ferr error
 		c.startRecord()
 		if cerr := c.add(num); cerr != nil {
-			ferr = failed(cerr)
+			ferr = cerr
 		} else if utf8.Valid(rec) {
 			ferr = emit(string(rec))
 		} else {
-			ferr = failed(recordError(format, num, "the text is not valid UTF-8"))
+			ferr = recordError(format, num, "the text is not valid UTF-8")
 		}
 		if ferr != nil {
 			return ferr

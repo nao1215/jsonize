@@ -157,7 +157,7 @@ func BenchmarkStreamTableLarge(b *testing.B) {
 	b.ReportAllocs()
 	b.SetBytes(int64(len(input)))
 	for b.Loop() {
-		if err := Stream(def, bytes.NewReader(input), Options{}, drop, nil); err != nil {
+		if err := Stream(def, bytes.NewReader(input), Options{}, drop); err != nil {
 			b.Fatal(err)
 		}
 	}

@@ -144,7 +144,7 @@ scenarios:
           stdout:
             equals: ""
 
-  - name: a record in the middle that cannot be read is skipped, not fatal
+  - name: a record in the middle that cannot be read ends the stream there
     steps:
       - fixture:
           file: gap.txt
@@ -160,7 +160,6 @@ scenarios:
           stdout:
             equals: |
               {"filesystem":"tmpfs","1k_blocks":1000000,"used":5000,"available":995000,"use_percent":1,"mounted_on":"/run"}
-              {"filesystem":"/dev/sda1","1k_blocks":20000000,"used":5000000,"available":15000000,"use_percent":25,"mounted_on":"/"}
           stderr:
             contains: "line 3"
       # Read whole, the same text is not the format it claimed to be, so
@@ -279,7 +278,8 @@ scenarios:
               {"key":"1","text":"two\nlines"}
               {"key":"2","text":""}
       # A quote in the middle of a value opens nothing: the bad line is
-      # reported and the lines after it are still records.
+      # its own record, reported against its own line, and the stream
+      # ends there rather than swallowing the lines after it.
       - fixture:
           file: bad-quote.csv
           content: "1,x\"y\n2,z\n3,w\n"
@@ -287,10 +287,7 @@ scenarios:
           command: jz --stream --parser csv --variant comma-no-header --file ${workdir}/bad-quote.csv
       - assert:
           exit_code: 3
-          stdout:
-            equals: |
-              {"column_1":"2","column_2":"z"}
-              {"column_1":"3","column_2":"w"}
+          stdout: {empty: true}
           stderr:
             contains: "line 1"
 
@@ -403,12 +400,13 @@ scenarios:
           stdout:
             contains: "> expect 1\n{\"r\":0,"
 
-  # With --explain=json a record the stream leaves out is reported when
-  # it is left out, on its own line of standard error, as a document with
-  # an event key, and the records after it are still written. Through jz
-  # run, the command's standard error goes to the same place, and a line
-  # it writes that looks like an event does not open with "jz: explain: ".
-  - name: a skipped record is reported as an event while the stream goes on
+  # A stream writes the records it has as they come and ends at the
+  # first it cannot read, while the producer is still running: the record
+  # before it is already out, the failure is on standard error once, and
+  # the status is 3. Through jz run, the command's standard error goes to
+  # the same place, and a line it writes that looks like a diagnostic of
+  # jz does not open with "jz: ".
+  - name: a stream ends at a bad record while the producer is still running
     steps:
       - fixture:
           file: skip.feed
@@ -416,8 +414,6 @@ scenarios:
             send root:x:0:0:root:/root:/bin/bash\n
             expect 1
             send not a passwd entry\n
-            send daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\n
-            expect 1
             close
             wait
       - run:
@@ -429,19 +425,14 @@ scenarios:
             equals: |
               > expect 1
               {"username":"root","password":"x","uid":0,"gid":0,"gecos":"root","home":"/root","shell":"/bin/bash"}
-              > expect 1
-              {"username":"daemon","password":"x","uid":1,"gid":1,"gecos":"daemon","home":"/usr/sbin","shell":"/usr/sbin/nologin"}
               status=3
       - assert:
           stderr:
-            contains: 'jz: explain: {"event":"skipped","definition":"etc/passwd","line":2,"reason":'
-      - assert:
-          stderr:
-            contains: '"skipped":1}'
+            contains: 'jz: etc/passwd: line 2: '
       - run:
           command: >-
             e2ehelper feed -deadline 10s -script skip.feed -- jz run --stream --explain=json --parser etc --variant passwd
-            --env 'E2EHELPER_STDERR=from the command: {"event":"skipped","line":2}' -- ${suitedir}/bin/standin
+            --env 'E2EHELPER_STDERR=from the command: not jz speaking' -- ${suitedir}/bin/standin
           timeout: 60s
       - assert:
           exit_code: 0
@@ -449,10 +440,10 @@ scenarios:
             contains: "status=3"
       - assert:
           stderr:
-            contains: 'jz: explain: {"event":"skipped","definition":"etc/passwd","line":2,"reason":'
+            contains: 'jz: etc/passwd: line 2: '
       - assert:
           stderr:
-            contains: "from the command: {\"event\":\"skipped\",\"line\":2}\n"
+            contains: "from the command: not jz speaking\n"
 
   # A quoted csv value may hold line breaks and blank lines, and the
   # record is whole only when the quote closes: its lines are held, the
@@ -583,26 +574,14 @@ scenarios:
               {"x":"b"}
               {"x":"c"}
 
-  # A record a stream cannot read is reported and left out, whatever the
-  # input is: a command's output, a data file or plain lines. The status
-  # is 3 once the input has ended. --stop-on-error ends the stream at that
-  # record instead: what was written before it stands, the failure is on
-  # standard error once, and a command jz run started is stopped.
-  - name: every stream leaves out a record it cannot read, and --stop-on-error ends it there
+  # A record a stream cannot read ends the stream, whatever the input is:
+  # a command's output, a data file or plain lines. What was written
+  # before it stands, the failure is on standard error once, the status is
+  # 3, and a command jz run started is stopped there.
+  - name: every stream ends at a record it cannot read
     steps:
       - run:
           command: jz --format jsonl --stream
-          stdin: "{\"n\":1}\nnot json\n{\"n\":2}\n"
-      - assert:
-          exit_code: 3
-          stdout:
-            equals: |
-              {"n":1}
-              {"n":2}
-          stderr:
-            contains: "jz: jsonl: line 2: the line is not one JSON value"
-      - run:
-          command: jz --format jsonl --stream --stop-on-error
           stdin: "{\"n\":1}\nnot json\n{\"n\":2}\n"
       - assert:
           exit_code: 3
@@ -621,12 +600,13 @@ scenarios:
           stdout:
             equals: |
               {"host":"a","status":"200"}
-              {"host":"b","status":"500"}
+          stderr:
+            contains: "jz: ltsv: line 2"
       - fixture:
           file: latin1.lines
           base64: "b25lCmNhZukKdHdvCg=="
       - run:
-          command: jz --format lines --stream --stop-on-error --file ${workdir}/latin1.lines
+          command: jz --format lines --stream --file ${workdir}/latin1.lines
       - assert:
           exit_code: 3
           stdout:
@@ -646,18 +626,12 @@ scenarios:
       - assert:
           exit_code: 3
           stdout:
-            matches: '\A\{"filesystem":"tmpfs",[^\n]*\}\n\{"filesystem":"/dev/sda1",[^\n]*\}\n\z'
-      - run:
-          command: jz --stream --stop-on-error --parser df --file ${workdir}/df.txt
-      - assert:
-          exit_code: 3
-          stdout:
             equals: |
               {"filesystem":"tmpfs","1k_blocks":12882672,"used":2388,"available":12880284,"use_percent":1,"mounted_on":"/run"}
           stderr:
             contains: "line 3"
       - run:
-          command: jz run --stream --stop-on-error --parser kv --variant equals -- ${suitedir}/bin/standin
+          command: jz run --stream --parser kv --variant equals -- ${suitedir}/bin/standin
           stdin: "a=1\nnoise\nb=2\n"
       - assert:
           exit_code: 3
@@ -666,12 +640,13 @@ scenarios:
               {"name":"a","value":"1"}
           stderr:
             contains: 'jz: kv/equals: line 2: expected "key=value": "noise"'
-      # Without --stream nothing is written after a failure anyway, so the
-      # option is refused before the file, which does not exist, is opened.
+      # --stop-on-error asked for what every stream now does, and a
+      # command line that still has it is refused before the file, which
+      # does not exist, is opened.
       - run:
-          command: jz --stop-on-error --file ${workdir}/missing.txt
+          command: jz --stream --stop-on-error --file ${workdir}/missing.txt
       - assert:
           exit_code: 2
           stdout: {empty: true}
           stderr:
-            contains: "--stop-on-error ends a stream at a record it cannot read"
+            contains: "--stop-on-error was removed"

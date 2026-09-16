@@ -84,10 +84,10 @@ scenarios:
               {"host":"server-a","sample":{"r":1,"b":0}}
               {"host":"server-a","sample":{"r":0,"b":0}}
 
-  - name: "Stop a stream at the first bad record: --stop-on-error keeps what came before"
+  - name: "Keep what a stream wrote before a bad record: the records before it stand"
     steps:
       - run:
-          command: jz --format jsonl --stream --stop-on-error
+          command: jz --format jsonl --stream
           stdin: "{\"n\":1}\nnot json\n{\"n\":2}\n"
       - assert:
           exit_code: 3

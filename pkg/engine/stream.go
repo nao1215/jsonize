@@ -35,33 +35,29 @@ func (e *NoStreamError) Error() string {
 // over one at a time; anything else is a NoStreamError. A composite is
 // handed over part by part (see composite_stream.go).
 //
-// onError decides what a record jz could not read means. Returning nil
-// keeps the stream going and the record is left out; returning an error
-// ends the read with it, which is what a caller wants when a partial
-// answer is worse than none. A nil onError is the second of those: the
-// first failure ends the read. Only a record's own content reaches
-// onError. A format with no streaming form, an emit that fails and a
-// record over the length limit are not records to skip, so they end the
-// read whatever onError says.
+// The first record jz cannot read ends the read with that failure. The
+// records already handed to emit stand, since a stream is written as it
+// is read and nothing written can be taken back; the ones after the
+// failure are not read, because a stream with a gap in it is an answer
+// nobody can check against the input.
 //
 // An error from r other than io.EOF is returned as it is, and the record
 // the read was in the middle of is not emitted: a reader that says its
 // input was cut short gets the records before the cut and none after.
-func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any) error, onError func(*ParseError) error) error {
+func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any) error) error {
 	if !def.Parse.Streams() {
 		return &NoStreamError{Definition: def.ID()}
 	}
 	s := &streamer{
-		run:     run{def: def, opts: opts},
-		p:       &def.Parse,
-		fields:  def.Fields,
-		emit:    emit,
-		onError: onError,
-		fold:    def.Input.FoldPattern(),
-		ignore:  def.Input.IgnorePatterns(),
-		blank:   def.Input.SkipBlankLines(),
-		sel:     &def.Input.Select,
-		held:    &hold{limit: int(opts.maxInput())},
+		run:    run{def: def, opts: opts},
+		p:      &def.Parse,
+		fields: def.Fields,
+		emit:   emit,
+		fold:   def.Input.FoldPattern(),
+		ignore: def.Input.IgnorePatterns(),
+		blank:  def.Input.SkipBlankLines(),
+		sel:    &def.Input.Select,
+		held:   &hold{limit: int(opts.maxInput())},
 	}
 	s.emit = s.handingOn(emit)
 	if def.Parse.Type == definition.TypeTable && def.Parse.Header.None {
@@ -99,14 +95,14 @@ func Stream(def *definition.Definition, r io.Reader, opts Options, emit func(any
 		}
 		num++
 		if rerr := s.feedRecordText(def, prepareRecord(string(raw), sep, num, opts.KeepEscapes), num); rerr != nil {
-			return unwrapStopped(rerr)
+			return rerr
 		}
 		if err != nil {
 			break
 		}
 	}
 	if err := s.finish(); err != nil {
-		return unwrapStopped(s.report(err))
+		return err
 	}
 	return nil
 }
@@ -121,26 +117,13 @@ func (s *streamer) handingOn(emit func(any) error) func(any) error {
 	}
 }
 
-// unwrapStopped hands back the error a composite stream stopped on as it
-// was reported.
-func unwrapStopped(err error) error {
-	var done *reportedError
-	if errors.As(err, &done) {
-		return done.err
-	}
-	return err
-}
-
 // feedRecordText hands one prepared record to the parser, reporting a
 // record that is not valid UTF-8 the same way as one that does not fit.
 func (s *streamer) feedRecordText(def *definition.Definition, text string, num int) error {
 	if err := checkRecord(text, def.Input.Separator()); err != nil {
-		return s.report(&ParseError{Definition: def.ID(), Line: num, Msg: err.msg})
+		return &ParseError{Definition: def.ID(), Line: num, Msg: err.msg}
 	}
-	if perr := s.feedPhysical(line{text: text, num: num}); perr != nil {
-		return s.report(perr)
-	}
-	return nil
+	return s.feedPhysical(line{text: text, num: num})
 }
 
 // hold is what a stream is holding back while it waits for a record to
@@ -186,10 +169,9 @@ func linesBytes(lines []line) int {
 // table header, and the record block that is still open.
 type streamer struct {
 	run
-	p       *definition.Parse
-	fields  map[string]*definition.Field
-	emit    func(any) error
-	onError func(*ParseError) error
+	p      *definition.Parse
+	fields map[string]*definition.Field
+	emit   func(any) error
 
 	fold   *regexp.Regexp
 	ignore []*regexp.Regexp
@@ -244,24 +226,6 @@ type streamer struct {
 	tree []line
 	// comp is the state of a composite, whose parts are streamed apart.
 	comp *composite
-}
-
-// report hands a failed record to onError. It returns nil when the read
-// should carry on, and the error that must end it otherwise. Anything
-// that is not a record jz failed to read passes straight through.
-func (s *streamer) report(err error) error {
-	var (
-		done    *reportedError
-		missing *MissingColumnError
-	)
-	if err == nil || s.onError == nil || errors.As(err, &done) || errors.As(err, &missing) {
-		return err
-	}
-	var pe *ParseError
-	if !errors.As(err, &pe) || errors.Is(err, ErrLineTooLong) || errors.Is(err, ErrInputTooLarge) {
-		return err
-	}
-	return s.onError(pe)
 }
 
 // feedPhysical takes one line as the input split it. For a csv it is
@@ -465,14 +429,10 @@ func (s *streamer) columns() {
 func (s *streamer) feedTable(l line) error {
 	if !s.header {
 		// The header is the first line the selection let through, which
-		// is where the batch reader takes it from too. A header jz
-		// cannot read ends the stream rather than leaving out a record:
-		// no row can be cut without the columns, and the next row would
-		// be taken for another header and report the same failure again
-		// against a line that is not one.
+		// is where the batch reader takes it from too.
 		cols, err := s.resolveHeader(s.p, l, s.split())
 		if err != nil {
-			return stopped(err)
+			return err
 		}
 		s.cols, s.header, s.headerText = cols, true, l.text
 		return nil
@@ -481,7 +441,7 @@ func (s *streamer) feedTable(l line) error {
 		// A second table, whose header says where its own columns are.
 		cols, err := s.resolveHeader(s.p, l, s.split())
 		if err != nil {
-			return stopped(err)
+			return err
 		}
 		s.cols = cols
 		return nil

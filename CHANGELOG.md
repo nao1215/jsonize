@@ -4,6 +4,30 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- A stream ends at the first record it cannot read, rather than leaving
+  the record out and going on. `--stream`, `jz run --stream` and `jz new
+  --each` all do this, for a command's output, a data file and `lines` or
+  `nul` alike: the records written before the failure stand, it is
+  reported once on standard error, nothing after it is read, and the
+  status is 3. A stream that goes on past a record it dropped reaches the
+  next program in the pipeline looking complete, since the diagnostic
+  went to standard error and the status comes only after the records have
+  been read and acted on.
+
+### Removed
+
+- `--stop-on-error` asked for what every stream now does. A command line
+  that still names it is refused with exit status 2 and a message saying
+  so; drop the option and the behaviour is unchanged.
+- `engine.Stream` no longer takes an `onError func(*ParseError) error`
+  beside `emit`: with one answer to a record that cannot be read there is
+  nothing to choose. A caller passing `nil` today drops the argument and
+  gets the same reading.
+
 ## [0.5.0]
 
 jz holds every reading of an input to the same rules. A stream is

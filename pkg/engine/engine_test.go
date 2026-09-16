@@ -870,7 +870,7 @@ func TestLimitsAndEncoding(t *testing.T) {
 	if _, err := Parse(def, zero, Options{}); err == nil || !strings.Contains(err.Error(), "NUL") {
 		t.Errorf("NUL in a line: %v", err)
 	}
-	err = Stream(def, bytes.NewReader(zero), Options{}, func(any) error { return nil }, nil)
+	err = Stream(def, bytes.NewReader(zero), Options{}, func(any) error { return nil })
 	if err == nil || !strings.Contains(err.Error(), "NUL") {
 		t.Errorf("NUL in a streamed line: %v", err)
 	}
@@ -1022,7 +1022,7 @@ func TestARepeatedHeaderStartsAnotherTable(t *testing.T) {
 		if err := Stream(def, strings.NewReader(tc.in), Options{}, func(v any) error {
 			streamed = append(streamed, v)
 			return nil
-		}, func(pe *ParseError) error { return pe }); err != nil {
+		}); err != nil {
 			t.Errorf("%s: stream: %v", tc.name, err)
 			continue
 		}
@@ -1050,7 +1050,7 @@ func TestABoxWithNoRuleUnderItsHeaderIsRefused(t *testing.T) {
 		if v, err := Parse(def, []byte(in), Options{}); err == nil || !strings.Contains(err.Error(), "no rule under its header") {
 			t.Errorf("%q: %v, %v", in, v, err)
 		}
-		err := Stream(def, strings.NewReader(in), Options{}, func(any) error { return nil }, func(pe *ParseError) error { return pe })
+		err := Stream(def, strings.NewReader(in), Options{}, func(any) error { return nil })
 		if err == nil || !strings.Contains(err.Error(), "no rule under its header") {
 			t.Errorf("stream %q: %v", in, err)
 		}
@@ -1090,7 +1090,7 @@ func TestAlignedRefusesAValueThatRunsIntoAnEmptyColumn(t *testing.T) {
 	err = Stream(def, strings.NewReader(in), Options{}, func(v any) error {
 		got = append(got, v)
 		return nil
-	}, func(pe *ParseError) error { return pe })
+	})
 	if err == nil || len(got) != 0 {
 		t.Errorf("stream: err = %v, records = %v", err, got)
 	}
@@ -1117,7 +1117,7 @@ func TestAlignedColumnNamedByTwoHeaderWords(t *testing.T) {
 	err = Stream(docker, strings.NewReader(in), Options{}, func(v any) error {
 		streamed = append(streamed, v)
 		return nil
-	}, func(pe *ParseError) error { return pe })
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1198,7 +1198,7 @@ func TestParseRefusesMoreValuesThanADocumentHolds(t *testing.T) {
 	err = Stream(def, strings.NewReader(in), Options{MaxValues: 8}, func(v any) error {
 		got = append(got, v)
 		return nil
-	}, nil)
+	})
 	if err != nil || len(got) != 100 {
 		t.Fatalf("stream under a record's worth: err = %v, records = %d", err, len(got))
 	}
@@ -1206,7 +1206,7 @@ func TestParseRefusesMoreValuesThanADocumentHolds(t *testing.T) {
 	err = Stream(def, strings.NewReader(in), Options{MaxValues: 7}, func(v any) error {
 		got = append(got, v)
 		return nil
-	}, nil)
+	})
 	if err == nil || !errors.Is(err, ErrTooManyValues) || len(got) != 0 {
 		t.Fatalf("stream over a record's worth: err = %v, records = %d", err, len(got))
 	}
@@ -1331,7 +1331,7 @@ parse:
 	err = Stream(def, strings.NewReader(input), Options{}, func(v any) error {
 		streamed = append(streamed, mustJSON(t, v))
 		return nil
-	}, nil)
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1684,7 +1684,7 @@ func TestRecordPreparationIsTheSameBothWays(t *testing.T) {
 		if err := Stream(def, strings.NewReader(in), Options{}, func(v any) error {
 			streamed = append(streamed, v)
 			return nil
-		}, nil); err != nil {
+		}); err != nil {
 			t.Errorf("%q: stream: %v", in, err)
 			continue
 		}
@@ -1732,7 +1732,7 @@ parse:
 	if err := Stream(def, strings.NewReader("name: a\nsize: 1\nname: b\nsize: 2\n"), Options{}, func(v any) error {
 		stream.WriteString(mustJSON(t, v))
 		return nil
-	}, nil); err != nil {
+	}); err != nil {
 		t.Fatal(err)
 	}
 	if stream.String() != `{"name":"a","size":1}{"name":"b","size":2}` {
@@ -1799,7 +1799,7 @@ parse:
 	if err == nil || !strings.Contains(err.Error(), "expected at least 3 fields but found 2") {
 		t.Errorf("short row: %v", err)
 	}
-	err = Stream(counted, strings.NewReader("1 2 3 4\n"), Options{}, func(any) error { return nil }, nil)
+	err = Stream(counted, strings.NewReader("1 2 3 4\n"), Options{}, func(any) error { return nil })
 	if err == nil || !strings.Contains(err.Error(), "expected at most 3 fields but found 4") {
 		t.Errorf("streamed: %v", err)
 	}

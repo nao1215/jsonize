@@ -39,8 +39,8 @@ location is given once, and no location enters a value given whole.
 
 --each makes one document per line of standard input and writes each as a
 line of JSON as soon as its line has come: KEY:=@- is the line read as
-JSON, KEY=@- the line as a string. A line that cannot be read is reported
-and left out, and the status is 3; --stop-on-error ends there instead.
+JSON, KEY=@- the line as a string. The first line that cannot be read
+ends the documents there, with the status 3.
 
 `
 
@@ -79,7 +79,6 @@ func (n *newCmdOptions) bind(o *optionSet) {
 	o.doc("", "path", "POINTER=VALUE", "put a value at a JSON Pointer, with =, :=, =@ or :=@ (repeatable)")
 	o.group("Output:")
 	o.boolOpt(&n.each, "each", "", "make one document per line of standard input, which @- stands for")
-	o.boolOpt(&n.output.stopOnError, "stop-on-error", "", "with --each, end at the first line that cannot be read")
 	o.boolOpt(&n.output.pretty, "pretty", "p", "indent JSON output")
 	o.helpDoc()
 }
@@ -91,12 +90,8 @@ func (a *app) cmdNew(args []string) int {
 	if code, done := a.parse(o, args, newUsage); done {
 		return code
 	}
-	switch {
-	case no.each && no.output.pretty:
+	if no.each && no.output.pretty {
 		a.errorf("--pretty and --each cannot be used together: each document is one line, and indenting spreads it over several")
-		return ExitUsage
-	case no.output.stopOnError && !no.each:
-		a.errorf("--stop-on-error ends --each at a line it cannot read, and without --each standard input is one value")
 		return ExitUsage
 	}
 	all := no.placed
@@ -109,7 +104,7 @@ func (a *app) cmdNew(args []string) int {
 	}
 	src := jsonbuild.Sources{ReadFile: readLimited, Stdin: a.env.Stdin, MaxSize: MaxInputSize}
 	if no.each {
-		return a.newEach(plan, src, no.output.stopOnError)
+		return a.newEach(plan, src)
 	}
 	v, err := plan.Build(src)
 	if err != nil {
@@ -124,9 +119,10 @@ func (a *app) cmdNew(args []string) int {
 // newEach makes one document per record of standard input and writes each
 // as soon as its record has come. The files the arguments name are read
 // once, before the first record, and nothing of standard input is held
-// but the record being read. A record that cannot be read is left out and
-// reported, as a stream leaves one out; with stop, the documents end there.
-func (a *app) newEach(plan *jsonbuild.Plan, src jsonbuild.Sources, stop bool) int {
+// but the record being read. The first record that cannot be read ends
+// the documents there, as it ends a stream: the ones already written
+// stand.
+func (a *app) newEach(plan *jsonbuild.Plan, src jsonbuild.Sources) int {
 	format, arg := plan.StdinFormat()
 	switch format {
 	case "":
@@ -140,16 +136,8 @@ func (a *app) newEach(plan *jsonbuild.Plan, src jsonbuild.Sources, stop bool) in
 	if err != nil {
 		return a.newFailed(err)
 	}
-	skipped := 0
 	err = datafile.Stream(format, a.env.Stdin, int(MaxInputSize), func(v any) error {
-		return a.eachDocument(fixed, v, arg, stop, &skipped)
-	}, func(pe *engine.ParseError) error {
-		if stop {
-			return pe
-		}
-		skipped++
-		a.errorf("new: %s: %v", arg, pe)
-		return nil
+		return a.eachDocument(fixed, v)
 	})
 	var pe *engine.ParseError
 	switch {
@@ -161,25 +149,18 @@ func (a *app) newEach(plan *jsonbuild.Plan, src jsonbuild.Sources, stop bool) in
 	case err != nil:
 		a.errorf("new: %s: reading standard input: %v", arg, err)
 		return ExitError
-	case skipped > 0:
-		return ExitParse
 	}
 	return ExitOK
 }
 
 // eachDocument writes the document fixed makes with a record's value v.
 // A document past the value limit is a record that cannot be made into
-// one, so it is treated as a record that cannot be read: reported and left
-// out, or with stop, the end of the documents.
-func (a *app) eachDocument(fixed *jsonbuild.Fixed, v any, arg string, stop bool, skipped *int) error {
+// one, so it ends the documents the way a record that cannot be read
+// does.
+func (a *app) eachDocument(fixed *jsonbuild.Fixed, v any) error {
 	doc, err := fixed.With(v)
 	if err != nil {
-		if stop {
-			return err
-		}
-		*skipped++
-		a.errorf("new: %s: %v", arg, err)
-		return nil
+		return err
 	}
 	return jsonutil.Encode(a.env.Stdout, doc, false)
 }

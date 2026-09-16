@@ -417,13 +417,10 @@ choosing which records to keep or computing a field from one is a job
 for a language jz does not have.
 
 Every stream answers a record it cannot read the same way, whether it
-reads a command's output, a data file or plain lines: the record is
-reported and left out, and the status is 3 at the end. A command that
-prints for hours should not lose everything after one odd line.
-`--stop-on-error` is for the caller who would rather have no more records
-than a stream with a gap. A failure after which the next record cannot be
-found (a line over the limit, a read error, a missing `--type` column)
-ends a stream either way.
+reads a command's output, a data file or plain lines: the record ends the
+stream, the records written before it stand, and the status is 3. The
+reasoning is under [a stream ends at the record it cannot
+read](#a-stream-ends-at-the-record-it-cannot-read).
 
 ### JSON is the only output
 
@@ -680,89 +677,53 @@ That is why it is an option. Making it the default would mean giving up
 the guarantee that a failure leaves nothing behind, for every user, to
 serve the commands that need it.
 
-### A stream refuses records, not the stream
+### A stream ends at the record it cannot read
 
 Reading a whole document, one record that does not fit means the text is
 not the format it claimed to be: nothing is written and the status is 3.
-A stream cannot take that view, because the records already written have
-left. So it takes the other one: a record jz cannot read is named on
-standard error with its line number, the records after it are still
-written, and the status is 3 at the end if anything was skipped.
+A stream cannot take all of that view, because the records already
+written have left. It takes as much of it as it can: the record that
+cannot be read ends the stream, the records before it stand, the failure
+is named on standard error with its line number, and the status is 3.
 
-This is what the commands `--stream` exists for actually print. A
-monitoring loop runs for hours, and sooner or later it prints one line
-with no reading for it among thousands that have one. Ending at that
-line would throw away everything still to come, which is a worse answer
-than a partial one for exactly the inputs the option is about. Batch mode is unchanged, so the guarantee is still there
-for everyone not asking for a stream.
+For a while a stream did the opposite. It named the record, left it out,
+and went on, so that a monitoring loop printing for hours would not lose
+everything after one odd line, and `--stop-on-error` was there for a
+caller who wanted the end instead. The trouble is what the consumer of
+the stream sees. jz writes to another program, and a stream with a gap in
+it looks exactly like a stream without one: the diagnostic went to
+standard error, which the next program in the pipeline does not read, and
+the count it works out is quietly wrong. The exit status says something
+was dropped, but only after the consumer has already read the records and
+acted on them. Between an answer that is short and says so at once, and
+an answer that is wrong and says so afterwards on another channel, jz
+owes the caller the first. With the stream ending at the record, the
+default is also the same rule everywhere: `jz` never hands on a shape the
+input does not have. `--stop-on-error` asked for what every stream now
+does, so it was removed, and a command line that still names it is
+refused with the message that says so.
 
-Two failures are not records and still end a stream at once. Text whose
+A command that really does print one odd line among thousands is not left
+without an answer: the records up to it are already written and stand, so
+a loop that wants to go on can start jz again on what follows.
+
+The other failures end a stream the same way, and always did. Text whose
 format cannot be identified is settled on the leading lines before
-anything is written (exit 4), and a format that reads its whole output
-into one object has no streaming form at all (exit 2). Neither is a
-record to leave out.
+anything is written (exit 4), a format that reads its whole output into
+one object has no streaming form at all (exit 2), and a line over the
+limit, a read error or a missing `--type` column leave no next record to
+find.
 
-`engine.Stream` takes an `onError func(*ParseError) error` beside `emit`,
-so a library caller chooses: returning nil carries on and leaves the
-record out, returning an error ends the read there. A nil `onError` is
-the second, which is what the conformance runner passes — a fixture read
-whole and read as a stream have to agree record for record, and a stream
-that quietly skipped one would hide the disagreement.
+`engine.Stream` takes an `emit` and nothing else: with one answer to a
+record it cannot read, there is nothing for a library caller to choose,
+and the conformance runner gets what it needs from the same rule — a
+fixture read whole and read as a stream have to agree record for record,
+and a stream that quietly skipped one would hide the disagreement.
 
-When `jz run --stream` skips a record and the command also fails, the
+When `jz run --stream` ends at a record and the command also fails, the
 command's status wins. jz has one number to return and mirrors the
-command's, which is the more useful of the two; the skipped records are
-on standard error either way, so only the number is given up.
-
-Detection is unchanged and it is what the first record waits for, but a
-stream does not wait for lines that cannot change the answer.
-`selector.Watch` follows the leading lines as they arrive and says when
-the choice they make is the one `Select` would make on any continuation:
-an expression that matched stays matched (unless it looks at the end of
-the text), one anchored with `\A` that the lines so far leave no way to
-match stays unmatched, a signature whose window is full is decided
-whole, and anything else is waited for, a `none` that could still match
-included. The choice is settled when every candidate is decided, or when the
-ones still open would lose to one that fits whatever they turn out to
-be. Committing before that would be the guess the selector exists to
-avoid; committing later only delays a command that prints a line a
-second. How soon that is depends on the definitions saying what their
-text opens with, so a signature states its first line with `\A` where
-the format has one.
-
-The rule is checked, not trusted. For every fixture, on automatic
-detection, with the command named, with the variant named and, where the
-fixture records them, with the system and arguments `jz run` would pass,
-the conformance run hands the lines over
-one at a time and compares the choice at the first settled point with
-the choice for the whole text; every decoy is checked the same way. The
-held lines are then read by the same code as the rest, so there is one
-reading, not two: `jz test` checks every fixture both ways and fails a
-definition whose two readings disagree.
-
-A stream that never ends has no status to look at, so what it leaves out
-has to be visible while it runs. `--explain` already writes facts on
-standard error under `jz: explain: `, and a record left out is one more:
-with `--explain=json` it is a line with a document holding an `event`
-key, the definition, the line, the reason and the count so far. It is
-not a new option, because it is the same promise `--explain` makes (say
-what happened, change neither standard output nor the status), and not
-a line on standard output, which is data and nothing else.
-
-A format that yields records streams them one at a time. `each: input`,
-a kv map and an ini file build one object out of the whole text, and
-that object does not exist until the last line has arrived; asking for it
-one record at a time is a request jz cannot carry out, so it is a usage
-error rather than a silent fallback.
-
-A composite is one object too, but its parts are not: ping's header, its
-replies and its summary each become readable at a different moment, and
-a ping that runs for an hour should not be answered at the end of it. So
-a composite streams as `{"part", "value"}` documents, one per element of
-a part that is a list and one per part that is a single value, which is
-the whole document rearranged rather than a second reading of it. The
-conformance check rebuilds the whole document from the stream for every
-composite fixture and compares the two.
+command's, which is the more useful of the two; the failure is on
+standard error either way, so only the number is given up.
 
 ### Every line is accounted for
 

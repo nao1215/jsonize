@@ -103,60 +103,34 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		return ExitUsage
 	}
 	emit := filter.streamEmit(out.recordWriter(a.env.Stdout), def)
-	skipped, onError := a.skipping(exp, def.ID(), out.stopOnError)
 	// A stream has no total size to bound; the line limit bounds a
 	// record that never ends, and the input limit bounds what is held
 	// while a record waits for its end.
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
-	err = engine.Stream(def, io.MultiReader(bytes.NewReader(head), br), eopts, emit, onError)
-	return a.streamEnd(err, filter, *skipped)
+	err = engine.Stream(def, io.MultiReader(bytes.NewReader(head), br), eopts, emit)
+	return a.streamEnd(err, filter)
 }
 
-// skipping returns the count of records left out so far and what a
-// stream does with a record it cannot read.
+// streamEnd settles what a stream returns once its input has ended or a
+// record has ended it.
 //
-// With stop, the stream ends there: the records before it stand, the
-// failure is reported once as the stream's end, and the status is 3. A
-// caller that would rather have no more records than a stream with a gap
-// in it asks for that.
-//
-// Otherwise the record is reported and left out, and the ones after it
-// are still written. A command that keeps printing (ping, rsync) puts a line jz has
-// no reading for among thousands it has, and ending the stream there
-// would throw away everything still to come. Reading a whole document is
-// the other answer and keeps it: there, one unreadable line means the
-// document is not the format it claimed to be, so nothing is written at
-// all. With --explain the record left out is also reported as a fact of
-// its own, when it happens, so a stream that never ends can be watched
-// for what it drops.
-func (a *app) skipping(exp *explanation, def string, stop bool) (*int, func(*engine.ParseError) error) {
-	skipped := new(int)
-	return skipped, func(pe *engine.ParseError) error {
-		if stop {
-			return pe
-		}
-		*skipped++
-		a.errorf("%v", pe)
-		a.explainSkip(exp, def, pe, *skipped)
-		return nil
-	}
-}
-
-// streamEnd settles what a stream returns once its input has ended.
-func (a *app) streamEnd(err error, filter *keyFilter, skipped int) int {
+// A record jz cannot read ends the stream where it is: the records
+// already written stand, since a stream is written as it is read, and the
+// failure is reported once with the status 3. Going on without it would
+// write a stream whose gaps nobody downstream can see, and reading the
+// same text as one document gives the same answer for the same reason:
+// one unreadable line means the text is not the format it was read as.
+func (a *app) streamEnd(err error, filter *keyFilter) int {
 	if nerr := filter.unseen(); nerr != nil && (err == nil || errors.Is(err, runner.ErrCut)) {
 		a.errorf("%v", nerr)
 		return ExitUsage
 	}
-	switch {
-	case err != nil && !errors.Is(err, runner.ErrCut):
+	if err != nil && !errors.Is(err, runner.ErrCut) {
 		// A command ended from outside leaves its last record half
 		// written. The engine has left it out; the records before it
 		// stand, and the command's status says how it ended.
 		return a.exitForStream(err)
-	case skipped > 0:
-		return ExitParse
 	}
 	return ExitOK
 }
@@ -164,7 +138,7 @@ func (a *app) streamEnd(err error, filter *keyFilter, skipped int) int {
 // streamWith streams the input with a definition given on the command
 // line. Detection is what the leading lines are held back for, and there
 // is none here, so the first record is written as soon as it is read.
-func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOptions, exp *explanation) int {
+func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOptions) int {
 	filter, err := out.filter()
 	if err != nil {
 		a.errorf("%v", err)
@@ -175,11 +149,10 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 		return ExitUsage
 	}
 	emit := filter.streamEmit(out.recordWriter(a.env.Stdout), def)
-	skipped, onError := a.skipping(exp, def.ID(), out.stopOnError)
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
-	err = engine.Stream(def, r, eopts, emit, onError)
-	return a.streamEnd(err, filter, *skipped)
+	err = engine.Stream(def, r, eopts, emit)
+	return a.streamEnd(err, filter)
 }
 
 // emptyFormats settles what a command that succeeded without printing

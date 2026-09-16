@@ -237,12 +237,10 @@ func (o *optionSet) print(w io.Writer) {
 type outputOptions struct {
 	pretty bool
 	stream bool
-	// stopOnError ends a stream at the first record it cannot read, which
-	// is otherwise reported and left out.
-	stopOnError bool
-	raw         bool
-	extract     stringList
-	exclude     stringList
+	raw    bool
+
+	extract stringList
+	exclude stringList
 	// year and zones are the assumptions the caller allows about a
 	// timestamp the format does not fully state.
 	year  string
@@ -256,7 +254,6 @@ type outputOptions struct {
 func (f *outputOptions) bindOutput(o *optionSet) {
 	o.boolOpt(&f.pretty, "pretty", "p", "indent JSON output")
 	o.boolOpt(&f.stream, "stream", "", "write each record as a line of JSON as soon as it is read")
-	o.boolOpt(&f.stopOnError, "stop-on-error", "", "end a stream at the first record that cannot be read")
 	o.listOpt(&f.extract, "extract", "KEY", "keep only this key of each object (repeatable)")
 	o.listOpt(&f.exclude, "exclude", "KEY", "drop this key from each object (repeatable)")
 }
@@ -337,9 +334,6 @@ func (f *outputOptions) assumptions() (convert.Assumptions, error) {
 func (f *outputOptions) check() error {
 	if f.pretty && f.stream {
 		return errors.New("--pretty and --stream cannot be used together: a stream is one record per line, and indenting spreads a record over several")
-	}
-	if f.stopOnError && !f.stream {
-		return errors.New("--stop-on-error ends a stream at a record it cannot read, and without --stream nothing is written when any record cannot be read")
 	}
 	if _, err := f.assumptions(); err != nil {
 		return err
@@ -528,7 +522,8 @@ func (a *app) parse(o *optionSet, args []string, usage string) (int, bool) {
 // that used to work gets told where the job went, since a script written
 // for an older jz is the likeliest place it comes from.
 var removedOptions = map[string]string{
-	"yaml": "--yaml was removed: jz writes JSON only; pipe the JSON to a YAML tool to get YAML (for example: jz ... | yq -P)",
+	"stop-on-error": "--stop-on-error was removed: a stream now ends at the first record it cannot read, which is what it asked for; drop it",
+	"yaml":          "--yaml was removed: jz writes JSON only; pipe the JSON to a YAML tool to get YAML (for example: jz ... | yq -P)",
 }
 
 // removedOption turns the flag package's refusal of an option jz used

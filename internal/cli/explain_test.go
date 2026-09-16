@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/registry"
 	official "github.com/nao1215/jsonize/registry"
 )
@@ -294,32 +293,5 @@ func TestParserFromPath(t *testing.T) {
 		if ok != tt.ok || p != tt.parser || v != tt.variant {
 			t.Errorf("%s: got %q %q %v, want %q %q %v", tt.path, p, v, ok, tt.parser, tt.variant, tt.ok)
 		}
-	}
-}
-
-// A skip event carries no line when the failure is about none, and a
-// reason long enough to split the line it is written on is cut, at a
-// character boundary, so the event stays one write of standard error.
-func TestExplainSkipBoundsTheEvent(t *testing.T) {
-	h := newHarness(t)
-	a := &app{env: h.env}
-	asJSON := newExplanation(explainJSON)
-	long := strings.Repeat("é", maxSkipReason)
-	a.explainSkip(asJSON, "x/y", &engine.ParseError{Definition: "x/y", Msg: long}, 7)
-	event := skipEvent(t, strings.TrimSuffix(h.stderr.String(), "\n"))
-	reason, _ := event["reason"].(string)
-	if event["line"] != nil || event["skipped"] != float64(7) || len(reason) > maxSkipReason+3 ||
-		!strings.HasSuffix(reason, "é...") {
-		t.Errorf("event = %v (reason %d bytes)", event, len(reason))
-	}
-	h.stderr.Reset()
-	a.explainSkip(newExplanation(explainText), "x/y", &engine.ParseError{Msg: "no line"}, 1)
-	if got := h.stderr.String(); got != "jz: explain: skipped: a record of x/y (1 record so far): no line\n" {
-		t.Errorf("text = %q", got)
-	}
-	h.stderr.Reset()
-	a.explainSkip(newExplanation(explainOff), "x/y", &engine.ParseError{Msg: "quiet"}, 1)
-	if h.stderr.Len() != 0 {
-		t.Errorf("off = %q", h.stderr.String())
 	}
 }
