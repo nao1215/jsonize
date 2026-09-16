@@ -1,0 +1,665 @@
+[
+  {
+    "interface": {
+      "name": "lo0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8049",
+      "flags": [
+        "UP",
+        "LOOPBACK",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 16384,
+      "index": null
+    },
+    "inet": [
+      {
+        "address": "127.0.0.1",
+        "peer": null,
+        "mask": "0xff000000",
+        "broadcast": null
+      },
+      {
+        "address": "127.0.0.2",
+        "peer": null,
+        "mask": "0xffffffff",
+        "broadcast": null
+      }
+    ],
+    "inet6": [
+      {
+        "address": "::1",
+        "zone": null,
+        "prefixlen": 128,
+        "flags": [],
+        "scopeid": null
+      },
+      {
+        "address": "fe80::1",
+        "zone": "lo0",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0x1"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "1203",
+        "names": [
+          "RXCSUM",
+          "TXCSUM",
+          "TXSTATUS",
+          "SW_TIMESTAMP"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": []
+  },
+  {
+    "interface": {
+      "name": "gif0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8051",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1280,
+      "index": null
+    },
+    "inet": [
+      {
+        "address": "10.0.0.1",
+        "peer": "10.0.0.2",
+        "mask": "0xffffffff",
+        "broadcast": null
+      }
+    ],
+    "inet6": [],
+    "bitmasks": [],
+    "properties": [
+      {
+        "name": null,
+        "value": "tunnel inet 192.0.2.1 --> 192.0.2.2"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "stf0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "0",
+      "flags": [],
+      "metric": null,
+      "mtu": 1280,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [],
+    "properties": []
+  },
+  {
+    "interface": {
+      "name": "XHC12",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "0",
+      "flags": [],
+      "metric": null,
+      "mtu": 0,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [],
+    "properties": []
+  },
+  {
+    "interface": {
+      "name": "anpi0",
+      "hwaddr": "02:00:00:00:00:01"
+    },
+    "status": {
+      "flags_value": "8863",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "SMART",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "400",
+        "names": [
+          "CHANNEL_IO"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "media",
+        "value": "none"
+      },
+      {
+        "name": "status",
+        "value": "inactive"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "en1",
+      "hwaddr": "02:00:00:00:00:02"
+    },
+    "status": {
+      "flags_value": "8863",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "SMART",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "400",
+        "names": [
+          "CHANNEL_IO"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "media",
+        "value": "none"
+      },
+      {
+        "name": "status",
+        "value": "inactive"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "en0",
+      "hwaddr": "02:00:00:00:00:03"
+    },
+    "status": {
+      "flags_value": "8863",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "SMART",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [
+      {
+        "address": "192.0.2.2",
+        "peer": null,
+        "mask": "0xffffff00",
+        "broadcast": "192.0.2.255"
+      }
+    ],
+    "inet6": [
+      {
+        "address": "fe80::1:2:3:4",
+        "zone": "en0",
+        "prefixlen": 64,
+        "flags": [
+          "secured"
+        ],
+        "scopeid": "0x7"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "400",
+        "names": [
+          "CHANNEL_IO"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "media",
+        "value": "autoselect <full-duplex,flow-control>"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "utun0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8051",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1380,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [
+      {
+        "address": "fe80::68dc:b83c:ca62:5e9b",
+        "zone": "utun0",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0x8"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": []
+  },
+  {
+    "interface": {
+      "name": "utun1",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8051",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [
+      {
+        "address": "fe80::4558:d8e0:5e0c:54ec",
+        "zone": "utun1",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0x9"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": []
+  },
+  {
+    "interface": {
+      "name": "utun2",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8051",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 2000,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [
+      {
+        "address": "fe80::e03a:d650:9d78:9ca3",
+        "zone": "utun2",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0xa"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": []
+  },
+  {
+    "interface": {
+      "name": "utun3",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8051",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1000,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [
+      {
+        "address": "fe80::ce81:b1c:bd2c:69e",
+        "zone": "utun3",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0xb"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": []
+  },
+  {
+    "interface": {
+      "name": "feth100",
+      "hwaddr": "66:65:74:68:00:64"
+    },
+    "status": {
+      "flags_value": "8843",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [
+      {
+        "address": "198.51.100.1",
+        "peer": null,
+        "mask": "0xffffff00",
+        "broadcast": "198.51.100.255"
+      },
+      {
+        "address": "198.51.100.2",
+        "peer": null,
+        "mask": "0xffffffff",
+        "broadcast": "198.51.100.2"
+      }
+    ],
+    "inet6": [
+      {
+        "address": "fe80::6465:74ff:fe68:64",
+        "zone": "feth100",
+        "prefixlen": 64,
+        "flags": [
+          "optimistic"
+        ],
+        "scopeid": "0xc"
+      },
+      {
+        "address": "2001:db8::1",
+        "zone": null,
+        "prefixlen": 64,
+        "flags": [
+          "tentative"
+        ],
+        "scopeid": null
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "8",
+        "names": [
+          "VLAN_HWTAGGING"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "peer",
+        "value": "feth101"
+      },
+      {
+        "name": "media",
+        "value": "autoselect (10Gbase-T <full-duplex>)"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "feth101",
+      "hwaddr": "66:65:74:68:00:65"
+    },
+    "status": {
+      "flags_value": "8943",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "RUNNING",
+        "PROMISC",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "8",
+        "names": [
+          "VLAN_HWTAGGING"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "peer",
+        "value": "feth100"
+      },
+      {
+        "name": "media",
+        "value": "autoselect (10Gbase-T <full-duplex>)"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "bridge100",
+      "hwaddr": "02:00:00:00:00:04"
+    },
+    "status": {
+      "flags_value": "8863",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "SMART",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "3",
+        "names": [
+          "RXCSUM",
+          "TXCSUM"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "Configuration",
+        "value": "id 0:0:0:0:0:0 priority 0 hellotime 0 fwddelay 0 maxage 0 holdcnt 0 proto stp maxaddr 100 timeout 1200 root id 0:0:0:0:0:0 priority 0 ifcost 0 port 0 ipfilter disabled flags 0x0"
+      },
+      {
+        "name": "member",
+        "value": "feth101 flags=3<LEARNING,DISCOVER> ifmaxaddr 0 port 13 priority 0 path cost 0"
+      },
+      {
+        "name": "media",
+        "value": "autoselect"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "vlan100",
+      "hwaddr": "66:65:74:68:00:64"
+    },
+    "status": {
+      "flags_value": "8842",
+      "flags": [
+        "BROADCAST",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [],
+    "properties": [
+      {
+        "name": "vlan",
+        "value": "100 parent interface: feth100"
+      },
+      {
+        "name": "media",
+        "value": "autoselect (10Gbase-T <full-duplex>)"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      }
+    ]
+  }
+]

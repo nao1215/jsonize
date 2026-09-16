@@ -1,0 +1,118 @@
+# ifconfig on macOS and FreeBSD prints one block per interface: a line
+# with the name, the flags as a hexadecimal number and as names, the
+# metric (FreeBSD), the MTU and, with -v on macOS, the interface index;
+# then one tab-indented line per fact, in an order that depends on the
+# system and the kind of interface. The blocks repeat, so the definition
+# describes one and `records` applies it to each.
+#
+# The keys follow ifconfig/busybox and ifconfig/net-tools where they say
+# the same thing: the name and the hardware address (the `ether` line)
+# under `interface`, the flags and the MTU under `status`, `address`,
+# `mask`, `broadcast` and `peer` for an IPv4 address, and `address` and
+# `prefixlen` for an IPv6 one. Unlike net-tools this ifconfig prints every
+# IPv4 address of the interface, so `inet` is a list. The netmask is kept
+# the way it was printed (`0xffffff00`); converting it would be writing a
+# value the command did not print.
+#
+# An IPv6 address carries its zone (`%en0`) apart from the address, the
+# words ifconfig prints about its state (`secured`, `tentative`,
+# `optimistic`) as a list, and its scope id when there is one.
+#
+# The lines of the form NAME=HEX<NAMES> (`options`, `nd6 options`,
+# `eflags`, `hwassist`, `bridge flags`) are read into `bitmasks`, the
+# number kept as printed and the names as a list.
+#
+# Every other line is kept in `properties`, in order: a line that opens
+# with a label and a colon (`media:`, `status:`, `groups:`, `member:`,
+# `description:`) as that label and the rest of the line, any other line
+# (a bridge's `id ... priority ...`, `tunnel inet A --> B`) as a value
+# with no name. These lines differ between systems, releases and kinds of
+# interface, and a list of what was printed keeps all of them without
+# claiming to know what each means. A line indented further than the one
+# above it continues it (a bridge member's port line, the lines under
+# macOS's `Configuration:` and `Address cache:`) and is joined onto it.
+#
+# An `inet` or `inet6` line with words this definition does not name
+# (FreeBSD's `vhid` for CARP, the lifetimes `-L` prints for a temporary
+# address) is refused rather than read short; no capture of either was
+# available to write them against.
+format: 1
+command: ifconfig
+variant: bsd
+description: macOS and FreeBSD ifconfig per-interface block
+metadata:
+  tags: [darwin, freebsd, bsd, network]
+  compatible: [macOS 15, macOS 26, FreeBSD 15.1]
+  references:
+    - https://man.freebsd.org/cgi/man.cgi?query=ifconfig&sektion=8
+    - https://keith.github.io/xcode-man-pages/ifconfig.8.html
+detect:
+  os: [darwin, freebsd]
+  signature:
+    all:
+      # One space before "mtu" and hexadecimal flags. net-tools writes two
+      # spaces and a decimal number, BusyBox writes "Link encap:".
+      - '\A[^\s:]+: flags=[0-9a-f]+<[A-Z0-9_,]*>(?: metric \d+)? mtu \d+(?: index \d+)?[ ]*$'
+input:
+  fold: '^\t(?:\t| {2,})\S'
+parse:
+  type: records
+  start: '^[^\s:]+: flags=[0-9a-f]+<'
+  parts:
+    # The name is on the first line and the hardware address on the ether
+    # line; everything that is not the ether line is left to the parts
+    # below.
+    - name: interface
+      ignore: ['^\t(?:[^e]|e[^t]|et[^h]|eth[^e]|ethe[^r]|ether[^ ])']
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>[^\s:]+): flags=[0-9a-f]+<[A-Z0-9_,]*>(?: metric \d+)? mtu \d+(?: index \d+)?[ ]*(?:\n\tether (?P<hwaddr>[0-9a-f]{1,2}(?::[0-9a-f]{1,2}){5})[ ]*)?\z'
+      fields:
+        name: {required: true}
+    - name: status
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[^\s:]+: flags=(?P<flags_value>[0-9a-f]+)<(?P<flags>[A-Z0-9_,]*)>(?: metric (?P<metric>\d+))? mtu (?P<mtu>\d+)(?: index (?P<index>\d+))?[ ]*\z'
+      fields:
+        flags: {type: array, split: ","}
+        metric: {type: int}
+        mtu: {type: int}
+        index: {type: int}
+    - name: inet
+      select: {skip: 1}
+      ignore: ['^\t(?:[^i]|i[^n]|in[^e]|ine[^t]|inet[^ ])']
+      parse:
+        type: regex
+        pattern: '^\tinet (?P<address>[0-9.]+)(?: --> (?P<peer>[0-9.]+))? netmask (?P<mask>0x[0-9a-f]+)(?: broadcast (?P<broadcast>[0-9.]+))?[ ]*$'
+    - name: inet6
+      select: {skip: 1}
+      ignore: ['^\t(?:[^i]|i[^n]|in[^e]|ine[^t]|inet[^6]|inet6[^ ])']
+      parse:
+        type: regex
+        pattern: '^\tinet6 (?P<address>[0-9a-f:.]+)(?:%(?P<zone>\S+))? prefixlen (?P<prefixlen>\d+)(?P<flags>(?: [a-z_]+)*)(?: scopeid (?P<scopeid>0x[0-9a-f]+))?[ ]*$'
+      fields:
+        prefixlen: {type: int}
+        flags: {type: array, trim_prefix: " ", split: " "}
+    - name: bitmasks
+      select: {skip: 1}
+      # A line whose leading run of lowercase words is not followed by "=".
+      ignore: ['^\t[a-z0-9 ]*(?:[^a-z0-9 =]|$)']
+      parse:
+        type: regex
+        pattern: '^\t(?P<name>[a-z0-9]+(?: [a-z0-9]+)*)=(?P<value>[0-9a-f]+)(?:<(?P<names>[A-Z0-9_,]*)>)?[ ]*$'
+      fields:
+        names: {type: array, split: ","}
+    - name: properties
+      select: {skip: 1}
+      ignore:
+        - '^\tinet6? '
+        - '^\tether '
+        - '^\t[a-z0-9 ]+='
+      parse:
+        type: regex
+        patterns:
+          - '^\t(?P<name>[A-Za-z][A-Za-z0-9 ()]*):(?: (?P<value>.*?))?[ ]*$'
+          - '^\t(?P<name>)??(?P<value>\S.*?)[ ]*$'
