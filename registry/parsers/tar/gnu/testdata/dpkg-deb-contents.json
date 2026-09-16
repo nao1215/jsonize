@@ -1,0 +1,137 @@
+[
+  {
+    "mode": "drwxr-xr-x",
+    "owner": "root",
+    "group": "root",
+    "size": 0,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./"
+  },
+  {
+    "mode": "drwxr-xr-x",
+    "owner": "root",
+    "group": "root",
+    "size": 0,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/"
+  },
+  {
+    "mode": "drwxr-xr-x",
+    "owner": "root",
+    "group": "root",
+    "size": 0,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/bin/"
+  },
+  {
+    "mode": "-rwxr-xr-x",
+    "owner": "root",
+    "group": "root",
+    "size": 26936,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/bin/hello"
+  },
+  {
+    "mode": "drwxr-xr-x",
+    "owner": "root",
+    "group": "root",
+    "size": 0,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/share/"
+  },
+  {
+    "mode": "drwxr-xr-x",
+    "owner": "root",
+    "group": "root",
+    "size": 0,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/share/doc/"
+  },
+  {
+    "mode": "drwxr-xr-x",
+    "owner": "root",
+    "group": "root",
+    "size": 0,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/share/doc/hello/"
+  },
+  {
+    "mode": "-rw-r--r--",
+    "owner": "root",
+    "group": "root",
+    "size": 1868,
+    "date": "2014-11-16",
+    "time": "20:51",
+    "name": "./usr/share/doc/hello/NEWS.gz"
+  },
+  {
+    "mode": "-rw-r--r--",
+    "owner": "root",
+    "group": "root",
+    "size": 957,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/share/doc/hello/changelog.Debian.gz"
+  },
+  {
+    "mode": "-rw-r--r--",
+    "owner": "root",
+    "group": "root",
+    "size": 2264,
+    "date": "2025-04-16",
+    "time": "17:00",
+    "name": "./usr/share/doc/hello/copyright"
+  },
+  {
+    "mode": "drwxr-xr-x",
+    "owner": "root",
+    "group": "root",
+    "size": 0,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/share/info/"
+  },
+  {
+    "mode": "-rw-r--r--",
+    "owner": "root",
+    "group": "root",
+    "size": 11668,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/share/info/hello.info.gz"
+  },
+  {
+    "mode": "drwxr-xr-x",
+    "owner": "root",
+    "group": "root",
+    "size": 0,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/share/man/"
+  },
+  {
+    "mode": "drwxr-xr-x",
+    "owner": "root",
+    "group": "root",
+    "size": 0,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/share/man/man1/"
+  },
+  {
+    "mode": "-rw-r--r--",
+    "owner": "root",
+    "group": "root",
+    "size": 790,
+    "date": "2026-02-03",
+    "time": "05:44",
+    "name": "./usr/share/man/man1/hello.1.gz"
+  }
+]

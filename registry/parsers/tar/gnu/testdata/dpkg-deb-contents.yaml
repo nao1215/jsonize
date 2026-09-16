@@ -1,0 +1,4 @@
+description: dpkg-deb -c lists the data archive of a package the way tar -tvf does, every path starting with ./.
+source: "dpkg-deb -c, dpkg 1.23 on Ubuntu 26.04 with LC_ALL=C, on hello_2.10-5build1_amd64.deb fetched with apt download"
+os: linux
+args: [-c, hello_2.10-5build1_amd64.deb]

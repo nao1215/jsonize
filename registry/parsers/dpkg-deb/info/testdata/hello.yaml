@@ -1,0 +1,4 @@
+description: A package with the control file and md5sums, and a long description whose lines are joined onto it.
+source: "dpkg-deb -I, dpkg 1.23 on Ubuntu 26.04 with LC_ALL=C, on hello_2.10-5build1_amd64.deb fetched with apt download"
+os: linux
+args: [-I, hello_2.10-5build1_amd64.deb]

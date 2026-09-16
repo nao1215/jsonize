@@ -25,6 +25,10 @@ variant: gnu
 aliases:
   # GNU tar is installed as gtar where the system tar is the BSD one.
   - name: gtar
+  # dpkg-deb -c lists a Debian package's data archive with GNU tar's
+  # verbose listing.
+  - name: dpkg-deb
+    args: {any: ["-c", "--contents"]}
 description: GNU tar -tvf archive listing
 metadata:
   tags: [linux, darwin, archive]

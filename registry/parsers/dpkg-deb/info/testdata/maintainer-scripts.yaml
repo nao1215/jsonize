@@ -1,0 +1,4 @@
+description: A package with maintainer scripts, marked executable with their interpreter, and a size of six digits that leaves two spaces in front.
+source: "dpkg-deb -I, dpkg 1.23 on Ubuntu 26.04 with LC_ALL=C, on tzdata_2026c-0ubuntu0.26.04.1_all.deb fetched with apt download"
+os: linux
+args: [--info, tzdata_2026c-0ubuntu0.26.04.1_all.deb]
