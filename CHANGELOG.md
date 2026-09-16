@@ -35,6 +35,13 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `top/linux` is a list with one record per iteration, so `top -b -n 2`
+  and `jz run --stream top -b -d 1` are read: before, the second
+  iteration's summary was taken for a row of the first one's task table
+  and the reading ended with exit 3. `top -b -n1` is now a list of one
+  object instead of the object; the published schema is version 2. A
+  stream writes an iteration once the next one begins, or the output
+  ends.
 - `jz new KEY=@FILE` and `--text-file KEY=PATH` leave out a byte order
   mark at the start of the file, as `--format text` and `jz new --each
   KEY=@-` already did. A document built from a file saved with one no
