@@ -1,0 +1,4 @@
+description: two files and the total line on FreeBSD.
+source: captured in a vmactions/freebsd-vm virtual machine (FreeBSD 15.1-RELEASE-p3) with LC_ALL=C wc /etc/hosts /etc/shells
+os: freebsd
+args: ["/etc/hosts", "/etc/shells"]

@@ -1,0 +1,20 @@
+[
+  {
+    "lines": 30,
+    "words": 167,
+    "bytes": 1035,
+    "filename": "/etc/hosts"
+  },
+  {
+    "lines": 9,
+    "words": 29,
+    "bytes": 195,
+    "filename": "/etc/shells"
+  },
+  {
+    "lines": 39,
+    "words": 196,
+    "bytes": 1230,
+    "filename": "total"
+  }
+]
