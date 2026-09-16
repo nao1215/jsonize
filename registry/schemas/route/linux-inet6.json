@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/route/linux-inet6.json",
+  "title": "route/linux-inet6",
+  "description": "route -A inet6 kernel IPv6 routing table",
+  "x-jsonize": {
+    "definition": "route/linux-inet6",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "destination": {
+        "type": "string"
+      },
+      "next_hop": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "string"
+      },
+      "metric": {
+        "type": "integer"
+      },
+      "ref": {
+        "type": "integer"
+      },
+      "use": {
+        "type": "integer"
+      },
+      "iface": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "destination",
+      "next_hop",
+      "flags",
+      "metric",
+      "ref",
+      "use",
+      "iface"
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/route/linux-extended.json",
+  "title": "route/linux-extended",
+  "description": "route -ee kernel IP routing table with every column",
+  "x-jsonize": {
+    "definition": "route/linux-extended",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "destination": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "string"
+      },
+      "gateway": {
+        "type": "string"
+      },
+      "genmask": {
+        "type": "string"
+      },
+      "iface": {
+        "type": "string"
+      },
+      "irtt": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "metric": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "mss": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "ref": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "use": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "window": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

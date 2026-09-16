@@ -1,0 +1,4 @@
+description: netstat -i captured from net-tools 2.10 rather than transcribed, with an interface whose flags are B, O, R and U.
+source: captured with LC_ALL=C and `netstat -i` from net-tools 2.10 in a debian:stable-slim container with a dummy interface that is up, eth0 and lo
+os: linux
+args: ["-i"]

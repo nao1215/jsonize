@@ -1,0 +1,44 @@
+# `ifconfig -s` prints the interface table `netstat -i` prints, the same
+# columns in the same places, without the "Kernel Interface table" banner
+# above it. The rows are read the way netstat/interface reads them, and
+# the header row, pinned whole, is what says the text is this table.
+#
+# ifconfig/net-tools refuses this text, since it has no interface blocks,
+# and netstat/interface refuses it, since the banner is missing.
+format: 1
+command: ifconfig
+variant: net-tools-short
+description: net-tools ifconfig -s interface table
+metadata:
+  tags: [linux, network, net-tools]
+  compatible: [net-tools 2.10]
+  references:
+    - https://manpages.debian.org/stable/net-tools/ifconfig.8.en.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AIface[ \t]+MTU[ \t]+RX-OK[ \t]+RX-ERR[ \t]+RX-DRP[ \t]+RX-OVR[ \t]+TX-OK[ \t]+TX-ERR[ \t]+TX-DRP[ \t]+TX-OVR[ \t]+Flg[ \t]*$'
+input:
+  ignore:
+    - '\AIface[ \t]+MTU[ \t]+RX-OK[ \t]+RX-ERR[ \t]+RX-DRP[ \t]+RX-OVR[ \t]+TX-OK[ \t]+TX-ERR[ \t]+TX-DRP[ \t]+TX-OVR[ \t]+Flg[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<iface>\S+)[ \t]+(?P<mtu>\d+)[ \t]+(?P<rx_ok>\d+)[ \t]+(?P<rx_err>\d+)[ \t]+(?P<rx_drp>\d+)[ \t]+(?P<rx_ovr>\d+)[ \t]+(?P<tx_ok>\d+)[ \t]+(?P<tx_err>\d+)[ \t]+(?P<tx_drp>\d+)[ \t]+(?P<tx_ovr>\d+)[ \t]+(?P<flags>\S.*?)[ \t]*$'
+fields:
+  iface: {required: true}
+  mtu: {type: int, required: true}
+  rx_ok: {type: int, required: true}
+  rx_err: {type: int, required: true}
+  rx_drp: {type: int, required: true}
+  rx_ovr: {type: int, required: true}
+  tx_ok: {type: int, required: true}
+  tx_err: {type: int, required: true}
+  tx_drp: {type: int, required: true}
+  tx_ovr: {type: int, required: true}
+  # The cell is the letters of the flags that are set, written with nothing
+  # between them, and "[NO FLAGS]" when none are. One letter is not always
+  # one flag either: in this release P stands for both PROMISC and
+  # POINTOPOINT. Splitting the cell would have to decide which, so it stays
+  # the string it was printed as.
+  flags: {required: true}

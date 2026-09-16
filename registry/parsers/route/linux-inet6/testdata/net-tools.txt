@@ -1,0 +1,10 @@
+Kernel IPv6 routing table
+Destination                    Next Hop                   Flag Met Ref  Use If
+2001:db8::/64                  ::                         U    256 1      0 dummy0
+fe80::/64                      ::                         U    256 1      0 dummy0
+::/0                           ::                         !n   -1  1      0 lo
+::1/128                        ::                         Un   0   3      0 lo
+2001:db8::7/128                ::                         Un   0   2      0 dummy0
+fe80::8c90:68ff:fe5a:b666/128  ::                         Un   0   2      0 dummy0
+ff00::/8                       ::                         U    256 2      0 dummy0
+::/0                           ::                         !n   -1  1      0 lo

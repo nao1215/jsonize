@@ -1,0 +1,62 @@
+[
+  {
+    "destination": "default",
+    "gateway": "172.17.0.1",
+    "genmask": "0.0.0.0",
+    "flags": "UG",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0,
+    "iface": "eth0"
+  },
+  {
+    "destination": "172.17.0.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.0.0",
+    "flags": "U",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0,
+    "iface": "eth0"
+  },
+  {
+    "destination": "192.0.2.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.255.192",
+    "flags": "U",
+    "mss": 0,
+    "window": 8192,
+    "irtt": 30,
+    "iface": "dummy0"
+  },
+  {
+    "destination": "192.0.2.128",
+    "gateway": "-",
+    "genmask": "255.255.255.128",
+    "flags": "!",
+    "mss": null,
+    "window": null,
+    "irtt": null,
+    "iface": "-"
+  },
+  {
+    "destination": "198.51.100.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.255.0",
+    "flags": "U",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0,
+    "iface": "dummy0"
+  },
+  {
+    "destination": "203.0.113.0",
+    "gateway": "198.51.100.1",
+    "genmask": "255.255.255.0",
+    "flags": "UG",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0,
+    "iface": "dummy0"
+  }
+]

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/arp/net-tools.json",
+  "title": "arp/net-tools",
+  "description": "net-tools arp, the ARP cache as a table",
+  "x-jsonize": {
+    "definition": "arp/net-tools",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "address": {
+        "type": "string"
+      },
+      "hwtype": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "hwaddress": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "flags": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "mask": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "device": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "address",
+      "hwtype",
+      "hwaddress",
+      "flags",
+      "mask",
+      "device"
+    ]
+  }
+}

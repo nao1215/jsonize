@@ -1,0 +1,4 @@
+description: arp -n naming an address the cache does not hold prints one line saying so and no table.
+source: >-
+  captured with LC_ALL=C and `arp -n 198.51.100.99` from net-tools 2.10 in a debian:stable-slim container, after `arp -i dummy0 -s`, `arp -s ... pub`, `arp -Ds ... pub` and a neighbour added with `ip neigh ... nud failed` on a dummy interface; the gateway's hardware address is replaced by 02:00:00:00:00:01
+expect_error: 'does not describe this input'

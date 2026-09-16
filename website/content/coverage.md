@@ -142,6 +142,11 @@ than choosing.
 | `netstat`, `-a`, `-t`, `-u`, `-x`, `-w`, `-l`, `-n`, `-e` | read | `netstat/all-sockets`, `netstat/internet`, `netstat/unix` |
 | `netstat -r`, `netstat -rn` | read | `netstat/routing` |
 | `netstat -e -r` | read | `route/linux`, which is the table those columns are |
+| `route`, `route -n` | read | `route/linux`; a rejecting route's missing counts are `null` and its gateway and interface stay `-` |
+| `route -e` | read | `netstat/routing`, the table `netstat -r` prints |
+| `route -ee` | read | `route/linux-extended` |
+| `route -A inet6` | read | `route/linux-inet6` |
+| `route -C` | refused | the IPv4 routing cache is gone from current kernels, so the table has a header and no rows to write a definition against |
 | `netstat -i` | read | `netstat/interface` |
 | `netstat -s` | refused | which counters appear, in which order and at which indent comes from the kernel and the net-tools build; there is no capture here to write it against |
 | `netstat` on Windows | refused | no definition; no vendor-published text sample was found to write one against, only screenshots |
@@ -159,10 +164,11 @@ than choosing.
 | `ifconfig`, `ifconfig -a`, `ifconfig IFACE` (net-tools) | read | `ifconfig/net-tools` |
 | `ifconfig` (BusyBox) | read | `ifconfig/busybox` |
 | `ifconfig`, `-a`, `-v`, `-L` (macOS, FreeBSD) | read | `ifconfig/bsd`; lines other than the flags, addresses and bit masks are kept in order under `properties` |
-| `ifconfig -s` (net-tools) | refused | a table of counters without the banner `netstat -i` prints |
+| `ifconfig -s`, `ifconfig -s -a` (net-tools) | read | `ifconfig/net-tools-short`, the table `netstat -i` prints without its banner |
 | `ifconfig -l` | refused | a line of names |
 | `arp -a`, `arp -an` | read | `arp/alternate` (Linux), `arp/freebsd`, `arp/darwin`, `arp/windows` |
-| `arp`, `arp -n` (net-tools) | refused | the tabular listing has no definition |
+| `arp`, `arp -n`, `arp -e`, `arp -i IFACE` (net-tools) | read | `arp/net-tools` |
+| `arp -v` (net-tools) | refused | the closing count line is not read |
 | `tracepath` | read | `tracepath/linux` |
 | `traceroute` | refused | no definition |
 
@@ -171,6 +177,7 @@ than choosing.
 | invocation | | definition |
 |---|---|---|
 | `rpm -qi PACKAGE`, `rpm -qi A B`, `rpm -qia` | read | `rpm/info`, one object per package; a label rpm did not print is `null` |
+| `rpm -qpi FILE.rpm` | read | `rpm/info`; the install date is the text `(not installed)` |
 | `rpm -qi` naming a package that is not installed | refused | the `package NAME is not installed` line is not part of any block |
 | `git log`, `git log --format=fuller` | read | `git/log` |
 | `git log --stat`, `git log --shortstat`, `git show --stat` | read | `git/log-stat`, with `files` and `summary` under each commit |

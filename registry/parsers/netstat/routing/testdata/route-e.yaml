@@ -1,0 +1,5 @@
+description: route -e with a rejecting route whose empty cells print -
+source: >-
+  captured with LC_ALL=C and `route -e` from net-tools 2.10 in a debian:stable-slim container with a dummy interface holding 198.51.100.7/24 and 2001:db8::7/64, a route to 203.0.113.0/24 through 198.51.100.1 with metric 50, a route to 192.0.2.0/26 with a window and rtt, and an unreachable route to 192.0.2.128/25; the link-local address is the container's random one
+os: linux
+args: ["-e"]

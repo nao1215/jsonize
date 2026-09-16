@@ -28,10 +28,10 @@ variant: interface
 description: netstat -i kernel interface table
 metadata:
   tags: [linux, network, net-tools]
-  # net-tools is not installed on the machine the fixtures were made on,
-  # and BusyBox netstat has no -i, so the fixtures are rendered from this
-  # machine's counters by the format strings named below rather than
-  # captured. Each fixture says so.
+  # The first fixtures were rendered by the format strings named below,
+  # because net-tools was not installed where they were made;
+  # debian-container.txt was captured from net-tools 2.10 afterwards and
+  # reads the same. Each fixture says which it is.
   compatible: [net-tools]
   references:
     - https://man7.org/linux/man-pages/man8/netstat.8.html

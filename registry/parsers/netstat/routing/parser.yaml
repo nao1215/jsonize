@@ -3,15 +3,21 @@
 # reports MSS, Window and irtt where route reports Metric, Ref and Use.
 # Both signatures pin their own header row whole, so neither can be
 # reached by the other's output.
+#
+# net-tools `route -e` prints this table too, which is what the alias
+# says; `route -ee` prints both sets of columns and route/linux-extended
+# reads it.
 format: 1
 command: netstat
 variant: routing
+aliases:
+  - name: route
+    args: {all: ["-e"], none: ["-ee"]}
 description: netstat -r kernel IP routing table
 metadata:
   tags: [linux, network, net-tools]
-  # Only BusyBox was available to capture from; net-tools prints the same
-  # columns but was not verified here.
-  compatible: [BusyBox]
+  # net-tools was captured through `route -e`, which prints this table.
+  compatible: [BusyBox, net-tools 2.10]
   references:
     - https://man7.org/linux/man-pages/man8/netstat.8.html
 detect:
@@ -31,11 +37,15 @@ fields:
   # where an absent gateway prints "*" and the default route prints
   # "default"; the flag cell is a set of letters (U, G, H) that is one
   # word, not a number.
+  #
+  # A rejecting route has no gateway, MSS, window, irtt or interface, and
+  # net-tools prints "-" in each of those cells. The numbers are null
+  # there; the gateway and the interface keep the "-" that was printed.
   destination: {required: true}
   gateway: {required: true}
   genmask: {required: true}
   flags: {required: true}
-  mss: {type: int}
-  window: {type: int}
-  irtt: {type: int}
+  mss: {type: int, null_if: ["-"]}
+  window: {type: int, null_if: ["-"]}
+  irtt: {type: int, null_if: ["-"]}
   iface: {required: true}

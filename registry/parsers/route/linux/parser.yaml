@@ -17,9 +17,7 @@ aliases:
 description: route kernel IP routing table
 metadata:
   tags: [linux, network, net-tools]
-  # Only BusyBox was available to capture from; net-tools prints the same
-  # columns but was not verified here.
-  compatible: [BusyBox]
+  compatible: [BusyBox, net-tools 2.10]
   references:
     - https://man7.org/linux/man-pages/man8/route.8.html
 detect:
@@ -37,11 +35,16 @@ parse:
 fields:
   # The flag cell is a set of letters (U, G, H, ! for a rejecting route)
   # rather than a number or a list, and is kept as the word it is.
+  #
+  # A rejecting route (`ip route add unreachable ...`) has no gateway,
+  # reference count or interface, and net-tools prints "-" in each of
+  # those cells. The count is null there; the gateway and the interface
+  # are words and keep the "-" that was printed.
   destination: {required: true}
   gateway: {required: true}
   genmask: {required: true}
   flags: {required: true}
-  metric: {type: int}
-  ref: {type: int}
-  use: {type: int}
+  metric: {type: int, null_if: ["-"]}
+  ref: {type: int, null_if: ["-"]}
+  use: {type: int, null_if: ["-"]}
   iface: {required: true}

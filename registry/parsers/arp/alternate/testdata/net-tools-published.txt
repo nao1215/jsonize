@@ -1,0 +1,5 @@
+? (198.51.100.30) at <incomplete> on dummy0
+? (198.51.100.20) at 02:00:00:00:00:20 [ether] PERM on dummy0
+? (172.17.0.1) at 02:00:00:00:00:01 [ether] on eth0
+? (198.51.100.21) at <from_interface> PERM PUB on dummy0
+? (198.51.100.22) at <from_interface> PERM PUB on dummy0

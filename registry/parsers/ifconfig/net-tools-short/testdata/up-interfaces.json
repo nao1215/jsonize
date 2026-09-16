@@ -1,0 +1,41 @@
+[
+  {
+    "iface": "dummy0",
+    "mtu": 1500,
+    "rx_ok": 0,
+    "rx_err": 0,
+    "rx_drp": 0,
+    "rx_ovr": 0,
+    "tx_ok": 2,
+    "tx_err": 0,
+    "tx_drp": 0,
+    "tx_ovr": 0,
+    "flags": "BORU"
+  },
+  {
+    "iface": "eth0",
+    "mtu": 1500,
+    "rx_ok": 4730,
+    "rx_err": 0,
+    "rx_drp": 0,
+    "rx_ovr": 0,
+    "tx_ok": 2364,
+    "tx_err": 0,
+    "tx_drp": 0,
+    "tx_ovr": 0,
+    "flags": "BMRU"
+  },
+  {
+    "iface": "lo",
+    "mtu": 65536,
+    "rx_ok": 0,
+    "rx_err": 0,
+    "rx_drp": 0,
+    "rx_ovr": 0,
+    "tx_ok": 0,
+    "tx_err": 0,
+    "tx_drp": 0,
+    "tx_ovr": 0,
+    "flags": "LRU"
+  }
+]
