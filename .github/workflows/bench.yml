@@ -9,13 +9,49 @@ permissions:
 
 # Benchmarks are informational: the job posts a benchstat comparison in
 # the log and never fails a PR on timing, because shared runners are noisy.
+#
+# What it compares is the base of the pull request against its head, both
+# built and run on this runner, one after the other. Comparing against a
+# committed baseline said nothing: that file was recorded on a developer's
+# machine, and a shared runner is a different machine with different
+# neighbours, so every number differed and none of the differences was the
+# change under review.
 jobs:
   bench:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: stable
-      - run: mkdir -p bench && go test -run '^$' -bench . -benchmem -count 3 ./internal/... ./pkg/... | tee bench/new.txt
-      - run: go run golang.org/x/perf/cmd/benchstat@latest bench/baseline.txt bench/new.txt || true
+      - name: Install benchstat
+        run: go install golang.org/x/perf/cmd/benchstat@v0.0.0-20250305200902-02a15fd9d7b7
+      # The results are written outside the working tree, which is checked
+      # out twice under them. A benchmark the branch adds does not exist on
+      # the base, and one it removes does not exist on the head; benchstat
+      # says so per benchmark, and the runs themselves still have to
+      # compile, which pipefail is for.
+      - name: Benchmark the base
+        run: |
+          set -euo pipefail
+          git switch --detach "$BASE_SHA"
+          go test -run '^$' -bench . -benchmem -count 6 ./internal/... ./pkg/... | tee "$RUNNER_TEMP/base.txt"
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
+      - name: Benchmark the head
+        run: |
+          set -euo pipefail
+          git switch --detach "$HEAD_SHA"
+          go test -run '^$' -bench . -benchmem -count 6 ./internal/... ./pkg/... | tee "$RUNNER_TEMP/head.txt"
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Compare
+        run: benchstat "$RUNNER_TEMP/base.txt" "$RUNNER_TEMP/head.txt"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: benchmarks
+          path: ${{ runner.temp }}/*.txt
+          retention-days: 7
