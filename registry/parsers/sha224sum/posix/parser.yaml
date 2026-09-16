@@ -27,6 +27,15 @@ aliases:
   # macOS installs GNU coreutils under a g prefix, and the g name prints
   # what the command prints.
   - name: gsha224sum
+  # shasum, the Perl script, prints the same line for -a 224.
+  - name: shasum
+    args: {any: ["224", "--algorithm=224"]}
+  # cksum prints this line for -a sha224 with --untagged; tagged, its
+  # default, is md5/bsd's.
+  - name: cksum
+    args: {all: ["--untagged"]}
+  - name: gcksum
+    args: {all: ["--untagged"]}
 description: sha224sum checksum lines
 metadata:
   tags: [linux, darwin, checksum]

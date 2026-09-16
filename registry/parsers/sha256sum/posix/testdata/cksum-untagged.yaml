@@ -1,0 +1,4 @@
+description: cksum -a sha256 --untagged prints the line sha256sum prints.
+source: captured on Ubuntu 26.04 with LC_ALL=C over files made for the fixture, uutils coreutils 0.8.0 cksum -a sha256 --untagged
+os: linux
+args: [-a, sha256, --untagged, notes.txt, "release notes.md"]

@@ -27,6 +27,17 @@ aliases:
   # macOS installs GNU coreutils under a g prefix, and the g name prints
   # what the command prints.
   - name: gsha1sum
+  # shasum, the Perl script, prints SHA-1 when no algorithm is given,
+  # and for -a 1. The other algorithms are refused by their values, the
+  # way sha256sum/posix takes 256.
+  - name: shasum
+    args: {none: ["224", "256", "384", "512", "512224", "512256", "--algorithm=224", "--algorithm=256", "--algorithm=384", "--algorithm=512", "--algorithm=512224", "--algorithm=512256", "--tag", "-c", "--check", "-U", "--UNIVERSAL", "-0", "--01"]}
+  # cksum prints this line for -a sha1 with --untagged; tagged, its
+  # default, is md5/bsd's.
+  - name: cksum
+    args: {all: ["--untagged"]}
+  - name: gcksum
+    args: {all: ["--untagged"]}
 description: sha1sum checksum lines
 metadata:
   tags: [linux, darwin, checksum]

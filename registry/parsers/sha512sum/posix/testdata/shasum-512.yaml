@@ -1,0 +1,4 @@
+description: shasum -a 512 prints the line sha512sum prints.
+source: captured on Ubuntu 26.04 with LC_ALL=C over files made for the fixture, shasum 6.04 (Perl) -a 512
+os: linux
+args: [-a, "512", notes.txt]

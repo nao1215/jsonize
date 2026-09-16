@@ -27,6 +27,20 @@ aliases:
   # macOS installs GNU coreutils under a g prefix, and the g name prints
   # what the command prints.
   - name: gsha384sum
+  # shasum, the Perl script, prints the same line for -a 384.
+  - name: shasum
+    args: {any: ["384", "--algorithm=384"]}
+  # cksum prints this line for -a sha384 with --untagged; tagged, its
+  # default, is md5/bsd's.
+  - name: cksum
+    args: {all: ["--untagged"]}
+  - name: gcksum
+    args: {all: ["--untagged"]}
+  # b2sum -l 384 prints a digest of that many bits, which is this length.
+  - name: b2sum
+    args: {any: ["-l", "--length", "--length="]}
+  - name: gb2sum
+    args: {any: ["-l", "--length", "--length="]}
 description: sha384sum checksum lines
 metadata:
   tags: [linux, darwin, checksum]

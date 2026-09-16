@@ -1,0 +1,4 @@
+description: cksum -a md5 --untagged prints the line md5sum prints.
+source: captured on Ubuntu 26.04 with LC_ALL=C over files made for the fixture, uutils coreutils 0.8.0 cksum -a md5 --untagged
+os: linux
+args: [-a, md5, --untagged, notes.txt]

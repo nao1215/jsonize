@@ -8,6 +8,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- The checksum lines of more tools: `cksum -a ALGORITHM` (tagged, and
+  with `--untagged`), `cksum -a bsd`, `shasum` with no algorithm, `-a 1`,
+  `224`, `384` and `512` and with `--tag`, and `b2sum -l BITS` for 128,
+  256 and 384 bits. Each goes to the definition whose line it prints.
 - `git config --list --show-origin` and `--show-scope` (the scope, the
   kind of origin and the file of each setting), `git diff --shortstat`
   and `git ls-tree -l` (the size of each blob). The registry holds 241

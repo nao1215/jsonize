@@ -1,0 +1,4 @@
+description: shasum -a 384 prints the line sha384sum prints.
+source: captured on Ubuntu 26.04 with LC_ALL=C over files made for the fixture, shasum 6.04 (Perl) -a 384
+os: linux
+args: [-a, "384", notes.txt]

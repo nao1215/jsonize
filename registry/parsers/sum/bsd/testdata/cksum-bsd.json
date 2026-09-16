@@ -1,0 +1,12 @@
+[
+  {
+    "checksum": 36979,
+    "blocks": 1,
+    "file": "notes.txt"
+  },
+  {
+    "checksum": 61776,
+    "blocks": 1,
+    "file": "release notes.md"
+  }
+]

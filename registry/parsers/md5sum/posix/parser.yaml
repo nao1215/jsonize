@@ -23,6 +23,17 @@ aliases:
   # macOS installs GNU coreutils under a g prefix, and the g name prints
   # what the command prints.
   - name: gmd5sum
+  # cksum prints this line for -a md5 with --untagged; tagged, its
+  # default, is md5/bsd's.
+  - name: cksum
+    args: {all: ["--untagged"]}
+  - name: gcksum
+    args: {all: ["--untagged"]}
+  # b2sum -l 128 prints a digest of that many bits, which is this length.
+  - name: b2sum
+    args: {any: ["-l", "--length", "--length="]}
+  - name: gb2sum
+    args: {any: ["-l", "--length", "--length="]}
 description: md5sum checksum lines
 metadata:
   tags: [linux, darwin, checksum]

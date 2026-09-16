@@ -29,12 +29,12 @@
 # the digest alone, and -s a quoted string where the name goes, so none
 # of them is read here; a name that begins with a quote, as -s prints
 # its string, is refused rather than guessed at. GNU's --tag is refused
-# by the tools together with -c and with --text, `--tag --zero` ends a
-# line with NUL, which jz refuses, and `cksum -a sha256` prints this
-# line without --tag and is not read here: which of its algorithms print
-# it depends on the value after -a. The FreeBSD names that end in "sum"
-# print the GNU default format, which is the md5sum and sha256sum
-# definitions.
+# by the tools together with -c and with --text, and `--tag --zero` ends
+# a line with NUL, which jz refuses. `cksum -a sha256` prints this line
+# without --tag, and so do cksum's other digest algorithms; the ones
+# that print another format under -a are refused by the signature. The
+# FreeBSD names that end in "sum" print the GNU default format, which is
+# the md5sum and sha256sum definitions.
 format: 1
 command: md5
 variant: bsd
@@ -68,6 +68,14 @@ aliases:
     args: {any: ["--tag", "--ta"]}
   - name: b2sum
     args: {any: ["--tag", "--ta"]}
+  # uutils cksum prints this line for a digest algorithm chosen with -a
+  # unless --untagged is given, and shasum, the Perl script, with --tag.
+  # cksum's other algorithms (crc, sysv, bsd) print other formats, which
+  # the signature refuses.
+  - name: cksum
+    args: {any: ["-a", "--algorithm", "--algorithm="], none: ["--untagged", "--raw", "-c", "--check", "--base64"]}
+  - name: shasum
+    args: {any: ["--tag"]}
   # macOS installs GNU coreutils under a g prefix, and the g name prints
   # what the command prints.
   - name: gmd5sum
