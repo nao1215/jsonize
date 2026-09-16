@@ -110,6 +110,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `jz run --help` lists `--format`, `--columns` and `--type` under
+  Input and the parser options under the same heading as `jz --help`,
+  where `--columns` and `--type` were among the parser options and
+  `--format` among the options for the command.
 - `npm ls -g` and `npm ls -g --all` are read. The first line is the
   global directory with no package name, so the project's `name` in
   npm/ls and the root's `name` in npm/ls-all may be null, and both
