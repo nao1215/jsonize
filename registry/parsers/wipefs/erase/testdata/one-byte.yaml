@@ -1,0 +1,4 @@
+description: A FAT file system, whose signature at offset 0 is one byte and is reported as "1 byte was erased". Without --force the GPT image beside it is refused on standard error only.
+source: wipefs --no-act --all gpt.img fat.img, util-linux 2.41.3 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [--no-act, --all, gpt.img, fat.img]

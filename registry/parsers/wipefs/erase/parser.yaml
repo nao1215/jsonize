@@ -1,0 +1,25 @@
+# `wipefs --all` (or --offset) reports each signature it erases, and
+# `wipefs --no-act --all` reports the same lines without writing: the
+# device, how many bytes, the offset in hexadecimal, the signature type
+# and the bytes that were there, as hexadecimal pairs.
+format: 1
+command: wipefs
+variant: erase
+description: wipefs --all, one line per erased signature
+metadata:
+  tags: [linux, block-device, filesystem, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/wipefs.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[^\n]+: \d+ (?:bytes were|byte was) erased at offset 0x[0-9a-f]+ \([^)\n]+\): [0-9a-f]{2}'
+parse:
+  type: regex
+  pattern: '^(?P<device>.+): (?P<bytes>\d+) (?:bytes were|byte was) erased at offset (?P<offset>0x[0-9a-f]+) \((?P<type>[^)]+)\): (?P<erased>[0-9a-f]{2}(?: [0-9a-f]{2})*)$'
+fields:
+  bytes: {type: int}
+  # Hexadecimal byte values, kept as printed.
+  erased: {type: array, split: " "}

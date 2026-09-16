@@ -1,0 +1,3 @@
+fat.img: 8 bytes were erased at offset 0x00000036 (vfat): 46 41 54 31 36 20 20 20
+fat.img: 1 byte was erased at offset 0x00000000 (vfat): eb
+fat.img: 2 bytes were erased at offset 0x000001fe (vfat): 55 aa
