@@ -1,0 +1,36 @@
+# `oomctl` (or `oomctl dump`) prints the state systemd-oomd holds: its
+# settings, the memory and swap use of the system, then the cgroups it
+# watches for swap use and for memory pressure, each under a "Path:" line
+# with its readings indented one tab further. The number of cgroups, and
+# what systemd-oomd prints about each, is up to systemd-oomd, so the
+# report is read as a tree of labelled lines rather than a fixed object:
+# each node is the label before the first ": " and the rest of the line,
+# which is null on a heading line such as "System Context:".
+#
+# The values are kept as printed. Sizes are rounded with a unit ("20.4G",
+# "0B"), limits are percentages and durations systemd time spans, and
+# "Memory: Used: 20.4G, Total: 61.4G" is one value holding two readings.
+format: 1
+command: oomctl
+variant: dump
+description: oomctl, the settings and monitored cgroups of systemd-oomd
+metadata:
+  tags: [systemd, memory]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/oomctl.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ADry Run: (?:yes|no)\nSwap Used Limit: [0-9.]+%\nDefault Memory Pressure Limit: [0-9.]+%\nDefault Memory Pressure Duration: [^\n]+\nSystem Context:\n'
+parse:
+  type: tree
+  indent: "\t"
+  root: '^(?:Dry Run|Swap Used Limit|Default Memory Pressure Limit|Default Memory Pressure Duration|System Context|Swap Monitored CGroups|Memory Pressure Monitored CGroups):'
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^(?P<label>[A-Z][A-Za-z0-9 ]*): (?P<value>.*)$'
+        - '^(?P<label>[A-Z][A-Za-z0-9 ]*):(?P<value>)??$'

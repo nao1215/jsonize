@@ -1,0 +1,95 @@
+[
+  {
+    "label": "Dry Run",
+    "value": "no",
+    "children": []
+  },
+  {
+    "label": "Swap Used Limit",
+    "value": "90.00%",
+    "children": []
+  },
+  {
+    "label": "Default Memory Pressure Limit",
+    "value": "60.00%",
+    "children": []
+  },
+  {
+    "label": "Default Memory Pressure Duration",
+    "value": "20s",
+    "children": []
+  },
+  {
+    "label": "System Context",
+    "value": null,
+    "children": [
+      {
+        "label": "Memory",
+        "value": "Used: 20.4G, Total: 61.4G",
+        "children": []
+      },
+      {
+        "label": "Swap",
+        "value": "Used: 16.4M, Total: 7.9G",
+        "children": []
+      }
+    ]
+  },
+  {
+    "label": "Swap Monitored CGroups",
+    "value": null,
+    "children": []
+  },
+  {
+    "label": "Memory Pressure Monitored CGroups",
+    "value": null,
+    "children": [
+      {
+        "label": "Path",
+        "value": "/user.slice/user-1000.slice/user@1000.service",
+        "children": [
+          {
+            "label": "Memory Pressure Limit",
+            "value": "50.00%",
+            "children": []
+          },
+          {
+            "label": "Memory Pressure Duration",
+            "value": "20s",
+            "children": []
+          },
+          {
+            "label": "Pressure",
+            "value": "Avg10: 0.00, Avg60: 0.00, Avg300: 0.00, Total: 91ms",
+            "children": []
+          },
+          {
+            "label": "Current Memory Usage",
+            "value": "32.4G",
+            "children": []
+          },
+          {
+            "label": "Memory Min",
+            "value": "0B",
+            "children": []
+          },
+          {
+            "label": "Memory Low",
+            "value": "0B",
+            "children": []
+          },
+          {
+            "label": "Pgscan",
+            "value": "7592529",
+            "children": []
+          },
+          {
+            "label": "Last Pgscan",
+            "value": "7592529",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]
