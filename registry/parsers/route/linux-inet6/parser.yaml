@@ -1,4 +1,4 @@
-# `route -A inet6` (and `route -6`) prints the IPv6 routing table under a
+# `route -A inet6` prints the IPv6 routing table under a
 # banner of its own. The destination carries its prefix length, the next
 # hop is an address (`::` for a route with none), the flags are letters
 # (U up, G gateway, n not cached, ! rejecting) kept as the word they are,
