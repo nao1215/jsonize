@@ -1,0 +1,4 @@
+description: Two samples of every block device, where the summary block repeats the column name line above its rows.
+source: captured on Ubuntu 26.04 (sysstat 12.7.7) with LC_ALL=C; the host name in the banner replaced with one of the same width, and loop devices past loop1 left out
+os: linux
+args: ["-d", "1", "2"]

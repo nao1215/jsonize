@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/disk.json",
+  "title": "sar/disk",
+  "description": "sar -d block device activity",
+  "x-jsonize": {
+    "definition": "sar/disk",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "device": {
+        "type": "string"
+      },
+      "tps": {
+        "type": "number"
+      },
+      "rkb_per_s": {
+        "type": "number"
+      },
+      "wkb_per_s": {
+        "type": "number"
+      },
+      "dkb_per_s": {
+        "type": "number"
+      },
+      "areq_sz": {
+        "type": "number"
+      },
+      "aqu_sz": {
+        "type": "number"
+      },
+      "await": {
+        "type": "number"
+      },
+      "util_percent": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "device",
+      "tps",
+      "rkb_per_s",
+      "wkb_per_s",
+      "dkb_per_s",
+      "areq_sz",
+      "aqu_sz",
+      "await",
+      "util_percent"
+    ]
+  }
+}

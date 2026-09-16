@@ -22,6 +22,7 @@ project follows [Semantic Versioning](https://semver.org/).
   `ipcs -l` (a record per resource) and `df -P` with `-B`, `-m` or
   `--block-size` (the unit the heading names in bytes). The registry
   holds 236 commands through 620 definitions.
+- `sar -d`, the activity of each block device (621 definitions).
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the
@@ -36,6 +37,18 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A command that prints at an interval gets its records out while it
+  runs. `jz run --stream ping HOST` never chose a definition, since
+  ping/linux asked for the summary ping prints only at its end, and
+  `jz run ping -c 25 HOST` failed with exit 4 because that summary came
+  past the lines a signature looks at. `free -h -s 1` and `journalctl
+  -f` waited for twenty lines or for the command to end before their
+  first record, since a rival variant could still have matched a later
+  line; the free and journalctl signatures now look at the lines those
+  formats open with. The same summary rule is gone from FreeBSD
+  `vmstat -i`, whose interrupt list can be longer than the window.
+- `docker stats` without `--no-stream` is read: each refresh leaves a
+  space before the clear-to-end-of-line sequence, which failed the row.
 - An `int` field, and `--type COLUMN=int`, keeps an integer past 64 bits
   with every digit instead of refusing it with exit 3: `ipcs -l` prints
   a shared memory limit of 2^64 - 4. A `+` and zeros in front are left
