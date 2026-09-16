@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/taskset/affinity-mask.json",
+  "title": "taskset/affinity-mask",
+  "description": "taskset -p CPU affinity mask of a process",
+  "x-jsonize": {
+    "definition": "taskset/affinity-mask",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "pid": {
+      "type": "integer"
+    },
+    "affinity_mask": {
+      "type": "string"
+    },
+    "new_affinity_mask": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "pid",
+    "affinity_mask"
+  ]
+}

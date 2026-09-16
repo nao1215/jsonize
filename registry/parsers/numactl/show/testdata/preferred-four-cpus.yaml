@@ -1,0 +1,4 @@
+description: A preferred policy under taskset, bound to four processors.
+source: numactl --preferred=0 taskset -c 0-3 numactl -s, numactl 2.0.19 on Ubuntu 26.04 with LC_ALL=C, on a machine with one node and 32 processors
+os: linux
+args: [--show]

@@ -1,0 +1,22 @@
+{
+  "policy": "preferred",
+  "preferred node": "0",
+  "physcpubind": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "cpubind": [
+    0
+  ],
+  "nodebind": [
+    0
+  ],
+  "membind": [
+    0
+  ],
+  "preferred": [
+    0
+  ]
+}

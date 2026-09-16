@@ -1,0 +1,4 @@
+description: The default policy, bound to every processor of the one node, with no preferred node in the last list.
+source: numactl -s, numactl 2.0.19 on Ubuntu 26.04 with LC_ALL=C, on a machine with one node and 32 processors
+os: linux
+args: [-s]

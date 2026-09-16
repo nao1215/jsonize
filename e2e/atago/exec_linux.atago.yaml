@@ -2340,3 +2340,15 @@ scenarios:
       - assert:
           exit_code: 4
           stdout: {empty: true}
+
+  - name: taskset -p lands on the affinity mask
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run taskset -p 1
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.pid", equals: 1 }
+              - { path: "$.affinity_mask", matches: "^[0-9a-f]+$" }

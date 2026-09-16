@@ -1,0 +1,32 @@
+# `taskset -p` reports one process's CPU affinity as a mask, a hexadecimal
+# number whose bits are the processors it may run on, and puts the pid
+# inside the sentence. Setting an affinity prints the mask twice, before
+# and after the change, so the second line is there only when the
+# command changed something. The mask stays the hexadecimal text it was
+# printed as: it can be wider than a number JSON readers hold exactly.
+format: 1
+command: taskset
+variant: affinity-mask
+description: taskset -p CPU affinity mask of a process
+metadata:
+  tags: [linux, process, scheduling, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/taskset.1.html
+detect:
+  os: [linux]
+  args:
+    # -c prints the list, which taskset/affinity-list reads.
+    none: ["-c", "--cpu-list"]
+  signature:
+    all:
+      - '\Apid \d+''s current affinity mask: [0-9a-f]+[ \t]*(?:\n|\z)'
+parse:
+  type: regex
+  each: input
+  patterns:
+    - '\Apid (?P<pid>\d+)''s current affinity mask: (?P<affinity_mask>[0-9a-f]+)\npid \d+''s new affinity mask: (?P<new_affinity_mask>[0-9a-f]+)[ \t]*\z'
+    - '\Apid (?P<pid>\d+)''s current affinity mask: (?P<affinity_mask>[0-9a-f]+)[ \t]*\z'
+fields:
+  pid: {type: int}
+  affinity_mask: {required: true}

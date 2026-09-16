@@ -1,0 +1,35 @@
+# `numactl --show` (-s) prints the NUMA policy of the process it runs in,
+# a "name: value" line each: the memory policy, the preferred node, the
+# processors and nodes the process may run on and allocate from, and the
+# preferred nodes. The lists are numbers separated by spaces, and an
+# empty list prints nothing after the colon. Under an interleave policy
+# the preferred node says "(interleave next)" and two lines name the
+# interleave mask and the next node.
+format: 1
+command: numactl
+variant: show
+description: numactl --show, the NUMA policy and the processors and nodes a process is bound to
+metadata:
+  tags: [linux, numa, cpu, memory]
+  compatible: [numactl]
+  references:
+    - https://man7.org/linux/man-pages/man8/numactl.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-s", "--show"]
+  signature:
+    all:
+      - '\Apolicy: [a-z]+[ \t]*\npreferred node: '
+parse:
+  type: kv
+  separator: ":"
+  as: map
+fields:
+  physcpubind: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  cpubind: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  nodebind: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  membind: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  preferred: {type: array, split_regex: '[ \t]+', items: {type: int}}
+  interleavemask: {type: array, split_regex: '[ \t]+', items: {type: int}, when_missing: omit}
+  interleavenode: {type: int, when_missing: omit}

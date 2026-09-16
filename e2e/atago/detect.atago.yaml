@@ -2291,3 +2291,19 @@ scenarios:
               - { path: "$[0].uids[1].validity", equals: revoked }
               - { path: "$[0].subkeys[0].usage", equals: E }
               - { path: "$[1].subkeys", length: 0 }
+
+  - name: numactl --show is detected, with its lists as numbers
+    steps:
+      - fixture:
+          file: numactl.txt
+          from: "${specdir}/../../registry/parsers/numactl/show/testdata/interleave.txt"
+      - run:
+          command: jz
+          stdin: {file: numactl.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.policy", equals: interleave }
+              - { path: "$.interleavenode", equals: 0 }
+              - { path: "$.physcpubind", length: 32 }

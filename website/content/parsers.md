@@ -165,7 +165,7 @@ the same reading with settings of your own.
 | `npm` | [`ls`](../schemas/npm/ls.json), [`ls-all`](../schemas/npm/ls-all.json), [`outdated`](../schemas/npm/outdated.json) |
 | `nslookup` | [`query`](../schemas/nslookup/query.json) |
 | `nstat` | [`counters`](../schemas/nstat/counters.json) |
-| `numactl` | [`hardware`](../schemas/numactl/hardware.json) |
+| `numactl` | [`hardware`](../schemas/numactl/hardware.json), [`show`](../schemas/numactl/show.json) |
 | `objdump` | [`section-headers`](../schemas/objdump/section-headers.json) |
 | `od` | [`hex-bytes`](../schemas/od/hex-bytes.json) |
 | `openssl` | [`ciphers`](../schemas/openssl/ciphers.json), [`ciphers-codes`](../schemas/openssl/ciphers-codes.json), [`version-all`](../schemas/openssl/version-all.json), [`x509-fields`](../schemas/openssl/x509-fields.json) |
@@ -245,7 +245,7 @@ the same reading with settings of your own.
 | `tar` | [`busybox`](../schemas/tar/busybox.json), [`gnu`](../schemas/tar/gnu.json) |
 | `task` | [`list`](../schemas/task/list.json) |
 | `tasklist` | [`csv`](../schemas/tasklist/csv.json), [`list`](../schemas/tasklist/list.json), [`modules`](../schemas/tasklist/modules.json), [`services`](../schemas/tasklist/services.json), [`table`](../schemas/tasklist/table.json), [`verbose`](../schemas/tasklist/verbose.json) |
-| `taskset` | [`affinity-list`](../schemas/taskset/affinity-list.json) |
+| `taskset` | [`affinity-list`](../schemas/taskset/affinity-list.json), [`affinity-mask`](../schemas/taskset/affinity-mask.json) |
 | `tc` | [`qdisc`](../schemas/tc/qdisc.json), [`qdisc-stats`](../schemas/tc/qdisc-stats.json) |
 | `timedatectl` | [`linux`](../schemas/timedatectl/linux.json), [`show`](../schemas/timedatectl/show.json), [`timesync`](../schemas/timedatectl/timesync.json), [`timezones`](../schemas/timedatectl/timezones.json) |
 | `tokei` | [`default`](../schemas/tokei/default.json) |
