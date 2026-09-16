@@ -1,0 +1,4 @@
+description: Two addresses looked up in reverse, one answer with a link and two host names with none, and a lookup timed in microseconds.
+source: resolvectl query 127.0.0.1 ::1, systemd 259 (259.5-0ubuntu3.4) on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [query, 127.0.0.1, "::1"]

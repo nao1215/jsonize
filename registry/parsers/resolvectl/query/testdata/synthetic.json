@@ -1,0 +1,24 @@
+[
+  {
+    "query": {
+      "name": "localhost"
+    },
+    "answers": [
+      {
+        "value": "127.0.0.1",
+        "link": "lo"
+      },
+      {
+        "value": "::1",
+        "link": "lo"
+      }
+    ],
+    "information": {
+      "protocol": "DNS",
+      "time": "1.0ms",
+      "authenticated": true,
+      "encrypted_transport": true,
+      "source": "synthetic"
+    }
+  }
+]

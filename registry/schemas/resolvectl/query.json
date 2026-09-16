@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/resolvectl/query.json",
+  "title": "resolvectl/query",
+  "description": "resolvectl query, the answers for each name with the link, protocol and where they came from",
+  "x-jsonize": {
+    "definition": "resolvectl/query",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "answers": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "link": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "value",
+            "link"
+          ]
+        }
+      },
+      "information": {
+        "type": "object",
+        "properties": {
+          "protocol": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          },
+          "authenticated": {
+            "type": "boolean"
+          },
+          "encrypted_transport": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "source": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "protocol",
+          "time",
+          "authenticated",
+          "encrypted_transport",
+          "source"
+        ]
+      }
+    },
+    "required": [
+      "query",
+      "answers",
+      "information"
+    ]
+  }
+}

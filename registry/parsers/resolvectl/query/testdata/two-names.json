@@ -1,0 +1,62 @@
+[
+  {
+    "query": {
+      "name": "example.com"
+    },
+    "answers": [
+      {
+        "value": "2606:4700:10::ac42:93f3",
+        "link": "wlp195s0"
+      },
+      {
+        "value": "2606:4700:10::6814:179a",
+        "link": "wlp195s0"
+      },
+      {
+        "value": "172.66.147.243",
+        "link": "wlp195s0"
+      },
+      {
+        "value": "104.20.23.154",
+        "link": "wlp195s0"
+      }
+    ],
+    "information": {
+      "protocol": "DNS",
+      "time": "551us",
+      "authenticated": false,
+      "encrypted_transport": false,
+      "source": "cache"
+    }
+  },
+  {
+    "query": {
+      "name": "example.org"
+    },
+    "answers": [
+      {
+        "value": "2606:4700:10::ac42:9ded",
+        "link": "wlp195s0"
+      },
+      {
+        "value": "2606:4700:10::6814:1a88",
+        "link": "wlp195s0"
+      },
+      {
+        "value": "172.66.157.237",
+        "link": "wlp195s0"
+      },
+      {
+        "value": "104.20.26.136",
+        "link": "wlp195s0"
+      }
+    ],
+    "information": {
+      "protocol": "DNS",
+      "time": "151us",
+      "authenticated": false,
+      "encrypted_transport": false,
+      "source": "cache"
+    }
+  }
+]

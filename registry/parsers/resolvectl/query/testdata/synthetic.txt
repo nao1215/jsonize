@@ -1,0 +1,6 @@
+localhost: 127.0.0.1                                        -- link: lo
+           ::1                                              -- link: lo
+
+-- Information acquired via protocol DNS in 1.0ms.
+-- Data is authenticated: yes; Data was acquired via local or encrypted transport: yes
+-- Data from: synthetic

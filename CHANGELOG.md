@@ -10,8 +10,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - `numactl --show` (the NUMA policy and the processors and nodes a
   process is bound to) and `taskset -p` (the affinity mask of a process,
-  beside the list taskset -pc already gave). The registry holds 247
-  commands through 702 definitions.
+  beside the list taskset -pc already gave), and `resolvectl query`
+  (the answers for each name, with the link, the protocol, how long it
+  took and where the data came from). The registry holds 247 commands
+  through 703 definitions.
 - `gpg -k` and `gpg -K`, each key with its algorithm, dates,
   capabilities and fingerprint, its user IDs with their validity, and its
   subkeys. The registry holds 247 commands through 700 definitions.

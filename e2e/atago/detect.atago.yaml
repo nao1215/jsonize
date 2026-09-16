@@ -2307,3 +2307,19 @@ scenarios:
               - { path: "$.policy", equals: interleave }
               - { path: "$.interleavenode", equals: 0 }
               - { path: "$.physcpubind", length: 32 }
+
+  - name: resolvectl query is read when resolvectl is named
+    steps:
+      - fixture:
+          file: query.txt
+          from: "${specdir}/../../registry/parsers/resolvectl/query/testdata/reverse.txt"
+      - run:
+          command: jz --parser resolvectl
+          stdin: {file: query.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].query.name", equals: "::1" }
+              - { path: "$[1].answers[1].value", equals: ip6-loopback }
+              - { path: "$[1].information.authenticated", equals: true }

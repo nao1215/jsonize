@@ -192,7 +192,7 @@ the same reading with settings of your own.
 | `rclone` | [`lsd`](../schemas/rclone/lsd.json), [`lsl`](../schemas/rclone/lsl.json), [`version`](../schemas/rclone/version.json) |
 | `readelf` | [`dynamic`](../schemas/readelf/dynamic.json), [`header`](../schemas/readelf/header.json), [`sections-wide`](../schemas/readelf/sections-wide.json), [`symbols-wide`](../schemas/readelf/symbols-wide.json) |
 | `redis-cli` | [`client-list`](../schemas/redis-cli/client-list.json), [`info`](../schemas/redis-cli/info.json) |
-| `resolvectl` | [`per-link`](../schemas/resolvectl/per-link.json), [`status`](../schemas/resolvectl/status.json) |
+| `resolvectl` | [`per-link`](../schemas/resolvectl/per-link.json), [`query`](../schemas/resolvectl/query.json), [`status`](../schemas/resolvectl/status.json) |
 | `rfkill` | [`linux`](../schemas/rfkill/linux.json), [`list`](../schemas/rfkill/list.json) |
 | `route` | [`linux`](../schemas/route/linux.json), [`windows`](../schemas/route/windows.json) |
 | `rpm` | [`info`](../schemas/rpm/info.json) |

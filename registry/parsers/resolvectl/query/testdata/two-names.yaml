@@ -1,0 +1,4 @@
+description: Two names from the network, each with four addresses of both families and its own closing lines.
+source: resolvectl query example.com example.org, systemd 259 (259.5-0ubuntu3.4) on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [query, example.com, example.org]
