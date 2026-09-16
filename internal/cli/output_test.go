@@ -106,7 +106,7 @@ func TestStreamFailureStopsTheCommand(t *testing.T) {
 	// A command that had already ended keeps its own status.
 	// A key the output decides is judged once the output has ended, which
 	// is once the command has.
-	code = h.run("run", "--stream", "--parser", "csv", "--variant", "comma", "--extract", "nope", "sh", "-c", "printf 'a,b\\n1,2\\n'; exit 7")
+	code = h.run("run", "--stream", "--format", "jsonl", "--extract", "nope", "sh", "-c", `echo '{"a":1}'; exit 7`)
 	if code != 7 || !strings.Contains(h.stderr.String(), "exited with status 7") {
 		t.Errorf("code = %d, stderr = %q", code, h.stderr.String())
 	}
