@@ -361,6 +361,16 @@ func (f *outputOptions) filter() (*keyFilter, error) {
 	return nil, nil //nolint:nilnil // a nil filter is the filter that keeps everything
 }
 
+// knowKeys refuses a key the caller named that a record def reads cannot
+// have, which is known before the input is read.
+func (f *outputOptions) knowKeys(def *definition.Definition) error {
+	filter, err := f.filter()
+	if err != nil {
+		return err
+	}
+	return filter.know(def)
+}
+
 // selectOptions narrow or pin the automatic detection, and ask for the
 // choice to be shown.
 type selectOptions struct {

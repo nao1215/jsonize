@@ -66,11 +66,12 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		}
 		return a.failed(exp, err, a.exitFor(err))
 	}
-	if len(head) == 0 && knownProducer {
+	if knownProducer && blank(head) {
 		// jz started the command, so it knows what the format was meant
-		// to be. A list with nothing in it is no lines at all here, the
-		// same answer `[]` gives when the whole document is written.
-		return a.emptyFormats(reg, ctx, true, exp)
+		// to be, and what printing nothing answers depends on how the
+		// command ended (runStream). The lines held back are all there
+		// was: blank ones are not counted towards the window.
+		return exitPrintedNothing
 	}
 	ctx.Input = head
 	chosen, err := selector.Select(reg, ctx)

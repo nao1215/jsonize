@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/nao1215/jsonize/internal/datafile"
 	"github.com/nao1215/jsonize/internal/runner"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
@@ -45,14 +46,21 @@ state that boundary explicitly:
   jz run --parser df -- sudo df -h    # a wrapper whose name is not the parser
   jz run --stream vmstat 1            # one JSON document per line
 
+--format reads the output as a data format instead, the way
+COMMAND | jz --format NAME does, and chooses no parser:
+
+  jz run --format csv sqlite3 -csv -header app.db 'select * from users'
+
 --stream answers a command that does not end: each record is written as
 soon as it can be read, instead of one array once the command has
 finished; a composite (ping) is written part by part. A format read into
-one object is a usage error.
+one object is a usage error, given before the command is run, as is a
+key to --extract or --exclude that no format left can have.
 
 If the command exits non-zero, jz still parses whatever it printed,
-reports the status on stderr and exits with that same status. A command
-terminated by a signal yields 128+signal.
+reports the status on stderr and exits with that same status; when it
+printed nothing, nothing is written. A command terminated by a signal
+yields 128+signal.
 
 `
 
@@ -60,6 +68,7 @@ terminated by a signal yields 128+signal.
 type runOptions struct {
 	out        outputOptions
 	sel        selectOptions
+	format     string
 	envs       stringList
 	keepLocale bool
 	timeout    time.Duration
@@ -70,6 +79,7 @@ func (r *runOptions) bind(o *optionSet) {
 	o.listOpt(&r.envs, "env", "NAME=VALUE", "set a variable in the command's environment (repeatable)")
 	o.boolOpt(&r.keepLocale, "keep-locale", "", "do not force LC_ALL=C for the command")
 	o.durationOpt(&r.timeout, "timeout", "DURATION", 0, "kill the command after this long (0 = no limit)")
+	o.stringOpt(&r.format, "format", "", "NAME", "", "read the output as this format: "+strings.Join(datafile.Names(), ", "))
 	o.group("Output:")
 	r.out.bindOutput(o)
 	o.group("Choosing and checking the parser:")
@@ -99,11 +109,24 @@ func (a *app) cmdRun(args []string) int {
 		a.errorf("%v", err)
 		return ExitUsage
 	}
+	name, cmdArgs := rest[0], rest[1:]
+	format, _, _, code := a.dataFormat("-", ro.format, "the output of "+name, &out, &sel)
+	if code != ExitOK {
+		return code
+	}
 	inline, hasInline, code := a.settle(&out, &sel)
 	if code != ExitOK {
 		return code
 	}
-	name, cmdArgs := rest[0], rest[1:]
+	if sel.tabular {
+		// A csv or a tsv read as data is read the way a file of it is,
+		// with the fixed definition and no registry.
+		if inline, err = datafile.TabularDefinition(format, sel.columns == ""); err != nil {
+			a.errorf("%v", err)
+			return ExitError
+		}
+		hasInline = true
+	}
 	// The command name is the parser unless the user says otherwise,
 	// which is what makes a wrapper (`jz run --parser df -- sudo df -h`)
 	// readable.
@@ -116,7 +139,7 @@ func (a *app) cmdRun(args []string) int {
 	// definition given on the command line is that knowledge already,
 	// and the registries are then not read at all.
 	var reg *registry.Registry
-	if !hasInline {
+	if !hasInline && format == "" {
 		if reg, code = a.runRegistry(&sel, parser, args[:len(args)-len(rest)], rest); code != ExitOK {
 			return code
 		}
@@ -130,10 +153,18 @@ func (a *app) cmdRun(args []string) int {
 	// arguments leave agree on.
 	sctx := selector.Context{Parser: parser, Variant: sel.variant, OS: a.env.GOOS, Args: cmdArgs}
 	var env []string
-	if hasInline {
+	switch {
+	case hasInline:
 		env = append(envList(inline.Exec.Env), extraEnv...)
-	} else {
+		code = a.refuseBefore([]*definition.Definition{inline}, &out)
+	case format != "":
+		env = extraEnv
+	default:
 		env = append(execEnv(reg, sctx), extraEnv...)
+		code = a.refuseBefore(a.readings(selector.Candidates(reg, sctx)), &out)
+	}
+	if code != ExitOK {
+		return code
 	}
 
 	ctx := a.env.Context
@@ -153,8 +184,19 @@ func (a *app) cmdRun(args []string) int {
 		MaxOutput:  MaxInputSize,
 	}
 	exp := newExplanation(sel.explain)
-	if hasInline {
-		return a.runWith(ctx, inline, command, &out, timeout, exp)
+	switch {
+	case format != "" && !sel.tabular:
+		exp.dataFile(format, fromFormat, "-")
+		return a.runReading(ctx, command, out.stream, timeout, exp, func(r io.Reader) int {
+			return a.convertData(format, r, &out, exp)
+		})
+	case hasInline:
+		if sel.tabular {
+			exp.dataFile(format, fromFormat, "-")
+		}
+		return a.runReading(ctx, command, out.stream, timeout, exp, func(r io.Reader) int {
+			return a.convertWith(inline, r, &out, exp)
+		})
 	}
 	if sel.parser != "" {
 		exp.scope(sctx, fromFlag)
@@ -184,7 +226,7 @@ func (a *app) readRun(ctx context.Context, reg *registry.Registry, sctx selector
 		a.explainWrite(exp)
 		return res.ExitCode
 	}
-	if len(strings.TrimSpace(string(res.Stdout))) == 0 {
+	if blank(res.Stdout) {
 		if res.ExitCode != 0 {
 			a.explainWrite(exp)
 			return res.ExitCode
@@ -200,19 +242,22 @@ func (a *app) readRun(ctx context.Context, reg *registry.Registry, sctx selector
 	// on; both narrow the variants before the output is checked.
 	sctx.Input = res.Stdout
 	chosen, err := selector.Select(reg, sctx)
+	if err == nil {
+		exp.chose(chosen)
+		err = out.knowKeys(a.reading(chosen.Entry.Def))
+	}
 	if err != nil {
 		return a.failed(exp, err, a.failedRun(err, res.ExitCode))
 	}
-	exp.chose(chosen)
 	data, acct, err := engine.ParseAccounted(a.reading(chosen.Entry.Def), res.Stdout, out.engineOptions())
 	if err != nil {
 		return a.failed(exp, err, a.failedRun(err, res.ExitCode))
 	}
 	exp.read(acct)
 	// The command's own status is what jz returns once the output has
-	// been written: jz read it, so the interesting number is the
-	// command's.
-	if code := a.writeDocument(exp, data, out, a.reading(chosen.Entry.Def)); code != ExitOK {
+	// been written, or once reading it has failed: jz read it, so the
+	// interesting number is the command's.
+	if code := a.writeDocument(exp, data, out, a.reading(chosen.Entry.Def)); code != ExitOK && res.ExitCode == 0 {
 		return code
 	}
 	return res.ExitCode
@@ -274,33 +319,51 @@ var errStreamFailed = errors.New("streaming failed")
 
 // runStream is `jz run --stream`: the command's output is read through a
 // pipe and converted as it arrives, instead of being collected first.
-// The child's status is mirrored the way it is without --stream.
+// The child's status is mirrored the way it is without --stream, and a
+// command that printed nothing is answered once its status is known, the
+// way it is then.
 func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.Command, sctx selector.Context, out *outputOptions, timeout time.Duration, exp *explanation) int {
-	return a.streamingChild(ctx, cmd, timeout, exp, func(r io.Reader) int {
+	code, res := a.streamingChild(ctx, cmd, func(r io.Reader) int {
 		return a.stream(reg, r, sctx, nil, out, true, exp)
 	})
+	if res == nil || code != exitPrintedNothing {
+		return a.streamStatus(ctx, cmd, res, code, timeout, exp)
+	}
+	a.reportChild(ctx, cmd.Name, res, timeout)
+	exp.ran(cmd.Name, cmd.Args, res.ExitCode)
+	if res.ExitCode != 0 {
+		a.explainWrite(exp)
+		return res.ExitCode
+	}
+	return a.emptyFormats(reg, sctx, true, exp)
 }
+
+// exitPrintedNothing is what reading a stream returns for a command jz
+// started that printed nothing but blank lines. It is no status: what it
+// answers depends on how the command ended, which is known only once it
+// has.
+const exitPrintedNothing = -1
 
 // streamingChild runs cmd with its output going to convert as it
 // arrives. The child writes its own standard error through the writer jz
-// shares with it, a failure in the conversion stops the child rather than
-// being reported when it ends, and the status is settled by streamStatus
-// either way.
-func (a *app) streamingChild(ctx context.Context, cmd runner.Command, timeout time.Duration, exp *explanation, convert func(io.Reader) int) int {
+// shares with it, and a failure in the conversion stops the child rather
+// than being reported when it ends. A command that could not be run is
+// reported here and comes back without a result.
+func (a *app) streamingChild(ctx context.Context, cmd runner.Command, convert func(io.Reader) int) (int, *runner.Result) {
 	childStderr := a.shareStderr()
 	defer a.restoreStderr(childStderr)
 	code := ExitOK
 	res, err := runner.Stream(ctx, cmd, childStderr, func(r io.Reader) error {
-		if code = convert(r); code != ExitOK {
+		if code = convert(r); code != ExitOK && code != exitPrintedNothing {
 			return errStreamFailed
 		}
 		return nil
 	})
 	if err != nil && !errors.Is(err, errStreamFailed) {
 		a.errorf("%v", err)
-		return ExitError
+		return ExitError, nil
 	}
-	return a.streamStatus(ctx, cmd, res, code, timeout, exp)
+	return code, res
 }
 
 // streamStatus settles what jz run --stream returns once the command has
@@ -310,6 +373,9 @@ func (a *app) streamingChild(ctx context.Context, cmd runner.Command, timeout ti
 // failure is what is returned and the stop is not reported as the
 // command's doing.
 func (a *app) streamStatus(ctx context.Context, cmd runner.Command, res *runner.Result, code int, timeout time.Duration, exp *explanation) int {
+	if res == nil {
+		return code
+	}
 	if res.Stopped {
 		a.explainCommand(exp, cmd.Name, cmd.Args, res.ExitCode)
 		return code
@@ -499,14 +565,16 @@ func variantNames(entries []*registry.Entry) []string {
 	return out
 }
 
-// runWith runs the command and reads its output with a definition given
-// on the command line. It is the pipe case with jz starting the
-// producer, so the command's status is mirrored the way it always is.
-func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runner.Command, out *outputOptions, timeout time.Duration, exp *explanation) int {
-	if out.stream {
-		return a.streamingChild(ctx, cmd, timeout, exp, func(r io.Reader) int {
-			return a.convertWith(def, r, out, exp)
-		})
+// runReading runs the command and reads its output with read, which
+// knows how to read it without choosing: with a definition given on the
+// command line, the one a csv or a tsv has, or a data format's own
+// reader. It is the pipe case with jz starting the producer, so the
+// command's status is mirrored the way it is when jz chooses, and so is
+// its output when it printed nothing but blank lines.
+func (a *app) runReading(ctx context.Context, cmd runner.Command, stream bool, timeout time.Duration, exp *explanation, read func(io.Reader) int) int {
+	if stream {
+		code, res := a.streamingChild(ctx, cmd, read)
+		return a.streamStatus(ctx, cmd, res, code, timeout, exp)
 	}
 	res, code := a.runChild(ctx, cmd)
 	if code != ExitOK {
@@ -519,11 +587,51 @@ func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runne
 		a.explainWrite(exp)
 		return res.ExitCode
 	}
-	code = a.convertWith(def, bytes.NewReader(res.Stdout), out, exp)
 	if res.ExitCode != 0 {
+		if !blank(res.Stdout) {
+			read(bytes.NewReader(res.Stdout))
+		} else {
+			a.explainWrite(exp)
+		}
 		return res.ExitCode
 	}
-	return code
+	return read(bytes.NewReader(res.Stdout))
+}
+
+// refuseBefore gives the refusals the options earn against every
+// definition that could read the output, before the command is run: a
+// stream none of them can write, and a key none of them can have. With no
+// definition left there is nothing to judge, and the reading says why.
+func (a *app) refuseBefore(defs []*definition.Definition, out *outputOptions) int {
+	if len(defs) == 0 {
+		return ExitOK
+	}
+	if out.stream && !slices.ContainsFunc(defs, func(d *definition.Definition) bool { return d.Parse.Streams() }) {
+		return a.exitForStream(&engine.NoStreamError{Definition: defs[0].ID()})
+	}
+	filter, err := out.filter()
+	if err == nil {
+		err = filter.knowBefore(defs)
+	}
+	if err != nil {
+		return a.exitFor(err)
+	}
+	return ExitOK
+}
+
+// readings returns the definitions entries are read with.
+func (a *app) readings(entries []*registry.Entry) []*definition.Definition {
+	out := make([]*definition.Definition, len(entries))
+	for i, e := range entries {
+		out[i] = a.reading(e.Def)
+	}
+	return out
+}
+
+// blank reports output that holds nothing but white space, which a
+// command that lists things prints when there is nothing to list.
+func blank(output []byte) bool {
+	return len(bytes.TrimSpace(output)) == 0
 }
 
 // reportChild writes what the command did with itself.

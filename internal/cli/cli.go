@@ -235,10 +235,14 @@ func (a *app) exitFor(err error) int {
 		return ExitOutputClosed
 	}
 	a.errorf("%v", err)
-	var mc *engine.MissingColumnError
-	if errors.As(err, &mc) {
-		// Only a column the caller named is checked, so the caller was
-		// wrong about the input rather than the input about its format.
+	var (
+		mc *engine.MissingColumnError
+		uk *unknownKeyError
+	)
+	if errors.As(err, &mc) || errors.As(err, &uk) {
+		// Only a column or a key the caller named is checked, so the
+		// caller was wrong about the input rather than the input about
+		// its format.
 		return ExitUsage
 	}
 	var pe *engine.ParseError

@@ -246,6 +246,94 @@ scenarios:
             path: "${workdir}"
             not_contains: [marker]
 
+  - name: a key or a stream no variant can give is refused before anything is executed
+    skip: {os: windows}
+    steps:
+      - fixture:
+          file: reg/parsers/sh/default/parser.yaml
+          content: |
+            format: 1
+            command: sh
+            variant: default
+            parse: {type: kv}
+      - fixture:
+          file: reg/parsers/one/default/parser.yaml
+          content: |
+            format: 1
+            command: one
+            variant: default
+            parse: {type: kv, as: map}
+      - run:
+          command: jz run --extract nope -- sh -c 'echo executed > marker; echo a=1'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: no key "nope" in the output
+      - run:
+          command: jz run --stream --parser one -- sh -c 'echo executed > marker; echo a=1'
+          env:
+            JSONIZE_REGISTRY_PATH: "${workdir}/reg"
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: has no streaming form
+      - assert:
+          dir:
+            path: "${workdir}"
+            not_contains: [marker]
+
+  # --define and --stream take the same path to the same answer: a
+  # command that failed and printed nothing gets no JSON, only its status.
+  - name: a failing command that prints nothing gets no JSON, whichever way it is read
+    skip: {os: windows}
+    steps:
+      - run:
+          command: "jz run --define 'parse: {type: kv}' -- sh -c 'exit 9'"
+      - assert:
+          exit_code: 9
+          stdout:
+            empty: true
+      - run:
+          command: "jz run --define 'parse: {type: kv}' --stream -- sh -c 'exit 9'"
+      - assert:
+          exit_code: 9
+          stdout:
+            empty: true
+      - run:
+          command: jz run --parser df --stream -- sh -c 'exit 9'
+      - assert:
+          exit_code: 9
+          stderr:
+            not_contains: printed nothing
+
+  - name: jz run --format reads the output as data, whole or as a stream
+    skip: {os: windows}
+    steps:
+      - run:
+          command: jz run --format csv --type id=int -- sh -c 'printf "id,name\\n1,alice\\n"'
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: '[{"id":1,"name":"alice"}]'
+      - run:
+          command: jz run --format jsonl --stream -- sh -c 'echo "{\"a\":1}"; exit 3'
+      - assert:
+          exit_code: 3
+          stdout:
+            equals: '{"a":1}'
+      - run:
+          command: jz run --format json --stream -- sh -c 'echo executed > marker'
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: a json document is one value
+      - assert:
+          dir:
+            path: "${workdir}"
+            not_contains: [marker]
+
   - name: jz flags stop at the command name
     skip: {os: windows}
     steps:

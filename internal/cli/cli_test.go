@@ -1791,3 +1791,122 @@ func TestDurationFields(t *testing.T) {
 		t.Errorf("raw uptime = %#v", obj["uptime"])
 	}
 }
+
+// jz run reads a command's output whole or as a stream, with a registered
+// variant or a --define, and each of those answers a question the way the
+// others do: the same status, the same document or none, and a refusal
+// the options earn given before the command is run.
+func TestRunAnswersTheSameWholeAndStreamed(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX sh")
+	}
+	h := newHarness(t)
+	shellRegistry(t, h)
+	writeRegistry(t, h.registryPath, map[string]string{
+		"parsers/one/default/parser.yaml": "format: 1\ncommand: one\nvariant: default\n" +
+			"detect: {signature: {all: ['=']}}\nparse: {type: kv, as: map}\n",
+	})
+	marker := filepath.Join(t.TempDir(), "ran")
+	const (
+		kv  = "parse: {type: kv}"
+		csv = "parse: {type: csv}"
+	)
+	for _, tc := range []struct {
+		name   string
+		opts   []string
+		script string
+		code   int
+		// whole and stream are what standard output holds; skip leaves a
+		// mode out.
+		whole, stream string
+		ran           bool
+		// says and quiet are text standard error must and must not hold.
+		says, quiet string
+	}{
+		{name: "a key the variant cannot have", opts: []string{"--parser", "sh", "--variant", "default", "--extract", "nokey"},
+			script: "echo a=1", code: ExitUsage},
+		{name: "a key the definition cannot have", opts: []string{"--define", kv, "--extract", "nokey"},
+			script: "echo a=1", code: ExitUsage},
+		{name: "a key no variant left can have, and no output", opts: []string{"--parser", "sh", "--variant", "default", "--extract", "nokey"},
+			script: "true", code: ExitUsage},
+		{name: "a failed command that printed nothing, defined", opts: []string{"--define", kv},
+			script: "exit 5", code: 5, ran: true},
+		{name: "a failed command that printed blank lines", opts: []string{"--parser", "df"},
+			script: "echo; exit 5", code: 5, ran: true, quiet: "printed nothing"},
+		{name: "a command that printed blank lines", opts: []string{"--parser", "df"},
+			script: "echo", code: ExitSelect, ran: true, says: "printed nothing"},
+		{name: "a key the output lacks after a failed command, registered", opts: []string{"--parser", "csv", "--variant", "comma", "--extract", "nokey"},
+			script: "printf 'a,b\\n1,2\\n'; exit 5", code: 5, ran: true, whole: "", stream: "skip"},
+		{name: "a key the output lacks after a failed command, defined", opts: []string{"--define", csv, "--extract", "nokey"},
+			script: "printf 'a,b\\n1,2\\n'; exit 5", code: 5, ran: true, whole: "", stream: "skip"},
+		{name: "a format read as data", opts: []string{"--format", "jsonl"},
+			script: `echo '{"a":1}'`, code: ExitOK, ran: true, whole: "[{\"a\":1}]\n", stream: "{\"a\":1}\n"},
+		{name: "a csv read as data", opts: []string{"--format", "csv", "--type", "a=int"},
+			script: "printf 'a\\n7\\n'", code: ExitOK, ran: true, whole: "[{\"a\":7}]\n", stream: "{\"a\":7}\n"},
+		{name: "data from a failed command", opts: []string{"--format", "jsonl"},
+			script: `echo '{"a":1}'; exit 5`, code: 5, ran: true, whole: "[{\"a\":1}]\n", stream: "{\"a\":1}\n"},
+		{name: "no data from a failed command", opts: []string{"--format", "jsonl"},
+			script: "exit 5", code: 5, ran: true},
+		{name: "data that is not the format", opts: []string{"--format", "jsonl"},
+			script: `echo '{"a":1}'; echo nope`, code: ExitParse, ran: true, whole: "", stream: "{\"a\":1}\n"},
+		{name: "an unknown format", opts: []string{"--format", "nope"}, script: "true", code: ExitUsage},
+		{name: "a format and a parser", opts: []string{"--format", "csv", "--parser", "csv"}, script: "true", code: ExitUsage},
+		{name: "a type for a format with no columns", opts: []string{"--format", "jsonl", "--type", "a=int"}, script: "true", code: ExitUsage},
+	} {
+		for _, stream := range []bool{false, true} {
+			want := tc.whole
+			if stream {
+				want = tc.stream
+			}
+			if want == "skip" {
+				continue
+			}
+			_ = os.Remove(marker)
+			args := append([]string{"run"}, tc.opts...)
+			if stream {
+				args = append(args, "--stream")
+			}
+			args = append(args, "--", "sh", "-c", "touch '"+marker+"'; "+tc.script)
+			code := h.run(args...)
+			_, err := os.Stat(marker)
+			if code != tc.code || h.stdout.String() != want || (err == nil) != tc.ran ||
+				!strings.Contains(h.stderr.String(), tc.says) ||
+				(tc.quiet != "" && strings.Contains(h.stderr.String(), tc.quiet)) {
+				t.Errorf("%s, stream %v: code=%d want %d, stdout=%q want %q, ran=%v want %v\n%s",
+					tc.name, stream, code, tc.code, h.stdout.String(), want, err == nil, tc.ran, h.stderr.String())
+			}
+		}
+	}
+	// A format with no streaming form is known before the command runs.
+	_ = os.Remove(marker)
+	for _, opts := range [][]string{{"--parser", "one"}, {"--format", "json"}} {
+		args := append(append([]string{"run", "--stream"}, opts...), "--", "sh", "-c", "touch '"+marker+"'; echo a=1")
+		if code := h.run(args...); code != ExitUsage {
+			t.Errorf("%v: code=%d %s", opts, code, h.stderr.String())
+		}
+		if _, err := os.Stat(marker); err == nil {
+			t.Errorf("%v: the command ran", opts)
+		}
+	}
+}
+
+// A key the chosen definition cannot have is the caller's mistake whatever
+// the input holds, so it is reported before the input is read, whole or
+// as a stream.
+func TestUnknownKeyIsRefusedBeforeTheInputIsRead(t *testing.T) {
+	h := newHarness(t)
+	for _, opts := range [][]string{
+		{"--parser", "kv", "--variant", "equals"},
+		{"--define", "parse: {type: kv}"},
+	} {
+		for _, stream := range []bool{false, true} {
+			args := append(append([]string{}, opts...), "--extract", "nokey")
+			if stream {
+				args = append(args, "--stream")
+			}
+			if code := h.pipe("a=1\nnot a pair\n", args...); code != ExitUsage || h.stdout.Len() != 0 {
+				t.Errorf("%v: code=%d stdout=%q %s", args, code, h.stdout.String(), h.stderr.String())
+			}
+		}
+	}
+}

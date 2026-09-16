@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -64,49 +65,49 @@ func (c *convertOptions) bind(o *optionSet) {
 }
 
 // dataFormat settles which data file format the input is, and from what:
-// --format, or the extension of --file when neither --format nor a
-// parser or a definition was named. A csv or a tsv is then read with the
-// engine and the fixed definition datafile gives it, which --columns and
-// --type apply to the way they apply to a named csv variant; it is never
-// a definition of the registry, which only --parser csv reads with.
+// --format, or the extension of file when neither --format nor a parser
+// or a definition was named. A csv or a tsv is then read with the engine
+// and the fixed definition datafile gives it, which --columns and --type
+// apply to the way they apply to a named csv variant; it is never a
+// definition of the registry, which only --parser csv reads with.
 // compression is what the file name says the file is compressed with,
-// whatever its format.
-func (a *app) dataFormat(co *convertOptions) (format, from, compression string, code int) {
+// whatever its format. input names what is read, for the refusals.
+func (a *app) dataFormat(file, named, input string, out *outputOptions, sel *selectOptions) (format, from, compression string, code int) {
 	byName, compression := "", ""
-	if co.file != "-" {
-		byName, compression = datafile.FromPath(co.file)
+	if file != "-" {
+		byName, compression = datafile.FromPath(file)
 	}
 	switch {
-	case co.format != "":
-		if !datafile.Known(co.format) {
-			a.errorf("unknown format %q; the formats are %s", co.format, strings.Join(datafile.Names(), ", "))
+	case named != "":
+		if !datafile.Known(named) {
+			a.errorf("unknown format %q; the formats are %s", named, strings.Join(datafile.Names(), ", "))
 			return "", "", "", ExitUsage
 		}
-		if co.selects.parser != "" || co.selects.variant != "" || co.selects.define != "" {
+		if sel.parser != "" || sel.variant != "" || sel.define != "" {
 			a.errorf("--format and --parser/--variant/--define cannot be used together: --format already says how the input is read")
 			return "", "", "", ExitUsage
 		}
-		format, from = co.format, fromFormat
-	case byName != "" && co.selects.parser == "" && co.selects.variant == "" && co.selects.define == "":
+		format, from = named, fromFormat
+	case byName != "" && sel.parser == "" && sel.variant == "" && sel.define == "":
 		format, from = byName, fromExtension
 	default:
 		return "", "", compression, ExitOK
 	}
-	if co.output.stream && !datafile.Tabular(format) && !datafile.Streams(format) {
+	if out.stream && !datafile.Tabular(format) && !datafile.Streams(format) {
 		a.errorf("--stream writes the records of a record format (%s), and a %s document is one value", strings.Join(recordFormats(), ", "), format)
 		return "", "", "", ExitUsage
 	}
-	if co.selects.columns != "" && !datafile.Tabular(format) {
-		a.errorf("--columns names the columns of a csv or a tsv, and %s is read as %s", describeInput(co.file), format)
+	if sel.columns != "" && !datafile.Tabular(format) {
+		a.errorf("--columns names the columns of a csv or a tsv, and %s is read as %s", input, format)
 		return "", "", "", ExitUsage
 	}
-	if len(co.selects.types) > 0 && !datafile.Tabular(format) {
-		a.errorf("--type converts the columns of a csv or a tsv, and %s is read as %s", describeInput(co.file), format)
+	if len(sel.types) > 0 && !datafile.Tabular(format) {
+		a.errorf("--type converts the columns of a csv or a tsv, and %s is read as %s", input, format)
 		return "", "", "", ExitUsage
 	}
 	if datafile.Tabular(format) {
-		co.selects.tabular = true
-		co.output.keepEscapes = true
+		sel.tabular = true
+		out.keepEscapes = true
 	}
 	return format, from, compression, ExitOK
 }
@@ -128,7 +129,7 @@ func (a *app) cmdConvert(args []string) int {
 	if o.fs.NArg() > 0 {
 		return a.unexpectedArgs(o, args)
 	}
-	format, formatFrom, compression, code := a.dataFormat(&co)
+	format, formatFrom, compression, code := a.dataFormat(co.file, co.format, describeInput(co.file), &co.output, &co.selects)
 	if code != ExitOK {
 		return code
 	}
@@ -166,6 +167,17 @@ func (a *app) cmdConvert(args []string) int {
 		}
 	}
 	if inline, code = a.nameColumns(reg, &co.selects, inline); code != ExitOK {
+		return code
+	}
+	// What the options ask of every definition that could read the input
+	// is refused before it is read, as it is before jz run runs anything.
+	switch {
+	case hasInline:
+		code = a.refuseBefore([]*definition.Definition{inline}, &co.output)
+	case co.selects.parser != "":
+		code = a.refuseBefore(a.readings(selector.Candidates(reg, selector.Context{Parser: co.selects.parser, Variant: co.selects.variant})), &co.output)
+	}
+	if code != ExitOK {
 		return code
 	}
 	// Every refusal the options can earn has been given by now, so the
@@ -223,13 +235,14 @@ func (a *app) convertDetected(reg *registry.Registry, r io.Reader, ctx selector.
 		return code
 	}
 	ctx.Input = data
-	sel, v, acct, err := a.readWith(reg, ctx, data, out.engineOptions())
-	if err != nil && retract != nil {
+	sel, v, acct, err := a.readWith(reg, ctx, data, out)
+	var uk *unknownKeyError
+	if err != nil && retract != nil && !errors.As(err, &uk) {
 		exp.dropPath(err)
 		ctx = *retract
 		ctx.Input = data
 		exp.scope(ctx, fromRegistry)
-		sel, v, acct, err = a.readWith(reg, ctx, data, out.engineOptions())
+		sel, v, acct, err = a.readWith(reg, ctx, data, out)
 	}
 	exp.chose(sel)
 	if err != nil {
@@ -345,19 +358,25 @@ func (a *app) writeDocument(exp *explanation, v any, out *outputOptions, def *de
 // readWith chooses a definition for the text and reads it with that one.
 // The two steps are taken together because a caller that may retry has
 // to treat them the same way: a definition that does not describe the
-// text and one that cannot read it are both the wrong definition. The
-// selection comes back even when the reading fails, since which
-// definition failed is part of explaining the failure.
-func (a *app) readWith(reg *registry.Registry, ctx selector.Context, data []byte, opts engine.Options) (*selector.Result, any, engine.Account, error) {
+// text and one that cannot read it are both the wrong definition. A key
+// the caller named that the chosen one cannot have is refused between
+// the two, as it is before a stream is read. The selection comes back
+// even when the reading fails, since which definition failed is part of
+// explaining the failure.
+func (a *app) readWith(reg *registry.Registry, ctx selector.Context, data []byte, out *outputOptions) (*selector.Result, any, engine.Account, error) {
 	sel, err := selector.Select(reg, ctx)
 	if err != nil {
 		return nil, nil, engine.Account{}, err
 	}
-	out, acct, err := engine.ParseAccounted(a.reading(sel.Entry.Def), data, opts)
+	def := a.reading(sel.Entry.Def)
+	if err := out.knowKeys(def); err != nil {
+		return sel, nil, engine.Account{}, err
+	}
+	v, acct, err := engine.ParseAccounted(def, data, out.engineOptions())
 	if err != nil {
 		return sel, nil, acct, err
 	}
-	return sel, out, acct, nil
+	return sel, v, acct, nil
 }
 
 // convertData reads a data file format with its own reader. There is

@@ -4,6 +4,34 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `jz run --format NAME` reads the command's output as a data format,
+  the way `COMMAND | jz --format NAME` reads it, with `--stream`,
+  `--columns` and `--type` as there. `jz run --type` already told the
+  caller to give `--format csv`, which `jz run` did not take.
+
+### Fixed
+
+- `jz run` refuses, before it starts the command, `--stream` when no
+  variant it could read the output with has a streaming form, and a key
+  to `--extract` or `--exclude` that none of them can have. It used to
+  run the command first, and with `--define` or no output at all it
+  either wrote `[]` for the key or stopped the command part way.
+- A key the definition cannot have is exit 2 whether the input is read
+  whole or as a stream; read whole, a line the definition could not read
+  was reported first, with 3.
+- A command `jz run` started that fails having printed nothing but blank
+  lines gets no JSON and its own status, with `--define` and with
+  `--stream` as without them: `--define` wrote `[]`, and `--stream`
+  added a message about the empty output. Blank output from a command
+  that succeeds is answered the same way with `--stream` as without.
+- `jz run` returns the command's status when it failed and its output
+  lacks a key named to `--extract`, as it does for every other failure
+  to read the output; without `--stream` it returned 2.
+
 ## [0.6.0]
 
 A stream ends at the first record it cannot read, so the next program in

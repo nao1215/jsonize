@@ -25,8 +25,13 @@ terminal prints help.
 through, mirrors its exit status, and runs it with `LC_ALL=C` so the
 output is the one the parsers describe. A command that succeeds without
 printing anything is answered with `[]`, or, when its parser's variants
-read a single object, with a message that jz cannot tell. Empty piped
-input has no answer, since nothing identifies it.
+read a single object, with a message that jz cannot tell; one that fails
+without printing anything gets no JSON, only its status. Empty piped
+input has no answer, since nothing identifies it. `jz run --format NAME
+COMMAND` reads the output as a data format, the way `COMMAND | jz
+--format NAME` does, and `--stream`, `--define` and the rest answer the
+same way whether jz reads a pipe or runs the command, whole or as a
+stream.
 
 ## Options
 
@@ -61,8 +66,9 @@ which is JSON. `--extract` and `--exclude` keep or drop keys. The options
 under the last heading are about the parsers of command output, and a
 pipeline that reads data or makes JSON from arguments needs none of them.
 
-`jz run` adds `--env NAME=VALUE`, `--keep-locale` and `--timeout`, which
-control the command rather than the conversion. `jz list` adds `--json`,
+`jz run` takes these options but `--file`, and adds `--env NAME=VALUE`,
+`--keep-locale` and `--timeout`, which control the command rather than
+the conversion. `jz list` adds `--json`,
 `--schema` and `--sources`, and `jz test` adds `--update` and `--decoys`.
 `jz completion bash|zsh` prints a shell completion script (see
 [Install](../install/#shell-completion)).
@@ -71,7 +77,10 @@ Options that state two answers at once are refused with exit status 2
 before the input is opened or a command is started: `--pretty` with
 `--stream`, `--extract` with `--exclude`, `--define` with
 `--parser`, `--format` with `--parser` or `--define`, `--columns` and
-`--type` where there are no columns, and `--type` with `--raw`.
+`--type` where there are no columns, and `--type` with `--raw`. So are,
+before the input is read or the command started, `--stream` when no
+variant of the named parser (or the `--define`) has a streaming form,
+and a key to `--extract` or `--exclude` that none of them can have.
 
 ## Data files
 

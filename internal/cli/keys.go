@@ -61,14 +61,40 @@ func (f *keyFilter) know(def *definition.Definition) error {
 	if f.open {
 		return nil
 	}
+	return f.refuse(f.known)
+}
+
+// knowBefore refuses, before anything is read or run, a named key that
+// none of defs can produce: the definition that reads the input will be
+// one of them, so the refusal cannot depend on the input. A key one of
+// them may have, or any key when one of them takes its keys from the
+// input, is left to know once the definition is chosen.
+func (f *keyFilter) knowBefore(defs []*definition.Definition) error {
+	if f == nil || len(f.keys) == 0 || len(defs) == 0 {
+		return nil
+	}
+	known := map[string]bool{}
+	for _, d := range defs {
+		keys, open := recordKeys(d)
+		if open {
+			return nil
+		}
+		maps.Copy(known, keys)
+	}
+	return f.refuse(known)
+}
+
+// refuse reports the named keys that known, every key a record can have,
+// does not hold.
+func (f *keyFilter) refuse(known map[string]bool) error {
 	var unknown []string
 	for k := range f.keys {
-		if !f.known[k] {
+		if !known[k] {
 			unknown = append(unknown, k)
 		}
 	}
 	if len(unknown) > 0 {
-		return &unknownKeyError{keys: sortStrings(unknown), present: slices.Sorted(maps.Keys(f.known))}
+		return &unknownKeyError{keys: sortStrings(unknown), present: slices.Sorted(maps.Keys(known))}
 	}
 	return nil
 }
