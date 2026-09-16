@@ -15,6 +15,12 @@ metadata:
   compatible: [file]
   references:
     - https://man7.org/linux/man-pages/man1/file.1.html
+detect:
+  args:
+    any: ["-i", "--mime", "--mime-type"]
+  signature:
+    all:
+      - '\A(?:[^:\n]+:[ \t]+(?:application|audio|font|image|inode|message|model|multipart|text|video)/[-+.\w]+(?:; charset=[-\w]+)?[ \t]*(?:\n|\z))+\z'
 exec:
   env:
     # In the C locale file writes each byte of a name outside ASCII as a
@@ -22,12 +28,6 @@ exec:
     # is, so "caf\303\251" could be either name. A UTF-8 locale prints
     # the letters as they are and escapes only what cannot be printed.
     LC_ALL: C.UTF-8
-detect:
-  args:
-    any: ["-i", "--mime", "--mime-type"]
-  signature:
-    all:
-      - '\A(?:[^:\n]+:[ \t]+(?:application|audio|font|image|inode|message|model|multipart|text|video)/[-+.\w]+(?:; charset=[-\w]+)?[ \t]*(?:\n|\z))+\z'
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):[ \t]+(?P<mime_type>[a-z]+/[-+.\w]+)(?:; charset=(?P<charset>[-\w]+))?[ \t]*$'

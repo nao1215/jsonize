@@ -16,6 +16,12 @@ detect:
       # The other two variants lead with UID or USER; this one starts at
       # PID and stops after four columns.
       - '\A\s*PID[ \t]+TTY[ \t]+TIME[ \t]+CMD\s*$'
+exec:
+  env:
+    # In the C locale procps writes each byte of a command line outside
+    # ASCII as "?", which loses the text. A UTF-8 locale that is still C
+    # prints it as it is and keeps the numbers and dates of the C locale.
+    LC_ALL: C.UTF-8
 parse:
   type: table
   header:

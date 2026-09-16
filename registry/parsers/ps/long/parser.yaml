@@ -18,6 +18,12 @@ detect:
   signature:
     all:
       - '\A\s*F[ \t]+S[ \t]+UID[ \t]+PID[ \t]+PPID[ \t]+C[ \t]+PRI[ \t]+NI[ \t]+ADDR[ \t]+SZ[ \t]+WCHAN[ \t]+TTY[ \t]+TIME[ \t]+CMD[ \t]*$'
+exec:
+  env:
+    # In the C locale procps writes each byte of a command line outside
+    # ASCII as "?", which loses the text. A UTF-8 locale that is still C
+    # prints it as it is and keeps the numbers and dates of the C locale.
+    LC_ALL: C.UTF-8
 parse:
   type: table
   header:

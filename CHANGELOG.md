@@ -139,11 +139,13 @@ project follows [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - `jz run file` with a name outside ASCII returned the name as file
-  printed it in the C locale (`caf\303\251.txt`) with exit 0. jz now
-  runs file, and GNU tar, in the C.UTF-8 locale, where the name is
-  printed as it is, and a name still written with an octal escape, which
-  could be a name holding those characters, is refused. `jz run tar
-  -tvf` reads such names instead of failing with exit 3.
+  printed it in the C locale (`caf\303\251.txt`) with exit 0, and `jz
+  run ps aux`, `top -b -c` and `pgrep -l` returned a command line outside
+  ASCII as question marks. jz now runs file, GNU tar, ps, top and pgrep
+  in the C.UTF-8 locale, where the text is printed as it is. A file name
+  still written with an octal escape, which could be a name holding those
+  characters, is refused. `jz run tar -tvf` reads a name outside ASCII
+  instead of failing with exit 3.
 - Output that adds what a definition does not read is refused with exit
   4 instead of reaching it and failing with exit 3: `mpstat -A`,
   `mpstat -I CPU`, `sar -A`, two sar or pidstat reports in one run

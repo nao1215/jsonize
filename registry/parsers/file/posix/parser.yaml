@@ -33,13 +33,6 @@ metadata:
   compatible: [file(1)]
   references:
     - https://man7.org/linux/man-pages/man1/file.1.html
-exec:
-  env:
-    # In the C locale file writes each byte of a name outside ASCII as a
-    # backslash and three octal digits, and a backslash in a name as it
-    # is, so "caf\303\251" could be either name. A UTF-8 locale prints
-    # the letters as they are and escapes only what cannot be printed.
-    LC_ALL: C.UTF-8
 detect:
   auto_detect: false
   signature:
@@ -69,6 +62,13 @@ detect:
       # message rarer than these two is refused, which is the same answer
       # this definition gives for a kind it does not name.
       - '(?i)\A(?:\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)(?:[ \t,;:.()][^\n]*)?\n)*\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)(?:[ \t,;:.()][^\n]*)?\z'
+exec:
+  env:
+    # In the C locale file writes each byte of a name outside ASCII as a
+    # backslash and three octal digits, and a backslash in a name as it
+    # is, so "caf\303\251" could be either name. A UTF-8 locale prints
+    # the letters as they are and escapes only what cannot be printed.
+    LC_ALL: C.UTF-8
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'
