@@ -154,6 +154,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A csv or tsv whose lines end with a carriage return alone was read as
+  one header line and no rows, exit 0. A carriage return outside a quoted
+  value is refused with exit 3 now.
+- Reading a csv or tsv as data refused a record longer than 1 MiB, the
+  line limit of command output, while every other data format took one up
+  to the 64 MiB input limit. The input limit bounds a csv record too.
 - YAML read with exit 0 into something other than the text said: text
   after a flow collection on its line was dropped (`a: [b]c` read as
   `{"a":["b"]}`), an anchor on a key inside a flow mapping or after `? `
