@@ -101,12 +101,26 @@ scenarios:
           exit_code: 2
           stderr:
             contains: "the value after := is not JSON"
+      # The argument is JSON; what it holds is what jz refuses. That is
+      # the input failing rather than the command line, so the status is
+      # the one the same text in a file earns.
       - run:
           command: jz new 'labels:={"app":"api","app":"web"}'
       - assert:
-          exit_code: 2
+          exit_code: 3
+          stdout: {empty: true}
           stderr:
             contains: 'the value after := cannot be written: the key "app" is given twice in one object'
+      - fixture:
+          file: twice.json
+          content: '{"app":"api","app":"web"}'
+      - run:
+          command: jz new labels:=@${workdir}/twice.json
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: 'the key "app" is given twice in one object'
       - run:
           command: jz new a=@- b:=@-
           stdin: "x"

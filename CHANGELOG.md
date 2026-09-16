@@ -6,6 +6,16 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `jz new KEY:=JSON` returns 3 rather than 2 when the argument is JSON
+  and jz refuses what it holds: a key given twice in one object, or
+  nesting past the depth limit. The same text in a file (`KEY:=@f.json`)
+  and the same text read as data (`jz --format json`) already returned 3,
+  so a script that built the argument with a command substitution got a
+  different status from one that passed the file. Text that is not JSON
+  at all is still 2, since that is the command line being wrong.
+
 ### Changed
 
 - A stream ends at the first record it cannot read, rather than leaving

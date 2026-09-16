@@ -52,6 +52,11 @@ func TestNewFailures(t *testing.T) {
 		{"no operator", []string{"new", "name"}, ExitUsage, `jz: new: "name": an argument is KEY=VALUE`},
 		{"a key given twice", []string{"new", "a=1", "a=2"}, ExitUsage, `the key "a" is given twice`},
 		{"not JSON", []string{"new", "a:=yes"}, ExitUsage, "the value after := is not JSON"},
+		// JSON the argument really is, refused by a rule about what jz
+		// writes, is the input failing rather than the command line: the
+		// same text in a file is exit 3, and so is this.
+		{"a key given twice inside a JSON value", []string{"new", `a:={"k":1,"k":2}`}, ExitParse, `the value after := cannot be written: the key "k" is given twice in one object`},
+		{"a JSON value that nests too deep", []string{"new", "a:=" + strings.Repeat("[", 1001) + strings.Repeat("]", 1001)}, ExitParse, "the value after := cannot be written: arrays and objects nest deeper than 1000"},
 		{"an option after the arguments", []string{"new", "a=1", "-p"}, ExitUsage, "options come before the arguments"},
 		{"yaml output", []string{"new", "-p", "--yaml"}, ExitUsage, "--yaml was removed"},
 		{"an unknown option", []string{"new", "--stream"}, ExitUsage, "flag provided but not defined"},
