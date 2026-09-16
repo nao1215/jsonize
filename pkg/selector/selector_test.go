@@ -443,9 +443,10 @@ func TestSelectErrorsForUnknownNames(t *testing.T) {
 	}
 }
 
-// An entry that ends in "=" is the long option with any value; the word
-// as typed still matches itself, and a short flag or an operand holding
-// "=" is not an option with a value.
+// An entry that ends in "=" is the option with any value, written with
+// two dashes or, as Go's flag package does, one; the word as typed still
+// matches itself, and an operand holding "=" is not an option with a
+// value.
 func TestArgsEntryEndingInEquals(t *testing.T) {
 	t.Parallel()
 	a := &definition.ArgsMatch{None: []string{"--config-env="}}
@@ -464,6 +465,13 @@ func TestArgsEntryEndingInEquals(t *testing.T) {
 		if _, _, ok := matchArgs(a, c.args); ok != c.ok {
 			t.Errorf("%q: ok = %v, want %v", c.args, ok, c.ok)
 		}
+	}
+	oneDash := &definition.ArgsMatch{Any: []string{"-func="}}
+	if _, _, ok := matchArgs(oneDash, []string{"tool", "cover", "-func=c.out"}); !ok {
+		t.Error("-func=c.out does not hold -func=")
+	}
+	if _, _, ok := matchArgs(oneDash, []string{"-func", "c.out"}); ok {
+		t.Error("-func with its value in the next word holds -func=")
 	}
 	anyOf := &definition.ArgsMatch{Any: []string{"--format=oneline"}}
 	if _, _, ok := matchArgs(anyOf, []string{"--format=oneline"}); !ok {
