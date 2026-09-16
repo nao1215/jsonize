@@ -1,0 +1,4 @@
+description: cksum -a bsd prints the line sum prints.
+source: captured on Ubuntu 26.04 with LC_ALL=C over files made for the fixture, uutils coreutils 0.8.0 cksum -a bsd
+os: linux
+args: [-a, bsd, notes.txt, "release notes.md"]

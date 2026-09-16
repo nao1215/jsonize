@@ -1,0 +1,4 @@
+description: b2sum -l 128 prints a 32 digit digest in the line md5sum prints.
+source: captured on Ubuntu 26.04 with LC_ALL=C over files made for the fixture, uutils coreutils 0.8.0 b2sum -l 128
+os: linux
+args: [-l, "128", notes.txt]

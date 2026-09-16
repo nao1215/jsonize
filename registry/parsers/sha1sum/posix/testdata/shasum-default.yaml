@@ -1,0 +1,4 @@
+description: shasum, the Perl script, prints SHA-1 when no algorithm is given.
+source: captured on Ubuntu 26.04 with LC_ALL=C over files made for the fixture, shasum 6.04 (Perl)
+os: linux
+args: [notes.txt, "release notes.md"]

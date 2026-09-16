@@ -1,0 +1,54 @@
+# `pdfinfo FILE` prints what a PDF says about itself, one "Key: value"
+# line each, the value aligned in a column: the document information
+# (Title, Author, the dates), whether the file is tagged, has a form or
+# JavaScript, the page count, the page size and rotation, the file size
+# in bytes, whether it is linearized ("Optimized") and the PDF version.
+# A document information entry the file leaves empty prints no value,
+# and one the file does not have is not printed. The dates are in the
+# local time of the machine with the zone abbreviation, or ISO 8601 with
+# -isodates, and stay text. "Encrypted" is "no", or "yes" and the
+# permissions in parentheses, and stays text too.
+format: 1
+command: pdfinfo
+variant: poppler
+description: pdfinfo, the document information, page count, page size and version of a PDF
+metadata:
+  tags: [pdf, document]
+  compatible: [poppler-utils]
+  references:
+    - https://manpages.debian.org/unstable/poppler-utils/pdfinfo.1.en.html
+detect:
+  args:
+    # -f and -l add a size line for each page, -box the page boxes, -meta
+    # the XML metadata, and the others print other reports.
+    none: ["-f", "-l", "-box", "-meta", "-custom", "-js", "-struct", "-struct-text", "-dests", "-url", "-listenc", "-v", "-h", "-help", "--help", "-?"]
+  signature:
+    all:
+      # Every line down to the page count is a key and its value. The
+      # expression is anchored at the start so that text of another shape
+      # is refused on its first line rather than after forty.
+      - '\A(?:[A-Z][A-Za-z0-9 ]*:[^\n]*\n)*Pages: +[0-9]+\n'
+      - '(?m)^Encrypted: +(?:no|yes\b)'
+      - '(?m)^Page size: +[0-9.]+ x [0-9.]+ pts'
+    window: 40
+parse:
+  type: kv
+  separator: ":"
+  as: map
+fields:
+  Title: {null_if: [""]}
+  Subject: {null_if: [""]}
+  Keywords: {null_if: [""]}
+  Author: {null_if: [""]}
+  Creator: {null_if: [""]}
+  Producer: {null_if: [""]}
+  Custom Metadata: {type: bool}
+  Metadata Stream: {type: bool}
+  Tagged: {type: bool}
+  UserProperties: {type: bool}
+  Suspects: {type: bool}
+  JavaScript: {type: bool}
+  Pages: {type: int}
+  Page rot: {type: int}
+  File size: {type: int, trim_suffix: " bytes"}
+  Optimized: {type: bool}

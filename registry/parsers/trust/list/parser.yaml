@@ -1,0 +1,31 @@
+# `trust list` (p11-kit) prints each object of the trust store as a
+# PKCS#11 URI on a line of its own, then its attributes indented by four
+# spaces, "type", "label", "trust" and "category" in that order, and a
+# blank line. The label is printed as it is stored, spaces and letters
+# outside ASCII included.
+format: 1
+command: trust
+variant: list
+description: trust list, the certificates of the p11-kit trust store and how each is trusted
+metadata:
+  tags: [linux, security, certificates]
+  compatible: [p11-kit]
+  references:
+    - https://p11-glue.github.io/p11-glue/p11-kit/manual/trust.html
+detect:
+  os: [linux]
+  args:
+    all: [list]
+  signature:
+    all:
+      - '\Apkcs11:[^\s]+\n    type: '
+parse:
+  type: records
+  start: '^pkcs11:'
+  record:
+    parse:
+      type: regex
+      each: input
+      pattern: '\A(?P<uri>pkcs11:\S+)(?:\n    type: (?P<type>[^\n]*))?(?:\n    label: (?P<label>[^\n]*))?(?:\n    trust: (?P<trust>[^\n]*))?(?:\n    category: (?P<category>[^\n]*))?\n*\z'
+    fields:
+      uri: {required: true}

@@ -1,0 +1,4 @@
+description: A label with parentheses and letters outside ASCII, which the C locale prints as they are.
+source: trust list, p11-kit 0.26.2 on Ubuntu 26.04 with LC_ALL=C, cut to two entries
+os: linux
+args: [list]

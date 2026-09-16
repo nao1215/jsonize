@@ -1,0 +1,4 @@
+description: cksum -a sha3 -l 256 names the algorithm with its length, SHA3-256.
+source: captured on Ubuntu 26.04 with LC_ALL=C over files made for the fixture, uutils coreutils 0.8.0 cksum -a sha3 -l 256
+os: linux
+args: [-a, sha3, -l, "256", notes.txt]

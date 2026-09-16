@@ -171,6 +171,9 @@ the same reading with settings of your own.
 | `pactl` | [`info`](../schemas/pactl/info.json), [`short-cards`](../schemas/pactl/short-cards.json), [`short-clients`](../schemas/pactl/short-clients.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
 | `parted` | [`machine`](../schemas/parted/machine.json) |
 | `passwd` | [`status`](../schemas/passwd/status.json) |
+| `pdffonts` | [`poppler`](../schemas/pdffonts/poppler.json) |
+| `pdfimages` | [`list`](../schemas/pdfimages/list.json) |
+| `pdfinfo` | [`poppler`](../schemas/pdfinfo/poppler.json) |
 | `pgrep` | [`list-name`](../schemas/pgrep/list-name.json) |
 | `pidstat` | [`io`](../schemas/pidstat/io.json), [`kernel`](../schemas/pidstat/kernel.json), [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json), [`priority`](../schemas/pidstat/priority.json), [`stack`](../schemas/pidstat/stack.json), [`switches`](../schemas/pidstat/switches.json), [`threads`](../schemas/pidstat/threads.json), [`user`](../schemas/pidstat/user.json) |
 | `ping` | [`bsd`](../schemas/ping/bsd.json), [`linux`](../schemas/ping/linux.json) |
@@ -247,6 +250,7 @@ the same reading with settings of your own.
 | `top` | [`busybox`](../schemas/top/busybox.json), [`darwin`](../schemas/top/darwin.json), [`linux`](../schemas/top/linux.json) |
 | `tracepath` | [`linux`](../schemas/tracepath/linux.json) |
 | `tree` | [`listing`](../schemas/tree/listing.json) |
+| `trust` | [`list`](../schemas/trust/list.json) |
 | `udevadm` | [`info`](../schemas/udevadm/info.json) |
 | `ulimit` | [`bash`](../schemas/ulimit/bash.json), [`dash`](../schemas/ulimit/dash.json) |
 | `uname` | [`darwin`](../schemas/uname/darwin.json), [`freebsd`](../schemas/uname/freebsd.json), [`linux`](../schemas/uname/linux.json) |
@@ -282,7 +286,7 @@ which of them wrote it, so they share a definition rather than having one
 each, and the command they are listed under is the one the definition is
 named for. These are read as well:
 
-`7za` (as `7z`), `arecord` (as `aplay`), `b2sum` (as `md5`, `md5sum`, `sha512sum`), `batcat` (as `bat`), `cksum` (as `md5sum`), `gb2sum` (as `md5`, `sha512sum`), `gcksum` (as `cksum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gfactor` (as `factor`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5`, `md5sum`), `gpg2` (as `gpg`), `gsha1sum` (as `md5`, `sha1sum`), `gsha224sum` (as `md5`, `sha224sum`), `gsha256sum` (as `md5`, `sha256sum`), `gsha384sum` (as `md5`, `sha384sum`), `gsha512sum` (as `md5`, `sha512sum`), `gstat` (as `stat`), `gsum` (as `sum`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `hd` (as `hexdump`), `mcli` (as `mc`), `md5sum` (as `md5`), `nerdctl` (as `docker`), `netstat` (as `route`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `python` (as `pip`), `python3` (as `pip`), `rmd160` (as `md5`), `sha1` (as `md5`), `sha1sum` (as `md5`, `md5sum`), `sha224` (as `md5`), `sha224sum` (as `md5`, `md5sum`), `sha256` (as `md5`), `sha256sum` (as `md5`, `md5sum`), `sha384` (as `md5`), `sha384sum` (as `md5`, `md5sum`), `sha512` (as `md5`), `sha512sum` (as `md5`, `md5sum`), `sha512t224` (as `md5`), `sha512t256` (as `md5`), `shasum` (as `sha256sum`), `skein1024` (as `md5`), `skein256` (as `md5`), `skein512` (as `md5`), `ssh-add` (as `ssh-keygen`), `systemd-resolve` (as `resolvectl`), `uv` (as `pip`), `vdir` (as `ls`)
+`7za` (as `7z`), `arecord` (as `aplay`), `b2sum` (as `md5`, `md5sum`, `sha256sum`, `sha384sum`, `sha512sum`), `batcat` (as `bat`), `cksum` (as `md5`, `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`, `sum`), `gb2sum` (as `md5`, `md5sum`, `sha256sum`, `sha384sum`, `sha512sum`), `gcksum` (as `cksum`, `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gfactor` (as `factor`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5`, `md5sum`), `gpg2` (as `gpg`), `gsha1sum` (as `md5`, `sha1sum`), `gsha224sum` (as `md5`, `sha224sum`), `gsha256sum` (as `md5`, `sha256sum`), `gsha384sum` (as `md5`, `sha384sum`), `gsha512sum` (as `md5`, `sha512sum`), `gstat` (as `stat`), `gsum` (as `sum`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `hd` (as `hexdump`), `mcli` (as `mc`), `md5sum` (as `md5`), `nerdctl` (as `docker`), `netstat` (as `route`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `python` (as `pip`), `python3` (as `pip`), `rmd160` (as `md5`), `sha1` (as `md5`), `sha1sum` (as `md5`, `md5sum`), `sha224` (as `md5`), `sha224sum` (as `md5`, `md5sum`), `sha256` (as `md5`), `sha256sum` (as `md5`, `md5sum`), `sha384` (as `md5`), `sha384sum` (as `md5`, `md5sum`), `sha512` (as `md5`), `sha512sum` (as `md5`, `md5sum`), `sha512t224` (as `md5`), `sha512t256` (as `md5`), `shasum` (as `md5`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`), `skein1024` (as `md5`), `skein256` (as `md5`), `skein512` (as `md5`), `ssh-add` (as `ssh-keygen`), `systemd-resolve` (as `resolvectl`), `uv` (as `pip`), `vdir` (as `ls`)
 
 `jz run`, `--parser` and `jz list` all take the other name.
 

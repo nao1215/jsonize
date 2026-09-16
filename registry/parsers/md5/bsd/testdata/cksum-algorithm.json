@@ -1,0 +1,12 @@
+[
+  {
+    "algorithm": "SHA256",
+    "file": "notes.txt",
+    "checksum": "5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+  },
+  {
+    "algorithm": "SHA256",
+    "file": "release notes.md",
+    "checksum": "66fa3700056b3ea50a0eb669ba2ac557b1f8ed83697780c599e1d9e6e0e4f448"
+  }
+]

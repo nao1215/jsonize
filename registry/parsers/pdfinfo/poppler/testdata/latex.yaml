@@ -1,0 +1,4 @@
+description: A LaTeX document that leaves the information entries empty, with dates in local time and its zone.
+source: pdfinfo, poppler-utils 26.01.0 on Ubuntu 26.04 with LC_ALL=C, on /usr/share/doc/shared-mime-info/shared-mime-info-spec.pdf
+os: linux
+args: [spec.pdf]

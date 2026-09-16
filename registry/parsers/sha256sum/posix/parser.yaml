@@ -32,6 +32,17 @@ aliases:
   # -U prints "^" where the mode goes and is refused by the pattern.
   - name: shasum
     args: {any: ["256", "--algorithm=256"]}
+  # cksum prints this line for -a sha256 with --untagged; tagged, its
+  # default, is md5/bsd's.
+  - name: cksum
+    args: {all: ["--untagged"]}
+  - name: gcksum
+    args: {all: ["--untagged"]}
+  # b2sum -l 256 prints a digest of that many bits, which is this length.
+  - name: b2sum
+    args: {any: ["-l", "--length", "--length="]}
+  - name: gb2sum
+    args: {any: ["-l", "--length", "--length="]}
 description: sha256sum checksum lines
 metadata:
   tags: [linux, darwin, checksum]

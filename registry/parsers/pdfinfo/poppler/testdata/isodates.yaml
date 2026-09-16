@@ -1,0 +1,4 @@
+description: -isodates prints the dates in ISO 8601.
+source: pdfinfo -isodates, poppler-utils 26.01.0 on Ubuntu 26.04 with LC_ALL=C, on a two-page PDF made with ImageMagick for the fixture
+os: linux
+args: [-isodates, images.pdf]

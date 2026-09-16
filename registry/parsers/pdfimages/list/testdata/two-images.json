@@ -1,0 +1,38 @@
+[
+  {
+    "page": 1,
+    "num": 0,
+    "type": "image",
+    "width": 40,
+    "height": 20,
+    "color": "index",
+    "components": 1,
+    "bpc": 8,
+    "encoding": "image",
+    "interpolate": false,
+    "object": 8,
+    "generation": 0,
+    "x_ppi": 72,
+    "y_ppi": 72,
+    "size": "16B",
+    "ratio": 2
+  },
+  {
+    "page": 2,
+    "num": 1,
+    "type": "image",
+    "width": 16,
+    "height": 16,
+    "color": "gray",
+    "components": 1,
+    "bpc": 8,
+    "encoding": "image",
+    "interpolate": false,
+    "object": 22,
+    "generation": 0,
+    "x_ppi": 72,
+    "y_ppi": 72,
+    "size": "52B",
+    "ratio": 20
+  }
+]

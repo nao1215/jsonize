@@ -2270,3 +2270,45 @@ scenarios:
           stderr:
             contains: "does not read the output of -Q"
 
+
+  - name: cksum -a, shasum and b2sum -l land on the definition of the line they print
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: sums/notes.txt
+          content: "hello\n"
+      - run:
+          command: jz run cksum -a sha256 ${workdir}/sums/notes.txt
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].algorithm", equals: SHA256 }
+              - { path: "$[0].checksum", equals: 5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03 }
+      - run:
+          command: jz run --explain cksum -a sha256 --untagged ${workdir}/sums/notes.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sha256sum/posix"
+      - run:
+          command: jz run --explain shasum ${workdir}/sums/notes.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sha1sum/posix"
+          stdout:
+            json:
+              - { path: "$[0].checksum", equals: f572d396fae9206628714fb2ce00f72e94f2258f }
+      - run:
+          command: jz run --explain b2sum -l 256 ${workdir}/sums/notes.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sha256sum/posix"
+      - run:
+          command: jz run --explain cksum -a bsd ${workdir}/sums/notes.txt
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sum/bsd"

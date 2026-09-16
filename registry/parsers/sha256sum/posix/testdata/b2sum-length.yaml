@@ -1,0 +1,4 @@
+description: b2sum -l 256 prints a 64 digit digest in the line sha256sum prints.
+source: captured on Ubuntu 26.04 with LC_ALL=C over files made for the fixture, uutils coreutils 0.8.0 b2sum -l 256
+os: linux
+args: [-l, "256", notes.txt, "release notes.md"]

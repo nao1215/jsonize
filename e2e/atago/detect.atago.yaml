@@ -2193,3 +2193,55 @@ scenarios:
             json:
               - { path: "$.project.name", equals: null }
               - { path: "$.dependencies[2].name", equals: npm }
+
+  - name: pdfinfo, pdffonts, pdfimages -list and trust list are detected
+    steps:
+      - fixture:
+          file: pdfinfo.txt
+          from: "${specdir}/../../registry/parsers/pdfinfo/poppler/testdata/latex.txt"
+      - run:
+          command: jz
+          stdin: {file: pdfinfo.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.Pages", equals: 19 }
+              - { path: "$.Title", equals: null }
+              - { path: "$.Encrypted", equals: "no" }
+      - fixture:
+          file: pdffonts.txt
+          from: "${specdir}/../../registry/parsers/pdffonts/poppler/testdata/not-embedded.txt"
+      - run:
+          command: jz
+          stdin: {file: pdffonts.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].name", equals: Helvetica }
+              - { path: "$[0].embedded", equals: false }
+      - fixture:
+          file: pdfimages.txt
+          from: "${specdir}/../../registry/parsers/pdfimages/list/testdata/two-images.txt"
+      - run:
+          command: jz
+          stdin: {file: pdfimages.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].color", equals: gray }
+              - { path: "$[1].ratio", equals: 20 }
+      - fixture:
+          file: trust.txt
+          from: "${specdir}/../../registry/parsers/trust/list/testdata/unicode-label.txt"
+      - run:
+          command: jz
+          stdin: {file: trust.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].label", equals: "NetLock Arany (Class Gold) Főtanúsítvány" }
+              - { path: "$[1].trust", equals: anchor }

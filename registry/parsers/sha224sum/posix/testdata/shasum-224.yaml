@@ -1,0 +1,4 @@
+description: shasum -a 224 prints the line sha224sum prints.
+source: captured on Ubuntu 26.04 with LC_ALL=C over files made for the fixture, shasum 6.04 (Perl) -a 224
+os: linux
+args: [-a, "224", notes.txt]

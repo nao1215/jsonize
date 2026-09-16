@@ -1,0 +1,4 @@
+description: shasum --tag, the Perl script, prints the same line, SHA1 by default.
+source: captured on Ubuntu 26.04 with LC_ALL=C over files made for the fixture, shasum 6.04 (Perl) --tag
+os: linux
+args: [--tag, notes.txt, "release notes.md"]

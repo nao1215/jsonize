@@ -12,6 +12,11 @@ command: sum
 variant: bsd
 aliases:
   - name: gsum
+  # uutils and GNU cksum print this line for -a bsd. The value is a
+  # separate argument, or joined to --algorithm= or any prefix of it, as
+  # cksum/posix lists it.
+  - name: cksum
+    args: {any: ["bsd", "-absd", "--algorithm=bsd", "--algorith=bsd", "--algorit=bsd", "--algori=bsd", "--algor=bsd", "--algo=bsd", "--alg=bsd", "--al=bsd", "--a=bsd"]}
 description: sum, the BSD checksum and block count of each file
 metadata:
   tags: [linux, checksum]

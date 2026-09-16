@@ -1,0 +1,4 @@
+description: An indexed and a gray image, one a page, with a size in bytes and the ratio with and without a decimal.
+source: pdfimages -list, poppler-utils 26.01.0 on Ubuntu 26.04 with LC_ALL=C, on a two-page PDF made with ImageMagick for the fixture
+os: linux
+args: [-list, images.pdf]

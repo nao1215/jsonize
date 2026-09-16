@@ -1,0 +1,45 @@
+# `pdfimages -list FILE` writes no image files and prints a row for each
+# image a PDF draws instead: the page, the image's number, its type
+# (image, a mask or a soft mask), the width and height in pixels, the
+# color space, the number of components and bits per component, the
+# encoding, whether it is interpolated, the object number and generation,
+# the resolution it is drawn at, and the size of its stream with the
+# ratio to the uncompressed size. The size is rounded with a unit
+# (16B, 1.2K), which stays text; the ratio is a percentage. An image
+# drawn on more than one page is listed on each. A PDF with no images
+# prints the heading alone.
+format: 1
+command: pdfimages
+variant: list
+description: pdfimages -list, the images of a PDF with their size, color and encoding
+metadata:
+  tags: [pdf, images, document]
+  compatible: [poppler-utils]
+  references:
+    - https://manpages.debian.org/unstable/poppler-utils/pdfimages.1.en.html
+detect:
+  args:
+    any: ["-list"]
+  signature:
+    all:
+      - '\Apage +num +type +width +height +color +comp +bpc +enc +interp +object ID +x-ppi +y-ppi +size +ratio\n-{20,}(?:\n|\z)'
+input:
+  ignore:
+    - '^page +num +type +width +height +color +comp +bpc +enc +interp +object ID +x-ppi +y-ppi +size +ratio$'
+    - '^-{20,}$'
+parse:
+  type: regex
+  pattern: '^ *(?P<page>[0-9]+) +(?P<num>[0-9]+) +(?P<type>\S+) +(?P<width>[0-9]+) +(?P<height>[0-9]+) +(?P<color>\S+) +(?P<components>[0-9]+) +(?P<bpc>[0-9]+) +(?P<encoding>\S+) +(?P<interpolate>yes|no) +(?P<object>[0-9]+) +(?P<generation>[0-9]+) +(?P<x_ppi>[0-9]+|-) +(?P<y_ppi>[0-9]+|-) +(?P<size>\S+) +(?P<ratio>[0-9.]+%|-)$'
+fields:
+  page: {type: int}
+  num: {type: int}
+  width: {type: int}
+  height: {type: int}
+  components: {type: int}
+  bpc: {type: int}
+  interpolate: {type: bool}
+  object: {type: int}
+  generation: {type: int}
+  x_ppi: {type: int, null_if: ["-"]}
+  y_ppi: {type: int, null_if: ["-"]}
+  ratio: {type: float, trim_suffix: "%", null_if: ["-"]}
