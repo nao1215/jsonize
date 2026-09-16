@@ -723,3 +723,22 @@ scenarios:
           exit_code: 2
           stderr:
             contains: "--type converts the columns of a csv or a tsv, and standard input is read as lines"
+
+  # A csv whose lines end with a carriage return alone is one line to a
+  # csv reader, and was read as a header with no rows.
+  - name: a csv with carriage return line endings is refused
+    steps:
+      - run:
+          command: jz --format csv
+          stdin: "a,b\r1,2\r"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "csv/comma: line 1: column 4: a carriage return outside a quoted value"
+      - run:
+          command: jz --format csv --stream
+          stdin: "a,b\r1,2\r"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}

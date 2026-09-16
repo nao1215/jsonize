@@ -79,12 +79,13 @@ func (r *runOptions) bind(o *optionSet) {
 	o.listOpt(&r.envs, "env", "NAME=VALUE", "set a variable in the command's environment (repeatable)")
 	o.boolOpt(&r.keepLocale, "keep-locale", "", "do not force LC_ALL=C for the command")
 	o.durationOpt(&r.timeout, "timeout", "DURATION", 0, "kill the command after this long (0 = no limit)")
+	o.group("Input:")
 	o.stringOpt(&r.format, "format", "", "NAME", "", "read the output as this format: "+strings.Join(datafile.Names(), ", "))
+	r.sel.bindColumns(o)
 	o.group("Output:")
 	r.out.bindOutput(o)
-	o.group("Choosing and checking the parser:")
+	o.group("Choosing and checking the parser of command output:")
 	r.sel.bindParser(o)
-	r.sel.bindColumns(o)
 	r.out.bindReading(o)
 	o.helpDoc()
 }
@@ -235,7 +236,7 @@ func (a *app) readRun(ctx context.Context, reg *registry.Registry, sctx selector
 		// command that lists things does when there is nothing to list.
 		// Here, unlike on a pipe, jz knows which format was meant, so it
 		// can say the list is empty instead of that it could not tell.
-		return a.emptyResult(reg, sctx, *out, exp)
+		return a.emptyResult(reg, sctx, name, *out, exp)
 	}
 
 	// jz ran the command, so it knows the arguments and the system it ran
@@ -335,7 +336,7 @@ func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.
 		a.explainWrite(exp)
 		return res.ExitCode
 	}
-	return a.emptyFormats(reg, sctx, true, exp)
+	return a.emptyFormats(reg, sctx, cmd.Name, true, exp)
 }
 
 // exitPrintedNothing is what reading a stream returns for a command jz
@@ -413,8 +414,8 @@ func (a *app) restoreStderr(io.Writer) {
 
 // emptyResult answers a command that succeeded without printing
 // anything with the empty list, when that is what it means.
-func (a *app) emptyResult(reg *registry.Registry, sctx selector.Context, out outputOptions, exp *explanation) int {
-	if code := a.emptyFormats(reg, sctx, false, exp); code != ExitOK {
+func (a *app) emptyResult(reg *registry.Registry, sctx selector.Context, command string, out outputOptions, exp *explanation) int {
+	if code := a.emptyFormats(reg, sctx, command, false, exp); code != ExitOK {
 		return code
 	}
 	if err := out.write(a.env.Stdout, []any{}); err != nil {

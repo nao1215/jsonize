@@ -28,6 +28,10 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 	if len(lines) == 0 {
 		return []any{}, nil
 	}
+	records := lines
+	if p != &r.def.Parse {
+		records = csvRecords(p, lines)
+	}
 	var (
 		cols    []string
 		header  []string
@@ -37,7 +41,7 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 		cols = p.Header.Columns
 	}
 	out := make([]any, 0, len(lines))
-	for _, rec := range csvRecords(p, lines) {
+	for _, rec := range records {
 		rows, err := readCSV(rec.text, p)
 		if err != nil {
 			ln, msg := csvFailure(rec, err)
@@ -108,6 +112,27 @@ func csvRecords(p *definition.Parse, lines []line) []line {
 	return out
 }
 
+// errBareCarriageReturn is a carriage return outside a quoted value. The
+// carriage return of a CRLF ending comes off before a record is read, so
+// what is left belongs to no line ending: a file whose lines end with CR
+// alone would otherwise be one line, its header, and no rows.
+var errBareCarriageReturn = errors.New("a carriage return outside a quoted value, which ends no csv line; convert lines that end with a carriage return alone to line feeds first")
+
+// bareCarriageReturn finds a carriage return in a record that no quoted
+// value holds, as the csv reader's own error would place it.
+func bareCarriageReturn(text string, delim rune) error {
+	if !strings.Contains(text, "\r") {
+		return nil
+	}
+	q := newCSVQuote(delim)
+	for n, l := range strings.Split(text, "\n") {
+		if col := q.scan(l); col > 0 {
+			return &csv.ParseError{StartLine: 1, Line: n + 1, Column: col, Err: errBareCarriageReturn}
+		}
+	}
+	return nil
+}
+
 // csvQuote follows the quoting rules of a csv text one line at a time,
 // so that a reader knows whether a line ends inside a quoted value
 // without reading the lines before it again. Only a quote that begins a
@@ -129,9 +154,19 @@ func newCSVQuote(delim rune) csvQuote {
 // feed reads one line and the line break after it, and reports whether a
 // quoted value is still open at the end of it.
 func (q *csvQuote) feed(text string) bool {
+	q.scan(text)
+	return q.quoted
+}
+
+// scan follows the quotes of one line and returns the column, counted in
+// characters from 1, of the first carriage return outside a quoted value,
+// or 0 when there is none.
+func (q *csvQuote) scan(text string) int {
+	bareCR, col := 0, 0
 	for i := 0; i < len(text); {
 		r, size := utf8.DecodeRuneInString(text[i:])
 		i += size
+		col++
 		switch {
 		case q.quoted && r == '"':
 			if i < len(text) && text[i] == '"' {
@@ -145,13 +180,16 @@ func (q *csvQuote) feed(text string) bool {
 		case r == q.delim || r == '\n':
 			q.start = true
 		default:
+			if r == '\r' && bareCR == 0 {
+				bareCR = col
+			}
 			q.start = false
 		}
 	}
 	if !q.quoted {
 		q.start = true
 	}
-	return q.quoted
+	return bareCR
 }
 
 // csvRow builds one object. A row shorter than the header leaves the
@@ -272,6 +310,9 @@ func csvColumns(p *definition.Parse, header []string) []string {
 
 // readCSV reads one record with the definition's delimiter.
 func readCSV(text string, p *definition.Parse) ([][]string, error) {
+	if err := bareCarriageReturn(text, csvDelimiter(p)); err != nil {
+		return nil, err
+	}
 	cr := csv.NewReader(strings.NewReader(text))
 	cr.Comma = csvDelimiter(p)
 	// A CSV of command output is not required to be rectangular, and the

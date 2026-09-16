@@ -619,9 +619,12 @@ func (s *streamer) startCSV() {
 
 // feedCSV holds a line back while a quoted value is still open, and hands
 // the record over once it is closed. At the top level every line is a
-// record already (see feedPhysical); the lines of a csv part of a
-// composite are grouped here.
+// record already (see feedPhysical) and is read as it comes; the lines of
+// a csv part of a composite are grouped here.
 func (s *streamer) feedCSV(l line) error {
+	if s.csvIn != nil {
+		return s.emitCSV(l)
+	}
 	if s.csvPending == nil {
 		s.csvPendNum = l.num
 	}

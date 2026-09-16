@@ -138,6 +138,10 @@ func TestTabularDataReadsTheSameEveryWay(t *testing.T) {
 		{"a byte order mark", "csv", "\xEF\xBB\xBFa,b\n1,2\n", `[{"a":"1","b":"2"}]`},
 		{"a tsv escape sequence", "tsv", "a\tb\n\x1b[1mx\x1b[0m\t007\n", `[{"a":"\u001b[1mx\u001b[0m","b":"007"}]`},
 		{"a tsv record of spaces", "tsv", "a\n \n", `[{"a":" "}]`},
+		// A record is bounded by the input limit, as a line of every other
+		// data format is, and not by the line limit of command output.
+		{"a value longer than a line of command output", "csv", "a\n" + strings.Repeat("x", MaxLineLength+1) + "\n", `[{"a":"` + strings.Repeat("x", MaxLineLength+1) + `"}]`},
+		{"a tsv value longer than a line of command output", "tsv", "a\n" + strings.Repeat("x", MaxLineLength+1) + "\n", `[{"a":"` + strings.Repeat("x", MaxLineLength+1) + `"}]`},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -166,7 +170,7 @@ func TestTabularDataReadsTheSameEveryWay(t *testing.T) {
 			}
 			for way, v := range got {
 				if v != tt.want {
-					t.Errorf("%s: got %s, want %s", way, v, tt.want)
+					t.Errorf("%s: got %.200s, want %.200s", way, v, tt.want)
 				}
 			}
 		})
@@ -232,6 +236,7 @@ func TestDataFileParseFailures(t *testing.T) {
 		{"bad.ltsv", []byte("a:1\nno label\n"), "jz: ltsv: line 2: field 1 has no label", ExitParse},
 		{"bad.yaml", []byte("a: .nan\n"), "jz: yaml: line 1: .nan is not a number JSON can hold", ExitParse},
 		{"ragged.csv", []byte("a,b\n1,2,3\n"), "line 2", ExitParse},
+		{"mac.csv", []byte("a,b\r1,2\r"), "jz: csv/comma: line 1: column 4: a carriage return outside a quoted value", ExitParse},
 		{"notgzip.json.gz", []byte("plain text"), "notgzip.json.gz: the gzip data cannot be decompressed", ExitParse},
 		{"cut.jsonl.gz", gzipBytes(t, strings.Repeat("{\"a\":1}\n", 50))[:40], "the gzip data cannot be decompressed", ExitParse},
 	} {

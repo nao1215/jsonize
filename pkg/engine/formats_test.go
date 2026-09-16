@@ -195,6 +195,36 @@ parse: {type: csv}
 	}
 }
 
+// A carriage return outside a quoted value ends no csv line and belongs
+// to no value, so a file whose lines end with CR alone is refused where
+// it was read as one header line and no rows. Inside quotes it is a
+// value's own, and the CR of a CRLF ending is the line ending.
+func TestParseCSVRefusesACarriageReturnOutsideQuotes(t *testing.T) {
+	t.Parallel()
+	plain := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: csv}\n")
+	for _, input := range []string{
+		"a,b\r1,2\r3,4\r",
+		"a,b\n1\r,2\n",
+		"a\r1\r\n2\n",
+		"a,b\n\"x\"\r,2\n",
+	} {
+		_, err := Parse(plain, []byte(input), Options{})
+		if err == nil || !strings.Contains(err.Error(), "carriage return outside a quoted value") {
+			t.Errorf("%q: %v", input, err)
+		}
+	}
+	for input, want := range map[string]string{
+		"a,b\r\n1,2\r\n":      `[{"a":"1","b":"2"}]`,
+		"a,b\n\"x\ry\",2\n":   `[{"a":"x\ry","b":"2"}]`,
+		"a,b\n\"x\r\ny\",2\n": `[{"a":"x\ny","b":"2"}]`,
+	} {
+		v, err := Parse(plain, []byte(input), Options{})
+		if err != nil || mustJSON(t, v) != want {
+			t.Errorf("%q: %v %v", input, mustJSON(t, v), err)
+		}
+	}
+}
+
 func TestParseINI(t *testing.T) {
 	t.Parallel()
 	const src = `format: 1

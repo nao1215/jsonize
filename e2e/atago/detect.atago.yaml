@@ -595,7 +595,7 @@ scenarios:
       - assert:
           exit_code: 2
           stderr:
-            contains: "not defined"
+            contains: "unknown option --raw"
 
   # A printed length of time becomes seconds. What the text cannot settle
   # is whether a bare "4:50" is minutes and seconds or hours and minutes,

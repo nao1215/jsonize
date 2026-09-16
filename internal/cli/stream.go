@@ -157,10 +157,10 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 //
 // The explanation is written here, since there is no text to choose by:
 // it names the variants the answer was judged against.
-func (a *app) emptyFormats(reg *registry.Registry, ctx selector.Context, stream bool, exp *explanation) int {
+func (a *app) emptyFormats(reg *registry.Registry, ctx selector.Context, command string, stream bool, exp *explanation) int {
 	candidates := selector.Candidates(reg, ctx)
 	exp.printedNothing(candidates)
-	err := emptyForm(ctx, candidates, stream)
+	err := emptyForm(ctx, parserKey(command), candidates, stream)
 	code := ExitOK
 	var ns *engine.NoStreamError
 	switch {
@@ -178,13 +178,14 @@ func (a *app) emptyFormats(reg *registry.Registry, ctx selector.Context, stream 
 }
 
 // emptyForm says why no output is not an answer from the candidates, or
-// nil when every one of them reads a list.
-func emptyForm(ctx selector.Context, candidates []*registry.Entry, stream bool) error {
+// nil when every one of them reads a list. The command is named as it was
+// run, which is not the parser when --parser reads a wrapper's output.
+func emptyForm(ctx selector.Context, command string, candidates []*registry.Entry, stream bool) error {
 	if len(candidates) == 0 {
 		if ctx.Variant != "" {
-			return fmt.Errorf("%s printed nothing, and %s/%s does not read what it prints with these arguments", ctx.Parser, ctx.Parser, ctx.Variant)
+			return fmt.Errorf("%s printed nothing, and %s/%s does not read what it prints with these arguments", command, ctx.Parser, ctx.Variant)
 		}
-		return fmt.Errorf("%s printed nothing, and no %s variant reads what it prints with these arguments", ctx.Parser, ctx.Parser)
+		return fmt.Errorf("%s printed nothing, and no %s variant reads what it prints with these arguments", command, ctx.Parser)
 	}
 	for _, e := range candidates {
 		switch {
@@ -192,7 +193,7 @@ func emptyForm(ctx selector.Context, candidates []*registry.Entry, stream bool) 
 		case stream && !e.Def.Parse.Streams():
 			return &engine.NoStreamError{Definition: e.Def.ID()}
 		default:
-			return fmt.Errorf("%s printed nothing, and %s reads a format that has no empty form", ctx.Parser, e.Def.ID())
+			return fmt.Errorf("%s printed nothing, and %s reads a format that has no empty form", command, e.Def.ID())
 		}
 	}
 	return nil

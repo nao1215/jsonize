@@ -124,6 +124,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `jz run --help` lists `--format`, `--columns` and `--type` under
+  Input and the parser options under the same heading as `jz --help`,
+  where `--columns` and `--type` were among the parser options and
+  `--format` among the options for the command.
 - `npm ls -g` and `npm ls -g --all` are read. The first line is the
   global directory with no package name, so the project's `name` in
   npm/ls and the root's `name` in npm/ls-all may be null, and both
@@ -168,6 +172,21 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A csv or tsv whose lines end with a carriage return alone was read as
+  one header line and no rows, exit 0. A carriage return outside a quoted
+  value is refused with exit 3 now.
+- Reading a csv or tsv as data refused a record longer than 1 MiB, the
+  line limit of command output, while every other data format took one up
+  to the 64 MiB input limit. The input limit bounds a csv record too.
+- `jz run --parser P -- CMD` named P where CMD printed nothing
+  (`df printed nothing` for `sh -c ...`). It names the command it ran.
+- `jz run --timeout -1s` ran with no limit. A negative duration is a usage
+  error.
+- An option jz does not have, or a value one cannot take, was reported in
+  the words of Go's flag package with one dash (`flag provided but not
+  defined: -nope`, `invalid value "x" for flag -timeout: parse error`).
+  It is `unknown option --nope` and `--timeout expects a duration such as
+  30s or 2m, got "x"` now.
 - YAML read with exit 0 into something other than the text said: text
   after a flow collection on its line was dropped (`a: [b]c` read as
   `{"a":["b"]}`), an anchor on a key inside a flow mapping or after `? `
