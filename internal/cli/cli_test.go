@@ -1801,6 +1801,9 @@ func TestRunAnswersTheSameWholeAndStreamed(t *testing.T) {
 		t.Skip("uses POSIX sh")
 	}
 	h := newHarness(t)
+	// The df variants left for a system decide whether blank output has
+	// an empty form; on Linux one of them has none.
+	h.env.GOOS = "linux"
 	shellRegistry(t, h)
 	writeRegistry(t, h.registryPath, map[string]string{
 		"parsers/one/default/parser.yaml": "format: 1\ncommand: one\nvariant: default\n" +
