@@ -171,6 +171,9 @@ the same reading with settings of your own.
 | `pactl` | [`info`](../schemas/pactl/info.json), [`short-cards`](../schemas/pactl/short-cards.json), [`short-clients`](../schemas/pactl/short-clients.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
 | `parted` | [`machine`](../schemas/parted/machine.json) |
 | `passwd` | [`status`](../schemas/passwd/status.json) |
+| `pdffonts` | [`poppler`](../schemas/pdffonts/poppler.json) |
+| `pdfimages` | [`list`](../schemas/pdfimages/list.json) |
+| `pdfinfo` | [`poppler`](../schemas/pdfinfo/poppler.json) |
 | `pgrep` | [`list-name`](../schemas/pgrep/list-name.json) |
 | `pidstat` | [`io`](../schemas/pidstat/io.json), [`kernel`](../schemas/pidstat/kernel.json), [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json), [`priority`](../schemas/pidstat/priority.json), [`stack`](../schemas/pidstat/stack.json), [`switches`](../schemas/pidstat/switches.json), [`threads`](../schemas/pidstat/threads.json), [`user`](../schemas/pidstat/user.json) |
 | `ping` | [`bsd`](../schemas/ping/bsd.json), [`linux`](../schemas/ping/linux.json) |
@@ -247,6 +250,7 @@ the same reading with settings of your own.
 | `top` | [`busybox`](../schemas/top/busybox.json), [`darwin`](../schemas/top/darwin.json), [`linux`](../schemas/top/linux.json) |
 | `tracepath` | [`linux`](../schemas/tracepath/linux.json) |
 | `tree` | [`listing`](../schemas/tree/listing.json) |
+| `trust` | [`list`](../schemas/trust/list.json) |
 | `udevadm` | [`info`](../schemas/udevadm/info.json) |
 | `ulimit` | [`bash`](../schemas/ulimit/bash.json), [`dash`](../schemas/ulimit/dash.json) |
 | `uname` | [`darwin`](../schemas/uname/darwin.json), [`freebsd`](../schemas/uname/freebsd.json), [`linux`](../schemas/uname/linux.json) |

@@ -1,0 +1,40 @@
+# `pdffonts FILE` lists the fonts a PDF uses, one row under a heading
+# and a rule of dashes: the name, the font type, the encoding, whether
+# the font is embedded, whether it is a subset (the name then opens with
+# six capital letters and a plus) and whether it has a ToUnicode map,
+# then the object number and generation of the font dictionary. A font
+# with no name is "[none]". The type can be several words ("Type 1C",
+# "CID TrueType (OT)"), so the row is read by its values rather than by
+# the column widths, which a long name pushes to the right. A PDF with
+# no fonts prints the heading alone.
+format: 1
+command: pdffonts
+variant: poppler
+description: pdffonts, the fonts of a PDF with their type, encoding and embedding
+metadata:
+  tags: [pdf, fonts, document]
+  compatible: [poppler-utils]
+  references:
+    - https://manpages.debian.org/unstable/poppler-utils/pdffonts.1.en.html
+detect:
+  args:
+    # -subst lists the substitutes for fonts not embedded, in another
+    # table.
+    none: ["-subst", "-v", "-h", "-help", "--help", "-?"]
+  signature:
+    all:
+      - '\Aname +type +encoding +emb sub uni object ID\n-{36} -{17} -{16} --- --- --- -{9}(?:\n|\z)'
+input:
+  ignore:
+    - '^name +type +encoding +emb sub uni object ID$'
+    - '^-{36} -{17} -{16} --- --- --- -{9}$'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S(?:.*?\S)?) +(?P<type>Type 1C? \(OT\)|Type 1C?|Type 3|TrueType \(OT\)|TrueType|CID Type 0C? \(OT\)|CID Type 0C?|CID TrueType \(OT\)|CID TrueType|unknown) +(?P<encoding>\S+) +(?P<embedded>yes|no) +(?P<subset>yes|no) +(?P<unicode>yes|no) +(?P<object>[0-9]+) +(?P<generation>[0-9]+)$'
+fields:
+  name: {required: true, null_if: ["[none]"]}
+  embedded: {type: bool}
+  subset: {type: bool}
+  unicode: {type: bool}
+  object: {type: int}
+  generation: {type: int}

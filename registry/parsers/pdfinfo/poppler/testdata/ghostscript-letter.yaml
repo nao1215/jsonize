@@ -1,0 +1,4 @@
+description: An old Ghostscript file with no Title or Author at all, and a page size with its paper name.
+source: pdfinfo, poppler-utils 26.01.0 on Ubuntu 26.04 with LC_ALL=C, on /usr/share/cups/data/standard.pdf
+os: linux
+args: [standard.pdf]

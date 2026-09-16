@@ -1,0 +1,23 @@
+[
+  {
+    "uri": "pkcs11:id=%D2%87%B4%E3%DF%37%27%93%55%F6%56%EA%81%E5%36%CC%8C%1E%3F%BD;type=cert",
+    "type": "certificate",
+    "label": "ACCVRAIZ1",
+    "trust": "anchor",
+    "category": "authority"
+  },
+  {
+    "uri": "pkcs11:id=%F7%7D%C5%FD%C4%E8%9A%1B%77%64%A7%F5%1D%A0%CC%BF%87%60%9A%6D;type=cert",
+    "type": "certificate",
+    "label": "AC RAIZ FNMT-RCM",
+    "trust": "anchor",
+    "category": "authority"
+  },
+  {
+    "uri": "pkcs11:id=%01%B9%2F%EF%BF%11%86%60%F2%4F%D0%41%6E%AB%73%1F%E7%D2%6E%49;type=cert",
+    "type": "certificate",
+    "label": "AC RAIZ FNMT-RCM SERVIDORES SEGUROS",
+    "trust": "anchor",
+    "category": "authority"
+  }
+]

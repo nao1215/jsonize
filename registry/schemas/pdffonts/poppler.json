@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pdffonts/poppler.json",
+  "title": "pdffonts/poppler",
+  "description": "pdffonts, the fonts of a PDF with their type, encoding and embedding",
+  "x-jsonize": {
+    "definition": "pdffonts/poppler",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "CID TrueType",
+          "CID TrueType (OT)",
+          "CID Type 0",
+          "CID Type 0 (OT)",
+          "CID Type 0C",
+          "CID Type 0C (OT)",
+          "TrueType",
+          "TrueType (OT)",
+          "Type 1",
+          "Type 1 (OT)",
+          "Type 1C",
+          "Type 1C (OT)",
+          "Type 3",
+          "unknown"
+        ]
+      },
+      "encoding": {
+        "type": "string"
+      },
+      "embedded": {
+        "type": "boolean"
+      },
+      "subset": {
+        "type": "boolean"
+      },
+      "unicode": {
+        "type": "boolean"
+      },
+      "object": {
+        "type": "integer"
+      },
+      "generation": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "name",
+      "type",
+      "encoding",
+      "embedded",
+      "subset",
+      "unicode",
+      "object",
+      "generation"
+    ]
+  }
+}

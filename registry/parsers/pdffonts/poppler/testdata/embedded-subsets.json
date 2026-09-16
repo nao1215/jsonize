@@ -1,0 +1,72 @@
+[
+  {
+    "name": "TWYWUS+NimbusSanL-Bold",
+    "type": "Type 1",
+    "encoding": "Custom",
+    "embedded": true,
+    "subset": true,
+    "unicode": true,
+    "object": 105,
+    "generation": 0
+  },
+  {
+    "name": "KZEACY+NimbusRomNo9L-Regu",
+    "type": "Type 1",
+    "encoding": "Custom",
+    "embedded": true,
+    "subset": true,
+    "unicode": true,
+    "object": 109,
+    "generation": 0
+  },
+  {
+    "name": "VEQMBL+NimbusRomNo9L-ReguItal",
+    "type": "Type 1",
+    "encoding": "Custom",
+    "embedded": true,
+    "subset": true,
+    "unicode": true,
+    "object": 121,
+    "generation": 0
+  },
+  {
+    "name": "JNNPWA+NimbusMonL-Regu",
+    "type": "Type 1",
+    "encoding": "Custom",
+    "embedded": true,
+    "subset": true,
+    "unicode": true,
+    "object": 153,
+    "generation": 0
+  },
+  {
+    "name": "HLIDAW+NimbusMonL-Bold",
+    "type": "Type 1",
+    "encoding": "Custom",
+    "embedded": true,
+    "subset": true,
+    "unicode": true,
+    "object": 169,
+    "generation": 0
+  },
+  {
+    "name": "SEBOZB+NimbusRomNo9L-Medi",
+    "type": "Type 1",
+    "encoding": "Custom",
+    "embedded": true,
+    "subset": true,
+    "unicode": true,
+    "object": 172,
+    "generation": 0
+  },
+  {
+    "name": "BGWWRR+CMR6",
+    "type": "Type 1",
+    "encoding": "Builtin",
+    "embedded": true,
+    "subset": true,
+    "unicode": true,
+    "object": 340,
+    "generation": 0
+  }
+]

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/trust/list.json",
+  "title": "trust/list",
+  "description": "trust list, the certificates of the p11-kit trust store and how each is trusted",
+  "x-jsonize": {
+    "definition": "trust/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "uri": {
+        "type": "string"
+      },
+      "type": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "label": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "trust": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "category": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "uri",
+      "type",
+      "label",
+      "trust",
+      "category"
+    ]
+  }
+}

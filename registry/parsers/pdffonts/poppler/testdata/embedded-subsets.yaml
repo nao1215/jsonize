@@ -1,0 +1,4 @@
+description: Embedded subsets of Type 1 fonts, one with a builtin encoding.
+source: pdffonts, poppler-utils 26.01.0 on Ubuntu 26.04 with LC_ALL=C, on /usr/share/doc/shared-mime-info/shared-mime-info-spec.pdf
+os: linux
+args: [spec.pdf]

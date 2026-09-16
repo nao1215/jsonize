@@ -1,0 +1,12 @@
+pkcs11:id=%CC%FA%67%93%F0%B6%B8%D0%A5%C0%1E%F3%53%FD%8C%53%DF%83%D7%96;type=cert
+    type: certificate
+    label: NetLock Arany (Class Gold) Főtanúsítvány
+    trust: anchor
+    category: authority
+
+pkcs11:id=%35%0F%C8%36%63%5E%E2%A3%EC%F9%3B%66%15%CE%51%52%E3%91%9A%3D;type=cert
+    type: certificate
+    label: OISTE WISeKey Global Root GB CA
+    trust: anchor
+    category: authority
+

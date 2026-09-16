@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pdfinfo/poppler.json",
+  "title": "pdfinfo/poppler",
+  "description": "pdfinfo, the document information, page count, page size and version of a PDF",
+  "x-jsonize": {
+    "definition": "pdfinfo/poppler",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "Author": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Creator": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Custom Metadata": {
+      "type": "boolean"
+    },
+    "File size": {
+      "type": "integer"
+    },
+    "JavaScript": {
+      "type": "boolean"
+    },
+    "Keywords": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Metadata Stream": {
+      "type": "boolean"
+    },
+    "Optimized": {
+      "type": "boolean"
+    },
+    "Page rot": {
+      "type": "integer"
+    },
+    "Pages": {
+      "type": "integer"
+    },
+    "Producer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Subject": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Suspects": {
+      "type": "boolean"
+    },
+    "Tagged": {
+      "type": "boolean"
+    },
+    "Title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "UserProperties": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": {
+    "type": "string"
+  }
+}
