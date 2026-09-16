@@ -286,7 +286,7 @@ scenarios:
   - name: "Build a JSON body for an API call: jz new makes the object"
     steps:
       - run:
-          command: jz new name=api version=1.4.0 replicas:=3 tags[]=web tags[]=prod
+          command: jz new name=api version=1.4.0 replicas:=3 'tags[]=web' 'tags[]=prod'
       - assert:
           exit_code: 0
           stdout:
@@ -374,6 +374,145 @@ scenarios:
           stdout:
             equals: |
               ["web",8080,true]
+
+  # The recipes below put jz in a pipeline, which is what jz is for, so
+  # the pipe is the thing being run and cannot become stdin the way the
+  # recipes above do. They name the shell (bash, which every runner has,
+  # Windows through Git) so that pipefail is available and so that the
+  # words are read the way the page writes them.
+  - name: "Pick the records you want with jq: jq selects the records jz named and typed"
+    steps:
+      - fixture:
+          file: df.txt
+          content: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+            tmpfs           7.8G  4.0K  7.8G   1% /tmp
+      - run:
+          command: >-
+            bash -c "set -o pipefail; jz --file '${workdir}/df.txt' |
+            jq -r '.[] | select(.use_percent >= 90) | .mounted_on'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              /
+
+  - name: "Fail a step when a value is out of range: jq -e turns a check into a status"
+    steps:
+      - fixture:
+          file: df.txt
+          content: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+            tmpfs           7.8G  4.0K  7.8G   1% /tmp
+      - run:
+          command: >-
+            bash -c "set -o pipefail; jz --file '${workdir}/df.txt' |
+            jq -e 'all(.use_percent < 90)' > /dev/null"
+      - assert:
+          exit_code: 1
+          stdout: {empty: true}
+      # The same check against a report with nothing over the threshold.
+      - fixture:
+          file: quiet.txt
+          content: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            tmpfs           7.8G  4.0K  7.8G   1% /tmp
+      - run:
+          command: >-
+            bash -c "set -o pipefail; jz --file '${workdir}/quiet.txt' |
+            jq -e 'all(.use_percent < 90)' > /dev/null"
+      - assert:
+          exit_code: 0
+
+  - name: "Send JSON to an HTTP API: jz new writes the body and curl posts it"
+    services:
+      - name: server
+        command: e2ehelper serve -addr ${workdir}/addr.txt
+        ready: {file: addr.txt, store: addr, timeout: 20s}
+    steps:
+      # The body on its own, so that the jz the page shows is run as the
+      # page writes it and not only inside a shell the suite names.
+      - run:
+          command: jz new service=api replicas:=3
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"service":"api","replicas":3}
+      - run:
+          command: >-
+            bash -c "set -o pipefail; jz new service=api replicas:=3 |
+            curl -sS -X POST -H 'content-type: application/json'
+            --data-binary @- 'http://${addr}/plain' -o /dev/null -w '%{http_code}\n'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              200
+
+  - name: "Save a report for a later step: the file jz wrote is read by the next command"
+    steps:
+      - fixture:
+          file: df.txt
+          content: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+      - run:
+          command: >-
+            bash -c "cd '${workdir}' && jz --file df.txt > df.json &&
+            jq -r '.[0].mounted_on' df.json"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              /
+
+  - name: "Read the explanation in a script: --explain=json is read with sed and jq"
+    steps:
+      - fixture:
+          file: df.txt
+          content: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+      # The explanation on its own, before the pipeline that reads it, and
+      # a text nothing reads, which is the second half of the recipe.
+      - run:
+          command: jz --explain=json
+          stdin: |
+            Filesystem      Size  Used Avail Use% Mounted on
+            /dev/nvme0n1p2  1.8T  1.6T  145G  92% /
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: '"definition":"df/gnu-human"'
+      - run:
+          command: jz --explain=json
+          stdin: "no format here\n"
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: '"outcome":"unidentified"'
+      - run:
+          command: >-
+            bash -c "set -o pipefail; jz --explain=json --file '${workdir}/df.txt' 2>&1 >/dev/null |
+            sed -n 's/^jz: explain: //p' | jq -r '.chosen.definition'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              df/gnu-human
+      - run:
+          command: >-
+            bash -c "printf 'no format here\n' | jz --explain=json 2>&1 >/dev/null |
+            sed -n 's/^jz: explain: //p' | jq -c '{outcome, exit: .error.exit}'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"outcome":"unidentified","exit":4}
 
   - name: "Fail a CI step when jz cannot read the output: unidentified text is exit 4 and no JSON"
     steps:

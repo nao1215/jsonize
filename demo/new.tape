@@ -17,7 +17,7 @@ Type "echo 1.4.0 > VERSION" Enter
 Type "clear" Enter
 Show
 
-Type "jz new name=api replicas:=3 tags[]=web tags[]=prod" Sleep 400ms Enter
+Type "jz new name=api replicas:=3 'tags[]=web' 'tags[]=prod'" Sleep 400ms Enter
 Sleep 2s
 
 Type "MESSAGE='@here: deploy := done'" Sleep 300ms Enter

@@ -35,6 +35,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- The examples that append to an array are quoted, in the README, the
+  usage guide, the cookbook, `jz new --help` and the demo recording.
+  `jz new tags[]=web` copied into zsh, which is what macOS starts with,
+  was refused by the shell with `no matches found` before jz saw it.
 - `--stream` holds the lines it identifies the format by to the 1 MiB
   record limit that the reading of a record already applied, so a
   producer that never ends a record is refused at the byte past the

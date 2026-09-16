@@ -37,8 +37,10 @@ need() {
   command -v "$1" >/dev/null 2>&1 || missing+=("$1 ($2)")
 }
 need go "builds jz and e2ehelper"
-need curl "http"
-need bash "completion"
+need curl "http, cookbook"
+need bash "completion, cookbook"
+need jq "cookbook"
+need sed "cookbook"
 case "$(uname -s)" in
 Linux)
   for c in iostat mpstat pidstat; do need "$c" "sysstat, exec_linux"; done
