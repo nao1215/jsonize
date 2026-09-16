@@ -1,0 +1,3 @@
+source: captured with LC_ALL=C pro status (ubuntu-pro-client 37.2ubuntu0.1) on Ubuntu 26.04 without root on an unattached machine; the warning about human-readable output went to standard error
+os: linux
+args: [status]

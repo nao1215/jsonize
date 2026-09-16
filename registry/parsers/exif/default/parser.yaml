@@ -1,0 +1,64 @@
+# `exif FILE` (the libexif command-line tool) prints the EXIF tags of a
+# JPEG as a table: a line naming the file and the byte order, a rule, the
+# "Tag" and "Value" heading, a rule, one row per tag and a closing rule.
+# When the data holds a thumbnail a last line gives its size in bytes,
+# which is null when there is none.
+#
+# The tag column is twenty characters wide and a longer name is cut to
+# fit ("Date and Time (Origi"), so a tag is the name as printed rather
+# than the name EXIF gives it. The value column is as wide as the rest of
+# the terminal width (80 unless -w says otherwise) and a longer value is
+# cut too, which can leave a space at its end; the value is kept as
+# printed, spaces included. A tag found in more than one IFD (the image
+# and its thumbnail both carry X-Resolution) is printed once for each,
+# so the tags are a list in the order printed rather than an object.
+#
+# -i prints the numeric tag in a column six characters wide and is not
+# read; -m, -x, -l and -t print other formats.
+format: 1
+command: exif
+variant: default
+description: exif (libexif) table of the EXIF tags of an image
+metadata:
+  tags: [image, metadata, exif]
+  compatible: [exif]
+  references:
+    - https://libexif.github.io/
+    - https://manpages.debian.org/unstable/exif/exif.1.en.html
+detect:
+  signature:
+    all:
+      - '\AEXIF tags in ''[^\n]*'' \(''(?:Motorola|Intel)'' byte order\):\n-{20}\+-+\nTag {17}\|Value\n-{20}\+-+(?:\n|\z)'
+input:
+  ignore:
+    - '^-{20}\+-+$'
+    - '^Tag {17}\|Value$'
+parse:
+  type: composite
+  parts:
+    - name: file
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AEXIF tags in ''(?P<name>.*)'' \(''(?P<byte_order>Motorola|Intel)'' byte order\):\z'
+      fields:
+        name: {required: true}
+        byte_order: {required: true}
+    - name: tags
+      select: {skip: 1, until: '^EXIF data contains a thumbnail \(\d+ bytes\)\.$'}
+      parse:
+        type: regex
+        pattern: '^(?P<tag>[^|\n]{20})\|(?P<value>.*)$'
+      fields:
+        tag: {required: true, regex: '(?P<tag>.*[^ ]) *'}
+    - name: thumbnail
+      ignore:
+        - '^EXIF tags in '
+        - '^[^|\n]{20}\|'
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?:EXIF data contains a thumbnail \((?P<bytes>\d+) bytes\)\.)?\z'
+      fields:
+        bytes: {type: int}

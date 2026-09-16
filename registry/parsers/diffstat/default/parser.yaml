@@ -1,0 +1,77 @@
+# `diffstat` reads a patch and prints a line per file with the number of
+# changed lines and a histogram, then a closing line counting the files,
+# the insertions, the deletions and, with -m, the modifications. A file
+# the patch names as binary prints the word "binary" in place of the
+# count.
+#
+# The count is printed in a field five characters wide right after the
+# bar ("|    2 ++"), and a count of five digits or more fills it and
+# touches the bar ("|12000 +++"). The histogram is scaled to fit 80
+# columns, so it is a picture rather than a count, and a file whose share
+# rounds to nothing prints the count and an empty histogram, which leaves
+# a space at the end of the line. The histogram stays the string it was
+# drawn as, and an empty one is null.
+#
+# git diff --stat prints a line of the same shape, with the count field
+# as wide as the largest count plus one. The two cannot be told apart
+# when git's largest count has four digits and diffstat printed nothing
+# of its own, so that text is left to git/diff-stat: this signature
+# takes a text whose counts all have three digits or fewer, which git
+# never pads to five characters, or one that carries a mark only
+# diffstat prints (the word "binary", an empty histogram, a "!" in the
+# histogram, a count touching the bar, or the modifications count).
+# `diffstat -m` on such a patch reads here; plain `diffstat` on a patch
+# with a file of 1000 to 9999 changed lines and no other mark is refused.
+#
+# -s prints only the closing line, which git/diff-shortstat reads; -t,
+# -T, -f0, -f2, -f4 and -c print other formats and are refused.
+format: 1
+command: diffstat
+variant: default
+description: diffstat histogram of the files a patch changes
+metadata:
+  tags: [diff, patch, vcs]
+  compatible: [diffstat]
+  references:
+    - https://invisible-island.net/diffstat/manpage/diffstat.html
+detect:
+  signature:
+    all:
+      # Every line in the window is a file line, and the closing line
+      # follows the last of them.
+      - '\A(?: [^\n]*?[ ]+\|(?:(?: {4}\d| {3}\d\d| {2}\d{3}| \d{4}|\d{5,}) [+!-]*|binary)\n)*(?: [^\n]*?[ ]+\|(?:(?: {4}\d| {3}\d\d| {2}\d{3}| \d{4}|\d{5,}) [+!-]*|binary))(?:\n \d+ files? changed(?:, \d+ insertions?\(\+\))?(?:, \d+ deletions?\(-\))?(?:, \d+ modifications?\(!\))?)?\z'
+    any:
+      # No count of four digits: git pads a count to five characters
+      # only beside one of four digits.
+      - '\A(?: [^\n]*?[ ]+\|(?:(?: {4}\d| {3}\d\d| {2}\d{3}) [+!-]*|binary)\n)*(?: [^\n]*?[ ]+\|(?:(?: {4}\d| {3}\d\d| {2}\d{3}) [+!-]*|binary))(?:\n \d+ files? changed(?:, \d+ insertions?\(\+\))?(?:, \d+ deletions?\(-\))?(?:, \d+ modifications?\(!\))?)?\z'
+      # A mark git does not print.
+      - '(?m)^ [^\n]*?[ ]+\|(?:binary$|[ \d]{5} $|[ \d]{5} [+-]*![+!-]*$|\d{5,} )'
+      - '(?m)^ \d+ files? changed[^\n]*, \d+ modifications?\(!\)$'
+    window: 200
+parse:
+  type: composite
+  parts:
+    - name: files
+      select: {until: '^ \d+ files? changed(?:,|$)'}
+      parse:
+        type: regex
+        patterns:
+          - pattern: '^ (?P<path>.*?)[ ]+\|[ ]*(?P<changes>\d+) (?P<graph>[+!-]*)$'
+            values: {binary: "no"}
+          - pattern: '^ (?P<path>.*?)[ ]+\|binary(?P<changes>)??(?P<graph>)??$'
+            values: {binary: "yes"}
+      fields:
+        path: {required: true}
+        changes: {type: int}
+        graph: {null_if: [""]}
+        binary: {type: bool, true_values: ["yes"], false_values: ["no"]}
+    - name: summary
+      parse:
+        type: regex
+        each: input
+        pattern: '(?m)^ (?P<files_changed>\d+) files? changed(?:, (?P<insertions>\d+) insertions?\(\+\))?(?:, (?P<deletions>\d+) deletions?\(-\))?(?:, (?P<modifications>\d+) modifications?\(!\))?$'
+      fields:
+        files_changed: {type: int, required: true}
+        insertions: {type: int}
+        deletions: {type: int}
+        modifications: {type: int}

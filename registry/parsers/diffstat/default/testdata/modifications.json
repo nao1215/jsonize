@@ -1,0 +1,34 @@
+{
+  "files": [
+    {
+      "binary": false,
+      "path": "added.txt",
+      "changes": 2,
+      "graph": "++"
+    },
+    {
+      "binary": false,
+      "path": "alpha.txt",
+      "changes": 3,
+      "graph": "++!"
+    },
+    {
+      "binary": false,
+      "path": "removed.txt",
+      "changes": 2,
+      "graph": "--"
+    },
+    {
+      "binary": false,
+      "path": "src/main.c",
+      "changes": 10,
+      "graph": "!!!!!!!!!!"
+    }
+  ],
+  "summary": {
+    "files_changed": 4,
+    "insertions": 4,
+    "deletions": 2,
+    "modifications": 11
+  }
+}

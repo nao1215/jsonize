@@ -1,0 +1,19 @@
+SERVICE          AVAILABLE  DESCRIPTION
+anbox-cloud      yes        Scalable Android in the cloud
+cc-eal           no         Common Criteria EAL2 Provisioning Packages
+esm-apps         yes        Expanded Security Maintenance for Applications
+esm-apps-legacy  no         Expanded Security Maintenance for Applications on Legacy Instances
+esm-infra        yes        Expanded Security Maintenance for Infrastructure
+esm-infra-legacy no         Expanded Security Maintenance for Infrastructure on Legacy Instances
+fips             no         NIST-certified FIPS crypto packages
+fips-preview     no         Preview of FIPS crypto packages undergoing certification with NIST
+fips-updates     no         FIPS compliant crypto packages with stable security updates
+landscape        yes        Management and administration tool for Ubuntu
+livepatch        yes        Canonical Livepatch service
+realtime-kernel  no         Ubuntu kernel with PREEMPT_RT patches integrated
+ros              no         Security Updates for the Robot Operating System
+ros-updates      no         All Updates for the Robot Operating System
+usg              no         Security compliance and audit tools
+
+This machine is not attached to an Ubuntu Pro subscription.
+See https://ubuntu.com/pro

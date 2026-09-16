@@ -1,0 +1,67 @@
+# `isoinfo -d -i IMAGE` (cdrkit) prints the primary volume descriptor of
+# an ISO 9660 image: the identifiers, the volume set size and sequence
+# number, the block size and the volume size in blocks, then whether the
+# image has an El Torito boot record, Joliet and Rock Ridge. An
+# identifier the image leaves blank is printed with nothing after the
+# label and is null.
+#
+# Joliet is "Joliet with UCS level N found" or "NO Joliet present", and
+# Rock Ridge "Rock Ridge signatures version N found" or "NO Rock Ridge
+# present"; the level and the version are null when the extension is
+# absent. A bootable image adds the El Torito line before them and, after
+# them, the validation entry and the default boot entry indented under
+# it. Those print their numbers in hexadecimal (Nsect 12 is "C") and stay
+# text, except the boot offset, which is printed in hexadecimal and then
+# in decimal ("Bootoff 22 34") and is read from the decimal. `boot` is
+# null throughout for an image with no boot record.
+#
+# schilytools isoinfo prints more lines (dates among them) and is not
+# read; -l, -f and -x print other things.
+format: 1
+command: isoinfo
+variant: volume-descriptor
+description: isoinfo -d, the primary volume descriptor of an ISO 9660 image
+metadata:
+  tags: [iso9660, cdrom, filesystem]
+  compatible: [cdrkit isoinfo]
+  references:
+    - https://manpages.debian.org/unstable/genisoimage/isoinfo.1.en.html
+detect:
+  signature:
+    all:
+      - '\ACD-ROM is in ISO 9660 format\nSystem id: [^\n]*\nVolume id: [^\n]*\nVolume set id: '
+parse:
+  type: composite
+  parts:
+    - name: volume
+      select: {until: '^Eltorito validation header:$'}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ACD-ROM is in ISO 9660 format\nSystem id: ?(?P<system_id>.*)\nVolume id: ?(?P<volume_id>.*)\nVolume set id: ?(?P<volume_set_id>.*)\nPublisher id: ?(?P<publisher_id>.*)\nData preparer id: ?(?P<data_preparer_id>.*)\nApplication id: ?(?P<application_id>.*)\nCopyright File id: ?(?P<copyright_file_id>.*)\nAbstract File id: ?(?P<abstract_file_id>.*)\nBibliographic File id: ?(?P<bibliographic_file_id>.*)\nVolume set size is: (?P<volume_set_size>\d+)\nVolume set sequence number is: (?P<volume_set_sequence_number>\d+)\nLogical block size is: (?P<logical_block_size>\d+)\nVolume size is: (?P<volume_size>\d+)\n(?:El Torito VD version (?P<el_torito_version>\d+) found, boot catalog is in sector (?P<boot_catalog_sector>\d+)\n)?(?:Joliet with UCS level (?P<joliet_level>\d+) found|NO Joliet present)\n(?:Rock Ridge signatures version (?P<rock_ridge_version>\d+) found|NO Rock Ridge present)\z'
+      fields:
+        system_id: {null_if: [""]}
+        volume_id: {null_if: [""]}
+        volume_set_id: {null_if: [""]}
+        publisher_id: {null_if: [""]}
+        data_preparer_id: {null_if: [""]}
+        application_id: {null_if: [""]}
+        copyright_file_id: {null_if: [""]}
+        abstract_file_id: {null_if: [""]}
+        bibliographic_file_id: {null_if: [""]}
+        volume_set_size: {type: int, required: true}
+        volume_set_sequence_number: {type: int, required: true}
+        logical_block_size: {type: int, required: true}
+        volume_size: {type: int, required: true}
+        el_torito_version: {type: int}
+        boot_catalog_sector: {type: int}
+        joliet_level: {type: int}
+        rock_ridge_version: {type: int}
+    - name: boot
+      select: {after: '^Eltorito validation header:$'}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?:[ ]*Hid (?P<header_id>[0-9A-F]+)\n[ ]*Arch (?P<arch>[0-9A-F]+) \((?P<arch_name>[^)\n]*)\)\n[ ]*ID ''(?P<id>.*)''\n[ ]*Key (?P<key>[0-9A-F]+ [0-9A-F]+)\n[ ]*Eltorito defaultboot header:\n[ ]*Bootid (?P<boot_indicator>[0-9A-F]+) \((?P<boot_indicator_name>[^)\n]*)\)\n[ ]*Boot media (?P<boot_media>[0-9A-F]+) \((?P<boot_media_name>[^)\n]*)\)\n[ ]*Load segment (?P<load_segment>[0-9A-F]+)\n[ ]*Sys type (?P<system_type>[0-9A-F]+)\n[ ]*Nsect (?P<sector_count>[0-9A-F]+)\n[ ]*Bootoff [0-9A-F]+ (?P<boot_offset>\d+))?\z'
+      fields:
+        boot_offset: {type: int}

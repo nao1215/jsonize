@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gocyclo/default.json",
+  "title": "gocyclo/default",
+  "description": "gocyclo, the cyclomatic complexity of each Go function",
+  "x-jsonize": {
+    "definition": "gocyclo/default",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "functions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "complexity": {
+            "type": "integer"
+          },
+          "package": {
+            "type": "string"
+          },
+          "function": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer"
+          },
+          "column": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "complexity",
+          "package",
+          "function",
+          "path",
+          "line",
+          "column"
+        ]
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "average": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "average"
+      ]
+    }
+  },
+  "required": [
+    "functions",
+    "summary"
+  ]
+}

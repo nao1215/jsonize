@@ -1,0 +1,5 @@
+ big.txt   | 1500 +++++++
+ blob.bin  |binary
+ huge.txt  |12000 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ small.txt |    3 
+ 4 files changed, 13502 insertions(+), 1 deletion(-)

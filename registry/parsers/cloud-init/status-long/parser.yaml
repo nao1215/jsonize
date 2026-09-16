@@ -1,0 +1,64 @@
+# `cloud-init status --long` prints the state of cloud-init as labelled
+# lines: the running status (not started, running, done, disabled), the
+# extended status that adds the condition ("degraded done", "error -
+# done"), the boot status code, the time of the last event when there is
+# one, and a description. `last_update` is written in UTC with its offset
+# and is converted; it is null when cloud-init has recorded no event.
+#
+# The errors follow as "errors: []" or as one "- message" line each
+# indented by a tab, and the recoverable errors as "recoverable_errors:
+# {}" or as a level line ("WARNING:", "DEPRECATED:") with its messages
+# under it. A recoverable message has its line breaks replaced by spaces;
+# an error message does not, and one that holds a line break is refused.
+#
+# With --wait the status line is preceded by a dot for every quarter of
+# a second waited; the dots are progress and are left out. Plain
+# `cloud-init status` prints the first line alone, which says too little
+# to be told from other text and is not read. --format json and yaml are
+# JSON and YAML already.
+format: 1
+command: cloud-init
+variant: status-long
+description: cloud-init status --long, the boot status and the errors cloud-init recorded
+metadata:
+  tags: [cloud, boot, ubuntu]
+  compatible: [cloud-init]
+  references:
+    - https://docs.cloud-init.io/en/latest/reference/cli.html#status
+detect:
+  signature:
+    all:
+      - '\A\.*status: (?:not started|running|done|disabled|error)\nextended_status: [^\n]*\nboot_status_code: [a-z-]+\n(?:last_update: [^\n]*\n)?detail: '
+parse:
+  type: composite
+  parts:
+    - name: status
+      select: {until: '^errors:(?: \[\])?$'}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A\.*status: (?P<status>[^\n]*)\nextended_status: (?P<extended_status>[^\n]*)\nboot_status_code: (?P<boot_status_code>[^\n]*)\n(?:last_update: (?P<last_update>[^\n]*)\n)?detail: ?(?P<detail>[^\n]*)\z'
+      fields:
+        status: {required: true}
+        extended_status: {required: true}
+        boot_status_code: {required: true}
+        last_update: {type: time, layout: "Mon, 02 Jan 2006 15:04:05 -0700"}
+        detail: {null_if: [""]}
+    - name: errors
+      select: {after: '^errors:(?: \[\])?$', until: '^recoverable_errors:(?: \{\})?$'}
+      parse:
+        type: regex
+        pattern: '^\t- (?P<message>.*)$'
+    - name: recoverable_errors
+      select: {after: '^recoverable_errors:(?: \{\})?$'}
+      parse:
+        type: records
+        start: '^[^\t\n][^\n]*:$'
+        record:
+          parse:
+            type: regex
+            each: input
+            pattern: '\A(?P<level>[^\t\n][^\n]*):\n\t- (?P<messages>[^\n]*(?:\n\t- [^\n]*)*)\z'
+          fields:
+            level: {required: true}
+            messages: {type: array, split_regex: '\n\t- '}

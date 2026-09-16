@@ -1,0 +1,3 @@
+description: a binary file, a count of five digits touching the bar, and a histogram that rounds to nothing
+source: captured with LC_ALL=C diffstat 1.68 on Ubuntu, reading the patch git diff --no-index wrote for two scratch directories of generated files
+args: [nonindex.patch]

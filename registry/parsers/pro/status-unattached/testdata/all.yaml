@@ -1,0 +1,4 @@
+description: --all lists every service and leaves out the hint to run it
+source: captured with LC_ALL=C pro status --all (ubuntu-pro-client 37.2ubuntu0.1) on Ubuntu 26.04 without root on an unattached machine; the warning about human-readable output went to standard error
+os: linux
+args: [status, --all]

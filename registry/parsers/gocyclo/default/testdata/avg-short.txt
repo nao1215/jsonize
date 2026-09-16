@@ -1,0 +1,4 @@
+46 cli TestExplainJSON internal/cli/explain_golden_test.go:190:1
+37 cli TestRunExecMode internal/cli/cli_test.go:947:1
+33 cli TestUsageAndVersion internal/cli/cli_test.go:661:1
+6.37

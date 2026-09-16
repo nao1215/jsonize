@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/cmp/posix.json",
+  "title": "cmp/posix",
+  "description": "cmp, the position of the first byte where two files differ",
+  "x-jsonize": {
+    "definition": "cmp/posix",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "file1": {
+      "type": "string"
+    },
+    "file2": {
+      "type": "string"
+    },
+    "byte": {
+      "type": "integer"
+    },
+    "line": {
+      "type": "integer"
+    },
+    "byte1_octal": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "byte1_shown": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "byte2_octal": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "byte2_shown": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "file1",
+    "file2",
+    "byte",
+    "line",
+    "byte1_octal",
+    "byte1_shown",
+    "byte2_octal",
+    "byte2_shown"
+  ]
+}

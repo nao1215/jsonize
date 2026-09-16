@@ -1,0 +1,5 @@
+ added.txt   |    2 ++
+ alpha.txt   |    3 ++!
+ removed.txt |    2 --
+ src/main.c  |   10 !!!!!!!!!!
+ 4 files changed, 4 insertions(+), 2 deletions(-), 11 modifications(!)

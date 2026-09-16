@@ -1,0 +1,25 @@
+{
+  "status": {
+    "status": "done",
+    "extended_status": "degraded done",
+    "boot_status_code": "enabled-by-generator",
+    "last_update": "2025-09-16T05:12:18Z",
+    "detail": "DataSourceNoCloud [seed=/var/lib/cloud/seed/nocloud-net]"
+  },
+  "errors": [],
+  "recoverable_errors": [
+    {
+      "level": "WARNING",
+      "messages": [
+        "Failed at merging in cloud config part from /etc/cloud/cloud.cfg.d/99-local.cfg",
+        "Unable to find a system nic for eth1"
+      ]
+    },
+    {
+      "level": "DEPRECATED",
+      "messages": [
+        "Key 'ssh_authorized_keys' is deprecated in 22.2"
+      ]
+    }
+  ]
+}

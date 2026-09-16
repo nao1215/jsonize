@@ -1,0 +1,2 @@
+source: captured with LC_ALL=C cmp (GNU diffutils 3.12) on Ubuntu for two text files differing in the second line
+args: [one.txt, two.txt]

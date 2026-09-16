@@ -1,0 +1,2 @@
+description: the NOTICES and FEATURES sections
+source: printed on Ubuntu 26.04 with LC_ALL=C by format_tabular of ubuntu-pro-client 37.2ubuntu0.1 (uaclient/status.py, the function pro status calls) for a status dict built in Python with four services, one notice and one feature; the layout is the formatter's own

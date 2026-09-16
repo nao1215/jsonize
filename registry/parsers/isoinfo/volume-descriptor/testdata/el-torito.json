@@ -1,0 +1,36 @@
+{
+  "volume": {
+    "system_id": "LINUX",
+    "volume_id": "BOOT12",
+    "volume_set_id": null,
+    "publisher_id": null,
+    "data_preparer_id": null,
+    "application_id": "GENISOIMAGE ISO 9660/HFS FILESYSTEM CREATOR (C) 1993 E.YOUNGDALE (C) 1997-2006 J.PEARSON/J.SCHILLING (C) 2006-2007 CDRKIT TEAM",
+    "copyright_file_id": null,
+    "abstract_file_id": null,
+    "bibliographic_file_id": null,
+    "volume_set_size": 1,
+    "volume_set_sequence_number": 1,
+    "logical_block_size": 2048,
+    "volume_size": 906,
+    "el_torito_version": 1,
+    "boot_catalog_sector": 33,
+    "joliet_level": 3,
+    "rock_ridge_version": null
+  },
+  "boot": {
+    "header_id": "1",
+    "arch": "0",
+    "arch_name": "x86",
+    "id": "",
+    "key": "55 AA",
+    "boot_indicator": "88",
+    "boot_indicator_name": "bootable",
+    "boot_media": "0",
+    "boot_media_name": "No Emulation Boot",
+    "load_segment": "0",
+    "system_type": "0",
+    "sector_count": "C",
+    "boot_offset": 34
+  }
+}

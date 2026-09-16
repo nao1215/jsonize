@@ -1,0 +1,95 @@
+{
+  "file": {
+    "name": "gps.jpg",
+    "byte_order": "Motorola"
+  },
+  "tags": [
+    {
+      "tag": "Manufacturer",
+      "value": "NIKON"
+    },
+    {
+      "tag": "Model",
+      "value": "NIKON D750"
+    },
+    {
+      "tag": "X-Resolution",
+      "value": " 1"
+    },
+    {
+      "tag": "Y-Resolution",
+      "value": " 1"
+    },
+    {
+      "tag": "Resolution Unit",
+      "value": "Internal error (unknown value 1)"
+    },
+    {
+      "tag": "Software",
+      "value": "GIMP 2.10"
+    },
+    {
+      "tag": "YCbCr Positioning",
+      "value": "Centered"
+    },
+    {
+      "tag": "Copyright",
+      "value": "Copyright (c) 2024 Example | with a bar and a long notice "
+    },
+    {
+      "tag": "Compression",
+      "value": "JPEG compression"
+    },
+    {
+      "tag": "X-Resolution",
+      "value": "72"
+    },
+    {
+      "tag": "Y-Resolution",
+      "value": "72"
+    },
+    {
+      "tag": "Resolution Unit",
+      "value": "Inch"
+    },
+    {
+      "tag": "Exif Version",
+      "value": "Exif Version 2.1"
+    },
+    {
+      "tag": "FlashPixVersion",
+      "value": "FlashPix Version 1.0"
+    },
+    {
+      "tag": "Color Space",
+      "value": "Uncalibrated"
+    },
+    {
+      "tag": "GPS Tag Version",
+      "value": "2.3.0.0"
+    },
+    {
+      "tag": "North or South Latit",
+      "value": "N"
+    },
+    {
+      "tag": "Latitude",
+      "value": "35, 40, 52.450"
+    },
+    {
+      "tag": "East or West Longitu",
+      "value": "E"
+    },
+    {
+      "tag": "Longitude",
+      "value": "139, 46, 1.65"
+    },
+    {
+      "tag": "Altitude",
+      "value": "40"
+    }
+  ],
+  "thumbnail": {
+    "bytes": 346
+  }
+}

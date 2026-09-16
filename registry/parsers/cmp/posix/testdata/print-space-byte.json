@@ -1,0 +1,10 @@
+{
+  "file1": "sp1",
+  "file2": "sp2",
+  "byte": 2,
+  "line": 1,
+  "byte1_octal": "40",
+  "byte1_shown": " ",
+  "byte2_octal": "11",
+  "byte2_shown": "^I"
+}

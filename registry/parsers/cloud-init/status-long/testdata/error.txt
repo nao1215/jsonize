@@ -1,0 +1,8 @@
+status: error
+extended_status: error - done
+boot_status_code: enabled-by-kernel-command-line
+last_update: Tue, 16 Sep 2025 05:12:18 +0000
+detail: Failed due to systemd unit failure
+errors:
+	- Failed due to systemd unit failure. Ensure all cloud-init services are enabled, and check 'systemctl' or 'journalctl' for more information.
+recoverable_errors: {}

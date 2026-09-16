@@ -1,0 +1,2 @@
+source: captured with LC_ALL=C diffstat 1.68 on Ubuntu, reading the patch of a commit of this repository
+args: [commit.patch]

@@ -1,0 +1,20 @@
+ CHANGELOG.md                                 |   12 +++++++-----
+ registry/parsers/file/mime/parser.yaml       |   12 ++++++------
+ registry/parsers/file/posix/parser.yaml      |   14 +++++++-------
+ registry/parsers/pgrep/list-name/parser.yaml |    6 ++++++
+ registry/parsers/ps/bsd-short/parser.yaml    |    6 ++++++
+ registry/parsers/ps/bsd/parser.yaml          |    6 ++++++
+ registry/parsers/ps/busybox/parser.yaml      |    6 ++++++
+ registry/parsers/ps/freebsd-long/parser.yaml |    6 ++++++
+ registry/parsers/ps/freebsd/parser.yaml      |    6 ++++++
+ registry/parsers/ps/full-format/parser.yaml  |    6 ++++++
+ registry/parsers/ps/jobs/parser.yaml         |    6 ++++++
+ registry/parsers/ps/long-y/parser.yaml       |    6 ++++++
+ registry/parsers/ps/long/parser.yaml         |    6 ++++++
+ registry/parsers/ps/posix/parser.yaml        |    6 ++++++
+ registry/parsers/ps/threads/parser.yaml      |    6 ++++++
+ registry/parsers/ps/unix/parser.yaml         |    6 ++++++
+ registry/parsers/tar/gnu/parser.yaml         |    6 +++---
+ registry/parsers/top/busybox/parser.yaml     |    6 ++++++
+ registry/parsers/top/linux/parser.yaml       |    6 ++++++
+ 19 files changed, 113 insertions(+), 21 deletions(-)
