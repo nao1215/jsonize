@@ -473,6 +473,17 @@ func signatureLines(s *definition.Signature) []string {
 	return out
 }
 
+// describeColumns says where a table or a csv gets its column names.
+func describeColumns(h definition.Header) string {
+	switch {
+	case len(h.Columns) > 0:
+		return " columns=" + strings.Join(h.Columns, ",")
+	case h.None:
+		return " (no header)"
+	}
+	return " columns=from header"
+}
+
 func describeParse(p *definition.Parse) string {
 	switch p.Type {
 	case definition.TypeTable:
@@ -481,15 +492,7 @@ func describeParse(p *definition.Parse) string {
 			split = definition.SplitWhitespace
 		}
 		s := "table split=" + split
-		switch {
-		case len(p.Header.Columns) > 0:
-			s += " columns=" + strings.Join(p.Header.Columns, ",")
-		case p.Header.None:
-			s += " (no header)"
-		default:
-			s += " columns=from header"
-		}
-		return s
+		return s + describeColumns(p.Header)
 	case definition.TypeRegex:
 		each := p.Each
 		if each == "" {
@@ -517,15 +520,7 @@ func describeParse(p *definition.Parse) string {
 		return p.Type + " parts=" + strings.Join(names, ",")
 	case definition.TypeCSV:
 		s := fmt.Sprintf("csv delimiter=%q", csvDelimiterOf(p))
-		switch {
-		case len(p.Header.Columns) > 0:
-			s += " columns=" + strings.Join(p.Header.Columns, ",")
-		case p.Header.None:
-			s += " (no header)"
-		default:
-			s += " columns=from header"
-		}
-		return s
+		return s + describeColumns(p.Header)
 	case definition.TypeINI:
 		sep := p.Separator
 		if sep == "" {

@@ -132,26 +132,14 @@ func (a *app) cmdConvert(args []string) int {
 	if code != ExitOK {
 		return code
 	}
-	if err := co.selects.check(); err != nil {
-		a.errorf("%v", err)
-		return ExitUsage
-	}
-	if err := co.output.check(); err != nil {
-		a.errorf("%v", err)
-		return ExitUsage
-	}
-	if err := checkReading(&co.output, &co.selects); err != nil {
-		a.errorf("%v", err)
-		return ExitUsage
-	}
-	inline, hasInline, err := co.selects.definition()
-	if err != nil {
-		a.errorf("%v", err)
-		return ExitRegistry
+	inline, hasInline, code := a.settle(&co.output, &co.selects)
+	if code != ExitOK {
+		return code
 	}
 	if co.selects.tabular {
 		// A csv or a tsv read as data has its definition fixed, so it needs
 		// no registry either, and a user's csv cannot change it.
+		var err error
 		if inline, err = datafile.TabularDefinition(format, co.selects.columns == ""); err != nil {
 			a.errorf("%v", err)
 			return ExitError
@@ -209,13 +197,25 @@ func (a *app) cmdConvert(args []string) int {
 		}
 	}
 	exp.scope(ctx, from)
+	var retract *selector.Context
+	if from == fromPath {
+		retract = &scoped
+	}
 	if co.output.stream {
-		var retract *selector.Context
-		if from == fromPath {
-			retract = &scoped
-		}
 		return a.stream(reg, r, ctx, retract, &co.output, false, exp)
 	}
+	return a.convertDetected(reg, r, ctx, retract, &co.output, exp)
+}
+
+// convertDetected reads the whole input, chooses the definition from the
+// text, and writes the JSON.
+//
+// retract, when it is not nil, is the choice the guess a file path made
+// falls back to, and it is used the way the streaming reader uses it: the
+// path is dropped when the definition it named does not describe the text
+// and equally when it describes it but cannot read it, since either way
+// the guess was wrong and the text is then read on its own terms.
+func (a *app) convertDetected(reg *registry.Registry, r io.Reader, ctx selector.Context, retract *selector.Context, out *outputOptions, exp *explanation) int {
 	// The size limit is not negotiable from the command line: it exists so
 	// that a runaway producer cannot make jz allocate without bound.
 	data, code := a.readAll(r)
@@ -223,34 +223,20 @@ func (a *app) cmdConvert(args []string) int {
 		return code
 	}
 	ctx.Input = data
-	sel, out, acct, err := a.readWith(reg, ctx, data, co.output.engineOptions())
-	if err != nil && ctx.Parser != co.selects.parser {
-		// The path was a guess, so it never makes the answer worse. It
-		// is dropped when the definition it named does not describe the
-		// text and equally when it describes it but cannot read it:
-		// either way the guess was wrong, and the text is then read on
-		// its own terms.
+	sel, v, acct, err := a.readWith(reg, ctx, data, out.engineOptions())
+	if err != nil && retract != nil {
 		exp.dropPath(err)
-		ctx.Parser, ctx.Variant = co.selects.parser, co.selects.variant
+		ctx = *retract
+		ctx.Input = data
 		exp.scope(ctx, fromRegistry)
-		sel, out, acct, err = a.readWith(reg, ctx, data, co.output.engineOptions())
+		sel, v, acct, err = a.readWith(reg, ctx, data, out.engineOptions())
 	}
 	exp.chose(sel)
 	if err != nil {
-		code := a.exitFor(err)
-		exp.fail(err, code)
-		a.explainWrite(exp)
-		return code
+		return a.failed(exp, err, a.exitFor(err))
 	}
 	exp.read(acct)
-	a.explainWrite(exp)
-	if out, code = a.narrow(out, &co.output, a.reading(sel.Entry.Def)); code != ExitOK {
-		return code
-	}
-	if err := co.output.write(a.env.Stdout, out); err != nil {
-		return a.writeFailed(err)
-	}
-	return ExitOK
+	return a.writeDocument(exp, v, out, a.reading(sel.Entry.Def))
 }
 
 // openInput opens what the conversion reads: standard input, or the
@@ -333,14 +319,21 @@ func (a *app) convertWith(def *definition.Definition, r io.Reader, out *outputOp
 	}
 	v, acct, err := engine.ParseAccounted(def, data, out.engineOptions())
 	if err != nil {
-		code := a.exitFor(err)
-		exp.fail(err, code)
-		a.explainWrite(exp)
-		return code
+		return a.failed(exp, err, a.exitFor(err))
 	}
 	exp.read(acct)
+	return a.writeDocument(exp, v, out, def)
+}
+
+// writeDocument writes the one document a whole reading produced. The
+// explanation goes out first, since it is about the reading and not
+// about the writing, and the keys the caller named are dropped on the
+// way: a key the definition does not have is a usage error, so nothing
+// is written for it.
+func (a *app) writeDocument(exp *explanation, v any, out *outputOptions, def *definition.Definition) int {
 	a.explainWrite(exp)
-	if v, code = a.narrow(v, out, def); code != ExitOK {
+	v, code := a.narrow(v, out, def)
+	if code != ExitOK {
 		return code
 	}
 	if err := out.write(a.env.Stdout, v); err != nil {
@@ -393,10 +386,7 @@ func (a *app) convertData(format string, r io.Reader, out *outputOptions, exp *e
 	}
 	v, err := datafile.Read(format, data)
 	if err != nil {
-		code := a.exitFor(err)
-		exp.fail(err, code)
-		a.explainWrite(exp)
-		return code
+		return a.failed(exp, err, a.exitFor(err))
 	}
 	// A record format is a list of the records it holds; a JSON or YAML
 	// document and a text are one value, whatever they hold.

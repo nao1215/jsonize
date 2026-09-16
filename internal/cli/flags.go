@@ -552,6 +552,26 @@ func splitEnvFlag(entries []string) ([]string, error) {
 	return entries, nil
 }
 
+// settle checks the options that state two answers at once and reads a
+// definition given with --define. Both modes do this in the same order
+// and answer the same way: a pair that cannot work is a usage error
+// before anything is read or run, and a --define that does not load is a
+// registry error. The bool result is true when --define gave one.
+func (a *app) settle(out *outputOptions, sel *selectOptions) (*definition.Definition, bool, int) {
+	for _, check := range []func() error{sel.check, out.check, func() error { return checkReading(out, sel) }} {
+		if err := check(); err != nil {
+			a.errorf("%v", err)
+			return nil, false, ExitUsage
+		}
+	}
+	inline, hasInline, err := sel.definition()
+	if err != nil {
+		a.errorf("%v", err)
+		return nil, false, ExitRegistry
+	}
+	return inline, hasInline, ExitOK
+}
+
 // nameColumns applies --type and --columns before anything is read or
 // run. The definition they apply to is the one named: the inline one,
 // which is returned changed, or the registered variant, which is read

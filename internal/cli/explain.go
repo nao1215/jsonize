@@ -169,6 +169,16 @@ func (e *explanation) read(acct engine.Account) {
 	}
 }
 
+// failed reports a failure the way every conversion reports one: the
+// explanation records it with the status it maps to, the explanation is
+// written, and the status is handed back to be returned. exitFor has
+// already put the message on standard error.
+func (a *app) failed(e *explanation, err error, code int) int {
+	e.fail(err, code)
+	a.explainWrite(e)
+	return code
+}
+
 // fail records the error the conversion ends with and the status it maps
 // to.
 func (e *explanation) fail(err error, code int) {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/nao1215/jsonize/pkg/convert"
+	"github.com/nao1215/jsonize/internal/recordio"
 	"github.com/nao1215/jsonize/pkg/registry"
 	"github.com/nao1215/jsonize/pkg/selector"
 )
@@ -52,7 +52,7 @@ func settlesAsWhole(reg *registry.Registry, ctx selector.Context, input []byte) 
 			// The whole text has come; a stream reads it whole too.
 			return nil
 		}
-		if sep == '\n' && !text && blankLine(line, first) {
+		if sep == '\n' && !text && recordio.Blank(line, first) {
 			continue
 		}
 		text = true
@@ -103,14 +103,4 @@ func describe(res *selector.Result, err error) string {
 		return fmt.Sprintf("the error %q", line)
 	}
 	return res.Entry.Def.ID()
-}
-
-// blankLine reports a line before the text, the way the selector and a
-// stream's head see one.
-func blankLine(line []byte, first bool) bool {
-	line = convert.StripANSI(line)
-	if first {
-		line = bytes.TrimPrefix(line, []byte{0xEF, 0xBB, 0xBF})
-	}
-	return len(bytes.TrimSpace(line)) == 0
 }

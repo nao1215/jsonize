@@ -116,15 +116,26 @@ func Run(ctx context.Context, cmd Command, stderr io.Writer) (*Result, error) {
 	return run(ctx, cmd, stderr, forwarded())
 }
 
-// run is Run with the signal source given, so a test can send one.
-func run(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay) (*Result, error) {
-	defer sigs.stop()
+// lookup finds the program a command names. A name with nothing in it
+// names no program, and one that is not on PATH is reported before
+// anything is started, whether the output is collected or streamed.
+func lookup(cmd Command) (string, error) {
 	if strings.TrimSpace(cmd.Name) == "" {
-		return nil, errors.New("no command given")
+		return "", errors.New("no command given")
 	}
 	path, err := exec.LookPath(cmd.Name)
 	if err != nil {
-		return nil, fmt.Errorf("cannot run %q: %w", cmd.Name, err)
+		return "", fmt.Errorf("cannot run %q: %w", cmd.Name, err)
+	}
+	return path, nil
+}
+
+// run is Run with the signal source given, so a test can send one.
+func run(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay) (*Result, error) {
+	defer sigs.stop()
+	path, err := lookup(cmd)
+	if err != nil {
+		return nil, err
 	}
 	limit := cmd.MaxOutput
 	if limit <= 0 {
@@ -180,12 +191,9 @@ func Stream(ctx context.Context, cmd Command, stderr io.Writer, consume func(io.
 // stream is Stream with the signal source given, so a test can send one.
 func stream(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay, consume func(io.Reader) error) (*Result, error) {
 	defer sigs.stop()
-	if strings.TrimSpace(cmd.Name) == "" {
-		return nil, errors.New("no command given")
-	}
-	path, err := exec.LookPath(cmd.Name)
+	path, err := lookup(cmd)
 	if err != nil {
-		return nil, fmt.Errorf("cannot run %q: %w", cmd.Name, err)
+		return nil, err
 	}
 	// Stopping the child goes through the context so that a child which
 	// ignores the request is killed after WaitDelay, the same as a
