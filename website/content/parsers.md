@@ -240,7 +240,7 @@ the same reading with settings of your own.
 | `tc` | [`qdisc`](../schemas/tc/qdisc.json), [`qdisc-stats`](../schemas/tc/qdisc-stats.json) |
 | `timedatectl` | [`linux`](../schemas/timedatectl/linux.json), [`show`](../schemas/timedatectl/show.json), [`timesync`](../schemas/timedatectl/timesync.json), [`timezones`](../schemas/timedatectl/timezones.json) |
 | `tokei` | [`default`](../schemas/tokei/default.json) |
-| `top` | [`darwin`](../schemas/top/darwin.json), [`linux`](../schemas/top/linux.json) |
+| `top` | [`busybox`](../schemas/top/busybox.json), [`darwin`](../schemas/top/darwin.json), [`linux`](../schemas/top/linux.json) |
 | `tracepath` | [`linux`](../schemas/tracepath/linux.json) |
 | `tree` | [`listing`](../schemas/tree/listing.json) |
 | `udevadm` | [`info`](../schemas/udevadm/info.json) |

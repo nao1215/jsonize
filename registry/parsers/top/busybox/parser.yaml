@@ -1,0 +1,81 @@
+# BusyBox `top -b` prints a memory line, a CPU line and a load line, then
+# one row per process. The memory figures are in kibibytes, with a K after
+# each; the CPU figures are whole percentages; the load line adds the
+# running and total task counts and the last process id.
+#
+# A process row is a pid, its parent, the user (a numeric id when the
+# name is unknown), the state (one to three letters: S, SW, IW<), the
+# virtual size, its share of memory, its share of CPU and the command
+# line. The virtual size is printed rounded with an m or a g when it is
+# large and is kept as that text; when it is wide enough it runs into the
+# percentage beside it ("1451g2178%"), so the two are told apart by what
+# each holds rather than by the space between them.
+format: 1
+command: top
+variant: busybox
+description: BusyBox top -b, memory, CPU and load, and the processes
+metadata:
+  tags: [linux, process, busybox]
+  compatible: [BusyBox]
+  references:
+    - https://busybox.net/downloads/BusyBox.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AMem: [0-9]+K used, [0-9]+K free, [0-9]+K shrd, [0-9]+K buff, [0-9]+K cached\nCPU: +[0-9]+% usr '
+input:
+  ignore:
+    - '^ +PID +PPID +USER +STAT +VSZ +%VSZ +%CPU +COMMAND$'
+parse:
+  type: composite
+  parts:
+    - name: memory
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AMem: (?P<used_kib>[0-9]+)K used, (?P<free_kib>[0-9]+)K free, (?P<shared_kib>[0-9]+)K shrd, (?P<buffers_kib>[0-9]+)K buff, (?P<cached_kib>[0-9]+)K cached\z'
+      fields:
+        used_kib: {type: int}
+        free_kib: {type: int}
+        shared_kib: {type: int}
+        buffers_kib: {type: int}
+        cached_kib: {type: int}
+    - name: cpu
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ACPU: +(?P<user>[0-9]+)% usr +(?P<system>[0-9]+)% sys +(?P<nice>[0-9]+)% nic +(?P<idle>[0-9]+)% idle +(?P<iowait>[0-9]+)% io +(?P<irq>[0-9]+)% irq +(?P<softirq>[0-9]+)% sirq\z'
+      fields:
+        user: {type: int}
+        system: {type: int}
+        nice: {type: int}
+        idle: {type: int}
+        iowait: {type: int}
+        irq: {type: int}
+        softirq: {type: int}
+    - name: load
+      select: {skip: 2, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ALoad average: (?P<load_1m>[0-9.]+) (?P<load_5m>[0-9.]+) (?P<load_15m>[0-9.]+) (?P<running>[0-9]+)/(?P<tasks>[0-9]+) (?P<last_pid>[0-9]+)\z'
+      fields:
+        load_1m: {type: float}
+        load_5m: {type: float}
+        load_15m: {type: float}
+        running: {type: int}
+        tasks: {type: int}
+        last_pid: {type: int}
+    - name: processes
+      select: {skip: 3}
+      parse:
+        type: regex
+        pattern: '^ *(?P<pid>[0-9]+) +(?P<ppid>[0-9]+) +(?P<user>\S+) +(?P<stat>[A-Z][A-Z<N]{0,2}) +(?P<vsz>[0-9]+(?:\.[0-9]+)?[mg]?) *(?P<vsz_percent>[0-9]+)% +(?P<cpu_percent>[0-9]+)% (?P<command>.+)$'
+      fields:
+        pid: {type: int}
+        ppid: {type: int}
+        vsz_percent: {type: int}
+        cpu_percent: {type: int}

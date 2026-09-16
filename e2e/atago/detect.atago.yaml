@@ -1788,3 +1788,22 @@ scenarios:
             json:
               - { path: "$.version.version", equals: 1.92.0 }
               - { path: "$.details.host", equals: x86_64-unknown-linux-gnu }
+
+  - name: BusyBox top tells a virtual size from the percentage it runs into
+    steps:
+      - fixture:
+          file: bbtop.txt
+          from: "${specdir}/../../registry/parsers/top/busybox/testdata/busybox-1.37.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: bbtop.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose top/busybox from embedded"
+          stdout:
+            json:
+              - { path: "$.memory.used_kib", equals: 61771228 }
+              - { path: "$.processes[1].vsz", equals: 1451g }
+              - { path: "$.processes[1].vsz_percent", equals: 2178 }
+              - { path: "$.processes[8].vsz", equals: 53.7g }

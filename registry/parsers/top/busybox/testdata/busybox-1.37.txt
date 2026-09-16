@@ -1,0 +1,13 @@
+Mem: 61771228K used, 2642120K free, 1951008K shrd, 2825536K buff, 34159132K cached
+CPU:   0% usr   0% sys   0% nic  99% idle   0% io   0% irq   0% sirq
+Load average: 0.46 0.80 1.28 1/4760 2619428
+  PID  PPID USER     STAT   VSZ %VSZ %CPU COMMAND
+ 2329     1 root     S    4001m   6%   0% /usr/bin/containerd
+855400 820329 ada    S    1451g2178%   0% /usr/share/code/code --type=renderer
+790597 6919 ada      SN   1181m   2%   0% /usr/libexec/localsearch-3
+  690     1 root     S<   96524   0%   0% /usr/lib/systemd/systemd-journald
+ 1978     1 61876    S<    2796   0%   0% /usr/bin/earlyoom -r 3600
+ 1398     2 root     SW       0   0%   0% [napi/phy0-0]
+  591     2 root     IW<      0   0%   0% [kworker/0:1H-kb]
+2619428 2619424 ada  R     2468   0%   0% busybox top -b -n1
+44681  6919 ada      S    53.7g  81%   0% /opt/google/chrome/chrome

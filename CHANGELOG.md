@@ -25,8 +25,9 @@ project follows [Semantic Versioning](https://semver.org/).
 - `sar -d`, the activity of each block device, and for ELF files
   `readelf -S -W` (the section headers), `readelf -d` (the dynamic
   section) and `size -A` (the size and address of each section), and
-  `rustc -vV` and `cargo -vV`. The registry holds 237 commands through
-  626 definitions.
+  `rustc -vV` and `cargo -vV`, and BusyBox `top -b` (a virtual size
+  that runs into the percentage beside it is told apart). The registry
+  holds 237 commands through 627 definitions.
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the
