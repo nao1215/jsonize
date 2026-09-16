@@ -169,11 +169,15 @@ func (o *optionSet) durationOpt(p *time.Duration, long, arg string, value time.D
 // keeps one.
 type durationValue time.Duration
 
-// Set reads the value as a Go duration ("500ms", "2m").
+// Set reads the value as a Go duration ("500ms", "2m"). A negative one
+// is no length of time, and 0 already says there is no limit.
 func (d *durationValue) Set(v string) error {
 	parsed, err := time.ParseDuration(v)
 	if err != nil {
-		return errors.New("parse error")
+		return fmt.Errorf("expects a duration such as 30s or 2m, got %q", v)
+	}
+	if parsed < 0 {
+		return fmt.Errorf("expects a duration such as 30s or 2m, got %q; 0 is no limit", v)
 	}
 	*d = durationValue(parsed)
 	return nil
@@ -500,10 +504,7 @@ func (o *optionSet) helpDoc() {
 // parse reads args and prints usage on --help or on an error. The bool
 // result is true when the caller should return the given exit code.
 func (a *app) parse(o *optionSet, args []string, usage string) (int, bool) {
-	err := o.fs.Parse(args)
-	if removed := removedOption(err); removed != nil {
-		err = removed
-	}
+	err := optionError(o.fs.Parse(args))
 	if errors.Is(err, flag.ErrHelp) {
 		fmt.Fprint(a.env.Stdout, usage)
 		o.print(a.env.Stdout)
@@ -536,19 +537,66 @@ var removedOptions = map[string]string{
 	"yaml":          "--yaml was removed: jz writes JSON only; pipe the JSON to a YAML tool to get YAML (for example: jz ... | yq -P)",
 }
 
-// removedOption turns the flag package's refusal of an option jz used
-// to have into the message that says what replaced it, or returns nil.
-func removedOption(err error) error {
-	const undefined = "flag provided but not defined: -"
-	if err == nil || !strings.HasPrefix(err.Error(), undefined) {
-		return nil
+// optionError rewrites a refusal of the flag package in the terms jz's
+// help uses: an option is named with two dashes, or one for a letter, and
+// a value it cannot take says what it takes. An option jz used to have
+// says what replaced it.
+func optionError(err error) error {
+	if err == nil || errors.Is(err, flag.ErrHelp) {
+		return err
 	}
-	name := strings.TrimPrefix(err.Error(), undefined)
-	name, _, _ = strings.Cut(strings.TrimPrefix(name, "-"), "=")
-	if msg, ok := removedOptions[name]; ok {
-		return errors.New(msg)
+	msg := err.Error()
+	if name, ok := strings.CutPrefix(msg, "flag provided but not defined: -"); ok {
+		name = strings.TrimPrefix(name, "-")
+		if removed, ok := removedOptions[name]; ok {
+			return errors.New(removed)
+		}
+		return fmt.Errorf("unknown option %s", optionName(name))
 	}
-	return nil
+	if name, ok := strings.CutPrefix(msg, "flag needs an argument: -"); ok {
+		return fmt.Errorf("%s needs a value", optionName(name))
+	}
+	// invalid boolean value "V" for -NAME: REASON
+	if rest, ok := strings.CutPrefix(msg, "invalid boolean value "); ok {
+		value, name, reason := invalidValue(rest, " for -")
+		if strings.HasPrefix(reason, "--") {
+			return errors.New(reason)
+		}
+		return fmt.Errorf("%s takes no value, got %s", optionName(name), value)
+	}
+	// invalid value "V" for flag -NAME: REASON
+	if rest, ok := strings.CutPrefix(msg, "invalid value "); ok {
+		_, name, reason := invalidValue(rest, " for flag -")
+		if strings.HasPrefix(reason, "--") {
+			return errors.New(reason)
+		}
+		return fmt.Errorf("%s %s", optionName(name), reason)
+	}
+	if arg, ok := strings.CutPrefix(msg, "bad flag syntax: "); ok {
+		return fmt.Errorf("%q is not an option", arg)
+	}
+	return err
+}
+
+// invalidValue splits `"VALUE"<sep>NAME: REASON`, the tail of the flag
+// package's refusal of a value. The value is quoted with %q, so it ends at
+// the last separator before the name.
+func invalidValue(rest, sep string) (value, name, reason string) {
+	i := strings.LastIndex(rest, sep)
+	if i < 0 {
+		return "", "", rest
+	}
+	value = rest[:i]
+	name, reason, _ = strings.Cut(rest[i+len(sep):], ": ")
+	return value, name, reason
+}
+
+// optionName writes a name the way the help does.
+func optionName(name string) string {
+	if len(name) == 1 {
+		return "-" + name
+	}
+	return "--" + name
 }
 
 // splitEnvFlag validates NAME=value entries.

@@ -59,7 +59,7 @@ func TestNewFailures(t *testing.T) {
 		{"a JSON value that nests too deep", []string{"new", "a:=" + strings.Repeat("[", 1001) + strings.Repeat("]", 1001)}, ExitParse, "the value after := cannot be written: arrays and objects nest deeper than 1000"},
 		{"an option after the arguments", []string{"new", "a=1", "-p"}, ExitUsage, "options come before the arguments"},
 		{"yaml output", []string{"new", "-p", "--yaml"}, ExitUsage, "--yaml was removed"},
-		{"an unknown option", []string{"new", "--stream"}, ExitUsage, "flag provided but not defined"},
+		{"an unknown option", []string{"new", "--stream"}, ExitUsage, "unknown option --stream"},
 		{"--string split in two", []string{"new", "--string", "message", "hello"}, ExitUsage, `jz: new: "--string message": --string takes KEY=TEXT or POINTER=TEXT as one argument`},
 		{"a location given twice", []string{"new", "--path", "/a/b=1", "--path", "/a/b=2"}, ExitUsage, `/a/b is given twice, first by "--path /a/b=1"`},
 		{"a pointer into a value", []string{"new", "--path", "/spec/x=1", "spec:=3"}, ExitUsage, `"spec:=3": /spec is given twice, first by "--path /spec/x=1"`},
