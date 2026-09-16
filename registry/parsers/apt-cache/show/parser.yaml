@@ -1,0 +1,63 @@
+# `apt-cache show PACKAGE` prints the package records APT has for a name,
+# one per version and archive, separated by a blank line, in the control
+# file format `apt show` and `dpkg -s` print. A field that runs long goes
+# on on lines that open with a space, which input.fold joins back onto it.
+#
+# It is told apart from those two by what it has and they do not: the
+# path of the package file in the archive and its checksums. Installed-Size
+# and Size are counts (kilobytes and bytes) and are numbers; the relation
+# fields and Task are lists.
+format: 1
+command: apt-cache
+variant: show
+description: apt-cache show, the package records APT has for a name
+metadata:
+  tags: [linux, packaging, debian]
+  compatible: [apt]
+  references:
+    - https://manpages.debian.org/apt-cache
+detect:
+  os: [linux]
+  args:
+    any: [show]
+  signature:
+    all:
+      - '\APackage: \S'
+      - '^Filename: \S+\.u?deb$'
+      - '^SHA256: [0-9a-f]{64}$'
+    none:
+      - '^Status: \S+ \S+ \S+[ \t]*$'
+      - '^APT-(?:Sources|Manual-Installed): \S'
+input:
+  fold: '^[ ]'
+parse:
+  type: records
+  start: '^Package: '
+  parts:
+    - name: package
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^Package: (?P<name>\S+)[ \t]*$'
+      fields:
+        name: {required: true}
+    - name: fields
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      fields:
+        Installed-Size: {type: int}
+        Size: {type: int}
+        Depends: {type: array, split: ","}
+        Pre-Depends: {type: array, split: ","}
+        Recommends: {type: array, split: ","}
+        Suggests: {type: array, split: ","}
+        Breaks: {type: array, split: ","}
+        Conflicts: {type: array, split: ","}
+        Replaces: {type: array, split: ","}
+        Provides: {type: array, split: ","}
+        Enhances: {type: array, split: ","}
+        Task: {type: array, split: ","}

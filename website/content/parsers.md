@@ -35,7 +35,7 @@ the same reading with settings of your own.
 | `amixer` | [`contents`](../schemas/amixer/contents.json), [`simple-controls`](../schemas/amixer/simple-controls.json) |
 | `aplay` | [`devices`](../schemas/aplay/devices.json) |
 | `apt` | [`list`](../schemas/apt/list.json), [`show`](../schemas/apt/show.json) |
-| `apt-cache` | [`depends`](../schemas/apt-cache/depends.json), [`madison`](../schemas/apt-cache/madison.json), [`policy`](../schemas/apt-cache/policy.json), [`search`](../schemas/apt-cache/search.json), [`stats`](../schemas/apt-cache/stats.json) |
+| `apt-cache` | [`depends`](../schemas/apt-cache/depends.json), [`madison`](../schemas/apt-cache/madison.json), [`policy`](../schemas/apt-cache/policy.json), [`search`](../schemas/apt-cache/search.json), [`show`](../schemas/apt-cache/show.json), [`stats`](../schemas/apt-cache/stats.json) |
 | `apt-config` | [`dump`](../schemas/apt-config/dump.json) |
 | `ar` | [`table-verbose`](../schemas/ar/table-verbose.json) |
 | `arp` | [`alternate`](../schemas/arp/alternate.json), [`darwin`](../schemas/arp/darwin.json), [`freebsd`](../schemas/arp/freebsd.json), [`windows`](../schemas/arp/windows.json) |
@@ -211,7 +211,7 @@ the same reading with settings of your own.
 | `shellcheck` | [`gcc`](../schemas/shellcheck/gcc.json) |
 | `size` | [`gnu`](../schemas/size/gnu.json), [`sysv`](../schemas/size/sysv.json) |
 | `smartctl` | [`scan`](../schemas/smartctl/scan.json) |
-| `snap` | [`changes`](../schemas/snap/changes.json), [`connections`](../schemas/snap/connections.json), [`list`](../schemas/snap/list.json), [`services`](../schemas/snap/services.json) |
+| `snap` | [`aliases`](../schemas/snap/aliases.json), [`changes`](../schemas/snap/changes.json), [`connections`](../schemas/snap/connections.json), [`list`](../schemas/snap/list.json), [`refresh-list`](../schemas/snap/refresh-list.json), [`services`](../schemas/snap/services.json), [`version`](../schemas/snap/version.json) |
 | `sockstat` | [`freebsd`](../schemas/sockstat/freebsd.json), [`freebsd-state`](../schemas/sockstat/freebsd-state.json) |
 | `spctl` | [`status`](../schemas/spctl/status.json) |
 | `ss` | [`connected`](../schemas/ss/connected.json), [`linux`](../schemas/ss/linux.json), [`single-protocol`](../schemas/ss/single-protocol.json), [`summary`](../schemas/ss/summary.json) |

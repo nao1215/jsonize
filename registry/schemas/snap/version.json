@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/snap/version.json",
+  "title": "snap/version",
+  "description": "snap version, the snap and snapd versions and the system they run on",
+  "x-jsonize": {
+    "definition": "snap/version",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "snap": {
+      "type": "string"
+    },
+    "snapd": {
+      "type": "string"
+    },
+    "series": {
+      "type": "string"
+    },
+    "distribution": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "release": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "kernel": {
+      "type": "string"
+    },
+    "architecture": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "snap",
+    "snapd",
+    "series",
+    "distribution",
+    "release",
+    "kernel",
+    "architecture"
+  ]
+}

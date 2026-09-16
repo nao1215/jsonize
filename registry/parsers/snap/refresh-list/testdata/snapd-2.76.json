@@ -1,0 +1,24 @@
+[
+  {
+    "name": "core22",
+    "version": "20260824",
+    "rev": "2955",
+    "size": "77.6MB",
+    "publisher": "canonical",
+    "verified": true,
+    "starred": false,
+    "notes": [
+      "base"
+    ]
+  },
+  {
+    "name": "firefox",
+    "version": "156.0-1",
+    "rev": "8929",
+    "size": "274MB",
+    "publisher": "mozilla",
+    "verified": true,
+    "starred": false,
+    "notes": null
+  }
+]

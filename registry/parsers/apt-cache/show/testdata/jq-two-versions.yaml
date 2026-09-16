@@ -1,0 +1,4 @@
+source: apt-cache show jq, captured on Ubuntu 26.04 (apt 3.2.0) with LC_ALL=C; apt writes the characters it cannot show in the C locale as question marks
+description: two records for the same version from two archives
+os: linux
+args: [show, jq]
