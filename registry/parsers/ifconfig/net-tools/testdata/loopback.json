@@ -1,0 +1,53 @@
+[
+  {
+    "interface": {
+      "name": "lo",
+      "hwtype": "loop",
+      "hwaddr": null,
+      "txqueuelen": 1000,
+      "encap": "Local Loopback"
+    },
+    "status": {
+      "flags_value": 73,
+      "flags": [
+        "UP",
+        "LOOPBACK",
+        "RUNNING"
+      ],
+      "mtu": 65536
+    },
+    "inet": {
+      "address": "127.0.0.1",
+      "mask": "255.0.0.0",
+      "broadcast": null,
+      "peer": null
+    },
+    "inet6": [
+      {
+        "address": "::1",
+        "prefixlen": 128,
+        "scopeid": "0x10",
+        "scope": "host"
+      }
+    ],
+    "rx": {
+      "packets": 4,
+      "bytes": 336,
+      "bytes_human": "336.0 B",
+      "errors": 0,
+      "dropped": 0,
+      "overruns": 0,
+      "frame": 0
+    },
+    "tx": {
+      "packets": 4,
+      "bytes": 336,
+      "bytes_human": "336.0 B",
+      "errors": 0,
+      "dropped": 0,
+      "overruns": 0,
+      "carrier": 0,
+      "collisions": 0
+    }
+  }
+]

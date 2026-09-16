@@ -1,0 +1,4 @@
+description: ifconfig without -a, which leaves out the interface that is down.
+source: captured with LC_ALL=C and `ifconfig` in a debian:stable-slim container with net-tools 2.10 installed, a dummy interface given an IPv4 address with a broadcast and three IPv6 addresses, a second dummy left down with MTU 9000, and a tun device given a point-to-point address; the MAC addresses are replaced with 02:00:00:00:00:0N and the link-local address derived from one with the matching fe80::ff:fe00:N
+os: linux
+args: []

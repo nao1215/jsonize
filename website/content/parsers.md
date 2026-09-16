@@ -102,7 +102,7 @@ the same reading with settings of your own.
 | `iconv` | [`list`](../schemas/iconv/list.json) |
 | `id` | [`posix`](../schemas/id/posix.json) |
 | `identify` | [`default`](../schemas/identify/default.json) |
-| `ifconfig` | [`busybox`](../schemas/ifconfig/busybox.json) |
+| `ifconfig` | [`busybox`](../schemas/ifconfig/busybox.json), [`net-tools`](../schemas/ifconfig/net-tools.json) |
 | `ini` | [`default`](../schemas/ini/default.json) |
 | `ionice` | [`class`](../schemas/ionice/class.json) |
 | `iostat` | [`cpu`](../schemas/iostat/cpu.json), [`cpu-timestamped`](../schemas/iostat/cpu-timestamped.json), [`device`](../schemas/iostat/device.json), [`device-timestamped`](../schemas/iostat/device-timestamped.json), [`extended`](../schemas/iostat/extended.json), [`extended-device`](../schemas/iostat/extended-device.json), [`extended-timestamped`](../schemas/iostat/extended-timestamped.json), [`freebsd-extended`](../schemas/iostat/freebsd-extended.json), [`human`](../schemas/iostat/human.json), [`human-sizes`](../schemas/iostat/human-sizes.json), [`human-sizes-timestamped`](../schemas/iostat/human-sizes-timestamped.json), [`human-timestamped`](../schemas/iostat/human-timestamped.json), [`linux`](../schemas/iostat/linux.json), [`linux-timestamped`](../schemas/iostat/linux-timestamped.json) |

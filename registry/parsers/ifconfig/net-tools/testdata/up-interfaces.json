@@ -1,0 +1,207 @@
+[
+  {
+    "interface": {
+      "name": "dummy0",
+      "hwtype": "ether",
+      "hwaddr": "02:00:00:00:00:01",
+      "txqueuelen": 1000,
+      "encap": "Ethernet"
+    },
+    "status": {
+      "flags_value": 195,
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "RUNNING",
+        "NOARP"
+      ],
+      "mtu": 1500
+    },
+    "inet": {
+      "address": "198.51.100.7",
+      "mask": "255.255.255.0",
+      "broadcast": "198.51.100.255",
+      "peer": null
+    },
+    "inet6": [
+      {
+        "address": "2001:db8::7",
+        "prefixlen": 64,
+        "scopeid": "0x0",
+        "scope": "global"
+      },
+      {
+        "address": "fe80::ff:fe00:1",
+        "prefixlen": 64,
+        "scopeid": "0x20",
+        "scope": "link"
+      },
+      {
+        "address": "2001:db8:1::7",
+        "prefixlen": 48,
+        "scopeid": "0x0",
+        "scope": "global"
+      }
+    ],
+    "rx": {
+      "packets": 0,
+      "bytes": 0,
+      "bytes_human": "0.0 B",
+      "errors": 0,
+      "dropped": 0,
+      "overruns": 0,
+      "frame": 0
+    },
+    "tx": {
+      "packets": 1,
+      "bytes": 70,
+      "bytes_human": "70.0 B",
+      "errors": 0,
+      "dropped": 0,
+      "overruns": 0,
+      "carrier": 0,
+      "collisions": 0
+    }
+  },
+  {
+    "interface": {
+      "name": "eth0",
+      "hwtype": "ether",
+      "hwaddr": "02:00:00:00:00:03",
+      "txqueuelen": 0,
+      "encap": "Ethernet"
+    },
+    "status": {
+      "flags_value": 4163,
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "mtu": 1500
+    },
+    "inet": {
+      "address": "172.17.0.3",
+      "mask": "255.255.0.0",
+      "broadcast": "172.17.255.255",
+      "peer": null
+    },
+    "inet6": [],
+    "rx": {
+      "packets": 5029,
+      "bytes": 13802902,
+      "bytes_human": "13.1 MiB",
+      "errors": 0,
+      "dropped": 0,
+      "overruns": 0,
+      "frame": 0
+    },
+    "tx": {
+      "packets": 2921,
+      "bytes": 212158,
+      "bytes_human": "207.1 KiB",
+      "errors": 0,
+      "dropped": 0,
+      "overruns": 0,
+      "carrier": 0,
+      "collisions": 0
+    }
+  },
+  {
+    "interface": {
+      "name": "lo",
+      "hwtype": "loop",
+      "hwaddr": null,
+      "txqueuelen": 1000,
+      "encap": "Local Loopback"
+    },
+    "status": {
+      "flags_value": 73,
+      "flags": [
+        "UP",
+        "LOOPBACK",
+        "RUNNING"
+      ],
+      "mtu": 65536
+    },
+    "inet": {
+      "address": "127.0.0.1",
+      "mask": "255.0.0.0",
+      "broadcast": null,
+      "peer": null
+    },
+    "inet6": [
+      {
+        "address": "::1",
+        "prefixlen": 128,
+        "scopeid": "0x10",
+        "scope": "host"
+      }
+    ],
+    "rx": {
+      "packets": 4,
+      "bytes": 336,
+      "bytes_human": "336.0 B",
+      "errors": 0,
+      "dropped": 0,
+      "overruns": 0,
+      "frame": 0
+    },
+    "tx": {
+      "packets": 4,
+      "bytes": 336,
+      "bytes_human": "336.0 B",
+      "errors": 0,
+      "dropped": 0,
+      "overruns": 0,
+      "carrier": 0,
+      "collisions": 0
+    }
+  },
+  {
+    "interface": {
+      "name": "tun0",
+      "hwtype": "unspec",
+      "hwaddr": "00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00",
+      "txqueuelen": 500,
+      "encap": "UNSPEC"
+    },
+    "status": {
+      "flags_value": 4241,
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "NOARP",
+        "MULTICAST"
+      ],
+      "mtu": 1500
+    },
+    "inet": {
+      "address": "10.8.0.1",
+      "mask": "255.255.255.255",
+      "broadcast": null,
+      "peer": "10.8.0.2"
+    },
+    "inet6": [],
+    "rx": {
+      "packets": 0,
+      "bytes": 0,
+      "bytes_human": "0.0 B",
+      "errors": 0,
+      "dropped": 0,
+      "overruns": 0,
+      "frame": 0
+    },
+    "tx": {
+      "packets": 0,
+      "bytes": 0,
+      "bytes_human": "0.0 B",
+      "errors": 0,
+      "dropped": 0,
+      "overruns": 0,
+      "carrier": 0,
+      "collisions": 0
+    }
+  }
+]
