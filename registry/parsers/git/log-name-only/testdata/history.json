@@ -1,0 +1,105 @@
+[
+  {
+    "commit": {
+      "hash": "5245d481237c3e098f28f498ce94bb2db15bdec3"
+    },
+    "headers": {
+      "Merge": "2f37536 2537a69",
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Sat Sep 5 10:00:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "Merge branch 'topic'"
+      ]
+    },
+    "files": []
+  },
+  {
+    "commit": {
+      "hash": "2f3753642ba3fc7da4de751c2582f067f6985568"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Fri Sep 4 10:00:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "drop notes"
+      ]
+    },
+    "files": [
+      {
+        "path": "notes.txt"
+      }
+    ]
+  },
+  {
+    "commit": {
+      "hash": "2537a69ade12831ca625634d9182e0864d13fba3"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Thu Sep 3 10:00:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "topic work"
+      ]
+    },
+    "files": [
+      {
+        "path": "topic.txt"
+      }
+    ]
+  },
+  {
+    "commit": {
+      "hash": "0da12db83e019297098b90d1b995e8fc0ceae415"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Wed Sep 2 10:00:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "rename and add a binary",
+        "",
+        "The body explains the change."
+      ]
+    },
+    "files": [
+      {
+        "path": "logo.bin"
+      },
+      {
+        "path": "new-name.txt"
+      },
+      {
+        "path": "notes.txt"
+      }
+    ]
+  },
+  {
+    "commit": {
+      "hash": "421800bd4f143398a4a352ba495b69eb650bbddf"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Tue Sep 1 10:00:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "add notes"
+      ]
+    },
+    "files": [
+      {
+        "path": "notes.txt"
+      },
+      {
+        "path": "old-name.txt"
+      }
+    ]
+  }
+]

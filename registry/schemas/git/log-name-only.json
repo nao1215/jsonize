@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/log-name-only.json",
+  "title": "git/log-name-only",
+  "description": "git log --name-only, each commit with the paths it changed",
+  "x-jsonize": {
+    "definition": "git/log-name-only",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "commit": {
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "string"
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "hash"
+        ]
+      },
+      "headers": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "message": {
+        "type": "object",
+        "properties": {
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "lines"
+        ]
+      },
+      "files": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      }
+    },
+    "required": [
+      "commit",
+      "headers",
+      "message",
+      "files"
+    ]
+  }
+}

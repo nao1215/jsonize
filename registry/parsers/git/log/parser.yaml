@@ -28,6 +28,11 @@ detect:
     # No message line can be it, since git indents those by four.
     none:
       - '^ \d+ files? changed(?:, \d+ insertions?\(\+\))?(?:, \d+ deletions?\(-\))?$'
+      # A line after the message that is neither indented nor the next
+      # commit: the paths `--numstat`, `--name-status` and `--name-only`
+      # add, which git/log-numstat, git/log-name-status and
+      # git/log-name-only read.
+      - '(?m)^    [^\n]*\n\n(?:[^c\s]|c(?:[^o]|o(?:[^m]|m(?:[^m]|m(?:[^i]|i(?:[^t]|t[^ ]))))))'
 input:
   skip_blank: false
 parse:

@@ -1,0 +1,5 @@
+description: >-
+  Five commits: a merge with no paths, a deletion, a binary file with no
+  line counts, a rename in the path cell and a message with a body.
+source: 'git log --numstat captured with LC_ALL=C from a repository made for this fixture with git 2.53 (the script sets fixed author and committer names and dates; the people are not real)'
+args: [log, --numstat]

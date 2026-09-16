@@ -454,7 +454,10 @@ func TestOtherInvocationsOfAKnownCommand(t *testing.T) {
 				" mode change 100644 => 100755 notes/second.txt\n",
 		},
 		{
-			name: "git log --numstat",
+			// git/log-numstat reads it now, and git/log named on its own
+			// refuses it.
+			name: "git log --numstat named as git/log",
+			args: []string{"--parser", "git", "--variant", "log"},
 			input: "commit 1a348149ff7078757f307580d7846bb788b17484\n" +
 				"Author: Ada Lovelace <ada@example.com>\n" +
 				"Date:   Mon Sep 7 09:06:35 2026 +0900\n" +

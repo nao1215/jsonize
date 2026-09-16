@@ -1,0 +1,8 @@
+commit 421800bd4f143398a4a352ba495b69eb650bbddf
+Author: Ada Lovelace <ada@example.com>
+Date:   Tue Sep 1 10:00:00 2026 +0900
+
+    add notes
+
+2	0	notes.txt
+1	0	old-name.txt

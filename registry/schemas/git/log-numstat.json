@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/log-numstat.json",
+  "title": "git/log-numstat",
+  "description": "git log --numstat, each commit with the added and deleted lines per path",
+  "x-jsonize": {
+    "definition": "git/log-numstat",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "commit": {
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "string"
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "hash"
+        ]
+      },
+      "headers": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "message": {
+        "type": "object",
+        "properties": {
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "lines"
+        ]
+      },
+      "files": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "added": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "deleted": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "added",
+            "deleted",
+            "path"
+          ]
+        }
+      }
+    },
+    "required": [
+      "commit",
+      "headers",
+      "message",
+      "files"
+    ]
+  }
+}

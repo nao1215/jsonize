@@ -1,0 +1,5 @@
+description: >-
+  Five commits: a merge with no paths, a deletion, an addition, a rename
+  listed by its new name and a message with a body.
+source: 'git log --name-only captured with LC_ALL=C from a repository made for this fixture with git 2.53 (the script sets fixed author and committer names and dates; the people are not real)'
+args: [log, --name-only]

@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/log-name-status.json",
+  "title": "git/log-name-status",
+  "description": "git log --name-status, each commit with the status of each changed path",
+  "x-jsonize": {
+    "definition": "git/log-name-status",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "commit": {
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "string"
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "hash"
+        ]
+      },
+      "headers": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "message": {
+        "type": "object",
+        "properties": {
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "lines"
+        ]
+      },
+      "files": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "M",
+                "R",
+                "T",
+                "U",
+                "X"
+              ]
+            },
+            "score": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "path": {
+              "type": "string"
+            },
+            "new_path": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "status",
+            "score",
+            "path",
+            "new_path"
+          ]
+        }
+      }
+    },
+    "required": [
+      "commit",
+      "headers",
+      "message",
+      "files"
+    ]
+  }
+}

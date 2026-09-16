@@ -2117,3 +2117,38 @@ scenarios:
               - { path: "$.entries[2].kind", equals: renamed }
               - { path: "$.entries[2].original_path", equals: old.txt }
               - { path: "$.entries[5].kind", equals: ignored }
+
+  - name: git log --numstat and --name-only are read when git is named, and a patch is refused
+    steps:
+      - fixture:
+          file: numstat.txt
+          from: "${specdir}/../../registry/parsers/git/log-numstat/testdata/history.txt"
+      - run:
+          command: jz --parser git
+          stdin: {file: numstat.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].files[0].deleted", equals: 3 }
+              - { path: "$[3].files[0].added", equals: null }
+      - fixture:
+          file: name-only.txt
+          from: "${specdir}/../../registry/parsers/git/log-name-only/testdata/history.txt"
+      - run:
+          command: jz --parser git
+          stdin: {file: name-only.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[3].files[1].path", equals: new-name.txt }
+      - fixture:
+          file: patch.txt
+          from: "${specdir}/../../registry/testdata/decoys/git-log-patch.txt"
+      - run:
+          command: jz --parser git
+          stdin: {file: patch.txt}
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
