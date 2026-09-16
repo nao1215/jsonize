@@ -23,6 +23,12 @@ detect:
       # A process id is never 0, which is how a count such as "0 issues."
       # is told apart.
       - '\A(?:[1-9][0-9]* [^ \n]{1,15}(?:\n|\z))+\z'
+exec:
+  env:
+    # In the C locale procps writes each byte of a command line outside
+    # ASCII as "?", which loses the text. A UTF-8 locale that is still C
+    # prints it as it is and keeps the numbers and dates of the C locale.
+    LC_ALL: C.UTF-8
 parse:
   type: regex
   pattern: '^(?P<pid>[0-9]+) (?P<name>[^ ]{1,15})$'

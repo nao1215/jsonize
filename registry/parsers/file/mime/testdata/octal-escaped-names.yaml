@@ -1,0 +1,5 @@
+description: The MIME form escapes a name the same way in the C locale, and is refused the same way.
+source: file 5.46 on Ubuntu 26.04 with LC_ALL=C, over files made for the fixture
+os: linux
+args: [--mime-type, café.txt, z.zip]
+expect_error: 'does not have the shape'

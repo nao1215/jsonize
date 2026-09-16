@@ -1,0 +1,57 @@
+[
+  {
+    "key": {
+      "type": "pub",
+      "stub": false,
+      "card": false,
+      "algorithm": "ed25519",
+      "keyid": null,
+      "created": "2026-09-16",
+      "usage": "SC",
+      "status": "expires",
+      "status_date": "2027-01-01",
+      "fingerprint": "45C5F669F41CDCBD0686D61125D5E603A9DEED23"
+    },
+    "uids": [
+      {
+        "validity": "ultimate",
+        "uid": "Ada Lovelace <ada@example.com>"
+      }
+    ],
+    "subkeys": [
+      {
+        "type": "sub",
+        "stub": false,
+        "card": false,
+        "algorithm": "cv25519",
+        "keyid": null,
+        "created": "2026-09-16",
+        "usage": "E",
+        "status": "expires",
+        "status_date": "2027-01-01",
+        "fingerprint": null
+      }
+    ]
+  },
+  {
+    "key": {
+      "type": "pub",
+      "stub": false,
+      "card": false,
+      "algorithm": "rsa2048",
+      "keyid": null,
+      "created": "2026-09-16",
+      "usage": "SC",
+      "status": null,
+      "status_date": null,
+      "fingerprint": "4FC045C559F5F0D38CB7A5CAA80966DEE18C52D9"
+    },
+    "uids": [
+      {
+        "validity": "ultimate",
+        "uid": "Charles Babbage (engine) <charles@example.com>"
+      }
+    ],
+    "subkeys": []
+  }
+]

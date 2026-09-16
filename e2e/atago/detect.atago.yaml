@@ -2274,3 +2274,20 @@ scenarios:
             json:
               - { path: "$[0].package", equals: libreadline8t64 }
               - { path: "$[0].local", equals: false }
+
+  - name: gpg -k is read when gpg is named, with each key's user IDs and subkeys
+    steps:
+      - fixture:
+          file: keys.txt
+          from: "${specdir}/../../registry/parsers/gpg/list-keys/testdata/subkey-fingerprints.txt"
+      - run:
+          command: jz --parser gpg
+          stdin: {file: keys.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].key.fingerprint", equals: 45C5F669F41CDCBD0686D61125D5E603A9DEED23 }
+              - { path: "$[0].uids[1].validity", equals: revoked }
+              - { path: "$[0].subkeys[0].usage", equals: E }
+              - { path: "$[1].subkeys", length: 0 }

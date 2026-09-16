@@ -1,0 +1,5 @@
+description: In the C locale file writes the bytes of a name outside ASCII in octal and a backslash as it is, so the escaped names could be other names and the text is refused.
+source: file 5.46 on Ubuntu 26.04 with LC_ALL=C, over files made for the fixture
+os: linux
+args: [café.txt, 日本語.md, back\slash, z.zip]
+expect_error: 'does not have the shape'

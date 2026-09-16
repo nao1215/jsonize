@@ -1,0 +1,18 @@
+[
+  {
+    "file": "café.txt",
+    "type": "ASCII text"
+  },
+  {
+    "file": "日本語.md",
+    "type": "ASCII text"
+  },
+  {
+    "file": "back\\slash",
+    "type": "ASCII text"
+  },
+  {
+    "file": "z.zip",
+    "type": "Zip archive data, made by v3.0 UNIX, extract using at least v1.0, last modified Sep 17 2026 01:44:54, uncompressed size 2, method=store"
+  }
+]

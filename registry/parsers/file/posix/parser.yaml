@@ -62,9 +62,19 @@ detect:
       # message rarer than these two is refused, which is the same answer
       # this definition gives for a kind it does not name.
       - '(?i)\A(?:\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)(?:[ \t,;:.()][^\n]*)?\n)*\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)(?:[ \t,;:.()][^\n]*)?\z'
+exec:
+  env:
+    # In the C locale file writes each byte of a name outside ASCII as a
+    # backslash and three octal digits, and a backslash in a name as it
+    # is, so "caf\303\251" could be either name. A UTF-8 locale prints
+    # the letters as they are and escapes only what cannot be printed.
+    LC_ALL: C.UTF-8
 parse:
   type: regex
   pattern: '^(?P<file>[^:]+):\s+(?P<type>.+?)\s*$'
 fields:
-  file: {required: true}
+  # A backslash and three octal digits is how file escapes a byte it
+  # cannot print, and nothing tells it from a name that holds those four
+  # characters, so such a name is refused rather than kept as printed.
+  file: {required: true, regex: '(?P<file>(?:[^\\]|\\+(?:[0-7]{1,2}\\+)*(?:[^0-7\\]|[0-7][^0-7\\]|[0-7]{2}[^0-7\\]|[0-7]{0,2}$))*)'}
   type: {required: true}

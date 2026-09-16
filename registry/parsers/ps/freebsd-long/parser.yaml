@@ -18,6 +18,12 @@ detect:
   signature:
     all:
       - '\A\s*UID[ \t]+PID[ \t]+PPID[ \t]+C[ \t]+PRI[ \t]+NI[ \t]+VSZ[ \t]+RSS[ \t]+MWCHAN[ \t]+STAT[ \t]+TT[ \t]+TIME[ \t]+COMMAND\s*$'
+exec:
+  env:
+    # procps writes a command line outside ASCII as "?" in the C locale,
+    # and this is given the same UTF-8 locale that is still C, so that a
+    # name reads the same whichever ps printed it.
+    LC_ALL: C.UTF-8
 parse:
   type: table
   header:

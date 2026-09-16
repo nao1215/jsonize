@@ -22,6 +22,12 @@ detect:
   signature:
     all:
       - '\A\s*PPID\s+PID\s+PGID\s+SID\s+TTY\s+TPGID\s+STAT\s+UID\s+TIME\s+COMMAND\s*$'
+exec:
+  env:
+    # In the C locale procps writes each byte of a command line outside
+    # ASCII as "?", which loses the text. A UTF-8 locale that is still C
+    # prints it as it is and keeps the numbers and dates of the C locale.
+    LC_ALL: C.UTF-8
 input:
   ignore:
     - '\A\s*PPID\s+PID\s+PGID\s'

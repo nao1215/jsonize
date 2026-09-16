@@ -21,6 +21,12 @@ detect:
       # terminal, a state, and the time in minutes, seconds and
       # hundredths.
       - '^[ \t]*[0-9]+[ \t]+\S+[ \t]+\S+[ \t]+[0-9]+:[0-9]{2}\.[0-9]{2}[ \t]+\S'
+exec:
+  env:
+    # procps writes a command line outside ASCII as "?" in the C locale,
+    # and this is given the same UTF-8 locale that is still C, so that a
+    # name reads the same whichever ps printed it.
+    LC_ALL: C.UTF-8
 parse:
   type: table
   header:
