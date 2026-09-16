@@ -1,0 +1,100 @@
+{
+  "files": [
+    {
+      "binary": false,
+      "path": "CHANGELOG.md",
+      "changes": 8,
+      "graph": null
+    },
+    {
+      "binary": false,
+      "path": "e2e/atago/exec_linux.atago.yaml",
+      "changes": 28,
+      "graph": null
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/readelf/symbols-wide/parser.yaml",
+      "changes": 58,
+      "graph": null
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/readelf/symbols-wide/testdata/go-names.json",
+      "changes": 75,
+      "graph": "+"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/readelf/symbols-wide/testdata/go-names.txt",
+      "changes": 8,
+      "graph": null
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/readelf/symbols-wide/testdata/go-names.yaml",
+      "changes": 4,
+      "graph": null
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/readelf/symbols-wide/testdata/shared-library.json",
+      "changes": 491,
+      "graph": "++++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/readelf/symbols-wide/testdata/shared-library.txt",
+      "changes": 40,
+      "graph": null
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/readelf/symbols-wide/testdata/shared-library.yaml",
+      "changes": 4,
+      "graph": null
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/readelf/symbols-wide/testdata/unstripped.json",
+      "changes": 603,
+      "graph": "++++++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/readelf/symbols-wide/testdata/unstripped.txt",
+      "changes": 51,
+      "graph": null
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/readelf/symbols-wide/testdata/unstripped.yaml",
+      "changes": 4,
+      "graph": null
+    },
+    {
+      "binary": false,
+      "path": "registry/schemas/readelf/symbols-wide.json",
+      "changes": 101,
+      "graph": "+"
+    },
+    {
+      "binary": false,
+      "path": "website/content/_index.md",
+      "changes": 2,
+      "graph": null
+    },
+    {
+      "binary": false,
+      "path": "website/content/parsers.md",
+      "changes": 2,
+      "graph": null
+    }
+  ],
+  "summary": {
+    "files_changed": 15,
+    "insertions": 1477,
+    "deletions": 2,
+    "modifications": null
+  }
+}

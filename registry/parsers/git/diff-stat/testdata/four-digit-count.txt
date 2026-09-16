@@ -1,0 +1,3 @@
+ /dev/null => b/big.txt | 1500 ++++++++++++++++++++++++++++++++++++++++++++++++
+ {a => b}/small.txt     |    3 +-
+ 2 files changed, 1502 insertions(+), 1 deletion(-)

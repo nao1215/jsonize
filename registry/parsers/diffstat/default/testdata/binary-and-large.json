@@ -1,0 +1,34 @@
+{
+  "files": [
+    {
+      "binary": false,
+      "path": "big.txt",
+      "changes": 1500,
+      "graph": "+++++++"
+    },
+    {
+      "binary": true,
+      "path": "blob.bin",
+      "changes": null,
+      "graph": null
+    },
+    {
+      "binary": false,
+      "path": "huge.txt",
+      "changes": 12000,
+      "graph": "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    },
+    {
+      "binary": false,
+      "path": "small.txt",
+      "changes": 3,
+      "graph": null
+    }
+  ],
+  "summary": {
+    "files_changed": 4,
+    "insertions": 13502,
+    "deletions": 1,
+    "modifications": null
+  }
+}

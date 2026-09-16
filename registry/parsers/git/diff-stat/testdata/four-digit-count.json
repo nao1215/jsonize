@@ -1,0 +1,23 @@
+{
+  "files": [
+    {
+      "path": "/dev/null => b/big.txt",
+      "changes": 1500,
+      "graph": "++++++++++++++++++++++++++++++++++++++++++++++++",
+      "old_bytes": null,
+      "new_bytes": null
+    },
+    {
+      "path": "{a => b}/small.txt",
+      "changes": 3,
+      "graph": "+-",
+      "old_bytes": null,
+      "new_bytes": null
+    }
+  ],
+  "summary": {
+    "files_changed": 2,
+    "insertions": 1502,
+    "deletions": 1
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "files": [
+    {
+      "binary": false,
+      "path": "CHANGELOG.md",
+      "changes": 12,
+      "graph": "+++++++-----"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/file/mime/parser.yaml",
+      "changes": 12,
+      "graph": "++++++------"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/file/posix/parser.yaml",
+      "changes": 14,
+      "graph": "+++++++-------"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/pgrep/list-name/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/bsd-short/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/bsd/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/busybox/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/freebsd-long/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/freebsd/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/full-format/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/jobs/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/long-y/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/long/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/posix/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/threads/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/ps/unix/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/tar/gnu/parser.yaml",
+      "changes": 6,
+      "graph": "+++---"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/top/busybox/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    },
+    {
+      "binary": false,
+      "path": "registry/parsers/top/linux/parser.yaml",
+      "changes": 6,
+      "graph": "++++++"
+    }
+  ],
+  "summary": {
+    "files_changed": 19,
+    "insertions": 113,
+    "deletions": 21,
+    "modifications": null
+  }
+}

@@ -39,7 +39,18 @@ detect:
       # closing line is no use as evidence, because a diff of more than
       # twenty files pushes it past the end of the window.
       - '\A .+ \|[ ]+(?:\d+|Bin)'
-      - '(?m)^ .+ \|[ ]+(?:\d+(?: [+-]+)?|Bin(?: \d+ -> \d+ bytes)?)$'
+      # Every line in the window is a file line, and the closing line
+      # follows the last of them.
+      - '\A(?: [^\n]*? \|[ ]+(?:\d+(?: [+-]+)?|Bin(?: \d+ -> \d+ bytes)?)\n)* [^\n]*? \|[ ]+(?:\d+(?: [+-]+)?|Bin(?: \d+ -> \d+ bytes)?)(?:\n \d+ files? changed(?:, \d+ insertions?\(\+\))?(?:, \d+ deletions?\(-\))?)?\z'
+    any:
+      # git pads every count to the width of the largest one plus a
+      # space, so some line has a count field other than five characters
+      # wide, or holds the four-digit count that made it five. diffstat
+      # always prints a field five characters wide, and a text whose
+      # counts are all shorter than four digits in such a field is its
+      # output, not git's (diffstat/default).
+      - '(?m)^ [^\n]*? \|(?: \d{1,4}| {2}\d{1,2}| {3}\d| {5,}\d| {4,}\d\d| {3,}\d{3}| {2,}\d{4}| \d{5,}| Bin)(?: |$)'
+    window: 200
 parse:
   type: composite
   parts:

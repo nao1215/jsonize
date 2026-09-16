@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/diffstat/default.json",
+  "title": "diffstat/default",
+  "description": "diffstat histogram of the files a patch changes",
+  "x-jsonize": {
+    "definition": "diffstat/default",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "binary": {
+            "type": "boolean"
+          },
+          "path": {
+            "type": "string"
+          },
+          "changes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "graph": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "binary",
+          "path",
+          "changes",
+          "graph"
+        ]
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "files_changed": {
+          "type": "integer"
+        },
+        "insertions": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "deletions": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "modifications": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "files_changed",
+        "insertions",
+        "deletions",
+        "modifications"
+      ]
+    }
+  },
+  "required": [
+    "files",
+    "summary"
+  ]
+}

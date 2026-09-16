@@ -1,0 +1,2 @@
+description: a count of four digits pads every count to five characters, the width diffstat prints
+source: captured with LC_ALL=C git diff --no-index --stat (git 2.53.0) on Ubuntu for two scratch directories of generated files
