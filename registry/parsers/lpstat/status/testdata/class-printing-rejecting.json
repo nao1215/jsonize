@@ -1,0 +1,120 @@
+[
+  {
+    "kind": "scheduler",
+    "running": true
+  },
+  {
+    "kind": "default_destination",
+    "printer": "office-laser"
+  },
+  {
+    "kind": "class",
+    "printer": "labels",
+    "members": [
+      "label-writer",
+      "office-laser"
+    ]
+  },
+  {
+    "kind": "device",
+    "printer": "lab-inkjet",
+    "uri": "socket://192.0.2.1:9100"
+  },
+  {
+    "kind": "device",
+    "printer": "label-writer",
+    "uri": "ipp://printer2.internal.example/ipp/print"
+  },
+  {
+    "kind": "device",
+    "printer": "labels",
+    "uri": "///dev/null"
+  },
+  {
+    "kind": "device",
+    "printer": "office-laser",
+    "uri": "///dev/null"
+  },
+  {
+    "kind": "accepting",
+    "printer": "lab-inkjet",
+    "accepting": true,
+    "since": "Thu Sep 17 07:19:18 2026",
+    "reason": null
+  },
+  {
+    "kind": "accepting",
+    "printer": "label-writer",
+    "accepting": true,
+    "since": "Thu Sep 17 07:19:18 2026",
+    "reason": null
+  },
+  {
+    "kind": "accepting",
+    "printer": "labels",
+    "accepting": false,
+    "since": "Thu Sep 17 07:29:18 2026",
+    "reason": "reason unknown"
+  },
+  {
+    "kind": "accepting",
+    "printer": "office-laser",
+    "accepting": false,
+    "since": "Thu Sep 17 07:19:18 2026",
+    "reason": "Moved to room 3"
+  },
+  {
+    "kind": "printer",
+    "state": "printing",
+    "printer": "lab-inkjet",
+    "job": "lab-inkjet-2",
+    "enabled": true,
+    "since": "Thu Sep 17 07:19:18 2026",
+    "reason": "The printer is unreachable at this time."
+  },
+  {
+    "kind": "printer",
+    "state": "idle",
+    "printer": "label-writer",
+    "enabled": true,
+    "since": "Thu Sep 17 07:19:18 2026",
+    "reason": null
+  },
+  {
+    "kind": "printer",
+    "state": "stopped",
+    "printer": "labels",
+    "enabled": false,
+    "since": "Thu Sep 17 07:29:18 2026",
+    "reason": "reason unknown"
+  },
+  {
+    "kind": "printer",
+    "state": "stopped",
+    "printer": "office-laser",
+    "enabled": false,
+    "since": "Thu Sep 17 07:19:18 2026",
+    "reason": "Moved to room 3"
+  },
+  {
+    "kind": "job",
+    "job": "label-writer-1",
+    "user": "bob",
+    "size": 1024,
+    "since": "Thu Sep 17 07:19:18 2026"
+  },
+  {
+    "kind": "job",
+    "job": "lab-inkjet-2",
+    "user": "bob",
+    "size": 1024,
+    "since": "Thu Sep 17 07:19:18 2026"
+  },
+  {
+    "kind": "job",
+    "job": "lab-inkjet-3",
+    "user": "bob",
+    "size": 1024,
+    "since": "Thu Sep 17 07:19:18 2026"
+  }
+]

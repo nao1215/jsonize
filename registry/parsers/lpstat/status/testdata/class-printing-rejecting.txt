@@ -1,0 +1,25 @@
+scheduler is running
+system default destination: office-laser
+members of class labels:
+	label-writer
+	office-laser
+device for lab-inkjet: socket://192.0.2.1:9100
+device for label-writer: ipp://printer2.internal.example/ipp/print
+device for labels: ///dev/null
+device for office-laser: ///dev/null
+lab-inkjet accepting requests since Thu Sep 17 07:19:18 2026
+label-writer accepting requests since Thu Sep 17 07:19:18 2026
+labels not accepting requests since Thu Sep 17 07:29:18 2026 -
+	reason unknown
+office-laser not accepting requests since Thu Sep 17 07:19:18 2026 -
+	Moved to room 3
+printer lab-inkjet now printing lab-inkjet-2.  enabled since Thu Sep 17 07:19:18 2026
+	The printer is unreachable at this time.
+printer label-writer is idle.  enabled since Thu Sep 17 07:19:18 2026
+printer labels disabled since Thu Sep 17 07:29:18 2026 -
+	reason unknown
+printer office-laser disabled since Thu Sep 17 07:19:18 2026 -
+	Moved to room 3
+label-writer-1          bob               1024   Thu Sep 17 07:19:18 2026
+lab-inkjet-2            bob               1024   Thu Sep 17 07:19:18 2026
+lab-inkjet-3            bob               1024   Thu Sep 17 07:19:18 2026

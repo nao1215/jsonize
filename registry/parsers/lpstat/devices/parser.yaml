@@ -1,0 +1,22 @@
+# `lpstat -v` prints the device URI of every printer and class, one per
+# line. The URI is kept as CUPS printed it, which for a file: device is
+# the path after the scheme ("///dev/null").
+format: 1
+command: lpstat
+variant: devices
+description: lpstat -v device URI of each printer
+metadata:
+  tags: [linux, darwin, printing, cups]
+  compatible: [CUPS]
+  references:
+    - https://www.cups.org/doc/man-lpstat.html
+detect:
+  signature:
+    all:
+      - '\Adevice for [^:\s]+: \S'
+parse:
+  type: regex
+  pattern: '^device for (?P<printer>[^:\s]+): (?P<uri>\S.*?)[ \t]*$'
+fields:
+  printer: {required: true}
+  uri: {required: true}

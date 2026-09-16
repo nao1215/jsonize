@@ -1,0 +1,1 @@
+source: captured on Ubuntu 26.04 (CUPS 2.4.16) with LC_ALL=C lpstat -h HOST -v from a private cupsd started as an unprivileged user on 127.0.0.1 with its own configuration directory; the printer names and device URIs were chosen for the capture
