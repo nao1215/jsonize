@@ -1,0 +1,7 @@
+Linux 3.10.0-1160.el7.x86_64 (host01) 	01/10/24 	_x86_64_	(8 CPU)
+
+10:00:01      UID       PID    %usr %system  %guest    %CPU   CPU  Command
+10:00:02        0         1    0.00    1.00    0.00    1.00     3  systemd
+
+Average:      UID       PID    %usr %system  %guest    %CPU   CPU  Command
+Average:        0         1    0.00    1.00    0.00    1.00     -  systemd

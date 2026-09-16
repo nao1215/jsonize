@@ -1,0 +1,5 @@
+Linux 5.15.0-91-generic (host01) 	01/10/24 	_x86_64_	(8 CPU)
+
+10:00:01     pgpgin/s pgpgout/s   fault/s  majflt/s  pgfree/s pgscank/s pgscand/s pgsteal/s    %vmeff
+10:00:02         0.00     12.00    145.00      0.00    310.00      0.00      0.00      0.00      0.00
+Average:         0.00     12.00    145.00      0.00    310.00      0.00      0.00      0.00      0.00
