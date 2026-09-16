@@ -159,10 +159,11 @@ than choosing.
 | `ifconfig`, `ifconfig -a`, `ifconfig IFACE` (net-tools) | read | `ifconfig/net-tools` |
 | `ifconfig` (BusyBox) | read | `ifconfig/busybox` |
 | `ifconfig`, `-a`, `-v`, `-L` (macOS, FreeBSD) | read | `ifconfig/bsd`; lines other than the flags, addresses and bit masks are kept in order under `properties` |
-| `ifconfig -s` (net-tools) | refused | a table of counters without the banner `netstat -i` prints |
+| `ifconfig -s`, `ifconfig -s -a` (net-tools) | read | `ifconfig/net-tools-short`, the table `netstat -i` prints without its banner |
 | `ifconfig -l` | refused | a line of names |
 | `arp -a`, `arp -an` | read | `arp/alternate` (Linux), `arp/freebsd`, `arp/darwin`, `arp/windows` |
-| `arp`, `arp -n` (net-tools) | refused | the tabular listing has no definition |
+| `arp`, `arp -n`, `arp -e`, `arp -i IFACE` (net-tools) | read | `arp/net-tools` |
+| `arp -v` (net-tools) | refused | the closing count line is not read |
 | `tracepath` | read | `tracepath/linux` |
 | `traceroute` | refused | no definition |
 
@@ -171,6 +172,7 @@ than choosing.
 | invocation | | definition |
 |---|---|---|
 | `rpm -qi PACKAGE`, `rpm -qi A B`, `rpm -qia` | read | `rpm/info`, one object per package; a label rpm did not print is `null` |
+| `rpm -qpi FILE.rpm` | read | `rpm/info`; the install date is the text `(not installed)` |
 | `rpm -qi` naming a package that is not installed | refused | the `package NAME is not installed` line is not part of any block |
 | `git log`, `git log --format=fuller` | read | `git/log` |
 | `git log --stat`, `git log --shortstat`, `git show --stat` | read | `git/log-stat`, with `files` and `summary` under each commit |

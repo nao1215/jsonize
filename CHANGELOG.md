@@ -8,6 +8,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- net-tools `arp`, `arp -n` and `arp -i IFACE` (`arp/net-tools`), the
+  cache as a table, and `ifconfig -s` (`ifconfig/net-tools-short`).
+  `arp -a` reads an entry published for a proxy, which net-tools prints
+  with `<from_interface>` for its hardware address and was refused. The
+  registry holds 247 commands through 702 definitions.
 - `gpg -k` and `gpg -K`, each key with its algorithm, dates,
   capabilities and fingerprint, its user IDs with their validity, and its
   subkeys. The registry holds 247 commands through 700 definitions.
