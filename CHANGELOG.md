@@ -8,6 +8,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `gpg -k` and `gpg -K`, each key with its algorithm, dates,
+  capabilities and fingerprint, its user IDs with their validity, and its
+  subkeys. The registry holds 247 commands through 700 definitions.
 - `dpkg-deb -I` (a package's size, the members of its control archive
   and its control fields) and `dpkg-deb -c`, which prints the listing
   tar/gnu reads, and `dpkg-divert --list`. The registry holds 247

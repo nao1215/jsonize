@@ -1,0 +1,4 @@
+description: The fingerprint of the subkey under it, and a revoked user ID shown with show-unusable-uids.
+source: "gpg -k --with-subkey-fingerprints --list-options show-unusable-uids, GnuPG 2.4.8 on Ubuntu 26.04 with LC_ALL=C, in a GNUPGHOME made for the fixture with keys generated for it; the GNUPGHOME path replaced with /home/user/.gnupg and the rule shortened to match"
+os: linux
+args: [-k, --with-subkey-fingerprints, --list-options, show-unusable-uids]

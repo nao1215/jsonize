@@ -1,0 +1,4 @@
+description: Two keys, one with an expiry, a second user ID revoked and hidden, and an encryption subkey.
+source: "gpg -k, GnuPG 2.4.8 on Ubuntu 26.04 with LC_ALL=C, in a GNUPGHOME made for the fixture with keys generated for it; the GNUPGHOME path replaced with /home/user/.gnupg and the rule shortened to match"
+os: linux
+args: [-k]

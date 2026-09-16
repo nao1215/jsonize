@@ -1,0 +1,69 @@
+# `gpg --list-keys` (-k) and `gpg --list-secret-keys` (-K) print the
+# keyring file and a rule under it, then a block per key: the primary key
+# ("pub", or "sec" for a secret key, followed by "#" when only a stub of
+# the secret is present and ">" when it is on a card) with its algorithm,
+# the key ID after a slash with --keyid-format, the creation date, the
+# capabilities in brackets and the expiry or revocation, then the
+# fingerprint indented on a line of its own, a "uid" line per user ID
+# with its validity in brackets, and a "sub" (or "ssb") line per subkey,
+# followed by the subkey's fingerprint with --with-subkey-fingerprints.
+# The fingerprint lines are joined onto the key they belong to.
+#
+# `--with-colons` prints the machine-readable form, which gpg/colons
+# reads.
+format: 1
+command: gpg
+variant: list-keys
+aliases:
+  - name: gpg2
+description: gpg -k and -K, each key with its fingerprint, user IDs and subkeys
+metadata:
+  tags: [security, gnupg, keys]
+  compatible: [GnuPG 2]
+  references:
+    - https://www.gnupg.org/documentation/manuals/gnupg/Operational-GPG-Commands.html
+detect:
+  args:
+    any: ["-k", "-K", "--list-keys", "--list-public-keys", "--list-secret-keys"]
+    none: ["--with-colons", "--list-sigs", "--check-sigs", "--list-signatures", "--check-signatures"]
+  signature:
+    all:
+      - '\A(?:[A-Za-z]:)?[/\\][^\n]*\n-+\n(?:pub|sec)[#>]? +[a-z0-9]+(?:/(?:0x)?[0-9A-F]+)? [0-9]{4}-[0-9]{2}-[0-9]{2} \['
+exec:
+  env:
+    # In the C locale gpg converts a user ID to ASCII and prints a letter
+    # outside it as a byte of Latin-1, which is not text jz can read. A
+    # UTF-8 locale that is still C prints the names as they are stored
+    # and the words in English.
+    LC_ALL: C.UTF-8
+input:
+  fold: '^ +[0-9A-F]{40,64}$'
+  ignore:
+    - '\A(?:[A-Za-z]:)?[/\\].*$'
+    - '^-+$'
+parse:
+  type: records
+  start: '^(?:pub|sec)[#>]? '
+  parts:
+    - name: key
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<type>pub|sec)(?P<stub>#?)(?P<card>>?) +(?P<algorithm>[a-z0-9]+)(?:/(?P<keyid>(?:0x)?[0-9A-F]+))? (?P<created>[0-9]{4}-[0-9]{2}-[0-9]{2}) \[(?P<usage>[SCEAR?]*)\](?: \[(?P<status>expires|expired|revoked): (?P<status_date>[0-9]{4}-[0-9]{2}-[0-9]{2})\])? (?P<fingerprint>[0-9A-F]{40,64})\z'
+      fields:
+        stub: {type: bool, true_values: ["#"], false_values: [""]}
+        card: {type: bool, true_values: [">"], false_values: [""]}
+    - name: uids
+      ignore: ['^(?:pub|sec|sub|ssb)[#>]? ']
+      parse:
+        type: regex
+        pattern: '^uid +\[ *(?P<validity>[a-z-]+)\] (?P<uid>.+)$'
+    - name: subkeys
+      ignore: ['^(?:pub|sec)[#>]? ', '^uid ']
+      parse:
+        type: regex
+        pattern: '^(?P<type>sub|ssb)(?P<stub>#?)(?P<card>>?) +(?P<algorithm>[a-z0-9]+)(?:/(?P<keyid>(?:0x)?[0-9A-F]+))? (?P<created>[0-9]{4}-[0-9]{2}-[0-9]{2}) \[(?P<usage>[SCEAR?]*)\](?: \[(?P<status>expires|expired|revoked): (?P<status_date>[0-9]{4}-[0-9]{2}-[0-9]{2})\])?(?: (?P<fingerprint>[0-9A-F]{40,64}))?$'
+      fields:
+        stub: {type: bool, true_values: ["#"], false_values: [""]}
+        card: {type: bool, true_values: [">"], false_values: [""]}

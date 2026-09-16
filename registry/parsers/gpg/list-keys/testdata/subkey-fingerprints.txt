@@ -1,0 +1,13 @@
+/home/user/.gnupg/pubring.kbx
+-----------------------------
+pub   ed25519 2026-09-16 [SC] [expires: 2027-01-01]
+      45C5F669F41CDCBD0686D61125D5E603A9DEED23
+uid           [ultimate] Ada Lovelace <ada@example.com>
+uid           [ revoked] Ada King <ada.king@example.org>
+sub   cv25519 2026-09-16 [E] [expires: 2027-01-01]
+      B00124CD03FF2215DC957F565D69EA2081611707
+
+pub   rsa2048 2026-09-16 [SC]
+      4FC045C559F5F0D38CB7A5CAA80966DEE18C52D9
+uid           [ultimate] Charles Babbage (engine) <charles@example.com>
+

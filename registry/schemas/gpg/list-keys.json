@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gpg/list-keys.json",
+  "title": "gpg/list-keys",
+  "description": "gpg -k and -K, each key with its fingerprint, user IDs and subkeys",
+  "x-jsonize": {
+    "definition": "gpg/list-keys",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "key": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "pub",
+              "sec"
+            ]
+          },
+          "stub": {
+            "type": "boolean"
+          },
+          "card": {
+            "type": "boolean"
+          },
+          "algorithm": {
+            "type": "string"
+          },
+          "keyid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "created": {
+            "type": "string"
+          },
+          "usage": {
+            "type": "string"
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status_date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fingerprint": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "stub",
+          "card",
+          "algorithm",
+          "keyid",
+          "created",
+          "usage",
+          "status",
+          "status_date",
+          "fingerprint"
+        ]
+      },
+      "uids": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "validity": {
+              "type": "string"
+            },
+            "uid": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "validity",
+            "uid"
+          ]
+        }
+      },
+      "subkeys": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "ssb",
+                "sub"
+              ]
+            },
+            "stub": {
+              "type": "boolean"
+            },
+            "card": {
+              "type": "boolean"
+            },
+            "algorithm": {
+              "type": "string"
+            },
+            "keyid": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "created": {
+              "type": "string"
+            },
+            "usage": {
+              "type": "string"
+            },
+            "status": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "status_date": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "fingerprint": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "stub",
+            "card",
+            "algorithm",
+            "keyid",
+            "created",
+            "usage",
+            "status",
+            "status_date",
+            "fingerprint"
+          ]
+        }
+      }
+    },
+    "required": [
+      "key",
+      "uids",
+      "subkeys"
+    ]
+  }
+}
