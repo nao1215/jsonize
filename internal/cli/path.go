@@ -40,7 +40,7 @@ type lookuper interface {
 // on the command line, where it is a claim they made rather than one
 // their directory layout made for them.
 //
-// A name with a dot in it is looked up with a dash in its place, and a
+// A name with a dot or an underscore in it is looked up with a dash in its place, and a
 // file one directory down with that directory joined to its name, since
 // that is how such variants are named (etc/resolv-conf, proc/net-dev).
 // Neither is a guess past an extension: a capture saved as df.txt is
@@ -58,13 +58,14 @@ func parserFromPath(reg lookuper, path string) (parser, variant string, ok bool)
 		return "", "", false
 	}
 	// A variant name is written with dashes where the file name has dots
-	// (etc/resolv-conf for /etc/resolv.conf), and a file one directory
+	// or underscores (etc/resolv-conf for /etc/resolv.conf), and a file one directory
 	// down is named with that directory in front (proc/net-dev for
 	// /proc/net/dev). Each is one exact name to look up, so a capture
 	// saved as df.txt names nothing: no variant is called df-txt.
-	names := [][2]string{{dir, strings.ReplaceAll(base, ".", "-")}}
+	dashed := strings.NewReplacer(".", "-", "_", "-")
+	names := [][2]string{{dir, dashed.Replace(base)}}
 	if grand := filepath.Base(filepath.Dir(parent)); grand != "" && grand != "." && grand != string(filepath.Separator) {
-		names = append(names, [2]string{grand, dir + "-" + strings.ReplaceAll(base, ".", "-")})
+		names = append(names, [2]string{grand, dashed.Replace(dir + "-" + base)})
 	}
 	for _, n := range names {
 		e, found := reg.Lookup(n[0], n[1])
