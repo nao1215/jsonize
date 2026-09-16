@@ -60,6 +60,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `sar -B`, `pidstat`, `pidstat -U` and `pidstat -r` are identified by
+  their whole header rather than its first columns, so the forms an
+  older sysstat prints (`%vmeff` in place of `pgprom/s` and `pgdem/s`,
+  no `%wait`) are refused as another format (exit 4) instead of chosen
+  and then failing on their first row (exit 3).
 - `sar -u ALL` piped to jz was read as `mpstat` with exit 0: the two
   print the same ten CPU columns, sar with `%steal` before `%irq`, and
   mpstat/linux looked only as far as `%nice`, so steal time came out as
