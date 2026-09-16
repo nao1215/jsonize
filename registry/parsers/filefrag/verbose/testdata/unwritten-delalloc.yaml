@@ -1,0 +1,4 @@
+description: A preallocated file with an unwritten extent, and a file not yet written out whose extent has no physical location.
+source: filefrag -v prealloc.bin delay.bin on ext4, prealloc.bin made with fallocate -l 1M and delay.bin written with head just before, e2fsprogs 1.47.2 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [-v, prealloc.bin, delay.bin]

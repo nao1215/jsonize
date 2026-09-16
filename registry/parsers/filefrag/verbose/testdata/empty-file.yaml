@@ -1,0 +1,4 @@
+description: An empty file has no extent table and a count of zero.
+source: filefrag -v empty.bin on ext4, e2fsprogs 1.47.2 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [-v, empty.bin]

@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/filefrag/verbose.json",
+  "title": "filefrag/verbose",
+  "description": "filefrag -v, the extents of each file",
+  "x-jsonize": {
+    "definition": "filefrag/verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "blocks": {
+            "type": "integer"
+          },
+          "block_size": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "size",
+          "blocks",
+          "block_size"
+        ]
+      },
+      "extents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "ext": {
+              "type": "integer"
+            },
+            "logical_start": {
+              "type": "integer"
+            },
+            "logical_end": {
+              "type": "integer"
+            },
+            "physical_start": {
+              "type": "integer"
+            },
+            "physical_end": {
+              "type": "integer"
+            },
+            "length": {
+              "type": "integer"
+            },
+            "expected": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "flags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "ext",
+            "logical_start",
+            "logical_end",
+            "physical_start",
+            "physical_end",
+            "length",
+            "expected",
+            "flags"
+          ]
+        }
+      },
+      "summary": {
+        "type": "object",
+        "properties": {
+          "extent_count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "extent_count"
+        ]
+      }
+    },
+    "required": [
+      "file",
+      "extents",
+      "summary"
+    ]
+  }
+}

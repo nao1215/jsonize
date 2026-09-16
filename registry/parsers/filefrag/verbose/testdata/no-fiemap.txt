@@ -1,0 +1,7 @@
+Filesystem type is: 1021994
+File size of /tmp/small.bin is 3000 (1 block of 4096 bytes)
+Filesystem type is: ef53
+File size of data.bin is 5000000 (1221 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..    1220:  300240896.. 300242116:   1221:             last,eof
+data.bin: 1 extent found

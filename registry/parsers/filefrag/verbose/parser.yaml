@@ -1,0 +1,73 @@
+# `filefrag -v` prints, for each file, its size in bytes and blocks, a
+# table of the extents the FIEMAP ioctl reports and a count of them. The
+# logical and physical offsets and the length are in blocks of the size
+# named on the first line. "expected" is the physical block the extent
+# would have started at had it followed the one before, and is printed
+# only where it did not. The flags are the FIEMAP flags, comma separated.
+#
+# A file on a file system without FIEMAP (tmpfs) gets its size line and
+# nothing else when filefrag is not run as root, so the extents and the
+# count may be missing from a record.
+#
+# "Filesystem type is: ef53" is printed before the first file and again
+# before a file on a file system of another type, so it describes a run
+# of files rather than any one of them. It is the statfs magic number in
+# hexadecimal, and is left out.
+format: 1
+command: filefrag
+variant: verbose
+description: filefrag -v, the extents of each file
+metadata:
+  tags: [linux, filesystem, e2fsprogs]
+  compatible: [e2fsprogs]
+  references:
+    - https://man7.org/linux/man-pages/man8/filefrag.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A(?:Filesystem type is: [0-9a-f]+\n)?File size of [^\n]+ is \d+ \(\d+ blocks? of \d+ bytes\)$'
+input:
+  ignore: ['^Filesystem type is: [0-9a-f]+$']
+parse:
+  type: records
+  start: '^File size of .+ is \d+ \(\d+ blocks? of \d+ bytes\)$'
+  parts:
+    - name: file
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '^File size of (?P<name>.+) is (?P<size>\d+) \((?P<blocks>\d+) blocks? of (?P<block_size>\d+) bytes\)$'
+      fields:
+        name: {required: true}
+        size: {type: int}
+        blocks: {type: int}
+        block_size: {type: int}
+    - name: extents
+      select: {after: '^ ext:[ \t]+logical_offset:[ \t]+physical_offset:[ \t]+length:[ \t]+expected:[ \t]+flags:$'}
+      ignore: ['^.+: \d+ extents? found$']
+      parse:
+        type: regex
+        pattern: '^[ \t]*(?P<ext>\d+):[ \t]*(?P<logical_start>\d+)\.\.[ \t]*(?P<logical_end>\d+):[ \t]*(?P<physical_start>\d+)\.\.[ \t]*(?P<physical_end>\d+):[ \t]*(?P<length>\d+):(?:[ \t]*(?P<expected>\d+):)?[ \t]*(?P<flags>\S*)$'
+      fields:
+        ext: {type: int}
+        logical_start: {type: int}
+        logical_end: {type: int}
+        physical_start: {type: int}
+        physical_end: {type: int}
+        length: {type: int}
+        expected: {type: int}
+        flags: {type: array, split: ","}
+    # The count line is missing where the extent table is.
+    - name: summary
+      select: {skip: 1}
+      ignore:
+        - '^ ext:[ \t]+logical_offset:'
+        - '^[ \t]*\d+:[ \t]*\d+\.\.'
+      parse:
+        type: regex
+        each: input
+        pattern: '^(?:.+: (?P<extent_count>\d+) extents? found)?$'
+      fields:
+        extent_count: {type: int}

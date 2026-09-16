@@ -1,0 +1,9 @@
+Filesystem type is: ef53
+File size of prealloc.bin is 1048576 (256 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..     255:  315040256.. 315040511:    256:             last,unwritten,eof
+prealloc.bin: 1 extent found
+File size of delay.bin is 20000 (5 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       4:          0..         0:      0:             last,unknown_loc,delalloc,eof
+delay.bin: 1 extent found
