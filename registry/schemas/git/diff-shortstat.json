@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/diff-shortstat.json",
+  "title": "git/diff-shortstat",
+  "description": "git diff --shortstat, the number of changed files, insertions and deletions",
+  "x-jsonize": {
+    "definition": "git/diff-shortstat",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "files_changed": {
+      "type": "integer"
+    },
+    "insertions": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "deletions": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "files_changed",
+    "insertions",
+    "deletions"
+  ]
+}

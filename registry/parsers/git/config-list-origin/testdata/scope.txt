@@ -1,0 +1,12 @@
+global	user.name=Ada Lovelace
+global	user.email=ada@example.com
+global	init.defaultbranch=main
+global	alias.st=status -sb
+local	core.repositoryformatversion=0
+local	core.filemode=true
+local	core.bare=false
+local	core.logallrefupdates=true
+local	remote.origin.url=../up
+local	remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+local	branch.main.remote=origin
+local	branch.main.merge=refs/heads/main

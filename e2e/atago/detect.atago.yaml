@@ -2152,3 +2152,44 @@ scenarios:
       - assert:
           exit_code: 4
           stdout: {empty: true}
+
+  - name: git config --show-origin, git diff --shortstat and npm ls -g are read
+    steps:
+      - fixture:
+          file: config.txt
+          from: "${specdir}/../../registry/parsers/git/config-list-origin/testdata/origin-and-scope.txt"
+      - run:
+          command: jz
+          stdin: {file: config.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].scope", equals: global }
+              - { path: "$[4].origin", equals: .git/config }
+              - { path: "$[12].origin_type", equals: command line }
+              - { path: "$[12].origin", equals: null }
+      - fixture:
+          file: shortstat.txt
+          from: "${specdir}/../../registry/parsers/git/diff-shortstat/testdata/changes.txt"
+      - run:
+          command: jz
+          stdin: {file: shortstat.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.files_changed", equals: 3 }
+              - { path: "$.deletions", equals: 3 }
+      - fixture:
+          file: npm-global.txt
+          from: "${specdir}/../../registry/parsers/npm/ls/testdata/global.txt"
+      - run:
+          command: jz --parser npm
+          stdin: {file: npm-global.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.project.name", equals: null }
+              - { path: "$.dependencies[2].name", equals: npm }

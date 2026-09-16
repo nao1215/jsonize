@@ -1,0 +1,13 @@
+global	file:/home/user/.gitconfig	user.name=Ada Lovelace
+global	file:/home/user/.gitconfig	user.email=ada@example.com
+global	file:/home/user/.gitconfig	init.defaultbranch=main
+global	file:/home/user/.gitconfig	alias.st=status -sb
+local	file:.git/config	core.repositoryformatversion=0
+local	file:.git/config	core.filemode=true
+local	file:.git/config	core.bare=false
+local	file:.git/config	core.logallrefupdates=true
+local	file:.git/config	remote.origin.url=../up
+local	file:.git/config	remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+local	file:.git/config	branch.main.remote=origin
+local	file:.git/config	branch.main.merge=refs/heads/main
+command	command line:	color.ui=auto

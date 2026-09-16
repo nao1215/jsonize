@@ -1,0 +1,3 @@
+description: a change with insertions and deletions
+source: 'git diff --shortstat HEAD~3 captured with LC_ALL=C from a repository made for this fixture with git 2.53 (the people are not real)'
+args: [diff, --shortstat, HEAD~3]
