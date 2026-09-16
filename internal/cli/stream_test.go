@@ -372,10 +372,14 @@ func (w *lineWatcher) Write(p []byte) (int, error) {
 // deadline, and output that comes ends the wait at once.
 func (w *lineWatcher) next(t *testing.T, what string) string {
 	t.Helper()
-	deadline := time.After(time.Minute)
+	// A minute is long past any line that is coming, and the test's own
+	// deadline cuts it shorter still; waiting for the deadline alone let
+	// one stalled stream hold `go test` for ten minutes.
+	wait := time.Minute
 	if d, ok := t.Deadline(); ok {
-		deadline = time.After(time.Until(d) - 5*time.Second)
+		wait = min(wait, time.Until(d)-5*time.Second)
 	}
+	deadline := time.After(wait)
 	select {
 	case l := <-w.lines:
 		return strings.TrimSuffix(l, "\n")
