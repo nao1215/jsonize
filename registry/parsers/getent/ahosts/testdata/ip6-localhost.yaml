@@ -1,0 +1,4 @@
+source: getent ahosts ip6-localhost, captured on Ubuntu 26.04 (glibc 2.43) with LC_ALL=C
+description: an IPv6 address, wider than the column
+os: linux
+args: [ahosts, ip6-localhost]

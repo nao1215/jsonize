@@ -1,0 +1,26 @@
+# `getent ahosts NAME` (and ahostsv4, ahostsv6) prints what getaddrinfo
+# answers for a name: one line per address and socket type, the address,
+# the socket type (STREAM, DGRAM, RAW) and, on the first line of each
+# address only, the canonical name. The name is null on the other lines.
+format: 1
+command: getent
+variant: ahosts
+description: getent ahosts, the addresses getaddrinfo answers for a name
+metadata:
+  tags: [linux, network, dns]
+  compatible: [glibc]
+  references:
+    - https://man7.org/linux/man-pages/man1/getent.1.html
+detect:
+  os: [linux]
+  args:
+    any: [ahosts, ahostsv4, ahostsv6]
+  signature:
+    all:
+      - '\A(?:[0-9A-Fa-f:.]+ +(?:STREAM|DGRAM|RAW)(?: +\S+)? *(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<address>[0-9A-Fa-f:.]+) +(?P<socktype>STREAM|DGRAM|RAW)(?: +(?P<name>\S+))?\s*$'
+fields:
+  address: {required: true}
+  socktype: {required: true}

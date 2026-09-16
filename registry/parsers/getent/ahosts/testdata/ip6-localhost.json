@@ -1,0 +1,17 @@
+[
+  {
+    "address": "::1",
+    "socktype": "STREAM",
+    "name": "ip6-localhost"
+  },
+  {
+    "address": "::1",
+    "socktype": "DGRAM",
+    "name": null
+  },
+  {
+    "address": "::1",
+    "socktype": "RAW",
+    "name": null
+  }
+]

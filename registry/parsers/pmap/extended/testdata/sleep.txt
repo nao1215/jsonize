@@ -1,0 +1,53 @@
+3000614:   sleep 30
+Address           Kbytes     RSS   Dirty Mode  Mapping
+00005768abd04000     968     968       0 r---- sleep
+00005768abdf6000    4832    1768       0 r-x-- sleep
+00005768ac2ae000    3836     628       0 r---- sleep
+00005768ac66d000    1428     964     964 r---- sleep
+00005768ac7d2000      24      12      12 rw--- sleep
+00005768ac7d8000       4       4       4 rw---   [ anon ]
+00005768c21ca000     132     112     112 rw---   [ anon ]
+0000706fb1554000      12      12       0 r---- libpcre2-8.so.0.14.0
+0000706fb1557000     496      68       0 r-x-- libpcre2-8.so.0.14.0
+0000706fb15d3000     172      56       0 r---- libpcre2-8.so.0.14.0
+0000706fb15fe000       4       4       4 r---- libpcre2-8.so.0.14.0
+0000706fb15ff000       4       4       4 rw--- libpcre2-8.so.0.14.0
+0000706fb1600000     160     160       0 r---- libc.so.6
+0000706fb1628000    1632    1376       0 r-x-- libc.so.6
+0000706fb17c0000     312     184       0 r---- libc.so.6
+0000706fb180e000      16      16      16 r---- libc.so.6
+0000706fb1812000       8       8       8 rw--- libc.so.6
+0000706fb1814000      52      20      20 rw---   [ anon ]
+0000706fb188e000      20      16      16 rw---   [ anon ]
+0000706fb1893000      72      72       0 r---- libm.so.6
+0000706fb18a5000     640     328       0 r-x-- libm.so.6
+0000706fb1945000     456      28       0 r---- libm.so.6
+0000706fb19b7000       4       4       4 r---- libm.so.6
+0000706fb19b8000       4       4       4 rw--- libm.so.6
+0000706fb19b9000      16      16       0 r---- libgcc_s.so.1
+0000706fb19bd000     144      64       0 r-x-- libgcc_s.so.1
+0000706fb19e1000      16      16       0 r---- libgcc_s.so.1
+0000706fb19e5000       4       4       4 r---- libgcc_s.so.1
+0000706fb19e6000       4       4       4 rw--- libgcc_s.so.1
+0000706fb19e7000      28      28       0 r---- libselinux.so.1
+0000706fb19ee000     132      64       0 r-x-- libselinux.so.1
+0000706fb1a0f000      28      28       0 r---- libselinux.so.1
+0000706fb1a16000       4       4       4 r---- libselinux.so.1
+0000706fb1a17000       4       4       4 rw--- libselinux.so.1
+0000706fb1a18000       8       0       0 rw---   [ anon ]
+0000706fb1a38000       4       0       0 -----   [ anon ]
+0000706fb1a39000       8       0       0 rw---   [ anon ]
+0000706fb1a3b000       8       8       8 rw---   [ anon ]
+0000706fb1a3d000      16       0       0 r----   [ anon ]
+0000706fb1a41000       8       0       0 r----   [ anon ]
+0000706fb1a43000       8       8       0 r-x--   [ anon ]
+0000706fb1a45000       4       4       0 r---- ld-linux-x86-64.so.2
+0000706fb1a46000     188     188       0 r-x-- ld-linux-x86-64.so.2
+0000706fb1a75000      44      44       0 r---- ld-linux-x86-64.so.2
+0000706fb1a80000       8       8       8 r---- ld-linux-x86-64.so.2
+0000706fb1a82000       4       4       4 rw--- ld-linux-x86-64.so.2
+0000706fb1a83000       4       4       4 rw---   [ anon ]
+00007ffec75f0000     136      20      20 rw---   [ stack ]
+ffffffffff600000       4       0       0 --x--   [ anon ]
+---------------- ------- ------- ------- 
+total kB           16120    7336    1228

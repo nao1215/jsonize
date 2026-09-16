@@ -1957,3 +1957,37 @@ scenarios:
             json:
               - { path: "$[1].scope.name", equals: "phy#0" }
               - { path: "$[0].rules[4].flags[0]", equals: DFS }
+
+  - name: pmap -x is a record per process with its mappings and totals
+    steps:
+      - fixture:
+          file: pmap.txt
+          from: "${specdir}/../../registry/parsers/pmap/extended/testdata/sleep.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: pmap.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose pmap/extended from embedded"
+          stdout:
+            json:
+              - { path: "$[0].process.command", equals: sleep 30 }
+              - { path: "$[0].mappings[5].mapping", equals: "[ anon ]" }
+              - { path: "$[0].total.kbytes", equals: 16120 }
+
+  - name: getent ahosts leaves the name out where getent does
+    steps:
+      - fixture:
+          file: ahosts.txt
+          from: "${specdir}/../../registry/parsers/getent/ahosts/testdata/localhost.txt"
+      - run:
+          command: jz
+          stdin: {file: ahosts.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].name", equals: localhost }
+              - { path: "$[1].name", equals: null }
+              - { path: "$[2].socktype", equals: RAW }

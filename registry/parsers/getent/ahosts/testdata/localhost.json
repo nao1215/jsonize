@@ -1,0 +1,17 @@
+[
+  {
+    "address": "127.0.0.1",
+    "socktype": "STREAM",
+    "name": "localhost"
+  },
+  {
+    "address": "127.0.0.1",
+    "socktype": "DGRAM",
+    "name": null
+  },
+  {
+    "address": "127.0.0.1",
+    "socktype": "RAW",
+    "name": null
+  }
+]
