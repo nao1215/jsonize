@@ -142,8 +142,9 @@ file as a command's output.
   it names.
 - YAML is typed by the YAML 1.2 core schema: `null` and `~`, `true` and
   `false`, integers (with `0x` and `0o`) and decimals; anything quoted
-  is a string. `.inf`, `.nan`, anchors, aliases, tags and a second
-  document are refused. So is a control character standing in the text,
+  is a string. A `%YAML 1.x` directive before `---` is read. `.inf`,
+  `.nan`, anchors, aliases, tags (and `%TAG`) and a second document are
+  refused. So is a control character standing in the text,
   which YAML does not allow there; written as an escape (`"a\0b"`) it is
   a character of the value. Sequences and mappings nest as deeply as
   JSON arrays and objects do, and no deeper.

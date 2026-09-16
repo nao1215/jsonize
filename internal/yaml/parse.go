@@ -258,6 +258,9 @@ func (p *parser) document() (*Node, error) {
 	if err != nil {
 		return nil, err
 	}
+	if off, err = p.directives(off); err != nil {
+		return nil, err
+	}
 	if p.eof(off) {
 		return nil, nil //nolint:nilnil // an empty document has no node
 	}
@@ -297,6 +300,41 @@ func (p *parser) document() (*Node, error) {
 		return nil, p.errorf(next, "a file holds one document")
 	}
 	return nil, p.errorf(next, "unexpected text after the document")
+}
+
+// directives passes over the directive lines a document may open with,
+// which have to end at "---". %YAML is read for its major version, and
+// %TAG is refused along with the tags it declares; any other directive is
+// reserved and passed over, as the specification asks.
+func (p *parser) directives(off int) (int, error) {
+	seen := -1
+	for !p.eof(off) && p.col(off) == 0 && p.at(off) == '%' {
+		if seen < 0 {
+			seen = off
+		}
+		line := string(p.src[off:p.eol(off)])
+		name, rest, _ := strings.Cut(line, " ")
+		switch name {
+		case "%TAG":
+			return 0, p.errorf(off, "anchors, aliases and tags are not supported")
+		case "%YAML":
+			version := strings.TrimSpace(rest)
+			if i := strings.IndexByte(version, '#'); i >= 0 {
+				version = strings.TrimSpace(version[:i])
+			}
+			if major, _, _ := strings.Cut(version, "."); major != "1" {
+				return 0, p.errorf(off, "the document is YAML %s; jz reads YAML 1", version)
+			}
+		}
+		var err error
+		if off, err = p.nextContent(off); err != nil {
+			return 0, err
+		}
+	}
+	if seen >= 0 && !(p.hasPrefix(off, "---") && p.separates(off+3)) {
+		return 0, p.errorf(seen, `a directive is followed by "---", which starts the document`)
+	}
+	return off, nil
 }
 
 // firstContent is nextContent for the first line of the text.

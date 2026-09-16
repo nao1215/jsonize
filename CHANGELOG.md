@@ -138,6 +138,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A YAML file that opens with a `%YAML 1.2` directive and `---` was
+  refused as holding two documents. The directive is read, a version
+  other than 1 is refused by name, and so is `%TAG`, whose tags jz does
+  not read.
 - `jz run file` with a name outside ASCII returned the name as file
   printed it in the C locale (`caf\303\251.txt`) with exit 0, and `jz
   run ps aux`, `top -b -c` and `pgrep -l` returned a command line outside
