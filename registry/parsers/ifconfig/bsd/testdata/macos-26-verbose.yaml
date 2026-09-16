@@ -1,0 +1,8 @@
+description: >-
+  ifconfig -v on the same machine, which adds the index to the first line
+  and many more lines to each block: eflags, xflags and hwassist bit masks,
+  labelled lines whose label holds a space or parentheses, and agent lines
+  with no space after their colons.
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C and `ifconfig -v`; the runner's network 192.168.64 is replaced by 192.0.2, its MAC addresses by 02:00:00:00:00:0N, the random identifiers -v prints by zero UUIDs and the link-local address of en0 by fe80::1:2:3:4
+os: darwin
+args: ["-v"]

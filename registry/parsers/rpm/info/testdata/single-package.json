@@ -1,0 +1,29 @@
+[
+  {
+    "name": "jz-sample",
+    "epoch": 3,
+    "version": "1.2.0",
+    "release": "4",
+    "architecture": "noarch",
+    "install_date": "Wed Sep 16 12:22:01 2026",
+    "group": "Development/Tools",
+    "size": 4,
+    "license": "MIT",
+    "signatures": null,
+    "source_rpm": "jz-sample-1.2.0-4.src.rpm",
+    "build_date": "Wed Sep 16 12:22:00 2026",
+    "build_host": "buildhost",
+    "relocations": [
+      "/opt/jz",
+      "/etc/jz"
+    ],
+    "packager": null,
+    "vendor": null,
+    "vcs": null,
+    "url": null,
+    "bug_url": null,
+    "summary": "A package whose summary says \"quoted\": and more",
+    "description": "First paragraph: a line with a colon.\n\n  An indented line with \"double quotes\" and 'single quotes'.\nVersion: 9.9 is a word in the description too\ncommit 0123456789abcdef0123456789abcdef01234567",
+    "distribution": null
+  }
+]

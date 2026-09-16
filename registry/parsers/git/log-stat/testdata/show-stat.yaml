@@ -1,0 +1,4 @@
+description: git show --stat of one commit prints the same block.
+source: captured with LC_ALL=C and `git show --stat HEAD~5` from a repository made for this fixture with git 2.53 (the script sets fixed author and committer names and dates; the people are not real)
+os: linux
+args: ["show", "--stat", "HEAD~5"]

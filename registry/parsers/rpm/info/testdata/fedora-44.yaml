@@ -1,0 +1,4 @@
+description: Five packages from rpm -qia on Fedora 44 with rpm 6.0.2, among them an SPDX licence expression longer than a line, a description with a blank line, an Epoch, a VCS line, and the gpg-pubkey entry whose Architecture, Signature and Source RPM are (none). rpm 6 prints the signature on the line below its label.
+source: captured with LC_ALL=C in the fedora:latest container image (Fedora 44, rpm 6.0.2) with `rpm -qia`; whole blocks cut from the output
+os: linux
+args: ["-qia"]

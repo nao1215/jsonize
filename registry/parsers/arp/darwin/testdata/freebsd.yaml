@@ -1,0 +1,3 @@
+description: FreeBSD prints how long an entry stays where macOS prints its scope, which arp/freebsd reads and this definition does not.
+source: the FreeBSD 15.1 capture of arp/freebsd (vtnet.txt), copied
+expect_error: 'does not describe this input'

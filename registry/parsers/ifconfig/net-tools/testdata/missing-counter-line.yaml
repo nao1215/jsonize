@@ -1,0 +1,6 @@
+description: >-
+  The loopback block with its RX errors line taken out. The receive part
+  reads its two lines as one, so a block whose lines are not the ones this
+  layout prints is refused rather than read with a counter missing.
+source: loopback.txt with the line beginning `RX errors` deleted by hand
+expect_error: 'part "rx"'

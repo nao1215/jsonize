@@ -1,0 +1,44 @@
+[
+  {
+    "commit": {
+      "hash": "533e21452aed1038a29c8622606c20964122eccd"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Wed Sep 2 10:00:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "docs: say \"hello\": then add a logo",
+        "",
+        "The README now reads \"hello there\": a colon, a \"quoted\" word and a",
+        "hash-like string 0123456789abcdef0123456789abcdef01234567 in the body.",
+        "",
+        "commit deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+        "Author: Not A Header <no@example.com>",
+        "1 file changed, 99 insertions(+)"
+      ]
+    },
+    "files": [
+      {
+        "path": "README.md",
+        "changes": 1,
+        "graph": "+",
+        "old_bytes": null,
+        "new_bytes": null
+      },
+      {
+        "path": "logo.png",
+        "changes": null,
+        "graph": null,
+        "old_bytes": 0,
+        "new_bytes": 9
+      }
+    ],
+    "summary": {
+      "files_changed": 2,
+      "insertions": 1,
+      "deletions": null
+    }
+  }
+]

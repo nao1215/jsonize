@@ -1,0 +1,4 @@
+description: arp -a on macOS 15 on Intel, the gateway and a permanent multicast entry.
+source: captured on GitHub Actions macos-15-intel (macOS 15.7.9) with LC_ALL=C arp -a; the runner's network 192.168.64 is replaced by 192.0.2 and the gateway's hardware address by 2:0:0:0:0:2
+os: darwin
+args: ["-a"]

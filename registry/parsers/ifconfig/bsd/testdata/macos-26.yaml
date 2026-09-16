@@ -1,0 +1,10 @@
+description: >-
+  ifconfig on macOS 26 after adding a second loopback address, a gif tunnel
+  with a point-to-point address, a feth pair with two IPv4 addresses and a
+  global IPv6 address, a bridge with one member, and a VLAN. Among the
+  interfaces are ones with no address, IPv6 addresses marked secured,
+  optimistic and tentative, and a bridge whose Configuration lines and
+  member line continue on further-indented lines.
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C and `ifconfig` after creating the interfaces with sudo ifconfig; the runner's network 192.168.64 is replaced by 192.0.2, its MAC addresses by 02:00:00:00:00:0N, the random identifiers -v prints by zero UUIDs and the link-local address of en0 by fe80::1:2:3:4
+os: darwin
+args: []

@@ -1,0 +1,4 @@
+description: The same history with --shortstat, the closing count alone under each commit that changed something.
+source: captured with LC_ALL=C and `git log --shortstat` from a repository made for this fixture with git 2.53 (the script sets fixed author and committer names and dates; the people are not real)
+os: linux
+args: ["log", "--shortstat"]

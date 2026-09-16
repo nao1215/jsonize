@@ -1,0 +1,4 @@
+description: net-tools arp -a prints the same line shape BusyBox does, here the one entry of a container's gateway.
+source: captured with LC_ALL=C and `arp -a` from net-tools 2.10 in a debian:stable-slim container; the gateway's hardware address is replaced by 02:00:00:00:00:01
+os: linux
+args: ["-a"]

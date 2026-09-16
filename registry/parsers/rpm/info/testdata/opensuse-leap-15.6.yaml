@@ -1,0 +1,4 @@
+description: Two packages from rpm -qia on openSUSE Leap 15.6 with rpm 4.14.3, which prints a Relocations line for every package and a Distribution line after the description, (none) for the gpg-pubkey entry.
+source: captured with LC_ALL=C in the opensuse/leap:15.6 container image (rpm 4.14.3) with `rpm -qia`; whole blocks cut from the output
+os: linux
+args: ["-qia"]

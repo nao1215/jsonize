@@ -1,0 +1,4 @@
+description: the gateway, the broadcast address and a multicast group whose name resolves and which is permanent.
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C arp -a; the runner's network 192.168.64 is replaced by 192.0.2 and the gateway's hardware address by 2:0:0:0:0:1, written without leading zeros as macOS writes it
+os: darwin
+args: ["-a"]

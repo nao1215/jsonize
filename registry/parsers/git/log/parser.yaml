@@ -23,6 +23,11 @@ detect:
     all:
       - '\Acommit [0-9a-f]{7,40}\b'
       - '^Author:[ \t]'
+    # A diffstat's closing count, one space in, is what `--stat` and
+    # `--shortstat` add under a commit; git/log-stat reads that output.
+    # No message line can be it, since git indents those by four.
+    none:
+      - '^ \d+ files? changed(?:, \d+ insertions?\(\+\))?(?:, \d+ deletions?\(-\))?$'
 input:
   skip_blank: false
 parse:

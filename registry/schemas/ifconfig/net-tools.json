@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ifconfig/net-tools.json",
+  "title": "ifconfig/net-tools",
+  "description": "net-tools ifconfig per-interface block",
+  "x-jsonize": {
+    "definition": "ifconfig/net-tools",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "interface": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "hwtype": {
+            "type": "string"
+          },
+          "hwaddr": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "txqueuelen": {
+            "type": "integer"
+          },
+          "encap": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "hwtype",
+          "hwaddr",
+          "txqueuelen",
+          "encap"
+        ]
+      },
+      "status": {
+        "type": "object",
+        "properties": {
+          "flags_value": {
+            "type": "integer"
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mtu": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "flags_value",
+          "flags",
+          "mtu"
+        ]
+      },
+      "inet": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "mask": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "broadcast": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "peer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "address",
+          "mask",
+          "broadcast",
+          "peer"
+        ]
+      },
+      "inet6": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "prefixlen": {
+              "type": "integer"
+            },
+            "scopeid": {
+              "type": "string"
+            },
+            "scope": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "address",
+            "prefixlen",
+            "scopeid",
+            "scope"
+          ]
+        }
+      },
+      "rx": {
+        "type": "object",
+        "properties": {
+          "packets": {
+            "type": "integer"
+          },
+          "bytes": {
+            "type": "integer"
+          },
+          "bytes_human": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "integer"
+          },
+          "dropped": {
+            "type": "integer"
+          },
+          "overruns": {
+            "type": "integer"
+          },
+          "frame": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "packets",
+          "bytes",
+          "bytes_human",
+          "errors",
+          "dropped",
+          "overruns",
+          "frame"
+        ]
+      },
+      "tx": {
+        "type": "object",
+        "properties": {
+          "packets": {
+            "type": "integer"
+          },
+          "bytes": {
+            "type": "integer"
+          },
+          "bytes_human": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "integer"
+          },
+          "dropped": {
+            "type": "integer"
+          },
+          "overruns": {
+            "type": "integer"
+          },
+          "carrier": {
+            "type": "integer"
+          },
+          "collisions": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "packets",
+          "bytes",
+          "bytes_human",
+          "errors",
+          "dropped",
+          "overruns",
+          "carrier",
+          "collisions"
+        ]
+      }
+    },
+    "required": [
+      "interface",
+      "status",
+      "inet",
+      "inet6",
+      "rx",
+      "tx"
+    ]
+  }
+}

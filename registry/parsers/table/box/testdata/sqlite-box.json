@@ -1,0 +1,22 @@
+[
+  {
+    "id": "25",
+    "name": "example.com",
+    "version": "3.8"
+  },
+  {
+    "id": "34",
+    "name": "anotherexample.com",
+    "version": "3.2"
+  },
+  {
+    "id": "41",
+    "name": "empty-version.example",
+    "version": null
+  },
+  {
+    "id": "58",
+    "name": "café.example",
+    "version": "10.0.1"
+  }
+]

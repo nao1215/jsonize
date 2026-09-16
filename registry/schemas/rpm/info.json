@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/rpm/info.json",
+  "title": "rpm/info",
+  "description": "rpm -qi / rpm -qia package information blocks",
+  "x-jsonize": {
+    "definition": "rpm/info",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "epoch": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "version": {
+        "type": "string"
+      },
+      "release": {
+        "type": "string"
+      },
+      "architecture": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "install_date": {
+        "type": "string"
+      },
+      "group": {
+        "type": "string"
+      },
+      "size": {
+        "type": "integer"
+      },
+      "license": {
+        "type": "string"
+      },
+      "signatures": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      },
+      "source_rpm": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "build_date": {
+        "type": "string"
+      },
+      "build_host": {
+        "type": "string"
+      },
+      "relocations": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      },
+      "packager": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "vendor": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "vcs": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "url": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "bug_url": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "summary": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "distribution": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "name",
+      "epoch",
+      "version",
+      "release",
+      "architecture",
+      "install_date",
+      "group",
+      "size",
+      "license",
+      "signatures",
+      "source_rpm",
+      "build_date",
+      "build_host",
+      "relocations",
+      "packager",
+      "vendor",
+      "vcs",
+      "url",
+      "bug_url",
+      "summary",
+      "description",
+      "distribution"
+    ]
+  }
+}

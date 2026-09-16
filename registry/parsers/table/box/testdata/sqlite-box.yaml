@@ -1,0 +1,2 @@
+description: The same query with sqlite3 -box, the table drawn with box-drawing characters.
+source: captured with LC_ALL=C.UTF-8 and `sqlite3 -box DB 'select * from sites'` from sqlite3 3.46.1 in a debian:stable-slim container, from a table created for this fixture

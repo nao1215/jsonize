@@ -1,0 +1,9 @@
+description: >-
+  Eight commits: a mode change counted as 0 insertions and 0 deletions, an
+  empty commit and a merge with no diffstat, a binary file added and
+  removed, a rename printed in braces, a path elided from the left, and a
+  message with quotation marks, colons, a hash-like string, blank lines, an
+  indented commit and Author line and an indented count line.
+source: captured with LC_ALL=C and `git log --stat` from a repository made for this fixture with git 2.53 (the script sets fixed author and committer names and dates; the people are not real)
+os: linux
+args: ["log", "--stat"]

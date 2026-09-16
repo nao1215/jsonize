@@ -1,0 +1,1561 @@
+[
+  {
+    "interface": {
+      "name": "lo0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8049",
+      "flags": [
+        "UP",
+        "LOOPBACK",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 16384,
+      "index": 1
+    },
+    "inet": [
+      {
+        "address": "127.0.0.1",
+        "peer": null,
+        "mask": "0xff000000",
+        "broadcast": null
+      },
+      {
+        "address": "127.0.0.2",
+        "peer": null,
+        "mask": "0xffffffff",
+        "broadcast": null
+      }
+    ],
+    "inet6": [
+      {
+        "address": "::1",
+        "zone": null,
+        "prefixlen": 128,
+        "flags": [],
+        "scopeid": null
+      },
+      {
+        "address": "fe80::1",
+        "zone": "lo0",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0x1"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "10000000",
+        "names": [
+          "SENDLIST"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000004",
+        "names": [
+          "NOAUTONX",
+          "INBAND_WAKE_PKT"
+        ]
+      },
+      {
+        "name": "options",
+        "value": "1203",
+        "names": [
+          "RXCSUM",
+          "TXCSUM",
+          "TXSTATUS",
+          "SW_TIMESTAMP"
+        ]
+      },
+      {
+        "name": "hwassist",
+        "value": "29000ff",
+        "names": [
+          "CSUM_IP",
+          "CSUM_TCP",
+          "CSUM_UDP",
+          "CSUM_IP_FRAGS",
+          "CSUM_FRAGMENT",
+          "CSUM_TCPIPV6",
+          "CSUM_UDPIPV6",
+          "CSUM_FRAGMENT_IPV6",
+          "MULTIPAGES",
+          "TXSTATUS",
+          "SW_TIMESTAMP"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "generation id",
+        "value": "1"
+      },
+      {
+        "name": "link quality",
+        "value": "100 (good)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "timestamp",
+        "value": "disabled"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "no mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "gif0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8051",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1280,
+      "index": 2
+    },
+    "inet": [
+      {
+        "address": "10.0.0.1",
+        "peer": "10.0.0.2",
+        "mask": "0xffffffff",
+        "broadcast": null
+      }
+    ],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "xflags",
+        "value": "4000000",
+        "names": [
+          "INBAND_WAKE_PKT"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": null,
+        "value": "tunnel inet 192.0.2.1 --> 192.0.2.2"
+      },
+      {
+        "name": "generation id",
+        "value": "2"
+      },
+      {
+        "name": "link quality",
+        "value": "-1 (unknown)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "no mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "stf0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "0",
+      "flags": [],
+      "metric": null,
+      "mtu": 1280,
+      "index": 3
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "xflags",
+        "value": "4000000",
+        "names": [
+          "INBAND_WAKE_PKT"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "generation id",
+        "value": "3"
+      },
+      {
+        "name": "link quality",
+        "value": "-1 (unknown)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "no mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "XHC12",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "0",
+      "flags": [],
+      "metric": null,
+      "mtu": 0,
+      "index": 4
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "40000000",
+        "names": [
+          "FASTLN_ON"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000000",
+        "names": [
+          "INBAND_WAKE_PKT"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "generation id",
+        "value": "4"
+      },
+      {
+        "name": "link quality",
+        "value": "-1 (unknown)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "yes mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "anpi0",
+      "hwaddr": "02:00:00:00:00:01"
+    },
+    "status": {
+      "flags_value": "8863",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "SMART",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": 5
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "40000080",
+        "names": [
+          "TXSTART",
+          "FASTLN_ON"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4002000",
+        "names": [
+          "NOSHAPING",
+          "INBAND_WAKE_PKT"
+        ]
+      },
+      {
+        "name": "options",
+        "value": "400",
+        "names": [
+          "CHANNEL_IO"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "netif",
+        "value": "00000000-0000-0000-0000-000000000001"
+      },
+      {
+        "name": "media",
+        "value": "none"
+      },
+      {
+        "name": "status",
+        "value": "inactive"
+      },
+      {
+        "name": "max mtu",
+        "value": "16000"
+      },
+      {
+        "name": "generation id",
+        "value": "5"
+      },
+      {
+        "name": "type",
+        "value": "USB Ethernet"
+      },
+      {
+        "name": null,
+        "value": "agent domain:Skywalk type:NetIf flags:0xa443 desc:\"Userspace Networking\""
+      },
+      {
+        "name": "link quality",
+        "value": "-2 (off)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "scheduler",
+        "value": "UNKNOWN"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "yes mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "en1",
+      "hwaddr": "02:00:00:00:00:02"
+    },
+    "status": {
+      "flags_value": "8863",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "SMART",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": 6
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "40000080",
+        "names": [
+          "TXSTART",
+          "FASTLN_ON"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000000",
+        "names": [
+          "INBAND_WAKE_PKT"
+        ]
+      },
+      {
+        "name": "options",
+        "value": "400",
+        "names": [
+          "CHANNEL_IO"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "netif",
+        "value": "00000000-0000-0000-0000-000000000002"
+      },
+      {
+        "name": "flowswitch",
+        "value": "00000000-0000-0000-0000-000000000003"
+      },
+      {
+        "name": "media",
+        "value": "none"
+      },
+      {
+        "name": "status",
+        "value": "inactive"
+      },
+      {
+        "name": "max mtu",
+        "value": "16000"
+      },
+      {
+        "name": "generation id",
+        "value": "6"
+      },
+      {
+        "name": "type",
+        "value": "USB Ethernet"
+      },
+      {
+        "name": null,
+        "value": "agent domain:Skywalk type:NetIf flags:0xa443 desc:\"Userspace Networking\""
+      },
+      {
+        "name": null,
+        "value": "agent domain:Skywalk type:FlowSwitch flags:0x4483 desc:\"Userspace Networking\""
+      },
+      {
+        "name": "link quality",
+        "value": "-2 (off)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "scheduler",
+        "value": "UNKNOWN"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "yes mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "en0",
+      "hwaddr": "02:00:00:00:00:03"
+    },
+    "status": {
+      "flags_value": "8863",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "SMART",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": 7
+    },
+    "inet": [
+      {
+        "address": "192.0.2.2",
+        "peer": null,
+        "mask": "0xffffff00",
+        "broadcast": "192.0.2.255"
+      }
+    ],
+    "inet6": [
+      {
+        "address": "fe80::1:2:3:4",
+        "zone": "en0",
+        "prefixlen": 64,
+        "flags": [
+          "secured"
+        ],
+        "scopeid": "0x7"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "400008c0",
+        "names": [
+          "ACCEPT_RTADV",
+          "TXSTART",
+          "ARPLL",
+          "FASTLN_ON"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000000",
+        "names": [
+          "INBAND_WAKE_PKT"
+        ]
+      },
+      {
+        "name": "options",
+        "value": "400",
+        "names": [
+          "CHANNEL_IO"
+        ]
+      },
+      {
+        "name": "hwassist",
+        "value": "100000",
+        "names": [
+          "MULTIPAGES"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "netif",
+        "value": "00000000-0000-0000-0000-000000000004"
+      },
+      {
+        "name": "flowswitch",
+        "value": "00000000-0000-0000-0000-000000000005"
+      },
+      {
+        "name": "media",
+        "value": "autoselect <full-duplex,flow-control>"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      },
+      {
+        "name": "max mtu",
+        "value": "1500"
+      },
+      {
+        "name": "generation id",
+        "value": "7"
+      },
+      {
+        "name": "type",
+        "value": "Ethernet"
+      },
+      {
+        "name": null,
+        "value": "agent domain:Skywalk type:NetIf flags:0xa443 desc:\"Userspace Networking\""
+      },
+      {
+        "name": null,
+        "value": "agent domain:Skywalk type:FlowSwitch flags:0x4483 desc:\"Userspace Networking\""
+      },
+      {
+        "name": "link quality",
+        "value": "100 (good)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "scheduler",
+        "value": "UNKNOWN"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "yes mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "utun0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8051",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1380,
+      "index": 8
+    },
+    "inet": [],
+    "inet6": [
+      {
+        "address": "fe80::68dc:b83c:ca62:5e9b",
+        "zone": "utun0",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0x8"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "2080",
+        "names": [
+          "TXSTART",
+          "NOAUTOIPV6LL"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000004",
+        "names": [
+          "NOAUTONX",
+          "INBAND_WAKE_PKT"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "generation id",
+        "value": "8"
+      },
+      {
+        "name": "link quality",
+        "value": "-1 (unknown)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "scheduler",
+        "value": "FQ_CODEL"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "no mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "utun1",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8051",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": 9
+    },
+    "inet": [],
+    "inet6": [
+      {
+        "address": "fe80::4558:d8e0:5e0c:54ec",
+        "zone": "utun1",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0x9"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "2080",
+        "names": [
+          "TXSTART",
+          "NOAUTOIPV6LL"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000004",
+        "names": [
+          "NOAUTONX",
+          "INBAND_WAKE_PKT"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "generation id",
+        "value": "9"
+      },
+      {
+        "name": null,
+        "value": "agent domain:com.apple.rapport type:RapportNetworkAgent flags:0x7c3 desc:\"Rapport Network Agent\""
+      },
+      {
+        "name": "link quality",
+        "value": "-1 (unknown)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "scheduler",
+        "value": "FQ_CODEL"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "no mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "utun2",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8051",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 2000,
+      "index": 10
+    },
+    "inet": [],
+    "inet6": [
+      {
+        "address": "fe80::e03a:d650:9d78:9ca3",
+        "zone": "utun2",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0xa"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "2080",
+        "names": [
+          "TXSTART",
+          "NOAUTOIPV6LL"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000004",
+        "names": [
+          "NOAUTONX",
+          "INBAND_WAKE_PKT"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "generation id",
+        "value": "10"
+      },
+      {
+        "name": null,
+        "value": "agent domain:ids501 type:clientchannel flags:0xc3 desc:\"IDSNexusAgent ids501 : clientchannel\""
+      },
+      {
+        "name": "link quality",
+        "value": "-1 (unknown)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "scheduler",
+        "value": "FQ_CODEL"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "no mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "utun3",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8051",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1000,
+      "index": 11
+    },
+    "inet": [],
+    "inet6": [
+      {
+        "address": "fe80::ce81:b1c:bd2c:69e",
+        "zone": "utun3",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0xb"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "2080",
+        "names": [
+          "TXSTART",
+          "NOAUTOIPV6LL"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000004",
+        "names": [
+          "NOAUTONX",
+          "INBAND_WAKE_PKT"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "generation id",
+        "value": "11"
+      },
+      {
+        "name": null,
+        "value": "agent domain:ids501 type:transport flags:0x4c3 desc:\"IDSTransportAgent ids501 : transport\""
+      },
+      {
+        "name": "link quality",
+        "value": "-1 (unknown)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "scheduler",
+        "value": "FQ_CODEL"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "no mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "feth100",
+      "hwaddr": "66:65:74:68:00:64"
+    },
+    "status": {
+      "flags_value": "8843",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": 12
+    },
+    "inet": [
+      {
+        "address": "198.51.100.1",
+        "peer": null,
+        "mask": "0xffffff00",
+        "broadcast": "198.51.100.255"
+      },
+      {
+        "address": "198.51.100.2",
+        "peer": null,
+        "mask": "0xffffffff",
+        "broadcast": "198.51.100.2"
+      }
+    ],
+    "inet6": [
+      {
+        "address": "fe80::6465:74ff:fe68:64",
+        "zone": "feth100",
+        "prefixlen": 64,
+        "flags": [
+          "optimistic"
+        ],
+        "scopeid": "0xc"
+      },
+      {
+        "address": "2001:db8::1",
+        "zone": null,
+        "prefixlen": 64,
+        "flags": [
+          "tentative"
+        ],
+        "scopeid": null
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "40010280",
+        "names": [
+          "TXSTART",
+          "VLAN",
+          "CLONE",
+          "FASTLN_ON"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000004",
+        "names": [
+          "NOAUTONX",
+          "INBAND_WAKE_PKT"
+        ]
+      },
+      {
+        "name": "options",
+        "value": "8",
+        "names": [
+          "VLAN_HWTAGGING"
+        ]
+      },
+      {
+        "name": "hwassist",
+        "value": "10000",
+        "names": [
+          "VLAN_TAGGING"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "peer",
+        "value": "feth101"
+      },
+      {
+        "name": "media",
+        "value": "autoselect (10Gbase-T <full-duplex>)"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      },
+      {
+        "name": "max mtu",
+        "value": "2048"
+      },
+      {
+        "name": "generation id",
+        "value": "12"
+      },
+      {
+        "name": "type",
+        "value": "Ethernet"
+      },
+      {
+        "name": "link quality",
+        "value": "-1 (unknown)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "scheduler",
+        "value": "UNKNOWN"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "yes mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "feth101",
+      "hwaddr": "66:65:74:68:00:65"
+    },
+    "status": {
+      "flags_value": "8943",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "RUNNING",
+        "PROMISC",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": 13
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "40010080",
+        "names": [
+          "TXSTART",
+          "CLONE",
+          "FASTLN_ON"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000004",
+        "names": [
+          "NOAUTONX",
+          "INBAND_WAKE_PKT"
+        ]
+      },
+      {
+        "name": "options",
+        "value": "8",
+        "names": [
+          "VLAN_HWTAGGING"
+        ]
+      },
+      {
+        "name": "hwassist",
+        "value": "10000",
+        "names": [
+          "VLAN_TAGGING"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "peer",
+        "value": "feth100"
+      },
+      {
+        "name": "media",
+        "value": "autoselect (10Gbase-T <full-duplex>)"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      },
+      {
+        "name": "max mtu",
+        "value": "2048"
+      },
+      {
+        "name": "generation id",
+        "value": "13"
+      },
+      {
+        "name": "type",
+        "value": "Ethernet"
+      },
+      {
+        "name": "link quality",
+        "value": "-1 (unknown)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "scheduler",
+        "value": "UNKNOWN"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "yes mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "bridge100",
+      "hwaddr": "02:00:00:00:00:04"
+    },
+    "status": {
+      "flags_value": "8863",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "SMART",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": 14
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "40010000",
+        "names": [
+          "CLONE",
+          "FASTLN_ON"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000000",
+        "names": [
+          "INBAND_WAKE_PKT"
+        ]
+      },
+      {
+        "name": "options",
+        "value": "3",
+        "names": [
+          "RXCSUM",
+          "TXCSUM"
+        ]
+      },
+      {
+        "name": "hwassist",
+        "value": "100067",
+        "names": [
+          "CSUM_IP",
+          "CSUM_TCP",
+          "CSUM_UDP",
+          "CSUM_TCPIPV6",
+          "CSUM_UDPIPV6",
+          "MULTIPAGES"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "Configuration",
+        "value": "id 0:0:0:0:0:0 priority 0 hellotime 0 fwddelay 0 maxage 0 holdcnt 0 proto stp maxaddr 100 timeout 1200 root id 0:0:0:0:0:0 priority 0 ifcost 0 port 0 ipfilter disabled flags 0x0"
+      },
+      {
+        "name": "member",
+        "value": "feth101 flags=3<LEARNING,DISCOVER> ifmaxaddr 0 port 13 priority 0 path cost 0 hostfilter 0 hw: 0:0:0:0:0:0 ip: 0.0.0.0"
+      },
+      {
+        "name": "media",
+        "value": "autoselect"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      },
+      {
+        "name": "generation id",
+        "value": "14"
+      },
+      {
+        "name": "link quality",
+        "value": "-1 (unknown)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "yes mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "vlan100",
+      "hwaddr": "66:65:74:68:00:64"
+    },
+    "status": {
+      "flags_value": "8842",
+      "flags": [
+        "BROADCAST",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": 15
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "eflags",
+        "value": "10000",
+        "names": [
+          "CLONE"
+        ]
+      },
+      {
+        "name": "xflags",
+        "value": "4000000",
+        "names": [
+          "INBAND_WAKE_PKT"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "vlan",
+        "value": "100 parent interface: feth100"
+      },
+      {
+        "name": "media",
+        "value": "autoselect (10Gbase-T <full-duplex>)"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      },
+      {
+        "name": "max mtu",
+        "value": "2048"
+      },
+      {
+        "name": "generation id",
+        "value": "15"
+      },
+      {
+        "name": "link quality",
+        "value": "-1 (unknown)"
+      },
+      {
+        "name": "state availability",
+        "value": "0 (true)"
+      },
+      {
+        "name": "qosmarking enabled",
+        "value": "no mode: none"
+      },
+      {
+        "name": "low power mode",
+        "value": "disabled"
+      },
+      {
+        "name": "multi layer packet logging (mpklog)",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode4",
+        "value": "disabled"
+      },
+      {
+        "name": "routermode6",
+        "value": "disabled"
+      }
+    ]
+  }
+]

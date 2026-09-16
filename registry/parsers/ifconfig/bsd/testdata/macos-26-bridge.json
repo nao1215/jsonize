@@ -1,0 +1,56 @@
+[
+  {
+    "interface": {
+      "name": "bridge100",
+      "hwaddr": "02:00:00:00:00:04"
+    },
+    "status": {
+      "flags_value": "8863",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "SMART",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "3",
+        "names": [
+          "RXCSUM",
+          "TXCSUM"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "Configuration",
+        "value": "id 0:0:0:0:0:0 priority 0 hellotime 0 fwddelay 0 maxage 0 holdcnt 0 proto stp maxaddr 100 timeout 1200 root id 0:0:0:0:0:0 priority 0 ifcost 0 port 0 ipfilter disabled flags 0x0"
+      },
+      {
+        "name": "member",
+        "value": "feth101 flags=3<LEARNING,DISCOVER> ifmaxaddr 0 port 13 priority 0 path cost 0"
+      },
+      {
+        "name": "Address cache",
+        "value": "66:65:74:68:0:64 Vlan1 feth101 1200 flags=0<>"
+      },
+      {
+        "name": "media",
+        "value": "autoselect"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      }
+    ]
+  }
+]

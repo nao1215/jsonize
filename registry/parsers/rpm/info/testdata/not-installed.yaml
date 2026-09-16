@@ -1,0 +1,3 @@
+description: rpm -qi bash coreutils where coreutils is not installed. rpm prints `package coreutils is not installed` on standard output after the description of bash, and that line is refused rather than read as a line of the description.
+source: captured with LC_ALL=C in the rockylinux/rockylinux:9 container image (rpm 4.16.1.3) with `rpm -qi bash coreutils`
+expect_error: 'input does not match'

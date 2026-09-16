@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/log-stat.json",
+  "title": "git/log-stat",
+  "description": "git log --stat and --shortstat, commits with their diffstat",
+  "x-jsonize": {
+    "definition": "git/log-stat",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "commit": {
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "string"
+          },
+          "refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "hash"
+        ]
+      },
+      "headers": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "message": {
+        "type": "object",
+        "properties": {
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "lines"
+        ]
+      },
+      "files": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "changes": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "graph": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "old_bytes": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "new_bytes": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "path",
+            "changes",
+            "graph",
+            "old_bytes",
+            "new_bytes"
+          ]
+        }
+      },
+      "summary": {
+        "type": "object",
+        "properties": {
+          "files_changed": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "insertions": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "deletions": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "files_changed",
+          "insertions",
+          "deletions"
+        ]
+      }
+    },
+    "required": [
+      "commit",
+      "headers",
+      "message",
+      "files",
+      "summary"
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+description: Three packages from rpm -qia on Rocky Linux 9 with rpm 4.16.1.3, a Bug URL line on one of them and the gpg-pubkey entry, whose description is an armoured key with a colon line and a blank line and is followed by a blank line.
+source: captured with LC_ALL=C in the rockylinux/rockylinux:9 container image (rpm 4.16.1.3) with `rpm -qia`; whole blocks cut from the output
+os: linux
+args: ["-qia"]

@@ -1,0 +1,4 @@
+description: ifconfig bridge100 on macOS 26, which prints the bridge's address cache under a heading of its own.
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C and `ifconfig bridge100`; the runner's network 192.168.64 is replaced by 192.0.2, its MAC addresses by 02:00:00:00:00:0N, the random identifiers -v prints by zero UUIDs and the link-local address of en0 by fe80::1:2:3:4
+os: darwin
+args: ["bridge100"]

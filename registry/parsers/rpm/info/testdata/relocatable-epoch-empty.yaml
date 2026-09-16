@@ -1,0 +1,4 @@
+description: rpm -qi with two names on rpm 6.0.2. The first package has an Epoch, two relocation prefixes, a summary with quotation marks and a colon, and a description with a colon, a blank line, an indented quoted line, a line that starts with a label and a line that looks like a commit hash; the second has no URL, no vendor, no packager and an empty description.
+source: two packages built for this fixture with rpmbuild in the fedora:latest container image (rpm 6.0.2), installed, then `LC_ALL=C rpm -qi jz-sample jz-empty`; the container host name is replaced with buildhost
+os: linux
+args: ["-qi", "jz-sample", "jz-empty"]

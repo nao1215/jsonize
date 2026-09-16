@@ -38,7 +38,7 @@ the same reading with settings of your own.
 | `apt-cache` | [`depends`](../schemas/apt-cache/depends.json), [`madison`](../schemas/apt-cache/madison.json), [`policy`](../schemas/apt-cache/policy.json), [`search`](../schemas/apt-cache/search.json), [`stats`](../schemas/apt-cache/stats.json) |
 | `apt-config` | [`dump`](../schemas/apt-config/dump.json) |
 | `ar` | [`table-verbose`](../schemas/ar/table-verbose.json) |
-| `arp` | [`alternate`](../schemas/arp/alternate.json), [`freebsd`](../schemas/arp/freebsd.json), [`windows`](../schemas/arp/windows.json) |
+| `arp` | [`alternate`](../schemas/arp/alternate.json), [`darwin`](../schemas/arp/darwin.json), [`freebsd`](../schemas/arp/freebsd.json), [`windows`](../schemas/arp/windows.json) |
 | `avahi-browse` | [`parsable`](../schemas/avahi-browse/parsable.json) |
 | `bat` | [`list-languages`](../schemas/bat/list-languages.json) |
 | `blkid` | [`export`](../schemas/blkid/export.json), [`linux`](../schemas/blkid/linux.json) |
@@ -86,7 +86,7 @@ the same reading with settings of your own.
 | `getmac` | [`verbose`](../schemas/getmac/verbose.json) |
 | `gh` | [`auth-status`](../schemas/gh/auth-status.json), [`issue-list`](../schemas/gh/issue-list.json), [`pr-list`](../schemas/gh/pr-list.json), [`release-list`](../schemas/gh/release-list.json), [`repo-list`](../schemas/gh/repo-list.json), [`run-list`](../schemas/gh/run-list.json), [`workflow-list`](../schemas/gh/workflow-list.json) |
 | `gio` | [`mime`](../schemas/gio/mime.json) |
-| `git` | [`branch-verbose`](../schemas/git/branch-verbose.json), [`cherry`](../schemas/git/cherry.json), [`config-list`](../schemas/git/config-list.json), [`count-objects`](../schemas/git/count-objects.json), [`diff-name-status`](../schemas/git/diff-name-status.json), [`diff-numstat`](../schemas/git/diff-numstat.json), [`diff-stat`](../schemas/git/diff-stat.json), [`for-each-ref`](../schemas/git/for-each-ref.json), [`log`](../schemas/git/log.json), [`log-oneline`](../schemas/git/log-oneline.json), [`ls-files-stage`](../schemas/git/ls-files-stage.json), [`ls-remote`](../schemas/git/ls-remote.json), [`ls-tree`](../schemas/git/ls-tree.json), [`reflog`](../schemas/git/reflog.json), [`remote-verbose`](../schemas/git/remote-verbose.json), [`shortlog-summary`](../schemas/git/shortlog-summary.json), [`show-ref`](../schemas/git/show-ref.json), [`stash-list`](../schemas/git/stash-list.json), [`status-porcelain`](../schemas/git/status-porcelain.json), [`worktree-list`](../schemas/git/worktree-list.json) |
+| `git` | [`branch-verbose`](../schemas/git/branch-verbose.json), [`cherry`](../schemas/git/cherry.json), [`config-list`](../schemas/git/config-list.json), [`count-objects`](../schemas/git/count-objects.json), [`diff-name-status`](../schemas/git/diff-name-status.json), [`diff-numstat`](../schemas/git/diff-numstat.json), [`diff-stat`](../schemas/git/diff-stat.json), [`for-each-ref`](../schemas/git/for-each-ref.json), [`log`](../schemas/git/log.json), [`log-oneline`](../schemas/git/log-oneline.json), [`log-stat`](../schemas/git/log-stat.json), [`ls-files-stage`](../schemas/git/ls-files-stage.json), [`ls-remote`](../schemas/git/ls-remote.json), [`ls-tree`](../schemas/git/ls-tree.json), [`reflog`](../schemas/git/reflog.json), [`remote-verbose`](../schemas/git/remote-verbose.json), [`shortlog-summary`](../schemas/git/shortlog-summary.json), [`show-ref`](../schemas/git/show-ref.json), [`stash-list`](../schemas/git/stash-list.json), [`status-porcelain`](../schemas/git/status-porcelain.json), [`worktree-list`](../schemas/git/worktree-list.json) |
 | `go` | [`bench`](../schemas/go/bench.json), [`dist-list`](../schemas/go/dist-list.json), [`env`](../schemas/go/env.json), [`list-modules`](../schemas/go/list-modules.json), [`mod-graph`](../schemas/go/mod-graph.json), [`test`](../schemas/go/test.json), [`version-modules`](../schemas/go/version-modules.json), [`vet`](../schemas/go/vet.json) |
 | `golangci-lint` | [`text`](../schemas/golangci-lint/text.json) |
 | `gpg` | [`colons`](../schemas/gpg/colons.json), [`version`](../schemas/gpg/version.json) |
@@ -102,7 +102,7 @@ the same reading with settings of your own.
 | `iconv` | [`list`](../schemas/iconv/list.json) |
 | `id` | [`posix`](../schemas/id/posix.json) |
 | `identify` | [`default`](../schemas/identify/default.json) |
-| `ifconfig` | [`busybox`](../schemas/ifconfig/busybox.json) |
+| `ifconfig` | [`bsd`](../schemas/ifconfig/bsd.json), [`busybox`](../schemas/ifconfig/busybox.json), [`net-tools`](../schemas/ifconfig/net-tools.json) |
 | `ini` | [`default`](../schemas/ini/default.json) |
 | `ionice` | [`class`](../schemas/ionice/class.json) |
 | `iostat` | [`cpu`](../schemas/iostat/cpu.json), [`cpu-timestamped`](../schemas/iostat/cpu-timestamped.json), [`device`](../schemas/iostat/device.json), [`device-timestamped`](../schemas/iostat/device-timestamped.json), [`extended`](../schemas/iostat/extended.json), [`extended-device`](../schemas/iostat/extended-device.json), [`extended-timestamped`](../schemas/iostat/extended-timestamped.json), [`freebsd-extended`](../schemas/iostat/freebsd-extended.json), [`human`](../schemas/iostat/human.json), [`human-sizes`](../schemas/iostat/human-sizes.json), [`human-sizes-timestamped`](../schemas/iostat/human-sizes-timestamped.json), [`human-timestamped`](../schemas/iostat/human-timestamped.json), [`linux`](../schemas/iostat/linux.json), [`linux-timestamped`](../schemas/iostat/linux-timestamped.json) |
@@ -190,6 +190,7 @@ the same reading with settings of your own.
 | `resolvectl` | [`per-link`](../schemas/resolvectl/per-link.json), [`status`](../schemas/resolvectl/status.json) |
 | `rfkill` | [`linux`](../schemas/rfkill/linux.json), [`list`](../schemas/rfkill/list.json) |
 | `route` | [`linux`](../schemas/route/linux.json), [`windows`](../schemas/route/windows.json) |
+| `rpm` | [`info`](../schemas/rpm/info.json) |
 | `rsync` | [`itemize`](../schemas/rsync/itemize.json) |
 | `rustc` | [`verbose-version`](../schemas/rustc/verbose-version.json) |
 | `rustup` | [`check`](../schemas/rustup/check.json), [`component-list`](../schemas/rustup/component-list.json), [`target-list`](../schemas/rustup/target-list.json), [`toolchains`](../schemas/rustup/toolchains.json), [`toolchains-verbose`](../schemas/rustup/toolchains-verbose.json) |

@@ -618,3 +618,41 @@ scenarios:
           stdout: {empty: true}
           stderr:
             contains: "excluded by the argument -e"
+
+  # Every macOS system has lo0 with 127.0.0.1, and mDNSResponder keeps a
+  # permanent ARP entry for its multicast group, so neither depends on the
+  # runner's network.
+  - name: ifconfig and arp land on ifconfig/bsd and arp/darwin
+    only: {os: darwin}
+    steps:
+      - run:
+          command: jz run --explain ifconfig lo0
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ifconfig/bsd from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].interface.name", equals: lo0 }
+              - { path: "$[0].inet[0].address", equals: 127.0.0.1 }
+              - { path: "$[0].inet[0].mask", equals: "0xff000000" }
+              - { path: "$[0].status.mtu", gt: 0 }
+      - run:
+          command: jz run --explain ifconfig -a
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ifconfig/bsd from embedded"
+          stdout:
+            json:
+              - { path: "$[?(@.interface.name == 'lo0')].status.flags[0]", equals: UP }
+      - run:
+          command: jz run --explain arp -an
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose arp/darwin from embedded"
+          stdout:
+            json:
+              - { path: "$[0].interface", matches: "." }

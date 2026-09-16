@@ -1,0 +1,6 @@
+description: >-
+  The macOS 15 loopback block with `vhid 1` added to an inet line, the word
+  FreeBSD prints for a CARP address. The inet part does not name it, so
+  the block is refused rather than read with the word missing.
+source: macos-15-loopback.txt with ` vhid 1` appended to its second inet line by hand
+expect_error: 'part "inet"'

@@ -1,0 +1,4 @@
+description: two files and the total line, with the counts right-aligned in eight columns.
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C wc /etc/hosts /etc/shells
+os: darwin
+args: ["/etc/hosts", "/etc/shells"]

@@ -1,0 +1,9 @@
+description: >-
+  ifconfig on FreeBSD 15.1 with a metric on every first line, an interface
+  description holding a colon, an alias address, a tentative link-local
+  address, an epair, a bridge whose member line continues, a gif tunnel, a
+  tun device with a point-to-point address and a netmask of 0x0, and a
+  VLAN with options=0.
+source: captured in a vmactions/freebsd-vm virtual machine (FreeBSD 15.1-RELEASE-p3) on GitHub Actions with LC_ALL=C and `ifconfig` after creating the interfaces with ifconfig; the MAC addresses of the created interfaces are replaced by 02:00:00:00:00:0N and the link-local address derived from one by fe80::ff:fe00:1
+os: freebsd
+args: []

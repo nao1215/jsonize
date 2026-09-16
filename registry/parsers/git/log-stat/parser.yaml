@@ -1,0 +1,114 @@
+# `git log --stat` and `git log --shortstat` print the blocks `git log`
+# prints, and under the message of a commit that changed something, the
+# diffstat: with `--stat` a line per path and the closing count, with
+# `--shortstat` the closing count alone. A merge and an empty commit print
+# none. The commit, the headers and the message are read the way git/log
+# reads them, the headers as a map, so `--format=fuller` and the other
+# formats whose headers are `Name: value` lines are read too; the
+# diffstat is read the way git/diff-stat reads it, into `files` and
+# `summary`.
+#
+# This is a variant of its own rather than two more keys on git/log:
+# every part of a record is a key every record carries, and adding them
+# there would change git/log's published output. A commit without a
+# diffstat has an empty `files` and a `summary` whose counts are null.
+#
+# What the file lines carry is what git printed, as in git/diff-stat: the
+# bar is a picture scaled to the width and stays the string it was drawn
+# as, a path too long for the column is printed elided from the left
+# ("..." and the tail) and so is a rename (`src/{main.go => app.go}`).
+# `git log --numstat` prints both exactly and is not this format.
+#
+# The message lines are indented by four spaces and a diffstat line by
+# one, which is what tells them apart: a message line that reads
+# `1 file changed` is still a message line. Anything else under a commit,
+# the `mode change` and `create mode` lines of `--summary`, a patch, or a
+# `--name-only` list, is refused.
+#
+# The output is told from git/log's by a closing count line, which the
+# signature looks for in the first 200 lines. A log whose first diffstat
+# starts later than that is read by git/log, which refuses it; name this
+# variant (`--parser git --variant log-stat`, or `jz run git log --stat`)
+# to read it.
+format: 1
+command: git
+variant: log-stat
+description: git log --stat and --shortstat, commits with their diffstat
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-log#Documentation/git-log.txt---stat
+    - https://git-scm.com/docs/git-log#Documentation/git-log.txt---shortstat
+detect:
+  args:
+    any: ["--stat", "--stat=", "--shortstat"]
+  signature:
+    all:
+      - '\Acommit [0-9a-f]{7,40}\b'
+      - '^Author:[ \t]'
+      - '^ \d+ files? changed(?:, \d+ insertions?\(\+\))?(?:, \d+ deletions?\(-\))?$'
+    window: 200
+  # git/log's signature holds for this text too; this variant is the one
+  # that reads the diffstat.
+  priority: 1
+input:
+  skip_blank: false
+parse:
+  type: records
+  start: '^commit [0-9a-f]{7,40}\b'
+  parts:
+    - name: commit
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\Acommit (?P<hash>[0-9a-f]{7,40})(?: \((?P<refs>[^)]*)\))?[ \t]*$'
+      fields:
+        hash: {required: true}
+        refs: {type: array, split: ",", when_missing: omit}
+    - name: headers
+      select: {skip: 1, until: '^[ \t]*$'}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+    # The message ends at the first diffstat line, which is indented by
+    # one space where a message line is indented by four.
+    - name: message
+      select: {after: '^[ \t]*$', until: '^ [^ ]'}
+      parse:
+        type: regex
+        each: input
+        pattern: '(?s)\A(?P<lines>(?:[ ]{4}[^\n]*|[ \t]*)(?:\n(?:[ ]{4}[^\n]*|[ \t]*))*?)[ \t\r\n]*\z'
+      fields:
+        lines: {type: array, split: "\n"}
+    - name: files
+      select: {after: '^[ \t]*$'}
+      ignore:
+        - '^[ ]{4}'
+        - '^[ \t]*$'
+        - '^ \d+ files? changed(?:, \d+ insertions?\(\+\))?(?:, \d+ deletions?\(-\))?$'
+      parse:
+        type: regex
+        pattern: '^ (?P<path>.*?)[ ]+\|[ ]+(?:(?P<changes>\d+)(?: (?P<graph>[+-]+))?|Bin(?: (?P<old_bytes>\d+) -> (?P<new_bytes>\d+) bytes)?)$'
+      fields:
+        path: {required: true}
+        changes: {type: int}
+        old_bytes: {type: int}
+        new_bytes: {type: int}
+    # The closing count, and the blank lines after the diffstat that
+    # separate this commit from the next.
+    - name: summary
+      select: {after: '^[ \t]*$'}
+      ignore:
+        - '^[ ]{4}'
+        - '^ .+ \|[ ]+(?:\d+|Bin)'
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[ \t\n]*(?: (?P<files_changed>\d+) files? changed(?:, (?P<insertions>\d+) insertions?\(\+\))?(?:, (?P<deletions>\d+) deletions?\(-\))?)?[ \t\n]*\z'
+      fields:
+        files_changed: {type: int}
+        insertions: {type: int}
+        deletions: {type: int}

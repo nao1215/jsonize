@@ -1,0 +1,122 @@
+# ifconfig from net-tools 2.x (the one Debian, Ubuntu and Fedora package)
+# prints one block per interface: the name with its flags and MTU, the
+# IPv4 line if the interface has an address, a line per IPv6 address, the
+# link line, two receive lines and two transmit lines, and a blank line.
+# The blocks repeat, so the definition describes one and `records`
+# applies it to each.
+#
+# The keys follow ifconfig/busybox where the two say the same thing: the
+# name, the hardware address and its encapsulation under `interface`, the
+# flags and the MTU under `status`, `address`, `mask`, `broadcast` and
+# `peer` for the IPv4 line (net-tools calls the far end of a
+# point-to-point link `destination`), and `address`, `prefixlen` and
+# `scope` for an IPv6 address. The flags are printed twice, as a decimal
+# number and as names; both are kept.
+#
+# net-tools prints only the interface's primary IPv4 address. `ip
+# address` lists the others; nothing here stands in for them.
+#
+# The link line names the hardware type (`ether`, `loop`, `unspec`), the
+# hardware address when there is one, the queue length and the
+# description in parentheses. A tun device has no MAC and prints its
+# unspecified address as sixteen dashed zero bytes, which is kept as it
+# was printed.
+#
+# The byte counts are printed exactly and again rounded; the exact one
+# is a number and the rounded one stays the string it was printed as.
+#
+# What this definition does not read: the `device interrupt ... memory
+# ...` line a physical NIC can print after the counters, and a metric in
+# the first line. Neither was printed on the machines this was captured
+# on, so a block with one is refused as unread text rather than read
+# from a guess at its layout. The one-line-per-interface table of
+# `ifconfig -s` is a different format.
+format: 1
+command: ifconfig
+variant: net-tools
+description: net-tools ifconfig per-interface block
+metadata:
+  tags: [linux, network, net-tools]
+  compatible: [net-tools 2.10]
+  references:
+    - https://manpages.debian.org/stable/net-tools/ifconfig.8.en.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      # Two spaces before "mtu" and a decimal flag number: the BSD
+      # ifconfig writes one space and hexadecimal flags, BusyBox writes
+      # "Link encap:".
+      - '\A[^\s:]+: flags=\d+<[A-Z0-9_,]*>  mtu \d+[ \t]*$'
+      - '^[ ]+RX packets \d+  bytes \d+ \([^)]*\)[ \t]*$'
+      - '^[ ]+TX errors \d+  dropped \d+ overruns \d+  carrier \d+  collisions \d+[ \t]*$'
+    window: 40
+parse:
+  type: records
+  start: '^[^\s:]+: flags='
+  parts:
+    # The name is on the first line and the hardware on the link line,
+    # with the address lines between them, which the parts below read.
+    - name: interface
+      select: {until: '^[ ]+RX packets '}
+      ignore: ['^[ ]+inet6? ']
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>[^\s:]+): flags=\d+<[A-Z0-9_,]*>  mtu \d+[ \t]*\n[ ]+(?P<hwtype>[a-z0-9]+)(?: (?P<hwaddr>\S+))?  txqueuelen (?P<txqueuelen>\d+)  \((?P<encap>[^)]*)\)[ \t]*\z'
+      fields:
+        name: {required: true}
+        txqueuelen: {type: int}
+    - name: status
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[^\s:]+: flags=(?P<flags_value>\d+)<(?P<flags>[A-Z0-9_,]*)>  mtu (?P<mtu>\d+)[ \t]*\z'
+      fields:
+        flags_value: {type: int}
+        flags: {type: array, split: ","}
+        mtu: {type: int}
+    # The IPv4 line, if the interface has one; an interface without an
+    # address carries the same keys, all null.
+    - name: inet
+      select: {skip: 1, until: '^[ ]+(?:inet6 |.*  txqueuelen \d+  \()'}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?:[ ]+inet (?P<address>\S+)  netmask (?P<mask>\S+)(?:  broadcast (?P<broadcast>\S+))?(?:  destination (?P<peer>\S+))?[ \t]*)?\z'
+    - name: inet6
+      select: {skip: 1, until: '  txqueuelen \d+  \('}
+      ignore: ['^[ ]+inet ']
+      parse:
+        type: regex
+        pattern: '\A[ ]+inet6 (?P<address>\S+)  prefixlen (?P<prefixlen>\d+)  scopeid (?P<scopeid>0x[0-9a-f]+)<(?P<scope>[a-z]+)>[ \t]*\z'
+      fields:
+        prefixlen: {type: int}
+    - name: rx
+      select: {after: '  txqueuelen \d+  \(', limit: 2}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[ ]+RX packets (?P<packets>\d+)  bytes (?P<bytes>\d+) \((?P<bytes_human>[^)]*)\)[ \t]*\n[ ]+RX errors (?P<errors>\d+)  dropped (?P<dropped>\d+)  overruns (?P<overruns>\d+)  frame (?P<frame>\d+)[ \t]*\z'
+      fields:
+        packets: {type: int}
+        bytes: {type: int}
+        errors: {type: int}
+        dropped: {type: int}
+        overruns: {type: int}
+        frame: {type: int}
+    - name: tx
+      select: {after: '^[ ]+RX errors ', limit: 2}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A[ ]+TX packets (?P<packets>\d+)  bytes (?P<bytes>\d+) \((?P<bytes_human>[^)]*)\)[ \t]*\n[ ]+TX errors (?P<errors>\d+)  dropped (?P<dropped>\d+) overruns (?P<overruns>\d+)  carrier (?P<carrier>\d+)  collisions (?P<collisions>\d+)[ \t]*\z'
+      fields:
+        packets: {type: int}
+        bytes: {type: int}
+        errors: {type: int}
+        dropped: {type: int}
+        overruns: {type: int}
+        carrier: {type: int}
+        collisions: {type: int}

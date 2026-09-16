@@ -1,0 +1,3 @@
+? (192.168.122.2) at 52:55:c0:a8:7a:02 on vtnet0 expires in 1193 seconds [ethernet]
+? (192.168.122.3) at 52:55:c0:a8:7a:03 on vtnet0 expires in 1193 seconds [ethernet]
+? (192.168.122.10) at 52:54:00:12:34:56 on vtnet0 permanent [ethernet]

@@ -1,0 +1,71 @@
+[
+  {
+    "interface": {
+      "name": "lo0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "8049",
+      "flags": [
+        "UP",
+        "LOOPBACK",
+        "RUNNING",
+        "MULTICAST"
+      ],
+      "metric": null,
+      "mtu": 16384,
+      "index": null
+    },
+    "inet": [
+      {
+        "address": "127.0.0.1",
+        "peer": null,
+        "mask": "0xff000000",
+        "broadcast": null
+      },
+      {
+        "address": "127.0.0.2",
+        "peer": null,
+        "mask": "0xffffffff",
+        "broadcast": null
+      }
+    ],
+    "inet6": [
+      {
+        "address": "::1",
+        "zone": null,
+        "prefixlen": 128,
+        "flags": [],
+        "scopeid": null
+      },
+      {
+        "address": "fe80::1",
+        "zone": "lo0",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0x1"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "1203",
+        "names": [
+          "RXCSUM",
+          "TXCSUM",
+          "TXSTATUS",
+          "SW_TIMESTAMP"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "201",
+        "names": [
+          "PERFORMNUD",
+          "DAD"
+        ]
+      }
+    ],
+    "properties": []
+  }
+]

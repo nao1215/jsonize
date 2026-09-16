@@ -1,0 +1,528 @@
+[
+  {
+    "interface": {
+      "name": "vtnet0",
+      "hwaddr": "52:54:00:12:34:56"
+    },
+    "status": {
+      "flags_value": "1008843",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST",
+        "LOWER_UP"
+      ],
+      "metric": 0,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [
+      {
+        "address": "192.168.122.10",
+        "peer": null,
+        "mask": "0xffffff00",
+        "broadcast": "192.168.122.255"
+      }
+    ],
+    "inet6": [
+      {
+        "address": "fe80::5054:ff:fe12:3456",
+        "zone": "vtnet0",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0x1"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "880028",
+        "names": [
+          "VLAN_MTU",
+          "JUMBO_MTU",
+          "LINKSTATE",
+          "HWSTATS"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "23",
+        "names": [
+          "PERFORMNUD",
+          "ACCEPT_RTADV",
+          "AUTO_LINKLOCAL"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "media",
+        "value": "Ethernet autoselect (10Gbase-T <full-duplex>)"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "lo0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "1008049",
+      "flags": [
+        "UP",
+        "LOOPBACK",
+        "RUNNING",
+        "MULTICAST",
+        "LOWER_UP"
+      ],
+      "metric": 0,
+      "mtu": 16384,
+      "index": null
+    },
+    "inet": [
+      {
+        "address": "127.0.0.1",
+        "peer": null,
+        "mask": "0xff000000",
+        "broadcast": null
+      },
+      {
+        "address": "127.0.0.2",
+        "peer": null,
+        "mask": "0xffffffff",
+        "broadcast": null
+      }
+    ],
+    "inet6": [
+      {
+        "address": "::1",
+        "zone": null,
+        "prefixlen": 128,
+        "flags": [],
+        "scopeid": null
+      },
+      {
+        "address": "fe80::1",
+        "zone": "lo0",
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": "0x2"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "680003",
+        "names": [
+          "RXCSUM",
+          "TXCSUM",
+          "LINKSTATE",
+          "RXCSUM_IPV6",
+          "TXCSUM_IPV6"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "23",
+        "names": [
+          "PERFORMNUD",
+          "ACCEPT_RTADV",
+          "AUTO_LINKLOCAL"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "groups",
+        "value": "lo"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "epair0a",
+      "hwaddr": "02:00:00:00:00:05"
+    },
+    "status": {
+      "flags_value": "1008843",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST",
+        "LOWER_UP"
+      ],
+      "metric": 0,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [
+      {
+        "address": "198.51.100.1",
+        "peer": null,
+        "mask": "0xffffff00",
+        "broadcast": "198.51.100.255"
+      },
+      {
+        "address": "198.51.100.2",
+        "peer": null,
+        "mask": "0xffffffff",
+        "broadcast": "198.51.100.2"
+      }
+    ],
+    "inet6": [
+      {
+        "address": "2001:db8::1",
+        "zone": null,
+        "prefixlen": 64,
+        "flags": [],
+        "scopeid": null
+      },
+      {
+        "address": "fe80::ff:fe00:1",
+        "zone": "epair0a",
+        "prefixlen": 64,
+        "flags": [
+          "tentative"
+        ],
+        "scopeid": "0x3"
+      }
+    ],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "60001b",
+        "names": [
+          "RXCSUM",
+          "TXCSUM",
+          "VLAN_MTU",
+          "VLAN_HWTAGGING",
+          "RXCSUM_IPV6",
+          "TXCSUM_IPV6"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "21",
+        "names": [
+          "PERFORMNUD",
+          "AUTO_LINKLOCAL"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "description",
+        "value": "uplink: test"
+      },
+      {
+        "name": "groups",
+        "value": "epair"
+      },
+      {
+        "name": "media",
+        "value": "Ethernet 10Gbase-T (10Gbase-T <full-duplex>)"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "epair0b",
+      "hwaddr": "02:00:00:00:00:06"
+    },
+    "status": {
+      "flags_value": "1008943",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "RUNNING",
+        "PROMISC",
+        "SIMPLEX",
+        "MULTICAST",
+        "LOWER_UP"
+      ],
+      "metric": 0,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "60001b",
+        "names": [
+          "RXCSUM",
+          "TXCSUM",
+          "VLAN_MTU",
+          "VLAN_HWTAGGING",
+          "RXCSUM_IPV6",
+          "TXCSUM_IPV6"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "29",
+        "names": [
+          "PERFORMNUD",
+          "IFDISABLED",
+          "AUTO_LINKLOCAL"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "groups",
+        "value": "epair"
+      },
+      {
+        "name": "media",
+        "value": "Ethernet 10Gbase-T (10Gbase-T <full-duplex>)"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "bridge0",
+      "hwaddr": "02:00:00:00:00:07"
+    },
+    "status": {
+      "flags_value": "1008843",
+      "flags": [
+        "UP",
+        "BROADCAST",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST",
+        "LOWER_UP"
+      ],
+      "metric": 0,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "10",
+        "names": [
+          "VLAN_HWTAGGING"
+        ]
+      },
+      {
+        "name": "bridge flags",
+        "value": "0",
+        "names": []
+      },
+      {
+        "name": "nd6 options",
+        "value": "9",
+        "names": [
+          "PERFORMNUD",
+          "IFDISABLED"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": null,
+        "value": "id 00:00:00:00:00:00 priority 32768 hellotime 2 fwddelay 15"
+      },
+      {
+        "name": null,
+        "value": "maxage 20 holdcnt 6 proto rstp maxaddr 2000 timeout 1200"
+      },
+      {
+        "name": null,
+        "value": "root id 00:00:00:00:00:00 priority 32768 ifcost 0 port 0"
+      },
+      {
+        "name": "member",
+        "value": "epair0b flags=143<LEARNING,DISCOVER,AUTOEDGE,AUTOPTP> port 4 priority 128 path cost 2000 vlan protocol 802.1q"
+      },
+      {
+        "name": "groups",
+        "value": "bridge"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "gif0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "1008011",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "MULTICAST",
+        "LOWER_UP"
+      ],
+      "metric": 0,
+      "mtu": 1280,
+      "index": null
+    },
+    "inet": [
+      {
+        "address": "10.0.0.1",
+        "peer": "10.0.0.2",
+        "mask": "0xffffffff",
+        "broadcast": null
+      }
+    ],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "80000",
+        "names": [
+          "LINKSTATE"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "29",
+        "names": [
+          "PERFORMNUD",
+          "IFDISABLED",
+          "AUTO_LINKLOCAL"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": null,
+        "value": "tunnel inet 192.0.2.1 --> 192.0.2.2"
+      },
+      {
+        "name": "groups",
+        "value": "gif"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "tun0",
+      "hwaddr": null
+    },
+    "status": {
+      "flags_value": "1008051",
+      "flags": [
+        "UP",
+        "POINTOPOINT",
+        "RUNNING",
+        "MULTICAST",
+        "LOWER_UP"
+      ],
+      "metric": 0,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [
+      {
+        "address": "10.1.0.1",
+        "peer": "10.1.0.2",
+        "mask": "0x0",
+        "broadcast": null
+      }
+    ],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "4080000",
+        "names": [
+          "LINKSTATE",
+          "MEXTPG"
+        ]
+      },
+      {
+        "name": "nd6 options",
+        "value": "29",
+        "names": [
+          "PERFORMNUD",
+          "IFDISABLED",
+          "AUTO_LINKLOCAL"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "groups",
+        "value": "tun"
+      }
+    ]
+  },
+  {
+    "interface": {
+      "name": "vlan100",
+      "hwaddr": "02:00:00:00:00:05"
+    },
+    "status": {
+      "flags_value": "1008842",
+      "flags": [
+        "BROADCAST",
+        "RUNNING",
+        "SIMPLEX",
+        "MULTICAST",
+        "LOWER_UP"
+      ],
+      "metric": 0,
+      "mtu": 1500,
+      "index": null
+    },
+    "inet": [],
+    "inet6": [],
+    "bitmasks": [
+      {
+        "name": "options",
+        "value": "0",
+        "names": null
+      },
+      {
+        "name": "nd6 options",
+        "value": "29",
+        "names": [
+          "PERFORMNUD",
+          "IFDISABLED",
+          "AUTO_LINKLOCAL"
+        ]
+      }
+    ],
+    "properties": [
+      {
+        "name": "groups",
+        "value": "vlan"
+      },
+      {
+        "name": "vlan",
+        "value": "100 vlanproto: 802.1q vlanpcp: 0 parent interface: epair0a"
+      },
+      {
+        "name": "media",
+        "value": "Ethernet 10Gbase-T (10Gbase-T <full-duplex>)"
+      },
+      {
+        "name": "status",
+        "value": "active"
+      }
+    ]
+  }
+]

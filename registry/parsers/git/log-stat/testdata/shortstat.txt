@@ -1,0 +1,67 @@
+commit a4ebd280f3ad8856a1281105f3a8d59ab9efa224
+Author: Ada Lovelace <ada@example.com>
+Date:   Mon Sep 7 10:00:00 2026 +0900
+
+    make topic.txt executable
+
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit ce3b8ff243ad4ea6274c7ff25459e7e270c3343e
+Author: Ada Lovelace <ada@example.com>
+Date:   Sun Sep 6 10:00:00 2026 +0900
+
+    an empty commit: nothing changed
+
+commit 74fc48f5b42fa8b4b8d6c1f70272a6f804fb0d7f
+Merge: 52ce2a5 1b4c0f6
+Author: Ada Lovelace <ada@example.com>
+Date:   Sat Sep 5 10:00:00 2026 +0900
+
+    Merge branch topic
+
+commit 52ce2a526059416d2b13a3666f54940d24a129b3
+Author: Ada Lovelace <ada@example.com>
+Date:   Fri Sep 4 10:00:00 2026 +0900
+
+    revert the README, drop the logo
+
+ 2 files changed, 1 deletion(-)
+
+commit 1b4c0f631148eb3bb2ca5158fe61c6765420101b
+Author: Ada Lovelace <ada@example.com>
+Date:   Fri Sep 4 10:00:00 2026 +0900
+
+    add topic
+
+ 1 file changed, 1 insertion(+)
+
+commit 7135ad3ded92f157d28bf91ebedb6bcd2ce94cdd
+Author: Ada Lovelace <ada@example.com>
+Date:   Thu Sep 3 10:00:00 2026 +0900
+
+    refactor: rename main.go and add a deep path
+
+ 2 files changed, 1 insertion(+)
+
+commit 533e21452aed1038a29c8622606c20964122eccd
+Author: Ada Lovelace <ada@example.com>
+Date:   Wed Sep 2 10:00:00 2026 +0900
+
+    docs: say "hello": then add a logo
+    
+    The README now reads "hello there": a colon, a "quoted" word and a
+    hash-like string 0123456789abcdef0123456789abcdef01234567 in the body.
+    
+    commit deadbeefdeadbeefdeadbeefdeadbeefdeadbeef
+    Author: Not A Header <no@example.com>
+     1 file changed, 99 insertions(+)
+
+ 2 files changed, 1 insertion(+)
+
+commit a52d185500b4bde335433269b72341d501e8043b
+Author: Ada Lovelace <ada@example.com>
+Date:   Tue Sep 1 10:00:00 2026 +0900
+
+    Initial commit
+
+ 2 files changed, 3 insertions(+)

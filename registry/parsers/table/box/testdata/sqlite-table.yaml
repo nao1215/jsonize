@@ -1,0 +1,5 @@
+description: >-
+  The ASCII table sqlite3 -table prints: a rule of + and - around the
+  table and under the header, a centred heading, a NULL printed as an empty
+  cell, and a value with a character outside ASCII.
+source: captured with LC_ALL=C.UTF-8 and `sqlite3 -table DB 'select * from sites'` from sqlite3 3.46.1 in a debian:stable-slim container, from a table created for this fixture

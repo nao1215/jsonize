@@ -1,0 +1,4 @@
+description: arp -an on the same machine, every name printed as "?".
+source: captured on GitHub Actions macos-latest (macOS 26.6.2) with LC_ALL=C arp -an; addresses replaced as in macos-26
+os: darwin
+args: ["-an"]

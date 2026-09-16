@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ifconfig/bsd.json",
+  "title": "ifconfig/bsd",
+  "description": "macOS and FreeBSD ifconfig per-interface block",
+  "x-jsonize": {
+    "definition": "ifconfig/bsd",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "interface": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "hwaddr": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "hwaddr"
+        ]
+      },
+      "status": {
+        "type": "object",
+        "properties": {
+          "flags_value": {
+            "type": "string"
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metric": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "mtu": {
+            "type": "integer"
+          },
+          "index": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "flags_value",
+          "flags",
+          "metric",
+          "mtu",
+          "index"
+        ]
+      },
+      "inet": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "peer": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "mask": {
+              "type": "string"
+            },
+            "broadcast": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "address",
+            "peer",
+            "mask",
+            "broadcast"
+          ]
+        }
+      },
+      "inet6": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "zone": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "prefixlen": {
+              "type": "integer"
+            },
+            "flags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "scopeid": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "address",
+            "zone",
+            "prefixlen",
+            "flags",
+            "scopeid"
+          ]
+        }
+      },
+      "bitmasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "names": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "name",
+            "value",
+            "names"
+          ]
+        }
+      },
+      "properties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "value": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "name",
+            "value"
+          ]
+        }
+      }
+    },
+    "required": [
+      "interface",
+      "status",
+      "inet",
+      "inet6",
+      "bitmasks",
+      "properties"
+    ]
+  }
+}

@@ -19,7 +19,7 @@ so the output shown is what jz prints.
 | convert a data file | [Convert a CSV file](#convert-a-csv-file), [Type the columns of a CSV file](#type-the-columns-of-a-csv-file), [Read a CSV without a header line](#read-a-csv-without-a-header-line), [Convert YAML to JSON](#convert-yaml-to-json), [Read compressed JSON Lines logs](#read-compressed-json-lines-logs), [Read LTSV access logs](#read-ltsv-access-logs) |
 | turn plain text into JSON | [Turn lines into a JSON array](#turn-lines-into-a-json-array), [Read find -print0 output](#read-find--print0-output), [Wrap a whole text in a JSON string](#wrap-a-whole-text-in-a-json-string) |
 | make JSON in a script | [Build a JSON body for an API call](#build-a-json-body-for-an-api-call), [Pass a variable that may start with @](#pass-a-variable-that-may-start-with-), [Put a file's contents into JSON](#put-a-files-contents-into-json), [Keep a file's line endings](#keep-a-files-line-endings), [Build nested JSON](#build-nested-json), [Make a JSON array](#make-a-json-array) |
-| hand the JSON to jq | [Pick the records you want with jq](#pick-the-records-you-want-with-jq), [Fail a step when a value is out of range](#fail-a-step-when-a-value-is-out-of-range) |
+| hand the JSON to jq | [Pick the records you want with jq](#pick-the-records-you-want-with-jq), [List installed packages by licence](#list-installed-packages-by-licence), [Fail a step when a value is out of range](#fail-a-step-when-a-value-is-out-of-range) |
 | send or store the JSON | [Send JSON to an HTTP API](#send-json-to-an-http-api), [Save a report for a later step](#save-a-report-for-a-later-step) |
 | use jz in CI | [Fail a CI step when jz cannot read the output](#fail-a-ci-step-when-jz-cannot-read-the-output), [Read the explanation in a script](#read-the-explanation-in-a-script), [Get the JSON Schema of an output](#get-the-json-schema-of-an-output) |
 | read a format jz does not know | [Add a parser of your own](#add-a-parser-of-your-own) |
@@ -286,6 +286,20 @@ $ df -h | jz | jq -r '.[] | select(.use_percent >= 90) | .mounted_on'
 `use_percent` is a number because df prints an exact one, so `>= 90` is a
 comparison rather than string work. A rounded size (`1.8T`) is a string,
 and a threshold on it belongs to the tool that knows what T means.
+
+## List installed packages by licence
+
+`rpm -qia` prints a block per installed package. jz reads every block,
+the description with its line breaks included, and jq picks the fields.
+
+```console
+$ rpm -qia | jz | jq -r '.[] | [.name, .epoch, .license] | @tsv'
+bash		GPL-3.0-or-later
+xz-libs	1	0BSD
+```
+
+A label rpm did not print for a package, such as `Epoch`, is `null`
+rather than missing, so every package has the same keys.
 
 ## Fail a step when a value is out of range
 
