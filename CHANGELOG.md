@@ -88,6 +88,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz new 'a[][]=1'` wrote `{"a[]":["1"]}`, a key the documentation says
+  a plain argument cannot name. A key that still ends in `[]` once the
+  `[]` that appends is taken off is refused with exit 2, in a plain
+  argument and in `--string` and `--text-file`.
 - `sar -B`, `pidstat`, `pidstat -U` and `pidstat -r` are identified by
   their whole header rather than its first columns, so the forms an
   older sysstat prints (`%vmeff` in place of `pgprom/s` and `pgdem/s`,
