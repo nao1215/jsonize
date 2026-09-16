@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (df (GNU coreutils) 9.7) with LC_ALL=C, tmpfs and efivarfs left out with -x and the user name in a mount point replaced
+description: a unit given with a number, which df prints no suffix for
+os: linux
+args: ["-P", "--block-size=1MiB", "-x", "tmpfs", "-x", "efivarfs"]

@@ -1,0 +1,7 @@
+
+------ Shared Memory Limits --------
+max number of segments = 4096
+max seg size (kbytes) = 18014398509465599
+max total shared memory (kbytes) = 18446744073709551612
+min seg size (bytes) = 1
+

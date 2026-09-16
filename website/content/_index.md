@@ -40,7 +40,7 @@ $ jz new --string "message=$MESSAGE" --path /metadata/labels/app=api replicas:=3
 | to select, sort or reshape JSON you already have | [jq](https://jqlang.org/) |
 | a parser for a command jz does not know yet | a YAML definition in your own registry |
 
-jz reads 235 commands through 617 definitions, from `df`, `ps` and `ip`
+jz reads 236 commands through 620 definitions, from `df`, `ps` and `ip`
 to `kubectl get`, `docker ps`, `tasklist` and `diskutil list`, on Linux,
 macOS, Windows and FreeBSD. A definition is a YAML file with captured
 output beside it; no Go code is needed to add one.

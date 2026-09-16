@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (uutils coreutils 0.8.0) with LC_ALL=C, reading standard input
+description: no file named, so no name printed
+os: linux
+args: []

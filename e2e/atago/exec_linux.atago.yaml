@@ -1884,6 +1884,17 @@ scenarios:
             json:
               - { path: "$.header.block_size", equals: "1M" }
               - { path: "$.filesystems[0].blocks", gte: 0 }
+      # With -P the heading names the unit in bytes.
+      - run:
+          command: jz run --explain df -P -BM
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose df/portable-blocks from embedded"
+          stdout:
+            json:
+              - { path: "$.header.block_size", equals: 1048576 }
+              - { path: "$.filesystems[0].blocks", gte: 0 }
       - run:
           command: jz run --explain df -k
       - assert:

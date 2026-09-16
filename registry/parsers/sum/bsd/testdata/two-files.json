@@ -1,0 +1,12 @@
+[
+  {
+    "checksum": 21575,
+    "blocks": 1,
+    "file": "hostname"
+  },
+  {
+    "checksum": 53099,
+    "blocks": 4,
+    "file": "passwd"
+  }
+]

@@ -1680,3 +1680,39 @@ scenarios:
               - { path: "$[0].link", equals: null }
               - { path: "$[2].link", equals: wlp195s0 }
               - { path: "$[2].values[1]", equals: "~example.org" }
+
+  - name: ipcs -l is a record per resource, and a limit past 64 bits keeps its digits
+    steps:
+      - fixture:
+          file: limits.txt
+          from: "${specdir}/../../registry/parsers/ipcs/limits/testdata/util-linux-2.41.txt"
+      - run:
+          command: jz
+          stdin: {file: limits.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 3 }
+              - { path: "$[1].resource.name", equals: Shared Memory }
+              - { path: "$[2].limits['semaphore max value']", equals: 32767 }
+      - assert:
+          stdout:
+            contains: '"max total shared memory (kbytes)":18446744073709551612'
+
+  - name: sum is told from cksum by its padding
+    steps:
+      - fixture:
+          file: sum.txt
+          from: "${specdir}/../../registry/parsers/sum/bsd/testdata/two-files.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: sum.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sum/bsd from embedded"
+          stdout:
+            json:
+              - { path: "$[1].checksum", equals: 53099 }
+              - { path: "$[1].blocks", equals: 4 }
