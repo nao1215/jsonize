@@ -1,0 +1,11 @@
+description: >-
+  rpm -qpi with two package files that are not installed, which prints
+  `(not installed)` as the install date. That is kept as the text rpm
+  printed; the other labels read as they do for an installed package.
+source: >-
+  two packages built for this fixture with rpmbuild in the fedora:latest
+  container image (rpm 6.0.2), queried without installing them with
+  `LC_ALL=C rpm -qpi jz-sample-*.rpm jz-empty-*.rpm`; the container host
+  name is replaced with buildhost
+os: linux
+args: ["-qpi", "jz-sample-1.2.0-4.noarch.rpm", "jz-empty-0.1-1.noarch.rpm"]
