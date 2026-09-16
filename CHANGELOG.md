@@ -4,7 +4,14 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.6.0]
+
+A stream ends at the first record it cannot read, so the next program in
+a pipeline never sees a partial result that looks complete, and
+`--stop-on-error` goes away with the choice it offered. `jz new KEY:=JSON`
+returns the same status as the same text read from a file, and the
+registry reads what exiftool, identify and pkg-config print: 227 commands
+through 600 definitions.
 
 ### Added
 
