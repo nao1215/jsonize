@@ -1,0 +1,262 @@
+[
+  {
+    "commit": {
+      "hash": "a4ebd280f3ad8856a1281105f3a8d59ab9efa224"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "AuthorDate": "Mon Sep 7 10:00:00 2026 +0900",
+      "Commit": "Grace Hopper <grace@example.com>",
+      "CommitDate": "Mon Sep 7 11:30:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "make topic.txt executable"
+      ]
+    },
+    "files": [
+      {
+        "path": "topic.txt",
+        "changes": 0,
+        "graph": null,
+        "old_bytes": null,
+        "new_bytes": null
+      }
+    ],
+    "summary": {
+      "files_changed": 1,
+      "insertions": 0,
+      "deletions": 0
+    }
+  },
+  {
+    "commit": {
+      "hash": "ce3b8ff243ad4ea6274c7ff25459e7e270c3343e"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "AuthorDate": "Sun Sep 6 10:00:00 2026 +0900",
+      "Commit": "Grace Hopper <grace@example.com>",
+      "CommitDate": "Sun Sep 6 11:30:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "an empty commit: nothing changed"
+      ]
+    },
+    "files": [],
+    "summary": {
+      "files_changed": null,
+      "insertions": null,
+      "deletions": null
+    }
+  },
+  {
+    "commit": {
+      "hash": "74fc48f5b42fa8b4b8d6c1f70272a6f804fb0d7f"
+    },
+    "headers": {
+      "Merge": "52ce2a5 1b4c0f6",
+      "Author": "Ada Lovelace <ada@example.com>",
+      "AuthorDate": "Sat Sep 5 10:00:00 2026 +0900",
+      "Commit": "Grace Hopper <grace@example.com>",
+      "CommitDate": "Sat Sep 5 11:30:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "Merge branch topic"
+      ]
+    },
+    "files": [],
+    "summary": {
+      "files_changed": null,
+      "insertions": null,
+      "deletions": null
+    }
+  },
+  {
+    "commit": {
+      "hash": "52ce2a526059416d2b13a3666f54940d24a129b3"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "AuthorDate": "Fri Sep 4 10:00:00 2026 +0900",
+      "Commit": "Grace Hopper <grace@example.com>",
+      "CommitDate": "Fri Sep 4 11:30:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "revert the README, drop the logo"
+      ]
+    },
+    "files": [
+      {
+        "path": "README.md",
+        "changes": 1,
+        "graph": "-",
+        "old_bytes": null,
+        "new_bytes": null
+      },
+      {
+        "path": "logo.png",
+        "changes": null,
+        "graph": null,
+        "old_bytes": 9,
+        "new_bytes": 0
+      }
+    ],
+    "summary": {
+      "files_changed": 2,
+      "insertions": null,
+      "deletions": 1
+    }
+  },
+  {
+    "commit": {
+      "hash": "1b4c0f631148eb3bb2ca5158fe61c6765420101b"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "AuthorDate": "Fri Sep 4 10:00:00 2026 +0900",
+      "Commit": "Grace Hopper <grace@example.com>",
+      "CommitDate": "Fri Sep 4 11:30:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "add topic"
+      ]
+    },
+    "files": [
+      {
+        "path": "topic.txt",
+        "changes": 1,
+        "graph": "+",
+        "old_bytes": null,
+        "new_bytes": null
+      }
+    ],
+    "summary": {
+      "files_changed": 1,
+      "insertions": 1,
+      "deletions": null
+    }
+  },
+  {
+    "commit": {
+      "hash": "7135ad3ded92f157d28bf91ebedb6bcd2ce94cdd"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "AuthorDate": "Thu Sep 3 10:00:00 2026 +0900",
+      "Commit": "Grace Hopper <grace@example.com>",
+      "CommitDate": "Thu Sep 3 11:30:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "refactor: rename main.go and add a deep path"
+      ]
+    },
+    "files": [
+      {
+        "path": "src/{main.go => app.go}",
+        "changes": 0,
+        "graph": null,
+        "old_bytes": null,
+        "new_bytes": null
+      },
+      {
+        "path": ".../keeps/going/and/going/until/it/cannot/fit/file-with-a-long-name.txt",
+        "changes": 1,
+        "graph": "+",
+        "old_bytes": null,
+        "new_bytes": null
+      }
+    ],
+    "summary": {
+      "files_changed": 2,
+      "insertions": 1,
+      "deletions": null
+    }
+  },
+  {
+    "commit": {
+      "hash": "533e21452aed1038a29c8622606c20964122eccd"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "AuthorDate": "Wed Sep 2 10:00:00 2026 +0900",
+      "Commit": "Grace Hopper <grace@example.com>",
+      "CommitDate": "Wed Sep 2 11:30:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "docs: say \"hello\": then add a logo",
+        "",
+        "The README now reads \"hello there\": a colon, a \"quoted\" word and a",
+        "hash-like string 0123456789abcdef0123456789abcdef01234567 in the body.",
+        "",
+        "commit deadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+        "Author: Not A Header <no@example.com>",
+        "1 file changed, 99 insertions(+)"
+      ]
+    },
+    "files": [
+      {
+        "path": "README.md",
+        "changes": 1,
+        "graph": "+",
+        "old_bytes": null,
+        "new_bytes": null
+      },
+      {
+        "path": "logo.png",
+        "changes": null,
+        "graph": null,
+        "old_bytes": 0,
+        "new_bytes": 9
+      }
+    ],
+    "summary": {
+      "files_changed": 2,
+      "insertions": 1,
+      "deletions": null
+    }
+  },
+  {
+    "commit": {
+      "hash": "a52d185500b4bde335433269b72341d501e8043b"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "AuthorDate": "Tue Sep 1 10:00:00 2026 +0900",
+      "Commit": "Grace Hopper <grace@example.com>",
+      "CommitDate": "Tue Sep 1 11:30:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "Initial commit"
+      ]
+    },
+    "files": [
+      {
+        "path": "README.md",
+        "changes": 2,
+        "graph": "++",
+        "old_bytes": null,
+        "new_bytes": null
+      },
+      {
+        "path": "src/main.go",
+        "changes": 1,
+        "graph": "+",
+        "old_bytes": null,
+        "new_bytes": null
+      }
+    ],
+    "summary": {
+      "files_changed": 2,
+      "insertions": 3,
+      "deletions": null
+    }
+  }
+]

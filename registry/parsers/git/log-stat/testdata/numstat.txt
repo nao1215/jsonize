@@ -1,0 +1,13 @@
+commit a4ebd280f3ad8856a1281105f3a8d59ab9efa224
+Author: Ada Lovelace <ada@example.com>
+Date:   Mon Sep 7 10:00:00 2026 +0900
+
+    make topic.txt executable
+
+0	0	topic.txt
+
+commit ce3b8ff243ad4ea6274c7ff25459e7e270c3343e
+Author: Ada Lovelace <ada@example.com>
+Date:   Sun Sep 6 10:00:00 2026 +0900
+
+    an empty commit: nothing changed

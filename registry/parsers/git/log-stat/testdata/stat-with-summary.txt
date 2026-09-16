@@ -1,0 +1,22 @@
+commit a4ebd280f3ad8856a1281105f3a8d59ab9efa224
+Author: Ada Lovelace <ada@example.com>
+Date:   Mon Sep 7 10:00:00 2026 +0900
+
+    make topic.txt executable
+
+ topic.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ mode change 100644 => 100755 topic.txt
+
+commit ce3b8ff243ad4ea6274c7ff25459e7e270c3343e
+Author: Ada Lovelace <ada@example.com>
+Date:   Sun Sep 6 10:00:00 2026 +0900
+
+    an empty commit: nothing changed
+
+commit 74fc48f5b42fa8b4b8d6c1f70272a6f804fb0d7f
+Merge: 52ce2a5 1b4c0f6
+Author: Ada Lovelace <ada@example.com>
+Date:   Sat Sep 5 10:00:00 2026 +0900
+
+    Merge branch topic

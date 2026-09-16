@@ -1,9 +1,8 @@
 description: >-
   `git log --stat` is not the default format. Its diffstat sits inside the
-  commit block, unindented, where the message would be, so reading it as
-  git/log would report file statistics as lines of the commit message.
-  The paths in a diffstat are elided (.../parsers/proc/loadavg/parser.yaml)
-  and the columns are padded to a width, so there is nothing to recover
-  them from: this output is refused rather than read.
+  commit block, unindented, where the message would be, and git/log-stat
+  is the definition that reads it. This one refuses it by the closing
+  count line rather than reporting the file statistics as lines of the
+  commit message.
 source: git 2.43 on Linux, `git log --stat`
-expect_error: 'part "message": input does not match pattern'
+expect_error: 'does not describe this input'

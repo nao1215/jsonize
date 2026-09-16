@@ -1,0 +1,4 @@
+description: The same history with --format=fuller --stat, whose headers are Author, AuthorDate, Commit and CommitDate.
+source: captured with LC_ALL=C and `git log --format=fuller --stat` from a repository made for this fixture with git 2.53 (the script sets fixed author and committer names and dates; the people are not real)
+os: linux
+args: ["log", "--format=fuller", "--stat"]

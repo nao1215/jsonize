@@ -1,0 +1,16 @@
+commit 533e21452aed1038a29c8622606c20964122eccd
+Author: Ada Lovelace <ada@example.com>
+Date:   Wed Sep 2 10:00:00 2026 +0900
+
+    docs: say "hello": then add a logo
+    
+    The README now reads "hello there": a colon, a "quoted" word and a
+    hash-like string 0123456789abcdef0123456789abcdef01234567 in the body.
+    
+    commit deadbeefdeadbeefdeadbeefdeadbeefdeadbeef
+    Author: Not A Header <no@example.com>
+     1 file changed, 99 insertions(+)
+
+ README.md |   1 +
+ logo.png  | Bin 0 -> 9 bytes
+ 2 files changed, 1 insertion(+)

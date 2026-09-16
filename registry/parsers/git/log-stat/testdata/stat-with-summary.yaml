@@ -1,0 +1,6 @@
+description: >-
+  git log --stat --summary adds a mode change line under the diffstat. No
+  part of the definition reads it, so the output is refused rather than
+  returned without it.
+source: captured with LC_ALL=C and `git log --stat --summary -3` from a repository made for this fixture with git 2.53 (the script sets fixed author and committer names and dates; the people are not real)
+expect_error: 'mode change'
