@@ -47,7 +47,7 @@ the same reading with settings of your own.
 | `bridge` | [`fdb`](../schemas/bridge/fdb.json), [`link`](../schemas/bridge/link.json) |
 | `busctl` | [`list`](../schemas/busctl/list.json), [`tree`](../schemas/busctl/tree.json), [`tree-services`](../schemas/busctl/tree-services.json) |
 | `capsh` | [`print`](../schemas/capsh/print.json) |
-| `cargo` | [`command-list`](../schemas/cargo/command-list.json), [`install-list`](../schemas/cargo/install-list.json), [`search`](../schemas/cargo/search.json), [`tree`](../schemas/cargo/tree.json) |
+| `cargo` | [`command-list`](../schemas/cargo/command-list.json), [`install-list`](../schemas/cargo/install-list.json), [`search`](../schemas/cargo/search.json), [`tree`](../schemas/cargo/tree.json), [`verbose-version`](../schemas/cargo/verbose-version.json) |
 | `chage` | [`linux`](../schemas/chage/linux.json) |
 | `chcp` | [`windows`](../schemas/chcp/windows.json) |
 | `chrt` | [`policy`](../schemas/chrt/policy.json) |
@@ -188,6 +188,7 @@ the same reading with settings of your own.
 | `rfkill` | [`linux`](../schemas/rfkill/linux.json), [`list`](../schemas/rfkill/list.json) |
 | `route` | [`linux`](../schemas/route/linux.json), [`windows`](../schemas/route/windows.json) |
 | `rsync` | [`itemize`](../schemas/rsync/itemize.json) |
+| `rustc` | [`verbose-version`](../schemas/rustc/verbose-version.json) |
 | `rustup` | [`check`](../schemas/rustup/check.json), [`component-list`](../schemas/rustup/component-list.json), [`target-list`](../schemas/rustup/target-list.json), [`toolchains`](../schemas/rustup/toolchains.json), [`toolchains-verbose`](../schemas/rustup/toolchains-verbose.json) |
 | `sar` | [`cpu`](../schemas/sar/cpu.json), [`disk`](../schemas/sar/disk.json), [`filesystem`](../schemas/sar/filesystem.json), [`io`](../schemas/sar/io.json), [`memory`](../schemas/sar/memory.json), [`network-device`](../schemas/sar/network-device.json), [`paging`](../schemas/sar/paging.json), [`queue`](../schemas/sar/queue.json), [`swap`](../schemas/sar/swap.json), [`task`](../schemas/sar/task.json) |
 | `sc` | [`query`](../schemas/sc/query.json), [`queryex`](../schemas/sc/queryex.json) |

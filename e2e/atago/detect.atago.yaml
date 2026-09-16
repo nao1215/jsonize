@@ -1771,3 +1771,20 @@ scenarios:
             json:
               - { path: "$", length: 2 }
               - { path: "$[0].total.size", equals: 11343020 }
+
+  - name: rustc -vV and cargo -vV split the version line from the details
+    steps:
+      - fixture:
+          file: cargo.txt
+          from: "${specdir}/../../registry/parsers/cargo/verbose-version/testdata/1-92.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: cargo.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose cargo/verbose-version from embedded"
+          stdout:
+            json:
+              - { path: "$.version.version", equals: 1.92.0 }
+              - { path: "$.details.host", equals: x86_64-unknown-linux-gnu }
