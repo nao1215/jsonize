@@ -1,0 +1,51 @@
+# `readelf -d` (--dynamic) prints the dynamic section of an ELF file: a
+# line saying where it is and how many entries it has, a column header,
+# and one row per entry with the tag in hexadecimal, its name in
+# brackets and its value. The value is printed the way the tag reads it
+# ("Shared library: [libc.so.6]", "8 (bytes)", "0x3000", "Flags: NOW
+# PIE") and is kept as printed. A file with no dynamic section, a
+# statically linked program, says so on a line of its own, and its
+# result has a null offset and count and no entries.
+format: 1
+command: readelf
+variant: dynamic
+description: readelf -d, the dynamic section of an ELF file
+metadata:
+  tags: [development, elf, binutils]
+  compatible: [GNU Binutils]
+  references:
+    - https://sourceware.org/binutils/docs/binutils/readelf.html
+detect:
+  args:
+    any: ["-d", "--dynamic"]
+  signature:
+    any:
+      - '\ADynamic section at offset 0x[0-9a-f]+ contains [0-9]+ entr(?:y|ies):\n  Tag +Type +Name/Value$'
+      - '\AThere is no dynamic section in this file\.$'
+input:
+  ignore:
+    - '^  Tag +Type +Name/Value$'
+    - '^There is no dynamic section in this file\.$'
+parse:
+  type: composite
+  parts:
+    - name: section
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        patterns:
+          - '\ADynamic section at offset 0x(?P<offset>[0-9a-f]+) contains (?P<count>[0-9]+) entr(?:y|ies):\z'
+          # The line a file with no dynamic section prints is left out, so
+          # the part has nothing to read.
+          - '\A(?P<offset>)??(?P<count>)??\z'
+      fields:
+        count: {type: int}
+    - name: entries
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^ 0x(?P<tag>[0-9a-f]+) \((?P<type>[A-Za-z0-9_]+)\) +(?P<value>.*)$'
+      fields:
+        tag: {required: true}
+        type: {required: true}

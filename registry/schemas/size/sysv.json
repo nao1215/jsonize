@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/size/sysv.json",
+  "title": "size/sysv",
+  "description": "size -A, the size and address of each section of each file",
+  "x-jsonize": {
+    "definition": "size/sysv",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "sections": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "size": {
+              "type": "integer"
+            },
+            "address": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "name",
+            "size",
+            "address"
+          ]
+        }
+      },
+      "total": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "size"
+        ]
+      }
+    },
+    "required": [
+      "file",
+      "sections",
+      "total"
+    ]
+  }
+}

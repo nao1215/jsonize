@@ -1,0 +1,2 @@
+source: readelf -d /usr/bin/cat, captured on Ubuntu 26.04 (GNU Binutils 2.46) with LC_ALL=C
+args: ["-d", "/usr/bin/cat"]

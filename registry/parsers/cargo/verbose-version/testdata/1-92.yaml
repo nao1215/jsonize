@@ -1,0 +1,2 @@
+source: captured on Ubuntu 26.04 (cargo 1.92.0 from rustup) with LC_ALL=C
+args: ["-vV"]

@@ -1,0 +1,15 @@
+{
+  "version": {
+    "version": "1.92.0",
+    "commit": "ded5c06cf",
+    "date": "2025-12-08"
+  },
+  "details": {
+    "binary": "rustc",
+    "commit-hash": "ded5c06cf21d2b93bffd5d884aa6e96934ee4234",
+    "commit-date": "2025-12-08",
+    "host": "x86_64-unknown-linux-gnu",
+    "release": "1.92.0",
+    "LLVM version": "21.1.3"
+  }
+}

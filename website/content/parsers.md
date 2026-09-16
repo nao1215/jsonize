@@ -47,7 +47,7 @@ the same reading with settings of your own.
 | `bridge` | [`fdb`](../schemas/bridge/fdb.json), [`link`](../schemas/bridge/link.json) |
 | `busctl` | [`list`](../schemas/busctl/list.json), [`tree`](../schemas/busctl/tree.json), [`tree-services`](../schemas/busctl/tree-services.json) |
 | `capsh` | [`print`](../schemas/capsh/print.json) |
-| `cargo` | [`command-list`](../schemas/cargo/command-list.json), [`install-list`](../schemas/cargo/install-list.json), [`search`](../schemas/cargo/search.json), [`tree`](../schemas/cargo/tree.json) |
+| `cargo` | [`command-list`](../schemas/cargo/command-list.json), [`install-list`](../schemas/cargo/install-list.json), [`search`](../schemas/cargo/search.json), [`tree`](../schemas/cargo/tree.json), [`verbose-version`](../schemas/cargo/verbose-version.json) |
 | `chage` | [`linux`](../schemas/chage/linux.json) |
 | `chcp` | [`windows`](../schemas/chcp/windows.json) |
 | `chrt` | [`policy`](../schemas/chrt/policy.json) |
@@ -182,12 +182,13 @@ the same reading with settings of your own.
 | `ps` | [`bsd`](../schemas/ps/bsd.json), [`bsd-short`](../schemas/ps/bsd-short.json), [`busybox`](../schemas/ps/busybox.json), [`freebsd`](../schemas/ps/freebsd.json), [`freebsd-long`](../schemas/ps/freebsd-long.json), [`full-format`](../schemas/ps/full-format.json), [`jobs`](../schemas/ps/jobs.json), [`long`](../schemas/ps/long.json), [`long-y`](../schemas/ps/long-y.json), [`posix`](../schemas/ps/posix.json), [`threads`](../schemas/ps/threads.json), [`unix`](../schemas/ps/unix.json) |
 | `pwdx` | [`default`](../schemas/pwdx/default.json) |
 | `rclone` | [`lsd`](../schemas/rclone/lsd.json), [`lsl`](../schemas/rclone/lsl.json), [`version`](../schemas/rclone/version.json) |
-| `readelf` | [`header`](../schemas/readelf/header.json) |
+| `readelf` | [`dynamic`](../schemas/readelf/dynamic.json), [`header`](../schemas/readelf/header.json), [`sections-wide`](../schemas/readelf/sections-wide.json) |
 | `redis-cli` | [`client-list`](../schemas/redis-cli/client-list.json), [`info`](../schemas/redis-cli/info.json) |
 | `resolvectl` | [`per-link`](../schemas/resolvectl/per-link.json), [`status`](../schemas/resolvectl/status.json) |
 | `rfkill` | [`linux`](../schemas/rfkill/linux.json), [`list`](../schemas/rfkill/list.json) |
 | `route` | [`linux`](../schemas/route/linux.json), [`windows`](../schemas/route/windows.json) |
 | `rsync` | [`itemize`](../schemas/rsync/itemize.json) |
+| `rustc` | [`verbose-version`](../schemas/rustc/verbose-version.json) |
 | `rustup` | [`check`](../schemas/rustup/check.json), [`component-list`](../schemas/rustup/component-list.json), [`target-list`](../schemas/rustup/target-list.json), [`toolchains`](../schemas/rustup/toolchains.json), [`toolchains-verbose`](../schemas/rustup/toolchains-verbose.json) |
 | `sar` | [`cpu`](../schemas/sar/cpu.json), [`disk`](../schemas/sar/disk.json), [`filesystem`](../schemas/sar/filesystem.json), [`io`](../schemas/sar/io.json), [`memory`](../schemas/sar/memory.json), [`network-device`](../schemas/sar/network-device.json), [`paging`](../schemas/sar/paging.json), [`queue`](../schemas/sar/queue.json), [`swap`](../schemas/sar/swap.json), [`task`](../schemas/sar/task.json) |
 | `sc` | [`query`](../schemas/sc/query.json), [`queryex`](../schemas/sc/queryex.json) |
@@ -204,7 +205,7 @@ the same reading with settings of your own.
 | `sha384sum` | [`posix`](../schemas/sha384sum/posix.json) |
 | `sha512sum` | [`posix`](../schemas/sha512sum/posix.json) |
 | `shellcheck` | [`gcc`](../schemas/shellcheck/gcc.json) |
-| `size` | [`gnu`](../schemas/size/gnu.json) |
+| `size` | [`gnu`](../schemas/size/gnu.json), [`sysv`](../schemas/size/sysv.json) |
 | `smartctl` | [`scan`](../schemas/smartctl/scan.json) |
 | `snap` | [`changes`](../schemas/snap/changes.json), [`connections`](../schemas/snap/connections.json), [`list`](../schemas/snap/list.json), [`services`](../schemas/snap/services.json) |
 | `sockstat` | [`freebsd`](../schemas/sockstat/freebsd.json), [`freebsd-state`](../schemas/sockstat/freebsd-state.json) |

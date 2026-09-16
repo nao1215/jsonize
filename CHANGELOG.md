@@ -22,7 +22,11 @@ project follows [Semantic Versioning](https://semver.org/).
   `ipcs -l` (a record per resource) and `df -P` with `-B`, `-m` or
   `--block-size` (the unit the heading names in bytes). The registry
   holds 236 commands through 620 definitions.
-- `sar -d`, the activity of each block device (621 definitions).
+- `sar -d`, the activity of each block device, and for ELF files
+  `readelf -S -W` (the section headers), `readelf -d` (the dynamic
+  section) and `size -A` (the size and address of each section), and
+  `rustc -vV` and `cargo -vV`. The registry holds 237 commands through
+  626 definitions.
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the

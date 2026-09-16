@@ -1,0 +1,71 @@
+/usr/bin/cat  :
+section                  size       addr
+.note.gnu.build-id         36        904
+.interp                    28        940
+.gnu.hash                  72        968
+.dynsym                  6648       1040
+.dynstr                  3423       7688
+.gnu.version              554      11112
+.gnu.version_r            576      11672
+.rela.dyn              974928      12248
+.rela.plt                 168     987176
+.init                      27     991232
+.plt                      128     991264
+.plt.got                   72     991392
+.text                 4945328     991488
+.fini                      13    5936816
+.rodata               2853608    5939200
+.debug_gdb_scripts         34    8792808
+.eh_frame_hdr          184380    8792844
+.eh_frame              876296    8977224
+.gcc_except_table       10264    9853520
+.note.gnu.property         32    9863784
+.note.ABI-tag              32    9863816
+.note.package             120    9863848
+.tdata                    408    9869008
+.tbss                     305    9869416
+.init_array               656    9869416
+.fini_array                 8    9870072
+.data.rel.ro          1373192    9870080
+.dynamic                  560   11243272
+.got                    85688   11243832
+.data                   24344   11329536
+.bss                     1040   11353888
+.gnu_debuglink             52          0
+Total                11343020
+
+
+/usr/lib/x86_64-linux-gnu/libz.so.1  :
+section                size     addr
+.note.gnu.build-id       36      736
+.gnu.hash               940      776
+.dynsym                2976     1720
+.dynstr                1488     4696
+.gnu.version            248     6184
+.gnu.version_d          524     6432
+.gnu.version_r           80     6960
+.rela.dyn               816     7040
+.rela.plt               408     7856
+.init                    27    12288
+.plt                    288    12320
+.plt.got                 16    12608
+.plt.sec                272    12624
+.text                 75200    12928
+.fini                    13    88128
+.rodata               18248    90112
+.eh_frame_hdr           996   108360
+.eh_frame              4644   109360
+.note.gnu.property       32   114008
+.note.package           128   114040
+.init_array               8   117840
+.fini_array               8   117848
+.data.rel.ro            352   117856
+.dynamic                496   118208
+.got                     32   118704
+.got.plt                160   118760
+.data                     8   118920
+.bss                      8   118928
+.gnu_debuglink           52        0
+Total                108504
+
+

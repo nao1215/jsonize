@@ -1,0 +1,163 @@
+{
+  "section": {
+    "offset": "ab7f08",
+    "count": 31
+  },
+  "entries": [
+    {
+      "tag": "0000000000000001",
+      "type": "NEEDED",
+      "value": "Shared library: [libselinux.so.1]"
+    },
+    {
+      "tag": "0000000000000001",
+      "type": "NEEDED",
+      "value": "Shared library: [libgcc_s.so.1]"
+    },
+    {
+      "tag": "0000000000000001",
+      "type": "NEEDED",
+      "value": "Shared library: [libm.so.6]"
+    },
+    {
+      "tag": "0000000000000001",
+      "type": "NEEDED",
+      "value": "Shared library: [libc.so.6]"
+    },
+    {
+      "tag": "0000000000000001",
+      "type": "NEEDED",
+      "value": "Shared library: [ld-linux-x86-64.so.2]"
+    },
+    {
+      "tag": "000000000000000c",
+      "type": "INIT",
+      "value": "0xf2000"
+    },
+    {
+      "tag": "000000000000000d",
+      "type": "FINI",
+      "value": "0x5a96b0"
+    },
+    {
+      "tag": "0000000000000019",
+      "type": "INIT_ARRAY",
+      "value": "0x969868"
+    },
+    {
+      "tag": "000000000000001b",
+      "type": "INIT_ARRAYSZ",
+      "value": "656 (bytes)"
+    },
+    {
+      "tag": "000000000000001a",
+      "type": "FINI_ARRAY",
+      "value": "0x969af8"
+    },
+    {
+      "tag": "000000000000001c",
+      "type": "FINI_ARRAYSZ",
+      "value": "8 (bytes)"
+    },
+    {
+      "tag": "000000006ffffef5",
+      "type": "GNU_HASH",
+      "value": "0x3c8"
+    },
+    {
+      "tag": "0000000000000005",
+      "type": "STRTAB",
+      "value": "0x1e08"
+    },
+    {
+      "tag": "0000000000000006",
+      "type": "SYMTAB",
+      "value": "0x410"
+    },
+    {
+      "tag": "000000000000000a",
+      "type": "STRSZ",
+      "value": "3423 (bytes)"
+    },
+    {
+      "tag": "000000000000000b",
+      "type": "SYMENT",
+      "value": "24 (bytes)"
+    },
+    {
+      "tag": "0000000000000015",
+      "type": "DEBUG",
+      "value": "0x0"
+    },
+    {
+      "tag": "0000000000000003",
+      "type": "PLTGOT",
+      "value": "0xab9138"
+    },
+    {
+      "tag": "0000000000000002",
+      "type": "PLTRELSZ",
+      "value": "168 (bytes)"
+    },
+    {
+      "tag": "0000000000000014",
+      "type": "PLTREL",
+      "value": "RELA"
+    },
+    {
+      "tag": "0000000000000017",
+      "type": "JMPREL",
+      "value": "0xf1028"
+    },
+    {
+      "tag": "0000000000000007",
+      "type": "RELA",
+      "value": "0x2fd8"
+    },
+    {
+      "tag": "0000000000000008",
+      "type": "RELASZ",
+      "value": "974928 (bytes)"
+    },
+    {
+      "tag": "0000000000000009",
+      "type": "RELAENT",
+      "value": "24 (bytes)"
+    },
+    {
+      "tag": "000000000000001e",
+      "type": "FLAGS",
+      "value": "BIND_NOW"
+    },
+    {
+      "tag": "000000006ffffffb",
+      "type": "FLAGS_1",
+      "value": "Flags: NOW PIE"
+    },
+    {
+      "tag": "000000006ffffffe",
+      "type": "VERNEED",
+      "value": "0x2d98"
+    },
+    {
+      "tag": "000000006fffffff",
+      "type": "VERNEEDNUM",
+      "value": "5"
+    },
+    {
+      "tag": "000000006ffffff0",
+      "type": "VERSYM",
+      "value": "0x2b68"
+    },
+    {
+      "tag": "000000006ffffff9",
+      "type": "RELACOUNT",
+      "value": "40354"
+    },
+    {
+      "tag": "0000000000000000",
+      "type": "NULL",
+      "value": "0x0"
+    }
+  ]
+}
