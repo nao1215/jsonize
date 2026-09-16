@@ -40,7 +40,6 @@ Input:
 Output:
   -p, --pretty                  indent JSON output
       --stream                  write each record as a line of JSON as soon as it is read
-      --stop-on-error           end a stream at the first record that cannot be read
       --extract KEY             keep only this key of each object (repeatable)
       --exclude KEY             drop this key from each object (repeatable)
 
@@ -72,8 +71,7 @@ Options that state two answers at once are refused with exit status 2
 before the input is opened or a command is started: `--pretty` with
 `--stream`, `--extract` with `--exclude`, `--define` with
 `--parser`, `--format` with `--parser` or `--define`, `--columns` and
-`--type` where there are no columns, `--type` with `--raw`, and
-`--stop-on-error` without `--stream`.
+`--type` where there are no columns, and `--type` with `--raw`.
 
 ## Data files
 
@@ -330,10 +328,9 @@ $ vmstat 1 | jz --stream | jz new --each --string host=server-a sample:=@-
   lines` reads it: the line ending and a byte order mark before the first
   line are not part of it. Without `--each`, `=@-` keeps a byte order mark
   as it keeps the rest of the text.
-- A line that is not JSON, or not UTF-8, is reported
-  (`jz: new: sample:=@-: jsonl: line 3: ...`) and left out, and the status
-  is 3 once the input ends. `--stop-on-error` ends there instead, keeping
-  the documents written before it.
+- The first line that is not JSON, or not UTF-8, ends the documents
+  there: it is reported (`jz: new: sample:=@-: jsonl: line 3: ...`), the
+  documents written before it stand, and the status is 3.
 - `--each` needs one argument that reads standard input, and refuses
   `--text-file KEY=-`, which reads it whole, and `--pretty`.
 - Without `--each`, `jz new sample:=@-` reads standard input once, whole.
@@ -454,61 +451,28 @@ lines have come. `--extract` and `--exclude` name the parts:
 ### A record that cannot be read
 
 Without `--stream`, a record that does not fit means nothing is written
-and the status is 3. In a stream, the record is reported on standard
-error and the ones after it are still written, for a command's output,
-a data file and `lines` or `nul` alike:
-
-```text
-jz: du/posix: line 2: expected at least 2 fields but found 1: "garbage"
-```
-
-The status is 3 at the end if anything was skipped. `--stop-on-error`
-ends the stream at that record instead: the records before it stay
-written, the failure is reported once, the status is 3, and a command
-`jz run` started is stopped.
+and the status is 3. A stream ends at that record: the records written
+before it stand, since a stream is written as it is read, the failure is
+reported once on standard error, the status is 3, and a command `jz run`
+started is stopped there. It works this way for a command's output, a
+data file and `lines` or `nul` alike:
 
 ```console
-$ printf '1\nnope\n2\n' | jz --format jsonl --stream --stop-on-error
+$ printf '1\nnope\n2\n' | jz --format jsonl --stream
 1
 jz: jsonl: line 2: the line is not one JSON value
 ```
 
-Some failures end a stream whatever the option: text whose format cannot
-be identified (exit 4, settled on the leading lines before any record is
+A stream with a gap in it is an answer nobody downstream can check
+against the input, which is why the records after the failure are not
+read. `jz run` with a failing command and a record it could not read
+returns the command's status.
+
+The other failures end a stream the same way: text whose format cannot be
+identified (exit 4, settled on the leading lines before any record is
 written), a format with no streaming form (exit 2), a record longer than
 the line limit, a `--type` column the input does not have (exit 2), a
-read error and a reader that has gone (141). After those there is no
-next record to find.
-
-When `jz run` has a failing command and a skipped record, it returns the
-command's status. The skipped records are on standard error either way.
-
-### Watching a stream for the records it left out
-
-`--explain=json` reports each record the stream leaves out as it happens,
-on its own line:
-
-```console
-$ printf 'root:x:0:0:root:/root:/bin/bash\nbroken\n' | jz --stream --explain=json --parser etc --variant passwd 2>&1 >/dev/null | sed -n 's/^jz: explain: //p'
-{"outcome":"chosen","scope":{"from":"--parser","parser":"etc","variant":"passwd",...},...}
-{"event":"skipped","definition":"etc/passwd","line":2,"reason":"expected at least 7 fields but found 1: \"broken\"","skipped":1}
-```
-
-The explanation has an `outcome` key; an event has `event`, which is
-`skipped`. `definition` is the definition the stream reads with, `line`
-the input line of the failure (`null` when it is not about one line),
-`reason` the error without the definition and line in front, cut at
-1,024 bytes and ended with `...` when cut, and `skipped` the records left
-out so far, this one included. `--explain` writes the same fact as text,
-after the ordinary diagnostic:
-
-```text
-jz: explain: skipped: a record of etc/passwd at line 2 (1 record so far): expected at least 7 fields but found 1: "broken"
-```
-
-Each explain line is a single write. In `jz run` a command that leaves a
-line unended can put its text in front of it; `sed -n 's/.*jz: explain:
-//p'` still finds the document.
+read error and a reader that has gone (141).
 
 ### A command ended before it finished
 
@@ -729,11 +693,10 @@ and `error` (`message`, `exit`). For a data file `outcome` is `format`,
 `chosen.definition` names the format and `chosen.registry` what named it
 (`--format` or `extension`).
 
-With `--stream` the explanation is written before the first record and
-has no `read` counts; records left out later get [lines of their
-own](#watching-a-stream-for-the-records-it-left-out). `--explain`
-changes neither standard output nor the exit status, and writes no clock
-reading, so two runs over the same input explain themselves identically.
+With `--stream` the explanation is written before the first record, since
+a stream may never end, and it has no `read` counts. `--explain` changes
+neither standard output nor the exit status, and writes no clock reading,
+so two runs over the same input explain themselves identically.
 
 ## Seeing what a definition extracted
 

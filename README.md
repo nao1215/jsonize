@@ -99,7 +99,6 @@ Input:
 Output:
   -p, --pretty                  indent JSON output
       --stream                  write each record as a line of JSON as soon as it is read
-      --stop-on-error           end a stream at the first record that cannot be read
       --extract KEY             keep only this key of each object (repeatable)
       --exclude KEY             drop this key from each object (repeatable)
 
@@ -166,8 +165,8 @@ $ jz new name=api replicas:=3 'tags[]=web' spec:=@deploy.yaml
 
 `--stream` answers a command that keeps printing with one JSON document
 per line as each record is read, and `jz new --each` wraps each one as it
-comes. A record that cannot be read is reported and left out, with exit
-status 3; `--stop-on-error` ends the stream there instead.
+comes. The first record that cannot be read ends the stream with exit
+status 3, keeping the documents already written.
 
 ```console
 $ vmstat 1 | jz --stream | jz new --each --string host=web sample:=@-
@@ -248,9 +247,9 @@ The four in one runnable piece are in
 
 Diagnostics go to standard error. By default, reading finishes before
 JSON is written, so a failure leaves standard output empty. jz writes
-JSON only. With `--stream` and `jz new --each`, records already written
-remain when a later record fails; check the exit status for skipped
-records.
+JSON only. With `--stream` and `jz new --each`, the records already
+written remain when a later record ends the stream; the status is 3 and
+the failure is on standard error.
 
 ## Development
 

@@ -14,7 +14,7 @@ so the output shown is what jz prints.
 |-----------|-------|
 | turn a command's output into JSON | [Convert what a command printed](#convert-what-a-command-printed), [Let jz run the command](#let-jz-run-the-command) |
 | shape what comes out | [Keep only the keys you need](#keep-only-the-keys-you-need) |
-| read a command that never stops | [Follow a command that keeps printing](#follow-a-command-that-keeps-printing), [Add fields to every record of a stream](#add-fields-to-every-record-of-a-stream), [Stop a stream at the first bad record](#stop-a-stream-at-the-first-bad-record) |
+| read a command that never stops | [Follow a command that keeps printing](#follow-a-command-that-keeps-printing), [Add fields to every record of a stream](#add-fields-to-every-record-of-a-stream), [Keep what a stream wrote before a bad record](#keep-what-a-stream-wrote-before-a-bad-record) |
 | understand or override detection | [See which parser jz chose](#see-which-parser-jz-chose), [Name the parser when detection refuses](#name-the-parser-when-detection-refuses), [Read output jz has no parser for](#read-output-jz-has-no-parser-for) |
 | convert a data file | [Convert a CSV file](#convert-a-csv-file), [Type the columns of a CSV file](#type-the-columns-of-a-csv-file), [Read a CSV without a header line](#read-a-csv-without-a-header-line), [Convert YAML to JSON](#convert-yaml-to-json), [Read compressed JSON Lines logs](#read-compressed-json-lines-logs), [Read LTSV access logs](#read-ltsv-access-logs) |
 | turn plain text into JSON | [Turn lines into a JSON array](#turn-lines-into-a-json-array), [Read find -print0 output](#read-find--print0-output), [Wrap a whole text in a JSON string](#wrap-a-whole-text-in-a-json-string) |
@@ -79,14 +79,16 @@ $ vmstat 1 | jz --stream | jz new --each --string host=server-a sample:=@-
 {"host":"server-a","sample":{"r":0,"b":0}}
 ```
 
-## Stop a stream at the first bad record
+## Keep what a stream wrote before a bad record
 
-A stream leaves out a record it cannot read and exits 3 at the end.
-`--stop-on-error` ends it at that record.
+A stream ends at the first record it cannot read and exits 3. The records
+written before it are already out and stand; the ones after it are not
+read, so a consumer never gets a stream with a silent gap in it.
 
 ```console
-$ printf '{"n":1}\nnot json\n{"n":2}\n' | jz --format jsonl --stream --stop-on-error
+$ printf '{"n":1}\nnot json\n{"n":2}\n' | jz --format jsonl --stream
 {"n":1}
+jz: jsonl: line 2: the line is not one JSON value
 ```
 
 ## See which parser jz chose
