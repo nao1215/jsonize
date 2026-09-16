@@ -2,19 +2,37 @@
   {
     "path": "github.com/nao1215/jsonize",
     "version": null,
+    "retracted": null,
+    "update": null,
+    "deprecated": false,
     "replacement": null,
-    "replacement_version": null
+    "replacement_version": null,
+    "replacement_retracted": null,
+    "replacement_update": null,
+    "replacement_deprecated": null
   },
   {
     "path": "github.com/goccy/go-yaml",
     "version": "v1.19.2",
+    "retracted": false,
+    "update": null,
+    "deprecated": false,
     "replacement": null,
-    "replacement_version": null
+    "replacement_version": null,
+    "replacement_retracted": null,
+    "replacement_update": null,
+    "replacement_deprecated": null
   },
   {
     "path": "github.com/google/go-cmp",
     "version": "v0.7.0",
+    "retracted": false,
+    "update": null,
+    "deprecated": false,
     "replacement": null,
-    "replacement_version": null
+    "replacement_version": null,
+    "replacement_retracted": null,
+    "replacement_update": null,
+    "replacement_deprecated": null
   }
 ]

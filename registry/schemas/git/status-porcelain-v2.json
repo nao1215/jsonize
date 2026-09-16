@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/status-porcelain-v2.json",
+  "title": "git/status-porcelain-v2",
+  "description": "git status --porcelain=v2, the branch headers and one entry per changed path",
+  "x-jsonize": {
+    "definition": "git/status-porcelain-v2",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "branch": {
+      "type": "object",
+      "properties": {
+        "oid": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "head": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "upstream": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ahead": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "behind": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "stash": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "oid",
+        "head",
+        "upstream",
+        "ahead",
+        "behind",
+        "stash"
+      ]
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ignored",
+              "ordinary",
+              "renamed",
+              "unmerged",
+              "untracked"
+            ]
+          },
+          "index": {
+            "type": "string"
+          },
+          "worktree": {
+            "type": "string"
+          },
+          "submodule": {
+            "type": "string"
+          },
+          "mode_head": {
+            "type": "string"
+          },
+          "mode_index": {
+            "type": "string"
+          },
+          "mode_worktree": {
+            "type": "string"
+          },
+          "object_head": {
+            "type": "string"
+          },
+          "object_index": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "score": {
+            "type": "string"
+          },
+          "original_path": {
+            "type": "string"
+          },
+          "mode_stage1": {
+            "type": "string"
+          },
+          "mode_stage2": {
+            "type": "string"
+          },
+          "mode_stage3": {
+            "type": "string"
+          },
+          "object_stage1": {
+            "type": "string"
+          },
+          "object_stage2": {
+            "type": "string"
+          },
+          "object_stage3": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "path"
+        ]
+      }
+    }
+  },
+  "required": [
+    "branch",
+    "entries"
+  ]
+}

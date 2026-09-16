@@ -1,0 +1,30 @@
+[
+  {
+    "commit": {
+      "hash": "421800bd4f143398a4a352ba495b69eb650bbddf"
+    },
+    "headers": {
+      "Author": "Ada Lovelace <ada@example.com>",
+      "Date": "Tue Sep 1 10:00:00 2026 +0900"
+    },
+    "message": {
+      "lines": [
+        "add notes"
+      ]
+    },
+    "files": [
+      {
+        "status": "A",
+        "score": null,
+        "path": "notes.txt",
+        "new_path": null
+      },
+      {
+        "status": "A",
+        "score": null,
+        "path": "old-name.txt",
+        "new_path": null
+      }
+    ]
+  }
+]

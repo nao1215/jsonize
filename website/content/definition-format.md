@@ -100,8 +100,10 @@ detect:
   definition that means both spellings lists both. The same holds for a
   long option cut short, which GNU tools accept while it is unambiguous:
   `--ta` is not `--tag` to jz, and a definition that means both lists
-  both. An entry that ends in `=` is the long option with any value:
-  `none: ["--config-env="]` refuses `--config-env=log.decorate=X`.
+  both. An entry that ends in `=` is the option with any value:
+  `none: ["--config-env="]` refuses `--config-env=log.decorate=X`, and
+  `any: ["-func="]` takes `-func=c.out`, the one-dash spelling of Go's
+  flag package.
   Bundled short flags
   are expanded, so `-hT` satisfies `any: ["-h"]`, and a short flag given
   n times holds every bundle of it up to n letters, so `-v -v` and `-vvv`

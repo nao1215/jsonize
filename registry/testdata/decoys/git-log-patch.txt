@@ -1,0 +1,36 @@
+commit 5245d481237c3e098f28f498ce94bb2db15bdec3
+Merge: 2f37536 2537a69
+Author: Ada Lovelace <ada@example.com>
+Date:   Sat Sep 5 10:00:00 2026 +0900
+
+    Merge branch 'topic'
+
+commit 2f3753642ba3fc7da4de751c2582f067f6985568
+Author: Ada Lovelace <ada@example.com>
+Date:   Fri Sep 4 10:00:00 2026 +0900
+
+    drop notes
+
+diff --git a/notes.txt b/notes.txt
+deleted file mode 100644
+index f04eb26..0000000
+--- a/notes.txt
++++ /dev/null
+@@ -1,3 +0,0 @@
+-one
+-2
+-three
+
+commit 2537a69ade12831ca625634d9182e0864d13fba3
+Author: Ada Lovelace <ada@example.com>
+Date:   Thu Sep 3 10:00:00 2026 +0900
+
+    topic work
+
+diff --git a/topic.txt b/topic.txt
+new file mode 100644
+index 0000000..718f4d2
+--- /dev/null
++++ b/topic.txt
+@@ -0,0 +1 @@
++t

@@ -1,0 +1,6 @@
+github.com/nao1215/sqly
+cel.dev/expr v0.25.2 [v0.25.3]
+cloud.google.com/go v0.123.0
+cloud.google.com/go/alloydb v1.26.0 [v1.30.0]
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.33.0 [v1.38.0] (deprecated)
+github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric v0.56.0 [v0.62.0] (deprecated)

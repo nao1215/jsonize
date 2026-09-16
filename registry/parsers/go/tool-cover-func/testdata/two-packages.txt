@@ -1,0 +1,10 @@
+github.com/nao1215/jsonize/internal/jsonbuild/jsonbuild.go:76:	String		100.0%
+github.com/nao1215/jsonize/internal/jsonbuild/jsonbuild.go:100:	Error		85.7%
+github.com/nao1215/jsonize/internal/jsonbuild/jsonbuild.go:120:	Error		100.0%
+github.com/nao1215/jsonize/internal/jsonbuild/jsonbuild.go:124:	Unwrap		100.0%
+github.com/nao1215/jsonize/internal/jsonbuild/jsonbuild.go:142:	maxValues	100.0%
+github.com/nao1215/jsonize/internal/yaml/parse.go:798:		escape		100.0%
+github.com/nao1215/jsonize/internal/yaml/parse.go:835:		blockScalar	100.0%
+github.com/nao1215/jsonize/internal/yaml/parse.go:872:		blockHeader	100.0%
+github.com/nao1215/jsonize/internal/yaml/parse.go:890:		blockLines	100.0%
+total:								(statements)	97.7%

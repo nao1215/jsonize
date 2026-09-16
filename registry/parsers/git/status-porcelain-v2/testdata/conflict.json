@@ -1,0 +1,44 @@
+{
+  "branch": {
+    "oid": "a4009e20a45d2ff26bff61345dcbeb26b96ec502",
+    "head": "main",
+    "upstream": null,
+    "ahead": null,
+    "behind": null,
+    "stash": 1
+  },
+  "entries": [
+    {
+      "kind": "unmerged",
+      "index": "A",
+      "worktree": "A",
+      "submodule": "N...",
+      "mode_stage1": "000000",
+      "mode_stage2": "100644",
+      "mode_stage3": "100644",
+      "mode_worktree": "100644",
+      "object_stage1": "0000000000000000000000000000000000000000",
+      "object_stage2": "975fbec8256d3e8a3797e7a3611380f27c49f4ac",
+      "object_stage3": "587be6b4c3f93f93c489c0111bba5596147a26cb",
+      "path": "both.txt"
+    },
+    {
+      "kind": "unmerged",
+      "index": "U",
+      "worktree": "U",
+      "submodule": "N...",
+      "mode_stage1": "100644",
+      "mode_stage2": "100644",
+      "mode_stage3": "100644",
+      "mode_worktree": "100644",
+      "object_stage1": "df967b96a579e45a18b8251732d16804b2e56a55",
+      "object_stage2": "ba2906d0666cf726c7eaadd2cd3db615dedfdf3a",
+      "object_stage3": "0f62d67e76ce1255a098942495a846df0f8a2c11",
+      "path": "f.txt"
+    },
+    {
+      "kind": "untracked",
+      "path": "café.txt"
+    }
+  ]
+}

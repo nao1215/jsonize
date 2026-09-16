@@ -1,0 +1,3 @@
+source: git status --porcelain=v2 (git 2.53) with LC_ALL=C in the repository of branch-ignored
+description: without --branch there are no headers, and every branch value is null
+args: [status, --porcelain=v2]

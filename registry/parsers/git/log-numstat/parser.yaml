@@ -1,0 +1,71 @@
+# `git log --numstat` prints each commit the way git/log reads it, then
+# a blank line and one tab separated line per changed path: lines added,
+# lines deleted and the path. A file git treats as binary prints "-" in
+# both count columns, which becomes null, and a rename is written in the
+# path cell as "old => new" or with the differing middle in braces, as
+# git/diff-numstat keeps it. A merge commit prints no paths.
+format: 1
+command: git
+variant: log-numstat
+description: git log --numstat, each commit with the added and deleted lines per path
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-log#Documentation/git-log.txt---numstat
+detect:
+  args:
+    any: ["--numstat"]
+    none: ["--stat", "--stat=", "--shortstat", "--name-only", "--name-status", "-p", "-u", "--patch", "--raw", "--summary", "--oneline", "--graph"]
+  signature:
+    all:
+      - '\Acommit [0-9a-f]{7,40}\b'
+      - '^Author:[ \t]'
+      - '^(?:\d+|-)\t(?:\d+|-)\t\S'
+    window: 200
+  # git/log's signature holds for this text when the first path line is
+  # past its window; this variant is the one that reads the paths.
+  priority: 1
+input:
+  skip_blank: false
+parse:
+  type: records
+  start: '^commit [0-9a-f]{7,40}\b'
+  parts:
+    - name: commit
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\Acommit (?P<hash>[0-9a-f]{7,40})(?: \((?P<refs>[^)]*)\))?[ \t]*$'
+      fields:
+        hash: {required: true}
+        refs: {type: array, split: ",", when_missing: omit}
+    - name: headers
+      select: {skip: 1, until: '^[ \t]*$'}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+    # The message ends at the first line that is not indented, where the
+    # paths begin.
+    - name: message
+      select: {after: '^[ \t]*$', until: '^[^ \t]'}
+      parse:
+        type: regex
+        each: input
+        pattern: '(?s)\A(?P<lines>(?:[ ]{4}[^\n]*|[ \t]*)(?:\n(?:[ ]{4}[^\n]*|[ \t]*))*?)[ \t\r\n]*\z'
+      fields:
+        lines: {type: array, split: "\n"}
+    - name: files
+      select: {after: '^[ \t]*$'}
+      ignore:
+        - '^[ ]{4}'
+        - '^[ \t]*$'
+      parse:
+        type: regex
+        pattern: '^(?P<added>\d+|-)\t(?P<deleted>\d+|-)\t(?P<path>.+)$'
+      fields:
+        added: {type: int, null_if: ["-"]}
+        deleted: {type: int, null_if: ["-"]}
+        path: {required: true}

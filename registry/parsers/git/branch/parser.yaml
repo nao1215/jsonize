@@ -3,7 +3,8 @@
 # in another worktree (elsewhere), and two spaces for the rest. A detached HEAD is listed as
 # "* (HEAD detached at abc1234)" or "* (no branch)", which is kept as the
 # name. With -a the remote-tracking branches follow as remotes/NAME, and
-# a symbolic one as "remotes/origin/HEAD -> origin/main".
+# a symbolic one as "remotes/origin/HEAD -> origin/main". -r lists
+# only those, without the remotes/ prefix and with no line marked.
 #
 # A marker and a word is what many lists look like, so the definition is
 # used only when it is named or reached by `jz run git branch`.
@@ -29,7 +30,6 @@ detect:
       # followed by more words (a systemd unit table, a debconf question)
       # is not a branch.
       - '\A(?:[*+ ] (?:\([^)\n]*\)|[^\s:~^?*\[\\]+(?: -> [^\s:~^?*\[\\]+)?)(?:\n|\z))+\z'
-      - '(?m)^\* \S'
 parse:
   type: regex
   patterns:

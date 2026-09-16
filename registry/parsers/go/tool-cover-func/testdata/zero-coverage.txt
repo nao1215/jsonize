@@ -1,0 +1,6 @@
+github.com/nao1215/sqly/config/argument.go:127:	NewArg			100.0%
+github.com/nao1215/sqly/config/argument.go:141:	newArg			97.3%
+github.com/nao1215/sqly/config/argument.go:292:	explicitFlags		100.0%
+github.com/nao1215/sqly/config/argument.go:299:	IsExplicit		0.0%
+github.com/nao1215/sqly/config/tty.go:22:	IsOutputToTTY		0.0%
+total:						(statements)		91.5%

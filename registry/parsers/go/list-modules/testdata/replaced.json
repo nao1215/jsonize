@@ -2,13 +2,25 @@
   {
     "path": "example.com/probe",
     "version": null,
+    "retracted": null,
+    "update": null,
+    "deprecated": false,
     "replacement": null,
-    "replacement_version": null
+    "replacement_version": null,
+    "replacement_retracted": null,
+    "replacement_update": null,
+    "replacement_deprecated": null
   },
   {
     "path": "example.com/lib",
     "version": "v1.0.0",
+    "retracted": false,
+    "update": null,
+    "deprecated": false,
     "replacement": "./lib",
-    "replacement_version": null
+    "replacement_version": null,
+    "replacement_retracted": null,
+    "replacement_update": null,
+    "replacement_deprecated": false
   }
 ]

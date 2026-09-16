@@ -1,0 +1,81 @@
+# `git log --name-only` prints each commit the way git/log reads it,
+# then a blank line and the changed paths, one to a line and nothing
+# else on it. A merge commit prints no paths. A path with an unusual
+# character is quoted the way C quotes a string.
+#
+# What tells the paths from the next commit is only that a line after
+# the message does not start with "commit ", so the signature asks for
+# that, and the definition is read when it is named or reached by `jz
+# run git log --name-only`: a path is any text.
+format: 1
+command: git
+variant: log-name-only
+description: git log --name-only, each commit with the paths it changed
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-log#Documentation/git-log.txt---name-only
+detect:
+  args:
+    any: ["--name-only"]
+    none: ["--stat", "--stat=", "--shortstat", "--numstat", "--name-status", "-p", "-u", "--patch", "--raw", "--summary", "--oneline", "--graph"]
+  signature:
+    all:
+      - '\Acommit [0-9a-f]{7,40}\b'
+      - '^Author:[ \t]'
+      # A message line, the blank line after it, and a line that is
+      # neither indented nor the start of the next commit.
+      - '(?m)^    [^\n]*\n\n(?:[^c\s]|c(?:[^o]|o(?:[^m]|m(?:[^m]|m(?:[^i]|i(?:[^t]|t[^ ]))))))'
+    # The lines of the other forms that put text in the same place:
+    # `--numstat`, `--name-status` and a patch.
+    none:
+      - '^(?:\d+|-)\t(?:\d+|-)\t\S'
+      - '^(?:[ADMTUXB]|[RC][0-9]{3})\t\S'
+      - '^diff --(?:git|cc|combined) '
+    window: 200
+  auto_detect: false
+  # git/log's signature holds for this text when the first path line is
+  # past its window; this variant is the one that reads the paths.
+  priority: 1
+input:
+  skip_blank: false
+parse:
+  type: records
+  start: '^commit [0-9a-f]{7,40}\b'
+  parts:
+    - name: commit
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\Acommit (?P<hash>[0-9a-f]{7,40})(?: \((?P<refs>[^)]*)\))?[ \t]*$'
+      fields:
+        hash: {required: true}
+        refs: {type: array, split: ",", when_missing: omit}
+    - name: headers
+      select: {skip: 1, until: '^[ \t]*$'}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+    # The message ends at the first line that is not indented, where the
+    # paths begin.
+    - name: message
+      select: {after: '^[ \t]*$', until: '^[^ \t]'}
+      parse:
+        type: regex
+        each: input
+        pattern: '(?s)\A(?P<lines>(?:[ ]{4}[^\n]*|[ \t]*)(?:\n(?:[ ]{4}[^\n]*|[ \t]*))*?)[ \t\r\n]*\z'
+      fields:
+        lines: {type: array, split: "\n"}
+    - name: files
+      select: {after: '^[ \t]*$'}
+      ignore:
+        - '^[ ]{4}'
+        - '^[ \t]*$'
+      parse:
+        type: regex
+        pattern: '^(?P<path>.+)$'
+      fields:
+        path: {required: true, unescape: {quote: '"', octal: true, sequences: {'\\': '\', '\"': '"', '\a': "\a", '\b': "\b", '\t': "\t", '\n': "\n", '\v': "\v", '\f': "\f", '\r': "\r"}}}

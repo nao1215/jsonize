@@ -1,0 +1,3 @@
+source: git status --porcelain=v2 --branch --ignored (git 2.53) with LC_ALL=C in a scratch repository with a staged file, a file changed in the index and again in the worktree, a rename, a deleted path with a space, an untracked and an ignored file
+description: the branch headers with an upstream one commit ahead, then an entry of every kind but unmerged
+args: [status, --porcelain=v2, --branch, --ignored]

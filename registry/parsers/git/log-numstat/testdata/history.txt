@@ -1,0 +1,43 @@
+commit 5245d481237c3e098f28f498ce94bb2db15bdec3
+Merge: 2f37536 2537a69
+Author: Ada Lovelace <ada@example.com>
+Date:   Sat Sep 5 10:00:00 2026 +0900
+
+    Merge branch 'topic'
+
+commit 2f3753642ba3fc7da4de751c2582f067f6985568
+Author: Ada Lovelace <ada@example.com>
+Date:   Fri Sep 4 10:00:00 2026 +0900
+
+    drop notes
+
+0	3	notes.txt
+
+commit 2537a69ade12831ca625634d9182e0864d13fba3
+Author: Ada Lovelace <ada@example.com>
+Date:   Thu Sep 3 10:00:00 2026 +0900
+
+    topic work
+
+1	0	topic.txt
+
+commit 0da12db83e019297098b90d1b995e8fc0ceae415
+Author: Ada Lovelace <ada@example.com>
+Date:   Wed Sep 2 10:00:00 2026 +0900
+
+    rename and add a binary
+    
+    The body explains the change.
+
+-	-	logo.bin
+0	0	old-name.txt => new-name.txt
+2	1	notes.txt
+
+commit 421800bd4f143398a4a352ba495b69eb650bbddf
+Author: Ada Lovelace <ada@example.com>
+Date:   Tue Sep 1 10:00:00 2026 +0900
+
+    add notes
+
+2	0	notes.txt
+1	0	old-name.txt

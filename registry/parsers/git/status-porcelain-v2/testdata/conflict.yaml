@@ -1,0 +1,3 @@
+source: git status --porcelain=v2 --branch --show-stash (git 2.53) with LC_ALL=C in a scratch repository during a merge with two conflicts, one stash and an untracked file with a non-ASCII name
+description: an unmerged entry carries three stages, a branch with no upstream has no counts, and a quoted path is unescaped
+args: [status, --porcelain=v2, --branch, --show-stash]

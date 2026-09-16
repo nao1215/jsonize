@@ -1,0 +1,43 @@
+# `go tool cover -func=PROFILE` prints one line per function of a coverage
+# profile: the file and the line the function starts on, the function
+# name, and the share of its statements the tests ran, then a last line
+# with the share for every statement in the profile. The columns are
+# aligned with tabs, so the number of tabs between two values depends on
+# how long the values are.
+format: 1
+command: go
+variant: tool-cover-func
+description: go tool cover -func, statement coverage per function and in total
+metadata:
+  tags: [go, toolchain, test, coverage]
+  compatible: [gc]
+  references:
+    - https://pkg.go.dev/cmd/cover
+detect:
+  args:
+    all: [tool, cover]
+    any: ["-func", "-func=", "--func", "--func="]
+  signature:
+    all:
+      # Every line the window holds is a function, and the last line of
+      # a short report is the total.
+      - '\A(?:\S[^\t\n]*\.go:[0-9]+:\t+\S+\t+[0-9]+\.[0-9]%\n)*(?:\S[^\t\n]*\.go:[0-9]+:\t+\S+\t+[0-9]+\.[0-9]%|total:\t+\(statements\)\t+[0-9]+\.[0-9]%)\n?\z'
+parse:
+  type: composite
+  parts:
+    - name: functions
+      select: {until: '^total:\t'}
+      parse:
+        type: regex
+        pattern: '^(?P<file>\S[^\t]*\.go):(?P<line>[0-9]+):\t+(?P<function>\S+)\t+(?P<coverage>[0-9]+\.[0-9])%$'
+      fields:
+        line: {type: int}
+        coverage: {type: float}
+    - name: total
+      ignore: ['\.go:[0-9]+:\t']
+      parse:
+        type: regex
+        each: input
+        pattern: '\Atotal:\t+\(statements\)\t+(?P<coverage>[0-9]+\.[0-9])%\z'
+      fields:
+        coverage: {type: float}

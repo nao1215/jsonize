@@ -1,0 +1,3 @@
+description: git show prints one commit the same way.
+source: 'git show --name-status HEAD~3 captured with LC_ALL=C from a repository made for this fixture with git 2.53 (the script sets fixed author and committer names and dates; the people are not real)'
+args: [show, --name-status, HEAD~3]
