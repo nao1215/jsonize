@@ -1,0 +1,83 @@
+{
+  "file": {
+    "name": "photo.jpg",
+    "byte_order": "Motorola"
+  },
+  "tags": [
+    {
+      "tag": "Image Description",
+      "value": "A test image, with a comma"
+    },
+    {
+      "tag": "Manufacturer",
+      "value": "Canon"
+    },
+    {
+      "tag": "Model",
+      "value": "Canon EOS 5D"
+    },
+    {
+      "tag": "Orientation",
+      "value": "Top-left"
+    },
+    {
+      "tag": "X-Resolution",
+      "value": "72"
+    },
+    {
+      "tag": "Y-Resolution",
+      "value": "72"
+    },
+    {
+      "tag": "Resolution Unit",
+      "value": "Inch"
+    },
+    {
+      "tag": "Artist",
+      "value": "Example Photographer"
+    },
+    {
+      "tag": "YCbCr Positioning",
+      "value": "Centered"
+    },
+    {
+      "tag": "Exposure Time",
+      "value": "1/125 sec."
+    },
+    {
+      "tag": "F-Number",
+      "value": "f/5.6"
+    },
+    {
+      "tag": "ISO Speed Ratings",
+      "value": "200"
+    },
+    {
+      "tag": "Exif Version",
+      "value": "Exif Version 2.32"
+    },
+    {
+      "tag": "Date and Time (Origi",
+      "value": "2024:05:01 10:20:30"
+    },
+    {
+      "tag": "Components Configura",
+      "value": "Y Cb Cr -"
+    },
+    {
+      "tag": "Focal Length",
+      "value": "50.0 mm"
+    },
+    {
+      "tag": "Color Space",
+      "value": "Uncalibrated"
+    },
+    {
+      "tag": "FlashPixVersion",
+      "value": "FlashPix Version 1.0"
+    }
+  ],
+  "thumbnail": {
+    "bytes": null
+  }
+}

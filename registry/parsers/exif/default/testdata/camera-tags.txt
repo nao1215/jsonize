@@ -1,0 +1,23 @@
+EXIF tags in 'photo.jpg' ('Motorola' byte order):
+--------------------+----------------------------------------------------------
+Tag                 |Value
+--------------------+----------------------------------------------------------
+Image Description   |A test image, with a comma
+Manufacturer        |Canon
+Model               |Canon EOS 5D
+Orientation         |Top-left
+X-Resolution        |72
+Y-Resolution        |72
+Resolution Unit     |Inch
+Artist              |Example Photographer
+YCbCr Positioning   |Centered
+Exposure Time       |1/125 sec.
+F-Number            |f/5.6
+ISO Speed Ratings   |200
+Exif Version        |Exif Version 2.32
+Date and Time (Origi|2024:05:01 10:20:30
+Components Configura|Y Cb Cr -
+Focal Length        |50.0 mm
+Color Space         |Uncalibrated
+FlashPixVersion     |FlashPix Version 1.0
+--------------------+----------------------------------------------------------

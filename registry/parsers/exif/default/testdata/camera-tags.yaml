@@ -1,0 +1,2 @@
+source: captured with LC_ALL=C exif 0.6.22 on Ubuntu from a JPEG made with ImageMagick convert and tagged with exiftool
+args: [photo.jpg]
