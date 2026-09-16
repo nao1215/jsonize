@@ -5,7 +5,7 @@
   "description": "go list -m all build list of modules",
   "x-jsonize": {
     "definition": "go/list-modules",
-    "version": 1
+    "version": 2
   },
   "type": "array",
   "items": {
@@ -20,6 +20,21 @@
           "null"
         ]
       },
+      "retracted": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "update": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "deprecated": {
+        "type": "boolean"
+      },
       "replacement": {
         "type": [
           "string",
@@ -31,13 +46,37 @@
           "string",
           "null"
         ]
+      },
+      "replacement_retracted": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "replacement_update": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "replacement_deprecated": {
+        "type": [
+          "boolean",
+          "null"
+        ]
       }
     },
     "required": [
       "path",
       "version",
+      "retracted",
+      "update",
+      "deprecated",
       "replacement",
-      "replacement_version"
+      "replacement_version",
+      "replacement_retracted",
+      "replacement_update",
+      "replacement_deprecated"
     ]
   }
 }

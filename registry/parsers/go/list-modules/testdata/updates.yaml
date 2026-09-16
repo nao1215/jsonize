@@ -1,0 +1,3 @@
+source: go list -m -u all in github.com/nao1215/sqly (go1.26.6) with LC_ALL=C, cut to the main module, three dependencies and two deprecated ones
+description: -u adds the available update in brackets and marks a deprecated module
+args: [list, -m, -u, all]

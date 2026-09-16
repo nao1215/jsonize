@@ -1,7 +1,12 @@
 # `go list -m all` prints the module path of the main module on its own,
 # then one line per module in the build list: a path and a version. A
 # module the main module replaces prints the replacement after " => ",
-# either as a directory (one word) or as a module and a version.
+# either as a directory (one word) or as a module and a version. With -u
+# the newer version available follows in brackets, "(retracted)" follows
+# a version its author retracted, and "(deprecated)" follows a module
+# its author deprecated; the replacement carries the same marks.
+# `retracted` is null for a line without a version, and the replacement
+# keys are null for a module nothing replaces.
 #
 # A path and a version separated by a space is the shape of a great many
 # listings, so the text is not evidence on its own and jz reads it only
@@ -29,6 +34,10 @@ detect:
       - '(?m)^\S+ v[0-9]+\.[0-9]+\.[0-9]+'
 parse:
   type: regex
-  pattern: '^(?P<path>\S+)(?: (?P<version>\S+))?(?: => (?P<replacement>\S+)(?: (?P<replacement_version>\S+))?)?$'
+  pattern: '^(?P<path>\S+)(?: (?P<version>[^\s(\[]\S*)(?P<retracted>(?: \(retracted\))?)(?: \[(?P<update>[^]\s]+)(?: \(retracted\))?\])?)?(?P<deprecated>(?: \(deprecated\))?)(?: => (?P<replacement>\S+)(?: (?P<replacement_version>[^\s(\[]\S*)(?P<replacement_retracted>(?: \(retracted\))?)(?: \[(?P<replacement_update>[^]\s]+)(?: \(retracted\))?\])?)?(?P<replacement_deprecated>(?: \(deprecated\))?))?$'
 fields:
   path: {required: true}
+  retracted: {type: bool, true_values: ["(retracted)"], false_values: [""], trim_prefix: " "}
+  deprecated: {type: bool, true_values: ["(deprecated)"], false_values: [""], trim_prefix: " "}
+  replacement_retracted: {type: bool, true_values: ["(retracted)"], false_values: [""], trim_prefix: " "}
+  replacement_deprecated: {type: bool, true_values: ["(deprecated)"], false_values: [""], trim_prefix: " "}
