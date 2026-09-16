@@ -100,7 +100,7 @@ func Fixtures(reg *registry.Registry, sources []registry.Source) ([]Fixture, []R
 		}
 		cases, err := Cases(fsys, e)
 		if err != nil {
-			problems = append(problems, Result{Definition: e.Def.ID(), Source: e.Source, Err: err})
+			problems = append(problems, Result{Definition: e.Def.ID(), Source: e.Source, Err: as(KindLoad, err)})
 			continue
 		}
 		for _, c := range cases {
@@ -213,7 +213,7 @@ func Decoys(reg *registry.Registry, decoys []Decoy, opts Options) []Result {
 		// the way the whole text does, rather than choose before the line
 		// that gives it away has come.
 		if err := settlesAsWhole(reg, selector.Context{}, d.Input); err != nil {
-			out = append(out, Result{Definition: "(stream)", Case: d.Name, Path: d.Name, Err: fmt.Errorf("automatic detection of the decoy %s: %w", d.Name, err)})
+			out = append(out, Result{Definition: "(stream)", Case: d.Name, Path: d.Name, Err: failf(KindSelect, "automatic detection of the decoy %s: %w", d.Name, err)})
 		}
 		if sel, err := selector.Select(reg, selector.Context{Input: d.Input}); err == nil {
 			out = append(out, Result{
@@ -221,7 +221,7 @@ func Decoys(reg *registry.Registry, decoys []Decoy, opts Options) []Result {
 				Case:       d.Name,
 				Path:       d.Name,
 				Source:     sel.Entry.Source,
-				Err:        fmt.Errorf("automatic detection read the decoy %s as %s", d.Name, sel.Entry.Def.ID()),
+				Err:        failf(KindSelect, "automatic detection read the decoy %s as %s", d.Name, sel.Entry.Def.ID()),
 			})
 		}
 		for _, r := range readers {
@@ -235,9 +235,9 @@ func Decoys(reg *registry.Registry, decoys []Decoy, opts Options) []Result {
 			// signature that says too little, or a parser that takes
 			// any word where the format has a vocabulary.
 			if res.parsed {
-				res.Err = fmt.Errorf("%s read the decoy %s", label, d.Name)
+				res.Err = failf(KindSelect, "%s read the decoy %s", label, d.Name)
 			} else {
-				res.Err = fmt.Errorf("%s accepted the decoy %s and then failed to parse it", label, d.Name)
+				res.Err = failf(KindSelect, "%s accepted the decoy %s and then failed to parse it", label, d.Name)
 			}
 			out = append(out, res)
 		}
@@ -270,9 +270,9 @@ func crossFixture(reg *registry.Registry, f Fixture, readers []reader, target fu
 		res.Case, res.Path = f.Case.Name, f.Path()
 		label := readersLabel(r.entry.Def.ID(), r.entry.Def.Command, names)
 		if res.parsed {
-			res.Err = fmt.Errorf("%s read %s, a fixture of %s", label, res.Path, owner)
+			res.Err = failf(KindSelect, "%s read %s, a fixture of %s", label, res.Path, owner)
 		} else {
-			res.Err = fmt.Errorf("%s accepted %s, a fixture of %s, and then failed to parse it", label, res.Path, owner)
+			res.Err = failf(KindSelect, "%s accepted %s, a fixture of %s, and then failed to parse it", label, res.Path, owner)
 		}
 		out = append(out, res)
 	}

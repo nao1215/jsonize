@@ -50,6 +50,76 @@ type Result struct {
 	parsed bool
 }
 
+// Kind names what a failure was, so that a report can be counted and
+// filtered without reading the message it carries.
+type Kind string
+
+// The kinds of failure a check reports.
+const (
+	// KindLoad is a definition or a set of fixtures that could not be read.
+	KindLoad Kind = "load"
+	// KindSelect is the wrong definition chosen for a text, none chosen,
+	// or another definition reading a text that is not its own.
+	KindSelect Kind = "select"
+	// KindParse is a fixture its own definition could not read.
+	KindParse Kind = "parse"
+	// KindRefuse is a case that states the text is refused, where it was
+	// read or was refused for another reason.
+	KindRefuse Kind = "refuse"
+	// KindStream is a stream reading the text differently from the way
+	// the whole document is read.
+	KindStream Kind = "stream"
+	// KindUnread is a changed copy of the text that did not change the
+	// answer, which is text the definition never read.
+	KindUnread Kind = "unread"
+	// KindSchema is output that does not fit the schema its definition
+	// derives.
+	KindSchema Kind = "schema"
+	// KindGolden is output that differs from the JSON beside the fixture,
+	// or a fixture with no JSON beside it.
+	KindGolden Kind = "golden"
+)
+
+// failure carries the kind of a failure alongside the message.
+type failure struct {
+	kind Kind
+	err  error
+}
+
+func (f *failure) Error() string { return f.err.Error() }
+func (f *failure) Unwrap() error { return f.err }
+
+// failf builds a failure of kind k.
+func failf(k Kind, format string, args ...any) error {
+	return &failure{kind: k, err: fmt.Errorf(format, args...)}
+}
+
+// as gives an error a kind unless it already carries one.
+func as(k Kind, err error) error {
+	if err == nil {
+		return nil
+	}
+	var f *failure
+	if errors.As(err, &f) {
+		return err
+	}
+	return &failure{kind: k, err: err}
+}
+
+// Kind names what this result failed at. A result that passed has none,
+// and one whose failure says nothing about itself is the reading of the
+// fixture failing, which is what the engine reports.
+func (r Result) Kind() Kind {
+	if r.Err == nil {
+		return ""
+	}
+	var f *failure
+	if errors.As(r.Err, &f) {
+		return f.kind
+	}
+	return KindParse
+}
+
 // Options configures a run.
 type Options struct {
 	// Update reports the produced JSON in Result.Actual without failing on
@@ -84,11 +154,11 @@ func Run(reg *registry.Registry, fsys fs.FS, sourceName string, opts Options) []
 		}
 		cases, err := Cases(fsys, e)
 		if err != nil {
-			results = append(results, Result{Definition: e.Def.ID(), Source: e.Source, Err: err})
+			results = append(results, Result{Definition: e.Def.ID(), Source: e.Source, Err: as(KindLoad, err)})
 			continue
 		}
 		if len(cases) == 0 {
-			results = append(results, Result{Definition: e.Def.ID(), Source: e.Source, Err: fmt.Errorf("no testdata cases; add at least one <case>.txt and <case>.json under %s", testdataPath(e))})
+			results = append(results, Result{Definition: e.Def.ID(), Source: e.Source, Err: failf(KindLoad, "no testdata cases; add at least one <case>.txt and <case>.json under %s", testdataPath(e))})
 			continue
 		}
 		for _, c := range cases {
@@ -149,11 +219,11 @@ func runCase(reg *registry.Registry, e *registry.Entry, c Case, opts Options) Re
 	// to identify its own definition the way a user's input would.
 	if c.Meta.ExpectError == "" {
 		if err := selectsOwn(reg, e, c, c.Input); err != nil {
-			res.Err = err
+			res.Err = as(KindSelect, err)
 			return res
 		}
 		if err := streamSelectsOwn(reg, e, c); err != nil {
-			res.Err = err
+			res.Err = as(KindSelect, err)
 			return res
 		}
 	}
@@ -164,7 +234,7 @@ func runCase(reg *registry.Registry, e *registry.Entry, c Case, opts Options) Re
 		// believe the text is theirs, so that is the path checked.
 		ctx := selector.Context{Parser: e.Def.Command, Variant: e.Def.Variant, OS: c.Meta.OS, Args: c.Meta.Args, Input: c.Input}
 		if err := settlesAsWhole(reg, ctx, c.Input); err != nil {
-			res.Err = fmt.Errorf("selection with --parser %s --variant %s: %w", e.Def.Command, e.Def.Variant, err)
+			res.Err = failf(KindSelect, "selection with --parser %s --variant %s: %w", e.Def.Command, e.Def.Variant, err)
 			return res
 		}
 		_, err := selector.Select(reg, ctx)
@@ -173,9 +243,9 @@ func runCase(reg *registry.Registry, e *registry.Entry, c Case, opts Options) Re
 		}
 		switch {
 		case err == nil:
-			res.Err = fmt.Errorf("expected an error containing %q but the input was read", c.Meta.ExpectError)
+			res.Err = failf(KindRefuse, "expected an error containing %q but the input was read", c.Meta.ExpectError)
 		case !strings.Contains(err.Error(), c.Meta.ExpectError):
-			res.Err = fmt.Errorf("expected an error containing %q, got: %w", c.Meta.ExpectError, err)
+			res.Err = failf(KindRefuse, "expected an error containing %q, got: %w", c.Meta.ExpectError, err)
 		}
 		return res
 	}
@@ -185,11 +255,11 @@ func runCase(reg *registry.Registry, e *registry.Entry, c Case, opts Options) Re
 		return res
 	}
 	if err := streamMatches(e.Def, c.Input, got, opts); err != nil {
-		res.Err = err
+		res.Err = as(KindStream, err)
 		return res
 	}
 	if err := sameAnswer(reg, e, c, got, opts); err != nil {
-		res.Err = err
+		res.Err = as(KindUnread, err)
 		return res
 	}
 	var buf bytes.Buffer
@@ -204,20 +274,20 @@ func runCase(reg *registry.Registry, e *registry.Entry, c Case, opts Options) Re
 	// value, an integer where it says string. A mismatch is the generator
 	// and the engine disagreeing about what the definition produces.
 	if errs := schema.Validate(schema.Generate(e.Def, 1), res.Actual); len(errs) > 0 {
-		res.Err = fmt.Errorf("the output does not fit the schema derived from the definition: %w", errors.Join(errs...))
+		res.Err = failf(KindSchema, "the output does not fit the schema derived from the definition: %w", errors.Join(errs...))
 		return res
 	}
 	if opts.Update {
 		return res
 	}
 	if c.Expected == nil {
-		res.Err = fmt.Errorf("fixture %s.txt has no %s.json; add the expected JSON (or expect_error in %s.yaml)", c.Name, c.Name, c.Name)
+		res.Err = failf(KindGolden, "fixture %s.txt has no %s.json; add the expected JSON (or expect_error in %s.yaml)", c.Name, c.Name, c.Name)
 		return res
 	}
 	if diff, err := Diff(c.Expected, res.Actual); err != nil {
-		res.Err = err
+		res.Err = as(KindGolden, err)
 	} else if diff != "" {
-		res.Err = fmt.Errorf("output differs from %s.json (-want +got):\n%s", c.Name, diff)
+		res.Err = failf(KindGolden, "output differs from %s.json (-want +got):\n%s", c.Name, diff)
 	}
 	return res
 }

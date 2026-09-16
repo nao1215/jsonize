@@ -6,6 +6,16 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- `jz test --json` writes the result to standard output as one object:
+  the counts, and a failure per entry with the definition, the case, the
+  fixture path, the registry it came from, what it failed at and the
+  message. The kinds are load, select, parse, refuse, stream, unread,
+  schema and golden, so a job can tell one failure from another without
+  matching the message. The lines on standard error and the exit status
+  are the same with the option as without.
+
 ### Changed
 
 - `max_fields` of a `table` may be one more than the number of columns,
