@@ -1,0 +1,38 @@
+# `sar -n SOCK6` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. A rate or a
+# percentage is a number with a fraction; a count or a size in kilobytes
+# is a whole number, in the summary as well.
+format: 1
+command: sar
+variant: sockets6
+description: sar -n SOCK6 sockets in use (IPv6)
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+tcp6sck[ \t]+udp6sck[ \t]+raw6sck[ \t]+ip6\-frag[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+tcp6sck[ \t]+udp6sck[ \t]+raw6sck[ \t]+ip6\-frag[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, tcp6sck, udp6sck, raw6sck, ip6_frag]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  tcp6sck: {type: int}
+  udp6sck: {type: int}
+  raw6sck: {type: int}
+  ip6_frag: {type: int}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/udp6.json",
+  "title": "sar/udp6",
+  "description": "sar -n UDP6 UDPv6 traffic",
+  "x-jsonize": {
+    "definition": "sar/udp6",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "idgm6_per_s": {
+        "type": "number"
+      },
+      "odgm6_per_s": {
+        "type": "number"
+      },
+      "noport6_per_s": {
+        "type": "number"
+      },
+      "idgmer6_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "idgm6_per_s",
+      "odgm6_per_s",
+      "noport6_per_s",
+      "idgmer6_per_s"
+    ]
+  }
+}

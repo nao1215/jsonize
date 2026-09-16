@@ -1,0 +1,6 @@
+Linux 7.0.0-31-generic (host01) 	09/16/26 	_x86_64_	(32 CPU)
+
+20:19:52       totsck    tcpsck    udpsck    rawsck   ip-frag    tcp-tw
+20:19:53         1922        69        32         0         0        10
+20:19:54         1921        74        32         0         0        10
+Average:         1922        72        32         0         0        10

@@ -1,0 +1,39 @@
+# `sar -H` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. A rate or a
+# percentage is a number with a fraction; a count or a size in kilobytes
+# is a whole number, in the summary as well.
+format: 1
+command: sar
+variant: hugepages
+description: sar -H huge pages utilization
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+kbhugfree[ \t]+kbhugused[ \t]+%hugused[ \t]+kbhugrsvd[ \t]+kbhugsurp[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+kbhugfree[ \t]+kbhugused[ \t]+%hugused[ \t]+kbhugrsvd[ \t]+kbhugsurp[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, kbhugfree, kbhugused, hugused_percent, kbhugrsvd, kbhugsurp]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  kbhugfree: {type: int}
+  kbhugused: {type: int}
+  hugused_percent: {type: float}
+  kbhugrsvd: {type: int}
+  kbhugsurp: {type: int}

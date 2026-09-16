@@ -1,0 +1,23 @@
+[
+  {
+    "time": "20:20:03",
+    "active_per_s": 0,
+    "passive_per_s": 0,
+    "iseg_per_s": 28,
+    "oseg_per_s": 35
+  },
+  {
+    "time": "20:20:04",
+    "active_per_s": 0,
+    "passive_per_s": 0,
+    "iseg_per_s": 25,
+    "oseg_per_s": 20
+  },
+  {
+    "time": "Average",
+    "active_per_s": 0,
+    "passive_per_s": 0,
+    "iseg_per_s": 26.5,
+    "oseg_per_s": 27.5
+  }
+]

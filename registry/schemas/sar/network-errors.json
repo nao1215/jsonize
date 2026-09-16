@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/network-errors.json",
+  "title": "sar/network-errors",
+  "description": "sar -n EDEV network device errors",
+  "x-jsonize": {
+    "definition": "sar/network-errors",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "iface": {
+        "type": "string"
+      },
+      "rxerr_per_s": {
+        "type": "number"
+      },
+      "txerr_per_s": {
+        "type": "number"
+      },
+      "coll_per_s": {
+        "type": "number"
+      },
+      "rxdrop_per_s": {
+        "type": "number"
+      },
+      "txdrop_per_s": {
+        "type": "number"
+      },
+      "txcarr_per_s": {
+        "type": "number"
+      },
+      "rxfram_per_s": {
+        "type": "number"
+      },
+      "rxfifo_per_s": {
+        "type": "number"
+      },
+      "txfifo_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "iface",
+      "rxerr_per_s",
+      "txerr_per_s",
+      "coll_per_s",
+      "rxdrop_per_s",
+      "txdrop_per_s",
+      "txcarr_per_s",
+      "rxfram_per_s",
+      "rxfifo_per_s",
+      "txfifo_per_s"
+    ]
+  }
+}

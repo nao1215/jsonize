@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/icmp6.json",
+  "title": "sar/icmp6",
+  "description": "sar -n ICMP6 ICMPv6 traffic",
+  "x-jsonize": {
+    "definition": "sar/icmp6",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "imsg6_per_s": {
+        "type": "number"
+      },
+      "omsg6_per_s": {
+        "type": "number"
+      },
+      "iech6_per_s": {
+        "type": "number"
+      },
+      "iechr6_per_s": {
+        "type": "number"
+      },
+      "oechr6_per_s": {
+        "type": "number"
+      },
+      "igmbq6_per_s": {
+        "type": "number"
+      },
+      "igmbr6_per_s": {
+        "type": "number"
+      },
+      "ogmbr6_per_s": {
+        "type": "number"
+      },
+      "igmbrd6_per_s": {
+        "type": "number"
+      },
+      "ogmbrd6_per_s": {
+        "type": "number"
+      },
+      "irtsol6_per_s": {
+        "type": "number"
+      },
+      "ortsol6_per_s": {
+        "type": "number"
+      },
+      "irtad6_per_s": {
+        "type": "number"
+      },
+      "inbsol6_per_s": {
+        "type": "number"
+      },
+      "onbsol6_per_s": {
+        "type": "number"
+      },
+      "inbad6_per_s": {
+        "type": "number"
+      },
+      "onbad6_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "imsg6_per_s",
+      "omsg6_per_s",
+      "iech6_per_s",
+      "iechr6_per_s",
+      "oechr6_per_s",
+      "igmbq6_per_s",
+      "igmbr6_per_s",
+      "ogmbr6_per_s",
+      "igmbrd6_per_s",
+      "ogmbrd6_per_s",
+      "irtsol6_per_s",
+      "ortsol6_per_s",
+      "irtad6_per_s",
+      "inbsol6_per_s",
+      "onbsol6_per_s",
+      "inbad6_per_s",
+      "onbad6_per_s"
+    ]
+  }
+}

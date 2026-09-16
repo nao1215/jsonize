@@ -1,0 +1,50 @@
+# `sar -n ICMP6` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. The figures
+# are numbers with a fraction.
+format: 1
+command: sar
+variant: icmp6
+description: sar -n ICMP6 ICMPv6 traffic
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+imsg6/s[ \t]+omsg6/s[ \t]+iech6/s[ \t]+iechr6/s[ \t]+oechr6/s[ \t]+igmbq6/s[ \t]+igmbr6/s[ \t]+ogmbr6/s[ \t]+igmbrd6/s[ \t]+ogmbrd6/s[ \t]+irtsol6/s[ \t]+ortsol6/s[ \t]+irtad6/s[ \t]+inbsol6/s[ \t]+onbsol6/s[ \t]+inbad6/s[ \t]+onbad6/s[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+imsg6/s[ \t]+omsg6/s[ \t]+iech6/s[ \t]+iechr6/s[ \t]+oechr6/s[ \t]+igmbq6/s[ \t]+igmbr6/s[ \t]+ogmbr6/s[ \t]+igmbrd6/s[ \t]+ogmbrd6/s[ \t]+irtsol6/s[ \t]+ortsol6/s[ \t]+irtad6/s[ \t]+inbsol6/s[ \t]+onbsol6/s[ \t]+inbad6/s[ \t]+onbad6/s[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, imsg6_per_s, omsg6_per_s, iech6_per_s, iechr6_per_s, oechr6_per_s, igmbq6_per_s, igmbr6_per_s, ogmbr6_per_s, igmbrd6_per_s, ogmbrd6_per_s, irtsol6_per_s, ortsol6_per_s, irtad6_per_s, inbsol6_per_s, onbsol6_per_s, inbad6_per_s, onbad6_per_s]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  imsg6_per_s: {type: float}
+  omsg6_per_s: {type: float}
+  iech6_per_s: {type: float}
+  iechr6_per_s: {type: float}
+  oechr6_per_s: {type: float}
+  igmbq6_per_s: {type: float}
+  igmbr6_per_s: {type: float}
+  ogmbr6_per_s: {type: float}
+  igmbrd6_per_s: {type: float}
+  ogmbrd6_per_s: {type: float}
+  irtsol6_per_s: {type: float}
+  ortsol6_per_s: {type: float}
+  irtad6_per_s: {type: float}
+  inbsol6_per_s: {type: float}
+  onbsol6_per_s: {type: float}
+  inbad6_per_s: {type: float}
+  onbad6_per_s: {type: float}

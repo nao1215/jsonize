@@ -1,0 +1,6 @@
+Linux 7.0.0-31-generic (host01) 	09/16/26 	_x86_64_	(32 CPU)
+
+20:20:08      tcp6sck   udp6sck   raw6sck  ip6-frag
+20:20:09            4        27         2         0
+20:20:10            4        27         2         0
+Average:            4        27         2         0

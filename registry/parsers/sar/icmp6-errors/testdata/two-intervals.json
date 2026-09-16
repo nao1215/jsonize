@@ -1,0 +1,44 @@
+[
+  {
+    "time": "20:20:17",
+    "ierr6_per_s": 0,
+    "idtunr6_per_s": 0,
+    "odtunr6_per_s": 0,
+    "itmex6_per_s": 0,
+    "otmex6_per_s": 0,
+    "iprmpb6_per_s": 0,
+    "oprmpb6_per_s": 0,
+    "iredir6_per_s": 0,
+    "oredir6_per_s": 0,
+    "ipck2b6_per_s": 0,
+    "opck2b6_per_s": 0
+  },
+  {
+    "time": "20:20:18",
+    "ierr6_per_s": 0,
+    "idtunr6_per_s": 0,
+    "odtunr6_per_s": 0,
+    "itmex6_per_s": 0,
+    "otmex6_per_s": 0,
+    "iprmpb6_per_s": 0,
+    "oprmpb6_per_s": 0,
+    "iredir6_per_s": 0,
+    "oredir6_per_s": 0,
+    "ipck2b6_per_s": 0,
+    "opck2b6_per_s": 0
+  },
+  {
+    "time": "Average",
+    "ierr6_per_s": 0,
+    "idtunr6_per_s": 0,
+    "odtunr6_per_s": 0,
+    "itmex6_per_s": 0,
+    "otmex6_per_s": 0,
+    "iprmpb6_per_s": 0,
+    "oprmpb6_per_s": 0,
+    "iredir6_per_s": 0,
+    "oredir6_per_s": 0,
+    "ipck2b6_per_s": 0,
+    "opck2b6_per_s": 0
+  }
+]

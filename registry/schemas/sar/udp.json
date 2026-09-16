@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/udp.json",
+  "title": "sar/udp",
+  "description": "sar -n UDP UDPv4 traffic",
+  "x-jsonize": {
+    "definition": "sar/udp",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "idgm_per_s": {
+        "type": "number"
+      },
+      "odgm_per_s": {
+        "type": "number"
+      },
+      "noport_per_s": {
+        "type": "number"
+      },
+      "idgmerr_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "idgm_per_s",
+      "odgm_per_s",
+      "noport_per_s",
+      "idgmerr_per_s"
+    ]
+  }
+}

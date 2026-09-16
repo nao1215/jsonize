@@ -1,0 +1,23 @@
+[
+  {
+    "time": "20:20:07",
+    "idgm_per_s": 0,
+    "odgm_per_s": 0,
+    "noport_per_s": 0,
+    "idgmerr_per_s": 0
+  },
+  {
+    "time": "20:20:08",
+    "idgm_per_s": 0,
+    "odgm_per_s": 0,
+    "noport_per_s": 0,
+    "idgmerr_per_s": 0
+  },
+  {
+    "time": "Average",
+    "idgm_per_s": 0,
+    "odgm_per_s": 0,
+    "noport_per_s": 0,
+    "idgmerr_per_s": 0
+  }
+]

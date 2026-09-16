@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/ip6.json",
+  "title": "sar/ip6",
+  "description": "sar -n IP6 IPv6 traffic",
+  "x-jsonize": {
+    "definition": "sar/ip6",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "irec6_per_s": {
+        "type": "number"
+      },
+      "fwddgm6_per_s": {
+        "type": "number"
+      },
+      "idel6_per_s": {
+        "type": "number"
+      },
+      "orq6_per_s": {
+        "type": "number"
+      },
+      "asmrq6_per_s": {
+        "type": "number"
+      },
+      "asmok6_per_s": {
+        "type": "number"
+      },
+      "imcpck6_per_s": {
+        "type": "number"
+      },
+      "omcpck6_per_s": {
+        "type": "number"
+      },
+      "fragok6_per_s": {
+        "type": "number"
+      },
+      "fragcr6_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "irec6_per_s",
+      "fwddgm6_per_s",
+      "idel6_per_s",
+      "orq6_per_s",
+      "asmrq6_per_s",
+      "asmok6_per_s",
+      "imcpck6_per_s",
+      "omcpck6_per_s",
+      "fragok6_per_s",
+      "fragcr6_per_s"
+    ]
+  }
+}

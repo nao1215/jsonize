@@ -1,0 +1,53 @@
+[
+  {
+    "time": "20:19:59",
+    "imsg_per_s": 0,
+    "omsg_per_s": 0,
+    "iech_per_s": 0,
+    "iechr_per_s": 0,
+    "oech_per_s": 0,
+    "oechr_per_s": 0,
+    "itm_per_s": 0,
+    "itmr_per_s": 0,
+    "otm_per_s": 0,
+    "otmr_per_s": 0,
+    "iadrmk_per_s": 0,
+    "iadrmkr_per_s": 0,
+    "oadrmk_per_s": 0,
+    "oadrmkr_per_s": 0
+  },
+  {
+    "time": "20:20:00",
+    "imsg_per_s": 0,
+    "omsg_per_s": 0,
+    "iech_per_s": 0,
+    "iechr_per_s": 0,
+    "oech_per_s": 0,
+    "oechr_per_s": 0,
+    "itm_per_s": 0,
+    "itmr_per_s": 0,
+    "otm_per_s": 0,
+    "otmr_per_s": 0,
+    "iadrmk_per_s": 0,
+    "iadrmkr_per_s": 0,
+    "oadrmk_per_s": 0,
+    "oadrmkr_per_s": 0
+  },
+  {
+    "time": "Average",
+    "imsg_per_s": 0,
+    "omsg_per_s": 0,
+    "iech_per_s": 0,
+    "iechr_per_s": 0,
+    "oech_per_s": 0,
+    "oechr_per_s": 0,
+    "itm_per_s": 0,
+    "itmr_per_s": 0,
+    "otm_per_s": 0,
+    "otmr_per_s": 0,
+    "iadrmk_per_s": 0,
+    "iadrmkr_per_s": 0,
+    "oadrmk_per_s": 0,
+    "oadrmkr_per_s": 0
+  }
+]

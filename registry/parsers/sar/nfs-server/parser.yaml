@@ -1,0 +1,44 @@
+# `sar -n NFSD` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. The figures
+# are numbers with a fraction.
+format: 1
+command: sar
+variant: nfs-server
+description: sar -n NFSD NFS server activity
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+scall/s[ \t]+badcall/s[ \t]+packet/s[ \t]+udp/s[ \t]+tcp/s[ \t]+hit/s[ \t]+miss/s[ \t]+sread/s[ \t]+swrite/s[ \t]+saccess/s[ \t]+sgetatt/s[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+scall/s[ \t]+badcall/s[ \t]+packet/s[ \t]+udp/s[ \t]+tcp/s[ \t]+hit/s[ \t]+miss/s[ \t]+sread/s[ \t]+swrite/s[ \t]+saccess/s[ \t]+sgetatt/s[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, scall_per_s, badcall_per_s, packet_per_s, udp_per_s, tcp_per_s, hit_per_s, miss_per_s, sread_per_s, swrite_per_s, saccess_per_s, sgetatt_per_s]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  scall_per_s: {type: float}
+  badcall_per_s: {type: float}
+  packet_per_s: {type: float}
+  udp_per_s: {type: float}
+  tcp_per_s: {type: float}
+  hit_per_s: {type: float}
+  miss_per_s: {type: float}
+  sread_per_s: {type: float}
+  swrite_per_s: {type: float}
+  saccess_per_s: {type: float}
+  sgetatt_per_s: {type: float}

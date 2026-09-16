@@ -1,0 +1,46 @@
+# `sar -u ALL` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. -u ALL adds the
+# interrupt, softirq, guest and guest nice shares to what sar/cpu reads,
+# and names user and system time %usr and %sys. Every figure is a
+# percentage.
+format: 1
+command: sar
+variant: cpu-all
+description: sar -u ALL CPU utilization with every field
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+CPU[ \t]+%usr[ \t]+%nice[ \t]+%sys[ \t]+%iowait[ \t]+%steal[ \t]+%irq[ \t]+%soft[ \t]+%guest[ \t]+%gnice[ \t]+%idle[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+CPU[ \t]+%usr[ \t]+%nice[ \t]+%sys[ \t]+%iowait[ \t]+%steal[ \t]+%irq[ \t]+%soft[ \t]+%guest[ \t]+%gnice[ \t]+%idle[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, cpu, usr_percent, nice_percent, sys_percent, iowait_percent, steal_percent, irq_percent, soft_percent, guest_percent, gnice_percent, idle_percent]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  cpu: {required: true}
+  usr_percent: {type: float}
+  nice_percent: {type: float}
+  sys_percent: {type: float}
+  iowait_percent: {type: float}
+  steal_percent: {type: float}
+  irq_percent: {type: float}
+  soft_percent: {type: float}
+  guest_percent: {type: float}
+  gnice_percent: {type: float}
+  idle_percent: {type: float}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/icmp.json",
+  "title": "sar/icmp",
+  "description": "sar -n ICMP ICMPv4 traffic",
+  "x-jsonize": {
+    "definition": "sar/icmp",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "imsg_per_s": {
+        "type": "number"
+      },
+      "omsg_per_s": {
+        "type": "number"
+      },
+      "iech_per_s": {
+        "type": "number"
+      },
+      "iechr_per_s": {
+        "type": "number"
+      },
+      "oech_per_s": {
+        "type": "number"
+      },
+      "oechr_per_s": {
+        "type": "number"
+      },
+      "itm_per_s": {
+        "type": "number"
+      },
+      "itmr_per_s": {
+        "type": "number"
+      },
+      "otm_per_s": {
+        "type": "number"
+      },
+      "otmr_per_s": {
+        "type": "number"
+      },
+      "iadrmk_per_s": {
+        "type": "number"
+      },
+      "iadrmkr_per_s": {
+        "type": "number"
+      },
+      "oadrmk_per_s": {
+        "type": "number"
+      },
+      "oadrmkr_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "imsg_per_s",
+      "omsg_per_s",
+      "iech_per_s",
+      "iechr_per_s",
+      "oech_per_s",
+      "oechr_per_s",
+      "itm_per_s",
+      "itmr_per_s",
+      "otm_per_s",
+      "otmr_per_s",
+      "iadrmk_per_s",
+      "iadrmkr_per_s",
+      "oadrmk_per_s",
+      "oadrmkr_per_s"
+    ]
+  }
+}

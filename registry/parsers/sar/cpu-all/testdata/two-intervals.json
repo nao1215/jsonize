@@ -1,0 +1,44 @@
+[
+  {
+    "time": "20:22:14",
+    "cpu": "all",
+    "usr_percent": 0.66,
+    "nice_percent": 0,
+    "sys_percent": 0.22,
+    "iowait_percent": 0,
+    "steal_percent": 0,
+    "irq_percent": 0,
+    "soft_percent": 0.03,
+    "guest_percent": 0,
+    "gnice_percent": 0,
+    "idle_percent": 99.09
+  },
+  {
+    "time": "20:22:15",
+    "cpu": "all",
+    "usr_percent": 2.13,
+    "nice_percent": 0,
+    "sys_percent": 0.66,
+    "iowait_percent": 0.03,
+    "steal_percent": 0,
+    "irq_percent": 0,
+    "soft_percent": 0.09,
+    "guest_percent": 0,
+    "gnice_percent": 0,
+    "idle_percent": 97.09
+  },
+  {
+    "time": "Average",
+    "cpu": "all",
+    "usr_percent": 1.4,
+    "nice_percent": 0,
+    "sys_percent": 0.44,
+    "iowait_percent": 0.02,
+    "steal_percent": 0,
+    "irq_percent": 0,
+    "soft_percent": 0.06,
+    "guest_percent": 0,
+    "gnice_percent": 0,
+    "idle_percent": 98.09
+  }
+]

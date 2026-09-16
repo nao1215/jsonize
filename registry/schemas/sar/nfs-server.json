@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/nfs-server.json",
+  "title": "sar/nfs-server",
+  "description": "sar -n NFSD NFS server activity",
+  "x-jsonize": {
+    "definition": "sar/nfs-server",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "scall_per_s": {
+        "type": "number"
+      },
+      "badcall_per_s": {
+        "type": "number"
+      },
+      "packet_per_s": {
+        "type": "number"
+      },
+      "udp_per_s": {
+        "type": "number"
+      },
+      "tcp_per_s": {
+        "type": "number"
+      },
+      "hit_per_s": {
+        "type": "number"
+      },
+      "miss_per_s": {
+        "type": "number"
+      },
+      "sread_per_s": {
+        "type": "number"
+      },
+      "swrite_per_s": {
+        "type": "number"
+      },
+      "saccess_per_s": {
+        "type": "number"
+      },
+      "sgetatt_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "scall_per_s",
+      "badcall_per_s",
+      "packet_per_s",
+      "udp_per_s",
+      "tcp_per_s",
+      "hit_per_s",
+      "miss_per_s",
+      "sread_per_s",
+      "swrite_per_s",
+      "saccess_per_s",
+      "sgetatt_per_s"
+    ]
+  }
+}

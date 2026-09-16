@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/softnet.json",
+  "title": "sar/softnet",
+  "description": "sar -n SOFT software-based network processing",
+  "x-jsonize": {
+    "definition": "sar/softnet",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "cpu": {
+        "type": "string"
+      },
+      "total_per_s": {
+        "type": "number"
+      },
+      "dropd_per_s": {
+        "type": "number"
+      },
+      "squeezd_per_s": {
+        "type": "number"
+      },
+      "rx_rps_per_s": {
+        "type": "number"
+      },
+      "flw_lim_per_s": {
+        "type": "number"
+      },
+      "blg_len": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "time",
+      "cpu",
+      "total_per_s",
+      "dropd_per_s",
+      "squeezd_per_s",
+      "rx_rps_per_s",
+      "flw_lim_per_s",
+      "blg_len"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+# `sar -n EICMP6` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. The figures
+# are numbers with a fraction.
+format: 1
+command: sar
+variant: icmp6-errors
+description: sar -n EICMP6 ICMPv6 errors
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+ierr6/s[ \t]+idtunr6/s[ \t]+odtunr6/s[ \t]+itmex6/s[ \t]+otmex6/s[ \t]+iprmpb6/s[ \t]+oprmpb6/s[ \t]+iredir6/s[ \t]+oredir6/s[ \t]+ipck2b6/s[ \t]+opck2b6/s[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+ierr6/s[ \t]+idtunr6/s[ \t]+odtunr6/s[ \t]+itmex6/s[ \t]+otmex6/s[ \t]+iprmpb6/s[ \t]+oprmpb6/s[ \t]+iredir6/s[ \t]+oredir6/s[ \t]+ipck2b6/s[ \t]+opck2b6/s[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, ierr6_per_s, idtunr6_per_s, odtunr6_per_s, itmex6_per_s, otmex6_per_s, iprmpb6_per_s, oprmpb6_per_s, iredir6_per_s, oredir6_per_s, ipck2b6_per_s, opck2b6_per_s]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  ierr6_per_s: {type: float}
+  idtunr6_per_s: {type: float}
+  odtunr6_per_s: {type: float}
+  itmex6_per_s: {type: float}
+  otmex6_per_s: {type: float}
+  iprmpb6_per_s: {type: float}
+  oprmpb6_per_s: {type: float}
+  iredir6_per_s: {type: float}
+  oredir6_per_s: {type: float}
+  ipck2b6_per_s: {type: float}
+  opck2b6_per_s: {type: float}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/kernel-tables.json",
+  "title": "sar/kernel-tables",
+  "description": "sar -v inode, file and other kernel tables",
+  "x-jsonize": {
+    "definition": "sar/kernel-tables",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "dentunusd": {
+        "type": "integer"
+      },
+      "file_nr": {
+        "type": "integer"
+      },
+      "inode_nr": {
+        "type": "integer"
+      },
+      "pty_nr": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "time",
+      "dentunusd",
+      "file_nr",
+      "inode_nr",
+      "pty_nr"
+    ]
+  }
+}

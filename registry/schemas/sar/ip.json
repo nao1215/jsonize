@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/ip.json",
+  "title": "sar/ip",
+  "description": "sar -n IP IPv4 traffic",
+  "x-jsonize": {
+    "definition": "sar/ip",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "irec_per_s": {
+        "type": "number"
+      },
+      "fwddgm_per_s": {
+        "type": "number"
+      },
+      "idel_per_s": {
+        "type": "number"
+      },
+      "orq_per_s": {
+        "type": "number"
+      },
+      "asmrq_per_s": {
+        "type": "number"
+      },
+      "asmok_per_s": {
+        "type": "number"
+      },
+      "fragok_per_s": {
+        "type": "number"
+      },
+      "fragcrt_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "irec_per_s",
+      "fwddgm_per_s",
+      "idel_per_s",
+      "orq_per_s",
+      "asmrq_per_s",
+      "asmok_per_s",
+      "fragok_per_s",
+      "fragcrt_per_s"
+    ]
+  }
+}

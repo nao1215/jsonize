@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/memory-all.json",
+  "title": "sar/memory-all",
+  "description": "sar -r ALL memory utilization with every field",
+  "x-jsonize": {
+    "definition": "sar/memory-all",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "kbmemfree": {
+        "type": "integer"
+      },
+      "kbavail": {
+        "type": "integer"
+      },
+      "kbmemused": {
+        "type": "integer"
+      },
+      "memused_percent": {
+        "type": "number"
+      },
+      "kbbuffers": {
+        "type": "integer"
+      },
+      "kbcached": {
+        "type": "integer"
+      },
+      "kbcommit": {
+        "type": "integer"
+      },
+      "commit_percent": {
+        "type": "number"
+      },
+      "kbactive": {
+        "type": "integer"
+      },
+      "kbinact": {
+        "type": "integer"
+      },
+      "kbdirty": {
+        "type": "integer"
+      },
+      "kbanonpg": {
+        "type": "integer"
+      },
+      "kbslab": {
+        "type": "integer"
+      },
+      "kbkstack": {
+        "type": "integer"
+      },
+      "kbpgtbl": {
+        "type": "integer"
+      },
+      "kbvmused": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "time",
+      "kbmemfree",
+      "kbavail",
+      "kbmemused",
+      "memused_percent",
+      "kbbuffers",
+      "kbcached",
+      "kbcommit",
+      "commit_percent",
+      "kbactive",
+      "kbinact",
+      "kbdirty",
+      "kbanonpg",
+      "kbslab",
+      "kbkstack",
+      "kbpgtbl",
+      "kbvmused"
+    ]
+  }
+}

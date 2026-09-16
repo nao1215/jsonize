@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/tcp.json",
+  "title": "sar/tcp",
+  "description": "sar -n TCP TCPv4 traffic",
+  "x-jsonize": {
+    "definition": "sar/tcp",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "active_per_s": {
+        "type": "number"
+      },
+      "passive_per_s": {
+        "type": "number"
+      },
+      "iseg_per_s": {
+        "type": "number"
+      },
+      "oseg_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "active_per_s",
+      "passive_per_s",
+      "iseg_per_s",
+      "oseg_per_s"
+    ]
+  }
+}

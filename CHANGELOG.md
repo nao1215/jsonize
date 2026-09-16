@@ -28,6 +28,10 @@ project follows [Semantic Versioning](https://semver.org/).
   `rustc -vV` and `cargo -vV`, and BusyBox `top -b` (a virtual size
   that runs into the percentage beside it is told apart). The registry
   holds 237 commands through 627 definitions.
+- Twenty-five `sar` reports: `-W`, `-H`, `-v`, `-I`, `-u ALL`, `-r ALL`,
+  `-m CPU`, and with `-n` the reports `EDEV`, `NFS`, `NFSD`, `SOCK`,
+  `IP`, `EIP`, `ICMP`, `EICMP`, `TCP`, `ETCP`, `UDP`, `SOCK6`, `IP6`,
+  `EIP6`, `ICMP6`, `EICMP6`, `UDP6` and `SOFT` (652 definitions).
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the
@@ -49,6 +53,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `sar -u ALL` piped to jz was read as `mpstat` with exit 0: the two
+  print the same ten CPU columns, sar with `%steal` before `%irq`, and
+  mpstat/linux looked only as far as `%nice`, so steal time came out as
+  interrupt time. mpstat/linux now asks for its whole header.
 - A command that prints at an interval gets its records out while it
   runs. `jz run --stream ping HOST` never chose a definition, since
   ping/linux asked for the summary ping prints only at its end, and

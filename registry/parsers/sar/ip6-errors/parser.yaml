@@ -1,0 +1,44 @@
+# `sar -n EIP6` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. The figures
+# are numbers with a fraction.
+format: 1
+command: sar
+variant: ip6-errors
+description: sar -n EIP6 IPv6 errors
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+ihdrer6/s[ \t]+iadrer6/s[ \t]+iukwnp6/s[ \t]+i2big6/s[ \t]+idisc6/s[ \t]+odisc6/s[ \t]+inort6/s[ \t]+onort6/s[ \t]+asmf6/s[ \t]+fragf6/s[ \t]+itrpck6/s[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+ihdrer6/s[ \t]+iadrer6/s[ \t]+iukwnp6/s[ \t]+i2big6/s[ \t]+idisc6/s[ \t]+odisc6/s[ \t]+inort6/s[ \t]+onort6/s[ \t]+asmf6/s[ \t]+fragf6/s[ \t]+itrpck6/s[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, ihdrer6_per_s, iadrer6_per_s, iukwnp6_per_s, i2big6_per_s, idisc6_per_s, odisc6_per_s, inort6_per_s, onort6_per_s, asmf6_per_s, fragf6_per_s, itrpck6_per_s]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  ihdrer6_per_s: {type: float}
+  iadrer6_per_s: {type: float}
+  iukwnp6_per_s: {type: float}
+  i2big6_per_s: {type: float}
+  idisc6_per_s: {type: float}
+  odisc6_per_s: {type: float}
+  inort6_per_s: {type: float}
+  onort6_per_s: {type: float}
+  asmf6_per_s: {type: float}
+  fragf6_per_s: {type: float}
+  itrpck6_per_s: {type: float}

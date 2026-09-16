@@ -1,0 +1,26 @@
+[
+  {
+    "time": "20:19:41",
+    "kbhugfree": 0,
+    "kbhugused": 0,
+    "hugused_percent": 0,
+    "kbhugrsvd": 0,
+    "kbhugsurp": 0
+  },
+  {
+    "time": "20:19:42",
+    "kbhugfree": 0,
+    "kbhugused": 0,
+    "hugused_percent": 0,
+    "kbhugrsvd": 0,
+    "kbhugsurp": 0
+  },
+  {
+    "time": "Average",
+    "kbhugfree": 0,
+    "kbhugused": 0,
+    "hugused_percent": 0,
+    "kbhugrsvd": 0,
+    "kbhugsurp": 0
+  }
+]

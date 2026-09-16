@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/swapping.json",
+  "title": "sar/swapping",
+  "description": "sar -W swapping activity (pages swapped in and out)",
+  "x-jsonize": {
+    "definition": "sar/swapping",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "pswpin_per_s": {
+        "type": "number"
+      },
+      "pswpout_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "pswpin_per_s",
+      "pswpout_per_s"
+    ]
+  }
+}

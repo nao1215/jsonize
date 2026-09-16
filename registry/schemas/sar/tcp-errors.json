@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/tcp-errors.json",
+  "title": "sar/tcp-errors",
+  "description": "sar -n ETCP TCPv4 errors",
+  "x-jsonize": {
+    "definition": "sar/tcp-errors",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "atmptf_per_s": {
+        "type": "number"
+      },
+      "estres_per_s": {
+        "type": "number"
+      },
+      "retrseg_per_s": {
+        "type": "number"
+      },
+      "isegerr_per_s": {
+        "type": "number"
+      },
+      "orsts_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "atmptf_per_s",
+      "estres_per_s",
+      "retrseg_per_s",
+      "isegerr_per_s",
+      "orsts_per_s"
+    ]
+  }
+}

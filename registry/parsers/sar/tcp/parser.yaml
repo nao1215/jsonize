@@ -1,0 +1,37 @@
+# `sar -n TCP` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. The figures
+# are numbers with a fraction.
+format: 1
+command: sar
+variant: tcp
+description: sar -n TCP TCPv4 traffic
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+active/s[ \t]+passive/s[ \t]+iseg/s[ \t]+oseg/s[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+active/s[ \t]+passive/s[ \t]+iseg/s[ \t]+oseg/s[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, active_per_s, passive_per_s, iseg_per_s, oseg_per_s]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  active_per_s: {type: float}
+  passive_per_s: {type: float}
+  iseg_per_s: {type: float}
+  oseg_per_s: {type: float}

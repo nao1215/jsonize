@@ -1,0 +1,23 @@
+[
+  {
+    "time": "20:19:43",
+    "dentunusd": 5098081,
+    "file_nr": 21163,
+    "inode_nr": 4112806,
+    "pty_nr": 14
+  },
+  {
+    "time": "20:19:44",
+    "dentunusd": 5098150,
+    "file_nr": 21195,
+    "inode_nr": 4112888,
+    "pty_nr": 14
+  },
+  {
+    "time": "Average",
+    "dentunusd": 5098116,
+    "file_nr": 21179,
+    "inode_nr": 4112847,
+    "pty_nr": 14
+  }
+]

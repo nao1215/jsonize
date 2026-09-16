@@ -1,0 +1,23 @@
+[
+  {
+    "time": "20:20:09",
+    "tcp6sck": 4,
+    "udp6sck": 27,
+    "raw6sck": 2,
+    "ip6_frag": 0
+  },
+  {
+    "time": "20:20:10",
+    "tcp6sck": 4,
+    "udp6sck": 27,
+    "raw6sck": 2,
+    "ip6_frag": 0
+  },
+  {
+    "time": "Average",
+    "tcp6sck": 4,
+    "udp6sck": 27,
+    "raw6sck": 2,
+    "ip6_frag": 0
+  }
+]

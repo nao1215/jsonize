@@ -1,0 +1,16 @@
+Linux 7.0.0-31-generic (host01) 	09/16/26 	_x86_64_	(32 CPU)
+
+20:19:46        IFACE   rxerr/s   txerr/s    coll/s  rxdrop/s  txdrop/s  txcarr/s  rxfram/s  rxfifo/s  txfifo/s
+20:19:47           lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+20:19:47         eno1      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+20:19:47     wlp195s0      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+
+20:19:47        IFACE   rxerr/s   txerr/s    coll/s  rxdrop/s  txdrop/s  txcarr/s  rxfram/s  rxfifo/s  txfifo/s
+20:19:48           lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+20:19:48         eno1      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+20:19:48     wlp195s0      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+
+Average:        IFACE   rxerr/s   txerr/s    coll/s  rxdrop/s  txdrop/s  txcarr/s  rxfram/s  rxfifo/s  txfifo/s
+Average:           lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+Average:         eno1      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+Average:     wlp195s0      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00      0.00

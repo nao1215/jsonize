@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/ip-errors.json",
+  "title": "sar/ip-errors",
+  "description": "sar -n EIP IPv4 errors",
+  "x-jsonize": {
+    "definition": "sar/ip-errors",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "ihdrerr_per_s": {
+        "type": "number"
+      },
+      "iadrerr_per_s": {
+        "type": "number"
+      },
+      "iukwnpr_per_s": {
+        "type": "number"
+      },
+      "idisc_per_s": {
+        "type": "number"
+      },
+      "odisc_per_s": {
+        "type": "number"
+      },
+      "onort_per_s": {
+        "type": "number"
+      },
+      "asmf_per_s": {
+        "type": "number"
+      },
+      "fragf_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "ihdrerr_per_s",
+      "iadrerr_per_s",
+      "iukwnpr_per_s",
+      "idisc_per_s",
+      "odisc_per_s",
+      "onort_per_s",
+      "asmf_per_s",
+      "fragf_per_s"
+    ]
+  }
+}

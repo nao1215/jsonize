@@ -1,0 +1,35 @@
+[
+  {
+    "time": "20:19:55",
+    "irec_per_s": 71,
+    "fwddgm_per_s": 0,
+    "idel_per_s": 71,
+    "orq_per_s": 67,
+    "asmrq_per_s": 0,
+    "asmok_per_s": 0,
+    "fragok_per_s": 0,
+    "fragcrt_per_s": 0
+  },
+  {
+    "time": "20:19:56",
+    "irec_per_s": 21,
+    "fwddgm_per_s": 0,
+    "idel_per_s": 21,
+    "orq_per_s": 21,
+    "asmrq_per_s": 0,
+    "asmok_per_s": 0,
+    "fragok_per_s": 0,
+    "fragcrt_per_s": 0
+  },
+  {
+    "time": "Average",
+    "irec_per_s": 46,
+    "fwddgm_per_s": 0,
+    "idel_per_s": 46,
+    "orq_per_s": 44,
+    "asmrq_per_s": 0,
+    "asmok_per_s": 0,
+    "fragok_per_s": 0,
+    "fragcrt_per_s": 0
+  }
+]
