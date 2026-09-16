@@ -458,12 +458,7 @@ func validateParse(v *validator, path string, p *Parse, fields map[string]*Field
 			v.add(path+".type", "a part cannot be composite")
 			return
 		}
-		if p.Start != "" {
-			v.add(path+".start", "only valid for type records")
-		}
-		if p.Record != nil {
-			v.add(path+".record", "only valid for type records")
-		}
+		rejectRecordsKeys(v, path, p)
 		validateComposite(v, path, p, TypeComposite)
 		rejectKeys(v, path, p, "table", "regex", "kv")
 	case TypeRecords:
@@ -625,13 +620,19 @@ func rejectKeys(v *validator, path string, p *Parse, families ...string) {
 			if len(p.Parts) > 0 {
 				v.add(path+".parts", "only valid for type composite or records")
 			}
-			if p.Start != "" {
-				v.add(path+".start", "only valid for type records")
-			}
-			if p.Record != nil {
-				v.add(path+".record", "only valid for type records")
-			}
+			rejectRecordsKeys(v, path, p)
 		}
+	}
+}
+
+// rejectRecordsKeys reports the keys only a records parser has, for a
+// type that is not one.
+func rejectRecordsKeys(v *validator, path string, p *Parse) {
+	if p.Start != "" {
+		v.add(path+".start", "only valid for type records")
+	}
+	if p.Record != nil {
+		v.add(path+".record", "only valid for type records")
 	}
 }
 

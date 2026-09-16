@@ -130,6 +130,21 @@ func lookup(cmd Command) (string, error) {
 	return path, nil
 }
 
+// child prepares the command, without its standard output: the collected
+// reading and the streamed one differ in where that goes and in nothing
+// else. The wait delay is what makes a grandchild that keeps the pipes
+// open after the command exits a delay rather than a hang.
+func child(ctx context.Context, path string, cmd Command, stderr io.Writer) *exec.Cmd {
+	c := exec.CommandContext(ctx, path, cmd.Args...)
+	c.Env = BuildEnv(os.Environ(), cmd.KeepLocale, cmd.Env)
+	c.Dir = cmd.Dir
+	c.Stdin = cmd.Stdin
+	c.Stderr = stderr
+	c.Cancel = func() error { return terminate(c.Process) }
+	c.WaitDelay = grace
+	return c
+}
+
 // run is Run with the signal source given, so a test can send one.
 func run(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay) (*Result, error) {
 	defer sigs.stop()
@@ -147,16 +162,8 @@ func run(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay) (*Resu
 	defer cancel(nil)
 	out := &limitedBuffer{limit: limit, cancel: cancel}
 
-	c := exec.CommandContext(runCtx, path, cmd.Args...)
-	c.Env = BuildEnv(os.Environ(), cmd.KeepLocale, cmd.Env)
-	c.Dir = cmd.Dir
-	c.Stdin = cmd.Stdin
+	c := child(runCtx, path, cmd, stderr)
 	c.Stdout = out
-	c.Stderr = stderr
-	c.Cancel = func() error { return terminate(c.Process) }
-	// If the child exits but a grandchild keeps the pipes open, give up on
-	// them after this delay instead of hanging.
-	c.WaitDelay = grace
 	start := time.Now()
 	if err := c.Start(); err != nil {
 		return nil, fmt.Errorf("cannot run %q: %w", cmd.Name, err)
@@ -200,13 +207,7 @@ func stream(ctx context.Context, cmd Command, stderr io.Writer, sigs *relay, con
 	// timeout.
 	runCtx, stop := context.WithCancel(ctx)
 	defer stop()
-	c := exec.CommandContext(runCtx, path, cmd.Args...)
-	c.Env = BuildEnv(os.Environ(), cmd.KeepLocale, cmd.Env)
-	c.Dir = cmd.Dir
-	c.Stdin = cmd.Stdin
-	c.Stderr = stderr
-	c.Cancel = func() error { return terminate(c.Process) }
-	c.WaitDelay = grace
+	c := child(runCtx, path, cmd, stderr)
 	// The pipe is jz's own rather than the one StdoutPipe would set up,
 	// so that waiting for the command is waiting for the command: a
 	// process it started and left behind may hold the writing end open,

@@ -249,40 +249,43 @@ func (a *app) explainWrite(e *explanation) {
 	}
 }
 
-// lines renders the explanation for a person.
-func (e *explanation) lines() []string {
-	var out []string
-	add := func(format string, args ...any) { out = append(out, fmt.Sprintf(format, args...)) }
+// headline is the first line of the explanation: what the outcome was,
+// in the words the outcome deserves.
+func (e *explanation) headline() string {
 	switch e.outcome() {
 	case "defined":
-		add("defined %s: the definition was given with --define, so nothing was chosen", e.defined)
+		return fmt.Sprintf("defined %s: the definition was given with --define, so nothing was chosen", e.defined)
 	case "format":
 		if e.from == fromExtension {
-			add("read as %s: the format the extension of %s names, so nothing was chosen", e.format, e.path)
-		} else {
-			add("read as %s: the format was given with --format, so nothing was chosen", e.format)
+			return fmt.Sprintf("read as %s: the format the extension of %s names, so nothing was chosen", e.format, e.path)
 		}
+		return fmt.Sprintf("read as %s: the format was given with --format, so nothing was chosen", e.format)
 	case "chosen":
-		add("chose %s from %s", e.selected.Entry.Def.ID(), e.selected.Entry.Source)
+		return fmt.Sprintf("chose %s from %s", e.selected.Entry.Def.ID(), e.selected.Entry.Source)
 	case "empty":
-		add("empty: the command printed nothing, so no definition was chosen by its text")
+		return "empty: the command printed nothing, so no definition was chosen by its text"
 	case "unidentified":
-		add("unidentified: no definition fits the text")
+		return "unidentified: no definition fits the text"
 	case "ambiguous":
 		var am *selector.AmbiguousError
 		errors.As(e.failure, &am)
-		add("ambiguous: %s all fit the text, and %s", ids(am.Candidates), am.Unsettled)
+		return fmt.Sprintf("ambiguous: %s all fit the text, and %s", ids(am.Candidates), am.Unsettled)
 	case "mismatch":
 		var me *selector.MismatchError
 		errors.As(e.failure, &me)
-		add("mismatch: %s was named and does not fit: %s", me.Entry.Def.ID(), me.Reason)
+		return fmt.Sprintf("mismatch: %s was named and does not fit: %s", me.Entry.Def.ID(), me.Reason)
 	case "unknown-parser":
-		add("unknown parser: %s names no definition", e.ctx.Parser)
+		return fmt.Sprintf("unknown parser: %s names no definition", e.ctx.Parser)
 	case "unknown-variant":
-		add("unknown variant: %s has no variant %s", e.ctx.Parser, e.ctx.Variant)
-	default:
-		add("failed before a definition was chosen")
+		return fmt.Sprintf("unknown variant: %s has no variant %s", e.ctx.Parser, e.ctx.Variant)
 	}
+	return "failed before a definition was chosen"
+}
+
+// lines renders the explanation for a person.
+func (e *explanation) lines() []string {
+	out := []string{e.headline()}
+	add := func(format string, args ...any) { out = append(out, fmt.Sprintf(format, args...)) }
 	out = append(out, e.scopeLines()...)
 	if e.empty {
 		if len(e.candidates) == 0 {
@@ -389,26 +392,48 @@ func (e *explanation) rejections() (rejected, held []selector.Rejection, explici
 
 // document renders the explanation as JSON. The keys are always present,
 // null or empty when they do not apply, so a consumer reads every
-// explanation the same way.
+// explanation the same way. This function is where their order is
+// stated; each of them is built beside it.
 func (e *explanation) document() *jsonutil.Object {
 	doc := jsonutil.NewObject()
 	doc.Set("outcome", e.outcome())
+	doc.Set("scope", e.scopeDoc())
+	doc.Set("chosen", e.chosenDoc())
+	doc.Set("candidates", e.candidatesDoc())
+	rejected, held, notConsidered := e.rejections()
+	doc.Set("rejected", rejectionList(rejected))
+	doc.Set("held_back", stringsToAny(idList(entriesOf(held))))
+	doc.Set("not_considered", int64(notConsidered))
+	doc.Set("read", e.readDoc())
+	doc.Set("command", e.commandDoc())
+	doc.Set("error", e.errorDoc())
+	return doc
+}
 
+// scopeDoc says what the choice was made within: where the scope came
+// from, and the parser, variant, system, arguments and path that narrow
+// it.
+func (e *explanation) scopeDoc() *jsonutil.Object {
 	scope := jsonutil.NewObject()
 	scope.Set("from", nullable(e.from))
 	scope.Set("parser", nullable(e.ctx.Parser))
 	scope.Set("variant", nullable(e.ctx.Variant))
 	scope.Set("os", nullable(e.ctx.OS))
+	var args any
 	if e.ctx.Args != nil {
-		scope.Set("args", stringsToAny(e.ctx.Args))
-	} else {
-		scope.Set("args", nil)
+		args = stringsToAny(e.ctx.Args)
 	}
+	scope.Set("args", args)
 	scope.Set("path", nullable(e.path))
 	scope.Set("path_dropped", nullable(e.dropped))
-	doc.Set("scope", scope)
+	return scope
+}
 
-	var chosen any
+// chosenDoc names the definition the input was read with, and null when
+// none was. A format named on the command line and a definition given
+// there were not chosen from candidates, so they have nothing to say
+// about what they beat.
+func (e *explanation) chosenDoc() any {
 	switch {
 	case e.selected != nil:
 		c := jsonutil.NewObject()
@@ -417,70 +442,45 @@ func (e *explanation) document() *jsonutil.Object {
 		c.Set("matched", stringsToAny(e.selected.Matched))
 		c.Set("settled_by", nullable(e.selected.Settled))
 		c.Set("outranked", rejectionList(e.selected.Outranked))
-		chosen = c
+		return c
 	case e.format != "":
-		c := jsonutil.NewObject()
-		c.Set("definition", e.format)
-		c.Set("registry", e.from)
-		c.Set("matched", []any{})
-		c.Set("settled_by", nil)
-		c.Set("outranked", []any{})
-		chosen = c
+		return statedChoice(e.format, e.from)
 	case e.defined != "":
-		c := jsonutil.NewObject()
-		c.Set("definition", e.defined)
-		c.Set("registry", fromDefine)
-		c.Set("matched", []any{})
-		c.Set("settled_by", nil)
-		c.Set("outranked", []any{})
-		chosen = c
+		return statedChoice(e.defined, fromDefine)
 	}
-	doc.Set("chosen", chosen)
+	return nil
+}
 
-	var candidates []any
+// statedChoice is a definition the caller named rather than one jz chose.
+func statedChoice(definition, registry string) *jsonutil.Object {
+	c := jsonutil.NewObject()
+	c.Set("definition", definition)
+	c.Set("registry", registry)
+	c.Set("matched", []any{})
+	c.Set("settled_by", nil)
+	c.Set("outranked", []any{})
+	return c
+}
+
+// candidatesDoc lists the definitions an ambiguous input fits, or the
+// ones an empty output was judged against. It is empty otherwise.
+func (e *explanation) candidatesDoc() []any {
 	var am *selector.AmbiguousError
 	switch {
 	case e.empty:
-		candidates = stringsToAny(idList(e.candidates))
+		return stringsToAny(idList(e.candidates))
 	case errors.As(e.failure, &am):
-		candidates = stringsToAny(idList(am.Candidates))
+		return stringsToAny(idList(am.Candidates))
 	}
-	if candidates == nil {
-		candidates = []any{}
-	}
-	doc.Set("candidates", candidates)
+	return []any{}
+}
 
-	rejected, held, notConsidered := e.rejections()
-	doc.Set("rejected", rejectionList(rejected))
-	heldList := make([]any, 0, len(held))
-	for _, r := range held {
-		heldList = append(heldList, r.Entry.Def.ID())
-	}
-	doc.Set("held_back", heldList)
-	doc.Set("not_considered", int64(notConsidered))
-
-	var read any
-	if acct := e.account; acct != nil {
-		r := jsonutil.NewObject()
-		r.Set("lines", int64(acct.Lines))
-		r.Set("read", int64(acct.Read))
-		r.Set("folded", int64(acct.Folded))
-		r.Set("blank", int64(acct.Blank))
-		ignored := make([]any, 0, len(acct.Ignored))
-		for _, ig := range acct.Ignored {
-			o := jsonutil.NewObject()
-			o.Set("rule", fmt.Sprintf("input.ignore[%d]", ig.Index))
-			o.Set("expression", ig.Expr)
-			o.Set("lines", int64(ig.Lines))
-			ignored = append(ignored, o)
-		}
-		r.Set("ignored", ignored)
-		r.Set("values", nil)
-		read = r
-	}
+// readDoc says where the input went. A definition accounts for lines; a
+// data file is read by its format's own reader, which counts the values
+// it made instead. The keys are the same either way, null where the one
+// reading has nothing to say.
+func (e *explanation) readDoc() any {
 	if e.counted {
-		// A data file is read by its format's own reader, which counts
-		// the values it made rather than lines of a definition.
 		r := jsonutil.NewObject()
 		r.Set("lines", nil)
 		r.Set("read", nil)
@@ -488,29 +488,60 @@ func (e *explanation) document() *jsonutil.Object {
 		r.Set("blank", nil)
 		r.Set("ignored", []any{})
 		r.Set("values", int64(e.records))
-		read = r
+		return r
 	}
-	doc.Set("read", read)
+	acct := e.account
+	if acct == nil {
+		return nil
+	}
+	r := jsonutil.NewObject()
+	r.Set("lines", int64(acct.Lines))
+	r.Set("read", int64(acct.Read))
+	r.Set("folded", int64(acct.Folded))
+	r.Set("blank", int64(acct.Blank))
+	ignored := make([]any, 0, len(acct.Ignored))
+	for _, ig := range acct.Ignored {
+		o := jsonutil.NewObject()
+		o.Set("rule", fmt.Sprintf("input.ignore[%d]", ig.Index))
+		o.Set("expression", ig.Expr)
+		o.Set("lines", int64(ig.Lines))
+		ignored = append(ignored, o)
+	}
+	r.Set("ignored", ignored)
+	r.Set("values", nil)
+	return r
+}
 
-	var command any
-	if e.finished {
-		c := jsonutil.NewObject()
-		c.Set("name", e.command)
-		c.Set("args", stringsToAny(nonNil(e.args)))
-		c.Set("exit", int64(e.status))
-		command = c
+// commandDoc reports the command jz started, once it has ended.
+func (e *explanation) commandDoc() any {
+	if !e.finished {
+		return nil
 	}
-	doc.Set("command", command)
+	c := jsonutil.NewObject()
+	c.Set("name", e.command)
+	c.Set("args", stringsToAny(nonNil(e.args)))
+	c.Set("exit", int64(e.status))
+	return c
+}
 
-	var failure any
-	if e.failure != nil {
-		f := jsonutil.NewObject()
-		f.Set("message", e.failure.Error())
-		f.Set("exit", int64(e.exit))
-		failure = f
+// errorDoc reports what the conversion ended with, when it failed.
+func (e *explanation) errorDoc() any {
+	if e.failure == nil {
+		return nil
 	}
-	doc.Set("error", failure)
-	return doc
+	f := jsonutil.NewObject()
+	f.Set("message", e.failure.Error())
+	f.Set("exit", int64(e.exit))
+	return f
+}
+
+// entriesOf takes the entries of rejections, which held_back names.
+func entriesOf(rs []selector.Rejection) []*registry.Entry {
+	out := make([]*registry.Entry, len(rs))
+	for i, r := range rs {
+		out[i] = r.Entry
+	}
+	return out
 }
 
 func rejectionList(rs []selector.Rejection) []any {

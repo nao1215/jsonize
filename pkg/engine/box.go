@@ -220,17 +220,7 @@ func (r *run) boxObject(cols []column, cells []raw, fields map[string]*definitio
 			return nil, r.errorf(ln, "", "cell %d has no column to go under (the header names %d): %q", i+1, len(cols), truncate(cells[i].text, 80))
 		}
 	}
-	obj := jsonutil.NewObject()
-	for i, c := range cols {
-		var v raw
-		if i < len(cells) {
-			v = cells[i]
-		}
-		if err := r.setField(obj, c.name, v, fields[c.name], ln); err != nil {
-			return nil, err
-		}
-	}
-	return obj, nil
+	return r.rowObject(cols, cells, fields, ln)
 }
 
 // boxColumns names the columns from the header row of a drawn table.
