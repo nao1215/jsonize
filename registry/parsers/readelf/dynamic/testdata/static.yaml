@@ -1,0 +1,3 @@
+source: readelf -d on a statically linked Go binary, captured on Ubuntu 26.04 (GNU Binutils 2.46) with LC_ALL=C
+description: a file with no dynamic section, which says so on its only line
+args: ["-d", "jz"]

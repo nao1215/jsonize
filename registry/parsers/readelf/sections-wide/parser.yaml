@@ -1,0 +1,57 @@
+# `readelf -S -W` (--section-headers --wide) prints the section header
+# table of an ELF file: a line saying how many headers there are and where
+# the table starts, a heading, a column header, one row per section, and
+# a legend of the flag letters. Without -W a row is split over two lines
+# and a long name is cut ("[...]"), which this definition does not read.
+#
+# The name is the first word after the index; the entry at index 0 has
+# none and it is null, and a name wider than its column pushes the rest of the row to the
+# right by what it overflows, so the cells after it are read by what they
+# hold rather than by where they stand. The address, the offset, the size
+# and the entry size are hexadecimal as printed, and kept as text; the
+# flags are the letters the legend explains, and link, info and alignment
+# are decimal numbers. The legend explains the letters and is left out.
+format: 1
+command: readelf
+variant: sections-wide
+description: readelf -S -W, the section headers of an ELF file
+metadata:
+  tags: [development, elf, binutils]
+  compatible: [GNU Binutils]
+  references:
+    - https://sourceware.org/binutils/docs/binutils/readelf.html
+detect:
+  args:
+    any: ["-S", "--section-headers", "--sections"]
+  signature:
+    all:
+      - '\AThere are [0-9]+ section headers, starting at offset 0x[0-9a-f]+:\n\nSection Headers:\n  \[Nr\] Name +Type +Address +Off +Size +ES Flg Lk Inf Al$'
+input:
+  ignore:
+    - '^Section Headers:$'
+    - '^  \[Nr\] Name +Type +Address +Off +Size +ES Flg Lk Inf Al$'
+    - '^Key to Flags:$'
+    - '^  [A-Za-z] \([a-zA-Z ]+\)(?:, [A-Za-z] \([a-zA-Z ]+\))*,?$'
+parse:
+  type: composite
+  parts:
+    - name: table
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\AThere are (?P<count>[0-9]+) section headers, starting at offset 0x(?P<offset>[0-9a-f]+):\z'
+      fields:
+        count: {type: int, required: true}
+        offset: {required: true}
+    - name: sections
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^  \[ *(?P<index>[0-9]+)\] (?P<name>\S*) +(?P<type>\S+) +(?P<address>[0-9a-f]+) (?P<offset>[0-9a-f]+) (?P<size>[0-9a-f]+) (?P<entsize>[0-9a-f]+) +(?P<flags>[A-Za-z]*) +(?P<link>[0-9]+) +(?P<info>[0-9]+) +(?P<align>[0-9]+)$'
+      fields:
+        index: {type: int, required: true}
+        name: {null_if: [""]}
+        link: {type: int}
+        info: {type: int}
+        align: {type: int}

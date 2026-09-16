@@ -1,0 +1,54 @@
+# `size -A` (--format=sysv) prints, for each file, its name and a colon,
+# a column header, one row per section with its size and address, and a
+# Total row, with blank lines between files. A record is a file: its
+# name, the sections, and the total, which is the sum of the sizes above
+# it and is kept since it is what the command reports first.
+#
+# The sizes and addresses are decimal; -x prints them in hexadecimal,
+# which this definition does not read.
+format: 1
+command: size
+variant: sysv
+description: size -A, the size and address of each section of each file
+metadata:
+  tags: [development, elf, binutils]
+  compatible: [GNU Binutils]
+  references:
+    - https://sourceware.org/binutils/docs/binutils/size.html
+detect:
+  args:
+    any: ["-A", "--format=sysv", "--format=SysV"]
+    none: ["-x", "--radix=16", "-o", "--radix=8"]
+  signature:
+    all:
+      - '\A\S[^\n]* +:\nsection +size +addr$'
+input:
+  ignore:
+    - '^section +size +addr$'
+parse:
+  type: records
+  start: '^\S.* +:$'
+  parts:
+    - name: file
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>\S.*?) +:\z'
+    - name: sections
+      select: {skip: 1, until: '^Total +[0-9]+$'}
+      parse:
+        type: regex
+        pattern: '^(?P<name>\S+) +(?P<size>[0-9]+) +(?P<address>[0-9]+)$'
+      fields:
+        size: {type: int}
+        address: {type: int}
+    - name: total
+      select: {skip: 1}
+      ignore: ['^\S+ +[0-9]+ +[0-9]+$']
+      parse:
+        type: regex
+        each: input
+        pattern: '\ATotal +(?P<size>[0-9]+)\z'
+      fields:
+        size: {type: int, required: true}

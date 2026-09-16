@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/readelf/sections-wide.json",
+  "title": "readelf/sections-wide",
+  "description": "readelf -S -W, the section headers of an ELF file",
+  "x-jsonize": {
+    "definition": "readelf/sections-wide",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "table": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "offset": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "count",
+        "offset"
+      ]
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "entsize": {
+            "type": "string"
+          },
+          "flags": {
+            "type": "string"
+          },
+          "link": {
+            "type": "integer"
+          },
+          "info": {
+            "type": "integer"
+          },
+          "align": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "index",
+          "name",
+          "type",
+          "address",
+          "offset",
+          "size",
+          "entsize",
+          "flags",
+          "link",
+          "info",
+          "align"
+        ]
+      }
+    }
+  },
+  "required": [
+    "table",
+    "sections"
+  ]
+}

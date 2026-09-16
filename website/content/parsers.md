@@ -182,7 +182,7 @@ the same reading with settings of your own.
 | `ps` | [`bsd`](../schemas/ps/bsd.json), [`bsd-short`](../schemas/ps/bsd-short.json), [`busybox`](../schemas/ps/busybox.json), [`freebsd`](../schemas/ps/freebsd.json), [`freebsd-long`](../schemas/ps/freebsd-long.json), [`full-format`](../schemas/ps/full-format.json), [`jobs`](../schemas/ps/jobs.json), [`long`](../schemas/ps/long.json), [`long-y`](../schemas/ps/long-y.json), [`posix`](../schemas/ps/posix.json), [`threads`](../schemas/ps/threads.json), [`unix`](../schemas/ps/unix.json) |
 | `pwdx` | [`default`](../schemas/pwdx/default.json) |
 | `rclone` | [`lsd`](../schemas/rclone/lsd.json), [`lsl`](../schemas/rclone/lsl.json), [`version`](../schemas/rclone/version.json) |
-| `readelf` | [`header`](../schemas/readelf/header.json) |
+| `readelf` | [`dynamic`](../schemas/readelf/dynamic.json), [`header`](../schemas/readelf/header.json), [`sections-wide`](../schemas/readelf/sections-wide.json) |
 | `redis-cli` | [`client-list`](../schemas/redis-cli/client-list.json), [`info`](../schemas/redis-cli/info.json) |
 | `resolvectl` | [`per-link`](../schemas/resolvectl/per-link.json), [`status`](../schemas/resolvectl/status.json) |
 | `rfkill` | [`linux`](../schemas/rfkill/linux.json), [`list`](../schemas/rfkill/list.json) |
@@ -204,7 +204,7 @@ the same reading with settings of your own.
 | `sha384sum` | [`posix`](../schemas/sha384sum/posix.json) |
 | `sha512sum` | [`posix`](../schemas/sha512sum/posix.json) |
 | `shellcheck` | [`gcc`](../schemas/shellcheck/gcc.json) |
-| `size` | [`gnu`](../schemas/size/gnu.json) |
+| `size` | [`gnu`](../schemas/size/gnu.json), [`sysv`](../schemas/size/sysv.json) |
 | `smartctl` | [`scan`](../schemas/smartctl/scan.json) |
 | `snap` | [`changes`](../schemas/snap/changes.json), [`connections`](../schemas/snap/connections.json), [`list`](../schemas/snap/list.json), [`services`](../schemas/snap/services.json) |
 | `sockstat` | [`freebsd`](../schemas/sockstat/freebsd.json), [`freebsd-state`](../schemas/sockstat/freebsd-state.json) |

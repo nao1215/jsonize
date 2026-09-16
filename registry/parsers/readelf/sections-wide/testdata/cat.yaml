@@ -1,0 +1,2 @@
+source: readelf -S -W /usr/bin/cat, captured on Ubuntu 26.04 (GNU Binutils 2.46) with LC_ALL=C; the binary is the uutils coreutils multi-call binary
+args: ["-S", "-W", "/usr/bin/cat"]

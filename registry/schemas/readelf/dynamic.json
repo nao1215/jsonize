@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/readelf/dynamic.json",
+  "title": "readelf/dynamic",
+  "description": "readelf -d, the dynamic section of an ELF file",
+  "x-jsonize": {
+    "definition": "readelf/dynamic",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "section": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "count": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "offset",
+        "count"
+      ]
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tag": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tag",
+          "type",
+          "value"
+        ]
+      }
+    }
+  },
+  "required": [
+    "section",
+    "entries"
+  ]
+}

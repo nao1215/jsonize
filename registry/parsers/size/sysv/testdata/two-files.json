@@ -1,0 +1,327 @@
+[
+  {
+    "file": {
+      "name": "/usr/bin/cat"
+    },
+    "sections": [
+      {
+        "name": ".note.gnu.build-id",
+        "size": 36,
+        "address": 904
+      },
+      {
+        "name": ".interp",
+        "size": 28,
+        "address": 940
+      },
+      {
+        "name": ".gnu.hash",
+        "size": 72,
+        "address": 968
+      },
+      {
+        "name": ".dynsym",
+        "size": 6648,
+        "address": 1040
+      },
+      {
+        "name": ".dynstr",
+        "size": 3423,
+        "address": 7688
+      },
+      {
+        "name": ".gnu.version",
+        "size": 554,
+        "address": 11112
+      },
+      {
+        "name": ".gnu.version_r",
+        "size": 576,
+        "address": 11672
+      },
+      {
+        "name": ".rela.dyn",
+        "size": 974928,
+        "address": 12248
+      },
+      {
+        "name": ".rela.plt",
+        "size": 168,
+        "address": 987176
+      },
+      {
+        "name": ".init",
+        "size": 27,
+        "address": 991232
+      },
+      {
+        "name": ".plt",
+        "size": 128,
+        "address": 991264
+      },
+      {
+        "name": ".plt.got",
+        "size": 72,
+        "address": 991392
+      },
+      {
+        "name": ".text",
+        "size": 4945328,
+        "address": 991488
+      },
+      {
+        "name": ".fini",
+        "size": 13,
+        "address": 5936816
+      },
+      {
+        "name": ".rodata",
+        "size": 2853608,
+        "address": 5939200
+      },
+      {
+        "name": ".debug_gdb_scripts",
+        "size": 34,
+        "address": 8792808
+      },
+      {
+        "name": ".eh_frame_hdr",
+        "size": 184380,
+        "address": 8792844
+      },
+      {
+        "name": ".eh_frame",
+        "size": 876296,
+        "address": 8977224
+      },
+      {
+        "name": ".gcc_except_table",
+        "size": 10264,
+        "address": 9853520
+      },
+      {
+        "name": ".note.gnu.property",
+        "size": 32,
+        "address": 9863784
+      },
+      {
+        "name": ".note.ABI-tag",
+        "size": 32,
+        "address": 9863816
+      },
+      {
+        "name": ".note.package",
+        "size": 120,
+        "address": 9863848
+      },
+      {
+        "name": ".tdata",
+        "size": 408,
+        "address": 9869008
+      },
+      {
+        "name": ".tbss",
+        "size": 305,
+        "address": 9869416
+      },
+      {
+        "name": ".init_array",
+        "size": 656,
+        "address": 9869416
+      },
+      {
+        "name": ".fini_array",
+        "size": 8,
+        "address": 9870072
+      },
+      {
+        "name": ".data.rel.ro",
+        "size": 1373192,
+        "address": 9870080
+      },
+      {
+        "name": ".dynamic",
+        "size": 560,
+        "address": 11243272
+      },
+      {
+        "name": ".got",
+        "size": 85688,
+        "address": 11243832
+      },
+      {
+        "name": ".data",
+        "size": 24344,
+        "address": 11329536
+      },
+      {
+        "name": ".bss",
+        "size": 1040,
+        "address": 11353888
+      },
+      {
+        "name": ".gnu_debuglink",
+        "size": 52,
+        "address": 0
+      }
+    ],
+    "total": {
+      "size": 11343020
+    }
+  },
+  {
+    "file": {
+      "name": "/usr/lib/x86_64-linux-gnu/libz.so.1"
+    },
+    "sections": [
+      {
+        "name": ".note.gnu.build-id",
+        "size": 36,
+        "address": 736
+      },
+      {
+        "name": ".gnu.hash",
+        "size": 940,
+        "address": 776
+      },
+      {
+        "name": ".dynsym",
+        "size": 2976,
+        "address": 1720
+      },
+      {
+        "name": ".dynstr",
+        "size": 1488,
+        "address": 4696
+      },
+      {
+        "name": ".gnu.version",
+        "size": 248,
+        "address": 6184
+      },
+      {
+        "name": ".gnu.version_d",
+        "size": 524,
+        "address": 6432
+      },
+      {
+        "name": ".gnu.version_r",
+        "size": 80,
+        "address": 6960
+      },
+      {
+        "name": ".rela.dyn",
+        "size": 816,
+        "address": 7040
+      },
+      {
+        "name": ".rela.plt",
+        "size": 408,
+        "address": 7856
+      },
+      {
+        "name": ".init",
+        "size": 27,
+        "address": 12288
+      },
+      {
+        "name": ".plt",
+        "size": 288,
+        "address": 12320
+      },
+      {
+        "name": ".plt.got",
+        "size": 16,
+        "address": 12608
+      },
+      {
+        "name": ".plt.sec",
+        "size": 272,
+        "address": 12624
+      },
+      {
+        "name": ".text",
+        "size": 75200,
+        "address": 12928
+      },
+      {
+        "name": ".fini",
+        "size": 13,
+        "address": 88128
+      },
+      {
+        "name": ".rodata",
+        "size": 18248,
+        "address": 90112
+      },
+      {
+        "name": ".eh_frame_hdr",
+        "size": 996,
+        "address": 108360
+      },
+      {
+        "name": ".eh_frame",
+        "size": 4644,
+        "address": 109360
+      },
+      {
+        "name": ".note.gnu.property",
+        "size": 32,
+        "address": 114008
+      },
+      {
+        "name": ".note.package",
+        "size": 128,
+        "address": 114040
+      },
+      {
+        "name": ".init_array",
+        "size": 8,
+        "address": 117840
+      },
+      {
+        "name": ".fini_array",
+        "size": 8,
+        "address": 117848
+      },
+      {
+        "name": ".data.rel.ro",
+        "size": 352,
+        "address": 117856
+      },
+      {
+        "name": ".dynamic",
+        "size": 496,
+        "address": 118208
+      },
+      {
+        "name": ".got",
+        "size": 32,
+        "address": 118704
+      },
+      {
+        "name": ".got.plt",
+        "size": 160,
+        "address": 118760
+      },
+      {
+        "name": ".data",
+        "size": 8,
+        "address": 118920
+      },
+      {
+        "name": ".bss",
+        "size": 8,
+        "address": 118928
+      },
+      {
+        "name": ".gnu_debuglink",
+        "size": 52,
+        "address": 0
+      }
+    ],
+    "total": {
+      "size": 108504
+    }
+  }
+]

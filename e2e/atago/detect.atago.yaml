@@ -1732,3 +1732,42 @@ scenarios:
               - { path: "$", length: 12 }
               - { path: "$[2].device", equals: nvme1n1 }
               - { path: "$[11].time", equals: Average }
+
+  - name: readelf -S -W and -d, and size -A, read the sections of an ELF file
+    steps:
+      - fixture:
+          file: sections.txt
+          from: "${specdir}/../../registry/parsers/readelf/sections-wide/testdata/cat.txt"
+      - run:
+          command: jz --parser readelf
+          stdin: {file: sections.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.table.count", equals: 34 }
+              - { path: "$.sections[0].name", equals: null }
+              - { path: "$.sections[1].name", equals: .note.gnu.build-id }
+              - { path: "$.sections[1].align", equals: 4 }
+      - fixture:
+          file: static.txt
+          from: "${specdir}/../../registry/parsers/readelf/dynamic/testdata/static.txt"
+      - run:
+          command: jz --parser readelf
+          stdin: {file: static.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: '{"section":{"offset":null,"count":null},"entries":[]}'
+      - fixture:
+          file: size.txt
+          from: "${specdir}/../../registry/parsers/size/sysv/testdata/two-files.txt"
+      - run:
+          command: jz
+          stdin: {file: size.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].total.size", equals: 11343020 }
