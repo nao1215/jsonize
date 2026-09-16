@@ -48,7 +48,8 @@ compiled definition and the whole text; encoding never sees definitions.
 
 ### A small public surface
 
-The command line has five subcommands (`run`, `list`, `test`, `completion`, `version`)
+The command line has six subcommands (`run`, `new`, `list`, `test`, `completion`,
+`version`)
 and the options listed in the usage page. Every option that asked the
 user to make a decision jz should be making, or that changed the output
 contract, was removed before release:
@@ -946,7 +947,7 @@ dependency. CI checks the same fixtures with the Python `jsonschema`
 package, so the two agreeing is evidence rather than one piece of code
 agreeing with itself.
 
-No CLI framework: five subcommands with a handful of flags each are
+No CLI framework: six subcommands with a handful of flags each are
 served by `flag` and a dispatch table, and the `run` subcommand needs
 "stop at the first non-flag" semantics that `flag` gives for free.
 

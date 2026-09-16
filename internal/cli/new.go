@@ -21,7 +21,7 @@ Makes a JSON object from the arguments, or an array with --array. Nothing
 is guessed: = makes a string and := reads JSON.
 
   jz new name=api replicas:=3 debug:=false
-  jz new tags[]=web tags[]=prod                 # {"tags":["web","prod"]}
+  jz new 'tags[]=web' 'tags[]=prod'             # {"tags":["web","prod"]}
   jz new version=@VERSION                       # a file's text, less its last line ending
   jz new spec:=@deploy.yaml                     # a data file, read as its extension names
   kubectl get pod web -o json | jz new pod:=@-  # standard input
