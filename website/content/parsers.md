@@ -52,12 +52,16 @@ the same reading with settings of your own.
 | `chcp` | [`windows`](../schemas/chcp/windows.json) |
 | `chrt` | [`policy`](../schemas/chrt/policy.json) |
 | `cksum` | [`posix`](../schemas/cksum/posix.json) |
+| `cloud-init` | [`status-long`](../schemas/cloud-init/status-long.json) |
+| `cmp` | [`posix`](../schemas/cmp/posix.json) |
+| `cpupower` | [`frequency-info`](../schemas/cpupower/frequency-info.json) |
 | `csrutil` | [`status`](../schemas/csrutil/status.json) |
 | `csv` | [`comma`](../schemas/csv/comma.json), [`comma-no-header`](../schemas/csv/comma-no-header.json), [`tab`](../schemas/csv/tab.json), [`tab-no-header`](../schemas/csv/tab-no-header.json) |
 | `curl` | [`headers`](../schemas/curl/headers.json), [`version`](../schemas/curl/version.json) |
 | `date` | [`posix`](../schemas/date/posix.json), [`rfc-email`](../schemas/date/rfc-email.json) |
 | `debconf-show` | [`linux`](../schemas/debconf-show/linux.json) |
 | `df` | [`bsd`](../schemas/df/bsd.json), [`bsd-human`](../schemas/df/bsd-human.json), [`busybox-human`](../schemas/df/busybox-human.json), [`freebsd`](../schemas/df/freebsd.json), [`freebsd-blocks`](../schemas/df/freebsd-blocks.json), [`freebsd-blocks-type`](../schemas/df/freebsd-blocks-type.json), [`freebsd-human`](../schemas/df/freebsd-human.json), [`freebsd-inodes`](../schemas/df/freebsd-inodes.json), [`freebsd-type`](../schemas/df/freebsd-type.json), [`freebsd-type-human`](../schemas/df/freebsd-type-human.json), [`gnu`](../schemas/df/gnu.json), [`gnu-blocks`](../schemas/df/gnu-blocks.json), [`gnu-blocks-type`](../schemas/df/gnu-blocks-type.json), [`gnu-human`](../schemas/df/gnu-human.json), [`gnu-inodes`](../schemas/df/gnu-inodes.json), [`gnu-inodes-human`](../schemas/df/gnu-inodes-human.json), [`gnu-type`](../schemas/df/gnu-type.json), [`gnu-type-human`](../schemas/df/gnu-type-human.json), [`portable`](../schemas/df/portable.json), [`portable-blocks`](../schemas/df/portable-blocks.json), [`portable-type`](../schemas/df/portable-type.json) |
+| `diffstat` | [`default`](../schemas/diffstat/default.json) |
 | `dig` | [`answers`](../schemas/dig/answers.json), [`axfr`](../schemas/dig/axfr.json), [`bind`](../schemas/dig/bind.json) |
 | `diskutil` | [`list`](../schemas/diskutil/list.json) |
 | `docker` | [`buildx-ls`](../schemas/docker/buildx-ls.json), [`compose-ls`](../schemas/docker/compose-ls.json), [`compose-ps`](../schemas/docker/compose-ps.json), [`context-ls`](../schemas/docker/context-ls.json), [`images-disk-usage`](../schemas/docker/images-disk-usage.json), [`images-repo-tag`](../schemas/docker/images-repo-tag.json), [`network-ls`](../schemas/docker/network-ls.json), [`ps`](../schemas/docker/ps.json), [`ps-size`](../schemas/docker/ps-size.json), [`stats`](../schemas/docker/stats.json), [`system-df`](../schemas/docker/system-df.json), [`system-df-verbose`](../schemas/docker/system-df-verbose.json), [`version`](../schemas/docker/version.json), [`volume-ls`](../schemas/docker/volume-ls.json) |
@@ -67,10 +71,13 @@ the same reading with settings of your own.
 | `dpkg-query` | [`list`](../schemas/dpkg-query/list.json) |
 | `driverquery` | [`table`](../schemas/driverquery/table.json), [`verbose`](../schemas/driverquery/verbose.json) |
 | `du` | [`gnu-human`](../schemas/du/gnu-human.json), [`posix`](../schemas/du/posix.json) |
+| `dumpe2fs` | [`superblock`](../schemas/dumpe2fs/superblock.json) |
+| `e2freefrag` | [`linux`](../schemas/e2freefrag/linux.json) |
 | `efibootmgr` | [`linux`](../schemas/efibootmgr/linux.json) |
 | `env` | [`null-separated`](../schemas/env/null-separated.json), [`posix`](../schemas/env/posix.json) |
 | `etc` | [`crontab`](../schemas/etc/crontab.json), [`fstab`](../schemas/etc/fstab.json), [`group`](../schemas/etc/group.json), [`hosts`](../schemas/etc/hosts.json), [`nsswitch`](../schemas/etc/nsswitch.json), [`os-release`](../schemas/etc/os-release.json), [`passwd`](../schemas/etc/passwd.json), [`protocols`](../schemas/etc/protocols.json), [`resolv-conf`](../schemas/etc/resolv-conf.json), [`services`](../schemas/etc/services.json) |
 | `ethtool` | [`driver-info`](../schemas/ethtool/driver-info.json), [`features`](../schemas/ethtool/features.json), [`pause`](../schemas/ethtool/pause.json), [`ring`](../schemas/ethtool/ring.json), [`settings`](../schemas/ethtool/settings.json), [`statistics`](../schemas/ethtool/statistics.json) |
+| `exif` | [`default`](../schemas/exif/default.json) |
 | `exiftool` | [`default`](../schemas/exiftool/default.json), [`groups`](../schemas/exiftool/groups.json) |
 | `eza` | [`full-iso`](../schemas/eza/full-iso.json), [`long`](../schemas/eza/long.json), [`long-group`](../schemas/eza/long-group.json), [`long-iso`](../schemas/eza/long-iso.json), [`long-links`](../schemas/eza/long-links.json) |
 | `factor` | [`default`](../schemas/factor/default.json) |
@@ -79,8 +86,11 @@ the same reading with settings of your own.
 | `fdesetup` | [`status`](../schemas/fdesetup/status.json) |
 | `fdisk` | [`linux`](../schemas/fdisk/linux.json) |
 | `file` | [`mime`](../schemas/file/mime.json), [`posix`](../schemas/file/posix.json) |
+| `filefrag` | [`verbose`](../schemas/filefrag/verbose.json) |
+| `fincore` | [`bytes`](../schemas/fincore/bytes.json), [`linux`](../schemas/fincore/linux.json) |
 | `findmnt` | [`df`](../schemas/findmnt/df.json), [`linux`](../schemas/findmnt/linux.json), [`source-first`](../schemas/findmnt/source-first.json) |
 | `free` | [`gnu`](../schemas/free/gnu.json), [`gnu-human`](../schemas/free/gnu-human.json), [`gnu-wide`](../schemas/free/gnu-wide.json), [`gnu-wide-human`](../schemas/free/gnu-wide-human.json) |
+| `gdisk` | [`list`](../schemas/gdisk/list.json) |
 | `getcap` | [`paths`](../schemas/getcap/paths.json) |
 | `getconf` | [`glibc`](../schemas/getconf/glibc.json) |
 | `getent` | [`ahosts`](../schemas/getent/ahosts.json) |
@@ -90,6 +100,7 @@ the same reading with settings of your own.
 | `gio` | [`mime`](../schemas/gio/mime.json) |
 | `git` | [`branch`](../schemas/git/branch.json), [`branch-verbose`](../schemas/git/branch-verbose.json), [`cherry`](../schemas/git/cherry.json), [`config-list`](../schemas/git/config-list.json), [`config-list-origin`](../schemas/git/config-list-origin.json), [`count-objects`](../schemas/git/count-objects.json), [`count-objects-human`](../schemas/git/count-objects-human.json), [`diff-name-status`](../schemas/git/diff-name-status.json), [`diff-numstat`](../schemas/git/diff-numstat.json), [`diff-shortstat`](../schemas/git/diff-shortstat.json), [`diff-stat`](../schemas/git/diff-stat.json), [`for-each-ref`](../schemas/git/for-each-ref.json), [`log`](../schemas/git/log.json), [`log-name-only`](../schemas/git/log-name-only.json), [`log-name-status`](../schemas/git/log-name-status.json), [`log-numstat`](../schemas/git/log-numstat.json), [`log-oneline`](../schemas/git/log-oneline.json), [`log-stat`](../schemas/git/log-stat.json), [`ls-files-stage`](../schemas/git/ls-files-stage.json), [`ls-remote`](../schemas/git/ls-remote.json), [`ls-tree`](../schemas/git/ls-tree.json), [`ls-tree-long`](../schemas/git/ls-tree-long.json), [`reflog`](../schemas/git/reflog.json), [`remote-verbose`](../schemas/git/remote-verbose.json), [`shortlog-summary`](../schemas/git/shortlog-summary.json), [`show-ref`](../schemas/git/show-ref.json), [`stash-list`](../schemas/git/stash-list.json), [`status-porcelain`](../schemas/git/status-porcelain.json), [`status-porcelain-v2`](../schemas/git/status-porcelain-v2.json), [`status-short-branch`](../schemas/git/status-short-branch.json), [`worktree-list`](../schemas/git/worktree-list.json), [`worktree-porcelain`](../schemas/git/worktree-porcelain.json) |
 | `go` | [`bench`](../schemas/go/bench.json), [`dist-list`](../schemas/go/dist-list.json), [`env`](../schemas/go/env.json), [`list-modules`](../schemas/go/list-modules.json), [`mod-graph`](../schemas/go/mod-graph.json), [`test`](../schemas/go/test.json), [`tool-cover-func`](../schemas/go/tool-cover-func.json), [`version`](../schemas/go/version.json), [`version-modules`](../schemas/go/version-modules.json), [`vet`](../schemas/go/vet.json) |
+| `gocyclo` | [`default`](../schemas/gocyclo/default.json) |
 | `golangci-lint` | [`text`](../schemas/golangci-lint/text.json) |
 | `gpg` | [`colons`](../schemas/gpg/colons.json), [`list-keys`](../schemas/gpg/list-keys.json), [`version`](../schemas/gpg/version.json) |
 | `gpgconf` | [`list-components`](../schemas/gpgconf/list-components.json), [`list-dirs`](../schemas/gpgconf/list-dirs.json) |
@@ -111,6 +122,7 @@ the same reading with settings of your own.
 | `ip` | [`address`](../schemas/ip/address.json), [`brief-address`](../schemas/ip/brief-address.json), [`brief-link`](../schemas/ip/brief-link.json), [`link`](../schemas/ip/link.json), [`multicast-address`](../schemas/ip/multicast-address.json), [`neighbour`](../schemas/ip/neighbour.json), [`oneline-address`](../schemas/ip/oneline-address.json), [`oneline-link`](../schemas/ip/oneline-link.json), [`route`](../schemas/ip/route.json), [`route-get`](../schemas/ip/route-get.json), [`rule`](../schemas/ip/rule.json), [`stats-link`](../schemas/ip/stats-link.json), [`stats-link-detail`](../schemas/ip/stats-link-detail.json) |
 | `ipconfig` | [`all`](../schemas/ipconfig/all.json), [`windows`](../schemas/ipconfig/windows.json) |
 | `ipcs` | [`limits`](../schemas/ipcs/limits.json), [`linux`](../schemas/ipcs/linux.json), [`message-queues`](../schemas/ipcs/message-queues.json), [`semaphores`](../schemas/ipcs/semaphores.json), [`shared-memory`](../schemas/ipcs/shared-memory.json) |
+| `isoinfo` | [`volume-descriptor`](../schemas/isoinfo/volume-descriptor.json) |
 | `iw` | [`dev`](../schemas/iw/dev.json), [`link`](../schemas/iw/link.json), [`reg-get`](../schemas/iw/reg-get.json) |
 | `journalctl` | [`boots`](../schemas/journalctl/boots.json), [`short`](../schemas/journalctl/short.json), [`short-iso`](../schemas/journalctl/short-iso.json), [`short-monotonic`](../schemas/journalctl/short-monotonic.json), [`short-precise`](../schemas/journalctl/short-precise.json) |
 | `just` | [`list`](../schemas/just/list.json) |
@@ -126,6 +138,7 @@ the same reading with settings of your own.
 | `localectl` | [`linux`](../schemas/localectl/linux.json) |
 | `loginctl` | [`seats`](../schemas/loginctl/seats.json), [`sessions`](../schemas/loginctl/sessions.json), [`show`](../schemas/loginctl/show.json), [`users`](../schemas/loginctl/users.json) |
 | `losetup` | [`associations`](../schemas/losetup/associations.json), [`linux`](../schemas/losetup/linux.json), [`raw`](../schemas/losetup/raw.json) |
+| `lpstat` | [`devices`](../schemas/lpstat/devices.json), [`printers`](../schemas/lpstat/printers.json), [`status`](../schemas/lpstat/status.json) |
 | `ls` | [`full-time`](../schemas/ls/full-time.json), [`long`](../schemas/ls/long.json), [`long-context`](../schemas/ls/long-context.json), [`long-inode`](../schemas/ls/long-inode.json), [`long-iso`](../schemas/ls/long-iso.json), [`long-no-group`](../schemas/ls/long-no-group.json), [`long-no-owner`](../schemas/ls/long-no-owner.json), [`long-no-owner-group`](../schemas/ls/long-no-owner-group.json), [`long-recursive`](../schemas/ls/long-recursive.json), [`names`](../schemas/ls/names.json), [`names-zero`](../schemas/ls/names-zero.json) |
 | `lsattr` | [`linux`](../schemas/lsattr/linux.json) |
 | `lsb_release` | [`linux`](../schemas/lsb_release/linux.json) |
@@ -168,10 +181,12 @@ the same reading with settings of your own.
 | `numactl` | [`hardware`](../schemas/numactl/hardware.json), [`show`](../schemas/numactl/show.json) |
 | `objdump` | [`section-headers`](../schemas/objdump/section-headers.json) |
 | `od` | [`hex-bytes`](../schemas/od/hex-bytes.json) |
+| `oomctl` | [`dump`](../schemas/oomctl/dump.json) |
 | `openssl` | [`ciphers`](../schemas/openssl/ciphers.json), [`ciphers-codes`](../schemas/openssl/ciphers-codes.json), [`version-all`](../schemas/openssl/version-all.json), [`x509-fields`](../schemas/openssl/x509-fields.json) |
 | `otool` | [`libraries`](../schemas/otool/libraries.json) |
 | `pactl` | [`info`](../schemas/pactl/info.json), [`short-cards`](../schemas/pactl/short-cards.json), [`short-clients`](../schemas/pactl/short-clients.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
 | `parted` | [`machine`](../schemas/parted/machine.json) |
+| `partx` | [`bytes`](../schemas/partx/bytes.json), [`show`](../schemas/partx/show.json) |
 | `passwd` | [`status`](../schemas/passwd/status.json) |
 | `pdffonts` | [`poppler`](../schemas/pdffonts/poppler.json) |
 | `pdfimages` | [`list`](../schemas/pdfimages/list.json) |
@@ -179,12 +194,14 @@ the same reading with settings of your own.
 | `pgrep` | [`list-name`](../schemas/pgrep/list-name.json) |
 | `pidstat` | [`io`](../schemas/pidstat/io.json), [`kernel`](../schemas/pidstat/kernel.json), [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json), [`priority`](../schemas/pidstat/priority.json), [`stack`](../schemas/pidstat/stack.json), [`switches`](../schemas/pidstat/switches.json), [`threads`](../schemas/pidstat/threads.json), [`user`](../schemas/pidstat/user.json) |
 | `ping` | [`bsd`](../schemas/ping/bsd.json), [`linux`](../schemas/ping/linux.json) |
+| `pinky` | [`long`](../schemas/pinky/long.json), [`short`](../schemas/pinky/short.json), [`short-iso`](../schemas/pinky/short-iso.json) |
 | `pip` | [`columns`](../schemas/pip/columns.json), [`columns-outdated`](../schemas/pip/columns-outdated.json), [`freeze`](../schemas/pip/freeze.json) |
 | `pkg-config` | [`list`](../schemas/pkg-config/list.json) |
 | `pmap` | [`extended`](../schemas/pmap/extended.json), [`linux`](../schemas/pmap/linux.json) |
 | `pmset` | [`settings`](../schemas/pmset/settings.json) |
 | `powerprofilesctl` | [`list`](../schemas/powerprofilesctl/list.json) |
 | `prlimit` | [`linux`](../schemas/prlimit/linux.json) |
+| `pro` | [`status-unattached`](../schemas/pro/status-unattached.json) |
 | `proc` | [`buddyinfo`](../schemas/proc/buddyinfo.json), [`cgroups`](../schemas/proc/cgroups.json), [`consoles`](../schemas/proc/consoles.json), [`cpuinfo-x86`](../schemas/proc/cpuinfo-x86.json), [`crypto`](../schemas/proc/crypto.json), [`devices`](../schemas/proc/devices.json), [`diskstats`](../schemas/proc/diskstats.json), [`filesystems`](../schemas/proc/filesystems.json), [`interrupts`](../schemas/proc/interrupts.json), [`loadavg`](../schemas/proc/loadavg.json), [`meminfo`](../schemas/proc/meminfo.json), [`modules`](../schemas/proc/modules.json), [`mountinfo`](../schemas/proc/mountinfo.json), [`net-arp`](../schemas/proc/net-arp.json), [`net-dev`](../schemas/proc/net-dev.json), [`net-if-inet6`](../schemas/proc/net-if-inet6.json), [`net-route`](../schemas/proc/net-route.json), [`net-sockstat`](../schemas/proc/net-sockstat.json), [`net-unix`](../schemas/proc/net-unix.json), [`partitions`](../schemas/proc/partitions.json), [`pressure`](../schemas/proc/pressure.json), [`schedstat`](../schemas/proc/schedstat.json), [`self-io`](../schemas/proc/self-io.json), [`self-limits`](../schemas/proc/self-limits.json), [`self-maps`](../schemas/proc/self-maps.json), [`self-status`](../schemas/proc/self-status.json), [`softirqs`](../schemas/proc/softirqs.json), [`stat`](../schemas/proc/stat.json), [`uptime`](../schemas/proc/uptime.json), [`vmstat`](../schemas/proc/vmstat.json) |
 | `procs` | [`default`](../schemas/procs/default.json) |
 | `ps` | [`bsd`](../schemas/ps/bsd.json), [`bsd-short`](../schemas/ps/bsd-short.json), [`busybox`](../schemas/ps/busybox.json), [`freebsd`](../schemas/ps/freebsd.json), [`freebsd-long`](../schemas/ps/freebsd-long.json), [`full-format`](../schemas/ps/full-format.json), [`jobs`](../schemas/ps/jobs.json), [`long`](../schemas/ps/long.json), [`long-y`](../schemas/ps/long-y.json), [`posix`](../schemas/ps/posix.json), [`threads`](../schemas/ps/threads.json), [`unix`](../schemas/ps/unix.json) |
@@ -207,7 +224,9 @@ the same reading with settings of your own.
 | `scutil` | [`dns`](../schemas/scutil/dns.json) |
 | `sensors` | [`linux`](../schemas/sensors/linux.json), [`no-adapter`](../schemas/sensors/no-adapter.json), [`raw`](../schemas/sensors/raw.json) |
 | `service` | [`status-all`](../schemas/service/status-all.json) |
+| `setxkbmap` | [`query`](../schemas/setxkbmap/query.json) |
 | `sfdisk` | [`dump`](../schemas/sfdisk/dump.json) |
+| `sgdisk` | [`print`](../schemas/sgdisk/print.json) |
 | `sha1sum` | [`posix`](../schemas/sha1sum/posix.json) |
 | `sha224sum` | [`posix`](../schemas/sha224sum/posix.json) |
 | `sha256sum` | [`posix`](../schemas/sha256sum/posix.json) |
@@ -225,6 +244,7 @@ the same reading with settings of your own.
 | `ssh-keyscan` | [`known-hosts`](../schemas/ssh-keyscan/known-hosts.json) |
 | `stat` | [`bsd`](../schemas/stat/bsd.json), [`bsd-verbose`](../schemas/stat/bsd-verbose.json), [`gnu`](../schemas/stat/gnu.json), [`gnu-filesystem`](../schemas/stat/gnu-filesystem.json), [`gnu-terse`](../schemas/stat/gnu-terse.json) |
 | `staticcheck` | [`default`](../schemas/staticcheck/default.json) |
+| `stty` | [`linux`](../schemas/stty/linux.json) |
 | `sum` | [`bsd`](../schemas/sum/bsd.json) |
 | `sw_vers` | [`darwin`](../schemas/sw_vers/darwin.json) |
 | `swapinfo` | [`freebsd`](../schemas/swapinfo/freebsd.json), [`freebsd-human`](../schemas/swapinfo/freebsd-human.json) |
@@ -253,7 +273,9 @@ the same reading with settings of your own.
 | `tracepath` | [`linux`](../schemas/tracepath/linux.json) |
 | `tree` | [`listing`](../schemas/tree/listing.json) |
 | `trust` | [`list`](../schemas/trust/list.json) |
+| `tune2fs` | [`superblock`](../schemas/tune2fs/superblock.json) |
 | `udevadm` | [`info`](../schemas/udevadm/info.json) |
+| `udisksctl` | [`status`](../schemas/udisksctl/status.json) |
 | `ulimit` | [`bash`](../schemas/ulimit/bash.json), [`dash`](../schemas/ulimit/dash.json) |
 | `uname` | [`darwin`](../schemas/uname/darwin.json), [`freebsd`](../schemas/uname/freebsd.json), [`linux`](../schemas/uname/linux.json) |
 | `unzip` | [`busybox`](../schemas/unzip/busybox.json), [`info-zip`](../schemas/unzip/info-zip.json) |
@@ -269,6 +291,7 @@ the same reading with settings of your own.
 | `wc` | [`posix`](../schemas/wc/posix.json) |
 | `who` | [`iso`](../schemas/who/iso.json), [`posix`](../schemas/who/posix.json) |
 | `whoami` | [`groups`](../schemas/whoami/groups.json), [`privileges`](../schemas/whoami/privileges.json) |
+| `wipefs` | [`erase`](../schemas/wipefs/erase.json), [`linux`](../schemas/wipefs/linux.json) |
 | `xinput` | [`list`](../schemas/xinput/list.json) |
 | `xrandr` | [`linux`](../schemas/xrandr/linux.json), [`listmonitors`](../schemas/xrandr/listmonitors.json) |
 | `xxd` | [`default`](../schemas/xxd/default.json) |
@@ -288,7 +311,7 @@ which of them wrote it, so they share a definition rather than having one
 each, and the command they are listed under is the one the definition is
 named for. These are read as well:
 
-`7za` (as `7z`), `arecord` (as `aplay`), `b2sum` (as `md5`, `md5sum`, `sha256sum`, `sha384sum`, `sha512sum`), `batcat` (as `bat`), `cksum` (as `md5`, `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`, `sum`), `dpkg-deb` (as `tar`), `gb2sum` (as `md5`, `md5sum`, `sha256sum`, `sha384sum`, `sha512sum`), `gcksum` (as `cksum`, `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gfactor` (as `factor`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5`, `md5sum`), `gpg2` (as `gpg`), `gsha1sum` (as `md5`, `sha1sum`), `gsha224sum` (as `md5`, `sha224sum`), `gsha256sum` (as `md5`, `sha256sum`), `gsha384sum` (as `md5`, `sha384sum`), `gsha512sum` (as `md5`, `sha512sum`), `gstat` (as `stat`), `gsum` (as `sum`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `hd` (as `hexdump`), `mcli` (as `mc`), `md5sum` (as `md5`), `nerdctl` (as `docker`), `netstat` (as `route`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `python` (as `pip`), `python3` (as `pip`), `rmd160` (as `md5`), `route` (as `netstat`), `sha1` (as `md5`), `sha1sum` (as `md5`, `md5sum`), `sha224` (as `md5`), `sha224sum` (as `md5`, `md5sum`), `sha256` (as `md5`), `sha256sum` (as `md5`, `md5sum`), `sha384` (as `md5`), `sha384sum` (as `md5`, `md5sum`), `sha512` (as `md5`), `sha512sum` (as `md5`, `md5sum`), `sha512t224` (as `md5`), `sha512t256` (as `md5`), `shasum` (as `md5`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`), `skein1024` (as `md5`), `skein256` (as `md5`), `skein512` (as `md5`), `ssh-add` (as `ssh-keygen`), `systemd-resolve` (as `resolvectl`), `uv` (as `pip`), `vdir` (as `ls`)
+`7za` (as `7z`), `arecord` (as `aplay`), `b2sum` (as `md5`, `md5sum`, `sha256sum`, `sha384sum`, `sha512sum`), `batcat` (as `bat`), `cksum` (as `md5`, `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`, `sum`), `dpkg-deb` (as `tar`), `gb2sum` (as `md5`, `md5sum`, `sha256sum`, `sha384sum`, `sha512sum`), `gcksum` (as `cksum`, `md5sum`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`), `gdate` (as `date`), `gdf` (as `df`), `gdu` (as `du`), `genv` (as `env`), `getent` (as `etc`), `gfactor` (as `factor`), `gid` (as `id`), `gls` (as `ls`), `gmd5sum` (as `md5`, `md5sum`), `gpg2` (as `gpg`), `gpinky` (as `pinky`), `gsha1sum` (as `md5`, `sha1sum`), `gsha224sum` (as `md5`, `sha224sum`), `gsha256sum` (as `md5`, `sha256sum`), `gsha384sum` (as `md5`, `sha384sum`), `gsha512sum` (as `md5`, `sha512sum`), `gstat` (as `stat`), `gstty` (as `stty`), `gsum` (as `sum`), `gtar` (as `tar`), `guname` (as `uname`), `gwc` (as `wc`), `gwho` (as `who`), `hd` (as `hexdump`), `mcli` (as `mc`), `md5sum` (as `md5`), `nerdctl` (as `docker`), `netstat` (as `route`), `ping6` (as `ping`), `pip3` (as `pip`), `podman` (as `docker`), `printenv` (as `env`), `python` (as `pip`), `python3` (as `pip`), `rmd160` (as `md5`), `route` (as `netstat`), `sha1` (as `md5`), `sha1sum` (as `md5`, `md5sum`), `sha224` (as `md5`), `sha224sum` (as `md5`, `md5sum`), `sha256` (as `md5`), `sha256sum` (as `md5`, `md5sum`), `sha384` (as `md5`), `sha384sum` (as `md5`, `md5sum`), `sha512` (as `md5`), `sha512sum` (as `md5`, `md5sum`), `sha512t224` (as `md5`), `sha512t256` (as `md5`), `shasum` (as `md5`, `sha1sum`, `sha224sum`, `sha256sum`, `sha384sum`, `sha512sum`), `skein1024` (as `md5`), `skein256` (as `md5`), `skein512` (as `md5`), `ssh-add` (as `ssh-keygen`), `systemd-resolve` (as `resolvectl`), `ua` (as `pro`), `uv` (as `pip`), `vdir` (as `ls`)
 
 `jz run`, `--parser` and `jz list` all take the other name.
 

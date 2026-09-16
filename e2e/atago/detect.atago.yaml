@@ -2638,3 +2638,159 @@ scenarios:
             json:
               - { path: '$[5].label', equals: "Swap Monitored CGroups" }
               - { path: '$[0].value', equals: "no" }
+
+  - name: pinky is read when pinky is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/pinky/short/testdata/uutils-utmp.txt"
+      - run:
+          command: jz --parser pinky
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].name', equals: "Alice Example" }
+              - { path: '$[1].login', equals: maintenance01 }
+              - { path: '$[1].name', equals: null }
+
+  - name: pinky with ISO times is read when pinky is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/pinky/short-iso/testdata/gnu-sessions.txt"
+      - run:
+          command: jz --parser pinky
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].when', equals: "2026-09-17 05:54" }
+              - { path: '$[1].tty', equals: seat0 }
+              - { path: '$[1].where', equals: null }
+
+  - name: pinky -l is read when pinky is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/pinky/long/testdata/gnu-three-users.txt"
+      - run:
+          command: jz --parser pinky
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].directory', equals: /home/bob }
+              - { path: '$[2].login', equals: nosuchuser42 }
+              - { path: '$[2].name', equals: null }
+
+  - name: stty -a is read when stty is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/stty/linux/testdata/gnu-all-raw-split-speed.txt"
+      - run:
+          command: jz --parser stty
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.ispeed', equals: 9600 }
+              - { path: '$.ospeed', equals: 115200 }
+              - { path: '$.control_characters[5].value', equals: ";" }
+
+  - name: setxkbmap -query is read when setxkbmap is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/setxkbmap/query/testdata/two-layouts-options.txt"
+      - run:
+          command: jz --parser setxkbmap
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.layout[1]', equals: jp }
+              - { path: '$.variant[0]', equals: "" }
+              - { path: '$.options[0]', equals: "ctrl:nocaps" }
+
+  - name: udisksctl status is read when udisksctl is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/udisksctl/status/testdata/two-nvme.txt"
+      - run:
+          command: jz --parser udisksctl
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[1].model', equals: "KIOXIA-EXCERIA PLUS G4 SSD" }
+              - { path: '$[1].revision', equals: "EVFAJ1.0" }
+
+  - name: lpstat -p is read when lpstat is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/lpstat/printers/testdata/printing-with-reasons.txt"
+      - run:
+          command: jz --parser lpstat
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].state', equals: printing }
+              - { path: '$[0].job', equals: lab-inkjet-2 }
+              - { path: '$[2].enabled', equals: false }
+
+  - name: lpstat -v is read when lpstat is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/lpstat/devices/testdata/three-printers.txt"
+      - run:
+          command: jz --parser lpstat
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].uri', equals: "socket://printer1.internal.example:9100" }
+              - { path: '$[2].uri', equals: "///dev/null" }
+
+  - name: lpstat -t is read when lpstat is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/lpstat/status/testdata/class-printing-rejecting.txt"
+      - run:
+          command: jz --parser lpstat
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].running', equals: true }
+              - { path: '$[2].members[1]', equals: office-laser }
+
+  - name: cpupower frequency-info is read when cpupower is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/cpupower/frequency-info/testdata/two-cpus.txt"
+      - run:
+          command: jz --parser cpupower
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[1].cpu', equals: 1 }
+              - { path: '$[0].children[0].value', equals: amd-pstate-epp }
