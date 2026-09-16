@@ -39,8 +39,10 @@ project follows [Semantic Versioning](https://semver.org/).
   frames), `ip route get`, `nmcli -t device`, `iw reg get` (the
   regulatory rules per frequency range) and `hostname -I`.
 - `pmap -x` (a record per process with its mappings and totals),
-  `pgrep -l` and `getent ahosts`. The registry holds 240 commands
-  through 664 definitions.
+  `pgrep -l` and `getent ahosts`.
+- `/proc/pressure/*` (pressure stall averages), `/proc/self/io`,
+  `/proc/cgroups` and `/proc/net/sockstat`. The registry holds 240
+  commands through 668 definitions.
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the
@@ -48,6 +50,13 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- A file path names more definitions: a dot in the file name is looked
+  up as a dash (`jz --file /etc/resolv.conf` reads with etc/resolv-conf)
+  and a file one directory down has that directory joined to its name
+  (`/proc/net/dev` is proc/net-dev, `/proc/self/io` is proc/self-io).
+  Before, both went to automatic detection, which refuses formats that
+  are read only when named. A capture saved as `fstab.txt` still names
+  nothing.
 - `iostat -s` and `iostat -xs` print short forms whose columns
   (`kB_w+d/s`, `kB/s`, `rqm/s`, `await`, `areq-sz`, `aqu-sz`, `%util`)
   iostat/linux read as strings; they are numbers now, and the published
