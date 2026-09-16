@@ -1,0 +1,2 @@
+description: an error, printed as a list under errors, and no recoverable errors
+source: printed on Ubuntu 26.04 with LC_ALL=C by print_status of cloud-init 26.1-0ubuntu3~26.04.1 (cloudinit/cmd/status.py, the function cloud-init status --long calls) for a StatusDetails built in Python with the systemd unit failure message status.py itself appends

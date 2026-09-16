@@ -1,0 +1,15 @@
+{
+  "status": {
+    "status": "error",
+    "extended_status": "error - done",
+    "boot_status_code": "enabled-by-kernel-command-line",
+    "last_update": "2025-09-16T05:12:18Z",
+    "detail": "Failed due to systemd unit failure"
+  },
+  "errors": [
+    {
+      "message": "Failed due to systemd unit failure. Ensure all cloud-init services are enabled, and check 'systemctl' or 'journalctl' for more information."
+    }
+  ],
+  "recoverable_errors": []
+}

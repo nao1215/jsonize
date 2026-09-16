@@ -1,0 +1,6 @@
+status: disabled
+extended_status: disabled
+boot_status_code: disabled-by-marker-file
+detail: Cloud-init disabled by /etc/cloud/cloud-init.disabled
+errors: []
+recoverable_errors: {}
