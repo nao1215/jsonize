@@ -310,6 +310,37 @@ scenarios:
           exit_code: 0
           stderr:
             contains: "etc/fstab from embedded"
+      # A dot in the file name is a dash in the variant name, and a file
+      # one directory down joins that directory to its name.
+      - fixture:
+          file: etc/resolv.conf
+          content: |
+            nameserver 192.0.2.53
+            search example.com
+      - run:
+          command: jz --explain --file ${workdir}/etc/resolv.conf
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "etc/resolv-conf from embedded"
+      - fixture:
+          file: proc/self/io
+          from: "${specdir}/../../registry/parsers/proc/self-io/testdata/cat.txt"
+      - run:
+          command: jz --explain --file ${workdir}/proc/self/io
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "proc/self-io from embedded"
+      # A capture saved with an extension still names nothing.
+      - fixture:
+          file: etc/fstab.txt
+          content: |
+            /dev/sda1  /      ext4  defaults    0 1
+      - run:
+          command: jz --file ${workdir}/etc/fstab.txt
+      - assert:
+          exit_code: 4
 
   # A file path is a guess about the text in it, and the guess is dropped
   # once the definition it named turns out not to describe the text. A
