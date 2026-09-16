@@ -1,0 +1,3 @@
+description: -b prints both bytes in octal and as cat -v shows them, here a NUL and a byte with the high bit set
+source: captured with LC_ALL=C cmp -b (GNU diffutils 3.12) on Ubuntu for two generated files differing in the last byte
+args: [-b, z1, z2]

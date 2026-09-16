@@ -1,0 +1,40 @@
+# `cmp FILE1 FILE2` prints one line when the files differ: the two names,
+# then where the first difference is, as a byte number and a line number
+# counted from 1. POSIX spells the position "char"; GNU cmp prints "char"
+# and, with -b (--print-bytes), "byte" followed by the two differing
+# bytes, each in octal padded to three characters and as cat -v would
+# show it ("^@", "M-^?", or a space for a space). The octal values stay
+# text. Identical files print nothing, and a file that ends first is
+# reported on standard error, so neither reaches jz.
+#
+# The names are separated from each other by a single space, so two names
+# can only be told apart when neither holds one; a line whose names do
+# is refused rather than split at a guess.
+#
+# -l prints a line of three numbers per differing byte and is not read:
+# nothing in such a line says which command printed it.
+format: 1
+command: cmp
+variant: posix
+description: cmp, the position of the first byte where two files differ
+metadata:
+  tags: [diff, file]
+  compatible: [GNU diffutils]
+  references:
+    - https://pubs.opengroup.org/onlinepubs/9799919799/utilities/cmp.html
+    - https://www.gnu.org/software/diffutils/manual/html_node/Invoking-cmp.html
+detect:
+  signature:
+    all:
+      - '\A[^ \n]+ [^ \n]+ differ: (?:char|byte) \d+, line \d+(?: is [ 0-7]{3} (?:[^ \n]+| ) [ 0-7]{3} (?:[^ \n]+| ))?\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\A(?P<file1>[^ \n]+) (?P<file2>[^ \n]+) differ: (?:char|byte) (?P<byte>\d+), line (?P<line>\d+)(?: is (?P<byte1_octal>[ 0-7]{3}) (?P<byte1_shown>[^ \n]+| ) (?P<byte2_octal>[ 0-7]{3}) (?P<byte2_shown>[^ \n]+| ))?\z'
+fields:
+  file1: {required: true}
+  file2: {required: true}
+  byte: {type: int, required: true}
+  line: {type: int, required: true}
+  byte1_octal: {regex: ' *(?P<v>[0-7]+)'}
+  byte2_octal: {regex: ' *(?P<v>[0-7]+)'}

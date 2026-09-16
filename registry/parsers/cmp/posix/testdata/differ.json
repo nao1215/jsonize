@@ -1,0 +1,10 @@
+{
+  "file1": "one.txt",
+  "file2": "two.txt",
+  "byte": 9,
+  "line": 2,
+  "byte1_octal": null,
+  "byte1_shown": null,
+  "byte2_octal": null,
+  "byte2_shown": null
+}

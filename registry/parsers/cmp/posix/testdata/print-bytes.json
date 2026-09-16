@@ -1,0 +1,10 @@
+{
+  "file1": "z1",
+  "file2": "z2",
+  "byte": 100,
+  "line": 1,
+  "byte1_octal": "0",
+  "byte1_shown": "^@",
+  "byte2_octal": "377",
+  "byte2_shown": "M-^?"
+}
