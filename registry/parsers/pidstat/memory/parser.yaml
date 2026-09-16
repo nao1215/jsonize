@@ -21,6 +21,9 @@ metadata:
     - https://man7.org/linux/man-pages/man1/pidstat.1.html
 detect:
   os: [linux]
+  args:
+    # Another report after this one, which this does not read.
+    none: ["-u", "-d", "-w", "-R", "-s", "-v"]
   signature:
     all:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'

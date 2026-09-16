@@ -1,0 +1,4 @@
+description: A Go binary has symbols larger than 99999 bytes, whose size readelf prints in hexadecimal, and names with spaces in them.
+source: readelf -sW, GNU readelf 2.46 (binutils for Ubuntu 26.04) with LC_ALL=C, on a build of jz, cut to the first symbol, two with a size in hexadecimal and two with a space in the name
+os: linux
+args: [-sW, jz]

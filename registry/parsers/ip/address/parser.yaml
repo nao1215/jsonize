@@ -31,6 +31,12 @@ detect:
       # first leave every address past the window. iproute2's header still
       # tells them apart: it has the group and no mode.
       - '\A\d+: \S+: <[A-Z0-9_,-]*> mtu \d+ qdisc \S+(?: master \S+)?(?: state \S+)? group \S+'
+    none:
+      # -s puts the counter tables under each interface, and -d the
+      # link details after the link address, neither of which this
+      # reads.
+      - '^[ \t]+RX:[ \t]+bytes[ \t]+packets'
+      - '^[ \t]+link/\S+ [^\n]* promiscuity [0-9]+'
 parse:
   type: records
   start: '^\d+: '

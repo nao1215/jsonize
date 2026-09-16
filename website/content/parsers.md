@@ -188,7 +188,7 @@ the same reading with settings of your own.
 | `ps` | [`bsd`](../schemas/ps/bsd.json), [`bsd-short`](../schemas/ps/bsd-short.json), [`busybox`](../schemas/ps/busybox.json), [`freebsd`](../schemas/ps/freebsd.json), [`freebsd-long`](../schemas/ps/freebsd-long.json), [`full-format`](../schemas/ps/full-format.json), [`jobs`](../schemas/ps/jobs.json), [`long`](../schemas/ps/long.json), [`long-y`](../schemas/ps/long-y.json), [`posix`](../schemas/ps/posix.json), [`threads`](../schemas/ps/threads.json), [`unix`](../schemas/ps/unix.json) |
 | `pwdx` | [`default`](../schemas/pwdx/default.json) |
 | `rclone` | [`lsd`](../schemas/rclone/lsd.json), [`lsl`](../schemas/rclone/lsl.json), [`version`](../schemas/rclone/version.json) |
-| `readelf` | [`dynamic`](../schemas/readelf/dynamic.json), [`header`](../schemas/readelf/header.json), [`sections-wide`](../schemas/readelf/sections-wide.json) |
+| `readelf` | [`dynamic`](../schemas/readelf/dynamic.json), [`header`](../schemas/readelf/header.json), [`sections-wide`](../schemas/readelf/sections-wide.json), [`symbols-wide`](../schemas/readelf/symbols-wide.json) |
 | `redis-cli` | [`client-list`](../schemas/redis-cli/client-list.json), [`info`](../schemas/redis-cli/info.json) |
 | `resolvectl` | [`per-link`](../schemas/resolvectl/per-link.json), [`status`](../schemas/resolvectl/status.json) |
 | `rfkill` | [`linux`](../schemas/rfkill/linux.json), [`list`](../schemas/rfkill/list.json) |

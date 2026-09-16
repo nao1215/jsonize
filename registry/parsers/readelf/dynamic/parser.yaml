@@ -18,6 +18,9 @@ metadata:
 detect:
   args:
     any: ["-d", "--dynamic"]
+    # Each of these adds a report of its own before or after this one,
+    # which no part here reads.
+    none: ["-a", "--all", "-h", "--file-header", "-l", "--program-headers", "--segments", "-S", "--section-headers", "--sections", "-g", "--section-groups", "-t", "--section-details", "-e", "--headers", "-s", "--syms", "--symbols", "--dyn-syms", "--lto-syms", "-n", "--notes", "-r", "--relocs", "-u", "--unwind", "-V", "--version-info", "-A", "--arch-specific", "-c", "--archive-index", "-x", "--hex-dump=", "-p", "--string-dump=", "-R", "--relocated-dump=", "-w", "--debug-dump", "--debug-dump=", "-I", "--histogram"]
   signature:
     any:
       - '\ADynamic section at offset 0x[0-9a-f]+ contains [0-9]+ entr(?:y|ies):\n  Tag +Type +Name/Value$'

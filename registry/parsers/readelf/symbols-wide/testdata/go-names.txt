@@ -1,0 +1,8 @@
+
+Symbol table '.symtab' contains 5983 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+    70: 000000000102a840 0x68628 OBJECT  LOCAL  DEFAULT    4 github.com/nao1215/jsonize/registry.files.files
+   328: 00000000011d59f0 0x47f70 OBJECT  LOCAL  DEFAULT    5 go:func.*
+  2186: 0000000000491800   286 FUNC    GLOBAL DEFAULT    3 internal/sync.(*HashTrieMap[go.shape.interface {},go.shape.interface {}]).iter
+  2187: 0000000000491920   133 FUNC    GLOBAL DEFAULT    3 internal/sync.(*HashTrieMap[go.shape.interface {},go.shape.interface {}]).Range

@@ -1,0 +1,4 @@
+description: ip -s -h link rounds the counters with a unit, which are not the numbers this reads, so the text is refused.
+source: ip -s -h link show lo, captured with LC_ALL=C on Ubuntu 26.04 (iproute2 6.19.0)
+os: linux
+expect_error: 'does not describe this input'

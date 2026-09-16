@@ -17,6 +17,10 @@ metadata:
     - https://man7.org/linux/man-pages/man1/sar.1.html
 detect:
   os: [linux]
+  args:
+    # Another report after this one, and `-h` values with units,
+    # neither of which this reads.
+    none: ["-B", "-b", "-d", "-F", "-H", "-I", "-m", "-n", "-q", "-r", "-S", "-v", "-W", "-w", "-y", "-A", "-h"]
   signature:
     all:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+CPU[ \t]+%usr[ \t]+%nice[ \t]+%sys[ \t]+%iowait[ \t]+%steal[ \t]+%irq[ \t]+%soft[ \t]+%guest[ \t]+%gnice[ \t]+%idle[ \t]*$'
