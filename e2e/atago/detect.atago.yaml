@@ -1858,3 +1858,31 @@ scenarios:
             json:
               - { path: "$[2].time", equals: Average }
               - { path: "$[2].active_per_s", gte: 0 }
+
+  - name: iostat -s and pidstat -U are read with their own columns typed
+    steps:
+      - fixture:
+          file: iostat-xs.txt
+          from: "${specdir}/../../registry/parsers/iostat/linux/testdata/extended-short.txt"
+      - run:
+          command: jz
+          stdin: {file: iostat-xs.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].devices[3].kb_s", equals: 1185.5 }
+              - { path: "$[0].devices[3].util_percent", equals: 1.1 }
+      - fixture:
+          file: pidstat-u.txt
+          from: "${specdir}/../../registry/parsers/pidstat/user/testdata/two-intervals.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: pidstat-u.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose pidstat/user from embedded"
+          stdout:
+            json:
+              - { path: "$[0].tasks[2].user", equals: ada }

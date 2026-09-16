@@ -1,0 +1,3 @@
+source: pidstat -U 1 2, captured on Ubuntu 26.04 (sysstat 12.7.7) with LC_ALL=C; the host name replaced, cut to three tasks a block and the user name of one replaced with one of the same width
+os: linux
+args: ["-U", "1", "2"]

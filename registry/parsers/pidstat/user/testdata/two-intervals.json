@@ -1,0 +1,122 @@
+[
+  {
+    "tasks": [
+      {
+        "time": "20:37:31",
+        "user": "root",
+        "pid": 5340,
+        "usr_percent": 0.98,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0.98,
+        "cpu": 3,
+        "command": "containerd"
+      },
+      {
+        "time": "20:37:31",
+        "user": "root",
+        "pid": 5342,
+        "usr_percent": 0.98,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0.98,
+        "cpu": 4,
+        "command": "containerd"
+      },
+      {
+        "time": "20:37:31",
+        "user": "ada",
+        "pid": 9181,
+        "usr_percent": 1.96,
+        "system_percent": 0.98,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 2.94,
+        "cpu": 20,
+        "command": "kwin_wayland"
+      }
+    ]
+  },
+  {
+    "tasks": [
+      {
+        "time": "20:37:32",
+        "user": "root",
+        "pid": 5592,
+        "usr_percent": 1,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 1,
+        "cpu": 4,
+        "command": "containerd"
+      },
+      {
+        "time": "20:37:32",
+        "user": "root",
+        "pid": 5749,
+        "usr_percent": 1,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 1,
+        "cpu": 22,
+        "command": "kubelet"
+      },
+      {
+        "time": "20:37:32",
+        "user": "ada",
+        "pid": 6942,
+        "usr_percent": 0,
+        "system_percent": 1,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 1,
+        "cpu": 23,
+        "command": "pipewire"
+      }
+    ]
+  },
+  {
+    "tasks": [
+      {
+        "time": "Average",
+        "user": "root",
+        "pid": 5340,
+        "usr_percent": 0.5,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0.5,
+        "cpu": null,
+        "command": "containerd"
+      },
+      {
+        "time": "Average",
+        "user": "root",
+        "pid": 5342,
+        "usr_percent": 0.5,
+        "system_percent": 0,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0.5,
+        "cpu": null,
+        "command": "containerd"
+      },
+      {
+        "time": "Average",
+        "user": "ada",
+        "pid": 6942,
+        "usr_percent": 0,
+        "system_percent": 0.5,
+        "guest_percent": 0,
+        "wait_percent": 0,
+        "cpu_percent": 0.5,
+        "cpu": null,
+        "command": "pipewire"
+      }
+    ]
+  }
+]

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pidstat/user.json",
+  "title": "pidstat/user",
+  "description": "pidstat -U CPU usage per task, with the user name instead of the UID",
+  "x-jsonize": {
+    "definition": "pidstat/user",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "string"
+            },
+            "user": {
+              "type": "string"
+            },
+            "pid": {
+              "type": "integer"
+            },
+            "usr_percent": {
+              "type": "number"
+            },
+            "system_percent": {
+              "type": "number"
+            },
+            "guest_percent": {
+              "type": "number"
+            },
+            "wait_percent": {
+              "type": "number"
+            },
+            "cpu_percent": {
+              "type": "number"
+            },
+            "cpu": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "command": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "time",
+            "user",
+            "pid",
+            "usr_percent",
+            "system_percent",
+            "guest_percent",
+            "wait_percent",
+            "cpu_percent",
+            "cpu",
+            "command"
+          ]
+        }
+      }
+    },
+    "required": [
+      "tasks"
+    ]
+  }
+}

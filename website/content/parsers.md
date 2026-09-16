@@ -169,7 +169,7 @@ the same reading with settings of your own.
 | `pactl` | [`info`](../schemas/pactl/info.json), [`short-cards`](../schemas/pactl/short-cards.json), [`short-clients`](../schemas/pactl/short-clients.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
 | `parted` | [`machine`](../schemas/parted/machine.json) |
 | `passwd` | [`status`](../schemas/passwd/status.json) |
-| `pidstat` | [`io`](../schemas/pidstat/io.json), [`kernel`](../schemas/pidstat/kernel.json), [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json), [`priority`](../schemas/pidstat/priority.json), [`stack`](../schemas/pidstat/stack.json), [`switches`](../schemas/pidstat/switches.json), [`threads`](../schemas/pidstat/threads.json) |
+| `pidstat` | [`io`](../schemas/pidstat/io.json), [`kernel`](../schemas/pidstat/kernel.json), [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json), [`priority`](../schemas/pidstat/priority.json), [`stack`](../schemas/pidstat/stack.json), [`switches`](../schemas/pidstat/switches.json), [`threads`](../schemas/pidstat/threads.json), [`user`](../schemas/pidstat/user.json) |
 | `ping` | [`bsd`](../schemas/ping/bsd.json), [`linux`](../schemas/ping/linux.json) |
 | `pip` | [`columns`](../schemas/pip/columns.json), [`columns-outdated`](../schemas/pip/columns-outdated.json), [`freeze`](../schemas/pip/freeze.json) |
 | `pkg-config` | [`list`](../schemas/pkg-config/list.json) |

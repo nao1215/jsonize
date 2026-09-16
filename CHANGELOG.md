@@ -31,7 +31,8 @@ project follows [Semantic Versioning](https://semver.org/).
 - Twenty-five `sar` reports: `-W`, `-H`, `-v`, `-I`, `-u ALL`, `-r ALL`,
   `-m CPU`, and with `-n` the reports `EDEV`, `NFS`, `NFSD`, `SOCK`,
   `IP`, `EIP`, `ICMP`, `EICMP`, `TCP`, `ETCP`, `UDP`, `SOCK6`, `IP6`,
-  `EIP6`, `ICMP6`, `EICMP6`, `UDP6` and `SOFT` (652 definitions).
+  `EIP6`, `ICMP6`, `EICMP6`, `UDP6` and `SOFT`, and `pidstat -U`, the
+  per-task report with user names (653 definitions).
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the
@@ -39,6 +40,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `iostat -s` and `iostat -xs` print short forms whose columns
+  (`kB_w+d/s`, `kB/s`, `rqm/s`, `await`, `areq-sz`, `aqu-sz`, `%util`)
+  iostat/linux read as strings; they are numbers now, and the published
+  schema of iostat/linux is version 3.
 - `top/linux` is a list with one record per iteration, so `top -b -n 2`
   and `jz run --stream top -b -d 1` are read: before, the second
   iteration's summary was taken for a row of the first one's task table
