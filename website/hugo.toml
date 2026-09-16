@@ -86,3 +86,11 @@ target = "static/demo"
 [[module.mounts]]
 source = "../registry/schemas"
 target = "static/schemas"
+
+# The logo lives with the repository's other images, so the README and
+# the site show the same file. It is mounted as an asset rather than as
+# static so the site can serve the sizes it uses rather than the full
+# one, which is wider than any place it appears.
+[[module.mounts]]
+source = "../doc/images"
+target = "assets/imgsrc"

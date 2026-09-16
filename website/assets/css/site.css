@@ -57,6 +57,12 @@ header nav a:hover {
 
 header nav .brand {
   margin-right: 0.5rem;
+  display: inline-flex;
+  align-self: center;
+}
+
+header nav .brand img {
+  display: block;
 }
 
 /* Embedded doc images (demo/snapshot GIFs) keep their intrinsic ratio while
@@ -430,6 +436,13 @@ main h3 {
 .hero {
   text-align: center;
   margin: 0.5rem 0 1.5rem;
+}
+
+.hero .logo {
+  display: block;
+  width: min(100%, 26rem);
+  height: auto;
+  margin: 0 auto;
 }
 
 .hero h1 {
