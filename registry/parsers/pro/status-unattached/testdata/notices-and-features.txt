@@ -1,0 +1,15 @@
+SERVICE          AVAILABLE  DESCRIPTION
+esm-apps         yes        Expanded Security Maintenance for Applications
+esm-infra        yes        Expanded Security Maintenance for Infrastructure
+fips             no         NIST-certified FIPS crypto packages
+livepatch        yes        Canonical Livepatch service
+NOTICES
+Operation in progress: pro attach
+
+FEATURES
+allow_beta: True
+
+For a list of all Ubuntu Pro services, run 'pro status --all'
+
+This machine is not attached to an Ubuntu Pro subscription.
+See https://ubuntu.com/pro

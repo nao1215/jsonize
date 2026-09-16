@@ -1,0 +1,81 @@
+{
+  "services": [
+    {
+      "service": "anbox-cloud",
+      "available": true,
+      "description": "Scalable Android in the cloud"
+    },
+    {
+      "service": "cc-eal",
+      "available": false,
+      "description": "Common Criteria EAL2 Provisioning Packages"
+    },
+    {
+      "service": "esm-apps",
+      "available": true,
+      "description": "Expanded Security Maintenance for Applications"
+    },
+    {
+      "service": "esm-apps-legacy",
+      "available": false,
+      "description": "Expanded Security Maintenance for Applications on Legacy Instances"
+    },
+    {
+      "service": "esm-infra",
+      "available": true,
+      "description": "Expanded Security Maintenance for Infrastructure"
+    },
+    {
+      "service": "esm-infra-legacy",
+      "available": false,
+      "description": "Expanded Security Maintenance for Infrastructure on Legacy Instances"
+    },
+    {
+      "service": "fips",
+      "available": false,
+      "description": "NIST-certified FIPS crypto packages"
+    },
+    {
+      "service": "fips-preview",
+      "available": false,
+      "description": "Preview of FIPS crypto packages undergoing certification with NIST"
+    },
+    {
+      "service": "fips-updates",
+      "available": false,
+      "description": "FIPS compliant crypto packages with stable security updates"
+    },
+    {
+      "service": "landscape",
+      "available": true,
+      "description": "Management and administration tool for Ubuntu"
+    },
+    {
+      "service": "livepatch",
+      "available": true,
+      "description": "Canonical Livepatch service"
+    },
+    {
+      "service": "realtime-kernel",
+      "available": false,
+      "description": "Ubuntu kernel with PREEMPT_RT patches integrated"
+    },
+    {
+      "service": "ros",
+      "available": false,
+      "description": "Security Updates for the Robot Operating System"
+    },
+    {
+      "service": "ros-updates",
+      "available": false,
+      "description": "All Updates for the Robot Operating System"
+    },
+    {
+      "service": "usg",
+      "available": false,
+      "description": "Security compliance and audit tools"
+    }
+  ],
+  "notices": [],
+  "features": []
+}

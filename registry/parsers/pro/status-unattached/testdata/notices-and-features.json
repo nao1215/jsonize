@@ -1,0 +1,35 @@
+{
+  "services": [
+    {
+      "service": "esm-apps",
+      "available": true,
+      "description": "Expanded Security Maintenance for Applications"
+    },
+    {
+      "service": "esm-infra",
+      "available": true,
+      "description": "Expanded Security Maintenance for Infrastructure"
+    },
+    {
+      "service": "fips",
+      "available": false,
+      "description": "NIST-certified FIPS crypto packages"
+    },
+    {
+      "service": "livepatch",
+      "available": true,
+      "description": "Canonical Livepatch service"
+    }
+  ],
+  "notices": [
+    {
+      "notice": "Operation in progress: pro attach"
+    }
+  ],
+  "features": [
+    {
+      "name": "allow_beta",
+      "value": "True"
+    }
+  ]
+}

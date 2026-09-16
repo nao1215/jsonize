@@ -1,0 +1,65 @@
+# `pro status` (the Ubuntu Pro client) on a machine that is not attached
+# to a subscription prints a table of the services the machine could
+# use, each with whether it is available and a description. NOTICES and
+# FEATURES sections may follow, then a hint to run `pro status --all`
+# (left out with --all), the note that the machine is not attached and
+# the address of the Ubuntu Pro page. A notice is kept as a line of text;
+# a feature is a name and a value, both kept as printed.
+#
+# The service name is padded to seventeen characters and the
+# availability to eleven, so neither holds a space and the description
+# is the rest of the line.
+#
+# An attached machine prints another table (SERVICE ENTITLED STATUS
+# DESCRIPTION) with the account and subscription under it, and a machine
+# with no services prints one sentence instead of the table; neither is
+# read. The client writes a warning on standard error saying the text is
+# for people and pointing at `pro status --format json`, which is the
+# form to use where the fields matter.
+format: 1
+command: pro
+variant: status-unattached
+aliases:
+  - name: ua
+description: pro status on an unattached machine, the Ubuntu Pro services it could use
+metadata:
+  tags: [ubuntu, subscription, security]
+  compatible: [ubuntu-pro-client]
+  references:
+    - https://documentation.ubuntu.com/pro-client/en/latest/references/pro_status_output/
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ASERVICE {10}AVAILABLE  DESCRIPTION\n'
+      - '(?m)^This machine is not attached to an Ubuntu Pro subscription\.\nSee https://ubuntu\.com/pro$'
+    window: 60
+input:
+  ignore:
+    - '^For a list of all Ubuntu Pro services(?: and variants)?, run ''pro status --all''$'
+    - '^This machine is not attached to an Ubuntu Pro subscription\.$'
+    - '^See https://ubuntu\.com/pro$'
+    - '^Kernels covered by livepatch are listed here: \S+$'
+parse:
+  type: composite
+  parts:
+    - name: services
+      select: {until: '^(?:NOTICES|FEATURES)$'}
+      parse:
+        type: table
+        split: whitespace
+        max_fields: 3
+      fields:
+        service: {required: true}
+        available: {type: bool, true_values: ["yes"], false_values: ["no"], required: true}
+        description: {required: true}
+    - name: notices
+      select: {after: '^NOTICES$', until: '^FEATURES$'}
+      parse:
+        type: regex
+        pattern: '^(?P<notice>.+)$'
+    - name: features
+      select: {after: '^FEATURES$'}
+      parse:
+        type: regex
+        pattern: '^(?P<name>[^:]+): (?P<value>.*)$'

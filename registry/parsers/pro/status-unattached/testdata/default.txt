@@ -1,0 +1,11 @@
+SERVICE          AVAILABLE  DESCRIPTION
+anbox-cloud      yes        Scalable Android in the cloud
+esm-apps         yes        Expanded Security Maintenance for Applications
+esm-infra        yes        Expanded Security Maintenance for Infrastructure
+landscape        yes        Management and administration tool for Ubuntu
+livepatch        yes        Canonical Livepatch service
+
+For a list of all Ubuntu Pro services, run 'pro status --all'
+
+This machine is not attached to an Ubuntu Pro subscription.
+See https://ubuntu.com/pro
