@@ -1,0 +1,3 @@
+source: go tool cover -func on a profile of internal/jsonbuild and internal/yaml in github.com/nao1215/jsonize (go1.26.4) with LC_ALL=C, cut to nine functions and the total
+description: the columns are padded with tabs, and a function name shorter than a tab stop takes one tab more
+args: [tool, cover, -func=c.out]

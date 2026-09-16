@@ -1,0 +1,3 @@
+source: go tool cover -func on a profile of the config package in github.com/nao1215/sqly (go1.26.4) with LC_ALL=C, cut to seven functions and the total
+description: a function the tests never reach reads 0.0%
+args: [tool, cover, -func, c.out]

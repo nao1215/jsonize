@@ -1,0 +1,70 @@
+{
+  "branch": {
+    "oid": "8d25952d2465e36f390fd8edd5ba1f7d55fefae0",
+    "head": "main",
+    "upstream": "origin/main",
+    "ahead": 1,
+    "behind": 0,
+    "stash": null
+  },
+  "entries": [
+    {
+      "kind": "ordinary",
+      "index": "A",
+      "worktree": ".",
+      "submodule": "N...",
+      "mode_head": "000000",
+      "mode_index": "100644",
+      "mode_worktree": "100644",
+      "object_head": "0000000000000000000000000000000000000000",
+      "object_index": "8ba3a16384aacc37d01564b28401755ce8053f51",
+      "path": "added.txt"
+    },
+    {
+      "kind": "ordinary",
+      "index": "M",
+      "worktree": "M",
+      "submodule": "N...",
+      "mode_head": "100644",
+      "mode_index": "100644",
+      "mode_worktree": "100644",
+      "object_head": "61780798228d17af2d34fce4cfbdf35556832472",
+      "object_index": "e6bfff5c1d0f0ecd501552b43a1e13d8008abc31",
+      "path": "b.txt"
+    },
+    {
+      "kind": "renamed",
+      "index": "R",
+      "worktree": ".",
+      "submodule": "N...",
+      "mode_head": "100644",
+      "mode_index": "100644",
+      "mode_worktree": "100644",
+      "object_head": "f2ad6c76f0115a6ba5b00456a849810e7ec0af20",
+      "object_index": "f2ad6c76f0115a6ba5b00456a849810e7ec0af20",
+      "score": "R100",
+      "path": "new.txt",
+      "original_path": "old.txt"
+    },
+    {
+      "kind": "ordinary",
+      "index": ".",
+      "worktree": "D",
+      "submodule": "N...",
+      "mode_head": "100644",
+      "mode_index": "100644",
+      "mode_worktree": "000000",
+      "object_head": "587be6b4c3f93f93c489c0111bba5596147a26cb",
+      "object_index": "587be6b4c3f93f93c489c0111bba5596147a26cb",
+      "path": "sp ace.txt"
+    },
+    {
+      "kind": "untracked",
+      "path": "untracked.txt"
+    },
+    {
+      "kind": "ignored",
+      "path": "debug.log"
+    }
+  ]
+}

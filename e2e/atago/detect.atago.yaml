@@ -2087,3 +2087,33 @@ scenarios:
             json:
               - { path: "$[1].detached", equals: true }
               - { path: "$[3].locked_reason", equals: on a removable disk }
+
+  - name: go tool cover -func is detected, and git status --porcelain=v2 is read when git is named
+    steps:
+      - fixture:
+          file: cover.txt
+          from: "${specdir}/../../registry/parsers/go/tool-cover-func/testdata/zero-coverage.txt"
+      - run:
+          command: jz
+          stdin: {file: cover.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.functions[3].function", equals: IsExplicit }
+              - { path: "$.functions[3].coverage", equals: 0 }
+              - { path: "$.total.coverage", equals: 91.5 }
+      - fixture:
+          file: status-v2.txt
+          from: "${specdir}/../../registry/parsers/git/status-porcelain-v2/testdata/branch-ignored.txt"
+      - run:
+          command: jz --parser git
+          stdin: {file: status-v2.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.branch.ahead", equals: 1 }
+              - { path: "$.entries[2].kind", equals: renamed }
+              - { path: "$.entries[2].original_path", equals: old.txt }
+              - { path: "$.entries[5].kind", equals: ignored }

@@ -8,6 +8,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `go tool cover -func` (the coverage of each function and the total)
+  and `git status --porcelain=v2` (the branch headers, and each entry
+  by kind with its modes and object names). The registry holds 241
+  commands through 686 definitions.
 - Seventeen definitions. Eight commands jz did not read: `apt-config
   dump`, `avahi-browse -p` (and with `-r` the resolved host, address,
   port and TXT record; a browse left running is read as a stream),
@@ -63,6 +67,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `go list -m -u all` is read: go/list-modules adds `update`, the newer
+  version shown in brackets, `retracted` and `deprecated`, and the same
+  three for the replacement. Before, the first line with any of them
+  failed with exit 3. Every object now has these keys, so the schema is
+  version 2.
+- An `args` entry that ends in `=` also matches the one-dash spelling
+  of Go's flag package: `any: ["-func="]` takes `-func=c.out`, which
+  before was only split into letters.
 - `git log --stat` output named as `--parser git --variant log` is
   refused by the signature (exit 4) instead of failing inside the message
   (exit 3), and detection hands it to `git/log-stat`. The published

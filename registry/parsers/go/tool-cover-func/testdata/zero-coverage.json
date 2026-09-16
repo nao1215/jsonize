@@ -1,0 +1,37 @@
+{
+  "functions": [
+    {
+      "file": "github.com/nao1215/sqly/config/argument.go",
+      "line": 127,
+      "function": "NewArg",
+      "coverage": 100
+    },
+    {
+      "file": "github.com/nao1215/sqly/config/argument.go",
+      "line": 141,
+      "function": "newArg",
+      "coverage": 97.3
+    },
+    {
+      "file": "github.com/nao1215/sqly/config/argument.go",
+      "line": 292,
+      "function": "explicitFlags",
+      "coverage": 100
+    },
+    {
+      "file": "github.com/nao1215/sqly/config/argument.go",
+      "line": 299,
+      "function": "IsExplicit",
+      "coverage": 0
+    },
+    {
+      "file": "github.com/nao1215/sqly/config/tty.go",
+      "line": 22,
+      "function": "IsOutputToTTY",
+      "coverage": 0
+    }
+  ],
+  "total": {
+    "coverage": 91.5
+  }
+}

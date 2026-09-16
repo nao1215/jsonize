@@ -1,0 +1,3 @@
+source: git status --porcelain=v2 --branch (git 2.53) with LC_ALL=C in a repository with no commit
+description: a branch with no commit has the oid "(initial)" and no entries
+args: [status, --porcelain=v2, --branch]

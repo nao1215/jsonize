@@ -1,0 +1,66 @@
+# `git status --porcelain=v2` prints one line per changed path, with a
+# letter or a digit at the start that says what the line holds: "1" an
+# ordinary change, "2" a rename or a copy, "u" an unmerged path, "?" an
+# untracked and "!" an ignored one. An ordinary line carries the status
+# in the index and the worktree ("." for unchanged), the submodule state,
+# the file modes in HEAD, the index and the worktree, and the object
+# names in HEAD and the index; a rename adds the score and the path it
+# was renamed from after a tab, and an unmerged line has the modes and
+# object names of the three stages. With --branch the lines start with
+# "# branch." headers: the commit ("(initial)" before the first one), the
+# branch ("(detached)" for a detached HEAD), the upstream, and how far
+# ahead and behind it is. --show-stash adds "# stash N". A path with an
+# unusual character is quoted the way C quotes a string.
+format: 1
+command: git
+variant: status-porcelain-v2
+description: git status --porcelain=v2, the branch headers and one entry per changed path
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-status#_porcelain_format_version_2
+detect:
+  args:
+    all: [status]
+    any: ["--porcelain=v2"]
+    none: ["-z"]
+  signature:
+    all:
+      # Every line is a header or an entry, down to the object names.
+      - '\A(?:# branch\.oid (?:[0-9a-f]{40,64}|\(initial\))|# branch\.head [^\n]+|# branch\.upstream [^\n]+|# branch\.ab \+[0-9]+ -[0-9]+|# stash [0-9]+|1 [.MTADRCU]{2} (?:N\.\.\.|S[C.][M.][U.])(?: [0-7]{6}){3}(?: [0-9a-f]{40,64}){2} [^\n]+|2 [.MTADRCU]{2} (?:N\.\.\.|S[C.][M.][U.])(?: [0-7]{6}){3}(?: [0-9a-f]{40,64}){2} [RC][0-9]{1,3} [^\t\n]+\t[^\n]+|u [.MTADRCU]{2} (?:N\.\.\.|S[C.][M.][U.])(?: [0-7]{6}){4}(?: [0-9a-f]{40,64}){3} [^\n]+|[?!] [^\n]+)(?:\n(?:# branch\.oid (?:[0-9a-f]{40,64}|\(initial\))|# branch\.head [^\n]+|# branch\.upstream [^\n]+|# branch\.ab \+[0-9]+ -[0-9]+|# stash [0-9]+|1 [.MTADRCU]{2} (?:N\.\.\.|S[C.][M.][U.])(?: [0-7]{6}){3}(?: [0-9a-f]{40,64}){2} [^\n]+|2 [.MTADRCU]{2} (?:N\.\.\.|S[C.][M.][U.])(?: [0-7]{6}){3}(?: [0-9a-f]{40,64}){2} [RC][0-9]{1,3} [^\t\n]+\t[^\n]+|u [.MTADRCU]{2} (?:N\.\.\.|S[C.][M.][U.])(?: [0-7]{6}){4}(?: [0-9a-f]{40,64}){3} [^\n]+|[?!] [^\n]+))*\n?\z'
+      # A "?" or "!" line alone is too little to go on.
+      - '(?m)^(?:# branch\.oid |# stash |[12u] )'
+parse:
+  type: composite
+  parts:
+    - name: branch
+      select: {until: '^[12u?!] '}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?:# branch\.oid (?P<oid>\S+)\n# branch\.head (?P<head>[^\n]+)(?:\n# branch\.upstream (?P<upstream>[^\n]+))?(?:\n# branch\.ab \+(?P<ahead>[0-9]+) -(?P<behind>[0-9]+))?\n?)?(?:# stash (?P<stash>[0-9]+))?\z'
+      fields:
+        oid: {null_if: ["(initial)"]}
+        head: {null_if: ["(detached)"]}
+        ahead: {type: int}
+        behind: {type: int}
+        stash: {type: int}
+    - name: entries
+      ignore: ['^# ']
+      parse:
+        type: regex
+        patterns:
+          - pattern: '^1 (?P<index>\S)(?P<worktree>\S) (?P<submodule>\S{4}) (?P<mode_head>[0-7]{6}) (?P<mode_index>[0-7]{6}) (?P<mode_worktree>[0-7]{6}) (?P<object_head>[0-9a-f]+) (?P<object_index>[0-9a-f]+) (?P<path>.+)$'
+            values: {kind: ordinary}
+          - pattern: '^2 (?P<index>\S)(?P<worktree>\S) (?P<submodule>\S{4}) (?P<mode_head>[0-7]{6}) (?P<mode_index>[0-7]{6}) (?P<mode_worktree>[0-7]{6}) (?P<object_head>[0-9a-f]+) (?P<object_index>[0-9a-f]+) (?P<score>[RC][0-9]+) (?P<path>[^\t]+)\t(?P<original_path>.+)$'
+            values: {kind: renamed}
+          - pattern: '^u (?P<index>\S)(?P<worktree>\S) (?P<submodule>\S{4}) (?P<mode_stage1>[0-7]{6}) (?P<mode_stage2>[0-7]{6}) (?P<mode_stage3>[0-7]{6}) (?P<mode_worktree>[0-7]{6}) (?P<object_stage1>[0-9a-f]+) (?P<object_stage2>[0-9a-f]+) (?P<object_stage3>[0-9a-f]+) (?P<path>.+)$'
+            values: {kind: unmerged}
+          - pattern: '^\? (?P<path>.+)$'
+            values: {kind: untracked}
+          - pattern: '^! (?P<path>.+)$'
+            values: {kind: ignored}
+      fields:
+        path: {required: true, unescape: {quote: '"', octal: true, sequences: {'\\': '\', '\"': '"', '\a': "\a", '\b': "\b", '\t': "\t", '\n': "\n", '\v': "\v", '\f': "\f", '\r': "\r"}}}
+        original_path: {unescape: {quote: '"', octal: true, sequences: {'\\': '\', '\"': '"', '\a': "\a", '\b': "\b", '\t': "\t", '\n': "\n", '\v': "\v", '\f': "\f", '\r': "\r"}}}

@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/go/tool-cover-func.json",
+  "title": "go/tool-cover-func",
+  "description": "go tool cover -func, statement coverage per function and in total",
+  "x-jsonize": {
+    "definition": "go/tool-cover-func",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "functions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "line": {
+            "type": "integer"
+          },
+          "function": {
+            "type": "string"
+          },
+          "coverage": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "file",
+          "line",
+          "function",
+          "coverage"
+        ]
+      }
+    },
+    "total": {
+      "type": "object",
+      "properties": {
+        "coverage": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "coverage"
+      ]
+    }
+  },
+  "required": [
+    "functions",
+    "total"
+  ]
+}

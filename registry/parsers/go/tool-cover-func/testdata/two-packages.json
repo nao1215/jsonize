@@ -1,0 +1,61 @@
+{
+  "functions": [
+    {
+      "file": "github.com/nao1215/jsonize/internal/jsonbuild/jsonbuild.go",
+      "line": 76,
+      "function": "String",
+      "coverage": 100
+    },
+    {
+      "file": "github.com/nao1215/jsonize/internal/jsonbuild/jsonbuild.go",
+      "line": 100,
+      "function": "Error",
+      "coverage": 85.7
+    },
+    {
+      "file": "github.com/nao1215/jsonize/internal/jsonbuild/jsonbuild.go",
+      "line": 120,
+      "function": "Error",
+      "coverage": 100
+    },
+    {
+      "file": "github.com/nao1215/jsonize/internal/jsonbuild/jsonbuild.go",
+      "line": 124,
+      "function": "Unwrap",
+      "coverage": 100
+    },
+    {
+      "file": "github.com/nao1215/jsonize/internal/jsonbuild/jsonbuild.go",
+      "line": 142,
+      "function": "maxValues",
+      "coverage": 100
+    },
+    {
+      "file": "github.com/nao1215/jsonize/internal/yaml/parse.go",
+      "line": 798,
+      "function": "escape",
+      "coverage": 100
+    },
+    {
+      "file": "github.com/nao1215/jsonize/internal/yaml/parse.go",
+      "line": 835,
+      "function": "blockScalar",
+      "coverage": 100
+    },
+    {
+      "file": "github.com/nao1215/jsonize/internal/yaml/parse.go",
+      "line": 872,
+      "function": "blockHeader",
+      "coverage": 100
+    },
+    {
+      "file": "github.com/nao1215/jsonize/internal/yaml/parse.go",
+      "line": 890,
+      "function": "blockLines",
+      "coverage": 100
+    }
+  ],
+  "total": {
+    "coverage": 97.7
+  }
+}
