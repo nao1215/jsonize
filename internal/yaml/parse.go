@@ -331,7 +331,7 @@ func (p *parser) directives(off int) (int, error) {
 			return 0, err
 		}
 	}
-	if seen >= 0 && !(p.hasPrefix(off, "---") && p.separates(off+3)) {
+	if seen >= 0 && (!p.hasPrefix(off, "---") || !p.separates(off+3)) {
 		return 0, p.errorf(seen, `a directive is followed by "---", which starts the document`)
 	}
 	return off, nil
