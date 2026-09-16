@@ -1,0 +1,44 @@
+[
+  {
+    "current": false,
+    "elsewhere": false,
+    "name": "feature/login",
+    "points_to": null
+  },
+  {
+    "current": false,
+    "elsewhere": false,
+    "name": "fix/typo",
+    "points_to": null
+  },
+  {
+    "current": true,
+    "elsewhere": false,
+    "name": "main",
+    "points_to": null
+  },
+  {
+    "current": false,
+    "elsewhere": false,
+    "name": "remotes/origin/HEAD",
+    "points_to": "origin/main"
+  },
+  {
+    "current": false,
+    "elsewhere": false,
+    "name": "remotes/origin/feature/login",
+    "points_to": null
+  },
+  {
+    "current": false,
+    "elsewhere": false,
+    "name": "remotes/origin/fix/typo",
+    "points_to": null
+  },
+  {
+    "current": false,
+    "elsewhere": false,
+    "name": "remotes/origin/main",
+    "points_to": null
+  }
+]

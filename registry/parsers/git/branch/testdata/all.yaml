@@ -1,0 +1,3 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: -a lists the remote-tracking branches under remotes/, the symbolic one with its target
+args: [branch, -a]

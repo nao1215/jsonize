@@ -1,0 +1,26 @@
+[
+  {
+    "current": false,
+    "elsewhere": false,
+    "name": "origin/HEAD",
+    "points_to": "origin/main"
+  },
+  {
+    "current": false,
+    "elsewhere": false,
+    "name": "origin/feature/login",
+    "points_to": null
+  },
+  {
+    "current": false,
+    "elsewhere": false,
+    "name": "origin/fix/typo",
+    "points_to": null
+  },
+  {
+    "current": false,
+    "elsewhere": false,
+    "name": "origin/main",
+    "points_to": null
+  }
+]
