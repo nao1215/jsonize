@@ -336,10 +336,20 @@ $ vmstat 1 | jz --stream | jz new --each --string host=server-a sample:=@-
 - Without `--each`, `jz new sample:=@-` reads standard input once, whole.
 
 A malformed argument (no `=`, an empty key, a location given twice, `:=`
-with invalid JSON, a malformed pointer, two arguments reading standard
-input) is exit 2 before anything is read. An unreadable file is exit 1,
-and one that is not the format it is read as, or not UTF-8, is exit 3
-with the line.
+with text that is not JSON, a malformed pointer, two arguments reading
+standard input) is exit 2 before anything is read. An unreadable file is
+exit 1, and one that is not the format it is read as, or not UTF-8, is
+exit 3 with the line.
+
+An argument that is JSON, refused for what it holds rather than for not
+being JSON (a key given twice in one object, nesting past the limit), is
+exit 3 as well: it is the value failing, not the command line, and the
+same text in a file is read the same way.
+
+```console
+$ jz new 'labels:={"app":"api","app":"web"}'
+jz: new: "labels:={\"app\":\"api\",\"app\":\"web\"}": the value after := cannot be written: the key "app" is given twice in one object
+```
 
 ## Choosing the keys
 

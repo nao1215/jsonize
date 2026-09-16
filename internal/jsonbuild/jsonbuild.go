@@ -356,6 +356,13 @@ func operand(pl *placement, value string, json bool, use func(string) error) err
 	}
 	v, err := readJSON(value)
 	if err != nil {
+		var pe *engine.ParseError
+		if errors.As(err, &pe) {
+			// The argument is JSON; jz refuses what it holds. That is the
+			// input failing, the way the same text in a file is, so it is
+			// not handed to use, which makes a usage error.
+			return &InputError{Arg: pl.arg.String(), Err: err}
+		}
 		return use(err.Error())
 	}
 	pl.kind, pl.value = inlineJSON, v
@@ -367,12 +374,14 @@ func readJSON(text string) (any, error) {
 	if err == nil {
 		return v, nil
 	}
-	// JSON jz refuses to write (a key given twice, nesting too deep) is
-	// not a string written by mistake, so it gets the reason rather than
-	// the hint.
+	// JSON jz refuses to write (a key given twice, nesting too deep, more
+	// values than it holds) is not a string written by mistake. It gets
+	// the reason rather than the hint, and it keeps the parse failure it
+	// is, so that the status is the one the same text read from a file
+	// earns.
 	var pe *engine.ParseError
 	if json.Valid([]byte(text)) && errors.As(err, &pe) {
-		return nil, errors.New("the value after := cannot be written: " + pe.Msg)
+		return nil, &engine.ParseError{Msg: "the value after := cannot be written: " + pe.Msg}
 	}
 	return nil, errors.New("the value after := is not JSON; a string is written with = or quoted")
 }

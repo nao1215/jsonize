@@ -175,8 +175,6 @@ func TestUsageErrors(t *testing.T) {
 		{"an array key then a value", false, []string{"a=1", "a[]=2"}, "both as a value and as an array"},
 		{"json that is not json", false, []string{"a:=nope"}, "the value after := is not JSON"},
 		{"two json values", false, []string{"a:=1 2"}, "the value after := is not JSON"},
-		{"json with a key given twice", false, []string{`a:={"k":1,"k":2}`}, `the value after := cannot be written: the key "k" is given twice in one object`},
-		{"json nested too deeply", true, []string{":=" + strings.Repeat("[", 1001) + strings.Repeat("]", 1001)}, "the value after := cannot be written: arrays and objects nest deeper than 1000"},
 		{"@ with no path", false, []string{"a=@"}, "@ names no file"},
 		{"standard input twice", false, []string{"a=@-", "b:=@-"}, `standard input is already read by "a=@-"`},
 		{"an array element that is not json", true, []string{":=nope"}, "not JSON"},
@@ -197,6 +195,41 @@ func TestUsageErrors(t *testing.T) {
 			var ue *UsageError
 			if !errors.As(err, &ue) || !strings.Contains(err.Error(), tt.want) {
 				t.Errorf("got %v, want a usage error holding %q", err, tt.want)
+			}
+		})
+	}
+}
+
+// An argument that is JSON, refused for what it holds rather than for
+// not being JSON, is the input failing and not the command line. It
+// keeps the parse failure it is, so that jz returns the status the same
+// text read from a file returns.
+func TestInlineJSONRefusedIsAParseFailure(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name  string
+		array bool
+		args  []string
+		want  string
+	}{
+		{"a key given twice", false, []string{`a:={"k":1,"k":2}`}, `the value after := cannot be written: the key "k" is given twice in one object`},
+		{"nested too deeply", true, []string{":=" + strings.Repeat("[", 1001) + strings.Repeat("]", 1001)}, "the value after := cannot be written: arrays and objects nest deeper than 1000"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			src := files(t, "")
+			var err error
+			if tt.array {
+				_, err = buildArray(tt.args, src)
+			} else {
+				_, err = buildObject(tt.args, src)
+			}
+			var (
+				pe *engine.ParseError
+				ue *UsageError
+			)
+			if !errors.As(err, &pe) || errors.As(err, &ue) || !strings.Contains(err.Error(), tt.want) {
+				t.Errorf("got %v, want a parse failure holding %q", err, tt.want)
 			}
 		})
 	}
