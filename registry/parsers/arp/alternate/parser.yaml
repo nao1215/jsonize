@@ -5,7 +5,7 @@
 # leaves both keys null.
 #
 # The tabular listing net-tools prints without -a is a different format
-# and is not covered here; it was not available to capture. Whatever
+# and is not covered here. Whatever
 # words a build prints between the hardware address and " on " (PERM,
 # PUB) are kept in order as flags.
 format: 1
@@ -14,9 +14,7 @@ variant: alternate
 description: arp -a, the alternate BSD style ARP cache listing
 metadata:
   tags: [linux, network, net-tools]
-  # Only BusyBox was available to capture from; net-tools prints the same
-  # line shape but was not verified here.
-  compatible: [BusyBox]
+  compatible: [BusyBox, net-tools 2.10]
   references:
     - https://man7.org/linux/man-pages/man8/arp.8.html
 detect:

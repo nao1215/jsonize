@@ -1,0 +1,41 @@
+# macOS arp -a and arp -an: one line per cache entry, the host name ("?"
+# with -n or when the address does not resolve), the address, the
+# hardware address, the interface, the words macOS prints about the entry
+# and the link type in brackets. The keys are those of arp/freebsd.
+#
+# macOS writes each byte of the hardware address without its leading
+# zero (1:0:5e:0:0:fb), and the address is kept as printed. `ifscope`
+# (the entry is scoped to its interface) and `permanent` (the entry does
+# not expire) are read as two booleans, false where the word is absent.
+#
+# Only resolved entries with those two words were captured. An entry
+# printed as "(incomplete)", or with other words between the interface
+# and the brackets, is refused rather than guessed at.
+format: 1
+command: arp
+variant: darwin
+description: macOS arp -a, the ARP cache with each entry's scope
+metadata:
+  tags: [darwin, bsd, network]
+  compatible: [macOS 15, macOS 26]
+  references:
+    - https://keith.github.io/xcode-man-pages/arp.8.html
+detect:
+  os: [darwin]
+  args:
+    # Bundled short flags are expanded, so -an holds -a.
+    all: ["-a"]
+  signature:
+    all:
+      - '\A\S+ \([0-9.]+\) at [0-9a-f]{1,2}(?::[0-9a-f]{1,2}){5} on \S+(?: ifscope)?(?: permanent)? \[[a-z0-9]+\]$'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+) \((?P<address>[0-9.]+)\) at (?P<hwaddress>[0-9a-f]{1,2}(?::[0-9a-f]{1,2}){5}) on (?P<interface>\S+)(?P<ifscope>(?: ifscope)?)(?P<permanent>(?: permanent)?) \[(?P<type>[a-z0-9]+)\][ \t]*$'
+fields:
+  name: {required: true}
+  address: {required: true}
+  hwaddress: {required: true}
+  interface: {required: true}
+  ifscope: {type: bool, true_values: ["ifscope"], false_values: [""]}
+  permanent: {type: bool, true_values: ["permanent"], false_values: [""]}
+  type: {required: true}

@@ -38,7 +38,7 @@ the same reading with settings of your own.
 | `apt-cache` | [`depends`](../schemas/apt-cache/depends.json), [`madison`](../schemas/apt-cache/madison.json), [`policy`](../schemas/apt-cache/policy.json), [`search`](../schemas/apt-cache/search.json), [`stats`](../schemas/apt-cache/stats.json) |
 | `apt-config` | [`dump`](../schemas/apt-config/dump.json) |
 | `ar` | [`table-verbose`](../schemas/ar/table-verbose.json) |
-| `arp` | [`alternate`](../schemas/arp/alternate.json), [`freebsd`](../schemas/arp/freebsd.json), [`windows`](../schemas/arp/windows.json) |
+| `arp` | [`alternate`](../schemas/arp/alternate.json), [`darwin`](../schemas/arp/darwin.json), [`freebsd`](../schemas/arp/freebsd.json), [`windows`](../schemas/arp/windows.json) |
 | `avahi-browse` | [`parsable`](../schemas/avahi-browse/parsable.json) |
 | `bat` | [`list-languages`](../schemas/bat/list-languages.json) |
 | `blkid` | [`export`](../schemas/blkid/export.json), [`linux`](../schemas/blkid/linux.json) |

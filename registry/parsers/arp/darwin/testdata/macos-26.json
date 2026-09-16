@@ -1,0 +1,29 @@
+[
+  {
+    "name": "?",
+    "address": "192.0.2.1",
+    "hwaddress": "2:0:0:0:0:1",
+    "interface": "en0",
+    "ifscope": true,
+    "permanent": false,
+    "type": "ethernet"
+  },
+  {
+    "name": "?",
+    "address": "192.0.2.255",
+    "hwaddress": "ff:ff:ff:ff:ff:ff",
+    "interface": "en0",
+    "ifscope": true,
+    "permanent": false,
+    "type": "ethernet"
+  },
+  {
+    "name": "mdns.mcast.net",
+    "address": "224.0.0.251",
+    "hwaddress": "1:0:5e:0:0:fb",
+    "interface": "en0",
+    "ifscope": true,
+    "permanent": true,
+    "type": "ethernet"
+  }
+]

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/arp/darwin.json",
+  "title": "arp/darwin",
+  "description": "macOS arp -a, the ARP cache with each entry's scope",
+  "x-jsonize": {
+    "definition": "arp/darwin",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "hwaddress": {
+        "type": "string"
+      },
+      "interface": {
+        "type": "string"
+      },
+      "ifscope": {
+        "type": "boolean"
+      },
+      "permanent": {
+        "type": "boolean"
+      },
+      "type": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "address",
+      "hwaddress",
+      "interface",
+      "ifscope",
+      "permanent",
+      "type"
+    ]
+  }
+}
