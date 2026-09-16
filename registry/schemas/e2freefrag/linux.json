@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/e2freefrag/linux.json",
+  "title": "e2freefrag/linux",
+  "description": "e2freefrag, the free space fragmentation of an ext2, ext3 or ext4 file system",
+  "x-jsonize": {
+    "definition": "e2freefrag/linux",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "object",
+      "properties": {
+        "device": {
+          "type": "string"
+        },
+        "block_size": {
+          "type": "integer"
+        },
+        "total_blocks": {
+          "type": "integer"
+        },
+        "free_blocks": {
+          "type": "integer"
+        },
+        "free_blocks_percent": {
+          "type": "number"
+        },
+        "chunk_size": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "chunk_blocks": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "total_chunks": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "free_chunks": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "free_chunks_percent": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "min_free_extent_kb": {
+          "type": "integer"
+        },
+        "max_free_extent_kb": {
+          "type": "integer"
+        },
+        "avg_free_extent_kb": {
+          "type": "integer"
+        },
+        "free_extents": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "device",
+        "block_size",
+        "total_blocks",
+        "free_blocks",
+        "free_blocks_percent",
+        "chunk_size",
+        "chunk_blocks",
+        "total_chunks",
+        "free_chunks",
+        "free_chunks_percent",
+        "min_free_extent_kb",
+        "max_free_extent_kb",
+        "avg_free_extent_kb",
+        "free_extents"
+      ]
+    },
+    "histogram": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "range_start": {
+            "type": "string"
+          },
+          "range_end": {
+            "type": "string"
+          },
+          "free_extents": {
+            "type": "integer"
+          },
+          "free_blocks": {
+            "type": "integer"
+          },
+          "percent": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "range_start",
+          "range_end",
+          "free_extents",
+          "free_blocks",
+          "percent"
+        ]
+      }
+    }
+  },
+  "required": [
+    "summary",
+    "histogram"
+  ]
+}

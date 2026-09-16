@@ -1,0 +1,4 @@
+description: With -c the summary adds the chunk size and the free chunks.
+source: e2freefrag -c 8 on the image of fragmented, e2fsprogs 1.47.2 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [-c, "8", frag.img]

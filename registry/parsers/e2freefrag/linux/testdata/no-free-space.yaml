@@ -1,0 +1,4 @@
+description: A full file system prints the histogram heading with no rows under it.
+source: e2freefrag on a 2 MiB ext2 image (mkfs.ext2 -b 1024 -m 0) filled by debugfs -w write of a larger file, e2fsprogs 1.47.2 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [full.img]
