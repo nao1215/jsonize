@@ -33,7 +33,8 @@ project follows [Semantic Versioning](https://semver.org/).
   `IP`, `EIP`, `ICMP`, `EICMP`, `TCP`, `ETCP`, `UDP`, `SOCK6`, `IP6`,
   `EIP6`, `ICMP6`, `EICMP6`, `UDP6` and `SOFT`, `pidstat -U`, the
   per-task report with user names, and `iostat -x -d`, the extended
-  device counters without the CPU table (654 definitions).
+  device counters without the CPU table, and `vmstat -p PARTITION`
+  (655 definitions).
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the

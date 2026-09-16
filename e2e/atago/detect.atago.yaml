@@ -1903,3 +1903,18 @@ scenarios:
             json:
               - { path: "$", length: 2 }
               - { path: "$[1].devices[3].r_s", equals: 87 }
+
+  - name: vmstat -p is a record of a partition's counters per interval
+    steps:
+      - fixture:
+          file: vmstat-p.txt
+          from: "${specdir}/../../registry/parsers/vmstat/linux-partition/testdata/three-samples.txt"
+      - run:
+          command: jz
+          stdin: {file: vmstat-p.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 3 }
+              - { path: "$[0].reads", gte: 0 }

@@ -1,0 +1,33 @@
+# `vmstat -p PARTITION` prints the counters of one partition: a header
+# line that opens with the partition's name and names the four columns,
+# then one row per interval with the reads, the sectors read, the writes
+# and the sectors requested for writing, each a total since boot. The
+# name is on the header line only, so each row is a record of the four
+# counts; the partition is the one the command line named.
+format: 1
+command: vmstat
+variant: linux-partition
+description: vmstat -p, the read and write counters of one partition per interval
+metadata:
+  tags: [linux, io, procps]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man8/vmstat.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-p", "--partition"]
+  signature:
+    all:
+      - '\A\S+[ \t]+reads[ \t]+read sectors[ \t]+writes[ \t]+requested writes[ \t]*$'
+input:
+  ignore:
+    - '^\S+[ \t]+reads[ \t]+read sectors[ \t]+writes[ \t]+requested writes[ \t]*$'
+parse:
+  type: regex
+  pattern: '^[ \t]+(?P<reads>[0-9]+)[ \t]+(?P<read_sectors>[0-9]+)[ \t]+(?P<writes>[0-9]+)[ \t]+(?P<requested_writes>[0-9]+)[ \t]*$'
+fields:
+  reads: {type: int}
+  read_sectors: {type: int}
+  writes: {type: int}
+  requested_writes: {type: int}
