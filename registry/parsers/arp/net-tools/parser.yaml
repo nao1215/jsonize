@@ -1,0 +1,47 @@
+# The table net-tools arp prints without -a (and with -e, -n or -i): a
+# header, then one row per cache entry with its address, hardware type,
+# hardware address, flags, netmask and interface. The keys are those of
+# arp/alternate, which reads the same cache printed the other way.
+#
+# The address is a host name unless -n was given or the name did not
+# resolve, and it is kept as printed. An entry the kernel has not resolved
+# prints "(incomplete)" across the type and address columns, and both are
+# null on it. A published proxy entry prints "*" as its type and
+# "<from_interface>" as its address; both are kept as printed, since they
+# are what the command says about the entry.
+#
+# The flags are letters written together (C complete, M permanent, P
+# published) and stay the string they were printed as. The netmask column
+# is filled only for a published network entry, which was not captured;
+# the row pattern takes a dotted address there and nothing else.
+#
+# -v adds a closing "Entries: N  Skipped: N  Found: N" line, which no part
+# reads, so that output is refused rather than read without it.
+format: 1
+command: arp
+variant: net-tools
+description: net-tools arp, the ARP cache as a table
+metadata:
+  tags: [linux, network, net-tools]
+  compatible: [net-tools 2.10]
+  references:
+    - https://manpages.debian.org/stable/net-tools/arp.8.en.html
+detect:
+  os: [linux]
+  args:
+    # -a prints the alternate style, which arp/alternate reads.
+    none: ["-a"]
+  signature:
+    all:
+      - '\AAddress[ ]+HWtype[ ]+HWaddress[ ]+Flags Mask[ ]+Iface[ \t]*$'
+input:
+  ignore:
+    - '\AAddress[ ]+HWtype[ ]+HWaddress[ ]+Flags Mask[ ]+Iface[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<address>\S+)[ ]+\(incomplete\)(?P<hwtype>)??(?P<hwaddress>)??(?:[ ]+(?P<flags>[A-Za-z]+))?(?:[ ]+(?P<mask>[0-9.]+))?[ ]+(?P<device>\S+)[ \t]*$'
+    - '^(?P<address>\S+)[ ]+(?P<hwtype>\S+)[ ]+(?P<hwaddress>[0-9a-fA-F]{2}(?::[0-9a-fA-F]{2})+|<from_interface>)(?:[ ]+(?P<flags>[A-Za-z]+))?(?:[ ]+(?P<mask>[0-9.]+))?[ ]+(?P<device>\S+)[ \t]*$'
+fields:
+  address: {required: true}
+  device: {required: true}

@@ -1,0 +1,34 @@
+[
+  {
+    "address": "198.51.100.30",
+    "hwtype": null,
+    "hwaddress": null,
+    "flags": null,
+    "mask": null,
+    "device": "dummy0"
+  },
+  {
+    "address": "198.51.100.20",
+    "hwtype": "ether",
+    "hwaddress": "02:00:00:00:00:20",
+    "flags": "CM",
+    "mask": null,
+    "device": "dummy0"
+  },
+  {
+    "address": "198.51.100.21",
+    "hwtype": "*",
+    "hwaddress": "<from_interface>",
+    "flags": "MP",
+    "mask": null,
+    "device": "dummy0"
+  },
+  {
+    "address": "198.51.100.22",
+    "hwtype": "*",
+    "hwaddress": "<from_interface>",
+    "flags": "MP",
+    "mask": null,
+    "device": "dummy0"
+  }
+]

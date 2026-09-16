@@ -1,0 +1,6 @@
+Address                  HWtype  HWaddress           Flags Mask            Iface
+198.51.100.30                    (incomplete)                              dummy0
+198.51.100.20            ether   02:00:00:00:00:20   CM                    dummy0
+172.17.0.1               ether   02:00:00:00:00:01   C                     eth0
+198.51.100.21            *       <from_interface>    MP                    dummy0
+198.51.100.22            *       <from_interface>    MP                    dummy0

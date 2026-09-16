@@ -38,7 +38,7 @@ the same reading with settings of your own.
 | `apt-cache` | [`depends`](../schemas/apt-cache/depends.json), [`madison`](../schemas/apt-cache/madison.json), [`policy`](../schemas/apt-cache/policy.json), [`search`](../schemas/apt-cache/search.json), [`show`](../schemas/apt-cache/show.json), [`stats`](../schemas/apt-cache/stats.json) |
 | `apt-config` | [`dump`](../schemas/apt-config/dump.json) |
 | `ar` | [`table-verbose`](../schemas/ar/table-verbose.json) |
-| `arp` | [`alternate`](../schemas/arp/alternate.json), [`darwin`](../schemas/arp/darwin.json), [`freebsd`](../schemas/arp/freebsd.json), [`windows`](../schemas/arp/windows.json) |
+| `arp` | [`alternate`](../schemas/arp/alternate.json), [`darwin`](../schemas/arp/darwin.json), [`freebsd`](../schemas/arp/freebsd.json), [`net-tools`](../schemas/arp/net-tools.json), [`windows`](../schemas/arp/windows.json) |
 | `avahi-browse` | [`parsable`](../schemas/avahi-browse/parsable.json) |
 | `bat` | [`list-languages`](../schemas/bat/list-languages.json) |
 | `blkid` | [`export`](../schemas/blkid/export.json), [`linux`](../schemas/blkid/linux.json) |
@@ -104,7 +104,7 @@ the same reading with settings of your own.
 | `iconv` | [`list`](../schemas/iconv/list.json) |
 | `id` | [`posix`](../schemas/id/posix.json) |
 | `identify` | [`default`](../schemas/identify/default.json) |
-| `ifconfig` | [`bsd`](../schemas/ifconfig/bsd.json), [`busybox`](../schemas/ifconfig/busybox.json), [`net-tools`](../schemas/ifconfig/net-tools.json) |
+| `ifconfig` | [`bsd`](../schemas/ifconfig/bsd.json), [`busybox`](../schemas/ifconfig/busybox.json), [`net-tools`](../schemas/ifconfig/net-tools.json), [`net-tools-short`](../schemas/ifconfig/net-tools-short.json) |
 | `ini` | [`default`](../schemas/ini/default.json) |
 | `ionice` | [`class`](../schemas/ionice/class.json) |
 | `iostat` | [`cpu`](../schemas/iostat/cpu.json), [`cpu-timestamped`](../schemas/iostat/cpu-timestamped.json), [`device`](../schemas/iostat/device.json), [`device-timestamped`](../schemas/iostat/device-timestamped.json), [`extended`](../schemas/iostat/extended.json), [`extended-device`](../schemas/iostat/extended-device.json), [`extended-timestamped`](../schemas/iostat/extended-timestamped.json), [`freebsd-extended`](../schemas/iostat/freebsd-extended.json), [`human`](../schemas/iostat/human.json), [`human-sizes`](../schemas/iostat/human-sizes.json), [`human-sizes-timestamped`](../schemas/iostat/human-sizes-timestamped.json), [`human-timestamped`](../schemas/iostat/human-timestamped.json), [`linux`](../schemas/iostat/linux.json), [`linux-timestamped`](../schemas/iostat/linux-timestamped.json) |

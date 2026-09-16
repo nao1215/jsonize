@@ -1,0 +1,4 @@
+description: arp -v closes the table with a count line, which this definition does not read.
+source: >-
+  captured with LC_ALL=C and `arp -v` from net-tools 2.10 in a debian:stable-slim container, after `arp -i dummy0 -s`, `arp -s ... pub`, `arp -Ds ... pub` and a neighbour added with `ip neigh ... nud failed` on a dummy interface; the gateway's hardware address is replaced by 02:00:00:00:00:01
+expect_error: 'Entries: 5'
