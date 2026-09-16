@@ -1,0 +1,9 @@
+{
+  "rules": "evdev",
+  "model": "pc105",
+  "layout": [
+    "us"
+  ],
+  "variant": null,
+  "options": null
+}

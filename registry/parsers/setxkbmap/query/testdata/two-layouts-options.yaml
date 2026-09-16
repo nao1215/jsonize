@@ -1,0 +1,3 @@
+description: two layouts, a variant list with an empty entry and two options
+source: captured on Ubuntu 26.04 (setxkbmap 1.3.4 against Xwayland) with LC_ALL=C setxkbmap -layout us,jp -variant ,kana -option ctrl:nocaps,compose:ralt -query, which prints the settings without applying them
+os: linux
