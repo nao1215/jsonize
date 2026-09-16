@@ -1,0 +1,1 @@
+source: captured on Ubuntu 26.04 with LC_ALL=C.UTF-8 pinky (uutils coreutils 0.8.0) inside a user and mount namespace, over a utmp file and password entries written for the capture; the text is the command's own

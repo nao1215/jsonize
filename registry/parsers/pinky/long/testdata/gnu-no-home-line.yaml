@@ -1,0 +1,2 @@
+description: -b leaves out the directory and shell line
+source: captured on Ubuntu 26.04 with LC_ALL=C gnupinky -lb USER (GNU coreutils 9.7) in a mount namespace where the home directory held .project and .plan files written for the capture; user name replaced

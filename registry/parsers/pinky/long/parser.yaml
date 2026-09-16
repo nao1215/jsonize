@@ -1,0 +1,38 @@
+# `pinky -l USER...` prints a block per user: the login and the full
+# name, the home directory and the shell, then the first line of
+# ~/.project and the whole of ~/.plan when those files exist. -b leaves
+# out the directory line, -h the project line and -p the plan. A user
+# that is not in the password database gets the first line only, with
+# "???" as the name.
+#
+# The plan is free text, kept as one string with its lines joined by line
+# breaks. Its blank lines are not kept, and a plan line that starts with
+# "Login name: " would open a new block; such a block is then refused
+# rather than read.
+format: 1
+command: pinky
+variant: long
+aliases:
+  - name: gpinky
+description: pinky -l long format for named users
+metadata:
+  tags: [linux, darwin, user]
+  compatible: [GNU coreutils, uutils coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/pinky-invocation.html
+detect:
+  signature:
+    all:
+      - '\ALogin name: \S+ *In real life:'
+parse:
+  type: records
+  start: '^Login name: '
+  record:
+    parse:
+      type: regex
+      each: input
+      pattern: '\ALogin name: (?P<login>\S+) *In real life:[ \t]*(?P<name>.*?)[ \t]*(?:\nDirectory: (?P<directory>.*?) *Shell:[ \t]*(?P<shell>.*?)[ \t]*)?(?:\nProject: (?P<project>.*?)[ \t]*)?(?:\nPlan:[ \t]*(?:\n(?P<plan>(?s:.*?)))?)?\s*\z'
+    fields:
+      login: {required: true}
+      # "???" is printed for a user the password database does not know.
+      name: {null_if: ["", "???"]}

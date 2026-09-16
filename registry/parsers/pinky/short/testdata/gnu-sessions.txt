@@ -1,0 +1,6 @@
+Login    Name                 TTY      Idle   When         Where
+bob      bob                 ?sshd     ?????  Sep 17 05:54 fe80::1%eno1
+bob      bob                 ?seat0    ?????  Sep 15 21:49
+bob      bob                 ?sshd     ?????  Sep 17 06:09 fe80::1%eno1
+bob      bob                 ?sshd     ?????  Sep 16 17:29 fe80::1%eno1
+bob      bob                 ?sshd     ?????  Sep 16 17:29 fe80::1%eno1

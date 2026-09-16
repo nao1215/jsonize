@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pinky/long.json",
+  "title": "pinky/long",
+  "description": "pinky -l long format for named users",
+  "x-jsonize": {
+    "definition": "pinky/long",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "login": {
+        "type": "string"
+      },
+      "name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "directory": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "shell": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "project": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "plan": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "login",
+      "name",
+      "directory",
+      "shell",
+      "project",
+      "plan"
+    ]
+  }
+}

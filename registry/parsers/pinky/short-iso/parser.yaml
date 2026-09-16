@@ -1,0 +1,35 @@
+# The pinky short listing as it is printed in a locale other than C,
+# where the login time carries the year: "2026-09-17 05:54". The rest of
+# the row is the one pinky/short reads, and its comments say how the
+# fixed-width columns are matched.
+#
+# The time is the machine's local time and states no zone, so it stays
+# as printed.
+format: 1
+command: pinky
+variant: short-iso
+aliases:
+  - name: gpinky
+description: pinky short listing of logged-in users in a locale other than C, with the year in the login time
+metadata:
+  tags: [linux, darwin, user, login]
+  compatible: [GNU coreutils, uutils coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/pinky-invocation.html
+detect:
+  signature:
+    all:
+      # The header, then a row whose login time has a year.
+      - '\ALogin[ \t]+Name[ \t]+TTY[ \t]+Idle[ \t]+When[ \t]+Where[ \t]*\n[^\n]*[ \t][0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}(?:[ \t]|$)'
+input:
+  ignore: ['^Login[ \t]+Name[ \t]+TTY[ \t]+Idle[ \t]+When[ \t]+Where[ \t]*$']
+parse:
+  type: regex
+  pattern: '^(?P<login>\S{8,}|\S{7} |\S{6} {2}|\S{5} {3}|\S{4} {4}|\S{3} {5}|\S{2} {6}|\S {7}) (?P<name>.{19}) (?P<messages>[ *?])(?P<tty>\S*) +(?P<idle>\S+) +(?P<when>[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2})(?: +(?P<where>\S.*?))?[ \t]*$'
+fields:
+  login: {regex: '(?P<login>\S+) *', required: true}
+  name: {regex: '(?P<name>.*?) *', null_if: [""]}
+  messages: {type: bool, true_values: [""], false_values: ["*"], null_if: ["?"]}
+  tty: {null_if: [""]}
+  idle: {null_if: ["?????"]}
+  when: {required: true}

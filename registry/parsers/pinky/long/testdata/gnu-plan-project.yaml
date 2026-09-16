@@ -1,0 +1,2 @@
+description: a user with ~/.project and a two-line ~/.plan, then one without
+source: captured on Ubuntu 26.04 with LC_ALL=C gnupinky -l USER root (GNU coreutils 9.7) in a mount namespace where the home directory held .project and .plan files written for the capture; user name replaced

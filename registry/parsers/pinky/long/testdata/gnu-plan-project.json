@@ -1,0 +1,18 @@
+[
+  {
+    "login": "bob",
+    "name": "bob",
+    "directory": "/home/bob",
+    "shell": "/bin/bash",
+    "project": "Parser work for the registry",
+    "plan": "Read the pinky manual.\nCapture a fixture."
+  },
+  {
+    "login": "root",
+    "name": "root",
+    "directory": "/root",
+    "shell": "/bin/bash",
+    "project": null,
+    "plan": null
+  }
+]
