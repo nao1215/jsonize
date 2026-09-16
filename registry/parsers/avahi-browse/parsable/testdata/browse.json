@@ -1,0 +1,50 @@
+[
+  {
+    "event": "new",
+    "interface": "eno1",
+    "protocol": "IPv4",
+    "name": "BRAVIA-4K-VH22-0123456789abcdef0123456789abcdef",
+    "type": "_googlecast._tcp",
+    "domain": "local",
+    "host": null,
+    "address": null,
+    "port": null,
+    "txt": null
+  },
+  {
+    "event": "new",
+    "interface": "eno1",
+    "protocol": "IPv4",
+    "name": "SONY\\032XRJ-75X90L",
+    "type": "AirPlay Remote Video",
+    "domain": "local",
+    "host": null,
+    "address": null,
+    "port": null,
+    "txt": null
+  },
+  {
+    "event": "new",
+    "interface": "eno1",
+    "protocol": "IPv4",
+    "name": "SONY\\032XRJ-75X90L",
+    "type": "_androidtvremote2._tcp",
+    "domain": "local",
+    "host": null,
+    "address": null,
+    "port": null,
+    "txt": null
+  },
+  {
+    "event": "new",
+    "interface": "eno1",
+    "protocol": "IPv4",
+    "name": "0f1e2d3c4b5a6978",
+    "type": "_spotify-connect._tcp",
+    "domain": "local",
+    "host": null,
+    "address": null,
+    "port": null,
+    "txt": null
+  }
+]

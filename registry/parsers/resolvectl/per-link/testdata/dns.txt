@@ -1,0 +1,8 @@
+Global:
+Link 2 (eno1):
+Link 3 (wlp195s0): 192.0.2.1 2001:db8::1
+Link 4 (br-0123456789ab):
+Link 5 (br-123456789abc):
+Link 6 (br-23456789abcd):
+Link 7 (docker0):
+Link 8 (vethd074b4f):

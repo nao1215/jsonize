@@ -1,0 +1,49 @@
+# `gio mime TYPE` prints the applications registered for a MIME type: the
+# default one on the first line, then the registered applications and the
+# recommended ones, each under its heading and indented by a tab. A type
+# with no default says so on the first line, and a list with nothing in it
+# is a line saying so instead of a heading, which is left out: the list is
+# then empty.
+#
+# The quotes around the type are the typographic ones gio prints in every
+# locale.
+format: 1
+command: gio
+variant: mime
+description: gio mime TYPE, the default, registered and recommended applications
+metadata:
+  tags: [linux, desktop]
+  compatible: [glib]
+  references:
+    - https://docs.gtk.org/gio/
+detect:
+  os: [linux]
+  args:
+    all: [mime]
+  signature:
+    all:
+      - '\A(?:Default application for “[^”\n]+”: \S|No default applications for “[^”\n]+”$)'
+input:
+  ignore:
+    - '^No (?:registered|recommended) applications$'
+parse:
+  type: composite
+  parts:
+    - name: default
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        patterns:
+          - '^Default application for “(?P<type>[^”]+)”: (?P<application>\S.*)$'
+          - '^No default applications for “(?P<type>[^”]+)”(?P<application>)??$'
+    - name: registered
+      select: {after: '^Registered applications:$', until: '^Recommended applications:$'}
+      parse:
+        type: regex
+        pattern: '^\t(?P<application>\S.*)$'
+    - name: recommended
+      select: {after: '^Recommended applications:$'}
+      parse:
+        type: regex
+        pattern: '^\t(?P<application>\S.*)$'

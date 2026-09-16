@@ -1,0 +1,8 @@
+[UNCHANGED]  /etc/sysctl.d/README.sysctl
+[UNCHANGED]  /usr/lib/sysctl.d/10-apparmor.conf
+[UNCHANGED]  /usr/lib/sysctl.d/10-coredump-debian.conf
+[UNCHANGED]  /usr/lib/sysctl.d/30-localsearch.conf
+[UNCHANGED]  /usr/lib/sysctl.d/50-default.conf
+[UNCHANGED]  /usr/lib/sysctl.d/50-pid-max.conf
+[UNCHANGED]  /usr/lib/modprobe.d/systemd.conf
+0 overridden configuration files found.

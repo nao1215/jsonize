@@ -1,0 +1,3 @@
+source: git ls-remote of a local repository, kept as a decoy for git show-ref and git for-each-ref before this definition existed
+description: HEAD first, then two branches and two lightweight tags
+args: [ls-remote, .]

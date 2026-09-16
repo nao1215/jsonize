@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pwdx/default.json",
+  "title": "pwdx/default",
+  "description": "pwdx, the working directory of each process",
+  "x-jsonize": {
+    "definition": "pwdx/default",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "pid": {
+        "type": "integer"
+      },
+      "cwd": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "pid",
+      "cwd"
+    ]
+  }
+}

@@ -1,0 +1,3 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: the reflog of a branch rather than HEAD, cut with -n
+args: [reflog, -n, "4", main]

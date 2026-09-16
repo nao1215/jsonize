@@ -1,0 +1,21 @@
+{
+  "default": {
+    "type": "text/x-log",
+    "application": "libreoffice-writer.desktop"
+  },
+  "registered": [
+    {
+      "application": "libreoffice-writer.desktop"
+    },
+    {
+      "application": "org.gnome.TextEditor.desktop"
+    },
+    {
+      "application": "org.gnome.gedit.desktop"
+    },
+    {
+      "application": "vim.desktop"
+    }
+  ],
+  "recommended": []
+}

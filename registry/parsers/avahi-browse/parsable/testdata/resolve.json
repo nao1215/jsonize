@@ -1,0 +1,98 @@
+[
+  {
+    "event": "new",
+    "interface": "eno1",
+    "protocol": "IPv4",
+    "name": "BRAVIA-4K-VH22-0123456789abcdef0123456789abcdef",
+    "type": "_googlecast._tcp",
+    "domain": "local",
+    "host": null,
+    "address": null,
+    "port": null,
+    "txt": null
+  },
+  {
+    "event": "new",
+    "interface": "eno1",
+    "protocol": "IPv4",
+    "name": "SONY\\032XRJ-75X90L",
+    "type": "AirPlay Remote Video",
+    "domain": "local",
+    "host": null,
+    "address": null,
+    "port": null,
+    "txt": null
+  },
+  {
+    "event": "new",
+    "interface": "eno1",
+    "protocol": "IPv4",
+    "name": "SONY\\032XRJ-75X90L",
+    "type": "_androidtvremote2._tcp",
+    "domain": "local",
+    "host": null,
+    "address": null,
+    "port": null,
+    "txt": null
+  },
+  {
+    "event": "new",
+    "interface": "eno1",
+    "protocol": "IPv4",
+    "name": "0f1e2d3c4b5a6978",
+    "type": "_spotify-connect._tcp",
+    "domain": "local",
+    "host": null,
+    "address": null,
+    "port": null,
+    "txt": null
+  },
+  {
+    "event": "resolved",
+    "interface": "eno1",
+    "protocol": "IPv6",
+    "name": "BRAVIA-4K-VH22-0123456789abcdef0123456789abcdef",
+    "type": "_googlecast._tcp",
+    "domain": "local",
+    "host": "01234567-89ab-4cde-8f01-23456789abcd.local",
+    "address": "fe80::db8:1",
+    "port": 8009,
+    "txt": "\"rs=YouTube\" \"rr=000000\" \"ct=000000\" \"nf=1\" \"bs=000000\" \"st=1\" \"ca=000000\" \"fn=SONY XRJ-75X90L\" \"ic=/setup/icon.png\" \"md=BRAVIA 4K VH22\" \"ve=05\" \"rm=000000\" \"cd=000000\" \"id=0123456789abcdef0123456789abcdef\""
+  },
+  {
+    "event": "resolved",
+    "interface": "eno1",
+    "protocol": "IPv4",
+    "name": "BRAVIA-4K-VH22-0123456789abcdef0123456789abcdef",
+    "type": "_googlecast._tcp",
+    "domain": "local",
+    "host": "01234567-89ab-4cde-8f01-23456789abcd.local",
+    "address": "192.0.2.14",
+    "port": 8009,
+    "txt": "\"rs=YouTube\" \"rr=000000\" \"ct=000000\" \"nf=1\" \"bs=000000\" \"st=1\" \"ca=000000\" \"fn=SONY XRJ-75X90L\" \"ic=/setup/icon.png\" \"md=BRAVIA 4K VH22\" \"ve=05\" \"rm=000000\" \"cd=000000\" \"id=0123456789abcdef0123456789abcdef\""
+  },
+  {
+    "event": "resolved",
+    "interface": "eno1",
+    "protocol": "IPv4",
+    "name": "0f1e2d3c4b5a6978",
+    "type": "_spotify-connect._tcp",
+    "domain": "local",
+    "host": "0f1e2d3c4b5a6978.local",
+    "address": "192.0.2.14",
+    "port": 52727,
+    "txt": "\"Stack=SP\" \"VERSION=1.0\" \"CPath=/zc\""
+  },
+  {
+    "event": "resolved",
+    "interface": "eno1",
+    "protocol": "IPv4",
+    "name": "SONY\\032XRJ-75X90L",
+    "type": "_androidtvremote2._tcp",
+    "domain": "local",
+    "host": "Android.local",
+    "address": "192.0.2.14",
+    "port": 6466,
+    "txt": "\"bt=02:00:5E:00:53:01\""
+  }
+]

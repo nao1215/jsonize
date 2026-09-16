@@ -1,0 +1,27 @@
+# `pwdx PID...` prints the working directory of each process, one
+# "pid: path" line each. A process it cannot inspect is reported on
+# standard error instead, so every line of the output has a path. A path
+# is everything after the separator, spaces included.
+#
+# A number, a colon and a path is also what a numbered list of files looks
+# like, so the definition is used only when it is named.
+format: 1
+command: pwdx
+variant: default
+description: pwdx, the working directory of each process
+metadata:
+  tags: [linux, process]
+  compatible: [procps]
+  references:
+    - https://man7.org/linux/man-pages/man1/pwdx.1.html
+detect:
+  os: [linux]
+  auto_detect: false
+  signature:
+    all:
+      - '\A(?:[0-9]+: /[^\n]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<pid>[0-9]+): (?P<cwd>/.*)$'
+fields:
+  pid: {type: int, required: true}

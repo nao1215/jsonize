@@ -1,0 +1,3 @@
+source: gio mime, captured on Ubuntu 26.04 (GLib 2.88) with LC_ALL=C
+os: linux
+args: [mime, text/plain]

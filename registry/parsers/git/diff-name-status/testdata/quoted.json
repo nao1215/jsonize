@@ -1,0 +1,26 @@
+[
+  {
+    "status": "M",
+    "score": null,
+    "path": "added.txt",
+    "new_path": null
+  },
+  {
+    "status": "A",
+    "score": null,
+    "path": "caf\\303\\251 menu.txt",
+    "new_path": null
+  },
+  {
+    "status": "A",
+    "score": null,
+    "path": "café menu.txt",
+    "new_path": null
+  },
+  {
+    "status": "A",
+    "score": null,
+    "path": "tab\there.txt",
+    "new_path": null
+  }
+]

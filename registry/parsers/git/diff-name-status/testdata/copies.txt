@@ -1,0 +1,6 @@
+A	added.txt
+C083	keep.txt	copy.txt
+D	gone.txt
+M	keep.txt
+R100	old.txt	new name.txt
+M	run.sh

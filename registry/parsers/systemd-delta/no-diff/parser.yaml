@@ -1,0 +1,36 @@
+# `systemd-delta --diff=false` lists the unit and configuration files that
+# a file elsewhere overrides, masks, redirects or extends, one line each:
+# the kind in brackets, padded to one width, the file, and for every kind
+# but UNCHANGED an arrow and the file it applies to. The count it closes
+# with is a summary of those lines and is left out.
+#
+# Without --diff=false systemd-delta prints a diff under each overridden
+# file, whose lines are the files' own text; that form is not read.
+format: 1
+command: systemd-delta
+variant: no-diff
+description: systemd-delta --diff=false, the overridden, masked and extended configuration files
+metadata:
+  tags: [linux, systemd, service]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/systemd-delta.html
+detect:
+  os: [linux]
+  args:
+    any: ["--diff=false", "--diff=no", "--diff=0"]
+  signature:
+    all:
+      - '\A\[(?:MASKED|EQUIVALENT|REDIRECTED|OVERRIDDEN|EXTENDED|UNCHANGED)\] +/'
+    none:
+      # A diff line: the file shown whole under an overridden one.
+      - '(?m)^(?:---|\+\+\+|@@) '
+input:
+  ignore:
+    - '^[0-9]+ overridden configuration files? found\.$'
+parse:
+  type: regex
+  pattern: '^\[(?P<kind>MASKED|EQUIVALENT|REDIRECTED|OVERRIDDEN|EXTENDED|UNCHANGED)\] +(?P<path>/\S*)(?: -> (?P<target>/\S*))??$'
+fields:
+  kind: {required: true}
+  path: {required: true}

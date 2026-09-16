@@ -1,0 +1,41 @@
+# `systemd-analyze calendar SPEC...` prints, for each calendar expression
+# it is given, the expression as written, its normalized form, when it
+# next elapses, that time in UTC when the local zone is another, and how
+# far it is from now, one "Label: value" line each and a blank line
+# between expressions. An expression that never elapses again has "never"
+# as its next elapse and no "From now" line.
+#
+# --iterations adds an "Iteration #N" line and a second "From now" for
+# each further elapse, and a label printed twice has no place in one
+# object, so that form is not read.
+format: 1
+command: systemd-analyze
+variant: calendar
+description: systemd-analyze calendar, how systemd reads each calendar expression and when it next elapses
+metadata:
+  tags: [linux, systemd, time]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html
+detect:
+  os: [linux]
+  args:
+    all: [calendar]
+    none: ["--iterations"]
+  signature:
+    all:
+      - '\A +Original form: [^\n]*\nNormalized form: [^\n]*\n +Next elapse: '
+    none:
+      - '(?m)^ +Iteration #[0-9]+: '
+      - '(?m)^ +UNIX seconds: '
+parse:
+  type: records
+  start: '^ *Original form: '
+  record:
+    parse:
+      type: kv
+      separator: ": "
+      as: map
+    fields:
+      Original form: {required: true}
+      Normalized form: {required: true}

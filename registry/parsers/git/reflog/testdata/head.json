@@ -1,0 +1,44 @@
+[
+  {
+    "commit": "dcba6e0",
+    "ref": "HEAD",
+    "index": 0,
+    "action": "reset",
+    "message": "moving to HEAD"
+  },
+  {
+    "commit": "dcba6e0",
+    "ref": "HEAD",
+    "index": 1,
+    "action": "checkout",
+    "message": "moving from topic to main"
+  },
+  {
+    "commit": "48b81b7",
+    "ref": "HEAD",
+    "index": 2,
+    "action": "commit",
+    "message": "topic change"
+  },
+  {
+    "commit": "dcba6e0",
+    "ref": "HEAD",
+    "index": 3,
+    "action": "checkout",
+    "message": "moving from main to topic"
+  },
+  {
+    "commit": "dcba6e0",
+    "ref": "HEAD",
+    "index": 4,
+    "action": "commit",
+    "message": "rename, delete, change, add"
+  },
+  {
+    "commit": "239c781",
+    "ref": "HEAD",
+    "index": 5,
+    "action": "commit (initial)",
+    "message": "first commit"
+  }
+]

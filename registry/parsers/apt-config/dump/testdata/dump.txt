@@ -1,0 +1,17 @@
+APT "";
+APT::Architecture "amd64";
+APT::Build-Essential "";
+APT::Build-Essential:: "build-essential";
+APT::Install-Recommends "1";
+APT::Install-Suggests "0";
+APT::Key "";
+APT::Key::Assert-Pubkey-Algo ">=rsa2048,ed25519,ed448,nistp256,nistp384,nistp512,brainpoolP256r1,brainpoolP320r1,brainpoolP384r1,brainpoolP512r1,secp256k1";
+APT::Key::Assert-Pubkey-Algo::Next ">=rsa2048,ed25519,ed448,nistp256,nistp384,nistp512";
+APT::Key::Assert-Pubkey-Algo::Future ">=rsa3072,ed25519,ed448";
+APT::Sandbox "";
+APT::Sandbox::User "_apt";
+Unattended-Upgrade::Allowed-Origins:: "${distro_id}:${distro_codename}";
+Unattended-Upgrade::Allowed-Origins:: "${distro_id}:${distro_codename}-security";
+Unattended-Upgrade::Allowed-Origins:: "${distro_id}ESMApps:${distro_codename}-apps-security";
+DPkg::Pre-Install-Pkgs "";
+DPkg::Pre-Install-Pkgs:: "/usr/sbin/dpkg-preconfigure --apt || true";

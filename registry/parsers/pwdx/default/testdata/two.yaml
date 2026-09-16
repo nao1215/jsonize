@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C for a shell and a sleep started in a directory whose name holds a space; the scratch directory path above it replaced with /tmp/work
+os: linux
+args: ["2232698", "2232702"]

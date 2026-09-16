@@ -1,0 +1,26 @@
+# `git ls-remote` prints one line per ref the remote advertises: the
+# object name, a tab and the ref name. An annotated tag is followed by a
+# second line whose name ends in "^{}" and whose object is the commit the
+# tag points at. A ref name holds no tab, and the tab is what tells this
+# from `git show-ref`, which puts a space there.
+format: 1
+command: git
+variant: ls-remote
+description: git ls-remote, the refs a remote advertises
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-ls-remote
+detect:
+  args:
+    any: [ls-remote]
+  signature:
+    all:
+      - '\A(?:[0-9a-f]{40,64}\t[^\s]+(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<object>[0-9a-f]{40,64})\t(?P<refname>\S+)$'
+fields:
+  object: {required: true}
+  refname: {required: true}

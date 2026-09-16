@@ -1,0 +1,3 @@
+source: resolvectl dns, captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C and cut to the first seven links; the bridge names replaced, and the one server of wlp195s0 replaced with a documentation address and a second one added to show a list
+os: linux
+args: [dns]

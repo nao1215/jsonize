@@ -1,0 +1,25 @@
+[
+  {
+    "index": null,
+    "link": null,
+    "values": null
+  },
+  {
+    "index": 2,
+    "link": "eno1",
+    "values": null
+  },
+  {
+    "index": 3,
+    "link": "wlp195s0",
+    "values": [
+      "home.example.net",
+      "~example.org"
+    ]
+  },
+  {
+    "index": 4,
+    "link": "br-0123456789ab",
+    "values": null
+  }
+]

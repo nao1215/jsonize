@@ -1,0 +1,37 @@
+# `git diff --name-status` prints one line per changed path: the status
+# letter, a tab and the path. A rename or a copy (R, C) carries a
+# similarity score after the letter and two paths, the old one and the
+# new one, each after a tab. A path git has to quote (a tab, a newline, a
+# byte outside ASCII while core.quotePath is on) is printed in double
+# quotes with C escapes and octal bytes, which are undone the way
+# git/status-porcelain undoes them, so a path is the name on disk.
+#
+# The score is a percentage and is typed; a line without one has none.
+format: 1
+command: git
+variant: diff-name-status
+description: git diff --name-status, the changed paths and how each changed
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---name-status
+detect:
+  args:
+    all: ["--name-status"]
+    any: [diff, diff-index, diff-files]
+  signature:
+    all:
+      # Every line: a status letter, a score only where the letter is R
+      # or C, and one path, or two for R and C, each after a tab.
+      - '\A(?:(?:[ADMTUXB]\t[^\t\n]+|[RC][0-9]{3}\t[^\t\n]+\t[^\t\n]+)(?:\n|\z))+\z'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<status>[RC])(?P<score>[0-9]{3})\t(?P<path>[^\t]+)\t(?P<new_path>[^\t]+)$'
+    - '^(?P<status>[ADMTUXB])(?P<score>)??\t(?P<path>[^\t]+)(?P<new_path>)??$'
+fields:
+  status: {required: true}
+  score: {type: int}
+  path: {required: true, unescape: {quote: '"', octal: true, sequences: {'\\': '\', '\"': '"', '\a': "\a", '\b': "\b", '\t': "\t", '\n': "\n", '\v': "\v", '\f': "\f", '\r': "\r"}}}
+  new_path: {unescape: {quote: '"', octal: true, sequences: {'\\': '\', '\"': '"', '\a': "\a", '\b': "\b", '\t': "\t", '\n': "\n", '\v': "\v", '\f': "\f", '\r': "\r"}}}

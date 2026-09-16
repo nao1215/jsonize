@@ -1,0 +1,70 @@
+[
+  {
+    "name": "APT",
+    "value": ""
+  },
+  {
+    "name": "APT::Architecture",
+    "value": "amd64"
+  },
+  {
+    "name": "APT::Build-Essential",
+    "value": ""
+  },
+  {
+    "name": "APT::Build-Essential::",
+    "value": "build-essential"
+  },
+  {
+    "name": "APT::Install-Recommends",
+    "value": "1"
+  },
+  {
+    "name": "APT::Install-Suggests",
+    "value": "0"
+  },
+  {
+    "name": "APT::Key",
+    "value": ""
+  },
+  {
+    "name": "APT::Key::Assert-Pubkey-Algo",
+    "value": ">=rsa2048,ed25519,ed448,nistp256,nistp384,nistp512,brainpoolP256r1,brainpoolP320r1,brainpoolP384r1,brainpoolP512r1,secp256k1"
+  },
+  {
+    "name": "APT::Key::Assert-Pubkey-Algo::Next",
+    "value": ">=rsa2048,ed25519,ed448,nistp256,nistp384,nistp512"
+  },
+  {
+    "name": "APT::Key::Assert-Pubkey-Algo::Future",
+    "value": ">=rsa3072,ed25519,ed448"
+  },
+  {
+    "name": "APT::Sandbox",
+    "value": ""
+  },
+  {
+    "name": "APT::Sandbox::User",
+    "value": "_apt"
+  },
+  {
+    "name": "Unattended-Upgrade::Allowed-Origins::",
+    "value": "${distro_id}:${distro_codename}"
+  },
+  {
+    "name": "Unattended-Upgrade::Allowed-Origins::",
+    "value": "${distro_id}:${distro_codename}-security"
+  },
+  {
+    "name": "Unattended-Upgrade::Allowed-Origins::",
+    "value": "${distro_id}ESMApps:${distro_codename}-apps-security"
+  },
+  {
+    "name": "DPkg::Pre-Install-Pkgs",
+    "value": ""
+  },
+  {
+    "name": "DPkg::Pre-Install-Pkgs::",
+    "value": "/usr/sbin/dpkg-preconfigure --apt || true"
+  }
+]

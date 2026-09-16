@@ -1,0 +1,31 @@
+# `git reflog` prints one line per entry: the abbreviated commit, the
+# selector (HEAD@{0}, main@{2}), the action and the message, separated by
+# ": ". The action is what moved the ref (commit, commit (amend),
+# checkout, reset, rebase (finish), merge BRANCH) and the message is the
+# rest of the line, which may itself hold ": ", so the action ends at the
+# first one.
+#
+# The selector is split into the ref and the index. With --date the index
+# is a date instead, which this definition does not read.
+format: 1
+command: git
+variant: reflog
+description: git reflog, the entries a ref moved through
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-reflog
+detect:
+  args:
+    any: [reflog]
+  signature:
+    all:
+      - '\A[0-9a-f]{7,64} [^\s@]+@\{[0-9]+\}: [^:\n]+: '
+parse:
+  type: regex
+  pattern: '^(?P<commit>[0-9a-f]{7,64}) (?P<ref>[^\s@]+)@\{(?P<index>[0-9]+)\}: (?P<action>[^:]+?): (?P<message>.*)$'
+fields:
+  commit: {required: true}
+  index: {type: int, required: true}
+  action: {required: true}

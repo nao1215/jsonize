@@ -1,0 +1,30 @@
+# `gsettings list-recursively [SCHEMA]` prints one line per key: the
+# schema, the key and the value, separated by single spaces. The value is
+# GVariant text ('orange', 24, uint32 1, @as []), which is kept as printed:
+# reading it as JSON would change what a quoted string or a typed number
+# says.
+format: 1
+command: gsettings
+variant: list-recursively
+description: gsettings list-recursively, the keys of a schema and their values
+metadata:
+  tags: [linux, desktop, gnome]
+  compatible: [glib]
+  references:
+    - https://docs.gtk.org/gio/gsettings-tool.html
+detect:
+  args:
+    any: [list-recursively]
+  signature:
+    all:
+      # A schema id is a dotted name, a key is lowercase words joined by
+      # dashes, and a value is GVariant text: a quoted string, a number, a
+      # boolean, a container, or a value with its type in front. A line
+      # of three words ("example.com has address") has none of those.
+      - '\A(?:[a-z][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_-]+)+ [a-z][a-z0-9-]* (?:''[^\n]*''|-?[0-9][^\n]*|true|false|nothing|[\[({<@][^\n]*|(?:byte|u?int(?:16|32|64)|double|handle|objectpath|signature) [^\n]+)(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<schema>\S+) (?P<key>\S+) (?P<value>.*)$'
+fields:
+  schema: {required: true}
+  key: {required: true}

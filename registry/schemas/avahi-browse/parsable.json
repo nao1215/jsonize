@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/avahi-browse/parsable.json",
+  "title": "avahi-browse/parsable",
+  "description": "avahi-browse -p, mDNS services seen and resolved, one per line",
+  "x-jsonize": {
+    "definition": "avahi-browse/parsable",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "event": {
+        "type": "string",
+        "enum": [
+          "new",
+          "removed",
+          "resolved"
+        ]
+      },
+      "interface": {
+        "type": "string"
+      },
+      "protocol": {
+        "type": "string",
+        "enum": [
+          "IPv4",
+          "IPv6"
+        ]
+      },
+      "name": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "domain": {
+        "type": "string"
+      },
+      "host": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "address": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "port": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "txt": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "event",
+      "interface",
+      "protocol",
+      "name",
+      "type",
+      "domain",
+      "host",
+      "address",
+      "port",
+      "txt"
+    ]
+  }
+}

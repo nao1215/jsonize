@@ -1,0 +1,8 @@
++;eno1;IPv4;BRAVIA-4K-VH22-0123456789abcdef0123456789abcdef;_googlecast._tcp;local
++;eno1;IPv4;SONY\032XRJ-75X90L;AirPlay Remote Video;local
++;eno1;IPv4;SONY\032XRJ-75X90L;_androidtvremote2._tcp;local
++;eno1;IPv4;0f1e2d3c4b5a6978;_spotify-connect._tcp;local
+=;eno1;IPv6;BRAVIA-4K-VH22-0123456789abcdef0123456789abcdef;_googlecast._tcp;local;01234567-89ab-4cde-8f01-23456789abcd.local;fe80::db8:1;8009;"rs=YouTube" "rr=000000" "ct=000000" "nf=1" "bs=000000" "st=1" "ca=000000" "fn=SONY XRJ-75X90L" "ic=/setup/icon.png" "md=BRAVIA 4K VH22" "ve=05" "rm=000000" "cd=000000" "id=0123456789abcdef0123456789abcdef"
+=;eno1;IPv4;BRAVIA-4K-VH22-0123456789abcdef0123456789abcdef;_googlecast._tcp;local;01234567-89ab-4cde-8f01-23456789abcd.local;192.0.2.14;8009;"rs=YouTube" "rr=000000" "ct=000000" "nf=1" "bs=000000" "st=1" "ca=000000" "fn=SONY XRJ-75X90L" "ic=/setup/icon.png" "md=BRAVIA 4K VH22" "ve=05" "rm=000000" "cd=000000" "id=0123456789abcdef0123456789abcdef"
+=;eno1;IPv4;0f1e2d3c4b5a6978;_spotify-connect._tcp;local;0f1e2d3c4b5a6978.local;192.0.2.14;52727;"Stack=SP" "VERSION=1.0" "CPath=/zc"
+=;eno1;IPv4;SONY\032XRJ-75X90L;_androidtvremote2._tcp;local;Android.local;192.0.2.14;6466;"bt=02:00:5E:00:53:01"

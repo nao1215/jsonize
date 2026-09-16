@@ -1,0 +1,2 @@
+source: avahi-browse -a -t -p, captured on Ubuntu 26.04 (avahi 0.8) with LC_ALL=C on one interface of a home network, the device identifiers replaced with hex of the same width
+args: ["-a", "-t", "-p"]

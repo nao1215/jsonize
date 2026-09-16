@@ -1,0 +1,25 @@
+# `git cherry UPSTREAM HEAD` prints one line per commit of HEAD that is
+# not in UPSTREAM: "-" when UPSTREAM already has a commit with the same
+# change, "+" when it does not, then the commit, and with -v its subject.
+# The sign is read as `in_upstream`, and the subject is null without -v.
+format: 1
+command: git
+variant: cherry
+description: git cherry, the commits of a branch and whether upstream has their change
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-cherry
+detect:
+  args:
+    any: [cherry]
+  signature:
+    all:
+      - '\A(?:[+-] [0-9a-f]{40,64}(?: [^\n]*)?(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<in_upstream>[+-]) (?P<commit>[0-9a-f]{40,64})(?: (?P<subject>.*))??$'
+fields:
+  in_upstream: {type: bool, true_values: ["-"], false_values: ["+"]}
+  commit: {required: true}

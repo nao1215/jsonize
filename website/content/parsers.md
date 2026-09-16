@@ -36,8 +36,10 @@ the same reading with settings of your own.
 | `aplay` | [`devices`](../schemas/aplay/devices.json) |
 | `apt` | [`list`](../schemas/apt/list.json), [`show`](../schemas/apt/show.json) |
 | `apt-cache` | [`depends`](../schemas/apt-cache/depends.json), [`madison`](../schemas/apt-cache/madison.json), [`policy`](../schemas/apt-cache/policy.json), [`search`](../schemas/apt-cache/search.json), [`stats`](../schemas/apt-cache/stats.json) |
+| `apt-config` | [`dump`](../schemas/apt-config/dump.json) |
 | `ar` | [`table-verbose`](../schemas/ar/table-verbose.json) |
 | `arp` | [`alternate`](../schemas/arp/alternate.json), [`freebsd`](../schemas/arp/freebsd.json), [`windows`](../schemas/arp/windows.json) |
+| `avahi-browse` | [`parsable`](../schemas/avahi-browse/parsable.json) |
 | `bat` | [`list-languages`](../schemas/bat/list-languages.json) |
 | `blkid` | [`export`](../schemas/blkid/export.json), [`linux`](../schemas/blkid/linux.json) |
 | `bluetoothctl` | [`show`](../schemas/bluetoothctl/show.json) |
@@ -71,6 +73,7 @@ the same reading with settings of your own.
 | `eza` | [`full-iso`](../schemas/eza/full-iso.json), [`long`](../schemas/eza/long.json), [`long-group`](../schemas/eza/long-group.json), [`long-iso`](../schemas/eza/long-iso.json), [`long-links`](../schemas/eza/long-links.json) |
 | `factor` | [`default`](../schemas/factor/default.json) |
 | `fc-list` | [`posix`](../schemas/fc-list/posix.json) |
+| `fc-match` | [`default`](../schemas/fc-match/default.json) |
 | `fdesetup` | [`status`](../schemas/fdesetup/status.json) |
 | `fdisk` | [`linux`](../schemas/fdisk/linux.json) |
 | `file` | [`mime`](../schemas/file/mime.json), [`posix`](../schemas/file/posix.json) |
@@ -81,10 +84,13 @@ the same reading with settings of your own.
 | `getfacl` | [`posix`](../schemas/getfacl/posix.json) |
 | `getmac` | [`verbose`](../schemas/getmac/verbose.json) |
 | `gh` | [`auth-status`](../schemas/gh/auth-status.json), [`issue-list`](../schemas/gh/issue-list.json), [`pr-list`](../schemas/gh/pr-list.json), [`release-list`](../schemas/gh/release-list.json), [`repo-list`](../schemas/gh/repo-list.json), [`run-list`](../schemas/gh/run-list.json), [`workflow-list`](../schemas/gh/workflow-list.json) |
-| `git` | [`branch-verbose`](../schemas/git/branch-verbose.json), [`config-list`](../schemas/git/config-list.json), [`count-objects`](../schemas/git/count-objects.json), [`diff-numstat`](../schemas/git/diff-numstat.json), [`diff-stat`](../schemas/git/diff-stat.json), [`for-each-ref`](../schemas/git/for-each-ref.json), [`log`](../schemas/git/log.json), [`log-oneline`](../schemas/git/log-oneline.json), [`ls-files-stage`](../schemas/git/ls-files-stage.json), [`ls-tree`](../schemas/git/ls-tree.json), [`remote-verbose`](../schemas/git/remote-verbose.json), [`shortlog-summary`](../schemas/git/shortlog-summary.json), [`show-ref`](../schemas/git/show-ref.json), [`stash-list`](../schemas/git/stash-list.json), [`status-porcelain`](../schemas/git/status-porcelain.json), [`worktree-list`](../schemas/git/worktree-list.json) |
+| `gio` | [`mime`](../schemas/gio/mime.json) |
+| `git` | [`branch-verbose`](../schemas/git/branch-verbose.json), [`cherry`](../schemas/git/cherry.json), [`config-list`](../schemas/git/config-list.json), [`count-objects`](../schemas/git/count-objects.json), [`diff-name-status`](../schemas/git/diff-name-status.json), [`diff-numstat`](../schemas/git/diff-numstat.json), [`diff-stat`](../schemas/git/diff-stat.json), [`for-each-ref`](../schemas/git/for-each-ref.json), [`log`](../schemas/git/log.json), [`log-oneline`](../schemas/git/log-oneline.json), [`ls-files-stage`](../schemas/git/ls-files-stage.json), [`ls-remote`](../schemas/git/ls-remote.json), [`ls-tree`](../schemas/git/ls-tree.json), [`reflog`](../schemas/git/reflog.json), [`remote-verbose`](../schemas/git/remote-verbose.json), [`shortlog-summary`](../schemas/git/shortlog-summary.json), [`show-ref`](../schemas/git/show-ref.json), [`stash-list`](../schemas/git/stash-list.json), [`status-porcelain`](../schemas/git/status-porcelain.json), [`worktree-list`](../schemas/git/worktree-list.json) |
 | `go` | [`bench`](../schemas/go/bench.json), [`dist-list`](../schemas/go/dist-list.json), [`env`](../schemas/go/env.json), [`list-modules`](../schemas/go/list-modules.json), [`mod-graph`](../schemas/go/mod-graph.json), [`test`](../schemas/go/test.json), [`version-modules`](../schemas/go/version-modules.json), [`vet`](../schemas/go/vet.json) |
 | `golangci-lint` | [`text`](../schemas/golangci-lint/text.json) |
 | `gpg` | [`colons`](../schemas/gpg/colons.json), [`version`](../schemas/gpg/version.json) |
+| `gpgconf` | [`list-components`](../schemas/gpgconf/list-components.json), [`list-dirs`](../schemas/gpgconf/list-dirs.json) |
+| `gsettings` | [`list-recursively`](../schemas/gsettings/list-recursively.json) |
 | `gzip` | [`list`](../schemas/gzip/list.json), [`list-verbose`](../schemas/gzip/list-verbose.json) |
 | `hciconfig` | [`linux`](../schemas/hciconfig/linux.json) |
 | `hexdump` | [`canonical`](../schemas/hexdump/canonical.json) |
@@ -174,10 +180,11 @@ the same reading with settings of your own.
 | `proc` | [`buddyinfo`](../schemas/proc/buddyinfo.json), [`consoles`](../schemas/proc/consoles.json), [`cpuinfo-x86`](../schemas/proc/cpuinfo-x86.json), [`crypto`](../schemas/proc/crypto.json), [`devices`](../schemas/proc/devices.json), [`diskstats`](../schemas/proc/diskstats.json), [`filesystems`](../schemas/proc/filesystems.json), [`interrupts`](../schemas/proc/interrupts.json), [`loadavg`](../schemas/proc/loadavg.json), [`meminfo`](../schemas/proc/meminfo.json), [`modules`](../schemas/proc/modules.json), [`mountinfo`](../schemas/proc/mountinfo.json), [`net-arp`](../schemas/proc/net-arp.json), [`net-dev`](../schemas/proc/net-dev.json), [`net-route`](../schemas/proc/net-route.json), [`net-unix`](../schemas/proc/net-unix.json), [`partitions`](../schemas/proc/partitions.json), [`schedstat`](../schemas/proc/schedstat.json), [`self-limits`](../schemas/proc/self-limits.json), [`self-status`](../schemas/proc/self-status.json), [`softirqs`](../schemas/proc/softirqs.json), [`stat`](../schemas/proc/stat.json), [`uptime`](../schemas/proc/uptime.json), [`vmstat`](../schemas/proc/vmstat.json) |
 | `procs` | [`default`](../schemas/procs/default.json) |
 | `ps` | [`bsd`](../schemas/ps/bsd.json), [`bsd-short`](../schemas/ps/bsd-short.json), [`busybox`](../schemas/ps/busybox.json), [`freebsd`](../schemas/ps/freebsd.json), [`freebsd-long`](../schemas/ps/freebsd-long.json), [`full-format`](../schemas/ps/full-format.json), [`jobs`](../schemas/ps/jobs.json), [`long`](../schemas/ps/long.json), [`long-y`](../schemas/ps/long-y.json), [`posix`](../schemas/ps/posix.json), [`threads`](../schemas/ps/threads.json), [`unix`](../schemas/ps/unix.json) |
+| `pwdx` | [`default`](../schemas/pwdx/default.json) |
 | `rclone` | [`lsd`](../schemas/rclone/lsd.json), [`lsl`](../schemas/rclone/lsl.json), [`version`](../schemas/rclone/version.json) |
 | `readelf` | [`header`](../schemas/readelf/header.json) |
 | `redis-cli` | [`client-list`](../schemas/redis-cli/client-list.json), [`info`](../schemas/redis-cli/info.json) |
-| `resolvectl` | [`status`](../schemas/resolvectl/status.json) |
+| `resolvectl` | [`per-link`](../schemas/resolvectl/per-link.json), [`status`](../schemas/resolvectl/status.json) |
 | `rfkill` | [`linux`](../schemas/rfkill/linux.json), [`list`](../schemas/rfkill/list.json) |
 | `route` | [`linux`](../schemas/route/linux.json), [`windows`](../schemas/route/windows.json) |
 | `rsync` | [`itemize`](../schemas/rsync/itemize.json) |
@@ -215,9 +222,10 @@ the same reading with settings of your own.
 | `syslog` | [`rfc3164`](../schemas/syslog/rfc3164.json), [`rfc5424`](../schemas/syslog/rfc5424.json) |
 | `system_profiler` | [`data-type`](../schemas/system_profiler/data-type.json) |
 | `systemctl` | [`automounts`](../schemas/systemctl/automounts.json), [`dependencies`](../schemas/systemctl/dependencies.json), [`jobs`](../schemas/systemctl/jobs.json), [`machines`](../schemas/systemctl/machines.json), [`paths`](../schemas/systemctl/paths.json), [`show`](../schemas/systemctl/show.json), [`show-properties`](../schemas/systemctl/show-properties.json), [`sockets`](../schemas/systemctl/sockets.json), [`status`](../schemas/systemctl/status.json), [`timers`](../schemas/systemctl/timers.json), [`unit-files`](../schemas/systemctl/unit-files.json), [`units`](../schemas/systemctl/units.json), [`units-jobs`](../schemas/systemctl/units-jobs.json), [`units-jobs-plain`](../schemas/systemctl/units-jobs-plain.json) |
-| `systemd-analyze` | [`blame`](../schemas/systemd-analyze/blame.json), [`critical-chain`](../schemas/systemd-analyze/critical-chain.json), [`security`](../schemas/systemd-analyze/security.json), [`time`](../schemas/systemd-analyze/time.json) |
+| `systemd-analyze` | [`blame`](../schemas/systemd-analyze/blame.json), [`calendar`](../schemas/systemd-analyze/calendar.json), [`critical-chain`](../schemas/systemd-analyze/critical-chain.json), [`security`](../schemas/systemd-analyze/security.json), [`time`](../schemas/systemd-analyze/time.json), [`timespan`](../schemas/systemd-analyze/timespan.json), [`timestamp`](../schemas/systemd-analyze/timestamp.json) |
 | `systemd-cgls` | [`tree`](../schemas/systemd-cgls/tree.json) |
 | `systemd-cgtop` | [`batch`](../schemas/systemd-cgtop/batch.json) |
+| `systemd-delta` | [`no-diff`](../schemas/systemd-delta/no-diff.json) |
 | `systemd-id128` | [`show`](../schemas/systemd-id128/show.json) |
 | `systemd-inhibit` | [`list`](../schemas/systemd-inhibit/list.json) |
 | `systemd-path` | [`paths`](../schemas/systemd-path/paths.json) |

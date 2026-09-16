@@ -1,0 +1,3 @@
+source: resolvectl domain, captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C and cut to the first three links; the search domain replaced with an example one and a routing-only domain added
+os: linux
+args: [domain]

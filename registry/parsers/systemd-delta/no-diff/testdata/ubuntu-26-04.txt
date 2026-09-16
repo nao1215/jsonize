@@ -1,0 +1,20 @@
+[OVERRIDDEN] /etc/tmpfiles.d/screen-cleanup.conf -> /usr/lib/tmpfiles.d/screen-cleanup.conf
+[OVERRIDDEN] /etc/systemd/system/cloud-init-network.service -> /usr/lib/systemd/system/cloud-init-network.service
+[EQUIVALENT] /etc/systemd/system/sshd.service -> /usr/lib/systemd/system/sshd.service
+[OVERRIDDEN] /usr/lib/systemd/system/user@.service.d/10-login-barrier.conf -> /usr/lib/systemd/system/user@0.service.d/10-login-barrier.conf
+[EXTENDED]   /usr/lib/systemd/system/rc-local.service -> /usr/lib/systemd/system/rc-local.service.d/debian.conf
+[EXTENDED]   /usr/lib/systemd/system/systemd-fsck-root.service -> /usr/lib/systemd/system/systemd-fsck-root.service.d/10-skip-fsck-initramfs.conf
+[EXTENDED]   /usr/lib/systemd/system/systemd-journald.service -> /usr/lib/systemd/system/systemd-journald.service.d/nice.conf
+[EXTENDED]   /usr/lib/systemd/system/systemd-localed.service -> /usr/lib/systemd/system/systemd-localed.service.d/x11-keyboard.conf
+[EXTENDED]   /usr/lib/systemd/system/systemd-logind.service -> /usr/lib/systemd/system/systemd-logind.service.d/dbus.conf
+[EXTENDED]   /usr/lib/systemd/system/systemd-udevd.service -> /usr/lib/systemd/system/systemd-udevd.service.d/syscall-architecture.conf
+[EXTENDED]   /usr/lib/systemd/system/user@.service -> /usr/lib/systemd/system/user@.service.d/10-login-barrier.conf
+[EXTENDED]   /usr/lib/systemd/system/user@.service -> /usr/lib/systemd/system/user@.service.d/10-oomd-user-service-defaults.conf
+[EXTENDED]   /usr/lib/systemd/system/user@.service -> /usr/lib/systemd/system/user@.service.d/timeout.conf
+[EQUIVALENT] /etc/systemd/user/dbus-org.bluez.obex.service -> /usr/lib/systemd/user/dbus-org.bluez.obex.service
+[EXTENDED]   /etc/systemd/user/snap.prompting-client.daemon.service -> /usr/lib/systemd/user/snap.prompting-client.daemon.service.d/70-gdm-skip.conf
+[OVERRIDDEN] /usr/lib/systemd/user/app-flatpak-.scope.d/override.conf -> /usr/lib/systemd/user/app-gnome-.scope.d/override.conf
+[OVERRIDDEN] /usr/lib/systemd/user/snap.prompting-client.daemon.service.d/70-gdm-skip.conf -> /usr/lib/systemd/user/snapd.session-agent.socket.d/70-gdm-skip.conf
+[EXTENDED]   /usr/lib/systemd/user/snapd.session-agent.socket -> /usr/lib/systemd/user/snapd.session-agent.socket.d/70-gdm-skip.conf
+
+18 overridden configuration files found.

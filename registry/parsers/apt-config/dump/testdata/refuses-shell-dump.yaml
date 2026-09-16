@@ -1,0 +1,3 @@
+source: written for this case, the shell assignments apt-config shell prints, which have no space and no semicolon
+description: an assignment is not an option line
+expect_error: 'does not describe this input'

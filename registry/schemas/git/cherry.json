@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/cherry.json",
+  "title": "git/cherry",
+  "description": "git cherry, the commits of a branch and whether upstream has their change",
+  "x-jsonize": {
+    "definition": "git/cherry",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "in_upstream": {
+        "type": "boolean"
+      },
+      "commit": {
+        "type": "string"
+      },
+      "subject": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "in_upstream",
+      "commit",
+      "subject"
+    ]
+  }
+}

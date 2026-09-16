@@ -1414,3 +1414,269 @@ scenarios:
               - { path: "$[1].name", equals: alsa }
               - { path: "$[1].title", equals: alsa }
               - { path: "$[1].description", equals: "Advanced Linux Sound Architecture (ALSA) - Library" }
+
+  - name: apt-config dump keeps every element of a list in the order printed
+    steps:
+      - fixture:
+          file: aptconfig.txt
+          from: "${specdir}/../../registry/parsers/apt-config/dump/testdata/dump.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: aptconfig.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose apt-config/dump from embedded"
+          stdout:
+            json:
+              - { path: "$[1].name", equals: "APT::Architecture" }
+              - { path: "$[1].value", equals: amd64 }
+              - { path: "$[12].name", equals: "Unattended-Upgrade::Allowed-Origins::" }
+              - { path: "$[14].name", equals: "Unattended-Upgrade::Allowed-Origins::" }
+
+  - name: gpgconf lists its directories as one object and its components as records
+    steps:
+      - fixture:
+          file: dirs.txt
+          from: "${specdir}/../../registry/parsers/gpgconf/list-dirs/testdata/gnupg-2.4.txt"
+      - run:
+          command: jz
+          stdin: {file: dirs.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.homedir", equals: /home/alice/.gnupg }
+      - fixture:
+          file: components.txt
+          from: "${specdir}/../../registry/parsers/gpgconf/list-components/testdata/gnupg-2.4.txt"
+      - run:
+          command: jz
+          stdin: {file: components.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[2].description", equals: Public Keys }
+      # The directory list named as the component list is refused.
+      - run:
+          command: jz --parser gpgconf --variant list-components
+          stdin: {file: dirs.txt}
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: gsettings keeps a value as the GVariant text it printed
+    steps:
+      - fixture:
+          file: gsettings.txt
+          from: "${specdir}/../../registry/parsers/gsettings/list-recursively/testdata/interface.txt"
+      - run:
+          command: jz
+          stdin: {file: gsettings.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].value", equals: "'orange'" }
+              - { path: "$[1].value", equals: "@as []" }
+
+  - name: pwdx is read only when named, and a path keeps its spaces
+    steps:
+      - fixture:
+          file: pwdx.txt
+          from: "${specdir}/../../registry/parsers/pwdx/default/testdata/two.txt"
+      - run:
+          command: jz
+          stdin: {file: pwdx.txt}
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          command: jz --parser pwdx
+          stdin: {file: pwdx.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].pid", equals: 2232698 }
+              - { path: "$[1].cwd", equals: /tmp/work/a dir }
+
+  - name: systemd-delta without its diffs is one record per file
+    steps:
+      - fixture:
+          file: delta.txt
+          from: "${specdir}/../../registry/parsers/systemd-delta/no-diff/testdata/unchanged.txt"
+      - run:
+          command: jz
+          stdin: {file: delta.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 7 }
+              - { path: "$[0].kind", equals: UNCHANGED }
+              - { path: "$[0].target", equals: null }
+      - fixture:
+          file: delta-diff.txt
+          from: "${specdir}/../../registry/parsers/systemd-delta/no-diff/testdata/refuses-diff.txt"
+      - run:
+          command: jz --parser systemd-delta
+          stdin: {file: delta-diff.txt}
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: avahi-browse -p says whether a service appeared or was resolved
+    steps:
+      - fixture:
+          file: avahi.txt
+          from: "${specdir}/../../registry/parsers/avahi-browse/parsable/testdata/resolve.txt"
+      - run:
+          command: jz
+          stdin: {file: avahi.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].event", equals: new }
+              - { path: "$[0].port", equals: null }
+              - { path: "$[6].event", equals: resolved }
+              - { path: "$[6].port", equals: 52727 }
+              - { path: "$[6].txt", equals: '"Stack=SP" "VERSION=1.0" "CPath=/zc"' }
+
+  - name: fc-match lists the fonts it would try, best first
+    steps:
+      - fixture:
+          file: fonts.txt
+          from: "${specdir}/../../registry/parsers/fc-match/default/testdata/all-sans.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: fonts.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose fc-match/default from embedded"
+          stdout:
+            json:
+              - { path: "$[0].family", equals: Noto Sans }
+              - { path: "$[0].style", equals: Regular }
+
+  - name: git diff --name-status gives a rename both its paths and its score
+    steps:
+      - fixture:
+          file: names.txt
+          from: "${specdir}/../../registry/parsers/git/diff-name-status/testdata/copies.txt"
+      - run:
+          command: jz --parser git
+          stdin: {file: names.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].status", equals: C }
+              - { path: "$[1].score", equals: 83 }
+              - { path: "$[1].new_path", equals: copy.txt }
+              - { path: "$[4].new_path", equals: new name.txt }
+              - { path: "$[0].score", equals: null }
+
+  - name: git reflog splits the selector and ends the action at the first colon
+    steps:
+      - fixture:
+          file: reflog.txt
+          from: "${specdir}/../../registry/parsers/git/reflog/testdata/head.txt"
+      - run:
+          command: jz
+          stdin: {file: reflog.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].action", equals: checkout }
+              - { path: "$[1].message", equals: moving from topic to main }
+              - { path: "$[5].action", equals: commit (initial) }
+              - { path: "$[5].index", equals: 5 }
+
+  - name: git cherry reads its sign as whether upstream has the change
+    steps:
+      - fixture:
+          file: cherry.txt
+          from: "${specdir}/../../registry/parsers/git/cherry/testdata/verbose.txt"
+      - run:
+          command: jz
+          stdin: {file: cherry.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].in_upstream", equals: true }
+              - { path: "$[1].in_upstream", equals: false }
+              - { path: "$[1].subject", equals: add other }
+
+  - name: gio mime keeps a list it says is empty as an empty list
+    steps:
+      - fixture:
+          file: mime.txt
+          from: "${specdir}/../../registry/parsers/gio/mime/testdata/no-recommended.txt"
+      - run:
+          command: jz
+          stdin: {file: mime.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.default.type", equals: text/x-log }
+              - { path: "$.registered", length: 4 }
+              - { path: "$.recommended", length: 0 }
+
+  - name: systemd-analyze timespan, timestamp and calendar are one object per argument
+    steps:
+      - fixture:
+          file: timespan.txt
+          from: "${specdir}/../../registry/parsers/systemd-analyze/timespan/testdata/three.txt"
+      - run:
+          command: jz
+          stdin: {file: timespan.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].us", equals: 5400000000 }
+              - { path: "$[2].Human", equals: 100ms }
+      - fixture:
+          file: calendar.txt
+          from: "${specdir}/../../registry/parsers/systemd-analyze/calendar/testdata/utc.txt"
+      - run:
+          command: jz
+          stdin: {file: calendar.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1]['Normalized form']", equals: "Mon *-*-* 09:00:00" }
+              - { path: "$[2]['Next elapse']", equals: never }
+      - fixture:
+          file: iterations.txt
+          from: "${specdir}/../../registry/parsers/systemd-analyze/calendar/testdata/refuses-iterations.txt"
+      - run:
+          command: jz --parser systemd-analyze --variant calendar
+          stdin: {file: iterations.txt}
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: resolvectl dns and domain are a list of values per link
+    steps:
+      - fixture:
+          file: domain.txt
+          from: "${specdir}/../../registry/parsers/resolvectl/per-link/testdata/domain.txt"
+      - run:
+          command: jz
+          stdin: {file: domain.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].link", equals: null }
+              - { path: "$[2].link", equals: wlp195s0 }
+              - { path: "$[2].values[1]", equals: "~example.org" }

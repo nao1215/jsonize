@@ -1,0 +1,14 @@
+[
+  {
+    "Original form": "2026-01-02 03:04:05",
+    "Normalized form": "Fri 2026-01-02 03:04:05 UTC",
+    "UNIX seconds": "@1767323045",
+    "From now": "8 months 13 days ago"
+  },
+  {
+    "Original form": "@1767323045",
+    "Normalized form": "Fri 2026-01-02 03:04:05 UTC",
+    "UNIX seconds": "@1767323045",
+    "From now": "8 months 13 days ago"
+  }
+]

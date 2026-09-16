@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gpgconf/list-dirs.json",
+  "title": "gpgconf/list-dirs",
+  "description": "gpgconf --list-dirs, the directories and sockets GnuPG uses",
+  "x-jsonize": {
+    "definition": "gpgconf/list-dirs",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {},
+  "additionalProperties": {
+    "type": "string"
+  }
+}

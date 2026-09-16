@@ -1,0 +1,3 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: -v with one commit upstream already has as a cherry-pick and one it does not
+args: [cherry, -v, main, topic]

@@ -1,0 +1,3 @@
+source: systemd-delta without --diff=false, captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C and cut after the first diff
+description: the diff under an overridden file is the file's own text, which this variant does not read
+expect_error: 'does not describe this input'

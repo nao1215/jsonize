@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/ls-remote.json",
+  "title": "git/ls-remote",
+  "description": "git ls-remote, the refs a remote advertises",
+  "x-jsonize": {
+    "definition": "git/ls-remote",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "object": {
+        "type": "string"
+      },
+      "refname": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "object",
+      "refname"
+    ]
+  }
+}

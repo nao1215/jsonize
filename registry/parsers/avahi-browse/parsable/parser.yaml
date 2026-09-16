@@ -1,0 +1,38 @@
+# `avahi-browse -p` (--parsable) prints one line per event, its fields
+# separated by semicolons: "+" for a service that appeared, "-" for one
+# that went away, and with -r "=" for a service resolved to a host,
+# address and port. The event is the first field; a resolved line adds
+# the host name, the address, the port and the TXT record, which is kept
+# as the quoted strings avahi printed. A semicolon or a space inside a
+# name is written as a decimal escape (SONY\032XRJ), and the name is kept
+# as printed.
+format: 1
+command: avahi-browse
+variant: parsable
+description: avahi-browse -p, mDNS services seen and resolved, one per line
+metadata:
+  tags: [linux, network, mdns]
+  compatible: [avahi]
+  references:
+    - https://manpages.debian.org/avahi-browse
+detect:
+  args:
+    any: ["-p", "--parsable"]
+  signature:
+    all:
+      # The first line is an event, an interface and a protocol. Only the
+      # first line is looked at, so that a browse left running is read
+      # as each service appears; the parser holds every later line to
+      # the same fields.
+      - '\A[+=-];[^;\n]+;IPv[46];[^;\n]*;[^;\n]*;[^;\n]*(?:\n|\z|;[^;\n]*;[^;\n]*;[0-9]+;)'
+parse:
+  type: regex
+  patterns:
+    - pattern: '^=;(?P<interface>[^;]+);(?P<protocol>IPv[46]);(?P<name>[^;]*);(?P<type>[^;]*);(?P<domain>[^;]*);(?P<host>[^;]*);(?P<address>[^;]*);(?P<port>[0-9]+);(?P<txt>.*)$'
+      values: {event: resolved}
+    - pattern: '^\+;(?P<interface>[^;]+);(?P<protocol>IPv[46]);(?P<name>[^;]*);(?P<type>[^;]*);(?P<domain>[^;]*)(?P<host>)??(?P<address>)??(?P<port>)??(?P<txt>)??$'
+      values: {event: new}
+    - pattern: '^-;(?P<interface>[^;]+);(?P<protocol>IPv[46]);(?P<name>[^;]*);(?P<type>[^;]*);(?P<domain>[^;]*)(?P<host>)??(?P<address>)??(?P<port>)??(?P<txt>)??$'
+      values: {event: removed}
+fields:
+  port: {type: int}
