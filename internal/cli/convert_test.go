@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"bytes"
+	"compress/gzip"
 	"encoding/base64"
 	"encoding/json"
 	"os"
@@ -22,30 +24,17 @@ func (h *harness) writeFile(name string, data []byte) string {
 	return p
 }
 
-// gzipped holds the text the tests read compressed, already compressed.
-// Compressing at test time crashed the Windows runner more than once,
-// inside hash/crc32, and what a test checks is that jz reads a .gz file,
-// not that the standard library writes one.
-var gzipped = map[string]string{
-	"{\"x\":1}\n":                     "H4sIAAAAAAAC/6tWqlCyMqzlAgAV8DFQCAAAAA==",
-	"a,b\n1,2\n":                      "H4sIAAAAAAAC/0vUSeIy1DHiAgB7B5cKCAAAAA==",
-	strings.Repeat("{\"a\":1}\n", 50): "H4sIAAAAAAAC/6tWSlSyMqzlqh6lBwUNAFdCj26QAQAA",
-	gnuDF:                             "H4sIAAAAAAAC/3PLzEktriwuSc1VAAFDb92knPzk7GIQJ7Q4NUXBsSwxMycxKScVxFVV8M0vzSsBCufncZXkFqSB1cGAoQEYgJimUNrSEsoyVFXQLyrN49JPSS3TL05JNITqMTKAajKFaTaEs4xMgZq4AOfxnAmiAAAA",
-	"1\n2\n":                          "H4sIAAAAAAAC/zPkMuICAGF44WkEAAAA",
-	"x":                               "H4sIAAAAAAAC/6sAAIMW3IwBAAAA",
-}
-
 func gzipBytes(t *testing.T, s string) []byte {
 	t.Helper()
-	enc, ok := gzipped[s]
-	if !ok {
-		t.Fatalf("no compressed form of %q in gzipped", s)
-	}
-	b, err := base64.StdEncoding.DecodeString(enc)
-	if err != nil {
+	var b bytes.Buffer
+	zw := gzip.NewWriter(&b)
+	if _, err := zw.Write([]byte(s)); err != nil {
 		t.Fatal(err)
 	}
-	return b
+	if err := zw.Close(); err != nil {
+		t.Fatal(err)
+	}
+	return b.Bytes()
 }
 
 // a:1<TAB>b:2 and a newline, compressed with bzip2, which the standard
@@ -244,7 +233,7 @@ func TestDataFileParseFailures(t *testing.T) {
 		{"bad.yaml", []byte("a: .nan\n"), "jz: yaml: line 1: .nan is not a number JSON can hold", ExitParse},
 		{"ragged.csv", []byte("a,b\n1,2,3\n"), "line 2", ExitParse},
 		{"notgzip.json.gz", []byte("plain text"), "notgzip.json.gz: the gzip data cannot be decompressed", ExitParse},
-		{"cut.jsonl.gz", gzipBytes(t, strings.Repeat("{\"a\":1}\n", 50))[:20], "the gzip data cannot be decompressed", ExitParse},
+		{"cut.jsonl.gz", gzipBytes(t, strings.Repeat("{\"a\":1}\n", 50))[:40], "the gzip data cannot be decompressed", ExitParse},
 	} {
 		p := h.writeFile(tt.name, tt.data)
 		if code := h.run("--file", p); code != tt.code || !strings.Contains(h.stderr.String(), tt.want) {
