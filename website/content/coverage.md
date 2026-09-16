@@ -348,6 +348,27 @@ The keys are jz's own and are not meant to match jc's. The netmask is
 kept as ifconfig printed it: `255.255.255.0` from net-tools and
 `0xffffff00` from macOS and FreeBSD.
 
+`scripts/compare_jc.py rpm git ifconfig arp table ping wc` runs both over
+the fixtures of these commands. Both read all 63 that jz reads. Of the 17
+written to be refused, jz refused 16 (the one it read is the `wc -lwcL`
+case above) and jc read 16. The differences in what was read:
+
+- rpm 6 prints the signature on the line under `Signature   :`. jc
+  reports the signature as null there; jz keeps it.
+- openSUSE's rpm prints `Distribution:` after the description, and jc
+  reads that line as part of the description. So does the `package NAME
+  is not installed` line `rpm -qi` prints for an unknown name, and a
+  description line that repeats the `Name        : ` label becomes a
+  second package. jz reads the first as its own key and refuses the other
+  two.
+- On macOS and FreeBSD jc writes a netmask in dotted form, which is not
+  what ifconfig printed, and leaves out the far end of a point-to-point
+  address (`inet 10.0.0.1 --> 10.0.0.2`).
+- Under `git log --stat --summary`, jc lists the `mode change` line as a
+  changed file. jz refuses the output.
+- In an ASCII table whose value holds a bar (`a|b`), jc returns `a b`.
+  jz refuses the row.
+
 Other things the articles do are left out on purpose, because they are
 not reading what a command printed:
 
