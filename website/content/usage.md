@@ -279,8 +279,9 @@ empty: `--string =@here`.
 
 `KEY=@FILE` drops the one line ending a text file ends with.
 `--text-file KEY=PATH` keeps the text whole: every line ending, CRLF or
-LF, an empty file as `""`. `-` is standard input. Text that is not UTF-8
-is refused with exit 3, not replaced.
+LF, an empty file as `""`. `-` is standard input. A byte order mark in
+front is not part of the text with either, as with `--format text`. Text
+that is not UTF-8 is refused with exit 3, not replaced.
 
 ```console
 $ printf 'Fixed a crash.\r\n\r\n' | jz new --text-file notes=- version=@VERSION
@@ -335,8 +336,7 @@ $ vmstat 1 | jz --stream | jz new --each --string host=server-a sample:=@-
 - With `:=@-` a line is a JSON Lines record: blank lines are skipped. With
   `=@-` every line is a record, an empty one `""`, read as `--format
   lines` reads it: the line ending and a byte order mark before the first
-  line are not part of it. Without `--each`, `=@-` keeps a byte order mark
-  as it keeps the rest of the text.
+  line are not part of it.
 - The first line that is not JSON, or not UTF-8, ends the documents
   there: it is reported (`jz: new: sample:=@-: jsonl: line 3: ...`), the
   documents written before it stand, and the status is 3.
@@ -378,7 +378,10 @@ the keys it has are "1k_blocks", "available", "filesystem", "mounted_on", "use_p
 A key is checked against what the definition lists in `jz list --schema`,
 not against one input, so a key some records leave out, or any key of an
 empty listing, narrows to nothing. Only a key taken from the input (a
-column named by a header) is looked for in the result. When the input
+column named by a header) is looked for in the result. With `--stream`
+such a key is judged when the stream ends, after the records have been
+written, except in a csv or a tsv, whose first record has every column
+and settles it before anything is written. When the input
 has more than 64 such keys, the refusal names 64 of them and says the
 keys it has include those.
 

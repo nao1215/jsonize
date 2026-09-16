@@ -13,6 +13,13 @@ project follows [Semantic Versioning](https://semver.org/).
   `--columns` and `--type` as there. `jz run --type` already told the
   caller to give `--format csv`, which `jz run` did not take.
 
+### Changed
+
+- `jz new KEY=@FILE` and `--text-file KEY=PATH` leave out a byte order
+  mark at the start of the file, as `--format text` and `jz new --each
+  KEY=@-` already did. A document built from a file saved with one no
+  longer starts its value with U+FEFF.
+
 ### Fixed
 
 - `jz run` refuses, before it starts the command, `--stream` when no
@@ -28,6 +35,9 @@ project follows [Semantic Versioning](https://semver.org/).
   `--stream` as without them: `--define` wrote `[]`, and `--stream`
   added a message about the empty output. Blank output from a command
   that succeeds is answered the same way with `--stream` as without.
+- `--stream --extract KEY` on a csv or a tsv refuses a key no column has
+  before writing a record, as the whole document does; it wrote an empty
+  object per record and then refused the key.
 - `jz run` returns the command's status when it failed and its output
   lacks a key named to `--extract`, as it does for every other failure
   to read the output; without `--stream` it returned 2.

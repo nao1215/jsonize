@@ -148,6 +148,22 @@ func (f *keyFilter) streamEmit(write func(any) error, def *definition.Definition
 	if f == nil {
 		return write
 	}
+	if def.Parse.Type == definition.TypeCSV {
+		// Every record of a csv has the columns the first one has, so a
+		// key the first one lacks is lacking from all of them, and is
+		// refused before a record is written without it.
+		first := true
+		return func(v any) error {
+			out := f.narrowRecord(v)
+			if first {
+				first = false
+				if err := f.unseen(); err != nil {
+					return err
+				}
+			}
+			return write(out)
+		}
+	}
 	if def.Parse.Type != definition.TypeComposite {
 		return func(v any) error {
 			return write(f.narrowRecord(v))

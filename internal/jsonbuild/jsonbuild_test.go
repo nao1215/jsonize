@@ -282,13 +282,13 @@ func TestTextFileKeepsLineEndings(t *testing.T) {
 		text("two=two.txt"), arg("two_less=@two.txt"),
 		text("crlf=crlf.txt"), arg("crlf_less=@crlf.txt"),
 		text("/body/stdin=-"),
-		text("empty=empty.txt"), text("bare=bare.txt"), text("bom=bom.txt"),
+		text("empty=empty.txt"), text("bare=bare.txt"), text("bom=bom.txt"), arg("bom_less=@bom.txt"),
 		text("list[]=VERSION"),
 	}, false, src)
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := `{"two":"a\n\n","two_less":"a\n","crlf":"line\r\n","crlf_less":"line","body":{"stdin":"from stdin\r\n\n"},"empty":"","bare":"no line ending","bom":"` + "\uFEFF" + `x\n","list":["1.2.3\n"]}`
+	want := `{"two":"a\n\n","two_less":"a\n","crlf":"line\r\n","crlf_less":"line","body":{"stdin":"from stdin\r\n\n"},"empty":"","bare":"no line ending","bom":"x\n","bom_less":"x","list":["1.2.3\n"]}`
 	if got := encode(t, v); got != want {
 		t.Errorf("got %s\nwant %s", got, want)
 	}
