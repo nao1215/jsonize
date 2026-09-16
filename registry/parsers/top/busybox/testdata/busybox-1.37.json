@@ -1,0 +1,118 @@
+{
+  "memory": {
+    "used_kib": 61771228,
+    "free_kib": 2642120,
+    "shared_kib": 1951008,
+    "buffers_kib": 2825536,
+    "cached_kib": 34159132
+  },
+  "cpu": {
+    "user": 0,
+    "system": 0,
+    "nice": 0,
+    "idle": 99,
+    "iowait": 0,
+    "irq": 0,
+    "softirq": 0
+  },
+  "load": {
+    "load_1m": 0.46,
+    "load_5m": 0.8,
+    "load_15m": 1.28,
+    "running": 1,
+    "tasks": 4760,
+    "last_pid": 2619428
+  },
+  "processes": [
+    {
+      "pid": 2329,
+      "ppid": 1,
+      "user": "root",
+      "stat": "S",
+      "vsz": "4001m",
+      "vsz_percent": 6,
+      "cpu_percent": 0,
+      "command": "/usr/bin/containerd"
+    },
+    {
+      "pid": 855400,
+      "ppid": 820329,
+      "user": "ada",
+      "stat": "S",
+      "vsz": "1451g",
+      "vsz_percent": 2178,
+      "cpu_percent": 0,
+      "command": "/usr/share/code/code --type=renderer"
+    },
+    {
+      "pid": 790597,
+      "ppid": 6919,
+      "user": "ada",
+      "stat": "SN",
+      "vsz": "1181m",
+      "vsz_percent": 2,
+      "cpu_percent": 0,
+      "command": "/usr/libexec/localsearch-3"
+    },
+    {
+      "pid": 690,
+      "ppid": 1,
+      "user": "root",
+      "stat": "S<",
+      "vsz": "96524",
+      "vsz_percent": 0,
+      "cpu_percent": 0,
+      "command": "/usr/lib/systemd/systemd-journald"
+    },
+    {
+      "pid": 1978,
+      "ppid": 1,
+      "user": "61876",
+      "stat": "S<",
+      "vsz": "2796",
+      "vsz_percent": 0,
+      "cpu_percent": 0,
+      "command": "/usr/bin/earlyoom -r 3600"
+    },
+    {
+      "pid": 1398,
+      "ppid": 2,
+      "user": "root",
+      "stat": "SW",
+      "vsz": "0",
+      "vsz_percent": 0,
+      "cpu_percent": 0,
+      "command": "[napi/phy0-0]"
+    },
+    {
+      "pid": 591,
+      "ppid": 2,
+      "user": "root",
+      "stat": "IW<",
+      "vsz": "0",
+      "vsz_percent": 0,
+      "cpu_percent": 0,
+      "command": "[kworker/0:1H-kb]"
+    },
+    {
+      "pid": 2619428,
+      "ppid": 2619424,
+      "user": "ada",
+      "stat": "R",
+      "vsz": "2468",
+      "vsz_percent": 0,
+      "cpu_percent": 0,
+      "command": "busybox top -b -n1"
+    },
+    {
+      "pid": 44681,
+      "ppid": 6919,
+      "user": "ada",
+      "stat": "S",
+      "vsz": "53.7g",
+      "vsz_percent": 81,
+      "cpu_percent": 0,
+      "command": "/opt/google/chrome/chrome"
+    }
+  ]
+}

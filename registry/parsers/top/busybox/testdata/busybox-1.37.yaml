@@ -1,0 +1,4 @@
+source: busybox top -b -n1 captured on Ubuntu 26.04 (BusyBox v1.37.0) with LC_ALL=C, cut to nine processes; the user name replaced with one of the same width and the arguments of one command cut
+description: a memory size in gigabytes that runs into the percent beside it (1451g2178%), one given with a decimal (53.7g), a kernel thread, a numeric user, and states of two and three letters
+os: linux
+args: ["-b", "-n1"]

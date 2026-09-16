@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/top/busybox.json",
+  "title": "top/busybox",
+  "description": "BusyBox top -b, memory, CPU and load, and the processes",
+  "x-jsonize": {
+    "definition": "top/busybox",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "memory": {
+      "type": "object",
+      "properties": {
+        "used_kib": {
+          "type": "integer"
+        },
+        "free_kib": {
+          "type": "integer"
+        },
+        "shared_kib": {
+          "type": "integer"
+        },
+        "buffers_kib": {
+          "type": "integer"
+        },
+        "cached_kib": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "used_kib",
+        "free_kib",
+        "shared_kib",
+        "buffers_kib",
+        "cached_kib"
+      ]
+    },
+    "cpu": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "integer"
+        },
+        "system": {
+          "type": "integer"
+        },
+        "nice": {
+          "type": "integer"
+        },
+        "idle": {
+          "type": "integer"
+        },
+        "iowait": {
+          "type": "integer"
+        },
+        "irq": {
+          "type": "integer"
+        },
+        "softirq": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "user",
+        "system",
+        "nice",
+        "idle",
+        "iowait",
+        "irq",
+        "softirq"
+      ]
+    },
+    "load": {
+      "type": "object",
+      "properties": {
+        "load_1m": {
+          "type": "number"
+        },
+        "load_5m": {
+          "type": "number"
+        },
+        "load_15m": {
+          "type": "number"
+        },
+        "running": {
+          "type": "integer"
+        },
+        "tasks": {
+          "type": "integer"
+        },
+        "last_pid": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "load_1m",
+        "load_5m",
+        "load_15m",
+        "running",
+        "tasks",
+        "last_pid"
+      ]
+    },
+    "processes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer"
+          },
+          "ppid": {
+            "type": "integer"
+          },
+          "user": {
+            "type": "string"
+          },
+          "stat": {
+            "type": "string"
+          },
+          "vsz": {
+            "type": "string"
+          },
+          "vsz_percent": {
+            "type": "integer"
+          },
+          "cpu_percent": {
+            "type": "integer"
+          },
+          "command": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pid",
+          "ppid",
+          "user",
+          "stat",
+          "vsz",
+          "vsz_percent",
+          "cpu_percent",
+          "command"
+        ]
+      }
+    }
+  },
+  "required": [
+    "memory",
+    "cpu",
+    "load",
+    "processes"
+  ]
+}
