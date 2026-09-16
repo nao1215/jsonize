@@ -189,7 +189,7 @@ the same reading with settings of your own.
 | `route` | [`linux`](../schemas/route/linux.json), [`windows`](../schemas/route/windows.json) |
 | `rsync` | [`itemize`](../schemas/rsync/itemize.json) |
 | `rustup` | [`check`](../schemas/rustup/check.json), [`component-list`](../schemas/rustup/component-list.json), [`target-list`](../schemas/rustup/target-list.json), [`toolchains`](../schemas/rustup/toolchains.json), [`toolchains-verbose`](../schemas/rustup/toolchains-verbose.json) |
-| `sar` | [`cpu`](../schemas/sar/cpu.json), [`filesystem`](../schemas/sar/filesystem.json), [`io`](../schemas/sar/io.json), [`memory`](../schemas/sar/memory.json), [`network-device`](../schemas/sar/network-device.json), [`paging`](../schemas/sar/paging.json), [`queue`](../schemas/sar/queue.json), [`swap`](../schemas/sar/swap.json), [`task`](../schemas/sar/task.json) |
+| `sar` | [`cpu`](../schemas/sar/cpu.json), [`disk`](../schemas/sar/disk.json), [`filesystem`](../schemas/sar/filesystem.json), [`io`](../schemas/sar/io.json), [`memory`](../schemas/sar/memory.json), [`network-device`](../schemas/sar/network-device.json), [`paging`](../schemas/sar/paging.json), [`queue`](../schemas/sar/queue.json), [`swap`](../schemas/sar/swap.json), [`task`](../schemas/sar/task.json) |
 | `sc` | [`query`](../schemas/sc/query.json), [`queryex`](../schemas/sc/queryex.json) |
 | `scc` | [`default`](../schemas/scc/default.json) |
 | `schtasks` | [`list`](../schemas/schtasks/list.json), [`table`](../schemas/schtasks/table.json) |

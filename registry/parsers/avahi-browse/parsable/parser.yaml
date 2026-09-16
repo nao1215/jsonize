@@ -24,7 +24,7 @@ detect:
       # first line is looked at, so that a browse left running is read
       # as each service appears; the parser holds every later line to
       # the same fields.
-      - '\A[+=-];[^;\n]+;IPv[46];[^;\n]*;[^;\n]*;[^;\n]*(?:\n|\z|;[^;\n]*;[^;\n]*;[0-9]+;)'
+      - '\A[+=-];[^;\n]+;IPv[46];[^;\n]*;[^;\n]*;[^;\n]*(?:$|;[^;\n]*;[^;\n]*;[0-9]+;)'
 parse:
   type: regex
   patterns:

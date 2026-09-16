@@ -726,3 +726,35 @@ func TestStreamRefusesAKeyNoColumnHasBeforeWritingARecord(t *testing.T) {
 		t.Errorf("code=%d stdout=%q %s", code, h.stdout.String(), h.stderr.String())
 	}
 }
+
+// A command that prints at an interval (free -s, journalctl -f, ping) has to get its
+// first record out while it is still running. Its definition cannot wait
+// for a line it prints only at its end, or for a later line to rule a
+// rival in, since the signature window may never fill.
+func TestIntervalOutputIsChosenOnItsLeadingLines(t *testing.T) {
+	for _, tc := range []struct {
+		name, head, want string
+		args             []string
+	}{
+		{"free -h -s 1", "               total        used        free      shared  buff/cache   available\nMem:            61Gi        34Gi       8.3Gi        17Gi        36Gi        26Gi\nSwap:          8.0Gi       2.0Gi       6.0Gi\n\n",
+			`{"type":"Mem","total":"61Gi"`, []string{"--stream", "--parser", "free"}},
+		{"journalctl -f", "Sep 16 19:06:09 host01 sshd[812]: Accepted publickey for alice\nSep 16 19:06:10 host01 systemd[1]: Started session-3.scope.\n",
+			`{"timestamp":"Sep 16 19:06:09"`, []string{"--stream", "--parser", "journalctl"}},
+		{"avahi-browse -a -p", "+;eno1;IPv4;printer;_ipp._tcp;local\n",
+			`{"event":"new","interface":"eno1"`, []string{"--stream", "--parser", "avahi-browse"}},
+		{"ping without its summary yet", "PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.\n64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.032 ms\n",
+			`{"part":"destination"`, []string{"--stream", "--parser", "ping"}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			h := newHarness(t)
+			h.env.GOOS = "linux"
+			pw, stdout, stderr, done := openStream(t, h, tc.args...)
+			feed(pw, tc.head)
+			if l := stdout.next(t, "the first record"); !strings.HasPrefix(l, tc.want) {
+				t.Errorf("first record = %s, stderr = %s", l, stderr.buf.String())
+			}
+			_ = pw.Close()
+			<-done
+		})
+	}
+}

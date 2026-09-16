@@ -1,0 +1,203 @@
+{
+  "destination": {
+    "name": "127.0.0.1",
+    "address": "127.0.0.1",
+    "source": null,
+    "device": null,
+    "data_bytes": 56,
+    "packet_bytes": 84
+  },
+  "replies": [
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 1,
+      "ttl": 64,
+      "time_ms": 0.032
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 2,
+      "ttl": 64,
+      "time_ms": 0.062
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 3,
+      "ttl": 64,
+      "time_ms": 0.067
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 4,
+      "ttl": 64,
+      "time_ms": 0.043
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 5,
+      "ttl": 64,
+      "time_ms": 0.039
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 6,
+      "ttl": 64,
+      "time_ms": 0.035
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 7,
+      "ttl": 64,
+      "time_ms": 0.124
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 8,
+      "ttl": 64,
+      "time_ms": 0.04
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 9,
+      "ttl": 64,
+      "time_ms": 0.058
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 10,
+      "ttl": 64,
+      "time_ms": 0.026
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 11,
+      "ttl": 64,
+      "time_ms": 0.047
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 12,
+      "ttl": 64,
+      "time_ms": 0.063
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 13,
+      "ttl": 64,
+      "time_ms": 0.063
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 14,
+      "ttl": 64,
+      "time_ms": 0.025
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 15,
+      "ttl": 64,
+      "time_ms": 0.06
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 16,
+      "ttl": 64,
+      "time_ms": 0.038
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 17,
+      "ttl": 64,
+      "time_ms": 0.042
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 18,
+      "ttl": 64,
+      "time_ms": 0.019
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 19,
+      "ttl": 64,
+      "time_ms": 0.032
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 20,
+      "ttl": 64,
+      "time_ms": 0.044
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 21,
+      "ttl": 64,
+      "time_ms": 0.039
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 22,
+      "ttl": 64,
+      "time_ms": 0.064
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 23,
+      "ttl": 64,
+      "time_ms": 0.065
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 24,
+      "ttl": 64,
+      "time_ms": 0.123
+    },
+    {
+      "bytes": 64,
+      "responder": "127.0.0.1",
+      "icmp_seq": 25,
+      "ttl": 64,
+      "time_ms": 0.044
+    }
+  ],
+  "statistics": {
+    "packets_transmitted": 25,
+    "packets_received": 25,
+    "duplicates": null,
+    "corrupted": null,
+    "errors": null,
+    "packet_loss_percent": 0,
+    "time_ms": 4987,
+    "round_trip_min_ms": 0.019,
+    "round_trip_avg_ms": 0.051,
+    "round_trip_max_ms": 0.124,
+    "round_trip_mdev_ms": 0.025,
+    "pipe": null,
+    "ipg_ms": null,
+    "ewma_ms": null
+  }
+}

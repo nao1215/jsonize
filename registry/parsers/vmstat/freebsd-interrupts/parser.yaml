@@ -22,7 +22,6 @@ detect:
   signature:
     all:
       - '\Ainterrupt[ \t]+total[ \t]+rate[ \t]*$'
-      - '^Total[ \t]+\d+[ \t]+\d+[ \t]*$'
 input:
   ignore:
     - '\Ainterrupt[ \t]+total[ \t]+rate[ \t]*$'

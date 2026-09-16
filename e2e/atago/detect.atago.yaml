@@ -1716,3 +1716,19 @@ scenarios:
             json:
               - { path: "$[1].checksum", equals: 53099 }
               - { path: "$[1].blocks", equals: 4 }
+
+  - name: sar -d is a row per device per sample
+    steps:
+      - fixture:
+          file: sar-d.txt
+          from: "${specdir}/../../registry/parsers/sar/disk/testdata/two-intervals.txt"
+      - run:
+          command: jz
+          stdin: {file: sar-d.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 12 }
+              - { path: "$[2].device", equals: nvme1n1 }
+              - { path: "$[11].time", equals: Average }

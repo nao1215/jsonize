@@ -1,0 +1,16 @@
+[HCONTAINER ID   NAME                                   CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O         PIDS
+1f0e2d3c4b5a   kind-worker2                           2.55%     407.3MiB / 61.43GiB   0.65%     42.7MB / 18.3MB   443MB / 257MB     286
+2a1b3c4d5e6f   kind-worker                            2.34%     403.7MiB / 61.43GiB   0.64%     149MB / 36.4MB    364MB / 26.5MB    278
+3b2c4d5e6f70   kind-control-plane                     10.44%    1.005GiB / 61.43GiB   1.64%     38.7MB / 173MB    780MB / 2.57GB    463
+4c3d5e6f7081   buildx_buildkit_builder0               0.00%     18.93MiB / 61.43GiB   0.03%     651kB / 126B      49.9MB / 16.4kB   22
+[HCONTAINER ID   NAME                                   CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O         PIDS [K
+1f0e2d3c4b5a   kind-worker2                           2.55%     407.3MiB / 61.43GiB   0.65%     42.7MB / 18.3MB   443MB / 257MB     286 [K
+2a1b3c4d5e6f   kind-worker                            2.34%     403.7MiB / 61.43GiB   0.64%     149MB / 36.4MB    364MB / 26.5MB    278 [K
+3b2c4d5e6f70   kind-control-plane                     10.44%    1.005GiB / 61.43GiB   1.64%     38.7MB / 173MB    780MB / 2.57GB    463 [K
+4c3d5e6f7081   buildx_buildkit_builder0               0.00%     18.93MiB / 61.43GiB   0.03%     651kB / 126B      49.9MB / 16.4kB   22 [K
+ [K
+[J[HCONTAINER ID   NAME                                   CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O         PIDS
+1f0e2d3c4b5a   kind-worker2                           2.55%     407.3MiB / 61.43GiB   0.65%     42.7MB / 18.3MB   443MB / 257MB     286
+2a1b3c4d5e6f   kind-worker                            2.34%     403.7MiB / 61.43GiB   0.64%     149MB / 36.4MB    364MB / 26.5MB    278
+3b2c4d5e6f70   kind-control-plane                     10.44%    1.005GiB / 61.43GiB   1.64%     38.7MB / 173MB    780MB / 2.57GB    463
+4c3d5e6f7081   buildx_buildkit_builder0               0.00%     18.93MiB / 61.43GiB   0.03%     651kB / 126B      49.9MB / 16.4kB   22
