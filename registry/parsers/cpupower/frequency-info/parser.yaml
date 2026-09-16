@@ -1,0 +1,45 @@
+# `cpupower frequency-info` prints a block per CPU headed by "analyzing
+# CPU N:", with "label: value" lines indented by two spaces and the lines
+# of a group ("boost state support:", "amd-pstate limits:") indented by
+# two more. Which labels appear depends on the cpufreq driver and on the
+# options (-p, -g and the others print one label), so the result is a
+# tree of name/value nodes rather than fixed keys, and the values stay
+# the strings cpupower printed ("625 MHz - 5.19 GHz").
+#
+# The current policy is a sentence that cpupower breaks over three lines,
+# the later two indented to line up under the value. Those lines are
+# joined onto the line above.
+#
+# -l and the other options that print bare numbers under the heading are
+# refused by the signature: the line after the heading is not indented.
+format: 1
+command: cpupower
+variant: frequency-info
+description: cpupower frequency-info cpufreq driver, policy and limits per CPU
+metadata:
+  tags: [linux, cpu, power]
+  compatible: [cpupower]
+  references:
+    - https://man.archlinux.org/man/cpupower-frequency-info.1
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\Aanalyzing CPU [0-9]+:[ \t]*\n  [A-Za-z]'
+input:
+  # A continuation of the policy sentence is indented far past the two
+  # levels a label can be at.
+  fold: '^ {10,}\S'
+parse:
+  type: tree
+  indent: "  "
+  root: '^analyzing CPU [0-9]+:[ \t]*$'
+  node:
+    parse:
+      type: regex
+      patterns:
+        - '^analyzing CPU (?P<cpu>[0-9]+):[ \t]*$'
+        - '^(?P<name>[^:]+):(?:[ \t]+(?P<value>.*?))?[ \t]*$'
+    fields:
+      cpu: {type: int, when_missing: omit}
+      name: {when_missing: omit}

@@ -1,0 +1,3 @@
+description: -b where the first byte is a space, printed as a space
+source: captured with LC_ALL=C cmp -b (GNU diffutils 3.12) on Ubuntu for two one-line files, one with a space and one with a tab
+args: [-b, sp1, sp2]

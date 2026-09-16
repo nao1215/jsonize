@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/cloud-init/status-long.json",
+  "title": "cloud-init/status-long",
+  "description": "cloud-init status --long, the boot status and the errors cloud-init recorded",
+  "x-jsonize": {
+    "definition": "cloud-init/status-long",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "extended_status": {
+          "type": "string"
+        },
+        "boot_status_code": {
+          "type": "string"
+        },
+        "last_update": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "detail": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "extended_status",
+        "boot_status_code",
+        "last_update",
+        "detail"
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      }
+    },
+    "recoverable_errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "string"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "level",
+          "messages"
+        ]
+      }
+    }
+  },
+  "required": [
+    "status",
+    "errors",
+    "recoverable_errors"
+  ]
+}

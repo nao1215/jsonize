@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/cpupower/frequency-info.json",
+  "title": "cpupower/frequency-info",
+  "description": "cpupower frequency-info cpufreq driver, policy and limits per CPU",
+  "x-jsonize": {
+    "definition": "cpupower/frequency-info",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/node"
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "properties": {
+        "cpu": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "required": [
+        "children"
+      ]
+    }
+  }
+}

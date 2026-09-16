@@ -1,0 +1,27 @@
+EXIF tags in 'gps.jpg' ('Motorola' byte order):
+--------------------+----------------------------------------------------------
+Tag                 |Value
+--------------------+----------------------------------------------------------
+Manufacturer        |NIKON
+Model               |NIKON D750
+X-Resolution        | 1
+Y-Resolution        | 1
+Resolution Unit     |Internal error (unknown value 1)
+Software            |GIMP 2.10
+YCbCr Positioning   |Centered
+Copyright           |Copyright (c) 2024 Example | with a bar and a long notice 
+Compression         |JPEG compression
+X-Resolution        |72
+Y-Resolution        |72
+Resolution Unit     |Inch
+Exif Version        |Exif Version 2.1
+FlashPixVersion     |FlashPix Version 1.0
+Color Space         |Uncalibrated
+GPS Tag Version     |2.3.0.0
+North or South Latit|N
+Latitude            |35, 40, 52.450
+East or West Longitu|E
+Longitude           |139, 46, 1.65
+Altitude            |40
+--------------------+----------------------------------------------------------
+EXIF data contains a thumbnail (346 bytes).

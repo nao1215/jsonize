@@ -1,0 +1,3 @@
+description: tags in two IFDs, GPS tags, a value cut at the column width and the thumbnail line
+source: captured with LC_ALL=C exif 0.6.22 on Ubuntu from a JPEG made with ImageMagick convert and given GPS tags and a thumbnail with exiftool
+args: [gps.jpg]

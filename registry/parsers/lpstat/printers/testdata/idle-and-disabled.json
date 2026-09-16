@@ -1,0 +1,26 @@
+[
+  {
+    "state": "stopped",
+    "printer": "lab-inkjet",
+    "job": null,
+    "enabled": false,
+    "since": "Thu Sep 17 07:17:49 2026",
+    "reason": "reason unknown"
+  },
+  {
+    "state": "idle",
+    "printer": "label-writer",
+    "job": null,
+    "enabled": true,
+    "since": "Thu Sep 17 07:17:49 2026",
+    "reason": null
+  },
+  {
+    "state": "idle",
+    "printer": "office-laser",
+    "job": null,
+    "enabled": true,
+    "since": "Thu Sep 17 07:17:49 2026",
+    "reason": null
+  }
+]

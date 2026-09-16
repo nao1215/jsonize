@@ -1,0 +1,4 @@
+description: cloud-init switched off by its marker file, with no event recorded
+source: captured with LC_ALL=C cloud-init status --long (cloud-init 26.1-0ubuntu3~26.04.1) on Ubuntu 26.04 without root; the WARNING lines about unreadable config parts went to standard error
+os: linux
+args: [status, --long]

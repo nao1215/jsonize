@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/wipefs/linux.json",
+  "title": "wipefs/linux",
+  "description": "wipefs, the signatures found on each device",
+  "x-jsonize": {
+    "definition": "wipefs/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "string"
+      },
+      "offset": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

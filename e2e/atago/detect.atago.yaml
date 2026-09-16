@@ -2323,3 +2323,474 @@ scenarios:
               - { path: "$[1].query.name", equals: "::1" }
               - { path: "$[1].answers[1].value", equals: ip6-loopback }
               - { path: "$[1].information.authenticated", equals: true }
+
+  - name: dumpe2fs -h is read when dumpe2fs is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/dumpe2fs/superblock/testdata/ext4-journal.txt"
+      - run:
+          command: jz --parser dumpe2fs
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$["Filesystem volume name"]', equals: testvol }
+              - { path: '$["Journal features"]', equals: "(none)" }
+              - { path: '$["Block size"]', equals: "4096" }
+
+  - name: tune2fs -l is read when tune2fs is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/tune2fs/superblock/testdata/ext4-journal.txt"
+      - run:
+          command: jz --parser tune2fs
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$["Block count"]', equals: "16384" }
+              - { path: '$["Filesystem state"]', equals: clean }
+
+  - name: e2freefrag is read when e2freefrag is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/e2freefrag/linux/testdata/fragmented.txt"
+      - run:
+          command: jz --parser e2freefrag
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.summary.free_extents', equals: 137 }
+              - { path: '$.histogram[3].range_start', equals: 4M }
+              - { path: '$.histogram[3].percent', equals: 79.52 }
+
+  - name: wipefs is read when wipefs is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/wipefs/linux/testdata/label-and-no-label.txt"
+      - run:
+          command: jz --parser wipefs
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].label', equals: "MY DISK" }
+              - { path: '$[3].type', equals: swap }
+              - { path: '$[3].label', equals: null }
+
+  - name: wipefs --all is read when wipefs is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/wipefs/erase/testdata/force.txt"
+      - run:
+          command: jz --parser wipefs
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[3].type', equals: swap }
+              - { path: '$[3].bytes', equals: 10 }
+              - { path: '$[4].erased[1]', equals: ef }
+
+  - name: partx --show is read when partx is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/partx/show/testdata/dos-logical.txt"
+      - run:
+          command: jz --parser partx
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 5 }
+              - { path: '$[3].nr', equals: 5 }
+              - { path: '$[3].start', equals: 65536 }
+
+  - name: partx --show -b is read when partx is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/partx/bytes/testdata/gpt.txt"
+      - run:
+          command: jz --parser partx
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[2].size', equals: 28294656 }
+              - { path: '$[2].name', equals: null }
+
+  - name: gdisk -l is read when gdisk is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/gdisk/list/testdata/gpt.txt"
+      - run:
+          command: jz --parser gdisk
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.disk.mbr', equals: protective }
+              - { path: '$.disk.messages[0]', equals: "Found valid GPT with protective MBR; using GPT." }
+              - { path: '$.partitions[2].code', equals: EF00 }
+
+  - name: sgdisk -p is read when sgdisk is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/sgdisk/print/testdata/no-partition-table.txt"
+      - run:
+          command: jz --parser sgdisk
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.disk.messages[0]', equals: "Creating new GPT entries in memory." }
+              - { path: '$.disk.sectors', equals: 2048 }
+              - { path: "$.partitions", length: 0 }
+
+  - name: filefrag -v is read when filefrag is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/filefrag/verbose/testdata/no-fiemap.txt"
+      - run:
+          command: jz --parser filefrag
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].extents", length: 0 }
+              - { path: '$[0].summary.extent_count', equals: null }
+              - { path: '$[1].extents[0].flags[1]', equals: eof }
+
+  - name: fincore is read when fincore is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/fincore/linux/testdata/name-with-spaces.txt"
+      - run:
+          command: jz --parser fincore
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].file', equals: "dir with space/my file.bin" }
+              - { path: '$[0].pages', equals: 5 }
+              - { path: '$[0].size', equals: 19.5K }
+
+  - name: fincore -b is read when fincore is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/fincore/bytes/testdata/files.txt"
+      - run:
+          command: jz --parser fincore
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[1].file', equals: sparse.bin }
+              - { path: '$[1].res', equals: 106496 }
+              - { path: '$[1].size', equals: 10485760 }
+
+  - name: diffstat is read when diffstat is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/diffstat/default/testdata/commit.txt"
+      - run:
+          command: jz --parser diffstat
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.files[0].path', equals: CHANGELOG.md }
+              - { path: '$.files[0].changes', equals: 12 }
+              - { path: '$.summary.insertions', equals: 113 }
+
+  - name: gocyclo is read when gocyclo is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/gocyclo/default/testdata/over-avg.txt"
+      - run:
+          command: jz --parser gocyclo
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.functions[0].function', equals: "(*run).resolveHeader" }
+              - { path: '$.functions[0].line', equals: 154 }
+              - { path: '$.summary.average', equals: 5.68 }
+
+  - name: exif is read when exif is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/exif/default/testdata/camera-tags.txt"
+      - run:
+          command: jz --parser exif
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.file.byte_order', equals: Motorola }
+              - { path: '$.tags[1].tag', equals: Manufacturer }
+              - { path: '$.tags[1].value', equals: Canon }
+
+  - name: isoinfo -d is read when isoinfo is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/isoinfo/volume-descriptor/testdata/el-torito.txt"
+      - run:
+          command: jz --parser isoinfo
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.volume.volume_id', equals: BOOT12 }
+              - { path: '$.volume.joliet_level', equals: 3 }
+
+  - name: cmp -b is read when cmp is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/cmp/posix/testdata/print-bytes.txt"
+      - run:
+          command: jz --parser cmp
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.byte', equals: 100 }
+              - { path: '$.byte2_octal', equals: "377" }
+              - { path: '$.byte2_shown', equals: "M-^?" }
+
+  - name: cloud-init status --long is read when cloud-init is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/cloud-init/status-long/testdata/degraded.txt"
+      - run:
+          command: jz --parser cloud-init
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.status.extended_status', equals: "degraded done" }
+              - { path: '$.recoverable_errors[0].level', equals: WARNING }
+
+  - name: pro status --all is read when pro is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/pro/status-unattached/testdata/all.txt"
+      - run:
+          command: jz --parser pro
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.services[1].service', equals: cc-eal }
+              - { path: '$.services[1].available', equals: false }
+              - { path: "$.notices", length: 0 }
+
+  - name: oomctl is read when oomctl is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/oomctl/dump/testdata/swap-and-two-cgroups.txt"
+      - run:
+          command: jz --parser oomctl
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[5].label', equals: "Swap Monitored CGroups" }
+              - { path: '$[0].value', equals: "no" }
+
+  - name: pinky is read when pinky is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/pinky/short/testdata/uutils-utmp.txt"
+      - run:
+          command: jz --parser pinky
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].name', equals: "Alice Example" }
+              - { path: '$[1].login', equals: maintenance01 }
+              - { path: '$[1].name', equals: null }
+
+  - name: pinky with ISO times is read when pinky is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/pinky/short-iso/testdata/gnu-sessions.txt"
+      - run:
+          command: jz --parser pinky
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].when', equals: "2026-09-17 05:54" }
+              - { path: '$[1].tty', equals: seat0 }
+              - { path: '$[1].where', equals: null }
+
+  - name: pinky -l is read when pinky is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/pinky/long/testdata/gnu-three-users.txt"
+      - run:
+          command: jz --parser pinky
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].directory', equals: /home/bob }
+              - { path: '$[2].login', equals: nosuchuser42 }
+              - { path: '$[2].name', equals: null }
+
+  - name: stty -a is read when stty is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/stty/linux/testdata/gnu-all-raw-split-speed.txt"
+      - run:
+          command: jz --parser stty
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.ispeed', equals: 9600 }
+              - { path: '$.ospeed', equals: 115200 }
+              - { path: '$.control_characters[5].value', equals: ";" }
+
+  - name: setxkbmap -query is read when setxkbmap is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/setxkbmap/query/testdata/two-layouts-options.txt"
+      - run:
+          command: jz --parser setxkbmap
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.layout[1]', equals: jp }
+              - { path: '$.variant[0]', equals: "" }
+              - { path: '$.options[0]', equals: "ctrl:nocaps" }
+
+  - name: udisksctl status is read when udisksctl is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/udisksctl/status/testdata/two-nvme.txt"
+      - run:
+          command: jz --parser udisksctl
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[1].model', equals: "KIOXIA-EXCERIA PLUS G4 SSD" }
+              - { path: '$[1].revision', equals: "EVFAJ1.0" }
+
+  - name: lpstat -p is read when lpstat is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/lpstat/printers/testdata/printing-with-reasons.txt"
+      - run:
+          command: jz --parser lpstat
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].state', equals: printing }
+              - { path: '$[0].job', equals: lab-inkjet-2 }
+              - { path: '$[2].enabled', equals: false }
+
+  - name: lpstat -v is read when lpstat is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/lpstat/devices/testdata/three-printers.txt"
+      - run:
+          command: jz --parser lpstat
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].uri', equals: "socket://printer1.internal.example:9100" }
+              - { path: '$[2].uri', equals: "///dev/null" }
+
+  - name: lpstat -t is read when lpstat is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/lpstat/status/testdata/class-printing-rejecting.txt"
+      - run:
+          command: jz --parser lpstat
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[0].running', equals: true }
+              - { path: '$[2].members[1]', equals: office-laser }
+
+  - name: cpupower frequency-info is read when cpupower is named
+    steps:
+      - fixture:
+          file: out.txt
+          from: "${specdir}/../../registry/parsers/cpupower/frequency-info/testdata/two-cpus.txt"
+      - run:
+          command: jz --parser cpupower
+          stdin: {file: out.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$[1].cpu', equals: 1 }
+              - { path: '$[0].children[0].value', equals: amd-pstate-epp }

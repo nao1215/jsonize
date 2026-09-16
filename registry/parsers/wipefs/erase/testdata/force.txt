@@ -1,0 +1,5 @@
+gpt.img: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
+gpt.img: 8 bytes were erased at offset 0x03fffe00 (gpt): 45 46 49 20 50 41 52 54
+gpt.img: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
+swap.img: 10 bytes were erased at offset 0x00000ff6 (swap): 53 57 41 50 53 50 41 43 45 32
+ext4.img: 2 bytes were erased at offset 0x00000438 (ext4): 53 ef

@@ -1,0 +1,63 @@
+# `e2freefrag` reports the free space of an ext2, ext3 or ext4 file
+# system: a summary of the device, the free chunks when -c names a chunk
+# size, the smallest, largest and average free extent, and a histogram of
+# free extents by size, one row per power-of-two range that holds any.
+# A file system with no free space prints the histogram heading and no
+# rows.
+#
+# The extent sizes are printed in KB as whole numbers computed from block
+# counts, so they are integers. The histogram ranges ("64K...128K-") are
+# labels of a bucket rather than sizes, and stay text.
+format: 1
+command: e2freefrag
+variant: linux
+description: e2freefrag, the free space fragmentation of an ext2, ext3 or ext4 file system
+metadata:
+  tags: [linux, filesystem, ext4, e2fsprogs]
+  compatible: [e2fsprogs]
+  references:
+    - https://man7.org/linux/man-pages/man8/e2freefrag.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ADevice: [^\n]+\nBlocksize: \d+ bytes\nTotal blocks: \d+\nFree blocks: \d+ \([0-9.]+%\)$'
+      - '^HISTOGRAM OF FREE EXTENT SIZES:$'
+input:
+  # The title of the histogram; the column heading under it is what the
+  # histogram part is read after.
+  ignore: ['^HISTOGRAM OF FREE EXTENT SIZES:$']
+parse:
+  type: composite
+  parts:
+    - name: summary
+      select: {until: '^Extent Size Range :'}
+      parse:
+        type: regex
+        each: input
+        pattern: '^Device: (?P<device>.+)\nBlocksize: (?P<block_size>\d+) bytes\nTotal blocks: (?P<total_blocks>\d+)\nFree blocks: (?P<free_blocks>\d+) \((?P<free_blocks_percent>[0-9.]+)%\)\n(?:Chunksize: (?P<chunk_size>\d+) bytes \((?P<chunk_blocks>\d+) blocks?\)\nTotal chunks: (?P<total_chunks>\d+)\nFree chunks: (?P<free_chunks>\d+) \((?P<free_chunks_percent>[0-9.]+)%\)\n)?Min\. free extent: (?P<min_free_extent_kb>\d+) KB[ \t]*\nMax\. free extent: (?P<max_free_extent_kb>\d+) KB[ \t]*\nAvg\. free extent: (?P<avg_free_extent_kb>\d+) KB[ \t]*\nNum\. free extent: (?P<free_extents>\d+)[ \t]*$'
+      fields:
+        device: {required: true}
+        block_size: {type: int}
+        total_blocks: {type: int}
+        free_blocks: {type: int}
+        free_blocks_percent: {type: float}
+        # The chunk lines are printed only with -c.
+        chunk_size: {type: int}
+        chunk_blocks: {type: int}
+        total_chunks: {type: int}
+        free_chunks: {type: int}
+        free_chunks_percent: {type: float}
+        min_free_extent_kb: {type: int}
+        max_free_extent_kb: {type: int}
+        avg_free_extent_kb: {type: int}
+        free_extents: {type: int}
+    - name: histogram
+      select: {after: '^Extent Size Range :[ \t]+Free extents[ \t]+Free Blocks[ \t]+Percent$'}
+      parse:
+        type: regex
+        pattern: '^[ \t]*(?P<range_start>\d+[KMGTPEZY]?)\.\.\.[ \t]*(?P<range_end>\d+[KMGTPEZY]?)-[ \t]*:[ \t]+(?P<free_extents>\d+)[ \t]+(?P<free_blocks>\d+)[ \t]+(?P<percent>[0-9.]+)%$'
+      fields:
+        free_extents: {type: int}
+        free_blocks: {type: int}
+        percent: {type: float}

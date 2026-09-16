@@ -1,0 +1,4 @@
+analyzing CPU 3:
+  current policy: frequency should be within 2.00 GHz and 5.19 GHz.
+                  The governor "powersave" may decide which speed to use
+                  within this range.

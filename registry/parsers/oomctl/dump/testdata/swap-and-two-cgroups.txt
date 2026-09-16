@@ -1,0 +1,29 @@
+Dry Run: no
+Swap Used Limit: 90.00%
+Default Memory Pressure Limit: 60.00%
+Default Memory Pressure Duration: 20s
+System Context:
+	Memory: Used: 20G, Total: 61.4G
+	Swap: Used: 16.6M, Total: 7.9G
+Swap Monitored CGroups:
+	Path: /user.slice/user-1000.slice/user@1000.service/app.slice/jz-oom-probe.service
+		Swap Usage: 0B
+Memory Pressure Monitored CGroups:
+	Path: /user.slice/user-1000.slice/user@1000.service
+		Memory Pressure Limit: 50.00%
+		Memory Pressure Duration: 20s
+		Pressure: Avg10: 0.00, Avg60: 0.00, Avg300: 0.00, Total: 127ms
+		Current Memory Usage: 31.9G
+		Memory Min: 0B
+		Memory Low: 0B
+		Pgscan: 7949326
+		Last Pgscan: 7949326
+	Path: /user.slice/user-1000.slice/user@1000.service/app.slice/jz-oom-probe.service
+		Memory Pressure Limit: 75.00%
+		Memory Pressure Duration: 20s
+		Pressure: Avg10: 0.00, Avg60: 0.00, Avg300: 0.00, Total: 0
+		Current Memory Usage: 1.3M
+		Memory Min: 0B
+		Memory Low: 0B
+		Pgscan: 0
+		Last Pgscan: 0

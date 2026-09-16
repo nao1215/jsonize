@@ -1,0 +1,42 @@
+analyzing CPU 0:
+  driver: amd-pstate-epp
+  CPUs which run at the same hardware frequency: 0
+  CPUs which need to have their frequency coordinated by software: 0
+  energy performance preference: balance_performance
+  hardware limits: 625 MHz - 5.19 GHz
+  available cpufreq governors: performance powersave
+  current policy: frequency should be within 2.00 GHz and 5.19 GHz.
+                  The governor "powersave" may decide which speed to use
+                  within this range.
+  current CPU frequency: Unable to call hardware
+  current CPU frequency: 4.56 GHz (asserted by call to kernel)
+  boost state support:
+    Supported: yes
+    Active: yes
+  amd-pstate limits:
+    Highest Performance: 166. Maximum Frequency: 5.19 GHz.
+    Nominal Performance: 96. Nominal Frequency: 3.00 GHz.
+    Lowest Non-linear Performance: 64. Lowest Non-linear Frequency: 2.00 GHz.
+    Lowest Performance: 20. Lowest Frequency: 599 MHz.
+    Preferred Core Support: 1. Preferred Core Ranking: 236.
+analyzing CPU 1:
+  driver: amd-pstate-epp
+  CPUs which run at the same hardware frequency: 1
+  CPUs which need to have their frequency coordinated by software: 1
+  energy performance preference: balance_performance
+  hardware limits: 625 MHz - 5.19 GHz
+  available cpufreq governors: performance powersave
+  current policy: frequency should be within 2.00 GHz and 5.19 GHz.
+                  The governor "powersave" may decide which speed to use
+                  within this range.
+  current CPU frequency: Unable to call hardware
+  current CPU frequency: 1.58 GHz (asserted by call to kernel)
+  boost state support:
+    Supported: yes
+    Active: yes
+  amd-pstate limits:
+    Highest Performance: 166. Maximum Frequency: 5.19 GHz.
+    Nominal Performance: 96. Nominal Frequency: 3.00 GHz.
+    Lowest Non-linear Performance: 64. Lowest Non-linear Frequency: 2.00 GHz.
+    Lowest Performance: 20. Lowest Frequency: 599 MHz.
+    Preferred Core Support: 1. Preferred Core Ranking: 226.

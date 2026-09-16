@@ -1,0 +1,5 @@
+DEVICE   OFFSET    TYPE UUID                                 LABEL
+ext4.img 0x438     ext4 0f1e2d3c-0000-4000-8000-000000000001 testvol
+gpt.img  0x200     gpt                                       
+gpt.img  0x3fffe00 gpt                                       
+gpt.img  0x1fe     PMBR                                      

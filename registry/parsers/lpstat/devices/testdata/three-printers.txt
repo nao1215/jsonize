@@ -1,0 +1,3 @@
+device for lab-inkjet: socket://printer1.internal.example:9100
+device for label-writer: ipp://printer2.internal.example/ipp/print
+device for office-laser: ///dev/null

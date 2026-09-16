@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/partx/show.json",
+  "title": "partx/show",
+  "description": "partx --show, the partitions on a disk or image with rounded sizes",
+  "x-jsonize": {
+    "definition": "partx/show",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "end": {
+        "type": "integer"
+      },
+      "nr": {
+        "type": "integer"
+      },
+      "sectors": {
+        "type": "integer"
+      },
+      "size": {
+        "type": "string"
+      },
+      "start": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

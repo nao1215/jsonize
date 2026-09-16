@@ -1,0 +1,72 @@
+[
+  {
+    "device": "gpt.img",
+    "bytes": 8,
+    "offset": "0x00000200",
+    "type": "gpt",
+    "erased": [
+      "45",
+      "46",
+      "49",
+      "20",
+      "50",
+      "41",
+      "52",
+      "54"
+    ]
+  },
+  {
+    "device": "gpt.img",
+    "bytes": 8,
+    "offset": "0x03fffe00",
+    "type": "gpt",
+    "erased": [
+      "45",
+      "46",
+      "49",
+      "20",
+      "50",
+      "41",
+      "52",
+      "54"
+    ]
+  },
+  {
+    "device": "gpt.img",
+    "bytes": 2,
+    "offset": "0x000001fe",
+    "type": "PMBR",
+    "erased": [
+      "55",
+      "aa"
+    ]
+  },
+  {
+    "device": "swap.img",
+    "bytes": 10,
+    "offset": "0x00000ff6",
+    "type": "swap",
+    "erased": [
+      "53",
+      "57",
+      "41",
+      "50",
+      "53",
+      "50",
+      "41",
+      "43",
+      "45",
+      "32"
+    ]
+  },
+  {
+    "device": "ext4.img",
+    "bytes": 2,
+    "offset": "0x00000438",
+    "type": "ext4",
+    "erased": [
+      "53",
+      "ef"
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pinky/short.json",
+  "title": "pinky/short",
+  "description": "pinky short listing of logged-in users in the C locale",
+  "x-jsonize": {
+    "definition": "pinky/short",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "login": {
+        "type": "string"
+      },
+      "name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "messages": {
+        "type": [
+          "boolean",
+          "null"
+        ]
+      },
+      "tty": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "idle": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "when": {
+        "type": "string"
+      },
+      "where": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "login",
+      "name",
+      "messages",
+      "tty",
+      "idle",
+      "when",
+      "where"
+    ]
+  }
+}

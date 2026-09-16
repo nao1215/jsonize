@@ -1,0 +1,31 @@
+{
+  "services": [
+    {
+      "service": "anbox-cloud",
+      "available": true,
+      "description": "Scalable Android in the cloud"
+    },
+    {
+      "service": "esm-apps",
+      "available": true,
+      "description": "Expanded Security Maintenance for Applications"
+    },
+    {
+      "service": "esm-infra",
+      "available": true,
+      "description": "Expanded Security Maintenance for Infrastructure"
+    },
+    {
+      "service": "landscape",
+      "available": true,
+      "description": "Management and administration tool for Ubuntu"
+    },
+    {
+      "service": "livepatch",
+      "available": true,
+      "description": "Canonical Livepatch service"
+    }
+  ],
+  "notices": [],
+  "features": []
+}

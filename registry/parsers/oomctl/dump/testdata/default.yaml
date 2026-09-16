@@ -1,0 +1,3 @@
+source: captured with LC_ALL=C oomctl (systemd 259.5-0ubuntu3.4) on Ubuntu 26.04 without root; the user manager is the only monitored cgroup
+os: linux
+args: []

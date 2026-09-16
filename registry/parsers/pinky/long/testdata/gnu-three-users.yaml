@@ -1,0 +1,2 @@
+description: two known users and one the password database does not know
+source: captured on Ubuntu 26.04 with LC_ALL=C gnupinky -l USER root nosuchuser42 (GNU coreutils 9.7); user name replaced

@@ -1,0 +1,2 @@
+source: captured with LC_ALL=C isoinfo -d (cdrkit 1.1.11) on Ubuntu from an image made with genisoimage -V DATA_DISC
+args: [-d, -i, plain.iso]

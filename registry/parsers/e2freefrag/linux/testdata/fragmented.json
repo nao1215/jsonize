@@ -1,0 +1,48 @@
+{
+  "summary": {
+    "device": "frag.img",
+    "block_size": 1024,
+    "total_blocks": 32768,
+    "free_blocks": 25106,
+    "free_blocks_percent": 76.6,
+    "chunk_size": null,
+    "chunk_blocks": null,
+    "total_chunks": null,
+    "free_chunks": null,
+    "free_chunks_percent": null,
+    "min_free_extent_kb": 3,
+    "max_free_extent_kb": 7935,
+    "avg_free_extent_kb": 183,
+    "free_extents": 137
+  },
+  "histogram": [
+    {
+      "range_start": "2K",
+      "range_end": "4K",
+      "free_extents": 76,
+      "free_blocks": 228,
+      "percent": 0.91
+    },
+    {
+      "range_start": "64K",
+      "range_end": "128K",
+      "free_extents": 57,
+      "free_blocks": 4047,
+      "percent": 16.12
+    },
+    {
+      "range_start": "512K",
+      "range_end": "1024K",
+      "free_extents": 1,
+      "free_blocks": 866,
+      "percent": 3.45
+    },
+    {
+      "range_start": "4M",
+      "range_end": "8M",
+      "free_extents": 3,
+      "free_blocks": 19965,
+      "percent": 79.52
+    }
+  ]
+}

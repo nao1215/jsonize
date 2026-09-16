@@ -1,0 +1,10 @@
+Filesystem type is: ef53
+File size of data.bin is 5000000 (1221 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..    1220:  300240896.. 300242116:   1221:             last,eof
+data.bin: 1 extent found
+File size of sparse.bin is 10485760 (2560 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:     1220..    1220:  300240068.. 300240068:      1:       1220:
+   1:     2197..    2221:  300257429.. 300257453:     25:  300241045: last
+sparse.bin: 2 extents found

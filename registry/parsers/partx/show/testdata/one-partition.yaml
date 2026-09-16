@@ -1,0 +1,4 @@
+description: One partition chosen with --nr, whose row is the only one.
+source: partx --show --nr 2 gpt.img on the image of gpt, util-linux 2.41.3 on Ubuntu 26.04 with LC_ALL=C; partition UUID replaced
+os: linux
+args: [--show, --nr, "2", gpt.img]

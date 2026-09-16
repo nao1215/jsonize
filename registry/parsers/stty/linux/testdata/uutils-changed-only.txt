@@ -1,0 +1,5 @@
+speed 115200 baud; line = 0;
+intr = ^K; eol = ;;
+-brkint -icrnl -imaxbel
+-opost
+-isig -icanon -echo

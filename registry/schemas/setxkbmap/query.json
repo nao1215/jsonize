@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/setxkbmap/query.json",
+  "title": "setxkbmap/query",
+  "description": "setxkbmap -query keyboard rules, model, layouts, variants and options",
+  "x-jsonize": {
+    "definition": "setxkbmap/query",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "rules": {
+      "type": "string"
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "layout": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "variant": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "options": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "rules",
+    "model",
+    "layout",
+    "variant",
+    "options"
+  ]
+}

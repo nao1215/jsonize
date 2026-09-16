@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 with LC_ALL=C stty -a > file (uutils coreutils 0.8.0) on a pseudo-terminal from script(1) set to 24 rows and 80 columns
+os: linux
+args: [-a]

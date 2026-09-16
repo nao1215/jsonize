@@ -1,0 +1,48 @@
+tune2fs 1.47.2 (1-Jan-2025)
+Filesystem volume name:   <none>
+Last mounted on:          /srv/data
+Filesystem UUID:          0f1e2d3c-0000-4000-8000-000000000003
+Filesystem magic number:  0xEF53
+Filesystem revision #:    1 (dynamic)
+Filesystem features:      ext_attr resize_inode dir_index filetype sparse_super large_file
+Filesystem flags:         signed_directory_hash 
+Default mount options:    user_xattr acl
+Filesystem state:         not clean with errors
+Errors behavior:          Continue
+Filesystem OS type:       Linux
+Inode count:              4096
+Block count:              4096
+Reserved block count:     204
+Overhead clusters:        260
+Free blocks:              3830
+Free inodes:              4085
+First block:              0
+Block size:               4096
+Fragment size:            4096
+Blocks per group:         32768
+Fragments per group:      32768
+Inodes per group:         4096
+Inode blocks per group:   256
+Filesystem created:       Thu Sep 17 07:12:21 2026
+Last mount time:          Tue Sep 15 18:30:00 2026
+Last write time:          Thu Sep 17 07:12:21 2026
+Mount count:              7
+Maximum mount count:      -1
+Last checked:             Thu Sep 17 07:12:21 2026
+Check interval:           0 (<none>)
+Reserved blocks uid:      0 (user root)
+Reserved blocks gid:      0 (group root)
+First inode:              11
+Inode size:               256
+Required extra isize:     32
+Desired extra isize:      32
+Default directory hash:   half_md4
+Directory Hash Seed:      0f1e2d3c-0000-4000-8000-000000000004
+FS Error count:           3
+First error time:         Tue Sep  1 21:00:00 2026
+First error function:     ext4_lookup
+First error line #:       1810
+First error inode #:      12
+Last error time:          Thu Sep 10 17:00:00 2026
+Last error function:      ext4_readdir
+Last error line #:        250

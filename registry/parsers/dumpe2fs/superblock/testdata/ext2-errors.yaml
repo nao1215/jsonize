@@ -1,0 +1,4 @@
+description: An ext2 file system with no label and no journal, with the error, mount and last-mounted fields set, so the "FS Error count" and "First error" lines appear.
+source: dumpe2fs -h on a 16 MiB image made with mkfs.ext2 and changed with debugfs -w set_super_value (last_mounted, error_count, first_error_*, last_error_*, state, mtime, mnt_count), e2fsprogs 1.47.2 on Ubuntu 26.04 with LC_ALL=C; UUID and hash seed replaced
+os: linux
+args: [-h, ext2.img]

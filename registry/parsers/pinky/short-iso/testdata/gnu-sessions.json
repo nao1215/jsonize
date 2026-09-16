@@ -1,0 +1,47 @@
+[
+  {
+    "login": "bob",
+    "name": "bob",
+    "messages": null,
+    "tty": "sshd",
+    "idle": null,
+    "when": "2026-09-17 05:54",
+    "where": "fe80::1%eno1"
+  },
+  {
+    "login": "bob",
+    "name": "bob",
+    "messages": null,
+    "tty": "seat0",
+    "idle": null,
+    "when": "2026-09-15 21:49",
+    "where": null
+  },
+  {
+    "login": "bob",
+    "name": "bob",
+    "messages": null,
+    "tty": "sshd",
+    "idle": null,
+    "when": "2026-09-17 06:09",
+    "where": "fe80::1%eno1"
+  },
+  {
+    "login": "bob",
+    "name": "bob",
+    "messages": null,
+    "tty": "sshd",
+    "idle": null,
+    "when": "2026-09-16 17:29",
+    "where": "fe80::1%eno1"
+  },
+  {
+    "login": "bob",
+    "name": "bob",
+    "messages": null,
+    "tty": "sshd",
+    "idle": null,
+    "when": "2026-09-16 17:29",
+    "where": "fe80::1%eno1"
+  }
+]

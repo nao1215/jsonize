@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/wipefs/erase.json",
+  "title": "wipefs/erase",
+  "description": "wipefs --all, one line per erased signature",
+  "x-jsonize": {
+    "definition": "wipefs/erase",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "device": {
+        "type": "string"
+      },
+      "bytes": {
+        "type": "integer"
+      },
+      "offset": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "erased": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "device",
+      "bytes",
+      "offset",
+      "type",
+      "erased"
+    ]
+  }
+}

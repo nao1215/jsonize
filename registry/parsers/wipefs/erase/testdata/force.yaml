@@ -1,0 +1,4 @@
+description: Partition table, swap and ext4 signatures on three devices.
+source: wipefs --no-act --all --force gpt.img swap.img ext4.img, util-linux 2.41.3 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [--no-act, --all, --force, gpt.img, swap.img, ext4.img]

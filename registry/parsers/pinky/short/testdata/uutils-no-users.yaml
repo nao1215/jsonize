@@ -1,0 +1,4 @@
+description: no logins, the header alone
+source: captured on Ubuntu 26.04 with LC_ALL=C pinky (uutils coreutils 0.8.0), which finds no utmp file on a systemd-logind system
+os: linux
+args: []

@@ -1,0 +1,4 @@
+description: a swap-monitored cgroup and a second memory-pressure-monitored one
+source: captured with LC_ALL=C oomctl dump (systemd 259.5-0ubuntu3.4) on Ubuntu 26.04 without root, while systemd-run --user -p ManagedOOMMemoryPressure=kill -p ManagedOOMMemoryPressureLimit=75% -p ManagedOOMSwap=kill ran sleep
+os: linux
+args: [dump]

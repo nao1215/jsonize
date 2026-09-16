@@ -1,0 +1,16 @@
+{
+  "rules": "evdev",
+  "model": "pc105",
+  "layout": [
+    "us",
+    "jp"
+  ],
+  "variant": [
+    "",
+    "kana"
+  ],
+  "options": [
+    "ctrl:nocaps",
+    "compose:ralt"
+  ]
+}

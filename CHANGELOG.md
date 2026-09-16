@@ -8,6 +8,20 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Twenty-three commands: `dumpe2fs -h` and `tune2fs -l` (the superblock
+  of an ext2/3/4 file system), `e2freefrag` (free space summary and
+  histogram), `wipefs` (the signature table, and the report `--all`
+  prints), `partx --show` (with rounded sizes and with `-b`), `gdisk -l`
+  and `sgdisk -p` (a GPT listing), `filefrag -v` (the extents of each
+  file), `fincore` (with rounded sizes and with `-b`), `diffstat`,
+  `gocyclo` (with `-avg` and `-avg-short`), `exif` (libexif's table),
+  `isoinfo -d`, `cmp` and `cmp -b`, `cloud-init status --long`,
+  `pro status` on a machine with no subscription (also as `ua`),
+  `oomctl`, `pinky` and `pinky -l`, `stty` and `stty -a`,
+  `setxkbmap -query`, `udisksctl status`, `lpstat -p`, `-v` and `-t`,
+  and `cpupower frequency-info`. `git diff --stat` is no longer read
+  from `diffstat` output, whose count column git never prints at that
+  width. The registry holds 270 commands through 737 definitions.
 - net-tools `arp`, `arp -n` and `arp -i IFACE` (`arp/net-tools`), the
   cache as a table, and `ifconfig -s` (`ifconfig/net-tools-short`).
   `arp -a` reads an entry published for a proxy, which net-tools prints

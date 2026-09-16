@@ -1,0 +1,4 @@
+description: GPT and protective MBR signatures, which have neither a UUID nor a label, beside an ext4 file system.
+source: wipefs ext4.img gpt.img on an ext4 image and a 64 MiB image partitioned with sgdisk, util-linux 2.41.3 on Ubuntu 26.04 with LC_ALL=C; UUID replaced
+os: linux
+args: [ext4.img, gpt.img]

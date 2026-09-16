@@ -1,0 +1,36 @@
+{
+  "volume": {
+    "system_id": "LINUX",
+    "volume_id": "BACKUP 2024",
+    "volume_set_id": "SET1",
+    "publisher_id": "Example Publisher",
+    "data_preparer_id": "Example Preparer",
+    "application_id": "Example Archive Tool",
+    "copyright_file_id": null,
+    "abstract_file_id": null,
+    "bibliographic_file_id": null,
+    "volume_set_size": 1,
+    "volume_set_sequence_number": 1,
+    "logical_block_size": 2048,
+    "volume_size": 189,
+    "el_torito_version": null,
+    "boot_catalog_sector": null,
+    "joliet_level": 3,
+    "rock_ridge_version": 1
+  },
+  "boot": {
+    "header_id": null,
+    "arch": null,
+    "arch_name": null,
+    "id": null,
+    "key": null,
+    "boot_indicator": null,
+    "boot_indicator_name": null,
+    "boot_media": null,
+    "boot_media_name": null,
+    "load_segment": null,
+    "system_type": null,
+    "sector_count": null,
+    "boot_offset": null
+  }
+}

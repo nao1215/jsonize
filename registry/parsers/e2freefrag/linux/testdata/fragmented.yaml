@@ -1,0 +1,4 @@
+description: A file system with free extents in four size ranges.
+source: e2freefrag on a 32 MiB ext4 image with 1 KiB blocks (mkfs.ext4 -b 1024), filled with 400 files by debugfs -w write and with every third and seventh file removed, e2fsprogs 1.47.2 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [frag.img]

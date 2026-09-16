@@ -1,0 +1,6 @@
+DEVICE   OFFSET TYPE UUID                                 LABEL
+fat.img  0x36   vfat 1234-ABCD                            MY DISK
+fat.img  0x0    vfat 1234-ABCD                            MY DISK
+fat.img  0x1fe  vfat 1234-ABCD                            MY DISK
+swap.img 0xff6  swap 0f1e2d3c-0000-4000-8000-000000000005 
+ext2.img 0x438  ext2 0f1e2d3c-0000-4000-8000-000000000003 

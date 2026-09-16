@@ -1,0 +1,4 @@
+description: An ext4 file system with a journal, so the journal superblock lines follow the file system ones.
+source: dumpe2fs -h on a 64 MiB image made with mkfs.ext4 -L testvol, e2fsprogs 1.47.2 on Ubuntu 26.04 with LC_ALL=C; UUID and hash seed replaced
+os: linux
+args: [-h, ext4.img]

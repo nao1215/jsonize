@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sgdisk/print.json",
+  "title": "sgdisk/print",
+  "description": "sgdisk -p, the GPT header and partition table of a disk or image",
+  "x-jsonize": {
+    "definition": "sgdisk/print",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "disk": {
+      "type": "object",
+      "properties": {
+        "messages": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "device": {
+          "type": "string"
+        },
+        "sectors": {
+          "type": "integer"
+        },
+        "size": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "logical_sector_size": {
+          "type": "integer"
+        },
+        "physical_sector_size": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "disk_guid": {
+          "type": "string"
+        },
+        "max_partitions": {
+          "type": "integer"
+        },
+        "table_first_sector": {
+          "type": "integer"
+        },
+        "table_last_sector": {
+          "type": "integer"
+        },
+        "first_usable_sector": {
+          "type": "integer"
+        },
+        "last_usable_sector": {
+          "type": "integer"
+        },
+        "alignment": {
+          "type": "integer"
+        },
+        "free_sectors": {
+          "type": "integer"
+        },
+        "free_size": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "messages",
+        "device",
+        "sectors",
+        "size",
+        "logical_sector_size",
+        "physical_sector_size",
+        "disk_guid",
+        "max_partitions",
+        "table_first_sector",
+        "table_last_sector",
+        "first_usable_sector",
+        "last_usable_sector",
+        "alignment",
+        "free_sectors",
+        "free_size"
+      ]
+    },
+    "partitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer"
+          },
+          "start_sector": {
+            "type": "integer"
+          },
+          "end_sector": {
+            "type": "integer"
+          },
+          "size": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "number",
+          "start_sector",
+          "end_sector",
+          "size",
+          "code",
+          "name"
+        ]
+      }
+    }
+  },
+  "required": [
+    "disk",
+    "partitions"
+  ]
+}

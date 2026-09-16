@@ -1,0 +1,2 @@
+source: captured with LC_ALL=C gocyclo v0.6.0 -top 12 pkg/registry internal/yaml on Ubuntu, over this repository
+args: [-top, "12", pkg/registry, internal/yaml]

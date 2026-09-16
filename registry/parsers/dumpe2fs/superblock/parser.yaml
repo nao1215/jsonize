@@ -1,0 +1,38 @@
+# `dumpe2fs -h` prints the superblock of an ext2, ext3 or ext4 file
+# system as "Label: value" lines, followed by the journal superblock when
+# the file system has a journal. The set of labels depends on the file
+# system: the journal lines, the "FS Error count" and "First error ..."
+# lines and the MMP lines appear only when they apply, so the lines are
+# read as pairs under their printed labels rather than as a fixed list.
+#
+# The labels hold spaces and "#", which a field name cannot, so every
+# value stays the text dumpe2fs printed. Several are not numbers on their
+# own anyway: "1 (dynamic)", "0 (user root)", "173 kB", a date in the
+# local time zone of the machine that ran dumpe2fs.
+#
+# dumpe2fs writes its version banner to standard error, so the text opens
+# with the first label. `tune2fs -l` prints the same labels behind a
+# banner on standard output, and is read by tune2fs/superblock.
+format: 1
+command: dumpe2fs
+variant: superblock
+description: dumpe2fs -h, the superblock of an ext2, ext3 or ext4 file system
+metadata:
+  tags: [linux, filesystem, ext4, e2fsprogs]
+  compatible: [e2fsprogs]
+  references:
+    - https://man7.org/linux/man-pages/man8/dumpe2fs.8.html
+detect:
+  os: [linux]
+  signature:
+    # Every line of the text is a label and its value. Without -h
+    # dumpe2fs goes on to the block groups, whose indented lines break
+    # that rule well inside the window: the superblock is under a hundred
+    # lines.
+    all:
+      - '\AFilesystem volume name:[ \t]+[^\n]*(?:\n[A-Z][A-Za-z0-9 #()/_.-]*:(?:[ \t][^\n]*)?)*\n*\z'
+    window: 200
+parse:
+  type: kv
+  separator: ":"
+  as: map

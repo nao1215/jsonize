@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lpstat/printers.json",
+  "title": "lpstat/printers",
+  "description": "lpstat -p printer and class states",
+  "x-jsonize": {
+    "definition": "lpstat/printers",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "state": {
+        "type": "string",
+        "enum": [
+          "idle",
+          "printing",
+          "stopped"
+        ]
+      },
+      "printer": {
+        "type": "string"
+      },
+      "job": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "enabled": {
+        "type": "boolean"
+      },
+      "since": {
+        "type": "string"
+      },
+      "reason": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "state",
+      "printer",
+      "job",
+      "enabled",
+      "since",
+      "reason"
+    ]
+  }
+}

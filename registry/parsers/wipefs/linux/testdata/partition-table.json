@@ -1,0 +1,30 @@
+[
+  {
+    "device": "ext4.img",
+    "offset": "0x438",
+    "type": "ext4",
+    "uuid": "0f1e2d3c-0000-4000-8000-000000000001",
+    "label": "testvol"
+  },
+  {
+    "device": "gpt.img",
+    "offset": "0x200",
+    "type": "gpt",
+    "uuid": null,
+    "label": null
+  },
+  {
+    "device": "gpt.img",
+    "offset": "0x3fffe00",
+    "type": "gpt",
+    "uuid": null,
+    "label": null
+  },
+  {
+    "device": "gpt.img",
+    "offset": "0x1fe",
+    "type": "PMBR",
+    "uuid": null,
+    "label": null
+  }
+]

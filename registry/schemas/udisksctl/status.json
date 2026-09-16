@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/udisksctl/status.json",
+  "title": "udisksctl/status",
+  "description": "udisksctl status drive list",
+  "x-jsonize": {
+    "definition": "udisksctl/status",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "model": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "revision": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "serial": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "device": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "model",
+      "revision",
+      "serial",
+      "device"
+    ]
+  }
+}

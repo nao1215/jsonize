@@ -1,0 +1,16 @@
+ CHANGELOG.md                                                       |    8 
+ e2e/atago/exec_linux.atago.yaml                                    |   28 
+ registry/parsers/readelf/symbols-wide/parser.yaml                  |   58 
+ registry/parsers/readelf/symbols-wide/testdata/go-names.json       |   75 +
+ registry/parsers/readelf/symbols-wide/testdata/go-names.txt        |    8 
+ registry/parsers/readelf/symbols-wide/testdata/go-names.yaml       |    4 
+ registry/parsers/readelf/symbols-wide/testdata/shared-library.json |  491 ++++++++
+ registry/parsers/readelf/symbols-wide/testdata/shared-library.txt  |   40 
+ registry/parsers/readelf/symbols-wide/testdata/shared-library.yaml |    4 
+ registry/parsers/readelf/symbols-wide/testdata/unstripped.json     |  603 ++++++++++
+ registry/parsers/readelf/symbols-wide/testdata/unstripped.txt      |   51 
+ registry/parsers/readelf/symbols-wide/testdata/unstripped.yaml     |    4 
+ registry/schemas/readelf/symbols-wide.json                         |  101 +
+ website/content/_index.md                                          |    2 
+ website/content/parsers.md                                         |    2 
+ 15 files changed, 1477 insertions(+), 2 deletions(-)

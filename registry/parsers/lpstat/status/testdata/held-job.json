@@ -1,0 +1,77 @@
+[
+  {
+    "kind": "scheduler",
+    "running": true
+  },
+  {
+    "kind": "default_destination",
+    "printer": "office-laser"
+  },
+  {
+    "kind": "device",
+    "printer": "lab-inkjet",
+    "uri": "socket://printer1.internal.example:9100"
+  },
+  {
+    "kind": "device",
+    "printer": "label-writer",
+    "uri": "ipp://printer2.internal.example/ipp/print"
+  },
+  {
+    "kind": "device",
+    "printer": "office-laser",
+    "uri": "///dev/null"
+  },
+  {
+    "kind": "accepting",
+    "printer": "lab-inkjet",
+    "accepting": false,
+    "since": "Thu Sep 17 07:17:49 2026",
+    "reason": "reason unknown"
+  },
+  {
+    "kind": "accepting",
+    "printer": "label-writer",
+    "accepting": true,
+    "since": "Thu Sep 17 07:17:49 2026",
+    "reason": null
+  },
+  {
+    "kind": "accepting",
+    "printer": "office-laser",
+    "accepting": true,
+    "since": "Thu Sep 17 07:17:49 2026",
+    "reason": null
+  },
+  {
+    "kind": "printer",
+    "state": "stopped",
+    "printer": "lab-inkjet",
+    "enabled": false,
+    "since": "Thu Sep 17 07:17:49 2026",
+    "reason": "reason unknown"
+  },
+  {
+    "kind": "printer",
+    "state": "idle",
+    "printer": "label-writer",
+    "enabled": true,
+    "since": "Thu Sep 17 07:17:49 2026",
+    "reason": null
+  },
+  {
+    "kind": "printer",
+    "state": "idle",
+    "printer": "office-laser",
+    "enabled": true,
+    "since": "Thu Sep 17 07:17:49 2026",
+    "reason": null
+  },
+  {
+    "kind": "job",
+    "job": "label-writer-1",
+    "user": "bob",
+    "size": 1024,
+    "since": "Thu Sep 17 07:17:57 2026"
+  }
+]
