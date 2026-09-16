@@ -1,0 +1,5 @@
+    RES PAGES     SIZE FILE
+5001216  1221  5000000 data.bin
+ 106496    26 10485760 sparse.bin
+      0     0        0 empty.bin
+  20480     5    20000 dir with space/my file.bin

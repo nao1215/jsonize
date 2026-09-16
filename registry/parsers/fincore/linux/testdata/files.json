@@ -1,0 +1,26 @@
+[
+  {
+    "res": "4.8M",
+    "pages": 1221,
+    "size": "4.8M",
+    "file": "data.bin"
+  },
+  {
+    "res": "104K",
+    "pages": 26,
+    "size": "10M",
+    "file": "sparse.bin"
+  },
+  {
+    "res": "0B",
+    "pages": 0,
+    "size": "0B",
+    "file": "empty.bin"
+  },
+  {
+    "res": "1M",
+    "pages": 256,
+    "size": "1M",
+    "file": "prealloc.bin"
+  }
+]

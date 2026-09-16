@@ -1,0 +1,43 @@
+# `fincore` reports how much of each file is in the page cache: the
+# resident size, the number of resident pages, the file size and the
+# name. The sizes are rounded ("4.8M") and fincore offers -b for exact
+# byte counts, which fincore/bytes reads, so they are kept as text here.
+# A rounded size always ends in a unit letter, "0B" included, so the
+# first row says which of the two the table is.
+#
+# The name is the last column and is read from the one space after SIZE
+# to the end of the line, so a name with spaces in it is kept whole.
+format: 1
+command: fincore
+variant: linux
+description: fincore, the page cache use of each file with rounded sizes
+metadata:
+  tags: [linux, memory, page-cache, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/fincore.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*RES[ \t]+PAGES[ \t]+SIZE[ \t]+FILE[ \t]*\n[ \t]*\d+(?:\.\d+)?[BKMGTPEZY][ \t]+\d+[ \t]+\d+(?:\.\d+)?[BKMGTPEZY] '
+    # The table is lined up. --raw prints the same words one space apart
+    # and the rows unaligned, with a space in a name written as \x20, so
+    # the names would come back escaped. An aligned table indents or
+    # spaces out its header, or pads the first row before one of its
+    # first three cells; a raw table does none of these.
+    any:
+      - '\A[ \t]'
+      - '\A[^\n]*?\S[ \t]{2,}\S'
+      - '\A[^\n]*\n[ \t]'
+      - '\A[^\n]*\n\S+[ \t]{2,}'
+      - '\A[^\n]*\n\S+[ \t]\S+[ \t]{2,}'
+input:
+  select:
+    after: '^[ \t]*RES[ \t]+PAGES[ \t]+SIZE[ \t]+FILE[ \t]*$'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<res>\d+(?:\.\d+)?[BKMGTPEZY])[ \t]+(?P<pages>\d+)[ \t]+(?P<size>\d+(?:\.\d+)?[BKMGTPEZY]) (?P<file>.+)$'
+fields:
+  pages: {type: int}
+  file: {required: true}

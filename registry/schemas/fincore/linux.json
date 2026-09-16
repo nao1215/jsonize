@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/fincore/linux.json",
+  "title": "fincore/linux",
+  "description": "fincore, the page cache use of each file with rounded sizes",
+  "x-jsonize": {
+    "definition": "fincore/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "res": {
+        "type": "string"
+      },
+      "pages": {
+        "type": "integer"
+      },
+      "size": {
+        "type": "string"
+      },
+      "file": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "res",
+      "pages",
+      "size",
+      "file"
+    ]
+  }
+}
