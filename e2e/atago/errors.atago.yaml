@@ -519,7 +519,7 @@ scenarios:
           stdout:
             empty: true
           stderr:
-            contains: "not defined: -meta"
+            contains: "unknown option --meta"
       - run:
           command: jz --os linux
           stdin: "x=1\n"
@@ -781,3 +781,21 @@ scenarios:
           exit_code: 2
           stderr:
             contains: 'column name "a" is given twice'
+
+  - name: a value an option cannot take says what it takes
+    steps:
+      - run:
+          command: jz run --timeout -1s df
+      - assert:
+          exit_code: 2
+          stdout:
+            empty: true
+          stderr:
+            contains: 'jz: --timeout expects a duration such as 30s or 2m, got "-1s"; 0 is no limit'
+      - run:
+          command: jz --explain=yaml
+          stdin: "x=1\n"
+      - assert:
+          exit_code: 2
+          stderr:
+            contains: 'jz: --explain takes no value, or =json for one JSON document; got "yaml"'

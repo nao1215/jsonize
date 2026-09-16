@@ -276,9 +276,17 @@ func TabularDefinition(format string, header bool) (*definition.Definition, erro
 }
 
 // TabularOptions sets how a csv or a tsv is read as data: an escape
-// sequence is part of the value that holds it, not colour to take off.
+// sequence is part of the value that holds it, not colour to take off,
+// and a record is as long as the input may be, as a line of every other
+// data format is, rather than bounded by the line limit of command output.
 func TabularOptions(opts engine.Options) engine.Options {
 	opts.KeepEscapes = true
+	if opts.MaxLineLength <= 0 {
+		opts.MaxLineLength = int(opts.MaxInputSize)
+		if opts.MaxLineLength <= 0 {
+			opts.MaxLineLength = engine.DefaultMaxInputSize
+		}
+	}
 	return opts
 }
 

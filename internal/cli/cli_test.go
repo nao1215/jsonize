@@ -226,7 +226,7 @@ func TestRemovedOptionsAreGone(t *testing.T) {
 		if h.stdout.Len() != 0 {
 			t.Errorf("%v: stdout = %q", args, h.stdout.String())
 		}
-		if !strings.Contains(h.stderr.String(), "not defined") {
+		if !strings.Contains(h.stderr.String(), "unknown option") {
 			t.Errorf("%v: stderr = %s", args, h.stderr.String())
 		}
 	}
@@ -1857,7 +1857,7 @@ func TestRunAnswersTheSameWholeAndStreamed(t *testing.T) {
 		{name: "a failed command that printed blank lines", opts: []string{"--parser", "df"},
 			script: "echo; exit 5", code: 5, ran: true, quiet: "printed nothing"},
 		{name: "a command that printed blank lines", opts: []string{"--parser", "df"},
-			script: "echo", code: ExitSelect, ran: true, says: "printed nothing"},
+			script: "echo", code: ExitSelect, ran: true, says: "jz: sh printed nothing, and df/"},
 		{name: "a key the output lacks after a failed command, registered", opts: []string{"--parser", "csv", "--variant", "comma", "--extract", "nokey"},
 			script: "printf 'a,b\\n1,2\\n'; exit 5", code: 5, ran: true, whole: "", stream: "skip"},
 		{name: "a key the output lacks after a failed command, defined", opts: []string{"--define", csv, "--extract", "nokey"},

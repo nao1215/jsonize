@@ -41,7 +41,7 @@ func TestYAMLOutputIsRemoved(t *testing.T) {
 	}
 	// An option that never existed keeps the ordinary message.
 	h := newHarness(t)
-	if code := h.run("--yml"); code != ExitUsage || !strings.Contains(h.stderr.String(), "flag provided but not defined: -yml") {
+	if code := h.run("--yml"); code != ExitUsage || !strings.Contains(h.stderr.String(), "jz: unknown option --yml\n") {
 		t.Errorf("--yml: code=%d stderr=%s", code, h.stderr.String())
 	}
 }
@@ -59,5 +59,37 @@ func TestYAMLInputStays(t *testing.T) {
 	}
 	if code := h.pipe("a=1\n", "--define", "parse: {type: kv, separator: \"=\"}"); code != ExitOK || strings.TrimSpace(h.stdout.String()) != `[{"name":"a","value":"1"}]` {
 		t.Errorf("--define: %d %s %s", code, h.stdout.String(), h.stderr.String())
+	}
+}
+
+// An option is refused in the form jz documents it, with two dashes for a
+// long name and one for a letter, and a value it cannot take says what it
+// takes. A duration is not negative: no limit is 0.
+func TestOptionErrorsNameTheOption(t *testing.T) {
+	for _, tt := range []struct {
+		args []string
+		want string
+	}{
+		{[]string{"--nope"}, "jz: unknown option --nope\n"},
+		{[]string{"-nope"}, "jz: unknown option --nope\n"},
+		{[]string{"-x"}, "jz: unknown option -x\n"},
+		{[]string{"--nope=1"}, "jz: unknown option --nope\n"},
+		{[]string{"--pretty=maybe"}, `jz: --pretty takes no value, got "maybe"` + "\n"},
+		{[]string{"-p=maybe"}, `jz: -p takes no value, got "maybe"` + "\n"},
+		{[]string{"--explain=yaml"}, `jz: --explain takes no value, or =json for one JSON document; got "yaml"` + "\n"},
+		{[]string{"--parser"}, "jz: --parser needs a value\n"},
+		{[]string{"run", "--timeout", "soon", "df"}, `jz: --timeout expects a duration such as 30s or 2m, got "soon"` + "\n"},
+		{[]string{"run", "--timeout", "-1s", "df"}, `jz: --timeout expects a duration such as 30s or 2m, got "-1s"; 0 is no limit` + "\n"},
+		{[]string{"new", "--nope", "a=1"}, "jz: unknown option --nope\n"},
+		{[]string{"list", "--os", "linux"}, "jz: unknown option --os\n"},
+	} {
+		h := newHarness(t)
+		h.env.Stdin = untouchedInput{t}
+		if code := h.run(tt.args...); code != ExitUsage {
+			t.Errorf("%v: code=%d stderr=%s", tt.args, code, h.stderr.String())
+		}
+		if first, _, _ := strings.Cut(h.stderr.String(), "\n"); first+"\n" != tt.want {
+			t.Errorf("%v: stderr starts %q, want %q", tt.args, first, tt.want)
+		}
 	}
 }
