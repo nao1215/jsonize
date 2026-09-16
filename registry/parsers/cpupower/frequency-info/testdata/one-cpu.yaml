@@ -1,0 +1,4 @@
+description: the amd-pstate-epp driver, with the boost and amd-pstate limit groups and the policy sentence over three lines
+source: captured on Ubuntu 26.04 (cpupower 7.0.14, AMD Ryzen AI Max+ 395) with LC_ALL=C cpupower frequency-info as an unprivileged user
+os: linux
+args: [frequency-info]

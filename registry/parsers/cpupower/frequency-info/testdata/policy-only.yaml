@@ -1,0 +1,4 @@
+description: -p prints the policy line alone under the heading
+source: captured on Ubuntu 26.04 (cpupower 7.0.14) with LC_ALL=C cpupower -c 3 frequency-info -p as an unprivileged user
+os: linux
+args: [-c, "3", frequency-info, -p]

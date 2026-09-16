@@ -1,0 +1,196 @@
+[
+  {
+    "cpu": 0,
+    "children": [
+      {
+        "name": "driver",
+        "value": "amd-pstate-epp",
+        "children": []
+      },
+      {
+        "name": "CPUs which run at the same hardware frequency",
+        "value": "0",
+        "children": []
+      },
+      {
+        "name": "CPUs which need to have their frequency coordinated by software",
+        "value": "0",
+        "children": []
+      },
+      {
+        "name": "energy performance preference",
+        "value": "balance_performance",
+        "children": []
+      },
+      {
+        "name": "hardware limits",
+        "value": "625 MHz - 5.19 GHz",
+        "children": []
+      },
+      {
+        "name": "available cpufreq governors",
+        "value": "performance powersave",
+        "children": []
+      },
+      {
+        "name": "current policy",
+        "value": "frequency should be within 2.00 GHz and 5.19 GHz. The governor \"powersave\" may decide which speed to use within this range.",
+        "children": []
+      },
+      {
+        "name": "current CPU frequency",
+        "value": "Unable to call hardware",
+        "children": []
+      },
+      {
+        "name": "current CPU frequency",
+        "value": "4.56 GHz (asserted by call to kernel)",
+        "children": []
+      },
+      {
+        "name": "boost state support",
+        "value": null,
+        "children": [
+          {
+            "name": "Supported",
+            "value": "yes",
+            "children": []
+          },
+          {
+            "name": "Active",
+            "value": "yes",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "amd-pstate limits",
+        "value": null,
+        "children": [
+          {
+            "name": "Highest Performance",
+            "value": "166. Maximum Frequency: 5.19 GHz.",
+            "children": []
+          },
+          {
+            "name": "Nominal Performance",
+            "value": "96. Nominal Frequency: 3.00 GHz.",
+            "children": []
+          },
+          {
+            "name": "Lowest Non-linear Performance",
+            "value": "64. Lowest Non-linear Frequency: 2.00 GHz.",
+            "children": []
+          },
+          {
+            "name": "Lowest Performance",
+            "value": "20. Lowest Frequency: 599 MHz.",
+            "children": []
+          },
+          {
+            "name": "Preferred Core Support",
+            "value": "1. Preferred Core Ranking: 236.",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "cpu": 1,
+    "children": [
+      {
+        "name": "driver",
+        "value": "amd-pstate-epp",
+        "children": []
+      },
+      {
+        "name": "CPUs which run at the same hardware frequency",
+        "value": "1",
+        "children": []
+      },
+      {
+        "name": "CPUs which need to have their frequency coordinated by software",
+        "value": "1",
+        "children": []
+      },
+      {
+        "name": "energy performance preference",
+        "value": "balance_performance",
+        "children": []
+      },
+      {
+        "name": "hardware limits",
+        "value": "625 MHz - 5.19 GHz",
+        "children": []
+      },
+      {
+        "name": "available cpufreq governors",
+        "value": "performance powersave",
+        "children": []
+      },
+      {
+        "name": "current policy",
+        "value": "frequency should be within 2.00 GHz and 5.19 GHz. The governor \"powersave\" may decide which speed to use within this range.",
+        "children": []
+      },
+      {
+        "name": "current CPU frequency",
+        "value": "Unable to call hardware",
+        "children": []
+      },
+      {
+        "name": "current CPU frequency",
+        "value": "1.58 GHz (asserted by call to kernel)",
+        "children": []
+      },
+      {
+        "name": "boost state support",
+        "value": null,
+        "children": [
+          {
+            "name": "Supported",
+            "value": "yes",
+            "children": []
+          },
+          {
+            "name": "Active",
+            "value": "yes",
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "amd-pstate limits",
+        "value": null,
+        "children": [
+          {
+            "name": "Highest Performance",
+            "value": "166. Maximum Frequency: 5.19 GHz.",
+            "children": []
+          },
+          {
+            "name": "Nominal Performance",
+            "value": "96. Nominal Frequency: 3.00 GHz.",
+            "children": []
+          },
+          {
+            "name": "Lowest Non-linear Performance",
+            "value": "64. Lowest Non-linear Frequency: 2.00 GHz.",
+            "children": []
+          },
+          {
+            "name": "Lowest Performance",
+            "value": "20. Lowest Frequency: 599 MHz.",
+            "children": []
+          },
+          {
+            "name": "Preferred Core Support",
+            "value": "1. Preferred Core Ranking: 226.",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]
