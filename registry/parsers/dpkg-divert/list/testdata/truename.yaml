@@ -1,0 +1,4 @@
+description: --truename prints the path a file is diverted to and nothing else, which is not this format.
+source: dpkg-divert --truename /usr/bin/luit, dpkg 1.23 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+expect_error: 'does not describe this input'

@@ -1,0 +1,30 @@
+# `dpkg-divert --list [GLOB]` prints a line for each diversion: the path
+# that is diverted, where the packaged file goes instead, and the package
+# that made the diversion. A diversion the administrator made has no
+# package and starts with "local". dpkg leaves out " to DIVERTED" when
+# the file goes to the default name, PATH.distrib.
+format: 1
+command: dpkg-divert
+variant: list
+description: dpkg-divert --list, each diverted path with where it goes and who diverted it
+metadata:
+  tags: [linux, debian, package]
+  compatible: [dpkg]
+  references:
+    - https://manpages.debian.org/unstable/dpkg/dpkg-divert.1.en.html
+detect:
+  os: [linux]
+  args:
+    any: ["--list"]
+    none: ["--listpackage", "--truename"]
+  signature:
+    all:
+      - '\A(?:(?:local )?diversion of /[^\n]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  patterns:
+    - '^diversion of (?P<path>/.+?)(?: to (?P<diverted_to>/.+?))? by (?P<package>[a-z0-9][a-z0-9+.-]*)(?P<local>)$'
+    - '^(?P<local>local) diversion of (?P<path>/.+?)(?: to (?P<diverted_to>/.+?))?(?P<package>)??$'
+fields:
+  local: {type: bool, true_values: ["local"], false_values: [""]}
+  path: {required: true}

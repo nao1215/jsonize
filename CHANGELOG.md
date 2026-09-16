@@ -10,8 +10,8 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - `dpkg-deb -I` (a package's size, the members of its control archive
   and its control fields) and `dpkg-deb -c`, which prints the listing
-  tar/gnu reads. The registry holds 246 commands through 698
-  definitions.
+  tar/gnu reads, and `dpkg-divert --list`. The registry holds 247
+  commands through 699 definitions.
 - `readelf -s -W`, each symbol table with the value, size, type,
   binding, visibility, section and name of every symbol, and the version
   a symbol is bound to. The registry holds 245 commands through 697
