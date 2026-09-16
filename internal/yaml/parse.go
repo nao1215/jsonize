@@ -655,7 +655,14 @@ func (p *parser) value(off, parent int) (*Node, int, error) {
 		n.Value = text
 		return n, next, nil
 	case '[', '{':
-		return p.flow(off)
+		n, next, err := p.flow(off)
+		if err != nil {
+			return nil, 0, err
+		}
+		if !p.lineEnds(next) {
+			return nil, 0, p.errorf(next, "unexpected text after the flow collection")
+		}
+		return n, next, nil
 	case '"', '\'':
 		text, next, err := p.quoted(off)
 		if err != nil {

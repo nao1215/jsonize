@@ -138,6 +138,9 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- YAML text after a flow collection on its line was dropped: `a: [b]c`
+  read as `{"a":["b"]}` with exit 0. It is refused with exit 3, as text
+  after a quoted value already was.
 - A YAML file that opens with a `%YAML 1.2` directive and `---` was
   refused as holding two documents. The directive is read, a version
   other than 1 is refused by name, and so is `%TAG`, whose tags jz does
