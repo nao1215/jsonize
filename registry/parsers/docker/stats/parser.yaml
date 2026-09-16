@@ -40,7 +40,7 @@ input:
     - '^CONTAINER ID[ \t]+NAME[ \t]+CPU %'
 parse:
   type: regex
-  pattern: '^(?P<container_id>\S+) {2,}(?P<name>\S+) {2,}(?P<cpu_percent>\S+) {2,}(?P<mem_usage>\S+) / (?P<mem_limit>\S+) {2,}(?P<mem_percent>\S+) {2,}(?P<net_input>\S+) / (?P<net_output>\S+) {2,}(?P<block_input>\S+) / (?P<block_output>\S+) {2,}(?P<pids>\S+)$'
+  pattern: '^(?P<container_id>\S+) {2,}(?P<name>\S+) {2,}(?P<cpu_percent>\S+) {2,}(?P<mem_usage>\S+) / (?P<mem_limit>\S+) {2,}(?P<mem_percent>\S+) {2,}(?P<net_input>\S+) / (?P<net_output>\S+) {2,}(?P<block_input>\S+) / (?P<block_output>\S+) {2,}(?P<pids>\S+)[ \t]*$'
 fields:
   container_id: {required: true}
   name: {required: true}

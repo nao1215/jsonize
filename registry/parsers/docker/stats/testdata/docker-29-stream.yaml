@@ -1,0 +1,3 @@
+source: docker stats without --no-stream, captured for three seconds on Ubuntu 26.04 (Docker 29.2.1) with LC_ALL=C through a pipe; container ids and names replaced with ones of the same width
+description: the refreshing form, which moves the cursor home before each frame and clears to the end of each line, leaving a space before the clear
+args: [stats]

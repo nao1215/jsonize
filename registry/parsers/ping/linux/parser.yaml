@@ -27,7 +27,6 @@ detect:
   signature:
     all:
       - '\APING \S+ \([\w.:%-]+\) (?:from \S+ \S*: )?(?:\d+\(\d+\) bytes of data\.|\d+ data bytes)$'
-      - '^--- \S+ ping statistics ---$'
 parse:
   type: composite
   parts:

@@ -19,8 +19,8 @@ detect:
     all:
       # The text opens with the header.
       - '\A[ \t]+total[ \t]'
-      - '^\s+total\s+used\s+free\s+shared\s+buff/cache\s+available\s*$'
-      - '^Mem:\s+[\d.]+[KMGTPB]i?\b'
+      - '\A\s+total\s+used\s+free\s+shared\s+buff/cache\s+available\s*$'
+      - '\A[^\n]*\nMem:\s+[\d.]+[KMGTPB]i?\b'
 parse:
   type: table
   header:

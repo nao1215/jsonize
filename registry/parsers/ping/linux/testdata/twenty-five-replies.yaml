@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (iputils 20250605) with LC_ALL=C
+description: more replies than the signature window holds, so the summary a running ping prints only at its end is past the lines that identify it
+os: linux
+args: ["-c", "25", "-i", "0.2", "127.0.0.1"]
