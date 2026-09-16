@@ -490,7 +490,7 @@ scenarios:
   # stream that line is reported and left out; everything else the
   # command printed still reaches standard output, and the status says
   # something was skipped.
-  - name: jz run --stream skips a line the command printed that it cannot read
+  - name: jz run --stream ends at a line the command printed that it cannot read
     only: {os: linux}
     steps:
       - run:
@@ -500,12 +500,11 @@ scenarios:
           stdout:
             equals: |
               {"size":4,"name":"/a"}
-              {"size":8,"name":"/b"}
           stderr:
             contains: "line 2"
-      # The command's own status wins over the skipped record: jz mirrors
-      # what the command said about itself, and it can only return one
-      # number. The skipped records are on standard error either way.
+      # The command's own status wins over the record jz could not read:
+      # jz mirrors what the command said about itself, and it can only
+      # return one number. The failure is on standard error either way.
       - run:
           command: jz run --stream --parser du -- sh -c 'printf "4\t/a\ngarbage\n8\t/b\n"; exit 7'
       - assert:
@@ -513,7 +512,6 @@ scenarios:
           stdout:
             equals: |
               {"size":4,"name":"/a"}
-              {"size":8,"name":"/b"}
           stderr:
             contains: "line 2"
 

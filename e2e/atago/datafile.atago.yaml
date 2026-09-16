@@ -320,8 +320,8 @@ scenarios:
           stdout: {empty: true}
           stderr:
             contains: "gzip: invalid checksum"
-      # A stream leaves out the line it cannot read and writes the rest;
-      # --stop-on-error keeps only what came before it.
+      # A stream ends at the line it cannot read, keeping what came
+      # before it.
       - run:
           command: jz --format jsonl --stream
           stdin: "1\n2\nnot json\n3\n"
@@ -331,18 +331,8 @@ scenarios:
             equals: |
               1
               2
-              3
           stderr:
             contains: "jz: jsonl: line 3: the line is not one JSON value"
-      - run:
-          command: jz --format jsonl --stream --stop-on-error
-          stdin: "1\n2\nnot json\n3\n"
-      - assert:
-          exit_code: 3
-          stdout:
-            equals: |
-              1
-              2
 
   - name: the options that state two answers, or none that fits, are usage errors
     steps:
@@ -657,7 +647,6 @@ scenarios:
           stdout:
             equals: |
               {"sku":"1","units":4}
-              {"sku":"3","units":5}
           stderr:
             contains: 'line 3: field "units": cannot convert "four" to int'
       - run:

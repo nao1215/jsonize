@@ -285,14 +285,10 @@ func TestDataFileOutputOptions(t *testing.T) {
 	if code := h.pipe("a:1\tb:2\na:3\tb:4\n", "--format", "ltsv", "--stream", "--extract", "a"); code != ExitOK || h.stdout.String() != "{\"a\":\"1\"}\n{\"a\":\"3\"}\n" {
 		t.Errorf("--stream --extract: %d %q %s", code, h.stdout.String(), h.stderr.String())
 	}
-	// A stream leaves out the line it cannot read and writes the rest, as
-	// a stream of a command's output does; the status is still 3.
-	if code := h.pipe("1\n2\nx\n3\n", "--format", "jsonl", "--stream"); code != ExitParse || h.stdout.String() != "1\n2\n3\n" || !strings.Contains(h.stderr.String(), "jz: jsonl: line 3: the line is not one JSON value") {
-		t.Errorf("a stream that skips: %d %q %s", code, h.stdout.String(), h.stderr.String())
-	}
-	// --stop-on-error ends it there, keeping what was written.
-	if code := h.pipe("1\n2\nx\n3\n", "--format", "jsonl", "--stream", "--stop-on-error"); code != ExitParse || h.stdout.String() != "1\n2\n" || strings.Count(h.stderr.String(), "line 3") != 1 {
-		t.Errorf("a stream that stops: %d %q %s", code, h.stdout.String(), h.stderr.String())
+	// A stream ends at the line it cannot read and keeps what was already
+	// written, as a stream of a command's output does; the status is 3.
+	if code := h.pipe("1\n2\nx\n3\n", "--format", "jsonl", "--stream"); code != ExitParse || h.stdout.String() != "1\n2\n" || strings.Count(h.stderr.String(), "jz: jsonl: line 3: the line is not one JSON value") != 1 {
+		t.Errorf("a stream that ends at a bad record: %d %q %s", code, h.stdout.String(), h.stderr.String())
 	}
 	// The options about a format's fields change nothing for a document.
 	if code := h.pipe("a: 1\n", "--format", "yaml", "--raw", "--assume-year", "2024"); code != ExitOK || strings.TrimSpace(h.stdout.String()) != `{"a":1}` {
@@ -407,7 +403,7 @@ func TestColumnTypes(t *testing.T) {
 	if code := h.pipe(bad, "--format", "csv", "--type", "count=int"); code != ExitParse || h.stdout.Len() != 0 || !strings.Contains(h.stderr.String(), `jz: csv/comma: line 3: field "count": cannot convert "many" to int`) {
 		t.Errorf("a value that is not an int: %d %q %s", code, h.stdout.String(), h.stderr.String())
 	}
-	if code := h.pipe(bad, "--format", "csv", "--type", "count=int", "--stream"); code != ExitParse || h.stdout.String() != `{"id":"1","count":2}`+"\n"+`{"id":"3","count":4}`+"\n" {
+	if code := h.pipe(bad, "--format", "csv", "--type", "count=int", "--stream"); code != ExitParse || h.stdout.String() != `{"id":"1","count":2}`+"\n" {
 		t.Errorf("a value that is not an int, streamed: %d %q %s", code, h.stdout.String(), h.stderr.String())
 	}
 	if code := h.pipe("id\n1\n", "--format", "csv", "--stream", "--type", "count=int"); code != ExitUsage || h.stdout.Len() != 0 {

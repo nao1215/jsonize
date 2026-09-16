@@ -147,24 +147,6 @@ scenarios:
           stdout:
             matches: '\A\{"part":"destination","value":\{"name":"192\.0\.2\.1","address":"192\.0\.2\.1",[^\n]*\}\}\n\{"part":"replies","value":\{"kind":"no_answer","error":"Request timeout","icmp_seq":0\}\}\n\{"part":"statistics","value":\{"name":"192\.0\.2\.1","packets_transmitted":2,"packets_received":0,[^\n]*\}\}\n\z'
 
-  - name: "usage: Watching a stream for the records it left out"
-    steps:
-      - run:
-          command: jz --stream --explain=json --parser etc --variant passwd
-          stdin: |
-            root:x:0:0:root:/root:/bin/bash
-            broken
-      - assert:
-          exit_code: 3
-          stdout:
-            equals: |
-              {"username":"root","password":"x","uid":0,"gid":0,"gecos":"root","home":"/root","shell":"/bin/bash"}
-          stderr:
-            matches: '(?m)^jz: explain: \{"outcome":"chosen","scope":\{"from":"--parser","parser":"etc","variant":"passwd",'
-      - assert:
-          stderr:
-            contains: 'jz: explain: {"event":"skipped","definition":"etc/passwd","line":2,"reason":"expected at least 7 fields but found 1: \"broken\"","skipped":1}'
-
   - name: "usage: Naming a parser"
     steps:
       - run:

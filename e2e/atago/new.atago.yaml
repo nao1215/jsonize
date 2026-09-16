@@ -433,12 +433,11 @@ scenarios:
               {"host":"a","sample":{"used":2}}
               status=0
 
-  # A line that cannot be read, late in the input, is reported and left
-  # out, and the documents after it are still written; the status is 3.
-  # --stop-on-error ends at that line, keeping what was written. The
+  # A line that cannot be read, late in the input, ends the documents
+  # there: the ones written before it stand and the status is 3. The
   # option pairs that cannot work are refused before standard input or a
   # file is read.
-  - name: --each leaves out a line it cannot read, or stops there with --stop-on-error, and refuses what cannot work
+  - name: --each ends at a line it cannot read, and refuses what cannot work
     steps:
       - run:
           command: jz new --each n:=@-
@@ -449,20 +448,8 @@ scenarios:
             equals: |
               {"n":1}
               {"n":2}
-              {"n":4}
           stderr:
             contains: "jz: new: n:=@-: jsonl: line 3: the line is not one JSON value"
-      - run:
-          command: jz new --each --stop-on-error n:=@-
-          stdin: "1\n2\nthree\n4\n"
-      - assert:
-          exit_code: 3
-          stdout:
-            equals: |
-              {"n":1}
-              {"n":2}
-          stderr:
-            contains: "jz: new: n:=@-: jsonl: line 3"
       - fixture:
           file: latin1.txt
           base64: "b2sKY2Fm6QpvawpbMQ=="
@@ -471,7 +458,7 @@ scenarios:
       - assert:
           exit_code: 0
           stdout:
-            contains: "lines=3"
+            contains: "lines=1"
       - assert:
           stdout:
             contains: "status=3"
@@ -499,11 +486,13 @@ scenarios:
           stderr:
             contains: "--pretty and --each cannot be used together"
       - run:
-          command: jz new --stop-on-error n=1
+          command: jz new --each --stop-on-error n:=@-
+          stdin: "1\n"
       - assert:
           exit_code: 2
+          stdout: {empty: true}
           stderr:
-            contains: "--stop-on-error ends --each at a line it cannot read"
+            contains: "--stop-on-error was removed"
       - run:
           command: jz new --each n:=@- v=@${workdir}/missing.txt
           stdin: "1\n"

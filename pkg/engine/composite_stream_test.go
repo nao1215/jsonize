@@ -39,27 +39,23 @@ parse:
         received: {type: int}
 `
 
-// collect streams input and returns the documents one per line, and what
-// onError was handed.
-func collect(t *testing.T, src string, r io.Reader) (string, []*ParseError, error) {
+// collect streams input and returns the documents one per line, with
+// whatever ended the stream.
+func collect(t *testing.T, src string, r io.Reader) (string, error) {
 	t.Helper()
 	var out bytes.Buffer
-	var bad []*ParseError
 	err := Stream(load(t, src), r, Options{}, func(v any) error {
 		return jsonutil.Encode(&out, v, false)
-	}, func(pe *ParseError) error {
-		bad = append(bad, pe)
-		return nil
 	})
-	return out.String(), bad, err
+	return out.String(), err
 }
 
 func TestCompositeStreamsPartByPart(t *testing.T) {
 	t.Parallel()
 	input := "PING host\nreply seq=1 time=0.5\nFrom gw seq=2 Destination Host Unreachable\nreply seq=3 time=1.25\n--- host statistics ---\n3 sent, 2 received\n"
-	got, bad, err := collect(t, pingLike, strings.NewReader(input))
-	if err != nil || len(bad) > 0 {
-		t.Fatalf("err=%v bad=%v", err, bad)
+	got, err := collect(t, pingLike, strings.NewReader(input))
+	if err != nil {
+		t.Fatalf("err=%v", err)
 	}
 	want := `{"part":"destination","value":{"name":"host"}}
 {"part":"replies","value":{"seq":1,"time_ms":0.5}}
@@ -96,7 +92,7 @@ func TestCompositeStreamWritesBeforeTheInputEnds(t *testing.T) {
 			}
 			docs <- b.String()
 			return nil
-		}, nil)
+		})
 	}()
 	steps := []struct{ send, want string }{
 		{"PING host\n", `{"part":"destination","value":{"name":"host"}}` + "\n"},
@@ -129,39 +125,31 @@ func TestCompositeStreamWritesBeforeTheInputEnds(t *testing.T) {
 	}
 }
 
-// A line no part reads is reported where it is and the stream goes on; a
-// line inside a single part's region that its pattern does not reach is
-// reported once that part has been read.
-func TestCompositeStreamReportsWhatNoPartReads(t *testing.T) {
+// A line no part reads ends the stream where it is, and so does a line
+// inside a single part's region that its pattern does not reach, once
+// that part has been read.
+func TestCompositeStreamEndsAtWhatNoPartReads(t *testing.T) {
 	t.Parallel()
 	input := "PING host\nreply seq=1 time=0.5\ngarbage\nreply seq=2 time=0.7\n--- host statistics ---\n2 sent, 2 received\n"
-	got, bad, err := collect(t, pingLike, strings.NewReader(input))
-	if err != nil {
-		t.Fatal(err)
+	got, err := collect(t, pingLike, strings.NewReader(input))
+	var pe *ParseError
+	if !errors.As(err, &pe) || pe.Line != 3 {
+		t.Fatalf("err = %v, want a failure on line 3", err)
 	}
-	if strings.Count(got, `"part":"replies"`) != 2 || !strings.Contains(got, `"part":"statistics"`) {
-		t.Errorf("records around the bad line were lost:\n%s", got)
-	}
-	if len(bad) != 1 || bad[0].Line != 3 {
-		t.Fatalf("reported %v, want line 3", bad)
+	if strings.Count(got, `"part":"replies"`) != 1 || strings.Contains(got, `"part":"statistics"`) {
+		t.Errorf("records around the bad line:\n%s", got)
 	}
 	// A line inside the summary's region that its pattern does not
-	// reach fails the part, once, the way it fails the whole document.
-	_, bad, err = collect(t, pingLike, strings.NewReader("PING host\n--- host statistics ---\n1 sent, 0 received\ntrailer\n"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(bad) != 1 || !strings.Contains(bad[0].Error(), `part "statistics"`) {
-		t.Fatalf("reported %v, want the summary part", bad)
+	// reach fails the part, the way it fails the whole document.
+	_, err = collect(t, pingLike, strings.NewReader("PING host\n--- host statistics ---\n1 sent, 0 received\ntrailer\n"))
+	if err == nil || !strings.Contains(err.Error(), `part "statistics"`) {
+		t.Fatalf("err = %v, want the summary part", err)
 	}
 	// A line that is in no part's region is unread wherever it is.
 	const twoParts = "format: 1\ncommand: t\nvariant: v\nparse:\n  type: composite\n  parts:\n    - name: head\n      select: {limit: 1}\n      parse: {type: regex, each: input, pattern: '\\A# (?P<t>.+)\\z'}\n    - name: rows\n      select: {after: '^---$'}\n      parse: {type: regex, pattern: '^(?P<n>\\d+)$'}\n"
-	got, bad, err = collect(t, twoParts, strings.NewReader("# title\nstray\n---\n1\n2\n"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(bad) != 1 || !errors.Is(bad[0], ErrUnread) || bad[0].Line != 2 || strings.Count(got, `"part":"rows"`) != 2 {
-		t.Fatalf("got %s, reported %v, want line 2 unread", got, bad)
+	got, err = collect(t, twoParts, strings.NewReader("# title\nstray\n---\n1\n2\n"))
+	if !errors.As(err, &pe) || !errors.Is(err, ErrUnread) || pe.Line != 2 || strings.Contains(got, `"part":"rows"`) {
+		t.Fatalf("got %s, err %v, want line 2 unread", got, err)
 	}
 }
 
@@ -169,15 +157,12 @@ func TestCompositeStreamReportsWhatNoPartReads(t *testing.T) {
 // the end the part is read with the lines it got, none, and fails.
 func TestCompositeStreamReadsAnEmptySinglePartAtTheEnd(t *testing.T) {
 	t.Parallel()
-	got, bad, err := collect(t, pingLike, strings.NewReader("PING host\nreply seq=1 time=0.5\n"))
-	if err != nil {
-		t.Fatal(err)
+	got, err := collect(t, pingLike, strings.NewReader("PING host\nreply seq=1 time=0.5\n"))
+	if err == nil || !strings.Contains(err.Error(), `part "statistics"`) {
+		t.Errorf("err = %v", err)
 	}
 	if strings.Count(got, "\n") != 2 {
 		t.Errorf("records: %s", got)
-	}
-	if len(bad) != 1 || !strings.Contains(bad[0].Error(), `part "statistics"`) {
-		t.Errorf("reported %v", bad)
 	}
 	if _, err := Parse(load(t, pingLike), []byte("PING host\nreply seq=1 time=0.5\n"), Options{}); err == nil {
 		t.Error("the whole document read a text with no summary")
@@ -188,12 +173,12 @@ func TestCompositeStreamReadsAnEmptySinglePartAtTheEnd(t *testing.T) {
 // single parts still open are not read: their lines never all came.
 func TestCompositeStreamCutShort(t *testing.T) {
 	t.Parallel()
-	got, bad, err := collect(t, pingLike, io.MultiReader(strings.NewReader("PING host\nreply seq=1 time=0.5\n--- host statistics ---\n1 sent"), errReader{}))
+	got, err := collect(t, pingLike, io.MultiReader(strings.NewReader("PING host\nreply seq=1 time=0.5\n--- host statistics ---\n1 sent"), errReader{}))
 	if err == nil || !strings.Contains(err.Error(), "broken") {
 		t.Fatalf("err = %v", err)
 	}
-	if strings.Contains(got, "statistics") || strings.Count(got, "\n") != 2 || len(bad) > 0 {
-		t.Errorf("got %s, bad %v", got, bad)
+	if strings.Contains(got, "statistics") || strings.Count(got, "\n") != 2 {
+		t.Errorf("got %s", got)
 	}
 }
 
@@ -231,7 +216,7 @@ parse:
 		done <- Stream(load(t, def), pr, Options{}, func(v any) error {
 			docs <- mustJSON(t, v)
 			return nil
-		}, nil)
+		})
 	}()
 	if _, err := io.WriteString(pw, "# one\na=1\n# two\nb=2\n"); err != nil {
 		t.Fatal(err)

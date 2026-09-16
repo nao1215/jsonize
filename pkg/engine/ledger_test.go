@@ -453,25 +453,15 @@ parse:
       parse: {type: kv}
 `
 	input := "# one\na=1\n# two\nb=2\nc=3\n# three\nd=4\n"
-	var skipped []int
-	var out strings.Builder
-	err := Stream(load(t, records), strings.NewReader(input), Options{}, func(v any) error {
-		out.WriteString(mustJSON(t, v) + "\n")
-		return nil
-	}, func(pe *ParseError) error {
-		if !errors.Is(pe, ErrUnread) {
-			return pe
-		}
-		skipped = append(skipped, pe.Line)
-		return nil
-	})
-	if err != nil {
-		t.Fatal(err)
+	out, err := streamAll(t, records, input)
+	// The second record is refused for its third line, which ends the
+	// stream: the first record stands and the third is never read.
+	var pe *ParseError
+	if !errors.As(err, &pe) || !errors.Is(err, ErrUnread) || pe.Line != 5 {
+		t.Fatalf("err = %v, want line 5 unread", err)
 	}
-	// The second record is refused for its third line; the ones around it
-	// are written.
-	if len(skipped) != 1 || skipped[0] != 5 || strings.Count(out.String(), "\n") != 2 || strings.Contains(out.String(), "two") {
-		t.Errorf("skipped %v, wrote:\n%s", skipped, out.String())
+	if strings.Count(out, "\n") != 1 || !strings.Contains(out, "one") {
+		t.Errorf("wrote:\n%s", out)
 	}
 	if _, err := Parse(load(t, records), []byte(input), Options{}); !errors.Is(err, ErrUnread) {
 		t.Errorf("the whole document: %v", err)
@@ -489,7 +479,6 @@ input:
 parse: {type: regex, pattern: '^(?P<v>\S+)$'}
 `
 	_, err = streamAll(t, sel, "a\nb\nEND\nlater\n")
-	var pe *ParseError
 	if !errors.As(err, &pe) || !errors.Is(err, ErrUnread) || pe.Line != 4 {
 		t.Errorf("stream past the selection: %v", err)
 	}

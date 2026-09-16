@@ -65,16 +65,13 @@ func TestCSVColumnNamedByTheCallerIsMissing(t *testing.T) {
 			if _, err := Parse(def, []byte(tt.input), Options{}); !errors.As(err, &mc) || err.Error() != tt.want {
 				t.Errorf("Parse: %v, want %s", err, tt.want)
 			}
-			wrote, skipped := 0, 0
+			wrote := 0
 			err = Stream(def, strings.NewReader(tt.input), Options{}, func(any) error {
 				wrote++
 				return nil
-			}, func(*ParseError) error {
-				skipped++
-				return nil
 			})
-			if !errors.As(err, &mc) || err.Error() != tt.want || wrote != 0 || skipped != 0 {
-				t.Errorf("Stream: %v, %d written, %d skipped", err, wrote, skipped)
+			if !errors.As(err, &mc) || err.Error() != tt.want || wrote != 0 {
+				t.Errorf("Stream: %v, %d written", err, wrote)
 			}
 		})
 	}
@@ -439,7 +436,7 @@ func sameAsStream(t *testing.T, d *definition.Definition, input []byte, whole an
 		var streamed bytes.Buffer
 		err := Stream(d, r, Options{MaxInputSize: 1 << 20}, func(rec any) error {
 			return jsonutil.Encode(&streamed, rec, false)
-		}, nil)
+		})
 		if err != nil {
 			t.Fatalf("read whole but not as a stream: %v", err)
 		}
@@ -517,7 +514,7 @@ func TestCSVQuotedValueKeepsBlankLines(t *testing.T) {
 		if err := Stream(def, strings.NewReader(tc.in), Options{}, func(v any) error {
 			streamed = append(streamed, v)
 			return nil
-		}, nil); err != nil {
+		}); err != nil {
 			t.Errorf("%s: stream: %v", tc.name, err)
 			continue
 		}
@@ -554,7 +551,7 @@ func TestCSVErrorsNameTheirLine(t *testing.T) {
 		if err == nil || !strings.Contains(err.Error(), tc.want) {
 			t.Errorf("%s: whole: %v, want %s", tc.name, err, tc.want)
 		}
-		err = Stream(def, strings.NewReader(tc.in), Options{}, func(any) error { return nil }, nil)
+		err = Stream(def, strings.NewReader(tc.in), Options{}, func(any) error { return nil })
 		if err == nil || !strings.Contains(err.Error(), tc.want) {
 			t.Errorf("%s: stream: %v, want %s", tc.name, err, tc.want)
 		}

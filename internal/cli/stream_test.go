@@ -100,22 +100,22 @@ func TestStreamRefusesWhatItCannotStream(t *testing.T) {
 	}
 }
 
-// A record jz cannot read is left out and the ones after it are still
-// written, which is what a command that keeps printing needs: one line
-// with no reading for it must not end the stream.
-func TestStreamSkipsTheRecordsItCannotRead(t *testing.T) {
+// A stream ends at the first record it cannot read. The records before
+// it stand, the failure is reported once, and the status is 3: a gap in
+// the middle of a stream is an answer nobody can check, so jz stops
+// rather than hand on a shape the input does not have.
+func TestStreamEndsAtTheRecordItCannotRead(t *testing.T) {
 	h := newHarness(t)
 	lines := strings.SplitAfter(gnuDF, "\n")
-	broken := lines[0] + "garbage\n" + strings.Join(lines[1:], "")
+	broken := lines[0] + lines[1] + "garbage\n" + strings.Join(lines[2:], "")
 	if code := h.pipe(broken, "--stream"); code != ExitParse {
 		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
 	}
-	recs := h.records()
-	if len(recs) != 2 || recs[0]["filesystem"] != "tmpfs" || recs[1]["filesystem"] != "/dev/sda1" {
+	if recs := h.records(); len(recs) != 1 || recs[0]["filesystem"] != "tmpfs" {
 		t.Errorf("records = %v", recs)
 	}
-	if !strings.Contains(h.stderr.String(), "line 2") {
-		t.Errorf("stderr does not name the line: %s", h.stderr.String())
+	if strings.Count(h.stderr.String(), "line 3") != 1 {
+		t.Errorf("stderr = %s", h.stderr.String())
 	}
 	// Reading the same text as one document keeps the other answer: a
 	// line that does not fit means the document is not this format, so
@@ -125,31 +125,20 @@ func TestStreamSkipsTheRecordsItCannotRead(t *testing.T) {
 	}
 }
 
-// --stop-on-error ends the stream at the record it cannot read: the ones
-// before it stand, the failure is reported once, and the status is 3. It
-// is refused without --stream, before anything is read or run.
-func TestStreamStopsOnError(t *testing.T) {
+// --stop-on-error asked for what every stream now does, so it is gone.
+// A command line that still has it is refused before anything is read or
+// run, with the message that says so rather than the flag package's
+// "not defined".
+func TestStopOnErrorWasRemoved(t *testing.T) {
 	h := newHarness(t)
-	lines := strings.SplitAfter(gnuDF, "\n")
-	broken := lines[0] + lines[1] + "garbage\n" + strings.Join(lines[2:], "")
-	if code := h.pipe(broken, "--stream", "--stop-on-error"); code != ExitParse {
-		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
-	}
-	if recs := h.records(); len(recs) != 1 || recs[0]["filesystem"] != "tmpfs" {
-		t.Errorf("records = %v", recs)
-	}
-	if strings.Count(h.stderr.String(), "line 3") != 1 {
-		t.Errorf("stderr = %s", h.stderr.String())
-	}
-	if code := h.pipe(broken, "--stream", "--stop-on-error", "--explain=json"); code != ExitParse || strings.Contains(h.stderr.String(), `"event":"skipped"`) {
-		t.Errorf("a stop is not a skip: %d %s", code, h.stderr.String())
-	}
 	for _, args := range [][]string{
+		{"--stream", "--stop-on-error"},
 		{"--stop-on-error"},
 		{"run", "--stop-on-error", "jz-no-such-command"},
+		{"new", "--each", "--stop-on-error", "n:=@-"},
 	} {
 		h.env.Stdin = untouchedInput{t}
-		if code := h.run(args...); code != ExitUsage || !strings.Contains(h.stderr.String(), "--stop-on-error ends a stream") {
+		if code := h.run(args...); code != ExitUsage || !strings.Contains(h.stderr.String(), "--stop-on-error was removed") {
 			t.Errorf("%v: %d %s", args, code, h.stderr.String())
 		}
 	}
@@ -196,9 +185,9 @@ func TestRunStream(t *testing.T) {
 	if got := len(h.records()); got != 1 {
 		t.Errorf("records before the failure = %d", got)
 	}
-	// --stop-on-error stops the command at the first record it cannot
-	// read and returns 3, since the command did not fail.
-	if code := h.run("run", "--stream", "--stop-on-error", "sh", "-c", "echo a=1; echo nonsense; echo b=2"); code != ExitParse {
+	// A record the command printed that jz cannot read ends the stream
+	// and returns 3, since the command itself did not fail.
+	if code := h.run("run", "--stream", "sh", "-c", "echo a=1; echo nonsense; echo b=2"); code != ExitParse {
 		t.Errorf("stop on error: %d %s", code, h.stderr.String())
 	}
 	if recs := h.records(); len(recs) != 1 || recs[0]["name"] != "a" {
@@ -514,10 +503,12 @@ func TestStreamWaitsForALineThatCouldStillChangeTheChoice(t *testing.T) {
 	<-done
 }
 
-// With --explain=json a record a stream leaves out is reported when it is
-// left out, as a JSON document of its own on standard error, and the
-// records after it are still written.
-func TestStreamReportsASkippedRecordWhenItHappens(t *testing.T) {
+// A stream writes its records as they come and ends at the first it
+// cannot read: the records before it are already out, the failure is
+// reported once, and nothing after it is read. With --explain the
+// explanation is still written before the first record, and it is the
+// only event there is.
+func TestStreamEndsAtABadRecordWhileItRuns(t *testing.T) {
 	h := newHarness(t)
 	pw, stdout, stderr, done := openStream(t, h, "--stream", "--explain=json")
 	feed(pw, vmstatHead+vmstatRecord)
@@ -530,79 +521,45 @@ func TestStreamReportsASkippedRecordWhenItHappens(t *testing.T) {
 	if l := stderr.next(t, "the parse error"); !strings.HasPrefix(l, "jz: vmstat/linux: line 4: ") {
 		t.Errorf("diagnostic = %s", l)
 	}
-	event := skipEvent(t, stderr.next(t, "the skip event"))
-	if event["event"] != "skipped" || event["definition"] != "vmstat/linux" || event["line"] != float64(4) ||
-		event["skipped"] != float64(1) || !strings.Contains(event["reason"].(string), "not a sample") {
-		t.Errorf("event = %v", event)
-	}
-	// The stream goes on, and the count goes on with it.
-	feed(pw, vmstatRecord+"still not one\n")
-	stdout.next(t, "the record after the skipped one")
-	stderr.next(t, "the second parse error")
-	if event := skipEvent(t, stderr.next(t, "the second skip event")); event["skipped"] != float64(2) || event["line"] != float64(6) {
-		t.Errorf("second event = %v", event)
-	}
 	_ = pw.Close()
 	if code := <-done; code != ExitParse {
 		t.Errorf("code = %d", code)
 	}
-	// --explain in text gives the same fact on one line.
-	if code := h.pipe(vmstatHead+"bad\n"+vmstatRecord, "--stream", "--explain"); code != ExitParse ||
-		!strings.Contains(h.stderr.String(), "jz: explain: skipped: a record of vmstat/linux at line 3 (1 record so far): ") {
-		t.Errorf("text: %d %s", code, h.stderr.String())
+	// The records that came after the bad one are not read, and the
+	// failure is reported once whether or not --explain is on.
+	for _, args := range [][]string{{"--stream"}, {"--stream", "--explain"}} {
+		if code := h.pipe(vmstatHead+"bad\n"+vmstatRecord, args...); code != ExitParse ||
+			strings.Count(h.stderr.String(), "jz: vmstat/linux: line 3: ") != 1 || len(h.records()) != 0 {
+			t.Errorf("%v: %d %s", args, code, h.stderr.String())
+		}
 	}
-	// Without --explain there is no event, only the diagnostic.
-	if code := h.pipe(vmstatHead+"bad\n"+vmstatRecord, "--stream"); code != ExitParse || strings.Contains(h.stderr.String(), "explain") {
-		t.Errorf("plain: %d %s", code, h.stderr.String())
-	}
-	// A definition given with --define reports the same way.
+	// A definition given with --define ends the same way.
 	def := `parse: {type: regex, pattern: '^(?P<k>\w+)=(?P<v>\w+)$'}`
-	if code := h.pipe("a=1\nbroken\nb=2\n", "--stream", "--explain=json", "--define", def); code != ExitParse ||
-		!strings.Contains(h.stderr.String(), `{"event":"skipped","definition":"inline/inline","line":2,`) || len(h.records()) != 2 {
+	if code := h.pipe("a=1\nbroken\nb=2\n", "--stream", "--define", def); code != ExitParse ||
+		!strings.Contains(h.stderr.String(), "jz: inline/inline: line 2: ") || len(h.records()) != 1 {
 		t.Errorf("--define: %d %s", code, h.stderr.String())
 	}
 }
 
-// skipEvent reads the document on a "jz: explain: " line.
-func skipEvent(t *testing.T, line string) map[string]any {
-	t.Helper()
-	doc, ok := strings.CutPrefix(line, "jz: explain: ")
-	var event map[string]any
-	if !ok || json.Unmarshal([]byte(doc), &event) != nil {
-		t.Fatalf("not an explain document: %s", line)
-	}
-	return event
-}
-
-// jz run --stream shares standard error with the command, and an event is
-// still a line of its own that opens with "jz: explain: ", among the lines
-// the command writes there.
-func TestRunStreamReportsASkippedRecordBesideTheCommandsStderr(t *testing.T) {
+// jz run --stream shares standard error with the command, and the
+// diagnostic that ends the stream is still a line of its own, among the
+// lines the command writes there.
+func TestRunStreamEndsBesideTheCommandsStderr(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("uses POSIX sh")
 	}
 	h := newHarness(t)
 	shellRegistry(t, h)
-	script := `echo a=1; echo "a=noise from the command" >&2; echo "not an assignment"; echo "explain: {\"event\":\"skipped\"}" >&2; echo b=2`
-	code := h.run("run", "--stream", "--explain=json", "--parser", "sh", "--variant", "default", "--", "sh", "-c", script)
+	script := `echo a=1; echo "a=noise from the command" >&2; echo "not an assignment"; echo b=2`
+	code := h.run("run", "--stream", "--parser", "sh", "--variant", "default", "--", "sh", "-c", script)
 	if code != ExitParse {
 		t.Fatalf("code=%d stderr=%s", code, h.stderr.String())
 	}
-	if recs := h.records(); len(recs) != 2 || recs[1]["name"] != "b" {
+	if recs := h.records(); len(recs) != 1 || recs[0]["name"] != "a" {
 		t.Errorf("records = %v", recs)
 	}
-	var events []map[string]any
-	for _, l := range strings.Split(h.stderr.String(), "\n") {
-		if doc, ok := strings.CutPrefix(l, "jz: explain: "); ok && strings.Contains(doc, `"event"`) {
-			var ev map[string]any
-			if err := json.Unmarshal([]byte(doc), &ev); err != nil {
-				t.Fatalf("event line is not JSON: %s", l)
-			}
-			events = append(events, ev)
-		}
-	}
-	if len(events) != 1 || events[0]["line"] != float64(2) || events[0]["definition"] != "sh/default" {
-		t.Errorf("events = %v\nstderr:\n%s", events, h.stderr.String())
+	if strings.Count(h.stderr.String(), "jz: sh/default: line 2: ") != 1 {
+		t.Errorf("the diagnostic is not a line of its own:\n%s", h.stderr.String())
 	}
 	if !strings.Contains(h.stderr.String(), "a=noise from the command\n") {
 		t.Errorf("the command's own stderr is missing:\n%s", h.stderr.String())

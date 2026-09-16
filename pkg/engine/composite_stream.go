@@ -111,7 +111,7 @@ func (s *streamer) startComposite() {
 			name := part.Name
 			ps.sub = newStreamer(s.def, &part.Parse, part.Fields, s.opts, s.held, func(v any) error {
 				return s.emit(partDocument(name, v))
-			}, s.onError)
+			})
 		}
 		c.parts = append(c.parts, ps)
 	}
@@ -145,8 +145,8 @@ func (s *streamer) feedComposite(l line) error {
 				// A part that reads line by line reads the line or says why
 				// it cannot, so the line cannot go missing there.
 				accounted = true
-				if err := s.report(ps.sub.feedRecord(l)); err != nil {
-					return stopped(err)
+				if err := ps.sub.feedRecord(l); err != nil {
+					return err
 				}
 			} else {
 				if err := s.held.take(lineBytes(l.text), s.def, l.num); err != nil {
@@ -159,9 +159,7 @@ func (s *streamer) feedComposite(l line) error {
 	}
 	switch {
 	case !claimed && !blank(l.text):
-		if err := s.report(s.unreadError([]UnreadSpan{{Line: l.num, Text: truncate(l.text, 80)}})); err != nil {
-			return stopped(err)
-		}
+		return s.unreadError([]UnreadSpan{{Line: l.num, Text: truncate(l.text, 80)}})
 	case len(single) > 0:
 		c.fates[l.num] = &fate{pending: len(single), read: accounted}
 	}
@@ -178,8 +176,8 @@ func (s *streamer) feedComposite(l line) error {
 			continue
 		}
 		ps.read = true
-		if err := s.report(ps.sub.finish()); err != nil {
-			return stopped(err)
+		if err := ps.sub.finish(); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -198,12 +196,11 @@ func (s *streamer) readSingle(ps *partStream) error {
 	if errors.As(err, &pe) && pe.Field == "" {
 		pe.Msg = "part \"" + ps.part.Name + "\": " + pe.Msg
 	}
-	if err == nil {
-		if err := s.emit(partDocument(ps.part.Name, v)); err != nil {
-			return stopped(err)
-		}
-	} else if rerr := s.report(err); rerr != nil {
-		return stopped(rerr)
+	if err != nil {
+		return err
+	}
+	if err := s.emit(partDocument(ps.part.Name, v)); err != nil {
+		return err
 	}
 	var unread []UnreadSpan
 	for _, l := range lines {
@@ -223,9 +220,7 @@ func (s *streamer) readSingle(ps *partStream) error {
 		}
 	}
 	if len(unread) > 0 {
-		if err := s.report(s.unreadError(unread)); err != nil {
-			return stopped(err)
-		}
+		return s.unreadError(unread)
 	}
 	return nil
 }
@@ -244,41 +239,25 @@ func (s *streamer) finishComposite() error {
 		default:
 			err = s.readSingle(ps)
 		}
-		if err := s.report(err); err != nil {
-			return stopped(err)
+		if err != nil {
+			return err
 		}
 	}
 	return nil
 }
 
-// reportedError is an error that has been through report already: the
-// caller that decided to stop on it is not asked again.
-type reportedError struct{ err error }
-
-func (e *reportedError) Error() string { return e.err.Error() }
-func (e *reportedError) Unwrap() error { return e.err }
-
-func stopped(err error) error {
-	var done *reportedError
-	if errors.As(err, &done) {
-		return err
-	}
-	return &reportedError{err: err}
-}
-
 // newStreamer prepares a streamer for one parser with no input stage of
 // its own: the lines it is given have been through the definition's. It
 // holds lines against the same bound as the stream it is part of.
-func newStreamer(def *definition.Definition, p *definition.Parse, fields map[string]*definition.Field, opts Options, held *hold, emit func(any) error, onError func(*ParseError) error) *streamer {
+func newStreamer(def *definition.Definition, p *definition.Parse, fields map[string]*definition.Field, opts Options, held *hold, emit func(any) error) *streamer {
 	s := &streamer{
-		run:     run{def: def, opts: opts},
-		p:       p,
-		fields:  fields,
-		emit:    emit,
-		onError: onError,
-		sel:     &definition.Select{},
-		ignore:  []*regexp.Regexp{},
-		held:    held,
+		run:    run{def: def, opts: opts},
+		p:      p,
+		fields: fields,
+		emit:   emit,
+		sel:    &definition.Select{},
+		ignore: []*regexp.Regexp{},
+		held:   held,
 	}
 	s.emit = s.handingOn(emit)
 	if p.Type == definition.TypeTable && p.Header.None {
