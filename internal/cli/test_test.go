@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -172,5 +173,84 @@ func TestTestChecksUserRegistry(t *testing.T) {
 	}
 	if !strings.Contains(h.stderr.String(), "golden files written under "+dir) {
 		t.Errorf("stderr=%q", h.stderr.String())
+	}
+}
+
+// --json writes the same facts the lines carry, in a shape a CI job can
+// count: the totals, and one entry per failure saying what it failed at.
+func TestTestWritesAJSONReport(t *testing.T) {
+	h := newHarness(t)
+	dir := greetRegistry(t, greetDef, "hello atago\n", `[{"name": "atago"}]`)
+	if code := h.run("test", "--json", dir); code != ExitOK {
+		t.Fatalf("passing: code=%d stderr=%s", code, h.stderr.String())
+	}
+	var report struct {
+		Passed   int `json:"passed"`
+		Failed   int `json:"failed"`
+		Failures []struct {
+			Definition string `json:"definition"`
+			Case       string `json:"case"`
+			Path       string `json:"path"`
+			Source     string `json:"source"`
+			Kind       string `json:"kind"`
+			Message    string `json:"message"`
+		} `json:"failures"`
+	}
+	read := func(what string) {
+		t.Helper()
+		report.Passed, report.Failed, report.Failures = 0, 0, nil
+		if err := json.Unmarshal(h.stdout.Bytes(), &report); err != nil {
+			t.Fatalf("%s: %v\n%s", what, err, h.stdout.String())
+		}
+	}
+	read("passing")
+	if report.Passed != 1 || report.Failed != 0 || len(report.Failures) != 0 {
+		t.Errorf("passing: %+v", report)
+	}
+	// The lines on standard error are the same with the report as without.
+	if !strings.Contains(h.stderr.String(), "1 passed, 0 failed") {
+		t.Errorf("passing: stderr=%q", h.stderr.String())
+	}
+	// A failure names the definition, the fixture, what it failed at and
+	// the message the line carries.
+	dir = greetRegistry(t, greetDef, "hello atago\n", `[{"name": "somebody else"}]`)
+	if code := h.run("test", "--json", dir); code != ExitError {
+		t.Fatalf("golden: code=%d stderr=%s", code, h.stderr.String())
+	}
+	read("golden")
+	if report.Passed != 0 || report.Failed != 1 || len(report.Failures) != 1 {
+		t.Fatalf("golden: %+v", report)
+	}
+	f := report.Failures[0]
+	if f.Definition != "greet/x" || f.Case != "a" || f.Kind != "golden" ||
+		f.Path != "parsers/greet/x/testdata/a.txt" || f.Source != dir ||
+		!strings.Contains(f.Message, "output differs from a.json") {
+		t.Errorf("golden: %+v", f)
+	}
+	// A definition that reads another definition's fixtures failed at
+	// choosing, not at reading its own.
+	dir = greetRegistry(t, greetWideDef, "Filesystem here\n", "")
+	if code := h.run("test", "--json", dir); code != ExitError {
+		t.Fatalf("select: code=%d stderr=%s", code, h.stderr.String())
+	}
+	read("select")
+	kinds := map[string]int{}
+	for _, f := range report.Failures {
+		kinds[f.Kind]++
+	}
+	if kinds["select"] == 0 {
+		t.Errorf("select: kinds=%v", kinds)
+	}
+	// A definition that did not load has no identity yet, so the file is
+	// what names it.
+	dir = greetRegistry(t, "format: 1\ncommand: greet\nvariant: x\nparse: {type: table, pattern: x}\n", "hello\n", "[]")
+	if code := h.run("test", "--json", dir); code != ExitError {
+		t.Fatalf("load: code=%d stderr=%s", code, h.stderr.String())
+	}
+	read("load")
+	if len(report.Failures) != 1 || report.Failures[0].Kind != "load" ||
+		report.Failures[0].Definition != "" ||
+		report.Failures[0].Path != "parsers/greet/x/parser.yaml" {
+		t.Errorf("load: %+v", report.Failures)
 	}
 }

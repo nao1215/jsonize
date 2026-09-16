@@ -338,6 +338,44 @@ Record your lsof and OS versions in the fixture's `source` before sharing
 it. The official fixtures are inside the binary, so the local definition
 is checked against them without a copy of the repository.
 
+## Reading the result from a script
+
+`jz test --json` writes the same facts as one object on standard output,
+for a job that has to count them rather than read them. The lines on
+standard error and the exit status are the same with it as without.
+
+```console
+$ jz test --json ./my-registry
+{
+  "passed": 12,
+  "failed": 1,
+  "failures": [
+    {
+      "definition": "lsof/linux",
+      "case": "process",
+      "path": "parsers/lsof/linux/testdata/process.txt",
+      "source": "./my-registry",
+      "kind": "golden",
+      "message": "output differs from process.json (-want +got):\n..."
+    }
+  ]
+}
+```
+
+`kind` says what the case failed at, so a job can tell one kind of
+failure from another without matching the message:
+
+| Kind | What it means |
+|------|---------------|
+| `load` | the definition or its fixtures could not be read; the entry names the file rather than a definition |
+| `select` | the wrong definition was chosen, none was, or another definition read a text that is not its own |
+| `parse` | the fixture could not be read with its own definition |
+| `refuse` | a case that states the text is refused was read, or was refused for another reason |
+| `stream` | `--stream` reads the text differently from the way the whole document is read |
+| `unread` | a changed copy of the text did not change the answer, which is text the definition never read |
+| `schema` | the output does not fit the schema its definition derives |
+| `golden` | the output differs from the JSON beside the fixture, or there is none |
+
 `JSONIZE_REGISTRY_PATH` makes the local definition shadow the official
 one of the same command and variant. For a persistent installation, move
 the definition into the [user registry](../usage/#registries).

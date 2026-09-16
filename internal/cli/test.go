@@ -11,6 +11,7 @@ import (
 
 	"github.com/nao1215/jsonize/internal/conformance"
 	"github.com/nao1215/jsonize/pkg/engine"
+	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/registry"
 )
 
@@ -38,10 +39,18 @@ registry and only their definitions are checked.
   jz test ./registry                   check a directory
   jz test --update ./registry          write testdata/<case>.json
   jz test --decoys ./decoys ./registry also refuse every file in a directory
+  jz test --json ./registry            also write the failures as one object
 
-Nothing is written to standard output. Exit status is 0 when everything
-passed, 1 when something failed, 2 for a usage error and 5 when a
-registry could not be read.
+Nothing is written to standard output unless --json is given, which
+writes one object there: the counts, and a failure per entry with the
+definition, the case, the fixture path, the registry it came from, what
+it failed at and the message. The failure kinds are load, select, parse,
+refuse, stream, unread, schema and golden. The report is written whether
+or not anything failed, and the lines on standard error and the exit
+status are the same with it as without.
+
+Exit status is 0 when everything passed, 1 when something failed, 2 for
+a usage error and 5 when a registry could not be read.
 
 Options:
 `
@@ -50,11 +59,13 @@ Options:
 type testOptions struct {
 	update bool
 	decoys string
+	json   bool
 }
 
 func (t *testOptions) bind(o *optionSet) {
 	o.boolOpt(&t.update, "update", "", "rewrite testdata/<case>.json from the current output")
 	o.stringOpt(&t.decoys, "decoys", "", "DIR", "", "require every file under DIR to be refused by every parser")
+	o.boolOpt(&t.json, "json", "", "write the failures to standard output as one JSON object")
 	o.helpDoc()
 }
 
@@ -113,7 +124,7 @@ func (a *app) cmdTest(args []string) int {
 			problems = append(problems, p)
 		}
 	}
-	return a.reportTest(results, problems, update)
+	return a.reportTest(results, problems, update, to.json)
 }
 
 // testSources builds the layering to check and names the sources under
@@ -174,9 +185,10 @@ func (a *app) hasDefinitions(reg *registry.Registry, underTest map[string]bool) 
 }
 
 // reportTest writes one entry per failure to stderr and returns the exit
-// code. Standard output stays empty: `jz test` reports, it does not
-// convert.
-func (a *app) reportTest(results []conformance.Result, problems []error, update bool) int {
+// code. Standard output stays empty unless a report was asked for:
+// `jz test` reports, it does not convert, and the report it writes is
+// the same facts the lines carry.
+func (a *app) reportTest(results []conformance.Result, problems []error, update, report bool) int {
 	passed, failed := conformance.Summary(results)
 	for _, p := range problems {
 		fmt.Fprintf(a.env.Stderr, "%s\n", indentAfterFirst(p.Error()))
@@ -215,10 +227,60 @@ func (a *app) reportTest(results []conformance.Result, problems []error, update 
 		fmt.Fprintf(a.env.Stderr, "golden files written under %s\n", strings.Join(dirs, ", "))
 	}
 	fmt.Fprintf(a.env.Stderr, "%d passed, %d failed\n", passed, failed)
+	if report {
+		if err := jsonutil.Encode(a.env.Stdout, testReport(results, problems, passed, failed), true); err != nil {
+			return a.writeFailed(err)
+		}
+	}
 	if failed > 0 {
 		return ExitError
 	}
 	return ExitOK
+}
+
+// testReport is the machine-readable form of what the lines say: the
+// counts and one entry per failure, in the order they were reported. A
+// definition that did not load has no case and no fixture of its own, so
+// those keys are left out of its entry rather than written empty.
+func testReport(results []conformance.Result, problems []error, passed, failed int) *jsonutil.Object {
+	doc := jsonutil.NewObject()
+	doc.Set("passed", passed)
+	doc.Set("failed", failed)
+	failures := []any{}
+	for _, p := range problems {
+		f := jsonutil.NewObject()
+		// A definition that did not load has no identity of its own yet,
+		// so the file is what names it.
+		var le *registry.LoadError
+		if errors.As(p, &le) {
+			f.Set("path", le.Path)
+			f.Set("source", le.Source)
+		}
+		f.Set("kind", string(conformance.KindLoad))
+		f.Set("message", p.Error())
+		failures = append(failures, f)
+	}
+	for _, r := range results {
+		if r.Err == nil {
+			continue
+		}
+		f := jsonutil.NewObject()
+		f.Set("definition", r.Definition)
+		if r.Case != "" {
+			f.Set("case", r.Case)
+		}
+		if r.Path != "" {
+			f.Set("path", r.Path)
+		}
+		if r.Source != "" {
+			f.Set("source", r.Source)
+		}
+		f.Set("kind", string(r.Kind()))
+		f.Set("message", r.Err.Error())
+		failures = append(failures, f)
+	}
+	doc.Set("failures", failures)
+	return doc
 }
 
 // sourceDir maps a source name back to the directory it was read from.
