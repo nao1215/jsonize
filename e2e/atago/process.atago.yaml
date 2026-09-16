@@ -85,26 +85,30 @@ scenarios:
           stdout:
             contains: "status=141"
 
-  # A stream that fails for a reason of its own will write nothing more,
-  # so the command is stopped: with a command that keeps printing, jz
-  # used to wait for it to end, which it never did. The failure is what
-  # jz returns; the stop is its own doing and is not reported as the
-  # command's status.
+  # A stream that fails will write nothing more, so the command is
+  # stopped: with a command that keeps printing, jz used to wait for it
+  # to end, which it never did. The definition reads a size of one digit,
+  # so the third line ends the stream while the command is still
+  # printing. The failure is what jz returns; the stop is its own doing
+  # and is not reported as the command's status.
   - name: a stream that cannot go on stops the command instead of waiting for it
     steps:
       - run:
-          command: jz run --stream --extract nope --parser du -- e2ehelper emit -lines 1000 -burst 250 -interval 100ms -pid ${workdir}/producer.pid
+          command: "jz run --stream --define 'parse: {type: regex, pattern: \"^(?P<size>[0-9])[[:space:]](?P<path>/mnt/[0-9]+)$\"}' -- e2ehelper emit -lines 1000 -burst 250 -interval 100ms -pid ${workdir}/producer.pid"
           timeout: 30s
       - assert:
           duration:
             lt: 6s
       - assert:
-          exit_code: 2
+          exit_code: 3
           stdout:
-            empty: true
+            contains: '"/mnt/2"'
+      - assert:
+          stdout:
+            not_contains: '"/mnt/3"'
       - assert:
           stderr:
-            contains: 'no key "nope" in the output'
+            contains: 'line 3'
       - assert:
           stderr:
             not_contains: "terminated"

@@ -82,10 +82,10 @@ func TestClosedOutputStopsTheCommand(t *testing.T) {
 	}
 }
 
-// A stream that fails for a reason of its own (here a key the format
-// does not produce) will write nothing more, so the command is stopped
-// and the failure is what is returned: the stop is not the command's
-// status, and it is not reported as if it were.
+// A stream that fails for a reason of its own (here a line the format
+// does not read) will write nothing more, so the command is stopped and
+// the failure is what is returned: the stop is not the command's status,
+// and it is not reported as if it were.
 func TestStreamFailureStopsTheCommand(t *testing.T) {
 	if runtime.GOOS == "windows" {
 		t.Skip("uses POSIX sh")
@@ -93,18 +93,20 @@ func TestStreamFailureStopsTheCommand(t *testing.T) {
 	h := newHarness(t)
 	shellRegistry(t, h)
 	start := time.Now()
-	code := h.run("run", "--stream", "--extract", "nope", "sh", "-c", "i=0; while [ $i -lt 100 ]; do echo a$i=1; i=$((i+1)); done; exec sleep 30")
-	if code != ExitUsage {
+	code := h.run("run", "--stream", "--parser", "sh", "--variant", "default", "sh", "-c", "i=0; while [ $i -lt 100 ]; do echo a$i=1; i=$((i+1)); done; echo nonsense; exec sleep 30")
+	if code != ExitParse {
 		t.Fatalf("code = %d, stderr = %q", code, h.stderr.String())
 	}
-	if !strings.Contains(h.stderr.String(), `no key "nope"`) || strings.Contains(h.stderr.String(), "terminated") {
+	if !strings.Contains(h.stderr.String(), `"nonsense"`) || strings.Contains(h.stderr.String(), "terminated") {
 		t.Errorf("stderr = %q", h.stderr.String())
 	}
 	if time.Since(start) > 10*time.Second {
 		t.Errorf("took %s: the command was not stopped", time.Since(start))
 	}
 	// A command that had already ended keeps its own status.
-	code = h.run("run", "--stream", "--extract", "nope", "sh", "-c", "echo a=1; exit 7")
+	// A key the output decides is judged once the output has ended, which
+	// is once the command has.
+	code = h.run("run", "--stream", "--parser", "csv", "--variant", "comma", "--extract", "nope", "sh", "-c", "printf 'a,b\\n1,2\\n'; exit 7")
 	if code != 7 || !strings.Contains(h.stderr.String(), "exited with status 7") {
 		t.Errorf("code = %d, stderr = %q", code, h.stderr.String())
 	}
