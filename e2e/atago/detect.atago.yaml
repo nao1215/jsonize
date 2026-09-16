@@ -1886,3 +1886,20 @@ scenarios:
           stdout:
             json:
               - { path: "$[0].tasks[2].user", equals: ada }
+
+  - name: iostat -x -d is a record per sample without the CPU table
+    steps:
+      - fixture:
+          file: iostat-xd.txt
+          from: "${specdir}/../../registry/parsers/iostat/extended-device/testdata/two-samples.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: iostat-xd.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose iostat/extended-device from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[1].devices[3].r_s", equals: 87 }

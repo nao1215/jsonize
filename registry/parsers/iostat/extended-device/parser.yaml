@@ -1,0 +1,65 @@
+# `iostat -x -d` prints the extended per-device counters without the CPU
+# table: after the banner, one block per interval, each opening with the
+# Device header. It is read the way iostat/device reads `iostat -d`, one
+# record per sample, with the columns of iostat/extended taken from the
+# header as printed.
+format: 1
+command: iostat
+variant: extended-device
+description: iostat -x -d, one sample of extended per-device counters without the CPU table
+metadata:
+  tags: [linux, io, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/iostat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^Device[ \t]+r/s[ \t]'
+    none:
+      # -t prints the time above each sample, and -c or the default adds
+      # the CPU table; other variants read those.
+      - '^(?:\d{2}/\d{2}/\d{2,4}[ \t]+\d{2}:\d{2}:\d{2}|\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{4})[ \t]*$'
+      - '^avg-cpu:[ \t]+%user[ \t]+%nice'
+input:
+  select:
+    # The banner is stated whole, so what is dropped is exactly the line
+    # described above and not whatever happens to open with "Linux".
+    after: '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)'
+parse:
+  type: records
+  start: '^Device[ \t]+r/s[ \t]'
+  parts:
+    - name: devices
+      parse:
+        type: table
+      fields:
+        device: {required: true}
+        r_s: {type: float}
+        rkb_s: {type: float}
+        # -m names the megabyte column in its place.
+        rmb_s: {type: float}
+        rrqm_s: {type: float}
+        rrqm_percent: {type: float}
+        r_await: {type: float}
+        rareq_sz: {type: float}
+        w_s: {type: float}
+        wkb_s: {type: float}
+        wmb_s: {type: float}
+        wrqm_s: {type: float}
+        wrqm_percent: {type: float}
+        w_await: {type: float}
+        wareq_sz: {type: float}
+        d_s: {type: float}
+        dkb_s: {type: float}
+        dmb_s: {type: float}
+        drqm_s: {type: float}
+        drqm_percent: {type: float}
+        d_await: {type: float}
+        dareq_sz: {type: float}
+        f_s: {type: float}
+        f_await: {type: float}
+        aqu_sz: {type: float}
+        util_percent: {type: float}
