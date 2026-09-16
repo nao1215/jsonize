@@ -39,13 +39,15 @@ project follows [Semantic Versioning](https://semver.org/).
   frames), `ip route get`, `nmcli -t device`, `iw reg get` (the
   regulatory rules per frequency range) and `hostname -I`.
 - `pmap -x` (a record per process with its mappings and totals),
-  `pgrep -l` and `getent ahosts`.
+  `pgrep -l` and `getent ahosts`. The registry holds 240 commands
+  through 664 definitions.
 - `rpm -qi` and `rpm -qia` (`rpm/info`), one object per package with
   the description kept whole, read from rpm 4.14, 4.16 and 6.0 output;
   `git log --stat` and `--shortstat` (`git/log-stat`), each commit with
   its diffstat as `files` and `summary`; `ifconfig` from net-tools
   (`ifconfig/net-tools`) and from macOS and FreeBSD (`ifconfig/bsd`);
-  and macOS `arp -a` (`arp/darwin`).
+  and macOS `arp -a` (`arp/darwin`). The registry holds 241 commands
+  through 669 definitions.
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the
