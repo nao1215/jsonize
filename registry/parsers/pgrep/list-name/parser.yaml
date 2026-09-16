@@ -1,0 +1,31 @@
+# `pgrep -l` (--list-name) prints one matching process per line: its id,
+# a space and its name, which the kernel cuts to fifteen bytes and which
+# holds no space. A process id and a word is also what a numbered list
+# looks like, so the definition is reached by `jz run pgrep -l` or by
+# naming it.
+format: 1
+command: pgrep
+variant: list-name
+description: pgrep -l, the matching processes with their names
+metadata:
+  tags: [linux, process, procps]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/pgrep.1.html
+detect:
+  os: [linux]
+  auto_detect: false
+  args:
+    any: ["-l", "--list-name"]
+    none: ["-a", "--list-full"]
+  signature:
+    all:
+      # A process id is never 0, which is how a count such as "0 issues."
+      # is told apart.
+      - '\A(?:[1-9][0-9]* [^ \n]{1,15}(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<pid>[0-9]+) (?P<name>[^ ]{1,15})$'
+fields:
+  pid: {type: int, required: true}
+  name: {required: true}

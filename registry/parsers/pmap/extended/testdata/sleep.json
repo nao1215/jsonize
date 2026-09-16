@@ -1,0 +1,407 @@
+[
+  {
+    "process": {
+      "pid": 3000614,
+      "command": "sleep 30"
+    },
+    "mappings": [
+      {
+        "address": "00005768abd04000",
+        "kbytes": 968,
+        "rss": 968,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "sleep"
+      },
+      {
+        "address": "00005768abdf6000",
+        "kbytes": 4832,
+        "rss": 1768,
+        "dirty": 0,
+        "mode": "r-x--",
+        "mapping": "sleep"
+      },
+      {
+        "address": "00005768ac2ae000",
+        "kbytes": 3836,
+        "rss": 628,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "sleep"
+      },
+      {
+        "address": "00005768ac66d000",
+        "kbytes": 1428,
+        "rss": 964,
+        "dirty": 964,
+        "mode": "r----",
+        "mapping": "sleep"
+      },
+      {
+        "address": "00005768ac7d2000",
+        "kbytes": 24,
+        "rss": 12,
+        "dirty": 12,
+        "mode": "rw---",
+        "mapping": "sleep"
+      },
+      {
+        "address": "00005768ac7d8000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 4,
+        "mode": "rw---",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "00005768c21ca000",
+        "kbytes": 132,
+        "rss": 112,
+        "dirty": 112,
+        "mode": "rw---",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "0000706fb1554000",
+        "kbytes": 12,
+        "rss": 12,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "libpcre2-8.so.0.14.0"
+      },
+      {
+        "address": "0000706fb1557000",
+        "kbytes": 496,
+        "rss": 68,
+        "dirty": 0,
+        "mode": "r-x--",
+        "mapping": "libpcre2-8.so.0.14.0"
+      },
+      {
+        "address": "0000706fb15d3000",
+        "kbytes": 172,
+        "rss": 56,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "libpcre2-8.so.0.14.0"
+      },
+      {
+        "address": "0000706fb15fe000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 4,
+        "mode": "r----",
+        "mapping": "libpcre2-8.so.0.14.0"
+      },
+      {
+        "address": "0000706fb15ff000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 4,
+        "mode": "rw---",
+        "mapping": "libpcre2-8.so.0.14.0"
+      },
+      {
+        "address": "0000706fb1600000",
+        "kbytes": 160,
+        "rss": 160,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "libc.so.6"
+      },
+      {
+        "address": "0000706fb1628000",
+        "kbytes": 1632,
+        "rss": 1376,
+        "dirty": 0,
+        "mode": "r-x--",
+        "mapping": "libc.so.6"
+      },
+      {
+        "address": "0000706fb17c0000",
+        "kbytes": 312,
+        "rss": 184,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "libc.so.6"
+      },
+      {
+        "address": "0000706fb180e000",
+        "kbytes": 16,
+        "rss": 16,
+        "dirty": 16,
+        "mode": "r----",
+        "mapping": "libc.so.6"
+      },
+      {
+        "address": "0000706fb1812000",
+        "kbytes": 8,
+        "rss": 8,
+        "dirty": 8,
+        "mode": "rw---",
+        "mapping": "libc.so.6"
+      },
+      {
+        "address": "0000706fb1814000",
+        "kbytes": 52,
+        "rss": 20,
+        "dirty": 20,
+        "mode": "rw---",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "0000706fb188e000",
+        "kbytes": 20,
+        "rss": 16,
+        "dirty": 16,
+        "mode": "rw---",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "0000706fb1893000",
+        "kbytes": 72,
+        "rss": 72,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "libm.so.6"
+      },
+      {
+        "address": "0000706fb18a5000",
+        "kbytes": 640,
+        "rss": 328,
+        "dirty": 0,
+        "mode": "r-x--",
+        "mapping": "libm.so.6"
+      },
+      {
+        "address": "0000706fb1945000",
+        "kbytes": 456,
+        "rss": 28,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "libm.so.6"
+      },
+      {
+        "address": "0000706fb19b7000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 4,
+        "mode": "r----",
+        "mapping": "libm.so.6"
+      },
+      {
+        "address": "0000706fb19b8000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 4,
+        "mode": "rw---",
+        "mapping": "libm.so.6"
+      },
+      {
+        "address": "0000706fb19b9000",
+        "kbytes": 16,
+        "rss": 16,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "libgcc_s.so.1"
+      },
+      {
+        "address": "0000706fb19bd000",
+        "kbytes": 144,
+        "rss": 64,
+        "dirty": 0,
+        "mode": "r-x--",
+        "mapping": "libgcc_s.so.1"
+      },
+      {
+        "address": "0000706fb19e1000",
+        "kbytes": 16,
+        "rss": 16,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "libgcc_s.so.1"
+      },
+      {
+        "address": "0000706fb19e5000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 4,
+        "mode": "r----",
+        "mapping": "libgcc_s.so.1"
+      },
+      {
+        "address": "0000706fb19e6000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 4,
+        "mode": "rw---",
+        "mapping": "libgcc_s.so.1"
+      },
+      {
+        "address": "0000706fb19e7000",
+        "kbytes": 28,
+        "rss": 28,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "libselinux.so.1"
+      },
+      {
+        "address": "0000706fb19ee000",
+        "kbytes": 132,
+        "rss": 64,
+        "dirty": 0,
+        "mode": "r-x--",
+        "mapping": "libselinux.so.1"
+      },
+      {
+        "address": "0000706fb1a0f000",
+        "kbytes": 28,
+        "rss": 28,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "libselinux.so.1"
+      },
+      {
+        "address": "0000706fb1a16000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 4,
+        "mode": "r----",
+        "mapping": "libselinux.so.1"
+      },
+      {
+        "address": "0000706fb1a17000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 4,
+        "mode": "rw---",
+        "mapping": "libselinux.so.1"
+      },
+      {
+        "address": "0000706fb1a18000",
+        "kbytes": 8,
+        "rss": 0,
+        "dirty": 0,
+        "mode": "rw---",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "0000706fb1a38000",
+        "kbytes": 4,
+        "rss": 0,
+        "dirty": 0,
+        "mode": "-----",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "0000706fb1a39000",
+        "kbytes": 8,
+        "rss": 0,
+        "dirty": 0,
+        "mode": "rw---",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "0000706fb1a3b000",
+        "kbytes": 8,
+        "rss": 8,
+        "dirty": 8,
+        "mode": "rw---",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "0000706fb1a3d000",
+        "kbytes": 16,
+        "rss": 0,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "0000706fb1a41000",
+        "kbytes": 8,
+        "rss": 0,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "0000706fb1a43000",
+        "kbytes": 8,
+        "rss": 8,
+        "dirty": 0,
+        "mode": "r-x--",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "0000706fb1a45000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "ld-linux-x86-64.so.2"
+      },
+      {
+        "address": "0000706fb1a46000",
+        "kbytes": 188,
+        "rss": 188,
+        "dirty": 0,
+        "mode": "r-x--",
+        "mapping": "ld-linux-x86-64.so.2"
+      },
+      {
+        "address": "0000706fb1a75000",
+        "kbytes": 44,
+        "rss": 44,
+        "dirty": 0,
+        "mode": "r----",
+        "mapping": "ld-linux-x86-64.so.2"
+      },
+      {
+        "address": "0000706fb1a80000",
+        "kbytes": 8,
+        "rss": 8,
+        "dirty": 8,
+        "mode": "r----",
+        "mapping": "ld-linux-x86-64.so.2"
+      },
+      {
+        "address": "0000706fb1a82000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 4,
+        "mode": "rw---",
+        "mapping": "ld-linux-x86-64.so.2"
+      },
+      {
+        "address": "0000706fb1a83000",
+        "kbytes": 4,
+        "rss": 4,
+        "dirty": 4,
+        "mode": "rw---",
+        "mapping": "[ anon ]"
+      },
+      {
+        "address": "00007ffec75f0000",
+        "kbytes": 136,
+        "rss": 20,
+        "dirty": 20,
+        "mode": "rw---",
+        "mapping": "[ stack ]"
+      },
+      {
+        "address": "ffffffffff600000",
+        "kbytes": 4,
+        "rss": 0,
+        "dirty": 0,
+        "mode": "--x--",
+        "mapping": "[ anon ]"
+      }
+    ],
+    "total": {
+      "kbytes": 16120,
+      "rss": 7336,
+      "dirty": 1228
+    }
+  }
+]

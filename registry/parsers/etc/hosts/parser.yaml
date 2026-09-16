@@ -43,6 +43,11 @@ detect:
       # second line of something else, such as the cache line
       # `ip route get` prints under its route.
       - '^[ \t]+[A-Za-z]'
+      # `getent ahosts` prints an address, a socket type in capitals and
+      # nothing on most lines. A host name in capitals that is a socket
+      # type is not a name anyone gives a host, and the lines after the
+      # first leave the name out, which no hosts entry does.
+      - '^\S+[ \t]+(?:STREAM|DGRAM|RAW)(?:[ \t]|$)'
 input:
   ignore:
     - '^\s*#'

@@ -1,0 +1,57 @@
+# `pmap -x PID` prints the memory map of a process: a line with the
+# process id and its command line, a column header, one row per mapping
+# (its address, its size, the resident and dirty kilobytes, its mode and
+# what is mapped there), a rule, and the totals. A mapping with no file
+# behind it is written "[ anon ]" or "[ stack ]", spaces included, and is
+# kept as printed. Several processes are several such blocks, one record
+# each.
+format: 1
+command: pmap
+variant: extended
+description: pmap -x, the memory mappings of a process and their totals
+metadata:
+  tags: [linux, process, memory, procps]
+  compatible: [procps-ng]
+  references:
+    - https://man7.org/linux/man-pages/man1/pmap.1.html
+detect:
+  os: [linux]
+  args:
+    any: ["-x", "--extended"]
+  signature:
+    all:
+      - '\A[0-9]+: +\S[^\n]*\nAddress +Kbytes +RSS +Dirty +Mode +Mapping$'
+input:
+  ignore:
+    - '^Address +Kbytes +RSS +Dirty +Mode +Mapping$'
+parse:
+  type: records
+  start: '^[0-9]+: +\S'
+  parts:
+    - name: process
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<pid>[0-9]+): +(?P<command>\S.*?)\s*\z'
+      fields:
+        pid: {type: int}
+    - name: mappings
+      select: {skip: 1, until: '^-{16} -{7} -{7} -{7} ?$'}
+      parse:
+        type: regex
+        pattern: '^(?P<address>[0-9a-f]+) +(?P<kbytes>[0-9]+) +(?P<rss>[0-9]+) +(?P<dirty>[0-9]+) (?P<mode>[-rwxsp]{5}) +(?P<mapping>.+?)\s*$'
+      fields:
+        kbytes: {type: int}
+        rss: {type: int}
+        dirty: {type: int}
+    - name: total
+      select: {after: '^-{16} -{7} -{7} -{7} ?$'}
+      parse:
+        type: regex
+        each: input
+        pattern: '\Atotal kB +(?P<kbytes>[0-9]+) +(?P<rss>[0-9]+) +(?P<dirty>[0-9]+)\s*\z'
+      fields:
+        kbytes: {type: int}
+        rss: {type: int}
+        dirty: {type: int}

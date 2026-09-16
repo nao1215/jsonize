@@ -81,6 +81,7 @@ the same reading with settings of your own.
 | `free` | [`gnu`](../schemas/free/gnu.json), [`gnu-human`](../schemas/free/gnu-human.json), [`gnu-wide`](../schemas/free/gnu-wide.json), [`gnu-wide-human`](../schemas/free/gnu-wide-human.json) |
 | `getcap` | [`paths`](../schemas/getcap/paths.json) |
 | `getconf` | [`glibc`](../schemas/getconf/glibc.json) |
+| `getent` | [`ahosts`](../schemas/getent/ahosts.json) |
 | `getfacl` | [`posix`](../schemas/getfacl/posix.json) |
 | `getmac` | [`verbose`](../schemas/getmac/verbose.json) |
 | `gh` | [`auth-status`](../schemas/gh/auth-status.json), [`issue-list`](../schemas/gh/issue-list.json), [`pr-list`](../schemas/gh/pr-list.json), [`release-list`](../schemas/gh/release-list.json), [`repo-list`](../schemas/gh/repo-list.json), [`run-list`](../schemas/gh/run-list.json), [`workflow-list`](../schemas/gh/workflow-list.json) |
@@ -170,11 +171,12 @@ the same reading with settings of your own.
 | `pactl` | [`info`](../schemas/pactl/info.json), [`short-cards`](../schemas/pactl/short-cards.json), [`short-clients`](../schemas/pactl/short-clients.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
 | `parted` | [`machine`](../schemas/parted/machine.json) |
 | `passwd` | [`status`](../schemas/passwd/status.json) |
+| `pgrep` | [`list-name`](../schemas/pgrep/list-name.json) |
 | `pidstat` | [`io`](../schemas/pidstat/io.json), [`kernel`](../schemas/pidstat/kernel.json), [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json), [`priority`](../schemas/pidstat/priority.json), [`stack`](../schemas/pidstat/stack.json), [`switches`](../schemas/pidstat/switches.json), [`threads`](../schemas/pidstat/threads.json), [`user`](../schemas/pidstat/user.json) |
 | `ping` | [`bsd`](../schemas/ping/bsd.json), [`linux`](../schemas/ping/linux.json) |
 | `pip` | [`columns`](../schemas/pip/columns.json), [`columns-outdated`](../schemas/pip/columns-outdated.json), [`freeze`](../schemas/pip/freeze.json) |
 | `pkg-config` | [`list`](../schemas/pkg-config/list.json) |
-| `pmap` | [`linux`](../schemas/pmap/linux.json) |
+| `pmap` | [`extended`](../schemas/pmap/extended.json), [`linux`](../schemas/pmap/linux.json) |
 | `pmset` | [`settings`](../schemas/pmset/settings.json) |
 | `powerprofilesctl` | [`list`](../schemas/powerprofilesctl/list.json) |
 | `prlimit` | [`linux`](../schemas/prlimit/linux.json) |

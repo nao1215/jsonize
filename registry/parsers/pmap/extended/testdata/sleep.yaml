@@ -1,0 +1,3 @@
+source: pmap -x on a sleep process, captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C
+os: linux
+args: ["-x", "3000614"]

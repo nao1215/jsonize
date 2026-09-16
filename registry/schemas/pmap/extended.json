@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/pmap/extended.json",
+  "title": "pmap/extended",
+  "description": "pmap -x, the memory mappings of a process and their totals",
+  "x-jsonize": {
+    "definition": "pmap/extended",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "process": {
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer"
+          },
+          "command": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pid",
+          "command"
+        ]
+      },
+      "mappings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string"
+            },
+            "kbytes": {
+              "type": "integer"
+            },
+            "rss": {
+              "type": "integer"
+            },
+            "dirty": {
+              "type": "integer"
+            },
+            "mode": {
+              "type": "string"
+            },
+            "mapping": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "address",
+            "kbytes",
+            "rss",
+            "dirty",
+            "mode",
+            "mapping"
+          ]
+        }
+      },
+      "total": {
+        "type": "object",
+        "properties": {
+          "kbytes": {
+            "type": "integer"
+          },
+          "rss": {
+            "type": "integer"
+          },
+          "dirty": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "kbytes",
+          "rss",
+          "dirty"
+        ]
+      }
+    },
+    "required": [
+      "process",
+      "mappings",
+      "total"
+    ]
+  }
+}

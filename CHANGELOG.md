@@ -37,8 +37,10 @@ project follows [Semantic Versioning](https://semver.org/).
   (655 definitions).
 - Network settings: `ethtool -g` (ring sizes) and `ethtool -a` (pause
   frames), `ip route get`, `nmcli -t device`, `iw reg get` (the
-  regulatory rules per frequency range) and `hostname -I`. The registry
-  holds 238 commands through 661 definitions.
+  regulatory rules per frequency range) and `hostname -I`.
+- `pmap -x` (a record per process with its mappings and totals),
+  `pgrep -l` and `getent ahosts`. The registry holds 240 commands
+  through 664 definitions.
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/getent/ahosts.json",
+  "title": "getent/ahosts",
+  "description": "getent ahosts, the addresses getaddrinfo answers for a name",
+  "x-jsonize": {
+    "definition": "getent/ahosts",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "address": {
+        "type": "string"
+      },
+      "socktype": {
+        "type": "string",
+        "enum": [
+          "DGRAM",
+          "RAW",
+          "STREAM"
+        ]
+      },
+      "name": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "address",
+      "socktype",
+      "name"
+    ]
+  }
+}
