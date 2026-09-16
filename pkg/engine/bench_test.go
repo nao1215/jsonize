@@ -146,3 +146,19 @@ func BenchmarkEncodeJSONPrettyLarge(b *testing.B) {
 		}
 	}
 }
+
+// BenchmarkStreamTableLarge measures `--stream` on the input the whole
+// document benchmark reads, so the two are a pair: a stream hands each
+// record over and keeps none of them, and a document keeps them all.
+func BenchmarkStreamTableLarge(b *testing.B) {
+	def := benchDef(b, dfDef)
+	input := dfInputRows(100000)
+	drop := func(any) error { return nil }
+	b.ReportAllocs()
+	b.SetBytes(int64(len(input)))
+	for b.Loop() {
+		if err := Stream(def, bytes.NewReader(input), Options{}, drop, nil); err != nil {
+			b.Fatal(err)
+		}
+	}
+}

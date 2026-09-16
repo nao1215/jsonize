@@ -74,7 +74,7 @@ bench: ## Run benchmarks (COUNT=6) and store the result in bench/new.txt
 
 .PHONY: bench-compare
 bench-compare: ## Compare bench/new.txt against bench/baseline.txt with benchstat
-	go run golang.org/x/perf/cmd/benchstat@latest bench/baseline.txt bench/new.txt
+	go run golang.org/x/perf/cmd/benchstat@v0.0.0-20260908200009-22c9c6c9d4da bench/baseline.txt bench/new.txt
 
 .PHONY: e2e
 e2e: build ## Run the atago end-to-end suite (requires atago on PATH)
