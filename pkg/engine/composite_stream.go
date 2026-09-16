@@ -208,8 +208,7 @@ func (s *streamer) readSingle(ps *partStream) error {
 		if f == nil {
 			continue
 		}
-		// A part that failed has said what was wrong with its lines.
-		f.read = f.read || err != nil || r.ledger.isRead(l)
+		f.read = f.read || r.ledger.isRead(l)
 		f.pending--
 		if f.pending > 0 {
 			continue

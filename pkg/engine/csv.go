@@ -28,6 +28,10 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 	if len(lines) == 0 {
 		return []any{}, nil
 	}
+	records := lines
+	if p != &r.def.Parse {
+		records = csvRecords(p, lines)
+	}
 	var (
 		cols    []string
 		header  []string
@@ -37,7 +41,7 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 		cols = p.Header.Columns
 	}
 	out := make([]any, 0, len(lines))
-	for _, rec := range csvRecords(p, lines) {
+	for _, rec := range records {
 		rows, err := readCSV(rec.text, p)
 		if err != nil {
 			ln, msg := csvFailure(rec, err)
