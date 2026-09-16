@@ -1,0 +1,3 @@
+source: git 2.53 in repositories built for this fixture on Ubuntu, LC_ALL=C
+description: a bare repository, which has no HEAD line
+args: [worktree, list, --porcelain]

@@ -1,0 +1,29 @@
+# `git count-objects -vH` prints the counts git/count-objects reads with
+# the sizes written for people ("33.62 MiB", "0 bytes"). The counts are
+# numbers and the sizes stay the text git printed.
+format: 1
+command: git
+variant: count-objects-human
+description: git count-objects -vH, the object counts with sizes for people
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-count-objects
+detect:
+  args:
+    all: ["count-objects"]
+    any: ["-vH", "-Hv", "-H", "--human-readable"]
+  signature:
+    all:
+      - '\Acount: [0-9]+\nsize: [0-9.]+ (?:bytes|KiB|MiB|GiB|TiB)\nin-pack: [^\n]*\npacks: [^\n]*\nsize-pack: [0-9.]+ (?:bytes|KiB|MiB|GiB|TiB)\nprune-packable: [^\n]*\ngarbage: [^\n]*\nsize-garbage: [0-9.]+ (?:bytes|KiB|MiB|GiB|TiB)(?:\nalternate: [^\n]*)*\n?\z'
+parse:
+  type: kv
+  separator: ":"
+  as: map
+fields:
+  count: {type: int}
+  in-pack: {type: int}
+  packs: {type: int}
+  prune-packable: {type: int}
+  garbage: {type: int}

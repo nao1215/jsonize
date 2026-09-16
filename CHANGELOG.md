@@ -50,8 +50,12 @@ project follows [Semantic Versioning](https://semver.org/).
   `/proc/cgroups`, `/proc/net/sockstat`, `/proc/PID/maps` and
   `/proc/net/if_inet6`.
 - `apt-cache show` (a record per package version, sizes typed), and
-  `snap refresh --list`, `snap aliases` and `snap version`. The registry
-  holds 241 commands through 679 definitions.
+  `snap refresh --list`, `snap aliases` and `snap version`.
+- For git, `branch` (which branch is checked out here or in another
+  worktree), `status -sb` (the branch, its upstream and how far ahead or
+  behind, then the changed paths), `worktree list --porcelain` and
+  `count-objects -vH`; and `go version`. The registry holds 241 commands
+  through 684 definitions.
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the

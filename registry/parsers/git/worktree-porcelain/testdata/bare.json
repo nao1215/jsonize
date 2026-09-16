@@ -1,0 +1,10 @@
+[
+  {
+    "path": "/home/alice/src/bare.git",
+    "bare": true,
+    "head": null,
+    "branch": null,
+    "locked_reason": null,
+    "prunable_reason": null
+  }
+]

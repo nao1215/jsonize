@@ -1,0 +1,20 @@
+{
+  "branch": {
+    "name": "main",
+    "upstream": "origin/main",
+    "ahead": 1,
+    "behind": null
+  },
+  "entries": [
+    {
+      "index": "M",
+      "worktree": "M",
+      "path": "a.txt"
+    },
+    {
+      "index": "?",
+      "worktree": "?",
+      "path": "new.txt"
+    }
+  ]
+}

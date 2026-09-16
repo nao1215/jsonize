@@ -1,0 +1,2 @@
+source: go version, captured on Ubuntu 26.04 (go1.26.6) with LC_ALL=C
+args: [version]

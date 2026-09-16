@@ -1,0 +1,3 @@
+source: git 2.53 in repositories built for this fixture on Ubuntu, LC_ALL=C
+description: a detached HEAD, which git lists as a branch named in brackets
+args: [branch]

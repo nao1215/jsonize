@@ -1,0 +1,54 @@
+# `git status -sb` (--short --branch) prints the short status with a
+# header line: "## " and the branch, "..." and its upstream when it has
+# one, and "[ahead N, behind M]" when they differ. A detached HEAD is
+# "HEAD (no branch)", and a branch with no commit yet is "No commits yet
+# on BRANCH". The lines after it are what git/status-porcelain reads, and
+# they are read the same way.
+format: 1
+command: git
+variant: status-short-branch
+description: git status -sb, the branch and its upstream, then the changed paths
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-status
+detect:
+  args:
+    all: [status]
+    any: ["-sb", "-bs", "-b", "--branch"]
+  signature:
+    all:
+      # The header is one branch, its upstream and the counts, nothing
+      # else, and every line after it is a status line. A Markdown heading
+      # opens the same way and has words in it.
+      - '\A## (?:No commits yet on \S+|HEAD \(no branch\)|[^\s.][^\s]*?(?:\.\.\.\S+)?(?: \[(?:ahead [0-9]+(?:, behind [0-9]+)?|behind [0-9]+|gone)\])?)(?:\n(?:\?\?|!!|[ MTADRCU][ MTADRCU]) [^\n]+)*\n?\z'
+parse:
+  type: composite
+  parts:
+    - name: branch
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        patterns:
+          - '\A## No commits yet on (?P<name>\S+)(?P<upstream>)??(?P<ahead>)??(?P<behind>)??\z'
+          - '\A## HEAD \(no branch\)(?P<name>)??(?P<upstream>)??(?P<ahead>)??(?P<behind>)??\z'
+          - '\A## (?P<name>\S+?)(?:\.\.\.(?P<upstream>\S+))?(?: \[(?:ahead (?P<ahead>[0-9]+))?(?:, )?(?:behind (?P<behind>[0-9]+))?(?:gone)?\])?\z'
+      fields:
+        ahead: {type: int}
+        behind: {type: int}
+    - name: entries
+      select: {skip: 1}
+      parse:
+        type: regex
+        patterns:
+          - '^(?P<index>[RC])(?P<worktree>[ MTADRCU]) (?P<path>"(?:[^"\\]|\\.)*"|[^" ][^ ]*) -> (?P<renamed_to>"(?:[^"\\]|\\.)*"|[^" ][^ ]*)$'
+          - '^(?P<index>[ MTADU])(?P<worktree>[RC]) (?P<path>"(?:[^"\\]|\\.)*"|[^" ][^ ]*) -> (?P<renamed_to>"(?:[^"\\]|\\.)*"|[^" ][^ ]*)$'
+          - '^(?P<index>[MTADU?!])(?P<worktree>[ MTADU?!]) (?P<path>.+)$'
+          - '^(?P<index> )(?P<worktree>[MTADU?!]) (?P<path>.+)$'
+      fields:
+        index: {null_if: [""]}
+        worktree: {null_if: [""]}
+        path: {required: true, unescape: {quote: '"', octal: true, sequences: {'\\': '\', '\"': '"', '\a': "\a", '\b': "\b", '\t': "\t", '\n': "\n", '\v': "\v", '\f': "\f", '\r': "\r"}}}
+        renamed_to: {when_missing: omit, unescape: {quote: '"', octal: true, sequences: {'\\': '\', '\"': '"', '\a': "\a", '\b': "\b", '\t': "\t", '\n': "\n", '\v': "\v", '\f': "\f", '\r': "\r"}}}

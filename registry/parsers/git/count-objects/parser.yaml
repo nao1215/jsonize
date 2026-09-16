@@ -13,13 +13,15 @@ metadata:
 detect:
   args:
     all: ["count-objects"]
+    # -H prints the sizes for people; git/count-objects-human reads that.
+    none: ["-vH", "-Hv", "-H", "--human-readable"]
   signature:
     all:
       # count-objects -v prints these eight lines in this order, then a
       # line for each alternate object store, and nothing else. Lines of
       # another command after them are refused rather than read as more
       # counts.
-      - '\Acount: [^\n]*\nsize: [^\n]*\nin-pack: [^\n]*\npacks: [^\n]*\nsize-pack: [^\n]*\nprune-packable: [^\n]*\ngarbage: [^\n]*\nsize-garbage: [^\n]*(?:\nalternate: [^\n]*)*\n?\z'
+      - '\Acount: [^\n]*\nsize: [0-9]+\nin-pack: [^\n]*\npacks: [^\n]*\nsize-pack: [^\n]*\nprune-packable: [^\n]*\ngarbage: [^\n]*\nsize-garbage: [^\n]*(?:\nalternate: [^\n]*)*\n?\z'
 parse:
   type: kv
   separator: ":"

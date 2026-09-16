@@ -1,0 +1,20 @@
+[
+  {
+    "current": false,
+    "elsewhere": true,
+    "name": "feature",
+    "points_to": null
+  },
+  {
+    "current": false,
+    "elsewhere": true,
+    "name": "locked-branch",
+    "points_to": null
+  },
+  {
+    "current": true,
+    "elsewhere": false,
+    "name": "main",
+    "points_to": null
+  }
+]

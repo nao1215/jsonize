@@ -1,0 +1,38 @@
+# `git worktree list --porcelain` prints one block per worktree,
+# separated by a blank line: "worktree PATH", then "HEAD OBJECT" and
+# either "branch REF" or "detached", or "bare" alone for a bare
+# repository, then "locked" and "prunable" when they apply, each with the
+# reason after a space when there is one. A worktree is one record: the
+# path, the commit, the branch (null when detached or bare), and bare,
+# detached, locked and prunable set to true on the worktrees they apply
+# to and left out of the others, with the reasons (null when none).
+format: 1
+command: git
+variant: worktree-porcelain
+description: git worktree list --porcelain, the worktrees and their state
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-worktree
+detect:
+  args:
+    all: [worktree, list]
+    any: ["--porcelain"]
+  signature:
+    all:
+      - '\Aworktree /\S[^\n]*\n(?:HEAD [0-9a-f]{40,64}\n|bare(?:\n|\z))'
+parse:
+  type: records
+  start: '^worktree '
+  record:
+    parse:
+      type: regex
+      each: input
+      pattern: '\Aworktree (?P<path>[^\n]+)\n(?:(?P<bare>bare)|HEAD (?P<head>[0-9a-f]{40,64})\n(?:branch (?P<branch>[^\n]+)|(?P<detached>detached)))(?:\n(?P<locked>locked)(?: (?P<locked_reason>[^\n]+))?)?(?:\n(?P<prunable>prunable)(?: (?P<prunable_reason>[^\n]+))?)?\z'
+    fields:
+      path: {required: true}
+      bare: {type: bool, true_values: ["bare"], when_missing: omit}
+      detached: {type: bool, true_values: ["detached"], when_missing: omit}
+      locked: {type: bool, true_values: ["locked"], when_missing: omit}
+      prunable: {type: bool, true_values: ["prunable"], when_missing: omit}

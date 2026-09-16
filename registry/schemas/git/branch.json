@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/branch.json",
+  "title": "git/branch",
+  "description": "git branch, the branches and which one is checked out",
+  "x-jsonize": {
+    "definition": "git/branch",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "current": {
+        "type": "boolean"
+      },
+      "elsewhere": {
+        "type": "boolean"
+      },
+      "name": {
+        "type": "string"
+      },
+      "points_to": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "current",
+      "elsewhere",
+      "name",
+      "points_to"
+    ]
+  }
+}
