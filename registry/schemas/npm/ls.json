@@ -5,7 +5,7 @@
   "description": "npm ls direct dependency tree",
   "x-jsonize": {
     "definition": "npm/ls",
-    "version": 1
+    "version": 2
   },
   "type": "object",
   "properties": {
@@ -13,7 +13,10 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "version": {
           "type": [

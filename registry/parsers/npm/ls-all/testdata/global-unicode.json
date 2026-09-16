@@ -1,0 +1,25 @@
+[
+  {
+    "name": null,
+    "version": null,
+    "path": "/usr/local/lib",
+    "state": null,
+    "children": [
+      {
+        "name": "is-glob",
+        "version": "4.0.3",
+        "path": null,
+        "state": null,
+        "children": [
+          {
+            "name": "is-extglob",
+            "version": "2.1.1",
+            "path": null,
+            "state": null,
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]

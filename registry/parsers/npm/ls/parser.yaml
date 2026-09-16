@@ -1,7 +1,9 @@
 # `npm ls` prints the project on the first line and one line per direct
 # dependency, so the result is the project and its list rather than one
 # flat array. The tree glyphs are ASCII (+-- and `--) in the C locale and
-# box drawing characters in a UTF-8 one; both spellings are read.
+# box drawing characters in a UTF-8 one; both spellings are read. With
+# -g the first line is the global node_modules directory alone, and the
+# project's name and version are null.
 # A tree deeper than one level, which `npm ls --all` prints, uses
 # continuation prefixes this definition does not read: such input is
 # reported as an error rather than parsed into a shape that has lost the
@@ -21,8 +23,9 @@ detect:
   signature:
     all:
       # The root line is "name@version /path". Outside a package npm
-      # still prints the line with the version left empty.
-      - '\A[^ \t]+@[^ \t]*[ \t]+\S'
+      # still prints the line with the version left empty, and with -g
+      # it is the directory alone.
+      - '\A(?:[^ \t]+@[^ \t]*[ \t]+\S|(?:/|[A-Za-z]:\\)[^\n]*$)'
       # Every line after it is a direct dependency. A line drawn deeper,
       # which `npm ls --all` prints, is npm/ls-all's to read.
       - '\A[^\n]*(?:\n(?:\+--|`--|├──|└──)[ \t][^\n]*)+\z'
@@ -39,9 +42,10 @@ parse:
         type: regex
         each: input
         # Outside a package npm prints the root line with no version.
-        pattern: '^(?P<name>@?[^@]+)@(?P<version>\S*)[ \t]+(?P<path>.+?)[ \t]*$'
+        patterns:
+          - '^(?P<name>@?[^@]+)@(?P<version>\S*)[ \t]+(?P<path>.+?)[ \t]*$'
+          - '^(?P<name>)??(?P<version>)??(?P<path>(?:/|[A-Za-z]:\\).*?)[ \t]*$'
       fields:
-        name: {required: true}
         # Empty outside a package, where npm has no version to print.
         version: {null_if: [""]}
         path: {required: true}

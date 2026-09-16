@@ -1,0 +1,4 @@
+description: With -g the root is the global node_modules directory alone, with no name or version.
+source: "captured with `npm ls -g --all --prefix DIR` (npm 10.9.4, node 22.22.1) on Ubuntu 26.04 with LC_ALL=C, after `npm install -g --prefix DIR is-glob`; DIR replaced with /usr/local"
+os: linux
+args: [ls, -g, --all]
