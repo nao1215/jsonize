@@ -14,8 +14,9 @@
 # style writes them as they are; the others put the name in quotes. A
 # backslash, or a quote at the start, therefore means two names at once,
 # and such a name is refused rather than decoded by guess. A name tar
-# leaves alone is the name. Run tar in a UTF-8 locale (`jz run
-# --keep-locale`) to get non-ASCII names as they are.
+# leaves alone is the name. `jz run` runs tar in a UTF-8 locale, where a
+# name outside ASCII is left alone; in the C locale tar writes it in
+# octal, and it is refused.
 #
 # The size of a device member is printed as major,minor rather than a
 # byte count and is not read here.
@@ -35,6 +36,9 @@ metadata:
   compatible: [GNU tar]
   references:
     - https://www.gnu.org/software/tar/manual/tar.html
+exec:
+  env:
+    LC_ALL: C.UTF-8
 detect:
   signature:
     all:

@@ -1,0 +1,4 @@
+description: In a UTF-8 locale, which jz run gives file, the names outside ASCII are printed as they are, and a backslash in a name is kept.
+source: file 5.46 on Ubuntu 26.04 with LC_ALL=C.UTF-8, over files made for the fixture
+os: linux
+args: [café.txt, 日本語.md, back\slash, z.zip]
