@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/isoinfo/volume-descriptor.json",
+  "title": "isoinfo/volume-descriptor",
+  "description": "isoinfo -d, the primary volume descriptor of an ISO 9660 image",
+  "x-jsonize": {
+    "definition": "isoinfo/volume-descriptor",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "volume": {
+      "type": "object",
+      "properties": {
+        "system_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "volume_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "volume_set_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "publisher_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "data_preparer_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "application_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "copyright_file_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "abstract_file_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "bibliographic_file_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "volume_set_size": {
+          "type": "integer"
+        },
+        "volume_set_sequence_number": {
+          "type": "integer"
+        },
+        "logical_block_size": {
+          "type": "integer"
+        },
+        "volume_size": {
+          "type": "integer"
+        },
+        "el_torito_version": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "boot_catalog_sector": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "joliet_level": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "rock_ridge_version": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "system_id",
+        "volume_id",
+        "volume_set_id",
+        "publisher_id",
+        "data_preparer_id",
+        "application_id",
+        "copyright_file_id",
+        "abstract_file_id",
+        "bibliographic_file_id",
+        "volume_set_size",
+        "volume_set_sequence_number",
+        "logical_block_size",
+        "volume_size",
+        "el_torito_version",
+        "boot_catalog_sector",
+        "joliet_level",
+        "rock_ridge_version"
+      ]
+    },
+    "boot": {
+      "type": "object",
+      "properties": {
+        "header_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "arch": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "arch_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "key": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "boot_indicator": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "boot_indicator_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "boot_media": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "boot_media_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "load_segment": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "system_type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sector_count": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "boot_offset": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "header_id",
+        "arch",
+        "arch_name",
+        "id",
+        "key",
+        "boot_indicator",
+        "boot_indicator_name",
+        "boot_media",
+        "boot_media_name",
+        "load_segment",
+        "system_type",
+        "sector_count",
+        "boot_offset"
+      ]
+    }
+  },
+  "required": [
+    "volume",
+    "boot"
+  ]
+}

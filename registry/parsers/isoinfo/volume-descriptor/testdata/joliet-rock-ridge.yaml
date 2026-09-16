@@ -1,0 +1,3 @@
+description: every identifier set, with Joliet and Rock Ridge
+source: captured with LC_ALL=C isoinfo -d (cdrkit 1.1.11) on Ubuntu from an image made with genisoimage -r -J and the identifier options
+args: [-d, -i, rich.iso]

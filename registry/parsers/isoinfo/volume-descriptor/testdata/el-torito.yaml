@@ -1,0 +1,3 @@
+description: a no-emulation El Torito boot record, whose sector count is printed in hexadecimal
+source: captured with LC_ALL=C isoinfo -d (cdrkit 1.1.11) on Ubuntu from an image made with genisoimage -b -c -no-emul-boot -boot-load-size 12 -J
+args: [-d, -i, boot12.iso]
