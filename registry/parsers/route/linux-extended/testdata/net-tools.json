@@ -1,0 +1,80 @@
+[
+  {
+    "destination": "default",
+    "gateway": "172.17.0.1",
+    "genmask": "0.0.0.0",
+    "flags": "UG",
+    "metric": 0,
+    "ref": 0,
+    "use": 0,
+    "iface": "eth0",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0
+  },
+  {
+    "destination": "172.17.0.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.0.0",
+    "flags": "U",
+    "metric": 0,
+    "ref": 0,
+    "use": 0,
+    "iface": "eth0",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0
+  },
+  {
+    "destination": "192.0.2.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.255.192",
+    "flags": "U",
+    "metric": 0,
+    "ref": 0,
+    "use": 0,
+    "iface": "dummy0",
+    "mss": 0,
+    "window": 8192,
+    "irtt": 30
+  },
+  {
+    "destination": "192.0.2.128",
+    "gateway": "-",
+    "genmask": "255.255.255.128",
+    "flags": "!",
+    "metric": 0,
+    "ref": null,
+    "use": 0,
+    "iface": "-",
+    "mss": null,
+    "window": null,
+    "irtt": null
+  },
+  {
+    "destination": "198.51.100.0",
+    "gateway": "0.0.0.0",
+    "genmask": "255.255.255.0",
+    "flags": "U",
+    "metric": 0,
+    "ref": 0,
+    "use": 0,
+    "iface": "dummy0",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0
+  },
+  {
+    "destination": "203.0.113.0",
+    "gateway": "198.51.100.1",
+    "genmask": "255.255.255.0",
+    "flags": "UG",
+    "metric": 50,
+    "ref": 0,
+    "use": 0,
+    "iface": "dummy0",
+    "mss": 0,
+    "window": 0,
+    "irtt": 0
+  }
+]
