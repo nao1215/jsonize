@@ -1,0 +1,48 @@
+[
+  {
+    "cpu": [
+      {
+        "user_percent": 5.81,
+        "nice_percent": 0.03,
+        "system_percent": 0.68,
+        "iowait_percent": 0.04,
+        "steal_percent": 0,
+        "idle_percent": 93.45
+      }
+    ],
+    "devices": [
+      {
+        "device": "loop0",
+        "tps": 0,
+        "kb_read_s": 0,
+        "kb_w_d_s": 0,
+        "kb_read": 17,
+        "kb_w_d": 0
+      },
+      {
+        "device": "loop1",
+        "tps": 0,
+        "kb_read_s": 0.01,
+        "kb_w_d_s": 0,
+        "kb_read": 692,
+        "kb_w_d": 0
+      },
+      {
+        "device": "nvme0n1",
+        "tps": 0.04,
+        "kb_read_s": 0.42,
+        "kb_w_d_s": 0,
+        "kb_read": 34369,
+        "kb_w_d": 40
+      },
+      {
+        "device": "nvme1n1",
+        "tps": 51.78,
+        "kb_read_s": 296.46,
+        "kb_w_d_s": 889.04,
+        "kb_read": 24328351,
+        "kb_w_d": 72957109
+      }
+    ]
+  }
+]

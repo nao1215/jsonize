@@ -1,0 +1,4 @@
+source: iostat -xs 1 1, captured on Ubuntu 26.04 (sysstat 12.7.7) with LC_ALL=C; the host name replaced with one of the same width and loop devices past loop1 left out
+description: the short extended form, one throughput column and the queue figures
+os: linux
+args: ["-x", "-s", "1", "1"]

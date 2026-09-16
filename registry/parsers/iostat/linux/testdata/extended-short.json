@@ -1,0 +1,56 @@
+[
+  {
+    "cpu": [
+      {
+        "user_percent": 5.81,
+        "nice_percent": 0.03,
+        "system_percent": 0.68,
+        "iowait_percent": 0.04,
+        "steal_percent": 0,
+        "idle_percent": 93.45
+      }
+    ],
+    "devices": [
+      {
+        "device": "loop0",
+        "tps": 0,
+        "kb_s": 0,
+        "rqm_s": 0,
+        "await": 0.14,
+        "areq_sz": 1.21,
+        "aqu_sz": 0,
+        "util_percent": 0
+      },
+      {
+        "device": "loop1",
+        "tps": 0,
+        "kb_s": 0.01,
+        "rqm_s": 0,
+        "await": 0.36,
+        "areq_sz": 12.58,
+        "aqu_sz": 0,
+        "util_percent": 0
+      },
+      {
+        "device": "nvme0n1",
+        "tps": 0.04,
+        "kb_s": 0.42,
+        "rqm_s": 0.05,
+        "await": 0.77,
+        "areq_sz": 11.49,
+        "aqu_sz": 0,
+        "util_percent": 0
+      },
+      {
+        "device": "nvme1n1",
+        "tps": 51.78,
+        "kb_s": 1185.5,
+        "rqm_s": 27.17,
+        "await": 108.49,
+        "areq_sz": 22.89,
+        "aqu_sz": 5.62,
+        "util_percent": 1.1
+      }
+    ]
+  }
+]

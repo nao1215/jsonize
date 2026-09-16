@@ -5,7 +5,7 @@
   "description": "iostat default report, one sample of CPU averages and per-device counters",
   "x-jsonize": {
     "definition": "iostat/linux",
-    "version": 2
+    "version": 3
   },
   "type": "array",
   "items": {
@@ -50,6 +50,24 @@
         "items": {
           "type": "object",
           "properties": {
+            "aqu_sz": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "areq_sz": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "await": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
             "device": {
               "type": "string"
             },
@@ -72,6 +90,24 @@
               ]
             },
             "kb_read_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "kb_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "kb_w_d": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "kb_w_d_s": {
               "type": [
                 "number",
                 "null"
@@ -113,6 +149,24 @@
                 "null"
               ]
             },
+            "mb_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "mb_w_d": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "mb_w_d_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
             "mb_wrtn": {
               "type": [
                 "integer",
@@ -125,7 +179,19 @@
                 "null"
               ]
             },
+            "rqm_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
             "tps": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "util_percent": {
               "type": [
                 "number",
                 "null"
