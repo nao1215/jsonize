@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/cpu-all.json",
+  "title": "sar/cpu-all",
+  "description": "sar -u ALL CPU utilization with every field",
+  "x-jsonize": {
+    "definition": "sar/cpu-all",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "cpu": {
+        "type": "string"
+      },
+      "usr_percent": {
+        "type": "number"
+      },
+      "nice_percent": {
+        "type": "number"
+      },
+      "sys_percent": {
+        "type": "number"
+      },
+      "iowait_percent": {
+        "type": "number"
+      },
+      "steal_percent": {
+        "type": "number"
+      },
+      "irq_percent": {
+        "type": "number"
+      },
+      "soft_percent": {
+        "type": "number"
+      },
+      "guest_percent": {
+        "type": "number"
+      },
+      "gnice_percent": {
+        "type": "number"
+      },
+      "idle_percent": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "cpu",
+      "usr_percent",
+      "nice_percent",
+      "sys_percent",
+      "iowait_percent",
+      "steal_percent",
+      "irq_percent",
+      "soft_percent",
+      "guest_percent",
+      "gnice_percent",
+      "idle_percent"
+    ]
+  }
+}

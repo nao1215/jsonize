@@ -1,0 +1,35 @@
+[
+  {
+    "time": "20:19:57",
+    "ihdrerr_per_s": 0,
+    "iadrerr_per_s": 0,
+    "iukwnpr_per_s": 0,
+    "idisc_per_s": 0,
+    "odisc_per_s": 0,
+    "onort_per_s": 0,
+    "asmf_per_s": 0,
+    "fragf_per_s": 0
+  },
+  {
+    "time": "20:19:58",
+    "ihdrerr_per_s": 0,
+    "iadrerr_per_s": 0,
+    "iukwnpr_per_s": 0,
+    "idisc_per_s": 0,
+    "odisc_per_s": 0,
+    "onort_per_s": 0,
+    "asmf_per_s": 0,
+    "fragf_per_s": 0
+  },
+  {
+    "time": "Average",
+    "ihdrerr_per_s": 0,
+    "iadrerr_per_s": 0,
+    "iukwnpr_per_s": 0,
+    "idisc_per_s": 0,
+    "odisc_per_s": 0,
+    "onort_per_s": 0,
+    "asmf_per_s": 0,
+    "fragf_per_s": 0
+  }
+]

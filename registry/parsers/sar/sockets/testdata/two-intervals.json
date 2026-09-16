@@ -1,0 +1,29 @@
+[
+  {
+    "time": "20:19:53",
+    "totsck": 1922,
+    "tcpsck": 69,
+    "udpsck": 32,
+    "rawsck": 0,
+    "ip_frag": 0,
+    "tcp_tw": 10
+  },
+  {
+    "time": "20:19:54",
+    "totsck": 1921,
+    "tcpsck": 74,
+    "udpsck": 32,
+    "rawsck": 0,
+    "ip_frag": 0,
+    "tcp_tw": 10
+  },
+  {
+    "time": "Average",
+    "totsck": 1922,
+    "tcpsck": 72,
+    "udpsck": 32,
+    "rawsck": 0,
+    "ip_frag": 0,
+    "tcp_tw": 10
+  }
+]

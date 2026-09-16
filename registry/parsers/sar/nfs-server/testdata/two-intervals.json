@@ -1,0 +1,44 @@
+[
+  {
+    "time": "20:19:51",
+    "scall_per_s": 0,
+    "badcall_per_s": 0,
+    "packet_per_s": 0,
+    "udp_per_s": 0,
+    "tcp_per_s": 0,
+    "hit_per_s": 0,
+    "miss_per_s": 0,
+    "sread_per_s": 0,
+    "swrite_per_s": 0,
+    "saccess_per_s": 0,
+    "sgetatt_per_s": 0
+  },
+  {
+    "time": "20:19:52",
+    "scall_per_s": 0,
+    "badcall_per_s": 0,
+    "packet_per_s": 0,
+    "udp_per_s": 0,
+    "tcp_per_s": 0,
+    "hit_per_s": 0,
+    "miss_per_s": 0,
+    "sread_per_s": 0,
+    "swrite_per_s": 0,
+    "saccess_per_s": 0,
+    "sgetatt_per_s": 0
+  },
+  {
+    "time": "Average",
+    "scall_per_s": 0,
+    "badcall_per_s": 0,
+    "packet_per_s": 0,
+    "udp_per_s": 0,
+    "tcp_per_s": 0,
+    "hit_per_s": 0,
+    "miss_per_s": 0,
+    "sread_per_s": 0,
+    "swrite_per_s": 0,
+    "saccess_per_s": 0,
+    "sgetatt_per_s": 0
+  }
+]

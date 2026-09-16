@@ -1,0 +1,37 @@
+# `sar -n UDP6` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. The figures
+# are numbers with a fraction.
+format: 1
+command: sar
+variant: udp6
+description: sar -n UDP6 UDPv6 traffic
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+idgm6/s[ \t]+odgm6/s[ \t]+noport6/s[ \t]+idgmer6/s[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+idgm6/s[ \t]+odgm6/s[ \t]+noport6/s[ \t]+idgmer6/s[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, idgm6_per_s, odgm6_per_s, noport6_per_s, idgmer6_per_s]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  idgm6_per_s: {type: float}
+  odgm6_per_s: {type: float}
+  noport6_per_s: {type: float}
+  idgmer6_per_s: {type: float}

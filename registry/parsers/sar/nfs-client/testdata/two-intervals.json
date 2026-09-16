@@ -1,0 +1,29 @@
+[
+  {
+    "time": "20:19:49",
+    "call_per_s": 0,
+    "retrans_per_s": 0,
+    "read_per_s": 0,
+    "write_per_s": 0,
+    "access_per_s": 0,
+    "getatt_per_s": 0
+  },
+  {
+    "time": "20:19:50",
+    "call_per_s": 0,
+    "retrans_per_s": 0,
+    "read_per_s": 0,
+    "write_per_s": 0,
+    "access_per_s": 0,
+    "getatt_per_s": 0
+  },
+  {
+    "time": "Average",
+    "call_per_s": 0,
+    "retrans_per_s": 0,
+    "read_per_s": 0,
+    "write_per_s": 0,
+    "access_per_s": 0,
+    "getatt_per_s": 0
+  }
+]

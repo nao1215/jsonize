@@ -1,0 +1,44 @@
+[
+  {
+    "time": "20:20:13",
+    "ihdrer6_per_s": 0,
+    "iadrer6_per_s": 0,
+    "iukwnp6_per_s": 0,
+    "i2big6_per_s": 0,
+    "idisc6_per_s": 0,
+    "odisc6_per_s": 0,
+    "inort6_per_s": 0,
+    "onort6_per_s": 0,
+    "asmf6_per_s": 0,
+    "fragf6_per_s": 0,
+    "itrpck6_per_s": 0
+  },
+  {
+    "time": "20:20:14",
+    "ihdrer6_per_s": 0,
+    "iadrer6_per_s": 0,
+    "iukwnp6_per_s": 0,
+    "i2big6_per_s": 0,
+    "idisc6_per_s": 0,
+    "odisc6_per_s": 0,
+    "inort6_per_s": 0,
+    "onort6_per_s": 0,
+    "asmf6_per_s": 0,
+    "fragf6_per_s": 0,
+    "itrpck6_per_s": 0
+  },
+  {
+    "time": "Average",
+    "ihdrer6_per_s": 0,
+    "iadrer6_per_s": 0,
+    "iukwnp6_per_s": 0,
+    "i2big6_per_s": 0,
+    "idisc6_per_s": 0,
+    "odisc6_per_s": 0,
+    "inort6_per_s": 0,
+    "onort6_per_s": 0,
+    "asmf6_per_s": 0,
+    "fragf6_per_s": 0,
+    "itrpck6_per_s": 0
+  }
+]

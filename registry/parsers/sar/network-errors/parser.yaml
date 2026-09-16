@@ -1,0 +1,43 @@
+# `sar -n EDEV` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. The figures
+# are numbers with a fraction.
+format: 1
+command: sar
+variant: network-errors
+description: sar -n EDEV network device errors
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+IFACE[ \t]+rxerr/s[ \t]+txerr/s[ \t]+coll/s[ \t]+rxdrop/s[ \t]+txdrop/s[ \t]+txcarr/s[ \t]+rxfram/s[ \t]+rxfifo/s[ \t]+txfifo/s[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+IFACE[ \t]+rxerr/s[ \t]+txerr/s[ \t]+coll/s[ \t]+rxdrop/s[ \t]+txdrop/s[ \t]+txcarr/s[ \t]+rxfram/s[ \t]+rxfifo/s[ \t]+txfifo/s[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, iface, rxerr_per_s, txerr_per_s, coll_per_s, rxdrop_per_s, txdrop_per_s, txcarr_per_s, rxfram_per_s, rxfifo_per_s, txfifo_per_s]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  iface: {required: true}
+  rxerr_per_s: {type: float}
+  txerr_per_s: {type: float}
+  coll_per_s: {type: float}
+  rxdrop_per_s: {type: float}
+  txdrop_per_s: {type: float}
+  txcarr_per_s: {type: float}
+  rxfram_per_s: {type: float}
+  rxfifo_per_s: {type: float}
+  txfifo_per_s: {type: float}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/sockets6.json",
+  "title": "sar/sockets6",
+  "description": "sar -n SOCK6 sockets in use (IPv6)",
+  "x-jsonize": {
+    "definition": "sar/sockets6",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "tcp6sck": {
+        "type": "integer"
+      },
+      "udp6sck": {
+        "type": "integer"
+      },
+      "raw6sck": {
+        "type": "integer"
+      },
+      "ip6_frag": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "time",
+      "tcp6sck",
+      "udp6sck",
+      "raw6sck",
+      "ip6_frag"
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/nfs-client.json",
+  "title": "sar/nfs-client",
+  "description": "sar -n NFS NFS client activity",
+  "x-jsonize": {
+    "definition": "sar/nfs-client",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "call_per_s": {
+        "type": "number"
+      },
+      "retrans_per_s": {
+        "type": "number"
+      },
+      "read_per_s": {
+        "type": "number"
+      },
+      "write_per_s": {
+        "type": "number"
+      },
+      "access_per_s": {
+        "type": "number"
+      },
+      "getatt_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "call_per_s",
+      "retrans_per_s",
+      "read_per_s",
+      "write_per_s",
+      "access_per_s",
+      "getatt_per_s"
+    ]
+  }
+}

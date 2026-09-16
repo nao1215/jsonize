@@ -1,0 +1,4 @@
+description: Two samples and the summary block.
+source: captured on Ubuntu 26.04 (sysstat 12.7.7) with LC_ALL=C; the host name in the banner replaced with one of the same width; the rows of CPUs past 2 left out
+os: linux
+args: ["-n", "SOFT", "1", "2"]

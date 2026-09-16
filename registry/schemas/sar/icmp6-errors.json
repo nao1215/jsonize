@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/icmp6-errors.json",
+  "title": "sar/icmp6-errors",
+  "description": "sar -n EICMP6 ICMPv6 errors",
+  "x-jsonize": {
+    "definition": "sar/icmp6-errors",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "ierr6_per_s": {
+        "type": "number"
+      },
+      "idtunr6_per_s": {
+        "type": "number"
+      },
+      "odtunr6_per_s": {
+        "type": "number"
+      },
+      "itmex6_per_s": {
+        "type": "number"
+      },
+      "otmex6_per_s": {
+        "type": "number"
+      },
+      "iprmpb6_per_s": {
+        "type": "number"
+      },
+      "oprmpb6_per_s": {
+        "type": "number"
+      },
+      "iredir6_per_s": {
+        "type": "number"
+      },
+      "oredir6_per_s": {
+        "type": "number"
+      },
+      "ipck2b6_per_s": {
+        "type": "number"
+      },
+      "opck2b6_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "ierr6_per_s",
+      "idtunr6_per_s",
+      "odtunr6_per_s",
+      "itmex6_per_s",
+      "otmex6_per_s",
+      "iprmpb6_per_s",
+      "oprmpb6_per_s",
+      "iredir6_per_s",
+      "oredir6_per_s",
+      "ipck2b6_per_s",
+      "opck2b6_per_s"
+    ]
+  }
+}

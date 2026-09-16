@@ -1,0 +1,32 @@
+[
+  {
+    "time": "20:20:21",
+    "cpu": "all",
+    "total_per_s": 666,
+    "dropd_per_s": 0,
+    "squeezd_per_s": 0,
+    "rx_rps_per_s": 0,
+    "flw_lim_per_s": 0,
+    "blg_len": 0
+  },
+  {
+    "time": "20:20:22",
+    "cpu": "all",
+    "total_per_s": 252,
+    "dropd_per_s": 0,
+    "squeezd_per_s": 0,
+    "rx_rps_per_s": 0,
+    "flw_lim_per_s": 0,
+    "blg_len": 0
+  },
+  {
+    "time": "Average",
+    "cpu": "all",
+    "total_per_s": 459,
+    "dropd_per_s": 0,
+    "squeezd_per_s": 0,
+    "rx_rps_per_s": 0,
+    "flw_lim_per_s": 0,
+    "blg_len": 0
+  }
+]

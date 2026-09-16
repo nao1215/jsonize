@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/hugepages.json",
+  "title": "sar/hugepages",
+  "description": "sar -H huge pages utilization",
+  "x-jsonize": {
+    "definition": "sar/hugepages",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "kbhugfree": {
+        "type": "integer"
+      },
+      "kbhugused": {
+        "type": "integer"
+      },
+      "hugused_percent": {
+        "type": "number"
+      },
+      "kbhugrsvd": {
+        "type": "integer"
+      },
+      "kbhugsurp": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "time",
+      "kbhugfree",
+      "kbhugused",
+      "hugused_percent",
+      "kbhugrsvd",
+      "kbhugsurp"
+    ]
+  }
+}

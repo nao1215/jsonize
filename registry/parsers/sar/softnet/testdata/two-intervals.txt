@@ -1,0 +1,6 @@
+Linux 7.0.0-31-generic (host01) 	09/16/26 	_x86_64_	(32 CPU)
+
+20:20:20        CPU   total/s   dropd/s squeezd/s  rx_rps/s flw_lim/s   blg_len
+20:20:21        all    666.00      0.00      0.00      0.00      0.00         0
+20:20:22        all    252.00      0.00      0.00      0.00      0.00         0
+Average:        all    459.00      0.00      0.00      0.00      0.00         0

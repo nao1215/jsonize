@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/cpu-frequency.json",
+  "title": "sar/cpu-frequency",
+  "description": "sar -m CPU clock frequency of each CPU",
+  "x-jsonize": {
+    "definition": "sar/cpu-frequency",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "cpu": {
+        "type": "string"
+      },
+      "mhz": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "cpu",
+      "mhz"
+    ]
+  }
+}

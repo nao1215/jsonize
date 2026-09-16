@@ -1,0 +1,26 @@
+[
+  {
+    "time": "20:20:05",
+    "atmptf_per_s": 0,
+    "estres_per_s": 0,
+    "retrseg_per_s": 0,
+    "isegerr_per_s": 0,
+    "orsts_per_s": 0
+  },
+  {
+    "time": "20:20:06",
+    "atmptf_per_s": 0,
+    "estres_per_s": 0,
+    "retrseg_per_s": 0,
+    "isegerr_per_s": 0,
+    "orsts_per_s": 0
+  },
+  {
+    "time": "Average",
+    "atmptf_per_s": 0,
+    "estres_per_s": 0,
+    "retrseg_per_s": 0,
+    "isegerr_per_s": 0,
+    "orsts_per_s": 0
+  }
+]

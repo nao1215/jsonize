@@ -1,0 +1,41 @@
+# `sar -n SOFT` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. A rate or a
+# percentage is a number with a fraction; a count or a size in kilobytes
+# is a whole number, in the summary as well.
+format: 1
+command: sar
+variant: softnet
+description: sar -n SOFT software-based network processing
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+CPU[ \t]+total/s[ \t]+dropd/s[ \t]+squeezd/s[ \t]+rx_rps/s[ \t]+flw_lim/s[ \t]+blg_len[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+CPU[ \t]+total/s[ \t]+dropd/s[ \t]+squeezd/s[ \t]+rx_rps/s[ \t]+flw_lim/s[ \t]+blg_len[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, cpu, total_per_s, dropd_per_s, squeezd_per_s, rx_rps_per_s, flw_lim_per_s, blg_len]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  cpu: {required: true}
+  total_per_s: {type: float}
+  dropd_per_s: {type: float}
+  squeezd_per_s: {type: float}
+  rx_rps_per_s: {type: float}
+  flw_lim_per_s: {type: float}
+  blg_len: {type: int}

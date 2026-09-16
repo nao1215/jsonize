@@ -1825,3 +1825,36 @@ scenarios:
               - { path: "$", length: 2 }
               - { path: "$[1].tasks.total", equals: 3 }
               - { path: "$[1].processes[2].command", equals: cron }
+
+  # sar -u ALL prints mpstat's ten CPU columns in another order, %steal
+  # before %irq. Read as mpstat it would put steal time under irq.
+  - name: sar -u ALL is not read as mpstat, whose columns come in another order
+    steps:
+      - fixture:
+          file: sar-u-all.txt
+          from: "${specdir}/../../registry/parsers/sar/cpu-all/testdata/two-intervals.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: sar-u-all.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose sar/cpu-all from embedded"
+      - run:
+          command: jz --parser mpstat
+          stdin: {file: sar-u-all.txt}
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - fixture:
+          file: sar-tcp.txt
+          from: "${specdir}/../../registry/parsers/sar/tcp/testdata/two-intervals.txt"
+      - run:
+          command: jz
+          stdin: {file: sar-tcp.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[2].time", equals: Average }
+              - { path: "$[2].active_per_s", gte: 0 }

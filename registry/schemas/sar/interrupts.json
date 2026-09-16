@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/interrupts.json",
+  "title": "sar/interrupts",
+  "description": "sar -I interrupts per second",
+  "x-jsonize": {
+    "definition": "sar/interrupts",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "intr": {
+        "type": "string"
+      },
+      "all": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "intr",
+      "all"
+    ]
+  }
+}

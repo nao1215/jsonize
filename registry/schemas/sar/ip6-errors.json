@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/ip6-errors.json",
+  "title": "sar/ip6-errors",
+  "description": "sar -n EIP6 IPv6 errors",
+  "x-jsonize": {
+    "definition": "sar/ip6-errors",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "ihdrer6_per_s": {
+        "type": "number"
+      },
+      "iadrer6_per_s": {
+        "type": "number"
+      },
+      "iukwnp6_per_s": {
+        "type": "number"
+      },
+      "i2big6_per_s": {
+        "type": "number"
+      },
+      "idisc6_per_s": {
+        "type": "number"
+      },
+      "odisc6_per_s": {
+        "type": "number"
+      },
+      "inort6_per_s": {
+        "type": "number"
+      },
+      "onort6_per_s": {
+        "type": "number"
+      },
+      "asmf6_per_s": {
+        "type": "number"
+      },
+      "fragf6_per_s": {
+        "type": "number"
+      },
+      "itrpck6_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "ihdrer6_per_s",
+      "iadrer6_per_s",
+      "iukwnp6_per_s",
+      "i2big6_per_s",
+      "idisc6_per_s",
+      "odisc6_per_s",
+      "inort6_per_s",
+      "onort6_per_s",
+      "asmf6_per_s",
+      "fragf6_per_s",
+      "itrpck6_per_s"
+    ]
+  }
+}

@@ -24,7 +24,10 @@ detect:
   signature:
     all:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
-      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+CPU[ \t]+%usr[ \t]+%nice'
+      # The whole header, in mpstat's order. `sar -u ALL` prints the same
+      # ten columns with %steal before %irq, and a header that stopped at
+      # %nice would read its steal time as interrupt time.
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+CPU[ \t]+%usr[ \t]+%nice[ \t]+%sys[ \t]+%iowait[ \t]+%irq[ \t]+%soft[ \t]+%steal[ \t]+%guest[ \t]+%gnice[ \t]+%idle[ \t]*$'
 input:
   select:
     # The banner is stated whole, so what is dropped is exactly the line

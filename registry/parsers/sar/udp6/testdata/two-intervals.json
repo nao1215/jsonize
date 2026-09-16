@@ -1,0 +1,23 @@
+[
+  {
+    "time": "20:20:19",
+    "idgm6_per_s": 0,
+    "odgm6_per_s": 0,
+    "noport6_per_s": 0,
+    "idgmer6_per_s": 0
+  },
+  {
+    "time": "20:20:20",
+    "idgm6_per_s": 0,
+    "odgm6_per_s": 0,
+    "noport6_per_s": 0,
+    "idgmer6_per_s": 0
+  },
+  {
+    "time": "Average",
+    "idgm6_per_s": 0,
+    "odgm6_per_s": 0,
+    "noport6_per_s": 0,
+    "idgmer6_per_s": 0
+  }
+]

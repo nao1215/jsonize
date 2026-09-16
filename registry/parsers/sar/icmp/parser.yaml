@@ -1,0 +1,47 @@
+# `sar -n ICMP` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. The figures
+# are numbers with a fraction.
+format: 1
+command: sar
+variant: icmp
+description: sar -n ICMP ICMPv4 traffic
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+imsg/s[ \t]+omsg/s[ \t]+iech/s[ \t]+iechr/s[ \t]+oech/s[ \t]+oechr/s[ \t]+itm/s[ \t]+itmr/s[ \t]+otm/s[ \t]+otmr/s[ \t]+iadrmk/s[ \t]+iadrmkr/s[ \t]+oadrmk/s[ \t]+oadrmkr/s[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+imsg/s[ \t]+omsg/s[ \t]+iech/s[ \t]+iechr/s[ \t]+oech/s[ \t]+oechr/s[ \t]+itm/s[ \t]+itmr/s[ \t]+otm/s[ \t]+otmr/s[ \t]+iadrmk/s[ \t]+iadrmkr/s[ \t]+oadrmk/s[ \t]+oadrmkr/s[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, imsg_per_s, omsg_per_s, iech_per_s, iechr_per_s, oech_per_s, oechr_per_s, itm_per_s, itmr_per_s, otm_per_s, otmr_per_s, iadrmk_per_s, iadrmkr_per_s, oadrmk_per_s, oadrmkr_per_s]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  imsg_per_s: {type: float}
+  omsg_per_s: {type: float}
+  iech_per_s: {type: float}
+  iechr_per_s: {type: float}
+  oech_per_s: {type: float}
+  oechr_per_s: {type: float}
+  itm_per_s: {type: float}
+  itmr_per_s: {type: float}
+  otm_per_s: {type: float}
+  otmr_per_s: {type: float}
+  iadrmk_per_s: {type: float}
+  iadrmkr_per_s: {type: float}
+  oadrmk_per_s: {type: float}
+  oadrmkr_per_s: {type: float}

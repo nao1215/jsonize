@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/sockets.json",
+  "title": "sar/sockets",
+  "description": "sar -n SOCK sockets in use (IPv4)",
+  "x-jsonize": {
+    "definition": "sar/sockets",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "totsck": {
+        "type": "integer"
+      },
+      "tcpsck": {
+        "type": "integer"
+      },
+      "udpsck": {
+        "type": "integer"
+      },
+      "rawsck": {
+        "type": "integer"
+      },
+      "ip_frag": {
+        "type": "integer"
+      },
+      "tcp_tw": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "time",
+      "totsck",
+      "tcpsck",
+      "udpsck",
+      "rawsck",
+      "ip_frag",
+      "tcp_tw"
+    ]
+  }
+}

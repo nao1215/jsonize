@@ -1,0 +1,10 @@
+Linux 7.0.0-31-generic (host01) 	09/16/26 	_x86_64_	(32 CPU)
+
+20:19:44         INTR       all
+20:19:45          sum  12677.00
+
+20:19:45         INTR       all
+20:19:46          sum   9781.00
+
+Average:         INTR       all
+Average:          sum  11229.00

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/sar/icmp-errors.json",
+  "title": "sar/icmp-errors",
+  "description": "sar -n EICMP ICMPv4 errors",
+  "x-jsonize": {
+    "definition": "sar/icmp-errors",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "time": {
+        "type": "string"
+      },
+      "ierr_per_s": {
+        "type": "number"
+      },
+      "oerr_per_s": {
+        "type": "number"
+      },
+      "idstunr_per_s": {
+        "type": "number"
+      },
+      "odstunr_per_s": {
+        "type": "number"
+      },
+      "itmex_per_s": {
+        "type": "number"
+      },
+      "otmex_per_s": {
+        "type": "number"
+      },
+      "iparmpb_per_s": {
+        "type": "number"
+      },
+      "oparmpb_per_s": {
+        "type": "number"
+      },
+      "isrcq_per_s": {
+        "type": "number"
+      },
+      "osrcq_per_s": {
+        "type": "number"
+      },
+      "iredir_per_s": {
+        "type": "number"
+      },
+      "oredir_per_s": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "time",
+      "ierr_per_s",
+      "oerr_per_s",
+      "idstunr_per_s",
+      "odstunr_per_s",
+      "itmex_per_s",
+      "otmex_per_s",
+      "iparmpb_per_s",
+      "oparmpb_per_s",
+      "isrcq_per_s",
+      "osrcq_per_s",
+      "iredir_per_s",
+      "oredir_per_s"
+    ]
+  }
+}

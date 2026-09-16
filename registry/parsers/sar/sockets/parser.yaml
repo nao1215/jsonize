@@ -1,0 +1,40 @@
+# `sar -n SOCK` prints a banner, then one row per sampling
+# interval and a summary block labelled Average:. It is read the way the
+# other sar reports are: the banner, a LINUX RESTART line and the column
+# name lines are left out, and the columns are written out here, since
+# the name line opens with a time rather than with a name. A rate or a
+# percentage is a number with a fraction; a count or a size in kilobytes
+# is a whole number, in the summary as well.
+format: 1
+command: sar
+variant: sockets
+description: sar -n SOCK sockets in use (IPv4)
+metadata:
+  tags: [linux, performance, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/sar.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+totsck[ \t]+tcpsck[ \t]+udpsck[ \t]+rawsck[ \t]+ip\-frag[ \t]+tcp\-tw[ \t]*$'
+input:
+  ignore:
+    - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)[ \t]*$'
+    - '^\d\d:\d\d:\d\d[ \t]+LINUX RESTART(?:[ \t]+\(\d+ CPU\))?[ \t]*$'
+    - '^(?:\d\d:\d\d:\d\d|Average:)[ \t]+totsck[ \t]+tcpsck[ \t]+udpsck[ \t]+rawsck[ \t]+ip\-frag[ \t]+tcp\-tw[ \t]*$'
+parse:
+  type: table
+  split: whitespace
+  header:
+    none: true
+    columns: [time, totsck, tcpsck, udpsck, rawsck, ip_frag, tcp_tw]
+fields:
+  time: {required: true, trim_suffix: ":"}
+  totsck: {type: int}
+  tcpsck: {type: int}
+  udpsck: {type: int}
+  rawsck: {type: int}
+  ip_frag: {type: int}
+  tcp_tw: {type: int}
