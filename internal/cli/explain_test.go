@@ -271,8 +271,14 @@ func TestParserFromPath(t *testing.T) {
 		{path: "/etc/fstab", parser: "etc", variant: "fstab", ok: true},
 		{path: "/proc/meminfo", parser: "proc", variant: "meminfo", ok: true},
 		{path: "/etc/../etc/passwd", parser: "etc", variant: "passwd", ok: true},
+		// A variant named after a file with a dot in its name, or after a
+		// file one directory further down.
+		{path: "/etc/resolv.conf", parser: "etc", variant: "resolv-conf", ok: true},
+		{path: "/proc/net/dev", parser: "proc", variant: "net-dev", ok: true},
+		{path: "/proc/self/io", parser: "proc", variant: "self-io", ok: true},
 		// A capture is a file name, not a variant name.
 		{path: "/tmp/etc/fstab.txt"},
+		{path: "/tmp/proc/meminfo.txt"},
 		// The directory names no parser.
 		{path: "/home/me/fstab"},
 		// Nothing to read a directory from.

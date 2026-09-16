@@ -40,25 +40,37 @@ type lookuper interface {
 // on the command line, where it is a claim they made rather than one
 // their directory layout made for them.
 //
+// A name with a dot in it is looked up with a dash in its place, and a
+// file one directory down with that directory joined to its name, since
+// that is how such variants are named (etc/resolv-conf, proc/net-dev).
+// Neither is a guess past an extension: a capture saved as df.txt is
+// looked up as df-txt, which no definition is called.
+//
 // Nothing here knows about /etc or /proc. A registry with a parser named
 // after some other directory gets the same treatment, and a path whose
 // directory names no parser is ignored.
 func parserFromPath(reg lookuper, path string) (parser, variant string, ok bool) {
 	clean := filepath.Clean(path)
 	base := filepath.Base(clean)
-	dir := filepath.Base(filepath.Dir(clean))
+	parent := filepath.Dir(clean)
+	dir := filepath.Base(parent)
 	if base == "" || dir == "" || dir == "." || dir == string(filepath.Separator) {
 		return "", "", false
 	}
-	// A capture saved as df.txt is a file name, not a variant name, and
-	// guessing past the extension would start the list of names this rule
-	// exists to avoid.
-	if strings.Contains(base, ".") {
-		return "", "", false
+	// A variant name is written with dashes where the file name has dots
+	// (etc/resolv-conf for /etc/resolv.conf), and a file one directory
+	// down is named with that directory in front (proc/net-dev for
+	// /proc/net/dev). Each is one exact name to look up, so a capture
+	// saved as df.txt names nothing: no variant is called df-txt.
+	names := [][2]string{{dir, strings.ReplaceAll(base, ".", "-")}}
+	if grand := filepath.Base(filepath.Dir(parent)); grand != "" && grand != "." && grand != string(filepath.Separator) {
+		names = append(names, [2]string{grand, dir + "-" + strings.ReplaceAll(base, ".", "-")})
 	}
-	e, found := reg.Lookup(dir, base)
-	if !found || selector.ShapeOnly(e.Def) {
-		return "", "", false
+	for _, n := range names {
+		e, found := reg.Lookup(n[0], n[1])
+		if found && !selector.ShapeOnly(e.Def) {
+			return n[0], n[1], true
+		}
 	}
-	return dir, base, true
+	return "", "", false
 }
