@@ -1,0 +1,54 @@
+# `resolvectl query NAME...` asks systemd-resolved for each name and
+# prints a block per name: the name and a colon before the first answer,
+# each further answer indented under it, and after each answer the link
+# it came in on when resolved knows one. An address looked up in reverse
+# answers with host names. A blank line and three lines starting "-- "
+# close the block: the protocol and how long the lookup took ("818us",
+# "19.0ms"), whether the data is authenticated and came over a local or
+# encrypted transport, and where it came from (network, cache, zone,
+# trust anchor or synthetic).
+#
+# A record type other than an address (`-t MX`) prints the record, which
+# is another format, and a service lookup another again.
+format: 1
+command: resolvectl
+variant: query
+description: resolvectl query, the answers for each name with the link, protocol and where they came from
+metadata:
+  tags: [linux, systemd, dns, network]
+  compatible: [systemd-resolved]
+  references:
+    - https://man7.org/linux/man-pages/man1/resolvectl.1.html
+detect:
+  os: [linux]
+  args:
+    all: [query]
+    none: ["-t", "--type", "--type=", "-c", "--class", "--class=", "--legend=no", "--raw", "--raw=", "--json", "--json="]
+  signature:
+    all:
+      - '\A\S+: \S+(?: +-- link: \S+)?[ \t]*\n(?: +\S+(?: +-- link: \S+)?[ \t]*\n)*\n-- Information acquired via protocol '
+    window: 60
+parse:
+  type: records
+  start: '^[^ \-][^\n]*?: \S'
+  parts:
+    - name: query
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>\S+): \S+(?: +-- link: \S+)?[ \t]*\z'
+    - name: answers
+      select: {until: '^-- '}
+      parse:
+        type: regex
+        pattern: '^(?:\S+: | +)(?P<value>\S+)(?: +-- link: (?P<link>\S+))?[ \t]*$'
+    - name: information
+      ignore: ['^(?:\S+: | +)\S+(?: +-- link: \S+)?[ \t]*$']
+      parse:
+        type: regex
+        each: input
+        pattern: '\A-- Information acquired via protocol (?P<protocol>\S+) in (?P<time>[0-9.]+[mun]?s)\.\n-- Data is authenticated: (?P<authenticated>yes|no)(?:; Data was acquired via local or encrypted transport: (?P<encrypted_transport>yes|no))?\n-- Data from: (?P<source>[^\n]+?)[ \t]*\z'
+      fields:
+        authenticated: {type: bool}
+        encrypted_transport: {type: bool}

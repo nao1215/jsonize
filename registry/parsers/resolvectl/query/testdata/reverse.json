@@ -1,0 +1,42 @@
+[
+  {
+    "query": {
+      "name": "127.0.0.1"
+    },
+    "answers": [
+      {
+        "value": "localhost",
+        "link": "lo"
+      }
+    ],
+    "information": {
+      "protocol": "DNS",
+      "time": "818us",
+      "authenticated": true,
+      "encrypted_transport": true,
+      "source": "synthetic"
+    }
+  },
+  {
+    "query": {
+      "name": "::1"
+    },
+    "answers": [
+      {
+        "value": "ip6-localhost",
+        "link": null
+      },
+      {
+        "value": "ip6-loopback",
+        "link": null
+      }
+    ],
+    "information": {
+      "protocol": "DNS",
+      "time": "126us",
+      "authenticated": true,
+      "encrypted_transport": true,
+      "source": "synthetic"
+    }
+  }
+]

@@ -2291,3 +2291,35 @@ scenarios:
               - { path: "$[0].uids[1].validity", equals: revoked }
               - { path: "$[0].subkeys[0].usage", equals: E }
               - { path: "$[1].subkeys", length: 0 }
+
+  - name: numactl --show is detected, with its lists as numbers
+    steps:
+      - fixture:
+          file: numactl.txt
+          from: "${specdir}/../../registry/parsers/numactl/show/testdata/interleave.txt"
+      - run:
+          command: jz
+          stdin: {file: numactl.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.policy", equals: interleave }
+              - { path: "$.interleavenode", equals: 0 }
+              - { path: "$.physcpubind", length: 32 }
+
+  - name: resolvectl query is read when resolvectl is named
+    steps:
+      - fixture:
+          file: query.txt
+          from: "${specdir}/../../registry/parsers/resolvectl/query/testdata/reverse.txt"
+      - run:
+          command: jz --parser resolvectl
+          stdin: {file: query.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].query.name", equals: "::1" }
+              - { path: "$[1].answers[1].value", equals: ip6-loopback }
+              - { path: "$[1].information.authenticated", equals: true }

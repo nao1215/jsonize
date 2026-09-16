@@ -1,0 +1,4 @@
+description: A name resolved locally to one address of each family, both on the loopback link.
+source: resolvectl query localhost, systemd 259 (259.5-0ubuntu3.4) on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [query, localhost]

@@ -165,7 +165,7 @@ the same reading with settings of your own.
 | `npm` | [`ls`](../schemas/npm/ls.json), [`ls-all`](../schemas/npm/ls-all.json), [`outdated`](../schemas/npm/outdated.json) |
 | `nslookup` | [`query`](../schemas/nslookup/query.json) |
 | `nstat` | [`counters`](../schemas/nstat/counters.json) |
-| `numactl` | [`hardware`](../schemas/numactl/hardware.json) |
+| `numactl` | [`hardware`](../schemas/numactl/hardware.json), [`show`](../schemas/numactl/show.json) |
 | `objdump` | [`section-headers`](../schemas/objdump/section-headers.json) |
 | `od` | [`hex-bytes`](../schemas/od/hex-bytes.json) |
 | `openssl` | [`ciphers`](../schemas/openssl/ciphers.json), [`ciphers-codes`](../schemas/openssl/ciphers-codes.json), [`version-all`](../schemas/openssl/version-all.json), [`x509-fields`](../schemas/openssl/x509-fields.json) |
@@ -192,7 +192,7 @@ the same reading with settings of your own.
 | `rclone` | [`lsd`](../schemas/rclone/lsd.json), [`lsl`](../schemas/rclone/lsl.json), [`version`](../schemas/rclone/version.json) |
 | `readelf` | [`dynamic`](../schemas/readelf/dynamic.json), [`header`](../schemas/readelf/header.json), [`sections-wide`](../schemas/readelf/sections-wide.json), [`symbols-wide`](../schemas/readelf/symbols-wide.json) |
 | `redis-cli` | [`client-list`](../schemas/redis-cli/client-list.json), [`info`](../schemas/redis-cli/info.json) |
-| `resolvectl` | [`per-link`](../schemas/resolvectl/per-link.json), [`status`](../schemas/resolvectl/status.json) |
+| `resolvectl` | [`per-link`](../schemas/resolvectl/per-link.json), [`query`](../schemas/resolvectl/query.json), [`status`](../schemas/resolvectl/status.json) |
 | `rfkill` | [`linux`](../schemas/rfkill/linux.json), [`list`](../schemas/rfkill/list.json) |
 | `route` | [`linux`](../schemas/route/linux.json), [`linux-extended`](../schemas/route/linux-extended.json), [`linux-inet6`](../schemas/route/linux-inet6.json), [`windows`](../schemas/route/windows.json) |
 | `rpm` | [`info`](../schemas/rpm/info.json) |
@@ -245,7 +245,7 @@ the same reading with settings of your own.
 | `tar` | [`busybox`](../schemas/tar/busybox.json), [`gnu`](../schemas/tar/gnu.json) |
 | `task` | [`list`](../schemas/task/list.json) |
 | `tasklist` | [`csv`](../schemas/tasklist/csv.json), [`list`](../schemas/tasklist/list.json), [`modules`](../schemas/tasklist/modules.json), [`services`](../schemas/tasklist/services.json), [`table`](../schemas/tasklist/table.json), [`verbose`](../schemas/tasklist/verbose.json) |
-| `taskset` | [`affinity-list`](../schemas/taskset/affinity-list.json) |
+| `taskset` | [`affinity-list`](../schemas/taskset/affinity-list.json), [`affinity-mask`](../schemas/taskset/affinity-mask.json) |
 | `tc` | [`qdisc`](../schemas/tc/qdisc.json), [`qdisc-stats`](../schemas/tc/qdisc-stats.json) |
 | `timedatectl` | [`linux`](../schemas/timedatectl/linux.json), [`show`](../schemas/timedatectl/show.json), [`timesync`](../schemas/timedatectl/timesync.json), [`timezones`](../schemas/timedatectl/timezones.json) |
 | `tokei` | [`default`](../schemas/tokei/default.json) |

@@ -1,0 +1,4 @@
+description: Under an interleave policy the preferred node carries a note and two more lines name the mask and the next node.
+source: numactl --interleave=all numactl -s, numactl 2.0.19 on Ubuntu 26.04 with LC_ALL=C, on a machine with one node and 32 processors
+os: linux
+args: [-s]

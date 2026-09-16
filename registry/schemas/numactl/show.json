@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/numactl/show.json",
+  "title": "numactl/show",
+  "description": "numactl --show, the NUMA policy and the processors and nodes a process is bound to",
+  "x-jsonize": {
+    "definition": "numactl/show",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "cpubind": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "interleavemask": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "interleavenode": {
+      "type": "integer"
+    },
+    "membind": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "nodebind": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "physcpubind": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "preferred": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    }
+  },
+  "additionalProperties": {
+    "type": "string"
+  }
+}
