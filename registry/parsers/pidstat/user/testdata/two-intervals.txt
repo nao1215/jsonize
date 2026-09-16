@@ -1,0 +1,16 @@
+Linux 7.0.0-31-generic (host01) 	09/16/26 	_x86_64_	(32 CPU)
+
+20:37:30        USER       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+20:37:31        root      5340    0.98    0.00    0.00    0.00    0.98     3  containerd
+20:37:31        root      5342    0.98    0.00    0.00    0.00    0.98     4  containerd
+20:37:31         ada      9181    1.96    0.98    0.00    0.00    2.94    20  kwin_wayland
+
+20:37:31        USER       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+20:37:32        root      5592    1.00    0.00    0.00    0.00    1.00     4  containerd
+20:37:32        root      5749    1.00    0.00    0.00    0.00    1.00    22  kubelet
+20:37:32         ada      6942    0.00    1.00    0.00    0.00    1.00    23  pipewire
+
+Average:        USER       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+Average:        root      5340    0.50    0.00    0.00    0.00    0.50     -  containerd
+Average:        root      5342    0.50    0.00    0.00    0.00    0.50     -  containerd
+Average:         ada      6942    0.00    0.50    0.00    0.00    0.50     -  pipewire

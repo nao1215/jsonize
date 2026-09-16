@@ -78,3 +78,16 @@ parse:
         mb_read: {type: int}
         mb_wrtn: {type: int}
         mb_dscd: {type: int}
+        # -s prints a short form: writes and discards together (kB_w+d), and
+        # with -x a single throughput column and the queue figures.
+        kb_w_d_s: {type: float}
+        kb_w_d: {type: int}
+        mb_w_d_s: {type: float}
+        mb_w_d: {type: int}
+        kb_s: {type: float}
+        mb_s: {type: float}
+        rqm_s: {type: float}
+        await: {type: float}
+        areq_sz: {type: float}
+        aqu_sz: {type: float}
+        util_percent: {type: float}

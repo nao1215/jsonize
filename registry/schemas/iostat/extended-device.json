@@ -1,50 +1,16 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://nao1215.github.io/jsonize/schemas/iostat/linux.json",
-  "title": "iostat/linux",
-  "description": "iostat default report, one sample of CPU averages and per-device counters",
+  "$id": "https://nao1215.github.io/jsonize/schemas/iostat/extended-device.json",
+  "title": "iostat/extended-device",
+  "description": "iostat -x -d, one sample of extended per-device counters without the CPU table",
   "x-jsonize": {
-    "definition": "iostat/linux",
-    "version": 3
+    "definition": "iostat/extended-device",
+    "version": 1
   },
   "type": "array",
   "items": {
     "type": "object",
     "properties": {
-      "cpu": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "user_percent": {
-              "type": "number"
-            },
-            "nice_percent": {
-              "type": "number"
-            },
-            "system_percent": {
-              "type": "number"
-            },
-            "iowait_percent": {
-              "type": "number"
-            },
-            "steal_percent": {
-              "type": "number"
-            },
-            "idle_percent": {
-              "type": "number"
-            }
-          },
-          "required": [
-            "user_percent",
-            "nice_percent",
-            "system_percent",
-            "iowait_percent",
-            "steal_percent",
-            "idle_percent"
-          ]
-        }
-      },
       "devices": {
         "type": "array",
         "items": {
@@ -56,13 +22,19 @@
                 "null"
               ]
             },
-            "areq_sz": {
+            "d_await": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "await": {
+            "d_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "dareq_sz": {
               "type": [
                 "number",
                 "null"
@@ -71,127 +43,127 @@
             "device": {
               "type": "string"
             },
-            "kb_dscd": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "kb_dscd_s": {
+            "dkb_s": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "kb_read": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "kb_read_s": {
+            "dmb_s": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "kb_s": {
+            "drqm_percent": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "kb_w_d": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "kb_w_d_s": {
+            "drqm_s": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "kb_wrtn": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "kb_wrtn_s": {
+            "f_await": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "mb_dscd": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "mb_dscd_s": {
+            "f_s": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "mb_read": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "mb_read_s": {
+            "r_await": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "mb_s": {
+            "r_s": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "mb_w_d": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "mb_w_d_s": {
+            "rareq_sz": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "mb_wrtn": {
-              "type": [
-                "integer",
-                "null"
-              ]
-            },
-            "mb_wrtn_s": {
+            "rkb_s": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "rqm_s": {
+            "rmb_s": {
               "type": [
                 "number",
                 "null"
               ]
             },
-            "tps": {
+            "rrqm_percent": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "rrqm_s": {
               "type": [
                 "number",
                 "null"
               ]
             },
             "util_percent": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "w_await": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "w_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "wareq_sz": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "wkb_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "wmb_s": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "wrqm_percent": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "wrqm_s": {
               "type": [
                 "number",
                 "null"
@@ -208,7 +180,6 @@
       }
     },
     "required": [
-      "cpu",
       "devices"
     ]
   }

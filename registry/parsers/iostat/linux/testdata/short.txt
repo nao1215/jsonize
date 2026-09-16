@@ -1,0 +1,12 @@
+Linux 7.0.0-31-generic (host01) 	09/16/26 	_x86_64_	(32 CPU)
+
+avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+           5.81    0.03    0.68    0.04    0.00   93.45
+
+Device             tps    kB_read/s     kB_w+d/s    kB_read     kB_w+d
+loop0             0.00         0.00         0.00         17          0
+loop1             0.00         0.01         0.00        692          0
+nvme0n1           0.04         0.42         0.00      34369         40
+nvme1n1          51.78       296.46       889.04   24328351   72957109
+
+

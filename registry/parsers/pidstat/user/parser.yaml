@@ -1,0 +1,47 @@
+# `pidstat -U` prints the report pidstat/linux reads with the name of
+# the user who owns each task in place of its UID: the column is USER, and
+# a name longer than the column is cut by pidstat, so the value is kept as
+# printed. Everything else is read the way pidstat/linux reads it.
+format: 1
+command: pidstat
+variant: user
+description: pidstat -U CPU usage per task, with the user name instead of the UID
+metadata:
+  tags: [linux, cpu, process, sysstat]
+  compatible: [sysstat]
+  references:
+    - https://man7.org/linux/man-pages/man1/pidstat.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
+      - '^[0-9]{2}:[0-9]{2}:[0-9]{2}[ \t]+USER[ \t]+PID[ \t]+%usr'
+input:
+  select:
+    # The banner is stated whole, so what is dropped is exactly the line
+    # described above and not whatever happens to open with "Linux".
+    after: '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_[ \t]+\(\d+ CPU\)'
+parse:
+  type: records
+  # A sample opens with the column header and runs to the next one.
+  start: '^(?:[0-9]{2}:[0-9]{2}:[0-9]{2}|Average:)[ \t]+USER[ \t]+PID[ \t]+%usr'
+  parts:
+    - name: tasks
+      parse:
+        type: table
+        header:
+          columns: [time, user, pid, usr_percent, system_percent, guest_percent, wait_percent, cpu_percent, cpu, command]
+      fields:
+        time: {required: true, trim_suffix: ":"}
+        user: {required: true}
+        pid: {type: int, required: true}
+        usr_percent: {type: float}
+        system_percent: {type: float}
+        guest_percent: {type: float}
+        wait_percent: {type: float}
+        cpu_percent: {type: float}
+        # A summary row is not about one processor and prints a dash
+        # where the number goes.
+        cpu: {type: int, null_if: ["-"]}
+        command: {required: true}
