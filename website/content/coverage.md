@@ -31,7 +31,11 @@ BIND dig 9.20.24, iputils, BusyBox 1.37.0. net-tools was not installed,
 so the `netstat` rows below were checked with BusyBox netstat, whose
 socket and routing tables the existing definitions read, and the
 interface table was written from the format strings net-tools prints it
-with rather than captured.
+with rather than captured. The `ifconfig`, `arp -a` and `rpm` rows were
+checked against captures from containers (net-tools 2.10 on Debian;
+rpm on Fedora 44, Rocky Linux 8 and 9 and openSUSE Leap 15.6) and from
+the macOS 15 and 26 runners and a FreeBSD 15.1 virtual machine on
+GitHub Actions.
 
 ## Storage and memory
 
@@ -152,8 +156,27 @@ than choosing.
 | `dig +trace` | refused | the delegation steps have no line that opens one, so nothing says where a step ends |
 | `ping -c N`, `-q`, `-D`, `-A`, `-s`, `-W`, `ping6` | read | `ping/linux`, `ping/bsd` |
 | `ping -f` | refused | flood output is a line of dots, not records |
+| `ifconfig`, `ifconfig -a`, `ifconfig IFACE` (net-tools) | read | `ifconfig/net-tools` |
+| `ifconfig` (BusyBox) | read | `ifconfig/busybox` |
+| `ifconfig`, `-a`, `-v`, `-L` (macOS, FreeBSD) | read | `ifconfig/bsd`; lines other than the flags, addresses and bit masks are kept in order under `properties` |
+| `ifconfig -s` (net-tools) | refused | a table of counters without the banner `netstat -i` prints |
+| `ifconfig -l` | refused | a line of names |
+| `arp -a`, `arp -an` | read | `arp/alternate` (Linux), `arp/freebsd`, `arp/darwin`, `arp/windows` |
+| `arp`, `arp -n` (net-tools) | refused | the tabular listing has no definition |
 | `tracepath` | read | `tracepath/linux` |
 | `traceroute` | refused | no definition |
+
+## Packages and history
+
+| invocation | | definition |
+|---|---|---|
+| `rpm -qi PACKAGE`, `rpm -qi A B`, `rpm -qia` | read | `rpm/info`, one object per package; a label rpm did not print is `null` |
+| `rpm -qi` naming a package that is not installed | refused | the `package NAME is not installed` line is not part of any block |
+| `git log`, `git log --format=fuller` | read | `git/log` |
+| `git log --stat`, `git log --shortstat`, `git show --stat` | read | `git/log-stat`, with `files` and `summary` under each commit |
+| `git log --oneline` | read | `git/log-oneline` |
+| `git log --numstat`, `--name-only`, `--summary`, `-p` | refused | a different listing under each commit |
+| `git log --format=...` with a format of your own | refused | the text is whatever the format said, and git does not escape it |
 
 ## systemd
 
@@ -300,13 +323,46 @@ shell and string values (`jwt`, `url`, `semver`, `path`, `timestamp`,
 everywhere (`xml`, `toml`, `plist`, `x509_*`; jz reads `yaml`, `json`,
 `csv` and `jsonl` files as data, by extension), and a set of
 commands with no definition here yet (`traceroute`, `iptables`,
-`iwconfig`, `dmidecode`, `mdadm`, `ntpq`, `find`, `finger`, `rpm -qi`,
+`iwconfig`, `dmidecode`, `mdadm`, `ntpq`, `find`, `finger`,
 `tune2fs`, `ufw`, `zpool status`, `zpool iostat`, `net user`, `net localgroup`, `dir`). The
 string and file formats are a different job from reading what a command
 printed: a JWT or a URL is not a command's output, and an XML or TOML
 reader is the tool for a file that already has a grammar. Adding them would make the count of formats larger without
 making the thing jz is for any better, which is why they are listed here
 rather than written.
+
+### Use cases from jc's articles
+
+jc's author has published articles showing jc used on real work. The
+ones whose input is a command's output are read by jz as well:
+
+| article's pipeline | with jz |
+|---|---|
+| `rpm -qia`, then the licence, build date and description with jq | `rpm -qia \| jz` (`rpm/info`) |
+| `git log --format=fuller --stat`, then files changed, insertions and deletions with jq | `git log --format=fuller --stat \| jz` (`git/log-stat`) |
+| `ifconfig` in a script meant to run on Linux and macOS, then the interface name, IPv4 address and netmask | `ifconfig \| jz` (`ifconfig/net-tools`, `ifconfig/bsd`, `ifconfig/busybox`) |
+| an ASCII table drawn with `+`, `-` and `\|` | `jz --parser table --variant box` |
+| `ping -c1`, `arp -a` and `wc` while scanning a subnet | `ping/linux`, `ping/bsd`, the `arp` variants, `jz --parser wc` |
+
+The keys are jz's own and are not meant to match jc's. The netmask is
+kept as ifconfig printed it: `255.255.255.0` from net-tools and
+`0xffffff00` from macOS and FreeBSD.
+
+Other things the articles do are left out on purpose, because they are
+not reading what a command printed:
+
+- Working out a network from an address (`192.168.1.10/25` to its
+  network, broadcast, host range, integer and hex forms, and whether it is
+  private). That is a calculator.
+- Decoding a certificate, a CSR or a CRL, and taking apart a URL, a path,
+  a timestamp, an email address, a version string or a JWT.
+- Adding values `date` did not print, such as the epoch, the day of the
+  year or a 12-hour clock.
+- Reading `typeset -p` and `declare -p`. Their quoting is the shell's
+  own grammar, and the only complete reader of it is the shell.
+- Plugins for Ansible, Salt or Nornir. jz writes JSON to standard output,
+  which any of them can read.
+- Selecting, sorting, grouping or reshaping the JSON. That is jq's job.
 
 jz reads around ninety commands jc has no parser for, among them the
 `systemd-*` tools, most of util-linux (`lsfd`, `lsns`, `lsmem`,

@@ -39,8 +39,13 @@ project follows [Semantic Versioning](https://semver.org/).
   frames), `ip route get`, `nmcli -t device`, `iw reg get` (the
   regulatory rules per frequency range) and `hostname -I`.
 - `pmap -x` (a record per process with its mappings and totals),
-  `pgrep -l` and `getent ahosts`. The registry holds 240 commands
-  through 664 definitions.
+  `pgrep -l` and `getent ahosts`.
+- `rpm -qi` and `rpm -qia` (`rpm/info`), one object per package with
+  the description kept whole, read from rpm 4.14, 4.16 and 6.0 output;
+  `git log --stat` and `--shortstat` (`git/log-stat`), each commit with
+  its diffstat as `files` and `summary`; `ifconfig` from net-tools
+  (`ifconfig/net-tools`) and from macOS and FreeBSD (`ifconfig/bsd`);
+  and macOS `arp -a` (`arp/darwin`).
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the
@@ -48,6 +53,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `git log --stat` output named as `--parser git --variant log` is
+  refused by the signature (exit 4) instead of failing inside the message
+  (exit 3), and detection hands it to `git/log-stat`. The published
+  schema of git/log is unchanged.
 - `iostat -s` and `iostat -xs` print short forms whose columns
   (`kB_w+d/s`, `kB/s`, `rqm/s`, `await`, `areq-sz`, `aqu-sz`, `%util`)
   iostat/linux read as strings; they are numbers now, and the published
