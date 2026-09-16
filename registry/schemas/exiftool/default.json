@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/exiftool/default.json",
+  "title": "exiftool/default",
+  "description": "exiftool metadata tags, one per line",
+  "x-jsonize": {
+    "definition": "exiftool/default",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {},
+  "additionalProperties": {
+    "type": "string"
+  }
+}

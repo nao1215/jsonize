@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/identify/default.json",
+  "title": "identify/default",
+  "description": "ImageMagick identify, one line per image",
+  "x-jsonize": {
+    "definition": "identify/default",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "format": {
+        "type": "string"
+      },
+      "width": {
+        "type": "integer"
+      },
+      "height": {
+        "type": "integer"
+      },
+      "page_width": {
+        "type": "integer"
+      },
+      "page_height": {
+        "type": "integer"
+      },
+      "page_x": {
+        "type": "integer"
+      },
+      "page_y": {
+        "type": "integer"
+      },
+      "depth": {
+        "type": "string"
+      },
+      "colorspace": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "user_time": {
+        "type": "string"
+      },
+      "elapsed": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "name",
+      "format",
+      "width",
+      "height",
+      "page_width",
+      "page_height",
+      "page_x",
+      "page_y",
+      "depth",
+      "colorspace",
+      "size",
+      "user_time",
+      "elapsed"
+    ]
+  }
+}

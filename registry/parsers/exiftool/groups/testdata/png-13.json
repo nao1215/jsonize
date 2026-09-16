@@ -1,0 +1,102 @@
+[
+  {
+    "group": "ExifTool",
+    "tag": "ExifTool Version Number",
+    "value": "13.50"
+  },
+  {
+    "group": "File",
+    "tag": "File Name",
+    "value": "debian-logo.png"
+  },
+  {
+    "group": "File",
+    "tag": "Directory",
+    "value": "/usr/share/pixmaps"
+  },
+  {
+    "group": "File",
+    "tag": "File Size",
+    "value": "1206 bytes"
+  },
+  {
+    "group": "File",
+    "tag": "File Modification Date/Time",
+    "value": "2026:02:17 02:48:32+09:00"
+  },
+  {
+    "group": "File",
+    "tag": "File Access Date/Time",
+    "value": "2026:09:16 14:53:19+09:00"
+  },
+  {
+    "group": "File",
+    "tag": "File Inode Change Date/Time",
+    "value": "2026:05:25 09:12:16+09:00"
+  },
+  {
+    "group": "File",
+    "tag": "File Permissions",
+    "value": "-rw-r--r--"
+  },
+  {
+    "group": "File",
+    "tag": "File Type",
+    "value": "PNG"
+  },
+  {
+    "group": "File",
+    "tag": "File Type Extension",
+    "value": "png"
+  },
+  {
+    "group": "File",
+    "tag": "MIME Type",
+    "value": "image/png"
+  },
+  {
+    "group": "PNG",
+    "tag": "Image Width",
+    "value": "48"
+  },
+  {
+    "group": "PNG",
+    "tag": "Image Height",
+    "value": "48"
+  },
+  {
+    "group": "PNG",
+    "tag": "Bit Depth",
+    "value": "8"
+  },
+  {
+    "group": "PNG",
+    "tag": "Color Type",
+    "value": "RGB with Alpha"
+  },
+  {
+    "group": "PNG",
+    "tag": "Compression",
+    "value": "Deflate/Inflate"
+  },
+  {
+    "group": "PNG",
+    "tag": "Filter",
+    "value": "Adaptive"
+  },
+  {
+    "group": "PNG",
+    "tag": "Interlace",
+    "value": "Noninterlaced"
+  },
+  {
+    "group": "Composite",
+    "tag": "Image Size",
+    "value": "48x48"
+  },
+  {
+    "group": "Composite",
+    "tag": "Megapixels",
+    "value": "0.002"
+  }
+]

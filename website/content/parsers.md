@@ -67,6 +67,7 @@ the same reading with settings of your own.
 | `env` | [`null-separated`](../schemas/env/null-separated.json), [`posix`](../schemas/env/posix.json) |
 | `etc` | [`crontab`](../schemas/etc/crontab.json), [`fstab`](../schemas/etc/fstab.json), [`group`](../schemas/etc/group.json), [`hosts`](../schemas/etc/hosts.json), [`nsswitch`](../schemas/etc/nsswitch.json), [`os-release`](../schemas/etc/os-release.json), [`passwd`](../schemas/etc/passwd.json), [`protocols`](../schemas/etc/protocols.json), [`resolv-conf`](../schemas/etc/resolv-conf.json), [`services`](../schemas/etc/services.json) |
 | `ethtool` | [`driver-info`](../schemas/ethtool/driver-info.json), [`features`](../schemas/ethtool/features.json), [`settings`](../schemas/ethtool/settings.json), [`statistics`](../schemas/ethtool/statistics.json) |
+| `exiftool` | [`default`](../schemas/exiftool/default.json), [`groups`](../schemas/exiftool/groups.json) |
 | `eza` | [`full-iso`](../schemas/eza/full-iso.json), [`long`](../schemas/eza/long.json), [`long-group`](../schemas/eza/long-group.json), [`long-iso`](../schemas/eza/long-iso.json), [`long-links`](../schemas/eza/long-links.json) |
 | `factor` | [`default`](../schemas/factor/default.json) |
 | `fc-list` | [`posix`](../schemas/fc-list/posix.json) |
@@ -92,6 +93,7 @@ the same reading with settings of your own.
 | `hyperfine` | [`basic`](../schemas/hyperfine/basic.json) |
 | `iconv` | [`list`](../schemas/iconv/list.json) |
 | `id` | [`posix`](../schemas/id/posix.json) |
+| `identify` | [`default`](../schemas/identify/default.json) |
 | `ifconfig` | [`busybox`](../schemas/ifconfig/busybox.json) |
 | `ini` | [`default`](../schemas/ini/default.json) |
 | `ionice` | [`class`](../schemas/ionice/class.json) |
@@ -164,6 +166,7 @@ the same reading with settings of your own.
 | `pidstat` | [`io`](../schemas/pidstat/io.json), [`kernel`](../schemas/pidstat/kernel.json), [`linux`](../schemas/pidstat/linux.json), [`memory`](../schemas/pidstat/memory.json), [`priority`](../schemas/pidstat/priority.json), [`stack`](../schemas/pidstat/stack.json), [`switches`](../schemas/pidstat/switches.json), [`threads`](../schemas/pidstat/threads.json) |
 | `ping` | [`bsd`](../schemas/ping/bsd.json), [`linux`](../schemas/ping/linux.json) |
 | `pip` | [`columns`](../schemas/pip/columns.json), [`columns-outdated`](../schemas/pip/columns-outdated.json), [`freeze`](../schemas/pip/freeze.json) |
+| `pkg-config` | [`list`](../schemas/pkg-config/list.json) |
 | `pmap` | [`linux`](../schemas/pmap/linux.json) |
 | `pmset` | [`settings`](../schemas/pmset/settings.json) |
 | `powerprofilesctl` | [`list`](../schemas/powerprofilesctl/list.json) |

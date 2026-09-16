@@ -1324,3 +1324,93 @@ scenarios:
             json:
               - { path: "$.page_size", equals: 16384 }
               - { path: "$.pages_free", equals: 7144 }
+
+  # exiftool prints one tag per line and -G puts the group in front of
+  # each of them. The two shapes are told apart without a hint, and the
+  # one that is not named is refused rather than read by the other.
+  - name: exiftool tells its plain and grouped forms apart
+    steps:
+      - fixture:
+          file: exif.txt
+          from: "${specdir}/../../registry/parsers/exiftool/default/testdata/png-13.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: exif.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose exiftool/default from embedded"
+          stdout:
+            json:
+              - { path: "$['File Name']", equals: debian-logo.png }
+              - { path: "$['MIME Type']", equals: image/png }
+      - fixture:
+          file: exif-g.txt
+          from: "${specdir}/../../registry/parsers/exiftool/groups/testdata/png-13.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: exif-g.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose exiftool/groups from embedded"
+          stdout:
+            json:
+              - { path: "$[0].group", equals: ExifTool }
+              - { path: "$[1].group", equals: File }
+              - { path: "$[1].tag", equals: File Name }
+      # The grouped form named as the plain one is refused, not read.
+      - run:
+          command: jz --parser exiftool --variant default
+          stdin: {file: exif-g.txt}
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
+  - name: ImageMagick identify is one record per image, with its numbers typed
+    steps:
+      - fixture:
+          file: identify.txt
+          from: "${specdir}/../../registry/parsers/identify/default/testdata/images-7.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: identify.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose identify/default from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].format", equals: PNG }
+              - { path: "$[0].width", equals: 48 }
+              - { path: "$[1].height", equals: 128 }
+              # A size written for people stays the text it is.
+              - { path: "$[1].size", equals: 2616B }
+
+  # pkg-config --list-all is a name and a phrase, which a glossary looks
+  # like too, so it is read only when it is named.
+  - name: pkg-config --list-all is read when named and not by detection
+    steps:
+      - fixture:
+          file: pkgconfig.txt
+          from: "${specdir}/../../registry/parsers/pkg-config/list/testdata/list-all-1.txt"
+      - run:
+          command: jz
+          stdin: {file: pkgconfig.txt}
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - run:
+          command: jz --parser pkg-config
+          stdin: {file: pkgconfig.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].name", equals: adwaita-icon-theme }
+              # A description holding " - " of its own is split at the
+              # first one, which is where the title ends.
+              - { path: "$[1].name", equals: alsa }
+              - { path: "$[1].title", equals: alsa }
+              - { path: "$[1].description", equals: "Advanced Linux Sound Architecture (ALSA) - Library" }

@@ -1,0 +1,13 @@
+adwaita-icon-theme             adwaita-icon-theme - A collection of icons used as the basis for GNOME themes
+alsa                           alsa - Advanced Linux Sound Architecture (ALSA) - Library
+applewmproto                   AppleWMProto - AppleWM extension headers
+bash-completion                bash-completion - programmable completion for the bash shell
+bigreqsproto                   BigReqsProto - BigReqs extension headers
+compositeproto                 CompositeExt - Composite extension headers
+damageproto                    DamageProto - Damage extension headers
+default-icon-theme             default-icon-theme - The default fallback theme used by XDG icon-theme implementations.
+dmxproto                       DMXProto - DMX extension headers
+dpmsproto                      DPMSProto - DPMS extension headers
+dracut                         dracut - dracut
+dri2proto                      DRI2Proto - DRI2 extension headers
+mobile-broadband-provider-info mobile-broadband-provider-info - Mobile Broadband Service Provider Information Database

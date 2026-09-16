@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/exiftool/groups.json",
+  "title": "exiftool/groups",
+  "description": "exiftool -G tags with the group each came from",
+  "x-jsonize": {
+    "definition": "exiftool/groups",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "group": {
+        "type": "string"
+      },
+      "tag": {
+        "type": "string"
+      },
+      "value": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "group",
+      "tag",
+      "value"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "/usr/share/pixmaps/debian-logo.png",
+    "format": "PNG",
+    "width": 48,
+    "height": 48,
+    "page_width": 48,
+    "page_height": 48,
+    "page_x": 0,
+    "page_y": 0,
+    "depth": "8-bit",
+    "colorspace": "sRGB",
+    "size": "1206B",
+    "user_time": "0.000u",
+    "elapsed": "0:00.000"
+  },
+  {
+    "name": "/usr/share/pixmaps/htop.png",
+    "format": "PNG",
+    "width": 128,
+    "height": 128,
+    "page_width": 128,
+    "page_height": 128,
+    "page_x": 0,
+    "page_y": 0,
+    "depth": "8-bit",
+    "colorspace": "sRGB",
+    "size": "2616B",
+    "user_time": "0.000u",
+    "elapsed": "0:00.000"
+  }
+]

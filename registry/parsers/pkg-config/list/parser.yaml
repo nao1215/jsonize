@@ -1,0 +1,43 @@
+# `pkg-config --list-all` prints one line per module it knows: the name
+# pkg-config is asked for, spaces that pad it to a column, the module's
+# own name, " - ", and the description. A name as wide as the column
+# leaves a single space ("mobile-broadband-provider-info"), so the name
+# is the first word rather than a fixed width. A description may hold
+# " - " of its own ("Advanced Linux Sound Architecture (ALSA) -
+# Library"), so the line is split at the first one, which is where the
+# title ends.
+#
+# The shape is a word and a phrase, which is also what a glossary or a
+# list of make targets looks like, so the definition is used only when
+# it is named.
+format: 1
+command: pkg-config
+variant: list
+description: pkg-config --list-all, the modules it knows
+metadata:
+  tags: [development, build]
+  compatible: [pkg-config, pkgconf]
+  references:
+    - https://manpages.debian.org/pkg-config
+detect:
+  args:
+    any: ["--list-all"]
+  auto_detect: false
+  signature:
+    all:
+      # Every line is a name, the space between the columns, a title,
+      # " - " with one space on each side, and the description. A column
+      # report that writes a missing figure as a dash pads around it
+      # ("3850      -    31.1G"), so the single spaces around the dash
+      # are what tell the two apart.
+      - '\A(?:[A-Za-z0-9]\S* +\S(?:[^\n]*\S)? - \S[^\n]*(?:\n|\z))+\z'
+      # And the names are in a column: at least one line is padded. A
+      # report of one name and one phrase per line (apt-cache search,
+      # a mount table) has a single space there on every line.
+      - '(?m)^[A-Za-z0-9]\S* {2,}\S(?:[^\n]*\S)? - \S'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+) +(?P<title>.+?) - (?P<description>.*)$'
+fields:
+  name: {required: true}
+  title: {required: true}

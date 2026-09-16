@@ -1,0 +1,2 @@
+source: captured on Ubuntu 26.04 (pkgconf 2) with LC_ALL=C, sorted and cut to the first twelve modules, with the one name as wide as the column kept
+args: ["--list-all"]

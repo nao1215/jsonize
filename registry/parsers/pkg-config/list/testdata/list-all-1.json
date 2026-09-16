@@ -1,0 +1,67 @@
+[
+  {
+    "name": "adwaita-icon-theme",
+    "title": "adwaita-icon-theme",
+    "description": "A collection of icons used as the basis for GNOME themes"
+  },
+  {
+    "name": "alsa",
+    "title": "alsa",
+    "description": "Advanced Linux Sound Architecture (ALSA) - Library"
+  },
+  {
+    "name": "applewmproto",
+    "title": "AppleWMProto",
+    "description": "AppleWM extension headers"
+  },
+  {
+    "name": "bash-completion",
+    "title": "bash-completion",
+    "description": "programmable completion for the bash shell"
+  },
+  {
+    "name": "bigreqsproto",
+    "title": "BigReqsProto",
+    "description": "BigReqs extension headers"
+  },
+  {
+    "name": "compositeproto",
+    "title": "CompositeExt",
+    "description": "Composite extension headers"
+  },
+  {
+    "name": "damageproto",
+    "title": "DamageProto",
+    "description": "Damage extension headers"
+  },
+  {
+    "name": "default-icon-theme",
+    "title": "default-icon-theme",
+    "description": "The default fallback theme used by XDG icon-theme implementations."
+  },
+  {
+    "name": "dmxproto",
+    "title": "DMXProto",
+    "description": "DMX extension headers"
+  },
+  {
+    "name": "dpmsproto",
+    "title": "DPMSProto",
+    "description": "DPMS extension headers"
+  },
+  {
+    "name": "dracut",
+    "title": "dracut",
+    "description": "dracut"
+  },
+  {
+    "name": "dri2proto",
+    "title": "DRI2Proto",
+    "description": "DRI2 extension headers"
+  },
+  {
+    "name": "mobile-broadband-provider-info",
+    "title": "mobile-broadband-provider-info",
+    "description": "Mobile Broadband Service Provider Information Database"
+  }
+]

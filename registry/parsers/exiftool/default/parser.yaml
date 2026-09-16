@@ -1,0 +1,34 @@
+# `exiftool FILE` prints one tag per line: the tag name, spaces that pad
+# it to a fixed column, a colon, and the value. The tag set depends on
+# what the file holds, so there is no list of fields to name; the keys
+# are the tag names as exiftool prints them.
+#
+# A value may hold colons of its own (exiftool writes a date as
+# "2026:02:17 02:48:32+09:00"), so the line is split at the first one,
+# which is the one the padding aligns. A tag name never holds a colon.
+#
+# Sizes and dimensions are printed for people ("1206 bytes", "48x48"),
+# so they stay the strings exiftool wrote. -G puts the group in front of
+# each tag name and is read by the groups variant.
+format: 1
+command: exiftool
+variant: default
+description: exiftool metadata tags, one per line
+metadata:
+  tags: [media, metadata, image]
+  compatible: [ExifTool]
+  references:
+    - https://exiftool.org/exiftool_pod.html
+detect:
+  signature:
+    all:
+      # exiftool opens with its own version, whatever the file is.
+      - '\AExifTool Version Number\s+: '
+      - '^File Name\s+: '
+    none:
+      # The groups variant prints the group in front of every tag.
+      - '^\['
+parse:
+  type: kv
+  separator: ":"
+  as: map

@@ -1,0 +1,36 @@
+# `identify FILE...` prints one line per image: the file name, the
+# format, the image size, the page geometry, the depth, the colour
+# space, the file size and the times identify spent. A file holding
+# several images (an animated GIF, a multi-page PDF) prints one line per
+# image, and the name then ends in the index ImageMagick reads it by
+# ("shot.gif[0]").
+#
+# The sizes are written for people ("1206B", "2.5MiB"), so they stay
+# strings; the width and height are the numbers they are.
+format: 1
+command: identify
+variant: default
+description: ImageMagick identify, one line per image
+metadata:
+  tags: [media, image]
+  compatible: [ImageMagick]
+  references:
+    - https://imagemagick.org/script/identify.php
+detect:
+  signature:
+    all:
+      # Every line is a name, a format in capitals, the size, and the
+      # page geometry, which nothing else prints in that order.
+      - '\A(?:\S.*? [A-Z][A-Z0-9]* \d+x\d+ \d+x\d+\+-?\d+\+-?\d+ [^\n]*(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S.*?) (?P<format>[A-Z][A-Z0-9]*) (?P<width>\d+)x(?P<height>\d+) (?P<page_width>\d+)x(?P<page_height>\d+)\+(?P<page_x>-?\d+)\+(?P<page_y>-?\d+) (?P<depth>\S+) (?P<colorspace>\S+) (?P<size>\S+) (?P<user_time>\S+) (?P<elapsed>\S+)$'
+fields:
+  name: {required: true}
+  format: {required: true}
+  width: {type: int}
+  height: {type: int}
+  page_width: {type: int}
+  page_height: {type: int}
+  page_x: {type: int}
+  page_y: {type: int}

@@ -1,0 +1,12 @@
+/                                                                                                                           3850      -    31.1G        -        -
+dev-hugepages.mount                                                                                                            -      -       4K        -        -
+dev-mqueue.mount                                                                                                               -      -       4K        -        -
+init.scope                                                                                                                     1      -      25M        -        -
+proc-sys-fs-binfmt_misc.mount                                                                                                  -      -       8K        -        -
+sys-fs-fuse-connections.mount                                                                                                  -      -       4K        -        -
+sys-kernel-config.mount                                                                                                        -      -       4K        -        -
+sys-kernel-debug.mount                                                                                                         -      -       4K        -        -
+sys-kernel-tracing.mount                                                                                                       -      -       4K        -        -
+system.slice                                                                                                                1573      -     7.6G        -        -
+system.slice/ModemManager.service                                                                                              4      -     2.5M        -        -
+system.slice/NetworkManager.service                                                                                            4      -    10.4M        -        -

@@ -1,0 +1,3 @@
+source: the same exiftool run without -G, which the default variant reads
+description: without -G there are no groups to read, so this variant does not describe it
+expect_error: 'does not describe this input'

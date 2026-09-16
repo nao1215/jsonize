@@ -1,0 +1,27 @@
+# `exiftool -G FILE` prints the group each tag came from in brackets
+# before the tag name: "[File]          File Name : debian-logo.png".
+# The group is what -G adds, so it is a record of its own rather than a
+# prefix on the key: a tag name can appear under more than one group,
+# and a map keyed by the name alone would lose one of them.
+format: 1
+command: exiftool
+variant: groups
+description: exiftool -G tags with the group each came from
+metadata:
+  tags: [media, metadata, image]
+  compatible: [ExifTool]
+  references:
+    - https://exiftool.org/exiftool_pod.html
+detect:
+  args:
+    any: ["-G", "-g"]
+  signature:
+    all:
+      - '\A\[ExifTool\]\s+ExifTool Version Number\s+: '
+      - '^\[File\]\s+File Name\s+: '
+parse:
+  type: regex
+  pattern: '^\[(?P<group>[^\]]+)\]\s+(?P<tag>\S(?:.*\S)?)\s+: (?P<value>.*)$'
+fields:
+  group: {required: true}
+  tag: {required: true}

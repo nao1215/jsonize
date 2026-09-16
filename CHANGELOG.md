@@ -6,6 +6,15 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Four definitions for what three tools print: `exiftool FILE` (the tags
+  one per line) and `exiftool -G FILE` (the group in front of each of
+  them), `identify FILE...` (one record per image, its width and height
+  typed), and `pkg-config --list-all` (the modules it knows, read only
+  when named since a name and a phrase is also what a glossary looks
+  like). The registry holds 227 commands through 600 definitions.
+
 ### Fixed
 
 - `jz new KEY:=JSON` returns 3 rather than 2 when the argument is JSON

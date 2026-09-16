@@ -1,0 +1,2 @@
+source: captured on Ubuntu 26.04 (exiftool 13.50) with LC_ALL=C over a PNG from /usr/share/pixmaps
+args: ["/usr/share/pixmaps/debian-logo.png"]

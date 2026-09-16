@@ -1,0 +1,3 @@
+source: systemd-cgtop -b output, a column report whose missing figures are written as a padded dash
+description: a dash standing for a missing figure is padded on both sides, unlike the single spaces around the dash pkg-config writes
+expect_error: 'does not describe this input'
