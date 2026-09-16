@@ -408,6 +408,9 @@ func TestParseCorners(t *testing.T) {
 		{"[a\n\n  b]", []any{"a\nb"}},
 		{"-", []any{nil}},
 		{"a: \"x\\\n\"", map[string]any{"a": "x"}},
+		{"%YAML 1.2\n---\na: 1\n", map[string]any{"a": int64(1)}},
+		{"# c\n%YAML 1.2\n\n%FOO bar\n--- # c\na: 1\n", map[string]any{"a": int64(1)}},
+		{"%YAML 1.1\n--- [1]\n", []any{int64(1)}},
 	}
 	for _, tt := range tests {
 		var got any
@@ -436,6 +439,23 @@ func TestParseCorners(t *testing.T) {
 		{"a:\n  b: 1\n\tc: 2\n", "tab is not indentation"},
 		{"- a\n\t- b\n", "tab is not indentation"},
 		{"a: |\n  x\n\ty\n", "tab is not indentation"},
+		{"a: [b]c\n", "unexpected text after the flow collection"},
+		{"{&x a: 1}\n", "anchors, aliases and tags"},
+		{"[*x]\n", "anchors, aliases and tags"},
+		{"{a: !t 1}\n", "anchors, aliases and tags"},
+		{"? &x a\n: 1\n", "anchors, aliases and tags"},
+		{"? |\n  x\n: 1\n", "is one line"},
+		{"{? a: 1}\n", "explicit key"},
+		{"[? a]\n", "explicit key"},
+		{"[@a]\n", "cannot start a value"},
+		{"a: {b: 1} c\n", "unexpected text after the flow collection"},
+		{"- [a]b\n", "unexpected text after the flow collection"},
+		{"[a]b\n", "unexpected text"},
+		{"--- [a] b\n", "unexpected text"},
+		{"%TAG ! tag:example.com,2000:\n---\na: 1\n", "anchors, aliases and tags"},
+		{"%YAML 1.2\na: 1\n", `a directive is followed by "---"`},
+		{"%YAML 1.2\n", `a directive is followed by "---"`},
+		{"%YAML 2.0\n---\na: 1\n", "YAML 2.0"},
 	} {
 		var got any
 		err := Unmarshal([]byte(tt.in), &got, true)

@@ -219,6 +219,18 @@ scenarios:
           stdout:
             equals: |
               {"a":1,"b":["x","y"]}
+      # A %YAML directive opens the one document at "---".
+      - run:
+          command: jz --format yaml
+          stdin: |
+            %YAML 1.2
+            ---
+            a: 1
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"a":1}
       - run:
           command: jz --format csv --explain
           stdin: |
