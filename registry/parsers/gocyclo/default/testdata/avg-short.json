@@ -1,0 +1,31 @@
+{
+  "functions": [
+    {
+      "complexity": 46,
+      "package": "cli",
+      "function": "TestExplainJSON",
+      "path": "internal/cli/explain_golden_test.go",
+      "line": 190,
+      "column": 1
+    },
+    {
+      "complexity": 37,
+      "package": "cli",
+      "function": "TestRunExecMode",
+      "path": "internal/cli/cli_test.go",
+      "line": 947,
+      "column": 1
+    },
+    {
+      "complexity": 33,
+      "package": "cli",
+      "function": "TestUsageAndVersion",
+      "path": "internal/cli/cli_test.go",
+      "line": 661,
+      "column": 1
+    }
+  ],
+  "summary": {
+    "average": 6.37
+  }
+}

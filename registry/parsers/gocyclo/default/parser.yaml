@@ -1,0 +1,54 @@
+# `gocyclo` prints one line per Go function, most complex first: the
+# cyclomatic complexity, the package name, the function and where it is
+# declared as file:line:column. A method is written "(T).Name" or
+# "(*T).Name", with a generic receiver's type parameters left out, so the
+# function holds no space; the file is the path as it was given and may.
+#
+# -avg adds a closing line "Average: " and the mean complexity of every
+# function analyzed, not only of the ones -top and -over let through, and
+# -avg-short prints the number alone. The number is printed with three
+# significant digits (%.3g), so a large mean is written with an exponent
+# ("1.23e+03") and one over no functions is "NaN", which is null. A run
+# without either option has no such line and `summary.average` is null.
+#
+# -over prints nothing when no function is above the limit, and with
+# -avg only the closing line. A lone average says nothing about which
+# command printed it, so that text is refused rather than read.
+format: 1
+command: gocyclo
+variant: default
+description: gocyclo, the cyclomatic complexity of each Go function
+metadata:
+  tags: [go, lint, metrics]
+  compatible: [gocyclo]
+  references:
+    - https://github.com/fzipp/gocyclo
+detect:
+  signature:
+    all:
+      # Every line in the window is a function line, and the average may
+      # close them.
+      - '\A(?:\d+ [A-Za-z_][A-Za-z0-9_]* (?:\(\*?[A-Za-z_][A-Za-z0-9_]*\)\.)?[A-Za-z_][A-Za-z0-9_]* [^\n]+\.go:\d+:\d+\n)*\d+ [A-Za-z_][A-Za-z0-9_]* (?:\(\*?[A-Za-z_][A-Za-z0-9_]*\)\.)?[A-Za-z_][A-Za-z0-9_]* [^\n]+\.go:\d+:\d+(?:\n(?:Average: )?(?:[0-9]+(?:\.[0-9]+)?(?:e[+-][0-9]+)?|NaN))?\z'
+parse:
+  type: composite
+  parts:
+    - name: functions
+      select: {until: '^(?:Average: )?(?:[0-9]+(?:\.[0-9]+)?(?:e[+-][0-9]+)?|NaN)$'}
+      parse:
+        type: regex
+        pattern: '^(?P<complexity>\d+) (?P<package>[A-Za-z_][A-Za-z0-9_]*) (?P<function>(?:\(\*?[A-Za-z_][A-Za-z0-9_]*\)\.)?[A-Za-z_][A-Za-z0-9_]*) (?P<path>.+\.go):(?P<line>\d+):(?P<column>\d+)$'
+      fields:
+        complexity: {type: int, required: true}
+        package: {required: true}
+        function: {required: true}
+        path: {required: true}
+        line: {type: int, required: true}
+        column: {type: int, required: true}
+    - name: summary
+      ignore: ['^\d+ [A-Za-z_][A-Za-z0-9_]* \S+ .+\.go:\d+:\d+$']
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?:(?:Average: )?(?P<average>[0-9]+(?:\.[0-9]+)?(?:e[+-][0-9]+)?|NaN))?\z'
+      fields:
+        average: {type: float, null_if: [NaN]}

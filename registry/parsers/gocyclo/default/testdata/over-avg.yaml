@@ -1,0 +1,3 @@
+description: -over lets one function through and -avg closes with the mean of all of them
+source: captured with LC_ALL=C gocyclo v0.6.0 -over 18 -avg pkg/engine on Ubuntu, over this repository (exit status 1)
+args: [-over, "18", -avg, pkg/engine]

@@ -1,0 +1,15 @@
+{
+  "functions": [
+    {
+      "complexity": 22,
+      "package": "engine",
+      "function": "(*run).resolveHeader",
+      "path": "pkg/engine/table.go",
+      "line": 154,
+      "column": 1
+    }
+  ],
+  "summary": {
+    "average": 5.68
+  }
+}

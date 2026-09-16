@@ -1,0 +1,103 @@
+{
+  "functions": [
+    {
+      "complexity": 27,
+      "package": "yaml",
+      "function": "(*parser).flowScalar",
+      "path": "internal/yaml/parse.go",
+      "line": 1143,
+      "column": 1
+    },
+    {
+      "complexity": 20,
+      "package": "yaml",
+      "function": "(*parser).document",
+      "path": "internal/yaml/parse.go",
+      "line": 256,
+      "column": 1
+    },
+    {
+      "complexity": 19,
+      "package": "yaml",
+      "function": "TestDecodeErrors",
+      "path": "internal/yaml/yaml_test.go",
+      "line": 269,
+      "column": 1
+    },
+    {
+      "complexity": 17,
+      "package": "registry",
+      "function": "TestLoadMergesSourcesWithPrecedence",
+      "path": "pkg/registry/registry_test.go",
+      "line": 19,
+      "column": 1
+    },
+    {
+      "complexity": 17,
+      "package": "registry",
+      "function": "(*Registry).addSource",
+      "path": "pkg/registry/registry.go",
+      "line": 193,
+      "column": 1
+    },
+    {
+      "complexity": 15,
+      "package": "yaml",
+      "function": "(*parser).mapping",
+      "path": "internal/yaml/parse.go",
+      "line": 469,
+      "column": 1
+    },
+    {
+      "complexity": 14,
+      "package": "yaml",
+      "function": "(*parser).quoted",
+      "path": "internal/yaml/parse.go",
+      "line": 797,
+      "column": 1
+    },
+    {
+      "complexity": 14,
+      "package": "yaml",
+      "function": "(*decoder).decode",
+      "path": "internal/yaml/decode.go",
+      "line": 82,
+      "column": 1
+    },
+    {
+      "complexity": 13,
+      "package": "yaml",
+      "function": "TestDecodeNulls",
+      "path": "internal/yaml/yaml_test.go",
+      "line": 339,
+      "column": 1
+    },
+    {
+      "complexity": 13,
+      "package": "yaml",
+      "function": "(*parser).explicitKey",
+      "path": "internal/yaml/parse.go",
+      "line": 552,
+      "column": 1
+    },
+    {
+      "complexity": 13,
+      "package": "yaml",
+      "function": "(*parser).directives",
+      "path": "internal/yaml/parse.go",
+      "line": 309,
+      "column": 1
+    },
+    {
+      "complexity": 13,
+      "package": "yaml",
+      "function": "generic",
+      "path": "internal/yaml/decode.go",
+      "line": 311,
+      "column": 1
+    }
+  ],
+  "summary": {
+    "average": null
+  }
+}
