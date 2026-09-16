@@ -4,7 +4,16 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.7.0]
+
+The registry reads 270 commands through 737 definitions, up from 227
+through 600: sar's reports, gpg keys, git's branches and config, file
+system and partition tools (dumpe2fs, wipefs, gdisk, partx), CUPS's
+lpstat and more. What was read wrong with exit 0 is refused instead: a
+csv whose lines end with a carriage return alone, and YAML text after a
+flow collection. A csv record read as data is bounded by the input limit
+like every other format, an option error names the option the way the
+help writes it, and `top -b -n N` is a list with a record per iteration.
 
 ### Added
 
