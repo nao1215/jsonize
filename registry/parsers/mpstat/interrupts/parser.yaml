@@ -23,6 +23,11 @@ detect:
   os: [linux]
   args:
     all: ["-I"]
+    # -A and -u put the processor report in front, and -I CPU and -I
+    # SCPU print a column per interrupt, which is another table. -I ALL
+    # prints all three and is refused by the parser: its ALL cannot be
+    # told from the one -P takes.
+    none: ["-A", "-u", "CPU", "SCPU"]
   signature:
     all:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'

@@ -23,6 +23,9 @@ metadata:
 detect:
   args:
     any: ["-S", "--section-headers", "--sections"]
+    # Each of these adds a report of its own before or after this one,
+    # which no part here reads.
+    none: ["-a", "--all", "-h", "--file-header", "-l", "--program-headers", "--segments", "-g", "--section-groups", "-t", "--section-details", "-e", "--headers", "-s", "--syms", "--symbols", "--dyn-syms", "--lto-syms", "-n", "--notes", "-r", "--relocs", "-u", "--unwind", "-d", "--dynamic", "-V", "--version-info", "-A", "--arch-specific", "-c", "--archive-index", "-x", "--hex-dump=", "-p", "--string-dump=", "-R", "--relocated-dump=", "-w", "--debug-dump", "--debug-dump=", "-I", "--histogram"]
   signature:
     all:
       - '\AThere are [0-9]+ section headers, starting at offset 0x[0-9a-f]+:\n\nSection Headers:\n  \[Nr\] Name +Type +Address +Off +Size +ES Flg Lk Inf Al$'

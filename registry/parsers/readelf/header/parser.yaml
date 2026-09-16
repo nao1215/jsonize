@@ -20,6 +20,10 @@ metadata:
   references:
     - https://sourceware.org/binutils/docs/binutils/readelf.html
 detect:
+  args:
+    # Each of these adds a report of its own before or after this one,
+    # which no part here reads.
+    none: ["-a", "--all", "-l", "--program-headers", "--segments", "-S", "--section-headers", "--sections", "-g", "--section-groups", "-t", "--section-details", "-e", "--headers", "-s", "--syms", "--symbols", "--dyn-syms", "--lto-syms", "-n", "--notes", "-r", "--relocs", "-u", "--unwind", "-d", "--dynamic", "-V", "--version-info", "-A", "--arch-specific", "-c", "--archive-index", "-x", "--hex-dump=", "-p", "--string-dump=", "-R", "--relocated-dump=", "-w", "--debug-dump", "--debug-dump=", "-I", "--histogram"]
   signature:
     all:
       - '\AELF Header:[ \t]*$'

@@ -17,6 +17,9 @@ metadata:
     - https://man7.org/linux/man-pages/man1/sar.1.html
 detect:
   os: [linux]
+  args:
+    # -A prints every report sar has after this one.
+    none: ["-A"]
   signature:
     all:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[^\n]*\n[ \t]*\n(?:\d\d:\d\d:\d\d[ \t]+LINUX RESTART[^\n]*\n[ \t]*\n)*(?:\d\d:\d\d:\d\d|Average:)[ \t]+CPU[ \t]+%usr[ \t]+%nice[ \t]+%sys[ \t]+%iowait[ \t]+%steal[ \t]+%irq[ \t]+%soft[ \t]+%guest[ \t]+%gnice[ \t]+%idle[ \t]*$'

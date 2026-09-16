@@ -21,6 +21,10 @@ metadata:
     - https://man7.org/linux/man-pages/man1/mpstat.1.html
 detect:
   os: [linux]
+  args:
+    # -A prints every report one after another, and -I adds the
+    # interrupt reports after this one, which no part here reads.
+    none: ["-A", "-I"]
   signature:
     all:
       - '\ALinux[ \t]+\S+[ \t]+\([^)]*\)[ \t]+\S+[ \t]+_\S+_'
