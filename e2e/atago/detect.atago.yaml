@@ -2245,3 +2245,32 @@ scenarios:
             json:
               - { path: "$[0].label", equals: "NetLock Arany (Class Gold) Főtanúsítvány" }
               - { path: "$[1].trust", equals: anchor }
+
+  - name: dpkg-deb -I and dpkg-divert --list are detected
+    steps:
+      - fixture:
+          file: deb-info.txt
+          from: "${specdir}/../../registry/parsers/dpkg-deb/info/testdata/maintainer-scripts.txt"
+      - run:
+          command: jz
+          stdin: {file: deb-info.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.package.control_size", equals: 65269 }
+              - { path: "$.members[0].executable", equals: true }
+              - { path: "$.members[0].interpreter", equals: "#!/bin/sh" }
+              - { path: "$.control.Package", equals: tzdata }
+      - fixture:
+          file: divert.txt
+          from: "${specdir}/../../registry/parsers/dpkg-divert/list/testdata/ubuntu.txt"
+      - run:
+          command: jz
+          stdin: {file: divert.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].package", equals: libreadline8t64 }
+              - { path: "$[0].local", equals: false }

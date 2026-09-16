@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/dpkg-divert/list.json",
+  "title": "dpkg-divert/list",
+  "description": "dpkg-divert --list, each diverted path with where it goes and who diverted it",
+  "x-jsonize": {
+    "definition": "dpkg-divert/list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string"
+      },
+      "diverted_to": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "package": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "local": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "path",
+      "diverted_to",
+      "package",
+      "local"
+    ]
+  }
+}

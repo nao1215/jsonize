@@ -1,0 +1,4 @@
+description: The diversions of a desktop system, each made by a package and each to a named path.
+source: dpkg-divert --list, dpkg 1.23 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [--list]

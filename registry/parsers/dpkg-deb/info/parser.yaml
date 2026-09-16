@@ -1,0 +1,70 @@
+# `dpkg-deb -I PACKAGE.deb` (--info) prints a binary package's header and
+# its control file, every line indented by one space. The first two lines
+# give the format version of the package, its size and the size of the
+# control archive. A line per member of the control archive follows: its
+# size in bytes and lines, a "*" for a file that is executable (a
+# maintainer script), its name, and the interpreter line of a script.
+# The control file comes last, a field per line, with the lines that
+# continue a field (the long description) indented by one more space;
+# those are joined onto the field.
+format: 1
+command: dpkg-deb
+variant: info
+description: dpkg-deb -I, a Debian package's control archive and control fields
+metadata:
+  tags: [linux, debian, package]
+  compatible: [dpkg]
+  references:
+    - https://manpages.debian.org/unstable/dpkg/dpkg-deb.1.en.html
+detect:
+  args:
+    any: ["-I", "--info"]
+  signature:
+    all:
+      - '\A new Debian package, version [0-9.]+\.\n size [0-9]+ bytes: control archive=[0-9]+ bytes\.\n'
+input:
+  # A continuation is indented by two spaces or more. A member line is
+  # too, when its size is short enough to pad, and starts with the
+  # size and "bytes,", which no continuation of a control field begins
+  # with in practice.
+  fold: '^  +(?:[^0-9 ]|[0-9]+(?:[^0-9 ]| [^b]| b[^y]))'
+parse:
+  type: composite
+  parts:
+    - name: package
+      select: {limit: 2}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A new Debian package, version (?P<format>[0-9.]+)\.\n size (?P<size>[0-9]+) bytes: control archive=(?P<control_size>[0-9]+) bytes\.\z'
+      fields:
+        size: {type: int}
+        control_size: {type: int}
+    - name: members
+      select: {skip: 2, until: '^ [A-Za-z][A-Za-z0-9-]*:'}
+      parse:
+        type: regex
+        pattern: '^ +(?P<bytes>[0-9]+) bytes, +(?P<lines>[0-9]+) lines +(?P<executable>\*?) +(?P<name>\S+)(?: +(?P<interpreter>\S.*?))?[ \t]*$'
+      fields:
+        bytes: {type: int}
+        lines: {type: int}
+        executable: {type: bool, true_values: ["*"], false_values: [""]}
+        name: {required: true}
+    - name: control
+      select: {after: '^ +[0-9]+ bytes, +[0-9]+ lines '}
+      ignore: ['^ +[0-9]+ bytes, +[0-9]+ lines ']
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      fields:
+        Installed-Size: {type: int}
+        Depends: {type: array, split: ","}
+        Pre-Depends: {type: array, split: ","}
+        Recommends: {type: array, split: ","}
+        Suggests: {type: array, split: ","}
+        Breaks: {type: array, split: ","}
+        Conflicts: {type: array, split: ","}
+        Replaces: {type: array, split: ","}
+        Provides: {type: array, split: ","}
+        Enhances: {type: array, split: ","}
