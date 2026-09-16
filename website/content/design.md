@@ -1030,39 +1030,37 @@ today, and inventing it for one report would be the wrong order.
 
 ### Exact field counts in a table
 
-A `table` with `split: whitespace` gives its last column whatever is left
-on the line. That is what `ps aux` needs, where the command and its
-arguments are one cell with spaces in it, and it is the default because
-`max_fields` is unset. It means a table cannot say "this row has exactly
-N fields": a row with N+1 of them produces N cells with two values in the
-last one, and `max_fields: N+1` is refused by validation because it
-exceeds the number of columns.
+Settled. A `table` with `split: whitespace` gives its last column
+whatever is left on the line, which is what `ps aux` needs, where the
+command and its arguments are one cell with spaces in it. It meant a
+table could not say "this row has exactly N fields": a row with N+1 of
+them produced N cells with two values in the last one.
 
-`proc/diskstats` needs the exact count and gets it from two places that
-were never designed to work together. Inside the signature window the
-expression counts the fields. Past the window nothing counts them, and
-what refuses a twenty-first field is that it lands in `flush_ms` and
-fails to convert to an integer. A table whose last column were text
-would take the extra field without a word.
+`max_fields` may now be one more than the number of columns, and that is
+the way a definition asks for the count. The split then yields a cell the
+columns have no name for, and the row is refused as too wide, whatever
+the type of the last column is. No key was added: the two uses are a
+number of fields to split into, which is what `max_fields` already was.
 
-Two uses are being served by one setting, and they want opposite things:
-a last column that absorbs the rest of the line, and a row whose width is
-checked. Relaxing the `max_fields` validation, or adding a key that
-states the width, would separate them. Neither is decided, and adding a
-definition key is not something to do for one definition.
+`proc/diskstats` used to get its count from two places that were never
+designed to work together: inside the signature window the expression
+counted the fields, and past the window what refused a twenty-first field
+was that it landed in `flush_ms` and failed to convert to an integer. It
+now sets `max_fields: 21` and the parser counts every row.
 
-Two further things any answer has to handle:
+What is still open is the case the number does not state. The widths a
+format allows are not always a range: `/proc/diskstats` has fourteen,
+eighteen and twenty fields across kernel versions, and a row of fifteen,
+sixteen, seventeen or nineteen is not any of them. A count written as a
+range would accept rows no kernel ever wrote, and a list of allowed
+widths is a key that has one caller.
 
-- The widths a format allows are not always a range. `/proc/diskstats`
-  has fourteen, eighteen and twenty fields across kernel versions, and a
-  row of fifteen, sixteen, seventeen or nineteen is not any of them. A
-  count written as a range would accept rows no kernel ever wrote.
-- Field counts cannot resolve every ambiguity. A twenty-field row
-  truncated to eighteen is indistinguishable from a row an older kernel
-  wrote, because the columns are backward compatible and the text carries
-  nothing else. Splitting the shapes into separate variants does not
-  change that: automatic detection would have the same two candidates and
-  the same absence of evidence.
+Field counts also cannot resolve every ambiguity. A twenty-field row
+truncated to eighteen is indistinguishable from a row an older kernel
+wrote, because the columns are backward compatible and the text carries
+nothing else. Splitting the shapes into separate variants does not change
+that: automatic detection would have the same two candidates and the same
+absence of evidence.
 
 ### A column that prints two layouts
 

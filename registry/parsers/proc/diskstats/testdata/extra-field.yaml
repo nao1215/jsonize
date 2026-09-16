@@ -3,7 +3,7 @@ description: |
   signature window. The signature counts the fields, so the file is not
   identified as this format at all. The companion fixture
   extra-field-beyond-window.txt covers the same row past the window,
-  where a different mechanism catches it.
+  where max_fields makes the parser count them.
 expect_error: 'does not describe this input'
 os: linux
 source: synthetic; the capture beside it with a field appended to each row.

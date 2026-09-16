@@ -1751,3 +1751,56 @@ func diff(want, got any) string {
 	}
 	return fmt.Sprintf("\n want %#v\n  got %#v", want, got)
 }
+
+// A whitespace table gives its last column whatever is left on the line,
+// which is what `ps aux` needs and what a table meant to be counted does
+// not want. One more than the number of columns is how a definition asks
+// for the count: the split then yields a cell the columns have no name
+// for, and the row is refused for being too wide.
+func TestParseTableCountsFieldsWhenAsked(t *testing.T) {
+	t.Parallel()
+	const columns = `
+format: 1
+command: t
+variant: %s
+parse:
+  type: table
+  header:
+    none: true
+    columns: [a, b, c]
+%s`
+	absorb := load(t, fmt.Sprintf(columns, "absorb", ""))
+	counted := load(t, fmt.Sprintf(columns, "counted", "  max_fields: 4\n"))
+	// The last column takes the rest of the line by default, and the same
+	// row is refused where the definition asked for the count.
+	got, err := Parse(absorb, []byte("1 2 3 4\n"), Options{})
+	if err != nil || mustJSON(t, got) != `[{"a":"1","b":"2","c":"3 4"}]` {
+		t.Errorf("absorbing: %v %v", mustJSON(t, got), err)
+	}
+	_, err = Parse(counted, []byte("1 2 3 4\n"), Options{})
+	if err == nil || !strings.Contains(err.Error(), "line 1: expected at most 3 fields but found 4") {
+		t.Errorf("counted: %v", err)
+	}
+	// A row of exactly the columns is read the same way either way, and
+	// the count holds on every row rather than on the first ones.
+	for _, def := range []*definition.Definition{absorb, counted} {
+		got, err := Parse(def, []byte("1 2 3\n4 5 6\n"), Options{})
+		if err != nil || mustJSON(t, got) != `[{"a":"1","b":"2","c":"3"},{"a":"4","b":"5","c":"6"}]` {
+			t.Errorf("%s: %v %v", def.ID(), mustJSON(t, got), err)
+		}
+	}
+	_, err = Parse(counted, []byte("1 2 3\n4 5 6 7\n"), Options{})
+	if err == nil || !strings.Contains(err.Error(), "line 2: expected at most 3 fields but found 4") {
+		t.Errorf("a later row: %v", err)
+	}
+	// A short row is still a short row, and a stream counts the fields of
+	// a record the same way a whole document does.
+	_, err = Parse(counted, []byte("1 2\n"), Options{})
+	if err == nil || !strings.Contains(err.Error(), "expected at least 3 fields but found 2") {
+		t.Errorf("short row: %v", err)
+	}
+	err = Stream(counted, strings.NewReader("1 2 3 4\n"), Options{}, func(any) error { return nil }, nil)
+	if err == nil || !strings.Contains(err.Error(), "expected at most 3 fields but found 4") {
+		t.Errorf("streamed: %v", err)
+	}
+}

@@ -8,6 +8,12 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `max_fields` of a `table` may be one more than the number of columns,
+  which is how a definition asks for a row to be counted rather than for
+  its last column to take the rest of the line. `ps aux` keeps the
+  default; `proc/diskstats` now counts every row, where a twenty-first
+  field used to be caught only by failing to convert to an integer in
+  the last column.
 - Loading the registry costs about a tenth less time, a tenth fewer
   bytes and a fifth fewer allocations. The walk that looks for
   definitions no longer descends into the fixtures beside them (5,614
