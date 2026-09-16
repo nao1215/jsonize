@@ -1,0 +1,3 @@
+source: hostname -I, captured on Ubuntu 26.04 (hostname 3.25) with LC_ALL=C; the two LAN addresses and the global IPv6 address replaced with documentation addresses, the Docker bridge addresses kept
+os: linux
+args: ["-I"]

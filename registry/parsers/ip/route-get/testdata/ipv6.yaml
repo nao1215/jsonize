@@ -1,0 +1,4 @@
+source: ip -6 route get on Ubuntu 26.04 (iproute2 6.19) with LC_ALL=C; the gateway and the source address replaced with documentation addresses
+description: an IPv6 lookup, which prints no uid and no cache line
+os: linux
+args: ["-6", route, get, "2001:4860:4860::8888"]

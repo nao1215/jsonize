@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ethtool/pause.json",
+  "title": "ethtool/pause",
+  "description": "ethtool -a, the pause frame settings of an interface",
+  "x-jsonize": {
+    "definition": "ethtool/pause",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "interface": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "Autonegotiate": {
+          "type": "boolean"
+        },
+        "RX": {
+          "type": "boolean"
+        },
+        "RX negotiated": {
+          "type": "boolean"
+        },
+        "TX": {
+          "type": "boolean"
+        },
+        "TX negotiated": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "interface",
+    "settings"
+  ]
+}

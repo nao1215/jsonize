@@ -1,0 +1,32 @@
+# `nmcli -t device` (--terse) prints one device per line as its fields
+# separated by colons: the device, its type, its state and the connection
+# it is using, empty when it has none. A colon or a backslash inside a
+# field is escaped with a backslash, which is undone. The state is the
+# phrase nmcli printed, "(externally)" included.
+format: 1
+command: nmcli
+variant: device-terse
+description: nmcli -t device, the devices, their types, states and connections
+metadata:
+  tags: [linux, network, networkmanager]
+  compatible: [NetworkManager]
+  references:
+    - https://networkmanager.dev/docs/api/latest/nmcli.html
+detect:
+  os: [linux]
+  # Colon separated fields are what many terse listings print, so the
+  # definition is reached by `jz run nmcli -t device` or by naming it.
+  auto_detect: false
+  args:
+    any: ["-t", "--terse"]
+  signature:
+    all:
+      - '\A(?:(?:[^:\\\n]|\\.)+:[a-z0-9-]+:(?:connected|disconnected|unavailable|unmanaged|connecting|deactivating|unknown)[^:\n]*:(?:[^\n]*)(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<device>(?:[^:\\]|\\.)+):(?P<type>[a-z0-9-]+):(?P<state>(?:[^:\\]|\\.)+):(?P<connection>.*)$'
+fields:
+  device: {required: true, unescape: {sequences: {'\:': ':', '\\': '\'}}}
+  type: {required: true}
+  state: {required: true}
+  connection: {null_if: [""], unescape: {sequences: {'\:': ':', '\\': '\'}}}

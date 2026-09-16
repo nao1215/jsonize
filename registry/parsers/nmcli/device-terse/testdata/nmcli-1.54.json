@@ -1,0 +1,74 @@
+[
+  {
+    "device": "wlp195s0",
+    "type": "wifi",
+    "state": "connected",
+    "connection": "home-wifi"
+  },
+  {
+    "device": "eno1",
+    "type": "ethernet",
+    "state": "connected",
+    "connection": "プロファイル 1"
+  },
+  {
+    "device": "br-0123456789ab",
+    "type": "bridge",
+    "state": "connected (externally)",
+    "connection": "br-0123456789ab"
+  },
+  {
+    "device": "docker0",
+    "type": "bridge",
+    "state": "connected (externally)",
+    "connection": "docker0"
+  },
+  {
+    "device": "lo",
+    "type": "loopback",
+    "state": "connected (externally)",
+    "connection": "lo"
+  },
+  {
+    "device": "br-123456789abc",
+    "type": "bridge",
+    "state": "connected (externally)",
+    "connection": "br-123456789abc"
+  },
+  {
+    "device": "br-23456789abcd",
+    "type": "bridge",
+    "state": "connected (externally)",
+    "connection": "br-23456789abcd"
+  },
+  {
+    "device": "veth0b71159",
+    "type": "ethernet",
+    "state": "connected (externally)",
+    "connection": "veth0b71159"
+  },
+  {
+    "device": "veth4bf1b84",
+    "type": "ethernet",
+    "state": "connected (externally)",
+    "connection": "veth4bf1b84"
+  },
+  {
+    "device": "veth81ec640",
+    "type": "ethernet",
+    "state": "connected (externally)",
+    "connection": "veth81ec640"
+  },
+  {
+    "device": "vethd074b4f",
+    "type": "ethernet",
+    "state": "connected (externally)",
+    "connection": "vethd074b4f"
+  },
+  {
+    "device": "p2p-dev-wlp195s0",
+    "type": "wifi-p2p",
+    "state": "disconnected",
+    "connection": null
+  }
+]

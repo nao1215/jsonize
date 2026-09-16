@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ethtool/ring.json",
+  "title": "ethtool/ring",
+  "description": "ethtool -g, the ring buffer maximums and settings of an interface",
+  "x-jsonize": {
+    "definition": "ethtool/ring",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "interface": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "maximums": {
+      "type": "object",
+      "properties": {
+        "CQE Size": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "HDS thresh": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "RX": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "RX Buf Len": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "RX Jumbo": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "RX Mini": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "TX": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "TX push buff len": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "current": {
+      "type": "object",
+      "properties": {
+        "CQE Size": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "HDS thresh": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "RX": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "RX Buf Len": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "RX Jumbo": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "RX Mini": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "TX": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "TX push buff len": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "interface",
+    "maximums",
+    "current"
+  ]
+}

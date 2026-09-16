@@ -68,7 +68,7 @@ the same reading with settings of your own.
 | `efibootmgr` | [`linux`](../schemas/efibootmgr/linux.json) |
 | `env` | [`null-separated`](../schemas/env/null-separated.json), [`posix`](../schemas/env/posix.json) |
 | `etc` | [`crontab`](../schemas/etc/crontab.json), [`fstab`](../schemas/etc/fstab.json), [`group`](../schemas/etc/group.json), [`hosts`](../schemas/etc/hosts.json), [`nsswitch`](../schemas/etc/nsswitch.json), [`os-release`](../schemas/etc/os-release.json), [`passwd`](../schemas/etc/passwd.json), [`protocols`](../schemas/etc/protocols.json), [`resolv-conf`](../schemas/etc/resolv-conf.json), [`services`](../schemas/etc/services.json) |
-| `ethtool` | [`driver-info`](../schemas/ethtool/driver-info.json), [`features`](../schemas/ethtool/features.json), [`settings`](../schemas/ethtool/settings.json), [`statistics`](../schemas/ethtool/statistics.json) |
+| `ethtool` | [`driver-info`](../schemas/ethtool/driver-info.json), [`features`](../schemas/ethtool/features.json), [`pause`](../schemas/ethtool/pause.json), [`ring`](../schemas/ethtool/ring.json), [`settings`](../schemas/ethtool/settings.json), [`statistics`](../schemas/ethtool/statistics.json) |
 | `exiftool` | [`default`](../schemas/exiftool/default.json), [`groups`](../schemas/exiftool/groups.json) |
 | `eza` | [`full-iso`](../schemas/eza/full-iso.json), [`long`](../schemas/eza/long.json), [`long-group`](../schemas/eza/long-group.json), [`long-iso`](../schemas/eza/long-iso.json), [`long-links`](../schemas/eza/long-links.json) |
 | `factor` | [`default`](../schemas/factor/default.json) |
@@ -95,6 +95,7 @@ the same reading with settings of your own.
 | `hciconfig` | [`linux`](../schemas/hciconfig/linux.json) |
 | `hexdump` | [`canonical`](../schemas/hexdump/canonical.json) |
 | `host` | [`bind`](../schemas/host/bind.json) |
+| `hostname` | [`all-addresses`](../schemas/hostname/all-addresses.json) |
 | `hostnamectl` | [`linux`](../schemas/hostnamectl/linux.json) |
 | `hyperfine` | [`basic`](../schemas/hyperfine/basic.json) |
 | `iconv` | [`list`](../schemas/iconv/list.json) |
@@ -104,10 +105,10 @@ the same reading with settings of your own.
 | `ini` | [`default`](../schemas/ini/default.json) |
 | `ionice` | [`class`](../schemas/ionice/class.json) |
 | `iostat` | [`cpu`](../schemas/iostat/cpu.json), [`cpu-timestamped`](../schemas/iostat/cpu-timestamped.json), [`device`](../schemas/iostat/device.json), [`device-timestamped`](../schemas/iostat/device-timestamped.json), [`extended`](../schemas/iostat/extended.json), [`extended-device`](../schemas/iostat/extended-device.json), [`extended-timestamped`](../schemas/iostat/extended-timestamped.json), [`freebsd-extended`](../schemas/iostat/freebsd-extended.json), [`human`](../schemas/iostat/human.json), [`human-sizes`](../schemas/iostat/human-sizes.json), [`human-sizes-timestamped`](../schemas/iostat/human-sizes-timestamped.json), [`human-timestamped`](../schemas/iostat/human-timestamped.json), [`linux`](../schemas/iostat/linux.json), [`linux-timestamped`](../schemas/iostat/linux-timestamped.json) |
-| `ip` | [`address`](../schemas/ip/address.json), [`brief-address`](../schemas/ip/brief-address.json), [`brief-link`](../schemas/ip/brief-link.json), [`link`](../schemas/ip/link.json), [`multicast-address`](../schemas/ip/multicast-address.json), [`neighbour`](../schemas/ip/neighbour.json), [`oneline-address`](../schemas/ip/oneline-address.json), [`oneline-link`](../schemas/ip/oneline-link.json), [`route`](../schemas/ip/route.json), [`rule`](../schemas/ip/rule.json), [`stats-link`](../schemas/ip/stats-link.json), [`stats-link-detail`](../schemas/ip/stats-link-detail.json) |
+| `ip` | [`address`](../schemas/ip/address.json), [`brief-address`](../schemas/ip/brief-address.json), [`brief-link`](../schemas/ip/brief-link.json), [`link`](../schemas/ip/link.json), [`multicast-address`](../schemas/ip/multicast-address.json), [`neighbour`](../schemas/ip/neighbour.json), [`oneline-address`](../schemas/ip/oneline-address.json), [`oneline-link`](../schemas/ip/oneline-link.json), [`route`](../schemas/ip/route.json), [`route-get`](../schemas/ip/route-get.json), [`rule`](../schemas/ip/rule.json), [`stats-link`](../schemas/ip/stats-link.json), [`stats-link-detail`](../schemas/ip/stats-link-detail.json) |
 | `ipconfig` | [`all`](../schemas/ipconfig/all.json), [`windows`](../schemas/ipconfig/windows.json) |
 | `ipcs` | [`limits`](../schemas/ipcs/limits.json), [`linux`](../schemas/ipcs/linux.json), [`message-queues`](../schemas/ipcs/message-queues.json), [`semaphores`](../schemas/ipcs/semaphores.json), [`shared-memory`](../schemas/ipcs/shared-memory.json) |
-| `iw` | [`dev`](../schemas/iw/dev.json), [`link`](../schemas/iw/link.json) |
+| `iw` | [`dev`](../schemas/iw/dev.json), [`link`](../schemas/iw/link.json), [`reg-get`](../schemas/iw/reg-get.json) |
 | `journalctl` | [`boots`](../schemas/journalctl/boots.json), [`short`](../schemas/journalctl/short.json), [`short-iso`](../schemas/journalctl/short-iso.json), [`short-monotonic`](../schemas/journalctl/short-monotonic.json), [`short-precise`](../schemas/journalctl/short-precise.json) |
 | `just` | [`list`](../schemas/just/list.json) |
 | `kldstat` | [`freebsd`](../schemas/kldstat/freebsd.json), [`freebsd-human`](../schemas/kldstat/freebsd-human.json) |
@@ -157,7 +158,7 @@ the same reading with settings of your own.
 | `networkctl` | [`list`](../schemas/networkctl/list.json) |
 | `networksetup` | [`hardware-ports`](../schemas/networksetup/hardware-ports.json) |
 | `nm` | [`dynamic`](../schemas/nm/dynamic.json) |
-| `nmcli` | [`connection`](../schemas/nmcli/connection.json), [`device`](../schemas/nmcli/device.json), [`device-show`](../schemas/nmcli/device-show.json), [`general`](../schemas/nmcli/general.json), [`radio`](../schemas/nmcli/radio.json), [`wifi`](../schemas/nmcli/wifi.json) |
+| `nmcli` | [`connection`](../schemas/nmcli/connection.json), [`device`](../schemas/nmcli/device.json), [`device-show`](../schemas/nmcli/device-show.json), [`device-terse`](../schemas/nmcli/device-terse.json), [`general`](../schemas/nmcli/general.json), [`radio`](../schemas/nmcli/radio.json), [`wifi`](../schemas/nmcli/wifi.json) |
 | `npm` | [`ls`](../schemas/npm/ls.json), [`ls-all`](../schemas/npm/ls-all.json), [`outdated`](../schemas/npm/outdated.json) |
 | `nslookup` | [`query`](../schemas/nslookup/query.json) |
 | `nstat` | [`counters`](../schemas/nstat/counters.json) |

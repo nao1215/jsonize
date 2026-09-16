@@ -38,6 +38,11 @@ detect:
       # every word of that is a legal host name. Nothing in the text
       # tells the two apart, so there is no positive form to write.
       - '^\S+[ \t]+dev[ \t]+\S+[ \t]+(?:lladdr|PERMANENT|NOARP|REACHABLE|STALE|DELAY|PROBE|INCOMPLETE|FAILED|NONE)(?:[ \t]|$)'
+      # A hosts file has no continuation lines: every line is an entry, a
+      # comment or blank. An indented line that opens with a word is the
+      # second line of something else, such as the cache line
+      # `ip route get` prints under its route.
+      - '^[ \t]+[A-Za-z]'
 input:
   ignore:
     - '^\s*#'

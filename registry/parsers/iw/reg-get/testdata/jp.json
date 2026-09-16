@@ -1,0 +1,190 @@
+[
+  {
+    "scope": {
+      "name": "global"
+    },
+    "country": {
+      "code": "JP",
+      "dfs_region": "DFS-JP"
+    },
+    "rules": [
+      {
+        "start_mhz": 2402,
+        "end_mhz": 2482,
+        "max_bandwidth_mhz": 40,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 20,
+        "dfs_cac": null,
+        "flags": null
+      },
+      {
+        "start_mhz": 2474,
+        "end_mhz": 2494,
+        "max_bandwidth_mhz": 20,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 20,
+        "dfs_cac": null,
+        "flags": [
+          "NO-OFDM"
+        ]
+      },
+      {
+        "start_mhz": 4910,
+        "end_mhz": 4990,
+        "max_bandwidth_mhz": 40,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 23,
+        "dfs_cac": null,
+        "flags": null
+      },
+      {
+        "start_mhz": 5170,
+        "end_mhz": 5250,
+        "max_bandwidth_mhz": 80,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 20,
+        "dfs_cac": null,
+        "flags": [
+          "AUTO-BW"
+        ]
+      },
+      {
+        "start_mhz": 5250,
+        "end_mhz": 5330,
+        "max_bandwidth_mhz": 80,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 20,
+        "dfs_cac": "0 ms",
+        "flags": [
+          "DFS",
+          "AUTO-BW"
+        ]
+      },
+      {
+        "start_mhz": 5490,
+        "end_mhz": 5730,
+        "max_bandwidth_mhz": 160,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 23,
+        "dfs_cac": "0 ms",
+        "flags": [
+          "DFS"
+        ]
+      },
+      {
+        "start_mhz": 5925,
+        "end_mhz": 6425,
+        "max_bandwidth_mhz": 320,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 23,
+        "dfs_cac": null,
+        "flags": [
+          "NO-OUTDOOR"
+        ]
+      },
+      {
+        "start_mhz": 57000,
+        "end_mhz": 66000,
+        "max_bandwidth_mhz": 2160,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 10,
+        "dfs_cac": null,
+        "flags": null
+      }
+    ]
+  },
+  {
+    "scope": {
+      "name": "phy#0"
+    },
+    "country": {
+      "code": "JP",
+      "dfs_region": "DFS-JP"
+    },
+    "rules": [
+      {
+        "start_mhz": 2402,
+        "end_mhz": 2482,
+        "max_bandwidth_mhz": 40,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 20,
+        "dfs_cac": null,
+        "flags": null
+      },
+      {
+        "start_mhz": 2474,
+        "end_mhz": 2494,
+        "max_bandwidth_mhz": 20,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 20,
+        "dfs_cac": null,
+        "flags": [
+          "NO-OFDM"
+        ]
+      },
+      {
+        "start_mhz": 4910,
+        "end_mhz": 4990,
+        "max_bandwidth_mhz": 40,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 23,
+        "dfs_cac": null,
+        "flags": null
+      },
+      {
+        "start_mhz": 5170,
+        "end_mhz": 5250,
+        "max_bandwidth_mhz": 80,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 20,
+        "dfs_cac": null,
+        "flags": [
+          "AUTO-BW"
+        ]
+      },
+      {
+        "start_mhz": 5250,
+        "end_mhz": 5330,
+        "max_bandwidth_mhz": 80,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 20,
+        "dfs_cac": "0 ms",
+        "flags": [
+          "DFS",
+          "AUTO-BW"
+        ]
+      },
+      {
+        "start_mhz": 5490,
+        "end_mhz": 5730,
+        "max_bandwidth_mhz": 160,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 23,
+        "dfs_cac": "0 ms",
+        "flags": [
+          "DFS"
+        ]
+      },
+      {
+        "start_mhz": 5925,
+        "end_mhz": 6425,
+        "max_bandwidth_mhz": 320,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 23,
+        "dfs_cac": null,
+        "flags": [
+          "NO-OUTDOOR"
+        ]
+      },
+      {
+        "start_mhz": 57000,
+        "end_mhz": 66000,
+        "max_bandwidth_mhz": 2160,
+        "max_antenna_gain_dbi": null,
+        "max_eirp_dbm": 10,
+        "dfs_cac": null,
+        "flags": null
+      }
+    ]
+  }
+]

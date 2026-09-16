@@ -1,0 +1,27 @@
+# `hostname -I` (--all-ip-addresses) prints every address of the host's
+# network interfaces but the loopback and IPv6 link-local ones, on one
+# line, separated by spaces, with a space after the last. The result is
+# the list of addresses in the order printed.
+format: 1
+command: hostname
+variant: all-addresses
+description: hostname -I, the addresses of the host
+metadata:
+  tags: [linux, network]
+  compatible: [hostname]
+  references:
+    - https://manpages.debian.org/hostname
+detect:
+  os: [linux]
+  auto_detect: false
+  args:
+    any: ["-I", "--all-ip-addresses"]
+  signature:
+    all:
+      - '\A(?:(?:\d+\.\d+\.\d+\.\d+|[0-9A-Fa-f:]*:[0-9A-Fa-f:]*) )+\n?\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\A(?P<addresses>\S.*?)\s*\z'
+fields:
+  addresses: {type: array, split: " ", required: true}

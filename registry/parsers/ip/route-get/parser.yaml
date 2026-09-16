@@ -1,0 +1,48 @@
+# `ip route get ADDRESS` prints the route the kernel would use for one
+# address: the address, with its type in front when it is not unicast
+# (local, broadcast), the source it was asked about after "from", the
+# gateway after "via", the device after "dev", and then attribute words
+# (src, proto, metric, uid, mark, pref) in the order the kernel gives
+# them. An IPv4 lookup adds an indented "cache" line with flags such as
+# <local,brd>, which is joined onto the route and kept with the
+# attributes.
+#
+# The attributes are pairs mixed with lone words, so they are kept as
+# the list of words printed, as ip/route keeps them.
+format: 1
+command: ip
+variant: route-get
+description: ip route get, the route the kernel chooses for an address
+metadata:
+  tags: [linux, network, iproute2]
+  compatible: [iproute2]
+  references:
+    - https://man7.org/linux/man-pages/man8/ip-route.8.html
+detect:
+  os: [linux]
+  # An address and "dev NAME" is also how ip neigh and bridge fdb open a
+  # line, so the definition is reached by `jz run ip route get` or by
+  # naming it, not by the text alone.
+  auto_detect: false
+  args:
+    all: ["get"]
+    any: ["route", "rout", "rou", "ro", "r"]
+  signature:
+    all:
+      # The address is IPv4 or IPv6, which a hardware address in bridge fdb
+      # is not.
+      - '\A(?:(?:unicast|local|broadcast|anycast|multicast) )?(?:\d+\.\d+\.\d+\.\d+|[0-9A-Fa-f:]*::[0-9A-Fa-f:]*|(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})(?: from \S+)?(?: via \S+)? dev \S+ '
+input:
+  fold: '^[ \t]+cache\b'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<type>unicast|local|broadcast|anycast|multicast) (?P<destination>[0-9A-Fa-f.:]+)(?: from (?P<from>\S+))?(?: via (?P<via>\S+))? dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
+    - '^(?P<destination>[0-9A-Fa-f.:]+)(?: from (?P<from>\S+))?(?: via (?P<via>\S+))? dev (?P<dev>\S+)\s*(?P<attributes>.*?)\s*$'
+fields:
+  destination: {required: true}
+  dev: {required: true}
+  type: {when_missing: omit}
+  from: {when_missing: omit}
+  via: {when_missing: omit}
+  attributes: {type: array, split_regex: '\s+'}

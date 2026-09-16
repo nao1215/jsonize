@@ -1,0 +1,12 @@
+wlp195s0:wifi:connected:home-wifi
+eno1:ethernet:connected:プロファイル 1
+br-0123456789ab:bridge:connected (externally):br-0123456789ab
+docker0:bridge:connected (externally):docker0
+lo:loopback:connected (externally):lo
+br-123456789abc:bridge:connected (externally):br-123456789abc
+br-23456789abcd:bridge:connected (externally):br-23456789abcd
+veth0b71159:ethernet:connected (externally):veth0b71159
+veth4bf1b84:ethernet:connected (externally):veth4bf1b84
+veth81ec640:ethernet:connected (externally):veth81ec640
+vethd074b4f:ethernet:connected (externally):vethd074b4f
+p2p-dev-wlp195s0:wifi-p2p:disconnected:

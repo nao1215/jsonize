@@ -17,6 +17,9 @@ detect:
     # "tc q"), and the first object in its table that the prefix fits is
     # the one it runs, so each prefix is listed.
     any: ["route", "rout", "rou", "ro", "r"]
+    # `ip route get` prints one route for one address; ip/route-get
+    # reads it.
+    none: ["get"]
   signature:
     all:
       - '\A(?:default|\d+\.\d+\.\d+\.\d+/\d+|\S+/\d+) (?:via|dev|proto) '

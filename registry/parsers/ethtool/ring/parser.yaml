@@ -1,0 +1,62 @@
+# `ethtool -g` (--show-ring) prints the ring buffer sizes of an interface:
+# a title naming it, the maximums the hardware allows and the settings in
+# use, each a list of "Name: value" lines. A size the driver does not
+# report is "n/a" and is null. Which lines appear depends on the driver
+# and the ethtool release, so each block is a map under the names ethtool
+# printed; the sizes known to be counts are numbers, and TX Push, RX Push
+# and TCP data split are the words ethtool printed.
+format: 1
+command: ethtool
+variant: ring
+description: ethtool -g, the ring buffer maximums and settings of an interface
+metadata:
+  tags: [linux, network]
+  compatible: [ethtool]
+  references:
+    - https://man7.org/linux/man-pages/man8/ethtool.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-g", "--show-ring"]
+  signature:
+    all:
+      - '\ARing parameters for \S+:\nPre-set maximums:$'
+parse:
+  type: composite
+  parts:
+    - name: interface
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ARing parameters for (?P<name>\S+):\z'
+    - name: maximums
+      select: {after: '^Pre-set maximums:$', until: '^Current hardware settings:$'}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      fields:
+        RX: {type: int, null_if: ["n/a"]}
+        RX Mini: {type: int, null_if: ["n/a"]}
+        RX Jumbo: {type: int, null_if: ["n/a"]}
+        TX: {type: int, null_if: ["n/a"]}
+        RX Buf Len: {type: int, null_if: ["n/a"]}
+        CQE Size: {type: int, null_if: ["n/a"]}
+        TX push buff len: {type: int, null_if: ["n/a"]}
+        HDS thresh: {type: int, null_if: ["n/a"]}
+    - name: current
+      select: {after: '^Current hardware settings:$'}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      fields:
+        RX: {type: int, null_if: ["n/a"]}
+        RX Mini: {type: int, null_if: ["n/a"]}
+        RX Jumbo: {type: int, null_if: ["n/a"]}
+        TX: {type: int, null_if: ["n/a"]}
+        RX Buf Len: {type: int, null_if: ["n/a"]}
+        CQE Size: {type: int, null_if: ["n/a"]}
+        TX push buff len: {type: int, null_if: ["n/a"]}
+        HDS thresh: {type: int, null_if: ["n/a"]}

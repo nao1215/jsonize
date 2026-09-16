@@ -1,0 +1,40 @@
+[
+  {
+    "destination": "1.1.1.1",
+    "via": "192.0.2.1",
+    "dev": "wlan0",
+    "attributes": [
+      "src",
+      "192.0.2.60",
+      "uid",
+      "1000",
+      "cache"
+    ]
+  },
+  {
+    "type": "local",
+    "destination": "127.0.0.1",
+    "dev": "lo",
+    "attributes": [
+      "src",
+      "127.0.0.1",
+      "uid",
+      "1000",
+      "cache",
+      "<local>"
+    ]
+  },
+  {
+    "type": "broadcast",
+    "destination": "255.255.255.255",
+    "dev": "wlan0",
+    "attributes": [
+      "src",
+      "192.0.2.60",
+      "uid",
+      "1000",
+      "cache",
+      "<local,brd>"
+    ]
+  }
+]
