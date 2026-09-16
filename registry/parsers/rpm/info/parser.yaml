@@ -1,0 +1,79 @@
+# `rpm -qi PACKAGE` prints one block per package: a label padded to
+# twelve columns, a colon and the value on each line, then
+# `Description :` and the description as the package wrote it, to the
+# start of the next block. `rpm -qia` prints the same block for every
+# installed package, one after the other, so both are this format.
+#
+# The labels come in a fixed order, and a label rpm has no value for is
+# either printed as `(none)` or not printed at all, depending on the label
+# and on the version of rpm. Either way the key is null, so every package
+# carries the same keys: Epoch, Relocations, Packager, Vendor, VCS, URL
+# and Bug URL are printed only when the package has them, and
+# `Relocations : (not relocatable)` (rpm 4.14) says what rpm 6 says by
+# leaving the line out. A label this definition does not name is an
+# error, rather than text a neighbouring value quietly takes.
+#
+# rpm 6 prints each OpenPGP signature on a line of its own under
+# `Signature   :`; earlier versions print the one signature beside the
+# label. Both are read as `signatures`, an array of what was printed.
+#
+# The description is the rest of the block, with its blank lines and
+# indentation kept and the blank lines after it left out. openSUSE's rpm
+# prints `Distribution:` after the description; that line is read as the
+# distribution only in a block that also has the `Relocations` line,
+# which is the rpm 4.14 layout SUSE's is. A description whose last line
+# is `Distribution: ` followed by text is read the same way there, since
+# the two are the same text.
+#
+# A description line that is exactly a `Name        : ` label opens a
+# block, the way rpm's own output does, and the block before it then has
+# no Version line and is refused. So is the `package NAME is not
+# installed` line rpm prints on standard output for a name it does not
+# know: it is not a description line.
+#
+# The dates are kept as printed. rpm writes them in the local time of the
+# machine it ran on and names no zone, so no offset can be read from the
+# text.
+format: 1
+command: rpm
+variant: info
+description: rpm -qi / rpm -qia package information blocks
+metadata:
+  tags: [linux, package]
+  compatible: [rpm 4.14, rpm 4.16, rpm 6.0]
+  references:
+    - https://rpm.org/docs/latest/man/rpm.8
+detect:
+  signature:
+    all:
+      - '\AName        : [^\n]+\n(?:Epoch       : \d+\n)?Version     : [^\n]*\nRelease     : [^\n]*\nArchitecture: [^\n]*\nInstall Date: '
+input:
+  skip_blank: false
+parse:
+  type: records
+  # The line rpm prints for a name it does not know opens a block of its
+  # own, which neither pattern reads, so it is refused rather than taken
+  # into the description above it.
+  start: '^(?:Name        : |package \S+ is not installed$)'
+  record:
+    parse:
+      type: regex
+      each: input
+      patterns:
+        # rpm 4.14 (and SUSE's build of it): Relocations always printed,
+        # Distribution after the description on SUSE.
+        - '\AName        : (?P<name>[^\n]+)(?:\nEpoch       : (?P<epoch>[^\n]*))?\nVersion     : (?P<version>[^\n]*)\nRelease     : (?P<release>[^\n]*)\nArchitecture: (?P<architecture>[^\n]*)\nInstall Date: (?P<install_date>[^\n]*)\nGroup       : (?P<group>[^\n]*)\nSize        : (?P<size>[^\n]*)\nLicense     : (?P<license>[^\n]*)\nSignature   :(?:[ ]|\n[ ]{14})(?P<signatures>[^\n]*(?:\n[ ]{14}[^\n]*)*)\nSource RPM  : (?P<source_rpm>[^\n]*)\nBuild Date  : (?P<build_date>[^\n]*)\nBuild Host  : (?P<build_host>[^\n]*)\nRelocations : (?:\(not relocatable\)|(?P<relocations>/[^\n]*?))[ ]*(?:\nPackager    : (?P<packager>[^\n]*))?(?:\nVendor      : (?P<vendor>[^\n]*))?(?:\nVCS         : (?P<vcs>[^\n]*))?(?:\nURL         : (?P<url>[^\n]*))?(?:\nBug URL     : (?P<bug_url>[^\n]*))?\nSummary     : (?P<summary>[^\n]*)\nDescription :\n?(?P<description>(?s:.*?))\n*(?:\nDistribution: (?P<distribution>[^\n]*))?\n*\z'
+        # rpm 4.16 and later: Relocations only for a relocatable package,
+        # nothing after the description.
+        - '\AName        : (?P<name>[^\n]+)(?:\nEpoch       : (?P<epoch>[^\n]*))?\nVersion     : (?P<version>[^\n]*)\nRelease     : (?P<release>[^\n]*)\nArchitecture: (?P<architecture>[^\n]*)\nInstall Date: (?P<install_date>[^\n]*)\nGroup       : (?P<group>[^\n]*)\nSize        : (?P<size>[^\n]*)\nLicense     : (?P<license>[^\n]*)\nSignature   :(?:[ ]|\n[ ]{14})(?P<signatures>[^\n]*(?:\n[ ]{14}[^\n]*)*)\nSource RPM  : (?P<source_rpm>[^\n]*)\nBuild Date  : (?P<build_date>[^\n]*)\nBuild Host  : (?P<build_host>[^\n]*)(?:\nRelocations : (?P<relocations>/[^\n]*?)[ ]*)?(?:\nPackager    : (?P<packager>[^\n]*))?(?:\nVendor      : (?P<vendor>[^\n]*))?(?:\nVCS         : (?P<vcs>[^\n]*))?(?:\nURL         : (?P<url>[^\n]*))?(?:\nBug URL     : (?P<bug_url>[^\n]*))?\nSummary     : (?P<summary>[^\n]*)\nDescription :\n?(?P<description>(?s:.*?))(?P<distribution>)??\n*\z'
+    fields:
+      name: {required: true}
+      epoch: {type: int}
+      version: {required: true}
+      release: {required: true}
+      architecture: {null_if: ["(none)"]}
+      size: {type: int}
+      signatures: {type: array, split: "\n", null_if: ["(none)"]}
+      source_rpm: {null_if: ["(none)"]}
+      relocations: {type: array, split_regex: '[ ]+'}
+      distribution: {null_if: ["(none)"]}

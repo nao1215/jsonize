@@ -190,6 +190,7 @@ the same reading with settings of your own.
 | `resolvectl` | [`per-link`](../schemas/resolvectl/per-link.json), [`status`](../schemas/resolvectl/status.json) |
 | `rfkill` | [`linux`](../schemas/rfkill/linux.json), [`list`](../schemas/rfkill/list.json) |
 | `route` | [`linux`](../schemas/route/linux.json), [`windows`](../schemas/route/windows.json) |
+| `rpm` | [`info`](../schemas/rpm/info.json) |
 | `rsync` | [`itemize`](../schemas/rsync/itemize.json) |
 | `rustc` | [`verbose-version`](../schemas/rustc/verbose-version.json) |
 | `rustup` | [`check`](../schemas/rustup/check.json), [`component-list`](../schemas/rustup/component-list.json), [`target-list`](../schemas/rustup/target-list.json), [`toolchains`](../schemas/rustup/toolchains.json), [`toolchains-verbose`](../schemas/rustup/toolchains-verbose.json) |

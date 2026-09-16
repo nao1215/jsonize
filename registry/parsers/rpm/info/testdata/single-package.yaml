@@ -1,0 +1,4 @@
+description: rpm -qi with one name on Rocky Linux 8 with rpm 4.14.3, which prints Relocations as SUSE's does but no Distribution line.
+source: built and queried as in relocatable-epoch-empty, in the rockylinux/rockylinux:8 container image (rpm 4.14.3), with `LC_ALL=C rpm -qi jz-sample`; the container host name is replaced with buildhost
+os: linux
+args: ["-qi", "jz-sample"]

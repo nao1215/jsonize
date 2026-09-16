@@ -1,0 +1,4 @@
+description: The same two packages on openSUSE Leap 15.6 with rpm 4.14.3, which prints the relocation prefixes with a trailing space, (not relocatable) for the second package, and Distribution (none) after each description, the empty one included.
+source: built and queried as in relocatable-epoch-empty, in the opensuse/leap:15.6 container image (rpm 4.14.3); the container host name is replaced with buildhost
+os: linux
+args: ["-qi", "jz-sample", "jz-empty"]

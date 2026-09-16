@@ -1,0 +1,21 @@
+Name        : jz-sample
+Epoch       : 3
+Version     : 1.2.0
+Release     : 4
+Architecture: noarch
+Install Date: Wed Sep 16 12:22:01 2026
+Group       : Development/Tools
+Size        : 4
+License     : MIT
+Signature   : (none)
+Source RPM  : jz-sample-1.2.0-4.src.rpm
+Build Date  : Wed Sep 16 12:22:00 2026
+Build Host  : buildhost
+Relocations : /opt/jz /etc/jz 
+Summary     : A package whose summary says "quoted": and more
+Description :
+First paragraph: a line with a colon.
+
+  An indented line with "double quotes" and 'single quotes'.
+Version: 9.9 is a word in the description too
+commit 0123456789abcdef0123456789abcdef01234567

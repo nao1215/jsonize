@@ -1,0 +1,72 @@
+Name        : bash
+Version     : 4.4
+Release     : 150400.27.6.1
+Architecture: x86_64
+Install Date: Fri Apr 24 18:48:36 2026
+Group       : System/Shells
+Size        : 1114818
+License     : GPL-3.0-or-later
+Signature   : RSA/SHA256, Mon Oct 13 14:48:16 2025, Key ID 70af9e8139db7c82
+Source RPM  : bash-4.4-150400.27.6.1.src.rpm
+Build Date  : Mon Oct 13 14:47:34 2025
+Build Host  : h04-ch1a
+Relocations : (not relocatable)
+Packager    : https://www.suse.com/
+Vendor      : SUSE LLC <https://www.suse.com/>
+URL         : http://www.gnu.org/software/bash/bash.html
+Summary     : The GNU Bourne-Again Shell
+Description :
+Bash is an sh-compatible command interpreter that executes commands
+read from standard input or from a file.  Bash incorporates useful
+features from the Korn and C shells (ksh and csh).  Bash is intended to
+be a conformant implementation of the IEEE Posix Shell and Tools
+specification (IEEE Working Group 1003.2).
+Distribution: SUSE Linux Enterprise 15
+Name        : gpg-pubkey
+Version     : 25db7ae0
+Release     : 645bae34
+Architecture: (none)
+Install Date: Fri Apr 24 18:48:41 2026
+Group       : Public Keys
+Size        : 0
+License     : pubkey
+Signature   : (none)
+Source RPM  : (none)
+Build Date  : Wed May 10 14:46:12 2023
+Build Host  : localhost
+Relocations : (not relocatable)
+Packager    : openSUSE:Backports OBS Project <openSUSE:Backports@build.opensuse.org>
+Summary     : gpg(openSUSE:Backports OBS Project <openSUSE:Backports@build.opensuse.org>)
+Description :
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: rpm-4.14.3 (NSS-3)
+
+mQINBGRbrjQBEACwmRL/YrGlEi8SWHrg16phvxyM0Lr4BMNmmVVS0EajOVT6sh7O
+eOz772YH115o88Oe6y5sZXhzb2q8xZFl4YNBEbB+/JY2Ep5AHje5aQxOMdS6a3G+
+CmohxuJjGQeY0mRP2G6uokgwqLM2LrJVKgO6zPYkb201vk9T89gj0tLCJOpuAZvy
+eUPNqIiXc2h+hm47rw0ZzpVJttczH7RRTLrpobPs6igIQsK96uZNYriiRaI8XVOL
+N2Oj5xhCkM5ksSeCsbVa3fCG38+I30R/Vd+doqeJ0GFej6fCF/e5nFWM/Q39tLa9
+GNxTLpO1PuNGa+Pk+QimOPwcMhJsR/2fUK1HNTOqJlPbMs4RfdeNvm1HvuiPQOoq
+q+WMIgNc1vbEDOyuLJBtwoZX4U6k7c+1XZimWkJMrgpg2da/WwMJ3Mx6crTe9lz1
+l+lQZuDB35c3zkHDRWeeNpHqTXZFx1jhZt44wprkpiCMMFsc1CNdwJPh+ARAFWD3
+B0q8aCWsNwFhwf/0EOEFJUd8kgC3lEwcArxyAwqxfLnnPq6qdLtS2yNZVnX/uzEU
+k5FWcjPaXFsTgryzK+xKJAQ8VDgb2kqkI7PHbkyWJozMukXz92yZXS5CMqYTfxzs
+uv1L4QHf8UO+9jGhyd9Wfr6ZxbRbsAk0rW5LnPG9V4SaqwPSC1Kl1gh3LwARAQAB
+tEZvcGVuU1VTRTpCYWNrcG9ydHMgT0JTIFByb2plY3QgPG9wZW5TVVNFOkJhY2tw
+b3J0c0BidWlsZC5vcGVuc3VzZS5vcmc+iQJUBBMBCAA+FiEE8ETCxQehJitTiqrd
+iknrAyXbeuAFAmRbrjQCGwMFCQeEzgAFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AA
+CgkQiknrAyXbeuBchRAAobGt3EQ+lnrXNDnh36Y85NfAqUJ5WdhTSa1IauLbK6nH
+kd5i2qaCBteH/fxOaVZYGxPASdjlSyfJxCrrAMp0oAMr+w2sFMmiyREQTMmlIK2f
+61AkoY4iHKmKl0LfjmWZKublQn8C9DZShHxYZgawvsAB06rDRA8tn1W1Pf+7TfvD
+rRZFekWxu/panUaoh4H8nNfuBrxjliSerAsOM1drIdgdfMPMWjSgsNepPoH4ty2W
+yalbiZqztvRSY3/KDN3qoZ60Ba7hhiqod3/7iqYHQPLl5z/kPwcSNtKX1HPyS/BQ
+2nNrgrxjoI7Nzlk/VEhHuaBpxkVcIy2hekTqwhVxtQf1/FsNIxbckVNs3ns3sJbB
+HUEzvr++P+cmIUIzjX9vTxbQZF417p4nQ16F0onXaXKy5xjgEwY2nmIdsKA2i1Lx
+tnHxr6cV4uoYLWDCIkbJksulcenT7yCJCyMJXZoI7ItzsGt+F7tbK5PFtZBUZNrC
+8RgTUWPexEQuTWCx3VhMzh/N0vUxps8QOzuLtUBwSZfb3FxQysO+pB636ge5CNJa
+JycaO8squEGsZIyNhekHyaLEmmXrmjghTQ3t9IXsIM69+AUjzbbq3bi3L+Cv1REP
+BNEont7uB9w9fTjgcR6TkHGhOcQ4EvDC+XLLAa1ySbbRnQvDnxtNPtgzIKNA5Sg=
+=IXOI
+-----END PGP PUBLIC KEY BLOCK-----
+
+Distribution: (none)

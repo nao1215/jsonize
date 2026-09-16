@@ -1,0 +1,16 @@
+Name        : jz-trap
+Version     : 1
+Release     : 1
+Architecture: noarch
+Install Date: Wed Sep 16 12:22:00 2026
+Group       : Unspecified
+Size        : 0
+License     : MIT
+Signature   : (none)
+Source RPM  : jz-trap-1-1.src.rpm
+Build Date  : Wed Sep 16 12:22:00 2026
+Build Host  : buildhost
+Relocations : (not relocatable)
+Summary     : A description that repeats the first label
+Description :
+Name        : this line opens no package

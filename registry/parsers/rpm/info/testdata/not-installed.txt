@@ -1,0 +1,22 @@
+Name        : bash
+Version     : 5.1.8
+Release     : 9.el9
+Architecture: x86_64
+Install Date: Mon May 25 20:18:51 2026
+Group       : Unspecified
+Size        : 7738730
+License     : GPLv3+
+Signature   : RSA/SHA256, Tue Apr 30 11:39:22 2024, Key ID 702d426d350d275d
+Source RPM  : bash-5.1.8-9.el9.src.rpm
+Build Date  : Tue Apr 30 11:29:27 2024
+Build Host  : pb-ade73b9a-348e-467f-bdbf-5a2743b41fe8-b-x86-64
+Packager    : Rocky Linux Build System (Peridot) <releng@rockylinux.org>
+Vendor      : Rocky Enterprise Software Foundation
+URL         : https://www.gnu.org/software/bash
+Summary     : The GNU Bourne Again shell
+Description :
+The GNU Bourne Again shell (Bash) is a shell or command language
+interpreter that is compatible with the Bourne shell (sh). Bash
+incorporates useful features from the Korn shell (ksh) and the C shell
+(csh). Most sh scripts can be run by bash without modification.
+package coreutils is not installed

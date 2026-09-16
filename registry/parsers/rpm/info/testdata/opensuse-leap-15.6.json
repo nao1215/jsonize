@@ -1,0 +1,52 @@
+[
+  {
+    "name": "bash",
+    "epoch": null,
+    "version": "4.4",
+    "release": "150400.27.6.1",
+    "architecture": "x86_64",
+    "install_date": "Fri Apr 24 18:48:36 2026",
+    "group": "System/Shells",
+    "size": 1114818,
+    "license": "GPL-3.0-or-later",
+    "signatures": [
+      "RSA/SHA256, Mon Oct 13 14:48:16 2025, Key ID 70af9e8139db7c82"
+    ],
+    "source_rpm": "bash-4.4-150400.27.6.1.src.rpm",
+    "build_date": "Mon Oct 13 14:47:34 2025",
+    "build_host": "h04-ch1a",
+    "relocations": null,
+    "packager": "https://www.suse.com/",
+    "vendor": "SUSE LLC <https://www.suse.com/>",
+    "vcs": null,
+    "url": "http://www.gnu.org/software/bash/bash.html",
+    "bug_url": null,
+    "summary": "The GNU Bourne-Again Shell",
+    "description": "Bash is an sh-compatible command interpreter that executes commands\nread from standard input or from a file.  Bash incorporates useful\nfeatures from the Korn and C shells (ksh and csh).  Bash is intended to\nbe a conformant implementation of the IEEE Posix Shell and Tools\nspecification (IEEE Working Group 1003.2).",
+    "distribution": "SUSE Linux Enterprise 15"
+  },
+  {
+    "name": "gpg-pubkey",
+    "epoch": null,
+    "version": "25db7ae0",
+    "release": "645bae34",
+    "architecture": null,
+    "install_date": "Fri Apr 24 18:48:41 2026",
+    "group": "Public Keys",
+    "size": 0,
+    "license": "pubkey",
+    "signatures": null,
+    "source_rpm": null,
+    "build_date": "Wed May 10 14:46:12 2023",
+    "build_host": "localhost",
+    "relocations": null,
+    "packager": "openSUSE:Backports OBS Project <openSUSE:Backports@build.opensuse.org>",
+    "vendor": null,
+    "vcs": null,
+    "url": null,
+    "bug_url": null,
+    "summary": "gpg(openSUSE:Backports OBS Project <openSUSE:Backports@build.opensuse.org>)",
+    "description": "-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: rpm-4.14.3 (NSS-3)\n\nmQINBGRbrjQBEACwmRL/YrGlEi8SWHrg16phvxyM0Lr4BMNmmVVS0EajOVT6sh7O\neOz772YH115o88Oe6y5sZXhzb2q8xZFl4YNBEbB+/JY2Ep5AHje5aQxOMdS6a3G+\nCmohxuJjGQeY0mRP2G6uokgwqLM2LrJVKgO6zPYkb201vk9T89gj0tLCJOpuAZvy\neUPNqIiXc2h+hm47rw0ZzpVJttczH7RRTLrpobPs6igIQsK96uZNYriiRaI8XVOL\nN2Oj5xhCkM5ksSeCsbVa3fCG38+I30R/Vd+doqeJ0GFej6fCF/e5nFWM/Q39tLa9\nGNxTLpO1PuNGa+Pk+QimOPwcMhJsR/2fUK1HNTOqJlPbMs4RfdeNvm1HvuiPQOoq\nq+WMIgNc1vbEDOyuLJBtwoZX4U6k7c+1XZimWkJMrgpg2da/WwMJ3Mx6crTe9lz1\nl+lQZuDB35c3zkHDRWeeNpHqTXZFx1jhZt44wprkpiCMMFsc1CNdwJPh+ARAFWD3\nB0q8aCWsNwFhwf/0EOEFJUd8kgC3lEwcArxyAwqxfLnnPq6qdLtS2yNZVnX/uzEU\nk5FWcjPaXFsTgryzK+xKJAQ8VDgb2kqkI7PHbkyWJozMukXz92yZXS5CMqYTfxzs\nuv1L4QHf8UO+9jGhyd9Wfr6ZxbRbsAk0rW5LnPG9V4SaqwPSC1Kl1gh3LwARAQAB\ntEZvcGVuU1VTRTpCYWNrcG9ydHMgT0JTIFByb2plY3QgPG9wZW5TVVNFOkJhY2tw\nb3J0c0BidWlsZC5vcGVuc3VzZS5vcmc+iQJUBBMBCAA+FiEE8ETCxQehJitTiqrd\niknrAyXbeuAFAmRbrjQCGwMFCQeEzgAFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AA\nCgkQiknrAyXbeuBchRAAobGt3EQ+lnrXNDnh36Y85NfAqUJ5WdhTSa1IauLbK6nH\nkd5i2qaCBteH/fxOaVZYGxPASdjlSyfJxCrrAMp0oAMr+w2sFMmiyREQTMmlIK2f\n61AkoY4iHKmKl0LfjmWZKublQn8C9DZShHxYZgawvsAB06rDRA8tn1W1Pf+7TfvD\nrRZFekWxu/panUaoh4H8nNfuBrxjliSerAsOM1drIdgdfMPMWjSgsNepPoH4ty2W\nyalbiZqztvRSY3/KDN3qoZ60Ba7hhiqod3/7iqYHQPLl5z/kPwcSNtKX1HPyS/BQ\n2nNrgrxjoI7Nzlk/VEhHuaBpxkVcIy2hekTqwhVxtQf1/FsNIxbckVNs3ns3sJbB\nHUEzvr++P+cmIUIzjX9vTxbQZF417p4nQ16F0onXaXKy5xjgEwY2nmIdsKA2i1Lx\ntnHxr6cV4uoYLWDCIkbJksulcenT7yCJCyMJXZoI7ItzsGt+F7tbK5PFtZBUZNrC\n8RgTUWPexEQuTWCx3VhMzh/N0vUxps8QOzuLtUBwSZfb3FxQysO+pB636ge5CNJa\nJycaO8squEGsZIyNhekHyaLEmmXrmjghTQ3t9IXsIM69+AUjzbbq3bi3L+Cv1REP\nBNEont7uB9w9fTjgcR6TkHGhOcQ4EvDC+XLLAa1ySbbRnQvDnxtNPtgzIKNA5Sg=\n=IXOI\n-----END PGP PUBLIC KEY BLOCK-----",
+    "distribution": null
+  }
+]

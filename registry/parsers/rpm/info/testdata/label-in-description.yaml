@@ -1,0 +1,4 @@
+description: >-
+  A package whose description is the line `Name        : this line opens no package`. rpm prints it as it is, so it reads as the start of a block that has no Version line, and the output is refused rather than split into two packages.
+source: a package built for this fixture with rpmbuild in the rockylinux/rockylinux:8 container image (rpm 4.14.3), then `LC_ALL=C rpm -qi jz-trap`; the container host name is replaced with buildhost
+expect_error: 'input does not match'
