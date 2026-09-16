@@ -142,6 +142,11 @@ than choosing.
 | `netstat`, `-a`, `-t`, `-u`, `-x`, `-w`, `-l`, `-n`, `-e` | read | `netstat/all-sockets`, `netstat/internet`, `netstat/unix` |
 | `netstat -r`, `netstat -rn` | read | `netstat/routing` |
 | `netstat -e -r` | read | `route/linux`, which is the table those columns are |
+| `route`, `route -n` | read | `route/linux`; a rejecting route's missing counts are `null` and its gateway and interface stay `-` |
+| `route -e` | read | `netstat/routing`, the table `netstat -r` prints |
+| `route -ee` | read | `route/linux-extended` |
+| `route -A inet6`, `route -6` | read | `route/linux-inet6` |
+| `route -C` | refused | the IPv4 routing cache is gone from current kernels, so the table has a header and no rows to write a definition against |
 | `netstat -i` | read | `netstat/interface` |
 | `netstat -s` | refused | which counters appear, in which order and at which indent comes from the kernel and the net-tools build; there is no capture here to write it against |
 | `netstat` on Windows | refused | no definition; no vendor-published text sample was found to write one against, only screenshots |
