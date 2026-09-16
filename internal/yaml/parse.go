@@ -568,6 +568,10 @@ func (p *parser) explicitKey(off int) (*Node, int, error) {
 		}
 	case '[', '{', '\n', '#':
 		return nil, 0, p.errorf(start, "a key written after \"? \" is one scalar")
+	case '&', '*', '!':
+		return nil, 0, p.errorf(start, "anchors, aliases and tags are not supported")
+	case '|', '>':
+		return nil, 0, p.errorf(start, "a key written after \"? \" is one line")
 	default:
 		text, end = p.plainLine(start)
 	}
@@ -1146,6 +1150,16 @@ func (p *parser) flowScalar(off int) (*Node, int, error) {
 		}
 		n.Value = text
 		return n, next, nil
+	}
+	switch p.src[off] {
+	case '&', '*', '!':
+		return nil, 0, p.errorf(off, "anchors, aliases and tags are not supported")
+	case '@', '`':
+		return nil, 0, p.errorf(off, "%q cannot start a value", p.src[off])
+	case '?':
+		if p.separates(off + 1) {
+			return nil, 0, p.errorf(off, "an explicit key (\"? \") inside a flow collection is not supported")
+		}
 	}
 	var b strings.Builder
 	i := off
