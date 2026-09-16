@@ -10,7 +10,6 @@ import (
 
 	"github.com/nao1215/jsonize/internal/recordio"
 	"github.com/nao1215/jsonize/internal/runner"
-	"github.com/nao1215/jsonize/pkg/convert"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/registry"
@@ -65,10 +64,7 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		if !errors.As(err, &pe) {
 			err = fmt.Errorf("reading input: %w", err)
 		}
-		code := a.exitFor(err)
-		exp.fail(err, code)
-		a.explainWrite(exp)
-		return code
+		return a.failed(exp, err, a.exitFor(err))
 	}
 	if len(head) == 0 && knownProducer {
 		// jz started the command, so it knows what the format was meant
@@ -86,30 +82,33 @@ func (a *app) stream(reg *registry.Registry, r io.Reader, ctx selector.Context, 
 		chosen, err = selector.Select(reg, ctx)
 	}
 	if err != nil {
-		code := a.exitFor(err)
-		exp.fail(err, code)
-		a.explainWrite(exp)
-		return code
+		return a.failed(exp, err, a.exitFor(err))
 	}
 	exp.chose(chosen)
 	a.explainWrite(exp)
-	def := a.reading(chosen.Entry.Def)
-	// A key the format does not produce is a usage error, the same as it
-	// is for a whole document, so it is kept apart from a parse failure.
-	// One the definition does not name is refused before a record is
-	// written; one the input decides is judged when the stream ends.
+	return a.streamRecords(a.reading(chosen.Entry.Def), io.MultiReader(bytes.NewReader(head), br), out, filter)
+}
+
+// streamRecords hands the records of one definition to standard output as
+// they are read.
+//
+// A key the format does not produce is a usage error, the same as it is
+// for a whole document, so it is kept apart from a parse failure. One the
+// definition does not name is refused before a record is written; one the
+// input decides is judged when the stream ends.
+//
+// A stream has no total size to bound: the line limit bounds a record
+// that never ends, and the input limit bounds what is held while a record
+// waits for its end.
+func (a *app) streamRecords(def *definition.Definition, r io.Reader, out *outputOptions, filter *keyFilter) int {
 	if err := filter.know(def); err != nil {
 		a.errorf("%v", err)
 		return ExitUsage
 	}
 	emit := filter.streamEmit(out.recordWriter(a.env.Stdout), def)
-	// A stream has no total size to bound; the line limit bounds a
-	// record that never ends, and the input limit bounds what is held
-	// while a record waits for its end.
 	eopts := out.engineOptions()
 	eopts.MaxInputSize = 0
-	err = engine.Stream(def, io.MultiReader(bytes.NewReader(head), br), eopts, emit)
-	return a.streamEnd(err, filter)
+	return a.streamEnd(engine.Stream(def, r, eopts, emit), filter)
 }
 
 // streamEnd settles what a stream returns once its input has ended or a
@@ -144,15 +143,7 @@ func (a *app) streamWith(def *definition.Definition, r io.Reader, out *outputOpt
 		a.errorf("%v", err)
 		return ExitUsage
 	}
-	if err := filter.know(def); err != nil {
-		a.errorf("%v", err)
-		return ExitUsage
-	}
-	emit := filter.streamEmit(out.recordWriter(a.env.Stdout), def)
-	eopts := out.engineOptions()
-	eopts.MaxInputSize = 0
-	err = engine.Stream(def, r, eopts, emit)
-	return a.streamEnd(err, filter)
+	return a.streamRecords(def, r, out, filter)
 }
 
 // emptyFormats settles what a command that succeeded without printing
@@ -179,7 +170,7 @@ func (a *app) emptyFormats(reg *registry.Registry, ctx selector.Context, stream 
 		code = ExitSelect
 	}
 	if err != nil {
-		exp.fail(err, code)
+		return a.failed(exp, err, code)
 	}
 	a.explainWrite(exp)
 	return code
@@ -271,7 +262,7 @@ func readHead(br *bufio.Reader, n int, sep byte, maxLen int, settled func([]byte
 			break
 		}
 		num++
-		if sep == '\n' && !text && blankHead(rec, num == 1) {
+		if sep == '\n' && !text && recordio.Blank(rec, num == 1) {
 			continue
 		}
 		text = true
@@ -281,17 +272,6 @@ func readHead(br *bufio.Reader, n int, sep byte, maxLen int, settled func([]byte
 		}
 	}
 	return out, nil
-}
-
-// blankHead reports a line before the text: nothing on it once the
-// escape sequences and, on the first line, the byte order mark are off,
-// which is how the selector reads it.
-func blankHead(line []byte, first bool) bool {
-	line = convert.StripANSI(line)
-	if first {
-		line = bytes.TrimPrefix(line, []byte{0xEF, 0xBB, 0xBF})
-	}
-	return len(bytes.TrimSpace(line)) == 0
 }
 
 // syncWriter serialises writes to one destination. In streaming exec mode

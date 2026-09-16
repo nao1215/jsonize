@@ -99,22 +99,9 @@ func (a *app) cmdRun(args []string) int {
 		a.errorf("%v", err)
 		return ExitUsage
 	}
-	if err := sel.check(); err != nil {
-		a.errorf("%v", err)
-		return ExitUsage
-	}
-	if err := out.check(); err != nil {
-		a.errorf("%v", err)
-		return ExitUsage
-	}
-	if err := checkReading(&out, &sel); err != nil {
-		a.errorf("%v", err)
-		return ExitUsage
-	}
-	inline, hasInline, err := sel.definition()
-	if err != nil {
-		a.errorf("%v", err)
-		return ExitRegistry
+	inline, hasInline, code := a.settle(&out, &sel)
+	if code != ExitOK {
+		return code
 	}
 	name, cmdArgs := rest[0], rest[1:]
 	// The command name is the parser unless the user says otherwise,
@@ -128,10 +115,7 @@ func (a *app) cmdRun(args []string) int {
 	// Nothing is executed until jz knows it can parse the result. A
 	// definition given on the command line is that knowledge already,
 	// and the registries are then not read at all.
-	var (
-		reg  *registry.Registry
-		code int
-	)
+	var reg *registry.Registry
 	if !hasInline {
 		if reg, code = a.runRegistry(&sel, parser, args[:len(args)-len(rest)], rest); code != ExitOK {
 			return code
@@ -180,13 +164,9 @@ func (a *app) cmdRun(args []string) int {
 	if out.stream {
 		return a.runStream(ctx, reg, command, sctx, &out, timeout, exp)
 	}
-	res, err := runner.Run(ctx, command, a.env.Stderr)
-	if err != nil {
-		a.errorf("%v", err)
-		if errors.Is(err, runner.ErrOutputTooLarge) {
-			return ExitParse
-		}
-		return ExitError
+	res, code := a.runChild(ctx, command)
+	if code != ExitOK {
+		return code
 	}
 	return a.readRun(ctx, reg, sctx, &out, exp, command, res, timeout)
 }
@@ -221,29 +201,38 @@ func (a *app) readRun(ctx context.Context, reg *registry.Registry, sctx selector
 	sctx.Input = res.Stdout
 	chosen, err := selector.Select(reg, sctx)
 	if err != nil {
-		code := a.failedRun(err, res.ExitCode)
-		exp.fail(err, code)
-		a.explainWrite(exp)
-		return code
+		return a.failed(exp, err, a.failedRun(err, res.ExitCode))
 	}
 	exp.chose(chosen)
 	data, acct, err := engine.ParseAccounted(a.reading(chosen.Entry.Def), res.Stdout, out.engineOptions())
 	if err != nil {
-		code := a.failedRun(err, res.ExitCode)
-		exp.fail(err, code)
-		a.explainWrite(exp)
-		return code
+		return a.failed(exp, err, a.failedRun(err, res.ExitCode))
 	}
 	exp.read(acct)
-	a.explainWrite(exp)
-	narrowed, code := a.narrow(data, out, a.reading(chosen.Entry.Def))
-	if code != ExitOK {
+	// The command's own status is what jz returns once the output has
+	// been written: jz read it, so the interesting number is the
+	// command's.
+	if code := a.writeDocument(exp, data, out, a.reading(chosen.Entry.Def)); code != ExitOK {
 		return code
 	}
-	if err := out.write(a.env.Stdout, narrowed); err != nil {
-		return a.writeFailed(err)
-	}
 	return res.ExitCode
+}
+
+// runChild runs the command and collects what it printed. A command that
+// could not be started or that printed past the input limit is reported
+// here; the limit is a parse failure, since the output jz would have read
+// is what was too large. The int result is ExitOK when the command ran,
+// whatever status it ended with.
+func (a *app) runChild(ctx context.Context, cmd runner.Command) (*runner.Result, int) {
+	res, err := runner.Run(ctx, cmd, a.env.Stderr)
+	if err != nil {
+		a.errorf("%v", err)
+		if errors.Is(err, runner.ErrOutputTooLarge) {
+			return nil, ExitParse
+		}
+		return nil, ExitError
+	}
+	return res, ExitOK
 }
 
 // runRegistry loads the registries for jz run and checks that the
@@ -287,11 +276,22 @@ var errStreamFailed = errors.New("streaming failed")
 // pipe and converted as it arrives, instead of being collected first.
 // The child's status is mirrored the way it is without --stream.
 func (a *app) runStream(ctx context.Context, reg *registry.Registry, cmd runner.Command, sctx selector.Context, out *outputOptions, timeout time.Duration, exp *explanation) int {
+	return a.streamingChild(ctx, cmd, timeout, exp, func(r io.Reader) int {
+		return a.stream(reg, r, sctx, nil, out, true, exp)
+	})
+}
+
+// streamingChild runs cmd with its output going to convert as it
+// arrives. The child writes its own standard error through the writer jz
+// shares with it, a failure in the conversion stops the child rather than
+// being reported when it ends, and the status is settled by streamStatus
+// either way.
+func (a *app) streamingChild(ctx context.Context, cmd runner.Command, timeout time.Duration, exp *explanation, convert func(io.Reader) int) int {
 	childStderr := a.shareStderr()
 	defer a.restoreStderr(childStderr)
 	code := ExitOK
 	res, err := runner.Stream(ctx, cmd, childStderr, func(r io.Reader) error {
-		if code = a.stream(reg, r, sctx, nil, out, true, exp); code != ExitOK {
+		if code = convert(r); code != ExitOK {
 			return errStreamFailed
 		}
 		return nil
@@ -504,28 +504,13 @@ func variantNames(entries []*registry.Entry) []string {
 // producer, so the command's status is mirrored the way it always is.
 func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runner.Command, out *outputOptions, timeout time.Duration, exp *explanation) int {
 	if out.stream {
-		childStderr := a.shareStderr()
-		defer a.restoreStderr(childStderr)
-		code := ExitOK
-		res, err := runner.Stream(ctx, cmd, childStderr, func(r io.Reader) error {
-			if code = a.convertWith(def, r, out, exp); code != ExitOK {
-				return errStreamFailed
-			}
-			return nil
+		return a.streamingChild(ctx, cmd, timeout, exp, func(r io.Reader) int {
+			return a.convertWith(def, r, out, exp)
 		})
-		if err != nil && !errors.Is(err, errStreamFailed) {
-			a.errorf("%v", err)
-			return ExitError
-		}
-		return a.streamStatus(ctx, cmd, res, code, timeout, exp)
 	}
-	res, err := runner.Run(ctx, cmd, a.env.Stderr)
-	if err != nil {
-		a.errorf("%v", err)
-		if errors.Is(err, runner.ErrOutputTooLarge) {
-			return ExitParse
-		}
-		return ExitError
+	res, code := a.runChild(ctx, cmd)
+	if code != ExitOK {
+		return code
 	}
 	a.reportChild(ctx, cmd.Name, res, timeout)
 	exp.ran(cmd.Name, cmd.Args, res.ExitCode)
@@ -534,7 +519,7 @@ func (a *app) runWith(ctx context.Context, def *definition.Definition, cmd runne
 		a.explainWrite(exp)
 		return res.ExitCode
 	}
-	code := a.convertWith(def, bytes.NewReader(res.Stdout), out, exp)
+	code = a.convertWith(def, bytes.NewReader(res.Stdout), out, exp)
 	if res.ExitCode != 0 {
 		return res.ExitCode
 	}

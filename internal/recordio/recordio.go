@@ -5,7 +5,10 @@ package recordio
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
+
+	"github.com/nao1215/jsonize/pkg/convert"
 )
 
 // ErrTooLong reports a record longer than the limit it was read under.
@@ -41,4 +44,17 @@ func Read(br *bufio.Reader, sep byte, maxLen int) ([]byte, error) {
 		}
 		return out, err
 	}
+}
+
+// Blank reports a line before the text of an input: nothing on it once
+// the escape sequences and, on the first line, the byte order mark are
+// off, which is how the selector reads it. The lines a format is
+// identified by and the lines a stream holds back have to agree about
+// which of them say nothing, so both ask here.
+func Blank(line []byte, first bool) bool {
+	line = convert.StripANSI(line)
+	if first {
+		line = bytes.TrimPrefix(line, []byte{0xEF, 0xBB, 0xBF})
+	}
+	return len(bytes.TrimSpace(line)) == 0
 }
