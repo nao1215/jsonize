@@ -1,0 +1,18 @@
+[
+  {
+    "destination": "2001:4860:4860::8888",
+    "from": "::",
+    "via": "fe80::1",
+    "dev": "eno1",
+    "attributes": [
+      "proto",
+      "ra",
+      "src",
+      "fd00:db8::1",
+      "metric",
+      "20100",
+      "pref",
+      "medium"
+    ]
+  }
+]

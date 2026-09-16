@@ -1,0 +1,6 @@
+1.1.1.1 via 192.0.2.1 dev wlan0 src 192.0.2.60 uid 1000 
+    cache 
+local 127.0.0.1 dev lo src 127.0.0.1 uid 1000 
+    cache <local> 
+broadcast 255.255.255.255 dev wlan0 src 192.0.2.60 uid 1000 
+    cache <local,brd> 

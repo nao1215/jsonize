@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/ip/route-get.json",
+  "title": "ip/route-get",
+  "description": "ip route get, the route the kernel chooses for an address",
+  "x-jsonize": {
+    "definition": "ip/route-get",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "type": {
+        "type": "string",
+        "enum": [
+          "anycast",
+          "broadcast",
+          "local",
+          "multicast",
+          "unicast"
+        ]
+      },
+      "destination": {
+        "type": "string"
+      },
+      "from": {
+        "type": "string"
+      },
+      "via": {
+        "type": "string"
+      },
+      "dev": {
+        "type": "string"
+      },
+      "attributes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "destination",
+      "dev",
+      "attributes"
+    ]
+  }
+}

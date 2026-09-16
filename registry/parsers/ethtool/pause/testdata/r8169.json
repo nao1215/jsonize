@@ -1,0 +1,12 @@
+{
+  "interface": {
+    "name": "eno1"
+  },
+  "settings": {
+    "Autonegotiate": true,
+    "RX": true,
+    "TX": true,
+    "RX negotiated": true,
+    "TX negotiated": true
+  }
+}

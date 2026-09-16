@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/hostname/all-addresses.json",
+  "title": "hostname/all-addresses",
+  "description": "hostname -I, the addresses of the host",
+  "x-jsonize": {
+    "definition": "hostname/all-addresses",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "addresses": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "addresses"
+  ]
+}

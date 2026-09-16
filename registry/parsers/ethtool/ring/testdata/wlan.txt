@@ -1,0 +1,20 @@
+Ring parameters for wlp195s0:
+Pre-set maximums:
+RX:			n/a
+RX Mini:		n/a
+RX Jumbo:		n/a
+TX:			n/a
+TX push buff len:	n/a
+HDS thresh:		n/a
+Current hardware settings:
+RX:			n/a
+RX Mini:		n/a
+RX Jumbo:		n/a
+TX:			n/a
+RX Buf Len:		n/a
+CQE Size:		n/a
+TX Push:		off
+RX Push:		off
+TX push buff len:	n/a
+TCP data split:		n/a
+HDS thresh:		n/a

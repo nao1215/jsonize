@@ -1,0 +1,26 @@
+{
+  "interface": {
+    "name": "wlp195s0"
+  },
+  "maximums": {
+    "RX": null,
+    "RX Mini": null,
+    "RX Jumbo": null,
+    "TX": null,
+    "TX push buff len": null,
+    "HDS thresh": null
+  },
+  "current": {
+    "RX": null,
+    "RX Mini": null,
+    "RX Jumbo": null,
+    "TX": null,
+    "RX Buf Len": null,
+    "CQE Size": null,
+    "TX Push": "off",
+    "RX Push": "off",
+    "TX push buff len": null,
+    "TCP data split": "n/a",
+    "HDS thresh": null
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/iw/reg-get.json",
+  "title": "iw/reg-get",
+  "description": "iw reg get, the regulatory domain and its frequency rules",
+  "x-jsonize": {
+    "definition": "iw/reg-get",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "scope": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "country": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "dfs_region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "dfs_region"
+        ]
+      },
+      "rules": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "start_mhz": {
+              "type": "integer"
+            },
+            "end_mhz": {
+              "type": "integer"
+            },
+            "max_bandwidth_mhz": {
+              "type": "integer"
+            },
+            "max_antenna_gain_dbi": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "max_eirp_dbm": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "dfs_cac": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "flags": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "start_mhz",
+            "end_mhz",
+            "max_bandwidth_mhz",
+            "max_antenna_gain_dbi",
+            "max_eirp_dbm",
+            "dfs_cac",
+            "flags"
+          ]
+        }
+      }
+    },
+    "required": [
+      "scope",
+      "country",
+      "rules"
+    ]
+  }
+}

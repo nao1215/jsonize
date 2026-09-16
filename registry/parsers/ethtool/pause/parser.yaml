@@ -1,0 +1,41 @@
+# `ethtool -a` (--show-pause) prints the pause frame settings of an
+# interface: a title naming it and "Name: value" lines, on or off. With
+# autonegotiation on, the two negotiated lines say what the link partner
+# agreed to. The values are booleans under the names ethtool printed.
+format: 1
+command: ethtool
+variant: pause
+description: ethtool -a, the pause frame settings of an interface
+metadata:
+  tags: [linux, network]
+  compatible: [ethtool]
+  references:
+    - https://man7.org/linux/man-pages/man8/ethtool.8.html
+detect:
+  os: [linux]
+  args:
+    any: ["-a", "--show-pause"]
+  signature:
+    all:
+      - '\APause parameters for \S+:\nAutonegotiate:[ \t]+(?:on|off)$'
+parse:
+  type: composite
+  parts:
+    - name: interface
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\APause parameters for (?P<name>\S+):\z'
+    - name: settings
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: ":"
+        as: map
+      fields:
+        Autonegotiate: {type: bool}
+        RX: {type: bool}
+        TX: {type: bool}
+        RX negotiated: {type: bool}
+        TX negotiated: {type: bool}

@@ -1,0 +1,26 @@
+{
+  "interface": {
+    "name": "eno1"
+  },
+  "maximums": {
+    "RX": 256,
+    "RX Mini": null,
+    "RX Jumbo": null,
+    "TX": 256,
+    "TX push buff len": null,
+    "HDS thresh": null
+  },
+  "current": {
+    "RX": 256,
+    "RX Mini": null,
+    "RX Jumbo": null,
+    "TX": 256,
+    "RX Buf Len": null,
+    "CQE Size": null,
+    "TX Push": "off",
+    "RX Push": "off",
+    "TX push buff len": null,
+    "TCP data split": "n/a",
+    "HDS thresh": null
+  }
+}

@@ -1,0 +1,4 @@
+source: ethtool -g on a wireless interface, captured on Ubuntu 26.04 (ethtool 6.19, driver mt7925e) with LC_ALL=C
+description: a driver that reports no sizes
+os: linux
+args: ["-g", "wlp195s0"]

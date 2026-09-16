@@ -1,0 +1,54 @@
+# `iw reg get` prints the wireless regulatory domain the kernel applies:
+# a block for the global setting and one for each wireless device that
+# has its own (phy#0), each with the country and its DFS region and then
+# one rule per frequency range. A rule is the range and the largest
+# channel width in MHz, the largest antenna gain and transmit power in
+# dBi and dBm (N/A where the rule sets none), the time a channel has to be
+# watched for radar before use (N/A, or "0 ms"), and the flags that apply
+# (NO-OFDM, DFS, AUTO-BW, NO-OUTDOOR, ...).
+format: 1
+command: iw
+variant: reg-get
+description: iw reg get, the regulatory domain and its frequency rules
+metadata:
+  tags: [linux, network, wireless]
+  compatible: [iw]
+  references:
+    - https://wireless.docs.kernel.org/en/latest/en/users/documentation/iw.html
+detect:
+  os: [linux]
+  args:
+    all: [reg]
+    any: [get]
+  signature:
+    all:
+      - '\A(?:global|phy#[0-9]+)\ncountry [A-Z0-9]{2}: \S+\n\t\([0-9]+ - [0-9]+ @ [0-9]+\), '
+parse:
+  type: records
+  start: '^(?:global|phy#[0-9]+)$'
+  parts:
+    - name: scope
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A(?P<name>global|phy#[0-9]+)\z'
+    - name: country
+      select: {skip: 1, limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\Acountry (?P<code>[A-Z0-9]{2}): (?P<dfs_region>\S+)\z'
+    - name: rules
+      select: {skip: 2}
+      parse:
+        type: regex
+        pattern: '^\t\((?P<start_mhz>[0-9]+) - (?P<end_mhz>[0-9]+) @ (?P<max_bandwidth_mhz>[0-9]+)\), \((?P<max_antenna_gain_dbi>N/A|[0-9.]+), (?P<max_eirp_dbm>N/A|[0-9.]+)\), \((?P<dfs_cac>N/A|[0-9]+ ms)\)(?:, (?P<flags>.+))?$'
+      fields:
+        start_mhz: {type: int}
+        end_mhz: {type: int}
+        max_bandwidth_mhz: {type: int}
+        max_antenna_gain_dbi: {type: float, null_if: ["N/A"]}
+        max_eirp_dbm: {type: float, null_if: ["N/A"]}
+        dfs_cac: {null_if: ["N/A"]}
+        flags: {type: array, split: ", "}

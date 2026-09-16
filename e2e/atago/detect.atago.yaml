@@ -1918,3 +1918,42 @@ scenarios:
             json:
               - { path: "$", length: 3 }
               - { path: "$[0].reads", gte: 0 }
+
+  - name: ethtool -g, ip route get and iw reg get read network settings
+    steps:
+      - fixture:
+          file: ring.txt
+          from: "${specdir}/../../registry/parsers/ethtool/ring/testdata/r8169.txt"
+      - run:
+          command: jz
+          stdin: {file: ring.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.maximums.RX", equals: 256 }
+              - { path: "$.current['RX Mini']", equals: null }
+      - fixture:
+          file: route-get.txt
+          from: "${specdir}/../../registry/parsers/ip/route-get/testdata/ipv4.txt"
+      - run:
+          command: jz --parser ip --variant route-get
+          stdin: {file: route-get.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].via", equals: 192.0.2.1 }
+              - { path: "$[1].type", equals: local }
+      - fixture:
+          file: reg.txt
+          from: "${specdir}/../../registry/parsers/iw/reg-get/testdata/jp.txt"
+      - run:
+          command: jz
+          stdin: {file: reg.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].scope.name", equals: "phy#0" }
+              - { path: "$[0].rules[4].flags[0]", equals: DFS }
