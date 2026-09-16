@@ -1,0 +1,26 @@
+[
+  {
+    "res": 5001216,
+    "pages": 1221,
+    "size": 5000000,
+    "file": "data.bin"
+  },
+  {
+    "res": 106496,
+    "pages": 26,
+    "size": 10485760,
+    "file": "sparse.bin"
+  },
+  {
+    "res": 0,
+    "pages": 0,
+    "size": 0,
+    "file": "empty.bin"
+  },
+  {
+    "res": 20480,
+    "pages": 5,
+    "size": 20000,
+    "file": "dir with space/my file.bin"
+  }
+]

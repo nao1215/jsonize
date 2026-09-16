@@ -1,0 +1,37 @@
+[
+  {
+    "device": "fat.img",
+    "bytes": 8,
+    "offset": "0x00000036",
+    "type": "vfat",
+    "erased": [
+      "46",
+      "41",
+      "54",
+      "31",
+      "36",
+      "20",
+      "20",
+      "20"
+    ]
+  },
+  {
+    "device": "fat.img",
+    "bytes": 1,
+    "offset": "0x00000000",
+    "type": "vfat",
+    "erased": [
+      "eb"
+    ]
+  },
+  {
+    "device": "fat.img",
+    "bytes": 2,
+    "offset": "0x000001fe",
+    "type": "vfat",
+    "erased": [
+      "55",
+      "aa"
+    ]
+  }
+]

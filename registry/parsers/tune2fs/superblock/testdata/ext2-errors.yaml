@@ -1,0 +1,4 @@
+description: An ext2 file system with no label and no journal, with the error, mount and last-mounted fields set.
+source: tune2fs -l on the image of dumpe2fs/superblock ext2-errors (mkfs.ext2, then debugfs -w set_super_value), e2fsprogs 1.47.2 on Ubuntu 26.04 with LC_ALL=C; UUID and hash seed replaced
+os: linux
+args: [-l, ext2.img]

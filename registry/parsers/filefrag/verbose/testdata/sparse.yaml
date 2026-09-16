@@ -1,0 +1,4 @@
+description: Two files on one file system, so the type line is printed once; the sparse file has an expected column and an extent with no flags.
+source: filefrag -v data.bin sparse.bin on ext4, data.bin 5000000 random bytes and sparse.bin a 10 MiB file written at two offsets with dd, e2fsprogs 1.47.2 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [-v, data.bin, sparse.bin]

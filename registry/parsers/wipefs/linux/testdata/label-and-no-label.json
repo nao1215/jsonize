@@ -1,0 +1,37 @@
+[
+  {
+    "device": "fat.img",
+    "offset": "0x36",
+    "type": "vfat",
+    "uuid": "1234-ABCD",
+    "label": "MY DISK"
+  },
+  {
+    "device": "fat.img",
+    "offset": "0x0",
+    "type": "vfat",
+    "uuid": "1234-ABCD",
+    "label": "MY DISK"
+  },
+  {
+    "device": "fat.img",
+    "offset": "0x1fe",
+    "type": "vfat",
+    "uuid": "1234-ABCD",
+    "label": "MY DISK"
+  },
+  {
+    "device": "swap.img",
+    "offset": "0xff6",
+    "type": "swap",
+    "uuid": "0f1e2d3c-0000-4000-8000-000000000005",
+    "label": null
+  },
+  {
+    "device": "ext2.img",
+    "offset": "0x438",
+    "type": "ext2",
+    "uuid": "0f1e2d3c-0000-4000-8000-000000000003",
+    "label": null
+  }
+]

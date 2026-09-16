@@ -1,0 +1,12 @@
+Device: full.img
+Blocksize: 1024 bytes
+Total blocks: 2048
+Free blocks: 0 (0.0%)
+
+Min. free extent: 0 KB 
+Max. free extent: 0 KB
+Avg. free extent: 0 KB
+Num. free extent: 0
+
+HISTOGRAM OF FREE EXTENT SIZES:
+Extent Size Range :  Free extents   Free Blocks  Percent

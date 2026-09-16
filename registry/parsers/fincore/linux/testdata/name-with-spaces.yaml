@@ -1,0 +1,4 @@
+description: A path with spaces in a directory and a file name, kept whole in the last column.
+source: fincore "dir with space/my file.bin" on ext4, util-linux 2.41.3 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [dir with space/my file.bin]

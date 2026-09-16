@@ -1,0 +1,3 @@
+description: The same labels from dumpe2fs -h, with no tune2fs banner, are not this command's output.
+source: dumpe2fs -h on the 64 MiB ext4 image of dumpe2fs/superblock ext4-journal, e2fsprogs 1.47.2 on Ubuntu 26.04 with LC_ALL=C; UUID and hash seed replaced
+expect_error: does not describe this input

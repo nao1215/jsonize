@@ -1,0 +1,32 @@
+GPT fdisk (gdisk) version 1.0.10
+
+Partition table scan:
+  MBR: MBR only
+  BSD: not present
+  APM: not present
+  GPT: not present
+
+
+***************************************************************
+Found invalid GPT and valid MBR; converting MBR to GPT format
+in memory. 
+***************************************************************
+
+
+Warning! Secondary partition table overlaps the last partition by
+33 blocks!
+You will need to delete this partition or resize it in another utility.
+Disk dos.img: 131072 sectors, 64.0 MiB
+Sector size (logical): 512 bytes
+Disk identifier (GUID): 0F1E2D3C-0000-4000-8000-00000000000A
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 131038
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 6110 sectors (3.0 MiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1            2048           43007   20.0 MiB    8300  Linux filesystem
+   2           43008           63487   10.0 MiB    8200  Linux swap
+   5           65536           81919   8.0 MiB     8300  Linux filesystem
+   6           83968          131071   23.0 MiB    0700  Microsoft basic data

@@ -1,0 +1,20 @@
+Device: frag.img
+Blocksize: 1024 bytes
+Total blocks: 32768
+Free blocks: 25106 (76.6%)
+
+Chunksize: 8192 bytes (8 blocks)
+Total chunks: 4097
+Free chunks: 3058 (74.6%)
+
+Min. free extent: 3 KB 
+Max. free extent: 7935 KB
+Avg. free extent: 183 KB
+Num. free extent: 137
+
+HISTOGRAM OF FREE EXTENT SIZES:
+Extent Size Range :  Free extents   Free Blocks  Percent
+    2K...    4K-  :            76           228    0.91%
+   64K...  128K-  :            57          4047   16.12%
+  512K... 1024K-  :             1           866    3.45%
+    4M...    8M-  :             3         19965   79.52%

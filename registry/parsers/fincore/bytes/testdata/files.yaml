@@ -1,0 +1,4 @@
+description: A cached file, a sparse file, an empty file and a path with spaces, sizes in bytes.
+source: fincore -b data.bin sparse.bin empty.bin "dir with space/my file.bin" on ext4, util-linux 2.41.3 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [-b, data.bin, sparse.bin, empty.bin, dir with space/my file.bin]

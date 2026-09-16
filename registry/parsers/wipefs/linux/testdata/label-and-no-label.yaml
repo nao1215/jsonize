@@ -1,0 +1,4 @@
+description: A FAT label with a space in the last column, and a swap area and an ext2 file system with no label.
+source: wipefs fat.img swap.img ext2.img on images made with mkfs.fat -n "MY DISK", mkswap and mkfs.ext2, util-linux 2.41.3 on Ubuntu 26.04 with LC_ALL=C; UUIDs replaced
+os: linux
+args: [fat.img, swap.img, ext2.img]

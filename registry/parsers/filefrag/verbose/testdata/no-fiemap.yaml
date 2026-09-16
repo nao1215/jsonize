@@ -1,0 +1,4 @@
+description: A file on tmpfs, which has no FIEMAP, gets only its size line when filefrag is not root; the file after it is on ext4, so the type line is printed again.
+source: filefrag -v on a file under /tmp (tmpfs) and data.bin on ext4, run as an ordinary user, e2fsprogs 1.47.2 on Ubuntu 26.04 with LC_ALL=C; the tmpfs path shortened to /tmp/small.bin
+os: linux
+args: [-v, /tmp/small.bin, data.bin]

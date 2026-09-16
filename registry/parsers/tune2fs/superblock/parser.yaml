@@ -1,0 +1,33 @@
+# `tune2fs -l` prints the superblock of an ext2, ext3 or ext4 file system
+# as "Label: value" lines behind a version banner. The lines are the ones
+# `dumpe2fs -h` prints, without its journal superblock lines, but the
+# banner is on standard output and names tune2fs, so the text says which
+# command wrote it and this is a definition of its own rather than an
+# alias of dumpe2fs/superblock.
+#
+# The labels hold spaces and "#", which a field name cannot, so every
+# value stays the text tune2fs printed. The banner is the heading of the
+# lines below it; the version it names is that of e2fsprogs.
+format: 1
+command: tune2fs
+variant: superblock
+description: tune2fs -l, the superblock of an ext2, ext3 or ext4 file system
+metadata:
+  tags: [linux, filesystem, ext4, e2fsprogs]
+  compatible: [e2fsprogs]
+  references:
+    - https://man7.org/linux/man-pages/man8/tune2fs.8.html
+detect:
+  os: [linux]
+  signature:
+    # The banner, then nothing but labels and values to the end.
+    all:
+      - '\Atune2fs [0-9][^ \n]* \([^)\n]*\)\nFilesystem volume name:[ \t]+[^\n]*(?:\n[A-Z][A-Za-z0-9 #()/_.-]*:(?:[ \t][^\n]*)?)*\n*\z'
+    window: 200
+input:
+  select:
+    after: '^tune2fs [0-9]\S* \([^)]*\)$'
+parse:
+  type: kv
+  separator: ":"
+  as: map

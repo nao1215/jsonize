@@ -1,0 +1,4 @@
+description: Values no wider than the header leave it one space apart, and the row is still padded.
+source: fincore empty.bin on ext4, util-linux 2.41.3 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [empty.bin]

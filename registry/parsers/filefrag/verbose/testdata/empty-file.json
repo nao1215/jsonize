@@ -1,0 +1,14 @@
+[
+  {
+    "file": {
+      "name": "empty.bin",
+      "size": 0,
+      "blocks": 0,
+      "block_size": 4096
+    },
+    "extents": [],
+    "summary": {
+      "extent_count": 0
+    }
+  }
+]

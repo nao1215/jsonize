@@ -1,0 +1,42 @@
+# `partx --show` lists the partitions the kernel would see on a disk or
+# an image, one row each: the partition number, the first and last
+# sector, the sector count, the size, the partition name and the
+# partition UUID. A DOS table has no names, so NAME is empty there, and
+# the UUID of a DOS partition is the disk identifier and the number.
+#
+# SIZE is rounded ("20M" for 40960 sectors) and partx offers -b for the
+# exact byte count, which partx/bytes reads, so the text is kept as it is
+# here. Every rounded size ends in a unit letter, "512B" included, so the
+# first row says which of the two the table is.
+format: 1
+command: partx
+variant: show
+description: partx --show, the partitions on a disk or image with rounded sizes
+metadata:
+  tags: [linux, block-device, partition, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/partx.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ANR[ \t]+START[ \t]+END[ \t]+SECTORS[ \t]+SIZE[ \t]+NAME[ \t]+UUID[ \t]*$'
+      - '\A[^\n]*\n[ \t]*\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+[ \t]+\d+(?:\.\d+)?[BKMGTPEZY][ \t]'
+    # The table is lined up. --raw prints the same words one space apart
+    # and the rows unaligned, with a space in a name written as \x20, so
+    # the names would come back escaped. An aligned table either spaces
+    # its header out or right-aligns a partition number under NR, which
+    # starts the row with a space; a raw row does neither.
+    any:
+      - '\ANR(?:[ \t][^\n]*\S)?[ \t]{2,}\S'
+      - '\A[^\n]*\n[ \t]\d[ \t]'
+parse:
+  type: table
+  split: aligned
+fields:
+  nr: {type: int, required: true}
+  start: {type: int, required: true}
+  end: {type: int, required: true}
+  sectors: {type: int, required: true}
+  size: {required: true}

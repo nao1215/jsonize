@@ -1,0 +1,57 @@
+[
+  {
+    "file": {
+      "name": "prealloc.bin",
+      "size": 1048576,
+      "blocks": 256,
+      "block_size": 4096
+    },
+    "extents": [
+      {
+        "ext": 0,
+        "logical_start": 0,
+        "logical_end": 255,
+        "physical_start": 315040256,
+        "physical_end": 315040511,
+        "length": 256,
+        "expected": null,
+        "flags": [
+          "last",
+          "unwritten",
+          "eof"
+        ]
+      }
+    ],
+    "summary": {
+      "extent_count": 1
+    }
+  },
+  {
+    "file": {
+      "name": "delay.bin",
+      "size": 20000,
+      "blocks": 5,
+      "block_size": 4096
+    },
+    "extents": [
+      {
+        "ext": 0,
+        "logical_start": 0,
+        "logical_end": 4,
+        "physical_start": 0,
+        "physical_end": 0,
+        "length": 0,
+        "expected": null,
+        "flags": [
+          "last",
+          "unknown_loc",
+          "delalloc",
+          "eof"
+        ]
+      }
+    ],
+    "summary": {
+      "extent_count": 1
+    }
+  }
+]

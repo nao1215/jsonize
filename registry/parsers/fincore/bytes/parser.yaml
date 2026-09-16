@@ -1,0 +1,36 @@
+# `fincore -b` prints the table fincore/linux reads with the resident
+# size and the file size as counts of bytes instead of rounded sizes, so
+# both are integers here. A byte count never ends in a unit letter, so
+# the first row says which of the two the table is.
+format: 1
+command: fincore
+variant: bytes
+description: fincore -b, the page cache use of each file with sizes in bytes
+metadata:
+  tags: [linux, memory, page-cache, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/fincore.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[ \t]*RES[ \t]+PAGES[ \t]+SIZE[ \t]+FILE[ \t]*\n[ \t]*\d+[ \t]+\d+[ \t]+\d+ '
+    # The table is lined up; see fincore/linux for why --raw is refused.
+    any:
+      - '\A[ \t]'
+      - '\A[^\n]*?\S[ \t]{2,}\S'
+      - '\A[^\n]*\n[ \t]'
+      - '\A[^\n]*\n\S+[ \t]{2,}'
+      - '\A[^\n]*\n\S+[ \t]\S+[ \t]{2,}'
+input:
+  select:
+    after: '^[ \t]*RES[ \t]+PAGES[ \t]+SIZE[ \t]+FILE[ \t]*$'
+parse:
+  type: regex
+  pattern: '^[ \t]*(?P<res>\d+)[ \t]+(?P<pages>\d+)[ \t]+(?P<size>\d+) (?P<file>.+)$'
+fields:
+  res: {type: int}
+  pages: {type: int}
+  size: {type: int}
+  file: {required: true}

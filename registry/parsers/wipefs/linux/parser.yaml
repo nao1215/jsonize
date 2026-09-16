@@ -1,0 +1,30 @@
+# `wipefs` with no action lists the signatures it finds on each device:
+# a file system, a swap area, a RAID member or a partition table, one row
+# per signature and its byte offset. A partition table has no UUID or
+# label, and a file system may have no label, so those cells are empty.
+# The label is the last column and may hold spaces.
+#
+# The offset is printed in hexadecimal and stays text. `wipefs --no-act`
+# prints this table as well; with --all it prints what it would erase,
+# which wipefs/erase reads.
+format: 1
+command: wipefs
+variant: linux
+description: wipefs, the signatures found on each device
+metadata:
+  tags: [linux, block-device, filesystem, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man8/wipefs.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\ADEVICE[ \t]+OFFSET[ \t]+TYPE[ \t]+UUID[ \t]+LABEL[ \t]*$'
+parse:
+  type: table
+  split: aligned
+fields:
+  device: {required: true}
+  offset: {required: true}
+  type: {required: true}

@@ -1,0 +1,5 @@
+  RES PAGES  SIZE FILE
+ 4.8M  1221  4.8M data.bin
+ 104K    26   10M sparse.bin
+   0B     0    0B empty.bin
+   1M   256    1M prealloc.bin

@@ -1,0 +1,4 @@
+description: A file read into the cache, a sparse file, an empty file and a preallocated one.
+source: fincore data.bin sparse.bin empty.bin prealloc.bin on ext4, util-linux 2.41.3 on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: [data.bin, sparse.bin, empty.bin, prealloc.bin]

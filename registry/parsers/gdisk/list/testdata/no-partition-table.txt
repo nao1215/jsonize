@@ -1,0 +1,19 @@
+GPT fdisk (gdisk) version 1.0.10
+
+Partition table scan:
+  MBR: not present
+  BSD: not present
+  APM: not present
+  GPT: not present
+
+Creating new GPT entries in memory.
+Disk empty.img: 2048 sectors, 1024.0 KiB
+Sector size (logical): 512 bytes
+Disk identifier (GUID): 0F1E2D3C-0000-4000-8000-00000000000C
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 2014
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 1981 sectors (990.5 KiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name

@@ -1,0 +1,19 @@
+{
+  "summary": {
+    "device": "full.img",
+    "block_size": 1024,
+    "total_blocks": 2048,
+    "free_blocks": 0,
+    "free_blocks_percent": 0,
+    "chunk_size": null,
+    "chunk_blocks": null,
+    "total_chunks": null,
+    "free_chunks": null,
+    "free_chunks_percent": null,
+    "min_free_extent_kb": 0,
+    "max_free_extent_kb": 0,
+    "avg_free_extent_kb": 0,
+    "free_extents": 0
+  },
+  "histogram": []
+}

@@ -1,0 +1,63 @@
+[
+  {
+    "file": {
+      "name": "data.bin",
+      "size": 5000000,
+      "blocks": 1221,
+      "block_size": 4096
+    },
+    "extents": [
+      {
+        "ext": 0,
+        "logical_start": 0,
+        "logical_end": 1220,
+        "physical_start": 300240896,
+        "physical_end": 300242116,
+        "length": 1221,
+        "expected": null,
+        "flags": [
+          "last",
+          "eof"
+        ]
+      }
+    ],
+    "summary": {
+      "extent_count": 1
+    }
+  },
+  {
+    "file": {
+      "name": "sparse.bin",
+      "size": 10485760,
+      "blocks": 2560,
+      "block_size": 4096
+    },
+    "extents": [
+      {
+        "ext": 0,
+        "logical_start": 1220,
+        "logical_end": 1220,
+        "physical_start": 300240068,
+        "physical_end": 300240068,
+        "length": 1,
+        "expected": 1220,
+        "flags": []
+      },
+      {
+        "ext": 1,
+        "logical_start": 2197,
+        "logical_end": 2221,
+        "physical_start": 300257429,
+        "physical_end": 300257453,
+        "length": 25,
+        "expected": 300241045,
+        "flags": [
+          "last"
+        ]
+      }
+    ],
+    "summary": {
+      "extent_count": 2
+    }
+  }
+]

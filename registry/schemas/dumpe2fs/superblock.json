@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/dumpe2fs/superblock.json",
+  "title": "dumpe2fs/superblock",
+  "description": "dumpe2fs -h, the superblock of an ext2, ext3 or ext4 file system",
+  "x-jsonize": {
+    "definition": "dumpe2fs/superblock",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {},
+  "additionalProperties": {
+    "type": "string"
+  }
+}
