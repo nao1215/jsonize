@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemd-analyze/timespan.json",
+  "title": "systemd-analyze/timespan",
+  "description": "systemd-analyze timespan, the length of each time span",
+  "x-jsonize": {
+    "definition": "systemd-analyze/timespan",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "Human": {
+        "type": "string"
+      },
+      "Original": {
+        "type": "string"
+      },
+      "us": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": {
+      "type": "string"
+    }
+  }
+}

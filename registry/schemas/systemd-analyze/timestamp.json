@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemd-analyze/timestamp.json",
+  "title": "systemd-analyze/timestamp",
+  "description": "systemd-analyze timestamp, how systemd reads each time",
+  "x-jsonize": {
+    "definition": "systemd-analyze/timestamp",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "Normalized form": {
+        "type": "string"
+      },
+      "Original form": {
+        "type": "string"
+      },
+      "UNIX seconds": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": "string"
+    }
+  }
+}

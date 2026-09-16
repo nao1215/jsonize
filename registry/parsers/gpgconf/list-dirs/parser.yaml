@@ -1,0 +1,26 @@
+# `gpgconf --list-dirs` prints the directories and sockets GnuPG uses, one
+# "name:value" line each. The names are GnuPG's own, and which of them are
+# printed depends on the version, so the result is one object keyed by
+# them. A value is printed percent-escaped (a colon as %3a) and is kept as
+# printed.
+format: 1
+command: gpgconf
+variant: list-dirs
+description: gpgconf --list-dirs, the directories and sockets GnuPG uses
+metadata:
+  tags: [security, gnupg]
+  compatible: [gnupg]
+  references:
+    - https://www.gnupg.org/documentation/manuals/gnupg/Invoking-gpgconf.html
+detect:
+  args:
+    any: ["--list-dirs"]
+  signature:
+    all:
+      - '\Asysconfdir:'
+      - '(?m)^homedir:'
+      - '\A(?:[a-z][a-z-]*:[^\n]*(?:\n|\z))+\z'
+parse:
+  type: kv
+  separator: ":"
+  as: map

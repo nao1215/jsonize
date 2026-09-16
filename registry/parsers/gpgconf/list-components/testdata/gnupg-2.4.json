@@ -1,0 +1,42 @@
+[
+  {
+    "name": "gpg",
+    "description": "OpenPGP",
+    "program": "/usr/bin/gpg"
+  },
+  {
+    "name": "gpgsm",
+    "description": "S/MIME",
+    "program": "/usr/bin/gpgsm"
+  },
+  {
+    "name": "keyboxd",
+    "description": "Public Keys",
+    "program": "/usr/lib/gnupg/keyboxd"
+  },
+  {
+    "name": "gpg-agent",
+    "description": "Private Keys",
+    "program": "/usr/bin/gpg-agent"
+  },
+  {
+    "name": "scdaemon",
+    "description": "Smartcards",
+    "program": "/usr/lib/gnupg/scdaemon"
+  },
+  {
+    "name": "tpm2daemon",
+    "description": "TPM",
+    "program": "/usr/lib/gnupg/tpm2daemon"
+  },
+  {
+    "name": "dirmngr",
+    "description": "Network",
+    "program": "/usr/bin/dirmngr"
+  },
+  {
+    "name": "pinentry",
+    "description": "Passphrase Entry",
+    "program": "/usr/bin/pinentry"
+  }
+]

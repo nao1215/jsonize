@@ -1,0 +1,14 @@
+sysconfdir:/etc/gnupg
+bindir:/usr/bin
+libexecdir:/usr/lib/gnupg
+libdir:/usr/lib/x86_64-linux-gnu/gnupg
+datadir:/usr/share/gnupg
+localedir:/usr/share/locale
+socketdir:/run/user/1000/gnupg
+dirmngr-socket:/run/user/1000/gnupg/S.dirmngr
+keyboxd-socket:/run/user/1000/gnupg/S.keyboxd
+agent-ssh-socket:/run/user/1000/gnupg/S.gpg-agent.ssh
+agent-extra-socket:/run/user/1000/gnupg/S.gpg-agent.extra
+agent-browser-socket:/run/user/1000/gnupg/S.gpg-agent.browser
+agent-socket:/run/user/1000/gnupg/S.gpg-agent
+homedir:/home/alice/.gnupg

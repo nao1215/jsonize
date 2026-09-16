@@ -1,0 +1,8 @@
+gpg:OpenPGP:/usr/bin/gpg
+gpgsm:S/MIME:/usr/bin/gpgsm
+keyboxd:Public Keys:/usr/lib/gnupg/keyboxd
+gpg-agent:Private Keys:/usr/bin/gpg-agent
+scdaemon:Smartcards:/usr/lib/gnupg/scdaemon
+tpm2daemon:TPM:/usr/lib/gnupg/tpm2daemon
+dirmngr:Network:/usr/bin/dirmngr
+pinentry:Passphrase Entry:/usr/bin/pinentry

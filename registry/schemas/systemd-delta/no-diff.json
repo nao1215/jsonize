@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemd-delta/no-diff.json",
+  "title": "systemd-delta/no-diff",
+  "description": "systemd-delta --diff=false, the overridden, masked and extended configuration files",
+  "x-jsonize": {
+    "definition": "systemd-delta/no-diff",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "kind": {
+        "type": "string",
+        "enum": [
+          "EQUIVALENT",
+          "EXTENDED",
+          "MASKED",
+          "OVERRIDDEN",
+          "REDIRECTED",
+          "UNCHANGED"
+        ]
+      },
+      "path": {
+        "type": "string"
+      },
+      "target": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "kind",
+      "path",
+      "target"
+    ]
+  }
+}

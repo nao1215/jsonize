@@ -1,0 +1,3 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: an addition, a deletion, a change, a mode change and a rename with a space in the new name
+args: [diff, --name-status, HEAD~1, HEAD]

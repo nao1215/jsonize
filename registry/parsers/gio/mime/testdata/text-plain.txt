@@ -1,0 +1,11 @@
+Default application for “text/plain”: libreoffice-writer.desktop
+Registered applications:
+	libreoffice-writer.desktop
+	org.gnome.TextEditor.desktop
+	org.gnome.gedit.desktop
+	vim.desktop
+Recommended applications:
+	libreoffice-writer.desktop
+	org.gnome.TextEditor.desktop
+	org.gnome.gedit.desktop
+	vim.desktop

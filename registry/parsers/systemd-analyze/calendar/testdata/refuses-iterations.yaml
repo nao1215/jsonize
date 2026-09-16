@@ -1,0 +1,3 @@
+source: systemd-analyze calendar --iterations=2 daily, captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C and TZ=UTC
+description: each iteration prints a second From now, which one object cannot hold
+expect_error: 'does not describe this input'

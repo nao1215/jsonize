@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/systemd-analyze/calendar.json",
+  "title": "systemd-analyze/calendar",
+  "description": "systemd-analyze calendar, how systemd reads each calendar expression and when it next elapses",
+  "x-jsonize": {
+    "definition": "systemd-analyze/calendar",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "Normalized form": {
+        "type": "string"
+      },
+      "Original form": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": {
+      "type": "string"
+    }
+  }
+}

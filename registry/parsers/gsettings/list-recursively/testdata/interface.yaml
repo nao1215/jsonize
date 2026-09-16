@@ -1,0 +1,2 @@
+source: gsettings list-recursively org.gnome.desktop.interface, captured on Ubuntu 26.04 (GLib 2.88) with LC_ALL=C, cut to fifteen keys and three with an empty, a typed and a long value
+args: [list-recursively, org.gnome.desktop.interface]

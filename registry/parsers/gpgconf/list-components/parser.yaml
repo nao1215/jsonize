@@ -1,0 +1,25 @@
+# `gpgconf --list-components` prints one line per component GnuPG has:
+# its name, a description and the program, separated by colons. A colon
+# inside a field is percent-escaped, so a line always has three.
+format: 1
+command: gpgconf
+variant: list-components
+description: gpgconf --list-components, the GnuPG components and their programs
+metadata:
+  tags: [security, gnupg]
+  compatible: [gnupg]
+  references:
+    - https://www.gnupg.org/documentation/manuals/gnupg/Invoking-gpgconf.html
+detect:
+  args:
+    any: ["--list-components"]
+  signature:
+    all:
+      # gpg is the first component GnuPG lists.
+      - '\Agpg:OpenPGP:'
+      - '\A(?:[a-z0-9-]+:[^:\n]*:[^:\n]+(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<name>[^:]+):(?P<description>[^:]*):(?P<program>[^:]+)$'
+fields:
+  name: {required: true}

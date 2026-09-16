@@ -1,0 +1,92 @@
+[
+  {
+    "kind": "OVERRIDDEN",
+    "path": "/etc/tmpfiles.d/screen-cleanup.conf",
+    "target": "/usr/lib/tmpfiles.d/screen-cleanup.conf"
+  },
+  {
+    "kind": "OVERRIDDEN",
+    "path": "/etc/systemd/system/cloud-init-network.service",
+    "target": "/usr/lib/systemd/system/cloud-init-network.service"
+  },
+  {
+    "kind": "EQUIVALENT",
+    "path": "/etc/systemd/system/sshd.service",
+    "target": "/usr/lib/systemd/system/sshd.service"
+  },
+  {
+    "kind": "OVERRIDDEN",
+    "path": "/usr/lib/systemd/system/user@.service.d/10-login-barrier.conf",
+    "target": "/usr/lib/systemd/system/user@0.service.d/10-login-barrier.conf"
+  },
+  {
+    "kind": "EXTENDED",
+    "path": "/usr/lib/systemd/system/rc-local.service",
+    "target": "/usr/lib/systemd/system/rc-local.service.d/debian.conf"
+  },
+  {
+    "kind": "EXTENDED",
+    "path": "/usr/lib/systemd/system/systemd-fsck-root.service",
+    "target": "/usr/lib/systemd/system/systemd-fsck-root.service.d/10-skip-fsck-initramfs.conf"
+  },
+  {
+    "kind": "EXTENDED",
+    "path": "/usr/lib/systemd/system/systemd-journald.service",
+    "target": "/usr/lib/systemd/system/systemd-journald.service.d/nice.conf"
+  },
+  {
+    "kind": "EXTENDED",
+    "path": "/usr/lib/systemd/system/systemd-localed.service",
+    "target": "/usr/lib/systemd/system/systemd-localed.service.d/x11-keyboard.conf"
+  },
+  {
+    "kind": "EXTENDED",
+    "path": "/usr/lib/systemd/system/systemd-logind.service",
+    "target": "/usr/lib/systemd/system/systemd-logind.service.d/dbus.conf"
+  },
+  {
+    "kind": "EXTENDED",
+    "path": "/usr/lib/systemd/system/systemd-udevd.service",
+    "target": "/usr/lib/systemd/system/systemd-udevd.service.d/syscall-architecture.conf"
+  },
+  {
+    "kind": "EXTENDED",
+    "path": "/usr/lib/systemd/system/user@.service",
+    "target": "/usr/lib/systemd/system/user@.service.d/10-login-barrier.conf"
+  },
+  {
+    "kind": "EXTENDED",
+    "path": "/usr/lib/systemd/system/user@.service",
+    "target": "/usr/lib/systemd/system/user@.service.d/10-oomd-user-service-defaults.conf"
+  },
+  {
+    "kind": "EXTENDED",
+    "path": "/usr/lib/systemd/system/user@.service",
+    "target": "/usr/lib/systemd/system/user@.service.d/timeout.conf"
+  },
+  {
+    "kind": "EQUIVALENT",
+    "path": "/etc/systemd/user/dbus-org.bluez.obex.service",
+    "target": "/usr/lib/systemd/user/dbus-org.bluez.obex.service"
+  },
+  {
+    "kind": "EXTENDED",
+    "path": "/etc/systemd/user/snap.prompting-client.daemon.service",
+    "target": "/usr/lib/systemd/user/snap.prompting-client.daemon.service.d/70-gdm-skip.conf"
+  },
+  {
+    "kind": "OVERRIDDEN",
+    "path": "/usr/lib/systemd/user/app-flatpak-.scope.d/override.conf",
+    "target": "/usr/lib/systemd/user/app-gnome-.scope.d/override.conf"
+  },
+  {
+    "kind": "OVERRIDDEN",
+    "path": "/usr/lib/systemd/user/snap.prompting-client.daemon.service.d/70-gdm-skip.conf",
+    "target": "/usr/lib/systemd/user/snapd.session-agent.socket.d/70-gdm-skip.conf"
+  },
+  {
+    "kind": "EXTENDED",
+    "path": "/usr/lib/systemd/user/snapd.session-agent.socket",
+    "target": "/usr/lib/systemd/user/snapd.session-agent.socket.d/70-gdm-skip.conf"
+  }
+]

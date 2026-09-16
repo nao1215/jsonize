@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/fc-match/default.json",
+  "title": "fc-match/default",
+  "description": "fc-match, the fonts fontconfig picks for a pattern, best first",
+  "x-jsonize": {
+    "definition": "fc-match/default",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "file": {
+        "type": "string"
+      },
+      "family": {
+        "type": "string"
+      },
+      "style": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "file",
+      "family",
+      "style"
+    ]
+  }
+}

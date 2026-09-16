@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C and TZ=UTC; the last expression is in the past and has no next elapse
+os: linux
+args: [calendar, daily, "Mon *-*-* 09:00", "2020-01-01"]

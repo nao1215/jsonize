@@ -1,0 +1,26 @@
+[
+  {
+    "object": "a03e0711c35437cc615d8390e4e735596919f88c",
+    "refname": "HEAD"
+  },
+  {
+    "object": "a03e0711c35437cc615d8390e4e735596919f88c",
+    "refname": "refs/heads/main"
+  },
+  {
+    "object": "a03e0711c35437cc615d8390e4e735596919f88c",
+    "refname": "refs/heads/topic"
+  },
+  {
+    "object": "830bb21df2e1c5a8d6e5322a4e365e2e800c0781",
+    "refname": "refs/tags/v0.1.0"
+  },
+  {
+    "object": "871db3c75e6ce9bb0ce29f14c0b448697f03ac48",
+    "refname": "refs/tags/v0.2.0"
+  },
+  {
+    "object": "a03e0711c35437cc615d8390e4e735596919f88c",
+    "refname": "refs/tags/v0.2.0^{}"
+  }
+]

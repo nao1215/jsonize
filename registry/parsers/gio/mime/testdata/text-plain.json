@@ -1,0 +1,34 @@
+{
+  "default": {
+    "type": "text/plain",
+    "application": "libreoffice-writer.desktop"
+  },
+  "registered": [
+    {
+      "application": "libreoffice-writer.desktop"
+    },
+    {
+      "application": "org.gnome.TextEditor.desktop"
+    },
+    {
+      "application": "org.gnome.gedit.desktop"
+    },
+    {
+      "application": "vim.desktop"
+    }
+  ],
+  "recommended": [
+    {
+      "application": "libreoffice-writer.desktop"
+    },
+    {
+      "application": "org.gnome.TextEditor.desktop"
+    },
+    {
+      "application": "org.gnome.gedit.desktop"
+    },
+    {
+      "application": "vim.desktop"
+    }
+  ]
+}

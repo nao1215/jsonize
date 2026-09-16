@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/reflog.json",
+  "title": "git/reflog",
+  "description": "git reflog, the entries a ref moved through",
+  "x-jsonize": {
+    "definition": "git/reflog",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "commit": {
+        "type": "string"
+      },
+      "ref": {
+        "type": "string"
+      },
+      "index": {
+        "type": "integer"
+      },
+      "action": {
+        "type": "string"
+      },
+      "message": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "commit",
+      "ref",
+      "index",
+      "action",
+      "message"
+    ]
+  }
+}

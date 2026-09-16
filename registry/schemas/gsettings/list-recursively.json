@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gsettings/list-recursively.json",
+  "title": "gsettings/list-recursively",
+  "description": "gsettings list-recursively, the keys of a schema and their values",
+  "x-jsonize": {
+    "definition": "gsettings/list-recursively",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "schema": {
+        "type": "string"
+      },
+      "key": {
+        "type": "string"
+      },
+      "value": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "schema",
+      "key",
+      "value"
+    ]
+  }
+}

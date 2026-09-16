@@ -1,0 +1,2 @@
+source: avahi-browse -a -t -p -r, captured on Ubuntu 26.04 (avahi 0.8) with LC_ALL=C on one interface of a home network, cut to four services; the device identifiers, the addresses, the MAC address and the hex TXT values replaced
+args: ["-a", "-t", "-p", "-r"]

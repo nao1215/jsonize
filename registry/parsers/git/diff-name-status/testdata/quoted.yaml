@@ -1,0 +1,3 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: a name outside ASCII, one holding a tab and one holding backslashes, which git quotes and escapes
+args: [diff, --name-status, HEAD~3]

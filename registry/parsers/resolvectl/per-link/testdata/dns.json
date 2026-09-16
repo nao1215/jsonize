@@ -1,0 +1,45 @@
+[
+  {
+    "index": null,
+    "link": null,
+    "values": null
+  },
+  {
+    "index": 2,
+    "link": "eno1",
+    "values": null
+  },
+  {
+    "index": 3,
+    "link": "wlp195s0",
+    "values": [
+      "192.0.2.1",
+      "2001:db8::1"
+    ]
+  },
+  {
+    "index": 4,
+    "link": "br-0123456789ab",
+    "values": null
+  },
+  {
+    "index": 5,
+    "link": "br-123456789abc",
+    "values": null
+  },
+  {
+    "index": 6,
+    "link": "br-23456789abcd",
+    "values": null
+  },
+  {
+    "index": 7,
+    "link": "docker0",
+    "values": null
+  },
+  {
+    "index": 8,
+    "link": "vethd074b4f",
+    "values": null
+  }
+]

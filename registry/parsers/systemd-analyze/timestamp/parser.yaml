@@ -1,0 +1,35 @@
+# `systemd-analyze timestamp TIME...` prints, for each time it is given,
+# the time as written, the time systemd reads it as, the same time in UTC
+# when the local zone is another, the UNIX time with an "@" in front and
+# how far that is from now. The lines are "Label: value" padded to one
+# column, and a blank line separates the times. Every value is kept as
+# printed: the UNIX time keeps its "@" and its microseconds, and "From
+# now" is a phrase.
+format: 1
+command: systemd-analyze
+variant: timestamp
+description: systemd-analyze timestamp, how systemd reads each time
+metadata:
+  tags: [linux, systemd, time]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html
+detect:
+  os: [linux]
+  args:
+    all: [timestamp]
+  signature:
+    all:
+      - '\A +Original form: [^\n]*\nNormalized form: [^\n]*\n(?: +\(in UTC\): [^\n]*\n)? +UNIX seconds: @'
+parse:
+  type: records
+  start: '^ *Original form: '
+  record:
+    parse:
+      type: kv
+      separator: ": "
+      as: map
+    fields:
+      Original form: {required: true}
+      Normalized form: {required: true}
+      UNIX seconds: {required: true}

@@ -1,0 +1,3 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: -C --find-copies-harder, which turns an added file into a copy with its score
+args: [diff, -C, --find-copies-harder, --name-status, HEAD~1, HEAD]

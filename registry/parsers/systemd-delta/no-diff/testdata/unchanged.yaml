@@ -1,0 +1,3 @@
+source: systemd-delta --diff=false --type=unchanged,masked, captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C, cut to the first six files and the closing count
+os: linux
+args: ["--no-pager", "--diff=false", "--type=unchanged,masked"]

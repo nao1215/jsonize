@@ -1,0 +1,37 @@
+[
+  {
+    "kind": "UNCHANGED",
+    "path": "/etc/sysctl.d/README.sysctl",
+    "target": null
+  },
+  {
+    "kind": "UNCHANGED",
+    "path": "/usr/lib/sysctl.d/10-apparmor.conf",
+    "target": null
+  },
+  {
+    "kind": "UNCHANGED",
+    "path": "/usr/lib/sysctl.d/10-coredump-debian.conf",
+    "target": null
+  },
+  {
+    "kind": "UNCHANGED",
+    "path": "/usr/lib/sysctl.d/30-localsearch.conf",
+    "target": null
+  },
+  {
+    "kind": "UNCHANGED",
+    "path": "/usr/lib/sysctl.d/50-default.conf",
+    "target": null
+  },
+  {
+    "kind": "UNCHANGED",
+    "path": "/usr/lib/sysctl.d/50-pid-max.conf",
+    "target": null
+  },
+  {
+    "kind": "UNCHANGED",
+    "path": "/usr/lib/modprobe.d/systemd.conf",
+    "target": null
+  }
+]

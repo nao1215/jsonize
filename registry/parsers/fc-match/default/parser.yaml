@@ -1,0 +1,24 @@
+# `fc-match PATTERN` prints the font fontconfig picks for a pattern, and
+# with -a or -s the fonts in the order it would try them, one line each:
+# the file name, a colon, and the family and the style in double quotes.
+# A --format of the caller's own prints something else and is not read.
+format: 1
+command: fc-match
+variant: default
+description: fc-match, the fonts fontconfig picks for a pattern, best first
+metadata:
+  tags: [linux, font, desktop]
+  compatible: [fontconfig]
+  references:
+    - https://www.freedesktop.org/software/fontconfig/fontconfig-user.html
+detect:
+  args:
+    none: ["-f", "--format"]
+  signature:
+    all:
+      - '\A(?:[^:/\n]+: "[^"\n]*" "[^"\n]*"(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<file>[^:/]+): "(?P<family>[^"]*)" "(?P<style>[^"]*)"$'
+fields:
+  file: {required: true}

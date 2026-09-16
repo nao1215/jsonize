@@ -1,0 +1,62 @@
+[
+  {
+    "file": "NotoSans-Regular.ttf",
+    "family": "Noto Sans",
+    "style": "Regular"
+  },
+  {
+    "file": "NotoSans-Bold.ttf",
+    "family": "Noto Sans",
+    "style": "Bold"
+  },
+  {
+    "file": "NotoSans-Italic.ttf",
+    "family": "Noto Sans",
+    "style": "Italic"
+  },
+  {
+    "file": "NotoSans-BoldItalic.ttf",
+    "family": "Noto Sans",
+    "style": "Bold Italic"
+  },
+  {
+    "file": "NotoSansAdlam-Regular.ttf",
+    "family": "Noto Sans Adlam",
+    "style": "Regular"
+  },
+  {
+    "file": "NotoSansAdlam-Bold.ttf",
+    "family": "Noto Sans Adlam",
+    "style": "Bold"
+  },
+  {
+    "file": "NotoSansArabicUI-Regular.ttf",
+    "family": "Noto Sans Arabic UI",
+    "style": "Regular"
+  },
+  {
+    "file": "NotoSansArabicUI-Bold.ttf",
+    "family": "Noto Sans Arabic UI",
+    "style": "Bold"
+  },
+  {
+    "file": "NotoSansArabic-Regular.ttf",
+    "family": "Noto Sans Arabic",
+    "style": "Regular"
+  },
+  {
+    "file": "NotoSansArabic-Bold.ttf",
+    "family": "Noto Sans Arabic",
+    "style": "Bold"
+  },
+  {
+    "file": "NotoSansArmenian-Regular.ttf",
+    "family": "Noto Sans Armenian",
+    "style": "Regular"
+  },
+  {
+    "file": "NotoSansArmenian-Bold.ttf",
+    "family": "Noto Sans Armenian",
+    "style": "Bold"
+  }
+]

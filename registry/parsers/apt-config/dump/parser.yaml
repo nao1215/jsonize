@@ -1,0 +1,31 @@
+# `apt-config dump` prints the configuration APT has read, one option per
+# line: the option's full name, a space, and its value in double quotes,
+# ended by a semicolon. A name ending in "::" is an element of a list and
+# appears once per element, so the result is a list of name/value pairs
+# in the order printed rather than a map that would keep only one of them.
+# A value is printed with its quotes and backslashes as they are, so it is
+# kept as the text between the quotes.
+format: 1
+command: apt-config
+variant: dump
+description: apt-config dump, the APT options and their values
+metadata:
+  tags: [linux, package, debian]
+  compatible: [apt]
+  references:
+    - https://manpages.debian.org/apt-config
+detect:
+  os: [linux]
+  args:
+    any: [dump]
+  signature:
+    all:
+      # The dump opens with the root of the tree, which has no value.
+      - '\AAPT "";\n'
+      # Every line is a name, a quoted value and a semicolon.
+      - '\A(?:\S+ "[^\n]*";(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+) "(?P<value>.*)";$'
+fields:
+  name: {required: true}

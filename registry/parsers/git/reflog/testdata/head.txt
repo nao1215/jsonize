@@ -1,0 +1,6 @@
+dcba6e0 HEAD@{0}: reset: moving to HEAD
+dcba6e0 HEAD@{1}: checkout: moving from topic to main
+48b81b7 HEAD@{2}: commit: topic change
+dcba6e0 HEAD@{3}: checkout: moving from main to topic
+dcba6e0 HEAD@{4}: commit: rename, delete, change, add
+239c781 HEAD@{5}: commit (initial): first commit

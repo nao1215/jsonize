@@ -8,6 +8,17 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Seventeen definitions. Eight commands jz did not read: `apt-config
+  dump`, `avahi-browse -p` (and with `-r` the resolved host, address,
+  port and TXT record; a browse left running is read as a stream),
+  `fc-match`, `gio mime TYPE`, `gpgconf --list-dirs` and
+  `--list-components`, `gsettings list-recursively` (a value kept as the
+  GVariant text printed), `pwdx` (read only when named) and
+  `systemd-delta --diff=false`. More of three it did: `git diff
+  --name-status` (a quoted path decoded), `git reflog`, `git ls-remote`,
+  `git cherry`, `systemd-analyze timespan`, `timestamp` and `calendar`,
+  and `resolvectl dns` and `domain`. The registry holds 235 commands
+  through 617 definitions.
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the

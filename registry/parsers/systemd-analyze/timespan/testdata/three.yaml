@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (systemd 259) with LC_ALL=C
+os: linux
+args: [timespan, 1h30m, 5s, 100ms]

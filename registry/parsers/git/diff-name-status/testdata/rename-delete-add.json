@@ -1,0 +1,38 @@
+[
+  {
+    "status": "A",
+    "score": null,
+    "path": "added.txt",
+    "new_path": null
+  },
+  {
+    "status": "A",
+    "score": null,
+    "path": "copy.txt",
+    "new_path": null
+  },
+  {
+    "status": "D",
+    "score": null,
+    "path": "gone.txt",
+    "new_path": null
+  },
+  {
+    "status": "M",
+    "score": null,
+    "path": "keep.txt",
+    "new_path": null
+  },
+  {
+    "status": "R",
+    "score": 100,
+    "path": "old.txt",
+    "new_path": "new name.txt"
+  },
+  {
+    "status": "M",
+    "score": null,
+    "path": "run.sh",
+    "new_path": null
+  }
+]

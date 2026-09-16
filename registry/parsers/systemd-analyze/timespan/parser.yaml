@@ -1,0 +1,33 @@
+# `systemd-analyze timespan SPAN...` prints, for each span it is given, the
+# span as written, its length in microseconds and the length the way
+# systemd writes it, one "Label: value" line each and a blank line between
+# spans. The microseconds are the exact length and are typed; the other
+# two are text.
+format: 1
+command: systemd-analyze
+variant: timespan
+description: systemd-analyze timespan, the length of each time span
+metadata:
+  tags: [linux, systemd, time]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/systemd-analyze.html
+detect:
+  os: [linux]
+  args:
+    all: [timespan]
+  signature:
+    all:
+      - '\AOriginal: [^\n]*\n +us: [0-9]+\n +Human: '
+parse:
+  type: records
+  start: '^Original: '
+  record:
+    parse:
+      type: kv
+      separator: ": "
+      as: map
+    fields:
+      us: {type: int, required: true}
+      Original: {required: true}
+      Human: {required: true}

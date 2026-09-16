@@ -1,0 +1,31 @@
+# `resolvectl dns` and `resolvectl domain` print one line for the global
+# settings and one per network link: "Global:" or "Link N (NAME):", then
+# the servers or the domains, separated by spaces, or nothing when there
+# are none. A domain with "~" in front is a routing-only domain and keeps
+# it. The two commands print the same shape, so one definition reads
+# both, and the values are a list under one key whichever it was, or null
+# for a line that names none.
+format: 1
+command: resolvectl
+variant: per-link
+description: resolvectl dns and domain, the DNS servers or search domains of each link
+metadata:
+  tags: [linux, systemd, network, dns]
+  compatible: [systemd]
+  references:
+    - https://www.freedesktop.org/software/systemd/man/latest/resolvectl.html
+detect:
+  os: [linux]
+  args:
+    any: [dns, domain]
+  signature:
+    all:
+      - '\A(?:(?:Global|Link [0-9]+ \([^)\n]+\)):(?: [^\n]*)?(?:\n|\z))+\z'
+parse:
+  type: regex
+  patterns:
+    - '^Global:(?P<index>)??(?P<link>)??(?: (?P<values>.+))?$'
+    - '^Link (?P<index>[0-9]+) \((?P<link>[^)]+)\):(?: (?P<values>.+))?$'
+fields:
+  index: {type: int}
+  values: {type: array, split: " ", null_if: [""]}

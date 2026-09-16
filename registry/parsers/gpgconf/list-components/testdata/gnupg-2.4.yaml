@@ -1,0 +1,2 @@
+source: captured on Ubuntu 26.04 (GnuPG 2.4) with LC_ALL=C
+args: ["--list-components"]

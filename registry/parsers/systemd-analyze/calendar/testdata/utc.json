@@ -1,0 +1,19 @@
+[
+  {
+    "Original form": "daily",
+    "Normalized form": "*-*-* 00:00:00",
+    "Next elapse": "Thu 2026-09-17 00:00:00 UTC",
+    "From now": "14h left"
+  },
+  {
+    "Original form": "Mon *-*-* 09:00",
+    "Normalized form": "Mon *-*-* 09:00:00",
+    "Next elapse": "Mon 2026-09-21 09:00:00 UTC",
+    "From now": "4 days left"
+  },
+  {
+    "Original form": "2020-01-01",
+    "Normalized form": "2020-01-01 00:00:00",
+    "Next elapse": "never"
+  }
+]

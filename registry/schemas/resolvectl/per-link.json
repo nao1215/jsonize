@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/resolvectl/per-link.json",
+  "title": "resolvectl/per-link",
+  "description": "resolvectl dns and domain, the DNS servers or search domains of each link",
+  "x-jsonize": {
+    "definition": "resolvectl/per-link",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "index": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "link": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "values": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "index",
+      "link",
+      "values"
+    ]
+  }
+}

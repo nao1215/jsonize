@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (apt 3) with LC_ALL=C, cut to the first twelve options, three elements of one list and the options of DPkg::Pre-Install-Pkgs
+os: linux
+args: [dump]

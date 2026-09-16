@@ -1,0 +1,3 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C, listing a bare repository it pushed to
+description: two branches and an annotated tag with its dereferenced line
+args: [ls-remote, ../remote.git]

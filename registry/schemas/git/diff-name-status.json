@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/diff-name-status.json",
+  "title": "git/diff-name-status",
+  "description": "git diff --name-status, the changed paths and how each changed",
+  "x-jsonize": {
+    "definition": "git/diff-name-status",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "M",
+          "R",
+          "T",
+          "U",
+          "X"
+        ]
+      },
+      "score": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "path": {
+        "type": "string"
+      },
+      "new_path": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "status",
+      "score",
+      "path",
+      "new_path"
+    ]
+  }
+}

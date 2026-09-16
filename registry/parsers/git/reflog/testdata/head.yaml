@@ -1,0 +1,3 @@
+source: git 2.53 in a repository built for this fixture on Ubuntu, LC_ALL=C
+description: commits, checkouts between two branches and a reset
+args: [reflog]
