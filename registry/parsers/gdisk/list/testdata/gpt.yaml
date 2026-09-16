@@ -1,0 +1,4 @@
+description: A GPT image with a protective MBR, a name holding a space and a partition with no name.
+source: gdisk -l gpt.img on a 64 MiB image partitioned with sgdisk -n -t -c, GPT fdisk 1.0.10 on Ubuntu 26.04 with LC_ALL=C; disk GUID replaced
+os: linux
+args: [-l, gpt.img]

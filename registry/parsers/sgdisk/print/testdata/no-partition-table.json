@@ -1,0 +1,22 @@
+{
+  "disk": {
+    "messages": [
+      "Creating new GPT entries in memory."
+    ],
+    "device": "empty.img",
+    "sectors": 2048,
+    "size": "1024.0 KiB",
+    "logical_sector_size": 512,
+    "physical_sector_size": null,
+    "disk_guid": "0F1E2D3C-0000-4000-8000-00000000000D",
+    "max_partitions": 128,
+    "table_first_sector": 2,
+    "table_last_sector": 33,
+    "first_usable_sector": 34,
+    "last_usable_sector": 2014,
+    "alignment": 2048,
+    "free_sectors": 1981,
+    "free_size": "990.5 KiB"
+  },
+  "partitions": []
+}

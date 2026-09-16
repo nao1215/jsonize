@@ -1,0 +1,4 @@
+description: An image with no partition table prints the table heading and no rows.
+source: gdisk -l empty.img on a 1 MiB image of zeros made with truncate, GPT fdisk 1.0.10 on Ubuntu 26.04 with LC_ALL=C; disk GUID replaced
+os: linux
+args: [-l, empty.img]

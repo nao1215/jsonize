@@ -1,0 +1,66 @@
+{
+  "disk": {
+    "version": "1.0.10",
+    "mbr": "MBR only",
+    "bsd": "not present",
+    "apm": "not present",
+    "gpt": "not present",
+    "messages": [
+      "***************************************************************",
+      "Found invalid GPT and valid MBR; converting MBR to GPT format",
+      "in memory.",
+      "***************************************************************",
+      "Warning! Secondary partition table overlaps the last partition by",
+      "33 blocks!",
+      "You will need to delete this partition or resize it in another utility."
+    ],
+    "device": "dos.img",
+    "sectors": 131072,
+    "size": "64.0 MiB",
+    "logical_sector_size": 512,
+    "physical_sector_size": null,
+    "disk_guid": "0F1E2D3C-0000-4000-8000-00000000000A",
+    "max_partitions": 128,
+    "table_first_sector": 2,
+    "table_last_sector": 33,
+    "first_usable_sector": 34,
+    "last_usable_sector": 131038,
+    "alignment": 2048,
+    "free_sectors": 6110,
+    "free_size": "3.0 MiB"
+  },
+  "partitions": [
+    {
+      "number": 1,
+      "start_sector": 2048,
+      "end_sector": 43007,
+      "size": "20.0 MiB",
+      "code": "8300",
+      "name": "Linux filesystem"
+    },
+    {
+      "number": 2,
+      "start_sector": 43008,
+      "end_sector": 63487,
+      "size": "10.0 MiB",
+      "code": "8200",
+      "name": "Linux swap"
+    },
+    {
+      "number": 5,
+      "start_sector": 65536,
+      "end_sector": 81919,
+      "size": "8.0 MiB",
+      "code": "8300",
+      "name": "Linux filesystem"
+    },
+    {
+      "number": 6,
+      "start_sector": 83968,
+      "end_sector": 131071,
+      "size": "23.0 MiB",
+      "code": "0700",
+      "name": "Microsoft basic data"
+    }
+  ]
+}

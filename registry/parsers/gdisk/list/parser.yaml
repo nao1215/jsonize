@@ -1,0 +1,69 @@
+# `gdisk -l` prints a banner, what it found when it scanned the disk for
+# MBR, BSD, APM and GPT data, any notes about what it did with them
+# ("Found valid GPT with protective MBR; using GPT.", or a warning block
+# when it converts an MBR table in memory), the GPT header of the disk
+# and the partition table.
+#
+# The notes are free text of any number of lines, so they are kept as a
+# list of lines rather than read. A disk with no partition table prints
+# the table heading and no rows.
+#
+# Sizes are rounded ("20.0 MiB") and stay text; the sector numbers on the
+# same row are exact. The partition type code is hexadecimal and stays
+# text.
+format: 1
+command: gdisk
+variant: list
+description: gdisk -l, the GPT header and partition table of a disk or image
+metadata:
+  tags: [linux, block-device, partition, gpt]
+  compatible: [gdisk]
+  references:
+    - https://www.rodsbooks.com/gdisk/
+    - https://man7.org/linux/man-pages/man8/gdisk.8.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AGPT fdisk \(gdisk\) version \S+\n+Partition table scan:$'
+      - '^Number  Start \(sector\)    End \(sector\)  Size       Code  Name$'
+    # The MBR conversion warnings push the table heading past line twenty.
+    window: 60
+parse:
+  type: composite
+  parts:
+    - name: disk
+      select: {until: '^Number  Start \(sector\)'}
+      parse:
+        type: regex
+        each: input
+        # "Model:" and "Sector size (logical/physical)" are what gdisk
+        # prints for a block device that reports them; the captured images
+        # print neither, so those two alternatives are not covered by a
+        # fixture.
+        pattern: '^GPT fdisk \(gdisk\) version (?P<version>\S+)\nPartition table scan:\n[ \t]+MBR: (?P<mbr>[^\n]+)\n[ \t]+BSD: (?P<bsd>[^\n]+)\n[ \t]+APM: (?P<apm>[^\n]+)\n[ \t]+GPT: (?P<gpt>[^\n]+)\n(?:(?P<messages>[^\n]*(?:\n[^\n]*)*?)\n)?Disk (?P<device>.+): (?P<sectors>\d+) sectors, (?P<size>[^\n]+)\n(?:Model: (?P<model>[^\n]*)\n)?Sector size \(logical(?:/physical)?\): (?P<logical_sector_size>\d+)(?:/(?P<physical_sector_size>\d+))? bytes\nDisk identifier \(GUID\): (?P<disk_guid>[0-9A-Fa-f-]+)\nPartition table holds up to (?P<max_partitions>\d+) entries\nMain partition table begins at sector (?P<table_first_sector>\d+) and ends at sector (?P<table_last_sector>\d+)\nFirst usable sector is (?P<first_usable_sector>\d+), last usable sector is (?P<last_usable_sector>\d+)\nPartitions will be aligned on (?P<alignment>\d+)-sector boundaries\nTotal free space is (?P<free_sectors>\d+) sectors \((?P<free_size>[^)\n]+)\)$'
+      fields:
+        messages: {type: array, split: "\n"}
+        device: {required: true}
+        sectors: {type: int}
+        model: {when_missing: omit}
+        logical_sector_size: {type: int}
+        physical_sector_size: {type: int}
+        max_partitions: {type: int}
+        table_first_sector: {type: int}
+        table_last_sector: {type: int}
+        first_usable_sector: {type: int}
+        last_usable_sector: {type: int}
+        alignment: {type: int}
+        free_sectors: {type: int}
+    - name: partitions
+      select: {after: '^Number  Start \(sector\)    End \(sector\)  Size       Code  Name$'}
+      parse:
+        type: regex
+        pattern: '^[ \t]*(?P<number>\d+)[ \t]+(?P<start_sector>\d+)[ \t]+(?P<end_sector>\d+)[ \t]+(?P<size>\S+ \S+)[ \t]+(?P<code>[0-9A-F]{4})(?:  (?P<name>.*))?$'
+      fields:
+        number: {type: int}
+        start_sector: {type: int}
+        end_sector: {type: int}
+        # A partition with no name prints nothing after the code.
+        name: {null_if: [""]}

@@ -1,0 +1,52 @@
+{
+  "disk": {
+    "version": "1.0.10",
+    "mbr": "protective",
+    "bsd": "not present",
+    "apm": "not present",
+    "gpt": "present",
+    "messages": [
+      "Found valid GPT with protective MBR; using GPT."
+    ],
+    "device": "gpt.img",
+    "sectors": 131072,
+    "size": "64.0 MiB",
+    "logical_sector_size": 512,
+    "physical_sector_size": null,
+    "disk_guid": "0F1E2D3C-0000-4000-8000-000000000009",
+    "max_partitions": 128,
+    "table_first_sector": 2,
+    "table_last_sector": 33,
+    "first_usable_sector": 34,
+    "last_usable_sector": 131038,
+    "alignment": 2048,
+    "free_sectors": 2014,
+    "free_size": "1007.0 KiB"
+  },
+  "partitions": [
+    {
+      "number": 1,
+      "start_sector": 2048,
+      "end_sector": 43007,
+      "size": "20.0 MiB",
+      "code": "8300",
+      "name": "data"
+    },
+    {
+      "number": 2,
+      "start_sector": 43008,
+      "end_sector": 75775,
+      "size": "16.0 MiB",
+      "code": "8200",
+      "name": "swap space"
+    },
+    {
+      "number": 3,
+      "start_sector": 75776,
+      "end_sector": 131038,
+      "size": "27.0 MiB",
+      "code": "EF00",
+      "name": null
+    }
+  ]
+}
