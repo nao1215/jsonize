@@ -80,7 +80,7 @@ scenarios:
           content: |
             replicas: 3
       - run:
-          command: jz new name=api replicas:=3 tags[]=web spec:=@${workdir}/deploy.yaml
+          command: jz new name=api replicas:=3 'tags[]=web' spec:=@${workdir}/deploy.yaml
       - assert:
           exit_code: 0
           stdout:
@@ -103,7 +103,7 @@ scenarios:
           content: |
             1.4.0
       - run:
-          command: jz new name=api replicas:=3 debug:=false tags[]=web tags[]=prod
+          command: jz new name=api replicas:=3 debug:=false 'tags[]=web' 'tags[]=prod'
       - assert:
           exit_code: 0
           stdout:
@@ -266,3 +266,35 @@ scenarios:
           stdout:
             equals: |
               [{"time":"2025-11-04T13:17:00Z"}]
+
+  # The pages are copied into a shell, and a shell is entitled to read an
+  # argument before jz does. zsh, which is what macOS starts with, reads
+  # the brackets of an appended key as a pattern and refuses the word with
+  # "no matches found"; /bin/sh leaves an unmatched pattern alone, so the
+  # scenarios above would not have caught it. The example is run here as
+  # the page writes it, in zsh and in bash, and once without the quotes to
+  # show what they are for.
+  - name: "the examples that hold brackets survive the shell they are pasted into"
+    skip: {os: windows}
+    steps:
+      - run:
+          command: zsh -c "jz new name=api replicas:=3 'tags[]=web' 'tags[]=prod'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"api","replicas":3,"tags":["web","prod"]}
+      - run:
+          command: bash -c "jz new name=api replicas:=3 'tags[]=web' 'tags[]=prod'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"name":"api","replicas":3,"tags":["web","prod"]}
+      - run:
+          command: zsh -c "jz new 'tags[]=web' tags[]=prod"
+      - assert:
+          exit_code: 1
+          stdout: {empty: true}
+          stderr:
+            contains: "no matches found"

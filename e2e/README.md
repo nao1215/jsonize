@@ -62,7 +62,8 @@ lacks:
 | `iostat`, `mpstat`, `pidstat`, `vmstat` | `sysstat`, `procps` | `exec_linux` |
 | `busybox` | `busybox` | `exec_linux` |
 | `zsh` | `zsh` | `completion` (macOS ships it; Windows has none, and those scenarios say so) |
-| `bash`, `curl` | on every runner, Windows through Git | `completion`, `http`, and bash for the connected socket in `exec_linux` |
+| `bash`, `curl` | on every runner, Windows through Git | `completion`, `http`, `cookbook`, and bash for the connected socket in `exec_linux` |
+| `jq`, `sed` | on every runner, Windows through Git; the FreeBSD machine installs jq | `cookbook`: the recipes that hand the JSON to jq are pipelines, and the pipeline is what they pin |
 | `git` | on every runner; the FreeBSD machine installs it | `exec`, `exec_linux` |
 | `df`, `free`, `ps`, `uptime`, `id`, `env`, `mount`, `du`, `stat`, `lscpu`, `lsmod`, `prlimit`, `who`, `wc`, `ls`, `ln`, `md5sum`, `sha256sum`, `tar`, `gzip` | on every runner | `exec_linux` |
 | `ip`, `ss`, `dpkg`, `apt-cache` | on every runner | `exec_linux` |

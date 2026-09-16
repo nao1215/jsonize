@@ -158,7 +158,7 @@ $ kubectl get deploy api -o yaml | jz --format yaml --extract spec
 endings, and `--path` places a value at a JSON Pointer.
 
 ```console
-$ jz new name=api replicas:=3 tags[]=web spec:=@deploy.yaml
+$ jz new name=api replicas:=3 'tags[]=web' spec:=@deploy.yaml
 {"name":"api","replicas":3,"tags":["web"],"spec":{"replicas":3}}
 ```
 
@@ -230,6 +230,8 @@ to identify the input, and
 [engine](https://pkg.go.dev/github.com/nao1215/jsonize/pkg/engine)
 to parse it. The embedded registry is available from
 [`registry.FS`](https://pkg.go.dev/github.com/nao1215/jsonize/registry#FS).
+The four in one runnable piece are in
+[the selector example](https://pkg.go.dev/github.com/nao1215/jsonize/pkg/selector#example-package).
 
 ## Exit codes
 

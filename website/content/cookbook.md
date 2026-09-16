@@ -19,7 +19,9 @@ so the output shown is what jz prints.
 | convert a data file | [Convert a CSV file](#convert-a-csv-file), [Type the columns of a CSV file](#type-the-columns-of-a-csv-file), [Read a CSV without a header line](#read-a-csv-without-a-header-line), [Convert YAML to JSON](#convert-yaml-to-json), [Read compressed JSON Lines logs](#read-compressed-json-lines-logs), [Read LTSV access logs](#read-ltsv-access-logs) |
 | turn plain text into JSON | [Turn lines into a JSON array](#turn-lines-into-a-json-array), [Read find -print0 output](#read-find--print0-output), [Wrap a whole text in a JSON string](#wrap-a-whole-text-in-a-json-string) |
 | make JSON in a script | [Build a JSON body for an API call](#build-a-json-body-for-an-api-call), [Pass a variable that may start with @](#pass-a-variable-that-may-start-with-), [Put a file's contents into JSON](#put-a-files-contents-into-json), [Keep a file's line endings](#keep-a-files-line-endings), [Build nested JSON](#build-nested-json), [Make a JSON array](#make-a-json-array) |
-| use jz in CI | [Fail a CI step when jz cannot read the output](#fail-a-ci-step-when-jz-cannot-read-the-output), [Get the JSON Schema of an output](#get-the-json-schema-of-an-output) |
+| hand the JSON to jq | [Pick the records you want with jq](#pick-the-records-you-want-with-jq), [Fail a step when a value is out of range](#fail-a-step-when-a-value-is-out-of-range) |
+| send or store the JSON | [Send JSON to an HTTP API](#send-json-to-an-http-api), [Save a report for a later step](#save-a-report-for-a-later-step) |
+| use jz in CI | [Fail a CI step when jz cannot read the output](#fail-a-ci-step-when-jz-cannot-read-the-output), [Read the explanation in a script](#read-the-explanation-in-a-script), [Get the JSON Schema of an output](#get-the-json-schema-of-an-output) |
 | read a format jz does not know | [Add a parser of your own](#add-a-parser-of-your-own) |
 
 ## Convert what a command printed
@@ -213,7 +215,7 @@ $ git log -1 --format=%B | jz --format text
 JSON, `[]` appends to an array.
 
 ```console
-$ jz new name=api version=1.4.0 replicas:=3 tags[]=web tags[]=prod
+$ jz new name=api version=1.4.0 replicas:=3 'tags[]=web' 'tags[]=prod'
 {"name":"api","version":"1.4.0","replicas":3,"tags":["web","prod"]}
 $ jz new name=api replicas:=3 | curl -sS -H 'Content-Type: application/json' -d @- https://api.example.com/deploy
 ```
@@ -266,6 +268,86 @@ A location given twice is refused instead of overwritten.
 ```console
 $ jz new --array web :=8080 :=true
 ["web",8080,true]
+```
+
+## Pick the records you want with jq
+
+jz does not select, sort or compute. It makes the JSON, and `jq` takes it
+from there, which is why the keys are named and typed rather than left as
+the text the command printed.
+
+```console
+$ df -h | jz | jq -r '.[] | select(.use_percent >= 90) | .mounted_on'
+/
+```
+
+`use_percent` is a number because df prints an exact one, so `>= 90` is a
+comparison rather than string work. A rounded size (`1.8T`) is a string,
+and a threshold on it belongs to the tool that knows what T means.
+
+## Fail a step when a value is out of range
+
+`jq -e` exits 1 when its result is false or null, so a check is one
+pipeline and the shell's own status.
+
+```console
+$ df -h | jz | jq -e 'all(.use_percent < 90)' > /dev/null
+$ echo $?
+1
+```
+
+Put `set -o pipefail` around it, or jz failing to read the output is
+hidden by jq succeeding on an empty input.
+
+## Send JSON to an HTTP API
+
+`jz new` writes the body and curl reads it from standard input, so the
+JSON is never a string the shell has to quote.
+
+```console
+$ jz new service=api replicas:=3 | curl -sS -X POST -H 'content-type: application/json' --data-binary @- http://127.0.0.1:8080/deploy -o /dev/null -w '%{http_code}\n'
+200
+```
+
+`--data-binary @-` rather than `-d @-`: the second strips line endings,
+which matters when a value came from a file. Put `set -o pipefail` around
+the pipeline, or jz failing to make the body is hidden by curl posting
+nothing successfully.
+
+## Save a report for a later step
+
+jz writes complete JSON or nothing, so a file it wrote is a file a later
+step can read. Redirect its output and check the status before the file
+is used.
+
+```console
+$ jz run df -h > df.json
+$ jq -r '.[0].mounted_on' df.json
+/
+```
+
+A failure leaves the file empty and the status non-zero; `set -e` or an
+explicit check is what stops the later step.
+
+## Read the explanation in a script
+
+`--explain=json` writes one JSON document to standard error, which leaves
+standard output for the conversion. Every line it writes starts with
+`jz: explain: `, so a script cuts that off and reads the rest.
+
+```console
+$ df -h | jz --explain=json 2>&1 >/dev/null | sed -n 's/^jz: explain: //p' | jq -r '.chosen.definition'
+df/gnu-human
+```
+
+The document says `outcome`, what the choice was made from (`scope`),
+what was chosen and what matched (`chosen`), what was turned down
+(`rejected`), what was read (`read`), and, when the conversion failed,
+`error` with the exit status jz ended with.
+
+```console
+$ printf 'no format here\n' | jz --explain=json 2>&1 >/dev/null | sed -n 's/^jz: explain: //p' | jq -c '{outcome, exit: .error.exit}'
+{"outcome":"unidentified","exit":4}
 ```
 
 ## Fail a CI step when jz cannot read the output

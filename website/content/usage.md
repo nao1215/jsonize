@@ -218,7 +218,7 @@ $ jz --file sales.csv --type units=int --type price=float --type in_stock=bool
 `--array`.
 
 ```console
-$ jz new name=api replicas:=3 debug:=false tags[]=web tags[]=prod
+$ jz new name=api replicas:=3 debug:=false 'tags[]=web' 'tags[]=prod'
 {"name":"api","replicas":3,"debug":false,"tags":["web","prod"]}
 
 $ jz new version=@VERSION spec:=@deploy.yaml
@@ -242,6 +242,9 @@ $ jz new --array web :=1 :=null
 - Nothing is guessed: `version=007` is `"007"`; use `:=` for numbers.
 - A key given twice is refused unless it ends in `[]`, and so is a key
   given both with and without `[]`.
+- Quote an argument whose key ends in `[]`. zsh, which is the default
+  shell on macOS, reads the brackets as a pattern and refuses the word
+  with `no matches found` before jz sees it.
 - The key is everything before the first `=`, so `spec.replicas:=3` is
   the key `spec.replicas`; nesting is `--path`.
 - Options come before the arguments; `--` ends them, so `jz new -- -x=1`
