@@ -1991,3 +1991,29 @@ scenarios:
               - { path: "$[0].name", equals: localhost }
               - { path: "$[1].name", equals: null }
               - { path: "$[2].socktype", equals: RAW }
+
+  - name: /proc/PID/maps and /proc/net/if_inet6 are read by path and by their text
+    steps:
+      - fixture:
+          file: proc/self/maps
+          from: "${specdir}/../../registry/parsers/proc/self-maps/testdata/sleep.txt"
+      - run:
+          command: jz --explain --file ${workdir}/proc/self/maps
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "proc/self-maps from embedded"
+          stdout:
+            json:
+              - { path: "$[0].inode", equals: 28967061 }
+      - fixture:
+          file: proc/net/if_inet6
+          from: "${specdir}/../../registry/parsers/proc/net-if-inet6/testdata/linux-7.0.txt"
+      - run:
+          command: jz --file ${workdir}/proc/net/if_inet6
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[1].interface", equals: lo }
+              - { path: "$[1].prefix_length", equals: "80" }

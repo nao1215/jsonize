@@ -1,0 +1,2 @@
+source: cat /proc/net/if_inet6 on Linux 7.0.0-31-generic on Ubuntu 26.04, cut to three interfaces; the interface identifiers of the link-local addresses replaced, and a unique local address in the shape the global one on this machine has added under eno1
+os: linux

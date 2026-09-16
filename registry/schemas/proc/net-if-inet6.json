@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/net-if-inet6.json",
+  "title": "proc/net-if-inet6",
+  "description": "/proc/net/if_inet6, the IPv6 addresses of the interfaces",
+  "x-jsonize": {
+    "definition": "proc/net-if-inet6",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "address": {
+        "type": "string"
+      },
+      "index": {
+        "type": "string"
+      },
+      "prefix_length": {
+        "type": "string"
+      },
+      "scope": {
+        "type": "string"
+      },
+      "flags": {
+        "type": "string"
+      },
+      "interface": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "address",
+      "index",
+      "prefix_length",
+      "scope",
+      "flags",
+      "interface"
+    ]
+  }
+}

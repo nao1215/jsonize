@@ -1,0 +1,49 @@
+5f98da62a000-5f98da71c000 r--p 00000000 103:02 28967061                  /usr/lib/cargo/bin/coreutils/sleep
+5f98da71c000-5f98dabd4000 r-xp 000f2000 103:02 28967061                  /usr/lib/cargo/bin/coreutils/sleep
+5f98dabd4000-5f98daf93000 r--p 005aa000 103:02 28967061                  /usr/lib/cargo/bin/coreutils/sleep
+5f98daf93000-5f98db0f8000 r--p 00968000 103:02 28967061                  /usr/lib/cargo/bin/coreutils/sleep
+5f98db0f8000-5f98db0fe000 rw-p 00acd000 103:02 28967061                  /usr/lib/cargo/bin/coreutils/sleep
+5f98db0fe000-5f98db0ff000 rw-p 00000000 00:00 0 
+5f98de33d000-5f98de35e000 rw-p 00000000 00:00 0                          [heap]
+70a008a00000-70a008a28000 r--p 00000000 103:02 28971096                  /usr/lib/x86_64-linux-gnu/libc.so.6
+70a008a28000-70a008bc0000 r-xp 00028000 103:02 28971096                  /usr/lib/x86_64-linux-gnu/libc.so.6
+70a008bc0000-70a008c0e000 r--p 001c0000 103:02 28971096                  /usr/lib/x86_64-linux-gnu/libc.so.6
+70a008c0e000-70a008c12000 r--p 0020e000 103:02 28971096                  /usr/lib/x86_64-linux-gnu/libc.so.6
+70a008c12000-70a008c14000 rw-p 00212000 103:02 28971096                  /usr/lib/x86_64-linux-gnu/libc.so.6
+70a008c14000-70a008c21000 rw-p 00000000 00:00 0 
+70a008cdd000-70a008ce2000 rw-p 00000000 00:00 0 
+70a008ce2000-70a008ce5000 r--p 00000000 103:02 28968490                  /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.14.0
+70a008ce5000-70a008d61000 r-xp 00003000 103:02 28968490                  /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.14.0
+70a008d61000-70a008d8c000 r--p 0007f000 103:02 28968490                  /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.14.0
+70a008d8c000-70a008d8d000 r--p 000a9000 103:02 28968490                  /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.14.0
+70a008d8d000-70a008d8e000 rw-p 000aa000 103:02 28968490                  /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.14.0
+70a008d8e000-70a008da0000 r--p 00000000 103:02 28971099                  /usr/lib/x86_64-linux-gnu/libm.so.6
+70a008da0000-70a008e40000 r-xp 00012000 103:02 28971099                  /usr/lib/x86_64-linux-gnu/libm.so.6
+70a008e40000-70a008eb2000 r--p 000b2000 103:02 28971099                  /usr/lib/x86_64-linux-gnu/libm.so.6
+70a008eb2000-70a008eb3000 r--p 00123000 103:02 28971099                  /usr/lib/x86_64-linux-gnu/libm.so.6
+70a008eb3000-70a008eb4000 rw-p 00124000 103:02 28971099                  /usr/lib/x86_64-linux-gnu/libm.so.6
+70a008eb4000-70a008eb8000 r--p 00000000 103:02 28968070                  /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+70a008eb8000-70a008edc000 r-xp 00004000 103:02 28968070                  /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+70a008edc000-70a008ee0000 r--p 00028000 103:02 28968070                  /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+70a008ee0000-70a008ee1000 r--p 0002c000 103:02 28968070                  /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+70a008ee1000-70a008ee2000 rw-p 0002d000 103:02 28968070                  /usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+70a008ee2000-70a008ee9000 r--p 00000000 103:02 28968988                  /usr/lib/x86_64-linux-gnu/libselinux.so.1
+70a008ee9000-70a008f0a000 r-xp 00007000 103:02 28968988                  /usr/lib/x86_64-linux-gnu/libselinux.so.1
+70a008f0a000-70a008f11000 r--p 00028000 103:02 28968988                  /usr/lib/x86_64-linux-gnu/libselinux.so.1
+70a008f11000-70a008f12000 r--p 0002f000 103:02 28968988                  /usr/lib/x86_64-linux-gnu/libselinux.so.1
+70a008f12000-70a008f13000 rw-p 00030000 103:02 28968988                  /usr/lib/x86_64-linux-gnu/libselinux.so.1
+70a008f13000-70a008f15000 rw-p 00000000 00:00 0 
+70a008f33000-70a008f34000 ---p 00000000 00:00 0 
+70a008f34000-70a008f36000 rw-p 00000000 00:00 0 
+70a008f36000-70a008f38000 rw-p 00000000 00:00 0 
+70a008f38000-70a008f3c000 r--p 00000000 00:00 0                          [vvar]
+70a008f3c000-70a008f3e000 r--p 00000000 00:00 0                          [vvar_vclock]
+70a008f3e000-70a008f40000 r-xp 00000000 00:00 0                          [vdso]
+70a008f40000-70a008f41000 r--p 00000000 103:02 28971093                  /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+70a008f41000-70a008f70000 r-xp 00001000 103:02 28971093                  /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+70a008f70000-70a008f7b000 r--p 00030000 103:02 28971093                  /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+70a008f7b000-70a008f7d000 r--p 0003b000 103:02 28971093                  /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+70a008f7d000-70a008f7e000 rw-p 0003d000 103:02 28971093                  /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+70a008f7e000-70a008f7f000 rw-p 00000000 00:00 0 
+7ffe64cab000-7ffe64ccd000 rw-p 00000000 00:00 0                          [stack]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]
