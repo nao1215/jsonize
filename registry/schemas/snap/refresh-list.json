@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/snap/refresh-list.json",
+  "title": "snap/refresh-list",
+  "description": "snap refresh --list, the snaps with an update waiting",
+  "x-jsonize": {
+    "definition": "snap/refresh-list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "version": {
+        "type": "string"
+      },
+      "rev": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "publisher": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "verified": {
+        "type": "boolean"
+      },
+      "starred": {
+        "type": "boolean"
+      },
+      "notes": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "name",
+      "version",
+      "rev",
+      "size",
+      "publisher",
+      "verified",
+      "starred",
+      "notes"
+    ]
+  }
+}

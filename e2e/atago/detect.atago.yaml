@@ -2017,3 +2017,32 @@ scenarios:
             json:
               - { path: "$[1].interface", equals: lo }
               - { path: "$[1].prefix_length", equals: "80" }
+
+  - name: apt-cache show and the snap listings are read with their counts typed
+    steps:
+      - fixture:
+          file: apt-cache-show.txt
+          from: "${specdir}/../../registry/parsers/apt-cache/show/testdata/jq-two-versions.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: apt-cache-show.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose apt-cache/show from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].fields.Size", equals: 72432 }
+      - fixture:
+          file: snap-version.txt
+          from: "${specdir}/../../registry/parsers/snap/version/testdata/snapd-2.76.txt"
+      - run:
+          command: jz
+          stdin: {file: snap-version.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.snapd", equals: 2.76.3 }
+              - { path: "$.architecture", equals: amd64 }

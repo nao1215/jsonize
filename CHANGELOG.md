@@ -48,8 +48,10 @@ project follows [Semantic Versioning](https://semver.org/).
   and macOS `arp -a` (`arp/darwin`).
 - `/proc/pressure/*` (pressure stall averages), `/proc/self/io`,
   `/proc/cgroups`, `/proc/net/sockstat`, `/proc/PID/maps` and
-  `/proc/net/if_inet6`. The registry holds 241 commands through 675
-  definitions.
+  `/proc/net/if_inet6`.
+- `apt-cache show` (a record per package version, sizes typed), and
+  `snap refresh --list`, `snap aliases` and `snap version`. The registry
+  holds 241 commands through 679 definitions.
 - `jz run --format NAME` reads the command's output as a data format,
   the way `COMMAND | jz --format NAME` reads it, with `--stream`,
   `--columns` and `--type` as there. `jz run --type` already told the

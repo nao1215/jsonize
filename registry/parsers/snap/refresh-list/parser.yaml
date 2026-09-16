@@ -1,0 +1,33 @@
+# `snap refresh --list` prints the snaps that have a newer revision
+# waiting, one row each: the name, the version and revision on offer,
+# the download size (rounded for people, kept as text), the publisher
+# with the marks snap puts after a verified or starred one, and notes.
+format: 1
+command: snap
+variant: refresh-list
+description: snap refresh --list, the snaps with an update waiting
+metadata:
+  tags: [linux, packaging, snap]
+  compatible: [snapd]
+  references:
+    - https://snapcraft.io/docs/managing-updates
+detect:
+  os: [linux]
+  args:
+    all: [refresh, "--list"]
+  signature:
+    all:
+      - '\AName[ \t]+Version[ \t]+Rev[ \t]+Size[ \t]+Publisher[ \t]+Notes[ \t]*$'
+input:
+  ignore:
+    - '^Name[ \t]+Version[ \t]+Rev[ \t]+Size[ \t]+Publisher[ \t]+Notes[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+)[ \t]+(?P<version>\S+)[ \t]+(?P<rev>\S+)[ \t]+(?P<size>\S+)[ \t]+(?P<publisher>[^\s*]+)(?P<verified>\*\*|)(?P<starred>\*|)[ \t]+(?P<notes>\S+)[ \t]*$'
+fields:
+  name: {required: true}
+  rev: {required: true}
+  publisher: {null_if: ["-"]}
+  verified: {type: bool, true_values: ["**"], false_values: [""]}
+  starred: {type: bool, true_values: ["*"], false_values: [""]}
+  notes: {type: array, split: ",", null_if: ["-"]}

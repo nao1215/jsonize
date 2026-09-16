@@ -1,0 +1,29 @@
+# `snap aliases` prints the command aliases snaps provide, one row each:
+# the snap's command, the alias it answers to and notes (manual, disabled,
+# or a dash for none).
+format: 1
+command: snap
+variant: aliases
+description: snap aliases, the aliases snaps provide for their commands
+metadata:
+  tags: [linux, packaging, snap]
+  compatible: [snapd]
+  references:
+    - https://snapcraft.io/docs/commands-and-aliases
+detect:
+  os: [linux]
+  args:
+    all: [aliases]
+  signature:
+    all:
+      - '\ACommand[ \t]+Alias[ \t]+Notes[ \t]*$'
+input:
+  ignore:
+    - '^Command[ \t]+Alias[ \t]+Notes[ \t]*$'
+parse:
+  type: regex
+  pattern: '^(?P<command>\S+)[ \t]+(?P<alias>\S+)[ \t]+(?P<notes>\S+)[ \t]*$'
+fields:
+  command: {required: true}
+  alias: {required: true}
+  notes: {type: array, split: ",", null_if: ["-"]}

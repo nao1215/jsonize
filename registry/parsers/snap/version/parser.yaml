@@ -1,0 +1,24 @@
+# `snap version` prints the versions of the snap command and the snapd
+# daemon, the assertion series, the distribution and its release, the
+# kernel and the architecture, one "name  value" line each. The result is
+# one object under the names snap printed.
+format: 1
+command: snap
+variant: version
+description: snap version, the snap and snapd versions and the system they run on
+metadata:
+  tags: [linux, packaging, snap]
+  compatible: [snapd]
+  references:
+    - https://snapcraft.io/docs/snap-command
+detect:
+  os: [linux]
+  args:
+    all: [version]
+  signature:
+    all:
+      - '\Asnap[ \t]+\S+\nsnapd[ \t]+\S+\nseries[ \t]+\S+$'
+parse:
+  type: regex
+  each: input
+  pattern: '(?s)\Asnap[ \t]+(?P<snap>\S+)\nsnapd[ \t]+(?P<snapd>\S+)\nseries[ \t]+(?P<series>\S+)\n(?:(?P<distribution>[a-z][\w.-]*)[ \t]+(?P<release>\S+)\n)?kernel[ \t]+(?P<kernel>\S+)(?:\narchitecture[ \t]+(?P<architecture>\S+))?\n?\z'

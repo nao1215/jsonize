@@ -1,0 +1,122 @@
+[
+  {
+    "package": {
+      "name": "jq"
+    },
+    "fields": {
+      "Priority": "optional",
+      "Section": "utils",
+      "Installed-Size": 122,
+      "Maintainer": "Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>",
+      "Architecture": "amd64",
+      "Version": "1.8.1-4ubuntu2",
+      "Depends": [
+        "libjq1 (= 1.8.1-4ubuntu2)",
+        "libc6 (>= 2.38)",
+        "libonig5 (>= 6.8.1)"
+      ],
+      "Filename": "pool/main/j/jq/jq_1.8.1-4ubuntu2_amd64.deb",
+      "Size": 72432,
+      "MD5sum": "2f9656ec8a129dde699c285b7232711b",
+      "SHA1": "eb184795f91527c212ad4f976bb02c22aa532e97",
+      "SHA256": "bb7f69de12414f6e52eea1da952ed7226b8e3fd9db74f93bb8ea3f2f39f4836f",
+      "SHA512": "494ab62460f89153ce352ea2df43868e4afd6abcf5553e88a74f1c698c51d28efe0179d11a53994b1416ad9dfbe949578ec3e3e17b0747fd2020c4a95ac0c0af",
+      "Homepage": "https://jqlang.github.io/jq",
+      "Description-en": "lightweight and flexible command-line JSON processor jq is like sed for JSON data ?? you can use it to slice and filter and map and transform structured data with the same ease that sed, awk, grep and friends let you play with text. . It is written in portable C, and it has minimal runtime dependencies. . jq can mangle the data format that you have into the one that you want with very little effort, and the program to do so is often shorter and simpler than you??d expect.",
+      "Description-md5": "fd8d7d97b13012ce68c52772c1ce56aa",
+      "Multi-Arch": "foreign",
+      "Original-Maintainer": "ChangZhuo Chen (陳昌倬) <czchen@debian.org>",
+      "Origin": "Ubuntu",
+      "Bugs": "https://bugs.launchpad.net/ubuntu/+filebug",
+      "Task": [
+        "ubuntu-desktop-minimal",
+        "ubuntu-desktop",
+        "cloud-image",
+        "cloud-image",
+        "server",
+        "ubuntu-server-raspi",
+        "ubuntu-desktop-raspi",
+        "kubuntu-desktop",
+        "xubuntu-minimal",
+        "xubuntu-desktop",
+        "lubuntu-desktop-minimal",
+        "lubuntu-desktop",
+        "lubuntu-desktop",
+        "ubuntustudio-desktop",
+        "ubuntustudio-desktop-core",
+        "ubuntukylin-desktop",
+        "ubuntukylin-desktop-minimal",
+        "ubuntu-mate-core",
+        "ubuntu-mate-desktop",
+        "ubuntu-budgie-desktop-minimal",
+        "ubuntu-budgie-desktop",
+        "ubuntu-budgie-desktop-raspi",
+        "ubuntu-unity-desktop",
+        "edubuntu-desktop-gnome-minimal",
+        "edubuntu-desktop-gnome-raspi",
+        "ubuntucinnamon-desktop-minimal",
+        "ubuntucinnamon-desktop-raspi"
+      ]
+    }
+  },
+  {
+    "package": {
+      "name": "jq"
+    },
+    "fields": {
+      "Priority": "optional",
+      "Section": "utils",
+      "Installed-Size": 122,
+      "Maintainer": "Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>",
+      "Architecture": "amd64",
+      "Version": "1.8.1-4ubuntu1",
+      "Depends": [
+        "libjq1 (= 1.8.1-4ubuntu1)",
+        "libc6 (>= 2.38)",
+        "libonig5 (>= 6.8.1)"
+      ],
+      "Filename": "pool/main/j/jq/jq_1.8.1-4ubuntu1_amd64.deb",
+      "Size": 72372,
+      "MD5sum": "98977c7d54300ec2942626bf2fd787d8",
+      "SHA1": "b7c925f8b7212a23aba55453f439812168268e15",
+      "SHA256": "d27a393992f04732c98d74bf899d26f6afaf50da3ab1faa2d798cca82c8d7e95",
+      "SHA512": "410fdaa968cb0a8ee5f825bf5113a8e88b85e9b509490f98c9b8761f68f34bfdc1f03a693c35279382754f419279f2b2c02be8dfd5edfec26f558df1d2168ada",
+      "Homepage": "https://jqlang.github.io/jq",
+      "Description-en": "lightweight and flexible command-line JSON processor jq is like sed for JSON data ?? you can use it to slice and filter and map and transform structured data with the same ease that sed, awk, grep and friends let you play with text. . It is written in portable C, and it has minimal runtime dependencies. . jq can mangle the data format that you have into the one that you want with very little effort, and the program to do so is often shorter and simpler than you??d expect.",
+      "Description-md5": "fd8d7d97b13012ce68c52772c1ce56aa",
+      "Multi-Arch": "foreign",
+      "Original-Maintainer": "ChangZhuo Chen (陳昌倬) <czchen@debian.org>",
+      "Origin": "Ubuntu",
+      "Bugs": "https://bugs.launchpad.net/ubuntu/+filebug",
+      "Task": [
+        "ubuntu-desktop-minimal",
+        "ubuntu-desktop",
+        "cloud-image",
+        "cloud-image",
+        "server",
+        "ubuntu-server-raspi",
+        "ubuntu-desktop-raspi",
+        "kubuntu-desktop",
+        "xubuntu-minimal",
+        "xubuntu-desktop",
+        "lubuntu-desktop-minimal",
+        "lubuntu-desktop",
+        "lubuntu-desktop",
+        "ubuntustudio-desktop",
+        "ubuntustudio-desktop-core",
+        "ubuntukylin-desktop",
+        "ubuntukylin-desktop-minimal",
+        "ubuntu-mate-core",
+        "ubuntu-mate-desktop",
+        "ubuntu-budgie-desktop-minimal",
+        "ubuntu-budgie-desktop",
+        "ubuntu-budgie-desktop-raspi",
+        "ubuntu-unity-desktop",
+        "edubuntu-desktop-gnome-minimal",
+        "edubuntu-desktop-gnome-raspi",
+        "ubuntucinnamon-desktop-minimal",
+        "ubuntucinnamon-desktop-raspi"
+      ]
+    }
+  }
+]

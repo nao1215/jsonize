@@ -1,0 +1,7 @@
+[
+  {
+    "command": "firefox.geckodriver",
+    "alias": "geckodriver",
+    "notes": null
+  }
+]
