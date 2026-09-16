@@ -1,0 +1,4 @@
+description: a system with no printers prints the first two lines only
+source: captured on Ubuntu 26.04 (CUPS 2.4.16) with LC_ALL=C lpstat -t against the system cupsd with no destinations added; the "No destinations added." lines go to standard error
+os: linux
+args: [-t]

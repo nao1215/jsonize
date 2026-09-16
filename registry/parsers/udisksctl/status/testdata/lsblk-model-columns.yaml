@@ -1,0 +1,3 @@
+description: lsblk asked for the same drive columns prints a different header, which this definition refuses
+source: captured on Ubuntu 26.04 with LC_ALL=C lsblk -d -o MODEL,REV,SERIAL,NAME -e 7 (util-linux 2.41.3); serial numbers replaced with placeholders of the same length
+expect_error: 'does not describe this input'

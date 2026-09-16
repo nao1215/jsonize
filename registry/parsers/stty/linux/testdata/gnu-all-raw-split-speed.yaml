@@ -1,0 +1,2 @@
+description: different input and output speeds, raw mode, and a control character set to ";"
+source: captured on Ubuntu 26.04 with LC_ALL=C gnustty -a > file (GNU coreutils 9.7) on a pseudo-terminal from script(1) after stty rows 50 cols 132 raw -echo, stty ispeed 9600 ospeed 115200 and stty intr ^K eol ';'

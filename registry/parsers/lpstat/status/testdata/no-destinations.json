@@ -1,0 +1,10 @@
+[
+  {
+    "kind": "scheduler",
+    "running": true
+  },
+  {
+    "kind": "default_destination",
+    "printer": null
+  }
+]

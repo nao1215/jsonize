@@ -1,0 +1,4 @@
+description: a model of 26 characters that pushes its row right, beside a row that fits the widths
+source: captured on Ubuntu 26.04 with LC_ALL=C udisksctl status (UDisks 2.10.91) with two NVMe drives; serial numbers replaced with placeholders of the same length
+os: linux
+args: [status]

@@ -1,0 +1,29 @@
+[
+  {
+    "login": "alice",
+    "name": "Alice Example",
+    "messages": false,
+    "tty": "pts/3",
+    "idle": "1d",
+    "when": "Sep 17 07:56",
+    "where": "192.0.2.10"
+  },
+  {
+    "login": "maintenance01",
+    "name": null,
+    "messages": false,
+    "tty": "tty2",
+    "idle": "1d",
+    "when": "Sep 16 08:06",
+    "where": null
+  },
+  {
+    "login": "bart",
+    "name": "Bartholomew Longnam",
+    "messages": false,
+    "tty": "pts/5",
+    "idle": "1d",
+    "when": "Sep 17 06:06",
+    "where": "workstation.internal.example"
+  }
+]

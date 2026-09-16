@@ -1,0 +1,26 @@
+[
+  {
+    "login": "alice",
+    "name": "Alice Example",
+    "directory": "/home/alice",
+    "shell": "/bin/bash",
+    "project": null,
+    "plan": null
+  },
+  {
+    "login": "bart",
+    "name": "Bartholomew Longname-Example",
+    "directory": "/home/bart",
+    "shell": "/bin/zsh",
+    "project": null,
+    "plan": null
+  },
+  {
+    "login": "maintenance01",
+    "name": null,
+    "directory": "/home/maintenance01",
+    "shell": "/bin/sh",
+    "project": null,
+    "plan": null
+  }
+]

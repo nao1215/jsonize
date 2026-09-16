@@ -1,0 +1,26 @@
+[
+  {
+    "login": "bob",
+    "name": "bob",
+    "directory": "/home/bob",
+    "shell": "/bin/bash",
+    "project": null,
+    "plan": null
+  },
+  {
+    "login": "root",
+    "name": "root",
+    "directory": "/root",
+    "shell": "/bin/bash",
+    "project": null,
+    "plan": null
+  },
+  {
+    "login": "nosuchuser42",
+    "name": null,
+    "directory": null,
+    "shell": null,
+    "project": null,
+    "plan": null
+  }
+]

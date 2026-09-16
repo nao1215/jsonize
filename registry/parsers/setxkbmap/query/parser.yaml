@@ -1,0 +1,37 @@
+# `setxkbmap -query` prints the XKB rule names one per line, each label
+# padded to the same column: rules, model and layout always, variant and
+# options only when they are set. The labels are fixed, so the result is
+# one object with those keys.
+#
+# layout, variant and options are comma-separated lists. A variant list
+# keeps an empty entry for a layout that has no variant (",kana" for
+# "us,jp"), so the n-th variant still belongs to the n-th layout.
+#
+# The warning setxkbmap prints against an Xwayland server goes to
+# standard error and is not part of this text.
+format: 1
+command: setxkbmap
+variant: query
+description: setxkbmap -query keyboard rules, model, layouts, variants and options
+metadata:
+  tags: [linux, x11, keyboard]
+  compatible: [setxkbmap]
+  references:
+    - https://gitlab.freedesktop.org/xorg/app/setxkbmap
+    - https://man.archlinux.org/man/setxkbmap.1
+detect:
+  signature:
+    all:
+      # The whole text: rules, model and layout, then the optional
+      # variant and options lines, and nothing else.
+      - '\Arules:[ \t]+\S*[ \t]*\nmodel:[ \t]+\S*[ \t]*\nlayout:[ \t]+\S*[ \t]*(?:\nvariant:[ \t]+\S*[ \t]*)?(?:\noptions:[ \t]+\S*[ \t]*)?\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\Arules:[ \t]+(?P<rules>\S*)[ \t]*\nmodel:[ \t]+(?P<model>\S*)[ \t]*\nlayout:[ \t]+(?P<layout>\S*)[ \t]*(?:\nvariant:[ \t]+(?P<variant>\S*)[ \t]*)?(?:\noptions:[ \t]+(?P<options>\S*)[ \t]*)?\z'
+fields:
+  rules: {required: true}
+  model: {null_if: [""]}
+  layout: {type: array, split: ","}
+  variant: {type: array, split: ","}
+  options: {type: array, split: ","}

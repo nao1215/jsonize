@@ -1,0 +1,4 @@
+Login    Name                TTY       Idle   When             Where
+alice    Alice Example       *pts/3    1d     2026-09-17 07:56 192.0.2.10
+maintenance01                     *tty2     1d     2026-09-16 08:06
+bart     Bartholomew Longnam *pts/5    1d     2026-09-17 06:06 workstation.internal.example

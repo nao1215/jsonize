@@ -1,0 +1,34 @@
+[
+  {
+    "state": "printing",
+    "printer": "lab-inkjet",
+    "job": "lab-inkjet-2",
+    "enabled": true,
+    "since": "Thu Sep 17 07:19:18 2026",
+    "reason": "The printer is unreachable at this time."
+  },
+  {
+    "state": "idle",
+    "printer": "label-writer",
+    "job": null,
+    "enabled": true,
+    "since": "Thu Sep 17 07:19:18 2026",
+    "reason": null
+  },
+  {
+    "state": "stopped",
+    "printer": "labels",
+    "job": null,
+    "enabled": false,
+    "since": "Thu Sep 17 07:29:18 2026",
+    "reason": "reason unknown"
+  },
+  {
+    "state": "stopped",
+    "printer": "office-laser",
+    "job": null,
+    "enabled": false,
+    "since": "Thu Sep 17 07:19:18 2026",
+    "reason": "Moved to room 3"
+  }
+]

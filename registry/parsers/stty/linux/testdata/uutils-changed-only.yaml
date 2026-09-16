@@ -1,0 +1,4 @@
+description: stty without -a prints only the settings that differ from the defaults, and no window size
+source: captured on Ubuntu 26.04 with LC_ALL=C stty > file (uutils coreutils 0.8.0) on a pseudo-terminal from script(1) after stty raw -echo, stty ispeed 9600 ospeed 115200 and stty intr ^K eol ';'
+os: linux
+args: []

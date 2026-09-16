@@ -1,0 +1,51 @@
+# pinky prints one row per login under a header. The columns are written
+# with fixed widths: the login padded to eight characters (a longer login
+# is printed whole and pushes the row right), a space, the full name cut
+# or padded to exactly nineteen characters, a space, one character saying
+# whether the terminal accepts messages, the terminal, the idle time, the
+# login time and the remote host.
+#
+# The full name may contain spaces and may be empty, so the row is read
+# by position rather than by words: the login is matched as eight padded
+# characters or a longer word, and the name as the nineteen characters
+# after it.
+#
+# In the C locale the login time is "Sep 17 05:54", with no year. In
+# other locales GNU and uutils pinky print "2026-09-17 05:54", which
+# pinky/short-iso reads. A header with no rows says nothing about the
+# time shape; it is read here, where jz run lands under LC_ALL=C.
+#
+# GNU and uutils pad the header differently, so the header is matched
+# word by word.
+format: 1
+command: pinky
+variant: short
+aliases:
+  - name: gpinky
+description: pinky short listing of logged-in users in the C locale
+metadata:
+  tags: [linux, darwin, user, login]
+  compatible: [GNU coreutils, uutils coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/pinky-invocation.html
+detect:
+  signature:
+    all:
+      # The header, then either the end of the text or a row whose login
+      # time has no year.
+      - '\ALogin[ \t]+Name[ \t]+TTY[ \t]+Idle[ \t]+When[ \t]+Where[ \t]*(?:\z|\n[^\n]*[ \t][A-Z][a-z]{2} [ 0-9][0-9] [0-9]{2}:[0-9]{2}(?:[ \t]|$))'
+input:
+  ignore: ['^Login[ \t]+Name[ \t]+TTY[ \t]+Idle[ \t]+When[ \t]+Where[ \t]*$']
+parse:
+  type: regex
+  pattern: '^(?P<login>\S{8,}|\S{7} |\S{6} {2}|\S{5} {3}|\S{4} {4}|\S{3} {5}|\S{2} {6}|\S {7}) (?P<name>.{19}) (?P<messages>[ *?])(?P<tty>\S*) +(?P<idle>\S+) +(?P<when>[A-Z][a-z]{2} [ 0-9][0-9] [0-9]{2}:[0-9]{2})(?: +(?P<where>\S.*?))?[ \t]*$'
+fields:
+  login: {regex: '(?P<login>\S+) *', required: true}
+  name: {regex: '(?P<name>.*?) *', null_if: [""]}
+  # A space means the terminal accepts messages, "*" that it does not and
+  # "?" that pinky could not look at the terminal.
+  messages: {type: bool, true_values: [""], false_values: ["*"], null_if: ["?"]}
+  tty: {null_if: [""]}
+  # "?????" is what pinky prints when it could not look at the terminal.
+  idle: {null_if: ["?????"]}
+  when: {type: time, layout: "Jan _2 15:04", year: assumed, required: true}

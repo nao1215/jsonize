@@ -1,0 +1,4 @@
+description: two CPU blocks, one root node each
+source: captured on Ubuntu 26.04 (cpupower 7.0.14, AMD Ryzen AI Max+ 395) with LC_ALL=C cpupower -c 0,1 frequency-info as an unprivileged user
+os: linux
+args: [-c, "0,1", frequency-info]

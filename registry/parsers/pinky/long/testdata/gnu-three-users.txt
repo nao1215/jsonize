@@ -1,0 +1,7 @@
+Login name: bob                         In real life:  bob
+Directory: /home/bob                    Shell:  /bin/bash
+
+Login name: root                        In real life:  root
+Directory: /root                        Shell:  /bin/bash
+
+Login name: nosuchuser42                In real life:  ???

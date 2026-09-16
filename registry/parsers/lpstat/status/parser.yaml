@@ -1,0 +1,58 @@
+# `lpstat -t` prints everything lpstat knows, section after section:
+# whether the scheduler runs, the default destination, the members of
+# each class, the device of each printer, whether each accepts jobs, the
+# state of each printer and the queued jobs. A section with nothing in it
+# prints nothing, and on a system with no printers only the first two
+# lines remain.
+#
+# Each line becomes one entry whose "kind" says which section it is from,
+# so the entries keep the order lpstat printed them in. A class member or
+# a reason is printed on a line of its own indented by a tab, and that
+# line is joined onto the line above.
+#
+# The times are the local time of the machine lpstat runs on, with no
+# zone, so they stay as printed.
+format: 1
+command: lpstat
+variant: status
+description: lpstat -t scheduler, destinations, devices, printer states and jobs
+metadata:
+  tags: [linux, darwin, printing, cups]
+  compatible: [CUPS]
+  references:
+    - https://www.cups.org/doc/man-lpstat.html
+detect:
+  signature:
+    all:
+      - '\Ascheduler is (?:not )?running[ \t]*(?:\n|\z)'
+input:
+  fold: '^\t'
+parse:
+  type: regex
+  patterns:
+    - pattern: '^scheduler is (?P<running>running|not running)[ \t]*$'
+      values: {kind: scheduler}
+    - pattern: '^system default destination: (?P<printer>\S+)[ \t]*$'
+      values: {kind: default_destination}
+    - pattern: '^no system default destination(?P<printer>)??[ \t]*$'
+      values: {kind: default_destination}
+    - pattern: '^members of class (?P<printer>[^:\s]+):(?: (?P<members>.+?))?[ \t]*$'
+      values: {kind: class}
+    - pattern: '^device for (?P<printer>[^:\s]+): (?P<uri>\S.*?)[ \t]*$'
+      values: {kind: device}
+    - pattern: '^(?P<printer>\S+) (?P<accepting>accepting|not accepting) requests since (?P<since>[A-Z][a-z]{2} [A-Z][a-z]{2} [ 0-9]?[0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} [0-9]{4})(?: -)?(?: (?P<reason>.+?))?[ \t]*$'
+      values: {kind: accepting}
+    - pattern: '^printer (?P<printer>\S+) is idle\.  (?P<enabled>enabled) since (?P<since>[A-Z][a-z]{2} [A-Z][a-z]{2} [ 0-9]?[0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} [0-9]{4})(?: -)?(?: (?P<reason>.+?))?[ \t]*$'
+      values: {kind: printer, state: idle}
+    - pattern: '^printer (?P<printer>\S+) now printing (?P<job>\S+)\.  (?P<enabled>enabled) since (?P<since>[A-Z][a-z]{2} [A-Z][a-z]{2} [ 0-9]?[0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} [0-9]{4})(?: -)?(?: (?P<reason>.+?))?[ \t]*$'
+      values: {kind: printer, state: printing}
+    - pattern: '^printer (?P<printer>\S+) (?P<enabled>disabled) since (?P<since>[A-Z][a-z]{2} [A-Z][a-z]{2} [ 0-9]?[0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} [0-9]{4})(?: -)?(?: (?P<reason>.+?))?[ \t]*$'
+      values: {kind: printer, state: stopped}
+    - pattern: '^(?P<job>\S+-[0-9]+) +(?P<user>\S+) +(?P<size>[0-9]+) +(?P<since>[A-Z][a-z]{2} [A-Z][a-z]{2} [ 0-9]?[0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} [0-9]{4})[ \t]*$'
+      values: {kind: job}
+fields:
+  running: {type: bool, true_values: [running], false_values: [not running]}
+  members: {type: array, split: " "}
+  accepting: {type: bool, true_values: [accepting], false_values: [not accepting]}
+  enabled: {type: bool, true_values: [enabled], false_values: [disabled]}
+  size: {type: int}

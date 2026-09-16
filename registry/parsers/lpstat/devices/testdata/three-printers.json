@@ -1,0 +1,14 @@
+[
+  {
+    "printer": "lab-inkjet",
+    "uri": "socket://printer1.internal.example:9100"
+  },
+  {
+    "printer": "label-writer",
+    "uri": "ipp://printer2.internal.example/ipp/print"
+  },
+  {
+    "printer": "office-laser",
+    "uri": "///dev/null"
+  }
+]

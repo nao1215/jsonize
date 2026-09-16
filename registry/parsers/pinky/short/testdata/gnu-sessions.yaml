@@ -1,0 +1,2 @@
+description: systemd sessions over ssh and on a seat, messages unknown, idle unknown
+source: captured on Ubuntu 26.04 with LC_ALL=C gnupinky (GNU coreutils 9.7), which reads logins from systemd-logind; user name and link-local address replaced

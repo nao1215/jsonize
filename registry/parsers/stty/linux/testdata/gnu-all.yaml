@@ -1,0 +1,2 @@
+description: GNU prints iuclc, ofill and xcase, which uutils does not
+source: captured on Ubuntu 26.04 with LC_ALL=C gnustty -a > file (GNU coreutils 9.7) on a pseudo-terminal from script(1) set to 24 rows and 80 columns

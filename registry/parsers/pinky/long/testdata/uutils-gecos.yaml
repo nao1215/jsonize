@@ -1,0 +1,2 @@
+description: a GECOS name with trailing commas, a name longer than nineteen characters and an empty name
+source: captured on Ubuntu 26.04 with LC_ALL=C pinky -l alice bart maintenance01 (uutils coreutils 0.8.0) inside a user and mount namespace over password entries written for the capture; the text is the command's own

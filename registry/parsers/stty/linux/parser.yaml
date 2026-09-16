@@ -1,0 +1,63 @@
+# stty prints the terminal settings as a stream of words, and breaks the
+# lines where they would pass the width of the output (80 columns through
+# a pipe, or COLUMNS), so a line break carries no meaning. The text is
+# read as one match: the line speed, the window size and line discipline
+# when printed, the control characters as "name = value;" and the mode
+# flags as words, "-" in front of a flag that is off.
+#
+# `stty -a` prints every control character and flag; `stty` alone prints
+# the speed, the line discipline and only the settings that differ from
+# the defaults. Both are the same stream and read the same way. When the
+# input and output speeds differ the first line has "ispeed" and
+# "ospeed" instead of "speed".
+#
+# A control character may be set to ";", which stty prints as "eol = ;;",
+# so a value ends at the last ";" before the next blank.
+#
+# The flag set depends on the implementation (GNU prints iuclc, ofill and
+# xcase, uutils prints tandem), so flags are a list rather than keys.
+# BSD and macOS stty print "24 rows; 80 columns;" and flags grouped under
+# "lflags:" and are refused by the signature.
+format: 1
+command: stty
+variant: linux
+aliases:
+  - name: gstty
+description: stty and stty -a terminal settings on Linux
+metadata:
+  tags: [linux, terminal]
+  compatible: [GNU coreutils, uutils coreutils]
+  references:
+    - https://www.gnu.org/software/coreutils/manual/html_node/stty-invocation.html
+detect:
+  signature:
+    all:
+      # The speed, then the window size and line discipline when present,
+      # then a line break.
+      - '\A(?:speed [0-9]+ baud|ispeed [0-9]+ baud;\s+ospeed [0-9]+ baud);(?:\s+rows [0-9]+;\s+columns [0-9]+;)?(?:\s+line = [0-9]+;)?[ \t]*\n'
+parse:
+  type: regex
+  each: input
+  pattern: '\A(?:speed (?P<speed>[0-9]+) baud|ispeed (?P<ispeed>[0-9]+) baud;\s+ospeed (?P<ospeed>[0-9]+) baud);(?:\s+rows (?P<rows>[0-9]+);\s+columns (?P<columns>[0-9]+);)?(?:\s+line = (?P<line>[0-9]+);)?(?:\s+(?P<control_characters>[a-z0-9]+ = \S*?;(?:\s+[a-z0-9]+ = \S*?;)*))?(?:\s+(?P<flags>-?[a-z0-9]+(?:\s+-?[a-z0-9]+)*))?\s*\z'
+fields:
+  speed: {type: int}
+  ispeed: {type: int}
+  ospeed: {type: int}
+  rows: {type: int}
+  columns: {type: int}
+  line: {type: int}
+  control_characters:
+    type: array
+    split_regex: ';\s+'
+    trim_suffix: ";"
+    items:
+      type: object
+      regex: '^(?P<name>[a-z0-9]+) = (?P<value>\S*)$'
+  flags:
+    type: array
+    split_regex: '\s+'
+    items:
+      type: object
+      regex: '^(?P<enabled>-?)(?P<name>[a-z0-9]+)$'
+      fields:
+        enabled: {type: bool, true_values: [""], false_values: ["-"]}

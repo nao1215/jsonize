@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lpstat/status.json",
+  "title": "lpstat/status",
+  "description": "lpstat -t scheduler, destinations, devices, printer states and jobs",
+  "x-jsonize": {
+    "definition": "lpstat/status",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "kind": {
+        "type": "string",
+        "enum": [
+          "accepting",
+          "class",
+          "default_destination",
+          "device",
+          "job",
+          "printer",
+          "scheduler"
+        ]
+      },
+      "running": {
+        "type": "boolean"
+      },
+      "printer": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "members": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string"
+        }
+      },
+      "uri": {
+        "type": "string"
+      },
+      "accepting": {
+        "type": "boolean"
+      },
+      "since": {
+        "type": "string"
+      },
+      "reason": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "state": {
+        "type": "string",
+        "enum": [
+          "idle",
+          "printing",
+          "stopped"
+        ]
+      },
+      "enabled": {
+        "type": "boolean"
+      },
+      "job": {
+        "type": "string"
+      },
+      "user": {
+        "type": "string"
+      },
+      "size": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "kind"
+    ]
+  }
+}

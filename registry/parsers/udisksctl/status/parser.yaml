@@ -1,0 +1,39 @@
+# `udisksctl status` prints one row per drive under a header and a rule
+# of dashes. The columns are padded, not separated: the model to 25
+# characters, the revision to 9 and the serial to 20, each followed by a
+# space, then the block device. A value longer than its width is printed
+# whole and pushes the rest of the row to the right.
+#
+# The model may contain spaces, and the revision or the serial may be
+# empty (a card reader, a virtual disk), so a row is first read by
+# position. A row that overflowed a width cannot be read by position, and
+# is read by words instead: a model that may contain spaces, then a
+# revision, a serial and a device with none, all present.
+format: 1
+command: udisksctl
+variant: status
+description: udisksctl status drive list
+metadata:
+  tags: [linux, disk, udisks]
+  compatible: [UDisks]
+  references:
+    - https://storaged.org/doc/udisks2-api/latest/udisksctl.1.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\AMODEL {2,}REVISION {2,}SERIAL {2,}DEVICE[ \t]*\n-{20,}[ \t]*$'
+input:
+  ignore:
+    - '^MODEL {2,}REVISION {2,}SERIAL {2,}DEVICE[ \t]*$'
+    - '^-{20,}[ \t]*$'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<model>.{25}) (?P<revision>\S{9}|\S{8} |\S{7} {2}|\S{6} {3}|\S{5} {4}|\S{4} {5}|\S{3} {6}|\S{2} {7}|\S {8}| {9}) (?P<serial>\S{20}|\S{19} |\S{18} {2}|\S{17} {3}|\S{16} {4}|\S{15} {5}|\S{14} {6}|\S{13} {7}|\S{12} {8}|\S{11} {9}|\S{10} {10}|\S{9} {11}|\S{8} {12}|\S{7} {13}|\S{6} {14}|\S{5} {15}|\S{4} {16}|\S{3} {17}|\S{2} {18}|\S {19}| {20}) (?P<device>\S+)[ \t]*$'
+    - '^(?P<model>\S.*?) +(?P<revision>\S+) +(?P<serial>\S+) +(?P<device>\S+)[ \t]*$'
+fields:
+  model: {regex: '(?P<model>.*?) *', null_if: [""]}
+  revision: {regex: '(?P<revision>\S*) *', null_if: [""]}
+  serial: {regex: '(?P<serial>\S*) *', null_if: [""]}
+  device: {required: true}

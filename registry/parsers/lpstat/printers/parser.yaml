@@ -1,0 +1,40 @@
+# `lpstat -p` prints a line per printer or class: idle, printing a job,
+# or disabled, then since when that has been so. The state message or
+# the reasons the printer is in that state follow on a line of their own
+# indented by a tab, and that line is joined onto the printer line.
+# lpstat writes " -" before the tab line of a stopped printer and nothing
+# before the one of a printer that is printing.
+#
+# The time is printed in the local time of the machine lpstat runs on,
+# with no zone, so it stays as printed.
+#
+# `lpstat -l -p` prints a block of tab-indented settings under each
+# printer; those are not a reason and the line is refused.
+format: 1
+command: lpstat
+variant: printers
+description: lpstat -p printer and class states
+metadata:
+  tags: [linux, darwin, printing, cups]
+  compatible: [CUPS]
+  references:
+    - https://www.cups.org/doc/man-lpstat.html
+detect:
+  signature:
+    all:
+      - '\Aprinter \S+ (?:is idle\.  enabled since |now printing \S+\.  enabled since |disabled since )'
+input:
+  fold: '^\t'
+parse:
+  type: regex
+  patterns:
+    - pattern: '^printer (?P<printer>\S+) is idle\.  (?P<job>)??(?P<enabled>enabled) since (?P<since>[A-Z][a-z]{2} [A-Z][a-z]{2} [ 0-9]?[0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} [0-9]{4})(?: -)?(?: (?P<reason>.+?))?[ \t]*$'
+      values: {state: idle}
+    - pattern: '^printer (?P<printer>\S+) now printing (?P<job>\S+)\.  (?P<enabled>enabled) since (?P<since>[A-Z][a-z]{2} [A-Z][a-z]{2} [ 0-9]?[0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} [0-9]{4})(?: -)?(?: (?P<reason>.+?))?[ \t]*$'
+      values: {state: printing}
+    - pattern: '^printer (?P<printer>\S+) (?P<job>)??(?P<enabled>disabled) since (?P<since>[A-Z][a-z]{2} [A-Z][a-z]{2} [ 0-9]?[0-9] [0-9]{2}:[0-9]{2}:[0-9]{2} [0-9]{4})(?: -)?(?: (?P<reason>.+?))?[ \t]*$'
+      values: {state: stopped}
+fields:
+  printer: {required: true}
+  enabled: {type: bool, true_values: [enabled], false_values: [disabled]}
+  since: {required: true}
