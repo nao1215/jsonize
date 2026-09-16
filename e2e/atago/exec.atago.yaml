@@ -423,6 +423,69 @@ scenarios:
           stderr:
             contains: no command given
 
+  # --stat and --shortstat put a diffstat under each commit. The output is
+  # still what git log prints, so git/log's signature is not what separates
+  # them: the closing count line is, and a merge or an empty commit prints
+  # none. Plain git log stays on git/log, whose published output has no
+  # diffstat keys.
+  - name: jz run git log --stat and --shortstat land on git/log-stat, plain git log on git/log
+    steps:
+      - run:
+          command: git init -q ${workdir}/stat
+      - assert:
+          exit_code: 0
+      - fixture:
+          file: stat/notes.txt
+          content: |
+            one
+            two
+      - run:
+          command: git -C ${workdir}/stat add notes.txt
+      - assert:
+          exit_code: 0
+      - run:
+          command: git -C ${workdir}/stat -c user.name=jz -c user.email=jz@example.test commit -q -m "add notes, two lines"
+      - assert:
+          exit_code: 0
+      - run:
+          command: git -C ${workdir}/stat -c user.name=jz -c user.email=jz@example.test commit --allow-empty -q -m "an empty commit"
+      - assert:
+          exit_code: 0
+      - run:
+          command: jz run --explain git -C ${workdir}/stat log --stat
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose git/log-stat from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].files", length: 0 }
+              - { path: "$[0].summary.files_changed", equals: null }
+              - { path: "$[1].message.lines[0]", equals: 'add notes, two lines' }
+              - { path: "$[1].files[0].path", equals: notes.txt }
+              - { path: "$[1].files[0].changes", equals: 2 }
+              - { path: "$[1].summary.insertions", equals: 2 }
+      - run:
+          command: jz run --explain git -C ${workdir}/stat log --shortstat
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose git/log-stat from embedded"
+          stdout:
+            json:
+              - { path: "$[1].files", length: 0 }
+              - { path: "$[1].summary.files_changed", equals: 1 }
+      - run:
+          command: jz run --explain git -C ${workdir}/stat log
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose git/log from embedded"
+          stdout:
+            json:
+              - { path: "$[1].message.lines[0]", equals: 'add notes, two lines' }
+
   # A setting in the repository's or the user's configuration changes what
   # git log --oneline prints without an argument jz could see: with
   # log.decorate the first subject would carry the branch names. jz runs

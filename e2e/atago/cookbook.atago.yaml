@@ -398,6 +398,64 @@ scenarios:
             equals: |
               /
 
+  - name: "List installed packages by licence: jq reads the fields of every rpm -qia block"
+    steps:
+      - fixture:
+          file: rpm.txt
+          content: |
+            Name        : bash
+            Version     : 5.3.9
+            Release     : 3.fc44
+            Architecture: x86_64
+            Install Date: Tue Aug 25 06:47:36 2026
+            Group       : Unspecified
+            Size        : 8873537
+            License     : GPL-3.0-or-later
+            Signature   :
+                          RSA/SHA256, Tue Jan 20 08:22:11 2026, Key ID dbfcf71c6d9f90a6
+            Source RPM  : bash-5.3.9-3.fc44.src.rpm
+            Build Date  : Fri Jan 16 09:11:11 2026
+            Build Host  : buildvm-x86-11.rdu3.fedoraproject.org
+            Packager    : Fedora Project
+            Vendor      : Fedora Project
+            URL         : https://www.gnu.org/software/bash
+            Bug URL     : https://bugz.fedoraproject.org/bash
+            Summary     : The GNU Bourne Again shell
+            Description :
+            The GNU Bourne Again shell (Bash) is a shell or command language
+            interpreter that is compatible with the Bourne shell (sh). Bash
+            incorporates useful features from the Korn shell (ksh) and the C shell
+            (csh). Most sh scripts can be run by bash without modification.
+            Name        : xz-libs
+            Epoch       : 1
+            Version     : 5.8.2
+            Release     : 2.fc44
+            Architecture: x86_64
+            Install Date: Tue Aug 25 06:47:36 2026
+            Group       : Unspecified
+            Size        : 222941
+            License     : 0BSD
+            Signature   :
+                          RSA/SHA256, Tue Jan 20 02:27:07 2026, Key ID dbfcf71c6d9f90a6
+            Source RPM  : xz-5.8.2-2.fc44.src.rpm
+            Build Date  : Sun Jan 18 23:37:38 2026
+            Build Host  : buildvm-x86-07.rdu3.fedoraproject.org
+            Packager    : Fedora Project
+            Vendor      : Fedora Project
+            URL         : https://tukaani.org/xz/
+            Bug URL     : https://bugz.fedoraproject.org/xz
+            Summary     : Libraries for decoding LZMA compression
+            Description :
+            Libraries for decoding files compressed with LZMA or XZ utils.
+      - run:
+          command: >-
+            bash -c "set -o pipefail; jz --file '${workdir}/rpm.txt' |
+            jq -r '.[] | [.name, .epoch, .license] | @tsv'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: "bash\t\tGPL-3.0-or-later\nxz-libs\t1\t0BSD\n"
+
   - name: "Fail a step when a value is out of range: jq -e turns a check into a status"
     steps:
       - fixture:

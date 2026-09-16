@@ -446,3 +446,19 @@ scenarios:
             json:
               - { path: "$.kernel_name", equals: FreeBSD }
               - { path: "$.machine", matches: "^(amd64|arm64|i386)$" }
+
+  - name: ifconfig lands on ifconfig/bsd
+    only: {os: freebsd}
+    steps:
+      - run:
+          command: jz run --explain ifconfig lo0
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose ifconfig/bsd from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].interface.name", equals: lo0 }
+              - { path: "$[0].inet[0].address", equals: 127.0.0.1 }
+              - { path: "$[0].status.metric", equals: 0 }
