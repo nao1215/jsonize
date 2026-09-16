@@ -1,0 +1,30 @@
+# /proc/self/io (and /proc/PID/io) counts the I/O of a process: the bytes
+# and the system calls it read and wrote, the bytes it made the storage
+# layer read and write, and the writes it cancelled by truncating a file.
+# Seven "name: value" lines, one object of whole numbers.
+format: 1
+command: proc
+variant: self-io
+description: /proc/self/io, the I/O counters of a process
+metadata:
+  tags: [linux, kernel, process, io]
+  compatible: [linux]
+  references:
+    - https://docs.kernel.org/filesystems/proc.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\Archar: [0-9]+\nwchar: [0-9]+\nsyscr: [0-9]+\nsyscw: [0-9]+\nread_bytes: [0-9]+\nwrite_bytes: [0-9]+\ncancelled_write_bytes: [0-9]+\n?\z'
+parse:
+  type: kv
+  separator: ":"
+  as: map
+fields:
+  rchar: {type: int}
+  wchar: {type: int}
+  syscr: {type: int}
+  syscw: {type: int}
+  read_bytes: {type: int}
+  write_bytes: {type: int}
+  cancelled_write_bytes: {type: int}

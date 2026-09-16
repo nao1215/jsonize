@@ -1,0 +1,2 @@
+source: cat /proc/net/sockstat on Linux 7.0.0-31-generic on Ubuntu 26.04
+os: linux

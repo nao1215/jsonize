@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/net-sockstat.json",
+  "title": "proc/net-sockstat",
+  "description": "/proc/net/sockstat, socket counts by protocol",
+  "x-jsonize": {
+    "definition": "proc/net-sockstat",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "protocol": {
+        "type": "string"
+      },
+      "used": {
+        "type": "integer"
+      },
+      "inuse": {
+        "type": "integer"
+      },
+      "orphan": {
+        "type": "integer"
+      },
+      "tw": {
+        "type": "integer"
+      },
+      "alloc": {
+        "type": "integer"
+      },
+      "mem": {
+        "type": "integer"
+      },
+      "memory": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "protocol"
+    ]
+  }
+}
