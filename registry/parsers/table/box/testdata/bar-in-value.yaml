@@ -1,0 +1,7 @@
+description: >-
+  sqlite3 -table does not escape a bar inside a value, so the row holding
+  a|b has one bar more than the rule has columns. The row is refused rather
+  than read with the value cut in two.
+source: >-
+  captured with LC_ALL=C.UTF-8 and `sqlite3 -table :memory: "select 1 as id, 'a|b' as name union all select 2, 'plain'"` with sqlite3 3.46.1 in a debian:stable-slim container
+expect_error: 'has no column to go under'
