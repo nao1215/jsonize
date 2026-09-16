@@ -1807,3 +1807,21 @@ scenarios:
               - { path: "$.processes[1].vsz", equals: 1451g }
               - { path: "$.processes[1].vsz_percent", equals: 2178 }
               - { path: "$.processes[8].vsz", equals: 53.7g }
+
+  - name: top -b is a record per iteration
+    steps:
+      - fixture:
+          file: top.txt
+          from: "${specdir}/../../registry/parsers/top/linux/testdata/two-iterations.txt"
+      - run:
+          command: jz --explain
+          stdin: {file: top.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose top/linux from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[1].tasks.total", equals: 3 }
+              - { path: "$[1].processes[2].command", equals: cron }

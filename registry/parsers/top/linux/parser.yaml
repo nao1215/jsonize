@@ -1,9 +1,11 @@
-# top -b -n1 prints five summary lines and then the task table. Each
-# summary line has its own shape, so each is a part of its own.
+# top -b prints an iteration as five summary lines and then the task
+# table, and prints one per -d interval until -n iterations have been
+# printed. Each iteration is a record, and each summary line has its own
+# shape, so it is a part of the record. -n1 is a list of one.
 format: 1
 command: top
 variant: linux
-description: "top -b -n1 on Linux (procps): summary lines plus the task table"
+description: "top -b on Linux (procps): one record per iteration, the summary lines plus the task table"
 metadata:
   tags: [linux, process, cpu, memory, procps]
   compatible: [procps-ng]
@@ -17,7 +19,8 @@ detect:
       - '^Tasks:[ \t]+[0-9]+ total,'
       - '^[ \t]*PID[ \t]+USER[ \t]+PR[ \t]+NI[ \t]'
 parse:
-  type: composite
+  type: records
+  start: '^top - [0-9]'
   parts:
     - name: uptime
       select: {limit: 1}

@@ -90,7 +90,7 @@ is in the heading and comes out beside the rows.
 | `ps -eLf` | read | `ps/threads` |
 | `ps axjf`, `ps -e --forest` | read | `ps/jobs`, `ps/posix` |
 | `ps -eo ...`, `ps -o ...=` | refused | the columns are whatever the option named; `--parser table` reads it |
-| `top -b -n1` | read | `top/linux` |
+| `top -b -n1`, `top -b -n 5 -d 1` | read | `top/linux`, a record per iteration |
 | `pidstat`, `pidstat -d`, `-r`, `-w` | read | the `pidstat` variants |
 
 ## Listings

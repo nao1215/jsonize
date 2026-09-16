@@ -1,0 +1,4 @@
+source: top -b -n 2 -d 0.3 -p on three processes, captured on Ubuntu 26.04 (procps-ng 4.0.4) with LC_ALL=C
+description: two iterations, each a summary and a task table of its own
+os: linux
+args: ["-b", "-n", "2", "-d", "0.3", "-p", "1,690,2013"]
