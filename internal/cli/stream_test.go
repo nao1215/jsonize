@@ -698,3 +698,31 @@ func TestStreamReportsAnUnreadableInputAsTheDocumentReadingDoes(t *testing.T) {
 		t.Errorf("stream: %d %s", code, h.stderr.String())
 	}
 }
+
+// A csv gives every record the columns its header names, so a key no
+// column has is known once the first record has been read, and nothing
+// is written under it: the stream answers as the whole document does.
+func TestStreamRefusesAKeyNoColumnHasBeforeWritingARecord(t *testing.T) {
+	h := newHarness(t)
+	for _, opts := range [][]string{
+		{"--format", "csv"},
+		{"--parser", "csv", "--variant", "comma"},
+		{"--define", "parse: {type: csv}"},
+	} {
+		for _, stream := range []bool{false, true} {
+			args := append(append([]string{}, opts...), "--extract", "nokey")
+			if stream {
+				args = append(args, "--stream")
+			}
+			if code := h.pipe("a,b\n1,2\n3,4\n", args...); code != ExitUsage || h.stdout.Len() != 0 ||
+				!strings.Contains(h.stderr.String(), `the keys it has are "a", "b"`) {
+				t.Errorf("%v: code=%d stdout=%q %s", args, code, h.stdout.String(), h.stderr.String())
+			}
+		}
+	}
+	// A key the columns have narrows every record.
+	if code := h.pipe("a,b\n1,2\n3,4\n", "--format", "csv", "--stream", "--extract", "b"); code != ExitOK ||
+		h.stdout.String() != "{\"b\":\"2\"}\n{\"b\":\"4\"}\n" {
+		t.Errorf("code=%d stdout=%q %s", code, h.stdout.String(), h.stderr.String())
+	}
+}

@@ -796,14 +796,18 @@ func value(pl *placement, src Sources) (any, error) {
 	return nil, fmt.Errorf("unknown value kind %d", pl.kind)
 }
 
-// textValue is a file's text as a string: UTF-8, whole for --text-file
-// and less the one line ending a text file ends with for =@.
+// textValue is a file's text as a string: UTF-8 without a byte order
+// mark, whole for --text-file and less the one line ending a text file
+// ends with for =@.
 func textValue(pl *placement, src Sources) (any, error) {
 	arg := pl.arg.String()
 	data, err := read(arg, pl.text, src)
 	if err != nil {
 		return nil, err
 	}
+	// A byte order mark says how the text is encoded and is not part of
+	// it, as --format text reads it.
+	data = bytes.TrimPrefix(data, []byte("\xEF\xBB\xBF"))
 	if !utf8.Valid(data) {
 		return nil, &InputError{Arg: arg, Err: ErrNotUTF8}
 	}
