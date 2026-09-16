@@ -8,6 +8,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `readelf -s -W`, each symbol table with the value, size, type,
+  binding, visibility, section and name of every symbol, and the version
+  a symbol is bound to. The registry holds 245 commands through 697
+  definitions.
 - Three commands of poppler-utils: `pdfinfo` (the document information,
   page count, page size and version), `pdffonts` (each font with its
   type, encoding and whether it is embedded) and `pdfimages -list`
@@ -127,6 +131,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `jz run mpstat -A`, `mpstat -I CPU`, `mpstat -u -I SUM`, `sar -A`,
+  `readelf -a` and any two readelf reports together (`readelf -h -S`)
+  exit 4 instead of reaching a definition that reads the first report
+  and failing on the next with exit 3.
 - `jz new 'a[][]=1'` wrote `{"a[]":["1"]}`, a key the documentation says
   a plain argument cannot name. A key that still ends in `[]` once the
   `[]` that appends is taken off is refused with exit 2, in a plain

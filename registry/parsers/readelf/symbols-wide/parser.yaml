@@ -1,0 +1,58 @@
+# `readelf -s -W` (--symbols --wide) prints each symbol table of an ELF
+# file under a line that names it and says how many entries it has: the
+# dynamic symbols (.dynsym) and, in a file that is not stripped, the full
+# table (.symtab). A row is the index, the value in hexadecimal, the size,
+# the type, the binding, the visibility, the section index (a number, or
+# UND, ABS or COM) and the name. Without -W readelf cuts a long name to
+# "[...]", so that form is not read.
+#
+# The size is decimal up to 99999 and hexadecimal with 0x above it, so it
+# stays text; `--sym-base=10` makes readelf print every size in decimal.
+# A name may hold spaces (a Go method on a generic type). A symbol bound
+# to a version has the version after "@", or "@@" for the version a
+# library defines as the default, and the dynamic table adds the version
+# index in parentheses; those become version, default_version and
+# version_index.
+format: 1
+command: readelf
+variant: symbols-wide
+description: readelf -s -W, the symbol tables of an ELF file
+metadata:
+  tags: [elf, binary, linux, toolchain]
+  compatible: [GNU binutils]
+  references:
+    - https://sourceware.org/binutils/docs/binutils/readelf.html
+detect:
+  args:
+    any: ["-W", "--wide"]
+    # Each of these adds a report of its own before or after this one,
+    # which no part here reads.
+    none: ["-a", "--all", "-h", "--file-header", "-l", "--program-headers", "--segments", "-S", "--section-headers", "--sections", "-g", "--section-groups", "-t", "--section-details", "-e", "--headers", "-n", "--notes", "-r", "--relocs", "-u", "--unwind", "-d", "--dynamic", "-V", "--version-info", "-A", "--arch-specific", "-c", "--archive-index", "-x", "--hex-dump=", "-p", "--string-dump=", "-R", "--relocated-dump=", "-w", "--debug-dump", "--debug-dump=", "-I", "--histogram"]
+  signature:
+    all:
+      - '\ASymbol table ''[^''\n]+'' contains [0-9]+ entr(?:y|ies):\n +Num: +Value +Size Type +Bind +Vis +Ndx Name$'
+input:
+  ignore:
+    - '^ +Num: +Value +Size Type +Bind +Vis +Ndx Name$'
+parse:
+  type: records
+  start: '^Symbol table '
+  parts:
+    - name: table
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\ASymbol table ''(?P<name>[^'']+)'' contains (?P<entries>[0-9]+) entr(?:y|ies):\z'
+      fields:
+        entries: {type: int}
+    - name: symbols
+      select: {skip: 1}
+      parse:
+        type: regex
+        pattern: '^ *(?P<num>[0-9]+): (?P<value>[0-9a-f]+) +(?P<size>[0-9]+|0x[0-9a-f]+) (?P<type>\S+) +(?P<bind>\S+) +(?P<visibility>\S+) +(?P<section>\S+) (?P<name>.*?)(?:(?P<default_version>@@?)(?P<version>[A-Za-z_][A-Za-z0-9_.]*)(?: \((?P<version_index>[0-9]+)\))?)?$'
+      fields:
+        num: {type: int, required: true}
+        name: {null_if: [""]}
+        default_version: {type: bool, true_values: ["@@"], false_values: ["@"]}
+        version_index: {type: int}

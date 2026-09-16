@@ -1,0 +1,75 @@
+[
+  {
+    "table": {
+      "name": ".symtab",
+      "entries": 5983
+    },
+    "symbols": [
+      {
+        "num": 0,
+        "value": "0000000000000000",
+        "size": "0",
+        "type": "NOTYPE",
+        "bind": "LOCAL",
+        "visibility": "DEFAULT",
+        "section": "UND",
+        "name": null,
+        "default_version": null,
+        "version": null,
+        "version_index": null
+      },
+      {
+        "num": 70,
+        "value": "000000000102a840",
+        "size": "0x68628",
+        "type": "OBJECT",
+        "bind": "LOCAL",
+        "visibility": "DEFAULT",
+        "section": "4",
+        "name": "github.com/nao1215/jsonize/registry.files.files",
+        "default_version": null,
+        "version": null,
+        "version_index": null
+      },
+      {
+        "num": 328,
+        "value": "00000000011d59f0",
+        "size": "0x47f70",
+        "type": "OBJECT",
+        "bind": "LOCAL",
+        "visibility": "DEFAULT",
+        "section": "5",
+        "name": "go:func.*",
+        "default_version": null,
+        "version": null,
+        "version_index": null
+      },
+      {
+        "num": 2186,
+        "value": "0000000000491800",
+        "size": "286",
+        "type": "FUNC",
+        "bind": "GLOBAL",
+        "visibility": "DEFAULT",
+        "section": "3",
+        "name": "internal/sync.(*HashTrieMap[go.shape.interface {},go.shape.interface {}]).iter",
+        "default_version": null,
+        "version": null,
+        "version_index": null
+      },
+      {
+        "num": 2187,
+        "value": "0000000000491920",
+        "size": "133",
+        "type": "FUNC",
+        "bind": "GLOBAL",
+        "visibility": "DEFAULT",
+        "section": "3",
+        "name": "internal/sync.(*HashTrieMap[go.shape.interface {},go.shape.interface {}]).Range",
+        "default_version": null,
+        "version": null,
+        "version_index": null
+      }
+    ]
+  }
+]

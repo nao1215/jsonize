@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/readelf/symbols-wide.json",
+  "title": "readelf/symbols-wide",
+  "description": "readelf -s -W, the symbol tables of an ELF file",
+  "x-jsonize": {
+    "definition": "readelf/symbols-wide",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "table": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "entries": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "entries"
+        ]
+      },
+      "symbols": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "num": {
+              "type": "integer"
+            },
+            "value": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "bind": {
+              "type": "string"
+            },
+            "visibility": {
+              "type": "string"
+            },
+            "section": {
+              "type": "string"
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "default_version": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "version": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "version_index": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "num",
+            "value",
+            "size",
+            "type",
+            "bind",
+            "visibility",
+            "section",
+            "name",
+            "default_version",
+            "version",
+            "version_index"
+          ]
+        }
+      }
+    },
+    "required": [
+      "table",
+      "symbols"
+    ]
+  }
+}

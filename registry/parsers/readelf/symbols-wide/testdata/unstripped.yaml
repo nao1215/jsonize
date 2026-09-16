@@ -1,0 +1,4 @@
+description: An executable built with gcc and not stripped has the dynamic symbols, with the version and its index, and the full table, with files, sections, local objects and hidden symbols.
+source: readelf -s -W, GNU readelf 2.46 (binutils for Ubuntu 26.04) with LC_ALL=C, on a hello world compiled for the fixture with gcc 15.2 -O0
+os: linux
+args: [-s, -W, hello]

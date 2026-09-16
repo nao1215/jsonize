@@ -732,6 +732,15 @@ scenarios:
               # Two samples and the closing summary.
               - { path: "$", length: 3 }
               - { path: "$[2].cpu[0].time", equals: Average }
+      # -A prints every report in a row, which no definition reads whole.
+      # It used to reach mpstat/linux and fail on the second header.
+      - run:
+          command: jz run mpstat -A
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+          stderr:
+            contains: "excluded by the argument -A"
 
   # Each pidstat report has its own columns under the same banner; the
   # header names the report, so each lands on its own definition.
@@ -2312,3 +2321,22 @@ scenarios:
           exit_code: 0
           stderr:
             contains: "chose sum/bsd"
+
+  - name: readelf -s -W lands on its symbol tables, and readelf -a is refused
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run readelf -s -W /bin/ls
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].table.name", equals: .dynsym }
+              - { path: "$[0].symbols[0].num", equals: 0 }
+      # -a prints every report one after another. It used to reach
+      # readelf/header and fail on the line after the header with exit 3.
+      - run:
+          command: jz run readelf -a /bin/ls
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
