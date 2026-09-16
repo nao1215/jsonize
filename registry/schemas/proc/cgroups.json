@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/cgroups.json",
+  "title": "proc/cgroups",
+  "description": "/proc/cgroups, the cgroup controllers and whether they are enabled",
+  "x-jsonize": {
+    "definition": "proc/cgroups",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "subsystem": {
+        "type": "string"
+      },
+      "hierarchy": {
+        "type": "integer"
+      },
+      "num_cgroups": {
+        "type": "integer"
+      },
+      "enabled": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subsystem",
+      "hierarchy",
+      "num_cgroups",
+      "enabled"
+    ]
+  }
+}

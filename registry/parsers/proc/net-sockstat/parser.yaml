@@ -1,0 +1,30 @@
+# /proc/net/sockstat counts the sockets of the network namespace: a line
+# for all sockets, then one per protocol (TCP, UDP, UDPLITE, RAW, FRAG),
+# each the protocol, a colon and name value pairs. The counters differ by
+# protocol (TCP has orphan, tw, alloc and mem), so a counter a line does
+# not print is left out of its object. mem counts pages.
+format: 1
+command: proc
+variant: net-sockstat
+description: /proc/net/sockstat, socket counts by protocol
+metadata:
+  tags: [linux, kernel, network]
+  compatible: [linux]
+  references:
+    - https://docs.kernel.org/networking/proc_net_tcp.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\Asockets: used [0-9]+\nTCP: inuse [0-9]+ '
+parse:
+  type: regex
+  pattern: '^(?P<protocol>sockets|[A-Z0-9]+):(?: used (?P<used>[0-9]+))?(?: inuse (?P<inuse>[0-9]+))?(?: orphan (?P<orphan>[0-9]+))?(?: tw (?P<tw>[0-9]+))?(?: alloc (?P<alloc>[0-9]+))?(?: mem (?P<mem>[0-9]+))?(?: memory (?P<memory>[0-9]+))?$'
+fields:
+  used: {type: int, when_missing: omit}
+  inuse: {type: int, when_missing: omit}
+  orphan: {type: int, when_missing: omit}
+  tw: {type: int, when_missing: omit}
+  alloc: {type: int, when_missing: omit}
+  mem: {type: int, when_missing: omit}
+  memory: {type: int, when_missing: omit}

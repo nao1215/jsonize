@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/pressure.json",
+  "title": "proc/pressure",
+  "description": "/proc/pressure/cpu, memory and io, pressure stall averages and totals",
+  "x-jsonize": {
+    "definition": "proc/pressure",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "kind": {
+        "type": "string",
+        "enum": [
+          "full",
+          "some"
+        ]
+      },
+      "avg10": {
+        "type": "number"
+      },
+      "avg60": {
+        "type": "number"
+      },
+      "avg300": {
+        "type": "number"
+      },
+      "total_us": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "kind",
+      "avg10",
+      "avg60",
+      "avg300",
+      "total_us"
+    ]
+  }
+}

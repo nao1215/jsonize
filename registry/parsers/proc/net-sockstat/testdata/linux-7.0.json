@@ -1,0 +1,32 @@
+[
+  {
+    "protocol": "sockets",
+    "used": 2242
+  },
+  {
+    "protocol": "TCP",
+    "inuse": 86,
+    "orphan": 0,
+    "tw": 20,
+    "alloc": 323,
+    "mem": 733
+  },
+  {
+    "protocol": "UDP",
+    "inuse": 42,
+    "mem": 2126
+  },
+  {
+    "protocol": "UDPLITE",
+    "inuse": 0
+  },
+  {
+    "protocol": "RAW",
+    "inuse": 0
+  },
+  {
+    "protocol": "FRAG",
+    "inuse": 0,
+    "memory": 0
+  }
+]

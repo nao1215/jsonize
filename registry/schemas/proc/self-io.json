@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/self-io.json",
+  "title": "proc/self-io",
+  "description": "/proc/self/io, the I/O counters of a process",
+  "x-jsonize": {
+    "definition": "proc/self-io",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "cancelled_write_bytes": {
+      "type": "integer"
+    },
+    "rchar": {
+      "type": "integer"
+    },
+    "read_bytes": {
+      "type": "integer"
+    },
+    "syscr": {
+      "type": "integer"
+    },
+    "syscw": {
+      "type": "integer"
+    },
+    "wchar": {
+      "type": "integer"
+    },
+    "write_bytes": {
+      "type": "integer"
+    }
+  },
+  "additionalProperties": {
+    "type": "string"
+  }
+}

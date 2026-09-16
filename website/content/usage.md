@@ -806,8 +806,11 @@ $ jz --file /proc/meminfo    # proc/meminfo
   is dropped at the choice, which is made before the first record; a
   record already written cannot be taken back, so a failure after that
   stands.
-- A name with a dot in it (`fstab.txt`) is ignored, and a path never
-  names a shape definition.
+- A dot or an underscore in the file name is looked up as a dash (`/etc/resolv.conf` is
+  `etc/resolv-conf`), and a file one directory down has that directory
+  joined to its name (`/proc/net/dev` is `proc/net-dev`). A capture
+  saved as `fstab.txt` names nothing, since no variant is called
+  `fstab-txt`, and a path never names a shape definition.
 
 ## Where jz stops and the command begins
 

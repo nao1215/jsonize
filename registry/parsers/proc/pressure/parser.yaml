@@ -1,0 +1,31 @@
+# /proc/pressure/cpu, memory and io report pressure stall information:
+# a "some" line (the share of time at least one task was stalled) and,
+# for memory and io, and for cpu since Linux 5.13, a "full" line (the
+# share of time every non-idle task was). Each line gives the averages
+# over the last 10, 60 and 300 seconds as percentages and the total stall
+# time in microseconds.
+#
+# The three files print the same lines, so one definition reads them all
+# and the file's name is not in the result.
+format: 1
+command: proc
+variant: pressure
+description: /proc/pressure/cpu, memory and io, pressure stall averages and totals
+metadata:
+  tags: [linux, kernel, performance]
+  compatible: [linux]
+  references:
+    - https://docs.kernel.org/accounting/psi.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\Asome avg10=[0-9.]+ avg60=[0-9.]+ avg300=[0-9.]+ total=[0-9]+\n(?:full avg10=[0-9.]+ avg60=[0-9.]+ avg300=[0-9.]+ total=[0-9]+\n?)?\z'
+parse:
+  type: regex
+  pattern: '^(?P<kind>some|full) avg10=(?P<avg10>[0-9.]+) avg60=(?P<avg60>[0-9.]+) avg300=(?P<avg300>[0-9.]+) total=(?P<total_us>[0-9]+)$'
+fields:
+  avg10: {type: float}
+  avg60: {type: float}
+  avg300: {type: float}
+  total_us: {type: int}

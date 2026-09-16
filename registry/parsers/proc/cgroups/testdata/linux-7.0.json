@@ -1,0 +1,80 @@
+[
+  {
+    "subsystem": "cpu",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "cpuacct",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "blkio",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "devices",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "freezer",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "net_cls",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "perf_event",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "net_prio",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "hugetlb",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "pids",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "rdma",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "misc",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  },
+  {
+    "subsystem": "dmem",
+    "hierarchy": 0,
+    "num_cgroups": 447,
+    "enabled": true
+  }
+]
