@@ -740,6 +740,8 @@ func TestIntervalOutputIsChosenOnItsLeadingLines(t *testing.T) {
 			`{"type":"Mem","total":"61Gi"`, []string{"--stream", "--parser", "free"}},
 		{"journalctl -f", "Sep 16 19:06:09 host01 sshd[812]: Accepted publickey for alice\nSep 16 19:06:10 host01 systemd[1]: Started session-3.scope.\n",
 			`{"timestamp":"Sep 16 19:06:09"`, []string{"--stream", "--parser", "journalctl"}},
+		{"avahi-browse -a -p", "+;eno1;IPv4;printer;_ipp._tcp;local\n",
+			`{"event":"new","interface":"eno1"`, []string{"--stream", "--parser", "avahi-browse"}},
 		{"ping without its summary yet", "PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.\n64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.032 ms\n",
 			`{"part":"destination"`, []string{"--stream", "--parser", "ping"}},
 	} {
