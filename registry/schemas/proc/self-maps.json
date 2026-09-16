@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/proc/self-maps.json",
+  "title": "proc/self-maps",
+  "description": "/proc/self/maps, the memory mappings of a process",
+  "x-jsonize": {
+    "definition": "proc/self-maps",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "start": {
+        "type": "string"
+      },
+      "end": {
+        "type": "string"
+      },
+      "perms": {
+        "type": "string",
+        "enum": [
+          "----",
+          "---p",
+          "---s",
+          "--x-",
+          "--xp",
+          "--xs",
+          "-w--",
+          "-w-p",
+          "-w-s",
+          "-wx-",
+          "-wxp",
+          "-wxs",
+          "r---",
+          "r--p",
+          "r--s",
+          "r-x-",
+          "r-xp",
+          "r-xs",
+          "rw--",
+          "rw-p",
+          "rw-s",
+          "rwx-",
+          "rwxp",
+          "rwxs"
+        ]
+      },
+      "offset": {
+        "type": "string"
+      },
+      "device": {
+        "type": "string"
+      },
+      "inode": {
+        "type": "integer"
+      },
+      "pathname": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "start",
+      "end",
+      "perms",
+      "offset",
+      "device",
+      "inode",
+      "pathname"
+    ]
+  }
+}

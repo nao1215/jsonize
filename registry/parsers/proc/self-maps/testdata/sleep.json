@@ -1,0 +1,443 @@
+[
+  {
+    "start": "5f98da62a000",
+    "end": "5f98da71c000",
+    "perms": "r--p",
+    "offset": "00000000",
+    "device": "103:02",
+    "inode": 28967061,
+    "pathname": "/usr/lib/cargo/bin/coreutils/sleep"
+  },
+  {
+    "start": "5f98da71c000",
+    "end": "5f98dabd4000",
+    "perms": "r-xp",
+    "offset": "000f2000",
+    "device": "103:02",
+    "inode": 28967061,
+    "pathname": "/usr/lib/cargo/bin/coreutils/sleep"
+  },
+  {
+    "start": "5f98dabd4000",
+    "end": "5f98daf93000",
+    "perms": "r--p",
+    "offset": "005aa000",
+    "device": "103:02",
+    "inode": 28967061,
+    "pathname": "/usr/lib/cargo/bin/coreutils/sleep"
+  },
+  {
+    "start": "5f98daf93000",
+    "end": "5f98db0f8000",
+    "perms": "r--p",
+    "offset": "00968000",
+    "device": "103:02",
+    "inode": 28967061,
+    "pathname": "/usr/lib/cargo/bin/coreutils/sleep"
+  },
+  {
+    "start": "5f98db0f8000",
+    "end": "5f98db0fe000",
+    "perms": "rw-p",
+    "offset": "00acd000",
+    "device": "103:02",
+    "inode": 28967061,
+    "pathname": "/usr/lib/cargo/bin/coreutils/sleep"
+  },
+  {
+    "start": "5f98db0fe000",
+    "end": "5f98db0ff000",
+    "perms": "rw-p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": null
+  },
+  {
+    "start": "5f98de33d000",
+    "end": "5f98de35e000",
+    "perms": "rw-p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": "[heap]"
+  },
+  {
+    "start": "70a008a00000",
+    "end": "70a008a28000",
+    "perms": "r--p",
+    "offset": "00000000",
+    "device": "103:02",
+    "inode": 28971096,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libc.so.6"
+  },
+  {
+    "start": "70a008a28000",
+    "end": "70a008bc0000",
+    "perms": "r-xp",
+    "offset": "00028000",
+    "device": "103:02",
+    "inode": 28971096,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libc.so.6"
+  },
+  {
+    "start": "70a008bc0000",
+    "end": "70a008c0e000",
+    "perms": "r--p",
+    "offset": "001c0000",
+    "device": "103:02",
+    "inode": 28971096,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libc.so.6"
+  },
+  {
+    "start": "70a008c0e000",
+    "end": "70a008c12000",
+    "perms": "r--p",
+    "offset": "0020e000",
+    "device": "103:02",
+    "inode": 28971096,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libc.so.6"
+  },
+  {
+    "start": "70a008c12000",
+    "end": "70a008c14000",
+    "perms": "rw-p",
+    "offset": "00212000",
+    "device": "103:02",
+    "inode": 28971096,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libc.so.6"
+  },
+  {
+    "start": "70a008c14000",
+    "end": "70a008c21000",
+    "perms": "rw-p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": null
+  },
+  {
+    "start": "70a008cdd000",
+    "end": "70a008ce2000",
+    "perms": "rw-p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": null
+  },
+  {
+    "start": "70a008ce2000",
+    "end": "70a008ce5000",
+    "perms": "r--p",
+    "offset": "00000000",
+    "device": "103:02",
+    "inode": 28968490,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.14.0"
+  },
+  {
+    "start": "70a008ce5000",
+    "end": "70a008d61000",
+    "perms": "r-xp",
+    "offset": "00003000",
+    "device": "103:02",
+    "inode": 28968490,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.14.0"
+  },
+  {
+    "start": "70a008d61000",
+    "end": "70a008d8c000",
+    "perms": "r--p",
+    "offset": "0007f000",
+    "device": "103:02",
+    "inode": 28968490,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.14.0"
+  },
+  {
+    "start": "70a008d8c000",
+    "end": "70a008d8d000",
+    "perms": "r--p",
+    "offset": "000a9000",
+    "device": "103:02",
+    "inode": 28968490,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.14.0"
+  },
+  {
+    "start": "70a008d8d000",
+    "end": "70a008d8e000",
+    "perms": "rw-p",
+    "offset": "000aa000",
+    "device": "103:02",
+    "inode": 28968490,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.14.0"
+  },
+  {
+    "start": "70a008d8e000",
+    "end": "70a008da0000",
+    "perms": "r--p",
+    "offset": "00000000",
+    "device": "103:02",
+    "inode": 28971099,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libm.so.6"
+  },
+  {
+    "start": "70a008da0000",
+    "end": "70a008e40000",
+    "perms": "r-xp",
+    "offset": "00012000",
+    "device": "103:02",
+    "inode": 28971099,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libm.so.6"
+  },
+  {
+    "start": "70a008e40000",
+    "end": "70a008eb2000",
+    "perms": "r--p",
+    "offset": "000b2000",
+    "device": "103:02",
+    "inode": 28971099,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libm.so.6"
+  },
+  {
+    "start": "70a008eb2000",
+    "end": "70a008eb3000",
+    "perms": "r--p",
+    "offset": "00123000",
+    "device": "103:02",
+    "inode": 28971099,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libm.so.6"
+  },
+  {
+    "start": "70a008eb3000",
+    "end": "70a008eb4000",
+    "perms": "rw-p",
+    "offset": "00124000",
+    "device": "103:02",
+    "inode": 28971099,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libm.so.6"
+  },
+  {
+    "start": "70a008eb4000",
+    "end": "70a008eb8000",
+    "perms": "r--p",
+    "offset": "00000000",
+    "device": "103:02",
+    "inode": 28968070,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+  },
+  {
+    "start": "70a008eb8000",
+    "end": "70a008edc000",
+    "perms": "r-xp",
+    "offset": "00004000",
+    "device": "103:02",
+    "inode": 28968070,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+  },
+  {
+    "start": "70a008edc000",
+    "end": "70a008ee0000",
+    "perms": "r--p",
+    "offset": "00028000",
+    "device": "103:02",
+    "inode": 28968070,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+  },
+  {
+    "start": "70a008ee0000",
+    "end": "70a008ee1000",
+    "perms": "r--p",
+    "offset": "0002c000",
+    "device": "103:02",
+    "inode": 28968070,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+  },
+  {
+    "start": "70a008ee1000",
+    "end": "70a008ee2000",
+    "perms": "rw-p",
+    "offset": "0002d000",
+    "device": "103:02",
+    "inode": 28968070,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1"
+  },
+  {
+    "start": "70a008ee2000",
+    "end": "70a008ee9000",
+    "perms": "r--p",
+    "offset": "00000000",
+    "device": "103:02",
+    "inode": 28968988,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libselinux.so.1"
+  },
+  {
+    "start": "70a008ee9000",
+    "end": "70a008f0a000",
+    "perms": "r-xp",
+    "offset": "00007000",
+    "device": "103:02",
+    "inode": 28968988,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libselinux.so.1"
+  },
+  {
+    "start": "70a008f0a000",
+    "end": "70a008f11000",
+    "perms": "r--p",
+    "offset": "00028000",
+    "device": "103:02",
+    "inode": 28968988,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libselinux.so.1"
+  },
+  {
+    "start": "70a008f11000",
+    "end": "70a008f12000",
+    "perms": "r--p",
+    "offset": "0002f000",
+    "device": "103:02",
+    "inode": 28968988,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libselinux.so.1"
+  },
+  {
+    "start": "70a008f12000",
+    "end": "70a008f13000",
+    "perms": "rw-p",
+    "offset": "00030000",
+    "device": "103:02",
+    "inode": 28968988,
+    "pathname": "/usr/lib/x86_64-linux-gnu/libselinux.so.1"
+  },
+  {
+    "start": "70a008f13000",
+    "end": "70a008f15000",
+    "perms": "rw-p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": null
+  },
+  {
+    "start": "70a008f33000",
+    "end": "70a008f34000",
+    "perms": "---p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": null
+  },
+  {
+    "start": "70a008f34000",
+    "end": "70a008f36000",
+    "perms": "rw-p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": null
+  },
+  {
+    "start": "70a008f36000",
+    "end": "70a008f38000",
+    "perms": "rw-p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": null
+  },
+  {
+    "start": "70a008f38000",
+    "end": "70a008f3c000",
+    "perms": "r--p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": "[vvar]"
+  },
+  {
+    "start": "70a008f3c000",
+    "end": "70a008f3e000",
+    "perms": "r--p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": "[vvar_vclock]"
+  },
+  {
+    "start": "70a008f3e000",
+    "end": "70a008f40000",
+    "perms": "r-xp",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": "[vdso]"
+  },
+  {
+    "start": "70a008f40000",
+    "end": "70a008f41000",
+    "perms": "r--p",
+    "offset": "00000000",
+    "device": "103:02",
+    "inode": 28971093,
+    "pathname": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+  },
+  {
+    "start": "70a008f41000",
+    "end": "70a008f70000",
+    "perms": "r-xp",
+    "offset": "00001000",
+    "device": "103:02",
+    "inode": 28971093,
+    "pathname": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+  },
+  {
+    "start": "70a008f70000",
+    "end": "70a008f7b000",
+    "perms": "r--p",
+    "offset": "00030000",
+    "device": "103:02",
+    "inode": 28971093,
+    "pathname": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+  },
+  {
+    "start": "70a008f7b000",
+    "end": "70a008f7d000",
+    "perms": "r--p",
+    "offset": "0003b000",
+    "device": "103:02",
+    "inode": 28971093,
+    "pathname": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+  },
+  {
+    "start": "70a008f7d000",
+    "end": "70a008f7e000",
+    "perms": "rw-p",
+    "offset": "0003d000",
+    "device": "103:02",
+    "inode": 28971093,
+    "pathname": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+  },
+  {
+    "start": "70a008f7e000",
+    "end": "70a008f7f000",
+    "perms": "rw-p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": null
+  },
+  {
+    "start": "7ffe64cab000",
+    "end": "7ffe64ccd000",
+    "perms": "rw-p",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": "[stack]"
+  },
+  {
+    "start": "ffffffffff600000",
+    "end": "ffffffffff601000",
+    "perms": "--xp",
+    "offset": "00000000",
+    "device": "00:00",
+    "inode": 0,
+    "pathname": "[vsyscall]"
+  }
+]

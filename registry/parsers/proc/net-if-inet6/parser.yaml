@@ -1,0 +1,22 @@
+# /proc/net/if_inet6 lists the IPv6 addresses of the network interfaces,
+# one per line: the address as 32 hexadecimal digits without colons, the
+# interface index, the prefix length, the scope and the flags, each in
+# hexadecimal, and the interface name, right-aligned. The hexadecimal
+# fields are kept as printed.
+format: 1
+command: proc
+variant: net-if-inet6
+description: /proc/net/if_inet6, the IPv6 addresses of the interfaces
+metadata:
+  tags: [linux, kernel, network]
+  compatible: [linux]
+  references:
+    - https://tldp.org/HOWTO/Linux+IPv6-HOWTO/ch11s04.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A(?:[0-9a-f]{32} [0-9a-f]{2,} [0-9a-f]{2} [0-9a-f]{2} [0-9a-f]{2} +\S+\n?)+\z'
+parse:
+  type: regex
+  pattern: '^(?P<address>[0-9a-f]{32}) (?P<index>[0-9a-f]+) (?P<prefix_length>[0-9a-f]{2}) (?P<scope>[0-9a-f]{2}) (?P<flags>[0-9a-f]{2}) +(?P<interface>\S+)$'

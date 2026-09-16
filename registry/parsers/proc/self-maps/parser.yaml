@@ -1,0 +1,27 @@
+# /proc/self/maps (and /proc/PID/maps) lists the memory mappings of a
+# process, one per line: the address range, the permissions, the offset
+# into the file, the device and the inode, and the path of what is
+# mapped, padded to a column. An anonymous mapping has no path and it is
+# null; a pseudo path ([heap], [stack], [vdso]) and a deleted file's
+# " (deleted)" are kept as printed. The addresses, offset and device are
+# hexadecimal and kept as text; the inode is a number.
+format: 1
+command: proc
+variant: self-maps
+description: /proc/self/maps, the memory mappings of a process
+metadata:
+  tags: [linux, kernel, process, memory]
+  compatible: [linux]
+  references:
+    - https://man7.org/linux/man-pages/man5/proc_pid_maps.5.html
+detect:
+  os: [linux]
+  signature:
+    all:
+      - '\A[0-9a-f]+-[0-9a-f]+ [-r][-w][-x][-sp] [0-9a-f]{8,} [0-9a-f]{2,}:[0-9a-f]{2,} [0-9]+ '
+parse:
+  type: regex
+  pattern: '^(?P<start>[0-9a-f]+)-(?P<end>[0-9a-f]+) (?P<perms>[-r][-w][-x][-sp]) (?P<offset>[0-9a-f]+) (?P<device>[0-9a-f]+:[0-9a-f]+) (?P<inode>[0-9]+) *(?P<pathname>.*?)$'
+fields:
+  inode: {type: int}
+  pathname: {null_if: [""]}
